@@ -587,7 +587,7 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
     return true;
 }
 
-VclPtr<VirtualDevice>
+VclPtr<VirtualDevice> // [-loplugin:scopedvclptr]
 StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& rStyle)
 {
     auto aFound = StylePreviewCache::Get().find(rStyle.translatedName);

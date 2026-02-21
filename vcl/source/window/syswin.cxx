@@ -1120,6 +1120,7 @@ void SystemWindow::ImplDeferredInit(vcl::Window* /*pParent*/, WinBits /*nBits*/)
     SAL_WARN("vcl.layout", "SystemWindow in layout without doDeferredInit impl");
 }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> SystemWindow::createScreenshot()
 {
     // same prerequisites as in Execute()

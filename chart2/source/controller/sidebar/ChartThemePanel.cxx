@@ -96,6 +96,7 @@ void ThemeWrapper::updateData() const
 
 void ThemeWrapper::select(const sal_uInt32 nIndex) { mpController->setTheme(nIndex); }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> ThemeWrapper::makePictureFromThemedChart(sal_uInt32 nIndex)
 {
     if (mpController)

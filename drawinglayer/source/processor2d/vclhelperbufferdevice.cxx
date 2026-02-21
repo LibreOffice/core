@@ -137,6 +137,7 @@ bool VDevBuffer::isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size&
     return false;
 }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel)
 {
     std::unique_lock aGuard(m_aMutex);

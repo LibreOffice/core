@@ -385,6 +385,7 @@ public:
 
     ScViewData& GetViewData() const { return mrParentControl.GetViewData(); }
     ScCheckListMenuControl::ExtendedData* getExtendedData() { return mrParentControl.getExtendedData(); }
+    // [-loplugin:scopedvclptr]
     VclPtr<VirtualDevice> create_virtual_device() const { return mxMenu->create_virtual_device(); }
 
     /**

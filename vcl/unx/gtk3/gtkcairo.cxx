@@ -113,6 +113,7 @@ namespace cairo
             mpGraphics->WidgetQueueDraw();
     }
 
+    // [-loplugin:scopedvclptr]
     VclPtr<VirtualDevice> Gtk3Surface::createVirtualDevice() const
     {
         SystemGraphicsData aSystemGraphicsData;

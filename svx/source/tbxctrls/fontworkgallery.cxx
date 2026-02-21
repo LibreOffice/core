@@ -103,6 +103,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
         if (GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb) && !aThumb.IsEmpty())
         {
+            // [-loplugin:scopedvclptr]
             VclPtr< VirtualDevice > pVDev = VclPtr<VirtualDevice>::Create();
             const Point aNull(0, 0);
 

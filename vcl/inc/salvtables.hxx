@@ -899,6 +899,7 @@ public:
         }
     }
 
+    // [-loplugin:scopedvclptr]
     VclPtr<VirtualDevice> create_render_virtual_device() const override
     {
         auto xRet = VclPtr<VirtualDevice>::Create();

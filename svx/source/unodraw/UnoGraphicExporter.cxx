@@ -300,6 +300,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
     @return the returned VirtualDevice is owned by the caller
 */
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, tools::Long nWidthPixel, tools::Long nHeightPixel ) const
 {
     VclPtr<VirtualDevice>  pVDev = VclPtr<VirtualDevice>::Create();
