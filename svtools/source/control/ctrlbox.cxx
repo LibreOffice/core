@@ -1629,7 +1629,7 @@ void SvtLineListBox::UpdateEntries()
                 pData->GetColorDist(aColor, aFieldColor),
                 pData->GetStyle(), aBmp );
         sal_Int16 nPos = static_cast<sal_Int16>(pData->GetStyle());
-        VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBmp);
+        auto pVDev = GetVirtualDevice(aBmp);
 
         OUString sId = OUString::number(nPos + 1);
         m_xLineIV->append(sId, GetLineStyleName(pData->GetStyle()), pVDev.get());
@@ -1639,7 +1639,7 @@ void SvtLineListBox::UpdateEntries()
     }
 }
 
-VclPtr<VirtualDevice> SvtLineListBox::GetVirtualDevice(const BitmapEx& rBmp)
+ScopedVclPtr<VirtualDevice> SvtLineListBox::GetVirtualDevice(const BitmapEx& rBmp)
 {
     constexpr tools::Long nMarginTopBottom = 5;
     constexpr tools::Long nMarginLeftRight = 2;
