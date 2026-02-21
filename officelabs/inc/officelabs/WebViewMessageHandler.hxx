@@ -9,6 +9,9 @@
  *   getDocument  - Read document text via DocumentController
  *   getSelection - Get current selection
  *   applyEdit    - Apply/reject a pending edit
+ *
+ * THREADING: m_pPanel is std::atomic because it's read on the CEF IO
+ *            thread (OnQuery) and written on the VCL thread (setPanel).
  */
 
 #ifndef INCLUDED_OFFICELABS_WEBVIEWMESSAGEHANDLER_HXX
@@ -26,6 +29,7 @@
 
 #include <include/wrapper/cef_message_router.h>
 #include <string>
+#include <atomic>
 
 namespace officelabs {
 
@@ -35,6 +39,10 @@ class WebViewMessageHandler final : public CefMessageRouterBrowserSide::Handler
 {
 public:
     explicit WebViewMessageHandler(WebViewPanel* pPanel);
+
+    /// Update the panel pointer (called when panel is destroyed/recreated).
+    /// Thread-safe: uses atomic store.
+    void setPanel(WebViewPanel* pPanel);
 
     bool OnQuery(CefRefPtr<CefBrowser> browser,
                  CefRefPtr<CefFrame> frame,
@@ -53,7 +61,7 @@ private:
     void handleApplyEdit(const std::string& json,
                          CefRefPtr<Callback> callback);
 
-    WebViewPanel* m_pPanel;  // non-owning, panel outlives handler
+    std::atomic<WebViewPanel*> m_pPanel;
 };
 
 } // namespace officelabs

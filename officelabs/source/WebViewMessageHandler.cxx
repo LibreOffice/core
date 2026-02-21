@@ -9,6 +9,7 @@
  * THREADING: cefQuery callbacks arrive on the CEF IO thread.
  *            Document operations MUST be dispatched to the VCL main thread
  *            via Application::PostUserEvent().
+ *            m_pPanel is atomic — read on CEF IO thread, written on VCL thread.
  */
 
 #ifdef HAVE_FEATURE_CEF
@@ -119,6 +120,11 @@ WebViewMessageHandler::WebViewMessageHandler(WebViewPanel* pPanel)
 {
 }
 
+void WebViewMessageHandler::setPanel(WebViewPanel* pPanel)
+{
+    m_pPanel.store(pPanel, std::memory_order_release);
+}
+
 bool WebViewMessageHandler::OnQuery(
     CefRefPtr<CefBrowser> /*browser*/,
     CefRefPtr<CefFrame> /*frame*/,
@@ -168,20 +174,29 @@ void WebViewMessageHandler::OnQueryCanceled(
 
 void WebViewMessageHandler::handleGetDocument(CefRefPtr<Callback> callback)
 {
-    if (!m_pPanel)
+    WebViewPanel* panel = m_pPanel.load(std::memory_order_acquire);
+    if (!panel)
     {
         callback->Failure(500, "Panel not available");
         return;
     }
 
     CefRefPtr<Callback> cb = callback;
-    WebViewPanel* panel = m_pPanel;
 
-    postToVclThread([cb, panel]() {
+    // Re-read panel pointer inside VCL lambda (panel may have been
+    // swapped between the CEF IO thread check and VCL dispatch).
+    postToVclThread([this, cb]() {
+        WebViewPanel* p = m_pPanel.load(std::memory_order_acquire);
+        if (!p)
+        {
+            cb->Failure(500, "Panel destroyed during dispatch");
+            return;
+        }
+
         // Always refresh document reference (handles document switches)
-        panel->detectDocument();
+        p->detectDocument();
 
-        DocumentController* dc = panel->getDocController();
+        DocumentController* dc = p->getDocController();
         if (!dc || !dc->hasDocument())
         {
             cb->Success("{\"text\":\"\"}");
@@ -197,20 +212,26 @@ void WebViewMessageHandler::handleGetDocument(CefRefPtr<Callback> callback)
 
 void WebViewMessageHandler::handleGetSelection(CefRefPtr<Callback> callback)
 {
-    if (!m_pPanel)
+    WebViewPanel* panel = m_pPanel.load(std::memory_order_acquire);
+    if (!panel)
     {
         callback->Failure(500, "Panel not available");
         return;
     }
 
     CefRefPtr<Callback> cb = callback;
-    WebViewPanel* panel = m_pPanel;
 
-    postToVclThread([cb, panel]() {
-        // Always refresh document reference (handles document switches)
-        panel->detectDocument();
+    postToVclThread([this, cb]() {
+        WebViewPanel* p = m_pPanel.load(std::memory_order_acquire);
+        if (!p)
+        {
+            cb->Failure(500, "Panel destroyed during dispatch");
+            return;
+        }
 
-        DocumentController* dc = panel->getDocController();
+        p->detectDocument();
+
+        DocumentController* dc = p->getDocController();
         if (!dc || !dc->hasDocument())
         {
             cb->Success("{\"selection\":\"\"}");
@@ -227,7 +248,8 @@ void WebViewMessageHandler::handleGetSelection(CefRefPtr<Callback> callback)
 void WebViewMessageHandler::handleApplyEdit(
     const std::string& json, CefRefPtr<Callback> callback)
 {
-    if (!m_pPanel)
+    WebViewPanel* panel = m_pPanel.load(std::memory_order_acquire);
+    if (!panel)
     {
         callback->Failure(500, "Panel not available");
         return;
@@ -239,12 +261,18 @@ void WebViewMessageHandler::handleApplyEdit(
     SAL_INFO("officelabs.cef", "applyEdit: id=" << editId << " action=" << action);
 
     CefRefPtr<Callback> cb = callback;
-    WebViewPanel* panel = m_pPanel;
 
-    postToVclThread([cb, panel, editId, action]() {
-        panel->detectDocument();
+    postToVclThread([this, cb, editId, action]() {
+        WebViewPanel* p = m_pPanel.load(std::memory_order_acquire);
+        if (!p)
+        {
+            cb->Failure(500, "Panel destroyed during dispatch");
+            return;
+        }
 
-        DocumentController* dc = panel->getDocController();
+        p->detectDocument();
+
+        DocumentController* dc = p->getDocController();
         if (!dc || !dc->hasDocument())
         {
             cb->Failure(400, "No document open");

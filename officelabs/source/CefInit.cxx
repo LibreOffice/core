@@ -16,6 +16,7 @@
 #endif
 
 #include <officelabs/CefInit.hxx>
+#include <officelabs/WebViewPanel.hxx>
 
 #include <include/cef_app.h>
 #include <include/cef_browser.h>
@@ -24,6 +25,9 @@
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <rtl/bootstrap.hxx>
+
+#include <cstdlib>
+#include <string>
 
 namespace officelabs {
 
@@ -75,6 +79,23 @@ bool CefInit::initialize()
     OString utf8Path = OUStringToOString(subprocessPath, RTL_TEXTENCODING_UTF8);
     CefString(&settings.browser_subprocess_path).FromASCII(utf8Path.getStr());
 
+    // Persistent cache — enables localStorage across CEF browser restarts.
+    // Without this, CEF runs in "incognito mode" and localStorage is lost
+    // when the sidebar panel is recreated (e.g. during OLE chart activation).
+#ifdef _WIN32
+    {
+        const char* localAppData = std::getenv("LOCALAPPDATA");
+        if (localAppData)
+        {
+            std::string rootCache = std::string(localAppData) + "\\OfficeLabs\\cef_data";
+            std::string profileCache = rootCache + "\\Default";
+            CefString(&settings.root_cache_path).FromASCII(rootCache.c_str());
+            CefString(&settings.cache_path).FromASCII(profileCache.c_str());
+            SAL_INFO("officelabs.cef", "CEF cache: " << rootCache);
+        }
+    }
+#endif
+
     // Log settings
     settings.log_severity = LOGSEVERITY_INFO;
     CefString(&settings.log_file).FromASCII("officelabs_cef.log");
@@ -99,6 +120,12 @@ void CefInit::shutdown()
         return;
 
     SAL_INFO("officelabs.cef", "Shutting down CEF...");
+
+    // Release persistent browser/popup/router BEFORE CefShutdown().
+    // Static CefRefPtrs in WebViewPanel.cxx must be cleared while CEF
+    // is still alive, otherwise their destructors touch freed CEF state.
+    WebViewPanel::cleanupPersistentBrowser();
+
     CefShutdown();
     m_bInitialized = false;
     SAL_INFO("officelabs.cef", "CEF shutdown complete");

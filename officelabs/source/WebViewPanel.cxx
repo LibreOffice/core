@@ -2,8 +2,19 @@
 /*
  * OfficeLabs WebView Panel Implementation
  *
- * Embeds a CEF browser inside a SystemChildWindow in the sidebar.
+ * Embeds a CEF browser inside a popup window tracked to the sidebar.
  * The browser loads a React chat app (from Vite dev server or bundled files).
+ *
+ * BROWSER PERSISTENCE
+ * -------------------
+ * The CEF browser, popup HWND, message router, and client live in static
+ * storage (s_browser, s_hCefParentWnd, etc.).  They are created once on
+ * the first panel instantiation and survive panel destruction/recreation.
+ *
+ * When the sidebar destroys the panel (e.g. during OLE chart activation),
+ * the destructor only hides the popup and nulls the handler's panel pointer.
+ * When the sidebar recreates the panel, the constructor reattaches to the
+ * existing browser — no page reload, no localStorage loss.
  */
 
 #ifdef HAVE_FEATURE_CEF
@@ -34,6 +45,27 @@
 #include <functional>
 #include <cstdlib>
 
+// ============================================================
+// Static (persistent) CEF state — survives panel destroy/recreate
+// ============================================================
+namespace {
+
+CefRefPtr<CefBrowser>                        s_browser;
+HWND                                         s_hCefParentWnd = nullptr;
+CefRefPtr<CefMessageRouterBrowserSide>       s_messageRouter;
+std::unique_ptr<officelabs::WebViewMessageHandler> s_messageHandler;
+CefRefPtr<CefClient>                         s_client;
+bool                                         s_browserCreated = false;
+
+// Track the document bound to the panel — used to detect document switches
+// and clear chat history when the user opens a different document.
+SfxObjectShell*                              s_lastDocShell = nullptr;
+
+} // anonymous namespace
+
+// ============================================================
+// Helpers
+// ============================================================
 namespace {
 
 // Helper: invoke a std::function on VCL thread via PostUserEvent
@@ -238,6 +270,9 @@ public:
     {
     }
 
+    /// Update the panel pointer (called on attach/detach).
+    void setPanel(WebViewPanel* p) { m_pPanel.store(p, std::memory_order_release); }
+
     // CefClient
     CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override { return this; }
     CefRefPtr<CefRequestHandler> GetRequestHandler() override { return this; }
@@ -245,8 +280,9 @@ public:
     // CefLifeSpanHandler
     void OnAfterCreated(CefRefPtr<CefBrowser> browser) override
     {
-        if (m_pPanel)
-            m_pPanel->onBrowserCreated(browser);
+        WebViewPanel* panel = m_pPanel.load(std::memory_order_acquire);
+        if (panel)
+            panel->onBrowserCreated(browser);
     }
 
     void OnBeforeClose(CefRefPtr<CefBrowser> browser) override
@@ -273,13 +309,17 @@ public:
         SAL_WARN("officelabs.cef", "Render process terminated, status="
                  << static_cast<int>(status) << " code=" << error_code);
 
-        if (m_pPanel)
-        {
-            WebViewPanel* panel = m_pPanel;
-            postToVclThread([panel]() {
-                panel->reloadBrowser();
-            });
-        }
+        // Use s_browser directly instead of going through the panel pointer.
+        // During OLE activation (doVerb), the panel pointer is null because
+        // the destructor cleared it.  Without this, the crash goes unhandled
+        // and the sidebar stays black forever.
+        postToVclThread([]() {
+            if (s_browser)
+            {
+                SAL_INFO("officelabs.cef", "Reloading browser after render crash");
+                s_browser->Reload();
+            }
+        });
     }
 
     bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
@@ -294,7 +334,7 @@ public:
     IMPLEMENT_REFCOUNTING(WebViewCefClient);
 
 private:
-    WebViewPanel* m_pPanel;
+    std::atomic<WebViewPanel*> m_pPanel;
     CefRefPtr<CefMessageRouterBrowserSide> m_messageRouter;
 };
 
@@ -312,36 +352,73 @@ std::unique_ptr<PanelLayout> WebViewPanel::Create(
     return std::make_unique<WebViewPanel>(pParent, pBindings);
 }
 
+void WebViewPanel::cleanupPersistentBrowser()
+{
+    SAL_INFO("officelabs.cef", "cleanupPersistentBrowser: releasing static CEF state");
+
+    // Close the browser first (before CefShutdown)
+    if (s_browser)
+    {
+        s_browser->GetHost()->CloseBrowser(true);
+        s_browser = nullptr;
+    }
+
+    s_client = nullptr;
+    s_messageRouter = nullptr;
+    s_messageHandler.reset();
+
+    if (s_hCefParentWnd)
+    {
+        DestroyWindow(s_hCefParentWnd);
+        s_hCefParentWnd = nullptr;
+    }
+
+    s_browserCreated = false;
+    s_lastDocShell = nullptr;
+}
+
 WebViewPanel::WebViewPanel(weld::Widget* pParent, SfxBindings* pBindings)
     : PanelLayout(pParent, u"WebViewPanel"_ustr, u"officelabs/ui/webviewpanel.ui"_ustr)
     , m_pBindings(pBindings)
 {
-    SAL_INFO("officelabs.cef", "WebViewPanel created");
+    SAL_INFO("officelabs.cef", "WebViewPanel created (s_browserCreated="
+             << (s_browserCreated ? "true" : "false") << ")");
 
-    // Create backend connections
+    // Create backend connections (per-panel)
     m_pAgent = std::make_unique<AgentConnection>();
     m_pDocController = std::make_unique<DocumentController>();
 
-    // Ensure CEF is initialized (lazy init on first panel creation)
-    bool bCefOk = CefInit::instance().initialize();
-
-    if (!bCefOk)
+    if (s_browserCreated)
     {
-        SAL_WARN("officelabs.cef", "CEF init failed - panel will be blank");
-        return;
+        // REATTACH to the existing persistent browser.
+        // This happens after OLE activation destroyed and recreated the panel.
+        SAL_INFO("officelabs.cef", "Reattaching to persistent CEF browser");
+        postToVclThread([this]() {
+            reattachCefBrowser();
+        });
     }
+    else
+    {
+        // FIRST TIME: initialize CEF and create the browser.
+        bool bCefOk = CefInit::instance().initialize();
+        if (!bCefOk)
+        {
+            SAL_WARN("officelabs.cef", "CEF init failed - panel will be blank");
+            return;
+        }
 
-    // Defer browser creation until after sidebar layout has happened.
-    // At construction time the panel has 0x0 size; PostUserEvent
-    // fires after the current event processing, giving layout a chance.
-    postToVclThread([this]() {
-        initCefBrowser();
-    });
+        // Defer browser creation until after sidebar layout has happened.
+        // At construction time the panel has 0x0 size; PostUserEvent
+        // fires after the current event processing, giving layout a chance.
+        postToVclThread([this]() {
+            initCefBrowser();
+        });
+    }
 }
 
 WebViewPanel::~WebViewPanel()
 {
-    SAL_INFO("officelabs.cef", "WebViewPanel destroyed");
+    SAL_INFO("officelabs.cef", "WebViewPanel destroyed (detaching, NOT closing browser)");
 
     m_aResizeTimer.Stop();
 
@@ -353,17 +430,24 @@ WebViewPanel::~WebViewPanel()
         m_bSubclassed = false;
     }
 
-    if (m_browser)
-    {
-        m_browser->GetHost()->CloseBrowser(true);
-        m_browser = nullptr;
-    }
+    // DETACH: null out the panel pointer in the handler and client so
+    // they don't call back into a deleted panel.  Do NOT close the browser
+    // or destroy the popup — they persist in static storage.
+    if (s_messageHandler)
+        s_messageHandler->setPanel(nullptr);
+    if (s_client)
+        static_cast<WebViewCefClient*>(s_client.get())->setPanel(nullptr);
 
-    if (m_hCefParentWnd)
-    {
-        DestroyWindow(m_hCefParentWnd);
-        m_hCefParentWnd = nullptr;
-    }
+    // Keep the popup WHERE IT IS during the destroy/recreate transition.
+    // DO NOT hide (SW_HIDE) or move off-screen — both cause the popup to
+    // not re-show because syncCefWindowSize() fights with the visibility
+    // state before the VCL parent is fully laid out.
+    // Leaving the popup in-place may cause a brief visual flash, but the
+    // SidebarDeck.AIDeck dispatch restores the panel quickly.
+
+    // Clear instance copies (statics keep the real references alive)
+    m_browser = nullptr;
+    m_hCefParentWnd = nullptr;
 
     m_pBinWindow.disposeAndClear();
 }
@@ -377,12 +461,12 @@ void WebViewPanel::initCefBrowser()
     CefMessageRouterConfig config;
     config.js_query_function = "cefQuery";
     config.js_cancel_function = "cefQueryCancel";
-    m_messageRouter = CefMessageRouterBrowserSide::Create(config);
+    s_messageRouter = CefMessageRouterBrowserSide::Create(config);
 
-    m_messageHandler = std::make_unique<WebViewMessageHandler>(this);
-    m_messageRouter->AddHandler(m_messageHandler.get(), true);
+    s_messageHandler = std::make_unique<WebViewMessageHandler>(this);
+    s_messageRouter->AddHandler(s_messageHandler.get(), true);
 
-    m_client = new WebViewCefClient(this, m_messageRouter);
+    s_client = new WebViewCefClient(this, s_messageRouter);
 
     // CreateChildFrame gives us a VclBin inside the weld container
     css::uno::Reference<css::awt::XWindow> xChildFrame = m_xContainer->CreateChildFrame();
@@ -406,13 +490,6 @@ void WebViewPanel::initCefBrowser()
     m_hFrameWnd = hFrameWnd;
 
     // Get the sidebar position in SCREEN coordinates.
-    // We use a POPUP window with NO OWNER so CEF lives entirely outside
-    // Win32's window hierarchy. This prevents crashes during:
-    //   - DrawPage paint (shapes, arrows)
-    //   - OLE in-place activation (charts, equations)
-    // An owned window receives WM_NCACTIVATE/WM_ACTIVATE during OLE
-    // activation, which causes CEF to interfere and crash LO.
-    // Without an owner, we manually track frame visibility/minimize state.
     auto aScrPos = pSizedParent->OutputToAbsoluteScreenPixel(Point(0, 0));
     int scrX = static_cast<int>(aScrPos.X());
     int scrY = static_cast<int>(aScrPos.Y());
@@ -425,8 +502,7 @@ void WebViewPanel::initCefBrowser()
     // Owner = hFrameWnd: popup is captured with the frame during screen
     // sharing (Teams, Zoom, etc.) and auto-hides when frame is minimized.
     // WM_ACTIVATE/WM_NCACTIVATE are suppressed in CefHostWndProc to
-    // prevent OLE in-place activation crashes (the original reason for
-    // using an unowned popup).
+    // prevent OLE in-place activation crashes.
     HWND hCefParent = CreateWindowExW(
         WS_EX_TOOLWINDOW,
         L"OfficeLabsCefHost", L"",
@@ -437,20 +513,20 @@ void WebViewPanel::initCefBrowser()
     if (hCefParent)
     {
         // Show at top of Z-order without activating.
-        // HWND_TOP puts popup IN FRONT of the frame (hFrameWnd would put it behind).
-        // The resize timer maintains Z-order afterward.
         SetWindowPos(hCefParent, HWND_TOP,
                      0, 0, 0, 0,
                      SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
     }
 
-    // Store HWNDs for cleanup and resize tracking
+    // Store in STATIC state (persists across panel lifetimes)
+    s_hCefParentWnd = hCefParent;
+
+    // Store instance copies
     m_hCefParentWnd = hCefParent;
     m_aLastSize = Size(w, h);
     m_aLastPos = Point(scrX, scrY);
 
     // Subclass the frame HWND for instant move/resize/activate notifications.
-    // This replaces the timer as the primary position-tracking mechanism.
     if (m_hFrameWnd)
     {
         if (SetWindowSubclass(m_hFrameWnd, FrameSubclassProc,
@@ -482,17 +558,126 @@ void WebViewPanel::initCefBrowser()
 
     CefBrowserHost::CreateBrowser(
         windowInfo,
-        m_client,
+        s_client,
         CefString(utf8Url.getStr()),
         browserSettings,
         nullptr,
         nullptr
     );
 
+    s_browserCreated = true;
+
     // Start resize tracking timer
     m_aResizeTimer.SetInvokeHandler(LINK(this, WebViewPanel, ResizeTimerHdl));
     m_aResizeTimer.SetTimeout(500);
     m_aResizeTimer.Start();
+}
+
+void WebViewPanel::reattachCefBrowser()
+{
+    SAL_INFO("officelabs.cef", "reattachCefBrowser: wiring persistent browser to new panel");
+
+    // Copy static refs into instance members
+    m_browser = s_browser;
+    m_hCefParentWnd = s_hCefParentWnd;
+
+    // Re-wire handler and client to point to this (new) panel
+    if (s_messageHandler)
+        s_messageHandler->setPanel(this);
+    if (s_client)
+        static_cast<WebViewCefClient*>(s_client.get())->setPanel(this);
+
+    // We need a VclBin for position reference (same as initCefBrowser)
+    css::uno::Reference<css::awt::XWindow> xChildFrame = m_xContainer->CreateChildFrame();
+    m_pBinWindow = VCLUnoHelper::GetWindow(xChildFrame);
+    if (!m_pBinWindow)
+    {
+        SAL_WARN("officelabs.cef", "reattach: CreateChildFrame failed");
+        return;
+    }
+
+    // Get the frame HWND from the new panel's parent
+    vcl::Window* pSizedParent = m_pBinWindow->GetParent();
+    if (!pSizedParent)
+        return;
+
+    const SystemEnvData* pFrameData = pSizedParent->GetSystemData();
+    HWND hFrameWnd = pFrameData ? static_cast<HWND>(pFrameData->hWnd) : nullptr;
+    if (!hFrameWnd)
+        return;
+
+    m_hFrameWnd = hFrameWnd;
+
+    // If the frame HWND has changed (unlikely but possible), re-parent the popup.
+    if (s_hCefParentWnd && hFrameWnd)
+    {
+        // Update the popup's owner to the new frame HWND.
+        // SetWindowLongPtr(GWLP_HWNDPARENT) changes the owner for popups.
+        LONG_PTR currentOwner = GetWindowLongPtr(s_hCefParentWnd, GWLP_HWNDPARENT);
+        if (reinterpret_cast<HWND>(currentOwner) != hFrameWnd)
+        {
+            SetWindowLongPtr(s_hCefParentWnd, GWLP_HWNDPARENT,
+                             reinterpret_cast<LONG_PTR>(hFrameWnd));
+            SAL_INFO("officelabs.cef", "reattach: re-parented popup to new frame HWND");
+        }
+    }
+
+    // Install frame subclass on the (possibly new) frame HWND
+    if (m_hFrameWnd)
+    {
+        if (SetWindowSubclass(m_hFrameWnd, FrameSubclassProc,
+                              CEFHOST_SUBCLASS_ID,
+                              reinterpret_cast<DWORD_PTR>(this)))
+        {
+            m_bSubclassed = true;
+        }
+    }
+
+    // Show the popup at its CURRENT position (where the sidebar was before
+    // doVerb) and bring it to the top of the Z-order.  Do NOT try to
+    // force-reposition — the VCL parent may not be laid out yet, so
+    // OutputToAbsoluteScreenPixel() returns wrong coordinates (e.g. 0,0)
+    // which puts the popup behind the document.
+    if (s_hCefParentWnd)
+    {
+        SetWindowPos(s_hCefParentWnd, HWND_TOP,
+                     0, 0, 0, 0,
+                     SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+
+        // Tell CEF the host may have changed — forces content repaint.
+        if (m_browser)
+        {
+            m_browser->GetHost()->NotifyMoveOrResizeStarted();
+            m_browser->GetHost()->WasResized();
+        }
+    }
+
+    // GRACE PERIOD: prevent syncCefWindowSize() from hiding the popup
+    // during the first few seconds while VCL lays out the sidebar.
+    // 10 ticks × 500ms timer = 5 seconds max.  If VCL becomes ready
+    // sooner, the grace ends immediately (see syncCefWindowSize).
+    m_nReattachGraceTicks = 10;
+    SAL_INFO("officelabs.cef", "reattach: grace period started (10 ticks)");
+
+    // Start resize tracking timer
+    m_aResizeTimer.SetInvokeHandler(LINK(this, WebViewPanel, ResizeTimerHdl));
+    m_aResizeTimer.SetTimeout(500);
+    m_aResizeTimer.Start();
+
+    // Re-detect the document and check for document switch.
+    // If the user opened a different document, clear the chat in React.
+    SfxObjectShell* pPrevShell = s_lastDocShell;
+    detectDocument();  // updates s_lastDocShell
+
+    if (pPrevShell != nullptr && s_lastDocShell != pPrevShell)
+    {
+        SAL_INFO("officelabs.cef",
+                 "reattach: document changed — clearing chat in React");
+        postMessageToJS(u"{\"type\":\"session:newDocument\"}"_ustr);
+    }
+
+    SAL_INFO("officelabs.cef", "reattachCefBrowser: done — browser alive, chat "
+             << (pPrevShell == s_lastDocShell ? "preserved" : "cleared"));
 }
 
 void WebViewPanel::syncCefWindowSize()
@@ -513,6 +698,37 @@ void WebViewPanel::syncCefWindowSize()
     bool bShouldShow = bSidebarVisible && !bFrameMinimized;
 
     bool bIsShown = IsWindowVisible(m_hCefParentWnd);
+
+    // GRACE PERIOD after reattach:
+    // After OLE in-place activation (chart insert, etc.), the sidebar panel
+    // is destroyed and recreated.  For the first few timer ticks the VCL
+    // parent may not be laid out yet — IsReallyVisible() returns false even
+    // though the sidebar IS about to be shown.  Without this grace, the
+    // popup gets hidden immediately and never comes back.
+    //
+    // During the grace period we:
+    //   - Do NOT hide the popup (skip the SW_HIDE)
+    //   - Still try to position it (fall through to position tracking)
+    //   - Clear the grace as soon as bShouldShow becomes true
+    if (m_nReattachGraceTicks > 0)
+    {
+        if (bShouldShow)
+        {
+            // VCL parent is ready — end grace period, resume normal behavior
+            m_nReattachGraceTicks = 0;
+            SAL_INFO("officelabs.cef", "syncCef: grace period ended (VCL ready)");
+        }
+        else
+        {
+            --m_nReattachGraceTicks;
+            if (m_nReattachGraceTicks == 0)
+                SAL_INFO("officelabs.cef", "syncCef: grace period expired");
+            // Do NOT hide — just skip visibility management and fall through
+            // to position tracking.  The popup stays visible at its old pos.
+            return;
+        }
+    }
+
     if (bShouldShow && !bIsShown)
         ShowWindow(m_hCefParentWnd, SW_SHOWNA);
     else if (!bShouldShow && bIsShown)
@@ -522,9 +738,6 @@ void WebViewPanel::syncCefWindowSize()
         return;
 
     // --- Z-order: keep popup in front of the LO frame ---
-    // Adjust when frame or popup is foreground (avoid popping over other apps).
-    // With the frame subclass, WM_ACTIVATE handles the primary Z-order fixup
-    // instantly. This timer-based check is a fallback.
     HWND hFg = GetForegroundWindow();
     if (m_hFrameWnd && (hFg == m_hFrameWnd || hFg == m_hCefParentWnd))
     {
@@ -606,12 +819,7 @@ void WebViewPanel::postMessageToJS(const OUString& jsonMessage)
 
 void WebViewPanel::detectDocument()
 {
-    // Already have a document? Skip re-detection unless it changed.
-    // (Remove this early-return if you need to support document switching.)
-
     // Strategy 1: Use SfxBindings -> Dispatcher -> ViewFrame -> ObjectShell
-    // This is the most reliable path because m_pBindings is tied to the specific
-    // frame that owns this sidebar panel.
     if (m_pBindings)
     {
         SfxDispatcher* pDisp = m_pBindings->GetDispatcher();
@@ -628,6 +836,7 @@ void WebViewPanel::detectDocument()
                     if (xTextDoc.is())
                     {
                         m_pDocController->setDocument(xTextDoc);
+                        s_lastDocShell = pShell;
                         SAL_INFO("officelabs.cef",
                                  "detectDocument: bound via SfxBindings");
                         return;
@@ -648,6 +857,7 @@ void WebViewPanel::detectDocument()
         if (xTextDoc.is())
         {
             m_pDocController->setDocument(xTextDoc);
+            s_lastDocShell = pShell;
             SAL_INFO("officelabs.cef",
                      "detectDocument: bound via SfxObjectShell::Current()");
             return;
@@ -660,7 +870,8 @@ void WebViewPanel::detectDocument()
 void WebViewPanel::onBrowserCreated(CefRefPtr<CefBrowser> browser)
 {
     m_browser = browser;
-    SAL_INFO("officelabs.cef", "CEF browser created successfully");
+    s_browser = browser;  // Also store in static state for persistence
+    SAL_INFO("officelabs.cef", "CEF browser created successfully (stored in static)");
 
     // Now that the browser is ready, detect and bind the current document
     postToVclThread([this]() {

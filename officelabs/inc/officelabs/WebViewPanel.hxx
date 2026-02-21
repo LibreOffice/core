@@ -8,6 +8,14 @@
  * IPC:
  *   C++ -> JS: postMessageToJS() calls window.officelabs.__onMessage(json)
  *   JS -> C++: window.cefQuery() routed to WebViewMessageHandler
+ *
+ * BROWSER PERSISTENCE:
+ *   The CEF browser and its popup HWND live in static storage and survive
+ *   panel destruction/recreation.  This prevents the sidebar from losing
+ *   state when OLE in-place activation (charts, equations) temporarily
+ *   changes the frame context.
+ *   On panel destroy: popup is hidden, handler panel-pointer is nulled.
+ *   On panel create:  popup is shown/repositioned, handler is re-wired.
  */
 
 #ifndef INCLUDED_OFFICELABS_WEBVIEWPANEL_HXX
@@ -50,6 +58,9 @@ public:
     static std::unique_ptr<PanelLayout> Create(
         weld::Widget* pParent, SfxBindings* pBindings);
 
+    /// Release static CEF resources before CefShutdown(). Called by CefInit.
+    static void cleanupPersistentBrowser();
+
     WebViewPanel(weld::Widget* pParent, SfxBindings* pBindings);
     virtual ~WebViewPanel() override;
 
@@ -74,6 +85,7 @@ public:
 
 private:
     void initCefBrowser();
+    void reattachCefBrowser();
     OUString getUIUrl() const;
     void syncCefWindowSize();
 
@@ -92,8 +104,11 @@ private:
     // VclBin created via CreateChildFrame() inside the weld container
     VclPtr<vcl::Window> m_pBinWindow;
 
-    // Popup window hosting the CEF browser (owned by frame, captured in screen sharing)
+    // Instance copies of persistent static state (for convenience)
     HWND m_hCefParentWnd = nullptr;
+    CefRefPtr<CefBrowser> m_browser;
+
+    // Per-instance frame tracking
     HWND m_hFrameWnd = nullptr;
 
     // Resize tracking: timer polls for container size changes (fallback)
@@ -105,15 +120,20 @@ private:
     bool m_bInSizeMove = false;
     bool m_bSubclassed = false;
 
-    // Backend connections
+    // Grace period after reattach: number of timer ticks during which
+    // syncCefWindowSize() will NOT hide the popup.  This prevents the
+    // "black sidebar" after OLE in-place activation (chart insert etc.)
+    // where the VCL parent isn't laid out yet and IsReallyVisible()
+    // returns false, causing an immediate SW_HIDE.
+    int m_nReattachGraceTicks = 0;
+
+    // Backend connections (per-panel — rebuilt on each attach)
     std::unique_ptr<AgentConnection> m_pAgent;
     std::unique_ptr<DocumentController> m_pDocController;
 
-    // CEF objects
-    CefRefPtr<CefBrowser> m_browser;
-    CefRefPtr<CefClient> m_client;
-    CefRefPtr<CefMessageRouterBrowserSide> m_messageRouter;
-    std::unique_ptr<WebViewMessageHandler> m_messageHandler;
+    // NOTE: CefClient, CefMessageRouter, WebViewMessageHandler are NOT
+    // per-instance — they live in static storage in WebViewPanel.cxx
+    // and survive panel destruction/recreation.
 };
 
 } // namespace officelabs
