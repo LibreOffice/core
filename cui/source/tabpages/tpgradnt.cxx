@@ -152,7 +152,7 @@ void SvxGradientTabPage::FillPresetListBox()
 
         OUString sId = OUString::number(nId);
         BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview(nId, aIconSize);
-        VclPtr<VirtualDevice> aVDev = GetVirtualDevice(aBitmap);
+        auto aVDev = GetVirtualDevice(aBitmap);
 
         if (!m_xGradientLB->get_id(nId).isEmpty())
         {
@@ -414,7 +414,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
         OUString sId = nCount > 0 ? m_xGradientLB->get_id( nCount - 1 ) : OUString();
         sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
         BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview( nCount, aIconSize );
-        VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
+        auto pVDev = GetVirtualDevice(aBitmap);
 
         m_xGradientLB->insert( nId + 1, &aName, &sId, pVDev, nullptr);
         FillPresetListBox();
@@ -430,7 +430,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
         m_xBtnModify->set_sensitive(true);
 }
 
-VclPtr<VirtualDevice> SvxGradientTabPage::GetVirtualDevice(BitmapEx aBitmap)
+ScopedVclPtr<VirtualDevice> SvxGradientTabPage::GetVirtualDevice(BitmapEx aBitmap)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     const Point aNull(0, 0);
@@ -471,7 +471,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     m_pGradientList->Replace(std::make_unique<XGradientEntry>(aBGradient, aName), nPos);
 
     BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), aIconSize );
-    VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
+    auto pVDev = GetVirtualDevice(aBitmap);
 
     m_xGradientLB->remove( nPos );
     m_xGradientLB->insert( nPos, &aName, &sId, pVDev, nullptr);

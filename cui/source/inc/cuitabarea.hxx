@@ -427,7 +427,7 @@ private:
     // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops createColorStops();
 
-    static VclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
     void FillPresetListBox();
     void ShowContextMenu(const Point& pPos);
     void MenuSelect(const OUString& rIdent);
