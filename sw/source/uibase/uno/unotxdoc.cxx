@@ -388,6 +388,21 @@ SwDoc& SwXTextDocument::GetDocOrThrow() const
         const_cast<SwXTextDocument*>(this)->getXWeak());
 }
 
+bool SwXTextDocument::partHasComments() const
+{
+    if (!m_pDocShell)
+        return false;
+
+    for (auto const& sidebarItem : *m_pDocShell->GetView()->GetPostItMgr())
+    {
+        if (!sidebarItem->mpPostIt)
+            continue;
+        return true;
+    }
+
+    return false;
+}
+
 SdrModel& SwXTextDocument::getSdrModelFromUnoModel() const
 {
     return *GetDocOrThrow().getIDocumentDrawModelAccess().GetDrawModel();

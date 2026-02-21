@@ -241,6 +241,7 @@ private:
 
     void ThrowIfInvalid() const;
     SwDoc& GetDocOrThrow() const;
+    bool partHasComments() const;
 
 public:
     SwXTextDocument(SwDocShell* pShell);
