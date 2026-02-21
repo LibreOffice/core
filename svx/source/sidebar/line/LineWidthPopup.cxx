@@ -196,15 +196,14 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
         m_bCustom = true;
 
         OUString aStrTip = OUString::number(static_cast<double>(m_nCustomWidth) / 10) + m_sPt;
-        VclPtr<VirtualDevice> aCustomVDev = CreateCustomPreview(m_aIMGCus, aStrTip, true);
+        auto aCustomVDev = CreateCustomPreview(m_aIMGCus, aStrTip, true);
         m_xIVWidth->set_image(8, aCustomVDev);
         m_xIVWidth->set_text(8, aStrTip);
     }
     else
     {
         m_bCustom = false;
-        VclPtr<VirtualDevice> aCustomVDev
-            = CreateCustomPreview(m_aIMGCusGray, maStrUnits[8], false);
+        auto aCustomVDev = CreateCustomPreview(m_aIMGCusGray, maStrUnits[8], false);
         m_xIVWidth->set_image(8, aCustomVDev);
         m_xIVWidth->set_text(8, maStrUnits[8]);
     }
@@ -246,8 +245,8 @@ void LineWidthPopup::GrabFocus()
         m_xMFWidth->grab_focus();
 }
 
-VclPtr<VirtualDevice> LineWidthPopup::CreateLinePreview(sal_uInt16 nLineWidth,
-                                                        const OUString& rText)
+ScopedVclPtr<VirtualDevice> LineWidthPopup::CreateLinePreview(sal_uInt16 nLineWidth,
+                                                              const OUString& rText)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     pVDev->SetOutputSizePixel(aPreviewSize);
@@ -285,8 +284,8 @@ VclPtr<VirtualDevice> LineWidthPopup::CreateLinePreview(sal_uInt16 nLineWidth,
     return pVDev;
 }
 
-VclPtr<VirtualDevice> LineWidthPopup::CreateCustomPreview(const Image& rImage,
-                                                          const OUString& rText, bool bEnabled)
+ScopedVclPtr<VirtualDevice>
+LineWidthPopup::CreateCustomPreview(const Image& rImage, const OUString& rText, bool bEnabled)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     pVDev->SetOutputSizePixel(aPreviewSize);
@@ -329,12 +328,12 @@ void LineWidthPopup::PopulateIconView()
     for (sal_uInt16 i = 1; i <= 8; ++i)
     {
         OUString sId = OUString::number(i);
-        VclPtr<VirtualDevice> aPreview = CreateLinePreview(i, maStrUnits[i - 1]);
+        auto aPreview = CreateLinePreview(i, maStrUnits[i - 1]);
         m_xIVWidth->insert(-1, &maStrUnits[i - 1], &sId, aPreview, nullptr);
     }
 
     OUString sCustomId = OUString::number(9);
-    VclPtr<VirtualDevice> aCustomPreview = CreateCustomPreview(m_aIMGCusGray, maStrUnits[8], false);
+    auto aCustomPreview = CreateCustomPreview(m_aIMGCusGray, maStrUnits[8], false);
     m_xIVWidth->insert(-1, &maStrUnits[8], &sCustomId, aCustomPreview, nullptr);
 }
 
