@@ -118,7 +118,6 @@ css::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles()
     RectangleVector aRectangles;
     maRegion.GetRegionRectangles(aRectangles);
 
-//    sal_uLong nRects = maRegion.GetRectCount();
     css::uno::Sequence< css::awt::Rectangle > aRects(aRectangles.size());
     sal_uInt32 a(0);
 
@@ -126,13 +125,6 @@ css::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles()
     {
         aRects.getArray()[a++] = vcl::unohelper::ConvertToAWTRect(rRect);
     }
-
-    //Rectangle aRect;
-    //sal_uInt32 nR = 0;
-    //RegionHandle h = maRegion.BeginEnumRects();
-    //while ( maRegion.GetEnumRects( h, aRect ) )
-    //  aRects.getArray()[nR++] = vcl::unohelper::ConvertToAWTRect( aRect );
-    //maRegion.EndEnumRects( h );
 
     return aRects;
 }
