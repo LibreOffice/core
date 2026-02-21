@@ -342,6 +342,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf170908_delText)
+{
+    // Given a file with deleted text at the end of the paragraph just before anchored stuff
+    createSwDoc("tdf170908_delText.docx");
+
+    // When exporting that to DOCX:
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // delText must be inside a w:del or MS Word considers the document to be corrupt
+    assertXPath(pXmlDoc, "//w:delText", 1); // there is a delTree element
+    CPPUNIT_ASSERT_EQUAL(1, countXPathNodes(pXmlDoc, "//w:del/w:r/w:delText")); // must be in w:del
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf170952_delText)
 {
     // Given a document with deleted text at the end of the paragraph
