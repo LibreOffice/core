@@ -85,7 +85,7 @@ public:
     // screenshotting
     Bitmap createScreenshot() const override
     {
-        VclPtr<VirtualDevice> xDialogSurface(this->m_pDlg->getDialog()->screenshot());
+        ScopedVclPtr<VirtualDevice> xDialogSurface(this->m_pDlg->getDialog()->screenshot());
         return xDialogSurface->GetBitmap(Point(), xDialogSurface->GetOutputSizePixel());
     }
     OUString GetScreenshotId() const override { return this->m_pDlg->get_help_id(); }

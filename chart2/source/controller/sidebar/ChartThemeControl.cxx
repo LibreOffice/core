@@ -105,7 +105,7 @@ void ChartThemeControl::updateStatus(bool bForce)
         if (!getToolboxId(nId, &pToolBox) && !m_pToolbar)
             return;
 
-        auto pDev = VclPtr<VirtualDevice>::Create();
+        ScopedVclPtrInstance<VirtualDevice> pDev;
         // render the actual chart into pDev
         auto aSelItemImg(pDev->GetBitmapEx(Point(), pDev->GetOutputSizePixel()));
         if (m_pToolbar)

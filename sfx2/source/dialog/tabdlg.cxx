@@ -1196,7 +1196,7 @@ Bitmap SfxTabDialogController::createScreenshot() const
         const_cast<SfxTabDialogController*>(this)->Start_Impl();
     }
 
-    VclPtr<VirtualDevice> xDialogSurface(m_xDialog->screenshot());
+    ScopedVclPtr<VirtualDevice> xDialogSurface(m_xDialog->screenshot());
     return xDialogSurface->GetBitmap(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
