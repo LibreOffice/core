@@ -1172,7 +1172,7 @@ void SdrHdlColor::CreateB2dIAObject()
 BitmapEx SdrHdlColor::CreateColorDropper(Color aCol)
 {
     // get the Bitmap
-    VclPtr<VirtualDevice> pWrite(VclPtr<VirtualDevice>::Create());
+    ScopedVclPtrInstance<VirtualDevice> pWrite;
     pWrite->SetOutputSizePixel(m_aMarkerSize);
     pWrite->SetBackground(aCol);
     pWrite->Erase();
