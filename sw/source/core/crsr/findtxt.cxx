@@ -53,6 +53,7 @@
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
 #include <view.hxx>
+#include <i18nutil/unicodeescape.hxx>
 
 using namespace ::com::sun::star;
 using namespace util;
@@ -984,8 +985,14 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
         std::optional<OUString> xRepl;
         if (bRegExp)
             xRepl = sw::ReplaceBackReferences(m_rSearchOpt, &rCursor, m_pLayout);
+
+        // process \uhhhh and \Uhhhhhhhh escapes for regex replacements
+        OUString aFinalReplStr = xRepl ? *xRepl : m_rSearchOpt.replaceString;
+        if (bRegExp && !xRepl) // fallback for when ReplaceBackReferences returns null
+            aFinalReplStr = i18nutil::processUnicodeEscapes(aFinalReplStr);
+
         bool const bReplaced = sw::ReplaceImpl(rCursor,
-                xRepl ? *xRepl : m_rSearchOpt.replaceString,
+                aFinalReplStr,
                 bRegExp, m_rCursor.GetDoc(), m_pLayout);
 
         m_rCursor.SaveTableBoxContent( rCursor.GetPoint() );
@@ -1149,6 +1156,7 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
             utl::TextSearch aSText(rSearchOpt);
             SearchResult aResult;
             OUString aReplaceStr( rSearchOpt.replaceString );
+            aReplaceStr = i18nutil::processUnicodeEscapes(aReplaceStr);
             if (bParaEnd)
             {
                 static constexpr OUString aStr(u"\\n"_ustr);

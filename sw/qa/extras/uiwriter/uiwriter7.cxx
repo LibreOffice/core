@@ -2961,6 +2961,58 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149089)
     CPPUNIT_ASSERT_EQUAL(nGridWidth1, nGridWidth2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf106137_UnicodeEscapeInReplacement)
+{
+    // unicode values in replacement strings should expand to Unicode character when regular expressions is selected as a option
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
+    IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
+
+    rIDCO.InsertString(*pCursor, u"hello world"_ustr);
+
+    uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDes = xReplace->createReplaceDescriptor();
+    xReplaceDes->setPropertyValue(u"SearchRegularExpression"_ustr, uno::Any(true));
+
+    xReplaceDes->setSearchString(u"world"_ustr);
+    xReplaceDes->setReplaceString(u"\\u0041\\u0042\\u0043"_ustr);
+    sal_Int32 nCount = xReplace->replaceAll(xReplaceDes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nCount);
+    CPPUNIT_ASSERT_EQUAL(u"hello ABC"_ustr, pCursor->GetPointNode().GetTextNode()->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf106137_UnicodeEscapeInReplacement_BackRef)
+{
+    // \uXXXX in replacement template should expand before back-references are substituted,
+    // so that the 'searched' content containing literal \u sequences is not accidentally expanded
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwCursorShell* pShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT(pShell);
+    SwPaM* pCursor = pShell->GetCursor();
+    IDocumentContentOperations& rIDCO(pDoc->getIDocumentContentOperations());
+
+    // Insert text that contains a actual excaped unicode string
+    rIDCO.InsertString(*pCursor, u"find \\u0042"_ustr);
+
+    uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDes = xReplace->createReplaceDescriptor();
+    xReplaceDes->setPropertyValue(u"SearchRegularExpression"_ustr, uno::Any(true));
+
+    // Capture the literal "\u0042" in a regex group
+    xReplaceDes->setSearchString(u"(find .*)"_ustr);
+    // Replace with \u0041 (which should become 'A') + the backreference
+    xReplaceDes->setReplaceString(u"\\u0041 $1"_ustr);
+    sal_Int32 nCount = xReplace->replaceAll(xReplaceDes);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nCount);
+    // shouldn't be 'A find B'
+    CPPUNIT_ASSERT_EQUAL(u"A find \\u0042"_ustr, pCursor->GetPointNode().GetTextNode()->GetText());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
