@@ -1449,7 +1449,7 @@ void SvxBorderTabPage::FillPresetIV()
     for( sal_uInt16 nIdx = 1; nIdx <= BORDER_PRESET_COUNT; ++nIdx )
     {
         OUString sId = OUString::number(nIdx);
-        VclPtr<VirtualDevice> pVDev = GetVirtualDevice(m_aBorderImgVec[GetPresetImageId(nIdx) - 1]);
+        auto pVDev = GetVirtualDevice(m_aBorderImgVec[GetPresetImageId(nIdx) - 1]);
         m_xWndPresets->insert(-1, nullptr, &sId, pVDev, nullptr);
     }
 
@@ -1466,7 +1466,7 @@ void SvxBorderTabPage::FillShadowIV()
     for( sal_uInt16 nIdx = 1; nIdx <= BORDER_SHADOW_COUNT; ++nIdx )
     {
         OUString sId = OUString::number(nIdx);
-        VclPtr<VirtualDevice> pVDev = GetVirtualDevice(m_aShadowImgVec[nIdx-1]);
+        auto pVDev = GetVirtualDevice(m_aShadowImgVec[nIdx-1]);
         m_xWndShadows->insert(-1, nullptr, &sId, pVDev, nullptr);
     }
 
@@ -1474,7 +1474,7 @@ void SvxBorderTabPage::FillShadowIV()
     m_xWndShadows->select(0);
 }
 
-VclPtr<VirtualDevice> SvxBorderTabPage::GetVirtualDevice( Image pImage )
+ScopedVclPtr<VirtualDevice> SvxBorderTabPage::GetVirtualDevice( Image pImage )
 {
     BitmapEx aPreviewBitmap = pImage.GetBitmapEx();
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();

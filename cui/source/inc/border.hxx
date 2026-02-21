@@ -191,7 +191,7 @@ private:
     void UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset );
 
     static TranslateId GetShadowStringId(sal_uInt16 nIconViewIdx);
-    static VclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
 };
 
 
