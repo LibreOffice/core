@@ -404,7 +404,7 @@ FactoryFunction SvxNumValueSet::GetUITestFactory() const
 void SvxNumValueSet::init(NumberingPageType eType)
 {
     mePageType = eType;
-    mpVDev = nullptr;
+    mpVDev.disposeAndClear();
 
     SetColCount( 4 );
     SetLineCount( 2 );

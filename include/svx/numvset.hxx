@@ -51,7 +51,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
     NumberingPageType mePageType;
     tools::Rectangle       maOrgRect;
-    VclPtr<VirtualDevice> mpVDev;
+    ScopedVclPtr<VirtualDevice> mpVDev;
 
     css::uno::Reference<css::text::XNumberingFormatter> mxFormatter;
     css::lang::Locale maLocale;
