@@ -182,14 +182,12 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	uno/mapping.hxx \
 	uno/sequence2.h \
 	uno/threadpool.h \
-	$(if $(filter-out $(OS),MACOSX), \
-		$(if $(ENABLE_GTK3),LibreOfficeKit/LibreOfficeKitGtk.h) \
-			LibreOfficeKit/LibreOfficeKit.hxx \
-			LibreOfficeKit/LibreOfficeKitEnums.h \
-			LibreOfficeKit/LibreOfficeKit.h \
-			LibreOfficeKit/LibreOfficeKitInit.h \
-			LibreOfficeKit/LibreOfficeKitTypes.h \
-	) \
+	$(if $(ENABLE_GTK3),LibreOfficeKit/LibreOfficeKitGtk.h) \
+	LibreOfficeKit/LibreOfficeKit.hxx \
+	LibreOfficeKit/LibreOfficeKitEnums.h \
+	LibreOfficeKit/LibreOfficeKit.h \
+	LibreOfficeKit/LibreOfficeKitInit.h \
+	LibreOfficeKit/LibreOfficeKitTypes.h \
 ))
 
 # vim: set noet sw=4 ts=4:
