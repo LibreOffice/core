@@ -96,6 +96,7 @@ void SvxColorIconView::addEntriesForColorSet(weld::IconView& pIconView,
     }
 }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> SvxColorIconView::createColorDevice()
 {
     const sal_uInt32 nEdgeLength = getEntryEdgeLength() - 2;

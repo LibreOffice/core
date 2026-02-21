@@ -79,6 +79,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/salcall \
     compilerplugins/clang/test/sallogareas \
     compilerplugins/clang/test/salunicodeliteral \
+    compilerplugins/clang/test/scopedvclptr \
     compilerplugins/clang/test/selfinit \
     compilerplugins/clang/test/simplifyconstruct \
     compilerplugins/clang/test/simplifydynamiccast \

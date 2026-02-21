@@ -235,6 +235,7 @@ namespace cairo
                                     &cairo_surface_destroy )));
     }
 
+    // [-loplugin:scopedvclptr]
     VclPtr<VirtualDevice> X11Surface::createVirtualDevice() const
     {
         SystemGraphicsData aSystemGraphicsData;

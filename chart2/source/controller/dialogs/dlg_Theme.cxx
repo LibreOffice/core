@@ -78,6 +78,7 @@ SchThemeDlg::SchThemeDlg(weld::Window* pWindow, ChartController* pController, bo
     mxThemeIconView->select(0);
 }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> SchThemeDlg::makeImage(int nIndex)
 {
     // clone the chart

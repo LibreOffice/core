@@ -665,6 +665,7 @@ OUString SalInstanceWidget::escape_ui_str(const OUString& rLabel) const
     return rLabel.replaceAll("~", "~~");
 }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> SalInstanceWidget::create_virtual_device() const
 {
     // create with (annoying) separate alpha layer that LibreOffice itself uses
@@ -1678,6 +1679,7 @@ OUString SalInstanceWindow::get_window_state(vcl::WindowDataMask nMask) const
 
 SystemEnvData SalInstanceWindow::get_system_data() const { return *m_xWindow->GetSystemData(); }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> SalInstanceWindow::screenshot()
 {
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());

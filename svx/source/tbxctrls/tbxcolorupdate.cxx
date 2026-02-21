@@ -193,6 +193,7 @@ void VclToolboxButtonColorUpdater::SetImage(VirtualDevice* pVirDev)
     mpTbx->SetItemImage(mnBtnId, Image(aGraphic.GetXGraphic()));
 }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> VclToolboxButtonColorUpdater::CreateVirtualDevice() const
 {
     auto xVD = VclPtr<VirtualDevice>::Create(*mpTbx->GetOutDev());
@@ -350,6 +351,7 @@ void ToolboxButtonColorUpdater::SetImage(VirtualDevice* pVirDev)
     mpTbx->set_item_image(msBtnId, pVirDev);
 }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> ToolboxButtonColorUpdater::CreateVirtualDevice() const
 {
     return mpTbx->create_virtual_device();

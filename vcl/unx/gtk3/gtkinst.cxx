@@ -4296,6 +4296,7 @@ public:
         return rLabel.replaceAll("_", "__");
     }
 
+    // [-loplugin:scopedvclptr]
     virtual VclPtr<VirtualDevice> create_virtual_device() const override
     {
         // create with no separate alpha layer like everything sane does
@@ -4362,6 +4363,7 @@ public:
             gtk_container_resize_children(GTK_CONTAINER(m_pWidget));
 #endif
 
+        // [-loplugin:scopedvclptr]
         VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
         xOutput->SetOutputSizePixel(aSize);
 
@@ -6571,6 +6573,7 @@ public:
             g_signal_handler_unblock(m_pWidget, m_nToplevelFocusChangedSignalId);
     }
 
+    // [-loplugin:scopedvclptr]
     virtual VclPtr<VirtualDevice> screenshot() override
     {
         // detect if we have to manually setup its size
@@ -6598,6 +6601,7 @@ public:
 #endif
         }
 
+        // [-loplugin:scopedvclptr]
         VclPtr<VirtualDevice> xOutput(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
         xOutput->SetOutputSizePixel(get_size());
         cairo_surface_t* pSurface = get_underlying_cairo_surface(*xOutput);

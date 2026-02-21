@@ -195,6 +195,7 @@ ChartThemePopup::~ChartThemePopup()
     mxManageChartStylesButton.reset();
 }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> ChartThemePopup::makeImage(int nIndex)
 {
     VclPtr<VirtualDevice> device1 = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);

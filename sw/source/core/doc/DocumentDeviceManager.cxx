@@ -259,8 +259,10 @@ DocumentDeviceManager::~DocumentDeviceManager()
 VirtualDevice& DocumentDeviceManager::CreateVirtualDevice_() const
 {
 #ifdef IOS
+    // [-loplugin:scopedvclptr]
     VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create(DeviceFormat::GRAYSCALE);
 #else
+    // [-loplugin:scopedvclptr]
     VclPtr<VirtualDevice> pNewVir = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
 #endif
 
