@@ -273,14 +273,14 @@ CPPUNIT_TEST_FIXTURE(BitmapFilterTest, testPerformance_24_BPP)
     }
 
     int nIterations = 10;
-    auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::steady_clock::now();
     Bitmap aResult;
     for (int i = 0; i < nIterations; i++)
     {
         BitmapFilterStackBlur aBlurFilter(250);
         aResult = aBlurFilter.execute(aBigBitmap);
     }
-    auto end = std::chrono::high_resolution_clock::now();
+    auto end = std::chrono::steady_clock::now();
     auto elapsed = (end - start) / nIterations;
 
     if (constWriteResultBitmap)
