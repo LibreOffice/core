@@ -1827,7 +1827,7 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, sal_Int32
 {
     // Don't start redline data here, possibly there is a hyperlink later, and
     // that has to be started first.
-    m_pRedlineData = pRedlineData;
+    m_pRedlineData.push_back(pRedlineData);
 
     // this mark is used to be able to enclose the run inside a sdr tag.
     m_pSerializer->mark(Tag_StartRun_1);
@@ -1935,9 +1935,9 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
             // InputField with extra grabbag params - it is sdt field
             (pIt->eType == ww::eFILLIN && static_cast<const SwInputField*>(pIt->pField.get())->getGrabBagParams().hasElements())))
         {
-            StartRedline(m_pRedlineData);
+            StartRedline(m_pRedlineData.back());
             StartField_Impl( pNode, nPos, *pIt, true );
-            EndRedline(m_pRedlineData);
+            EndRedline(m_pRedlineData.back());
 
             if (m_nHyperLinkCount.back() > 0)
                 ++m_nFieldsInHyperlink;
@@ -2010,16 +2010,17 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     DoWritePermissionsStart();
 
     // Surround annotation references with redline start/end markup if we're inside a delete.
-    bool bHasAnnotationMarkReferencesInDel = !m_rAnnotationMarksEnd.empty() && m_pRedlineData
-                                             && m_pRedlineData->GetType() == RedlineType::Delete;
+    const bool bHasAnnotationMarkReferencesInDel
+        = !m_rAnnotationMarksEnd.empty() && m_pRedlineData.back()
+            && m_pRedlineData.back()->GetType() == RedlineType::Delete;
     if (bHasAnnotationMarkReferencesInDel)
     {
-        StartRedline(m_pRedlineData);
+        StartRedline(m_pRedlineData.back());
     }
     DoWriteAnnotationMarks();
     if (bHasAnnotationMarkReferencesInDel)
     {
-        EndRedline(m_pRedlineData);
+        EndRedline(m_pRedlineData.back());
     }
 
     // if there is some redlining in the document, output it
@@ -2037,7 +2038,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
 
     if (!bSkipRedline)
     {
-        StartRedline(m_pRedlineData);
+        StartRedline(m_pRedlineData.back());
     }
 
     if (m_closeHyperlinkInThisRun && m_nHyperLinkCount.back() > 0 && !m_hyperLinkAnchor.isEmpty()
@@ -2111,7 +2112,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     // (except in the case of fields with multiple runs)
     if (!bSkipRedline)
     {
-        EndRedline(m_pRedlineData);
+        EndRedline(m_pRedlineData.back());
     }
     DoWriteBookmarksEnd(m_rBookmarksEnd, false, true); // Write moverange bookmarks
 
@@ -2153,7 +2154,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
 
     if ( !m_bWritingField )
     {
-        m_pRedlineData = nullptr;
+        m_pRedlineData.back() = nullptr;
     }
 
     if ( m_closeHyperlinkInThisRun )
@@ -2226,11 +2227,12 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
         }
     }
 
-    if ( m_pRedlineData )
+    if (m_pRedlineData.back())
     {
-        EndRedline(m_pRedlineData);
-        m_pRedlineData = nullptr;
+        EndRedline(m_pRedlineData.back());
     }
+    assert(m_pRedlineData.size());
+    m_pRedlineData.pop_back();
 
     DoWriteBookmarksStart(m_rFinalBookmarksStart);
     DoWriteBookmarksEnd(m_rFinalBookmarksEnd); // Write all final bookmarks
@@ -3050,7 +3052,7 @@ void DocxAttributeOutput::DoWriteCmd( std::u16string_view rCmd )
     }
     // Write the Field command
     sal_Int32 nTextToken = XML_instrText;
-    if ( m_pRedlineData && m_pRedlineData->GetType() == RedlineType::Delete )
+    if (m_pRedlineData.size() && m_pRedlineData.back() && m_pRedlineData.back()->GetType() == RedlineType::Delete)
         nTextToken = XML_delInstrText;
 
     m_pSerializer->startElementNS(XML_w, nTextToken, FSNS(XML_xml, XML_space), "preserve");
@@ -4065,11 +4067,12 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
             break;
         }
     }
-    bool bMoved = isInMoveBookmark && m_pRedlineData && m_pRedlineData->IsMoved() &&
+    const bool bHasRedlineData = m_pRedlineData.size() && m_pRedlineData.back();
+    const bool bMoved = isInMoveBookmark && bHasRedlineData && m_pRedlineData.back()->IsMoved() &&
                   // tdf#150166 save tracked moving around TOC as w:ins, w:del
                   SwDoc::GetCurTOX(*m_rExport.m_pCurPam->GetPoint()) == nullptr;
-
-    if (GetRedlineTypeForTextToken(m_pRedlineData) == RedlineType::Delete && !bMoved)
+    if (!bMoved && bHasRedlineData
+        && GetRedlineTypeForTextToken(m_pRedlineData.back()) == RedlineType::Delete)
     {
         nTextToken = XML_delText;
     }
@@ -6810,6 +6813,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
 {
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
     MSWord_SdrAttrIter aAttrIter( m_rExport, rEditObj, TXT_HFTXTBOX );
+    m_pRedlineData.push_back(nullptr);
 
     sal_Int32 nPara = rEditObj.GetParagraphCount();
 
@@ -6867,6 +6871,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         while( nCurrentPos < nEnd );
         EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t());
     }
+    m_pRedlineData.pop_back();
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
 }
 
@@ -10787,7 +10792,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),
-      m_pRedlineData( nullptr ),
       m_nRedlineId( 0 ),
       m_bOpenedSectPr( false ),
       m_bHadSectPr(false),

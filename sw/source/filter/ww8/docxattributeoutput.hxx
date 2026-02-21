@@ -869,7 +869,7 @@ private:
     std::unique_ptr< const WW8_SepInfo > m_pSectionInfo;
 
     /// Redline data to remember in the text run.
-    const SwRedlineData *m_pRedlineData;
+    std::vector<const SwRedlineData*> m_pRedlineData;
 
     /// Id of the redline
     sal_Int32 m_nRedlineId;
