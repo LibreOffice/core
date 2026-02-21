@@ -153,7 +153,7 @@ void SvxPatternTabPage::FillPresetListBox()
 
         OUString sId = OUString::number(nId);
         Bitmap aBitmap = m_pPatternList->GetBitmapForPreview(nId, aIconSize);
-        VclPtr<VirtualDevice> aVDev = GetVirtualDevice(aBitmap);
+        auto aVDev = GetVirtualDevice(aBitmap);
         Bitmap aBmp = aVDev->GetBitmap(Point(), aVDev->GetOutputSizePixel());
 
         if (!m_xPatternLB->get_id(nId).isEmpty())
@@ -426,7 +426,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
             OUString sId = nCount > 0 ? m_xPatternLB->get_id( nCount - 1 ) : OUString();
             sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
             Bitmap aBitmapEx = m_pPatternList->GetBitmapForPreview( nCount, aIconSize );
-            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmapEx);
+            auto pVDev = GetVirtualDevice(aBitmapEx);
             Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
 
             m_xPatternLB->insert( nId + 1, &aName, &sId, &aBmp, nullptr);
@@ -460,7 +460,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     m_pPatternList->Replace(std::make_unique<XBitmapEntry>(Graphic(m_xBitmapCtl->GetBitmap()), aName), nPos);
 
     Bitmap aBitmapEx = m_pPatternList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), aIconSize );
-    VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmapEx);
+    auto pVDev = GetVirtualDevice(aBitmapEx);
     Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
 
     m_xPatternLB->remove( nPos );
@@ -471,7 +471,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     m_nPatternListState |= ChangeType::MODIFIED;
 }
 
-VclPtr<VirtualDevice> SvxPatternTabPage::GetVirtualDevice(Bitmap aBitmap)
+ScopedVclPtr<VirtualDevice> SvxPatternTabPage::GetVirtualDevice(Bitmap aBitmap)
 {
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     const Point aNull(0, 0);
