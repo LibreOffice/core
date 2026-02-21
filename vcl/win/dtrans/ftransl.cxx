@@ -359,6 +359,11 @@ Any SAL_CALL CDataFormatTranslatorUNO::getSystemDataTypeFromDataFlavor( const Da
                 findStandardFormatIdForCharset( charset, aAny );
             }
         }
+        else if (fullMediaType.equalsIgnoreAsciiCase("text/markdown"))
+        {
+            // See CDOTransferable::initFlavorListFromFormatList: take the text stream
+            aAny <<= static_cast<sal_Int32>(CF_UNICODETEXT);
+        }
         else
         {
             if (refXMimeCntType->hasParameter(Windows_FormatName))

@@ -344,7 +344,7 @@ void CDOTransferable::initFlavorListFromFormatList(const std::vector<sal_uInt32>
         if (CF_LOCALE == cfFormat)
             continue;
 
-        // if text or oemtext is offered we pretend to have unicode text
+        // if text or oemtext is offered we pretend to have unicode text; any text implies markdown
         if (CDataFormatTranslator::isTextFormat(cfFormat))
         {
             if (!m_bUnicodeRegistered)
@@ -354,6 +354,11 @@ void CDOTransferable::initFlavorListFromFormatList(const std::vector<sal_uInt32>
 
                 // register unicode text as format
                 addSupportedFlavor(formatEtcToDataFlavor(CF_UNICODETEXT));
+                // register markdown as format
+                css::datatransfer::DataFlavor aFlavor;
+                aFlavor.MimeType = "text/markdown";
+                aFlavor.DataType = cppu::UnoType<OUString>::get();
+                addSupportedFlavor(aFlavor);
             }
         }
         else
