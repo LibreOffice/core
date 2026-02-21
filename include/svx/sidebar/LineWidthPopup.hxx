@@ -61,9 +61,9 @@ private:
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(MFModifyHdl, weld::MetricSpinButton&, void);
 
-    VclPtr<VirtualDevice> CreateLinePreview(sal_uInt16 nLineWidth, const OUString& rText);
-    VclPtr<VirtualDevice> CreateCustomPreview(const Image& rImage, const OUString& rText,
-                                              bool bEnabled);
+    ScopedVclPtr<VirtualDevice> CreateLinePreview(sal_uInt16 nLineWidth, const OUString& rText);
+    ScopedVclPtr<VirtualDevice> CreateCustomPreview(const Image& rImage, const OUString& rText,
+                                                    bool bEnabled);
     void PopulateIconView();
 };
 
