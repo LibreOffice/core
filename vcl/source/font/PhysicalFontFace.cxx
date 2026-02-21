@@ -477,7 +477,7 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
             hb_subset_input_pin_axis_location(pInput, pHbFace, rVariation.tag, rVariation.value);
     }
 
-    // Perform the subsettting
+    // Perform the subsetting
     hb_face_t* pSubsetFace = hb_subset_or_fail(pHbFace, pInput);
     comphelper::ScopeGuard aSubsetFaceGuard([&]() { hb_face_destroy(pSubsetFace); });
     if (!pSubsetFace)
