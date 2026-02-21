@@ -407,10 +407,7 @@ void SvxCharacterMap::renderShowSetBatch(sal_Int32 nStartPos, sal_Int32 nCount)
             continue;
 
         sal_UCS4 cChar = getCharacterFromId(sId);
-        VclPtr<VirtualDevice> pVDev = generateCharGraphic(cChar);
-
-        m_xShowSet->set_image(i, pVDev);
-        pVDev.disposeAndClear();
+        m_xShowSet->set_image(i, generateCharGraphic(cChar));
     }
 
     m_xShowSet->thaw();
@@ -484,10 +481,7 @@ void SvxCharacterMap::renderSearchSetBatch(sal_Int32 nStartPos, sal_Int32 nCount
             continue;
 
         sal_UCS4 cChar = getCharacterFromId(sId);
-        VclPtr<VirtualDevice> pVDev = generateCharGraphic(cChar);
-
-        m_xSearchSet->set_image(i, pVDev);
-        pVDev.disposeAndClear();
+        m_xSearchSet->set_image(i, generateCharGraphic(cChar));
     }
 
     m_xSearchSet->thaw();
@@ -526,7 +520,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchRenderIdleHdl, void*, void)
     }
 }
 
-VclPtr<VirtualDevice> SvxCharacterMap::generateCharGraphic(sal_UCS4 cChar)
+ScopedVclPtr<VirtualDevice> SvxCharacterMap::generateCharGraphic(sal_UCS4 cChar)
 {
     VclPtr<VirtualDevice> pVirDev = VclPtr<VirtualDevice>::Create();
     pVirDev->SetOutputSizePixel(Size(48, 48));
@@ -1150,14 +1144,12 @@ void SvxCharacterMap::rerenderCharacter(std::u16string_view sChar, std::u16strin
     if (it != posMap.end())
     {
         sal_Int32 pos = it->second;
-        VclPtr<VirtualDevice> pVDev = generateCharGraphic(cChar);
+        auto pVDev = generateCharGraphic(cChar);
 
         if (!isSearchMode)
             m_xShowSet->set_image(pos, pVDev);
         else
             m_xSearchSet->set_image(pos, pVDev);
-
-        pVDev.disposeAndClear();
     }
 }
 

@@ -70,7 +70,7 @@ private:
     void init();
 
     // Character bitmap generation and model population
-    VclPtr<VirtualDevice> generateCharGraphic(sal_UCS4 cChar);
+    ScopedVclPtr<VirtualDevice> generateCharGraphic(sal_UCS4 cChar);
     void clearSearchCharModel();
     void populateShowCharModel();
     void populateSearchCharModel();
