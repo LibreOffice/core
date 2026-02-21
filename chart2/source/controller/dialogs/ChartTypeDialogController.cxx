@@ -399,7 +399,7 @@ void ChartTypeDialogController::setTemplateProperties( const uno::Reference< bea
 Bitmap ChartTypeDialogController::getPreviewBitmap(Image pImage)
 {
     Bitmap aPreviewBitmap = pImage.GetBitmap();
-    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    ScopedVclPtr<VirtualDevice> pVDev(VclPtr<VirtualDevice>::Create());
     if (pVDev->GetDPIScaleFactor() > 1)
         aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
     return aPreviewBitmap;
