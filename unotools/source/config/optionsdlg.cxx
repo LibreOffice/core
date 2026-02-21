@@ -32,7 +32,7 @@ constexpr OUString ROOT_NODE = u"OptionsDialogGroups"_ustr;
 constexpr OUString PAGES_NODE = u"Pages"_ustr;
 
 namespace {
-    enum NodeType{ NT_Group, NT_Option };
+    enum class NodeType{ Group, Option };
 }
 constexpr OUString g_sPathDelimiter = u"/"_ustr;
 static void ReadNode(
@@ -49,7 +49,7 @@ SvtOptionsDialogOptions::SvtOptionsDialogOptions()
     for ( const auto& rNode : aNodeSeq )
     {
         OUString sSubNode( sNode + rNode );
-        ReadNode( xHierarchyAccess, m_aOptionNodeList, sSubNode, NT_Group );
+        ReadNode( xHierarchyAccess, m_aOptionNodeList, sSubNode, NodeType::Group );
     }
 }
 
@@ -64,14 +64,14 @@ static void ReadNode(
     sal_Int32 nLen = 0;
     switch ( _eType )
     {
-        case NT_Group :
+        case NodeType::Group :
         {
             sSet = PAGES_NODE;
             nLen = 2;
             break;
         }
 
-        case NT_Option :
+        case NodeType::Option :
         {
             nLen = 1;
             break;
@@ -83,7 +83,7 @@ static void ReadNode(
     Sequence< OUString > lResult( nLen );
     auto plResult = lResult.getArray();
     plResult[0] = sNode + "Hide";
-    if ( _eType != NT_Option )
+    if ( _eType != NodeType::Option )
         plResult[1] = sNode + sSet;
 
     Sequence< Any > aValues = utl::ConfigItem::GetProperties( xHierarchyAccess, lResult, /*bAllLocales*/false );
@@ -91,14 +91,14 @@ static void ReadNode(
     if ( aValues[0] >>= bHide )
         aOptionNodeList.emplace( sNode, bHide );
 
-    if ( _eType != NT_Option )
+    if ( _eType != NodeType::Option )
     {
         OUString sNodes( sNode + sSet );
         const Sequence< OUString > aNodes = utl::ConfigItem::GetNodeNames( xHierarchyAccess, sNodes, utl::ConfigNameFormat::LocalNode );
         for ( const auto& rNode : aNodes )
         {
             OUString sSubNodeName( sNodes + g_sPathDelimiter + rNode );
-            ReadNode( xHierarchyAccess, aOptionNodeList, sSubNodeName, NT_Option );
+            ReadNode( xHierarchyAccess, aOptionNodeList, sSubNodeName, NodeType::Option );
         }
     }
 }
