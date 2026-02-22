@@ -4608,7 +4608,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf147398)
     m_pDoc->DeleteTab(0);
 }
 
-#if SC_USE_SSE2
+#ifdef LO_X86_SIMD_AVAILABLE
 CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf156985)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);

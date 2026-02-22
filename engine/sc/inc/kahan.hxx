@@ -9,29 +9,10 @@
 
 #pragma once
 
+#include "arraysum.hxx"
 #include <o3tl/untaint.hxx>
 #include <rtl/math.hxx>
 #include <cmath>
-
-class KahanSum;
-namespace sc::op
-{
-// Checkout available optimization options.
-// Note that it turned out to be problematic to support CPU-specific code
-// that's not guaranteed to be available on that specific platform (see
-// git commit 2d36e7f5186ba5215f2b228b98c24520bd4f2882). SSE2 is guaranteed on
-// x86_64 and it is our baseline requirement for x86 on Windows, so SSE2 use is
-// hardcoded on those platforms.
-// Whenever we raise baseline to e.g. AVX, this may get
-// replaced with AVX code (get it from mentioned git commit).
-// Do it similarly with other platforms.
-#if defined(X86_64) || (defined(INTEL) && defined(_WIN32))
-#define SC_USE_SSE2 1
-KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent);
-#else
-#define SC_USE_SSE2 0
-#endif
-}
 
 /**
   * This class provides LO with Kahan summation algorithm
@@ -102,7 +83,7 @@ public:
       */
     inline void add(const KahanSum& fSum)
     {
-#if SC_USE_SSE2
+#ifdef LO_X86_SIMD_AVAILABLE
         add(fSum.m_fSum + fSum.m_fError);
         add(fSum.m_fMem);
 #else

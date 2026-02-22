@@ -8,18 +8,17 @@
  *
  */
 
-#include <arraysumfunctor.hxx>
+#include <arraysum.hxx>
 #include <tools/simdsupport.hxx>
 
-#include <stdlib.h>
+#include <math.h>
 
-#if SC_USE_SSE2
+#ifdef LO_SSE2_AVAILABLE
 
 namespace sc::op
 {
-/** Kahan sum with SSE2.
-  */
-static inline void sumSSE2(__m128d& sum, __m128d& err, const __m128d& value)
+/** Kahan sum with SSE2. */
+LO_FORCE_INLINE void sumSSE2(__m128d& sum, __m128d& err, const __m128d& value)
 {
     const __m128d ANNULATE_SIGN_BIT = _mm_castsi128_pd(_mm_set1_epi64x(0x7FFF'FFFF'FFFF'FFFF));
     // Temporal parameter
@@ -40,9 +39,20 @@ static inline void sumSSE2(__m128d& sum, __m128d& err, const __m128d& value)
     sum = t;
 }
 
-/** Execute Kahan sum with SSE2.
-  */
-KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
+/** Performs one step of Neumaier summation. */
+LO_FORCE_INLINE void sumNeumaier(double& sum, double& err, double value)
+{
+    double t = sum + value;
+    if (fabs(sum) >= fabs(value))
+        err += (sum - t) + value;
+    else
+        err += (value - t) + sum;
+    sum = t;
+}
+
+/** Execute Kahan sum with SSE2. */
+LO_DLLPUBLIC_EXPORT void executeSSE2(size_t& i, size_t nSize, const double* pCurrent,
+                                     double& outSum, double& outErr)
 {
     // Make sure we don't fall out of bounds.
     // This works by sums of 8 terms.
@@ -103,13 +113,13 @@ KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
 
         // First Kahan & pairwise summation
         // 0+1 -> 0
-        KahanSum::sumNeumaierNormal(sums[0], errs[0], sums[1]);
-        KahanSum::sumNeumaierNormal(sums[0], errs[0], errs[1]);
+        sumNeumaier(sums[0], errs[0], sums[1]);
+        sumNeumaier(sums[0], errs[0], errs[1]);
 
         // Store result
-        return { sums[0], errs[0] };
+        outSum = sums[0];
+        outErr = errs[0];
     }
-    return { 0.0, 0.0 };
 }
 
 } // namespace

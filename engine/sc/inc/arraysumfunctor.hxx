@@ -13,6 +13,9 @@
 #include <cmath>
 #include "kahan.hxx"
 #include <formula/errorcodes.hxx>
+#ifdef LO_X86_SIMD_AVAILABLE
+#include <tools/cpuid.hxx>
+#endif
 
 namespace sc::op
 {
@@ -52,8 +55,27 @@ static inline KahanSum executeUnrolled(size_t& i, size_t nSize, const double* pC
   */
 static inline KahanSum executeFast(size_t& i, size_t nSize, const double* pCurrent)
 {
-#if SC_USE_SSE2
-    return executeSSE2(i, nSize, pCurrent);
+#ifdef LO_X86_SIMD_AVAILABLE
+    static const bool bHasAVX512F = cpuid::hasAVX512F();
+    if (bHasAVX512F)
+    {
+        double fSum = 0.0;
+        double fErr = 0.0;
+        executeAVX512F(i, nSize, pCurrent, fSum, fErr);
+        return { fSum, fErr };
+    }
+    static const bool bHasAVX = cpuid::hasAVX();
+    if (bHasAVX)
+    {
+        double fSum = 0.0;
+        double fErr = 0.0;
+        executeAVX(i, nSize, pCurrent, fSum, fErr);
+        return { fSum, fErr };
+    }
+    double fSum = 0.0;
+    double fErr = 0.0;
+    executeSSE2(i, nSize, pCurrent, fSum, fErr);
+    return { fSum, fErr };
 #else
     return executeUnrolled(i, nSize, pCurrent);
 #endif

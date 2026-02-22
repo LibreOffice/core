@@ -34,8 +34,7 @@ void getCpuId(uint32_t array[4], uint32_t /*nInfoType*/)
 }
 #endif
 
-// For AVX we need to check if OS has support for ymm registers
-bool checkAVXSupportInOS()
+uint32_t getXCR0()
 {
     uint32_t xcr0 = 0;
 #if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_AMD64))
@@ -43,7 +42,21 @@ bool checkAVXSupportInOS()
 #elif (defined(__i386__) || defined(__x86_64__))
     __asm__("xgetbv" : "=a"(xcr0) : "c"(0) : "%edx");
 #endif
-    return ((xcr0 & 6) == 6); /* checking if xmm and ymm state are enabled in XCR0 */
+    return xcr0;
+}
+
+// For AVX we need to check if OS has support for ymm registers
+bool checkAVXSupportInOS()
+{
+    uint32_t xcr0 = getXCR0();
+    return ((xcr0 & 0x06) == 0x06); // bits 1,2 = xmm + ymm
+}
+
+// For AVX512 we additionally need opmask, ZMM_Hi256, Hi16_ZMM state
+bool checkAVX512SupportInOS()
+{
+    uint32_t xcr0 = getXCR0();
+    return ((xcr0 & 0xE6) == 0xE6); // bits 1,2,5,6,7 = xmm + ymm + opmask + ZMM_Hi256 + Hi16_ZMM
 }
 
 } // end anonymous namespace
@@ -99,7 +112,7 @@ InstructionSetFlags getCpuInstructionSetFlags()
 
                     if ((aExtendedInfo[1] & AVX2_bit) != 0)
                         eInstructions |= InstructionSetFlags::AVX2;
-                    if ((aExtendedInfo[1] & AVX512F_bit) != 0)
+                    if (((aExtendedInfo[1] & AVX512F_bit) != 0) && checkAVX512SupportInOS())
                         eInstructions |= InstructionSetFlags::AVX512F;
                 }
             }
