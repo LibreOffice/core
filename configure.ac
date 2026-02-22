@@ -1521,9 +1521,15 @@ if test "$_os" = "Emscripten"; then
         fi
     fi
     if test -f "$EMSCRIPTEN_VERSION_H"; then
-        EMSCRIPTEN_MAJOR=$($GREP __EMSCRIPTEN_major__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_major__ //p')
-        EMSCRIPTEN_MINOR=$($GREP __EMSCRIPTEN_minor__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_minor__ //p')
-        EMSCRIPTEN_TINY=$($GREP __EMSCRIPTEN_tiny__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_tiny__ //p')
+        if $GREP -q __EMSCRIPTEN_MAJOR__ "$EMSCRIPTEN_VERSION_H"; then
+            EMSCRIPTEN_MAJOR=$($GREP __EMSCRIPTEN_MAJOR__ "$EMSCRIPTEN_VERSION_H" | head -n 1 | $SED -ne 's/.*__EMSCRIPTEN_MAJOR__ //p')
+            EMSCRIPTEN_MINOR=$($GREP __EMSCRIPTEN_MINOR__ "$EMSCRIPTEN_VERSION_H" |  head -n 1 | $SED -ne 's/.*__EMSCRIPTEN_MINOR__ //p')
+            EMSCRIPTEN_TINY=$($GREP __EMSCRIPTEN_TINY__ "$EMSCRIPTEN_VERSION_H" |  head -n 1 | $SED -ne 's/.*__EMSCRIPTEN_TINY__ //p')
+        else
+            EMSCRIPTEN_MAJOR=$($GREP __EMSCRIPTEN_major__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_major__ //p')
+            EMSCRIPTEN_MINOR=$($GREP __EMSCRIPTEN_minor__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_minor__ //p')
+            EMSCRIPTEN_TINY=$($GREP __EMSCRIPTEN_tiny__ "$EMSCRIPTEN_VERSION_H" | $SED -ne 's/.*__EMSCRIPTEN_tiny__ //p')
+        fi
     else
         EMSCRIPTEN_DEFINES=$(echo | emcc -dM -E - | $GREP __EMSCRIPTEN_)
         EMSCRIPTEN_MAJOR=$(echo "$EMSCRIPTEN_DEFINES" | $SED -ne 's/.*__EMSCRIPTEN_major__ //p')

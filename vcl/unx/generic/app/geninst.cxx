@@ -91,9 +91,15 @@ OUString SalGenericInstance::getOSVersion()
     }
     aKernelVer = OUString::createFromAscii(stName.sysname) + " " + aKernelVer.copy(0, nIndex);
 #elif defined(EMSCRIPTEN)
+#if defined __EMSCRIPTEN_MAJOR__
+    aKernelVer = u"Emscripten "_ustr + OUString::number(__EMSCRIPTEN_MAJOR__) + u"."_ustr
+                 + OUString::number(__EMSCRIPTEN_MINOR__) + u"."_ustr
+                 + OUString::number(__EMSCRIPTEN_TINY__);
+#else
     aKernelVer = u"Emscripten "_ustr + OUString::number(__EMSCRIPTEN_major__) + u"."_ustr
                  + OUString::number(__EMSCRIPTEN_minor__) + u"."_ustr
                  + OUString::number(__EMSCRIPTEN_tiny__);
+#endif
 #endif
     return aKernelVer;
 }
