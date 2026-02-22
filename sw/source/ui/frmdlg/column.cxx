@@ -1339,7 +1339,7 @@ void SwColumnPage::SetInSection(bool bSet)
 
 ScopedVclPtr<VirtualDevice> SwColumnPage::CreateColumnLayoutVDev(sal_uInt16 nItemId)
 {
-    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    ScopedVclPtr<VirtualDevice> pVDev(VclPtr<VirtualDevice>::Create());
     const Size aSize(30, 30);
     pVDev->SetOutputSizePixel(aSize);
 

@@ -79,7 +79,7 @@ CellLineStylePopup::~CellLineStylePopup()
 
 ScopedVclPtr<VirtualDevice> CellLineStylePopup::CreateImage(int nIndex)
 {
-    VclPtr<VirtualDevice> pDev = mxCellLineStyleTreeView->create_virtual_device();
+    ScopedVclPtr<VirtualDevice> pDev = mxCellLineStyleTreeView->create_virtual_device();
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     pDev->SetBackground(rStyleSettings.GetFieldColor());
     pDev->SetLineColor(rStyleSettings.GetFieldTextColor());

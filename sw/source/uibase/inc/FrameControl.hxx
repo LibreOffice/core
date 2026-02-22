@@ -55,7 +55,7 @@ public:
 class SwFrameMenuButtonBase : public InterimItemWindow, public ISwFrameControl
 {
 protected:
-    VclPtr<VirtualDevice> m_xVirDev;
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
 private:
     VclPtr<SwEditWin>     m_pEditWin;
     const SwFrame*          m_pFrame;

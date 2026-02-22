@@ -367,7 +367,7 @@ public:
     virtual OUString strip_mnemonic(const OUString& rLabel) const override;
     virtual OUString escape_ui_str(const OUString& rLabel) const override;
 
-    virtual VclPtr<VirtualDevice> create_virtual_device() const override;
+    virtual ScopedVclPtr<VirtualDevice> create_virtual_device() const override;
 
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override;
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>

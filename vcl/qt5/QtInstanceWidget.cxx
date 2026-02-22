@@ -755,9 +755,9 @@ OUString QtInstanceWidget::escape_ui_str(const OUString& rLabel) const
     return rLabel.replaceAll("&", "&&");
 }
 
-VclPtr<VirtualDevice> QtInstanceWidget::create_virtual_device() const
+ScopedVclPtr<VirtualDevice> QtInstanceWidget::create_virtual_device() const
 {
-    VclPtr<VirtualDevice> xRet = VclPtr<VirtualDevice>::Create();
+    ScopedVclPtr<VirtualDevice> xRet(VclPtr<VirtualDevice>::Create());
     xRet->SetBackground();
     return xRet;
 }
