@@ -242,11 +242,11 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
 
 rtl_TextEncoding SwIoSystem::GetTextEncoding(SvStream& rStrm)
 {
-    sal_Size nLen, nOrig;
+    sal_uLong nLen, nOrig;
     char aBuf[4096];
     nOrig = nLen = rStrm.ReadBytes(aBuf, sizeof(aBuf));
 
-    rtl_TextEncoding eCharSet;
+    rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
     const bool bRet = SwIoSystem::IsDetectableText(aBuf, nLen, &eCharSet, nullptr, nullptr, nullptr);
     if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
         rStrm.SeekRel(-(tools::Long(nLen)));
