@@ -32,11 +32,9 @@ $(eval $(call gb_Library_use_libraries,officelabs,\
 
 $(eval $(call gb_Library_use_externals,officelabs,\
     boost_headers \
-    curl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,officelabs,\
-    officelabs/source/AgentConnection \
     officelabs/source/DocumentController \
 ))
 

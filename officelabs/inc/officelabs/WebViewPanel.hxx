@@ -47,7 +47,6 @@ class SfxBindings;
 
 namespace officelabs {
 
-class AgentConnection;
 class DocumentController;
 class WebViewMessageHandler;
 
@@ -79,8 +78,7 @@ public:
     // Detect/refresh the current Writer document for DocumentController
     void detectDocument();
 
-    // Access agent and document controller (for message handler)
-    AgentConnection* getAgent() const { return m_pAgent.get(); }
+    // Access document controller (for message handler)
     DocumentController* getDocController() const { return m_pDocController.get(); }
 
 private:
@@ -127,8 +125,7 @@ private:
     // returns false, causing an immediate SW_HIDE.
     int m_nReattachGraceTicks = 0;
 
-    // Backend connections (per-panel — rebuilt on each attach)
-    std::unique_ptr<AgentConnection> m_pAgent;
+    // Backend document bridge (per-panel — rebuilt on each attach)
     std::unique_ptr<DocumentController> m_pDocController;
 
     // NOTE: CefClient, CefMessageRouter, WebViewMessageHandler are NOT

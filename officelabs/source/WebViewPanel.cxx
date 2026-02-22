@@ -22,7 +22,6 @@
 #include <officelabs/WebViewPanel.hxx>
 #include <officelabs/CefInit.hxx>
 #include <officelabs/WebViewMessageHandler.hxx>
-#include <officelabs/AgentConnection.hxx>
 #include <officelabs/DocumentController.hxx>
 
 #include <sfx2/bindings.hxx>
@@ -384,8 +383,7 @@ WebViewPanel::WebViewPanel(weld::Widget* pParent, SfxBindings* pBindings)
     SAL_INFO("officelabs.cef", "WebViewPanel created (s_browserCreated="
              << (s_browserCreated ? "true" : "false") << ")");
 
-    // Create backend connections (per-panel)
-    m_pAgent = std::make_unique<AgentConnection>();
+    // Create per-panel document bridge
     m_pDocController = std::make_unique<DocumentController>();
 
     if (s_browserCreated)

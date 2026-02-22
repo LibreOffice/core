@@ -1,5 +1,4 @@
 # Accessibility suppressions for officelabs UI
-# These labels are status indicators, not form labels
-officelabs/ui/agenticpanel.ui://GtkLabel[@id='connection_status'] orphan-label
-officelabs/ui/agenticpanel.ui://GtkLabel[@id='model_label'] orphan-label
-officelabs/ui/agenticpanel.ui://GtkLabel[@id='pending_edits_label'] orphan-label
+# The CEF browser container is a drawing area -- it has no GTK label by design,
+# the entire surface is rendered by Chromium Embedded Framework.
+officelabs/ui/webviewpanel.ui://GtkDrawingArea[@id='cef_container'] no-labelled-by
