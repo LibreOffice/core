@@ -1883,7 +1883,7 @@ namespace emfio
                     case EMR_SMALLTEXTOUT :
                     {
                         sal_Int32   ptlReferenceX, ptlReferenceY;
-                        sal_uInt32  nLen, nOptions, nGfxMode;
+                        sal_uInt32  nLen, nOptions(0), nGfxMode;
                         float       fXScale, fYScale;
 
                         mpInputStream->ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY )
