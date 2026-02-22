@@ -72,7 +72,7 @@ class SwHeaderFooterWin final : public InterimItemWindow
     std::unique_ptr<weld::MenuButton> m_xMenuButton;
     std::unique_ptr<weld::Button> m_xPushButton;
     VclPtr<SwEditWin>     m_pEditWin;
-    VclPtr<VirtualDevice> m_xVirDev;
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
     const SwFrame*        m_pFrame;
     OUString              m_sLabel;
     bool                  m_bIsHeader;

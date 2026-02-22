@@ -194,9 +194,9 @@ void VclToolboxButtonColorUpdater::SetImage(VirtualDevice* pVirDev)
     mpTbx->SetItemImage(mnBtnId, Image(aGraphic.GetXGraphic()));
 }
 
-VclPtr<VirtualDevice> VclToolboxButtonColorUpdater::CreateVirtualDevice() const
+ScopedVclPtr<VirtualDevice> VclToolboxButtonColorUpdater::CreateVirtualDevice() const
 {
-    auto xVD = VclPtr<VirtualDevice>::Create(*mpTbx->GetOutDev());
+    ScopedVclPtr<VirtualDevice> xVD = VclPtr<VirtualDevice>::Create(*mpTbx->GetOutDev());
     xVD->SetBackground(Wallpaper(COL_WHITE));
     return xVD;
 }
@@ -351,7 +351,7 @@ void ToolboxButtonColorUpdater::SetImage(VirtualDevice* pVirDev)
     mpTbx->set_item_image(msBtnId, pVirDev);
 }
 
-VclPtr<VirtualDevice> ToolboxButtonColorUpdater::CreateVirtualDevice() const
+ScopedVclPtr<VirtualDevice> ToolboxButtonColorUpdater::CreateVirtualDevice() const
 {
     return mpTbx->create_virtual_device();
 }

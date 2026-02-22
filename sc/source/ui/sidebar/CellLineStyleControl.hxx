@@ -40,7 +40,7 @@ private:
     DECL_LINK(StyleSelectHdl, weld::TreeView&, bool);
     DECL_LINK(PBClickHdl, weld::Button&, void);
 
-    VclPtr<VirtualDevice> CreateImage(int nIndex);
+    ScopedVclPtr<VirtualDevice> CreateImage(int nIndex);
 
 public:
     CellLineStylePopup(weld::Toolbar* pParent, const OUString& rId, SfxDispatcher* pDispatcher);

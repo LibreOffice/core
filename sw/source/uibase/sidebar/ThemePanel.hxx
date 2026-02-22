@@ -43,7 +43,7 @@ private:
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(ItemActivatedHdl, weld::IconView&, bool);
     void DoubleClickHdl();
-    VclPtr<VirtualDevice> CreateImage(const model::ColorSet& rColorSet);
+    ScopedVclPtr<VirtualDevice> CreateImage(const model::ColorSet& rColorSet);
 };
 
 } // end of namespace sw::sidebar

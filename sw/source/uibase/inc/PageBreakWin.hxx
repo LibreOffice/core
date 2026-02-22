@@ -65,7 +65,7 @@ class SwPageBreakWin final : public InterimItemWindow
     std::unique_ptr<weld::MenuButton> m_xMenuButton;
     VclPtr<SwBreakDashedLine> m_pLine;
     VclPtr<SwEditWin>     m_pEditWin;
-    VclPtr<VirtualDevice> m_xVirDev;
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
     const SwFrame*        m_pFrame;
     bool                  m_bIsAppearing;
     int                   m_nFadeRate;

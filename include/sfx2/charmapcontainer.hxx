@@ -92,8 +92,8 @@ public:
               const Link<void*, void>& rUpdateFavHdl, const Link<void*, void>& rUpdateRecentHdl,
               const Link<const CharAndFont&, void>& rCharSelectedHdl);
 
-    static VclPtr<VirtualDevice> CreateIcon(weld::IconView& rIconView, const OUString& rFont,
-                                            const OUString& rText);
+    static ScopedVclPtr<VirtualDevice> CreateIcon(weld::IconView& rIconView, const OUString& rFont,
+                                                  const OUString& rText);
 
     void getFavCharacterList();
     void updateFavCharControl();

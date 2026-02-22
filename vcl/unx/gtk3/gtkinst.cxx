@@ -4334,10 +4334,10 @@ public:
         return rLabel.replaceAll("_", "__");
     }
 
-    virtual VclPtr<VirtualDevice> create_virtual_device() const override
+    virtual ScopedVclPtr<VirtualDevice> create_virtual_device() const override
     {
         // create with no separate alpha layer like everything sane does
-        auto xRet = VclPtr<VirtualDevice>::Create();
+        ScopedVclPtr<VirtualDevice> xRet(VclPtr<VirtualDevice>::Create());
         xRet->SetBackground();
         return xRet;
     }

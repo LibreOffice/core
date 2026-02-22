@@ -74,7 +74,7 @@ IMPL_LINK_NOARG(ThemePanel, ItemActivatedHdl, weld::IconView&, bool)
     return true;
 }
 
-VclPtr<VirtualDevice> ThemePanel::CreateImage(const model::ColorSet& rColorSet)
+ScopedVclPtr<VirtualDevice> ThemePanel::CreateImage(const model::ColorSet& rColorSet)
 {
     constexpr tools::Long BORDER = 4;
     constexpr tools::Long SIZE = 16;
@@ -86,7 +86,7 @@ VclPtr<VirtualDevice> ThemePanel::CreateImage(const model::ColorSet& rColorSet)
                     BORDER * 3 + SIZE * 2 + LABEL_HEIGHT);
 
     const Size aSize(aMin.Width() + 40, aMin.Height());
-    VclPtr<VirtualDevice> pDev = mxIconViewColors->create_virtual_device();
+    ScopedVclPtr<VirtualDevice> pDev = mxIconViewColors->create_virtual_device();
     pDev->SetOutputSizePixel(aSize);
 
     tools::Long startX = (aSize.Width() / 2.0) - (aMin.Width() / 2.0);

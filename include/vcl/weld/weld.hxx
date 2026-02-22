@@ -13,6 +13,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/dllapi.h>
 #include <utility>
 
@@ -368,7 +369,7 @@ public:
     */
     virtual OUString escape_ui_str(const OUString& rLabel) const = 0;
 
-    virtual VclPtr<VirtualDevice> create_virtual_device() const = 0;
+    virtual ScopedVclPtr<VirtualDevice> create_virtual_device() const = 0;
 
     //do something transient to attract the attention of the user to the widget
     virtual void call_attention_to() = 0;

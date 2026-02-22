@@ -666,7 +666,7 @@ OUString SalInstanceWidget::escape_ui_str(const OUString& rLabel) const
     return rLabel.replaceAll("~", "~~");
 }
 
-VclPtr<VirtualDevice> SalInstanceWidget::create_virtual_device() const
+ScopedVclPtr<VirtualDevice> SalInstanceWidget::create_virtual_device() const
 {
     // create with (annoying) separate alpha layer that LibreOffice itself uses
     return VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(),

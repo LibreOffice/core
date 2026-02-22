@@ -137,7 +137,7 @@ class SwColumnPage final : public SfxTabPage
     DECL_LINK(UpdateColMgrColorBox, ColorListBox&, void);
     void Timeout();
 
-    VclPtr<VirtualDevice> CreateIconViewImage(int nIndex);
+    ScopedVclPtr<VirtualDevice> CreateIconViewImage(int nIndex);
     void            Update(const weld::MetricSpinButton* pInteractiveField);
     void            UpdateCols();
     void            Init();

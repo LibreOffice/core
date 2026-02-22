@@ -1319,7 +1319,7 @@ void SwColumnPage::SetInSection(bool bSet)
     m_xTextDirectionLB->set_visible(bSet);
 }
 
-VclPtr<VirtualDevice> SwColumnPage::CreateIconViewImage(int nIndex)
+ScopedVclPtr<VirtualDevice> SwColumnPage::CreateIconViewImage(int nIndex)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -1327,7 +1327,7 @@ VclPtr<VirtualDevice> SwColumnPage::CreateIconViewImage(int nIndex)
     tools::Long nRectWidth = aSize.getWidth();
     tools::Long nRectHeight = aSize.getHeight();
 
-    VclPtr<VirtualDevice> pDev = m_xDefaultIconView->create_virtual_device();
+    ScopedVclPtr<VirtualDevice> pDev = m_xDefaultIconView->create_virtual_device();
     pDev->SetOutputSizePixel(aSize);
 
     pDev->SetFillColor(rStyleSettings.GetFieldColor());
