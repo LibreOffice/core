@@ -90,6 +90,7 @@ void SelectionObserver::StartObservation()
     OSL_ASSERT(!mbIsObservationActive);
     maInsertedPages.clear();
     mbIsObservationActive = true;
+    mbPageEventOccurred = false;
 }
 
 void SelectionObserver::AbortObservation()
