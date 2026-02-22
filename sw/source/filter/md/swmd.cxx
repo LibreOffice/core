@@ -747,7 +747,6 @@ SwMarkdownParser::SwMarkdownParser(SwDoc& rD, SwPaM& rCursor, SvStream& rIn, OUS
     rCursor.DeleteMark();
     m_pPam = &rCursor;
     m_rInput.ResetError();
-    m_nFilesize = m_rInput.TellEnd();
     m_rInput.Seek(STREAM_SEEK_TO_BEGIN);
     m_rInput.ResetError();
 }
@@ -843,67 +842,54 @@ ErrCode SwMarkdownParser::CallParser()
 {
     // use utf8
     m_rInput.StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
-    if (m_rInput.good())
-    {
-        rtl_TextEncoding eSrcEnc;
-        const sal_uInt64 nPos = m_rInput.Tell(); //bom size
-        if (nPos == 2)
-            eSrcEnc = RTL_TEXTENCODING_UCS2;
-        else if (nPos == 3)
-            eSrcEnc = RTL_TEXTENCODING_UTF8;
-        else
-        {
-            SvStreamEndian eEndian;
-            SfxObjectShell::DetectCharSet(m_rInput, eSrcEnc, eEndian);
-            if (eSrcEnc == RTL_TEXTENCODING_DONTKNOW)
-                return ERRCODE_IO_INVALIDCHAR;
-            m_rInput.SetEndian(eEndian);
-        }
-
-        m_rInput.ResetError();
-        m_nFilesize -= nPos;
-
-        if (eSrcEnc == RTL_TEXTENCODING_UTF8)
-        {
-            m_pArr.reset(new char[m_nFilesize]);
-            m_rInput.ReadBytes(m_pArr.get(), m_nFilesize);
-        }
-        else
-        {
-            OString sUtf8Data;
-            if (eSrcEnc == RTL_TEXTENCODING_UCS2)
-            {
-                if (m_nFilesize & 1)
-                    return ERRCODE_IO_INVALIDCHAR;
-
-                const sal_uInt64 nChars = m_nFilesize / 2;
-                OUString sData = read_uInt16s_ToOUString(m_rInput, nChars);
-                sUtf8Data = OUStringToOString(sData, RTL_TEXTENCODING_UTF8);
-            }
-            else
-            {
-                OUString sData = read_uInt8s_ToOUString(m_rInput, m_nFilesize, eSrcEnc);
-                sUtf8Data = OUStringToOString(sData, RTL_TEXTENCODING_UTF8);
-            }
-
-            if (sUtf8Data.getLength())
-            {
-                m_nFilesize = sUtf8Data.getLength();
-                m_pArr.reset(new char[m_nFilesize]);
-                memcpy(m_pArr.get(), sUtf8Data.getStr(), m_nFilesize);
-            }
-            else
-            {
-                return ERRCODE_IO_INVALIDCHAR;
-            }
-        }
-    }
-    else
+    if (!m_rInput.good())
     {
         return ERRCODE_IO_INVALIDCHAR;
     }
 
-    ::StartProgress(STR_STATSTR_W4WREAD, 0, m_nFilesize, m_xDoc->GetDocShell());
+    rtl_TextEncoding eSrcEnc;
+    const sal_uInt64 nPos = m_rInput.Tell(); //bom size
+    if (nPos == 2)
+        eSrcEnc = RTL_TEXTENCODING_UCS2;
+    else if (nPos == 3)
+        eSrcEnc = RTL_TEXTENCODING_UTF8;
+    else
+    {
+        SvStreamEndian eEndian;
+        SfxObjectShell::DetectCharSet(m_rInput, eSrcEnc, eEndian);
+        if (eSrcEnc == RTL_TEXTENCODING_DONTKNOW)
+            return ERRCODE_IO_INVALIDCHAR;
+        m_rInput.SetEndian(eEndian);
+    }
+
+    m_rInput.ResetError();
+    const sal_uInt64 nFilesize = m_rInput.remainingSize();
+    OString sUtf8Data;
+
+    if (eSrcEnc == RTL_TEXTENCODING_UCS2)
+    {
+        if (nFilesize & 1)
+            return ERRCODE_IO_INVALIDCHAR;
+
+        const sal_uInt64 nChars = nFilesize / 2;
+        OUString sData = read_uInt16s_ToOUString(m_rInput, nChars);
+        sUtf8Data = OUStringToOString(sData, RTL_TEXTENCODING_UTF8);
+    }
+    else
+    {
+        sUtf8Data = read_uInt8s_ToOString(m_rInput, nFilesize);
+        if (eSrcEnc != RTL_TEXTENCODING_UTF8)
+        {
+            OUString sData = OStringToOUString(sUtf8Data, eSrcEnc);
+            sUtf8Data = OUStringToOString(sData, RTL_TEXTENCODING_UTF8);
+        }
+    }
+    if (sUtf8Data.isEmpty())
+    {
+        return ERRCODE_IO_INVALIDCHAR;
+    }
+
+    ::StartProgress(STR_STATSTR_W4WREAD, 0, sUtf8Data.getLength(), m_xDoc->GetDocShell());
 
     SwTextFormatColl* pColl
         = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT);
@@ -921,7 +907,7 @@ ErrCode SwMarkdownParser::CallParser()
                          nullptr,
                          nullptr };
 
-    int result = md_parse(m_pArr.get(), m_nFilesize, &parser, static_cast<void*>(this));
+    int result = md_parse(sUtf8Data.getStr(), sUtf8Data.getLength(), &parser, this);
 
     if (result != 0)
     {
@@ -934,7 +920,6 @@ ErrCode SwMarkdownParser::CallParser()
 
 SwMarkdownParser::~SwMarkdownParser()
 {
-    m_pArr.reset();
     m_pNumRuleInfo.reset();
     m_xDoc.clear();
 }
