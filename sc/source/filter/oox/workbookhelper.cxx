@@ -866,13 +866,12 @@ rtl::Reference< ScTableSheetObj > WorkbookHelper::getSheetFromDoc( sal_Int32 nSh
     return xSheetsIA->GetSheetByIndex( nSheet );
 }
 
-Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( const OUString& rSheet ) const
+rtl::Reference< ScTableSheetObj > WorkbookHelper::getSheetFromDoc( const OUString& rSheet ) const
 {
-    Reference< XSpreadsheet > xSheet;
+    rtl::Reference< ScTableSheetObj > xSheet;
     try
     {
-        Reference< XNameAccess > xSheetsNA( getDocument()->getSheets(), UNO_QUERY_THROW );
-        xSheet.set( xSheetsNA->getByName( rSheet ), UNO_QUERY );
+        xSheet = getDocument()->getScSheets()->GetSheetByName( rSheet );
     }
     catch( Exception& )
     {
@@ -885,8 +884,9 @@ Reference< XCellRange > WorkbookHelper::getCellRangeFromDoc( const ScRange& rRan
     Reference< XCellRange > xRange;
     try
     {
-        Reference< XSpreadsheet > xSheet( getSheetFromDoc( rRange.aStart.Tab() ), UNO_SET_THROW );
-        xRange = xSheet->getCellRangeByPosition( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row() );
+        rtl::Reference< ScTableSheetObj > xSheet( getSheetFromDoc( rRange.aStart.Tab() ) );
+        if (xSheet)
+            xRange = xSheet->getCellRangeByPosition( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row() );
     }
     catch( Exception& )
     {

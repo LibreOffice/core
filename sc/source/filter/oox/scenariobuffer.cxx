@@ -119,39 +119,40 @@ void Scenario::finalizeImport()
     {
         /*  Find an unused name for the scenario (Calc stores scenario data in
             hidden sheets named after the scenario following the base sheet). */
-        Reference< XNameAccess > xSheetsNA( getDocument()->getSheets(), UNO_QUERY_THROW );
+        rtl::Reference< ScTableSheetsObj > xSheetsNA( getDocument()->getScSheets() );
         OUString aScenName = ContainerHelper::getUnusedName( xSheetsNA, maModel.maName, '_' );
 
         // create the new scenario sheet
         rtl::Reference< ScTableSheetObj > xScenariosSupp( getSheetFromDoc( mnSheet ) );
-        Reference< XScenarios > xScenarios( xScenariosSupp->getScenarios(), UNO_SET_THROW );
+        rtl::Reference< ScScenariosObj > xScenarios( xScenariosSupp->getScScenarios() );
         xScenarios->addNewByName( aScenName, AddressConverter::toApiSequence(aRanges), maModel.maComment );
 
         // write scenario cell values
-        Reference< XSpreadsheet > xSheet( getSheetFromDoc( aScenName ), UNO_SET_THROW );
-        for( const auto& rCell : maCells )
+        rtl::Reference< ScTableSheetObj > xSheet( getSheetFromDoc( aScenName ) );
+        if (xSheet)
         {
-            if( !rCell.mbDeleted ) try
+            for( const auto& rCell : maCells )
             {
-                // use XCell::setFormula to auto-detect values and strings
-                Reference< XCell > xCell( xSheet->getCellByPosition( rCell.maPos.Col(), rCell.maPos.Row() ), UNO_SET_THROW );
-                xCell->setFormula( rCell.maValue );
+                if( !rCell.mbDeleted )
+                {
+                    // use XCell::setFormula to auto-detect values and strings
+                    Reference< XCell > xCell( xSheet->getScCellByPosition( rCell.maPos.Col(), rCell.maPos.Row() ) );
+                    if (xCell)
+                        xCell->setFormula( rCell.maValue );
+                }
             }
-            catch( Exception& )
-            {
-            }
-        }
 
-        // scenario properties
-        PropertySet aPropSet( xScenarios->getByName( aScenName ) );
-        aPropSet.setProperty( PROP_IsActive, maModel.mbActive );
-        aPropSet.setProperty( PROP_CopyBack, false );
-        aPropSet.setProperty( PROP_CopyStyles, false );
-        aPropSet.setProperty( PROP_CopyFormulas, false );
-        aPropSet.setProperty( PROP_Protected, maModel.mbLocked );
-        // #112621# do not show/print scenario border
-        aPropSet.setProperty( PROP_ShowBorder, false );
-        aPropSet.setProperty( PROP_PrintBorder, false );
+            // scenario properties
+            PropertySet aPropSet( xScenarios->getByName( aScenName ) );
+            aPropSet.setProperty( PROP_IsActive, maModel.mbActive );
+            aPropSet.setProperty( PROP_CopyBack, false );
+            aPropSet.setProperty( PROP_CopyStyles, false );
+            aPropSet.setProperty( PROP_CopyFormulas, false );
+            aPropSet.setProperty( PROP_Protected, maModel.mbLocked );
+            // #112621# do not show/print scenario border
+            aPropSet.setProperty( PROP_ShowBorder, false );
+            aPropSet.setProperty( PROP_PrintBorder, false );
+        }
     }
     catch( Exception& )
     {

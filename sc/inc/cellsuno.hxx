@@ -113,8 +113,10 @@ class SfxItemPropertyMap;
 class SfxItemPropertySet;
 struct SfxItemPropertyMapEntry;
 class ScTableRowsObj;
+class ScTableColumnsObj;
 class ScTableValidationObj;
 class ScCellObj;
+class ScScenariosObj;
 class SolarMutexGuard;
 class SvxUnoTextRangeBase;
 
@@ -266,7 +268,7 @@ public:
                             // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+    SC_DLLPUBLIC virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const css::uno::Any& aValue ) override;
     virtual css::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
@@ -629,7 +631,8 @@ public:
     rtl::Reference< ScTableRowsObj >
                             getScRowsByPosition( SolarMutexGuard& rGuard, sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom );
-    rtl::Reference< ScTableRowsObj > getScRows();
+    SC_DLLPUBLIC rtl::Reference< ScTableColumnsObj > getScColumns();
+    SC_DLLPUBLIC rtl::Reference< ScTableRowsObj > getScRows();
     SC_DLLPUBLIC rtl::Reference< ScCellObj >
                             getScCellByPosition( sal_Int32 nColumn, sal_Int32 nRow );
 };
@@ -957,6 +960,8 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    rtl::Reference< ScScenariosObj > getScScenarios() const;
 
 protected:
     void AdjustUpdatedRanges(UpdateRefMode mode) override;

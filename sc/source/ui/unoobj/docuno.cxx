@@ -4535,12 +4535,17 @@ sal_Bool SAL_CALL ScTableSheetsObj::hasElements()
 
 uno::Any SAL_CALL ScTableSheetsObj::getByName( const OUString& aName )
 {
+    return uno::Any(uno::Reference<sheet::XSpreadsheet>(GetSheetByName(aName)));
+}
+
+rtl::Reference<ScTableSheetObj> ScTableSheetsObj::GetSheetByName( const OUString& aName ) const
+{
     SolarMutexGuard aGuard;
     rtl::Reference<ScTableSheetObj> xSheet(GetObjectByName_Impl(aName));
     if (!xSheet.is())
         throw container::NoSuchElementException();
 
-    return uno::Any(uno::Reference<sheet::XSpreadsheet>(xSheet));
+    return xSheet;
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableSheetsObj::getElementNames()
@@ -4681,13 +4686,17 @@ sal_Int32 SAL_CALL ScTableColumnsObj::getCount()
 
 uno::Any SAL_CALL ScTableColumnsObj::getByIndex( sal_Int32 nIndex )
 {
+    return uno::Any(uno::Reference<table::XCellRange>(getScTableColumnByIndex(nIndex)));
+}
+
+rtl::Reference<ScTableColumnObj> ScTableColumnsObj::getScTableColumnByIndex( sal_Int32 nIndex ) const
+{
     SolarMutexGuard aGuard;
     rtl::Reference<ScTableColumnObj> xColumn(GetObjectByIndex_Impl(nIndex));
     if (!xColumn.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(uno::Reference<table::XCellRange>(xColumn));
-
+    return xColumn;
 }
 
 uno::Type SAL_CALL ScTableColumnsObj::getElementType()
@@ -4923,12 +4932,17 @@ sal_Int32 SAL_CALL ScTableRowsObj::getCount()
 
 uno::Any SAL_CALL ScTableRowsObj::getByIndex( sal_Int32 nIndex )
 {
+    return uno::Any(uno::Reference<table::XCellRange>(GetTableRowByIndex(nIndex)));
+}
+
+rtl::Reference<ScTableRowObj> ScTableRowsObj::GetTableRowByIndex( sal_Int32 nIndex ) const
+{
     SolarMutexGuard aGuard;
     rtl::Reference<ScTableRowObj> xRow(GetObjectByIndex_Impl(nIndex));
     if (!xRow.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::Any(uno::Reference<table::XCellRange>(xRow));
+    return xRow;
 }
 
 uno::Type SAL_CALL ScTableRowsObj::getElementType()

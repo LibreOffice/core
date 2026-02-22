@@ -198,7 +198,7 @@ void Comment::finalizeImport(const VmlDrawing::NoteShapesMap& rNoteShapesMap)
 
     try
     {
-        ScTableSheetObj* pAnnosSupp = static_cast<ScTableSheetObj*>(getSheet().get());
+        ScTableSheetObj* pAnnosSupp = getSheet().get();
         rtl::Reference<ScAnnotationsObj> xAnnos = static_cast<ScAnnotationsObj*>(pAnnosSupp->getAnnotations().get());
         ScDocShell* pDocShell = xAnnos->GetDocShell();
 

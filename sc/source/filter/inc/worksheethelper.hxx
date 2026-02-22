@@ -181,7 +181,7 @@ public:
     /** Returns the index of the current sheet. */
     SCTAB               getSheetIndex() const;
     /** Returns the XSpreadsheet interface of the current sheet. */
-    const css::uno::Reference< css::sheet::XSpreadsheet >&
+    const rtl::Reference< ScTableSheetObj >&
                         getSheet() const;
 
     /** Returns the XCell interface for the passed cell address. */

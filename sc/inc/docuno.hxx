@@ -515,6 +515,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     rtl::Reference<ScTableSheetObj> GetSheetByIndex(sal_Int32 nIndex) const;
+    rtl::Reference<ScTableSheetObj> GetSheetByName(const OUString& rName) const;
 };
 
 class ScTableColumnsObj final : public cppu::WeakImplHelper<
@@ -582,6 +583,8 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    SC_DLLPUBLIC rtl::Reference<ScTableColumnObj> getScTableColumnByIndex( sal_Int32 Index ) const;
 };
 
 class ScTableRowsObj final : public cppu::WeakImplHelper<
@@ -644,6 +647,7 @@ public:
 
     void setPropertyValueIsFiltered( SolarMutexGuard& rGuard, bool b );
     bool getPropertyValueOHeight( SolarMutexGuard& rGuard );
+    SC_DLLPUBLIC rtl::Reference<ScTableRowObj> GetTableRowByIndex( sal_Int32 nIndex) const;
 };
 
 class ScSpreadsheetSettingsObj final : public cppu::WeakImplHelper<
@@ -741,13 +745,13 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             /// XScenarios
-    virtual void SAL_CALL   addNewByName( const OUString& aName,
+    SC_DLLPUBLIC virtual void SAL_CALL   addNewByName( const OUString& aName,
                                 const css::uno::Sequence< css::table::CellRangeAddress >& aRanges,
                                 const OUString& aComment ) override;
     virtual void SAL_CALL   removeByName( const OUString& aName ) override;
 
                             /// XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    SC_DLLPUBLIC virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 

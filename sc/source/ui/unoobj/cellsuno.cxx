@@ -4693,6 +4693,11 @@ rtl::Reference<ScCellRangeObj> ScCellRangeObj::getScCellRangeByName(
 
 uno::Reference<table::XTableColumns> SAL_CALL ScCellRangeObj::getColumns()
 {
+    return getScColumns();
+}
+
+rtl::Reference<ScTableColumnsObj> ScCellRangeObj::getScColumns()
+{
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
@@ -6528,6 +6533,11 @@ uno::Reference<sheet::XDataPilotTables> SAL_CALL ScTableSheetObj::getDataPilotTa
 }
 
 uno::Reference<sheet::XScenarios> SAL_CALL ScTableSheetObj::getScenarios()
+{
+    return getScScenarios();
+}
+
+rtl::Reference<ScScenariosObj> ScTableSheetObj::getScScenarios() const
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
