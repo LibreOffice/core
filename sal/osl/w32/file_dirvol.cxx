@@ -1528,54 +1528,74 @@ oslFileError SAL_CALL osl_getFileStatus(
         pStatus->uAttributes &= ~sal_uInt64(FILE_ATTRIBUTE_READONLY);
 
     // tdf#150118: if there is no Read Only attribute set, lets check if the user has write access on the file
+    // tdf#170297: skip AccessCheck for remote drives - it uses a local impersonation token which
+    // does not reflect the network credentials used by the SMB redirector, producing unreliable
+    // results that cause remote files to be incorrectly marked as read-only
     if ( (pStatus->uAttributes & (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_DIRECTORY)) == 0 )
     {
-        HANDLE hProcessToken = nullptr;
-        OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | TOKEN_QUERY, &hProcessToken);
-
-        HANDLE hImpersonationToken = nullptr;
-        DuplicateToken(hProcessToken, SecurityImpersonation, &hImpersonationToken);
-
-        PSECURITY_DESCRIPTOR pSD = nullptr;
-        // https://learn.microsoft.com/en-us/windows/win32/api/aclapi/nf-aclapi-getnamedsecurityinfow
-        DWORD aResult = GetNamedSecurityInfoW(
-            o3tl::toW(sFullPath.getStr()), SE_FILE_OBJECT,
-            OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
-            nullptr, nullptr, nullptr, nullptr, &pSD);
-
-        if (aResult == ERROR_SUCCESS)
+        bool bIsRemote = false;
+        if (sFullPath.startsWith("\\\\") && !sFullPath.startsWith("\\\\?\\"))
         {
-            GENERIC_MAPPING mapping
-                = { FILE_GENERIC_READ, FILE_GENERIC_WRITE, FILE_GENERIC_EXECUTE, FILE_ALL_ACCESS };
-            DWORD grantedAccess = 0;
-            BOOL accessStatus = TRUE;
-            PRIVILEGE_SET privSet;
-            DWORD privSetSize = sizeof(privSet);
+            // UNC path (\\server\share\...) is always remote
+            bIsRemote = true;
+        }
+        else if (sFullPath.getLength() >= 2 && rtl::isAsciiAlpha(sFullPath[0])
+                 && sFullPath[1] == ':')
+        {
+            // Drive letter path: check if mapped to a remote drive
+            WCHAR rootPath[4] = { static_cast<WCHAR>(sFullPath[0]), L':', L'\\', 0 };
+            bIsRemote = (GetDriveTypeW(rootPath) == DRIVE_REMOTE);
+        }
 
-            // https://learn.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-accesscheck
-            BOOL bResult = AccessCheck(pSD, hImpersonationToken, FILE_GENERIC_WRITE, &mapping,
-                                       &privSet, &privSetSize, &grantedAccess, &accessStatus);
+        if (!bIsRemote)
+        {
+            HANDLE hProcessToken = nullptr;
+            OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | TOKEN_QUERY, &hProcessToken);
 
-            if (bResult)
+            HANDLE hImpersonationToken = nullptr;
+            DuplicateToken(hProcessToken, SecurityImpersonation, &hImpersonationToken);
+
+            PSECURITY_DESCRIPTOR pSD = nullptr;
+            // https://learn.microsoft.com/en-us/windows/win32/api/aclapi/nf-aclapi-getnamedsecurityinfow
+            DWORD aResult = GetNamedSecurityInfoW(
+                o3tl::toW(sFullPath.getStr()), SE_FILE_OBJECT,
+                OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
+                nullptr, nullptr, nullptr, nullptr, &pSD);
+
+            if (aResult == ERROR_SUCCESS)
             {
-                if (!accessStatus)
+                GENERIC_MAPPING mapping
+                    = { FILE_GENERIC_READ, FILE_GENERIC_WRITE, FILE_GENERIC_EXECUTE, FILE_ALL_ACCESS };
+                DWORD grantedAccess = 0;
+                BOOL accessStatus = TRUE;
+                PRIVILEGE_SET privSet;
+                DWORD privSetSize = sizeof(privSet);
+
+                // https://learn.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-accesscheck
+                BOOL bResult = AccessCheck(pSD, hImpersonationToken, FILE_GENERIC_WRITE, &mapping,
+                                           &privSet, &privSetSize, &grantedAccess, &accessStatus);
+
+                if (bResult)
                 {
-                    // User does NOT have write access: set Read Only attribute
-                    pStatus->uAttributes |= sal_uInt64(FILE_ATTRIBUTE_READONLY);
+                    if (!accessStatus)
+                    {
+                        // User does NOT have write access: set Read Only attribute
+                        pStatus->uAttributes |= sal_uInt64(FILE_ATTRIBUTE_READONLY);
+                    }
                 }
+                else
+                {
+                    SAL_WARN("sal.osl", "AccessCheck API failed with: " << GetLastError());
+                }
+                LocalFree(pSD); // free memory
             }
             else
             {
-                SAL_WARN("sal.osl", "AccessCheck API failed with: " << GetLastError());
+                SAL_WARN("sal.osl", "GetNamedSecurityInfoW API failed with: " << aResult);
             }
-            LocalFree(pSD); // free memory
+            CloseHandle(hImpersonationToken); // free memory
+            CloseHandle(hProcessToken); // free memory
         }
-        else
-        {
-            SAL_WARN("sal.osl", "GetNamedSecurityInfoW API failed with: " << aResult);
-        }
-        CloseHandle(hImpersonationToken); // free memory
-        CloseHandle(hProcessToken); // free memory
     }
 
     pStatus->uValidFields |= osl_FileStatus_Mask_Attributes;
