@@ -1011,7 +1011,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Left,
+        SvxAdjust::ParaStart,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"6 hidden-merge, visible"_ustr, pTextFrame->GetText());
@@ -1023,7 +1023,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Left,
+        SvxAdjust::ParaStart,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"7 visible, hidden-merge"_ustr, pTextFrame->GetText());
@@ -1035,7 +1035,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Left,
+        SvxAdjust::ParaStart,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"8 visible, delete-merge, visible, hidden-merge, visible"_ustr,
@@ -1043,7 +1043,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Right,
+        SvxAdjust::ParaEnd,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
@@ -1053,7 +1053,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Left,
+        SvxAdjust::ParaStart,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"9 hidden-merge"_ustr, pTextFrame->GetText());
@@ -1065,7 +1065,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Left,
+        SvxAdjust::ParaStart,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"10 visible, hidden-merge, visible, delete-merge, visible"_ustr,
@@ -1073,7 +1073,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Right,
+        SvxAdjust::ParaEnd,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"def"_ustr, pTextFrame->GetText());
@@ -1083,7 +1083,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Left,
+        SvxAdjust::ParaStart,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
 
     aViewOptions.SetShowHiddenChar(false);
@@ -1129,7 +1129,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"abcdef"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Left,
+        SvxAdjust::ParaStart,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"7 visible, hidden-merge"_ustr, pTextFrame->GetText());
@@ -1144,7 +1144,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Right,
+        SvxAdjust::ParaEnd,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"defghi"_ustr, pTextFrame->GetText());
@@ -1156,7 +1156,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"abcdef"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Left,
+        SvxAdjust::ParaStart,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"10 visible, hidden-merge, visible, delete-merge, visible"_ustr,
@@ -1164,12 +1164,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHiddenParaProps)
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"abcdef"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Right,
+        SvxAdjust::ParaEnd,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
     pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
     CPPUNIT_ASSERT_EQUAL(u"ghi"_ustr, pTextFrame->GetText());
     CPPUNIT_ASSERT_EQUAL(
-        SvxAdjust::Left,
+        SvxAdjust::ParaStart,
         pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
 
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
@@ -1406,6 +1406,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40277)
     CPPUNIT_ASSERT(xSpell->isValid(sWord3, static_cast<sal_uInt16>(eLang), aProperties));
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf163894)
+{
+    createSwDoc("tdf163894.fodt");
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    // This was "Mauris ... nonummy.", i.e. full text of the paragraph containing the text
+    // formatted by the character style "Emphasis"
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", u"Etiam eget dui. Aliquet pede. Donec. ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 {
     createSwDoc("tdf85610.fodt");
@@ -1521,8 +1531,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
     };
 
     // inline the loading because currently properties can't be passed...
-    OUString const url(createFileURL(u"table_cell_overlap.fodt"));
-    loadWithParams(url, comphelper::containerToSequence(aFilterOptions));
+    createSwDoc("table_cell_overlap.fodt", comphelper::containerToSequence(aFilterOptions));
     save(TestFilter::PDF_WRITER);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();

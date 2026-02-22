@@ -47,12 +47,15 @@
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/commandevent.hxx>
 #include <comphelper/flagguard.hxx>

@@ -27,6 +27,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <svl/stritem.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
@@ -36,6 +37,7 @@
 #include <svtools/inettbc.hxx>
 
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <sfx2/sfxsids.hrc>
 
 using namespace ::com::sun::star::uno;

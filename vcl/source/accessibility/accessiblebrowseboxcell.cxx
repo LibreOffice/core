@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <tools/gen.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 #include <vcl/accessibletableprovider.hxx>
 

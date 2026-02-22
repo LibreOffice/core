@@ -8,6 +8,7 @@
  */
 
 #include <tools/datetimeutils.hxx>
+#include <tools/datetime.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 

@@ -35,9 +35,8 @@ static void InitCurl_easy(CURL* const pCURL)
     char const* const path = GetCABundleFile();
     if (path == nullptr)
     {
-#if defined EMSCRIPTEN
         SAL_WARN("ucb.ucp.webdav.curl", "no OpenSSL CA certificate bundle found");
-#else
+#if !defined(EMSCRIPTEN)
         throw css::uno::RuntimeException(u"no OpenSSL CA certificate bundle found"_ustr);
 #endif
     }
@@ -59,7 +58,7 @@ static void InitCurl_easy(CURL* const pCURL)
         rc = curl_easy_setopt(pCURL, CURLOPT_CAPATH, capath);
         if (rc != CURLE_OK)
         {
-            throw css::uno::RuntimeException("CURLOPT_CAPATH failed");
+            throw css::uno::RuntimeException(u"CURLOPT_CAPATH failed"_ustr);
         }
     }
 

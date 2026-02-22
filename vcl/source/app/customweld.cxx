@@ -7,7 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/OAccessible.hxx>
 #include <vcl/weld/customweld.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace weld
 {
@@ -56,6 +58,7 @@ IMPL_LINK(CustomWeld, DoResize, const Size&, rSize, void)
 IMPL_LINK(CustomWeld, DoPaint, weld::DrawingArea::draw_args, aPayload, void)
 {
     m_rWidgetController.Paint(aPayload.first, aPayload.second);
+    m_rWidgetController.ClearInvalidateFlags();
 }
 
 IMPL_LINK(CustomWeld, DoMouseButtonDown, const MouseEvent&, rMEvt, bool)

@@ -23,7 +23,9 @@
 #include <filter/msfilter/classids.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/docfile.hxx>
+#include <sot/formats.hxx>
 #include <sot/storage.hxx>
+#include <tools/globname.hxx>
 #include <array>
 
 //These are the default MathType sizes

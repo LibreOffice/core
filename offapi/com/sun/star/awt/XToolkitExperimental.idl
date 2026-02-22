@@ -52,6 +52,8 @@ interface XToolkitExperimental : XToolkit3
     sequence<string> getRecordingAndClear();
 
     /** Wait until all idles dispatched.
+
+        @since LibreOffice 24.2
      */
     void waitUntilAllIdlesDispatched();
 };

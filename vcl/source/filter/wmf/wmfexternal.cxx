@@ -22,6 +22,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 // formally known as WMF_EXTERNALHEADER
 WmfExternal::WmfExternal()

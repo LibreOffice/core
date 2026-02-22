@@ -20,12 +20,18 @@
 
 #include "swdllapi.h"
 
-#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <cppuhelper/implbase.hxx>
 
 class SwDoc;
 class SwPaM;
 
-class SW_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") OTextCursorHelper
+typedef cppu::WeakImplHelper<css::beans::XPropertySet> OTextCursorHelper_Base;
+
+/**
+ base class for SwXTextViewCursor and SwXTextTableCursor and SwXTextCursor
+ */
+class SW_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") OTextCursorHelper : public OTextCursorHelper_Base
 {
 public:
 

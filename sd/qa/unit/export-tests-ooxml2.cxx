@@ -15,7 +15,7 @@
 #include <svx/svdotable.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -1603,7 +1603,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSmartartRotation2)
 
     // clear SmartArt data to check how group shapes with double-rotated children are exported, not smartart
     // NOTE: Now we have a slot (comphelper::dispatchCommand(u".uno:DiagramToGroup"_ustr, {})) and method
-    //       at IDiagramHelper to do that, adapted removal of Diagram/SmartArt functionality
+    //       at DiagramHelper_svx to do that, adapted removal of Diagram/SmartArt functionality
     uno::Reference<drawing::XDrawPage> xPage(getPage(0));
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     SdrObjGroup* pSdrObjGroup
@@ -1921,36 +1921,35 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf59323_slideFooters)
     assertXPath(pXmlDocSlide1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:fld/a:rPr");
 }
 
-CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf53970)
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf53970_embeddedMediaFile)
 {
     // Embedded media file
-    {
-        createSdImpressDoc("odp/tdf53970.odp");
-        saveAndReload(TestFilter::PPTX);
+    createSdImpressDoc("odp/tdf53970.odp");
+    saveAndReload(TestFilter::PPTX);
 
-        // Without fix in place, the media shape was lost on export.
-        CPPUNIT_ASSERT(getPage(0)->hasElements());
-    }
+    // Without fix in place, the media shape was lost on export.
+    CPPUNIT_ASSERT(getPage(0)->hasElements());
+}
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf53970_linkedMediaFile)
+{
     // Linked media file
-    {
-        createSdImpressDoc("odp/tdf53970_linked.odp");
-        save(TestFilter::PPTX);
+    createSdImpressDoc("odp/tdf53970_linked.odp");
+    save(TestFilter::PPTX);
 
-        xmlDocUniquePtr pXmlRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
-        CPPUNIT_ASSERT(pXmlRels);
-        assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@TargetMode='External']", 2);
+    xmlDocUniquePtr pXmlRels = parseExport(u"ppt/slides/_rels/slide1.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pXmlRels);
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@TargetMode='External']", 2);
 
-        uno::Reference<beans::XPropertySet> xShape(getShape(0, getPage(0)));
-        CPPUNIT_ASSERT(xShape.is());
-        OUString sVideoURL;
+    uno::Reference<beans::XPropertySet> xShape(getShape(0, getPage(0)));
+    CPPUNIT_ASSERT(xShape.is());
+    OUString sVideoURL;
 
-        // Without fix in place, the media shape was imported as an image after export
-        // and this test would have failed with exception of type com.sun.star.beans.UnknownPropertyException
-        CPPUNIT_ASSERT_MESSAGE("MediaURL property is not set",
-                               xShape->getPropertyValue(u"MediaURL"_ustr) >>= sVideoURL);
-        CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sVideoURL.isEmpty());
-    }
+    // Without fix in place, the media shape was imported as an image after export
+    // and this test would have failed with exception of type com.sun.star.beans.UnknownPropertyException
+    CPPUNIT_ASSERT_MESSAGE("MediaURL property is not set",
+                           xShape->getPropertyValue(u"MediaURL"_ustr) >>= sVideoURL);
+    CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sVideoURL.isEmpty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

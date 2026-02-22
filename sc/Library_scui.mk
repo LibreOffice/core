@@ -107,7 +107,6 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/miscdlgs/mtrindlg \
     sc/source/ui/miscdlgs/mvtabdlg \
     sc/source/ui/miscdlgs/namecrea \
-    sc/source/ui/miscdlgs/scuiautofmt \
     sc/source/ui/miscdlgs/shtabdlg \
     sc/source/ui/miscdlgs/strindlg \
     sc/source/ui/miscdlgs/tabbgcolordlg \

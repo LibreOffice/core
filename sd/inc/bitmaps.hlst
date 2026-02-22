@@ -104,7 +104,6 @@ inline constexpr OUString BMP_PRESENTERSCREEN_BORDER_ACTIVE_LEFT = u"sd/res/pres
 inline constexpr OUString BMP_PRESENTERSCREEN_BUTTON_HELP_NORMAL = u"sd/res/presenterscreen-ButtonHelpNormal.png"_ustr;
 inline constexpr OUString BMP_PRESENTERSCREEN_BUTTON_EXIT_PRESENTER_NORMAL = u"sd/res/presenterscreen-ButtonExitPresenterNormal.png"_ustr;
 inline constexpr OUString BMP_PRESENTERSCREEN_SEPARATOR = u"sd/res/presenterscreen-Separator.png"_ustr;
-inline constexpr OUString BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_CALLOUT = u"sd/res/presenterscreen-BorderActiveBottomCallout.png"_ustr;
 inline constexpr OUString BMP_PRESENTERSCREEN_BORDER_TOOLBAR_LEFT = u"sd/res/presenterscreen-BorderToolbarLeft.png"_ustr;
 inline constexpr OUString BMP_PRESENTERSCREEN_BUTTON_SLIDE_SORTER_NORMAL = u"sd/res/presenterscreen-ButtonSlideSorterNormal.png"_ustr;
 inline constexpr OUString BMP_PRESENTERSCREEN_SCROLLBAR_PAGER_MIDDLE_NORMAL = u"sd/res/presenterscreen-ScrollbarPagerMiddleNormal.png"_ustr;

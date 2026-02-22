@@ -34,6 +34,7 @@
 #include <TablesSingleDlg.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace dbaui
 {

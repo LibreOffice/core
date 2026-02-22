@@ -41,6 +41,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
+#include <tools/stream.hxx>
 
 #include <comphelper/memorystream.hxx>
 #include <comphelper/processfactory.hxx>

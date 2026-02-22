@@ -22,7 +22,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/customweld.hxx>
 
 #include <svx/strings.hrc>
@@ -31,8 +33,10 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <tools/mapunit.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 // namespaces
 using namespace ::com::sun::star::uno;

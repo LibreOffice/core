@@ -25,6 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <utility>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmfexternal.hxx>

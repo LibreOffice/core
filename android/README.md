@@ -13,6 +13,16 @@ It uses OpenGL ES 2 for rendering of the document tiles which are gathered from
 LibreOffice using LOK. The application contains the LibreOffice core in one shared
 library: `liblo-native-code.so`, which is bundled together with the application.
 
+## Adding Dependencies
+
+To add a new dependency, make sure it hasn't already been declared in
+`android/gradle/libs.versions.toml`. If it has, just use the existing dependency declaration.
+Otherwise, declare it in the version catalog, then reference it in your Gradle files.
+
+**Note:** You cannot declare *different versions* of *one* dependency. If you really need to do this,
+create another version catalog or declare the dependency explicitly in the `.gradle` file.
+
+
 ## Architecture and Threading
 
 The application implements editing support using 4 threads:
@@ -223,7 +233,7 @@ Note that lldb might not yield the same results as `ndk-gdb`. If you suspect a
 problem with `lldb`, you can try to manually use `ndk-gdb` as described above.
 Using `lldb` from within Android Studio is more comfortable though and works like this:
 
-- open `android/source/build.gradle` in Android Studio via File|New → Import Project
+- open `android` directory in Android Studio via File|Open...
 - make sure you select the right build variant (`strippedUIDebug` is what you want)
 - use Run|Edit Configurations to create a new configuration of type "Android Native"
 	- on tab "General" pick module "source"
@@ -242,7 +252,7 @@ then toggling the breakpoint by clicking on the margin is more comfortable.
 
 ### Debugging the Java Part
 
-Open `android/source/build.gradle` in Android studio via File|New → Import
+Open `android` directory in Android studio via File|Open...
 Project and you can use Android Studio's debugging interface.
 Just make sure you pick the correct build variant (strippedUIDebug)
 

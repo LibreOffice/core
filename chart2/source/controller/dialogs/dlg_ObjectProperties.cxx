@@ -67,6 +67,7 @@
 
 #include <svx/flagsdef.hxx>
 #include <svx/numinf.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <svl/cjkoptions.hxx>
 #include <utility>

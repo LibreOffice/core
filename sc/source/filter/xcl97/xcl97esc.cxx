@@ -37,6 +37,7 @@
 
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
+#include <tools/globname.hxx>
 #include <xeescher.hxx>
 
 #include <drwlayer.hxx>

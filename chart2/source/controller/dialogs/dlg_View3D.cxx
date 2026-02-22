@@ -26,6 +26,7 @@
 #include <Diagram.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
 
 namespace chart
 {

@@ -66,6 +66,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
 #include <utility>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svtools/sfxecode.hxx>
@@ -931,7 +932,7 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame const * pFrame )
     if ( pSfxApp->IsDowning() || IsLoading() || !pFrame || pFrame->GetFrame().IsClosing_Impl() )
         return;
 
-    const SfxBoolItem* pHiddenItem = pMedium->GetItemSet().GetItem(SID_HIDDEN, false);
+    const SfxBoolItem* pHiddenItem = pMedium ? pMedium->GetItemSet().GetItem(SID_HIDDEN, false) : nullptr;
     if ( !pHiddenItem || !pHiddenItem->GetValue() )
     {
         SfxEventHintId nId = pImpl->nEventId;

@@ -32,6 +32,7 @@ NavigatorWrapper::NavigatorWrapper (
 {
     SetUpdateRequestFunctor(
             [this] () { return this->UpdateNavigator(); });
+    SetToolBoxToolTips(mrViewShellBase.GetDocument());
 }
 
 css::ui::LayoutSize NavigatorWrapper::GetHeightForWidth (const sal_Int32)

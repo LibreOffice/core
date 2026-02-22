@@ -26,6 +26,8 @@
 
 class PageOrientationPopup;
 
+namespace weld { class Button; }
+
 namespace sw::sidebar {
 
 class PageOrientationControl final : public WeldToolbarPopup

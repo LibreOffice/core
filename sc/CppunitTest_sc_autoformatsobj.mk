@@ -11,4 +11,10 @@
 
 $(eval $(call sc_unoapi_common,autoformatsobj))
 
+.PHONY: restore-default-autoformats
+restore-default-autoformats:
+	-cp "sc/res/xml/tablestyles.xml" "$(INSTROOT)/$(LIBO_SHARE_FOLDER)/calc/tablestyles.xml"
+
+$(call gb_CppunitTest_get_target,sc_autoformatsobj): restore-default-autoformats
+
 # vim: set noet sw=4 ts=4:

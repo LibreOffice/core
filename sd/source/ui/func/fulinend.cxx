@@ -18,11 +18,12 @@
  */
 
 #include <fulinend.hxx>
+#include <svtools/dlgname.hxx>
 #include <svx/xtable.hxx>
-#include <svx/svxdlg.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <strings.hrc>
@@ -112,15 +113,14 @@ void FuLineEnd::DoExecute( SfxRequest& )
         }
     }
 
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg( pFact->CreateSvxNameDialog( nullptr, aName, aDesc ) );
+    SvxNameDialog aDlg(nullptr, aName, aDesc);
 
-    pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_LINEEND );
+    aDlg.SetEditHelpId(HID_SD_NAMEDIALOG_LINEEND);
 
-    if( pDlg->Execute() != RET_OK )
+    if (aDlg.run() != RET_OK)
         return;
 
-    aName = pDlg->GetName();
+    aName = aDlg.GetName();
     bDifferent = true;
 
     for( ::tools::Long i = 0; i < nCount && bDifferent; i++ )

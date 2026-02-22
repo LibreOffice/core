@@ -10,6 +10,7 @@
 #pragma once
 
 #include <sal/config.h>
+#include <sal/types.h>
 #include <vector>
 
 #include <epoxy/gl.h>

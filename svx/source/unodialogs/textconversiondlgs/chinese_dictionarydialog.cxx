@@ -30,6 +30,8 @@
 #include <o3tl/safeint.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <utility>
 #include <osl/diagnose.h>
 

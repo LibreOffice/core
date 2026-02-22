@@ -20,23 +20,27 @@ QtInstanceContainer::QtInstanceContainer(QWidget* pWidget)
 
 void QtInstanceContainer::move(weld::Widget* pWidget, weld::Container* pNewParent)
 {
-    QtInstanceWidget* pQtInstanceWidget = dynamic_cast<QtInstanceWidget*>(pWidget);
-    assert(pQtInstanceWidget);
-    QWidget* pQWidget = pQtInstanceWidget->getQWidget();
-    assert(pQWidget);
-    getLayout().removeWidget(pQWidget);
+    SolarMutexGuard g;
 
-    if (!pNewParent)
-    {
-        pQWidget->hide();
-        pQWidget->deleteLater();
-        return;
-    }
+    GetQtInstance().RunInMainThread([&] {
+        QtInstanceWidget* pQtInstanceWidget = dynamic_cast<QtInstanceWidget*>(pWidget);
+        assert(pQtInstanceWidget);
+        QWidget* pQWidget = pQtInstanceWidget->getQWidget();
+        assert(pQWidget);
+        getLayout().removeWidget(pQWidget);
 
-    QtInstanceContainer* pNewContainer = dynamic_cast<QtInstanceContainer*>(pNewParent);
-    assert(pNewContainer);
-    QLayout& rNewLayout = pNewContainer->getLayout();
-    rNewLayout.addWidget(pQWidget);
+        if (!pNewParent)
+        {
+            pQWidget->hide();
+            pQWidget->deleteLater();
+            return;
+        }
+
+        QtInstanceContainer* pNewContainer = dynamic_cast<QtInstanceContainer*>(pNewParent);
+        assert(pNewContainer);
+        QLayout& rNewLayout = pNewContainer->getLayout();
+        rNewLayout.addWidget(pQWidget);
+    });
 }
 
 css::uno::Reference<css::awt::XWindow> QtInstanceContainer::CreateChildFrame()
@@ -45,7 +49,35 @@ css::uno::Reference<css::awt::XWindow> QtInstanceContainer::CreateChildFrame()
     return css::uno::Reference<css::awt::XWindow>();
 }
 
-void QtInstanceContainer::child_grab_focus() { assert(false && "Not implemented yet"); }
+QWidget* QtInstanceContainer::findFocusableWidget(QWidget* pWidget)
+{
+    if (!pWidget)
+        return nullptr;
+
+    if (QWidget* pFocusWidget = pWidget->focusWidget())
+        return pFocusWidget;
+
+    if (pWidget->focusPolicy() & Qt::FocusPolicy::StrongFocus)
+        return pWidget;
+
+    for (QObject* pChild : pWidget->children())
+    {
+        if (pChild->isWidgetType())
+            return findFocusableWidget(static_cast<QWidget*>(pChild));
+    }
+
+    return nullptr;
+}
+
+void QtInstanceContainer::child_grab_focus()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QWidget* pFocusWidget = findFocusableWidget(getQWidget()))
+            pFocusWidget->setFocus();
+    });
+}
 
 void QtInstanceContainer::connect_container_focus_changed(const Link<Container&, void>& rLink)
 {

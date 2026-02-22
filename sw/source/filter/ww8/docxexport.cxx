@@ -172,16 +172,22 @@ void DocxExport::AppendBookmarks( const SwTextNode& rNode, sal_Int32 nCurrentPos
     IMarkVector aMarks;
     if ( GetBookmarks( rNode, nCurrentPos, nCurrentPos + nLen, aMarks ) )
     {
+        const bool bSdtGetsBookmarkEnd = m_pAttrOutput->DoesParaSdtPreventBookmarkEnd(nCurrentPos);
         for ( MarkBase* pMark : aMarks )
         {
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
-            if ( nStart == nCurrentPos )
+            if (nStart == nCurrentPos && rNode == pMark->GetMarkStart().GetNode())
                 aStarts.push_back( pMark->GetName().toString() );
 
-            if ( nEnd == nCurrentPos )
-                aEnds.push_back( pMark->GetName().toString() );
+            if (nEnd == nCurrentPos && rNode == pMark->GetMarkEnd().GetNode())
+            {
+                if (bSdtGetsBookmarkEnd)
+                    m_pAttrOutput->WriteBookmarkEndWithParaSdt(pMark->GetName().toString());
+                else
+                    aEnds.push_back(pMark->GetName().toString());
+            }
         }
     }
 
@@ -215,10 +221,10 @@ void DocxExport::AppendAnnotationMarks( const SwWW8AttrIter& rAttrs, sal_Int32 n
             const sal_Int32 nStart = pMark->GetMarkStart().GetContentIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().GetContentIndex();
 
-            if ( nStart == nCurrentPos )
+            if (nStart == nCurrentPos && rAttrs.GetNode() == pMark->GetMarkStart().GetNode())
                 aStarts.push_back( pMark->GetName() );
 
-            if ( nEnd == nCurrentPos )
+            if (nEnd == nCurrentPos && rAttrs.GetNode() == pMark->GetMarkEnd().GetNode())
                 aEnds.push_back( pMark->GetName() );
         }
     }
@@ -738,6 +744,11 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
         m_pSections->AppendSection( SwFormatPageDesc(pNewPgDesc), rNd, pFormat, nLnNm );
     }
 
+}
+
+void DocxExport::ClearFlyAttrList()
+{
+    SdrExporter().getFlyAttrList().clear();
 }
 
 void DocxExport::InitStyles()
@@ -1405,9 +1416,9 @@ void DocxExport::WriteSettings()
     pFS->singleElementNS(XML_w, XML_autoHyphenation, FSNS(XML_w, XML_val), "true");
 
     // Hyphenation details set depending on default style, otherwise on body style
-    SwTextFormatColl* pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
+    SwTextFormatColl* pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD, /*bRegardLanguage=*/false);
     if (!pColl || !pColl->GetItemIfSet(RES_PARATR_HYPHENZONE, false))
-        pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT, /*bRegardLanguage=*/false);
+        pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT, /*bRegardLanguage=*/false);
     const SvxHyphenZoneItem* pZoneItem = nullptr;
     bool bHyphenationKeep = false;
     bool bHyphenationZone = false;
@@ -1778,6 +1789,7 @@ void DocxExport::WriteCustomXml()
 
     for (sal_Int32 j = 0; j < customXmlDomlist.getLength(); j++)
     {
+        uno::Reference < css::io::XOutputStream > xCustomXmlItemOutStream;
         const uno::Reference<xml::dom::XDocument>& customXmlDom = customXmlDomlist[j];
         const uno::Reference<xml::dom::XDocument>& customXmlDomProps = customXmlDomPropslist[j];
         if (customXmlDom.is())
@@ -1789,8 +1801,8 @@ void DocxExport::WriteCustomXml()
             uno::Reference< xml::sax::XSAXSerializable > serializer( customXmlDom, uno::UNO_QUERY );
             uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
 
-            uno::Reference < css::io::XOutputStream > xOutStream = GetFilter().openFragmentStream("customXml/item" + OUString::number(j + 1) + ".xml",
-                u"application/xml"_ustr);
+            xCustomXmlItemOutStream = GetFilter().openFragmentStream(
+                "customXml/item" + OUString::number(j + 1) + ".xml", u"application/xml"_ustr);
             if (m_SdtData.size())
             {
                 // There are some SDT blocks data with data bindings which can update some custom xml values
@@ -1810,7 +1822,8 @@ void DocxExport::WriteCustomXml()
                     if (i == m_SdtData.size() - 1)
                     {
                         // last transformation
-                        lcl_UpdateXmlValues(m_SdtData[i], xXSLTInStream->getInputStream(), xOutStream);
+                        lcl_UpdateXmlValues(
+                            m_SdtData[i], xXSLTInStream->getInputStream(), xCustomXmlItemOutStream);
                     }
                     else
                     {
@@ -1824,7 +1837,7 @@ void DocxExport::WriteCustomXml()
             }
             else
             {
-                writer->setOutputStream(xOutStream);
+                writer->setOutputStream(xCustomXmlItemOutStream);
 
                 serializer->serialize(writer, uno::Sequence< beans::StringPair >());
             }
@@ -1839,8 +1852,7 @@ void DocxExport::WriteCustomXml()
             serializer->serialize(writer, uno::Sequence< beans::StringPair >());
 
             // Adding itemprops's relationship entry to item.xml.rels file
-            m_rFilter.addRelation( GetFilter().openFragmentStream( "customXml/item"+OUString::number(j+1)+".xml",
-                    u"application/xml"_ustr ) ,
+            m_rFilter.addRelation(xCustomXmlItemOutStream,
                     oox::getRelationship(Relationship::CUSTOMXMLPROPS),
                     Concat2View("itemProps"+OUString::number(j+1)+".xml" ));
         }

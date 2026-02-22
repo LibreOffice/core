@@ -15,6 +15,11 @@
 #include <vcl/timer.hxx>
 #include <optional>
 
+namespace weld
+{
+class MenuButton;
+}
+
 class SwPageBreakWin;
 
 /** Class for the page break control window.

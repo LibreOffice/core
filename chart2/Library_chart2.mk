@@ -254,6 +254,7 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/view/charttypes/CategoryPositionHelper \
     chart2/source/view/charttypes/NetChart \
     chart2/source/view/charttypes/PieChart \
+    chart2/source/view/charttypes/UnsupportedChart \
     chart2/source/view/charttypes/Splines \
     chart2/source/view/charttypes/VSeriesPlotter \
     chart2/source/view/diagram/VDiagram \

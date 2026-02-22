@@ -35,8 +35,10 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/sequence.hxx>
 
+#include <xmloff/maptype.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>

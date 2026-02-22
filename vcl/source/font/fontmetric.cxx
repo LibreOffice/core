@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 

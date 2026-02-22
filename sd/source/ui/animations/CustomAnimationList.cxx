@@ -37,9 +37,12 @@
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <sdresid.hxx>
@@ -527,7 +530,7 @@ sal_Int8 CustomAnimationList::ExecuteDrop(const ExecuteDropEvent& rEvt)
         = mxTreeView->get_dest_row_at_pos(rEvt.maPosPixel, true);
 
     const bool bMovingEffect = ( mxDndEffectDragging != nullptr );
-    const bool bMoveNotSelf  = !xDndEffectInsertBefore || (mxDndEffectDragging && mxTreeView->iter_compare(*xDndEffectInsertBefore, *mxDndEffectDragging) != 0);
+    const bool bMoveNotSelf  = !xDndEffectInsertBefore || (mxDndEffectDragging && !xDndEffectInsertBefore->equal(*mxDndEffectDragging));
     const bool bHaveSequence(mpMainSequence);
 
     if( bMovingEffect && bMoveNotSelf && bHaveSequence )

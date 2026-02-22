@@ -35,6 +35,7 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
 #include <impgraph.hxx>
@@ -88,8 +89,6 @@
 #include <o3tl/string_view.hxx>
 #include <o3tl/test_info.hxx>
 #include <vcl/TypeSerializer.hxx>
-#include <vcl/GraphicNativeMetadata.hxx>
-#include <vcl/GraphicNativeTransform.hxx>
 
 #include "FilterConfigCache.hxx"
 
@@ -951,15 +950,6 @@ ErrCode GraphicFilter::readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkT
 
     rGraphic = Graphic(*aImportOutput.moBitmap);
     rLinkType = GfxLinkType::NativeJpg;
-
-    // Get Orientation from EXIF data
-    if (GraphicNativeMetadata aMetadata; aMetadata.read(rStream))
-    {
-        if (Degree10 aRotation = aMetadata.getRotation())
-        {
-            GraphicNativeTransform(rGraphic).rotate(aRotation);
-        }
-    }
 
     return ERRCODE_NONE;
 }

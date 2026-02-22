@@ -8,6 +8,7 @@
  */
 
 #include <test/htmltesttools.hxx>
+#include <tools/stream.hxx>
 #include <sal/log.hxx>
 
 #include <libxml/HTMLparser.h>

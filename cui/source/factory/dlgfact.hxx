@@ -117,14 +117,11 @@ public:
     virtual VclPtr<AbstractFmInputRecordNoDialog> CreateFmInputRecordNoDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog(weld::Window* pParent) override;
     virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog(weld::Window* pParent, const OUString& rName) override;
-    virtual VclPtr<AbstractSvxNameDialog> CreateSvxNameDialog(weld::Window* pParent,
-                                            const OUString& rName, const OUString& rDesc, const OUString& rTitle = u""_ustr) override;
     // #i68101#
     virtual VclPtr<AbstractSvxObjectNameDialog> CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName) override;
     virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription, bool isDecorative) override;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxMultiPathDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxPathSelectDialog(weld::Window* pParent) override;
-    virtual VclPtr<AbstractSvxHpLinkDlg>          CreateSvxHpLinkDlg(SfxChildWindow* pChild, SfxBindings* pBindings, weld::Window* pParent) override;
     virtual VclPtr<AbstractFmSearchDialog>        CreateFmSearchDialog(weld::Window* pParent,
                                                         const OUString& strInitialText,
                                                         const std::vector< OUString >& _rContexts,
@@ -220,6 +217,8 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateUIPickerDialog(weld::Window* pParent) override;
+    virtual VclPtr<VclAbstractDialog> CreateHyperlinkDialog(weld::Window* pParent,
+                                                            SfxChildWindow* pChildWindow) override;
 
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,

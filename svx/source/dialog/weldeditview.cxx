@@ -99,7 +99,22 @@ void WeldEditView::Paste()
 
 WeldEditView::WeldEditView()
     : m_bAcceptsTab(false)
+    , m_aCursorTimer("WeldEditView CursorTimer")
+    , m_bCursorVisible(false)
 {
+    m_aCursorTimer.SetInvokeHandler(LINK(this, WeldEditView, BlinkTimerHdl));
+}
+
+IMPL_LINK_NOARG(WeldEditView, BlinkTimerHdl, Timer*, void)
+{
+    m_bCursorVisible = !m_bCursorVisible;
+    if (!m_aCachedCursorPixRect.IsEmpty())
+    {
+        OutputDevice& rDevice = EditViewOutputDevice();
+        Invalidate(rDevice.PixelToLogic(m_aCachedCursorPixRect), weld::InvalidateFlags::Cursor);
+    }
+    else
+        Invalidate();
 }
 
 // tdf#127033 want to use UI font so override makeEditEngine to enable that
@@ -228,6 +243,21 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         return;
     }
 
+    // Fast path: blink-only repaint with valid cache
+    weld::InvalidateFlags ePending = GetInvalidateFlags();
+    if (ePending == weld::InvalidateFlags::Cursor && !m_aCachedCursorPixRect.IsEmpty())
+    {
+        VirtualDevice& rSrc = m_bCursorVisible ? *m_xCursorOnDev : *m_xCursorOffDev;
+        // Blit cached bitmap in pixel coordinates to avoid rounding issues
+        bool bMapMode = rRenderContext.IsMapModeEnabled();
+        rRenderContext.EnableMapMode(false);
+        rRenderContext.DrawOutDev(m_aCachedCursorPixRect.TopLeft(),
+                                  m_aCachedCursorPixRect.GetSize(), Point(0, 0),
+                                  m_aCachedCursorPixRect.GetSize(), rSrc);
+        rRenderContext.EnableMapMode(bMapMode);
+        return;
+    }
+
     auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
     rRenderContext.SetClipRegion();
 
@@ -239,7 +269,45 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
     {
         pEditView->ShowCursor(false);
         vcl::Cursor* pCursor = pEditView->GetCursor();
-        pCursor->DrawToDevice(rRenderContext);
+
+        // Get the pixel bounding rect the cursor will occupy
+        tools::Rectangle aPixRect = pCursor->GetBoundRect(rRenderContext);
+        if (!aPixRect.IsEmpty())
+        {
+            m_aCachedCursorPixRect = aPixRect;
+            Size aPixSize = aPixRect.GetSize();
+
+            // Cache in pixel coordinates to avoid rounding issues
+            bool bMapMode = rRenderContext.IsMapModeEnabled();
+            rRenderContext.EnableMapMode(false);
+
+            // Cache "cursor off" — text without cursor (before drawing cursor)
+            m_xCursorOffDev->SetOutputSizePixel(aPixSize);
+            m_xCursorOffDev->SetMapMode(MapMode(MapUnit::MapPixel));
+            m_xCursorOffDev->DrawOutDev(Point(0, 0), aPixSize, aPixRect.TopLeft(), aPixSize,
+                                        rRenderContext);
+
+            // Draw cursor, then cache "cursor on"
+            rRenderContext.EnableMapMode(bMapMode);
+            pCursor->DrawToDevice(rRenderContext);
+            rRenderContext.EnableMapMode(false);
+
+            m_xCursorOnDev->SetOutputSizePixel(aPixSize);
+            m_xCursorOnDev->SetMapMode(MapMode(MapUnit::MapPixel));
+            m_xCursorOnDev->DrawOutDev(Point(0, 0), aPixSize, aPixRect.TopLeft(), aPixSize,
+                                       rRenderContext);
+
+            rRenderContext.EnableMapMode(bMapMode);
+
+            // If cursor should be hidden, restore to clean state
+            if (!m_bCursorVisible)
+            {
+                rRenderContext.EnableMapMode(false);
+                rRenderContext.DrawOutDev(aPixRect.TopLeft(), aPixSize, Point(0, 0), aPixSize,
+                                          *m_xCursorOffDev);
+                rRenderContext.EnableMapMode(bMapMode);
+            }
+        }
     }
 
     // get logic selection
@@ -1573,6 +1641,16 @@ void WeldEditView::GetFocus()
     if (pEditView)
     {
         pEditView->ShowCursor(false);
+
+        m_bCursorVisible = true;
+        m_aCachedCursorPixRect = tools::Rectangle();
+        sal_uInt64 nBlinkTime = Application::GetSettings().GetStyleSettings().GetCursorBlinkTime();
+        if (nBlinkTime != STYLE_CURSOR_NOBLINKTIME)
+        {
+            m_aCursorTimer.SetTimeout(nBlinkTime);
+            m_aCursorTimer.Start();
+        }
+
         Invalidate(); // redraw with cursor
     }
 
@@ -1591,6 +1669,10 @@ void WeldEditView::GetFocus()
 
 void WeldEditView::LoseFocus()
 {
+    m_aCursorTimer.Stop();
+    m_bCursorVisible = false;
+    m_aCachedCursorPixRect = tools::Rectangle();
+
     weld::CustomWidgetController::LoseFocus();
     Invalidate(); // redraw without cursor
 

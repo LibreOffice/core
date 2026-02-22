@@ -38,10 +38,6 @@ public:
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
-    static std::unique_ptr<PanelLayout> Create (
-        weld::Widget* pParent,
-        ViewShellBase& rViewShellBase);
-
     // Sidebar
     AllMasterPagesSelector (
         weld::Widget* pParent,

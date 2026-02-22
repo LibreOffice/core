@@ -59,9 +59,6 @@ enum RestartReason {
     // For the Calculation settings changes to take effect,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_CALCULATION,
-    // To apply changes, %PRODUCTNAME,
-    // %PRODUCTNAME must be restarted:
-    RESTART_REASON_UI_CHANGE,
     // No particular reason:
     RESTART_REASON_NONE
 };

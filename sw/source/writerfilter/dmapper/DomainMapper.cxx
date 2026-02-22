@@ -1271,7 +1271,12 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
 
             if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::unknown)
             {
-                // Still not determined content type? and it is even not unsupported? Then it is plain text field
+                // If the SdtControlType is not defined, it really OUGHT to be richText
+                // (although the presence of dataBinding gets treated as plainText by MS Word).
+                // HOWEVER, richText blockSDT is not working as a content control yet,
+                // so here we just convert blockSDT richText into plainText instead.
+
+                // Most likely this will just be changed again elsewhere.
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::plainText);
             }
             if (nName == NS_ooxml::LN_CT_SdtRun_sdtContent)
@@ -1764,7 +1769,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_PPrBase_jc:
     {
         bool bExchangeLeftRight = !IsRTFImport() && !m_pImpl->IsInComments() && ExchangeLeftRight(rContext, *m_pImpl);
-        handleParaJustification(nIntValue, rContext, bExchangeLeftRight);
+        bool bUseLiteralDirection = IsRTFImport() || m_pImpl->IsInComments();
+        handleParaJustification(nIntValue, rContext, bExchangeLeftRight, bUseLiteralDirection);
         break;
     }
     case NS_ooxml::LN_CT_PPrBase_keepLines:
@@ -2141,8 +2147,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 // 2. no adjust property exists yet
                 if ( !(m_pImpl->GetAnyProperty(PROP_PARA_ADJUST, rContext) >>= eAdjust) )
                 {
-                    // RTL defaults to right adjust
-                    eAdjust = nIntValue ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT;
+                    // Both directions default to start adjust
+                    eAdjust = style::ParagraphAdjust_START;
                     rContext->Insert(PROP_PARA_ADJUST, uno::Any( eAdjust ), /*bOverwrite=*/false);
                 }
                 // 3,4. existing adjust: if RTL, then swap. If LTR, but previous was RTL, also swap.
@@ -3057,6 +3063,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     {
         if ( m_pImpl->IsDiscardHeaderFooter() )
             break;
+
         //tdf112342: Break before images as well, if there are page break
         if (m_pImpl->isBreakDeferred(BreakType::PAGE_BREAK)
             && nSprmId == NS_ooxml::LN_inline_inline && !m_pImpl->IsInShape())
@@ -3367,7 +3374,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pProperties->resolve(*this);
     }
     break;
-    break;
     case NS_ooxml::LN_CT_SdtPr_date:
     {
         m_pImpl->m_pSdtHelper->setControlType(SdtControlType::datePicker);
@@ -3427,12 +3433,21 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPr_tabIndex:
     case NS_ooxml::LN_CT_SdtPr_lock:
     {
+        if (nSprmId == NS_ooxml::LN_CT_SdtPr_dataBinding)
+        {
+            // Although the absense of a <w:text/> element should mean that the control is richText,
+            // in practice, the presence of a dataBinding element makes it plainText
+            if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::richText)
+                m_pImpl->m_pSdtHelper->setControlType(SdtControlType::plainText);
+        }
+
         if (!m_pImpl->GetSdtStarts().empty())
         {
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_showingPlcHdr)
             {
                 if (nIntValue)
                     m_pImpl->m_pSdtHelper->SetShowingPlcHdr();
+                break;
             }
 
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_color)
@@ -4472,8 +4487,13 @@ void DomainMapper::ResetStyleProperties()
                             pContext->Insert(ePropertyId, uno::Any(sal_Int32(0)));
                             break;
                         case PROP_PARA_LAST_LINE_ADJUST:
-                        case PROP_PARA_ADJUST:
                             pContext->Insert(ePropertyId, uno::Any(style::ParagraphAdjust_LEFT));
+                            break;
+                        case PROP_PARA_ADJUST:
+                            pContext->Insert(ePropertyId,
+                                             uno::Any(IsRTFImport()
+                                                          ? style::ParagraphAdjust_LEFT
+                                                          : style::ParagraphAdjust_START));
                             break;
                         case PROP_PARA_TAB_STOPS:
                             pContext->Insert(ePropertyId, uno::Any(uno::Sequence< style::TabStop >()));
@@ -4884,6 +4904,8 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                         m_pImpl->m_pSdtHelper->createPlainTextControl();
                     else if (!m_pImpl->m_pSdtHelper->isFieldStartRangeSet())
                         m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
+                    // MS Word says plainText control containing a field is a corrupt file
+                    m_pImpl->m_pSdtHelper->setControlType(SdtControlType::richText);
                 }
                 m_pImpl->AppendFieldCommand(sText);
             }
@@ -5044,9 +5066,13 @@ void DomainMapper::handleUnderlineType(const Id nId, const ::tools::SvRef<Proper
     rContext->Insert(PROP_CHAR_UNDERLINE, uno::Any(nUnderline));
 }
 
-void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::tools::SvRef<PropertyMap>& rContext, const bool bExchangeLeftRight)
+void DomainMapper::handleParaJustification(const sal_Int32 nIntValue,
+                                           const ::tools::SvRef<PropertyMap>& rContext,
+                                           const bool bExchangeLeftRight,
+                                           const bool bUseLiteralDirection)
 {
-    style::ParagraphAdjust nAdjust = style::ParagraphAdjust_LEFT;
+    style::ParagraphAdjust nAdjust
+        = bUseLiteralDirection ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_START;
     style::ParagraphAdjust nLastLineAdjust = style::ParagraphAdjust_LEFT;
     OUString aStringValue = u"left"_ustr;
     sal_uInt16 nWordSpacing = 100;
@@ -5058,7 +5084,15 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::to
         break;
     case NS_ooxml::LN_Value_ST_Jc_right:
     case NS_ooxml::LN_Value_ST_Jc_end:
-        nAdjust = bExchangeLeftRight ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_RIGHT;
+        if (bUseLiteralDirection)
+        {
+            nAdjust
+                = bExchangeLeftRight ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_RIGHT;
+        }
+        else
+        {
+            nAdjust = style::ParagraphAdjust_END;
+        }
         aStringValue = "right";
         break;
     case NS_ooxml::LN_Value_ST_Jc_distribute:
@@ -5092,7 +5126,15 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::to
     case NS_ooxml::LN_Value_ST_Jc_left:
     case NS_ooxml::LN_Value_ST_Jc_start:
     default:
-        nAdjust = bExchangeLeftRight ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT;
+        if (bUseLiteralDirection)
+        {
+            nAdjust
+                = bExchangeLeftRight ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT;
+        }
+        else
+        {
+            nAdjust = style::ParagraphAdjust_START;
+        }
         break;
     }
     rContext->Insert( PROP_PARA_ADJUST, uno::Any( nAdjust ) );

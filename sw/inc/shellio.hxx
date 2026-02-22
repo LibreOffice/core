@@ -206,7 +206,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOCX(SvStream &rStream);
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportRTF(SvStream &rStream);
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportRTF(SvStream &rStream);
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHTML(SvStream &rStream);
-SAL_DLLPUBLIC_EXPORT void FlushFontCache();
 
 class SW_DLLPUBLIC Reader
 {

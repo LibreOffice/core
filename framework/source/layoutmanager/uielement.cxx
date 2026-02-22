@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <uielement/uielement.hxx>
-
 #include <com/sun/star/ui/DockingArea.hpp>
+#include <framework/uielement.hxx>
 
 using namespace ::com::sun::star;
 

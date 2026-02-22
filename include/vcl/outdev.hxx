@@ -27,47 +27,32 @@
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/region.hxx>
-#include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
-#include <vcl/rendercontext/AntialiasingFlags.hxx>
-#include <vcl/rendercontext/SystemTextColorFlags.hxx>
-#include <vcl/rendercontext/DrawGridFlags.hxx>
 #include <vcl/rendercontext/DrawImageFlags.hxx>
-#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/rendercontext/DrawTextFlags.hxx>
-#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/rendercontext/ImplMapRes.hxx>
 #include <vcl/rendercontext/InvertFlags.hxx>
-#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <vcl/rendercontext/State.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
-#include <vcl/metaactiontypes.hxx>
-#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <unotools/fontdefs.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/awt/DeviceInfo.hpp>
 
 #include <memory>
 #include <optional>
@@ -75,6 +60,8 @@
 #include <string_view>
 #include <vector>
 
+class Bitmap;
+class ImplControlValue;
 struct ImplOutDevData;
 class LogicalFontInstance;
 struct SystemGraphicsData;
@@ -101,6 +88,20 @@ class Printer;
 class VCLXGraphics;
 class SalLayoutGlyphs;
 
+enum class AddFontSubstituteFlags;
+enum class AntialiasingFlags;
+enum class ControlPart;
+enum class ControlState;
+enum class ControlType;
+enum class DefaultFontType;
+enum class DrawGridFlags;
+enum class DrawModeFlags : sal_uInt32;
+enum class GetDefaultFontFlags;
+enum class MetaActionType;
+enum class OutDevSupportType;
+enum class RasterOp;
+enum class SystemTextColorFlags;
+
 namespace vcl
 {
     class ExtOutDevData;
@@ -122,11 +123,13 @@ namespace vcl
 
 namespace basegfx {
     class B2DHomMatrix;
+    class B2DPoint;
     class B2ISize;
 }
 
 namespace com::sun::star::awt {
     class XGraphics;
+    struct DeviceInfo;
 }
 
 namespace com::sun::star::rendering {
@@ -434,12 +437,11 @@ public:
 
     virtual void                CopyArea(
                                     const Point& rDestPt,
-                                    const Point& rSrcPt,  const Size& rSrcSize,
-                                    bool bWindowInvalidate = false );
+                                    const Point& rSrcPt,  const Size& rSrcSize );
 
 protected:
 
-    virtual void                CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate);
+    virtual void                CopyDeviceArea( SalTwoRect& aPosAry );
 
     virtual tools::Rectangle    GetBackgroundComponentBounds() const;
 
@@ -602,7 +604,7 @@ public:
 
     void                        DrawRect( const tools::Rectangle& rRect );
     void                        DrawRect( const tools::Rectangle& rRect,
-                                          sal_uLong nHorzRount, sal_uLong nVertRound );
+                                          sal_uLong nHorzRound, sal_uLong nVertRound );
 
     /// Fill the given rectangle with checkered rectangles of size nLen x nLen using the colors aStart and aEnd
     void                        DrawCheckered(
@@ -1421,6 +1423,17 @@ protected:
                                     double &fMaximumArea);
 
 private:
+
+    SAL_DLLPRIVATE void         DrawScaledAndTranslatedBitmap(
+                                    const basegfx::B2DVector& rScale,
+                                    const basegfx::B2DVector& rTranslate,
+                                    const Bitmap& rBitmap);
+
+    SAL_DLLPRIVATE void         DrawMirroredBitmap(
+                                    const basegfx::B2DVector& rScale,
+                                    const basegfx::B2DVector& rTranslate,
+                                    const Bitmap& rBitmap);
+
     SAL_DLLPRIVATE void         DrawAlphaBitmap(
                                     const Point& rDestPt,
                                     const Size& rDestSize,

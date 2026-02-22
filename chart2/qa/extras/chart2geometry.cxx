@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
+#include <comphelper/scopeguard.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <string_view>
@@ -218,7 +219,6 @@ void Chart2GeometryTest::testTdf128345ChartArea_CG_TS_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify the content of the opacity definition
-    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 1/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
@@ -272,7 +272,6 @@ void Chart2GeometryTest::testTdf128345ChartWall_CS_TG_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify content of the opacity definition
-    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 1/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
@@ -334,7 +333,6 @@ void Chart2GeometryTest::testTdf128345Legend_CS_TG_axial_import()
         = getXPathContent(pXmlDoc, sStylePath + "/style:graphic-properties/@draw:opacity-name");
 
     // Verify content of the opacity definition
-    save(TestFilter::ODP);
     xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 1/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc2);
     const OString sAttribute("@draw:name='" + OU2O(sOUOpacityName) + "'");
@@ -462,7 +460,7 @@ void Chart2GeometryTest::testTdf135366LabelExport()
 
 void Chart2GeometryTest::testTdf135366_CustomLabelText()
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Error was, that custom text in a data label was only exported in ODF extended,
     // although the used <chart:data-label> element exists since ODF 1.2.

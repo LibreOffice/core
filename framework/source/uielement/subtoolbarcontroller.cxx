@@ -25,9 +25,12 @@
 #include <svtools/toolbarmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/gen.hxx>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <com/sun/star/awt/XDockableWindow.hpp>

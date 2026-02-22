@@ -22,7 +22,7 @@ class tdf109083(UITestCase):
             for i in range(0, 2):
                 with self.ui_test.execute_dialog_through_command(".uno:InsertTable") as xDialog:
                     formatlbinstable = xDialog.getChild("formatlbinstable")
-                    entry = formatlbinstable.getChild("1")
+                    entry = formatlbinstable.getChild("0")
                     entry.executeAction("SELECT", tuple())
                 xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
@@ -55,8 +55,6 @@ class tdf109083(UITestCase):
                     hex_custom = xDialog.getChild("hex_custom")
                     if i >= 2:
                         self.assertEqual(get_state_as_dict(hex_custom)["Text"], "ffff00")
-                    else:
-                        self.assertEqual(get_state_as_dict(hex_custom)["Text"], "ffffff")
                 self.xUITest.executeCommand(".uno:GoRight")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

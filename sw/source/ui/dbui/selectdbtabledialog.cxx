@@ -23,6 +23,7 @@
 #include "selectdbtabledialog.hxx"
 #include "dbtablepreviewdialog.hxx"
 #include <osl/diagnose.h>
+#include <vcl/weld/Dialog.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

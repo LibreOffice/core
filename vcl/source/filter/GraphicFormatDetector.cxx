@@ -27,6 +27,7 @@
 #include <tools/solar.h>
 #include <tools/zcodec.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <filter/WebpReader.hxx>
 #include "igif/gifread.hxx"
 #include <vcl/TypeSerializer.hxx>

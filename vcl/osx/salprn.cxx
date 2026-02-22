@@ -24,6 +24,7 @@
 #include <sal/macros.h>
 #include <osl/diagnose.h>
 #include <tools/long.hxx>
+#include <tools/mapunit.hxx>
 
 #include <osx/salinst.h>
 #include <osx/salprn.h>
@@ -38,6 +39,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/view/PrintableState.hpp>
 
 #include <algorithm>
 #include <cstdlib>

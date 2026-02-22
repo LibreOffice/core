@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_CHART_MODELBASE_HXX
-#define INCLUDED_OOX_DRAWINGML_CHART_MODELBASE_HXX
+#pragma once
 
 #include <memory>
 
@@ -115,7 +114,5 @@ struct LayoutModel
 };
 
 } // namespace oox::drawingml::chart
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

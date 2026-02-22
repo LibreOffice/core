@@ -25,7 +25,7 @@
 #include <string_view>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <unotools/unotoolsdllapi.h>
 
@@ -33,6 +33,7 @@ namespace com::sun::star::container {
     class XHierarchicalNameAccess;
 }
 namespace utl { class ConfigItem; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace utl {
 

@@ -25,6 +25,7 @@
 #include <svl/itemset.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/Builder.hxx>
 
 SwNumFormatDlg::SwNumFormatDlg(weld::Widget* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialogController(pParent, &rSet, u"cui/ui/formatnumberdialog.ui"_ustr, u"FormatNumberDialog"_ustr)

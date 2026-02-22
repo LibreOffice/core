@@ -21,6 +21,7 @@
 
 #include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace chart
 {

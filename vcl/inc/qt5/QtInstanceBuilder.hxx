@@ -19,12 +19,20 @@
 #include <vcl/weld/Assistant.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <vcl/weld/MenuButton.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Notebook.hxx>
+#include <vcl/weld/Paned.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TextView.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
@@ -38,6 +46,7 @@ public:
     ~QtInstanceBuilder();
 
     static bool IsUIFileSupported(const OUString& rUIFile, const weld::Widget* pParent);
+    static bool IsInterimUIFileSupported(const OUString& rUIFile);
 
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OUString& id) override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OUString& rId) override;
@@ -47,7 +56,7 @@ public:
     virtual std::unique_ptr<weld::Container> weld_container(const OUString& rId) override;
     virtual std::unique_ptr<weld::Box> weld_box(const OUString& rId) override;
     virtual std::unique_ptr<weld::Grid> weld_grid(const OUString& rId) override;
-    virtual std::unique_ptr<weld::Paned> weld_paned(const OUString&) override;
+    virtual std::unique_ptr<weld::Paned> weld_paned(const OUString& rId) override;
     virtual std::unique_ptr<weld::Frame> weld_frame(const OUString& rId) override;
     virtual std::unique_ptr<weld::ScrolledWindow>
     weld_scrolled_window(const OUString& rId, bool bUserManagedScrolling = false) override;

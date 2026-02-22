@@ -31,6 +31,7 @@
 #include <editeng/sizeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/ilstitem.hxx>
+#include <tools/mapunit.hxx>
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 #include <vector>

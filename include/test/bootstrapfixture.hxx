@@ -18,13 +18,6 @@
 
 namespace test
 {
-enum ValidationFormat
-{
-    OOXML,
-    ODF,
-    MSBINARY
-};
-
 // Class to do lots of heavy-lifting UNO & environment
 // bootstrapping for unit tests, such that we can use
 // almost an entire LibreOffice during compile - so
@@ -52,8 +45,6 @@ public:
     virtual ~BootstrapFixture() override;
 
     virtual void setUp() override;
-
-    void validate(const OUString& rURL, std::u16string_view rFilter) const;
 
     // Allows to exclude tests dependent on color depth of the default virtual device
     static sal_uInt16 getDefaultDeviceBitCount();

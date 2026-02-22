@@ -23,6 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <rtl/ref.hxx>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>

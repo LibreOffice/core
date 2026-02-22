@@ -196,8 +196,8 @@ SwFormatINetFormat::SwFormatINetFormat()
     , msVisitedFormatName()
     , msHyperlinkName()
     , mpTextAttr( nullptr )
-    , mnINetFormatId( 0 )
-    , mnVisitedFormatId( 0 )
+    , mnINetFormatId( SwPoolFormatId::ZERO )
+    , mnVisitedFormatId( SwPoolFormatId::ZERO )
 {
     setNonShareable();
 }
@@ -210,8 +210,8 @@ SwFormatINetFormat::SwFormatINetFormat( OUString aURL, OUString aTarget )
     , msVisitedFormatName()
     , msHyperlinkName()
     , mpTextAttr( nullptr )
-    , mnINetFormatId( RES_POOLCHR_INET_NORMAL )
-    , mnVisitedFormatId( RES_POOLCHR_INET_VISIT )
+    , mnINetFormatId( SwPoolFormatId::CHR_INET_NORMAL )
+    , mnVisitedFormatId( SwPoolFormatId::CHR_INET_VISIT )
 {
     setNonShareable();
     SwStyleNameMapper::FillUIName( mnINetFormatId, msINetFormatName );
@@ -319,7 +319,7 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_URL_VISITED_FMT:
         {
             UIName sVal = msVisitedFormatName;
-            if (sVal.isEmpty() && mnVisitedFormatId != 0)
+            if (sVal.isEmpty() && mnVisitedFormatId != SwPoolFormatId::ZERO)
                 SwStyleNameMapper::FillUIName(mnVisitedFormatId, sVal);
             ProgName aRet;
             if (!sVal.isEmpty())
@@ -331,7 +331,7 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_URL_UNVISITED_FMT:
         {
             UIName sVal = msINetFormatName;
-            if (sVal.isEmpty() && mnINetFormatId != 0)
+            if (sVal.isEmpty() && mnINetFormatId != SwPoolFormatId::ZERO)
                 SwStyleNameMapper::FillUIName(mnINetFormatId, sVal);
             ProgName aRet;
             if (!sVal.isEmpty())
@@ -432,7 +432,7 @@ SwFormatRuby::SwFormatRuby( OUString aRubyText )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY  ),
     m_sRubyText( std::move(aRubyText) ),
     m_pTextAttr( nullptr ),
-    m_nCharFormatId( 0 ),
+    m_nCharFormatId( SwPoolFormatId::ZERO ),
     m_nPosition( 0 ),
     m_eAdjustment( css::text::RubyAdjust_LEFT )
 {

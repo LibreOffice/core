@@ -3,9 +3,9 @@
 @@ -102,7 +102,7 @@
  #____________________________________________________________________________
  
- # Firebird needs no RTTI
--RTTI_FLAG:= -fno-rtti
-+RTTI_FLAG:=
+ # Firebird needs no RTTI, make it build with icu-76.1
+-RTTI_FLAG:= -fno-rtti -DU_SHOW_CPLUSPLUS_API=0 -DU_SHOW_CPLUSPLUS_HEADER_API=0
++RTTI_FLAG:= -DU_SHOW_CPLUSPLUS_API=0 -DU_SHOW_CPLUSPLUS_HEADER_API=0
  
  # If this is defined then we use special rules useful for developers only
  IsDeveloper = @DEVEL_FLG@

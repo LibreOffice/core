@@ -16,7 +16,6 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_carlito \
 	$(if $(MPL_SUBSET),,ExternalPackage_culmus) \
 	ExternalPackage_dejavu \
-	ExternalPackage_gentium \
 	ExternalPackage_liberation \
 	ExternalPackage_liberation_narrow \
 	ExternalPackage_libertineg \
@@ -50,7 +49,6 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_carlito \
 	$(if $(MPL_SUBSET),,UnpackedTarball_culmus) \
 	UnpackedTarball_dejavu \
-	UnpackedTarball_gentium \
 	UnpackedTarball_liberation \
 	UnpackedTarball_liberation_narrow \
 	UnpackedTarball_libertineg \

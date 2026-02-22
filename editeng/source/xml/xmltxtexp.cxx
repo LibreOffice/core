@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/fldunit.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <editeng/unoedsrc.hxx>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustmentDEGREE">
@@ -122,6 +122,25 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkButton" id="PB_NUMBERFORMAT">
+                            <property name="label" translatable="yes" context="dlg_DataLabel|PB_NUMBERFORMAT">Number _format...</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="valign">center</property>
+                            <property name="use-underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="PB_NUMBERFORMAT-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlg_DataLabel|extended_tip|PB_NUMBERFORMAT">Opens a dialog to select the number format.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkCheckButton" id="CB_VALUE_AS_PERCENTAGE">
                             <property name="label" translatable="yes" context="dlg_DataLabel|CB_VALUE_AS_PERCENTAGE">Value as _percentage</property>
                             <property name="visible">True</property>
@@ -137,6 +156,25 @@
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="PB_PERCENT_NUMBERFORMAT">
+                            <property name="label" translatable="yes" context="dlg_DataLabel|PB_PERCENT_NUMBERFORMAT">Percentage f_ormat...</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="valign">center</property>
+                            <property name="use-underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="PB_PERCENT_NUMBERFORMAT-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlg_DataLabel|extended_tip|PB_PERCENT_NUMBERFORMAT">Opens a dialog to select the percentage format.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
                             <property name="top-attach">1</property>
                           </packing>
                         </child>
@@ -157,6 +195,49 @@
                           <packing>
                             <property name="left-attach">0</property>
                             <property name="top-attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE">
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="dlg_DataLabel|STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE">Number Format for Percentage Value</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="CB_DATA_SERIES_NAME">
+                            <property name="label" translatable="yes" context="dlg_DataLabel|CB_DATA_SERIES_NAME">_Series name</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="CB_DATA_SERIES_NAME-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlg_DataLabel|extended_tip|CB_DATA_SERIES_NAME">Shows the data series name in the label.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="CT_LABEL_DIAL">
+                            <property name="can-focus">False</property>
+                            <property name="no-show-all">True</property>
+                            <property name="label" translatable="yes" context="dlg_DataLabel|CT_LABEL_DIAL">ABCD</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">3</property>
                           </packing>
                         </child>
                         <child>
@@ -190,87 +271,6 @@
                           <packing>
                             <property name="left-attach">0</property>
                             <property name="top-attach">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="PB_NUMBERFORMAT">
-                            <property name="label" translatable="yes" context="dlg_DataLabel|PB_NUMBERFORMAT">Number _format...</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="valign">center</property>
-                            <property name="use-underline">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="PB_NUMBERFORMAT-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="dlg_DataLabel|extended_tip|PB_NUMBERFORMAT">Opens a dialog to select the number format.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="PB_PERCENT_NUMBERFORMAT">
-                            <property name="label" translatable="yes" context="dlg_DataLabel|PB_PERCENT_NUMBERFORMAT">Percentage f_ormat...</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="valign">center</property>
-                            <property name="use-underline">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="PB_PERCENT_NUMBERFORMAT-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="dlg_DataLabel|extended_tip|PB_PERCENT_NUMBERFORMAT">Opens a dialog to select the percentage format.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="CT_LABEL_DIAL">
-                            <property name="can-focus">False</property>
-                            <property name="no-show-all">True</property>
-                            <property name="label" translatable="yes" context="dlg_DataLabel|CT_LABEL_DIAL">ABCD</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE">
-                            <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="dlg_DataLabel|STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE">Number Format for Percentage Value</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="CB_DATA_SERIES_NAME">
-                            <property name="label" translatable="yes" context="dlg_DataLabel|CB_DATA_SERIES_NAME">_Series name</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="draw-indicator">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="CB_DATA_SERIES_NAME-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="dlg_DataLabel|extended_tip|CB_DATA_SERIES_NAME">Shows the data series name in the label.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">3</property>
                           </packing>
                         </child>
                         <child>
@@ -316,6 +316,43 @@
                         <property name="column-spacing">12</property>
                         <property name="row-homogeneous">True</property>
                         <child>
+                          <object class="GtkLabel" id="FT_TEXT_SEPARATOR">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="dlg_DataLabel|FT_TEXT_SEPARATOR">_Separator</property>
+                            <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">LB_TEXT_SEPARATOR</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="LB_TEXT_SEPARATOR">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="valign">center</property>
+                            <items>
+                              <item id="0" translatable="yes" context="dlg_DataLabel|liststoreSEPARATOR">Space</item>
+                              <item id="1" translatable="yes" context="dlg_DataLabel|liststoreSEPARATOR">Comma</item>
+                              <item id="2" translatable="yes" context="dlg_DataLabel|liststoreSEPARATOR">Semicolon</item>
+                              <item id="3" translatable="yes" context="dlg_DataLabel|liststoreSEPARATOR">New line</item>
+                              <item id="4" translatable="yes" context="dlg_DataLabel|liststoreSEPARATOR">Period</item>
+                            </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="LB_TEXT_SEPARATOR-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlg_DataLabel|extended_tip|LB_TEXT_SEPARATOR">Selects the separator between multiple text strings for the same object.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkLabel" id="FT_LABEL_PLACEMENT">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
@@ -358,43 +395,6 @@
                           <packing>
                             <property name="left-attach">1</property>
                             <property name="top-attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="FT_TEXT_SEPARATOR">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="label" translatable="yes" context="dlg_DataLabel|FT_TEXT_SEPARATOR">_Separator</property>
-                            <property name="use-underline">True</property>
-                            <property name="mnemonic-widget">LB_TEXT_SEPARATOR</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="LB_TEXT_SEPARATOR">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="valign">center</property>
-                            <items>
-                              <item id="0" translatable="yes" context="dlg_DataLabel|liststoreSEPARATOR">Space</item>
-                              <item id="1" translatable="yes" context="dlg_DataLabel|liststoreSEPARATOR">Comma</item>
-                              <item id="2" translatable="yes" context="dlg_DataLabel|liststoreSEPARATOR">Semicolon</item>
-                              <item id="3" translatable="yes" context="dlg_DataLabel|liststoreSEPARATOR">New line</item>
-                              <item id="4" translatable="yes" context="dlg_DataLabel|liststoreSEPARATOR">Period</item>
-                            </items>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="LB_TEXT_SEPARATOR-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="dlg_DataLabel|extended_tip|LB_TEXT_SEPARATOR">Selects the separator between multiple text strings for the same object.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                       </object>

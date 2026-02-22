@@ -25,19 +25,19 @@
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
 #include <tools/stream.hxx>
-#include <vcl/cursor.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
-#include <vcl/seleng.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/outdev.hxx>
 #include <memory>
 
 class TextEngine;
+class SelectionEngine;
 
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;
+namespace vcl { class Cursor; }
 namespace vcl { class Window; }
 
 namespace com::sun::star::datatransfer::clipboard {

@@ -17,6 +17,9 @@
 #include <unotools/streamwrap.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 
 #if ENABLE_ZXING
 #if __has_include(<Version.h>)
@@ -153,7 +156,9 @@ OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRB
     OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_UTF8);
     std::string QRText(o);
     ZXing::BarcodeFormat format = ZXing::BarcodeFormatFromString(GetBarCodeType(aQRType));
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto writer = ZXing::MultiFormatWriter(format).setMargin(aQRBorder).setEccLevel(bqrEcc);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     writer.setEncoding(ZXing::CharacterSet::UTF8);
 #if ZXING_VERSION_MAJOR >= 2
     ZXing::BitMatrix bitmatrix = writer.encode(QRText, 0, 0);

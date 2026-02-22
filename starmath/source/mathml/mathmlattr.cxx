@@ -130,27 +130,27 @@ bool ParseMathMLAttributeLengthValue(std::u16string_view rStr, MathMLAttributeLe
     return true;
 }
 
-bool GetMathMLMathvariantValue(const OUString& rStr, MathMLMathvariantValue& rV)
+bool GetMathMLMathvariantValue(std::u16string_view rStr, MathMLMathvariantValue& rV)
 {
-    static const std::unordered_map<OUString, MathMLMathvariantValue> aMap{
-        { "normal", MathMLMathvariantValue::Normal },
-        { "bold", MathMLMathvariantValue::Bold },
-        { "italic", MathMLMathvariantValue::Italic },
-        { "bold-italic", MathMLMathvariantValue::BoldItalic },
-        { "double-struck", MathMLMathvariantValue::DoubleStruck },
-        { "bold-fraktur", MathMLMathvariantValue::BoldFraktur },
-        { "script", MathMLMathvariantValue::Script },
-        { "bold-script", MathMLMathvariantValue::BoldScript },
-        { "fraktur", MathMLMathvariantValue::Fraktur },
-        { "sans-serif", MathMLMathvariantValue::SansSerif },
-        { "bold-sans-serif", MathMLMathvariantValue::BoldSansSerif },
-        { "sans-serif-italic", MathMLMathvariantValue::SansSerifItalic },
-        { "sans-serif-bold-italic", MathMLMathvariantValue::SansSerifBoldItalic },
-        { "monospace", MathMLMathvariantValue::Monospace },
-        { "initial", MathMLMathvariantValue::Initial },
-        { "tailed", MathMLMathvariantValue::Tailed },
-        { "looped", MathMLMathvariantValue::Looped },
-        { "stretched", MathMLMathvariantValue::Stretched }
+    static const std::unordered_map<std::u16string_view, MathMLMathvariantValue> aMap{
+        { u"normal", MathMLMathvariantValue::Normal },
+        { u"bold", MathMLMathvariantValue::Bold },
+        { u"italic", MathMLMathvariantValue::Italic },
+        { u"bold-italic", MathMLMathvariantValue::BoldItalic },
+        { u"double-struck", MathMLMathvariantValue::DoubleStruck },
+        { u"bold-fraktur", MathMLMathvariantValue::BoldFraktur },
+        { u"script", MathMLMathvariantValue::Script },
+        { u"bold-script", MathMLMathvariantValue::BoldScript },
+        { u"fraktur", MathMLMathvariantValue::Fraktur },
+        { u"sans-serif", MathMLMathvariantValue::SansSerif },
+        { u"bold-sans-serif", MathMLMathvariantValue::BoldSansSerif },
+        { u"sans-serif-italic", MathMLMathvariantValue::SansSerifItalic },
+        { u"sans-serif-bold-italic", MathMLMathvariantValue::SansSerifBoldItalic },
+        { u"monospace", MathMLMathvariantValue::Monospace },
+        { u"initial", MathMLMathvariantValue::Initial },
+        { u"tailed", MathMLMathvariantValue::Tailed },
+        { u"looped", MathMLMathvariantValue::Looped },
+        { u"stretched", MathMLMathvariantValue::Stretched }
     };
 
     auto it = aMap.find(rStr);

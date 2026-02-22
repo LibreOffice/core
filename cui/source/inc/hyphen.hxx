@@ -20,6 +20,7 @@
 
 #include <memory>
 
+#include <i18nlangtag/lang.h>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -69,7 +70,7 @@ class SvxHyphenWordDialog : public SfxDialogController
     DECL_LINK(HyphenateAllHdl_Impl, weld::Button&, void);
     DECL_LINK(CancelHdl_Impl, weld::Button&, void);
     DECL_LINK(GetFocusHdl_Impl, weld::Widget&, void);
-    DECL_LINK(CursorChangeHdl_Impl, weld::Entry&, void);
+    DECL_LINK(CursorChangeHdl_Impl, weld::TextWidget&, void);
 
 public:
     SvxHyphenWordDialog(OUString aWord, LanguageType nLang,

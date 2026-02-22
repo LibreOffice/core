@@ -11,25 +11,21 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,fontconfig))
 
+$(eval $(call gb_StaticLibrary_use_unpacked,fontconfig,fontconfig))
+
 $(eval $(call gb_StaticLibrary_set_include,fontconfig,\
-	-I$(call gb_UnpackedTarball_get_dir,fontconfig) \
-	-I$(call gb_UnpackedTarball_get_dir,freetype)/include \
-	-I$(call gb_UnpackedTarball_get_dir,expat)/lib \
+	-I$(gb_UnpackedTarball_workdir)/fontconfig \
+	-I$(gb_UnpackedTarball_workdir)/fontconfig/fc-lang \
+	-I$(gb_UnpackedTarball_workdir)/freetype/include \
+	-I$(gb_UnpackedTarball_workdir)/expat/lib \
 	$$(INCLUDE) \
 ))
 
 # Ignore warnings, warnings in this code is not our problem, or is it?
 
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,fontconfig))
+
 $(eval $(call gb_StaticLibrary_add_defs,fontconfig,\
-	-wd4018 \
-	-wd4090 \
-	-wd4100 \
-	-wd4189 \
-	-wd4200 \
-	-wd4245 \
-	-wd4267 \
-	-wd4701 \
-	-wd4703 \
 	-DHAVE_CONFIG_H \
 	-DFC_CACHEDIR='"C:/Windows/Temp"' \
 	-DCONFIGDIR='"Whatever"' \
@@ -67,6 +63,12 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,fontconfig,\
 		fcweight \
 		fcxml \
 		ftglue \
+	) \
+))
+
+$(eval $(call gb_StaticLibrary_add_generated_exception_objects,fontconfig,\
+	$(addprefix UnpackedTarball/fontconfig/src/, \
+		fcdwrite \
 	) \
 ))
 

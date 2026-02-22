@@ -22,9 +22,10 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 
+namespace drawinglayer::primitive3d { class BasePrimitive3D; }
+namespace drawinglayer::primitive3d { class Primitive3DContainer; }
 
 namespace drawinglayer::processor3d
     {

@@ -18,7 +18,9 @@
  */
 
 
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>

@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -38,6 +39,7 @@
 #include <svx/xtable.hxx>
 #include <svx/itemwin.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/mapunit.hxx>
 #include "linemetricbox.hxx"
 
 using namespace ::com::sun::star;

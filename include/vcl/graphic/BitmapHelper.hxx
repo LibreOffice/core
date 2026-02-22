@@ -9,10 +9,9 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
-
-#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
+
+class Bitmap;
 
 namespace com::sun::star::awt
 {
@@ -25,6 +24,11 @@ class XGraphic;
 namespace com::sun::star::uno
 {
 class Any;
+}
+
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
 }
 
 namespace vcl

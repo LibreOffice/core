@@ -30,7 +30,7 @@ class SVXCORE_DLLPUBLIC SdrObjGroup final : public SdrObject, public SdrObjList
 public:
     // Basic DiagramHelper support
     virtual bool isDiagram() const override;
-    virtual const std::shared_ptr< svx::diagram::IDiagramHelper >& getDiagramHelper() const override;
+    virtual const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelper() const override;
 
 private:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
@@ -41,8 +41,8 @@ private:
 
     // Allow *only* DiagramHelper itself to set this internal reference to
     // tightly control usage
-    friend class svx::diagram::IDiagramHelper;
-    std::shared_ptr< svx::diagram::IDiagramHelper > mp_DiagramHelper;
+    friend class svx::diagram::DiagramHelper_svx;
+    std::shared_ptr< svx::diagram::DiagramHelper_svx > mp_DiagramHelper;
 
 public:
     SdrObjGroup(SdrModel& rSdrModel);

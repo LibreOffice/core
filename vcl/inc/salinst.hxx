@@ -26,6 +26,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
 #include <vcl/vclenum.hxx>
+#include <vcl/weld/ColorChooserDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include "displayconnectiondispatch.hxx"

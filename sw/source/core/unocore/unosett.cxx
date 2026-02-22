@@ -84,7 +84,7 @@ namespace
 {
     SvtBroadcaster& GetPageDescNotifier(SwDoc* pDoc)
     {
-        return pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier();
+        return pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier();
     }
 }
 
@@ -197,8 +197,8 @@ static SwCharFormat* lcl_getCharFormat(SwDoc* pDoc, const uno::Any& aValue)
     }
     if(!pRet)
     {
-        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sCharFormat, SwGetPoolIdFromName::ChrFmt);
-        if(USHRT_MAX != nId)
+        const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(sCharFormat, SwGetPoolIdFromName::ChrFmt);
+        if(SwPoolFormatId::UNKNOWN != nId)
             pRet = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
     }
     return pRet;
@@ -213,8 +213,8 @@ static SwTextFormatColl* lcl_GetParaStyle(SwDoc* pDoc, const uno::Any& aValue)
     SwTextFormatColl* pRet = pDoc->FindTextFormatCollByName( sParaStyle );
     if( !pRet  )
     {
-        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sParaStyle, SwGetPoolIdFromName::TxtColl );
-        if( USHRT_MAX != nId  )
+        const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName( sParaStyle, SwGetPoolIdFromName::TxtColl );
+        if( SwPoolFormatId::UNKNOWN != nId  )
             pRet = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
     }
     return pRet;
@@ -229,8 +229,8 @@ static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
     SwPageDesc* pRet = pDoc->FindPageDesc( sPageDesc );
     if(!pRet)
     {
-        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sPageDesc, SwGetPoolIdFromName::PageDesc);
-        if(USHRT_MAX != nId)
+        const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(sPageDesc, SwGetPoolIdFromName::PageDesc);
+        if(SwPoolFormatId::UNKNOWN != nId)
             pRet = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( nId );
     }
     return pRet;
@@ -2180,7 +2180,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         && !SwXNumberingRules::isInvalidStyle(rCharStyleName))
     {
         ProgName tmp;
-        SwStyleNameMapper::FillProgName(RES_POOLCHR_BULLET_LEVEL, tmp);
+        SwStyleNameMapper::FillProgName(SwPoolFormatId::CHR_BULLET_LEVEL, tmp);
         rCharStyleName = UIName(tmp.toString());
     }
 

@@ -30,6 +30,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Scrollbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 

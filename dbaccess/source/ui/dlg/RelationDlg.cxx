@@ -30,6 +30,7 @@
 #include <RTableConnectionData.hxx>
 #include <RelationControl.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;

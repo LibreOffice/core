@@ -20,6 +20,7 @@
 
 #include <tools/link.hxx>
 #include <tools/fract.hxx>
+#include <vcl/weld/Scrollbar.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewfac.hxx>

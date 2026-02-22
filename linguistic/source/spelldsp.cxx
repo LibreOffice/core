@@ -232,7 +232,9 @@ Reference< XSpellAlternatives > SAL_CALL
 // including the IgnoreAll list
 static Reference< XDictionaryEntry > lcl_GetRulingDictionaryEntry(
     const OUString &rWord,
-    LanguageType nLanguage )
+    LanguageType nLanguage,
+    const Reference< XSearchableDictionaryList >& xDList,
+    std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap )
 {
     Reference< XDictionaryEntry > xRes;
 
@@ -244,15 +246,14 @@ static Reference< XDictionaryEntry > lcl_GetRulingDictionaryEntry(
         xRes = xIgnoreAll->getEntry( rWord );
     if (!xRes.is())
     {
-        Reference< XSearchableDictionaryList > xDList( GetDictionaryList() );
         Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDList,
-                rWord, nLanguage, false, true ) );
+                rWord, nLanguage, false, true, rDictionaryMap ) );
         if (xNegEntry.is())
             xRes = std::move(xNegEntry);
         else
         {
             Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDList,
-                    rWord, nLanguage, true, true ) );
+                    rWord, nLanguage, true, true, rDictionaryMap ) );
             if (xPosEntry.is())
                 xRes = std::move(xPosEntry);
         }
@@ -413,16 +414,17 @@ bool SpellCheckerDispatcher::isValid_Impl(
         }
 
         // cross-check against results from dictionaries which have precedence!
-        if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
+        auto xDicList = GetDicList();
+        if (xDicList  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
-            Reference< XDictionaryEntry > xTmp( lcl_GetRulingDictionaryEntry( aChkWord, nLanguage ) );
+            Reference< XDictionaryEntry > xTmp( lcl_GetRulingDictionaryEntry( aChkWord, nLanguage, xDicList, m_aDictionaryMap ) );
             if (xTmp.is()) {
                 bRes = !xTmp->isNegative();
             } else {
                 setCharClass(LanguageTag(nLanguage));
                 CapType ct = capitalType(aChkWord, m_oCharClass ? &*m_oCharClass : nullptr);
                 if (ct == CapType::INITCAP || ct == CapType::ALLCAP) {
-                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_oCharClass), nLanguage ) );
+                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_oCharClass), nLanguage, xDicList, m_aDictionaryMap ) );
                     if (xTmp2.is()) {
                         bRes = !xTmp2->isNegative();
                     }
@@ -636,7 +638,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
     // cross-check against results from user-dictionaries which have precedence!
     if (xDList.is())
     {
-        Reference< XDictionaryEntry > xTmp( lcl_GetRulingDictionaryEntry( aChkWord, nLanguage ) );
+        Reference< XDictionaryEntry > xTmp( lcl_GetRulingDictionaryEntry( aChkWord, nLanguage, xDList, m_aDictionaryMap ) );
         if (xTmp.is())
         {
             if (xTmp->isNegative())    // negative entry found
@@ -648,7 +650,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
                 // replacement text must not be in negative dictionary itself
                 if (!aAddRplcTxt.isEmpty() &&
-                    !SearchDicList( xDList, aAddRplcTxt, nLanguage, false, true ).is())
+                    !SearchDicList( xDList, aAddRplcTxt, nLanguage, false, true, m_aDictionaryMap ).is())
                 {
                     aProposalList.Prepend( aAddRplcTxt );
                 }
@@ -665,7 +667,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             CapType ct = capitalType(aChkWord, m_oCharClass ? &*m_oCharClass : nullptr);
             if (ct == CapType::INITCAP || ct == CapType::ALLCAP)
             {
-                Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_oCharClass), nLanguage ) );
+                Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, m_oCharClass), nLanguage, xDList, m_aDictionaryMap ) );
                 if (xTmp2.is())
                 {
                     if (xTmp2->isNegative())    // negative entry found
@@ -677,7 +679,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
                         // replacement text must not be in negative dictionary itself
                         if (!aAddRplcTxt.isEmpty() &&
-                            !SearchDicList( xDList, aAddRplcTxt, nLanguage, false, true ).is())
+                            !SearchDicList( xDList, aAddRplcTxt, nLanguage, false, true, m_aDictionaryMap ).is())
                         {
                             switch ( ct )
                             {
@@ -715,7 +717,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         // remove entries listed in negative dictionaries
         // (we don't want to display suggestions that will be regarded as misspelled later on)
         if (xDList.is())
-            SeqRemoveNegEntries( aProposals, xDList, nLanguage );
+            SeqRemoveNegEntries( aProposals, xDList, nLanguage, m_aDictionaryMap );
 
         uno::Reference< linguistic2::XSetSpellAlternatives > xSetAlt( xRes, uno::UNO_QUERY );
         if (xSetAlt.is())

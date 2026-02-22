@@ -182,4 +182,55 @@ class HyperlinkDialog(UITestCase):
                         args=("CLICK", tuple()), close_button="cancel"):
                     pass
 
+    def test_tdf168548_hyperlink_dialog_horizontal_tabs(self):
+        #CRASH: launching hyperlink dialog with horizontal tabs
+        with self.ui_test.create_doc_in_start_center("writer"):
+            # First, verify hyperlink dialog opens with default vertical tabs
+            with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
+                xTab = xDialog.getChild("tabcontrol")
+                self.assertEqual(get_state_as_dict(xTab)["PageCount"], "4")
+
+            try:
+                # Change the tab position setting to horizontal in Options -> Appearance
+                with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
+                    xPages = xDialog.getChild("pages")
+                    xLOEntry = xPages.getChild('0')
+                    xLOEntry.executeAction("EXPAND", tuple())
+                    xAppearanceEntry = xLOEntry.getChild('7')
+                    xAppearanceEntry.executeAction("SELECT", tuple())
+                    xHorizontalRadio = xDialog.getChild("rbHorizontal")
+                    xHorizontalRadio.executeAction("CLICK", tuple())
+                    self.assertEqual(get_state_as_dict(xHorizontalRadio)["Checked"], "true")
+
+                # Open hyperlink dialog again - without the fix this would crash
+                with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
+                    xTab = xDialog.getChild("tabcontrol")
+                    self.assertEqual(get_state_as_dict(xTab)["PageCount"], "4")
+            finally:
+                # Reset tab position back to default
+                with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
+                    xPages = xDialog.getChild("pages")
+                    xLOEntry = xPages.getChild('0')
+                    xLOEntry.executeAction("EXPAND", tuple())
+                    xAppearanceEntry = xLOEntry.getChild('7')
+                    xAppearanceEntry.executeAction("SELECT", tuple())
+                    xVerticalRadio = xDialog.getChild("rbVertical")
+                    xVerticalRadio.executeAction("CLICK", tuple())
+                    self.assertEqual(get_state_as_dict(xVerticalRadio)["Checked"], "true")
+
+    def test_tdf118042_target_in_document_button(self):
+        # Test clicking "Target in Document" button crash
+        with self.ui_test.create_doc_in_start_center("writer"):
+
+            with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
+                xTab = xDialog.getChild("tabcontrol")
+                select_pos(xTab, "2")
+                self.assertEqual(get_state_as_dict(xTab)["CurrPageTitle"], "~Document")
+
+                # Without the fix this would crash here.
+                xBrowseBtn = xDialog.getChild("browse")
+                xBrowseBtn.executeAction("CLICK", tuple())
+
+                self.assertEqual(get_state_as_dict(xTab)["CurrPageTitle"], "~Document")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

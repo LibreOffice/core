@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include "vbachart.hxx"
+
 #include <ooo/vba/excel/XAxes.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <rtl/ref.hxx>

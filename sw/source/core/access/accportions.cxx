@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <txttypes.hxx>
 
 // for portion replacement in Special()

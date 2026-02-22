@@ -24,7 +24,9 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/fileurl.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/style.hxx>
 
@@ -38,6 +40,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
+#include <tools/urlobj.hxx>
 #include <rtl/uri.hxx>
 
 #include <unotools/useroptions.hxx>

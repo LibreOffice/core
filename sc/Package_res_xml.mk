@@ -11,6 +11,7 @@ $(eval $(call gb_Package_Package,sc_res_xml,$(SRCDIR)/sc/res/xml))
 
 $(eval $(call gb_Package_add_files,sc_res_xml,$(LIBO_SHARE_FOLDER)/calc,\
 	styles.xml \
+	tablestyles.xml \
 ))
 
 # vim: set noet sw=4 ts=4:

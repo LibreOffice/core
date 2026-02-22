@@ -20,6 +20,7 @@
 #pragma once
 
 #include "AccessibleGridControlBase.hxx"
+#include "AccessibleGridControlHeader.hxx"
 #include "AccessibleGridControlTable.hxx"
 #include "tablecontrol.hxx"
 

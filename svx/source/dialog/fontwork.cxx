@@ -35,9 +35,11 @@
 
 #include <svtools/unitconv.hxx>
 #include <svx/svxids.hrc>
+#include <tools/mapunit.hxx>
 #include <bitmaps.hlst>
 #include <svx/fontwork.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/weld/Builder.hxx>
 
 constexpr int WIDTH_CHARS = 10;
 

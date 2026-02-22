@@ -21,6 +21,7 @@
 #ifndef INCLUDED_SVX_XOUTBMP_HXX
 #define INCLUDED_SVX_XOUTBMP_HXX
 
+#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <comphelper/errcode.hxx>
 #include <com/sun/star/uno/Sequence.h>

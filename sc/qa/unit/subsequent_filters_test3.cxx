@@ -48,6 +48,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <comphelper/scopeguard.hxx>
+#include <test/commontesttools.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include "helper/qahelper.hxx"
 #include <officecfg/Office/Common.hxx>
@@ -1446,7 +1447,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testInvalidBareBiff5)
     CPPUNIT_ASSERT_EQUAL(OUString(), pDoc->GetString(aPos));
 }
 
-CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTooManyColsRows)
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTooManyColsRows_ods)
 {
     // The intentionally doc has cells beyond our MAXROW/MAXCOL, so there
     // should be a warning on load.
@@ -1457,12 +1458,15 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTooManyColsRows)
 
     CPPUNIT_ASSERT(pMedium->GetWarningError() == SCWARN_IMPORT_ROW_OVERFLOW
                    || pMedium->GetWarningError() == SCWARN_IMPORT_COLUMN_OVERFLOW);
+}
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTooManyColsRows_xlsx)
+{
     createScDoc("xlsx/too-many-cols-rows.xlsx", /*pPassword*/ nullptr,
                 /*bCheckWarningError*/ false);
 
-    pDocSh = getScDocShell();
-    pMedium = pDocSh->GetMedium();
+    ScDocShell* pDocSh = getScDocShell();
+    SfxMedium* pMedium = pDocSh->GetMedium();
 
     CPPUNIT_ASSERT(pMedium->GetWarningError() == SCWARN_IMPORT_ROW_OVERFLOW
                    || pMedium->GetWarningError() == SCWARN_IMPORT_COLUMN_OVERFLOW);
@@ -1474,14 +1478,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf83671_SmartArt_import)
     // Error was, that the background shape had size zero and the diagram shapes where missing.
 
     // Make sure SmartArt is loaded as group shape
-    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
-        pChange->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     // Get document and shape
     createScDoc("xlsx/tdf83671_SmartArt_import.xlsx");
@@ -1500,14 +1498,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf83671_SmartArt_import)
     tools::Rectangle aBackground = pChildren->GetObj(0)->GetLogicRect();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6000), aBackground.getOpenWidth(), 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4200), aBackground.getOpenHeight(), 10);
-
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
-        pChange->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf83671_SmartArt_import2)
@@ -1517,14 +1507,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf83671_SmartArt_import2)
     // had size 100x100 Hmm and position 0|0.
 
     // Make sure SmartArt is loaded with converting to metafile
-    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    if (bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
-        pChange->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        false);
 
     // Get document and shape
     createScDoc("xlsx/tdf83671_SmartArt_import.xlsx");
@@ -1544,14 +1528,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf83671_SmartArt_import2)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6000), aBackground.getOpenWidth(), 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4200), aBackground.getOpenHeight(), 10);
     CPPUNIT_ASSERT_EQUAL(Point(1164, 1270), aBackground.GetPos());
-
-    if (bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
-        pChange->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
@@ -1561,14 +1537,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
     // Error was, that the theme was not considered and therefore the text was white.
 
     // Make sure it is not loaded as metafile but with single shapes.
-    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
-        pChange->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     // Get document and shape in SmartArt object
     createScDoc("xlsx/tdf151818_SmartartThemeFontColor.xlsx");
@@ -1597,14 +1567,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf151818_SmartArtFontColor)
     // Without fix the color scheme was "lt1" (1) but should be "dk2" (2).
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2),
                          xPortion->getPropertyValue(u"CharColorTheme"_ustr).get<sal_Int16>());
-
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
-        pChange->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf137216_HideCol)
@@ -1771,40 +1733,39 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testRhbz1390776)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong range", u"=SUM(A18:A23)"_ustr, pDoc->GetFormula(0, 27, 0));
 }
 
-CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf104310)
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf104310_x14)
 {
     // 1. Test x14 extension
-    {
-        createScDoc("xlsx/tdf104310.xlsx");
-        ScDocument* pDoc = getScDoc();
+    createScDoc("xlsx/tdf104310.xlsx");
+    ScDocument* pDoc = getScDoc();
 
-        const ScValidationData* pData = pDoc->GetValidationEntry(1);
-        CPPUNIT_ASSERT(pData);
+    const ScValidationData* pData = pDoc->GetValidationEntry(1);
+    CPPUNIT_ASSERT(pData);
 
-        // Make sure the list is correct.
-        std::vector<ScTypedStrData> aList;
-        pData->FillSelectionList(aList, ScAddress(0, 1, 0));
-        CPPUNIT_ASSERT_EQUAL(size_t(5), aList.size());
-        for (size_t i = 0; i < 5; ++i)
-            CPPUNIT_ASSERT_DOUBLES_EQUAL(double(i + 1), aList[i].GetValue(), 1e-8);
-    }
+    // Make sure the list is correct.
+    std::vector<ScTypedStrData> aList;
+    pData->FillSelectionList(aList, ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aList.size());
+    for (size_t i = 0; i < 5; ++i)
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(double(i + 1), aList[i].GetValue(), 1e-8);
+}
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf104310_x12ac)
+{
     // 2. Test x12ac extension
-    {
-        createScDoc("xlsx/tdf104310-2.xlsx");
-        ScDocument* pDoc = getScDoc();
+    createScDoc("xlsx/tdf104310-2.xlsx");
+    ScDocument* pDoc = getScDoc();
 
-        const ScValidationData* pData = pDoc->GetValidationEntry(1);
-        CPPUNIT_ASSERT(pData);
+    const ScValidationData* pData = pDoc->GetValidationEntry(1);
+    CPPUNIT_ASSERT(pData);
 
-        // Make sure the list is correct.
-        std::vector<ScTypedStrData> aList;
-        pData->FillSelectionList(aList, ScAddress(0, 1, 0));
-        CPPUNIT_ASSERT_EQUAL(size_t(3), aList.size());
-        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, aList[0].GetString());
-        CPPUNIT_ASSERT_EQUAL(u"2,3"_ustr, aList[1].GetString());
-        CPPUNIT_ASSERT_EQUAL(u"4"_ustr, aList[2].GetString());
-    }
+    // Make sure the list is correct.
+    std::vector<ScTypedStrData> aList;
+    pData->FillSelectionList(aList, ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aList.size());
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, aList[0].GetString());
+    CPPUNIT_ASSERT_EQUAL(u"2,3"_ustr, aList[1].GetString());
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, aList[2].GetString());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf31231)

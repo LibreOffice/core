@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/grid/DefaultGridColumnModel.hpp>
 #include <helper/property.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <rtl/ref.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>

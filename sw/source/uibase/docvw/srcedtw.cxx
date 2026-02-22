@@ -29,8 +29,10 @@
 #include <officecfg/Office/Common.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -45,6 +47,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/scrolladaptor.hxx>
 #include <tools/time.hxx>
+#include <unotools/fontdefs.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
 #include <srcview.hxx>

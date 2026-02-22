@@ -37,6 +37,7 @@
 #include <memory>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Builder.hxx>
 
 SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
     : SfxTabDialogController(pParent, u"modules/swriter/ui/footendnotedialog.ui"_ustr, u"FootEndnoteDialog"_ustr)
@@ -177,8 +178,8 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     }
 
     UIName sStr;
-    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(m_bEndNote ? RES_POOLCOLL_ENDNOTE
-                           : RES_POOLCOLL_FOOTNOTE), sStr );
+    SwStyleNameMapper::FillUIName( m_bEndNote ? SwPoolFormatId::COLL_ENDNOTE
+                           : SwPoolFormatId::COLL_FOOTNOTE, sStr );
     if (m_xParaTemplBox->find_text(sStr.toString()) == -1)
         m_xParaTemplBox->append_text(sStr.toString());
 
@@ -199,7 +200,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     }
 
     // page
-    for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
+    for (SwPoolFormatId i = SwPoolFormatId::PAGE_BEGIN; i < SwPoolFormatId::PAGE_END; i = i + 1)
         m_xPageTemplBox->append_text(SwStyleNameMapper::GetUIName(i, ProgName()).toString());
 
     const size_t nCount = m_pSh->GetPageDescCnt();

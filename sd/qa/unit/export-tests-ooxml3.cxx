@@ -13,6 +13,7 @@
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <test/commontesttools.hxx>
 
 #include <sdpage.hxx>
 
@@ -413,14 +414,8 @@ int SdOOXMLExportTest3::testTdf115005_FallBack_Images(bool bAddReplacementImages
 
     // check if fallback images were not created if AddReplacementImages=true/false
     // set AddReplacementImages
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(
-            comphelper::ConfigurationChanges::create());
-        if (!officecfg::Office::Common::Save::Graphic::AddReplacementImages::isReadOnly())
-            officecfg::Office::Common::Save::Graphic::AddReplacementImages::set(
-                bAddReplacementImages, batch);
-        batch->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Save::Graphic::AddReplacementImages> aCfg(
+        bAddReplacementImages);
 
     // save the file with already set options
     save(TestFilter::ODP);
@@ -1100,6 +1095,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf135843)
     assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnR/a:solidFill");
     assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnT/a:solidFill");
     assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnB/a:solidFill");
+
+    // tdf#166335: fmla must not be an empty string
+    static constexpr OString sGlueStart("/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:custGeom"_ostr);
+    assertXPath(pXmlDoc, sGlueStart + "/a:gdLst/a:gd[@name='GluePoint2X']", "fmla", u"val w");
+    assertXPath(pXmlDoc, sGlueStart + "/a:gdLst/a:gd[@name='GluePoint2Y']", "fmla", u"*/ 1 h 2");
+    assertXPath(pXmlDoc, sGlueStart + "/a:gdLst/a:gd[@name='GluePoint3X']", "fmla", u"*/ 1 w 2");
+    assertXPath(pXmlDoc, sGlueStart + "/a:gdLst/a:gd[@name='GluePoint3Y']", "fmla", u"val h");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testNegativeTimeAnimateValue)
@@ -1130,7 +1132,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf168736)
     // Verify hyperlink to nextslide is properly exported the Relationship has Target attribute
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:hlinkClick",
                 "action", u"ppaction://hlinkshowjump?jump=nextslide");
+}
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf168736_2)
+{
     createSdImpressDoc("ppt/tdf168736-2.ppt");
     save(TestFilter::PPTX);
 
@@ -1169,6 +1174,31 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169524)
     // Verify that no left margin is exported
     assertXPathNoAttribute(
         pXmlDoc, "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl1pPr", "marL");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169952)
+{
+    createSdImpressDoc("odp/tdf169952.odp");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/charts/chart2.xml"_ustr);
+
+    CPPUNIT_ASSERT_MESSAGE("Without the fix chart2.xml is not exported", pXmlDoc);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169952_multiple_OLEs)
+{
+    createSdImpressDoc("odp/tdf169952_multiple_OLEs.odp");
+    save(TestFilter::PPTX);
+
+    // Without the fix two of the three OLE objects would get lost, and only oleObject1.bin
+    // would exist
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/embeddings/oleObject1.bin"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/embeddings/oleObject2.bin"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/embeddings/oleObject3.bin"_ustr)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

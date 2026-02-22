@@ -74,6 +74,7 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/svdpagv.hxx>
@@ -1196,6 +1197,19 @@ void SwViewShell::SetAdjustTableLineHeightsToGridHeight(bool bValue)
     }
 }
 
+void SwViewShell::SetListLabelAlignmentIgnoresDirection(bool bValue)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION) != bValue)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION, bValue);
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Pos
+                                       | SwInvalidateFlags::Size | SwInvalidateFlags::Table;
+        lcl_InvalidateAllContent(*this, nInv);
+    }
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );
@@ -1562,7 +1576,7 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
                 if(!HasDrawView())
                     MakeDrawView();
                 SdrView* pDrawView = GetDrawView();
-                pDrawView->AddDeviceToPaintView(*pVout, nullptr);
+                pDrawView->AddDeviceToPaintView(*pVout);
 
                 // clear mpWin during DLPrePaint2 to get paint preparation for mpOut, but set it again
                 // immediately afterwards. There are many decisions in SW which imply that Printing

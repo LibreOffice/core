@@ -28,7 +28,9 @@
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <utility>
+#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/unohelp.hxx>
 #include <svtools/unitconv.hxx>
 
@@ -36,6 +38,7 @@
 #include <editeng/editrids.hrc>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 

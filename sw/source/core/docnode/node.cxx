@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <tools/gen.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -934,6 +934,14 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
         case SwNodeType::Grf:
         {
             auto pNoTextNode = static_cast<const SwNoTextNode*>(this);
+
+            if (pNoTextNode->HasSwAttrSet())
+            {
+                (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwAttrSet"));
+                pNoTextNode->GetSwAttrSet().dumpAsXml(pWriter);
+                (void)xmlTextWriterEndElement(pWriter);
+            }
+
             const tools::PolyPolygon* pContour = pNoTextNode->HasContour();
             if (pContour)
             {

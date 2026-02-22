@@ -22,6 +22,7 @@
 #include <sfx2/passwd.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <libwps/libwps.h>
 

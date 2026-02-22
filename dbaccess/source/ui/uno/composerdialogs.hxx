@@ -27,6 +27,8 @@
 #include <comphelper/proparrhlp.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <svtools/genericunodialog.hxx>
+#include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/weld.hxx>
 
 namespace dbaui
 {

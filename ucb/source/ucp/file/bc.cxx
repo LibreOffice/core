@@ -47,12 +47,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 class fileaccess::PropertyListeners
 {
     typedef comphelper::OInterfaceContainerHelper4<beans::XPropertiesChangeListener> ContainerHelper;
@@ -463,7 +457,7 @@ BaseContent::addProperty(
 {
     if( ( m_nState & JustInserted ) || ( m_nState & Deleted ) || Name.isEmpty() )
     {
-        throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+        throw lang::IllegalArgumentException( u""_ustr, uno::Reference< uno::XInterface >(), 0 );
     }
 
     m_pMyShell->associate( m_aUncPath,Name,DefaultValue,Attributes );
@@ -596,7 +590,7 @@ void SAL_CALL
 BaseContent::setParent(
     const Reference< XInterface >& )
 {
-    throw lang::NoSupportException( THROW_WHERE );
+    throw lang::NoSupportException();
 }
 
 
@@ -768,12 +762,12 @@ BaseContent::setPropertyValues(
             OUString NewTitle;
             if( !( Values[i].Value >>= NewTitle ) )
             {
-                retRange[i] <<= beans::IllegalTypeException( THROW_WHERE );
+                retRange[i] <<= beans::IllegalTypeException();
                 break;
             }
             else if( NewTitle.isEmpty() )
             {
-                retRange[i] <<= lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+                retRange[i] <<= lang::IllegalArgumentException( u""_ustr, uno::Reference< uno::XInterface >(), 0 );
                 break;
             }
 

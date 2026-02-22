@@ -86,6 +86,7 @@
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/frame.hxx>
 #include <attrib.hxx>
+#include <dbdata.hxx>
 #include <svx/sdprcitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/pageitem.hxx>

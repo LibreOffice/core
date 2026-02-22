@@ -134,7 +134,7 @@ class solver(UITestCase):
 
 
     # Tests whether all solver named ranges are hidden in the UI
-    def test_tdf160064(self):
+    def test_tdf160064_hidden_named_ranges_persist_after_reload(self):
         # This test uses the same file from bug tdf#160104, so no need to check if the model is correct upon opening
         with self.ui_test.load_file(get_url_for_data_file("tdf160104.ods")) as calc_doc:
             # The Manage Names dialog must not contain any names

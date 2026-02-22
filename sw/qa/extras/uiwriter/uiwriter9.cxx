@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_poppler.h>
 #include <swmodeltestbase.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Writer.hxx>
@@ -67,6 +68,7 @@
 #include <pagefrm.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdmark.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
@@ -159,14 +161,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionShape)
                                                ->getName());
 
     // prevent the warning dialog which is automatically cancelled
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(false, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard _([&] {
-        officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(true, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection> aCfg(
+        false);
 
     // backspace should delete the hidden section
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
@@ -761,20 +757,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969B)
     //CPPUNIT_ASSERT(!pWrtShell->GetCurField(true));
 }
 
+#if ENABLE_PDFIMPORT
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPDFExportCrash)
 {
     createSwDoc("section-table-section.fodt");
 
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
 
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
+    save(TestFilter::PDF_WRITER, {
+                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                                 });
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 }
+#endif
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159049)
 {
@@ -995,14 +994,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf165351)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 {
     // Turn "Enclose with characters" on temporarily
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(true, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard _([&] {
-        officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(false, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters> aCfg(
+        true);
 
     createSwDoc();
 
@@ -1085,14 +1078,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
 {
     // Turn "Enclose with characters" on temporarily
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(true, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard _([&] {
-        officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(false, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters> aCfg(
+        true);
 
     // Given a document with several paragraphs, and a formula object
     createSwDoc("text-with-formula.fodt");
@@ -1170,14 +1157,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167133)
 {
     // Turn "Enclose with characters" on temporarily
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(true, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard _([&] {
-        officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(false, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters> aCfg(
+        true);
 
     // Given a document with a single paragraph, having a formula object
     createSwDoc("text-with-formula-one-paragraph.fodt");
@@ -1233,16 +1214,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159054_disableOutlineNumbering)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
 {
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(true, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard g([] {
-        std::shared_ptr<comphelper::ConfigurationChanges> _pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(false, _pBatch);
-        _pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::DisableActiveContent> aCfg(
+        true);
 
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1297,16 +1270,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_dde_disable)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_ole_object_disable)
 {
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(true, pBatch);
-    pBatch->commit();
-    comphelper::ScopeGuard g([] {
-        std::shared_ptr<comphelper::ConfigurationChanges> _pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Security::Scripting::DisableActiveContent::set(false, _pBatch);
-        _pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::DisableActiveContent> aCfg(
+        true);
 
     // Enable LOK mode, otherwise OCommonEmbeddedObject::SwitchStateTo_Impl() will throw when it
     // finds out that the test runs headless.
@@ -1328,11 +1293,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_ole_object_disable)
     uno::Reference<document::XEmbeddedObjectSupplier2> xEmbedSupplier(xShape, uno::UNO_QUERY);
     auto xEmbeddedObj = xEmbedSupplier->getExtendedControlOverEmbeddedObject();
     CPPUNIT_ASSERT_EQUAL(embed::EmbedStates::LOADED, xEmbeddedObj->getCurrentState());
-
-    // Dispose the document while LOK is still active to avoid leaks.
-    mxComponent->dispose();
-    mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf146190)

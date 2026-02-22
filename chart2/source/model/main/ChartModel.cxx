@@ -1435,7 +1435,7 @@ rtl::Reference< ChartType > ChartModel::getChartTypeOfSeries( const rtl::Referen
 // static
 awt::Size ChartModel::getDefaultPageSize()
 {
-    return awt::Size( 16000, 9000 );
+    return awt::Size( DEFAULT_PAGE_WIDTH, DEFAULT_PAGE_HEIGHT );
 }
 
 awt::Size ChartModel::getPageSize()

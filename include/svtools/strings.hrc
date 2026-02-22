@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, u8##String)
 
 // To translators: tdf#125447 use no mnemonic in this string
@@ -250,6 +252,7 @@
 #define STR_FIELD_WORKTEL                       NC_("STR_FIELD_WORKTEL", "Tel: Work")
 #define STR_FIELD_FAX                           NC_("STR_FIELD_FAX", "Fax")
 #define STR_FIELD_EMAIL                         NC_("STR_FIELD_EMAIL", "Email")
+#define STR_FIELD_GENDER                        NC_("STR_FIELD_GENDER", "Gender")
 #define STR_FIELD_URL                           NC_("STR_FIELD_URL", "URL")
 #define STR_FIELD_NOTE                          NC_("STR_FIELD_NOTE", "Note")
 #define STR_FIELD_USER1                         NC_("STR_FIELD_USER1", "User 1")

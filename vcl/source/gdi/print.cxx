@@ -25,6 +25,7 @@
 #include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/alpha.hxx>
 #include <vcl/QueueInfo.hxx>
@@ -32,6 +33,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
+#include <vcl/PrinterSupport.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 
 #include <jobset.h>
 #include <print.h>
@@ -48,6 +51,7 @@
 #include <salvd.hxx>
 #include <svdata.hxx>
 
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -58,10 +62,10 @@ int nImplSysDialog = 0;
 
 namespace
 {
-    Paper ImplGetPaperFormat( tools::Long nWidth100thMM, tools::Long nHeight100thMM )
+    Paper ImplGetPaperFormat( tools::Long nWidth100thMM, tools::Long nHeight100thMM, bool bAlsoTryRotated = false )
     {
         PaperInfo aInfo(nWidth100thMM, nHeight100thMM);
-        aInfo.doSloppyFit();
+        aInfo.doSloppyFit(bAlsoTryRotated);
         return aInfo.getPaper();
     }
 
@@ -70,7 +74,6 @@ namespace
         static PaperInfo aInfo(PAPER_USER);
         return aInfo;
     }
-}
 
 void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
 {
@@ -93,6 +96,7 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
         if ( ePaper != PAPER_USER )
             rJobSetup.ImplGetData().SetPaperFormat(ePaper);
     }
+}
 }
 
 void Printer::ImplPrintTransparent( const Bitmap& rBmp,
@@ -280,8 +284,7 @@ void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
 }
 
 void Printer::CopyArea( const Point& /*rDestPt*/,
-                        const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
-                        bool /*bWindowInvalidate*/ )
+                        const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/ )
 {
     SAL_WARN( "vcl.gdi", "Don't use OutputDevice::CopyArea(...) with printer devices!" );
 }
@@ -1207,15 +1210,16 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
         if ( aInfo.sloppyEqual(rPaperInfo) )
         {
             rData.SetPaperFormat(
-                ImplGetPaperFormat( rPaperInfo.getWidth(),
-                    rPaperInfo.getHeight() ));
-            rData.SetOrientation( Orientation::Portrait );
+                ImplGetPaperFormat(rPaperInfo.getWidth(), rPaperInfo.getHeight(), true));
+            rData.SetOrientation(rPaperInfo.getWidth() <= rPaperInfo.getHeight()
+                                     ? Orientation::Portrait
+                                     : Orientation::Landscape);
             return;
         }
     }
 
     // If the printer supports landscape orientation, check paper sizes again
-    // with landscape orientation. This is necessary as a printer driver provides
+    // with landscape orientation. This is necessary as many printer drivers provide
     // all paper sizes with portrait orientation only!!
     if ( !(rData.GetPaperFormat() == PAPER_USER &&
          nLandscapeAngle != 0 &&
@@ -1233,9 +1237,10 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
         if ( aRotatedInfo.sloppyEqual( rPaperInfo ) )
         {
             rData.SetPaperFormat(
-                ImplGetPaperFormat( rPaperInfo.getWidth(),
-                    rPaperInfo.getHeight() ));
-            rData.SetOrientation( Orientation::Landscape );
+                ImplGetPaperFormat(rPaperInfo.getWidth(), rPaperInfo.getHeight(), true));
+            rData.SetOrientation(rPaperInfo.getWidth() < rPaperInfo.getHeight()
+                                     ? Orientation::Landscape
+                                     : Orientation::Portrait);
             return;
         }
     }

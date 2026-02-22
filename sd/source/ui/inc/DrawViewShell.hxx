@@ -44,9 +44,9 @@ class SdrObject;
 class SdrPageView;
 class TransferableDataHelper;
 class TransferableClipboardListener;
-class AbstractSvxNameDialog;
 class SdrLayer;
 class SvxClipboardFormatItem;
+class SvxNameDialog;
 struct ESelection;
 class AbstractSvxObjectNameDialog;
 
@@ -392,11 +392,13 @@ public:
 
     void destroyXSlideShowInstance();
 
+    virtual void RememberCanvasPageVisArea(const ::tools::Rectangle &aRect) override;
+
 protected:
                     DECL_DLLPRIVATE_LINK( ClipboardChanged, TransferableDataHelper*, void );
                     DECL_DLLPRIVATE_LINK( TabSplitHdl, TabBar *, void );
                     DECL_DLLPRIVATE_LINK( NameObjectHdl, AbstractSvxObjectNameDialog&, bool );
-                    DECL_DLLPRIVATE_LINK( RenameSlideHdl, AbstractSvxNameDialog&, bool );
+                    DECL_DLLPRIVATE_LINK(RenameSlideHdl, SvxNameDialog&, bool);
 
     void            DeleteActualPage();
     void            DeleteActualLayer();
@@ -512,6 +514,8 @@ private:
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
 
     css::uno::Reference<css::presentation::XSlideShow> mxSlideShow;
+
+    ::tools::Rectangle  maCanvasPageVisArea;
 };
 
 /// Merge the background properties together and deposit the result in rMergeAttr

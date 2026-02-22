@@ -23,6 +23,7 @@
 #include <officecfg/Office/Calc.hxx>
 #include <tools/lineend.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>

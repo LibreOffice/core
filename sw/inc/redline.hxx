@@ -55,10 +55,10 @@ class SW_DLLPUBLIC SwRedlineExtraData_FormatColl final : public SwRedlineExtraDa
 {
     UIName m_sFormatNm;
     std::shared_ptr<SfxItemSet> m_pSet;
-    sal_uInt16 m_nPoolId;
+    SwPoolFormatId m_nPoolId;
     bool m_bFormatAll; // don't strip the last paragraph mark
 public:
-    SwRedlineExtraData_FormatColl( UIName aColl, sal_uInt16 nPoolFormatId,
+    SwRedlineExtraData_FormatColl( UIName aColl, SwPoolFormatId nPoolFormatId,
                                 const std::shared_ptr<SfxItemSet>& pSet = nullptr, bool bFormatAll = true );
     virtual ~SwRedlineExtraData_FormatColl() override;
     virtual SwRedlineExtraData* CreateNew() const override;

@@ -27,7 +27,12 @@
 #include <vcl/QueueInfo.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
+#include <vcl/PrinterSupport.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/vclevent.hxx>
 #include <sal/log.hxx>
 
 void ImplFillPrnDlgListBox( const Printer* pPrinter,

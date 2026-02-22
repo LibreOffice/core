@@ -21,6 +21,7 @@
 
 #include <initializer_list>
 
+#include <rtl/ref.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 

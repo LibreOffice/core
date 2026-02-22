@@ -19,9 +19,8 @@ constexpr tools::Long SIZE = ChartColorPaletteLayout::ItemSize;
 
 ChartColorPalettes::ChartColorPalettes(weld::Builder& rBuilder, const OUString& id,
                                        const OUString& winId)
-    : mrBuilder(rBuilder)
-    , mxIconView(mrBuilder.weld_icon_view(id))
-    , mxWindow(mrBuilder.weld_scrolled_window(winId))
+    : mxIconView(rBuilder.weld_icon_view(id))
+    , mxWindow(rBuilder.weld_scrolled_window(winId))
     , mnHighlightedItemId(0)
 {
     mxIconView->connect_mouse_move(LINK(this, ChartColorPalettes, OnMouseMove));
@@ -81,7 +80,7 @@ void ChartColorPalettes::Fill()
 
     mxIconView->freeze();
 
-    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
     pVDev->SetOutputSizePixel(aSize);
 
     tools::Rectangle aDrawArea(0, 0, aSize.getWidth(), aSize.getHeight());

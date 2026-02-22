@@ -31,6 +31,7 @@
 
 #include <fontattributes.hxx>
 #include <fontsubset.hxx>
+#include <glyphid.hxx>
 
 #include <hb.h>
 #include <hb-ot.h>
@@ -160,7 +161,8 @@ public:
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
     SAL_DLLPRIVATE bool CreateFontSubset(std::vector<sal_uInt8>&, const sal_GlyphId*,
-                                         const sal_uInt8*, const int, FontSubsetInfo&) const;
+                                         const sal_uInt8*, const int, FontSubsetInfo&,
+                                         const std::vector<hb_variation_t>& rVariations = {}) const;
 
     bool IsColorFont() const { return HasColorLayers() || HasColorBitmaps(); }
 

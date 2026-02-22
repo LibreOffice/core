@@ -19,6 +19,8 @@
 
 #include "tp_DataLabel.hxx"
 
+#include <vcl/weld/Dialog.hxx>
+
 namespace chart
 {
 

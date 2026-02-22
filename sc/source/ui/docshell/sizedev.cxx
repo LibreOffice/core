@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/printer.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/virdev.hxx>
 
 #include <sizedev.hxx>

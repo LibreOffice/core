@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include "dp_gui_dependencydialog.hxx"

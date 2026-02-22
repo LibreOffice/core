@@ -22,6 +22,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include "dxf2mtf.hxx"
 

@@ -10,6 +10,7 @@
 
 #include <vcl/BinaryDataContainer.hxx>
 #include <o3tl/hash_combine.hxx>
+#include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/seqstream.hxx>

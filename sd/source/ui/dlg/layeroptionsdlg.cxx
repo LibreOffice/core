@@ -18,6 +18,8 @@
  */
 
 #include <svl/itemset.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <sdattr.hxx>
 #include <layeroptionsdlg.hxx>

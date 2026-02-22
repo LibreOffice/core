@@ -43,6 +43,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/stdtext.hxx>

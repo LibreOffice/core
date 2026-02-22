@@ -27,6 +27,8 @@
 #include <vbahelper/vbapagesetupbase.hxx>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef cppu::ImplInheritanceHelper< VbaPageSetupBase, ooo::vba::word::XPageSetup > SwVbaPageSetup_BASE;

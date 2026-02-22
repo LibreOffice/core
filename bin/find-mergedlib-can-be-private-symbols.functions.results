@@ -14891,11 +14891,11 @@ sdr::contact::ViewObjectContact::triggerLazyInvalidate()
 sdr::contact::ViewObjectContactOfSdrObj::getPageViewOutputDevice() const
 sdr::contact::ViewObjectContactOfSdrObj::getSdrObject() const
 sdr::contact::ViewObjectContactOfSdrObj::isObjectVisibleOnAnyLayer(SdrObject const&, SdrLayerIDSet const&)
-sdr::overlay::OverlayAnimatedBitmapEx::Trigger(unsigned int)
-sdr::overlay::OverlayAnimatedBitmapEx::createOverlayObjectPrimitive2DSequence()
-sdr::overlay::OverlayAnimatedBitmapEx::~OverlayAnimatedBitmapEx()
-sdr::overlay::OverlayBitmapEx::createOverlayObjectPrimitive2DSequence()
-sdr::overlay::OverlayBitmapEx::~OverlayBitmapEx()
+sdr::overlay::OverlayAnimatedBitmap::Trigger(unsigned int)
+sdr::overlay::OverlayAnimatedBitmap::createOverlayObjectPrimitive2DSequence()
+sdr::overlay::OverlayAnimatedBitmap::~OverlayAnimatedBitmap()
+sdr::overlay::OverlayBitmap::createOverlayObjectPrimitive2DSequence()
+sdr::overlay::OverlayBitmap::~OverlayBitmap()
 sdr::overlay::OverlayManager::ImpDrawMembers(basegfx::B2DRange const&, OutputDevice&) const
 sdr::overlay::OverlayManager::ImpStripeDefinitionChanged()
 sdr::overlay::OverlayManager::OverlayManager(OutputDevice&)
@@ -15746,11 +15746,11 @@ svx::administrateDatabaseRegistration(weld::Window*)
 svx::checkForFontWork(SdrObject const*)
 svx::classification::containsProperty(com::sun::star::uno::Sequence<com::sun::star::beans::Property> const&, std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 svx::classification::convertClassificationResultToString(std::vector<svx::ClassificationResult, std::allocator<svx::ClassificationResult> > const&)
-svx::diagram::DiagramData::addConnection(svx::diagram::TypeConstant, rtl::OUString const&, rtl::OUString const&)
-svx::diagram::DiagramData::getChildrenString(rtl::OUStringBuffer&, svx::diagram::Point const*, int) const
+svx::diagram::DiagramData_svx::addConnection(svx::diagram::TypeConstant, rtl::OUString const&, rtl::OUString const&)
+svx::diagram::DiagramData_svx::getDiagramChildrenString(rtl::OUStringBuffer&, svx::diagram::Point const*, int) const
 svx::diagram::DiagramFrameHdl::CreateB2dIAObject()
 svx::diagram::DiagramFrameHdl::DiagramFrameHdl(basegfx::B2DHomMatrix const&)
-svx::diagram::IDiagramHelper::AddAdditionalVisualization(SdrObjGroup const&, SdrHdlList&)
+svx::diagram::DiagramHelper_svx::AddAdditionalVisualization(SdrObjGroup const&, SdrHdlList&)
 svx::frame::Array::GetB2DRange(int, int, int, int) const
 svx::frame::Array::GetCellCount() const
 svx::frame::Array::GetCellStyleBL(int, int) const

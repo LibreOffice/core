@@ -20,6 +20,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <osl/time.h>
 #include <osl/security.hxx>

@@ -14,35 +14,23 @@ use warnings;
 use lib "solenv/clang-format";
 use ClangFormat;
 
-my $clang_format = ClangFormat::find();
-my $src = ClangFormat::get_extension_regex();
+my $clang_format = ClangFormat::find() . ' -i ';
+my $re_ext = '\.('. ClangFormat::get_extension_regex() .')$';
 my $excluded_list_names = ClangFormat::get_excludelist();
-my @filenames = ();
-my $dry_run = 0;
+
+my $dry_run = $ARGV[0] eq '-n';
 
 # Get a list of files.
-open (FILES, "git ls-files |") ||  die "Cannot run git ls-files.";
-while (my $filename = <FILES>)
-{
-    chomp $filename;
-    if ($filename =~ /\.($src)$/ and !exists($excluded_list_names->{$filename}))
-    {
-        push @filenames, $filename;
-    }
-}
+open (FILES, 'git ls-files |') or  die 'Cannot run git ls-files.';
 
-if ($#ARGV ge 0 && $ARGV[0] eq "-n")
-{
-    $dry_run = 1;
-}
+my @filenames = grep { chomp $_;  /$re_ext/ and !exists($excluded_list_names->{$_}) } <FILES>;
 
 foreach my $filename (@filenames)
 {
-    my $command = $clang_format . " -i " . $filename;
-    print($filename . "\n");
+    print($filename, "\n");
     if (!$dry_run)
     {
-        system($command) == 0 or die "failed to execute \"$command\": $?";
+        system($clang_format . $filename) == 0 or die qq(failed to execute "$clang_format $filename": $?);
     }
 }
 

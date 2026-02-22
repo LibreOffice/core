@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/rtfkeywd.hxx>
+#include <tools/globname.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -87,6 +88,7 @@
 #include <redline.hxx>
 #include <rtf.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/gfxlink.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/mathml/imexport.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -664,7 +666,7 @@ OString RtfAttributeOutput::MoveProperties(GetCharacterPropertiesMode mode)
     // 2. Add the character formatting, that is not part of assoc groups
     if (auto* pStyleItem = m_aCharFormatting.GetItemIfSet(RES_TXTATR_CHARFMT, false))
         OutputFormattingItem(*pStyleItem, rBuf);
-    for (SfxItemIter it(m_aCharFormatting); !it.IsAtEnd(); it.NextItem())
+    for (SfxItemIter it(m_aCharFormatting); !it.IsAtEnd(); it.Next())
     {
         if (it.GetCurWhich() != RES_TXTATR_CHARFMT)
             OutputFormattingItem(*it.GetCurItem(), rBuf);

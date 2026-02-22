@@ -98,7 +98,7 @@ SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& r
         m_pAutoCompleteWord(&rToTell),
         m_pDoc(&rSwDoc)
 {
-    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
 #if OSL_DEBUG_LEVEL > 0
     ++s_nSwAutoCompleteClientCount;
 #endif
@@ -109,7 +109,7 @@ SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) 
     m_pAutoCompleteWord(rClient.m_pAutoCompleteWord),
     m_pDoc(rClient.m_pDoc)
 {
-    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
 #if OSL_DEBUG_LEVEL > 0
     ++s_nSwAutoCompleteClientCount;
 #endif

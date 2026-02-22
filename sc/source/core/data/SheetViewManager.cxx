@@ -117,6 +117,11 @@ void SheetViewManager::unsyncAllSheetViews()
 {
     for (auto const& pSheetView : maViews)
     {
+        if (!pSheetView)
+        {
+            continue;
+        }
+
         pSheetView->unsync();
     }
 }

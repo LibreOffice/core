@@ -25,6 +25,7 @@ $(eval $(call gb_UIConfig_add_uifiles,vcl,\
 	vcl/uiconfig/ui/printerpropertiesdialog \
 	vcl/uiconfig/ui/printprogressdialog \
 	vcl/uiconfig/ui/querydialog \
+	vcl/uiconfig/ui/screenshotmenu \
 	vcl/uiconfig/ui/screenshotparent \
 	vcl/uiconfig/ui/wizard \
 	vcl/uiconfig/ui/openlockedquerybox \

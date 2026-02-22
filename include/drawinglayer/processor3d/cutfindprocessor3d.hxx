@@ -25,6 +25,8 @@
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
+#include <vector>
+
 namespace drawinglayer::processor3d
     {
         /** CutFindProcessor class

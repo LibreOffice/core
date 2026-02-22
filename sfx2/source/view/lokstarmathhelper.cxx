@@ -18,6 +18,7 @@
 #include <comphelper/lok.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/virdev.hxx>

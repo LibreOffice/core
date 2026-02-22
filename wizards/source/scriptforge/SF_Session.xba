@@ -666,7 +666,7 @@ Public Function RunApplication(Optional ByVal Command As Variant _
 
 Dim bReturn As Boolean			&apos;	Returned value
 Dim oShell As Object			&apos;	com.sun.star.system.SystemShellExecute
-Dim sCommand As String			&apos;	Command as an URL
+Dim sCommand As String			&apos;	Command as a URL
 Const cstThisSub = &quot;Session.RunApplication&quot;
 Const cstSubArgs = &quot;Command, [Parameters]&quot;
 

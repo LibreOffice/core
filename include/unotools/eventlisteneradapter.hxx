@@ -21,11 +21,11 @@
 #define INCLUDED_UNOTOOLS_EVENTLISTENERADAPTER_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/lang/EventObject.hpp>
 #include <memory>
 
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::lang { class XComponent; }
+namespace com::sun::star::lang { struct EventObject; }
 
 namespace utl
 {

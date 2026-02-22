@@ -28,6 +28,7 @@
 #include <EventMultiplexer.hxx>
 #include <DrawDocShell.hxx>
 #include <osl/diagnose.h>
+#include <vcl/weld/Menu.hxx>
 
 #include <helpids.h>
 

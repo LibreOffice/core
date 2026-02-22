@@ -30,4 +30,6 @@ $(eval $(call gb_Executable_add_exception_objects,rustmaker,\
     codemaker/source/rustmaker/cpp_include_manager \
 ))
 
+$(eval $(call gb_Executable_use_external,rustmaker,frozen))
+
 # vim:set noet sw=4 ts=4:

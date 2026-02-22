@@ -24,6 +24,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <tabcont.hxx>
 #include <tabvwsh.hxx>

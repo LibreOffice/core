@@ -11,6 +11,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <tools/gen.hxx>
 #include <tools/poly.hxx>
 
 namespace

@@ -33,11 +33,16 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
+#include <svtools/dlgname.hxx>
 #include <svx/passwd.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
-#include <dlgname.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/Menu.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -177,7 +182,7 @@ void ScriptContainersListBox::Remove(const weld::TreeIter* pEntryIter, bool bRem
 
         // children must be removed from the tree in reverse order
         std::unique_ptr<weld::TreeIter> xRemoveIter = m_xTreeView->make_iterator();
-        while (m_xTreeView->iter_compare(*xIter, *pEntryIter) != 0)
+        while (!xIter->equal(*pEntryIter))
         {
             m_xTreeView->copy_iterator(*xIter, *xRemoveIter);
             (void)m_xTreeView->iter_previous(*xIter);

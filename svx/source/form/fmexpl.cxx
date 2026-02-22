@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sfx2/objitem.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <svx/fmshell.hxx>
 #include <comphelper/types.hxx>

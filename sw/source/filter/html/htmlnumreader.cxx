@@ -82,11 +82,11 @@ void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
     rInfo.SetNodeStartValue( nLevel );
     if( bNewNumFormat )
     {
-        sal_uInt16 nChrFormatPoolId = 0;
+        SwPoolFormatId nChrFormatPoolId = SwPoolFormatId::ZERO;
         if( HtmlTokenId::ORDERLIST_ON == nToken )
         {
             aNumFormat.SetNumberingType(SVX_NUM_ARABIC);
-            nChrFormatPoolId = RES_POOLCHR_NUM_LEVEL;
+            nChrFormatPoolId = SwPoolFormatId::CHR_NUM_LEVEL;
         }
         else
         {
@@ -99,7 +99,7 @@ void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
             }
             aNumFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aNumFormat.SetBulletChar( cBulletChar );
-            nChrFormatPoolId = RES_POOLCHR_BULLET_LEVEL;
+            nChrFormatPoolId = SwPoolFormatId::CHR_BULLET_LEVEL;
         }
 
         sal_Int32 nAbsLSpace = HTML_NUMBER_BULLET_MARGINLEFT;
@@ -494,7 +494,7 @@ void SwHTMLParser::NewNumberBulletListItem( HtmlTokenId nToken )
         }
         aNumFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         aNumFormat.SetBulletChar( cBulletChar );   // the bullet character !!
-        aNumFormat.SetCharFormat( m_pCSS1Parser->GetCharFormatFromPool(RES_POOLCHR_BULLET_LEVEL) );
+        aNumFormat.SetCharFormat( m_pCSS1Parser->GetCharFormatFromPool(SwPoolFormatId::CHR_BULLET_LEVEL) );
         aNumFormat.SetFirstLineOffset( HTML_NUMBER_BULLET_INDENT );
         aNumRule.Set( 0, aNumFormat );
 

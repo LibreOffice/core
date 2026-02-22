@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <basegfx/utils/bgradient.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/papersizelistbox.hxx>

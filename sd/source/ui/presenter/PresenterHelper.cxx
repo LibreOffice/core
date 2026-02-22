@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 
@@ -117,8 +118,6 @@ Reference<rendering::XBitmap> PresenterHelper::loadBitmap (
           BMP_PRESENTERSCREEN_TRANSITION },
         { u"bitmaps/BorderActiveBottom.png"_ustr,
           BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM },
-        { u"bitmaps/BorderActiveBottomCallout.png"_ustr,
-          BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_CALLOUT },
         { u"bitmaps/BorderActiveBottomLeft.png"_ustr,
           BMP_PRESENTERSCREEN_BORDER_ACTIVE_BOTTOM_LEFT },
         { u"bitmaps/BorderActiveBottomRight.png"_ustr,

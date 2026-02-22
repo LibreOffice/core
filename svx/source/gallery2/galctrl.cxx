@@ -22,6 +22,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <tools/mapunit.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <galbrws1.hxx>
 #include <svx/galtheme.hxx>

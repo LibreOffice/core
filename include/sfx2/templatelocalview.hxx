@@ -34,6 +34,8 @@ class SfxDocumentTemplates;
 class TemplateContainerItem;
 class TemplateViewItem;
 
+namespace weld { class Menu; }
+
 enum class FILTER_APPLICATION
 {
     NONE,

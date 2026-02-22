@@ -326,7 +326,6 @@ namespace oox::drawingml {
 
 ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport, bool bUserShapes )
     : DrawingML( std::move(pFS), pFB, eDocumentType, pTextExport )
-    , m_nEmbeddedObjects(0)
     , mnShapeIdMax( 1 )
     , mbUserShapes( bUserShapes )
     , mnXmlNamespace( nXmlNamespace )
@@ -912,6 +911,14 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                 }
             }
 
+            if (isDiagaramExport())
+            {
+                // add evtl. used DiagramDataModelID if DiagramExport
+                SdrObject* pTarget(SdrObject::getSdrObjectFromXShape(xShape));
+                if (nullptr != pTarget && !pTarget->getDiagramDataModelID().isEmpty())
+                    pAttrListSp->add(XML_modelId, pTarget->getDiagramDataModelID());
+            }
+
             // export <sp> element (with a namespace prefix)
             mpFS->startElementNS(mnXmlNamespace, XML_sp, pAttrListSp);
         }
@@ -1423,7 +1430,10 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
                         && (xShapeProps->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL);
 
     if (!xGraphic.is() && !bHasMediaURL)
+    {
         SAL_INFO("oox.shape", "no graphic or media URL found");
+        return;
+    }
 
     FSHelperPtr pFS = GetFS();
     XmlFilterBase* pFB = GetFB();
@@ -2223,6 +2233,42 @@ bool ShapeExport::IsShapeTypeKnown(const Reference<XShape>& xShape)
     return constMap.contains(sShapeType);
 }
 
+bool ShapeExport::IsValidShape(const Reference<XShape>& xShape, DocumentType eDocumentType)
+{
+    if (!xShape)
+        return false;
+
+    auto aConverterIterator = constMap.find(xShape->getShapeType());
+    if (aConverterIterator == constMap.end())
+        return false;
+
+    if (aConverterIterator->second == &ShapeExport::WriteGraphicObjectShape)
+    {
+        if (IsNonEmptySimpleText(xShape))
+            return true;
+
+        Reference<XPropertySet> xShapeProps(xShape, UNO_QUERY);
+        Reference<XPropertySetInfo> xShapePropSetInfo
+            = xShapeProps.is() ? xShapeProps->getPropertySetInfo() : nullptr;
+        if (!xShapePropSetInfo.is())
+            return false;
+
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xShapeProps->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+
+        // tdf#155903 Only for PPTX. Microsoft does not support this feature in Word and Excel.
+        OUString sMediaURL;
+        bool bHasMediaURL = eDocumentType == DOCUMENT_PPTX
+                            && xShapePropSetInfo->hasPropertyByName(u"MediaURL"_ustr)
+                            && (xShapeProps->getPropertyValue(u"MediaURL"_ustr) >>= sMediaURL);
+
+        if (!xGraphic.is() && !bHasMediaURL)
+            return false;
+    }
+
+    return true;
+}
+
 ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 {
     if (!xShape)
@@ -2846,7 +2892,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         // TODO: With Chart extracted this cannot really happen since
         // no Chart could've been added at all
         ChartExport aChartExport( mnXmlNamespace, GetFS(), xChartDoc, GetFB(), GetDocumentType() );
-        aChartExport.WriteChartObj( xShape, GetNewShapeID( xShape ), ++mnChartCount );
+        aChartExport.WriteChartObj(xShape, GetNewShapeID(xShape), mpFB->getNewChartUniqueId());
 #endif
         return *this;
     }
@@ -2964,7 +3010,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         assert(!sRelationType.isEmpty());
         assert(!sSuffix.isEmpty());
 
-        OUString sNumber = OUString::number(++m_nEmbeddedObjects);
+        OUString sNumber = OUString::number(mpFB->getNewOLEUniqueId());
         OUString sFileName = u"embeddings/oleObject"_ustr + sNumber + u"."_ustr + sSuffix;
         OUString sFilePath = GetComponentDir() + u"/"_ustr + sFileName;
         uno::Reference<io::XOutputStream> const xOutStream(mpFB->openFragmentStream(sFilePath, sMediaType));

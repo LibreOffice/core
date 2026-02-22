@@ -23,6 +23,7 @@
 
 #include <vcl/wizardmachine.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <memory>
 

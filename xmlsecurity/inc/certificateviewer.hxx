@@ -22,6 +22,7 @@
 #include <utility>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>

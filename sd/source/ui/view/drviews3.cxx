@@ -50,7 +50,7 @@
 #include <svx/float3d.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -501,7 +501,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     if (SID_REGENERATE_DIAGRAM == nSlot)
                     {
                         mpDrawView->UnmarkAll();
-                        pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
+                        pObj->getDiagramHelper()->reLayout();
                         mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                     }
                     else if (SID_EDIT_DIAGRAM == nSlot)
@@ -782,7 +782,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         }
         case SID_ATTR_PARA_ADJUST_START:
         {
-            SvxAdjustItem aItem( SvxAdjust::Block, EE_PARA_JUST );
+            SvxAdjustItem aItem( SvxAdjust::ParaStart, EE_PARA_JUST );
             SfxItemSetFixed<EE_PARA_JUST, EE_PARA_JUST> aEditAttr( GetPool() );
 
             aEditAttr.Put( aItem );
@@ -793,7 +793,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         }
         case SID_ATTR_PARA_ADJUST_END:
         {
-            SvxAdjustItem aItem( SvxAdjust::Block, EE_PARA_JUST );
+            SvxAdjustItem aItem( SvxAdjust::ParaEnd, EE_PARA_JUST );
             SfxItemSetFixed<EE_PARA_JUST, EE_PARA_JUST> aEditAttr( GetPool() );
 
             aEditAttr.Put( aItem );
@@ -1141,6 +1141,13 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
         rSet.Put( SfxStringItem( SID_DELETE_SNAPITEM,
                             SdResId( STR_POPUP_DELETE_SNAPLINE)) );
     }
+}
+
+void DrawViewShell::RememberCanvasPageVisArea(const ::tools::Rectangle &aRect)
+{
+    if (!GetDoc()->HasCanvasPage())
+        return;
+    maCanvasPageVisArea = aRect;
 }
 
 } // end of namespace sd

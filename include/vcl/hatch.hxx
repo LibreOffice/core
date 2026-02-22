@@ -25,11 +25,11 @@
 #include <tools/degree.hxx>
 #include <vcl/dllapi.h>
 
-#include <vcl/vclenum.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
 
 class SvStream;
+enum class HatchStyle;
 
 struct ImplHatch
 {

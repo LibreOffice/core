@@ -54,8 +54,6 @@ private:
 
     Kind determineKind(llvm::StringRef const & id);
 
-    bool isInLokIncludeFile(SourceLocation spellingLocation) const;
-
     bool isApi(NamedDecl const * decl);
 };
 
@@ -282,12 +280,6 @@ ReservedId::Kind ReservedId::determineKind(llvm::StringRef const & id) {
     return Kind::Ok;
 }
 
-bool ReservedId::isInLokIncludeFile(SourceLocation spellingLocation) const {
-    return loplugin::hasPathnamePrefix(
-        getFilenameOfLocation(spellingLocation),
-        SRCDIR "/include/LibreOfficeKit/");
-}
-
 bool ReservedId::isApi(NamedDecl const * decl) {
     auto const fdecl = dyn_cast<FunctionDecl>(decl);
     if (fdecl != nullptr) {
@@ -300,7 +292,7 @@ bool ReservedId::isApi(NamedDecl const * decl) {
     }
     auto const loc = compiler.getSourceManager().getSpellingLoc(
         decl->getLocation());
-    if (!(isInUnoIncludeFile(loc) || isInLokIncludeFile(loc))
+    if (!isInUnoIncludeFile(loc)
         || isa<ParmVarDecl>(decl))
     {
         return false;

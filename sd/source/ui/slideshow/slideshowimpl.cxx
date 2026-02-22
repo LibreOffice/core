@@ -75,10 +75,13 @@
 #include <vcl/ColorDialog.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/help.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -980,7 +983,7 @@ bool SlideshowImpl::startPreview(
 
         if( mpView )
         {
-            mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev(), nullptr );
+            mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev() );
             mpView->SetAnimationPause( true );
         }
 
@@ -1169,7 +1172,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
 
             if( mpView )
             {
-                mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev(), nullptr );
+                mpView->AddDeviceToPaintView( *mpShowWindow->GetOutDev() );
                 mpView->SetAnimationPause( true );
             }
 
@@ -1302,6 +1305,12 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                         break;
                     }
                     case NavbarButtonSize::Auto:
+                    {
+                        mxShow->setProperty(beans::PropertyValue("NavigationBarAutoscale", -1,
+                                Any(true),
+                                PropertyState_DIRECT_VALUE));
+                    }
+                    [[fallthrough]]; // Preset default buttons size
                     case NavbarButtonSize::Small:
                     default:
                     {

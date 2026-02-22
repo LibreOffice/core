@@ -41,7 +41,7 @@ IconView::IconView(vcl::Window* pParent, WinBits nBits)
 {
     m_nColumnCount = 1;
     mbCenterAndClipText = true;
-    SetEntryWidth(100);
+    SetEntryWidth(0);
 
     pImpl.reset(new IconViewImpl(this, GetModel(), GetStyle()));
 }
@@ -59,11 +59,32 @@ void IconView::SetFixedColumnCount(short nColumnCount)
     m_nColumnCount = nColumnCount;
 }
 
-void IconView::UpdateEntrySize(const Image& pImage)
+void IconView::UpdateEntrySize(const SvTreeListEntry& rEntry)
 {
+    const SvLBoxContextBmp* pBitmapItem
+        = static_cast<const SvLBoxContextBmp*>(rEntry.GetFirstItem(SvLBoxItemType::ContextBmp));
+    const Size aImageSize = pBitmapItem ? pBitmapItem->GetBitmap1().GetSizePixel() : Size();
+    // provide some minimum width if text exists (will be ellipsized if it doesn't fit completely)
+    const tools::Long nMinTextWidth = rEntry.GetFirstItem(SvLBoxItemType::String) ? 100 : 0;
+
     int spacing = nSpacing * 2;
-    SetEntryHeight(pImage.GetSizePixel().getHeight() + spacing);
-    SetEntryWidth(pImage.GetSizePixel().getWidth() + spacing);
+    const short nMinHeight = aImageSize.getHeight() + spacing;
+    const short nMinWidth = std::max(aImageSize.getWidth() + spacing, nMinTextWidth);
+
+    bool bChanged = false;
+    if (nMinWidth > GetEntryWidth())
+    {
+        SetEntryWidth(nMinWidth);
+        bChanged = true;
+    }
+    if (nMinHeight > GetEntryHeight())
+    {
+        SetEntryHeight(nMinHeight);
+        bChanged = true;
+    }
+
+    if (bChanged)
+        Resize();
 }
 
 bool IconView::HasSeparatorEntry() const
@@ -327,8 +348,13 @@ void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEn
         if (pIt)
         {
             const SvLBoxContextBmp* pBmpItem = static_cast<const SvLBoxContextBmp*>(pIt);
+            Size i = pBmpItem->GetBitmap1().GetSizePixel();
             if (pBmpItem)
+            {
                 rJsonWriter.put("ondemand", true);
+                rJsonWriter.put("width", i.getWidth());
+                rJsonWriter.put("height", i.getHeight());
+            }
         }
 
         if (const OUString tooltip = GetEntryTooltip(pEntry); !tooltip.isEmpty())

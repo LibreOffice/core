@@ -9,6 +9,7 @@
 
 #include <svx/dialog/ThemeColorEditDialog.hxx>
 #include <svx/colorbox.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace svx
 {

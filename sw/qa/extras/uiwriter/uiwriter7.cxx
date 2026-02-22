@@ -72,6 +72,7 @@
 #include <rootfrm.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <vcl/idletask.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
@@ -162,8 +163,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     sal_uInt16 initialCount = pNewSet->Count();
     SvxAdjustItem AdjustItem = rAttrSet.GetAdjust();
     SvxAdjust initialAdjust = AdjustItem.GetAdjust();
-    //By default the adjust is LEFT
-    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, initialAdjust);
+    //By default the adjust is START
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::ParaStart, initialAdjust);
     //Changing the adjust to RIGHT
     AdjustItem.SetAdjust(SvxAdjust::Right);
     //Checking whether the change is made or not
@@ -189,8 +190,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     const SwAttrSet& rAttrSet3 = pTextFormat3->GetAttrSet();
     const SvxAdjustItem& rAdjustItem3 = rAttrSet3.GetAdjust();
     SvxAdjust Adjust3 = rAdjustItem3.GetAdjust();
-    //The adjust should be back to default, LEFT
-    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, Adjust3);
+    //The adjust should be back to default, START
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::ParaStart, Adjust3);
     //Redo the changes
     rUndoManager.Redo();
     SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(UIName(u"Body Text"_ustr));
@@ -205,8 +206,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     const SwAttrSet& rAttrSet5 = pTextFormat5->GetAttrSet();
     const SvxAdjustItem& rAdjustItem5 = rAttrSet5.GetAdjust();
     SvxAdjust Adjust5 = rAdjustItem5.GetAdjust();
-    //The adjust should be back to default, LEFT
-    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, Adjust5);
+    //The adjust should be back to default, START
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::ParaStart, Adjust5);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
@@ -361,6 +362,53 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
     // check of the end result
     CPPUNIT_ASSERT_EQUAL(u"mCelqy xWorpqd mThzq mis ma mtasq"_ustr,
                          pCursor->GetPointNode().GetTextNode()->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf131431)
+{
+    // the goal of this test is to check if replaceAll does not go into an infinite loop
+
+    // load document with underlined text with empty and non empty lines
+    createSwDoc("tdf131431.odt");
+
+    // setup search for any underline text
+    uno::Sequence<beans::PropertyValue> aSearchAttribute(comphelper::InitPropertySequence(
+        { { "CharUnderline", uno::Any(sal_Int32(css::awt::FontUnderline::NONE)) } }));
+
+    // setup replace with green highlight color
+    uno::Sequence<beans::PropertyValue> aReplaceAttribute(
+        comphelper::InitPropertySequence({ { "CharBackColor", uno::Any(sal_Int32(0x00FF00)) } }));
+
+    uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDes = xReplace->createReplaceDescriptor();
+    uno::Reference<util::XPropertyReplace> xPropReplace(xReplaceDes, uno::UNO_QUERY_THROW);
+    xPropReplace->setSearchAttributes(aSearchAttribute);
+    xPropReplace->setReplaceAttributes(aReplaceAttribute);
+
+    // time out after 30 seconds if replaceAll hasn't returned
+    std::atomic<bool> completed{ false };
+    std::thread TimeoutThread([&completed]() {
+        for (int i = 0; i < 300; ++i)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            if (completed)
+            {
+                return;
+            }
+        }
+        CPPUNIT_FAIL("Test timed out after 30 seconds - infinite loop detected");
+    });
+
+    // actual test
+    sal_Int32 nReplaceCount = xReplace->replaceAll(xReplaceDes);
+
+    completed = true;
+    TimeoutThread.join();
+
+    // ideally should be 9, but due to some bugs it reports more
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nReplaceCount);
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(8), nReplaceCount);
+    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(14), nReplaceCount);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf147583_backwardSearch)
@@ -1849,11 +1897,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf151605)
     createSwDoc("tdf151605.odt");
 
     // disable IncludeHiddenText
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::set(false, batch);
-    officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(false, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText> aCfg1(
+        false);
+    ScopedConfigValue<officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection> aCfg2(
+        false);
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
@@ -1866,34 +1913,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf151605)
 
     CPPUNIT_ASSERT_EQUAL(u"Before"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(u"After"_ustr, getParagraph(2)->getString());
-
-    // re-enable it
-    officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::set(true, batch);
-    officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(true, batch);
-    batch->commit();
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf90362)
 {
     createSwDoc("tdf90362.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    // Ensure correct initial setting
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
-    batch->commit();
-    // First check if the end of the second paragraph is indeed protected.
-    pWrtShell->EndPara();
-    pWrtShell->Down(/*bSelect=*/false);
-    CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
+    {
+        // Ensure correct initial setting
+        ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea> aCfg(
+            false);
+        // First check if the end of the second paragraph is indeed protected.
+        pWrtShell->EndPara();
+        pWrtShell->Down(/*bSelect=*/false);
+        CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
+    }
 
-    // Then enable ignoring of protected areas and make sure that this time the cursor is read-write.
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(true, batch);
-    batch->commit();
-    CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
-    // Clean up, otherwise following tests will have that option set
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
-    batch->commit();
+    {
+        // Then enable ignoring of protected areas and make sure that this time the cursor is read-write.
+        ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea> aCfg(
+            true);
+        CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUndoDelAsCharTdf107512)

@@ -10,6 +10,9 @@
 #pragma once
 
 #include "QtInstanceDialog.hxx"
+
+#include <vcl/weld/MessageDialog.hxx>
+
 #include <QtWidgets/QMessageBox>
 
 class QtInstanceMessageDialog : public QtInstanceDialog, public virtual weld::MessageDialog

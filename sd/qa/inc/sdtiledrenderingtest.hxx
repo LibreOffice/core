@@ -9,7 +9,7 @@
 #ifndef INCLUDED_SD_QA_INC_SDTILEDRENDERINGTEST_HXX
 #define INCLUDED_SD_QA_INC_SDTILEDRENDERINGTEST_HXX
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -21,7 +21,7 @@
 class SdXImpressDocument;
 class SfxViewShell;
 
-class SDQAHELPER_DLLPUBLIC SdTiledRenderingTest : public UnoApiXmlTest
+class SDQAHELPER_DLLPUBLIC SdTiledRenderingTest : public UnoApiTest
 {
 public:
     SdTiledRenderingTest();
@@ -51,6 +51,8 @@ protected:
     osl::Condition m_aDocumentSizeCondition;
     xmlBufferPtr m_pXmlBuffer;
     TestLokCallbackWrapper m_callbackWrapper;
+
+    void testClipNumRules(const char* pFileName);
 };
 
 /// A view callback tracks callbacks invoked on one specific view.

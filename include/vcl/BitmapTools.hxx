@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_BITMAP_TOOLS_HXX
-#define INCLUDED_VCL_BITMAP_TOOLS_HXX
+#pragma once
 
 #include <config_cairo_canvas.h>
 #include <config_wasm_strip.h>
@@ -108,7 +107,5 @@ BitmapColor premultiply(const BitmapColor c);
 BitmapColor unpremultiply(const BitmapColor c);
 
 } // end vcl::bitmap
-
-#endif // INCLUDED_VCL_BITMAP_TOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

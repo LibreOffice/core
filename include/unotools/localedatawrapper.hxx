@@ -24,8 +24,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
-#include <com/sun/star/i18n/LanguageCountryInfo.hpp>
-#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/math.h>
@@ -38,8 +36,10 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XLocaleData5; }
 namespace com::sun::star::i18n { struct Calendar2; }
 namespace com::sun::star::i18n { struct Currency2; }
+namespace com::sun::star::i18n { struct ForbiddenCharacters; }
 namespace com::sun::star::i18n { struct FormatElement; }
 namespace com::sun::star::i18n { struct CalendarItem2; }
+namespace com::sun::star::i18n { struct LanguageCountryInfo; }
 
 class Date;
 namespace tools

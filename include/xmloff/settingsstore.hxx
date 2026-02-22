@@ -9,14 +9,14 @@
 
 // Simple interface to allow serialization of document settings
 
-#ifndef INCLUDED_XMLOFF_SETTINGSSTORE_HXX
-#define INCLUDED_XMLOFF_SETTINGSSTORE_HXX
+#pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::uno { template <typename> class Sequence; }
 
 // Scans list of properties for certain URL properties that could refer
 // to internal objects, and initializes from these.
@@ -37,7 +37,5 @@ public:
 protected:
     ~DocumentSettingsSerializer() {}
 };
-
-#endif // INCLUDED_XMLOFF_SETTINGSSTORE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

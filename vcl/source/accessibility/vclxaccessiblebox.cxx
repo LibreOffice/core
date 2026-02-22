@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <vcl/accessibility/strings.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/combobox.hxx>
 

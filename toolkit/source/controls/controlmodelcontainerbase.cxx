@@ -32,12 +32,14 @@
 #include <controls/tabpagemodel.hxx>
 #include <controls/stdtabcontroller.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/types.hxx>

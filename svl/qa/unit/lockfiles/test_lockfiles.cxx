@@ -22,6 +22,7 @@
 #include <svl/msodocumentlockfile.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/security.hxx>
 #include <osl/socket.hxx>

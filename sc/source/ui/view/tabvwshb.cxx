@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <vcl/errinf.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxdlg.hxx>
@@ -460,9 +461,12 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 const uno::Reference<frame::XModel> xModel( GetViewData().GetDocShell()->GetBaseModel() );
 
                 VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractQrCodeGenDialog> pDialog(pFact->CreateQrCodeGenDialog(
+                VclPtr<AbstractQrCodeGenDialog> pDialog(pFact->CreateQrCodeGenDialog(
                     pWin->GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_QRCODE));
-                pDialog->Execute();
+                pDialog->StartExecuteAsync([pDialog](sal_Int32) {
+                    pDialog->disposeOnce();
+                });
+
                 break;
             }
 

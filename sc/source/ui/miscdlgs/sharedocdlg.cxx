@@ -25,6 +25,8 @@
 #include <unotools/useroptions.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <docsh.hxx>
 

@@ -42,9 +42,10 @@ KFSalInstance::KFSalInstance(std::unique_ptr<QApplication>& pQApp)
     pSVData->maAppData.mxToolkitName = constructToolkitID(sToolkit);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 12, 0)
 bool KFSalInstance::GetUseReducedAnimation()
 {
-    // since Qt doesn not have a standard way to disable animations for the toolkit
+    // since Qt < 6.12 doesn not have a standard way to detect whether animations should be reduced,
     // use the animation speed setting when on KDE Plasma, in accordance with how kde-gtk-config
     // sets the Gtk setting based on that:
     // https://invent.kde.org/plasma/kde-gtk-config/-/blob/881ae01ad361a03396f7f327365f225ef87688e8/kded/configvalueprovider.cpp#L239
@@ -62,6 +63,7 @@ bool KFSalInstance::GetUseReducedAnimation()
 
     return QtInstance::GetUseReducedAnimation();
 }
+#endif
 
 bool KFSalInstance::hasNativeFileSelection() const
 {

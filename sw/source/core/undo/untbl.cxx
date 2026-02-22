@@ -1355,6 +1355,29 @@ void SaveBox::CreateNew( SwTable& rTable, SwTableLine& rParent, SaveTable& rSTab
 
             pBox->setRowSpan(m_nRowSpan);
 
+            if (m_Ptrs.pContentAttrs)
+            {
+                SwNodes& rNds = pBox->GetFrameFormat()->GetDoc().GetNodes();
+                sal_uInt16 nSet = 0;
+                SwNodeOffset nEnd = pBox->GetSttNd()->EndOfSectionIndex();
+                for (SwNodeOffset n = m_nStartNode + 1; n < nEnd; ++n)
+                {
+                    SwContentNode* pCNd = rNds[ n ]->GetContentNode();
+                    if( pCNd )
+                    {
+                        std::shared_ptr<SfxItemSet> pSet((*m_Ptrs.pContentAttrs)[nSet++]);
+                        if( pSet )
+                        {
+                            for( const WhichPair& rPair : aSave_BoxContentSet )
+                                pCNd->ResetAttr( rPair.first, rPair.second );
+                            pCNd->SetAttr( *pSet );
+                        }
+                        else
+                            pCNd->ResetAllAttr();
+                    }
+                }
+            }
+
             SwTableBoxes* pTBoxes = &pBox->GetUpper()->GetTabBoxes();
             pTBoxes->erase( std::find( pTBoxes->begin(), pTBoxes->end(), pBox ) );
 
@@ -1492,6 +1515,17 @@ SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
 {
     const SwTable& rTable = rTableNd.GetTable();
     m_pSaveTable.reset( new SaveTable( rTable ) );
+
+    switch (GetId())
+    {
+        case SwUndoId::TABLE_DELBOX:
+        case SwUndoId::ROW_DELETE:
+        case SwUndoId::COL_DELETE:
+            m_pSaveTable->SaveContentAttrs(const_cast<SwDoc&>(rTableNd.GetDoc()));
+            break;
+        default:
+            break;
+    }
 
     // and remember selection
     ReNewBoxes( rBoxes );
@@ -1840,6 +1874,14 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
                 rTable.PrepareDeleteCol( m_nMin, m_nMax );
             rTable.DeleteSel( rDoc, aSelBoxes, nullptr, this, true, true );
             m_nSttNode = pTableNd->GetIndex();
+
+            if (SwFEShell* pFEShell = rDoc.GetDocShell()->GetFEShell())
+            {
+                if (officecfg::Office::Writer::Table::Change::ApplyTableAutoFormat::get())
+                {
+                    pFEShell->UpdateTableStyleFormatting(pTableNd);
+                }
+            }
         }
         break;
     default:
@@ -1886,7 +1928,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
     CHECKTABLE(pTableNd->GetTable())
 
     SwSelBoxes aSelBoxes;
-    SwTextFormatColl* pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD );
+    SwTextFormatColl* pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD );
 
     for (const auto& rBox : m_Boxes)
     {

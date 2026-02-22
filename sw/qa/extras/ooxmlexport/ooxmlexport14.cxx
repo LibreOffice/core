@@ -72,6 +72,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
     xmlDocUniquePtr pLayout14 = parseLayoutDump();
     sal_Int32 nHeight14 = getXPath(pLayout14, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
 
+    dispose();
     createSwDoc("128197_compat15.docx");
     xmlDocUniquePtr pLayout15 = parseLayoutDump();
     sal_Int32 nHeight15 = getXPath(pLayout15, "//page[1]/body/txt[1]/infos/bounds", "height").toInt32();
@@ -84,9 +85,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
 CPPUNIT_TEST_FIXTURE(Test, testTdf135595_HFtableWrap)
 {
     createSwDoc("tdf135595_HFtableWrap.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 5
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -110,9 +108,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135595_HFtableWrap)
 DECLARE_OOXMLEXPORT_TEST(testTdf135943_shapeWithText_L0c15,
                          "tdf135943_shapeWithText_LayoutInCell0_compat15.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // With compat15, layoutinCell ought to be ignored/forced to true.
     // HOWEVER, currently only the shape is correctly placed, while its text is un-synced separately.
     // So to prevent this ugly mess, just leave everything together in the historical (wrong) spot.
@@ -135,9 +130,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135943_shapeWithText_L0c15,
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap_c12, "tdf135595_HFtableWrap_c12.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 10
-    skipValidation();
-
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // tdf#104596: ignore wrap exception apparently does not apply if it is not "layout in table cell".
     // Should be only one page. Row height should be two lines at 722, not wrapped to three lines at 998.
@@ -204,9 +196,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123873)
 CPPUNIT_TEST_FIXTURE(Test, Tdf133065)
 {
     createSwDoc("tdf133065.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 14
-    skipValidation();
 
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(7, getShapes());
@@ -599,9 +588,6 @@ CPPUNIT_TEST_FIXTURE(Test, Tdf133035)
 {
     createSwDoc("tdf133035.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     auto pxml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pxml);
@@ -691,9 +677,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf130167_spilloverHeaderShape, "testTdf130167_spilloverHeader.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xNameAccess(
         xTextGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
@@ -809,6 +792,130 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155707)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[17]/w:pPr/w:jc", "val", u"highKashida");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf163894)
+{
+    createSwDoc("tdf163894.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"handbooks");
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"infuriating");
+
+    // backward search reaches the whole content of the first node on the page,
+    // i.e. which content was typeset on the previous pages, like here
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"initializes");
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"misfitting");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"misrepresenting");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"modicum");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf163894_hidden)
+{
+    createSwDoc("tdf163894_hidden.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"handbooks");
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+
+    // there is a single paragraph on the page: choose the nearest reference from the previous pages,
+    // not the nearest one on the following pages
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"infuriating");
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+
+    // hiding the field content by a hidden space formatted with the referred character style,
+    // separated by an also hidden space without the referred characters style from the other
+    // marching text content
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u" ");
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u" ");
+
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"mitosis");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"modicum");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf32363)
+{
+    createSwDoc("tdf32363.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"1 ");
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Do not shorten this short heading");
+
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"2 ");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Beginning of the paragraph");
+
+    assertXPath(pLayout, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"3 ");
+    assertXPath(pLayout, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Beginning of the paragraph + ellipsis…");
+
+    assertXPath(pLayout, "/root/page[6]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"3 ");
+    assertXPath(pLayout, "/root/page[6]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Beginning of the paragraph + ellipsis…");
+
+    assertXPath(pLayout, "/root/page[7]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"4 ");
+    assertXPath(pLayout, "/root/page[7]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Hidden text with the referred character style");
+
+    assertXPath(pLayout, "/root/page[8]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"4 ");
+    assertXPath(pLayout, "/root/page[8]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Hidden text with the referred character style");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf163894_from_top_to_beginning_of_the_documentMarguerite)
+{
+    createSwDoc("tdf163894_from_top.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"handbooks");
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+
+    // This was "initializes"
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"infuriating");
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"infuriating");
+
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"initializes");
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"Marguerite");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[1]",
+                "expand", u"maroon");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion[2]",
+                "expand", u"modicum");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf161643)
 {
     createSwDoc("fdo76163.docx");
@@ -844,7 +951,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleConfNested)
 CPPUNIT_TEST_FIXTURE(Test, testTdf133771)
 {
     // Create the doc model.
-    createSwDoc("tdf133771.odt", /*pPassword*/ "test");
+    createSwDoc("tdf133771.odt", /*rParams*/ {}, /*pPassword*/ "test");
 
     CPPUNIT_ASSERT_EQUAL(u"Password Protected"_ustr, getParagraph(1)->getString());
 

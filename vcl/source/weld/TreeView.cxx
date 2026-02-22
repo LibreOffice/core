@@ -126,6 +126,83 @@ bool weld::TreeView::is_selected(int pos) const
 
     return false;
 }
+
+bool weld::TreeView::iter_next(TreeIter& rIter) const
+{
+    if (iter_children(rIter))
+        return true;
+
+    if (iter_next_sibling(rIter))
+        return true;
+
+    // Move up level(s) until we find the level where the next node exists.
+    while (iter_parent(rIter))
+    {
+        if (iter_next_sibling(rIter))
+            return true;
+    }
+
+    return false;
+}
+
+void weld::TreeView::last_child(weld::TreeIter& rIter, int nChildren) const
+{
+    iter_nth_child(rIter, nChildren - 1);
+    nChildren = iter_n_children(rIter);
+    if (nChildren)
+        last_child(rIter, nChildren);
+}
+
+bool weld::TreeView::iter_previous(weld::TreeIter& rIter) const
+{
+    if (iter_previous_sibling(rIter))
+    {
+        // Move down level(s) until we find the level where the last node exists.
+        const int nChildren = iter_n_children(rIter);
+        if (!nChildren)
+            return true;
+        last_child(rIter, nChildren);
+        return true;
+    }
+
+    // Move up level
+    return iter_parent(rIter);
+}
+
+bool weld::TreeView::iter_children(TreeIter& rIter) const
+{
+    if (get_children_on_demand(rIter))
+        return false;
+
+    return do_iter_children(rIter);
+}
+
+int weld::TreeView::iter_compare(const TreeIter& rIterA, const TreeIter& rIterB) const
+{
+    if (rIterA.equal(rIterB))
+        return 0;
+
+    std::unique_ptr<weld::TreeIter> pIter = make_iterator();
+    bool bValid = get_iter_first(*pIter);
+    while (bValid)
+    {
+        if (pIter->equal(rIterA))
+            return -1;
+        if (pIter->equal(rIterB))
+            return 1;
+
+        bValid = iter_next(*pIter);
+    }
+
+    assert(false && "None of the entries found in the tree");
+    return 0;
+}
+
+bool weld::TreeView::iter_has_child(const TreeIter& rIter) const
+{
+    std::unique_ptr<weld::TreeIter> pIter = make_iterator(&rIter);
+    return iter_children(*pIter);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -147,22 +147,6 @@ void SdOptionsGeneric::Commit( SdOptionsItem& rCfgItem ) const
     }
 }
 
-Sequence< OUString > SdOptionsGeneric::GetPropertyNames() const
-{
-    sal_uLong           nCount;
-    const char* const*  ppPropNames;
-
-    GetPropNameArray( ppPropNames, nCount );
-
-    Sequence< OUString > aNames( nCount );
-    OUString*            pNames = aNames.getArray();
-
-    for( sal_uLong i = 0; i < nCount; i++ )
-        pNames[ i ] = OUString::createFromAscii( ppPropNames[ i ] );
-
-    return aNames;
-}
-
 void SdOptionsGeneric::Store()
 {
     if( mpCfgItem )
@@ -254,47 +238,47 @@ bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
         );
 }
 
-void SdOptionsMisc::GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const
+Sequence< OUString > SdOptionsMisc::GetPropertyNames() const
 {
-    static const char* const aPropNames[] =
+    static constexpr OUString aPropNames[] =
     {
-        "ObjectMoveable",
-        "NoDistort",
-        "TextObject/QuickEditing",
-        "BackgroundCache",
-        "CopyWhileMoving",
-        "TextObject/Selectable",
-        "DclickTextedit",
-        "RotateClick",
-        "Preview",
-        "ModifyWithAttributes",
-        "DefaultObjectSize/Width",
-        "DefaultObjectSize/Height",
+        u"ObjectMoveable"_ustr,
+        u"NoDistort"_ustr,
+        u"TextObject/QuickEditing"_ustr,
+        u"BackgroundCache"_ustr,
+        u"CopyWhileMoving"_ustr,
+        u"TextObject/Selectable"_ustr,
+        u"DclickTextedit"_ustr,
+        u"RotateClick"_ustr,
+        u"Preview"_ustr,
+        u"ModifyWithAttributes"_ustr,
+        u"DefaultObjectSize/Width"_ustr,
+        u"DefaultObjectSize/Height"_ustr,
 
-        "Compatibility/PrinterIndependentLayout",
+        u"Compatibility/PrinterIndependentLayout"_ustr,
 
-        "ShowComments",
-        "DragThresholdPixels",
+        u"ShowComments"_ustr,
+        u"DragThresholdPixels"_ustr,
 
         // just for impress
-        "NewDoc/AutoPilot",
-        "Compatibility/AddBetween",
-        "ShowUndoDeleteWarning",
-        "SlideshowRespectZOrder",
+        u"NewDoc/AutoPilot"_ustr,
+        u"Compatibility/AddBetween"_ustr,
+        u"ShowUndoDeleteWarning"_ustr,
+        u"SlideshowRespectZOrder"_ustr,
 
-        "PreviewNewEffects",
-        "PreviewChangedEffects",
-        "PreviewTransitions",
+        u"PreviewNewEffects"_ustr,
+        u"PreviewChangedEffects"_ustr,
+        u"PreviewTransitions"_ustr,
 
-        "Display",
+        u"Display"_ustr,
 
-        "PenColor",
-        "PenWidth",
-        "TabBarVisible"
+        u"PenColor"_ustr,
+        u"PenWidth"_ustr,
+        u"TabBarVisible"_ustr
     };
 
-    rCount = ( IsImpress() ? SAL_N_ELEMENTS(aPropNames) : 15 );
-    ppNames = aPropNames;
+    size_t len = ( IsImpress() ? std::size(aPropNames) : 15 );
+    return Sequence<OUString>(aPropNames, len);
 }
 
 bool SdOptionsMisc::ReadData( const Any* pValues )
@@ -529,39 +513,31 @@ void SdOptionsGrid::SetDefaults()
     SetGridVisible( false );
 }
 
-void SdOptionsGrid::GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const
+Sequence< OUString > SdOptionsGrid::GetPropertyNames() const
 {
     if( isMetricSystem() )
     {
-        static const char* const aPropNamesMetric[] =
-        {
-            "Resolution/XAxis/Metric",
-            "Resolution/YAxis/Metric",
-            "Subdivision/XAxis",
-            "Subdivision/YAxis",
-            "Option/SnapToGrid",
-            "Option/Synchronize",
-            "Option/VisibleGrid",
-            "SnapGrid/Size"
-        };
-        ppNames = aPropNamesMetric;
-        rCount = SAL_N_ELEMENTS(aPropNamesMetric);
+        return Sequence({
+            u"Resolution/XAxis/Metric"_ustr,
+            u"Resolution/YAxis/Metric"_ustr,
+            u"Subdivision/XAxis"_ustr,
+            u"Subdivision/YAxis"_ustr,
+            u"Option/SnapToGrid"_ustr,
+            u"Option/Synchronize"_ustr,
+            u"Option/VisibleGrid"_ustr
+        });
     }
     else
     {
-        static const char* const aPropNamesNonMetric[] =
-        {
-            "Resolution/XAxis/NonMetric",
-            "Resolution/YAxis/NonMetric",
-            "Subdivision/XAxis",
-            "Subdivision/YAxis",
-            "Option/SnapToGrid",
-            "Option/Synchronize",
-            "Option/VisibleGrid",
-            "SnapGrid/Size"
-        };
-        ppNames = aPropNamesNonMetric;
-        rCount = SAL_N_ELEMENTS(aPropNamesNonMetric);
+        return Sequence({
+            u"Resolution/XAxis/NonMetric"_ustr,
+            u"Resolution/YAxis/NonMetric"_ustr,
+            u"Subdivision/XAxis"_ustr,
+            u"Subdivision/YAxis"_ustr,
+            u"Option/SnapToGrid"_ustr,
+            u"Option/Synchronize"_ustr,
+            u"Option/VisibleGrid"_ustr
+        });
     }
 }
 
@@ -698,60 +674,55 @@ bool SdOptionsPrint::operator==( const SdOptionsPrint& rOpt ) const
             GetHandoutPages() == rOpt.GetHandoutPages() );
 }
 
-void SdOptionsPrint::GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const
+Sequence< OUString > SdOptionsPrint::GetPropertyNames() const
 {
     if (IsImpress())
     {
-        static const char* const aImpressPropNames[] =
-        {
-            "Other/Date",
-            "Other/Time",
-            "Other/PageName",
-            "Other/HiddenPage",
-            "Page/PageSize",
-            "Page/PageTile",
+        return Sequence({
+
+            u"Other/Date"_ustr,
+            u"Other/Time"_ustr,
+            u"Other/PageName"_ustr,
+            u"Other/HiddenPage"_ustr,
+            u"Page/PageSize"_ustr,
+            u"Page/PageTile"_ustr,
             // bWarningPrinter
             // bWarningSize
             // bWarningOrientation
-            "Page/Booklet",
-            "Page/BookletFront",
-            "Page/BookletBack",
+            u"Page/Booklet"_ustr,
+            u"Page/BookletFront"_ustr,
+            u"Page/BookletBack"_ustr,
             // bCutPage
-            "Other/FromPrinterSetup",
-            "Other/Quality",
-            "Content/Presentation",
-            "Content/Note",
-            "Content/Handout",
-            "Content/Outline",
-            "Other/HandoutHorizontal",
-            "Other/PagesPerHandout"
-        };
-        rCount = SAL_N_ELEMENTS(aImpressPropNames);
-        ppNames = aImpressPropNames;
+            u"Other/FromPrinterSetup"_ustr,
+            u"Other/Quality"_ustr,
+            u"Content/Presentation"_ustr,
+            u"Content/Note"_ustr,
+            u"Content/Handout"_ustr,
+            u"Content/Outline"_ustr,
+            u"Other/HandoutHorizontal"_ustr,
+            u"Other/PagesPerHandout"_ustr
+        });
     }
     else
     {
-        static const char* const aDrawPropNames[] =
-        {
-            "Other/Date",
-            "Other/Time",
-            "Other/PageName",
-            "Other/HiddenPage",
-            "Page/PageSize",
-            "Page/PageTile",
+        return Sequence({
+            u"Other/Date"_ustr,
+            u"Other/Time"_ustr,
+            u"Other/PageName"_ustr,
+            u"Other/HiddenPage"_ustr,
+            u"Page/PageSize"_ustr,
+            u"Page/PageTile"_ustr,
             // bWarningPrinter
             // bWarningSize
             // bWarningOrientation
-            "Page/Booklet",
-            "Page/BookletFront",
-            "Page/BookletBack",
+            u"Page/Booklet"_ustr,
+            u"Page/BookletFront"_ustr,
+            u"Page/BookletBack"_ustr,
             // bCutPage
-            "Other/FromPrinterSetup",
-            "Other/Quality",
-            "Content/Drawing",
-        };
-        rCount = SAL_N_ELEMENTS(aDrawPropNames);
-        ppNames = aDrawPropNames;
+            u"Other/FromPrinterSetup"_ustr,
+            u"Other/Quality"_ustr,
+            u"Content/Drawing"_ustr,
+        });
     }
 }
 

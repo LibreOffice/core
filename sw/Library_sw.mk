@@ -90,6 +90,7 @@ $(eval $(call gb_Library_use_libraries,sw,\
     editeng \
     fwk \
     i18nlangtag \
+    i18npool \
     i18nutil \
     lng \
     msfilter \
@@ -377,7 +378,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/layact \
     sw/source/core/layout/laycache \
     sw/source/core/layout/layouter \
-    sw/source/core/layout/legacyitem \
     sw/source/core/layout/movedfwdfrmsbyobjpos \
     sw/source/core/layout/newfrm \
     sw/source/core/layout/objectformatter \

@@ -16,7 +16,7 @@
 #include <nss.h>
 #endif
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -29,6 +29,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <libxml/xpathInternals.h>
@@ -36,7 +37,7 @@
 using namespace css;
 
 /// Testsuite for the document signing feature.
-class SigningTest2 : public UnoApiXmlTest
+class SigningTest2 : public UnoApiTest
 {
 protected:
     uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
@@ -50,13 +51,13 @@ public:
 };
 
 SigningTest2::SigningTest2()
-    : UnoApiXmlTest(u"/xmlsecurity/qa/unit/signing/data/"_ustr)
+    : UnoApiTest(u"/xmlsecurity/qa/unit/signing/data/"_ustr)
 {
 }
 
 void SigningTest2::setUp()
 {
-    UnoApiXmlTest::setUp();
+    UnoApiTest::setUp();
 
     MacrosTest::setUpX509(m_directories, u"xmlsecurity_signing2"_ustr);
     MacrosTest::setUpGpg(m_directories, std::u16string_view(u"xmlsecurity_signing2"));
@@ -79,7 +80,7 @@ void SigningTest2::tearDown()
 {
     MacrosTest::tearDownGpg();
 
-    UnoApiXmlTest::tearDown();
+    UnoApiTest::tearDown();
 }
 
 /// Test if a macro signature from a ODF Database is preserved when saving
@@ -111,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
 CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
 {
     // load ODF 1.3 encrypted document
-    loadFromFile(u"encrypted_scriptsig_odf13.odt", "password");
+    loadFromFile(u"encrypted_scriptsig_odf13.odt", /*rParams*/ {}, "password");
     {
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
@@ -128,10 +129,10 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
 
     {
         // test the old, standard ODF 1.2/1.3/1.4 encryption
-        Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+        comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
         SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
 
-        saveAndReload(TestFilter::ODT, "password");
+        saveAndReload(TestFilter::ODT, /*rParams*/ {}, /*pPassword*/ "password");
 
         xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
         assertXPath(pXmlDoc, "/manifest:manifest", "version", u"1.3");
@@ -179,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
 
     {
         // store it with new wholesome ODF extended encryption - reload
-        saveAndReload(TestFilter::ODT, "password");
+        saveAndReload(TestFilter::ODT, /*rParams*/ {}, /*pPassword*/ "password");
 
         // test wholesome ODF extended encryption
         xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
@@ -234,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
 CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesomeLO242)
 {
     // load wholesome ODF (extended) encrypted document
-    loadFromFile(u"encrypted_scriptsig_lo242.odt", "password");
+    loadFromFile(u"encrypted_scriptsig_lo242.odt", /*rParams*/ {}, "password");
     {
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
@@ -251,7 +252,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
 
     {
         // store it with new wholesome ODF extended encryption - reload
-        saveAndReload(TestFilter::ODT, "password");
+        saveAndReload(TestFilter::ODT, /*rParams*/ {}, /*pPassword*/ "password");
 
         // test wholesome ODF extended encryption
         xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
@@ -313,10 +314,10 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
 
     {
         // test the old, standard ODF 1.2/1.3/1.4 encryption
-        Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+        comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
         SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
 
-        saveAndReload(TestFilter::ODT, "password");
+        saveAndReload(TestFilter::ODT, /*rParams*/ {}, /*pPassword*/ "password");
 
         xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
         assertXPath(pXmlDoc, "/manifest:manifest", "version", u"1.3");

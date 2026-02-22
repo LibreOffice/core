@@ -18,6 +18,7 @@
  */
 
 #include <newtabledlg.hxx>
+#include <vcl/weld/Builder.hxx>
 
 SvxNewTableDialog::SvxNewTableDialog(weld::Window* pWindow)
     : GenericDialogController(pWindow, u"cui/ui/newtabledialog.ui"_ustr, u"NewTableDialog"_ustr)

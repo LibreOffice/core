@@ -83,6 +83,7 @@
 #include <svl/grabbagitem.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/svborder.hxx>
 #include <unotools/tempfile.hxx>

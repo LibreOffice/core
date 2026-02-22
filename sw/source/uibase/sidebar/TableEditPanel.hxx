@@ -17,6 +17,7 @@
 #include <svx/relfld.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 namespace sw::sidebar
 {

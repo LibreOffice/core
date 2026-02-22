@@ -15,7 +15,6 @@
 
 #include <textcontentcontrol.hxx>
 
-#include "vbacontentcontrollistentries.hxx"
 #include "vbacontentcontrollistentry.hxx"
 
 typedef CollTestImplHelper<ooo::vba::word::XContentControlListEntries>

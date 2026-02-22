@@ -33,6 +33,7 @@
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/vclevent.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

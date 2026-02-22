@@ -33,7 +33,9 @@
 #include <i18nutil/searchopt.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -173,7 +175,7 @@ SwIndexMarkPane::SwIndexMarkPane(std::shared_ptr<weld::Dialog> xDialog, weld::Bu
     , m_xNextSameBT(rBuilder.weld_button(u"last"_ustr))
     , m_xPrevBT(rBuilder.weld_button(u"previous"_ustr))
     , m_xNextBT(rBuilder.weld_button(u"next"_ustr))
-    , m_xForSelectedEntry(rBuilder.weld_label(u"selectedentrytitle"_ustr))
+    , m_xForSelectedEntryFrame(rBuilder.weld_frame(u"selectedentryframe"_ustr))
 {
     m_xSyncED->show();
 
@@ -364,7 +366,7 @@ void SwIndexMarkPane::InitControls()
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
             const FrameTypeFlags nFrameType = m_pSh->GetFrameType(nullptr,true);
-            m_xForSelectedEntry->show();
+            m_xForSelectedEntryFrame->set_label(SwResId(STR_FOR_SELECTED_ENTRY));
             m_xApplyToAllCB->show();
             m_xSearchCaseSensitiveCB->show();
             m_xSearchCaseWordOnlyCB->show();

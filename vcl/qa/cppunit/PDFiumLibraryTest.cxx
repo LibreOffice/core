@@ -18,11 +18,17 @@
 
 #include <com/sun/star/util/DateTime.hpp>
 
+#include <basegfx/vector/b2dsize.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <tools/stream.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFAnnotationMarker.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
+#include <vcl/pdf/PDFTextRenderMode.hxx>
 #include <vcl/pdfread.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 
@@ -119,7 +125,7 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testPageObjects)
     CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Text, pPageObject->getType());
 
     CPPUNIT_ASSERT_EQUAL(u"The quick, brown fox jumps over a lazy dog. DJs flock by when "
-                         "MTV ax quiz prog. Junk MTV quiz "_ustr,
+                         "MTV ax quiz prog. Junk MTV quiz"_ustr,
                          pPageObject->getText(pTextPage));
 
     CPPUNIT_ASSERT_EQUAL(12.0, pPageObject->getFontSize());

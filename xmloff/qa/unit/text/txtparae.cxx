@@ -7,21 +7,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 using namespace com::sun::star;
 
 namespace
 {
 /// Covers xmloff/source/text/txtparae.cxx fixes.
-class Test : public UnoApiXmlTest
+class Test : public UnoApiTest
 {
 public:
     Test();
 };
 
 Test::Test()
-    : UnoApiXmlTest(u"/xmloff/qa/unit/text/data/"_ustr)
+    : UnoApiTest(u"/xmloff/qa/unit/text/data/"_ustr)
 {
 }
 

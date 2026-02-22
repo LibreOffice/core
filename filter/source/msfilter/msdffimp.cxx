@@ -29,6 +29,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
+#include <tools/globname.hxx>
 #include <tools/solar.h>
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
@@ -3285,7 +3286,7 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, SvxMSDffClientData* /* pClient
                 rSt.Seek( nOfs );
                 DffRecordHeader aEscherF002Hd;
                 bool bOk = ReadDffRecordHeader( rSt, aEscherF002Hd );
-                sal_uLong nEscherF002End = bOk ? aEscherF002Hd.GetRecEndFilePos() : 0;
+                sal_uInt64 nEscherF002End = bOk ? aEscherF002Hd.GetRecEndFilePos() : 0;
                 while (rSt.good() && rSt.Tell() < nEscherF002End)
                 {
                     DffRecordHeader aEscherObjListHd;
@@ -3885,11 +3886,11 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItem
                 }
                 if (bOk && DFF_msofbtBSE == aHd.nRecType)
                 {
-                    const sal_uInt8 nSkipBLIPLen = 20;
-                    const sal_uInt8 nSkipShapePos = 4;
-                    const sal_uInt8 nSkipBLIP = 4;
-                    const sal_uLong nSkip =
-                        nSkipBLIPLen + 4 + nSkipShapePos + 4 + nSkipBLIP;
+                    const sal_uInt32 nSkip = 20 // SkipBLIP length
+                                             + 4 // spacing
+                                             + 4 // SkipShape position
+                                             + 4 // spacing
+                                             + 4; // SkipBLIP
 
                     if (nSkip <= aHd.nRecLen)
                     {
@@ -4523,7 +4524,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                         if ( bWithPadding )
                         {
                             // trim, remove additional space
-                            VclPtr<VirtualDevice> pDevice = VclPtr<VirtualDevice>::Create();
+                            ScopedVclPtrInstance<VirtualDevice> pDevice;
                             vcl::Font aFont = pDevice->GetFont();
                             aFont.SetFamilyName( aFontName );
                             aFont.SetFontSize( Size( 0, 96 ) );

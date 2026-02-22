@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
+#include <accessibility/IComboListBoxHelper.hxx>
 
 class IComboListBoxHelper;
 class VCLXAccessibleListItem;

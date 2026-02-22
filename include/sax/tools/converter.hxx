@@ -32,7 +32,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <tools/color.hxx>
-#include <unotools/saveopt.hxx>
 
 namespace com::sun::star {
     namespace uno {

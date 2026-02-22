@@ -52,6 +52,7 @@
 #include <pgbrksh.hxx>
 #include <scdll.hxx>
 #include <SparklineShell.hxx>
+#include <tableshell.hxx>
 
 #include <appoptio.hxx>
 #include <searchresults.hxx>
@@ -73,6 +74,7 @@
 #include <tbzoomsliderctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <SheetViewControl.hxx>
+#include <TableStylesControl.hxx>
 
 #include <svx/xmlsecctrl.hxx>
 // Child windows
@@ -129,6 +131,7 @@ void ScDLL::Init()
     ScEditShell         ::RegisterInterface(pMod);
     ScPivotShell        ::RegisterInterface(pMod);
     sc::SparklineShell  ::RegisterInterface(pMod);
+    ScTableShell        ::RegisterInterface(pMod);
     ScAuditingShell     ::RegisterInterface(pMod);
     ScFormatShell       ::RegisterInterface(pMod);
     ScCellShell         ::RegisterInterface(pMod);
@@ -150,6 +153,7 @@ void ScDLL::Init()
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH,  pMod );
     sc::ScNumberFormatControl       ::RegisterControl(SID_NUMBER_TYPE_FORMAT,   pMod );
     sc::SheetViewControl::RegisterControl(FID_CURRENT_SHEET_VIEW, pMod);
+    sc::TableStylesControl          ::RegisterControl(SID_DATABASE_SETTINGS,    pMod);
 
     SvxGrafModeToolBoxControl       ::RegisterControl(SID_ATTR_GRAF_MODE,       pMod);
     SvxGrafRedToolBoxControl        ::RegisterControl(SID_ATTR_GRAF_RED,        pMod);
@@ -197,6 +201,7 @@ void ScDLL::Init()
     ScPrintAreasDlgWrapper      ::RegisterChildWindow(false, pMod);
     ScColRowNameRangesDlgWrapper::RegisterChildWindow(false, pMod);
     ScFormulaDlgWrapper         ::RegisterChildWindow(false, pMod);
+    ScTableLayoutWrapper        ::RegisterChildWindow(false, pMod);
 
     ScRandomNumberGeneratorDialogWrapper::RegisterChildWindow(false, pMod);
     ScSamplingDialogWrapper             ::RegisterChildWindow(false, pMod);

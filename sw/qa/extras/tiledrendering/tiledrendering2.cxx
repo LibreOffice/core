@@ -20,6 +20,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/msgpool.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/vclevent.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <sfx2/lokhelper.hxx>
@@ -350,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testLoadVisibleArea)
 
     // When loading that document:
     OUString aURL = createFileURL(u"3pages.odt");
-    UnoApiXmlTest::loadFromURL(aURL);
+    UnoApiTest::loadFromURL(aURL);
 
     // Then make sure only the first page is laid out:
     SwDocShell* pDocShell = getSwDocShell();
@@ -759,7 +760,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellcheckVisibleArea)
 {
     // Given a document with 3 pages, the first page is visible:
     OUString aURL = createFileURL(u"3pages.odt");
-    UnoApiXmlTest::loadFromURL(aURL);
+    UnoApiTest::loadFromURL(aURL);
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwRootFrame* pLayout = pWrtShell->GetLayout();
@@ -788,7 +789,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIdleLayoutShape)
     comphelper::LibreOfficeKit::setInitialClientVisibleArea(aVisibleArea);
     comphelper::ScopeGuard g([] { comphelper::LibreOfficeKit::setInitialClientVisibleArea({}); });
     OUString aURL = createFileURL(u"3pages-shape.odt");
-    UnoApiXmlTest::loadFromURL(aURL);
+    UnoApiTest::loadFromURL(aURL);
 
     // When doing idle layout:
     AnyInputCallback aAnyInput;

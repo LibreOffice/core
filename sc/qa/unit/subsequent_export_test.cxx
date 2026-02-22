@@ -25,6 +25,7 @@
 #include <postit.hxx>
 #include <validat.hxx>
 
+#include <comphelper/scopeguard.hxx>
 #include <svx/svdpage.hxx>
 #include <tabprotection.hxx>
 #include <editeng/wghtitem.hxx>
@@ -227,26 +228,50 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf111876)
     CPPUNIT_ASSERT(sTarget != "../xls/bug-fixes.xls");
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest, testPasswordExport)
+CPPUNIT_TEST_FIXTURE(ScExportTest, testPasswordExport_ODS)
 {
-    std::vector<TestFilter> aFilterNames{ TestFilter::ODS, TestFilter::XLS, TestFilter::XLSX };
+    createScDoc();
 
-    for (size_t i = 0; i < aFilterNames.size(); ++i)
-    {
-        createScDoc();
+    ScDocument* pDoc = getScDoc();
 
-        ScDocument* pDoc = getScDoc();
+    pDoc->SetValue(0, 0, 0, 1.0);
 
-        pDoc->SetValue(0, 0, 0, 1.0);
+    saveAndReload(TestFilter::ODS, /*rParams*/ {}, /*pPassword*/ "test");
 
-        saveAndReload(aFilterNames[i], /*pPassword*/ "test");
-
-        pDoc = getScDoc();
-        double aVal = pDoc->GetValue(0, 0, 0);
-        ASSERT_DOUBLES_EQUAL(1.0, aVal);
-    }
+    pDoc = getScDoc();
+    double aVal = pDoc->GetValue(0, 0, 0);
+    ASSERT_DOUBLES_EQUAL(1.0, aVal);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest, testPasswordExport_XLS)
+{
+    createScDoc();
+
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetValue(0, 0, 0, 1.0);
+
+    saveAndReload(TestFilter::XLS, /*rParams*/ {}, /*pPassword*/ "test");
+
+    pDoc = getScDoc();
+    double aVal = pDoc->GetValue(0, 0, 0);
+    ASSERT_DOUBLES_EQUAL(1.0, aVal);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest, testPasswordExport_XLSX)
+{
+    createScDoc();
+
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetValue(0, 0, 0, 1.0);
+
+    saveAndReload(TestFilter::XLSX, /*rParams*/ {}, /*pPassword*/ "test");
+
+    pDoc = getScDoc();
+    double aVal = pDoc->GetValue(0, 0, 0);
+    ASSERT_DOUBLES_EQUAL(1.0, aVal);
+}
 CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf134332)
 {
     createScDoc("ods/tdf134332.ods");
@@ -257,7 +282,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf134332)
 
     ASSERT_DOUBLES_EQUAL(238.0, pDoc->GetValue(ScAddress(0, 10144, 0)));
 
-    saveAndReload(TestFilter::ODS, /*pPassword*/ "test");
+    saveAndReload(TestFilter::ODS, /*rParams*/ {}, /*pPassword*/ "test");
 
     // Without the fixes in place, it would have failed here
     pDoc = getScDoc();
@@ -612,7 +637,7 @@ static auto verifySpreadsheet13(char const* const pTestName, ScDocument& rDoc) -
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // import
     createScDoc("ods/spreadsheet13e.ods");
@@ -1027,7 +1052,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162963)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162963_ODF)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Verify, that calcext:contains-footer is only written in extended file format versions.
     // The parameter in DefaultVersion::set need to be adapted, when attribute contains-footer
@@ -1067,7 +1092,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162177_EastersundayODF14)
 {
     // EASTERSUNDAY was added to ODFF in ODF 1.4. LibreOffice has written it as
     // ORG.OPENOFFICE.EASTERSUNDAY for ODF 1.2 and ODF 1.3.
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     createScDoc("fods/tdf162177_Eastersunday.fods");
 
     // File has it as ORG.OPENOFFICE.EASTERSUNDAY in ODF 1.3. Test, that it is read correctly.
@@ -1090,43 +1115,54 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf162177_EastersundayODF14)
     assertXPath(pXmlDoc, sPath, "formula", u"of:=EASTERSUNDAY(2024)");
 }
 
+const RowData DfltRowData[] = {
+    { 0, 4, 0, 529, 0, false },
+    { 5, 10, 0, 1058, 0, false },
+    { 17, 20, 0, 1746, 0, false },
+    // check last couple of row in document to ensure
+    // they are 5.29mm ( effective default row xlsx height )
+    { 1048573, 1048575, 0, 529, 0, false },
+};
+
+const RowData EmptyRepeatRowData[] = {
+    // rows 0-4, 5-10, 17-20 are all set at various
+    // heights, there is no content in the rows, there
+    // was a bug where only the first row ( of repeated rows )
+    // was set after export
+    { 0, 4, 0, 529, 0, false },
+    { 5, 10, 0, 1058, 0, false },
+    { 17, 20, 0, 1767, 0, false },
+};
+
 CPPUNIT_TEST_FIXTURE(ScExportTest, testMiscRowHeightExport)
 {
-    static const TestParam::RowData DfltRowData[] = {
-        { 0, 4, 0, 529, 0, false },
-        { 5, 10, 0, 1058, 0, false },
-        { 17, 20, 0, 1746, 0, false },
-        // check last couple of row in document to ensure
-        // they are 5.29mm ( effective default row xlsx height )
-        { 1048573, 1048575, 0, 529, 0, false },
-    };
+    // Checks that some distributed ( non-empty ) heights remain set after export (roundtrip)
+    // additionally there is effectively a default row height ( 5.29 mm ). So we test the
+    // unset rows at the end of the document to ensure the effective xlsx default height
+    // is set there too.
+    miscRowHeightsTest(u"xlsx/miscrowheights.xlsx", TestFilter::XLSX, SAL_N_ELEMENTS(DfltRowData),
+                       DfltRowData);
+}
 
-    static const TestParam::RowData EmptyRepeatRowData[] = {
-        // rows 0-4, 5-10, 17-20 are all set at various
-        // heights, there is no content in the rows, there
-        // was a bug where only the first row ( of repeated rows )
-        // was set after export
-        { 0, 4, 0, 529, 0, false },
-        { 5, 10, 0, 1058, 0, false },
-        { 17, 20, 0, 1767, 0, false },
-    };
+CPPUNIT_TEST_FIXTURE(ScExportTest, testMiscRowHeightExport2)
+{
+    // Checks that some distributed ( non-empty ) heights remain set after export (to xls)
+    miscRowHeightsTest(u"xlsx/miscrowheights.xlsx", TestFilter::XLS, SAL_N_ELEMENTS(DfltRowData),
+                       DfltRowData);
+}
 
-    TestParam aTestValues[] = {
-        // Checks that some distributed ( non-empty ) heights remain set after export (roundtrip)
-        // additionally there is effectively a default row height ( 5.29 mm ). So we test the
-        // unset rows at the end of the document to ensure the effective xlsx default height
-        // is set there too.
-        { u"xlsx/miscrowheights.xlsx", TestFilter::XLSX, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
-        // Checks that some distributed ( non-empty ) heights remain set after export (to xls)
-        { u"xlsx/miscrowheights.xlsx", TestFilter::XLS, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
-        // Checks that repeated rows ( of various heights ) remain set after export ( to xlsx )
-        { u"ods/miscemptyrepeatedrowheights.ods", TestFilter::XLSX,
-          SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
-        // Checks that repeated rows ( of various heights ) remain set after export ( to xls )
-        { u"ods/miscemptyrepeatedrowheights.ods", TestFilter::XLS,
-          SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData },
-    };
-    miscRowHeightsTest(aTestValues, SAL_N_ELEMENTS(aTestValues));
+CPPUNIT_TEST_FIXTURE(ScExportTest, testMiscRowHeightExport3)
+{
+    // Checks that repeated rows ( of various heights ) remain set after export ( to xlsx )
+    miscRowHeightsTest(u"ods/miscemptyrepeatedrowheights.ods", TestFilter::XLSX,
+                       SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest, testMiscRowHeightExport4)
+{
+    // Checks that repeated rows ( of various heights ) remain set after export ( to xls )
+    miscRowHeightsTest(u"ods/miscemptyrepeatedrowheights.ods", TestFilter::XLS,
+                       SAL_N_ELEMENTS(EmptyRepeatRowData), EmptyRepeatRowData);
 }
 
 namespace

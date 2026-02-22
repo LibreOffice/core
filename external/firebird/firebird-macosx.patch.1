@@ -20,18 +20,22 @@
 -
  #DYLD_PRINT_ENV=1
  #export DYLD_PRINT_ENV
-
-@@ -31,8 +31,8 @@
- MACOSX_DEPLOYMENT_TARGET=10.9
+ 
+@@ -36,11 +33,11 @@
+ #DYLD_PRINT_LIBRARIES=1
+ #export DYLD_PRINT_LIBRARIES
+ 
+-MACOSX_DEPLOYMENT_TARGET=10.9
++MACOSX_DEPLOYMENT_TARGET=10.15
  export MACOSX_DEPLOYMENT_TARGET
  
 -PROD_FLAGS=-DDARWIN -pipe -O2 -MMD -fPIC -fno-common -mmacosx-version-min=10.9
 -DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -mmacosx-version-min=10.9 -Wno-non-virtual-dtor
-+PROD_FLAGS=-DDARWIN -pipe -O2 -MMD -fPIC -fno-common
-+DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -Wno-non-virtual-dtor
++PROD_FLAGS=-DDARWIN -pipe -O2 -MMD -fPIC -fno-common -mmacosx-version-min=10.15
++DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -mmacosx-version-min=10.15 -Wno-non-virtual-dtor
  CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -stdlib=libc++ -msse4
  
- EXE_LINK_OPTIONS:=
+ UNDEF_PLATFORM=
 --- firebird.org/src/common/unicode_util.cpp	2016-07-07 13:55:55.992234709 +0200
 +++ firebird/src/common/unicode_util.cpp	2016-08-10 11:25:46.422331020 +0200
 @@ -63,8 +63,8 @@

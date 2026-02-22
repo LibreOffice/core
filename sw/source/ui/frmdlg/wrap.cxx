@@ -29,6 +29,7 @@
 #include <fmtfollowtextflow.hxx>
 #include <svtools/unitconv.hxx>
 #include <svx/swframevalidation.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <cmdid.h>
 #include <docsh.hxx>

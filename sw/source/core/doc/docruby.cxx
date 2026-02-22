@@ -22,9 +22,9 @@
 
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 
 #include <unotools/charclass.hxx>
+#include <i18npool/breakiterator.hxx>
 
 #include <hintids.hxx>
 #include <doc.hxx>

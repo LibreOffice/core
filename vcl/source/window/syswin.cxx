@@ -22,6 +22,7 @@
 
 #include "menubarwindow.hxx"
 
+#include <comphelper/OAccessible.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/config.h>
@@ -30,6 +31,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>

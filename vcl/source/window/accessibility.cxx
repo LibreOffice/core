@@ -23,6 +23,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/wrkwin.hxx>
 #include <comphelper/lok.hxx>
 

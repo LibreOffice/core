@@ -50,6 +50,7 @@ void Chart2UiChartTest::testCopyPasteToNewSheet(
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
+    dispose();
     loadFromURL(u"private:factory/scalc"_ustr);
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
@@ -129,6 +130,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf99969)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
+    dispose();
     loadFromURL(u"private:factory/scalc"_ustr);
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
@@ -215,6 +217,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new writer document
+    dispose();
     loadFromURL(u"private:factory/swriter"_ustr);
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
@@ -244,7 +247,10 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011)
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0),
                                                     uno::UNO_QUERY_THROW);
     testCopyPasteToNewSheet(xChartDoc, u"Object 1"_ustr, 3, 9);
+}
 
+CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011_2)
+{
     loadFromFile(u"ods/tdf136011.ods");
     uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 1),
                                                      uno::UNO_QUERY_THROW);
@@ -288,6 +294,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
+    dispose();
     loadFromURL(u"private:factory/scalc"_ustr);
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
@@ -519,6 +526,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf153706)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
+    dispose();
     loadFromURL(u"private:factory/scalc"_ustr);
 
     // Paste; this must create a chart with own data source having a proper copy of the data

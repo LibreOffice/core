@@ -19,6 +19,8 @@
 
 #include <tools/lineend.hxx>
 #include <unotools/charclass.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <expfld.hxx>

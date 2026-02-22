@@ -10,6 +10,9 @@ excludelist:
     - com/sun/star/accessibility/XAccessible.hpp
     - com/sun/star/accessibility/XAccessibleComponent.hpp
     - com/sun/star/accessibility/XAccessibleContext.hpp
+    svtools/source/control/toolbarmenu.cxx:
+    # Needed for implicit dtor
+    - vcl/weld/Popover.hxx
     svtools/source/dialogs/insdlg.cxx:
     # Needed on WIN
     - comphelper/classids.hxx

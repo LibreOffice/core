@@ -22,6 +22,9 @@
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <osl/file.hxx>
 

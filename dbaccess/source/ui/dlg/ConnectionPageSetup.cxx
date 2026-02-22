@@ -23,6 +23,7 @@
 #include <IItemSetHelper.hxx>
 #include <svl/itemset.hxx>
 #include <dsitems.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace dbaui
 {

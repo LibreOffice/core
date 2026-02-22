@@ -30,6 +30,7 @@
 #include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>

@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
+#include <com/sun/star/i18n/ParseResult.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -1983,6 +1984,20 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
     rParam.nRow2 -= aRows.size();
 }
 
+void ScTable::RemoveSimpleSubTotals( ScSubTotalParam& rParam, const ScSubTotalParam& rOldParam )
+{
+    const ScRange aOldRange(rOldParam.nCol1, rOldParam.nRow1, nTab, rOldParam.nCol2,
+                            rOldParam.nRow2, nTab);
+    SCCOL nStartCol = aOldRange.aStart.Col();
+    SCCOL nEndCol = ClampToAllocatedColumns(aOldRange.aEnd.Col());
+    SCROW nEndRow = aOldRange.aEnd.Row();
+
+    RemoveRowBreak(nEndRow + 1, false, true);
+    rDocument.DeleteRow(nStartCol, nTab, nEndCol, nTab, nEndRow, 1);
+
+    rParam.nRow2--;
+}
+
 //  Delete hard number formats (for result formulas)
 
 static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
@@ -2352,6 +2367,62 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     return bSpaceLeft;
 }
 
+bool ScTable::DoSimpleSubTotals( ScSubTotalParam& rParam )
+{
+    RowEntry aRowEntry;
+    aRowEntry.nGroupNo = 0; // only one group can have
+    //aRowEntry.nSubStartRow = rParam.nRow1 + static_cast<SCROW>(rParam.bHasHeader); // Header
+    //aRowEntry.nFuncStart = rParam.nRow1 + static_cast<SCROW>(rParam.bHasHeader); // Header
+    aRowEntry.nDestRow = rParam.nRow2 + 1;
+    aRowEntry.nFuncEnd = rParam.nRow2;
+
+    bool bRet = false;
+    if (rDocument.InsertRow(rParam.nCol1, nTab, rParam.nCol2, nTab, aRowEntry.nDestRow, 1))
+    {
+        rParam.nRow2++;
+        DBShowRow(aRowEntry.nDestRow, true);
+        bRet = true;
+    }
+
+    // insert the labels
+    const auto& group = rParam.aGroups[aRowEntry.nGroupNo];
+    if (group.nSubLabels > 0)
+    {
+        for (SCCOL nResult = 0; nResult < group.nSubLabels; ++nResult)
+        {
+            SetString(group.collabels(nResult), aRowEntry.nDestRow, nTab, group.label(nResult));
+        }
+    }
+    else
+    {
+        SetString(rParam.nCol1, aRowEntry.nDestRow, nTab, ScResId(STR_TABLE_TOTAL));
+    }
+
+    // insert the formulas
+    if (group.nCustFuncs > 0)
+    {
+        for (SCCOL nResult = 0; nResult < group.nCustFuncs; ++nResult)
+        {
+            if (ScTokenArray* pArray = group.custToken(nResult))
+            {
+                ScFormulaCell* pCell = new ScFormulaCell(
+                    rDocument, ScAddress(group.colcust(nResult), aRowEntry.nDestRow, nTab),
+                    *pArray);
+                if (rParam.bIncludePattern)
+                    pCell->SetNeedNumberFormat(true);
+
+                SetFormulaCell(group.colcust(nResult), aRowEntry.nDestRow, pCell);
+                if (group.colcust(nResult) != group.nField)
+                {
+                    lcl_RemoveNumberFormat(this, group.colcust(nResult), aRowEntry.nDestRow);
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
+
 void ScTable::TopTenQuery( ScQueryParam& rParam )
 {
     bool bSortCollatorInitialized = false;
@@ -2599,7 +2670,7 @@ void ScTable::PrepareQuery( ScQueryParam& rQueryParam )
     lcl_PrepareQuery(&rDocument, this, rQueryParam, false);
 }
 
-SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
+SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub, bool bKeepTotals)
 {
     ScQueryParam    aParam( rParamOrg );
     typedef std::unordered_set<OUString> StrSetType;
@@ -2632,6 +2703,11 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
     {
         bool bResult;                                   // Filter result
         bool bValid = queryEvaluator.ValidQuery(j, nullptr, &blockPos);
+        // Keep Totals row (last) even if we have no any cell formula!
+        if (!bValid && bKeepTotals && j == nRealRow2)
+        {
+            bValid = true;
+        }
         if (!bValid && bKeepSub)                        // Keep subtotals
         {
             for (SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2 && !bValid; nCol++)

@@ -20,7 +20,6 @@
 #define INCLUDED_SVL_UNDO_HXX
 
 #include <svl/svldllapi.h>
-#include <comphelper/lok.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/datetime.hxx>
 #include <o3tl/strong_int.hxx>

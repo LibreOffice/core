@@ -50,6 +50,7 @@
 #include <sfx2/strings.hrc>
 #include <helpids.h>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/weld/Menu.hxx>
 
 using namespace css;
 using namespace css::beans;

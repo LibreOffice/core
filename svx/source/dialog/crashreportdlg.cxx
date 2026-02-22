@@ -16,6 +16,9 @@
 #include <unotools/configmgr.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

@@ -17,7 +17,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_new_cond_format_api, \
 	sc/qa/extras/new_cond_format \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,sc_new_cond_format_api,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sc_new_cond_format_api, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_new_cond_format_api, \
 	basegfx \

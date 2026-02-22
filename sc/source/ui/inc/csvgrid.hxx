@@ -30,6 +30,7 @@
 #include "csvsplits.hxx"
 
 namespace svtools { class ColorConfig; }
+namespace weld { class Menu; }
 class EditEngine;
 class ScAsciiOptions;
 class ScCsvTableBox;

@@ -25,6 +25,7 @@
 
 #include <comphelper/fileformat.h>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/gdimtf.hxx>

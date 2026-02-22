@@ -9,7 +9,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,dbaccess_CRMDatabase_test))
 
-$(eval $(call gb_CppunitTest_use_external,dbaccess_CRMDatabase_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,dbaccess_CRMDatabase_test, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_CRMDatabase_test, \
     dbaccess/qa/unit/CRMDatabase_test \

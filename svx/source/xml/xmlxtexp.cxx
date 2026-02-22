@@ -23,6 +23,7 @@
 #include <tools/urlobj.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
@@ -34,6 +35,7 @@
 
 #include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
+#include <tools/fldunit.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>

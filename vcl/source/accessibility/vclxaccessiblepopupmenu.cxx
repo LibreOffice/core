@@ -21,6 +21,7 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <comphelper/accessiblecontexthelper.hxx>
+#include <tools/color.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

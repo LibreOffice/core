@@ -16,8 +16,11 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <vcl/bitmap.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/color.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 
 using namespace css;

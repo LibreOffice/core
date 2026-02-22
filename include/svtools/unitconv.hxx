@@ -19,9 +19,10 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
-#include <tools/mapunit.hxx>
-#include <tools/fldunit.hxx>
 #include <tools/long.hxx>
+
+enum class FieldUnit : sal_uInt16;
+enum class MapUnit : sal_uInt8;
 
 namespace weld { class MetricSpinButton; }
 

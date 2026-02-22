@@ -18,6 +18,7 @@
  */
 
 #include <dlg_InsertAxis_Grid.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace chart
 {

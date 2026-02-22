@@ -61,6 +61,8 @@
 #include <unotools/confignode.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
@@ -177,7 +179,6 @@ FmPropBrw::FmPropBrw(const Reference< XComponentContext >& _xORB, SfxBindings* _
     , m_bInitialStateChange(true)
     , m_pParent(_pParent)
     , m_nAsyncGetFocusId(nullptr)
-    , m_xDialogBox(m_xBuilder->weld_box(u"dialog-vbox1"_ustr))
     , m_xContainer(m_xBuilder->weld_container(u"container"_ustr))
     , m_xORB(_xORB)
 {
@@ -395,7 +396,7 @@ void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 
 IMPL_LINK_NOARG( FmPropBrw, OnAsyncGetFocus, void*, void )
 {
-    m_xDialogBox->child_grab_focus();
+    m_xDialog->child_grab_focus();
     m_nAsyncGetFocusId = nullptr;
 }
 

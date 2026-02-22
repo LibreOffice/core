@@ -49,6 +49,8 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 
 #include <bitmaps.hlst>
 
@@ -1119,7 +1121,7 @@ IMPL_LINK(FmFilterNavigator, EditedEntryHdl, const IterString&, rIterString, boo
     const weld::TreeIter& rIter = rIterString.first;
     const OUString& rNewText = rIterString.second;
 
-    assert(m_xEditingCurrently && m_xTreeView->iter_compare(rIter, *m_xEditingCurrently) == 0 &&
+    assert(m_xEditingCurrently && rIter.equal(*m_xEditingCurrently) &&
                "FmFilterNavigator::EditedEntry: suspicious entry!");
     m_xEditingCurrently.reset();
 
@@ -1350,7 +1352,7 @@ void FmFilterNavigator::Remove(FmFilterData const * pItem)
     if (!xEntry)
         return;
 
-    if (m_xEditingCurrently && m_xTreeView->iter_compare(*xEntry, *m_xEditingCurrently) == 0)
+    if (m_xEditingCurrently && xEntry->equal(*m_xEditingCurrently))
         EndEditing();
 
     m_xTreeView->remove(*xEntry);

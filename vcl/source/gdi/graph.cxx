@@ -20,9 +20,11 @@
 #include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
 #include <impgraph.hxx>

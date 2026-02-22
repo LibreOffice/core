@@ -5448,7 +5448,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="LeftPara2">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:LeftPara</property>
+                                            <property name="action_name">.uno:StartPara</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -5468,7 +5468,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="RightPara2">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:RightPara</property>
+                                            <property name="action_name">.uno:EndPara</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -6691,7 +6691,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="LeftPara6">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:LeftPara</property>
+                                            <property name="action_name">.uno:StartPara</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -6711,7 +6711,7 @@
                                         <child>
                                           <object class="GtkToolButton" id="RightPara1">
                                             <property name="visible">True</property>
-                                            <property name="action_name">.uno:RightPara</property>
+                                            <property name="action_name">.uno:EndPara</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>

@@ -93,14 +93,13 @@ OUString GetOptionalProperty (
 } // end of anonymous namespace
 
 // internal
-AccessibleShape::AccessibleShape (
-    const AccessibleShapeInfo& rShapeInfo,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo)
-    : AccessibleContextBase (rShapeInfo.mxParent,AccessibleRole::SHAPE),
-      mxShape (rShapeInfo.mxShape),
-      maShapeTreeInfo (rShapeTreeInfo),
-      m_nIndexInParent(-1),
-      mpParent (rShapeInfo.mpChildrenManager)
+AccessibleShape::AccessibleShape(const AccessibleShapeInfo& rShapeInfo,
+                                 const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : ImplInheritanceHelper(rShapeInfo.mxParent, AccessibleRole::SHAPE)
+    , mxShape(rShapeInfo.mxShape)
+    , maShapeTreeInfo(rShapeTreeInfo)
+    , m_nIndexInParent(-1)
+    , mpParent(rShapeInfo.mpChildrenManager)
 {
     m_pShape = SdrObject::getSdrObjectFromXShape(mxShape);
     UpdateNameAndDescription();
@@ -652,41 +651,6 @@ void SAL_CALL AccessibleShape::removeAccessibleEventListener (
         mpText->RemoveEventListener (rxListener);
 }
 
-// XInterface
-css::uno::Any SAL_CALL
-    AccessibleShape::queryInterface (const css::uno::Type & rType)
-{
-    css::uno::Any aReturn = AccessibleContextBase::queryInterface (rType);
-    if ( ! aReturn.hasValue())
-        aReturn = ::cppu::queryInterface (rType,
-            static_cast<XAccessibleComponent*>(this),
-            static_cast<XAccessibleExtendedComponent*>(this),
-            static_cast< css::accessibility::XAccessibleSelection* >(this),
-            static_cast< css::accessibility::XAccessibleExtendedAttributes* >(this),
-            static_cast<document::XShapeEventListener*>(this),
-            static_cast<lang::XUnoTunnel*>(this),
-            static_cast<XAccessibleGroupPosition*>(this),
-            static_cast<XAccessibleHypertext*>(this)
-            );
-    return aReturn;
-}
-
-
-void SAL_CALL
-    AccessibleShape::acquire()
-    noexcept
-{
-    AccessibleContextBase::acquire ();
-}
-
-
-void SAL_CALL
-    AccessibleShape::release()
-    noexcept
-{
-    AccessibleContextBase::release ();
-}
-
 // XAccessibleSelection
 void SAL_CALL AccessibleShape::selectAccessibleChild( sal_Int64 )
 {
@@ -776,22 +740,6 @@ OUString SAL_CALL AccessibleShape::getExtendedAttributes()
         return "style:" + GetStyle() + ";";
 
     return OUString();
-}
-
-// XServiceInfo
-OUString SAL_CALL
-    AccessibleShape::getImplementationName()
-{
-    return u"AccessibleShape"_ustr;
-}
-
-
-uno::Sequence<OUString> SAL_CALL
-    AccessibleShape::getSupportedServiceNames()
-{
-    ensureAlive();
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleShape"_ustr };
-    return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
 // XTypeProvider

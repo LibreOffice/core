@@ -57,6 +57,7 @@
 #include <unobookmark.hxx>
 #include <unofield.hxx>
 #include <unoframe.hxx>
+#include <unotextcursor.hxx>
 #include <map>
 
 class SwXTextDocument;
@@ -518,8 +519,7 @@ struct AnchoredObjectsInfo
 struct TextAppendContext
 {
     css::uno::Reference<css::text::XTextAppend> xTextAppend;
-    css::uno::Reference<css::text::XParagraphCursor> xCursor;
-    css::uno::Reference<css::text::XTextRange> xInsertPosition;
+    rtl::Reference<SwXTextCursor> xCursor;
     ParagraphPropertiesPtr pLastParagraphProperties;
 
     /**
@@ -531,8 +531,7 @@ struct TextAppendContext
     TextAppendContext(css::uno::Reference<css::text::XTextAppend> const& i_xAppend,
                       css::uno::Reference<css::text::XTextCursor> const& i_xCursor)
         : xTextAppend(i_xAppend)
-        , xCursor(i_xCursor, css::uno::UNO_QUERY)
-        , xInsertPosition(xCursor)
+        , xCursor(dynamic_cast<SwXTextCursor*>(i_xCursor.get()))
     {}
 };
 

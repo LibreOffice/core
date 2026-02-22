@@ -19,6 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 #include <sal/log.hxx>
 
 #include "parawin.hxx"
@@ -522,7 +523,7 @@ IMPL_LINK( ParaWin, GetFxFocusHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for (size_t nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
+    for (size_t nPos=0; nPos < std::size(aArgInput); ++nPos)
     {
         if(&rPtr == &aArgInput[nPos])
         {
@@ -543,7 +544,7 @@ IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for (size_t nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
+    for (size_t nPos=0; nPos < std::size(aArgInput); ++nPos)
     {
         if(&rPtr == &aArgInput[nPos])
         {
@@ -572,7 +573,7 @@ IMPL_LINK( ParaWin, ModifyHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
-    for (size_t nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
+    for (size_t nPos=0; nPos < std::size(aArgInput); ++nPos)
     {
         if(&rPtr == &aArgInput[nPos])
         {

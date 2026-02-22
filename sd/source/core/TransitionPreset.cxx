@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/lok.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/UI/Effects.hxx>

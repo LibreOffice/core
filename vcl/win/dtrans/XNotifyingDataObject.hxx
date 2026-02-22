@@ -43,7 +43,7 @@ class CXNotifyingDataObject final : public IDataObject
 {
 public:
     CXNotifyingDataObject(
-        const IDataObjectPtr& aIDataObject,
+        const sal::systools::COMReference<IDataObject>& aIDataObject,
         const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable,
         const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& aXClipOwner,
         CWinClipboard* const theWinClipoard);
@@ -74,7 +74,7 @@ private:
     void lostOwnership( );
 
     sal_Int32                                                                     m_nRefCnt;
-    IDataObjectPtr                                                                m_aIDataObject;
+    sal::systools::COMReference<IDataObject>                                      m_aIDataObject;
     const css::uno::Reference< css::datatransfer::XTransferable >                 m_XTransferable;
     const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >    m_XClipboardOwner;
     unotools::WeakReference<CWinClipboard> m_pWinClipImpl;

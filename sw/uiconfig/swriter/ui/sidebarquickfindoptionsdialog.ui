@@ -65,6 +65,86 @@
             <property name="hexpand">True</property>
             <property name="row-spacing">6</property>
             <child>
+              <object class="GtkCheckButton" id="matchcase">
+                <property name="label" translatable="yes" context="sidebarquickfindoptionsdialog|matchcase">Match case</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="matchcase-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebarquickfindoptionsdialog|extended_tip|matchcase">Finds only exact case matches.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="wholewordsonly">
+                <property name="label" translatable="yes" context="sidebarquickfindoptionsdialog|wholewordsonly">Whole words only</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="wholewordsonly-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebarquickfindoptionsdialog|extended_tip|wholewordsonly">Finds only whole words.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="comments">
+                <property name="label" translatable="yes" context="sidebarquickfindoptionsdialog|comments">Comments</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="comments-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebarquickfindoptionsdialog|extended_tip|comments">Allow search in comments.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="regularexpressions">
+                <property name="label" translatable="yes" context="sidebarquickfindoptionsdialog|regularexpressions">Regular expressions</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="regularexpressions-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebarquickfindoptionsdialog|extended_tip|regularexpressions">Search using regular expression.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkBox" id="box3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -115,47 +195,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="matchcase">
-                <property name="label" translatable="yes" context="sidebarquickfindoptionsdialog|matchcase">Match case</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="no-show-all">True</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="matchcase-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebarquickfindoptionsdialog|extended_tip|matchcase">Finds only exact case matches.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="wholewordsonly">
-                <property name="label" translatable="yes" context="sidebarquickfindoptionsdialog|wholewordsonly">Whole words only</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="no-show-all">True</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="wholewordsonly-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sidebarquickfindoptionsdialog|extended_tip|wholewordsonly">Finds only whole words.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
           </object>

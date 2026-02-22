@@ -261,7 +261,7 @@ public:
 
 //  to uno, all three look the same
 
-class ScFilterDescriptorBase : public cppu::WeakImplHelper<
+class SAL_DLLPUBLIC_RTTI ScFilterDescriptorBase : public cppu::WeakImplHelper<
                                     css::sheet::XSheetFilterDescriptor,
                                     css::sheet::XSheetFilterDescriptor2,
                                     css::sheet::XSheetFilterDescriptor3,
@@ -277,7 +277,7 @@ public:
                             ScFilterDescriptorBase(ScDocShell* pDocShell);
     virtual                 ~ScFilterDescriptorBase() override;
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    SC_DLLPUBLIC virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
                             // in the derived classes(?):
                             // (nField[] here within the area)
@@ -297,17 +297,17 @@ public:
                                 css::sheet::TableFilterField2 >& aFilterFields ) override;
 
                             // XSheetFilterDescriptor3
-    virtual css::uno::Sequence< css::sheet::TableFilterField3 > SAL_CALL
+    SC_DLLPUBLIC virtual css::uno::Sequence< css::sheet::TableFilterField3 > SAL_CALL
                             getFilterFields3() override;
-    virtual void SAL_CALL   setFilterFields3( const css::uno::Sequence<
+    SC_DLLPUBLIC virtual void SAL_CALL   setFilterFields3( const css::uno::Sequence<
                                 css::sheet::TableFilterField3 >& aFilterFields ) override;
 
                             // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
+    SC_DLLPUBLIC virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
                                     const css::uno::Any& aValue ) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue(
+    SC_DLLPUBLIC virtual css::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
                                     const css::uno::Reference<
@@ -350,7 +350,7 @@ public:
 
 //  ScRangeFilterDescriptor - FilterDescriptor of a data base area
 
-class ScRangeFilterDescriptor final : public ScFilterDescriptorBase
+class SC_DLLPUBLIC ScRangeFilterDescriptor final : public ScFilterDescriptorBase
 {
 private:
     rtl::Reference<ScDatabaseRangeObj>  mxParent;

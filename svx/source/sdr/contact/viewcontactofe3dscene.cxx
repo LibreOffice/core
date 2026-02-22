@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>

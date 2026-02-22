@@ -12,6 +12,9 @@
 #include <vcl/dllapi.h>
 #include <vcl/weld/ItemView.hxx>
 
+enum class SelectionMode;
+enum class TxtAlign;
+
 namespace weld
 {
 enum class ColumnToggleType
@@ -37,7 +40,7 @@ public:
     typedef std::tuple<vcl::RenderContext&, const tools::Rectangle&, bool, const OUString&>
         render_args;
 
-protected:
+private:
     Link<TreeView&, void> m_aSelectionChangedHdl;
     Link<TreeView&, bool> m_aRowActivatedHdl;
     Link<int, void> m_aColumnClickedHdl;
@@ -50,6 +53,8 @@ protected:
     Link<const TreeIter&, bool> m_aCollapsingHdl;
     Link<TreeView&, void> m_aVisibleRangeChangedHdl;
     Link<TreeView&, void> m_aModelChangedHdl;
+
+protected:
     // if handler returns true, drag is disallowed, consumer can change bool
     // arg to false to disable the treeview default dnd icon
     Link<bool&, bool> m_aDragBeginHdl;
@@ -132,6 +137,7 @@ protected:
     using weld::ItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
+    virtual bool do_iter_children(TreeIter& rIter) const = 0;
     virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
     virtual void do_remove_selection() = 0;
 
@@ -258,6 +264,7 @@ public:
                            const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
         = 0;
 
+    // col index -1 sets text emphasis for all columns
     void set_text_emphasis(int row, bool bOn, int col);
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
     bool get_text_emphasis(int row, int col) const;
@@ -314,11 +321,11 @@ public:
     // set iter to point to previous node at the current level
     virtual bool iter_previous_sibling(TreeIter& rIter) const = 0;
     // set iter to point to next node, depth first, then sibling
-    virtual bool iter_next(TreeIter& rIter) const = 0;
+    bool iter_next(TreeIter& rIter) const;
     // set iter to point to previous node, sibling first then depth
-    virtual bool iter_previous(TreeIter& rIter) const = 0;
+    bool iter_previous(TreeIter& rIter) const;
     // set iter to point to first child node
-    virtual bool iter_children(TreeIter& rIter) const = 0;
+    bool iter_children(TreeIter& rIter) const;
     bool iter_nth_sibling(TreeIter& rIter, int nChild) const
     {
         bool bRet = true;
@@ -338,8 +345,8 @@ public:
        If b appears before a , then 1 is returned. If the two nodes are equal,
        then 0 is returned.
     */
-    virtual int iter_compare(const TreeIter& a, const TreeIter& b) const = 0;
-    virtual bool iter_has_child(const TreeIter& rIter) const = 0;
+    virtual int iter_compare(const TreeIter& rIterA, const TreeIter& rIterB) const;
+    bool iter_has_child(const TreeIter& rIter) const;
     // returns the number of direct children rIter has
     virtual int iter_n_children(const TreeIter& rIter) const = 0;
 
@@ -375,24 +382,26 @@ public:
     /* expanding on-demand node details
 
     When a node is added with children-on-demand (typically via 'insert' with
-    bChildrenOnDemand of true), then initially in reality the
-    children-on-demand node is given a 'placeholder' child entry to indicate
-    the load-on-demand state.
+    bChildrenOnDemand of true), then it shows an expander indicator even if
+    it doesn't have any "real" child entries (yet).
 
-    The 'placeholder' needs to be there for the expander indicator to be
-    drawn/shown even when there are no "real" entries yet. This child doesn't
-    exist for the purposes of any of the iterator methods, e.g. iter_has_child
-    on an on-demand node which hasn't been expanded yet is false. Likewise the
-    rest of the iterator methods skip over or otherwise ignore that node.
+    (Depending on the underlying toolkit, implementations may in reality give
+    the children-on-demand node a 'placeholder' child entry to indicate the
+    load-on-demand state and ensure the treeview draws/shows the expander
+    indicator even when there are no "real" entries yet. In that case, this
+    child doesn't exist for the purposes of any of the iterator methods,
+    e.g. iter_has_child on an on-demand node which hasn't been expanded yet
+    is false. Likewise the rest of the iterator methods skip over or otherwise
+    ignore that node.)
 
     Normal usage is the user clicks on the expander, the expansion mechanism
-    removes the 'placeholder' entry (set_children_on_demand(false)) and calls
+    disables on-demand nodes (set_children_on_demand(false)) and calls
     any installed expanding-callback (installable via connect_expanding) which
     has the opportunity to populate the node with children.
 
     If you decide to directly populate the children of an on-demand node
-    outside of the expanding-callback then you also need to explicitly remove
-    the 'placeholder' with set_children_on_demand(false) otherwise the treeview
+    outside of the expanding-callback then you also need to explicitly disable
+    on-demand mode with set_children_on_demand(false); otherwise the treeview
     is in an inconsistent state.  */
 
     virtual bool get_row_expanded(const TreeIter& rIter) const = 0;
@@ -520,6 +529,9 @@ public:
 
     using Widget::set_sensitive;
     using Widget::get_sensitive;
+
+private:
+    void last_child(weld::TreeIter& rIter, int nChildren) const;
 };
 }
 

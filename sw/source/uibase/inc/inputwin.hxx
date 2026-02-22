@@ -25,6 +25,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Entry.hxx>
 
 #include <sfx2/childwin.hxx>

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_SHAPE_HXX
-#define INCLUDED_OOX_DRAWINGML_SHAPE_HXX
+#pragma once
 
 #include <map>
 #include <memory>
@@ -65,7 +64,7 @@ struct FillProperties;
 struct GraphicProperties;
 struct LineProperties;
 struct Shape3DProperties;
-class AdvancedDiagramHelper;
+class DiagramHelper_oox;
 class CustomShapeProperties;
 typedef std::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
 
@@ -99,7 +98,7 @@ struct LinkedTxbxAttr
     LinkedTxbxAttr(): id(0),seq(0){};
 };
 
-class Diagram;
+class SmartArtDiagram;
 
 class OOX_DLLPUBLIC Shape
     : public std::enable_shared_from_this< Shape >
@@ -156,8 +155,11 @@ public:
 
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
     sal_Int32                       getRotation() const { return mnRotation; }
+    sal_Int32 getDiagramRotation() const { return mnDiagramRotation; }
     void                            setDiagramRotation( sal_Int32 nRotation ) { mnDiagramRotation = nRotation; }
     void                            setFlip( bool bFlipH, bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
+    void                            setFlipH(bool bFlipH) { mbFlipH = bFlipH;}
+    void                            setFlipV(bool bFlipV) { mbFlipV = bFlipV;}
     bool                            getFlipH() const { return mbFlipH; }
     bool                            getFlipV() const { return mbFlipV; }
     void                            addChild( const ShapePtr& rChildPtr ) { maChildren.push_back( rChildPtr ); }
@@ -176,13 +178,18 @@ public:
     void                            setFLocksText(bool bFLocksText) { mbFLocksText = bFLocksText; }
     void                            setFPublished(bool bFPublished) { mbFPublished = bFPublished; }
     void                            setTitle(const OUString& rTitle) { msTitle = rTitle; }
+    bool getHidden() const { return mbHidden; }
     void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
+    bool getHiddenMasterShape() const { return mbHiddenMasterShape; }
     void                            setHiddenMasterShape( bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
+    bool getLocked() const { return mbLocked; }
     void                            setLocked( bool bLocked ) { mbLocked = bLocked; }
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_Int32 nSubTypeIndex ) { moSubTypeIndex = nSubTypeIndex; }
     const std::optional< sal_Int32 >& getSubTypeIndex() const { return moSubTypeIndex; }
+
+    bool getIsTextBox() const { return mbTextBox; }
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     SAL_DLLPRIVATE void             setDefaults(bool bHeight);
@@ -233,7 +240,7 @@ public:
     SAL_DLLPRIVATE void setTextBox(bool bTextBox);
 
     // access to DiagramHelper
-    AdvancedDiagramHelper* getDiagramHelper() const { return mpDiagramHelper; }
+    DiagramHelper_oox* getDiagramHelper() const { return mpDiagramHelper; }
     SAL_DLLPRIVATE css::uno::Sequence< css::uno::Sequence< css::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, const OUString& sFragment, std::u16string_view sType );
     void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
@@ -270,9 +277,8 @@ public:
     // Allows preparation of a local Diagram helper && propagate an eventually
     // existing one to the data holder object later
     SAL_DLLPRIVATE void prepareDiagramHelper(
-        const std::shared_ptr< Diagram >& rDiagramPtr,
-        const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
-        bool bSelfCreated);
+        const std::shared_ptr< SmartArtDiagram >& rDiagramPtr,
+        const std::shared_ptr<::oox::drawingml::Theme>& rTheme);
     SAL_DLLPRIVATE void propagateDiagramHelper();
 
     // for Writer it is necessary to migrate an existing helper to a new Shape
@@ -449,14 +455,12 @@ private:
 
     // temporary space for DiagramHelper in preparation for collecting data
     // Note: I tried to use a unique_ptr here, but existing constructor func does not allow that
-    AdvancedDiagramHelper* mpDiagramHelper;
+    DiagramHelper_oox* mpDiagramHelper;
 
     // association-ID to identify the Diagram ModelData
     OUString msDiagramDataModelID;
 };
 
 }
-
-#endif // INCLUDED_OOX_DRAWINGML_SHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

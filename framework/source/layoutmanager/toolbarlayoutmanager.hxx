@@ -26,8 +26,8 @@
 
 #include <uiconfiguration/globalsettings.hxx>
 #include <framework/addonsoptions.hxx>
-#include <uielement/uielement.hxx>
-#include <services/layoutmanager.hxx>
+#include <framework/layoutmanager.hxx>
+#include <framework/uielement.hxx>
 
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
@@ -105,6 +105,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         bool floatToolbar( std::u16string_view rResourceURL );
         bool lockToolbar( std::u16string_view rResourceURL );
         bool unlockToolbar( std::u16string_view rResourceURL );
+        bool makeContextSensitive( std::u16string_view sResourceURL, bool bSensitive );
         void setToolbarPos( std::u16string_view rResourceURL, const css::awt::Point& aPos );
         void setToolbarSize( std::u16string_view rResourceURL, const css::awt::Size& aSize );
         void setToolbarPosSize( std::u16string_view rResourceURL, const css::awt::Point& aPos, const css::awt::Size& aSize );

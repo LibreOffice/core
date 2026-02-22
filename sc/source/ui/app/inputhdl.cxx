@@ -57,6 +57,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/json_writer.hxx>
 #include <formula/formulahelper.hxx>

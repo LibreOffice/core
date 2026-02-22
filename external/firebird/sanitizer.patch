@@ -21,7 +21,7 @@
 +_ZTI*
 --- builds/posix/make.defaults
 +++ builds/posix/make.defaults
-@@ -252,7 +252,7 @@
+@@ -263,7 +263,7 @@
  # LINKER OPTIONS
  #
  
@@ -30,12 +30,12 @@
  ifeq ($(TARGET),Debug)
    UNDEF_FLAGS = $(UNDEF_PLATFORM)
  endif
-@@ -291,7 +291,7 @@
+@@ -315,7 +315,7 @@
  LIB_LINK_MAPFILE= -Wl,--version-script,$(1)
  FIREBIRD_LIBRARY_LINK= -L$(LIB) -lfbclient $(MATHLIB)
  
--EXE_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) $(UNDEF_FLAGS) $(LIB_PATH_OPTS) $(LINK_EMPTY_SYMBOLS)
-+EXE_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) $(UNDEF_FLAGS) $(LIB_PATH_OPTS)
+-EXE_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) $(UNDEF_FLAGS) $(LIB_PATH_OPTS) $(call LINK_DARWIN_RPATH,..) $(LINK_EMPTY_SYMBOLS)
++EXE_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) $(UNDEF_FLAGS) $(LIB_PATH_OPTS) $(call LINK_DARWIN_RPATH,..)
  LIB_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) -shared
  
  FB_DAEMON = $(BIN)/firebird$(EXEC_EXT)

@@ -17,7 +17,9 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_pdf_export, \
 
 $(eval $(call gb_CppunitTest_use_externals,sc_pdf_export, \
     boost_headers \
+    libxml2 \
 ))
+
 ifeq ($(TLS),NSS)
 $(eval $(call gb_CppunitTest_use_externals,sc_pdf_export,\
        plc4 \

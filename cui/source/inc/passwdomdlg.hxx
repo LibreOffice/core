@@ -20,6 +20,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 
 #include <memory>
 
@@ -41,7 +42,11 @@ class PasswordToOpenModifyDialog : public SfxDialogController
     std::unique_ptr<weld::Entry> m_xReenterPasswdToModifyED;
     std::unique_ptr<weld::Label> m_xReenterPasswdToModifyInd;
     std::shared_ptr<weld::MessageDialog> m_xErrorBox;
-    std::array<std::unique_ptr<weld::ToggleButton>, 4> m_xPass;
+
+    std::unique_ptr<weld::ToggleButton> m_xBtn1;
+    std::unique_ptr<weld::ToggleButton> m_xBtn2;
+    std::unique_ptr<weld::ToggleButton> m_xBtn3;
+    std::unique_ptr<weld::ToggleButton> m_xBtn4;
 
     OUString                    m_aOneMismatch;
     OUString                    m_aTwoMismatch;

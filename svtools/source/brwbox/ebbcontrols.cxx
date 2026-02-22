@@ -18,8 +18,10 @@
 
 #include "accessibleeditbrowseboxcell.hxx"
 
+#include <tools/date.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace svt
 {

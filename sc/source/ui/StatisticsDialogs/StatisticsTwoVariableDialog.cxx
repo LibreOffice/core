@@ -9,6 +9,7 @@
  */
 
 #include <svl/undo.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <rangelst.hxx>
 #include <docsh.hxx>

@@ -39,11 +39,13 @@
 #include <comphelper/propertyvalue.hxx>
 #include <rtl/bootstrap.hxx>
 #include <comphelper/configuration.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <vcl/idle.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
@@ -1241,11 +1243,7 @@ void SdDrawDocument::SetDefaultWritingMode(css::text::WritingMode eMode )
     SvxFrameDirectionItem aModeItem( nVal, EE_PARA_WRITINGDIR );
     m_pItemPool->SetUserDefaultItem( aModeItem );
 
-    SvxAdjustItem aAdjust( SvxAdjust::Left, EE_PARA_JUST );
-
-    if( eMode == css::text::WritingMode_RL_TB )
-        aAdjust.SetAdjust( SvxAdjust::Right );
-
+    SvxAdjustItem aAdjust( SvxAdjust::ParaStart, EE_PARA_JUST );
     m_pItemPool->SetUserDefaultItem( aAdjust );
 }
 

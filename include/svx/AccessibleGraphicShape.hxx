@@ -40,8 +40,7 @@ class AccessibleShapeTreeInfo;
         XAccessibleImage interface.
 */
 class SVX_DLLPUBLIC AccessibleGraphicShape
-    :   public AccessibleShape,
-        public css::accessibility::XAccessibleImage
+    : public cppu::ImplInheritanceHelper<AccessibleShape, css::accessibility::XAccessibleImage>
 {
 public:
     AccessibleGraphicShape (
@@ -57,34 +56,6 @@ public:
     sal_Int32 SAL_CALL getAccessibleImageHeight() override;
 
     sal_Int32 SAL_CALL getAccessibleImageWidth() override;
-
-    //=====  XInterface  ======================================================
-
-    virtual css::uno::Any SAL_CALL
-        queryInterface (const css::uno::Type & rType) override;
-
-    virtual void SAL_CALL
-        acquire()
-        noexcept override;
-
-    virtual void SAL_CALL
-        release()
-        noexcept override;
-
-    //=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
-    //=====  XTypeProvider  ===================================================
-
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
-        getTypes() override;
 
 protected:
     /// Create a name string that contains the accessible name.

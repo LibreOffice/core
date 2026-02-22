@@ -1055,7 +1055,11 @@ cygwin*|wsl*)
     # look at $host etc that much, it mostly uses its own $_os
     # variable, set here in this case statement.
 
-    using_freetype_fontconfig=no
+    if test "$enable_headless" != "yes"; then
+        using_freetype_fontconfig=no
+    else
+        using_freetype_fontconfig=yes
+    fi
     using_x11=no
     test_unix_dlapi=no
     test_openldap=no
@@ -1330,6 +1334,14 @@ if test "$using_freetype_fontconfig" = yes; then
     if test "$using_headless_plugin" = yes; then
         AC_DEFINE(ENABLE_HEADLESS)
         ENABLE_HEADLESS=TRUE
+    fi
+    if test "$_os" = "WINNT" -a "$enable_headless" = yes; then
+        # We build them, don't do any pkg-config checks
+        test_fontconfig=no
+        test_freetype=no
+        ENABLE_FONTCONFIG=TRUE
+        ENABLE_FREETYPE=TRUE
+        BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
     fi
 else
     test_fontconfig=no
@@ -1946,7 +1958,7 @@ AC_ARG_ENABLE(gen,
 
 AC_ARG_ENABLE(headless,
     AS_HELP_STRING([--enable-headless],
-        [Enable headless plugin (svp) even on macOS.]),
+        [Enable headless plugin (svp) even on macOS or Windows.]),
 ,using_headless_plugin=yes)
 
 AC_ARG_ENABLE(gui,
@@ -2254,6 +2266,11 @@ AC_ARG_ENABLE(opencl,
     AS_HELP_STRING([--disable-opencl],
         [Disable OpenCL support.]),
 ,enable_opencl=yes)
+
+AC_ARG_ENABLE(opengl,
+    AS_HELP_STRING([--disable-opengl],
+        [Disable OpenGL support.]),
+,enable_opengl=yes)
 
 libo_FUZZ_ARG_ENABLE(librelogo,
     AS_HELP_STRING([--disable-librelogo],
@@ -6210,6 +6227,7 @@ if test "$cross_compiling" = "yes"; then
         bin/bffvalidator.sh.in \
         bin/odfvalidator.sh.in \
         bin/officeotron.sh.in \
+        bin/verapdf.sh.in \
         instsetoo_native/util/openoffice.lst.in \
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in \
@@ -7140,7 +7158,9 @@ if test $_os = Darwin; then
     if test -n "$PKG_CONFIG"; then
         if test "$PKG_CONFIG" = /usr/bin/pkg-config && ls -l /usr/bin/pkg-config | $GREP -q Mono.framework; then
             AC_MSG_ERROR([yes, from Mono. This *will* break the build. Please remove or hide $PKG_CONFIG])
-        elif test "$PKG_CONFIG" = "/opt/homebrew/bin/pkg-config"; then
+        elif test `uname -m` = "arm64" -a "$PKG_CONFIG" = "/opt/homebrew/bin/pkg-config"; then
+            AC_MSG_RESULT([yes, from Homebrew. This is OK.])
+        elif [[[ `uname -m` == "x86_64" && "$PKG_CONFIG" == "/usr/local/bin/pkg-config" && `readlink "$PKG_CONFIG"` == ../Cellar/pkgconf/*/bin/pkg-config ]]]; then
             AC_MSG_RESULT([yes, from Homebrew. This is OK.])
         else
             if test "$enable_bogus_pkg_config" = "yes"; then
@@ -7387,6 +7407,11 @@ the  Windows SDK are installed.])
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
         elif test -d "$WINDOWS_SDK_HOME_unix/Include/$winsdklibsubdir/um"; then
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/shared"
+        fi
+        if test "$USE_HEADLESS_CODE" = "TRUE"; then
+            if test -d "$WINDOWS_SDK_HOME_unix/Include/$winsdklibsubdir/winrt"; then
+                SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/winrt"
+            fi
         fi
     fi
 
@@ -7905,17 +7930,19 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
 
-    AC_MSG_CHECKING([whether $CC_BASE supports -D_FORTIFY_SOURCE=2])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=2"
-    if test "$ENABLE_OPTIMIZED" = TRUE; then
-        CFLAGS="$CFLAGS -O2"
+    if test "$_os" = "Linux"; then
+        AC_MSG_CHECKING([whether $CC_BASE supports -D_FORTIFY_SOURCE=2])
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=2"
+        if test "$ENABLE_OPTIMIZED" = TRUE; then
+            CFLAGS="$CFLAGS -O2"
+        fi
+        AC_LINK_IFELSE(
+            [AC_LANG_PROGRAM([[#include <string.h>]], [[return 0;]])],
+            [AC_MSG_RESULT([yes]); HARDENING_OPT_CFLAGS="$HARDENING_OPT_CFLAGS -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=2"],
+            [AC_MSG_RESULT([no])])
+        CFLAGS=$save_CFLAGS
     fi
-    AC_LINK_IFELSE(
-        [AC_LANG_PROGRAM([[#include <string.h>]], [[return 0;]])],
-        [AC_MSG_RESULT([yes]); HARDENING_OPT_CFLAGS="$HARDENING_OPT_CFLAGS -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=2"],
-        [AC_MSG_RESULT([no])])
-    CFLAGS=$save_CFLAGS
 
     AC_MSG_CHECKING([whether $CC_BASE supports -D_GLIBCXX_ASSERTIONS])
     save_CFLAGS=$CFLAGS
@@ -9657,6 +9684,31 @@ if test "$with_export_validation" != "no"; then
         else
             OFFICEOTRON="sh $OFFICEOTRON"
         fi
+
+        AC_PATH_PROGS(VERAPDF, verapdf)
+        if test -z "$VERAPDF"; then
+            # remember to download the verapdf with validator later
+            AC_MSG_NOTICE([no verapdf found, will download it])
+            BUILD_TYPE="$BUILD_TYPE VERAPDF"
+            VERAPDF="$BUILDDIR/bin/verapdf.sh"
+
+            # and fetch name of verapdf jar name from download.lst
+            VERAPDF_JAR=`$SED -n -e "s/^VERAPDF_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+            AC_SUBST(VERAPDF_JAR)
+
+            if test -z "$VERAPDF_JAR"; then
+                AC_MSG_ERROR([cannot determine verapdf jar location (--with-export-validation)])
+            fi
+        fi
+        if test "$build_os" = "cygwin"; then
+            # In case of Cygwin it will be executed from Windows,
+            # so we need to run bash and absolute path to validator
+            # so instead of "odfvalidator" it will be
+            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+            VERAPDF="bash.exe `cygpath -m "$VERAPDF"`"
+        else
+            VERAPDF="sh $VERAPDF"
+        fi
     fi
     AC_SUBST(OFFICEOTRON)
 else
@@ -10369,6 +10421,9 @@ else
     FREETYPE_LIBS_internal="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
 fi
 libo_CHECK_SYSTEM_MODULE([freetype],[FREETYPE],[freetype2 >= 9.9.3],,system,TRUE)
+if test "$_os" = WINNT -a "$ENABLE_HEADLESS" = TRUE; then
+    FREETYPE_CFLAGS="$FREETYPE_CFLAGS_internal"
+fi
 
 # ===================================================================
 # Check for system libxslt
@@ -10698,7 +10753,7 @@ if test \( "$cross_compiling" = yes -a -z "$PYTHON_FOR_BUILD" \) -o "$enable_pyt
     SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
     PYTHON_VERSION_MINOR=13
-    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.11
+    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.12
     if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
         AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
     fi
@@ -11654,26 +11709,26 @@ AC_SUBST(SYSTEM_LIBORCUS)
 dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
-harfbuzz_required_version=5.1.0
+harfbuzz_required_version=8.3.1
 
 GRAPHITE_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/graphite/include -DGRAPHITE2_STATIC"
 HARFBUZZ_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/harfbuzz/src"
 case "$_os" in
     Linux)
         GRAPHITE_LIBS_internal='$(gb_StaticLibrary_WORKDIR)/libgraphite.a'
-        HARFBUZZ_LIBS_internal='$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz.a $(GRAPHITE_LIBS)'
+        HARFBUZZ_LIBS_internal='$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz.a $(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz-subset.a $(GRAPHITE_LIBS)'
         ;;
     WINNT)
         GRAPHITE_LIBS_internal='$(gb_StaticLibrary_WORKDIR)/graphite.lib'
-        HARFBUZZ_LIBS_internal='$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz.a $(GRAPHITE_LIBS)'
+        HARFBUZZ_LIBS_internal='$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz.a $(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/libharfbuzz-subset.a $(GRAPHITE_LIBS)'
         ;;
     *)
         GRAPHITE_LIBS_internal='-L$(gb_StaticLibrary_WORKDIR) -lgraphite'
-        HARFBUZZ_LIBS_internal='-L$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/ -lharfbuzz $(GRAPHITE_LIBS)'
+        HARFBUZZ_LIBS_internal='-L$(gb_UnpackedTarball_workdir)/harfbuzz/builddir/src/ -lharfbuzz -lharfbuzz-subset $(GRAPHITE_LIBS)'
         ;;
 esac
 libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
-libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= $harfbuzz_required_version])
+libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= $harfbuzz_required_version harfbuzz-subset >= $harfbuzz_required_version])
 
 if test "$with_system_harfbuzz" = "yes"; then
     if test "$with_system_graphite" = "no"; then
@@ -12861,9 +12916,13 @@ AC_SUBST(GSTREAMER_1_0_CFLAGS)
 AC_SUBST(GSTREAMER_1_0_LIBS)
 AC_SUBST(ENABLE_GSTREAMER_1_0)
 
+dnl =================================================
+dnl Check whether to build with OpenGL support.
+dnl =================================================
+
 ENABLE_OPENGL_TRANSITIONS=
 ENABLE_OPENGL_CANVAS=
-if test $_os = iOS -o $_os = Android -o "$ENABLE_FUZZERS" = "TRUE"; then
+if test $_os = iOS -o $_os = Android -o "$ENABLE_FUZZERS" = "TRUE" -o "$enable_opengl" != "yes"; then
    : # disable
 elif test "$_os" = "Darwin"; then
     # We use frameworks on macOS, no need for detail checks
@@ -16271,6 +16330,7 @@ AC_CONFIG_FILES([
                  bin/bffvalidator.sh
                  bin/odfvalidator.sh
                  bin/officeotron.sh
+                 bin/verapdf.sh
                  instsetoo_native/util/openoffice.lst
                  sysui/desktop/macosx/Info.plist
                  sysui/desktop/macosx/LaunchConstraint.plist

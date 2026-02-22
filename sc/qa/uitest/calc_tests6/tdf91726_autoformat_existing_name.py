@@ -21,13 +21,13 @@ class tdf91726(UITestCase):
             #AutoFormat Styles
             with self.ui_test.execute_dialog_through_command(".uno:AutoFormat", close_button="") as xDialog:
                 #add new style "Default"
-                xadd = xDialog.getChild("add")
+                xadd = xDialog.getChild("rename")
 
                 # Use empty close_button to open consecutive dialogs
                 with self.ui_test.execute_blocking_action(
                         xadd.executeAction, args=('CLICK', ()), close_button="") as dialog:
-                    nameEntry = dialog.getChild("name_entry")
-                    nameEntry.executeAction("TYPE", mkPropertyValues({"TEXT":"Default"}))
+                    nameEntry = dialog.getChild("edit")
+                    nameEntry.executeAction("TYPE", mkPropertyValues({"TEXT":"Academic"}))
                     xOKBtn = dialog.getChild("ok")
 
                     with self.ui_test.execute_blocking_action(
@@ -39,9 +39,9 @@ class tdf91726(UITestCase):
 
                         with self.ui_test.execute_blocking_action(
                                 xOKBtn2.executeAction, args=('CLICK', ()), close_button="cancel") as dialog3:
-                            nameEntry = dialog3.getChild("name_entry")
+                            nameEntry = dialog3.getChild("edit")
                             #back to name dialog, LO should not crash
-                            self.assertEqual(get_state_as_dict(nameEntry)["Text"], "Default")
+                            self.assertEqual(get_state_as_dict(nameEntry)["Text"], "Default Style")
 
                 xCanceltn = xDialog.getChild("cancel")
                 self.ui_test.close_dialog_through_button(xCanceltn)

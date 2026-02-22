@@ -186,6 +186,7 @@ enum class SwUndoId
     REINSTATE_REDLINE = 154,
     COPY_HEADER_FOOTER = 155,
     SORT_CHAPTERS = 156,
+    UNFLOAT_FRAME_CONTENT = 157
 };
 
 OUString GetUndoComment(SwUndoId eId);

@@ -20,6 +20,7 @@
 #include <dbfunc.hxx>
 #include <scitems.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
@@ -597,6 +598,125 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     aModificator.SetDocumentModified();
 
     SelectionChanged();
+}
+
+void ScDBFunc::DoTableSubTotals( const ScDBData& rNewData, const ScSubTotalParam& rParam, bool bRecord )
+{
+    bool bDo = !rParam.bRemoveOnly; // sal_False = only delete
+
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SCTAB nTab = GetViewData().GetTabNumber();
+    if (bRecord && !rDoc.IsUndoEnabled())
+        bRecord = false;
+
+    ScDBData* pDBData
+        = rDoc.GetDBAtArea(nTab, rParam.nCol1, rParam.nRow1, rParam.nCol2, rParam.nRow2);
+    if (!pDBData)
+    {
+        OSL_FAIL("SubTotals: no DBData");
+        return;
+    }
+
+    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, 0, rParam.nRow1 + 1, rDoc.MaxCol(), rDoc.MaxRow());
+    if (!aTester.IsEditable())
+    {
+        ErrorMessage(aTester.GetMessageId());
+        return;
+    }
+
+    if (rDoc.HasAttrib(rParam.nCol1, rParam.nRow1 + 1, nTab, rParam.nCol2, rParam.nRow2, nTab,
+                       HasAttrFlags::Merged | HasAttrFlags::Overlapped))
+    {
+        ErrorMessage(STR_MSSG_INSERTCELLS_0); // do not insert into merged
+        return;
+    }
+
+    weld::WaitObject aWait(GetViewData().GetDialogParent());
+    ScDocShellModificator aModificator(*pDocSh);
+
+    // ScSubTotalParam aNewParam(rParam);
+    ScSubTotalParam aNewParam;
+    rNewData.GetSubTotalParam(aNewParam); // change end of range
+    ScDocumentUniquePtr pUndoDoc;
+    std::unique_ptr<ScDBCollection> pUndoDB;
+
+    if (bRecord) // record old data
+    {
+        bool bOldFilter = bDo && rParam.bDoSort;
+        SCTAB nTabCount = rDoc.GetTableCount();
+        pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+        pUndoDoc->InitUndo(rDoc, nTab, nTab, false, bOldFilter);
+
+        // record data range - including filter results
+        rDoc.CopyToDocument(rParam.nCol1, rParam.nRow1 + 1, nTab, rParam.nCol2, rParam.nRow2, nTab,
+                            InsertDeleteFlags::ALL, false, *pUndoDoc);
+
+        // all formulas for reference
+        rDoc.CopyToDocument(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), nTabCount - 1,
+                            InsertDeleteFlags::FORMULA, false, *pUndoDoc);
+
+        // database ranges
+        ScDBCollection* pDocDB = rDoc.GetDBCollection();
+        if (!pDocDB->empty())
+            pUndoDB.reset(new ScDBCollection(*pDocDB));
+    }
+
+    if (rParam.bReplace)
+        rDoc.RemoveTableSubTotals(nTab, aNewParam, rParam);
+    bool bSuccess = true;
+    if (bDo)
+    {
+        bSuccess = rDoc.DoTableSubTotals(nTab, aNewParam);
+    }
+    ScRange aDirtyRange(aNewParam.nCol1, aNewParam.nRow1, nTab, aNewParam.nCol2, aNewParam.nRow2,
+                        nTab);
+    rDoc.SetDirty(aDirtyRange, true);
+
+    // Need to store with the new values
+    *pDBData = rNewData;
+    if (bRecord)
+    {
+        ScDBCollection* pDocDB = rDoc.GetDBCollection();
+        pDocSh->GetUndoManager()->AddUndoAction(std::make_unique<ScUndoTableTotals>(
+            *pDocSh, nTab, rParam, aNewParam.nRow2, std::move(pUndoDoc),
+            std::move(pUndoDB), std::make_unique<ScDBCollection>(*pDocDB)));
+    }
+
+    if (!bSuccess)
+    {
+        // "Can not insert any rows"
+        ErrorMessage(STR_MSSG_DOSUBTOTALS_2);
+    }
+
+    // store
+    pDBData->SetSubTotalParam(aNewParam);
+    pDBData->SetArea(nTab, aNewParam.nCol1, aNewParam.nRow1, aNewParam.nCol2, aNewParam.nRow2);
+    rDoc.CompileDBFormula();
+
+    pDocSh->PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
+                     PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
+                         | PaintPartFlags::Size);
+
+    aModificator.SetDocumentModified();
+
+    SelectionChanged();
+}
+
+void ScDBFunc::DeleteCalcTable()
+{
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDBData* pDBObj = rDoc.GetTableDBAtCursor(GetViewData().GetCurX(), GetViewData().GetCurY(),
+                                          GetViewData().CurrentTabForData(), ScDBDataPortion::AREA);
+    if (pDBObj)
+    {
+        ScDBDocFunc aFunc(*pDocSh);
+        aFunc.DeleteDBTable(pDBObj, true, false);
+        CursorPosChanged(); // shells may be switched
+    }
+    else
+        ErrorMessage(STR_TABLE_NOTFOUND);
 }
 
 // consolidate

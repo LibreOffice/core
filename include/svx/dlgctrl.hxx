@@ -19,12 +19,15 @@
 #ifndef INCLUDED_SVX_DLGCTRL_HXX
 #define INCLUDED_SVX_DLGCTRL_HXX
 
+#include <comphelper/OAccessible.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/rectenum.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>

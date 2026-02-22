@@ -25,7 +25,7 @@
 
 namespace dbaui
 {
-   // OQueryDesignFieldUndoAct - Basisclass for undo's in the fieldlist of a query design
+   // OQueryDesignFieldUndoAct - BasicClass for undo's in the fieldlist of a query design
 
     class OQueryDesignFieldUndoAct : public OCommentUndoAction
     {

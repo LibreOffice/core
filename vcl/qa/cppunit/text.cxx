@@ -14,7 +14,10 @@
 
 #include <vcl/BitmapReadAccess.hxx>
 #include <comphelper/errcode.hxx>
+#include <vcl/fntstyle.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/virdev.hxx>
 
 #include <ImplLayoutArgs.hxx>

@@ -23,6 +23,7 @@
 #include <svx/svdglue.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <strings.hrc>
 #include <gluectrl.hxx>

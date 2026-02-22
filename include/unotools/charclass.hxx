@@ -22,14 +22,14 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
-#include <com/sun/star/i18n/ParseResult.hpp>
-#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XCharacterClassification; }
+namespace com::sun::star::i18n { enum class DirectionProperty; }
+namespace com::sun::star::i18n { enum class UnicodeScript; }
+namespace com::sun::star::i18n { struct ParseResult; }
 
 inline constexpr sal_Int32 nCharClassAlphaType =
     css::i18n::KCharacterType::UPPER |

@@ -471,9 +471,11 @@ void lcl_setTextAnchorFromTextProps(const uno::Reference<beans::XPropertySet>& x
     aTextPropMap.getValue(u"ParaAdjust"_ustr) >>= nParaAlign;
     switch (nParaAlign)
     {
+        case sal_Int16(style::ParagraphAdjust_START):
         case sal_Int16(style::ParagraphAdjust_LEFT):
             eHorzAdjust = drawing::TextHorizontalAdjust_LEFT;
             break;
+        case sal_Int16(style::ParagraphAdjust_END):
         case sal_Int16(style::ParagraphAdjust_RIGHT):
             eHorzAdjust = drawing::TextHorizontalAdjust_RIGHT;
             break;

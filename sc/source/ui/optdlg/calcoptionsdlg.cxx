@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <officecfg/Office/Calc.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <calcconfig.hxx>
 #include "calcoptionsdlg.hxx"

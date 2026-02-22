@@ -19,15 +19,18 @@
 
 #pragma once
 
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
-#include <vcl/GraphicAttributes.hxx>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
 
 class Graphic;
+enum class GraphicDrawMode;
 
 namespace drawinglayer::attribute
 {
 class FillGraphicAttribute;
 }
+
+namespace basegfx { class B2DHomMatrix; }
+namespace drawinglayer::primitive2d { class Primitive2DContainer; }
 
 namespace drawinglayer::primitive2d
 {

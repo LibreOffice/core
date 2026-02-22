@@ -20,6 +20,7 @@
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <slider.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 
 #include "thumbpos.hxx"

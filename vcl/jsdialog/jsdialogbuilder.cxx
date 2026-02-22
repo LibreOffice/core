@@ -1247,10 +1247,10 @@ JSListBox::JSListBox(JSDialogSender* pSender, ::ListBox* pListBox, SalInstanceBu
 {
 }
 
-void JSListBox::insert(int pos, const OUString& rStr, const OUString* pId,
-                       const OUString* pIconName, VirtualDevice* pImageSurface)
+void JSListBox::do_insert(int pos, const OUString& rStr, const OUString* pId,
+                          const OUString* pIconName, VirtualDevice* pImageSurface)
 {
-    SalInstanceComboBoxWithoutEdit::insert(pos, rStr, pId, pIconName, pImageSurface);
+    SalInstanceComboBoxWithoutEdit::do_insert(pos, rStr, pId, pIconName, pImageSurface);
     sendUpdate();
 }
 
@@ -1266,6 +1266,12 @@ void JSListBox::do_set_active(int pos)
     sendUpdate();
 }
 
+void JSListBox::do_set_active_id(const OUString& rStr)
+{
+    sal_uInt16 nPos = find_id(rStr);
+    set_active(nPos);
+}
+
 JSComboBox::JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
                        bool bTakeOwnership)
     : JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>(pSender, pComboBox, pBuilder,
@@ -1273,10 +1279,10 @@ JSComboBox::JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstan
 {
 }
 
-void JSComboBox::insert(int pos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface)
+void JSComboBox::do_insert(int pos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface)
 {
-    SalInstanceComboBoxWithEdit::insert(pos, rStr, pId, pIconName, pImageSurface);
+    SalInstanceComboBoxWithEdit::do_insert(pos, rStr, pId, pIconName, pImageSurface);
     sendUpdate();
 }
 
@@ -1556,10 +1562,8 @@ JSCheckButton::JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox,
 
 void JSCheckButton::do_set_state(TriState eState)
 {
-    TriState eOldState = get_state();
     SalInstanceCheckButton::do_set_state(eState);
-    if (eOldState != eState)
-        sendUpdate();
+    sendUpdate();
 }
 
 JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,

@@ -22,6 +22,8 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#include <QtAccessibleRegistry.hxx>
+#include <QtAccessibleInterimChildWidget.hxx>
 #include <QtBitmap.hxx>
 #include <QtClipboard.hxx>
 #include <QtData.hxx>
@@ -930,6 +932,37 @@ QtInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const 
     {
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
     }
+}
+
+std::unique_ptr<weld::Builder> QtInstance::CreateInterimBuilder(vcl::Window* pParent,
+                                                                const OUString& rUIRoot,
+                                                                const OUString& rUIFile,
+                                                                bool bAllowCycleFocusOut,
+                                                                sal_uInt64 nLOKWindowId)
+{
+    if (!QtInstanceBuilder::IsInterimUIFileSupported(rUIFile))
+        return SalInstance::CreateInterimBuilder(pParent, rUIRoot, rUIFile, bAllowCycleFocusOut,
+                                                 nLOKWindowId);
+
+    VclPtr<SystemChildWindow> pEmbedWindow = VclPtr<SystemChildWindow>::Create(pParent, 0);
+    pEmbedWindow->Show(true, ShowFlags::NoActivate);
+    pEmbedWindow->set_expand(true);
+
+    const SystemEnvData* pEnvData = pEmbedWindow->GetSystemData();
+    assert(pEnvData);
+
+    QWidget* pWidget = static_cast<QWidget*>(pEnvData->pWidget);
+
+    // set property to identify native Qt widget's a11y parent in QtAccessibleWidget::customFactory
+    rtl::Reference<comphelper::OAccessible> pParentAccessible = pEmbedWindow->GetAccessible();
+    QObject* pParentObject = QtAccessibleRegistry::getQObject(pParentAccessible);
+    assert(pParentObject);
+    pWidget->setProperty(QtAccessibleInterimChildWidget::PROPERTY_INTERIM_PARENT,
+                         QVariant::fromValue(pParentObject));
+
+    pWidget->show();
+
+    return std::make_unique<QtInstanceBuilder>(pWidget, rUIRoot, rUIFile);
 }
 
 weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,

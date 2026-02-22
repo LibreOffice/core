@@ -22,6 +22,8 @@
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svtools/langtab.hxx>
 

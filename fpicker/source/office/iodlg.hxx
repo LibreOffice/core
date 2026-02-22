@@ -28,6 +28,7 @@
 #include "asyncfilepicker.hxx"
 #include "fpsmartcontent.hxx"
 #include "fpdialogbase.hxx"
+#include <vcl/weld/ComboBox.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/timer.hxx>
 

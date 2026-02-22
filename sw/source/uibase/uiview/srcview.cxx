@@ -27,6 +27,8 @@
 #include <vcl/weld/weld.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/undo.hxx>

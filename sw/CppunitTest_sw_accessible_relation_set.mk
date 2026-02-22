@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_accessible_relation_set, \
 
 $(eval $(call gb_CppunitTest_use_externals,sw_accessible_relation_set,\
 	boost_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sw_accessible_relation_set,\

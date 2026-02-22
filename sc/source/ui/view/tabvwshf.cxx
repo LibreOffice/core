@@ -31,6 +31,7 @@
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svxdlg.hxx>

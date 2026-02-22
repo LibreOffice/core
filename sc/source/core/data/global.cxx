@@ -37,6 +37,7 @@
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
@@ -251,17 +252,8 @@ void ScGlobal::ClearAutoFormat()
     assert(!bThreadedGroupCalcInProgress);
     if (xAutoFormat)
     {
-        //  When modified via StarOne then only the SaveLater flag is set and no saving is done.
-        //  If the flag is set then save now.
-        if (xAutoFormat->IsSaveLater())
-            xAutoFormat->Save();
         xAutoFormat.reset();
     }
-}
-
-ScAutoFormat* ScGlobal::GetAutoFormat()
-{
-    return xAutoFormat.get();
 }
 
 ScAutoFormat* ScGlobal::GetOrCreateAutoFormat()
@@ -270,11 +262,12 @@ ScAutoFormat* ScGlobal::GetOrCreateAutoFormat()
     if ( !xAutoFormat )
     {
         xAutoFormat.reset(new ScAutoFormat);
-        xAutoFormat->Load();
     }
 
     return xAutoFormat.get();
 }
+
+void ScGlobal::ResetAutoFormat() { xAutoFormat.reset(new ScAutoFormat); }
 
 LegacyFuncCollection* ScGlobal::GetLegacyFuncCollection()
 {

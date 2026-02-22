@@ -14,6 +14,7 @@
 #include <utility>
 
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/BitmapTools.hxx>
 
 #include <sal/log.hxx>

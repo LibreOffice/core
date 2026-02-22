@@ -21,7 +21,6 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <basegfx/range/b2drange.hxx>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 
 
@@ -30,6 +29,7 @@
 namespace basegfx {
     class B2DPolyPolygon;
     class B2DHomMatrix;
+    class B2DRange;
 }
 
 

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -39,7 +39,7 @@
 using namespace ::com::sun::star;
 
 /// Covers xmloff/source/draw/ fixes.
-class XmloffDrawTest : public UnoApiXmlTest
+class XmloffDrawTest : public UnoApiTest
 {
 public:
     XmloffDrawTest();
@@ -74,7 +74,7 @@ public:
 };
 
 XmloffDrawTest::XmloffDrawTest()
-    : UnoApiXmlTest(u"/xmloff/qa/unit/data/"_ustr)
+    : UnoApiTest(u"/xmloff/qa/unit/data/"_ustr)
 {
 }
 
@@ -93,12 +93,12 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
 {
     // Load a document that has a shape with a textbox in it. Save it to ODF and reload.
     loadFromFile(u"textbox-loss.docx");
-    saveAndReload(TestFilter::ODP);
+    saveAndReload(TestFilter::ODT);
 
     // Make sure that the shape is still a textbox.
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     bool bTextBox = false;
     xShape->getPropertyValue(u"TextBox"_ustr) >>= bTextBox;
 
@@ -279,9 +279,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testFillAndLineThemeColorExportImport)
 
     checkFillAndLineComplexColors(getShape(0));
 
-    save(TestFilter::ODP);
-
-    loadFromURL(maTempFile.GetURL());
+    saveAndReload(TestFilter::ODP);
 
     checkFillAndLineComplexColors(getShape(0));
 }
@@ -528,7 +526,7 @@ void lcl_assertMetalProperties(std::string_view sInfo, uno::Reference<drawing::X
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf145700_3D_metal_type_MSCompatible.doc");
     // verify properties
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -569,7 +567,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf145700_3D_metal_type_MSCompatible.doc");
 
     // save in ODF 1.4 strict and test that new attribute is written.
@@ -592,7 +590,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeODF)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf162686_3D_metal_type_ODF.fods");
     // verify properties
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -640,7 +638,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeODF)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePosition)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf162691_handle_position.fodt");
 
     save(TestFilter::ODT);
@@ -666,7 +664,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePosition)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePolar)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf162691_handle_polar.fodt");
 
     save(TestFilter::ODT);
@@ -717,7 +715,7 @@ void lcl_assertSpecularityProperty(std::string_view sInfo, uno::Reference<drawin
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf147580_extrusion-specularity.doc");
     // verify property
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -761,7 +759,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf147580_extrusion-specularity.doc");
 
     // The file has c3DSpecularAmt="80000" which results internally in specularity=122%.

@@ -7,6 +7,9 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <widgettestdlg.hxx>
 #include <bitmaps.hlst>
 

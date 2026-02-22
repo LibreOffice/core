@@ -20,6 +20,7 @@
 #include <svtools/imagemgr.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/globname.hxx>
 #include <tools/debug.hxx>
 #include <vcl/image.hxx>
 #include <sot/storage.hxx>

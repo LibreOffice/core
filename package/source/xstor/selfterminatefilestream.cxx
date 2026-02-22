@@ -21,6 +21,7 @@
 
 #include "selfterminatefilestream.hxx"
 #include <comphelper/processfactory.hxx>
+#include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star;

@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <unotools/tempfile.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/stream.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <osl/mutex.hxx>

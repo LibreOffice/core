@@ -43,9 +43,12 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/colorcfg.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svl/itemset.hxx>
 

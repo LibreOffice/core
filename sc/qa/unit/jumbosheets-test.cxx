@@ -327,7 +327,7 @@ ScJumboSheetsTest::ScJumboSheetsTest()
 
 void ScJumboSheetsTest::setUp()
 {
-    UnoApiXmlTest::setUp();
+    UnoApiTest::setUp();
 
     //Init before GetDefaultsOptions
     ScDLL::Init();
@@ -345,7 +345,7 @@ void ScJumboSheetsTest::tearDown()
     aDefaultsOption.SetInitJumboSheets(false);
     mod->SetDefaultsOptions(aDefaultsOption);
 
-    UnoApiXmlTest::tearDown();
+    UnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScJumboSheetsTest);

@@ -1,5 +1,12 @@
 ---
 assumeFilename: dbaccess/source/ui/querydesign/QueryDesignView.cxx
+customAssumeFilenames:
+    # Needs dbaccess/source/core/inc/ headers
+    dbaccess/source/core/dataaccess/: dbaccess/source/core/dataaccess/ModelImpl.cxx
+    # Needs dbaccess/source/core/inc/ headers
+    dbaccess/source/core/api: dbaccess/source/core/dataaccess/ModelImpl.cxx
+    # Needs dbaccess/source/sdbtools/inc/ headers
+    dbaccess/source/sdbtools/connection: dbaccess/source/sdbtools/connection/connectiontools.cxx
 excludelist:
     dbaccess/inc/strings.hrc:
     # Needed for TranslateId macro to work

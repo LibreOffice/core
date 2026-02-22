@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2023-08-15 08:05:49 using:
+ Generated on 2026-02-19 12:36:16 using:
  ./bin/update_pch external/pdfium pdfium --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -386,7 +386,6 @@
 #include <core/fxge/cfx_fillrenderoptions.h>
 #include <core/fxge/cfx_folderfontinfo.h>
 #include <core/fxge/cfx_font.h>
-#include <core/fxge/cfx_fontcache.h>
 #include <core/fxge/cfx_fontmapper.h>
 #include <core/fxge/cfx_fontmgr.h>
 #include <core/fxge/cfx_gemodule.h>
@@ -415,7 +414,6 @@
 #include <core/fxge/fx_font.h>
 #include <core/fxge/fx_fontencoding.h>
 #include <core/fxge/renderdevicedriver_iface.h>
-#include <core/fxge/scoped_font_transform.h>
 #include <core/fxge/systemfontinfo_iface.h>
 #include <core/fxge/text_char_pos.h>
 #include <core/fxge/text_glyph_pos.h>

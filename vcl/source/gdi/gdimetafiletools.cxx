@@ -20,6 +20,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/gdimetafiletools.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -30,6 +31,7 @@
 #include <vcl/graphictools.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
+#include <tools/mapunit.hxx>
 
 // helpers
 

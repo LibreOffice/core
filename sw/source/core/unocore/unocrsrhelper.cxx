@@ -1304,7 +1304,7 @@ void makeRedline( SwPaM const & rPaM,
             if (!aRevertProperties.hasElements())
             {
                 // to reject the paragraph style change, use standard style
-                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( UIName(u""_ustr),  RES_POOLCOLL_STANDARD, nullptr ));
+                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( UIName(u""_ustr),  SwPoolFormatId::COLL_STANDARD, nullptr ));
             }
         }
         else
@@ -1359,7 +1359,7 @@ void makeRedline( SwPaM const & rPaM,
 
             if (!aWhichPairs.empty())
             {
-                sal_uInt16 nStylePoolId = USHRT_MAX;
+                SwPoolFormatId nStylePoolId = SwPoolFormatId::UNKNOWN;
                 OUString sParaStyleName;
                 UIName sUIStyle;
                 SfxItemSet aItemSet(rDoc.GetAttrPool(), std::move(aWhichPairs));
@@ -1396,7 +1396,7 @@ void makeRedline( SwPaM const & rPaM,
                 }
 
                 if (eType == RedlineType::ParagraphFormat && sParaStyleName.isEmpty())
-                    nStylePoolId = RES_POOLCOLL_STANDARD;
+                    nStylePoolId = SwPoolFormatId::COLL_STANDARD;
 
                 // tdf#149747 Get UI style name from programmatic style name
                 SwStyleNameMapper::FillUIName(ProgName(sParaStyleName), sUIStyle,
@@ -1407,7 +1407,7 @@ void makeRedline( SwPaM const & rPaM,
                     sUIStyle.isEmpty() ? UIName(sParaStyleName) : std::move(sUIStyle), nStylePoolId, pAutoStyle));
             }
             else if (eType == RedlineType::ParagraphFormat)
-                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( UIName(u""_ustr), RES_POOLCOLL_STANDARD, nullptr ));
+                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( UIName(u""_ustr), SwPoolFormatId::COLL_STANDARD, nullptr ));
         }
     }
 

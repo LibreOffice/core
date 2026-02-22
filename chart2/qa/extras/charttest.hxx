@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 
@@ -59,11 +59,11 @@
 using namespace css;
 using namespace css::uno;
 
-class ChartTest : public UnoApiXmlTest
+class ChartTest : public UnoApiTest
 {
 public:
     ChartTest(const OUString& path)
-        : UnoApiXmlTest(path)
+        : UnoApiTest(path)
     {
     }
 

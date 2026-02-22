@@ -10,23 +10,37 @@
 #pragma once
 
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/compbase.hxx>
-#include <tools/time.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/formatter.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/weld/Builder.hxx>
-#include <vcl/weld/Entry.hxx>
-#include <vcl/weld/FormattedSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 
 class CalendarWrapper;
+
+enum class ExtDateFieldFormat;
+enum class ExtTimeFieldFormat;
+enum class SelectionOptions;
+enum class TimeFieldFormat : sal_Int32;
+enum class TimeFormat;
+
+namespace com::sun::star::frame
+{
+class XDispatch;
+}
+namespace com::sun::star::frame
+{
+class XFrame;
+}
+
+namespace tools
+{
+class Time;
+}
 
 namespace vcl
 {
@@ -35,6 +49,10 @@ class Window;
 
 namespace weld
 {
+class Builder;
+class Entry;
+class FormattedSpinButton;
+class TextWidget;
 class TreeView;
 
 typedef comphelper::WeakComponentImplHelper<css::awt::XWindow> TransportAsXWindow_Base;
@@ -318,7 +336,7 @@ public:
 private:
     DECL_DLLPRIVATE_LINK(FormatOutputHdl, double, std::optional<OUString>);
     DECL_DLLPRIVATE_LINK(ParseInputHdl, const OUString&, Formatter::ParseResult);
-    DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::Entry&, void);
+    DECL_DLLPRIVATE_LINK(CursorChangedHdl, weld::TextWidget&, void);
 
     SAL_DLLPRIVATE void Init();
 

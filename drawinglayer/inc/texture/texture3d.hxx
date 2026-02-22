@@ -49,7 +49,7 @@ namespace drawinglayer::texture
 
 namespace drawinglayer::texture
     {
-        class GeoTexSvxBitmapEx : public GeoTexSvx
+        class GeoTexSvxBitmap : public GeoTexSvx
         {
         protected:
             Bitmap                                      maBitmap;
@@ -63,10 +63,10 @@ namespace drawinglayer::texture
             bool impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const;
 
         public:
-            GeoTexSvxBitmapEx(
+            GeoTexSvxBitmap(
                 const Bitmap& rBitmap,
                 const basegfx::B2DRange& rRange);
-            virtual ~GeoTexSvxBitmapEx() override;
+            virtual ~GeoTexSvxBitmap() override;
 
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const override;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const override;
@@ -76,7 +76,7 @@ namespace drawinglayer::texture
 
 namespace drawinglayer::texture
     {
-        class GeoTexSvxBitmapExTiled final : public GeoTexSvxBitmapEx
+        class GeoTexSvxBitmapTiled final : public GeoTexSvxBitmap
         {
             double                                      mfOffsetX;
             double                                      mfOffsetY;
@@ -88,7 +88,7 @@ namespace drawinglayer::texture
             basegfx::B2DPoint impGetCorrected(const basegfx::B2DPoint& rUV) const;
 
         public:
-            GeoTexSvxBitmapExTiled(
+            GeoTexSvxBitmapTiled(
                 const Bitmap& rBitmap,
                 const basegfx::B2DRange& rRange,
                 double fOffsetX,

@@ -67,4 +67,8 @@ $(eval $(call gb_CppunitTest_use_vcl,svx_unit))
 $(eval $(call gb_CppunitTest_use_rdb,svx_unit,services))
 $(eval $(call gb_CppunitTest_use_configuration,svx_unit))
 
+$(eval $(call gb_CppunitTest_add_arguments,svx_unit, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:

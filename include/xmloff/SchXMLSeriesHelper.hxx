@@ -20,8 +20,6 @@
 #ifndef INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX
 #define INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
-
 #include <xmloff/dllapi.h>
 
 #include <vector>
@@ -31,6 +29,7 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::chart2 { class XDiagram; }
 namespace com::sun::star::frame { class XModel; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class XMLOFF_DLLPUBLIC SchXMLSeriesHelper
 {

@@ -37,6 +37,9 @@
 #include <sfx2/docfile.hxx>
 #include <preview.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 void SfxPreviewWin_Impl::SetObjectShell(SfxObjectShell const * pObj)

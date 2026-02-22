@@ -477,7 +477,7 @@ private:
         auto pIface = invoke(f);
         if (pIface)
             return I(pIface);
-        throw css::uno::RuntimeException("Not implemented");
+        throw css::uno::RuntimeException(u"Not implemented"_ustr);
     }
 
 public:

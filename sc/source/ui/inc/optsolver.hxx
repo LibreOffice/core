@@ -25,6 +25,7 @@
 #include <SolverSettings.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/table/CellAddress.hpp>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 

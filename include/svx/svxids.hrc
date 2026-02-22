@@ -1123,6 +1123,8 @@ class XFillGradientItem;
 
 #define SID_ATTR_RESIZE_ALL_PAGES                       TypedWhichId<SfxBoolItem>( SID_SVX_START + 1257 )
 
+#define SID_RESET_AUTOFORMATS                           ( SID_SVX_START + 1258 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
 #define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1257 + 1 )
 

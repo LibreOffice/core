@@ -40,6 +40,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Builder.hxx>
 
 
 static sal_uInt16 nFieldDlgFormatSel = 0;
@@ -649,7 +650,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                     m_xSelectionToolTipLB->append(sId,
                         pIDoc->getOutlineText(nOutlIdx, pSh->GetLayout(), true, true, false));
                     if ((IsFieldEdit() && pRefField
-                            && pRefField->GetReferencedTextNode(nullptr, nullptr) == maOutlineNodes[nOutlIdx])
+                            && pRefField->GetReferencedTextNode() == maOutlineNodes[nOutlIdx])
                         || mpSavedSelectedTextNode == maOutlineNodes[nOutlIdx])
                     {
                         m_sSelectionToolTipLBId = sId;
@@ -684,7 +685,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                     m_xSelectionToolTipLB->append(sId,
                         pIDoc->getListItemText(*maNumItems[nNumItemIdx], *pSh->GetLayout()));
                     if ((IsFieldEdit() && pRefField
-                            && pRefField->GetReferencedTextNode(nullptr, nullptr) == maNumItems[nNumItemIdx]->GetTextNode())
+                            && pRefField->GetReferencedTextNode() == maNumItems[nNumItemIdx]->GetTextNode())
                         || mpSavedSelectedTextNode == maNumItems[nNumItemIdx]->GetTextNode())
                     {
                         m_sSelectionToolTipLBId = sId;
@@ -710,6 +711,24 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                 = pStyleSheetPool->CreateIterator(SfxStyleFamily::Para, SfxStyleSearchBits::Used);
 
             SfxStyleSheetBase* pStyle = stylesheetIterator->First();
+            while (pStyle != nullptr)
+            {
+                bool isSubstring = MatchSubstring(pStyle->GetName(), filterString);
+
+                if (isSubstring)
+                {
+                    m_xSelectionLB->append_text(pStyle->GetName());
+                }
+
+                pStyle = stylesheetIterator->Next();
+            }
+
+            // add character styles
+
+            stylesheetIterator
+                = pStyleSheetPool->CreateIterator(SfxStyleFamily::Char, SfxStyleSearchBits::Used);
+
+            pStyle = stylesheetIterator->First();
             while (pStyle != nullptr)
             {
                 bool isSubstring = MatchSubstring(pStyle->GetName(), filterString);

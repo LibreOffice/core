@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <memory>
 #include <filter/PsdReader.hxx>

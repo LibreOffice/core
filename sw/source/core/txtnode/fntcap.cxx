@@ -22,7 +22,7 @@
 #include <vcl/outdev.hxx>
 #include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 
 #include <fntcache.hxx>
 #include <swfont.hxx>

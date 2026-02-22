@@ -22,6 +22,7 @@
 #include <SchXMLExport.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/maptype.hxx>
 
 
 SchXMLAutoStylePoolP::SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport ) :

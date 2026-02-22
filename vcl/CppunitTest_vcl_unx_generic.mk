@@ -14,6 +14,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,vcl_unx_generic))
 $(eval $(call gb_CppunitTest_use_externals,vcl_unx_generic,\
     boost_headers \
     harfbuzz \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,vcl_unx_generic,\

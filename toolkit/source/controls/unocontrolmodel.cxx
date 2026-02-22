@@ -38,6 +38,7 @@
 #include <tools/debug.hxx>
 #include <tools/long.hxx>
 #include <helper/property.hxx>
+#include <rtl/ref.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/configmgr.hxx>

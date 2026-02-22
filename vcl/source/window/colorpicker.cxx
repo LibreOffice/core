@@ -19,9 +19,12 @@
 
 #include <colorpicker.hxx>
 
+#include <comphelper/OAccessible.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/ColorDialog.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <cmath>
 #include <o3tl/typed_flags_set.hxx>

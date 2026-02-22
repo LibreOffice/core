@@ -80,7 +80,7 @@ namespace sdr::properties { class BaseProperties; }
 namespace sdr::contact { class ViewContact; }
 namespace sdr::annotation { class ObjectAnnotationData; }
 namespace com::sun::star::drawing { class XShape; }
-namespace svx::diagram { class IDiagramHelper; }
+namespace svx::diagram { class DiagramHelper_svx; }
 
 
 enum class SdrInventor : sal_uInt32 {
@@ -228,12 +228,15 @@ class SVXCORE_DLLPUBLIC SdrObject : public SfxListener, public cppu::OWeakObject
 public:
     // Basic DiagramHelper support
     virtual bool isDiagram() const;
-    virtual const std::shared_ptr< svx::diagram::IDiagramHelper >& getDiagramHelper() const;
-    const std::shared_ptr< svx::diagram::IDiagramHelper >& getDiagramHelperFromDiagramOrMember() const;
-    void setDiagramDataModelID(const OUString& rID) { msDiagramDataModelID = rID; }
-    const OUString& getDiagramDataModelID() const { return msDiagramDataModelID; }
+    virtual const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelper() const;
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelperFromDiagramOrMember() const;
+    void setDiagramDataModelID(const OUString& rID);
+    const OUString& getDiagramDataModelID() const;
 
 private:
+    // check if a ObjectName is set and it is in DiagramModelID syntax
+    bool ObjectNameIsDiagramModelID();
+
     friend class                SdrObjListIter;
     friend class                SdrObjList;
     friend class                SdrVirtObj;
@@ -743,6 +746,8 @@ public:
     void SetMoveProtect(bool bProt);
     bool IsMoveProtect() const { return m_bMovProt;}
     void SetResizeProtect(bool bProt);
+    bool IsDeleteProtect() const { return m_bDelProt; }
+    void SetDeleteProtect(bool bProt);
     bool IsResizeProtect() const { return m_bSizProt;}
     virtual void SetPrintable(bool isPrintable);
     virtual bool IsPrintable() const;
@@ -753,6 +758,7 @@ public:
     virtual bool IsSdrTextObj() const { return false; }
     virtual bool IsSdrOle2Obj() const { return false; }
     virtual bool IsTextPath() const { return false ; }
+    virtual bool IsSwVirtFlyDrawObj() const { return false ; }
 
     /// Whether the aspect ratio should be kept by default when resizing.
     virtual bool shouldKeepAspectRatio() const { return false; }
@@ -892,6 +898,7 @@ protected:
     // the following flags will be streamed
     bool                        m_bMovProt : 1;   // if true, the position is protected
     bool                        m_bSizProt : 1;   // if true, the size is protected
+    bool                        m_bDelProt : 1;   // if true, object cannot be deleted
     // If bEmptyPresObj is true, it is a presentation object that has no content yet.
     // The flag's default value is false.
     // The management is done by the application.
@@ -988,9 +995,6 @@ private:
 
     // Hyperlink for the whole shape
     OUString msHyperlink;
-
-    // if this object is a representation of Diagram Sub-Data, hold the DataModelID
-    OUString msDiagramDataModelID;
 
     // only for internal use!
     SvxShape* getSvxShape();

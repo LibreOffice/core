@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/lok.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/DocWindow.hxx>
 #include <vcl/ctrl.hxx>

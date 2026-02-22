@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <utility>
 

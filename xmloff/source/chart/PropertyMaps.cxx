@@ -32,6 +32,7 @@
 
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <comphelper/attributelist.hxx>
+#include <xmloff/maptype.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>

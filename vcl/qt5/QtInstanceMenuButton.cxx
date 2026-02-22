@@ -30,6 +30,12 @@ QtInstanceMenuButton::QtInstanceMenuButton(QToolButton* pButton)
     connect(m_pToolButton, &QToolButton::clicked, this, &QtInstanceMenuButton::handleButtonClicked);
 }
 
+void QtInstanceMenuButton::set_label(const OUString& rText)
+{
+    QtInstanceToggleButton::set_label(rText);
+    updateToolButtonStyle(*m_pToolButton);
+}
+
 void QtInstanceMenuButton::insert_item(int nPos, const OUString& rId, const OUString& rStr,
                                        const OUString* pIconName, VirtualDevice* pImageSurface,
                                        TriState eCheckRadioFalse)
@@ -139,6 +145,19 @@ void QtInstanceMenuButton::set_popover(weld::Widget* pPopover)
 {
     QtInstanceWidget* pPopoverWidget = dynamic_cast<QtInstanceWidget*>(pPopover);
     m_pPopover = pPopoverWidget ? pPopoverWidget->getQWidget() : nullptr;
+}
+
+void QtInstanceMenuButton::updateToolButtonStyle(QToolButton& rToolButton)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        // set tool button style to ensure that text is shown when not empty,
+        // and no unnecessary space is reserved for text if it is empty
+        const Qt::ToolButtonStyle eStyle
+            = rToolButton.text().isEmpty() ? Qt::ToolButtonIconOnly : Qt::ToolButtonTextBesideIcon;
+        rToolButton.setToolButtonStyle(eStyle);
+    });
 }
 
 QMenu& QtInstanceMenuButton::getMenu() const

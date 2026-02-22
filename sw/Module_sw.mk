@@ -17,6 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+include $(SRCDIR)/sw/common_unoapi_tests.mk
 include $(SRCDIR)/sw/layoutwriter_setup.mk
 include $(SRCDIR)/sw/ooxmlexport_setup.mk
 include $(SRCDIR)/sw/rtfexport_setup.mk
@@ -152,7 +153,36 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_globalfilter \
     CppunitTest_sw_accessible_relation_set \
     CppunitTest_sw_apiterminate \
-    CppunitTest_sw_apitests \
+    CppunitTest_sw_apitests_SwXAutoTextContainer \
+    CppunitTest_sw_apitests_SwXBodyText \
+    CppunitTest_sw_apitests_SwXBookmark \
+    CppunitTest_sw_apitests_SwXBookmarks \
+    CppunitTest_sw_apitests_SwXChapterNumbering \
+    CppunitTest_sw_apitests_SwXDocumentIndex \
+    CppunitTest_sw_apitests_SwXDocumentIndexes \
+    CppunitTest_sw_apitests_SwXDocumentIndexMark \
+    CppunitTest_sw_apitests_SwXDocumentSettings \
+    CppunitTest_sw_apitests_SwXFieldEnumeration \
+    CppunitTest_sw_apitests_SwXFrames \
+    CppunitTest_sw_apitests_SwXFootnote \
+    CppunitTest_sw_apitests_SwXFootnoteProperties \
+    CppunitTest_sw_apitests_SwXFootnoteText \
+    CppunitTest_sw_apitests_SwXFootnotes \
+    CppunitTest_sw_apitests_SwXHeadFootText \
+    CppunitTest_sw_apitests_SwXNumberingRules \
+    CppunitTest_sw_apitests_SwXParagraphEnumeration \
+    CppunitTest_sw_apitests_SwXReferenceMark \
+    CppunitTest_sw_apitests_SwXStyleFamilies \
+    CppunitTest_sw_apitests_SwXReferenceMarks \
+    CppunitTest_sw_apitests_SwXTableCellText \
+    CppunitTest_sw_apitests_SwXTextEmbeddedObjects \
+    CppunitTest_sw_apitests_SwXTextFrame \
+    CppunitTest_sw_apitests_SwXTextField \
+    CppunitTest_sw_apitests_SwXTextFieldMasters \
+    CppunitTest_sw_apitests_SwXTextFieldTypes \
+    CppunitTest_sw_apitests_SwXTextSections \
+    CppunitTest_sw_apitests_SwXTextTable \
+    CppunitTest_sw_apitests_SwXTextTables \
     CppunitTest_sw_autocorrect \
     CppunitTest_sw_unowriter \
     CppunitTest_sw_core_text \
@@ -197,6 +227,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_writerfilter_rtftok \
     CppunitTest_sw_writerfilter_filter \
     CppunitTest_sw_snap_to_grid \
+    CppunitTest_sw_page_line_spacing \
 ))
 
 ifneq ($(DISABLE_GUI),TRUE)
@@ -257,6 +288,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_sw_options \
 	UITest_sw_sidebar \
 	UITest_sw_styleInspector \
+	UITest_sw_trackedChanges \
 	UITest_sw_ui_fmtui \
 	UITest_sw_ui_frmdlg \
 	UITest_sw_ui_index \

@@ -108,7 +108,8 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
     , m_sRM_PostgresText( DBA_RES( STR_PAGETITLE_POSTGRES ) )
     , m_sRM_MySQLText( DBA_RES( STR_PAGETITLE_MYSQL ) )
     , m_sRM_ODBCText( DBA_RES( STR_PAGETITLE_ODBC ) )
-    , m_sRM_DocumentOrSpreadSheetText( DBA_RES( STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET ) )
+    , m_sRM_SpreadSheetText( DBA_RES( STR_PAGETITLE_SPREADSHEET ) )
+    , m_sRM_DocumentText( DBA_RES( STR_PAGETITLE_DOCUMENT ) )
     , m_sRM_AuthentificationText( DBA_RES( STR_PAGETITLE_AUTHENTIFICATION ) )
     , m_sRM_FinalText( DBA_RES( STR_PAGETITLE_FINAL ) )
     , m_sWorkPath( SvtPathOptions().GetWorkPath() )
@@ -231,8 +232,11 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName(WizardState _nState) const
         case PAGE_DBSETUPWIZARD_ODBC:
             sRoadmapItem = m_sRM_ODBCText;
             break;
-        case PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET:
-            sRoadmapItem = m_sRM_DocumentOrSpreadSheetText;
+        case PAGE_DBSETUPWIZARD_SPREADSHEET:
+            sRoadmapItem = m_sRM_SpreadSheetText;
+            break;
+        case PAGE_DBSETUPWIZARD_DOCUMENT:
+            sRoadmapItem = m_sRM_DocumentText;
             break;
         case PAGE_DBSETUPWIZARD_AUTHENTIFICATION:
             sRoadmapItem = m_sRM_AuthentificationText;
@@ -514,8 +518,12 @@ std::unique_ptr<BuilderPage> ODbTypeWizDialogSetup::createPage(WizardState _nSta
             xPage = OLDAPConnectionPageSetup::CreateLDAPTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
-        case PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET:
+        case PAGE_DBSETUPWIZARD_SPREADSHEET:
             xPage = OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage(pPageContainer, this, *m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_DOCUMENT:
+            xPage = ODocumentConnectionPageSetup::CreateDocumentTabPage(pPageContainer, this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MSACCESS:

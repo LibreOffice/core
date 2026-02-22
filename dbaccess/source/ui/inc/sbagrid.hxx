@@ -30,6 +30,8 @@
 #include "sbamultiplex.hxx"
 #include <svx/dataaccessdescriptor.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/weld/Menu.hxx>
+
 #include <map>
 #include <queue>
 

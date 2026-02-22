@@ -44,10 +44,10 @@ class colorScale(UITestCase):
                 self.assertEqual("", get_state_as_dict(xCondFormat.getChild("edcolscalemax"))["Text"])
 
             self.assertEqual(1, cond_formats.Length)
-            self.assertEqual(3, len(cond_formats.ConditionalFormats[0].getByIndex(0).ColorScaleEntries))
-            self.assertEqual(16711680, cond_formats.ConditionalFormats[0].getByIndex(0).ColorScaleEntries[0].Color)
-            self.assertEqual(16776960, cond_formats.ConditionalFormats[0].getByIndex(0).ColorScaleEntries[1].Color)
-            self.assertEqual(43315, cond_formats.ConditionalFormats[0].getByIndex(0).ColorScaleEntries[2].Color)
+            self.assertEqual(3, len(cond_formats.ConditionalFormats[0][0].ColorScaleEntries))
+            self.assertEqual(16711680, cond_formats.ConditionalFormats[0][0].ColorScaleEntries[0].Color)
+            self.assertEqual(16776960, cond_formats.ConditionalFormats[0][0].ColorScaleEntries[1].Color)
+            self.assertEqual(43315, cond_formats.ConditionalFormats[0][0].ColorScaleEntries[2].Color)
 
     def test_colorScale2Entries(self):
 
@@ -86,8 +86,8 @@ class colorScale(UITestCase):
                 self.ui_test.close_dialog_through_button(xOKBtn)
 
             self.assertEqual(1, cond_formats.Length)
-            self.assertEqual(2, len(cond_formats.ConditionalFormats[0].getByIndex(0).ColorScaleEntries))
-            self.assertEqual(16777069, cond_formats.ConditionalFormats[0].getByIndex(0).ColorScaleEntries[0].Color)
-            self.assertEqual(7847013, cond_formats.ConditionalFormats[0].getByIndex(0).ColorScaleEntries[1].Color)
+            self.assertEqual(2, len(cond_formats.ConditionalFormats[0][0].ColorScaleEntries))
+            self.assertEqual(16777069, cond_formats.ConditionalFormats[0][0].ColorScaleEntries[0].Color)
+            self.assertEqual(7847013, cond_formats.ConditionalFormats[0][0].ColorScaleEntries[1].Color)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

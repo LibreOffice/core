@@ -8,7 +8,7 @@
  */
 
 #include <sal/config.h>
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <o3tl/cppunittraitshelper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -22,11 +22,11 @@
 
 using namespace ::com::sun::star;
 
-class MathMLExportTest : public UnoApiXmlTest
+class MathMLExportTest : public UnoApiTest
 {
 public:
     MathMLExportTest()
-        : UnoApiXmlTest(u"starmath/qa/extras/data/"_ustr)
+        : UnoApiTest(u"starmath/qa/extras/data/"_ustr)
     {
     }
 

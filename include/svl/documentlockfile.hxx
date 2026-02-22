@@ -24,6 +24,7 @@
 
 #include <svl/lockfilecommon.hxx>
 
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XOutputStream; }
 

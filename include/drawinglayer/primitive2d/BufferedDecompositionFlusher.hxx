@@ -19,12 +19,20 @@
 
 #pragma once
 
-#include <drawinglayer/primitive2d/BufferedDecompositionGroupPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <osl/thread.hxx>
 #include <unotools/weakref.hxx>
 #include <condition_variable>
 #include <unordered_map>
+
+namespace drawinglayer::primitive2d
+{
+class BufferedDecompositionGroupPrimitive2D;
+}
+namespace drawinglayer::primitive2d
+{
+class BufferedDecompositionPrimitive2D;
+}
 
 namespace drawinglayer::primitive2d
 {

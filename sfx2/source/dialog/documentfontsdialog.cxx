@@ -20,6 +20,7 @@
 #include <documentfontsdialog.hxx>
 
 #include <sfx2/objsh.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>

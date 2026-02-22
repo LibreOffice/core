@@ -494,7 +494,7 @@ ErrCode SwHTMLWriter::WriteStream()
     m_nDefListLvl = 0;
     m_nDefListMargin = ((m_xTemplate.is() && !m_bCfgOutStyles) ? m_xTemplate.get() : m_pDoc)
                            ->getIDocumentStylePoolAccess()
-                           .GetTextCollFromPool(RES_POOLCOLL_HTML_DD, false)
+                           .GetTextCollFromPool(SwPoolFormatId::COLL_HTML_DD, false)
                            ->GetTextLeftMargin()
                            .ResolveTextLeft({});
     m_nHeaderFooterSpace = 0;
@@ -1056,7 +1056,7 @@ static void OutBodyColor( const char* pTag, const SwFormat *pFormat,
         if( COL_AUTO == aColor )
             aColor = COL_BLACK;
         HTMLOutFuncs::Out_Color( rHWrt.Strm(), aColor );
-        if( RES_POOLCOLL_STANDARD==pFormat->GetPoolFormatId() )
+        if( SwPoolFormatId::COLL_STANDARD==pFormat->GetPoolFormatId() )
             rHWrt.m_xDfltColor = aColor;
     }
 }
@@ -1202,15 +1202,15 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         // output text colour, when it was set in the default template or was changed
         OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_text,
-                      m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD, false ),
+                      m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD, false ),
                       *this );
 
         // colour of (un)visited links
         OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_link,
-                      m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_INET_NORMAL ),
+                      m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( SwPoolFormatId::CHR_INET_NORMAL ),
                       *this );
         OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_vlink,
-                      m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_INET_VISIT ),
+                      m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( SwPoolFormatId::CHR_INET_VISIT ),
                       *this );
 
         const SfxItemSet& rItemSet = pPageDesc->GetMaster().GetAttrSet();
@@ -1594,14 +1594,14 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 
 // Paragraphs with Table of Contents and other index styles will be typeset with
 // dot leaders at the position of the last tabulator in PrintLayout (CSS2) mode
-sal_Int32 SwHTMLWriter::indexOfDotLeaders( sal_uInt16 nPoolId, std::u16string_view rStr )
+sal_Int32 SwHTMLWriter::indexOfDotLeaders( SwPoolFormatId nPoolId, std::u16string_view rStr )
 {
-    if (m_bCfgPrintLayout && ((nPoolId >= RES_POOLCOLL_TOX_CNTNT1 && nPoolId <= RES_POOLCOLL_TOX_CNTNT5) ||
-        (nPoolId >= RES_POOLCOLL_TOX_IDX1 && nPoolId <= RES_POOLCOLL_TOX_IDX3) ||
-        (nPoolId >= RES_POOLCOLL_TOX_USER1 && nPoolId <= RES_POOLCOLL_TOX_CNTNT10) ||
-        nPoolId == RES_POOLCOLL_TOX_ILLUS1 || nPoolId == RES_POOLCOLL_TOX_TABLES1 ||
-        nPoolId == RES_POOLCOLL_TOX_OBJECT1 ||
-        (nPoolId >= RES_POOLCOLL_TOX_AUTHORITIES1 && nPoolId <= RES_POOLCOLL_TOX_USER10))) {
+    if (m_bCfgPrintLayout && ((nPoolId >= SwPoolFormatId::COLL_TOX_CNTNT1 && nPoolId <= SwPoolFormatId::COLL_TOX_CNTNT5) ||
+        (nPoolId >= SwPoolFormatId::COLL_TOX_IDX1 && nPoolId <= SwPoolFormatId::COLL_TOX_IDX3) ||
+        (nPoolId >= SwPoolFormatId::COLL_TOX_USER1 && nPoolId <= SwPoolFormatId::COLL_TOX_CNTNT10) ||
+        nPoolId == SwPoolFormatId::COLL_TOX_ILLUS1 || nPoolId == SwPoolFormatId::COLL_TOX_TABLES1 ||
+        nPoolId == SwPoolFormatId::COLL_TOX_OBJECT1 ||
+        (nPoolId >= SwPoolFormatId::COLL_TOX_AUTHORITIES1 && nPoolId <= SwPoolFormatId::COLL_TOX_USER10))) {
              size_t i = rStr.rfind('\t');
              // there are only ASCII (Latin-1) characters after the tabulator
              if (i != std::u16string_view::npos && OUStringToOString(rStr.substr(i + 1), RTL_TEXTENCODING_ASCII_US).indexOf('?') == -1)

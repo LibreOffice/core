@@ -24,10 +24,7 @@
 #include <rtl/ref.hxx>
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <xmloff/maptype.hxx>
 #include <xmloff/styleexp.hxx>
-#include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -46,6 +43,7 @@ class XMLRedlineExport;
 class MultiPropertySetHelper;
 enum class XMLShapeExportFlags;
 class SvXMLExportPropertyMapper;
+struct XMLPropertyState;
 
 namespace com::sun::star
 {
@@ -63,6 +61,8 @@ namespace xmloff
     class BoundFrameSets;
 
 }
+
+namespace xmloff::token { enum XMLTokenEnum : sal_Int16; }
 
 namespace basegfx
 {

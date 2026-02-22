@@ -129,6 +129,7 @@ const char cSequenceMarkSeparator = '!';
 sal_Unicode const toxMarkSeparator = '\u0019';
 
 #define DB_DELIM u'\x00ff'        // Database <-> table separator.
+#define CONDITIONAL_FIELD_SEPARATOR u'\0'
 
 enum class SetAttrMode
 {

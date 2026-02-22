@@ -20,13 +20,14 @@
 #define INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
 
 #include <config_options.h>
+#include <rtl/ustring.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/Type.hxx>
 #include <memory>
 #include <mutex>
 
 
 namespace com::sun::star::uno { template <typename > class Reference; }
+namespace com::sun::star::uno { class Type; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace utl

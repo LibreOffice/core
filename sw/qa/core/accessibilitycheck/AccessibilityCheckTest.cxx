@@ -17,6 +17,7 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 class AccessibilityCheckTest : public SwModelTestBase
 {
@@ -339,7 +340,7 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testStylesWithHeader)
 
 // Text contrast tests
 // see https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
-CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTextContrast)
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTextContrast_Fail)
 {
     // first test doc has these issues:
     // * normal text with contrast < 4.5
@@ -354,7 +355,10 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTextContrast)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_CONTRAST, aIssues[0]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_CONTRAST, aIssues[1]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_CONTRAST, aIssues[2]->m_eIssueID);
+}
 
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTextContrast_Ok)
+{
     // second test doc has large text with contrast between 3.0 and 4.5,
     // which is sufficient for large text
     // both of these are considered large text according to the spec:
@@ -434,16 +438,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
     CPPUNIT_ASSERT(pWrtShell);
 
     // Enable online a11y checker
-    {
-        auto pBatch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::set(true, pBatch);
-        pBatch->commit();
-    }
-    comphelper::ScopeGuard g([] {
-        auto pBatch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck::set(false, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Common::Accessibility::OnlineAccessibilityCheck> aCfg(
+        true);
 
     Scheduler::ProcessEventsToIdle();
 

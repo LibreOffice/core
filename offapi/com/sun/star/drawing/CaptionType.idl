@@ -36,7 +36,7 @@ published constants CaptionType
     */
     const short angled = 1;
 
-    /** the caption line is build up with a straight line from the caption area
+    /** the caption line is built up with a straight line from the caption area
         edge, followed by the shortest line to the caption area point.
     */
     const short connector = 2;

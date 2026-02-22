@@ -17,7 +17,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_anchor_test, \
 	sc/qa/unit/anchor \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,sc_anchor_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sc_anchor_test, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_anchor_test, \
 	basegfx \

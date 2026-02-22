@@ -20,10 +20,12 @@
 #include <svx/dialcontrol.hxx>
 #include <svx/svdtrans.hxx>
 #include <cmath>
+#include <unotools/fontdefs.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

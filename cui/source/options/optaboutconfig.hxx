@@ -11,8 +11,8 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <dlgname.hxx>
 #include <i18nutil/searchopt.hxx>
+#include <svtools/dlgname.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>

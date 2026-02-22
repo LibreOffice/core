@@ -340,6 +340,7 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf102010, "empty.odt", "10-testing-addresses.od
 
     // Generate correct mail merge result filename
     executeMailMerge();
+    dispose();
     // Don't overwrite previous result
     executeMailMerge( true );
     loadMailMergeDocument( 1 );

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/animate/Animation.hxx>
 #include <vcl/bitmap/BitmapMosaicFilter.hxx>
 #include <vcl/bitmap/BitmapSharpenFilter.hxx>
 #include <vcl/bitmap/BitmapEmbossGreyFilter.hxx>
@@ -26,7 +27,10 @@
 #include <vcl/bitmap/BitmapColorQuantizationFilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <osl/diagnose.h>
+#include <tools/mapunit.hxx>
+#include <tools/fldunit.hxx>
 #include <cuigrfflt.hxx>
 
 CuiGraphicPreviewWindow::CuiGraphicPreviewWindow()

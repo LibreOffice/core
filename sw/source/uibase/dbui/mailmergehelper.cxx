@@ -33,6 +33,7 @@
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <utility>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

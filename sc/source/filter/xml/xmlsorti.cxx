@@ -28,8 +28,8 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <o3tl/string_view.hxx>
 
-#include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/sheet/SortNumberBehavior.hpp>
+#include <com/sun/star/table/TableSortField.hpp>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -179,12 +179,12 @@ void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
 
 void ScXMLSortContext::AddSortField(std::u16string_view sFieldNumber, std::u16string_view sDataType, std::u16string_view sOrder)
 {
-    util::SortField aSortField;
+    table::TableSortField aSortField;
     aSortField.Field = o3tl::toInt32(sFieldNumber);
     if (IsXMLToken(sOrder, XML_ASCENDING))
-        aSortField.SortAscending = true;
+        aSortField.IsAscending = true;
     else
-        aSortField.SortAscending = false;
+        aSortField.IsAscending = false;
     if (sDataType.size() > 8)
     {
         std::u16string_view sTemp = sDataType.substr(0, 8);
@@ -197,15 +197,15 @@ void ScXMLSortContext::AddSortField(std::u16string_view sFieldNumber, std::u16st
         else
         {
             if (IsXMLToken(sDataType, XML_AUTOMATIC))
-                aSortField.FieldType = util::SortFieldType_AUTOMATIC;
+                aSortField.FieldType = table::TableSortFieldType_AUTOMATIC;
         }
     }
     else
     {
         if (IsXMLToken(sDataType, XML_TEXT))
-            aSortField.FieldType = util::SortFieldType_ALPHANUMERIC;
+            aSortField.FieldType = table::TableSortFieldType_ALPHANUMERIC;
         else if (IsXMLToken(sDataType, XML_NUMBER))
-            aSortField.FieldType = util::SortFieldType_NUMERIC;
+            aSortField.FieldType = table::TableSortFieldType_NUMERIC;
     }
     aSortFields.realloc(aSortFields.getLength() + 1);
     aSortFields.getArray()[aSortFields.getLength() - 1] = aSortField;

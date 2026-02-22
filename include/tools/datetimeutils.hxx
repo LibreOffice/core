@@ -10,7 +10,12 @@
 #ifndef INCLUDED_TOOLS_DATETIMEUTILS_HXX
 #define INCLUDED_TOOLS_DATETIMEUTILS_HXX
 
-#include <tools/datetime.hxx>
+//#include <tools/datetime.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/toolsdllapi.h>
+
+class Date;
+class DateTime;
 
 // This function converts a 'DateTime' object to an 'OString' object
 TOOLS_DLLPUBLIC OString DateTimeToOString(const DateTime& rDateTime);

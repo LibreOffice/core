@@ -57,6 +57,7 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
+#include <test/commontesttools.hxx>
 #include <unomodel.hxx>
 
 using namespace ::com::sun::star;
@@ -95,6 +96,8 @@ public:
     void testEncodedTableStyles();
     void testTdf157117();
     void testPageBackgroundImages();
+    void testCanvasSlideExportODP();
+    void testDuplicateAndMove();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf99396);
@@ -122,6 +125,8 @@ public:
     CPPUNIT_TEST(testEncodedTableStyles);
     CPPUNIT_TEST(testTdf157117);
     CPPUNIT_TEST(testPageBackgroundImages);
+    CPPUNIT_TEST(testCanvasSlideExportODP);
+    CPPUNIT_TEST(testDuplicateAndMove);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -133,6 +138,7 @@ void SdMiscTest::testTdf99396()
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pObject = pPage->GetObj(0);
@@ -162,6 +168,7 @@ void SdMiscTest::testTableObjectUndoTest()
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTableObject);
@@ -545,10 +552,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     createSdDrawDoc("tdf101242_ODF.odg");
 
     // Saving including items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(true);
     save(TestFilter::ODG);
 
     // Verify, that the saved document still has the ODF attributes
@@ -599,10 +603,7 @@ void SdMiscTest::testTdf101242_ODF_no_settings()
     createSdDrawDoc("tdf101242_ODF.odg");
 
     // Saving without items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(false);
     save(TestFilter::ODG);
 
     // Verify, that the saved document still has the ODF attributes
@@ -636,10 +637,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     createSdDrawDoc("tdf101242_settings.odg");
 
     // Saving including items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(true);
     save(TestFilter::ODG);
 
     // Verify, that the saved document has the ODF attributes
@@ -691,10 +689,7 @@ void SdMiscTest::testTdf101242_settings_remove()
     createSdDrawDoc("tdf101242_settings.odg");
 
     // Saving without config items in settings.xml
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(false, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(false);
     save(TestFilter::ODG);
 
     // Verify, that the saved document has the ODF attributes
@@ -724,16 +719,14 @@ void SdMiscTest::testTdf119392()
     // Loads a document which has two user layers "V--" and "V-L". Inserts a new layer "-P-" between them.
     // Checks, that the bitfields in the saved file have the bits in the correct order, in case
     // option WriteLayerAsConfigItem is true and the config items are written.
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::set(true, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(true);
 
     createSdDrawDoc("tdf119392_InsertLayer.odg");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     // Insert layer "-P-", not visible, printable, not locked
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrView* pView = pViewShell->GetView();
     pView->InsertNewLayer(u"-P-"_ustr, 6); // 0..4 standard layer, 5 layer "V--"
     SdrPageView* pPageView = pView->GetSdrPageView();
@@ -794,6 +787,7 @@ void SdMiscTest::testTdf119956()
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     sd::GraphicViewShell* pGraphicViewShell = static_cast<sd::GraphicViewShell*>(pViewShell);
     CPPUNIT_ASSERT(pGraphicViewShell);
@@ -837,6 +831,7 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>(pPage->GetObj(0));
     pShape->Mirror(Point(4000, 2000), Point(4000, 10000));
@@ -863,6 +858,7 @@ void SdMiscTest::testTdf130988()
 
     //emulate command .uno:ConvertInto3DLathe
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     E3dView* pView = pViewShell->GetView();
     pView->MarkNextObj();
     pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(8000.0, -3000.0),
@@ -889,6 +885,7 @@ void SdMiscTest::testTdf131033()
     // It produces a rotation around a vertical axis, which is far away from the
     // generating shape.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     E3dView* pView = pViewShell->GetView();
     pView->MarkNextObj();
     pView->ConvertMarkedObjTo3D(false, basegfx::B2DPoint(11000.0, -5000.0),
@@ -922,6 +919,7 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
 
     // Verify view
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdrPageView* pPageView = pViewShell->GetView()->GetSdrPageView();
     CPPUNIT_ASSERT(pPageView->IsLayerVisible(sName));
     CPPUNIT_ASSERT(pPageView->IsLayerPrintable(sName));
@@ -1062,6 +1060,7 @@ void SdMiscTest::testTdf157117()
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     // insert two pages to make a total of 3 pages
     dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
@@ -1234,6 +1233,57 @@ void SdMiscTest::testPageBackgroundImages()
     // Check none of the graphic names is empty
     for (OUString const& rName : aGraphicNames)
         CPPUNIT_ASSERT(!rName.isEmpty());
+}
+
+void SdMiscTest::testCanvasSlideExportODP()
+{
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    // insert canvas page to make a total of 2 pages
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+
+    // assert the document has 2 standard pages
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDocument->GetSdPageCount(PageKind::Standard));
+
+    // saving with config items in settings.xml
+    ScopedConfigValue<officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem> aCfg(true);
+    save(TestFilter::ODP);
+
+    // Verify if the "HasCanvasPage" item is true
+    xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get 'settings.xml'", pXmlDoc);
+    static constexpr OString sPathStart("/office:document-settings/office:settings/"
+                                        "config:config-item-set[@config:name='ooo:view-settings']/"
+                                        "config:config-item-map-indexed[@config:name='Views']/"
+                                        "config:config-item-map-entry"_ostr);
+    assertXPathContent(pXmlDoc, sPathStart + "/config:config-item[@config:name='HasCanvasPage']",
+                       u"true");
+}
+
+void SdMiscTest::testDuplicateAndMove()
+{
+    createSdImpressDoc("slide_with_text.odp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    SdPage* pFirstPage = pViewShell->GetActualPage();
+
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+    pXImpressDocument->setPart(2);
+    dispatchCommand(mxComponent, u".uno:MovePageLast"_ustr, {});
+
+    pXImpressDocument->setPart(3);
+    SdPage* pLastPage = pViewShell->GetActualPage();
+    // Without the fix in place, the textbox changes size
+    // - Expected: 25200x2630@(1400,628)
+    // - Actual  : 19799x11137@(600,2257)
+    CPPUNIT_ASSERT_EQUAL(pFirstPage->GetObj(0)->GetSnapRect(), pLastPage->GetObj(0)->GetSnapRect());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);

@@ -112,7 +112,7 @@ public:
 
     virtual OUString get_accessible_id() const override;
 
-    virtual void set_accessible_relation_labeled_by(weld::Widget*) override;
+    virtual void set_accessible_relation_labeled_by(weld::Widget* pLabel) override;
 
     virtual void set_tooltip_text(const OUString& rTip) override;
 
@@ -142,8 +142,6 @@ public:
     virtual std::unique_ptr<weld::Container> weld_parent() const override;
 
     virtual void queue_resize() override;
-
-    virtual void help_hierarchy_foreach(const std::function<bool(const OUString&)>&) override;
 
     virtual OUString strip_mnemonic(const OUString& rLabel) const override;
 

@@ -26,12 +26,15 @@
 #include <rtl/textenc.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
+#include <unotools/fontdefs.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/viewoptions.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/languageoptions.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <editeng/langitem.hxx>
 #include <swtypes.hxx>
 #include <ascfldlg.hxx>
@@ -41,6 +44,7 @@
 #include <IDocumentDeviceAccess.hxx>
 
 #include <vcl/metric.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace ::com::sun::star;
 

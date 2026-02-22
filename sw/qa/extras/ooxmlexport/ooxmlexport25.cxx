@@ -150,6 +150,115 @@ DECLARE_OOXMLEXPORT_TEST(testTdf165478_bottomAligned, "tdf165478_bottomAligned.d
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1887), nFlyTop);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf165359_SdtWithInline)
+{
+    createSwDoc("tdf165359_SdtWithInline.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // MS Word reports document as corrupt if a picture is inside of a plainText content control
+    assertXPath(pXmlDoc, "//w:sdtPr/w:text", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf165359_SdtWithDrawing)
+{
+    createSwDoc("tdf165359_SdtWithDrawing.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // MS Word reports document as corrupt if a picture is inside of a plainText content control
+    assertXPath(pXmlDoc, "//w:sdtPr/w:text", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf170438_dropdown)
+{
+    createSwDoc("tdf170438_dropdown.odt");
+
+    saveAndReload(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // MS Word reports document as corrupt if displayText is empty
+    assertXPath(pXmlDoc, "//w:listItem[1]", "displayText", u" ");
+    assertXPath(pXmlDoc, "//w:listItem[1]", "value", u""); // value may be empty
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf170516_drawingBeforePlainText)
+{
+    createSwDoc("tdf170516_drawingBeforePlainText.docx");
+
+    saveAndReload(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt", 1); // only one sdt
+    assertXPath(pXmlDoc, "//w:tc/w:p/w:sdt", 1); // and it is inside a cell
+
+    assertXPath(pXmlDoc, "//mc:AlternateContent", 1); // only one drawing
+    assertXPath(pXmlDoc, "//w:tc/w:p/w:r/mc:AlternateContent", 1); // and it is not inside the sdt
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf168988_grabbagDatePicker)
+{
+    createSwDoc("tdf168988_grabbagDatePicker.docx");
+
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt", 1); // only one sdt
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date", 1); // it is a date content control
+    // there is no valid date, so fullDate must not be provided (or MS Word says 'corrupt file')
+    assertXPathNoAttribute(pXmlDoc, "//w:sdt/w:sdtPr/w:date", "fullDate");
+    assertXPathContent(pXmlDoc, "//w:sdt/w:sdtContent/w:r/w:t",
+                       u"                                     2012./2013.");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf169101_datePicker)
+{
+    createSwDoc("tdf169101_datePicker.docx");
+
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt", 1); // only one sdt
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date", 1); // it is a date content control
+    // there is no valid date, so fullDate must not be provided (or MS Word says 'corrupt file')
+    assertXPathNoAttribute(pXmlDoc, "//w:sdt/w:sdtPr/w:date", "fullDate");
+    assertXPathContent(pXmlDoc, "//w:sdt/w:sdtContent/w:r/w:t", u"Week #");
+
+    // if the relationship is missing, then MS Word shows placeholder text instead of customXml date
+    xmlDocUniquePtr pXmlCustomXmlRels = parseExport(u"customXml/_rels/item1.xml.rels"_ustr);
+    assertXPath(pXmlCustomXmlRels, "//rels:Relationship", "Target", u"itemProps1.xml");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf170389_manyTabstops)
+{
+    createSwDoc("tdf170389_manyTabstops.odt");
+
+    saveAndReload(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // MS Word reports document as corrupt if it has more than 64 tabstops defined
+    // The paragraph itself defines 40, and inherits 40. Without the fixes, this was 80 or 64
+    assertXPath(pXmlDoc, "//w:tabs/w:tab", 40);
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    sal_Int32 nSize
+        = getXPath(pLayout, "//SwFixPortion[@type='PortionType::TabLeft']", "width").toInt32();
+    // The word 'tabstop' should be almost at the very end of the line, starting at 6 inches.
+    // Without the fix, the tabstop's width was a tiny 247, now it is 1797.
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1500), nSize); // nSize > 1500
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf170602_checkbox_bookmarkEnd)
+{
+    createSwDoc("tdf170602_checkbox_bookmarkEnd.docx");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // MS Word reports document as corrupt if a plainText blockSdt contains a bookmarkEnd
+    assertXPath(pXmlDoc, "//w:body/w:tbl/w:tr[2]/w:tc[1]/w:bookmarkEnd", 1); // Tempestades
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInvalidDatetimeInProps)
 {
     createSwDoc("invalidDatetimeInProps.fodt");
@@ -165,9 +274,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169413_asciiTheme)
 {
     // the document failed to reload without errors after a round-trip
     createSwDoc("tdf169413_asciiTheme.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 5
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
 }
@@ -236,13 +342,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167082)
 
     createSwDoc("tdf167082.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
     saveAndReload(TestFilter::DOCX);
 
     OUString aStyleName = getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), aStyleName);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRangeCommentInDeleteDocxExport)
+{
+    // Given a document with a comment that is inside a delete redline:
+    createSwDoc("redline-range-comment.docx");
+
+    // When exporting that to DOCX:
+    save(TestFilter::DOCX);
+
+    // Then make sure that the comment reference is inside the delete redline:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the comment anchor was outside the redline.
+    CPPUNIT_ASSERT_EQUAL(1, countXPathNodes(pXmlDoc, "//w:del/w:r/w:commentReference"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableAnchorPosExport)

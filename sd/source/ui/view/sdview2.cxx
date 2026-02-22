@@ -24,8 +24,8 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/urlobj.hxx>
+#include <svtools/dlgname.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svxdlg.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpagv.hxx>
@@ -885,17 +885,16 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
                 OUString aTitle(SdResId(STR_TITLE_NAMEGROUP));
                 OUString aDesc(SdResId(STR_DESC_NAMEGROUP));
 
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(mpViewSh->GetFrameWeld(), aNewName, aDesc));
+                SvxNameDialog aDlg(mpViewSh->GetFrameWeld(), aNewName, aDesc);
 
-                pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
+                aDlg.SetEditHelpId(HID_SD_NAMEDIALOG_OBJECT);
 
                 bNameOK = false;
-                pDlg->SetText( aTitle );
+                aDlg.set_title(aTitle);
 
-                while( !bNameOK && pDlg->Execute() == RET_OK )
+                while (!bNameOK && aDlg.run() == RET_OK)
                 {
-                    aNewName = pDlg->GetName();
+                    aNewName = aDlg.GetName();
 
                     if( !mrDoc.GetObj( aNewName ) )
                         bNameOK = true;

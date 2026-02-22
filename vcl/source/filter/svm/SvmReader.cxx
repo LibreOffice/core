@@ -29,6 +29,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 
 #include "SvmConverter.hxx"
 

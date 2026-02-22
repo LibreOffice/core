@@ -1,9 +1,0 @@
---- skia/src/utils/win/SkDWriteNTDDI_VERSION.h.sav	2019-08-15 21:59:46.000000000 +0200
-+++ skia/src/utils/win/SkDWriteNTDDI_VERSION.h	2019-09-26 15:30:36.395622200 +0200
-@@ -28,4 +28,6 @@
- #  endif
- #endif
- 
-+#define NTDDI_VERSION 0x0A000002 // NTDDI_WIN10_RS1
-+
- #endif

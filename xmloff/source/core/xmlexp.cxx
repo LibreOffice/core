@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
+#include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/xml/sax/SAXInvalidCharacterException.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -43,6 +44,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <i18nlangtag/languagetag.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/propertyvalue.hxx>

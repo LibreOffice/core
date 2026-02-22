@@ -7,16 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/htmltesttools.hxx>
 
 using namespace css;
 
-class SdHTMLFilterTest : public UnoApiXmlTest, public HtmlTestTools
+class SdHTMLFilterTest : public UnoApiTest, public HtmlTestTools
 {
 public:
     SdHTMLFilterTest()
-        : UnoApiXmlTest(u"/sd/qa/unit/data/"_ustr)
+        : UnoApiTest(u"/sd/qa/unit/data/"_ustr)
     {
     }
 

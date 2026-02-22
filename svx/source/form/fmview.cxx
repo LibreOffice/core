@@ -42,6 +42,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <o3tl/deleter.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -171,9 +172,9 @@ namespace
 }
 
 
-void FmFormView::AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window* pWindow)
+void FmFormView::AddDeviceToPaintView(OutputDevice& rNewDev)
 {
-    E3dView::AddDeviceToPaintView(rNewDev, pWindow);
+    E3dView::AddDeviceToPaintView(rNewDev);
 
     // look up the PageViewWindow for the newly inserted window, and care for it
     // #i39269# / 2004-12-20 / frank.schoenheit@sun.com

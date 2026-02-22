@@ -20,6 +20,7 @@
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
+#include <i18nlangtag/lang.h>
 #include <vcl/idle.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>

@@ -31,6 +31,7 @@
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #include <com/sun/star/i18n/TextConversionType.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
+#include <vcl/vclenum.hxx>
 #include <vcl/weld/weld.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>

@@ -38,6 +38,10 @@
 #include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/IconView.hxx>
 
 #include <swmodule.hxx>
 
@@ -376,6 +380,7 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
     , m_bFrame(false)
     , m_bHtmlMode(false)
     , m_bLockUpdate(false)
+    , m_xDefaultIconView(m_xBuilder->weld_icon_view(u"iconview"_ustr))
     , m_xCLNrEdt(m_xBuilder->weld_spin_button(u"colsnf"_ustr))
     , m_xBalanceColsCB(m_xBuilder->weld_check_button(u"balance"_ustr))
     , m_xBtnBack(m_xBuilder->weld_button(u"back"_ustr))
@@ -402,7 +407,6 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xEd3(new SwPercentField(m_xBuilder->weld_metric_spin_button(u"width3mf"_ustr, FieldUnit::CM)))
     , m_xDistEd1(new SwPercentField(m_xBuilder->weld_metric_spin_button(u"spacing1mf"_ustr, FieldUnit::CM)))
     , m_xDistEd2(new SwPercentField(m_xBuilder->weld_metric_spin_button(u"spacing2mf"_ustr, FieldUnit::CM)))
-    , m_xDefaultVS(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, m_aDefaultVS))
     , m_xPgeExampleWN(new weld::CustomWeld(*m_xBuilder, u"pageexample"_ustr, m_aPgeExampleWN))
     , m_xFrameExampleWN(new weld::CustomWeld(*m_xBuilder, u"frameexample"_ustr, m_aFrameExampleWN))
     , m_xApplyToFT(m_xBuilder->weld_label(u"applytoft"_ustr))
@@ -420,10 +424,7 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
 
     SetExchangeSupport();
 
-    m_aDefaultVS.SetColCount(5);
-
     for (int i = 0; i < 5; ++i)
-    //Set accessible name one by one
     {
         OUString aItemText;
         switch( i )
@@ -444,10 +445,17 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
                 aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM4 );
                 break;
         }
-        m_aDefaultVS.InsertItem( i + 1, aItemText, i );
+
+        const OUString* pNullIconName = nullptr;
+        m_xDefaultIconView->insert(i, nullptr, nullptr, pNullIconName, nullptr);
+        m_xDefaultIconView->set_item_tooltip_text(i, aItemText);
+        m_xDefaultIconView->set_item_accessible_name(i, aItemText);
+
+        ScopedVclPtr<VirtualDevice> pDev = CreateIconViewImage(i);
+        m_xDefaultIconView->set_image(i, *pDev);
     }
 
-    m_aDefaultVS.SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
+    m_xDefaultIconView->connect_selection_changed(LINK(this, SwColumnPage, SetDefaultsHdl));
 
     Link<weld::SpinButton&,void> aCLNrLk = LINK(this, SwColumnPage, ColModify);
     m_xCLNrEdt->connect_value_changed(aCLNrLk);
@@ -916,7 +924,7 @@ void SwColumnPage::ColModify(bool bForceColReset)
         return;
 
     if (!bForceColReset)
-        m_aDefaultVS.SetNoSelection();
+        m_xDefaultIconView->unselect_all();
     tools::Long nDist = static_cast< tools::Long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
     m_xColMgr->SetCount(m_nCols, o3tl::narrowing<sal_uInt16>(nDist));
     for(sal_uInt16 i = 0; i < m_nCols; i++)
@@ -1258,12 +1266,16 @@ DeactivateRC SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK(SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void)
+IMPL_LINK_NOARG(SwColumnPage, SetDefaultsHdl, weld::IconView&, void)
 {
-    const sal_uInt16 nItem = pVS->GetSelectedItemId();
-    if( nItem < 4 )
+    std::unique_ptr<weld::TreeIter> pSelected = m_xDefaultIconView->get_selected();
+    if (!pSelected)
+        return;
+
+    const int nIndex = m_xDefaultIconView->get_iter_index_in_parent(*pSelected);
+    if (nIndex < 3)
     {
-        m_xCLNrEdt->set_value(nItem);
+        m_xCLNrEdt->set_value(nIndex + 1);
         m_xAutoWidthBox->set_active(true);
         m_xDistEd1->set_value(50, FieldUnit::CM);
         ColModify(/*bForceColReset=*/true);
@@ -1277,7 +1289,7 @@ IMPL_LINK(SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void)
         ColModify(/*bForceColReset=*/true);
         // now set the width ratio to 2 : 1 or 1 : 2 respectively
         const tools::Long nSmall = static_cast< tools::Long >(m_xColMgr->GetActualSize() / 3);
-        if(nItem == 4)
+        if (nIndex == 3)
         {
             m_xEd2->set_value(m_xEd2->NormalizePercent(nSmall), FieldUnit::TWIP);
             m_pModifiedField = m_xEd2.get();
@@ -1307,20 +1319,22 @@ void SwColumnPage::SetInSection(bool bSet)
     m_xTextDirectionLB->set_visible(bSet);
 }
 
-void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
+VclPtr<VirtualDevice> SwColumnPage::CreateIconViewImage(int nIndex)
 {
-    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    tools::Rectangle aRect = rUDEvt.GetRect();
-    const sal_uInt16 nItemId = rUDEvt.GetItemId();
-    tools::Long nRectWidth = aRect.GetWidth();
-    tools::Long nRectHeight = aRect.GetHeight();
+    const Size aSize(25, 28);
+    tools::Long nRectWidth = aSize.getWidth();
+    tools::Long nRectHeight = aSize.getHeight();
 
-    Point aBLPos = aRect.TopLeft();
-    auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    VclPtr<VirtualDevice> pDev = m_xDefaultIconView->create_virtual_device();
+    pDev->SetOutputSizePixel(aSize);
+
     pDev->SetFillColor(rStyleSettings.GetFieldColor());
     pDev->SetLineColor(rStyleSettings.GetFieldTextColor());
+    pDev->SetBackground(rStyleSettings.GetFieldColor());
+    pDev->Erase();
+
 
     tools::Long nStep = std::abs(std::abs(nRectHeight * 95 /100) / 11);
     tools::Long nTop = (nRectHeight - 11 * nStep ) / 2;
@@ -1328,53 +1342,48 @@ void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     tools::Long nStarts[3];
     tools::Long nEnds[3];
     nStarts[0] = nRectWidth * 10 / 100;
-    switch( nItemId )
+    switch(nIndex)
     {
-        case 1:
+        case 0:
             nEnds[0] = nRectWidth * 9 / 10;
             nCols = 1;
-        break;
-        case 2: nCols = 2;
+            break;
+        case 1: nCols = 2;
             nEnds[0] = nRectWidth * 45 / 100;
             nStarts[1] = nEnds[0] + nStep;
             nEnds[1] = nRectWidth * 9 / 10;
-        break;
-        case 3: nCols = 3;
+            break;
+        case 2: nCols = 3;
             nEnds[0]    = nRectWidth * 30 / 100;
             nStarts[1]  = nEnds[0] + nStep;
             nEnds[1]    = nRectWidth * 63 / 100;
             nStarts[2]  = nEnds[1] + nStep;
             nEnds[2]    = nRectWidth * 9 / 10;
-        break;
-        case 4: nCols = 2;
+            break;
+        case 3: nCols = 2;
             nEnds[0] = nRectWidth * 63 / 100;
             nStarts[1] = nEnds[0] + nStep;
             nEnds[1] = nRectWidth * 9 / 10;
-        break;
-        case 5: nCols = 2;
+            break;
+        case 4: nCols = 2;
             nEnds[0] = nRectWidth * 30 / 100;
             nStarts[1] = nEnds[0] + nStep;
             nEnds[1] = nRectWidth * 9 / 10;
-        break;
+            break;
     }
     for(sal_uInt16 j = 0; j < nCols; j++ )
     {
-        Point aStart(aBLPos.X() + nStarts[j], 0);
-        Point aEnd(aBLPos.X() + nEnds[j], 0);
+        Point aStart(nStarts[j], 0);
+        Point aEnd(nEnds[j], 0);
         for( sal_uInt16 i = 0; i < 12; i ++)
         {
-            aStart.setY( aBLPos.Y() + nTop + i * nStep);
+            aStart.setY(nTop + i * nStep);
             aEnd.setY( aStart.Y() );
             pDev->DrawLine(aStart, aEnd);
         }
     }
-}
 
-void ColumnValueSet::StyleUpdated()
-{
-    SetFormat();
-    Invalidate();
-    ValueSet::StyleUpdated();
+    return pDev;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

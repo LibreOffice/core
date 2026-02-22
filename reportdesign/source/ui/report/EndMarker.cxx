@@ -20,6 +20,8 @@
 #include <ColorChanger.hxx>
 #include <SectionWindow.hxx>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
+
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>

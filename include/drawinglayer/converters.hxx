@@ -19,8 +19,27 @@
 
 #pragma once
 
-#include <vcl/bitmap.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/unit_conversion.hxx>
+#include <tools/gen.hxx>
+
+#include <optional>
+
+class AlphaMask;
+class Bitmap;
+
+namespace basegfx
+{
+class B2DRange;
+}
+namespace drawinglayer::primitive2d
+{
+class Primitive2DContainer;
+}
+namespace drawinglayer::geometry
+{
+class ViewInformation2D;
+}
 
 namespace drawinglayer
 {

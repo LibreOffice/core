@@ -28,6 +28,8 @@
 #include <ooo/vba/word/XFont.hpp>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XStyle > SwVbaStyle_BASE;

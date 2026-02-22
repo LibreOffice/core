@@ -42,6 +42,8 @@ class SwAnchoredObject;
       - order 1: to-paragraph, 2: to-character, 3: as-character
     - anchor node position
     - internal anchor order number
+    - split fly precede / follow relation
+      - order 1: precede, 2: follow
     If one of the sort criteria attributes of an anchored object changes,
     the sorting has to be updated - use method <Update(..)>
 */

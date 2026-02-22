@@ -21,6 +21,9 @@
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/windowstate.hxx>
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>

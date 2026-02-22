@@ -23,6 +23,7 @@
 #include <editeng/editengdllapi.h>
 #include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
+#include <svl/poolitem.hxx>
 #include <vector>
 
 class SfxItemSet;

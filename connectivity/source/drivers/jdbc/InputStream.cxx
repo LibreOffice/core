@@ -28,13 +28,6 @@
 
 using namespace connectivity;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
-
 //************ Class: java.io.InputStream
 
 
@@ -84,7 +77,7 @@ void SAL_CALL java_io_InputStream::closeInput(  )
 sal_Int32 SAL_CALL java_io_InputStream::readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     if (nBytesToRead < 0)
-        throw css::io::BufferSizeExceededException( THROW_WHERE, *this );
+        throw css::io::BufferSizeExceededException( u""_ustr, *this );
 
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java environment has been deleted!");

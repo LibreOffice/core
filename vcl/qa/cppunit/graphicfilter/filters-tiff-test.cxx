@@ -10,6 +10,7 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <tools/stream.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>

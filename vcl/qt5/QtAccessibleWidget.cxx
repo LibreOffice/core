@@ -23,6 +23,8 @@
 #include <QtGui/QAccessibleInterface>
 
 #include <QtAccessibleEventListener.hxx>
+#include <QtAccessibleInterimChildWidget.hxx>
+#include <QtAccessibleInterimParentWidget.hxx>
 #include <QtAccessibleRegistry.hxx>
 #include <QtFrame.hxx>
 #include <QtTools.hxx>
@@ -56,7 +58,9 @@
 #include <comphelper/AccessibleImplementationHelper.hxx>
 #include <sal/log.hxx>
 #include <vcl/accessibility/AccessibleTextAttributeHelper.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/qt/QtUtils.hxx>
+#include <vcl/syschild.hxx>
 
 using namespace css;
 using namespace css::accessibility;
@@ -806,6 +810,16 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
     if (!pObject)
         return nullptr;
 
+    QVariant aInterimParentProp
+        = pObject->property(QtAccessibleInterimChildWidget::PROPERTY_INTERIM_PARENT);
+    if (!aInterimParentProp.isNull())
+    {
+        assert(aInterimParentProp.canConvert<QObject*>());
+        QObject* pParent = aInterimParentProp.value<QObject*>();
+        assert(pObject->isWidgetType());
+        return new QtAccessibleInterimChildWidget(static_cast<QWidget*>(pObject), pParent);
+    }
+
     const QVariant aAccVariant = pObject->property(PROPERTY_ACCESSIBLE);
     if (aAccVariant.isValid() && aAccVariant.canConvert<QtAccessibleWidget*>())
     {
@@ -833,6 +847,25 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
         QtXAccessible* pXAccessible = static_cast<QtXAccessible*>(pObject);
         if (pXAccessible->m_xAccessible.is())
         {
+            if (VCLXAccessibleComponent* pVCLAccComponent
+                = dynamic_cast<VCLXAccessibleComponent*>(pXAccessible->m_xAccessible.get()))
+            {
+                VclPtr<vcl::Window> pWindow = pVCLAccComponent->GetWindow();
+                if (pWindow && pWindow->GetType() == WindowType::SYSTEMCHILDWINDOW)
+                {
+                    // when native Qt widgets are used inside vcl widgets, make sure those
+                    // are included in the a11y tree, see also QtInstance::CreateInterimBuilder
+                    const SystemEnvData* pEnvData
+                        = static_cast<SystemChildWindow*>(pWindow.get())->GetSystemData();
+                    if (QWidget* pNativeChild
+                        = pEnvData ? static_cast<QWidget*>(pEnvData->pWidget) : nullptr)
+                    {
+                        return new QtAccessibleInterimParentWidget(pXAccessible->m_xAccessible,
+                                                                   *pObject, pNativeChild);
+                    }
+                }
+            }
+
             QtAccessibleWidget* pRet
                 = new QtAccessibleWidget(pXAccessible->m_xAccessible, *pObject);
             // clear the reference in the QtXAccessible, no longer needed now that the QtAccessibleWidget holds one

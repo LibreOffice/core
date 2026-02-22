@@ -357,7 +357,7 @@ public:
     of the PDF - the basis for tagged PDF. Structural elements are implemented
     using marked content tags. Each structural element can contain sub elements
     (e.g. a section can contain a heading and a paragraph). The structure hierarchy
-    is build automatically from the Begin/EndStructureElement calls.
+    is built automatically from the Begin/EndStructureElement calls.
 
     The easy way is to call WrapBeginStructureElement, but it's also possible
     to call EnsureStructureElement/InitStructureElement/BeginStructureElement

@@ -26,13 +26,17 @@
 #include <officecfg/VCL.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
 
 #include <utility>
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <printdlg.hxx>
@@ -48,6 +52,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/view/DuplexMode.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
+#include <com/sun/star/view/PrintableState.hpp>
 
 #include <unordered_map>
 #include <unordered_set>

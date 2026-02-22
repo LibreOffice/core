@@ -412,9 +412,4 @@ const SwTableAutoFormatTable& SwModule::GetAutoFormatTable()
     return *m_xTableAutoFormatTable;
 }
 
-void SwModule::InvalidateAutoFormatTable()
-{
-    m_xTableAutoFormatTable.reset();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

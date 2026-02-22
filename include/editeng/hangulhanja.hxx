@@ -23,6 +23,8 @@
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/mslangid.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
+
 namespace com::sun::star::lang { struct Locale; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class E> class Sequence; }

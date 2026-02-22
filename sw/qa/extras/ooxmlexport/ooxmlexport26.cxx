@@ -26,9 +26,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126245)
 {
     createSwDoc("tdf126245.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export change tracking rejection data for tracked numbering change
@@ -45,6 +42,21 @@ CPPUNIT_TEST_FIXTURE(Test, testwDateValueFormat)
     // - Actual  : 44
     // - validation error in OOXML export: Errors: 44
     saveAndReload(TestFilter::DOCX);
+
+    // tdf#170457: round-tripped document was indicated as corrupt by MS Word
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    xmlDocUniquePtr pXmlComments = parseExport(u"word/comments.xml"_ustr);
+
+    int nComments = countXPathNodes(pXmlComments, "//w:comment");
+
+    int nCommentReferences = countXPathNodes(pXmlDoc, "//w:commentReference");
+    // Each comment is referenced - the counts must match
+    CPPUNIT_ASSERT_EQUAL(nComments, nCommentReferences);
+    CPPUNIT_ASSERT_EQUAL(int(22), nCommentReferences);
+
+    int nCommentStarts = countXPathNodes(pXmlDoc, "//w:commentRangeStart");
+    int nCommentEnds = countXPathNodes(pXmlDoc, "//w:commentRangeEnd");
+    CPPUNIT_ASSERT_EQUAL(nCommentStarts, nCommentEnds);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf124491)
@@ -150,9 +162,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
 CPPUNIT_TEST_FIXTURE(Test, testTdf136850)
 {
     createSwDoc("tdf136850.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 5
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -388,9 +397,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
     createSwDoc("tdf81100.docx");
     verify();
 
-    //FIXME: validation error in OOXML export: Errors: 6
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 
@@ -525,9 +531,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121597TrackedDeletionOfMultipleParagraphs)
 CPPUNIT_TEST_FIXTURE(Test, testTdf141660)
 {
     createSwDoc("tdf141660.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());

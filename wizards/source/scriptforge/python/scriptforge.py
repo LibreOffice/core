@@ -553,12 +553,10 @@ class SFServices(object):
     flgDictArg = 32  # Invoked service method may contain a dict argument
     flgDateArg = 64  # Invoked service method may contain a date argument
     flgDateRet = 128  # Invoked service method can return a date
-    flgArrayArg = 512  # 1st argument can be a 2D array
-    flgArrayRet = 1024  # Invoked service method can return a 2D array (standard modules) or any array (class modules)
     flgUno = 256  # Invoked service method/property can return a UNO object
-    flgObject = 2048  # N-th argument may be a Basic object
-                      # N (default = 0) can be passed as companion in a tuple
-    flgHardCode = 4096  # Force hardcoded call to method, avoid CallByName()
+    flgObject = 512  # N-th argument may be a Basic object
+                     # N (default = 0) can be passed as companion in a tuple
+    flgHardCode = 1024  # Force hardcoded call to method, avoid CallByName()
     # Basic class type
     moduleClass, moduleStandard = 2, 1
     #
@@ -661,13 +659,13 @@ class SFServices(object):
 
     def basicmethods(self):
         if self.serviceimplementation == 'basic':
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Methods')
+            return self.ExecMethod(self.vbMethod, 'Methods')
         else:
             return []
 
     def basicproperties(self):
         if self.serviceimplementation == 'basic':
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Properties')
+            return self.ExecMethod(self.vbMethod, 'Properties')
         else:
             return []
 
@@ -713,7 +711,7 @@ class SFScriptForge:
                 Difference with the Basic version: dates are returned in their iso format,
                 not as any of the datetime objects.
                 """
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'ImportFromCSVFile',
+            return self.ExecMethod(self.vbMethod, 'ImportFromCSVFile',
                                    filename, delimiter, dateformat)
 
     # #########################################################################
@@ -762,11 +760,14 @@ class SFScriptForge:
                 if 1900 <= unodate.Year <= datetime.MAXYEAR:
                     date = datetime.datetime(unodate.Year, unodate.Month, unodate.Day, unodate.Hours,
                                              unodate.Minutes, unodate.Seconds, int(unodate.NanoSeconds / 1000))
+                elif unodate.Year == 1899:      # The date has not been set
+                    date = datetime.time(unodate.Hours, unodate.Minutes, unodate.Seconds,
+                                         int(unodate.NanoSeconds / 1000))
             elif 'com.sun.star.util.Date' in datetype:
                 if 1900 <= unodate.Year <= datetime.MAXYEAR:
                     date = datetime.datetime(unodate.Year, unodate.Month, unodate.Day)
             elif 'com.sun.star.util.Time' in datetype:
-                date = datetime.datetime(unodate.Hours, unodate.Minutes, unodate.Seconds,
+                date = datetime.time(unodate.Hours, unodate.Minutes, unodate.Seconds,
                                          int(unodate.NanoSeconds / 1000))
             else:
                 return unodate  # Not recognized as a UNO date structure
@@ -1223,7 +1224,7 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'FileExists', filename)
 
         def Files(self, foldername, filter = '', includesubfolders = False):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Files', foldername, filter, includesubfolders)
+            return self.ExecMethod(self.vbMethod, 'Files', foldername, filter, includesubfolders)
 
         def FolderExists(self, foldername):
             return self.ExecMethod(self.vbMethod, 'FolderExists', foldername)
@@ -1283,7 +1284,7 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'PickFolder', defaultfolder, title, freetext)
 
         def SubFolders(self, foldername, filter = '', includesubfolders = False):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'SubFolders', foldername,
+            return self.ExecMethod(self.vbMethod, 'SubFolders', foldername,
                                    filter, includesubfolders)
 
         @classmethod
@@ -1575,7 +1576,7 @@ class SFScriptForge:
             return cls.SIMPLEEXEC(scope + '#' + script, *args)
 
         def GetRangeFromCalc(self, filename, range):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetRangeFromCalc', filename, range)
+            return self.ExecMethod(self.vbMethod, 'GetRangeFromCalc', filename, range)
 
         def GetPDFExportOptions(self):
             return self.ExecMethod(self.vbMethod, 'GetPDFExportOptions')
@@ -1601,13 +1602,13 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod + self.flgDictArg, 'SetPDFExportOptions', pdfoptions)
 
         def UnoMethods(self, unoobject):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'UnoMethods', unoobject)
+            return self.ExecMethod(self.vbMethod, 'UnoMethods', unoobject)
 
         def UnoObjectType(self, unoobject):
             return self.ExecMethod(self.vbMethod, 'UnoObjectType', unoobject)
 
         def UnoProperties(self, unoobject):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'UnoProperties', unoobject)
+            return self.ExecMethod(self.vbMethod, 'UnoProperties', unoobject)
 
         def WebService(self, uri):
             return self.ExecMethod(self.vbMethod, 'WebService', uri)
@@ -1632,7 +1633,7 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'Exists', variablename)
 
         def ReadValue(self, variablename):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'ReadValue', variablename)
+            return self.ExecMethod(self.vbMethod, 'ReadValue', variablename)
 
         def Remove(self, variablename):
             return self.ExecMethod(self.vbMethod, 'Remove', variablename)
@@ -1694,11 +1695,11 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'IsUrl', inputstr)
 
         def SplitNotQuoted(self, inputstr, delimiter = ' ', occurrences = 0, quotechar = '"'):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'SplitNotQuoted', inputstr, delimiter,
+            return self.ExecMethod(self.vbMethod, 'SplitNotQuoted', inputstr, delimiter,
                                    occurrences, quotechar)
 
         def Wrap(self, inputstr, width = 70, tabsize = 8):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Wrap', inputstr, width, tabsize)
+            return self.ExecMethod(self.vbMethod, 'Wrap', inputstr, width, tabsize)
 
     # #########################################################################
     # SF_TextStream CLASS
@@ -1810,7 +1811,14 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'CreateDocument', documenttype, templatefile, hidden)
 
         def Documents(self):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Documents')
+            return self.ExecMethod(self.vbMethod, 'Documents')
+
+        def EnterValue(self, prompt = '', valuetype = 'STRING', default = '', title = '', choices = (), format = ''):
+            if isinstance(default, (datetime.datetime, datetime.time)):
+                default = SFScriptForge.SF_Basic.CDateToUnoDateTime(default)
+            flag = self.flgDateArg + self.flgDateRet if valuetype.upper() in ('DATE', 'TIME', 'DATETIME') else 0
+            return self.ExecMethod(self.vbMethod + flag, 'EnterValue', prompt, valuetype, default, title,
+                                   choices, format)
 
         def GetDocument(self, windowname = ''):
             return self.ExecMethod(self.vbMethod, 'GetDocument', windowname)
@@ -1915,7 +1923,7 @@ class SFDatabases:
             return self.ExecMethod(self.vbMethod, 'DSum', expression, tablename, criteria)
 
         def GetRows(self, sqlcommand, directsql = False, header = False, maxrows = 0):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet + self.flgDateRet, 'GetRows', sqlcommand,
+            return self.ExecMethod(self.vbMethod + self.flgDateRet, 'GetRows', sqlcommand,
                                    directsql, header, maxrows)
 
         def OpenFormDocument(self, formdocument):
@@ -1985,7 +1993,7 @@ class SFDatabases:
             return self.ExecMethod(self.vbMethod, 'ExportValueToFile', fieldname, filename, overwrite)
 
         def GetRows(self, header = False, maxrows = 0):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet + self.flgDateRet, 'GetRows', header, maxrows)
+            return self.ExecMethod(self.vbMethod + self.flgDateRet, 'GetRows', header, maxrows)
 
         def GetValue(self, fieldname):
             return self.ExecMethod(self.vbMethod, 'GetValue', fieldname)
@@ -2058,7 +2066,7 @@ class SFDatabases:
             return self.ExecMethod(self.vbMethod, 'RemoveMenu', menuheader)
 
         def Toolbars(self, toolbarname = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Toolbars', toolbarname)
+            return self.ExecMethod(self.vbMethod, 'Toolbars', toolbarname)
 
 
 # #####################################################################################################################
@@ -2120,7 +2128,7 @@ class SFDialogs:
             return self.ExecMethod(self.vbMethod, 'CloneControl', sourcename, controlname, left, top)
 
         def Controls(self, controlname = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet + self.flgHardCode, 'Controls', controlname)
+            return self.ExecMethod(self.vbMethod, 'Controls', controlname)
 
         def CreateButton(self, controlname, place, toggle = False, push = ''):
             return self.ExecMethod(self.vbMethod, 'CreateButton', controlname, place, toggle, push)
@@ -2333,7 +2341,7 @@ class SFDialogs:
             return self.ExecMethod(self.vbMethod, 'SetFocus')
 
         def SetTableData(self, dataarray, widths = (1,), alignments = '', rowheaderwidth = 10):
-            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetTableData', dataarray, widths, alignments,
+            return self.ExecMethod(self.vbMethod, 'SetTableData', dataarray, widths, alignments,
                                    rowheaderwidth)
 
         def WriteLine(self, line = ''):
@@ -2386,7 +2394,7 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
 
         def ContextMenus(self, contextmenuname = '', submenuchar = '>'):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'ContextMenus', contextmenuname, submenuchar)
+            return self.ExecMethod(self.vbMethod, 'ContextMenus', contextmenuname, submenuchar)
 
         def CreateMenu(self, menuheader, before = '', submenuchar = '>'):
             return self.ExecMethod(self.vbMethod, 'CreateMenu', menuheader, before, submenuchar)
@@ -2432,12 +2440,12 @@ class SFDocuments:
             # Exclude Base and Math
             doctype = self.DocumentType
             if doctype in ('Calc', 'Writer', 'FormDocument', 'Draw', 'Impress'):
-                return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Styles', family, namepattern, used,
+                return self.ExecMethod(self.vbMethod, 'Styles', family, namepattern, used,
                                        userdefined, parentstyle, category)
             raise RuntimeError('The \'Styles\' method is not applicable to {0} documents'.format(doctype))
 
         def Toolbars(self, toolbarname = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Toolbars', toolbarname)
+            return self.ExecMethod(self.vbMethod, 'Toolbars', toolbarname)
 
         def XStyle(self, family, stylename):
             # Exclude Base and Math
@@ -2480,10 +2488,10 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'CloseFormDocument', formdocument)
 
         def FormDocuments(self):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'FormDocuments')
+            return self.ExecMethod(self.vbMethod, 'FormDocuments')
 
         def Forms(self, formdocument, form = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', formdocument, form)
+            return self.ExecMethod(self.vbMethod, 'Forms', formdocument, form)
 
         def GetDatabase(self, user = '', password = ''):
             return self.ExecMethod(self.vbMethod, 'GetDatabase', user, password)
@@ -2597,7 +2605,7 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'BorderRange', targetrange, borders, filterformula, filterscope)
 
         def Charts(self, sheetname, chartname = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Charts', sheetname, chartname)
+            return self.ExecMethod(self.vbMethod, 'Charts', sheetname, chartname)
 
         def ClearAll(self, range, filterformula = '', filterscope = ''):
             return self.ExecMethod(self.vbMethod, 'ClearAll', range, filterformula, filterscope)
@@ -2681,16 +2689,16 @@ class SFDocuments:
                                    filterformula, filterscope)
 
         def Forms(self, sheetname, form = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', sheetname, form)
+            return self.ExecMethod(self.vbMethod, 'Forms', sheetname, form)
 
         def GetColumnName(self, columnnumber):
             return self.ExecMethod(self.vbMethod, 'GetColumnName', columnnumber)
 
         def GetFormula(self, range):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetFormula', range)
+            return self.ExecMethod(self.vbMethod, 'GetFormula', range)
 
         def GetValue(self, range):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetValue', range)
+            return self.ExecMethod(self.vbMethod, 'GetValue', range)
 
         def ImportFromCSVFile(self, filename, destinationcell, filteroptions = ScriptForge.cstSymEmpty):
             return self.ExecMethod(self.vbMethod, 'ImportFromCSVFile', filename, destinationcell, filteroptions)
@@ -2738,19 +2746,19 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'RenameSheet', sheetname, newname)
 
         def SetArray(self, targetcell, value):
-            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetArray', targetcell, value)
+            return self.ExecMethod(self.vbMethod, 'SetArray', targetcell, value)
 
         def SetCellStyle(self, targetrange, style, filterformula = '', filterscope = ''):
             return self.ExecMethod(self.vbMethod, 'SetCellStyle', targetrange, style, filterformula, filterscope)
 
         def SetFormula(self, targetrange, formula):
-            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetFormula', targetrange, formula)
+            return self.ExecMethod(self.vbMethod, 'SetFormula', targetrange, formula)
 
         def SetValue(self, targetrange, value):
-            return self.ExecMethod(self.vbMethod + self.flgArrayArg, 'SetValue', targetrange, value)
+            return self.ExecMethod(self.vbMethod, 'SetValue', targetrange, value)
 
         def Shapes(self, sheetname, shapename = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Shapes', sheetname, shapename)
+            return self.ExecMethod(self.vbMethod, 'Shapes', sheetname, shapename)
 
         def ShiftDown(self, range, wholerow = False, rows = 0):
             return self.ExecMethod(self.vbMethod, 'ShiftDown', range, wholerow, rows)
@@ -2862,7 +2870,7 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'CloseFormDocument')
 
         def Controls(self, controlname = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
+            return self.ExecMethod(self.vbMethod, 'Controls', controlname)
 
         def GetDatabase(self, user = '', password = ''):
             return self.ExecMethod(self.vbMethod, 'GetDatabase', user, password)
@@ -2886,7 +2894,7 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'Requery')
 
         def Subforms(self, subform = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Subforms', subform)
+            return self.ExecMethod(self.vbMethod, 'Subforms', subform)
 
     # #########################################################################
     # SF_FormControl CLASS
@@ -2917,7 +2925,7 @@ class SFDocuments:
                                  Visible = 2, XControlModel = 0, XControlView = 0)
 
         def Controls(self, controlname = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
+            return self.ExecMethod(self.vbMethod, 'Controls', controlname)
 
         def SetFocus(self):
             return self.ExecMethod(self.vbMethod, 'SetFocus')
@@ -2953,7 +2961,7 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'CloseDocument')
 
         def Forms(self, form = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', form)
+            return self.ExecMethod(self.vbMethod, 'Forms', form)
 
         def GetDatabase(self, user = '', password = ''):
             return self.ExecMethod(self.vbMethod, 'GetDatabase', user, password)
@@ -2990,7 +2998,7 @@ class SFDocuments:
             return windowname,
 
         def Forms(self, form = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', form)
+            return self.ExecMethod(self.vbMethod, 'Forms', form)
 
         def ImportStylesFromFile(self, filename = '', families = '', overwrite = False):
             return self.ExecMethod(self.vbMethod, 'ImportStylesFromFile', filename, families, overwrite)
@@ -3132,7 +3140,7 @@ class SFWidgets:
                                  ResourceURL = 0, Visible = 3, XUIElement = 0)
 
         def ToolbarButtons(self, buttonname = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'ToolbarButtons', buttonname)
+            return self.ExecMethod(self.vbMethod, 'ToolbarButtons', buttonname)
 
     # #########################################################################
     # SF_ToolbarButton CLASS

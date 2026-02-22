@@ -49,6 +49,7 @@
 #include <unotxdoc.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
@@ -111,6 +112,68 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96515)
 
     // This was 2, a new page was created for the new paragraph.
     CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf98446_switch_to_single_page_on_hide_whitespace)
+{
+    createSwDoc();
+
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwView* pView = pDocShell->GetView();
+
+    // Enable hide whitespace view mode
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetHideWhitespaceMode(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsWhitespaceHidden());
+
+    // --- Case 1: Multiple pages per row -------------------------------------
+
+    // Switch to multiple pages per row
+    dispatchCommand(mxComponent, u".uno:MultiplePagesPerRow"_ustr, {});
+    // Without the fix in place, this test would have failed with
+    // - Expected: Switching back to single-page layout when hiding whitespace
+    // - Actual  : Layout remained in multi-column mode
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsWhitespaceHidden());
+
+    // Re-apply hide whitespace in multi-column mode
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Switching back to single-page layout when hiding whitespace
+    // - Actual  : Layout remained in multi-column mode
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsViewLayoutBookMode());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetViewOptions()->GetViewLayoutColumns());
+
+    // --- Case 2: Book mode --------------------------------------------------
+    dispatchCommand(mxComponent, u".uno:BookView"_ustr, {});
+    // Without the fix in place, this test would have failed with
+    // - Expected: Switching back to single-page layout when hiding whitespace
+    // - Actual  : Layout remained in book mode
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsWhitespaceHidden());
+
+    // Re-apply hide whitespace in multi-column mode
+    pWrtShell->ApplyViewOptions(aViewOptions);
+    // Without the fix in place, this test would have failed with
+    // - Expected: Switching back to single-page layout when hiding whitespace
+    // - Actual  : Layout remained in book mode
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsViewLayoutBookMode());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetViewOptions()->GetViewLayoutColumns());
+
+    // --- Case 3: Manual layout changes --------------------------------------
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Multi-column layout disables whitespace hiding
+    // - Actual  : Whitespace remained hidden in multi-column mode
+    pView->SetViewLayout(/*nColumns=*/0, /*bBookMode=*/false);
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsWhitespaceHidden());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Multi-column layout disables whitespace hiding
+    // - Actual  : Whitespace remained hidden in multi-column mode
+    pView->SetViewLayout(/*nColumns=*/2, /*bBookMode=*/true);
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsWhitespaceHidden());
 }
 
 static OUString lcl_translitTest(SwDoc& rDoc, const SwPaM& rPaM, TransliterationFlags const nType)
@@ -380,16 +443,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
     CPPUNIT_ASSERT_EQUAL(u"   text"_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+}
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148_2)
+{
+    using TF = TransliterationFlags;
     /* Test what happens when node contains text but selection does not contain any text */
     createSwDoc();
-    pDoc = getSwDoc();
-    pWrtShell = getSwDocShell()->GetWrtShell();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->Insert(u"text   "_ustr);
 
     pWrtShell->StartOfSection();
-    pCursor = pWrtShell->getShellCursor(false);
+    SwShellCursor* pCursor = pWrtShell->getShellCursor(false);
     for (int i = 0; i < 4; i++)
     {
         pCursor->Move(fnMoveForward);
@@ -406,16 +473,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
                          lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
     CPPUNIT_ASSERT_EQUAL(u"text   "_ustr,
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+}
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148_3)
+{
+    using TF = TransliterationFlags;
     /* Test what happens when node contains only non-word text but selection does not contain any text */
     createSwDoc();
-    pDoc = getSwDoc();
-    pWrtShell = getSwDocShell()->GetWrtShell();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->Insert(u"-1   "_ustr);
 
     pWrtShell->StartOfSection();
-    pCursor = pWrtShell->getShellCursor(false);
+    SwShellCursor* pCursor = pWrtShell->getShellCursor(false);
     for (int i = 0; i < 2; i++)
     {
         pCursor->Move(fnMoveForward);
@@ -430,15 +501,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
     CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
     CPPUNIT_ASSERT_EQUAL(u"-1   "_ustr, lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+}
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148_4)
+{
+    using TF = TransliterationFlags;
     createSwDoc();
-    pDoc = getSwDoc();
-    pWrtShell = getSwDocShell()->GetWrtShell();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->Insert(u"   -1"_ustr);
 
     pWrtShell->StartOfSection();
-    pCursor = pWrtShell->getShellCursor(false);
+    SwShellCursor* pCursor = pWrtShell->getShellCursor(false);
     pCursor->SetMark();
     for (int i = 0; i < 2; i++)
     {
@@ -449,16 +524,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
     CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
     CPPUNIT_ASSERT_EQUAL(u"   -1"_ustr, lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+}
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148_5)
+{
+    using TF = TransliterationFlags;
     /* Test what happens when node and selection contains only non-word text */
     createSwDoc();
-    pDoc = getSwDoc();
-    pWrtShell = getSwDocShell()->GetWrtShell();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->Insert(u"   -1"_ustr);
 
     pWrtShell->StartOfSection();
-    pCursor = pWrtShell->getShellCursor(false);
+    SwShellCursor* pCursor = pWrtShell->getShellCursor(false);
     pCursor->SetMark();
     for (int i = 0; i < 5; i++)
     {
@@ -983,7 +1062,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testSmallCaps)
 {
     // Create a document, add some characters and select them.
     createSwDoc();
-    createSwDoc();
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert(u"text"_ustr);
@@ -1126,7 +1204,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleUndo)
     sal_Int32 nStyleCount = pDoc->GetTableStyles().size();
     SwTableAutoFormat* pStyle = pDoc->MakeTableStyle(TableStyleName(u"Test Style"_ustr));
     SvxBrushItem aBackground(COL_LIGHTMAGENTA, RES_BACKGROUND);
-    pStyle->GetBoxFormat(0).GetProps().SetBackground(aBackground);
+    pStyle->GetField(0)->SetBackground(aBackground);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount + 1);
     rUndoManager.Undo();
@@ -1136,7 +1214,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleUndo)
     // check if attributes are preserved
     pStyle = pDoc->GetTableStyles().FindAutoFormat(TableStyleName(u"Test Style"_ustr));
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetProps().GetBackground() == aBackground));
+    CPPUNIT_ASSERT(bool(pStyle->GetField(0)->GetBackground() == aBackground));
 
     pDoc->DelTableStyle(TableStyleName(u"Test Style"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount);
@@ -1145,7 +1223,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleUndo)
     pStyle = pDoc->GetTableStyles().FindAutoFormat(TableStyleName(u"Test Style"_ustr));
     // check if attributes are preserved
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetProps().GetBackground() == aBackground));
+    CPPUNIT_ASSERT(bool(pStyle->GetField(0)->GetBackground() == aBackground));
     rUndoManager.Redo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount);
 
@@ -1154,24 +1232,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableStyleUndo)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount + 1);
     pStyle = pDoc->GetTableStyles().FindAutoFormat(TableStyleName(u"Test Style"_ustr));
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetProps().GetBackground() == aBackground));
+    CPPUNIT_ASSERT(bool(pStyle->GetField(0)->GetBackground() == aBackground));
 
     SwTableAutoFormat aNewStyle(TableStyleName(u"Test Style2"_ustr));
     SvxBrushItem aBackground2(COL_LIGHTGREEN, RES_BACKGROUND);
-    aNewStyle.GetBoxFormat(0).GetProps().SetBackground(aBackground2);
+    aNewStyle.GetField(0)->SetBackground(aBackground2);
 
     pDoc->ChgTableStyle(TableStyleName(u"Test Style"_ustr), aNewStyle);
     pStyle = pDoc->GetTableStyles().FindAutoFormat(TableStyleName(u"Test Style"_ustr));
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetProps().GetBackground() == aBackground2));
+    CPPUNIT_ASSERT(bool(pStyle->GetField(0)->GetBackground() == aBackground2));
     rUndoManager.Undo();
     pStyle = pDoc->GetTableStyles().FindAutoFormat(TableStyleName(u"Test Style"_ustr));
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetProps().GetBackground() == aBackground));
+    CPPUNIT_ASSERT(bool(pStyle->GetField(0)->GetBackground() == aBackground));
     rUndoManager.Redo();
     pStyle = pDoc->GetTableStyles().FindAutoFormat(TableStyleName(u"Test Style"_ustr));
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetProps().GetBackground() == aBackground2));
+    CPPUNIT_ASSERT(bool(pStyle->GetField(0)->GetBackground() == aBackground2));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineCopyPaste)
@@ -1964,10 +2042,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf105625)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Ensure correct initial setting
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea> aCfg(false);
     // We should be able to edit at positions adjacent to fields.
     // Check if the start and the end of the 1st paragraph are not protected
     // (they are adjacent to FORMCHECKBOX)
@@ -1998,10 +2073,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf125151_protected)
     createSwDoc("tdf125151_protected.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Ensure correct initial setting
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea> aCfg(false);
     pWrtShell->Down(/*bSelect=*/false);
     // The cursor moved inside of the FieldMark textbox.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 1", false, pWrtShell->HasReadonlySel());
@@ -2016,10 +2088,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf125151_protectedB)
     createSwDoc("tdf125151_protectedB.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Ensure correct initial setting
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
-    batch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea> aCfg(false);
     // The cursor starts inside of the FieldMark textbox.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Readonly 1", false, pWrtShell->HasReadonlySel());
     // Move left to the start/definition of the textbox
@@ -2041,7 +2110,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf106736)
     CPPUNIT_ASSERT_MESSAGE("Left Tab width is ~103", nWidth < 150);
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks)
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks_True)
 {
     // The option is true in settings.xml
     createSwDoc("MsWordCompTrailingBlanksTrue.odt");
@@ -2107,14 +2176,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks)
                 u"PortionType::Hole");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[4]", "portion",
                 u"         "); // All the trailing blanks
+}
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks_false)
+{
     // The option is false in settings.xml
     createSwDoc("MsWordCompTrailingBlanksFalse.odt");
-    pDoc = getSwDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL(false, pDoc->getIDocumentSettingAccess().get(
                                     DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS));
     calcLayout();
-    pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Check that trailing spaces spans are put into Text portions if option is disabled
 
     assertXPath(pXmlDoc, "/root/page/body/txt", 3);
@@ -2184,16 +2256,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks)
                 u"PortionType::Text");
     assertXPath(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout/child::*[5]", "portion",
                 u"   "); // third colored trailing blank span here
+}
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks_EmptyDocument)
+{
     // MsWordCompTrailingBlanks option should be false by default in new documents
     createSwDoc();
-    pDoc = getSwDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL(false, pDoc->getIDocumentSettingAccess().get(
                                     DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS));
+}
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testMsWordCompTrailingBlanks_Docx)
+{
     // The option should be true if a .docx, .doc or .rtf document is opened
     createSwDoc("MsWordCompTrailingBlanks.docx");
-    pDoc = getSwDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL(true, pDoc->getIDocumentSettingAccess().get(
                                    DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS));
 }
@@ -2531,6 +2609,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf143320)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Create a new document
+    dispose();
     createSwDoc();
     pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);

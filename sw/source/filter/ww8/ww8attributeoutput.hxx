@@ -24,6 +24,7 @@
 #include "wrtww8.hxx"
 #include <editeng/boxitem.hxx>
 #include <sfx2/docfile.hxx>
+#include <tools/urlobj.hxx>
 
 class WW8AttributeOutput : public AttributeOutputBase
 {

@@ -19,11 +19,13 @@
 
 #include <utility>
 #include <vcl/errinf.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <o3tl/string_view.hxx>
 #include <docsh.hxx>

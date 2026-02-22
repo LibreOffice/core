@@ -14,7 +14,10 @@ $(eval $(call gb_CppunitTest_set_include,starmath_import,\
     -I$(SRCDIR)/starmath/inc \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,starmath_import,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,starmath_import, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,starmath_import))
 

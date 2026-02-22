@@ -28,6 +28,7 @@
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <unicode/uchar.h>

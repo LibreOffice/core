@@ -21,7 +21,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl,\
 	sal/qa/osl/pipe/osl_Pipe \
 	sal/qa/osl/process/osl_process \
 	sal/qa/osl/process/osl_Thread \
-	sal/qa/osl/profile/osl_old_testprofile \
 	sal/qa/osl/setthreadname/test-setthreadname \
 	sal/qa/osl/socket \
 ))

@@ -17,6 +17,7 @@
 
 #include <svx/colorbox.hxx>
 #include <vcl/formatter.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 namespace sc
 {

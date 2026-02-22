@@ -28,6 +28,7 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdoutl.hxx>
+#include <tools/mapunit.hxx>
 #include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

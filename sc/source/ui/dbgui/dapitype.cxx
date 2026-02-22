@@ -21,6 +21,9 @@
 
 #include <dapitype.hxx>
 #include <comphelper/lok.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool bEnableExternal)
     : GenericDialogController(pParent, u"modules/scalc/ui/selectsource.ui"_ustr, u"SelectSourceDialog"_ustr)

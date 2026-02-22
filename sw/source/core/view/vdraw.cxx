@@ -36,6 +36,7 @@
 #include <dcontact.hxx>
 #include <dview.hxx>
 #include <flyfrm.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/canvastools.hxx>
@@ -207,7 +208,7 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
     std::vector<SdrObject*> aCandidatesToMove;
     for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
-        if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj.get()) ==  nullptr )
+        if( DynCastSwVirtFlyDrawObj( pObj.get()) ==  nullptr )
         {
             // Objects not anchored to the frame, do not need to be adjusted
             const SwContact *pCont = GetUserCall(pObj.get());

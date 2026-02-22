@@ -39,6 +39,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svl/filenotation.hxx>
 #include <osl/diagnose.h>
+#include <vcl/weld/Builder.hxx>
 
 namespace dbp
 {

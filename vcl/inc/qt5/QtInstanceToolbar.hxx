@@ -11,7 +11,10 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Toolbar.hxx>
+
 #include <QtWidgets/QToolBar>
+#include <QtWidgets/QToolButton>
 
 class QtInstanceToolbar : public QtInstanceWidget, public virtual weld::Toolbar
 {
@@ -62,6 +65,13 @@ public:
     virtual sal_uInt16 get_modifier_state() const override;
 
     virtual int get_drop_index(const Point& rPoint) const override;
+
+private:
+    QWidget& getWidget(const OUString& rIdent) const;
+    QWidget& getWidget(int nIndex) const;
+
+    QToolButton& getToolButton(const OUString& rIdent) const;
+    QToolButton& getToolButton(int nIndex) const;
 
 private Q_SLOTS:
     void toolButtonClicked(const QString& rId);

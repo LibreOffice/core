@@ -30,6 +30,7 @@
 #include <tools/link.hxx>
 #include <comphelper/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <memory>
 #include <optional>

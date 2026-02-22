@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <oox/drawingml/effectproperties.hxx>
+#include <drawingml/effectproperties.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/token/properties.hxx>

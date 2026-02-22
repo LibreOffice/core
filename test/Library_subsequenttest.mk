@@ -45,7 +45,6 @@ $(eval $(call gb_Library_use_externals,subsequenttest,\
 
 $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/unoapi_test \
-	test/source/unoapixml_test \
 	test/source/a11y/AccessibilityTools \
 	test/source/a11y/XAccessibleActionTester \
 	test/source/a11y/XAccessibleComponentTester \

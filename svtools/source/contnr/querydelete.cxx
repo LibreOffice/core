@@ -18,6 +18,8 @@
  */
 
 #include <svtools/querydelete.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 
 namespace svtools
 {

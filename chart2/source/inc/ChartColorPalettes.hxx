@@ -27,7 +27,6 @@ public:
     typedef Link<const MouseEvent&, bool> MouseEventHandler;
 
 private:
-    weld::Builder& mrBuilder;
     std::unique_ptr<weld::IconView> mxIconView;
     std::unique_ptr<weld::ScrolledWindow> mxWindow;
     std::vector<ChartColorPalette> maColorSets;

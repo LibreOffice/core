@@ -22,7 +22,10 @@
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 #include <com/sun/star/drawing/XCustomShapeHandle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/svdobj.hxx>
+#include <svx/svdoashp.hxx>
 
 class SVXCORE_DLLPUBLIC EnhancedCustomShapeEngine
     : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::drawing::XCustomShapeEngine>

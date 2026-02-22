@@ -1,5 +1,10 @@
 ---
 assumeFilename: avmedia/source/gstreamer/gstplayer.cxx
+customAssumeFilenames:
+    # Needs -isystem /usr/include/x86_64-linux-gnu/qt5
+    avmedia/source/qt6: avmedia/source/qt6/QtFrameGrabber.cxx
+    # Needs mediacontrol.hxx to be available
+    avmedia/source/viewer/mediawindow_impl.hxx: avmedia/source/framework/mediacontrol.cxx
 excludelist:
     avmedia/source/gstreamer/gstframegrabber.hxx:
     # Keep catch-all main gstreamer header

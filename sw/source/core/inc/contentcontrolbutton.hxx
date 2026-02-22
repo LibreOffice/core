@@ -11,6 +11,7 @@
 
 #include <vcl/ctrl.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Popover.hxx>
 #include <vcl/weld/weld.hxx>
 #include <swrect.hxx>
 

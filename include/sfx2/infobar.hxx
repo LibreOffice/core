@@ -17,6 +17,7 @@
 #include <sfx2/dllapi.h>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/TextView.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 // These must match the values in offapi/com/sun/star/frame/InfobarType.idl
 enum class InfobarType

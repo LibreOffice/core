@@ -12,6 +12,8 @@
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_set.h>
 #include <jsdialog/enabled.hxx>
+#include <o3tl/string_view.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vector>
 
 namespace
@@ -171,6 +173,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/imoptdialog.ui" },
         { u"modules/scalc/ui/insertcells.ui" },
         { u"modules/scalc/ui/managenamesdialog.ui" },
+        { u"modules/scalc/ui/mergecellsdialog.ui" },
         { u"modules/scalc/ui/movecopysheet.ui" },
         { u"modules/scalc/ui/movingaveragedialog.ui" },
         { u"modules/scalc/ui/optimalcolwidthdialog.ui" },
@@ -205,6 +208,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/definedatabaserangedialog.ui" },
         { u"modules/scalc/ui/selectrange.ui" },
         { u"modules/scalc/ui/selectsheetviewdialog.ui" },
+        { u"modules/scalc/ui/definetablerangedialog.ui" },
     });
 
 constexpr auto SwriterDialogList
@@ -420,6 +424,7 @@ constexpr auto SidebarList
         { u"modules/scalc/ui/functionpanel.ui" },
         { u"modules/scalc/ui/sidebaralignment.ui" },
         { u"modules/scalc/ui/sidebarcellappearance.ui" },
+        { u"modules/scalc/ui/sidebardatabase.ui" },
         { u"modules/scalc/ui/sidebarnumberformat.ui" },
         // schart
         { u"modules/schart/ui/sidebaraxis.ui" },
@@ -495,9 +500,11 @@ constexpr auto NotebookbarList
     = frozen::make_unordered_set<std::u16string_view>({
         { u"modules/scalc/ui/numberbox.ui" },
         { u"modules/scalc/ui/sheetviewbox.ui" },
+        { u"modules/scalc/ui/tablestylesbox.ui" },
         { u"svx/ui/fontnamebox.ui" },
         { u"svx/ui/fontsizebox.ui" },
         { u"svx/ui/stylespreview.ui" },
+        { u"svx/ui/themeselectorpanel.ui" },
         // not interim builder, but regular builder:
         { u"modules/simpress/ui/masterpagepanelall.ui" },
         { u"modules/simpress/ui/slidetransitionspanel.ui" }
@@ -645,6 +652,210 @@ std::vector<OUString> completeWriterDialogList(const o3tl::sorted_vector<OUStrin
     }
     return missing;
 }
+
+std::vector<OUString> completeWriterSidebarList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    for (const auto& entry : SidebarList)
+    {
+        OUString sEntry(entry);
+        // Skip these ones, I don't think they can appear in practice
+        if (entry == u"modules/swriter/ui/managechangessidebar.ui" ||
+            entry == u"modules/swriter/ui/pagefooterpanel.ui" ||
+            entry == u"modules/swriter/ui/pageheaderpanel.ui" ||
+            entry == u"modules/swriter/ui/pagestylespanel.ui" ||
+            entry == u"modules/swriter/ui/sidebarstylepresets.ui" ||
+            entry == u"modules/swriter/ui/sidebartheme.ui")
+            continue;
+        else if (sEntry.startsWith("modules/swriter/") && !entries.contains(sEntry))
+            missing.push_back(sEntry);
+    }
+    return missing;
+}
+
+std::vector<OUString> completeCalcDialogList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    for (const auto& entry : ScalcDialogList)
+    {
+        OUString sEntry(entry);
+        if (!entries.contains(sEntry))
+            missing.push_back(sEntry);
+    }
+    return missing;
+}
+
+std::vector<OUString> completeCalcSidebarList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    for (const auto& entry : SidebarList)
+    {
+        OUString sEntry(entry);
+        if (sEntry.startsWith("modules/scalc/") && !entries.contains(sEntry))
+            missing.push_back(sEntry);
+    }
+    return missing;
+}
+
+std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUString>& entries)
+{
+    std::vector<OUString> missing;
+    for (const auto& entry : SidebarList)
+    {
+        OUString sEntry(entry);
+
+        // consider schart and smath as 'common', but other modules specific to a toplevel application
+        if (sEntry.startsWith("modules/") && !sEntry.startsWith("modules/schart/") && !sEntry.startsWith("modules/smath/"))
+            continue;
+        //TODO:  This one should be selectable, but that seems to be broken
+        else if (entry == u"modules/schart/ui/sidebarerrorbar.ui")
+            continue;
+        // Skip this one, it can't appear in practice
+        else if (entry == u"modules/smath/ui/sidebarproperties_math.ui")
+            continue;
+        // Skip this one, theme related, disabled at the moment
+        else if (entry == u"modules/schart/ui/sidebarcolors.ui")
+            continue;
+        // Skip this one, theme related, disabled at the moment
+        else if (entry == u"modules/schart/ui/sidebargradients.ui")
+            continue;
+        // Skip this one, theme related, disabled at the moment
+        else if (entry == u"modules/schart/ui/sidebartheme.ui")
+            continue;
+        // Skip this one, in practice it appears in draw/impress
+        // TODO: it should probably be made to appear in writer too
+        else if (entry == u"svx/ui/mediaplayback.ui")
+            continue;
+        // Skip this one, I don't think it can appear in practice
+        else if (entry == u"svx/ui/sidebargallery.ui")
+            continue;
+        // Skip this one, its context means it cannot appear in writer
+        else if (entry == u"svx/ui/sidebarshadow.ui")
+            continue;
+        // Skip this one, its context means it cannot appear in writer
+        else if (entry == u"svx/ui/sidebartexteffect.ui")
+            continue;
+        // Skip this one, its context means it cannot appear in writer
+        else if (entry == u"svx/ui/sidebarlists.ui")
+            continue;
+        // Skip this one, its context means it can only appear in draw/impress
+        else if (entry == u"svx/ui/defaultshapespanel.ui")
+            continue;
+        else if (!entries.contains(sEntry))
+            missing.push_back(sEntry);
+    }
+    return missing;
+}
+
+std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries,
+                                               /*LibreOfficeKitDocumentType*/ int docType,
+                                               bool linguisticDataAvailable)
+{
+    std::vector<OUString> missing;
+    auto processCategory = [&](const auto& category) {
+        for (const auto& entry : category)
+        {
+            if (!linguisticDataAvailable && (
+                entry == u"cui/ui/thesaurus.ui" ||
+                entry == u"cui/ui/spellingdialog.ui" ||
+                entry == u"cui/ui/spelloptionsdialog.ui"))
+            {
+                // Skip the dialogs that can't be reached in the absense of
+                // linguistic data.
+                continue;
+            }
+
+            if (docType != LOK_DOCTYPE_TEXT)
+            {
+                // The 'writerperfect' ones are writer only
+                if (o3tl::starts_with(entry, u"writerperfect"))
+                    continue;
+                // The manage changes dialog is only enabled in writer
+                else if (entry == u"svx/ui/acceptrejectchangesdialog.ui")
+                    continue;
+            }
+
+            if (docType == LOK_DOCTYPE_SPREADSHEET)
+            {
+                // Not supported in Calc
+                if (entry == u"svx/ui/gotopagedialog.ui" ||
+                    entry == u"cui/ui/splitcellsdialog.ui")
+                {
+                    continue;
+                }
+            }
+
+            // Skip this one, I don't think it can appear in practice
+            if (entry == u"sfx/ui/cmisinfopage.ui")
+                continue;
+            // Skip this one, I think it can only happen on loading
+            // an archaic wordperfect file
+            else if (entry == u"writerperfect/ui/wpftencodingdialog.ui")
+                continue;
+            // Skip this one, I don't think it can appear in practice
+            else if (entry == u"cui/ui/colorpickerdialog.ui")
+                continue;
+            // Skip this one, is the query dialog about enabling overwrite
+            // mode which is disabled in the default config
+            else if (entry == u"cui/ui/querysetinsmodedialog.ui")
+                continue;
+            // Skip this one, its actually a sd-only one (with code in sd), but
+            // somehow the .ui is in cui
+            else if (entry == u"cui/ui/bulletandposition.ui")
+                continue;
+            // Skip this one for now, it requires smartart to already exist in a .docx
+            else if (entry == u"cui/ui/diagramdialog.ui")
+                continue;
+            // Skip this one, it cannot appear in writer
+            else if (entry == u"cui/ui/possizetabpage.ui")
+                continue;
+            // Skip this one, it cannot appear in writer, only calc in practice
+            else if (entry == u"cui/ui/cellalignment.ui")
+                continue;
+            // Skip this one, it cannot appear in writer, only impress/draw in
+            // practice
+            else if (entry == u"cui/ui/formatcellsdialog.ui")
+                continue;
+            // Skip this one, it cannot appear in writer (until autotext dialogs
+            // are enabled, in which case that is likely disabled. Maybe possible
+            // from calc.
+            else if (entry == u"cui/ui/eventassigndialog.ui")
+                continue;
+            // Skip this one, it is disabled in filter/source/pdf/impdialog.cxx
+            // for kit mode
+            else if (entry == u"filter/ui/pdfsignpage.ui")
+                continue;
+            // This, for the chart wizard, it is really only available in calc
+            else if (entry == u"vcl/ui/wizard.ui")
+                continue;
+            // The warn dialog appears to be somewhat broken, at least the
+            // existing tests for it are currently disabled and it doesn't
+            // work for me
+            else if (entry == u"uui/ui/macrowarnmedium.ui")
+                continue;
+            // This, for the formula dialog, are really only available in calc
+            else if (entry == u"formula/ui/formuladialog.ui" ||
+                     entry == u"formula/ui/functionpage.ui" ||
+                     entry == u"formula/ui/parameter.ui" ||
+                     entry == u"formula/ui/structpage.ui")
+            {
+                continue;
+            }
+            // Testing this requires hosting an image, or similar, with
+            // a username+password
+            else if (entry == u"uui/ui/logindialog.ui")
+                continue;
+            OUString sEntry(entry);
+            if (!entries.contains(sEntry))
+                missing.push_back(sEntry);
+        }
+    };
+    processCategory(CuiDialogList);
+    processCategory(SfxDialogList);
+    processCategory(OtherDialogList);
+    return missing;
+}
+
 
 } // end of jsdialog
 

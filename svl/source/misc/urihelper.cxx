@@ -520,7 +520,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     // eStyle.
 
     // tdf#145381: In addition to the productions I added a mechanism to detect
-    // matching brackets. The task presents the case of an url that ends on a
+    // matching brackets. The task presents the case of a url that ends on a
     // closing bracket. This needs to be detected as part of the uri in the case
     // that a matching opening bracket exists.
 

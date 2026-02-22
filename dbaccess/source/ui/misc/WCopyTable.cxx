@@ -71,8 +71,6 @@ using namespace dbtools;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-#define MAX_PAGES   4   // max. number of pages, which are shown
-
 namespace
 {
     void clearColumns(ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColumnsVec)
@@ -687,6 +685,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl, weld::Button&, void)
 {
+    constexpr sal_uInt16 MAX_PAGES = 4; // max. number of pages, which are shown
     m_ePressed = WIZARD_NEXT;
     if ( GetCurLevel() < MAX_PAGES )
     {

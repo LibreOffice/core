@@ -58,69 +58,94 @@
       </object>
     </child>
   </object>
-  <object class="GtkWindow" id="window">
+  <object class="GtkDialog">
     <property name="can-focus">False</property>
-    <child>
-      <object class="GtkBox" id="toplevel">
-        <property name="visible">True</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
         <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
         <child>
-          <object class="GtkBox" id="TabBarContents">
+          <object class="GtkBox" id="toplevel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="TabBarContents">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="border-width">2</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkMenuButton" id="menubutton">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes" context="tabbar|menubutton|tool_tip">Sidebar Settings</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="margin-bottom">3</property>
-                    <property name="image">image6</property>
-                    <property name="relief">none</property>
-                    <property name="always-show-image">True</property>
-                    <property name="popup">mainmenu</property>
-                    <property name="use-popover">False</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolbar" id="measure">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="halign">center</property>
+                    <property name="can-focus">False</property>
+                    <property name="border-width">2</property>
                     <property name="orientation">vertical</property>
-                    <property name="toolbar-style">icons</property>
-                    <property name="show-arrow">False</property>
                     <child>
-                      <object class="GtkToggleToolButton" id="toggle">
+                      <object class="GtkMenuButton" id="menubutton">
                         <property name="visible">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="icon-name">sfx2/res/symphony/sidebar-property-large.png</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="tabbar|menubutton|tool_tip">Sidebar Settings</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="margin-bottom">3</property>
+                        <property name="image">image6</property>
+                        <property name="relief">none</property>
+                        <property name="always-show-image">True</property>
+                        <property name="popup">mainmenu</property>
+                        <property name="use-popover">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolbar" id="measure">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="halign">center</property>
+                        <property name="orientation">vertical</property>
+                        <property name="toolbar-style">icons</property>
+                        <property name="show-arrow">False</property>
+                        <child>
+                          <object class="GtkToggleToolButton" id="toggle">
+                            <property name="visible">True</property>
+                            <property name="use-underline">True</property>
+                            <property name="icon-name">sfx2/res/symphony/sidebar-property-large.png</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
               </object>
@@ -134,7 +159,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>

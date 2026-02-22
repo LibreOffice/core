@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/json_writer.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/event.hxx>

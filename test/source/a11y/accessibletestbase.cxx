@@ -16,6 +16,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
+#include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>

@@ -59,6 +59,7 @@
 #include <editeng/memberids.h>
 #include <editeng/unoprnms.hxx>
 #include <svl/itemprop.hxx>
+#include <svl/poolitem.hxx>
 #include "unomapproperties.hxx"
 
 using namespace ::com::sun::star;

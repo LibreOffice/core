@@ -43,18 +43,18 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="votingLabel">
+          <object class="GtkLabel" id="ratingLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes" context="additionsEntry|votingLabel">Voting:</property>
+            <property name="label" translatable="yes" context="additionsEntry|ratingLabel">Rating:</property>
             <property name="xalign">0</property>
             <accessibility>
-              <relation type="label-for" target="imageVoting1"/>
-              <relation type="label-for" target="imageVoting2"/>
-              <relation type="label-for" target="imageVoting3"/>
-              <relation type="label-for" target="imageVoting4"/>
-              <relation type="label-for" target="imageVoting5"/>
+              <relation type="label-for" target="imageRating1"/>
+              <relation type="label-for" target="imageRating2"/>
+              <relation type="label-for" target="imageRating3"/>
+              <relation type="label-for" target="imageRating4"/>
+              <relation type="label-for" target="imageRating5"/>
             </accessibility>
           </object>
           <packing>
@@ -212,14 +212,14 @@
             <property name="valign">center</property>
             <property name="hexpand">True</property>
             <child>
-              <object class="GtkImage" id="imageVoting1">
+              <object class="GtkImage" id="imageRating1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="icon-name">cmd/sc_stars-empty.png</property>
                 <accessibility>
-                  <relation type="labelled-by" target="votingLabel"/>
+                  <relation type="labelled-by" target="ratingLabel"/>
                 </accessibility>
               </object>
               <packing>
@@ -229,14 +229,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="imageVoting2">
+              <object class="GtkImage" id="imageRating2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="icon-name">cmd/sc_stars-empty.png</property>
                 <accessibility>
-                  <relation type="labelled-by" target="votingLabel"/>
+                  <relation type="labelled-by" target="ratingLabel"/>
                 </accessibility>
               </object>
               <packing>
@@ -246,14 +246,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="imageVoting3">
+              <object class="GtkImage" id="imageRating3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="icon-name">cmd/sc_stars-empty.png</property>
                 <accessibility>
-                  <relation type="labelled-by" target="votingLabel"/>
+                  <relation type="labelled-by" target="ratingLabel"/>
                 </accessibility>
               </object>
               <packing>
@@ -263,14 +263,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="imageVoting4">
+              <object class="GtkImage" id="imageRating4">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="icon-name">cmd/sc_stars-empty.png</property>
                 <accessibility>
-                  <relation type="labelled-by" target="votingLabel"/>
+                  <relation type="labelled-by" target="ratingLabel"/>
                 </accessibility>
               </object>
               <packing>
@@ -280,14 +280,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="imageVoting5">
+              <object class="GtkImage" id="imageRating5">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="icon-name">cmd/sc_stars-empty.png</property>
                 <accessibility>
-                  <relation type="labelled-by" target="votingLabel"/>
+                  <relation type="labelled-by" target="ratingLabel"/>
                 </accessibility>
               </object>
               <packing>

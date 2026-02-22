@@ -245,6 +245,8 @@ public:
     virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos ) = 0;
     virtual void RemoveLeadingWhiteSpace(SwPaM& rPaM) = 0;
 
+    virtual void AutoSetParagraphDirections(SwPaM& rPaM, const SwRootFrame* pLayout = nullptr) = 0;
+
 protected:
     virtual ~IDocumentContentOperations() {};
 };

@@ -39,6 +39,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/vclenum.hxx>
 #include <memory>
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>

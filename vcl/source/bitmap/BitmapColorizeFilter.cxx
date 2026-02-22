@@ -8,6 +8,10 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <tools/color.hxx>
 #include <tools/helpers.hxx>
 

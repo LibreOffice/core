@@ -45,7 +45,47 @@ public:
         : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     {
     }
+
+    void testMacro(std::u16string_view aFileName, const OUString& rScriptURL);
 };
+
+void VBAMacroTest::testMacro(std::u16string_view aFileName, const OUString& rScriptURL)
+{
+    loadFromFile(aFileName);
+    OUString sTempDir;
+    OUString sTempDirURL;
+    osl::FileBase::getTempDirURL(sTempDirURL);
+    osl::FileBase::getSystemPathFromFileURL(sTempDirURL, sTempDir);
+    sTempDir += OUStringChar(SAL_PATHDELIMITER);
+    OUString sTestFileName(u"My Test WorkBook.xls"_ustr);
+    uno::Sequence<uno::Any> aParams;
+
+    // process all events such as OnLoad events etc.  otherwise they tend
+    // to arrive later at a random time - while processing other StarBasic
+    // methods.
+    Scheduler::ProcessEventsToIdle();
+
+    bool bWorkbooksHandling = aFileName == u"Workbooks.xls" && !sTempDir.isEmpty();
+
+    if (bWorkbooksHandling)
+    {
+        aParams = { uno::Any(sTempDir), uno::Any(sTestFileName) };
+    }
+
+    uno::Any aRet = executeMacro(rScriptURL, aParams);
+    OUString aStringRes;
+    CPPUNIT_ASSERT(aRet >>= aStringRes);
+    CPPUNIT_ASSERT_EQUAL(u"OK"_ustr, aStringRes);
+
+    if (bWorkbooksHandling)
+    {
+        OUString sFileUrl;
+        OUString sFilePath = sTempDir + sTestFileName;
+        osl::FileBase::getFileURLFromSystemPath(sFilePath, sFileUrl);
+        if (!sFileUrl.isEmpty())
+            osl::File::remove(sFileUrl);
+    }
+}
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSimpleCopyAndPaste)
 {
@@ -63,26 +103,26 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSimpleCopyAndPaste)
     ScDocument& rDoc = pDocSh->GetDocument();
 
     // Check state
-    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(2, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(ScAddress(2, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(ScAddress(2, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(2, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(2, 5, 0));
 
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(1, 5, 0));
 
     executeMacro(
         u"vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document"_ustr);
 
     // Copy from C4-C6
-    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(2, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(ScAddress(2, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(ScAddress(2, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(2, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(2, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(2, 5, 0));
 
     // Paste to B4-B6
-    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(1, 3, 0)));
-    CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(ScAddress(1, 4, 0)));
-    CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(ScAddress(1, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(1, 3, 0));
+    CPPUNIT_ASSERT_EQUAL(20.0, rDoc.GetValue(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(1, 5, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMultiDocumentCopyAndPaste)
@@ -108,16 +148,16 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMultiDocumentCopyAndPaste)
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(1, 3, 0));
 
     executeMacro(
         u"vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(200.0, rDoc.GetValue(ScAddress(1, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(100.0, rDoc.GetValue(ScAddress(1, 2, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(1, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(200.0, rDoc.GetValue(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(100.0, rDoc.GetValue(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(1, 3, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSheetAndColumnSelectAndHide)
@@ -321,33 +361,69 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMacroKeyBinding)
         xAccelerator->getCommandByKeyEvent(aCtrlT));
 }
 
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testAddress)
+{
+    testMacro(
+        u"TestAddress.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
 {
-    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
-    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    if (!IsDefaultDPI())
-        return;
-    TestMacroInfo testInfo[] = {
-        { u"TestAddress.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        {
-            u"vba.xls"_ustr,
-            u"vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document"_ustr,
-        },
-        { u"MiscRangeTests.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"bytearraystring.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacro.test?language=Basic&location=document"_ustr },
-        { u"AutoFilter.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"CalcFont.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"TestIntersection.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"TestUnion.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"range-4.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+    testMacro(
+        u"vba.xls",
+        u"vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMiscRangeTests)
+{
+    testMacro(
+        u"MiscRangeTests.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testByteArrayString)
+{
+    testMacro(
+        u"bytearraystring.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacro.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testAutoFilter)
+{
+    testMacro(
+        u"AutoFilter.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testFont)
+{
+    testMacro(
+        u"CalcFont.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testIntersection)
+{
+    testMacro(
+        u"TestIntersection.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testUnion)
+{
+    testMacro(
+        u"TestUnion.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testRanges4)
+{
+    testMacro(
+        u"range-4.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
 // FIXME: sometimes it fails on Windows with
 // Failed:  : Test change event for Range.Clear set:
 // Failed:  : Test change event for Range.ClearContents set:
@@ -356,91 +432,137 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
 // Tests passed: 4
 // Tests failed: 4
 #if !defined(_WIN32)
-        { u"Ranges-3.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testRanges3)
+{
+    testMacro(
+        u"Ranges-3.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
 #endif
-        { u"TestCalc_Rangetest.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"TestCalc_Rangetest2.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"Ranges-2.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"pagesetup.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"Window.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"window2.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"PageBreaks.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"Shapes.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"Ranges.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"CheckOptionToggleValue.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"GeneratedEventTest.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"MiscControlTests.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"Workbooks.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"Names.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"NamesSheetLocal.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"vba_endFunction.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"vba_findFunction.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
-        { u"BGR-RGBTest.xls"_ustr,
-          u"vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document"_ustr }
-    };
-    OUString sTempDir;
-    OUString sTempDirURL;
-    osl::FileBase::getTempDirURL(sTempDirURL);
-    osl::FileBase::getSystemPathFromFileURL(sTempDirURL, sTempDir);
-    sTempDir += OUStringChar(SAL_PATHDELIMITER);
-    OUString sTestFileName(u"My Test WorkBook.xls"_ustr);
-    uno::Sequence<uno::Any> aParams;
-    for (const auto& rTestInfo : testInfo)
-    {
-        OUString aFileName = loadFromFile(rTestInfo.sFileBaseName);
 
-        // process all events such as OnLoad events etc.  otherwise they tend
-        // to arrive later at a random time - while processing other StarBasic
-        // methods.
-        Scheduler::ProcessEventsToIdle();
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testRanges6)
+{
+    testMacro(
+        u"TestCalc_Rangetest.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
 
-        bool bWorkbooksHandling = rTestInfo.sFileBaseName == "Workbooks.xls" && !sTempDir.isEmpty();
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testRanges5)
+{
+    testMacro(
+        u"TestCalc_Rangetest2.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
 
-        if (bWorkbooksHandling)
-        {
-            aParams = { uno::Any(sTempDir), uno::Any(sTestFileName) };
-        }
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testRanges2)
+{
+    testMacro(
+        u"Ranges-2.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
 
-        SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName << " with url "
-                                                         << rTestInfo.sMacroUrl);
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testPageSetup)
+{
+    testMacro(
+        u"pagesetup.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
 
-        uno::Any aRet = executeMacro(rTestInfo.sMacroUrl, aParams);
-        OUString aStringRes;
-        aRet >>= aStringRes;
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testWindows)
+{
+    testMacro(
+        u"Window.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            OUString("script reported failure in file " + rTestInfo.sFileBaseName)
-                .toUtf8()
-                .getStr(),
-            u"OK"_ustr, aStringRes);
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testWindows2)
+{
+    testMacro(
+        u"window2.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
 
-        if (bWorkbooksHandling)
-        {
-            OUString sFileUrl;
-            OUString sFilePath = sTempDir + sTestFileName;
-            osl::FileBase::getFileURLFromSystemPath(sFilePath, sFileUrl);
-            if (!sFileUrl.isEmpty())
-                osl::File::remove(sFileUrl);
-        }
-    }
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testPageBreaks)
+{
+    testMacro(
+        u"PageBreaks.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testShapes)
+{
+    testMacro(
+        u"Shapes.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testRanges)
+{
+    testMacro(
+        u"Ranges.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testCheckOptionToggleValue)
+{
+    testMacro(
+        u"CheckOptionToggleValue.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testGeneratedEventTest)
+{
+    testMacro(
+        u"GeneratedEventTest.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testMiscControlTests)
+{
+    testMacro(
+        u"MiscControlTests.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testWorkbooks)
+{
+    testMacro(
+        u"Workbooks.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNames)
+{
+    testMacro(
+        u"Names.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNamesSheetLocal)
+{
+    testMacro(
+        u"NamesSheetLocal.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testendFunction)
+{
+    testMacro(
+        u"vba_endFunction.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testfindFunction)
+{
+    testMacro(
+        u"vba_findFunction.xls",
+        u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(VBAMacroTest, testBGR_RGB)
+{
+    testMacro(u"BGR-RGBTest.xls",
+              u"vnd.sun.Star.script:VBAProject.Module1.test?language=Basic&location=document"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149579)
@@ -460,9 +582,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149579)
     CPPUNIT_ASSERT(pDocSh);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    rDoc.SetValue(ScAddress(0, 0, 0), 5.0);
-    rDoc.SetValue(ScAddress(0, 1, 0), 10.0);
-    rDoc.SetValue(ScAddress(0, 2, 0), 1.0);
+    rDoc.SetValue(0, 0, 0, 5.0);
+    rDoc.SetValue(0, 1, 0, 10.0);
+    rDoc.SetValue(0, 2, 0, 1.0);
 
     // Without the fix in place, this call would have crashed in debug builds with failed assertion
     executeMacro(
@@ -471,9 +593,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149579)
     // Without the fix in place, this test would have failed with
     // - Expected: 1
     // - Actual  : 5
-    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(5.0, rDoc.GetValue(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(5.0, rDoc.GetValue(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(0, 2, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaRangeSort)
@@ -495,18 +617,18 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaRangeSort)
     CPPUNIT_ASSERT(pDocSh);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    rDoc.SetValue(ScAddress(0, 0, 0), 1.0);
-    rDoc.SetValue(ScAddress(0, 1, 0), 0.5);
-    rDoc.SetValue(ScAddress(0, 2, 0), 2.0);
+    rDoc.SetValue(0, 0, 0, 1.0);
+    rDoc.SetValue(0, 1, 0, 0.5);
+    rDoc.SetValue(0, 2, 0, 2.0);
 
     // Without the fix in place, this call would have crashed in debug builds with failed assertion
     executeMacro(
         u"vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location="
         "document"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(0, 2, 0));
 
     // Change sheet's first param sorting order
     ScSortParam aParam;
@@ -521,9 +643,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaRangeSort)
     // Without the fix in place, this test would have failed in non-debug builds with
     // - Expected: 2
     // - Actual  : 0.5
-    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(0, 2, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107885)
@@ -575,18 +697,18 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf52602)
     executeMacro(u"vnd.sun.Star.script:VBAProject.Modul1.Test_NumberFormat_DateTime?language=Basic&"
                  "location=document"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(u"15:20"_ustr, rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"15:20"_ustr, rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20"_ustr, rDoc.GetString(ScAddress(1, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20"_ustr, rDoc.GetString(ScAddress(1, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20:00"_ustr, rDoc.GetString(ScAddress(2, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20:00"_ustr, rDoc.GetString(ScAddress(2, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"1/3/12 15:20"_ustr, rDoc.GetString(ScAddress(3, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"1/3/12 15:20"_ustr, rDoc.GetString(ScAddress(3, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"1/ March 2012"_ustr, rDoc.GetString(ScAddress(4, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"1/ March 2012"_ustr, rDoc.GetString(ScAddress(4, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"1/ Mar 2012"_ustr, rDoc.GetString(ScAddress(5, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"1/ Mar 2012"_ustr, rDoc.GetString(ScAddress(5, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"15:20"_ustr, rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"15:20"_ustr, rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20"_ustr, rDoc.GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20"_ustr, rDoc.GetString(1, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20:00"_ustr, rDoc.GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"03/01/2012 15:20:00"_ustr, rDoc.GetString(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1/3/12 15:20"_ustr, rDoc.GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1/3/12 15:20"_ustr, rDoc.GetString(3, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1/ March 2012"_ustr, rDoc.GetString(4, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1/ March 2012"_ustr, rDoc.GetString(4, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1/ Mar 2012"_ustr, rDoc.GetString(5, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"1/ Mar 2012"_ustr, rDoc.GetString(5, 1, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf107902)
@@ -792,9 +914,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testForEachInSelection)
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, rDoc.GetString(0, 2, 0));
 
     // tdf#153724: without the fix, this would fail with
     // assertion failed
@@ -805,9 +927,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testForEachInSelection)
     executeMacro(u"vnd.sun.Star.script:Standard.Module1.TestForEachInSelection?"
                  "language=Basic&location=document"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(u"oof"_ustr, rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"rab"_ustr, rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"zab"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"oof"_ustr, rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"rab"_ustr, rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"zab"_ustr, rDoc.GetString(0, 2, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNonAsciiMacroIRI)
@@ -819,9 +941,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNonAsciiMacroIRI)
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, rDoc.GetString(0, 2, 0));
 
     auto ret
         = dispatchCommand(mxComponent, u"macro://./Standard.Module1.NonAsciiName_αβγ"_ustr, {});
@@ -833,9 +955,9 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNonAsciiMacroIRI)
     // - Actual  : 0
     CPPUNIT_ASSERT_EQUAL(css::frame::DispatchResultState::SUCCESS, retEvent.State);
 
-    CPPUNIT_ASSERT_EQUAL(u"oof"_ustr, rDoc.GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"rab"_ustr, rDoc.GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"zab"_ustr, rDoc.GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"oof"_ustr, rDoc.GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"rab"_ustr, rDoc.GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"zab"_ustr, rDoc.GetString(0, 2, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf167378)

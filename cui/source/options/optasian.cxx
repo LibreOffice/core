@@ -35,6 +35,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 using namespace com::sun::star::uno;

@@ -26,7 +26,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
@@ -272,22 +271,6 @@ void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEv
     {
         NotifyAccessibleEvent( AccessibleEventId::VISIBLE_DATA_CHANGED, Any(), Any() );
     }
-}
-
-// XServiceInfo
-OUString AccessibleDialogControlShape::getImplementationName()
-{
-    return u"com.sun.star.comp.basctl.AccessibleShape"_ustr;
-}
-
-sal_Bool AccessibleDialogControlShape::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-Sequence< OUString > AccessibleDialogControlShape::getSupportedServiceNames()
-{
-    return { u"com.sun.star.drawing.AccessibleShape"_ustr };
 }
 
 // XAccessibleContext

@@ -13,6 +13,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <editeng/unoprnms.hxx>
 #include <sal/log.hxx>
+#include <tools/mapunit.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>

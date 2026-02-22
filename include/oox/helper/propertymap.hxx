@@ -56,9 +56,6 @@ public:
     /** Returns the name of the passed property identifier. */
     static const OUString& getPropertyName( sal_Int32 nPropId );
 
-    /** Returns the property identifier of the passed name. */
-    static sal_Int32 getPropertyId( std::u16string_view sPropName );
-
     /** Returns true, if the map contains a property with the passed identifier. */
     bool                hasProperty( sal_Int32 nPropId ) const;
 

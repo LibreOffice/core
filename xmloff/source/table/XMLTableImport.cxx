@@ -35,6 +35,7 @@
 #include <utility>
 #include <xmloff/table/XMLTableImport.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlimp.hxx>

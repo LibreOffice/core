@@ -28,10 +28,10 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
-              <object class="GtkRadioMenuItem" id="gear_sort_voting">
+              <object class="GtkRadioMenuItem" id="gear_sort_rating">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="menuassignpage|gear_textOnly">Voting</property>
+                <property name="label" translatable="yes" context="menuassignpage|gear_textOnly">Rating</property>
                 <property name="draw-as-radio">True</property>
               </object>
             </child>
@@ -41,7 +41,7 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="menuassignpage|gear_textOnly">Downloads</property>
                 <property name="draw-as-radio">True</property>
-                <property name="group">gear_sort_voting</property>
+                <property name="group">gear_sort_rating</property>
               </object>
             </child>
             <child>
@@ -50,7 +50,7 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="menuassignpage|gear_textOnly">Comments</property>
                 <property name="draw-as-radio">True</property>
-                <property name="group">gear_sort_voting</property>
+                <property name="group">gear_sort_rating</property>
               </object>
             </child>
           </object>

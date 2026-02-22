@@ -66,6 +66,8 @@ public:
     css::geometry::IntegerSize2D getSize() const;
     basegfx::B2DPoint calcSpritePos(UnoViewSharedPtr const& rView) const;
 
+    void clear();
+
 private:
     SlideOverlayButton(css::uno::Reference<css::rendering::XBitmap> xIconBitmap,
                        css::awt::Point pPosition,

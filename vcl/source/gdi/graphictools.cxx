@@ -149,7 +149,7 @@ SvStream& ReadSvtGraphicStroke( SvStream& rIStm, SvtGraphicStroke& rClass )
     sal_uInt32 nSize;
     rIStm.ReadUInt32( nSize );
     rClass.maDashArray.resize(nSize);
-    for (double dash : rClass.maDashArray)
+    for (double& dash : rClass.maDashArray)
         rIStm.ReadDouble(dash);
 
     return rIStm;

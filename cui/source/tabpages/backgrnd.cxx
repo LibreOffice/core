@@ -28,6 +28,7 @@
 #include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
 #include <svx/unobrushitemhelper.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace css;
 

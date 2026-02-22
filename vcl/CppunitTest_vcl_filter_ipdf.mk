@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,vcl_filter_ipdf))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_filter_ipdf,\
 	boost_headers \
+	libxml2 \
 	pdfium \
 ))
 

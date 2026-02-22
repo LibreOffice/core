@@ -1,0 +1,17 @@
+--- builds/posix/Makefile.in.examples.before	2024-01-07 20:16:41.073172761 +0000
++++ builds/posix/Makefile.in.examples	2024-01-07 20:17:23.768143528 +0000
+@@ -59,8 +59,13 @@
+ #endif
+ GPRE_FLAGS=	-m -z -n
+ 
+-LIB_LINK_RPATH = $(call LIB_PLATFORM_RPATH,$(if $(subst intl,,$(1)),$(LIB),$(LIB)/../intl))
++ifeq ($(PLATFORM),DARWIN)
++LIB_LINK_RPATH =
+ LINK_DARWIN_RPATH = -Wl,-rpath,@loader_path/../$(TARGET)/firebird
++else
++LIB_LINK_RPATH = $(call LIB_PLATFORM_RPATH,$(if $(subst intl,,$(1)),$(LIB),$(LIB)/../intl))
++LINK_DARWIN_RPATH =
++endif
+ LIB_LINK_MAPFILE =
+ 
+ EXAMPLES_DEST=	$(GEN_ROOT)/examples

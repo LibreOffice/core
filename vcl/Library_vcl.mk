@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \
     -DTK_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,tk))\" \
     $(if $(SYSTEM_LIBFIXMATH),-DSYSTEM_LIBFIXMATH) \
+    $(if $(filter WNT-TRUE,$(OS)-$(USE_HEADLESS_CODE)),-DDO_USE_TTF_ON_WIN32) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,vcl))
@@ -76,7 +77,17 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     ucbhelper \
     utl \
     xmlreader \
+	$(if $(filter WNT-TRUE,$(OS)-$(USE_HEADLESS_CODE)), \
+        cairo \
+	) \
 ))
+
+$(if $(filter WNT-TRUE,$(OS)-$(USE_HEADLESS_CODE)), \
+	$(eval $(call gb_Library_use_static_libraries,vcl,\
+        fontconfig \
+        freetype \
+	)) \
+)
 
 $(eval $(call gb_Library_use_externals,vcl,\
     boost_headers \
@@ -551,9 +562,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/font/font \
     vcl/source/font/EOTConverter \
     vcl/source/fontsubset/cff \
-    vcl/source/fontsubset/fontsubset \
     vcl/source/fontsubset/sft \
-    vcl/source/fontsubset/ttcr \
     vcl/source/pdf/COSWriter \
     vcl/source/pdf/EncryptionHashTransporter \
     vcl/source/pdf/ExternalPDFStreams \
@@ -585,6 +594,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/weld/AssistantController \
     vcl/source/weld/Builder \
     vcl/source/weld/ComboBox \
+    vcl/source/weld/Dialog \
     vcl/source/weld/DialogController \
     vcl/source/weld/Entry \
     vcl/source/weld/EntryTreeView \
@@ -833,8 +843,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,vcl,\
+    dwrite \
     ole32 \
     setupapi \
+    shell32 \
     version \
 ))
 

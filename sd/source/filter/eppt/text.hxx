@@ -23,6 +23,7 @@
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <editeng/svxenum.hxx>
 #include <vector>
 #include <memory>

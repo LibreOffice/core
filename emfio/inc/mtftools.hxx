@@ -19,6 +19,7 @@
 #pragma once
 
 #include <basegfx/utils/b2dclipstate.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <tools/poly.hxx>
 #include <vcl/font.hxx>
 #include <vcl/bitmap.hxx>
@@ -26,6 +27,8 @@
 #include <vcl/rendercontext/State.hxx>
 #include <vcl/metaact.hxx>
 #include <rtl/ref.hxx>
+
+#include <com/sun/star/drawing/LineCap.hpp>
 
 #include "emfiodllapi.h"
 
@@ -264,6 +267,7 @@ namespace emfio
         ETO_RTLREADING  = 0x0080,
         /* _WIN32_WINNT >= 0x0500 */
         ETO_NO_RECT     = 0x0100,
+        ETO_SMALL_CHARS = 0x0200,
         ETO_PDY         = 0x2000
     };
 
@@ -806,6 +810,8 @@ namespace emfio
             OUString const & rString,
             KernArray* pDXArry = nullptr,
             tools::Long* pDYArry = nullptr,
+            const float fXScale = 1.0,
+            const float fYScale = 1.0,
             bool bRecordPath = false,
             GraphicsMode nGraphicsMode = GraphicsMode::GM_COMPATIBLE);
 

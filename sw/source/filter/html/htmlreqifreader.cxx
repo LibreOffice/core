@@ -16,6 +16,7 @@
 #include <svtools/parrtf.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
+#include <tools/globname.hxx>
 #include <tools/stream.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <vcl/cvtgrf.hxx>

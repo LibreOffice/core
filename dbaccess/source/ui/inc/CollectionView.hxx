@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <rtl/ref.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>

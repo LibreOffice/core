@@ -206,102 +206,99 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
         return;
 
     ACFlags nFlags = ACFlags::NONE;        // default all off
-    sal_Int32 nTemp = 0;
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        if (aValues[nProp].hasValue())
+        sal_Int32 nTemp = 0; // the default for quotes when the optional value is empty
+        switch(nProp)
         {
-            switch(nProp)
-            {
-                case  0:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::SaveWordCplSttLst;
-                break;//"Exceptions/TwoCapitalsAtStart",
-                case  1:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::SaveWordWordStartLst;
-                break;//"Exceptions/CapitalAtStartSentence",
-                case  2:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::Autocorrect;
-                break;//"UseReplacementTable",
-                case  3:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::CapitalStartWord;
-                break;//"TwoCapitalsAtStart",
-                case  4:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::CapitalStartSentence;
-                break;//"CapitalAtStartSentence",
-                case  5:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::ChgWeightUnderl;
-                break;//"ChangeUnderlineWeight",
-                case  6:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::SetINetAttr;
-                break;//"SetInetAttribute",
-                case  7:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::ChgOrdinalNumber;
-                break;//"ChangeOrdinalNumber",
-                case 8:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                         nFlags |= ACFlags::AddNonBrkSpace;
-                break;//"AddNonBreakingSpace"
-                case  9:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::ChgToEnEmDash;
-                break;//"ChangeDash",
-                case 10:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::IgnoreDoubleSpace;
-                break;//"RemoveDoubleSpaces",
-                case 11:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::ChgSglQuotes;
-                break;//"ReplaceSingleQuote",
-                case 12:
-                    aValues[nProp] >>= nTemp;
-                    rParent.pAutoCorrect->SetStartSingleQuote(
-                        sal::static_int_cast< sal_Unicode >( nTemp ) );
-                break;//"SingleQuoteAtStart",
-                case 13:
-                    aValues[nProp] >>= nTemp;
-                    rParent.pAutoCorrect->SetEndSingleQuote(
-                        sal::static_int_cast< sal_Unicode >( nTemp ) );
-                break;//"SingleQuoteAtEnd",
-                case 14:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::ChgQuotes;
-                break;//"ReplaceDoubleQuote",
-                case 15:
-                    aValues[nProp] >>= nTemp;
-                    rParent.pAutoCorrect->SetStartDoubleQuote(
-                        sal::static_int_cast< sal_Unicode >( nTemp ) );
-                break;//"DoubleQuoteAtStart",
-                case 16:
-                    aValues[nProp] >>= nTemp;
-                    rParent.pAutoCorrect->SetEndDoubleQuote(
-                        sal::static_int_cast< sal_Unicode >( nTemp ) );
-                break;//"DoubleQuoteAtEnd"
-                case 17:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::CorrectCapsLock;
-                break;//"CorrectAccidentalCapsLock"
-                case 18:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::TransliterateRTL;
-                break;//"TransliterateRTL"
-                case 19:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::ChgAngleQuotes;
-                break;//"ChangeAngleQuotes"
-                case  20:
-                    if (*o3tl::doAccess<bool>(aValues[nProp]))
-                        nFlags |= ACFlags::SetDOIAttr;
-                break;//"SetDOIAttr",
-            }
+            case  0:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::SaveWordCplSttLst;
+            break;//"Exceptions/TwoCapitalsAtStart",
+            case  1:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::SaveWordWordStartLst;
+            break;//"Exceptions/CapitalAtStartSentence",
+            case  2:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::Autocorrect;
+            break;//"UseReplacementTable",
+            case  3:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::CapitalStartWord;
+            break;//"TwoCapitalsAtStart",
+            case  4:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::CapitalStartSentence;
+            break;//"CapitalAtStartSentence",
+            case  5:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::ChgWeightUnderl;
+            break;//"ChangeUnderlineWeight",
+            case  6:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::SetINetAttr;
+            break;//"SetInetAttribute",
+            case  7:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::ChgOrdinalNumber;
+            break;//"ChangeOrdinalNumber",
+            case 8:
+                if (aValues[nProp] == true)
+                     nFlags |= ACFlags::AddNonBrkSpace;
+            break;//"AddNonBreakingSpace"
+            case  9:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::ChgToEnEmDash;
+            break;//"ChangeDash",
+            case 10:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::IgnoreDoubleSpace;
+            break;//"RemoveDoubleSpaces",
+            case 11:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::ChgSglQuotes;
+            break;//"ReplaceSingleQuote",
+            case 12:
+                aValues[nProp] >>= nTemp;
+                rParent.pAutoCorrect->SetStartSingleQuote(
+                    sal::static_int_cast< sal_Unicode >( nTemp ) );
+            break;//"SingleQuoteAtStart",
+            case 13:
+                aValues[nProp] >>= nTemp;
+                rParent.pAutoCorrect->SetEndSingleQuote(
+                    sal::static_int_cast< sal_Unicode >( nTemp ) );
+            break;//"SingleQuoteAtEnd",
+            case 14:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::ChgQuotes;
+            break;//"ReplaceDoubleQuote",
+            case 15:
+                aValues[nProp] >>= nTemp;
+                rParent.pAutoCorrect->SetStartDoubleQuote(
+                    sal::static_int_cast< sal_Unicode >( nTemp ) );
+            break;//"DoubleQuoteAtStart",
+            case 16:
+                aValues[nProp] >>= nTemp;
+                rParent.pAutoCorrect->SetEndDoubleQuote(
+                    sal::static_int_cast< sal_Unicode >( nTemp ) );
+            break;//"DoubleQuoteAtEnd"
+            case 17:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::CorrectCapsLock;
+            break;//"CorrectAccidentalCapsLock"
+            case 18:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::TransliterateRTL;
+            break;//"TransliterateRTL"
+            case 19:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::ChgAngleQuotes;
+            break;//"ChangeAngleQuotes"
+            case  20:
+                if (aValues[nProp] == true)
+                    nFlags |= ACFlags::SetDOIAttr;
+            break;//"SetDOIAttr",
         }
     }
     if( nFlags != ACFlags::NONE )
@@ -443,138 +440,135 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
     SvxSwAutoFormatFlags& rSwFlags = rParent.pAutoCorrect->GetSwFlags();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        if (aValues[nProp].hasValue())
+        switch(nProp)
         {
-            switch(nProp)
-            {
-                case   0: rParent.bFileRel = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Text/FileLinks",
-                case   1: rParent.bNetRel = *o3tl::doAccess<bool>(aValues[nProp]);  break; // "Text/InternetLinks",
-                case   2: rParent.bAutoTextPreview = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Text/ShowPreview",
-                case   3: rParent.bAutoTextTip = *o3tl::doAccess<bool>(aValues[nProp]);  break; // "Text/ShowToolTip",
-                case   4: rParent.bSearchInAllCategories = *o3tl::doAccess<bool>(aValues[nProp]);  break; //"Text/SearchInAllCategories"
-                case   5: rSwFlags.bAutoCorrect = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/UseReplacementTable",
-                case   6: rSwFlags.bCapitalStartSentence = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/TwoCapitalsAtStart",
-                case   7: rSwFlags.bCapitalStartWord = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/CapitalAtStartSentence",
-                case   8: rSwFlags.bChgWeightUnderl = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/ChangeUnderlineWeight",
-                case   9: rSwFlags.bSetINetAttr = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/SetInetAttribute",
-                case  10: rSwFlags.bChgOrdinalNumber = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/ChangeOrdinalNumber",
-                case  11: rSwFlags.bAddNonBrkSpace = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/AddNonBreakingSpace",
+            case  0: rParent.bFileRel = (aValues[nProp] == true); break; // "Text/FileLinks",
+            case  1: rParent.bNetRel = (aValues[nProp] == true);  break; // "Text/InternetLinks",
+            case  2: rParent.bAutoTextPreview = (aValues[nProp] == true); break; // "Text/ShowPreview",
+            case  3: rParent.bAutoTextTip = (aValues[nProp] == true);  break; // "Text/ShowToolTip",
+            case  4: rParent.bSearchInAllCategories = (aValues[nProp] == true);  break; //"Text/SearchInAllCategories"
+            case  5: rSwFlags.bAutoCorrect = (aValues[nProp] == true); break; // "Format/Option/UseReplacementTable",
+            case  6: rSwFlags.bCapitalStartSentence = (aValues[nProp] == true); break; // "Format/Option/TwoCapitalsAtStart",
+            case  7: rSwFlags.bCapitalStartWord = (aValues[nProp] == true); break; // "Format/Option/CapitalAtStartSentence",
+            case  8: rSwFlags.bChgWeightUnderl = (aValues[nProp] == true); break; // "Format/Option/ChangeUnderlineWeight",
+            case  9: rSwFlags.bSetINetAttr = (aValues[nProp] == true); break; // "Format/Option/SetInetAttribute",
+            case 10: rSwFlags.bChgOrdinalNumber = (aValues[nProp] == true); break; // "Format/Option/ChangeOrdinalNumber",
+            case 11: rSwFlags.bAddNonBrkSpace = (aValues[nProp] == true); break; // "Format/Option/AddNonBreakingSpace",
 // it doesn't exist here - the common flags are used for that -> LM
-//                  case  12: rSwFlags.bChgToEnEmDash = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/ChangeDash",
-                case  13: rSwFlags.bDelEmptyNode = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/DelEmptyParagraphs",
-                case  14: rSwFlags.bChgUserColl = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/ReplaceUserStyle",
-                case  15: rSwFlags.bChgEnumNum = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/ChangeToBullets/Enable",
-                case  16:
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.cBullet =
-                        sal::static_int_cast< sal_Unicode >(nVal);
-                }
-                break; // "Format/Option/ChangeToBullets/SpecialCharacter/Char",
-                case  17:
-                {
-                    OUString sTemp; aValues[nProp] >>= sTemp;
-                    rSwFlags.aBulletFont.SetFamilyName(sTemp);
-                }
-                break; // "Format/Option/ChangeToBullets/SpecialCharacter/Font",
-                case  18:
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.aBulletFont.SetFamily(FontFamily(nVal));
-                }
-                break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontFamily",
-                case  19:
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.aBulletFont.SetCharSet(rtl_TextEncoding(nVal));
-                }
-                break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontCharset",
-                case  20:
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.aBulletFont.SetPitch(FontPitch(nVal));
-                }
-                break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch",
-                case  21: rSwFlags.bRightMargin = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/CombineParagraphs",
-                case  22:
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.nRightMargin =
-                        sal::static_int_cast< sal_uInt8 >(nVal);
-                }
-                break; // "Format/Option/CombineValue",
-                case  23: rSwFlags.bAFormatDelSpacesAtSttEnd =  *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/DelSpacesAtStartEnd",
-                case  24: rSwFlags.bAFormatDelSpacesBetweenLines = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/DelSpacesBetween",
-                case  25: rParent.bAutoFmtByInput = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/ByInput/Enable",
-                case  26: rSwFlags.bChgToEnEmDash = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/ByInput/ChangeDash",
-                case  27: rSwFlags.bSetNumRule = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/ByInput/ApplyNumbering/Enable",
-                case  28: rSwFlags.bSetBorder = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/ByInput/ChangeToBorders",
-                case  29: rSwFlags.bCreateTable = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/ByInput/ChangeToTable",
-                case  30: rSwFlags.bReplaceStylesByInput =  *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/ByInput/ReplaceStyle",
-                case  31: rSwFlags.bAFormatByInpDelSpacesAtSttEnd =  *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/ByInput/DelSpacesAtStartEnd",
-                case  32: rSwFlags.bAFormatByInpDelSpacesBetweenLines = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/ByInput/DelSpacesBetween",
-                case  33: rSwFlags.bAutoCompleteWords = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Completion/Enable",
-                case  34:
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.nAutoCmpltWordLen =
-                        sal::static_int_cast< sal_uInt16 >(nVal);
-                }
-                break; // "Completion/MinWordLen",
-                case  35:
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.nAutoCmpltListLen =
-                        sal::static_int_cast< sal_uInt32 >(nVal);
-                }
-                break; // "Completion/MaxListLen",
-                case  36: rSwFlags.bAutoCmpltCollectWords = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Completion/CollectWords",
-                case  37: rSwFlags.bAutoCmpltEndless = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Completion/EndlessList",
-                case  38: rSwFlags.bAutoCmpltAppendBlank = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Completion/AppendBlank",
-                case  39: rSwFlags.bAutoCmpltShowAsTip = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Completion/ShowAsTip",
-                case  40:
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.nAutoCmpltExpandKey =
-                        sal::static_int_cast< sal_uInt16 >(nVal);
-                }
-                break; // "Completion/AcceptKey"
-                case 41 :rSwFlags.bAutoCmpltKeepList = *o3tl::doAccess<bool>(aValues[nProp]); break;//"Completion/KeepList"
-                case 42 :
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.cByInputBullet =
-                        sal::static_int_cast< sal_Unicode >(nVal);
-                }
-                break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Char",
-                case 43 :
-                {
-                    OUString sTemp; aValues[nProp] >>= sTemp;
-                    rSwFlags.aByInputBulletFont.SetFamilyName(sTemp);
-                }
-                break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",
-                case 44 :
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.aByInputBulletFont.SetFamily(FontFamily(nVal));
-                }
-                break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",
-                case 45 :
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.aByInputBulletFont.SetCharSet(rtl_TextEncoding(nVal));
-                }
-                break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",
-                case 46 :
-                {
-                    sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
-                    rSwFlags.aByInputBulletFont.SetPitch(FontPitch(nVal));
-                }
-                break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
-                case   47: rSwFlags.bSetDOIAttr = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/SetDOIAttribute",
-                case 48 : rSwFlags.bSetNumRuleAfterSpace = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/ByInput/ApplyNumberingAfterSpace",
-                case 49 : rSwFlags.bReplaceStyles = *o3tl::doAccess<bool>(aValues[nProp]); break; // "Format/Option/ReplaceStyle",
+//            case 12: rSwFlags.bChgToEnEmDash = (aValues[nProp] == true); break; // "Format/Option/ChangeDash",
+            case 13: rSwFlags.bDelEmptyNode = (aValues[nProp] == true); break; // "Format/Option/DelEmptyParagraphs",
+            case 14: rSwFlags.bChgUserColl = (aValues[nProp] == true); break; // "Format/Option/ReplaceUserStyle",
+            case 15: rSwFlags.bChgEnumNum = (aValues[nProp] == true); break; // "Format/Option/ChangeToBullets/Enable",
+            case 16:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.cBullet =
+                    sal::static_int_cast< sal_Unicode >(nVal);
             }
+            break; // "Format/Option/ChangeToBullets/SpecialCharacter/Char",
+            case 17:
+            {
+                OUString sTemp; aValues[nProp] >>= sTemp;
+                rSwFlags.aBulletFont.SetFamilyName(sTemp);
+            }
+            break; // "Format/Option/ChangeToBullets/SpecialCharacter/Font",
+            case 18:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.aBulletFont.SetFamily(FontFamily(nVal));
+            }
+            break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontFamily",
+            case 19:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.aBulletFont.SetCharSet(rtl_TextEncoding(nVal));
+            }
+            break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontCharset",
+            case 20:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.aBulletFont.SetPitch(FontPitch(nVal));
+            }
+            break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch",
+            case 21: rSwFlags.bRightMargin = (aValues[nProp] == true); break; // "Format/Option/CombineParagraphs",
+            case 22:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.nRightMargin =
+                    sal::static_int_cast< sal_uInt8 >(nVal);
+            }
+            break; // "Format/Option/CombineValue",
+            case 23: rSwFlags.bAFormatDelSpacesAtSttEnd =  (aValues[nProp] == true); break; // "Format/Option/DelSpacesAtStartEnd",
+            case 24: rSwFlags.bAFormatDelSpacesBetweenLines = (aValues[nProp] == true); break; // "Format/Option/DelSpacesBetween",
+            case 25: rParent.bAutoFmtByInput = (aValues[nProp] == true); break; // "Format/ByInput/Enable",
+            case 26: rSwFlags.bChgToEnEmDash = (aValues[nProp] == true); break; // "Format/ByInput/ChangeDash",
+            case 27: rSwFlags.bSetNumRule = (aValues[nProp] == true); break; // "Format/ByInput/ApplyNumbering/Enable",
+            case 28: rSwFlags.bSetBorder = (aValues[nProp] == true); break; // "Format/ByInput/ChangeToBorders",
+            case 29: rSwFlags.bCreateTable = (aValues[nProp] == true); break; // "Format/ByInput/ChangeToTable",
+            case 30: rSwFlags.bReplaceStylesByInput =  (aValues[nProp] == true); break; // "Format/ByInput/ReplaceStyle",
+            case 31: rSwFlags.bAFormatByInpDelSpacesAtSttEnd =  (aValues[nProp] == true); break; // "Format/ByInput/DelSpacesAtStartEnd",
+            case 32: rSwFlags.bAFormatByInpDelSpacesBetweenLines = (aValues[nProp] == true); break; // "Format/ByInput/DelSpacesBetween",
+            case 33: rSwFlags.bAutoCompleteWords = (aValues[nProp] == true); break; // "Completion/Enable",
+            case 34:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.nAutoCmpltWordLen =
+                    sal::static_int_cast< sal_uInt16 >(nVal);
+            }
+            break; // "Completion/MinWordLen",
+            case 35:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.nAutoCmpltListLen =
+                    sal::static_int_cast< sal_uInt32 >(nVal);
+            }
+            break; // "Completion/MaxListLen",
+            case 36: rSwFlags.bAutoCmpltCollectWords = (aValues[nProp] == true); break; // "Completion/CollectWords",
+            case 37: rSwFlags.bAutoCmpltEndless = (aValues[nProp] == true); break; // "Completion/EndlessList",
+            case 38: rSwFlags.bAutoCmpltAppendBlank = (aValues[nProp] == true); break; // "Completion/AppendBlank",
+            case 39: rSwFlags.bAutoCmpltShowAsTip = (aValues[nProp] == true); break; // "Completion/ShowAsTip",
+            case 40:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.nAutoCmpltExpandKey =
+                    sal::static_int_cast< sal_uInt16 >(nVal);
+            }
+            break; // "Completion/AcceptKey"
+            case 41: rSwFlags.bAutoCmpltKeepList = (aValues[nProp] == true); break;//"Completion/KeepList"
+            case 42:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.cByInputBullet =
+                    sal::static_int_cast< sal_Unicode >(nVal);
+            }
+            break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Char",
+            case 43:
+            {
+                OUString sTemp; aValues[nProp] >>= sTemp;
+                rSwFlags.aByInputBulletFont.SetFamilyName(sTemp);
+            }
+            break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",
+            case 44:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.aByInputBulletFont.SetFamily(FontFamily(nVal));
+            }
+            break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",
+            case 45:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.aByInputBulletFont.SetCharSet(rtl_TextEncoding(nVal));
+            }
+            break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",
+            case 46:
+            {
+                sal_Int32 nVal = 0; aValues[nProp] >>= nVal;
+                rSwFlags.aByInputBulletFont.SetPitch(FontPitch(nVal));
+            }
+            break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
+            case 47: rSwFlags.bSetDOIAttr = (aValues[nProp] == true); break; // "Format/Option/SetDOIAttribute",
+            case 48: rSwFlags.bSetNumRuleAfterSpace = (aValues[nProp] == true); break; // "Format/ByInput/ApplyNumberingAfterSpace",
+            case 49: rSwFlags.bReplaceStyles = (aValues[nProp] == true); break; // "Format/Option/ReplaceStyle",
         }
     }
 }

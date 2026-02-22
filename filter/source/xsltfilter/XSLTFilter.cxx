@@ -234,7 +234,8 @@ namespace XSLT
             {
                 xTransformer.set(
                     m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                        u"com.sun.star.xml.xslt.XSLT2Transformer"_ustr, rArgs, m_xContext),
+                        u"com.sun.star.xml.xslt.XSLT2Transformer"_ustr,
+                        {Any{rArgs}}, m_xContext),
                     css::uno::UNO_QUERY_THROW);
             }
             catch (const Exception&)

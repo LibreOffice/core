@@ -39,6 +39,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <salhelper/thread.hxx>
+#include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
@@ -838,7 +839,7 @@ IMPL_LINK_NOARG(SvtURLBox, TryAutoComplete, Timer *, void)
         pCtx->launch();
     }
     else
-        m_xWidget->clear();
+        UpdatePicklistForSmartProtocol_Impl();
 }
 
 SvtURLBox::SvtURLBox(std::unique_ptr<weld::ComboBox> pWidget)

@@ -182,7 +182,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,MORE_FONTS,FONT_CALADEA_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_CARLITO_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_DEJAVU_TARBALL) \
-		$(call fetch_Optional,MORE_FONTS,FONT_GENTIUM_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_NARROW_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LINLIBERTINEG_TARBALL) \
@@ -253,6 +252,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,OPENSYMBOL,OPENSYMBOL_TTF) \
 		$(call fetch_Optional,ODFVALIDATOR,ODFVALIDATOR_JAR) \
 		$(call fetch_Optional,OFFICEOTRON,OFFICEOTRON_JAR) \
+		$(call fetch_Optional,VERAPDF,VERAPDF_JAR) \
 	,$(call fetch_Download_item,https://dev-www.libreoffice.org/extern,$(item)))
 	-@mkdir -p $(TARFILE_LOCATION)/cargo
 	$(if $(call fetch_Optional,YRS,1),\

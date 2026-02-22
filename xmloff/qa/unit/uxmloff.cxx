@@ -204,7 +204,8 @@ void Test::testMetaGenerator()
         { "LibreOffice/25.2.6.2$Linux_X86_64 LibreOffice_project/520$Build-2", ";25.2.6.2", SvXMLImport::LO_252 },
         { "LibreOfficeDev/25.8.0.0.alpha0$Linux_X86_64 LibreOffice_project/308705574842e0c36f7385f73fc47da9a4542367", ";25.8.0.0.", SvXMLImport::LO_258 },
         { "LibreOfficeDev/26.2.0.0.alpha0$Linux_X86_64 LibreOffice_project/d7e24df067ba6af0043e70750ad2b97e21201fa9", ";26.2.0.0.", SvXMLImport::LO_262 },
-        { "LibreOfficeDev/26.8.0.0.alpha0$Linux_X86_64 LibreOffice_project/d7e24df067ba6af0043e70750ad2b97e21201fa9", ";26.8.0.0.", SvXMLImport::LO_New }
+        { "LibreOfficeDev/26.8.0.0.alpha0$Linux_X86_64 LibreOffice_project/d7e24df067ba6af0043e70750ad2b97e21201fa9", ";26.8.0.0.", SvXMLImport::LO_268 },
+        { "LibreOfficeDev/27.2.0.0.alpha0$Linux_X86_64 LibreOffice_project/d7e24df067ba6af0043e70750ad2b97e21201fa9", ";27.2.0.0.", SvXMLImport::LO_New }
     };
 
     for (auto const[pGenerator, pBuildId, nResult] : tests)

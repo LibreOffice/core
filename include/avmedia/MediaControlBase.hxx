@@ -21,6 +21,7 @@
 #include <config_options.h>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <avmedia/avmediadllapi.h>

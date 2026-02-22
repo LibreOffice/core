@@ -11,6 +11,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -19,6 +20,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/vclmain.hxx>
 
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>

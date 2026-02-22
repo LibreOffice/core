@@ -39,6 +39,7 @@
 #include <svx/fontwork.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editstat.hxx>
@@ -51,6 +52,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>
+#include <unotools/fontdefs.hxx>
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>

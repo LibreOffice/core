@@ -40,26 +40,29 @@ class XAccessibleTable;
 class QtFrame;
 class QtWidget;
 
-class QtAccessibleWidget final : public QObject,
-                                 public QAccessibleInterface,
-                                 public QAccessibleActionInterface,
+class QtAccessibleWidget : public QObject,
+                           public QAccessibleInterface,
+                           public QAccessibleActionInterface,
 #ifndef Q_MOC_RUN
 #if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
-                                 public QAccessibleAttributesInterface,
+                           public QAccessibleAttributesInterface,
 #endif
 #endif
-                                 public QAccessibleTextInterface,
-                                 public QAccessibleEditableTextInterface,
+                           public QAccessibleTextInterface,
+                           public QAccessibleEditableTextInterface,
 #ifndef Q_MOC_RUN
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
-                                 public QAccessibleSelectionInterface,
+                           public QAccessibleSelectionInterface,
 #endif
 #endif
-                                 public QAccessibleTableCellInterface,
-                                 public QAccessibleTableInterface,
-                                 public QAccessibleValueInterface
+                           public QAccessibleTableCellInterface,
+                           public QAccessibleTableInterface,
+                           public QAccessibleValueInterface
 {
     Q_OBJECT
+
+    css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
+    QObject& m_rObject;
 
 public:
     QtAccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible>& xAccessible,
@@ -197,7 +200,6 @@ public:
                                     const rtl::Reference<comphelper::OAccessible>& rAccessible);
 
 private:
-    css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleContextImpl() const;
     css::uno::Reference<css::accessibility::XAccessibleTable> getAccessibleTableForParent() const;
 
@@ -208,8 +210,6 @@ private:
         css::uno::Reference<Interface> xInterface(xContext, css::uno::UNO_QUERY);
         return xInterface.is();
     }
-
-    QObject& m_rObject;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

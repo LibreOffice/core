@@ -37,6 +37,7 @@
 #include <svx/SvxXTextColumns.hxx>
 #include <vcl/svapp.hxx>
 
+#include <climits>
 #include <numeric>
 
 namespace

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cmath>
 #include <o3tl/any.hxx>
 #include <o3tl/string_view.hxx>
 #include <oox/token/tokens.hxx>
@@ -107,6 +108,9 @@ void WriteAnimationProperty(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
         }
         return;
     }
+    // If rAny is not a valid ValuePair and token is XML_by
+    if (nToken == XML_by)
+        return;
 
     sal_Int32 nRgb = {}; // spurious -Werror=maybe-uninitialized
     double fDouble = {}; // spurious -Werror=maybe-uninitialized
@@ -179,9 +183,9 @@ void WriteAnimateColorColor(const FSHelperPtr& pFS, const Any& rAny, sal_Int32 n
     if (nToken == XML_by)
     {
         // CT_TLByHslColorTransform
-        pFS->singleElementNS(XML_p, XML_hsl, XML_h, OString::number(aHSL[0] * 60000), // ST_Angel
-                             XML_s, OString::number(aHSL[1] * 100000), XML_l,
-                             OString::number(aHSL[2] * 100000));
+        pFS->singleElementNS(
+            XML_p, XML_hsl, XML_h, OString::number(std::round(aHSL[0] * 60000)), // ST_Angel
+            XML_s, OString::number(aHSL[1] * 100000), XML_l, OString::number(aHSL[2] * 100000));
     }
     else
     {

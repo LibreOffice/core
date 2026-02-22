@@ -31,6 +31,7 @@
 #include <sal/macros.h>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
+#include <vcl/keycod.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/image.hxx>

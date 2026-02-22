@@ -692,7 +692,7 @@ void ScHTMLLayoutParser::Adjust()
         // Real column
         (void)SeekOffset( &maColOffset, pE->nOffset, &pE->nCol, nOffsetTolerance );
         SCCOL nColBeforeSkip = pE->nCol;
-        SkipLocked(pE.get(), false);
+        SkipLocked(pE.get(), /*bJoin*/ false);
         if ( pE->nCol != nColBeforeSkip )
         {
             size_t nCount = maColOffset.size();
@@ -918,7 +918,7 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
     if ( pE->nRow == SCROW_MAX )
         pE->nRow = nRowCnt;
     SCCOL nCol = pE->nCol;
-    SkipLocked( pE ); // Change of columns to the right
+    SkipLocked( pE, /*bJoin*/ true ); // Change of columns to the right
 
     if ( nCol < pE->nCol )
     {   // Replaced

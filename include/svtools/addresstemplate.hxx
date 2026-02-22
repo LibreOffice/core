@@ -22,16 +22,21 @@
 #include <config_options.h>
 #include <memory>
 #include <svtools/svtdllapi.h>
-#include <vcl/weld/ComboBox.hxx>
+#include <tools/link.hxx>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/ScrolledWindow.hxx>
-#include <vcl/weld/weld.hxx>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace com :: sun :: star :: container { class XNameAccess; }
 namespace com :: sun :: star :: sdbc { class XDataSource; }
 namespace com :: sun :: star :: sdb { class XDatabaseContext; }
 namespace com :: sun :: star :: uno { class XComponentContext; }
 namespace com :: sun :: star :: util { struct AliasProgrammaticPair; }
+
+namespace weld { class Button; }
+namespace weld { class ComboBox; }
+namespace weld { class ScrolledWindow; }
+namespace weld { class Window; }
 
 #define FIELD_PAIRS_VISIBLE         5
 #define FIELD_CONTROLS_VISIBLE      2 * FIELD_PAIRS_VISIBLE

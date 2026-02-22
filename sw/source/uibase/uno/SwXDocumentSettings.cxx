@@ -172,6 +172,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES,
     HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR,
     HANDLE_ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT,
+    HANDLE_LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION,
 };
 
 }
@@ -290,6 +291,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { u"BalanceSpacesAndIdeographicSpaces"_ustr, HANDLE_BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, cppu::UnoType<bool>::get(), 0 },
         { u"ForceTopAlignmentInCellWithFloatingAnchor"_ustr, HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR, cppu::UnoType<bool>::get(), 0 },
         { u"AdjustTableLineHeightsToGridHeight"_ustr, HANDLE_ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT, cppu::UnoType<bool>::get(), 0 },
+        { u"ListLabelAlignmentIgnoresDirection"_ustr, HANDLE_LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1261,6 +1263,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT, bTmp);
             }
             break;
+        case HANDLE_LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION:
+            if (bool bTmp; rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION, bTmp);
+            }
+            break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1900,6 +1909,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT);
+        }
+        break;
+        case HANDLE_LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION);
         }
         break;
         default:

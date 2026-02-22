@@ -72,4 +72,6 @@ Reference<XInterface> SwXFootnoteProperties::init()
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXFootnoteProperties);
 }
 
+CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

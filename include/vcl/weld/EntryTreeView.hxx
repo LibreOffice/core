@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
+#include <vcl/font.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>
@@ -29,6 +30,12 @@ protected:
     std::unique_ptr<Entry> m_xEntry;
     std::unique_ptr<TreeView> m_xTreeView;
 
+    virtual void do_insert(int pos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface) override
+    {
+        m_xTreeView->insert(pos, rStr, pId, pIconName, pImageSurface);
+    }
+
 public:
     EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView);
 
@@ -41,12 +48,6 @@ public:
         for (const auto& rItem : rItems)
             append(rItem);
         m_xTreeView->thaw();
-    }
-
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface) override
-    {
-        m_xTreeView->insert(pos, rStr, pId, pIconName, pImageSurface);
     }
 
     virtual int get_count() const override { return m_xTreeView->n_children(); }

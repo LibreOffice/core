@@ -21,6 +21,7 @@
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 
@@ -39,6 +40,7 @@
 #include <CustomNotebookbarGenerator.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <unotools/configmgr.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/frame/theUICommandDescription.hpp>

@@ -50,10 +50,10 @@ void SwDateContentControlButton::LaunchPopup()
     if (m_pContentControl)
     {
         const Date& rNullDate = m_pNumberFormatter->GetNullDate();
-        double fCurrentDate = m_pContentControl->GetCurrentDateValue();
-        if (fCurrentDate != 0)
+        std::optional<double> ofCurrentDate = m_pContentControl->GetCurrentDateValue();
+        if (ofCurrentDate.has_value())
         {
-            m_xCalendar->set_date(rNullDate + sal_Int32(fCurrentDate));
+            m_xCalendar->set_date(rNullDate + sal_Int32(*ofCurrentDate));
         }
     }
 

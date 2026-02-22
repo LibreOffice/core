@@ -87,6 +87,7 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
             {
                 mpShapePtr->getGraphicProperties().m_xMediaStream = std::move(xMediaStream);
                 mpShapePtr->getGraphicProperties().m_sMediaPackageURL = lcl_GetMediaReference(path);
+                mpShapePtr->getGraphicProperties().m_sMediaMimeType = "audio/unknown";
             }
         }
         break;
@@ -113,6 +114,11 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
                     mpShapePtr->getGraphicProperties().m_sMediaPackageURL
                         = getFilter().getAbsoluteUrl(rPath);
             }
+
+            if (getBaseToken(aElementToken) == XML_audioFile)
+                mpShapePtr->getGraphicProperties().m_sMediaMimeType = "audio/unknown";
+            else
+                mpShapePtr->getGraphicProperties().m_sMediaMimeType = "video/unknown";
         }
         break;
     }
@@ -307,7 +313,9 @@ ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aEleme
 
         // No DrawingML fallback, need to warn the user at the end.
         if (mpShapePtr->getExtDrawings().empty())
+        {
             getFilter().setMissingExtDrawing();
+        }
         else
         {
             for (const auto& rRelId : mpShapePtr->getExtDrawings())

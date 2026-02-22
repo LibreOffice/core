@@ -559,6 +559,7 @@ public:
     static const sal_uInt16 LO_252 = 82 | LO_flag;
     static const sal_uInt16 LO_258 = 83 | LO_flag;
     static const sal_uInt16 LO_262 = 84 | LO_flag;
+    static const sal_uInt16 LO_268 = 85 | LO_flag;
     static const sal_uInt16 LO_New = 100 | LO_flag;
     static const sal_uInt16 ProductVersionUnknown = SAL_MAX_UINT16;
 

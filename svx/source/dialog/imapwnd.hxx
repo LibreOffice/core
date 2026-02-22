@@ -26,6 +26,7 @@
 #include <sfx2/frame.hxx>
 #include <svx/graphctl.hxx>
 #include <svl/itempool.hxx>
+#include <vcl/weld/Menu.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 

@@ -40,14 +40,12 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testTdAsText)
 {
     // Given a document with an A2 cell that contains "02" as text:
-    OUString aURL = createFileURL(u"text.html");
-
     // When loading that document to Calc:
     uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"DocumentService"_ustr,
                                       u"com.sun.star.sheet.SpreadsheetDocument"_ustr),
     };
-    loadWithParams(aURL, aParams);
+    loadFromFile(u"text.html", aParams);
 
     // Then make sure "01" is not auto-converted to 1, as a number:
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY);
@@ -235,14 +233,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79298_strikeout_variants)
 CPPUNIT_TEST_FIXTURE(Test, testTdf132770_inserted_text)
 {
     // Given a document with an inserted text tag <ins>
-    OUString aURL = createFileURL(u"tdf132770_inserted_text.html");
-
     // When loading that document to Calc:
     uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"DocumentService"_ustr,
                                       u"com.sun.star.sheet.SpreadsheetDocument"_ustr),
     };
-    loadWithParams(aURL, aParams);
+    loadFromFile(u"tdf132770_inserted_text.html", aParams);
 
     // Verify HTML inserted text tag <ins>
     ScDocument* pDoc = getScDoc();

@@ -22,10 +22,12 @@
 #include "menubarwindow.hxx"
 #include "bufferdevice.hxx"
 
+#include <comphelper/OAccessible.hxx>
 #include <sal/log.hxx>
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <window.h>
 

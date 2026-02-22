@@ -23,9 +23,10 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
+namespace drawinglayer::primitive2d { class BasePrimitive2D; }
+namespace drawinglayer::primitive2d { class Primitive2DContainer; }
 
 namespace drawinglayer::processor2d
     {

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 
 class LockCorruptQueryBox
 {

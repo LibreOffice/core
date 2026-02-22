@@ -194,7 +194,7 @@ IMPL_LINK_NOARG(ScHighlightChgDlg, OKBtnHdl, weld::Button&, void)
 {
     aChangeViewSet.SetShowChanges(m_xHighlightBox->get_active());
     aChangeViewSet.SetHasDate(m_xFilterCtr->IsDate());
-    SvxRedlinDateMode eMode = m_xFilterCtr->GetDateMode();
+    SvxRedlineDateMode eMode = m_xFilterCtr->GetDateMode();
     aChangeViewSet.SetTheDateMode( eMode );
     Date aFirstDate( m_xFilterCtr->GetFirstDate() );
     tools::Time aFirstTime( m_xFilterCtr->GetFirstTime() );

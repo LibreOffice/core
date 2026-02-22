@@ -18,6 +18,7 @@
  */
 
 #include <svtools/svtresid.hxx>
+#include <unotools/resmgr.hxx>
 
 std::locale SvtResLocale() { return Translate::Create("svt"); }
 

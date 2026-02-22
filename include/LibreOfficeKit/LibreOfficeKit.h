@@ -32,11 +32,11 @@ extern "C"
 {
 #endif
 
-typedef struct _LibreOfficeKit LibreOfficeKit;
-typedef struct _LibreOfficeKitClass LibreOfficeKitClass;
+typedef struct LibreOfficeKitStruct LibreOfficeKit;
+typedef struct LibreOfficeKitClassStruct LibreOfficeKitClass;
 
-typedef struct _LibreOfficeKitDocument LibreOfficeKitDocument;
-typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
+typedef struct LibreOfficeKitDocumentStruct LibreOfficeKitDocument;
+typedef struct LibreOfficeKitDocumentClassStruct LibreOfficeKitDocumentClass;
 
 // Do we have an extended member in this struct ?
 #define LIBREOFFICEKIT_HAS_MEMBER(strct,member,nSize) \
@@ -44,12 +44,12 @@ typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
 
 #define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitClass,member,(pKit)->pClass->nSize)
 
-struct _LibreOfficeKit
+struct LibreOfficeKitStruct
 {
     LibreOfficeKitClass* pClass;
 };
 
-struct _LibreOfficeKitClass
+struct LibreOfficeKitClassStruct
 {
     size_t  nSize;
 
@@ -65,6 +65,20 @@ struct _LibreOfficeKitClass
                                                         const char* pURL,
                                                         const char* pOptions);
     /// @since LibreOffice 5.2
+
+    /// The name "freeError" is a historical accident, actually this
+    /// is a generic deallocation function for dynamically allocated
+    /// memory returned by other LibreOfficeKit functions.
+
+    /// Especially on Windows it is important to not call free() in
+    /// your own code on a pointer returned from some random other
+    /// dynamic library (like the one this code goes into) where it
+    /// might have been allocated by calling malloc() (etc) in a C
+    /// runtime library that is different from the one used by your
+    /// code. That will lead to a crash. Always call the free() in the
+    /// same C runtime where the malloc() that allocated the pointer
+    /// is.
+
     void (*freeError) (char* pFree);
 
     /// @since LibreOffice 6.0
@@ -173,12 +187,12 @@ struct _LibreOfficeKitClass
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
 
-struct _LibreOfficeKitDocument
+struct LibreOfficeKitDocumentStruct
 {
     LibreOfficeKitDocumentClass* pClass;
 };
 
-struct _LibreOfficeKitDocumentClass
+struct LibreOfficeKitDocumentClassStruct
 {
     size_t  nSize;
 

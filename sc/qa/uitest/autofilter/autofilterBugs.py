@@ -294,4 +294,31 @@ class autofilter(UITestCase):
             xCancelBtn = xFloatWindow.getChild("cancel")
             xCancelBtn.executeAction("CLICK", tuple())
 
+        #tdf1160018
+    def test_tdf160018_use_on_database_range(self):
+        # Error was, that AutoFilter has extended the database range to which it is attached.
+        with self.ui_test.load_file(get_url_for_data_file("tdf160018_use_on_database_range.ods")):
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+
+            # select database range with name "upper". It has an AutoFilter.
+            propDbName = mkPropertyValues({"DbName": "upper"})
+            self.xUITest.executeCommandWithParameters(".uno:SelectDB", propDbName)
+
+            #verify size.
+            gridWinStateOrig = get_state_as_dict(xGridWin)
+            self.assertEqual(gridWinStateOrig["MarkedArea"], "Sheet1.A3:Sheet1.B11")
+
+            # Open Autofilter and cancel immediately
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "2"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xButton = xFloatWindow.getChild("cancel")
+            xButton.executeAction("CLICK", tuple())
+
+            # select database range "upper" again.
+            self.xUITest.executeCommandWithParameters(".uno:SelectDB", propDbName)
+
+            # Error was, that the range was extended to Sheet1.A3:Sheet1.B18
+            gridWinState = get_state_as_dict(xGridWin)
+            self.assertEqual(gridWinState["MarkedArea"], "Sheet1.A3:Sheet1.B11")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

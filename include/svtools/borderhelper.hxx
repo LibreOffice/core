@@ -21,14 +21,16 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/point/b2dpoint.hxx>
+#include <vector>
 
 class OutputDevice;
 class Point;
 
 enum class SvxBorderLineStyle : sal_Int16;
+
+namespace basegfx { class B2DPoint; }
+namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx { class B2DPolygon; }
 
 namespace svtools {
 

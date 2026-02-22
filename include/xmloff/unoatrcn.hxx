@@ -29,9 +29,9 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <xmloff/xmlcnimp.hxx>
-
 #include <cppuhelper/implbase.hxx>
+
+class SvXMLAttrContainerData;
 
 extern css::uno::Reference< css::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
 

@@ -37,7 +37,7 @@ namespace canvas
         {
         }
 
-        /** the whole idea is build around the concept that you create
+        /** the whole idea is built around the concept that you create
             some arbitrary buffer which contains the image data and
             tell the texture manager about it.  from there on you can
             draw this image using any kind of graphics api you want.

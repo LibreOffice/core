@@ -300,8 +300,9 @@ protected:
     // Invalidate children on enable/disable
     virtual void StateChanged( StateChangedType eType ) override;
 
-    virtual sal_uInt32 Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uInt32 nPos=TREELIST_APPEND);
-    virtual sal_uInt32 Insert( SvTreeListEntry* pEntry,sal_uInt32 nRootPos = TREELIST_APPEND );
+    virtual void Insert(SvTreeListEntry* pEnt, SvTreeListEntry* pPar,
+                        sal_uInt32 nPos = TREELIST_APPEND);
+    virtual void Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos = TREELIST_APPEND);
 
     // In-place editing
     std::unique_ptr<SvInplaceEdit2>  pEdCtrl;
@@ -338,33 +339,14 @@ public:
     virtual ~SvTreeListBox() override;
     virtual void dispose() override;
 
-    SvTreeList* GetModel() const
-    {
-        return pModel.get();
-    }
+    SvTreeList* GetModel() const { return m_pModel.get(); }
 
-    sal_uInt32 GetEntryCount() const
-    {
-        return pModel ? pModel->GetEntryCount() : 0;
-    }
-    SvTreeListEntry* First() const
-    {
-        return pModel ? pModel->First() : nullptr;
-    }
-    SvTreeListEntry* Next( SvTreeListEntry* pEntry ) const
-    {
-         return pModel->Next(pEntry);
-    }
-    SvTreeListEntry* Prev( SvTreeListEntry* pEntry ) const
-    {
-        return pModel->Prev(pEntry);
-    }
-    SvTreeListEntry* Last() const
-    {
-        return pModel ? pModel->Last() : nullptr;
-    }
+    sal_uInt32 GetEntryCount() const { return m_pModel ? m_pModel->GetEntryCount() : 0; }
+    SvTreeListEntry* First() const { return m_pModel ? m_pModel->First() : nullptr; }
+    SvTreeListEntry* Next(SvTreeListEntry* pEntry) const { return m_pModel->Next(pEntry); }
+    SvTreeListEntry* Last() const { return m_pModel ? m_pModel->Last() : nullptr; }
 
-    SvTreeListEntry* FirstChild( SvTreeListEntry* pParent ) const;
+    SvTreeListEntry* FirstChild(const SvTreeListEntry* pParent) const;
 
     sal_uInt32 GetEntryPos(const SvTreeListEntry* pEntry) const;
 

@@ -11,6 +11,7 @@
 #include <svl/undo.hxx>
 #include <rtl/math.hxx>
 #include <osl/time.h>
+#include <vcl/weld/Dialog.hxx>
 
 #include <rangelst.hxx>
 #include <docsh.hxx>

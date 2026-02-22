@@ -61,9 +61,12 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>

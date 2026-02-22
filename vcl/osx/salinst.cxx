@@ -41,6 +41,7 @@
 #include <vcl/QueueInfo.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/window.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svmain.hxx>

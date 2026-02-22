@@ -19,6 +19,8 @@
 
 #include <sfx2/sfxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <vcl/weld/Dialog.hxx>
+
 #include <swtypes.hxx>
 #include <pattern.hxx>
 #include <strings.hrc>

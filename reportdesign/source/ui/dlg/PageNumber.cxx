@@ -23,6 +23,7 @@
 #include <strings.hxx>
 #include <ReportController.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <utility>
 
 namespace rptui

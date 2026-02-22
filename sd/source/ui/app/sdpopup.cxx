@@ -26,6 +26,7 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/useroptions.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Menu.hxx>
 
 #include <strings.hrc>
 #include <sdpopup.hxx>

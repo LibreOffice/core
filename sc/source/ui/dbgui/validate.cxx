@@ -46,6 +46,7 @@
 #include <comphelper/lok.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
 
 /*  Position indexes for "Allow" list box.
     They do not map directly to ScValidationMode and can safely be modified to

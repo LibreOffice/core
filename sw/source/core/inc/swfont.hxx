@@ -31,6 +31,7 @@
 #include <editeng/lrspitem.hxx>
 #include <optional>
 #include <o3tl/enumarray.hxx>
+#include <vcl/fntstyle.hxx>
 
 class SfxItemSet;
 class SwAttrSet;

@@ -23,13 +23,13 @@
 #include <map>
 #include <vector>
 #include <svtools/svtdllapi.h>
-#include <tools/fldunit.hxx>
 #include <tools/link.hxx>
 #include <tools/fract.hxx>
 #include <vcl/window.hxx>
 #include <vcl/glyphitem.hxx>
 
 class MouseEvent;
+enum class FieldUnit : sal_uInt16;
 
 /*************************************************************************
 
@@ -226,7 +226,7 @@ All the handlers can also be set as links with the particular Set..Hdl() methods
     - Click()
         This handler is called when no element has been clicked on.
         The position can be queried with GetClickPos(). This way it is possible
-        to, for example, ser tabs in the ruler. After calling the click handler,
+        to, for example, set tabs in the ruler. After calling the click handler,
         the drag, if any, is immediately triggered. This makes it possible to
         set a new tab in the click handler and then immediately move it.
 

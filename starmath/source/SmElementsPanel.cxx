@@ -25,6 +25,7 @@
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/hint.hxx>
+#include <vcl/weld/Menu.hxx>
 
 #include "SmElementsPanel.hxx"
 #include <starmath.hrc>

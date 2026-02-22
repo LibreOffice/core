@@ -22,6 +22,7 @@
 
 #include <strings.hrc>
 
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <vcl/roadmapwizardmachine.hxx>

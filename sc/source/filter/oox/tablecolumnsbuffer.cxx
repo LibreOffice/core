@@ -20,8 +20,11 @@
 #include <tablecolumnsbuffer.hxx>
 
 #include <sal/log.hxx>
+#include <formula/grammar.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
+#include <dbdata.hxx>
+#include <subtotalparam.hxx>
 
 XmlColumnPrModel::XmlColumnPrModel() :
     mnMapId( 1 ),
@@ -55,8 +58,10 @@ void TableColumn::importTableColumn( const AttributeList& rAttribs )
     maName = rAttribs.getString( XML_name, OUString() );
     maModel.maUniqueName = rAttribs.getXString( XML_uniqueName, OUString() );
     mnDataDxfId = rAttribs.getInteger( XML_dataDxfId, -1 );
+    if ( rAttribs.hasAttribute(XML_totalsRowLabel ) )
+        maRowLabel = rAttribs.getStringDefaulted(XML_totalsRowLabel);
     if ( rAttribs.hasAttribute( XML_totalsRowFunction ) )
-        maColumnAttributes.maTotalsFunction = rAttribs.getStringDefaulted( XML_totalsRowFunction );
+        maSubTotal = rAttribs.getStringDefaulted(XML_totalsRowFunction);
 }
 
 void TableColumn::importTableColumn( SequenceInputStream& /*rStrm*/ )
@@ -70,9 +75,24 @@ const OUString& TableColumn::getName() const
     return maName;
 }
 
-const TableColumnAttributes& TableColumn::getColumnAttributes() const
+const std::optional<OUString>& TableColumn::getColumnRowLabel() const
 {
-    return maColumnAttributes;
+    return maRowLabel;
+}
+
+const std::optional<OUString>& TableColumn::getColumnSubTotal() const
+{
+    return maSubTotal;
+}
+
+const std::optional<OUString>& TableColumn::getColumnFunction() const
+{
+    return maFunction;
+}
+
+void TableColumn::setFunc( const OUString& rChars )
+{
+    maFunction = rChars;
 }
 
 void TableColumn::importXmlColumnPr(const AttributeList& rAttribs)
@@ -102,12 +122,19 @@ void TableColumns::importTableColumns( SequenceInputStream& /*rStrm*/ )
     (void) mnCount;
 }
 
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 TableColumn& TableColumns::createTableColumn()
 {
     TableColumnVector::value_type xTableColumn = std::make_shared<TableColumn>( *this );
     maTableColumnVector.push_back( xTableColumn );
     return *xTableColumn;
 }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 
 bool TableColumns::finalizeImport( ScDBData* pDBData )
 {
@@ -117,17 +144,39 @@ bool TableColumns::finalizeImport( ScDBData* pDBData )
     {
         /* TODO: use svl::SharedString for names */
         ::std::vector< OUString > aNames( maTableColumnVector.size());
-        ::std::vector< TableColumnAttributes > aAttributesVector( maTableColumnVector.size() );
+        ::std::vector< TableColumnAttributes > aAttributes( maTableColumnVector.size() );
         size_t i = 0;
+        bool hasAnySetValue = false;
         for (const auto& rxTableColumn : maTableColumnVector)
         {
             aNames[i] = rxTableColumn->getName();
-            aAttributesVector[i] = rxTableColumn->getColumnAttributes();
             pDBData->SetTableColumnModel( rxTableColumn->getModel() );
+            aAttributes[i].maTotalsRowLabel = rxTableColumn->getColumnRowLabel();
+            aAttributes[i].maTotalsFunction = rxTableColumn->getColumnSubTotal();
+            aAttributes[i].maCustomFunction = rxTableColumn->getColumnFunction();
+
+            if (!hasAnySetValue
+                && (aAttributes[i].maTotalsRowLabel.has_value()
+                    || aAttributes[i].maTotalsFunction.has_value()
+                    || aAttributes[i].maCustomFunction.has_value()))
+            {
+                hasAnySetValue = true;
+            }
+
             ++i;
         }
         pDBData->SetTableColumnNames( std::move(aNames) );
-        pDBData->SetTableColumnAttributes( std::move(aAttributesVector) );
+
+        // Import subtotal parameters for columns
+        if (hasAnySetValue)
+        {
+            ScSubTotalParam aSubTotalParam;
+            pDBData->GetSubTotalParam(aSubTotalParam);
+            aSubTotalParam.bHasHeader = pDBData->HasHeader();
+            pDBData->ImportTotalRowParam(aSubTotalParam, aAttributes,
+                                         formula::FormulaGrammar::GRAM_OOXML);
+            pDBData->SetSubTotalParam(aSubTotalParam);
+        }
         return true;
     }
     return false;

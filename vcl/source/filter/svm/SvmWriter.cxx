@@ -20,8 +20,11 @@
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <rtl/crc.h>
 #include <tools/solar.h>
+#include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 
 #include <osl/thread.h>

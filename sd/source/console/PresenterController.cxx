@@ -93,7 +93,7 @@ PresenterController::PresenterController (
       mxMainPaneId(rxMainPaneId),
       mpPaneContainer(std::move(xPaneContainer)),
       mnCurrentSlideIndex(-1),
-      mpWindowManager(new PresenterWindowManager(rxContext,mpPaneContainer,this)),
+      mpWindowManager(new PresenterWindowManager(mpPaneContainer,this)),
       mpCanvasHelper(std::make_shared<PresenterCanvasHelper>()),
       mnPendingSlideNumber(-1)
 {

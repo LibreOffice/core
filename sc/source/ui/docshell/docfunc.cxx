@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/TableAutoFmt.hxx>
 #include <scitems.hxx>
 
 #include <comphelper/lok.hxx>
@@ -28,6 +29,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <utility>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
@@ -1641,7 +1643,7 @@ bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, I
         }
         case INS_CELLSDOWN:
         {
-            auto bIntersects = std::any_of(rMarkData.begin(), rMarkData.end(), [&pDPs, &aRange](const SCTAB& rTab) {
+            auto bIntersects = std::ranges::any_of(rMarkData, [&pDPs, &aRange](const SCTAB& rTab) {
                 return pDPs->IntersectsTableByColumns(aRange.aStart.Col(), aRange.aEnd.Col(), aRange.aStart.Row(), rTab); });
             if (bIntersects)
                 // This column range cuts through at least one pivot table.  Not good.
@@ -1676,7 +1678,7 @@ bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, I
         }
         case INS_CELLSRIGHT:
         {
-            auto bIntersects = std::any_of(rMarkData.begin(), rMarkData.end(), [&pDPs, &aRange](const SCTAB& rTab) {
+            auto bIntersects = std::ranges::any_of(rMarkData, [&pDPs, &aRange](const SCTAB& rTab) {
                 return pDPs->IntersectsTableByRows(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Row(), rTab); });
             if (bIntersects)
                 // This column range cuts through at least one pivot table.  Not good.
@@ -1736,7 +1738,7 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
         }
         case DelCellCmd::CellsUp:
         {
-            auto bIntersects = std::any_of(rMarkData.begin(), rMarkData.end(), [&pDPs, &aRange](const SCTAB& rTab) {
+            auto bIntersects = std::ranges::any_of(rMarkData, [&pDPs, &aRange](const SCTAB& rTab) {
                 return pDPs->IntersectsTableByColumns(aRange.aStart.Col(), aRange.aEnd.Col(), aRange.aStart.Row(), rTab); });
             if (bIntersects)
                 // This column range cuts through at least one pivot table.  Not good.
@@ -1760,7 +1762,7 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
         }
         case DelCellCmd::CellsLeft:
         {
-            auto bIntersects = std::any_of(rMarkData.begin(), rMarkData.end(), [&pDPs, &aRange](const SCTAB& rTab) {
+            auto bIntersects = std::ranges::any_of(rMarkData, [&pDPs, &aRange](const SCTAB& rTab) {
                 return pDPs->IntersectsTableByRows(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Row(), rTab); });
             if (bIntersects)
                 // This column range cuts through at least one pivot table.  Not good.
@@ -4326,7 +4328,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     {
         weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
-        bool bSize = pAutoFormat->findByIndex(nFormatNo)->GetIncludeWidthHeight();
+        bool bSize = pAutoFormat->GetData(nFormatNo)->IsWidthHeight();
         if (sal_uInt64(nEndCol - nStartCol + 1) * sal_uInt64(nEndRow - nStartRow + 1) > AUTOFORMAT_WARN_SIZE)
         {
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),

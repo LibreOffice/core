@@ -24,6 +24,10 @@ $(eval $(call gb_StaticLibrary_set_include,zxing,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_StaticLibrary_add_cxxflags,zxing,\
+       -DZXING_INTERNAL \
+))
+
 # The list below is created with
 # find workdir/UnpackedTarball/zxing/core/ -name "*.cpp" ! -name '*DecodeHints.cpp' | LC_COLLATE=C sort | sed -e 's/^/\t/' -e 's/$/ \\/' -e 's/workdir\///' -e 's/\.cpp//'
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
@@ -55,7 +59,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/ResultPoint \
 	UnpackedTarball/zxing/core/src/TextDecoder \
 	UnpackedTarball/zxing/core/src/TextEncoder \
-	UnpackedTarball/zxing/core/src/TextUtfEncoding \
 	UnpackedTarball/zxing/core/src/Utf \
 	UnpackedTarball/zxing/core/src/WhiteRectDetector \
 	UnpackedTarball/zxing/core/src/WriteBarcode \

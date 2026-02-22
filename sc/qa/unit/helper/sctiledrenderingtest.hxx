@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <osl/conditn.hxx>
 #include <test/lokcallback.hxx>
@@ -24,7 +24,7 @@ class ScTabViewShell;
 class ScAddress;
 class SfxViewShell;
 
-class SCQAHELPER_DLLPUBLIC ScTiledRenderingTest : public UnoApiXmlTest
+class SCQAHELPER_DLLPUBLIC ScTiledRenderingTest : public UnoApiTest
 {
 public:
     ScTiledRenderingTest();

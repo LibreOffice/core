@@ -29,7 +29,10 @@
 #include <svx/weldeditview.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/DrawingArea.hxx>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
 
@@ -73,6 +76,7 @@ private:
 
     void DoScroll();
     void SetScrollBarRange();
+    void SetSizeRequest();
 
 protected:
     virtual bool    KeyInput( const KeyEvent& rKEvt ) override;

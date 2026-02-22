@@ -72,6 +72,7 @@
 #include <osl/file.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 using namespace ::com::sun::star;
 
@@ -93,131 +94,168 @@ public:
         : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
+
+    void testDocumentLayout(std::u16string_view sInput, std::u16string_view sDump,
+                            TestFilter sExportType, bool bUpdateMe = false);
 };
 
 /** Test document against a reference XML dump of shapes.
 
-If you want to update one of these tests, or add a new one, set the nUpdateMe
-to the index of the test, and the dump XML's will be created (or rewritten)
+If you want to update one of these tests, or add a new one, set the bUpdateMe
+to true, and the dump XML's will be created (or rewritten)
 instead of checking. Use with care - when the test is failing, first find out
 why, instead of just updating .xml's blindly.
 
 Example: Let's say you are adding a test called fdoABCD.pptx.  You'll place it
-to the data/ subdirectory, and will add an entry to aFilesToCompare below,
-the 3rd parameter is for export test - can be -1 (don't export), "impress8", "MS PowerPoint 97" or "Impress Office Open XML"
-like:
+to the data/ subdirectory, and will add a new test below,
+When the 3rd parameter is set TestFilter::NONE, it doesn't export.
+Temporarily you'll set bUpdateMe to true, and run
 
-        { "fdoABCD.pptx", "xml/fdoABCD_", "Impress Office Open XML" },
-
-and will count the index in the aFilesToCompare structure (1st is 0, 2nd is 1,
-etc.)  Temporarily you'll set nUpdateMe to this index (instead of -1), and run
-
-make sd
+make CppunitTest_sd_import_tests
 
 This will generate the sd/qa/unit/data/xml/fdoABCD_*.xml for you.  Now you
-will change nUpdateMe back to -1, and commit your fdoABCD.pptx test, the
-xml/fdoABCD_*.xml dumps, and the aFilesToCompare addition in one commit.
+will change bUpdateMe back to false, and commit your fdoABCD.pptx test, the
+xml/fdoABCD_*.xml dumps, and the addition in this file in one commit.
 
-As the last step, you will revert your fix and do 'make sd' again, to check
+As the last step, you will revert your fix and do 'make CppunitTest_sd_import_tests' again, to check
 that without your fix, the unit test breaks.  Then clean up, and push :-)
 
 NOTE: This approach is suitable only for tests of fixes that actually change
 the layout - best to check by reverting your fix locally after having added
 the test, and re-running; it should break.
 */
-CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
+void SdImportTest::testDocumentLayout(std::u16string_view sInput, std::u16string_view sDump,
+                                      TestFilter sExportType, bool bUpdateMe)
 {
     // Use fallback document theme, which uses previous default
     // fill and line colors as accent colors.
     o3tl::setEnvironment(u"LO_FORCE_FALLBACK_DOCUMENT_THEME"_ustr, u"1"_ustr);
 
-    struct TestDumpInfo
+    loadFromFile(sInput);
+    if (sExportType != TestFilter::NONE)
+        saveAndReload(sExportType);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    CPPUNIT_ASSERT(xDrawPages.is());
+
+    sal_Int32 nLength = xDrawPages->getCount();
+    for (sal_Int32 j = 0; j < nLength; ++j)
     {
-        std::u16string_view sInput;
-        std::u16string_view sDump;
-        TestFilter sExportType;
-    };
+        uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(j), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xDrawPage.is());
+        uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
+        OUString aString = XShapeDumper::dump(xShapes);
 
-    auto aFilesToCompare = std::to_array<TestDumpInfo>({
-        { u"odp/shapes-test.odp", u"xml/shapes-test_page", TestFilter::NONE },
-            { u"fdo47434.pptx", u"xml/fdo47434_", TestFilter::NONE },
-            { u"n758621.ppt", u"xml/n758621_", TestFilter::NONE },
-            { u"fdo64586.ppt", u"xml/fdo64586_", TestFilter::NONE },
+        OString aFileName = OUStringToOString(createFileURL(sDump), RTL_TEXTENCODING_UTF8)
+                            + OString::number(j) + ".xml";
 
-            // needed to adapt this, the border parameter is no longer
-            // exported with MCGRs due to oox neither needing nor
-            // supporting it with now freely definable gradients
-            { u"n819614.pptx", u"xml/n819614_", TestFilter::NONE },
+        if (bUpdateMe)
+        {
+            // had to adapt this, std::ofstream annot write to a URL but needs a
+            // filesystem path. Seems as if no one had to adapt any of the cases
+            // for some years :-/
+            OUString sTempFilePath;
+            osl::FileBase::getSystemPathFromFileURL(OUString::fromUtf8(aFileName), sTempFilePath);
+            std::ofstream aStream(sTempFilePath.toUtf8().getStr(),
+                                  std::ofstream::out | std::ofstream::binary);
+            aStream << aString;
+            aStream.close();
+        }
+        else
+        {
+            doXMLDiff(
+                aFileName.getStr(), OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
+                static_cast<int>(aString.getLength()),
+                OUStringToOString(createFileURL(u"tolerance.xml"), RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
+}
 
-            { u"n820786.pptx", u"xml/n820786_", TestFilter::NONE },
-            { u"n762695.pptx", u"xml/n762695_", TestFilter::NONE },
-            { u"n593612.pptx", u"xml/n593612_", TestFilter::NONE },
-            { u"fdo71434.pptx", u"xml/fdo71434_", TestFilter::NONE },
-            { u"n902652.pptx", u"xml/n902652_", TestFilter::NONE },
-            { u"tdf90403.pptx", u"xml/tdf90403_", TestFilter::NONE },
-            { u"tdf90338.odp", u"xml/tdf90338_", TestFilter::PPTX },
-            { u"tdf92001.odp", u"xml/tdf92001_", TestFilter::PPTX },
+CPPUNIT_TEST_FIXTURE(SdImportTest, testShapesTest)
+{
+    testDocumentLayout(u"odp/shapes-test.odp", u"xml/shapes-test_page", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo47434)
+{
+    testDocumentLayout(u"fdo47434.pptx", u"xml/fdo47434_", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN758621)
+{
+    testDocumentLayout(u"n758621.ppt", u"xml/n758621_", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo64586)
+{
+    testDocumentLayout(u"fdo64586.ppt", u"xml/fdo64586_", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN819614)
+{
+    // needed to adapt this, the border parameter is no longer
+    // exported with MCGRs due to oox neither needing nor
+    // supporting it with now freely definable gradients
+    testDocumentLayout(u"n819614.pptx", u"xml/n819614_", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN820786)
+{
+    testDocumentLayout(u"n820786.pptx", u"xml/n820786_", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN762695)
+{
+    testDocumentLayout(u"n762695.pptx", u"xml/n762695_", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN593612)
+{
+    testDocumentLayout(u"n593612.pptx", u"xml/n593612_", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo71434)
+{
+    testDocumentLayout(u"fdo71434.pptx", u"xml/fdo71434_", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testN902652)
+{
+    testDocumentLayout(u"n902652.pptx", u"xml/n902652_", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf90403)
+{
+    testDocumentLayout(u"tdf90403.pptx", u"xml/tdf90403_", TestFilter::NONE);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf90338)
+{
+    testDocumentLayout(u"tdf90338.odp", u"xml/tdf90338_", TestFilter::PPTX);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf92001)
+{
+    testDocumentLayout(u"tdf92001.odp", u"xml/tdf92001_", TestFilter::PPTX);
+}
+
 // GCC -mfpmath=387 rounding issues in lclPushMarkerProperties
 // (oox/source/drawingml/lineproperties.cxx); see mail sub-thread starting at
 // <https://lists.freedesktop.org/archives/libreoffice/2016-September/
 // 075211.html> "Re: Test File: sc/qa/unit/data/functions/fods/chiinv.fods:
 // fails with Assertion" for how "-mfpmath=sse -msse2" would fix that:
 #if !(defined LINUX && defined X86)
-            { u"tdf100491.pptx", u"xml/tdf100491_", TestFilter::NONE },
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf100491)
+{
+    testDocumentLayout(u"tdf100491.pptx", u"xml/tdf100491_", TestFilter::NONE);
+}
 #endif
-            { u"tdf109317.pptx", u"xml/tdf109317_", TestFilter::ODP },
-        // { u"pptx/n828390.pptx", u"pptx/xml/n828390_", TestFilter::PPTX }, // Example
-    });
 
-    for (size_t i = 0; i < aFilesToCompare.size(); ++i)
-    {
-        size_t const nUpdateMe
-            = SAL_MAX_UINT32; // index of test we want to update; supposedly only when the test is created
-
-        loadFromFile(aFilesToCompare[i].sInput);
-        if (aFilesToCompare[i].sExportType != TestFilter::NONE)
-            saveAndReload(aFilesToCompare[i].sExportType);
-
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
-                                                                       uno::UNO_QUERY_THROW);
-        uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
-        CPPUNIT_ASSERT(xDrawPages.is());
-
-        sal_Int32 nLength = xDrawPages->getCount();
-        for (sal_Int32 j = 0; j < nLength; ++j)
-        {
-            uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(j), uno::UNO_QUERY);
-            CPPUNIT_ASSERT(xDrawPage.is());
-            uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
-            OUString aString = XShapeDumper::dump(xShapes);
-
-            OString aFileName
-                = OUStringToOString(createFileURL(aFilesToCompare[i].sDump), RTL_TEXTENCODING_UTF8)
-                  + OString::number(j) + ".xml";
-
-            if (nUpdateMe == i) // index was wrong here
-            {
-                // had to adapt this, std::ofstream annot write to an URL but needs a
-                // filesystem path. Seems as if no one had to adapt any of the cases
-                // for some years :-/
-                OUString sTempFilePath;
-                osl::FileBase::getSystemPathFromFileURL(OUString::fromUtf8(aFileName),
-                                                        sTempFilePath);
-                std::ofstream aStream(sTempFilePath.toUtf8().getStr(),
-                                      std::ofstream::out | std::ofstream::binary);
-                aStream << aString;
-                aStream.close();
-            }
-            else
-            {
-                doXMLDiff(aFileName.getStr(),
-                          OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
-                          static_cast<int>(aString.getLength()),
-                          OUStringToOString(createFileURL(u"tolerance.xml"), RTL_TEXTENCODING_UTF8)
-                              .getStr());
-            }
-        }
-    }
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf109317)
+{
+    testDocumentLayout(u"tdf109317.pptx", u"xml/tdf109317_", TestFilter::ODP);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf157216)
@@ -1852,11 +1890,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testPDFImportShared)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Page number doesn't match expected", sal_Int32(i),
                                      rGraphic.getPageNumber());
     }
-
-    mxComponent->dispose();
-    mxComponent.clear();
-
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 #if defined(IMPORT_PDF_ELEMENTS)
@@ -1930,7 +1963,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc910045)
     CPPUNIT_ASSERT_EQUAL(Color(0x4f81bd), nColor);
 }
 
-CPPUNIT_TEST_FIXTURE(SdImportTest, testRowHeight)
+CPPUNIT_TEST_FIXTURE(SdImportTest, testRowHeight_n80340)
 {
     createSdImpressDoc("pptx/n80340.pptx");
     const SdrPage* pPage = GetPage(1);
@@ -1944,7 +1977,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testRowHeight)
     uno::Reference<beans::XPropertySet> xRefRow(xRows->getByIndex(0), uno::UNO_QUERY_THROW);
     xRefRow->getPropertyValue(u"Height"_ustr) >>= nHeight;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(508), nHeight);
+}
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testRowHeight_tableScale)
+{
     createSdImpressDoc("pptx/tablescale.pptx");
     const SdrPage* pPage2 = GetPage(1);
 
@@ -1954,6 +1990,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testRowHeight)
     uno::Reference<css::table::XTable> xTable2(pTableObj2->getTable(), uno::UNO_SET_THROW);
     uno::Reference<css::table::XTableRows> xRows2(xTable2->getRows(), uno::UNO_SET_THROW);
 
+    sal_Int32 nHeight;
     for (sal_Int32 nRow = 0; nRow < 7; ++nRow)
     {
         uno::Reference<beans::XPropertySet> xRefRow2(xRows2->getByIndex(nRow),
@@ -1978,6 +2015,35 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf93830)
     sal_Int32 nTextLeftDistance = 0;
     xPropSet->getPropertyValue(u"TextLeftDistance"_ustr) >>= nTextLeftDistance;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4024), nTextLeftDistance);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf165732)
+{
+    // Text insets larger than shape dimension should be clamped symmetrically.
+    createSdImpressDoc("pptx/tdf165732.pptx");
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0));
+
+    // Shape "2": each side reduced by 1: 200 -> 199.
+    uno::Reference<beans::XPropertySet> xShape0(xPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int32 nLeft = 0, nRight = 0;
+    xShape0->getPropertyValue(u"TextLeftDistance"_ustr) >>= nLeft;
+    xShape0->getPropertyValue(u"TextRightDistance"_ustr) >>= nRight;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(199), nLeft);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(199), nRight);
+
+    // Shape "1": no clamping.
+    uno::Reference<beans::XPropertySet> xShape1(xPage->getByIndex(1), uno::UNO_QUERY);
+    sal_Int32 nLeft1 = 0;
+    xShape1->getPropertyValue(u"TextLeftDistance"_ustr) >>= nLeft1;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nLeft1);
+
+    // Shape "5": top and bottom reduced by 17.5: 200 -> 183 (rounded).
+    uno::Reference<beans::XPropertySet> xShape7(xPage->getByIndex(7), uno::UNO_QUERY);
+    sal_Int32 nUpper = 0, nLower = 0;
+    xShape7->getPropertyValue(u"TextUpperDistance"_ustr) >>= nUpper;
+    xShape7->getPropertyValue(u"TextLowerDistance"_ustr) >>= nLower;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(183), nUpper);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(183), nLower);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf127129)

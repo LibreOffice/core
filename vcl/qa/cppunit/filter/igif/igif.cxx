@@ -11,6 +11,7 @@
 
 #include <test/bootstrapfixture.hxx>
 
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <unotest/directories.hxx>
 #include <vcl/graph.hxx>

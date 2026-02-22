@@ -23,6 +23,7 @@
 
 #include <gst/gstbuffer.h>
 #include <o3tl/safeint.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 

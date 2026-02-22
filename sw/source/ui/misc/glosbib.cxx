@@ -19,6 +19,9 @@
 
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/tempfile.hxx>
@@ -71,9 +74,9 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
     m_xNameED->connect_size_allocate(LINK(this, SwGlossaryGroupDlg, EntrySizeAllocHdl));
     m_xPathLB->connect_size_allocate(LINK(this, SwGlossaryGroupDlg, EntrySizeAllocHdl));
 
-    for (size_t i = 0; i < rPathArr.size(); ++i)
+    for (const auto& rPath : rPathArr)
     {
-        INetURLObject aTempURL(rPathArr[i]);
+        INetURLObject aTempURL(rPath);
         const OUString sPath = aTempURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset );
         sal_uInt32 nCaseReadonly = 0;
         utl::TempFileNamed aTempFile(&sPath);

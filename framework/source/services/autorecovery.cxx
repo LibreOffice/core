@@ -85,6 +85,7 @@
 #include <vcl/evntpost.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/vclenum.hxx>
 #include <unotools/pathoptions.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/tempfile.hxx>
@@ -92,12 +93,14 @@
 #include <ucbhelper/content.hxx>
 #include <svtools/sfxecode.hxx>
 
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <svl/documentlockfile.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>

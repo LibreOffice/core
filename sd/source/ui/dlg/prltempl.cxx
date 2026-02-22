@@ -38,6 +38,7 @@
 #include <svx/flagsdef.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
 
 #define IS_OUTLINE(x) (x >= PresentationObjects::Outline_1 && x <= PresentationObjects::Outline_9)
 

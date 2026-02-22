@@ -26,6 +26,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

@@ -17,10 +17,20 @@
 #include <rtl/ref.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <test/testinteractionhandler.hxx>
+#include <test/xmltesttools.hxx>
+#include <tools/stream.hxx>
 #include <unotest/macros_test.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+
+enum ValidationFormat
+{
+    OOXML,
+    ODF,
+    MSBINARY,
+    PDF
+};
 
 enum class TestFilter
 {
@@ -32,6 +42,7 @@ enum class TestFilter
     DOCX,
     DOCX_2007,
     DOTX,
+    EPUB,
     FODG,
     FODS,
     FODT,
@@ -57,6 +68,7 @@ enum class TestFilter
     RTF,
     SVG_DRAW,
     SVG_IMPRESS,
+    SVG_WRITER,
     TEXT,
     TEXT_ENCODED,
     XHTML_CALC,
@@ -77,6 +89,7 @@ const std::unordered_map<TestFilter, OUString> TestFilterNames{
     { TestFilter::DOCX, u"Office Open XML Text"_ustr },
     { TestFilter::DOCX_2007, u"MS Word 2007 XML"_ustr },
     { TestFilter::DOTX, u"MS Word 2007 XML Template"_ustr },
+    { TestFilter::EPUB, u"EPUB"_ustr },
     { TestFilter::FODG, u"OpenDocument Drawing Flat XML"_ustr },
     { TestFilter::FODS, u"OpenDocument Spreadsheet Flat XML"_ustr },
     { TestFilter::FODT, u"OpenDocument Text Flat XML"_ustr },
@@ -102,6 +115,7 @@ const std::unordered_map<TestFilter, OUString> TestFilterNames{
     { TestFilter::RTF, u"Rich Text Format"_ustr },
     { TestFilter::SVG_DRAW, u"draw_svg_Export"_ustr },
     { TestFilter::SVG_IMPRESS, u"impress_svg_Export"_ustr },
+    { TestFilter::SVG_WRITER, u"writer_svg_Export"_ustr },
     { TestFilter::TEXT, u"Text"_ustr },
     { TestFilter::TEXT_ENCODED, u"Text (encoded)"_ustr },
     { TestFilter::XHTML_CALC, u"XHTML Calc File"_ustr },
@@ -116,7 +130,9 @@ const std::unordered_map<TestFilter, OUString> TestFilterNames{
 
 // basic uno api test class
 
-class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unotest::MacrosTest
+class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture,
+                                      public unotest::MacrosTest,
+                                      public XmlTestTools
 {
 public:
     UnoApiTest(OUString path);
@@ -126,29 +142,37 @@ public:
 
     OUString createFileURL(std::u16string_view aFileBase);
     OUString createFilePath(std::u16string_view aFileBase);
-    void loadFromURL(const OUString& rURL, const char* pPassword = nullptr);
-    void loadWithParams(const OUString& rURL,
-                        const css::uno::Sequence<css::beans::PropertyValue>& rParams);
-    OUString loadFromFile(std::u16string_view aFileBase, const char* pPassword = nullptr);
+    void loadFromURL(const OUString& rURL,
+                     const css::uno::Sequence<css::beans::PropertyValue>& rParams = {},
+                     const char* pPassword = nullptr);
+    void dispose();
+    OUString loadFromFile(std::u16string_view aFileBase,
+                          const css::uno::Sequence<css::beans::PropertyValue>& rParams = {},
+                          const char* pPassword = nullptr);
 
     css::uno::Any executeMacro(const OUString& rScriptURL,
                                const css::uno::Sequence<css::uno::Any>& rParams = {});
 
-    void save(TestFilter eFilter, const char* pPassword = nullptr);
-    void saveWithParams(const css::uno::Sequence<css::beans::PropertyValue>& rParams);
-    void saveAndReload(TestFilter eFilter, const char* pPassword = nullptr);
+    void save(TestFilter eFilter, const css::uno::Sequence<css::beans::PropertyValue>& rParams = {},
+              const char* pPassword = nullptr);
+    void saveAndReload(TestFilter eFilter,
+                       const css::uno::Sequence<css::beans::PropertyValue>& rParams = {},
+                       const char* pPassword = nullptr);
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExport(const OString& rPassword = OString());
 
     void createTempCopy(std::u16string_view fileName);
 
-    void skipValidation() { mbSkipValidation = true; }
-    void setFilterOptions(const OUString& rFilterOptions) { maFilterOptions = rFilterOptions; }
+    xmlDocUniquePtr parseExport(OUString const& rStreamName);
 
-    void setImportFilterOptions(const OUString& rFilterOptions)
-    {
-        maImportFilterOptions = rFilterOptions;
-    }
+    /**
+     * Returns an xml stream of an exported file.
+     * To be used when the exporter doesn't create zip archives, but single files
+     * (like Flat ODF Export)
+     */
+    xmlDocUniquePtr parseExportedFile();
+
+    void skipValidation() { mbSkipValidation = true; }
 
     void setImportFilterName(TestFilter eFilterName) { meImportFilterName = eFilterName; }
 
@@ -165,15 +189,12 @@ protected:
 
     rtl::Reference<TestInteractionHandler> xInteractionHandler;
 
-private:
-    void setTestInteractionHandler(const char* pPassword,
-                                   std::vector<css::beans::PropertyValue>& rFilterOptions);
+    void validate(TestFilter eFilter);
 
+private:
     bool mbSkipValidation;
     OUString m_aBaseString;
-    OUString maFilterOptions;
 
-    OUString maImportFilterOptions;
     TestFilter meImportFilterName;
 };
 

@@ -44,9 +44,6 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo81381)
 {
     createSwDoc("fdo81381.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:object[1]/o:OLEObject[1]", "DrawAspect", u"Icon");
@@ -811,9 +808,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88583)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97090, "tdf97090.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 39
-    skipValidation();
-
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);

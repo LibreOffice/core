@@ -26,7 +26,10 @@ $(eval $(call gb_CppunitTest_use_libraries,framework_accelerators, \
 	unotest \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,framework_accelerators,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,framework_accelerators, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,framework_accelerators))
 

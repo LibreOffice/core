@@ -55,7 +55,7 @@ TextOutRenderer& TextOutRenderer::get(bool bUseDWrite, bool bRenderingModeNatura
 
     if (!pSalData)
     { // don't call this after DeInitVCL()
-        fprintf(stderr, "TextOutRenderer fatal error: no SalData");
+        SAL_WARN("vcl.gdi", "TextOutRenderer fatal error: no SalData");
         abort();
     }
 

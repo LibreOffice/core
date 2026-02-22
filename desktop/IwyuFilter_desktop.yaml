@@ -1,5 +1,8 @@
 ---
 assumeFilename: desktop/source/lib/init.cxx
+customAssumeFilenames:
+    # Needs desktop/source/deployment/registry/inc/ header
+    desktop/source/deployment/registry/: desktop/source/deployment/registry/dp_backenddb.cxx
 excludelist:
     desktop/inc/lib/init.hxx:
     # Complete type is needed

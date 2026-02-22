@@ -22,6 +22,7 @@
 
 #include <comphelper/scopeguard.hxx>
 
+#include <o3tl/numeric.hxx>
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
@@ -295,21 +296,10 @@ int SvRTFParser::GetNextToken_()
 sal_Unicode SvRTFParser::GetHexValue()
 {
     // collect Hex values
-    int n;
-    sal_Unicode nHexVal = 0;
-
-    for( n = 0; n < 2; ++n )
-    {
-        nHexVal *= 16;
-        nNextCh = GetNextChar();
-        if( nNextCh >= '0' && nNextCh <= '9' )
-            nHexVal += (nNextCh - 48);
-        else if( nNextCh >= 'a' && nNextCh <= 'f' )
-            nHexVal += (nNextCh - 87);
-        else if( nNextCh >= 'A' && nNextCh <= 'F' )
-            nHexVal += (nNextCh - 55);
-    }
-    return nHexVal;
+    sal_uInt32 nHi = GetNextChar();
+    sal_uInt32 nLo = GetNextChar();
+    nNextCh = nLo;
+    return o3tl::convertToHex<sal_Unicode, 0>(nHi, nLo);
 }
 
 void SvRTFParser::ScanText()

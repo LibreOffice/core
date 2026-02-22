@@ -22,6 +22,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/locktoplevels.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TextView.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <splitcelldlg.hxx>
+#include <vcl/weld/Builder.hxx>
 
 SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, tools::Long nMaxVertical, tools::Long nMaxHorizontal)
     : GenericDialogController(pParent, u"cui/ui/splitcellsdialog.ui"_ustr, u"SplitCellsDialog"_ustr)

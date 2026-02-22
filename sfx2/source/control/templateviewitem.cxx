@@ -18,6 +18,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <tools/color.hxx>
 #include <tools/poly.hxx>
 #include <vcl/graph.hxx>
 

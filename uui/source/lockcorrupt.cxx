@@ -22,6 +22,8 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/wintypes.hxx>
 
 LockCorruptQueryBox::LockCorruptQueryBox(weld::Window* pParent, const std::locale& rResLocale)
     : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question,

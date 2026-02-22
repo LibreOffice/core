@@ -25,6 +25,7 @@
 #include <vcl/window.hxx>
 #include <vcl/tabpage.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <helper/scrollabledialog.hxx>
 #include <helper/property.hxx>
 

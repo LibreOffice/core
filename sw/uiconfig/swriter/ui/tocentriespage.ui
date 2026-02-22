@@ -59,12 +59,13 @@
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
-      <!-- n-columns=2 n-rows=1 -->
+      <!-- n-columns=2 n-rows=2 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="row-spacing">6</property>
         <property name="column-spacing">12</property>
         <child>
           <object class="GtkFrame" id="levelframe">
@@ -84,6 +85,7 @@
                 <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTreeView" id="level">
+                    <property name="width-request">120</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="model">liststore1</property>
@@ -91,9 +93,6 @@
                     <property name="headers-clickable">False</property>
                     <property name="search-column">0</property>
                     <property name="show-expanders">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection1"/>
-                    </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                         <child>
@@ -122,7 +121,7 @@
           </object>
           <packing>
             <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
@@ -141,7 +140,7 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=1 n-rows=3 -->
+                  <!-- n-columns=1 n-rows=4 -->
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -171,24 +170,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="all">
-                            <property name="label" translatable="yes" context="tocentriespage|all">_All</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="use-underline">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="all-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|all">Applies the current settings to all levels without closing the dialog.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">2</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkBox" id="token">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
@@ -204,6 +185,9 @@
                             <property name="left-attach">1</property>
                             <property name="top-attach">0</property>
                           </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -289,13 +273,6 @@
                             <property name="halign">start</property>
                             <property name="hexpand">True</property>
                             <property name="has-entry">True</property>
-                            <child internal-child="entry">
-                              <object class="GtkEntry" id="comboboxtext-entry">
-                                <property name="can-focus">True</property>
-                                <property name="activates-default">True</property>
-                                <property name="truncate-multiline">True</property>
-                              </object>
-                            </child>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="fillchar-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|fillchar">Select the tab leader that you want use.</property>
@@ -419,8 +396,8 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="tocentriespage|tabstopposft">Tab stop position:</property>
-                            <property name="mnemonic-widget">tabstoppos</property>
                             <property name="use-underline">True</property>
+                            <property name="mnemonic-widget">tabstoppos</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -501,6 +478,38 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="applytoallbox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-bottom">6</property>
+                        <property name="hexpand">True</property>
+                        <child>
+                          <object class="GtkButton" id="all">
+                            <property name="label" translatable="yes" context="tocentriespage|applytoalllevels">_Apply to all levels</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="use-underline">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="all-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|all">Applies the current settings to all levels without closing the dialog.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="pack-type">end</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -718,6 +727,28 @@
               </packing>
             </child>
             <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">False</property>
+            <property name="vexpand">False</property>
+            <property name="orientation">vertical</property>
+            <child>
               <object class="GtkFrame" id="formatframe">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -839,8 +870,9 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -914,8 +946,9 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -1160,14 +1193,16 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="left-attach">1</property>
+            <property name="left-attach">0</property>
             <property name="top-attach">0</property>
+            <property name="width">2</property>
           </packing>
         </child>
       </object>

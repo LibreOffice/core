@@ -21,6 +21,7 @@
 
 #include <chartview/ChartSfxItemIds.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace chart
 {

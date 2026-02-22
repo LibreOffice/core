@@ -28,6 +28,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1

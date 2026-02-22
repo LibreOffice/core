@@ -21,6 +21,10 @@
 
 #include <formatcontentcontrol.hxx>
 
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+
 SwContentControlListItemDlg::SwContentControlListItemDlg(weld::Widget* pParent,
                                                          SwContentControlListItem& rItem)
     : GenericDialogController(pParent, u"modules/swriter/ui/contentcontrollistitemdlg.ui"_ustr,

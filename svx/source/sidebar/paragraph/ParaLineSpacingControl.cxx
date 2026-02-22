@@ -26,6 +26,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/mapunit.hxx>
 
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
@@ -33,6 +34,7 @@
 #include <ParaLineSpacingPopup.hxx>
 
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #define DEFAULT_LINE_SPACING  200
 #define FIX_DIST_DEF          283

@@ -526,6 +526,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !pOpt->IsHideWhitespaceMode();
 
         pOpt->SetHideWhitespaceMode(bFlag);
+
+        // tdf#98446 - switch to single-page view when selecting hide whitespaces option
+        if (bFlag && !pOpt->CanHideWhitespace())
+        {
+            pOpt->SetViewLayoutBookMode(false);
+            pOpt->SetViewLayoutColumns(1);
+        }
         break;
 
     case FN_VIEW_SHOW_WHITESPACE:
@@ -533,6 +540,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = pOpt->IsHideWhitespaceMode();
 
         pOpt->SetHideWhitespaceMode(!bFlag);
+
+        // tdf#98446 - switch to single-page view when deselecting show whitespaces option
+        if (!bFlag && !pOpt->CanHideWhitespace())
+        {
+            pOpt->SetViewLayoutBookMode(false);
+            pOpt->SetViewLayoutColumns(1);
+        }
         break;
 
     case FN_VIEW_SMOOTH_SCROLL:
@@ -812,11 +826,15 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     case FN_MULTIPLE_PAGES_PER_ROW:
         pOpt->SetViewLayoutBookMode( false );
         pOpt->SetViewLayoutColumns( 0 );
+        // tdf#98446 - hiding whitespace is only possible in single-page view
+        pOpt->SetHideWhitespaceMode(false);
         break;
 
     case FN_BOOKVIEW:
         pOpt->SetViewLayoutColumns( 2 );
         pOpt->SetViewLayoutBookMode( true );
+        // tdf#98446 - hiding whitespace is only possible in single-page view
+        pOpt->SetHideWhitespaceMode(false);
         break;
     case SID_CLICK_CHANGE_ROTATION:
         if( STATE_TOGGLE == eState )

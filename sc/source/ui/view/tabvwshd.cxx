@@ -19,6 +19,7 @@
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <tabvwsh.hxx>
 #include <scmod.hxx>

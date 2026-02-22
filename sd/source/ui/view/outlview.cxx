@@ -20,6 +20,7 @@
 #include <OutlineView.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/outliner.hxx>
@@ -36,6 +37,7 @@
 #include <xmloff/autolayout.hxx>
 #include <tools/debug.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/fontdefs.hxx>
 
 #include <editeng/editobj.hxx>
 #include <editeng/editund2.hxx>
@@ -414,7 +416,7 @@ void OutlineView::DisconnectFromApplication()
     Application::RemoveEventListener(LINK(this, OutlineView, AppEventListenerHdl));
 }
 
-void OutlineView::AddDeviceToPaintView(OutputDevice& rDev, vcl::Window* pWindow)
+void OutlineView::AddDeviceToPaintView(OutputDevice& rDev)
 {
     bool bAdded = false;
     bool bValidArea = false;
@@ -448,7 +450,7 @@ void OutlineView::AddDeviceToPaintView(OutputDevice& rDev, vcl::Window* pWindow)
     // white background in Outliner
     rDev.SetBackground( Wallpaper( aWhiteColor ) );
 
-    ::sd::View::AddDeviceToPaintView(rDev, pWindow);
+    ::sd::View::AddDeviceToPaintView(rDev);
 }
 
 void OutlineView::DeleteDeviceFromPaintView(OutputDevice& rDev)

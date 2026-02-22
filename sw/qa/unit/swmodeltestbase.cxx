@@ -24,8 +24,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/scheduler.hxx>
 #include <comphelper/configuration.hxx>
-#include <officecfg/Office/Writer.hxx>
-#include <officecfg/Office/Common.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
@@ -56,7 +54,7 @@ void SwModelTestBase::paste(std::u16string_view aFilename, const OUString& aInst
 }
 
 SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath)
-    : UnoApiXmlTest(pTestDocumentPath)
+    : UnoApiTest(pTestDocumentPath)
     , mpXmlBuffer(nullptr)
 {
 }
@@ -374,23 +372,27 @@ uno::Reference<drawing::XShape> SwModelTestBase::getTextFrameByName(const OUStri
     return xShape;
 }
 
-void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
+void SwModelTestBase::loadURL(OUString const& rURL,
+                              const css::uno::Sequence<css::beans::PropertyValue>& rParams,
+                              const char* pPassword)
 {
     // Output name at load time, so in the case of a hang, the name of the hanging input file is visible.
     std::cout << rURL << ":\n";
 
-    loadFromURL(rURL, pPassword);
+    loadFromURL(rURL, rParams, pPassword);
 
     CPPUNIT_ASSERT(!getSwDocShell()->GetMedium()->GetWarningError());
 
     calcLayout();
 }
 
-void SwModelTestBase::saveAndReload(TestFilter eFilter, const char* pPassword)
+void SwModelTestBase::saveAndReload(TestFilter eFilter,
+                                    const css::uno::Sequence<css::beans::PropertyValue>& rParams,
+                                    const char* pPassword)
 {
-    save(eFilter, pPassword);
-
-    loadURL(maTempFile.GetURL(), pPassword);
+    save(eFilter, rParams, pPassword);
+    dispose();
+    loadURL(maTempFile.GetURL(), rParams, pPassword);
 }
 
 int SwModelTestBase::getPages() const
@@ -411,12 +413,14 @@ int SwModelTestBase::getShapes() const
     return xDraws->getCount();
 }
 
-void SwModelTestBase::createSwDoc(const char* pName, const char* pPassword)
+void SwModelTestBase::createSwDoc(const char* pName,
+                                  const css::uno::Sequence<css::beans::PropertyValue>& rParams,
+                                  const char* pPassword)
 {
     if (!pName)
         loadURL(u"private:factory/swriter"_ustr);
     else
-        loadURL(createFileURL(OUString::createFromAscii(pName)), pPassword);
+        loadURL(createFileURL(OUString::createFromAscii(pName)), rParams, pPassword);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.TextDocument"_ustr));
@@ -483,20 +487,6 @@ void SwModelTestBase::emulateTyping(std::u16string_view rStr)
         pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
         Scheduler::ProcessEventsToIdle();
     }
-}
-
-SwExportFormFieldsGuard::SwExportFormFieldsGuard()
-{
-    m_pBatch = comphelper::ConfigurationChanges::create();
-    m_bValue = officecfg::Office::Common::Filter::PDF::Export::ExportFormFields::get();
-    officecfg::Office::Common::Filter::PDF::Export::ExportFormFields::set(true, m_pBatch);
-    m_pBatch->commit();
-}
-
-SwExportFormFieldsGuard::~SwExportFormFieldsGuard()
-{
-    officecfg::Office::Common::Filter::PDF::Export::ExportFormFields::set(m_bValue, m_pBatch);
-    m_pBatch->commit();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,6 +26,9 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/itemset.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 namespace basctl
 {

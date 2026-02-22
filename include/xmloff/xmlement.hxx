@@ -21,7 +21,8 @@
 #define INCLUDED_XMLOFF_XMLEMENT_HXX
 
 #include <sal/types.h>
-#include <xmloff/xmltoken.hxx>
+
+namespace xmloff::token { enum XMLTokenEnum : sal_Int16; }
 
 /** Map an XMLTokenEnum to an enum value.
  * To be used with SvXMLUnitConverter::convertEnum(...)

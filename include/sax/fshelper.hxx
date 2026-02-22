@@ -20,10 +20,9 @@
 #ifndef INCLUDED_SAX_FSHELPER_HXX
 #define INCLUDED_SAX_FSHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ref.hxx>
+//#include <rtl/ref.hxx>
 #include <sax/saxdllapi.h>
 #include <optional>
 #include <memory>
@@ -32,6 +31,8 @@
 
 namespace com::sun::star::io { class XOutputStream; }
 namespace sax_fastparser { class FastAttributeList; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace rtl { template <class reference_type> class Reference; }
 
 constexpr sal_Int32 FSNS(sal_Int32 namespc, sal_Int32 element) { return (namespc << 16) | element; }
 

@@ -11,11 +11,9 @@ $(eval $(call gb_CppunitTest_CppunitTest,vcl_bitmap_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_bitmap_test, \
     vcl/qa/cppunit/BitmapTest \
-    vcl/qa/cppunit/BitmapExTest \
     vcl/qa/cppunit/bitmapcolor \
     vcl/qa/cppunit/ScanlineToolsTest \
     vcl/qa/cppunit/BitmapScaleTest \
-    vcl/qa/cppunit/BitmapFilterTest \
     vcl/qa/cppunit/BmpFilterTest \
     vcl/qa/cppunit/XpmFilterTest \
 ))
@@ -49,6 +47,8 @@ $(eval $(call gb_CppunitTest_use_ure,vcl_bitmap_test))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_bitmap_test))
 
 $(eval $(call gb_CppunitTest_use_rdb,vcl_bitmap_test,services))
+
+$(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,harfbuzz))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_bitmap_test))
 

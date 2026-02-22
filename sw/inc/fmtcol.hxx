@@ -31,6 +31,8 @@
 #include <memory>
 
 class SwAttrPool;
+class SwViewShell;
+class SwFontObj;
 namespace sw{ class DocumentStylePoolManager; }
 
 /// SwFormatColl is just an SwFormat subclass that defaults to m_bAutoFormat=false, expressing that
@@ -63,23 +65,17 @@ class SW_DLLPUBLIC SwTextFormatColl
 
     bool mbAssignedToOutlineStyle;
 
-    bool m_bInSwFntCache;
-
     SwTextFormatColl *mpNextTextFormatColl;
 
     SwCharFormat* mpLinkedCharFormat = nullptr;
 
+    /** cached/temporary font layout information */
+    mutable std::unique_ptr<SwFontObj> mxFontObj;
+
 protected:
     SwTextFormatColl( SwAttrPool& rPool, const UIName &rFormatCollName,
                     SwTextFormatColl* pDerFrom = nullptr,
-                    sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
-        : SwFormatColl(rPool, rFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
-        , mbStayAssignedToListLevelOfOutlineStyle(false)
-        , mbAssignedToOutlineStyle(false)
-        , m_bInSwFntCache(false)
-    {
-        mpNextTextFormatColl = this;
-    }
+                    sal_uInt16 nFormatWh = RES_TXTFMTCOLL );
 
     /// To get UL- / LR- / FontHeight-changes.
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
@@ -136,19 +132,9 @@ public:
         if(HasWriterListeners() && !IsModifyLocked())
             CallSwClientNotify(sw::LegacyModifyHint(&rDrop, &rDrop));
     };
-    bool IsInSwFntCache() const { return m_bInSwFntCache; };
-    void SetInSwFntCache() { m_bInSwFntCache = true; };
-    virtual void InvalidateInSwFntCache(sal_uInt16 nWhich) override
-    {
-        if(isCHRATR(nWhich))
-        {
-            m_bInSwFntCache = false;
-        }
-    };
-    virtual void InvalidateInSwFntCache() override
-    {
-        m_bInSwFntCache = false;
-    }
+    virtual void InvalidateInSwFntCache(sal_uInt16 nWhich) override;
+    virtual void InvalidateInSwFntCache() override;
+    const SwFontObj & GetFontObj(SwViewShell *pSh) const;
 };
 
 class SwGrfFormatColl final : public SwFormatColl

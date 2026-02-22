@@ -24,7 +24,7 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -451,37 +451,35 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT(nullptr != pObj);
     CPPUNIT_ASSERT(pObj->isDiagram());
 
-    const std::shared_ptr< svx::diagram::IDiagramHelper >& rIDiagramHelper(pObj->getDiagramHelper());
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rIDiagramHelper(pObj->getDiagramHelper());
     CPPUNIT_ASSERT(rIDiagramHelper);
 
-    beans::PropertyValue aPropVal;
+    uno::Any aPropVal;
     uno::Reference<xml::dom::XDocument> aDomTree;
 
-    aPropVal = rIDiagramHelper->getDomPropertyValue("OOXData");
-    CPPUNIT_ASSERT(aPropVal.Value.hasValue());
-    CPPUNIT_ASSERT(aPropVal.Value >>= aDomTree); // PropertyValue of proper type
+    aPropVal = rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXData);
+    CPPUNIT_ASSERT(aPropVal.hasValue());
+    CPPUNIT_ASSERT(aPropVal >>= aDomTree); // PropertyValue of proper type
     CPPUNIT_ASSERT(aDomTree); // Reference not empty
 
-    aPropVal = rIDiagramHelper->getDomPropertyValue("OOXLayout");
-    CPPUNIT_ASSERT(aPropVal.Value.hasValue());
-    CPPUNIT_ASSERT(aPropVal.Value >>= aDomTree); // PropertyValue of proper type
+    aPropVal = rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXLayout);
+    CPPUNIT_ASSERT(aPropVal.hasValue());
+    CPPUNIT_ASSERT(aPropVal >>= aDomTree); // PropertyValue of proper type
     CPPUNIT_ASSERT(aDomTree); // Reference not empty
 
-    aPropVal = rIDiagramHelper->getDomPropertyValue("OOXStyle");
-    CPPUNIT_ASSERT(aPropVal.Value.hasValue());
-    CPPUNIT_ASSERT(aPropVal.Value >>= aDomTree); // PropertyValue of proper type
+    aPropVal = rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXStyle);
+    CPPUNIT_ASSERT(aPropVal.hasValue());
+    CPPUNIT_ASSERT(aPropVal >>= aDomTree); // PropertyValue of proper type
     CPPUNIT_ASSERT(aDomTree); // Reference not empty
 
-    aPropVal = rIDiagramHelper->getDomPropertyValue("OOXColor");
-    CPPUNIT_ASSERT(aPropVal.Value.hasValue());
-    CPPUNIT_ASSERT(aPropVal.Value >>= aDomTree); // PropertyValue of proper type
+    aPropVal = rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXColor);
+    CPPUNIT_ASSERT(aPropVal.hasValue());
+    CPPUNIT_ASSERT(aPropVal >>= aDomTree); // PropertyValue of proper type
     CPPUNIT_ASSERT(aDomTree); // Reference not empty
 
-    aPropVal = rIDiagramHelper->getDomPropertyValue("OOXDrawing");
-    CPPUNIT_ASSERT(aPropVal.Value.hasValue());
-    uno::Sequence< uno::Any > diagramDrawing;
-    CPPUNIT_ASSERT(aPropVal.Value >>= diagramDrawing);
-    CPPUNIT_ASSERT(diagramDrawing[0] >>= aDomTree); // PropertyValue of proper type
+    aPropVal = rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawing);
+    CPPUNIT_ASSERT(aPropVal.hasValue());
+    CPPUNIT_ASSERT(aPropVal >>= aDomTree); // PropertyValue of proper type
     CPPUNIT_ASSERT(aDomTree); // Reference not empty
 
     uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(0), uno::UNO_QUERY);
@@ -711,7 +709,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71646, "fdo71646.docx")
     sal_Int16 nLRDir  = getProperty< sal_Int32 >( xParaLTRLeft, u"WritingMode"_ustr );
 
     // this will test the both the text direction and alignment for paragraph
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), nLTRLeft);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_START), nLTRLeft);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
 }
 

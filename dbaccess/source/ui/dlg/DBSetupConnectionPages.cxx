@@ -771,6 +771,41 @@ using namespace ::com::sun::star;
         return bChangedSomething;
     }
 
+    std::unique_ptr<OGenericAdministrationPage> ODocumentConnectionPageSetup::CreateDocumentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
+    {
+        return std::make_unique<ODocumentConnectionPageSetup>(pPage, pController, _rAttrSet);
+    }
+
+    ODocumentConnectionPageSetup::ODocumentConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
+        : OConnectionTabPageSetup(pPage, pController, u"dbaccess/ui/dbwizspreadsheetpage.ui"_ustr, u"DBWizSpreadsheetPage"_ustr,
+                                 rCoreAttrs, STR_WRITER_HELPTEXT, STR_WRITER_HEADERTEXT, STR_WRITER_PATH_OR_FILE)
+        , m_xPasswordrequired(m_xBuilder->weld_check_button(u"passwordrequired"_ustr))
+    {
+        m_xPasswordrequired->connect_toggled(LINK(this, OGenericAdministrationPage, OnControlModifiedButtonClick));
+    }
+
+    ODocumentConnectionPageSetup::~ODocumentConnectionPageSetup()
+    {
+    }
+
+    void ODocumentConnectionPageSetup::fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& /*_rControlList*/)
+    {
+    }
+
+    void ODocumentConnectionPageSetup::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)
+    {
+        OConnectionTabPageSetup::fillControls(_rControlList);
+        _rControlList.emplace_back(new OSaveValueWidgetWrapper<weld::Toggleable>(m_xPasswordrequired.get()));
+
+    }
+
+    bool ODocumentConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
+    {
+        bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
+        fillBool(*_rSet,m_xPasswordrequired.get(),DSID_PASSWORDREQUIRED,false,bChangedSomething);
+        return bChangedSomething;
+    }
+
     std::unique_ptr<OGenericAdministrationPage> OAuthentificationPageSetup::CreateAuthentificationTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
         return std::make_unique<OAuthentificationPageSetup>(pPage, pController, _rAttrSet);

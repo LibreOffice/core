@@ -27,15 +27,19 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <svx/svdograf.hxx>
+#include <tools/urlobj.hxx>
 
 #include <strings.hrc>
 #include <DrawViewShell.hxx>
 #include <DrawDocShell.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 
 #include <sdpage.hxx>
 #include <drawdoc.hxx>

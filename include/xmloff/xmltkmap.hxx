@@ -22,13 +22,14 @@
 
 #include <config_options.h>
 #include <sal/config.h>
+#include <rtl/ustring.hxx>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <xmloff/xmltoken.hxx>
 #include <memory>
 
 
 class SvXMLTokenMap_Impl;
+namespace xmloff::token { enum XMLTokenEnum : sal_Int16; }
 
 #define XML_TOK_UNKNOWN 0xffffU
 #define XML_TOKEN_MAP_END { 0xffffU, xmloff::token::XML_TOKEN_INVALID, 0U }

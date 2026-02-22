@@ -65,7 +65,7 @@ const SvxPageUsage aArr[] =
 
 static sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
 {
-    for ( size_t i = 0; i < SAL_N_ELEMENTS(aArr); ++i )
+    for ( size_t i = 0; i < std::size(aArr); ++i )
         if ( aArr[i] == nUsage )
             return i;
     return 3;
@@ -73,7 +73,7 @@ static sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
 
 static SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
 {
-    if ( nPos >= SAL_N_ELEMENTS(aArr) )
+    if ( nPos >= std::size(aArr) )
         return SvxPageUsage::NONE;
     return aArr[nPos];
 }

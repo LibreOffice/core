@@ -165,6 +165,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_SHUFFLE_PAGES
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_HYPERLINK_SETLINK // ole : no, status : no
     [
         ExecMethod = FuTemporary ;
@@ -3034,6 +3039,16 @@ interface DrawView
         StateMethod = GetAttrState;
     ]
     SID_THEME_DIALOG
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ADD_THEME
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_APPLY_THEME
     [
         ExecMethod = FuTemporary;
         StateMethod = GetAttrState;

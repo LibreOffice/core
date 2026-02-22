@@ -113,6 +113,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <memory>
 
 #include "../../core/crsr/callnk.hxx"
@@ -128,6 +129,8 @@
 #include <textcontentcontrol.hxx>
 
 #include <UndoAttribute.hxx>
+
+#include <comphelper/flagguard.hxx>
 
 using namespace sw::mark;
 using namespace com::sun::star;
@@ -1683,11 +1686,11 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
 
         if (bNum)
         {
-            pChrFormat = GetCharFormatFromPool( RES_POOLCHR_NUM_LEVEL );
+            pChrFormat = GetCharFormatFromPool( SwPoolFormatId::CHR_NUM_LEVEL );
         }
         else
         {
-            pChrFormat = GetCharFormatFromPool( RES_POOLCHR_BULLET_LEVEL );
+            pChrFormat = GetCharFormatFromPool( SwPoolFormatId::CHR_BULLET_LEVEL );
         }
 
         const SwTextNode *const pTextNode = sw::GetParaPropsNode(*GetLayout(),
@@ -1706,15 +1709,27 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
 
             if (! bNum)
             {
+                static constexpr OUString sDefaultBulletSymbol = u"•"_ustr;
+                static constexpr OUString sDefaultBulletSymbolFont = u"OpenSymbol"_ustr;
                 uno::Sequence<OUString> aBulletSymbols(
-                    officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
+                    officecfg::Office::Common::BulletsNumbering::DefaultListBullets::get());
                 uno::Sequence<OUString> aBulletSymbolsFonts(
-                    officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
-                sal_Int32 nBulletSymbolIndex = nLvl < aBulletSymbols.getLength() ? nLvl : 0;
+                    officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::get());
+                if (!aBulletSymbols.hasElements())
+                {
+                    SAL_WARN("sw", "empty DefaultListBullets config, adding a default single bullet");
+                    // Add a single element even if user cleared the list in the config
+                    aBulletSymbols.realloc(1);
+                    aBulletSymbols.getArray()[0] = sDefaultBulletSymbol;
+                }
+                const sal_Int32 nBulletSymbolIndex = nLvl % aBulletSymbols.getLength();
                 aFormat.SetBulletChar(aBulletSymbols[nBulletSymbolIndex].toChar());
                 vcl::Font aFont;
-                sal_Int32 nBulletSymbolsFontIndex = nLvl < aBulletSymbolsFonts.getLength() ? nLvl : 0;
-                aFont.SetFamilyName(aBulletSymbolsFonts[nBulletSymbolsFontIndex]);
+                // Symbol and font correspond to each other, use same index
+                if (nBulletSymbolIndex < aBulletSymbolsFonts.getLength())
+                    aFont.SetFamilyName(aBulletSymbolsFonts[nBulletSymbolIndex]);
+                else
+                    aFont.SetFamilyName(sDefaultBulletSymbolFont);
                 aFormat.SetBulletFont(&aFont);
                 aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 // #i93908# clear suffix for bullet lists
@@ -1933,8 +1948,8 @@ SwTextFormatColl *SwWrtShell::GetParaStyle(const UIName &rCollName, GetStyle eCr
     SwTextFormatColl* pColl = FindTextFormatCollByName( rCollName );
     if( !pColl && GETSTYLE_NOCREATE != eCreate )
     {
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, SwGetPoolIdFromName::TxtColl );
-        if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
+        SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, SwGetPoolIdFromName::TxtColl );
+        if( SwPoolFormatId::UNKNOWN != nId || GETSTYLE_CREATEANY == eCreate )
             pColl = GetTextCollFromPool( nId );
     }
     return pColl;
@@ -1950,8 +1965,8 @@ SwCharFormat *SwWrtShell::GetCharStyle(const UIName &rFormatName, GetStyle eCrea
     SwCharFormat* pFormat = FindCharFormatByName( rFormatName );
     if( !pFormat && GETSTYLE_NOCREATE != eCreate )
     {
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rFormatName, SwGetPoolIdFromName::ChrFmt );
-        if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
+        SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName( rFormatName, SwGetPoolIdFromName::ChrFmt );
+        if( SwPoolFormatId::UNKNOWN != nId || GETSTYLE_CREATEANY == eCreate )
             pFormat = static_cast<SwCharFormat*>(GetFormatFromPool( nId ));
     }
     return pFormat;
@@ -2030,7 +2045,7 @@ void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyl
     // ITEM: SfxItemIter and removing SfxPoolItems:
     std::vector<sal_uInt16> aDeleteWhichIDs;
 
-    for (SfxItemIter aIter(aCoreSet); !aIter.IsAtEnd(); aIter.NextItem())
+    for (SfxItemIter aIter(aCoreSet); !aIter.IsAtEnd(); aIter.Next())
     {
         if(!IsInvalidItem(aIter.GetCurItem()))
         {
@@ -2699,6 +2714,15 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible,
 // make content visible or not visible only if needed
 void SwWrtShell::InvalidateOutlineContentVisibility()
 {
+    // tdf#170599 fix taken from fix for:
+    //   "rhbz#818557, fdo#58893: EndAllAction will call SelectShell(),
+    //    which pushes a bunch of SfxShells that are not cleared
+    //    (for unknown reasons) when closing the document, causing crash;
+    //    setting g_bNoInterrupt appears to avoid the problem."
+    // In this case the crash occurs when reopening Print Preview with outline folding enabled and
+    // a heading in the first paragraph and display formatting hidden characters option is enabled.
+    comphelper::FlagRestorationGuard g(g_bNoInterrupt, true);
+
     StartAction();
 
     GetView().GetEditWin().GetFrameControlsManager().HideControls(FrameControlType::Outline);
@@ -2812,6 +2836,10 @@ bool SwWrtShell::HasFoldedOutlineContentSelected() const
 
 void SwWrtShell::InfoReadOnlyDialog(bool bAsync) const
 {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
     if (bAsync)
     {
         auto xInfo = std::make_shared<weld::MessageDialogController>(
@@ -2839,6 +2867,9 @@ void SwWrtShell::InfoReadOnlyDialog(bool bAsync) const
         }
         xInfo->run();
     }
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 16
+#pragma GCC diagnostic pop
+#endif
 }
 
 bool SwWrtShell::WarnHiddenSectionDialog() const

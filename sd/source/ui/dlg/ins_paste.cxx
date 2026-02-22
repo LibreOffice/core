@@ -18,6 +18,7 @@
  */
 
 #include <ins_paste.hxx>
+#include <vcl/weld/Builder.hxx>
 
 SdInsertPasteDlg::SdInsertPasteDlg(weld::Window* pWindow)
     : GenericDialogController(pWindow, u"modules/simpress/ui/insertslides.ui"_ustr,

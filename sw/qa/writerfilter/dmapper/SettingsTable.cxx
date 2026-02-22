@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
@@ -20,11 +20,11 @@ using namespace com::sun::star;
 namespace
 {
 /// Tests for sw/source/writerfilter/dmapper/SettingsTable.cxx.
-class Test : public UnoApiXmlTest
+class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiXmlTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
+        : UnoApiTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };

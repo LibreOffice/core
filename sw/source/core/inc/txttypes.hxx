@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/types.h>
+
 /// Portion groups
 constexpr sal_uInt16 PORGRP_TXT       = 0x8000;
 constexpr sal_uInt16 PORGRP_EXP       = 0x4000;

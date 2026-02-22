@@ -26,6 +26,7 @@
 #include <vector>
 
 #include <editeng/outlobj.hxx>
+#include <rtl/ref.hxx>
 #include <svl/itemset.hxx>
 #include <svl/undo.hxx>
 #include <svl/style.hxx>

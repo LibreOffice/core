@@ -474,9 +474,6 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeOLE)
 {
     createSwDoc("fdo77759.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -504,6 +501,7 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78420)
     createSwDoc("fdo78420.docx");
 
     //FIXME: validation error in OOXML export: Errors: 10
+    // We are storing cp:contentType in docProps/core.xml and that is not a valid element.
     skipValidation();
 
     save(TestFilter::DOCX);
@@ -746,9 +744,6 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79817)
 CPPUNIT_TEST_FIXTURE(Test, testfdo79968_sldx)
 {
     createSwDoc("fdo79968.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::DOCX);
     // This UT for DOCX embedded with powerpoint slide

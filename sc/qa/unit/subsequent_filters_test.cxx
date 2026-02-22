@@ -647,90 +647,100 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFunctionsODS)
     // financial functions
     aCSVPath = createFilePath(u"contentCSV/financial-functions.csv");
     testFile(aCSVPath, *pDoc, 6);
+}
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFunctionsODS_databaseFunctions)
+{
     createScDoc("ods/database-functions.ods");
-    pDocSh = getScDocShell();
+    ScDocShell* pDocSh = getScDocShell();
     pDocSh->DoHardRecalc();
-    pDoc = getScDoc();
 
-    aCSVPath = createFilePath(u"contentCSV/database-functions.csv");
-    testFile(aCSVPath, *pDoc, 0);
+    ScDocument* pDoc = getScDoc();
 
-    createScDoc("ods/date-time-functions.ods");
-    pDocSh = getScDocShell();
-    pDocSh->DoHardRecalc();
-    pDoc = getScDoc();
-    aCSVPath = createFilePath(u"contentCSV/date-time-functions.csv");
-    testFile(aCSVPath, *pDoc, 0, StringType::PureString);
-
-    createScDoc("ods/user-defined-function.ods");
-    pDocSh = getScDocShell();
-    pDocSh->DoHardRecalc();
-    pDoc = getScDoc();
-    aCSVPath = createFilePath(u"contentCSV/user-defined-function.csv");
+    OUString aCSVPath = createFilePath(u"contentCSV/database-functions.csv");
     testFile(aCSVPath, *pDoc, 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCachedFormulaResultsODS)
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFunctionsODS_dateTimeFunctions)
 {
+    createScDoc("ods/date-time-functions.ods");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    ScDocument* pDoc = getScDoc();
+    OUString aCSVPath = createFilePath(u"contentCSV/date-time-functions.csv");
+    testFile(aCSVPath, *pDoc, 0, StringType::PureString);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testFunctionsODS_usedDefinedFunctions)
+{
+    createScDoc("ods/user-defined-function.ods");
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    ScDocument* pDoc = getScDoc();
+    OUString aCSVPath = createFilePath(u"contentCSV/user-defined-function.csv");
+    testFile(aCSVPath, *pDoc, 0);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCachedFormulaResultsODS_functions)
+{
+    createScDoc("ods/functions.ods");
+
+    ScDocument* pDoc = getScDoc();
+
+    //test cached formula results of logical functions
+    OUString aCSVPath = createFilePath(u"contentCSV/logical-functions.csv");
+    testFile(aCSVPath, *pDoc, 0);
+    //test cached formula results of spreadsheet functions
+    aCSVPath = createFilePath(u"contentCSV/spreadsheet-functions.csv");
+    testFile(aCSVPath, *pDoc, 1);
+    //test cached formula results of mathematical functions
+    aCSVPath = createFilePath(u"contentCSV/mathematical-functions.csv");
+    testFile(aCSVPath, *pDoc, 2, StringType::PureString);
+    //test cached formula results of information functions
+    aCSVPath = createFilePath(u"contentCSV/information-functions.csv");
+    testFile(aCSVPath, *pDoc, 3);
+    // text functions
+    aCSVPath = createFilePath(u"contentCSV/text-functions.csv");
+    testFile(aCSVPath, *pDoc, 4, StringType::PureString);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testCachedFormulaResultsODS_cachedValue)
+{
+    createScDoc("ods/cachedValue.ods");
+
+    ScDocument* pDoc = getScDoc();
+    OUString aCSVPath = createFilePath(u"contentCSV/cachedValue.csv");
+    testFile(aCSVPath, *pDoc, 0);
+
+    //we want to me sure that volatile functions are always recalculated
+    //regardless of cached results.  if you update the ods file, you must
+    //update the values here.
+    //if NOW() is recalculated, then it should never equal "01/25/13 01:06 PM"
+    OUString sTodayRecalc(pDoc->GetString(0, 0, 1));
+
+    CPPUNIT_ASSERT("01/25/13 01:06 PM" != sTodayRecalc);
+
+    OUString sTodayRecalcRef(pDoc->GetString(1, 0, 1));
+    CPPUNIT_ASSERT_EQUAL(sTodayRecalc, sTodayRecalcRef);
+
+    // make sure that error values are not being treated as string values
+    for (SCCOL nCol = 0; nCol < 4; ++nCol)
     {
-        createScDoc("ods/functions.ods");
-
-        ScDocument* pDoc = getScDoc();
-
-        //test cached formula results of logical functions
-        OUString aCSVPath = createFilePath(u"contentCSV/logical-functions.csv");
-        testFile(aCSVPath, *pDoc, 0);
-        //test cached formula results of spreadsheet functions
-        aCSVPath = createFilePath(u"contentCSV/spreadsheet-functions.csv");
-        testFile(aCSVPath, *pDoc, 1);
-        //test cached formula results of mathematical functions
-        aCSVPath = createFilePath(u"contentCSV/mathematical-functions.csv");
-        testFile(aCSVPath, *pDoc, 2, StringType::PureString);
-        //test cached formula results of information functions
-        aCSVPath = createFilePath(u"contentCSV/information-functions.csv");
-        testFile(aCSVPath, *pDoc, 3);
-        // text functions
-        aCSVPath = createFilePath(u"contentCSV/text-functions.csv");
-        testFile(aCSVPath, *pDoc, 4, StringType::PureString);
-    }
-
-    {
-        createScDoc("ods/cachedValue.ods");
-
-        ScDocument* pDoc = getScDoc();
-        OUString aCSVPath = createFilePath(u"contentCSV/cachedValue.csv");
-        testFile(aCSVPath, *pDoc, 0);
-
-        //we want to me sure that volatile functions are always recalculated
-        //regardless of cached results.  if you update the ods file, you must
-        //update the values here.
-        //if NOW() is recalculated, then it should never equal "01/25/13 01:06 PM"
-        OUString sTodayRecalc(pDoc->GetString(0, 0, 1));
-
-        CPPUNIT_ASSERT("01/25/13 01:06 PM" != sTodayRecalc);
-
-        OUString sTodayRecalcRef(pDoc->GetString(1, 0, 1));
-        CPPUNIT_ASSERT_EQUAL(sTodayRecalc, sTodayRecalcRef);
-
-        // make sure that error values are not being treated as string values
-        for (SCCOL nCol = 0; nCol < 4; ++nCol)
+        for (SCROW nRow = 0; nRow < 2; ++nRow)
         {
-            for (SCROW nRow = 0; nRow < 2; ++nRow)
-            {
-                OUString aFormula = "=ISERROR(" + OUStringChar(static_cast<char>('A' + nCol))
-                                    + OUString::number(nRow) + ")";
-                pDoc->SetString(nCol, nRow + 2, 2, aFormula);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(
-                    OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr(), u"TRUE"_ustr,
-                    pDoc->GetString(nCol, nRow + 2, 2));
+            OUString aFormula = "=ISERROR(" + OUStringChar(static_cast<char>('A' + nCol))
+                                + OUString::number(nRow) + ")";
+            pDoc->SetString(nCol, nRow + 2, 2, aFormula);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr(), u"TRUE"_ustr,
+                pDoc->GetString(nCol, nRow + 2, 2));
 
-                OUString aIsTextFormula = "=ISTEXT("
-                                          + OUString::number(static_cast<char>('A' + nCol))
-                                          + OUString::number(nRow) + ")";
-                pDoc->SetString(nCol, nRow + 4, 2, aIsTextFormula);
-                CPPUNIT_ASSERT_EQUAL(u"FALSE"_ustr, pDoc->GetString(nCol, nRow + 4, 2));
-            }
+            OUString aIsTextFormula = "=ISTEXT(" + OUString::number(static_cast<char>('A' + nCol))
+                                      + OUString::number(nRow) + ")";
+            pDoc->SetString(nCol, nRow + 4, 2, aIsTextFormula);
+            CPPUNIT_ASSERT_EQUAL(u"FALSE"_ustr, pDoc->GetString(nCol, nRow + 4, 2));
         }
     }
 }
@@ -1585,6 +1595,19 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRowIndex1BasedXLSX)
     CPPUNIT_ASSERT_EQUAL(u"Second line."_ustr, aStr);
     aStr = pText->GetText(2);
     CPPUNIT_ASSERT_EQUAL(u"Third line."_ustr, aStr);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testNonAsciiWithDotXLSX)
+{
+    createScDoc("xlsx/tdf100154.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    OUString aStr = pDoc->GetFormula(0, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(u"=$'Новый.лист'.A1"_ustr, aStr);
+
+    pDoc->CalcAll();
+    double aValue = pDoc->GetValue(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(5.0, aValue);
 }
 
 ScFiltersTest::ScFiltersTest()

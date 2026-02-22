@@ -48,6 +48,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
 
 // carrier of the dialog
 SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* /*pCW*/, weld::Window *pParent)

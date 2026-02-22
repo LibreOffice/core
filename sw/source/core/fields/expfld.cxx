@@ -30,6 +30,9 @@
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <com/sun/star/text/SetVariableType.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
+#include <comphelper/processfactory.hxx>
 #include <unofield.hxx>
 #include <frmfmt.hxx>
 #include <fmtfld.hxx>
@@ -826,6 +829,43 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
     }
 }
 
+SwTextField* SwSetExpField::GetTextField() const
+{
+    SwTextField* pTextField = nullptr;
+    if(mpFormatField && mpFormatField->GetTextField())
+        pTextField = mpFormatField->GetTextField();
+
+    return pTextField;
+}
+
+OUString SwSetExpField::GetFirstNWords(const OUString& rText, sal_Int32 nWords) const
+{
+    if (rText.isEmpty())
+        return rText;
+
+    css::lang::Locale aLocale;
+    if(GetTextField())
+        aLocale = g_pBreakIt->GetLocale(GetTextField()->GetTextNode().GetLang(0));
+
+    sal_Int32 nPos = 0;
+    for (sal_Int32 i = 0; i < nWords; ++i)
+    {
+        css::i18n::Boundary b =
+            g_pBreakIt->GetBreakIter()->getWordBoundary(
+                rText, nPos, aLocale,
+                css::i18n::WordType::ANY_WORD, true);
+
+        if (b.endPos <= nPos)
+            break;
+
+        nPos = b.endPos;
+    }
+
+    auto sSub = rText.subView(0, nPos);
+    OUString s(sSub.data(), sSub.size());
+    return s.trim();
+}
+
 void SwSetExpField::SetFormatField(SwFormatField & rFormatField)
 {
     mpFormatField = &rFormatField;
@@ -853,10 +893,15 @@ OUString SwSetExpField::GetFieldName() const
                                 ? SwFieldTypesEnum::SetInput
                                 : SwFieldTypesEnum::Set   );
 
+    OUString sFieldText = "";
+
+    if(GetTextField())
+         sFieldText = GetFirstNWords(GetTextField()->GetTextNode().GetText(), 2);
+
     OUString aStr(
         SwFieldType::GetTypeStr( nStrType )
         + " "
-        + GetTyp()->GetName().toString() );
+        + (sFieldText.isEmpty() ? GetTyp()->GetName().toString() : sFieldText));
 
     // Sequence: without formula
     if (SwFieldTypesEnum::Sequence != nStrType)

@@ -11,7 +11,11 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <xmloff/xmltoken.hxx>
+
+namespace xmloff::token
+{
+enum XMLTokenEnum : sal_Int16;
+}
 
 namespace com::sun::star::uno
 {

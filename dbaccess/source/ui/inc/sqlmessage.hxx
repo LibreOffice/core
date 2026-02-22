@@ -20,14 +20,16 @@
 #pragma once
 
 #include <connectivity/dbexception.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <memory>
 
 namespace dbaui
 {
 
-enum MessageType
+enum class MessageType
 {
     Info,
     Error,
@@ -89,12 +91,10 @@ public:
         @param  rMessage    the detailed message to display
         @param  _eType      determines the image to use. AUTO is disallowed in this constructor version
     */
-    OSQLMessageBox(weld::Window* pParent,
-                const OUString& rTitle,
-                const OUString& rMessage,
-                MessBoxStyle nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk,
-                MessageType _eType = Info,
-                const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
+    OSQLMessageBox(weld::Window* pParent, const OUString& rTitle, const OUString& rMessage,
+                   MessBoxStyle nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk,
+                   MessageType _eType = MessageType::Info,
+                   const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr);
 
     void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
     void add_button(const OUString& rText, int nResponse, const OUString& rHelpId = {}) { m_xDialog->add_button(rText, nResponse, rHelpId); }

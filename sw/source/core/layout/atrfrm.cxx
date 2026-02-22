@@ -2795,9 +2795,9 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // reset fill information
         if(maFillAttributes && supportsFullDrawingLayerFillAttributeSet())
         {
-            SfxItemIter aIter(*pNewAttrSetChg->GetChgSet());
-            for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+            for (SfxItemIter aIter( *pNewAttrSetChg->GetChgSet() ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 if(!IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST)
                 {
                     maFillAttributes.reset();

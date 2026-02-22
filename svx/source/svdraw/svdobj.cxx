@@ -36,6 +36,7 @@
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
 #include <o3tl/deleter.hxx>
@@ -201,18 +202,60 @@ struct SdrObject::Impl
         meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME) {}
 };
 
+bool SdrObject::ObjectNameIsDiagramModelID()
+{
+    if (!m_pPlusData)
+        return false;
+
+    const OUString& rStr(m_pPlusData->aObjName);
+    if (rStr.isEmpty())
+        return false;
+
+    // length is fixed (38 chars)
+    if (38 != rStr.getLength())
+        return false;
+
+    // starts and ends with curly braces
+    const sal_Unicode* pStr(rStr.getStr());
+    if (pStr[0] != '{' || pStr[37] != '}')
+        return false;
+
+    // has 'minus' signs at positions 9, 14, 19 and 24
+    const char minus('-');
+    if (pStr[9] != minus || pStr[14] != minus || pStr[19] != minus || pStr[24] != minus)
+        return false;
+
+    // we could also check for upper-case hex alphabet (0..9, A..F) for
+    // the rest of characters, but should be safe enough already
+    return true;
+}
+
+void SdrObject::setDiagramDataModelID(const OUString& rID)
+{
+    if (!m_pPlusData)
+        ImpForcePlusData();
+    m_pPlusData->aObjName = rID;
+}
+
+const OUString& SdrObject::getDiagramDataModelID() const
+{
+    if(m_pPlusData)
+        return m_pPlusData->aObjName;
+    return EMPTY_OUSTRING;
+}
+
 bool SdrObject::isDiagram() const
 {
     return false;
 }
 
-const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObject::getDiagramHelper() const
+const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObject::getDiagramHelper() const
 {
-    static std::shared_ptr< svx::diagram::IDiagramHelper > aEmpty;
+    static std::shared_ptr< svx::diagram::DiagramHelper_svx > aEmpty;
     return aEmpty;
 }
 
-const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObject::getDiagramHelperFromDiagramOrMember() const
+const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObject::getDiagramHelperFromDiagramOrMember() const
 {
     SdrObject* pCurrent(const_cast<SdrObject*>(this));
 
@@ -366,12 +409,12 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     , mpSvxShape( nullptr )
     , mbDoNotInsertIntoPageAutomatically(false)
     , msHyperlink()
-    , msDiagramDataModelID()
 {
     m_bVirtObj         =false;
     m_bSnapRectDirty   =true;
     m_bMovProt         =false;
     m_bSizProt         =false;
+    m_bDelProt         =false;
     m_bNoPrint         =false;
     m_bEmptyPresObj    =false;
     m_bNotVisibleAsMaster=false;
@@ -403,11 +446,11 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     , mpSvxShape( nullptr )
     , mbDoNotInsertIntoPageAutomatically(false)
     , msHyperlink()
-    , msDiagramDataModelID()
 {
     m_bVirtObj         =false;
     m_bSnapRectDirty   =true;
     m_bMovProt         =false;
+    m_bDelProt         =false;
     m_bSizProt         =false;
     m_bNoPrint         =false;
     m_bEmptyPresObj    =false;
@@ -1032,7 +1075,7 @@ void SdrObject::RecalcBoundRect()
 
 void SdrObject::BroadcastObjectChange() const
 {
-    if ((getSdrModelFromSdrObject().isLocked()) || getSdrModelFromSdrObject().IsInDestruction() || comphelper::IsFuzzing())
+    if (getSdrModelFromSdrObject().IsInDestruction() || comphelper::IsFuzzing())
         return;
 
     bool bPlusDataBroadcast(m_pPlusData && m_pPlusData->pBroadcast);
@@ -1040,6 +1083,13 @@ void SdrObject::BroadcastObjectChange() const
 
     if(!(bPlusDataBroadcast || bObjectChange))
         return;
+
+    // Only check if we want to defer, after we decided that we really need to broadcast something
+    if (getSdrModelFromSdrObject().isLocked())
+    {
+        getSdrModelFromSdrObject().addDeferredObjectChanges(this);
+        return;
+    }
 
     SdrHint aHint(SdrHintKind::ObjectChange, *this);
 
@@ -1218,18 +1268,17 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
             drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, false);
             aExtractor.process(xSequence);
             const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
-            const sal_uInt32 nSize(rResult.size());
 
             // when count is one, it is implied that the object has only its normal
             // contour anyways and TakeContour() is to return an empty PolyPolygon
             // (see old implementation for historical reasons)
-            if(nSize > 1)
+            if(rResult.size() > 1)
             {
                 // the topology for contour is correctly a vector of PolyPolygons; for
                 // historical reasons cut it back to a single tools::PolyPolygon here
-                for(sal_uInt32 a(0); a < nSize; a++)
+                for (auto const &rPoly : rResult)
                 {
-                    aRetval.append(rResult[a]);
+                    aRetval.append(rPoly);
                 }
             }
         }
@@ -2058,6 +2107,34 @@ const SfxPoolItem& SdrObject::GetMergedItem(const sal_uInt16 nWhich) const
 void SdrObject::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems)
 {
     GetProperties().SetMergedItemSetAndBroadcast(rSet, bClearAllItems);
+
+    const SdrMetricItem* pItem;
+    const bool bSetSoftEdge
+        = (SfxItemState::SET == rSet.GetItemState(SDRATTR_SOFTEDGE_RADIUS, true, &pItem)
+           && pItem->GetValue() > 0);
+    if (bSetSoftEdge)
+    {
+        // Remove 3D grabbag
+        try
+        {
+            css::uno::Any aAnyGrabBag;
+            GetGrabBagItem(aAnyGrabBag);
+            uno::Sequence<beans::PropertyValue> aSeqGrabBag
+                = aAnyGrabBag.get<uno::Sequence<beans::PropertyValue>>();
+            auto it = std::find_if(aSeqGrabBag.begin(), aSeqGrabBag.end(),
+                                   [](const beans::PropertyValue& rProp) {
+                                       return rProp.Name == u"3DEffectProperties"_ustr;
+                                   });
+            if (it == aSeqGrabBag.end())
+                return;
+            comphelper::removeElementAt(aSeqGrabBag, it - aSeqGrabBag.begin());
+            SetGrabBagItem(css::uno::Any(aSeqGrabBag));
+        }
+        catch (const css::uno::Exception&)
+        {
+          // Grab bag not found, nothing to do
+        }
+    }
 }
 
 void SdrObject::ApplyNotPersistAttr(const SfxItemSet& rAttr)
@@ -2730,6 +2807,16 @@ void SdrObject::SetResizeProtect(bool bProt)
     }
 }
 
+void SdrObject::SetDeleteProtect(bool bProt)
+{
+    if (IsDeleteProtect() != bProt)
+    {
+        m_bDelProt = bProt;
+        SetChanged();
+        BroadcastObjectChange();
+    }
+}
+
 bool SdrObject::IsPrintable() const
 {
     return !m_bNoPrint;
@@ -3168,6 +3255,20 @@ void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
     if (GetName().isEmpty())
         return;
 
+    if (ObjectNameIsDiagramModelID())
+        // do not make name unique for DiagramModelID's
+        return;
+
+    OUString sName(GetName().trim());
+    OUString sRootName(sName);
+
+    if (!sName.isEmpty() && rtl::isAsciiDigit(sName[sName.getLength() - 1]))
+    {
+        sal_Int32 nPos(sName.getLength() - 1);
+        while (nPos > 0 && rtl::isAsciiDigit(sName[--nPos]));
+        sRootName = o3tl::trim(sName.subView(0, nPos + 1));
+    }
+
     if (rNameSet.empty())
     {
         SdrPage* pPage;
@@ -3180,19 +3281,13 @@ void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
             {
                 pObj = aIter.Next();
                 if (pObj != this)
-                    rNameSet.insert(pObj->GetName());
+                {
+                    auto rName = pObj->GetName();
+                    if (rName.startsWith(sRootName))
+                        rNameSet.insert(rName);
+                }
             }
         }
-    }
-
-    OUString sName(GetName().trim());
-    OUString sRootName(sName);
-
-    if (!sName.isEmpty() && rtl::isAsciiDigit(sName[sName.getLength() - 1]))
-    {
-        sal_Int32 nPos(sName.getLength() - 1);
-        while (nPos > 0 && rtl::isAsciiDigit(sName[--nPos]));
-        sRootName = o3tl::trim(sName.subView(0, nPos + 1));
     }
 
     for (sal_uInt32 n = 1; rNameSet.find(sName) != rNameSet.end(); n++)

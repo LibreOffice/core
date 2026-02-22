@@ -33,6 +33,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/types.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace dbaui

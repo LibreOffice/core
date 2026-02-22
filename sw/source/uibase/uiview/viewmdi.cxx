@@ -25,6 +25,7 @@
 #include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
+#include <vcl/vclevent.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -252,6 +253,9 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
         SwViewOption aOpt( *pOpt );
         aOpt.SetViewLayoutColumns( nColumns );
         aOpt.SetViewLayoutBookMode( bBookMode );
+        // tdf#98446 - hiding whitespace is only possible in single-page view
+        if (!aOpt.CanHideWhitespace())
+            aOpt.SetHideWhitespaceMode(false);
         m_pWrtShell->ApplyViewOptions( aOpt );
     }
 

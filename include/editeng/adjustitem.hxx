@@ -146,26 +146,6 @@ public:
         return eRet;
     }
 
-    sal_Int8 GetAsFlags() const
-    {
-        sal_Int8 nFlags = 0;
-        if ( bOneBlock )
-            nFlags |= 0x0001;
-        if ( bLastCenter )
-            nFlags |= 0x0002;
-        if ( bLastBlock )
-            nFlags |= 0x0004;
-        return nFlags;
-    }
-
-    void SetAsFlags(sal_Int8 nFlags)
-    {
-        ASSERT_CHANGE_REFCOUNTED_ITEM;
-        bOneBlock = 0 != (nFlags & 0x0001);
-        bLastCenter = 0 != (nFlags & 0x0002);
-        bLastBlock = 0 != (nFlags & 0x0004);
-    }
-
     sal_uInt16 GetPropWordSpacing() const
     {
         return nPropWordSpacing;

@@ -268,7 +268,6 @@ public:
 
     void            TransliterateText( TransliterationFlags nType );
 
-    ScAutoFormatData* CreateAutoFormatData();
     void            AutoFormat( sal_uInt16 nFormatNo );
 
     bool            SearchAndReplace( const SvxSearchItem* pSearchItem,

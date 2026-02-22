@@ -19,15 +19,19 @@
 
 #include <sal/config.h>
 
+#include <tools/json_writer.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/uitest/uiobject.hxx>

@@ -28,6 +28,9 @@
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+
 SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     weld::Window* pWindow, const SdDrawDocument& rDoc,
     SfxMedium* pSfxMedium, const OUString& rFileName )
@@ -42,7 +45,8 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     m_xLbTree->set_size_request(m_xLbTree->get_approximate_digit_width() * 48,
                                 m_xLbTree->get_height_rows(12));
 
-    m_xLbTree->SetViewFrame( rDoc.GetDocSh()->GetViewShell()->GetViewFrame() );
+    if (sd::ViewShell* pViewShell = rDoc.GetDocSh()->GetViewShell())
+        m_xLbTree->SetViewFrame( pViewShell->GetViewFrame() );
 
     m_xLbTree->connect_changed(LINK(this, SdInsertPagesObjsDlg, SelectObjectHdl));
 

@@ -28,6 +28,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
 #include "eventimp.hxx"
 #include "descriptionimp.hxx"
 

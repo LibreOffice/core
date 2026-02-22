@@ -54,7 +54,7 @@ class SwFootnoteNumPortion : public SwNumberPortion
 {
 public:
     SwFootnoteNumPortion( const OUString &rExpand, std::unique_ptr<SwFont> pFntL )
-         : SwNumberPortion( rExpand, std::move(pFntL), true, false, 0, false )
+         : SwNumberPortion( rExpand, std::move(pFntL), nullptr, true, false, 0, false )
          { SetWhichPor( PortionType::FootnoteNum ); }
 };
 

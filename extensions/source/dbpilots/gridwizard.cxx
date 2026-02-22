@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <vcl/weld/Builder.hxx>
 #include "dbptools.hxx"
 #include <helpids.h>
 

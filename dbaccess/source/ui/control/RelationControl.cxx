@@ -22,6 +22,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/mapunit.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <TableConnectionData.hxx>
 #include <TableConnection.hxx>

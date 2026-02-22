@@ -8,9 +8,12 @@
  */
 
 #include <officecfg/Office/Common.hxx>
-#include <svx/svxdlg.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <svtools/dlgname.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include "tsaurls.hxx"
 
@@ -90,13 +93,11 @@ IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl, weld::Button&, void)
 {
     OUString aDesc(m_xEnterAUrl->get_label());
 
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(
-        pFact->CreateSvxNameDialog(m_xDialog.get(), OUString(), aDesc));
+    SvxNameDialog aDlg(m_xDialog.get(), OUString(), aDesc);
 
-    if (pDlg->Execute() == RET_OK)
+    if (aDlg.run() == RET_OK)
     {
-        AddTSAURL(pDlg->GetName());
+        AddTSAURL(aDlg.GetName());
         m_xOKBtn->set_sensitive(true);
     }
     m_xURLListBox->unselect_all();

@@ -118,7 +118,7 @@ private:
     /// Reference to the shape's property set.
     css::uno::Reference<css::beans::XPropertySet> mxSet;
 
-    /// The description string that is build.
+    /// The description string that is built.
     OUStringBuffer msDescription;
 
     /** This flag is used to determine whether to insert a separator e.g. a

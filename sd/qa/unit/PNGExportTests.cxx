@@ -28,6 +28,8 @@ public:
         : UnoApiTest(u"/sd/qa/unit/data/"_ustr)
     {
     }
+
+    void checkVerticalAligment(std::u16string_view aFileName, bool bLegacy);
 };
 
 static void assertColorsAreSimilar(const std::string& message, const BitmapColor& expected,
@@ -797,59 +799,71 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
 {
-    const OUString filenames[] = { u"odp/tdf99729-new.odp"_ustr, u"odp/tdf99729-legacy.odp"_ustr };
-    int nonwhitecounts[] = { 0, 0 };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(filenames); ++i)
+    checkVerticalAligment(u"odp/tdf99729-new.odp", false);
+}
+
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729_Legacy)
+{
+    checkVerticalAligment(u"odp/tdf99729-legacy.odp", true);
+}
+
+void SdPNGExportTest::checkVerticalAligment(std::u16string_view aFileName, bool bLegacy)
+{
+    int nonwhitecounts = 0;
+    // 1st check for new behaviour - having AnchoredTextOverflowLegacy compatibility flag set to false in settings.xml
+    loadFromFile(aFileName);
+
+    uno::Reference<uno::XComponentContext> xContext = getComponentContext();
+    CPPUNIT_ASSERT(xContext.is());
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(xContext);
+    CPPUNIT_ASSERT(xGraphicExporter.is());
+
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(320)),
+        comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(240))
+    };
+
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
+        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
+    };
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                           uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPage.is());
+    xGraphicExporter->setSourceDocument(xPage);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    Bitmap aBMP = aPNGReader.read();
+    BitmapScopedReadAccess pRead(aBMP);
+    for (tools::Long nX = 154; nX < (154 + 12); ++nX)
     {
-        // 1st check for new behaviour - having AnchoredTextOverflowLegacy compatibility flag set to false in settings.xml
-        loadFromFile(filenames[i]);
-
-        uno::Reference<uno::XComponentContext> xContext = getComponentContext();
-        CPPUNIT_ASSERT(xContext.is());
-        uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
-            = drawing::GraphicExportFilter::create(xContext);
-        CPPUNIT_ASSERT(xGraphicExporter.is());
-
-        uno::Sequence<beans::PropertyValue> aFilterData{
-            comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(320)),
-            comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(240))
-        };
-
-        uno::Sequence<beans::PropertyValue> aDescriptor{
-            comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
-            comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
-            comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
-        };
-
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
-                                               uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xPage.is());
-        xGraphicExporter->setSourceDocument(xPage);
-        xGraphicExporter->filter(aDescriptor);
-
-        SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
-        vcl::PngImageReader aPNGReader(aFileStream);
-        Bitmap aBMP = aPNGReader.read();
-        BitmapScopedReadAccess pRead(aBMP);
-        for (tools::Long nX = 154; nX < (154 + 12); ++nX)
+        for (tools::Long nY = 16; nY < (16 + 96); ++nY)
         {
-            for (tools::Long nY = 16; nY < (16 + 96); ++nY)
-            {
-                const Color aColor = pRead->GetColor(nY, nX);
-                if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff)
-                    || (aColor.GetBlue() != 0xff))
-                    ++nonwhitecounts[i];
-            }
+            const Color aColor = pRead->GetColor(nY, nX);
+            if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff)
+                || (aColor.GetBlue() != 0xff))
+                ++nonwhitecounts;
         }
     }
-    // The numbers 1-9 should be above the Text Box in rectangle 154,16 - 170,112.
-    // If text alignment is wrong, the rectangle will be white.
-    CPPUNIT_ASSERT_MESSAGE("Tdf99729: vertical alignment of text is incorrect!",
-                           nonwhitecounts[0] > 100); // it is 134 with cleartype disabled
-    // The numbers 1-9 should be below the Text Box -> rectangle 154,16 - 170,112 should be white.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Tdf99729: legacy vertical alignment of text is incorrect!", 0,
-                                 nonwhitecounts[1]);
+    if (!bLegacy)
+    {
+        // The numbers 1-9 should be above the Text Box in rectangle 154,16 - 170,112.
+        // If text alignment is wrong, the rectangle will be white.
+        CPPUNIT_ASSERT_MESSAGE("Tdf99729: vertical alignment of text is incorrect!",
+                               nonwhitecounts > 100); // it is 134 with cleartype disabled
+    }
+    else
+    {
+        // The numbers 1-9 should be below the Text Box -> rectangle 154,16 - 170,112 should be white.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Tdf99729: legacy vertical alignment of text is incorrect!", 0,
+                                     nonwhitecounts);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)

@@ -92,6 +92,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
 
     // Open a new document
+    dispose();
     createScDoc();
 
     pViewShell = getViewShell();

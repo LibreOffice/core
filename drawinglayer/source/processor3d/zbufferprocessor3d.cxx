@@ -26,6 +26,7 @@
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <o3tl/safeint.hxx>
 #include <svtools/optionsdrawinglayer.hxx>

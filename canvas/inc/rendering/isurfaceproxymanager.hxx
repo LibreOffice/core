@@ -41,7 +41,7 @@ namespace canvas
 
         /** Create a surface proxy for a color buffer.
 
-            The whole idea is build around the concept that you create
+            The whole idea is built around the concept that you create
             some arbitrary buffer which contains the image data and
             tell the texture manager about it.  From there on you can
             draw into this image using any kind of graphics api you

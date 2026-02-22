@@ -39,6 +39,7 @@
 #include <connectivity/dbtools.hxx>
 #include <comphelper/interaction.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <connectivity/conncleanup.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <tools/urlobj.hxx>

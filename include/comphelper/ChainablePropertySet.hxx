@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_COMPHELPER_CHAINABLEPROPERTYSET_HXX
-#define INCLUDED_COMPHELPER_CHAINABLEPROPERTYSET_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -143,6 +142,5 @@ namespace comphelper
         virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override final;
     };
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

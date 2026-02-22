@@ -51,6 +51,7 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <unoprnms.hxx>
 
 #include <dbui.hrc>

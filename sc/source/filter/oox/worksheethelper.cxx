@@ -227,7 +227,7 @@ public:
     const Reference< XSpreadsheet >& getSheet() const { return mxSheet; }
 
     /** Returns the XCell interface for the passed cell address. */
-    Reference< XCell >  getCell( const ScAddress& rAddress ) const;
+    rtl::Reference< ScCellObj > getCell( const ScAddress& rAddress ) const;
     /** Returns the XSheetCellRanges interface for the passed cell range addresses. */
     rtl::Reference<ScCellRangesObj> getCellRangeList( const ScRangeList& rRanges ) const;
 
@@ -451,15 +451,13 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, ISegmentProgr
     }
 }
 
-Reference< XCell > WorksheetGlobals::getCell( const ScAddress& rAddress ) const
+rtl::Reference< ScCellObj > WorksheetGlobals::getCell( const ScAddress& rAddress ) const
 {
-    Reference< XCell > xCell;
-    if( mxSheet.is() ) try
+    rtl::Reference< ScCellObj > xCell;
+    ScDocShell* pDocShell = getScDocument().GetDocumentShell();
+    if( pDocShell )
     {
-        xCell = mxSheet->getCellByPosition( rAddress.Col(), rAddress.Row() );
-    }
-    catch( Exception& )
-    {
+         xCell = new ScCellObj( pDocShell, rAddress );
     }
     return xCell;
 }

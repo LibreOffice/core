@@ -18,6 +18,7 @@
  */
 
 #include <svx/svxids.hrc>
+#include <vcl/weld/Builder.hxx>
 #include <QueryTextView.hxx>
 #include <querycontainerwindow.hxx>
 #include <helpids.h>

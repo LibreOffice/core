@@ -31,6 +31,8 @@
 #include <PostItMgr.hxx>
 #include <swmodule.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
+#include <annotationmark.hxx>
 #include <txtannotationfld.hxx>
 #include <ndtxt.hxx>
 #include <undobj.hxx>

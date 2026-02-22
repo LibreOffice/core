@@ -26,11 +26,11 @@
 #include "dlgfact.hxx"
 
 #include <about.hxx>
-#include <dlgname.hxx>
 #include <securityoptions.hxx>
 #include <AdditionsDialog.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/pageids.hxx>
+#include <svtools/dlgname.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <numfmt.hxx>
@@ -52,7 +52,6 @@
 #include <cuitbxform.hxx>
 #include <optdict.hxx>
 #include <multipat.hxx>
-#include <cuihyperdlg.hxx>
 #include <cuifmsearch.hxx>
 #include <cuigrfflt.hxx>
 #include <cuitabarea.hxx>
@@ -94,6 +93,7 @@
 #include <tipofthedaydlg.hxx>
 #include <widgettestdlg.hxx>
 #include <uipickerdlg.hxx>
+#include <hyperlinkdlg.hxx>
 #include <DiagramDialog.hxx>
 #include <fileextcheckdlg.hxx>
 #include <TextColumnsPage.hxx>
@@ -745,63 +745,6 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxEditDictionaryDia
 
 namespace
 {
-class AbstractSvxNameDialog_Impl final
-    : public vcl::AbstractDialogImpl_Sync<AbstractSvxNameDialog, SvxNameDialog>
-{
-public:
-    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
-    OUString GetName() override { return m_pDlg->GetName(); }
-    void SetCheckNameHdl(const Link<AbstractSvxNameDialog&, bool>& rLink) override;
-    void SetCheckNameTooltipHdl(const Link<AbstractSvxNameDialog&, OUString>& rLink) override;
-    void SetEditHelpId(const OUString& rHelpId) override { m_pDlg->SetEditHelpId(rHelpId); }
-    //from class Window
-    void SetText(const OUString& rStr) override { m_pDlg->set_title(rStr); }
-
-private:
-    Link<AbstractSvxNameDialog&, bool> aCheckNameHdl;
-    Link<AbstractSvxNameDialog&, OUString> aCheckNameTooltipHdl;
-    DECL_LINK(CheckNameHdl, SvxNameDialog&, bool);
-    DECL_LINK(CheckNameTooltipHdl, SvxNameDialog&, OUString);
-};
-}
-
-void AbstractSvxNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxNameDialog&, bool>& rLink)
-{
-    aCheckNameHdl = rLink;
-    if (rLink.IsSet())
-        m_pDlg->SetCheckNameHdl(LINK(this, AbstractSvxNameDialog_Impl, CheckNameHdl));
-    else
-        m_pDlg->SetCheckNameHdl(Link<SvxNameDialog&, bool>());
-}
-
-void AbstractSvxNameDialog_Impl::SetCheckNameTooltipHdl(
-    const Link<AbstractSvxNameDialog&, OUString>& rLink)
-{
-    aCheckNameTooltipHdl = rLink;
-    if (rLink.IsSet())
-        m_pDlg->SetCheckNameTooltipHdl(LINK(this, AbstractSvxNameDialog_Impl, CheckNameTooltipHdl));
-    else
-        m_pDlg->SetCheckNameTooltipHdl(Link<SvxNameDialog&, OUString>());
-}
-
-IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameHdl, SvxNameDialog&, bool)
-{
-    return aCheckNameHdl.Call(*this);
-}
-
-IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameTooltipHdl, SvxNameDialog&, OUString)
-{
-    return aCheckNameTooltipHdl.Call(*this);
-}
-
-VclPtr<AbstractSvxNameDialog> AbstractDialogFactory_Impl::CreateSvxNameDialog(weld::Window* pParent,
-                                    const OUString& rName, const OUString& rDesc, const OUString& rTitle)
-{
-    return VclPtr<AbstractSvxNameDialog_Impl>::Create(pParent, rName, rDesc, rTitle);
-}
-
-namespace
-{
 class AbstractSvxObjectNameDialog_Impl final
     : public vcl::AbstractDialogImpl_Async<AbstractSvxObjectNameDialog, SvxObjectNameDialog>
 {
@@ -896,22 +839,6 @@ VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxPathSele
     return VclPtr<AbstractSvxPathSelectDialog_Impl>::Create(pParent);
 }
 
-namespace
-{
-class AbstractSvxHpLinkDlg_Impl final
-    : public vcl::AbstractDialogImpl_Sync_Shared<AbstractSvxHpLinkDlg, SvxHpLinkDlg>
-{
-public:
-    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
-    std::shared_ptr<SfxDialogController> GetController() override { return m_pDlg; }
-    bool QueryClose() override { return m_pDlg->QueryClose(); }
-};
-}
-
-VclPtr<AbstractSvxHpLinkDlg> AbstractDialogFactory_Impl::CreateSvxHpLinkDlg(SfxChildWindow* pChild, SfxBindings* pBindings, weld::Window* pParent)
-{
-    return VclPtr<AbstractSvxHpLinkDlg_Impl>::Create(pBindings, pChild, pParent);
-}
 
 namespace
 {
@@ -1590,6 +1517,16 @@ VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateUIPickerDialog(weld::Window* pParent)
 {
     return VclPtr<CuiAbstractController_Impl<UIPickerDialog>>::Create(pParent);
+}
+
+VclPtr<VclAbstractDialog>
+AbstractDialogFactory_Impl::CreateHyperlinkDialog(weld::Window* pParent,
+                                                  SfxChildWindow* pChildWindow)
+{
+    auto pDlg = std::make_shared<HyperlinkDialog>(pParent, pChildWindow);
+    if (pChildWindow)
+        pChildWindow->SetController(pDlg);
+    return VclPtr<CuiAbstractControllerAsync_Impl<HyperlinkDialog>>::Create(pDlg);
 }
 
 VclPtr<AbstractDiagramDialog>

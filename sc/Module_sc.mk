@@ -101,11 +101,13 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_subsequent_export_test2 \
 	CppunitTest_sc_subsequent_export_test3 \
 	CppunitTest_sc_subsequent_export_test4 \
+	CppunitTest_sc_subsequent_export_test5 \
 	CppunitTest_sc_uicalc \
 	CppunitTest_sc_uicalc2 \
 	CppunitTest_sc_vba_macro_test \
 	CppunitTest_sc_a11y \
 	CppunitTest_sc_filter_html \
+	CppunitTest_sc_filter_xml \
 ))
 
 ifneq ($(ENABLE_JUMBO_SHEETS),)
@@ -138,7 +140,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_arealinkobj \
 	CppunitTest_sc_arealinksobj \
 	CppunitTest_sc_autoformatobj \
-	CppunitTest_sc_autoformatsobj \
 	CppunitTest_sc_cellcursorobj \
 	CppunitTest_sc_cellfieldsobj \
 	CppunitTest_sc_cellformatsenumeration \
@@ -203,6 +204,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_indexenumeration_tablerowsenumeration \
 	CppunitTest_sc_indexenumeration_textfieldenumeration \
 	CppunitTest_sc_importdescriptorbaseobj \
+	CppunitTest_sc_importdescriptorcellrangeobj \
 	CppunitTest_sc_labelrangeobj \
 	CppunitTest_sc_labelrangesobj \
 	CppunitTest_sc_modelobj \

@@ -27,6 +27,7 @@
 #include <sfx2/dispatch.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <svl/itemset.hxx>
+#include <tools/fldunit.hxx>
 
 using namespace css;
 using namespace css::uno;

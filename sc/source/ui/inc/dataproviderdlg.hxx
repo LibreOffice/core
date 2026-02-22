@@ -15,6 +15,7 @@
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/idle.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>

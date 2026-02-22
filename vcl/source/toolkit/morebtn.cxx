@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/mapunit.hxx>
 #include <vcl/toolkit/morebtn.hxx>
 #include <vcl/stdtext.hxx>
 

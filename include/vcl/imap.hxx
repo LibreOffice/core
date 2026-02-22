@@ -22,7 +22,8 @@
 
 #include <vcl/imapobj.hxx>
 #include <vcl/dllapi.h>
-#include <tools/stream.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 #include <tools/solar.h>
 #include <memory>
 #include <vector>
@@ -30,6 +31,9 @@
 class Point;
 class Size;
 class Fraction;
+class SvStream;
+enum class IMapFormat;
+enum class StreamMode;
 
 class VCL_DLLPUBLIC ImageMap final
 {

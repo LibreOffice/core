@@ -26,8 +26,6 @@
 #include <vcl/headbar.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/accessibility/AccessibleBrowseBox.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vector>
 #include <stack>
@@ -37,10 +35,12 @@
 #include <memory>
 #include <o3tl/typed_flags_set.hxx>
 
+class AccessibleBrowseBox;
 class BrowserColumn;
 class BrowserHeader;
 class ScrollAdaptor;
 class MeasureStatusBar;
+enum class AccessibleBrowseBoxObjType;
 
 namespace weld {
     class Scrollbar;

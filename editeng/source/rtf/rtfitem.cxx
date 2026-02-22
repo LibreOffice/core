@@ -1851,13 +1851,11 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
 
     if( aTmp.Count() )
     {
-        SfxItemIter aIter( aTmp );
-        const SfxPoolItem* pItem = aIter.GetCurItem();
-        do
+        for (SfxItemIter aIter( aTmp ); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             pAttrPool->SetUserDefaultItem( *pItem );
-            pItem = aIter.NextItem();
-        } while (pItem);
+        }
     }
 }
 

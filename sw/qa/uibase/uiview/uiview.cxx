@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateReplacementNosetting)
     // Load a copy of the document in hidden mode.
     OUString aSourceURL = createFileURL(u"update-replacement-nosetting.odt");
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::File::copy(aSourceURL, maTempFile.GetURL()));
-    loadWithParams(maTempFile.GetURL(), { comphelper::makePropertyValue(u"Hidden"_ustr, true) });
+    loadFromURL(maTempFile.GetURL(), { comphelper::makePropertyValue(u"Hidden"_ustr, true) });
 
     // Update "everything" (including object replacements) and save it.
     dispatchCommand(mxComponent, u".uno:UpdateAll"_ustr, {});
@@ -541,10 +541,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
 
     // Tear down LOK:
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
-    mxComponent->dispose();
-    mxComponent.clear();
     comphelper::LibreOfficeKit::setPartInInvalidation(false);
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

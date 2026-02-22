@@ -109,21 +109,21 @@ public:
 
     virtual ~TDialogImplBase() = default;
 
-    TFileDialog getComPtr() { return m_iDialog; }
+    const TFileDialog& getComPtr() { return m_iDialog; }
     virtual sal::systools::COMReference<IShellItemArray> getResult(bool bInExecute)
     {
-        sal::systools::COMReference<IShellItem> iItem;
+        sal::systools::COMReference<IShellItemArray> iItems;
         if (m_iDialog.is())
         {
+            sal::systools::COMReference<IShellItem> iItem;
             if (bInExecute)
                 m_iDialog->GetCurrentSelection(&iItem);
             else
                 m_iDialog->GetResult(&iItem);
+            if (iItem.is())
+                SHCreateShellItemArrayFromShellItem(iItem, IID_PPV_ARGS(&iItems));
         }
-        void* iItems = nullptr;
-        if (iItem.is())
-            SHCreateShellItemArrayFromShellItem(iItem.get(), IID_IShellItemArray, &iItems);
-        return static_cast<IShellItemArray*>(iItems);
+        return iItems;
     }
 
 private:
@@ -132,39 +132,32 @@ private:
 
 namespace {
 
-template <class ComPtrDialog, REFCLSID CLSID> class TDialogImpl : public TDialogImplBase
+template <class IDlg, REFCLSID CLSID> class TDialogImpl : public TDialogImplBase
 {
 public:
     TDialogImpl()
-        : TDialogImplBase(ComPtrDialog(CLSID).get())
+        : TDialogImplBase(sal::systools::COMReference<IDlg>(CLSID).get())
     {
     }
 };
 
-class TOpenDialogImpl : public TDialogImpl<TFileOpenDialog, CLSID_FileOpenDialog>
+class TOpenDialogImpl : public TDialogImpl<IFileOpenDialog, CLSID_FileOpenDialog>
 {
 public:
     sal::systools::COMReference<IShellItemArray> getResult(bool bInExecute) override
     {
-        sal::systools::COMReference<IShellItemArray> iItems;
-        TFileOpenDialog iDialog(getComPtr(), sal::systools::COM_QUERY_THROW);
-        bool bGetResult = false;
-        if (!iDialog.is())
-            bGetResult = true;
-        else if (FAILED(bInExecute ? iDialog->GetSelectedItems(&iItems) : iDialog->GetResults(&iItems)))
-            bGetResult = true;
-
-        if (bGetResult)
-            iItems = TDialogImplBase::getResult(bInExecute);
-
-        return iItems;
+        if (auto iDialog = getComPtr().QueryInterface<IFileOpenDialog>())
+        {
+            sal::systools::COMReference<IShellItemArray> iItems;
+            if (SUCCEEDED(bInExecute ? iDialog->GetSelectedItems(&iItems)
+                                     : iDialog->GetResults(&iItems)))
+                return iItems;
+        }
+        return TDialogImplBase::getResult(bInExecute);
     }
 };
 
 }
-
-using TSaveDialogImpl = TDialogImpl<TFileSaveDialog, CLSID_FileSaveDialog>;
-using TFolderPickerDialogImpl = TDialogImpl<TFileOpenDialog, CLSID_FileOpenDialog>;
 
 
 static OUString lcl_getURLFromShellItem (IShellItem* pItem)
@@ -504,14 +497,14 @@ void VistaFilePickerImpl::impl_sta_CreateOpenDialog(Request& rRequest)
 
 void VistaFilePickerImpl::impl_sta_CreateSaveDialog(Request& rRequest)
 {
-    impl_sta_CreateDialog<TSaveDialogImpl>();
+    impl_sta_CreateDialog<TDialogImpl<IFileSaveDialog, CLSID_FileSaveDialog>>();
     impl_sta_InitDialog(rRequest, FOS_FILEMUSTEXIST | FOS_OVERWRITEPROMPT);
 }
 
 
 void VistaFilePickerImpl::impl_sta_CreateFolderPicker(Request& rRequest)
 {
-    impl_sta_CreateDialog<TFolderPickerDialogImpl>();
+    impl_sta_CreateDialog<TOpenDialogImpl>();
     impl_sta_InitDialog(rRequest, FOS_PICKFOLDERS);
 }
 
@@ -980,19 +973,17 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(Request& rRequest)
 
 TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
 {
-    TFileDialog iDialog;
+    if (m_pDialog)
+        return m_pDialog->getComPtr();
 
-    if (m_pDialog != nullptr)
-        iDialog = m_pDialog->getComPtr();
-
-    return iDialog;
+    return {};
 }
 
 
 TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
 {
-    if (m_pDialog != nullptr)
-        return { m_pDialog->getComPtr(), sal::systools::COM_QUERY_THROW };
+    if (m_pDialog)
+        return m_pDialog->getComPtr().QueryInterface<IFileDialogCustomize>();
 
     return {};
 }

@@ -40,12 +40,15 @@
 #include <com/sun/star/awt/XItemListListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include <svl/numuno.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <tools/lineend.hxx>
 
 #include <vcl/image.hxx>
+
+class SvNumberFormatsSupplierObj;
+
+namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 //  class VCLXGraphicControl
 //    deriving from VCLXWindow, drawing the graphic which exists as "Graphic" at the model

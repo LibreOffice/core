@@ -20,6 +20,7 @@
 #include <libxml/xmlwriter.h>
 
 #include <svtools/embedhlp.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/outdev.hxx>
@@ -41,6 +42,8 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <tools/globname.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/stream.hxx>
 #include <comphelper/classids.hxx>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>

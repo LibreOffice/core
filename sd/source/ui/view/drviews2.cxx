@@ -65,7 +65,7 @@
 #include <sfx2/zoomitem.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokunocmdlist.hxx>
-
+#include <svtools/dlgname.hxx>
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/ClassificationDialog.hxx>
 #include <svx/ClassificationCommon.hxx>
@@ -105,6 +105,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <editeng/cmapitem.hxx>
@@ -197,6 +198,8 @@
 
 #include <theme/ThemeColorChanger.hxx>
 #include <svx/dialog/ThemeDialog.hxx>
+#include <svx/dialog/ThemeColorEditDialog.hxx>
+#include <svx/ColorSets.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <ViewShellBase.hxx>
@@ -1401,9 +1404,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
         case SID_INSERT_CANVAS_SLIDE:
         {
-            sal_uInt16 nCanvasPageIndex = GetDoc()->InsertCanvasPage();
+            sal_uInt16 nCanvasPageIndex = GetDoc()->GetOrInsertCanvasPage();
             Cancel(); // Don't know what this does
             SwitchPage(nCanvasPageIndex);
+            rReq.Done();
+        }
+        break;
+
+        case SID_SHUFFLE_PAGES:
+        {
+            if (!GetDoc()->HasCanvasPage())
+                break;
+            GetDoc()->ReshufflePages();
+            Cancel();
             rReq.Done();
         }
         break;
@@ -1518,15 +1531,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
                 else
                 {
-                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aPageName, aDescr));
-                    aNameDlg->SetText( aTitle );
-                    aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ) );
-                    aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+                    SvxNameDialog aNameDlg(GetFrameWeld(), aPageName, aDescr);
+                    aNameDlg.set_title(aTitle);
+                    aNameDlg.SetCheckNameHdl(LINK(this, DrawViewShell, RenameSlideHdl));
+                    aNameDlg.SetEditHelpId(HID_SD_NAMEDIALOG_PAGE);
 
-                    if( aNameDlg->Execute() == RET_OK )
+                    if (aNameDlg.run() == RET_OK)
                     {
-                        OUString aNewName = aNameDlg->GetName();
+                        OUString aNewName = aNameDlg.GetName();
                         if (aNewName != aPageName)
                         {
                             bool bResult = RenameSlide( maTabControl->GetPageId(nPage), aNewName );
@@ -1641,7 +1653,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 switch( eZT )
                 {
                     case SvxZoomType::PERCENT:
-                        SetZoom( static_cast<::tools::Long>( pArgs->Get( SID_ATTR_ZOOM ).GetValue()) );
+                    {
+                        sal_uInt16 nZoom = pArgs->Get( SID_ATTR_ZOOM ).GetValue();
+                        SetZoom( static_cast<::tools::Long>( nZoom ) );
+                    }
                         break;
 
                     case SvxZoomType::OPTIMAL:
@@ -4263,6 +4278,61 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             Cancel();
             rReq.Ignore();
+        }
+        break;
+
+        case SID_ADD_THEME:
+        {
+            // Create empty color set as starting point for new theme
+            auto pCurrentColorSet = std::make_shared<model::ColorSet>(OUString());
+
+            // Open ThemeColorEditDialog to create/edit the new color set
+            auto pSubDialog = std::make_shared<svx::ThemeColorEditDialog>(GetFrameWeld(), *pCurrentColorSet);
+
+            weld::DialogController::runAsync(pSubDialog, [pSubDialog, this](sal_uInt32 nResult) {
+                if (nResult != RET_OK)
+                    return;
+
+                auto aColorSet = pSubDialog->getColorSet();
+                if (!aColorSet.getName().isEmpty())
+                {
+                    // Add the new color set to the global collection
+                    svx::ColorSets::get().insert(aColorSet);
+                    // Invalidate to update the toolbar control
+                    GetViewFrame()->GetBindings().Invalidate(SID_ADD_THEME);
+                }
+            });
+
+            Cancel();
+            rReq.Ignore();
+        }
+        break;
+
+        case SID_APPLY_THEME:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            if (pArgs)
+            {
+                const SfxPoolItem* pItem;
+                if (pArgs->GetItemState(FN_PARAM_1, true, &pItem) == SfxItemState::SET)
+                {
+                    OUString aThemeName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    auto pColorSet = svx::ColorSets::get().getColorSet(aThemeName);
+
+                    if (pColorSet)
+                    {
+                        SdrPage* pMasterPage = &GetActualPage()->TRG_GetMasterPage();
+                        auto* pDocShell = GetDocSh();
+
+                        auto pSharedColorSet = std::shared_ptr<model::ColorSet>(new model::ColorSet(*pColorSet));
+                        sd::ThemeColorChanger aChanger(pMasterPage, pDocShell);
+                        aChanger.apply(pSharedColorSet);
+                    }
+                }
+            }
+
+            Cancel();
+            rReq.Done();
         }
         break;
 

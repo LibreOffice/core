@@ -29,6 +29,8 @@
 #include <ObjectNameProvider.hxx>
 #include <DataSeries.hxx>
 
+#include <vcl/weld/Dialog.hxx>
+
 using namespace ::com::sun::star;
 
 namespace chart

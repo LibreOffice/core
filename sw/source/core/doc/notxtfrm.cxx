@@ -21,6 +21,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/imap.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/printer.hxx>
@@ -134,8 +135,8 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
         else if ( !rURL.GetURL().isEmpty() )
             bVisited = rSh.GetDoc()->IsVisitedURL( rURL.GetURL() );
 
-        SwFormat *pFormat = rSh.GetDoc()->getIDocumentStylePoolAccess().GetFormatFromPool( o3tl::narrowing<sal_uInt16>
-            (bVisited ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL ) );
+        SwFormat *pFormat = rSh.GetDoc()->getIDocumentStylePoolAccess().GetFormatFromPool(
+            bVisited ? SwPoolFormatId::CHR_INET_VISIT : SwPoolFormatId::CHR_INET_NORMAL );
         aCol = pFormat->GetColor().GetValue();
         eUnderline = pFormat->GetUnderline().GetLineStyle();
     }
@@ -1399,7 +1400,7 @@ void SwNoTextFrame::ImplPaintPictureBitmap( vcl::RenderContext* pOut,
                 SdrModel& rModel = pPage->getSdrModelFromSdrPage();
                 SdrOutliner& rOutl = rModel.GetDrawOutliner();
                 aOldBackColor = rOutl.GetBackgroundColor();
-                rOutl.SetBackgroundColor(pPage->GetPageBackgroundColor());
+                rOutl.SetBackgroundColor(pPage->GetPageBackgroundColor(nullptr, !bPrn));
             }
 
             bDone = paintUsingPrimitivesHelper(

@@ -19,9 +19,13 @@
 
 #include <svtools/unitconv.hxx>
 #include <tools/poly.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclenum.hxx>
 #include <sal/log.hxx>
 
 #include <viewopt.hxx>

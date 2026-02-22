@@ -43,7 +43,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoGrabBagShape)
     // Load a document and select the first shape.
     css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
         u"ReadOnly"_ustr, true) };
-    loadWithParams(u"private:factory/simpress"_ustr, aArgs);
+    loadFromURL(u"private:factory/simpress"_ustr, aArgs);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDrawPage(
@@ -79,6 +79,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTempFilePath)
     pBaseModel->storeAsURL(aTargetFile, aArgs);
 
     // Load it and export to PDF.
+    dispose();
     loadFromURL(aTargetFile);
     pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     OUString aPdfTarget = aTargetDir + "/test.pdf";

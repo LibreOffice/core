@@ -32,8 +32,12 @@
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
 #include <vcl/formatter.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/zformat.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>

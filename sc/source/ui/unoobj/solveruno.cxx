@@ -10,6 +10,8 @@
 
 #include <rtl/math.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <solveruno.hxx>
 #include <docsh.hxx>
 #include <docfunc.hxx>

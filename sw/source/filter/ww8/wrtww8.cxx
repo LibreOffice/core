@@ -103,6 +103,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <svl/stritem.hxx>
+#include <tools/globname.hxx>
 #include <unotools/tempfile.hxx>
 #include <filter/msfilter/mscodec.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
@@ -3628,7 +3629,7 @@ ErrCode WW8Export::ExportDocument_Impl()
     // set AutoHyphenation flag if found in default para style
     const SvxHyphenZoneItem* pItem;
     SwTextFormatColl* pStdTextFormatColl =
-        m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false);
+        m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD, false);
     if (pStdTextFormatColl && (pItem = pStdTextFormatColl->GetItemIfSet(
         RES_PARATR_HYPHENZONE, false)))
     {
@@ -3980,6 +3981,7 @@ MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCurso
     , m_bHasFtr(false)
     , m_bSubstituteBullets(true)
     , m_bTabInTOC(false)
+    , m_bSuppressBidi(false)
     , m_bHideTabLeaderAndPageNumbers(false)
     , m_bExportModeRTF(false)
     , m_bFontSizeWritten(false)

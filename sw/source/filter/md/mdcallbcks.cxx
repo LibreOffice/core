@@ -205,8 +205,8 @@ int SwMarkdownParser::enter_span_callback(MD_SPANTYPE type, void* detail, void* 
         case MD_SPAN_CODE:
         {
             SwDoc* pDoc = parser->m_xDoc.get();
-            SwTextFormatColl* pColl
-                = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HTML_PRE);
+            SwTextFormatColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
+                SwPoolFormatId::COLL_HTML_PRE);
             pItem.reset(new SvxFontItem(pColl->GetFont()));
             break;
         }

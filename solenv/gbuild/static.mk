@@ -54,7 +54,7 @@
 # Then there is the special static "components" library, which simply depends on all built
 # components. In theory these could be limited per-module (Writer, Calc, etc.), but currently
 # this is not implemented and instead solenv/bin/native-code.py is used, so actually
-# everything is build and "cleaned up" at link time, which is especially expensive for WASM.
+# everything is built and "cleaned up" at link time, which is especially expensive for WASM.
 # That library is currently just used for Emscripten, but could be used generally for
 # static builds.
 #

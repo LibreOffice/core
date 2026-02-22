@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_uicalc2, \
     sc \
     scqahelper \
     sfx \
+    sot \
     subsequenttest \
     svl \
     svl \

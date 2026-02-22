@@ -27,6 +27,7 @@
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/configuration.hxx>
 

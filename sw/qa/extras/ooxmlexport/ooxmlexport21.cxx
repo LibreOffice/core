@@ -26,6 +26,7 @@
 #include <comphelper/configuration.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 #include <pam.hxx>
 #include <unotxdoc.hxx>
@@ -69,9 +70,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161631)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf158597, "tdf158597.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 8
-    skipValidation();
-
     // test with 2 properties: font size, italic (toggle)
     {
         uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
@@ -566,9 +564,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.doc
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 317
-    skipValidation();
-
     // given an in-table, group-shape vertically aligned -1.35 cm (above) the top page margin
     // (which is actually forced to layoutInCell, so that turns into 1.35cm above the cell margin)
 
@@ -689,9 +684,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellD, "tdf160077_layoutInCellD.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 11
-    skipValidation();
-
     // given a compat12 VML document with wrap-through blue rect that doesn't mention allowInCell
 
     // Although MSO's UI reports "layoutInCell" for the rectangle, it isn't specified or honored
@@ -792,9 +784,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160814_commentOrder)
 CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
 {
     // 1. Remove all personal info
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving>
+        aCfg1(true);
+
     createSwDoc("personalmetadata.docx");
     save(TestFilter::DOCX);
 
@@ -808,28 +800,31 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastModifiedBy", 0);
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastPrinted", 0);
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaDataAndKeepUserInformation)
+{
+    // 1. Remove all personal info
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving>
+        aCfg1(true);
 
     // 2. Remove personal information, keep user information
-    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving>
+        aCfg2(true);
+
     createSwDoc("personalmetadata.docx");
     save(TestFilter::DOCX);
 
-    pAppDoc = parseExport(u"docProps/app.xml"_ustr);
+    xmlDocUniquePtr pAppDoc = parseExport(u"docProps/app.xml"_ustr);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template", 0);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 0);
-    pCoreDoc = parseExport(u"docProps/core.xml"_ustr);
+    xmlDocUniquePtr pCoreDoc = parseExport(u"docProps/core.xml"_ustr);
     assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:created", 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:modified", 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/dc:creator", 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastModifiedBy", 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastPrinted", 1);
     assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision", 0);
-
-    // Reset config change
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(false, pBatch);
-    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(false, pBatch);
-    pBatch->commit();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf169072_illegalDates)
@@ -846,28 +841,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169072_illegalDates)
     assertXPath(pXmlCore, "/cp:coreProperties/cp:lastPrinted", 0); // was 1600-12-31T00:00:52Z
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
+CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData_Disabled)
 {
     // 1. Check we have the original edit time info
     createSwDoc("personalmetadata.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pAppDoc = parseExport(u"docProps/app.xml"_ustr);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 1);
+}
 
+CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData_Enabled)
+{
     // Set config RemoveEditingTimeOnSaving to true
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving>
+        aCfg(true);
 
     // 2. Check edit time info is removed
     createSwDoc("personalmetadata.docx");
     save(TestFilter::DOCX);
-    pAppDoc = parseExport(u"docProps/app.xml"_ustr);
+    xmlDocUniquePtr pAppDoc = parseExport(u"docProps/app.xml"_ustr);
     assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 0);
-
-    // Reset config change
-    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(false, pBatch);
-    pBatch->commit();
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_noPageBitmap, "tdf126533_noPageBitmap.docx")
@@ -928,9 +921,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131098_imageFill, "tdf131098_imageFill.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     //Unit test for bug fix in tdf#154369
     // Docx file contains ordered list formatted with Heading 1 style, font color set as Accent 1 from theme
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1287,9 +1277,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf164065)
 {
     createSwDoc("tdf164065.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
@@ -1316,9 +1303,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf164474)
         // - Actual  : 0
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     }
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     // Test also after save-and-reload:
     saveAndReload(TestFilter::DOCX);

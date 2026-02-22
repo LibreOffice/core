@@ -22,7 +22,9 @@
 #include <map>
 #include <memory>
 #include "expbase.hxx"
+#include <editeng/fontitem.hxx>
 #include <tools/solar.h>
+#include <tools/stream.hxx>
 
 class ScRTFExport : public ScExportBase
 {

@@ -19,6 +19,7 @@
 
 #include <contentcontroldlg.hxx>
 
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/cuicharmap.hxx>
 #include <svl/numformat.hxx>

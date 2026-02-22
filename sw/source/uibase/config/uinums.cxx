@@ -24,6 +24,7 @@
 #include <tools/stream.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/itemiter.hxx>
+#include <tools/urlobj.hxx>
 
 #include <swtypes.hxx>
 #include <utility>
@@ -170,12 +171,12 @@ void SwNumRulesWithName::SetNumFormat(
 {
     m_aFormats[nIndex].reset( new SwNumFormatGlobal(rNumFormat) );
     m_aFormats[nIndex]->m_sCharFormatName = rName;
-    m_aFormats[nIndex]->m_nCharPoolId = USHRT_MAX;
+    m_aFormats[nIndex]->m_nCharPoolId = SwPoolFormatId::UNKNOWN;
     m_aFormats[nIndex]->m_Items.clear();
 }
 
 SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFormat )
-    : m_aFormat( rFormat ), m_nCharPoolId( USHRT_MAX )
+    : m_aFormat( rFormat ), m_nCharPoolId( SwPoolFormatId::UNKNOWN )
 {
     // relative gaps?????
 
@@ -187,13 +188,11 @@ SwNumRulesWithName::SwNumFormatGlobal::SwNumFormatGlobal( const SwNumFormat& rFo
     m_nCharPoolId = pFormat->GetPoolFormatId();
     if( pFormat->GetAttrSet().Count() )
     {
-        SfxItemIter aIter( pFormat->GetAttrSet() );
-        const SfxPoolItem *pCurr = aIter.GetCurItem();
-        do
+        for (SfxItemIter aIter( pFormat->GetAttrSet() ); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pCurr = aIter.GetCurItem();
             m_Items.push_back(std::unique_ptr<SfxPoolItem>(pCurr->Clone()));
-            pCurr = aIter.NextItem();
-        } while (pCurr);
+        }
     }
 
     m_aFormat.SetCharFormat( nullptr );

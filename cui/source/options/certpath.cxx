@@ -12,6 +12,9 @@
 #include <osl/security.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include "certpath.hxx"
 
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
@@ -32,7 +35,7 @@ CertPathDialog::CertPathDialog(weld::Window* pParent)
     m_xCertPathList->set_size_request(m_xCertPathList->get_approximate_digit_width() * 140,
                                       m_xCertPathList->get_height_rows(6));
 
-    // needed for VLCPLUGIN != gtk3 (e.g. "gen")
+    // needed for VCLPLUGIN != gtk3 (e.g. "gen")
     int nControlWidth = m_xCertPathList->get_approximate_digit_width() * 40;
     m_xCertPathList->set_column_fixed_widths({nControlWidth});
 

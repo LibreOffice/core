@@ -25,6 +25,7 @@
 #include "AccessibleHyperlink.hxx"
 #include <editeng/unoedprx.hxx>
 #include <editeng/flditem.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/keycodes.hxx>
 
 using namespace ::com::sun::star;

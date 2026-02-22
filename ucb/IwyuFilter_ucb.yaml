@@ -1,5 +1,10 @@
 ---
 assumeFilename: ucb/source/core/ucb.cxx
+customAssumeFilenames:
+    # Needs -I/.../workdir/UnpackedTarball/libcmis/inc
+    ucb/source/ucp/cmis: ucb/source/ucp/cmis/cmis_content.cxx
+    # Needs -isystem /usr/include/glib-2.0
+    ucb/source/ucp/gio: ucb/source/ucp/gio/gio_content.cxx
 excludelist:
     ucb/source/core/ucb.cxx:
     # Needed for UnoType

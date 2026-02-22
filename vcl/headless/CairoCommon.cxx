@@ -34,6 +34,8 @@
 #include <sal/log.hxx>
 #include <osl/module.h>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
+
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 12, 0)
 #error "require at least cairo 1.12.0"
 #endif

@@ -27,6 +27,7 @@
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
 #include <sot/storage.hxx>
+#include <tools/globname.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>

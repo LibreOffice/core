@@ -177,6 +177,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/connectionsbuffer \
 	sc/source/filter/oox/connectionsfragment \
 	sc/source/filter/oox/defnamesbuffer \
+	sc/source/filter/oox/defaulttablestyles \
 	sc/source/filter/oox/drawingbase \
 	sc/source/filter/oox/drawingfragment \
 	sc/source/filter/oox/excelchartconverter \

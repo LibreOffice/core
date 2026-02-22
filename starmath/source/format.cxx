@@ -18,6 +18,7 @@
  */
 
 #include <format.hxx>
+#include <tools/color.hxx>
 
 
 SmFormat::SmFormat()

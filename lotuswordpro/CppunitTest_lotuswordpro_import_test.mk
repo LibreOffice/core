@@ -9,7 +9,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,lotuswordpro_import_test))
 
-$(eval $(call gb_CppunitTest_use_external,lotuswordpro_import_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,lotuswordpro_import_test, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,lotuswordpro_import_test, \
     lotuswordpro/qa/cppunit/import_test \

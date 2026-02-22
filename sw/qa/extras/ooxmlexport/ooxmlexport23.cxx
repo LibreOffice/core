@@ -21,6 +21,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 using namespace com::sun::star;
 
@@ -39,12 +40,9 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
     createSwDoc("tdf135774_numberingCRProps.docx");
 
     // This only affects when saving as w:highlight - which is not the default since 7.0.
-    bool bWasExportToShade = !officecfg::Office::Common::Filter::Microsoft::Export::
-                                 CharBackgroundToHighlighting::get();
-    auto batch = comphelper::ConfigurationChanges::create();
-    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true,
-                                                                                            batch);
-    batch->commit();
+    ScopedConfigValue<
+        officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting>
+        aCfg(true);
 
     //Simulate a user editing the char background color of the paragraph 2 marker (CR)
     uno::Reference<beans::XPropertySet> properties(getParagraph(2), uno::UNO_QUERY);
@@ -84,13 +82,6 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
                 "//w:style[@w:styleId='CustomParaStyleHighlightGreen']/w:rPr/w:highlight", "val",
                 u"green");
     // Visually, the last bullet point's text should be green-highlighted (but the bullet point itself shouldn't)
-
-    if (bWasExportToShade)
-    {
-        officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(
-            false, batch);
-        batch->commit();
-    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132766)
@@ -136,9 +127,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128245)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 5
-    skipValidation();
-
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
                                                     uno::UNO_QUERY);
@@ -274,9 +262,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf77796)
 {
     createSwDoc("tdf77796.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
@@ -399,9 +384,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133605_2, "tdf133605_2.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf123757)
 {
     createSwDoc("tdf123757.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
@@ -814,9 +796,6 @@ CPPUNIT_TEST_FIXTURE(Test, testStrikeoutGroupShapeText)
 CPPUNIT_TEST_FIXTURE(Test, testTdf131539)
 {
     createSwDoc("tdf131539.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
 
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());

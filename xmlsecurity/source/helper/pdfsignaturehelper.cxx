@@ -33,6 +33,7 @@
 #include <vcl/checksum.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
 #include <sfx2/viewsh.hxx>
 
 using namespace ::com::sun::star;

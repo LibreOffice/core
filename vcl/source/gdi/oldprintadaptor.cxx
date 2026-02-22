@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <comphelper/propertyvalue.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <vcl/gdimtf.hxx>
 

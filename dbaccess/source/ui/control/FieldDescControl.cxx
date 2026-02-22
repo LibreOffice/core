@@ -21,11 +21,13 @@
 #include <FieldDescControl.hxx>
 #include <FieldControls.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/mapunit.hxx>
 #include <TableDesignHelpBar.hxx>
 #include <vcl/svapp.hxx>
 #include <FieldDescriptions.hxx>
 #include <svl/numuno.hxx>
 #include <vcl/transfer.hxx>
+#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>

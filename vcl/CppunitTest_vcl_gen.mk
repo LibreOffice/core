@@ -30,7 +30,10 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_gen, \
 	vcl \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,vcl_gen,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,vcl_gen, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_gen))
 

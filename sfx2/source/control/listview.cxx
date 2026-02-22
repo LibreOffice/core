@@ -23,6 +23,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/wintypes.hxx>
 
 #include <bitmaps.hlst>

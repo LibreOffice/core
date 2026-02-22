@@ -21,6 +21,8 @@
 #include <svtools/restartdialog.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/themecolors.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <map>
 
@@ -119,7 +121,6 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , m_xNotebookbarIconSize(m_xBuilder->weld_combo_box(u"notebookbariconsdropdown"_ustr))
     , m_xSizeGrid(m_xBuilder->weld_widget(u"grdIconSize"_ustr))
     , m_xCustomizationFrame(m_xBuilder->weld_widget(u"items"_ustr))
-    , m_sAutoStr(m_xIconsDropDown->get_text(0))
     , m_xVerticalToolbars(m_xBuilder->weld_radio_button(u"rbVertical"_ustr))
     , m_xHorizontalToolbars(m_xBuilder->weld_radio_button(u"rbHorizontal"_ustr))
 {
@@ -163,8 +164,11 @@ void SvxAppearanceTabPage::LoadSchemeList()
 void SvxAppearanceTabPage::ImplDestroy()
 {
     if (m_bRestartRequired)
+    {
+        pColorConfig->SetupTheme();
         ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), GetFrameWeld(),
                                         svtools::RESTART_REASON_THEME_CHANGE);
+    }
 }
 
 SvxAppearanceTabPage::~SvxAppearanceTabPage() { suppress_fun_call_w_exception(ImplDestroy()); }
@@ -347,10 +351,6 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorValueChgHdl, ColorListBox&, void)
         return;
 
     ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
-
-    // restart only for the UI colors
-    if (nEntry >= WINDOWCOLOR)
-        m_bRestartRequired = true;
 
     // use nColor for caching the value of color in use. This avoids tedious refactoring which IMO
     // would use function calls to discriminate between colors. Those functions themself call some virtual functions
@@ -555,7 +555,8 @@ void SvxAppearanceTabPage::InitIcons()
     const vcl::IconThemeInfo& autoIconTheme
         = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, autoThemeId);
 
-    OUString entryForAuto = m_sAutoStr + " (" + autoIconTheme.GetDisplayName() + ")";
+    OUString sAutoStr(CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC));
+    OUString entryForAuto = sAutoStr + " (" + autoIconTheme.GetDisplayName() + ")";
     m_xIconsDropDown->append(u"auto"_ustr,
                              entryForAuto); // index 0 means choose style automatically
 
@@ -750,6 +751,7 @@ void SvxAppearanceTabPage::FillItemsList()
             { HTMLUNKNOWN, CuiResId(REG_HTMLUNKNOWN) },
             { CALCGRID, CuiResId(REG_CALCGRID) },
             { CALCCELLFOCUS, CuiResId(REG_CALCCELLFOCUS) },
+            { CALCDBFOCUS, CuiResId(REG_CALCDBFOCUS) },
             { CALCPAGEBREAK, CuiResId(REG_CALCPAGEBREAK) },
             { CALCPAGEBREAKMANUAL, CuiResId(REG_CALCPAGEBREAKMANUAL) },
             { CALCPAGEBREAKAUTOMATIC, CuiResId(REG_CALCPAGEBREAKAUTOMATIC) },

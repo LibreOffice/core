@@ -25,9 +25,13 @@
 #include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
+#include <vcl/wintypes.hxx>
 #include <osl/diagnose.h>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
@@ -47,87 +51,51 @@ namespace dbaui
 
 namespace
 {
-    class ImageProvider
+OUString lcl_getImageName(SQLExceptionInfo::TYPE eType)
+{
+    switch (eType)
     {
-    private:
-        OUString m_defaultImageID;
+        case SQLExceptionInfo::TYPE::SQLWarning:
+            return u"dialog-warning"_ustr;
+        case SQLExceptionInfo::TYPE::SQLContext:
+            return u"dialog-information"_ustr;
+        default:
+            return u"dialog-error"_ustr;
+    }
+}
 
-    public:
-        explicit ImageProvider(OUString defaultImageID)
-            : m_defaultImageID(std::move(defaultImageID))
-        {
-        }
+class LabelProvider
+{
+private:
+    OUString m_label;
 
-        const OUString& getImage() const
-        {
-            return m_defaultImageID;
-        }
-    };
-
-    class LabelProvider
+public:
+    explicit LabelProvider(TranslateId labelResourceID)
+        : m_label(DBA_RES(labelResourceID))
     {
-    private:
-        OUString  m_label;
-    public:
-        explicit LabelProvider(TranslateId labelResourceID)
-            : m_label(DBA_RES(labelResourceID))
-        {
-        }
+    }
 
-        const OUString& getLabel() const
-        {
-            return m_label;
-        }
-    };
+    const OUString& getLabel() const { return m_label; }
+};
 
-    class ProviderFactory
+class ProviderFactory
+{
+private:
+    mutable std::shared_ptr<LabelProvider> m_pErrorLabel;
+    mutable std::shared_ptr<LabelProvider> m_pWarningsLabel;
+    mutable std::shared_ptr<LabelProvider> m_pInfoLabel;
+
+public:
+    ProviderFactory() {}
+
+    std::shared_ptr<LabelProvider> const& getLabelProvider(SQLExceptionInfo::TYPE _eType,
+                                                           bool _bSubLabel) const
     {
-    private:
-        mutable std::shared_ptr< ImageProvider >   m_pErrorImage;
-        mutable std::shared_ptr< ImageProvider >   m_pWarningsImage;
-        mutable std::shared_ptr< ImageProvider >   m_pInfoImage;
-        mutable std::shared_ptr< LabelProvider >   m_pErrorLabel;
-        mutable std::shared_ptr< LabelProvider >   m_pWarningsLabel;
-        mutable std::shared_ptr< LabelProvider >   m_pInfoLabel;
+        std::shared_ptr<LabelProvider>* ppProvider(&m_pErrorLabel);
+        TranslateId pLabelID(STR_EXCEPTION_ERROR);
 
-    public:
-        ProviderFactory()
+        switch (_eType)
         {
-        }
-
-        std::shared_ptr< ImageProvider > const & getImageProvider( SQLExceptionInfo::TYPE _eType ) const
-        {
-            std::shared_ptr< ImageProvider >* ppProvider( &m_pErrorImage );
-            OUString sNormalImageID(u"dialog-error"_ustr);
-
-            switch ( _eType )
-            {
-            case SQLExceptionInfo::TYPE::SQLWarning:
-                ppProvider = &m_pWarningsImage;
-                sNormalImageID = "dialog-warning";
-                break;
-
-            case SQLExceptionInfo::TYPE::SQLContext:
-                ppProvider = &m_pInfoImage;
-                sNormalImageID = "dialog-information";
-                break;
-
-            default:
-                break;
-            }
-
-            if ( !ppProvider->get() )
-                (*ppProvider) = std::make_shared<ImageProvider>(sNormalImageID);
-            return *ppProvider;
-        }
-
-        std::shared_ptr< LabelProvider > const & getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
-        {
-            std::shared_ptr< LabelProvider >* ppProvider( &m_pErrorLabel );
-            TranslateId pLabelID( STR_EXCEPTION_ERROR );
-
-            switch ( _eType )
-            {
             case SQLExceptionInfo::TYPE::SQLWarning:
                 ppProvider = &m_pWarningsLabel;
                 pLabelID = STR_EXCEPTION_WARNING;
@@ -139,119 +107,117 @@ namespace
                 break;
             default:
                 break;
-            }
-
-            if ( !ppProvider->get() )
-                (*ppProvider) = std::make_shared<LabelProvider>( pLabelID );
-            return *ppProvider;
         }
 
-    };
+        if (!ppProvider->get())
+            (*ppProvider) = std::make_shared<LabelProvider>(pLabelID);
+        return *ppProvider;
+    }
+};
 
-    /// a stripped version of the SQLException, packed for displaying
-    struct ExceptionDisplayInfo
+/// a stripped version of the SQLException, packed for displaying
+struct ExceptionDisplayInfo
+{
+    SQLExceptionInfo::TYPE eType;
+
+    std::shared_ptr<LabelProvider> pLabelProvider;
+
+    bool bSubEntry;
+
+    OUString sMessage;
+    OUString sSQLState;
+    OUString sErrorCode;
+
+    ExceptionDisplayInfo()
+        : eType(SQLExceptionInfo::TYPE::Undefined)
+        , bSubEntry(false)
     {
-        SQLExceptionInfo::TYPE                  eType;
-
-        std::shared_ptr< ImageProvider >        pImageProvider;
-        std::shared_ptr< LabelProvider >        pLabelProvider;
-
-        bool                                    bSubEntry;
-
-        OUString                                sMessage;
-        OUString                                sSQLState;
-        OUString                                sErrorCode;
-
-        ExceptionDisplayInfo() : eType( SQLExceptionInfo::TYPE::Undefined ), bSubEntry( false ) { }
-        explicit ExceptionDisplayInfo( SQLExceptionInfo::TYPE _eType ) : eType( _eType ), bSubEntry( false ) { }
-    };
-
-    bool lcl_hasDetails( const ExceptionDisplayInfo& _displayInfo )
+    }
+    explicit ExceptionDisplayInfo(SQLExceptionInfo::TYPE _eType)
+        : eType(_eType)
+        , bSubEntry(false)
     {
-        return  ( !_displayInfo.sErrorCode.isEmpty() )
-                ||  (   !_displayInfo.sSQLState.isEmpty()
-                    &&  _displayInfo.sSQLState != "S1000"
-                    );
+    }
+};
+
+bool lcl_hasDetails(const ExceptionDisplayInfo& _displayInfo)
+{
+    return (!_displayInfo.sErrorCode.isEmpty())
+           || (!_displayInfo.sSQLState.isEmpty() && _displayInfo.sSQLState != "S1000");
+}
+
+typedef std::vector<ExceptionDisplayInfo> ExceptionDisplayChain;
+
+/// strips the [OOoBase] vendor identifier from the given error message, if applicable
+OUString lcl_stripOOoBaseVendor(const OUString& _rErrorMessage)
+{
+    OUString sErrorMessage(_rErrorMessage);
+
+    const OUString sVendorIdentifier(::connectivity::SQLError::getMessagePrefix());
+    if (sErrorMessage.startsWith(sVendorIdentifier))
+    {
+        // characters to strip
+        sal_Int32 nStripLen(sVendorIdentifier.getLength());
+        // usually, there should be a whitespace between the vendor and the real message
+        while ((sErrorMessage.getLength() > nStripLen) && (sErrorMessage[nStripLen] == ' '))
+            ++nStripLen;
+        sErrorMessage = sErrorMessage.copy(nStripLen);
     }
 
-    typedef std::vector< ExceptionDisplayInfo >   ExceptionDisplayChain;
+    return sErrorMessage;
+}
 
-    /// strips the [OOoBase] vendor identifier from the given error message, if applicable
-    OUString lcl_stripOOoBaseVendor( const OUString& _rErrorMessage )
+void lcl_buildExceptionChain(const SQLExceptionInfo& _rErrorInfo, const ProviderFactory& _rFactory,
+                             ExceptionDisplayChain& _out_rChain)
+{
+    ExceptionDisplayChain().swap(_out_rChain);
+
+    SQLExceptionIteratorHelper iter(_rErrorInfo);
+    while (iter.hasMoreElements())
     {
-        OUString sErrorMessage( _rErrorMessage );
+        // current chain element
+        SQLExceptionInfo aCurrentElement;
+        iter.next(aCurrentElement);
 
-        const OUString sVendorIdentifier( ::connectivity::SQLError::getMessagePrefix() );
-        if ( sErrorMessage.startsWith( sVendorIdentifier ) )
+        const SQLException* pCurrentError = aCurrentElement;
+        assert(pCurrentError && "lcl_buildExceptionChain: iterator failure!");
+        // hasMoreElements should not have returned <TRUE/> in this case
+
+        ExceptionDisplayInfo aDisplayInfo(aCurrentElement.getType());
+
+        aDisplayInfo.sMessage = pCurrentError->Message.trim();
+        aDisplayInfo.sSQLState = pCurrentError->SQLState;
+        if (pCurrentError->ErrorCode)
+            aDisplayInfo.sErrorCode = OUString::number(pCurrentError->ErrorCode);
+
+        if (aDisplayInfo.sMessage.isEmpty() && !lcl_hasDetails(aDisplayInfo))
         {
-            // characters to strip
-            sal_Int32 nStripLen( sVendorIdentifier.getLength() );
-            // usually, there should be a whitespace between the vendor and the real message
-            while   (   ( sErrorMessage.getLength() > nStripLen )
-                    &&  ( sErrorMessage[nStripLen] == ' ' )
-                    )
-                    ++nStripLen;
-            sErrorMessage = sErrorMessage.copy( nStripLen );
+            OSL_FAIL(
+                "lcl_buildExceptionChain: useless exception: no state, no error code, no message!");
+            continue;
         }
 
-        return sErrorMessage;
-    }
+        aDisplayInfo.pLabelProvider = _rFactory.getLabelProvider(aCurrentElement.getType(), false);
 
-    void lcl_buildExceptionChain( const SQLExceptionInfo& _rErrorInfo, const ProviderFactory& _rFactory, ExceptionDisplayChain& _out_rChain )
-    {
-        ExceptionDisplayChain().swap(_out_rChain);
+        _out_rChain.push_back(std::move(aDisplayInfo));
 
-        SQLExceptionIteratorHelper iter( _rErrorInfo );
-        while ( iter.hasMoreElements() )
+        if (aCurrentElement.getType() == SQLExceptionInfo::TYPE::SQLContext)
         {
-            // current chain element
-            SQLExceptionInfo aCurrentElement;
-            iter.next( aCurrentElement );
-
-            const SQLException* pCurrentError = aCurrentElement;
-            assert(pCurrentError && "lcl_buildExceptionChain: iterator failure!");
-                // hasMoreElements should not have returned <TRUE/> in this case
-
-            ExceptionDisplayInfo aDisplayInfo( aCurrentElement.getType() );
-
-            aDisplayInfo.sMessage = pCurrentError->Message.trim();
-            aDisplayInfo.sSQLState = pCurrentError->SQLState;
-            if ( pCurrentError->ErrorCode )
-                aDisplayInfo.sErrorCode = OUString::number( pCurrentError->ErrorCode );
-
-            if  (   aDisplayInfo.sMessage.isEmpty()
-                &&  !lcl_hasDetails( aDisplayInfo )
-                )
+            const SQLContext* pContext = aCurrentElement;
+            if (!pContext->Details.isEmpty())
             {
-                OSL_FAIL( "lcl_buildExceptionChain: useless exception: no state, no error code, no message!" );
-                continue;
-            }
+                ExceptionDisplayInfo aSubInfo(aCurrentElement.getType());
 
-            aDisplayInfo.pImageProvider = _rFactory.getImageProvider( aCurrentElement.getType() );
-            aDisplayInfo.pLabelProvider = _rFactory.getLabelProvider( aCurrentElement.getType(), false );
+                aSubInfo.sMessage = pContext->Details;
+                aSubInfo.pLabelProvider
+                    = _rFactory.getLabelProvider(aCurrentElement.getType(), true);
+                aSubInfo.bSubEntry = true;
 
-            _out_rChain.push_back(std::move(aDisplayInfo));
-
-            if ( aCurrentElement.getType() == SQLExceptionInfo::TYPE::SQLContext )
-            {
-                const SQLContext* pContext = aCurrentElement;
-                if ( !pContext->Details.isEmpty() )
-                {
-                    ExceptionDisplayInfo aSubInfo( aCurrentElement.getType() );
-
-                    aSubInfo.sMessage = pContext->Details;
-                    aSubInfo.pImageProvider = _rFactory.getImageProvider( aCurrentElement.getType() );
-                    aSubInfo.pLabelProvider = _rFactory.getLabelProvider( aCurrentElement.getType(), true );
-                    aSubInfo.bSubEntry = true;
-
-                    _out_rChain.push_back(std::move(aSubInfo));
-                }
+                _out_rChain.push_back(std::move(aSubInfo));
             }
         }
     }
 }
-
-namespace {
 
 class OExceptionChainDialog : public weld::GenericDialogController
 {
@@ -312,7 +278,6 @@ OExceptionChainDialog::OExceptionChainDialog(weld::Window* pParent, ExceptionDis
         ExceptionDisplayInfo aInfo22018;
         aInfo22018.sMessage = DBA_RES( STR_EXPLAN_STRINGCONVERSION_ERROR );
         aInfo22018.pLabelProvider = aProviderFactory.getLabelProvider( SQLExceptionInfo::TYPE::SQLContext, false );
-        aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::TYPE::SQLContext );
         m_aExceptions.push_back( aInfo22018 );
 
         insertExceptionEntry(m_aExceptions.size() - 1, aInfo22018);
@@ -329,7 +294,7 @@ void OExceptionChainDialog::insertExceptionEntry(size_t nElementPos,
                                                  const ExceptionDisplayInfo& rEntry)
 {
     m_xExceptionList->append(OUString::number(nElementPos), rEntry.pLabelProvider->getLabel(),
-                             rEntry.pImageProvider->getImage());
+                             lcl_getImageName(rEntry.eType));
 }
 
 IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected, weld::TreeView&, void)
@@ -524,14 +489,21 @@ void OSQLMessageBox::Construct(weld::Window* pParent, MessBoxStyle _nStyle, Mess
 {
     // init the image
     MessageType eType( _eImage );
-    if ( eType == AUTO )
+    if (eType == MessageType::AUTO)
     {
         switch ( m_pImpl->aDisplayInfo[0].eType )
         {
-        case SQLExceptionInfo::TYPE::SQLException: eType = Error;    break;
-        case SQLExceptionInfo::TYPE::SQLWarning:   eType = Warning;  break;
-        case SQLExceptionInfo::TYPE::SQLContext:   eType = Info;     break;
-        default: OSL_FAIL( "OSQLMessageBox::Construct: invalid type!" );
+            case SQLExceptionInfo::TYPE::SQLException:
+                eType = MessageType::Error;
+                break;
+            case SQLExceptionInfo::TYPE::SQLWarning:
+                eType = MessageType::Warning;
+                break;
+            case SQLExceptionInfo::TYPE::SQLContext:
+                eType = MessageType::Info;
+                break;
+            default:
+                OSL_FAIL("OSQLMessageBox::Construct: invalid type!");
         }
     }
     VclMessageType eMessageType;
@@ -540,16 +512,16 @@ void OSQLMessageBox::Construct(weld::Window* pParent, MessBoxStyle _nStyle, Mess
         default:
             OSL_FAIL( "OSQLMessageBox::impl_initImage: unsupported image type!" );
             [[fallthrough]];
-        case Info:
+        case MessageType::Info:
             eMessageType = VclMessageType::Info;
             break;
-        case Warning:
+        case MessageType::Warning:
             eMessageType = VclMessageType::Warning;
             break;
-        case Error:
+        case MessageType::Error:
             eMessageType = VclMessageType::Error;
             break;
-        case Query:
+        case MessageType::Query:
             eMessageType = VclMessageType::Question;
             break;
     }
@@ -568,7 +540,7 @@ OSQLMessageBox::OSQLMessageBox(weld::Window* pParent, const SQLExceptionInfo& rE
     : m_pImpl(new SQLMessageBox_Impl(rException))
     , m_sHelpURL(std::move(sHelpURL))
 {
-    Construct(pParent, nStyle, AUTO);
+    Construct(pParent, nStyle, MessageType::AUTO);
 }
 
 OSQLMessageBox::OSQLMessageBox(weld::Window* pParent, const OUString& rTitle, const OUString& rMessage, MessBoxStyle nStyle, MessageType eType, const ::dbtools::SQLExceptionInfo* pAdditionalErrorInfo )

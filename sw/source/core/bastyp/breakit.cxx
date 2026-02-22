@@ -52,9 +52,10 @@ SwBreakIt * SwBreakIt::Get()
 
 SwBreakIt::SwBreakIt( uno::Reference<uno::XComponentContext> xContext )
     : m_xContext(std::move(xContext))
-    , m_xBreak(i18n::BreakIterator::create(m_xContext))
+    , m_xBreak(dynamic_cast<i18npool::BreakIterator*>(i18n::BreakIterator::create(m_xContext).get()))
     , m_aForbiddenLang(LANGUAGE_DONTKNOW)
 {
+    assert(m_xBreak);
 }
 
 void SwBreakIt::GetLocale_( const LanguageType aLang )

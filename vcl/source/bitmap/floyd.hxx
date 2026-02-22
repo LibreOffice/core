@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <tools/solar.h>
+
 const extern sal_uLong nVCLRLut[ 6 ] = { 16, 17, 18, 19, 20, 21 };
 const extern sal_uLong nVCLGLut[ 6 ] = { 0, 6, 12, 18, 24, 30 };
 const extern sal_uLong nVCLBLut[ 6 ] = { 0, 36, 72, 108, 144, 180 };

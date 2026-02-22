@@ -59,6 +59,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
 namespace basctl
@@ -840,13 +841,14 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
             bool bDialogAlreadyExists = rDocument.hasDialog( aLibName, aXmlDlgName );
 
             OUString aNewDlgName = aXmlDlgName;
-            enum NameClashMode
+            enum class NameClashMode
             {
-                NO_CLASH,
-                CLASH_OVERWRITE_DIALOG,
-                CLASH_RENAME_DIALOG,
+                None,
+                OverwriteDialog,
+                RenameDialog,
             };
-            NameClashMode eNameClashMode = NO_CLASH;
+
+            NameClashMode eNameClashMode = NameClashMode::None;
             if( bDialogAlreadyExists )
             {
                 OUString aQueryBoxTitle(IDEResId(RID_STR_DLGIMP_CLASH_TITLE));
@@ -858,14 +860,14 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
                 if( nRet == RET_YES )
                 {
                     // RET_YES == Rename, see NameClashQueryBox::NameClashQueryBox
-                    eNameClashMode = CLASH_RENAME_DIALOG;
+                    eNameClashMode = NameClashMode::RenameDialog;
 
                     aNewDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
                 }
                 else if( nRet == RET_NO )
                 {
                     // RET_NO == Replace, see NameClashQueryBox::NameClashQueryBox
-                    eNameClashMode = CLASH_OVERWRITE_DIALOG;
+                    eNameClashMode = NameClashMode::OverwriteDialog;
                 }
                 else if( nRet == RET_CANCEL )
                 {
@@ -985,7 +987,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
 
             LocalizationMgr::setStringResourceAtDialog( rDocument, aLibName, aNewDlgName, xDialogModel );
 
-            if( eNameClashMode == CLASH_OVERWRITE_DIALOG )
+            if( eNameClashMode == NameClashMode::OverwriteDialog )
             {
                 if (basctl::RemoveDialog( rDocument, aLibName, aNewDlgName ) )
                 {
@@ -1001,7 +1003,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
                 }
             }
 
-            if( eNameClashMode == CLASH_RENAME_DIALOG )
+            if( eNameClashMode == NameClashMode::RenameDialog )
             {
                 bool bRenamed = false;
                 if( xDialogModelPropSet.is() )
@@ -1086,7 +1088,7 @@ EntryDescriptor DialogWindow::CreateEntryDescriptor()
     ScriptDocument aDocument( GetDocument() );
     OUString aLibName( GetLibName() );
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
-    return EntryDescriptor( std::move(aDocument), eLocation, aLibName, OUString(), GetName(), OBJ_TYPE_DIALOG );
+    return EntryDescriptor( std::move(aDocument), eLocation, aLibName, OUString(), GetName(), EntryType::Dialog );
 }
 
 void DialogWindow::SetReadOnly (bool bReadOnly)

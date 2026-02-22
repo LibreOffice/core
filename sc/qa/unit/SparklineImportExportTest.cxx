@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <document.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <Sparkline.hxx>
@@ -17,11 +17,11 @@
 using namespace css;
 
 /** Test import, export or roundtrip of sparklines for ODF and OOXML */
-class SparklineImportExportTest : public UnoApiXmlTest
+class SparklineImportExportTest : public UnoApiTest
 {
 public:
     SparklineImportExportTest()
-        : UnoApiXmlTest(u"sc/qa/unit/data"_ustr)
+        : UnoApiTest(u"sc/qa/unit/data"_ustr)
     {
     }
 

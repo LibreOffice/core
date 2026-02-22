@@ -19,6 +19,7 @@
 
 #include <vcl/stdtext.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <bitmaps.hlst>
 #include <strings.hrc>

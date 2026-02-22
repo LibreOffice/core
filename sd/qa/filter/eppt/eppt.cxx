@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -24,14 +24,14 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Covers sd/source/filter/eppt/ fixes.
-class Test : public UnoApiXmlTest
+class Test : public UnoApiTest
 {
 public:
     Test();
 };
 
 Test::Test()
-    : UnoApiXmlTest(u"/sd/qa/filter/eppt/data/"_ustr)
+    : UnoApiTest(u"/sd/qa/filter/eppt/data/"_ustr)
 {
 }
 

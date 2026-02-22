@@ -204,27 +204,32 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                 Graphic aGraphic = *pGraphic;
 
-                CompressGraphicsDialog aDialog(GetView().GetFrameWeld(), std::move(aGraphic), aSize, aCropRectangle, GetView().GetViewFrame().GetBindings());
-                if (aDialog.run() == RET_OK)
-                {
-                    rSh.StartAllAction();
-                    rSh.StartUndo(SwUndoId::START);
-                    tools::Rectangle aScaledCropedRectangle = aDialog.GetScaledCropRectangle();
+                auto xDialog = std::make_shared<CompressGraphicsDialog>(GetView().GetFrameWeld(), std::move(aGraphic), aSize, aCropRectangle, GetView().GetViewFrame().GetBindings());
+                weld::DialogController::runAsync(xDialog, [this, xDialog, aCrop, aMirror](sal_uInt32 nResult) {
+                    if (nResult == RET_OK)
+                    {
+                        SwWrtShell& rShell = GetShell();
 
-                    aCrop.SetLeft(   o3tl::toTwips( aScaledCropedRectangle.Left(), o3tl::Length::mm100 ));
-                    aCrop.SetTop(    o3tl::toTwips( aScaledCropedRectangle.Top(), o3tl::Length::mm100 ));
-                    aCrop.SetRight(  o3tl::toTwips( aScaledCropedRectangle.Right(), o3tl::Length::mm100 ));
-                    aCrop.SetBottom( o3tl::toTwips( aScaledCropedRectangle.Bottom(), o3tl::Length::mm100 ));
+                        rShell.StartAllAction();
+                        rShell.StartUndo(SwUndoId::START);
+                        tools::Rectangle aScaledCropedRectangle = xDialog->GetScaledCropRectangle();
 
-                    Graphic aCompressedGraphic( aDialog.GetCompressedGraphic() );
-                    rSh.ReRead(OUString(), OUString(), &aCompressedGraphic);
+                        SwCropGrf aNewCrop(aCrop);
+                        aNewCrop.SetLeft(o3tl::toTwips( aScaledCropedRectangle.Left(), o3tl::Length::mm100));
+                        aNewCrop.SetTop(o3tl::toTwips( aScaledCropedRectangle.Top(), o3tl::Length::mm100));
+                        aNewCrop.SetRight(o3tl::toTwips( aScaledCropedRectangle.Right(), o3tl::Length::mm100));
+                        aNewCrop.SetBottom(o3tl::toTwips( aScaledCropedRectangle.Bottom(), o3tl::Length::mm100));
 
-                    rSh.SetAttrItem(aCrop);
-                    rSh.SetAttrItem(aMirror);
+                        Graphic aCompressedGraphic( xDialog->GetCompressedGraphic() );
+                        rShell.ReRead(OUString(), OUString(), &aCompressedGraphic);
 
-                    rSh.EndUndo(SwUndoId::END);
-                    rSh.EndAllAction();
-                }
+                        rShell.SetAttrItem(aNewCrop);
+                        rShell.SetAttrItem(aMirror);
+
+                        rShell.EndUndo(SwUndoId::END);
+                        rShell.EndAllAction();
+                    }
+                });
             }
         }
         break;

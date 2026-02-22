@@ -10,6 +10,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <unotest/bootstrapfixturebase.hxx>
+#include <svtools/htmltokn.h>
 #include <svtools/parhtml.hxx>
 #include <tools/ref.hxx>
 #include <tools/stream.hxx>

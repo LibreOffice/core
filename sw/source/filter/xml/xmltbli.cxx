@@ -1223,10 +1223,9 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     // xml:id for RDF metadata
     GetImport().SetXmlId(uno::Reference<XTextTable>(xTable), sXmlId);
 
-    Reference < XCell > xCell = xTable->getCellByPosition( 0, 0 );
-    Reference < XText> xText( xCell, UNO_QUERY );
+    rtl::Reference< SwXCell > xCell = xTable->getSwCellByPosition( 0, 0 );
     m_xOldCursor = GetImport().GetTextImport()->GetCursor();
-    GetImport().GetTextImport()->SetCursor( xText->createTextCursor() );
+    GetImport().GetTextImport()->SetCursor( xCell->createTextCursor() );
 
     // take care of open redlines for tables
     GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
@@ -2701,7 +2700,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         SwNodeOffset nOffset(pPrevSttNd ? 1 : 0);
         SwNodeIndex aIdx( *pEndNd, nOffset );
         SwTextFormatColl *pColl =
-            pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD, false );
+            pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD, false );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx.GetNode(), SwTableBoxStartNode,
                                                  pColl );
         // Consider the case that a table is defined without a row.

@@ -24,11 +24,13 @@
 
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
-#include <com/sun/star/lang/Locale.hpp>
+#include <rtl/ustring.hxx>
 
 #include <string_view>
 #include <utility>
 #include <vector>
+
+namespace com::sun::star::lang { struct Locale; }
 
 struct IsoLanguageCountryEntry;
 struct IsoLanguageScriptCountryEntry;

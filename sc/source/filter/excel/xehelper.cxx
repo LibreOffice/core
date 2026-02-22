@@ -30,6 +30,7 @@
 #include <o3tl/string_view.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/font.hxx>
+#include <vcl/metric.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/itemset.hxx>
 #include <svtools/ctrltool.hxx>

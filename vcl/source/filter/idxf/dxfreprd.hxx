@@ -21,6 +21,7 @@
 
 #include "dxfblkrd.hxx"
 #include "dxftblrd.hxx"
+#include <rtl/ustring.hxx>
 #include <array>
 #include <string_view>
 

@@ -38,6 +38,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <memory>
@@ -239,12 +240,12 @@ OUString ChooseMacro(weld::Window* pParent,
 
     MacroChooser aChooser(pParent, xDocFrame);
     if (bChooseOnly || !SvtModuleOptions::IsBasicIDEInstalled())
-        aChooser.SetMode(MacroChooser::ChooseOnly);
+        aChooser.SetMode(MacroChooser::Mode::ChooseOnly);
 
     if ( !bChooseOnly && rxLimitToDocument.is() )
     {
         // Hack!
-        aChooser.SetMode(MacroChooser::Recording);
+        aChooser.SetMode(MacroChooser::Mode::Recording);
     }
 
     short nRetValue = aChooser.run();
@@ -253,12 +254,12 @@ OUString ChooseMacro(weld::Window* pParent,
 
     switch ( nRetValue )
     {
-        case Macro_OkRun:
+        case static_cast<int>(MacroExitCode::Macro_OkRun):
         {
             bool bError = false;
 
             pMethod = aChooser.GetMacro();
-            if ( !pMethod && aChooser.GetMode() == MacroChooser::Recording )
+            if ( !pMethod && aChooser.GetMode() == MacroChooser::Mode::Recording )
                 pMethod = aChooser.CreateMacro();
 
             if ( !pMethod )

@@ -200,6 +200,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ListLabelAlignmentIgnoresDirection" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Always align list labels as if the paragraph is left-to-right</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>

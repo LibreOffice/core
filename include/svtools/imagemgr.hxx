@@ -24,6 +24,8 @@
 #include <unotools/ucbhelper.hxx>
 #include <vcl/vclenum.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
+
 enum class SvImageId {
     NONE                   =    0,
     START                  = 3076,  // must match to old Id's in SFX!

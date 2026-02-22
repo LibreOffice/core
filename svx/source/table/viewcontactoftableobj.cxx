@@ -43,6 +43,7 @@
 #include <svx/sdooitm.hxx>
 #include <utility>
 #include <vcl/canvastools.hxx>
+#include <vcl/pdfwriter.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <svx/xfltrit.hxx>
 

@@ -24,6 +24,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svl/intitem.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <swtypes.hxx>
 #include <uiborder.hxx>

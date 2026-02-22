@@ -27,6 +27,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sot/exchange.hxx>
+#include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
 #include <fmtinfmt.hxx>
@@ -62,6 +63,8 @@
 #include <sal/log.hxx>
 
 #include <fldmgr.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <strings.hrc>
 #include <officecfg/Office/Common.hxx>

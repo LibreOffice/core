@@ -22,9 +22,9 @@
 
 #include <vector>
 
-#include <vcl/graph.hxx>
-
 #include <svtools/svtdllapi.h>
+
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace com :: sun :: star :: awt { class XToolkit; }
 namespace com :: sun :: star :: frame { class XModel; }
@@ -40,6 +40,11 @@ namespace com::sun::star {
         class XController;
     }
 }
+
+class Color;
+class Graphic;
+class Point;
+class Size;
 
 class SVT_DLLPUBLIC DocumentToGraphicRenderer
 {

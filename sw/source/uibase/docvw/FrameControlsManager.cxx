@@ -189,8 +189,12 @@ void SwFrameControlsManager::SetContentControlAliasButton(SwContentControl* pCon
     {
         pControl = std::make_shared<SwFrameControl>(
             VclPtr<SwContentControlAliasButton>::Create(m_pEditWin, pContentControl).get());
-        const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
-        pControl->SetReadonly(pViewOpt->IsReadonly());
+        SwWrtShell* pWrtShell = m_pEditWin->GetView().GetWrtShellPtr();
+        if (pWrtShell)
+        {
+            const SwViewOption* pViewOpt = pWrtShell->GetViewOptions();
+            pControl->SetReadonly(pViewOpt->IsReadonly());
+        }
         rControls[nullptr] = pControl;
     }
 

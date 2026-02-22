@@ -42,6 +42,7 @@
 #include <addressconverter.hxx>
 #include <defnamesbuffer.hxx>
 #include <biffhelper.hxx>
+#include <datauno.hxx>
 #include <document.hxx>
 #include <dbdata.hxx>
 #include <scitems.hxx>
@@ -720,20 +721,21 @@ SortCondition& AutoFilter::createSortCondition()
     return *xSortCondition;
 }
 
-void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRange, sal_Int16 nSheet )
+void AutoFilter::finalizeImport(const rtl::Reference<ScDatabaseRangeObj>& rxDatabaseRange, sal_Int16 nSheet)
 {
     // convert filter settings using the filter descriptor of the database range
-    const Reference<XSheetFilterDescriptor3> xFilterDesc( rxDatabaseRange->getFilterDescriptor(), UNO_QUERY_THROW );
+    ScDocument& rDoc = getScDocument();
+    ScDocShell* pDocSh = rDoc.GetDocumentShell();
+    rtl::Reference<ScRangeFilterDescriptor> xFilterDesc = new ScRangeFilterDescriptor(pDocSh, rxDatabaseRange.get());
     if( !xFilterDesc.is() )
         return;
 
     // set some common properties for the auto filter range
-    PropertySet aDescProps( xFilterDesc );
-    aDescProps.setProperty( PROP_IsCaseSensitive, false );
-    aDescProps.setProperty( PROP_SkipDuplicates, false );
-    aDescProps.setProperty( PROP_Orientation, TableOrientation_ROWS );
-    aDescProps.setProperty( PROP_ContainsHeader, true );
-    aDescProps.setProperty( PROP_CopyOutputData, false );
+    xFilterDesc->setPropertyValue(u"IsCaseSensitive"_ustr, css::uno::Any(false));
+    xFilterDesc->setPropertyValue(u"SkipDuplicates"_ustr, css::uno::Any(false));
+    xFilterDesc->setPropertyValue(u"Orientation"_ustr, css::uno::Any(TableOrientation_ROWS));
+    xFilterDesc->setPropertyValue(u"ContainsHeader"_ustr, css::uno::Any(true));
+    xFilterDesc->setPropertyValue(u"SaveOutputPosition"_ustr, css::uno::Any(false));
 
     // resulting list of all UNO API filter fields
     ::std::vector<TableFilterField3> aFilterFields;
@@ -750,7 +752,6 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
         '(A1 and B1) or (B2 and C1)'. */
     bool bHasOrConnection = false;
 
-    ScDocument& rDoc = getScDocument();
     SCCOL nCol = maRange.aStart.Col();
     SCROW nRow = maRange.aStart.Row();
     SCTAB nTab = maRange.aStart.Tab();
@@ -806,7 +807,7 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
 
     // regular expressions
     bool bUseRegExp = obNeedsRegExp.value_or( false );
-    aDescProps.setProperty( PROP_UseRegularExpressions, bUseRegExp );
+    xFilterDesc->setPropertyValue(u"RegularExpressions"_ustr, css::uno::Any(bUseRegExp));
 
     // sort
     if (maSortConditions.empty())
@@ -866,7 +867,7 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
         OSL_FAIL("AutoFilter::finalizeImport(): cannot find matching DBData");
 }
 
-Reference< XDatabaseRange > AutoFilter::createDatabaseObject(sal_Int16 nSheet)
+rtl::Reference<ScDatabaseRangeObj> AutoFilter::createDatabaseObject(sal_Int16 nSheet)
 {
     ScRange aRangeCopy(maRange);
     aRangeCopy.aStart.SetTab(nSheet);
@@ -894,7 +895,7 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
 
     std::shared_ptr<AutoFilter> xAutoFilter = maAutoFilters.front();
     // use the same name for the database range as used for the defined name '_FilterDatabase'
-    Reference< XDatabaseRange > xDatabaseRange = xAutoFilter->createDatabaseObject(nSheet);
+    rtl::Reference<ScDatabaseRangeObj> xDatabaseRange = xAutoFilter->createDatabaseObject(nSheet);
     // first, try to create an auto filter
     bool bHasAutoFilter = finalizeImport( xDatabaseRange, nSheet );
     // no success: try to create an advanced filter
@@ -911,45 +912,50 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
         return;
 
     // set some common properties for the filter descriptor
-    PropertySet aDescProps( xDatabaseRange->getFilterDescriptor() );
-    aDescProps.setProperty( PROP_IsCaseSensitive, false );
-    aDescProps.setProperty( PROP_SkipDuplicates, false );
-    aDescProps.setProperty( PROP_Orientation, TableOrientation_ROWS );
-    aDescProps.setProperty( PROP_ContainsHeader, true );
+    ScDocShell* pDocSh = getScDocument().GetDocumentShell();
+    rtl::Reference<ScRangeFilterDescriptor> xFilterDesc = new ScRangeFilterDescriptor(pDocSh, xDatabaseRange.get());
+    xFilterDesc->setPropertyValue(u"IsCaseSensitive"_ustr, css::uno::Any(false));
+    xFilterDesc->setPropertyValue(u"SkipDuplicates"_ustr, css::uno::Any(false));
+    xFilterDesc->setPropertyValue(u"Orientation"_ustr, css::uno::Any(TableOrientation_ROWS));
+    xFilterDesc->setPropertyValue(u"ContainsHeader"_ustr, css::uno::Any(true));
     // criteria range may contain wildcards, but these are incompatible with REs
-    aDescProps.setProperty( PROP_UseRegularExpressions, false );
+    xFilterDesc->setPropertyValue(u"RegularExpressions"_ustr, css::uno::Any(false));
 
     // position of output data (if built-in defined name 'Extract' exists)
     DefinedNameRef xExtractName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_EXTRACT, nSheet );
     ScRange aOutputRange;
     bool bHasOutputRange = xExtractName && xExtractName->getAbsoluteRange( aOutputRange );
-    aDescProps.setProperty( PROP_CopyOutputData, bHasOutputRange );
+    xFilterDesc->setPropertyValue(u"CopyOutputData"_ustr, css::uno::Any(bHasOutputRange));
     if( bHasOutputRange )
     {
-        aDescProps.setProperty( PROP_SaveOutputPosition, true );
-        aDescProps.setProperty( PROP_OutputPosition, CellAddress( aOutputRange.aStart.Tab(), aOutputRange.aStart.Col(), aOutputRange.aStart.Row() ) );
+        xFilterDesc->setPropertyValue(u"SaveOutputPosition"_ustr, css::uno::Any(true));
+        xFilterDesc->setPropertyValue(u"OutputPosition"_ustr,
+                                      css::uno::Any(CellAddress(aOutputRange.aStart.Tab(),
+                                                                aOutputRange.aStart.Col(),
+                                                                aOutputRange.aStart.Row())));
     }
 
     /*  Properties of the database range (must be set after
         modifying properties of the filter descriptor,
         otherwise the 'FilterCriteriaSource' property gets
         deleted). */
-    PropertySet aRangeProps( xDatabaseRange );
-    aRangeProps.setProperty( PROP_AutoFilter, false );
-    aRangeProps.setProperty( PROP_FilterCriteriaSource,
-                             CellRangeAddress( aCriteriaRange.aStart.Tab(),
-                                               aCriteriaRange.aStart.Col(), aCriteriaRange.aStart.Row(),
-                                               aCriteriaRange.aEnd.Col(), aCriteriaRange.aEnd.Row() ));
+    xDatabaseRange->setPropertyValue(u"AutoFilter"_ustr, css::uno::Any(false));
+    xDatabaseRange->setPropertyValue(u"FilterCriteriaSource"_ustr,
+                                     css::uno::Any( CellRangeAddress(aCriteriaRange.aStart.Tab(),
+                                                                     aCriteriaRange.aStart.Col(),
+                                                                     aCriteriaRange.aStart.Row(),
+                                                                     aCriteriaRange.aEnd.Col(),
+                                                                     aCriteriaRange.aEnd.Row())));
 }
 
-bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRange, sal_Int16 nSheet )
+bool AutoFilterBuffer::finalizeImport(const rtl::Reference<ScDatabaseRangeObj>& rxDatabaseRange,
+                                      sal_Int16 nSheet)
 {
     AutoFilter* pAutoFilter = getActiveAutoFilter();
     if( pAutoFilter && rxDatabaseRange.is() ) try
     {
         // the property 'AutoFilter' enables the drop-down buttons
-        PropertySet aRangeProps( rxDatabaseRange );
-        aRangeProps.setProperty( PROP_AutoFilter, true );
+        rxDatabaseRange->setPropertyValue(u"AutoFilter"_ustr, css::uno::Any(true));
 
         pAutoFilter->finalizeImport( rxDatabaseRange, nSheet );
 

@@ -244,6 +244,11 @@ static RenderMethod initRenderMethodToUse()
 {
     if (Application::IsBitmapRendering())
         return RenderRaster;
+#if defined(MACOSX) || defined(_WIN32)
+    // macOS/win can __only__ render via skia - there, we can only disable HW acceleration
+    if (Application::IsSafeModeEnabled())
+        return RenderRaster;
+#endif
 
     if (const char* env = getenv("SAL_SKIA"))
     {

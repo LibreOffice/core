@@ -1,5 +1,12 @@
 ---
 assumeFilename: extensions/source/propctrlr/formcomponenthandler.cxx
+customAssumeFilenames:
+    # Needs extensions/source/inc/ headers
+    extensions/source/abpilot/ : extensions/source/abpilot/abspilot.cxx
+    # Needs extensions/source/inc/ headers
+    extensions/source/dbpilots/ : extensions/source/dbpilots/commonpagesdbp.cxx
+    # Needs ldap.h
+    extensions/source/config/ldap : extensions/source/config/ldap/ldapuserprofilebe.cxx
 excludelist:
     extensions/inc/strings.hrc:
     # Needed for TranslateId macro

@@ -760,7 +760,10 @@ void SlideSorterViewShell::ExecMovePageFirst (SfxRequest& /*rReq*/)
     SyncPageSelectionToDocument(xSelection);
 
     // Moves selected pages after page -1
-    GetDoc()->MoveSelectedPages( sal_uInt16(-1) );
+    if (!GetDoc()->HasCanvasPage())
+        GetDoc()->MoveSelectedPages( sal_uInt16(-1) );
+    else
+        GetDoc()->MoveSelectedPages(1);
 
     PostMoveSlidesActions(xSelection);
 }
@@ -792,6 +795,20 @@ void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
         rSet.DisableItem( SID_MOVE_PAGE_FIRST );
         rSet.DisableItem( SID_MOVE_PAGE_UP );
     }
+
+    if (GetDoc()->HasCanvasPage())
+    {
+        if (firstSelectedPageNo == 0)
+        {
+            rSet.DisableItem( SID_MOVE_PAGE_LAST );
+            rSet.DisableItem( SID_MOVE_PAGE_DOWN );
+        }
+        if (firstSelectedPageNo == 1)
+        {
+            rSet.DisableItem( SID_MOVE_PAGE_FIRST );
+            rSet.DisableItem( SID_MOVE_PAGE_UP );
+        }
+    }
 }
 
 void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
@@ -813,6 +830,9 @@ void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
 
     if (firstSelectedPageNo == 0)
         return;
+    if (GetDoc()->HasCanvasPage())
+        if (firstSelectedPageNo == 1)
+            return;
 
     // Move pages before firstSelectedPageNo - 1 (so after firstSelectedPageNo - 2),
     // remembering that -1 means at first, which is good.
@@ -843,6 +863,9 @@ void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
     lastSelectedPageNo = (lastSelectedPageNo - 1) / 2;
     if (lastSelectedPageNo == nNoOfPages - 1)
         return;
+    if (GetDoc()->HasCanvasPage())
+        if (lastSelectedPageNo == 0)
+            return;
 
     // Move to position after lastSelectedPageNo
     GetDoc()->MoveSelectedPages( lastSelectedPageNo + 1 );

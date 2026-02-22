@@ -21,6 +21,9 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <vcl/fileregistration.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <fileextcheckdlg.hxx>
 

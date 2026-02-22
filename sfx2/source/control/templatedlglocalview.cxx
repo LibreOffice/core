@@ -13,11 +13,14 @@
 #include <inputdlg.hxx>
 #include <templateviewitem.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/uiobject.hxx>
 #include <templatecontaineritem.hxx>
 #include <sfx2/strings.hrc>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <sfx2/doctempl.hxx>
 #include <helpids.h>
 #include <bitmaps.hlst>
@@ -27,7 +30,7 @@ TemplateDlgLocalView::TemplateDlgLocalView(std::unique_ptr<weld::ScrolledWindow>
                                            std::unique_ptr<weld::TreeView> xTreeView)
     : TemplateLocalView(std::move(xWindow), std::move(xMenu))
     , ListView(std::move(xTreeView))
-    , mViewMode(TemplateViewMode::eThumbnailView)
+    , mViewMode(TemplateViewMode::ThumbnailView)
 {
     mxTreeView->connect_row_activated(LINK(this, TemplateDlgLocalView, RowActivatedHdl));
     mxTreeView->connect_column_clicked(LINK(this, ListView, ColumnClickedHdl));
@@ -132,16 +135,17 @@ void TemplateDlgLocalView::createContextMenu(const bool bIsDefault, const bool b
     }
     if (bIsBuiltIn)
     {
+        mxContextMenu->set_sensitive(u"edit"_ustr, false);
         mxContextMenu->set_sensitive(u"rename"_ustr, false);
         mxContextMenu->set_sensitive(u"delete"_ustr, false);
     }
-    if (mViewMode == TemplateViewMode::eThumbnailView)
+    if (mViewMode == TemplateViewMode::ThumbnailView)
     {
         ContextMenuSelectHdl(mxContextMenu->popup_at_rect(
             GetDrawingArea(), tools::Rectangle(maPosition, Size(1, 1))));
         Invalidate();
     }
-    else if (mViewMode == TemplateViewMode::eListView)
+    else if (mViewMode == TemplateViewMode::ListView)
         ContextMenuSelectHdl(mxContextMenu->popup_at_rect(
             mxTreeView.get(), tools::Rectangle(maPosition, Size(1, 1))));
 }
@@ -240,9 +244,11 @@ void TemplateDlgLocalView::insertItems(const std::vector<TemplateItemProperties>
 
 void TemplateDlgLocalView::setTemplateViewMode(TemplateViewMode eMode) { mViewMode = eMode; }
 
+TemplateViewMode TemplateDlgLocalView::getTemplateViewMode() const { return mViewMode; }
+
 void TemplateDlgLocalView::Show()
 {
-    if (mViewMode == TemplateViewMode::eListView)
+    if (mViewMode == TemplateViewMode::ListView)
     {
         ThumbnailView::Hide();
         ListView::ShowListView();
@@ -267,7 +273,7 @@ bool TemplateDlgLocalView::IsVisible() const
 
 void TemplateDlgLocalView::syncCursor()
 {
-    if (mViewMode == TemplateViewMode::eListView)
+    if (mViewMode == TemplateViewMode::ListView)
     {
         ListView::unselect_all();
         int nIndex = -1;
@@ -423,4 +429,10 @@ IMPL_LINK(TemplateDlgLocalView, KeyPressHdl, const KeyEvent&, rKEvt, bool)
     }
     return false;
 }
+
+FactoryFunction TemplateDlgLocalView::GetUITestFactory() const
+{
+    return TemplateDlgLocalViewUIObject::create;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

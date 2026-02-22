@@ -306,13 +306,13 @@ class LayoutNode
 public:
     typedef std::map<sal_Int32, OUString> VarMap;
 
-    LayoutNode(Diagram& rDgm)
+    LayoutNode(SmartArtDiagram& rDgm)
         : LayoutAtom(*this)
         , mrDgm(rDgm)
         , mnChildOrder(0)
     {
     }
-    Diagram& getDiagram() { return mrDgm; }
+    SmartArtDiagram& getDiagram() { return mrDgm; }
     virtual void accept( LayoutAtomVisitor& ) override;
     VarMap & variables()
         { return mVariables; }
@@ -339,7 +339,7 @@ public:
     const LayoutNode* getParentLayoutNode() const;
 
 private:
-    Diagram& mrDgm;
+    SmartArtDiagram& mrDgm;
     VarMap                       mVariables;
     OUString                     msMoveWith;
     OUString                     msStyleLabel;

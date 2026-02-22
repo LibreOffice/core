@@ -1140,7 +1140,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
         SwNodeIndex aIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
         rDoc.GetNodes().MakeTextNode( aIdx.GetNode(),
-                        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
+                        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT ) );
 
         if( pESh )
             pESh->StartAllAction();

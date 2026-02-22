@@ -62,6 +62,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPaste)
         dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
     }
 
+    dispose();
     createSwDoc("placeholder-bold.fodt");
 
     // select placeholder field
@@ -148,6 +149,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPasteStyleOverride)
         dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
     }
 
+    dispose();
     createSwDoc("placeholder-bold-style-override.fodt");
 
     // select placeholder field
@@ -1027,6 +1029,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128375)
         dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+        dispose();
     }
 }
 
@@ -2796,6 +2799,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140061)
 
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
+    dispose();
     createSwDoc();
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 

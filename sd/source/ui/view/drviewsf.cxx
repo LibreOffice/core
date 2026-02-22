@@ -351,7 +351,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 mpDrawView->GetAttributes( aAttrs );
 
                 SvxAdjust eAdj = aAttrs.Get( EE_PARA_JUST ).GetAdjust();
-                if ( eAdj == SvxAdjust::Left)
+                if ( eAdj == SvxAdjust::ParaStart)
                 {
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_START, true ) );
                 }
@@ -367,7 +367,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 mpDrawView->GetAttributes( aAttrs );
 
                 SvxAdjust eAdj = aAttrs.Get( EE_PARA_JUST ).GetAdjust();
-                if ( eAdj == SvxAdjust::Left)
+                if ( eAdj == SvxAdjust::ParaEnd)
                 {
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_END, true ) );
                 }

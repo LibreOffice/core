@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <delcodlg.hxx>
+#include <vcl/weld/Builder.hxx>
 
 bool       ScDeleteContentsDlg::bPreviousAllCheck = false;
 InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING  |

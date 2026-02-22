@@ -32,6 +32,9 @@
  * All functions behave like the wrapped ones, set errno on errors.
  */
 
+#ifndef INCLUDED_TOOLS_UNIXWRAPPERS_H
+#define INCLUDED_TOOLS_UNIXWRAPPERS_H
+
 #include <fcntl.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -74,7 +77,7 @@ extern "C" {
 
 #endif
 
-#ifdef __cplusplus
+#if defined __cplusplus && __cplusplus >= 201703L
 #define UNIXWRAPPERS_H_MAYBE_UNUSED [[maybe_unused]]
 #else
 #define UNIXWRAPPERS_H_MAYBE_UNUSED
@@ -332,5 +335,7 @@ UNIXWRAPPERS_H_MAYBE_UNUSED static const char* wrap_realpath(const char* path, c
 #endif
 
 #undef UNIXWRAPPERS_H_MAYBE_UNUSED
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -19,6 +19,7 @@
 
 #include <noteurl.hxx>
 
+#include <tools/mapunit.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imaprect.hxx>
 #include <vcl/mapmod.hxx>

@@ -564,8 +564,8 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
                 const SwAttrSetChg& rNewSetChg = *pChangeHint->m_pNew;
                 SfxItemIter aOIter(*rOldSetChg.GetChgSet());
                 SfxItemIter aNIter(*rNewSetChg.GetChgSet());
-                const SfxPoolItem* pOItem = aOIter.GetCurItem();
-                const SfxPoolItem* pNItem = aNIter.GetCurItem();
+                const SfxPoolItem* pOItem = aOIter.IsAtEnd() ? nullptr : aOIter.GetCurItem();
+                const SfxPoolItem* pNItem = aNIter.IsAtEnd() ? nullptr : aNIter.GetCurItem();
                 SwAttrSetChg aOldSet(rOldSetChg);
                 SwAttrSetChg aNewSet(rNewSetChg);
                 do
@@ -1120,8 +1120,8 @@ void SwPageFrame::ComputeRegister(const SwTextFormatColl* pFormat, sal_uInt16& r
     else
     {
         SwViewShell *pSh = getRootFrame()->GetCurrShell();
-        SwFontAccess aFontAccess( pFormat, pSh );
-        SwFont aFnt( aFontAccess.Get()->GetFont() );
+        const SwFontObj& rFontAccess = pFormat->GetFontObj(pSh);
+        SwFont aFnt( rFontAccess.GetFont() );
 
         OutputDevice *pOut = nullptr;
         if(pSh)

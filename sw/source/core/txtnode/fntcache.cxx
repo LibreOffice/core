@@ -21,6 +21,7 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/lineinfo.hxx>
@@ -31,7 +32,7 @@
 #include <vcl/fontcapabilities.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <breakit.hxx>
 #include <paintfrm.hxx>
 #include <viewsh.hxx>
@@ -1048,6 +1049,42 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     Color aOldColor( pTmpFont->GetColor() );
     bool bChgColor = rInf.ApplyAutoColor( pTmpFont );
+
+    if (rInf.GetOmitPaint() || rInf.GetInsertColorPaint() || rInf.GetDeleteColorPaint())
+    {
+        Color aColor = pTmpFont->GetColor();
+        sal_uInt16 nHue;
+        sal_uInt16 nSaturation;
+        sal_uInt16 nBrightness;
+        aColor.RGBtoHSB(nHue, nSaturation, nBrightness);
+        if (rInf.GetOmitPaint())
+        {
+            // 50% lightness: balance between completely omitting the paint and hard-to-notice small
+            // difference.
+            nBrightness = 50;
+        }
+        else if (rInf.GetInsertColorPaint())
+        {
+            // Insert: color transform to produce a green-like color.
+            nHue = 120;
+            nSaturation = std::max<sal_uInt16>(nSaturation, 75);
+            nBrightness = std::clamp<sal_uInt16>(nBrightness, 40, 60);
+        }
+        else if (rInf.GetDeleteColorPaint())
+        {
+            // Delete: color transform to produce a red-like color.
+            nHue = 0;
+            nSaturation = std::max<sal_uInt16>(nSaturation, 75);
+            nBrightness = std::clamp<sal_uInt16>(nBrightness, 40, 60);
+        }
+        aColor = Color::HSBtoRGB(nHue, nSaturation, nBrightness);
+        if (aColor != pTmpFont->GetColor())
+        {
+            bChgColor = true;
+            pTmpFont->SetColor(aColor);
+        }
+    }
+
     if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
         rInf.GetOut().SetFont( *pTmpFont );
     if ( bChgColor )

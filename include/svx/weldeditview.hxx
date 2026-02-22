@@ -15,6 +15,8 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weld/customweld.hxx>
 
 class WeldEditAccessible;
@@ -54,6 +56,14 @@ protected:
     std::unique_ptr<EditEngine> m_xEditEngine;
     std::unique_ptr<EditView> m_xEditView;
     rtl::Reference<WeldEditAccessible> m_xAccessible;
+
+    // Cursor blink support
+    AutoTimer m_aCursorTimer;
+    bool m_bCursorVisible;
+    tools::Rectangle m_aCachedCursorPixRect; // pixel coords of cached cursor area
+    ScopedVclPtrInstance<VirtualDevice> m_xCursorOnDev;
+    ScopedVclPtrInstance<VirtualDevice> m_xCursorOffDev;
+    DECL_DLLPRIVATE_LINK(BlinkTimerHdl, Timer*, void);
 
     virtual void makeEditEngine();
 

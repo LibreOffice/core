@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <set>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
@@ -319,9 +318,10 @@ void PageSettings::setFitToPagesMode( bool bFitToPages )
 void PageSettings::finalizeImport()
 {
     OUStringBuffer aStyleNameBuffer( "PageStyle_" );
-    Reference<container::XNamed> xSheetName(getSheet(), UNO_QUERY);
-    if( xSheetName.is() )
-        aStyleNameBuffer.append( xSheetName->getName() );
+    ScDocument& rDoc = getScDocument();
+    OUString aSheetName;
+    if(rDoc.GetName(getSheetIndex(), aSheetName))
+        aStyleNameBuffer.append(aSheetName);
     else
         aStyleNameBuffer.append( static_cast< sal_Int32 >( getSheetIndex() + 1 ) );
     OUString aStyleName = aStyleNameBuffer.makeStringAndClear();
@@ -332,7 +332,7 @@ void PageSettings::finalizeImport()
 
     // Set page style name to the sheet.
     SCTAB nTab = getSheetIndex();
-    getScDocument().SetPageStyle(nTab, aStyleName);
+    rDoc.SetPageStyle(nTab, aStyleName);
 }
 
 void PageSettings::importPictureData( const Relations& rRelations, const OUString& rRelId )

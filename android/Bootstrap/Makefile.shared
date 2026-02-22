@@ -19,13 +19,6 @@ SODEST=$(JNILIBSDIR)/$(ANDROID_APP_ABI)
 OBJLOCAL=$(BUILDDIR)/android/obj/local/$(ANDROID_APP_ABI)
 
 #
-# Helpful rules ...
-#
-
-local.properties: $(BUILDDIR)/config_host.mk
-	echo sdk.dir=$(ANDROID_SDK_DIR) >local.properties
-
-#
 # Build / link the single .so for this app
 #
 
@@ -86,37 +79,32 @@ stop-start-cycle:
 	$(ANDROID_SDK_DIR)/platform-tools/adb shell stop && $(ANDROID_SDK_DIR)/platform-tools/adb shell start && sleep 10
 
 # build-host specific stuff (build paths and the like) to keep build.gradle static
-liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk \
+liboSettings.gradle.kts: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk \
 		$(wildcard $(INSTDIR)/program/version.ini $(INSTDIR)/program/versionrc) \
 		$(SRCDIR)/android/Bootstrap/Makefile.shared
 	@echo "creating $@"
 	( \
 		echo "// created by Makefile.shared - your changes will be overridden" \
-		&& echo "ext {" \
-		&& echo "    liboSrcRoot         = '$(SRC_ROOT)'" \
-		&& echo "    liboJniLibsdir      = '$(JNILIBSDIR)'" \
-		&& echo "    liboWorkdir         = '$(WORKDIR)'" \
-		&& echo "    liboInstdir         = '$(INSTDIR)'" \
-		&& echo "    liboEtcFolder       = '$(LIBO_ETC_FOLDER)'" \
-		&& echo "    liboUreMiscFolder   = '$(LIBO_URE_MISC_FOLDER)'" \
-		&& echo "    liboSharedResFolder = '$(LIBO_SHARE_RESOURCE_FOLDER)'" \
-		&& echo "    liboUREJavaFolder   = '$(LIBO_URE_SHARE_JAVA_FOLDER)'" \
-		&& echo "    liboShareJavaFolder = '$(LIBO_SHARE_JAVA_FOLDER)'" \
-		&& echo "    liboVersionMajor    = '$(LIBO_VERSION_MAJOR)'" \
-		&& echo "    liboVersionMinor    = '$(LIBO_VERSION_MINOR)'" \
-		&& echo "    liboGitFullCommit   = '$(shell cd $(SRCDIR) && git log -1 --format=%H)'" \
-		&& echo "}" \
-		&& echo "android {" \
-		&& echo "    ndkPath = '$(ANDROID_NDK_DIR)'" \
-		&& echo "    ndkVersion = '$(ANDROID_NDK_VERSION)'" \
-		&& echo "}" \
-		&& echo "android.defaultConfig {" \
-		&& echo "    applicationId '$(ANDROID_PACKAGE_NAME)'" \
-		&& echo "    minSdkVersion $(ANDROID_API_LEVEL)" \
-		&& echo "    versionCode project.hasProperty('cmdVersionCode') ? cmdVersionCode.toInteger() : $(if $(versionCode),$(versionCode),1)" \
-		&& echo "    versionName '$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)'" \
-		&& echo "    buildConfigField('String', 'BUILD_ID_SHORT', '\"$(shell cd $(SRCDIR) && git log -1 --format=%h)\"')" \
-		&& echo "    buildConfigField('String', 'VENDOR', '\"$(OOO_VENDOR)\"')" \
-		&& echo "    buildConfigField('String', 'PRIVACY_POLICY_URL', '\"$(PRIVACY_POLICY_URL)\"')" \
+		&& echo "extra.apply {" \
+		&& echo "    set(\"liboSrcRoot\", \"$(SRC_ROOT)\")" \
+		&& echo "    set(\"liboJniLibsdir\", \"$(JNILIBSDIR)\")" \
+		&& echo "    set(\"liboWorkdir\", \"$(WORKDIR)\")" \
+		&& echo "    set(\"liboInstdir\", \"$(INSTDIR)\")" \
+		&& echo "    set(\"liboEtcFolder\", \"$(LIBO_ETC_FOLDER)\")" \
+		&& echo "    set(\"liboUreMiscFolder\", \"$(LIBO_URE_MISC_FOLDER)\")" \
+		&& echo "    set(\"liboSharedResFolder\", \"$(LIBO_SHARE_RESOURCE_FOLDER)\")" \
+		&& echo "    set(\"liboUREJavaFolder\", \"$(LIBO_URE_SHARE_JAVA_FOLDER)\")" \
+		&& echo "    set(\"liboShareJavaFolder\", \"$(LIBO_SHARE_JAVA_FOLDER)\")" \
+		&& echo "    set(\"liboVersionMajor\", \"$(LIBO_VERSION_MAJOR)\")" \
+		&& echo "    set(\"liboVersionMinor\", \"$(LIBO_VERSION_MINOR)\")" \
+		&& echo "    set(\"liboGitFullCommit\", \"$(shell cd $(SRCDIR) && git log -1 --format=%H)\")" \
+		&& echo "    set(\"androidNdkPath\", \"$(ANDROID_NDK_DIR)\")" \
+		&& echo "    set(\"androidNdkVersion\", \"$(ANDROID_NDK_VERSION)\")" \
+		&& echo "    set(\"androidApplicationId\", \"$(ANDROID_PACKAGE_NAME)\")" \
+		&& echo "    set(\"androidMinSdkVersion\", $(ANDROID_API_LEVEL))" \
+		&& echo "    set(\"androidVersionName\", \"$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)\")" \
+		&& echo "    set(\"buildIdShort\", \"\\\"$(shell cd $(SRCDIR) && git log -1 --format=%h)\\\"\")" \
+		&& echo "    set(\"vendor\", \"\\\"$(OOO_VENDOR)\\\"\")" \
+		&& echo "    set(\"privacyPolicyUrl\", \"\\\"$(PRIVACY_POLICY_URL)\\\"\")" \
 		&& echo "}" \
 	) > $@

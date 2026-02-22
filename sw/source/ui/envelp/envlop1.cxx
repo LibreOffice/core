@@ -167,12 +167,12 @@ short SwEnvDlg::Ok()
     {
         if (m_pAddresseeSet)
         {
-            SwTextFormatColl* pColl = m_pSh->GetTextCollFromPool(RES_POOLCOLL_ENVELOPE_ADDRESS);
+            SwTextFormatColl* pColl = m_pSh->GetTextCollFromPool(SwPoolFormatId::COLL_ENVELOPE_ADDRESS);
             pColl->SetFormatAttr(*m_pAddresseeSet);
         }
         if (m_pSenderSet)
         {
-            SwTextFormatColl* pColl = m_pSh->GetTextCollFromPool(RES_POOLCOLL_SEND_ADDRESS);
+            SwTextFormatColl* pColl = m_pSh->GetTextCollFromPool(SwPoolFormatId::COLL_SEND_ADDRESS);
             pColl->SetFormatAttr(*m_pSenderSet);
         }
     }

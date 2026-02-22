@@ -118,7 +118,7 @@ HTMLAttrContext_SaveDoc *HTMLAttrContext::GetSaveDocContext( bool bCreate )
     return m_pSaveDocContext.get();
 }
 
-HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, OUString aClass,
+HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, SwPoolFormatId nPoolId, OUString aClass,
                   bool bDfltColl ) :
     m_aClass(std::move( aClass )),
     m_nToken( nTokn ),
@@ -143,7 +143,7 @@ HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn, sal_uInt16 nPoolId, OUStrin
 
 HTMLAttrContext::HTMLAttrContext( HtmlTokenId nTokn ) :
     m_nToken( nTokn ),
-    m_nTextFormatColl( 0 ),
+    m_nTextFormatColl( SwPoolFormatId::ZERO ),
     m_nLeftMargin( 0 ),
     m_nRightMargin( 0 ),
     m_nFirstLineIndent( 0 ),
@@ -580,14 +580,13 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             m_aContexts.back().get() != pContext,
             "SwHTMLParser::InsertAttrs: Context already on the Stack");
 
-    SfxItemIter aIter( rItemSet );
-
     const SvxFirstLineIndentItem * pFirstLineItem(nullptr);
     const SvxTextLeftMarginItem * pTextLeftMargin(nullptr);
     const SvxRightMarginItem * pRightMargin(nullptr);
 
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( rItemSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         switch( pItem->Which() )
         {
         case RES_MARGIN_FIRSTLINE:
@@ -675,9 +674,9 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             }
 #endif
 
-    SfxItemIter aIter2(rItemSet);
-    for (const SfxPoolItem* pItem = aIter2.GetCurItem(); pItem; pItem = aIter2.NextItem())
+    for (SfxItemIter aIter( rItemSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         HTMLAttr **ppAttr = nullptr;
 
         switch( pItem->Which() )

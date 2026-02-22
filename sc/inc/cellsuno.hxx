@@ -678,7 +678,7 @@ public:
     static const SvxItemPropertySet* GetEditPropertySet();
     static const SfxItemPropertyMap& GetCellPropertyMap();
 
-                            ScCellObj(ScDocShell* pDocSh, const ScAddress& rP);
+    SC_DLLPUBLIC ScCellObj(ScDocShell* pDocSh, const ScAddress& rP);
     SC_DLLPUBLIC virtual    ~ScCellObj() override;
 
     virtual void            RefChanged() override;

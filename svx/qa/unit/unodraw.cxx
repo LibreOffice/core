@@ -23,7 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
@@ -41,11 +41,11 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for svx/source/unodraw/ code.
-class UnodrawTest : public UnoApiXmlTest
+class UnodrawTest : public UnoApiTest
 {
 public:
     UnodrawTest()
-        : UnoApiXmlTest(u"svx/qa/unit/data/"_ustr)
+        : UnoApiTest(u"svx/qa/unit/data/"_ustr)
     {
     }
 };

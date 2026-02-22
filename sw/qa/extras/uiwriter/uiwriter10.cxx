@@ -17,7 +17,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/configuration.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
@@ -36,6 +35,8 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <redline.hxx>
 #include <svx/svxids.hrc>
+#include <officecfg/Office/Compatibility.hxx>
+#include <test/commontesttools.hxx>
 
 /// Second set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest5 : public SwModelTestBase
@@ -1768,30 +1769,9 @@ static uno::Reference<text::XTextRange> getAssociatedTextRange(uno::Any object)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf123218)
 {
-    struct ReverseXAxisOrientationDoughnutChart
-        : public comphelper::ConfigurationProperty<ReverseXAxisOrientationDoughnutChart, bool>
-    {
-        static OUString path()
-        {
-            return u"/org.openoffice.Office.Compatibility/View/ReverseXAxisOrientationDoughnutChart"_ustr;
-        }
-        ~ReverseXAxisOrientationDoughnutChart() = delete;
-    };
-
-    struct ClockwisePieChartDirection
-        : public comphelper::ConfigurationProperty<ClockwisePieChartDirection, bool>
-    {
-        static OUString path()
-        {
-            return u"/org.openoffice.Office.Compatibility/View/ClockwisePieChartDirection"_ustr;
-        }
-        ~ClockwisePieChartDirection() = delete;
-    };
-    auto batch = comphelper::ConfigurationChanges::create();
-
-    ReverseXAxisOrientationDoughnutChart::set(false, batch);
-    ClockwisePieChartDirection::set(true, batch);
-    batch->commit();
+    using CompatViewCfg = officecfg::Office::Compatibility::View;
+    ScopedConfigValue<CompatViewCfg::ReverseXAxisOrientationDoughnutChart> aCfg1(false);
+    ScopedConfigValue<CompatViewCfg::ClockwisePieChartDirection> aCfg2(true);
 
     createSwDoc();
 

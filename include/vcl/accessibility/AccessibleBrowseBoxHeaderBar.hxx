@@ -25,17 +25,13 @@
 #include <vcl/accessibility/AccessibleBrowseBoxTableBase.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 
-
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
-        AccessibleBrowseBoxHeaderBarImplHelper;
-
 /** This class represents the accessible object of a header bar of a BrowseBox
     control (row or column header bar). This object supports the
     XAccessibleSelection interface. Selecting a child of this object selects
     complete rows or columns of the data table. */
-class AccessibleBrowseBoxHeaderBar final :
-    public AccessibleBrowseBoxTableBase,
-    public AccessibleBrowseBoxHeaderBarImplHelper
+class AccessibleBrowseBoxHeaderBar final
+    : public cppu::ImplInheritanceHelper<AccessibleBrowseBoxTableBase,
+                                         css::accessibility::XAccessibleSelection>
 {
 public:
     /** @param rxParent         Parent that holds the browsebox headerbar control
@@ -133,17 +129,6 @@ public:
 
     /** Removes the specified row/column from the selection. */
     virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
-
-    // XInterface
-
-    /** Queries for a new interface. */
-    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-
-    /** Acquires the object (calls acquire() on base class). */
-    virtual void SAL_CALL acquire() noexcept override;
-
-    /** Releases the object (calls release() on base class). */
-    virtual void SAL_CALL release() noexcept override;
 
     // XServiceInfo
 

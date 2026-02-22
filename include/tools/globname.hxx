@@ -20,7 +20,10 @@
 #define INCLUDED_TOOLS_GLOBNAME_HXX
 
 #include <tools/toolsdllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
+
+#include <rtl/ustring.hxx>
+
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 struct SAL_WARN_UNUSED SvGUID
 {

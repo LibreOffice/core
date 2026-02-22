@@ -107,11 +107,6 @@ public:
 
     virtual void SAL_CALL disposing() override;
 
-    static bool isPresenterScreenEnabled(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    static bool isPresenterScreenFullScreen(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-
     /** Make the presenter screen visible.
     */
     void InitializePresenterScreen();
@@ -219,17 +214,16 @@ private:
             Returns -1 when the presenter screen can or shall not be
             displayed.
     */
-    sal_Int32 GetPresenterScreenNumber (
-                const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
+    static sal_Int32 GetPresenterScreenNumber (
+                const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation);
 
     static sal_Int32 GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen );
 
     /** Create a resource id for the full screen background pane so that it
         is displayed on another screen than the full screen presentation.
     */
-    rtl::Reference<sd::framework::ResourceId> GetMainPaneId (
-        const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation,
-        const css::uno::Reference<css::uno::XComponentContext>& xContext) const;
+    static rtl::Reference<sd::framework::ResourceId> GetMainPaneId (
+        const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation);
 };
 
 }

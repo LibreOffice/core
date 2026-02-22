@@ -20,7 +20,10 @@
 #include <graphic/UnoGraphicDescriptor.hxx>
 
 #include <cppuhelper/weakagg.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

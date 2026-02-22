@@ -23,7 +23,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
-#include <vcl/vclenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class CommandEvent;
@@ -31,6 +30,7 @@ class CommandEvent;
 namespace vcl {
     class Window;
 }
+enum class SelectionMode;
 
 // Timerticks
 constexpr sal_uInt64 SELENG_DRAGDROP_TIMEOUT = 400;
@@ -91,6 +91,8 @@ private:
 
     inline bool         ShouldDeselect( bool bModifierKey1 ) const;
                                 // determines to deselect or not when Ctrl-key is pressed on CursorPosChanging
+    bool                IsDragEnabled() const;
+                                // checks if dragging is enabled via flag or drag gesture listeners
 public:
 
                         SelectionEngine( vcl::Window* pWindow,

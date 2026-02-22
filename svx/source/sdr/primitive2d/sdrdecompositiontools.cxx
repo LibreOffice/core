@@ -108,34 +108,49 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
     const OutlinerParaObject& rOutlinerParaObj = rText.getOutlinerParaObject();
     const bool bVerticalWriting(rOutlinerParaObj.IsEffectivelyVertical());
     const double fWidthForText = bVerticalWriting ? rSnapRange.getHeight() : rSnapRange.getWidth();
+    const double fHeightForText = bVerticalWriting ? rSnapRange.getWidth() : rSnapRange.getHeight();
     // create a range describing the wanted text position and size (aTextAnchorRange). This
     // means to use the text distance values here
-    // If the margin is larger than the entire width of the text area, then limit the
-    // margin.
-    const double fTextLeftDistance
-        = std::min(static_cast<double>(rText.getTextLeftDistance()), fWidthForText);
-    const double nTextRightDistance
-        = std::min(static_cast<double>(rText.getTextRightDistance()), fWidthForText);
+    // If left + right margins exceed the available width, reduce each by half the excess.
+    double fTextLeftDistance = static_cast<double>(rText.getTextLeftDistance());
+    double fTextRightDistance = static_cast<double>(rText.getTextRightDistance());
+    if (fWidthForText > 0 && fTextLeftDistance + fTextRightDistance >= fWidthForText)
+    {
+        const double diffFactor = (fTextLeftDistance + fTextRightDistance - fWidthForText) / 2.0;
+        fTextLeftDistance -= diffFactor;
+        fTextRightDistance -= diffFactor;
+    }
+    // If top + bottom margins exceed the available height, reduce each by half the excess.
+    // Guard on fWidthForText > 0 for consistency with the horizontal check: skip for
+    // degenerate zero-width shapes where the zero-width expansion handles layout instead.
+    double fTextUpperDistance = static_cast<double>(rText.getTextUpperDistance());
+    double fTextLowerDistance = static_cast<double>(rText.getTextLowerDistance());
+    if (fWidthForText > 0 && fHeightForText > 0 && fTextUpperDistance + fTextLowerDistance >= fHeightForText)
+    {
+        const double diffFactor = (fTextUpperDistance + fTextLowerDistance - fHeightForText) / 2.0;
+        fTextUpperDistance -= diffFactor;
+        fTextLowerDistance -= diffFactor;
+    }
     double fDistanceForTextL, fDistanceForTextT, fDistanceForTextR, fDistanceForTextB;
     if (!bVerticalWriting)
     {
         fDistanceForTextL = fTextLeftDistance;
-        fDistanceForTextT = rText.getTextUpperDistance();
-        fDistanceForTextR = nTextRightDistance;
-        fDistanceForTextB = rText.getTextLowerDistance();
+        fDistanceForTextT = fTextUpperDistance;
+        fDistanceForTextR = fTextRightDistance;
+        fDistanceForTextB = fTextLowerDistance;
     }
     else if (rOutlinerParaObj.IsTopToBottom())
     {
-        fDistanceForTextL = rText.getTextLowerDistance();
+        fDistanceForTextL = fTextLowerDistance;
         fDistanceForTextT = fTextLeftDistance;
-        fDistanceForTextR = rText.getTextUpperDistance();
-        fDistanceForTextB = nTextRightDistance;
+        fDistanceForTextR = fTextUpperDistance;
+        fDistanceForTextB = fTextRightDistance;
     }
     else
     {
-        fDistanceForTextL = rText.getTextUpperDistance();
-        fDistanceForTextT = nTextRightDistance;
-        fDistanceForTextR = rText.getTextLowerDistance();
+        fDistanceForTextL = fTextUpperDistance;
+        fDistanceForTextT = fTextRightDistance;
+        fDistanceForTextR = fTextLowerDistance;
         fDistanceForTextB = fTextLeftDistance;
     }
     const basegfx::B2DPoint aTopLeft(rSnapRange.getMinX() + fDistanceForTextL,
@@ -150,12 +165,15 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
     // lines, not a single character would satisfy a zero width requirement.
     // SdrTextObj::impDecomposeBlockTextPrimitive() uses the same constant to
     // effectively set no limits.
-    if (!bVerticalWriting && aAnchorRange.getWidth() == 0)
+    // Also check fWidthForText == 0: a zero-width shape whose margins invert the
+    // anchor range gets a non-zero anchor width after B2DRange normalization, so
+    // the getWidth() == 0 check would not trigger without this second condition.
+    if (!bVerticalWriting && (fWidthForText == 0 || aAnchorRange.getWidth() == 0))
     {
         aAnchorRange.expand(basegfx::B2DPoint(aTopLeft.getX() - 1000000, aTopLeft.getY()));
         aAnchorRange.expand(basegfx::B2DPoint(aBottomRight.getX() + 1000000, aBottomRight.getY()));
     }
-    else if (bVerticalWriting && aAnchorRange.getHeight() == 0)
+    else if (bVerticalWriting && (fWidthForText == 0 || aAnchorRange.getHeight() == 0))
     {
         aAnchorRange.expand(basegfx::B2DPoint(aTopLeft.getX(), aTopLeft.getY() - 1000000));
         aAnchorRange.expand(basegfx::B2DPoint(aBottomRight.getX(), aBottomRight.getY() + 1000000));

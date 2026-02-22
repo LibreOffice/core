@@ -23,6 +23,7 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace chart
 {

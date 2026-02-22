@@ -19,6 +19,7 @@
 
 #include <memory>
 
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>

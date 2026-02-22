@@ -32,6 +32,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <rtl/bootstrap.hxx>
 
 #ifdef DBG_UTIL
@@ -1259,10 +1260,8 @@ namespace emfio
                             SAL_INFO("emfio", "\t\tIndex: " << nIndex << " Style: 0x" << std::hex
                                                             << nPenStyle << std::dec
                                                             << " PenWidth: " << nPenWidth);
-                            // PS_COSMETIC width is always fixed at one logical unit
-                            // and is not affected by any geometric transformations like scaling
-                            if (nPenStyle == PS_COSMETIC)
-                                nPenWidth = 1;
+                            if ((nPenStyle & PS_STYLE_MASK) > PS_INSIDEFRAME)
+                                nPenStyle = PS_COSMETIC;
                             CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>(ReadColor(), nPenStyle, nPenWidth));
                         }
                     }
@@ -1285,10 +1284,8 @@ namespace emfio
                             else
                             {
                                 SAL_INFO("emfio", "\t\tStyle: 0x" << std::hex << nPenStyle << std::dec);
-                                // PS_COSMETIC width is always fixed at one logical unit
-                                // and is not affected by any geometric transformations like scaling
-                                if (nPenStyle == PS_COSMETIC)
-                                    nWidth = 1;
+                                if ((nPenStyle & PS_STYLE_MASK) > PS_INSIDEFRAME)
+                                    nPenStyle = PS_COSMETIC;
                                 SAL_INFO("emfio", "\t\tWidth: " << nWidth);
                                 CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>(aColorRef, nPenStyle, nWidth));
                             }
@@ -1883,6 +1880,81 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_SMALLTEXTOUT :
+                    {
+                        sal_Int32   ptlReferenceX, ptlReferenceY;
+                        sal_uInt32  nLen, nOptions, nGfxMode;
+                        float       fXScale, fYScale;
+
+                        mpInputStream->ReadInt32( ptlReferenceX ).ReadInt32( ptlReferenceY )
+                           .ReadUInt32( nLen ).ReadUInt32( nOptions )
+                           .ReadUInt32( nGfxMode ).ReadFloat( fXScale ).ReadFloat( fYScale );
+                        SAL_INFO("emfio", "\t\tReference: (" << ptlReferenceX << ", " << ptlReferenceY << ")");
+                        SAL_INFO("emfio", "\t\tcChars: " << nLen);
+                        SAL_INFO("emfio", "\t\tfuOptions: 0x" << std::hex << nOptions << std::dec);
+                        SAL_INFO("emfio", "\t\tiGraphicsMode: 0x" << std::hex << nGfxMode << std::dec);
+                        SAL_INFO("emfio", "\t\tScale: " << fXScale << " x " << fYScale);
+
+                        // Read optional bounding rectangle (present only if ETO_NO_RECT is NOT set)
+                        tools::Rectangle aRect;
+                        if ( !( nOptions & ETO_NO_RECT ) )
+                        {
+                            sal_Int32 nLeftRect, nTopRect, nRightRect, nBottomRect;
+                            mpInputStream->ReadInt32( nLeftRect ).ReadInt32( nTopRect ).ReadInt32( nRightRect ).ReadInt32( nBottomRect );
+                            aRect = tools::Rectangle( nLeftRect, nTopRect, nRightRect, nBottomRect );
+                            SAL_INFO("emfio", "\t\tBounds: " << nLeftRect << ", " << nTopRect << ", " << nRightRect << ", " << nBottomRect);
+                        }
+
+                        if (!mpInputStream->good())
+                        {
+                            bStatus = false;
+                        }
+                        else
+                        {
+                            const BackgroundMode mnBkModeBackup = mnBkMode;
+                            if ( nOptions & ETO_NO_RECT )
+                                mnBkMode = BackgroundMode::Transparent;
+                            else if ( nOptions & ETO_OPAQUE )
+                                DrawRectWithBGColor( aRect );
+
+                            vcl::text::ComplexTextLayoutFlags nTextLayoutMode = vcl::text::ComplexTextLayoutFlags::Default;
+                            if ( nOptions & ETO_RTLREADING )
+                                nTextLayoutMode = vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
+                            SetTextLayoutMode( nTextLayoutMode );
+
+                            Point aPos( ptlReferenceX, ptlReferenceY );
+                            OUString aText;
+                            if ( nOptions & ETO_SMALL_CHARS )
+                            {
+                                if ( nLen <= ( mnEndPos - mpInputStream->Tell() ) )
+                                {
+                                    std::vector<char> pBuf( nLen );
+                                    mpInputStream->ReadBytes(pBuf.data(), nLen);
+                                    aText = OUString(pBuf.data(), nLen, GetCharSet());
+                                }
+                            }
+                            else
+                            {
+                                if ( ( nLen * sizeof(sal_Unicode) ) <= ( mnEndPos - mpInputStream->Tell() ) )
+                                {
+                                    aText = read_uInt16s_ToOUString(*mpInputStream, nLen);
+                                }
+                            }
+                            SAL_INFO("emfio", "\t\tText: " << aText);
+
+                            if ( nOptions & ETO_CLIPPED )
+                            {
+                                Push();
+                                IntersectClipRect( aRect );
+                            }
+                            DrawText(aPos, aText, nullptr, nullptr, fXScale, fYScale, mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
+                            if ( nOptions & ETO_CLIPPED )
+                                Pop();
+                            mnBkMode = mnBkModeBackup;
+                        }
+                    }
+                    break;
+
                     case EMR_POLYTEXTOUTA :
                     case EMR_EXTTEXTOUTA :
                         bFlag = true;
@@ -1892,7 +1964,7 @@ namespace emfio
                     {
                         sal_Int32   nLeft, nTop, nRight, nBottom;
                         sal_uInt32  nGfxMode;
-                        float       nXScale, nYScale;
+                        float       fXScale, fYScale;
                         sal_uInt32  ncStrings( 1 );
                         sal_Int32   ptlReferenceX, ptlReferenceY;
                         sal_uInt32  nLen, nOffString, nOptions, offDx;
@@ -1901,10 +1973,10 @@ namespace emfio
                         nCurPos = mpInputStream->Tell() - 8;
 
                         mpInputStream->ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom )
-                           .ReadUInt32( nGfxMode ).ReadFloat( nXScale ).ReadFloat( nYScale );
+                           .ReadUInt32( nGfxMode ).ReadFloat( fXScale ).ReadFloat( fYScale );
                         SAL_INFO("emfio", "\t\tBounds: " << nLeft << ", " << nTop << ", " << nRight << ", " << nBottom);
                         SAL_INFO("emfio", "\t\tiGraphicsMode: 0x" << std::hex << nGfxMode << std::dec);
-                        SAL_INFO("emfio", "\t\t Scale: " << nXScale << " x " << nYScale);
+                        SAL_INFO("emfio", "\t\t Scale: " << fXScale << " x " << fYScale);
                         if ( ( nRecType == EMR_POLYTEXTOUTA ) || ( nRecType == EMR_POLYTEXTOUTW ) )
                         {
                             mpInputStream->ReadUInt32( ncStrings );
@@ -2029,7 +2101,7 @@ namespace emfio
                                     Push(); // Save the current clip. It will be restored after text drawing
                                     IntersectClipRect( aRect );
                                 }
-                                DrawText(aPos, aText, aDXAry.empty() ? nullptr : &aDXAry, pDYAry.get(), mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
+                                DrawText(aPos, aText, aDXAry.empty() ? nullptr : &aDXAry, pDYAry.get(), fXScale, fYScale, mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
                                 if ( nOptions & ETO_CLIPPED )
                                     Pop();
                             }
@@ -2223,7 +2295,6 @@ namespace emfio
                     case EMR_DRAWESCAPE :
                     case EMR_EXTESCAPE :
                     case EMR_STARTDOC :
-                    case EMR_SMALLTEXTOUT :
                     case EMR_FORCEUFIMAPPING :
                     case EMR_NAMEDESCAPE :
                     case EMR_COLORCORRECTPALETTE :

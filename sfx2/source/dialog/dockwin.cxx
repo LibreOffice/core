@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>

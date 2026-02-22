@@ -68,6 +68,7 @@
 #include <XMLReplacementImageContext.hxx>
 #include <XMLImageMapContext.hxx>
 #include "sdpropls.hxx"
+#include "sdxmlimp_impl.hxx"
 #include "eventimp.hxx"
 #include "descriptionimp.hxx"
 #include "SignatureLineContext.hxx"
@@ -80,6 +81,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -2243,12 +2245,20 @@ void SdXMLPageShapeContext::startFastElement (sal_Int32 nElement,
     SetTransformation();
 
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-    if(xPropSet.is())
+    if (xPropSet.is() && mnPageNumber >= 0) // mnPageNumber < 0 means "ignore"
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
         static constexpr OUString aPageNumberStr(u"PageNumber"_ustr);
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
             xPropSet->setPropertyValue(aPageNumberStr, uno::Any( mnPageNumber ));
+    }
+
+    // For later resolution of page shape references, in case the target page does not
+    // exist during import. This will be resolved in SdXMLImport::endDocument()
+    if (mnPageNumber > 0)
+    {
+        if (SdXMLImport* pSdImport = dynamic_cast<SdXMLImport*>(&GetImport()))
+            pSdImport->AddPageShapePageNum(mxShape, mnPageNumber);
     }
 
     SdXMLShapeContext::startFastElement(nElement, xAttrList);

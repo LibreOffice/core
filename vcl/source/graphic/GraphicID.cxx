@@ -22,6 +22,7 @@
 #include <impgraph.hxx>
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 GraphicID::GraphicID(ImpGraphic const& rGraphic)
 {

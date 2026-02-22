@@ -21,6 +21,7 @@
 #include <sfx2/dispatch.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
 #include <osl/diagnose.h>
+#include <vcl/weld/weldutils.hxx>
 
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
@@ -174,10 +175,16 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
     uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
     if( xInit.is() )
     {
+        css::uno::Reference< css::awt::XWindow > xParent;
+        vcl::Window* pWin = rWrtShell.GetWin();
+        if (pWin)
+        {
+            xParent = new weld::TransportAsXWindow(pWin->GetFrameWeld());
+        }
         //  initialize dialog
         uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
         {
-            {"ParentWindow", uno::Any(uno::Reference< awt::XWindow >())},
+            {"ParentWindow", uno::Any(xParent)},
             {"ChartModel", uno::Any(xChartModel)}
         }));
         xInit->initialize( aSeq );

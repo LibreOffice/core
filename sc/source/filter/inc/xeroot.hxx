@@ -51,6 +51,7 @@ class XclExpObjectManager;
 class XclExpFilterManager;
 class XclExpPivotTableManager;
 class XclExpDxfs;
+class XclExpXmlTableStyles;
 class XclExpXmlPivotTableManager;
 class XclExpTablesManager;
 namespace sc { class CompileFormulaContext; }
@@ -74,6 +75,7 @@ struct XclExpRootData : public XclRootData
     typedef std::shared_ptr< XclExpFilterManager >       XclExpFilterMgrRef;
     typedef std::shared_ptr< XclExpPivotTableManager >   XclExpPTableMgrRef;
     typedef rtl::Reference< XclExpDxfs >                 XclExpDxfsRef;
+    typedef rtl::Reference< XclExpXmlTableStyles >       XclExpXmlTableStylesRef;
 
     XclExpTabInfoRef    mxTabInfo;          /// Calc->Excel sheet index conversion.
     XclExpAddrConvRef   mxAddrConv;         /// The address converter.
@@ -92,6 +94,7 @@ struct XclExpRootData : public XclRootData
     XclExpFilterMgrRef  mxFilterMgr;        /// Manager for filtered areas in all sheets.
     XclExpPTableMgrRef  mxPTableMgr;        /// All pivot tables and pivot caches.
     XclExpDxfsRef       mxDxfs;             /// All delta formatting entries
+    XclExpXmlTableStylesRef mxTableStyles;
 
     std::shared_ptr<XclExpXmlPivotTableManager> mxXmlPTableMgr;
     std::shared_ptr<XclExpTablesManager> mxTablesMgr;

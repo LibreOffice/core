@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_pdf_encryption, \
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_pdf_encryption, \
 	boost_headers \
+	libxml2 \
 	$(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
 

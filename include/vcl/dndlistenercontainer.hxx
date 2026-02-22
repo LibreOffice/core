@@ -20,12 +20,13 @@
 #pragma once
 
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
-#include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
 #include <comphelper/compbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
+
+namespace com::sun::star::datatransfer::dnd { class XDragSource; }
 
 class DNDListenerContainer final :
                                 public ::comphelper::WeakComponentImplHelper<
@@ -78,6 +79,9 @@ public:
     virtual void SAL_CALL addDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
     virtual void SAL_CALL removeDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
     virtual void SAL_CALL resetRecognizer(  ) override;
+
+    // Helper method to check if there are any drag gesture listeners registered
+    bool hasDragGestureListeners() const;
 
        /*
      * XDropTargetDragContext

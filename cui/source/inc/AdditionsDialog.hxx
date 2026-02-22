@@ -15,6 +15,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/weld.hxx>
 
@@ -123,11 +124,11 @@ public:
     std::unique_ptr<weld::Label> m_xLabelLicense;
     std::unique_ptr<weld::Label> m_xLabelVersion;
     std::unique_ptr<weld::LinkButton> m_xLinkButtonComments;
-    std::unique_ptr<weld::Image> m_xImageVoting1;
-    std::unique_ptr<weld::Image> m_xImageVoting2;
-    std::unique_ptr<weld::Image> m_xImageVoting3;
-    std::unique_ptr<weld::Image> m_xImageVoting4;
-    std::unique_ptr<weld::Image> m_xImageVoting5;
+    std::unique_ptr<weld::Image> m_xImageRating1;
+    std::unique_ptr<weld::Image> m_xImageRating2;
+    std::unique_ptr<weld::Image> m_xImageRating3;
+    std::unique_ptr<weld::Image> m_xImageRating4;
+    std::unique_ptr<weld::Image> m_xImageRating5;
     std::unique_ptr<weld::Label> m_xLabelDownloadNumber;
     AdditionsDialog* m_pParentDialog;
     OUString m_sDownloadURL;

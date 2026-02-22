@@ -21,14 +21,15 @@
 #define INCLUDED_XMLOFF_FORMLAYERIMPORT_HXX
 
 #include <sal/config.h>
+#include <rtl/ustring.hxx>
 #include <xmloff/dllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::drawing { class XDrawPage; }
 namespace com::sun::star::xml::sax { class XFastAttributeList; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class SvXMLImport;
 class SvXMLImportContext;

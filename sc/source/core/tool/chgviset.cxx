@@ -106,13 +106,13 @@ void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
 {
     switch ( eDateMode )
     {   // corresponds with ScViewUtil::IsActionShown
-        case SvxRedlinDateMode::EQUAL :
-        case SvxRedlinDateMode::NOTEQUAL :
+        case SvxRedlineDateMode::EQUAL:
+        case SvxRedlineDateMode::NOTEQUAL:
             aFirstDateTime.SetTime( 0 );
             aLastDateTime = aFirstDateTime;
             aLastDateTime.SetTime( 23595999 );
             break;
-        case SvxRedlinDateMode::SAVE:
+        case SvxRedlineDateMode::SAVE:
         {
             const ScChangeAction* pLast = nullptr;
             ScChangeTrack* pTrack = rDoc.GetChangeTrack();

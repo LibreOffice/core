@@ -35,6 +35,7 @@
 #include <vcl/textdata.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/xtextedt.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>

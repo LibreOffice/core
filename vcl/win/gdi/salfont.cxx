@@ -48,6 +48,7 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/fontcfg.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
@@ -540,8 +541,8 @@ WinFontFace::GetVariations(const LogicalFontInstance& rFont) const
     if (!mxVariations)
     {
         mxVariations.emplace();
-        sal::systools::COMReference<IDWriteFontFace5> xDWFontFace5(
-            static_cast<const WinFontInstance&>(rFont).GetDWFontFace(), sal::systools::COM_QUERY);
+        auto xDWFontFace5(static_cast<const WinFontInstance&>(rFont).GetDWFontFace()
+                              .QueryInterface<IDWriteFontFace5>());
         if (xDWFontFace5 && xDWFontFace5->HasVariations())
         {
             std::vector<DWRITE_FONT_AXIS_VALUE> aAxisValues(xDWFontFace5->GetFontAxisValueCount());

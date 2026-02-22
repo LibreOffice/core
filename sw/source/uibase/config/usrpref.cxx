@@ -140,7 +140,7 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
     static_assert(std::strcmp("Zoom/ZoomType", aPropNames[g_ZoomType]) == 0);
     static_assert(std::strcmp("Zoom/ZoomValue", aPropNames[g_ZoomValue]) == 0);
 #endif
-    const int nCount = m_bWeb ? 12 : SAL_N_ELEMENTS(aPropNames);
+    const int nCount = m_bWeb ? 12 : std::size(aPropNames);
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -561,7 +561,7 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
         "DirectCursor/Insert",          // 1
         "Option/ProtectedArea",         // 2
     };
-    const int nCount = SAL_N_ELEMENTS(aPropNames);
+    const int nCount = std::size(aPropNames);
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -640,7 +640,7 @@ Sequence<OUString> SwFmtAidsAutoComplConfig::GetPropertyNames()
     static const char* const aPropNames[] = {
         "EncloseWithCharacters", // 0
     };
-    const int nCount = SAL_N_ELEMENTS(aPropNames);
+    const int nCount = std::size(aPropNames);
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for (int i = 0; i < nCount; i++)

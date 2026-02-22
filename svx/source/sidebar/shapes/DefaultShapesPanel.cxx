@@ -22,8 +22,10 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <utility>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 namespace svx::sidebar {
 

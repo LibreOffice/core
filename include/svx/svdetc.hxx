@@ -23,6 +23,7 @@
 #include <editeng/outliner.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/link.hxx>
+#include <tools/mapunit.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/whichranges.hxx>
 #include <unotools/syslocale.hxx>

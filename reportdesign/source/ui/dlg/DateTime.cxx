@@ -24,6 +24,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <strings.hxx>
 #include <ReportController.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>

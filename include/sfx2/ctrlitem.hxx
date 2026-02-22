@@ -79,19 +79,6 @@ public:
     SAL_DLLPRIVATE void BindInternal_Impl( sal_uInt16 nNewId, SfxBindings* );
 };
 
-
-class SFX2_DLLPUBLIC SfxStatusForwarder final : public SfxControllerItem
-{
-    SfxControllerItem*      pMaster;
-
-    virtual void        StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState ) override;
-
-public:
-                            SfxStatusForwarder( sal_uInt16 nSlotId,
-                                   SfxControllerItem&rMaster );
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

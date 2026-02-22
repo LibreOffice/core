@@ -21,10 +21,12 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <utility>
+#include <tools/fldunit.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <svl/intitem.hxx>
 #include <tools/debug.hxx>
 

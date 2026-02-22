@@ -16,62 +16,27 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_CORE_INC_SWFNTCCH_HXX
-#define INCLUDED_SW_SOURCE_CORE_INC_SWFNTCCH_HXX
+#pragma once
 
 #define NUM_DEFAULT_VALUES 40
 
-#include "swcache.hxx"
 #include "swfont.hxx"
 
 class SwViewShell;
 class SfxPoolItem;
 class SwTextFormatColl;
 
-class SwFontCache : public SwCache
+class SwFontObj
 {
 public:
+    SwFontObj( const SwTextFormatColl *pOwner, SwViewShell *pSh );
+    ~SwFontObj();
 
-    SwFontCache() : SwCache(50
-#ifdef DBG_UTIL
-    , "Global AttributeSet/Font-Cache pSwFontCache"_ostr
-#endif
-    ) {}
-
-};
-
-// AttributeSet/Font-Cache, globale Variable, in FontCache.Cxx angelegt
-extern SwFontCache *pSwFontCache;
-
-class SwFontObj final : public SwCacheObj
-{
-    friend class SwFontAccess;
-
+    const SwFont& GetFont() const { return m_aSwFont; }
+    const SfxPoolItem* const* GetDefault() const { return m_pDefaultArray; }
 private:
     SwFont m_aSwFont;
     const SfxPoolItem* m_pDefaultArray[ NUM_DEFAULT_VALUES ];
-
-public:
-    SwFontObj( const SwTextFormatColl* pOwner, SwViewShell *pSh );
-
-    virtual ~SwFontObj() override;
-
-    SwFont& GetFont()        { return m_aSwFont; }
-    const SwFont& GetFont() const  { return m_aSwFont; }
-    const SfxPoolItem** GetDefault() { return m_pDefaultArray; }
 };
-
-class SwFontAccess final : public SwCacheAccess
-{
-    SwViewShell *m_pShell;
-
-    virtual SwCacheObj *NewObj( ) override;
-
-public:
-    SwFontAccess( const SwTextFormatColl *pOwner, SwViewShell *pSh );
-    SwFontObj *Get();
-};
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

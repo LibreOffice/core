@@ -23,8 +23,6 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <map>
 #include <memory>
@@ -60,6 +58,8 @@ namespace beans { class XPropertySet; }
 namespace xml::sax { class XFastAttributeList; }
 namespace util { struct DateTime; }
 }
+namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace rtl { template <class reference_type> class Reference; }
 

@@ -36,6 +36,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -49,6 +50,8 @@
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/unobrushitemhelper.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace com::sun::star;
 
@@ -90,10 +93,9 @@ namespace svx {
         ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg(pParent, *pBBSet, true /*bEnableDrawingLayerFillStyles*/));
         if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
         {
-            SfxItemIter aIter( *pDlg->GetOutputItemSet() );
-
-            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+            for (SfxItemIter aIter( *pDlg->GetOutputItemSet() ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 if ( !IsInvalidItem( pItem ) )
                     pBBSet->Put( *pItem );
             }
@@ -616,10 +618,9 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
     pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult) {
         if (nResult == RET_OK && pDlg->GetOutputItemSet())
         {
-            SfxItemIter aIter(*pDlg->GetOutputItemSet());
-
-            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+            for (SfxItemIter aIter( *pDlg->GetOutputItemSet() ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 if(!IsInvalidItem(pItem))
                 {
                     m_pBBSet->Put(*pItem);

@@ -1,20 +1,20 @@
 --- configure
 +++ configure
-@@ -21506,7 +21468,7 @@
+@@ -21637,7 +21637,7 @@
      char a;
      union { long long x; sem_t y; } b;
    };
--  exit((int)&((struct s*)0)->b);
-+  exit((int)&((struct s*)1024)->b - 1024);
+-  return (int)&((struct s*)0)->b;
++  return (int)&((struct s*)1024)->b - 1024;
  }
  _ACEOF
  if ac_fn_c_try_run "$LINENO"; then :
-@@ -21541,7 +21503,7 @@
+@@ -21672,7 +21672,7 @@
      char a;
      double b;
    };
--  exit((int)&((struct s*)0)->b);
-+  exit((int)&((struct s*)1024)->b - 1024);
+-  return (int)&((struct s*)0)->b;
++  return (int)&((struct s*)1024)->b - 1024;
  }
  _ACEOF
  if ac_fn_c_try_run "$LINENO"; then :
@@ -106,6 +106,15 @@
  
  	int32_t (U_EXPORT2 *ulocCountAvailable)();
  	const char* (U_EXPORT2 *ulocGetAvailable)(int32_t n);
+@@ -1378,7 +1378,7 @@
+ 
+ 			for (int prefixLen = 1; prefixLen < len; ++prefixLen)
+ 			{
+-				const Array<USHORT> str(strChars, prefixLen);
++				const Array<USHORT> str(reinterpret_cast<USHORT *>(strChars), prefixLen);
+ 				SortKeyArray* keySet = obj->contractionsPrefix.get(str);
+ 
+ 				if (!keySet)
 --- src/dsql/StmtNodes.cpp
 +++ src/dsql/StmtNodes.cpp
 @@ -6643,7 +6643,7 @@
@@ -241,6 +250,17 @@
  }
  
  
+--- src/jrd/scl.epp
++++ src/jrd/scl.epp
+@@ -218,8 +218,6 @@
+ 	if ((tdbb->tdbb_flags & TDBB_trusted_ddl) && (mask != SCL_references))
+ 		return true;
+ 
+-	const MetaName& userName = s_class->sclClassUser.second;
+-
+ 	if (s_class && (s_class->scl_flags & SCL_corrupt))
+ 	{
+ 		Arg::StatusVector status;
 --- src/lock/lock.cpp
 +++ src/lock/lock.cpp
 @@ -441,7 +441,7 @@

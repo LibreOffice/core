@@ -108,8 +108,8 @@ SwPageDesc* SwEndNoteInfo::GetPageDesc(SwDoc& rDoc) const
 {
     if(!m_pPageDesc)
     {
-        m_pPageDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( o3tl::narrowing<sal_uInt16>(
-            m_bEndNote ? RES_POOLPAGE_ENDNOTE : RES_POOLPAGE_FOOTNOTE ) );
+        m_pPageDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(
+            m_bEndNote ? SwPoolFormatId::PAGE_ENDNOTE : SwPoolFormatId::PAGE_FOOTNOTE );
         m_aDepends.StartListening(m_pPageDesc);
     }
     return m_pPageDesc;
@@ -158,8 +158,8 @@ void SwEndNoteInfo::SetFootnoteTextColl(SwTextFormatColl& rFormat)
 
 SwCharFormat* SwEndNoteInfo::GetCharFormat(SwDoc& rDoc) const
 {
-    auto pCharFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( o3tl::narrowing<sal_uInt16>(
-        m_bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE ) );
+    auto pCharFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(
+        m_bEndNote ? SwPoolFormatId::CHR_ENDNOTE : SwPoolFormatId::CHR_FOOTNOTE );
     if (m_pCharFormat != pCharFormatFromDoc)
     {
         m_aDepends.EndListening(m_pCharFormat);
@@ -171,7 +171,7 @@ SwCharFormat* SwEndNoteInfo::GetCharFormat(SwDoc& rDoc) const
 
 namespace
 {
-    void lcl_ResetPoolIdForDocAndSync(const sal_uInt16 nId, SwCharFormat* pFormat, const SwEndNoteInfo& rInfo)
+    void lcl_ResetPoolIdForDocAndSync(const SwPoolFormatId nId, SwCharFormat* pFormat, const SwEndNoteInfo& rInfo)
     {
         SwDoc& rDoc = pFormat->GetDoc();
         for(auto pDocFormat : *rDoc.GetCharFormats())
@@ -179,7 +179,7 @@ namespace
             if(pDocFormat == pFormat)
                 pDocFormat->SetPoolFormatId(nId);
             else if(pDocFormat->GetPoolFormatId() == nId)
-                pDocFormat->SetPoolFormatId(0);
+                pDocFormat->SetPoolFormatId(SwPoolFormatId::ZERO);
         }
         rInfo.GetCharFormat(rDoc);
         rInfo.GetAnchorCharFormat(rDoc);
@@ -189,17 +189,17 @@ namespace
 void SwEndNoteInfo::SetCharFormat(SwCharFormat* pFormat)
 {
     lcl_ResetPoolIdForDocAndSync(
-            o3tl::narrowing<sal_uInt16>(m_bEndNote
-                    ? RES_POOLCHR_ENDNOTE
-                    : RES_POOLCHR_FOOTNOTE),
+            m_bEndNote
+                    ? SwPoolFormatId::CHR_ENDNOTE
+                    : SwPoolFormatId::CHR_FOOTNOTE,
             pFormat,
             *this);
 }
 
 SwCharFormat* SwEndNoteInfo::GetAnchorCharFormat(SwDoc& rDoc) const
 {
-    auto pAnchorFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( o3tl::narrowing<sal_uInt16>(
-        m_bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR ) );
+    auto pAnchorFormatFromDoc = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(
+        m_bEndNote ? SwPoolFormatId::CHR_ENDNOTE_ANCHOR : SwPoolFormatId::CHR_FOOTNOTE_ANCHOR );
     if(m_pAnchorFormat != pAnchorFormatFromDoc)
     {
         m_aDepends.EndListening(m_pAnchorFormat);
@@ -212,9 +212,9 @@ SwCharFormat* SwEndNoteInfo::GetAnchorCharFormat(SwDoc& rDoc) const
 void SwEndNoteInfo::SetAnchorCharFormat(SwCharFormat* pFormat)
 {
     lcl_ResetPoolIdForDocAndSync(
-            o3tl::narrowing<sal_uInt16>(m_bEndNote
-                    ? RES_POOLCHR_ENDNOTE_ANCHOR
-                    : RES_POOLCHR_FOOTNOTE_ANCHOR),
+            m_bEndNote
+                    ? SwPoolFormatId::CHR_ENDNOTE_ANCHOR
+                    : SwPoolFormatId::CHR_FOOTNOTE_ANCHOR,
             pFormat,
             *this);
 }
@@ -453,8 +453,8 @@ void lcl_ChgFormatColl(SwDoc* pDoc, SwTextFootnote* pTextFootnote, SwUndoChangeF
 {
     SwTextFormatColl* pChangeToTextFormatColl
         = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
-            pTextFootnote->GetFootnote().IsEndNote() ? RES_POOLCOLL_ENDNOTE
-                                                     : RES_POOLCOLL_FOOTNOTE);
+            pTextFootnote->GetFootnote().IsEndNote() ? SwPoolFormatId::COLL_ENDNOTE
+                                                     : SwPoolFormatId::COLL_FOOTNOTE);
 
     SwNodeIndex aNodeIndex(*pTextFootnote->GetStartNode(), 1);
     while (!aNodeIndex.GetNode().IsEndNode())

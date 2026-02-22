@@ -293,9 +293,6 @@ class DrawingML
 {
 
 private:
-    OOX_DLLPUBLIC static sal_Int32 mnDrawingMLCount;
-    OOX_DLLPUBLIC static sal_Int32 mnVmlCount;
-
     /// To specify where write eg. the images to (like 'ppt', or 'word' - according to the OPC).
     DocumentType meDocumentType;
     /// Parent exporter, used for text callback.
@@ -311,10 +308,12 @@ protected:
     /// If set, this is the parent of the currently handled shape.
     css::uno::Reference<css::drawing::XShape> m_xParent;
     bool                                      mbIsBackgroundDark;
-    OOX_DLLPUBLIC static sal_Int32 mnChartCount;
 
     /// True when exporting presentation placeholder shape.
     bool mbPlaceholder;
+
+    /// True when DiagramReplacementVisualization is exported
+    bool mbDiagaramExport;
 
     bool mbEmbedFonts = false;
 
@@ -375,6 +374,10 @@ public:
     DocumentType GetDocumentType() const { return meDocumentType; }
     /// The application-specific text exporter callback, if there is one.
     DMLTextExport* GetTextExport() { return mpTextExport; }
+
+    /// get/set mbDiagaramExport
+    void setDiagaramExport(bool bNew) { mbDiagaramExport = bNew; }
+    bool isDiagaramExport() const { return mbDiagaramExport;}
 
     void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
@@ -516,22 +519,20 @@ public:
     OOX_DLLPUBLIC void Write3DEffects(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet, bool bIsText);
     void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
+
+    // Diagram helpers
     OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
                                     sal_Int32 nDiagramId, sal_Int32 nShapeId = -1);
-    void writeDiagramRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
-                          const css::uno::Reference<css::io::XOutputStream>& xOutStream,
-                          std::u16string_view sGrabBagProperyName, int nDiagramId);
+    void writeDiagramImageRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
+                               const css::uno::Reference<css::io::XOutputStream>& xOutStream,
+                               std::u16string_view sGrabBagProperyName, int nDiagramId);
+    void writeDiagramHlinkRels(const css::uno::Sequence<css::uno::Sequence<css::uno::Any>>& xRelSeq,
+                               const css::uno::Reference<css::io::XOutputStream>& xOutStream);
     static void WriteFromTo(const css::uno::Reference<css::drawing::XShape>& rXShape, const css::awt::Size& aPageSize,
                             const sax_fastparser::FSHelperPtr& pDrawing);
 
     static bool IsGroupShape( const css::uno::Reference< css::drawing::XShape >& rXShape );
     sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
-
-    OOX_DLLPUBLIC static void ResetMlCounters();
-
-    static sal_Int32 getNewDrawingUniqueId() { return ++mnDrawingMLCount; }
-    static sal_Int32 getNewVMLUniqueId() { return ++mnVmlCount; }
-    static sal_Int32 getNewChartUniqueId() { return ++mnChartCount; }
 
     // A Helper to decide the script type for given text in order to call WriteRunProperties.
     static sal_Int16 GetScriptType(const OUString& rStr);
@@ -540,7 +541,8 @@ public:
 
     static ::Color ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
 
-    static const char* GetAlignment( css::style::ParagraphAdjust nAlignment, bool bPlaceHolder = false );
+    static const char* GetAlignment(css::style::ParagraphAdjust nAlignment, bool bRTL,
+                                    bool bPlaceHolder);
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,

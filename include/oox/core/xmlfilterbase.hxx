@@ -257,6 +257,11 @@ public:
 
     OUString getNamespaceURL(sal_Int32 nNSID) const;
 
+    sal_Int32 getNewDrawingUniqueId() { return ++mnDrawingMLCount; }
+    sal_Int32 getNewVMLUniqueId() { return ++mnVmlCount; }
+    sal_Int32 getNewChartUniqueId() { return ++mnChartCount; }
+    sal_Int32 getNewOLEUniqueId() { return ++mnOLECount; }
+
 protected:
     virtual css::uno::Reference< css::io::XInputStream >
         implGetInputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const override;
@@ -280,6 +285,12 @@ private:
     sal_Int32 mnMaxDocId;
     bool mbMSO2007;
     bool mbMSO;
+
+    sal_Int32 mnDrawingMLCount = 0;
+    sal_Int32 mnVmlCount = 0;
+    sal_Int32 mnChartCount = 0;
+    sal_Int32 mnOLECount = 0;
+
 protected:
     bool mbMissingExtDrawing;
 };

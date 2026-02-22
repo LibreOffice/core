@@ -1247,6 +1247,7 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/datetimetransformationentry.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/definedatabaserangedialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/definename.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/definetablerangedialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/deletecells.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/deletecolumnentry.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/deletecontents.ui \
@@ -1358,6 +1359,7 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/showsheetdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/sidebaralignment.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/sidebarcellappearance.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/sidebardatabase.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/sidebarnumberformat.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/simplerefdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/modules/scalc/ui/solverdlg.ui \

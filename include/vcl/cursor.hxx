@@ -97,10 +97,11 @@ public:
                         { return !(Cursor::operator==( rCursor )); }
 
     void            DrawToDevice(OutputDevice& rRenderContext);
+    tools::Rectangle GetBoundRect(OutputDevice const& rRenderContext) const;
 
 private:
     SAL_DLLPRIVATE void LOKNotify( vcl::Window* pWindow, const OUString& rAction );
-    SAL_DLLPRIVATE bool ImplPrepForDraw(const OutputDevice* pDevice, ImplCursorData& rData);
+    SAL_DLLPRIVATE bool ImplPrepForDraw(const OutputDevice* pDevice, ImplCursorData& rData) const;
     SAL_DLLPRIVATE void ImplRestore();
     SAL_DLLPRIVATE void ImplDoShow( bool bDrawDirect, bool bRestore );
     SAL_DLLPRIVATE bool ImplDoHide( bool bStop );

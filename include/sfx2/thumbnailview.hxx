@@ -16,6 +16,7 @@
 #include <memory>
 #include <vector>
 
+#include <tools/color.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>

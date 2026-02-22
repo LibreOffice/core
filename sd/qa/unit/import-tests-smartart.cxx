@@ -22,7 +22,7 @@
 #include <svx/svdogrp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 using namespace ::com::sun::star;
 
@@ -375,16 +375,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextAutoRotation)
     testText(2, 15, u"p"_ustr, 2250, 0);
 }
 
-CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBasicProcess)
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
-}
-
-CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testPyramid)
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
-}
-
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testPyramidOneChild)
 {
     // Load a document with a pyra algorithm in it.
@@ -455,26 +445,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testCycle)
     CPPUNIT_ASSERT_EQUAL(u"ooxml-rightArrow"_ustr, aType);
 }
 
-CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHierarchy)
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
-}
-
-CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testmatrix)
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
-}
-
-CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testvenndiagram)
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
-}
-
-CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testInvertedPyramid)
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
-}
-
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testMultidirectional)
 {
     // similar document as cycle, but arrows are pointing in both directions
@@ -492,26 +462,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testMultidirectional)
     CPPUNIT_ASSERT(aCustomShapeGeometry[u"Type"_ustr].has<OUString>());
     OUString aType = aCustomShapeGeometry[u"Type"_ustr].get<OUString>();
     CPPUNIT_ASSERT_EQUAL(u"ooxml-leftRightArrow"_ustr, aType);
-}
-
-CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHorizontalBulletList)
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
-}
-
-CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testEquation)
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
-}
-
-CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBasicRadicals)
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
-}
-
-CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSegmentedCycle)
-{
-    //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBaseRtoL)
@@ -1067,15 +1017,16 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testInteropGrabBag)
     CPPUNIT_ASSERT(nullptr != pObj);
     CPPUNIT_ASSERT(pObj->isDiagram());
 
-    const std::shared_ptr<svx::diagram::IDiagramHelper>& rIDiagramHelper(pObj->getDiagramHelper());
-    // const AdvancedDiagramHelper* pHelper(dynamic_cast<AdvancedDiagramHelper*>(rIDiagramHelper.get()));
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rIDiagramHelper(
+        pObj->getDiagramHelper());
     CPPUNIT_ASSERT(rIDiagramHelper);
 
-    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXData").Value.hasValue());
-    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXLayout").Value.hasValue());
-    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXStyle").Value.hasValue());
-    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXColor").Value.hasValue());
-    CPPUNIT_ASSERT(rIDiagramHelper->getDomPropertyValue("OOXDrawing").Value.hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXData).hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXLayout).hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXStyle).hasValue());
+    CPPUNIT_ASSERT(rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXColor).hasValue());
+    CPPUNIT_ASSERT(
+        rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawing).hasValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBackground)
@@ -1693,7 +1644,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Gear)
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf145528Matrix)
 {
-    // The file contains a diagram of type "Titled Matrix". Such is build from shapes of type
+    // The file contains a diagram of type "Titled Matrix". Such is built from shapes of type
     // 'round1Rect'.
     createSdImpressDoc("pptx/tdf145528_SmartArt_Matrix.pptx");
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);

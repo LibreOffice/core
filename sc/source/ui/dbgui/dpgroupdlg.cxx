@@ -28,6 +28,7 @@
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <svtools/ctrlbox.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace {
 

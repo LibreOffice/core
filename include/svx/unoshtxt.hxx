@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <editeng/unoedsrc.hxx>
+#include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 
 class SdrObject;

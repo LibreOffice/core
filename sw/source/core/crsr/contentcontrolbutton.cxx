@@ -13,6 +13,7 @@
 #include <vcl/weld/weldutils.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 
 #include <edtwin.hxx>
 #include <dview.hxx>

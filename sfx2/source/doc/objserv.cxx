@@ -60,6 +60,7 @@
 #include <svtools/DocumentToGraphicRenderer.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>

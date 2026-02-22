@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(Test,  testChildNodesOfCubicBezierTo)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath( pXmlDoc,
-        "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[3]/wps:spPr[1]/a:custGeom[1]/a:pathLst[1]/a:path[1]/a:cubicBezTo[2]/a:pt[3]");
+        "/w:document/w:body/w:p[2]/w:r[2]/mc:AlternateContent[1]/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[3]/wps:spPr[1]/a:custGeom[1]/a:pathLst[1]/a:path[1]/a:cubicBezTo[2]/a:pt[3]");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMSwordHang)
@@ -664,9 +664,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle, "tdf126533_axialAngle.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // axial gradient is purple foreground/lime background in the middle (top-left to bottom-right)
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
@@ -682,9 +679,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle, "tdf126533_axialAngle.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_axialAngle2, "tdf126533_axialAngle2.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // axial gradient is purple foreground/lime background in the middle (top-right to bottom-left)
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
@@ -797,6 +791,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRubyHyperlink)
     createSwDoc("rubyhyperlink.fodt");
 
     //FIXME: validation error in OOXML export: Errors: 4
+    // We have hyperlink inside rubyBase here, like:
+    //    <w:rubyBase>
+    //         <w:hyperlink r:id="rId3">
+    // but not obvious what the right output should be.
     skipValidation();
 
     saveAndReload(TestFilter::DOCX);
@@ -935,9 +933,6 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentInitials)
 
 DECLARE_OOXMLEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     uno::Reference<drawing::XShape> xShape = getShape(1);
     comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty< uno::Sequence<beans::PropertyValue> >(xShape, u"CustomShapeGeometry"_ustr));
 

@@ -24,6 +24,8 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
+#include <tools/fldunit.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 

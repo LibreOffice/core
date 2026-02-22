@@ -25,6 +25,7 @@
 #include <unx/geninst.h>
 #include <salusereventlist.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld/ColorChooserDialog.hxx>
 
 #include <osl/conditn.hxx>
 
@@ -188,6 +189,9 @@ public:
 
     std::unique_ptr<weld::Builder> CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot,
                                                  const OUString& rUIFile) override;
+    virtual std::unique_ptr<weld::Builder>
+    CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                         bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0) override;
     virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                      VclMessageType eMessageType,
                                                      VclButtonsType eButtonType,
@@ -226,8 +230,11 @@ public:
     // for qt font options
     virtual const cairo_font_options_t* GetCairoFontOptions() override;
 
-    // whether to reduce animations; KFSalInstance overrides this to read Plasma settings
+#if QT_VERSION < QT_VERSION_CHECK(6, 12, 0)
+    // Helper to implement QtFrame::GetUseReducedAnimation for Qt < 6.12
+    // KFSalInstance overrides this to read Plasma settings
     virtual bool GetUseReducedAnimation() { return false; }
+#endif
     void UpdateStyle(bool bFontsChanged);
 
     void* CreateGStreamerSink(const SystemChildWindow*) override;

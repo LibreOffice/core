@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONACTIVITY_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONACTIVITY_HXX
+#pragma once
 
 #include "activity.hxx"
 #include "animatableshape.hxx"
@@ -60,7 +59,5 @@ namespace slideshow::internal
         typedef ::std::shared_ptr< AnimationActivity > AnimationActivitySharedPtr;
 
 }
-
-#endif // INCLUDED_SLIDESHOW_SOURCE_INC_ANIMATIONACTIVITY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

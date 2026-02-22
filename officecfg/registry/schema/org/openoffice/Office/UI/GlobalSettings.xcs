@@ -35,7 +35,6 @@
                     TRUE  = All toolbars should be locked by default.
                     FALSE = All toolbars should never be locked by default.
         -->
-        <value>true</value>
       </prop>
       <prop oor:name="Docked" oor:type="xs:boolean">
         <info>
@@ -58,7 +57,6 @@
         <info>
           <desc>Determines if the global states set should be used or not."</desc>
         </info>
-        <value>true</value>
       </prop>
       <node-ref oor:name="States" oor:node-type="GlobalWindowState">
         <info>

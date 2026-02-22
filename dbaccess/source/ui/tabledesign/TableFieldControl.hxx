@@ -19,6 +19,7 @@
 #pragma once
 
 #include <FieldDescControl.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace dbaui
 {

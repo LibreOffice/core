@@ -64,6 +64,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/globname.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -123,6 +124,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
 ,   mnPaperBin(PAPERBIN_PRINTER_SETTINGS)
 ,   mpPageLink(nullptr)
 ,   mbIsCanvasPage(false)
+,   mbIsCanvasMasterPage(false)
 ,   mnTransitionType(0)
 ,   mnTransitionSubtype(0)
 ,   mbTransitionDirection(true)
@@ -286,7 +288,7 @@ void SdPage::EnsureMasterPageDefaultBackground()
 
 /** creates a presentation object with the given PresObjKind on this page. A user call will be set
 */
-SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt)
+SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt, const sal_uInt16 nPagePreviewNum)
 {
     SfxUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
@@ -429,6 +431,23 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         }
         break;
 
+        case PresObjKind::PagePreview:
+        {
+            if (nPagePreviewNum < getSdrModelFromSdrPage().GetPageCount())
+            {
+                pSdrObj = new SdrPageObj(getSdrModelFromSdrPage(), getSdrModelFromSdrPage().GetPage(nPagePreviewNum));
+            }
+            else
+            {
+                pSdrObj = new SdrPageObj(getSdrModelFromSdrPage());
+            }
+            pSdrObj->SetMarkProtect(false);
+            pSdrObj->SetResizeProtect(false);
+            pSdrObj->SetMoveProtect(false);
+            pSdrObj->SetDeleteProtect(true);
+        }
+        break;
+
         case PresObjKind::Header:
         case PresObjKind::Footer:
         case PresObjKind::DateTime:
@@ -531,11 +550,11 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             aTempAttr.Put( SvxFontHeightItem( 493, 100, EE_CHAR_FONTHEIGHT_CTL ) );
             aTempAttr.Put( SvxFontHeightItem( 493, 100, EE_CHAR_FONTHEIGHT_CJK ) );
 
-            SvxAdjust eH = SvxAdjust::Left;
+            SvxAdjust eH = SvxAdjust::ParaStart;
 
             if( (eObjKind == PresObjKind::DateTime) && (mePageKind != PageKind::Standard ) )
             {
-                eH = SvxAdjust::Right;
+                eH = SvxAdjust::ParaEnd;
             }
             else if( (eObjKind == PresObjKind::Footer) && (mePageKind == PageKind::Standard ) )
             {
@@ -543,10 +562,10 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             }
             else if( eObjKind == PresObjKind::SlideNumber )
             {
-                eH = SvxAdjust::Right;
+                eH = SvxAdjust::ParaEnd;
             }
 
-            if( eH != SvxAdjust::Left )
+            if( eH != SvxAdjust::ParaStart )
                 aTempAttr.Put(SvxAdjustItem(eH, EE_PARA_JUST ));
 
             pSdrObj->SetMergedItemSet(aTempAttr);
@@ -917,7 +936,7 @@ const o3tl::enumarray<PresObjKind, const char*> PresObjKindVector = {
     "PRESOBJ_TEXT" ,"PRESOBJ_GRAPHIC" , "PRESOBJ_OBJECT",
     "PRESOBJ_CHART", "PRESOBJ_ORGCHART", "PRESOBJ_TABLE",
     "PRESOBJ_PAGE", "PRESOBJ_HANDOUT",
-    "PRESOBJ_NOTES","PRESOBJ_HEADER", "PRESOBJ_FOOTER",
+    "PRESOBJ_NOTES", "PRESOBJ_PAGEPREVIEW", "PRESOBJ_HEADER", "PRESOBJ_FOOTER",
     "PRESOBJ_DATETIME", "PRESOBJ_SLIDENUMBER", "PRESOBJ_CALC",
     "PRESOBJ_MEDIA"
 };
@@ -1382,6 +1401,13 @@ OUString SdPage::autoLayoutToString(AutoLayout nLayoutId)
         return "AUTOLAYOUT_TITLE";
     }
     return enumtoString(nLayoutId);
+}
+
+void SdPage::SetCanvasPage()
+{
+    mbIsCanvasPage = true;
+    SetExcluded(true);
+    static_cast<SdDrawDocument&>(getSdrModelFromSdrPage()).StoreCanvasPage(this);
 }
 
 static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* rRectangle ,const OUString& sLayoutType )

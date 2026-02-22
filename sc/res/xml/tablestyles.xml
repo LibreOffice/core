@@ -1,0 +1,1081 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0">
+  <style:style style:name="Default-Style.background" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.body" style:family="table-cell">
+    <style:table-cell-properties fo:border="0.5pt solid #000000" fo:padding="0.0403in"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.even-columns" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.even-rows" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.first-column" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.first-row" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.first-row-end-column" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.first-row-even-column" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.first-row-start-column" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.last-column" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.last-row" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.last-row-end-column" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.last-row-even-column" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.last-row-start-column" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.odd-columns" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Default-Style.odd-rows" style:family="table-cell">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.background" style:family="table-cell" style:parent-style-name="Default-Style.background">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.body" style:family="table-cell" style:parent-style-name="Default-Style.body">
+    <style:table-cell-properties fo:border="0pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties style:font-name-asian="DejaVu Sans" style:font-family-asian="'DejaVu Sans'" style:font-name-complex="DejaVu Sans" style:font-family-complex="'DejaVu Sans'"/>
+  </style:style>
+  <style:style style:name="Academic.even-columns" style:family="table-cell" style:parent-style-name="Default-Style.even-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.even-rows" style:family="table-cell" style:parent-style-name="Default-Style.even-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.first-column" style:family="table-cell" style:parent-style-name="Default-Style.first-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.first-row" style:family="table-cell" style:parent-style-name="Default-Style.first-row">
+    <style:table-cell-properties fo:border-top="0.75pt solid #000000" fo:border-bottom="0.75pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.first-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.first-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.first-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.last-column" style:family="table-cell" style:parent-style-name="Default-Style.last-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.last-row" style:family="table-cell" style:parent-style-name="Default-Style.last-row">
+    <style:table-cell-properties fo:border-bottom="0.75pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.last-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.last-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.last-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.odd-columns" style:family="table-cell" style:parent-style-name="Default-Style.odd-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Academic.odd-rows" style:family="table-cell" style:parent-style-name="Default-Style.odd-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.background" style:family="table-cell" style:parent-style-name="Default-Style.background">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.body" style:family="table-cell" style:parent-style-name="Default-Style.body">
+    <style:table-cell-properties fo:border="0pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-name-asian="DejaVu Sans" style:font-family-asian="'DejaVu Sans'" style:font-name-complex="DejaVu Sans" style:font-family-complex="'DejaVu Sans'"/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.even-columns" style:family="table-cell" style:parent-style-name="Default-Style.even-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.even-rows" style:family="table-cell" style:parent-style-name="Default-Style.even-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.first-column" style:family="table-cell" style:parent-style-name="Default-Style.first-column">
+    <style:table-cell-properties fo:border-left="0.75pt solid #00599d"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.first-row" style:family="table-cell" style:parent-style-name="Default-Style.first-row">
+    <style:table-cell-properties fo:border-top="0.75pt solid #00599d" fo:background-color="#00599d"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:color="#ffffff" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.first-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.first-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.first-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.last-column" style:family="table-cell" style:parent-style-name="Default-Style.last-column">
+    <style:table-cell-properties fo:border-right="0.75pt solid #00599d"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.last-row" style:family="table-cell" style:parent-style-name="Default-Style.last-row">
+    <style:table-cell-properties fo:border-top="0.75pt solid #00599d" fo:border-bottom="0.75pt solid #00599d" fo:background-color="#adc5e7"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.last-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.last-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.last-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.odd-columns" style:family="table-cell" style:parent-style-name="Default-Style.odd-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Blue.odd-rows" style:family="table-cell" style:parent-style-name="Default-Style.odd-rows">
+    <style:table-cell-properties fo:background-color="#dddddd"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.background" style:family="table-cell" style:parent-style-name="Default-Style.background">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.body" style:family="table-cell" style:parent-style-name="Default-Style.body">
+    <style:table-cell-properties fo:border="0pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-name-asian="DejaVu Sans" style:font-family-asian="'DejaVu Sans'" style:font-name-complex="DejaVu Sans" style:font-family-complex="'DejaVu Sans'"/>
+  </style:style>
+  <style:style style:name="Box-List-Green.even-columns" style:family="table-cell" style:parent-style-name="Default-Style.even-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.even-rows" style:family="table-cell" style:parent-style-name="Default-Style.even-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.first-column" style:family="table-cell" style:parent-style-name="Default-Style.first-column">
+    <style:table-cell-properties fo:border-left="0.75pt solid #009353"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.first-row" style:family="table-cell" style:parent-style-name="Default-Style.first-row">
+    <style:table-cell-properties fo:border-top="0.75pt solid #009353" fo:background-color="#009353"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:color="#ffffff" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Box-List-Green.first-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.first-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.first-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.last-column" style:family="table-cell" style:parent-style-name="Default-Style.last-column">
+    <style:table-cell-properties fo:border-right="0.75pt solid #009353"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.last-row" style:family="table-cell" style:parent-style-name="Default-Style.last-row">
+    <style:table-cell-properties fo:border-top="0.75pt solid #009353" fo:border-bottom="0.75pt solid #009353" fo:background-color="#bee3d3"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Box-List-Green.last-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.last-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.last-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.odd-columns" style:family="table-cell" style:parent-style-name="Default-Style.odd-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Green.odd-rows" style:family="table-cell" style:parent-style-name="Default-Style.odd-rows">
+    <style:table-cell-properties fo:background-color="#dddddd"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.background" style:family="table-cell" style:parent-style-name="Default-Style.background">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.body" style:family="table-cell" style:parent-style-name="Default-Style.body">
+    <style:table-cell-properties fo:border="0pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-name-asian="DejaVu Sans" style:font-family-asian="'DejaVu Sans'" style:font-name-complex="DejaVu Sans" style:font-family-complex="'DejaVu Sans'"/>
+  </style:style>
+  <style:style style:name="Box-List-Red.even-columns" style:family="table-cell" style:parent-style-name="Default-Style.even-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.even-rows" style:family="table-cell" style:parent-style-name="Default-Style.even-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.first-column" style:family="table-cell" style:parent-style-name="Default-Style.first-column">
+    <style:table-cell-properties fo:border-left="0.75pt solid #ce181e"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.first-row" style:family="table-cell" style:parent-style-name="Default-Style.first-row">
+    <style:table-cell-properties fo:border-top="0.75pt solid #ce181e" fo:background-color="#ce181e"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:color="#ffffff" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Box-List-Red.first-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.first-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.first-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.last-column" style:family="table-cell" style:parent-style-name="Default-Style.last-column">
+    <style:table-cell-properties fo:border-right="0.75pt solid #ce181e"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.last-row" style:family="table-cell" style:parent-style-name="Default-Style.last-row">
+    <style:table-cell-properties fo:border-top="0.75pt solid #ce181e" fo:border-bottom="0.75pt solid #ce181e" fo:background-color="#fcd3c1"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Box-List-Red.last-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.last-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.last-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.odd-columns" style:family="table-cell" style:parent-style-name="Default-Style.odd-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Red.odd-rows" style:family="table-cell" style:parent-style-name="Default-Style.odd-rows">
+    <style:table-cell-properties fo:background-color="#dddddd"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.background" style:family="table-cell" style:parent-style-name="Default-Style.background">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.body" style:family="table-cell" style:parent-style-name="Default-Style.body">
+    <style:table-cell-properties fo:border="0pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-name-asian="DejaVu Sans" style:font-family-asian="'DejaVu Sans'" style:font-name-complex="DejaVu Sans" style:font-family-complex="'DejaVu Sans'"/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.even-columns" style:family="table-cell" style:parent-style-name="Default-Style.even-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.even-rows" style:family="table-cell" style:parent-style-name="Default-Style.even-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.first-column" style:family="table-cell" style:parent-style-name="Default-Style.first-column">
+    <style:table-cell-properties fo:border-left="0.75pt solid #faa61a"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.first-row" style:family="table-cell" style:parent-style-name="Default-Style.first-row">
+    <style:table-cell-properties fo:border-top="0.75pt solid #faa61a" fo:background-color="#faa61a"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:color="#ffffff" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.first-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.first-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.first-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.last-column" style:family="table-cell" style:parent-style-name="Default-Style.last-column">
+    <style:table-cell-properties fo:border-right="0.75pt solid #faa61a"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.last-row" style:family="table-cell" style:parent-style-name="Default-Style.last-row">
+    <style:table-cell-properties fo:border-top="0.75pt solid #faa61a" fo:border-bottom="0.75pt solid #faa61a" fo:background-color="#fffbcc"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.last-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.last-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.last-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.odd-columns" style:family="table-cell" style:parent-style-name="Default-Style.odd-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Box-List-Yellow.odd-rows" style:family="table-cell" style:parent-style-name="Default-Style.odd-rows">
+    <style:table-cell-properties fo:background-color="#dddddd"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.background" style:family="table-cell" style:parent-style-name="Default-Style.background">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.body" style:family="table-cell" style:parent-style-name="Default-Style.body">
+    <style:table-cell-properties fo:border-bottom="0.5pt solid #999999" fo:background-color="#eeeeee"/>
+    <style:paragraph-properties/>
+    <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-name-asian="DejaVu Sans" style:font-family-asian="'DejaVu Sans'" style:font-name-complex="DejaVu Sans" style:font-family-complex="'DejaVu Sans'"/>
+  </style:style>
+  <style:style style:name="Elegant.even-columns" style:family="table-cell" style:parent-style-name="Default-Style.even-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.even-rows" style:family="table-cell" style:parent-style-name="Default-Style.even-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.first-column" style:family="table-cell" style:parent-style-name="Default-Style.first-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.first-row" style:family="table-cell" style:parent-style-name="Default-Style.first-row">
+    <style:table-cell-properties fo:border-top="1.5pt solid #000000" fo:border-bottom="0.75pt solid #000000" fo:background-color="#ffffff"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Elegant.first-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.first-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.first-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.last-column" style:family="table-cell" style:parent-style-name="Default-Style.last-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.last-row" style:family="table-cell" style:parent-style-name="Default-Style.last-row">
+    <style:table-cell-properties fo:border-bottom="1.5pt solid #000000" fo:background-color="#ffffff"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.last-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.last-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.last-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.odd-columns" style:family="table-cell" style:parent-style-name="Default-Style.odd-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Elegant.odd-rows" style:family="table-cell" style:parent-style-name="Default-Style.odd-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.background" style:family="table-cell" style:parent-style-name="Default-Style.background">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.body" style:family="table-cell" style:parent-style-name="Default-Style.body">
+    <style:table-cell-properties fo:border="0.5pt solid #b2b2b2"/>
+    <style:paragraph-properties/>
+    <style:text-properties style:font-name-asian="Source Han Sans CN Regular" style:font-family-asian="Source Han Sans CN Regular" style:font-name-complex="Lohit Devanagari" style:font-family-complex="Lohit Devanagari"/>
+  </style:style>
+  <style:style style:name="Financial.even-columns" style:family="table-cell" style:parent-style-name="Default-Style.even-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.even-rows" style:family="table-cell" style:parent-style-name="Default-Style.even-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.first-column" style:family="table-cell" style:parent-style-name="Default-Style.first-column">
+    <style:table-cell-properties fo:border-left="0.75pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.first-row" style:family="table-cell" style:parent-style-name="Default-Style.first-row">
+    <style:table-cell-properties fo:border-top="0.75pt solid #000000" fo:background-color="#cccccc"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.first-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.first-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.first-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.last-column" style:family="table-cell" style:parent-style-name="Default-Style.last-column">
+    <style:table-cell-properties fo:border-right="0.75pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.last-row" style:family="table-cell" style:parent-style-name="Default-Style.last-row">
+    <style:table-cell-properties fo:border-top="1.5pt double-thin #000000" fo:border-bottom="0.75pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Financial.last-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.last-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.last-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.odd-columns" style:family="table-cell" style:parent-style-name="Default-Style.odd-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Financial.odd-rows" style:family="table-cell" style:parent-style-name="Default-Style.odd-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.background" style:family="table-cell" style:parent-style-name="Default-Style.background">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.body" style:family="table-cell" style:parent-style-name="Default-Style.body">
+    <style:table-cell-properties fo:border="0.5pt solid #666666"/>
+    <style:paragraph-properties/>
+    <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-name-asian="DejaVu Sans" style:font-family-asian="'DejaVu Sans'" style:font-name-complex="DejaVu Sans" style:font-family-complex="'DejaVu Sans'"/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.even-columns" style:family="table-cell" style:parent-style-name="Default-Style.even-columns">
+    <style:table-cell-properties fo:background-color="#eeeeee"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.even-rows" style:family="table-cell" style:parent-style-name="Default-Style.even-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.first-column" style:family="table-cell" style:parent-style-name="Default-Style.first-column">
+    <style:table-cell-properties fo:background-color="#ffffff"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.first-row" style:family="table-cell" style:parent-style-name="Default-Style.first-row">
+    <style:table-cell-properties fo:background-color="#b2b2b2"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.first-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.first-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.first-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.last-column" style:family="table-cell" style:parent-style-name="Default-Style.last-column">
+    <style:table-cell-properties fo:background-color="#ffffff"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.last-row" style:family="table-cell" style:parent-style-name="Default-Style.last-row">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.last-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.last-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.last-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.odd-columns" style:family="table-cell" style:parent-style-name="Default-Style.odd-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Columns.odd-rows" style:family="table-cell" style:parent-style-name="Default-Style.odd-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.background" style:family="table-cell" style:parent-style-name="Default-Style.background">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.body" style:family="table-cell" style:parent-style-name="Default-Style.body">
+    <style:table-cell-properties fo:border="0.5pt solid #666666"/>
+    <style:paragraph-properties/>
+    <style:text-properties style:font-name="Liberation Sans" fo:font-family="'Liberation Sans'" style:font-name-asian="DejaVu Sans" style:font-family-asian="'DejaVu Sans'" style:font-name-complex="DejaVu Sans" style:font-family-complex="'DejaVu Sans'"/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.even-columns" style:family="table-cell" style:parent-style-name="Default-Style.even-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.even-rows" style:family="table-cell" style:parent-style-name="Default-Style.even-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.first-column" style:family="table-cell" style:parent-style-name="Default-Style.first-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.first-row" style:family="table-cell" style:parent-style-name="Default-Style.first-row">
+    <style:table-cell-properties fo:background-color="#b2b2b2"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.first-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.first-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.first-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.last-column" style:family="table-cell" style:parent-style-name="Default-Style.last-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.last-row" style:family="table-cell" style:parent-style-name="Default-Style.last-row">
+    <style:table-cell-properties fo:background-color="#eeeeee"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.last-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.last-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.last-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.odd-columns" style:family="table-cell" style:parent-style-name="Default-Style.odd-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-Grid-Rows.odd-rows" style:family="table-cell" style:parent-style-name="Default-Style.odd-rows">
+    <style:table-cell-properties fo:background-color="#eeeeee"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.background" style:family="table-cell" style:parent-style-name="Default-Style.background">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.body" style:family="table-cell" style:parent-style-name="Default-Style.body">
+    <style:table-cell-properties fo:border="0pt solid #000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties style:font-name-asian="DejaVu Sans" style:font-family-asian="'DejaVu Sans'" style:font-name-complex="DejaVu Sans" style:font-family-complex="'DejaVu Sans'"/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.even-columns" style:family="table-cell" style:parent-style-name="Default-Style.even-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.even-rows" style:family="table-cell" style:parent-style-name="Default-Style.even-rows">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.first-column" style:family="table-cell" style:parent-style-name="Default-Style.first-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.first-row" style:family="table-cell" style:parent-style-name="Default-Style.first-row">
+    <style:table-cell-properties fo:background-color="#000000"/>
+    <style:paragraph-properties/>
+    <style:text-properties fo:color="#ffffff" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.first-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.first-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.first-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.first-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.last-column" style:family="table-cell" style:parent-style-name="Default-Style.last-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.last-row" style:family="table-cell" style:parent-style-name="Default-Style.last-row">
+    <style:table-cell-properties fo:border-bottom="0.75pt solid #000000" fo:background-color="#ffffff"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.last-row-end-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-end-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.last-row-even-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-even-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.last-row-start-column" style:family="table-cell" style:parent-style-name="Default-Style.last-row-start-column">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.odd-columns" style:family="table-cell" style:parent-style-name="Default-Style.odd-columns">
+    <style:table-cell-properties/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <style:style style:name="Simple-List-Shaded.odd-rows" style:family="table-cell" style:parent-style-name="Default-Style.odd-rows">
+    <style:table-cell-properties fo:background-color="#cccccc"/>
+    <style:paragraph-properties/>
+    <style:text-properties/>
+  </style:style>
+  <table:table-template table:name="Default Style">
+    <table:first-row table:style-name="Default-Style.first-row"/>
+    <table:last-row table:style-name="Default-Style.last-row"/>
+    <table:first-column table:style-name="Default-Style.first-column"/>
+    <table:last-column table:style-name="Default-Style.last-column"/>
+    <table:body table:style-name="Default-Style.body"/>
+    <table:even-rows table:style-name="Default-Style.even-rows"/>
+    <table:odd-rows table:style-name="Default-Style.odd-rows"/>
+    <table:even-columns table:style-name="Default-Style.even-columns"/>
+    <table:odd-columns table:style-name="Default-Style.odd-columns"/>
+    <table:background table:style-name="Default-Style.background"/>
+    <loext:first-row-even-column table:style-name="Default-Style.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Default-Style.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Default-Style.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Default-Style.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Default-Style.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Default-Style.last-row-start-column"/>
+  </table:table-template>
+  <table:table-template table:name="Academic" table:use-first-row-styles="true" table:use-last-row-styles="true" table:use-first-column-styles="true" table:use-last-column-styles="true" table:use-banding-rows-styles="true" table:use-banding-columns-styles="true" >
+    <table:first-row table:style-name="Academic.first-row"/>
+    <table:last-row table:style-name="Academic.last-row"/>
+    <table:first-column table:style-name="Academic.first-column"/>
+    <table:last-column table:style-name="Academic.last-column"/>
+    <table:body table:style-name="Academic.body"/>
+    <table:even-rows table:style-name="Academic.even-rows"/>
+    <table:odd-rows table:style-name="Academic.odd-rows"/>
+    <table:even-columns table:style-name="Academic.even-columns"/>
+    <table:odd-columns table:style-name="Academic.odd-columns"/>
+    <table:background table:style-name="Academic.background"/>
+    <loext:first-row-even-column table:style-name="Academic.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Academic.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Academic.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Academic.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Academic.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Academic.last-row-start-column"/>
+  </table:table-template>
+  <table:table-template table:name="Box List Blue" table:use-first-row-styles="true" table:use-last-row-styles="true" table:use-first-column-styles="true" table:use-last-column-styles="true" table:use-banding-rows-styles="true" table:use-banding-columns-styles="true" >
+    <table:first-row table:style-name="Box-List-Blue.first-row"/>
+    <table:last-row table:style-name="Box-List-Blue.last-row"/>
+    <table:first-column table:style-name="Box-List-Blue.first-column"/>
+    <table:last-column table:style-name="Box-List-Blue.last-column"/>
+    <table:body table:style-name="Box-List-Blue.body"/>
+    <table:even-rows table:style-name="Box-List-Blue.even-rows"/>
+    <table:odd-rows table:style-name="Box-List-Blue.odd-rows"/>
+    <table:even-columns table:style-name="Box-List-Blue.even-columns"/>
+    <table:odd-columns table:style-name="Box-List-Blue.odd-columns"/>
+    <table:background table:style-name="Box-List-Blue.background"/>
+    <loext:first-row-even-column table:style-name="Box-List-Blue.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Box-List-Blue.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Box-List-Blue.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Box-List-Blue.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Box-List-Blue.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Box-List-Blue.last-row-start-column"/>
+  </table:table-template>
+  <table:table-template table:name="Box List Green" table:use-first-row-styles="true" table:use-last-row-styles="true" table:use-first-column-styles="true" table:use-last-column-styles="true" table:use-banding-rows-styles="true" table:use-banding-columns-styles="true" >
+    <table:first-row table:style-name="Box-List-Green.first-row"/>
+    <table:last-row table:style-name="Box-List-Green.last-row"/>
+    <table:first-column table:style-name="Box-List-Green.first-column"/>
+    <table:last-column table:style-name="Box-List-Green.last-column"/>
+    <table:body table:style-name="Box-List-Green.body"/>
+    <table:even-rows table:style-name="Box-List-Green.even-rows"/>
+    <table:odd-rows table:style-name="Box-List-Green.odd-rows"/>
+    <table:even-columns table:style-name="Box-List-Green.even-columns"/>
+    <table:odd-columns table:style-name="Box-List-Green.odd-columns"/>
+    <table:background table:style-name="Box-List-Green.background"/>
+    <loext:first-row-even-column table:style-name="Box-List-Green.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Box-List-Green.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Box-List-Green.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Box-List-Green.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Box-List-Green.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Box-List-Green.last-row-start-column"/>
+  </table:table-template>
+  <table:table-template table:name="Box List Red" table:use-first-row-styles="true" table:use-last-row-styles="true" table:use-first-column-styles="true" table:use-last-column-styles="true" table:use-banding-rows-styles="true" table:use-banding-columns-styles="true" >
+    <table:first-row table:style-name="Box-List-Red.first-row"/>
+    <table:last-row table:style-name="Box-List-Red.last-row"/>
+    <table:first-column table:style-name="Box-List-Red.first-column"/>
+    <table:last-column table:style-name="Box-List-Red.last-column"/>
+    <table:body table:style-name="Box-List-Red.body"/>
+    <table:even-rows table:style-name="Box-List-Red.even-rows"/>
+    <table:odd-rows table:style-name="Box-List-Red.odd-rows"/>
+    <table:even-columns table:style-name="Box-List-Red.even-columns"/>
+    <table:odd-columns table:style-name="Box-List-Red.odd-columns"/>
+    <table:background table:style-name="Box-List-Red.background"/>
+    <loext:first-row-even-column table:style-name="Box-List-Red.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Box-List-Red.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Box-List-Red.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Box-List-Red.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Box-List-Red.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Box-List-Red.last-row-start-column"/>
+  </table:table-template>
+  <table:table-template table:name="Box List Yellow" table:use-first-row-styles="true" table:use-last-row-styles="true" table:use-first-column-styles="true" table:use-last-column-styles="true" table:use-banding-rows-styles="true" table:use-banding-columns-styles="true" >
+    <table:first-row table:style-name="Box-List-Yellow.first-row"/>
+    <table:last-row table:style-name="Box-List-Yellow.last-row"/>
+    <table:first-column table:style-name="Box-List-Yellow.first-column"/>
+    <table:last-column table:style-name="Box-List-Yellow.last-column"/>
+    <table:body table:style-name="Box-List-Yellow.body"/>
+    <table:even-rows table:style-name="Box-List-Yellow.even-rows"/>
+    <table:odd-rows table:style-name="Box-List-Yellow.odd-rows"/>
+    <table:even-columns table:style-name="Box-List-Yellow.even-columns"/>
+    <table:odd-columns table:style-name="Box-List-Yellow.odd-columns"/>
+    <table:background table:style-name="Box-List-Yellow.background"/>
+    <loext:first-row-even-column table:style-name="Box-List-Yellow.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Box-List-Yellow.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Box-List-Yellow.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Box-List-Yellow.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Box-List-Yellow.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Box-List-Yellow.last-row-start-column"/>
+  </table:table-template>
+  <table:table-template table:name="Elegant" table:use-first-row-styles="true" table:use-last-row-styles="true" table:use-first-column-styles="true" table:use-last-column-styles="true" table:use-banding-rows-styles="true" table:use-banding-columns-styles="true" >
+    <table:first-row table:style-name="Elegant.first-row"/>
+    <table:last-row table:style-name="Elegant.last-row"/>
+    <table:first-column table:style-name="Elegant.first-column"/>
+    <table:last-column table:style-name="Elegant.last-column"/>
+    <table:body table:style-name="Elegant.body"/>
+    <table:even-rows table:style-name="Elegant.even-rows"/>
+    <table:odd-rows table:style-name="Elegant.odd-rows"/>
+    <table:even-columns table:style-name="Elegant.even-columns"/>
+    <table:odd-columns table:style-name="Elegant.odd-columns"/>
+    <table:background table:style-name="Elegant.background"/>
+    <loext:first-row-even-column table:style-name="Elegant.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Elegant.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Elegant.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Elegant.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Elegant.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Elegant.last-row-start-column"/>
+  </table:table-template>
+  <table:table-template table:name="Financial" table:use-first-row-styles="true" table:use-last-row-styles="true" table:use-first-column-styles="true" table:use-last-column-styles="true" table:use-banding-rows-styles="true" table:use-banding-columns-styles="true" >
+    <table:first-row table:style-name="Financial.first-row"/>
+    <table:last-row table:style-name="Financial.last-row"/>
+    <table:first-column table:style-name="Financial.first-column"/>
+    <table:last-column table:style-name="Financial.last-column"/>
+    <table:body table:style-name="Financial.body"/>
+    <table:even-rows table:style-name="Financial.even-rows"/>
+    <table:odd-rows table:style-name="Financial.odd-rows"/>
+    <table:even-columns table:style-name="Financial.even-columns"/>
+    <table:odd-columns table:style-name="Financial.odd-columns"/>
+    <table:background table:style-name="Financial.background"/>
+    <loext:first-row-even-column table:style-name="Financial.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Financial.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Financial.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Financial.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Financial.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Financial.last-row-start-column"/>
+  </table:table-template>
+  <table:table-template table:name="Simple Grid Columns" table:use-first-row-styles="true" table:use-last-row-styles="true" table:use-first-column-styles="true" table:use-last-column-styles="true" table:use-banding-rows-styles="true" table:use-banding-columns-styles="true" >
+    <table:first-row table:style-name="Simple-Grid-Columns.first-row"/>
+    <table:last-row table:style-name="Simple-Grid-Columns.last-row"/>
+    <table:first-column table:style-name="Simple-Grid-Columns.first-column"/>
+    <table:last-column table:style-name="Simple-Grid-Columns.last-column"/>
+    <table:body table:style-name="Simple-Grid-Columns.body"/>
+    <table:even-rows table:style-name="Simple-Grid-Columns.even-rows"/>
+    <table:odd-rows table:style-name="Simple-Grid-Columns.odd-rows"/>
+    <table:even-columns table:style-name="Simple-Grid-Columns.even-columns"/>
+    <table:odd-columns table:style-name="Simple-Grid-Columns.odd-columns"/>
+    <table:background table:style-name="Simple-Grid-Columns.background"/>
+    <loext:first-row-even-column table:style-name="Simple-Grid-Columns.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Simple-Grid-Columns.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Simple-Grid-Columns.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Simple-Grid-Columns.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Simple-Grid-Columns.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Simple-Grid-Columns.last-row-start-column"/>
+  </table:table-template>
+  <table:table-template table:name="Simple Grid Rows" table:use-first-row-styles="true" table:use-last-row-styles="true" table:use-first-column-styles="true" table:use-last-column-styles="true" table:use-banding-rows-styles="true" table:use-banding-columns-styles="true" >
+    <table:first-row table:style-name="Simple-Grid-Rows.first-row"/>
+    <table:last-row table:style-name="Simple-Grid-Rows.last-row"/>
+    <table:first-column table:style-name="Simple-Grid-Rows.first-column"/>
+    <table:last-column table:style-name="Simple-Grid-Rows.last-column"/>
+    <table:body table:style-name="Simple-Grid-Rows.body"/>
+    <table:even-rows table:style-name="Simple-Grid-Rows.even-rows"/>
+    <table:odd-rows table:style-name="Simple-Grid-Rows.odd-rows"/>
+    <table:even-columns table:style-name="Simple-Grid-Rows.even-columns"/>
+    <table:odd-columns table:style-name="Simple-Grid-Rows.odd-columns"/>
+    <table:background table:style-name="Simple-Grid-Rows.background"/>
+    <loext:first-row-even-column table:style-name="Simple-Grid-Rows.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Simple-Grid-Rows.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Simple-Grid-Rows.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Simple-Grid-Rows.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Simple-Grid-Rows.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Simple-Grid-Rows.last-row-start-column"/>
+  </table:table-template>
+  <table:table-template table:name="Simple List Shaded" table:use-first-row-styles="true" table:use-last-row-styles="true" table:use-first-column-styles="true" table:use-last-column-styles="true" table:use-banding-rows-styles="true" table:use-banding-columns-styles="true" >
+    <table:first-row table:style-name="Simple-List-Shaded.first-row"/>
+    <table:last-row table:style-name="Simple-List-Shaded.last-row"/>
+    <table:first-column table:style-name="Simple-List-Shaded.first-column"/>
+    <table:last-column table:style-name="Simple-List-Shaded.last-column"/>
+    <table:body table:style-name="Simple-List-Shaded.body"/>
+    <table:even-rows table:style-name="Simple-List-Shaded.even-rows"/>
+    <table:odd-rows table:style-name="Simple-List-Shaded.odd-rows"/>
+    <table:even-columns table:style-name="Simple-List-Shaded.even-columns"/>
+    <table:odd-columns table:style-name="Simple-List-Shaded.odd-columns"/>
+    <table:background table:style-name="Simple-List-Shaded.background"/>
+    <loext:first-row-even-column table:style-name="Simple-List-Shaded.first-row-even-column"/>
+    <loext:last-row-even-column table:style-name="Simple-List-Shaded.last-row-even-column"/>
+    <loext:first-row-end-column table:style-name="Simple-List-Shaded.first-row-end-column"/>
+    <loext:first-row-start-column table:style-name="Simple-List-Shaded.first-row-start-column"/>
+    <loext:last-row-end-column table:style-name="Simple-List-Shaded.last-row-end-column"/>
+    <loext:last-row-start-column table:style-name="Simple-List-Shaded.last-row-start-column"/>
+  </table:table-template>
+</office:styles>

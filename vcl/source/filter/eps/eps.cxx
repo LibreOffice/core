@@ -18,6 +18,7 @@
  */
 
 #include <filter/EpsWriter.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
@@ -27,6 +28,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/region.hxx>
@@ -37,6 +39,7 @@
 #include <unotools/configmgr.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <strings.hrc>
 #include <osl/diagnose.h>

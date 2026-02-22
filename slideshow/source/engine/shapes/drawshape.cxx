@@ -24,7 +24,9 @@
 #include <o3tl/safeint.hxx>
 
 #include <utility>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 

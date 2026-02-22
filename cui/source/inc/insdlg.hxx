@@ -23,6 +23,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <svtools/insdlg.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/SpinButton.hxx>

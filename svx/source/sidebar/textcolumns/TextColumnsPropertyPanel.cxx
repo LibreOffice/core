@@ -25,6 +25,7 @@
 #include <svl/eitem.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/svdoattr.hxx>
+#include <tools/fldunit.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 

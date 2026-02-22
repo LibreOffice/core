@@ -23,9 +23,10 @@
 
 #include <sal/config.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <tools/color.hxx>
 
 // predefines
+
+class Color;
 
 namespace drawinglayer::geometry
 {

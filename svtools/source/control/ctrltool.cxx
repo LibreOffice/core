@@ -28,6 +28,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <utility>
 #include <vcl/embeddedfontsmanager.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -35,6 +36,7 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/ctrltool.hxx>
+#include <unotools/fontdefs.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/lok.hxx>

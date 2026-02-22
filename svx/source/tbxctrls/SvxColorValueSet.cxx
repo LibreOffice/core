@@ -21,6 +21,7 @@
 #include <svx/xtable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <osl/diagnose.h>
 
 #include <svx/uiobject.hxx>
@@ -50,42 +51,23 @@ sal_uInt32 SvxColorValueSet::getColumnCount()
     return rStyleSettings.GetColorValueSetColumnCount();
 }
 
-void SvxColorValueSet::addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex)
+void SvxColorValueSet::addEntriesForXColorList(const XColorList& rXColorList)
 {
     const sal_uInt32 nColorCount(rXColorList.Count());
 
-    for(sal_uInt32 nIndex(0); nIndex < nColorCount; nIndex++, nStartIndex++)
+    sal_uInt32 nId = 1;
+    for (sal_uInt32 nIndex = 0; nIndex < nColorCount; nIndex++)
     {
         const XColorEntry* pEntry = rXColorList.GetColor(nIndex);
 
         if(pEntry)
         {
-            InsertItem(nStartIndex, pEntry->GetColor(), pEntry->GetName());
+            InsertItem(nId, pEntry->GetColor(), pEntry->GetName());
+            nId++;
         }
         else
         {
             OSL_ENSURE(false, "OOps, XColorList with empty entries (!)");
-        }
-    }
-}
-
-void SvxColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, std::u16string_view rNamePrefix)
-{
-    sal_uInt32 nStartIndex = 1;
-    if(!rNamePrefix.empty())
-    {
-        for(const auto& rColor : rColorSet)
-        {
-            InsertItem(nStartIndex, rColor, rNamePrefix + OUString::number(nStartIndex));
-            nStartIndex++;
-        }
-    }
-    else
-    {
-        for(const auto& rColor : rColorSet)
-        {
-            InsertItem(nStartIndex, rColor, u""_ustr);
-            nStartIndex++;
         }
     }
 }

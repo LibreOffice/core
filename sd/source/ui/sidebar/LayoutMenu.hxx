@@ -25,6 +25,7 @@
 #include <sfx2/request.hxx>
 #include <xmloff/autolayout.hxx>
 #include <vcl/image.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/weld/IconView.hxx>
 #include <map>
 
@@ -64,8 +65,6 @@ public:
                css::uno::Reference<css::ui::XSidebar> xSidebar);
     virtual ~LayoutMenu() override;
 
-    void Dispose();
-
     /** Return a numerical value representing the currently selected
         layout.
     */
@@ -99,7 +98,6 @@ private:
     rtl::Reference<::sdtools::SlotStateListener> mxListener;
     bool mbIsMainViewChangePending;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
-    bool mbIsDisposed;
 
     // Store the size of preview image
     Size maPreviewSize;
@@ -151,9 +149,6 @@ private:
     */
     void UpdateSelection();
 
-    // internal ctor
-    void implConstruct(DrawDocShell& rDocumentShell);
-
     void MenuSelect(const OUString& rIdent);
 
     /** When clicked then set the current page of the view in the center pane.
@@ -165,7 +160,7 @@ private:
     DECL_LINK(EventMultiplexerListener, ::sdtools::EventMultiplexerEvent&, void);
     DECL_LINK(MenuSelectAsyncHdl, void*, void);
 
-    static VclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
     static Bitmap GetPreviewAsBitmap(const Image& rImage);
     void HandleMenuSelect(std::u16string_view rIdent);
 };

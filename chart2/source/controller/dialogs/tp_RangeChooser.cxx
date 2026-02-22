@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
+#include <vcl/weld/Builder.hxx>
 
 namespace
 {

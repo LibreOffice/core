@@ -25,6 +25,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>
@@ -409,7 +410,7 @@ public:
 
 class SmSymDefineDialog final : public weld::GenericDialogController
 {
-    VclPtr<VirtualDevice> m_xVirDev;
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
     SmSymbolManager m_aSymbolMgrCopy;
     SmSymbolManager& m_rSymbolMgr;
     SmShowChar m_aOldSymbolDisplay;

@@ -26,7 +26,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include "datamodel.hxx"
+#include "datamodel_oox.hxx"
 #include <oox/drawingml/shape.hxx>
 
 namespace com::sun::star {
@@ -35,7 +35,7 @@ namespace com::sun::star {
 
 namespace oox::drawingml {
 
-class Diagram;
+class SmartArtDiagram;
 class LayoutNode;
 typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
 class LayoutAtom;
@@ -46,7 +46,7 @@ typedef std::map< const svx::diagram::Point*, ShapePtr > PresPointShapeMap;
 class DiagramLayout
 {
 public:
-    DiagramLayout(Diagram& rDgm)
+    DiagramLayout(SmartArtDiagram& rDgm)
         : mrDgm(rDgm)
     {
     }
@@ -60,7 +60,7 @@ public:
         { msTitle = sTitle; }
     void setDesc( const OUString & sDesc )
         { msDesc = sDesc; }
-    Diagram& getDiagram() { return mrDgm; }
+    SmartArtDiagram& getDiagram() { return mrDgm; }
     LayoutNodePtr & getNode()
         { return mpNode; }
     const LayoutNodePtr & getNode() const
@@ -79,7 +79,7 @@ public:
         { return maPresPointShapeMap; }
 
 private:
-    Diagram& mrDgm;
+    SmartArtDiagram& mrDgm;
     OUString msDefStyle;
     OUString msMinVer;
     OUString msUniqueId;
@@ -123,12 +123,13 @@ struct DiagramColor
 };
 
 typedef std::map<OUString,DiagramColor> DiagramColorMap;
-typedef std::map<OUString,css::beans::PropertyValue> DiagramPRDomMap;
+typedef std::map<svx::diagram::DomMapFlag,css::uno::Any> DiagramPRDomMap;
 
-class Diagram
+class SmartArtDiagram
 {
 public:
-    explicit Diagram();
+    explicit SmartArtDiagram();
+    explicit SmartArtDiagram(SmartArtDiagram const& rSource);
     void setData( const OoxDiagramDataPtr& pData )
         { mpData = pData; }
     const OoxDiagramDataPtr& getData() const
@@ -142,15 +143,21 @@ public:
     const DiagramQStyleMap& getStyles() const { return maStyles; }
     DiagramColorMap& getColors() { return maColors; }
     const DiagramColorMap& getColors() const { return maColors; }
-    DiagramPRDomMap & getRPDomMap() { return maDiagramPRDomMap; }
-    void addTo( const ShapePtr & pShape, bool bCreate );
+    void createShapeHierarchyFromModel( const ShapePtr & pShape, bool bCreate );
 
     oox::core::NamedShapePairs& getDiagramFontHeights() { return maDiagramFontHeights; }
     void syncDiagramFontHeights();
 
-    void addDomPropertyValue(css::beans::PropertyValue& aValue);
-    css::beans::PropertyValue getDomPropertyValue(const OUString& rName) const;
-    void resetDomPropertyValues() { maDiagramPRDomMap.clear(); }
+    void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const css::uno::Any& rValue);
+    css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const;
+    void resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags);
+
+    // check if mandatory DiagramDomS exist (or can be created)
+    bool checkMinimalDataDoms() const;
+
+    // helpers to write some specific DiagramDoms
+    void writeDiagramOOXData(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const;
+    void writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
 
 private:
     // This contains groups of shapes: automatic font size is the same in each group.
@@ -163,7 +170,7 @@ private:
     DiagramPRDomMap                maDiagramPRDomMap;
 };
 
-typedef std::shared_ptr< Diagram > DiagramPtr;
+typedef std::shared_ptr< SmartArtDiagram > DiagramPtr;
 
 }
 

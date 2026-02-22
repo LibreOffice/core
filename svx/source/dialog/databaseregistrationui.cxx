@@ -24,6 +24,7 @@
 
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/vclenum.hxx>
 
 namespace svx
 {

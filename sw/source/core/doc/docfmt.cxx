@@ -34,7 +34,7 @@
 #include <unotools/configmgr.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <fmtpdsc.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
@@ -116,10 +116,14 @@ static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
 
         // remove unused attribute RES_LR_SPACE
         // add list attributes, except RES_PARATR_LIST_AUTOFMT
+        // tdf#151857: Frame direction is conceptually an aspect of language, rather than text
+        // formatting. Preserve paragraph direction across resets.
         SfxItemSetFixed<
                 RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
+                RES_PARATR_AUTOFRAMEDIR, RES_PARATR_AUTOFRAMEDIR,
                 RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_AUTOFMT - 1,
                 RES_PAGEDESC, RES_BREAK,
+                RES_FRAMEDIR, RES_FRAMEDIR,
                 RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME> aSavedAttrsSet(rDoc.GetAttrPool());
         const SfxItemSet* pAttrSetOfNode = pNode->GetpSwAttrSet();
 
@@ -131,12 +135,10 @@ static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
             if ( aListAttrSet.Count() )
             {
                 aSavedAttrsSet.Put(aListAttrSet);
-                SfxItemIter aIter( aListAttrSet );
-                const SfxPoolItem* pItem = aIter.GetCurItem();
-                while( pItem )
+                for (SfxItemIter aIter( aListAttrSet ); !aIter.IsAtEnd(); aIter.Next())
                 {
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
                     aClearWhichIds.push_back( pItem->Which() );
-                    pItem = aIter.NextItem();
                 }
             }
         }
@@ -171,6 +173,18 @@ static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
             aSavedAttrsSet.Put(*pItem);
             aClearWhichIds.push_back(RES_FRMATR_CONDITIONAL_STYLE_NAME);
         }
+        if (auto pItem = pAttrSetOfNode->GetItemIfSet(RES_PARATR_AUTOFRAMEDIR);
+            pItem && !pItem->GetValue())
+        {
+            aSavedAttrsSet.Put(*pItem);
+            aClearWhichIds.push_back(RES_PARATR_AUTOFRAMEDIR);
+        }
+        if (auto pItem = pAttrSetOfNode->GetItemIfSet(RES_FRAMEDIR, false);
+            pItem && pItem->GetValue() != SvxFrameDirection::Environment)
+        {
+            aSavedAttrsSet.Put(*pItem);
+            aClearWhichIds.push_back(RES_FRAMEDIR);
+        }
 
         // do not clear items directly from item set and only clear to be kept
         // attributes, if no deletion item set is found.
@@ -192,14 +206,15 @@ static bool lcl_RstAttr( SwNode* pNd, void* pArgs )
             {
                 OSL_ENSURE( !bKeepAttributes,
                         "<lcl_RstAttr(..)> - certain attributes are kept, but not needed." );
-                SfxItemIter aIter( *pPara->pDelSet );
-                for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+                for (SfxItemIter aIter( *pPara->pDelSet ); !aIter.IsAtEnd(); aIter.Next())
                 {
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
                     if ( ( pItem->Which() != RES_PAGEDESC &&
                            pItem->Which() != RES_BREAK &&
                            pItem->Which() != RES_FRMATR_STYLE_NAME &&
                            pItem->Which() != RES_FRMATR_CONDITIONAL_STYLE_NAME &&
-                           pItem->Which() != RES_PARATR_NUMRULE ) ||
+                           pItem->Which() != RES_PARATR_NUMRULE &&
+                           pItem->Which() != RES_FRAMEDIR ) ||
                          ( aSavedAttrsSet.GetItemState( pItem->Which(), false ) != SfxItemState::SET ) )
                     {
                         pNode->ResetAttr( pItem->Which() );
@@ -564,11 +579,10 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     sw::BroadcastingModify aCallMod;
     SwAttrSet aOld( GetAttrPool(), rSet.GetRanges() ),
             aNew( GetAttrPool(), rSet.GetRanges() );
-    SfxItemIter aIter( rSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
     SfxItemPool* pSdrPool = GetAttrPool().GetSecondaryPool();
-    do
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         bool bCheckSdrDflt = false;
         const sal_uInt16 nWhich = pItem->Which();
         aOld.Put( GetAttrPool().GetUserOrPoolDefaultItem( nWhich ) );
@@ -617,9 +631,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                 }
             }
         }
-
-        pItem = aIter.NextItem();
-    } while (pItem);
+    }
 
     if( aNew.Count() && aCallMod.HasWriterListeners() )
     {
@@ -1812,7 +1824,7 @@ SwTableNumFormatMerge::~SwTableNumFormatMerge()
         pNFormat->ClearMergeTable();
 }
 
-void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nPoolId,
+void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, SwPoolFormatId nPoolId,
                                     const SfxItemSet* pSet )
 {
     SwPaM aPam( rPos );
@@ -1890,9 +1902,9 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
 
     const sal_Int32 nEnd(rPam.End()->GetContentIndex());
     std::vector<WhichPair> whichIds;
-    SfxItemIter iter(rSet);
-    for (SfxPoolItem const* pItem = iter.GetCurItem(); pItem; pItem = iter.NextItem())
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (RES_CHRATR_BEGIN <= pItem->Which() && pItem->Which() < RES_CHRATR_END)
         {   // tdf#162911 don't add items with static default like INETFMT
             whichIds.push_back({pItem->Which(), pItem->Which()});
@@ -1945,10 +1957,9 @@ void SwDoc::ChgFormat(SwFormat & rFormat, const SfxItemSet & rSet)
         // invalidate all new items in <aOldSet> in order to clear these items,
         // if the undo action is triggered.
         {
-            SfxItemIter aIter(aSet);
-
-            for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+            for (SfxItemIter aIter( aSet ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 aOldSet.InvalidateItem(pItem->Which());
             }
         }

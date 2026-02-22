@@ -28,6 +28,7 @@
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TextView.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <rangeutl.hxx>
 #include "content.hxx"
 

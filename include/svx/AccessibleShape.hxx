@@ -59,12 +59,7 @@ class AccessibleTextHelper;
 class ChildrenManager;
 class IAccessibleParent;
 
-/** This base class provides a base implementation for all shapes.  For more
-    detailed documentation about the methods refer to the descriptions of
-    the implemented interfaces.  These are, among others,
-    XAccessible, <type>XAccessibleContext</type>,
-    XAccessibleComponent and
-    XAccessibleExtendedComponent.
+/** This base class provides a base implementation for all shapes.
 
     <p>The children of a shape can stem from two sources which, in case of
     SVX and SD shapes, are mutually exclusive.  This implementation,
@@ -84,14 +79,12 @@ class IAccessibleParent;
     container, who can then call dispose() at the accessible object.</p>
 */
 class SVX_DLLPUBLIC AccessibleShape
-    :   public AccessibleContextBase,
-        public css::accessibility::XAccessibleSelection,
-        public css::accessibility::XAccessibleExtendedAttributes,
-        public css::accessibility::XAccessibleGroupPosition,
-        public css::accessibility::XAccessibleHypertext,
-        public IAccessibleViewForwarderListener,
-        public css::document::XShapeEventListener,
-        public css::lang::XUnoTunnel
+    : public cppu::ImplInheritanceHelper<
+          AccessibleContextBase, css::accessibility::XAccessibleSelection,
+          css::accessibility::XAccessibleExtendedAttributes,
+          css::accessibility::XAccessibleGroupPosition, css::accessibility::XAccessibleHypertext,
+          css::document::XShapeEventListener, css::lang::XUnoTunnel>,
+      public IAccessibleViewForwarderListener
 {
 public:
     /** Create a new accessible object that makes the given shape accessible.
@@ -261,31 +254,6 @@ public:
         removeAccessibleEventListener (
             const css::uno::Reference<
             css::accessibility::XAccessibleEventListener >& rxListener) override;
-
-
-    //=====  XInterface  ======================================================
-
-    virtual css::uno::Any SAL_CALL
-        queryInterface (const css::uno::Type & rType) override;
-
-    virtual void SAL_CALL
-        acquire()
-        noexcept override;
-
-    virtual void SAL_CALL
-        release()
-        noexcept override;
-
-
-    //=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
 
     //=====  XTypeProvider  ===================================================
 

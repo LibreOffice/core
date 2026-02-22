@@ -76,9 +76,6 @@ namespace oox::drawingml {
 
 class OOX_DLLPUBLIC ShapeExport : public DrawingML {
 
-private:
-    int m_nEmbeddedObjects;
-
 public:
     typedef std::unordered_map< css::uno::Reference< css::drawing::XShape>, sal_Int32> ShapeHashMap;
 
@@ -113,6 +110,8 @@ public:
 
     static bool         NonEmptyText( const css::uno::Reference< css::uno::XInterface >& xIface );
     static bool         IsShapeTypeKnown( const css::uno::Reference< css::drawing::XShape >& xShape );
+    static bool IsValidShape(const css::uno::Reference<css::drawing::XShape>& xShape,
+                             DocumentType eDocumentType);
 
     ShapeExport&
                         WritePolyPolygonShape( const css::uno::Reference< css::drawing::XShape >& xShape, bool bClosed );

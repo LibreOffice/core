@@ -18,6 +18,7 @@
  */
 
 #include <svx/dialog/gotodlg.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace com::sun::star;
 

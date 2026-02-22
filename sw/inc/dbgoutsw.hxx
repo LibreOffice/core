@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include "frmfmt.hxx"
 #include "tox.hxx"
 #include <cstdio>
 #include <string_view>

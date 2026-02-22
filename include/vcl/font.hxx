@@ -23,14 +23,13 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/long.hxx>
 #include <tools/degree.hxx>
 #include <i18nlangtag/lang.h>
-#include <vcl/fntstyle.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
+class Color;
 class Size;
 class LanguageTag;
 class SvStream;
@@ -38,6 +37,9 @@ class SvStream;
 class ImplFont;
 class FontAttributes;
 namespace vcl { class Font; }
+enum class FontKerning;
+enum class FontRelief;
+
 // need to first declare these outside the vcl namespace, or the friend declarations won't work right
 VCL_DLLPUBLIC SvStream&  ReadFont( SvStream& rIStm, vcl::Font& );
 VCL_DLLPUBLIC SvStream&  WriteFont( SvStream& rOStm, const vcl::Font& );

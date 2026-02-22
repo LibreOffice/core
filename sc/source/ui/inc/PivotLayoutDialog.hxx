@@ -18,6 +18,8 @@
 #include "PivotLayoutTreeListData.hxx"
 #include "PivotLayoutTreeListLabel.hxx"
 
+#include <vcl/weld/Builder.hxx>
+
 class ScItemValue final
 {
 public:
@@ -96,6 +98,7 @@ private:
     DECL_LINK(ToggleDestination, weld::Toggleable&, void);
     DECL_LINK(SourceListSelected, weld::ComboBox&, void);
     DECL_LINK(SourceEditModified, formula::RefEdit&, void);
+    DECL_LINK(UpdateCheckExpandCollapse, weld::Toggleable&, void);
     void ToggleSource();
     void ToggleDestination();
     virtual void Close() override;

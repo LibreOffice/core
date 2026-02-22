@@ -339,7 +339,7 @@ SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType
     //mnStartNode = mnCurrentNode = get node from current cursor TODO!
 
     // register as listener and get notified when document is closed
-    StartListening(mpDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD )->GetNotifier());
+    StartListening(mpDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( SwPoolFormatId::PAGE_STANDARD )->GetNotifier());
 }
 
 SwXFlatParagraphIterator::~SwXFlatParagraphIterator()

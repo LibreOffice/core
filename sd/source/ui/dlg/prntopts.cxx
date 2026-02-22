@@ -25,6 +25,7 @@
 #include <svl/intitem.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Draw.hxx>
+#include <vcl/weld/Builder.hxx>
 
 /**
  *  dialog to adjust print options

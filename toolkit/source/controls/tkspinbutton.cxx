@@ -24,6 +24,7 @@
 
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <rtl/ref.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <helper/property.hxx>

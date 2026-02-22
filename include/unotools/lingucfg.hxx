@@ -22,7 +22,6 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 #include <i18nlangtag/lang.h>
@@ -30,6 +29,7 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::util { class XChangesBatch; }
+namespace com::sun::star::uno { class Any; }
 
 class SvtLinguConfigItem;
 

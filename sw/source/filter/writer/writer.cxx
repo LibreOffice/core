@@ -26,6 +26,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <osl/diagnose.h>
+#include <tools/urlobj.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>
 #include <docary.hxx>

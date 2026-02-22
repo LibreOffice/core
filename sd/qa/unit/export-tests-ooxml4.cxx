@@ -15,6 +15,7 @@
 #include <editeng/numitem.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
@@ -1100,7 +1101,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testAutofittedTextboxIndent)
     // (the behaviour changed).
 
     xmlDocUniquePtr pXmlDocContent1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr", "marL",
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p[1]/a:pPr", "marL",
                 u"1080000");
 }
 
@@ -1170,34 +1171,34 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNotesAuthorDate)
 {
     createSdImpressDoc("pptx/pres-with-notes.pptx");
 
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    // 1. Remove all personal info, but keep note info
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
-    officecfg::Office::Common::Security::Scripting::KeepNoteAuthorDateInfoOnSaving::set(true,
-                                                                                        pBatch);
-    pBatch->commit();
+    using ScriptingCfg = officecfg::Office::Common::Security::Scripting;
+    ScopedConfigValue<ScriptingCfg::RemovePersonalInfoOnSaving> aCfg1(true);
+    {
+        // 1. Remove all personal info, but keep note info
+        ScopedConfigValue<ScriptingCfg::KeepNoteAuthorDateInfoOnSaving> aCfg2(true);
 
-    saveAndReload(TestFilter::PPTX);
+        saveAndReload(TestFilter::PPTX);
 
-    xmlDocUniquePtr pXml = parseExport(u"ppt/commentAuthors.xml"_ustr);
-    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=0]", "name", u"Hans Wurst");
-    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=1]", "name", u"Max Muster");
+        xmlDocUniquePtr pXml = parseExport(u"ppt/commentAuthors.xml"_ustr);
+        assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=0]", "name", u"Hans Wurst");
+        assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=1]", "name", u"Max Muster");
 
-    pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
-    assertXPath(pXml, "/p:cmLst/p:cm", "dt", u"2024-06-13T12:03:08.000000000");
+        pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
+        assertXPath(pXml, "/p:cmLst/p:cm", "dt", u"2024-06-13T12:03:08.000000000");
+    }
 
-    // 2. Remove all personal info
-    officecfg::Office::Common::Security::Scripting::KeepNoteAuthorDateInfoOnSaving::set(false,
-                                                                                        pBatch);
-    pBatch->commit();
-    saveAndReload(TestFilter::PPTX);
+    {
+        // 2. Remove all personal info
+        ScopedConfigValue<ScriptingCfg::KeepNoteAuthorDateInfoOnSaving> aCfg2(false);
+        saveAndReload(TestFilter::PPTX);
 
-    pXml = parseExport(u"ppt/commentAuthors.xml"_ustr);
-    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=0]", "name", u"Author1");
-    assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=1]", "name", u"Author2");
+        xmlDocUniquePtr pXml = parseExport(u"ppt/commentAuthors.xml"_ustr);
+        assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=0]", "name", u"Author1");
+        assertXPath(pXml, "/p:cmAuthorLst/p:cmAuthor[@id=1]", "name", u"Author2");
 
-    pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
-    assertXPathNoAttribute(pXml, "/p:cmLst/p:cm", "dt");
+        pXml = parseExport(u"ppt/comments/comment1.xml"_ustr);
+        assertXPathNoAttribute(pXml, "/p:cmLst/p:cm", "dt");
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTableCellVerticalPropertyRoundtrip)
@@ -1490,6 +1491,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testBadPercentageValue)
     saveAndReload(TestFilter::PPTX);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testInvalidAudio)
+{
+    createSdImpressDoc("odp/invalidAudio.odp");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    // - validation error in OOXML export: Errors: 1
+    saveAndReload(TestFilter::PPTX);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testInvalidPrstDashEnumValue)
 {
     createSdImpressDoc("odp/invalidPrstDashEnumValue.odp");
@@ -1498,6 +1510,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testInvalidPrstDashEnumValue)
     // - Expected: 0
     // - Actual  : 113
     // - validation error in OOXML export: Errors: 113
+    saveAndReload(TestFilter::PPTX);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testInvalidXmlBy)
+{
+    createSdImpressDoc("odp/invalidXmlBy.odp");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 15
+    // - validation error in OOXML export: Errors: 15
     saveAndReload(TestFilter::PPTX);
 }
 
@@ -1949,6 +1972,55 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testFooterIdxConsistency)
     // - Expected: 1
     // - Actual  : 2
     // - In <>, attribute 'idx' of '//p:sp/p:nvSpPr/p:nvPr/p:ph' incorrect value.
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testOmitCanvasSlideExport)
+{
+    createSdImpressDoc("odp/canvas-slide.odp");
+
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE("no document", pDoc != nullptr);
+
+    // the document has 2 pages - one canvas page, and one normal page
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(pDoc->HasCanvasPage());
+
+    save(TestFilter::PPTX);
+
+    // Verify that the canvas slide was omitted from the export
+    // It should have one master slide, and one slide
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/presentation.xml"_ustr);
+    assertXPath(pXmlDocContent, "/p:presentation/p:sldMasterIdLst/p:sldMasterId", 1);
+    assertXPath(pXmlDocContent, "/p:presentation/p:sldIdLst/p:sldId", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testParaAlignStartEnd)
+{
+    createSdImpressDoc("odp/para-align-start-end.fodp");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // PresentationML doesn't support start and end paragraph alignment.
+    // Paragraphs should be exported as left/right alignment, depending on para direction.
+    assertXPath(pDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[1]/a:pPr[@algn='l']", 1);
+    assertXPath(pDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[2]/a:pPr[@algn='r']", 1);
+    assertXPath(pDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[3]/a:pPr[@algn='r']", 1);
+    assertXPath(pDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:txBody/a:p[4]/a:pPr[@algn='l']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf169559)
+{
+    createSdImpressDoc("pptx/tdf169524.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(
+        pXmlDoc,
+        "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl1pPr/a:spcAft/a:spcPts",
+        "val", u"1701");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

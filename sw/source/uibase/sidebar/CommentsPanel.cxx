@@ -47,6 +47,7 @@
 #include <editeng/editeng.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weld/Menu.hxx>
 
 #include <strings.hrc>
 #include <cmdid.h>

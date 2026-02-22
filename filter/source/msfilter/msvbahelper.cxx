@@ -41,6 +41,7 @@
 #include <sfx2/objsh.hxx>
 #include <o3tl/string_view.hxx>
 #include <svtools/acceleratorexecute.hxx>
+#include <vcl/keycod.hxx>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <frozen/bits/defines.h>

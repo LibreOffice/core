@@ -14,6 +14,8 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <tools/color.hxx>
 
 using uno::Reference;
 using beans::XPropertySet;
@@ -230,29 +232,28 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testAxisNumberFormatXLSX)
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx[2]/c:numFmt", "sourceLinked", u"1");
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataPointLabelNumberFormatXLSX)
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataPointLabelNumberFormatXLSX_tdf123774)
 {
     loadFromFile(u"ods/tdf123774.ods");
-    {
-        save(TestFilter::XLSX);
-        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
-        CPPUNIT_ASSERT(pXmlDoc);
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:numFmt", "formatCode", u"[$-40E]0.00%");
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:numFmt", "sourceLinked", u"0");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:numFmt", "formatCode", u"[$-40E]0.00%");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:numFmt", "sourceLinked", u"0");
 
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:numFmt", "formatCode", u"[$-40E]0.00%");
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:numFmt", "sourceLinked", u"0");
-    }
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:numFmt", "formatCode", u"[$-40E]0.00%");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pieChart/c:ser/c:dLbls/c:dLbl[1]/c:numFmt", "sourceLinked", u"0");
+}
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataPointLabelNumberFormatXLSX_tdf130986)
+{
     loadFromFile(u"xlsx/tdf130986.xlsx");
-    {
-        save(TestFilter::XLSX);
-        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
-        CPPUNIT_ASSERT(pXmlDoc);
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl/c:idx", "val", u"1");
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl/c:numFmt", "formatCode", u"0.00E+00");
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl/c:numFmt", "sourceLinked", u"0");
-    }
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl/c:idx", "val", u"1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl/c:numFmt", "formatCode", u"0.00E+00");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:dLbl/c:numFmt", "sourceLinked", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataLabelDefaultValuesXLSX)

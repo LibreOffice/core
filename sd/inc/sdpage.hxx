@@ -123,6 +123,7 @@ friend class sd::UndoAttrObject;
     sal_uInt16  mnPaperBin;               ///< PaperBin
     SdPageLink* mpPageLink;               ///< Page link (at left sides only)
     bool    mbIsCanvasPage;               ///< whether the page is a canvas page
+    bool    mbIsCanvasMasterPage;         ///< whether it is the master page of canvas page
 
     // PDF link annotations for read-only pdfium
     std::vector<std::pair<basegfx::B2DRectangle, OUString>> maLinkAnnotations;
@@ -168,7 +169,7 @@ public:
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
     void EnsureMasterPageDefaultBackground();
-    SD_DLLPUBLIC SdrObject* CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt = OUString());
+    SD_DLLPUBLIC SdrObject* CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt = OUString(), const sal_uInt16 nPagePreviewNum = 0xffff);
     SD_DLLPUBLIC rtl::Reference<SdrObject> CreateDefaultPresObj(PresObjKind eObjKind);
     SD_DLLPUBLIC void DestroyDefaultPresObj(PresObjKind eObjKind);
     SD_DLLPUBLIC SdrObject* GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
@@ -402,7 +403,10 @@ public:
     static sal_uInt16 mnLastPageId;
 
     bool IsCanvasPage() const { return mbIsCanvasPage; }
-    void SetCanvasPage() { mbIsCanvasPage = true; }
+    void SetCanvasPage();
+
+    bool IsCanvasMasterPage() const { return mbIsCanvasMasterPage; }
+    void SetCanvasMasterPage() { mbIsCanvasMasterPage = true; }
 
 private:
     bool mbIsPrecious;

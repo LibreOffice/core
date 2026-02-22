@@ -67,6 +67,7 @@
 #include <rtl/ustring.hxx>
 
 #include "lwpsdwdrawheader.hxx"
+#include <xfilter/xfframe.hxx>
 
 #include <memory>
 

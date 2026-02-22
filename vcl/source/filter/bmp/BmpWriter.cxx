@@ -18,6 +18,7 @@
  */
 
 #include <filter/BmpWriter.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/dibtools.hxx>
 
 bool BmpWriter(SvStream& rStream, const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)

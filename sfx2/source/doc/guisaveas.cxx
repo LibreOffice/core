@@ -76,6 +76,8 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <unotools/tempfile.hxx>

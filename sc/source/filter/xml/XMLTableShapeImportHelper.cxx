@@ -26,6 +26,7 @@
 #include <docuno.hxx>
 #include <sheetdata.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>

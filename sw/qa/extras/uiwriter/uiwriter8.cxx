@@ -21,6 +21,7 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <frameformats.hxx>
 #include <tools/json_writer.hxx>
@@ -680,13 +681,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145584)
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "Selection", uno::Any(true) } }));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
-
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
+    save(TestFilter::PDF_WRITER, {
+                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                                 });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -717,12 +715,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131728)
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "ExportBookmarksToPDFDestination", uno::Any(true) } }));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
-
-    dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
+    save(TestFilter::PDF_WRITER, {
+                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                                 });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -759,12 +754,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf95239)
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "ExportBookmarksToPDFDestination", uno::Any(true) } }));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
-
-    dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
+    save(TestFilter::PDF_WRITER, {
+                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                                 });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -804,10 +796,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf95239)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152575)
 {
-    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
-    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
-    if (!IsDefaultDPI())
-        return;
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     if (!pPDFium)
         return;
@@ -818,20 +806,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152575)
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "ExportNotesInMargin", uno::Any(true) } }));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
-
     // Without the fix in place, this test would have crashed here
-    dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
+    save(TestFilter::PDF_WRITER, {
+                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                                 });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(3, pPdfDocument->getPageCount());
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/1);
     CPPUNIT_ASSERT(pPdfPage);
     // Without the fix for tdf#152575 this would be only 42 objects
-    CPPUNIT_ASSERT_EQUAL(50, pPdfPage->getObjectCount());
+    CPPUNIT_ASSERT_EQUAL(51, pPdfPage->getObjectCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf140731)
@@ -1326,11 +1311,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131771)
 
     uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xTextTable, u"TableTemplateName"_ustr));
-    uno::Reference<beans::XPropertySet> xTableProps(xTextTable, uno::UNO_QUERY_THROW);
-    xTableProps->setPropertyValue(u"TableTemplateName"_ustr, uno::Any(u"Default Style"_ustr));
-
+    // By default every table has 'Default Style' table style
     CPPUNIT_ASSERT_EQUAL(u"Default Style"_ustr,
+                         getProperty<OUString>(xTextTable, u"TableTemplateName"_ustr));
+
+    uno::Reference<beans::XPropertySet> xTableProps(xTextTable, uno::UNO_QUERY_THROW);
+    xTableProps->setPropertyValue(u"TableTemplateName"_ustr, uno::Any(u"Elegant"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u"Elegant"_ustr,
                          getProperty<OUString>(xTextTable, u"TableTemplateName"_ustr));
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
@@ -1340,15 +1328,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131771)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 
-    CPPUNIT_ASSERT_EQUAL(u"Default Style"_ustr,
+    CPPUNIT_ASSERT_EQUAL(u"Elegant"_ustr,
                          getProperty<OUString>(xTextTable, u"TableTemplateName"_ustr));
 
     uno::Reference<text::XTextTable> xTextTable2(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
 
     // Without the fix in place, this test would have failed with
-    // - Expected: Default Style
+    // - Expected: Elegant
     // - Actual  :
-    CPPUNIT_ASSERT_EQUAL(u"Default Style"_ustr,
+    CPPUNIT_ASSERT_EQUAL(u"Elegant"_ustr,
                          getProperty<OUString>(xTextTable2, u"TableTemplateName"_ustr));
 }
 
@@ -1372,6 +1360,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf156546)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create another document
+    dispose();
     createSwDoc();
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
@@ -1556,6 +1545,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf121546)
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 
     // Create a new document
+    dispose();
     createSwDoc();
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
@@ -1612,6 +1602,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf134626)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Create a new document
+    dispose();
     createSwDoc();
     pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
@@ -3067,6 +3058,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf153636)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf168157_crash_after_pasting_and_undoing)
+{
+    createSwDoc("tdf168157.docx");
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157129)
 {
     // Unit test for tdf#157129
@@ -3080,6 +3098,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157129)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Create a new document
+    dispose();
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 

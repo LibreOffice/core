@@ -23,7 +23,6 @@
 
 #include <comphelper/compbase.hxx>
 #include <com/sun/star/graphic/XPrimitive3D.hpp>
-#include <basegfx/range/b3drange.hxx>
 #include <deque>
 
 
@@ -45,6 +44,8 @@
 namespace drawinglayer::geometry {
     class ViewInformation3D;
 }
+
+namespace basegfx { class B3DRange; }
 
 namespace drawinglayer::primitive3d {
     /// typedefs for basePrimitive3DImplBase, Primitive3DContainer and Primitive3DReference

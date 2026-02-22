@@ -18,6 +18,7 @@
  */
 
 #include <cuitbxform.hxx>
+#include <vcl/weld/Builder.hxx>
 
 FmInputRecordNoDialog::FmInputRecordNoDialog(weld::Window* pParent)
     : GenericDialogController(pParent, u"cui/ui/recordnumberdialog.ui"_ustr,

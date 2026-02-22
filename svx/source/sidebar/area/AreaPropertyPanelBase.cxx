@@ -29,6 +29,7 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/weldutils.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/urlobj.hxx>
 #include <bitmaps.hlst>
 #include <comphelper/lok.hxx>

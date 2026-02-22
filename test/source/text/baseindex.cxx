@@ -14,9 +14,11 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 
+#include <vcl/bitmap.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/RawBitmap.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/graph.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/color.hxx>
 #include <tools/stream.hxx>

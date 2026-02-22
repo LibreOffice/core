@@ -24,6 +24,7 @@
 #include <comphelper/compbase.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 
 namespace com::sun::star::drawing { class XDrawPage; }
 

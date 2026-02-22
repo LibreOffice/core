@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 
 #include <svl/eitem.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/transfer.hxx>
 #include <sfx2/dispatch.hxx>

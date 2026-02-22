@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_empty_stdlib_save, \
 
 $(eval $(call gb_CppunitTest_use_externals,dbaccess_empty_stdlib_save,\
     boost_headers \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,dbaccess_empty_stdlib_save, \

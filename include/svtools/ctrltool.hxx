@@ -20,16 +20,18 @@
 #pragma once
 
 #include <config_options.h>
+#include <i18nlangtag/lang.h>
 #include <svtools/svtdllapi.h>
+#include <tools/fontenum.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <vcl/metric.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <vector>
 #include <memory>
 #include <string_view>
 
+class FontMetric;
 class ImplFontListNameInfo;
 class OutputDevice;
 

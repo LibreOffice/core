@@ -486,6 +486,9 @@ public:
      * e.g. {commandName: ".uno:StyleApply", commandValues: {"familyName1" : ["list of style names in the family1"], etc.}}
      * @param pCommand a UNO command for which the possible values are requested
      * @return {commandName: unoCmd, commandValues: {possible_values}}
+     *
+     * The return value is dynamically allocated and should be
+     * deallocated by calling the lok::Office::freeMemory() function.
      */
     char* getCommandValues(const char* pCommand)
     {
@@ -1009,7 +1012,8 @@ public:
         return new Document(pDoc);
     }
 
-    /// Returns the last error as a string, the returned pointer has to be freed by the caller.
+    /// Returns the last error as a string. The returned pointer has to be freed by the caller
+    /// by calling the freeError() member function.
     char* getError()
     {
         return mpThis->pClass->getError(mpThis);
@@ -1017,6 +1021,10 @@ public:
 
     /**
      * Frees the memory pointed to by pFree.
+     *
+     * Use on dynamically allocated data returned by LibreOfficeKit
+     * functions. In other cases than the value returned by
+     * getError(), call freeMemory() instead for clarity.
      *
      * @since LibreOffice 5.2
      */
@@ -1318,6 +1326,17 @@ public:
     }
 
     /**
+     * Frees the memory pointed to by pFree.
+     *
+     * Use on dynamically allocated data returned by LibreOfficeKit
+     * functions. Just a wrapper for freeError() with a better name.
+     */
+    void freeMemory(char* pFree)
+    {
+        freeError(pFree);
+    }
+
+    /**
      * Registers a callback that can display an interactive file save dialog.
      */
     void registerFileSaveDialogCallback(LibreOfficeKitFileSaveDialogCallback pCallback)
@@ -1326,7 +1345,13 @@ public:
     }
 };
 
-/// Factory method to create a lok::Office instance.
+/// Create a lok::Office instance.
+///
+/// Presumably you are not supposed to create multiple lok::Office
+/// instances in the same process. Possibly not even a new one after
+/// destroying a previous one.
+///
+/// For information on the parameters, see writeup for lok_init_2 in LibreOfficeKitInit.h.
 inline Office* lok_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
 {
     LibreOfficeKit* pThis = lok_init_2(pInstallPath, pUserProfileUrl);

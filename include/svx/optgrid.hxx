@@ -104,7 +104,7 @@ private:
         DRAW_MODE = 3,
         HTML_MODE = 4
     };
-    bool                bAttrModified;
+    bool                m_bAttrModified;
     ModuleMode          m_Emode;
 
     std::unique_ptr<weld::CheckButton> m_xCbxUseGridsnap;

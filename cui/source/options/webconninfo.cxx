@@ -25,6 +25,8 @@
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 using namespace ::com::sun::star;
 

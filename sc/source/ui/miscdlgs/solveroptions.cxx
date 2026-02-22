@@ -27,6 +27,9 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <osl/diagnose.h>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <algorithm>
 

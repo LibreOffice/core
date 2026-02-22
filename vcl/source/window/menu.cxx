@@ -23,10 +23,12 @@
 
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
+#include <tools/json_writer.hxx>
 
 #include <comphelper/types.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/dialoghelper.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/image.hxx>
@@ -1085,15 +1087,17 @@ void Menu::SetHelpText( sal_uInt16 nItemId, const OUString& rStr )
         pData->aHelpText = rStr;
 }
 
-OUString Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
+OUString Menu::GetHelpText( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if (!pData)
         return OUString();
 
-    if ( pData->aHelpText.isEmpty() &&
-         (( !pData->aHelpId.isEmpty()  ) || ( !pData->aCommandStr.isEmpty() )))
+    if (!pData->aHelpText.isEmpty())
+        return pData->aHelpText;
+
+    if (!pData->aHelpId.isEmpty() || !pData->aCommandStr.isEmpty())
     {
         Help* pHelp = Application::GetHelp();
         if ( pHelp )
@@ -1106,14 +1110,7 @@ OUString Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
     }
 
     //Fallback to Menu::GetAccessibleDescription without reentry to GetHelpText()
-    if (pData->aHelpText.isEmpty())
-        return pData->aAccessibleDescription;
-    return pData->aHelpText;
-}
-
-OUString Menu::GetHelpText( sal_uInt16 nItemId ) const
-{
-    return ImplGetHelpText( nItemId );
+    return pData->aAccessibleDescription;
 }
 
 void Menu::SetTipHelpText( sal_uInt16 nItemId, const OUString& rStr )

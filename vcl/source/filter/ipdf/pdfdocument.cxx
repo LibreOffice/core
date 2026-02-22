@@ -574,9 +574,10 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
         if (!pAcroFormDictionary)
         {
             // No AcroForm key, assume no signatures.
-            m_aEditBuffer.WriteBytes(static_cast<const char*>(m_aEditBuffer.GetData())
-                                         + pCatalog->GetDictionaryOffset(),
-                                     pCatalog->GetDictionaryLength());
+            auto const p = static_cast<const char*>(m_aEditBuffer.GetData())
+                           + pCatalog->GetDictionaryOffset();
+            std::vector<char> copy(p, p + pCatalog->GetDictionaryLength());
+            m_aEditBuffer.WriteBytes(copy.data(), copy.size());
             m_aEditBuffer.WriteOString("/AcroForm<</Fields[\n");
             m_aEditBuffer.WriteNumberAsString(nAnnotId);
             m_aEditBuffer.WriteOString(" 0 R\n]/SigFlags 3>>\n");

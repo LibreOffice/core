@@ -37,6 +37,8 @@
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/weld.hxx>
+#include <vcl/GraphicNativeTransform.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
 #include <fuinsert.hxx>
 #include <tabvwsh.hxx>
 #include <drwlayer.hxx>
@@ -112,39 +114,17 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
                         ScAnchorType aAnchorType = SCA_CELL )
 {
     Graphic& rGraphic1 = const_cast<Graphic &>(rGraphic);
-    ScDrawView* pDrawView = rViewSh.GetScDrawView();
-
-    // #i123922# check if an existing object is selected; if yes, evtl. replace
-    // the graphic for a SdrGraphObj (including link state updates) or adapt the fill
-    // style for other objects
-    if(pDrawView)
+    GraphicNativeMetadata aMetadata;
+    if ( aMetadata.read(rGraphic1) )
     {
-        const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
-        if (1 == rMarkList.GetMarkCount())
+        const Degree10 aRotation = aMetadata.getRotation();
+        if (aRotation)
         {
-            SdrObject* pPickObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-            if(pPickObj)
-            {
-                //sal_Int8 nAction(DND_ACTION_MOVE);
-                //Point aPos;
-                const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
-
-                SdrObject* pResult = pDrawView->ApplyGraphicToObject(
-                    *pPickObj,
-                    rGraphic1,
-                    aBeginUndo,
-                    bAsLink ? rFileName : OUString());
-
-                if(pResult)
-                {
-                    // we are done; mark the modified/new object
-                    pDrawView->MarkObj(pResult, pDrawView->GetSdrPageView());
-                    return;
-                }
-            }
+            GraphicNativeTransform aTransform( rGraphic1 );
+            aTransform.rotate( aRotation );
         }
     }
+    ScDrawView* pDrawView = rViewSh.GetScDrawView();
 
     //  set the size so the graphic has its original pixel size
     //  at 100% view scale (as in SetMarkedOriginalSize),

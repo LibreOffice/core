@@ -42,7 +42,8 @@ std::vector< OUString >
 void    SeqRemoveNegEntries(
                 std::vector< OUString > &rSeq,
                 css::uno::Reference< css::linguistic2::XSearchableDictionaryList > const &rxDicList,
-                LanguageType nLanguage );
+                LanguageType nLanguage,
+                std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap );
 
 void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
         css::uno::Reference< css::linguistic2::XSearchableDictionaryList > const &xDicList,

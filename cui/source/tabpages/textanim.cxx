@@ -28,6 +28,7 @@
 #include <svx/sdtaiitm.hxx>
 #include <svx/sdtayitm.hxx>
 #include <svtools/unitconv.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <vcl/tabs.hrc>
 

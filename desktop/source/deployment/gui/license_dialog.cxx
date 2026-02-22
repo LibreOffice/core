@@ -23,6 +23,8 @@
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/threadex.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weld.hxx>

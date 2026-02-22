@@ -32,6 +32,7 @@
 #include <sfx2/QuerySaveDocument.hxx>
 #include <paramdialog.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 #include <CollectionView.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 

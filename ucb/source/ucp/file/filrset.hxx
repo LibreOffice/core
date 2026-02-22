@@ -33,6 +33,7 @@
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include "filrow.hxx"
+#include "filerror.hxx"
 #include <cppuhelper/implbase.hxx>
 
 namespace fileaccess {

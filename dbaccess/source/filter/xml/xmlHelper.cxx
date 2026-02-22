@@ -24,6 +24,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 
 #include <strings.hxx>
 #include <rtl/ref.hxx>

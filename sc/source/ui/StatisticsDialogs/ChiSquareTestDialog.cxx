@@ -14,6 +14,8 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 
+#include <vcl/weld/Dialog.hxx>
+
 ScChiSquareTestDialog::ScChiSquareTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     weld::Window* pParent, ScViewData& rViewData ) :

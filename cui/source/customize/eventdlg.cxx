@@ -27,6 +27,7 @@
 #include <comphelper/documentinfo.hxx>
 #include <unotools/configmgr.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include "eventdlg.hxx"
 #include "macropg_impl.hxx"

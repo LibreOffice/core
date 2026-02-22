@@ -28,6 +28,9 @@
 #include <mmconfigitem.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>

@@ -26,12 +26,16 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
 #include <unotools/useroptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <tools/datetime.hxx>
 
 #include <versdlg.hxx>

@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <o3tl/typed_flags_set.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <com/sun/star/beans/StringPair.hpp>

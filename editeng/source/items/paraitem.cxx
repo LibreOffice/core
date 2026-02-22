@@ -53,9 +53,8 @@
 
 using namespace ::com::sun::star;
 
-
 SfxPoolItem* SvxLineSpacingItem::CreateDefault() { return new  SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, 0);}
-SfxPoolItem* SvxAdjustItem::CreateDefault() { return new  SvxAdjustItem(SvxAdjust::Left, 0);}
+SfxPoolItem* SvxAdjustItem::CreateDefault() { return new  SvxAdjustItem(SvxAdjust::ParaStart, 0);}
 SfxPoolItem* SvxWidowsItem::CreateDefault() { return new  SvxWidowsItem(0, 0);}
 SfxPoolItem* SvxOrphansItem::CreateDefault() { return new  SvxOrphansItem(0, 0);}
 SfxPoolItem* SvxHyphenZoneItem::CreateDefault() { return new  SvxHyphenZoneItem(false, 0);}
@@ -63,19 +62,6 @@ SfxPoolItem* SvxTabStopItem::CreateDefault() { return new  SvxTabStopItem(0);}
 SfxPoolItem* SvxFormatSplitItem::CreateDefault() { return new  SvxFormatSplitItem(false, 0);}
 SfxPoolItem* SvxPageModelItem::CreateDefault() { return new  SvxPageModelItem(TypedWhichId<SvxPageModelItem>(0));}
 SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlignItem(Align::Automatic, TypedWhichId<SvxParaVertAlignItem>(0));}
-
-namespace {
-
-enum class SvxSpecialLineSpace
-{
-    User,
-    OneLine,
-    OnePointFiveLines,
-    TwoLines,
-    End
-};
-
-}
 
 SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId )
     : SfxPoolItem(nId)

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <formula/funcutl.hxx>
+#include <vcl/font.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/weld.hxx>

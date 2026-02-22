@@ -21,13 +21,13 @@
 
 #include <svtools/svtdllapi.h>
 #include <vcl/print.hxx>
-#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
-#include <vcl/weld/weld.hxx>
 #include <vcl/timer.hxx>
 
 class QueueInfo;
 class VclSimpleEvent;
+namespace weld { class ComboBox; }
 
 class SVT_DLLPUBLIC PrinterSetupDialog final : public weld::GenericDialogController
 {

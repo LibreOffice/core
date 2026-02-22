@@ -32,6 +32,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <test/commontesttools.hxx>
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -216,9 +217,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf146802, "tdf146802.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 7
-    skipValidation();
-
     // There is a group shape with text box inside having an embedded VML formula,
     // check if something missing.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Where is the formula?", 2, getShapes());
@@ -534,18 +532,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaListRightIndent, "testParaListRightIndent.docx"
 CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
 {
     // Given a document that lacks builtin styles, and addition of them is disabled:
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Load::DisableBuiltinStyles::set(true, pBatch);
-        pBatch->commit();
-    }
-    comphelper::ScopeGuard g([] {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Load::DisableBuiltinStyles::set(false, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Common::Load::DisableBuiltinStyles> aCfg(true);
 
     // When saving that document:
     createSwDoc("dont-add-new-styles.docx");
@@ -763,9 +750,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
-
     // There are a WPG shape and a picture
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
@@ -811,9 +795,6 @@ DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf146851_1, "tdf146851_1.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     uno::Reference<beans::XPropertySet> xPara;
 
     xPara.set(getParagraph(1, u"qwerty"_ustr), uno::UNO_QUERY);
@@ -937,6 +918,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81507)
 
     // Ensure that we have <w:text/>
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:text");
+    // (related tdf#170322) The last one did NOT import with a <w:text/> type identifier,
+    // however it IS plainText in MS Word - apparently because it has a dataBinding
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:text");
 }
 
@@ -998,9 +981,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 {
     createSwDoc("tdf146955.odt");
 
-    // FIXME: validation error in OOXML export: Errors: 9
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     // import of a (broken?) DOCX export with dozens of frames raised a SAX exception,
     // when the code tried to access to a non-existent footnote
@@ -1059,9 +1039,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     {
         uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
         auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, u"NumberingRules"_ustr);
@@ -1091,8 +1068,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154481, "tdf154481.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 16
-    skipValidation();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Missing pages!", 7, getPages());
 }
 

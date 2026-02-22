@@ -28,6 +28,7 @@
 // predefines
 
 namespace basegfx { class B2DPolygon; }
+namespace basegfx { class BColor; }
 
 
 // FillGradientPrimitive2D class

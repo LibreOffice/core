@@ -21,11 +21,14 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>

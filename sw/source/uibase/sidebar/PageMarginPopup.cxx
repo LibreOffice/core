@@ -19,6 +19,7 @@
 #include <PageMarginPopup.hxx>
 #include "PageMarginControl.hxx"
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 PageMarginPopup::PageMarginPopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())

@@ -85,6 +85,7 @@
 #include <unomap.hxx>
 #include <names.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/GradientStyle.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -724,6 +725,19 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
     aDrawInf.SetSpaceStop( ! rPor.GetNextPortion() ||
                              rPor.GetNextPortion()->InFixMargGrp() ||
                              rPor.GetNextPortion()->IsHolePortion() );
+
+    if (m_bOmitPaint)
+    {
+        aDrawInf.SetOmitPaint(m_bOmitPaint);
+    }
+    else if (m_bInsertColorPaint)
+    {
+        aDrawInf.SetInsertColorPaint(m_bInsertColorPaint);
+    }
+    else if (m_bDeleteColorPaint)
+    {
+        aDrawInf.SetDeleteColorPaint(m_bDeleteColorPaint);
+    }
 
     // Draw text next to the left border
     Point aFontPos(m_aPos);

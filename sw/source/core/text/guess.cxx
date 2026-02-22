@@ -26,8 +26,8 @@
 #include <tgrditem.hxx>
 #include <com/sun/star/i18n/BreakType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/text/ParagraphHyphenationKeepType.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <unotools/charclass.hxx>
 #include <svl/urihelper.hxx>
 #include "porfld.hxx"
@@ -43,7 +43,8 @@ using namespace ::com::sun::star::linguistic2;
 
 namespace{
 
-bool IsBlank(sal_Unicode ch) { return ch == CH_BLANK || ch == CH_FULL_BLANK || ch == CH_NB_SPACE || ch == CH_SIX_PER_EM; }
+// UAX #14: spaces from SP and BA classes (elided in the end of a line)
+bool IsBlank(sal_Unicode ch) { return ch == CH_BLANK || ch == CH_FULL_BLANK || ch == CH_SIX_PER_EM; }
 
 // Used when spaces should not be counted in layout
 // Returns adjusted cut position
@@ -471,7 +472,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
             if ( ( bHyphenationNoLastWord || bDoNotHyphenateLastLine ) &&
                             sal_Int32(m_nCutPos) > nLastWord &&
                             TextFrameIndex(COMPLETE_STRING) != m_nCutPos &&
-                            // if the last word is multiple line long, e.g. an URL,
+                            // if the last word is multiple line long, e.g. a URL,
                             // apply this only if the space before the word is there
                             // in the actual line, i.e. start the long word in a new
                             // line, but still allows to break its last parts
@@ -807,7 +808,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 m_nBreakPos = rInf.GetIdx() - TextFrameIndex(1);
             }
 
-            if( aAdjust != SvxAdjust::Left )
+            if( aAdjust != SvxAdjust::ParaStart && aAdjust != SvxAdjust::Left )
             {
                 // Delete any blanks at the end of a line, but be careful:
                 // If a field has been expanded, we do not want to delete any

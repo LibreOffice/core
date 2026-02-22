@@ -16,6 +16,7 @@
 #include <formulagroup.hxx>
 
 #include <officecfg/Office/Calc.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 using namespace sc;
 
@@ -84,6 +85,45 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testTdf160368)
     ScDocShell* pDocSh = getScDocShell();
     // without fix: ScFormulaCell::MaybeInterpret(): Assertion `!rDocument.IsThreadedGroupCalcInProgress()' failed.
     pDocSh->DoHardRecalc();
+}
+
+// VLOOKUP with CONCATENATE involving decimal numbers returns #N/A
+// under threaded calculation when locale uses comma as decimal separator
+CPPUNIT_TEST_FIXTURE(ScParallelismTest, testTdf167636)
+{
+    // Set locale to French (comma decimal separator) for the duration of the test
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString(u"fr-FR"_ustr);
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    createScDoc("ods/tdf167636.ods");
+
+    ScDocument* pDoc = getScDoc();
+
+    // Recalculate via CalcFormulaTree which uses threaded group calculation.
+    pDoc->CalcFormulaTree(false, false, true);
+
+    // After threaded recalc with French locale, VLOOKUP formulas
+    // involving CONCATENATE with decimal numbers should return correct
+    // results, not #N/A.
+
+    // D2 = 14 * 10 = 140
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(140.0, pDoc->GetValue(3, 1, 0), 1e-10);
+    // D3 = 16 * 20 = 320
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(320.0, pDoc->GetValue(3, 2, 0), 1e-10);
+    // D4 = 12 * 30 = 360
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(360.0, pDoc->GetValue(3, 3, 0), 1e-10);
+    // D5 = 6 * 40 = 240
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(240.0, pDoc->GetValue(3, 4, 0), 1e-10);
+    // D6 = 13 * 50 = 650
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(650.0, pDoc->GetValue(3, 5, 0), 1e-10);
+    // D7 = 7 * 60 = 420
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(420.0, pDoc->GetValue(3, 6, 0), 1e-10);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

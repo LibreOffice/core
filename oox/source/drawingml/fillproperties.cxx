@@ -26,6 +26,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bitmap/BitmapMonochromeFilter.hxx>
+#include <vcl/gfxlink.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <basegfx/utils/gradienttools.hxx>
@@ -916,6 +917,11 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         rPropMap.setProperty(PROP_MediaURL, m_sMediaPackageURL);
         if (m_xMediaStream.is())
             rPropMap.setProperty(PROP_PrivateStream, m_xMediaStream);
+    }
+    // Media Type
+    if (!m_sMediaMimeType.isEmpty())
+    {
+        rPropMap.setProperty(PROP_MediaMimeType, m_sMediaMimeType);
     }
 }
 

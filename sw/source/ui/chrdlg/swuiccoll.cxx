@@ -25,6 +25,7 @@
 #include <wrtsh.hxx>
 
 #include <sfx2/styfitem.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <ccoll.hxx>
 #include <fmtcol.hxx>

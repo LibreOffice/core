@@ -1233,6 +1233,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             GetDrawObjs() && GetDrawObjs()->size() == 1 &&
             (*GetDrawObjs())[0]->GetFrameFormat()->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR;
 
+    bool bCreateNewSuppressedByEmptySplit = false;
     if (bLoneAsCharAnchoredObj)
     {
         // Still try split text frame if we have columns.
@@ -1263,7 +1264,10 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // frame if we have columns.
             if (pBodyFrame && !FindColFrame() && isFirstVisibleFrameInPageBody(this)
                 && !hasFly(this) && !hasAtPageFly(pBodyFrame))
+            {
                 createNew = false;
+                bCreateNewSuppressedByEmptySplit = true;
+            }
         }
     }
 
@@ -1316,6 +1320,15 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             ChangeOffset( GetFollow(), nEnd );
             if( !bDelta )
                 GetFollow()->ManipOfst( nEnd );
+        }
+        else
+        {
+            if (bCreateNewSuppressedByEmptySplit && nEnd != nOld)
+            {
+                // Not empty split: nEnd moved
+                SplitFrame(nEnd);
+                dontJoin = true;
+            }
         }
     }
     else

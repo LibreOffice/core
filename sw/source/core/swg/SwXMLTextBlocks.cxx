@@ -558,7 +558,7 @@ void SwXMLTextBlocks::MakeBlockText( std::u16string_view rText )
     SwTextNode* pTextNode = m_xDoc->GetNodes()[ m_xDoc->GetNodes().GetEndOfContent().
                                         GetIndex() - 1 ]->GetTextNode();
     if( pTextNode->GetTextColl() == m_xDoc->GetDfltTextFormatColl() )
-        pTextNode->ChgFormatColl( m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
+        pTextNode->ChgFormatColl( m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ));
 
     sal_Int32 nPos = 0;
     do

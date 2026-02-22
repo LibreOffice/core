@@ -10,6 +10,7 @@
 #include <dialogs/SelectSheetViewDialog.hxx>
 #include <sal/config.h>
 #include <o3tl/safeint.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <memory>
 
 #include <viewdata.hxx>

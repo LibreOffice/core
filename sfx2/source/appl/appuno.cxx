@@ -37,6 +37,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/document/BrokenPackageRequest.hpp>

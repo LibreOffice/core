@@ -20,6 +20,8 @@
 #include <ChartResourceGroups.hxx>
 #include <ChartResourceGroupDlgs.hxx>
 
+#include <vcl/vclenum.hxx>
+
 #include <strings.hrc>
 #include <ResId.hxx>
 

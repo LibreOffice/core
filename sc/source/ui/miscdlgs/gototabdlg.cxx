@@ -11,6 +11,9 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <gototabdlg.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 ScGoToTabDlg::ScGoToTabDlg(weld::Window* pParent)
     : GenericDialogController(pParent, u"modules/scalc/ui/gotosheetdialog.ui"_ustr,

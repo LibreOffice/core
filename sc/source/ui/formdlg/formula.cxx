@@ -26,6 +26,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <formula/formulahelper.hxx>
 #include <formula/IFunctionDescription.hxx>
 #include <formula/errorcodes.hxx>

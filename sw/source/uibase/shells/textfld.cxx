@@ -64,6 +64,7 @@
 #include <swmodule.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 
 #include <xmloff/odffields.hxx>
 #include <IDocumentContentOperations.hxx>

@@ -20,6 +20,8 @@
 #include <memory>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weld.hxx>
 
@@ -118,7 +120,7 @@ public:
 
     DECL_LINK( MatrixHdl, weld::Toggleable&, void );
     DECL_LINK( FormulaHdl, weld::TextView&, void);
-    DECL_LINK( FormulaCursorHdl, weld::TextView&, void );
+    DECL_LINK( FormulaCursorHdl, weld::TextWidget&, void);
     DECL_LINK( BtnHdl, weld::Button&, void );
     DECL_LINK( FavToggleHdl, weld::Button&, void );
     DECL_LINK( DblClkHdl, FuncPage&, void );
@@ -1467,7 +1469,7 @@ void FormulaDlg_Impl::UpdateOldSel()
         std::swap(m_nSelectionStart, m_nSelectionEnd);
 }
 
-IMPL_LINK_NOARG( FormulaDlg_Impl, FormulaCursorHdl, weld::TextView&, void)
+IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaCursorHdl, weld::TextWidget&, void)
 {
     int nStartPos, nEndPos;
     m_xMEdit->get_selection_bounds(nStartPos, nEndPos);

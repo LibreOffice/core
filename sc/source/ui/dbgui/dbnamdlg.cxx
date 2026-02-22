@@ -25,7 +25,9 @@
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -354,9 +356,18 @@ void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
     }
 
     m_xBtnAdd->set_label( aStrModify );
-    m_xBtnAdd->set_sensitive(true);
-    m_xBtnRemove->set_sensitive(true);
-    m_xOptions->set_sensitive(true);
+    if (pData && !pData->GetTableStyleInfo())
+    {
+        m_xOptions->set_sensitive(true);
+        m_xBtnAdd->set_sensitive(true);
+        m_xBtnRemove->set_sensitive(true);
+    }
+    else
+    {
+        m_xBtnAdd->set_sensitive(false);
+        m_xBtnRemove->set_sensitive(false);
+        m_xOptions->set_sensitive(false);
+    }
 }
 
 bool ScDbNameDlg::IsRefInputMode() const
@@ -591,7 +602,12 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, weld::ComboBox&, void)
             m_xBtnRemove->set_sensitive(false);
         }
 
-        m_xAssignFrame->set_sensitive(true);
+        const ScDBData* pData = aLocalDbCol.getNamedDBs().findByUpperName(
+            ScGlobal::getCharClass().uppercase(theName));
+        if (pData && pData->GetTableStyleInfo())
+            m_xAssignFrame->set_sensitive(false);
+        else
+            m_xAssignFrame->set_sensitive(true);
 
         //@BugID 54702 enable/disable in the base class only
         //SFX_APPWINDOW->set_sensitive(true);

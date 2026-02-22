@@ -369,30 +369,32 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf156955)
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
 {
     // Test related to IgnoreBreakAfterMultilineField compatibility flag.
-    {
-        createSdImpressDoc("pptx/tdf148966.pptx");
-        xmlDocUniquePtr pXmlDoc = parseLayout();
-        // Without the accompanying fix, would fail with:
-        // - Expected: 5952
-        // - Actual  : 7814
-        // i.e. Line break after multiline field should have been ignored.
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"5952");
-    }
-    {
-        createSdImpressDoc("odp/tdf148966-withflag.odp");
-        xmlDocUniquePtr pXmlDoc = parseLayout();
-        // Without the accompanying fix, would fail with:
-        // - Expected: 5952
-        // - Actual  : 7814
-        // i.e. When IgnoreBreakAfterMultilineField flag is set, line break
-        // after multiline field should have been ignored.
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"5952");
-    }
-    {
-        createSdImpressDoc("odp/tdf148966-withoutflag.odp");
-        xmlDocUniquePtr pXmlDoc = parseLayout();
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"7814");
-    }
+    createSdImpressDoc("pptx/tdf148966.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+    // Without the accompanying fix, would fail with:
+    // - Expected: 5952
+    // - Actual  : 7814
+    // i.e. Line break after multiline field should have been ignored.
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"5952");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966_WithFlag)
+{
+    createSdImpressDoc("odp/tdf148966-withflag.odp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+    // Without the accompanying fix, would fail with:
+    // - Expected: 5952
+    // - Actual  : 7814
+    // i.e. When IgnoreBreakAfterMultilineField flag is set, line break
+    // after multiline field should have been ignored.
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"5952");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966_WithoutFlag)
+{
+    createSdImpressDoc("odp/tdf148966-withoutflag.odp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"7814");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTableVerticalText)
@@ -509,7 +511,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf164622)
                 "y", u"892");
 }
 
-CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010_ODP_enabled)
 {
     // Test UseTrailingEmptyLinesInLayout compatibility option.
     // The test documents have an auto-shrink text "textbox\n\n"; the box itself is positioned
@@ -544,7 +546,10 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
         assertXPathContent(pXml, "/metafile['2']/push/push/textarray[3]/text", u"textbox");
     }
+}
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010_ODP_disabled)
+{
     // 3. It must be disabled in an existing ODP without that option in settings.xml
     loadFromFile(u"odp/trailing-paragraphs.odp");
     {
@@ -568,7 +573,10 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(8100, y, 100);
         assertXPathContent(pXml, "/metafile['4']/push/push/textarray[3]/text", u"textbox");
     }
+}
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010_PPTX)
+{
     // Now test PPTX and its round-trip. The text there imports as draw:custom-shape; it generates
     // a single textarray element.
 

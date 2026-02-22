@@ -7,10 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <QtInstanceMenu.hxx>
 #include <QtInstanceToolbar.hxx>
 #include <QtInstanceToolbar.moc>
-
-#include <QtWidgets/QToolButton>
 
 QtInstanceToolbar::QtInstanceToolbar(QToolBar* pToolBar)
     : QtInstanceWidget(pToolBar)
@@ -33,11 +32,7 @@ void QtInstanceToolbar::set_item_sensitive(const OUString& rIdent, bool bSensiti
 {
     SolarMutexGuard g;
 
-    GetQtInstance().RunInMainThread([&] {
-        QWidget* pWidget = m_pToolBar->findChild<QWidget*>(toQString(rIdent));
-        assert(pWidget && "No toolbar child for the given ID found");
-        pWidget->setEnabled(bSensitive);
-    });
+    GetQtInstance().RunInMainThread([&] { getWidget(rIdent).setEnabled(bSensitive); });
 }
 
 bool QtInstanceToolbar::get_item_sensitive(const OUString& rIdent) const
@@ -45,11 +40,7 @@ bool QtInstanceToolbar::get_item_sensitive(const OUString& rIdent) const
     SolarMutexGuard g;
 
     bool bSensitive = false;
-    GetQtInstance().RunInMainThread([&] {
-        QWidget* pWidget = m_pToolBar->findChild<QWidget*>(toQString(rIdent));
-        assert(pWidget && "No toolbar child for the given ID found");
-        bSensitive = pWidget->isEnabled();
-    });
+    GetQtInstance().RunInMainThread([&] { bSensitive = getWidget(rIdent).isEnabled(); });
 
     return bSensitive;
 }
@@ -58,10 +49,9 @@ void QtInstanceToolbar::set_item_active(const OUString& rIdent, bool bActive)
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        QToolButton* pToolButton = m_pToolBar->findChild<QToolButton*>(toQString(rIdent));
-        assert(pToolButton && "No tool button with the given ID found");
-        assert(pToolButton->isCheckable() && "Tool button is not checkable");
-        pToolButton->setChecked(bActive);
+        QToolButton& rToolButton = getToolButton(rIdent);
+        assert(rToolButton.isCheckable() && "Tool button is not checkable");
+        rToolButton.setChecked(bActive);
     });
 }
 
@@ -71,10 +61,9 @@ bool QtInstanceToolbar::get_item_active(const OUString& rIdent) const
 
     bool bActive = false;
     GetQtInstance().RunInMainThread([&] {
-        QToolButton* pToolButton = m_pToolBar->findChild<QToolButton*>(toQString(rIdent));
-        assert(pToolButton && "No tool button with the given ID found");
-        assert(pToolButton->isCheckable() && "Tool button is not checkable");
-        bActive = pToolButton->isChecked();
+        QToolButton& rToolButton = getToolButton(rIdent);
+        assert(rToolButton.isCheckable() && "Tool button is not checkable");
+        bActive = rToolButton.isChecked();
     });
 
     return bActive;
@@ -91,18 +80,28 @@ bool QtInstanceToolbar::get_menu_item_active(const OUString&) const
     return false;
 }
 
-void QtInstanceToolbar::set_item_menu(const OUString&, weld::Menu*)
+void QtInstanceToolbar::set_item_menu(const OUString& rIdent, weld::Menu* pMenu)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QtInstanceMenu* pQtInstanceMenu = dynamic_cast<QtInstanceMenu*>(pMenu);
+        assert((!pMenu || pQtInstanceMenu) && "Non-Qt menu");
+        QMenu* pQMenu = pQtInstanceMenu ? pQtInstanceMenu->getMenu() : nullptr;
+        getToolButton(rIdent).setMenu(pQMenu);
+    });
 }
+
 void QtInstanceToolbar::set_item_popover(const OUString&, weld::Widget*)
 {
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceToolbar::set_item_visible(const OUString&, bool)
+void QtInstanceToolbar::set_item_visible(const OUString& rIdent, bool bVisible)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getWidget(rIdent).setVisible(bVisible); });
 }
 
 void QtInstanceToolbar::set_item_help_id(const OUString&, const OUString&)
@@ -110,37 +109,57 @@ void QtInstanceToolbar::set_item_help_id(const OUString&, const OUString&)
     assert(false && "Not implemented yet");
 }
 
-bool QtInstanceToolbar::get_item_visible(const OUString&) const
+bool QtInstanceToolbar::get_item_visible(const OUString& rIdent) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bVisible = false;
+    GetQtInstance().RunInMainThread([&] { bVisible = getWidget(rIdent).isVisible(); });
+
+    return bVisible;
 }
 
-void QtInstanceToolbar::set_item_label(const OUString&, const OUString&)
+void QtInstanceToolbar::set_item_label(const OUString& rIdent, const OUString& rLabel)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getToolButton(rIdent).setText(toQString(rLabel)); });
 }
 
-OUString QtInstanceToolbar::get_item_label(const OUString&) const
+OUString QtInstanceToolbar::get_item_label(const OUString& rIdent) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sLabel;
+    GetQtInstance().RunInMainThread([&] { sLabel = toOUString(getToolButton(rIdent).text()); });
+
+    return sLabel;
 }
 
-void QtInstanceToolbar::set_item_tooltip_text(const OUString&, const OUString&)
+void QtInstanceToolbar::set_item_tooltip_text(const OUString& rIdent, const OUString& rTip)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getWidget(rIdent).setToolTip(toQString(rTip)); });
 }
 
-OUString QtInstanceToolbar::get_item_tooltip_text(const OUString&) const
+OUString QtInstanceToolbar::get_item_tooltip_text(const OUString& rIdent) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sToolTip;
+    GetQtInstance().RunInMainThread(
+        [&] { sToolTip = toOUString(getToolButton(rIdent).toolTip()); });
+
+    return sToolTip;
 }
 
-void QtInstanceToolbar::set_item_icon_name(const OUString&, const OUString&)
+void QtInstanceToolbar::set_item_icon_name(const OUString& rIdent, const OUString& rIconName)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread(
+        [&] { getToolButton(rIdent).setIcon(loadQPixmapIcon(rIconName)); });
 }
 
 void QtInstanceToolbar::set_item_image_mirrored(const OUString&, bool)
@@ -148,15 +167,22 @@ void QtInstanceToolbar::set_item_image_mirrored(const OUString&, bool)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceToolbar::set_item_image(const OUString&,
-                                       const css::uno::Reference<css::graphic::XGraphic>&)
+void QtInstanceToolbar::set_item_image(const OUString& rIdent,
+                                       const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getToolButton(rIdent).setIcon(toQPixmap(rIcon)); });
 }
 
-void QtInstanceToolbar::set_item_image(const OUString&, VirtualDevice*)
+void QtInstanceToolbar::set_item_image(const OUString& rIdent, VirtualDevice* pDevice)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        const QPixmap aIconPixmap = pDevice ? toQPixmap(*pDevice) : QPixmap();
+        getToolButton(rIdent).setIcon(aIconPixmap);
+    });
 }
 
 void QtInstanceToolbar::insert_item(int, const OUString&)
@@ -171,44 +197,65 @@ void QtInstanceToolbar::insert_separator(int, const OUString&)
 
 int QtInstanceToolbar::get_n_items() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nItemCount = 0;
+    GetQtInstance().RunInMainThread([&] { nItemCount = m_pToolBar->actions().count(); });
+
+    return nItemCount;
 }
 
-OUString QtInstanceToolbar::get_item_ident(int) const
+OUString QtInstanceToolbar::get_item_ident(int nIndex) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sIdent;
+    GetQtInstance().RunInMainThread([&] { sIdent = toOUString(getWidget(nIndex).objectName()); });
+
+    return sIdent;
 }
 
-void QtInstanceToolbar::set_item_ident(int, const OUString&)
+void QtInstanceToolbar::set_item_ident(int nIndex, const OUString& rIdent)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getWidget(nIndex).setObjectName(toQString(rIdent)); });
 }
 
-void QtInstanceToolbar::set_item_label(int, const OUString&)
+void QtInstanceToolbar::set_item_label(int nIndex, const OUString& rLabel)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getToolButton(nIndex).setText(toQString(rLabel)); });
 }
 
-void QtInstanceToolbar::set_item_image(int, const css::uno::Reference<css::graphic::XGraphic>&)
+void QtInstanceToolbar::set_item_image(int nIndex,
+                                       const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getToolButton(nIndex).setIcon(toQPixmap(rIcon)); });
 }
 
-void QtInstanceToolbar::set_item_tooltip_text(int, const OUString&)
+void QtInstanceToolbar::set_item_tooltip_text(int nIndex, const OUString& rTip)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getWidget(nIndex).setToolTip(toQString(rTip)); });
 }
 
-void QtInstanceToolbar::set_item_accessible_name(int, const OUString&)
+void QtInstanceToolbar::set_item_accessible_name(int nIndex, const OUString& rName)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getWidget(nIndex).setAccessibleName(toQString(rName)); });
 }
 
-void QtInstanceToolbar::set_item_accessible_name(const OUString&, const OUString&)
+void QtInstanceToolbar::set_item_accessible_name(const OUString& rIdent, const OUString& rName)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getWidget(rIdent).setAccessibleName(toQString(rName)); });
 }
 
 vcl::ImageType QtInstanceToolbar::get_icon_size() const
@@ -229,6 +276,40 @@ int QtInstanceToolbar::get_drop_index(const Point&) const
 {
     assert(false && "Not implemented yet");
     return -1;
+}
+
+QWidget& QtInstanceToolbar::getWidget(const OUString& rIdent) const
+{
+    assert(GetQtInstance().IsMainThread());
+
+    QWidget* pWidget = m_pToolBar->findChild<QWidget*>(toQString(rIdent));
+    assert(pWidget && "No widget with the given ID found");
+    return *pWidget;
+}
+
+QWidget& QtInstanceToolbar::getWidget(int nIndex) const
+{
+    assert(GetQtInstance().IsMainThread());
+
+    QAction* pAction = m_pToolBar->actions().at(nIndex);
+    assert(pAction);
+    QWidget* pWidget = m_pToolBar->widgetForAction(pAction);
+    assert(pWidget);
+    return *pWidget;
+}
+
+QToolButton& QtInstanceToolbar::getToolButton(const OUString& rIdent) const
+{
+    QToolButton* pToolButton = qobject_cast<QToolButton*>(&getWidget(rIdent));
+    assert(pToolButton && "Not a tool button");
+    return *pToolButton;
+}
+
+QToolButton& QtInstanceToolbar::getToolButton(int nIndex) const
+{
+    QToolButton* pToolButton = qobject_cast<QToolButton*>(&getWidget(nIndex));
+    assert(pToolButton && "Not a tool button");
+    return *pToolButton;
 }
 
 void QtInstanceToolbar::toolButtonClicked(const QString& rId)

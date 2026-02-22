@@ -21,7 +21,9 @@
 #include "lockfailed.hxx"
 #include <unotools/resmgr.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/wintypes.hxx>
 
 LockFailedQueryBox::LockFailedQueryBox(weld::Window* pParent, const std::locale& rLocale)
     : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Error,

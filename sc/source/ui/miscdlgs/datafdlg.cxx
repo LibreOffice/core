@@ -15,6 +15,7 @@
 #include <tabvwsh.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <osl/diagnose.h>
 
 ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell& rTabViewShellOri)

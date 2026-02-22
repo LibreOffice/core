@@ -31,7 +31,6 @@
 #include <string_view>
 #include <vector>
 
-namespace com::sun::star::xml::sax { class XFastTokenHandler; }
 namespace com::sun::star::xml { struct Attribute; }
 
 namespace sax_fastparser

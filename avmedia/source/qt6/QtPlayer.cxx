@@ -287,15 +287,10 @@ uno::Reference<media::XFrameGrabber> SAL_CALL QtPlayer::createFrameGrabber()
     // as QtFrameGrabber has issues (see e.g. tdf#166055)
     static const bool bPreferQtFrameGrabber
         = (getenv("SAL_VCL_QT_USE_QT_FRAME_GRABBER") != nullptr);
-    if (!bPreferQtFrameGrabber)
-    {
-        uno::Reference<media::XFrameGrabber> xFrameGrabber
-            = createPlatformFrameGrabber(toOUString(m_xMediaPlayer->source().url()));
-        if (xFrameGrabber.is())
-            return xFrameGrabber;
-    }
+    if (bPreferQtFrameGrabber)
+        return new QtFrameGrabber(m_xMediaPlayer->source());
 
-    return new QtFrameGrabber(m_xMediaPlayer->source());
+    return createPlatformFrameGrabber(toOUString(m_xMediaPlayer->source().url()));
 }
 
 OUString SAL_CALL QtPlayer::getImplementationName()

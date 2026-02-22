@@ -224,22 +224,6 @@ const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
     return GetPropertyNameVector()[ nPropId ];
 }
 
-sal_Int32 PropertyMap::getPropertyId( std::u16string_view sPropName )
-{
-    // This may use a std::map to get faster from String to ID in the
-    // future, inside the [0..PROP_COUNT[ entries. Since it is currently
-    // only used for Diagram re-creation I opted for less memory usage here
-    if(sPropName.empty())
-        return -1;
-
-    const std::vector<OUString>& rVec(GetPropertyNameVector());
-    for(size_t a(0); a < rVec.size(); a++)
-        if(rVec[a] == sPropName)
-            return a;
-
-    return -1;
-}
-
 void PropertyMap::assignAll( const PropertyMap& rPropMap )
 {
     for (auto const& prop : rPropMap.maProperties)

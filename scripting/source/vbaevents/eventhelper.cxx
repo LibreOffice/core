@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ref.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>

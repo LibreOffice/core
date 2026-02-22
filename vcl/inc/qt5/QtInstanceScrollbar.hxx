@@ -11,6 +11,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Scrollbar.hxx>
+
 #include <QtWidgets/QScrollBar>
 
 class QtInstanceScrollbar : public QtInstanceWidget, public virtual weld::Scrollbar

@@ -25,6 +25,9 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
+#include <drawdoc.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawController.hxx>
 
 namespace sd {
 
@@ -51,6 +54,18 @@ SdNavigatorFloat::SdNavigatorFloat(SfxBindings* _pBindings, SfxChildWindow* _pMg
         [_pBindings] () { return RequestNavigatorUpdate(_pBindings); });
 
     SetMinOutputSizePixel(GetOptimalSize());
+
+    // Set the toolbox navigation button tooltips
+    // Tunnel through the controller to obtain a ViewShellBase.
+    css::uno::Reference<css::frame::XFrame> xFrame = _pBindings->GetActiveFrame();
+    ViewShellBase* pViewShellBase = nullptr;
+    rtl::Reference<sd::DrawController> pController
+        = dynamic_cast<sd::DrawController*>(xFrame->getController().get());
+    if (pController != nullptr)
+        pViewShellBase = pController->GetViewShellBase();
+    if (pViewShellBase == nullptr)
+        throw css::uno::RuntimeException(u"can not get ViewShellBase for frame"_ustr);
+    m_xNavWin->SetToolBoxToolTips(pViewShellBase->GetDocument());
 }
 
 void SdNavigatorFloat::Activate()

@@ -123,9 +123,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153526_commentInNumbering, "tdf153526_commentInNumbering.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // an exception was prematurely ending finishParagraph, losing numbering and CRs
     // so before the patch, this was 6.
     CPPUNIT_ASSERT_EQUAL(13, getParagraphs());
@@ -170,9 +167,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154478)
 {
     createSwDoc("tdf154478.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/comments.xml"_ustr);
 
@@ -199,9 +193,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153592_columnBreaks)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104394_lostTextbox, "tdf104394_lostTextbox.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     // This was only one page b/c the textbox was missing.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
@@ -311,9 +302,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePr2)
 
     createSwDoc("tdf154703_framePr2.rtf");
     verify();
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
@@ -620,8 +608,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf151912)
     assertXPath(pXmlDoc, "//w:sdt//w:sdtPr/w:id", "val", u"1802566103");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf147724)
 {
+    skipValidation(); // ERROR Attribute 'storeItemID' must appear on element 'w:dataBinding'.
+    createSwDoc("tdf147724.docx");
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
     // Ensure we load field value from external XML correctly (it was "HERUNTERLADEN")
@@ -631,6 +621,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147724, "tdf147724.docx")
     // There 2 variants possible, both are acceptable
     OUString sFieldResult = getXPathContent(pLayout, "/root/page[1]/body/txt[2]");
     CPPUNIT_ASSERT(sFieldResult == "Placeholder -> *HERUNTERLADEN*" || sFieldResult == "Placeholder -> *ABC*");
+
+    saveAndReload(TestFilter::DOCX);
+    pLayout = parseLayoutDump();
+
+    // Ensure we load field value from external XML correctly (it was "HERUNTERLADEN")
+    assertXPathContent(pLayout, "/root/page[1]/body/txt[1]", u"Placeholder -> *ABC*");
+
+    // This SDT has no storage id, it is not an error, but content can be taken from any suitable XML
+    // There 2 variants possible, both are acceptable
+    sFieldResult = getXPathContent(pLayout, "/root/page[1]/body/txt[2]");
+    CPPUNIT_ASSERT(sFieldResult == "Placeholder -> *HERUNTERLADEN*" || sFieldResult == "Placeholder -> *ABC*");
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:p/w:sdt/w:sdtPr/w:dataBinding", 2); // two w:sdt's with w:dataBinding
+    assertXPath(pXmlDoc, "//w:p[1]/w:sdt/w:sdtPr/w:dataBinding", "storeItemID",
+                u"{4E8A9591-F074-446B-902F-511FF79C122F}");
+    // empty storeItemID's must not be specified: MS Word considers those document corrupt
+    assertXPathNoAttribute(pXmlDoc, "//w:p[2]/w:sdt/w:sdtPr/w:dataBinding", "storeItemID");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf130782, "chart.docx")
@@ -777,9 +785,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
 {
     createSwDoc("embedded_chart.odt");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
 
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
@@ -862,9 +867,6 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingUnknownStyleInRedline)
 {
     // This must not fail assertions
     createSwDoc("UnknownStyleInRedline.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     // Check that the original unknown style name "UnknownStyle" is roundtripped
@@ -1133,19 +1135,38 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_behindDocB)
     verify(/*bIsExport*/ true);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind, "tdf159158_zOrder_headerBehind.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_headerBehind)
 {
-    // given a blue star (not marked as behind text) anchored in the header
-    // and an overlapping yellow rectangle anchored in the body text.
-    // (note that in ODT format the star is on top, but for DOCX format it must be behind (hidden)
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
-    // I don't know why the star is the lowest order in ODT import (maybe header weirdness),
-    // but it certainly needs to be the lowest on docx round-trip (also for header weirdness)
-    CPPUNIT_ASSERT_EQUAL(u"StarInHeader"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"RectangleInBody"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
+    createSwDoc("tdf159158_zOrder_headerBehind.odt");
+
+    {
+        // given a blue star (not marked as behind text) anchored in the header
+        // and an overlapping yellow rectangle anchored in the body text.
+        // (note that in ODT format the star is on top, but for DOCX format it must be behind (hidden)
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
+        CPPUNIT_ASSERT_EQUAL(u"RectangleInBody"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"StarInHeader"_ustr, getProperty<OUString>(zOrder1, u"Name"_ustr));
+    }
+
+    maTempFile.EnableKillingFile(false);
+    saveAndReload(TestFilter::DOCX);
+
+    {
+        // given a blue star (not marked as behind text) anchored in the header
+        // and an overlapping yellow rectangle anchored in the body text.
+        // (note that in ODT format the star is on top, but for DOCX format it must be behind (hidden)
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
+        CPPUNIT_ASSERT_EQUAL(u"StarInHeader"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"RectangleInBody"_ustr, getProperty<OUString>(zOrder1, u"Name"_ustr));
+    }
+
+    maTempFile.EnableKillingFile();
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind2, "tdf159158_zOrder_headerBehind2.docx")

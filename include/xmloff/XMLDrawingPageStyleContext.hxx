@@ -21,8 +21,9 @@
 
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimppr.hxx>
-#include <xmloff/families.hxx>
 #include <xmloff/dllapi.h>
+
+enum class XmlStyleFamily;
 
 class XMLOFF_DLLPUBLIC XMLDrawingPageStyleContext : public XMLPropStyleContext
 {

@@ -20,10 +20,14 @@
 #include <stdlib.h>
 #include <o3tl/sprintf.hxx>
 #include <tools/config.hxx>
+#include <tools/fldunit.hxx>
+#include <tools/mapunit.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>

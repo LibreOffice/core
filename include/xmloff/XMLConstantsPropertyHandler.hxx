@@ -24,10 +24,10 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlprhdl.hxx>
-#include <xmloff/xmltoken.hxx>
 
 template<typename EnumT>
 struct SvXMLEnumMapEntry;
+namespace xmloff::token { enum XMLTokenEnum : sal_Int16; }
 
 
 /** Abstract base-class for different XML-types. Derivations of this class

@@ -401,9 +401,15 @@ void TestBreakIterator::testLineBreaking()
 
         {
             const OUString str = u"word word、word word"_ustr;
+            aUserOptions.applyForbiddenRules = true; // tdf#169590
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(
                 str, strlen("word wordXwor"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10), aResult.breakIndex);
+
+            aUserOptions.applyForbiddenRules = false; // tdf#169590
+            i18n::LineBreakResults aResult2 = m_xBreak->getLineBreak(
+                str, strlen("word wordXwor"), aLocale, 0, aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(13), aResult2.breakIndex);
         }
     }
 
@@ -1682,10 +1688,19 @@ void TestBreakIterator::testChinese()
 
         // Comma normally not allowed at start of line, quote normally not allowed at end
         auto aTest = u"水水水、水水水「水水水水水水水水水"_ustr;
+        stUserOptions.applyForbiddenRules = true; // tdf#169590
+        stUserOptions.forbiddenBeginCharacters = u"、"_ustr;
+        stUserOptions.forbiddenEndCharacters = u"「"_ustr;
         auto stBreak1 = m_xBreak->getLineBreak(aTest, 3, stLocale, 0, stHyphOptions, stUserOptions);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), stBreak1.breakIndex);
         auto stBreak2 = m_xBreak->getLineBreak(aTest, 8, stLocale, 0, stHyphOptions, stUserOptions);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(7), stBreak2.breakIndex);
+
+        stUserOptions.applyForbiddenRules = false; // tdf#169590
+        auto stBreak3 = m_xBreak->getLineBreak(aTest, 3, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), stBreak3.breakIndex);
+        auto stBreak4 = m_xBreak->getLineBreak(aTest, 8, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), stBreak4.breakIndex);
     }
 
     // tdf#117554 Do not break at ZWNBSP
@@ -1742,6 +1757,9 @@ void TestBreakIterator::testChinese()
 
         auto aTest = u"例例\u201C例例例例\u201D例例"_ustr;
 
+        stUserOptions.applyForbiddenRules = true; // tdf#169590
+        stUserOptions.forbiddenBeginCharacters = u"\u201D"_ustr;
+        stUserOptions.forbiddenEndCharacters = u"\u201C"_ustr;
         // Break opportunities should be outside of the quotation marks.
         // U+201C is a left quotation mark, so the break opportunity should be to the left:
         auto stBreak1 = m_xBreak->getLineBreak(aTest, 3, stLocale, 0, stHyphOptions, stUserOptions);
@@ -1750,6 +1768,10 @@ void TestBreakIterator::testChinese()
         // U+201D is a right quotation mark, so the break opportunity should be to the right:
         auto stBreak2 = m_xBreak->getLineBreak(aTest, 8, stLocale, 0, stHyphOptions, stUserOptions);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(8), stBreak2.breakIndex);
+
+        stUserOptions.applyForbiddenRules = false; // tdf#169590
+        auto stBreak3 = m_xBreak->getLineBreak(aTest, 3, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), stBreak3.breakIndex);
     }
 }
 

@@ -169,179 +169,178 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenODTWithRestrictedEmbeddedFont)
 {
     // The ODT has a restricted embedded font, referenced both from styles.xml and content.xml.
     // Test its loading without and with approval; and check that there are no double requests
-    {
-        // 1. Load and do not approve the restricted font
-        FontMappingUseListener fontMappingData;
-        rtl::Reference xInteraction(new FontInteractionHandler(false));
-        loadWithParams(createFileURL(u"embed-restricted-style+autostyle.odt"),
-                       { comphelper::makePropertyValue(
-                           u"InteractionHandler"_ustr,
-                           uno::Reference<task::XInteractionHandler>(xInteraction)) });
+    // 1. Load and do not approve the restricted font
+    FontMappingUseListener fontMappingData;
+    rtl::Reference xInteraction(new FontInteractionHandler(false));
+    createSwDoc(
+        "embed-restricted-style+autostyle.odt",
+        { comphelper::makePropertyValue(u"InteractionHandler"_ustr,
+                                        uno::Reference<task::XInteractionHandler>(xInteraction)) });
 
-        // It asked exactly once, even though both styles.xml and content.xml requested the font:
-        CPPUNIT_ASSERT_EQUAL(1, xInteraction->getRequestCount());
-        // It requested the expected font
-        CPPUNIT_ASSERT_EQUAL(u"Naftalene"_ustr, xInteraction->getRequestedFontName().trim());
-        // The document is editable:
-        CPPUNIT_ASSERT(!getSwDocShell()->IsReadOnly());
+    // It asked exactly once, even though both styles.xml and content.xml requested the font:
+    CPPUNIT_ASSERT_EQUAL(1, xInteraction->getRequestCount());
+    // It requested the expected font
+    CPPUNIT_ASSERT_EQUAL(u"Naftalene"_ustr, xInteraction->getRequestedFontName().trim());
+    // The document is editable:
+    CPPUNIT_ASSERT(!getSwDocShell()->IsReadOnly());
 
-        fontMappingData.checkpoint();
-        // The request was disapproved, and the font didn't load; so it was substituted:
-        CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
-        CPPUNIT_ASSERT(fontMappingData.wasSubstituted(u"Naftalene"));
+    fontMappingData.checkpoint();
+    // The request was disapproved, and the font didn't load; so it was substituted:
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
+    CPPUNIT_ASSERT(fontMappingData.wasSubstituted(u"Naftalene"));
 
-        // Make sure that saving doesn't somehow embed the font
-        save(TestFilter::ODT);
-        xmlDocUniquePtr pXml = parseExport(u"content.xml"_ustr);
-        assertXPath(pXml, "//style:font-face[@style:name='Naftalene']");
-        assertXPath(pXml, "//style:font-face[@style:name='Naftalene']/svg:font-face-src", 0);
+    // Make sure that saving doesn't somehow embed the font
+    save(TestFilter::ODT);
+    xmlDocUniquePtr pXml = parseExport(u"content.xml"_ustr);
+    assertXPath(pXml, "//style:font-face[@style:name='Naftalene']");
+    assertXPath(pXml, "//style:font-face[@style:name='Naftalene']/svg:font-face-src", 0);
 
-        auto xZipFile = packages::zip::ZipFileAccess::createWithURL(
-            comphelper::getProcessComponentContext(), maTempFile.GetURL());
-        CPPUNIT_ASSERT(xZipFile);
-        for (const OUString& name : xZipFile->getElementNames())
-            CPPUNIT_ASSERT(name.indexOf("Naftalene") < 0);
-    }
+    auto xZipFile = packages::zip::ZipFileAccess::createWithURL(
+        comphelper::getProcessComponentContext(), maTempFile.GetURL());
+    CPPUNIT_ASSERT(xZipFile);
+    for (const OUString& name : xZipFile->getElementNames())
+        CPPUNIT_ASSERT(name.indexOf("Naftalene") < 0);
+}
 
-    {
-        // 2. Load and approve the restricted font
-        FontMappingUseListener fontMappingData;
-        rtl::Reference xInteraction(new FontInteractionHandler(true));
-        loadWithParams(createFileURL(u"embed-restricted-style+autostyle.odt"),
-                       { comphelper::makePropertyValue(
-                           u"InteractionHandler"_ustr,
-                           uno::Reference<task::XInteractionHandler>(xInteraction)) });
+CPPUNIT_TEST_FIXTURE(Test, testOpenODTWithRestrictedEmbeddedFont2)
+{
+    // 2. Load and approve the restricted font
+    FontMappingUseListener fontMappingData;
+    rtl::Reference xInteraction(new FontInteractionHandler(true));
+    createSwDoc(
+        "embed-restricted-style+autostyle.odt",
+        { comphelper::makePropertyValue(u"InteractionHandler"_ustr,
+                                        uno::Reference<task::XInteractionHandler>(xInteraction)) });
 
-        // It asked exactly once, even though both styles.xml and content.xml requested the font:
-        CPPUNIT_ASSERT_EQUAL(1, xInteraction->getRequestCount());
-        // It requested the expected font
-        CPPUNIT_ASSERT_EQUAL(u"Naftalene"_ustr, xInteraction->getRequestedFontName().trim());
-        // The document loaded read-only:
-        CPPUNIT_ASSERT(getSwDocShell()->IsReadOnly());
+    // It asked exactly once, even though both styles.xml and content.xml requested the font:
+    CPPUNIT_ASSERT_EQUAL(1, xInteraction->getRequestCount());
+    // It requested the expected font
+    CPPUNIT_ASSERT_EQUAL(u"Naftalene"_ustr, xInteraction->getRequestedFontName().trim());
+    // The document loaded read-only:
+    CPPUNIT_ASSERT(getSwDocShell()->IsReadOnly());
 
-        fontMappingData.checkpoint();
-        // The request was approved, and the font loaded; no substitution happened:
-        CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
-        CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Naftalene"));
+    fontMappingData.checkpoint();
+    // The request was approved, and the font loaded; no substitution happened:
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
+    CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Naftalene"));
 
-        // Make sure that saving doesn't somehow embed the font
-        save(TestFilter::ODT);
-        xmlDocUniquePtr pXml = parseExport(u"content.xml"_ustr);
-        assertXPath(pXml, "//style:font-face[@style:name='Naftalene']");
-        assertXPath(pXml, "//style:font-face[@style:name='Naftalene']/svg:font-face-src", 0);
+    // Make sure that saving doesn't somehow embed the font
+    save(TestFilter::ODT);
+    xmlDocUniquePtr pXml = parseExport(u"content.xml"_ustr);
+    assertXPath(pXml, "//style:font-face[@style:name='Naftalene']");
+    assertXPath(pXml, "//style:font-face[@style:name='Naftalene']/svg:font-face-src", 0);
 
-        auto xZipFile = packages::zip::ZipFileAccess::createWithURL(
-            comphelper::getProcessComponentContext(), maTempFile.GetURL());
-        CPPUNIT_ASSERT(xZipFile);
-        for (const OUString& name : xZipFile->getElementNames())
-            CPPUNIT_ASSERT(name.indexOf("Naftalene") < 0);
-    }
+    auto xZipFile = packages::zip::ZipFileAccess::createWithURL(
+        comphelper::getProcessComponentContext(), maTempFile.GetURL());
+    CPPUNIT_ASSERT(xZipFile);
+    for (const OUString& name : xZipFile->getElementNames())
+        CPPUNIT_ASSERT(name.indexOf("Naftalene") < 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testOpenDOCXWithRestrictedEmbeddedFont)
 {
     // The DOCX has two embedded fonts, one restricted (Naftalene), one unrestricted (Unsteady
     // Oversteer). Test without interaction handler, and with handler (without and with approval).
-    {
-        // 1. Load without interaction handler. It must not load the restricted font;
-        // unrestricted one must load.
-        FontMappingUseListener fontMappingData;
-        loadWithParams(createFileURL(u"embed-restricted+unrestricted.docx"), {});
+    // 1. Load without interaction handler. It must not load the restricted font;
+    // unrestricted one must load.
+    FontMappingUseListener fontMappingData;
+    loadFromFile(u"embed-restricted+unrestricted.docx");
 
-        // The document is editable:
-        CPPUNIT_ASSERT(!getSwDocShell()->IsReadOnly());
+    // The document is editable:
+    CPPUNIT_ASSERT(!getSwDocShell()->IsReadOnly());
 
-        fontMappingData.checkpoint();
+    fontMappingData.checkpoint();
 
-        // Interaction handler was absent, and the restricted font didn't load; it was substituted:
-        CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
-        CPPUNIT_ASSERT(fontMappingData.wasSubstituted(u"Naftalene"));
+    // Interaction handler was absent, and the restricted font didn't load; it was substituted:
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
+    CPPUNIT_ASSERT(fontMappingData.wasSubstituted(u"Naftalene"));
 
-        // Unrestricted font was loaded and used without substitution:
-        CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
-        CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
+    // Unrestricted font was loaded and used without substitution:
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
+    CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
 
-        // Make sure that saving doesn't somehow embed the font
-        save(TestFilter::DOCX);
-        xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBold", 0);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedItalic", 0);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBoldItalic", 0);
-    }
+    // Make sure that saving doesn't somehow embed the font
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBold", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedItalic", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBoldItalic", 0);
+}
 
-    {
-        // 2. Load and do not approve the restricted font. It must not load the restricted font;
-        // unrestricted one must load.
-        FontMappingUseListener fontMappingData;
-        rtl::Reference xInteraction(new FontInteractionHandler(false));
-        loadWithParams(createFileURL(u"embed-restricted+unrestricted.docx"),
-                       { comphelper::makePropertyValue(
-                           u"InteractionHandler"_ustr,
-                           uno::Reference<task::XInteractionHandler>(xInteraction)) });
+CPPUNIT_TEST_FIXTURE(Test, testOpenDOCXWithRestrictedEmbeddedFont2)
+{
+    // 2. Load and do not approve the restricted font. It must not load the restricted font;
+    // unrestricted one must load.
+    FontMappingUseListener fontMappingData;
+    rtl::Reference xInteraction(new FontInteractionHandler(false));
+    createSwDoc(
+        "embed-restricted+unrestricted.docx",
+        { comphelper::makePropertyValue(u"InteractionHandler"_ustr,
+                                        uno::Reference<task::XInteractionHandler>(xInteraction)) });
 
-        CPPUNIT_ASSERT_EQUAL(1, xInteraction->getRequestCount());
-        // It requested only the expected font (no requests for 'Unsteady Oversteer')
-        CPPUNIT_ASSERT_EQUAL(u"Naftalene"_ustr, xInteraction->getRequestedFontName().trim());
-        // The document is editable:
-        CPPUNIT_ASSERT(!getSwDocShell()->IsReadOnly());
+    CPPUNIT_ASSERT_EQUAL(1, xInteraction->getRequestCount());
+    // It requested only the expected font (no requests for 'Unsteady Oversteer')
+    CPPUNIT_ASSERT_EQUAL(u"Naftalene"_ustr, xInteraction->getRequestedFontName().trim());
+    // The document is editable:
+    CPPUNIT_ASSERT(!getSwDocShell()->IsReadOnly());
 
-        fontMappingData.checkpoint();
+    fontMappingData.checkpoint();
 
-        // The request was disapproved, and the font didn't load; so it was substituted:
-        CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
-        CPPUNIT_ASSERT(fontMappingData.wasSubstituted(u"Naftalene"));
+    // The request was disapproved, and the font didn't load; so it was substituted:
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
+    CPPUNIT_ASSERT(fontMappingData.wasSubstituted(u"Naftalene"));
 
-        // Unrestricted font was loaded and used without substitution:
-        CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
-        CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
+    // Unrestricted font was loaded and used without substitution:
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
+    CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
 
-        // Make sure that saving doesn't somehow embed the font
-        save(TestFilter::DOCX);
-        xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBold", 0);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedItalic", 0);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBoldItalic", 0);
-    }
+    // Make sure that saving doesn't somehow embed the font
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBold", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedItalic", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBoldItalic", 0);
+}
 
-    {
-        // 3. Load and approve the restricted font. It must load both fonts, and open in read-only
-        // mode.
-        FontMappingUseListener fontMappingData;
-        rtl::Reference xInteraction(new FontInteractionHandler(true));
-        loadWithParams(createFileURL(u"embed-restricted+unrestricted.docx"),
-                       { comphelper::makePropertyValue(
-                           u"InteractionHandler"_ustr,
-                           uno::Reference<task::XInteractionHandler>(xInteraction)) });
+CPPUNIT_TEST_FIXTURE(Test, testOpenDOCXWithRestrictedEmbeddedFont3)
+{
+    // 3. Load and approve the restricted font. It must load both fonts, and open in read-only
+    // mode.
+    FontMappingUseListener fontMappingData;
+    rtl::Reference xInteraction(new FontInteractionHandler(true));
+    createSwDoc(
+        "embed-restricted+unrestricted.docx",
+        { comphelper::makePropertyValue(u"InteractionHandler"_ustr,
+                                        uno::Reference<task::XInteractionHandler>(xInteraction)) });
 
-        CPPUNIT_ASSERT_EQUAL(1, xInteraction->getRequestCount());
-        // It requested the expected font
-        CPPUNIT_ASSERT_EQUAL(u"Naftalene"_ustr, xInteraction->getRequestedFontName().trim());
-        // The document loaded read-only:
-        CPPUNIT_ASSERT(getSwDocShell()->IsReadOnly());
+    CPPUNIT_ASSERT_EQUAL(1, xInteraction->getRequestCount());
+    // It requested the expected font
+    CPPUNIT_ASSERT_EQUAL(u"Naftalene"_ustr, xInteraction->getRequestedFontName().trim());
+    // The document loaded read-only:
+    CPPUNIT_ASSERT(getSwDocShell()->IsReadOnly());
 
-        fontMappingData.checkpoint();
+    fontMappingData.checkpoint();
 
-        // The request was approved, and the restricted font loaded; no substitution:
-        CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
-        CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Naftalene"));
+    // The request was approved, and the restricted font loaded; no substitution:
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
+    CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Naftalene"));
 
-        // Unrestricted font was loaded and used without substitution:
-        CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
-        CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
+    // Unrestricted font was loaded and used without substitution:
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
+    CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
 
-        // Make sure that saving doesn't somehow embed the font
-        save(TestFilter::DOCX);
-        xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBold", 0);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedItalic", 0);
-        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBoldItalic", 0);
-    }
+    // Make sure that saving doesn't somehow embed the font
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBold", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedItalic", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBoldItalic", 0);
 }
 
 #if !defined(MACOSX)
@@ -580,8 +579,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEmbedding)
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 3']", 5);
+    // 'DejaVu Sans' is by default exported because of table styles
     for (auto fontName :
-         { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
+         { "DejaVu Sans Mono", "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
     {
         OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 3']");
@@ -600,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEmbedding)
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 3']", 5);
-    for (auto fontName : { "DejaVu Sans", "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
+    for (auto fontName : { "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
     {
         OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 3']");

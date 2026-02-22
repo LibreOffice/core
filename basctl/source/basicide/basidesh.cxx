@@ -46,6 +46,7 @@
 #include <svl/srchitem.hxx>
 #include <tools/debug.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 
 #if defined(DISABLE_DYNLOADING) || ENABLE_MERGELIBS
 /* Avoid clash with the ones from svx/source/form/typemap.cxx */

@@ -20,7 +20,11 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <svtools/dlgname.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
@@ -37,7 +41,6 @@
 #include <SvxConfigPageHelper.hxx>
 #include <dialmgr.hxx>
 
-#include <dlgname.hxx>
 #include <comphelper/processfactory.hxx>
 
 static OUString GetDefaultToolbar() { return ITEM_TOOLBAR_URL + "standardbar"; }

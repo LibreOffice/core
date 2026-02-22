@@ -29,46 +29,17 @@
 // from atrstck.cxx
 extern const sal_uInt8 StackPos[];
 
-// FontCache is created in txtinit.cxx TextInit_ and deleted in TextFinit
-SwFontCache *pSwFontCache = nullptr;
-
-SwFontObj::SwFontObj( const SwTextFormatColl *pOwn, SwViewShell *pSh ) :
-    SwCacheObj( pOwn ),
-    m_aSwFont( &pOwn->GetAttrSet(), pSh ? &pSh->getIDocumentSettingAccess() : nullptr )
+SwFontObj::SwFontObj( const SwTextFormatColl *pOwner, SwViewShell *pSh ) :
+    m_aSwFont( &pOwner->GetAttrSet(), pSh ? &pSh->getIDocumentSettingAccess() : nullptr )
 {
     m_aSwFont.AllocFontCacheId( pSh, m_aSwFont.GetActual() );
-    const SwAttrSet& rAttrSet = pOwn->GetAttrSet();
+    const SwAttrSet& rAttrSet = pOwner->GetAttrSet();
     for (sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         m_pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i );
 }
 
 SwFontObj::~SwFontObj()
 {
-}
-
-SwFontAccess::SwFontAccess( const SwTextFormatColl *pOwn, SwViewShell *pSh ) :
-    SwCacheAccess( *pSwFontCache, pOwn, pOwn->IsInSwFntCache() ),
-    m_pShell( pSh )
-{
-}
-
-SwFontObj *SwFontAccess::Get( )
-{
-    return static_cast<SwFontObj *>( SwCacheAccess::Get( ) );
-}
-
-SwCacheObj *SwFontAccess::NewObj( )
-{
-    const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(m_pOwner))->SetInSwFntCache();
-    return new SwFontObj( static_cast<const SwTextFormatColl*>(m_pOwner), m_pShell );
-}
-
-SAL_DLLPUBLIC_EXPORT void FlushFontCache()
-{
-    if (pSwFontCache)
-        pSwFontCache->Flush();
-    if (pFntCache)
-        pFntCache->Flush();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,6 @@
 #include <tools/link.hxx>
 #include <utility>
 #include <vcl/toolboxid.hxx>
-#include <vcl/weld/Builder.hxx>
 
 #include <unordered_map>
 
@@ -45,13 +44,10 @@ namespace com :: sun :: star :: frame { class XLayoutManager; }
 namespace com :: sun :: star :: uno { class XComponentContext; }
 namespace com :: sun :: star :: util { class XURLTransformer; }
 
-class ToolBox;
+namespace weld { class Builder; }
+namespace weld { class Toolbar; }
 
-namespace weld
-{
-    class Builder;
-    class Toolbar;
-}
+class ToolBox;
 
 namespace svt
 {

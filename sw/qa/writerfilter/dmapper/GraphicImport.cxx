@@ -7,7 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <sal/config.h>
+
+#include <test/commontesttools.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -21,6 +24,7 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -29,11 +33,11 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for sw/source/writerfilter/dmapper/GraphicImport.cxx.
-class Test : public UnoApiXmlTest
+class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiXmlTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
+        : UnoApiTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };
@@ -382,14 +386,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellOfHraphics)
 CPPUNIT_TEST_FIXTURE(Test, testTdf149840SmartArtBackground)
 {
     // Make sure SmartArt is loaded as group shape
-    bool bUseGroup = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pChange);
-        pChange->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     loadFromFile(u"tdf149840_SmartArtBackground.docx");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -418,14 +416,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149840SmartArtBackground)
     // The test would have failed with Expected: 2404x5226, Actual: 2910x5226
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<sal_Int32>(2404), aShapeTwoSize.Width, 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<sal_Int32>(5226), aShapeTwoSize.Height, 1);
-
-    if (!bUseGroup)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> pChange(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(false, pChange);
-        pChange->commit();
-    }
 }
 }
 

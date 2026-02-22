@@ -141,11 +141,6 @@
         </child>
       </object>
     </child>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="form-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumbering|extended_tip|form">Click a numbering scheme in the list, and then enter a name for the scheme. The numbers correspond to the outline level of the styles.</property>
-      </object>
-    </child>
   </object>
   <object class="GtkDialog" id="OutlineNumberingDialog">
     <property name="can-focus">False</property>

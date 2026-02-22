@@ -619,6 +619,13 @@ interface BaseTextSelection
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_APPLY_THEME
+    [
+        ExecMethod = ExecDlg;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_PROTECTPOS
     [
         ExecMethod = Execute ;
@@ -628,5 +635,12 @@ interface BaseTextSelection
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
+    ]
+
+    SID_ADD_THEME
+    [
+        ExecMethod = ExecDlg;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 }

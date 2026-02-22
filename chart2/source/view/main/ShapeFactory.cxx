@@ -51,6 +51,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svdorect.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
 #include <tools/UnitConversion.hxx>
@@ -2216,89 +2217,62 @@ rtl::Reference<SvxShapeText>
             PropertyMapper::setMultiProperties( aPropNames, aPropValues, *xShape );
         }
 
-        bool bStackCharacters(false);
-        try
+        if( xFormattedString.hasElements() )
         {
-            xTextProperties->getPropertyValue( u"StackCharacters"_ustr ) >>= bStackCharacters;
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
-
-        if(bStackCharacters)
-        {
-            //if the characters should be stacked we use only the first character properties for code simplicity
-            if( xFormattedString.hasElements() )
+            bool bStackCharacters(false);
+            try
             {
+                xTextProperties->getPropertyValue( u"StackCharacters"_ustr ) >>= bStackCharacters;
+            }
+            catch( const uno::Exception& )
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "" );
+            }
+
+            // Lock during property update to prevent unnecessary layout work.
+            xShape->addActionLock();
+
+            if(bStackCharacters)
+            {
+                //if the characters should be stacked we use only the first character properties for code simplicity
                 size_t nLBreaks = xFormattedString.size() - 1;
-                uno::Reference< beans::XPropertySet > xSelectionProp(xSelectionCursor, uno::UNO_QUERY);
                 for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedString)
                 {
                     if (!rxFS->getString().isEmpty())
                     {
-                        xTextCursor->gotoEnd(false);
-                        xSelectionCursor->gotoEnd(false);
                         OUString aLabel = ShapeFactory::getStackedString(rxFS->getString(), bStackCharacters);
                         if (nLBreaks-- > 0)
                             aLabel += OUStringChar('\r');
-                        xShape->insertString(xTextCursor, aLabel, false);
-                        xSelectionCursor->gotoEnd(true); // select current paragraph
                         uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
-                        if (xFormattedString.size() > 1 && xSelectionProp.is())
-                        {
-                            PropertyMapper::setMappedProperties(xSelectionProp, xSourceProps,
+                        uno::Sequence<beans::PropertyValue> aPropVals =
+                            PropertyMapper::getPropVals(xSourceProps,
                                 PropertyMapper::getPropertyNameMapForTextShapeProperties());
-                        }
-                        else
-                        {
-                            PropertyMapper::setMappedProperties(*xShape, xSourceProps,
-                                PropertyMapper::getPropertyNameMapForTextShapeProperties());
-                        }
+                        xShape->appendTextPortion(aLabel, aPropVals);
                     }
-                }
-
-                // adapt font size according to page size
-                awt::Size aOldRefSize;
-                if( xTextProperties->getPropertyValue( u"ReferencePageSize"_ustr) >>= aOldRefSize )
-                {
-                    RelativeSizeHelper::adaptFontSizes( *xShape, aOldRefSize, rSize );
                 }
             }
-        }
-        else
-        {
-            uno::Reference< beans::XPropertySet > xSelectionProp(xSelectionCursor, uno::UNO_QUERY);
-            for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedString)
+            else
             {
-                if (!rxFS->getString().isEmpty())
+                for (const uno::Reference<chart2::XFormattedString>& rxFS : xFormattedString)
                 {
-                    xTextCursor->gotoEnd(false);
-                    xSelectionCursor->gotoEnd(false);
-                    xShape->insertString(xTextCursor, rxFS->getString(), false);
-                    xSelectionCursor->gotoEnd(true); // select current paragraph
-                    uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
-                    if (xFormattedString.size() > 1 && xSelectionProp.is())
+                    if (!rxFS->getString().isEmpty())
                     {
-                        PropertyMapper::setMappedProperties(xSelectionProp, xSourceProps,
-                            PropertyMapper::getPropertyNameMapForTextShapeProperties());
-                    }
-                    else
-                    {
-                        PropertyMapper::setMappedProperties(*xShape, xSourceProps,
-                            PropertyMapper::getPropertyNameMapForTextShapeProperties());
+                        uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
+                        uno::Sequence<beans::PropertyValue> aPropVals =
+                            PropertyMapper::getPropVals(xSourceProps,
+                                PropertyMapper::getPropertyNameMapForTextShapeProperties());
+                        xShape->appendTextPortion(rxFS->getString(), aPropVals);
                     }
                 }
             }
 
-            if( xFormattedString.hasElements() )
+            xShape->removeActionLock();
+
+            // adapt font size according to page size
+            awt::Size aOldRefSize;
+            if( xTextProperties->getPropertyValue(u"ReferencePageSize"_ustr) >>= aOldRefSize )
             {
-                // adapt font size according to page size
-                awt::Size aOldRefSize;
-                if( xTextProperties->getPropertyValue(u"ReferencePageSize"_ustr) >>= aOldRefSize )
-                {
-                    RelativeSizeHelper::adaptFontSizes( *xShape, aOldRefSize, rSize );
-                }
+                RelativeSizeHelper::adaptFontSizes( *xShape, aOldRefSize, rSize );
             }
         }
 
@@ -2309,10 +2283,19 @@ rtl::Reference<SvxShapeText>
             fFontHeight = convertPointToMm100(fFontHeight);
             sal_Int32 nXDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * 0.18f ) );
             sal_Int32 nYDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * 0.30f ) );
-            xShape->SvxShape::setPropertyValue( u"TextLeftDistance"_ustr, uno::Any( nXDistance ) );
-            xShape->SvxShape::setPropertyValue( u"TextRightDistance"_ustr, uno::Any( nXDistance ) );
-            xShape->SvxShape::setPropertyValue( u"TextUpperDistance"_ustr, uno::Any( nYDistance ) );
-            xShape->SvxShape::setPropertyValue( u"TextLowerDistance"_ustr, uno::Any( nYDistance ) );
+            uno::Sequence<OUString> aPropNames {
+                u"TextLeftDistance"_ustr,
+                u"TextRightDistance"_ustr,
+                u"TextUpperDistance"_ustr,
+                u"TextLowerDistance"_ustr,
+            };
+            uno::Sequence<uno::Any> aPropVals {
+                uno::Any( nXDistance ),
+                uno::Any( nXDistance ),
+                uno::Any( nYDistance ),
+                uno::Any( nYDistance ),
+            };
+            xShape->SvxShape::setPropertyValues( aPropNames, aPropVals );
         }
         sal_Int32 nXPos = rPos.X;
         sal_Int32 nYPos = rPos.Y;
@@ -2322,9 +2305,15 @@ rtl::Reference<SvxShapeText>
         ::basegfx::B2DHomMatrix aM;
         aM.rotate( -basegfx::deg2rad(nRotation) );//#i78696#->#i80521#
         aM.translate( nXPos, nYPos );
-        xShape->SvxShape::setPropertyValue( u"Transformation"_ustr, uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
-
-        xShape->SvxShape::setPropertyValue( u"ParaAdjust"_ustr, uno::Any( style::ParagraphAdjust_CENTER ) );
+        uno::Sequence<OUString> aPropNames {
+             u"Transformation"_ustr,
+             u"ParaAdjust"_ustr
+        };
+        uno::Sequence<uno::Any> aPropVals {
+            uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ),
+            uno::Any( style::ParagraphAdjust_CENTER )
+        };
+        xShape->SvxShape::setPropertyValues( aPropNames, aPropVals );
     }
     catch( const uno::Exception& )
     {

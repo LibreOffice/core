@@ -18,6 +18,8 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <strings.hrc>
 #include <retypepassdlg.hxx>
 #include <scresid.hxx>

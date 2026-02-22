@@ -24,6 +24,8 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XFrames > SwVbaFrames_BASE;

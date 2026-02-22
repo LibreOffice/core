@@ -120,7 +120,7 @@
 #include <fmtftntx.hxx>
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <tgrditem.hxx>
@@ -1758,7 +1758,7 @@ const SwCharFormat* GetSwCharFormat(const SwFormatINetFormat& rINet, SwDoc& rDoc
     if (rINet.GetValue().isEmpty())
         return nullptr;
 
-    const sal_uInt16 nId = rINet.GetINetFormatId();
+    const SwPoolFormatId nId = rINet.GetINetFormatId();
     const UIName& rStr = rINet.GetINetFormat();
     if (rStr.isEmpty())
     {
@@ -2540,10 +2540,10 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         for( n = rColls.size(); n; )
                         {
                             const SwTextFormatColl* pColl = rColls[ --n ];
-                            sal_uInt16 nPoolId = pColl->GetPoolFormatId();
+                            SwPoolFormatId nPoolId = pColl->GetPoolFormatId();
                             if (
                                 //Is a Non-Standard Outline Style
-                                (RES_POOLCOLL_HEADLINE1 > nPoolId || RES_POOLCOLL_HEADLINE9 < nPoolId) &&
+                                (SwPoolFormatId::COLL_HEADLINE1 > nPoolId || SwPoolFormatId::COLL_HEADLINE9 < nPoolId) &&
                                 //Has a valid outline level
                                 (pColl->IsAssignedToListLevelOfOutlineStyle()) &&
                                 // Is less than the lowest known non-standard level
@@ -3501,7 +3501,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 {
                     OUString aCond = pField->GetPar1();
                     OUString aTrueFalse = pField->GetPar2();
-                    sal_Int32 nPos = aTrueFalse.indexOf('|');
+                    sal_Int32 nPos = aTrueFalse.indexOf(CONDITIONAL_FIELD_SEPARATOR);
                     OUString aTrue;
                     OUString aFalse;
                     if (nPos == -1)
@@ -5267,6 +5267,14 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     sal_uInt8 nAdjBiDi;
     switch ( rAdjust.GetAdjust() )
     {
+        case SvxAdjust::ParaStart:
+            nAdj = 0;
+            nAdjBiDi = 0;
+            break;
+        case SvxAdjust::ParaEnd:
+            nAdj = 2;
+            nAdjBiDi = 2;
+            break;
         case SvxAdjust::Left:
             nAdj = 0;
             nAdjBiDi = 2;
@@ -6008,7 +6016,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTest
         const SfxPoolItem* pFillStyle(nullptr);
         const SfxPoolItem* pGradient(nullptr);
 
-        for (SfxItemIter aIter(*pSet); !aIter.IsAtEnd(); aIter.NextItem())
+        for (SfxItemIter aIter(*pSet); !aIter.IsAtEnd(); aIter.Next())
         {
             pItem = aIter.GetCurItem();
 

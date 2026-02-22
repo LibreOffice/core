@@ -24,15 +24,15 @@
 #include <sal/types.h>
 
 #include <cppuhelper/implbase.hxx>
-#include <xmloff/xmltoken.hxx>
 
 #include <vector>
 
-#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
+namespace com::sun::star::beans { struct StringPair; }
 namespace com::sun::star::document { class XDocumentProperties; }
 namespace com::sun::star::util { struct DateTime; }
+namespace xmloff::token { enum XMLTokenEnum : sal_Int16; }
 
 
 class SvXMLExport;

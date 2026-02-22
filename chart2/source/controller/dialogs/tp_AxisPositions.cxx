@@ -26,6 +26,7 @@
 #include <svx/chrtitem.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/formatter.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace ::com::sun::star;
 

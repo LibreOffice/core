@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:orphans="2" fo:widows="2" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="12.51mm" style:writing-mode="page"/>
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt" fo:language="en" fo:country="GB" style:letter-kerning="true"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Comment" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties fo:margin-left="1mm" fo:margin-right="1mm" fo:margin-top="1mm" fo:margin-bottom="0mm" style:contextual-spacing="false" fo:line-height="100%" fo:text-indent="0mm" style:auto-text-indent="false"/>
+   <style:text-properties fo:font-size="10pt"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="210mm" fo:page-height="297mm" style:print-orientation="portrait" fo:margin-top="20mm" fo:margin-bottom="20mm" fo:margin-left="20mm" fo:margin-right="20mm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p>He heard quiet steps behind him<office:annotation>
+      <dc:creator>Mike</dc:creator>
+      <dc:date>2026-01-31T17:49:06.393884900</dc:date>
+      <meta:creator-initials>M</meta:creator-initials>
+      <text:p text:style-name="Comment">A comment. One two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty.</text:p>
+     </office:annotation>. That didn&apos;t bode well. Who could be following him this late at night and in this deadbeat part of town? And at this particular moment, just after he pulled off the big time and was making off with the greenbacks<office:annotation>
+      <dc:creator>Mike</dc:creator>
+      <dc:date>2026-01-31T17:51:06.483107200</dc:date>
+      <meta:creator-initials>M</meta:creator-initials>
+      <text:p text:style-name="Comment">Another comment. Twenty-one twenty-two twenty-three twenty-four twenty-five twenty-six twenty-seven twenty-eight twenty-nine thirty.</text:p>
+     </office:annotation>. Was there another crook who&apos;d had the same idea, and was now watching him and waiting for a chance to grab the fruit of his labour? Or did the steps behind him mean that one of many law officers in town was on to him and just waiting to pounce and snap those cuffs on his wrists? He nervously looked all around. Suddenly he saw the alley. Like lightning he darted off to the left and disappeared between the two warehouses almost falling over the bin lying in the middle of the pavement. He tried to nervously tap his way along in the inky darkness and suddenly stiffened: it was a dead-end, he would have to go back the way he had come. The steps got louder and louder, he saw the black outline of a figure coming around the corner. Is this the end of the line? he thought pressing himself back against the wall trying to make himself invisible in the dark, was all that planning and energy wasted? He was dripping with sweat now, cold and wet, he could smell the fear coming off his clothes. Suddenly next to him, with a barely noticeable squeak, a door swung quietly to and fro in the night&apos;s breeze. Could this be the haven he&apos;d prayed for? Slowly he slid toward the door, pressing himself more and more into the wall, into the dark, away from his enemy. Would this door save his hide?</text:p>
+  </office:text>
+ </office:body>
+</office:document>

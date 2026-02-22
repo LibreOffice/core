@@ -34,6 +34,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <test/commontesttools.hxx>
 
 #include <unotxdoc.hxx>
 
@@ -45,9 +46,6 @@ public:
 
 DECLARE_OOXMLEXPORT_TEST(testWPGtextboxes, "testWPGtextboxes.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     auto MyShape = getShape(1);
@@ -68,17 +66,8 @@ DECLARE_OOXMLEXPORT_TEST(testWPGtextboxes, "testWPGtextboxes.docx")
 CPPUNIT_TEST_FIXTURE(Test, testSmartart)
 {
     // experimental config setting
-    bool bOrigSet = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    Resetter resetter(
-        [bOrigSet] () {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                    comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(bOrigSet, pBatch);
-            return pBatch->commit();
-        });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     auto verify = [this]() {
         CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -169,9 +158,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedCellStartDOCXExport)
 
 DECLARE_OOXMLEXPORT_TEST(testWpgOnly, "wpg-only.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Check position, it was nearly 0. This is a shape, so use getPosition(), not a property.
     CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(548005), xShape->getPosition().X);
@@ -358,10 +344,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560, "fdo72560.docx")
 
     // this will test the text direction and alignment for paragraphs
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaLeftRTL, u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), getProperty< sal_Int32 >( xParaLeftRTL, u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_END), getProperty< sal_Int32 >( xParaLeftRTL, u"ParaAdjust"_ustr ));
 
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( xParaRightLTR, u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( xParaRightLTR, u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_END), getProperty< sal_Int32 >( xParaRightLTR, u"ParaAdjust"_ustr ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560b, "fdo72560b.docx")
@@ -369,7 +355,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560b, "fdo72560b.docx")
     // The problem was libreoffice confuse when RTL was specified in non-default style
     uno::Reference<uno::XInterface> xParaEndRTL(getParagraph( 2, u"RTL END"_ustr));
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaEndRTL, u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_LEFT), getProperty< sal_Int32 >( xParaEndRTL, u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_END), getProperty< sal_Int32 >( xParaEndRTL, u"ParaAdjust"_ustr ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560c, "fdo72560c.docx")
@@ -377,14 +363,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560c, "fdo72560c.docx")
     // The problem was libreoffice confuse when RTL was specified in DocDefaults
     uno::Reference<uno::XInterface> xParaEndRTL(getParagraph( 2, u"RTL END"_ustr));
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>( xParaEndRTL, u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_LEFT), getProperty< sal_Int32 >( xParaEndRTL, u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_END), getProperty< sal_Int32 >( xParaEndRTL, u"ParaAdjust"_ustr ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560d, "fdo72560d.docx")
 {
     // The problem was libreoffice confuse when RTL was specified in "Normal" when not using Normal at all
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( getParagraph(1), u"ParaAdjust"_ustr ));
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_RIGHT), getProperty< sal_Int32 >( getParagraph(2), u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_END), getProperty< sal_Int32 >( getParagraph(1), u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(style::ParagraphAdjust_END), getProperty< sal_Int32 >( getParagraph(2), u"ParaAdjust"_ustr ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo72560e, "fdo72560e.docx")
@@ -392,7 +378,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo72560e, "fdo72560e.docx")
     // The problem was libreoffice confuse when *locale* is RTL, but w:bidi / w:jc are never defined.
     // This unit test would only be noticed if the testing environment is set to something like an Arabic locale.
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( getParagraph(2), u"WritingMode"_ustr ));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_LEFT), getProperty<sal_Int32>( getParagraph(2), u"ParaAdjust"_ustr ));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_START), getProperty<sal_Int32>( getParagraph(2), u"ParaAdjust"_ustr ));
 
     // widow/orphan control is on when never specified.
     CPPUNIT_ASSERT_EQUAL(sal_Int8(2), getProperty<sal_Int8>( getParagraph(2), u"ParaWidows"_ustr ));
@@ -611,17 +597,8 @@ DECLARE_OOXMLEXPORT_TEST(testStrict, "strict.docx")
 CPPUNIT_TEST_FIXTURE(Test, testSmartartStrict)
 {
     // experimental config setting
-    bool bOrigSet = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::get();
-    Resetter resetter(
-        [bOrigSet] () {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                    comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(bOrigSet, pBatch);
-            return pBatch->commit();
-        });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes> aCfg(
+        true);
 
     auto verify = [this]() {
         uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
@@ -679,9 +656,6 @@ DECLARE_OOXMLEXPORT_TEST(testLargeTwips, "large-twips.docx" )
 
 DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twips.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     // Slightly related to cp#1000043, the twips value was negative, which wrapped around somewhere,
     // while MSO seems to ignore that as well.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -691,9 +665,6 @@ DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twip
 
 DECLARE_OOXMLEXPORT_TEST(testFdo38414, "fdo38414.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     // The cells in the last (4th) column were merged properly and so the result didn't have the same height.
     // (Since w:gridBefore is worked around by faking another cell in the row, so column count is thus 5
     // instead of 4, therefore compare height of cells 4 and 5 rather than 3 and 4.)
@@ -761,9 +732,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134606)
 {
     createSwDoc("tdf134606.docx");
 
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     save(TestFilter::DOCX);
     // The problem was that the importer lost the nested table structure with w:gridBefore
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -795,9 +763,6 @@ DECLARE_OOXMLEXPORT_TEST(testChartSize, "chart-size.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testInlineGroupshape, "inline-groupshape.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Inline groupshape was in the background, so it was hidden sometimes by other shapes.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), u"Opaque"_ustr));
 }
@@ -827,9 +792,6 @@ DECLARE_OOXMLEXPORT_TEST(testCaption, "caption.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeTrackedchanges, "groupshape-trackedchanges.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     // Shape text was completely missing, ensure inserted text is available.

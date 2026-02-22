@@ -387,7 +387,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // set the default colour (from the default template), so that a meaningful
     // colour is set at all
     const Color& rDfltColor =
-        m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD )
+        m_pCSS1Parser->GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD )
             ->GetColor().GetValue();
     aItemSet.Put( SvxColorItem( rDfltColor, EE_CHAR_COLOR ) );
 
@@ -440,10 +440,9 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     if( HasStyleOptions( aStyle, aId, aClass )  &&
         ParseStyleOptions( aStyle, aId, aClass, aStyleItemSet, aPropInfo ) )
     {
-        SfxItemIter aIter( aStyleItemSet );
-
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        for (SfxItemIter aIter( aStyleItemSet ); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             PutEEPoolItem( aItemSet, *pItem );
         }
     }

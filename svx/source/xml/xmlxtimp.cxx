@@ -20,6 +20,7 @@
 #include <tools/urlobj.hxx>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>

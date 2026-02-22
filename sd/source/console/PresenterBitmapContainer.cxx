@@ -184,15 +184,6 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, u"ButtonDownFileName"_ustr) >>= sFileName)
-        try
-        {
-            pBitmap->SetBitmap(
-                BitmapDescriptor::ButtonDown,
-                sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
-        }
-        catch (Exception&)
-        {}
     if (PresenterConfigurationAccess::GetProperty(rxProperties, u"DisabledFileName"_ustr) >>= sFileName)
         try
         {
@@ -202,21 +193,9 @@ std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> PresenterBitmapConta
         }
         catch (Exception&)
         {}
-    if (PresenterConfigurationAccess::GetProperty(rxProperties, u"MaskFileName"_ustr) >>= sFileName)
-        try
-        {
-            pBitmap->SetBitmap(
-                BitmapDescriptor::Mask,
-                sd::presenter::PresenterHelper::loadBitmap(sFileName, rxCanvas));
-        }
-        catch (Exception&)
-        {}
 
     PresenterConfigurationAccess::GetProperty(rxProperties, u"XOffset"_ustr) >>= pBitmap->mnXOffset;
     PresenterConfigurationAccess::GetProperty(rxProperties, u"YOffset"_ustr) >>= pBitmap->mnYOffset;
-
-    PresenterConfigurationAccess::GetProperty(rxProperties, u"XHotSpot"_ustr) >>= pBitmap->mnXHotSpot;
-    PresenterConfigurationAccess::GetProperty(rxProperties, u"YHotSpot"_ustr) >>= pBitmap->mnYHotSpot;
 
     PresenterConfigurationAccess::GetProperty(rxProperties, u"ReplacementColor"_ustr) >>= pBitmap->maReplacementColor;
 
@@ -249,8 +228,6 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor()
       mnHeight(0),
       mnXOffset(0),
       mnYOffset(0),
-      mnXHotSpot(0),
-      mnYHotSpot(0),
       maReplacementColor(0x00000000),
       meHorizontalTexturingMode(Once),
       meVerticalTexturingMode(Once)
@@ -263,8 +240,6 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (
       mnHeight(0),
       mnXOffset(0),
       mnYOffset(0),
-      mnXHotSpot(0),
-      mnYHotSpot(0),
       maReplacementColor(0x00000000),
       meHorizontalTexturingMode(Once),
       meVerticalTexturingMode(Once)
@@ -276,16 +251,12 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (
     mnHeight = rpDefault->mnHeight;
     mnXOffset = rpDefault->mnXOffset;
     mnYOffset = rpDefault->mnYOffset;
-    mnXHotSpot = rpDefault->mnXHotSpot;
-    mnYHotSpot = rpDefault->mnYHotSpot;
     maReplacementColor = rpDefault->maReplacementColor;
     meHorizontalTexturingMode = rpDefault->meHorizontalTexturingMode;
     meVerticalTexturingMode = rpDefault->meVerticalTexturingMode;
     mxNormalBitmap = rpDefault->mxNormalBitmap;
     mxMouseOverBitmap = rpDefault->mxMouseOverBitmap;
-    mxButtonDownBitmap = rpDefault->mxButtonDownBitmap;
     mxDisabledBitmap = rpDefault->mxDisabledBitmap;
-    mxMaskBitmap = rpDefault->mxMaskBitmap;
 }
 
 const css::uno::Reference<css::rendering::XBitmap>&
@@ -309,20 +280,11 @@ css::uno::Reference<css::rendering::XBitmap> const &
             else
                 return mxNormalBitmap;
 
-        case ButtonDown:
-            if (mxButtonDownBitmap.is())
-                return mxButtonDownBitmap;
-            else
-                return mxNormalBitmap;
-
         case Disabled:
             if (mxDisabledBitmap.is())
                 return mxDisabledBitmap;
             else
                 return mxNormalBitmap;
-
-        case Mask:
-            return mxMaskBitmap;
     }
 }
 
@@ -347,16 +309,8 @@ void PresenterBitmapContainer::BitmapDescriptor::SetBitmap (
             mxMouseOverBitmap = rxBitmap;
             break;
 
-        case ButtonDown:
-            mxButtonDownBitmap = rxBitmap;
-            break;
-
         case Disabled:
             mxDisabledBitmap = rxBitmap;
-            break;
-
-        case Mask:
-            mxMaskBitmap = rxBitmap;
             break;
     }
 }

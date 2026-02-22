@@ -18,8 +18,13 @@
  */
 
 #include <vcl/TypeSerializer.hxx>
+#include <vcl/animate/Animation.hxx>
+#include <vcl/BinaryDataContainer.hxx>
+#include <tools/color.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
+#include <tools/stream.hxx>
 #include <sal/log.hxx>
 #include <comphelper/fileformat.h>
 #include <vcl/filter/SvmReader.hxx>
@@ -27,6 +32,9 @@
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/gfxlink.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 TypeSerializer::TypeSerializer(SvStream& rStream)
     : GenericTypeSerializer(rStream)

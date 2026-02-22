@@ -29,6 +29,7 @@
 #include <vector>
 
 #include <swrect.hxx>
+#include <viewsh.hxx>
 
 class OutputDevice;
 class SwFrame;

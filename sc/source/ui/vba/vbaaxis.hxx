@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
+
+#include "vbachart.hxx"
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
 #include <ooo/vba/excel/XChart.hpp>

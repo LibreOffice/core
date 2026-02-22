@@ -25,6 +25,7 @@
 
 #include <config_options.h>
 #include <accessibility/accessibletablistbox.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/accessibletableprovider.hxx>
@@ -34,11 +35,21 @@
 #include <memory>
 #include <vector>
 
+enum class SvTabListBoxRole
+{
+    Unknown,
+    Tree,       // hierarchical, single-column
+    TreeGrid,   // hierarchical, multi-column
+    ListBox,    // flat, single-column
+    Grid        // flat, multi-column
+};
+
 class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
 {
 private:
     std::vector<SvLBoxTab>      mvTabList;
     OUString                    aCurEntry;
+    SvTabListBoxRole            m_eRole;
 
 protected:
     static std::u16string_view  GetToken( std::u16string_view sStr, sal_Int32 &nIndex );
@@ -73,6 +84,9 @@ public:
 
     void             SetTabAlignCenter(sal_uInt16 nTab);
     void             SetTabEditable( sal_uInt16 nTab, bool bEditable );
+
+    void             SetRole(SvTabListBoxRole e) { m_eRole = e; }
+    SvTabListBoxRole GetRole() const { return m_eRole; }
 
     virtual void     DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
@@ -113,8 +127,9 @@ public:
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, SvTreeListEntry* pParent,
                                  sal_uInt32 nPos, sal_uInt16 nCol, OUString* pUserData = nullptr ) override;
-    virtual sal_uInt32 Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uInt32 nPos=TREELIST_APPEND) override;
-    virtual sal_uInt32 Insert( SvTreeListEntry* pEntry, sal_uInt32 nRootPos = TREELIST_APPEND ) override;
+    virtual void Insert(SvTreeListEntry* pEnt, SvTreeListEntry* pPar,
+                        sal_uInt32 nPos = TREELIST_APPEND) override;
+    virtual void Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos = TREELIST_APPEND) override;
 
     // Accessible -------------------------------------------------------------
 

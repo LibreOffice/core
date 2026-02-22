@@ -24,6 +24,7 @@
 
 #include <tabpages.hxx>
 #include <osl/diagnose.h>
+#include <vcl/weld/Builder.hxx>
 
 const WhichRangesContainer ScTabPageProtection::pProtectionRanges(
     svl::Items<SID_SCATTR_PROTECTION, SID_SCATTR_PROTECTION>);

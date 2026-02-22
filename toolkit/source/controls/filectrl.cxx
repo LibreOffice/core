@@ -25,6 +25,7 @@
 #include <osl/file.h>
 #include <svl/svlresid.hxx>
 #include <svl/svl.hrc>
+#include <unotools/resmgr.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/toolkit/edit.hxx>

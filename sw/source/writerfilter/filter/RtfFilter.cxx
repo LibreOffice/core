@@ -31,6 +31,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
+#include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>

@@ -48,11 +48,11 @@ IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, const weld::TreeIter&, rEntry, b
     LibraryLocation eLocation = aDesc.GetLocation();
     EntryType eType = aDesc.GetType();
 
-    if ( eType == OBJ_TYPE_DOCUMENT )
+    if ( eType == EntryType::Document )
     {
         ImpCreateLibEntries( rEntry, aDocument, eLocation );
     }
-    else if ( eType == OBJ_TYPE_LIBRARY )
+    else if ( eType == EntryType::Library )
     {
         const OUString& aOULibName( aDesc.GetLibName() );
 
@@ -112,10 +112,10 @@ IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, const weld::TreeIter&, rEntry, b
             }
         }
     }
-    else if ( eType == OBJ_TYPE_DOCUMENT_OBJECTS
-            || eType == OBJ_TYPE_USERFORMS
-            || eType == OBJ_TYPE_NORMAL_MODULES
-            || eType == OBJ_TYPE_CLASS_MODULES )
+    else if ( eType == EntryType::DocumentObjects
+            || eType == EntryType::UserForms
+            || eType == EntryType::NormalModules
+            || eType == EntryType::ClassModules )
     {
         const OUString& aLibName( aDesc.GetLibName() );
         ImpCreateLibSubSubEntriesInVBAMode( rEntry, aDocument, aLibName );
@@ -191,11 +191,11 @@ SbxVariable* SbTreeListBox::FindVariable(const weld::TreeIter* pEntry)
 
             switch ( pBE->GetType() )
             {
-            case OBJ_TYPE_LIBRARY:
+            case EntryType::Library:
                 if (BasicManager* pBasMgr = aDocument.getBasicManager())
                     pVar = pBasMgr->GetLib( aName );
                 break;
-            case OBJ_TYPE_MODULE:
+            case EntryType::Module:
                 DBG_ASSERT(dynamic_cast<StarBASIC*>(pVar), "FindVariable: invalid Basic");
                 if(!pVar)
                 {
@@ -208,7 +208,7 @@ SbxVariable* SbTreeListBox::FindVariable(const weld::TreeIter* pEntry)
                 }
                 pVar = static_cast<StarBASIC*>(pVar)->FindModule( aName );
                 break;
-            case OBJ_TYPE_METHOD:
+            case EntryType::Method:
                 DBG_ASSERT(dynamic_cast<SbxObject*>(pVar), "FindVariable: invalid module/object");
                 if(!pVar)
                 {
@@ -216,15 +216,15 @@ SbxVariable* SbTreeListBox::FindVariable(const weld::TreeIter* pEntry)
                 }
                 pVar = static_cast<SbxObject*>(pVar)->GetMethods()->Find(aName, SbxClassType::Method);
                 break;
-            case OBJ_TYPE_DIALOG:
+            case EntryType::Dialog:
                 // sbx dialogs removed
                 break;
-            case OBJ_TYPE_DOCUMENT_OBJECTS:
+            case EntryType::DocumentObjects:
                 bDocumentObjects = true;
                 [[fallthrough]];
-            case OBJ_TYPE_USERFORMS:
-            case OBJ_TYPE_NORMAL_MODULES:
-            case OBJ_TYPE_CLASS_MODULES:
+            case EntryType::UserForms:
+            case EntryType::NormalModules:
+            case EntryType::ClassModules:
                 // skip, to find the child entry.
                 continue;
             default:
@@ -247,7 +247,7 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
     OUString aLibSubName;
     OUString aName;
     OUString aMethodName;
-    EntryType eType = OBJ_TYPE_UNKNOWN;
+    EntryType eType = EntryType::Unknown;
 
     if ( !pEntry )
         return EntryDescriptor(std::move(aDocument), eLocation, aLibName, aLibSubName, aName, aMethodName, eType);
@@ -276,7 +276,7 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
                 {
                     aDocument = pDocumentEntry->GetDocument();
                     eLocation = pDocumentEntry->GetLocation();
-                    eType = OBJ_TYPE_DOCUMENT;
+                    eType = EntryType::Document;
                 }
             }
             break;
@@ -294,29 +294,29 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
 
             switch ( pBE->GetType() )
             {
-                case OBJ_TYPE_LIBRARY:
+                case EntryType::Library:
                 {
                     aLibName = pair.second;
                     eType = pBE->GetType();
                 }
                 break;
-                case OBJ_TYPE_MODULE:
-                case OBJ_TYPE_DIALOG:
+                case EntryType::Module:
+                case EntryType::Dialog:
                 {
                     aName = pair.second;
                     eType = pBE->GetType();
                 }
                 break;
-                case OBJ_TYPE_METHOD:
+                case EntryType::Method:
                 {
                     aMethodName = pair.second;
                     eType = pBE->GetType();
                 }
                 break;
-                case OBJ_TYPE_DOCUMENT_OBJECTS:
-                case OBJ_TYPE_USERFORMS:
-                case OBJ_TYPE_NORMAL_MODULES:
-                case OBJ_TYPE_CLASS_MODULES:
+                case EntryType::DocumentObjects:
+                case EntryType::UserForms:
+                case EntryType::NormalModules:
+                case EntryType::ClassModules:
                 {
                     aLibSubName = pair.second;
                     eType = pBE->GetType();
@@ -325,12 +325,12 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
                 default:
                 {
                     OSL_FAIL( "GetEntryDescriptor: unknown type" );
-                    eType = OBJ_TYPE_UNKNOWN;
+                    eType = EntryType::Unknown;
                 }
                 break;
             }
 
-            if ( eType == OBJ_TYPE_UNKNOWN )
+            if ( eType == EntryType::Unknown )
                 break;
         }
     }
@@ -343,13 +343,13 @@ SbxItemType SbTreeListBox::ConvertType (EntryType eType)
 {
     switch (eType)
     {
-        case OBJ_TYPE_DOCUMENT:  return SBX_TYPE_SHELL;
-        case OBJ_TYPE_LIBRARY:   return SBX_TYPE_LIBRARY;
-        case OBJ_TYPE_MODULE:    return SBX_TYPE_MODULE;
-        case OBJ_TYPE_DIALOG:    return SBX_TYPE_DIALOG;
-        case OBJ_TYPE_METHOD:    return SBX_TYPE_METHOD;
+        case EntryType::Document:  return SBX_TYPE_SHELL;
+        case EntryType::Library:   return SBX_TYPE_LIBRARY;
+        case EntryType::Module:    return SBX_TYPE_MODULE;
+        case EntryType::Dialog:    return SBX_TYPE_DIALOG;
+        case EntryType::Method:    return SBX_TYPE_METHOD;
         default:
-            return static_cast<SbxItemType>(OBJ_TYPE_UNKNOWN);
+            return static_cast<SbxItemType>(EntryType::Unknown);
     }
 }
 
@@ -367,37 +367,37 @@ bool SbTreeListBox::IsValidEntry(const weld::TreeIter& rEntry)
 
     switch ( eType )
     {
-        case OBJ_TYPE_DOCUMENT:
+        case EntryType::Document:
         {
             bIsValid = aDocument.isAlive()
                 && (aDocument.isApplication()
                     || GetRootEntryName(aDocument, eLocation) == m_xControl->get_text(rEntry));
         }
         break;
-        case OBJ_TYPE_LIBRARY:
+        case EntryType::Library:
         {
             bIsValid = aDocument.hasLibrary( E_SCRIPTS, aLibName ) || aDocument.hasLibrary( E_DIALOGS, aLibName );
         }
         break;
-        case OBJ_TYPE_MODULE:
+        case EntryType::Module:
         {
             bIsValid = aDocument.hasModule( aLibName, aName );
         }
         break;
-        case OBJ_TYPE_DIALOG:
+        case EntryType::Dialog:
         {
             bIsValid = aDocument.hasDialog( aLibName, aName );
         }
         break;
-        case OBJ_TYPE_METHOD:
+        case EntryType::Method:
         {
             bIsValid = HasMethod( aDocument, aLibName, aName, aMethodName );
         }
         break;
-        case OBJ_TYPE_DOCUMENT_OBJECTS:
-        case OBJ_TYPE_USERFORMS:
-        case OBJ_TYPE_NORMAL_MODULES:
-        case OBJ_TYPE_CLASS_MODULES:
+        case EntryType::DocumentObjects:
+        case EntryType::UserForms:
+        case EntryType::NormalModules:
+        case EntryType::ClassModules:
         {
             bIsValid = true;
         }

@@ -20,6 +20,10 @@
 #include "customizeaddresslistdialog.hxx"
 #include "createaddresslistdialog.hxx"
 
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
         weld::Window* pParent, const SwCSVData& rOldData)
     : SfxDialogController(pParent, u"modules/swriter/ui/customizeaddrlistdialog.ui"_ustr,

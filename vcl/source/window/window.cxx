@@ -29,6 +29,8 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclevent.hxx>
@@ -78,6 +80,7 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <tools/json_writer.hxx>
+#include <unotools/fontdefs.hxx>
 #include <boost/property_tree/ptree.hpp>
 
 #include <cassert>
@@ -1237,30 +1240,12 @@ ImplWinData* Window::ImplGetWinData() const
 }
 
 
-void WindowOutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool bWindowInvalidate )
+void WindowOutputDevice::CopyDeviceArea( SalTwoRect& aPosAry )
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
         return;
 
-    if (bWindowInvalidate)
-    {
-        const tools::Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
-                Size(aPosAry.mnSrcWidth, aPosAry.mnSrcHeight));
-
-        mxOwnerWindow->ImplMoveAllInvalidateRegions(aSrcRect,
-                aPosAry.mnDestX-aPosAry.mnSrcX,
-                aPosAry.mnDestY-aPosAry.mnSrcY,
-                false);
-
-        mpGraphics->CopyArea(aPosAry.mnDestX, aPosAry.mnDestY,
-                aPosAry.mnSrcX, aPosAry.mnSrcY,
-                aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
-                *this);
-
-        return;
-    }
-
-    OutputDevice::CopyDeviceArea(aPosAry, bWindowInvalidate);
+    OutputDevice::CopyDeviceArea(aPosAry);
 }
 
 const OutputDevice* WindowOutputDevice::DrawOutDevDirectCheck(const OutputDevice& rSrcDev) const

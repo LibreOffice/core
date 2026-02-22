@@ -19,6 +19,7 @@
 #include <TextCharacterSpacingPopup.hxx>
 #include "TextCharacterSpacingControl.hxx"
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 using namespace svx;
 

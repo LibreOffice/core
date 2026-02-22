@@ -32,6 +32,17 @@
         </info>
       </prop>
     </group>
+    <group oor:name="Certificate">
+      <info>
+        <desc>Specifies security settings related to certificates.</desc>
+      </info>
+      <prop oor:name="DisableCertificateRevocationCheck" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Disable certificate revocation checks.</desc>
+        </info>
+        <value>false</value>
+      </prop>
+    </group>
     <group oor:name="HiddenContent">
       <info>
         <desc>Specifies whether to remove the hidden content when sending the document attached to an email</desc>

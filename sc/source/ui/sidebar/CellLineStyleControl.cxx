@@ -21,6 +21,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/lineitem.hxx>
 #include <sfx2/bindings.hxx>

@@ -41,6 +41,7 @@
 #include <salinst.hxx>
 #include <comphelper/emscriptenthreading.hxx>
 #include <comphelper/profilezone.hxx>
+#include <comphelper/lok.hxx>
 #include <schedulerimpl.hxx>
 
 namespace {
@@ -617,7 +618,8 @@ void Scheduler::CallbackTaskScheduling()
     }
     catch (css::uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION("vcl.schedule", "Uncaught");
+        TOOLS_WARN_EXCEPTION("vcl.schedule",
+                             "Uncaught exception for task '" << pTask->GetDebugName() << "'");
         std::abort();
     }
     catch (std::exception& e)
@@ -796,7 +798,7 @@ Task::~Task()
             mpSchedulerData->mpTask = nullptr;
     }
     else
-        assert(nullptr == mpSchedulerData || comphelper::IsFuzzing());
+        assert(nullptr == mpSchedulerData || comphelper::IsFuzzing() || comphelper::LibreOfficeKit::isActive());
 }
 
 bool Task::DecideTransferredExecution()

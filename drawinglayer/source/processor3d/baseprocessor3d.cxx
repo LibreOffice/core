@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <utility>
 

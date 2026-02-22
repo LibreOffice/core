@@ -122,18 +122,20 @@ OUString GraphicSizeCheckGUIEntry::getText()
 
 void GraphicSizeCheckGUIEntry::markObject()
 {
-    sd::ViewShell* pViewShell = m_pDocument->GetDocSh()->GetViewShell();
-    SdrView* pView = pViewShell->GetView();
-    pView->ShowSdrPage(m_pViolation->getObject()->getSdrPageFromSdrObject());
-    pView->UnmarkAll();
-    pView->MarkObj(m_pViolation->getObject(), pView->GetSdrPageView());
+    if (sd::ViewShell* pViewShell = m_pDocument->GetDocSh()->GetViewShell())
+    {
+        SdrView* pView = pViewShell->GetView();
+        pView->ShowSdrPage(m_pViolation->getObject()->getSdrPageFromSdrObject());
+        pView->UnmarkAll();
+        pView->MarkObj(m_pViolation->getObject(), pView->GetSdrPageView());
+    }
 }
 
 void GraphicSizeCheckGUIEntry::runProperties()
 {
     markObject();
-    sd::ViewShell* pViewShell = m_pDocument->GetDocSh()->GetViewShell();
-    pViewShell->GetDispatcher()->Execute(SID_ATTR_GRAF_CROP, SfxCallMode::SYNCHRON);
+    if (sd::ViewShell* pViewShell = m_pDocument->GetDocSh()->GetViewShell())
+        pViewShell->GetDispatcher()->Execute(SID_ATTR_GRAF_CROP, SfxCallMode::SYNCHRON);
 }
 
 GraphicSizeCheckGUIResult::GraphicSizeCheckGUIResult(SdDrawDocument* pDocument)

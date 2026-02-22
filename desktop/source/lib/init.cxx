@@ -15,6 +15,7 @@
 #include <config_buildconfig.h>
 #include <config_cairo_rgba.h>
 #include <config_features.h>
+#include <config_vclplug.h>
 #include <editeng/unolingu.hxx>
 
 #include <stdio.h>
@@ -66,6 +67,7 @@
 #include <utility>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/errinf.hxx>
+#include <vcl/idletask.hxx>
 #include <vcl/lok.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -166,11 +168,13 @@
 #include <svx/ucsubset.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/GestureEventPan.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/urlobj.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -181,10 +185,11 @@
 #include <vcl/ImageTree.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/dialoghelper.hxx>
-#ifdef _WIN32
+#if defined(_WIN32) && !USE_HEADLESS_CODE
 #include <vcl/BitmapTools.hxx>
 #endif
 #include <unicode/uchar.h>
+#include <unotools/fontdefs.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -1448,6 +1453,23 @@ int getDocumentType (LibreOfficeKitDocument* pThis)
 }
 
 } // anonymous namespace
+
+WaitUntilIdle::WaitUntilIdle()
+    : maIdle{"LibLODocument IdleTask"}
+{
+    maIdle.SetPriority(TaskPriority::TOOLKIT_DEBUG);
+    maIdle.SetInvokeHandler(LINK(this, WaitUntilIdle, IdleHdl));
+}
+
+IMPL_LINK_NOARG(WaitUntilIdle, IdleHdl, Timer*, void)
+{
+    tools::JsonWriter aJson;
+    aJson.put("commandName", ".uno:ReportWhenIdle");
+    aJson.put("idleID", msIdleId);
+    mpCallbackFlushHandler->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+    mpCallbackFlushHandler.reset();
+    msIdleId.clear();
+}
 
 LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xComponent, int nDocumentId)
     : mxComponent(std::move(xComponent))
@@ -4339,7 +4361,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
         pDevice->DrawRect(aRect);
     }
 
-#ifdef _WIN32
+#if defined(_WIN32) && !USE_HEADLESS_CODE
     // pBuffer was not used there
     pDevice->EnableMapMode(false);
     Bitmap aBmp(pDevice->GetBitmap({ 0, 0 }, { nCanvasWidth, nCanvasHeight }));
@@ -5621,29 +5643,53 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
     else if (gImpl && aCommand == ".uno:UICoverage")
     {
+        bool report(true), linguisticDataAvailable(true);
+        std::optional<bool> applyTracking;
+
         for (const beans::PropertyValue& rPropValue : aPropertyValuesVector)
         {
             if (rPropValue.Name == "Report")
-            {
-                bool report(true);
                 rPropValue.Value >>= report;
-                if (report)
-                {
-                    tools::JsonWriter aJson;
-                    aJson.put("commandName", aCommand);
-                    aJson.put("success", true);
-                    Application::UICoverageReport(aJson);
-                    pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
-                }
-            }
+            else if (rPropValue.Name == "LinguisticDataAvailable")
+                rPropValue.Value >>= linguisticDataAvailable;
             else if (rPropValue.Name == "Track")
             {
                 bool track(false);
                 rPropValue.Value >>= track;
-                Application::EnableUICoverage(track);
+                applyTracking = track;
             }
         }
 
+        if (report)
+        {
+            tools::JsonWriter aJson;
+            aJson.put("commandName", aCommand);
+            aJson.put("success", true);
+            Application::UICoverageReport(aJson, getDocumentType(pThis), linguisticDataAvailable);
+            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+        }
+
+        if (applyTracking)
+            Application::EnableUICoverage(*applyTracking);
+
+        return;
+    }
+    else if (gImpl && aCommand == ".uno:ReportWhenIdle")
+    {
+        assert(pDocument->maIdleHelper.msIdleId.isEmpty() && "idle id should be unset");
+        pDocument->maIdleHelper.mpCallbackFlushHandler = pDocument->mpCallbackFlushHandlers[nView];
+
+        for (const beans::PropertyValue& rPropValue : aPropertyValuesVector)
+        {
+            if (rPropValue.Name == "idleID")
+            {
+                rPropValue.Value >>= pDocument->maIdleHelper.msIdleId;
+            }
+        }
+
+        assert(!pDocument->maIdleHelper.msIdleId.isEmpty() && "idle id should be set");
+
+        pDocument->maIdleHelper.maIdle.Start();
         return;
     }
 
@@ -5925,7 +5971,12 @@ static void doc_setViewOption(LibreOfficeKitDocument* pThis, const char* pOption
         const int nZoom = getUString(pValue).toInt32();
 
         if (nZoom)
+        {
             pDoc->setExportZoom(nZoom);
+
+            // Remember the current page zoom in Impress
+            pDoc->setPageZoom(nZoom);
+        }
     }
 }
 
@@ -6327,8 +6378,6 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
     {
         {"AnchorType", uno::Any(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
         {"IgnoreComments", uno::Any(true)},
-        // The MIME type is specified explicitly, don't guess.
-        {"SkipDetection", uno::Any(true)},
     }));
     if (!comphelper::dispatchCommand(u".uno:Paste"_ustr, aPropertyValues))
     {
@@ -6526,7 +6575,7 @@ static char* getFontSubset (std::string_view aFontName)
     if (const vcl::Font* pFont = FindFont(aFoundFont))
     {
         FontCharMapRef xFontCharMap (new FontCharMap());
-        auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
+        ScopedVclPtrInstance<VirtualDevice> aDevice(DeviceFormat::WITHOUT_ALPHA);
 
         aDevice->SetFont(*pFont);
         aDevice->GetFontCharMap(xFontCharMap);
@@ -7219,7 +7268,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
     if (aText.isEmpty())
         aText = aFont.GetFamilyName();
 
-    auto aDevice(VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA));
+    ScopedVclPtrInstance<VirtualDevice> aDevice(DeviceFormat::WITHOUT_ALPHA);
     ::tools::Rectangle aRect;
     aFont.SetFontSize(Size(0, nDefaultFontSize));
     aFont.SetOrientation(Degree10(pOrientation));
@@ -7757,6 +7806,7 @@ static char* lo_getError (LibreOfficeKit *pThis)
 
 static void lo_freeError(char* pFree)
 {
+    // Do not try to do anything clever here. This should just call free() on the pointer.
     free(pFree);
 }
 

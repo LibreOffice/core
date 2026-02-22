@@ -2355,55 +2355,44 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124772NumFmt)
                 "formatCode", u"\\$#,##0");
 }
 
-CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124810)
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124810_pivotDark)
 {
-    {
-        // First, test that we roundtrip existing pivot table style information from XLSX.
-        createScDoc("xlsx/pivot_dark1.xlsx");
+    // First, test that we roundtrip existing pivot table style information from XLSX.
+    createScDoc("xlsx/pivot_dark1.xlsx");
 
-        save(TestFilter::XLSX);
-        xmlDocUniquePtr pTable = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
-        CPPUNIT_ASSERT(pTable);
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pTable = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pTable);
 
-        // All attributes must have been roundtripped correctly (testdoc uses some non-default values)
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "name",
-                    u"PivotStyleDark1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowHeaders",
-                    u"1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColHeaders",
-                    u"1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowStripes",
-                    u"1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColStripes",
-                    u"0");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showLastColumn",
-                    u"0");
-    }
+    // All attributes must have been roundtripped correctly (testdoc uses some non-default values)
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "name",
+                u"PivotStyleDark1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowHeaders", u"1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColHeaders", u"1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowStripes", u"1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColStripes", u"0");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showLastColumn", u"0");
+}
 
-    {
-        // Now check that we export default style information when there's no such information in
-        // original document. Just use some ODS as source. This might be changed when we start
-        // exporting better pivot table style information.
-        createScDoc("ods/tdf124651_simplePivotTable.ods");
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124810_simplePivotTable)
+{
+    // Now check that we export default style information when there's no such information in
+    // original document. Just use some ODS as source. This might be changed when we start
+    // exporting better pivot table style information.
+    createScDoc("ods/tdf124651_simplePivotTable.ods");
 
-        save(TestFilter::XLSX);
-        xmlDocUniquePtr pTable = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
-        CPPUNIT_ASSERT(pTable);
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pTable = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pTable);
 
-        // The default style for pivot tables in Excel 2007 through 2016 is PivotStyleLight16
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "name",
-                    u"PivotStyleLight16");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowHeaders",
-                    u"1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColHeaders",
-                    u"1");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowStripes",
-                    u"0");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColStripes",
-                    u"0");
-        assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showLastColumn",
-                    u"1");
-    }
+    // The default style for pivot tables in Excel 2007 through 2016 is PivotStyleLight16
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "name",
+                u"PivotStyleLight16");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowHeaders", u"1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColHeaders", u"1");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showRowStripes", u"0");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showColStripes", u"0");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotTableStyleInfo", "showLastColumn", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testTdf124883)
@@ -2570,67 +2559,76 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableCompactLayoutXLSX)
     testThis(*getScDoc());
 }
 
+// This tests that a out-of-sync sheet data and pivot table cached definitions
+// still get imported correctly as expected.
+
+// It is perfectly valid that the sheet data and pivot table are out-of-sync,
+// but even if the sheet data is heavily modified, the pivot table should still
+// be imported.
+
+// The test document has columns named A-K where only A and K are used in the
+// pivot table. The columns B-J were removed in the sheet data, but the pivot table
+// was not updated, so the cached data still has those and the pivot table
+// description still relies on those columns to be present.
+
+static void testPivotTable(ScDocument& rDocument)
+{
+    ScDPCollection* pDPs = rDocument.GetDPCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one pivot table instance.", size_t(1),
+                                 pDPs->GetCount());
+
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+
+    // Do we have a dim named "A"
+    ScDPSaveDimension* pSaveDimA = pSaveData->GetExistingDimensionByName(u"A");
+    CPPUNIT_ASSERT(pSaveDimA);
+
+    // Do we have a dim named "K"
+    ScDPSaveDimension* pSaveDimK = pSaveData->GetExistingDimensionByName(u"K");
+    CPPUNIT_ASSERT(pSaveDimK);
+
+    // Check the headers
+    CPPUNIT_ASSERT_EQUAL(u"K"_ustr, rDocument.GetString(ScAddress(0, 2, 0))); // A3
+    CPPUNIT_ASSERT_EQUAL(u"Sum of A"_ustr, rDocument.GetString(ScAddress(1, 2, 0))); //B3
+
+    // Check the values
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, rDocument.GetString(ScAddress(0, 3, 0))); //A4
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, rDocument.GetString(ScAddress(0, 4, 0))); //A5
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, rDocument.GetString(ScAddress(1, 3, 0))); //B4
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, rDocument.GetString(ScAddress(1, 4, 0))); //B5
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest,
                      testPivotTableXLSX_OutOfSyncPivotTableCachedDefinitionImport)
 {
-    // This tests that a out-of-sync sheet data and pivot table cached definitions
-    // still get imported correctly as expected.
-
-    // It is perfectly valid that the sheet data and pivot table are out-of-sync,
-    // but even if the sheet data is heavily modified, the pivot table should still
-    // be imported.
-
-    // The test document has columns named A-K where only A and K are used in the
-    // pivot table. The columns B-J were removed in the sheet data, but the pivot table
-    // was not updated, so the cached data still has those and the pivot table
-    // description still relies on those columns to be present.
-
-    auto testThis = [](ScDocument& rDocument) {
-        ScDPCollection* pDPs = rDocument.GetDPCollection();
-        CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one pivot table instance.", size_t(1),
-                                     pDPs->GetCount());
-
-        const ScDPObject* pDPObj = &(*pDPs)[0];
-        CPPUNIT_ASSERT(pDPObj);
-        ScDPSaveData* pSaveData = pDPObj->GetSaveData();
-        CPPUNIT_ASSERT(pSaveData);
-
-        // Do we have a dim named "A"
-        ScDPSaveDimension* pSaveDimA = pSaveData->GetExistingDimensionByName(u"A");
-        CPPUNIT_ASSERT(pSaveDimA);
-
-        // Do we have a dim named "K"
-        ScDPSaveDimension* pSaveDimK = pSaveData->GetExistingDimensionByName(u"K");
-        CPPUNIT_ASSERT(pSaveDimK);
-
-        // Check the headers
-        CPPUNIT_ASSERT_EQUAL(u"K"_ustr, rDocument.GetString(ScAddress(0, 2, 0))); // A3
-        CPPUNIT_ASSERT_EQUAL(u"Sum of A"_ustr, rDocument.GetString(ScAddress(1, 2, 0))); //B3
-
-        // Check the values
-        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, rDocument.GetString(ScAddress(0, 3, 0))); //A4
-        CPPUNIT_ASSERT_EQUAL(u"2"_ustr, rDocument.GetString(ScAddress(0, 4, 0))); //A5
-        CPPUNIT_ASSERT_EQUAL(u"5"_ustr, rDocument.GetString(ScAddress(1, 3, 0))); //B4
-        CPPUNIT_ASSERT_EQUAL(u"5"_ustr, rDocument.GetString(ScAddress(1, 4, 0))); //B5
-    };
-
     // test document with sheet data and pivot table in sync
     createScDoc("xlsx/PivotTable_CachedDefinitionAndDataInSync.xlsx");
-    testThis(*getScDoc());
+    testPivotTable(*getScDoc());
+}
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest,
+                     testPivotTableXLSX_OutOfSyncPivotTableCachedDefinitionImport2)
+{
     // test document with sheet data and pivot table in out-of-sync - B-J columns removed,
     // but the pivot table cache still has all the data
     createScDoc(
         "xlsx/PivotTable_CachedDefinitionAndDataNotInSync_SheetColumnsRemoved_WithCacheData.xlsx");
-    testThis(*getScDoc());
+    testPivotTable(*getScDoc());
+}
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest,
+                     testPivotTableXLSX_OutOfSyncPivotTableCachedDefinitionImport3)
+{
     // test document with sheet data and pivot table in out-of-sync - B-J columns removed,
     // but the pivot table cache is not saved, only the cached definitions are available
     createScDoc("xlsx/"
                 "PivotTable_CachedDefinitionAndDataNotInSync_SheetColumnsRemoved_WithoutCacheData."
                 "xlsx");
-    testThis(*getScDoc());
+    testPivotTable(*getScDoc());
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testFirstHeaderRowZero)

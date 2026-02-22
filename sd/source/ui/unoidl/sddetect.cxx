@@ -24,6 +24,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <rtl/ref.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -32,6 +33,7 @@
 #include <sot/storage.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

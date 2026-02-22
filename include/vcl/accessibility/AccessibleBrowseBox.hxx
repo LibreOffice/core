@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <rtl/ref.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxBase.hxx>
 
 class AccessibleBrowseBoxHeaderBar;

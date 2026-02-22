@@ -22,7 +22,8 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <xmloff/XMLShapeStyleContext.hxx>
-#include <xmloff/XMLEventsImportContext.hxx>
+
+class XMLEventsImportContext;
 
 class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext final : public XMLShapeStyleContext
 {

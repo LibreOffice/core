@@ -34,6 +34,7 @@
 #include <sqlmessage.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace dbaui
 {

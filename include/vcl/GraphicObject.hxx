@@ -21,9 +21,12 @@
 
 #include <memory>
 #include <string_view>
+#include <basegfx/vector/b2dvector.hxx>
+#include <tools/poly.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 
 #include <vcl/GraphicAttributes.hxx>
 

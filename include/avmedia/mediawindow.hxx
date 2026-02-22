@@ -54,9 +54,8 @@ namespace avmedia
 
     namespace priv { class MediaWindowImpl; }
 
-    typedef comphelper::WeakComponentImplHelper<css::media::XPlayerListener> PlayerListener_BASE;
-
-    class AVMEDIA_DLLPUBLIC PlayerListener final : public PlayerListener_BASE
+    class AVMEDIA_DLLPUBLIC PlayerListener final
+        : public comphelper::WeakComponentImplHelper<css::media::XPlayerListener>
     {
     private:
         css::uno::Reference<css::media::XPlayerNotifier> m_xNotifier;

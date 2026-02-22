@@ -34,6 +34,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/animate/Animation.hxx>

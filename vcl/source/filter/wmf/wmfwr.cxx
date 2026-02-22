@@ -28,12 +28,15 @@
 #include <rtl/tencinfo.h>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

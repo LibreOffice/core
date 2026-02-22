@@ -28,6 +28,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <editeng/editobj.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/numformat.hxx>
 #include <svl/inethist.hxx>

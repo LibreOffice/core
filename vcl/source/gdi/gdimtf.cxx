@@ -26,11 +26,13 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapPalette.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>

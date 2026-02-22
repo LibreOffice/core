@@ -32,6 +32,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/weld/Builder.hxx>
 
 // tdf#115871 - reset outline and list options to parent settings
 const WhichRangesContainer SwParagraphNumTabPage::s_aPageRg(

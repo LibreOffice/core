@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/range/b3drange.hxx>
 
 
 // Embedded3DPrimitive2D class

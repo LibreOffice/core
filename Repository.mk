@@ -537,7 +537,7 @@ $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
     icg \
     sdui \
     $(if $(ENABLE_GEN),vclplug_gen) \
-    $(if $(filter $(OS),WNT),vclplug_win) \
+    $(if $(filter $(OS)-$(USE_HEADLESS_CODE),WNT-),vclplug_win) \
     $(if $(filter $(OS),MACOSX),vclplug_osx) \
 ))
 
@@ -1051,6 +1051,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	    favicon \
 	    unoembind \
 	) \
+	svx_xml \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
@@ -1064,7 +1065,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_carlito \
 		$(if $(MPL_SUBSET),,fonts_culmus) \
 		fonts_dejavu \
-		fonts_gentium \
 		fonts_liberation \
 		fonts_liberation_narrow \
 		fonts_libertineg \

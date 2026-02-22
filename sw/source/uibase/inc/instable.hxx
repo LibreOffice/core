@@ -28,8 +28,8 @@
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 
+#include <svx/dialog/TableAutoFmtPreview.hxx>
 #include "wrtsh.hxx"
-#include "autoformatpreview.hxx"
 #include <view.hxx>
 #include <tblafmt.hxx>
 #include <itabenum.hxx>
@@ -45,7 +45,7 @@ class SwInsTableDlg final : public SfxDialogController
 
     sal_Int64 m_nEnteredValRepeatHeaderNF;
 
-    AutoFormatPreview m_aWndPreview;
+    SvxAutoFmtPreview m_aWndPreview;
 
     std::unique_ptr<weld::Entry> m_xNameEdit;
     std::unique_ptr<weld::Label> m_xWarning;

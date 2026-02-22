@@ -14,10 +14,26 @@
 
 namespace weld
 {
+void TextWidget::signal_cursor_position()
+{
+    if (notify_events_disabled())
+        return;
+    m_aCursorPositionHdl.Call(*this);
+}
+
 void TextWidget::set_text(const OUString& rText)
 {
     disable_notify_events();
     do_set_text(rText);
+    enable_notify_events();
+}
+
+void TextWidget::set_position(int nCursorPos)
+{
+    disable_notify_events();
+    if (nCursorPos == -1)
+        nCursorPos = get_text().getLength();
+    do_set_position(nCursorPos);
     enable_notify_events();
 }
 

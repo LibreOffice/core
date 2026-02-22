@@ -20,6 +20,8 @@
 #include <hintids.hxx>
 #include <o3tl/untaint.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -1451,7 +1453,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         }
 
         UIName aFormatName;
-        for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
+        for (SwPoolFormatId i = SwPoolFormatId::PAGE_BEGIN; i < SwPoolFormatId::PAGE_END; i = i + 1)
         {
             aFormatName = SwStyleNameMapper::GetUIName(i, ProgName());
             if (m_xPageCollLB->find_text(aFormatName.toString()) == -1)

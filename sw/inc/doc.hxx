@@ -21,9 +21,11 @@
 // SwDoc interfaces
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <string_view>
 #include <vcl/idle.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"
+#include "tblafmt.hxx"
 #include "toxe.hxx"
 #include "flyenum.hxx"
 #include "flypos.hxx"
@@ -1275,6 +1277,9 @@ public:
     {
         return const_cast<SwDoc*>(this)->GetTableStyles();
     }
+
+    // Reapply styles to tables in the doc
+    void ResetTableStyles(const OUString& sTableStyle, std::u16string_view sOldName);
     /// Counts table styles without triggering lazy-load of them.
     bool HasTableStyles() const { return m_pTableStyles != nullptr; }
     // Create a new table style. Tracked by Undo.
@@ -1537,7 +1542,7 @@ public:
     void SetAutoFormatRedline( bool bFlag )    { mbIsAutoFormatRedline = bFlag; }
 
     // For AutoFormat: with Undo/Redlining.
-    void SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nPoolId,
+    void SetTextFormatCollByAutoFormat( const SwPosition& rPos, SwPoolFormatId nPoolId,
                                 const SfxItemSet* pSet );
     void SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& );
 

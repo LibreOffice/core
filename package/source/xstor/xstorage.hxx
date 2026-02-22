@@ -96,18 +96,10 @@ public:
 
 class OStorage;
 
-struct StorageHolder_Impl
-{
-    OStorage* m_pPointer;
-    css::uno::WeakReference< css::embed::XStorage > m_xWeakRef;
-
-    explicit inline StorageHolder_Impl( OStorage* pStorage );
-};
-
 class SwitchablePersistenceStream;
 struct OStorage_Impl
 {
-    typedef std::vector<StorageHolder_Impl> StorageHoldersType;
+    typedef std::vector<unotools::WeakReference< OStorage >> StorageHoldersType;
 
     rtl::Reference<comphelper::RefCountedMutex> m_xMutex;
 
@@ -283,6 +275,9 @@ class OStorage final : public css::lang::XTypeProvider
     rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
     comphelper::OMultiTypeInterfaceContainerHelper2 m_aListenersContainer; // list of listeners
     ::std::optional< ::cppu::OTypeCollection> m_oTypeCollection;
+    // m_nStorageType is both here, and in m_pImpl->m_nStorageType because
+    // sometimes we need the value when m_pImpl is nullptr.
+    sal_Int32 m_nStorageType; // the mode in which the storage is used
     bool m_bReadOnlyWrap;
     ::rtl::Reference<OChildDispListener_Impl> m_pSubElDispListener;
     ::std::vector< css::uno::WeakReference< css::lang::XComponent > > m_aOpenSubComponentsVector;
@@ -531,12 +526,6 @@ public:
     // XHierarchicalStorageAccess2
     virtual css::uno::Reference< css::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
 };
-
-StorageHolder_Impl::StorageHolder_Impl( OStorage* pStorage )
-: m_pPointer( pStorage )
-, m_xWeakRef( css::uno::Reference< css::embed::XStorage >( pStorage ) )
-{
-}
 
 #endif
 

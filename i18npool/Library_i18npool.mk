@@ -26,6 +26,10 @@ $(eval $(call gb_Library_set_include,i18npool,\
 
 $(eval $(call gb_Library_use_sdk_api,i18npool))
 
+$(eval $(call gb_Library_add_defs,i18npool,\
+	-DI18NPOOL_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_libraries,i18npool,\
 	comphelper \
 	cppu \

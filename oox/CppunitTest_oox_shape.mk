@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,oox_shape))
 
 $(eval $(call gb_CppunitTest_use_externals,oox_shape,\
 	boost_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,oox_shape, \

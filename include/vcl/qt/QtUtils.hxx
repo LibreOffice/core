@@ -19,12 +19,17 @@
  **/
 
 #include <rtl/ustring.hxx>
+#include <tools/stream.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/image.hxx>
 #include <vcl/outdev.hxx>
 
 #include <QtCore/QString>
+#include <QtGui/QIcon>
 #include <QtGui/QPixmap>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QStyle>
 
 inline QString toQString(const OUString& rStr)
 {
@@ -67,8 +72,14 @@ inline QPixmap toQPixmap(const OutputDevice& rDevice)
 
 inline QPixmap loadQPixmapIcon(const OUString& rIconName)
 {
-    Bitmap aIcon(rIconName);
-    return toQPixmap(aIcon);
+    const Bitmap aBitmap(rIconName);
+    if (!aBitmap.IsEmpty())
+        return toQPixmap(aBitmap);
+
+    const QIcon aIcon = QIcon::fromTheme(toQString(rIconName));
+    assert(!aIcon.isNull() && "No icon found for that icon name");
+    const int nIconSize = QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
+    return aIcon.pixmap(nIconSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

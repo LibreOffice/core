@@ -37,8 +37,12 @@
 
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
+#include <svtools/dlgname.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
@@ -47,7 +51,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <dlgname.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>

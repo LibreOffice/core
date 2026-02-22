@@ -46,8 +46,15 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <unotools/fontdefs.hxx>
+#include <vcl/accessibility/AccessibleBrowseBox.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 

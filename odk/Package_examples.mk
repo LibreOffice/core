@@ -250,12 +250,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/GUI/UnoMenu.java \
     DevelopersGuide/GUI/UnoMenu2.java \
     DevelopersGuide/GUI/oologo.gif \
-    DevelopersGuide/OfficeBean/Makefile \
-    DevelopersGuide/OfficeBean/OOoBeanViewer.java \
-    DevelopersGuide/OfficeBean/OfficeIconColor16.jpg \
-    DevelopersGuide/OfficeBean/OfficeIconColor32.jpg \
-    DevelopersGuide/OfficeBean/OfficeIconMono16.jpg \
-    DevelopersGuide/OfficeBean/OfficeIconMono32.jpg \
     DevelopersGuide/OfficeDev/Clipboard/java/Clipboard.java \
     DevelopersGuide/OfficeDev/Clipboard/java/ClipboardListener.java \
     DevelopersGuide/OfficeDev/Clipboard/java/ClipboardOwner.java \
@@ -477,6 +471,8 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     cpp/counter/countermain.cxx \
     cpp/remoteclient/Makefile \
     cpp/remoteclient/remoteclient.cxx \
+    cpp/SWriter/Makefile \
+    cpp/SWriter/SWriter.cxx \
     dotnet/WriterDemo/csharp/Makefile \
     dotnet/WriterDemo/csharp/WriterDemo.cs \
     dotnet/WriterDemo/fsharp/Makefile \

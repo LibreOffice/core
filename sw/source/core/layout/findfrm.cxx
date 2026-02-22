@@ -1502,6 +1502,20 @@ static bool lcl_IsInSectionDirectly( const SwFrame *pUp )
     return false;
 }
 
+bool SwFrame::IsInSplitButNotYetMovedFollow() const
+{
+    const SwFrame* pFrame = this;
+    while (pFrame && pFrame->IsInTab() && pFrame->IsInFly())
+    {
+        const SwTabFrame* pTabFrame = pFrame->FindTabFrame();
+        assert(pTabFrame);
+        if (pTabFrame->IsSplitButNotYetMovedFloatingFollow())
+            return true;
+        pFrame = pTabFrame->GetUpper();
+    }
+    return false;
+}
+
 /** determine, if frame is moveable in given environment
 
     OD 08.08.2003 #110978#
@@ -1512,6 +1526,10 @@ static bool lcl_IsInSectionDirectly( const SwFrame *pUp )
 */
 bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const
 {
+    if (IsTabFrame())
+        if (static_cast<const SwTabFrame*>(this)->IsSplitButNotYetMovedFloatingFollow())
+           return false;
+
     bool bRetVal = false;
 
     if ( !_pLayoutFrame )

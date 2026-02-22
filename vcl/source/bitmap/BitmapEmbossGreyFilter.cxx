@@ -16,6 +16,7 @@
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <algorithm>
+#include <vector>
 
 Bitmap BitmapEmbossGreyFilter::execute(Bitmap const& rBitmap) const
 {

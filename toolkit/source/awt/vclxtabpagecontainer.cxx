@@ -24,9 +24,11 @@
 #include <sal/log.hxx>
 #include <helper/property.hxx>
 #include <vcl/image.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <helper/tkresmgr.hxx>

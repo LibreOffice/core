@@ -32,6 +32,7 @@
 #include "PropertyIds.hxx"
 #include <unofootnote.hxx>
 #include <unoxstyle.hxx>
+#include <unotextcursor.hxx>
 
 #include <memory>
 #include <optional>
@@ -258,7 +259,7 @@ private:
 
     bool                                            m_bIsFirstSection;
     css::uno::Reference< css::text::XTextRange >    m_xStartingRange;
-    css::uno::Reference< css::text::XTextRange >    m_xPreStartingRange;
+    rtl::Reference< SwXTextCursor >                 m_xPreStartingRange;
 
     OUString m_sPageStyleName;
     rtl::Reference<SwXPageStyle>                    m_aPageStyle;
@@ -650,7 +651,7 @@ typedef tools::SvRef< TablePropertyMap > TablePropertyMapPtr;
 /// Information about a paragraph to be finished after a table end.
 struct TableParagraph
 {
-    css::uno::Reference<css::text::XTextRange> m_rStartParagraph;
+    rtl::Reference<SwXTextCursor> m_rStartParagraph;
     css::uno::Reference<css::text::XTextRange> m_rEndParagraph;
     PropertyMapPtr m_pPropertyMap;
     css::uno::Reference<css::beans::XPropertySet> m_rPropertySet;

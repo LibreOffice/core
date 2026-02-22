@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -35,14 +35,14 @@
 using namespace ::com::sun::star;
 
 /// Covers xmloff/source/text/ fixes.
-class XmloffStyleTest : public UnoApiXmlTest
+class XmloffStyleTest : public UnoApiTest
 {
 public:
     XmloffStyleTest();
 };
 
 XmloffStyleTest::XmloffStyleTest()
-    : UnoApiXmlTest(u"/xmloff/qa/unit/data/"_ustr)
+    : UnoApiTest(u"/xmloff/qa/unit/data/"_ustr)
 {
 }
 

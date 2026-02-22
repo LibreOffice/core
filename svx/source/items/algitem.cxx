@@ -120,23 +120,6 @@ SvxOrientationItem* SvxOrientationItem::Clone( SfxItemPool* ) const
     return new SvxOrientationItem( *this );
 }
 
-bool SvxOrientationItem::IsStacked() const
-{
-    return GetValue() == SvxCellOrientation::Stacked;
-}
-
-Degree100 SvxOrientationItem::GetRotation( Degree100 nStdAngle ) const
-{
-    Degree100 nAngle = nStdAngle;
-    switch( GetValue() )
-    {
-        case SvxCellOrientation::BottomUp: nAngle = 9000_deg100; break;
-        case SvxCellOrientation::TopBottom: nAngle = 27000_deg100; break;
-        default: ; //prevent warning
-    }
-    return nAngle;
-}
-
 SvxMarginItem::SvxMarginItem( const TypedWhichId<SvxMarginItem> nId ) :
 
     SfxPoolItem( nId ),

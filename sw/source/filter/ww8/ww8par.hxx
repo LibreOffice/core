@@ -194,7 +194,6 @@ private:
 
     WW8ListManager(const WW8ListManager&) = delete;
     WW8ListManager& operator=(const WW8ListManager&) = delete;
-    sal_uInt16 m_nLastLFOPosition;
 };
 
 struct WW8FlyPara

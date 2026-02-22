@@ -372,7 +372,7 @@ fi
 
 %files
 # specify stale symlinks verbatim, not as glob - a change in recent versions of
-# glibc breaks rpm unless rpm is build with internal glob-matching (issue 49374)
+# glibc breaks rpm unless rpm is built with internal glob-matching (issue 49374)
 # https://bugzilla.redhat.com/beta/show_bug.cgi?id=134362
 %defattr(-, root, root)
 %if "%unixfilename" != "libreoffice%productversion" && "%unixfilename" != "libreofficedev%productversion"

@@ -2971,10 +2971,9 @@ void SwWW8ImplReader::PostProcessAttrs()
     if (m_pPostProcessAttrsInfo == nullptr)
         return;
 
-    SfxItemIter aIter(m_pPostProcessAttrsInfo->mItemSet);
-
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( m_pPostProcessAttrsInfo->mItemSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         m_xCtrlStck->NewAttr(*m_pPostProcessAttrsInfo->mPaM.GetPoint(),
                            *pItem);
         m_xCtrlStck->SetAttr(*m_pPostProcessAttrsInfo->mPaM.GetMark(),
@@ -4331,7 +4330,7 @@ SwFormatPageDesc wwSectionManager::SetSwFormatPageDesc(mySegIter const &rIter,
     if (mrReader.m_bNewDoc && rIter == rStart)
     {
         rIter->mpPage =
-            mrReader.m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+            mrReader.m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD);
     }
     else
     {
@@ -4474,7 +4473,7 @@ void wwSectionManager::InsertSegments()
             {
                 pTextNd =
                     mrReader.m_rDoc.GetNodes().MakeTextNode(aAnchor.GetNode(),
-                    mrReader.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
+                    mrReader.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT ));
 
                 aSectPaM.GetPoint()->Assign(*pTextNd, 0);
             }
@@ -5095,7 +5094,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         {
             SwNodeIndex aIdx( m_rDoc.GetNodes().GetEndOfContent());
             SwTextFormatColl* pColl =
-                m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD,
+                m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD,
                 false);
             SwStartNode *pNode =
                 m_rDoc.GetNodes().MakeTextSection(aIdx.GetNode(),
@@ -6175,21 +6174,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* ImportDOC()
     return new WW8Reader;
 }
 
-namespace
-{
-    class FontCacheGuard
-    {
-    public:
-        ~FontCacheGuard()
-        {
-            FlushFontCache();
-        }
-    };
-}
-
 bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
 {
-    FontCacheGuard aFontCacheGuard;
     std::unique_ptr<Reader> xReader(ImportDOC());
 
     rtl::Reference<SotStorage> xStorage;

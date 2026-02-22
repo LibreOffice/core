@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVL_URIHELPER_HXX
 #define INCLUDED_SVL_URIHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <rtl/textenc.h>
 #include <svl/svldllapi.h>
 #include <tools/link.hxx>
@@ -29,6 +28,7 @@
 namespace com::sun::star {
     namespace uno { class XComponentContext; }
     namespace uri { class XUriReference; }
+    namespace uno {template <typename> class Reference; }
 }
 
 class CharClass;

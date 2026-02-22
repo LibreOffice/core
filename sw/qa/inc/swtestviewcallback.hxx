@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_QA_INC_SWTESTVIEWCALLBACK_HXX
-#define INCLUDED_SW_QA_INC_SWTESTVIEWCALLBACK_HXX
+#pragma once
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -66,7 +65,5 @@ public:
 
     void callbackImpl(int nType, const char* pPayload);
 };
-
-#endif // INCLUDED_SW_QA_INC_SWTESTVIEWCALLBACK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

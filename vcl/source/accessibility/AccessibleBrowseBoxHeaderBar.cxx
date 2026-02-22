@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/gen.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxHeaderBar.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/unohelp.hxx>
@@ -33,10 +34,9 @@ using namespace ::com::sun::star::accessibility;
 // Ctor/Dtor/disposing --------------------------------------------------------
 
 AccessibleBrowseBoxHeaderBar::AccessibleBrowseBoxHeaderBar(
-        const Reference< XAccessible >& rxParent,
-        vcl::IAccessibleTableProvider& rBrowseBox,
-        AccessibleBrowseBoxObjType eObjType ) :
-    AccessibleBrowseBoxTableBase( rxParent, rBrowseBox,eObjType )
+    const Reference<XAccessible>& rxParent, vcl::IAccessibleTableProvider& rBrowseBox,
+    AccessibleBrowseBoxObjType eObjType)
+    : ImplInheritanceHelper(rxParent, rBrowseBox, eObjType)
 {
     OSL_ENSURE( isRowBar() || isColumnBar(),
         "AccessibleBrowseBoxHeaderBar - invalid object type" );
@@ -265,25 +265,6 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::deselectAccessibleChild(
         else
             implSelectColumn( implToVCLColumnPos( nSelectedChildIndex ), false );
     }
-}
-
-// XInterface -----------------------------------------------------------------
-
-Any SAL_CALL AccessibleBrowseBoxHeaderBar::queryInterface( const uno::Type& rType )
-{
-    Any aAny( AccessibleBrowseBoxTableBase::queryInterface( rType ) );
-    return aAny.hasValue() ?
-        aAny : AccessibleBrowseBoxHeaderBarImplHelper::queryInterface( rType );
-}
-
-void SAL_CALL AccessibleBrowseBoxHeaderBar::acquire() noexcept
-{
-    AccessibleBrowseBoxTableBase::acquire();
-}
-
-void SAL_CALL AccessibleBrowseBoxHeaderBar::release() noexcept
-{
-    AccessibleBrowseBoxTableBase::release();
 }
 
 // XServiceInfo ---------------------------------------------------------------

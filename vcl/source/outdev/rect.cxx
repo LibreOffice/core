@@ -22,6 +22,7 @@
 #include <tools/helpers.hxx>
 
 #include <vcl/metaact.hxx>
+#include <vcl/rendercontext/DrawGridFlags.hxx>
 #include <vcl/virdev.hxx>
 
 #include <salgdi.hxx>

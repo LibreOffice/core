@@ -37,62 +37,62 @@ bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
     const SfxItemPropertyMapEntry* pEntry = rPropMap.getByName(aPropertyName );
     if( !pEntry || !pEntry->nWID )
         return false;
-    switch( pEntry->nWID )
+    switch( static_cast<ScPropUnoId>(pEntry->nWID) )
     {
-        case PROP_UNO_CALCASSHOWN :
+        case ScPropUnoId::CalcAsShown:
             rOptions.SetCalcAsShown( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
-        case PROP_UNO_DEFTABSTOP  :
+        case ScPropUnoId::DefTabStop:
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 rOptions.SetTabDistance( nIntVal );
         }
         break;
-        case PROP_UNO_IGNORECASE  :
+        case ScPropUnoId::IgnoreCase:
             rOptions.SetIgnoreCase( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
-        case PROP_UNO_ITERENABLED:
+        case ScPropUnoId::IterEnabled:
             rOptions.SetIter( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
-        case PROP_UNO_ITERCOUNT   :
+        case ScPropUnoId::IterCount:
         {
             sal_Int32 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 rOptions.SetIterCount( static_cast<sal_uInt16>(nIntVal) );
         }
         break;
-        case PROP_UNO_ITEREPSILON :
+        case ScPropUnoId::IterEpsilon:
         {
             double fDoubleVal = 0;
             if ( aValue >>= fDoubleVal )
                 rOptions.SetIterEps( fDoubleVal );
         }
         break;
-        case PROP_UNO_LOOKUPLABELS :
+        case ScPropUnoId::LookupLabels:
             rOptions.SetLookUpColRowNames( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
-        case PROP_UNO_MATCHWHOLE  :
+        case ScPropUnoId::MatchWhole:
             rOptions.SetMatchWholeCell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
-        case PROP_UNO_NULLDATE:
+        case ScPropUnoId::NullDate:
         {
             util::Date aDate;
             if ( aValue >>= aDate )
                 rOptions.SetDate( aDate.Day, aDate.Month, aDate.Year );
         }
         break;
-        case PROP_UNO_STANDARDDEC:
+        case ScPropUnoId::StandardDec:
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 rOptions.SetStdPrecision( nIntVal );
         }
         break;
-        case PROP_UNO_REGEXENABLED:
+        case ScPropUnoId::RegexEnabled:
             rOptions.SetFormulaRegexEnabled( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
-        case PROP_UNO_WILDCARDSENABLED:
+        case ScPropUnoId::WildcardsEnabled:
             rOptions.SetFormulaWildcardsEnabled( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         break;
         default:;
@@ -109,33 +109,33 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
     const SfxItemPropertyMapEntry* pEntry = rPropMap.getByName( aPropertyName );
     if( !pEntry || !pEntry->nWID )
         return aRet;
-    switch( pEntry->nWID )
+    switch( static_cast<ScPropUnoId>(pEntry->nWID) )
     {
-        case PROP_UNO_CALCASSHOWN :
+        case ScPropUnoId::CalcAsShown:
             aRet <<= rOptions.IsCalcAsShown();
         break;
-        case PROP_UNO_DEFTABSTOP :
+        case ScPropUnoId::DefTabStop:
             aRet <<= static_cast<sal_Int16>( rOptions.GetTabDistance() );
         break;
-        case PROP_UNO_IGNORECASE :
+        case ScPropUnoId::IgnoreCase:
             aRet <<= rOptions.IsIgnoreCase();
         break;
-        case PROP_UNO_ITERENABLED:
+        case ScPropUnoId::IterEnabled:
             aRet <<= rOptions.IsIter();
         break;
-        case PROP_UNO_ITERCOUNT:
+        case ScPropUnoId::IterCount:
             aRet <<= static_cast<sal_Int32>( rOptions.GetIterCount() );
         break;
-        case PROP_UNO_ITEREPSILON:
+        case ScPropUnoId::IterEpsilon:
             aRet <<= rOptions.GetIterEps();
         break;
-        case PROP_UNO_LOOKUPLABELS:
+        case ScPropUnoId::LookupLabels:
             aRet <<= rOptions.IsLookUpColRowNames();
         break;
-        case PROP_UNO_MATCHWHOLE:
+        case ScPropUnoId::MatchWhole:
             aRet <<= rOptions.IsMatchWholeCell();
         break;
-        case PROP_UNO_NULLDATE:
+        case ScPropUnoId::NullDate:
         {
             sal_uInt16 nD, nM;
             sal_Int16 nY;
@@ -144,13 +144,13 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
             aRet <<= aDate;
         }
         break;
-        case PROP_UNO_STANDARDDEC :
+        case ScPropUnoId::StandardDec:
             aRet <<= static_cast<sal_Int16>( rOptions.GetStdPrecision() );
         break;
-        case PROP_UNO_REGEXENABLED:
+        case ScPropUnoId::RegexEnabled:
             aRet <<= rOptions.IsFormulaRegexEnabled();
         break;
-        case PROP_UNO_WILDCARDSENABLED:
+        case ScPropUnoId::WildcardsEnabled:
             aRet <<= rOptions.IsFormulaWildcardsEnabled();
         break;
         default:;

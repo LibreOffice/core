@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/mapunit.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>

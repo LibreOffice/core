@@ -27,6 +27,7 @@
 #include <gridwin.hxx>
 #include <vector>
 #include <officecfg/Office/Calc.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(weld::Window* pParent,
                                              css::uno::Sequence<uno::Sequence<uno::Any>>& rData,

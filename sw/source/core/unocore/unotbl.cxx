@@ -910,7 +910,7 @@ sal_Int32 SwXCell::getError()
 rtl::Reference< SwXTextCursor > SwXCell::createXTextCursor()
 {
     if(!m_pStartNode && !IsValid())
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("Cannot create TextCursor: The table cell is invalid and disposed.", getXWeak());
     const SwStartNode* pSttNd = m_pStartNode ? m_pStartNode : m_pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     rtl::Reference<SwXTextCursor> const pXCursor =
@@ -924,7 +924,7 @@ rtl::Reference<SwXTextCursor> SwXCell::createXTextCursorByRange(const uno::Refer
 {
     SwUnoInternalPaM aPam(*GetDoc());
     if(!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("Cannot create TextCursor by range: The text range is invalid.", getXWeak());
     return createXTextCursorByRangeImpl(aPam);
 }
 
@@ -932,7 +932,7 @@ rtl::Reference< SwXTextCursor > SwXCell::createXTextCursorByRangeImpl(
         SwUnoInternalPaM& rPam)
 {
     if(!m_pStartNode && !IsValid())
-        throw uno::RuntimeException();
+        throw uno::RuntimeException("Cannot create TextCursor by range: The cell is invalid and disposed.", getXWeak());
     const SwStartNode* pSttNd = m_pStartNode ? m_pStartNode : m_pBox->GetSttNd();
     // skip sections
     SwStartNode* p1 = rPam.GetPointNode().StartOfSectionNode();
@@ -1067,7 +1067,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
                 m_xParentText = sw::CreateParentXText(rDoc, aPos);
             }
 
-            return uno::Any(m_xParentText);
+            return uno::Any(uno::Reference<text::XText>(m_xParentText));
         }
         break;
         default:

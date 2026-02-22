@@ -28,6 +28,8 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <sal/log.hxx>
+#include <vcl/accessibility/AccessibleBrowseBox.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Entry.hxx>

@@ -71,6 +71,8 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 using namespace ::com::sun::star;

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:12:28 using:
+ Generated on 2023-10-28 10:48:29 using:
  ./bin/update_pch connectivity firebird_sdbc --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -30,22 +30,24 @@
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
-#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
+#include <rtl/character.hxx>
+#include <rtl/math.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -59,10 +61,11 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <resource/sharedresources.hxx>
-#include <unotools/localfilehelper.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <TConnection.hxx>

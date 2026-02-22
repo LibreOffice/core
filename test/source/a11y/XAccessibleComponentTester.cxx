@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 #include <vcl/unohelp.hxx>
 
 #include <test/a11y/AccessibilityTools.hxx>

@@ -21,9 +21,9 @@
 #define INCLUDED_UNOTOOLS_CLOSEVETO_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::uno { class XInterface; }
 
 namespace utl

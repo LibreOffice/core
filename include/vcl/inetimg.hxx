@@ -21,10 +21,10 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <sot/formats.hxx>
 #include <utility>
 
 class SvStream;
+enum class SotClipboardFormatId : sal_uInt32;
 
 class INetImage
 {

@@ -9,7 +9,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,dbaccess_hsqldb_test))
 
-$(eval $(call gb_CppunitTest_use_external,dbaccess_hsqldb_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,dbaccess_hsqldb_test, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_hsqldb_test, \
     dbaccess/qa/unit/hsqldb \

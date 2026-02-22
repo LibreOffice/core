@@ -18,6 +18,7 @@
  */
 
 #include <svtools/unitconv.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <fmtfsize.hxx>
 #include <swtypes.hxx>

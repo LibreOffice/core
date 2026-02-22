@@ -22,6 +22,11 @@
 
 #include <svtools/toolbarmenu.hxx>
 
+namespace weld
+{
+class Button;
+}
+
 namespace svx
 {
 class TextUnderlinePopup;

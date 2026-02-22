@@ -46,6 +46,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/boxitem.hxx>
+#include <test/commontesttools.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <IDocumentSettingAccess.hxx>
@@ -389,6 +390,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149978)
 {
     createSwDoc("tdf149978.fodt");
     // on Linux the bug only reproduces if a document has been loaded previously
+    dispose();
     createSwDoc("tdf149978.fodt");
     // this was nondeterministic so try 10 times
     for (int i = 1; i <= 10; ++i)
@@ -1407,13 +1409,10 @@ void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> const & 
                              bool expectedResult)
 {
     // Set desired configuration params
-    auto xChanges = comphelper::ConfigurationChanges::create();
-    T::set(configValue, xChanges);
-    xChanges->commit();
+    ScopedConfigValue<T> aCfg(configValue);
 
     // Set Windows Security Zone for temp file
-    sal::systools::COMReference<IZoneIdentifier> pZoneId;
-    pZoneId.CoCreateInstance(CLSID_PersistentZoneIdentifier);
+    sal::systools::COMReference<IZoneIdentifier> pZoneId(CLSID_PersistentZoneIdentifier);
 
     // ignore setting of Zone 0, since at least for Windows Server
     // setups, that always leads to E_ACCESSDENIED - presumably since
@@ -1424,7 +1423,7 @@ void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> const & 
     if( zoneId != 0 )
     {
         CPPUNIT_ASSERT(SUCCEEDED(pZoneId->SetId(zoneId)));
-        sal::systools::COMReference<IPersistFile> pPersist(pZoneId, sal::systools::COM_QUERY_THROW);
+        auto pPersist(pZoneId.QueryInterface<IPersistFile>(sal::systools::COM_QUERY_THROW()));
         OUString sTempFileWinPath;
         osl::FileBase::getSystemPathFromFileURL(sFileName, sTempFileWinPath);
         CPPUNIT_ASSERT(
@@ -1459,6 +1458,8 @@ CPPUNIT_TEST_FIXTURE(Test, testWindowsFileZone)
     // Tweak macro security to 1
     SvtSecurityOptions::SetMacroSecurityLevel(1);
 
+    using ZoneCfg = officecfg::Office::Common::Security::Scripting::WindowsSecurityZone;
+
     // Run all tests: set for temp file security zone and then check if macro are enabled
     // depending on configuration values for given zone
     // There is no easy way to check default (0) variant, so macro are disabled by default in these tests.
@@ -1467,57 +1468,27 @@ CPPUNIT_TEST_FIXTURE(Test, testWindowsFileZone)
     // ignores Zone 0 (see above) - assuming the initial file state is
     // local after a copy, we're still triggering the expected
     // behaviour
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneLocal>(
-        mxDesktop, aTempFile.GetURL(), 0, 0, false);
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneLocal>(
-        mxDesktop, aTempFile.GetURL(), 1, 0, true);
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneLocal>(
-        mxDesktop, aTempFile.GetURL(), 2, 0, false);
+    runWindowsFileZoneTests<ZoneCfg::ZoneLocal>(mxDesktop, aTempFile.GetURL(), 0, 0, false);
+    runWindowsFileZoneTests<ZoneCfg::ZoneLocal>(mxDesktop, aTempFile.GetURL(), 1, 0, true);
+    runWindowsFileZoneTests<ZoneCfg::ZoneLocal>(mxDesktop, aTempFile.GetURL(), 2, 0, false);
 
     // run tests for other zones (these actually set the Windows
     // Security Zone at the file)
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneUntrusted>(
-        mxDesktop, aTempFile.GetURL(), 0, 4, false);
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneUntrusted>(
-        mxDesktop, aTempFile.GetURL(), 1, 4, true);
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneUntrusted>(
-        mxDesktop, aTempFile.GetURL(), 2, 4, false);
+    runWindowsFileZoneTests<ZoneCfg::ZoneUntrusted>(mxDesktop, aTempFile.GetURL(), 0, 4, false);
+    runWindowsFileZoneTests<ZoneCfg::ZoneUntrusted>(mxDesktop, aTempFile.GetURL(), 1, 4, true);
+    runWindowsFileZoneTests<ZoneCfg::ZoneUntrusted>(mxDesktop, aTempFile.GetURL(), 2, 4, false);
 
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneInternet>(
-        mxDesktop, aTempFile.GetURL(), 0, 3, false);
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneInternet>(
-        mxDesktop, aTempFile.GetURL(), 1, 3, true);
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneInternet>(
-        mxDesktop, aTempFile.GetURL(), 2, 3, false);
+    runWindowsFileZoneTests<ZoneCfg::ZoneInternet>(mxDesktop, aTempFile.GetURL(), 0, 3, false);
+    runWindowsFileZoneTests<ZoneCfg::ZoneInternet>(mxDesktop, aTempFile.GetURL(), 1, 3, true);
+    runWindowsFileZoneTests<ZoneCfg::ZoneInternet>(mxDesktop, aTempFile.GetURL(), 2, 3, false);
 
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneTrusted>(
-        mxDesktop, aTempFile.GetURL(), 0, 2, false);
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneTrusted>(
-        mxDesktop, aTempFile.GetURL(), 1, 2, true);
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneTrusted>(
-        mxDesktop, aTempFile.GetURL(), 2, 2, false);
+    runWindowsFileZoneTests<ZoneCfg::ZoneTrusted>(mxDesktop, aTempFile.GetURL(), 0, 2, false);
+    runWindowsFileZoneTests<ZoneCfg::ZoneTrusted>(mxDesktop, aTempFile.GetURL(), 1, 2, true);
+    runWindowsFileZoneTests<ZoneCfg::ZoneTrusted>(mxDesktop, aTempFile.GetURL(), 2, 2, false);
 
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneIntranet>(
-        mxDesktop, aTempFile.GetURL(), 0, 1, false);
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneIntranet>(
-        mxDesktop, aTempFile.GetURL(), 1, 1, true);
-    runWindowsFileZoneTests<
-        officecfg::Office::Common::Security::Scripting::WindowsSecurityZone::ZoneIntranet>(
-        mxDesktop, aTempFile.GetURL(), 2, 1, false);
+    runWindowsFileZoneTests<ZoneCfg::ZoneIntranet>(mxDesktop, aTempFile.GetURL(), 0, 1, false);
+    runWindowsFileZoneTests<ZoneCfg::ZoneIntranet>(mxDesktop, aTempFile.GetURL(), 1, 1, true);
+    runWindowsFileZoneTests<ZoneCfg::ZoneIntranet>(mxDesktop, aTempFile.GetURL(), 2, 1, false);
 #endif
 }
 
@@ -1564,7 +1535,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBrokenPackage_Tdf159474)
     // It expectedly fails to load normally:
     CPPUNIT_ASSERT_ASSERTION_FAIL(loadFromURL(url));
     // importing it must succeed with RepairPackage set to true.
-    loadWithParams(url, { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) });
+    loadFromURL(url, { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) });
     // The document imports in repair mode; the original broken package is used as a template,
     // and the loaded document has no URL:
     CPPUNIT_ASSERT(mxComponent.queryThrow<frame::XModel>()->getURL().isEmpty());

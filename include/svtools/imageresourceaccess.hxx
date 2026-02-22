@@ -25,12 +25,12 @@
 #include <string_view>
 
 #include <config_options.h>
+#include <rtl/ustring.hxx>
 #include <svtools/svtdllapi.h>
-
-#include <com/sun/star/uno/Reference.hxx>
 
 namespace com :: sun :: star :: io { class XInputStream; }
 namespace com :: sun :: star :: uno { class XComponentContext; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class SvStream;
 

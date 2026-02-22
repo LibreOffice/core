@@ -26,6 +26,9 @@
 #include <WPFTEncodingDialog.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 namespace writerperfect
 {
@@ -84,10 +87,6 @@ void insertEncodings(weld::ComboBox& box)
     for (const auto& rEncoding : s_encodings)
         box.append(OUString(rEncoding.first), OUString(rEncoding.second));
 }
-
-void selectEncoding(weld::ComboBox& box, const OUString& encoding) { box.set_active_id(encoding); }
-
-OUString getEncoding(const weld::ComboBox& box) { return box.get_active_id(); }
 }
 
 WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& title,
@@ -102,7 +101,7 @@ WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& ti
 
     insertEncodings(*m_xLbCharset);
     m_xLbCharset->make_sorted();
-    selectEncoding(*m_xLbCharset, encoding);
+    m_xLbCharset->set_active_id(encoding);
 
     m_xDialog->set_title(title);
 
@@ -117,7 +116,7 @@ IMPL_STATIC_LINK_NOARG(WPFTEncodingDialog, InstallLOKNotifierHdl, void*,
 
 WPFTEncodingDialog::~WPFTEncodingDialog() {}
 
-OUString WPFTEncodingDialog::GetEncoding() const { return getEncoding(*m_xLbCharset); }
+OUString WPFTEncodingDialog::GetEncoding() const { return m_xLbCharset->get_active_id(); }
 
 IMPL_LINK_NOARG(WPFTEncodingDialog, CancelHdl, weld::Button&, void)
 {

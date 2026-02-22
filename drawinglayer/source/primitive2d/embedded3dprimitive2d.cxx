@@ -20,6 +20,7 @@
 #include <drawinglayer/primitive2d/embedded3dprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>

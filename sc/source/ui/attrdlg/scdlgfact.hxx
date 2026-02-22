@@ -34,10 +34,6 @@ public:
 
     virtual VclPtr<AbstractScTextImportOptionsDlg> CreateScTextImportOptionsDlg(weld::Window* pParent) override;
 
-    virtual VclPtr<AbstractScAutoFormatDlg> CreateScAutoFormatDlg(weld::Window* pParent,
-                                                                ScAutoFormat* pAutoFormat,
-                                                                const ScAutoFormatData* pSelFormatData,
-                                                                ScViewData& rViewData) override;
     virtual VclPtr<AbstractScColRowLabelDlg> CreateScColRowLabelDlg (weld::Window* pParent,
                                                                 bool bCol,
                                                                 bool bRow) override;

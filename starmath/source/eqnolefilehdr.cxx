@@ -18,6 +18,7 @@
  */
 
 #include "eqnolefilehdr.hxx"
+#include <rtl/ref.hxx>
 #include <sot/storage.hxx>
 
 

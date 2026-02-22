@@ -22,9 +22,9 @@
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 
-class AbstractSvxNameDialog;
 class SfxItemSet;
 class SfxRequest;
+class SvxNameDialog;
 
 namespace sd::slidesorter
 {
@@ -77,8 +77,8 @@ private:
         drviews2.cxx.
     */
     void RenameSlide(const SfxRequest& rRequest);
-    DECL_LINK(RenameSlideHdl, AbstractSvxNameDialog&, bool);
-    DECL_STATIC_LINK(SlotManager, RenameSlideTooltipHdl, AbstractSvxNameDialog&, OUString);
+    DECL_LINK(RenameSlideHdl, SvxNameDialog&, bool);
+    DECL_STATIC_LINK(SlotManager, RenameSlideTooltipHdl, SvxNameDialog&, OUString);
     bool RenameSlideFromDrawViewShell(sal_uInt16 nPageId, const OUString& rName);
 
     /** Handle SID_INSERTPAGE slot calls.

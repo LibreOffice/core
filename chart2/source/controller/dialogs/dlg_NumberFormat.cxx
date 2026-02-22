@@ -24,6 +24,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace chart
 {

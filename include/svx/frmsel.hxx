@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_FRMSEL_HXX
 
 #include <memory>
+#include <comphelper/OAccessible.hxx>
 #include <editeng/borderline.hxx>
 #include <svx/framebordertype.hxx>
 #include <svx/svxdllapi.h>

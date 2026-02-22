@@ -1567,7 +1567,7 @@ namespace xmloff
                 // check if we need to export the ListSource as attribute
                 {
                     // for a list box, if the ListSourceType is VALUE_LIST, no ListSource is stored, but instead
-                    // a sequence of pairs which is build from the StringItemList and the ValueList
+                    // a sequence of pairs which is built from the StringItemList and the ValueList
                     ListSourceType eListSourceType = ListSourceType_VALUELIST;
                     bool bSuccess =
                         m_xProps->getPropertyValue(PROPERTY_LISTSOURCETYPE) >>= eListSourceType;

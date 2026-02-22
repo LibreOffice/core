@@ -20,6 +20,7 @@
 #include <svx/svdlayer.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svtools/dlgname.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/svxdlg.hxx>
 #include <osl/diagnose.h>
@@ -118,7 +119,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
     return bSuccess;
 }
 
-IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
+IMPL_LINK(DrawViewShell, RenameSlideHdl, SvxNameDialog&, rDialog, bool)
 {
     OUString aNewName = rDialog.GetName();
 

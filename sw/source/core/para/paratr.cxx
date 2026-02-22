@@ -201,13 +201,6 @@ SwNumRuleItem* SwNumRuleItem::Clone( SfxItemPool * ) const
     return new SwNumRuleItem( *this );
 }
 
-bool SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    assert(SfxPoolItem::operator==(rAttr));
-
-    return GetValue() == static_cast<const SwNumRuleItem&>(rAttr).GetValue();
-}
-
 bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     ProgName sRet = SwStyleNameMapper::GetProgName(GetValue(), SwGetPoolIdFromName::NumRule );

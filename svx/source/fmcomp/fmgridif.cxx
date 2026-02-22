@@ -59,6 +59,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/macros.h>
 

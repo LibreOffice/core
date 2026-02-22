@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -17,11 +17,11 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Covers ooox/source/export/ fixes.
-class Test : public UnoApiXmlTest
+class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiXmlTest(u"/oox/qa/unit/data/"_ustr)
+        : UnoApiTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
 };
@@ -82,44 +82,43 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlOdt)
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlDocx)
 {
-    {
-        loadFromFile(u"dml-groupshape-polygon.docx");
+    loadFromFile(u"dml-groupshape-polygon.docx");
 
-        // Without TrackChanges, inserting the Checkbox works just fine
-        // when exporting to docx.
-        dispatchCommand(mxComponent, u".uno:InsertCheckboxContentControl"_ustr, {});
+    // Without TrackChanges, inserting the Checkbox works just fine
+    // when exporting to docx.
+    dispatchCommand(mxComponent, u".uno:InsertCheckboxContentControl"_ustr, {});
 
-        save(TestFilter::DOCX);
-    }
+    save(TestFilter::DOCX);
+}
 
-    {
-        loadFromFile(u"dml-groupshape-polygon.docx");
+CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControlDocx_2)
+{
+    loadFromFile(u"dml-groupshape-polygon.docx");
 
-        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-        uno::Reference<text::XText> xText = xTextDocument->getText();
-        uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
-        // With TrackChanges, the Checkbox causes an assertion in the sax serializer,
-        // in void sax_fastparser::FastSaxSerializer::endFastElement(sal_Int32).
-        // Element == maMarkStack.top()->m_DebugStartedElements.back()
-        // sax/source/tools/fastserializer.cxx#402
-        dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    // With TrackChanges, the Checkbox causes an assertion in the sax serializer,
+    // in void sax_fastparser::FastSaxSerializer::endFastElement(sal_Int32).
+    // Element == maMarkStack.top()->m_DebugStartedElements.back()
+    // sax/source/tools/fastserializer.cxx#402
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
 
-        xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
 
-        dispatchCommand(mxComponent, u".uno:InsertCheckboxContentControl"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertCheckboxContentControl"_ustr, {});
 
-        // Loading should not show the "corrupted" dialog, which would assert.
-        saveAndReload(TestFilter::DOCX);
+    // Loading should not show the "corrupted" dialog, which would assert.
+    saveAndReload(TestFilter::DOCX);
 
-        // Now that we loaded it successfully, delete the controls,
-        // still with change-tracking enabled, and save.
-        dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
-        dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
+    // Now that we loaded it successfully, delete the controls,
+    // still with change-tracking enabled, and save.
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
-        // Loading should not show the "corrupted" dialog, which would assert.
-        saveAndReload(TestFilter::DOCX);
-    }
+    // Loading should not show the "corrupted" dialog, which would assert.
+    saveAndReload(TestFilter::DOCX);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapePolygon)

@@ -23,6 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 #include <tools/color.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TreeView.hxx>
@@ -90,14 +91,14 @@ private:
     OUString sAutomaticCurrencyEntry;
 
     SvxNumberPreview m_aWndPreview;
-    std::unique_ptr<weld::Label> m_xFtCategory;
+    std::unique_ptr<weld::Frame> m_xCategoryFrame;
     std::unique_ptr<weld::TreeView> m_xLbCategory;
-    std::unique_ptr<weld::Label> m_xFtFormat;
+    std::unique_ptr<weld::Frame> m_xFormatFrame;
     std::unique_ptr<weld::ComboBox> m_xLbCurrency;
     std::unique_ptr<weld::TreeView> m_xLbFormat;
-    std::unique_ptr<weld::Label> m_xFtLocale;
+    std::unique_ptr<weld::Frame> m_xFrameLocale;
     std::unique_ptr<weld::CheckButton> m_xCbSourceFormat;
-    std::unique_ptr<weld::Label> m_xFtOptions;
+    std::unique_ptr<weld::Frame> m_xOptionsFrame;
     std::unique_ptr<weld::Label> m_xFtDecimals;
     std::unique_ptr<weld::SpinButton> m_xEdDecimals;
     std::unique_ptr<weld::Label> m_xFtDenominator;
@@ -126,6 +127,7 @@ private:
     void    UpdateDecimalsDenominatorEditBox();
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
+    void EnableLocaleUi();
     void    SetCategory( sal_uInt16 nPos );
     OUString  GetExpColorString( const Color*& rpPreviewColor, const OUString& aFormatStr, short nTmpCatPos );
     void    MakePreviewText( const OUString& rFormat );

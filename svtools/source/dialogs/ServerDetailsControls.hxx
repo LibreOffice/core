@@ -15,6 +15,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <tools/link.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace com :: sun :: star :: awt { class XWindow; }

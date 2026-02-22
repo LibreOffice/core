@@ -19,12 +19,11 @@
 
 #pragma once
 
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
-
 #include <toolkit/controls/unocontrol.hxx>
 
+namespace com::sun::star::awt { struct Size; }
+namespace com::sun::star::util { struct Date; }
+namespace com::sun::star::util { struct Time; }
 
 
 

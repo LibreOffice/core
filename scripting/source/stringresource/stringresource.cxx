@@ -33,6 +33,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <osl/diagnose.h>
+#include <o3tl/numeric.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/tencinfo.h>
@@ -1635,20 +1636,6 @@ static void skipWhites( const sal_Unicode* pBuf, sal_Int32 nLen, sal_Int32& ri )
     }
 }
 
-static bool isHexDigit( sal_Unicode c, sal_uInt16& nDigitVal )
-{
-    bool bRet = true;
-    if( c >= '0' && c <= '9' )
-        nDigitVal = c - '0';
-    else if( c >= 'a' && c <= 'f' )
-        nDigitVal = c - 'a' + 10;
-    else if( c >= 'A' && c <= 'F' )
-        nDigitVal = c - 'A' + 10;
-    else
-        bRet = false;
-    return bRet;
-}
-
 static sal_Unicode getEscapeChar( const sal_Unicode* pBuf, sal_Int32 nLen, sal_Int32& ri )
 {
     sal_Int32 i = ri;
@@ -1681,9 +1668,11 @@ static sal_Unicode getEscapeChar( const sal_Unicode* pBuf, sal_Int32 nLen, sal_I
 
             // Process hex digits
             sal_Int32 nDigitCount = 0;
-            sal_uInt16 nDigitVal;
-            while( i < nLen && isHexDigit( pBuf[i], nDigitVal ) )
+            while (i < nLen)
             {
+                int nDigitVal = o3tl::convertToHex<int>(pBuf[i]);
+                if (nDigitVal < 0)
+                    break;
                 cRet = 16 * cRet + nDigitVal;
 
                 nDigitCount++;

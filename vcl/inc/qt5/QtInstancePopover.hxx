@@ -11,6 +11,8 @@
 
 #include "QtInstanceContainer.hxx"
 
+#include <vcl/weld/Popover.hxx>
+
 class QtInstancePopover : public QtInstanceContainer, public virtual weld::Popover
 {
     Q_OBJECT

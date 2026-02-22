@@ -25,13 +25,16 @@
 #include <osl/diagnose.h>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 #include <utility>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

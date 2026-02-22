@@ -26,6 +26,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolboxid.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <svl/lstner.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>

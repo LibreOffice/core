@@ -22,6 +22,13 @@
 #include <jobdata.hxx>
 #include <salprn.hxx>
 
+#if defined GetDefaultPrinter
+#  undef GetDefaultPrinter
+#endif
+#if defined SetPrinterData
+#  undef SetPrinterData
+#endif
+
 class GenPspGraphics;
 class VCL_DLLPUBLIC PspSalInfoPrinter : public SalInfoPrinter
 {

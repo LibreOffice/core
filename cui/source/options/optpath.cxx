@@ -24,6 +24,8 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <bitmaps.hlst>
 #include <dialmgr.hxx>

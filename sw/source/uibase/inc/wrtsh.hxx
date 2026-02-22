@@ -524,7 +524,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     bool IsOutlineContentVisible(const size_t nPos);
     void MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible = true, bool bSetAttrOutlineVisibility = true);
-    void MakeAllFoldedOutlineContentVisible(bool bMakeVisible = true);
+    SW_DLLPUBLIC void MakeAllFoldedOutlineContentVisible(bool bMakeVisible = true);
     void InvalidateOutlineContentVisibility();
     bool GetAttrOutlineContentVisible(const size_t nPos) const;
 
@@ -538,6 +538,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool IsEnteringStdMode() const { return m_bEnteringStdMode; }
 
     std::optional<OString> getLOKPayload(int nType, int nViewId) const;
+
+    void SortChapters(const SwOutlineNodes::size_type nOutlineNodePos = SwOutlineNodes::npos);
 
 private:
 
@@ -702,7 +704,7 @@ inline bool SwWrtShell::Is_FnDragEQBeginDrag() const
 #endif
 }
 
-class MakeAllOutlineContentTemporarilyVisible
+class SW_DLLPUBLIC MakeAllOutlineContentTemporarilyVisible
 {
 private:
     SwWrtShell* m_pWrtSh = nullptr;

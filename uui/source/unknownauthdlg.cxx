@@ -21,6 +21,9 @@
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+
 using namespace css;
 
 IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl, weld::Button&, void)

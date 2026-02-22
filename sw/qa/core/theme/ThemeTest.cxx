@@ -619,6 +619,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_ownTransferable)
         css::uno::Reference<css::datatransfer::XTransferableSupplier> xTS(
             xModel->getCurrentController(), css::uno::UNO_QUERY_THROW);
         xTransferable = xTS->getTransferable();
+        dispose();
     }
     {
         // Open another document with another custom theme:

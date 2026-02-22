@@ -29,12 +29,16 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <svx/svxids.hrc>
 #include <strings.hrc>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <svtools/unitconv.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

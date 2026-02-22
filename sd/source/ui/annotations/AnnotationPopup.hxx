@@ -10,6 +10,7 @@
 #pragma once
 
 #include <svx/annotation/IAnnotationPopup.hxx>
+#include <vcl/weld/Popover.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace sdr::annotation

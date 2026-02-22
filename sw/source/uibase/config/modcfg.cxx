@@ -34,6 +34,8 @@
 #include <modcfg.hxx>
 #include <caption.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 using namespace com::sun::star::uno;
 
 #define GLOB_NAME_CALC      0

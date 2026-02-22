@@ -120,7 +120,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnKeepOther;
     std::unique_ptr<weld::Button> m_xBtnKeepAllMine;
     std::unique_ptr<weld::Button> m_xBtnKeepAllOthers;
-    std::unique_ptr<SvxRedlinTable> m_xLbConflicts;
+    std::unique_ptr<SvxRedlineTable> m_xLbConflicts;
 
     OUString            GetConflictString( const ScConflictsListEntry& rConflictEntry );
     void                SetActionString(ScChangeAction& rAction, ScDocument& rDoc, const weld::TreeIter& rEntry);

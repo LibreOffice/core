@@ -12,6 +12,8 @@
 #include <reffact.hxx>
 #include <docfunc.hxx>
 
+#include <vcl/weld/Dialog.hxx>
+
 namespace sc
 {
 SparklineDataRangeDialog::SparklineDataRangeDialog(SfxBindings* pBindings,

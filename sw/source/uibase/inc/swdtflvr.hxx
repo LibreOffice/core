@@ -110,8 +110,7 @@ class SAL_DLLPUBLIC_RTTI SwTransferable final : public TransferableHelper
                                         SotClipboardFormatId nFormat, SotExchangeDest nDestination );
 
     static bool PasteFileContent( const TransferableDataHelper&,
-                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments = false,
-                                    bool bUseDetection = false );
+                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments = false);
     static bool PasteOLE( const TransferableDataHelper& rData, SwWrtShell& rSh,
                             SotClipboardFormatId nFormat, SotExchangeActionFlags nActionFlags, bool bMsg );
     static bool PasteTargetURL( const TransferableDataHelper& rData, SwWrtShell& rSh,
@@ -195,7 +194,7 @@ public:
     // paste - methods and helper methods for the paste
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
     SW_DLLPUBLIC static bool Paste( SwWrtShell&, const TransferableDataHelper&, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
-                          bool bIgnoreComments = false, PasteTableType ePasteTable = PasteTableType::PASTE_DEFAULT, bool bUseDetection = false );
+                          bool bIgnoreComments = false, PasteTableType ePasteTable = PasteTableType::PASTE_DEFAULT);
     static bool PasteData( const TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt8 nAction, SotExchangeActionFlags nActionFlags,
                           SotClipboardFormatId nFormat,
@@ -205,7 +204,7 @@ public:
                           bool bPasteSelection = false, RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA,
                           bool bIgnoreComments = false,
                           SwPasteContext* pContext = nullptr,
-                          PasteTableType nPaste = PasteTableType::PASTE_DEFAULT, bool bUseDetection = false );
+                          PasteTableType nPaste = PasteTableType::PASTE_DEFAULT);
 
     static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );

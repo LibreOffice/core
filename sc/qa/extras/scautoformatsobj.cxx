@@ -83,8 +83,8 @@ public:
 ScAutoFormatsObj::ScAutoFormatsObj()
     : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<container::XNamed>::get())
-    , XIndexAccess(2)
-    , XNameAccess(u"Default"_ustr)
+    , XIndexAccess(12) // There are 11 table styles by default, so (11 + 1)
+    , XNameAccess(u"Default Style"_ustr)
     , XNameContainer(u"ScAutoFormatsObj"_ustr)
     , XNameReplace(u"ScAutoFormatsObj"_ustr)
     , XServiceInfo(u"stardiv.StarCalc.ScAutoFormatsObj"_ustr,

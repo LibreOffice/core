@@ -48,8 +48,14 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
+#include <unotools/fontdefs.hxx>
 #include <utility>
 #include <vcl/image.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <svl/urihelper.hxx>

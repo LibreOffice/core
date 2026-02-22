@@ -35,6 +35,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <strings.hrc>
 
 #define USER_DATA_VERSION_1 "1"

@@ -21,6 +21,8 @@
 
 #include <algorithm>
 #include <anchoredobject.hxx>
+#include <flyfrm.hxx>
+#include <flyfrms.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
@@ -198,7 +200,51 @@ struct ObjAnchorOrder
         // objects anchored at the same content position/page/fly with same
         // wrap influence.
         // Thus, compare anchor order number
-        return pAnchorListed->GetOrder() < pAnchorNew->GetOrder();
+        if (pAnchorListed->GetOrder() != pAnchorNew->GetOrder())
+            return pAnchorListed->GetOrder() < pAnchorNew->GetOrder();
+
+        // return true, when _pListedAnchoredObj is a precede split fly of _pNewAnchoredObj
+        {
+            auto pLHFly = _pListedAnchoredObj->DynCastFlyFrame();
+            auto pLHSplitFly = pLHFly && pLHFly->IsFlySplitAllowed()
+                                   ? static_cast<const SwFlyAtContentFrame*>(pLHFly)
+                                   : nullptr;
+            auto pRHFly = _pNewAnchoredObj->DynCastFlyFrame();
+            auto pRHSplitFly = pRHFly && pRHFly->IsFlySplitAllowed()
+                                   ? static_cast<const SwFlyAtContentFrame*>(pRHFly)
+                                   : nullptr;
+
+            // split fly after others
+            if (!pLHSplitFly && pRHSplitFly)
+                return true;
+            if (pLHSplitFly && !pRHSplitFly)
+                return false;
+
+            if (pLHSplitFly && pRHSplitFly)
+            {
+                // standalone split fly after chained. This case happens when a follow fly gets
+                // emptied, dropped from chain, and eventually will be removed; but at this point,
+                // it's still there in the sorted vector. Without this code, the vector would not
+                // be properly partitioned relative to newly added follow, causing assertion in
+                // clang/dbgutil:
+                auto isInChain
+                    = [](const SwFlyAtContentFrame* p) { return p->HasFollow() || p->IsFollow(); };
+                if (isInChain(pLHSplitFly) && !isInChain(pRHSplitFly))
+                    return true;
+                if (!isInChain(pLHSplitFly) && isInChain(pRHSplitFly))
+                    return false;
+
+                if (pLHSplitFly->HasFollow() && pRHSplitFly->IsFollow())
+                {
+                    for (auto p = pRHSplitFly->GetPrecede(); p; p = p->GetPrecede())
+                    {
+                        if (p == pLHSplitFly)
+                            return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 };
 

@@ -25,6 +25,8 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/sdangitm.hxx>
+#include <tools/fldunit.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace chart
 {

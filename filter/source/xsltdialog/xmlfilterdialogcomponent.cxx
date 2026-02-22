@@ -29,6 +29,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 
 #include "xmlfiltersettingsdialog.hxx"
 

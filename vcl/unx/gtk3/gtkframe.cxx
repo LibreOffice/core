@@ -35,6 +35,7 @@
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>

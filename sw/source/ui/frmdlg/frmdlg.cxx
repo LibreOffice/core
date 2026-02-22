@@ -41,6 +41,7 @@
 #include <comphelper/lok.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
 
 // the dialog's carrier
 SwFrameDlg::SwFrameDlg(const SfxViewFrame& rViewFrame,

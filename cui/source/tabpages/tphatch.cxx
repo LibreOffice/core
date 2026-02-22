@@ -19,8 +19,12 @@
 
 #include <memory>
 #include <tools/urlobj.hxx>
+#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
@@ -34,13 +38,13 @@
 #include <svx/xtable.hxx>
 #include <svx/xflbckit.hxx>
 #include <cuitabarea.hxx>
-#include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <sal/log.hxx>
+#include <svtools/dlgname.hxx>
 #include <svtools/unitconv.hxx>
 
 using namespace com::sun::star;
@@ -429,13 +433,12 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
         bValidHatchName = (SearchHatchList(aName) == -1);
     }
 
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    SvxNameDialog aDlg(GetFrameWeld(), aName, aDesc);
     sal_uInt16         nError   = 1;
 
-    while( pDlg->Execute() == RET_OK )
+    while (aDlg.run() == RET_OK)
     {
-        aName = pDlg->GetName();
+        aName = aDlg.GetName();
 
         bValidHatchName = (SearchHatchList(aName) == -1);
         if( bValidHatchName )
@@ -449,7 +452,6 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
         if (xWarnBox->run() != RET_OK)
             break;
     }
-    pDlg.disposeAndClear();
 
     if( nError )
         return;
@@ -544,13 +546,12 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
     OUString aDesc( CuiResId( RID_CUISTR_DESC_HATCH ) );
     OUString aName( m_pHatchingList->GetHatch( nPos )->GetName() );
 
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    SvxNameDialog aDlg(GetFrameWeld(), aName, aDesc);
 
     bool bLoop = true;
-    while( bLoop && pDlg->Execute() == RET_OK )
+    while (bLoop && aDlg.run() == RET_OK)
     {
-        aName = pDlg->GetName();
+        aName = aDlg.GetName();
         sal_Int32 nHatchPos = SearchHatchList( aName );
         bool bValidHatchName = (nHatchPos == static_cast<sal_Int32>(nPos) ) || (nHatchPos == -1);
 

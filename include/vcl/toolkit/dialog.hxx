@@ -110,7 +110,6 @@ public:
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual void    Command( const CommandEvent& rCEvt ) override;
     virtual void    PixelInvalidate(const tools::Rectangle* pRectangle) override;
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
@@ -153,7 +152,6 @@ public:
 
     void            Activate() override;
 
-    void            SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink);
     void            SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink);
     void            SetLOKTunnelingState(bool bEnabled);
 

@@ -23,6 +23,7 @@
 
 #include "dxfreprd.hxx"
 #include <osl/nlsupport.h>
+#include <rtl/character.hxx>
 #include <unotools/defaultencoding.hxx>
 #include <unotools/wincodepage.hxx>
 
@@ -423,17 +424,6 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
     mbInCalc = false;
 }
 
-namespace {
-    bool lcl_isDec(sal_Unicode ch)
-    {
-        return ch >= L'0' && ch <= L'9';
-    }
-    bool lcl_isHex(sal_Unicode ch)
-    {
-        return lcl_isDec(ch) || (ch >= L'A' && ch <= L'F') || (ch >= L'a' && ch <= L'f');
-    }
-}
-
 OUString DXFRepresentation::ToOUString(std::string_view s) const
 {
     OUString result = OStringToOUString(s, getTextEncoding(),
@@ -450,9 +440,9 @@ OUString DXFRepresentation::ToOUString(std::string_view s) const
     sal_Int32 pos = result.indexOf("%%"); // %%nnn, where nnn - 3-digit decimal ASCII code
     while (pos != -1 && pos <= result.getLength() - 5) {
         OUString asciiNum = result.copy(pos + 2, 3);
-        if (lcl_isDec(asciiNum[0]) &&
-            lcl_isDec(asciiNum[1]) &&
-            lcl_isDec(asciiNum[2]))
+        if (rtl::isAsciiDigit(asciiNum[0]) &&
+            rtl::isAsciiDigit(asciiNum[1]) &&
+            rtl::isAsciiDigit(asciiNum[2]))
         {
             char ch = static_cast<char>(asciiNum.toUInt32());
             OUString codePt(&ch, 1, mEnc);
@@ -464,10 +454,10 @@ OUString DXFRepresentation::ToOUString(std::string_view s) const
     pos = result.indexOf("\\U+"); // \U+XXXX, where XXXX - 4-digit hex unicode
     while (pos != -1 && pos <= result.getLength() - 7) {
         OUString codePtNum = result.copy(pos + 3, 4);
-        if (lcl_isHex(codePtNum[0]) &&
-            lcl_isHex(codePtNum[1]) &&
-            lcl_isHex(codePtNum[2]) &&
-            lcl_isHex(codePtNum[3]))
+        if (rtl::isAsciiHexDigit(codePtNum[0]) &&
+            rtl::isAsciiHexDigit(codePtNum[1]) &&
+            rtl::isAsciiHexDigit(codePtNum[2]) &&
+            rtl::isAsciiHexDigit(codePtNum[3]))
         {
             OUString codePt(static_cast<sal_Unicode>(codePtNum.toUInt32(16)));
             result = result.replaceAll(result.subView(pos, 7), codePt, pos);

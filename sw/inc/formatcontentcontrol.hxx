@@ -292,10 +292,10 @@ public:
     void SetCurrentDateValue(double fCurrentDate);
 
     /// Parses m_aCurrentDate and returns it.
-    double GetCurrentDateValue() const;
+    std::optional<double> GetCurrentDateValue() const;
 
     /// Formats m_oSelectedDate, taking m_aDateFormat and m_aDateLanguage into account.
-    OUString GetDateString() const;
+    OUString GetDateString(bool bAsISO8601 = false) const;
 
     void SetPlainText(bool bPlainText) { m_bPlainText = bPlainText; }
 

@@ -28,6 +28,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
+#include <vcl/bitmap.hxx>
 
 class SvMemoryStream;
 class GDIMetaFile;

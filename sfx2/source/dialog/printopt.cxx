@@ -24,6 +24,7 @@
 #include <svtools/restartdialog.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <sfx2/printopt.hxx>
 

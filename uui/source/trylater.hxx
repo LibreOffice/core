@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 class TryLaterQueryBox

@@ -18,6 +18,8 @@
  */
 
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
 
 
 namespace drawinglayer::attribute

@@ -140,7 +140,7 @@ rtl::Reference<SdrObject> SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveW
     // For drawing objects: set layer of cloned object to invisible layer
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
     if ( dynamic_cast<const SwFlyDrawObj*>( pObj.get() ) ==  nullptr &&
-         dynamic_cast<const SwVirtFlyDrawObj*>( pObj.get() ) ==  nullptr &&
+         DynCastSwVirtFlyDrawObj( pObj.get() ) ==  nullptr &&
          pObj->GetObjIdentifier() != SdrObjKind::NewFrame )
     {
         if ( getIDocumentDrawModelAccess().IsVisibleLayerId( nLayerIdForClone ) )
@@ -160,7 +160,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
                                     SwFrameFormat* pFrameFormat )
 {
     if( !pFrameFormat )
-        pFrameFormat = getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME );
+        pFrameFormat = getIDocumentStylePoolAccess().GetFrameFormatFromPool( SwPoolFormatId::FRM_FRAME );
 
     UIName sName;
     switch( rNode.GetNodeType() )
@@ -309,10 +309,10 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
     if (pAnchorPos)
     {
         if( !pFrameFormat )
-            pFrameFormat = getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME );
+            pFrameFormat = getIDocumentStylePoolAccess().GetFrameFormatFromPool( SwPoolFormatId::FRM_FRAME );
 
-        sal_uInt16 nCollId = o3tl::narrowing<sal_uInt16>(
-            GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
+        SwPoolFormatId nCollId =
+            GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE) ? SwPoolFormatId::COLL_TEXT : SwPoolFormatId::COLL_FRAME;
 
         /* If there is no adjust item in the paragraph style for the content node of the new fly section
            propagate an existing adjust item at the anchor to the new content node. */
@@ -668,7 +668,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
 
     if( !pColl )
     {
-        pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_LABEL );
+        pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_LABEL );
     }
 
     SwTextNode *pNew = nullptr;
@@ -733,7 +733,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pOldFormat->DelFrames();
 
                 pNewFormat = rDoc.MakeFlyFrameFormat( rDoc.GetUniqueFrameName(),
-                                rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool(RES_POOLFRM_FRAME) );
+                                rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool(SwPoolFormatId::FRM_FRAME) );
 
                 /* #i6447#: Only the selected items are copied from the old
                    format. */
@@ -926,7 +926,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 SwCharFormat* pCharFormat = rDoc.FindCharFormatByName(rCharacterStyle);
                 if( !pCharFormat )
                 {
-                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, SwGetPoolIdFromName::ChrFmt);
+                    const SwPoolFormatId nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, SwGetPoolIdFromName::ChrFmt);
                     pCharFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nMyId );
                 }
                 if (pCharFormat)
@@ -1029,7 +1029,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
 
     if( !pColl )
     {
-        pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_LABEL );
+        pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_LABEL );
     }
 
     SwTextNode* pNew = nullptr;
@@ -1101,7 +1101,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
             SwFlyStartNode, pColl );
 
     pNewFormat = rDoc.MakeFlyFrameFormat( rDoc.GetUniqueFrameName(),
-                 rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME ) );
+                 rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( SwPoolFormatId::FRM_FRAME ) );
 
     // Set border and shadow to default if the template contains any.
     if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState( RES_BOX ))
@@ -1217,7 +1217,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
                 SwCharFormat * pCharFormat = rDoc.FindCharFormatByName(rCharacterStyle);
                 if ( !pCharFormat )
                 {
-                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, SwGetPoolIdFromName::ChrFmt );
+                    const SwPoolFormatId nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, SwGetPoolIdFromName::ChrFmt );
                     pCharFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nMyId );
                 }
                 if ( pCharFormat )

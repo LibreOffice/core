@@ -17,6 +17,7 @@
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/syschild.hxx>

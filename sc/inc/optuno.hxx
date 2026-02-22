@@ -22,19 +22,21 @@
 #include "docuno.hxx"
 #include "docoptio.hxx"
 
-#define PROP_UNO_CALCASSHOWN    1
-#define PROP_UNO_DEFTABSTOP     2
-#define PROP_UNO_IGNORECASE     3
-#define PROP_UNO_ITERENABLED    4
-#define PROP_UNO_ITERCOUNT      5
-#define PROP_UNO_ITEREPSILON    6
-#define PROP_UNO_LOOKUPLABELS   7
-#define PROP_UNO_MATCHWHOLE     8
-#define PROP_UNO_NULLDATE       9
-#define PROP_UNO_STANDARDDEC    10
-#define PROP_UNO_REGEXENABLED   11
-#define PROP_UNO_WILDCARDSENABLED 12
-
+enum class ScPropUnoId
+{
+    CalcAsShown      = 1,
+    DefTabStop       = 2,
+    IgnoreCase       = 3,
+    IterEnabled      = 4,
+    IterCount        = 5,
+    IterEpsilon      = 6,
+    LookupLabels     = 7,
+    MatchWhole       = 8,
+    NullDate         = 9,
+    StandardDec      = 10,
+    RegexEnabled     = 11,
+    WildcardsEnabled = 12
+};
 class ScDocOptionsHelper
 {
 public:

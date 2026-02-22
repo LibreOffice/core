@@ -45,6 +45,8 @@
 #include <rtl/uri.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/stream.hxx>
 #include <osl/diagnose.h>
 #include <oox/helper/graphichelper.hxx>
 #include <vcl/wmfexternal.hxx>
@@ -1379,6 +1381,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
             // note: apparently \'0d\'0a is interpreted as 2 breaks, not 1
             if ((ch == '\r' || ch == '\n')
                 && m_aStates.top().getDestination() != Destination::DOCCOMM
+                && m_aStates.top().getDestination() != Destination::DOCVAR
                 && m_aStates.top().getDestination() != Destination::LEVELNUMBERS
                 && m_aStates.top().getDestination() != Destination::LEVELTEXT)
             {

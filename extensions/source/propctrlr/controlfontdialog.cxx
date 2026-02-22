@@ -23,6 +23,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 #include "fontdialog.hxx"
 #include "formstrings.hxx"
 #include "pcrcommon.hxx"

@@ -67,6 +67,8 @@ public:
     void UpdateFont(SwFont &rFont) { ActualizeFont(rFont, m_rArr[m_nPos - m_nStart]); }
 };
 
+enum class SwRedlineRenderMode;
+
 class SwRedlineItr
 {
     std::deque<SwTextAttr *> m_Hints;
@@ -88,7 +90,7 @@ private:
 
     void Clear_( SwFont* pFnt );
     bool ChkSpecialUnderline_() const;
-    void FillHints( std::size_t nAuthor, RedlineType eType );
+    void FillHints(std::size_t nAuthor, RedlineType eType, SwRedlineRenderMode eRenderMode);
     short EnterExtend(SwFont& rFnt, SwNodeOffset const nNode, sal_Int32 const nNew)
     {
         if (m_pExt) return m_pExt->Enter(rFnt, nNode, nNew);

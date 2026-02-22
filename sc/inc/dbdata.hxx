@@ -26,6 +26,7 @@
 #include "rangelst.hxx"
 
 #include <svl/listener.hxx>
+#include <svl/poolitem.hxx>
 
 #include <memory>
 #include <set>
@@ -35,6 +36,45 @@ class ScDocument;
 struct ScSortParam;
 struct ScQueryParam;
 struct ScSubTotalParam;
+class ScTokenArray;
+
+class SC_DLLPUBLIC ScDatabaseSettingItem final : public SfxPoolItem
+{
+    bool mbHeaderRow;
+    bool mbTotalRow;
+    bool mbFirstCol;
+    bool mbLastCol;
+    bool mbStripedRows;
+    bool mbStripedCols;
+    bool mbShowFilters;
+    OUString maStyleID;
+
+public:
+    static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(ScDatabaseSettingItem)
+    ScDatabaseSettingItem();
+    ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bool bFirstCol, bool bLastCol,
+                          bool bStripedRows, bool bStripedCols, bool bShowFilter,
+                          const OUString& aStyleID);
+    ScDatabaseSettingItem( const ScDatabaseSettingItem& rItem );
+    virtual ~ScDatabaseSettingItem() override;
+
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+
+    ScDatabaseSettingItem& operator=( const ScDatabaseSettingItem& rItem );
+    virtual bool operator==( const SfxPoolItem& ) const override;
+    virtual ScDatabaseSettingItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+
+    bool HasHeaderRow() const;
+    bool HasTotalRow() const;
+    bool HasFirstCol() const;
+    bool HasLastCol() const;
+    bool HasStripedRows() const;
+    bool HasStripedCols() const;
+    bool HasShowFilters() const;
+    const OUString& GetStyleID() const;
+};
 
 /** Enum used to indicate which portion of the DBArea is to be considered. */
 enum class ScDBDataPortion
@@ -46,7 +86,9 @@ enum class ScDBDataPortion
 // TODO: this can be merged with struct TableColumnModel
 struct TableColumnAttributes
 {
+    std::optional<OUString> maTotalsRowLabel = std::nullopt;
     std::optional<OUString> maTotalsFunction = std::nullopt;
+    std::optional<OUString> maCustomFunction = std::nullopt;
 };
 
 // xmlColumnPr attributes
@@ -85,6 +127,20 @@ protected:
     ScRangeList maDirtyTableColumnNames;
 };
 
+
+struct SAL_DLLPUBLIC_RTTI ScTableStyleParam
+{
+    OUString maStyleID;
+    bool mbRowStripes;
+    bool mbColumnStripes;
+    bool mbFirstColumn;
+    bool mbLastColumn;
+
+    SC_DLLPUBLIC ScTableStyleParam();
+
+    bool operator== (const ScTableStyleParam& rData) const;
+};
+
 class SAL_DLLPUBLIC_RTTI ScDBData final : public SvtListener, public ScRefreshTimer
 {
 private:
@@ -92,6 +148,7 @@ private:
     std::unique_ptr<ScQueryParam> mpQueryParam;
     std::unique_ptr<ScSubTotalParam> mpSubTotal;
     std::unique_ptr<ScImportParam> mpImportParam;
+    std::unique_ptr<ScTableStyleParam> mpTableStyles;
 
     ScDBDataContainerBase* mpContainer;
 
@@ -122,7 +179,6 @@ private:
     bool            bModified;          ///< is set/cleared for/by(?) UpdateReference
 
     ::std::vector< OUString > maTableColumnNames;   ///< names of table columns
-    ::std::vector< TableColumnAttributes > maTableColumnAttributes; ///< attributes of table columns
     ::std::vector< TableColumnModel > maTableColumnModel;
     bool            mbTableColumnNamesDirty;
     SCSIZE          nFilteredRowCount;
@@ -137,8 +193,9 @@ public:
 
     SC_DLLPUBLIC ScDBData(const OUString& rName,
              SCTAB nTab,
-             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-             bool bByR = true, bool bHasH = true, bool bTotals = false, const OUString& rTableType = "worksheet");
+             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bByR = true, bool bHasH = true, bool bTotals = false,
+                          const OUString& rTableType = u"worksheet"_ustr,
+                          const OUString& rTableStyleID = u""_ustr);
     ScDBData(const ScDBData& rData);
     ScDBData(const OUString& rName, const ScDBData& rData);
     SC_DLLPUBLIC virtual ~ScDBData() override;
@@ -180,8 +237,6 @@ public:
     void        EndTableColumnNamesListener();
     SC_DLLPUBLIC void SetTableColumnNames( ::std::vector< OUString >&& rNames );
     SC_DLLPUBLIC const ::std::vector< OUString >& GetTableColumnNames() const { return maTableColumnNames; }
-    SC_DLLPUBLIC void SetTableColumnAttributes( ::std::vector< TableColumnAttributes >&& rAttributes );
-    SC_DLLPUBLIC const ::std::vector< TableColumnAttributes >& GetTableColumnAttributes() const { return maTableColumnAttributes; }
     SC_DLLPUBLIC void SetTableColumnModel( TableColumnModel& rModel )
     {
         maTableColumnModel.push_back(std::move(rModel));
@@ -225,7 +280,18 @@ public:
     SC_DLLPUBLIC void       SetAdvancedQuerySource(const ScRange* pSource);
 
     SC_DLLPUBLIC void       GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
-    void        SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
+    SC_DLLPUBLIC void       SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
+
+    // Total row param handling for Table Styles
+    SC_DLLPUBLIC void       ImportTotalRowParam(ScSubTotalParam& rSubTotalParam,
+                                                const std::vector<TableColumnAttributes>& rAttributesVector,
+                                                formula::FormulaGrammar::Grammar eGrammar) const;
+    SC_DLLPUBLIC void       CreateTotalRowParam(ScSubTotalParam& rSubTotalParam) const;
+
+    SC_DLLPUBLIC std::vector<TableColumnAttributes>
+                            GetTotalRowAttributes(formula::FormulaGrammar::Grammar eGrammar) const;
+
+    OUString    GetSimpleSubTotalFunction(const ScTokenArray* pTokens, SCCOL nCol, SCROW nHeaderRow) const;
 
     void        GetImportParam(ScImportParam& rImportParam) const;
     void        SetImportParam(const ScImportParam& rImportParam);
@@ -257,9 +323,16 @@ public:
     void CalcSaveFilteredCount(SCSIZE nNonFilteredRowCount);
     void GetFilterSelCount(SCSIZE& nSelected, SCSIZE& nTotal);
 
+    SC_DLLPUBLIC void SetTableStyleInfo(const ScTableStyleParam& rParams);
+    SC_DLLPUBLIC const ScTableStyleParam* GetTableStyleInfo() const;
+    void RemoveTableStyleInfo();
+
+    static ScSubTotalFunc GetSubTotalFuncFromString(std::u16string_view sFunction);
+    static OUString GetStringFromSubTotalFunc(ScSubTotalFunc eFunc);
+
 private:
 
-    void AdjustTableColumnAttributes( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
+    void AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
             SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 );
     void InvalidateTableColumnNames( bool bSwapToEmptyNames );
 };
@@ -297,6 +370,7 @@ public:
         ScDBData* findByIndex(sal_uInt16 nIndex);
         ScDBData* findByUpperName(const OUString& rName);
         iterator findByUpperName2(const OUString& rName);
+        iterator findByPointer(const ScDBData* p);
         ScDBData* findByName(const OUString& rName);
 
         /** Takes ownership of p and attempts to insert it into the collection.
@@ -360,12 +434,16 @@ public:
     AnonDBs& getAnonDBs() { return maAnonDBs;}
     const AnonDBs& getAnonDBs() const { return maAnonDBs;}
 
+    const ScDBData* GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
+    ScDBData* GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
     const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
     ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
     const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     SC_DLLPUBLIC ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     SC_DLLPUBLIC ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
     SC_DLLPUBLIC std::vector<ScDBData*> GetAllDBsFromTab(SCTAB nTab);
+    std::vector<const ScDBData*> GetAllNamedDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
+                                                      SCROW nRow2, SCTAB nTab) const;
 
     void RefreshDirtyTableColumnNames();
 

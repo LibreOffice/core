@@ -23,7 +23,6 @@
 #include <config_options.h>
 #include <com/sun/star/style/XStyle.hpp>
 
-#include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svl/svldllapi.h>
 #include <svl/hint.hxx>
@@ -31,7 +30,6 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <tools/mapunit.hxx>
 
 #include <memory>
 #include <optional>
@@ -83,6 +81,8 @@ class SfxStyleSheetBasePool;
 
 namespace svl { class IndexedStyleSheets; }
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
+namespace rtl { template <class reference_type> class Reference; }
+enum class MapUnit : sal_uInt8;
 
 /*
 Everyone changing instances of SfxStyleSheetBasePool or SfxStyleSheetBase

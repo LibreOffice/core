@@ -21,6 +21,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

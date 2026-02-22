@@ -210,7 +210,6 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
 {
     if( nDays < 0 )
         throw lang::IllegalArgumentException();
-
     sal_Int32   nTempDays;
     sal_Int32   i = 0;
     bool        bCalc;
@@ -218,7 +217,10 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
     do
     {
         nTempDays = nDays;
-        rYear = static_cast<sal_uInt16>((nTempDays / 365) - i);
+        sal_Int32 nTempYear = nTempDays / 365;
+        if (nTempYear > SAL_MAX_INT16)
+            throw lang::IllegalArgumentException("days value too large " + OUString::number(nDays), {}, 1);
+        rYear = static_cast<sal_uInt16>(nTempYear - i);
         nTempDays -= (static_cast<sal_Int32>(rYear) -1) * 365;
         nTempDays -= (( rYear -1) / 4) - (( rYear -1) / 100) + ((rYear -1) / 400);
         bCalc = false;

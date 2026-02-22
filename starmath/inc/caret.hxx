@@ -295,7 +295,7 @@ private:
  * appears it is not trivial to find all caret positions and determine which follows which.
  * In OpenOffice Math this is done by the SmCaretPosGraphBuildingVisitor. This visitor builds
  * graph (an instance of SmCaretPosGraph) over the caret positions. For details on how this
- * graph is build, and how new methods should be implemented see SmCaretPosGraphBuildingVisitor.
+ * graph is built, and how new methods should be implemented see SmCaretPosGraphBuildingVisitor.
  *
  * The result of the SmCaretPosGraphBuildingVisitor is a graph over the caret positions in a
  * formula, represented by an instance of SmCaretPosGraph. Each entry (instances of SmCaretPosGraphEntry)

@@ -14,6 +14,7 @@
 #include <reffact.hxx>
 #include <scresid.hxx>
 #include <svl/style.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <strings.hrc>
 
 namespace

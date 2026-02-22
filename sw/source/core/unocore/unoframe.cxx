@@ -970,7 +970,7 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc& rDoc, SfxItemSet& rSet, SfxItem
     }
     else
     {
-        const ::SfxItemSet *pItemSet = &rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
+        const ::SfxItemSet *pItemSet = &rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( SwPoolFormatId::FRM_FRAME )->GetAttrSet();
         bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
         FillCol(rSet, *pItemSet);
     }
@@ -1053,7 +1053,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     }
     else
     {
-        const ::SfxItemSet *pItemSet = &rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_GRAPHIC )->GetAttrSet();
+        const ::SfxItemSet *pItemSet = &rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( SwPoolFormatId::FRM_GRAPHIC )->GetAttrSet();
         bRet = FillBaseProperties(rFrameSet, *pItemSet, rSizeFound);
         bRet &= FillMirror(rGrSet, *pItemSet);
     }
@@ -1141,7 +1141,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
         return;
 
     // Register ourselves as a listener to the document (via the page descriptor)
-    StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(SwPoolFormatId::PAGE_STANDARD)->GetNotifier());
     // get the property set for the default style data
     // First get the model
     rtl::Reference < SwXTextDocument > xModel = pShell->GetBaseModel();
@@ -1411,7 +1411,14 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, getXWeak() );
 
         SwDoc& rDoc = pFormat->GetDoc();
-        if ( ((m_eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
+        if (m_eType == FLYCNTTYPE_GRF && RES_GRFATR_VISIBLE == pEntry->nWID)
+        {
+            bool bVisible = true;
+            aValue >>= bVisible;
+            SdrObject* pObject = GetOrCreateSdrObject(static_cast<SwFlyFrameFormat&>(*pFormat));
+            pObject->SetVisible(bVisible);
+        }
+        else if ( ((m_eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
             (FN_PARAM_CONTOUR_PP         == pEntry->nWID) ||
             (FN_UNO_IS_AUTOMATIC_CONTOUR == pEntry->nWID) ||
             (FN_UNO_IS_PIXEL_CONTOUR     == pEntry->nWID) )
@@ -1962,7 +1969,12 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     }
     else if(pFormat)
     {
-        if( ((m_eType == FLYCNTTYPE_GRF) || (m_eType == FLYCNTTYPE_OLE)) &&
+        if (m_eType == FLYCNTTYPE_GRF && RES_GRFATR_VISIBLE == pEntry->nWID)
+        {
+            SdrObject* pObject = GetOrCreateSdrObject(static_cast<SwFlyFrameFormat&>(*pFormat));
+            aAny <<= pObject->IsVisible();
+        }
+        else if( ((m_eType == FLYCNTTYPE_GRF) || (m_eType == FLYCNTTYPE_OLE)) &&
                 (isGRFATR(pEntry->nWID) ||
                         pEntry->nWID == FN_PARAM_CONTOUR_PP ||
                         pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
@@ -2141,7 +2153,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             const SdrObject* pObj = pFormat->FindRealSdrObject();
             if( pObj == nullptr )
                 pObj = pFormat->FindSdrObject();
-            if( pObj )
+            if (pObj && pObj->getParentSdrObjListFromSdrObject())
             {
                 aAny <<= static_cast<sal_Int32>(pObj->GetOrdNum());
             }
@@ -2224,7 +2236,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                     m_xParentText = sw::CreateParentXText(pFormat->GetDoc(), *rFormatAnchor.GetContentAnchor());
                 }
             }
-            aAny <<= m_xParentText;
+            aAny <<= uno::Reference<text::XText>(m_xParentText);
         }
         else
         {
@@ -2625,6 +2637,11 @@ void SwXFrame::dispose()
 }
 
 uno::Reference< text::XTextRange >  SwXFrame::getAnchor()
+{
+    return getSwAnchor();
+}
+
+rtl::Reference< SwXTextRange >  SwXFrame::getSwAnchor()
 {
     SolarMutexGuard aGuard;
     rtl::Reference<SwXTextRange> aRef;
@@ -3046,6 +3063,9 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
     {
         setPropertyValue(UNO_NAME_DESCRIPTION, *pDescription);
     }
+    if (const uno::Any* pVisible = m_pProps->GetProperty(RES_GRFATR_VISIBLE, 0))
+        setPropertyValue(UNO_NAME_VISIBLE, *pVisible);
+
 
     // For grabbag
     if (const uno::Any* pFrameIntropgrabbagItem = m_pProps->GetProperty(RES_FRMATR_GRABBAG, 0))
@@ -3263,6 +3283,11 @@ rtl::Reference< SwXTextCursor > SwXTextFrame::createXTextCursorByRangeImpl(
 }
 
 uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration()
+{
+    return createSwEnumeration();
+}
+
+rtl::Reference< SwXParagraphEnumeration >  SwXTextFrame::createSwEnumeration()
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();

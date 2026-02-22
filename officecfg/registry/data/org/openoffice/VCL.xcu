@@ -800,28 +800,28 @@
     </node>
     <node oor:name="ak-GH" oor:op="replace">
       <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Tahoma;SansSerif</value>
+        <value>Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Tahoma;SansSerif</value>
       </prop>
       <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif</value>
+        <value>Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif</value>
       </prop>
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
         <value>FreeMono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Tahoma;SansSerif</value>
+        <value>Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Tahoma;SansSerif</value>
       </prop>
       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif</value>
+        <value>Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif</value>
       </prop>
       <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>Gentium;Aboriginal Serif;FreeSerif;Luxi Serif;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Serif</value>
+        <value>Aboriginal Serif;FreeSerif;Luxi Serif;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Serif</value>
       </prop>
       <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif</value>
+        <value>Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif</value>
       </prop>
       <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
-        <value> Gentium;Aboriginal Serif;FreeSerif;Luxi Serif;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Serif</value>
+        <value> Aboriginal Serif;FreeSerif;Luxi Serif;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Serif</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
         <value>FreeMono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
@@ -830,7 +830,7 @@
         <value>FreeMono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS;Lucida Sans Unicode;Gentium;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif</value>
+        <value>Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif</value>
       </prop>
     </node>
     <node oor:name="si" oor:op="replace">

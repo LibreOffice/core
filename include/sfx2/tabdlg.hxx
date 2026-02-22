@@ -29,6 +29,7 @@
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/builderpage.hxx>
+#include <vcl/weld/Notebook.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/setitem.hxx>

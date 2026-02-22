@@ -27,12 +27,6 @@ using namespace fileaccess;
 using namespace com::sun::star;
 using namespace css::uno;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 // Function for TypeConverting
 
 template< class _type_ >
@@ -100,7 +94,7 @@ XRow_impl::getString(
              sal_Int32 columnIndex )
 {
   if( isIndexOutOfBounds( columnIndex ) )
-    throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+    throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
   return getValue<OUString>(columnIndex);
 }
 
@@ -109,7 +103,7 @@ XRow_impl::getBoolean(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<bool>(columnIndex);
 }
 
@@ -119,7 +113,7 @@ XRow_impl::getByte(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<sal_Int8>(columnIndex);
 }
 
@@ -128,7 +122,7 @@ XRow_impl::getShort(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<sal_Int16>(columnIndex);
 }
 
@@ -138,7 +132,7 @@ XRow_impl::getInt(
           sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<sal_Int32>(columnIndex);
 }
 
@@ -147,7 +141,7 @@ XRow_impl::getLong(
            sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<sal_Int64>(columnIndex);
 }
 
@@ -156,7 +150,7 @@ XRow_impl::getFloat(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<float>(columnIndex);
 }
 
@@ -165,7 +159,7 @@ XRow_impl::getDouble(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<double>(columnIndex);
 }
 
@@ -174,7 +168,7 @@ XRow_impl::getBytes(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<uno::Sequence< sal_Int8 >>(columnIndex);
 }
 
@@ -183,7 +177,7 @@ XRow_impl::getDate(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<util::Date>(columnIndex);
 }
 
@@ -192,7 +186,7 @@ XRow_impl::getTime(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<util::Time>(columnIndex);
 }
 
@@ -201,7 +195,7 @@ XRow_impl::getTimestamp(
             sal_Int32 columnIndex )
 {
   if( isIndexOutOfBounds( columnIndex ) )
-    throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+    throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
   return getValue<util::DateTime>(columnIndex);
 }
 
@@ -211,7 +205,7 @@ XRow_impl::getBinaryStream(
                sal_Int32 columnIndex )
 {
   if( isIndexOutOfBounds( columnIndex ) )
-    throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+    throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
   return getValue<uno::Reference< io::XInputStream >>(columnIndex);
 }
 
@@ -221,7 +215,7 @@ XRow_impl::getCharacterStream(
                   sal_Int32 columnIndex )
 {
   if( isIndexOutOfBounds( columnIndex ) )
-      throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+      throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
   return getValue<uno::Reference< io::XInputStream >>(columnIndex);
 }
 
@@ -232,7 +226,7 @@ XRow_impl::getObject(
     const uno::Reference< container::XNameAccess >& )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     std::scoped_lock aGuard( m_aMutex );
     uno::Any Value = m_aValueMap[columnIndex - 1];
     m_nWasNull = !Value.hasValue();
@@ -244,7 +238,7 @@ XRow_impl::getRef(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<uno::Reference< sdbc::XRef >>(columnIndex);
 }
 
@@ -253,7 +247,7 @@ XRow_impl::getBlob(
            sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<uno::Reference< sdbc::XBlob >>(columnIndex);
 }
 
@@ -262,7 +256,7 @@ XRow_impl::getClob(
            sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<uno::Reference< sdbc::XClob >>(columnIndex);
 }
 
@@ -272,7 +266,7 @@ XRow_impl::getArray(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     return getValue<uno::Reference< sdbc::XArray >>(columnIndex);
 }
 

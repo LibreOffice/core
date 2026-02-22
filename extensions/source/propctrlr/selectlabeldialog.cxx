@@ -35,6 +35,7 @@
 #include <comphelper/types.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <vcl/weld/Builder.hxx>
 
 
 namespace pcr

@@ -49,18 +49,18 @@ namespace o3tl {
 namespace basctl
 {
 
-enum EntryType
+enum class EntryType
 {
-    OBJ_TYPE_UNKNOWN,
-    OBJ_TYPE_DOCUMENT,
-    OBJ_TYPE_LIBRARY,
-    OBJ_TYPE_MODULE,
-    OBJ_TYPE_DIALOG,
-    OBJ_TYPE_METHOD,
-    OBJ_TYPE_DOCUMENT_OBJECTS,
-    OBJ_TYPE_USERFORMS,
-    OBJ_TYPE_NORMAL_MODULES,
-    OBJ_TYPE_CLASS_MODULES
+    Unknown,
+    Document,
+    Library,
+    Module,
+    Dialog,
+    Method,
+    DocumentObjects,
+    UserForms,
+    NormalModules,
+    ClassModules
 };
 
 class Entry
@@ -94,7 +94,7 @@ public:
     DocumentEntry (
         ScriptDocument aDocument,
         LibraryLocation eLocation,
-        EntryType eType = OBJ_TYPE_DOCUMENT
+        EntryType eType = EntryType::Document
     );
     virtual ~DocumentEntry () override;
 
@@ -163,16 +163,13 @@ public:
     friend bool operator==(const basctl::EntryDescriptor& aDesc1, const basctl::EntryDescriptor& aDesc2) = default;
 };
 
-
 /*
     Classification of types and pointers in the Entries:
-
-    OBJ_TYPE_DOCUMENT        DocumentEntry
-    OBJ_TYPE_LIBRARY         Entry
-    OBJ_TYPE_MODULE          Entry
-    OBJ_TYPE_DIALOG          Entry
-    OBJ_TYPE_METHOD          Entry
-
+    EntryType::Document        DocumentEntry
+    EntryType::Library         Entry
+    EntryType::Module          Entry
+    EntryType::Dialog          Entry
+    EntryType::Method          Entry
 */
 
 class SbTreeListBox : public DocumentEventListener
@@ -308,7 +305,7 @@ template<> class hash<basctl::EntryDescriptor>
             rDesc.GetLibSubName()                               + "|" +
             rDesc.GetName()                                     + "|" +
             rDesc.GetMethodName()                               + "|" +
-            OUString::number(rDesc.GetType());
+            OUString::number(static_cast<int>(rDesc.GetType()));
 
         return sDescSerial.hashCode();
     }

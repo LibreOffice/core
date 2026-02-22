@@ -21,13 +21,13 @@
 #define INCLUDED_VCL_MAPMOD_HXX
 
 #include <vcl/dllapi.h>
-#include <tools/mapunit.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
 #include <ostream>
 
 class Point;
 class Fraction;
+enum class MapUnit : sal_uInt8;
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC MapMode
 {

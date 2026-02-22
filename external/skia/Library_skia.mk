@@ -129,6 +129,7 @@ $(eval $(call gb_Library_set_include,skia,\
     -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/ \
     -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/include/ \
     -I$(gb_UnpackedTarball_workdir)/skia/src/gpu/vk/vulkanmemoryallocator/ \
+    -I$(gb_UnpackedTarball_workdir)/skia/src/ports/ \
     -I$(gb_UnpackedTarball_workdir)/skia/include/third_party/vulkan/ \
     -I$(SRCDIR)/external/skia/inc/ \
 ))
@@ -314,10 +315,13 @@ endif
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkCodec \
+    UnpackedTarball/skia/src/codec/SkCodecColorProfile \
     UnpackedTarball/skia/src/codec/SkCodecImageGenerator \
     UnpackedTarball/skia/src/codec/SkColorPalette \
     UnpackedTarball/skia/src/codec/SkExif \
     UnpackedTarball/skia/src/codec/SkGainmapInfo \
+    UnpackedTarball/skia/src/codec/SkHdrAgtm \
+    UnpackedTarball/skia/src/codec/SkHdrAgtmParse \
     UnpackedTarball/skia/src/codec/SkHdrMetadata \
     UnpackedTarball/skia/src/codec/SkImageGenerator_FromEncoded \
     UnpackedTarball/skia/src/codec/SkMaskSwizzler \
@@ -358,6 +362,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/base/SkContainers \
     UnpackedTarball/skia/src/base/SkCubics \
     UnpackedTarball/skia/src/base/SkDeque \
+    UnpackedTarball/skia/src/base/SkDebug \
     UnpackedTarball/skia/src/base/SkFloatingPoint \
     UnpackedTarball/skia/src/base/SkHalf \
     UnpackedTarball/skia/src/base/SkMalloc \
@@ -491,10 +496,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkPathPriv \
     UnpackedTarball/skia/src/core/SkPathRaw \
     UnpackedTarball/skia/src/core/SkPathRawShapes \
-    UnpackedTarball/skia/src/core/SkPathRef \
     UnpackedTarball/skia/src/core/SkPathUtils \
-    UnpackedTarball/skia/src/core/SkPath_editing \
-    UnpackedTarball/skia/src/core/SkPath_pathref \
     UnpackedTarball/skia/src/core/SkPath_serial \
     UnpackedTarball/skia/src/core/SkPixelRef \
     UnpackedTarball/skia/src/core/SkPixmap \
@@ -1065,6 +1067,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/gradients/GrGradientBitmapCache \
     UnpackedTarball/skia/src/gpu/ganesh/gradients/GrGradientShader \
     UnpackedTarball/skia/src/gpu/ganesh/image/GrImageUtils \
+    UnpackedTarball/skia/src/gpu/ganesh/image/GrMippedBitmap \
     UnpackedTarball/skia/src/gpu/ganesh/image/GrTextureGenerator \
     UnpackedTarball/skia/src/gpu/ganesh/image/SkImage_Ganesh \
     UnpackedTarball/skia/src/gpu/ganesh/image/SkImage_GaneshBase \

@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">86400000</property>
-    <property name="step_increment">1000</property>
-    <property name="page_increment">60000</property>
+    <property name="step-increment">1000</property>
+    <property name="page-increment">60000</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="upper">86400000</property>
-    <property name="step_increment">1000</property>
-    <property name="page_increment">60000</property>
+    <property name="step-increment">1000</property>
+    <property name="page-increment">60000</property>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">cmd/sc_timefield.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">cmd/sc_timefield.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">cmd/sc_timefield.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">cmd/sc_timefield.png</property>
   </object>
-  <!-- n-columns=1 n-rows=1 -->
+  <!-- n-columns=1 n-rows=10 -->
   <object class="GtkGrid" id="RedlineFilterPage">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="valign">start</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="border_width">6</property>
-    <property name="row_spacing">6</property>
-    <property name="column_spacing">6</property>
+    <property name="border-width">6</property>
+    <property name="row-spacing">6</property>
+    <property name="column-spacing">6</property>
     <child>
       <object class="GtkCheckButton" id="date">
         <property name="label" translatable="yes" context="redlinefilterpage|date">_Date:</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="use_underline">True</property>
-        <property name="draw_indicator">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="use-underline">True</property>
+        <property name="draw-indicator">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="date-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|date">Filters the list of changes according to the date and the time that you specify.</property>
@@ -47,18 +47,18 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child>
       <object class="GtkCheckButton" id="author">
         <property name="label" translatable="yes" context="redlinefilterpage|author">_Author:</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="use_underline">True</property>
-        <property name="draw_indicator">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="use-underline">True</property>
+        <property name="draw-indicator">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="author-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|author">Filters the list of changes according to the name of the author that you select from the list.</property>
@@ -66,18 +66,18 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
       </packing>
     </child>
     <child>
       <object class="GtkCheckButton" id="comment">
         <property name="label" translatable="yes" context="redlinefilterpage|comment">C_omment:</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="use_underline">True</property>
-        <property name="draw_indicator">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="use-underline">True</property>
+        <property name="draw-indicator">True</property>
         <accessibility>
           <relation type="label-for" target="commentedit"/>
         </accessibility>
@@ -88,18 +88,18 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">8</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">8</property>
       </packing>
     </child>
     <child>
       <object class="GtkEntry" id="commentedit">
         <property name="visible">True</property>
         <property name="sensitive">False</property>
-        <property name="can_focus">True</property>
+        <property name="can-focus">True</property>
         <property name="margin-start">24</property>
         <property name="hexpand">True</property>
-        <property name="activates_default">True</property>
+        <property name="activates-default">True</property>
         <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="commentedit-atkobject">
@@ -109,18 +109,18 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">9</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">9</property>
       </packing>
     </child>
     <child>
       <object class="GtkCheckButton" id="range">
         <property name="label" translatable="yes" context="redlinefilterpage|range">_Range:</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="use_underline">True</property>
-        <property name="draw_indicator">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="use-underline">True</property>
+        <property name="draw-indicator">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="range-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|range">Filters the list of changes according to the range of cells that you specify. To select a range of cells in your sheet, click the Set Reference button (...).</property>
@@ -128,15 +128,15 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">6</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">6</property>
       </packing>
     </child>
     <child>
       <object class="GtkComboBoxText" id="actionlist">
         <property name="visible">True</property>
         <property name="sensitive">False</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="margin-start">24</property>
         <property name="hexpand">True</property>
         <accessibility>
@@ -150,18 +150,18 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">5</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
       <object class="GtkCheckButton" id="action">
         <property name="label" translatable="yes" context="redlinefilterpage|action">A_ction:</property>
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="use_underline">True</property>
-        <property name="draw_indicator">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="use-underline">True</property>
+        <property name="draw-indicator">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="action-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="redlinefilterpage|extended_tip|action">Filters the list of changes according to the type of change that you select in the Action box.</property>
@@ -169,15 +169,15 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
       <object class="GtkComboBoxText" id="authorlist">
         <property name="visible">True</property>
         <property name="sensitive">False</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="margin-start">24</property>
         <property name="hexpand">True</property>
         <accessibility>
@@ -191,27 +191,27 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="margin-start">24</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkEntry" id="rangeedit">
             <property name="visible">True</property>
             <property name="sensitive">False</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
-            <property name="activates_default">True</property>
+            <property name="activates-default">True</property>
+            <property name="truncate-multiline">True</property>
             <accessibility>
               <relation type="labelled-by" target="range"/>
             </accessibility>
-            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="rangeedit-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|rangeedit-atkobject">Range</property>
@@ -230,9 +230,9 @@
             <property name="label">...</property>
             <property name="visible">True</property>
             <property name="sensitive">False</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes" context="redlinefilterpage|dotdotdot|tooltip_text">Set reference</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes" context="redlinefilterpage|dotdotdot|tooltip_text">Set reference</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -242,14 +242,14 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">7</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">7</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="box3">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="margin-start">24</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
@@ -257,7 +257,7 @@
           <object class="GtkComboBoxText" id="datecond">
             <property name="visible">True</property>
             <property name="sensitive">False</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <items>
               <item translatable="yes" context="redlinefilterpage|datecond">earlier than</item>
@@ -284,33 +284,33 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=4 n-rows=2 -->
           <object class="GtkGrid" id="grid3">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">6</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="and">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="redlinefilterpage|and">a_nd</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <property name="xalign">1</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkMenuButton" id="startdate">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="draw-indicator">True</property>
                 <property name="label" translatable="no"></property>
                 <child>
                   <placeholder/>
@@ -323,20 +323,20 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinButton" id="starttime">
-                <property name="width_request">70</property>
+                <property name="width-request">70</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="activates_default">True</property>
-                <property name="adjustment">adjustment1</property>
+                <property name="activates-default">True</property>
                 <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="starttime-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|starttime-atkobject">Start Time</property>
@@ -345,31 +345,31 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="startclock">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="redlinefilterpage|startclock|tooltip_text">Set current time and date</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="redlinefilterpage|startclock|tooltip_text">Set current time and date</property>
                 <property name="image">image1</property>
                 <property name="always-show-image">True</property>
               </object>
               <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">3</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkMenuButton" id="enddate">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="draw-indicator">True</property>
                 <property name="label" translatable="no"></property>
                 <child>
                   <placeholder/>
@@ -382,20 +382,20 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinButton" id="endtime">
-                <property name="width_request">75</property>
+                <property name="width-request">75</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="activates_default">True</property>
-                <property name="adjustment">adjustment2</property>
+                <property name="activates-default">True</property>
                 <property name="truncate-multiline">True</property>
+                <property name="adjustment">adjustment2</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="endtime-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="redlinefilterpage|endtime-atkobject">End Time</property>
@@ -404,23 +404,23 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">2</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="endclock">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="redlinefilterpage|endclock|tooltip_text">Set current time and date</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="redlinefilterpage|endclock|tooltip_text">Set current time and date</property>
                 <property name="image">image2</property>
                 <property name="always-show-image">True</property>
               </object>
               <packing>
-                <property name="left_attach">3</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">3</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -435,8 +435,8 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
     <child internal-child="accessible">

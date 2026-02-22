@@ -20,9 +20,11 @@
 
 #include <memory>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 
+#include <editeng/autodiritem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -197,6 +199,9 @@ static OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
     DebOutBuffer buffer;
     switch ( rItem.Which() )
     {
+        case EE_PARA_AUTOWRITINGDIR:
+            buffer.append("AutoWritingDir=", rItem.StaticWhichCast(EE_PARA_AUTOWRITINGDIR));
+        break;
         case EE_PARA_WRITINGDIR:
             buffer.append("WritingDir=", rItem.StaticWhichCast(EE_PARA_WRITINGDIR));
         break;

@@ -37,6 +37,8 @@ $(eval $(call gb_CppunitTest_use_sdk_api,vcl_timer))
 $(eval $(call gb_CppunitTest_use_ure,vcl_timer))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_timer))
 
+$(eval $(call gb_CppunitTest_use_externals,vcl_timer,harfbuzz))
+
 $(eval $(call gb_CppunitTest_use_components,vcl_timer,\
 	configmgr/source/configmgr \
 	i18npool/util/i18npool \

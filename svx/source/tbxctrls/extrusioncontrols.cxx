@@ -22,6 +22,9 @@
 #include <comphelper/propertyvalue.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/svdtrans.hxx>

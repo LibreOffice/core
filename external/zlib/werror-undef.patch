@@ -1,0 +1,16 @@
+--- zconf.h	2026-02-18 12:26:44.923467968 +0100
++++ zconf.h	2026-02-18 12:27:35.631302082 +0100
+@@ -443,11 +443,11 @@
+    typedef unsigned long z_crc_t;
+ #endif
+
+-#if HAVE_UNISTD_H-0     /* may be set to #if 1 by ./configure */
++#ifdef HAVE_UNISTD_H     /* may be set to #if 1 by ./configure */
+ #  define Z_HAVE_UNISTD_H
+ #endif
+
+-#if HAVE_STDARG_H-0     /* may be set to #if 1 by ./configure */
++#ifdef HAVE_STDARG_H     /* may be set to #if 1 by ./configure */
+ #  define Z_HAVE_STDARG_H
+ #endif
+

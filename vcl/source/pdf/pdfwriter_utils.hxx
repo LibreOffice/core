@@ -20,6 +20,7 @@
 #pragma once
 
 #include <rtl/strbuf.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/outdev.hxx>
 #include <vcl/mapmod.hxx>

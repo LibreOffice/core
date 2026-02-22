@@ -11,6 +11,8 @@
 
 #include "QtInstanceDialog.hxx"
 
+#include <vcl/weld/ColorChooserDialog.hxx>
+
 #include <QtWidgets/QColorDialog>
 
 class QtInstanceColorChooserDialog : public QtInstanceDialog,

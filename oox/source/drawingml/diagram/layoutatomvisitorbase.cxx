@@ -109,7 +109,7 @@ void LayoutAtomVisitorBase::visit(LayoutNode& rAtom)
 
     // stop processing if it's not a child of previous LayoutNode
 
-    const DiagramData::PointsNameMap::const_iterator aDataNode
+    const DiagramData_oox::PointsNameMap::const_iterator aDataNode
         = mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
     if (aDataNode == mrDgm.getData()->getPointsPresNameMap().end()
         || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
@@ -158,7 +158,7 @@ void ShallowPresNameVisitor::visit(ForEachAtom& rAtom)
 
 void ShallowPresNameVisitor::visit(LayoutNode& rAtom)
 {
-    DiagramData::PointsNameMap::const_iterator aDataNode =
+    DiagramData_oox::PointsNameMap::const_iterator aDataNode =
         mrDgm.getData()->getPointsPresNameMap().find(rAtom.getName());
     if( aDataNode != mrDgm.getData()->getPointsPresNameMap().end() )
         mnCnt = std::max(mnCnt,

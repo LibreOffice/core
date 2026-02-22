@@ -37,6 +37,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/TerminationVetoException.hpp>
+#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
@@ -52,6 +53,7 @@
 #include <comphelper/lok.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
+#include <unotools/cmdoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <desktop/crashreport.hxx>
 #include <vcl/scheduler.hxx>

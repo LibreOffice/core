@@ -11,6 +11,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <svtools/htmltokn.h>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
 #include <ucbhelper/content.hxx>

@@ -31,6 +31,7 @@
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <tools/datetime.hxx>
+#include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/scheduler.hxx>

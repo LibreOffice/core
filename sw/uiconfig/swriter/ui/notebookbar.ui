@@ -3830,7 +3830,7 @@
                                         <property name="visible">True</property>
                                         <property name="halign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="action-name">.uno:LeftPara</property>
+                                        <property name="action-name">.uno:StartPara</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -3854,7 +3854,7 @@
                                         <property name="visible">True</property>
                                         <property name="halign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="action-name">.uno:RightPara</property>
+                                        <property name="action-name">.uno:EndPara</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -10512,7 +10512,7 @@
                                     <property name="visible">True</property>
                                     <property name="halign">center</property>
                                     <property name="hexpand">True</property>
-                                    <property name="action-name">.uno:LeftPara</property>
+                                    <property name="action-name">.uno:StartPara</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -10536,7 +10536,7 @@
                                     <property name="visible">True</property>
                                     <property name="halign">center</property>
                                     <property name="hexpand">True</property>
-                                    <property name="action-name">.uno:RightPara</property>
+                                    <property name="action-name">.uno:EndPara</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>

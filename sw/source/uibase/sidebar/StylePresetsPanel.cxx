@@ -16,6 +16,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>

@@ -42,7 +42,7 @@ excludelist:
     - com/sun/star/drawing/LineStyle.hpp
     oox/source/drawingml/shape.cxx:
     # Actually used
-    - diagram/datamodel.hxx
+    - diagram/datamodel_oox.hxx
     # Needed for direct member access
     - com/sun/star/xml/dom/XDocument.hpp
     oox/source/drawingml/textparagraph.cxx:

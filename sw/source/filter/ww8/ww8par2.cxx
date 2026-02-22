@@ -695,7 +695,7 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 
         m_bCurrentAND_fNumberAcross = 0 != pAD->fNumberAcross;
         WW8_ANLV const &rAV = pAD->eAnlv;
         SetBaseAnlv(aNF, rAV, nSwLevel);                    // set the base format
-        SetAnlvStrings(aNF, nSwLevel, rAV, pAD->rgchAnld, 0, SAL_N_ELEMENTS(pAD->rgchAnld), bOutLine); // set the rest
+        SetAnlvStrings(aNF, nSwLevel, rAV, pAD->rgchAnld, 0, std::size(pAD->rgchAnld), bOutLine); // set the rest
     }
     pNumR->Set(nSwLevel, aNF);
 }
@@ -833,7 +833,7 @@ void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLe
 
     if (!m_bVer67)
         nTextOfs *= 2;
-    SetAnlvStrings(aNF, nSwLevel, rAV, pO->rgch, nTextOfs, SAL_N_ELEMENTS(pO->rgch), true); // and apply
+    SetAnlvStrings(aNF, nSwLevel, rAV, pO->rgch, nTextOfs, std::size(pO->rgch), true); // and apply
     pNumR->Set(nSwLevel, aNF);
 }
 
@@ -2861,7 +2861,7 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
 
 bool WW8TabDesc::IsValidCell(short nCol) const
 {
-    return (o3tl::make_unsigned(nCol) < SAL_N_ELEMENTS(m_pActBand->bExist)) &&
+    return (o3tl::make_unsigned(nCol) < std::size(m_pActBand->bExist)) &&
            m_pActBand->bExist[nCol] &&
            o3tl::make_unsigned(m_nCurrentRow) < m_pTabLines->size();
 }
@@ -4520,7 +4520,7 @@ void WW8RStyle::Import()
 {
     mpIo->m_pDfltTextFormatColl  = mpIo->m_rDoc.GetDfltTextFormatColl();
     mpIo->m_pStandardFormatColl =
-        mpIo->m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false);
+        mpIo->m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD, false);
 
     if( mpIo->m_nIniFlags & WW8FL_NO_STYLES )
         return;

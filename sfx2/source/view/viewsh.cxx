@@ -28,6 +28,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/colorcfg.hxx>
@@ -2188,7 +2189,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 weld::Window* pWin = SfxGetpApp()->GetTopWindow();
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
                                                                          VclMessageType::Info, VclButtonsType::Ok,
-                                                                         SfxResId(STR_ERROR_SEND_MAIL)));
+                                                                         SfxResId(STR_BLUETOOTH_SEND_ERROR)));
                 xBox->run();
                 rReq.Ignore();
             }
@@ -3532,14 +3533,14 @@ void SfxViewShell::SetLOKLocale(const OUString& rBcp47LanguageTag)
         comphelper::LibreOfficeKit::setLanguageTag(GetLOKLanguageTag());
         comphelper::LibreOfficeKit::setLocale(GetLOKLocale());
     }
+    mpCalendar = std::make_unique<CalendarWrapper>(::comphelper::getProcessComponentContext());
+    mpCalendar->loadDefaultCalendar(GetLOKLocale().getLocale());
 }
 
 void SfxViewShell::SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag)
 {
     SetLOKLanguageTag(rBcp47LanguageTag);
     SetLOKLocale(rBcp47LanguageTag);
-    mpCalendar = std::make_unique<CalendarWrapper>(::comphelper::getProcessComponentContext());
-    mpCalendar->loadDefaultCalendar(GetLOKLocale().getLocale());
 }
 
 CalendarWrapper& SfxViewShell::GetLOKCalendar()

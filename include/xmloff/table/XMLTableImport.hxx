@@ -20,20 +20,25 @@
 #ifndef INCLUDED_XMLOFF_TABLE_XMLTABLEIMPORT_HXX
 #define INCLUDED_XMLOFF_TABLE_XMLTABLEIMPORT_HXX
 
-#include <com/sun/star/table/XColumnRowRange.hpp>
-
 #include <xmloff/dllapi.h>
-#include <xmloff/xmlictxt.hxx>
+#include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <xmloff/xmlimppr.hxx>
-#include <xmloff/prhdlfac.hxx>
-
-#include <rtl/ref.hxx>
 
 #include <map>
 #include <memory>
+#include <vector>
 
+class SvXMLImport;
+class SvXMLImportContext;
+class SvXMLImportPropertyMapper;
 class SvXMLStyleContext;
+class XMLPropertyHandlerFactory;
+class XMLPropertySetMapper;
+
+namespace com::sun::star::table { class XColumnRowRange; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::xml::sax { class XFastAttributeList; }
+namespace rtl { template <class reference_type> class Reference; }
 
 typedef std::map< OUString, OUString > XMLTableTemplate;
 // Not using a map here, as we want the templates to be

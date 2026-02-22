@@ -33,11 +33,15 @@
 #include "contwnd.hxx"
 #include <svx/svdopath.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include "dlgunit.hxx"
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(SvxContourDlgChildWindow, SID_CONTOUR_DLG);

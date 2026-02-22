@@ -104,6 +104,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xfillit0.hxx>
+#include <unotools/fontdefs.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/utils/b2dclipstate.hxx>
@@ -130,6 +131,9 @@
 #include <ndtxt.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/hatch.hxx>
+#include <vcl/rendercontext/DrawGridFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <poolfmt.hxx>
 
 using namespace ::editeng;
@@ -4108,7 +4112,7 @@ bool SwFlyFrame::IsPaint(SdrObject *pObj, const SwViewShell& rSh)
 
     if ( (!rSh.GetViewOptions()->IsDraw()
              && (dynamic_cast<SdrUnoObj*>(pObj) || dynamic_cast<SdrAttrObj*>(pObj) || dynamic_cast<SwFlyDrawObj*>(pObj)))
-        || (!rSh.GetViewOptions()->IsGraphic() && dynamic_cast<SwVirtFlyDrawObj*>(pObj)) )
+        || (!rSh.GetViewOptions()->IsGraphic() && DynCastSwVirtFlyDrawObj(pObj)) )
     {
         SwRect rBoundRect = GetBoundRectOfAnchoredObj( pObj );
         lcl_PaintReplacement(rBoundRect, rSh);
@@ -4130,7 +4134,7 @@ bool SwFlyFrame::IsPaint(SdrObject *pObj, const SwViewShell& rSh)
         {
             bPaint = false;
         }
-        if ( auto pFlyDraw = dynamic_cast<SwVirtFlyDrawObj *>( pObj ) )
+        if ( auto pFlyDraw = DynCastSwVirtFlyDrawObj( pObj ) )
         {
             SwFlyFrame *pFly = pFlyDraw->GetFlyFrame();
             if ( gProp.pSFlyOnlyDraw && gProp.pSFlyOnlyDraw == pFly )
@@ -4273,6 +4277,9 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
         }
     }
 
+    const SwViewOption* pViewOptions = pShell ? pShell->GetViewOptions() : nullptr;
+    SwRedlineRenderMode eRedlineRenderMode
+        = pViewOptions ? pViewOptions->GetRedlineRenderMode() : SwRedlineRenderMode::Standard;
     {
         bool bContour = GetFormat()->GetSurround().IsContour();
         tools::PolyPolygon aPoly;
@@ -4320,7 +4327,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
         }
         // paint of margin needed.
         const bool bPaintMarginOnly( !bPaintCompleteBack &&
-                                     getFramePrintArea().SSize() != getFrameArea().SSize() );
+                                     (getFramePrintArea().SSize() != getFrameArea().SSize() || eRedlineRenderMode != SwRedlineRenderMode::Standard));
 
         // #i47804# - paint background of parent fly frame
         // for transparent graphics in layer Hell, if parent fly frame isn't
@@ -4486,7 +4493,8 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
     PaintDecorators();
 
     // crossing out for tracked deletion
-    if ( GetAuthor() != std::string::npos && IsDeleted() )
+    if (GetAuthor() != std::string::npos && IsDeleted()
+        && eRedlineRenderMode == SwRedlineRenderMode::Standard)
     {
         tools::Long startX = aRect.Left(  ), endX = aRect.Right();
         tools::Long startY = aRect.Top(  ),  endY = aRect.Bottom();
@@ -5507,7 +5515,8 @@ void SwFrame::PaintSwFrameShadowAndBorder(
     if (GetType() & (SwFrameType::NoTxt|SwFrameType::Row|SwFrameType::Body|SwFrameType::Footnote|SwFrameType::Column|SwFrameType::Root))
         return;
 
-    if (IsCellFrame() && !gProp.pSGlobalShell->GetViewOptions()->IsTable())
+    const SwViewOption& rViewOptions = *gProp.pSGlobalShell->GetViewOptions();
+    if (IsCellFrame() && !rViewOptions.IsTable())
         return;
 
     // #i29550#
@@ -5526,7 +5535,8 @@ void SwFrame::PaintSwFrameShadowAndBorder(
         return;
     }
 
-    const bool bLine = rAttrs.IsLine();
+    SwRedlineRenderMode eRedlineRenderMode = rViewOptions.GetRedlineRenderMode();
+    const bool bLine = (rAttrs.IsLine() || (IsFlyFrame() && eRedlineRenderMode != SwRedlineRenderMode::Standard));
     const bool bShadow = rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE;
 
     // - flag to control,
@@ -5604,6 +5614,21 @@ void SwFrame::PaintSwFrameShadowAndBorder(
         const SvxBorderLine* pRightBorder(rBox.GetRight());
         const SvxBorderLine* pTopBorder(rBox.GetTop());
         const SvxBorderLine* pBottomBorder(rBox.GetBottom());
+
+        auto pFlyFrame = IsFlyFrame() ? static_cast<const SwFlyFrame*>(this) : nullptr;
+        SvxBoxItem aBoxItem(RES_BOX);
+        if (pFlyFrame)
+        {
+            // This is a fly frame, see if it wants to paint a custom border based on the redline
+            // mode and status.
+            if (pFlyFrame->GetRedlineRenderModeFrame(aBoxItem))
+            {
+                pLeftBorder = aBoxItem.GetLeft();
+                pRightBorder = aBoxItem.GetRight();
+                pTopBorder = aBoxItem.GetTop();
+                pBottomBorder = aBoxItem.GetBottom();
+            }
+        }
 
         // if R2L, exchange Right/Left
         const bool bR2L(IsCellFrame() && IsRightToLeft());
@@ -6240,7 +6265,7 @@ void SwPageFrame::PaintBaselineGrid(OutputDevice& rOututDevice) const
             return;
         }
         const SwTextFormatColl* pDefaultFormat
-            = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT);
+            = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT);
         if (!pDefaultFormat)
         {
             return;
@@ -6864,7 +6889,13 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     bool bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, bLowerMode, /*bConsiderTextBox=*/false );
 
     // show track changes of table row
-    if( IsRowFrame() && !getRootFrame()->IsHideRedlines() )
+    const SwViewOption* pViewOptions = pSh->GetViewOptions();
+    SwRedlineRenderMode eRedlineRenderMode = pViewOptions->GetRedlineRenderMode();
+    // Non-standard redline render mode means we don't paint a custom background color for table
+    // redlines.
+    bool bHideTableRedlines
+        = getRootFrame()->IsHideRedlines() || eRedlineRenderMode != SwRedlineRenderMode::Standard;
+    if( IsRowFrame() && !bHideTableRedlines )
     {
         RedlineType eType = static_cast<const SwRowFrame*>(this)->GetTabLine()->GetRedlineType();
         if ( RedlineType::Delete == eType || RedlineType::Insert == eType )
@@ -6873,7 +6904,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             bBack = true;
         }
     }
-    else if ( IsCellFrame() && !getRootFrame()->IsHideRedlines() )
+    else if ( IsCellFrame() && !bHideTableRedlines )
     {
         RedlineType eType = static_cast<const SwCellFrame*>(this)->GetTabBox()->GetRedlineType();
         if ( RedlineType::Delete == eType || RedlineType::Insert == eType )
@@ -6883,7 +6914,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
         }
     }
 
-    if ( bBack && IsCellFrame() && !getRootFrame()->IsHideRedlines() &&
+    if ( bBack && IsCellFrame() && !bHideTableRedlines &&
         // skip cell background to show the row colored according to its tracked change
         RedlineType::None != static_cast<const SwRowFrame*>(GetUpper())->GetTabLine()->GetRedlineType() )
     {
@@ -6909,7 +6940,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             //  #i6467# - on print output, pdf output and in embedded mode not editing color COL_WHITE is used
             // instead of the global retouche color.
             if ( pSh->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
-                 pSh->GetViewOptions()->IsPDFExport() ||
+                 pViewOptions->IsPDFExport() ||
                  ( pSh->GetDoc()->GetDocShell()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
                    !pSh->GetDoc()->GetDocShell()->IsInPlaceActive()
                  )

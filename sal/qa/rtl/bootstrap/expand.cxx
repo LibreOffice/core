@@ -65,7 +65,7 @@ void Test::testThreeSegments() {
         osl::File f(url);
         CPPUNIT_ASSERT_EQUAL(
             osl::FileBase::E_None, f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create));
-        char const data[] = "[section1]\nkey=value1\n[section2]\nkey=value2\n";
+        char const data[] = "[section1]\nkey=value1\n[section2]\nkey=value2\n[non_recursive_test]\nmacro_key=$TEST\n";
         sal_uInt64 length = std::strlen(data);
         sal_uInt64 written = 0;
         CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, f.write(data, length, written));
@@ -97,6 +97,11 @@ void Test::testThreeSegments() {
         OUString s("${" + esc + ":section2:key}");
         rtl::Bootstrap::expandMacros(s);
         CPPUNIT_ASSERT_EQUAL(u"value2"_ustr, s);
+    }
+    {
+        OUString s("${" + esc + ":non_recursive_test:macro_key}");
+        rtl::Bootstrap::expandMacros(s);
+        CPPUNIT_ASSERT_EQUAL(u"$TEST"_ustr, s);
     }
 }
 

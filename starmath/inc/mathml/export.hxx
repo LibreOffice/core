@@ -22,6 +22,8 @@
 // Our mathml
 #include "element.hxx"
 
+#include <unomodel.hxx>
+
 // Xml tools
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>

@@ -26,10 +26,12 @@
 #include <vcl/textrectinfo.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/help.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
@@ -62,18 +64,18 @@ void Window::ImplCalcSymbolRect( tools::Rectangle& rRect )
 
 } /* namespace vcl */
 
-static void ImplDrawBrdWinSymbol( vcl::RenderContext* pDev,
+static void ImplDrawBrdWinSymbol( vcl::RenderContext& rRenderContext,
                                   const tools::Rectangle& rRect, SymbolType eSymbol )
 {
     // we leave 5% room between the symbol and the button border
-    DecorationView  aDecoView( pDev );
+    DecorationView  aDecoView( &rRenderContext );
     tools::Rectangle       aTempRect = rRect;
     vcl::Window::ImplCalcSymbolRect( aTempRect );
     aDecoView.DrawSymbol( aTempRect, eSymbol,
-                          pDev->GetSettings().GetStyleSettings().GetButtonTextColor() );
+                          rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor() );
 }
 
-static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
+static void ImplDrawBrdWinSymbolButton( vcl::RenderContext& rRenderContext,
                                         const tools::Rectangle& rRect,
                                         SymbolType eSymbol, DrawButtonFlags nState )
 {
@@ -81,30 +83,31 @@ static void ImplDrawBrdWinSymbolButton( vcl::RenderContext* pDev,
     nState &= ~DrawButtonFlags::Highlight;
 
     tools::Rectangle aTempRect;
-    vcl::Window *pWin = pDev->GetOwnerWindow();
+    vcl::Window *pWin = rRenderContext.GetOwnerWindow();
     if( pWin )
     {
         if( bMouseOver )
         {
             // provide a bright background for selection effect
-            pDev->SetFillColor( pDev->GetSettings().GetStyleSettings().GetWindowColor() );
-            pDev->SetLineColor();
-            pDev->DrawRect( rRect );
-            pWin->DrawSelectionBackground( rRect, 2, bool(nState & DrawButtonFlags::Pressed),
-                                            true );
+            rRenderContext.SetFillColor( rRenderContext.GetSettings().GetStyleSettings().GetWindowColor() );
+            rRenderContext.SetLineColor();
+            rRenderContext.DrawRect( rRect );
+            vcl::RenderTools::DrawSelectionBackground(rRenderContext, *pWin, rRect, 2,
+                                                      bool(nState & DrawButtonFlags::Pressed),
+                                                      true, false );
         }
         aTempRect = rRect;
-        aTempRect.AdjustLeft(3 );
+        aTempRect.AdjustLeft( 3 );
         aTempRect.AdjustRight( -4 );
-        aTempRect.AdjustTop(3 );
+        aTempRect.AdjustTop( 3 );
         aTempRect.AdjustBottom( -4 );
     }
     else
     {
-        DecorationView aDecoView( pDev );
+        DecorationView aDecoView( &rRenderContext );
         aTempRect = aDecoView.DrawButton( rRect, nState|DrawButtonFlags::Flat );
     }
-    ImplDrawBrdWinSymbol( pDev, aTempRect, eSymbol );
+    ImplDrawBrdWinSymbol( rRenderContext, aTempRect, eSymbol );
 }
 
 
@@ -1481,28 +1484,28 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
         tools::Rectangle aSymbolRect(pData->maCloseRect);
         if (pOffset)
             aSymbolRect.Move(pOffset->X(), pOffset->Y());
-        ImplDrawBrdWinSymbolButton(&rRenderContext, aSymbolRect, SymbolType::CLOSE, pData->mnCloseState);
+        ImplDrawBrdWinSymbolButton(rRenderContext, aSymbolRect, SymbolType::CLOSE, pData->mnCloseState);
     }
     if (!pData->maDockRect.IsEmpty())
     {
         tools::Rectangle aSymbolRect(pData->maDockRect);
         if (pOffset)
             aSymbolRect.Move(pOffset->X(), pOffset->Y());
-        ImplDrawBrdWinSymbolButton(&rRenderContext, aSymbolRect, SymbolType::DOCK, pData->mnDockState);
+        ImplDrawBrdWinSymbolButton(rRenderContext, aSymbolRect, SymbolType::DOCK, pData->mnDockState);
     }
     if (!pData->maMenuRect.IsEmpty())
     {
         tools::Rectangle aSymbolRect(pData->maMenuRect);
         if (pOffset)
             aSymbolRect.Move(pOffset->X(), pOffset->Y());
-        ImplDrawBrdWinSymbolButton(&rRenderContext, aSymbolRect, SymbolType::MENU, pData->mnMenuState);
+        ImplDrawBrdWinSymbolButton(rRenderContext, aSymbolRect, SymbolType::MENU, pData->mnMenuState);
     }
     if (!pData->maHideRect.IsEmpty())
     {
         tools::Rectangle aSymbolRect(pData->maHideRect);
         if (pOffset)
             aSymbolRect.Move(pOffset->X(), pOffset->Y());
-        ImplDrawBrdWinSymbolButton(&rRenderContext, aSymbolRect, SymbolType::HIDE, pData->mnHideState);
+        ImplDrawBrdWinSymbolButton(rRenderContext, aSymbolRect, SymbolType::HIDE, pData->mnHideState);
     }
 
     if (!pData->maHelpRect.IsEmpty())
@@ -1510,7 +1513,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
         tools::Rectangle aSymbolRect(pData->maHelpRect);
         if (pOffset)
             aSymbolRect.Move(pOffset->X(), pOffset->Y());
-        ImplDrawBrdWinSymbolButton(&rRenderContext, aSymbolRect, SymbolType::HELP, pData->mnHelpState);
+        ImplDrawBrdWinSymbolButton(rRenderContext, aSymbolRect, SymbolType::HELP, pData->mnHelpState);
     }
 }
 

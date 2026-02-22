@@ -21,7 +21,8 @@
 
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
-#include <tools/color.hxx>
+
+class Color;
 
 namespace SvtOptionsDrawinglayer
 {

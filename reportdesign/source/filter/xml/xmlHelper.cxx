@@ -38,6 +38,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <com/sun/star/report/XReportControlFormat.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

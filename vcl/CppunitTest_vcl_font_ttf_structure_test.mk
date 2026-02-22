@@ -18,7 +18,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_font_ttf_structure_test, 
 	vcl/qa/cppunit/font/TTFStructureTest \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,vcl_font_ttf_structure_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,vcl_font_ttf_structure_test, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_font_ttf_structure_test, \
 	basegfx \

@@ -26,6 +26,7 @@
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <editeng/lineitem.hxx>
 #include <svl/itemset.hxx>
 #include <memory>

@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

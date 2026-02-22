@@ -23,6 +23,9 @@
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <tools/gen.hxx>
 
 SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)

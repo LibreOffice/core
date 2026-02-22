@@ -61,6 +61,7 @@
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/sharedunocomponent.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <algorithm>
 #include <iterator>

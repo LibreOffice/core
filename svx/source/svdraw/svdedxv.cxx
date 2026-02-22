@@ -43,6 +43,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dndlistenercontainer.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/lok.hxx>
@@ -2402,10 +2403,9 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 #ifdef DBG_UTIL
         {
             bool bHasEEFeatureItems = false;
-            SfxItemIter aIter(rSet);
-            for (const SfxPoolItem* pItem = aIter.GetCurItem(); !bHasEEFeatureItems && pItem;
-                 pItem = aIter.NextItem())
+            for (SfxItemIter aIter(rSet); !bHasEEFeatureItems && !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 if (!IsInvalidItem(pItem))
                 {
                     sal_uInt16 nW = pItem->Which();
@@ -2570,9 +2570,9 @@ void SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveH
     SdrGlueEditView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
 }
 
-void SdrObjEditView::AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window* pWindow)
+void SdrObjEditView::AddDeviceToPaintView(OutputDevice& rNewDev)
 {
-    SdrGlueEditView::AddDeviceToPaintView(rNewDev, pWindow);
+    SdrGlueEditView::AddDeviceToPaintView(rNewDev);
 
     if (mxWeakTextEditObj.get() && !mbTextEditOnlyOneView
         && rNewDev.GetOutDevType() == OUTDEV_WINDOW)

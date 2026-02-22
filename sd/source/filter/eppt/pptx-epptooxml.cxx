@@ -88,7 +88,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/ColorSets.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
@@ -96,6 +96,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/font/EOTConverter.hxx>
+#include <vcl/font/FontDataContainer.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -442,7 +443,6 @@ bool PowerPointExport::importDocument() noexcept
 
 bool PowerPointExport::exportDocument()
 {
-    drawingml::DrawingML::ResetMlCounters();
     auto& rGraphicExportCache = drawingml::GraphicExportCache::get();
 
     rGraphicExportCache.push();
@@ -1707,7 +1707,9 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
     SAL_INFO("sd.eppt", "write slide: " << nPageNum << "\n----------------");
 
     // slides list
-    if (nPageNum == 0)
+    if (!mbHasCanvasPage && nPageNum == 0)
+        mPresentationFS->startElementNS(XML_p, XML_sldIdLst);
+    else if (mbHasCanvasPage && nPageNum  == 1)
         mPresentationFS->startElementNS(XML_p, XML_sldIdLst);
 
     // add explicit relation of presentation to this slide
@@ -1908,6 +1910,8 @@ void PowerPointExport::FindEquivalentMasterPages()
     maEquivalentMasters.resize(mnMasterPages, SAL_MAX_UINT32);
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
     {
+        if (i == mnCanvasMasterIndex)
+            continue;
         css::uno::Reference<css::drawing::XDrawPage> xDrawPage;
         uno::Any aAny(xDrawPages->getByIndex(i));
         aAny >>= xDrawPage;
@@ -1928,11 +1932,13 @@ void PowerPointExport::FindEquivalentMasterPages()
 
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
     {
-        if (!maMastersLayouts[i].first || maEquivalentMasters[i] != SAL_MAX_UINT32)
+        if (!maMastersLayouts[i].first || maEquivalentMasters[i] != SAL_MAX_UINT32
+            || i == mnCanvasMasterIndex)
             continue;
         for (sal_uInt32 j = i + 1; j < mnMasterPages; j++)
         {
-            if (!maMastersLayouts[j].first || maEquivalentMasters[j] != SAL_MAX_UINT32)
+            if (!maMastersLayouts[j].first || maEquivalentMasters[j] != SAL_MAX_UINT32
+                || j == mnCanvasMasterIndex)
                 continue;
 
             if (lcl_ComparePageProperties(maMastersLayouts[i].first, maMastersLayouts[j].first)
@@ -1958,6 +1964,8 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 {
     SAL_INFO("sd.eppt", "write master slide: " << nPageNum << "\n--------------");
 
+    assert(mnCanvasMasterIndex != nPageNum);
+
     if (nPageNum != GetEquivalentMasterPage(nPageNum)
         && GetEquivalentMasterPage(nPageNum) != SAL_MAX_UINT32)
     {
@@ -1976,7 +1984,9 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
         }
 
         // Close the list tag if it was the last one
-        if (nPageNum == mnMasterPages - 1)
+        if (nPageNum + 1 == mnMasterPages)
+            mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
+        if (mnCanvasMasterIndex == mnMasterPages - 1 && nPageNum + 2 == mnMasterPages)
             mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
 
         return;
@@ -1984,6 +1994,8 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     // slides list
     if (nPageNum == 0)
+        mPresentationFS->startElementNS(XML_p, XML_sldMasterIdLst);
+    if (mnCanvasMasterIndex == 0 && nPageNum == 1)
         mPresentationFS->startElementNS(XML_p, XML_sldMasterIdLst);
 
     OUString sRelId = addRelation(mPresentationFS->getOutputStream(),
@@ -1994,7 +2006,13 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
                                      XML_id, OString::number(GetNewSlideMasterId()),
                                      FSNS(XML_r, XML_id), sRelId);
 
-    if (nPageNum == mnMasterPages - 1)
+    // if canvas master page is the last one, close the list tag before that
+    if (mnCanvasMasterIndex == mnMasterPages - 1)
+    {
+        if (nPageNum + 2 == mnMasterPages)
+            mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
+    }
+    if (nPageNum + 1 == mnMasterPages)
         mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
 
     FSHelperPtr pFS =
@@ -2155,6 +2173,8 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     // Add layouts of other Impress masters that came from a single pptx master with multiple layouts
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
     {
+        if (i == mnCanvasMasterIndex)
+            continue;
         if (i != nPageNum && maEquivalentMasters[i] == nPageNum)
         {
             aLayouts = getLayoutsUsedForMaster(maMastersLayouts[i].first);
@@ -2345,15 +2365,29 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
         {
             SAL_INFO("sd.eppt", "mType: " << mType);
             const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mXShape)));
-            bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
+            bool bSaveAsDiagram(false);
 
-            // check if it was modified. For now, since we have no ppt export for Diagram,
-            // do not export as Diagram, that would be empty if the GrabBag was deleted
-            if (bIsDiagram && pDiagramCandidate->getDiagramHelper()->isModified())
-                bIsDiagram = false;
+            if (nullptr != pDiagramCandidate)
+            {
+                const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rIDiagramHelper(pDiagramCandidate->getDiagramHelper());
 
-            if (bIsDiagram)
-                WriteDiagram(pFS, aDML, mXShape, mnDiagramId++);
+                if (rIDiagramHelper)
+                {
+                    // check if all needed data exists to either write unchanged/untouched
+                    // Diagram or with re-creation of some DataDoms
+                    bSaveAsDiagram = rIDiagramHelper->checkMinimalDataDoms();
+                }
+            }
+
+            if (bSaveAsDiagram)
+            {
+                sal_Int32 nShapeId = aDML.GetNewShapeID(mXShape);
+                SAL_INFO("sd.eppt", "writing Diagram " + OUString::number(mnDiagramId) + " with Shape Id " + OUString::number(nShapeId));
+                pFS->startElementNS(XML_p, XML_graphicFrame);
+                aDML.WriteDiagram(mXShape, mnDiagramId, nShapeId);
+                pFS->endElementNS(XML_p, XML_graphicFrame);
+                mnDiagramId++;
+            }
             else
                 aDML.WriteShape(mXShape);
         }
@@ -2702,6 +2736,8 @@ bool PowerPointExport::ImplCreateDocument()
 
     for (sal_uInt32 i = 0; i < mnPages; i++)
     {
+        if (mbHasCanvasPage && i == 0)
+            continue;
         if (!GetPageByIndex(i, NOTICE))
             return false;
 
@@ -2745,12 +2781,12 @@ void PowerPointExport::WriteNotesMaster()
         auto pTheme = std::make_shared<model::Theme>("Office Theme");
         pTheme->setColorSet(std::make_shared<model::ColorSet>(*pDefaultColorSet));
 
-        WriteTheme(mnMasterPages, pTheme.get());
+        WriteTheme(mnMasterPages - static_cast<int>(mbHasCanvasPage), pTheme.get());
 
         // add implicit relation to the presentation theme
         addRelation(pFS->getOutputStream(),
                     oox::getRelationship(Relationship::THEME),
-                    Concat2View("../theme/theme" + OUString::number(mnMasterPages + 1) + ".xml"));
+                    Concat2View("../theme/theme" + OUString::number(mnMasterPages + 1 - static_cast<int>(mbHasCanvasPage)) + ".xml"));
     }
 
     pFS->startElementNS(XML_p, XML_notesMaster, presentationNamespaces(*this));
@@ -2877,18 +2913,6 @@ bool PowerPointExport::ImplCreateMainNotes()
 OUString PowerPointExport::getImplementationName()
 {
     return u"com.sun.star.comp.Impress.oox.PowerPointExport"_ustr;
-}
-
-void PowerPointExport::WriteDiagram(const FSHelperPtr& pFS, PowerPointShapeExport& rDML,
-                                    const css::uno::Reference<css::drawing::XShape>& rXShape,
-                                    sal_Int32 nDiagramId)
-{
-    sal_Int32 nShapeId = rDML.GetNewShapeID(rXShape);
-    SAL_INFO("sd.eppt", "writing Diagram " + OUString::number(nDiagramId) + " with Shape Id "
-                            + OUString::number(nShapeId));
-    pFS->startElementNS(XML_p, XML_graphicFrame);
-    rDML.WriteDiagram(rXShape, nDiagramId, nShapeId);
-    pFS->endElementNS(XML_p, XML_graphicFrame);
 }
 
 void PowerPointExport::WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType)

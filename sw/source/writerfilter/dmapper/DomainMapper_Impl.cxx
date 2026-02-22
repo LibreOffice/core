@@ -101,6 +101,7 @@
 #include <utility>
 #include <xmloff/odffields.hxx>
 #include <rtl/uri.hxx>
+#include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -155,6 +156,7 @@
 #include <unotextbodyhf.hxx>
 #include <unosett.hxx>
 #include <unodraw.hxx>
+#include <unoparagraph.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -606,7 +608,7 @@ void CopyPageDescNameToNextParagraph(const uno::Reference<lang::XComponent>& xPa
     }
 
     // If so, search for the next paragraph.
-    uno::Reference<text::XParagraphCursor> xParaCursor(xCursor, uno::UNO_QUERY);
+    rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>(xCursor.get());
     if (!xParaCursor.is())
     {
         return;
@@ -618,13 +620,7 @@ void CopyPageDescNameToNextParagraph(const uno::Reference<lang::XComponent>& xPa
         return;
     }
 
-    uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xParaCursor, uno::UNO_QUERY);
-    if (!xEnumerationAccess.is())
-    {
-        return;
-    }
-
-    uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
+    uno::Reference<container::XEnumeration> xEnumeration = xParaCursor->createEnumeration();
     if (!xEnumeration.is())
     {
         return;
@@ -703,14 +699,14 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     if (IsInShape() || IsInHeaderFooter() || m_StreamStateStack.top().bIsInTextBox)
         return;
 
-    if (!m_aTextAppendStack.empty())
+    if (m_aTextAppendStack.empty())
+        return;
+
+    uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    if (xTextAppend.is())
     {
-        uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-        if (xTextAppend.is())
-        {
-            xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
-            SetIsDummyParaAddedForTableInSection(true);
-        }
+        xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
+        SetIsDummyParaAddedForTableInSection(true);
     }
 }
 
@@ -847,7 +843,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
             xCursor->gotoEnd(false);
         }
         else
-            xCursor.set(m_aTextAppendStack.top().xCursor, uno::UNO_SET_THROW);
+            xCursor.set(static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()), uno::UNO_SET_THROW);
 
         // Keep the character properties of the last but one paragraph, even if
         // it's empty. This works for headers/footers, and maybe in other cases
@@ -1102,7 +1098,7 @@ void DomainMapper_Impl::PopSdt()
         // Go to the start of the end's paragraph. This helps in case
         // DomainMapper_Impl::AddDummyParaForTableInSection() would make our range multi-paragraph,
         // while the intention is to keep start/end inside the same paragraph for run SDTs.
-        uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
+        rtl::Reference<SwXTextCursor> xParagraphCursor = dynamic_cast<SwXTextCursor*>(xCursor.get());
         if (xParagraphCursor.is()
             && m_pSdtHelper->GetSdtType() == NS_ooxml::LN_CT_SdtRun_sdtContent)
         {
@@ -1275,13 +1271,14 @@ void DomainMapper_Impl::PopSdt()
     {
         OUString aDateString;
         xContentControl->getPropertyValue(u"DateString"_ustr) >>= aDateString;
-        xCursor->setString(aDateString);
+        if (!aDateString.isEmpty())
+            xCursor->setString(aDateString);
     }
 
     m_pSdtHelper->clear();
 }
 
-void    DomainMapper_Impl::PushProperties(ContextType eId)
+void DomainMapper_Impl::PushProperties(ContextType eId)
 {
     PropertyMapPtr pInsert(eId == CONTEXT_SECTION ?
         (new SectionPropertyMap( m_bIsFirstSection )) :
@@ -1350,7 +1347,7 @@ void DomainMapper_Impl::PushListProperties(const PropertyMapPtr& pListProperties
 }
 
 
-void    DomainMapper_Impl::PopProperties(ContextType eId)
+void DomainMapper_Impl::PopProperties(ContextType eId)
 {
     OSL_ENSURE(!m_aPropertyStacks[eId].empty(), "section stack already empty");
     if ( m_aPropertyStacks[eId].empty() )
@@ -1668,8 +1665,7 @@ OUString DomainMapper_Impl::GetListStyleName(sal_Int32 nListId)
 ListsManager::Pointer const & DomainMapper_Impl::GetListTable()
 {
     if(!m_pListTable)
-        m_pListTable =
-            new ListsManager( m_rDMapper, m_xTextDocument );
+        m_pListTable = new ListsManager( m_rDMapper, m_xTextDocument );
     return m_pListTable;
 }
 
@@ -1807,7 +1803,7 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
         if (nIndexOfWidthProperty > -1 && nType == text::SizeType::FIX)
             rFrameProperties[nIndexOfWidthProperty].Value >>= nWidth;
 
-        for( size_t nProperty = 0; nProperty < SAL_N_ELEMENTS( aBorderProperties ); ++nProperty)
+        for( size_t nProperty = 0; nProperty < std::size( aBorderProperties ); ++nProperty)
         {
             const OUString sPropertyName = getPropertyName(aBorderProperties[nProperty]);
             beans::PropertyValue aValue;
@@ -1852,8 +1848,10 @@ static void lcl_AddRange(
     uno::Reference< text::XTextAppend > const& xTextAppend,
     TextAppendContext const & rAppendContext)
 {
-    uno::Reference<text::XParagraphCursor> xParaCursor(
-        xTextAppend->createTextCursorByRange( rAppendContext.xInsertPosition.is() ? rAppendContext.xInsertPosition : xTextAppend->getEnd()), uno::UNO_QUERY_THROW );
+    rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>(
+        xTextAppend->createTextCursorByRange( rAppendContext.xCursor.is() ? static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get()) : xTextAppend->getEnd()).get() );
+    if (!xParaCursor)
+        throw uno::RuntimeException();
     pToBeSavedProperties->SetEndingRange(xParaCursor->getStart());
     xParaCursor->gotoStartOfParagraph( false );
 
@@ -2501,13 +2499,14 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             bool bKeepLastParagraphProperties = false;
             if( bIsDropCap )
             {
-                uno::Reference<text::XParagraphCursor> xParaCursor(
-                    xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
+                rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>
+                    (xTextAppend->createTextCursorByRange(xTextAppend->getEnd()).get());
+                if (!xParaCursor)
+                    throw uno::RuntimeException();
                 //select paragraph
                 xParaCursor->gotoStartOfParagraph( true );
-                uno::Reference< beans::XPropertyState > xParaProperties( xParaCursor, uno::UNO_QUERY_THROW );
-                xParaProperties->setPropertyToDefault(getPropertyName(PROP_CHAR_ESCAPEMENT));
-                xParaProperties->setPropertyToDefault(getPropertyName(PROP_CHAR_HEIGHT));
+                xParaCursor->setPropertyToDefault(getPropertyName(PROP_CHAR_ESCAPEMENT));
+                xParaCursor->setPropertyToDefault(getPropertyName(PROP_CHAR_HEIGHT));
                 //handles (2) and part of (6)
                 pToBeSavedProperties = new ParagraphProperties(pParaContext->props());
                 sal_Int32 nCount = xParaCursor->getString().getLength();
@@ -2544,8 +2543,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     {
                         //handles (7)
                         rAppendContext.pLastParagraphProperties->SetEndingRange(
-                            rAppendContext.xInsertPosition.is() ? rAppendContext.xInsertPosition
-                                                                : xTextAppend->getEnd());
+                            rAppendContext.xCursor.is() ? static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get())
+                                                        : xTextAppend->getEnd());
                         bKeepLastParagraphProperties = true;
                     }
                     else
@@ -2706,9 +2705,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     aProperties.push_back(aValue);
                 }
                 uno::Reference< text::XTextRange > xTextRange;
-                if (rAppendContext.xInsertPosition.is())
+                if (rAppendContext.xCursor.is())
                 {
-                    xTextRange = xTextAppend->finishParagraphInsert( comphelper::containerToSequence(aProperties), rAppendContext.xInsertPosition );
+                    xTextRange = xTextAppend->finishParagraphInsert( comphelper::containerToSequence(aProperties), static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get()) );
                     rAppendContext.xCursor->gotoNextParagraph(false);
                     if (rAppendContext.pLastParagraphProperties)
                         rAppendContext.pLastParagraphProperties->SetEndingRange(xTextRange->getEnd());
@@ -2847,8 +2846,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             // tdf#164878 skip empty paragraphs, i.e. math formula and other objects
                             m_StreamStateStack.top().bParaChanged )
                     {
-                        uno::Reference<text::XParagraphCursor> xParaCursor(
-                            xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
+                        rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>(
+                            xTextAppend->createTextCursorByRange(xTextAppend->getEnd()).get());
+                        if (!xParaCursor)
+                            throw uno::RuntimeException();
                         //select paragraph
                         xParaCursor->gotoStartOfParagraph( true );
 
@@ -2874,22 +2875,20 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                         fillEmptyFrameProperties(aFrameProperties, false);
 
-                        uno::Reference<text::XTextAppendAndConvert> xBodyText(xRangeStart->getText(), uno::UNO_QUERY);
+                        rtl::Reference<SwXText> xBodyText = dynamic_cast<SwXText*>(xRangeStart->getText().get());
 
-                        uno::Reference<text::XTextContent> xFrame = xBodyText->convertToTextFrame(xRangeStart, xRangeEnd, comphelper::containerToSequence(aFrameProperties));
-                        uno::Reference<beans::XPropertySet> xFrameProps(xFrame, uno::UNO_QUERY);
+                        rtl::Reference<SwXTextFrame> xFrame = xBodyText->convertToSwTextFrame(xRangeStart, xRangeEnd, aFrameProperties);
                         // set frame style now to avoid losing text content (convertToTextFrame() doesn't work
                         // with frame styles anchored "as character")
-                        xFrameProps->setPropertyValue(u"FrameStyleName"_ustr, uno::Any(u"Inline Heading"_ustr));
+                        xFrame->setPropertyValue(u"FrameStyleName"_ustr, uno::Any(u"Inline Heading"_ustr));
                         // set anchoring because setting frame style doesn't modify the anchoring to
                         // its default "anchored as character" setting
-                        xFrameProps->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+                        xFrame->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
                         // tdf#164903 empty top and bottom margins to emulate the behaviour of style separators
-                        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xFrame, uno::UNO_QUERY);
-                        if ( xParaEnumAccess.is() && !pParaContext->isSet(PROP_PARA_TOP_MARGIN) )
+                        if ( !pParaContext->isSet(PROP_PARA_TOP_MARGIN) )
                         {
-                            uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+                            rtl::Reference<SwXParagraphEnumeration> xParaEnum = xFrame->createSwEnumeration();
                             if ( xParaEnum.is() )
                             {
                                 uno::Reference<beans::XPropertySet> xParaProps(xParaEnum->nextElement(), uno::UNO_QUERY);
@@ -2987,8 +2986,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 {
                     // Get the end of paragraph character inserted
                     uno::Reference< text::XTextCursor > xCur = xTextRange->getText( )->createTextCursor( );
-                    if (rAppendContext.xInsertPosition.is())
-                        xCur->gotoRange( rAppendContext.xInsertPosition, false );
+                    if (rAppendContext.xCursor.is())
+                        xCur->gotoRange( static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get()), false );
                     else
                         xCur->gotoEnd( false );
 
@@ -3007,8 +3006,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 break;
                         }
 
-                        if (rAppendContext.xInsertPosition.is())
-                            xCur->gotoRange(rAppendContext.xInsertPosition, false);
+                        if (rAppendContext.xCursor.is())
+                            xCur->gotoRange(static_cast<text::XSentenceCursor*>(rAppendContext.xCursor.get()), false);
                         else
                             xCur->gotoEnd(false);
                     }
@@ -3032,8 +3031,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     uno::Reference<text::XTextCursor> xCur = xTextRange->getText( )->createTextCursor( );
                     xCur->gotoEnd(false);
                     xCur->goLeft(1, false);
-                    uno::Reference<text::XTextCursor> xCur2 =  xTextRange->getText()->createTextCursorByRange(xCur);
-                    uno::Reference<text::XParagraphCursor> xParaCursor(xCur2, uno::UNO_QUERY_THROW);
+                    rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>
+                            (xTextRange->getText()->createTextCursorByRange(xCur).get());
+                    if (!xParaCursor)
+                        throw uno::RuntimeException();
                     xParaCursor->gotoStartOfParagraph(false);
                     if (0 < m_StreamStateStack.top().nTableDepth)
                     {
@@ -3055,7 +3056,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 pHidden->second >>= bIsHidden;
                             if (!bIsHidden)
                             {
-                                uno::Reference<text::XTextCursor> xCur3 =  xTextRange->getText()->createTextCursorByRange(xParaCursor);
+                                uno::Reference<text::XTextCursor> xCur3 = xTextRange->getText()->createTextCursorByRange(static_cast<text::XSentenceCursor*>(xParaCursor.get()));
                                 xCur3->goRight(1, true);
                                 if (xCur3->getString() == SAL_NEWLINE_STRING)
                                 {
@@ -3320,143 +3321,143 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 void DomainMapper_Impl::applyToggleAttributes(const PropertyMapPtr& pPropertyMap)
 {
     std::optional<PropertyMap::Property> charStyleProperty = pPropertyMap->getProperty(PROP_CHAR_STYLE_NAME);
-    if (charStyleProperty.has_value())
+    if (!charStyleProperty.has_value())
+        return;
+
+    OUString sCharStyleName;
+    charStyleProperty->second >>= sCharStyleName;
+    float fCharStyleBold = css::awt::FontWeight::NORMAL;
+    float fCharStyleBoldComplex = css::awt::FontWeight::NORMAL;
+    css::awt::FontSlant eCharStylePosture = css::awt::FontSlant_NONE;
+    css::awt::FontSlant eCharStylePostureComplex = css::awt::FontSlant_NONE;
+    sal_Int16 nCharStyleCaseMap = css::style::CaseMap::NONE;
+    sal_Int16 nCharStyleRelief = css::awt::FontRelief::NONE;
+    bool bCharStyleContoured = false;//Outline;
+    bool bCharStyleShadowed = false;
+    sal_Int16 nCharStyleStrikeThrough = awt::FontStrikeout::NONE;
+    bool bCharStyleHidden = false;
+
+    rtl::Reference<SwXStyle> xCharStylePropertySet = GetCharacterStyles()->getCharacterStyleByName(sCharStyleName);
+    xCharStylePropertySet->getToggleAttributes(
+            fCharStyleBold,
+            fCharStyleBoldComplex,
+            eCharStylePosture,
+            eCharStylePostureComplex,
+            nCharStyleCaseMap,
+            nCharStyleRelief,
+            bCharStyleContoured,
+            bCharStyleShadowed,
+            nCharStyleStrikeThrough,
+            bCharStyleHidden);
+
+    if (!(fCharStyleBold > css::awt::FontWeight::NORMAL || eCharStylePosture != css::awt::FontSlant_NONE|| nCharStyleCaseMap != css::style::CaseMap::NONE ||
+          nCharStyleRelief != css::awt::FontRelief::NONE || bCharStyleContoured || bCharStyleShadowed ||
+          nCharStyleStrikeThrough == awt::FontStrikeout::SINGLE || bCharStyleHidden))
+        return;
+
+    rtl::Reference<SwXStyle> const xParaStylePropertySet =
+        GetParagraphStyles()->getParagraphStyleByName(m_StreamStateStack.top().sCurrentParaStyleName);
+    float fParaStyleBold = css::awt::FontWeight::NORMAL;
+    float fParaStyleBoldComplex = css::awt::FontWeight::NORMAL;
+    css::awt::FontSlant eParaStylePosture = css::awt::FontSlant_NONE;
+    css::awt::FontSlant eParaStylePostureComplex = css::awt::FontSlant_NONE;
+    sal_Int16 nParaStyleCaseMap = css::style::CaseMap::NONE;
+    sal_Int16 nParaStyleRelief = css::awt::FontRelief::NONE;
+    bool bParaStyleContoured = false;
+    bool bParaStyleShadowed = false;
+    sal_Int16 nParaStyleStrikeThrough = awt::FontStrikeout::NONE;
+    bool bParaStyleHidden = false;
+    xParaStylePropertySet->getToggleAttributes(
+            fParaStyleBold,
+            fParaStyleBoldComplex,
+            eParaStylePosture,
+            eParaStylePostureComplex,
+            nParaStyleCaseMap,
+            nParaStyleRelief,
+            bParaStyleContoured,
+            bParaStyleShadowed,
+            nParaStyleStrikeThrough,
+            bParaStyleHidden);
+    if (fCharStyleBold > css::awt::FontWeight::NORMAL && fParaStyleBold > css::awt::FontWeight::NORMAL)
     {
-        OUString sCharStyleName;
-        charStyleProperty->second >>= sCharStyleName;
-        float fCharStyleBold = css::awt::FontWeight::NORMAL;
-        float fCharStyleBoldComplex = css::awt::FontWeight::NORMAL;
-        css::awt::FontSlant eCharStylePosture = css::awt::FontSlant_NONE;
-        css::awt::FontSlant eCharStylePostureComplex = css::awt::FontSlant_NONE;
-        sal_Int16 nCharStyleCaseMap = css::style::CaseMap::NONE;
-        sal_Int16 nCharStyleRelief = css::awt::FontRelief::NONE;
-        bool bCharStyleContoured = false;//Outline;
-        bool bCharStyleShadowed = false;
-        sal_Int16 nCharStyleStrikeThrough = awt::FontStrikeout::NONE;
-        bool bCharStyleHidden = false;
-
-        rtl::Reference<SwXStyle> xCharStylePropertySet = GetCharacterStyles()->getCharacterStyleByName(sCharStyleName);
-        xCharStylePropertySet->getToggleAttributes(
-                fCharStyleBold,
-                fCharStyleBoldComplex,
-                eCharStylePosture,
-                eCharStylePostureComplex,
-                nCharStyleCaseMap,
-                nCharStyleRelief,
-                bCharStyleContoured,
-                bCharStyleShadowed,
-                nCharStyleStrikeThrough,
-                bCharStyleHidden);
-
-        if (fCharStyleBold > css::awt::FontWeight::NORMAL || eCharStylePosture != css::awt::FontSlant_NONE|| nCharStyleCaseMap != css::style::CaseMap::NONE ||
-            nCharStyleRelief != css::awt::FontRelief::NONE || bCharStyleContoured || bCharStyleShadowed ||
-            nCharStyleStrikeThrough == awt::FontStrikeout::SINGLE || bCharStyleHidden)
+        std::optional<PropertyMap::Property> charBoldProperty = pPropertyMap->getProperty(PROP_CHAR_WEIGHT);
+        if (!charBoldProperty.has_value())
         {
-            rtl::Reference<SwXStyle> const xParaStylePropertySet =
-                GetParagraphStyles()->getParagraphStyleByName(m_StreamStateStack.top().sCurrentParaStyleName);
-            float fParaStyleBold = css::awt::FontWeight::NORMAL;
-            float fParaStyleBoldComplex = css::awt::FontWeight::NORMAL;
-            css::awt::FontSlant eParaStylePosture = css::awt::FontSlant_NONE;
-            css::awt::FontSlant eParaStylePostureComplex = css::awt::FontSlant_NONE;
-            sal_Int16 nParaStyleCaseMap = css::style::CaseMap::NONE;
-            sal_Int16 nParaStyleRelief = css::awt::FontRelief::NONE;
-            bool bParaStyleContoured = false;
-            bool bParaStyleShadowed = false;
-            sal_Int16 nParaStyleStrikeThrough = awt::FontStrikeout::NONE;
-            bool bParaStyleHidden = false;
-            xParaStylePropertySet->getToggleAttributes(
-                    fParaStyleBold,
-                    fParaStyleBoldComplex,
-                    eParaStylePosture,
-                    eParaStylePostureComplex,
-                    nParaStyleCaseMap,
-                    nParaStyleRelief,
-                    bParaStyleContoured,
-                    bParaStyleShadowed,
-                    nParaStyleStrikeThrough,
-                    bParaStyleHidden);
-            if (fCharStyleBold > css::awt::FontWeight::NORMAL && fParaStyleBold > css::awt::FontWeight::NORMAL)
-            {
-                std::optional<PropertyMap::Property> charBoldProperty = pPropertyMap->getProperty(PROP_CHAR_WEIGHT);
-                if (!charBoldProperty.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_WEIGHT, uno::Any(css::awt::FontWeight::NORMAL));
-                }
-            }
-            if (fCharStyleBoldComplex > css::awt::FontWeight::NORMAL && fParaStyleBoldComplex > css::awt::FontWeight::NORMAL)
-            {
-                std::optional<PropertyMap::Property> charBoldPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_WEIGHT_COMPLEX);
-                if (!charBoldPropertyComplex.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_WEIGHT_COMPLEX, uno::Any(css::awt::FontWeight::NORMAL));
-                    pPropertyMap->Insert(PROP_CHAR_WEIGHT_ASIAN, uno::Any(css::awt::FontWeight::NORMAL));
-                }
-            }
-            if (eCharStylePosture != css::awt::FontSlant_NONE && eParaStylePosture != css::awt::FontSlant_NONE)
-            {
-                std::optional<PropertyMap::Property> charItalicProperty = pPropertyMap->getProperty(PROP_CHAR_POSTURE);
-                if (!charItalicProperty.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_POSTURE, uno::Any(css::awt::FontSlant_NONE));
-                }
-            }
-            if (eCharStylePostureComplex != css::awt::FontSlant_NONE && eParaStylePostureComplex != css::awt::FontSlant_NONE)
-            {
-                std::optional<PropertyMap::Property> charItalicPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_POSTURE_COMPLEX);
-                if (!charItalicPropertyComplex.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_POSTURE_COMPLEX, uno::Any(css::awt::FontSlant_NONE));
-                    pPropertyMap->Insert(PROP_CHAR_POSTURE_ASIAN, uno::Any(css::awt::FontSlant_NONE));
-                }
-            }
-            if (nCharStyleCaseMap == nParaStyleCaseMap && nCharStyleCaseMap != css::style::CaseMap::NONE)
-            {
-                std::optional<PropertyMap::Property> charCaseMap = pPropertyMap->getProperty(PROP_CHAR_CASE_MAP);
-                if (!charCaseMap.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_CASE_MAP, uno::Any(css::style::CaseMap::NONE));
-                }
-            }
-            if (nParaStyleRelief != css::awt::FontRelief::NONE && nCharStyleRelief == nParaStyleRelief)
-            {
-                std::optional<PropertyMap::Property> charRelief = pPropertyMap->getProperty(PROP_CHAR_RELIEF);
-                if (!charRelief.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_RELIEF, uno::Any(css::awt::FontRelief::NONE));
-                }
-            }
-            if (bParaStyleContoured && bCharStyleContoured)
-            {
-                std::optional<PropertyMap::Property> charContoured = pPropertyMap->getProperty(PROP_CHAR_CONTOURED);
-                if (!charContoured.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_CONTOURED, uno::Any(false));
-                }
-            }
-            if (bParaStyleShadowed && bCharStyleShadowed)
-            {
-                std::optional<PropertyMap::Property> charShadow = pPropertyMap->getProperty(PROP_CHAR_SHADOWED);
-                if (!charShadow.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_SHADOWED, uno::Any(false));
-                }
-            }
-            if (nParaStyleStrikeThrough == css::awt::FontStrikeout::SINGLE && nParaStyleStrikeThrough == nCharStyleStrikeThrough)
-            {
-                std::optional<PropertyMap::Property> charStrikeThrough = pPropertyMap->getProperty(PROP_CHAR_STRIKEOUT);
-                if (!charStrikeThrough.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_STRIKEOUT, uno::Any(css::awt::FontStrikeout::NONE));
-                }
-            }
-            if (bParaStyleHidden && bCharStyleHidden)
-            {
-                std::optional<PropertyMap::Property> charHidden = pPropertyMap->getProperty(PROP_CHAR_HIDDEN);
-                if (!charHidden.has_value())
-                {
-                    pPropertyMap->Insert(PROP_CHAR_HIDDEN, uno::Any(false));
-                }
-            }
+            pPropertyMap->Insert(PROP_CHAR_WEIGHT, uno::Any(css::awt::FontWeight::NORMAL));
+        }
+    }
+    if (fCharStyleBoldComplex > css::awt::FontWeight::NORMAL && fParaStyleBoldComplex > css::awt::FontWeight::NORMAL)
+    {
+        std::optional<PropertyMap::Property> charBoldPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_WEIGHT_COMPLEX);
+        if (!charBoldPropertyComplex.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_WEIGHT_COMPLEX, uno::Any(css::awt::FontWeight::NORMAL));
+            pPropertyMap->Insert(PROP_CHAR_WEIGHT_ASIAN, uno::Any(css::awt::FontWeight::NORMAL));
+        }
+    }
+    if (eCharStylePosture != css::awt::FontSlant_NONE && eParaStylePosture != css::awt::FontSlant_NONE)
+    {
+        std::optional<PropertyMap::Property> charItalicProperty = pPropertyMap->getProperty(PROP_CHAR_POSTURE);
+        if (!charItalicProperty.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_POSTURE, uno::Any(css::awt::FontSlant_NONE));
+        }
+    }
+    if (eCharStylePostureComplex != css::awt::FontSlant_NONE && eParaStylePostureComplex != css::awt::FontSlant_NONE)
+    {
+        std::optional<PropertyMap::Property> charItalicPropertyComplex = pPropertyMap->getProperty(PROP_CHAR_POSTURE_COMPLEX);
+        if (!charItalicPropertyComplex.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_POSTURE_COMPLEX, uno::Any(css::awt::FontSlant_NONE));
+            pPropertyMap->Insert(PROP_CHAR_POSTURE_ASIAN, uno::Any(css::awt::FontSlant_NONE));
+        }
+    }
+    if (nCharStyleCaseMap == nParaStyleCaseMap && nCharStyleCaseMap != css::style::CaseMap::NONE)
+    {
+        std::optional<PropertyMap::Property> charCaseMap = pPropertyMap->getProperty(PROP_CHAR_CASE_MAP);
+        if (!charCaseMap.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_CASE_MAP, uno::Any(css::style::CaseMap::NONE));
+        }
+    }
+    if (nParaStyleRelief != css::awt::FontRelief::NONE && nCharStyleRelief == nParaStyleRelief)
+    {
+        std::optional<PropertyMap::Property> charRelief = pPropertyMap->getProperty(PROP_CHAR_RELIEF);
+        if (!charRelief.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_RELIEF, uno::Any(css::awt::FontRelief::NONE));
+        }
+    }
+    if (bParaStyleContoured && bCharStyleContoured)
+    {
+        std::optional<PropertyMap::Property> charContoured = pPropertyMap->getProperty(PROP_CHAR_CONTOURED);
+        if (!charContoured.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_CONTOURED, uno::Any(false));
+        }
+    }
+    if (bParaStyleShadowed && bCharStyleShadowed)
+    {
+        std::optional<PropertyMap::Property> charShadow = pPropertyMap->getProperty(PROP_CHAR_SHADOWED);
+        if (!charShadow.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_SHADOWED, uno::Any(false));
+        }
+    }
+    if (nParaStyleStrikeThrough == css::awt::FontStrikeout::SINGLE && nParaStyleStrikeThrough == nCharStyleStrikeThrough)
+    {
+        std::optional<PropertyMap::Property> charStrikeThrough = pPropertyMap->getProperty(PROP_CHAR_STRIKEOUT);
+        if (!charStrikeThrough.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_STRIKEOUT, uno::Any(css::awt::FontStrikeout::NONE));
+        }
+    }
+    if (bParaStyleHidden && bCharStyleHidden)
+    {
+        std::optional<PropertyMap::Property> charHidden = pPropertyMap->getProperty(PROP_CHAR_HIDDEN);
+        if (!charHidden.has_value())
+        {
+            pPropertyMap->Insert(PROP_CHAR_HIDDEN, uno::Any(false));
         }
     }
 }
@@ -3466,7 +3467,7 @@ void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Refer
     // remove workaround for change tracked images, if they are part of a redline,
     // i.e. if the next run is a tracked change with the same type, author and date,
     // as in the change tracking of the image.
-    if ( m_bRedlineImageInPreviousRun )
+    if ( !m_bRedlineImageInPreviousRun )
     {
         auto pCurrentRedline = m_aRedlines.top().size() > 0
             ? m_aRedlines.top().back()
@@ -3498,7 +3499,7 @@ void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Refer
     }
 }
 
-    void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
+void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
 {
     if (m_bDiscardHeaderFooter)
         return;
@@ -3533,9 +3534,9 @@ void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Refer
         MergeAtContentImageRedlineWithNext(xTextAppend);
 
         uno::Reference< text::XTextRange > xTextRange;
-        if (m_aTextAppendStack.top().xInsertPosition.is())
+        if (m_aTextAppendStack.top().xCursor.is())
         {
-            xTextRange = xTextAppend->insertTextPortion(rString, aValues, m_aTextAppendStack.top().xInsertPosition);
+            xTextRange = xTextAppend->insertTextPortion(rString, aValues, static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()));
             m_aTextAppendStack.top().xCursor->gotoRange(xTextRange->getEnd(), true);
         }
         else
@@ -3635,15 +3636,15 @@ void DomainMapper_Impl::appendTextContent(
     SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text append stack");
     if (m_aTextAppendStack.empty())
         return;
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
+    rtl::Reference< SwXText > xTextAppendAndConvert = dynamic_cast<SwXText*>( m_aTextAppendStack.top().xTextAppend.get() );
     OSL_ENSURE( xTextAppendAndConvert.is(), "trying to append a text content without XTextAppendAndConvert" );
     if (!xTextAppendAndConvert.is() || !hasTableManager() || getTableManager().isIgnore())
         return;
 
     try
     {
-        if (m_aTextAppendStack.top().xInsertPosition.is())
-            xTextAppendAndConvert->insertTextContentWithProperties( xContent, xPropertyValues, m_aTextAppendStack.top().xInsertPosition );
+        if (m_aTextAppendStack.top().xCursor.is())
+            xTextAppendAndConvert->insertTextContentWithProperties( xContent, xPropertyValues, static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()) );
         else
             xTextAppendAndConvert->appendTextContent( xContent, xPropertyValues );
     }
@@ -3928,43 +3929,44 @@ rtl::Reference< SwXTextSection > DomainMapper_Impl::appendTextSectionAfter(
     if (m_aTextAppendStack.empty())
         return xSection;
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    if(xTextAppend.is())
+    if(!xTextAppend)
+        return xSection;
+
+    try
     {
-        try
-        {
-            uno::Reference< text::XParagraphCursor > xCursor(
-                xTextAppend->createTextCursorByRange( xBefore ), uno::UNO_QUERY_THROW);
-            //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
-            xCursor->gotoStartOfParagraph( false );
-            if (m_aTextAppendStack.top().xInsertPosition.is())
-                xCursor->gotoRange( m_aTextAppendStack.top().xInsertPosition, true );
-            else
-                xCursor->gotoEnd( true );
-            // The paragraph after this new section is already inserted. The previous node may be a
-            // table; then trying to go left would skip the whole table. Split the trailing
-            // paragraph; let the section span over the first of the two resulting paragraphs;
-            // destroy the last section's paragraph afterwards.
-            xTextAppend->insertControlCharacter(
-                xCursor->getEnd(), css::text::ControlCharacter::PARAGRAPH_BREAK, false);
-            auto xNewPara = getParagraphOfRange(xCursor->getEnd());
-            xCursor->gotoPreviousParagraph(true);
-            auto xEndPara = getParagraphOfRange(xCursor->getEnd());
-            // xEndPara may already have properties (like page break); make sure to apply them
-            // to the newly appended paragraph, which will be kept in the end.
-            copyAllProps(xEndPara, xNewPara);
+        rtl::Reference< SwXTextCursor > xCursor =
+            dynamic_cast<SwXTextCursor*>(
+                xTextAppend->createTextCursorByRange( xBefore ).get());
+        if (!xCursor)
+            return {};
+        //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
+        xCursor->gotoStartOfParagraph( false );
+        if (m_aTextAppendStack.top().xCursor.is())
+            xCursor->gotoRange( static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()), true );
+        else
+            xCursor->gotoEnd( true );
+        // The paragraph after this new section is already inserted. The previous node may be a
+        // table; then trying to go left would skip the whole table. Split the trailing
+        // paragraph; let the section span over the first of the two resulting paragraphs;
+        // destroy the last section's paragraph afterwards.
+        xTextAppend->insertControlCharacter(
+            xCursor->getEnd(), css::text::ControlCharacter::PARAGRAPH_BREAK, false);
+        auto xNewPara = getParagraphOfRange(xCursor->getEnd());
+        xCursor->gotoPreviousParagraph(true);
+        auto xEndPara = getParagraphOfRange(xCursor->getEnd());
+        // xEndPara may already have properties (like page break); make sure to apply them
+        // to the newly appended paragraph, which will be kept in the end.
+        copyAllProps(xEndPara, xNewPara);
 
-            xSection = m_xTextDocument->createTextSection();
-            xSection->attach(xCursor);
+        xSection = m_xTextDocument->createTextSection();
+        xSection->attach(static_cast<text::XSentenceCursor*>(xCursor.get()));
 
-            // Remove the extra paragraph (last inside the section)
-            xEndPara->dispose();
-        }
-        catch(const uno::Exception&)
-        {
-        }
-
+        // Remove the extra paragraph (last inside the section)
+        xEndPara->dispose();
     }
-
+    catch(const uno::Exception&)
+    {
+    }
     return xSection;
 }
 
@@ -4038,8 +4040,8 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
             {
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), text::VertOrientation::BOTTOM));
             }
-            uno::Reference<text::XTextAppendAndConvert> xBodyText(xRangeStart->getText(), uno::UNO_QUERY);
-            xBodyText->convertToTextFrame(xTextAppend, xRangeEnd, comphelper::containerToSequence(aFrameProperties));
+            rtl::Reference<SwXText> xBodyText = dynamic_cast<SwXText*>(xRangeStart->getText().get());
+            xBodyText->convertToSwTextFrame(xTextAppend, xRangeEnd, aFrameProperties);
         }
         m_aHeaderFooterTextAppendStack.pop();
     }
@@ -4793,7 +4795,6 @@ void DomainMapper_Impl::PopAnnotation()
         {
             uno::Sequence< beans::PropertyValue > aEmptyProperties;
             appendTextContent( m_xAnnotationField, aEmptyProperties );
-            CheckRedline( m_xAnnotationField->getAnchor( ) );
         }
         else
         {
@@ -4855,6 +4856,7 @@ void DomainMapper_Impl::PopAnnotation()
                 xCursor->setString(OUString());
             }
         }
+        CheckRedline(m_xAnnotationField->getAnchor());
         m_aAnnotationPositions.erase( m_nAnnotationId );
     }
     catch (uno::Exception const&)
@@ -5261,23 +5263,22 @@ void DomainMapper_Impl::PopShapeContext()
 
 bool DomainMapper_Impl::IsSdtEndBefore()
 {
-    bool bIsSdtEndBefore = false;
     PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_CHARACTER);
-    if(pContext)
+    if(!pContext)
+        return false;
+    bool bIsSdtEndBefore = false;
+    const uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
+    for (const auto& rCurrentCharProp : currentCharProps)
     {
-        const uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
-        for (const auto& rCurrentCharProp : currentCharProps)
+        if (rCurrentCharProp.Name == "CharInteropGrabBag")
         {
-            if (rCurrentCharProp.Name == "CharInteropGrabBag")
+            uno::Sequence<beans::PropertyValue> aCharGrabBag;
+            rCurrentCharProp.Value >>= aCharGrabBag;
+            for (const auto& rProp : aCharGrabBag)
             {
-                uno::Sequence<beans::PropertyValue> aCharGrabBag;
-                rCurrentCharProp.Value >>= aCharGrabBag;
-                for (const auto& rProp : aCharGrabBag)
+                if(rProp.Name == "SdtEndBefore")
                 {
-                    if(rProp.Name == "SdtEndBefore")
-                    {
-                        rProp.Value >>= bIsSdtEndBefore;
-                    }
+                    rProp.Value >>= bIsSdtEndBefore;
                 }
             }
         }
@@ -5475,7 +5476,7 @@ void DomainMapper_Impl::HandlePTab(sal_Int32 nAlignment)
     }
 
     uno::Reference<css::text::XTextRange> xInsertPosition
-        = m_aTextAppendStack.top().xInsertPosition;
+        = static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get());
     if (!xInsertPosition.is())
     {
         xInsertPosition = xTextAppend->getEnd();
@@ -5491,7 +5492,7 @@ void DomainMapper_Impl::HandlePTab(sal_Int32 nAlignment)
     }
 
     // Assume that there is some content before the tab character.
-    uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
+    rtl::Reference<SwXTextCursor> xParagraphCursor(dynamic_cast<SwXTextCursor*>(xCursor.get()));
     if (!xParagraphCursor.is())
     {
         return;
@@ -5565,102 +5566,102 @@ static sal_Int16 lcl_ParseNumberingType( std::u16string_view rCommand )
         sNumber = o3tl::getToken(rCommand, 0, ' ', nStartIndex2);
     }
 
-    if( !sNumber.isEmpty() )
+    if( sNumber.isEmpty() )
+        return nRet;
+
+    //todo: might make sense to hash this list, too
+    struct NumberingPairs
     {
-        //todo: might make sense to hash this list, too
-        struct NumberingPairs
-        {
-            const char* cWordName;
-            sal_Int16 nType;
-        };
-        static const NumberingPairs aNumberingPairs[] =
-        {
-            {"Arabic", style::NumberingType::ARABIC}
-            ,{"ROMAN", style::NumberingType::ROMAN_UPPER}
-            ,{"roman", style::NumberingType::ROMAN_LOWER}
-            ,{"ALPHABETIC", style::NumberingType::CHARS_UPPER_LETTER}
-            ,{"alphabetic", style::NumberingType::CHARS_LOWER_LETTER}
-            ,{"CircleNum", style::NumberingType::CIRCLE_NUMBER}
-            ,{"ThaiArabic", style::NumberingType::CHARS_THAI}
-            ,{"ThaiCardText", style::NumberingType::CHARS_THAI}
-            ,{"ThaiLetter", style::NumberingType::CHARS_THAI}
+        const char* cWordName;
+        sal_Int16 nType;
+    };
+    static const NumberingPairs aNumberingPairs[] =
+    {
+        {"Arabic", style::NumberingType::ARABIC}
+        ,{"ROMAN", style::NumberingType::ROMAN_UPPER}
+        ,{"roman", style::NumberingType::ROMAN_LOWER}
+        ,{"ALPHABETIC", style::NumberingType::CHARS_UPPER_LETTER}
+        ,{"alphabetic", style::NumberingType::CHARS_LOWER_LETTER}
+        ,{"CircleNum", style::NumberingType::CIRCLE_NUMBER}
+        ,{"ThaiArabic", style::NumberingType::CHARS_THAI}
+        ,{"ThaiCardText", style::NumberingType::CHARS_THAI}
+        ,{"ThaiLetter", style::NumberingType::CHARS_THAI}
 //            ,{"SBCHAR", style::NumberingType::}
 //            ,{"DBCHAR", style::NumberingType::}
 //            ,{"DBNUM1", style::NumberingType::}
 //            ,{"DBNUM2", style::NumberingType::}
 //            ,{"DBNUM3", style::NumberingType::}
 //            ,{"DBNUM4", style::NumberingType::}
-            ,{"Aiueo", style::NumberingType::AIU_FULLWIDTH_JA}
-            ,{"Iroha", style::NumberingType::IROHA_FULLWIDTH_JA}
+        ,{"Aiueo", style::NumberingType::AIU_FULLWIDTH_JA}
+        ,{"Iroha", style::NumberingType::IROHA_FULLWIDTH_JA}
 //            ,{"ZODIAC1", style::NumberingType::}
 //            ,{"ZODIAC2", style::NumberingType::}
 //            ,{"ZODIAC3", style::NumberingType::}
 //            ,{"CHINESENUM1", style::NumberingType::}
 //            ,{"CHINESENUM2", style::NumberingType::}
 //            ,{"CHINESENUM3", style::NumberingType::}
-            ,{"ArabicAlpha", style::NumberingType::CHARS_ARABIC}
-            ,{"ArabicAbjad", style::NumberingType::FULLWIDTH_ARABIC}
-            ,{"Ganada", style::NumberingType::HANGUL_JAMO_KO}
-            ,{"Chosung", style::NumberingType::HANGUL_SYLLABLE_KO}
-            ,{"KoreanCounting", style::NumberingType::NUMBER_HANGUL_KO}
-            ,{"KoreanLegal", style::NumberingType::NUMBER_LEGAL_KO}
-            ,{"KoreanDigital", style::NumberingType::NUMBER_DIGITAL_KO}
-            ,{"KoreanDigital2", style::NumberingType::NUMBER_DIGITAL2_KO}
+        ,{"ArabicAlpha", style::NumberingType::CHARS_ARABIC}
+        ,{"ArabicAbjad", style::NumberingType::FULLWIDTH_ARABIC}
+        ,{"Ganada", style::NumberingType::HANGUL_JAMO_KO}
+        ,{"Chosung", style::NumberingType::HANGUL_SYLLABLE_KO}
+        ,{"KoreanCounting", style::NumberingType::NUMBER_HANGUL_KO}
+        ,{"KoreanLegal", style::NumberingType::NUMBER_LEGAL_KO}
+        ,{"KoreanDigital", style::NumberingType::NUMBER_DIGITAL_KO}
+        ,{"KoreanDigital2", style::NumberingType::NUMBER_DIGITAL2_KO}
 /* possible values:
 style::NumberingType::
 
-    CHARS_UPPER_LETTER_N
-    CHARS_LOWER_LETTER_N
-    TRANSLITERATION
-    NATIVE_NUMBERING
-    CIRCLE_NUMBER
-    NUMBER_LOWER_ZH
-    NUMBER_UPPER_ZH
-    NUMBER_UPPER_ZH_TW
-    TIAN_GAN_ZH
-    DI_ZI_ZH
-    NUMBER_TRADITIONAL_JA
-    AIU_HALFWIDTH_JA
-    IROHA_HALFWIDTH_JA
-    NUMBER_UPPER_KO
-    NUMBER_HANGUL_KO
-    HANGUL_JAMO_KO
-    HANGUL_SYLLABLE_KO
-    HANGUL_CIRCLED_JAMO_KO
-    HANGUL_CIRCLED_SYLLABLE_KO
-    CHARS_HEBREW
-    CHARS_NEPALI
-    CHARS_KHMER
-    CHARS_LAO
-    CHARS_TIBETAN
-    CHARS_CYRILLIC_UPPER_LETTER_BG
-    CHARS_CYRILLIC_LOWER_LETTER_BG
-    CHARS_CYRILLIC_UPPER_LETTER_N_BG
-    CHARS_CYRILLIC_LOWER_LETTER_N_BG
-    CHARS_CYRILLIC_UPPER_LETTER_RU
-    CHARS_CYRILLIC_LOWER_LETTER_RU
-    CHARS_CYRILLIC_UPPER_LETTER_N_RU
-    CHARS_CYRILLIC_LOWER_LETTER_N_RU
-    CHARS_CYRILLIC_UPPER_LETTER_SR
-    CHARS_CYRILLIC_LOWER_LETTER_SR
-    CHARS_CYRILLIC_UPPER_LETTER_N_SR
-    CHARS_CYRILLIC_LOWER_LETTER_N_SR
-    CHARS_CYRILLIC_UPPER_LETTER_UK
-    CHARS_CYRILLIC_LOWER_LETTER_UK
-    CHARS_CYRILLIC_UPPER_LETTER_N_UK
-    CHARS_CYRILLIC_LOWER_LETTER_N_UK*/
+CHARS_UPPER_LETTER_N
+CHARS_LOWER_LETTER_N
+TRANSLITERATION
+NATIVE_NUMBERING
+CIRCLE_NUMBER
+NUMBER_LOWER_ZH
+NUMBER_UPPER_ZH
+NUMBER_UPPER_ZH_TW
+TIAN_GAN_ZH
+DI_ZI_ZH
+NUMBER_TRADITIONAL_JA
+AIU_HALFWIDTH_JA
+IROHA_HALFWIDTH_JA
+NUMBER_UPPER_KO
+NUMBER_HANGUL_KO
+HANGUL_JAMO_KO
+HANGUL_SYLLABLE_KO
+HANGUL_CIRCLED_JAMO_KO
+HANGUL_CIRCLED_SYLLABLE_KO
+CHARS_HEBREW
+CHARS_NEPALI
+CHARS_KHMER
+CHARS_LAO
+CHARS_TIBETAN
+CHARS_CYRILLIC_UPPER_LETTER_BG
+CHARS_CYRILLIC_LOWER_LETTER_BG
+CHARS_CYRILLIC_UPPER_LETTER_N_BG
+CHARS_CYRILLIC_LOWER_LETTER_N_BG
+CHARS_CYRILLIC_UPPER_LETTER_RU
+CHARS_CYRILLIC_LOWER_LETTER_RU
+CHARS_CYRILLIC_UPPER_LETTER_N_RU
+CHARS_CYRILLIC_LOWER_LETTER_N_RU
+CHARS_CYRILLIC_UPPER_LETTER_SR
+CHARS_CYRILLIC_LOWER_LETTER_SR
+CHARS_CYRILLIC_UPPER_LETTER_N_SR
+CHARS_CYRILLIC_LOWER_LETTER_N_SR
+CHARS_CYRILLIC_UPPER_LETTER_UK
+CHARS_CYRILLIC_LOWER_LETTER_UK
+CHARS_CYRILLIC_UPPER_LETTER_N_UK
+CHARS_CYRILLIC_LOWER_LETTER_N_UK*/
 
-        };
-        for(const NumberingPairs& rNumberingPair : aNumberingPairs)
+    };
+    for(const NumberingPairs& rNumberingPair : aNumberingPairs)
+    {
+        if( /*sCommand*/sNumber.equalsAscii(rNumberingPair.cWordName ))
         {
-            if( /*sCommand*/sNumber.equalsAscii(rNumberingPair.cWordName ))
-            {
-                nRet = rNumberingPair.nType;
-                break;
-            }
+            nRet = rNumberingPair.nType;
+            break;
         }
-
     }
+
     return nRet;
 }
 
@@ -5670,24 +5671,22 @@ static OUString lcl_ParseFormat( const OUString& rCommand )
     //  The command looks like: " DATE \@"dd MMMM yyyy" or "09/02/2014"
     OUString command;
     sal_Int32 delimPos = rCommand.indexOf("\\@");
-    if (delimPos != -1)
-    {
-        // Remove whitespace permitted by standard between \@ and "
-        const sal_Int32 nQuoteIndex = rCommand.indexOf('\"');
-        if (nQuoteIndex != -1)
-        {
-            sal_Int32 wsChars = nQuoteIndex - delimPos - 2;
-            command = rCommand.replaceAt(delimPos+2, wsChars, u"");
-        }
-        else
-        {
-            // turn date \@ MM into date \@"MM"
-            command = OUString::Concat(rCommand.subView(0, delimPos + 2)) + "\"" + o3tl::trim(rCommand.subView(delimPos + 2)) + "\"";
-        }
-        return OUString(msfilter::util::findQuotedText(command, u"\\@\"", '\"'));
-    }
+    if (delimPos == -1)
+        return command;
 
-    return OUString();
+    // Remove whitespace permitted by standard between \@ and "
+    const sal_Int32 nQuoteIndex = rCommand.indexOf('\"');
+    if (nQuoteIndex != -1)
+    {
+        sal_Int32 wsChars = nQuoteIndex - delimPos - 2;
+        command = rCommand.replaceAt(delimPos+2, wsChars, u"");
+    }
+    else
+    {
+        // turn date \@ MM into date \@"MM"
+        command = OUString::Concat(rCommand.subView(0, delimPos + 2)) + "\"" + o3tl::trim(rCommand.subView(delimPos + 2)) + "\"";
+    }
+    return OUString(msfilter::util::findQuotedText(command, u"\\@\"", '\"'));
 }
 /*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
@@ -6137,21 +6136,21 @@ void DomainMapper_Impl::ChainTextFrames()
         //Finally - go through and attach the chains based on matching ID and incremented sequence number (dml-style).
         for (const auto& rOuter : chainingWPS)
         {
-                for (const auto& rInner : chainingWPS)
+            for (const auto& rInner : chainingWPS)
+            {
+                if (rInner.nId == rOuter.nId)
                 {
-                    if (rInner.nId == rOuter.nId)
+                    if (rInner.nSeq == (rOuter.nSeq + nDirection))
                     {
-                        if (rInner.nSeq == (rOuter.nSeq + nDirection))
-                        {
-                            uno::Reference<text::XTextContent> const xTextContent(rOuter.xShape, uno::UNO_QUERY_THROW);
-                            uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
+                        uno::Reference<text::XTextContent> const xTextContent(rOuter.xShape, uno::UNO_QUERY_THROW);
+                        uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
 
-                            //The reverse chaining happens automatically, so only one direction needs to be set
-                            xPropertySet->setPropertyValue(sChainNextName, uno::Any(rInner.shapeName));
-                            break ; //there cannot be more than one next frame
-                        }
+                        //The reverse chaining happens automatically, so only one direction needs to be set
+                        xPropertySet->setPropertyValue(sChainNextName, uno::Any(rInner.shapeName));
+                        break ; //there cannot be more than one next frame
                     }
                 }
+            }
         }
         m_vTextFramesForChaining.clear(); //clear the vector
     }
@@ -6170,9 +6169,11 @@ void DomainMapper_Impl::PushTextBoxContent()
     {
         rtl::Reference<SwXTextFrame> xTBoxFrame(m_xTextDocument->createTextFrame());
         xTBoxFrame->setName("textbox" + OUString::number(m_xPendingTextBoxFrames.size() + 1));
-        uno::Reference<text::XTextAppendAndConvert>(m_aTextAppendStack.top().xTextAppend,
-            uno::UNO_QUERY_THROW)
-            ->appendTextContent(static_cast<SwXFrame*>(xTBoxFrame.get()), beans::PropertyValues());
+        rtl::Reference<SwXText> xText = dynamic_cast<SwXText*>(m_aTextAppendStack.top().xTextAppend.get());
+        assert(xText);
+        if (!xText)
+            return;
+        xText->appendTextContent(static_cast<SwXFrame*>(xTBoxFrame.get()), beans::PropertyValues());
         m_xPendingTextBoxFrames.push(xTBoxFrame);
 
         m_aTextAppendStack.push(TextAppendContext(xTBoxFrame, {}));
@@ -6239,9 +6240,9 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const css::uno::Reference<cs
     {
         xProps->setPropertyValue(u"TextBoxContent"_ustr, uno::Any(uno::Reference< text::XTextFrame >(xTextBox)));
     }
-    catch (...)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("writerfilter.dmapper", "Exception while trying to attach textboxes!");
+        TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Exception while trying to attach textboxes!");
         return;
     }
 
@@ -6302,9 +6303,9 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const css::uno::Reference<cs
             m_vTextFramesForChaining.push_back(xShape);
         }
     }
-    catch (...)
+    catch (const uno::Exception&)
     {
-        SAL_WARN("writerfilter.dmapper", "Exception while trying to link textboxes!");
+        TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "Exception while trying to link textboxes!");
     }
 }
 
@@ -6376,8 +6377,8 @@ void DomainMapper_Impl::PushFieldContext()
         uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
         if (xTextAppend.is())
             xCrsr = xTextAppend->createTextCursorByRange(
-                        m_aTextAppendStack.top().xInsertPosition.is()
-                            ? m_aTextAppendStack.top().xInsertPosition
+                        m_aTextAppendStack.top().xCursor.is()
+                            ? static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get())
                             : xTextAppend->getEnd());
     }
 
@@ -6964,7 +6965,7 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
             NS_ooxml::LN_Value_ST_RubyAlign_right,
             NS_ooxml::LN_Value_ST_RubyAlign_rightVertical,
         };
-        aInfo.nRubyAlign = aRubyAlignValues[(nJc<SAL_N_ELEMENTS(aRubyAlignValues))?nJc:0];
+        aInfo.nRubyAlign = aRubyAlignValues[(nJc<std::size(aRubyAlignValues))?nJc:0];
     }
 
     // we don't parse or use the font field in rCommand
@@ -7113,11 +7114,11 @@ void DomainMapper_Impl::handleDocProperty
     size_t nMap = 0;
     if (!xPropertySetInfo->hasPropertyByName(rFirstParam))
     {
-        for( ; nMap < SAL_N_ELEMENTS(aDocProperties); ++nMap )
+        for( const auto& rElement : aDocProperties )
         {
-            if (rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName))
+            if (rFirstParam.equalsAscii(rElement.pDocPropertyName))
             {
-                sFieldServiceName = OUString::createFromAscii(aDocProperties[nMap].pServiceName);
+                sFieldServiceName = OUString::createFromAscii(rElement.pServiceName);
                 break;
             }
         }
@@ -7246,22 +7247,23 @@ OUString DomainMapper_Impl::extractTocTitle()
     // try-catch was added in the same way as inside appendTextSectionAfter()
     try
     {
-        uno::Reference<text::XParagraphCursor> const xCursor(
-            xTextAppend->createTextCursorByRange(m_StreamStateStack.top().xSdtEntryStart), uno::UNO_QUERY_THROW);
+        rtl::Reference<SwXTextCursor> const xCursor =
+            dynamic_cast<SwXTextCursor*>(
+                xTextAppend->createTextCursorByRange(m_StreamStateStack.top().xSdtEntryStart).get());
         if (!xCursor.is())
             return OUString();
 
         //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
         xCursor->gotoStartOfParagraph( false );
-        if (m_aTextAppendStack.top().xInsertPosition.is())
-            xCursor->gotoRange( m_aTextAppendStack.top().xInsertPosition, true );
+        if (m_aTextAppendStack.top().xCursor.is())
+            xCursor->gotoRange( static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()), true );
         else
             xCursor->gotoEnd( true );
 
         // the paragraph after this new section might have been already inserted
         OUString sResult = xCursor->getString();
         if (sResult.endsWith(SAL_NEWLINE_STRING))
-            sResult = sResult.copy(0, sResult.getLength() - SAL_N_ELEMENTS(SAL_NEWLINE_STRING) + 1);
+            sResult = sResult.copy(0, sResult.getLength() - std::size(SAL_NEWLINE_STRING) + 1);
 
         return sResult;
     }
@@ -7288,7 +7290,7 @@ DomainMapper_Impl::StartIndexSectionChecked(std::u16string_view sServiceName)
     const auto& xTextAppend = GetTopTextAppend();
     const auto xTextRange = xTextAppend->getEnd();
     const auto xRet = createSectionForRange(xTextRange, xTextRange, sServiceName, false);
-    if (!m_aTextAppendStack.top().xInsertPosition)
+    if (!m_aTextAppendStack.top().xCursor)
     {
         try
         {
@@ -7737,8 +7739,8 @@ rtl::Reference<SwXSection> DomainMapper_Impl::createSectionForRange(
     rtl::Reference< SwXSection > xSection;
     try
     {
-        uno::Reference< text::XParagraphCursor > xCursor(
-            xTextAppend->createTextCursorByRange( xStart ), uno::UNO_QUERY );
+        rtl::Reference< SwXTextCursor > xCursor =
+            dynamic_cast<SwXTextCursor*>(xTextAppend->createTextCursorByRange( xStart ).get());
         if(!xCursor)
             return {};
         //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
@@ -7750,7 +7752,7 @@ rtl::Reference<SwXSection> DomainMapper_Impl::createSectionForRange(
         xSection = m_xTextDocument->createSection(sObjectType);
         if (!xSection)
             return {};
-        xSection->attach( xCursor );
+        xSection->attach( static_cast<text::XSentenceCursor*>(xCursor.get()) );
     }
     catch(const uno::Exception&)
     {
@@ -7848,17 +7850,17 @@ static auto InsertFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
     uno::Reference<text::XTextAppend> const& xTextAppend(rTextAppendStack.top().xTextAppend);
     uno::Reference<text::XTextCursor> const xCursor =
         xTextAppend->createTextCursorByRange(xStartRange);
-    if (rTextAppendStack.top().xInsertPosition.is())
+    if (rTextAppendStack.top().xCursor.is())
     {
         uno::Reference<text::XTextRangeCompare> const xCompare(
                 rTextAppendStack.top().xTextAppend,
                 uno::UNO_QUERY);
-        if (xCompare->compareRegionStarts(xStartRange, rTextAppendStack.top().xInsertPosition) < 0)
+        if (xCompare->compareRegionStarts(xStartRange, static_cast<text::XSentenceCursor*>(rTextAppendStack.top().xCursor.get())) < 0)
         {
             SAL_WARN("writerfilter.dmapper", "invalid field mark positions");
             assert(false);
         }
-        xCursor->gotoRange(rTextAppendStack.top().xInsertPosition, true);
+        xCursor->gotoRange(static_cast<text::XSentenceCursor*>(rTextAppendStack.top().xCursor.get()), true);
     }
     else
     {
@@ -7891,7 +7893,7 @@ static auto PopFieldmark(std::stack<TextAppendContext> & rTextAppendStack,
     {
         return; // only a single CH_TXT_ATR_FORMELEMENT!
     }
-    xCursor->gotoRange(rTextAppendStack.top().xInsertPosition, false);
+    xCursor->gotoRange(static_cast<text::XSentenceCursor*>(rTextAppendStack.top().xCursor.get()), false);
     xCursor->goRight(1, true);
     xCursor->setString(OUString()); // undo SplitNode from CloseFieldCommand()
     // note: paragraph properties will be overwritten
@@ -9143,8 +9145,8 @@ void DomainMapper_Impl::PopFieldContext()
                             // should not be part of index
                             auto xCursor
                                 = xTextAppend->createTextCursorByRange(
-                                    m_aTextAppendStack.top().xInsertPosition.is()
-                                    ? m_aTextAppendStack.top().xInsertPosition
+                                    m_aTextAppendStack.top().xCursor.is()
+                                    ? static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get())
                                     : xTextAppend->getEnd());
                             xCursor->goLeft(1, true);
                             // delete
@@ -9157,7 +9159,7 @@ void DomainMapper_Impl::PopFieldContext()
                             else
                             {
                                 xTextAppend->finishParagraphInsert(css::beans::PropertyValues(),
-                                    m_aTextAppendStack.top().xInsertPosition);
+                                    static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()));
                             }
                         }
                         m_bStartedTOC = false;
@@ -9228,9 +9230,9 @@ void DomainMapper_Impl::PopFieldContext()
                         }
                         else if (!pContext->GetHyperlinkURL().isEmpty() && xCrsr.is())
                         {
-                            if (m_aTextAppendStack.top().xInsertPosition.is())
+                            if (m_aTextAppendStack.top().xCursor.is())
                             {
-                                xCrsr->gotoRange(m_aTextAppendStack.top().xInsertPosition, true);
+                                xCrsr->gotoRange(static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get()), true);
                             }
                             else
                             {
@@ -9420,8 +9422,8 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
             {
                 uno::Reference<text::XTextCursor> const xCursor =
                     xTextAppend->createTextCursorByRange(
-                        m_aTextAppendStack.top().xInsertPosition.is()
-                            ? m_aTextAppendStack.top().xInsertPosition
+                        m_aTextAppendStack.top().xCursor.is()
+                            ? static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get())
                             : xTextAppend->getEnd() );
 
                 if (!xCursor)
@@ -9586,7 +9588,7 @@ void DomainMapper_Impl::AddAnnotationPosition(
         if (m_bIsNewDoc)
             xCursor = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
         else
-            xCursor = m_aTextAppendStack.top().xCursor;
+            xCursor = static_cast<text::XSentenceCursor*>(m_aTextAppendStack.top().xCursor.get());
         if (xCursor.is())
             xCurrent = xCursor->getStart();
     }
@@ -9665,6 +9667,13 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
             }));
             xPropertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr,uno::Any(aFrameGrabBag));
         }
+    }
+
+    if (m_pSdtHelper->getControlType() == SdtControlType::plainText
+        && (m_StreamStateStack.top().bSdt || GetSdtStarts().size()))
+    {
+        // plainText controls cannot contain pictures or shapes
+        m_pSdtHelper->setControlType(SdtControlType::richText);
     }
 
 
@@ -9862,18 +9871,17 @@ void DomainMapper_Impl::ExecuteFrameConversion()
         std::vector<sal_Int32> redPos, redLen;
         try
         {
-            uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert( GetTopTextAppend(), uno::UNO_QUERY_THROW );
+            rtl::Reference< SwXText > xTextAppendAndConvert = dynamic_cast<SwXText*>( GetTopTextAppend().get() );
             // convert redline ranges to cursor movement and character length
             sal_Int32 redIdx;
             lcl_CopyRedlines(GetTopTextAppend(), m_aStoredRedlines[StoredRedlines::FRAME], redPos, redLen, redIdx);
 
-            const uno::Reference< text::XTextContent > xTextContent = xTextAppendAndConvert->convertToTextFrame(
+            const rtl::Reference< SwXTextFrame > xTextContent = xTextAppendAndConvert->convertToSwTextFrame(
                 m_xFrameStartRange,
                 m_xFrameEndRange,
-                comphelper::containerToSequence(m_aFrameProperties) );
+                m_aFrameProperties );
 
-            uno::Reference< text::XText > xDest( xTextContent, uno::UNO_QUERY_THROW );
-            lcl_PasteRedlines(xDest, m_aStoredRedlines[StoredRedlines::FRAME], redPos, redLen, redIdx);
+            lcl_PasteRedlines(xTextContent, m_aStoredRedlines[StoredRedlines::FRAME], redPos, redLen, redIdx);
         }
         catch( const uno::Exception&)
         {

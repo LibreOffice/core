@@ -576,7 +576,7 @@ void SwUndoUpdateIndex::UndoImpl(::sw::UndoRedoContext & rContext)
     // dummy node so that SaveSection doesn't remove ToX section...
     SwTextNode *const pDeletionPrevention = rDoc.GetNodes().MakeTextNode(
         *rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode(),
-        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT));
+        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT));
     m_pSaveSectionUpdated->SaveSection(SwNodeRange(first, last), false);
     m_pSaveSectionOriginal->RestoreSection(rDoc, first.GetNode(), true);
     // delete before restoring nested undo, so its node indexes match
@@ -597,7 +597,7 @@ void SwUndoUpdateIndex::RedoImpl(::sw::UndoRedoContext & rContext)
     // dummy node so that SaveSection doesn't remove ToX section...
     SwTextNode *const pDeletionPrevention = rDoc.GetNodes().MakeTextNode(
         *rDoc.GetNodes()[m_nStartIndex]->EndOfSectionNode(),
-        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT));
+        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT));
     m_pSaveSectionOriginal->SaveSection(SwNodeRange(first, last), false);
     m_pSaveSectionUpdated->RestoreSection(rDoc, first.GetNode(), true);
     // delete before restoring nested undo, so its node indexes match

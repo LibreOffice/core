@@ -12,14 +12,15 @@
 #include <QtDoubleSpinBox.hxx>
 #include <QtExpander.hxx>
 #include <QtInstanceMenu.hxx>
+#include <QtInstanceMenuButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceNotebook.hxx>
 #include <QtInstanceTreeView.hxx>
 #include <QtHyperlinkLabel.hxx>
+#include <QtTreeViewModel.hxx>
 
 #include <vcl/qt/QtUtils.hxx>
 
-#include <QtCore/QSortFilterProxyModel>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QtGui/QActionGroup>
 #endif
@@ -278,25 +279,13 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         QLabel* pLabel = new QLabel(pParentWidget);
         const OUString sIconName = extractIconName(rMap);
         if (!sIconName.isEmpty())
-        {
-            const Image aImage = loadThemeImage(sIconName);
-            if (!aImage.GetBitmap().IsEmpty())
-            {
-                pLabel->setPixmap(toQPixmap(aImage));
-            }
-            else
-            {
-                const QIcon aIcon = QIcon::fromTheme(toQString(sIconName));
-                assert(!aIcon.isNull() && "No icon found for that icon name");
-                const int nIconSize = QApplication::style()->pixelMetric(QStyle::PM_ButtonIconSize);
-                pLabel->setPixmap(aIcon.pixmap(nIconSize));
-            }
-        }
+            pLabel->setPixmap(loadQPixmapIcon(sIconName));
         pObject = pLabel;
     }
     else if (sName == u"GtkLabel")
     {
         QLabel* pLabel = new QLabel(pParentWidget);
+        pLabel->setTextFormat(Qt::TextFormat::PlainText);
         setLabelProperties(*pLabel, rMap);
         extractMnemonicWidget(rId, rMap);
         pObject = pLabel;
@@ -404,26 +393,30 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     {
         pObject = new QToolBar(pParentWidget);
     }
-    else if (sName == u"GtkToggleToolButton" || sName == u"GtkToolButton")
+    else if (sName == u"GtkMenuToolButton" || sName == u"GtkRadioToolButton"
+             || sName == u"GtkToggleToolButton" || sName == u"GtkToolButton")
     {
         QToolButton* pToolButton = new QToolButton(pParentWidget);
         const OUString sIconName = extractIconName(rMap);
         if (!sIconName.isEmpty())
-        {
-            const Image aImage = loadThemeImage(sIconName);
-            pToolButton->setIcon(toQPixmap(aImage));
-        }
+            pToolButton->setIcon(loadQPixmapIcon(sIconName));
         pToolButton->setText(toQString(extractLabel(rMap)));
-        pToolButton->setCheckable(sName == u"GtkToggleToolButton");
+        pToolButton->setCheckable(sName == u"GtkRadioToolButton"
+                                  || sName == u"GtkToggleToolButton");
+
+        if (sName == u"GtkMenuToolButton")
+            pToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+
+        if (sName == u"GtkRadioToolButton")
+            extractRadioButtonGroup(rId, rMap);
+
         pObject = pToolButton;
     }
     else if (sName == u"GtkTreeView")
     {
         QTreeView* pTreeView = new QTreeView(pParentWidget);
-        QStandardItemModel* pItemModel = new QStandardItemModel(pTreeView);
-        QSortFilterProxyModel* pProxyModel = new QSortFilterProxyModel(pTreeView);
-        pProxyModel->setSourceModel(pItemModel);
-        pTreeView->setModel(pProxyModel);
+        QtTreeViewModel* pTreeViewModel = new QtTreeViewModel(pTreeView);
+        pTreeView->setModel(pTreeViewModel);
         pTreeView->setHeaderHidden(!extractHeadersVisible(rMap));
         pTreeView->setRootIsDecorated(extractShowExpanders(rMap));
         setItemViewProperties(*pTreeView, rMap);
@@ -645,8 +638,8 @@ void QtBuilder::setMnemonicWidget(const OUString& rLabelId, const OUString& rMne
 void QtBuilder::setRadioButtonGroup(const OUString& rRadioButtonId, const OUString& rRadioGroupId)
 {
     // insert all buttons into a button group owned by button whose ID matches the group's
-    QRadioButton* pGroupOwner = get<QRadioButton>(rRadioGroupId);
-    assert(pGroupOwner && "No radio button with the given group name");
+    QAbstractButton* pGroupOwner = get<QAbstractButton>(rRadioGroupId);
+    assert(pGroupOwner && "No button with the given group name");
 
     QButtonGroup* pButtonGroup = nullptr;
     static const char* const pPropertyKey = "PROPERTY_BUTTONGROUP";
@@ -661,7 +654,7 @@ void QtBuilder::setRadioButtonGroup(const OUString& rRadioButtonId, const OUStri
         pButtonGroup->addButton(pGroupOwner);
     }
 
-    QRadioButton* pRadioButton = get<QRadioButton>(rRadioButtonId);
+    QAbstractButton* pRadioButton = get<QAbstractButton>(rRadioButtonId);
     assert(pRadioButton && "No radio button with given ID");
     pButtonGroup->addButton(pRadioButton);
 
@@ -1007,6 +1000,7 @@ void QtBuilder::setMenuButtonProperties(QToolButton& rButton, stringmap& rProps,
     }
 
     setButtonProperties(rButton, rProps, pParentWidget);
+    QtInstanceMenuButton::updateToolButtonStyle(rButton);
 }
 
 void QtBuilder::setMessageDialogProperties(QMessageBox& rMessageBox, stringmap& rProps)

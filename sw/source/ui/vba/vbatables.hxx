@@ -24,6 +24,8 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef CollTestImplHelper< ov::word::XTables > SwVbaTables_BASE;

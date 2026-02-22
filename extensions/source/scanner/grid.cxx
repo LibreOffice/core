@@ -21,6 +21,7 @@
 #include <o3tl/sprintf.hxx>
 #include <osl/thread.h>
 #include <rtl/math.hxx>
+#include <tools/mapunit.hxx>
 
 #include <bitmaps.hlst>
 #include <cmath>
@@ -30,6 +31,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/customweld.hxx>
 
 #include <algorithm>

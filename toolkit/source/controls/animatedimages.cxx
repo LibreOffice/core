@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <o3tl/safeint.hxx>
+#include <rtl/ref.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 

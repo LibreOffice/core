@@ -31,6 +31,7 @@
 #include <frameformats.hxx>
 
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
@@ -48,27 +49,20 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testHiddenSectionPageDescs)
 {
     createSwDoc("hidden-sections-with-pagestyles.odt");
 
-    // disable Field Names warning dialog
-    const bool bAsk = officecfg::Office::Common::Misc::QueryShowFieldName::get();
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges;
-    if (bAsk)
     {
-        xChanges = comphelper::ConfigurationChanges::create();
-        officecfg::Office::Common::Misc::QueryShowFieldName::set(false, xChanges);
-        xChanges->commit();
-    }
+        // disable Field Names warning dialog
+        ScopedConfigValue<officecfg::Office::Common::Misc::QueryShowFieldName> aCfg(false);
 
-    // hide these just so that the height of the section is what is expected;
-    // otherwise height depends on which tests run previously
-    uno::Sequence<beans::PropertyValue> argsSH(
-        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
-    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
-    uno::Sequence<beans::PropertyValue> args(
-        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
-    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
-    Scheduler::ProcessEventsToIdle();
+        // hide these just so that the height of the section is what is expected;
+        // otherwise height depends on which tests run previously
+        uno::Sequence<beans::PropertyValue> argsSH(
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
+        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+        uno::Sequence<beans::PropertyValue> args(
+            comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+        dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+        Scheduler::ProcessEventsToIdle();
 
-    {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page", 2);
         assertXPath(pXmlDoc, "/root/page[1]", "formatName", u"Hotti");
@@ -85,12 +79,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testHiddenSectionPageDescs)
         assertXPath(pXmlDoc, "/root/page[2]/body/section[2]", "formatName", u"Rueckantwort");
         assertXPath(pXmlDoc, "/root/page[2]/body/section[2]/infos/bounds", "height", u"0");
         assertXPath(pXmlDoc, "/root/page[2]", "formatName", u"Folgeseite");
-    }
-
-    if (bAsk)
-    {
-        officecfg::Office::Common::Misc::QueryShowFieldName::set(true, xChanges);
-        xChanges->commit();
     }
 
     // toggle one section hidden and other visible
@@ -650,7 +638,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf134548)
     }
 }
 
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf124423)
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf124423_DOCX)
 {
     createSwDoc("tdf124423.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -661,12 +649,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf124423)
     sal_Int32 nPageWidth = getXPath(pXmlDoc, "//page/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_EQUAL(nPageWidth, nFly2Width);
     CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly1Width);
+}
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf124423_ODT)
+{
     createSwDoc("tdf124423.odt");
-    pXmlDoc = parseLayoutDump();
-    nFly1Width = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
-    nFly2Width = getXPath(pXmlDoc, "(//anchored/fly)[2]/infos/prtBounds", "width").toInt32();
-    nPageWidth = getXPath(pXmlDoc, "//page/infos/prtBounds", "width").toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nFly1Width
+        = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly2Width
+        = getXPath(pXmlDoc, "(//anchored/fly)[2]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nPageWidth = getXPath(pXmlDoc, "//page/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly2Width);
     CPPUNIT_ASSERT_LESS(nPageWidth / 2, nFly1Width);
 }
@@ -726,7 +719,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf138782)
             .toInt32());
 }
 
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf135035)
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf135035_DOCX)
 {
     createSwDoc("tdf135035.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -740,13 +733,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf135035)
     CPPUNIT_ASSERT_EQUAL(nParentWidth, nFly2Width);
     CPPUNIT_ASSERT_EQUAL(nParentWidth, nFly3Width);
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly1Width);
+}
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf135035_ODT)
+{
     createSwDoc("tdf135035.odt");
-    pXmlDoc = parseLayoutDump();
-    nFly1Width = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
-    nFly2Width = getXPath(pXmlDoc, "(//anchored/fly)[2]/infos/prtBounds", "width").toInt32();
-    nFly3Width = getXPath(pXmlDoc, "(//anchored/fly)[3]/infos/prtBounds", "width").toInt32();
-    nParentWidth = getXPath(pXmlDoc, "(//txt)[1]/infos/prtBounds", "width").toInt32();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nFly1Width
+        = getXPath(pXmlDoc, "(//anchored/fly)[1]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly2Width
+        = getXPath(pXmlDoc, "(//anchored/fly)[2]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nFly3Width
+        = getXPath(pXmlDoc, "(//anchored/fly)[3]/infos/prtBounds", "width").toInt32();
+    sal_Int32 nParentWidth = getXPath(pXmlDoc, "(//txt)[1]/infos/prtBounds", "width").toInt32();
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly2Width);
     CPPUNIT_ASSERT_LESS(nParentWidth / 2, nFly1Width);
     CPPUNIT_ASSERT_GREATER(nParentWidth, nFly3Width);
@@ -772,7 +771,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf139336_ColumnsWithFootnoteDoNotOccu
     assertXPath(pXmlDoc, "/root/page", 2);
 }
 
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage)
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_Old)
 {
     // Old odt files should keep their original layout, as it was before Tdf139336 fix.
     // The new odt file is only 1 page long, while the old odt file (with the same content)
@@ -786,9 +785,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf54465_ColumnsWithFootnoteDoNotOccup
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_GREATER(1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlXPathFreeObject(pXmlObj);
+}
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_New)
+{
     createSwDoc("tdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_New.odt");
-    pXmlDoc = parseLayoutDump();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 1);
 }
 
@@ -1120,6 +1122,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159259)
 
     CPPUNIT_ASSERT_EQUAL(paraRight, flyRight); // The fly is right-aligned
     CPPUNIT_ASSERT_EQUAL(paraHeight, flyHeight);
+
+    // tdf#170322: MS Word considers the document corrupt if a plainText control contains a field
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDocument, "//w:sdt/w:sdtPr", 1);
+    // the sdtPr must be a richText control, not plainText
+    assertXPath(pXmlDocument, "//w:sdt/w:sdtPr/w:text", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testLargeTopParaMarginAfterHiddenSection)
@@ -1833,12 +1842,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf162614)
     // - Expected: 770
     // - Actual  : 267
     assertXPath(pXmlDoc, "//page[2]/body/tab[2]/infos/bounds", "height", u"770");
+}
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf162614_2)
+{
     // Now a test for a case that took me some time to fix when creating the patch.
     // It is the greatly simplified tdf124795-5.
 
     createSwDoc("C4_must_start_on_p1.fodt");
-    pXmlDoc = parseLayoutDump();
+    auto pXmlDoc = parseLayoutDump();
 
     // The first line of C4 text must start on the first page - the initial version of the fix
     // moved it to page 2.

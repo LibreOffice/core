@@ -22,6 +22,8 @@
 #include <sal/types.h>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dialmgr.hxx>
@@ -35,6 +37,7 @@
 
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 
 using namespace ::com::sun::star::uno;

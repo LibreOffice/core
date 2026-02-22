@@ -12,15 +12,24 @@
 
 #include <vector>
 #include <tools/gen.hxx>
-#include <tools/stream.hxx>
 #include <tools/color.hxx>
 #include <vcl/graph.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 
-#include <vcl/pdf/PDFAnnotationSubType.hxx>
-#include <vcl/pdf/PDFAnnotationMarker.hxx>
+class SvStream;
+namespace com::sun::star::task
+{
+class XInteractionHandler;
+}
+namespace vcl::pdf
+{
+enum class PDFAnnotationSubType;
+}
+namespace vcl::pdf
+{
+struct PDFAnnotationMarker;
+}
 
 namespace vcl
 {

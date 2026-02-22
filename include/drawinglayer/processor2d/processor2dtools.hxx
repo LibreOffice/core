@@ -20,12 +20,12 @@
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSOR2DTOOLS_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <vcl/bitmap.hxx>
 #include <memory>
 
 namespace drawinglayer::geometry { class ViewInformation2D; }
 namespace drawinglayer::processor2d { class BaseProcessor2D; }
 
+class Bitmap;
 class OutputDevice;
 
 namespace drawinglayer::processor2d

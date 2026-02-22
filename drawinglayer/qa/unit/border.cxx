@@ -20,6 +20,7 @@
 #include <rtl/ref.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <editeng/borderline.hxx>

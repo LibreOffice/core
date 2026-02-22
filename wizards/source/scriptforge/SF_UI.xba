@@ -131,6 +131,8 @@ Dim oComp As Object				&apos;	com.sun.star.lang.XComponent
 				ActiveWindow = &quot;&quot;
 			End If
 		End With
+	Else
+		ActiveWindow = &quot;&quot;
 	End If
 
 End Function	&apos;	ScriptForge.SF_UI.ActiveWindow
@@ -491,6 +493,309 @@ Catch:
 End Function    &apos;   ScriptForge.SF_UI.Documents
 
 REM -----------------------------------------------------------------------------
+Public Function EnterValue(Optional ByRef Prompt As Variant _
+							, Optional ByVal ValueType As Variant _
+							, Optional ByVal Default As Variant _
+							, Optional ByVal Title As Variant _
+							, Optional ByRef Choices As Variant _
+							, Optional ByVal Format As Variant _
+							) As Variant
+&apos;&apos;&apos; Displays a typed input box and returns the value entered by the user
+&apos;&apos;&apos;	Args: Irrelevant arguments are ignored
+&apos;&apos;&apos;		Prompt: the message appearing above the input field. Default = the zero-length string
+&apos;&apos;&apos;			Use of \n and \t escape characters is allowed.
+&apos;&apos;&apos;		ValueType: one of next values:
+&apos;&apos;&apos;			BOOL: to display a checkbox
+&apos;&apos;&apos;			STRING: (default) the dialog will look like an InputBox
+&apos;&apos;&apos;			PASSWORD: idem STRING but the input string is not readable
+&apos;&apos;&apos;			LIST, COMBO, RADIO: to display a list- of alternative potential choices
+&apos;&apos;&apos;			INTEGER, FLOAT: to get a numeric value
+&apos;&apos;&apos;			DATE, TIME, DATETIME: to let the user choose a date, an hour or both
+&apos;&apos;&apos;		Default: the value displayed at box appearance and having the expected type.
+&apos;&apos;&apos;		Title: the text appearing at the top of the box
+&apos;&apos;&apos;		Choices: the list of possible values (LIST, COMBO and RADIO only), as an array/tuple
+&apos;&apos;&apos;		Format: the format in which to display dates, times or numeric values
+&apos;&apos;&apos;			Depends on the platform.FormatLocale
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A scalar of the given type, as entered by the user.
+&apos;&apos;&apos;		Returns Empty when the user cancelled the input box.
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		bool = ui.EnterValue(&quot;Do you prefer to leave ?&quot;, &quot;BOOL&quot;, True)
+&apos;&apos;&apos;		destination = ui.EnterValue(&quot;What is your next destination ?&quot;, &quot;LIST&quot;, _
+&apos;&apos;&apos;						Choices := Array(&quot;Belgium, &quot;Brazil&quot;, &quot;France&quot;, &quot;Mexico&quot;), _
+&apos;&apos;&apos;						Default := &quot;France&quot;, _
+&apos;&apos;&apos;						Title := &quot;This is in the titlebar&quot;)
+
+Dim vEnterValue As Variant			&apos;	Return value
+Dim oDialog As Object				&apos;	A SFDialogs.SF_Dialog class instance
+Dim oControl As Object				&apos;	A SFDialogs.SF_DialogControl class instance
+Dim oTime As Object					&apos;	An alternative SFDialogs.SF_DialogControl class instance to represent a TimeField
+Dim oButton As Object				&apos;	A button SFDialogs.SF_DialogControl class instance
+Dim iExecute As Integer				&apos;	dialog.Execute() return value
+
+Dim vPrompt As Variant				&apos;	Array of prompt rows
+Dim sPrompt As String				&apos;	A single prompt row
+Dim lPromptHeight As Long			&apos;	Height of prompt (all lengths in MAP APPFONT units)
+Dim lPromptWidth As Long			&apos;	Width of prompt
+
+Dim lControlY As Long				&apos;	Vertical ordinate of control
+Dim lControlHeight As Long			&apos;	Height of control
+Dim lControlWidth As Long			&apos;	Width of control
+Dim sItem As String					&apos;	A single item in Default()
+Dim lItemLength As Long				&apos;	Length of an item in Default()
+
+Dim lDialogWidth As Long			&apos;	Width of dialog
+Dim lDialogHeight As Long			&apos;	Height of dialog
+
+Dim oStr As Object					:	Set oStr = CreateScriptService(&quot;String&quot;)
+Dim i As Long
+
+Const LEFTMARGIN = 10 _
+		, TOPMARGIN = 10 _
+		, RIGHTMARGIN = 10 _
+		, BOTTOMMARGIN = 10
+Const INTERVAL = 3
+&apos;	One Map AppFont unit is equal to one eighth of the average character (Systemfont) height and one quarter of the average character width.
+Const TEXTHEIGHT = 8, TEXTWIDTH = 4, TEXTOFFSET = 2, MAXTEXTLENGTH = 70
+Const NUMERICWIDTH = 150, CHECKBOXWIDTH = 8, DATEWIDTH = 50, TIMEWIDTH = 50
+Const TABSIZE = 4
+Const LISTWIDTH = 20, MAXLISTCOUNT = 8
+Const GROUPBOXMARGIN = 2
+Const BUTTONWIDTH = 40, BUTTONHEIGHT = 10
+
+Const cstThisSub = &quot;UI.EnterValue&quot;
+Const cstSubArgs = &quot;Prompt, ValueType=&quot;&quot;BOOL&quot;&quot;|&quot;&quot;STRING&quot;&quot;|&quot;&quot;LIST&quot;&quot;|&quot;&quot;COMBO&quot;&quot;|&quot;&quot;RADIO&quot;&quot;&quot; _
+			&amp; &quot;|&quot;&quot;INTEGER&quot;&quot;|&quot;&quot;FLOAT&quot;&quot;|&quot;&quot;PASSWORD&quot;&quot;|&quot;&quot;DATE&quot;&quot;|&quot;&quot;TIME&quot;&quot;|&quot;&quot;DATETIME&quot;&quot;&quot; _
+			&amp; &quot;, [Default], [Title], [Choices], [Format]&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vEnterValue = Empty
+
+Check:
+	If IsMissing(Prompt) Or IsEmpty(Prompt) Then Prompt = &quot;&quot;
+	If IsMissing(ValueType) Or IsEmpty(ValueType) Then ValueType = &quot;STRING&quot;
+	If IsMissing(Default) Or IsEmpty(Default) Then Default = &quot;&quot;
+	If IsMissing(Choices) Or IsEmpty(Choices) Then Choices = Array()
+	If IsMissing(Title) Or IsEmpty(Title) Then Title = &quot;&quot;
+	If IsMissing(Format) Or IsEmpty(Format) Then Format = &quot;&quot;
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(Prompt, &quot;Prompt&quot;, V_STRING) Then GoTo Finally
+		If Not SF_Utils._Validate(ValueType, &quot;ValueType&quot;, V_STRING, _
+			Split(&quot;BOOL,STRING,LIST,COMBO,RADIO,INTEGER,FLOAT,PASSWORD,DATE,TIME,DATETIME,&quot;, &quot;,&quot;) _
+			) Then GoTo Finally
+		If Len(ValueType) = 0 Then ValueType = &quot;STRING&quot;
+		If Not SF_Utils._Validate(Default, &quot;Default&quot;, Array(V_STRING, V_NUMERIC, V_DATE, V_BOOLEAN)) Then GoTo Finally
+		If Not SF_Utils._ValidateArray(Choices, &quot;Choices&quot;, 1, V_STRING, True) Then GoTo Finally
+		If Not SF_Utils._Validate(Title, &quot;Title&quot;, V_STRING) Then GoTo Finally
+		If Not SF_Utils._Validate(Format, &quot;Format&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	lDialogWidth = 0
+	lDialogHeight = 0
+
+	&apos;	Compute prompt size
+	vPrompt = oStr.Wrap(Prompt, MAXTEXTLENGTH, TabSize := TABSIZE)
+	lPromptWidth = 0
+	For Each sPrompt in vPrompt
+		If lPromptWidth &lt; Len(sPrompt) Then lPromptWidth = Len(sPrompt)
+	Next sPrompt
+	lPromptWidth = lPromptWidth * TEXTWIDTH
+	If lPromptWidth &gt; lDialogWidth Then lDialogWidth = lPromptWidth
+	lPromptHeight = ((UBound(vPrompt) + 1) * (TEXTHEIGHT + TEXTOFFSET)) - TEXTOFFSET
+
+	&apos;	Compute dialog control size
+	lControlHeight = TEXTHEIGHT
+	Select Case UCase(ValueType)
+		Case &quot;STRING&quot;, &quot;PASSWORD&quot;
+			lControlWidth = TEXTWIDTH * MAXTEXTLENGTH
+		Case &quot;BOOL&quot;
+			lControlHeight = lPromptHeight
+		Case &quot;INTEGER&quot;, &quot;FLOAT&quot;
+			lControlWidth = NUMERICWIDTH
+		Case &quot;DATE&quot;
+			lControlWidth = DATEWIDTH
+		Case &quot;TIME&quot;
+			lControlWidth = TIMEWIDTH
+		Case &quot;DATETIME&quot;
+			lControlWidth = DATEWIDTH + TEXTOFFSET + TIMEWIDTH
+		Case &quot;COMBO&quot;, &quot;LIST&quot;, &quot;RADIO&quot;
+			lControlWidth = LISTWIDTH
+			lItemLength = 0
+			For Each sItem in Choices()
+				If Len(sItem) &gt; lItemLength Then lItemLength = Len(sItem)
+			Next sItem
+			lControlWidth = lControlWidth + lItemLength * TEXTWIDTH
+			If UCase(ValueType) = &quot;LIST&quot; Then
+				lControlHeight = ((TEXTHEIGHT + TEXTOFFSET) _
+									* Iif(UBound(Choices) &gt; MAXLISTCOUNT - 1, MAXLISTCOUNT, UBound(Choices) + 1)) _
+									- TEXTOFFSET
+			ElseIf UCase(ValueType) = &quot;RADIO&quot; Then
+				lControlHeight = (TEXTHEIGHT + TEXTOFFSET) * (UBound(Choices) + 1) - TEXTOFFSET
+			End If
+	End Select
+	If lControlWidth &gt; lDialogWidth Then lDialogWidth = lControlWidth
+
+	&apos;	Setup of dialog
+	lDialogHeight = TOPMARGIN + Iif(UCase(ValueType) = &quot;BOOL&quot;, 0, lPromptHeight + INTERVAL) + lControlHeight
+	Set oDialog = CreateScriptService(&quot;SFDialogs.NewDialog&quot;, &quot;EnterValue&quot; _
+					, Array(0, 0, LEFTMARGIN + lDialogWidth + RIGHTMARGIN, TOPMARGIN + lDialogHeight + BUTTONHEIGHT + BOTTOMMARGIN) _
+					)
+	With oDialog
+		If Len(Title) &gt; 0 Then .Caption = Title
+		Select Case UCase(ValueType)
+			Case &quot;BOOL&quot;
+				&apos;	Prompt is set at input control level
+			Case Else
+				Set oControl = .CreateFixedText(&quot;Prompt&quot; _
+						, Place := Array(LEFTMARGIN, TOPMARGIN, lPromptWidth, lPromptHeight) _
+						, MultiLine := ( UBound(vPrompt) &gt; 0 ) _
+						)
+				oControl.Caption = Join(vPrompt, &quot;&quot;)
+		End Select
+	End With
+
+	&apos;	Setup of enabled control(s)
+	lControlY = TOPMARGIN + lPromptHeight + INTERVAL
+	Select Case UCase(ValueType)
+		Case &quot;STRING&quot;, &quot;PASSWORD&quot;
+			Set oControl = oDialog.CreateTextField(&quot;InputField&quot; _
+					, Place := Array(LEFTMARGIN, lControlY, lControlWidth, TEXTHEIGHT) _
+					, MultiLine := False _
+					, PasswordCharacter := Iif(UCase(ValueType) = &quot;PASSWORD&quot;, &quot;*&quot;, &quot;&quot;))
+			If VarType(Default) = V_STRING Then oControl.Value = Default
+		Case &quot;INTEGER&quot;, &quot;FLOAT&quot;
+			Set oControl = oDialog.CreateFormattedField(&quot;InputField&quot; _
+					, Place := Array(LEFTMARGIN, lControlY, lControlWidth, TEXTHEIGHT) _
+					, SpinButton := ( UCase(ValueType) = &quot;INTEGER&quot; ))
+			If Len(Format) &gt; 0 Then oControl.Format = Format
+			If SF_Utils._VarTypeExt(Default) = V_NUMERIC Then oControl.Value = Default
+		Case &quot;BOOL&quot;
+			Set oControl = oDialog.CreateCheckBox(&quot;InputField&quot; _
+					, Place := Array(LEFTMARGIN, TOPMARGIN, lPROMPTWidth + CHECKBOXWIDTH, lPromptHeight) _
+					, MultiLine := ( UBound(vPrompt) &gt; 0 ) _
+					)
+			oControl.Caption = Join(vPrompt, &quot;&quot;)
+			oControl.TripleState = False
+			If VarType(Default) = V_BOOLEAN Then oControl.Value = Default
+		Case &quot;DATE&quot;
+			Set oControl = oDialog.CreateDateField(&quot;InputField&quot; _
+					, Place := Array(LEFTMARGIN, lControlY, lControlWidth, TEXTHEIGHT) _
+					, DropDown := True _
+					)
+			If VarType(Default) = V_DATE Then oControl.Value = Default
+		Case &quot;TIME&quot;
+			Set oControl = oDialog.CreateTimeField(&quot;InputField&quot; _
+					, Place := Array(LEFTMARGIN, lControlY, lControlWidth, TEXTHEIGHT) _
+					)
+			oControl.Format = &quot;24h long&quot;	&apos;	Include seconds
+			If VarType(Default) = V_DATE Then oControl.Value = Default
+		Case &quot;DATETIME&quot;
+			Set oControl = oDialog.CreateDateField(&quot;InputField&quot; _
+					, Place := Array(LEFTMARGIN, lControlY, DATEWIDTH, TEXTHEIGHT) _
+					, DropDown := True _
+					)
+			If VarType(Default) = V_DATE Then oControl.Value = DateSerial(Year(Default), Month(Default), Day(Default))
+			Set oTime = oDialog.CreateTimeField(&quot;TimeField&quot; _
+					, Place := Array(LEFTMARGIN + DATEWIDTH + TEXTOFFSET, lControlY, TIMEWIDTH, TEXTHEIGHT) _
+					)
+			oTime.Format = &quot;24h long&quot;	&apos;	Include seconds
+			If VarType(Default) = V_DATE Then oTime.Value = TimeSerial(Hour(Default), Minute(Default), Second(Default))
+		Case &quot;COMBO&quot;
+			Set oControl = oDialog.CreateComboBox(&quot;InputField&quot; _
+					, Place := Array(LEFTMARGIN, lControlY, lControlWidth, TEXTHEIGHT) _
+					, DropDown := True _
+					, LineCount := Iif(UBound(Choices) &gt; MAXLISTCOUNT - 1, MAXLISTCOUNT, UBound(Choices) + 1) _
+					)
+			oControl.RowSource = Choices
+			If Len(Default) &gt; 0 Then
+				oControl.Value = Default
+			ElseIf UBound(Choices) &gt;= 0 Then
+				oControl.Value = Choices(0)
+			End If
+		Case &quot;LIST&quot;
+			Set oControl = oDialog.CreateListBox(&quot;InputField&quot; _
+					, Place := Array(LEFTMARGIN, lControlY, lControlWidth, lControlHeight) _
+					, DropDown := False _
+					, LineCount := Iif(UBound(Choices) &gt; MAXLISTCOUNT - 1, MAXLISTCOUNT, UBound(Choices) + 1) _
+					, MultiSelect := False _
+					)
+			oControl.RowSource = Choices
+			If Len(Default) &gt; 0 Then
+				oControl.Value = Default
+			ElseIf UBound(Choices) &gt;= 0 Then
+				oControl.Value = Choices(0)
+			End If
+		Case &quot;RADIO&quot;
+			For i = 0 To UBound(Choices)
+				Set oControl = oDialog.CreateRadioButton(&quot;InputField&quot; &amp; Right(&quot;0&quot; &amp; i, 2) _
+						, Place := Array(LEFTMARGIN, lControlY + i * (TEXTHEIGHT + TEXTOFFSET), lControlWidth, TEXTHEIGHT) _
+						, MultiLine := False _
+						)
+				oControl.Caption = Choices(i)
+				If Len(Default) &gt; 0 Then oControl.Value = ( Default = Choices(i) ) Else oControl.Value = ( i = 0 )
+			Next i
+			oDialog.CreateGroupBox(&quot;GroupBox&quot; _
+					, Place := Array(LEFTMARGIN - GROUPBOXMARGIN, lControlY - GROUPBOXMARGIN _
+						, lControlWidth + (2 * GROUPBOXMARGIN), oControl.Y + TEXTHEIGHT + (2 * GROUPBOXMARGIN) - lControlY) _
+					)
+		Case Else
+	End Select
+
+	&apos;	Define the Cancel and OK buttons
+	With oDialog
+		Set oButton = .CreateButton(&quot;CancelButton&quot; _
+				, Place := Array(.Width - RIGHTMARGIN - BUTTONWIDTH, .Height - BOTTOMMARGIN - BUTTONHEIGHT _
+									, BUTTONWIDTH, BUTTONHEIGHT) _
+				, Push := &quot;CANCEL&quot; _
+				)
+		Set oButton = .CreateButton(&quot;OKButton&quot; _
+				, Place := Array(oButton.X - BUTTONWIDTH - INTERVAL, oButton.Y, BUTTONWIDTH, BUTTONHEIGHT) _
+				, Push := &quot;OK&quot; _
+				)
+		oButton.Default = True
+	End With
+
+	&apos;	Run the dialog
+	oControl.SetFocus()
+	oDialog.Center()
+	iExecute = oDialog.Execute(Modal := True)
+	If iExecute = oDialog.OKBUTTON Then
+		Select Case UCase(ValueType)
+			Case &quot;STRING&quot;, &quot;PASSWORD&quot;, &quot;DATE&quot;, &quot;TIME&quot;, &quot;COMBO&quot;, &quot;LIST&quot;
+				vEnterValue = oControl.Value
+			Case &quot;INTEGER&quot;
+				vEnterValue = CLng(oControl.Value)
+			Case &quot;FLOAT&quot;
+				vEnterValue = CDbl(oControl.Value)
+			Case &quot;BOOL&quot;
+				vEnterValue = CBool(oControl.Value)
+			Case &quot;DATETIME&quot;
+				vEnterValue = CDate(oControl.Value + oTime.Value)
+			Case &quot;RADIO&quot;
+				For i = 0 To UBound(Choices)
+					Set oControl = oDialog.Controls(&quot;InputField&quot; &amp; Right(&quot;0&quot; &amp; i, 2))
+					If oControl.Value = True Then
+						vEnterValue = Choices(i)
+						Exit For
+					End If
+				Next i
+			Case Else
+		End Select
+	End If
+
+	oControl.Dispose()
+	oDialog.Terminate()
+
+Finally:
+	EnterValue = vEnterValue
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function    &apos;   ScriptForge.SF_UI.EnterValue
+
+REM -----------------------------------------------------------------------------
 Public Function GetDocument(Optional ByVal WindowName As Variant) As Variant
 &apos;&apos;&apos; Returns a SFDocuments.Document object referring to the active window or the given window
 &apos;&apos;&apos;	Args:
@@ -615,7 +920,7 @@ Try:
 		Loop
 	Else
 		vWindow = SF_UI._IdentifyWindow(StarDesktop.CurrentComponent)
-		bFound = True
+		bFound = Not IsNull(vWindow.Frame)
 	End If
 
 	If bFound Then
@@ -671,7 +976,7 @@ Try:
 		Loop
 	Else
 		vWindow = SF_UI._IdentifyWindow(StarDesktop.CurrentComponent)
-		bFound = True
+		bFound = Not IsNull(vWindow.Frame)
 	End If
 
 	If bFound Then
@@ -694,6 +999,7 @@ Public Function Methods() As Variant
 					, &quot;CreateBaseDocument&quot; _
 					, &quot;CreateDocument&quot; _
 					, &quot;Documents&quot; _
+					, &quot;EnterValue&quot; _
 					, &quot;GetDocument&quot; _
 					, &quot;Maximize&quot; _
 					, &quot;Minimize&quot; _
@@ -1013,7 +1319,7 @@ Try:
 	Next i
 	Set oDispatch = SF_Utils._GetUNOService(&quot;DispatchHelper&quot;)
 	If SF_String.StartsWith(Command, cstPrefix) Then sCommand = Command Else sCommand = cstPrefix &amp; Command
-	oDispatch.executeDispatch(StarDesktop.ActiveFrame, sCommand, &quot;&quot;, 0, vProps)
+	If Not IsNull (StarDesktop.ActiveFrame) Then oDispatch.executeDispatch(StarDesktop.ActiveFrame, sCommand, &quot;&quot;, 0, vProps)
 
 Finally:
 	SF_Utils._ExitFunction(cstThisSub)

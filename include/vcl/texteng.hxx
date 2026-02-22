@@ -34,7 +34,6 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <vcl/font.hxx>
-#include <vcl/vclenum.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -63,6 +62,7 @@ namespace com::sun::star::i18n {
 }
 
 class LocaleDataWrapper;
+enum class TxtAlign;
 
 typedef std::vector<TextView*> TextViews;
 

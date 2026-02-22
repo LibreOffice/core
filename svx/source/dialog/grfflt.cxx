@@ -17,11 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/animate/Animation.hxx>
 #include <vcl/bitmap/BitmapSharpenFilter.hxx>
 #include <vcl/bitmap/BitmapMedianFilter.hxx>
 #include <vcl/bitmap/BitmapSobelGreyFilter.hxx>
 #include <vcl/bitmap/BitmapPopArtFilter.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

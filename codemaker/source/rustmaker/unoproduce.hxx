@@ -46,10 +46,6 @@ public:
     // Finalize opaque pointer generation
     void finalizeGeneration();
 
-    // Static lookup tables for Rust keyword conflicts and type mappings
-    static const std::unordered_set<std::string_view> m_reservedKeywords;
-    static const std::unordered_map<std::string_view, OString> m_baseTypes;
-
 private:
     // Main UNO type processor - coordinates opaque generation for all types
     void produceType(const OString& name);

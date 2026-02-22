@@ -51,7 +51,7 @@ Example `bashrc` scriptlet:
 <https://doc.qt.io/qt-5/wasm.html>
 
 Most of the information from <https://doc.qt.io/qt-6/wasm.html> is still valid for Qt5;
-generally the Qt6 WASM documentation is much better, because it incorporated many
+generally the Qt6 WASM documentation is much better, because it incorporated much
 information from the Qt Wiki.
 
 FWIW: Qt 5.15 LTS is not maintained publicly and Qt WASM has quite a few bugs. Most
@@ -120,8 +120,8 @@ correct output file names, checked by `configure` (`a.out`).
 
 There's a distro config for WASM, but it just provides --host=wasm32-local-emscripten, which
 should be enough setup. The build itself is a cross build and the cross-toolset just depends
-on a minimal toolset (gcc, libc-dev, flex, bison); all else is build from source, because the
-final result is not depending on the build system at all.
+on a minimal toolset (gcc, libc-dev, flex, bison); all else is built from source, because the
+final result does not depend on the build system at all.
 
 Recommended configure setup is thusly:
 
@@ -156,7 +156,7 @@ The default html to use should be qt_soffice.html
 
 ### Debugging setup
 
-Since a few months you can use DWARF information embedded by LLVM into the WASM
+For a few months you can use DWARF information embedded by LLVM into the WASM
 to debug WASM in Chrome. You need to enable an experimental feature and install
 an additional extension. The whole setup is described in:
 
@@ -165,7 +165,7 @@ https://developer.chrome.com/blog/wasm-debugging-2020/
 This way you don't need source maps (much faster linking!) and can resolve local
 WASM variables to C++ names!
 
-Per default, the WASM debug build splits the DWARF information into an additional
+By default, the WASM debug build splits the DWARF information into an additional
 WASM file, postfixed '.debug.wasm'.
 
 ### Using Docker to cross-build with emscripten
@@ -175,7 +175,7 @@ is _not_ stable over time, as e.g. nodejs versions evolve), that is
 easy to replicate across different machines - consider the docker
 images we're providing.
 
-Config/setup file see
+For Config/setup file see
 <https://git.libreoffice.org/lode/+/ccb36979563635b51215477455953252c99ec013>
 
 Run
@@ -208,7 +208,7 @@ Right now there's a very rough implementation in place. With lots of different
 bits unimplemented. And it _might_ be leaking memory. i.e. Lots of room for
 improvement! ;)
 
-Some usage examples through javascript of the current implementation:
+Some usage examples through JavaScript of the current implementation:
 ```js
 // inserts a string at the start of the Writer document.
 Module.uno_init.then(function() {
@@ -300,8 +300,8 @@ This is mentioned at the end of:
 The usage of `MAIN_MODULE` and `SIDE_MODULE` has other problems, a major one IMHO is symbol resolution at runtime only.
 So this works really more like plugins in the sense of symbol resolution without dependencies `/` rpath.
 
-There is some clang-level dynamic-linking in progress (WASM dlload). The following link is already a bit old,
-but I found it a god summary of problems to expect:
+There is some clang-level dynamic-linking in progress (WASM dlopen). The following link is already a bit old,
+but I found it a good summary of problems to expect:
 
 - <https://iandouglasscott.com/2019/07/18/experimenting-with-webassembly-dynamic-linking-with-clang/>
 
@@ -313,13 +313,13 @@ More info on Qt WASM emscripten pthreads:
 - <https://wiki.qt.io/Qt_for_WebAssembly#Multithreading_Support>
 
 WASM needs `-pthread` at compile, not just link time for atomics support. Alternatively you can provide
-`-s USE_PTHREADS=1`, but both don't seem to work reliable, so best provide both.
+`-s USE_PTHREADS=1`, but both don't seem to work reliably, so best provide both.
 <https://github.com/emscripten-core/emscripten/issues/10370>
 
-The output file must have the prefix .o, otherwise the WASM files will get a
+The output file must have the suffix .o, otherwise the WASM files will get a
 `node.js` shebang (!) and ranlib won't be able to index the library (link errors).
 
-Qt with threads has further memory limit. From Qt configure:
+Qt with threads has a further memory limit. From Qt configure:
 ```
 Project MESSAGE: Setting PTHREAD_POOL_SIZE to 4
 Project MESSAGE: Setting TOTAL_MEMORY to 1GB
@@ -330,10 +330,10 @@ You can actually allocate 4GB:
 - <https://bugzilla.mozilla.org/show_bug.cgi?id=1392234>
 
 LO uses a nested event loop to run dialogs in general, but that won't work, because you can't drive
-the browser event loop. like VCL does with the system event loop in the various VCL backends.
+the browser event loop, like VCL does with the system event loop in the various VCL backends.
 Changing this will need some major work (basically dropping Application::Execute).
 
-But with the know problems with exceptions and threads, this might change:
+But with the known problems with exceptions and threads, this might change:
 
 - <https://github.com/emscripten-core/emscripten/pull/11518>
 - <https://github.com/emscripten-core/emscripten/issues/11503>

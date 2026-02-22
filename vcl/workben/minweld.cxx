@@ -18,6 +18,7 @@
 #include <i18nlangtag/mslangid.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sal/main.h>

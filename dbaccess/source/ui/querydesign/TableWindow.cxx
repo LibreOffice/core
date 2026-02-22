@@ -32,6 +32,8 @@
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/wall.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

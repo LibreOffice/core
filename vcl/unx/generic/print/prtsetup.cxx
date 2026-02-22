@@ -22,6 +22,7 @@
 #include <strings.hrc>
 
 #include <officecfg/Office/Common.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 using namespace psp;
 

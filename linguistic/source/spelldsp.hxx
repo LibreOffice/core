@@ -51,6 +51,7 @@ class SpellCheckerDispatcher :
 
     css::uno::Reference< css::linguistic2::XLinguProperties >           m_xPropSet;
     css::uno::Reference< css::linguistic2::XSearchableDictionaryList >  m_xDicList;
+    std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>> m_aDictionaryMap;
 
     LngSvcMgr                       &m_rMgr;
     mutable std::unique_ptr<linguistic::SpellCache> m_pCache; // Spell Cache (holds known words)

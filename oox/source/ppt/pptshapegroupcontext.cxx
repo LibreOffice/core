@@ -142,11 +142,15 @@ void PPTShapeGroupContext::importExtDrawings( )
     for (auto const& extDrawing : pGraphicShape->getExtDrawings())
     {
         OUString aFragmentPath = getFragmentPathFromRelId(extDrawing);
-        getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), aFragmentPath,
+        static bool bIgnoreExtDrawings(nullptr != std::getenv("DIAGRAM_IGNORE_EXTDRAWINGS"));
+        if (!bIgnoreExtDrawings)
+        {
+            getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), aFragmentPath,
                                                                    mpSlidePersistPtr,
                                                                    meShapeLocation,
                                                                    mpGroupShapePtr,
                                                                    pGraphicShape ) );
+        }
         pGraphicShape->keepDiagramDrawing(getFilter(), aFragmentPath);
 
         // Apply font color imported from color fragment

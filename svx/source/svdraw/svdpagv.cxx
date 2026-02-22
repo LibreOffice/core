@@ -37,6 +37,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <osl/diagnose.h>
+#include <vcl/rendercontext/DrawGridFlags.hxx>
 
 using namespace ::com::sun::star;
 

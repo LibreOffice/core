@@ -21,8 +21,15 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <basegfx/range/b2drange.hxx>
+
+namespace basegfx
+{
+class B2DRange;
+}
+namespace drawinglayer::geometry
+{
+class ViewInformation2D;
+}
 
 namespace drawinglayer::primitive2d
 {

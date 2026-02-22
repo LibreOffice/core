@@ -25,6 +25,7 @@
 #include <utility>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/decoview.hxx>
@@ -32,6 +33,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Entry.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>

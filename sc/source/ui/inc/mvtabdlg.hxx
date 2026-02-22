@@ -20,6 +20,7 @@
 #pragma once
 
 #include <types.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>

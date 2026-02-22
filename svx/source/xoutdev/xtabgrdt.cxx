@@ -25,6 +25,7 @@
 #include <svx/xtable.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/diagnose.h>

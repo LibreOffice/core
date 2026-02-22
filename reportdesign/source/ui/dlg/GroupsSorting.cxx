@@ -39,6 +39,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>

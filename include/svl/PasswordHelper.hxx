@@ -25,9 +25,11 @@
 #include <string_view>
 #include <optional>
 
+#include <rtl/ustring.hxx>
 #include <svl/svldllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
+
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 class SvPasswordHelper
 {

@@ -20,17 +20,20 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
+#include <tools/color.hxx>
 #include <vcl/wintypes.hxx>
-#include <vcl/image.hxx>
-#include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
 #include <vector>
 
+class Image;
 class UserDrawEvent;
 class VirtualDevice;
 class ValueSetAcc;
+
+namespace weld { class ScrolledWindow; }
 
 struct ValueSetItem;
 

@@ -22,8 +22,6 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <com/sun/star/drawing/ProjectionMode.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
 
@@ -32,6 +30,8 @@
 namespace drawinglayer::attribute {
     class ImpSdrSceneAttribute;
 }
+namespace com::sun::star::drawing { enum class ProjectionMode; }
+namespace com::sun::star::drawing { enum class ShadeMode; }
 
 
 namespace drawinglayer::attribute

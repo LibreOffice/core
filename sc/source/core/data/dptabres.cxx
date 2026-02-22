@@ -844,7 +844,7 @@ OUString ScDPResultData::GetMeasureString(tools::Long nMeasure, bool bForce, ScS
     {
         //  for user-specified subtotal function with all measures,
         //  display only function name
-        assert(unsigned(eForceFunc) < SAL_N_ELEMENTS(aFuncStrIds));
+        assert(unsigned(eForceFunc) < std::size(aFuncStrIds));
         if ( eForceFunc != SUBTOTAL_FUNC_NONE )
             return ScResId(aFuncStrIds[eForceFunc]);
 

@@ -316,6 +316,10 @@ bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
             m_pDropTarget->handleDropEvent(*pDropEvent);
             return true;
         }
+        case QEvent::Enter:
+        {
+            return signal_mouse_motion(MouseEvent({}, 0, MouseEventModifiers::ENTERWINDOW));
+        }
         case QEvent::KeyPress:
         {
             QKeyEvent* pKeyEvent = static_cast<QKeyEvent*>(pEvent);
@@ -325,6 +329,10 @@ bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
         {
             QKeyEvent* pKeyEvent = static_cast<QKeyEvent*>(pEvent);
             return signal_key_release(toVclKeyEvent(*pKeyEvent));
+        }
+        case QEvent::Leave:
+        {
+            return signal_mouse_motion(MouseEvent({}, 0, MouseEventModifiers::LEAVEWINDOW));
         }
         case QEvent::MouseButtonDblClick:
         case QEvent::MouseButtonPress:
@@ -602,9 +610,11 @@ OUString QtInstanceWidget::get_accessible_id() const
 #endif
 }
 
-void QtInstanceWidget::set_accessible_relation_labeled_by(weld::Widget*)
+void QtInstanceWidget::set_accessible_relation_labeled_by(weld::Widget* pLabel)
 {
-    assert(false && "Not implemented yet");
+    // QWidget doesn't have API to set a random widget as a11y label,
+    // take over the accessible name from the labelling widget instead
+    set_accessible_name(pLabel->get_accessible_name());
 }
 
 void QtInstanceWidget::set_tooltip_text(const OUString& rTip)
@@ -741,11 +751,6 @@ void QtInstanceWidget::queue_resize()
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] { getQWidget()->adjustSize(); });
-}
-
-void QtInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUString&)>&)
-{
-    assert(false && "Not implemented yet");
 }
 
 OUString QtInstanceWidget::strip_mnemonic(const OUString& rLabel) const

@@ -10,6 +10,19 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <comphelper/propertysequence.hxx>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
+#include <editeng/adjustitem.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/postitem.hxx>
+#include <names.hxx>
+#include <tblafmt.hxx>
+#include <tools/color.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <comphelper/classids.hxx>
 #include <tools/globname.hxx>
@@ -21,6 +34,7 @@
 #include <vcl/event.hxx>
 #include <editeng/langitem.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/vclevent.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 
@@ -662,7 +676,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testAtCharImageCopy)
     pWrtShell1->SelAll();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell1);
     xTransfer->Copy();
-    // Don't use createSwDoc(), UnoApiTest::loadWithParams() would dispose the first document.
+    // Don't use createSwDoc(), UnoApiTest::loadFromURL() would dispose the first document.
     mxComponent2 = loadFromDesktop(u"private:factory/swriter"_ustr);
 
     // When copying the body text from that document to a new one:
@@ -1091,6 +1105,80 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
     CPPUNIT_ASSERT(pRedline);
     CPPUNIT_ASSERT_EQUAL(RedlineType::Format, pRedline->GetType());
     CPPUNIT_ASSERT(!pRedline->GetRedlineData().Next());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableAutoFormats)
+{
+    // Create an empty document.
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+
+    // Check table styles size, by default we have 11 styles
+    CPPUNIT_ASSERT_EQUAL(size_t(11), pDoc->GetTableStyles().size());
+
+    // Create new style
+    SwTableAutoFormat aNewStyle(TableStyleName(u"TestStyle"_ustr));
+
+    // Change first-row styling
+    SwBoxAutoFormat* pField = aNewStyle.GetField(0);
+
+    // Change font posture
+    SvxPostureItem aPosture(FontItalic::ITALIC_NORMAL, RES_CHRATR_POSTURE);
+    pField->SetPosture(aPosture);
+
+    // Change font horizontal alignment
+    SvxAdjustItem aAdjust(SvxAdjust::Center, RES_PARATR_ADJUST);
+    pField->SetAdjust(aAdjust);
+
+    // Change font color
+    SvxColorItem aColor(COL_RED, RES_CHRATR_COLOR);
+    pField->SetColor(aColor);
+
+    // Change font background color
+    SvxBrushItem aBackground(COL_YELLOW, RES_BACKGROUND);
+    pField->SetBackground(aBackground);
+
+    // Add the new style to the doc
+    pDoc->GetTableStyles().AddAutoFormat(aNewStyle);
+
+    // Test the number of styles after adding the new style
+    CPPUNIT_ASSERT_EQUAL(size_t(12), pDoc->GetTableStyles().size());
+
+    // Save and reload the document
+    saveAndReload(TestFilter::ODT);
+
+    pDoc = getSwDoc();
+
+    // Test whether the new style is added
+    CPPUNIT_ASSERT_EQUAL(size_t(12), pDoc->GetTableStyles().size());
+
+    // Test that the new styles has all the new properties
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Rows", uno::Any(sal_Int32(2)) },
+                                           { "Columns", uno::Any(sal_Int32(2)) },
+                                           { "AutoFormat", uno::Any(u"TestStyle"_ustr) } }));
+
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"TestStyle"_ustr,
+                         getProperty<OUString>(xTextTable, u"TableTemplateName"_ustr));
+
+    uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getProperty<Color>(xCell, u"BackColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(
+        COL_RED, getProperty<Color>(getParagraphOfText(1, xCell->getText()), u"CharColor"_ustr));
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER,
+                         static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(
+                             getParagraphOfText(1, xCell->getText()), u"ParaAdjust"_ustr)));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontSlant_ITALIC,
+        getProperty<awt::FontSlant>(getParagraphOfText(1, xCell->getText()), u"CharPosture"_ustr));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

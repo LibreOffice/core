@@ -29,7 +29,10 @@
 #include <dsitems.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
+#include <vcl/wintypes.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <vcl/stdtext.hxx>
 #include <sqlmessage.hxx>

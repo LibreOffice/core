@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <osl/file.hxx>
+#include <rtl/ref.hxx>
 #include <sot/stg.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/storage.hxx>

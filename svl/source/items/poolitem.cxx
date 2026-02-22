@@ -18,6 +18,7 @@
  */
 
 #include <svl/poolitem.hxx>
+#include <tools/mapunit.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <osl/diagnose.h>

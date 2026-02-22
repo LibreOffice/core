@@ -30,6 +30,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <unotools/pathoptions.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace com::sun::star;
 

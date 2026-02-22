@@ -26,14 +26,14 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testCompilerHorizontal)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 5; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(12, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(12, i, 0));
+        double fLibre = pDoc->GetValue(12, i, 0);
+        double fExcel = pDocRes->GetValue(12, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
-        fLibre = pDoc->GetValue(ScAddress(13, i, 0));
-        fExcel = pDocRes->GetValue(ScAddress(13, i, 0));
+        fLibre = pDoc->GetValue(13, i, 0);
+        fExcel = pDocRes->GetValue(13, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
-        fLibre = pDoc->GetValue(ScAddress(14, i, 0));
-        fExcel = pDocRes->GetValue(ScAddress(14, i, 0));
+        fLibre = pDoc->GetValue(14, i, 0);
+        fExcel = pDocRes->GetValue(14, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -48,8 +48,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testCompilerNested)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 5; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -64,12 +64,12 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testCompilerString)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 5; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
 
-        fLibre = pDoc->GetValue(ScAddress(3, i, 0));
-        fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        fLibre = pDoc->GetValue(3, i, 0);
+        fExcel = pDocRes->GetValue(3, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -84,8 +84,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testCompilerInEq)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 7; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        double fLibre = pDoc->GetValue(3, i, 0);
+        double fExcel = pDocRes->GetValue(3, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -104,8 +104,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testCompilerPrecision)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 3; ++i)
     {
-        double fOpenCL = pDoc->GetValue(ScAddress(0, i, 0));
-        double fNormal = pDocRes->GetValue(ScAddress(0, i, 0));
+        double fOpenCL = pDoc->GetValue(0, i, 0);
+        double fNormal = pDocRes->GetValue(0, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fNormal, fOpenCL, fabs(1e-14*fOpenCL));
     }
 }
@@ -123,13 +123,13 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testSystematic)
     int nRow, nCol;
     for (nRow = 0; nRow < 1000; ++nRow)
     {
-        if (pDoc->GetString(ScAddress(0, nRow, 0)) == "a")
+        if (pDoc->GetString(0, nRow, 0) == "a")
         {
             nAVertBegin = nRow + 1;
 
             for (nCol = 0; nCol < 1000; ++nCol)
             {
-                if (pDoc->GetString(ScAddress(nCol, nRow, 0)) != "a")
+                if (pDoc->GetString(nCol, nRow, 0) != "a")
                 {
                     nAHorEnd = nCol;
                     break;
@@ -140,7 +140,7 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testSystematic)
     }
     for (; nRow < 1000; ++nRow)
     {
-        if (pDoc->GetString(ScAddress(0, nRow, 0)) != "a")
+        if (pDoc->GetString(0, nRow, 0) != "a")
         {
             nAVertEnd = nRow;
             break;
@@ -149,13 +149,13 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testSystematic)
 
     for (; nRow < 1000; ++nRow)
     {
-        if (pDoc->GetString(ScAddress(0, nRow, 0)) == "b")
+        if (pDoc->GetString(0, nRow, 0) == "b")
         {
             nBVertBegin = nRow + 1;
 
             for (nCol = 0; nCol < 1000; ++nCol)
             {
-                if (pDoc->GetString(ScAddress(nCol, nRow, 0)) != "b")
+                if (pDoc->GetString(nCol, nRow, 0) != "b")
                 {
                     nBHorEnd = nCol;
                     break;
@@ -166,7 +166,7 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testSystematic)
     }
     for (; nRow < 1000; ++nRow)
     {
-        if (pDoc->GetString(ScAddress(0, nRow, 0)) != "b")
+        if (pDoc->GetString(0, nRow, 0) != "b")
         {
             nBVertEnd = nRow;
             break;
@@ -186,8 +186,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testSystematic)
     {
         for (int j = 1; j < nAHorEnd; ++j)
         {
-            double fLibre = pDoc->GetValue(ScAddress(j, i, 0));
-            double fExcel = pDoc->GetValue(ScAddress(j, nBVertBegin + (i - nAVertBegin), 0));
+            double fLibre = pDoc->GetValue(j, i, 0);
+            double fExcel = pDoc->GetValue(j, nBVertBegin + (i - nAVertBegin), 0);
 
             const OString sFailedMessage =
                 OStringChar(static_cast<char>('A'+j)) +
@@ -211,35 +211,35 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testSharedFormulaXLS)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i < 5; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     for (SCROW i = 6; i < 14; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     for (SCROW i = 15; i < 18; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     for (SCROW i = 19; i < 22; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     for (SCROW i = 23; i < 25; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
         //double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
         // There seems to be a bug in LibreOffice beta
         ASSERT_DOUBLES_EQUAL(/*fExcel*/ 60.0, fLibre);
@@ -247,33 +247,33 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testSharedFormulaXLS)
 
     for (SCROW i = 25; i < 27; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     for (SCROW i = 28; i < 35; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     // workaround for a Calc beta bug
-    ASSERT_DOUBLES_EQUAL(25.0, pDoc->GetValue(ScAddress(2, 35, 0)));
-    ASSERT_DOUBLES_EQUAL(24.0, pDoc->GetValue(ScAddress(2, 36, 0)));
+    ASSERT_DOUBLES_EQUAL(25.0, pDoc->GetValue(2, 35, 0));
+    ASSERT_DOUBLES_EQUAL(24.0, pDoc->GetValue(2, 36, 0));
 
     for (SCROW i = 38; i < 43; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
     for (SCROW i = 5; i < 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(5, i, 1));
-        double fExcel = pDocRes->GetValue(ScAddress(5, i, 1));
+        double fLibre = pDoc->GetValue(5, i, 1);
+        double fExcel = pDocRes->GetValue(5, i, 1);
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
@@ -281,8 +281,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testSharedFormulaXLS)
     {
         for (SCCOL j = 6; j < 11; ++j)
         {
-            double fLibre = pDoc->GetValue(ScAddress(j, i, 1));
-            double fExcel = pDocRes->GetValue(ScAddress(j, i, 1));
+            double fLibre = pDoc->GetValue(j, i, 1);
+            double fExcel = pDocRes->GetValue(j, i, 1);
             CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre,
                 fabs(fExcel*0.0001));
         }
@@ -298,8 +298,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaCos)
 
     for (SCROW i = 0; i <= 15; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(1,i,0);
+        double fExcel = pDocRes->GetValue(1,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -314,8 +314,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaSinh)
 
     for (SCROW i = 0; i <= 15; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(1,i,0);
+        double fExcel = pDocRes->GetValue(1,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -330,141 +330,141 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialFormula)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
+        double fLibre = pDoc->GetValue(2,i,0);
+        double fExcel = pDocRes->GetValue(2,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(6,i,1));
-        double fExcel = pDocRes->GetValue(ScAddress(6,i,1));
+        double fLibre = pDoc->GetValue(6,i,1);
+        double fExcel = pDocRes->GetValue(6,i,1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2,i,2));
-        double fExcel = pDocRes->GetValue(ScAddress(2,i,2));
+        double fLibre = pDoc->GetValue(2,i,2);
+        double fExcel = pDocRes->GetValue(2,i,2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(6,i,3));
-        double fExcel = pDocRes->GetValue(ScAddress(6,i,3));
+        double fLibre = pDoc->GetValue(6,i,3);
+        double fExcel = pDocRes->GetValue(6,i,3);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 0; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3,i,4));
-        double fExcel = pDocRes->GetValue(ScAddress(3,i,4));
+        double fLibre = pDoc->GetValue(3,i,4);
+        double fExcel = pDocRes->GetValue(3,i,4);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 0; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3,i,5));
-        double fExcel = pDocRes->GetValue(ScAddress(3,i,5));
+        double fLibre = pDoc->GetValue(3,i,5);
+        double fExcel = pDocRes->GetValue(3,i,5);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 0; i < 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(5,i,6));
-        double fExcel = pDocRes->GetValue(ScAddress(5,i,6));
+        double fLibre = pDoc->GetValue(5,i,6);
+        double fExcel = pDocRes->GetValue(5,i,6);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3,i,7));
-        double fExcel = pDocRes->GetValue(ScAddress(3,i,7));
+        double fLibre = pDoc->GetValue(3,i,7);
+        double fExcel = pDocRes->GetValue(3,i,7);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3,i,8));
-        double fExcel = pDocRes->GetValue(ScAddress(3,i,8));
+        double fLibre = pDoc->GetValue(3,i,8);
+        double fExcel = pDocRes->GetValue(3,i,8);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3,i,9));
-        double fExcel = pDocRes->GetValue(ScAddress(3,i,9));
+        double fLibre = pDoc->GetValue(3,i,9);
+        double fExcel = pDocRes->GetValue(3,i,9);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2,i,10));
-        double fExcel = pDocRes->GetValue(ScAddress(2,i,10));
+        double fLibre = pDoc->GetValue(2,i,10);
+        double fExcel = pDocRes->GetValue(2,i,10);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(7,i,11));
-        double fExcel = pDocRes->GetValue(ScAddress(7,i,11));
+        double fLibre = pDoc->GetValue(7,i,11);
+        double fExcel = pDocRes->GetValue(7,i,11);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(5,i,12));
-        double fExcel = pDocRes->GetValue(ScAddress(5,i,12));
+        double fLibre = pDoc->GetValue(5,i,12);
+        double fExcel = pDocRes->GetValue(5,i,12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 0; i <= 12; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(6,i,13));
-        double fExcel = pDocRes->GetValue(ScAddress(6,i,13));
+        double fLibre = pDoc->GetValue(6,i,13);
+        double fExcel = pDocRes->GetValue(6,i,13);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3,i,14));
-        double fExcel = pDocRes->GetValue(ScAddress(3,i,14));
+        double fLibre = pDoc->GetValue(3,i,14);
+        double fExcel = pDocRes->GetValue(3,i,14);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(6,i,15));
-        double fExcel = pDocRes->GetValue(ScAddress(6,i,15));
+        double fLibre = pDoc->GetValue(6,i,15);
+        double fExcel = pDocRes->GetValue(6,i,15);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(6,i,16));
-        double fExcel = pDocRes->GetValue(ScAddress(6,i,16));
+        double fLibre = pDoc->GetValue(6,i,16);
+        double fExcel = pDocRes->GetValue(6,i,16);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 1; i <= 5; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(6,i,17));
-        double fExcel = pDocRes->GetValue(ScAddress(6,i,17));
+        double fLibre = pDoc->GetValue(6,i,17);
+        double fExcel = pDocRes->GetValue(6,i,17);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 0; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3,i,18));
-        double fExcel = pDocRes->GetValue(ScAddress(3,i,18));
+        double fLibre = pDoc->GetValue(3,i,18);
+        double fExcel = pDocRes->GetValue(3,i,18);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
     for (SCROW i = 0; i <= 18; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3,i,19));
-        double fExcel = pDocRes->GetValue(ScAddress(3,i,19));
+        double fLibre = pDoc->GetValue(3,i,19);
+        double fExcel = pDocRes->GetValue(3,i,19);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -479,8 +479,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaCorrel)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        double fLibre = pDoc->GetValue(3, i, 0);
+        double fExcel = pDocRes->GetValue(3, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -494,8 +494,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaFisher)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(1,i,0);
+        double fExcel = pDocRes->GetValue(1,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -510,8 +510,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaFisherInv)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(1,i,0);
+        double fExcel = pDocRes->GetValue(1,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -526,8 +526,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaGamma)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(1,i,0);
+        double fExcel = pDocRes->GetValue(1,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -541,8 +541,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialFvscheduleFormula)
 
     for (SCROW i = 0; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -557,8 +557,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testMathFormulaAbs)
     // Verify ABS Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(1,i,0);
+        double fExcel = pDocRes->GetValue(1,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -572,8 +572,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialSYDFormula)
 
     for (SCROW i = 0; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(4, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(4, i, 0));
+        double fLibre = pDoc->GetValue(4, i, 0);
+        double fExcel = pDocRes->GetValue(4, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -589,8 +589,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialIRRFormula)
 
     for (SCROW i = 0; i <= 6; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -606,8 +606,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaGammaLn)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(1,i,0);
+        double fExcel = pDocRes->GetValue(1,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -622,8 +622,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaGauss)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(1,i,0);
+        double fExcel = pDocRes->GetValue(1,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -638,8 +638,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaGeoMean)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(1,i,0);
+        double fExcel = pDocRes->GetValue(1,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -654,8 +654,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaHarMean)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        double fLibre = pDoc->GetValue(1,i,0);
+        double fExcel = pDocRes->GetValue(1,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -669,8 +669,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialSLNFormula)
 
     for (SCROW i = 0; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        double fLibre = pDoc->GetValue(3, i, 0);
+        double fExcel = pDocRes->GetValue(3, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -684,8 +684,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialMIRRFormula)
 
     for (SCROW i = 0; i <= 6; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        double fLibre = pDoc->GetValue(3, i, 0);
+        double fExcel = pDocRes->GetValue(3, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -699,8 +699,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialCoupdaybsFormula)
 
     for (SCROW i = 1; i <=10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(4, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(4, i, 0));
+        double fLibre = pDoc->GetValue(4, i, 0);
+        double fExcel = pDocRes->GetValue(4, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -714,8 +714,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialDollardeFormula)
 
     for (SCROW i = 0; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        double fLibre = pDoc->GetValue(2, i, 0);
+        double fExcel = pDocRes->GetValue(2, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -729,8 +729,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialCoupdaysFormula)
 
     for (SCROW i = 1; i <=10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(4, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(4, i, 0));
+        double fLibre = pDoc->GetValue(4, i, 0);
+        double fExcel = pDocRes->GetValue(4, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
@@ -745,8 +745,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialCoupdaysncFormula)
 
     for (SCROW i = 1; i <=10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(4, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(4, i, 0));
+        double fLibre = pDoc->GetValue(4, i, 0);
+        double fExcel = pDocRes->GetValue(4, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -759,8 +759,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinacialRateFormula)
 
     for (SCROW i = 1; i <= 5; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
+        double fLibre = pDoc->GetValue(6, i, 0);
+        double fExcel = pDocRes->GetValue(6, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -774,8 +774,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialAccrintmFormula)
 
     for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(5, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(5, i, 0));
+        double fLibre = pDoc->GetValue(5, i, 0);
+        double fExcel = pDocRes->GetValue(5, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -789,8 +789,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testFinancialCoupnumFormula)
 
     for (SCROW i = 0; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(4, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(4, i, 0));
+        double fLibre = pDoc->GetValue(4, i, 0);
+        double fExcel = pDocRes->GetValue(4, i, 0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }
@@ -805,8 +805,8 @@ CPPUNIT_TEST_FIXTURE(ScOpenCLTest1, testStatisticalFormulaNegbinomdist)
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i <= 9; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(3,i,0));
-        double fExcel = pDocRes->GetValue(ScAddress(3,i,0));
+        double fLibre = pDoc->GetValue(3,i,0);
+        double fExcel = pDocRes->GetValue(3,i,0);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 }

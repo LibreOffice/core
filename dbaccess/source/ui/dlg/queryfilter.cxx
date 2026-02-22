@@ -26,6 +26,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <connectivity/dbtools.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <strings.hxx>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 

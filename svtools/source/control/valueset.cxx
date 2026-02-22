@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

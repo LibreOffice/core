@@ -21,6 +21,8 @@
 
 #include <osl/mutex.hxx>
 
+#include <framework/AbstractResource.hxx>
+#include <framework/ResourceFactory.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <map>

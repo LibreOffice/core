@@ -31,6 +31,7 @@
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 
 #include <comphelper/sequence.hxx>
+#include <basegfx/color/bcolor.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>

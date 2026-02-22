@@ -235,7 +235,7 @@
 #define STR_COLUMN_VALUESET_ITEM3               NC_("STR_COLUMN_VALUESET_ITEM3", "2 columns with different size (left > right)")
 #define STR_COLUMN_VALUESET_ITEM4               NC_("STR_COLUMN_VALUESET_ITEM4", "2 columns with different size (left < right)")
 // Table styles, Writer internal, others are taken from Svx
-#define STR_TABSTYLE_DEFAULT                    NC_("STR_TABSTYLE_DEFAULT", "Default Table Style")
+#define STR_TABSTYLE_DEFAULT                    NC_("STR_TABSTYLE_DEFAULT", "Default Style")
 
 #define STR_PARAGRAPHSTYLEFAMILY                NC_("STR_PARAGRAPHSTYLEFAMILY", "Paragraph Styles")
 #define STR_CHARACTERSTYLEFAMILY                NC_("STR_CHARACTERSTYLEFAMILY", "Character Styles")
@@ -755,6 +755,7 @@
 #define STR_DELETE_FOOTNOTE                     NC_("STR_DELETE_FOOTNOTE", "Delete Footnote")
 #define STR_DELETE_ENDNOTE                      NC_("STR_DELETE_ENDNOTE", "Delete Endnote")
 #define STR_DELETE_ENTRY                        NC_("STR_DELETE_ENTRY", "~Delete")
+#define STR_FOR_SELECTED_ENTRY                  NC_("STR_FOR_SELECTED_ENTRY", "For Selected Entry")
 #define STR_UPDATE_SEL                          NC_("STR_UPDATE_SEL", "Selection")
 #define STR_UPDATE_INDEX                        NC_("STR_UPDATE_INDEX", "Indexes")
 #define STR_UPDATE_LINK                         NC_("STR_UPDATE_LINK", "Links")
@@ -1536,6 +1537,7 @@
 #define STR_COMPAT_OPT_UNDERLINETRAILINGSPACE NC_("STR_COMPAT_OPT_UNDERLINETRAILINGSPACE", "Underline Word-compatible trailing blanks")
 #define STR_COMPAT_OPT_BALANCESPACESANDIDEOGRAPHICSPACES NC_("STR_COMPAT_OPT_BALANCESPACESANDIDEOGRAPHICSPACES", "Adjust spaces to half the width of ideographic spaces, using Word-compatible rules")
 #define STR_COMPAT_OPT_ADJUSTTABLELINEHEIGHTSTOGRIDHEIGHT NC_("STR_COMPAT_OPT_ADJUSTTABLELINEHEIGHTSTOGRIDHEIGHT", "Adjust line heights to grid height in table")
+#define STR_COMPAT_OPT_LISTLABELALIGNMENTIGNORESDIRECTION NC_("STR_COMPAT_OPT_LISTLABELALIGNMENTIGNORESDIRECTION", "Ignore paragraph directions for list label alignment")
 
 #define STR_TABLE_PANEL_ALIGN_AUTO              NC_("sidebartableedit|alignautolabel", "Automatic")
 #define STR_TABLE_PANEL_ALIGN_LEFT              NC_("sidebartableedit|alignleftlabel", "Left")
@@ -1576,6 +1578,8 @@
 #define STR_PAGES NNC_("STR_PAGES", "Page: %1", "Pages: %1-%2")
 
 #define STR_UNDO_SORT_CHAPTERS NC_("STR_UNDO_SORT_CHAPTERS", "Sort chapters")
+
+#define STR_UNDO_UNFLOAT_FRAME_CONTENT NC_("STR_UNDO_UNFLOAT_FRAME_CONTENT", "Unfloat frame content")
 
 #endif
 

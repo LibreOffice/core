@@ -36,6 +36,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/zcodec.hxx>
@@ -48,6 +49,7 @@
 
 #include <svx/unopage.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>

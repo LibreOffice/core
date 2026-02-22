@@ -33,9 +33,21 @@ excludelist:
     cui/source/tabpages/numfmt.cxx:
     # Actually used
     - com/sun/star/frame/XModel.hpp
+    cui/source/tabpages/tpgradnt.cxx:
+    # Needed for implicit dtor
+    - vcl/weld/ScrolledWindow.hxx
+    cui/source/tabpages/tphatch.cxx:
+    # Needed for implicit dtor
+    - vcl/weld/ScrolledWindow.hxx
+    cui/source/tabpages/tppattern.cxx:
+    # Needed for implicit dtor
+    - vcl/weld/ScrolledWindow.hxx
     cui/source/customize/cfg.cxx:
     # Actually used
     - com/sun/star/ui/dialogs/XFilePicker3.hpp
     cui/source/dialogs/AdditionsDialog.cxx:
     # Actually needed for orcus::json::parse_error
     - orcus/json_parser.hpp
+    cui/source/options/optchart.cxx:
+    # Needed for implicit dtor
+    - vcl/weld/ScrolledWindow.hxx

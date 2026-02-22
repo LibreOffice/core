@@ -566,7 +566,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
             }
 
             if( pCNd &&
-                RES_POOLCOLL_TABLE_HDLN !=
+                SwPoolFormatId::COLL_TABLE_HDLN !=
                     pCNd->GetFormatColl()->GetPoolFormatId() )
                 bReplaceColl = false;
         }
@@ -583,19 +583,18 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
     if( !pTextNd )
         return;
 
-    const sal_uInt16 nPoolId = pTextNd->GetTextColl()->GetPoolFormatId();
+    const SwPoolFormatId nPoolId = pTextNd->GetTextColl()->GetPoolFormatId();
     if( bReplaceColl &&
         (( 1 < rDstTable.GetTabLines().size() &&
             pLine == rDstTable.GetTabLines().front() )
             // Is the Table's content still valid?
-            ? RES_POOLCOLL_TABLE == nPoolId
-            : RES_POOLCOLL_TABLE_HDLN == nPoolId ) )
+            ? SwPoolFormatId::COLL_TABLE == nPoolId
+            : SwPoolFormatId::COLL_TABLE_HDLN == nPoolId ) )
     {
         SwTextFormatColl* pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(
-            o3tl::narrowing<sal_uInt16>(
-                                RES_POOLCOLL_TABLE == nPoolId
-                                    ? RES_POOLCOLL_TABLE_HDLN
-                                    : RES_POOLCOLL_TABLE ) );
+                                SwPoolFormatId::COLL_TABLE == nPoolId
+                                    ? SwPoolFormatId::COLL_TABLE_HDLN
+                                    : SwPoolFormatId::COLL_TABLE );
         if( pColl )         // Apply style
         {
             SwPaM aPam( aSavePos );

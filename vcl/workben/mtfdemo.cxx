@@ -11,6 +11,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vcl/vclmain.hxx>
 #include <vcl/gdimtf.hxx>

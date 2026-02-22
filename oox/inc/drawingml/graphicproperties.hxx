@@ -37,6 +37,7 @@ struct GraphicProperties
 {
     BlipFillProperties      maBlipProps;            ///< Properties for the graphic.
     OUString                m_sMediaPackageURL;     ///< Audio/Video URL.
+    OUString                m_sMediaMimeType;
     bool                    mbIsCustomShape = false;
     bool                    mbIsExtruded = false;
     css::uno::Reference<css::io::XInputStream> m_xMediaStream; ///< Audio/Video input stream.

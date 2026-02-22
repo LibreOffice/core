@@ -33,6 +33,7 @@
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -318,6 +319,7 @@ void ScTabView::InvalidateAttribs()
         rBindings.Invalidate( SID_ATTR_BORDER_DIAG_TLBR );
         rBindings.Invalidate( SID_ATTR_BORDER_DIAG_BLTR );
         rBindings.Invalidate( SID_NUMBER_TYPE_FORMAT );
+        rBindings.Invalidate( SID_DATABASE_SETTINGS );
     }
 
     rBindings.Invalidate( SID_BACKGROUND_COLOR );
@@ -579,6 +581,7 @@ void ScTabView::SelectionChanged(bool bFromPaste)
 
     rBindings.Invalidate( SID_CURRENTCELL );    // -> Navigator
     rBindings.Invalidate( SID_AUTO_FILTER );    // -> Menu
+    rBindings.Invalidate( SID_INSERT_CALCTABLE );
     rBindings.Invalidate( FID_NOTE_VISIBLE );
     rBindings.Invalidate( FID_SHOW_NOTE );
     rBindings.Invalidate( FID_HIDE_NOTE );
@@ -668,15 +671,7 @@ void ScTabView::CursorPosChanged()
 
     //  Broadcast, so that other Views of the document also switch
 
-    ScDocument& rDocument = aViewData.GetDocument();
-    bool bDataPilot = rDocument.HasDataPilotAtPosition(aViewData.GetCurPos());
-    aViewData.GetViewShell()->SetPivotShell(bDataPilot);
-
-    if (!bDataPilot)
-    {
-        bool bSparkline = rDocument.HasSparkline(aViewData.GetCurPos());
-        aViewData.GetViewShell()->SetSparklineShell(bSparkline);
-    }
+    aViewData.GetViewShell()->UpdateContextShells();
 
     //  UpdateInputHandler now in CellContentChanged
 

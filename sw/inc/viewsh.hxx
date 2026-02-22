@@ -477,6 +477,8 @@ public:
 
     SW_DLLPUBLIC void SetAdjustTableLineHeightsToGridHeight(bool bValue);
 
+    SW_DLLPUBLIC void SetListLabelAlignmentIgnoresDirection(bool bValue);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.
@@ -523,9 +525,9 @@ public:
     void LockView( bool b )   { mbViewLocked = b;    }
 
     inline void LockPaint(LockPaintReason eReason);
-           void ImplLockPaint();
+    SW_DLLPUBLIC void ImplLockPaint();
     inline void UnlockPaint(bool bVirDev = false );
-           void ImplUnlockPaint( std::vector<LockPaintReason>& rReasons, bool bVirDev );
+    SW_DLLPUBLIC void ImplUnlockPaint(std::vector<LockPaintReason>& rReasons, bool bVirDev);
            bool IsPaintLocked() const { return mnLockPaint != 0; }
 
     // Get/set DrawView and PageView.

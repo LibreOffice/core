@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sd_pdf_import_test, \
 
 $(eval $(call gb_CppunitTest_use_externals,sd_pdf_import_test, \
     boost_headers \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sd_pdf_import_test,\

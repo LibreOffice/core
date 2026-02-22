@@ -29,6 +29,7 @@
 
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/lok.hxx>
@@ -2518,7 +2519,17 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         rBuffer.append( '=');
     const FormulaToken* t = maArrIterator.First();
     while( t )
-        t = CreateStringFromToken( rBuffer, t, true );
+    {
+        // Discard writing unknown functions without a name in OOXML ex: #NAME!()
+        if (t->GetOpCode() == ocNoName && t->GetType() == svByte
+            && FormulaGrammar::isOOXML(meGrammar))
+        {
+            rBuffer.setLength(0);
+            rBuffer.append(GetNativeSymbol(ocErrRef));
+            break;
+        }
+        t = CreateStringFromToken(rBuffer, t, true);
+    }
 
     if (pSaveArr != pArr)
     {

@@ -21,6 +21,7 @@
 
 #include <unotools/configitem.hxx>
 #include <tools/long.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <vector>
 #include <memory>
 

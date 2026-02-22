@@ -13,6 +13,8 @@
 #include <rtl/strbuf.hxx>
 #include <vcl/timer.hxx>
 
+#include <graphic/Manager.hxx>
+
 #include <memory>
 #include <mutex>
 #include <chrono>

@@ -12,10 +12,10 @@
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
-enum TemplateViewMode
+enum class TemplateViewMode
 {
-    eListView,
-    eThumbnailView
+    ListView,
+    ThumbnailView
 };
 struct ListViewItem;
 

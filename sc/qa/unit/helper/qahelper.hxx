@@ -14,7 +14,7 @@
 
 #include <cppunit/SourceLine.h>
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <comphelper/documentconstants.hxx>
 
@@ -41,21 +41,14 @@ class ScRangeList;
 class ScTokenArray;
 
 // data format for row height tests
-struct TestParam
+struct RowData
 {
-    struct RowData
-    {
-        SCROW nStartRow;
-        SCROW nEndRow;
-        SCTAB nTab;
-        int nExpectedHeight; // -1 for default height
-        int nCheck; // currently only CHECK_OPTIMAL ( we could add CHECK_MANUAL etc.)
-        bool bOptimal;
-    };
-    const std::u16string_view sTestDoc;
-    TestFilter  eExportType;
-    int nRowData;
-    RowData const * pData;
+    SCROW nStartRow;
+    SCROW nEndRow;
+    SCTAB nTab;
+    int nExpectedHeight; // -1 for default height
+    int nCheck; // currently only CHECK_OPTIMAL ( we could add CHECK_MANUAL etc.)
+    bool bOptimal;
 };
 
 struct RangeNameDef
@@ -152,11 +145,11 @@ protected:
     ScDocument* m_pDoc;
 };
 
-class SCQAHELPER_DLLPUBLIC ScModelTestBase : public UnoApiXmlTest
+class SCQAHELPER_DLLPUBLIC ScModelTestBase : public UnoApiTest
 {
 public:
     ScModelTestBase(const OUString& path)
-        : UnoApiXmlTest(path)
+        : UnoApiTest(path)
     {
     }
 
@@ -165,7 +158,7 @@ public:
     ScDocument* getScDoc2();
     ScDocShell* getScDocShell();
     ScTabViewShell* getViewShell();
-    void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems);
+    void miscRowHeightsTest(std::u16string_view sFileName, TestFilter eExportTyle, int nRowData, RowData const* pData);
 
     void enableOpenCL();
     void disableOpenCL();

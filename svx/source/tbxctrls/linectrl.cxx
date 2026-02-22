@@ -18,10 +18,13 @@
  */
 
 #include <tools/debug.hxx>
+#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <svtools/toolbarmenu.hxx>

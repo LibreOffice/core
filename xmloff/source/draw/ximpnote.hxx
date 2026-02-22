@@ -29,8 +29,17 @@ class SdXMLNotesContext : public SdXMLGenericPageContext
 public:
     SdXMLNotesContext( SdXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        bool ignorePageNumberInThumbnail = false);
     virtual ~SdXMLNotesContext() override;
+
+    // XFastContextHandler
+    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+
+private:
+    bool mbIgnorePageNumberInThumbnail;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

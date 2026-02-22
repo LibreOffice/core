@@ -10,6 +10,7 @@
 
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/weldutils.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 namespace svx::sidebar{
 

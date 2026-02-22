@@ -29,7 +29,6 @@
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
@@ -38,6 +37,7 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::ucb { class XCommandEnvironment; }
+namespace rtl { template <class reference_type> class Reference; }
 
 namespace ucbhelper {
 

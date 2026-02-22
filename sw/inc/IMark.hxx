@@ -26,6 +26,7 @@
 #include <unotools/weakref.hxx>
 #include <tools/ref.hxx>
 #include <vcl/keycod.hxx>
+#include <vcl/vclptr.hxx>
 #include "swrect.hxx"
 #include "calbck.hxx"
 #include "pam.hxx"

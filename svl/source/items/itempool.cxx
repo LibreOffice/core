@@ -29,6 +29,7 @@
 #include <svl/hint.hxx>
 #include <svl/itemset.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 
 #include <cassert>
 #include <vector>

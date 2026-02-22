@@ -37,6 +37,7 @@
 #include <awt/vclxwindows.hxx>
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/graph.hxx>
@@ -55,6 +56,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 
@@ -63,6 +65,7 @@
 #include <helper/tkresmgr.hxx>
 #include "vclxwindows_internal.hxx"
 #include <svl/numformat.hxx>
+#include <svl/numuno.hxx>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;

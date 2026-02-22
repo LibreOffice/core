@@ -3312,7 +3312,10 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:AddDirect" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~New</value>
+          <value xml:lang="en-US">~New Document</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">New</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3539,6 +3542,14 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ThemeSelectorPanel" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Theme...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
 
       <node oor:name=".uno:InsertTimeField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -3560,11 +3571,8 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
         </prop>
       </node>
       <node oor:name=".uno:StyleNewByExample" oor:op="replace">
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~New Style from Selection</value>
-        </prop>
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">New</value>
+          <value xml:lang="en-US">New Style from Selection</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4642,9 +4650,6 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:FormatPaintbrush" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Clone</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Clone Formatting</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
@@ -6818,6 +6823,16 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value>1</value>
         </prop>
       </node>
+      <!-- tdf#170387 for compatibility: This one was replaced by the above ".uno:ExtensionManager"
+      in all menus, etc., but existing configuration can still reference this one. -->
+      <node oor:name="service:com.sun.star.deployment.ui.PackageManagerDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Extensions...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:Signature" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Digital Signatu~res...</value>
@@ -7099,17 +7114,6 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       <node oor:name=".uno:DevelopmentToolsDockingWindow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Development Tools</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ToolbarLock" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Lock Toolbars</value>
-        </prop>
-        <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Lock or unlock all toolbars</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -8071,6 +8075,14 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       <node oor:name=".uno:ThemeDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Theme...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AddTheme" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Add Theme...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

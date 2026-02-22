@@ -22,14 +22,15 @@
 
 #include <svl/svldllapi.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
-
-#include <tools/urlobj.hxx>
+#include <rtl/ustring.hxx>
 #include <o3tl/enumarray.hxx>
 
 #include <mutex>
 #include <string_view>
 #include <vector>
+
+class INetURLObject;
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 enum class LockFileComponent
 {

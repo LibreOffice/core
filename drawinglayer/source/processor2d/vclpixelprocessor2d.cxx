@@ -25,6 +25,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/canvastools.hxx>
+#include <vcl/vclenum.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/bgradient.hxx>

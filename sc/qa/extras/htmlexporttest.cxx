@@ -9,14 +9,15 @@
 
 #include <sal/config.h>
 
+#include <comphelper/propertyvalue.hxx>
 #include <test/htmltesttools.hxx>
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
-class ScHTMLExportTest : public UnoApiXmlTest, public HtmlTestTools
+class ScHTMLExportTest : public UnoApiTest, public HtmlTestTools
 {
 public:
     ScHTMLExportTest()
-        : UnoApiXmlTest(u"/sc/qa/extras/testdocuments/"_ustr)
+        : UnoApiTest(u"/sc/qa/extras/testdocuments/"_ustr)
     {}
 
     void testHtmlSkipImage()
@@ -29,8 +30,9 @@ public:
         assertXPath(pDoc, "/html/body", 1);
         assertXPath(pDoc, "/html/body/table/tr/td/img", 1);
 
-        setFilterOptions(u"SkipImages"_ustr);
-        save(TestFilter::HTML_CALC);
+        save(TestFilter::HTML_CALC, {
+                                   comphelper::makePropertyValue(u"FilterOptions"_ustr, u"SkipImages"_ustr),
+                               });
 
         pDoc = parseHtml(maTempFile);
         CPPUNIT_ASSERT (pDoc);

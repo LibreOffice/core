@@ -28,6 +28,8 @@
 #include <zxcvbn.h>
 #include <sal/log.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 using namespace com::sun::star;
 
 void SvPasswordHelper::GetHashPasswordSHA256(uno::Sequence<sal_Int8>& rPassHash, std::u16string_view rPassword)

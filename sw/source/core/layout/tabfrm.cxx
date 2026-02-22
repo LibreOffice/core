@@ -1158,7 +1158,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     //                   table, or it will be set to false under certain
     //                   conditions that are not suitable for splitting
     //                   the row.
-    bool bSplitRowAllowed = bTryToSplit;
+    bool bSplitRowAllowed = bTryToSplit && nRemainingSpaceForLastRow > 0;
     if (bSplitRowAllowed && !pRow->IsRowSplitAllowed())
     {
         // A row larger than the entire page ought to be allowed to split regardless of setting,
@@ -1411,7 +1411,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     }
 
     SwRowFrame* pLastRow = nullptr;     // points to the last remaining line in master
-    SwRowFrame* pFollowRow = nullptr;   // points to either the follow flow line or the
+    SwRowFrame* pFollowRow;             // points to either the follow flow line or the
                                         // first regular line in the follow
 
     if ( bSplitRowAllowed )
@@ -1513,6 +1513,18 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     }
 
     return bRet;
+}
+
+bool SwTabFrame::IsSplitButNotYetMovedFloatingFollow() const
+{
+    if (IsFollow() && GetUpper() && GetUpper()->IsFlyFrame())
+    {
+        // Test if this is a just-split follow nested floating table, and it is waiting to be moved
+        // to the next page together with its anchor. We get here while formatting all the outer
+        // cells' anchored objects, before the outer table splits eventually.
+        return static_cast<const SwFlyFrame*>(GetUpper())->IsSplitButNotYetMovedFollow();
+    }
+    return false;
 }
 
 namespace
@@ -2915,12 +2927,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         // 3. The table is allowed to split or we do not have a pIndPrev:
         SwFrame* pIndPrev = GetIndPrev();
 
-        SwFlyFrame* pFly = FindFlyFrame();
-        if (!pIndPrev && pFly && pFly->IsFlySplitAllowed())
+        if (SwFlyFrame* pFly = FindFlyFrame(); !pIndPrev && pFly && pFly->IsFlySplitAllowed())
         {
-            auto pFlyAtContent = static_cast<SwFlyAtContentFrame*>(pFly);
-            SwFrame* pAnchor = pFlyAtContent->FindAnchorCharFrame();
-            if (pAnchor)
+            if (SwFrame* pAnchor = pFly->FindAnchorCharFrame())
             {
                 // If the anchor of the split has a previous frame, we're allowed to move forward.
                 pIndPrev = pAnchor->GetIndPrev();
@@ -3269,23 +3278,22 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         //Let's see if we find some place anywhere...
         if (!bMovedFwd)
         {
-            bool bMoveAlways = false;
+            bool bSkipMoveFwd = false;
             SwFrame* pUpper = GetUpper();
             if (pUpper && pUpper->IsFlyFrame())
             {
                 auto pFlyFrame = static_cast<SwFlyFrame*>(pUpper);
                 if (pFlyFrame->IsFlySplitAllowed())
                 {
-                    // If the anchor of the split has a previous frame, MoveFwd() is allowed to move
-                    // forward.
-                    bMoveAlways = true;
+                    // Don't try to move floating table forward. It's done elsewhere moving its fly.
+                    bSkipMoveFwd = true;
                 }
             }
             // don't make the effort to move fwd if its known
             // conditions that are known not to work
             if (IsInFootnote() && ForbiddenForFootnoteCntFwd())
                 bMakePage = false;
-            else if (!MoveFwd(bMakePage, false, bMoveAlways))
+            else if (bSkipMoveFwd || !MoveFwd(bMakePage, false))
                 bMakePage = false;
         }
 
@@ -4087,8 +4095,8 @@ void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             const SwAttrSetChg& rNewSetChg = *pChangeHint->m_pNew;
             SfxItemIter aOIter(*rOldSetChg.GetChgSet());
             SfxItemIter aNIter(*rNewSetChg.GetChgSet());
-            const SfxPoolItem* pOItem = aOIter.GetCurItem();
-            const SfxPoolItem* pNItem = aNIter.GetCurItem();
+            const SfxPoolItem* pOItem = aOIter.IsAtEnd() ? nullptr : aOIter.GetCurItem();
+            const SfxPoolItem* pNItem = aNIter.IsAtEnd() ? nullptr : aNIter.GetCurItem();
             SwAttrSetChg aOldSet(rOldSetChg);
             SwAttrSetChg aNewSet(rNewSetChg);
             do
@@ -4800,7 +4808,7 @@ static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* p
     bool bIsFollow( false );
     if ( pTmp->IsTextFrame() && static_cast<const SwTextFrame*>(pTmp)->IsFollow() )
     {
-        const SwFrame* pMaster;
+        const SwTextFrame* pMaster;
         // #i46450# Master does not necessarily have
         // to exist if this function is called from JoinFrame() ->
         // Cut() -> Shrink()
@@ -4814,7 +4822,12 @@ static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* p
 
         if ( pMaster )
         {
-            pObjs = static_cast<const SwTextFrame*>(pTmp)->FindMaster()->GetDrawObjs();
+            while (pMaster->IsFollow())
+            {
+                pMaster = pMaster->FindMaster();
+                assert(pMaster);
+            }
+            pObjs = pMaster->GetDrawObjs();
             bIsFollow = true;
         }
     }
@@ -4828,10 +4841,21 @@ static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* p
         {
             // #i26945# - if <pTmp> is follow, the
             // anchor character frame has to be <pTmp>.
-            if ( bIsFollow &&
-                 pAnchoredObj->FindAnchorCharFrame() != pTmp )
+            if (bIsFollow)
             {
-                continue;
+                if (pAnchoredObj->FindAnchorCharFrame() != pTmp)
+                    continue;
+
+                if (SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame())
+                {
+                    if (pFly->IsSplitButNotYetMovedFollow())
+                    {
+                        // A follow split fly, that is yet to move forward: upper's height is not
+                        // correct yet - just return a huge value to signal "too large". This will
+                        // eventually force split / move to the next page.
+                        return SAL_MAX_INT32 / 2; // ~19 km
+                    }
+                }
             }
             // #i26945# - consider also drawing objects
             {
@@ -4889,11 +4913,11 @@ static tools::Long CalcHeightWithFlys_Impl(const SwFrame* pTmp, const SwFrame* p
                         // I do not want to remove the first calculation because
                         // if clipping has been applied, using the GetCurrRelPos
                         // might be the better option to calculate nHeight.
-                        const SwTwips nDistOfFlyBottomToAnchorTop2 = aRectFnSet.YDiff(
+                        const tools::Long nDistOfFlyBottomToAnchorTop2 = aRectFnSet.YDiff(
                                                                         aRectFnSet.GetBottom(pAnchoredObj->GetObjRect()),
                                                                         aRectFnSet.GetBottom(pFrame->getFrameArea()) );
 
-                        nHeight = std::max( nHeight, tools::Long(nDistOfFlyBottomToAnchorTop2 ));
+                        nHeight = std::max( nHeight, nDistOfFlyBottomToAnchorTop2 );
                     }
                 }
             }
@@ -5080,36 +5104,39 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
     const SwCellFrame* pLow = static_cast<const SwCellFrame*>(_pRow->Lower());
     while ( pLow )
     {
-        SwTwips nTmp = 0;
-        const tools::Long nRowSpan = pLow->GetLayoutRowSpan();
-        // --> NEW TABLES
-        // Consider height of
-        // 1. current cell if RowSpan == 1
-        // 2. current cell if cell is "follow" cell of a cell with RowSpan == -1
-        // 3. master cell if RowSpan == -1
-        if ( 1 == nRowSpan )
-        {
-            nTmp = ::lcl_CalcMinCellHeight( pLow, _bConsiderObjs );
-        }
-        else if ( -1 == nRowSpan )
-        {
-            // Height of the last cell of a row span is height of master cell
-            // minus the height of the other rows which are covered by the master
-            // cell:
-            const SwCellFrame& rMaster = pLow->FindStartEndOfRowSpanCell( true );
-            nTmp = ::lcl_CalcMinCellHeight( &rMaster, _bConsiderObjs );
-            const SwFrame* pMasterRow = rMaster.GetUpper();
-            while ( pMasterRow && pMasterRow != _pRow )
-            {
-                nTmp -= aRectFnSet.GetHeight(pMasterRow->getFrameArea());
-                pMasterRow = pMasterRow->GetNext();
-            }
-        }
-        // <-- NEW TABLES
-
         // Do not consider rotated cells:
-        if ( pLow->IsVertical() == aRectFnSet.IsVert() && nTmp > nHeight )
-            nHeight = nTmp;
+        if (pLow->IsVertical() == aRectFnSet.IsVert())
+        {
+            SwTwips nTmp = 0;
+            const tools::Long nRowSpan = pLow->GetLayoutRowSpan();
+            // --> NEW TABLES
+            // Consider height of
+            // 1. current cell if RowSpan == 1
+            // 2. current cell if cell is "follow" cell of a cell with RowSpan == -1
+            // 3. master cell if RowSpan == -1
+            if ( 1 == nRowSpan )
+            {
+                nTmp = ::lcl_CalcMinCellHeight( pLow, _bConsiderObjs );
+            }
+            else if ( -1 == nRowSpan )
+            {
+                // Height of the last cell of a row span is height of master cell
+                // minus the height of the other rows which are covered by the master
+                // cell:
+                const SwCellFrame& rMaster = pLow->FindStartEndOfRowSpanCell( true );
+                nTmp = ::lcl_CalcMinCellHeight( &rMaster, _bConsiderObjs );
+                const SwFrame* pMasterRow = rMaster.GetUpper();
+                while ( pMasterRow && pMasterRow != _pRow )
+                {
+                    nTmp -= aRectFnSet.GetHeight(pMasterRow->getFrameArea());
+                    pMasterRow = pMasterRow->GetNext();
+                }
+            }
+            // <-- NEW TABLES
+
+            if (nTmp > nHeight)
+                nHeight = nTmp;
+        }
 
         pLow = static_cast<const SwCellFrame*>(pLow->GetNext());
     }

@@ -25,9 +25,12 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/virdev.hxx>
 

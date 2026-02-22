@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/dialog/TableAutoFmtDlg.hxx>
+#include <tblafmt.hxx>
 #include <hintids.hxx>
 #include <svl/imageitm.hxx>
 #include <svl/numformat.hxx>
@@ -38,6 +40,7 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/bindings.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -876,16 +879,35 @@ void SwTableShell::Execute(SfxRequest &rReq)
             break;
         case SID_AUTOFORMAT:
         {
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            VclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(GetView().GetFrameWeld(), &rSh));
-            pDlg->StartExecuteAsync(
-                [pDlg] (sal_Int32 nResult)->void
+            bool bRTL= AllSettings::GetLayoutRTL();
+            OUString sFormatName;
+            if (const SwTableNode* pTableNode = rSh.IsCursorInTable())
+            {
+                bRTL = rSh.IsTableRightToLeft();
+                sFormatName = pTableNode->GetTable().GetTableStyleName().toString();
+            }
+
+            SwTableAutoFormatTable& rFormats = rSh.GetDoc()->GetTableStyles();
+            SvxTableAutoFmtDlg aDlg(rFormats, sFormatName, GetView().GetFrameWeld(), true, bRTL);
+            if (aDlg.run() == RET_OK)
+                rSh.SetTableStyle(*rFormats.GetData(aDlg.GetIndex()));
+
+            break;
+        }
+        case SID_RESET_AUTOFORMATS:
+        {
+            if (const SfxStringItem* pFormatName = rReq.GetArg<SfxStringItem>(SID_AUTOFORMAT))
+            {
+                OUString sOldName;
+                if (const SfxStringItem* pOldName
+                    = rReq.GetArg<SfxStringItem>(SID_RESET_AUTOFORMATS))
                 {
-                    if (nResult == RET_OK)
-                        pDlg->Apply();
-                    pDlg->disposeOnce();
+                    sOldName = pOldName->GetValue();
                 }
-            );
+
+                rSh.GetDoc()->ResetTableStyles(pFormatName->GetValue(), sOldName);
+            }
+
             break;
         }
         case FN_TABLE_SET_ROW_HEIGHT:

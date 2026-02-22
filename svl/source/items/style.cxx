@@ -343,12 +343,12 @@ bool SfxStyleSheetBase::IsUsed() const
  */
 OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
 {
-    SfxItemIter aIter( GetItemSet() );
     OUStringBuffer aDesc;
 
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( GetItemSet() ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         OUString aItemPresentation;
 
         if ( !IsInvalidItem( pItem ) &&

@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/drawing/NormalsKind.hpp>
 #include <drawinglayer/primitive3d/sdrsphereprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <primitive3d/sdrdecompositiontools3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>

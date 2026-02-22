@@ -40,6 +40,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeMetalType.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
 #include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>

@@ -31,6 +31,8 @@
 
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 namespace svxdr = svx::DocRecovery;
 using namespace ::osl;

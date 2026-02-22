@@ -32,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <sot/storage.hxx>
 #include <tools/debug.hxx>
+#include <tools/globname.hxx>
 #include <sal/log.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>

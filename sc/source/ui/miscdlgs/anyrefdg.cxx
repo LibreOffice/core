@@ -26,6 +26,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <anyrefdg.hxx>
 #include <sc.hrc>

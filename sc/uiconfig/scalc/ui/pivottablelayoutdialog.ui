@@ -741,6 +741,7 @@
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <property name="margin-start">20</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="check-show-expand-collapse-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|check-show-expand-collapse">Select this check box to show expand/collapse buttons for field members</property>
@@ -748,7 +749,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left-attach">0</property>
+                        <property name="left-attach">1</property>
                         <property name="top-attach">3</property>
                       </packing>
                     </child>

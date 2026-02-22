@@ -63,9 +63,12 @@
 #include "srchctrl.hxx"
 #include <svx/dialmgr.hxx>
 #include <editeng/brushitem.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <comphelper/lok.hxx>
 
@@ -200,7 +203,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
 
     SfxItemPool* pPool = rSet.GetPool();
 
-    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
+    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.Next())
     {
         const sal_uInt16 nWhich(aIter.GetCurWhich());
         const sal_uInt16 nSlot(pPool->GetSlotId(nWhich));
@@ -1392,17 +1395,18 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
     else if (&rBtn == m_xSimilarityBtn.get())
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(
+        VclPtr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog(
             m_xDialog.get(), m_pSearchItem->IsLEVRelaxed(), m_pSearchItem->GetLEVOther(),
             m_pSearchItem->GetLEVShorter(), m_pSearchItem->GetLEVLonger()));
-        if ( executeSubDialog(pDlg.get()) == RET_OK )
-        {
-            m_pSearchItem->SetLEVRelaxed(pDlg->IsRelaxed());
-            m_pSearchItem->SetLEVOther(pDlg->GetOther());
-            m_pSearchItem->SetLEVShorter(pDlg->GetShorter());
-            m_pSearchItem->SetLEVLonger(pDlg->GetLonger());
-            SaveToModule_Impl();
-        }
+        executeSubDialog(pDlg, [pDlg, this](sal_Int32 nResult) {
+            if (nResult == RET_OK ) {
+                m_pSearchItem->SetLEVRelaxed(pDlg->IsRelaxed());
+                m_pSearchItem->SetLEVOther(pDlg->GetOther());
+                m_pSearchItem->SetLEVShorter(pDlg->GetShorter());
+                m_pSearchItem->SetLEVLonger(pDlg->GetLonger());
+                SaveToModule_Impl();
+            };
+        });
     }
     else if (&rBtn == m_xJapOptionsBtn.get())
     {
@@ -2329,6 +2333,17 @@ short SvxSearchDialog::executeSubDialog(VclAbstractDialog * dialog) {
     comphelper::ScopeGuard g([this] { m_executingSubDialog = false; });
     m_executingSubDialog = true;
     return dialog->Execute();
+}
+
+void SvxSearchDialog::executeSubDialog(VclPtr<VclAbstractDialog> dialog, const std::function<void(sal_Int32)>& func) {
+    assert(!m_executingSubDialog);
+    m_executingSubDialog = true;
+
+    dialog->StartExecuteAsync([dialog, func, this](sal_Int32 nResult) {
+        func(nResult);
+        dialog->disposeOnce();
+        m_executingSubDialog = false;
+    });
 }
 
 SFX_IMPL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper, SID_SEARCH_DLG);

@@ -45,6 +45,7 @@
 #include <svx/drawitem.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <View.hxx>
 #include <sdresid.hxx>
 #include <tpaction.hxx>
@@ -138,9 +139,12 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
     if( pDocSh && pDocSh->GetViewShell() )
     {
         mpDoc = pDocSh->GetDoc();
-        SfxViewFrame* pFrame = pDocSh->GetViewShell()->GetViewFrame();
-        m_xLbTree->SetViewFrame( pFrame );
-        m_xLbTreeDocument->SetViewFrame( pFrame );
+        if (sd::ViewShell* pViewShell = pDocSh->GetViewShell())
+        {
+            SfxViewFrame* pFrame = pViewShell->GetViewFrame();
+            m_xLbTree->SetViewFrame( pFrame );
+            m_xLbTreeDocument->SetViewFrame( pFrame );
+        }
     }
     else
     {

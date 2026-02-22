@@ -11,6 +11,7 @@
 #define INCLUDED_SVX_COLORBOX_HXX
 
 #include <memory>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/colorwindow.hxx>
 

@@ -25,6 +25,7 @@
 #endif
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include "optupdt.hxx"

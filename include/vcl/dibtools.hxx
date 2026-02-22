@@ -20,13 +20,13 @@
 #define INCLUDED_VCL_DIBTOOLS_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/Scanline.hxx>
 
 // predefines
 
 class SvStream;
 class Bitmap;
 class AlphaMask;
+enum class ScanlineFormat : sal_uInt8;
 
 // - Compression defines
 

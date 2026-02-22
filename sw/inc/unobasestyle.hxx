@@ -18,6 +18,11 @@
  */
 #pragma once
 
+#include <sal/types.h>
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/style/XStyle.hpp>
+
 class SAL_DLLPUBLIC_RTTI SwXBaseStyle
     : public cppu::WeakImplHelper<css::style::XStyle, css::beans::XPropertySet>
 {

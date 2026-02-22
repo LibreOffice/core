@@ -112,7 +112,7 @@ void QtInstanceNotebook::insert_page(const OUString& rIdent, const OUString& rLa
         QWidget* pPage = new QWidget;
         pPage->setLayout(new QVBoxLayout);
         pPage->setProperty(PROPERTY_TAB_PAGE_ID, toQString(rIdent));
-        nPos = m_pTabWidget->insertTab(nPos, pPage, toQString(rLabel));
+        nPos = m_pTabWidget->insertTab(nPos, pPage, vclToQtStringWithAccelerator(rLabel));
         if (pIconName && !pIconName->isEmpty())
             m_pTabWidget->setTabIcon(nPos, loadQPixmapIcon(*pIconName));
     });

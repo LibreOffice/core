@@ -36,21 +36,21 @@ enum class SvxPrevLineSpace
 
 class SVX_DLLPUBLIC SvxParaPrevWindow final : public weld::CustomWidgetController
 {
-    Size                aSize;
+    Size                m_aSize;
 
     // indentation
-    tools::Long                nLeftMargin;
-    tools::Long                nRightMargin;
-    short               nFirstLineOffset;
+    tools::Long                m_nLeftMargin;
+    tools::Long                m_nRightMargin;
+    short               m_nFirstLineOffset;
     // distances
-    sal_uInt16          nUpper;
-    sal_uInt16          nLower;
+    sal_uInt16          m_nUpper;
+    sal_uInt16          m_nLower;
     // adjustment
-    SvxAdjust           eAdjust;
+    SvxAdjust           m_eAdjust;
     // last line in justification
-    SvxAdjust           eLastLine;
+    SvxAdjust           m_eLastLine;
     // line distance
-    SvxPrevLineSpace    eLine;
+    SvxPrevLineSpace    m_eLine;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -61,39 +61,39 @@ public:
 
     void SetFirstLineOffset( short nNew )
     {
-        nFirstLineOffset = nNew;
+        m_nFirstLineOffset = nNew;
     }
     void SetLeftMargin( tools::Long nNew )
     {
-        nLeftMargin = nNew;
+        m_nLeftMargin = nNew;
     }
     void SetRightMargin( tools::Long nNew )
     {
-        nRightMargin = nNew;
+        m_nRightMargin = nNew;
     }
     void SetUpper( sal_uInt16 nNew )
     {
-        nUpper = nNew;
+        m_nUpper = nNew;
     }
     void SetLower( sal_uInt16 nNew )
     {
-        nLower = nNew;
+        m_nLower = nNew;
     }
     void SetAdjust( SvxAdjust eNew )
     {
-        eAdjust = eNew;
+        m_eAdjust = eNew;
     }
     void SetLastLine( SvxAdjust eNew )
     {
-        eLastLine = eNew;
+        m_eLastLine = eNew;
     }
     void SetLineSpace( SvxPrevLineSpace eNew )
     {
-        eLine = eNew;
+        m_eLine = eNew;
     }
     void SetSize( Size aNew )
     {
-        aSize = aNew;
+        m_aSize = aNew;
     }
 };
 

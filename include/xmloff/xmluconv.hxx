@@ -32,7 +32,7 @@
 
 #include <unotools/saveopt.hxx>
 
-#include <tools/fldunit.hxx>
+enum class FieldUnit : sal_uInt16;
 
 namespace com::sun::star {
     namespace text { class XNumberingTypeInfo; }

@@ -21,6 +21,8 @@
 
 #include <crdlg.hxx>
 #include <scui_def.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 ScColOrRowDlg::ScColOrRowDlg(weld::Window* pParent, const OUString& rStrTitle,
                              const OUString& rStrLabel)

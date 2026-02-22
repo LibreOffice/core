@@ -22,6 +22,8 @@
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/eventlisteneradapter.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
+
 namespace com::sun::star::container { class XHierarchicalNameAccess; }
 namespace com::sun::star::container { class XNameAccess; }
 namespace com::sun::star::container { class XNameContainer; }

@@ -26,6 +26,7 @@
 #include <vcl/vclevent.hxx>
 #include <hyperlabel.hxx>
 #include <tools/color.hxx>
+#include <tools/mapunit.hxx>
 #include <rtl/ustring.hxx>
 
 constexpr tools::Long LABELBASEMAPHEIGHT = 8;

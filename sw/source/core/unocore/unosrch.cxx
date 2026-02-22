@@ -34,6 +34,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <memory>
 #include <unordered_map>
 

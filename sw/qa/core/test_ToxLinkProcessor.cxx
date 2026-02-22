@@ -12,6 +12,7 @@
 #include <rtl/ustring.hxx>
 
 #include <ToxLinkProcessor.hxx>
+#include <poolfmt.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -42,14 +43,14 @@ public:
 
     static constexpr OUString STYLE_NAME_1 = u"anyStyle1"_ustr;
     static constexpr OUString STYLE_NAME_2 = u"anyStyle2"_ustr;
-    static const sal_uInt16 POOL_ID_1;
-    static const sal_uInt16 POOL_ID_2;
+    static const SwPoolFormatId POOL_ID_1;
+    static const SwPoolFormatId POOL_ID_2;
     static constexpr OUString URL_1 = u"#anyUrl1"_ustr;
     static constexpr OUString URL_2 = u"#anyUrl2"_ustr;
 };
 
-const sal_uInt16 ToxLinkProcessorTest::POOL_ID_1 = 42;
-const sal_uInt16 ToxLinkProcessorTest::POOL_ID_2 = 43;
+const SwPoolFormatId ToxLinkProcessorTest::POOL_ID_1 = SwPoolFormatId(42);
+const SwPoolFormatId ToxLinkProcessorTest::POOL_ID_2 = SwPoolFormatId(43);
 
 void
 ToxLinkProcessorTest::NoExceptionIsThrownIfTooManyLinksAreClosed()
@@ -87,7 +88,7 @@ namespace {
 
 class ToxLinkProcessorWithOverriddenObtainPoolId : public ToxLinkProcessor {
 public:
-    virtual sal_uInt16
+    virtual SwPoolFormatId
     ObtainPoolId(const UIName& characterStyle) const override {
         if (characterStyle == ToxLinkProcessorTest::STYLE_NAME_1) {
             return ToxLinkProcessorTest::POOL_ID_1;
@@ -95,7 +96,7 @@ public:
         if (characterStyle == ToxLinkProcessorTest::STYLE_NAME_2) {
             return ToxLinkProcessorTest::POOL_ID_2;
         }
-        return 0;
+        return SwPoolFormatId::ZERO;
     }
 };
 

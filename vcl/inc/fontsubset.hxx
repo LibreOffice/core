@@ -25,65 +25,32 @@
 
 #include <vcl/dllapi.h>
 
-#include "glyphid.hxx"
-
-class SvStream;
+// Translate units from TT to PS (standard 1/1000)
+inline int XUnits(int nUPEM, int n) { return (n * 1000) / nUPEM; }
 
 enum class FontType {
     NO_FONT     = 0,
     SFNT_TTF    = 1<<1,                     ///< SFNT container with TrueType glyphs
     SFNT_CFF    = 1<<2,                     ///< SFNT container with CFF-container
-    TYPE1_PFA   = 1<<3,                     ///< PSType1 Postscript Font Ascii
-    TYPE1_PFB   = 1<<4,                     ///< PSType1 Postscript Font Binary
-    CFF_FONT    = 1<<5,                     ///< CFF-container with PSType2 glyphs
-    ANY_SFNT    = SFNT_TTF | SFNT_CFF,
-    ANY_TYPE1   = TYPE1_PFA | TYPE1_PFB
+    TYPE1_PFB   = 1<<3,                     ///< PSType1 Postscript Font Binary
+    CFF_FONT    = 1<<4,                     ///< CFF-container with PSType2 glyphs
+    ANY_SFNT    = SFNT_TTF | SFNT_CFF
 };
 namespace o3tl {
-    template<> struct typed_flags<FontType> : is_typed_flags<FontType, (1<<8)-1> {};
+    template<> struct typed_flags<FontType> : is_typed_flags<FontType, 0x1e> {};
 }
 
 class VCL_DLLPUBLIC FontSubsetInfo final
 {
-public:
-    SAL_DLLPRIVATE explicit FontSubsetInfo();
-    SAL_DLLPRIVATE ~FontSubsetInfo();
-
-    SAL_DLLPRIVATE void LoadFont( FontType eInFontType,
-                    const unsigned char* pFontBytes, int nByteLength );
-
-    SAL_DLLPRIVATE bool CreateFontSubset( FontType nOutFontTypeMask,
-                    SvStream* pOutFile,
-                    const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncodedIds,
-                    int nReqGlyphCount);
-
 public: // TODO: make subsetter results private and provide accessor methods instead
         // subsetter-provided subset details needed by e.g. Postscript or PDF
     OUString                m_aPSName;
-    int                     m_nAscent;          ///< all metrics in PS font units
-    int                     m_nDescent;
-    int                     m_nCapHeight;
-    tools::Rectangle               m_aFontBBox;
-    FontType                m_nFontType;        ///< font-type of subset result
-    bool                    m_bFilled;
-
-private:
-    // input-font-specific details
-    unsigned const char*    mpInFontBytes;
-    int                     mnInByteLength;
-    FontType                meInFontType;       ///< allowed mask of input font-types
-
-    // subset-request details
-    FontType                mnReqFontTypeMask;  ///< allowed subset-target font types
-    SvStream*               mpOutFile;
-    OString                 maReqFontName;
-    const sal_GlyphId*      mpReqGlyphIds;
-    const sal_uInt8*        mpReqEncodedIds;
-    int                     mnReqGlyphCount;
-
-    SAL_DLLPRIVATE bool CreateFontSubsetFromCff();
+    int                     m_nAscent = 0;                   ///< all metrics in PS font units
+    int                     m_nDescent = 0;
+    int                     m_nCapHeight = 0;
+    tools::Rectangle        m_aFontBBox;
+    FontType                m_nFontType = FontType::NO_FONT; ///< font-type of subset result
+    bool                    m_bFilled = false;
 };
-
-int VCL_DLLPUBLIC TestFontSubset(const void* data, sal_uInt32 size);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

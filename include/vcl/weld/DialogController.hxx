@@ -11,12 +11,12 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/weld/Builder.hxx>
 
 #include <functional>
 
 namespace weld
 {
+class Builder;
 class Container;
 class Dialog;
 class MessageDialog;

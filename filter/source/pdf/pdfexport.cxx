@@ -20,6 +20,7 @@
 
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -27,6 +28,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphic/GraphicMetadata.hxx>
 #include <vcl/pdf/PDFEncryptionInitialization.hxx>
 #include <rtl/ustring.hxx>
@@ -37,6 +39,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/compbase.hxx>
@@ -901,7 +904,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 switch( nPrintAllowed )
                 {
-                case 0: // initialized when aContext is build, means no printing
+                case 0: // initialized when aContext is built, means no printing
                     break;
                 default:
                 case 2:

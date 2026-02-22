@@ -51,16 +51,17 @@
 
 #include <vector>
 
-// TODO: move file mapping stuff to OSL
-#include <unistd.h>
-#include <dlfcn.h>
+#include <tools/UnixWrappers.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/mman.h>
 #include <unx/fontmanager.hxx>
 #include <impfontcharmap.hxx>
 
 static FT_Library aLibFT = nullptr;
+
+#ifdef _WIN32
+#define strncasecmp(x,y,z) _strnicmp(x,y,z)
+#endif
 
 // TODO: remove when the priorities are selected by UI
 // if (AH==0) => disable autohinting
@@ -76,7 +77,8 @@ FreetypeFontFile::FreetypeFontFile( OString aNativeFileName )
     mpFileMap( nullptr ),
     mnFileSize( 0 ),
     mnRefCount( 0 ),
-    mnLangBoost( 0 )
+    mnLangBoost( 0 ),
+    mnHandle( 0 )
 {
     // boost font preference if UI language is mentioned in filename
     int nPos = maNativeFileName.lastIndexOf( '_' );
@@ -108,10 +110,10 @@ bool FreetypeFontFile::Map()
         if( sscanf( pFileName, "/:FD:/%d%n", &nFD, &n ) == 1 && pFileName[n] == '\0' )
         {
             lseek( nFD, 0, SEEK_SET );
-            nFile = dup( nFD );
+            nFile = wrap_dup( nFD );
         }
         else
-            nFile = open( pFileName, O_RDONLY );
+            nFile = wrap_open( pFileName, O_RDONLY, 0 );
         if( nFile < 0 )
         {
             SAL_WARN("vcl.unx.freetype", "open('" << maNativeFileName << "') failed: " << strerror(errno));
@@ -119,16 +121,16 @@ bool FreetypeFontFile::Map()
         }
 
         struct stat aStat;
-        int nRet = fstat( nFile, &aStat );
+        int nRet = wrap_fstat( nFile, &aStat );
         if (nRet < 0)
         {
             SAL_WARN("vcl.unx.freetype", "fstat on '" << maNativeFileName << "' failed: " << strerror(errno));
-            close (nFile);
+            wrap_close (nFile);
             return false;
         }
         mnFileSize = aStat.st_size;
         mpFileMap = static_cast<unsigned char*>(
-            mmap( nullptr, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 ));
+            wrap_mmap( mnFileSize, nFile, &mnHandle ));
         if( mpFileMap == MAP_FAILED )
         {
             SAL_WARN("vcl.unx.freetype", "mmap of '" << maNativeFileName << "' failed: " << strerror(errno));
@@ -136,7 +138,7 @@ bool FreetypeFontFile::Map()
         }
         else
             SAL_INFO("vcl.unx.freetype", "mmap'ed '" << maNativeFileName << "' successfully");
-        close( nFile );
+        wrap_close( nFile );
     }
 
     return (mpFileMap != nullptr);
@@ -149,7 +151,7 @@ void FreetypeFontFile::Unmap()
     assert(mnRefCount >= 0 && "how did this go negative\n");
     if (mpFileMap)
     {
-        munmap(mpFileMap, mnFileSize);
+        wrap_munmap(mpFileMap, mnFileSize, mnHandle);
         mpFileMap = nullptr;
     }
 }
@@ -182,8 +184,25 @@ namespace
 #if !HAVE_DLAPI
         FT_Done_MM_Var(library, amaster);
 #else
+#ifdef _WIN32
+        // Unlike on Unixes, we can't pass a NULL module parameter to
+        // osl_getAsciiFunctionSymbol(), i.e. GetProcAddress(), and
+        // have it look through all modules loaded, like dlsym() does.
+        // Instead, we "know" that FT_Done_MM_Var will either be in
+        // mergedlo.dll or vcllo.dll.
+        void(*func)(FT_Library, FT_MM_Var*) = nullptr;
+        oslModule module;
+        if (osl_getModuleHandle((u"mergedlo.dll"_ustr).pData, &module) ||
+            osl_getModuleHandle((u"vcllo.dll"_ustr).pData, &module))
+            func = reinterpret_cast<void(*)(FT_Library, FT_MM_Var*)>(
+                osl_getAsciiFunctionSymbol(module, "FT_Done_MM_Var"));
+        // If FT_Done_MM_Var is not found, we will crash or something,
+        // at least in a build with the debugging C runtime, as
+        // calling free() below is very wrong, I think.
+#else
         static auto func = reinterpret_cast<void(*)(FT_Library, FT_MM_Var*)>(
             osl_getAsciiFunctionSymbol(nullptr, "FT_Done_MM_Var"));
+#endif
         if (func)
             func(library, amaster);
         else

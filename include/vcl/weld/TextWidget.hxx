@@ -21,13 +21,22 @@ private:
     OUString m_sSavedValue;
 
 protected:
+    Link<TextWidget&, void> m_aCursorPositionHdl;
+
+    void signal_cursor_position();
+
     virtual void do_set_text(const OUString& rText) = 0;
+    virtual void do_set_position(int nCursorPos) = 0;
     virtual void do_select_region(int nStartPos, int nEndPos) = 0;
     virtual void do_replace_selection(const OUString& rText) = 0;
 
 public:
     void set_text(const OUString& rText);
     virtual OUString get_text() const = 0;
+
+    // nCursorPos can be -1 to set to the end
+    void set_position(int nCursorPos);
+    virtual int get_position() const = 0;
 
     // if nStartPos or nEndPos is -1 the max available text pos will be used
     void select_region(int nStartPos, int nEndPos);
@@ -60,6 +69,11 @@ public:
     void save_value() { m_sSavedValue = get_text(); }
     OUString const& get_saved_value() const { return m_sSavedValue; }
     bool get_value_changed_from_saved() const { return m_sSavedValue != get_text(); }
+
+    virtual void connect_cursor_position(const Link<TextWidget&, void>& rLink)
+    {
+        m_aCursorPositionHdl = rLink;
+    }
 };
 }
 

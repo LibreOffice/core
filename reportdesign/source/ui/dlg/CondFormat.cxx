@@ -33,6 +33,7 @@
 
 #include <comphelper/property.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <algorithm>
 #include <UndoActions.hxx>

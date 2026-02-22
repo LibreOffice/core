@@ -26,6 +26,7 @@
 #include <cuitabarea.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
 
 SvxAreaTabDialog::SvxAreaTabDialog
 (

@@ -53,6 +53,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/orphitem.hxx>
 #include <utility>
+#include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -161,6 +162,8 @@ CSS1PropertyEnum const aTextAlignTable[] =
     { "center",      sal_uInt16(SvxAdjust::Center)   },
     { "right",       sal_uInt16(SvxAdjust::Right)    },
     { "justify",     sal_uInt16(SvxAdjust::Block)    },
+    { "start",       sal_uInt16(SvxAdjust::ParaStart)},
+    { "end",         sal_uInt16(SvxAdjust::ParaEnd)  },
     { nullptr,                    0                   }
 };
 

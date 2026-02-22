@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
 #include <utility>

@@ -23,6 +23,7 @@
 #include <comphelper/configuration.hxx>
 #include <o3tl/temporary.hxx>
 
+#include <vcl/glyphitem.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/font/Feature.hxx>
 #include <vcl/font/FeatureParser.hxx>

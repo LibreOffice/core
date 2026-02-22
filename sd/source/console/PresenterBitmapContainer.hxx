@@ -51,7 +51,7 @@ public:
         BitmapDescriptor();
         explicit BitmapDescriptor (const std::shared_ptr<BitmapDescriptor>& rpDefault);
 
-        enum Mode {Normal, MouseOver, ButtonDown, Disabled, Mask};
+        enum Mode {Normal, MouseOver, Disabled};
         const css::uno::Reference<css::rendering::XBitmap>& GetNormalBitmap() const;
         css::uno::Reference<css::rendering::XBitmap> const & GetBitmap(const Mode eMode) const;
         void SetBitmap (
@@ -62,8 +62,6 @@ public:
         sal_Int32 mnHeight;
         sal_Int32 mnXOffset;
         sal_Int32 mnYOffset;
-        sal_Int32 mnXHotSpot;
-        sal_Int32 mnYHotSpot;
         css::util::Color maReplacementColor;
         enum TexturingMode { Once, Repeat, Stretch };
         TexturingMode meHorizontalTexturingMode;
@@ -72,9 +70,7 @@ public:
     private:
         css::uno::Reference<css::rendering::XBitmap> mxNormalBitmap;
         css::uno::Reference<css::rendering::XBitmap> mxMouseOverBitmap;
-        css::uno::Reference<css::rendering::XBitmap> mxButtonDownBitmap;
         css::uno::Reference<css::rendering::XBitmap> mxDisabledBitmap;
-        css::uno::Reference<css::rendering::XBitmap> mxMaskBitmap;
     };
 
     /** Create a new bitmap container from a section of the configuration.

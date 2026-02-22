@@ -1015,16 +1015,36 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 
     if (bWriteFormula)
     {
-        if (!bTagStarted)
+        ScTokenArray aTokenArray(*mrScFmlaCell.GetCode());
+        bool bValid = true;
+        // Discard formulas containing macros in XLSX export.
+        if (!rStrm.IsExportVBA())
         {
-            rWorksheet->startElement( XML_f,
-                    XML_aca, ToPsz( (mxTokArr && mxTokArr->IsVolatile()) ||
-                        (mxAddRec && mxAddRec->IsVolatile()) ) );
+            formula::FormulaTokenArrayPlainIterator aIter(aTokenArray);
+            formula::FormulaToken* t = aIter.First();
+            while (t)
+            {
+                if (t->GetOpCode() == ocMacro)
+                {
+                    bValid = false;
+                    break;
+                }
+                t = aIter.Next();
+            }
         }
-        rWorksheet->writeEscaped( XclXmlUtils::ToOUString(
-                    rStrm.GetRoot().GetCompileFormulaContext(), mrScFmlaCell.aPos, mrScFmlaCell.GetCode(),
-                    mrScFmlaCell.GetErrCode()));
-        rWorksheet->endElement( XML_f );
+        if (bValid)
+        {
+            if (!bTagStarted)
+            {
+                rWorksheet->startElement(XML_f, XML_aca,
+                                         ToPsz((mxTokArr && mxTokArr->IsVolatile())
+                                               || (mxAddRec && mxAddRec->IsVolatile())));
+            }
+            rWorksheet->writeEscaped(XclXmlUtils::ToOUString(
+                rStrm.GetRoot().GetCompileFormulaContext(), mrScFmlaCell.aPos, &aTokenArray,
+                mrScFmlaCell.GetErrCode()));
+            rWorksheet->endElement(XML_f);
+        }
     }
 
     if( strcmp( sType, "inlineStr" ) == 0 )
@@ -2067,7 +2087,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, ScfUInt16Vec& aXFIn
                 aXFIndexes[ i ] = EXC_XF_NOTFOUND;
         }
         // They can differ only up to maxNonDefault, in the rest they are the same.
-        for( size_t i = maxStartAllDefault; i < aXFIndexes.size(); ++i )
+        for( size_t i = maxStartAllDefault, cnt = aXFIndexes.size(); i < cnt; ++i )
             aXFIndexes[ i ] = EXC_XF_NOTFOUND;
         maxStartAllNotFound = maxStartAllDefault;
     }

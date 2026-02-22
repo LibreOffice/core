@@ -18,6 +18,7 @@
  */
 
 #include <filter/BmpReader.hxx>
+#include <tools/stream.hxx>
 #include <vcl/TypeSerializer.hxx>
 
 bool BmpReader(SvStream& rStream, Graphic& rGraphic)

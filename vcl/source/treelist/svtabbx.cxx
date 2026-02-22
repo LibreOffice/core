@@ -195,6 +195,25 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     rJsonWriter.put("singleclickactivate", GetActivateOnSingleClick());
 
+    switch (m_eRole)
+    {
+        case SvTabListBoxRole::Unknown:
+            assert(false && "this shouldn't be possible on load from .ui");
+            break;
+        case SvTabListBoxRole::Tree:
+            rJsonWriter.put("role", "tree");
+            break;
+        case SvTabListBoxRole::TreeGrid:
+            rJsonWriter.put("role", "treegrid");
+            break;
+        case SvTabListBoxRole::ListBox:
+            rJsonWriter.put("role", "listbox");
+            break;
+        case SvTabListBoxRole::Grid:
+            rJsonWriter.put("role", "grid");
+            break;
+    }
+
     bool bCheckButtons = static_cast<int>(nTreeFlags & SvTreeFlags::CHKBTN);
 
     bool isRadioButton = false;
@@ -267,6 +286,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits )
+    , m_eRole(SvTabListBoxRole::Unknown)
 {
     SetHighlightRange();    // select full width
 }
@@ -579,19 +599,16 @@ SvTreeListEntry* SvHeaderTabListBox::InsertEntryToColumn(
     return pEntry;
 }
 
-sal_uInt32 SvHeaderTabListBox::Insert(
-    SvTreeListEntry* pEnt, SvTreeListEntry* pPar, sal_uInt32 nPos )
+void SvHeaderTabListBox::Insert(SvTreeListEntry* pEnt, SvTreeListEntry* pPar, sal_uInt32 nPos)
 {
-    sal_uInt32 n = SvTabListBox::Insert( pEnt, pPar, nPos );
+    SvTabListBox::Insert(pEnt, pPar, nPos);
     RecalculateAccessibleChildren();
-    return n;
 }
 
-sal_uInt32 SvHeaderTabListBox::Insert( SvTreeListEntry* pEntry, sal_uInt32 nRootPos )
+void SvHeaderTabListBox::Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos)
 {
-    sal_uInt32 nPos = SvTabListBox::Insert( pEntry, nRootPos );
+    SvTabListBox::Insert(pEntry, nRootPos);
     RecalculateAccessibleChildren();
-    return nPos;
 }
 
 void SvHeaderTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)

@@ -222,7 +222,7 @@ SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         ::basegfx::B2DPolyPolygon aPolyPolygon;
         std::optional<::basegfx::B2DPolyPolygon> pPolyPolygon;
 
-        if ( auto pVirtFlyDrawObj = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) )
+        if ( auto pVirtFlyDrawObj = DynCastSwVirtFlyDrawObj( pObj ) )
         {
             // GetContour() causes the graphic to be loaded, which may cause
             // the graphic to change its size, call ClrObject()
@@ -900,7 +900,7 @@ SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
     // #i68520#
     mpAnchoredObjList.reset(new SwAnchoredObjList);
 
-    if( nCount && bWrapAllowed )
+    if (nCount && bWrapAllowed && !m_pCurrFrame->IsInSplitButNotYetMovedFollow())
     {
         SwRect const aRect(GetFrameArea());
         // Make ourselves a little smaller than we are,
@@ -929,7 +929,8 @@ SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
                  !pAnchoredObj->ConsiderForTextWrap() ||
                  ( mbIgnoreObjsInHeaderFooter && !bFooterHeader &&
                    pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() ) ||
-                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat()->GetFollowTextFlow().GetValue() )
+                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat()->GetFollowTextFlow().GetValue() ) ||
+                 ( pAnchoredObj->DynCastFlyFrame()  && pAnchoredObj->DynCastFlyFrame()->IsSplitButNotYetMovedFollow() )
                )
             {
                 continue;
@@ -1374,6 +1375,25 @@ SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 
     if( !aFly.Width() )
         return aFly;
+
+    if (auto pFlyFrame = pAnchoredObj->DynCastFlyFrame())
+    {
+        if (pFlyFrame->IsFlySplitAllowed())
+        {
+            if (const SwFrame* pLower =  pFlyFrame->Lower())
+            {
+                // The floating table could be too tall for its fly frame at this point, because the
+                // fly's Grow_ would limit to only available space. Take the excessive height into
+                // account here, so that the line can be forced to move to next page (via SwFlyPortion).
+
+                auto aLowerHeight = aRectFnSet.GetHeight(pLower->getFrameArea());
+                if (aLowerHeight > aRectFnSet.GetHeight(aFly))
+                {
+                    aRectFnSet.SetHeight(aFly, aLowerHeight);
+                }
+            }
+        }
+    }
 
     // so the line may grow up to the lower edge of the frame
     SetNextTop( aRectFnSet.GetBottom(aFly) );

@@ -20,10 +20,11 @@
 #define INCLUDED_UNOTOOLS_LOCALFILEHELPER_HXX
 
 #include <config_options.h>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/unotoolsdllapi.h>
 
 #include <rtl/ustring.hxx>
+
+namespace com::sun::star::uno { template <typename> class Sequence; }
 
 namespace utl
 {

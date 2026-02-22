@@ -20,6 +20,8 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/collatorres.hxx>

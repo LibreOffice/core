@@ -11,4 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,fast_float))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,fast_float,$(FAST_FLOAT_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_add_patches,fast_float,\
+	external/fast_float/0001-fix-warning-C4702-unreachable-code.patch \
+))
+
 # vim: set noet sw=4 ts=4:

@@ -47,6 +47,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
@@ -64,6 +65,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/locktoplevels.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <openuriexternally.hxx>
 
@@ -1215,15 +1217,22 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
             {
                 bool bUseFinalFallback = true;
                 // no help found -> try ids of parents.
-                pWidget->help_hierarchy_foreach([&aHelpModuleName, &aHelpURL, &bUseFinalFallback](const OUString& rHelpId){
-                    if (rHelpId.isEmpty())
-                        return false;
-                    aHelpURL = CreateHelpURL(rHelpId, aHelpModuleName);
-                    bool bFinished = !SfxContentHelper::IsHelpErrorDocument(aHelpURL);
-                    if (bFinished)
-                        bUseFinalFallback = false;
-                    return bFinished;
-                });
+                std::unique_ptr<weld::Container> pParent = pWidget->weld_parent();
+                while (pParent)
+                {
+                    const OUString sHelpId = pParent->get_help_id();
+                    if (!sHelpId.isEmpty())
+                    {
+                        aHelpURL = CreateHelpURL(sHelpId, aHelpModuleName);
+                        if (!SfxContentHelper::IsHelpErrorDocument(aHelpURL))
+                        {
+                            bUseFinalFallback = false;
+                            break;
+                        }
+                    }
+
+                    pParent = pParent->weld_parent();
+                }
 
                 if (bUseFinalFallback)
                 {

@@ -175,7 +175,7 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
  </XShape>
- <XShape positionX="4074" positionY="985" sizeX="9286" sizeY="1295" type="com.sun.star.drawing.TextShape" name="CID/Title=" text="Gr&#xE1;fico de Colunas ou Barras" fontHeight="18.600000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="118" textRightDistance="118" textUpperDistance="197" textLowerDistance="197" textMaximumFrameHeight="0" textMaximumFrameWidth="11421" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="d9d9d9" fillTransparence="0" fillTransparenceGradientName="">
+ <XShape positionX="4074" positionY="985" sizeX="9202" sizeY="1155" type="com.sun.star.drawing.TextShape" name="CID/Title=" text="Gr&#xE1;fico de Colunas ou Barras" fontHeight="12" fontColor="ffffffff" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="76" textRightDistance="76" textUpperDistance="127" textLowerDistance="127" textMaximumFrameHeight="0" textMaximumFrameWidth="11421" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="d9d9d9" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
@@ -184,8 +184,8 @@
   <LineStart/>
   <LineEnd/>
   <Transformation>
-   <Line1 column1="9287.000000" column2="0.000000" column3="4074.000000"/>
-   <Line2 column1="0.000000" column2="1296.000000" column3="985.000000"/>
+   <Line1 column1="9203.000000" column2="0.000000" column3="4074.000000"/>
+   <Line2 column1="0.000000" column2="1156.000000" column3="985.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
  </XShape>

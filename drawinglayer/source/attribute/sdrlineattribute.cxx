@@ -19,6 +19,8 @@
 
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/vector/b2enums.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 
 
 namespace drawinglayer::attribute

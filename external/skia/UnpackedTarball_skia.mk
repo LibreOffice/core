@@ -12,7 +12,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,skia))
 $(eval $(call gb_UnpackedTarball_set_tarball,skia,$(SKIA_TARBALL)))
 
 skia_patches := \
-    fix-ddi.patch \
+    fix-pch.patch.1 \
     make-api-visible.patch.1 \
     no-trace-resources-on-exit.patch.1 \
     fix-alpha-difference-copy.patch.1 \
@@ -24,7 +24,6 @@ skia_patches := \
     fix-without-gl.patch.1 \
     windows-typeface-directwrite.patch.1 \
     windows-raster-surface-no-copies.patch.1 \
-    fix-windows-dwrite.patch.1 \
     swap-buffers-rect.patch.1 \
     ubsan.patch.1 \
     fix-warnings.patch.1 \
@@ -42,6 +41,8 @@ skia_patches := \
 	0003-loong64-Fix-missing-rounding-in-loong64-scaled_mult-.patch \
 	0004-loong64-Fix-the-remaining-implicit-vector-casts.patch \
     msvc-unknown-attributes.patch.1 \
+	fix-semaphore-include.patch.1 \
+	fix-xputimage-depth.patch.1 \
 
 ifneq ($(MSYSTEM),)
 # use binary flag so patch from git-bash won't choke on mixed line-endings in patches

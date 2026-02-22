@@ -13,6 +13,11 @@ $(eval $(call gb_UnpackedTarball_set_tarball,cairo,$(CAIRO_TARBALL),,cairo))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,cairo,2))
 
+ifeq ($(OS)-$(ENABLE_HEADLESS),WNT-TRUE)
+$(eval $(call gb_UnpackedTarball_add_file,cairo,config.h,external/cairo/configs/wnt_cairo_config.h))
+$(eval $(call gb_UnpackedTarball_add_file,cairo,src/cairo-features.h,external/cairo/configs/wnt_cairo_features.h))
+endif
+
 # The avoid-negative-left-shift patch, I'm not sure if it's the right thing. It triggers in JunitTest_chart2_unoapi.
 #
 # The ubsan-memcpy-nullptr is reported at https://gitlab.freedesktop.org/cairo/cairo/-/issues/884

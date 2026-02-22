@@ -324,6 +324,13 @@ interface BaseTextTable
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_RESET_AUTOFORMATS
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_ATTR_BORDER // status()
     [
         ExecMethod = Execute ;

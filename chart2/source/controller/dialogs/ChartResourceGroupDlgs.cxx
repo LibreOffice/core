@@ -23,6 +23,8 @@
 #include <strings.hrc>
 #include <ResId.hxx>
 
+#include <vcl/weld/Dialog.hxx>
+
 namespace chart
 {
 using namespace ::com::sun::star;

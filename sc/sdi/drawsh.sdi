@@ -33,6 +33,7 @@ interface TableDraw
     SID_DEFINE_DBNAME           [ StateMethod = StateDisableItems; ]
     SID_OPENDLG_CONSOLIDATE     [ StateMethod = StateDisableItems; ]
     SID_OPENDLG_EDIT_PRINTAREA  [ StateMethod = StateDisableItems; ]
+    SID_INSERT_CALCTABLE        [ StateMethod = StateDisableItems; ]
     // others:
     SID_DRAW_CHART              [ StateMethod = StateDisableItems; ]
 

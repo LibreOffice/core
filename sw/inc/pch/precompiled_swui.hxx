@@ -553,7 +553,6 @@
 #include <SwNumberTreeTypes.hxx>
 #include <SwRewriter.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <autoformatpreview.hxx>
 #include <bparr.hxx>
 #include <calbck.hxx>
 #include <charfmt.hxx>

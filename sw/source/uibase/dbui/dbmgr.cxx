@@ -41,6 +41,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/urlobj.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/print.hxx>
 #include <vcl/scheduler.hxx>
@@ -3089,8 +3090,8 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
                 {
                     TOOLS_WARN_EXCEPTION("sw.mailmerge", "");
                 }
-                pDlg->disposeOnce();
             }
+            pDlg->disposeOnce();
         }
     );
 

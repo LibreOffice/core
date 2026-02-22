@@ -238,7 +238,7 @@ public:
 
     /** Creates and returns an unnamed database range on-the-fly in the Calc document.
         The range will not be buffered in the global table buffer. */
-    css::uno::Reference< css::sheet::XDatabaseRange >
+    rtl::Reference<ScDatabaseRangeObj>
                         createUnnamedDatabaseRangeObject(
                             const ScRange& rRangeAddr ) const;
 

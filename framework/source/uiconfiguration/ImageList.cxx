@@ -19,6 +19,7 @@
 
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
 #include "ImageList.hxx"
 

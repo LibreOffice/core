@@ -22,6 +22,8 @@
 #include <scitems.hxx>
 
 #include <osl/diagnose.h>
+#include <tools/fldunit.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <tptable.hxx>
 #include <global.hxx>

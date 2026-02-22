@@ -13,6 +13,11 @@ class printDialog(UITestCase):
     def test_printDialog(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf155218.ods")):
             with self.ui_test.execute_dialog_through_command(".uno:Print", close_button="cancel") as xDialog:
+                # The number of pages is updated on an idle handler after creating the dialog. Let’s
+                # wait until the main loop is truly idle again to make sure the text has been
+                # updated before reading it
+                xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+                xToolkit.waitUntilAllIdlesDispatched()
 
                 xPortraiTotalNumberPages = xDialog.getChild("totalnumpages")
                 self.assertEqual(get_state_as_dict(xPortraiTotalNumberPages)["Text"], "/ 2")

@@ -25,15 +25,21 @@
 #include <o3tl/test_info.hxx>
 #include <o3tl/untaint.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/stream.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Popover.hxx>
 #include <vcl/weld/customweld.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
@@ -630,7 +636,7 @@ static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, Ou
     if (bSelected)
         rDevice.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else
-        rDevice.SetTextColor(rStyleSettings.GetDialogTextColor());
+        rDevice.SetTextColor(rStyleSettings.GetWindowTextColor());
 
     tools::Long nX = rTopLeft.X();
     tools::Long nH = gUserItemSz.Height();
@@ -1092,22 +1098,22 @@ void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
 }
 
 FontSizeBox::FontSizeBox(std::unique_ptr<weld::ComboBox> p)
-    : pFontList(nullptr)
-    , nSavedValue(0)
-    , nMin(20)
-    , nMax(9999)
-    , eUnit(FieldUnit::POINT)
-    , nDecimalDigits(1)
-    , nRelMin(0)
-    , nRelMax(0)
-    , nRelStep(0)
-    , nPtRelMin(0)
-    , nPtRelMax(0)
-    , nPtRelStep(0)
-    , bRelativeMode(false)
-    , bRelative(false)
-    , bPtRelative(false)
-    , bStdSize(false)
+    : m_pFontList(nullptr)
+    , m_nSavedValue(0)
+    , m_nMin(20)
+    , m_nMax(9999)
+    , m_eUnit(FieldUnit::POINT)
+    , m_nDecimalDigits(1)
+    , m_nRelMin(0)
+    , m_nRelMax(0)
+    , m_nRelStep(0)
+    , m_nPtRelMin(0)
+    , m_nPtRelMax(0)
+    , m_nPtRelStep(0)
+    , m_bRelativeMode(false)
+    , m_bRelative(false)
+    , m_bPtRelative(false)
+    , m_bStdSize(false)
     , m_xComboBox(std::move(p))
 {
     m_xComboBox->set_entry_width_chars(std::ceil(m_xComboBox->get_pixel_size(format_number(105)).Width() /
@@ -1127,7 +1133,7 @@ void FontSizeBox::set_active_or_entry_text(const OUString& rText)
 IMPL_LINK(FontSizeBox, ReformatHdl, weld::Widget&, rWidget, void)
 {
     FontSizeNames aFontSizeNames(Application::GetSettings().GetUILanguageTag().getLanguageType());
-    if (!bRelativeMode || !aFontSizeNames.IsEmpty())
+    if (!m_bRelativeMode || !aFontSizeNames.IsEmpty())
     {
         if (aFontSizeNames.Name2Size(m_xComboBox->get_active_text()) != 0)
             return;
@@ -1140,24 +1146,24 @@ IMPL_LINK(FontSizeBox, ReformatHdl, weld::Widget&, rWidget, void)
 
 IMPL_LINK(FontSizeBox, ModifyHdl, weld::ComboBox&, rBox, void)
 {
-    if (bRelativeMode)
+    if (m_bRelativeMode)
     {
         OUString aStr = comphelper::string::stripStart(rBox.get_active_text(), ' ');
 
-        bool bNewMode = bRelative;
-        bool bOldPtRelMode = bPtRelative;
+        bool bNewMode = m_bRelative;
+        bool bOldPtRelMode = m_bPtRelative;
 
-        if ( bRelative )
+        if (m_bRelative)
         {
-            bPtRelative = false;
+            m_bPtRelative = false;
             const sal_Unicode* pStr = aStr.getStr();
             while ( *pStr )
             {
                 if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') && !unicode::isSpace(*pStr) )
                 {
-                    if ( ('-' == *pStr || '+' == *pStr) && !bPtRelative )
-                        bPtRelative = true;
-                    else if ( bPtRelative && 'p' == *pStr && 't' == *++pStr )
+                    if (('-' == *pStr || '+' == *pStr) && !m_bPtRelative)
+                        m_bPtRelative = true;
+                    else if (m_bPtRelative && 'p' == *pStr && 't' == *++pStr)
                         ;
                     else
                     {
@@ -1173,17 +1179,17 @@ IMPL_LINK(FontSizeBox, ModifyHdl, weld::ComboBox&, rBox, void)
             if ( -1 != aStr.indexOf('%') )
             {
                 bNewMode = true;
-                bPtRelative = false;
+                m_bPtRelative = false;
             }
 
             if ( '-' == aStr[0] || '+' == aStr[0] )
             {
                 bNewMode = true;
-                bPtRelative = true;
+                m_bPtRelative = true;
             }
         }
 
-        if ( bNewMode != bRelative || bPtRelative != bOldPtRelMode )
+        if (bNewMode != m_bRelative || m_bPtRelative != bOldPtRelMode)
             SetRelative( bNewMode );
     }
     m_aChangeHdl.Call(rBox);
@@ -1192,10 +1198,10 @@ IMPL_LINK(FontSizeBox, ModifyHdl, weld::ComboBox&, rBox, void)
 void FontSizeBox::Fill( const FontList* pList )
 {
     // remember for relative mode
-    pFontList = pList;
+    m_pFontList = pList;
 
     // no font sizes need to be set for relative mode
-    if ( bRelative )
+    if (m_bRelative)
         return;
 
     // query font sizes
@@ -1209,12 +1215,12 @@ void FontSizeBox::Fill( const FontList* pList )
     if ( pAry == FontList::GetStdSizeAry() )
     {
         // for standard sizes we don't need to bother
-        if (bStdSize && m_xComboBox->get_count() && aFontSizeNames.IsEmpty())
+        if (m_bStdSize && m_xComboBox->get_count() && aFontSizeNames.IsEmpty())
             return;
-        bStdSize = true;
+        m_bStdSize = true;
     }
     else
-        bStdSize = false;
+        m_bStdSize = false;
 
     int nSelectionStart, nSelectionEnd;
     m_xComboBox->get_entry_selection_bounds(nSelectionStart, nSelectionEnd);
@@ -1272,19 +1278,19 @@ void FontSizeBox::Fill( const FontList* pList )
 
 void FontSizeBox::EnableRelativeMode( sal_uInt16 nNewMin, sal_uInt16 nNewMax, sal_uInt16 nStep )
 {
-    bRelativeMode = true;
-    nRelMin       = nNewMin;
-    nRelMax       = nNewMax;
-    nRelStep      = nStep;
+    m_bRelativeMode = true;
+    m_nRelMin = nNewMin;
+    m_nRelMax = nNewMax;
+    m_nRelStep = nStep;
     SetUnit(FieldUnit::POINT);
 }
 
 void FontSizeBox::EnablePtRelativeMode( short nNewMin, short nNewMax, short nStep )
 {
-    bRelativeMode = true;
-    nPtRelMin     = nNewMin;
-    nPtRelMax     = nNewMax;
-    nPtRelStep    = nStep;
+    m_bRelativeMode = true;
+    m_nPtRelMin = nNewMin;
+    m_nPtRelMax = nNewMax;
+    m_nPtRelStep = nStep;
     SetUnit(FieldUnit::POINT);
 }
 
@@ -1296,7 +1302,7 @@ void FontSizeBox::InsertValue(int i)
 
 void FontSizeBox::SetRelative( bool bNewRelative )
 {
-    if ( !bRelativeMode )
+    if (!m_bRelativeMode)
         return;
 
     int nSelectionStart, nSelectionEnd;
@@ -1305,49 +1311,49 @@ void FontSizeBox::SetRelative( bool bNewRelative )
 
     if (bNewRelative)
     {
-        bRelative = true;
-        bStdSize = false;
+        m_bRelative = true;
+        m_bStdSize = false;
 
         m_xComboBox->clear();
 
-        if (bPtRelative)
+        if (m_bPtRelative)
         {
             SetDecimalDigits( 1 );
-            SetRange(nPtRelMin, nPtRelMax);
+            SetRange(m_nPtRelMin, m_nPtRelMax);
             SetUnit(FieldUnit::POINT);
 
-            short i = nPtRelMin, n = 0;
+            short i = m_nPtRelMin, n = 0;
             // JP 30.06.98: more than 100 values are not useful
-            while ( i <= nPtRelMax && n++ < 100 )
+            while (i <= m_nPtRelMax && n++ < 100)
             {
                 InsertValue( i );
-                i = i + nPtRelStep;
+                i = i + m_nPtRelStep;
             }
         }
         else
         {
             SetDecimalDigits(0);
-            SetRange(nRelMin, nRelMax);
+            SetRange(m_nRelMin, m_nRelMax);
             SetUnit(FieldUnit::PERCENT);
 
-            sal_uInt16 i = nRelMin;
-            while ( i <= nRelMax )
+            sal_uInt16 i = m_nRelMin;
+            while (i <= m_nRelMax)
             {
                 InsertValue( i );
-                i = i + nRelStep;
+                i = i + m_nRelStep;
             }
         }
     }
     else
     {
-        if (pFontList)
+        if (m_pFontList)
             m_xComboBox->clear();
-        bRelative = bPtRelative = false;
+        m_bRelative = m_bPtRelative = false;
         SetDecimalDigits(1);
         SetRange(20, 9999);
         SetUnit(FieldUnit::POINT);
-        if ( pFontList)
-            Fill( pFontList );
+        if (m_pFontList)
+            Fill(m_pFontList);
     }
 
     set_active_or_entry_text(aStr);
@@ -1359,24 +1365,24 @@ OUString FontSizeBox::format_number(int nValue) const
     OUString sRet;
 
     //pawn percent off to icu to decide whether percent is separated from its number for this locale
-    if (eUnit == FieldUnit::PERCENT)
+    if (m_eUnit == FieldUnit::PERCENT)
     {
         double fValue = nValue;
-        fValue /= weld::SpinButton::Power10(nDecimalDigits);
+        fValue /= weld::SpinButton::Power10(m_nDecimalDigits);
         sRet = unicode::formatPercent(fValue, Application::GetSettings().GetUILanguageTag());
     }
     else
     {
         const SvtSysLocale aSysLocale;
         const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
-        sRet = rLocaleData.getNum(nValue, nDecimalDigits, true, false);
-        if (eUnit != FieldUnit::NONE && eUnit != FieldUnit::DEGREE)
+        sRet = rLocaleData.getNum(nValue, m_nDecimalDigits, true, false);
+        if (m_eUnit != FieldUnit::NONE && m_eUnit != FieldUnit::DEGREE)
             sRet += " ";
-        assert(eUnit != FieldUnit::PERCENT);
-        sRet += weld::MetricSpinButton::MetricToString(eUnit);
+        assert(m_eUnit != FieldUnit::PERCENT);
+        sRet += weld::MetricSpinButton::MetricToString(m_eUnit);
     }
 
-    if (bRelativeMode && bPtRelative && (0 <= nValue) && !sRet.isEmpty())
+    if (m_bRelativeMode && m_bPtRelative && (0 <= nValue) && !sRet.isEmpty())
         sRet = "+" + sRet;
 
     return sRet;
@@ -1385,11 +1391,11 @@ OUString FontSizeBox::format_number(int nValue) const
 void FontSizeBox::SetValue(int nNewValue, FieldUnit eInUnit)
 {
     auto nTempValue = vcl::ConvertValue(nNewValue, 0, GetDecimalDigits(), eInUnit, GetUnit());
-    if (nTempValue < nMin)
-        nTempValue = nMin;
-    else if (nTempValue > nMax)
-        nTempValue = nMax;
-    if (!bRelative)
+    if (nTempValue < m_nMin)
+        nTempValue = m_nMin;
+    else if (nTempValue > m_nMax)
+        nTempValue = m_nMax;
+    if (!m_bRelative)
     {
         FontSizeNames aFontSizeNames(Application::GetSettings().GetUILanguageTag().getLanguageType());
         // conversion loses precision; however font sizes should
@@ -1407,13 +1413,13 @@ void FontSizeBox::SetValue(int nNewValue, FieldUnit eInUnit)
 
 void FontSizeBox::set_value(int nNewValue)
 {
-    SetValue(nNewValue, eUnit);
+    SetValue(nNewValue, m_eUnit);
 }
 
 int FontSizeBox::get_value() const
 {
     OUString aStr = m_xComboBox->get_active_text();
-    if (!bRelative)
+    if (!m_bRelative)
     {
         FontSizeNames aFontSizeNames(Application::GetSettings().GetUILanguageTag().getLanguageType());
         auto nValue = aFontSizeNames.Name2Size(aStr);
@@ -1431,10 +1437,10 @@ int FontSizeBox::get_value() const
     (void)vcl::TextToValue(aStr, fResult, 0, GetDecimalDigits(), rLocaleData, GetUnit());
     if (!aStr.isEmpty())
     {
-        if (fResult < nMin)
-            fResult = nMin;
-        else if (fResult > nMax)
-            fResult = nMax;
+        if (fResult < m_nMin)
+            fResult = m_nMin;
+        else if (fResult > m_nMax)
+            fResult = m_nMax;
     }
     return std::round(fResult);
 }

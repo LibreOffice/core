@@ -19,6 +19,7 @@
 
 #include <brwview.hxx>
 #include <sbagrid.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/split.hxx>

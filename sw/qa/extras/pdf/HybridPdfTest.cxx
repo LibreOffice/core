@@ -82,7 +82,8 @@ void HybridPdfTest::testHybridWithAttachedFileAndPass()
     // The ODT document is embedded using an attached file conforming to the PDF specs
     // it doesn't have the "/AdditionalStreams"
     // The file is encrypted
-    createSwDoc("Hybrid_EmbeddedFileOnlyPDF20UAPasswordpop.pdf", "pop");
+    createSwDoc("Hybrid_EmbeddedFileOnlyPDF20UAPasswordpop.pdf", /*rParams*/ {},
+                /*pPassword*/ "pop");
 
     // We can access the document text in a single paragraph that spans multiple rows
     // This wouldn't be possible with a PDF, so the opened document has to be ODT

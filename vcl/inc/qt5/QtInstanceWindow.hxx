@@ -24,11 +24,10 @@ public:
 
     virtual void set_title(const OUString& rTitle) override;
     virtual OUString get_title() const override;
-    virtual void window_move(int, int) override;
+    virtual void window_move(int x, int y) override;
     virtual bool get_resizable() const override;
     virtual Size get_size() const override;
     virtual Point get_position() const override;
-    virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const override;
 
     virtual bool has_toplevel_focus() const override;
     virtual void present() override;
@@ -49,6 +48,9 @@ public:
     virtual const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() override;
 
     bool eventFilter(QObject* pObject, QEvent* pEvent) override;
+
+private:
+    void collectScreenShotData(QWidget& rWidget, weld::ScreenShotCollection& rScreenShotCollection);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

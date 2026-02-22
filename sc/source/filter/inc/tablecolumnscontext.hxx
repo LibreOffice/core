@@ -33,6 +33,7 @@ public:
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void        onCharacters( const rtl::OUString& rChars ) override;
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;

@@ -3771,8 +3771,7 @@ void DesktopLOKTest::testSpellcheckerMultiView()
     comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLangISO, true));
 
     auto aSavedSettings = Application::GetSettings();
-    std::unique_ptr<Resetter> pResetter(
-            new Resetter([&]() { Application::SetSettings(aSavedSettings); }));
+    comphelper::ScopeGuard g([&]() { Application::SetSettings(aSavedSettings); });
     AllSettings aSettings(aSavedSettings);
     aSettings.SetLanguageTag(aLangISO, true);
     Application::SetSettings(aSettings);

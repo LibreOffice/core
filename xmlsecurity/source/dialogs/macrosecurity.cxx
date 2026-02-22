@@ -36,11 +36,15 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/color.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/datetime.hxx>
 
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 
 using namespace comphelper;
 using namespace ::com::sun::star;

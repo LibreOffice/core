@@ -23,7 +23,6 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
@@ -32,6 +31,7 @@
 namespace com::sun::star {
     namespace uno{
         class Any;
+        template <class E> class Sequence;
     }
     namespace beans{
         struct PropertyValue;

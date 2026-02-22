@@ -35,6 +35,8 @@
 #include <pfiltdlg.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <osl/diagnose.h>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 ScPivotFilterDlg::ScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArgSet, ScViewData& rData,
                                    SCTAB nSourceTab )

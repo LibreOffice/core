@@ -38,10 +38,12 @@
 #include <SwAppletImpl.hxx>
 #include <ndindex.hxx>
 
+#include <tools/mapunit.hxx>
 #include <osl/diagnose.h>
 #include <sot/exchange.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/frmdescr.hxx>
+#include <vcl/mapmod.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

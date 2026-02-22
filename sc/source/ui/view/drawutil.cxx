@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/unit_conversion.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 
 #include <drawutil.hxx>

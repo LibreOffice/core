@@ -24,6 +24,7 @@
 
 #include <svx/databaselocationinput.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 
 namespace abp

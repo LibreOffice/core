@@ -989,13 +989,17 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     const ScDPSaveData::DimsType& rDims = rSaveData.GetDimensions();
     bool bTabularMode = false;
     bool bCompactMode = true;
+    bool bDataOnRows = false;
     for (const auto & i : rDims)
     {
         const ScDPSaveDimension& rDim = *i;
 
         tools::Long nPos = -1; // position in cache
         if (rDim.IsDataLayout())
+        {
             nPos = -2; // Excel uses an index of -2 to indicate a data layout field.
+            bDataOnRows = (rDim.GetOrientation() == sheet::DataPilotFieldOrientation_ROW);
+        }
         else
         {
             OUString aSrcName = ScDPUtil::getSourceDimensionName(rDim.GetName());
@@ -1047,6 +1051,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
         XML_name, rDPObj.GetName().toUtf8(),
         XML_cacheId, OString::number(nCacheId),
+        XML_dataOnRows, ToPsz10(bDataOnRows),
         XML_applyNumberFormats, ToPsz10(false),
         XML_applyBorderFormats, ToPsz10(false),
         XML_applyFontFormats, ToPsz10(false),

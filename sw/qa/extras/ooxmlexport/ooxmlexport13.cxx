@@ -57,9 +57,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125778_lostPageBreakTOX, "tdf125778_lostPageBrea
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126994_lostPageBreak, "tdf126994_lostPageBreak.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
-
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 3, getPages() );
 }
 
@@ -113,9 +110,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf155690, "tdf155690.docx")
 CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF)
 {
     createSwDoc("tdf121374_sectionHF.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
@@ -175,9 +169,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121659_loseColumnBrNextToShape)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     OUString listId;
     OUString listStyle;
     {
@@ -490,9 +481,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123636_newlinePageBreak4, "tdf123636_newlinePage
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
@@ -520,15 +508,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle, "tdf118947_tableStyle.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table style sets 0 right margin", sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Table sets 2.5 line-spacing", sal_Int16(250), getProperty<style::LineSpacing>(xPara, u"ParaLineSpacing"_ustr).Height);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph background color in cell A2", sal_Int32(-1), getProperty<sal_Int32>(xPara, u"ParaBackColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Compat mode overrides left adjust", style::ParagraphAdjust_RIGHT,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Compat mode overrides left adjust", style::ParagraphAdjust_END,
                                  static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, u"ParaAdjust"_ustr)));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     // This cell is affected by compatSetting overrideTableStyleFontSizeAndJustification=1 (no goofy exception)
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
@@ -540,7 +525,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx"
     // Even though not specified, Table-Style tries to distribute the properties in DocDefault. DocDefault fontsize is 8pt.
     // However, this is overridden by the default style's specified fontsize of 12 and left justify.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Non-Compat mode has 12pt font size", 12.f, getProperty<float>(getRun(xPara,1), u"CharHeight"_ustr));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Non-Compat mode keeps the style's left adjust", style::ParagraphAdjust_LEFT,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Non-Compat mode keeps the style's left adjust", style::ParagraphAdjust_START,
                                  static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, u"ParaAdjust"_ustr)));
 }
 
@@ -677,6 +662,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123435, "tdf123435.docx")
     // - Expected: 2
     // - Actual  : 1
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
+    // tdf#166335: fmla must not be an empty string
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // without the fix, this was 8. Having an a:gd fmla="" causes MSOffice to report a corrupt doc.
+    assertXPath(pXmlDoc, "//a:gdLst/a:gd[@fmla='']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
@@ -704,9 +695,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameSizeExport)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf119201, "tdf119201.docx")
 {
-    // FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Visibility of shapes wasn't imported/exported, for now base printable property on that, too
     auto xShape(getShape(1));
     CPPUNIT_ASSERT_MESSAGE("First shape should be visible.", getProperty<bool>(xShape, u"Visible"_ustr));
@@ -731,6 +719,49 @@ DECLARE_OOXMLEXPORT_TEST(testTdf156484, "tdf156484.docx")
     xShape = getShape(3);
     CPPUNIT_ASSERT_MESSAGE("Third shape should not be visible.", !getProperty<bool>(xShape, u"Visible"_ustr));
     CPPUNIT_ASSERT_MESSAGE("Third shape should not be printable.", !getProperty<bool>(xShape, u"Printable"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf162527_hidden_image)
+{
+    createSwDoc("tdf162527_hidden_image.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the fix this element would have no 'hidden' attribute
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/wp:docPr", "hidden",
+                u"1");
+
+    auto xShape(getShape(1));
+    CPPUNIT_ASSERT_MESSAGE("Shape should not be visible.",
+                           !getProperty<bool>(xShape, u"Visible"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf169802_hidden_shape)
+{
+    createSwDoc("tdf169802_hidden_shape.docx");
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    // Just to check that the layout has sane content
+    int nTextNodes = countXPathNodes(pDump, "//*[contains(@type, 'PortionType::Text')]");
+    CPPUNIT_ASSERT_MESSAGE("Layout must contain text nodes", 0 < nTextNodes);
+    // Layout mustn't contain fly portion, without the fix it would contain several
+    int nFlyNodes = countXPathNodes(pDump, "//*[contains(@type, 'PortionType::Fly')]");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("No fly portion nodes must exist in the layout", 0, nFlyNodes);
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    const char* const sPath("/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor");
+    CPPUNIT_ASSERT_EQUAL(0, getXPathAttributePosition(pXmlDoc, sPath, "distT"));
+    CPPUNIT_ASSERT_EQUAL(1, getXPathAttributePosition(pXmlDoc, sPath, "distB"));
+    CPPUNIT_ASSERT_EQUAL(2, getXPathAttributePosition(pXmlDoc, sPath, "distL"));
+    CPPUNIT_ASSERT_EQUAL(3, getXPathAttributePosition(pXmlDoc, sPath, "distR"));
+    CPPUNIT_ASSERT_EQUAL(4, getXPathAttributePosition(pXmlDoc, sPath, "simplePos"));
+    CPPUNIT_ASSERT_EQUAL(5, getXPathAttributePosition(pXmlDoc, sPath, "relativeHeight"));
+    CPPUNIT_ASSERT_EQUAL(6, getXPathAttributePosition(pXmlDoc, sPath, "behindDoc"));
+    CPPUNIT_ASSERT_EQUAL(7, getXPathAttributePosition(pXmlDoc, sPath, "locked"));
+    CPPUNIT_ASSERT_EQUAL(8, getXPathAttributePosition(pXmlDoc, sPath, "layoutInCell"));
+    CPPUNIT_ASSERT_EQUAL(9, getXPathAttributePosition(pXmlDoc, sPath, "allowOverlap"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124594, "tdf124594.docx")
@@ -848,9 +879,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123460)
     createSwDoc("tdf123460.docx");
     verify();
 
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     verify(/*bIsExport*/ true);
 }
@@ -858,9 +886,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123460)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146140)
 {
     createSwDoc("tdf123460.docx");
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1347,13 +1372,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
     CPPUNIT_ASSERT(visitedStyleName.equalsIgnoreAsciiCase("Visited Internet Link"));
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf142693_hugePaperSizeImport)
+CPPUNIT_TEST_FIXTURE(Test, testTdf142693_hugePaperSize)
 {
-    createSwDoc("tdf142693_hugePaperSizeImport.docx");
+    createSwDoc("tdf142693_hugePaperSize.docx");
+
+    // Verify that original page size is imported as is, since Writer can handle
+    // large page sizes
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Width (mm) ", sal_Int32(1594),
+                                 getProperty<sal_Int32>(xPageStyle, u"Width"_ustr) / 100);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Page Height (mm)", sal_Int32(1841),
+                                 getProperty<sal_Int32>(xPageStyle, u"Height"_ustr) / 100);
+
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "w", u"90369");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "h", u"104372");
+    // Verify that exported page size is limited to conform to max page dimensions
+    // Word can handle in practice, which is about 64k twips (as opposed to 31680 in [MS-OI29500])
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "w", u"65500");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "h", u"65500");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127925)
@@ -1377,9 +1414,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127579)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128304)
 {
     createSwDoc("tdf128304.odt");
-
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(4, getShapes());

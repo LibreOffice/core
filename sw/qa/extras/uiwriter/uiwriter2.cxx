@@ -22,6 +22,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
+#include <test/commontesttools.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
@@ -389,18 +390,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 {
-    Resetter resetter([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Writer::AutoFunction::Format::ByInput::ReplaceStyle::set(false, pBatch);
-        officecfg::Office::Writer::AutoFunction::Format::Option::ReplaceStyle::set(false, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::AutoFunction::Format::ByInput::ReplaceStyle::set(true, pBatch);
-    officecfg::Office::Writer::AutoFunction::Format::Option::ReplaceStyle::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Writer::AutoFunction::Format::ByInput::ReplaceStyle> aCfg1(
+        true);
+    ScopedConfigValue<officecfg::Office::Writer::AutoFunction::Format::Option::ReplaceStyle> aCfg2(
+        true);
 
     createSwDoc();
     SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
@@ -2597,10 +2590,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
     createSwDoc("tdf105413.fodt");
     SwDoc* pDoc = getSwDoc();
 
-    // all paragraphs are left-aligned with preset single line spacing
+    // all paragraphs are start-aligned with preset single line spacing
     for (int i = 1; i < 4; ++i)
     {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5),
                              getProperty<sal_Int32>(getParagraph(i), u"ParaAdjust"_ustr));
         dispatchCommand(mxComponent, u".uno:SpacePara1"_ustr, {});
     }
@@ -2629,7 +2622,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
                          getProperty<style::LineSpacing>(getParagraph(3), u"ParaLineSpacing"_ustr)
                              .Height); // double line spacing
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), u"ParaAdjust"_ustr)); // left-aligned
+        sal_Int32(5), getProperty<sal_Int32>(getParagraph(2), u"ParaAdjust"_ustr)); // left-aligned
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
                          getProperty<style::LineSpacing>(getParagraph(2), u"ParaLineSpacing"_ustr)
                              .Height); // single line spacing

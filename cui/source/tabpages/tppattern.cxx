@@ -21,10 +21,15 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
+#include <svtools/dlgname.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
@@ -36,7 +41,6 @@
 #include <svx/xtable.hxx>
 #include <svx/xflbmtit.hxx>
 #include <cuitabarea.hxx>
-#include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <sal/log.hxx>
 
@@ -349,13 +353,12 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
         bValidPatternName = (SearchPatternList(aName) == -1);
     }
 
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    SvxNameDialog aDlg(GetFrameWeld(), aName, aDesc);
     sal_uInt16         nError(1);
 
-    while( pDlg->Execute() == RET_OK )
+    while (aDlg.run() == RET_OK)
     {
-        aName = pDlg->GetName();
+        aName = aDlg.GetName();
 
         bValidPatternName = (SearchPatternList(aName) == -1);
 
@@ -369,8 +372,6 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
         if (xWarnBox->run() != RET_OK)
             break;
     }
-
-    pDlg.disposeAndClear();
 
     if( !nError )
     {
@@ -446,14 +447,13 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
     OUString aDesc(CuiResId(RID_CUISTR_DESC_NEW_PATTERN));
     OUString aName(m_pPatternList->GetBitmap(nPos)->GetName());
 
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    SvxNameDialog aDlg(GetFrameWeld(), aName, aDesc);
 
     bool bLoop = true;
 
-    while( bLoop && pDlg->Execute() == RET_OK )
+    while (bLoop && aDlg.run() == RET_OK)
     {
-        aName = pDlg->GetName();
+        aName = aDlg.GetName();
         sal_Int32 nPatternPos = SearchPatternList(aName);
         bool bValidPatternName = (nPatternPos == static_cast<sal_Int32>(nPos) ) || (nPatternPos == -1);
 

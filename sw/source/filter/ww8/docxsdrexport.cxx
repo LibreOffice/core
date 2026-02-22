@@ -21,6 +21,7 @@
 #include <svx/svdobjkind.hxx>
 #include <svx/svditer.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <oox/export/shapes.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
 #include <textboxhelper.hxx>
@@ -847,7 +848,6 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                       && pObj->GetLayer() != iDocumentDrawModelAccess.GetHeaderFooterHellId()
                       && pObj->GetLayer() != iDocumentDrawModelAccess.GetInvisibleHellId();
         }
-        attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
 
         attrList->add(XML_distT, OString::number(TwipsToEMU(nDistT)));
         attrList->add(XML_distB, OString::number(TwipsToEMU(nDistB)));
@@ -855,6 +855,11 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         attrList->add(XML_distR, OString::number(TwipsToEMU(nDistR)));
 
         attrList->add(XML_simplePos, "0");
+
+        // It seems 0 and 1 have special meaning: just start counting from 2 to avoid issues with that.
+        // Mandatory attribute, write 0 if pObj is null.
+        attrList->add(XML_relativeHeight, pObj ? OString::number(pObj->GetOrdNum() + 2) : "0"_ostr);
+        attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
         attrList->add(XML_locked, "0");
 
         bool bLclInTabCell = true;
@@ -876,20 +881,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             bLclInTabCell = true;
         }
 
-        if (bLclInTabCell)
-            attrList->add(XML_layoutInCell, "1");
-        else
-            attrList->add(XML_layoutInCell, "0");
+        attrList->add(XML_layoutInCell, bLclInTabCell ? "1" : "0");
 
         bool bAllowOverlap = pFrameFormat->GetWrapInfluenceOnObjPos().GetAllowOverlap();
         attrList->add(XML_allowOverlap, bAllowOverlap ? "1" : "0");
-
-        if (pObj)
-            // It seems 0 and 1 have special meaning: just start counting from 2 to avoid issues with that.
-            attrList->add(XML_relativeHeight, OString::number(pObj->GetOrdNum() + 2));
-        else
-            // relativeHeight is mandatory attribute, if value is not present, we must write default value
-            attrList->add(XML_relativeHeight, "0");
 
         if (pObj)
         {
@@ -1193,6 +1188,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             }
         }
     }
+    // Although the spec allows some randomly larger 27273042316900,
+    // MS Word reports a document as corrupt if the effectExtent > SAL_MAX_INT32 or < SAL_MIN_INT32
+    nLeftExtEMU = std::clamp<sal_Int64>(nLeftExtEMU, SAL_MIN_INT32, SAL_MAX_INT32);
+    nTopExtEMU = std::clamp<sal_Int64>(nTopExtEMU, SAL_MIN_INT32, SAL_MAX_INT32);
+    nRightExtEMU = std::clamp<sal_Int64>(nRightExtEMU, SAL_MIN_INT32, SAL_MAX_INT32);
+    nBottomExtEMU = std::clamp<sal_Int64>(nBottomExtEMU, SAL_MIN_INT32, SAL_MAX_INT32);
+
     m_pImpl->getSerializer()->singleElementNS(
         XML_wp, XML_effectExtent, XML_l, OString::number(nLeftExtEMU), XML_t,
         OString::number(nTopExtEMU), XML_r, OString::number(nRightExtEMU), XML_b,
@@ -1595,6 +1597,9 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XSha
         if (eFillStyle == css::drawing::FillStyle_BITMAP)
             return false;
     }
+    if (!oox::drawingml::ShapeExport::IsValidShape(xShape, drawingml::DOCUMENT_DOCX))
+        return false;
+
     return true;
 }
 

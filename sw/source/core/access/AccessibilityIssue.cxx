@@ -24,6 +24,7 @@
 #include <docsh.hxx>
 #include <view.hxx>
 #include <comphelper/lok.hxx>
+#include <svtools/dlgname.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxdlg.hxx>
 
@@ -339,12 +340,11 @@ void AccessibilityIssue::quickFixIssue() const
         case IssueObject::HYPERLINKTEXT:
         case IssueObject::HYPERLINKFLY:
         {
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             SwWrtShell* pWrtShell = pShell->GetWrtShell();
-            ScopedVclPtr<AbstractSvxNameDialog> aNameDialog(pFact->CreateSvxNameDialog(
-                pWrtShell->GetView().GetFrameWeld(), OUString(), SwResId(STR_HYPERLINK_NO_NAME_DLG),
-                SwResId(STR_HYPERLINK_NO_NAME_DLG)));
-            if (aNameDialog->Execute() == RET_OK)
+            SvxNameDialog aNameDialog(pWrtShell->GetView().GetFrameWeld(), OUString(),
+                                      SwResId(STR_HYPERLINK_NO_NAME_DLG),
+                                      SwResId(STR_HYPERLINK_NO_NAME_DLG));
+            if (aNameDialog.run() == RET_OK)
             {
                 if (m_eIssueObject == IssueObject::HYPERLINKTEXT)
                 {
@@ -357,7 +357,7 @@ void AccessibilityIssue::quickFixIssue() const
                         && xRun->getPropertySetInfo()->hasPropertyByName(u"HyperLinkName"_ustr))
                     {
                         xRun->setPropertyValue(u"HyperLinkName"_ustr,
-                                               uno::Any(aNameDialog->GetName()));
+                                               uno::Any(aNameDialog.GetName()));
                     }
                 }
                 else
@@ -367,7 +367,7 @@ void AccessibilityIssue::quickFixIssue() const
                     if (pFlyFormat)
                     {
                         SwFormatURL item{ pFlyFormat->GetURL() };
-                        item.SetName(aNameDialog->GetName());
+                        item.SetName(aNameDialog.GetName());
                         SwAttrSet set{ m_pDoc->GetAttrPool(), svl::Items<RES_URL, RES_URL> };
                         set.Put(item);
                         m_pDoc->SetFlyFrameAttr(*pFlyFormat, set);
@@ -379,18 +379,17 @@ void AccessibilityIssue::quickFixIssue() const
         break;
         case IssueObject::DOCUMENT_TITLE:
         {
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             SwWrtShell* pWrtShell = pShell->GetWrtShell();
-            ScopedVclPtr<AbstractSvxNameDialog> aNameDialog(pFact->CreateSvxNameDialog(
-                pWrtShell->GetView().GetFrameWeld(), OUString(),
-                SwResId(STR_DOCUMENT_TITLE_DLG_DESC), SwResId(STR_DOCUMENT_TITLE_DLG_TITLE)));
-            if (aNameDialog->Execute() == RET_OK)
+            SvxNameDialog aNameDialog(pWrtShell->GetView().GetFrameWeld(), OUString(),
+                                      SwResId(STR_DOCUMENT_TITLE_DLG_DESC),
+                                      SwResId(STR_DOCUMENT_TITLE_DLG_TITLE));
+            if (aNameDialog.run() == RET_OK)
             {
                 const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     pShell->GetModel(), uno::UNO_QUERY_THROW);
                 const uno::Reference<document::XDocumentProperties> xDocumentProperties(
                     xDPS->getDocumentProperties());
-                xDocumentProperties->setTitle(aNameDialog->GetName());
+                xDocumentProperties->setTitle(aNameDialog.GetName());
 
                 m_pDoc->getOnlineAccessibilityCheck()->resetAndQueueDocumentLevel();
             }

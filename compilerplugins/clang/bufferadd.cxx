@@ -83,6 +83,7 @@ public:
 
     bool VisitStmt(Stmt const*);
     bool VisitCallExpr(CallExpr const*);
+    bool VisitCXXMemberCallExpr(CXXMemberCallExpr const*);
     bool VisitCXXConstructExpr(CXXConstructExpr const*);
     bool VisitUnaryOperator(UnaryOperator const*);
 
@@ -139,6 +140,35 @@ bool BufferAdd::VisitCallExpr(CallExpr const* callExpr)
                 if (varDecl->getName() == "noelf7")
                     callExpr->dump();
             }
+    }
+    return true;
+}
+
+bool BufferAdd::VisitCXXMemberCallExpr(CXXMemberCallExpr const* expr)
+{
+    if (ignoreLocation(expr))
+    {
+        return true;
+    }
+    auto const e = dyn_cast<DeclRefExpr>(expr->getImplicitObjectArgument()->IgnoreParenImpCasts());
+    if (e == nullptr)
+    {
+        return true;
+    }
+    auto const d = dyn_cast<VarDecl>(e->getDecl());
+    if (d == nullptr)
+    {
+        return true;
+    }
+    auto const tc = loplugin::TypeCheck(d->getType());
+    if (!(tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
+          || tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()))
+    {
+        return true;
+    }
+    if (!isMethodOkToMerge(expr))
+    {
+        badMap.insert(d);
     }
     return true;
 }

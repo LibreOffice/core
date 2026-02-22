@@ -154,27 +154,29 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
 void DocxTableStyleExport::Impl::tableStyleTableCellMar(
     const uno::Sequence<beans::PropertyValue>& rTableCellMar, sal_Int32 nType)
 {
-    static DocxStringTokenMap const aTableCellMarTokens[]
-        = { { "left", XML_left }, { "right", XML_right }, { "start", XML_start },
-            { "end", XML_end },   { "top", XML_top },     { "bottom", XML_bottom },
-            { nullptr, 0 } };
+    // use table to output elements in correct order
+    static std::pair<OUString, sal_Int32> constexpr aTableCellOrder[]{
+        { u"top"_ustr, XML_top },       { u"start"_ustr, XML_start }, { u"left"_ustr, XML_left },
+        { u"bottom"_ustr, XML_bottom }, { u"end"_ustr, XML_end },     { u"right"_ustr, XML_right }
+    };
 
     if (!rTableCellMar.hasElements())
         return;
 
     m_pSerializer->startElementNS(XML_w, nType);
-    for (const auto& rProp : rTableCellMar)
+
+    comphelper::SequenceAsHashMap aCellMap(rTableCellMar);
+    for (const std::pair<OUString, sal_Int32>& rPair : aTableCellOrder)
     {
-        if (sal_Int32 nToken = DocxStringGetToken(aTableCellMarTokens, rProp.Name))
-        {
-            comphelper::SequenceAsHashMap aMap(
-                rProp.Value.get<uno::Sequence<beans::PropertyValue>>());
-            m_pSerializer->singleElementNS(XML_w, nToken, FSNS(XML_w, XML_w),
-                                           OString::number(aMap[u"w"_ustr].get<sal_Int32>()),
-                                           FSNS(XML_w, XML_type),
-                                           aMap[u"type"_ustr].get<OUString>());
-        }
+        uno::Any aAny = aCellMap.getValue(rPair.first);
+        if (!aAny.hasValue())
+            continue;
+        comphelper::SequenceAsHashMap aMap(aAny.get<uno::Sequence<beans::PropertyValue>>());
+        m_pSerializer->singleElementNS(XML_w, rPair.second, FSNS(XML_w, XML_w),
+                                       OString::number(aMap[u"w"_ustr].get<sal_Int32>()),
+                                       FSNS(XML_w, XML_type), aMap[u"type"_ustr].get<OUString>());
     }
+
     m_pSerializer->endElementNS(XML_w, nType);
 }
 
@@ -204,26 +206,27 @@ void DocxTableStyleExport::Impl::tableStyleTcBorder(
 void DocxTableStyleExport::Impl::tableStyleTcBorders(
     const uno::Sequence<beans::PropertyValue>& rTcBorders, sal_Int32 nToken)
 {
-    static DocxStringTokenMap const aTcBordersTokens[] = { { "left", XML_left },
-                                                           { "right", XML_right },
-                                                           { "start", XML_start },
-                                                           { "end", XML_end },
-                                                           { "top", XML_top },
-                                                           { "bottom", XML_bottom },
-                                                           { "insideH", XML_insideH },
-                                                           { "insideV", XML_insideV },
-                                                           { "tl2br", XML_tl2br },
-                                                           { "tr2bl", XML_tr2bl },
-                                                           { nullptr, 0 } };
+    // use table to output elements in correct order
+    static std::pair<OUString, sal_Int32> constexpr aBordersOrder[]{
+        { u"top"_ustr, XML_top },         { u"start"_ustr, XML_start },
+        { u"left"_ustr, XML_left },       { u"bottom"_ustr, XML_bottom },
+        { u"end"_ustr, XML_end },         { u"right"_ustr, XML_right },
+        { u"insideH"_ustr, XML_insideH }, { u"insideV"_ustr, XML_insideV },
+        { u"tl2br"_ustr, XML_tl2br },     { u"tr2bl"_ustr, XML_tr2bl },
+    };
 
     if (!rTcBorders.hasElements())
         return;
 
+    comphelper::SequenceAsHashMap aBorderMap(rTcBorders);
     m_pSerializer->startElementNS(XML_w, nToken);
-    for (const auto& rTcBorder : rTcBorders)
-        if (sal_Int32 nSubToken = DocxStringGetToken(aTcBordersTokens, rTcBorder.Name))
-            tableStyleTcBorder(nSubToken,
-                               rTcBorder.Value.get<uno::Sequence<beans::PropertyValue>>());
+    for (const auto& rPair : aBordersOrder)
+    {
+        uno::Any aAny = aBorderMap.getValue(rPair.first);
+        if (!aAny.hasValue())
+            continue;
+        tableStyleTcBorder(rPair.second, aAny.get<uno::Sequence<beans::PropertyValue>>());
+    }
     m_pSerializer->endElementNS(XML_w, nToken);
 }
 

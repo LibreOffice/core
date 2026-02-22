@@ -45,6 +45,7 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/scrbar.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>

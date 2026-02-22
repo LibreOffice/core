@@ -21,6 +21,7 @@
 #include <view/SlsTheme.hxx>
 #include <controller/SlsProperties.hxx>
 #include <tools/color.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

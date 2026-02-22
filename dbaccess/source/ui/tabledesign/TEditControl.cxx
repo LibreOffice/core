@@ -43,6 +43,7 @@
 #include <dsntypes.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Menu.hxx>
 
 using namespace ::dbaui;
 using namespace ::comphelper;

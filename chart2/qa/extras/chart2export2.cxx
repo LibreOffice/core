@@ -17,6 +17,8 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <vcl/gfxlink.hxx>
+
 using uno::Reference;
 using beans::XPropertySet;
 
@@ -110,22 +112,22 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCombinedChartSecondaryAxisODS)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenXLSX)
 {
     // Original files were created with MS Office
-    {
-        loadFromFile(u"xlsx/tdf127777.xlsx");
-        save(TestFilter::XLSX);
-        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
-        CPPUNIT_ASSERT(pXmlDoc);
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val",
-                    u"between");
-    }
-    {
-        loadFromFile(u"xlsx/tdf132076.xlsx");
-        save(TestFilter::XLSX);
-        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
-        CPPUNIT_ASSERT(pXmlDoc);
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val",
-                    u"between");
-    }
+    loadFromFile(u"xlsx/tdf127777.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val",
+                u"between");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenXLSX_tdf132076)
+{
+    loadFromFile(u"xlsx/tdf132076.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:crossBetween", "val",
+                u"between");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenWithDeletedAxis)
@@ -150,34 +152,37 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCrossBetweenODS)
                 u"between");
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_boxWhisker)
 {
-    xmlDocUniquePtr pXmlDoc;
-
-    // ====
     loadFromFile(u"xlsx/boxWhisker.xlsx");
     save(TestFilter::XLSX);
-    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 3, 0,
                 "layoutId", u"boxWhisker");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"BoxWhisker");
-    // ====
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_clusteredColumn)
+{
     loadFromFile(u"xlsx/clusteredColumn.xlsx");
     save(TestFilter::XLSX);
-    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
                 "layoutId", u"clusteredColumn");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"Clustered Column");
-    // ====
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_funnel1)
+{
     loadFromFile(u"xlsx/funnel1.xlsx");
     save(TestFilter::XLSX);
-    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
@@ -189,11 +194,13 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
         "val", u"c55a11");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"Funnel chart!");
+}
 
-    // ====
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_paretoLine)
+{
     loadFromFile(u"xlsx/paretoLine.xlsx");
     save(TestFilter::XLSX);
-    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     // A pareto chart from MSO really consists of two subcharts: a pareto line
@@ -204,40 +211,52 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX)
                 "layoutId", u"paretoLine");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"ParetoLine");
-    // ====
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_regionMap)
+{
     loadFromFile(u"xlsx/regionMap.xlsx");
     save(TestFilter::XLSX);
-    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
                 "layoutId", u"regionMap");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"RegionMap");
-    // ====
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_sunburst)
+{
     loadFromFile(u"xlsx/sunburst.xlsx");
     save(TestFilter::XLSX);
-    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
                 "layoutId", u"sunburst");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"Sunburst");
-    // ====
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_treemap)
+{
     loadFromFile(u"xlsx/treemap.xlsx");
     save(TestFilter::XLSX);
-    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
                 "layoutId", u"treemap");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"Treemap");
-    // ====
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_waterfall)
+{
     loadFromFile(u"xlsx/waterfall.xlsx");
     save(TestFilter::XLSX);
-    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series",
@@ -457,107 +476,104 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabel)
 }
 
 /// Test for tdf#94235
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataSeriesName)
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataSeriesName_ODF)
 {
-    // ODF
-    {
-        loadFromFile(u"ods/ser_labels.ods");
-        saveAndReload(TestFilter::ODS);
-        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
-        uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
-        CPPUNIT_ASSERT(xDataSeries.is());
-        uno::Reference<beans::XPropertySet> xPropertySet;
-        chart2::DataPointLabel aDataPointLabel;
-        xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-        xPropertySet->getPropertyValue(u"Label"_ustr) >>= aDataPointLabel;
-        CPPUNIT_ASSERT_EQUAL(sal_True, aDataPointLabel.ShowSeriesName);
-    }
+    loadFromFile(u"ods/ser_labels.ods");
+    saveAndReload(TestFilter::ODS);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    chart2::DataPointLabel aDataPointLabel;
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aDataPointLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_True, aDataPointLabel.ShowSeriesName);
+}
 
-    // OOXML
-    {
-        loadFromFile(u"xlsx/ser_labels.xlsx");
-        saveAndReload(TestFilter::XLSX);
-        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
-        uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
-        CPPUNIT_ASSERT(xDataSeries.is());
-        uno::Reference<beans::XPropertySet> xPropertySet;
-        chart2::DataPointLabel aDataPointLabel;
-        xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
-        xPropertySet->getPropertyValue(u"Label"_ustr) >>= aDataPointLabel;
-        CPPUNIT_ASSERT_EQUAL(sal_True, aDataPointLabel.ShowSeriesName);
-    }
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataSeriesName_OOXML)
+{
+    loadFromFile(u"xlsx/ser_labels.xlsx");
+    saveAndReload(TestFilter::XLSX);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    chart2::DataPointLabel aDataPointLabel;
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
+    xPropertySet->getPropertyValue(u"Label"_ustr) >>= aDataPointLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_True, aDataPointLabel.ShowSeriesName);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomPositionofDataLabel)
 {
     loadFromFile(u"xlsx/testCustomPosDataLabels.xlsx");
-    {
-        save(TestFilter::XLSX);
-        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
-        CPPUNIT_ASSERT(pXmlDoc);
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
 
-        // test custom position of data label (xlsx)
-        assertXPath(pXmlDoc,
-                    "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:idx",
-                    "val", u"2");
-        OUString aXVal = getXPath(pXmlDoc,
-                                  "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/"
-                                  "c:dLbl[1]/c:layout/c:manualLayout/c:x",
-                                  "val");
-        double nX = aXVal.toDouble();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.11027682973075476, nX, 1e-7);
+    // test custom position of data label (xlsx)
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[1]/c:idx", "val",
+                u"2");
+    OUString aXVal = getXPath(pXmlDoc,
+                              "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/"
+                              "c:dLbl[1]/c:layout/c:manualLayout/c:x",
+                              "val");
+    double nX = aXVal.toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.11027682973075476, nX, 1e-7);
 
-        OUString aYVal = getXPath(pXmlDoc,
-                                  "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/"
-                                  "c:dLbl[1]/c:layout/c:manualLayout/c:y",
-                                  "val");
-        double nY = aYVal.toDouble();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.0742140311063737, nY, 1e-7);
-    }
+    OUString aYVal = getXPath(pXmlDoc,
+                              "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/"
+                              "c:dLbl[1]/c:layout/c:manualLayout/c:y",
+                              "val");
+    double nY = aYVal.toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.0742140311063737, nY, 1e-7);
+}
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomPositionofDataLabel_tdf108110)
+{
     loadFromFile(u"docx/testTdf108110.docx");
-    {
-        save(TestFilter::DOCX);
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
-        CPPUNIT_ASSERT(pXmlDoc);
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
 
-        // test custom position of data label (docx)
-        assertXPath(pXmlDoc,
-                    "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[2]/c:idx",
-                    "val", u"2");
-        OUString aXVal = getXPath(pXmlDoc,
-                                  "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/"
-                                  "c:dLbl[2]/c:layout/c:manualLayout/c:x",
-                                  "val");
-        double nX = aXVal.toDouble();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0227256488772236, nX, 1e-7);
+    // test custom position of data label (docx)
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/c:dLbl[2]/c:idx", "val",
+                u"2");
+    OUString aXVal = getXPath(pXmlDoc,
+                              "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/"
+                              "c:dLbl[2]/c:layout/c:manualLayout/c:x",
+                              "val");
+    double nX = aXVal.toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0227256488772236, nX, 1e-7);
 
-        OUString aYVal = getXPath(pXmlDoc,
-                                  "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/"
-                                  "c:dLbl[2]/c:layout/c:manualLayout/c:y",
-                                  "val");
-        double nY = aYVal.toDouble();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.172648731408574, nY, 1e-7);
-    }
+    OUString aYVal = getXPath(pXmlDoc,
+                              "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser/c:dLbls/"
+                              "c:dLbl[2]/c:layout/c:manualLayout/c:y",
+                              "val");
+    double nY = aYVal.toDouble();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.172648731408574, nY, 1e-7);
+}
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomPositionofDataLabel_tdf136024)
+{
     loadFromFile(u"ods/tdf136024.ods");
-    {
-        saveAndReload(TestFilter::ODS);
-        // tdf#136024: test custom position of pie chart data label after an ods export
-        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
-        CPPUNIT_ASSERT(xChartDoc.is());
+    saveAndReload(TestFilter::ODS);
+    // tdf#136024: test custom position of pie chart data label after an ods export
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
 
-        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
-        CPPUNIT_ASSERT(xDataSeries.is());
-        uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0),
-                                                         uno::UNO_SET_THROW);
+    Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0),
+                                                     uno::UNO_SET_THROW);
 
-        chart2::RelativePosition aCustomLabelPosition;
-        CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"CustomLabelPosition"_ustr)
-                       >>= aCustomLabelPosition);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.0961935120945059, aCustomLabelPosition.Primary, 1e-5);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.209578842093566, aCustomLabelPosition.Secondary, 1e-5);
-    }
+    chart2::RelativePosition aCustomLabelPosition;
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"CustomLabelPosition"_ustr)
+                   >>= aCustomLabelPosition);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(-0.0961935120945059, aCustomLabelPosition.Primary, 1e-5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.209578842093566, aCustomLabelPosition.Secondary, 1e-5);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf161571PiechartCustomPosDataLabels)
@@ -648,33 +664,33 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabelMultipleSeries)
     CPPUNIT_ASSERT_EQUAL(u"Line"_ustr, aFields[2]->getString());
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testLeaderLines)
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testLeaderLines_tdf90749)
 {
     loadFromFile(u"xlsx/testTdf90749.xlsx");
-    {
-        save(TestFilter::XLSX);
-        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
-        CPPUNIT_ASSERT(pXmlDoc);
-        assertXPath(pXmlDoc,
-                    "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:dLbls/c:extLst/c:ext/"
-                    "c15:showLeaderLines",
-                    "val", u"1");
-        assertXPath(pXmlDoc,
-                    "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:dLbls/c:extLst/c:ext/"
-                    "c15:showLeaderLines",
-                    "val", u"0");
-    }
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:dLbls/c:extLst/c:ext/"
+                "c15:showLeaderLines",
+                "val", u"1");
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:dLbls/c:extLst/c:ext/"
+                "c15:showLeaderLines",
+                "val", u"0");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testLeaderLines)
+{
     loadFromFile(u"docx/MSO_Custom_Leader_Line.docx");
-    {
-        save(TestFilter::DOCX);
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
-        CPPUNIT_ASSERT(pXmlDoc);
-        // tdf#134571: Check the leader line is switch off.
-        assertXPath(pXmlDoc,
-                    "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:extLst/c:ext/"
-                    "c15:showLeaderLines",
-                    "val", u"0");
-    }
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // tdf#134571: Check the leader line is switch off.
+    assertXPath(pXmlDoc,
+                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dLbls/c:extLst/c:ext/"
+                "c15:showLeaderLines",
+                "val", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf161607PieChartLeaderLinesColorWidth)
@@ -1056,42 +1072,39 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomLabelText)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDeletedLegendEntries)
 {
     loadFromFile(u"xlsx/deleted_legend_entry.xlsx");
-    {
-        saveAndReload(TestFilter::XLSX);
-        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
-        CPPUNIT_ASSERT(xChartDoc.is());
-        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 1));
-        CPPUNIT_ASSERT(xDataSeries.is());
-        Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
-        bool bShowLegendEntry = true;
-        CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"ShowLegendEntry"_ustr)
-                       >>= bShowLegendEntry);
-        CPPUNIT_ASSERT(!bShowLegendEntry);
-    }
+    saveAndReload(TestFilter::XLSX);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 1));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+    bool bShowLegendEntry = true;
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"ShowLegendEntry"_ustr) >>= bShowLegendEntry);
+    CPPUNIT_ASSERT(!bShowLegendEntry);
+}
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDeletedLegendEntries2)
+{
     loadFromFile(u"xlsx/deleted_legend_entry2.xlsx");
-    {
-        saveAndReload(TestFilter::XLSX);
-        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
-        CPPUNIT_ASSERT(xChartDoc.is());
-        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
-        CPPUNIT_ASSERT(xDataSeries.is());
-        Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
-        bool bShowLegendEntry = true;
-        CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"ShowLegendEntry"_ustr)
-                       >>= bShowLegendEntry);
-        CPPUNIT_ASSERT(!bShowLegendEntry);
+    saveAndReload(TestFilter::XLSX);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
+    bool bShowLegendEntry = true;
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(u"ShowLegendEntry"_ustr) >>= bShowLegendEntry);
+    CPPUNIT_ASSERT(!bShowLegendEntry);
 
-        Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(1);
-        CPPUNIT_ASSERT(xChartDoc.is());
-        Reference<chart2::XDataSeries> xDataSeries2(getDataSeriesFromDoc(xChartDoc2, 0));
-        CPPUNIT_ASSERT(xDataSeries2.is());
-        Reference<beans::XPropertySet> xPropertySet2(xDataSeries2, uno::UNO_QUERY_THROW);
-        Sequence<sal_Int32> deletedLegendEntriesSeq;
-        CPPUNIT_ASSERT(xPropertySet2->getPropertyValue(u"DeletedLegendEntries"_ustr)
-                       >>= deletedLegendEntriesSeq);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
-    }
+    Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(1);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries2(getDataSeriesFromDoc(xChartDoc2, 0));
+    CPPUNIT_ASSERT(xDataSeries2.is());
+    Reference<beans::XPropertySet> xPropertySet2(xDataSeries2, uno::UNO_QUERY_THROW);
+    Sequence<sal_Int32> deletedLegendEntriesSeq;
+    CPPUNIT_ASSERT(xPropertySet2->getPropertyValue(u"DeletedLegendEntries"_ustr)
+                   >>= deletedLegendEntriesSeq);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), deletedLegendEntriesSeq[0]);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf60316)
@@ -1192,63 +1205,59 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf127792)
                 u"midCat");
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf131979)
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf131115)
 {
     loadFromFile(u"ods/tdf131115.ods");
-    {
-        saveAndReload(TestFilter::ODS);
-        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
-        CPPUNIT_ASSERT(xChartDoc.is());
-        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
-        CPPUNIT_ASSERT(xDataSeries.is());
-        Reference<beans::XPropertySet> xPropertySet;
-        xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
-        bool blinknumberformattosource = true;
-        CPPUNIT_ASSERT(xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT)
-                       >>= blinknumberformattosource);
-        CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.",
-                               !blinknumberformattosource);
-    }
-
-    loadFromFile(u"ods/tdf131979.ods");
-    {
-        saveAndReload(TestFilter::ODS);
-        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
-        CPPUNIT_ASSERT(xChartDoc.is());
-        Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
-        CPPUNIT_ASSERT(xDataSeries.is());
-        Reference<beans::XPropertySet> xPropertySet;
-        xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
-        bool blinknumberformattosource = true;
-        CPPUNIT_ASSERT(xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT)
-                       >>= blinknumberformattosource);
-        CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.",
-                               blinknumberformattosource);
-    }
+    saveAndReload(TestFilter::ODS);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropertySet;
+    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
+    bool blinknumberformattosource = true;
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT)
+                   >>= blinknumberformattosource);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to false.",
+                           !blinknumberformattosource);
 }
 
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf132076)
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf131979)
 {
-    {
-        loadFromFile(u"ods/tdf132076.ods");
-        save(TestFilter::XLSX);
-        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
-        CPPUNIT_ASSERT(pXmlDoc);
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:numFmt", "formatCode",
-                    u"dd");
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:numFmt", "sourceLinked",
-                    u"0");
-    }
-    {
-        loadFromFile(u"xlsx/tdf132076.xlsx");
-        save(TestFilter::XLSX);
-        xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
-        CPPUNIT_ASSERT(pXmlDoc);
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:numFmt", "formatCode",
-                    u"dd");
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:numFmt", "sourceLinked",
-                    u"0");
-    }
+    loadFromFile(u"ods/tdf131979.ods");
+    saveAndReload(TestFilter::ODS);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    Reference<beans::XPropertySet> xPropertySet;
+    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_SET_THROW);
+    bool blinknumberformattosource = true;
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT)
+                   >>= blinknumberformattosource);
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.",
+                           blinknumberformattosource);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf132076_ODS)
+{
+    loadFromFile(u"ods/tdf132076.ods");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:numFmt", "formatCode", u"dd");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:numFmt", "sourceLinked", u"0");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf132076_XLSX)
+{
+    loadFromFile(u"xlsx/tdf132076.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:numFmt", "formatCode", u"dd");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dateAx/c:numFmt", "sourceLinked",
+                u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf125812)

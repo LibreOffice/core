@@ -22,7 +22,6 @@
 #include <config_options.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <framework/fwkdllapi.h>
 
 namespace com::sun::star::task
@@ -36,6 +35,14 @@ class XInteractionRequest;
 namespace com::sun::star::uno
 {
 template <class E> class Sequence;
+}
+namespace com::sun::star::uno
+{
+class Any;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
 }
 
 namespace framework

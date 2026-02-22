@@ -76,6 +76,7 @@ $(eval $(call gb_Library_use_libraries,svx,\
     vcl \
     xo \
     xmlscript \
+    sax \
 ))
 
 $(eval $(call gb_Library_use_externals,svx,\
@@ -176,12 +177,15 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/svxruler \
     svx/source/dialog/swframeexample \
     svx/source/dialog/swframeposstrings \
+    svx/source/dialog/ThemeColorsPaneBase \
     svx/source/dialog/ThemeDialog \
     svx/source/dialog/ThemeColorEditDialog \
     svx/source/dialog/txencbox \
     svx/source/dialog/txenctab \
     svx/source/dialog/weldeditview \
     svx/source/dialog/signaturelinehelper \
+    svx/source/dialog/TableAutoFmtDlg \
+    svx/source/dialog/TableStylesDlg \
     svx/source/engine3d/float3d \
     svx/source/fmcomp/dbaobjectex \
     svx/source/form/databaselocationinput \
@@ -198,7 +202,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
 	svx/source/items/ehdl \
     svx/source/items/hlnkitem \
     svx/source/items/numfmtsh \
-    svx/source/items/legacyitem \
     svx/source/items/numinf \
     svx/source/items/ofaitem \
     svx/source/items/pageitem \
@@ -264,6 +267,9 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/table/tablertfexporter \
     svx/source/table/tablertfimporter \
 	svx/source/table/tablehtmlimporter \
+	svx/source/table/tableautofmt \
+	svx/source/table/tableautofmtpreview \
+	svx/source/table/tablestylesparser \
     svx/source/tbxctrls/bulletsnumbering \
     svx/source/tbxctrls/colrctrl \
     svx/source/tbxctrls/SvxColorChildWindow \
@@ -278,6 +284,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/tbxctrls/tbunosearchcontrollers \
     svx/source/tbxctrls/tbxcolor \
     svx/source/tbxctrls/tbxdrctl \
+    svx/source/tbxctrls/ThemeColorsToolBoxControl \
     svx/source/tbxctrls/verttexttbxctrl \
     svx/source/uitest/uiobject \
     svx/source/unodraw/unoctabl \

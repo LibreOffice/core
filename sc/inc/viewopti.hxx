@@ -20,6 +20,7 @@
 #pragma once
 
 #include <svx/optgrid.hxx>
+#include <tools/color.hxx>
 
 #include "scdllapi.h"
 #include "optutil.hxx"

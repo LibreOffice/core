@@ -83,6 +83,18 @@ void SlideOverlayButton::setVisible(const bool bVisible)
     mrScreenUpdater.requestImmediateUpdate();
 }
 
+void SlideOverlayButton::clear()
+{
+    mrEventMultiplexer.removeViewHandler(
+        std::dynamic_pointer_cast<ViewEventHandler>(shared_from_this()));
+    mrEventMultiplexer.removeClickHandler(
+        std::dynamic_pointer_cast<MouseEventHandler>(shared_from_this()));
+    for (auto& item : maViews)
+    {
+        item.second->getContentCanvas()->clear();
+    }
+}
+
 css::geometry::IntegerSize2D SlideOverlayButton::getSize() const { return mxIconBitmap->getSize(); }
 
 basegfx::B2DPoint SlideOverlayButton::calcSpritePos(UnoViewSharedPtr const& rView) const

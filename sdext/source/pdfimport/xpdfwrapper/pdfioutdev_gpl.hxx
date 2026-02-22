@@ -85,13 +85,21 @@ namespace pdfi
             isUnderline(rSrc.isUnderline),
             size(rSrc.size)
         {
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+            familyName.append(rSrc.getFamilyName());
+#else
             familyName.append(&rSrc.getFamilyName());
+#endif
         }
 
         FontAttributes& operator=( const FontAttributes& rSrc )
         {
             familyName.clear();
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+            familyName.append(rSrc.getFamilyName());
+#else
             familyName.append(&rSrc.getFamilyName());
+#endif
 
             isEmbedded  = rSrc.isEmbedded;
             maFontWeight= rSrc.maFontWeight;
@@ -104,12 +112,21 @@ namespace pdfi
 
         bool operator==(const FontAttributes& rFont) const
         {
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+            return getFamilyName().compare(rFont.getFamilyName())==0 &&
+                isEmbedded == rFont.isEmbedded &&
+                maFontWeight == rFont.maFontWeight &&
+                isItalic == rFont.isItalic &&
+                isUnderline == rFont.isUnderline &&
+                size == rFont.size;
+#else
             return getFamilyName().cmp(&rFont.getFamilyName())==0 &&
                 isEmbedded == rFont.isEmbedded &&
                 maFontWeight == rFont.maFontWeight &&
                 isItalic == rFont.isItalic &&
                 isUnderline == rFont.isUnderline &&
                 size == rFont.size;
+#endif
         }
 
         GooString   familyName;
@@ -172,7 +189,9 @@ namespace pdfi
         //----- initialization and control
 
         // Set default transform matrix.
-#if POPPLER_CHECK_VERSION(0, 71, 0)
+#if POPPLER_CHECK_VERSION(26, 2, 0)
+void setDefaultCTM(const std::array<double, 6> &pMat) override;
+#elif POPPLER_CHECK_VERSION(0, 71, 0)
         virtual void setDefaultCTM(const double *ctm) override;
 #else
         virtual void setDefaultCTM(double *ctm) override;

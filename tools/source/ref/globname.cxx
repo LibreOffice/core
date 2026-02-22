@@ -26,6 +26,8 @@
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 // SvGlobalName ----------------------------------------------------------------
 
 SvGlobalName::SvGlobalName( const css::uno::Sequence < sal_Int8 >& aSeq )

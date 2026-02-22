@@ -43,6 +43,7 @@
 #include <svl/intitem.hxx>
 #include <svl/zformat.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 

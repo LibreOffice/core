@@ -35,6 +35,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/tencinfo.h>
@@ -825,8 +826,15 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 #endif
 
                     ScViewData* pViewData = GetViewData();
-                    SfxViewShell* pViewShell = pViewData ? pViewData->GetViewShell() : nullptr;
-                    SfxViewFrame* pViewFrame = pViewShell ? &pViewShell->GetViewFrame() : nullptr;
+                    if (!pViewData)
+                        break;
+                    SfxViewShell* pViewShell = pViewData->GetViewShell();
+                    if (!pViewShell)
+                        break;
+                    SfxViewFrame* pViewFrame = &pViewShell->GetViewFrame();
+                    if (!pViewFrame)
+                        break;
+                    SfxFrame* pFrame = &pViewFrame->GetFrame();
 
                     try
                     {
@@ -848,8 +856,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 if ( xFactory.is() )
                                 {
                                     uno::Reference< task::XJob > xJob( xFactory->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
-                                    SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : nullptr );
-                                    uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : nullptr );
+                                    uno::Reference< frame::XController > xController = pFrame->GetController();
                                     uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
                                     uno::Sequence< beans::NamedValue > aArgsForJob { { u"SpreadsheetView"_ustr, uno::Any( xSpreadsheetView ) } };
                                     xJob->execute( aArgsForJob );
@@ -862,14 +869,11 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     }
 
                     // Show delayed infobar entries
-                    if (pViewFrame)
+                    for (auto const& r : m_pImpl->mpDelayedInfobarEntry)
                     {
-                        for (auto const& r : m_pImpl->mpDelayedInfobarEntry)
-                        {
-                            pViewFrame->AppendInfoBar(r.msId, r.msPrimaryMessage, r.msSecondaryMessage, r.maInfobarType, r.mbShowCloseButton);
-                        }
-                        m_pImpl->mpDelayedInfobarEntry.clear();
+                        pViewFrame->AppendInfoBar(r.msId, r.msPrimaryMessage, r.msSecondaryMessage, r.maInfobarType, r.mbShowCloseButton);
                     }
+                    m_pImpl->mpDelayedInfobarEntry.clear();
                 }
                 break;
             case SfxEventHintId::SaveDoc:

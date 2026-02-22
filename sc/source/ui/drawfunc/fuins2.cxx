@@ -44,6 +44,7 @@
 #include <scmod.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <comphelper/lok.hxx>
@@ -507,24 +508,27 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         xChartModel->lockControllers();
 
     // object size
-    awt::Size aSz = xObj->getVisualAreaSize( nAspect );
-    Size aSize( aSz.Width, aSz.Height );
-
-    MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-
-    bool bSizeCh = false;
-    if (aSize.IsEmpty())
+    Size aSize;
+    if (xObj.is())
     {
-        aSize.setWidth( 5000 );
-        aSize.setHeight( 5000 );
-        bSizeCh = true;
-    }
-    if (bSizeCh)
-    {
-        aSize = OutputDevice::LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( aMapUnit ) );
-        aSz.Width = aSize.Width();
-        aSz.Height = aSize.Height();
-        xObj->setVisualAreaSize( nAspect, aSz );
+        awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+        aSize = Size( aSz.Width, aSz.Height );
+
+        bool bSizeCh = false;
+        if (aSize.IsEmpty())
+        {
+            aSize.setWidth( 5000 );
+            aSize.setHeight( 5000 );
+            bSizeCh = true;
+        }
+        if (bSizeCh)
+        {
+            MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+            aSize = OutputDevice::LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( aMapUnit ) );
+            aSz.Width = aSize.Width();
+            aSz.Height = aSize.Height();
+            xObj->setVisualAreaSize( nAspect, aSz );
+        }
     }
 
     ScViewData& rData = rViewSh.GetViewData();

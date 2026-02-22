@@ -20,6 +20,7 @@
 #include <vcl/print.hxx>
 #include <svtools/prnsetup.hxx>
 #include <svtools/unitconv.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <cmdid.h>
 #include "envprt.hxx"

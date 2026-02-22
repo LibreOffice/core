@@ -27,6 +27,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <svl/cjkoptions.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <numpara.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
@@ -303,8 +304,8 @@ void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage
 {
     // set style's and metric's names
     UIName sNumCharFormat, sBulletCharFormat;
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFormat);
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_BULLET_LEVEL, sBulletCharFormat);
+    SwStyleNameMapper::FillUIName( SwPoolFormatId::CHR_NUM_LEVEL, sNumCharFormat);
+    SwStyleNameMapper::FillUIName( SwPoolFormatId::CHR_BULLET_LEVEL, sBulletCharFormat);
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
     if (rId == "font")
@@ -377,7 +378,7 @@ void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage
         {
             std::vector<OUString> aList;
             UIName aNew;
-            SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, aNew );
+            SwStyleNameMapper::FillUIName( SwPoolFormatId::COLL_TEXT, aNew );
             aList.push_back( aNew.toString() );
             if( m_pWrtShell )
             {

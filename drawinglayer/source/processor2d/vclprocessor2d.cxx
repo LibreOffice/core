@@ -27,10 +27,12 @@
 #include <tools/fract.hxx>
 #include <utility>
 #include <vcl/canvastools.hxx>
+#include <vcl/fntstyle.hxx>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

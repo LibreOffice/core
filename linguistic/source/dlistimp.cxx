@@ -509,8 +509,9 @@ uno::Reference< XDictionaryEntry > SAL_CALL
             sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
+    std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>> aDictionaryMap;
     return SearchDicList( this, rWord, LinguLocaleToLanguage( rLocale ),
-                            bSearchPosDics, bSearchSpellEntry );
+                            bSearchPosDics, bSearchSpellEntry, aDictionaryMap );
 }
 
 

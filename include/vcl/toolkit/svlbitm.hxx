@@ -225,11 +225,13 @@ inline void SvLBoxButton::SetStateHilighted( bool bHilight )
         nItemFlags &= ~SvItemStateFlags::HIGHLIGHTED;
 }
 
-struct SvLBoxContextBmp_Impl;
-
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) SvLBoxContextBmp : public SvLBoxItem
 {
-    std::unique_ptr<SvLBoxContextBmp_Impl>  m_pImpl;
+    Image m_aImage1;
+    Image m_aImage2;
+
+    bool m_bExpanded;
+
 public:
     SvLBoxContextBmp(const Image& aBmp1,
                      const Image& aBmp2,
@@ -249,37 +251,10 @@ public:
 
     virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 
-    void SetModeImages(const Image& rBitmap1, const Image& rBitmap2);
-
-    inline void SetBitmap1(const Image& rImage);
-    inline void SetBitmap2(const Image& rImage);
-    inline const Image& GetBitmap1() const;
-    inline const Image& GetBitmap2() const;
-
-private:
-    Image& implGetImageStore(bool bFirst);
+    void SetBitmap1(const Image& rImage) { m_aImage1 = rImage; };
+    void SetBitmap2(const Image& rImage) { m_aImage2 = rImage; };
+    const Image& GetBitmap1() const { return m_aImage1; };
+    const Image& GetBitmap2() const { return m_aImage2; };
 };
-
-inline void SvLBoxContextBmp::SetBitmap1(const Image& _rImage)
-{
-    implGetImageStore(true) = _rImage;
-}
-
-inline void SvLBoxContextBmp::SetBitmap2(const Image& _rImage)
-{
-    implGetImageStore(false) = _rImage;
-}
-
-inline const Image& SvLBoxContextBmp::GetBitmap1() const
-{
-    Image& rImage = const_cast<SvLBoxContextBmp*>(this)->implGetImageStore(true);
-    return rImage;
-}
-
-inline const Image& SvLBoxContextBmp::GetBitmap2() const
-{
-    Image& rImage = const_cast<SvLBoxContextBmp*>(this)->implGetImageStore(false);
-    return rImage;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,8 +19,8 @@
 
 #include <memory>
 #include <DrawDocShell.hxx>
+#include <svtools/dlgname.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svxdlg.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <helpids.h>
@@ -280,25 +280,23 @@ bool DrawDocShell::CheckPageName(weld::Window* pWin, OUString& rName)
     if( ! bIsNameValid )
     {
         OUString aDesc;
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-
         if (GetDocumentType() == DocumentType::Draw)
             aDesc = SdResId( STR_WARN_PAGE_EXISTS_DRAW );
         else
             aDesc = SdResId( STR_WARN_PAGE_EXISTS );
 
-        ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(pWin, aStrForDlg, aDesc));
-        aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+        SvxNameDialog aNameDlg(pWin, aStrForDlg, aDesc);
+        aNameDlg.SetEditHelpId(HID_SD_NAMEDIALOG_PAGE);
 
-        aNameDlg->SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) );
+        aNameDlg.SetCheckNameHdl(LINK(this, DrawDocShell, RenameSlideHdl));
 
         rtl::Reference<FuPoor> xFunc( mpViewShell->GetCurrentFunction() );
         if( xFunc.is() )
             xFunc->cancel();
 
-        if( aNameDlg->Execute() == RET_OK )
+        if (aNameDlg.run() == RET_OK)
         {
-            rName = aNameDlg->GetName();
+            rName = aNameDlg.GetName();
             bIsNameValid = IsNewPageNameValid( rName );
         }
     }
@@ -414,7 +412,7 @@ bool DrawDocShell::IsPageNameUnique( std::u16string_view rPageName ) const
     return mpDoc->IsPageNameUnique(rPageName);
 }
 
-IMPL_LINK( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
+IMPL_LINK(DrawDocShell, RenameSlideHdl, SvxNameDialog&, rDialog, bool)
 {
     OUString aNewName = rDialog.GetName();
     return IsNewPageNameValid( aNewName );

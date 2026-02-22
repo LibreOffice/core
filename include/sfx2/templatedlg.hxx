@@ -21,6 +21,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 
@@ -49,7 +50,6 @@ public:
 
     SAL_DLLPRIVATE void setDocumentModel(const css::uno::Reference<css::frame::XModel>& rModel);
     SAL_DLLPRIVATE void setTemplateViewMode(TemplateViewMode eViewMode);
-    SAL_DLLPRIVATE TemplateViewMode getTemplateViewMode() const;
 
 protected:
     SAL_DLLPRIVATE void getApplicationSpecificSettings();
@@ -131,11 +131,10 @@ protected:
     std::unique_ptr<weld::Button> mxOKButton;
     std::unique_ptr<weld::CheckButton> mxCBXHideDlg;
     std::unique_ptr<weld::MenuButton> mxActionBar;
-    std::unique_ptr<TemplateDlgLocalView> mxLocalView;
+    TemplateDlgLocalView maLocalView;
     std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
     std::unique_ptr<weld::Toggleable> mxListViewButton;
     std::unique_ptr<weld::Toggleable> mxThumbnailViewButton;
-    TemplateViewMode mViewMode;
     bool bMakeSelItemVisible;
 };
 

@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "basictest.hxx"
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <test/bootstrapfixture.hxx>
 

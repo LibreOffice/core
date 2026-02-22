@@ -29,6 +29,7 @@
 #include <connectivity/dbtools.hxx>
 #include <helpids.h>
 #include <osl/diagnose.h>
+#include <vcl/weld/Builder.hxx>
 
 
 namespace dbp

@@ -21,6 +21,7 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include "SchXMLEnumConverter.hxx"
 #include <xmloff/xmlement.hxx>
+#include <xmloff/xmltoken.hxx>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;

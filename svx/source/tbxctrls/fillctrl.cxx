@@ -21,10 +21,12 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svxids.hrc>
 #include <tools/json_writer.hxx>

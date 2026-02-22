@@ -11,4 +11,21 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,meson))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,meson,$(MESON_TARBALL)))
 
+ifeq ($(OS),WNT)
+# hack to make meson use a specific VS version and not always the latest
+# (argument is '-latest' so inner quotes to separate the arguments
+# it also always specifies -prerelease, but that is left alone here)
+ifneq ($(filter 17.%,$(VCVER)),)
+meson_vsversion=-version', '[17,18)
+else ifneq ($(filter 18.%,$(VCVER)),)
+meson_vsversion=-version', '[18,19)
+else
+$(warning Warning: Unhandled VCVER '$(VCVER)'; defaulting meson to use latest VS version)
+meson_vsversion=-latest
+endif
+
+$(eval $(call gb_UnpackedTarball_set_post_action,meson,\
+    sed -i -e "s/-latest/$(meson_vsversion)/" mesonbuild/utils/vsenv.py \
+))
+endif
 # vim: set noet sw=4 ts=4:

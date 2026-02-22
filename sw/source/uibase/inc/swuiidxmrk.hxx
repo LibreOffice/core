@@ -25,6 +25,7 @@
 #include <sfx2/childwin.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/weld.hxx>
@@ -90,7 +91,7 @@ class SwIndexMarkPane
     std::unique_ptr<weld::Button> m_xNextSameBT;
     std::unique_ptr<weld::Button> m_xPrevBT;
     std::unique_ptr<weld::Button> m_xNextBT;
-    std::unique_ptr<weld::Label> m_xForSelectedEntry;
+    std::unique_ptr<weld::Frame> m_xForSelectedEntryFrame;
 
     void            Apply();
     void            InitControls();

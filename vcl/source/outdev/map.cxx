@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/cursor.hxx>
 #include <vcl/lineinfo.hxx>
@@ -516,7 +517,7 @@ basegfx::B2DPolygon OutputDevice::ImplLogicToDevicePixel(const basegfx::B2DPolyg
             {
                 const basegfx::B2DPoint aB2DC2(aPoly.getNextControlPoint(i));
 
-                aC1 = basegfx::B2DPoint(aB2DC2.getX() + mnOutOffX, aB2DC2.getY() + mnOutOffY);
+                aC2 = basegfx::B2DPoint(aB2DC2.getX() + mnOutOffX, aB2DC2.getY() + mnOutOffY);
             }
 
             aPoly.setB2DPoint(i, aPt);

@@ -26,6 +26,7 @@
 #include <vcl/image.hxx>
 
 #include <memory>
+#include <vector>
 
 
 namespace frm

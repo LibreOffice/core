@@ -44,7 +44,9 @@ enum class ContentTypeId
     FOOTNOTE       = 13,
     ENDNOTE        = 14,
     LAST           = ENDNOTE,
-    UNKNOWN        = -1
+    UNKNOWN        = -1,
+    INDEXTOXBASE   = -2,
+    INDEXTOXMARK   = -3
 };
 
 // strings for context menus
@@ -78,7 +80,6 @@ public:
     virtual bool            IsProtect() const;
     const SwContentType*    GetParent() const {return m_pParent;}
     const OUString&         GetName()   const {return m_sContentName;}
-    double                  GetPosition() const { return m_nYPosition; }
     bool operator==(const SwContent& /*rCont*/) const
     {
         // they're never equal, otherwise they'd fall out of the array

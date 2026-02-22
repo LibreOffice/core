@@ -12,6 +12,8 @@
 // Our mathml
 #include "element.hxx"
 
+#include <unomodel.hxx>
+
 // XML tools
 #include <utility>
 #include <comphelper/errcode.hxx>

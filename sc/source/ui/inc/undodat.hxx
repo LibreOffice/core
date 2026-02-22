@@ -205,6 +205,55 @@ private:
     std::unique_ptr<ScDBCollection> xUndoDB;
 };
 
+class ScUndoDBTable : public ScSimpleUndo
+{
+public:
+    ScUndoDBTable(ScDocShell& rNewDocShell, const OUString& rNewTable, bool bIns,
+                  std::unique_ptr<ScDBCollection> pNewUndoColl,
+                  std::unique_ptr<ScDBCollection> pNewRedoColl);
+    virtual ~ScUndoDBTable() override;
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual void Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool CanRepeat(SfxRepeatTarget& rTarget) const override;
+
+    virtual OUString GetComment() const override;
+
+private:
+    OUString aTableName;
+    bool bInsert;
+    std::unique_ptr<ScDBCollection> pUndoColl;
+    std::unique_ptr<ScDBCollection> pRedoColl;
+
+    void DoChange(const bool bUndo);
+};
+
+class ScUndoTableTotals: public ScDBFuncUndo
+{
+public:
+    ScUndoTableTotals(ScDocShell& rNewDocShell, SCTAB nNewTab,
+                      const ScSubTotalParam& rNewParam, SCROW nNewEndY,
+                      ScDocumentUniquePtr pNewUndoDoc,
+                      std::unique_ptr<ScDBCollection> pNewUndoDB,
+                      std::unique_ptr<ScDBCollection> pNewRedoDB);
+
+    virtual void      Undo() override;
+    virtual void      Redo() override;
+    virtual void      Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool      CanRepeat(SfxRepeatTarget& rTarget) const override;
+
+    virtual OUString GetComment() const override;
+
+private:
+    SCTAB           nTab;
+    ScSubTotalParam aParam;                         // The original passed parameter
+    SCROW           nNewEndRow;                     // Size of result
+    ScDocumentUniquePtr xUndoDoc;
+    std::unique_ptr<ScDBCollection> xUndoDB;
+    std::unique_ptr<ScDBCollection> xRedoDB;
+};
+
 class ScUndoQuery: public ScDBFuncUndo
 {
 public:
@@ -258,8 +307,8 @@ public:
 class ScUndoDBData: public ScSimpleUndo
 {
 public:
-                    ScUndoDBData( ScDocShell& rNewDocShell,
-                            std::unique_ptr<ScDBCollection> pNewUndoColl,
+                    ScUndoDBData( ScDocShell& rNewDocShell, const OUString& rNewUndoName,
+                            std::unique_ptr<ScDBCollection> pNewUndoColl, const OUString& rNewRedoName,
                             std::unique_ptr<ScDBCollection> pNewRedoColl );
     virtual         ~ScUndoDBData() override;
 
@@ -271,8 +320,12 @@ public:
     virtual OUString GetComment() const override;
 
 private:
+    OUString aUndoName;
     std::unique_ptr<ScDBCollection> pUndoColl;
+    OUString aRedoName;
     std::unique_ptr<ScDBCollection> pRedoColl;
+
+    void           DoChange(const bool bUndo);
 };
 
 class ScUndoImportData: public ScSimpleUndo

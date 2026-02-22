@@ -24,6 +24,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 #include <ucbhelper/resultsetmetadata.hxx>
 #include <ucbhelper/macros.hxx>

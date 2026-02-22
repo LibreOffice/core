@@ -108,4 +108,6 @@ Reference<text::XTextContent> SwXFootnote::getTextContent() { return mxTextConte
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXFootnote);
 }
 
+CPPUNIT_PLUGIN_IMPLEMENT();
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

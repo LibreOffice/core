@@ -15,6 +15,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/NotebookbarContextControl.hxx>

@@ -114,6 +114,11 @@
                 <property name="height-request">260</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="preview-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="outlinenumberingpage|preview-atkobject">Preview</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -162,37 +167,6 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkLabel" id="label3">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="outlinenumberingpage|label3">Paragraph style:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">style</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="style">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="tooltip-text" translatable="yes" context="outlinenumberingpage|tooltip_text|style">Select the paragraph style to assign to the selected outline level. Select [None] to skip the outline level.</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="style-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|style">Select the paragraph style to assign to the selected outline level. Select [None] to skip the outline level.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -204,34 +178,6 @@
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label5">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="outlinenumberingpage|label5">Character style:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">charstyle</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="sublevelsft">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="outlinenumberingpage|sublevelsft">Show sublevels:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">sublevelsnf</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -248,43 +194,6 @@
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="charstyle">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="charstyle-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|charstyle">Select the character style of the numbering character.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="sublevelsnf">
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
-                    <property name="can-focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="activates-default">True</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustment2</property>
-                    <property name="value">1</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="sublevelsnf-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|sublevelsnf">Select the number of outline levels to display in the heading number, where 1 starts at the current level, and increasing the value shows additional previous levels. For example, select “3” to display the current level and the two previous levels in the heading number.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -318,6 +227,102 @@
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="outlinenumberingpage|label3">Paragraph style:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">style</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="style">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="tooltip-text" translatable="yes" context="outlinenumberingpage|tooltip_text|style">Select the paragraph style to assign to the selected outline level. Select [None] to skip the outline level.</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="style-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|style">Select the paragraph style to assign to the selected outline level. Select [None] to skip the outline level.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="outlinenumberingpage|label5">Character style:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">charstyle</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="charstyle">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="charstyle-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|charstyle">Select the character style of the numbering character.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="sublevelsft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="outlinenumberingpage|sublevelsft">Show sublevels:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">sublevelsnf</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="sublevelsnf">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustment2</property>
+                    <property name="value">1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sublevelsnf-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="outlinenumberingpage|extended_tip|sublevelsnf">Select the number of outline levels to display in the heading number, where 1 starts at the current level, and increasing the value shows additional previous levels. For example, select “3” to display the current level and the two previous levels in the heading number.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">4</property>
                   </packing>
                 </child>
               </object>

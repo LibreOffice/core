@@ -21,8 +21,6 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLINEATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <basegfx/vector/b2enums.hxx>
-#include <com/sun/star/drawing/LineCap.hpp>
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
@@ -36,6 +34,8 @@ namespace basegfx {
 namespace drawinglayer::attribute {
     class ImpSdrLineAttribute;
 }
+namespace basegfx { enum class B2DLineJoin; }
+namespace com::sun::star::drawing { enum class LineCap; }
 
 
 namespace drawinglayer::attribute

@@ -42,6 +42,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <sfx2/objsh.hxx>
+#include <tools/globname.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/configuration.hxx>
@@ -738,7 +739,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
                 { 0x88, 0x00, 0x22, 0x00, 0x88, 0x00, 0x22, 0x00 },
                 { 0x80, 0x00, 0x08, 0x00, 0x80, 0x00, 0x08, 0x00 }
             };
-            const sal_uInt8* const pnPattern = sppnPatterns[std::min<size_t>(rFillData.mnPattern - 2, SAL_N_ELEMENTS(sppnPatterns) - 1)];
+            const sal_uInt8* const pnPattern = sppnPatterns[std::min<size_t>(rFillData.mnPattern - 2, std::size(sppnPatterns) - 1)];
             // create 2-colored 8x8 DIB
             SvMemoryStream aMemStrm;
             aMemStrm.WriteUInt32( 12 ).WriteInt16( 8 ).WriteInt16( 8 ).WriteUInt16( 1 ).WriteUInt16( 1 );

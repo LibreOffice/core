@@ -100,6 +100,9 @@ excludelist:
     # Needed on MACOSX
     - svl/intitem.hxx
     - app.hrc
+    sd/source/ui/dlg/sdpreslt.cxx:
+    # Needed for implicit dtor
+    - vcl/weld/ScrolledWindow.hxx
     sd/source/ui/framework/configuration/GenericConfigurationChangeRequest.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp

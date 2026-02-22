@@ -21,6 +21,7 @@
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolkit/floatwin.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/mnemonic.hxx>
@@ -36,6 +37,8 @@
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
+
+#include <com/sun/star/awt/GradientStyle.hpp>
 
 #include <accel.hxx>
 #include <svdata.hxx>
@@ -2547,12 +2550,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     // no gradient background for items that have a popup open
     bool bHasOpenPopup = mpFloatWin && (mnDownItemId==pItem->mnId);
 
-    bool bHighContrastWhite = false;
-    // check the face color as highcontrast indicator
-    // because the toolbox itself might have a gradient
-    if (rStyleSettings.GetFaceColor() == COL_WHITE)
-        bHighContrastWhite = true;
-
     // Compute buttons area.
     Size    aBtnSize    = pItem->maRect.GetSize();
 
@@ -2563,7 +2560,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     tools::Long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
     tools::Long    nImageOffX  = 0;
     tools::Long    nImageOffY  = 0;
-    DrawButtonFlags nStyle      = DrawButtonFlags::NONE;
 
     // draw separators
     if ( (pItem->meType == ToolBoxItemType::SEPARATOR) && nPos > 0 )
@@ -2574,19 +2570,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     // do nothing if item is no button or will be displayed as window
     if ( (pItem->meType != ToolBoxItemType::BUTTON) || pItem->mbShowWindow )
         return;
-
-    if ( pItem->meState == TRISTATE_TRUE )
-    {
-        nStyle |= DrawButtonFlags::Checked;
-    }
-    else if ( pItem->meState == TRISTATE_INDET )
-    {
-        nStyle |= DrawButtonFlags::DontKnow;
-    }
-    if ( nHighlight == 1 )
-    {
-        nStyle |= DrawButtonFlags::Pressed;
-    }
 
     ImplErase(rRenderContext, pItem->maRect, nHighlight != 0, bHasOpenPopup );
 
@@ -2648,12 +2631,6 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
             else
                 ImplDrawButton(rRenderContext, aButtonRect, nHighlight, pItem->meState == TRISTATE_TRUE,
                                pItem->mbEnabled && IsEnabled(), pItem->mbShowWindow);
-
-            if( nHighlight != 0 )
-            {
-                if( bHighContrastWhite )
-                    nImageStyle |= DrawImageFlags::ColorTransform;
-            }
         }
         rRenderContext.DrawImage(Point( nImageOffX, nImageOffY ), *pImage, nImageStyle);
     }

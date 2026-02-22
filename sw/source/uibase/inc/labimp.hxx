@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_LABIMP_HXX
 
+#include <tools/fldunit.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <vcl/weld/weld.hxx>
 

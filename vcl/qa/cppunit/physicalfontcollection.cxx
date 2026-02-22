@@ -11,6 +11,7 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/TestAssert.h>
+#include <unotools/fontdefs.hxx>
 
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFamily.hxx>

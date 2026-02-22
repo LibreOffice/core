@@ -33,10 +33,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
 // internal
-AccessibleGraphicShape::AccessibleGraphicShape (
-    const AccessibleShapeInfo& rShapeInfo,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo)
-    : AccessibleShape (rShapeInfo, rShapeTreeInfo)
+AccessibleGraphicShape::AccessibleGraphicShape(const AccessibleShapeInfo& rShapeInfo,
+                                               const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : ImplInheritanceHelper(rShapeInfo, rShapeTreeInfo)
 {
 }
 
@@ -64,59 +63,6 @@ sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth()
 {
     return AccessibleShape::getSize().Width;
 }
-
-// XInterface
-css::uno::Any SAL_CALL
-    AccessibleGraphicShape::queryInterface (const css::uno::Type & rType)
-{
-    css::uno::Any aReturn = AccessibleShape::queryInterface (rType);
-    if ( ! aReturn.hasValue())
-        aReturn = ::cppu::queryInterface (rType,
-            static_cast<XAccessibleImage*>(this));
-    return aReturn;
-}
-
-
-void SAL_CALL
-    AccessibleGraphicShape::acquire()
-    noexcept
-{
-    AccessibleShape::acquire ();
-}
-
-
-void SAL_CALL
-    AccessibleGraphicShape::release()
-    noexcept
-{
-    AccessibleShape::release ();
-}
-
-// XServiceInfo
-OUString SAL_CALL
-    AccessibleGraphicShape::getImplementationName()
-{
-    return u"AccessibleGraphicShape"_ustr;
-}
-
-
-css::uno::Sequence< OUString> SAL_CALL
-    AccessibleGraphicShape::getSupportedServiceNames()
-{
-    ensureAlive();
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleGraphicShape"_ustr };
-    return comphelper::concatSequences(AccessibleShape::getSupportedServiceNames(), vals);
-}
-
-// XTypeProvider
-uno::Sequence<uno::Type> SAL_CALL
-    AccessibleGraphicShape::getTypes()
-{
-    // Get list of types from the context base implementation...
-    return comphelper::concatSequences(AccessibleShape::getTypes(),
-            uno::Sequence { cppu::UnoType<XAccessibleImage>::get() });
-}
-
 
 /// Create the base name of this object, i.e. the name without appended number.
 OUString

@@ -25,6 +25,7 @@
 #include <comphelper/classids.hxx>
 #include <sot/stg.hxx>
 #include <sal/macros.h>
+#include <vcl/transfer.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

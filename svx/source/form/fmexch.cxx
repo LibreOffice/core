@@ -163,12 +163,10 @@ namespace svxform
         }
     }
 
-    size_t OControlTransferData::onEntryRemoved(const weld::TreeView* pView, const weld::TreeIter* _pEntry)
+    size_t OControlTransferData::onEntryRemoved(const weld::TreeIter* _pEntry)
     {
         auto aIter = std::find_if(m_aSelectedEntries.begin(), m_aSelectedEntries.end(),
-                                  [pView, _pEntry](const auto& rElem) {
-                                    return pView->iter_compare(*rElem, *_pEntry) == 0;
-                                  });
+                                  [_pEntry](const auto& rElem) { return rElem->equal(*_pEntry); });
         if (aIter != m_aSelectedEntries.end())
             m_aSelectedEntries.erase(aIter);
 
@@ -206,7 +204,7 @@ namespace svxform
             ::std::vector< sal_uInt32 > aCurrentPath;
 
             std::unique_ptr<weld::TreeIter> xLoop(pTreeBox->make_iterator(rCurrentEntry.get()));
-            while (pTreeBox->iter_compare(*xLoop, *pRoot) != 0)
+            while (!xLoop->equal(*pRoot))
             {
                 aCurrentPath.push_back(pTreeBox->get_iter_index_in_parent(*xLoop));
                 bool bLoop = pTreeBox->iter_parent(*xLoop);

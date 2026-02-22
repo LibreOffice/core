@@ -58,6 +58,7 @@
 #include <svl/voiditem.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svtools/dlgname.hxx>
 #include <svl/whiter.hxx>
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <svx/zoomslideritem.hxx>
@@ -71,6 +72,7 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <sal/log.hxx>
 #include <tools/svborder.hxx>
 #include <o3tl/string_view.hxx>
@@ -1845,13 +1847,11 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             OUString aName = "My Formula 1";
             OUString aDesc(SmResId(STR_USER_DEFINED_FORMULA));
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSvxNameDialog> pDlg(
-                pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+            SvxNameDialog aDlg(GetFrameWeld(), aName, aDesc);
 
-            if (pDlg->Execute() == RET_OK)
+            if (aDlg.run() == RET_OK)
             {
-                aName = pDlg->GetName();
+                aName = aDlg.GetName();
                 if (SmModule::get()->GetConfig()->HasUserDefinedFormula(aName))
                 {
                     std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(
@@ -1871,7 +1871,6 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 Broadcast(SfxHint(SfxHintId::SmNewUserFormula));
                 rReq.Ignore ();
             }
-            pDlg.disposeAndClear();
         }
         break;
     }

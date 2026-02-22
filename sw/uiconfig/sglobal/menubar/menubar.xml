@@ -403,10 +403,13 @@
       </menu:menu>
       <menu:menu menu:id=".uno:TextAlign">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:CommonAlignLeft" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:CommonAlignStart" menu:style="radio"/>
           <menu:menuitem menu:id=".uno:CommonAlignHorizontalCenter" menu:style="radio"/>
-          <menu:menuitem menu:id=".uno:CommonAlignRight" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:CommonAlignEnd" menu:style="radio"/>
           <menu:menuitem menu:id=".uno:CommonAlignJustified" menu:style="radio"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:CommonAlignLeft" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:CommonAlignRight" menu:style="radio"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:CommonAlignTop" menu:style="radio"/>
           <menu:menuitem menu:id=".uno:CommonAlignVerticalCenter" menu:style="radio"/>

@@ -190,6 +190,7 @@ static auto GetMediaMimes() -> std::map<OString, OString> const&
         { "mov", "video/quicktime" },
         { "wmv", "video/x-ms-wmv" },
         { "avi", "video/x-msvideo" },
+        { "flv", "video/x-flv" },
         { "m4a", "audio/mp4" },
         { "aac", "audio/aac" },
         { "mp3", "audio/mpeg" }, // https://bugs.chromium.org/p/chromium/issues/detail?id=227004
@@ -229,7 +230,8 @@ auto GuessMediaMimeType(::std::u16string_view rFileName) -> OUString
 {
     if (auto const i = rFileName.rfind('.'); i != ::std::string_view::npos)
     {
-        OString const ext(OUStringToOString(rFileName.substr(i + 1), RTL_TEXTENCODING_UTF8));
+        OString const ext(
+            OUStringToOString(rFileName.substr(i + 1), RTL_TEXTENCODING_UTF8).toAsciiLowerCase());
         auto const& rMap(GetMediaMimes());
         auto const it(rMap.find(ext));
         if (it != rMap.end())

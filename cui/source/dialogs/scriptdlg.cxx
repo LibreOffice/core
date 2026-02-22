@@ -23,6 +23,8 @@
 
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <strings.hrc>
@@ -53,6 +55,7 @@
 
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;

@@ -12,6 +12,7 @@
 
 #include <SwStyleNameMapper.hxx>
 #include <ndtxt.hxx>
+#include <poolfmt.hxx>
 #include <sal/log.hxx>
 #include <rtl/uri.hxx>
 
@@ -55,7 +56,7 @@ void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, con
             new ClosedLink(uri, m_oStartedLink->mStartPosition, endPosition));
 
     const UIName& characterStyle = m_oStartedLink->mCharacterStyle;
-    sal_uInt16 poolId = ObtainPoolId(characterStyle);
+    SwPoolFormatId poolId = ObtainPoolId(characterStyle);
     pClosedLink->mINetFormat.SetVisitedFormatAndId(characterStyle, poolId);
     pClosedLink->mINetFormat.SetINetFormatAndId(characterStyle, poolId);
     pClosedLink->mINetFormat.SetName(rAltText);
@@ -64,11 +65,11 @@ void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, con
     m_oStartedLink.reset();
 }
 
-sal_uInt16
+SwPoolFormatId
 ToxLinkProcessor::ObtainPoolId(const UIName& characterStyle) const
 {
     if (characterStyle.isEmpty()) {
-        return USHRT_MAX;
+        return SwPoolFormatId::UNKNOWN;
     }
     else {
         return SwStyleNameMapper::GetPoolIdFromUIName(characterStyle, SwGetPoolIdFromName::ChrFmt);

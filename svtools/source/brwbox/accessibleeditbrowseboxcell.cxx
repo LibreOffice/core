@@ -20,6 +20,7 @@
 #include "accessibleeditbrowseboxcell.hxx"
 
 #include <comphelper/accessiblecontexthelper.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;

@@ -60,13 +60,17 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/multisel.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <memory>

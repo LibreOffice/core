@@ -66,6 +66,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -297,12 +298,22 @@ bool SlideSorterController::Command (
             if (mrModel.GetEditMode() == EditMode::Page)
             {
                 if (pPage != nullptr)
-                    aPopupId = "pagepane";
+                {
+                    if (pPage->IsCanvasPage())
+                        aPopupId = "pagepanecanvas";
+                    else
+                        aPopupId = "pagepane";
+                }
                 else
                     aPopupId = "pagepanenosel";
             }
             else if (pPage != nullptr)
-                aPopupId = "pagepanemaster";
+            {
+                if (pPage->IsCanvasMasterPage())
+                    aPopupId = "pagepanecanvasmaster";
+                else
+                    aPopupId = "pagepanemaster";
+            }
             else
                 aPopupId = "pagepanenoselmaster";
 

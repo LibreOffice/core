@@ -180,6 +180,8 @@ public:
     // XAccessibleComponent
     sal_Int32 SAL_CALL getBackground() override;
 
+    const SwTabFrame* GetTabFrame() const;
+
     void FireSelectionEvent( );
     void AddSelectionCell(SwAccessibleContext*, bool bAddOrRemove);
 };

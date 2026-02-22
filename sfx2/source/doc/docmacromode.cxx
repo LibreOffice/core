@@ -284,7 +284,7 @@ namespace sfx2
         osl::FileBase::getSystemPathFromFileURL(sURL, sFilePath);
         sal::systools::COMReference<IZoneIdentifier> pZoneId;
         pZoneId.CoCreateInstance(CLSID_PersistentZoneIdentifier);
-        sal::systools::COMReference<IPersistFile> pPersist(pZoneId, sal::systools::COM_QUERY);
+        auto pPersist(pZoneId.QueryInterface<IPersistFile>());
         DWORD dwZone;
         if (!pPersist || !SUCCEEDED(pPersist->Load(o3tl::toW(sFilePath.getStr()), STGM_READ)) ||
             !SUCCEEDED(pZoneId->GetId(&dwZone)))

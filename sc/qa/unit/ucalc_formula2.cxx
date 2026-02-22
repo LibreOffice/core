@@ -4699,6 +4699,66 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testRegexForXLOOKUP)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testHoriQueryEmptyCell)
+{
+    //Tests for fix for tdf#170388 and tdf#170295
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    m_pDoc->SetString(0, 0, 0, u"x"_ustr); // col, row, tab
+    m_pDoc->SetString(1, 0, 0, u"y"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"z"_ustr);
+
+    // Count empty cells in range A1:H1
+    m_pDoc->SetFormula(ScAddress(0, 2, 0), "=COUNTIF(A1:H1;\"=\")",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    // Without fix, count was 0
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTIF equal empty", 5.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+
+    // Get address of first empty cell
+    m_pDoc->SetFormula(ScAddress(0, 3, 0), "=CELL(\"ADDRESS\"; XLOOKUP(;A1:H1;A1:H1))",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    // Without fix, reference was #N/A
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("XLOOKUP empty", u"$D$1"_ustr,
+                                 m_pDoc->GetString(ScAddress(0, 3, 0)));
+
+    // criterion <> counts empty cells too.
+    m_pDoc->SetFormula(ScAddress(0, 4, 0), "=COUNTIF(A1:H1;\"<>y\")",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    // Without fix, count was 2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTIF not equal", 7.0, m_pDoc->GetValue(ScAddress(0, 4, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testVertQueryEmptyCell)
+{
+    //Test for fix for tdf#159544
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // Data in A1:B10, with empty A3, A5, A6, A7, A9, A10
+    m_pDoc->SetString(0, 0, 0, u"a"_ustr); // A1 col, row, tab
+    m_pDoc->SetString(0, 1, 0, u"b"_ustr); // A2
+    m_pDoc->SetString(0, 3, 0, u"d"_ustr); // A4
+    m_pDoc->SetString(0, 7, 0, u"h"_ustr); // A8
+    for (SCROW nRow = 0; nRow <= 9; ++nRow)
+    {
+        m_pDoc->SetValue(1, nRow, 0, nRow + 1);
+    }
+
+    m_pDoc->SetFormula(ScAddress(3, 0, 0), "=COUNTIFS(A1:A10;\"=\";B1:B10;\">0\")",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    // As >0 is true for all cells in B1:B10, match is determined by empty cells in col A1:A10.
+    // Without fix the range was reduced, so that B9 and B10 were not count and result was 4.
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+
+    // Make sure the result is identical for exchanged queries. This tests that the range
+    // reduction has actually been reversed.
+    m_pDoc->SetFormula(ScAddress(3, 1, 0), "=COUNTIFS($B1:$B10;\">0\";A1:A10;\"=\")",
+                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

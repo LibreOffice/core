@@ -51,6 +51,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/flagguard.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>

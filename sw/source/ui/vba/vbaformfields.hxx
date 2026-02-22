@@ -14,6 +14,8 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 typedef CollTestImplHelper<ooo::vba::word::XFormFields> SwVbaFormFields_BASE;
 
 class SwVbaFormFields : public SwVbaFormFields_BASE

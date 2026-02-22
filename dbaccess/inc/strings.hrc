@@ -368,7 +368,8 @@
 #define STR_PAGETITLE_MYSQL                         NC_("STR_PAGETITLE_MYSQL", "Set up MySQL/MariaDB connection" )
 #define STR_PAGETITLE_POSTGRES                      NC_("STR_PAGETITLE_POSTGRES", "Set up PostgreSQL connection" )
 #define STR_PAGETITLE_ODBC                          NC_("STR_PAGETITLE_ODBC", "Set up ODBC connection" )
-#define STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET       NC_("STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET", "Set up Writer Document or Spreadsheet connection" )
+#define STR_PAGETITLE_SPREADSHEET                   NC_("STR_PAGETITLE_SPREADSHEET", "Set up Spreadsheet connection" )
+#define STR_PAGETITLE_DOCUMENT                      NC_("STR_PAGETITLE_DOCUMENT", "Set up Writer Document connection" )
 #define STR_PAGETITLE_AUTHENTIFICATION              NC_("STR_PAGETITLE_AUTHENTIFICATION", "Set up user authentication" )
 #define STR_PAGETITLE_MYSQL_NATIVE                  NC_("STR_PAGETITLE_MYSQL_NATIVE", "Set up MySQL/MariaDB server data")
 #define STR_PAGETITLE_FINAL                         NC_("STR_PAGETITLE_FINAL", "Save and proceed" )
@@ -397,6 +398,8 @@
 #define STR_SPREADSHEET_HEADERTEXT                  NC_("STR_SPREADSHEET_HEADERTEXT", "Set up a connection to spreadsheets")
 #define STR_SPREADSHEET_HELPTEXT                    NC_("STR_SPREADSHEET_HELPTEXT", "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." )
 #define STR_SPREADSHEETPATH                         NC_("STR_SPREADSHEETPATH", "~Location and file name" )
+#define STR_WRITER_HEADERTEXT                       NC_("STR_WRITER_HEADERTEXT", "Set up a connection to a text document")
+#define STR_WRITER_HELPTEXT                         NC_("STR_WRITER_HELPTEXT", "Click 'Browse...' to select a %PRODUCTNAME Writer or Microsoft Word document.\n%PRODUCTNAME will open this file in read-only mode." )
 
 #define STR_COMMAND_EXECUTED_SUCCESSFULLY           NC_("STR_COMMAND_EXECUTED_SUCCESSFULLY", "Command successfully executed." )
 #define STR_COMMAND_NROWS                           NNC_("STR_COMMAND_NROWS", "%1 row in set", "%1 rows in set" )

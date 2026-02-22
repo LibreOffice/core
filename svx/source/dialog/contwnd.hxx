@@ -19,6 +19,11 @@
 
 #pragma once
 
+namespace weld
+{
+class Dialog;
+}
+
 #include <tools/poly.hxx>
 #include <svx/graphctl.hxx>
 

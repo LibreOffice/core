@@ -23,12 +23,13 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/svldllapi.h>
 
 namespace com::sun::star::lang {
     struct Locale;
 }
+namespace com::sun::star::uno { template <typename> class Sequence; }
 
 /// These constants define character compression in Asian text.
 /// Must match the values in com::sun::star::text::CharacterCompressionType.

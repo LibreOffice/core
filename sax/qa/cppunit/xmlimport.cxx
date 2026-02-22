@@ -34,6 +34,7 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <osl/file.hxx>
+#include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/fastattribs.hxx>

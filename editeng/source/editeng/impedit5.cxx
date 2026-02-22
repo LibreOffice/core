@@ -29,7 +29,11 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/window.hxx>
+
+#include <com/sun/star/i18n/Calendar2.hpp>
+
 #include <utility>
 
 void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
@@ -1116,6 +1120,10 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
                     pEditView->getImpl().DrawSelectionXOR();
                     UndoActionStart( EDITUNDO_DELETE );
                     aCurSel = DeleteLeftOrRight( aCurSel, nDel, nMode );
+
+                    // tdf#162120: Automatically adjust paragraph directions after edit
+                    UpdateAutoParaDirection(aCurSel);
+
                     UndoActionEnd();
                     bModified = true;
                     bAllowIdle = false;

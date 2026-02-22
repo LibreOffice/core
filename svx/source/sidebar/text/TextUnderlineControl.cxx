@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <helpids.h>
 #include <sfx2/tbxctrl.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 namespace svx {

@@ -20,6 +20,7 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
+#include <com/sun/star/i18n/ParseResult.hpp>
 #include <i18nlangtag/lang.h>
 #include <tools/lineend.hxx>
 #include <comphelper/configuration.hxx>

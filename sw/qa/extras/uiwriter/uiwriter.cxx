@@ -86,6 +86,7 @@ public:
     std::unique_ptr<SwTextBlocks> readDOCXAutotext(
         std::u16string_view sFileName, bool bEmpty = false);
     void testRedlineFrame(char const*const file);
+    void testWatermarkPosition(int nAdditionalPagesCount, bool bChangeHeader);
 };
 
 std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(std::u16string_view sFileName, bool bEmpty)
@@ -387,6 +388,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     pWrtShell->SelAll();
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
+    dispose();
     createSwDoc("pagebreak-target.fodt");
     SwDoc* pDoc = getSwDoc();
     pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1011,81 +1013,115 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkDOCX)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), pWatermark->GetTransparency());
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition1)
+{
+    testWatermarkPosition(0, true);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition2)
+{
+    testWatermarkPosition(0, false);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition3)
+{
+    testWatermarkPosition(1, true);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition4)
+{
+    testWatermarkPosition(1, false);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition5)
+{
+    testWatermarkPosition(5, true);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition6)
+{
+    testWatermarkPosition(5, false);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition7)
+{
+    testWatermarkPosition(20, true);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition8)
+{
+    testWatermarkPosition(20, false);
+}
+
+void SwUiWriterTest::testWatermarkPosition(int nAdditionalPagesCount, bool bChangeHeader)
 {
     // tdf#108494 Watermark inserted in the document with page break was outside the first page
     const int aPagesInDocument = 2;
-    const int aAdditionalPagesCount[] = {    0,     0,    1,     1,    5,     5,   20,    20 };
-    const bool aChangeHeader[]        = { true, false, true, false, true, false, true, false };
+    int aPages = aPagesInDocument + nAdditionalPagesCount;
 
-    for (tools::ULong i = 0; i < sizeof(aAdditionalPagesCount) / sizeof(int); ++i)
+    // Empty document with one Page Break
+    createSwDoc("watermark-position.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwEditShell* pEditShell = pDoc->GetEditShell();
+    CPPUNIT_ASSERT(pEditShell);
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                     uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+
+    // 1. Add additional page breaks
+    for (int j = 0; j < nAdditionalPagesCount; ++j)
+        pWrtShell->InsertPageBreak();
+
+    // 2. Change header state (On, Off, On)
+    if (bChangeHeader)
     {
-        int aPages = aPagesInDocument + aAdditionalPagesCount[i];
+        SwPageDesc aDesc(pDoc->GetPageDesc(0));
+        SwFrameFormat& rMaster = aDesc.GetMaster();
+        rMaster.SetFormatAttr(SwFormatHeader(true));
+        pDoc->ChgPageDesc(0, aDesc);
 
-        // Empty document with one Page Break
-        createSwDoc("watermark-position.odt");
-        SwDoc* pDoc = getSwDoc();
-        SwEditShell* pEditShell = pDoc->GetEditShell();
-        CPPUNIT_ASSERT(pEditShell);
-        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
-                                                                         uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+        aDesc = pDoc->GetPageDesc(0);
+        SwFrameFormat& rMaster2 = aDesc.GetMaster();
+        rMaster2.SetFormatAttr(SwFormatHeader(false));
+        pDoc->ChgPageDesc(0, aDesc);
 
-        // 1. Add additional page breaks
-        for (int j = 0; j < aAdditionalPagesCount[i]; ++j)
-            pWrtShell->InsertPageBreak();
-
-        // 2. Change header state (On, Off, On)
-        if (aChangeHeader[i])
-        {
-            SwPageDesc aDesc(pDoc->GetPageDesc(0));
-            SwFrameFormat& rMaster = aDesc.GetMaster();
-            rMaster.SetFormatAttr(SwFormatHeader(true));
-            pDoc->ChgPageDesc(0, aDesc);
-
-            aDesc = pDoc->GetPageDesc(0);
-            SwFrameFormat& rMaster2 = aDesc.GetMaster();
-            rMaster2.SetFormatAttr(SwFormatHeader(false));
-            pDoc->ChgPageDesc(0, aDesc);
-
-            aDesc = pDoc->GetPageDesc(0);
-            SwFrameFormat& rMaster3 = aDesc.GetMaster();
-            rMaster3.SetFormatAttr(SwFormatHeader(true));
-            pDoc->ChgPageDesc(0, aDesc);
-        }
-
-        // 3. Insert Watermark
-        SfxWatermarkItem aWatermark;
-        aWatermark.SetText(u"Watermark"_ustr);
-        aWatermark.SetFont(u"DejaVu Sans"_ustr);
-
-        pEditShell->SetWatermark(aWatermark);
-
-        uno::Reference<css::drawing::XShape> xShape = getShape(1);
-        CPPUNIT_ASSERT(xShape.is());
-
-        SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-
-        // Get Watermark object
-        SdrObject* pObject = pPage->GetObj(0);
-        pObject->RecalcBoundRect();
-        const tools::Rectangle& rRect = pObject->GetSnapRect();
-        Size rSize = pPage->GetSize();
-
-        // Page break, calculate height of a page
-        const int nPageHeight = rSize.getHeight() / aPages;
-
-        std::stringstream aMessage;
-        aMessage << "Case: " << i << ", nPageHeight = " << nPageHeight << ", rRect.Bottom = " << rRect.Bottom();
-
-        // Check if Watermark is inside a page
-        CPPUNIT_ASSERT_MESSAGE(aMessage.str(), nPageHeight >= rRect.Bottom());
-
-        // Check if Watermark is centered
-        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xShape, u"HoriOrient"_ustr));
-        CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xShape, u"VertOrient"_ustr));
+        aDesc = pDoc->GetPageDesc(0);
+        SwFrameFormat& rMaster3 = aDesc.GetMaster();
+        rMaster3.SetFormatAttr(SwFormatHeader(true));
+        pDoc->ChgPageDesc(0, aDesc);
     }
+
+    // 3. Insert Watermark
+    SfxWatermarkItem aWatermark;
+    aWatermark.SetText(u"Watermark"_ustr);
+    aWatermark.SetFont(u"DejaVu Sans"_ustr);
+
+    pEditShell->SetWatermark(aWatermark);
+
+    uno::Reference<css::drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT(xShape.is());
+
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+
+    // Get Watermark object
+    SdrObject* pObject = pPage->GetObj(0);
+    pObject->RecalcBoundRect();
+    const tools::Rectangle& rRect = pObject->GetSnapRect();
+    Size rSize = pPage->GetSize();
+
+    // Page break, calculate height of a page
+    const int nPageHeight = rSize.getHeight() / aPages;
+
+    std::stringstream aMessage;
+    aMessage << ", nPageHeight = " << nPageHeight << ", rRect.Bottom = " << rRect.Bottom();
+
+    // Check if Watermark is inside a page
+    CPPUNIT_ASSERT_MESSAGE(aMessage.str(), nPageHeight >= rRect.Bottom());
+
+    // Check if Watermark is centered
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xShape, u"HoriOrient"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xShape, u"VertOrient"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo74981)

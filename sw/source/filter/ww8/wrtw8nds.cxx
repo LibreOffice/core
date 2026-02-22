@@ -87,11 +87,11 @@
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <oox/export/vmlexport.hxx>
 #include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -183,7 +183,7 @@ lcl_getLinkChainName(const uno::Reference<beans::XPropertySet>& rPropertySet,
 static bool lcl_IsInlineHeading(const ww8::Frame &rFrame)
 {
     const SwFormat* pParent = rFrame.GetFrameFormat().DerivedFrom();
-    return pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING;
+    return pParent && pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING;
 }
 
 MSWordAttrIter::MSWordAttrIter( MSWordExportBase& rExport )
@@ -715,17 +715,6 @@ bool SwWW8AttrIter::IsWatermarkFrame()
     }
 
     return false;
-}
-
-bool SwWW8AttrIter::IsAnchorLinkedToThisNode( SwNodeOffset nNodePos )
-{
-    if ( maFlyIter == maFlyFrames.end() )
-        return false;
-
-    /* if current node position and the anchor position are the same
-        then the frame anchor is linked to this node
-    */
-    return nNodePos == maFlyIter->GetPosition().GetNodeIndex();
 }
 
 bool SwWW8AttrIter::HasFlysAt(sal_Int32 nSwPos, const ww8::Frame** pInlineHeading) const
@@ -2501,14 +2490,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         do {
 
             const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nCurrentPos );
-            bool bPostponeWritingText    = false ;
-            bool bStartedPostponedRunProperties = false;
-            OUString aSavedSnippet ;
 
             // Don't redline content-controls--Word doesn't do them.
-            SwTextAttr* pAttr = rNode.GetTextAttrAt(nCurrentPos, RES_TXTATR_CONTENTCONTROL,
-                                                    sw::GetTextAttrMode::Default);
-            if (pAttr && pAttr->GetStart() == nCurrentPos)
+            const SwTextAttr* pSdt = rNode.GetTextAttrAt(nCurrentPos, RES_TXTATR_CONTENTCONTROL,
+                                                         sw::GetTextAttrMode::Default);
+            if (pSdt && pSdt->GetStart() == nCurrentPos)
             {
                 pRedlineData = nullptr;
             }
@@ -2540,29 +2526,19 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
             }
 
-            /*
-               1) If there is a text node and an overlapping anchor, then write them in two different
-               runs and not as part of the same run.
-               2) Ensure that it is a text node and not in a fly.
-               3) If the anchor is associated with a text node with empty text then we ignore.
-               */
-            if (GetExportFormat() == MSWordExportBase::ExportFormat::DOCX
-                && aStr != OUStringChar(CH_TXTATR_BREAKWORD) && !aStr.isEmpty()
-                    && !rNode.GetFlyFormat()
-                    && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()) )
-            {
-                bPostponeWritingText = true ;
-            }
+            AttrOutput().ResetFlyProcessingFlag();
+            const FlyProcessingState nStateOfFlyFrame = aAttrIter.OutFlys(nCurrentPos);
 
-            FlyProcessingState nStateOfFlyFrame = aAttrIter.OutFlys( nCurrentPos );
-            AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
-            AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
             // Append bookmarks in this range after flys, exclusive of final
             // position of this range
-            AppendBookmarks( rNode, nCurrentPos, nNextAttr - nCurrentPos, pRedlineData );
-            // Sadly only possible for main or glossary document parts: ECMA-376 Part 1 sect. 11.3.2
-            if ( m_nTextTyp == TXT_MAINTEXT )
-                AppendAnnotationMarks(aAttrIter, nCurrentPos, nNextAttr - nCurrentPos);
+            if (0 != nEnd) // start == final position is written when nNextAttr == nEnd
+            {
+                AppendBookmarks(rNode, nCurrentPos, nNextAttr - nCurrentPos, pRedlineData);
+                // Sadly, comments are only possible
+                // for main or glossary document parts: ECMA-376 Part 1 sect. 11.3.2
+                if (m_nTextTyp == TXT_MAINTEXT)
+                    AppendAnnotationMarks(aAttrIter, nCurrentPos, nNextAttr - nCurrentPos);
+            }
 
             // At the moment smarttags are only written for paragraphs, at the
             // beginning of the paragraph.
@@ -2572,8 +2548,18 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             bool bTextAtr = aAttrIter.IsTextAttr( nCurrentPos );
             nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nCurrentPos );
 
-            OUString aSymbolFont;
             sal_Int32 nLen = nNextAttr - nCurrentPos;
+
+            // DOCX: Put the flies in their own run.
+            // This is critical for plainText content controls and fields.
+            if (nStateOfFlyFrame == FLY_PROCESSED && !aStr.isEmpty()
+                && GetExportFormat() == MSWordExportBase::ExportFormat::DOCX)
+            {
+                // FLY_PROCESSED: there is at least 1 fly already written
+                AttrOutput().EndRun(&rNode, nCurrentPos, /*nLen=*/-1, /*bLastRun=*/false);
+                AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
+            }
+
             if ( !bTextAtr && nLen )
             {
                 sal_Unicode ch = aStr[nCurrentPos];
@@ -2583,16 +2569,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                                     || ch == CH_TXT_ATR_FIELDEND
                                     || ch == CH_TXT_ATR_FORMELEMENT)
                                 ? 1 : 0;
-                if (ofs == 1
-                    && GetExportFormat() == MSWordExportBase::ExportFormat::DOCX
-                    // FLY_PROCESSED: there's at least 1 fly already written
-                    && nStateOfFlyFrame == FLY_PROCESSED)
-                {
-                    // write flys in a separate run before field character
-                    AttrOutput().EndRun(&rNode, nCurrentPos, -1, nNextAttr == nEnd);
-                    AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
-                }
-
                 IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
                 if ( ch == CH_TXT_ATR_FIELDSTART )
                 {
@@ -2759,18 +2735,10 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     m_bAddFootnoteTab = false;
                 }
 
-                aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), rNode, nCurrentPos + ofs,
+                OUString aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), rNode, nCurrentPos + ofs,
                                                 nCurrentPos + ofs + nLen);
 
-                if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
-                {
-                    aSavedSnippet = aSnippet ;
-                }
-                else
-                {
-                    bPostponeWritingText = false ;
-                    AttrOutput().RunText( aSnippet, eChrSet, aSymbolFont );
-                }
+                AttrOutput().RunText( aSnippet, eChrSet, aSymbolFont );
 
                 if (ofs == 1 && nNextAttr == nEnd)
                 {
@@ -2784,20 +2752,16 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             if ( aAttrIter.IsDropCap( nNextAttr ) )
                 AttrOutput().FormatDrop( rNode, aAttrIter.GetSwFormatDrop(), nStyle, pTextNodeInfo, pTextNodeInfoInner );
 
-            // Only output character attributes if this is not a postponed text run.
-            if (0 != nEnd && !(bPostponeWritingText
-                    && (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame)))
+            if (0 != nEnd)
             {
                 // Output the character attributes
                 // #i51277# do this before writing flys at end of paragraph
-                bStartedPostponedRunProperties = true;
                 AttrOutput().StartRunProperties();
                 aAttrIter.OutAttr(nCurrentPos, false);
                 AttrOutput().EndRunProperties( pRedlineData );
             }
 
             // At the end of line, output the attributes until the CR.
-            // Exception: footnotes at the end of line
             if ( nNextAttr == nEnd )
             {
                 OSL_ENSURE( nOpenAttrWithRange >= 0, "odd to see this happening, expected >= 0" );
@@ -2808,7 +2772,17 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     else
                     {
                         // insert final graphic anchors if any before CR
-                        nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
+                        if (pSdt && *pSdt->GetEnd() == nEnd && aAttrIter.HasFlysAt(nEnd))
+                        {
+                            // Close the content control run before exporting final flies,
+                            // otherwise the flies will be moved into the Sdt run,
+                            // which (for a non-richText Sdt) will be considered corrupt in MS Word.
+                            AttrOutput().EndRun(&rNode, nCurrentPos, nLen, /*bLastRun=*/false);
+                            nLen = 0;
+                            nCurrentPos = nEnd;
+                            AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
+                        }
+                        aAttrIter.OutFlys(nEnd);
                         // insert final bookmarks if any before CR and after flys
                         AppendBookmarks( rNode, nEnd, 1 );
                         AppendAnnotationMarks(aAttrIter, nEnd, 1);
@@ -2842,7 +2816,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 AttrOutput().EndRunProperties( pRedlineData );
             }
 
-            // Exception: footnotes at the end of line
             if ( nNextAttr == nEnd )
             {
                 OSL_ENSURE(nOpenAttrWithRange >= 0,
@@ -2862,7 +2835,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     AttrOutput().WritePostitFieldReference();
 
                     // insert final graphic anchors if any before CR
-                    nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
+                    aAttrIter.OutFlys(nEnd);
                     // insert final bookmarks if any before CR and after flys
                     AppendBookmarks( rNode, nEnd, 1 );
                     AppendAnnotationMarks(aAttrIter, nEnd, 1);
@@ -2894,34 +2867,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             AttrOutput().WritePostitFieldReference();
 
-            aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), rNode, nCurrentPos, nCurrentPos + nLen);
-
-            if (bPostponeWritingText)
-            {
-                if (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame)
-                {
-                    AttrOutput().EndRun(&rNode, nCurrentPos, -1, /*bLastRun=*/false);
-                    if (!aSavedSnippet.isEmpty())
-                        bStartedPostponedRunProperties = false;
-
-                    AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
-                    AttrOutput().SetAnchorIsLinkedToNode( false );
-                    AttrOutput().ResetFlyProcessingFlag();
-                }
-                if (0 != nEnd && !bStartedPostponedRunProperties)
-                {
-                    AttrOutput().StartRunProperties();
-                    aAttrIter.OutAttr( nCurrentPos, false );
-                    AttrOutput().EndRunProperties( pRedlineData );
-
-                    // OutAttr may have introduced new comments, so write them out now
-                    AttrOutput().WritePostitFieldReference();
-                }
-                AttrOutput().RunText( aSavedSnippet, eChrSet, aSymbolFont );
-                AttrOutput().EndRun(&rNode, nCurrentPos, nLen, nNextAttr == nEnd);
-            }
-            else
-                AttrOutput().EndRun(&rNode, nCurrentPos, nLen, nNextAttr == nEnd);
+            AttrOutput().EndRun(&rNode, nCurrentPos, nLen, nNextAttr == nEnd);
 
             nCurrentPos = nNextAttr;
             UpdatePosition( &aAttrIter, nCurrentPos );

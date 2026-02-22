@@ -28,6 +28,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <svl/style.hxx>
 #include <svx/chinese_translation_unodialog.hxx>
+#include <unotools/fontdefs.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>

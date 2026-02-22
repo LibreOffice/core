@@ -25,6 +25,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/svxids.hrc>
 #include <strings.hrc>
+#include <svtools/dlgname.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xflbmsxy.hxx>
@@ -44,14 +45,16 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
-#include <svx/svxdlg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <svtools/unitconv.hxx>
 #include <tools/debug.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 using namespace com::sun::star;
 
@@ -579,13 +582,12 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
     OUString aDesc( CuiResId( RID_CUISTR_DESC_NEW_BITMAP ) );
     OUString aName( m_pBitmapList->GetBitmap( nPos )->GetName() );
 
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    SvxNameDialog aDlg(GetFrameWeld(), aName, aDesc);
 
     bool bLoop = true;
-    while( bLoop && pDlg->Execute() == RET_OK )
+    while (bLoop && aDlg.run() == RET_OK)
     {
-        aName = pDlg->GetName();
+        aName = aDlg.GetName();
         sal_Int32 nBitmapPos = SearchBitmapList( aName );
         bool bValidBitmapName = (nBitmapPos == static_cast<sal_Int32>(nPos) ) || (nBitmapPos == -1);
 
@@ -789,14 +791,12 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
         // convert file URL to UI name
         OUString        aName;
         INetURLObject   aURL( aDlg.GetPath() );
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(
-            pDialogFrameWeld, aURL.GetLastName().getToken(0, '.'), aDesc));
+        SvxNameDialog aNameDlg(pDialogFrameWeld, aURL.GetLastName().getToken(0, '.'), aDesc);
         nError = ErrCode(1);
 
-        while( pDlg->Execute() == RET_OK )
+        while (aNameDlg.run() == RET_OK)
         {
-            aName = pDlg->GetName();
+            aName = aNameDlg.GetName();
 
             bool bDifferent = true;
 
@@ -814,8 +814,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
             if (xBox->run() != RET_OK)
                 break;
         }
-
-        pDlg.disposeAndClear();
 
         if( !nError )
             AddBitmap(std::move(aGraphic), aName);

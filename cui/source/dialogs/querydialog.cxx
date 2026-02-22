@@ -19,6 +19,7 @@
 
 #include <querydialog.hxx>
 #include <bitmaps.hlst>
+#include <vcl/weld/Builder.hxx>
 
 QueryDialog::QueryDialog(weld::Window* pParent, const OUString& sTitle, const OUString& sText,
                          const OUString& sQuestion, bool bShowAgain)

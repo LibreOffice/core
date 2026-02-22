@@ -17,7 +17,7 @@ QtInstanceRadioButton::QtInstanceRadioButton(QRadioButton* pRadioButton)
     , m_pRadioButton(pRadioButton)
 {
     assert(m_pRadioButton);
-    connect(m_pRadioButton, &QRadioButton::toggled, this, [&] { signal_toggled(); });
+    connect(m_pRadioButton, &QRadioButton::toggled, this, &QtInstanceRadioButton::handleToggled);
 }
 
 void QtInstanceRadioButton::do_set_active(bool bActive)
@@ -53,6 +53,12 @@ void QtInstanceRadioButton::QtInstanceRadioButton::set_label_wrap(bool /*bWrap*/
 {
     // https://bugreports.qt.io/browse/QTBUG-5370
     SAL_WARN("vcl.qt", "Qt doesn't support word wrap in radio buttons (see QTBUG-5370)");
+}
+
+void QtInstanceRadioButton::handleToggled()
+{
+    SolarMutexGuard g;
+    signal_toggled();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

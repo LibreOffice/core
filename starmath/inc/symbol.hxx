@@ -31,6 +31,8 @@
 #include "format.hxx"
 #include "utility.hxx"
 
+#include <vcl/vclenum.hxx>
+
 
 #define SYMBOL_NONE     0xFFFF
 

@@ -17,6 +17,8 @@
 #include <tools/stream.hxx>
 #include <sot/storage.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 namespace com::sun::star::io
 {
 class XInputStream;

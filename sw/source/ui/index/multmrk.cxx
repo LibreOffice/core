@@ -21,6 +21,8 @@
 #include <toxmgr.hxx>
 #include <wrtsh.hxx>
 
+#include <vcl/weld/Builder.hxx>
+
 SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr& rTOXMgr)
     : GenericDialogController(pParent, u"modules/swriter/ui/selectindexdialog.ui"_ustr,
                               u"SelectIndexDialog"_ustr)

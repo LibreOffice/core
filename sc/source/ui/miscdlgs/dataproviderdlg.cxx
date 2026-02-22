@@ -23,7 +23,10 @@
 #include <unotools/charclass.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 
 class ScDataTransformationBaseControl
 {

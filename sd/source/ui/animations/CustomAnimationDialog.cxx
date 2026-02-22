@@ -37,15 +37,19 @@
 
 #include <comphelper/lok.hxx>
 #include <i18nutil/unicode.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/MenuButton.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
 
 #include <svtools/ctrltool.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>

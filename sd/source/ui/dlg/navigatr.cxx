@@ -55,6 +55,9 @@
 
 #include <sdpage.hxx>
 
+#include <sdresid.hxx>
+#include <strings.hrc>
+
 /**
  * SdNavigatorWin - FloatingWindow
  */
@@ -109,6 +112,24 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     {
         mxToolbox->hide();
         mxLbDocs->hide();
+    }
+}
+
+void SdNavigatorWin::SetToolBoxToolTips(const SdDrawDocument* pDoc)
+{
+    if (pDoc->GetDocumentType() == DocumentType::Impress)
+    {
+        mxToolbox->set_item_tooltip_text(u"first"_ustr, SdResId(STR_FIRST_SLIDE));
+        mxToolbox->set_item_tooltip_text(u"previous"_ustr, SdResId(STR_PREVIOUS_SLIDE));
+        mxToolbox->set_item_tooltip_text(u"next"_ustr, SdResId(STR_NEXT_SLIDE));
+        mxToolbox->set_item_tooltip_text(u"last"_ustr, SdResId(STR_LAST_SLIDE));
+    }
+    else
+    {
+        mxToolbox->set_item_tooltip_text(u"first"_ustr, SdResId(STR_FIRST_PAGE));
+        mxToolbox->set_item_tooltip_text(u"previous"_ustr, SdResId(STR_PREVIOUS_PAGE));
+        mxToolbox->set_item_tooltip_text(u"next"_ustr, SdResId(STR_NEXT_PAGE));
+        mxToolbox->set_item_tooltip_text(u"last"_ustr, SdResId(STR_LAST_PAGE));
     }
 }
 
@@ -876,9 +897,10 @@ void SdPageNameControllerItem::StateChangedAtToolBoxControl( sal_uInt16 nSId,
     // marked objects. The HasSelectedChildren test is required when in 'Named Shapes' mode in
     // order to select the page name when none of the marked objects have a name.
     bool bDrawViewHasMarkedObjects = false;
-    if (pInfo->GetDrawDocShell() && pInfo->GetDrawDocShell()->GetViewShell())
+    ::sd::ViewShell* pViewSh = pInfo->GetDrawDocShell() ? pInfo->GetDrawDocShell()->GetViewShell() : nullptr;
+    if (pViewSh)
     {
-        const SdrView* pDrawView = pInfo->GetDrawDocShell()->GetViewShell()->GetDrawView();
+        const SdrView* pDrawView = pViewSh->GetDrawView();
         if (pDrawView && pDrawView->GetMarkedObjectList().GetMarkCount())
             bDrawViewHasMarkedObjects = true;
     }

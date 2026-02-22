@@ -16,6 +16,10 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/place.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/SpinButton.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include "ServerDetailsControls.hxx"
 

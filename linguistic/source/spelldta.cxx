@@ -97,14 +97,15 @@ void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
 
 void SeqRemoveNegEntries( std::vector< OUString > &rSeq,
         Reference< XSearchableDictionaryList > const &rxDicList,
-        LanguageType nLanguage )
+        LanguageType nLanguage,
+        std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap )
 {
     bool bSthRemoved = false;
     sal_Int32 nLen = rSeq.size();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         Reference< XDictionaryEntry > xNegEntry( SearchDicList( rxDicList,
-                    rSeq[i], nLanguage, false, true ) );
+                    rSeq[i], nLanguage, false, true, rDictionaryMap ) );
         if (xNegEntry.is())
         {
             rSeq[i].clear();

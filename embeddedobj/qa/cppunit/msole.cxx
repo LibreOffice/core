@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -35,11 +35,11 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Covers embeddedobj/source/msole/ fixes.
-class Test : public UnoApiXmlTest
+class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiXmlTest("/embeddedobj/qa/cppunit/data/")
+        : UnoApiTest("/embeddedobj/qa/cppunit/data/")
     {
     }
 };
@@ -100,12 +100,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSaveOnThread)
         return;
 
     DBG_TESTSOLARMUTEX();
-    OUString aURL = createFileURL(u"reqif-ole2.xhtml");
     uno::Sequence<beans::PropertyValue> aLoadProperties = {
         comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
         comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
     };
-    loadWithParams(aURL, aLoadProperties);
+    loadFromFile(u"reqif-ole2.xhtml", aLoadProperties);
 
     // When saving that document on a thread:
     OdtExportThread aThread(mxComponent, maTempFile.GetURL());

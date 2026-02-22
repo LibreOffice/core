@@ -25,6 +25,7 @@
 #include <svl/typedwhich.hxx>
 #include <svtools/scrolladaptor.hxx>
 #include <vcl/prntypes.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <o3tl/deleter.hxx>
 #include <pres.hxx>
 #include "View.hxx"
@@ -427,12 +428,17 @@ public:
      */
     virtual void onGrabFocus(){};
 
+    virtual void RememberCanvasPageVisArea(const ::tools::Rectangle & /*aRect*/) {};
+
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorMm100Position(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Gets the current selection
     css::uno::Reference<css::datatransfer::XTransferable> GetSelectionTransferable() const;
     /// Allows starting or ending a graphic move or resize action.
     void SetGraphicMm100Position(bool bStart, const Point& rPosition);
+
+    sal_uInt16 GetPageZoom() const;
+    void RememberPageZoom(const sal_uInt16 nZoom);
 
     class Implementation;
 
@@ -481,6 +487,9 @@ protected:
     bool        mbStartShowWithDialog;    // presentation is started by dialog
     sal_uInt16      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
     sal_uInt16      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
+
+    sal_uInt16            mnCanvasPageZoom = 20;
+    sal_uInt16            mnNonCanvasPageZoom = 100;
 
     //af    bool        bPrintDirectSelected;       // Print only selected objects in direct print
     //afString      sPageRange;                 // pagerange if selected objects in direct print

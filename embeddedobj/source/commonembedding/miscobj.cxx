@@ -35,13 +35,16 @@
 #include <comphelper/mimeconfighelper.hxx>
 
 #include <utility>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/vclenum.hxx>
 #include <strings.hrc>
 #include <osl/file.hxx>
 #include <comphelper/DirectoryHelper.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/wintypes.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -115,7 +118,7 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     if ( !m_xContext.is() )
         throw uno::RuntimeException();
 
-    m_xDocHolder = new embeddedobj::DocumentHolder( m_xContext, this );
+    m_xDocHolder = new embeddedobj::DocumentHolder( m_xContext, *this );
 
     // parse configuration entries
     // TODO/LATER: in future UI names can be also provided here

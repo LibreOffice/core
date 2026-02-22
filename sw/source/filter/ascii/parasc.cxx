@@ -169,10 +169,10 @@ ErrCode SwASCIIParser::CallParser()
 
     if (m_bNewDoc)
     {
-        pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HTML_PRE,
+        pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_HTML_PRE,
                                                                          false);
         if (!pColl)
-            pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD,
+            pColl = m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD,
                                                                              false);
         if (pColl)
             m_rDoc.SetTextFormatColl(*m_oPam, pColl);
@@ -512,6 +512,8 @@ ErrCode SwASCIIParser::ReadChars()
 void SwASCIIParser::InsertText( const OUString& rStr )
 {
     m_rDoc.getIDocumentContentOperations().InsertString(*m_oPam, rStr);
+    m_rDoc.getIDocumentContentOperations().AutoSetParagraphDirections(*m_oPam,
+                                                                      /*layout*/ nullptr);
 
     if (m_oItemSet && g_pBreakIt
         && m_nScript != (SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX))

@@ -28,20 +28,19 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/table/XColumnRowRange.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-
 #include <rtl/ref.hxx>
 
 #include <xmloff/dllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <xmloff/prhdlfac.hxx>
-#include <xmloff/xmlexppr.hxx>
 #include <xmloff/styleexp.hxx>
 
 class SvXMLExport;
 class SvXMLExportPropertyMapper;
+class XMLPropertyHandlerFactory;
+
+namespace com::sun::star::container { class XIndexAccess; }
+namespace com::sun::star::table { class XCell; }
+namespace com::sun::star::table { class XColumnRowRange; }
 
 typedef std::map< const css::uno::Reference< css::uno::XInterface >, OUString > TableStyleMap;
 

@@ -1407,22 +1407,9 @@ void SwFEShell::SetTableStyle(const TableStyleName& rStyleName)
     UpdateTableStyleFormatting(pTableNode, false, &rStyleName);
 }
 
-bool SwFEShell::ResetTableStyle()
-{
-    SwTableNode *pTableNode = const_cast<SwTableNode*>(IsCursorInTable());
-    if (!pTableNode)
-        return false;
-
-    TableStyleName takingAddressOfRValue;
-    return UpdateTableStyleFormatting(pTableNode, false, &takingAddressOfRValue);
-}
-
     // AutoFormat for the table/table selection
 bool SwFEShell::SetTableStyle(const SwTableAutoFormat& rStyle)
 {
-    // make sure SwDoc has the style
-    GetDoc()->GetTableStyles().AddAutoFormat(rStyle);
-
     SwTableNode *pTableNode = const_cast<SwTableNode*>(IsCursorInTable());
     if (!pTableNode)
         return false;

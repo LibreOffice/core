@@ -21,7 +21,7 @@ PRJNAME := cli_ure
 TARGET := test_climaker
 PACKAGE = climaker
 
-#we use the climaker which is build by this project
+#we use the climaker which is built by this project
 CLIMAKER*=$(WRAPCMD) $(BIN)$/climaker
 .INCLUDE: settings.mk
 

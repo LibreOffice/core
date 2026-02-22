@@ -9,7 +9,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,reportdesign_basic_test))
 
-$(eval $(call gb_CppunitTest_use_external,reportdesign_basic_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,reportdesign_basic_test, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,reportdesign_basic_test, \
     reportdesign/qa/unit/ReportDesignBasicTests \

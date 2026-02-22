@@ -12,6 +12,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <test/bootstrapfixture.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <unotest/macros_test.hxx>

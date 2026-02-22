@@ -33,11 +33,15 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 namespace
 {
+using ScriptingCfg = officecfg::Office::Common::Security::Scripting;
+
 class Test : public SwModelTestBase
 {
 public:
@@ -79,13 +83,11 @@ CPPUNIT_TEST_FIXTURE(Test, tdf150927)
         "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 2);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
+CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaDataAndKeepUserInformation)
 {
+    ScopedConfigValue<ScriptingCfg::RemovePersonalInfoOnSaving> aCfg1(true);
     // 1. Remove personal info, keep user info
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(true, pBatch);
-    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<ScriptingCfg::KeepDocUserInfoOnSaving> aCfg2(true);
 
     createSwDoc("personalmetadata.odt");
     saveAndReload(TestFilter::ODT);
@@ -108,14 +110,16 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
                 "/office:document-settings/office:settings/config:config-item-set[2]/"
                 "config:config-item[@config:name='PrinterSetup']",
                 0);
+}
 
-    // 2. Remove user info too
-    officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(false, pBatch);
-    pBatch->commit();
+CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
+{
+    // 1. Remove all personal info
+    ScopedConfigValue<ScriptingCfg::RemovePersonalInfoOnSaving> aCfg1(true);
 
     createSwDoc("personalmetadata.odt");
     saveAndReload(TestFilter::ODT);
-    pXmlDoc = parseExport(u"meta.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 0);
     assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date", 0);
@@ -134,13 +138,9 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
                 "/office:document-settings/office:settings/config:config-item-set[2]/"
                 "config:config-item[@config:name='PrinterSetup']",
                 0);
-
-    // Reset config change
-    officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(false, pBatch);
-    pBatch->commit();
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
+CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData_Disabled)
 {
     // 1. Check we have the original edit time info
     createSwDoc("personalmetadata.odt");
@@ -148,21 +148,18 @@ CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData)
     xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration",
                        u"PT21M22S");
+}
 
+CPPUNIT_TEST_FIXTURE(Test, testRemoveOnlyEditTimeMetaData_Enabled)
+{
     // Set config RemoveEditingTimeOnSaving to true
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(true, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<ScriptingCfg::RemoveEditingTimeOnSaving> aCfg(true);
 
     // 2. Check edit time info is 0
     createSwDoc("personalmetadata.odt");
     save(TestFilter::ODT);
-    pXmlDoc = parseExport(u"meta.xml"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
     assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", u"P0D");
-
-    // Reset config change
-    officecfg::Office::Common::Security::Scripting::RemoveEditingTimeOnSaving::set(false, pBatch);
-    pBatch->commit();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf151100)
@@ -299,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165115)
 {
     // Test saving a template file with password protection
     createSwDoc();
-    saveAndReload(TestFilter::OTT, "test");
+    saveAndReload(TestFilter::OTT, /*rParams*/ {}, /*pPassword*/ "test");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
@@ -903,7 +900,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150408_IsLegal)
         "is-legal", u"true");
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
+CPPUNIT_TEST_FIXTURE(Test, testTdf159382_DOCX)
 {
     // Testing NoGapAfterNoteNumber compat option
 
@@ -950,7 +947,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         CPPUNIT_ASSERT(width);
         CPPUNIT_ASSERT_LESS(sal_Int32(100), width);
     }
+}
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159382_DOC)
+{
     createSwDoc("footnote_spacing_hanging_para.doc");
     // 3. Make sure that DOC import sets NoGapAfterNoteNumber option, and creates
     // correct layout
@@ -970,7 +970,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         CPPUNIT_ASSERT(width);
         CPPUNIT_ASSERT_LESS(sal_Int32(100), width);
     }
+}
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159382_RTF)
+{
     createSwDoc("footnote_spacing_hanging_para.rtf");
     // 4. Make sure that RTF import sets NoGapAfterNoteNumber option, and creates
     // correct layout
@@ -990,7 +993,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         CPPUNIT_ASSERT(width);
         CPPUNIT_ASSERT_LESS(sal_Int32(100), width);
     }
+}
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf159382_NewDocument)
+{
     createSwDoc();
     // 5. Make sure that a new Writer document has this setting set to false
     {
@@ -1525,7 +1531,10 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
         CPPUNIT_ASSERT_EQUAL(uno::Any(false),
                              xSettings->getPropertyValue(u"MsWordUlTrailSpace"_ustr));
     }
+}
 
+CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace_NewDocument)
+{
     createSwDoc();
     // 5. Make sure that a new Writer document has this setting set to false
     {
@@ -1736,11 +1745,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162120StyleWritingModeAutomaticSerialization)
 
     auto pStylesDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pStylesDoc, "//style:paragraph-properties[@style:writing-mode-automatic]", 1);
+    assertXPath(pStylesDoc, "//style:paragraph-properties[@style:writing-mode-automatic='true']",
+                0);
+    assertXPath(pStylesDoc, "//style:paragraph-properties[@style:writing-mode-automatic='false']",
+                1);
     assertXPath(pStylesDoc, "//style:style[@style:name='AutoStyle']/style:paragraph-properties",
-                "writing-mode-automatic", u"true");
+                "writing-mode-automatic", u"false");
 
     auto pContentDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pContentDoc, "//style:paragraph-properties[@style:writing-mode-automatic]", 2);
+    assertXPath(pContentDoc, "//style:paragraph-properties[@style:writing-mode-automatic='true']",
+                0);
+    assertXPath(pContentDoc, "//style:paragraph-properties[@style:writing-mode-automatic='false']",
+                2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf169882)
@@ -1748,6 +1765,57 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169882)
     // The document must not hang on layout
     createSwDoc("tdf169882.odt");
     saveAndReload(TestFilter::ODT);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf72640LabelAlignCompatNewVersion)
+{
+    // Tests behavior of the LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION compat flag
+    // in documents created with newer versions of LO.
+
+    auto fnCheck = [&] {
+        SwDoc* pDoc = getSwDoc();
+        IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+        return rIDSA.get(DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION);
+    };
+
+    createSwDoc("tdf72640-label-align-compat-new.fodt");
+    CPPUNIT_ASSERT(!fnCheck());
+    saveAndReload(TestFilter::ODT);
+    CPPUNIT_ASSERT(!fnCheck());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf72640LabelAlignCompatOldVersion)
+{
+    // Tests behavior of the LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION compat flag
+    // in documents created with older versions of LO.
+
+    auto fnCheck = [&] {
+        SwDoc* pDoc = getSwDoc();
+        IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+        return rIDSA.get(DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION);
+    };
+
+    createSwDoc("tdf72640-label-align-compat-old.fodt");
+    CPPUNIT_ASSERT(fnCheck());
+    saveAndReload(TestFilter::ODT);
+    CPPUNIT_ASSERT(fnCheck());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf72640LabelAlignCompatThirdpartyVersion)
+{
+    // Tests behavior of the LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION compat flag
+    // in documents created with generic generators.
+
+    auto fnCheck = [&] {
+        SwDoc* pDoc = getSwDoc();
+        IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+        return rIDSA.get(DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION);
+    };
+
+    createSwDoc("tdf72640-label-align-compat-thirdparty.fodt");
+    CPPUNIT_ASSERT(!fnCheck());
+    saveAndReload(TestFilter::ODT);
+    CPPUNIT_ASSERT(!fnCheck());
 }
 
 } // end of anonymous namespace

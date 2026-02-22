@@ -23,6 +23,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <o3tl/safeint.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <utility>
@@ -44,6 +45,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include "exportdialog.hxx"

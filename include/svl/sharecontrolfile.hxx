@@ -22,6 +22,8 @@
 
 #include <svl/svldllapi.h>
 
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <svl/lockfilecommon.hxx>
 #include <vector>
 

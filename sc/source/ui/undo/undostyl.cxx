@@ -18,6 +18,7 @@
  */
 
 #include <svl/itemset.hxx>
+#include <tools/mapunit.hxx>
 #include <utility>
 #include <vcl/virdev.hxx>
 #include <osl/diagnose.h>

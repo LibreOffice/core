@@ -560,6 +560,7 @@ public:
     bool m_bHasFtr : 1;
     bool m_bSubstituteBullets : 1; // true: SubstituteBullet() gets called
     bool m_bTabInTOC : 1; //true for TOC field flag 'w'
+    bool m_bSuppressBidi : 1; // prevent duplicate bidi elements
 
     bool m_bHideTabLeaderAndPageNumbers : 1 ; // true: the 'z' field of TOC is set.
     bool m_bExportModeRTF;
@@ -926,6 +927,8 @@ protected:
 
     virtual bool IsDummyFloattableAnchor(SwNode& /*rNode*/) const { return false; }
 
+    virtual void ClearFlyAttrList() = 0;
+
 public:
     MSWordExportBase(SwDoc& rDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam);
     virtual ~MSWordExportBase();
@@ -1224,6 +1227,8 @@ protected:
     virtual void OutputLinkedOLE( const OUString& ) override;
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum ) override;
+
+    virtual void ClearFlyAttrList() override {}
 
 private:
     WW8Export(const WW8Export&) = delete;
@@ -1593,7 +1598,6 @@ public:
     const SwFormatDrop& GetSwFormatDrop() const { return mrSwFormatDrop; }
 
     bool IsWatermarkFrame();
-    bool IsAnchorLinkedToThisNode( SwNodeOffset nNodePos );
 
     void SplitRun( sal_Int32 nSplitEndPos );
 

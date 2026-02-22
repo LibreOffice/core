@@ -25,6 +25,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -239,9 +240,8 @@ void SdrPaintWindow::impCreateOverlayManager()
         mxOverlayManager = mrPaintView.CreateOverlayManager(GetOutputDevice());
 }
 
-SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, vcl::Window* pWindow)
+SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut)
 :   mpOutputDevice(&rOut),
-    mpWindow(pWindow),
     mrPaintView(rNewPaintView),
     mbTemporaryTarget(false), // #i72889#
     mbOutputToWindow(OUTDEV_WINDOW == mpOutputDevice->GetOutDevType()),

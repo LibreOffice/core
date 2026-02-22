@@ -26,6 +26,7 @@
 
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/virdev.hxx>
 
 #include <drawmode.hxx>

@@ -38,6 +38,7 @@
 #include <com/sun/star/rendering/Texture.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <math.h>
+#include <officecfg/Office/PresenterScreen.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -48,11 +49,9 @@ namespace sdext::presenter {
 //===== PresenterWindowManager ================================================
 
 PresenterWindowManager::PresenterWindowManager (
-    const Reference<XComponentContext>& rxContext,
     ::rtl::Reference<PresenterPaneContainer> pPaneContainer,
     ::rtl::Reference<PresenterController> pPresenterController)
     : PresenterWindowManagerInterfaceBase(m_aMutex),
-      mxComponentContext(rxContext),
       mpPresenterController(std::move(pPresenterController)),
       mpPaneContainer(std::move(pPaneContainer)),
       mbIsLayoutPending(true),
@@ -459,12 +458,8 @@ PresenterWindowManager::ViewMode PresenterWindowManager::GetViewMode() const
 
 void PresenterWindowManager::RestoreViewMode()
 {
-    sal_Int32 nMode (0);
-    PresenterConfigurationAccess aConfiguration (
-        mxComponentContext,
-        u"/org.openoffice.Office.PresenterScreen/"_ustr,
-        PresenterConfigurationAccess::READ_ONLY);
-    aConfiguration.GetConfigurationNode(u"Presenter/InitialViewMode"_ustr) >>= nMode;
+    sal_Int32 nMode = officecfg::Office::PresenterScreen::Presenter::InitialViewMode::get().value_or(
+            0);
     switch (nMode)
     {
         default:
@@ -484,36 +479,25 @@ void PresenterWindowManager::RestoreViewMode()
 
 void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
 {
-    try
+    auto xChanges = comphelper::ConfigurationChanges::create();
+    sal_Int32 aValue = 0;
+    switch (eViewMode)
     {
-        PresenterConfigurationAccess aConfiguration (
-            mxComponentContext,
-            u"/org.openoffice.Office.PresenterScreen/"_ustr,
-            PresenterConfigurationAccess::READ_WRITE);
-        aConfiguration.GoToChild(u"Presenter"_ustr);
-        Any aValue;
-        switch (eViewMode)
-        {
-            default:
-            case VM_Standard:
-                aValue <<= sal_Int32(0);
-                break;
+        default:
+        case VM_Standard:
+            aValue = 0;
+            break;
 
-            case VM_Notes:
-                aValue <<= sal_Int32(1);
-                break;
+        case VM_Notes:
+            aValue = 1;
+            break;
 
-            case VM_SlideOverview:
-                aValue <<= sal_Int32(2);
-                break;
-        }
-
-        aConfiguration.SetProperty (u"InitialViewMode"_ustr, aValue);
-        aConfiguration.CommitChanges();
+        case VM_SlideOverview:
+            aValue = 2;
+            break;
     }
-    catch (Exception&)
-    {
-    }
+    officecfg::Office::PresenterScreen::Presenter::InitialViewMode::set(aValue, xChanges);
+    xChanges->commit();
 }
 
 void PresenterWindowManager::AddLayoutListener (

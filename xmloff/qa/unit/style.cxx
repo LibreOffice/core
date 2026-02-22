@@ -10,7 +10,7 @@
 #include <tools/color.hxx>
 #include <sal/config.h>
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/awt/ColorStop.hpp>
 #include <com/sun/star/awt/Gradient2.hpp>
@@ -20,13 +20,14 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
+#include <comphelper/scopeguard.hxx>
 #include <rtl/character.hxx>
 #include <unotools/saveopt.hxx>
 
 using namespace ::com::sun::star;
 
 /// Covers xmloff/source/style/ fixes.
-class XmloffStyleTest : public UnoApiXmlTest
+class XmloffStyleTest : public UnoApiTest
 {
 public:
     XmloffStyleTest();
@@ -34,7 +35,7 @@ public:
 };
 
 XmloffStyleTest::XmloffStyleTest()
-    : UnoApiXmlTest(u"/xmloff/qa/unit/data/"_ustr)
+    : UnoApiTest(u"/xmloff/qa/unit/data/"_ustr)
 {
 }
 
@@ -170,50 +171,46 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRtlGutter)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
-
     // Load document. It has a frame style with writing-mode bt-lr.
     // In ODF 1.3 extended it is written as loext:writing-mode="bt-lr".
     // In ODF 1.3 strict, there must not be an attribute at all.
     loadFromFile(u"tdf150407_WritingModeBTLR_style.odt");
 
     // Save to latest extended. Adapt test, when attribute value "bt-lr" is included in ODF strict.
-    {
-        save(TestFilter::ODT);
+    save(TestFilter::ODT);
 
-        // With applied fix for tdf150407 still loext:writing-mode="bt-lr" has to be written.
-        xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
-        assertXPath(pXmlDoc,
-                    "/office:document-styles/office:styles/style:style[@style:name='FrameBTLR']/"
-                    "style:graphic-properties[@loext:writing-mode]");
-        assertXPath(pXmlDoc,
-                    "/office:document-styles/office:styles/style:style[@style:name='FrameBTLR']/"
-                    "style:graphic-properties",
-                    "writing-mode", u"bt-lr");
-    }
+    // With applied fix for tdf150407 still loext:writing-mode="bt-lr" has to be written.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
+    assertXPath(pXmlDoc,
+                "/office:document-styles/office:styles/style:style[@style:name='FrameBTLR']/"
+                "style:graphic-properties[@loext:writing-mode]");
+    assertXPath(pXmlDoc,
+                "/office:document-styles/office:styles/style:style[@style:name='FrameBTLR']/"
+                "style:graphic-properties",
+                "writing-mode", u"bt-lr");
+}
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR_ODFVER_013)
+{
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf150407_WritingModeBTLR_style.odt");
     // Save to ODF 1.3 strict.
-    {
-        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
-        // As of Nov 2024, validating against a version other than LATEST is not implemented.
-        skipValidation();
-        save(TestFilter::ODT);
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+    // As of Nov 2024, validating against a version other than LATEST is not implemented.
+    skipValidation();
+    save(TestFilter::ODT);
 
-        // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
-        // A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
-        xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
-        assertXPathNoAttribute(pXmlDoc,
-                               "/office:document-styles/office:styles/"
-                               "style:style[@style:name='FrameBTLR']/style:graphic-properties",
-                               "writing-mode");
-    }
+    // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
+    // A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc,
+                           "/office:document-styles/office:styles/"
+                           "style:style[@style:name='FrameBTLR']/style:graphic-properties",
+                           "writing-mode");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
-
     // Load document. It has a frame position with vertical position relative to bottom margin.
     // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-bottom".
     // In ODF 1.3 strict, there must not be an attribute at all.
@@ -221,43 +218,39 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
 
     // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
     // attribute value "page-content-bottom" is included in ODF strict.
-    {
-        save(TestFilter::ODT);
+    save(TestFilter::ODT);
 
-        // With applied fix for tdf150407 still loext:vertical-rel="page-content-bottom" has to be
-        // written.
-        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-        assertXPath(
-            pXmlDoc,
-            "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
-            "style:graphic-properties[@loext:vertical-rel]");
-        assertXPath(
-            pXmlDoc,
-            "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
-            "style:graphic-properties",
-            "vertical-rel", u"page-content-bottom");
-    }
+    // With applied fix for tdf150407 still loext:vertical-rel="page-content-bottom" has to be
+    // written.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
+                "style:graphic-properties[@loext:vertical-rel]");
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
+                "style:graphic-properties",
+                "vertical-rel", u"page-content-bottom");
+}
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin_ODFVER_013)
+{
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf150407_PosRelBottomMargin.docx");
     // Save to ODF 1.3 strict.
-    {
-        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
-        save(TestFilter::ODT);
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+    save(TestFilter::ODT);
 
-        // Without the fix an faulty 'vertical-rel="page-content-bottom"' attribute was written in
-        // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
-        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-        assertXPathNoAttribute(pXmlDoc,
-                               "/office:document-content/office:automatic-styles/"
-                               "style:style[@style:name='gr1']/style:graphic-properties",
-                               "vertical-rel");
-    }
+    // Without the fix an faulty 'vertical-rel="page-content-bottom"' attribute was written in
+    // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc,
+                           "/office:document-content/office:automatic-styles/"
+                           "style:style[@style:name='gr1']/style:graphic-properties",
+                           "vertical-rel");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
-
     // Load document. It has a frame position with vertical position relative to top margin.
     // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-top".
     // In ODF 1.3 strict, there must not be an attribute at all.
@@ -265,37 +258,35 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
 
     // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
     // attribute value "page-content-top" is included in ODF strict.
-    {
-        save(TestFilter::ODT);
+    save(TestFilter::ODT);
 
-        // With applied fix for tdf150407 still loext:vertical-rel="page-content-top has to be
-        // written.
-        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-        assertXPath(
-            pXmlDoc,
-            "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
-            "style:graphic-properties[@loext:vertical-rel]");
-        assertXPath(
-            pXmlDoc,
-            "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
-            "style:graphic-properties",
-            "vertical-rel", u"page-content-top");
-    }
+    // With applied fix for tdf150407 still loext:vertical-rel="page-content-top has to be
+    // written.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
+                "style:graphic-properties[@loext:vertical-rel]");
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
+                "style:graphic-properties",
+                "vertical-rel", u"page-content-top");
+}
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin_ODFVER_013)
+{
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf150407_PosRelTopMargin.docx");
     // Save to ODF 1.3 strict.
-    {
-        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
-        save(TestFilter::ODT);
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+    save(TestFilter::ODT);
 
-        // Without the fix an faulty 'vertical-rel="page-content-top"' attribute was written in
-        // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
-        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-        assertXPathNoAttribute(pXmlDoc,
-                               "/office:document-content/office:automatic-styles/"
-                               "style:style[@style:name='gr1']/style:graphic-properties",
-                               "vertical-rel");
-    }
+    // Without the fix an faulty 'vertical-rel="page-content-top"' attribute was written in
+    // productive build. A debug build fails assertion in SvXMLNamespaceMap::GetQNameByKey().
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc,
+                           "/office:document-content/office:automatic-styles/"
+                           "style:style[@style:name='gr1']/style:graphic-properties",
+                           "vertical-rel");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTdf156707)
@@ -465,7 +456,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
     loadFromFile(u"MCGR_threeStops.fodt");
 
     // saveAndReload includes validation and must not fail with the new elements and attributes.
-    saveAndReload(TestFilter::ODG);
+    saveAndReload(TestFilter::ODT);
 
     // Examine file markup
     // For compatibility the file should still have the old attributes 'start-color' and 'end-color'
@@ -532,7 +523,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Load document. It has a shape with color gradient build from color stop yellow at offset 0.5
     // and color stop red at offset 1.0. For better backward compatibility such gradient has to be
@@ -569,7 +560,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
 {
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // Load document. It has a shape with transparency gradient build from transparency 100% at
     // offset 0, transparency 100% at offset 0.4 and transparency 10% at offset 1.0. For better

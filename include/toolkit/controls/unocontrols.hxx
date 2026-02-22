@@ -50,6 +50,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/uno3.hxx>
+#include <rtl/ref.hxx>
 #include <tools/gen.hxx>
 
 #include <memory>

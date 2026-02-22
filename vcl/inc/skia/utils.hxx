@@ -92,10 +92,11 @@ inline SkColor toSkColorWithTransparency(Color aColor, double fTransparency)
     return SkColorSetA(toSkColor(aColor), 255 * (1.0 - fTransparency));
 }
 
-inline SkColor toSkColorWithIntensity(Color color, int intensity)
+inline SkColor4f toSkColorWithIntensity(Color color, int intensity)
 {
-    return SkColorSetARGB(color.GetAlpha(), color.GetRed() * intensity / 100,
-                          color.GetGreen() * intensity / 100, color.GetBlue() * intensity / 100);
+    return SkColor4f::FromColor(SkColorSetARGB(color.GetAlpha(), color.GetRed() * intensity / 100,
+                                               color.GetGreen() * intensity / 100,
+                                               color.GetBlue() * intensity / 100));
 }
 
 inline Color fromSkColor(SkColor color)

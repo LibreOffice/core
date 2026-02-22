@@ -83,7 +83,7 @@ ScAutoFormatObj::ScAutoFormatObj()
     : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
     , XElementAccess(cppu::UnoType<beans::XPropertySet>::get())
     , XIndexAccess(16)
-    , XNamed(u"Default"_ustr)
+    , XNamed(u"Simple List Shaded"_ustr) // The last table style in 'tablestyles.xml'
     , XServiceInfo(u"ScAutoFormatObj"_ustr, u"com.sun.star.sheet.TableAutoFormat"_ustr)
 {
 }
@@ -96,8 +96,7 @@ uno::Reference<uno::XInterface> ScAutoFormatObj::init()
     uno::Reference<container::XIndexAccess> xIA(
         xMSF->createInstance(u"com.sun.star.sheet.TableAutoFormats"_ustr), uno::UNO_QUERY_THROW);
 
-    uno::Reference<beans::XPropertySet> xTableAutoFormat(xIA->getByIndex(xIA->getCount() - 1),
-                                                         uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xTableAutoFormat(xIA->getByIndex(10), uno::UNO_QUERY_THROW);
     return xTableAutoFormat;
 }
 

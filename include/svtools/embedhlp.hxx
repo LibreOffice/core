@@ -20,10 +20,14 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
-#include <vcl/graph.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
+
+class Graphic;
+class LinkParamNone;
+class MapMode;
+class Size;
+class SvStream;
 
 namespace com :: sun :: star :: io { class XInputStream; }
 
@@ -32,9 +36,14 @@ namespace comphelper
     class EmbeddedObjectContainer;
 }
 
+namespace tools { class Rectangle; }
+
 namespace com::sun::star::embed {
     class XEmbeddedObject;
 }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+
+template <typename Arg, typename Ret> class Link;
 
 class OutputDevice;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;

@@ -15,6 +15,7 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 #include <o3tl/safeint.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 ScFourierAnalysisDialog::ScFourierAnalysisDialog(SfxBindings* pSfxBindings,
                                                  SfxChildWindow* pChildWindow,

@@ -20,6 +20,7 @@
 #include "admininvokationpage.hxx"
 #include "abspilot.hxx"
 #include "admininvokationimpl.hxx"
+#include <vcl/weld/Builder.hxx>
 
 namespace abp
 {

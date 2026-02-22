@@ -22,7 +22,9 @@
 
 #include <svl/eitem.hxx>
 #include <svx/sdangitm.hxx>
+#include <tools/fldunit.hxx>
 #include <officecfg/Office/Compatibility.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace chart
 {

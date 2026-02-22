@@ -31,6 +31,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
+#include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <memory>
@@ -44,7 +45,7 @@ namespace comphelper::string { class NaturalStringSorter; }
 
 class SvtCalendarBox;
 
-enum class SvxRedlinDateMode
+enum class SvxRedlineDateMode
 {
     BEFORE, SINCE, EQUAL, NOTEQUAL, BETWEEN, SAVE, NONE
 };
@@ -69,18 +70,18 @@ enum class RedlineType : sal_uInt16
 SVX_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const RedlineType& eType);
 
 /// Struct for sorting data.
-class SAL_WARN_UNUSED SVX_DLLPUBLIC RedlinData
+class SAL_WARN_UNUSED SVX_DLLPUBLIC RedlineData
 {
 public:
-                    RedlinData();
-    virtual         ~RedlinData();
+    RedlineData();
+    virtual ~RedlineData();
     DateTime        aDateTime;
     void*           pData;
     RedlineType     eType;
     bool            bDisabled;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlinTable
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRedlineTable
 {
 private:
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
@@ -95,7 +96,7 @@ private:
     bool            m_bDate;
     bool            m_bComment;
     bool            m_bSorted;
-    SvxRedlinDateMode m_nDaTiMode;
+    SvxRedlineDateMode m_nDaTiMode;
     DateTime        m_aDaTiFirst;
     DateTime        m_aDaTiLast;
     DateTime        m_aDaTiFilterFirst;
@@ -106,18 +107,17 @@ private:
     int ColCompare(const weld::TreeIter& rLeft, const weld::TreeIter& rRight);
 
 public:
-    SvxRedlinTable(std::unique_ptr<weld::TreeView> xWriterControl,
-                   std::unique_ptr<weld::TreeView> xCalcControl,
-                   weld::ComboBox* pSortByControl);
+    SvxRedlineTable(std::unique_ptr<weld::TreeView> xWriterControl,
+                    std::unique_ptr<weld::TreeView> xCalcControl, weld::ComboBox* pSortByControl);
 
     weld::TreeView& GetWidget() { return *m_pTreeView; }
     bool IsSorted() const { return m_bSorted; }
 
-    ~SvxRedlinTable();
+    ~SvxRedlineTable();
 
     // For FilterPage only {
     void            SetFilterDate(bool bFlag);
-    void            SetDateTimeMode(SvxRedlinDateMode nMode);
+    void SetDateTimeMode(SvxRedlineDateMode nMode);
     void            SetFirstDate(const Date&);
     void            SetLastDate(const Date&);
     void            SetFirstTime(const tools::Time&);
@@ -165,7 +165,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public SvxTPage
 
     bool                   m_bModified;
 
-    SvxRedlinTable* m_pRedlinTable;
+    SvxRedlineTable* m_pRedlineTable;
     std::unique_ptr<weld::CheckButton> m_xCbDate;
     std::unique_ptr<weld::ComboBox> m_xLbDate;
     std::unique_ptr<SvtCalendarBox> m_xDfDate;
@@ -204,7 +204,7 @@ public:
     virtual ~SvxTPFilter() override;
 
     void            DeactivatePage();
-    void            SetRedlinTable(SvxRedlinTable*);
+    void SetRedlineTable(SvxRedlineTable*);
 
     Date            GetFirstDate() const;
     void            SetFirstDate(const Date &aDate);
@@ -217,7 +217,7 @@ public:
     void            SetLastTime(const tools::Time &aTime);
 
     void            SetDateMode(sal_uInt16 nMode);
-    SvxRedlinDateMode GetDateMode() const;
+    SvxRedlineDateMode GetDateMode() const;
 
     void            ClearAuthors();
     void            InsertAuthor( const OUString& rString );
@@ -287,7 +287,7 @@ private:
     std::unique_ptr<weld::Button> m_xRejectAll;
     std::unique_ptr<weld::Button> m_xUndo;
     std::unique_ptr<weld::ComboBox> m_xSortByComboBox;
-    std::unique_ptr<SvxRedlinTable> m_xViewData;
+    std::unique_ptr<SvxRedlineTable> m_xViewData;
 
     DECL_DLLPRIVATE_LINK( PbClickHdl, weld::Button&, void );
     DECL_DLLPRIVATE_LINK(SortByComboBoxChangedHdl, weld::ComboBox&, void);
@@ -296,7 +296,7 @@ public:
     SvxTPView(weld::Container* pParent);
     virtual ~SvxTPView() override;
 
-    SvxRedlinTable* GetTableControl() { return m_xViewData.get(); }
+    SvxRedlineTable* GetTableControl() { return m_xViewData.get(); }
 
     weld::ComboBox* GetSortByComboBoxControl() { return m_xSortByComboBox.get(); }
 
@@ -349,7 +349,7 @@ public:
     void            ShowFilterPage();
 
     SvxTPFilter*    GetFilterPage() { return m_xTPFilter.get(); }
-    SvxTPView*      GetViewPage() { return m_xTPView.get(); }
+    SvxTPView& GetViewPage() { return *m_xTPView; }
 };
 
 #endif // INCLUDED_SVX_CTREDLIN_HXX

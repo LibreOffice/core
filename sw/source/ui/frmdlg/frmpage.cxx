@@ -72,6 +72,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <svtools/embedhlp.hxx>
 #include <comphelper/lok.hxx>
 #include <memory>
@@ -544,7 +545,7 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePo
                 return eStringId;
             }
         }
-        for(size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(aVertIds); ++nIndex)
+        for(size_t nIndex = 0; nIndex < std::size(aVertIds); ++nIndex)
         {
             // --> OD 2009-08-31 #mongolianlayout#
             if ( !bVerticalL2R )
@@ -873,8 +874,8 @@ bool InTextBox(const SwFrameFormat& rFlyFormat)
 void SwFramePage::setOptimalRelWidth()
 {
     static const RelationMaps aMaps[] = {
-        { aRelationMap, SAL_N_ELEMENTS(aRelationMap) },
-        { aAsCharRelationMap, SAL_N_ELEMENTS(aAsCharRelationMap) }
+        { aRelationMap, std::size(aRelationMap) },
+        { aAsCharRelationMap, std::size(aAsCharRelationMap) }
     };
 
     std::vector<SvxSwFramePosString::StringId> aRels;

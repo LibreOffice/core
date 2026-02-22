@@ -20,6 +20,7 @@
 #include <swtypes.hxx>
 
 #include <editeng/unolingu.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 

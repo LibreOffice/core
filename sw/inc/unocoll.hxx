@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 #include "swdllapi.h"
 
 class SwDoc;

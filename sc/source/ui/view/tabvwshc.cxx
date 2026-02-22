@@ -39,6 +39,7 @@
 #include <consdlg.hxx>
 #include <filtdlg.hxx>
 #include <dbnamdlg.hxx>
+#include <dbtabledlg.hxx>
 #include <areasdlg.hxx>
 #include <crnrdlg.hxx>
 #include <formula.hxx>
@@ -258,6 +259,16 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             // when called for an existing range, then mark
             GetDBData( true, SC_DB_OLD );
             xResult = std::make_shared<ScDbNameDlg>(pB, pCW, pParent, GetViewData());
+            break;
+        }
+        case SID_INSERT_CALCTABLE:
+        {
+            GetDBData(true, SC_DB_OLD);
+            const ScMarkData& rMark = GetViewData().GetMarkData();
+            if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
+                MarkDataArea( false );
+
+            xResult = std::make_shared<ScDbTableDlg>(pB, pCW, pParent, GetViewData());
             break;
         }
         case SID_OPENDLG_EDIT_PRINTAREA:

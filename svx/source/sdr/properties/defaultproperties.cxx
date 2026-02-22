@@ -29,6 +29,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/xbtmpit.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 namespace sdr::properties
 {

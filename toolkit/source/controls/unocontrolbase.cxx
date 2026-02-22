@@ -19,8 +19,11 @@
 
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
 
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <helper/property.hxx>

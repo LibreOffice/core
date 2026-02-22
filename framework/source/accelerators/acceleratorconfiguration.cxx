@@ -50,8 +50,10 @@
 #include <unotools/configpaths.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/keycod.hxx>
 
 constexpr OUString PRESET_DEFAULT = u"default"_ustr;
 constexpr OUString TARGET_CURRENT = u"current"_ustr;

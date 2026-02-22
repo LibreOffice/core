@@ -230,6 +230,16 @@ public:
         tools::Long nUpper = 0,
         tools::Long nLower = 0);
 
+    // When this model is locked (mbModelLocked), and an SdrObject wanted to BroadcastObjectChange,
+    // it adds itself to the deferred change list instead, to batch-broadcast when unlocked.
+    void addDeferredObjectChanges(const SdrObject* pObject);
+
+    // When this flag is set, ignore AddDeferredObjectChanges calls. Used as a hack in special
+    // cases, where the broadcasts are not wanted at all (e.g., ScDrawLayer::SetPageSize, which
+    // updates the objects, but doesn't want related anchor point recalculations).
+    void setIgnoreDeferredObjectChanges(bool bIgnore);
+    bool isIgnoringDeferredObjectChanges() const;
+
 protected:
     void implDtorClearModel();
     virtual css::uno::Reference< css::frame::XModel > createUnoModel();

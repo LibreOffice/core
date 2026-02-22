@@ -11,6 +11,14 @@
 
 namespace weld
 {
+void weld::ComboBox::insert(int pos, const OUString& rStr, const OUString* pId,
+                            const OUString* pIconName, VirtualDevice* pImageSurface)
+{
+    disable_notify_events();
+    do_insert(pos, rStr, pId, pIconName, pImageSurface);
+    enable_notify_events();
+}
+
 void weld::ComboBox::set_active(int pos)
 {
     disable_notify_events();

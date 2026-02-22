@@ -23,7 +23,10 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
+#include <tools/time.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <sdattr.hrc>
 #include <present.hxx>

@@ -28,6 +28,7 @@
 #include <vcl/toolkit/treelistbox.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/help.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/toolkit/edit.hxx>
@@ -420,22 +421,22 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     nImpFlags = SvTreeListBoxFlags::NONE;
     pTargetEntry = nullptr;
     nDragDropMode = DragDropMode::NONE;
-    pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
+    m_pModel->SetCloneLink(LINK(this, SvTreeListBox, CloneHdl_Impl));
     pHdlEntry = nullptr;
     eSelMode = SelectionMode::Single;
     nDragDropMode = DragDropMode::NONE;
     SetType(WindowType::TREELISTBOX);
 
     InitTreeView();
-    pImpl->SetModel( pModel.get() );
+    pImpl->SetModel(m_pModel.get());
 
     SetSublistOpenWithLeftRight();
 }
 
 void SvTreeListBox::Clear()
 {
-    if (pModel)
-        pModel->Clear();  // Model calls SvTreeListBox::ModelHasCleared()
+    if (m_pModel)
+        m_pModel->Clear(); // Model calls SvTreeListBox::ModelHasCleared()
 }
 
 IMPL_LINK( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry, SvTreeListEntry* )
@@ -443,16 +444,14 @@ IMPL_LINK( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry, SvTreeListEnt
     return CloneEntry(pEntry);
 }
 
-sal_uInt32 SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uInt32 nPos )
+void SvTreeListBox::Insert(SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uInt32 nPos)
 {
-    sal_uInt32 nInsPos = pModel->Insert( pEntry, pParent, nPos );
-    return nInsPos;
+    m_pModel->Insert(pEntry, pParent, nPos);
 }
 
-sal_uInt32 SvTreeListBox::Insert( SvTreeListEntry* pEntry,sal_uInt32 nRootPos )
+void SvTreeListBox::Insert(SvTreeListEntry* pEntry, sal_uInt32 nRootPos)
 {
-    sal_uInt32 nInsPos = pModel->Insert( pEntry, nRootPos );
-    return nInsPos;
+    m_pModel->Insert(pEntry, nRootPos);
 }
 
 bool SvTreeListBox::ExpandingHdl()
@@ -558,9 +557,9 @@ TriState SvTreeListBox::NotifyCopying(
     return NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
 }
 
-SvTreeListEntry* SvTreeListBox::FirstChild( SvTreeListEntry* pParent ) const
+SvTreeListEntry* SvTreeListBox::FirstChild(const SvTreeListEntry* pParent) const
 {
-    return pModel->FirstChild(pParent);
+    return m_pModel->FirstChild(pParent);
 }
 
 sal_uInt32 SvTreeListBox::GetEntryPos(const SvTreeListEntry* pEntry) const
@@ -584,8 +583,8 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
     bool bSuccess = true;
     std::vector<SvTreeListEntry*> aList;
     bool bClone = ( pSource->GetModel() != GetModel() );
-    Link<SvTreeListEntry*,SvTreeListEntry*> aCloneLink( pModel->GetCloneLink() );
-    pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
+    Link<SvTreeListEntry*, SvTreeListEntry*> aCloneLink(m_pModel->GetCloneLink());
+    m_pModel->SetCloneLink(LINK(this, SvTreeListBox, CloneHdl_Impl));
 
     // cache selection to simplify iterating over the selection when doing a D&D
     // exchange within the same listbox
@@ -609,12 +608,12 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
             if ( bClone )
             {
                 sal_uInt32 nCloneCount = 0;
-                pSourceEntry = pModel->Clone(pSourceEntry, nCloneCount);
-                pModel->InsertTree(pSourceEntry, pNewParent, nInsertionPos);
+                pSourceEntry = m_pModel->Clone(pSourceEntry, nCloneCount);
+                m_pModel->InsertTree(pSourceEntry, pNewParent, nInsertionPos);
             }
             else
             {
-                sal_uInt32 nListPos = pModel->Copy(pSourceEntry, pNewParent, nInsertionPos);
+                sal_uInt32 nListPos = m_pModel->Copy(pSourceEntry, pNewParent, nInsertionPos);
                 pSourceEntry = GetEntry( pNewParent, nListPos );
             }
         }
@@ -624,7 +623,7 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
         if (nOk == TRISTATE_INDET)  // HACK: make visible moved entry
             MakeVisible( pSourceEntry );
     }
-    pModel->SetCloneLink( aCloneLink );
+    m_pModel->SetCloneLink(aCloneLink);
     return bSuccess;
 }
 
@@ -635,9 +634,9 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
     bool bSuccess = true;
     std::vector<SvTreeListEntry*> aList;
     bool bClone = ( pSource->GetModel() != GetModel() );
-    Link<SvTreeListEntry*,SvTreeListEntry*> aCloneLink( pModel->GetCloneLink() );
+    Link<SvTreeListEntry*, SvTreeListEntry*> aCloneLink(m_pModel->GetCloneLink());
     if ( bClone )
-        pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
+        m_pModel->SetCloneLink(LINK(this, SvTreeListBox, CloneHdl_Impl));
 
     SvTreeListEntry* pSourceEntry = pSource->FirstSelected();
     while ( pSourceEntry )
@@ -666,15 +665,15 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
             if ( bClone )
             {
                 sal_uInt32 nCloneCount = 0;
-                pSourceEntry = pModel->Clone(pSourceEntry, nCloneCount);
-                pModel->InsertTree(pSourceEntry, pNewParent, nInsertionPos);
+                pSourceEntry = m_pModel->Clone(pSourceEntry, nCloneCount);
+                m_pModel->InsertTree(pSourceEntry, pNewParent, nInsertionPos);
             }
             else
             {
                 if ( nOk )
-                    pModel->Move(pSourceEntry, pNewParent, nInsertionPos);
+                    m_pModel->Move(pSourceEntry, pNewParent, nInsertionPos);
                 else
-                    pModel->Copy(pSourceEntry, pNewParent, nInsertionPos);
+                    m_pModel->Copy(pSourceEntry, pNewParent, nInsertionPos);
             }
         }
         else
@@ -683,7 +682,7 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
         if (nOk == TRISTATE_INDET)  // HACK: make moved entry visible
             MakeVisible( pSourceEntry );
     }
-    pModel->SetCloneLink( aCloneLink );
+    m_pModel->SetCloneLink(aCloneLink);
     return bSuccess;
 }
 
@@ -703,13 +702,10 @@ void SvTreeListBox::RemoveSelection()
     }
 
     for (auto const& elem : aList)
-        pModel->Remove(elem);
+        m_pModel->Remove(elem);
 }
 
-void SvTreeListBox::RemoveEntry(SvTreeListEntry const * pEntry)
-{
-    pModel->Remove(pEntry);
-}
+void SvTreeListBox::RemoveEntry(SvTreeListEntry const* pEntry) { m_pModel->Remove(pEntry); }
 
 void SvTreeListBox::RecalcViewData()
 {
@@ -749,12 +745,12 @@ void SvTreeListBox::OnCurrentEntryChanged()
 
 SvTreeListEntry* SvTreeListBox::GetEntry( SvTreeListEntry* pParent, sal_uInt32 nPos ) const
 {
-    return pModel->GetEntry(pParent, nPos);
+    return m_pModel->GetEntry(pParent, nPos);
 }
 
 SvTreeListEntry* SvTreeListBox::GetEntry( sal_uInt32 nRootPos ) const
 {
-    return pModel->GetEntry(nRootPos);
+    return m_pModel->GetEntry(nRootPos);
 }
 
 SvTreeListEntry* SvTreeListBox::GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const
@@ -806,12 +802,12 @@ void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_In
 
 SvTreeListEntry* SvTreeListBox::GetParent( SvTreeListEntry* pEntry ) const
 {
-    return pModel->GetParent(pEntry);
+    return m_pModel->GetParent(pEntry);
 }
 
 sal_uInt32 SvTreeListBox::GetChildCount( SvTreeListEntry const * pParent ) const
 {
-    return pModel->GetChildCount(pParent);
+    return m_pModel->GetChildCount(pParent);
 }
 
 sal_uInt32 SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
@@ -884,9 +880,9 @@ void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable )
         if ( !bEnable )
         {
             pSelEntry->nEntryFlags |= SvTLEntryFlags::DISABLE_DROP;
-            nRefDepth = pModel->GetDepth( pSelEntry );
+            nRefDepth = m_pModel->GetDepth(pSelEntry);
             pTemp = Next( pSelEntry );
-            while( pTemp && pModel->GetDepth( pTemp ) > nRefDepth )
+            while (pTemp && m_pModel->GetDepth(pTemp) > nRefDepth)
             {
                 pTemp->nEntryFlags |= SvTLEntryFlags::DISABLE_DROP;
                 pTemp = Next( pTemp );
@@ -895,9 +891,9 @@ void SvTreeListBox::EnableSelectionAsDropTarget( bool bEnable )
         else
         {
             pSelEntry->nEntryFlags &= ~SvTLEntryFlags::DISABLE_DROP;
-            nRefDepth = pModel->GetDepth( pSelEntry );
+            nRefDepth = m_pModel->GetDepth(pSelEntry);
             pTemp = Next( pSelEntry );
-            while( pTemp && pModel->GetDepth( pTemp ) > nRefDepth )
+            while (pTemp && m_pModel->GetDepth(pTemp) > nRefDepth)
             {
                 pTemp->nEntryFlags &= ~SvTLEntryFlags::DISABLE_DROP;
                 pTemp = Next( pTemp );
@@ -1684,8 +1680,7 @@ void SvTreeListBox::CheckBoxInserted(SvTreeListEntry* pEntry)
 
 void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
 {
-
-    SvTreeListEntry* pParent = pModel->GetParent( pEntry );
+    SvTreeListEntry* pParent = m_pModel->GetParent(pEntry);
     if( pParent )
     {
         SvTLEntryFlags nFlags = pParent->GetFlags();
@@ -2177,13 +2172,13 @@ sal_uInt32 SvTreeListBox::SelectChildren( SvTreeListEntry* pParent, bool bSelect
     sal_uInt32 nRet = 0;
     if( !pParent->HasChildren() )
         return 0;
-    sal_uInt16 nRefDepth = pModel->GetDepth( pParent );
+    sal_uInt16 nRefDepth = m_pModel->GetDepth(pParent);
     SvTreeListEntry* pChild = FirstChild( pParent );
     do {
         nRet++;
         Select( pChild, bSelect );
         pChild = Next( pChild );
-    } while( pChild && pModel->GetDepth( pChild ) > nRefDepth );
+    } while (pChild && m_pModel->GetDepth(pChild) > nRefDepth);
     return nRet;
 }
 
@@ -2197,13 +2192,13 @@ void SvTreeListBox::SelectAll( bool bSelect )
 
 void SvTreeListBox::ModelHasInsertedTree( SvTreeListEntry* pEntry )
 {
-    sal_uInt16 nRefDepth = pModel->GetDepth( pEntry );
+    sal_uInt16 nRefDepth = m_pModel->GetDepth(pEntry);
     SvTreeListEntry* pTmp = pEntry;
     do
     {
         ImpEntryInserted( pTmp );
         pTmp = Next( pTmp );
-    } while( pTmp && nRefDepth < pModel->GetDepth( pTmp ) );
+    } while (pTmp && nRefDepth < m_pModel->GetDepth(pTmp));
     pImpl->TreeInserted( pEntry );
 }
 
@@ -2515,7 +2510,7 @@ void SvTreeListBox::EditedText( const OUString& rStr )
         if( EditedEntry( pEdEntry, rStr ) )
         {
             pEdItem->SetText( rStr );
-            pModel->InvalidateEntry( pEdEntry );
+            m_pModel->InvalidateEntry(pEdEntry);
         }
         if( GetSelectionCount() == 0 )
             Select( pEdEntry );
@@ -2681,7 +2676,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         if (pNextTab && (GetTabPos(&rEntry, pNextTab) <= nDynTabPos))
             return;
 
-        if (!((nWindowStyle & WB_HASBUTTONSATROOT) || pModel->GetDepth(&rEntry) > 0))
+        if (!((nWindowStyle & WB_HASBUTTONSATROOT) || m_pModel->GetDepth(&rEntry) > 0))
             return;
 
         aImagePos = Point(GetTabPos(&rEntry, pFirstDynamicTab), nLine);
@@ -3054,7 +3049,7 @@ sal_IntPtr SvTreeListBox::GetTabPos(const SvTreeListEntry* pEntry, const SvLBoxT
     sal_IntPtr nPos = pTab->GetPos();
     if( pTab->IsDynamic() )
     {
-        sal_uInt16 nDepth = pModel->GetDepth( pEntry );
+        sal_uInt16 nDepth = m_pModel->GetDepth(pEntry);
         nDepth = nDepth * static_cast<sal_uInt16>(nIndent);
         nPos += static_cast<sal_IntPtr>(nDepth);
     }
@@ -3424,7 +3419,7 @@ void SvTreeListBox::ModelNotification( SvListAction nActionId, SvTreeListEntry* 
 
         case SvListAction::RESORTED:
             // after a selection: show first entry and also keep the selection
-            MakeVisible( pModel->First(), true );
+            MakeVisible(m_pModel->First(), true);
             SetUpdateMode( true );
             break;
 

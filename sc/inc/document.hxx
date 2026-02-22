@@ -215,6 +215,7 @@ struct ScFilterEntries;
 typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
 struct ScDataAreaExtras;
 enum class ScConditionMode;
+class ScTableStyles;
 
 namespace sc {
 
@@ -438,6 +439,7 @@ private:
 
     std::unique_ptr<ScExternalRefManager> pExternalRefMgr;
     std::unique_ptr<ScMacroManager>       mpMacroMgr;
+    std::unique_ptr<ScTableStyles>        mpTableStyles;
 
     // mutable for lazy construction
     mutable std::unique_ptr< ScFormulaParserPool >
@@ -893,10 +895,15 @@ public:
     SC_DLLPUBLIC ScDBCollection* GetDBCollection() const { return pDBCollection.get();}
     void                         SetDBCollection( std::unique_ptr<ScDBCollection> pNewDBCollection,
                                                   bool bRemoveAutoFilter = false );
+
+    const ScDBData*              GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
+    ScDBData*                    GetTableDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
     const ScDBData*              GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
     ScDBData*                    GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
     SC_DLLPUBLIC const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     SC_DLLPUBLIC ScDBData*       GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    std::vector<const ScDBData*> GetAllNamedDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
+                                                      SCROW nRow2, SCTAB nTab) const;
     void                         RefreshDirtyTableColumnNames();
     SC_DLLPUBLIC sc::ExternalDataMapper& GetExternalDataMapper();
 
@@ -1196,6 +1203,10 @@ public:
 
     bool            DoSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
     void            RemoveSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
+    // Table SubTotals
+    bool            DoTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam );
+    void            RemoveTableSubTotals( SCTAB nTab, ScSubTotalParam& rParam, const ScSubTotalParam& rOldParam );
+
     bool            TestRemoveSubTotals( SCTAB nTab, const ScSubTotalParam& rParam );
     bool            HasSubTotalCells( const ScRange& rRange );
 
@@ -1548,7 +1559,7 @@ public:
 
                         @returns true if there is any data, false if not.
                      */
-    bool            ShrinkToUsedDataArea( bool& o_bShrunk,
+    SC_DLLPUBLIC bool ShrinkToUsedDataArea( bool& o_bShrunk,
                                           SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                           SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
                                           bool bStickyTopRow = false, bool bStickyLeftCol = false,
@@ -1900,6 +1911,7 @@ public:
     SC_DLLPUBLIC const ScPatternAttr*       GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
     const ScPatternAttr*                    GetSelectionPattern( const ScMarkData& rMark );
     std::unique_ptr<ScPatternAttr>          CreateSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
+    SC_DLLPUBLIC const SfxItemSet*          GetTableFormatSet( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC void                       AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
     void                                    RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
 
@@ -2015,8 +2027,6 @@ public:
 
     void                 AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                      sal_uInt16 nFormatNo, const ScMarkData& rMark );
-    void                 GetAutoFormatData( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                            ScAutoFormatData& rData );
     bool                 SearchAndReplace( const SvxSearchItem& rSearchItem,
                                            SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
                                            const ScMarkData& rMark, ScRangeList& rMatchedRanges,
@@ -2246,7 +2256,7 @@ public:
     void               Reorder( const sc::ReorderParam& rParam );
 
     void               PrepareQuery( SCTAB nTab, ScQueryParam& rQueryParam );
-    SCSIZE             Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );
+    SCSIZE             Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub, bool bKeepTotals = false );
     SC_DLLPUBLIC bool  CreateQueryParam( const ScRange& rRange, ScQueryParam& rQueryParam );
     OUString           GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab);
 
@@ -2757,6 +2767,10 @@ public:
     SCROW GetLOKFreezeRow(SCTAB nTab) const;
     bool  SetLOKFreezeCol(SCCOL nFreezeCol, SCTAB nTab);
     bool  SetLOKFreezeRow(SCROW nFreezeRow, SCTAB nTab);
+
+    SC_DLLPUBLIC ScTableStyles* GetTableStyles();
+    SC_DLLPUBLIC const ScTableStyles* GetTableStyles() const;
+    SC_DLLPUBLIC bool HasTableStyles() const;
 
 private:
 

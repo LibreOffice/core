@@ -21,6 +21,7 @@
 #include <svx/fmview.hxx>
 #include <salhelper/thread.hxx>
 #include <sal/log.hxx>
+#include <tools/stream.hxx>
 #include <osl/file.hxx>
 #include <svtools/filechangedchecker.hxx>
 #include <comphelper/diagnose_ex.hxx>

@@ -22,6 +22,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/weldutils.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 
 namespace svx::sidebar {

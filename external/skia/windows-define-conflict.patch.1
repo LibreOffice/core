@@ -1,12 +1,12 @@
 diff -ur skia.org/src/gpu/vk/vulkanmemoryallocator/VulkanAMDMemoryAllocator.h skia/src/gpu/vk/vulkanmemoryallocator/VulkanAMDMemoryAllocator.h
 --- skia.org/src/gpu/vk/vulkanmemoryallocator/VulkanAMDMemoryAllocator.h	2024-10-10 13:39:56.699879300 +0200
 +++ skia/src/gpu/vk/vulkanmemoryallocator/VulkanAMDMemoryAllocator.h	2024-10-10 13:40:06.489885800 +0200
-@@ -30,7 +30,7 @@
+@@ -31,7 +31,7 @@
                                               VkDevice device,
                                               uint32_t physicalDeviceVersion,
                                               const VulkanExtensions* extensions,
 -                                             const VulkanInterface* interface,
 +                                             const VulkanInterface* vinterface,
-                                              ThreadSafe,
-                                              std::optional<VkDeviceSize> blockSize);
-
+                                              ThreadSafe);
+ 
+     ~VulkanAMDMemoryAllocator() override;

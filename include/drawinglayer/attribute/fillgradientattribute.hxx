@@ -21,11 +21,15 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <com/sun/star/awt/GradientStyle.hpp>
 
 namespace basegfx
 {
 class BColorStops;
+}
+
+namespace com::sun::star::awt
+{
+enum class GradientStyle;
 }
 
 namespace drawinglayer::attribute

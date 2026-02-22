@@ -183,6 +183,7 @@ private:
     SVX_DLLPRIVATE void SetObjectItem(const SfxPoolItem& rItem);
 
     SVX_DLLPRIVATE static css::uno::Any GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertyMapEntry* pMap );
+    SVX_DLLPRIVATE void setPropertyValueImpl( const OUString& aPropertyName, const css::uno::Any& aValue, SfxItemSet& rSet );
 
     /// @throws css::uno::RuntimeException
     SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj );

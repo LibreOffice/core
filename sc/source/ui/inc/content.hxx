@@ -22,6 +22,7 @@
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <address.hxx>
+#include <rtl/ref.hxx>
 #include <tools/solar.h>
 #include <o3tl/enumarray.hxx>
 

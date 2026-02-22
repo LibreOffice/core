@@ -46,7 +46,9 @@
 #include <svtools/unitconv.hxx>
 
 #include <svx/float3d.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/ColorDialog.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <com/sun/star/drawing/TextureKind2.hpp>
 
 #include <bitmaps.hlst>

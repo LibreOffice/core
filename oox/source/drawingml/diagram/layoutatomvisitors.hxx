@@ -31,7 +31,7 @@ namespace oox::drawingml {
 class ShapeCreationVisitor : public LayoutAtomVisitorBase
 {
 public:
-    ShapeCreationVisitor(const Diagram& rDgm,
+    ShapeCreationVisitor(const SmartArtDiagram& rDgm,
                          const svx::diagram::Point* pRootPoint,
                          ShapePtr xParentShape) :
         LayoutAtomVisitorBase(rDgm, pRootPoint),
@@ -52,7 +52,7 @@ private:
 class ShapeTemplateVisitor : public LayoutAtomVisitorBase
 {
 public:
-    ShapeTemplateVisitor(const Diagram& rDgm, const svx::diagram::Point* pRootPoint)
+    ShapeTemplateVisitor(const SmartArtDiagram& rDgm, const svx::diagram::Point* pRootPoint)
         : LayoutAtomVisitorBase(rDgm, pRootPoint)
     {}
 
@@ -74,7 +74,7 @@ private:
 class ShapeLayoutingVisitor : public LayoutAtomVisitorBase
 {
 public:
-    ShapeLayoutingVisitor(const Diagram& rDgm, const svx::diagram::Point* pRootPoint) :
+    ShapeLayoutingVisitor(const SmartArtDiagram& rDgm, const svx::diagram::Point* pRootPoint) :
         LayoutAtomVisitorBase(rDgm, pRootPoint)
     {}
 

@@ -22,6 +22,7 @@
 #include <unx/saldisp.hxx>
 #include <unx/x11/x11sys.hxx>
 
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <svdata.hxx>

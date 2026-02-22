@@ -149,18 +149,18 @@ public:
     SfxObjectShellLock      BuildTmpSelectionDoc();
 };
 
-typedef cppu::WeakImplHelper<
+typedef cppu::ImplInheritanceHelper<
+                            OTextCursorHelper,
                             css::text::XTextViewCursor,
                             css::lang::XServiceInfo,
                             css::text::XPageCursor,
                             css::view::XScreenCursor,
                             css::view::XViewCursor,
                             css::view::XLineCursor,
-                            css::beans::XPropertySet,
                             css::beans::XPropertyState
                             > SwXTextViewCursor_Base;
 
-class SwXTextViewCursor final: public SwXTextViewCursor_Base, public OTextCursorHelper
+class SwXTextViewCursor final: public SwXTextViewCursor_Base
 {
     SwView*                         m_pView;
     const SfxItemPropertySet*       m_pPropSet;

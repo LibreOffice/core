@@ -45,6 +45,7 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     auto pTextObject = DynCastSdrTextObj(pPage->GetObj(0));
     CPPUNIT_ASSERT(pTextObject);
@@ -61,6 +62,7 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     }
 
     sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell1);
     SdrView* pView1 = pViewShell1->GetView();
     Scheduler::ProcessEventsToIdle();
     pView1->SdrBeginTextEdit(pTextObject);

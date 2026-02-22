@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_DRAWINGMLTYPES_HXX
-#define INCLUDED_OOX_DRAWINGML_DRAWINGMLTYPES_HXX
+#pragma once
 
 #include <memory>
 #include <optional>
@@ -237,7 +236,5 @@ struct EmuRectangle : public EmuPoint, public EmuSize
 model::RectangleAlignment convertToRectangleAlignment(sal_Int32 nToken);
 
 } // namespace oox::drawingml
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

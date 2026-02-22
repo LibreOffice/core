@@ -612,7 +612,7 @@ void ScModelTestBase::createScDoc(const char* pName, const char* pPassword, bool
     if (!pName)
         loadFromURL(u"private:factory/scalc"_ustr);
     else
-        loadFromFile(OUString::createFromAscii(pName), pPassword);
+        loadFromFile(OUString::createFromAscii(pName), /*rParams*/ {}, pPassword);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr));
@@ -652,39 +652,34 @@ ScTabViewShell* ScModelTestBase::getViewShell()
     return pTabViewShell;
 }
 
-void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems)
+void ScModelTestBase::miscRowHeightsTest(std::u16string_view sFileName, TestFilter eExportType, int nRowData, RowData const* pData)
 {
-    for ( unsigned int index=0; index<numElems; ++index )
+    loadFromFile(sFileName);
+
+    if ( eExportType != TestFilter::NONE )
+        saveAndReload(eExportType);
+
+    ScDocument* pDoc = getScDoc();
+
+    for (int i=0; i< nRowData; ++i)
     {
-        const std::u16string_view sFileName = aTestValues[ index ].sTestDoc;
-        TestFilter eExportType =  aTestValues[ index ].eExportType;
-        loadFromFile(sFileName);
-
-        if ( eExportType != TestFilter::NONE )
-            saveAndReload(aTestValues[ index ].eExportType);
-
-        ScDocument* pDoc = getScDoc();
-
-        for (int i=0; i<aTestValues[ index ].nRowData; ++i)
+        SCROW nRow = pData[i].nStartRow;
+        SCROW nEndRow = pData[ i ].nEndRow;
+        SCTAB nTab = pData[ i ].nTab;
+        int nExpectedHeight = pData[ i ].nExpectedHeight;
+        if ( nExpectedHeight == -1 )
+            nExpectedHeight = convertTwipToMm100(ScGlobal::nStdRowHeight);
+        bool bCheckOpt = ( ( pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
+        for ( ; nRow <= nEndRow; ++nRow )
         {
-            SCROW nRow = aTestValues[ index ].pData[ i].nStartRow;
-            SCROW nEndRow = aTestValues[ index ].pData[ i ].nEndRow;
-            SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
-            int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
-            if ( nExpectedHeight == -1 )
-                nExpectedHeight = convertTwipToMm100(ScGlobal::nStdRowHeight);
-            bool bCheckOpt = ( ( aTestValues[ index ].pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
-            for ( ; nRow <= nEndRow; ++nRow )
+            SAL_INFO( "sc.qa", " checking row " << nRow << " for height " << nExpectedHeight );
+            int nHeight = convertTwipToMm100(pDoc->GetRowHeight(nRow, nTab, false));
+            if ( bCheckOpt )
             {
-                SAL_INFO( "sc.qa", " checking row " << nRow << " for height " << nExpectedHeight );
-                int nHeight = convertTwipToMm100(pDoc->GetRowHeight(nRow, nTab, false));
-                if ( bCheckOpt )
-                {
-                    bool bOpt = !(pDoc->GetRowFlags( nRow, nTab ) & CRFlags::ManualSize);
-                    CPPUNIT_ASSERT_EQUAL(aTestValues[ index ].pData[ i ].bOptimal, bOpt);
-                }
-                CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
+                bool bOpt = !(pDoc->GetRowFlags( nRow, nTab ) & CRFlags::ManualSize);
+                CPPUNIT_ASSERT_EQUAL(pData[ i ].bOptimal, bOpt);
             }
+            CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
         }
     }
 }

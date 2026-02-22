@@ -62,6 +62,7 @@
 #include <com/sun/star/util/DateTimeWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/datetime.hxx>
 #include <comphelper/diagnose_ex.hxx>

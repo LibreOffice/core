@@ -81,46 +81,40 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <object class="GtkAlignment">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="left-padding">12</property>
+                <property name="margin-start">12</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkRadioButton" id="opt_appcolors">
+                    <property name="label" translatable="yes" context="colorscheme|opt_appcolors">Use Application Colors</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkRadioButton" id="opt_appcolors">
-                        <property name="label" translatable="yes" context="colorscheme|opt_appcolors">Use Application Colors</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="opt_usescheme">
-                        <property name="label" translatable="yes" context="colorscheme|opt_usescheme">Choose Color Scheme</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">opt_appcolors</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="opt_usescheme">
+                    <property name="label" translatable="yes" context="colorscheme|opt_usescheme">Choose Color Scheme</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">opt_appcolors</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
             </child>
@@ -149,40 +143,34 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <object class="GtkAlignment">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="left-padding">12</property>
+                <property name="can-focus">True</property>
+                <property name="margin-start">12</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow-type">in</property>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkTreeView" id="schemelist">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="shadow-type">in</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers-visible">False</property>
+                    <property name="headers-clickable">False</property>
+                    <property name="search-column">0</property>
+                    <property name="show-expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
                     <child>
-                      <object class="GtkTreeView" id="schemelist">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="model">liststore1</property>
-                        <property name="headers-visible">False</property>
-                        <property name="headers-clickable">False</property>
-                        <property name="search-column">0</property>
-                        <property name="show-expanders">False</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
-                        </child>
+                      <object class="GtkTreeViewColumn">
                         <child>
-                          <object class="GtkTreeViewColumn">
-                            <child>
-                              <object class="GtkCellRendererText" id="rendertext"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
+                          <object class="GtkCellRendererText" id="rendertext"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
                         </child>
                       </object>
                     </child>

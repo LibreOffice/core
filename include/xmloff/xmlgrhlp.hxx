@@ -21,7 +21,6 @@
 
 #include <comphelper/compbase.hxx>
 #include <vcl/graph.hxx>
-#include <rtl/ref.hxx>
 
 #include <string_view>
 #include <vector>
@@ -30,8 +29,12 @@
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <xmloff/dllapi.h>
+
+namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::io { class XStream; }
+
+namespace rtl { template <class reference_type> class Reference; }
 
 enum class SvXMLGraphicHelperMode
 {

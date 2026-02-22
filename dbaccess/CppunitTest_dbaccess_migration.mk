@@ -13,7 +13,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_migration, \
     dbaccess/qa/unit/migration \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,dbaccess_migration,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,dbaccess_migration, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_libraries,dbaccess_migration, \
     basegfx \

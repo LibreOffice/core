@@ -44,6 +44,21 @@ class   SwFrameControlsManager;
 enum class SdrHitKind;
 class SwTextFrame;
 
+namespace Move {
+    enum class Size {
+        Small,
+        Big,
+        Huge
+    };
+
+    enum class Direction {
+        Left,
+        Up,
+        Right,
+        Down
+    };
+};
+
 // input window
 
 /** Window class for the Writer edit area, this is the one handling mouse
@@ -138,8 +153,8 @@ class SAL_DLLPUBLIC_RTTI SwEditWin final : public vcl::DocWindow,
 
     void            ResetMouseButtonDownFlags();
 
-    void            ChangeFly( sal_uInt8 nDir, bool bWeb );
-    void            ChangeDrawing( sal_uInt8 nDir );
+    void            ChangeFly(Move::Direction eDir, Move::Size eDirSize, bool bWeb);
+    void            ChangeDrawing(Move::Direction eDir, Move::Size eDirSize);
 
     bool            EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos);
     bool            RulerColumnDrag( const MouseEvent& rMEvt, bool bVerticalMode);

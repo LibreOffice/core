@@ -20,6 +20,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/resmgr.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>

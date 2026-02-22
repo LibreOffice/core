@@ -11,13 +11,13 @@
 
 #include <vcl/syswin.hxx>
 #include <vcl/ctrl.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/settings.hxx>
 #include <vector>
 
 class NotebookBarContextChangeEventListener;
 class NotebookbarContextControl;
 class SfxViewShell;
+struct NotebookBarAddonsItem;
 
 /// This implements Widget Layout-based notebook-like menu bar.
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) NotebookBar final : public Control, public VclBuilderContainer

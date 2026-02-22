@@ -28,6 +28,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <svx/pageitem.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace sw::sidebar {
 

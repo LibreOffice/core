@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/errcode.hxx>
 #include <osl/diagnose.h>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>

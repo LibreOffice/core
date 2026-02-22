@@ -527,7 +527,7 @@ SwXText::insertTextContent(
             pRange->DeleteAndInsert(u"", ::sw::DeleteAndInsertMode::ForceReplace
                 | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
         }
-        else if (SwXTextCursor *const pCursor = dynamic_cast<SwXTextCursor*>(dynamic_cast<OTextCursorHelper*>(xRange.get())))
+        else if (SwXTextCursor *const pCursor = dynamic_cast<SwXTextCursor*>(xRange.get()))
         {
             pCursor->DeleteAndInsert(u"", ::sw::DeleteAndInsertMode::ForceReplace
                 | (bForceExpandHints ? ::sw::DeleteAndInsertMode::ForceExpandHints : ::sw::DeleteAndInsertMode::Default));
@@ -1148,6 +1148,16 @@ SwXText::finishParagraphInsert(
     return finishOrAppendParagraph(rProperties, xInsertPosition);
 }
 
+rtl::Reference< SwXParagraph >
+SwXText::finishSwParagraphInsert(
+        const uno::Sequence< beans::PropertyValue > & rProperties,
+        const uno::Reference< text::XTextRange >& xInsertPosition)
+{
+    SolarMutexGuard g;
+
+    return finishOrAppendParagraph(rProperties, xInsertPosition);
+}
+
 rtl::Reference<SwXParagraph>
 SwXText::finishOrAppendParagraph(
         const uno::Sequence< beans::PropertyValue > & rProperties,
@@ -1470,6 +1480,17 @@ SwXText::convertToTextFrame(
     const uno::Reference< text::XTextRange >& xEnd,
     const uno::Sequence< beans::PropertyValue >& rFrameProperties)
 {
+    return static_cast<SwXFrame*>(convertToSwTextFrame(xStart, xEnd, comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(rFrameProperties)).get());
+}
+
+// move previously appended paragraphs into a text frames
+// to support import filters
+rtl::Reference< SwXTextFrame >
+SwXText::convertToSwTextFrame(
+    const uno::Reference< text::XTextRange >& xStart,
+    const uno::Reference< text::XTextRange >& xEnd,
+    const std::vector< beans::PropertyValue >& rFrameProperties)
+{
     SolarMutexGuard aGuard;
 
     if(!IsValid())
@@ -1492,7 +1513,6 @@ SwXText::convertToTextFrame(
             break;
         }
     }
-    uno::Reference< text::XTextContent > xRet;
     std::optional<SwUnoInternalPaM> pTempStartPam(*GetDoc());
     std::optional<SwUnoInternalPaM> pEndPam(*GetDoc());
     if (!::sw::XTextRangeToSwPaM(*pTempStartPam, xStart, eMode)
@@ -1748,7 +1768,6 @@ SwXText::convertToTextFrame(
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-    xRet = static_cast<SwXFrame*>(xNewFrame.get());
     if (bParaBeforeInserted || bParaAfterInserted)
     {
         const rtl::Reference<SwXTextCursor> xFrameTextCursor =
@@ -1787,7 +1806,7 @@ SwXText::convertToTextFrame(
             throw uno::RuntimeException(sMessage);
         }
     }
-    return xRet;
+    return xNewFrame;
 }
 
 namespace {
@@ -1795,11 +1814,11 @@ namespace {
 // Move previously imported paragraphs into a new text table.
 struct VerticallyMergedCell
 {
-    std::vector<uno::Reference< beans::XPropertySet > > aCells;
+    std::vector<rtl::Reference< SwXCell > > aCells;
     sal_Int32                                           nLeftPosition;
     bool                                                bOpen;
 
-    VerticallyMergedCell(uno::Reference< beans::XPropertySet > const& rxCell,
+    VerticallyMergedCell(rtl::Reference< SwXCell > const& rxCell,
             const sal_Int32 nLeft)
         : nLeftPosition( nLeft )
         , bOpen( true )
@@ -2074,10 +2093,9 @@ static void
 lcl_ApplyCellProperties(
     const sal_Int32 nLeftPos,
     const uno::Sequence< beans::PropertyValue >& rCellProperties,
-    const uno::Reference< uno::XInterface >& xCell,
+    const rtl::Reference< SwXCell >& xCell,
     std::vector<VerticallyMergedCell> & rMergedCells)
 {
-    const uno::Reference< beans::XPropertySet > xCellPS(xCell, uno::UNO_QUERY);
     for (const auto& rCellProperty : rCellProperties)
     {
         const OUString & rName  = rCellProperty.Name;
@@ -2100,7 +2118,7 @@ lcl_ApplyCellProperties(
                     }
                 }
                 // add the new group of merged cells
-                rMergedCells.emplace_back(xCellPS, nLeftPos);
+                rMergedCells.emplace_back(xCell, nLeftPos);
             }
             else
             {
@@ -2110,7 +2128,7 @@ lcl_ApplyCellProperties(
                 {
                     if (aMergedCell.bOpen && lcl_SimilarPosition(aMergedCell.nLeftPosition, nLeftPos))
                     {
-                        aMergedCell.aCells.push_back( xCellPS );
+                        aMergedCell.aCells.push_back( xCell );
                         bFound = true;
                     }
                 }
@@ -2138,7 +2156,7 @@ lcl_ApplyCellProperties(
                 };
                 if (std::find(vDenylist.begin(), vDenylist.end(), rName) == vDenylist.end())
                 {
-                    xCellPS->setPropertyValue(rName, rValue);
+                    xCell->setPropertyValue(rName, rValue);
                 }
             }
             catch (const uno::Exception&)
@@ -2325,7 +2343,7 @@ SwXText::convertToSwTable(
             {
                 lcl_ApplyCellProperties(lcl_GetLeftPos(nCell, aRowSeparators[nRow]),
                     rCellProps,
-                    xRet->getCellByPosition(nCell, nRow),
+                    xRet->getSwCellByPosition(nCell, nRow),
                     aMergedCells);
                 ++nCell;
             }

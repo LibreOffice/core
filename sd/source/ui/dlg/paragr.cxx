@@ -25,6 +25,7 @@
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/xcolit.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/SpinButton.hxx>
 
 #include <paragr.hxx>

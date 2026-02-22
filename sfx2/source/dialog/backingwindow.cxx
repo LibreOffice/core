@@ -25,6 +25,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 
 #include <unotools/historyoptions.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -676,8 +678,13 @@ IMPL_LINK (BackingWindow, MenuSelectHdl, const OUString&, rId, void)
 
 IMPL_LINK(BackingWindow, CreateContextMenuHdl, TemplateViewItem*, pItem, void)
 {
-    if (pItem)
-        mxLocalView->createContextMenu();
+    if (!pItem)
+        return;
+
+    bool bIsInternal = TemplateLocalView::IsInternalTemplate(pItem->getPath());
+
+    mxLocalView->createContextMenu(bIsInternal);
+
 }
 
 IMPL_LINK(BackingWindow, OpenTemplateHdl, const OUString&, rTemplatePath, void)

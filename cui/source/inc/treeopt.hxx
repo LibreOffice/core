@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <optional>
 
 #include <sfx2/basedlgs.hxx>
 #include <svtools/restartdialog.hxx>

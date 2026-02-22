@@ -22,6 +22,7 @@
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/valueset.hxx>
+#include <vcl/image.hxx>
 #include <vcl/weld/customweld.hxx>
 
 // enum to index light images

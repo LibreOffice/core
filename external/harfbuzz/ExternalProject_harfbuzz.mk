@@ -68,8 +68,9 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) : | $(call gb_Externa
 			-Dicu=enabled \
 			-Dicu_builtin=true \
 			-Dgraphite2=enabled \
-			$(if $(filter WNT,$(OS))$(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
-		$(MESON) compile -C builddir lib \
+			$(if $(filter MSC_TRUE,$(COM)_$(MSVC_USE_DEBUG_RUNTIME)),-Db_vscrt=mdd) \
+			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
+		$(MESON) compile -C builddir libs \
 			$(if $(verbose),--verbose) \
 	)
 	$(call gb_Trace_EndRange,harfbuzz,EXTERNAL)

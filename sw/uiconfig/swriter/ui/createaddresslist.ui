@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkDialog" id="CreateAddressList">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="createaddresslist|CreateAddressList">New Address List</property>
     <property name="resizable">False</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -40,8 +40,8 @@
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -54,8 +54,8 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -69,23 +69,23 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=2 n-rows=1 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
             <child>
               <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="orientation">vertical</property>
@@ -93,11 +93,11 @@
                 <child>
                   <object class="GtkLabel" id="ADDRESS_INFORMATION">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes" context="createaddresslist|ADDRESS_INFORMATION">Address Information</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">scrollwin</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">scrollwin</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -108,51 +108,27 @@
                 <child>
                   <object class="GtkScrolledWindow" id="scrollwin">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="vscrollbar_policy">always</property>
-                    <property name="shadow_type">in</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">always</property>
+                    <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkViewport">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <child>
                           <!-- n-columns=1 n-rows=1 -->
                           <object class="GtkGrid" id="CONTAINER">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="border_width">6</property>
+                            <property name="can-focus">False</property>
+                            <property name="border-width">6</property>
                             <property name="orientation">vertical</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">6</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
+                            <property name="row-spacing">6</property>
+                            <property name="column-spacing">6</property>
                             <child>
                               <placeholder/>
                             </child>
@@ -175,16 +151,16 @@
                 <child>
                   <object class="GtkBox" id="box2">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="VIEW_ENTRIES">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="createaddresslist|VIEW_ENTRIES">Sho_w entry number</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">grid2</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">grid2</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -194,19 +170,19 @@
                       </packing>
                     </child>
                     <child>
-                      <!-- n-columns=1 n-rows=1 -->
+                      <!-- n-columns=5 n-rows=1 -->
                       <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">center</property>
                         <property name="hexpand">True</property>
-                        <property name="column_spacing">6</property>
+                        <property name="column-spacing">6</property>
                         <child>
                           <object class="GtkButton" id="START">
                             <property name="label" translatable="yes" context="createaddresslist|START">|&lt;</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="START-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|START">Click the buttons to navigate through the records or enter a record number to display a record.</property>
@@ -214,16 +190,16 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkButton" id="PREV">
                             <property name="label" translatable="yes" context="createaddresslist|PREV">&lt;</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="PREV-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|PREV">Click the buttons to navigate through the records or enter a record number to display a record.</property>
@@ -231,16 +207,16 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkButton" id="END">
                             <property name="label" translatable="yes" context="createaddresslist|END">&gt;|</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="END-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|END">Click the buttons to navigate through the records or enter a record number to display a record.</property>
@@ -248,16 +224,16 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">4</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">4</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkButton" id="NEXT">
                             <property name="label" translatable="yes" context="createaddresslist|NEXT">&gt;</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="NEXT-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|NEXT">Click the buttons to navigate through the records or enter a record number to display a record.</property>
@@ -265,23 +241,23 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">3</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                         <child>
-                          <!-- n-columns=1 n-rows=1 -->
+                          <!-- n-columns=1 n-rows=2 -->
                           <object class="GtkGrid">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkSpinButton" id="SETNOSB">
-                                <property name="can_focus">True</property>
-                                <property name="no_show_all">True</property>
-                                <property name="activates_default">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="no-show-all">True</property>
+                                <property name="activates-default">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="numeric">True</property>
-                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="SETNOSB-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|SETNOSB">Click the buttons to navigate through the records or enter a record number to display a record.</property>
@@ -289,16 +265,16 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkEntry" id="SETNOED">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="activates_default">True</property>
-                                <property name="width_chars">4</property>
+                                <property name="can-focus">True</property>
+                                <property name="activates-default">True</property>
+                                <property name="width-chars">4</property>
                                 <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="SETNOED-atkobject">
@@ -307,14 +283,14 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="top_attach">0</property>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">0</property>
                           </packing>
                         </child>
                       </object>
@@ -333,24 +309,24 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkButtonBox" id="buttonbox1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
-                <property name="layout_style">start</property>
+                <property name="layout-style">start</property>
                 <child>
                   <object class="GtkButton" id="NEW">
                     <property name="label" translatable="yes" context="createaddresslist|NEW">_New</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="NEW-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|NEW">Adds a new blank record to the address list.</property>
@@ -367,9 +343,9 @@
                   <object class="GtkButton" id="DELETE">
                     <property name="label" translatable="yes" context="createaddresslist|DELETE">_Delete</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="DELETE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|DELETE">Deletes the selected record.</property>
@@ -386,9 +362,9 @@
                   <object class="GtkButton" id="FIND">
                     <property name="label" translatable="yes" context="createaddresslist|FIND">_Find...</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="FIND-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|FIND">Opens the Find Entry dialog. You can leave the dialog open while you edit the entries.</property>
@@ -405,9 +381,9 @@
                   <object class="GtkButton" id="CUSTOMIZE">
                     <property name="label" translatable="yes" context="createaddresslist|CUSTOMIZE">C_ustomize...</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="CUSTOMIZE-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|CUSTOMIZE">Opens the Customize Address List dialog where you can rearrange, rename, add, and delete fields.</property>
@@ -422,8 +398,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
@@ -440,9 +416,6 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="CreateAddressList-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|CreateAddressList">Enter new addresses or edit the addresses for mail merge documents.</property>

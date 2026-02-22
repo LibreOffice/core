@@ -30,6 +30,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
+#include <tools/stream.hxx>
 #include <osl/diagnose.h>
 #include <vcl/event.hxx>
 

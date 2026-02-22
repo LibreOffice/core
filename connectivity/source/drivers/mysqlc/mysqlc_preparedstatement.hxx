@@ -19,7 +19,6 @@
 
 #pragma once
 #include "mysqlc_statement.hxx"
-#include "mysqlc_resultset.hxx"
 
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>

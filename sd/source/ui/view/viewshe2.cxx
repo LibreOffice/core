@@ -405,6 +405,7 @@ void ViewShell::SetZoom(::tools::Long nZoom)
     }
 
     UpdateScrollBars();
+    RememberPageZoom(nZoom);
 }
 
 ::tools::Long ViewShell::GetZoom() const
@@ -632,6 +633,22 @@ void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
 {
     ::tools::Long nZoom = static_cast<::tools::Long>(static_cast<double>(rZoomX) * 100);
     SetZoom(nZoom);
+}
+
+sal_uInt16 ViewShell::GetPageZoom() const
+{
+    if (getCurrentPage()->IsCanvasPage())
+        return mnCanvasPageZoom;
+    return mnNonCanvasPageZoom;
+}
+
+void ViewShell::RememberPageZoom(const sal_uInt16 nZoom)
+{
+    SdPage* pPage = getCurrentPage();
+    if (pPage && pPage->IsCanvasPage())
+        mnCanvasPageZoom = nZoom;
+    else
+        mnNonCanvasPageZoom = nZoom;
 }
 
 void ViewShell::SetActiveWindow (::sd::Window* pWin)

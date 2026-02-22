@@ -123,6 +123,9 @@ excludelist:
     include/ucbhelper/commandenvironment.hxx:
     # base class has to be a complete type
     - com/sun/star/ucb/XCommandEnvironment.hpp
+    include/ucbhelper/contentidentifier.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ucb/XContentIdentifier.hpp
     include/ucbhelper/interceptedinteraction.hxx:
     # base class has to be a complete type
     - com/sun/star/task/XInteractionHandler.hpp
@@ -134,6 +137,33 @@ excludelist:
     include/ucbhelper/propertyvalueset.hxx:
     # needed in --fwdecl mode
     - namespace ucbhelper_impl { struct PropertyValue; }
+    # base class has to be a complete type
+    - com/sun/star/sdbc/XColumnLocate.hpp
+    - com/sun/star/sdbc/XRow.hpp
+    include/ucbhelper/providerhelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/ucb/XContentProvider.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/ucbhelper/resultset.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/ucb/XContentAccess.hpp
+    - com/sun/star/sdbc/XResultSet.hpp
+    - com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp
+    - com/sun/star/sdbc/XRow.hpp
+    - com/sun/star/sdbc/XCloseable.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    include/ucbhelper/resultsetmetadata.hxx:
+    # base class has to be a complete type
+    - com/sun/star/sdbc/XResultSetMetaData.hpp
+    include/ucbhelper/resultsethelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/ucb/XDynamicResultSet.hpp
+    include/ucbhelper/interactionrequest.hxx:
+    # base class has to be a complete type
+    - com/sun/star/task/XInteractionRequest.hpp
     include/comphelper/accessiblekeybindinghelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleKeyBinding.hpp
@@ -275,6 +305,9 @@ excludelist:
     include/tools/simdsupport.hxx:
     # Needed for CPU intrinsics detection to work
     - emmintrin.h
+    include/tools/XmlWriter.hxx:
+    # Not to be confused with std <concepts>
+    - o3tl/concepts.hxx
     include/unotest/bootstrapfixturebase.hxx:
     # These are used in virtually all test files, too much work to move them everywhere
     - cppunit/TestAssert.h
@@ -291,17 +324,22 @@ excludelist:
     - com/sun/star/ucb/XProgressHandler.hpp
     include/unotools/streamwrap.hxx:
     # base class has to be a complete type
+    - com/sun/star/io/XInputStream.hpp
     - com/sun/star/io/XOutputStream.hpp
     - com/sun/star/io/XStream.hpp
     - com/sun/star/io/XTruncate.hpp
     include/sax/fastattribs.hxx:
     # base class has to be a complete type
-    - com/sun/star/xml/sax/XFastAttributeList.hpp
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/xml/sax/XFastTokenHandler.hpp
     include/sax/fastparser.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/xml/sax/XFastParser.hpp
+    include/svl/lstner.hxx:
+    # Full type is needed within std::map
+    - sal/backtrace.hxx
     include/svl/numuno.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XUnoTunnel.hpp
@@ -332,10 +370,19 @@ excludelist:
     include/vcl/CairoFormats.hxx:
     # Needed for macro #define
     - vcl/Scanline.hxx
+    include/vcl/dndlistenercontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp
+    - com/sun/star/datatransfer/dnd/XDropTarget.hpp
+    - com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp
+    - com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp
     include/vcl/keycodes.hxx:
     # Needed for macros
     - com/sun/star/awt/Key.hpp
     - com/sun/star/awt/KeyGroup.hpp
+    include/vcl/imap.hxx:
+    # Needed for std::vector<std::unique_ptr<IMapObject>> type
+    - vcl/imapobj.hxx
     include/vcl/transfer.hxx:
     # base class has to be a complete type
     - com/sun/star/datatransfer/XTransferable2.hpp
@@ -345,32 +392,34 @@ excludelist:
     - com/sun/star/frame/XTerminateListener.hpp
     - com/sun/star/datatransfer/dnd/XDragGestureListener.hpp
     - com/sun/star/datatransfer/dnd/XDropTargetListener.hpp
-    include/toolkit/awt/vclxwindow.hxx:
+    include/toolkit/awt/vclxfont.hxx:
     # base class has to be a complete type
-    - com/sun/star/awt/XWindow2.hpp
-    - com/sun/star/awt/XVclWindowPeer.hpp
-    - com/sun/star/awt/XLayoutConstrains.hpp
-    - com/sun/star/awt/XView.hpp
-    - com/sun/star/beans/XPropertySetInfo.hpp
-    - com/sun/star/awt/XDockableWindow.hpp
-    - com/sun/star/awt/XStyleSettingsSupplier.hpp
+    - com/sun/star/awt/XFont2.hpp
+    include/toolkit/awt/vclxdevice.hxx:
+    # base class has to be a complete type
+    - com/sun/star/awt/XDevice.hpp
+    - com/sun/star/awt/XUnitConversion.hpp
+    include/vcl/weld/customweld.hxx:
+    # FIXME some compilers (GCC, MSVC) fail to build with fw declaring this, while Clang does not
+    - comphelper/OAccessible.hxx
+    include/vcl/weld/weldutils.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XStatusListener.hpp
+    include/vcl/vectorgraphicdata.hxx:
+    # TODO Needed on Android NDK 27 for some reason
+    - com/sun/star/graphic/XPrimitive2D.hpp
     include/toolkit/awt/vclxwindows.hxx:
     # base class has to be a complete type
-    - com/sun/star/awt/XListBox.hpp
-    - com/sun/star/awt/XToggleButton.hpp
-    - com/sun/star/awt/XComboBox.hpp
-    - com/sun/star/awt/XItemListListener.hpp
-    include/toolkit/controls/unocontrol.hxx:
-    # base class has to be a complete type
-    - com/sun/star/awt/XControl.hpp
-    - com/sun/star/awt/XWindow2.hpp
-    - com/sun/star/awt/XView.hpp
-    - com/sun/star/beans/XPropertiesChangeListener.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/awt/XUnitConversion.hpp
-    - com/sun/star/awt/XStyleSettingsSupplier.hpp
-    - com/sun/star/accessibility/XAccessible.hpp
-    - com/sun/star/util/XModeChangeBroadcaster.hpp
+    - com/sun/star/awt/XTextArea.hpp
+    - com/sun/star/awt/XTextComponent.hpp
+    - com/sun/star/awt/XNumericField.hpp
+    - com/sun/star/awt/XScrollBar.hpp
+    - com/sun/star/awt/XTextEditField.hpp
+    - com/sun/star/awt/XSpinField.hpp
+    - com/sun/star/awt/XFixedHyperlink.hpp
+    - com/sun/star/awt/XFixedText.hpp
+    - com/sun/star/awt/XRadioButton.hpp
+    - com/sun/star/awt/XCheckBox.hpp
     include/toolkit/controls/unocontrolmodel.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XControlModel.hpp
@@ -379,30 +428,13 @@ excludelist:
     - com/sun/star/beans/XPropertyState.hpp
     - com/sun/star/io/XPersistObject.hpp
     - com/sun/star/util/XCloneable.hpp
-    include/toolkit/controls/unocontrols.hxx:
-    # base class has to be a complete type
-    - com/sun/star/awt/XTextComponent.hpp
-    - com/sun/star/awt/XTextListener.hpp
-    - com/sun/star/awt/XTextLayoutConstrains.hpp
-    - com/sun/star/awt/XButton.hpp
-    - com/sun/star/awt/XToggleButton.hpp
-    - com/sun/star/awt/XRadioButton.hpp
-    - com/sun/star/awt/XCheckBox.hpp
-    - com/sun/star/awt/XListBox.hpp
-    - com/sun/star/awt/XItemList.hpp
     include/toolkit/helper/macros.hxx:
     # Needed for macros
     - comphelper/diagnose_ex.hxx
-    include/xmloff/unointerfacetouniqueidentifiermapper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/uno/XInterface.hpp
     include/xmloff/unoatrcn.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNameContainer.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    include/xmloff/xmlictxt.hxx:
-    # base class has to be a complete type
-    - com/sun/star/xml/sax/XFastContextHandler.hpp
     include/xmloff/xmlexp.hxx:
     # base class has to be a complete type
     - com/sun/star/document/XFilter.hpp
@@ -410,6 +442,11 @@ excludelist:
     - com/sun/star/document/XExporter.hpp
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/container/XNamed.hpp
+    include/xmloff/xmlgrhlp.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XBinaryStreamResolver.hpp
+    - com/sun/star/document/XGraphicObjectResolver.hpp
+    - com/sun/star/document/XGraphicStorageHandler.hpp
     include/xmloff/xmlmetae.hxx:
     # base class has to be a complete type
     - com/sun/star/xml/sax/XDocumentHandler.hpp
@@ -421,6 +458,7 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/xml/sax/XFastDocumentHandler.hpp
     - com/sun/star/xml/sax/XFastParser.hpp
+    - com/sun/star/xml/sax/XDocumentHandler.hpp
     include/xmloff/XMLTextMasterPageContext.hxx:
     # needed in --fwdecl mode
     - struct ContextID_Index_Pair
@@ -430,34 +468,18 @@ excludelist:
     include/svtools/dialogclosedlistener.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/dialogs/XDialogClosedListener.hpp
-    include/svtools/genericunodialog.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XInitialization.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/ui/dialogs/XExecutableDialog.hpp
     include/svtools/openfiledroptargetlistener.hxx:
     # base class has to be a complete type
     - com/sun/star/datatransfer/dnd/XDropTargetListener.hpp
-    include/svtools/popupmenucontrollerbase.hxx:
-    # base class has to be a complete type
-    - com/sun/star/frame/XDispatch.hpp
-    - com/sun/star/frame/XDispatchProvider.hpp
-    - com/sun/star/frame/XPopupMenuController.hpp
-    - com/sun/star/frame/XStatusListener.hpp
-    - com/sun/star/lang/XInitialization.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     include/svtools/popupwindowcontroller.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     include/svtools/sfxecode.hxx:
     # Needed for macro defines
     - class ErrCode
-    include/svtools/toolboxcontroller.hxx:
-    # base class has to be a complete type
-    - com/sun/star/frame/XStatusListener.hpp
-    - com/sun/star/frame/XToolbarController.hpp
-    - com/sun/star/util/XUpdatable.hpp
-    - com/sun/star/lang/XInitialization.hpp
+    include/svtools/strings.hrc:
+    # Needed for TranslateId macro
+    - unotools/resmgr.hxx
     include/svtools/unoevent.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNameReplace.hpp
@@ -508,60 +530,13 @@ excludelist:
     - cppuhelper/supportsservice.hxx
     # Needed for HAVE_FEATURE_JAVA
     - rtl/ref.hxx
-    include/connectivity/ConnectionWrapper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XUnoTunnel.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    include/connectivity/conncleanup.hxx:
-    # base class has to be a complete type
-    - com/sun/star/beans/XPropertyChangeListener.hpp
-    - com/sun/star/sdbc/XRowSetListener.hpp
-    include/connectivity/parameters.hxx:
-    # base class has to be a complete type
-    - com/sun/star/sdb/XSingleSelectQueryComposer.hpp
-    include/connectivity/paramwrapper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/container/XEnumerationAccess.hpp
-    - com/sun/star/container/XIndexAccess.hpp
     include/connectivity/sdbcx/VCollection.hxx:
     # base class has to be a complete type
-    - com/sun/star/container/XNameAccess.hpp
-    - com/sun/star/container/XIndexAccess.hpp
-    - com/sun/star/container/XEnumerationAccess.hpp
-    - com/sun/star/container/XContainer.hpp
-    - com/sun/star/sdbc/XColumnLocate.hpp
-    - com/sun/star/util/XRefreshable.hpp
-    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
-    - com/sun/star/sdbcx/XAppend.hpp
-    - com/sun/star/sdbcx/XDrop.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/beans/XPropertySet.hpp
-    include/connectivity/sdbcx/VColumn.hxx:
-    # base class has to be a complete type
-    - com/sun/star/container/XNamed.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
-    include/connectivity/sdbcx/VTable.hxx:
-    # base class has to be a complete type
-    - com/sun/star/container/XNamed.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/sdbcx/XAlterTable.hpp
-    - com/sun/star/sdbcx/XColumnsSupplier.hpp
-    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
-    - com/sun/star/sdbcx/XIndexesSupplier.hpp
-    - com/sun/star/sdbcx/XKeysSupplier.hpp
-    - com/sun/star/sdbcx/XRename.hpp
-    include/connectivity/sdbcx/VView.hxx:
-    # base class has to be a complete type
-    - com/sun/star/container/XNamed.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     include/drawinglayer/primitive2d/baseprimitive2d.hxx:
     # base class has to be a complete type
     - com/sun/star/graphic/XPrimitive2D.hpp
     - com/sun/star/util/XAccounting.hpp
-    include/drawinglayer/primitive3d/baseprimitive3d.hxx:
-    # base class has to be a complete type
-    - com/sun/star/graphic/XPrimitive3D.hpp
     include/sfx2/childwin.hxx:
     # Needed in macro #define
     - comphelper/lok.hxx

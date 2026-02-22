@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,slideshow_engine))
 
 $(eval $(call gb_CppunitTest_use_externals,slideshow_engine,\
 	boost_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,slideshow_engine, \

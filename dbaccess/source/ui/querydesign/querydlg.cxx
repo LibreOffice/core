@@ -27,6 +27,7 @@
 #include <QueryTableView.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <vcl/weld/Dialog.hxx>
 #include <RelationControl.hxx>
 
 #define ID_INNER_JOIN       1

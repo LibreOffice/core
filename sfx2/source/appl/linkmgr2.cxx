@@ -34,6 +34,8 @@
 #include <tools/debug.hxx>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/gdimtf.hxx>
 #include <sfx2/lnkbase.hxx>

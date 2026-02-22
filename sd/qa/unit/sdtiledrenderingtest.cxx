@@ -24,7 +24,7 @@
 using namespace css;
 
 SdTiledRenderingTest::SdTiledRenderingTest()
-    : UnoApiXmlTest(u"/sd/qa/unit/tiledrendering/data/"_ustr)
+    : UnoApiTest(u"/sd/qa/unit/tiledrendering/data/"_ustr)
     , m_bFound(true)
     , m_nPart(0)
     , m_nSelectionBeforeSearchResult(0)
@@ -37,7 +37,7 @@ SdTiledRenderingTest::SdTiledRenderingTest()
 
 void SdTiledRenderingTest::setUp()
 {
-    UnoApiXmlTest::setUp();
+    UnoApiTest::setUp();
 
     // prevent showing warning message box
     osl_setEnvironment(u"OOX_NO_SMARTART_WARNING"_ustr.pData, u"1"_ustr.pData);
@@ -46,19 +46,12 @@ void SdTiledRenderingTest::setUp()
 
 void SdTiledRenderingTest::tearDown()
 {
-    if (mxComponent.is())
-    {
-        mxComponent->dispose();
-        mxComponent.clear();
-    }
-
     if (m_pXmlBuffer)
         xmlBufferFree(m_pXmlBuffer);
 
     m_callbackWrapper.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 
-    UnoApiXmlTest::tearDown();
+    UnoApiTest::tearDown();
 }
 
 SdXImpressDocument*

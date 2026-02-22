@@ -20,6 +20,7 @@
 #include <svtools/prnsetup.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <vcl/print.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <label.hxx>
 #include "labprt.hxx"
 #include <labimg.hxx>

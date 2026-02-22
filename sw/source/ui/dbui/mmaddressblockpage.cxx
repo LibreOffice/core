@@ -23,12 +23,16 @@
 #include "addresslistdialog.hxx"
 #include <editeng/eeitem.hxx>
 #include <o3tl/safeint.hxx>
+#include <tools/mapunit.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svl/itemset.hxx>
 #include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/transfer.hxx>

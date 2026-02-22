@@ -9,6 +9,7 @@
 
 #include "cmis_datasupplier.hxx"
 #include "cmis_resultset.hxx"
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;

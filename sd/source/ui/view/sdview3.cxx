@@ -43,6 +43,7 @@
 #include <unotools/streamwrap.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/pdfread.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <svx/svxids.hrc>

@@ -20,6 +20,7 @@
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>

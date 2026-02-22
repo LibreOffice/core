@@ -22,7 +22,9 @@
 #include <comphelper/configurationlistener.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <tools/color.hxx>
+#include <tools/fldunit.hxx>
 #include <svl/numformat.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
@@ -31,6 +33,9 @@
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weldutils.hxx>
@@ -46,6 +51,7 @@
 #include <sfx2/viewsh.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
@@ -62,6 +68,7 @@
 #include <helpids.h>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svx/xtable.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -1359,7 +1366,7 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     if (!bIsNotSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else
-        rRenderContext.SetTextColor(rStyleSettings.GetDialogTextColor());
+        rRenderContext.SetTextColor(rStyleSettings.GetWindowTextColor());
 
     // handle the push-button
     if (!bIsNotSelected)

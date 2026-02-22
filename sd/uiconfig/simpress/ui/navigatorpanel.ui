@@ -138,7 +138,6 @@
             <child>
               <object class="GtkToolButton" id="first">
                 <property name="visible">True</property>
-                <property name="tooltip-text" translatable="yes" context="navigatorpanel|first|tooltip_text">First Slide</property>
                 <property name="icon-name">sd/res/nv03.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="first-atkobject">
@@ -154,7 +153,6 @@
             <child>
               <object class="GtkToolButton" id="previous">
                 <property name="visible">True</property>
-                <property name="tooltip-text" translatable="yes" context="navigatorpanel|previous|tooltip_text">Previous Slide</property>
                 <property name="icon-name">sd/res/nv04.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="previous-atkobject">
@@ -170,7 +168,6 @@
             <child>
               <object class="GtkToolButton" id="next">
                 <property name="visible">True</property>
-                <property name="tooltip-text" translatable="yes" context="navigatorpanel|next|tooltip_text">Next Slide</property>
                 <property name="icon-name">sd/res/nv05.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="next-atkobject">
@@ -186,7 +183,6 @@
             <child>
               <object class="GtkToolButton" id="last">
                 <property name="visible">True</property>
-                <property name="tooltip-text" translatable="yes" context="navigatorpanel|last|tooltip_text">Last Slide</property>
                 <property name="icon-name">sd/res/nv06.png</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="last-atkobject">

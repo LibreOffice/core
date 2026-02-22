@@ -26,6 +26,10 @@
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoom_def.hxx>
 #include <tools/debug.hxx>
+#include <tools/fldunit.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 namespace
 {

@@ -26,6 +26,8 @@
 #include <vcl/weld/weld.hxx>
 #include <svx/signaturelinehelper.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>

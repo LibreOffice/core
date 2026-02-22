@@ -306,7 +306,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
  
      PFN_vkGetPhysicalDeviceProperties localGetPhysicalDeviceProperties =
              reinterpret_cast<PFN_vkGetPhysicalDeviceProperties>(
-@@ -86,23 +100,42 @@
+@@ -86,23 +100,35 @@
                                              backendContext.fInstance,
                                              VK_NULL_HANDLE));
      if (!localGetPhysicalDeviceProperties) {
@@ -342,14 +342,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      }
 +
 +    backendContext.fMemoryAllocator =
-+            skgpu::VulkanAMDMemoryAllocator::Make(d->fInstance,
-+                                                  backendContext.fPhysicalDevice,
-+                                                  backendContext.fDevice,
-+                                                  physDevVersion,
-+                                                  &extensions,
-+                                                  d->fInterface.get(),
-+                                                  skgpu::ThreadSafe::kNo,
-+                                                  /*blockSize=*/std::nullopt);
++            skgpu::VulkanMemoryAllocators::Make(backendContext, skgpu::ThreadSafe::kNo);
 +
 +    fShared = fGlobalShared;
 +    } // if( !fShared )
@@ -359,7 +352,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      GET_PROC(DestroySurfaceKHR);
      GET_PROC(GetPhysicalDeviceSurfaceSupportKHR);
      GET_PROC(GetPhysicalDeviceSurfaceCapabilitiesKHR);
-@@ -110,7 +143,6 @@
+@@ -110,7 +136,6 @@
      GET_PROC(GetPhysicalDeviceSurfacePresentModesKHR);
      GET_DEV_PROC(DeviceWaitIdle);
      GET_DEV_PROC(QueueWaitIdle);
@@ -367,26 +360,20 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      GET_DEV_PROC(CreateSwapchainKHR);
      GET_DEV_PROC(DestroySwapchainKHR);
      GET_DEV_PROC(GetSwapchainImagesKHR);
-@@ -118,27 +150,22 @@
+@@ -118,20 +143,22 @@
      GET_DEV_PROC(QueuePresentKHR);
      GET_DEV_PROC(GetDeviceQueue);
  
 -    backendContext.fMemoryAllocator =
--            skgpu::VulkanAMDMemoryAllocator::Make(fInstance,
--                                                  backendContext.fPhysicalDevice,
--                                                  backendContext.fDevice,
--                                                  physDevVersion,
--                                                  &extensions,
--                                                  fInterface.get(),
--                                                  skgpu::ThreadSafe::kNo,
--                                                  /*blockSize=*/std::nullopt);
+-            skgpu::VulkanMemoryAllocators::Make(backendContext, skgpu::ThreadSafe::kNo);
 -
 -    fContext = GrDirectContexts::MakeVulkan(backendContext, fDisplayParams->grContextOptions());
+-
+-    fDeviceSurface = fCreateVkSurfaceFn(fInstance);
 +    // No actual window, used just to create the shared GrContext.
 +    if(fCreateVkSurfaceFn == nullptr)
 +        return;
- 
--    fDeviceSurface = fCreateVkSurfaceFn(fInstance);
++ 
 +    fDeviceSurface = fCreateVkSurfaceFn(fShared->fInstance);
      if (VK_NULL_HANDLE == fDeviceSurface) {
          this->destroyContext();
@@ -397,14 +384,13 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 +    fGetDeviceQueue(fShared->fDevice, fShared->fPresentQueueIndex, 0, &fPresentQueue);
 +
      VkBool32 supported;
--    VkResult res = fGetPhysicalDeviceSurfaceSupportKHR(
+     VkResult res = fGetPhysicalDeviceSurfaceSupportKHR(
 -            fPhysicalDevice, fPresentQueueIndex, fDeviceSurface, &supported);
-+    VkResult res = fGetPhysicalDeviceSurfaceSupportKHR(
 +            fShared->fPhysicalDevice, fShared->fPresentQueueIndex, fDeviceSurface, &supported);
      if (VK_SUCCESS != res) {
          this->destroyContext();
          return;
-@@ -148,20 +175,18 @@
+@@ -141,20 +168,18 @@
          this->destroyContext();
          return;
      }
@@ -427,7 +413,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                                nullptr);
      if (VK_SUCCESS != res) {
          return false;
-@@ -169,14 +194,14 @@
+@@ -162,14 +187,14 @@
  
      SkAutoMalloc surfaceFormatAlloc(surfaceFormatCount * sizeof(VkSurfaceFormatKHR));
      VkSurfaceFormatKHR* surfaceFormats = (VkSurfaceFormatKHR*)surfaceFormatAlloc.get();
@@ -444,7 +430,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                                     nullptr);
      if (VK_SUCCESS != res) {
          return false;
-@@ -184,7 +209,7 @@
+@@ -177,7 +202,7 @@
  
      SkAutoMalloc presentModeAlloc(presentModeCount * sizeof(VkPresentModeKHR));
      VkPresentModeKHR* presentModes = (VkPresentModeKHR*)presentModeAlloc.get();
@@ -453,7 +439,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                                     presentModes);
      if (VK_SUCCESS != res) {
          return false;
-@@ -296,8 +321,8 @@
+@@ -289,8 +314,8 @@
      swapchainCreateInfo.imageArrayLayers = 1;
      swapchainCreateInfo.imageUsage = usageFlags;
  
@@ -464,7 +450,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
          swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
          swapchainCreateInfo.queueFamilyIndexCount = 2;
          swapchainCreateInfo.pQueueFamilyIndices = queueFamilies;
-@@ -313,16 +338,16 @@
+@@ -306,16 +331,16 @@
      swapchainCreateInfo.clipped = true;
      swapchainCreateInfo.oldSwapchain = fSwapchain;
  
@@ -484,7 +470,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
          swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
      }
      // If buffer creation fails, destroy the swapchain.
-@@ -330,9 +355,9 @@
+@@ -323,9 +348,9 @@
                                         usageFlags,
                                         colorType,
                                         swapchainCreateInfo.imageSharingMode)) {
@@ -496,7 +482,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
          swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
          return false;
      }
-@@ -346,13 +371,13 @@
+@@ -339,13 +364,13 @@
                                                    VkSharingMode sharingMode) {
      // Determine number of swapchain images
      uint32_t swapchainImgCount;
@@ -512,7 +498,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
  
      // Populate all swapchain image representations
      fImages = skia_private::AutoTArray<SwapchainImage>((size_t)swapchainImgCount);
-@@ -365,8 +390,8 @@
+@@ -358,8 +383,8 @@
          static const VkSemaphoreCreateInfo submitSemInfo =
                  {VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO, /*pNext=*/nullptr, /*flags=*/0};
          SkDEBUGCODE(VkResult result = )GR_VK_CALL(
@@ -523,7 +509,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                  &submitSemInfo,
                                  /*pAllocator=*/nullptr,
                                  &fImages[i].fRenderCompletionSemaphore));
-@@ -379,7 +404,7 @@
+@@ -372,7 +397,7 @@
          info.fFormat = format;
          info.fImageUsageFlags = usageFlags;
          info.fLevelCount = 1;
@@ -532,7 +518,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
          info.fProtected = skgpu::Protected(fDisplayParams->createProtectedNativeBackend());
          info.fSharingMode = sharingMode;
  
-@@ -429,7 +454,7 @@
+@@ -422,7 +447,7 @@
      info.fNumSemaphores = 1;
      info.fSignalSemaphores = &backendRenderSemaphore;
      skgpu::MutableTextureState presentState = skgpu::MutableTextureStates::MakeVulkan(
@@ -541,7 +527,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      auto dContext = surface->recordingContext()->asDirectContext();
      dContext->flush(surface, info, &presentState);
      dContext->submit();
-@@ -443,7 +468,7 @@
+@@ -436,7 +461,7 @@
      // Clean up the image's semaphores
      for (size_t i = 0; i < fImages.size(); i++) {
          if (fImages[i].fRenderCompletionSemaphore != VK_NULL_HANDLE) {
@@ -550,7 +536,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                                      fImages[i].fRenderCompletionSemaphore,
                                                      /*pAllocator=*/nullptr));
          }
-@@ -459,42 +484,58 @@
+@@ -452,42 +477,58 @@
  void VulkanWindowContext::destroyContext() {
      if (this->isValid()) {
          fQueueWaitIdle(fPresentQueue);
@@ -623,7 +609,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
  }
  
  sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
-@@ -502,12 +543,12 @@
+@@ -495,12 +536,12 @@
      static const VkSemaphoreCreateInfo acquireSemInfo =
              { VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO, /*pNext=*/nullptr, /*flags=*/0 };
      SkDEBUGCODE(VkResult result = )GR_VK_CALL(
@@ -639,7 +625,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                          fSwapchain,
                                          /*timeout=*/UINT64_MAX,
                                          fAcquireSemaphore,
-@@ -515,26 +556,26 @@
+@@ -508,26 +549,26 @@
                                          &fCurrentImageIndex);
      if (VK_ERROR_SURFACE_LOST_KHR == res) {
          // TODO: Recreate fDeviceSurface using fCreateVkSurfaceFn, and then rebuild the swapchain
@@ -673,7 +659,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
              return nullptr;
          }
      }
-@@ -564,4 +605,6 @@
+@@ -557,4 +598,6 @@
      fQueuePresentKHR(fPresentQueue, &presentInfo);
  }
  

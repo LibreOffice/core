@@ -20,10 +20,14 @@
 #include "impdialog.hxx"
 #include <strings.hrc>
 #include <officecfg/Office/Common.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/graphic/GraphicMetadata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/pdf/PDFEncryptionInitialization.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/passwd.hxx>
 #include <comphelper/diagnose_ex.hxx>

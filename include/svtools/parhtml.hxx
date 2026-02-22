@@ -21,7 +21,6 @@
 
 #include <svtools/svtdllapi.h>
 #include <svtools/svparser.hxx>
-#include <svtools/htmltokn.h>
 
 #include <string_view>
 #include <vector>
@@ -36,6 +35,7 @@ namespace com::sun::star {
 
 class Color;
 enum class HtmlOptionId;
+enum class HtmlTokenId : sal_Int16;
 
 #define HTMLFONTSZ1_DFLT 7
 #define HTMLFONTSZ2_DFLT 10

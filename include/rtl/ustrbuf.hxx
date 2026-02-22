@@ -519,6 +519,13 @@ public:
      */
     const sal_Unicode*  getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
+#if defined LIBO_INTERNAL_ONLY
+    // Provide unsafe non-const access to the null-terminated string.  Callers can mutate the
+    // contents of the string buffer (including introducing embedded null characters), but cannot
+    // modify its length.
+    sal_Unicode * getMutableStr() SAL_RETURNS_NONNULL { return pData->buffer; }
+#endif
+
     /**
       Access to individual characters.
 

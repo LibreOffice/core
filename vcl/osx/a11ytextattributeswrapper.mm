@@ -261,6 +261,9 @@ using namespace ::com::sun::star::uno;
                     case css::style::ParagraphAdjust_BLOCK:
                         textAlignment = [NSNumber numberWithInteger:NSTextAlignmentJustified];
                         break;
+                    case css::style::ParagraphAdjust_START:
+                        textAlignment = [NSNumber numberWithInteger:NSTextAlignmentNatural];
+                        break;
                     case css::style::ParagraphAdjust_LEFT:
                     default:
                         textAlignment = [NSNumber numberWithInteger:NSTextAlignmentLeft];

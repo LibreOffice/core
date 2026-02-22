@@ -22,6 +22,7 @@
 #include <vcl/wizardmachine.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <mailmergehelper.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/weld.hxx>

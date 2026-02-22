@@ -19,6 +19,7 @@
 
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

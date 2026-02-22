@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <global.hxx>
+#include <svx/dialog/TableAutoFmtDlg.hxx>
 #include <scitems.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
@@ -27,6 +29,7 @@
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
@@ -1027,9 +1030,15 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     {
                         const SfxStringItem& rNameItem = pReqArgs->Get( SID_AUTOFORMAT );
                         ScAutoFormat* pFormat = ScGlobal::GetOrCreateAutoFormat();
-                        ScAutoFormat::const_iterator it = pFormat->find(rNameItem.GetValue());
-                        ScAutoFormat::const_iterator itBeg = pFormat->begin();
-                        size_t nIndex = std::distance(itBeg, it);
+                        size_t nIndex = 0;
+                        for (size_t i = 0; i < pFormat->size(); i++)
+                        {
+                            if (ScAutoFormatData* pData = pFormat->GetData(i))
+                            {
+                                if (pData->GetName() == rNameItem.GetValue())
+                                    nIndex = i;
+                            }
+                        }
 
                         pTabViewShell->AutoFormat( nIndex );
 
@@ -1038,13 +1047,12 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        ScGlobal::ClearAutoFormat();
-                        std::unique_ptr<ScAutoFormatData> pNewEntry(pTabViewShell->CreateAutoFormatData());
-                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                        SCTAB nCurrentTab = GetViewData().GetTabNumber();
+                        bool bRTL = GetViewData().GetDocument().IsLayoutRTL(nCurrentTab);
 
-                        ScopedVclPtr<AbstractScAutoFormatDlg> pDlg(pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry.get(), GetViewData()));
-
-                        if ( pDlg->Execute() == RET_OK )
+                        SvxTableAutoFmtDlg aDlg(*ScGlobal::GetOrCreateAutoFormat(), "", pDlgParent,
+                                                false, bRTL);
+                        if (aDlg.run() == RET_OK)
                         {
                             ScEditableTester aTester = ScEditableTester::CreateAndTestView(pTabViewShell);
                             if ( !aTester.IsEditable() )
@@ -1053,9 +1061,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             }
                             else
                             {
-                                pTabViewShell->AutoFormat( pDlg->GetIndex() );
+                                pTabViewShell->AutoFormat(aDlg.GetIndex());
 
-                                rReq.AppendItem( SfxStringItem( SID_AUTOFORMAT, pDlg->GetCurrFormatName() ) );
+                                rReq.AppendItem(
+                                    SfxStringItem(SID_AUTOFORMAT, aDlg.GetCurrFormatName()));
                                 rReq.Done();
                             }
                         }

@@ -26,6 +26,7 @@
 
 #include <tabpages.hxx>
 #include <attrdlg.hxx>
+#include <sal/log.hxx>
 #include <svx/dialogs.hrc>
 #include <editeng/editids.hrc>
 #include <editeng/flstitem.hxx>

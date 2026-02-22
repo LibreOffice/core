@@ -21,12 +21,18 @@
 #define INCLUDED_VCL_NOTEBOOKBARADDONSMERGER_HXX
 
 #include <vcl/builder.hxx>
-#include <vcl/window.hxx>
-#include <vcl/image.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-#include "NotebookBarAddonsItem.hxx"
 
 class Menu;
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
+namespace vcl
+{
+class Window;
+}
+struct NotebookBarAddonsItem;
 
 struct AddonNotebookBarItem
 {

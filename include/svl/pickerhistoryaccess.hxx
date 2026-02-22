@@ -22,8 +22,8 @@
 
 #include <svl/svldllapi.h>
 
-#include <com/sun/star/uno/Reference.hxx>
-
+namespace com::sun::star::uno { class XInterface; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace svt
 {

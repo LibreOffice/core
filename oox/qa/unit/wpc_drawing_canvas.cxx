@@ -8,7 +8,7 @@
  */
 
 #include <tools/color.hxx>
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <docmodel/color/ComplexColor.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
@@ -35,11 +35,11 @@ namespace
 /// The test suite covers tests for import of Word drawing canvas (wpc), available since LO 24.2.
 /// Before its implementation the VML fallback was used. That lost properties because VML is not able
 /// to describe them or the VML import of LO has deficits.
-class TestWPC : public UnoApiXmlTest
+class TestWPC : public UnoApiTest
 {
 public:
     TestWPC()
-        : UnoApiXmlTest(u"/oox/qa/unit/data/"_ustr)
+        : UnoApiTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
 };

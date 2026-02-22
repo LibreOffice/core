@@ -20,7 +20,7 @@
 #include <hintids.hxx>
 #include <editeng/protitem.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <unotools/charclass.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/srchitem.hxx>
@@ -56,6 +56,7 @@
 #include <memory>
 #include <comphelper/lok.hxx>
 #include <editsh.hxx>
+#include <pamtyp.hxx>
 
 #include <viewopt.hxx>
 #include <annotationmark.hxx>
@@ -797,7 +798,7 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
         // independent from search direction: SPoint is always bigger than mark
         // if the search area is valid
         SwPosition *pSttPos = aRegion.GetMark(),
-                        *pEndPos = aRegion.GetPoint();
+                   *pEndPos = aRegion.GetPoint();
         *pSttPos = *pTmpCursor->Start();
         *pEndPos = *pTmpCursor->End();
         if( bSrchBkwrd )
@@ -807,7 +808,7 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
             pPHdl.reset(new PercentHdl( aRegion ));
 
         // as long as found and not at same position
-        while(  *pSttPos <= *pEndPos )
+        while( *pSttPos <= *pEndPos )
         {
             nFndRet = rParas.DoFind(*pCurrentCursor, fnMove, aRegion, bInReadOnly, xSearchItem);
             if( 0 == nFndRet ||
@@ -855,16 +856,26 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
                 }
             }
 
+            // tdf#131431 move pCurrentCursor if it hasn't moved to avoid an infinite loop
+            if( bSrchBkwrd && *pEndPos == *pCurrentCursor->Start() )
+            {
+                (*fnMove.fnPos)( pCurrentCursor->GetMark(), false );
+            }
+            else if ( !bSrchBkwrd && *pSttPos == *pCurrentCursor->End() )
+            {
+                (*fnMove.fnPos)( pCurrentCursor->GetPoint(), false );
+            }
+
+            if( *pSttPos == *pEndPos )
+                // in area but at the end => done
+                break;
+
             if( bSrchBkwrd )
                 // move pEndPos in front of the found area
                 *pEndPos = *pCurrentCursor->Start();
             else
                 // move pSttPos behind the found area
                 *pSttPos = *pCurrentCursor->End();
-
-            if( *pSttPos == *pEndPos )
-                // in area but at the end => done
-                break;
 
             if( !nCursorCnt && pPHdl )
             {

@@ -14,11 +14,13 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <dialmgr.hxx>
 #include <officecfg/Office/UI/ToolbarMode.hxx>
+#include <sal/log.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <strings.hrc>
 #include <unotools/confignode.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Builder.hxx>
 
 UIPickerDialog::UIPickerDialog(weld::Window* pParent)
     : SfxTabDialogController(pParent, u"cui/ui/uipickerdialog.ui"_ustr, u"UIPickerDialog"_ustr)

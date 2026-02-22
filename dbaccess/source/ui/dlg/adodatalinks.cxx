@@ -45,22 +45,21 @@ OUString PromptNew(sal_IntPtr hWnd)
         sal::systools::CoInitializeGuard aGuard(COINIT_APARTMENTTHREADED);
 
         // Instantiate DataLinks object.
-        sal::systools::COMReference<IDataSourceLocator> dlPrompt;
-        dlPrompt.CoCreateInstance(CLSID_DataLinks,       //clsid -- Data Links UI
-                                  nullptr,               //pUnkOuter
-                                  CLSCTX_INPROC_SERVER); //dwClsContext
+        sal::systools::COMReference<IDataSourceLocator> dlPrompt(
+            CLSID_DataLinks,       //clsid -- Data Links UI
+            nullptr,               //pUnkOuter
+            CLSCTX_INPROC_SERVER); //dwClsContext
 
-        sal::systools::ThrowIfFailed(dlPrompt->put_hWnd(hWnd), "put_hWnd failed");
+        sal::systools::ThrowIfFailed(dlPrompt->put_hWnd(hWnd));
 
         // Prompt for connection information.
         sal::systools::COMReference<IDispatch> piDispatch;
-        sal::systools::ThrowIfFailed(dlPrompt->PromptNew(&piDispatch), "PromptNew failed");
-        sal::systools::COMReference<ADOConnection> piTmpConnection(piDispatch,
-                                                                   sal::systools::COM_QUERY_THROW);
+        sal::systools::ThrowIfFailed(dlPrompt->PromptNew(&piDispatch));
+        auto piTmpConnection(
+            piDispatch.QueryInterface<ADOConnection>(sal::systools::COM_QUERY_THROW()));
 
         sal::systools::BStr _result;
-        sal::systools::ThrowIfFailed(piTmpConnection->get_ConnectionString(&_result),
-                                     "get_ConnectionString failed");
+        sal::systools::ThrowIfFailed(piTmpConnection->get_ConnectionString(&_result));
 
         return OUString(_result);
     }
@@ -77,28 +76,26 @@ OUString PromptEdit(sal_IntPtr hWnd, OUString const & connstr)
         // Initialize COM
         sal::systools::CoInitializeGuard aGuard(COINIT_APARTMENTTHREADED);
 
-        sal::systools::COMReference<ADOConnection> piTmpConnection;
-        piTmpConnection.CoCreateInstance(CLSID_CADOConnection, nullptr, CLSCTX_INPROC_SERVER);
+        sal::systools::COMReference<ADOConnection> piTmpConnection(CLSID_CADOConnection, nullptr,
+                                                                   CLSCTX_INPROC_SERVER);
 
         sal::systools::ThrowIfFailed(
-            piTmpConnection->put_ConnectionString(sal::systools::BStr(connstr)),
-            "put_ConnectionString failed");
+            piTmpConnection->put_ConnectionString(sal::systools::BStr(connstr)));
 
         // Instantiate DataLinks object.
-        sal::systools::COMReference<IDataSourceLocator> dlPrompt;
-        dlPrompt.CoCreateInstance(CLSID_DataLinks,       //clsid -- Data Links UI
-                                  nullptr,               //pUnkOuter
-                                  CLSCTX_INPROC_SERVER); //dwClsContext
+        sal::systools::COMReference<IDataSourceLocator> dlPrompt(
+            CLSID_DataLinks,       //clsid -- Data Links UI
+            nullptr,               //pUnkOuter
+            CLSCTX_INPROC_SERVER); //dwClsContext
 
-        sal::systools::ThrowIfFailed(dlPrompt->put_hWnd(hWnd), "put_hWnd failed");
+        sal::systools::ThrowIfFailed(dlPrompt->put_hWnd(hWnd));
 
         try
         {
             // Prompt for connection information.
             IDispatch* piDispatch = piTmpConnection.get();
             VARIANT_BOOL pbSuccess;
-            sal::systools::ThrowIfFailed(dlPrompt->PromptEdit(&piDispatch, &pbSuccess),
-                                         "PromptEdit failed");
+            sal::systools::ThrowIfFailed(dlPrompt->PromptEdit(&piDispatch, &pbSuccess));
             if (!pbSuccess) //if user press cancel then sal_False == pbSuccess
                 return connstr;
         }
@@ -106,13 +103,13 @@ OUString PromptEdit(sal_IntPtr hWnd, OUString const & connstr)
         {
             // Prompt for new connection information.
             sal::systools::COMReference<IDispatch> piDispatch;
-            sal::systools::ThrowIfFailed(dlPrompt->PromptNew(&piDispatch), "PromptNew failed");
-            piTmpConnection.set(piDispatch, sal::systools::COM_QUERY_THROW);
+            sal::systools::ThrowIfFailed(dlPrompt->PromptNew(&piDispatch));
+            piTmpConnection
+                = piDispatch.QueryInterface<ADOConnection>(sal::systools::COM_QUERY_THROW());
         }
 
         sal::systools::BStr _result;
-        sal::systools::ThrowIfFailed(piTmpConnection->get_ConnectionString(&_result),
-                                     "get_ConnectionString failed");
+        sal::systools::ThrowIfFailed(piTmpConnection->get_ConnectionString(&_result));
 
         return OUString(_result);
     }

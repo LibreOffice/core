@@ -42,11 +42,11 @@ lcl_GetSpecialExtraName(const OUString& rExtraName, const bool bIsUIName )
         : SwStyleNameMapper::GetExtraProgNameArray();
     static const sal_uInt16 nIds[] =
     {
-        RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
-        RES_POOLCOLL_LABEL_ABB - RES_POOLCOLL_EXTRA_BEGIN,
-        RES_POOLCOLL_LABEL_TABLE - RES_POOLCOLL_EXTRA_BEGIN,
-        RES_POOLCOLL_LABEL_FRAME- RES_POOLCOLL_EXTRA_BEGIN,
-        RES_POOLCOLL_LABEL_FIGURE-RES_POOLCOLL_EXTRA_BEGIN,
+        sal_uInt16(SwPoolFormatId::COLL_LABEL_DRAWING) - sal_uInt16(SwPoolFormatId::COLL_EXTRA_BEGIN),
+        sal_uInt16(SwPoolFormatId::COLL_LABEL_ABB) - sal_uInt16(SwPoolFormatId::COLL_EXTRA_BEGIN),
+        sal_uInt16(SwPoolFormatId::COLL_LABEL_TABLE) - sal_uInt16(SwPoolFormatId::COLL_EXTRA_BEGIN),
+        sal_uInt16(SwPoolFormatId::COLL_LABEL_FRAME)- sal_uInt16(SwPoolFormatId::COLL_EXTRA_BEGIN),
+        sal_uInt16(SwPoolFormatId::COLL_LABEL_FIGURE)-sal_uInt16(SwPoolFormatId::COLL_EXTRA_BEGIN),
         0
     };
     const sal_uInt16 * pIds;
@@ -88,13 +88,13 @@ void lcl_CheckSuffixAndDelete(ProgName & rString)
 
 NameToIdHash HashFromRange(sal_uInt16 nAcc) { return NameToIdHash(nAcc); }
 template <typename... Rest>
-NameToIdHash HashFromRange(sal_uInt16 nAcc, sal_uInt16 nBegin, sal_uInt16 nEnd,
+NameToIdHash HashFromRange(sal_uInt16 nAcc, SwPoolFormatId nBegin, SwPoolFormatId nEnd,
                            const std::vector<OUString>& (*pFunc)(), Rest... rest)
 {
-    NameToIdHash hash(HashFromRange(nAcc + nEnd - nBegin, rest...));
+    NameToIdHash hash(HashFromRange(nAcc + sal_uInt16(nEnd) - sal_uInt16(nBegin), rest...));
     sal_uInt16 nIndex, nId;
     const std::vector<OUString>& rStrings = pFunc();
-    for (nIndex = 0, nId = nBegin; nId < nEnd; nId++, nIndex++)
+    for (nIndex = 0, nId = sal_uInt16(nBegin); nId < sal_uInt16(nEnd); nId++, nIndex++)
         hash[rStrings[nIndex]] = nId;
     return hash;
 }
@@ -124,55 +124,55 @@ template <auto initFunc> struct TablePair
 NameToIdHash GetParaMap (bool bProgName)
 {
     return HashFromRange(0,
-        RES_POOLCOLL_TEXT_BEGIN, RES_POOLCOLL_TEXT_END, bProgName ? &SwStyleNameMapper::GetTextProgNameArray : &SwStyleNameMapper::GetTextUINameArray,
-        RES_POOLCOLL_LISTS_BEGIN, RES_POOLCOLL_LISTS_END, bProgName ? &SwStyleNameMapper::GetListsProgNameArray : &SwStyleNameMapper::GetListsUINameArray,
-        RES_POOLCOLL_EXTRA_BEGIN, RES_POOLCOLL_EXTRA_END, bProgName ? &SwStyleNameMapper::GetExtraProgNameArray : &SwStyleNameMapper::GetExtraUINameArray,
-        RES_POOLCOLL_REGISTER_BEGIN, RES_POOLCOLL_REGISTER_END, bProgName ? &SwStyleNameMapper::GetRegisterProgNameArray : &SwStyleNameMapper::GetRegisterUINameArray,
-        RES_POOLCOLL_DOC_BEGIN, RES_POOLCOLL_DOC_END, bProgName ? &SwStyleNameMapper::GetDocProgNameArray : &SwStyleNameMapper::GetDocUINameArray,
-        RES_POOLCOLL_HTML_BEGIN, RES_POOLCOLL_HTML_END, bProgName ? &SwStyleNameMapper::GetHTMLProgNameArray : &SwStyleNameMapper::GetHTMLUINameArray
+        SwPoolFormatId::COLL_TEXT_BEGIN, SwPoolFormatId::COLL_TEXT_END, bProgName ? &SwStyleNameMapper::GetTextProgNameArray : &SwStyleNameMapper::GetTextUINameArray,
+        SwPoolFormatId::COLL_LISTS_BEGIN, SwPoolFormatId::COLL_LISTS_END, bProgName ? &SwStyleNameMapper::GetListsProgNameArray : &SwStyleNameMapper::GetListsUINameArray,
+        SwPoolFormatId::COLL_EXTRA_BEGIN, SwPoolFormatId::COLL_EXTRA_END, bProgName ? &SwStyleNameMapper::GetExtraProgNameArray : &SwStyleNameMapper::GetExtraUINameArray,
+        SwPoolFormatId::COLL_REGISTER_BEGIN, SwPoolFormatId::COLL_REGISTER_END, bProgName ? &SwStyleNameMapper::GetRegisterProgNameArray : &SwStyleNameMapper::GetRegisterUINameArray,
+        SwPoolFormatId::COLL_DOC_BEGIN, SwPoolFormatId::COLL_DOC_END, bProgName ? &SwStyleNameMapper::GetDocProgNameArray : &SwStyleNameMapper::GetDocUINameArray,
+        SwPoolFormatId::COLL_HTML_BEGIN, SwPoolFormatId::COLL_HTML_END, bProgName ? &SwStyleNameMapper::GetHTMLProgNameArray : &SwStyleNameMapper::GetHTMLUINameArray
     );
 };
 
 NameToIdHash GetCharMap(bool bProgName)
 {
     return HashFromRange(0,
-        RES_POOLCHR_NORMAL_BEGIN, RES_POOLCHR_NORMAL_END, bProgName ? &SwStyleNameMapper::GetChrFormatProgNameArray : &SwStyleNameMapper::GetChrFormatUINameArray,
-        RES_POOLCHR_HTML_BEGIN, RES_POOLCHR_HTML_END, bProgName ? &SwStyleNameMapper::GetHTMLChrFormatProgNameArray : &SwStyleNameMapper::GetHTMLChrFormatUINameArray
+        SwPoolFormatId::CHR_NORMAL_BEGIN, SwPoolFormatId::CHR_NORMAL_END, bProgName ? &SwStyleNameMapper::GetChrFormatProgNameArray : &SwStyleNameMapper::GetChrFormatUINameArray,
+        SwPoolFormatId::CHR_HTML_BEGIN, SwPoolFormatId::CHR_HTML_END, bProgName ? &SwStyleNameMapper::GetHTMLChrFormatProgNameArray : &SwStyleNameMapper::GetHTMLChrFormatUINameArray
     );
 };
 
 NameToIdHash GetFrameMap(bool bProgName)
 {
     return HashFromRange(0,
-        RES_POOLFRM_BEGIN, RES_POOLFRM_END, bProgName ? &SwStyleNameMapper::GetFrameFormatProgNameArray : &SwStyleNameMapper::GetFrameFormatUINameArray
+        SwPoolFormatId::FRM_BEGIN, SwPoolFormatId::FRM_END, bProgName ? &SwStyleNameMapper::GetFrameFormatProgNameArray : &SwStyleNameMapper::GetFrameFormatUINameArray
     );
 };
 
 NameToIdHash GetPageMap(bool bProgName)
 {
     return HashFromRange(0,
-        RES_POOLPAGE_BEGIN, RES_POOLPAGE_END, bProgName ? &SwStyleNameMapper::GetPageDescProgNameArray : &SwStyleNameMapper::GetPageDescUINameArray
+        SwPoolFormatId::PAGE_BEGIN, SwPoolFormatId::PAGE_END, bProgName ? &SwStyleNameMapper::GetPageDescProgNameArray : &SwStyleNameMapper::GetPageDescUINameArray
     );
 };
 
 NameToIdHash GetNumRuleMap(bool bProgName)
 {
     return HashFromRange(0,
-        RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END, bProgName ? &SwStyleNameMapper::GetNumRuleProgNameArray : &SwStyleNameMapper::GetNumRuleUINameArray
+        SwPoolFormatId::NUMRULE_BEGIN, SwPoolFormatId::NUMRULE_END, bProgName ? &SwStyleNameMapper::GetNumRuleProgNameArray : &SwStyleNameMapper::GetNumRuleUINameArray
     );
 };
 
 NameToIdHash GetTableStyleMap(bool bProgName)
 {
     return HashFromRange(0,
-        RES_POOLTABLESTYLE_BEGIN, RES_POOLTABLESTYLE_END, bProgName ? &SwStyleNameMapper::GetTableStyleProgNameArray : &SwStyleNameMapper::GetTableStyleUINameArray
+        SwPoolFormatId::TABLESTYLE_BEGIN, SwPoolFormatId::TABLESTYLE_END, bProgName ? &SwStyleNameMapper::GetTableStyleProgNameArray : &SwStyleNameMapper::GetTableStyleUINameArray
     );
 };
 
 NameToIdHash GetCellStyleMap(bool bProgName)
 {
     return HashFromRange(0,
-        RES_POOLCELLSTYLE_BEGIN, RES_POOLCELLSTYLE_END, bProgName ? &SwStyleNameMapper::GetCellStyleProgNameArray : &SwStyleNameMapper::GetCellStyleUINameArray
+        SwPoolFormatId::CELLSTYLE_BEGIN, SwPoolFormatId::CELLSTYLE_END, bProgName ? &SwStyleNameMapper::GetCellStyleProgNameArray : &SwStyleNameMapper::GetCellStyleUINameArray
     );
 };
 
@@ -207,17 +207,17 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
     {
         bTested = true;
 
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_TEXT_BEGIN, RES_POOLCOLL_TEXT_END );
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_LISTS_BEGIN, RES_POOLCOLL_LISTS_END );
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_EXTRA_BEGIN, RES_POOLCOLL_EXTRA_END );
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_REGISTER_BEGIN, RES_POOLCOLL_REGISTER_END );
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_DOC_BEGIN, RES_POOLCOLL_DOC_END );
-        testNameTable( SwGetPoolIdFromName::TxtColl, RES_POOLCOLL_HTML_BEGIN, RES_POOLCOLL_HTML_END );
-        testNameTable( SwGetPoolIdFromName::ChrFmt, RES_POOLCHR_NORMAL_BEGIN, RES_POOLCHR_NORMAL_END );
-        testNameTable( SwGetPoolIdFromName::ChrFmt, RES_POOLCHR_HTML_BEGIN, RES_POOLCHR_HTML_END );
-        testNameTable( SwGetPoolIdFromName::FrmFmt, RES_POOLFRM_BEGIN, RES_POOLFRM_END );
-        testNameTable( SwGetPoolIdFromName::PageDesc, RES_POOLPAGE_BEGIN, RES_POOLPAGE_END );
-        testNameTable( SwGetPoolIdFromName::NumRule, RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END );
+        testNameTable( SwGetPoolIdFromName::TxtColl, SwPoolFormatId::COLL_TEXT_BEGIN, SwPoolFormatId::COLL_TEXT_END );
+        testNameTable( SwGetPoolIdFromName::TxtColl, SwPoolFormatId::COLL_LISTS_BEGIN, SwPoolFormatId::COLL_LISTS_END );
+        testNameTable( SwGetPoolIdFromName::TxtColl, SwPoolFormatId::COLL_EXTRA_BEGIN, SwPoolFormatId::COLL_EXTRA_END );
+        testNameTable( SwGetPoolIdFromName::TxtColl, SwPoolFormatId::COLL_REGISTER_BEGIN, SwPoolFormatId::COLL_REGISTER_END );
+        testNameTable( SwGetPoolIdFromName::TxtColl, SwPoolFormatId::COLL_DOC_BEGIN, SwPoolFormatId::COLL_DOC_END );
+        testNameTable( SwGetPoolIdFromName::TxtColl, SwPoolFormatId::COLL_HTML_BEGIN, SwPoolFormatId::COLL_HTML_END );
+        testNameTable( SwGetPoolIdFromName::ChrFmt, SwPoolFormatId::CHR_NORMAL_BEGIN, SwPoolFormatId::CHR_NORMAL_END );
+        testNameTable( SwGetPoolIdFromName::ChrFmt, SwPoolFormatId::CHR_HTML_BEGIN, SwPoolFormatId::CHR_HTML_END );
+        testNameTable( SwGetPoolIdFromName::FrmFmt, SwPoolFormatId::FRM_BEGIN, SwPoolFormatId::FRM_END );
+        testNameTable( SwGetPoolIdFromName::PageDesc, SwPoolFormatId::PAGE_BEGIN, SwPoolFormatId::PAGE_END );
+        testNameTable( SwGetPoolIdFromName::NumRule, SwPoolFormatId::NUMRULE_BEGIN, SwPoolFormatId::NUMRULE_END );
     }
 #endif
 
@@ -247,16 +247,16 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
 UIName SwStyleNameMapper::GetUIName(const ProgName& rName,
                                              SwGetPoolIdFromName const eFlags)
 {
-    sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
-    return nId != USHRT_MAX ? GetUIName( nId, rName ) : UIName(rName.toString());
+    SwPoolFormatId nId = GetPoolIdFromProgName ( rName, eFlags );
+    return nId != SwPoolFormatId::UNKNOWN ? GetUIName( nId, rName ) : UIName(rName.toString());
 }
 
 // Get the programmatic name from the UI name
 ProgName SwStyleNameMapper::GetProgName(
         const UIName& rName, SwGetPoolIdFromName const eFlags)
 {
-    sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
-    return nId != USHRT_MAX ? GetProgName( nId, rName ) : ProgName(rName.toString());
+    SwPoolFormatId nId = GetPoolIdFromUIName ( rName, eFlags );
+    return nId != SwPoolFormatId::UNKNOWN ? GetProgName( nId, rName ) : ProgName(rName.toString());
 }
 
 // Get the programmatic name from the UI name in rName and put it into rFillName
@@ -264,14 +264,14 @@ void SwStyleNameMapper::FillProgName(
         const UIName& rName, ProgName& rFillName,
         SwGetPoolIdFromName const eFlags)
 {
-    sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
-    if ( nId == USHRT_MAX )
+    SwPoolFormatId nId = GetPoolIdFromUIName ( rName, eFlags );
+    if ( nId == SwPoolFormatId::UNKNOWN )
     {
         // rName isn't in our UI name table...check if it's in the programmatic one
         nId = GetPoolIdFromProgName ( ProgName(rName.toString()), eFlags );
 
         rFillName = ProgName(rName.toString());
-        if (nId == USHRT_MAX )
+        if (nId == SwPoolFormatId::UNKNOWN )
         {
             if (eFlags != SwGetPoolIdFromName::TableStyle)
             {
@@ -311,13 +311,13 @@ void SwStyleNameMapper::FillUIName(
     if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == "Standard")
         aName = ProgName(SwResId(STR_POOLCHR_STANDARD));
 
-    sal_uInt16 nId = GetPoolIdFromProgName ( aName, eFlags );
-    if ( nId == USHRT_MAX )
+    SwPoolFormatId nId = GetPoolIdFromProgName ( aName, eFlags );
+    if ( nId == SwPoolFormatId::UNKNOWN )
     {
         rFillName = UIName(aName.toString());
         // TabStyle: unfortunately ODF documents with UIName table styles exist
         if (eFlags == SwGetPoolIdFromName::TableStyle || // see testTdf129568ui
-            GetPoolIdFromUIName(UIName(aName.toString()), eFlags) == USHRT_MAX)
+            GetPoolIdFromUIName(UIName(aName.toString()), eFlags) == SwPoolFormatId::UNKNOWN)
         {
             // aName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
             lcl_CheckSuffixAndDelete(rFillName);
@@ -335,153 +335,153 @@ void SwStyleNameMapper::FillUIName(
 }
 
 const OUString& SwStyleNameMapper::getNameFromId(
-        sal_uInt16 const nId, const OUString& rFillName, bool const bProgName)
+        SwPoolFormatId const nId, const OUString& rFillName, bool const bProgName)
 {
-    sal_uInt16 nStt = 0;
+    SwPoolFormatId nStt = SwPoolFormatId::ZERO;
     const std::vector<OUString>* pStrArr = nullptr;
 
-    switch( (USER_FMT | COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID) & nId )
+    switch( (USER_FMT | COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID) & sal_uInt16(nId) )
     {
     case COLL_TEXT_BITS:
-        if( RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END )
+        if( SwPoolFormatId::COLL_TEXT_BEGIN <= nId && nId < SwPoolFormatId::COLL_TEXT_END )
         {
             pStrArr = bProgName ? &GetTextProgNameArray() : &GetTextUINameArray();
-            nStt = RES_POOLCOLL_TEXT_BEGIN;
+            nStt = SwPoolFormatId::COLL_TEXT_BEGIN;
         }
         break;
     case COLL_LISTS_BITS:
-        if( RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END )
+        if( SwPoolFormatId::COLL_LISTS_BEGIN <= nId && nId < SwPoolFormatId::COLL_LISTS_END )
         {
             pStrArr = bProgName ? &GetListsProgNameArray() : &GetListsUINameArray();
-            nStt = RES_POOLCOLL_LISTS_BEGIN;
+            nStt = SwPoolFormatId::COLL_LISTS_BEGIN;
         }
         break;
     case COLL_EXTRA_BITS:
-        if( RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END )
+        if( SwPoolFormatId::COLL_EXTRA_BEGIN <= nId && nId < SwPoolFormatId::COLL_EXTRA_END )
         {
             pStrArr = bProgName ? &GetExtraProgNameArray() : &GetExtraUINameArray();
-            nStt = RES_POOLCOLL_EXTRA_BEGIN;
+            nStt = SwPoolFormatId::COLL_EXTRA_BEGIN;
         }
         break;
     case COLL_REGISTER_BITS:
-        if( RES_POOLCOLL_REGISTER_BEGIN <= nId && nId < RES_POOLCOLL_REGISTER_END )
+        if( SwPoolFormatId::COLL_REGISTER_BEGIN <= nId && nId < SwPoolFormatId::COLL_REGISTER_END )
         {
             pStrArr = bProgName ? &GetRegisterProgNameArray() : &GetRegisterUINameArray();
-            nStt = RES_POOLCOLL_REGISTER_BEGIN;
+            nStt = SwPoolFormatId::COLL_REGISTER_BEGIN;
         }
         break;
     case COLL_DOC_BITS:
-        if( RES_POOLCOLL_DOC_BEGIN <= nId && nId < RES_POOLCOLL_DOC_END )
+        if( SwPoolFormatId::COLL_DOC_BEGIN <= nId && nId < SwPoolFormatId::COLL_DOC_END )
         {
             pStrArr = bProgName ? &GetDocProgNameArray() : &GetDocUINameArray();
-            nStt = RES_POOLCOLL_DOC_BEGIN;
+            nStt = SwPoolFormatId::COLL_DOC_BEGIN;
         }
         break;
     case COLL_HTML_BITS:
-        if( RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END )
+        if( SwPoolFormatId::COLL_HTML_BEGIN <= nId && nId < SwPoolFormatId::COLL_HTML_END )
         {
             pStrArr = bProgName ? &GetHTMLProgNameArray() : &GetHTMLUINameArray();
-            nStt = RES_POOLCOLL_HTML_BEGIN;
+            nStt = SwPoolFormatId::COLL_HTML_BEGIN;
         }
         break;
-    case POOLGRP_CHARFMT:
-        if( RES_POOLCHR_NORMAL_BEGIN <= nId && nId < RES_POOLCHR_NORMAL_END )
+    case sal_uInt16(POOLGRP_CHARFMT):
+        if( SwPoolFormatId::CHR_NORMAL_BEGIN <= nId && nId < SwPoolFormatId::CHR_NORMAL_END )
         {
             pStrArr = bProgName ? &GetChrFormatProgNameArray() : &GetChrFormatUINameArray();
-            nStt = RES_POOLCHR_NORMAL_BEGIN;
+            nStt = SwPoolFormatId::CHR_NORMAL_BEGIN;
         }
-        else if( RES_POOLCHR_HTML_BEGIN <= nId && nId < RES_POOLCHR_HTML_END )
+        else if( SwPoolFormatId::CHR_HTML_BEGIN <= nId && nId < SwPoolFormatId::CHR_HTML_END )
         {
             pStrArr = bProgName ? &GetHTMLChrFormatProgNameArray() : &GetHTMLChrFormatUINameArray();
-            nStt = RES_POOLCHR_HTML_BEGIN;
+            nStt = SwPoolFormatId::CHR_HTML_BEGIN;
         }
         break;
-    case POOLGRP_FRAMEFMT:
-        if( RES_POOLFRM_BEGIN <= nId && nId < RES_POOLFRM_END )
+    case sal_uInt16(POOLGRP_FRAMEFMT):
+        if( SwPoolFormatId::FRM_BEGIN <= nId && nId < SwPoolFormatId::FRM_END )
         {
             pStrArr = bProgName ? &GetFrameFormatProgNameArray() : &GetFrameFormatUINameArray();
-            nStt = RES_POOLFRM_BEGIN;
+            nStt = SwPoolFormatId::FRM_BEGIN;
         }
         break;
-    case POOLGRP_PAGEDESC:
-        if( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END )
+    case sal_uInt16(POOLGRP_PAGEDESC):
+        if( SwPoolFormatId::PAGE_BEGIN <= nId && nId < SwPoolFormatId::PAGE_END )
         {
             pStrArr = bProgName ? &GetPageDescProgNameArray() : &GetPageDescUINameArray();
-            nStt = RES_POOLPAGE_BEGIN;
+            nStt = SwPoolFormatId::PAGE_BEGIN;
         }
         break;
-    case POOLGRP_NUMRULE:
-        if( RES_POOLNUMRULE_BEGIN <= nId && nId < RES_POOLNUMRULE_END )
+    case sal_uInt16(POOLGRP_NUMRULE):
+        if( SwPoolFormatId::NUMRULE_BEGIN <= nId && nId < SwPoolFormatId::NUMRULE_END )
         {
             pStrArr = bProgName ? &GetNumRuleProgNameArray() : &GetNumRuleUINameArray();
-            nStt = RES_POOLNUMRULE_BEGIN;
+            nStt = SwPoolFormatId::NUMRULE_BEGIN;
         }
         break;
-    case POOLGRP_TABSTYLE:
-        if( RES_POOLTABLESTYLE_BEGIN <= nId && nId < RES_POOLTABLESTYLE_END )
+    case sal_uInt16(POOLGRP_TABSTYLE):
+        if( SwPoolFormatId::TABLESTYLE_BEGIN <= nId && nId < SwPoolFormatId::TABLESTYLE_END )
         {
             pStrArr = bProgName ? &GetTableStyleProgNameArray() : &GetTableStyleUINameArray();
-            nStt = RES_POOLTABLESTYLE_BEGIN;
+            nStt = SwPoolFormatId::TABLESTYLE_BEGIN;
         }
         break;
     }
-    return pStrArr ? pStrArr->operator[](nId - nStt) : rFillName;
+    return pStrArr ? pStrArr->operator[](sal_uInt16(nId - nStt)) : rFillName;
 }
 
 void SwStyleNameMapper::fillUINameFromId(
-        sal_uInt16 const nId, UIName& rFillName)
+        SwPoolFormatId const nId, UIName& rFillName)
 {
     rFillName = UIName(getNameFromId(nId, rFillName.toString(), /*bProgName*/false));
 }
 
 void SwStyleNameMapper::fillProgNameFromId(
-        sal_uInt16 const nId, ProgName& rFillName)
+        SwPoolFormatId const nId, ProgName& rFillName)
 {
     rFillName = ProgName(getNameFromId(nId, rFillName.toString(), /*bProgName*/true));
 }
 
 // Get the UI name from the pool ID
-void SwStyleNameMapper::FillUIName(sal_uInt16 const nId, UIName& rFillName)
+void SwStyleNameMapper::FillUIName(SwPoolFormatId const nId, UIName& rFillName)
 {
     fillUINameFromId(nId, rFillName);
 }
 
 // Get the UI name from the pool ID
 UIName SwStyleNameMapper::GetUIName(
-        sal_uInt16 const nId, const ProgName& rName)
+        SwPoolFormatId const nId, const ProgName& rName)
 {
     return UIName(getNameFromId(nId, rName.toString(), false));
 }
 
 // Get the programmatic name from the pool ID
-void SwStyleNameMapper::FillProgName(sal_uInt16 nId, ProgName& rFillName)
+void SwStyleNameMapper::FillProgName(SwPoolFormatId nId, ProgName& rFillName)
 {
     fillProgNameFromId(nId, rFillName);
 }
 
 // Get the programmatic name from the pool ID
 ProgName
-SwStyleNameMapper::GetProgName(sal_uInt16 const nId, const UIName& rName)
+SwStyleNameMapper::GetProgName(SwPoolFormatId const nId, const UIName& rName)
 {
     return ProgName(getNameFromId(nId, rName.toString(), true));
 }
 
 // This gets the PoolId from the UI Name
-sal_uInt16 SwStyleNameMapper::GetPoolIdFromUIName(
+SwPoolFormatId SwStyleNameMapper::GetPoolIdFromUIName(
         const UIName& rName, SwGetPoolIdFromName const eFlags)
 {
     const NameToIdHash & rHashMap = getHashTable ( eFlags, false );
     NameToIdHash::const_iterator aIter = rHashMap.find(rName.toString());
-    return aIter != rHashMap.end() ? (*aIter).second : USHRT_MAX;
+    return aIter != rHashMap.end() ? SwPoolFormatId((*aIter).second) : SwPoolFormatId::UNKNOWN;
 }
 
 // Get the Pool ID from the programmatic name
-sal_uInt16 SwStyleNameMapper::GetPoolIdFromProgName(
+SwPoolFormatId SwStyleNameMapper::GetPoolIdFromProgName(
             const ProgName& rName, SwGetPoolIdFromName const eFlags)
 {
     const NameToIdHash & rHashMap = getHashTable ( eFlags, true );
     NameToIdHash::const_iterator aIter = rHashMap.find(rName.toString());
-    return aIter != rHashMap.end() ? (*aIter).second : USHRT_MAX;
+    return aIter != rHashMap.end() ? SwPoolFormatId((*aIter).second) : SwPoolFormatId::UNKNOWN;
 }
 
 // Hard coded Programmatic Name tables
@@ -496,16 +496,16 @@ const std::vector<OUString>& SwStyleNameMapper::GetCellStyleUINameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
 {
     static const std::vector<OUString> s_aTextProgNameArray = {
-        u"Standard"_ustr, // RES_POOLCOLL_STANDARD
+        u"Standard"_ustr, // SwPoolFormatId::COLL_STANDARD
         u"Text body"_ustr,
         u"First line indent"_ustr,
         u"Hanging indent"_ustr,
         u"Text body indent"_ustr,
         u"Salutation"_ustr,
         u"Signature"_ustr,
-        u"List Indent"_ustr, // RES_POOLCOLL_CONFRONTATION
+        u"List Indent"_ustr, // SwPoolFormatId::COLL_CONFRONTATION
         u"Marginalia"_ustr,
-        // RES_POOLCOLL_TEXT_END
+        // SwPoolFormatId::COLL_TEXT_END
     };
     return s_aTextProgNameArray;
 }
@@ -561,7 +561,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetListsProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetExtraProgNameArray()
 {
     static const std::vector<OUString> s_aExtraProgNameArray = {
-        u"Header and Footer"_ustr, // RES_POOLCOLL_EXTRA_BEGIN
+        u"Header and Footer"_ustr, // SwPoolFormatId::COLL_EXTRA_BEGIN
         u"Header"_ustr,
         u"Header left"_ustr,
         u"Header right"_ustr,
@@ -574,14 +574,14 @@ const std::vector<OUString>& SwStyleNameMapper::GetExtraProgNameArray()
         u"Illustration"_ustr,
         u"Table"_ustr,
         u"Text"_ustr,
-        u"Figure"_ustr, // RES_POOLCOLL_LABEL_FIGURE
+        u"Figure"_ustr, // SwPoolFormatId::COLL_LABEL_FIGURE
         u"Frame contents"_ustr,
         u"Footnote"_ustr,
         u"Addressee"_ustr,
         u"Sender"_ustr,
         u"Endnote"_ustr,
         u"Drawing"_ustr,
-        u"Comment"_ustr, // RES_POOLCOLL_COMMENT
+        u"Comment"_ustr, // SwPoolFormatId::COLL_COMMENT
     };
     return s_aExtraProgNameArray;
 }
@@ -646,7 +646,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetDocProgNameArray()
         u"Heading 8"_ustr,
         u"Heading 9"_ustr,
         u"Heading 10"_ustr,
-        // RES_POOLCOLL_DOC_END
+        // SwPoolFormatId::COLL_DOC_END
     };
     return s_aDocProgNameArray;
 }
@@ -666,13 +666,13 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatProgNameArray()
 {
     static const std::vector<OUString> s_aFrameFormatProgNameArray = {
-        u"Frame"_ustr, // RES_POOLFRM_FRAME
+        u"Frame"_ustr, // SwPoolFormatId::FRM_FRAME
         u"Graphics"_ustr,
         u"OLE"_ustr,
         u"Formula"_ustr,
         u"Marginalia"_ustr,
         u"Watermark"_ustr,
-        u"Labels"_ustr, // RES_POOLFRM_LABEL
+        u"Labels"_ustr, // SwPoolFormatId::FRM_LABEL
         u"Inline Heading"_ustr,
     };
     return s_aFrameFormatProgNameArray;
@@ -681,7 +681,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetChrFormatProgNameArray()
 {
     static const std::vector<OUString> s_aChrFormatProgNameArray = {
-        u"Footnote Symbol"_ustr, // RES_POOLCHR_FOOTNOTE
+        u"Footnote Symbol"_ustr, // SwPoolFormatId::CHR_FOOTNOTE
         u"Page Number"_ustr,
         u"Caption characters"_ustr,
         u"Drop Caps"_ustr,
@@ -696,8 +696,8 @@ const std::vector<OUString>& SwStyleNameMapper::GetChrFormatProgNameArray()
         u"Main index entry"_ustr,
         u"Footnote anchor"_ustr,
         u"Endnote anchor"_ustr,
-        u"Rubies"_ustr, // RES_POOLCHR_RUBYTEXT
-        u"Vertical Numbering Symbols"_ustr, // RES_POOLCHR_VERT_NUMBER
+        u"Rubies"_ustr, // SwPoolFormatId::CHR_RUBYTEXT
+        u"Vertical Numbering Symbols"_ustr, // SwPoolFormatId::CHR_VERT_NUMBER
     };
     return s_aChrFormatProgNameArray;
 }
@@ -705,7 +705,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetChrFormatProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatProgNameArray()
 {
     static const std::vector<OUString> s_aHTMLChrFormatProgNameArray = {
-        u"Emphasis"_ustr, // RES_POOLCHR_HTML_EMPHASIS
+        u"Emphasis"_ustr, // SwPoolFormatId::CHR_HTML_EMPHASIS
         u"Citation"_ustr,
         u"Strong Emphasis"_ustr,
         u"Source Text"_ustr,
@@ -713,7 +713,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetHTMLChrFormatProgNameArray()
         u"User Entry"_ustr,
         u"Variable"_ustr,
         u"Definition"_ustr,
-        u"Teletype"_ustr, // RES_POOLCHR_HTML_TELETYPE
+        u"Teletype"_ustr, // SwPoolFormatId::CHR_HTML_TELETYPE
     };
     return s_aHTMLChrFormatProgNameArray;
 }
@@ -759,33 +759,33 @@ const std::vector<OUString>& SwStyleNameMapper::GetTableStyleProgNameArray()
     // sw/source/core/doc/DocumentStylePoolManager.cxx and MUST match the order of
     // RES_POOL_TABLESTYLE_TYPE in sw/inc/poolfmt.hxx
     static const std::vector<OUString> s_aTableStyleProgNameArray = {
-        u"Default Style"_ustr,       // RES_POOLTABLESTYLE_DEFAULT
-        u"3D"_ustr,                  // RES_POOLTABLESTYLE_3D
-        u"Black 1"_ustr,             // RES_POOLTABLESTYLE_BLACK1
-        u"Black 2"_ustr,             // RES_POOLTABLESTYLE_BLACK2
-        u"Blue"_ustr,                // RES_POOLTABLESTYLE_BLUE
-        u"Brown"_ustr,               // RES_POOLTABLESTYLE_BROWN
-        u"Currency"_ustr,            // RES_POOLTABLESTYLE_CURRENCY
-        u"Currency 3D"_ustr,         // RES_POOLTABLESTYLE_CURRENCY_3D
-        u"Currency Gray"_ustr,       // RES_POOLTABLESTYLE_CURRENCY_GRAY
-        u"Currency Lavender"_ustr,   // RES_POOLTABLESTYLE_CURRENCY_LAVENDER
-        u"Currency Turquoise"_ustr,  // RES_POOLTABLESTYLE_CURRENCY_TURQUOISE
-        u"Gray"_ustr,                // RES_POOLTABLESTYLE_GRAY
-        u"Green"_ustr,               // RES_POOLTABLESTYLE_GREEN
-        u"Lavender"_ustr,            // RES_POOLTABLESTYLE_LAVENDER
-        u"Red"_ustr,                 // RES_POOLTABLESTYLE_RED
-        u"Turquoise"_ustr,           // RES_POOLTABLESTYLE_TURQUOISE
-        u"Yellow"_ustr,              // RES_POOLTABLESTYLE_YELLOW
-        u"Academic"_ustr,            // RES_POOLTABLESTYLE_LO6_ACADEMIC
-        u"Box List Blue"_ustr,       // RES_POOLTABLESTYLE_LO6_BOX_LIST_BLUE
-        u"Box List Green"_ustr,      // RES_POOLTABLESTYLE_LO6_BOX_LIST_GREEN
-        u"Box List Red"_ustr,        // RES_POOLTABLESTYLE_LO6_BOX_LIST_RED
-        u"Box List Yellow"_ustr,     // RES_POOLTABLESTYLE_LO6_BOX_LIST_YELLOW
-        u"Elegant"_ustr,             // RES_POOLTABLESTYLE_LO6_ELEGANT
-        u"Financial"_ustr,           // RES_POOLTABLESTYLE_LO6_FINANCIAL
-        u"Simple Grid Columns"_ustr, // RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_COLUMNS
-        u"Simple Grid Rows"_ustr,    // RES_POOLTABLESTYLE_LO6_SIMPLE_GRID_ROWS
-        u"Simple List Shaded"_ustr,  // RES_POOLTABLESTYLE_LO6_SIMPLE_LIST_SHADED
+        u"Default Style"_ustr,       // SwPoolFormatId::TABLESTYLE_DEFAULT
+        u"3D"_ustr,                  // SwPoolFormatId::TABLESTYLE_3D
+        u"Black 1"_ustr,             // SwPoolFormatId::TABLESTYLE_BLACK1
+        u"Black 2"_ustr,             // SwPoolFormatId::TABLESTYLE_BLACK2
+        u"Blue"_ustr,                // SwPoolFormatId::TABLESTYLE_BLUE
+        u"Brown"_ustr,               // SwPoolFormatId::TABLESTYLE_BROWN
+        u"Currency"_ustr,            // SwPoolFormatId::TABLESTYLE_CURRENCY
+        u"Currency 3D"_ustr,         // SwPoolFormatId::TABLESTYLE_CURRENCY_3D
+        u"Currency Gray"_ustr,       // SwPoolFormatId::TABLESTYLE_CURRENCY_GRAY
+        u"Currency Lavender"_ustr,   // SwPoolFormatId::TABLESTYLE_CURRENCY_LAVENDER
+        u"Currency Turquoise"_ustr,  // SwPoolFormatId::TABLESTYLE_CURRENCY_TURQUOISE
+        u"Gray"_ustr,                // SwPoolFormatId::TABLESTYLE_GRAY
+        u"Green"_ustr,               // SwPoolFormatId::TABLESTYLE_GREEN
+        u"Lavender"_ustr,            // SwPoolFormatId::TABLESTYLE_LAVENDER
+        u"Red"_ustr,                 // SwPoolFormatId::TABLESTYLE_RED
+        u"Turquoise"_ustr,           // SwPoolFormatId::TABLESTYLE_TURQUOISE
+        u"Yellow"_ustr,              // SwPoolFormatId::TABLESTYLE_YELLOW
+        u"Academic"_ustr,            // SwPoolFormatId::TABLESTYLE_LO6_ACADEMIC
+        u"Box List Blue"_ustr,       // SwPoolFormatId::TABLESTYLE_LO6_BOX_LIST_BLUE
+        u"Box List Green"_ustr,      // SwPoolFormatId::TABLESTYLE_LO6_BOX_LIST_GREEN
+        u"Box List Red"_ustr,        // SwPoolFormatId::TABLESTYLE_LO6_BOX_LIST_RED
+        u"Box List Yellow"_ustr,     // SwPoolFormatId::TABLESTYLE_LO6_BOX_LIST_YELLOW
+        u"Elegant"_ustr,             // SwPoolFormatId::TABLESTYLE_LO6_ELEGANT
+        u"Financial"_ustr,           // SwPoolFormatId::TABLESTYLE_LO6_FINANCIAL
+        u"Simple Grid Columns"_ustr, // SwPoolFormatId::TABLESTYLE_LO6_SIMPLE_GRID_COLUMNS
+        u"Simple Grid Rows"_ustr,    // SwPoolFormatId::TABLESTYLE_LO6_SIMPLE_GRID_ROWS
+        u"Simple List Shaded"_ustr,  // SwPoolFormatId::TABLESTYLE_LO6_SIMPLE_LIST_SHADED
     };
     return s_aTableStyleProgNameArray;
 }

@@ -20,6 +20,7 @@
 #include <config_java.h>
 
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
@@ -1351,6 +1352,9 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"IncrementIndent", { PayloadType::EnabledPayload, true } },
         { u"DecrementIndent", { PayloadType::EnabledPayload, true } },
         { u"EditHeaderAndFooter", { PayloadType::EnabledPayload, true } },
+        { u"InsertCalcTable", { PayloadType::EnabledPayload, true } },
+        { u"RemoveCalcTable", { PayloadType::EnabledPayload, true } },
+        { u"DatabaseSettings", { PayloadType::EnabledPayload, true } },
         { u"InsertSparkline", { PayloadType::EnabledPayload, true } },
         { u"DeleteSparkline", { PayloadType::EnabledPayload, true } },
         { u"DeleteSparklineGroup", { PayloadType::EnabledPayload, true } },
@@ -1454,6 +1458,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"ChangeTheme", { PayloadType::None, true } },
         { u"DeleteSlide", { PayloadType::None, true } },
         { u"DuplicateSlide", { PayloadType::None, true } },
+        { u"EditStyle", { PayloadType::None, true } },
         { u"InsertSlide", { PayloadType::None, true } },
         { u"JumpToMark", { PayloadType::None, true } },
         { u"MoveKeepInsertMode", { PayloadType::None, true } },

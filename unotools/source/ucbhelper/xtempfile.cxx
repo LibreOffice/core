@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <o3tl/safeint.hxx>
+#include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>

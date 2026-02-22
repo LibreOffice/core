@@ -12,6 +12,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <tools/stream.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <graphic/GraphicFormatDetector.hxx>

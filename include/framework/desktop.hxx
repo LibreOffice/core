@@ -34,19 +34,20 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTasksSupplier.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <rtl/ref.hxx>
-#include <unotools/cmdoptions.hxx>
+
+class SvtCommandOptions;
 
 namespace comphelper { class NumberedCollection; }
+namespace com::sun::star::frame { class XDispatchRecorderSupplier; }
+namespace com::sun::star::lang { class XComponent; }
+namespace com::sun::star::uno { class XComponentContext; }
 
 namespace framework{
 

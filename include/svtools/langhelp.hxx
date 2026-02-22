@@ -11,9 +11,9 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
-
 #include <rtl/ustring.hxx>
+
+namespace com::sun::star::uno { template <typename> class Sequence; }
 
 /** Localize a URI to one of the foundation's webservices
 

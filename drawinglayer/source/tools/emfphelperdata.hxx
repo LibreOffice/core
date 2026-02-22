@@ -183,7 +183,8 @@ namespace emfplushelper
         basegfx::B2DHomMatrix       maMapTransform;
 
         std::unique_ptr<EMFPObject> maEMFPObjects[256];
-        float                       mfPageScale;
+        double                      mfPageScaleX;
+        double                      mfPageScaleY;
         sal_Int32                   mnOriginX;
         sal_Int32                   mnOriginY;
         sal_uInt32                  mnHDPI;

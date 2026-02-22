@@ -19,7 +19,9 @@
 
 #include <vcl/GraphicNativeTransform.hxx>
 
+#include <vcl/bitmap.hxx>
 #include <vcl/gfxlink.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

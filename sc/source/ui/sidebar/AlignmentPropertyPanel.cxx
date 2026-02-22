@@ -28,6 +28,8 @@
 #include <svl/itemset.hxx>
 #include <svx/rotmodit.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/fldunit.hxx>
+#include <tools/mapunit.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;

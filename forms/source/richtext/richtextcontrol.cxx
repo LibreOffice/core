@@ -31,8 +31,10 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svx/svxids.hrc>

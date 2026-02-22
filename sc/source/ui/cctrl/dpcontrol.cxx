@@ -27,6 +27,7 @@
 #include <docpool.hxx>
 #include <patattr.hxx>
 #include <svtools/colorcfg.hxx>
+#include <tools/mapunit.hxx>
 
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings& rStyle, const Fraction& rZoomY, ScDocument& rDoc):
     maZoomY(rZoomY),

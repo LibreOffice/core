@@ -21,7 +21,10 @@
 #include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
+#include <vcl/wintypes.hxx>
 #include <sal/log.hxx>
 
 #include <svtools/ehdl.hxx>

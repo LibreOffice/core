@@ -25,7 +25,11 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svtools/unitconv.hxx>
+#include <vcl/PrinterSupport.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <osl/diagnose.h>

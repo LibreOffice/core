@@ -22,6 +22,10 @@
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/windowstate.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 // UNO-Stuff
 #include <comphelper/processfactory.hxx>
@@ -38,7 +42,7 @@
 
 #include <strings.hrc>
 #include <hlmarkwn.hxx>
-#include <hltpbase.hxx>
+#include <hyperlinktabpagebase.hxx>
 #include <hlmarkwn_def.hxx>
 
 #include <stack>
@@ -63,17 +67,17 @@ struct TargetData
 
 }
 
-//*** Window-Class ***
-// Constructor / Destructor
-SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd(weld::Window* pParentDialog, SvxHyperlinkTabPageBase *pParentPage)
+
+// Constructor for new HyperlinkDialog
+SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd(weld::Window* pParentDialog)
     : GenericDialogController(pParentDialog, u"cui/ui/hyperlinkmarkdialog.ui"_ustr, u"HyperlinkMark"_ustr)
-    , mpParent(pParentPage)
     , mnError(LERR_NOERROR)
-    , mxBtApply(m_xBuilder->weld_button(u"ok"_ustr))
-    , mxBtClose(m_xBuilder->weld_button(u"close"_ustr))
-    , mxLbTree(m_xBuilder->weld_tree_view(u"TreeListBox"_ustr))
-    , mxError(m_xBuilder->weld_label(u"error"_ustr))
 {
+    mxBtApply = m_xBuilder->weld_button(u"ok"_ustr);
+    mxBtClose = m_xBuilder->weld_button(u"close"_ustr);
+    mxLbTree = m_xBuilder->weld_tree_view(u"TreeListBox"_ustr);
+    mxError = m_xBuilder->weld_label(u"error"_ustr);
+
     mxLbTree->set_size_request(mxLbTree->get_approximate_digit_width() * 25,
                                mxLbTree->get_height_rows(12));
     mxBtApply->connect_clicked( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
@@ -132,14 +136,12 @@ sal_uInt16 SvxHlinkDlgMarkWnd::SetError( sal_uInt16 nError)
 }
 
 // Move window
-void SvxHlinkDlgMarkWnd::MoveTo(const Point& rNewPos)
+void SvxHlinkDlgMarkWnd::RestorePosSize()
 {
     // tdf#149935 - remember last used position and size
     SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
     if (aDlgOpt.Exists())
         m_xDialog->set_window_state(aDlgOpt.GetWindowState());
-    else
-        m_xDialog->window_move(rNewPos.X(), rNewPos.Y());
 }
 
 namespace
@@ -480,7 +482,8 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, weld::Button&, void)
         TargetData* pData = weld::fromId<TargetData*>(mxLbTree->get_id(*xEntry));
         if (pData->bIsTarget)
         {
-            mpParent->SetMarkStr(pData->aUStrLinkname);
+            maSelectedMark = pData->aUStrLinkname;
+            m_xDialog->response(RET_OK);
         }
     }
 }

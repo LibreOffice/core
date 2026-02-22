@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <svl/memberid.h>
+#include <svl/style.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <unordered_set>

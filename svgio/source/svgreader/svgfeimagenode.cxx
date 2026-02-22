@@ -18,6 +18,7 @@
  */
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <svgfeimagenode.hxx>

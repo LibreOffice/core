@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>

@@ -27,6 +27,7 @@
 #include <svx/drawitem.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
 
 SvxLineTabDialog::SvxLineTabDialog(weld::Window* pParent, const SfxItemSet* pAttr,
     SdrModel* pModel, const SdrObject* pSdrObj, bool bHasObj)

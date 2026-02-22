@@ -48,6 +48,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotation)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
@@ -100,6 +101,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsert)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
@@ -116,6 +118,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDeleteAll)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
@@ -143,6 +146,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDeleteAllByAuthor)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
@@ -178,6 +182,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDelete)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
@@ -212,6 +217,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationInsertUndoRedo)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
@@ -257,6 +263,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationPositionUpdate)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     // Check current page
     SdPage* pPage = pViewShell->GetActualPage();
@@ -452,6 +459,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationTextUpdate)
 
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
 
     // Check current page
     SdPage* pPage = pViewShell->GetActualPage();

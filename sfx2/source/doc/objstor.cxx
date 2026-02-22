@@ -73,6 +73,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <tools/debug.hxx>
+#include <tools/globname.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/memorystream.hxx>

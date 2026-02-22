@@ -21,7 +21,9 @@
 #include <tools/UnitConversion.hxx>
 #include <editeng/unoipset.hxx>
 #include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <svl/solar.hrc>
+#include <tools/mapunit.hxx>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

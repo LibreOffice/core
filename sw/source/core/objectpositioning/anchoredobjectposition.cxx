@@ -60,7 +60,7 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
 #if OSL_DEBUG_LEVEL > 0
     // assert, if object isn't of expected type
     const bool bObjOfExceptedType =
-            dynamic_cast<const SwVirtFlyDrawObj*>( &mrDrawObj) !=  nullptr || // object representing fly frame
+            DynCastSwVirtFlyDrawObj( &mrDrawObj) !=  nullptr || // object representing fly frame
             dynamic_cast<const SwDrawVirtObj*>( &mrDrawObj) !=  nullptr    || // 'virtual' drawing object
             ( dynamic_cast<const SdrVirtObj*>( &mrDrawObj) ==  nullptr &&    // 'master' drawing object
               dynamic_cast<const SwFlyDrawObj*>( &mrDrawObj) ==  nullptr );  // - indirectly checked
@@ -80,7 +80,7 @@ void SwAnchoredObjectPosition::GetInfoAboutObj()
 {
     // determine, if object represents a fly frame
     {
-        mbIsObjFly = dynamic_cast<const SwVirtFlyDrawObj*>( &mrDrawObj) !=  nullptr;
+        mbIsObjFly = DynCastSwVirtFlyDrawObj( &mrDrawObj) !=  nullptr;
     }
 
     // determine contact object

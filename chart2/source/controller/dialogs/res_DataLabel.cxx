@@ -36,7 +36,9 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/sdangitm.hxx>
 #include <svx/svxids.hrc>
+#include <tools/fldunit.hxx>
 #include <osl/diagnose.h>
+#include <vcl/vclenum.hxx>
 
 namespace chart
 {

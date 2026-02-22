@@ -20,6 +20,7 @@
 #pragma once
 
 #include <filter/msfilter/msfilterdllapi.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/errcode.hxx>

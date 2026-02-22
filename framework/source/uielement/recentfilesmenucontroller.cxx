@@ -31,6 +31,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/abstdlg.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>

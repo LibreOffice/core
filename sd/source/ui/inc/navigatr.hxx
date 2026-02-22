@@ -123,6 +123,7 @@ public:
     SD_DLLPUBLIC SdPageObjsTLV& GetObjects();
 
     virtual void HandleContextChange(const vcl::EnumContext& eContext) override;
+    void SetToolBoxToolTips(const SdDrawDocument* pDoc);
 
 private:
     friend class SdNavigatorFloat;

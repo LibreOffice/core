@@ -19,8 +19,12 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <comphelper/errcode.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/errinf.hxx>
 
 typedef std::pair<TranslateId, ErrCode> ErrMsgCode;

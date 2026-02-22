@@ -12,6 +12,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/weld/Entry.hxx>
 
+#include <optional>
+
 namespace weld
 {
 class VCL_DLLPUBLIC SpinButton : virtual public Entry

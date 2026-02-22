@@ -31,6 +31,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
+#include <tools/globname.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertyvalue.hxx>

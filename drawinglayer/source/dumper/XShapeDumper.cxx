@@ -39,6 +39,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <comphelper/diagnose_ex.hxx>
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
 #include <iostream>
@@ -1734,10 +1735,13 @@ void dumpShapeService(const uno::Reference< beans::XPropertySet >& xPropSet, xml
             dumpTransformationAsElement(aTransformation, xmlWriter);
     }
     {
-        uno::Any anotherAny = xPropSet->getPropertyValue(u"NavigationOrder"_ustr);
-        sal_Int32 aNavigationOrder = sal_Int32();
-        if(anotherAny >>= aNavigationOrder)
-            dumpNavigationOrderAsAttribute(aNavigationOrder, xmlWriter);
+        if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"NavigationOrder"_ustr))
+        {
+            uno::Any anotherAny = xPropSet->getPropertyValue(u"NavigationOrder"_ustr);
+            sal_Int32 aNavigationOrder = sal_Int32();
+            if(anotherAny >>= aNavigationOrder)
+                dumpNavigationOrderAsAttribute(aNavigationOrder, xmlWriter);
+        }
     }
     if(xInfo->hasPropertyByName(u"Hyperlink"_ustr))
     {
@@ -1836,73 +1840,73 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
 
     try
     {
-    if (xServiceInfo->supportsService(u"com.sun.star.drawing.Text"_ustr))
-    {
-        uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY_THROW);
-        OUString aText = xText->getString();
-        if(!aText.isEmpty())
-            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
-    }
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.TextProperties"_ustr))
-        dumpTextPropertiesService(xPropSet, xmlWriter);
+        if (xServiceInfo->supportsService(u"com.sun.star.drawing.Text"_ustr))
+        {
+            uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY_THROW);
+            OUString aText = xText->getString();
+            if(!aText.isEmpty())
+                (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
+        }
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.TextProperties"_ustr))
+            dumpTextPropertiesService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.GroupShape"_ustr))
-    {
-        uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY_THROW);
-        dumpXShapes(xShapes, xmlWriter, bDumpInteropProperties);
-    }
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.FillProperties"_ustr))
-        dumpFillPropertiesService(xPropSet, xmlWriter);
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.GroupShape"_ustr))
+        {
+            uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY_THROW);
+            dumpXShapes(xShapes, xmlWriter, bDumpInteropProperties);
+        }
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.FillProperties"_ustr))
+            dumpFillPropertiesService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.LineProperties"_ustr))
-        dumpLinePropertiesService(xPropSet, xmlWriter);
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.LineProperties"_ustr))
+            dumpLinePropertiesService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.PolyPolygonDescriptor"_ustr))
-        dumpPolyPolygonDescriptorService(xPropSet, xmlWriter);
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.PolyPolygonDescriptor"_ustr))
+            dumpPolyPolygonDescriptorService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.ShadowProperties"_ustr))
-        dumpShadowPropertiesService(xPropSet, xmlWriter);
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.ShadowProperties"_ustr))
+            dumpShadowPropertiesService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.Shape"_ustr))
-        dumpShapeService(xPropSet, xmlWriter, bDumpInteropProperties);
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.Shape"_ustr))
+            dumpShapeService(xPropSet, xmlWriter, bDumpInteropProperties);
 
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.PolyPolygonBezierDescriptor"_ustr))
-        dumpPolyPolygonBezierDescriptorService(xPropSet, xmlWriter);
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.PolyPolygonBezierDescriptor"_ustr))
+            dumpPolyPolygonBezierDescriptorService(xPropSet, xmlWriter);
 
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.CustomShape"_ustr))
-        dumpCustomShapeService(xPropSet, xmlWriter);
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.CustomShape"_ustr))
+            dumpCustomShapeService(xPropSet, xmlWriter);
 
-    // EnhancedShapeDumper used
+        // EnhancedShapeDumper used
 
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeExtrusion"_ustr))
-    {
-        EnhancedShapeDumper enhancedDumper(xmlWriter);
-        enhancedDumper.dumpEnhancedCustomShapeExtrusionService(xPropSet);
-    }
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeGeometry"_ustr))
-    {
-        EnhancedShapeDumper enhancedDumper(xmlWriter);
-        enhancedDumper.dumpEnhancedCustomShapeGeometryService(xPropSet);
-    }
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeHandle"_ustr))
-    {
-        EnhancedShapeDumper enhancedDumper(xmlWriter);
-        enhancedDumper.dumpEnhancedCustomShapeHandleService(xPropSet);
-    }
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapePath"_ustr))
-    {
-        EnhancedShapeDumper enhancedDumper(xmlWriter);
-        enhancedDumper.dumpEnhancedCustomShapePathService(xPropSet);
-    }
-    if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeTextPath"_ustr))
-    {
-        EnhancedShapeDumper enhancedDumper(xmlWriter);
-        enhancedDumper.dumpEnhancedCustomShapeTextPathService(xPropSet);
-    }
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeExtrusion"_ustr))
+        {
+            EnhancedShapeDumper enhancedDumper(xmlWriter);
+            enhancedDumper.dumpEnhancedCustomShapeExtrusionService(xPropSet);
+        }
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeGeometry"_ustr))
+        {
+            EnhancedShapeDumper enhancedDumper(xmlWriter);
+            enhancedDumper.dumpEnhancedCustomShapeGeometryService(xPropSet);
+        }
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeHandle"_ustr))
+        {
+            EnhancedShapeDumper enhancedDumper(xmlWriter);
+            enhancedDumper.dumpEnhancedCustomShapeHandleService(xPropSet);
+        }
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapePath"_ustr))
+        {
+            EnhancedShapeDumper enhancedDumper(xmlWriter);
+            enhancedDumper.dumpEnhancedCustomShapePathService(xPropSet);
+        }
+        if(xServiceInfo->supportsService(u"com.sun.star.drawing.EnhancedCustomShapeTextPath"_ustr))
+        {
+            EnhancedShapeDumper enhancedDumper(xmlWriter);
+            enhancedDumper.dumpEnhancedCustomShapeTextPathService(xPropSet);
+        }
     }   // end of the 'try' block
-    catch (const beans::UnknownPropertyException& e)
+    catch (const beans::UnknownPropertyException& )
     {
-        std::cout << "Exception caught in XShapeDumper.cxx: " << e.Message << std::endl;
+        TOOLS_WARN_EXCEPTION("drawinglayer", "");
     }
 
     #if DEBUG_DUMPER

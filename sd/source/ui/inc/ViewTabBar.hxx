@@ -21,8 +21,10 @@
 
 #include "framework/AbstractResource.hxx"
 #include "framework/ConfigurationChangeListener.hxx"
+#include <ResourceId.hxx>
 #include <comphelper/compbase.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <vector>

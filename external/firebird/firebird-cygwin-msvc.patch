@@ -16,7 +16,7 @@
 +++ src/misc/writeBuildNum.sh	2016-07-13 11:31:18.132820200 +0200
 @@ -95,9 +95,9 @@
  createMakeVersion() {
-
+ 
  OdsH="${Root}/src/jrd/ods.h"
 -Mini="/tmp/miniods.h"
 -TestCpp="/tmp/test.cpp"
@@ -24,12 +24,12 @@
 +Mini=$(cygpath -m "/tmp/miniods.h")
 +TestCpp=$(cygpath -m "/tmp/test.cpp")
 +AOut=$(cygpath -m "/tmp/a.out")
-
+ 
  grep ODS_VERSION $OdsH | grep -v ENCODE_ODS >$Mini
-
---- configure	2016-07-07 15:57:04.538983200 +0200
-+++ configure	2016-07-13 11:31:18.132820200 +0200
-@@ -21490,13 +21490,12 @@
+ 
+--- configure	2023-11-11 02:44:14.576802800 +0900
++++ configure	2023-11-11 02:59:09.005211200 +0900
+@@ -21650,11 +21650,10 @@
    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
  #include <stdlib.h>
@@ -40,10 +40,8 @@
 -    union { long long x; sem_t y; } b;
 +    long long b;
    };
-   exit((int)&((struct s*)1024)->b - 1024);
+   return (int)&((struct s*)1024)->b - 1024;
  }
- _ACEOF
- if ac_fn_c_try_run "$LINENO"; then :
 --- builds/make.new/config/config.h.in	2016-07-07 15:55:55.693112800 +0200
 +++ builds/make.new/config/config.h.in	2016-07-08 13:38:49.994986400 +0200
 @@ -211,7 +211,7 @@
@@ -122,8 +120,8 @@
  
  /*****************************************************
 diff -ur builds/posix/make.defaults builds/posix/make.defaults
---- builds/posix/make.defaults	2016-07-07 13:56:13.036235166 +0200
-+++ builds/posix/make.defaults	2016-07-07 14:29:52.368289242 +0200
+--- builds/posix/make.defaults	2023-11-11 14:37:21.822343900 +0900
++++ builds/posix/make.defaults	2023-11-11 15:13:06.175152700 +0900
 @@ -56,7 +56,7 @@
  else
    FIREBIRD=$(FB_BUILD)
@@ -155,7 +153,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  SHRLIB_FOREIGN_EXT=	$(SHRLIB_EXT)
  
  #_____________________________________________________________________________
-@@ -201,9 +202,8 @@
+@@ -201,9 +201,8 @@
  
  # Search path for libraries
  
@@ -166,7 +164,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  
  #_____________________________________________________________________________
  
-@@ -217,9 +217,9 @@
+@@ -217,9 +216,9 @@
  #
  
  #LibraryFileName=libfbclient
@@ -179,7 +177,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  LibraryBaseName=$(LibraryFileName).${SHRLIB_EXT}
  
  LIBFIREBIRD_FULLNAME = $(LIB)/$(LibraryFullName)
-@@ -228,7 +228,7 @@
+@@ -228,7 +227,7 @@
  
  # The firebird engine library name
  
@@ -188,7 +186,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  EngineSoName=$(EngineFileName).${SHRLIB_EXT}
  ENGINE_SONAME = $(PLUGINS)/$(EngineSoName)
  
-@@ -242,7 +242,7 @@
+@@ -242,7 +241,7 @@
    ifeq ($(STD_EDITLINE), true)
  	LIBEDITLINE := -l$(READLINE)
    else
@@ -197,16 +195,16 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
    endif
  endif
  
-@@ -313,7 +313,7 @@
+@@ -313,7 +312,7 @@
  
  LIB_LINK_SONAME= -Wl,-soname,$(1)
  LIB_LINK_MAPFILE= -Wl,--version-script,$(1)
 -FIREBIRD_LIBRARY_LINK= -L$(LIB) -lfbclient $(MATHLIB)
 +FIREBIRD_LIBRARY_LINK= -L$(LIB) -lifbclient $(MATHLIB)
  
- EXE_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) $(UNDEF_FLAGS) $(LIB_PATH_OPTS) $(LINK_EMPTY_SYMBOLS)
+ EXE_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) $(UNDEF_FLAGS) $(LIB_PATH_OPTS) $(call LINK_DARWIN_RPATH,..) $(LINK_EMPTY_SYMBOLS)
  LIB_LINK_OPTIONS= $(LDFLAGS) $(THR_FLAGS) -shared
-@@ -355,7 +355,7 @@
+@@ -355,7 +354,7 @@
  
  # Pay attention - we place common library into obj, not lib dir
  # It's just a set of object files, prepared to be used by ld, not an output library
@@ -215,18 +213,18 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  
  # From utilities
  CREATE_DB	= $(RBIN)/create_db$(EXEC_EXT)
---- builds/posix/Makefile.in	2016-07-07 15:56:06.459221300 +0200
-+++ builds/posix/Makefile.in	2016-07-13 12:44:57.134217200 +0200
+--- builds/posix/Makefile.in	2023-11-11 14:40:14.036728600 +0900
++++ builds/posix/Makefile.in	2023-11-11 15:27:30.810728700 +0900
 @@ -33,7 +33,7 @@
  #		Alex Peshkoff - created single makefile based on Mark's files
  #
-
+ 
 -ROOT=$(shell cd ..; pwd)
 +ROOT=$(shell cygpath -m '$(shell cd ..; pwd)')
-
+ 
  include     make.defaults
  ifeq ($(CROSS_OUT), Y)
-@@ -178,7 +178,7 @@
+@@ -183,7 +183,7 @@
  .PHONY:	cross1 cross2 boot yvalve engine fbintl gpre utilities plugins rest codes ids examples cross_rest preliminaryCheck
  
  master_process:
@@ -235,16 +233,16 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  	$(MAKE) updateBuildNum
  	$(MAKE) export_lists
  	$(MAKE) extern
-@@ -214,7 +215,7 @@
+@@ -219,7 +219,7 @@
  	$(MAKE) CROSS_OUT=Y cross2
-
+ 
  cross1:
 -	ln -sf $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
 +	cp -f $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
  	$(MAKE) updateBuildNum
  	$(MAKE) export_lists
  	$(MAKE) extern
-@@ -239,7 +240,7 @@
+@@ -244,7 +244,7 @@
  	$(MAKE) -f Makefile.examples -C $(GEN_ROOT)/examples/
  
  cross2:
@@ -253,7 +251,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  	$(MAKE) prerequisites
  	$(MAKE) tommath
  	$(MAKE) yvalve
-@@ -310,7 +311,7 @@
+@@ -315,7 +315,7 @@
  
  # remote redirector is statically linked in main FB library
  $(LIBFIREBIRD_FULLNAME):	$(YValve_Objects) $(Remote_Client_Objects) $(COMMON_LIB)
@@ -262,7 +260,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  
  
  #___________________________________________________________________________
-@@ -320,8 +321,8 @@
+@@ -324,8 +324,8 @@
  
  engine: $(ENGINE_SONAME)
  
@@ -273,7 +271,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  
  
  #___________________________________________________________________________
-@@ -330,8 +331,8 @@
+@@ -334,8 +334,8 @@
  
  fbintl: $(LIBFBINTL_SO)
  
@@ -284,7 +282,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  
  
  #___________________________________________________________________________
-@@ -427,12 +429,13 @@
+@@ -434,12 +434,13 @@
  
  .PHONY:	firebird_server fb_lock_print fbguard fbsvcmgr fbtracemgr gbak gfix gsec gsplit gstat isql nbackup
  
@@ -295,13 +293,13 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  firebird_server:	$(FB_DAEMON)
  
 -$(FB_DAEMON):	$(Remote_Server_Objects) $(COMMON_LIB)
--	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS) $(call LINK_DARWIN_RPATH,..)
+-	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS)
 +$(FB_DAEMON):	$(Remote_Server_Objects) $(Remote_Client_Objects) $(COMMON_LIB)
-+	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS) $(LIB_GUI) $(call LINK_DARWIN_RPATH,..)
++	$(EXE_LINK) $(EXE_LINK_OPTIONS) $^ -o $@ $(FIREBIRD_LIBRARY_LINK) $(LINK_LIBS) $(LIB_GUI)
  
  fb_lock_print:	$(LOCKPRINT)
  
-@@ -633,7 +635,7 @@
+@@ -638,7 +639,7 @@
  IBASE_ExtraFiles = include/types_pub.h include/consts_pub.h dsql/sqlda_pub.h common/dsc_pub.h jrd/ibase.h jrd/inf_pub.h jrd/blr.h include/gen/iberror.h
  SRC_IBASE_ExtraFiles = $(addprefix $(SRC_ROOT)/, $(IBASE_ExtraFiles))
  MAKE_HEADER_Src = $(addprefix $(SRC_ROOT)/, misc/makeHeader.cpp)
@@ -311,11 +309,15 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  $(INCLUDE_DEST)/ibase.h: $(SRC_IBASE_ExtraFiles)
  	$(STATICEXE_LINK) -o $(MAKE_HEADER_Bin) $(MAKE_HEADER_Src)
 diff -ur builds/posix/make.rules builds/posix/make.rules
---- builds/posix/make.rules	2016-07-07 13:56:13.036235166 +0200
-+++ builds/posix/make.rules	2016-07-07 14:31:16.116291485 +0200
-@@ -92,26 +92,23 @@
+--- builds/posix/make.rules	2023-08-03 22:46:32.000000000 +0900
++++ builds/posix/make.rules	2023-11-11 15:41:57.592482300 +0900
+@@ -92,30 +92,26 @@
  
  $(OBJ)/%.o: $(SRC_ROOT)/%.c
+ 	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
+-	@sed $(INLINE_EDIT_SED) -e "1,2s/:/: \$$(wildcard/" -e "\$$s/\(.*\)/\\1)/" $(patsubst %.o,%.d,$@)
+ 
+ $(OBJ)/%.o: $(SRC_ROOT)/%.m
  	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
 -	@sed $(INLINE_EDIT_SED) -e "1,2s/:/: \$$(wildcard/" -e "\$$s/\(.*\)/\\1)/" $(patsubst %.o,%.d,$@)
  
@@ -373,7 +375,7 @@ diff -ur builds/posix/prefix.mingw builds/posix/prefix.mingw
 +++ builds/posix/prefix.mingw	2016-07-07 14:50:54.704323046 +0200
 @@ -20,8 +20,8 @@
  # 
-
+ 
  # -Wno-unused-variable is used due to unused gpre generated variables
 -PROD_FLAGS=-O2  -DMINGW -Wall -Wshadow -Wundef -Wno-long-long -Wno-unused-variable -Wno-sign-compare -Wno-parentheses -Wno-switch -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads -Wno-non-virtual-dtor
 -DEV_FLAGS=-ggdb -DMINGW -Wall -Wshadow -Wundef -Wno-long-long -Wno-unused-variable -Wno-sign-compare -Wno-parentheses -Wno-switch -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads -Wno-non-virtual-dtor
@@ -384,7 +386,7 @@ diff -ur builds/posix/prefix.mingw builds/posix/prefix.mingw
 
 @@ -29,6 +29,7 @@
  LIB_LINK=$(LD)
-
+ 
  LIB_LINK_OPTIONS+=-Wl,--enable-stdcall-fixup
 +LIB_PLATFORM_RPATH=
 
@@ -393,7 +395,7 @@ diff -ur builds/posix/prefix.mingw builds/posix/prefix.mingw
 @@ -36,6 +37,9 @@
  LIB_LINK_OPTIONS+=-Wl,-s
  endif
-
+ 
 +LIB_LINK_OPTIONS=
 +LINK_OPTS=
 +
@@ -402,13 +404,13 @@ diff -ur builds/posix/prefix.mingw builds/posix/prefix.mingw
  LIB_GUI:= -mwindows -lcomctl32 -lgdi32
 @@ -55,7 +59,9 @@
  ClientLibrarySoName := $(ClientLibraryName)
-
+ 
  # Looks like MinGW 3 does not support version scripts but support def-files
 -LINK_FIREBIRD_SYMBOLS = $(BLD_ROOT)/win32/defs/fbclient_s.def $(BLD_ROOT)/win32/defs/fbclient.def
 +LINK_FIREBIRD_SYMBOLS = /def:$(BLD_ROOT)/win32/defs/fbclient_s.def /def:$(BLD_ROOT)/win32/defs/firebird.def
 +LINK_PLUGIN_SYMBOLS = /def:$(BLD_ROOT)/win32/defs/plugin.def
 +LINK_IBUTIL_SYMBOLS = /def:$(BLD_ROOT)/win32/defs/ib_util.def
-
+ 
  # This is required for newly built executable to find newly built shared
  # libraries because on Win32 there is no such thing as LD_LIBRARY_PATH
 --- builds/posix/make.shared.variables	2016-07-22 17:07:46.650672300 +0200
@@ -427,7 +429,7 @@ diff -ur configure configure
 @@ -3337,6 +3337,14 @@
      SHRLIB_EXT=dll
      ;;
-
+ 
 +  *-*-cygwin*)
 +    MAKEFILE_PREFIX=mingw
 +    PLATFORM=win32
@@ -502,8 +504,8 @@ diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
  #ifdef WIN32
  #include <windows.h>
  #define DLL_EXPORT __declspec(dllexport)
---- extern/cloop/Makefile	2016-07-07 15:56:28.279136300 +0200
-+++ extern/cloop/Makefile	2016-07-13 16:22:38.493479800 +0200
+--- extern/cloop/Makefile	2023-11-11 14:40:41.522517700 +0900
++++ extern/cloop/Makefile	2023-11-11 15:59:43.477031600 +0900
 @@ -11,8 +11,8 @@
  SRC_DIR		:= src
  BUILD_DIR	:= build
@@ -544,7 +546,7 @@ diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
  $(OBJ_DIRS) $(BIN_DIR) $(LIB_DIR):
  	@mkdir -p $@
  
-@@ -74,7 +74,7 @@
+@@ -74,7 +78,7 @@
  -include $(addsuffix .d,$(basename $(OBJS_C)))
  -include $(addsuffix .d,$(basename $(OBJS_CPP)))
  
@@ -553,7 +555,7 @@ diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
  	$(OBJ_DIR)/cloop/Expr.o \
  	$(OBJ_DIR)/cloop/Generator.o \
  	$(OBJ_DIR)/cloop/Lexer.o \
-@@ -83,20 +83,20 @@
+@@ -84,20 +88,20 @@
  
  	$(LD) $^ -o $@
  
@@ -582,7 +584,7 @@ diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
  		--uses "SysUtils" \
  		--interfaceFile $(SRC_DIR)/tests/test1/CalcPascalApi.interface.pas \
  		--implementationFile $(SRC_DIR)/tests/test1/CalcPascalApi.implementation.pas \
-@@ -108,23 +108,23 @@
+@@ -109,23 +113,23 @@
  	$(OBJ_DIR)/tests/test1/CalcCApi.o \
  	$(OBJ_DIR)/tests/test1/CTest.o \
  
@@ -638,9 +640,9 @@ diff -ur src/misc/makeHeader.cpp src/misc/makeHeader.cpp
  #include <unistd.h>
 -//#endif
 +#endif
-
-
-
+ 
+ 
+ 
 --- builds/posix/Makefile.in.plugins_examples.orig	2020-11-13 18:07:52.515550600 +0100
 +++ builds/posix/Makefile.in.plugins_examples	2020-11-13 18:08:33.218626500 +0100
 @@ -28,7 +28,7 @@

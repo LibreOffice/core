@@ -25,6 +25,8 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <vcl/graph.hxx>
 
+class SvStream;
+
 inline constexpr OUString MIMETYPE_BMP = u"image/x-MS-bmp"_ustr;
 inline constexpr OUString MIMETYPE_GIF = u"image/gif"_ustr;
 inline constexpr OUString MIMETYPE_JPG = u"image/jpeg"_ustr;

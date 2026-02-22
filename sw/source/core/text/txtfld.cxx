@@ -374,10 +374,9 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
         pCleanedSet->ClearItem(RES_TXTATR_CHARFMT);
     };
 
-    SfxItemIter aIter(*pSet);
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-    while (pItem)
+    for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
             pCleanedSet->ClearItem(pItem->Which());
         else if (pFormat && pFormat->HasItem(pItem->Which()))
@@ -411,7 +410,6 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
             if (eCaseMap == SvxCaseMap::SmallCaps)
                 pCleanedSet->ClearItem(pItem->Which());
         }
-        pItem = aIter.NextItem();
     };
 
     // SetDiffFnt resets the background color (why?), so capture it and re-apply if it had a value,
@@ -692,13 +690,21 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 
                     checkApplyParagraphMarkFormatToNumbering(pNumFnt.get(), rInf, pIDSA, pFormat);
 
+                    auto pNumRedlineRenderModeFont = std::make_unique<SwFont>(*pNumFnt);
+
                     if ( !lcl_setRedlineAttr( rInf, *pTextNd, pNumFnt ) && bHasHiddenNum )
+                    {
                         pNumFnt->SetColor(SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor());
+                        pNumRedlineRenderModeFont->SetColor(
+                            SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor());
+                    }
 
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
+                    pNumRedlineRenderModeFont->SetVertical(
+                        pNumRedlineRenderModeFont->GetOrientation(), m_pFrame->IsVertical());
 
-                    pRet = new SwNumberPortion( aTextNow, std::move(pNumFnt),
+                    pRet = new SwNumberPortion( aTextNow, std::move(pNumFnt), std::move(pNumRedlineRenderModeFont),
                                                 bLeft, bCenter, nMinDist,
                                                 bLabelAlignmentPosAndSpaceModeActive );
                 }

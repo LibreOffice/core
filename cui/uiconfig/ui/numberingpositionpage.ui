@@ -425,13 +425,13 @@ numbering and text:</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <items>
-                      <item translatable="yes" context="numberingpositionpage|liststore1">Left</item>
+                      <item translatable="yes" context="numberingpositionpage|liststore1">Start</item>
                       <item translatable="yes" context="numberingpositionpage|liststore1">Centered</item>
-                      <item translatable="yes" context="numberingpositionpage|liststore1">Right</item>
+                      <item translatable="yes" context="numberingpositionpage|liststore1">End</item>
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="numalignlb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingpositionpage|extended_tip|numalignlb">Set the alignment of the numbering symbols. Select "Left" to align the numbering symbol to start directly at the "Aligned at" position. Select "Right" to align the symbol to end directly before the "Aligned at" position. Select "Centered" to center the symbol around the "Aligned at" position.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingpositionpage|extended_tip|numalignlb">Set the alignment of the numbering symbols. Select "Start" to align the numbering symbol to start directly at the "Aligned at" position. Select "End" to align the symbol to end directly before the "Aligned at" position. Select "Centered" to center the symbol around the "Aligned at" position.</property>
                       </object>
                     </child>
                   </object>
@@ -446,7 +446,7 @@ numbering and text:</property>
                     <property name="can-focus">False</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="num2alignlb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingpositionpage|extended_tip|num2alignlb">Set the alignment of the numbering symbols. Select "Left" to align the numbering symbol to start directly at the "Aligned at" position. Select "Right" to align the symbol to end directly before the "Aligned at" position. Select "Centered" to center the symbol around the "Aligned at" position.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingpositionpage|extended_tip|num2alignlb">Set the alignment of the numbering symbols. Select "Start" to align the numbering symbol to start directly at the "Aligned at" position. Select "End" to align the symbol to end directly before the "Aligned at" position. Select "Centered" to center the symbol around the "Aligned at" position.</property>
                       </object>
                     </child>
                   </object>

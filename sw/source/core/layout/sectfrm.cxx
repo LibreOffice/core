@@ -2749,8 +2749,8 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 const SwAttrSetChg& rNewSetChg = *pChangeHint->m_pNew;
                 SfxItemIter aOIter(*rOldSetChg.GetChgSet());
                 SfxItemIter aNIter(*rNewSetChg.GetChgSet());
-                const SfxPoolItem* pOItem = aOIter.GetCurItem();
-                const SfxPoolItem* pNItem = aNIter.GetCurItem();
+                const SfxPoolItem* pOItem = aOIter.IsAtEnd() ? nullptr : aOIter.GetCurItem();
+                const SfxPoolItem* pNItem = aNIter.IsAtEnd() ? nullptr : aNIter.GetCurItem();
                 SwAttrSetChg aOldSet(rOldSetChg);
                 SwAttrSetChg aNewSet(rNewSetChg);
                 do

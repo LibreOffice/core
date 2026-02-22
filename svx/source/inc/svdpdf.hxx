@@ -27,11 +27,13 @@
 
 #include <tools/fract.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/xdash.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 

@@ -18,12 +18,13 @@
  */
 #pragma once
 
+#include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
-#include <svl/itemset.hxx>
 #include <memory>
 #include <vector>
 #include <unordered_map>
 
+class SfxItemSet;
 class StylePoolImpl;
 
 class SVL_DLLPUBLIC StylePool final

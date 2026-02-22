@@ -19,6 +19,7 @@
 
 #include <tools/poly.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>

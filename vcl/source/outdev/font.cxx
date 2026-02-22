@@ -28,9 +28,13 @@
 
 #include <vcl/event.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/fntstyle.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/print.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 

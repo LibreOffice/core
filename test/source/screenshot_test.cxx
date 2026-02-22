@@ -21,6 +21,9 @@
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/weld.hxx>
 #include <tools/stream.hxx>
 
@@ -121,7 +124,7 @@ void ScreenshotTest::saveScreenshot(VclAbstractDialog const & rDialog)
 
 void ScreenshotTest::saveScreenshot(weld::Window& rDialog)
 {
-    VclPtr<VirtualDevice> xDialogSurface(rDialog.screenshot());
+    ScopedVclPtr<VirtualDevice> xDialogSurface(rDialog.screenshot());
     const Bitmap aScreenshot(xDialogSurface->GetBitmap(Point(), xDialogSurface->GetOutputSizePixel()));
 
     if (!aScreenshot.IsEmpty())

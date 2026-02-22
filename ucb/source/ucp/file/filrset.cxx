@@ -41,12 +41,6 @@
 using namespace fileaccess;
 using namespace com::sun::star;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 XResultSet_impl::XResultSet_impl( TaskManager* pMyShell,
                                   const OUString& aUnqPath,
                                   sal_Int32 OpenMode,
@@ -222,7 +216,7 @@ XResultSet_impl::OneMore(std::unique_lock<std::mutex>& rGuard)
         }
         else  // error fetching anything
         {
-            throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+            throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
         }
     }
 }
@@ -345,7 +339,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::relative( sal_Int32 row )
 {
     if( isAfterLast() || isBeforeFirst() )
-        throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
+        throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
     if( row > 0 )
         while( row-- ) next();
     else if( row < 0 )
@@ -463,7 +457,7 @@ XResultSet_impl::getStaticResultSet()
     std::unique_lock aGuard( m_aMutex );
 
     if ( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException( THROW_WHERE );
+        throw ucb::ListenerAlreadySetException();
 
     return uno::Reference< sdbc::XResultSet >( this );
 }
@@ -477,7 +471,7 @@ XResultSet_impl::setListener(
     std::unique_lock aGuard( m_aMutex );
 
     if ( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException( THROW_WHERE );
+        throw ucb::ListenerAlreadySetException();
 
     m_xListener = Listener;
 
@@ -515,7 +509,7 @@ XResultSet_impl::connectToCache(
     {
         std::unique_lock aGuard( m_aMutex );
         if( m_xListener.is() )
-            throw ucb::ListenerAlreadySetException( THROW_WHERE );
+            throw ucb::ListenerAlreadySetException();
     }
     uno::Reference< ucb::XSourceInitialization > xTarget(
         xCache, uno::UNO_QUERY );
@@ -539,7 +533,7 @@ XResultSet_impl::connectToCache(
             return;
         }
     }
-    throw ucb::ServiceNotFoundException( THROW_WHERE );
+    throw ucb::ServiceNotFoundException();
 }
 
 

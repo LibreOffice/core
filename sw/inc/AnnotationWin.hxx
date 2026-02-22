@@ -24,13 +24,13 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>
 
 #include "postithelper.hxx"
 #include "swrect.hxx"
 #include "SidebarWindowsTypes.hxx"
-#include <annotationmark.hxx>
 
 class OutlinerParaObject;
 class SwPostItMgr;
@@ -112,6 +112,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay.get();}
 
         tools::Long            GetPostItTextHeight();
+        tools::Long GuessTextHeightForWidth(tools::Long nWidth) const;
 
         void            SwitchToPostIt(sal_uInt16 aDirection);
         void            SwitchToFieldPos();

@@ -20,6 +20,7 @@
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
@@ -33,6 +34,7 @@
 #include <processor3d/geometry2dextractor.hxx>
 #include <basegfx/raster/bzpixelraster.hxx>
 #include <utility>
+#include <tools/mapunit.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/RawBitmap.hxx>
 #include <vcl/skia/SkiaHelper.hxx>

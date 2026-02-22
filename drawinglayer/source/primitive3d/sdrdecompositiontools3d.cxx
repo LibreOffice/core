@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/drawing/TextureKind2.hpp>
+#include <com/sun/star/drawing/TextureMode.hpp>
+
 #include <primitive3d/sdrdecompositiontools3d.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
@@ -31,6 +34,7 @@
 #include <primitive3d/hatchtextureprimitive3d.hxx>
 #include <primitive3d/shadowprimitive3d.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>

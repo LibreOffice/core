@@ -20,6 +20,7 @@
 #include "optlanguagetool.hxx"
 #include <officecfg/Office/Linguistic.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <dialmgr.hxx>
 #include <strings.hrc>
 

@@ -60,6 +60,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -72,7 +73,7 @@
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <vcl/EnumContext.hxx>
-#include <vcl/toolbox.hxx>
+#include <vcl/themecolors.hxx>
 
 #include <unotools/moduleoptions.hxx>
 #include <unotools/securityoptions.hxx>
@@ -1310,31 +1311,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             aDialog.run();
             break;
         }
-        case SID_TOOLBAR_LOCK:
-        {
-            if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
-            {
-                Reference<XFrame> xCurrentFrame;
-                const uno::Reference<uno::XComponentContext>& xContext
-                    = ::comphelper::getProcessComponentContext();
-                xCurrentFrame = pViewFrame->GetFrame().GetFrameInterface();
-                const Reference<frame::XModuleManager> xModuleManager
-                    = frame::ModuleManager::create(xContext);
-                const utl::OConfigurationTreeRoot aAppNode(
-                    xContext, u"org.openoffice.Office.UI.GlobalSettings/Toolbars/States"_ustr, true);
-                if (aAppNode.isValid())
-                {
-                    bool isLocked = comphelper::getBOOL(aAppNode.getNodeValue(u"Locked"_ustr));
-                    aAppNode.setNodeValue(u"Locked"_ustr, Any(!isLocked));
-                    aAppNode.commit();
-                    //TODO: apply immediately w/o restart needed
-                    SolarMutexGuard aGuard;
-                    svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr,
-                                                  svtools::RESTART_REASON_UI_CHANGE);
-                }
-            }
-            break;
-        }
         default:
             break;
     }
@@ -1546,11 +1522,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     }
                     if (!bSuccess)
                         rSet.DisableItem(nWhich);
-                }
-                break;
-                case SID_TOOLBAR_LOCK:
-                {
-                    rSet.Put( SfxBoolItem( SID_TOOLBAR_LOCK, ToolBox::AlwaysLocked() ));
                 }
                 break;
                 default:

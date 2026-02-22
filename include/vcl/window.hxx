@@ -25,13 +25,9 @@
 #include <tools/link.hxx>
 #include <vcl/wintypes.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/keycodes.hxx>
-#include <vcl/region.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
 struct ImplSVEvent;
@@ -63,6 +59,7 @@ class InputContext;
 class VclEventListeners;
 class EditView;
 enum class ImplPaintFlags;
+enum class KeyIndicatorState;
 enum class VclEventId;
 enum class PointerStyle;
 
@@ -85,7 +82,10 @@ namespace comphelper
 class OAccessible;
 }
 
+namespace rtl { template <class reference_type> class Reference; }
+
 namespace vcl {
+    class Region;
     struct ControlLayoutData;
 }
 

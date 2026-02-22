@@ -20,6 +20,7 @@
 #include "mediaevent_impl.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 
 using namespace ::com::sun::star;

@@ -26,13 +26,14 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <unotools/localedatawrapper.hxx>
 
 #include <map>
 #include <unordered_map>
+#include <vector>
 
 namespace com::sun::star::i18n { struct Currency; }
 
+class LocaleDataWrapper;
 class SvNumberformat;
 
 #define SV_COUNTRY_LANGUAGE_OFFSET     10000  // Max count of formats per country/language

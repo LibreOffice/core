@@ -19,6 +19,7 @@
 
 #include <osl/diagnose.h>
 #include <svtools/brwbox.hxx>
+#include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxHeaderCell.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>

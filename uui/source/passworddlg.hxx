@@ -31,7 +31,8 @@ class PasswordDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Label> m_xFTConfirmPassword;
     std::unique_ptr<weld::Entry> m_xEDConfirmPassword;
     std::unique_ptr<weld::Button> m_xOKBtn;
-    std::array<std::unique_ptr<weld::ToggleButton>, 2> m_xPass;
+    std::unique_ptr<weld::ToggleButton> m_xBtn1;
+    std::unique_ptr<weld::ToggleButton> m_xBtn2;
     sal_uInt16      nMinLen;
     OUString        aPasswdMismatch;
 

@@ -8,6 +8,7 @@
  */
 
 #include <swmessdialog.hxx>
+#include <vcl/weld/Builder.hxx>
 
 SwMessageAndEditDialog::SwMessageAndEditDialog(weld::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription)

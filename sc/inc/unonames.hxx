@@ -331,6 +331,11 @@ inline constexpr OUString SC_UNONAME_ISSHAREDFMLA     = u"IsSharedFormula"_ustr;
 inline constexpr OUString SC_UNONAME_TOTALSROW        = u"TotalsRow"_ustr;
 inline constexpr OUString SC_UNONAME_NUMBERBEHAVIOR   = u"NumberBehavior"_ustr;
 inline constexpr OUString SC_UNONAME_TABLETYPE        = u"TableType"_ustr;
+inline constexpr OUString SC_UNONAME_TABLE_STYLENAME  = u"TableStyleName"_ustr;
+inline constexpr OUString SC_UNONAME_ROW_STRIPES      = u"UseRowStripes"_ustr;
+inline constexpr OUString SC_UNONAME_COL_STRIPES      = u"UseColStripes"_ustr;
+inline constexpr OUString SC_UNONAME_FIRST_COL        = u"UseFirstColumnFormatting"_ustr;
+inline constexpr OUString SC_UNONAME_LAST_COL         = u"UseLastColumnFormatting"_ustr;
 
 //  text fields
 inline constexpr OUString SC_UNONAME_ANCTYPE          = u"AnchorType"_ustr;

@@ -22,10 +22,7 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <xmloff/xmlimppr.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
-#include <com/sun/star/drawing/ProjectionMode.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <sax/fastattribs.hxx>
@@ -35,11 +32,14 @@
 #include <memory>
 
 namespace com::sun::star::beans { class XPropertySet; }
+namespace com::sun::star::drawing { enum class ProjectionMode; }
+namespace com::sun::star::drawing { enum class ShadeMode; }
 namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::frame { class XModel; }
 
 class SvXMLImport;
+class SvXMLImportPropertyMapper;
 class SvXMLStylesContext;
 class XMLSdPropHdlFactory;
 class XMLTableImport;

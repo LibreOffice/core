@@ -1062,11 +1062,12 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                                && rShape.GetAnchor().GetAnchorNode()->FindTableNode();
     SfxItemSet aTextBoxSet(pFormat->GetDoc().GetAttrPool(), aFrameFormatSetRange);
 
-    SfxItemIter aIter(rSet);
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-
-    do
+    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
+        if (pItem->Which() == 0)
+            break;
+
         switch (pItem->Which())
         {
             case RES_VERT_ORIENT:
@@ -1176,9 +1177,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                                         << pItem->Which());
                 break;
         }
-
-        pItem = aIter.NextItem();
-    } while (pItem && (0 != pItem->Which()));
+    }
 
     if (aTextBoxSet.Count())
     {
@@ -1657,8 +1656,7 @@ std::vector<SwFrameFormat*> SwTextBoxHelper::CollectTextBoxes(const SdrObject* p
         for (const rtl::Reference<SdrObject>& pObj : *pChildren)
         {
             auto pChildTextBoxes = CollectTextBoxes(pObj.get(), pFormat);
-            for (auto& rChildTextBox : pChildTextBoxes)
-                vRet.push_back(rChildTextBox);
+            vRet.insert(vRet.end(), pChildTextBoxes.begin(), pChildTextBoxes.end());
         }
     }
     else
@@ -1803,11 +1801,9 @@ void SwTextBoxNode::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBo
         }
     }
 
-    auto pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pDrawObject);
-    if (pSwFlyDraw)
-    {
-        pSwFlyDraw->SetTextBox(true);
-    }
+    SdrObject* const pFlyObject{ pNewTextBox->FindSdrObject() };
+    assert(dynamic_cast<SwFlyDrawObj*>(pFlyObject));
+    static_cast<SwFlyDrawObj*>(pFlyObject)->SetTextBox(true);
     m_pTextBoxes.push_back(aElem);
 }
 

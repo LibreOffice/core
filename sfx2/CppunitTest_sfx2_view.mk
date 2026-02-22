@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sfx2_view))
 
 $(eval $(call gb_CppunitTest_use_externals,sfx2_view,\
 	boost_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sfx2_view, \

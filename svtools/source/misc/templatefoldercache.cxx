@@ -33,6 +33,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>

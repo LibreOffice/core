@@ -27,7 +27,7 @@ namespace com::sun::star::drawing { struct Position3D; }
 namespace chart
 {
 
-class SplineCalculater
+class SplineCalculator
 {
 public:
     static void CalculateCubicSplines(

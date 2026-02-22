@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 
 #include <utility>
 #include <vcl/alpha.hxx>

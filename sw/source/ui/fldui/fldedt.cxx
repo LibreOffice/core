@@ -23,6 +23,8 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/optgenrl.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <docufld.hxx>
 #include <expfld.hxx>
 #include <view.hxx>

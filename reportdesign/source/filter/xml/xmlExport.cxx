@@ -24,6 +24,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/numehelp.hxx>
 #include "xmlHelper.hxx"

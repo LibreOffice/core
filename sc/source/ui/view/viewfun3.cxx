@@ -26,6 +26,7 @@
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <tools/urlobj.hxx>
 #include <sot/exchange.hxx>

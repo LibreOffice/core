@@ -19,6 +19,7 @@
 
 #include <csvtablebox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Menu.hxx>
 
 ScCsvTableBox::ScCsvTableBox(weld::Builder& rBuilder)
     : mxRuler(new ScCsvRuler(maData, this))

@@ -20,6 +20,7 @@
 #include "optbasic.hxx"
 #include <basic/codecompletecache.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <rtl/ustrbuf.hxx>
 
 SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)

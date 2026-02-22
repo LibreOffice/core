@@ -9,7 +9,13 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <editeng/wghtitem.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <test/lokcallback.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <docsh.hxx>
 #include <view.hxx>
@@ -32,6 +38,33 @@ public:
     {
     }
 };
+
+/// LOK view callback for test purposes.
+struct ViewCallback
+{
+    std::vector<OUString> m_aStateChanges;
+
+    static void callback(int nType, const char* pPayload, void* pData);
+    void callbackImpl(int nType, const char* pPayload);
+};
+
+void ViewCallback::callback(int nType, const char* pPayload, void* pData)
+{
+    static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+}
+
+void ViewCallback::callbackImpl(int nType, const char* pPayload)
+{
+    switch (nType)
+    {
+        case LOK_CALLBACK_STATE_CHANGED:
+        {
+            OUString aPayload = OUString::fromUtf8(pPayload);
+            m_aStateChanges.push_back(aPayload);
+        }
+        break;
+    }
+}
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineHidden)
@@ -449,6 +482,53 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSelf)
     // i.e. the original redline was lost instead of replacing that with an insert-then-delete
     // redline.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
+{
+    // Set up LOK:
+    comphelper::LibreOfficeKit::setActive(true);
+
+    // Given a new document:
+    createSwDoc("compare-new.odt");
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    ViewCallback aCallback;
+    TestLokCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallbackWrapper);
+    aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(*pWrtShell->GetSfxViewShell()));
+
+    // When comparing with an old document:
+    OUString aOther = createFileURL(u"compare-old.odt");
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("URL", aOther),
+        comphelper::makePropertyValue("NoAcceptDialog", true),
+    };
+    dispatchCommand(mxComponent, ".uno:CompareDocuments", aArgs);
+
+    // Then make sure a JSON callback with the expected content is emitted:
+    auto it = std::find_if(aCallback.m_aStateChanges.begin(), aCallback.m_aStateChanges.end(),
+                           [](const OUString& i) -> bool { return i.startsWith("{"); });
+    CPPUNIT_ASSERT(it != aCallback.m_aStateChanges.end());
+    std::stringstream aStream((std::string(it->toUtf8())));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(std::string("CompareDocumentsProperties"),
+                         aTree.get<std::string>("commandName"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Alice"),
+                         aTree.get<std::string>("state.metadata.otherDocument.modifiedBy"));
+    CPPUNIT_ASSERT_EQUAL(std::string("2010-02-12T13:51:17.860434211"),
+                         aTree.get<std::string>("state.metadata.otherDocument.modificationDate"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Bob"),
+                         aTree.get<std::string>("state.metadata.thisDocument.modifiedBy"));
+    CPPUNIT_ASSERT_EQUAL(std::string("2026-02-12T13:52:55.923182809"),
+                         aTree.get<std::string>("state.metadata.thisDocument.modificationDate"));
+
+    // Tear down LOK:
+    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -109,6 +109,7 @@
 #endif
 #include <rtl/bootstrap.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
+#include <vcl/exceptiontypes.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/settings.hxx>
@@ -126,6 +127,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/window.hxx>
 #include "langselect.hxx"
 #include <salhelper/thread.hxx>
@@ -1448,23 +1450,21 @@ int Desktop::Main()
                               || std::getenv("LIBO_UPDATER_TEST_RUNNING");
         if (bUpdateRunning)
         {
-            OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
             OUString aOldBuildID = officecfg::Office::Update::Update::OldBuildID::get();
-
-            OUString aBuildID = Updater::getBuildID();
-            if (aOldBuildID == aBuildID)
+            if (aOldBuildID == Updater::getBuildID())
             {
                 Updater::log("Old and new Build ID are the same. No Updating took place.");
             }
             else
             {
+                OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
                 if (!aSeeAlso.isEmpty())
                 {
                     SAL_INFO("desktop.updater", "See also: " << aSeeAlso);
-                            Reference< css::system::XSystemShellExecute > xSystemShell(
-                    SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                    Reference<css::system::XSystemShellExecute> xSystemShell(
+                        SystemShellExecute::create(::comphelper::getProcessComponentContext()));
 
-                    xSystemShell->execute( aSeeAlso, OUString(), SystemShellExecuteFlags::URIS_ONLY );
+                    xSystemShell->execute(aSeeAlso, OUString(), SystemShellExecuteFlags::URIS_ONLY);
                 }
             }
 
@@ -1485,8 +1485,7 @@ int Desktop::Main()
 
         if (aUpdateFile.is() || std::getenv("LIBO_UPDATER_TEST_UPDATE"))
         {
-            OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
-            rtl::Bootstrap::expandMacros(aBuildID);
+            OUString aBuildID(Updater::getBuildID());
             std::shared_ptr< comphelper::ConfigurationChanges > batch(
                     comphelper::ConfigurationChanges::create());
             officecfg::Office::Update::Update::OldBuildID::set(aBuildID, batch);

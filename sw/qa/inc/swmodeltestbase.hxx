@@ -22,7 +22,7 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 
 #include "swqahelperdllapi.h"
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <unotools/tempfile.hxx>
 
 #include <doc.hxx>
@@ -47,10 +47,6 @@
 #define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, TestFilter::DOC)
 
 class SwXTextDocument;
-namespace comphelper
-{
-class ConfigurationChanges;
-}
 namespace vcl
 {
 namespace pdf
@@ -59,18 +55,8 @@ class PDFiumDocument;
 }
 }
 
-/// Temporarily enables the ExportFormFields setting.
-class SWQAHELPER_DLLPUBLIC SwExportFormFieldsGuard
-{
-    std::shared_ptr<comphelper::ConfigurationChanges> m_pBatch;
-    bool m_bValue;
-public:
-    SwExportFormFieldsGuard();
-    ~SwExportFormFieldsGuard();
-};
-
 /// Base class for filter tests loading or roundtripping a document, then asserting the document model.
-class SWQAHELPER_DLLPUBLIC SwModelTestBase : public UnoApiXmlTest
+class SWQAHELPER_DLLPUBLIC SwModelTestBase : public UnoApiTest
 {
 protected:
     xmlBufferPtr mpXmlBuffer;
@@ -193,7 +179,8 @@ protected:
     /// Get TextFrame by name
     css::uno::Reference<css::drawing::XShape> getTextFrameByName(const OUString& aName);
 
-    void saveAndReload(TestFilter eFilter, const char* pPassword = nullptr);
+    void saveAndReload(TestFilter eFilter, const css::uno::Sequence<css::beans::PropertyValue>& rParams = {},
+            const char* pPassword = nullptr);
 
     /// Get page count.
     int getPages() const;
@@ -209,7 +196,8 @@ protected:
      * createSwDoc("test.fodt");
      * createSwDoc("test.fodt", "test");
      */
-    void createSwDoc(const char* pName = nullptr, const char* pPassword = nullptr);
+    void createSwDoc(const char* pName = nullptr,
+            const css::uno::Sequence<css::beans::PropertyValue>& rParams = {}, const char* pPassword = nullptr);
 
     /**
      * As createSwDoc except a Web Document in Browse Mode
@@ -244,7 +232,8 @@ protected:
     void emulateTyping(std::u16string_view rStr);
 
 private:
-    void loadURL(OUString const& rURL, const char* pPassword = nullptr);
+    void loadURL(OUString const& rURL,
+            const css::uno::Sequence<css::beans::PropertyValue>& rParams = {}, const char* pPassword = nullptr);
 
     void dumpLayout(SwDoc* pDoc);
 };

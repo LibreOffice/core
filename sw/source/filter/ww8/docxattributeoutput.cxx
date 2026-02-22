@@ -36,6 +36,7 @@
 #include <redline.hxx>
 #include <unoframe.hxx>
 #include <textboxhelper.hxx>
+#include <SwStyleNameMapper.hxx>
 #include <rdfhelper.hxx>
 #include "wrtww8.hxx"
 
@@ -102,6 +103,7 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
+#include <tools/globname.hxx>
 #include <svl/whiter.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
@@ -144,9 +146,10 @@
 #include <osl/file.hxx>
 #include <utility>
 #include <vcl/embeddedfontsmanager.hxx>
+#include <vcl/vectorgraphicdata.hxx>
+#include <i18npool/breakiterator.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -437,18 +440,27 @@ bool lclHasSolidFillTransformations(const model::ComplexColor& aComplexColor)
     return idx != transformations.end();
 }
 
+// Does this paragraph indicate that a grabbagged 'SdtPr' (in a previous paragraph) should end here?
+bool lcl_hasParaSdtEndBefore(const SwNode& rNode)
+{
+    const SwTextNode* pTextNode = rNode.GetTextNode();
+    if (!pTextNode || !pTextNode->GetpSwAttrSet())
+        return false;
+
+    const SfxGrabBagItem* pParaGrabBag = pTextNode->GetpSwAttrSet()->GetItem(RES_PARATR_GRABBAG);
+    if (!pParaGrabBag)
+        return false;
+
+    const std::map<OUString, css::uno::Any>& rMap = pParaGrabBag->GetGrabBag();
+    return rMap.contains(u"ParaSdtEndBefore"_ustr);
+}
+
 } // end anonymous namespace
 
 void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
 {
     if (bIsRTL)
         m_pSerializer->singleElementNS(XML_w, XML_rtl, FSNS(XML_w, XML_val), "true");
-}
-
-/// Are multiple paragraphs disallowed inside this type of SDT?
-static bool lcl_isOnelinerSdt(std::u16string_view rName)
-{
-    return rName == u"Title" || rName == u"Subtitle" || rName == u"Company";
 }
 
 // write a floating table directly to docx without the surrounding frame
@@ -599,27 +611,15 @@ sal_Int32 DocxAttributeOutput::StartParagraph(const ww8::WW8TableNodeInfo::Point
     // Look up the "sdt end before this paragraph" property early, when it
     // would normally arrive, it would be too late (would be after the
     // paragraph start has been written).
-    bool bEndParaSdt = false;
-    if (m_aParagraphSdt.m_bStartedSdt)
-    {
-        SwTextNode* pTextNode = m_rExport.m_pCurPam->GetPointNode().GetTextNode();
-        if (pTextNode && pTextNode->GetpSwAttrSet())
-        {
-            const SfxItemSet* pSet = pTextNode->GetpSwAttrSet();
-            if (const SfxGrabBagItem* pParaGrabBag = pSet->GetItem(RES_PARATR_GRABBAG))
-            {
-                const std::map<OUString, css::uno::Any>& rMap = pParaGrabBag->GetGrabBag();
-                bEndParaSdt = m_aParagraphSdt.m_bStartedSdt && rMap.contains(u"ParaSdtEndBefore"_ustr);
-            }
-        }
-    }
+    const bool bEndParaSdt
+        = m_aParagraphSdt.m_bStartedSdt
+            && lcl_hasParaSdtEndBefore(m_rExport.m_pCurPam->GetPointNode());
+
     // TODO also avoid multiline paragraphs in those SDT types for shape text
-    bool bOneliner = m_aParagraphSdt.m_bStartedSdt && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() && lcl_isOnelinerSdt(m_aStartedParagraphSdtPrAlias);
-    if (bEndParaSdt || (m_aParagraphSdt.m_bStartedSdt && m_bHadSectPr) || bOneliner)
+    if (bEndParaSdt || (m_aParagraphSdt.m_bStartedSdt && m_bHadSectPr))
     {
         // This is the common case: "close sdt before the current paragraph" was requested by the next paragraph.
-        m_aParagraphSdt.EndSdtBlock(m_pSerializer);
-        m_aStartedParagraphSdtPrAlias.clear();
+        EndParaSdtBlock();
     }
     m_bHadSectPr = false;
 
@@ -758,7 +758,7 @@ bool FramePrHelper::UseFrameTextDirection(sal_Int32 nTableDepth)
     return m_bUseFrameTextDirection;
 }
 
-void SdtBlockHelper::DeleteAndResetTheLists()
+void SdtBlockHelper::clearGrabbagValues()
 {
     if (m_pTokenChildren.is() )
         m_pTokenChildren.clear();
@@ -779,14 +779,19 @@ void SdtBlockHelper::DeleteAndResetTheLists()
     if (!m_aAppearance.isEmpty())
         m_aAppearance.clear();
     m_bShowingPlaceHolder = false;
-    m_nId = 0;
+    m_oId = std::nullopt;
+    m_oSdtPrToken = std::nullopt;
     m_nTabIndex = 0;
 }
 
-void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing)
+void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer,
+                                   const SwPosition* pStartPosition, bool bForceRichText)
 {
-    if (m_nSdtPrToken <= 0 && !m_pDataBindingAttrs.is() && !m_nId)
-        return;
+    if (!m_oSdtPrToken.has_value())
+        return; // not a full Sdt definition
+
+    if (pStartPosition != m_pStartPosition)
+        return; // Sdt grabbag data is not for the current paragraph - only used for m_aParagraphSdt
 
     // sdt start mark
     pSerializer->mark(DocxAttributeOutput::Tag_WriteSdtBlock);
@@ -798,31 +803,33 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
 
     WriteExtraParams(pSerializer);
 
-    if (m_nSdtPrToken > 0 && m_pTokenChildren.is())
+    if (m_oSdtPrToken.has_value() && *m_oSdtPrToken && m_pTokenChildren.is())
     {
+        assert((!bForceRichText || m_oSdtPrToken != FSNS(XML_w14, XML_checkbox)) && "This document will probably be reported as corrupt by MS Word");
         if (!m_pTokenAttributes.is())
-            pSerializer->startElement(m_nSdtPrToken);
+            pSerializer->startElement(*m_oSdtPrToken);
         else
         {
-            pSerializer->startElement(m_nSdtPrToken, detachFrom(m_pTokenAttributes));
+            pSerializer->startElement(*m_oSdtPrToken, detachFrom(m_pTokenAttributes));
         }
 
-        if (m_nSdtPrToken == FSNS(XML_w, XML_date) || m_nSdtPrToken == FSNS(XML_w, XML_docPartObj) || m_nSdtPrToken == FSNS(XML_w, XML_docPartList) || m_nSdtPrToken == FSNS(XML_w14, XML_checkbox)) {
+        assert(m_oSdtPrToken != FSNS(XML_w, XML_date) && "date is never grabbagged, so SdtPrToken is never set to date");
+        if (/* m_oSdtPrToken == FSNS(XML_w, XML_date) ||*/ m_oSdtPrToken == FSNS(XML_w, XML_docPartObj) || m_oSdtPrToken == FSNS(XML_w, XML_docPartList) || m_oSdtPrToken == FSNS(XML_w14, XML_checkbox)) {
             for (auto& it : *m_pTokenChildren)
             {
                 pSerializer->singleElement(it.getToken(), FSNS(XML_w, XML_val), it.toCString());
             }
         }
 
-        pSerializer->endElement(m_nSdtPrToken);
+        pSerializer->endElement(*m_oSdtPrToken);
     }
-    else if ((m_nSdtPrToken > 0) && m_nSdtPrToken != FSNS(XML_w, XML_id) && !(bRunTextIsOn && bParagraphHasDrawing))
+    else if (m_oSdtPrToken.has_value() && *m_oSdtPrToken && !bForceRichText)
     {
         if (!m_pTokenAttributes.is())
-            pSerializer->singleElement(m_nSdtPrToken);
+            pSerializer->singleElement(*m_oSdtPrToken);
         else
         {
-            pSerializer->singleElement(m_nSdtPrToken, detachFrom(m_pTokenAttributes));
+            pSerializer->singleElement(*m_oSdtPrToken, detachFrom(m_pTokenAttributes));
         }
     }
 
@@ -836,10 +843,6 @@ void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSeriali
 
     // write the ending tags after the paragraph
     m_bStartedSdt = true;
-
-    // clear sdt status
-    m_nSdtPrToken = 0;
-    DeleteAndResetTheLists();
 }
 
 void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer)
@@ -850,9 +853,9 @@ void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSeri
     if (!m_aTag.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_tag, FSNS(XML_w, XML_val), m_aTag);
 
-    if (m_nId)
+    if (m_oId.has_value() && *m_oId)
     {
-        pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val), OString::number(m_nId));
+        pSerializer->singleElementNS(XML_w, XML_id, FSNS(XML_w, XML_val), OString::number(*m_oId));
     }
 
     if (!m_aLock.isEmpty())
@@ -898,15 +901,27 @@ void SdtBlockHelper::EndSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerialize
     pSerializer->endElementNS(XML_w, XML_sdtContent);
     pSerializer->endElementNS(XML_w, XML_sdt);
     m_bStartedSdt = false;
+    m_pStartPosition = nullptr;
+    clearGrabbagValues();
 }
 
-void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt)
+void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt,
+                                             const SwPosition* pStartPosition)
 {
+    if (m_bStartedSdt)
+        return; // must not change grabbag cache while <w:sdt> is being written
+
+    if (m_pStartPosition && pStartPosition == m_pStartPosition)
+        return; // m_aParagraphSdt's params have already been cached from the grabbag.
+
+    clearGrabbagValues();
+    m_pStartPosition = pStartPosition; // grabbag cache is valid for this paragraph
+
     for (const beans::PropertyValue& aPropertyValue : aGrabBagSdt)
     {
         if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
         {
-            m_nSdtPrToken = FSNS(XML_w14, XML_checkbox);
+            m_oSdtPrToken = FSNS(XML_w14, XML_checkbox);
             uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
             for (const auto& rProp : aGrabBag)
@@ -955,7 +970,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
             else
             {
                 // We still have w:text, but no attrs
-                m_nSdtPrToken = FSNS(XML_w, XML_text);
+                m_oSdtPrToken = FSNS(XML_w, XML_text);
             }
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPlaceholder_docPart")
@@ -1000,8 +1015,11 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id")
         {
-            if (!(aPropertyValue.Value >>= m_nId))
+            sal_Int32 nId = 0;
+            if (!(aPropertyValue.Value >>= nId))
                 SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt id value");
+            else
+                m_oId = nId;
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_tabIndex" && !m_nTabIndex)
         {
@@ -1014,14 +1032,14 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
                 SAL_WARN("sw.ww8", "DocxAttributeOutput::GrabBag: unexpected sdt lock value");
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_citation")
-            m_nSdtPrToken = FSNS(XML_w, XML_citation);
+            m_oSdtPrToken = FSNS(XML_w, XML_citation);
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj" ||
             aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
         {
             if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj")
-                m_nSdtPrToken = FSNS(XML_w, XML_docPartObj);
+                m_oSdtPrToken = FSNS(XML_w, XML_docPartObj);
             else if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
-                m_nSdtPrToken = FSNS(XML_w, XML_docPartList);
+                m_oSdtPrToken = FSNS(XML_w, XML_docPartList);
 
             uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
@@ -1044,13 +1062,24 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
             }
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_equation")
-            m_nSdtPrToken = FSNS(XML_w, XML_equation);
+            m_oSdtPrToken = FSNS(XML_w, XML_equation);
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_picture")
-            m_nSdtPrToken = FSNS(XML_w, XML_picture);
+            m_oSdtPrToken = FSNS(XML_w, XML_picture);
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_group")
-            m_nSdtPrToken = FSNS(XML_w, XML_group);
+            m_oSdtPrToken = FSNS(XML_w, XML_group);
         else
             SAL_WARN("sw.ww8", "GetSdtParamsFromGrabBag unhandled SdtPr grab bag property " << aPropertyValue.Name);
+    }
+
+    // richText does not have a SdtPr token. Provide a zero value if this is a full grabbag Sdt.
+    // Historically, LO round-trips an Sdt if it has an Id, or a dataBinding, or an SdtPrToken.
+    if (!m_oSdtPrToken.has_value())
+    {
+         // MS Word treats richText-with-dataBinding as a plainText content control
+        if (m_pDataBindingAttrs.is())
+            m_oSdtPrToken = FSNS(XML_w, XML_text);
+        else if (m_oId.has_value())
+            m_oSdtPrToken = 0; // indicates richText - no marker is written into SdtPr for richText
     }
 }
 
@@ -1264,9 +1293,11 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
 
     m_pSerializer->endElementNS( XML_w, XML_p );
     // on export sdt blocks are never nested ATM
-    if (!m_bAnchorLinkedToNode && !m_aParagraphSdt.m_bStartedSdt)
+    if (!m_aParagraphSdt.m_bStartedSdt)
     {
-        m_aParagraphSdt.WriteSdtBlock(m_pSerializer, m_bRunTextIsOn, m_rExport.SdrExporter().IsParagraphHasDrawing());
+        const bool bForceRichText
+            = m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing();
+        m_aParagraphSdt.WriteSdtBlock(m_pSerializer, m_rExport.m_pCurPam->Start(), bForceRichText);
 
         if (m_aParagraphSdt.m_bStartedSdt)
         {
@@ -1276,13 +1307,6 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
                 m_rExport.SdrExporter().setParagraphSdtOpen(true);
         }
     }
-    else
-    {
-        //These should be written out to the actual Node and not to the anchor.
-        //Clear them as they will be repopulated when the node is processed.
-        m_aParagraphSdt.m_nSdtPrToken = 0;
-        m_aParagraphSdt.DeleteAndResetTheLists();
-    }
 
     m_pSerializer->mark(Tag_StartParagraph_2);
 
@@ -1291,7 +1315,10 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
     {
         DocxTableExportContext aTableExportContext(*this);
         m_aFramePr.SetFrame(pFrame.get(), !m_xTableWrt ? -1 : m_tableReference.m_nTableDepth);
+        const bool bOldStartedSdt = m_aParagraphSdt.m_bStartedSdt;
         m_rExport.SdrExporter().writeOnlyTextOfFrame(pFrame.get());
+        if (!bOldStartedSdt && m_aParagraphSdt.m_bStartedSdt)
+            EndParaSdtBlock();
         m_aFramePr.SetFrame(nullptr);
     }
 
@@ -1625,16 +1652,22 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
         WriteCollectedParagraphProperties();
     Redline( pRedlineData );
 
-    WriteCollectedParagraphProperties();
-
-    // Write w:framePr
     if (!m_bWritingHeaderFooter && m_aFramePr.Frame())
     {
+        // write the collected paragraph properties __without__ the <framePr> element
+        m_rExport.SdrExporter().getFlyAttrList().clear();
+        WriteCollectedParagraphProperties();
+
+        // Write w:framePr
         const SwFrameFormat& rFrameFormat = m_aFramePr.Frame()->GetFrameFormat();
         assert(SwTextBoxHelper::TextBoxIsFramePr(rFrameFormat) && "by definition, because Frame()");
 
         const Size aSize = m_aFramePr.Frame()->GetSize();
         PopulateFrameProperties(&rFrameFormat, aSize);
+    }
+    else
+    {
+        WriteCollectedParagraphProperties();
     }
 
     // Write 'Paragraph Mark' properties
@@ -1780,16 +1813,6 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     m_bOpenedParaPr = false;
 }
 
-void DocxAttributeOutput::SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame )
-{
-    m_nStateOfFlyFrame = nStateOfFlyFrame;
-}
-
-void DocxAttributeOutput::SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode )
-{
-    m_bAnchorLinkedToNode = bAnchorLinkedToNode ;
-}
-
 void DocxAttributeOutput::ResetFlyProcessingFlag()
 {
     m_bPostponedProcessingFly = false ;
@@ -1861,18 +1884,14 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     // level down, to be able to prepend the actual run start attribute (just
     // before "postponed run start")
     m_pSerializer->mark(Tag_EndRun_1); // let's call it "actual run start"
-    bool bCloseEarlierSDT = false;
 
     if (m_bEndCharSdt)
     {
         // This is the common case: "close sdt before the current run" was requested by the next run.
+        // This is NOT common anymore. Hardly any runSdt's are grabbagged nowadays,
+        // but yes, if is is grabbagged, then this is the common way that it is closed.
 
-        // if another sdt starts in this run, then wait
-        // as closing the sdt now, might cause nesting of sdts
-        if (m_aRunSdt.m_nSdtPrToken > 0)
-            bCloseEarlierSDT = true;
-        else
-            m_aRunSdt.EndSdtBlock(m_pSerializer);
+        m_aRunSdt.EndSdtBlock(m_pSerializer);
         m_bEndCharSdt = false;
     }
 
@@ -1989,7 +2008,20 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     DoWriteBookmarksStart(m_rBookmarksStart, m_pMoveRedlineData);
     DoWriteBookmarksEnd(m_rBookmarksEnd, false, false); // Write non-moverange bookmarks
     DoWritePermissionsStart();
+
+    // Surround annotation references with redline start/end markup if we're inside a delete.
+    bool bHasAnnotationMarkReferencesInDel = !m_rAnnotationMarksEnd.empty() && m_pRedlineData
+                                             && m_pRedlineData->GetType() == RedlineType::Delete;
+    if (bHasAnnotationMarkReferencesInDel)
+    {
+        StartRedline(m_pRedlineData, bLastRun);
+    }
     DoWriteAnnotationMarks();
+    if (bHasAnnotationMarkReferencesInDel)
+    {
+        EndRedline(m_pRedlineData, bLastRun);
+    }
+
     // if there is some redlining in the document, output it
     bool bSkipRedline = false;
     if (nLen == 1)
@@ -2095,23 +2127,11 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
 
     // enclose in a sdt block, if necessary: if one is already started, then don't do it for now
     // (so on export sdt blocks are never nested ATM)
-    if ( !m_bAnchorLinkedToNode && !m_aRunSdt.m_bStartedSdt)
+    if (!m_aRunSdt.m_bStartedSdt)
     {
-        m_aRunSdt.WriteSdtBlock(m_pSerializer, m_bRunTextIsOn, m_rExport.SdrExporter().IsParagraphHasDrawing());
-    }
-    else
-    {
-        //These should be written out to the actual Node and not to the anchor.
-        //Clear them as they will be repopulated when the node is processed.
-        m_aRunSdt.m_nSdtPrToken = 0;
-        m_aRunSdt.DeleteAndResetTheLists();
-    }
-
-    if (bCloseEarlierSDT)
-    {
-        m_pSerializer->mark(Tag_EndRun_2);
-        m_aRunSdt.EndSdtBlock(m_pSerializer);
-        m_pSerializer->mergeTopMarks(Tag_EndRun_2, sax_fastparser::MergeMarks::PREPEND);
+        const bool bForceRichText
+            = m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing();
+        m_aRunSdt.WriteSdtBlock(m_pSerializer, nullptr, bForceRichText);
     }
 
     m_pSerializer->mergeTopMarks(Tag_StartRun_1);
@@ -2251,6 +2271,9 @@ void DocxAttributeOutput::DoWriteMoveRangeTagStart(std::u16string_view bookmarkN
                     : OUStringToOString(rAuthor, RTL_TEXTENCODING_UTF8));
     if (!bNoDate)
         pAttributeList->add(FSNS(XML_w, XML_date ), DateTimeToOString( aDateTime ));
+    else
+        // w:date is a required attribute, so just use a placeholder date
+        pAttributeList->add(FSNS(XML_w, XML_date ), "1970-01-01T00:00:00Z");
     pAttributeList->add(FSNS(XML_w, XML_name), bookmarkName);
     m_pSerializer->singleElementNS( XML_w, bFrom ? XML_moveFromRangeStart : XML_moveToRangeStart, pAttributeList );
 
@@ -2564,7 +2587,7 @@ void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OU
     {
         // There are some extra sdt parameters came from grab bag
         SdtBlockHelper aSdtBlock;
-        aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt);
+        aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt, nullptr);
         aSdtBlock.WriteExtraParams(m_pSerializer);
     }
 
@@ -2599,13 +2622,13 @@ void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::
     {
         // There are some extra sdt parameters came from grab bag
         SdtBlockHelper aSdtBlock;
-        aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt);
+        aSdtBlock.GetSdtParamsFromGrabBag(aGrabBagSdt, nullptr);
         aSdtBlock.WriteExtraParams(m_pSerializer);
 
-        if (aSdtBlock.m_nSdtPrToken && aSdtBlock.m_nSdtPrToken != FSNS(XML_w, XML_id))
+        if (aSdtBlock.m_oSdtPrToken.has_value() && *aSdtBlock.m_oSdtPrToken)
         {
             // Write <w:text/> or whatsoever from grabbag
-            m_pSerializer->singleElement(aSdtBlock.m_nSdtPrToken);
+            m_pSerializer->singleElement(*aSdtBlock.m_oSdtPrToken);
         }
 
         // Store databindings data for later writing to corresponding XMLs
@@ -2697,12 +2720,14 @@ void DocxAttributeOutput::WriteContentControlStart()
         m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);
     }
 
-    if (!m_pContentControl->GetDataBindingPrefixMappings().isEmpty() || !m_pContentControl->GetDataBindingXpath().isEmpty() || !m_pContentControl->GetDataBindingStoreItemID().isEmpty())
+    const OUString sID = m_pContentControl->GetDataBindingStoreItemID();
+    if (!sID.isEmpty() || !m_pContentControl->GetDataBindingPrefixMappings().isEmpty()
+        || !m_pContentControl->GetDataBindingXpath().isEmpty())
     {
         m_pSerializer->singleElementNS( XML_w, XML_dataBinding,
             FSNS(XML_w, XML_prefixMappings), m_pContentControl->GetDataBindingPrefixMappings(),
             FSNS(XML_w, XML_xpath), m_pContentControl->GetDataBindingXpath(),
-            FSNS(XML_w, XML_storeItemID), m_pContentControl->GetDataBindingStoreItemID());
+            FSNS(XML_w, XML_storeItemID), sax_fastparser::UseIf(sID, !sID.isEmpty()));
     }
 
     if (m_pContentControl->GetTabIndex())
@@ -2763,12 +2788,6 @@ void DocxAttributeOutput::WriteContentControlStart()
                 xAttributes->add(FSNS(XML_w, XML_displayText), rItem.m_aDisplayText);
             }
 
-            OUString aValue = rItem.m_aValue;
-            if (aValue.isEmpty())
-            {
-                // Empty value would be invalid DOCX, default to the display text.
-                aValue = rItem.m_aDisplayText;
-            }
             xAttributes->add(FSNS(XML_w, XML_value), rItem.m_aValue);
             m_pSerializer->singleElementNS(XML_w, XML_listItem, xAttributes);
         }
@@ -2784,14 +2803,23 @@ void DocxAttributeOutput::WriteContentControlStart()
 
     if (m_pContentControl->GetDate())
     {
-        OUString aCurrentDate = m_pContentControl->GetCurrentDate();
-        if (aCurrentDate.isEmpty())
+        // fullDate must be a valid date (YYYY-MM-DDTHH:MM:SSZ) or MS Word calls the file corrupt
+        OUString aFullDate = m_pContentControl->GetDateString(/*bAsISO8601=*/true);
+        if (aFullDate.isEmpty())
+        {
+            // Round-trip fullDate (if valid) in case it just doesn't match the display format
+            const OUString sDisplayVal = m_pContentControl->GetCurrentDate();
+            if (sDisplayVal.getLength() == 20 && sDisplayVal[10] == 'T' && sDisplayVal[19] == 'Z')
+                aFullDate = sDisplayVal;
+        }
+
+        if (aFullDate.isEmpty())
         {
             m_pSerializer->startElementNS(XML_w, XML_date);
         }
         else
         {
-            m_pSerializer->startElementNS(XML_w, XML_date, FSNS(XML_w, XML_fullDate), aCurrentDate);
+            m_pSerializer->startElementNS(XML_w, XML_date, FSNS(XML_w, XML_fullDate), aFullDate);
         }
         OUString aDateFormat = m_pContentControl->GetDateFormat().replaceAll("\"", "'");
         if (!aDateFormat.isEmpty())
@@ -2874,9 +2902,10 @@ void DocxAttributeOutput::WriteSdtDropDownStart(
     for (auto const& rItem : rListItems)
     {
         auto const item(OUStringToOString(rItem, RTL_TEXTENCODING_UTF8));
+        OString sDisplayText = item.isEmpty() ? " "_ostr : item; // displayText must not be empty
         m_pSerializer->singleElementNS(XML_w, XML_listItem,
                 FSNS(XML_w, XML_value), item,
-                FSNS(XML_w, XML_displayText), item);
+                FSNS(XML_w, XML_displayText), sDisplayText);
     }
 
     m_pSerializer->endElementNS(XML_w, XML_dropDownList);
@@ -2923,20 +2952,10 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         FieldMarkParamsHelper params(rFieldmark);
 
         OUString sFullDate;
-        OUString sCurrentDate;
-        params.extractParam( ODF_FORMDATE_CURRENTDATE, sCurrentDate );
-        if(!sCurrentDate.isEmpty())
-        {
-            sFullDate = sCurrentDate + "T00:00:00Z";
-        }
-        else
-        {
-            std::pair<bool, double> aResult = rFieldmark.GetCurrentDate();
-            if(aResult.first)
-            {
-                sFullDate = rFieldmark.GetDateInStandardDateFormat(aResult.second) + "T00:00:00Z";
-            }
-        }
+        std::pair<bool, double> aResult = rFieldmark.GetCurrentDate();
+        // fullDate must be a valid ISO8601 date string or MS Word reports the file as corrupt
+        if (aResult.first) // bFoundValidDate is true
+            sFullDate = rFieldmark.GetDateInStandardDateFormat(aResult.second) + "T00:00:00Z";
 
         OUString sDateFormat;
         params.extractParam( ODF_FORMDATE_DATEFORMAT, sDateFormat );
@@ -3792,6 +3811,106 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
             return "SdtEndBefore" == rProp.Name && m_aRunSdt.m_bStartedSdt && !m_bEndCharSdt; });
     if (pProp != std::cend(aGrabBag))
         pProp->Value >>= m_bEndCharSdt;
+}
+
+std::optional<sal_Int32> DocxAttributeOutput::GetGrabBagParaSdtPrToken()
+{
+    // NOTE: just because w:sdt has started doesn't mean THIS paragraph will be in the sdt.
+    // It won't be if lcl_hasParaSdtEndBefore (unless it also has 'SdtPr'),
+    // So don't call this function before StartParagraph has completed EndParaSdtBlock.
+
+    if (m_aParagraphSdt.m_bStartedSdt)
+        return m_aParagraphSdt.m_oSdtPrToken;
+
+    // update from the grabbag
+    SwPosition* pStartPosition = m_rExport.m_pCurPam->Start();
+    const SwTextNode* pTextNd = pStartPosition->GetNode().GetTextNode();
+    if (!pTextNd)
+        return std::nullopt;
+    const SfxItemSet* pSet = pTextNd->GetpSwAttrSet();
+    if (!pSet)
+        return std::nullopt;
+    const SfxGrabBagItem* pParaGrabBag = pSet->GetItem(RES_PARATR_GRABBAG);
+    if (!pParaGrabBag)
+        return std::nullopt;
+    std::map<OUString, css::uno::Any> rMap = pParaGrabBag->GetGrabBag();
+    if (!rMap.contains(u"SdtPr"_ustr))
+        return std::nullopt;
+
+    const uno::Sequence<beans::PropertyValue> aGrabBagSdt
+        = rMap[u"SdtPr"_ustr].get<uno::Sequence<beans::PropertyValue>>();
+    m_aParagraphSdt.GetSdtParamsFromGrabBag(aGrabBagSdt, pStartPosition);
+
+    return m_aParagraphSdt.m_oSdtPrToken;
+}
+
+// Microsoft Word complains about a corrupt document
+// if a bookmarkEnd exists inside most types of blockSdt content controls.
+bool DocxAttributeOutput::DoesParaSdtPreventBookmarkEnd(const sal_Int32 nPos)
+{
+    if (!nPos && !m_aParagraphSdt.m_bStartedSdt)
+         return false; // don't delay position 0 bookmarkEnds. They should be in front of the Sdt.
+
+    SwPosition* pStartPosition = m_rExport.m_pCurPam->Start();
+    const SwTextNode* pTextNd = pStartPosition->GetNode().GetTextNode();
+    if (!pTextNd && !m_aParagraphSdt.m_bStartedSdt)
+        return false; // there cannot be a paragraph blockSdt here.
+
+    SwTextAttr* pContentControl = nullptr;
+    if (pTextNd)
+    {
+        pContentControl = pTextNd->GetTextAttrAt(nPos, RES_TXTATR_CONTENTCONTROL,
+                                                 sw::GetTextAttrMode::Default);
+    }
+
+    // Not concerned with real content controls - only grabbagged ones are causing problems.
+    if (pContentControl) // native content controls are always runSdt
+        return false; // not dealing with a grabbag blockSdt here.
+
+    // NOTE: just because w:sdt has started doesn't mean THIS paragraph will be in the sdt.
+    // It won't be if lcl_hasParaSdtEndBefore (unless it also has 'SdtPr'),
+    // but practically speaking, m_bStartedSdt will be turned off
+    // before THIS paragraph tries to process any bookmarks - so the complication is just ignored.
+    bool bParagraphHasGrabBagSdt = m_aParagraphSdt.m_bStartedSdt;
+
+    // check if m_aParagraphSdt is cached for the right paragraph
+    if (!bParagraphHasGrabBagSdt && m_aParagraphSdt.m_pStartPosition == pStartPosition)
+    {
+        // yes - it is already cached.
+        if (!m_aParagraphSdt.m_oSdtPrToken.has_value())
+            return false; // not a full Sdt
+
+        bParagraphHasGrabBagSdt = true;
+    }
+
+    if (!bParagraphHasGrabBagSdt && pTextNd)
+        bParagraphHasGrabBagSdt = GetGrabBagParaSdtPrToken().has_value();
+
+    bool bSdtDoesNotAllowBookmarkEnd = false;
+    if (bParagraphHasGrabBagSdt)
+    {
+        // rich blockSdt are allowed to contain bookmarkEnd: richText(0), Group ...
+        // plain blockSdt are not allowed to contain bookmarkEnd.
+        switch (*m_aParagraphSdt.m_oSdtPrToken)
+        {
+            case FSNS(XML_w14, XML_checkbox):
+            case FSNS(XML_w, XML_text):
+            case FSNS(XML_w, XML_dropDownList):
+            case FSNS(XML_w, XML_comboBox):
+            // case FSNS(XML_w, XML_date):
+            case FSNS(XML_w, XML_picture):
+                bSdtDoesNotAllowBookmarkEnd = true;
+                break;
+            default:
+                break;
+        }
+    }
+    return bSdtDoesNotAllowBookmarkEnd;
+}
+
+void DocxAttributeOutput::WriteBookmarkEndWithParaSdt(const OUString& rString)
+{
+    m_aParagraphSdt.m_vBookmarkEnd.push_back(rString);
 }
 
 void DocxAttributeOutput::WritePostponedGraphic()
@@ -5222,7 +5341,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = rHt.StaticWhichCast(RES_PARATR_LINESPACING).GetInterLineSpaceRule() != SvxInterLineSpaceRule::Off;
             break;
         case RES_PARATR_ADJUST:
-            bMustWrite = rHt.StaticWhichCast(RES_PARATR_ADJUST).GetAdjust() != SvxAdjust::Left;
+            bMustWrite = rHt.StaticWhichCast(RES_PARATR_ADJUST).GetAdjust() != SvxAdjust::ParaStart;
             break;
         case RES_PARATR_SPLIT:
             bMustWrite = !rHt.StaticWhichCast(RES_PARATR_SPLIT).GetValue();
@@ -5513,6 +5632,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     OUString const title(pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle());
     auto const docPrattrList(CreateDocPrAttrList(
         GetExport(), pFrameFormat->GetName().toString(), title, descr));
+    if (pSdrObj && !pSdrObj->IsVisible())
+        docPrattrList->add(XML_hidden, "1");
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrattrList );
 
     OUString sURL, sRelId;
@@ -5884,8 +6005,9 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
         for (const auto& rItem : aItems)
         {
+            OUString sDisplayText = rItem.isEmpty() ? " " : rItem; // displayText must not be empty
             m_pSerializer->singleElementNS(XML_w, XML_listItem,
-                                           FSNS(XML_w, XML_displayText), rItem,
+                                           FSNS(XML_w, XML_displayText), sDisplayText,
                                            FSNS(XML_w, XML_value), rItem);
         }
 
@@ -6282,9 +6404,9 @@ void DocxAttributeOutput::WriteOLEShape(const SwFlyFrameFormat& rFrameFormat, co
     }
 
     // shape filled with the preview image
-    m_pSerializer->singleElementNS(XML_v, XML_imagedata,
-                                   FSNS(XML_r, XML_id), rImageId,
-                                   FSNS(XML_o, XML_title), "");
+    if (!rImageId.isEmpty())
+        m_pSerializer->singleElementNS(XML_v, XML_imagedata, FSNS(XML_r, XML_id), rImageId,
+                                       FSNS(XML_o, XML_title), "");
 
     //export wrap settings
     if (rFrameFormat.GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR) //As-char objs does not have surround.
@@ -6531,7 +6653,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
 
                 // skip also inline headings already exported before
                 const SwFormat* pParent = rFrame.GetFrameFormat().DerivedFrom();
-                if ( pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING )
+                if ( pParent && pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING )
                     break;
 
                 // The frame output is postponed to the end of the anchor paragraph
@@ -7077,6 +7199,8 @@ void DocxAttributeOutput::PageBreakBefore( bool bBreak )
 
 void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo, bool bExtraPageBreak)
 {
+    if (m_bWritingHeaderFooter && m_bOpenedParaPr)
+        return; // do not put a run inside <w:hdr>..<w:p>..<w:pPr>
     switch ( nC )
     {
         case msword::ColumnBreak:
@@ -7175,6 +7299,8 @@ void DocxAttributeOutput::EndParaSdtBlock()
     {
         // Paragraph-level SDT still open? Close it now.
         m_aParagraphSdt.EndSdtBlock(m_pSerializer);
+
+        DoWriteBookmarksEnd(m_aParagraphSdt.m_vBookmarkEnd);
     }
 }
 
@@ -7779,15 +7905,15 @@ void DocxAttributeOutput::OverrideNumberingDefinition(
 
             m_pSerializer->startElementNS(XML_w, XML_lvlOverride, FSNS(XML_w, XML_ilvl), OString::number(nLevel));
 
-            if (bListsAreDifferent)
-            {
-                GetExport().NumberingLevel(rRule, nLevel);
-            }
             if (levelOverride != rLevelOverrides.end())
             {
                 // list numbering restart override
                 m_pSerializer->singleElementNS(XML_w, XML_startOverride,
                     FSNS(XML_w, XML_val), OString::number(levelOverride->second));
+            }
+            if (bListsAreDifferent)
+            {
+                GetExport().NumberingLevel(rRule, nLevel);
             }
 
             m_pSerializer->endElementNS(XML_w, XML_lvlOverride);
@@ -8512,6 +8638,11 @@ void DocxAttributeOutput::CharScriptHint(const SvxScriptHintItem& rHint)
 void DocxAttributeOutput::TextINetFormat( const SwFormatINetFormat& rLink )
 {
     const SwCharFormat* pFormat = m_rExport.m_rDoc.FindCharFormatByName(rLink.GetINetFormat());
+    if (!pFormat)
+    {
+        pFormat = m_rExport.m_rDoc.FindCharFormatByName(
+            SwStyleNameMapper::GetUIName(rLink.GetINetFormatId(), ProgName()));
+    }
     if (pFormat)
     {
         OString aStyleId(m_rExport.m_pStyles->GetStyleId(m_rExport.GetId(pFormat)));
@@ -9114,6 +9245,12 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
 
     switch ( rAdjust.GetAdjust() )
     {
+        case SvxAdjust::ParaStart:
+            pAdjustString = bEcma ? "left" : "start";
+            break;
+        case SvxAdjust::ParaEnd:
+            pAdjustString = bEcma ? "right" : "end";
+            break;
         case SvxAdjust::Left:
             if ( bEcma )
             {
@@ -9256,13 +9393,18 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     }
 
     // do not output inherited tabs twice (inside styles and inside inline properties)
-    if ( nCount == nInheritedTabCount && nCount > 0 )
+    if (nCount == nInheritedTabCount)
     {
         if ( *pInheritedTabs == rTabStop )
-            return;
+            return; // <w:tabs> must contain at least one <w:tab>, so don't write it empty
     }
 
     m_pSerializer->startElementNS(XML_w, XML_tabs);
+
+    // <w:tabs> may contain 64 <w:tab> entries at most, or else MS Word reports the file as corrupt
+    sal_uInt32 nWrittenTabs = 0;
+    // do not output inherited tabs multiple times (inside styles and inside inline properties)
+    std::vector<bool> vInherited(nCount, false);
 
     // Get offset for tabs
     // In DOCX, w:pos specifies the position of the current custom tab stop with respect to the current page margins.
@@ -9273,6 +9415,9 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     sal_Int32 nCurrTab = 0;
     for ( sal_uInt16 i = 0; i < nInheritedTabCount; ++i )
     {
+        if (nWrittenTabs == 64)
+            break; // maximum allowed number of entries reached
+
         while ( nCurrTab < nCount && rTabStop[nCurrTab] < pInheritedTabs->At(i) )
             ++nCurrTab;
 
@@ -9281,13 +9426,22 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
             m_pSerializer->singleElementNS( XML_w, XML_tab,
                 FSNS( XML_w, XML_val ), "clear",
                 FSNS( XML_w, XML_pos ), OString::number(pInheritedTabs->At(i).GetTabPos()) );
+            ++nWrittenTabs;
         }
+        else if (pInheritedTabs->At(i) == rTabStop[nCurrTab])
+            vInherited[nCurrTab] = true;
     }
 
     for (sal_uInt16 i = 0; i < nCount; i++ )
     {
         if( rTabStop[i].GetAdjustment() != SvxTabAdjust::Default )
-            impl_WriteTabElement( m_pSerializer, rTabStop[i], tabsOffset );
+        {
+            if (!vInherited[i] && nWrittenTabs < 64)
+            {
+                impl_WriteTabElement( m_pSerializer, rTabStop[i], tabsOffset );
+                ++nWrittenTabs;
+            }
+        }
         else
             GetExport().setDefaultTabStop( rTabStop[i].GetTabPos());
     }
@@ -9415,8 +9569,11 @@ void DocxAttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
         if ( m_rExport.m_pCurrentPageDesc->GetLandscape( ) )
             attrList->add( FSNS( XML_w, XML_orient ), "landscape" );
 
-        attrList->add( FSNS( XML_w, XML_w ), OString::number( rSize.GetWidth( ) ) );
-        attrList->add( FSNS( XML_w, XML_h ), OString::number( rSize.GetHeight( ) ) );
+        // Max page dimensions in practice, (2.1.220 Part 1 Section 17.6.13 in [MS-OI29500] says 31680,
+        // but Word can handle about 64k twips
+        const tools::Long nMaxSize = 65500;
+        attrList->add( FSNS( XML_w, XML_w ), OString::number( std::min( nMaxSize, rSize.GetWidth( ) ) ) );
+        attrList->add( FSNS( XML_w, XML_h ), OString::number( std::min( nMaxSize, rSize.GetHeight( ) ) ) );
 
         m_pSerializer->singleElementNS( XML_w, XML_pgSz, attrList );
     }
@@ -10414,7 +10571,7 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
     if ( m_rExport.m_bOutPageDescs )
     {
         m_pSerializer->singleElementNS(XML_w, XML_textDirection, FSNS(XML_w, XML_val), sTextFlow);
-        if ( bBiDi )
+        if ( bBiDi && !m_rExport.m_bSuppressBidi )
             m_pSerializer->singleElementNS(XML_w, XML_bidi);
     }
     else if ( !m_rExport.m_bOutFlyFrameAttrs )
@@ -10455,6 +10612,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
             rGrabBagElement.second >>= aGrabBagSeq;
 
+            bool bAddedValAttr = false;
             for (const auto& rProp : aGrabBagSeq)
             {
                 OUString sVal = rProp.Value.get<OUString>();
@@ -10463,7 +10621,10 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     continue;
 
                 if (rProp.Name == "val")
+                {
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_val), sVal);
+                    bAddedValAttr = true;
+                }
                 else if (rProp.Name == "color")
                     AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_color), sVal);
                 else if (rProp.Name == "themeColor")
@@ -10483,13 +10644,15 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 else if (rProp.Name == "originalColor")
                     rProp.Value >>= m_sOriginalBackgroundColor;
             }
+            // w:val attribute is required
+            if (!bAddedValAttr)
+                AddToAttrList(m_pBackgroundAttrList, FSNS(XML_w, XML_val), "clear");
         }
         else if (rGrabBagElement.first == "SdtPr")
         {
             const uno::Sequence<beans::PropertyValue> aGrabBagSdt =
                     rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
-            m_aParagraphSdt.GetSdtParamsFromGrabBag(aGrabBagSdt);
-            m_aStartedParagraphSdtPrAlias = m_aParagraphSdt.m_aAlias;
+            m_aParagraphSdt.GetSdtParamsFromGrabBag(aGrabBagSdt, m_rExport.m_pCurPam->Start());
         }
         else if (rGrabBagElement.first == "ParaCnfStyle")
         {
@@ -10604,11 +10767,11 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             if (m_aRunSdt.m_bStartedSdt)
                 m_bEndCharSdt = true;
         }
-        else if (rGrabBagElement.first == "SdtPr" && FLY_NOT_PROCESSED != m_nStateOfFlyFrame )
+        else if (rGrabBagElement.first == "SdtPr")
         {
             const uno::Sequence<beans::PropertyValue> aGrabBagSdt =
                     rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
-            m_aRunSdt.GetSdtParamsFromGrabBag(aGrabBagSdt);
+            m_aRunSdt.GetSdtParamsFromGrabBag(aGrabBagSdt, nullptr);
         }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::CharGrabBag: unhandled grab bag property " << rGrabBagElement.first);
@@ -10633,7 +10796,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_bOpenedParaPr( false ),
       m_bRunTextIsOn( false ),
       m_bWritingHeaderFooter( false ),
-      m_bAnchorLinkedToNode(false),
       m_bWritingField( false ),
       m_bPreventDoubleFieldsHandling( false ),
       m_nNextBookmarkId( 0 ),
@@ -10661,8 +10823,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_nParaBeforeSpacing(0),
-      m_nParaAfterSpacing(0),
-      m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
+      m_nParaAfterSpacing(0)
 {
     m_nHyperLinkCount.push_back(0);
 }

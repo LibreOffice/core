@@ -20,8 +20,10 @@
 #include <vcl/qt/QtUtils.hxx>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QtGui/QActionGroup>
 #include <QtGui/QShortcut>
 #else
+#include <QtWidgets/QActionGroup>
 #include <QtWidgets/QShortcut>
 #endif
 
@@ -32,6 +34,8 @@ QtInstanceMenu::QtInstanceMenu(QMenu* pMenu)
     : m_pMenu(pMenu)
 {
     assert(m_pMenu);
+
+    connect(m_pMenu, &QMenu::triggered, this, &QtInstanceMenu::menuActionTriggered);
 
     // connect slots in order to show help for current entry on F1
     connect(m_pMenu, &QMenu::hovered, this, &QtInstanceMenu::menuActionHovered);
@@ -112,6 +116,16 @@ OUString QtInstanceMenu::get_label(const OUString& rIdent) const
     return sLabel;
 }
 
+void QtInstanceMenu::set_tooltip_text(const OUString& rIdent, const OUString& rTip)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QAction* pAction = getAction(rIdent))
+            pAction->setToolTip(toQString(rTip));
+    });
+}
+
 void QtInstanceMenu::set_active(const OUString& rIdent, bool bActive)
 {
     SolarMutexGuard g;
@@ -150,9 +164,6 @@ void QtInstanceMenu::insert(int nPos, const OUString& rId, const OUString& rStr,
                             const css::uno::Reference<css::graphic::XGraphic>& rImage,
                             TriState eCheckRadioFalse)
 {
-    assert(eCheckRadioFalse != TRISTATE_FALSE
-           && "Support for radio menu items not implemented yet");
-
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
@@ -160,8 +171,17 @@ void QtInstanceMenu::insert(int nPos, const OUString& rId, const OUString& rStr,
 
         insertAction(*pAction, rId, nPos);
 
-        if (eCheckRadioFalse == TRISTATE_TRUE)
-            pAction->setCheckable(true);
+        pAction->setCheckable(eCheckRadioFalse != TRISTATE_INDET);
+        if (eCheckRadioFalse == TRISTATE_FALSE)
+        {
+            // For Qt, all mutually exclusive actions/menu entries would usually be put
+            // into the same QActionGroup. However, LO currently manually implements logic
+            // to toggle all other entries off when one gets enabled and doesn't use the concept of groups.
+            // Creating a separate QActionGroup for each item causes each item to be displayed
+            // with a radio button and leaves control for manually toggling on/off.
+            QActionGroup* pActionGroup = new QActionGroup(pAction);
+            pActionGroup->addAction(pAction);
+        }
 
         if (pIconName && !pIconName->isEmpty())
             pAction->setIcon(loadQPixmapIcon(*pIconName));
@@ -234,6 +254,8 @@ OUString QtInstanceMenu::get_id(int nPos) const
     return sId;
 }
 
+QMenu* QtInstanceMenu::getMenu() const { return m_pMenu; }
+
 void QtInstanceMenu::setActionName(QAction& rAction, const OUString& rActionName)
 {
     rAction.setProperty(PROPERTY_ACTION_NAME, toQString(rActionName));
@@ -266,6 +288,14 @@ QAction* QtInstanceMenu::getAction(const OUString& rIdent) const
 }
 
 void QtInstanceMenu::menuActionHovered(QAction* pAction) { m_pCurrentAction = pAction; }
+
+void QtInstanceMenu::menuActionTriggered(QAction* pAction)
+{
+    SolarMutexGuard g;
+
+    assert(pAction);
+    signal_activate(toOUString(pAction->objectName()));
+}
 
 void QtInstanceMenu::showHelp()
 {

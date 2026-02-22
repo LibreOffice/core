@@ -47,6 +47,10 @@ $(eval $(call gb_CppunitTest_set_include,sw_rtfimport,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_rtfimport,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_api,sw_rtfimport,\
 	udkapi \
 	offapi \

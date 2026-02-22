@@ -22,6 +22,7 @@
 #include <officecfg/Office/Common.hxx>
 #include "opthtml.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <vcl/weld/Builder.hxx>
 
 
 OfaHtmlTabPage::OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)

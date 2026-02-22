@@ -19,6 +19,7 @@
 
 #include <securityoptions.hxx>
 #include <unotools/securityoptions.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace
 {

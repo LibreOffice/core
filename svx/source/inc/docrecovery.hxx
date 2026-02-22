@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
 #define INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
 
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/TreeView.hxx>

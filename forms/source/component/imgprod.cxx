@@ -21,6 +21,7 @@
 
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <utility>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/cvtgrf.hxx>

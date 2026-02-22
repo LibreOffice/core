@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>

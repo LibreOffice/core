@@ -35,7 +35,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <paratr.hxx>
 #include <sal/log.hxx>
 #include <optional>
@@ -672,6 +672,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         if( pPos->IsFlyCntPortion() )
         {
             bool bDeleted = false;
+            bool bInserted = false;
             size_t nAuthor = std::string::npos;
             if ( bHasRedline )
             {
@@ -683,10 +684,21 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 bool bHasFlyRedline = rLine.GetRedln()->CheckLine(flyStart.first->GetIndex(),
                     flyStart.second, flyStart.first->GetIndex(), flyStart.second, sRedlineText,
                     bHasRedlineEnd, eRedlineEnd, /*pAuthorAtPos=*/&nAuthor);
-                bDeleted = bHasFlyRedline && eRedlineEnd == RedlineType::Delete;
+                if (bHasFlyRedline)
+                {
+                    bDeleted = eRedlineEnd == RedlineType::Delete;
+                    bInserted = eRedlineEnd == RedlineType::Insert;
+                }
             }
             static_cast<SwFlyCntPortion*>(pPos)->SetDeleted(bDeleted);
             static_cast<SwFlyCntPortion*>(pPos)->SetAuthor(nAuthor);
+
+            if (auto pFlyPortion = dynamic_cast<sw::FlyContentPortion*>(pPos))
+            {
+                SwFlyFrame* pFlyFrame = pFlyPortion->GetFlyFrame();
+                pFlyFrame->SetDeleted(bDeleted);
+                pFlyFrame->SetInserted(bInserted);
+            }
         }
         // anchored to characters
         else if ( pPos->IsFlyPortion() )
@@ -702,6 +714,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
                     {
                         bool bDeleted = false;
+                        bool bInserted = false;
                         size_t nAuthor = std::string::npos;
                         const SwFormatAnchor& rAnchor = pAnchoredObj->GetFrameFormat()->GetAnchor();
                         if ( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR )
@@ -715,9 +728,14 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                                 bDeleted = true;
                                 nAuthor = pFnd->GetAuthor();
                             }
+                            else if (pFnd && pFnd->GetType() == RedlineType::Insert)
+                            {
+                                bInserted = true;
+                            }
                         }
                         pFly->SetDeleted(bDeleted);
                         pFly->SetAuthor(nAuthor);
+                        pFly->SetInserted(bInserted);
                     }
                 }
             }

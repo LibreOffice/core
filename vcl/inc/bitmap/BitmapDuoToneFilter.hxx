@@ -10,9 +10,11 @@
 
 #pragma once
 
+#include <tools/color.hxx>
+
 #include <vcl/bitmap/BitmapFilter.hxx>
 
-class BitmapDuoToneFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapDuoToneFilter final : public BitmapFilter
 {
 public:
     BitmapDuoToneFilter(Color nColorOne, Color nColorTwo)

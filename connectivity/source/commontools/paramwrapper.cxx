@@ -71,7 +71,7 @@ namespace dbtools::param
         if ( m_xDelegator.is() )
             m_xDelegatorPSI = m_xDelegator->getPropertySetInfo();
         if ( !m_xDelegatorPSI.is() )
-            throw RuntimeException();
+            throw RuntimeException("ParameterWrapper: PropertySetInfo is not available");
     }
 
 
@@ -85,7 +85,7 @@ namespace dbtools::param
         if ( m_xDelegator.is() )
             m_xDelegatorPSI = m_xDelegator->getPropertySetInfo();
         if ( !m_xDelegatorPSI.is() )
-            throw RuntimeException();
+            throw RuntimeException("ParameterWrapper: PropertySetInfo is not available");
 
         OSL_ENSURE( !m_aIndexes.empty(), "ParameterWrapper::ParameterWrapper: sure about the indexes?" );
     }

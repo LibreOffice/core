@@ -38,6 +38,8 @@
 #include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>

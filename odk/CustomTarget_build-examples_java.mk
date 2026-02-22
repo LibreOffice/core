@@ -24,7 +24,6 @@ my_example_dirs_java = \
     DevelopersGuide/FirstSteps/HelloTextTableShape/java \
     DevelopersGuide/Forms \
     DevelopersGuide/GUI \
-    DevelopersGuide/OfficeBean \
     DevelopersGuide/OfficeDev \
     DevelopersGuide/OfficeDev/Clipboard/java \
     DevelopersGuide/OfficeDev/DesktopEnvironment \

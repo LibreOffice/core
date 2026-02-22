@@ -27,6 +27,7 @@
 #include <officecfg/Office/Writer.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <test/commontesttools.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -546,9 +547,6 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedXlsx)
     createSwDoc("embedded-xlsx.docx");
     verify();
 
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     verify();
 
@@ -609,9 +607,6 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreak)
 CPPUNIT_TEST_FIXTURE(Test, testOleObject)
 {
     createSwDoc("test_ole_object.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -886,17 +881,8 @@ CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_true)
 
 CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_false)
 {
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(false, batch);
-    batch->commit();
-    comphelper::ScopeGuard g(
-        [batch]
-        {
-            officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(true,
-                                                                                           batch);
-            batch->commit();
-        });
+    ScopedConfigValue<officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown>
+        aCfg(false);
 
     createSwDoc("combobox-control.docx");
     verifyComboBoxExport(false);
@@ -951,9 +937,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104707_urlComment)
 CPPUNIT_TEST_FIXTURE(Test, testOLEObjectinHeader)
 {
     createSwDoc("2129393649.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 22
-    skipValidation();
 
     save(TestFilter::DOCX);
     // fdo#76015 : Document contains oleobject in header xml.
@@ -1051,9 +1034,6 @@ CPPUNIT_TEST_FIXTURE(Test, testContentTypeDOCX)
 {
     createSwDoc("fdo80410.docx");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -1141,14 +1121,18 @@ CPPUNIT_TEST_FIXTURE(Test, testSimpleSdts)
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt[1]/w:sdtPr/w:picture", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt[2]/w:sdtPr/w:group", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:citation", 1);
+
+    // tdf#170602: bookmarkEnd not allowed inside plainText Sdt
+    // This is a pre-emptive test - just asserting where it currently is.
+    // Probably the bookmark belongs before the w:sdt,
+    // but definitely not after the first </w:r>
+    // and definitely not bookmarking the entire sdt (not after the picture </w:sdt>)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt[1]/w:sdtContent/w:p/w:bookmarkEnd", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmbeddedExcelChart)
 {
     createSwDoc("EmbeddedExcelChart.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);

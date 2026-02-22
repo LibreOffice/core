@@ -27,6 +27,7 @@
 #include <svl/macitem.hxx>
 #include <tools/debug.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <cfgutil.hxx>
 #include <sfx2/evntconf.hxx>
 #include <headertablistbox.hxx>

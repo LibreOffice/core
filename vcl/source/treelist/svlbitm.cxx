@@ -438,29 +438,16 @@ void SvLBoxButton::InitViewData(SvTreeListBox* pView,SvTreeListEntry* pEntry, Sv
 // class SvLBoxContextBmp
 // ***************************************************************
 
-struct SvLBoxContextBmp_Impl
+SvLBoxContextBmp::SvLBoxContextBmp(const Image& aBmp1, const Image& aBmp2, bool bExpanded)
+    : m_aImage1(aBmp1)
+    , m_aImage2(aBmp2)
+    , m_bExpanded(bExpanded)
 {
-    Image       m_aImage1;
-    Image       m_aImage2;
-
-    bool        m_bExpanded;
-};
-
-// ***************************************************************
-
-SvLBoxContextBmp::SvLBoxContextBmp(const Image& aBmp1, const Image& aBmp2,
-    bool bExpanded)
-    :m_pImpl( new SvLBoxContextBmp_Impl )
-{
-
-    m_pImpl->m_bExpanded = bExpanded;
-    SetModeImages( aBmp1, aBmp2 );
 }
 
 SvLBoxContextBmp::SvLBoxContextBmp()
-    : m_pImpl( new SvLBoxContextBmp_Impl )
+    : m_bExpanded(false)
 {
-    m_pImpl->m_bExpanded = false;
 }
 
 SvLBoxContextBmp::~SvLBoxContextBmp()
@@ -472,25 +459,12 @@ SvLBoxItemType SvLBoxContextBmp::GetType() const
     return SvLBoxItemType::ContextBmp;
 }
 
-void SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 )
-{
-    m_pImpl->m_aImage1 = _rBitmap1;
-    m_pImpl->m_aImage2 = _rBitmap2;
-}
-
-Image& SvLBoxContextBmp::implGetImageStore( bool _bFirst )
-{
-
-    // OJ: #i27071# wrong mode so we just return the normal images
-    return _bFirst ? m_pImpl->m_aImage1 : m_pImpl->m_aImage2;
-}
-
 void SvLBoxContextBmp::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     SvViewDataItem* pViewData)
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    Size aSize = m_pImpl->m_aImage1.GetSizePixel();
+    Size aSize = m_aImage1.GetSizePixel();
     pViewData->mnWidth = aSize.Width();
     pViewData->mnHeight = aSize.Height();
 }
@@ -501,7 +475,7 @@ void SvLBoxContextBmp::Paint(
 {
 
     // get the image.
-    const Image& rImage = implGetImageStore(pView->IsExpanded() != m_pImpl->m_bExpanded);
+    const Image& rImage = pView->IsExpanded() != m_bExpanded ? m_aImage1 : m_aImage2;
 
     bool _bSemiTransparent = bool( SvTLEntryFlags::SEMITRANSPARENT & rEntry.GetFlags( ) );
     // draw
@@ -514,9 +488,9 @@ void SvLBoxContextBmp::Paint(
 std::unique_ptr<SvLBoxItem> SvLBoxContextBmp::Clone(SvLBoxItem const * pSource) const
 {
     std::unique_ptr<SvLBoxContextBmp> pNew(new SvLBoxContextBmp);
-    pNew->m_pImpl->m_aImage1 = static_cast< SvLBoxContextBmp const * >( pSource )->m_pImpl->m_aImage1;
-    pNew->m_pImpl->m_aImage2 = static_cast< SvLBoxContextBmp const * >( pSource )->m_pImpl->m_aImage2;
-    pNew->m_pImpl->m_bExpanded = static_cast<SvLBoxContextBmp const *>(pSource)->m_pImpl->m_bExpanded;
+    pNew->m_aImage1 = static_cast<SvLBoxContextBmp const*>(pSource)->m_aImage1;
+    pNew->m_aImage2 = static_cast<SvLBoxContextBmp const*>(pSource)->m_aImage2;
+    pNew->m_bExpanded = static_cast<SvLBoxContextBmp const*>(pSource)->m_bExpanded;
     return std::unique_ptr<SvLBoxItem>(pNew.release());
 }
 

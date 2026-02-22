@@ -524,9 +524,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo51550)
 {
     createSwDoc("fdo51550.odt");
 
-    // FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -817,16 +814,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093.docx")
     sal_Int16 nLRDir  = getProperty< sal_Int32 >( xParaLtrRight, u"WritingMode"_ustr );
 
     // this will test the both the text direction and alignment for each paragraph
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), nRtlLeft);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_END), nRtlLeft);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nRLDir);
 
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), nRtlRight);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_START), nRtlRight);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nRRDir);
 
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), nLtrLeft);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_START), nLtrLeft);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLLDir);
 
-    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), nLtrRight);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_END), nLtrRight);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
 }
 

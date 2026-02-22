@@ -14,8 +14,11 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdundo.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <svx/diagram/datamodel.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/datamodel_svx.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 DiagramDialog::DiagramDialog(weld::Window* pWindow, SdrObjGroup& rDiagram)
     : GenericDialogController(pWindow, u"cui/ui/diagramdialog.ui"_ustr, u"DiagramDialog"_ustr)
@@ -61,7 +64,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
         return;
 
     OUString sText = mpTextAdd->get_text();
-    const std::shared_ptr< svx::diagram::IDiagramHelper >& pDiagramHelper(m_rDiagram.getDiagramHelper());
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& pDiagramHelper(m_rDiagram.getDiagramHelper());
 
     if (pDiagramHelper && !sText.isEmpty())
     {
@@ -75,7 +78,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
             aStartState = pDiagramHelper->extractDiagramDataState();
         }
 
-        OUString sNodeId = pDiagramHelper->addNode(sText);
+        OUString sNodeId = pDiagramHelper->addDiagramNode(sText);
 
         if (bUndo)
         {
@@ -99,7 +102,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
         return;
 
     std::unique_ptr<weld::TreeIter> pEntry = mpTreeDiagram->get_selected();
-    const std::shared_ptr< svx::diagram::IDiagramHelper >& pDiagramHelper(m_rDiagram.getDiagramHelper());
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& pDiagramHelper(m_rDiagram.getDiagramHelper());
 
     if (pDiagramHelper && pEntry)
     {
@@ -113,7 +116,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
             aStartState = pDiagramHelper->extractDiagramDataState();
         }
 
-        if (pDiagramHelper->removeNode(mpTreeDiagram->get_id(*pEntry)))
+        if (pDiagramHelper->removeDiagramNode(mpTreeDiagram->get_id(*pEntry)))
         {
             if (bUndo)
             {
@@ -135,12 +138,12 @@ void DiagramDialog::populateTree(const weld::TreeIter* pParent, const OUString& 
     if (!m_rDiagram.isDiagram())
         return;
 
-    const std::shared_ptr< svx::diagram::IDiagramHelper >& pDiagramHelper(m_rDiagram.getDiagramHelper());
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& pDiagramHelper(m_rDiagram.getDiagramHelper());
 
     if (!pDiagramHelper)
         return;
 
-    auto aItems = pDiagramHelper->getChildren(rParentId);
+    auto aItems = pDiagramHelper->getDiagramChildren(rParentId);
     for (auto& aItem : aItems)
     {
         std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());

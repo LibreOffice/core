@@ -30,6 +30,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <svx/svxids.hrc>
+#include <tools/mapunit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/resmgr.hxx>
 #include <svx/xmlexchg.hxx>
@@ -42,6 +43,10 @@
 #include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XSet.hpp>

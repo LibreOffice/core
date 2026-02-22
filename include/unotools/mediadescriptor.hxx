@@ -24,7 +24,6 @@
 
 #include <vector>
 
-#include <comphelper/docpasswordrequest.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/unotoolsdllapi.h>
 
@@ -34,7 +33,10 @@ namespace com::sun::star::io {
 namespace com::sun::star::beans {
     struct NamedValue;
 }
+namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace comphelper { class IDocPasswordVerifier; class SequenceAsHashMap; }
+namespace comphelper { enum class DocPasswordRequestType; }
 
 namespace utl::MediaDescriptor {
 

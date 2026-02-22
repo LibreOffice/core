@@ -20,6 +20,7 @@
 #include <memory>
 
 #include <comphelper/lok.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
@@ -37,9 +38,9 @@ struct ImplCursorData
     Point           maPixRotOff;        // Pixel-Offset-Position
     Size            maPixSize;          // Pixel-Size
     Degree10        mnOrientation;      // Pixel-Orientation
-    CursorDirection mnDirection;        // indicates writing direction
-    sal_uInt16      mnStyle;            // Cursor-Style
-    bool            mbCurVisible;       // Is cursor currently visible
+    CursorDirection mnDirection = CursorDirection::NONE; // indicates writing direction
+    sal_uInt16      mnStyle = 0;        // Cursor-Style
+    bool            mbCurVisible = false; // Is cursor currently visible
     VclPtr<vcl::Window> mpWindow;           // assigned window
 };
 
@@ -47,12 +48,77 @@ namespace
 {
 const char* pDisableCursorIndicator(getenv("SAL_DISABLE_CURSOR_INDICATOR"));
 bool bDisableCursorIndicator(nullptr != pDisableCursorIndicator);
+
+// Build the cursor shape polygon accounting for direction indicators
+// and orientation, or return empty polygon for simple rectangular cursors
+tools::Polygon ImplCursorPoly(ImplCursorData const* pData)
+{
+    tools::Rectangle aRect(pData->maPixPos, pData->maPixSize);
+    if (pData->mnDirection == CursorDirection::NONE && !pData->mnOrientation)
+        return {};
+
+    tools::Polygon aPoly(aRect);
+    if (aPoly.GetSize() != 5)
+        return {};
+
+    aPoly[1].AdjustX(1);  // include the right border
+    aPoly[2].AdjustX(1);
+
+    // apply direction flag after slant to use the correct shape
+    if (!bDisableCursorIndicator && pData->mnDirection != CursorDirection::NONE)
+    {
+        Point pAry[7];
+        // Related system settings for "delta" could be:
+        // gtk cursor-aspect-ratio and  windows SPI_GETCARETWIDTH
+        int delta = (aRect.getOpenHeight() * 4 / 100) + 1;
+        if (pData->mnDirection == CursorDirection::LTR)
+        {
+            // left-to-right
+            pAry[0] = aPoly.GetPoint(0);
+            pAry[1] = aPoly.GetPoint(1);
+            pAry[2] = pAry[1];
+            pAry[2].AdjustX(delta);
+            pAry[2].AdjustY(delta);
+            pAry[3] = pAry[1];
+            pAry[3].AdjustY(delta * 2);
+            pAry[4] = aPoly.GetPoint(2);
+            pAry[5] = aPoly.GetPoint(3);
+            pAry[6] = aPoly.GetPoint(4);
+        }
+        else if (pData->mnDirection == CursorDirection::RTL)
+        {
+            // right-to-left
+            pAry[0] = aPoly.GetPoint(0);
+            pAry[1] = aPoly.GetPoint(1);
+            pAry[2] = aPoly.GetPoint(2);
+            pAry[3] = aPoly.GetPoint(3);
+            pAry[4] = pAry[0];
+            pAry[4].AdjustY(delta * 2);
+            pAry[5] = pAry[0];
+            pAry[5].AdjustX(-delta);
+            pAry[5].AdjustY(delta);
+            pAry[6] = aPoly.GetPoint(4);
+        }
+        aPoly = tools::Polygon(7, pAry);
+    }
+
+    if (pData->mnOrientation)
+        aPoly.Rotate(pData->maPixRotOff, pData->mnOrientation);
+    return aPoly;
+}
+
+// Calculate the pixel bounding rect of the cursor
+tools::Rectangle ImplCursorBoundRect(ImplCursorData const* pData)
+{
+    tools::Polygon aPoly = ImplCursorPoly(pData);
+    if (aPoly.GetSize())
+        return aPoly.GetBoundRect();
+    return tools::Rectangle(pData->maPixPos, pData->maPixSize);
+}
 }
 
 static tools::Rectangle ImplCursorInvert(vcl::RenderContext* pRenderContext, ImplCursorData const * pData)
 {
-    tools::Rectangle aPaintRect;
-
     bool bMapMode = pRenderContext->IsMapModeEnabled();
     pRenderContext->EnableMapMode( false );
     InvertFlags nInvertStyle;
@@ -61,66 +127,21 @@ static tools::Rectangle ImplCursorInvert(vcl::RenderContext* pRenderContext, Imp
     else
         nInvertStyle = InvertFlags::NONE;
 
-    tools::Rectangle aRect( pData->maPixPos, pData->maPixSize );
-    if ( pData->mnDirection != CursorDirection::NONE || pData->mnOrientation )
+    tools::Rectangle aRect;
+    tools::Polygon aPoly = ImplCursorPoly(pData);
+    if (aPoly.GetSize())
     {
-        tools::Polygon aPoly( aRect );
-        if( aPoly.GetSize() == 5 )
-        {
-            aPoly[1].AdjustX(1 );  // include the right border
-            aPoly[2].AdjustX(1 );
-
-            // apply direction flag after slant to use the correct shape
-            if (!bDisableCursorIndicator && pData->mnDirection != CursorDirection::NONE)
-            {
-                Point pAry[7];
-                // Related system settings for "delta" could be:
-                // gtk cursor-aspect-ratio and  windows SPI_GETCARETWIDTH
-                int delta = (aRect.getOpenHeight() * 4 / 100) + 1;
-                if( pData->mnDirection == CursorDirection::LTR )
-                {
-                    // left-to-right
-                    pAry[0] = aPoly.GetPoint( 0 );
-                    pAry[1] = aPoly.GetPoint( 1 );
-                    pAry[2] = pAry[1];
-                    pAry[2].AdjustX(delta);
-                    pAry[2].AdjustY(delta);
-                    pAry[3] =  pAry[1];
-                    pAry[3].AdjustY(delta * 2);
-                    pAry[4] = aPoly.GetPoint( 2 );
-                    pAry[5] = aPoly.GetPoint( 3 );
-                    pAry[6] = aPoly.GetPoint( 4 );
-                }
-                else if( pData->mnDirection == CursorDirection::RTL )
-                {
-                    // right-to-left
-                    pAry[0] = aPoly.GetPoint( 0 );
-                    pAry[1] = aPoly.GetPoint( 1 );
-                    pAry[2] = aPoly.GetPoint( 2 );
-                    pAry[3] = aPoly.GetPoint( 3 );
-                    pAry[4] = pAry[0];
-                    pAry[4].AdjustY(delta*2);
-                    pAry[5] =  pAry[0];
-                    pAry[5].AdjustX(-delta);
-                    pAry[5].AdjustY(delta);
-                    pAry[6] = aPoly.GetPoint( 4 );
-                }
-                aPoly = tools::Polygon( 7, pAry);
-            }
-
-            if ( pData->mnOrientation )
-                aPoly.Rotate( pData->maPixRotOff, pData->mnOrientation );
-            pRenderContext->Invert( aPoly, nInvertStyle );
-            aPaintRect = aPoly.GetBoundRect();
-        }
+        pRenderContext->Invert(aPoly, nInvertStyle);
+        aRect = aPoly.GetBoundRect();
     }
     else
     {
-        pRenderContext->Invert( aRect, nInvertStyle );
-        aPaintRect = aRect;
+        aRect = tools::Rectangle(pData->maPixPos, pData->maPixSize);
+        pRenderContext->Invert(aRect, nInvertStyle);
     }
-    pRenderContext->EnableMapMode( bMapMode );
-    return aPaintRect;
+
+    pRenderContext->EnableMapMode(bMapMode);
+    return aRect;
 }
 
 static void ImplCursorInvert(vcl::Window* pWindow, ImplCursorData const * pData)
@@ -140,7 +161,7 @@ static void ImplCursorInvert(vcl::Window* pWindow, ImplCursorData const * pData)
         pGuard->SetPaintRect(pRenderContext->PixelToLogic(aPaintRect));
 }
 
-bool vcl::Cursor::ImplPrepForDraw(const OutputDevice* pDevice, ImplCursorData& rData)
+bool vcl::Cursor::ImplPrepForDraw(const OutputDevice* pDevice, ImplCursorData& rData) const
 {
     if (pDevice && !rData.mbCurVisible)
     {
@@ -177,14 +198,20 @@ void vcl::Cursor::ImplDraw()
 void vcl::Cursor::DrawToDevice(OutputDevice& rRenderContext)
 {
     ImplCursorData aData;
-    aData.mnStyle = 0;
-    aData.mbCurVisible = false;
     // calculate output area
     if (ImplPrepForDraw(&rRenderContext, aData))
     {
         // display
         ImplCursorInvert(&rRenderContext, &aData);
     }
+}
+
+tools::Rectangle vcl::Cursor::GetBoundRect(OutputDevice const& rRenderContext) const
+{
+    ImplCursorData aData;
+    if (ImplPrepForDraw(&rRenderContext, aData))
+        return ImplCursorBoundRect(&aData);
+    return {};
 }
 
 void vcl::Cursor::ImplRestore()
@@ -220,7 +247,6 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
     if ( !mpData )
     {
         mpData.reset( new ImplCursorData );
-        mpData->mbCurVisible = false;
         mpData->maTimer.SetInvokeHandler( LINK( this, Cursor, ImplTimerHdl ) );
     }
 

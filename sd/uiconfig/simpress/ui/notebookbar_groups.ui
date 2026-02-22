@@ -896,7 +896,7 @@
                         <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
-                        <property name="action_name">.uno:LeftPara</property>
+                        <property name="action_name">.uno:StartPara</property>
                         <property name="image">lefti</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>
@@ -934,7 +934,7 @@
                         <property name="can_focus">True</property>
                         <property name="focus_on_click">False</property>
                         <property name="receives_default">True</property>
-                        <property name="action_name">.uno:RightPara</property>
+                        <property name="action_name">.uno:EndPara</property>
                         <property name="image">righti</property>
                         <property name="relief">none</property>
                         <property name="xalign">0</property>

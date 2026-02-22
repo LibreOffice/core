@@ -18,69 +18,41 @@
  */
 
 #include <svx/hyperdlg.hxx>
-#include <svx/svxdlg.hxx>
-#include <sfx2/app.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <officecfg/Office/Common.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
+#include <svl/eitem.hxx>
+#include <vcl/svapp.hxx>
+
 //#                                                                      #
 //# Childwindow-Wrapper-Class                                            #
 //#                                                                      #
 SFX_IMPL_CHILDWINDOW_WITHID(SvxHlinkDlgWrapper, SID_HYPERLINK_DIALOG)
 
 SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
-                                                SfxBindings* pBindings,
-                                                SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( _pParent, nId ),
-
-    mpDlg( nullptr )
-
+                                        SfxBindings*,
+                                        SfxChildWinInfo*) :
+    SfxChildWindow( _pParent, nId )
 {
-    // dirty hack to always show vertical tabs on the hyperlink dialog
-    const bool bVert = officecfg::Office::Common::Misc::UseVerticalNotebookbar::get();
-    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::UseVerticalNotebookbar::set(true, xChanges);
-    xChanges->commit();
-
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    mpDlg = pFact->CreateSvxHpLinkDlg(this, pBindings, _pParent->GetFrameWeld());
-    SetController( mpDlg->GetController() );
-    SetVisible_Impl(false);
-
-    if ( !pInfo->aSize.IsEmpty() )
-    {
-        weld::Window* pTopWindow = SfxGetpApp()->GetTopWindow();
-        if (pTopWindow)
-        {
-            weld::Dialog* pDialog = GetController()->getDialog();
-
-            Size aParentSize(pTopWindow->get_size());
-            Size aDlgSize(pDialog->get_size());
-
-            if( aParentSize.Width() < pInfo->aPos.X() )
-                pInfo->aPos.setX( aParentSize.Width()-aDlgSize.Width() < tools::Long(0.1*aParentSize.Width()) ?
-                                  tools::Long(0.1*aParentSize.Width()) : aParentSize.Width()-aDlgSize.Width() );
-            if( aParentSize.Height() < pInfo->aPos. Y() )
-                pInfo->aPos.setY( aParentSize.Height()-aDlgSize.Height() < tools::Long(0.1*aParentSize.Height()) ?
-                                  tools::Long(0.1*aParentSize.Height()) : aParentSize.Height()-aDlgSize.Height() );
-
-            pDialog->window_move(pInfo->aPos.X(), pInfo->aPos.Y());
-        }
-    }
-    SetHideNotDelete( true );
-
-    officecfg::Office::Common::Misc::UseVerticalNotebookbar::set(bVert, xChanges);
-    xChanges->commit();
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    mpDlg = pFact->CreateHyperlinkDialog(_pParent->GetFrameWeld(), this);
+    mpDlg->StartExecuteAsync([](sal_Int32) {
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        if (!pViewFrame || !pViewFrame->HasChildWindow(SID_HYPERLINK_DIALOG))
+            return;
+        SfxBoolItem aValue(SID_HYPERLINK_DIALOG, false);
+        pViewFrame->GetDispatcher()->ExecuteList(
+            SID_HYPERLINK_DIALOG,
+            SfxCallMode::RECORD , { &aValue });
+    });
 }
 
 SfxChildWinInfo SvxHlinkDlgWrapper::GetInfo() const
 {
-    return SfxChildWindow::GetInfo();
-}
-
-bool SvxHlinkDlgWrapper::QueryClose()
-{
-    return !mpDlg || mpDlg->QueryClose();
+    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
+    aInfo.bVisible = false;
+    return aInfo;
 }
 
 SvxHlinkDlgWrapper::~SvxHlinkDlgWrapper()
@@ -89,3 +61,4 @@ SvxHlinkDlgWrapper::~SvxHlinkDlgWrapper()
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

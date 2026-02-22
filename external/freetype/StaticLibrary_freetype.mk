@@ -11,15 +11,21 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,freetype))
 
+$(eval $(call gb_StaticLibrary_use_unpacked,freetype,freetype))
+
 $(eval $(call gb_StaticLibrary_set_include,freetype,\
-	-I$(call gb_UnpackedTarball_get_dir,freetype)/include \
+	-I$(gb_UnpackedTarball_workdir)/freetype/include \
 	$$(INCLUDE) \
 ))
 
+# Ignore warnings, warnings in this code is not our problem, or is it?
+
+$(eval $(call gb_StaticLibrary_set_warnings_disabled,freetype))
+
 $(eval $(call gb_StaticLibrary_add_defs,freetype,\
+	-DDLG_STATIC \
 	-DZ_PREFIX \
 	-DFT2_BUILD_LIBRARY \
-	-DFT_DEBUG_LOGGING \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,freetype,\

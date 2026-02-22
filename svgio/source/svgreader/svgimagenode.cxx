@@ -21,7 +21,9 @@
 #include <svgdocument.hxx>
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>

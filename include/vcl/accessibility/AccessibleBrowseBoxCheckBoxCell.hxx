@@ -19,6 +19,7 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
+#include <tools/gen.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 
 namespace com::sun::star::accessibility { class XAccessible; }

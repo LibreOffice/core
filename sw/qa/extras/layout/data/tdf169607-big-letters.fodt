@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:settings>
+  <config:config-item-set config:name="ooo:configuration-settings">
+   <config:config-item config:name="IgnoreTabsAndBlanksForLineCalculation" config:type="boolean">true</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+ <office:automatic-styles>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:font-size="500pt"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="297mm" fo:page-height="210mm" style:print-orientation="landscape" fo:margin-top="20mm" fo:margin-bottom="20mm" fo:margin-left="20mm" fo:margin-right="20mm" style:writing-mode="lr-tb"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p loext:marker-style-name="T1"><text:span text:style-name="T1">FOOBAR</text:span></text:p>
+  </office:text>
+ </office:body>
+</office:document>

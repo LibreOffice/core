@@ -38,7 +38,7 @@ namespace xmloff
         OUString sLibrary, sLocalMacroName;
         for (const auto& rEvent : _rEvents)
         {
-            // the name of the event is build from listener interface and listener method name
+            // the name of the event is built from listener interface and listener method name
             OUString sName = rEvent.ListenerType
                 + EVENT_NAME_SEPARATOR
                 + rEvent.EventMethod;

@@ -32,6 +32,7 @@
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
 #include <utility>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/macitem.hxx>
 #include <svtools/htmlout.hxx>
@@ -39,6 +40,7 @@
 #include <svl/urihelper.hxx>
 #include <vcl/unohelp.hxx>
 #include <svx/svdouno.hxx>
+#include <unotools/fontdefs.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>

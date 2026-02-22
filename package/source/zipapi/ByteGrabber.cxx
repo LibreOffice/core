@@ -26,12 +26,6 @@
 
 using namespace ::com::sun::star;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 /** ByteGrabber implements the >> operators on an XOutputStream. This is
  *  potentially quite slow and may need to be optimised
  */
@@ -74,7 +68,7 @@ sal_Int32 ByteGrabber::readBytes( sal_Int8* aData,
 void ByteGrabber::seek( sal_Int64 location )
 {
     if (!xSeek.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     xSeek->seek( location );
 }
@@ -82,7 +76,7 @@ void ByteGrabber::seek( sal_Int64 location )
 sal_Int64 ByteGrabber::getPosition(  )
 {
     if (!xSeek.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     return xSeek->getPosition();
 }
@@ -90,7 +84,7 @@ sal_Int64 ByteGrabber::getPosition(  )
 sal_Int64 ByteGrabber::getLength(  )
 {
     if (!xSeek.is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     return xSeek->getLength();
 }

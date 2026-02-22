@@ -154,7 +154,7 @@ namespace svxform
             @param  _pEntry
             @return the number of entries remaining in the selection.
         */
-        size_t  onEntryRemoved(const weld::TreeView* pView, const weld::TreeIter* _pEntry);
+        size_t onEntryRemoved(const weld::TreeIter* _pEntry);
 
         void setFormsRoot(
             const css::uno::Reference< css::form::XForms >& _rxFormsRoot

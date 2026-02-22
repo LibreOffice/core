@@ -42,6 +42,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xmlexchg.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

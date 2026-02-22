@@ -22,11 +22,15 @@
 #include <rtl/math.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <vcl/BitmapTools.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/print.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

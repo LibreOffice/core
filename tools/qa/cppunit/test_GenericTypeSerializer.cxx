@@ -23,6 +23,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <tools/GenericTypeSerializer.hxx>
+#include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <tools/gen.hxx>
 

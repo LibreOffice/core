@@ -11,20 +11,31 @@
 #include <vcl/builder.hxx>
 #include <vcl/weld/Assistant.hxx>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ColorChooserDialog.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/DrawingArea.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/EntryTreeView.hxx>
 #include <vcl/weld/FormattedSpinButton.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <vcl/weld/MenuButton.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Notebook.hxx>
+#include <vcl/weld/Popover.hxx>
+#include <vcl/weld/Scrollbar.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TextView.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolkit/edit.hxx>
@@ -179,6 +190,7 @@ public:
     virtual bool get_active(const OUString& rIdent) const override;
     virtual void set_label(const OUString& rIdent, const OUString& rLabel) override;
     virtual OUString get_label(const OUString& rIdent) const override;
+    virtual void set_tooltip_text(const OUString& rIdent, const OUString& rTip) override;
     virtual void set_visible(const OUString& rIdent, bool bShow) override;
     virtual void clear() override;
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
@@ -372,8 +384,6 @@ public:
 
     virtual void queue_resize() override;
 
-    virtual void help_hierarchy_foreach(const std::function<bool(const OUString&)>& func) override;
-
     virtual OUString strip_mnemonic(const OUString& rLabel) const override;
     virtual OUString escape_ui_str(const OUString& rLabel) const override;
 
@@ -474,8 +484,6 @@ public:
 
     virtual Point get_position() const override;
 
-    virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const override;
-
     virtual bool get_resizable() const override;
 
     virtual bool has_toplevel_focus() const override;
@@ -508,8 +516,6 @@ private:
     std::vector<VclPtr<vcl::Window>> m_aHiddenWidgets; // vector of hidden Controls
     tools::Long m_nOldEditWidthReq; // Original width request of the input field
     sal_Int32 m_nOldBorderWidth; // border width for expanded dialog
-
-    DECL_LINK(PopupScreenShotMenuHdl, const CommandEvent&, bool);
 
     void recursively_unset_default_buttons();
 
@@ -607,13 +613,42 @@ public:
     virtual OUString filter(const OUString& rText) override;
 };
 
-class SalInstanceEntry : public SalInstanceWidget, public virtual weld::Entry
+class SalInstanceTextWidget : public SalInstanceWidget, public virtual weld::TextWidget
+{
+    VclPtr<::Edit> m_pEntry;
+
+    DECL_LINK(CursorListener, VclWindowEvent&, void);
+
+public:
+    SalInstanceTextWidget(Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    virtual ~SalInstanceTextWidget() override;
+
+    virtual void connect_cursor_position(const Link<TextWidget&, void>& rLink) override;
+
+    virtual OUString get_text() const override;
+
+    virtual int get_position() const override;
+
+    virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
+
+    virtual void set_editable(bool bEditable) override;
+    virtual bool get_editable() const override;
+
+    virtual void set_font_color(const Color& rColor) override;
+
+protected:
+    virtual void do_set_text(const OUString& rText) override;
+    virtual void do_set_position(int nCursorPos) override;
+    virtual void do_select_region(int nStartPos, int nEndPos) override;
+    virtual void do_replace_selection(const OUString& rText) override;
+};
+
+class SalInstanceEntry : public SalInstanceTextWidget, public virtual weld::Entry
 {
 private:
     VclPtr<::Edit> m_xEntry;
 
     DECL_LINK(ChangeHdl, Edit&, void);
-    DECL_LINK(CursorListener, VclWindowEvent&, void);
     DECL_LINK(ActivateHdl, Edit&, bool);
 
     WeldTextFilter m_aTextFilter;
@@ -621,29 +656,11 @@ private:
 public:
     SalInstanceEntry(::Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
-    virtual void do_set_text(const OUString& rText) override;
-
-    virtual OUString get_text() const override;
-
     virtual void set_width_chars(int nChars) override;
 
     virtual int get_width_chars() const override;
 
     virtual void set_max_length(int nChars) override;
-
-    virtual void do_select_region(int nStartPos, int nEndPos) override;
-
-    bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
-
-    virtual void do_replace_selection(const OUString& rText) override;
-
-    virtual void do_set_position(int nCursorPos) override;
-
-    virtual int get_position() const override;
-
-    virtual void set_editable(bool bEditable) override;
-
-    virtual bool get_editable() const override;
 
     virtual void set_visibility(bool bVisible) override;
 
@@ -654,10 +671,6 @@ public:
     virtual void set_message_type(weld::EntryMessageType eType) override;
 
     virtual void set_font(const vcl::Font& rFont) override;
-
-    virtual void set_font_color(const Color& rColor) override;
-
-    virtual void connect_cursor_position(const Link<Entry&, void>& rLink) override;
 
     virtual void set_placeholder_text(const OUString& rText) override;
 
@@ -931,6 +944,10 @@ class SalInstanceComboBoxWithoutEdit : public SalInstanceComboBox<ListBox>
 private:
     DECL_LINK(SelectHdl, ListBox&, void);
 
+protected:
+    virtual void do_insert(int pos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
 public:
     SalInstanceComboBoxWithoutEdit(ListBox* pListBox, SalInstanceBuilder* pBuilder,
                                    bool bTakeOwnership);
@@ -938,9 +955,6 @@ public:
     virtual OUString get_active_text() const override;
 
     virtual void remove(int pos) override;
-
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
 
     virtual void insert_separator(int pos, const OUString& /*rId*/) override;
 
@@ -1003,6 +1017,10 @@ private:
     WeldTextFilter m_aTextFilter;
     bool m_bInSelect;
 
+protected:
+    virtual void do_insert(int pos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
 public:
     SalInstanceComboBoxWithEdit(::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
                                 bool bTakeOwnership);
@@ -1016,9 +1034,6 @@ public:
     virtual OUString get_active_text() const override;
 
     virtual void remove(int pos) override;
-
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
 
     virtual void insert_separator(int pos, const OUString& /*rId*/) override;
 
@@ -1413,7 +1428,7 @@ public:
     virtual ~SalInstanceToolbar() override;
 };
 
-class SalInstanceTextView : public SalInstanceWidget, public virtual weld::TextView
+class SalInstanceTextView : public SalInstanceTextWidget, public virtual weld::TextView
 {
 private:
     VclPtr<VclMultiLineEdit> m_xTextView;
@@ -1421,33 +1436,16 @@ private:
 
     DECL_LINK(ChangeHdl, Edit&, void);
     DECL_LINK(VscrollHdl, ScrollBar*, void);
-    DECL_LINK(CursorListener, VclWindowEvent&, void);
 
 public:
     SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
                         bool bTakeOwnership);
 
-    virtual void do_set_text(const OUString& rText) override;
-
-    virtual void do_replace_selection(const OUString& rText) override;
-
-    virtual OUString get_text() const override;
-
-    bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
-
-    virtual void do_select_region(int nStartPos, int nEndPos) override;
-
-    virtual void set_editable(bool bEditable) override;
-    virtual bool get_editable() const override;
     virtual void set_max_length(int nChars) override;
 
     virtual void set_monospace(bool bMonospace) override;
 
     virtual void set_font(const vcl::Font& rFont) override;
-
-    virtual void set_font_color(const Color& rColor) override;
-
-    virtual void connect_cursor_position(const Link<TextView&, void>& rLink) override;
 
     virtual bool can_move_cursor_with_up() const override;
 
@@ -1696,8 +1694,6 @@ public:
 
     virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override;
 
-    void set_text_emphasis(SvTreeListEntry* pEntry, bool bOn, int col = -1);
-
     virtual void set_text_emphasis(const weld::TreeIter& rIter, bool bOn, int col) override;
 
     virtual bool get_text_emphasis(const weld::TreeIter& rIter, int col) const override;
@@ -1731,11 +1727,7 @@ public:
 
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override;
 
-    virtual bool iter_next(weld::TreeIter& rIter) const override;
-
-    virtual bool iter_previous(weld::TreeIter& rIter) const override;
-
-    virtual bool iter_children(weld::TreeIter& rIter) const override;
+    virtual bool do_iter_children(weld::TreeIter& rIter) const override;
 
     virtual bool iter_parent(weld::TreeIter& rIter) const override;
 
@@ -1748,8 +1740,6 @@ public:
     virtual void do_unselect(const weld::TreeIter& rIter) override;
 
     virtual int get_iter_depth(const weld::TreeIter& rIter) const override;
-
-    virtual bool iter_has_child(const weld::TreeIter& rIter) const override;
 
     virtual bool get_row_expanded(const weld::TreeIter& rIter) const override;
 

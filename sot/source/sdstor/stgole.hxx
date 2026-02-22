@@ -23,6 +23,7 @@
 #include <memory>
 
 #include <sot/stg.hxx>
+#include <sot/formats.hxx>
 
 class StgInternalStream : public SvStream
 {

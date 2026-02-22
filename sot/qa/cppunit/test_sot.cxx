@@ -10,6 +10,7 @@
 #include <unotest/filters-test.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 
+#include <rtl/ref.hxx>
 #include <sot/storage.hxx>
 #include <sot/storinfo.hxx>
 #include <sysformats.hxx>

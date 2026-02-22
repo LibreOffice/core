@@ -52,7 +52,6 @@ public:
 
     Reference<XInterface> init() override
     {
-        loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
 
         Reference<container::XIndexAccess> xIndexAccess;
@@ -111,10 +110,17 @@ public:
 
         return Reference<XInterface>(xNumRules, UNO_QUERY_THROW);
     }
+
+    virtual void setUp() override
+    {
+        UnoApiTest::setUp();
+        // create writer document
+        loadFromURL(u"private:factory/swriter"_ustr);
+    }
+
     //tdf#135335
     void testBulletFontName()
     {
-        loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDoc(mxComponent, UNO_QUERY_THROW);
         Reference<text::XText> xText = xTextDoc->getText();
         Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -176,5 +182,7 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXNumberingRules);
 }
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2155,10 +2155,19 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
     SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
             ImplGetSvxTextPortionSfxPropertySet(), pTextForwarder, nPara );
     pTextForwarder->QuickSetAttribs( aItemSet, aSel );
+
     rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *this );
     pRange->SetSelection( aSel );
+    uno::Sequence<OUString> aPropNames(rCharAndParaProps.getLength());
+    uno::Sequence<uno::Any> aPropVals(rCharAndParaProps.getLength());
+    int i = 0;
     for( const beans::PropertyValue& rProp : rCharAndParaProps )
-        pRange->setPropertyValue( rProp.Name, rProp.Value );
+    {
+        aPropNames.getArray()[i] = rProp.Name;
+        aPropVals.getArray()[i] = rProp.Value;
+        ++i;
+    }
+    pRange->setPropertyValues( aPropNames, aPropVals );
     return pRange;
 }
 

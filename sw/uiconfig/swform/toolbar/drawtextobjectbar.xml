@@ -45,9 +45,9 @@
  <toolbar:toolbaritem xlink:href=".uno:Color"/>
  <toolbar:toolbaritem xlink:href=".uno:CharBackColor"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:StartPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
- <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
+ <toolbar:toolbaritem xlink:href=".uno:EndPara"/>
  <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>

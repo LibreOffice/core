@@ -22,8 +22,8 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <vcl/pdfwriter.hxx>
 
+namespace vcl::pdf { enum class StructElement; }
 
 namespace drawinglayer::primitive2d
 {

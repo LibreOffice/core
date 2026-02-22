@@ -23,6 +23,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <swtypes.hxx>
 #include <flddinf.hrc>

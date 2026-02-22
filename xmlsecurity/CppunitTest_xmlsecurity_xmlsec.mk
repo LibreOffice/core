@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,xmlsecurity_xmlsec))
 
 $(eval $(call gb_CppunitTest_use_externals,xmlsecurity_xmlsec,\
     boost_headers \
+    libxml2 \
 ))
 
 ifneq ($(OS),WNT)
@@ -61,5 +62,9 @@ $(eval $(call gb_CppunitTest_use_custom_headers,xmlsecurity_xmlsec,\
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,xmlsecurity_xmlsec))
+
+$(eval $(call gb_CppunitTest_add_arguments,xmlsecurity_xmlsec, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
 
 # vim: set noet sw=4 ts=4:

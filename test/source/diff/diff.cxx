@@ -81,7 +81,8 @@ private:
     bool compareElements(xmlNode* node1, xmlNode* node2);
 
     /// Error message for cppunit that prints out when expected and found are not equal.
-    void cppunitAssertEqual(const xmlChar *expected, const xmlChar *found);
+    void cppunitAssertEqual(const xmlNodePtr node, const xmlAttrPtr attr, const xmlChar *expected, const xmlChar *found);
+    void cppunitAssertEqual(const xmlNodePtr node, const xmlChar *expected, const xmlChar *found);
 
     /// Error message for cppunit that prints out when expected and found are not equal - for doubles.
     void cppunitAssertEqualDouble(const xmlNodePtr node, const xmlAttrPtr attr, double expected, double found, double delta);
@@ -173,7 +174,7 @@ bool XMLDiff::compare()
 #if USE_CPPUNIT
     CPPUNIT_ASSERT(root1);
     CPPUNIT_ASSERT(root2);
-    cppunitAssertEqual(root1->name, root2->name);
+    cppunitAssertEqual(nullptr, root1->name, root2->name);
 #else
     if (!root1 || !root2)
         return false;
@@ -203,7 +204,7 @@ bool checkForEmptyChildren(xmlNodePtr node)
 bool XMLDiff::compareElements(xmlNode* node1, xmlNode* node2)
 {
 #if USE_CPPUNIT
-    cppunitAssertEqual(node1->name, node2->name);
+    cppunitAssertEqual(nullptr, node1->name, node2->name);
 #else
     if (!xmlStrEqual( node1->name, node2->name ))
         return false;
@@ -244,11 +245,34 @@ bool XMLDiff::compareElements(xmlNode* node1, xmlNode* node2)
     return true;
 }
 
-void XMLDiff::cppunitAssertEqual(const xmlChar *expected, const xmlChar *found)
+void XMLDiff::cppunitAssertEqual(const xmlNodePtr node, const xmlAttrPtr attr, const xmlChar *expected, const xmlChar *found)
 {
 #if USE_CPPUNIT
+    xmlChar * path = xmlGetNodePath(node);
     std::stringstream stringStream;
-    stringStream << "Reference: " << fileName << "\n- Expected: " << reinterpret_cast<const char*>(expected) << "\n- Found: " << reinterpret_cast<const char*>(found);
+    stringStream
+        << "Reference: " << fileName
+        << "\n- Node: " << (path ? reinterpret_cast<const char*>(path) : "null")
+        << "\n- Attr: " << (attr ? reinterpret_cast<const char*>(attr->name) : "null")
+        << "\n- Expected: " << reinterpret_cast<const char*>(expected)
+        << "\n- Found: " << reinterpret_cast<const char*>(found);
+    xmlFree(path);
+
+    CPPUNIT_ASSERT_MESSAGE(stringStream.str(), xmlStrEqual(expected, found));
+#endif
+}
+
+void XMLDiff::cppunitAssertEqual(const xmlNodePtr node, const xmlChar *expected, const xmlChar *found)
+{
+#if USE_CPPUNIT
+    xmlChar * path = xmlGetNodePath(node);
+    std::stringstream stringStream;
+    stringStream
+        << "Reference: " << fileName
+        << "\n- Parent Node: " << (path ? reinterpret_cast<const char*>(path) : "null")
+        << "\n- Expected Child Node: " << reinterpret_cast<const char*>(expected)
+        << "\n- Found Child Node: " << reinterpret_cast<const char*>(found);
+    xmlFree(path);
 
     CPPUNIT_ASSERT_MESSAGE(stringStream.str(), xmlStrEqual(expected, found));
 #endif
@@ -259,7 +283,10 @@ void XMLDiff::cppunitAssertEqualDouble(const xmlNodePtr node, const xmlAttrPtr a
 #if USE_CPPUNIT
     xmlChar * path = xmlGetNodePath(node);
     std::stringstream stringStream;
-    stringStream << "Reference: " << fileName << "\n- Node: " << reinterpret_cast<const char*>(path) << "\n- Attr: " << reinterpret_cast<const char*>(attr->name);
+    stringStream
+        << "Reference: " << fileName
+        << "\n- Node: " << reinterpret_cast<const char*>(path)
+        << "\n- Attr: " << reinterpret_cast<const char*>(attr->name);
     xmlFree(path);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(stringStream.str(), expected, found, delta);
@@ -291,7 +318,7 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
     for(attr1 = node1->properties, attr2 = node2->properties; attr1 != nullptr && attr2 != nullptr; attr1 = attr1->next, attr2 = attr2->next)
     {
 #if USE_CPPUNIT
-        cppunitAssertEqual(attr1->name, attr2->name);
+        cppunitAssertEqual(node1, attr1->name, attr2->name);
 #else
         if (!xmlStrEqual( attr1->name, attr2->name ))
             return false;
@@ -341,13 +368,38 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
         }
         else
         {
+            bool bIgnoreGUIDStrings(false);
 
-#if USE_CPPUNIT
-            cppunitAssertEqual(val1, val2);
-#else
             if(!xmlStrEqual( val1, val2 ))
-                return false;
+            {
+                // there might be GuidString's used, these may get created
+                // at every export or internal usage, so these cannot be
+                // compared to a saved pattern. To identify, use their
+                // format. An example is:
+                // "{662825F2-FD0A-477C-81F6-D00196403932}"
+                // We can use here their specific length of 38, that
+                // should be good for now. If needed this may be extended
+                // to check for
+                // - curly braces at start/end
+                // - minus ('-') at positions 9, 14, 19 and 24
+                // - upper-case hex alphabet (0..9, A..F) for the characters
+                // also see ObjectNameIsDiagramModelID() which is similar
+                const int len1(xmlStrlen(val1));
+                const int len2(xmlStrlen(val2));
+
+                if (len1 == len2 && 38 == len1)
+                    bIgnoreGUIDStrings = true;
+            }
+
+            if (!bIgnoreGUIDStrings)
+            {
+#if USE_CPPUNIT
+                cppunitAssertEqual(node1, attr1, val1, val2);
+#else
+                if(!xmlStrEqual( val1, val2 ))
+                    return false;
 #endif
+            }
         }
 
         xmlFree(val1);

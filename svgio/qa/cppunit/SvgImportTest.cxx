@@ -15,6 +15,7 @@
 
 #include <comphelper/seqstream.hxx>
 #include <comphelper/string.hxx>
+#include <tools/stream.hxx>
 
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
@@ -443,6 +444,17 @@ CPPUNIT_TEST_FIXTURE(Test, testFontsizePercentage)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", u"Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", u"16");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", u"Times New Roman");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontFamilyIncludingApostrophes)
+{
+    //Check when font-size uses percentage and defined globally
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/FontFamilyIncludingApostrophes.svg");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", u"#000000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", u"Text");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", u"16");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", u"Liberation Sans");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontsizeRelative)

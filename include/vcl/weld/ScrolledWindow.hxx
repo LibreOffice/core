@@ -12,6 +12,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/weld/weld.hxx>
 
+enum class VclPolicyType;
+
 namespace weld
 {
 class VCL_DLLPUBLIC ScrolledWindow : virtual public Widget

@@ -26,6 +26,7 @@
 #include <com/sun/star/graphic/GraphicMapper.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/mapunit.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/seqstream.hxx>
 #include <utility>

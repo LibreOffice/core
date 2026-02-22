@@ -13,6 +13,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <doc.hxx>
 
 namespace sw

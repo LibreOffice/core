@@ -108,10 +108,19 @@ namespace TextFormatCollFunc
     }
 } // end of namespace TextFormatCollFunc
 
+SwTextFormatColl::SwTextFormatColl( SwAttrPool& rPool, const UIName &rFormatCollName,
+                SwTextFormatColl* pDerFrom,
+                sal_uInt16 nFormatWh )
+: SwFormatColl(rPool, rFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
+, mbStayAssignedToListLevelOfOutlineStyle(false)
+, mbAssignedToOutlineStyle(false)
+{
+    mpNextTextFormatColl = this;
+}
+
 SwTextFormatColl::~SwTextFormatColl()
 {
-    if(m_bInSwFntCache)
-        pSwFontCache->Delete( this );
+    mxFontObj.reset();
 
     if (GetDoc().IsInDtor())
     {
@@ -721,6 +730,24 @@ void SwTextFormatColl::DeleteAssignmentToListLevelOfOutlineStyle()
 {
     mbAssignedToOutlineStyle = false;
     ResetFormatAttr(RES_PARATR_OUTLINELEVEL);
+}
+
+void SwTextFormatColl::InvalidateInSwFntCache(sal_uInt16 nWhich)
+{
+    if(isCHRATR(nWhich))
+        mxFontObj.reset();
+};
+
+void SwTextFormatColl::InvalidateInSwFntCache()
+{
+    mxFontObj.reset();
+}
+
+const SwFontObj & SwTextFormatColl::GetFontObj(SwViewShell *pSh) const
+{
+    if (!mxFontObj)
+        mxFontObj = std::make_unique<SwFontObj>(this, pSh);
+    return *mxFontObj;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

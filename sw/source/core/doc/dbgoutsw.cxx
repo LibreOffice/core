@@ -249,12 +249,12 @@ const char * dbg_out(const SfxPoolItem * pItem)
 
 static OUString lcl_dbg_out(const SfxItemSet & rSet)
 {
-    SfxItemIter aIter(rSet);
     bool bFirst = true;
     OUStringBuffer aStr = "[ ";
 
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if (!bFirst)
             aStr.append(", ");
 

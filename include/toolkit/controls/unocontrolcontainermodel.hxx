@@ -21,6 +21,7 @@
 
 #include <toolkit/dllapi.h>
 #include <toolkit/controls/unocontrolmodel.hxx>
+#include <rtl/ref.hxx>
 
 class TOOLKIT_DLLPUBLIC UnoControlContainerModel final : public UnoControlModel
 {

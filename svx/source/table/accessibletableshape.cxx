@@ -304,10 +304,11 @@ void SAL_CALL AccessibleTableShapeImpl::disposing( const EventObject& /*Source*/
 {
 }
 
-AccessibleTableShape::AccessibleTableShape( const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo)
-: AccessibleTableShape_Base(rShapeInfo, rShapeTreeInfo)
-, mnPreviousSelectionCount(0)
-, mxImpl( new AccessibleTableShapeImpl( maShapeTreeInfo ) )
+AccessibleTableShape::AccessibleTableShape(const AccessibleShapeInfo& rShapeInfo,
+                                           const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : ImplInheritanceHelper(rShapeInfo, rShapeTreeInfo)
+    , mnPreviousSelectionCount(0)
+    , mxImpl(new AccessibleTableShapeImpl(maShapeTreeInfo))
 {
 }
 
@@ -333,7 +334,7 @@ void AccessibleTableShape::Init()
         TOOLS_WARN_EXCEPTION("svx.table", "");
     }
 
-    AccessibleTableShape_Base::Init();
+    AccessibleShape::Init();
 }
 
 
@@ -345,36 +346,6 @@ SvxTableController* AccessibleTableShape::getTableController()
     else
         return nullptr;
 }
-
-
-// XInterface
-
-
-Any SAL_CALL AccessibleTableShape::queryInterface( const Type& aType )
-{
-    if ( aType == cppu::UnoType<XAccessibleTableSelection>::get())
-    {
-        Reference<XAccessibleTableSelection> xThis( this );
-        Any aRet;
-        aRet <<= xThis;
-        return aRet;
-    }
-    else
-        return AccessibleTableShape_Base::queryInterface( aType );
-}
-
-
-void SAL_CALL AccessibleTableShape::acquire(  ) noexcept
-{
-    AccessibleTableShape_Base::acquire();
-}
-
-
-void SAL_CALL AccessibleTableShape::release(  ) noexcept
-{
-    AccessibleTableShape_Base::release();
-}
-
 
 // XAccessible
 

@@ -20,6 +20,10 @@
 #include <tools/GenericTypeSerializer.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <tools/color.hxx>
+#include <tools/fract.hxx>
+#include <tools/gen.hxx>
+#include <tools/stream.hxx>
 #include <vector>
 
 namespace tools

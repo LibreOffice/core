@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <svx/svdpntv.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/window.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -175,7 +176,7 @@ SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)
     SetDefaultStyleSheet(GetModel().GetDefaultStyleSheet(), true);
 
     if (pOut)
-        AddDeviceToPaintView(*pOut, nullptr);
+        AddDeviceToPaintView(*pOut);
 
     maColorConfig.AddListener(this);
     onChangeColorConfig();
@@ -405,9 +406,9 @@ void SdrPaintView::HideSdrPage()
     }
 }
 
-void SdrPaintView::AddDeviceToPaintView(OutputDevice& rNewDev, vcl::Window *pWindow)
+void SdrPaintView::AddDeviceToPaintView(OutputDevice& rNewDev)
 {
-    SdrPaintWindow* pNewPaintWindow = new SdrPaintWindow(*this, rNewDev, pWindow);
+    SdrPaintWindow* pNewPaintWindow = new SdrPaintWindow(*this, rNewDev);
     maPaintWindows.emplace_back(pNewPaintWindow);
 
     if(mpPageView)
@@ -960,10 +961,9 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
 #ifdef DBG_UTIL
     {
         bool bHasEEFeatureItems=false;
-        SfxItemIter aIter(rAttr);
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); !bHasEEFeatureItems && pItem;
-             pItem = aIter.NextItem())
+        for (SfxItemIter aIter( rAttr ); !bHasEEFeatureItems && !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             if (!IsInvalidItem(pItem)) {
                 sal_uInt16 nW=pItem->Which();
                 if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END) bHasEEFeatureItems=true;

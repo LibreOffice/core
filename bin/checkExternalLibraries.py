@@ -15,11 +15,13 @@ from packaging.version import Version, parse
 import subprocess
 import argparse
 
-python_branch = ""
-openssl_branch = ""
-postgres_branch = ""
-mariadb_branch = ""
-rhino_branch = ""
+branches = {}
+
+libraryBranches = [
+    "python", "postgres", "openssl",
+    "mariadb-connector-c", "rhino",
+    "firebird"
+]
 
 libraryIds = {
     "openssl": 2,
@@ -92,26 +94,15 @@ def get_library_list(fileName):
             continue
 
         libraryName = decodedName.split("=")[1]
-        if libraryName.startswith("Python"):
-            global python_branch
-            python_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
-            print("Python is on branch: " + str(python_branch))
-        elif libraryName.startswith("postgres"):
-            global postgres_branch
-            postgres_branch = ''.join(re.findall("\d{1,2}", libraryName)[0])
-            print("Postgres is on branch: " + str(postgres_branch))
-        elif libraryName.startswith("openssl"):
-            global openssl_branch
-            openssl_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
-            print("Openssl is on branch: " + str(openssl_branch))
-        elif libraryName.startswith("mariadb"):
-            global mariadb_branch
-            mariadb_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
-            print("MariaDB is on branch: " + str(mariadb_branch))
-        elif libraryName.startswith("rhino"):
-            global rhino_branch
-            rhino_branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
-            print("Rhino is on branch: " + str(rhino_branch))
+        for libraryBranch in libraryBranches:
+            if libraryName.lower().startswith(libraryBranch):
+                if libraryBranch == "postgres":
+                    branch = ''.join(re.findall("\d{1,2}", libraryName)[0])
+                else:
+                    branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
+                branches[libraryBranch] = branch
+                print(libraryBranch + " is on branch: " + str(branch))
+                break
         libraryList.append(libraryName.lower())
     return libraryList
 
@@ -126,7 +117,7 @@ def get_latest_version(libNameOrig):
 
     if not bFound:
         if libName.startswith("postgresql"):
-            libName = "postgresql%20" + str(postgres_branch) + ".x"
+            libName = "postgresql%20" + str(branches["postgres"]) + ".x"
         if libName.startswith("noto"):
             libName = "notofonts"
         elif re.match("[0-9a-f]{5,40}", libName.split("-")[0]): # SHA1
@@ -146,31 +137,18 @@ def get_latest_version(libNameOrig):
     if not json['items']:
         return Version("0.0.0"), ""
 
-    if libName == "openssl":
-        for idx, ver in enumerate(json['items'][item]['stable_versions']):
-            if ver.startswith(openssl_branch):
-                latest_version = idx
-                break
+    for k,v in branches.items():
+        bFound = False
+        if libName == k:
+            for idx, ver in enumerate(json['items'][item]['stable_versions']):
+                if ver.startswith(v):
+                    latest_version = idx
+                    bFound = True
+                    break
+        if bFound:
+            break
 
-    elif libName == "python":
-        for idx, ver in enumerate(json['items'][item]['stable_versions']):
-            if ver.startswith(python_branch):
-                latest_version = idx
-                break
-
-    elif libName == "mariadb-connector-c":
-        for idx, ver in enumerate(json['items'][item]['stable_versions']):
-            if ver.startswith(mariadb_branch):
-                latest_version = idx
-                break
-
-    elif libName == "rhino":
-        for idx, ver in enumerate(json['items'][item]['stable_versions']):
-            if ver.startswith(rhino_branch):
-                latest_version = idx
-                break
-
-    elif libName == "notofonts":
+    if libName == "notofonts":
         fontName = libNameOrig.split("-")[0]
         for i in range(len(json['items'])):
             for idx, ver in enumerate(json['items'][i]['stable_versions']):

@@ -26,9 +26,11 @@
 #include <osl/process.h> //osl_getProcessLocale
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx> //SAL_WARN
+#include <tools/color.hxx>
 #include <vcl/graph.hxx> //Graphic
 #include <vcl/settings.hxx> //GetSettings
 #include <vcl/svapp.hxx> //Application::
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 #include <unotools/resmgr.hxx> //Translate
 

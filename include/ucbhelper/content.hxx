@@ -20,8 +20,7 @@
 #define INCLUDED_UCBHELPER_CONTENT_HXX
 
 #include <rtl/ref.hxx>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <rtl/ustring.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com::sun::star::beans
@@ -62,6 +61,8 @@ class XComponentContext;
 namespace com::sun::star::uno
 {
 class Any;
+template <class E> class Sequence;
+template <class interface_type> class Reference;
 }
 
 namespace ucbhelper

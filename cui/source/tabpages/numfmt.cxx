@@ -25,6 +25,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <i18nlangtag/lang.h>
 #include <svx/svxids.hrc>
 #include <svtools/colorcfg.hxx>
@@ -189,14 +190,6 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 
 // class SvxNumberFormatTabPage ------------------------------------------
 
-#define REMOVE_DONTKNOW() \
-    if (!m_xFtLocale->get_sensitive())                              \
-    {                                                                 \
-        m_xFtLocale->set_sensitive(true);                           \
-        m_xLbLocale->set_sensitive(true);                           \
-        m_xLbLocale->set_active_id(pNumFmtShell->GetCurLanguage()); \
-    }
-
 SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/numberingformatpage.ui"_ustr, u"NumberingFormatPage"_ustr, &rCoreAttrs)
@@ -204,14 +197,14 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     , m_nLbFormatSelPosEdComment(SELPOS_NONE)
     , bLegacyAutomaticCurrency(false)
     , sAutomaticLangEntry(CuiResId(RID_CUISTR_AUTO_ENTRY))
-    , m_xFtCategory(m_xBuilder->weld_label(u"categoryft"_ustr))
+    , m_xCategoryFrame(m_xBuilder->weld_frame(u"categoryframe"_ustr))
     , m_xLbCategory(m_xBuilder->weld_tree_view(u"categorylb"_ustr))
-    , m_xFtFormat(m_xBuilder->weld_label(u"formatft"_ustr))
+    , m_xFormatFrame(m_xBuilder->weld_frame(u"formatframe"_ustr))
     , m_xLbCurrency(m_xBuilder->weld_combo_box(u"currencylb"_ustr))
     , m_xLbFormat(m_xBuilder->weld_tree_view(u"formatlb"_ustr))
-    , m_xFtLocale(m_xBuilder->weld_label(u"localeft"_ustr))
+    , m_xFrameLocale(m_xBuilder->weld_frame(u"localeframe"_ustr))
     , m_xCbSourceFormat(m_xBuilder->weld_check_button(u"sourceformat"_ustr))
-    , m_xFtOptions(m_xBuilder->weld_label(u"optionsft"_ustr))
+    , m_xOptionsFrame(m_xBuilder->weld_frame(u"options"_ustr))
     , m_xFtDecimals(m_xBuilder->weld_label(u"decimalsft"_ustr))
     , m_xEdDecimals(m_xBuilder->weld_spin_button(u"decimalsed"_ustr))
     , m_xFtDenominator(m_xBuilder->weld_label(u"denominatorft"_ustr))
@@ -545,13 +538,13 @@ void SvxNumberFormatTabPage::Obstructing()
 {
     m_xLbFormat->unselect_all();
     m_xLbLocale->set_active(-1);
-    m_xFtLocale->set_sensitive(false);
-    m_xLbLocale->set_sensitive(false);
+    m_xFrameLocale->set_sensitive(false);
 
     m_xIbAdd->set_sensitive(false );
     m_xIbRemove->set_sensitive(false );
     m_xIbInfo->set_sensitive(false );
 
+    m_xOptionsFrame->set_sensitive(false);
     m_xBtnNegRed->set_sensitive(false);
     m_xBtnThousand->set_sensitive(false);
     m_xBtnEngineering->set_sensitive(false);
@@ -561,7 +554,6 @@ void SvxNumberFormatTabPage::Obstructing()
     m_xEdLeadZeroes->set_sensitive(false);
     m_xEdDecimals->set_sensitive(false);
     m_xEdDenominator->set_sensitive(false);
-    m_xFtOptions->set_sensitive(false);
     m_xEdDecimals->set_text( OUString() );
     m_xEdLeadZeroes->set_text( OUString() );
     m_xBtnNegRed->set_active( false );
@@ -587,13 +579,10 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     bool bEnable = !m_xCbSourceFormat->get_active();
     if ( !bEnable )
         m_xCbSourceFormat->grab_focus();
-    m_xFtCategory->set_sensitive( bEnable );
-    m_xLbCategory->set_sensitive( bEnable );
-    m_xFtFormat->set_sensitive( bEnable );
-    m_xLbCurrency->set_sensitive( bEnable );
-    m_xLbFormat->set_sensitive( bEnable );
-    m_xFtLocale->set_sensitive( bEnable );
-    m_xLbLocale->set_sensitive( bEnable );
+    m_xCategoryFrame->set_sensitive(bEnable);
+    m_xFormatFrame->set_sensitive(bEnable);
+    m_xFrameLocale->set_sensitive(bEnable);
+    m_xOptionsFrame->set_sensitive(bEnable);
     m_xFtDecimals->set_sensitive( bEnable );
     m_xEdDecimals->set_sensitive( bEnable );
     m_xFtDenominator->set_sensitive( bEnable );
@@ -602,11 +591,18 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
     m_xEdLeadZeroes->set_sensitive( bEnable );
     m_xBtnNegRed->set_sensitive( bEnable );
     m_xBtnThousand->set_sensitive( bEnable );
-    m_xBtnEngineering->set_sensitive( bEnable );
-    m_xFtOptions->set_sensitive( bEnable );
+    m_xBtnEngineering->set_sensitive(bEnable);
     m_xFormatCodeFrame->set_sensitive( bEnable );
 }
 
+void SvxNumberFormatTabPage::EnableLocaleUi()
+{
+    if (!m_xFrameLocale->get_sensitive())
+    {
+        m_xFrameLocale->set_sensitive(true);
+        m_xLbLocale->set_active_id(pNumFmtShell->GetCurLanguage());
+    }
+}
 
 /*************************************************************************
 #*  Method:    HideLanguage
@@ -621,8 +617,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 
 void SvxNumberFormatTabPage::HideLanguage(bool bFlag)
 {
-    m_xFtLocale->set_visible(!bFlag);
-    m_xLbLocale->set_visible(!bFlag);
+    m_xFrameLocale->set_visible(!bFlag);
 }
 
 /*************************************************************************
@@ -640,7 +635,7 @@ void SvxNumberFormatTabPage::HideLanguage(bool bFlag)
 
 bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 {
-    bool bDataChanged   = m_xFtLocale->get_sensitive() || m_xCbSourceFormat->get_sensitive();
+    bool bDataChanged = m_xFrameLocale->get_sensitive() || m_xCbSourceFormat->get_sensitive();
     if ( bDataChanged )
     {
         const SfxItemSet& rMyItemSet = GetItemSet();
@@ -887,7 +882,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_CURRENCY:
         case CAT_FRACTION:
         case CAT_TIME:
-            m_xFtOptions->set_sensitive(true);
+            m_xOptionsFrame->set_sensitive(true);
             if ( nCategory == CAT_FRACTION )
             {
                 m_xFtDenominator->set_sensitive(true);
@@ -925,7 +920,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_DATE:
         case CAT_BOOLEAN:
         default:
-            m_xFtOptions->set_sensitive(false);
+            m_xOptionsFrame->set_sensitive(false);
             m_xFtDecimals->set_sensitive(false);
             m_xEdDecimals->set_sensitive(false);
             m_xFtDenominator->set_sensitive(false);
@@ -990,8 +985,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         pNumFmtShell->LanguageChanged(m_xLbLocale->get_active_id(),
                                       nFmtLbSelPos,aEntryList);
 
-    REMOVE_DONTKNOW() // possibly UI-Enable
-
+    EnableLocaleUi();
 
     if ( (!aEntryList.empty()) && (nFmtLbSelPos != SELPOS_NONE) )
     {
@@ -1199,7 +1193,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(weld::Widget* pLb)
             ChangePreviewText( static_cast<sal_uInt16>(nSelPos) );
         }
 
-        REMOVE_DONTKNOW() // possibly UI-Enable
+        EnableLocaleUi();
 
         if ( pNumFmtShell->FindEntry( aFormat) )
         {

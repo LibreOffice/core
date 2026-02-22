@@ -32,10 +32,12 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <utility>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <bitmaps.hlst>
 

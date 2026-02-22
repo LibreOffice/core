@@ -22,13 +22,14 @@
 
 #include <tools/datetime.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/i18n/Calendar2.hpp>
 #include <unotools/unotoolsdllapi.h>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XCalendar4; }
+namespace com::sun::star::i18n { struct Calendar2; }
+namespace com::sun::star::i18n { struct CalendarItem2; }
 namespace com::sun::star::lang { struct Locale; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {

@@ -63,6 +63,7 @@
 #include <unocrsrhelper.hxx>
 #include <textcontentcontrol.hxx>
 #include <EnhancedPDFExportHelper.hxx>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
@@ -1267,7 +1268,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 }
             }
             assert(2 <= sal_Int32(nFieldLen));
-            pPor = new SwFieldPortion(SwFieldType::GetTypeStr(SwFieldTypesEnum::Input), nullptr, nFieldLen);
+            pPor = new SwFieldPortion(SwFieldType::GetTypeStr(SwFieldTypesEnum::Input), nullptr, nullptr, nFieldLen);
         }
         else
         {
@@ -2104,15 +2105,10 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
         if( GetInfo().IsStop() )
         {
             m_pCurr->SetLen(TextFrameIndex(0));
-            m_pCurr->Height( GetFrameRstHeight() + 1, false );
-            m_pCurr->SetRealHeight( GetFrameRstHeight() + 1 );
-
-            // Don't oversize the line in case of split flys, so we don't try to move the anchor
-            // of a precede fly forward, next to its follow.
-            if (m_pFrame->HasNonLastSplitFlyDrawObj())
-            {
-                m_pCurr->SetRealHeight(GetFrameRstHeight());
-            }
+            auto nFrameRstHeight = GetFrameRstHeight();
+            m_pCurr->Height(nFrameRstHeight + 1, false);
+            if (!m_pFrame->HasNonLastSplitFlyDrawObj())
+                m_pCurr->SetRealHeight(nFrameRstHeight + 1);
 
             m_pCurr->Width(0);
             m_pCurr->Truncate();
@@ -2455,16 +2451,23 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                 }
         }
 
-        if( IsRegisterOn() )
+        SwRectFnSet aRectFnSet(*m_pFrame);
+        if( IsRegisterOn() && !aRectFnSet.IsVert() )
         {
             SwTwips nTmpY = Y() + m_pCurr->GetAscent() + nLineHeight - m_pCurr->Height();
-            SwRectFnSet aRectFnSet(*m_pFrame);
-            if ( aRectFnSet.IsVert() )
-                nTmpY = m_pFrame->SwitchHorizontalToVertical( nTmpY );
             nTmpY = aRectFnSet.YDiff( nTmpY, RegStart() );
-            const sal_uInt16 nDiff = sal_uInt16( nTmpY % RegDiff() );
+            const sal_uInt16 nDiff = sal_uInt16( std::abs(nTmpY) % RegDiff() );
             if( nDiff )
-                nLineHeight += RegDiff() - nDiff;
+            {
+                if( nTmpY >= 0 )
+                {
+                    nLineHeight += RegDiff() - nDiff;
+                }
+                else
+                {
+                    nLineHeight += nDiff;
+                }
+            }
         }
     }
     m_pCurr->SetRealHeight( nLineHeight );

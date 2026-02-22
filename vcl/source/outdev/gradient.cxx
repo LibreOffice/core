@@ -21,6 +21,7 @@
 
 #include <vcl/gradient.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>

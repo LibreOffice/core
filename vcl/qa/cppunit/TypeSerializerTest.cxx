@@ -20,13 +20,16 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <comphelper/hash.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/vcompat.hxx>
 #include <comphelper/fileformat.h>
 #include <tools/fract.hxx>
 #include "CommonTools.hxx"
 
 #include <vcl/TypeSerializer.hxx>
+#include <com/sun/star/awt/GradientStyle.hpp>
 
 #if USE_TLS_NSS
 #include <nss.h>

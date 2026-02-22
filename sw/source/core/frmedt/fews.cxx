@@ -503,7 +503,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
             {
                 SdrObject* pDrawObj = aDrawObjs.back();
                 assert(pDrawObj);
-                if ( dynamic_cast<const SwVirtFlyDrawObj*>( pDrawObj) ==  nullptr &&
+                if ( DynCastSwVirtFlyDrawObj( pDrawObj) ==  nullptr &&
                      dynamic_cast<const SwFlyDrawObj*>( pDrawObj) ==  nullptr )
                 {
                     SwFlyFrameFormat *pFormat =
@@ -1338,7 +1338,7 @@ bool SwFEShell::IsFrameVertical(const bool bEnvironment, bool& bRTL, bool& bVert
         }
 
         if ( !bEnvironment )
-            if ( auto pVirtFly = dynamic_cast<const SwVirtFlyDrawObj*>( pObj) )
+            if ( auto pVirtFly = DynCastSwVirtFlyDrawObj( pObj) )
                 pRef = pVirtFly->GetFlyFrame();
 
         bVert = pRef->IsVertical();

@@ -21,17 +21,23 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <tools/json_writer.hxx>
 
 #include <vcl/builder.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/event.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <accessibility/vclxaccessibleedit.hxx>

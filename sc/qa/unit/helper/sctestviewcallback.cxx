@@ -14,7 +14,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/lokhelper.hxx>
 

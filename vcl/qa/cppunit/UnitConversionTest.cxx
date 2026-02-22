@@ -13,6 +13,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <tools/fldunit.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/fieldvalues.hxx>
 
 namespace

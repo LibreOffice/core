@@ -463,9 +463,9 @@ void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc, bool bAppl
         SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( UIName(rColl) );
         if( !pColl )
         {
-            const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+            const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(
                 UIName(rColl), SwGetPoolIdFromName::TxtColl );
-            if( USHRT_MAX != nId )
+            if( SwPoolFormatId::UNKNOWN != nId )
                 pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
             else
                 pColl = rDoc.MakeTextFormatColl( UIName(rColl),
@@ -841,8 +841,8 @@ void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSor
     {
         if(bWithDefault || pBase->GetName() !=  sStandard)
         {
-            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( UIName(pBase->GetName()), SwGetPoolIdFromName::ChrFmt );
-            OUString sId(OUString::number(nPoolId));
+            SwPoolFormatId nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( UIName(pBase->GetName()), SwGetPoolIdFromName::ChrFmt );
+            OUString sId(OUString::number(sal_uInt16(nPoolId)));
             if (bSorted)
                 InsertStringSorted(sId, pBase->GetName(), rToFill, nOffset);
             else

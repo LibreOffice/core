@@ -11,6 +11,7 @@
 
 #include <gridwin.hxx>
 #include <svx/svdpage.hxx>
+#include <tools/mapunit.hxx>
 #include <libxml/xmlwriter.h>
 #include <viewdata.hxx>
 #include <document.hxx>

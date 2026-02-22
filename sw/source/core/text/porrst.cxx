@@ -372,8 +372,8 @@ SwTwips SwTextFrame::EmptyHeight() const
     }
     else
     {
-        SwFontAccess aFontAccess( &rTextNode.GetTextFormatColl(), pSh);
-        pFnt.reset(new SwFont( aFontAccess.Get()->GetFont() ));
+        const SwFontObj& rFontAccess = rTextNode.GetTextFormatColl().GetFontObj(pSh);
+        pFnt.reset(new SwFont( rFontAccess.GetFont() ));
         pFnt->CheckFontCacheId( pSh, pFnt->GetActual() );
     }
 
@@ -442,9 +442,10 @@ bool SwTextFrame::FormatEmpty()
         return false;
     const SwAttrSet& aSet = GetTextNodeForParaProps()->GetSwAttrSet();
     const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
-    if( !bCollapse && ( ( ( ! IsRightToLeft() && ( SvxAdjust::Left != nAdjust ) ) ||
-          (   IsRightToLeft() && ( SvxAdjust::Right != nAdjust ) ) ) ||
-          aSet.GetRegister().GetValue() ) )
+    bool bAdjustInsignificant = (!IsRightToLeft() && (SvxAdjust::Left == nAdjust))
+                                || (IsRightToLeft() && (SvxAdjust::Right == nAdjust))
+                                || (SvxAdjust::ParaStart == nAdjust);
+    if (!bCollapse && (!bAdjustInsignificant || aSet.GetRegister().GetValue()))
         return false;
     const SvxLineSpacingItem &rSpacing = aSet.GetLineSpacing();
     if( !bCollapse && ( SvxLineSpaceRule::Min == rSpacing.GetLineSpaceRule() ||
@@ -542,22 +543,32 @@ bool SwTextFrame::FormatEmpty()
 
 bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
 {
-    const SwFrame *pFrame = this;
     rRegDiff = 0;
+    rRegStart = 0;
+    if(IsVertical())
+    {
+        return false;
+    }
+    const SwFrame *pFrame = this;
     while( !( ( SwFrameType::Body | SwFrameType::Fly )
            & pFrame->GetType() ) && pFrame->GetUpper() )
         pFrame = pFrame->GetUpper();
     if( ( SwFrameType::Body| SwFrameType::Fly ) & pFrame->GetType() )
     {
         SwRectFnSet aRectFnSet(*pFrame);
-        rRegStart = aRectFnSet.GetPrtTop(*pFrame);
+        if(aRectFnSet.IsVert())
+        {
+            return false;
+        }
         pFrame = pFrame->FindPageFrame();
         if( pFrame->IsPageFrame() )
         {
             const SwPageFrame* pPage = static_cast<const SwPageFrame*>(pFrame);
+            const SwLayoutFrame* pBody = pPage->FindBodyCont();
             SwPageDesc* pDesc = const_cast<SwPageFrame*>(pPage)->FindPageDesc();
-            if( pDesc )
+            if( pDesc && pBody )
             {
+                rRegStart = aRectFnSet.GetPrtTop(*pBody);
                 rRegDiff = pDesc->GetRegHeight();
                 if( !rRegDiff )
                 {
@@ -573,10 +584,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                     }
                 }
                 const tools::Long nTmpDiff = pDesc->GetRegAscent() - rRegDiff;
-                if ( aRectFnSet.IsVert() )
-                    rRegStart -= nTmpDiff;
-                else
-                    rRegStart += nTmpDiff;
+                rRegStart += nTmpDiff;
             }
         }
     }

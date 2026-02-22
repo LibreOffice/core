@@ -14,6 +14,7 @@
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 

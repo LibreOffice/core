@@ -134,7 +134,7 @@ public:
             { m_pDefinedIn = const_cast<sw::FormatDropDefiner*>(pDefiner); };
 };
 
-class SwRegisterItem final : public SfxBoolItem
+class SW_DLLPUBLIC SwRegisterItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -168,7 +168,6 @@ public:
     SwNumRuleItem(SwNumRuleItem const &) = default; // SfxPoolItem copy function dichotomy
 
     /// "pure virtual methods" of SfxPoolItem
-    virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwNumRuleItem*  Clone( SfxItemPool *pPool = nullptr ) const override;
     // Marked as false since the SfxStringItem superclass supports hashing, but
     // this class has not been checked for safety under hashing yet.

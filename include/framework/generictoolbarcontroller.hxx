@@ -23,6 +23,8 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/toolbox.hxx>
 
+namespace weld { class Toolbar; }
+
 namespace framework
 {
 

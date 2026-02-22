@@ -42,7 +42,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
     // Load document
     uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
                                                                                  false) };
-    loadWithParams(u"private:factory/swriter"_ustr, aLoadArgs);
+    loadFromURL(u"private:factory/swriter"_ustr, aLoadArgs);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
@@ -85,7 +85,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkTitleSuggestedFileName)
     uno::Sequence<beans::PropertyValue> aArguments
         = { comphelper::makePropertyValue(u"SuggestedSaveAsName"_ustr, u"suggestedname.odt"_ustr),
             comphelper::makePropertyValue(u"Hidden"_ustr, false) };
-    loadWithParams(u"private:factory/swriter"_ustr, aArguments);
+    loadFromURL(u"private:factory/swriter"_ustr, aArguments);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
     uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
@@ -103,7 +103,7 @@ CPPUNIT_TEST_FIXTURE(Test, setTitleAndCheck)
 
     uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
                                                                                  false) };
-    loadWithParams(u"private:factory/swriter"_ustr, aLoadArgs);
+    loadFromURL(u"private:factory/swriter"_ustr, aLoadArgs);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XController> xController(xModel->getCurrentController());

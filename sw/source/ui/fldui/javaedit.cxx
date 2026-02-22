@@ -22,6 +22,8 @@
 #include <view.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <fldbas.hxx>

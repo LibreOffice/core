@@ -223,6 +223,7 @@ interface TableEditView
 
     SID_PRINTPREVIEW    [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_THEME_DIALOG    [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_APPLY_THEME     [ ExecMethod = Execute; StateMethod = GetState; ]
 
     SID_NAVIGATOR_SELECT_COMMENT [ ExecMethod = ExecNavigatorWin; ]
 

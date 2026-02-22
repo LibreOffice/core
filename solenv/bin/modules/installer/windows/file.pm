@@ -302,7 +302,6 @@ sub get_file_component_name
         # $componentname =~ s/_basicidecommands_/_baic_/g;
         # $componentname =~ s/_genericcommands_/_genc_/g;
         # $componentname =~ s/_bibliographycommands_/_bibc_/g;
-        # $componentname =~ s/_gentiumbookbasicbolditalic_/_gbbbi_/g;
         # $componentname =~ s/_share_/_s_/g;
         # $componentname =~ s/_extension_/_ext_/g;
         # $componentname =~ s/_extensions_/_exs_/g;

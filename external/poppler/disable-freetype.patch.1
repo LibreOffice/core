@@ -32,25 +32,25 @@ disable freetype dependent code
      if (!filepath.ends_with(".ttf") && !filepath.ends_with(".ttc") && !filepath.ends_with(".otf")) {
          error(errIO, -1, "We only support embedding ttf/ttc/otf fonts for now. The font file for {0:s} {1:s} was {2:s}", fontFamily.c_str(), fontStyle.c_str(), filepath.c_str());
          return {};
-@@ -2994,6 +2996,7 @@
+@@ -2974,6 +2974,7 @@
      }
  
-     return { dictFontName, fontDictRef };
+     return { .fontName = dictFontName, .ref = fontDictRef };
 +#endif
  }
  
  std::string Form::getFallbackFontForChar(Unicode uChar, const GfxFont &fontToEmulate) const
 --- poppler/splash/SplashFontEngine.cc.orig	2024-02-21 01:28:10.479645185 +0000
 +++ popller/splash/SplashFontEngine.cc	2023-09-05 22:15:14.000000000 +0100
-@@ -66,7 +66,7 @@
+@@ -59,8 +59,6 @@
+     for (auto *font : fontCache) {
          delete font;
      }
- 
+-
 -    delete ftEngine;
-+    //delete ftEngine;
  }
  
- SplashFontFile *SplashFontEngine::getFontFile(const SplashFontFileID &id)
+ std::shared_ptr<SplashFontFile> SplashFontEngine::getFontFile(const SplashFontFileID &id)
 --- poppler/splash/SplashFTFontEngine.h.orig	2023-09-05 22:15:14.000000000 +0100
 +++ poppler/splash/SplashFTFontEngine.h	2024-02-21 13:53:29.715423742 +0000
 @@ -27,8 +27,6 @@
@@ -71,23 +71,23 @@ disable freetype dependent code
  
      ~SplashFTFontEngine();
  
-@@ -51,22 +49,20 @@
+@@ -49,22 +49,20 @@
      SplashFTFontEngine &operator=(const SplashFTFontEngine &) = delete;
  
      // Load fonts.
--    SplashFontFile *loadType1Font(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, const char **enc, int faceIndex);
--    SplashFontFile *loadType1CFont(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, const char **enc, int faceIndex);
--    SplashFontFile *loadOpenTypeT1CFont(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, const char **enc, int faceIndex);
--    SplashFontFile *loadCIDFont(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, int faceIndex);
--    SplashFontFile *loadOpenTypeCFFFont(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, std::vector<int> &&codeToGID, int faceIndex);
--    SplashFontFile *loadTrueTypeFont(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, std::vector<int> &&codeToGID, int faceIndex);
-+    SplashFontFile *loadType1Font(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, const char **enc, int faceIndex) { return nullptr; };
-+    SplashFontFile *loadType1CFont(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, const char **enc, int faceIndex) { return nullptr; };
-+    SplashFontFile *loadOpenTypeT1CFont(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, const char **enc, int faceIndex) { return nullptr; };
-+    SplashFontFile *loadCIDFont(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, int faceIndex) { return nullptr; };
-+    SplashFontFile *loadOpenTypeCFFFont(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, std::vector<int> &&codeToGID, int faceIndex) { return nullptr; };
-+    SplashFontFile *loadTrueTypeFont(std::unique_ptr<SplashFontFileID> idA, SplashFontSrc *src, std::vector<int> &&codeToGID, int faceIndex) { return nullptr; };
-     bool getAA() { return aa; }
+-    std::shared_ptr<SplashFontFile> loadType1Font(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex);
+-    std::shared_ptr<SplashFontFile> loadType1CFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex);
+-    std::shared_ptr<SplashFontFile> loadOpenTypeT1CFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex);
+-    std::shared_ptr<SplashFontFile> loadCIDFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, int faceIndex);
+-    std::shared_ptr<SplashFontFile> loadOpenTypeCFFFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, std::vector<int> &&codeToGID, int faceIndex);
+-    std::shared_ptr<SplashFontFile> loadTrueTypeFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, std::vector<int> &&codeToGID, int faceIndex);
++    std::shared_ptr<SplashFontFile> loadType1Font(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex) { return nullptr; };
++    std::shared_ptr<SplashFontFile> loadType1CFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex) { return nullptr; };
++    std::shared_ptr<SplashFontFile> loadOpenTypeT1CFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, const char **enc, int faceIndex) { return nullptr; };
++    std::shared_ptr<SplashFontFile> loadCIDFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, int faceIndex) { return nullptr; };
++    std::shared_ptr<SplashFontFile> loadOpenTypeCFFFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, std::vector<int> &&codeToGID, int faceIndex) { return nullptr; };
++    std::shared_ptr<SplashFontFile> loadTrueTypeFont(std::unique_ptr<SplashFontFileID> idA, std::unique_ptr<SplashFontSrc> src, std::vector<int> &&codeToGID, int faceIndex) { return nullptr; };
+     bool getAA() const { return aa; }
      void setAA(bool aaA) { aa = aaA; }
  
  private:

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2025-01-02 12:16:27 using:
+ Generated on 2026-02-11 13:08:20 using:
  ./bin/update_pch external/zxing zxing --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,12 +24,15 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <cassert>
 #include <cctype>
+#include <charconv>
 #include <climits>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <exception>
@@ -42,8 +45,10 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <numbers>
 #include <numeric>
 #include <optional>
+#include <ranges>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -55,27 +60,7 @@
 #if PCH_LEVEL >= 2
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <aztec/AZReader.h>
-#include <aztec/AZWriter.h>
-#include <datamatrix/DMReader.h>
-#include <datamatrix/DMWriter.h>
 #include <libzueci/zueci.h>
-#include <maxicode/MCReader.h>
-#include <oned/ODCodabarWriter.h>
-#include <oned/ODCode128Writer.h>
-#include <oned/ODCode39Writer.h>
-#include <oned/ODCode93Writer.h>
-#include <oned/ODEAN13Writer.h>
-#include <oned/ODEAN8Writer.h>
-#include <oned/ODITFWriter.h>
-#include <oned/ODReader.h>
-#include <oned/ODUPCAWriter.h>
-#include <oned/ODUPCEWriter.h>
-#include <pdf417/PDFReader.h>
-#include <pdf417/PDFWriter.h>
-#include <qrcode/QRErrorCorrectionLevel.h>
-#include <qrcode/QRReader.h>
-#include <qrcode/QRWriter.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4

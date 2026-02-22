@@ -41,6 +41,8 @@
 #include <sfx2/objitem.hxx>
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tabwin.hrc>
 #include <utility>

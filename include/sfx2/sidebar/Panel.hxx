@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
+#include <vcl/vclptr.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vector>

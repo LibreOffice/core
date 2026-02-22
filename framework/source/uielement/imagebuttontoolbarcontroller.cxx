@@ -25,6 +25,7 @@
 
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>

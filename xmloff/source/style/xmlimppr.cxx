@@ -34,7 +34,7 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlimp.hxx>
-
+#include <xmloff/xmlcnimp.hxx>
 #include <xmloff/unoatrcn.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>

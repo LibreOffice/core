@@ -12,6 +12,8 @@
 #include "sdmodeltestbase.hxx"
 #include <sdpage.hxx>
 
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <editeng/editobj.hxx>
@@ -45,6 +47,7 @@
 
 #include <svx/svdotable.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 using namespace css;
 using namespace css::animations;
@@ -75,6 +78,11 @@ public:
                 osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
         };
     };
+
+    void testLinkedGraphicRT(TestFilter eFilter);
+    void testImageWithSpecialID(TestFilter eFilter);
+    void testSwappedOutImageExport(TestFilter eFilter);
+    void testSvgImageSupport(TestFilter eFilter);
 
 protected:
     uno::Reference<awt::XBitmap> getBitmapFromTable(OUString const& rName);
@@ -555,86 +563,93 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf97630)
                 1);
 }
 
-CPPUNIT_TEST_FIXTURE(SdExportTest, testImpressPasswordExport)
+CPPUNIT_TEST_FIXTURE(SdExportTest, testImpressPasswordExport_ODP)
 {
-    std::vector<TestFilter> vFormat{ TestFilter::ODP, TestFilter::PPTX };
+    createSdImpressDoc();
+    saveAndReload(TestFilter::ODP, /*rParams*/ {}, /*pPassword*/ "test");
+}
 
-    for (size_t i = 0; i < vFormat.size(); i++)
-    {
-        createSdImpressDoc();
-
-        saveAndReload(vFormat[i], /*pPassword*/ "test");
-    }
+CPPUNIT_TEST_FIXTURE(SdExportTest, testImpressPasswordExport_PPTX)
+{
+    createSdImpressDoc();
+    saveAndReload(TestFilter::PPTX, /*rParams*/ {}, /*pPassword*/ "test");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testDrawPasswordExport)
 {
     createSdDrawDoc();
 
-    saveAndReload(TestFilter::ODG, /*pPassword*/ "test");
+    saveAndReload(TestFilter::ODG, /*rParams*/ {}, /*pPassword*/ "test");
 }
 
-CPPUNIT_TEST_FIXTURE(SdExportTest, testSwappedOutImageExport)
+CPPUNIT_TEST_FIXTURE(SdExportTest, testSwappedOutImageExport_ODP)
+{
+    testSwappedOutImageExport(TestFilter::ODP);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testSwappedOutImageExport_PPT)
+{
+    testSwappedOutImageExport(TestFilter::PPT);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testSwappedOutImageExport_PPTX)
+{
+    testSwappedOutImageExport(TestFilter::PPTX);
+}
+
+void SdExportTest::testSwappedOutImageExport(TestFilter eFilter)
 {
     // Problem was with the swapped out images, which were not swapped in during export.
+    createSdImpressDoc("odp/document_with_two_images.odp");
+    const OString sFailedMessage = "Failed on filter: " + TestFilterNames.at(eFilter).toUtf8();
 
-    std::vector<TestFilter> vFormat{ TestFilter::ODP, TestFilter::PPTX, TestFilter::PPT };
+    // Export the document and import again for a check
+    saveAndReload(eFilter);
 
-    for (size_t i = 0; i < vFormat.size(); i++)
+    // Check whether graphic exported well after it was swapped out
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
+                                 xDrawPagesSupplier->getDrawPages()->getCount());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY_THROW);
+
+    uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
+
+    // Check Graphic, Size
     {
-        // Load the original file with one image
-        createSdImpressDoc("odp/document_with_two_images.odp");
-        const OString sFailedMessage
-            = "Failed on filter: " + TestFilterNames.at(vFormat[i]).toUtf8();
+        uno::Reference<graphic::XGraphic> xGraphic;
+        XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
+                               xGraphic->getType() != graphic::GraphicType::EMPTY);
+        uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610),
+                                     xBitmap->getSize().Width);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381),
+                                     xBitmap->getSize().Height);
+    }
 
-        // Export the document and import again for a check
-        saveAndReload(vFormat[i]);
+    // Second Image
+    xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW);
+    xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    XPropSet.set(xImage, uno::UNO_QUERY_THROW);
 
-        // Check whether graphic exported well after it was swapped out
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
-                                                                       uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
-                                     xDrawPagesSupplier->getDrawPages()->getCount());
-        uno::Reference<drawing::XDrawPage> xDrawPage(
-            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
-
-        uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
-
-        // Check Graphic, Size
-        {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
-                                   xGraphic->getType() != graphic::GraphicType::EMPTY);
-            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610),
-                                         xBitmap->getSize().Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381),
-                                         xBitmap->getSize().Height);
-        }
-
-        // Second Image
-        xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW);
-        xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-        XPropSet.set(xImage, uno::UNO_QUERY_THROW);
-
-        // Check Graphic, Size
-        {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
-                                   xGraphic->getType() != graphic::GraphicType::EMPTY);
-            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900),
-                                         xBitmap->getSize().Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600),
-                                         xBitmap->getSize().Height);
-        }
+    // Check Graphic, Size
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+        XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
+                               xGraphic->getType() != graphic::GraphicType::EMPTY);
+        uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900),
+                                     xBitmap->getSize().Width);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600),
+                                     xBitmap->getSize().Height);
     }
 }
 
@@ -793,62 +808,74 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf128985)
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nWritingMode);
 }
 
-CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT)
+CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT_ODP)
 {
-    // FIXME: PPTX fails
-    std::vector<TestFilter> vFormat{ TestFilter::ODP, TestFilter::PPT };
-    for (size_t i = 0; i < vFormat.size(); i++)
+    testLinkedGraphicRT(TestFilter::ODP);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT_PPT)
+{
+    testLinkedGraphicRT(TestFilter::PPT);
+}
+
+// FIXME: PPTX fails
+/*
+CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT_PPTX)
+{
+    testLinkedGraphicRT(TestFilter::PPTX);
+}
+*/
+
+void SdExportTest::testLinkedGraphicRT(TestFilter eFilter)
+{
+    // Load the original file with one image
+    createSdImpressDoc("odp/document_with_linked_graphic.odp");
+
+    // Check if the graphic has been imported correctly (before doing the export/import run)
     {
-        // Load the original file with one image
-        createSdImpressDoc("odp/document_with_linked_graphic.odp");
+        static constexpr OString sFailedImportMessage
+            = "Failed to correctly import the document"_ostr;
+        SdXImpressDocument* pXImpressDocument
+            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pXImpressDocument);
+        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+        CPPUNIT_ASSERT_MESSAGE(sFailedImportMessage.getStr(), pDoc != nullptr);
+        const SdrPage* pPage = pDoc->GetPage(1);
+        CPPUNIT_ASSERT_MESSAGE(sFailedImportMessage.getStr(), pPage != nullptr);
+        SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
+        CPPUNIT_ASSERT_MESSAGE(sFailedImportMessage.getStr(), pObject != nullptr);
+        CPPUNIT_ASSERT_MESSAGE(sFailedImportMessage.getStr(), pObject->IsLinkedGraphic());
 
-        // Check if the graphic has been imported correctly (before doing the export/import run)
-        {
-            static constexpr OString sFailedImportMessage
-                = "Failed to correctly import the document"_ostr;
-            SdXImpressDocument* pXImpressDocument
-                = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-            CPPUNIT_ASSERT(pXImpressDocument);
-            SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-            CPPUNIT_ASSERT_MESSAGE(sFailedImportMessage.getStr(), pDoc != nullptr);
-            const SdrPage* pPage = pDoc->GetPage(1);
-            CPPUNIT_ASSERT_MESSAGE(sFailedImportMessage.getStr(), pPage != nullptr);
-            SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
-            CPPUNIT_ASSERT_MESSAGE(sFailedImportMessage.getStr(), pObject != nullptr);
-            CPPUNIT_ASSERT_MESSAGE(sFailedImportMessage.getStr(), pObject->IsLinkedGraphic());
+        const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedImportMessage.getStr(), int(GraphicType::Bitmap),
+                                     int(rGraphicObj.GetGraphic().GetType()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedImportMessage.getStr(), sal_uLong(864900),
+                                     rGraphicObj.GetGraphic().GetSizeBytes());
+    }
 
-            const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedImportMessage.getStr(), int(GraphicType::Bitmap),
-                                         int(rGraphicObj.GetGraphic().GetType()));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedImportMessage.getStr(), sal_uLong(864900),
-                                         rGraphicObj.GetGraphic().GetSizeBytes());
-        }
+    // Save and reload
+    saveAndReload(eFilter);
 
-        // Save and reload
-        saveAndReload(vFormat[i]);
+    // Check whether graphic imported well after export
+    {
+        const OString sFailedMessage = "Failed on filter: " + TestFilterNames.at(eFilter).toUtf8();
 
-        // Check whether graphic imported well after export
-        {
-            const OString sFailedMessage
-                = "Failed on filter: " + TestFilterNames.at(vFormat[i]).toUtf8();
+        SdXImpressDocument* pXImpressDocument
+            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pXImpressDocument);
+        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDoc != nullptr);
+        const SdrPage* pPage = pDoc->GetPage(1);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pPage != nullptr);
+        SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pObject != nullptr);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pObject->IsLinkedGraphic());
 
-            SdXImpressDocument* pXImpressDocument
-                = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-            CPPUNIT_ASSERT(pXImpressDocument);
-            SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDoc != nullptr);
-            const SdrPage* pPage = pDoc->GetPage(1);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pPage != nullptr);
-            SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pObject != nullptr);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pObject->IsLinkedGraphic());
-
-            const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(GraphicType::Bitmap),
-                                         int(rGraphicObj.GetGraphic().GetType()));
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(864900),
-                                         rGraphicObj.GetGraphic().GetSizeBytes());
-        }
+        const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(GraphicType::Bitmap),
+                                     int(rGraphicObj.GetGraphic().GetType()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(864900),
+                                     rGraphicObj.GetGraphic().GetSizeBytes());
     }
 }
 
@@ -887,65 +914,73 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf79082)
                 "position", u"25.4cm");
 }
 
-CPPUNIT_TEST_FIXTURE(SdExportTest, testImageWithSpecialID)
+CPPUNIT_TEST_FIXTURE(SdExportTest, testImageWithSpecialID_ODP)
+{
+    testImageWithSpecialID(TestFilter::ODP);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testImageWithSpecialID_PPT)
+{
+    testImageWithSpecialID(TestFilter::PPT);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testImageWithSpecialID_PPTX)
+{
+    testImageWithSpecialID(TestFilter::PPTX);
+}
+
+void SdExportTest::testImageWithSpecialID(TestFilter eFilter)
 {
     // Check how LO handles when the imported graphic's ID is different from that one
     // which is generated by LO.
+    createSdImpressDoc("odp/images_with_special_IDs.odp");
+    const OString sFailedMessage = "Failed on filter: " + TestFilterNames.at(eFilter).toUtf8();
+    saveAndReload(eFilter);
 
-    std::vector<TestFilter> vFormat{ TestFilter::ODP, TestFilter::PPTX, TestFilter::PPT };
-    for (size_t i = 0; i < vFormat.size(); i++)
+    // Check whether graphic was exported well
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
+                                 xDrawPagesSupplier->getDrawPages()->getCount());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY_THROW);
+
+    uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
+
+    // Check Graphic, Size
     {
-        // Load the original file
-        createSdImpressDoc("odp/images_with_special_IDs.odp");
-        const OString sFailedMessage
-            = "Failed on filter: " + TestFilterNames.at(vFormat[i]).toUtf8();
-        saveAndReload(vFormat[i]);
+        uno::Reference<graphic::XGraphic> xGraphic;
+        XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
+                               xGraphic->getType() != graphic::GraphicType::EMPTY);
+        uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610),
+                                     xBitmap->getSize().Width);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381),
+                                     xBitmap->getSize().Height);
+    }
 
-        // Check whether graphic was exported well
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
-                                                                       uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
-                                     xDrawPagesSupplier->getDrawPages()->getCount());
-        uno::Reference<drawing::XDrawPage> xDrawPage(
-            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    // Second Image
+    xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW);
+    xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    XPropSet.set(xImage, uno::UNO_QUERY_THROW);
 
-        uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
-
-        // Check Graphic, Size
-        {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
-                                   xGraphic->getType() != graphic::GraphicType::EMPTY);
-            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610),
-                                         xBitmap->getSize().Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381),
-                                         xBitmap->getSize().Height);
-        }
-
-        // Second Image
-        xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW);
-        xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-        XPropSet.set(xImage, uno::UNO_QUERY_THROW);
-
-        // Check Graphic, Size
-        {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
-                                   xGraphic->getType() != graphic::GraphicType::EMPTY);
-            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900),
-                                         xBitmap->getSize().Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600),
-                                         xBitmap->getSize().Height);
-        }
+    // Check Graphic, Size
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+        XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
+                               xGraphic->getType() != graphic::GraphicType::EMPTY);
+        uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900),
+                                     xBitmap->getSize().Width);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600),
+                                     xBitmap->getSize().Height);
     }
 }
 
@@ -1018,9 +1053,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdf)
 
     loadFromFile(u"pdf/sample.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
     setImportFilterName(TestFilter::FODG);
-    saveAndReload(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG,
+                  {
+                      comphelper::makePropertyValue(
+                          u"FilterOptions"_ustr,
+                          u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+                  });
 
     const SdrPage* pPage = GetPage(1);
 
@@ -1041,9 +1080,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
 
     loadFromFile(u"pdf/textheight1.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
     setImportFilterName(TestFilter::FODG);
-    saveAndReload(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG,
+                  {
+                      comphelper::makePropertyValue(
+                          u"FilterOptions"_ustr,
+                          u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+                  });
 
     xmlDocUniquePtr pXml = parseLayout();
     sal_Int32 x = getXPath(pXml, "//textarray[1]", "x").toInt32();
@@ -1072,9 +1115,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
 
     loadFromFile(u"pdf/differentfonts.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
     setImportFilterName(TestFilter::FODG);
-    saveAndReload(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG,
+                  {
+                      comphelper::makePropertyValue(
+                          u"FilterOptions"_ustr,
+                          u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+                  });
 
     xmlDocUniquePtr pXml = parseLayout();
     {
@@ -1111,8 +1158,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
 
     loadFromFile(u"pdf/BasicHindi.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    save(TestFilter::FODG);
+    save(TestFilter::FODG,
+         {
+             comphelper::makePropertyValue(
+                 u"FilterOptions"_ustr,
+                 u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+         });
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
@@ -1120,12 +1171,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
 
     // ensure the expected content
     assertXPathContent(pXmlDoc,
-                       "/office:document/office:body/office:drawing/draw:page/draw:g/draw:frame[3]/"
-                       "draw:text-box/text:p[@text:style-name='P4'][1]",
+                       "/office:document/office:body/office:drawing/draw:page/draw:g/draw:frame[4]/"
+                       "draw:text-box/text:p[@text:style-name='P6'][1]",
                        u"FIRST-YEAR HINDI COURSE");
 
     // ensure the expected font name
-    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='P4']/"
+    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='P6']/"
                          "style:text-properties[@style:font-name='AcademyEngravedLetPlain']");
 }
 
@@ -1138,9 +1189,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfGrayscaleImageUnderInvisibleTe
 
     loadFromFile(u"pdf/GrayscaleImageUnderInvisibleTest.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
     setImportFilterName(TestFilter::FODG);
-    saveAndReload(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG,
+                  {
+                      comphelper::makePropertyValue(
+                          u"FilterOptions"_ustr,
+                          u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+                  });
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroupShape.is());
@@ -1185,9 +1240,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfClippedImages)
 
     loadFromFile(u"pdf/ClippedImages.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
     setImportFilterName(TestFilter::FODG);
-    saveAndReload(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG,
+                  {
+                      comphelper::makePropertyValue(
+                          u"FilterOptions"_ustr,
+                          u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+                  });
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xGroupShape.is());
@@ -1215,9 +1274,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfMissingFontVersion)
 
     loadFromFile(u"pdf/ErrareHumanumEst.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
     setImportFilterName(TestFilter::FODG);
-    saveAndReload(TestFilter::FODG);
+    saveAndReload(TestFilter::FODG,
+                  {
+                      comphelper::makePropertyValue(
+                          u"FilterOptions"_ustr,
+                          u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+                  });
 
     const SdrPage* pPage = GetPage(1);
 
@@ -1240,8 +1303,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfEmbeddedFonts)
 
     loadFromFile(u"pdf/sciencejournalsource.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    save(TestFilter::FODG);
+    save(TestFilter::FODG,
+         {
+             comphelper::makePropertyValue(
+                 u"FilterOptions"_ustr,
+                 u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+         });
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
@@ -1261,8 +1328,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternStroke)
 
     loadFromFile(u"pdf/pattern-stroke.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    save(TestFilter::FODG);
+    save(TestFilter::FODG,
+         {
+             comphelper::makePropertyValue(
+                 u"FilterOptions"_ustr,
+                 u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+         });
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
@@ -1281,8 +1352,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternFill)
 
     loadFromFile(u"pdf/pattern-fill.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    save(TestFilter::FODG);
+    save(TestFilter::FODG,
+         {
+             comphelper::makePropertyValue(
+                 u"FilterOptions"_ustr,
+                 u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+         });
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
@@ -1303,8 +1378,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testPdfPageMasterOrientation)
 
     loadFromFile(u"pdf/SampleSlideDeck.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    save(TestFilter::FODG);
+    save(TestFilter::FODG,
+         {
+             comphelper::makePropertyValue(
+                 u"FilterOptions"_ustr,
+                 u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+         });
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
@@ -1325,8 +1404,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextShear)
 
     loadFromFile(u"pdf/textshear.pdf");
 
-    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
-    save(TestFilter::FODG);
+    save(TestFilter::FODG,
+         {
+             comphelper::makePropertyValue(
+                 u"FilterOptions"_ustr,
+                 u"{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}"_ustr),
+         });
 
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
@@ -1484,46 +1567,44 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testPageWithTransparentBackground)
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTextRotation)
 {
-    // Save behavior depends on whether ODF strict or extended is used.
-    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
-
     // The contained shape has a text rotation vert="vert" which corresponds to
     // loext:writing-mode="tb-rl90" in the graphic-properties of the style of the shape in ODF 1.3
     // extended.
     // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
     // attribute value "tb-rl90" is included in ODF strict.
-    {
-        createSdImpressDoc("pptx/shape-text-rotate.pptx");
-        saveAndReload(TestFilter::ODP);
+    createSdImpressDoc("pptx/shape-text-rotate.pptx");
+    saveAndReload(TestFilter::ODP);
 
-        uno::Reference<drawing::XDrawPage> xPage(getPage(0));
-        uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
-        CPPUNIT_ASSERT(xPropSet.is());
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0));
+    uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
+    CPPUNIT_ASSERT(xPropSet.is());
 
-        auto aWritingMode = xPropSet->getPropertyValue(u"WritingMode"_ustr).get<sal_Int16>();
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL90), aWritingMode);
-    }
+    auto aWritingMode = xPropSet->getPropertyValue(u"WritingMode"_ustr).get<sal_Int16>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL90), aWritingMode);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTextRotation_ODFVER_013)
+{
+    comphelper::ScopeGuard g([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+
     // In ODF 1.3 strict the workaround to use the TextRotateAngle is used instead.
-    {
-        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
 
-        createSdImpressDoc("pptx/shape-text-rotate.pptx");
-        saveAndReload(TestFilter::ODP);
+    createSdImpressDoc("pptx/shape-text-rotate.pptx");
+    saveAndReload(TestFilter::ODP);
 
-        uno::Reference<drawing::XDrawPage> xPage(getPage(0));
-        uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0));
+    uno::Reference<beans::XPropertySet> xPropSet(getShape(0, xPage));
 
-        CPPUNIT_ASSERT(xPropSet.is());
-        auto aGeomPropSeq = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                                .get<uno::Sequence<beans::PropertyValue>>();
-        comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
+    CPPUNIT_ASSERT(xPropSet.is());
+    auto aGeomPropSeq = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
+                            .get<uno::Sequence<beans::PropertyValue>>();
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
 
-        auto it = aCustomShapeGeometry.find(u"TextRotateAngle"_ustr);
-        CPPUNIT_ASSERT(it != aCustomShapeGeometry.end());
+    auto it = aCustomShapeGeometry.find(u"TextRotateAngle"_ustr);
+    CPPUNIT_ASSERT(it != aCustomShapeGeometry.end());
 
-        CPPUNIT_ASSERT_EQUAL(double(-90),
-                             aCustomShapeGeometry[u"TextRotateAngle"_ustr].get<double>());
-    }
+    CPPUNIT_ASSERT_EQUAL(double(-90), aCustomShapeGeometry[u"TextRotateAngle"_ustr].get<double>());
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf115394PPT)
@@ -2409,46 +2490,53 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf153179)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getPage(0)->getCount());
 }
 
-CPPUNIT_TEST_FIXTURE(SdExportTest, testSvgImageSupport)
+CPPUNIT_TEST_FIXTURE(SdExportTest, testSvgImageSupport_ODP)
 {
-    for (TestFilter eFormat : { TestFilter::ODP, TestFilter::PPTX })
-    {
-        // Load the original file
-        createSdImpressDoc("odp/SvgImageTest.odp");
-        // Save into the target format
-        saveAndReload(eFormat);
+    testSvgImageSupport(TestFilter::ODP);
+}
 
-        const OString sFailedMessage = "Failed on filter: " + TestFilterNames.at(eFormat).toUtf8();
+CPPUNIT_TEST_FIXTURE(SdExportTest, testSvgImageSupport_PPTX)
+{
+    testSvgImageSupport(TestFilter::PPTX);
+}
 
-        // Check whether SVG graphic was exported as expected
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
-                                                                       uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1),
-                                     xDrawPagesSupplier->getDrawPages()->getCount());
-        uno::Reference<drawing::XDrawPage> xDrawPage(
-            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDrawPage.is());
+void SdExportTest::testSvgImageSupport(TestFilter eFilter)
+{
+    // Load the original file
+    createSdImpressDoc("odp/SvgImageTest.odp");
+    // Save into the target format
+    saveAndReload(eFilter);
 
-        // Get the image
-        uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xPropertySet(xImage, uno::UNO_QUERY_THROW);
+    const OString sFailedMessage = "Failed on filter: " + TestFilterNames.at(eFilter).toUtf8();
 
-        // Convert to a XGraphic
-        uno::Reference<graphic::XGraphic> xGraphic;
-        xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+    // Check whether SVG graphic was exported as expected
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1),
+                                 xDrawPagesSupplier->getDrawPages()->getCount());
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDrawPage.is());
 
-        // Access the Graphic
-        Graphic aGraphic(xGraphic);
+    // Get the image
+    uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xImage, uno::UNO_QUERY_THROW);
 
-        // Check if it contains a VectorGraphicData struct
-        auto pVectorGraphic = aGraphic.getVectorGraphicData();
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pVectorGraphic);
+    // Convert to a XGraphic
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+    CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
 
-        // Which should be of type SVG, which means we have a SVG file
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), VectorGraphicDataType::Svg,
-                                     pVectorGraphic->getType());
-    }
+    // Access the Graphic
+    Graphic aGraphic(xGraphic);
+
+    // Check if it contains a VectorGraphicData struct
+    auto pVectorGraphic = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pVectorGraphic);
+
+    // Which should be of type SVG, which means we have a SVG file
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), VectorGraphicDataType::Svg,
+                                 pVectorGraphic->getType());
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTableBordersTransparancy)

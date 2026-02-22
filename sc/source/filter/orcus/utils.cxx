@@ -7,6 +7,7 @@
 
 #include <orcus_utils.hxx>
 #include <osl/thread.hxx>
+#include <tools/stream.hxx>
 
 orcus::file_content toFileContent(const OUString& rPath)
 {

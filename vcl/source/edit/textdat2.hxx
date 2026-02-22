@@ -22,6 +22,7 @@
 #include <tools/long.hxx>
 
 #include <vcl/cursor.hxx>
+#include <vcl/seleng.hxx>
 
 #include <cstddef>
 #include <limits>

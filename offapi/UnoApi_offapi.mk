@@ -750,10 +750,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/document,\
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/drawing,\
 	AccessibleDrawDocumentView \
 	AccessibleGraphControl \
-	AccessibleGraphicShape \
 	AccessibleImageBullet \
-	AccessibleOLEShape \
-	AccessibleShape \
 	AppletShape \
 	Background \
 	BitmapTable \
@@ -920,8 +917,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/form/validatio
 	ValidatableControlModel \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/formula,\
-	AccessibleFormulaText \
-	AccessibleFormulaView \
 	FormulaProperties \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/frame,\

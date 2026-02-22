@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:ooow="http://openoffice.org/2004/writer" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p/>
+   <text:section text:name="Section1" text:condition="ooow:0" text:display="condition">
+    <text:p>This is a hidden section.<text:note text:id="ftn1" text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body>
+       <text:p>This is a footnote in the hidden section.</text:p></text:note-body></text:note> Here are some random words in it.</text:p>
+   </text:section>
+  </office:text>
+ </office:body>
+</office:document>

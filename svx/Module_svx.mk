@@ -23,6 +23,7 @@ $(eval $(call gb_Module_add_targets,svx,\
     Library_svx \
     Library_svxcore \
     Package_document_themes \
+    Package_xml \
 ))
 
 ifeq ($(gb_Side),host)

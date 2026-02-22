@@ -60,6 +60,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <svx/svxdlg.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <map>
 #include <algorithm>

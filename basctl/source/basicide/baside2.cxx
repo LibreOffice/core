@@ -60,6 +60,7 @@
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <unotools/securityoptions.hxx>
 #include <utility>
 #include <vcl/locktoplevels.hxx>
@@ -68,6 +69,7 @@
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/textview.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/xtextedt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1375,7 +1377,7 @@ EntryDescriptor ModulWindow::CreateEntryDescriptor()
                 break;
         }
     }
-    return EntryDescriptor( std::move(aDocument), eLocation, aLibName, aLibSubName, aModName, OBJ_TYPE_MODULE );
+    return EntryDescriptor( std::move(aDocument), eLocation, aLibName, aLibSubName, aModName, EntryType::Module );
 }
 
 void ModulWindow::SetReadOnly (bool b)

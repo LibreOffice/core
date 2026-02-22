@@ -42,6 +42,8 @@
 #include "pormulti.hxx"
 #include <doc.hxx>
 #include <fmturl.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <redline.hxx>
 
 // Returns, if we have an underline breaking situation
 // Adding some more conditions here means you also have to change them
@@ -118,6 +120,93 @@ SwLinePortion *SwTextPainter::CalcPaintOfst(const SwRect &rPaint, bool& rbSkippe
         }
     }
     return pPor;
+}
+
+namespace
+{
+/// See if the redline render mode requires to omit the paint of the text portion.
+class SwTextPaintOmitter
+{
+    SwTextPainter& m_rPainter;
+    bool m_bOmitPaint;
+    bool m_bInsertColorPaint;
+    bool m_bDeleteColorPaint;
+
+public:
+    SwTextPaintOmitter(SwTextPainter& rPainter, const SwRedlineTable& rRedlineTable);
+    ~SwTextPaintOmitter();
+};
+
+SwTextPaintOmitter::SwTextPaintOmitter(SwTextPainter& rPainter, const SwRedlineTable& rRedlineTable)
+    : m_rPainter(rPainter)
+    , m_bOmitPaint(false)
+    , m_bInsertColorPaint(false)
+    , m_bDeleteColorPaint(false)
+{
+    if (!rPainter.GetRedln() || !rPainter.GetRedln()->IsOn())
+    {
+        return;
+    }
+
+    SwRedlineTable::size_type nRedline = rPainter.GetRedln()->GetAct();
+    if (nRedline == SwRedlineTable::npos)
+    {
+        return;
+    }
+
+    SwRedlineRenderMode eRedlineRenderMode = rPainter.GetInfo().GetOpt().GetRedlineRenderMode();
+    const SwRangeRedline* pRedline = rRedlineTable[nRedline];
+    RedlineType eType = pRedline->GetType();
+    // We have a matrix of redline render mode and redline types. The intent is to show the "omit
+    // inserts" mode on the left (inserts are semi-hidden, deletes are colored), and to show the
+    // "omit deletes" mode on the right (deletes are semi-hidden, inserts are colored). And do none
+    // of this in the standard (default) case.
+    if (eRedlineRenderMode == SwRedlineRenderMode::OmitInserts && eType == RedlineType::Insert)
+    {
+        m_bOmitPaint = true;
+    }
+    else if (eRedlineRenderMode == SwRedlineRenderMode::OmitInserts && eType == RedlineType::Delete)
+    {
+        m_bDeleteColorPaint = true;
+    }
+    else if (eRedlineRenderMode == SwRedlineRenderMode::OmitDeletes && eType == RedlineType::Delete)
+    {
+        m_bOmitPaint = true;
+    }
+    else if (eRedlineRenderMode == SwRedlineRenderMode::OmitDeletes && eType == RedlineType::Insert)
+    {
+        m_bInsertColorPaint = true;
+    }
+
+    if (m_bOmitPaint)
+    {
+        rPainter.GetInfo().SetOmitPaint(true);
+    }
+    else if (m_bInsertColorPaint)
+    {
+        rPainter.GetInfo().SetInsertColorPaint(true);
+    }
+    else if (m_bDeleteColorPaint)
+    {
+        rPainter.GetInfo().SetDeleteColorPaint(true);
+    }
+}
+
+SwTextPaintOmitter::~SwTextPaintOmitter()
+{
+    if (m_bOmitPaint)
+    {
+        m_rPainter.GetInfo().SetOmitPaint(false);
+    }
+    else if (m_bInsertColorPaint)
+    {
+        m_rPainter.GetInfo().SetInsertColorPaint(false);
+    }
+    else if (m_bDeleteColorPaint)
+    {
+        m_rPainter.GetInfo().SetDeleteColorPaint(false);
+    }
+}
 }
 
 // There are two possibilities to output transparent font:
@@ -305,6 +394,9 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // Reference portion for the paragraph end portion
     SwLinePortion* pEndTempl = m_pCurr->GetFirstPortion();
 
+    const SwDoc& rDoc = GetInfo().GetTextFrame()->GetDoc();
+    const IDocumentRedlineAccess& rIDRA = rDoc.getIDocumentRedlineAccess();
+    const SwRedlineTable& rRedlineTable = rIDRA.GetRedlineTable();
     while( pPor )
     {
         bool bSeeked = true;
@@ -423,6 +515,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
 
         {
+            SwTextPaintOmitter aTextPaintOmitter(*this, rRedlineTable);
+
             // #i16816# tagged pdf support
             Por_Info aPorInfo(*pPor, *this, 0);
             SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, &aPorInfo, *pOut );

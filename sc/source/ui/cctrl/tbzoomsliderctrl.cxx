@@ -18,6 +18,7 @@
  */
 #include <tbzoomsliderctrl.hxx>
 #include <i18nutil/unicode.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/svapp.hxx>
 
 #include <comphelper/propertyvalue.hxx>
@@ -27,11 +28,13 @@
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <iterator>
 #include <set>
 #include <bitmaps.hlst>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 

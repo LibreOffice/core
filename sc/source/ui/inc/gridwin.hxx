@@ -38,7 +38,11 @@ namespace sc {
     class SpellCheckContext;
 }
 
-namespace sdr::overlay { class OverlayManager; }
+namespace sdr::overlay {
+    class OverlayManager;
+    class OverlayObject;
+    enum class OverlayType;
+}
 
 class FmFormView;
 struct ScTableInfo;
@@ -114,8 +118,11 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOHeader;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOShrink;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOSparklineGroup;
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mpOODatabase;
 
     std::optional<tools::Rectangle> mpAutoFillRect;
+    std::optional<tools::Rectangle> mpDBExpandRect;
+    ScRange maDBRange;
 
     /// LibreOfficeKit needs a persistent FmFormView for tiled rendering,
     /// otherwise the invalidations from drawinglayer do not work.
@@ -235,6 +242,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     bool            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
     bool            DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
     void            SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow);
+    void            SendAutofilterChange();
     void DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup, bool bMultiField );
     void DoPushPivotToggle( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
 
@@ -326,6 +334,9 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     DECL_DLLPRIVATE_LINK(InitiatePageBreaksTimer, Timer*, void);
 
     void            UpdateFormulaRange(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2);
+
+    std::unique_ptr<sdr::overlay::OverlayObject> DrawOverlay(const std::vector<tools::Rectangle>& rRects, const Color& rColor, bool bBorder, bool bContrastOutline, sdr::overlay::OverlayType eOverlayType);
+    std::unique_ptr<sdr::overlay::OverlayObjectList> DrawFillMarker(SCCOL nCol, SCROW nRow, std::optional<tools::Rectangle>& rRect, bool bIsTableArea);
 
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
@@ -488,6 +499,8 @@ public:
     void            UpdateCursorOverlay();
     void            DeleteSelectionOverlay();
     void            UpdateSelectionOverlay();
+    void            UpdateDatabaseOverlay();
+    void            DeleteDatabaseOverlay();
     void            UpdateHighlightOverlay();
     void            DeleteAutoFillOverlay();
     void            UpdateAutoFillOverlay();

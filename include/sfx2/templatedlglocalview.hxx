@@ -13,12 +13,15 @@
 
 class TemplateDlgLocalView final : public TemplateLocalView, public ListView
 {
+    friend class TemplateDlgLocalViewUIObject;
+
 public:
     TemplateDlgLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
                          std::unique_ptr<weld::Menu> xMenu,
                          std::unique_ptr<weld::TreeView> xTreeView);
 
     void setTemplateViewMode(TemplateViewMode eMode);
+    TemplateViewMode getTemplateViewMode() const;
 
     virtual void showAllTemplates() override;
 
@@ -48,6 +51,8 @@ public:
 
     void insertItems(const std::vector<TemplateItemProperties>& rTemplates, bool isRegionSelected,
                      bool bShowCategoryInTooltip);
+
+    virtual FactoryFunction GetUITestFactory() const override;
 
 private:
     void ContextMenuSelectHdl(std::u16string_view rIdent);

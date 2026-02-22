@@ -21,7 +21,6 @@
 #include <config_feature_desktop.h>
 
 #include <properties.h>
-#include <services/layoutmanager.hxx>
 #include "helpers.hxx"
 
 #include <framework/sfxhelperfunctions.hxx>
@@ -52,8 +51,10 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <framework/layoutmanager.hxx>
 #include <vcl/status.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1949,6 +1950,24 @@ sal_Bool SAL_CALL LayoutManager::unlockWindow( const OUString& aName )
         if ( pToolbarManager )
         {
             bResult = pToolbarManager->unlockToolbar( aName );
+            if ( pToolbarManager->isLayoutDirty() )
+                doLayout();
+        }
+    }
+    return bResult;
+}
+
+bool LayoutManager::makeContextSensitive(std::u16string_view sName, bool bSensitive )
+{
+    bool bResult( false );
+    if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( sName ), UIRESOURCETYPE_TOOLBAR ))
+    {
+        SolarMutexClearableGuard aReadLock;
+        ToolbarLayoutManager*             pToolbarManager = m_xToolbarManager.get();
+        aReadLock.clear();
+        if ( pToolbarManager )
+        {
+            bResult = pToolbarManager->makeContextSensitive(sName, bSensitive );
             if ( pToolbarManager->isLayoutDirty() )
                 doLayout();
         }

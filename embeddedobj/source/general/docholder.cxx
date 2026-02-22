@@ -58,6 +58,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <osl/diagnose.h>
 #include <utility>
+#include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <sfx2/strings.hrc>
@@ -68,9 +69,6 @@
 #include <docholder.hxx>
 #include <commonembobj.hxx>
 #include <intercept.hxx>
-
-#define HATCH_BORDER_WIDTH (((m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) && \
-                            m_pEmbedObj->getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
 
 using namespace ::com::sun::star;
 
@@ -152,8 +150,8 @@ namespace embeddedobj
 {
 
 DocumentHolder::DocumentHolder( uno::Reference< uno::XComponentContext > xContext,
-                                OCommonEmbeddedObject* pEmbObj )
-: m_pEmbedObj( pEmbObj ),
+                                OCommonEmbeddedObject& rEmbObj )
+: m_rEmbedObj( rEmbObj ),
   m_xContext(std::move( xContext )),
   m_bReadOnly( false ),
   m_bWaitForClose( false ),
@@ -322,12 +320,13 @@ void DocumentHolder::ResizeWindows_Impl( const awt::Rectangle& aHatchRect )
 {
     OSL_ENSURE( m_xFrame.is() && m_xOwnWindow.is() /*&& m_xHatchWindow.is()*/,
                 "The object does not have windows required for inplace mode!" );
+    sal_Int32 nHatchBorderWidth(getHatchBorderWidth());
     if ( m_xHatchWindow.is() )
     {
-        m_xOwnWindow->setPosSize( HATCH_BORDER_WIDTH,
-                                  HATCH_BORDER_WIDTH,
-                                  aHatchRect.Width - 2*HATCH_BORDER_WIDTH,
-                                  aHatchRect.Height - 2*HATCH_BORDER_WIDTH,
+        m_xOwnWindow->setPosSize( nHatchBorderWidth,
+                                  nHatchBorderWidth,
+                                  aHatchRect.Width - 2*nHatchBorderWidth,
+                                  aHatchRect.Height - 2*nHatchBorderWidth,
                                   awt::PosSize::POSSIZE );
 
 
@@ -338,10 +337,10 @@ void DocumentHolder::ResizeWindows_Impl( const awt::Rectangle& aHatchRect )
                                     awt::PosSize::POSSIZE );
     }
     else
-        m_xOwnWindow->setPosSize( aHatchRect.X + HATCH_BORDER_WIDTH,
-                                  aHatchRect.Y + HATCH_BORDER_WIDTH,
-                                  aHatchRect.Width - 2*HATCH_BORDER_WIDTH,
-                                  aHatchRect.Height - 2*HATCH_BORDER_WIDTH,
+        m_xOwnWindow->setPosSize( aHatchRect.X + nHatchBorderWidth,
+                                  aHatchRect.Y + nHatchBorderWidth,
+                                  aHatchRect.Width - 2*nHatchBorderWidth,
+                                  aHatchRect.Height - 2*nHatchBorderWidth,
                                   awt::PosSize::POSSIZE );
 }
 
@@ -387,10 +386,11 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         uno::Reference < frame::XModel > xModel( GetComponent(), uno::UNO_QUERY );
         awt::Rectangle aHatchRectangle = AddBorderToArea( aRectangleToShow );
 
-        awt::Rectangle aOwnRectangle(  HATCH_BORDER_WIDTH,
-                                    HATCH_BORDER_WIDTH,
-                                    aHatchRectangle.Width - 2*HATCH_BORDER_WIDTH,
-                                    aHatchRectangle.Height - 2*HATCH_BORDER_WIDTH );
+        sal_Int32 nHatchBorderWidth(getHatchBorderWidth());
+        awt::Rectangle aOwnRectangle( nHatchBorderWidth,
+                                    nHatchBorderWidth,
+                                    aHatchRectangle.Width - 2*nHatchBorderWidth,
+                                    aHatchRectangle.Height - 2*nHatchBorderWidth );
         uno::Reference< awt::XWindow > xHWindow;
         uno::Reference< awt::XWindowPeer > xMyParent( xParent );
 
@@ -403,7 +403,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
             uno::Reference< embed::XHatchWindow > xHatchWindow =
                             xHatchFactory->createHatchWindowInstance( xParent,
                                                                       aHatchRectangle,
-                                                                      awt::Size( HATCH_BORDER_WIDTH, HATCH_BORDER_WIDTH ) );
+                                                                      awt::Size( nHatchBorderWidth, nHatchBorderWidth ) );
 
             uno::Reference< awt::XWindowPeer > xHatchWinPeer( xHatchWindow, uno::UNO_QUERY );
             xHWindow.set( xHatchWinPeer, uno::UNO_QUERY_THROW );
@@ -954,12 +954,12 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
 
         // set document title to show in the title bar
         css::uno::Reference< css::frame::XTitle > xModelTitle( xDoc, css::uno::UNO_QUERY );
-        if( xModelTitle.is() && m_pEmbedObj && !m_pEmbedObj->getContainerName().isEmpty() )
+        if( xModelTitle.is() && !m_rEmbedObj.getContainerName().isEmpty() )
         {
             std::locale aResLoc = Translate::Create("sfx");
             OUString sEmbedded = Translate::get(STR_EMBEDDED_TITLE, aResLoc);
-            xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded );
-            m_aContainerName = m_pEmbedObj->getContainerName();
+            xModelTitle->setTitle( m_rEmbedObj.getContainerName() + sEmbedded );
+            m_aContainerName = m_rEmbedObj.getContainerName();
             // TODO: get real m_aDocumentNamePart
             m_aDocumentNamePart = sEmbedded;
         }
@@ -1074,19 +1074,21 @@ sal_Int32 DocumentHolder::GetMapUnit( sal_Int64 nAspect )
 
 awt::Rectangle DocumentHolder::CalculateBorderedArea( const awt::Rectangle& aRect )
 {
-    return awt::Rectangle( aRect.X + m_aBorderWidths.Left + HATCH_BORDER_WIDTH,
-                             aRect.Y + m_aBorderWidths.Top + HATCH_BORDER_WIDTH,
-                             aRect.Width - m_aBorderWidths.Left - m_aBorderWidths.Right - 2*HATCH_BORDER_WIDTH,
-                             aRect.Height - m_aBorderWidths.Top - m_aBorderWidths.Bottom - 2*HATCH_BORDER_WIDTH );
+    sal_Int32 nHatchBorderWidth(getHatchBorderWidth());
+    return awt::Rectangle( aRect.X + m_aBorderWidths.Left + nHatchBorderWidth,
+                             aRect.Y + m_aBorderWidths.Top + nHatchBorderWidth,
+                             aRect.Width - m_aBorderWidths.Left - m_aBorderWidths.Right - 2*nHatchBorderWidth,
+                             aRect.Height - m_aBorderWidths.Top - m_aBorderWidths.Bottom - 2*nHatchBorderWidth );
 }
 
 
 awt::Rectangle DocumentHolder::AddBorderToArea( const awt::Rectangle& aRect )
 {
-    return awt::Rectangle( aRect.X - m_aBorderWidths.Left - HATCH_BORDER_WIDTH,
-                             aRect.Y - m_aBorderWidths.Top - HATCH_BORDER_WIDTH,
-                             aRect.Width + m_aBorderWidths.Left + m_aBorderWidths.Right + 2*HATCH_BORDER_WIDTH,
-                             aRect.Height + m_aBorderWidths.Top + m_aBorderWidths.Bottom + 2*HATCH_BORDER_WIDTH );
+    sal_Int32 nHatchBorderWidth(getHatchBorderWidth());
+    return awt::Rectangle( aRect.X - m_aBorderWidths.Left - nHatchBorderWidth,
+                             aRect.Y - m_aBorderWidths.Top - nHatchBorderWidth,
+                             aRect.Width + m_aBorderWidths.Left + m_aBorderWidths.Right + 2*nHatchBorderWidth,
+                             aRect.Height + m_aBorderWidths.Top + m_aBorderWidths.Bottom + 2*nHatchBorderWidth );
 }
 
 
@@ -1161,14 +1163,14 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
 {
     // if the component does not support document::XEventBroadcaster
     // the modify notifications are used as workaround, but only for running state
-    if( aEvent.Source == m_xComponent && m_pEmbedObj && m_pEmbedObj->getCurrentState() == embed::EmbedStates::RUNNING )
-        m_pEmbedObj->PostEvent_Impl( u"OnVisAreaChanged"_ustr );
+    if( aEvent.Source == m_xComponent && m_rEmbedObj.getCurrentState() == embed::EmbedStates::RUNNING )
+        m_rEmbedObj.PostEvent_Impl( u"OnVisAreaChanged"_ustr );
 }
 
 
 void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
 {
-    if( m_pEmbedObj && Event.Source == m_xComponent )
+    if( Event.Source == m_xComponent )
     {
         // for now the ignored events are not forwarded, but sent by the object itself
         if ( !Event.EventName.startsWith( "OnSave" )
@@ -1176,7 +1178,7 @@ void SAL_CALL DocumentHolder::notifyEvent( const document::EventObject& Event )
           && !Event.EventName.startsWith( "OnSaveAs" )
           && !Event.EventName.startsWith( "OnSaveAsDone" )
           && !( Event.EventName.startsWith( "OnVisAreaChanged" ) && m_nNoResizeReact ) )
-            m_pEmbedObj->PostEvent_Impl( Event.EventName );
+            m_rEmbedObj.PostEvent_Impl( Event.EventName );
     }
 }
 
@@ -1185,7 +1187,7 @@ void SAL_CALL DocumentHolder::borderWidthsChanged( const uno::Reference< uno::XI
                                                     const frame::BorderWidths& aNewSize )
 {
     // TODO: may require mutex introduction ???
-    if ( m_pEmbedObj && m_xFrame.is() && aObject == m_xFrame->getController() )
+    if ( m_xFrame.is() && aObject == m_xFrame->getController() )
     {
         if ( m_aBorderWidths.Left != aNewSize.Left
           || m_aBorderWidths.Right != aNewSize.Right
@@ -1203,13 +1205,10 @@ void SAL_CALL DocumentHolder::borderWidthsChanged( const uno::Reference< uno::XI
 void SAL_CALL DocumentHolder::requestPositioning( const awt::Rectangle& aRect )
 {
     // TODO: may require mutex introduction ???
-    if ( m_pEmbedObj )
-    {
-        // borders should not be counted
-        awt::Rectangle aObjRect = CalculateBorderedArea( aRect );
-        IntCounterGuard aGuard( m_nNoResizeReact );
-        m_pEmbedObj->requestPositioning( aObjRect );
-    }
+    // borders should not be counted
+    awt::Rectangle aObjRect = CalculateBorderedArea( aRect );
+    IntCounterGuard aGuard( m_nNoResizeReact );
+    m_rEmbedObj.requestPositioning( aObjRect );
 }
 
 
@@ -1241,15 +1240,15 @@ awt::Rectangle SAL_CALL DocumentHolder::calcAdjustedRectangle( const awt::Rectan
 
 void SAL_CALL DocumentHolder::activated(  )
 {
-    if ( !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) )
+    if ( !(m_rEmbedObj.getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) )
         return;
 
-    if ( m_pEmbedObj->getCurrentState() != embed::EmbedStates::UI_ACTIVE &&
-    !(m_pEmbedObj->getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_NOUIACTIVATE) )
+    if ( m_rEmbedObj.getCurrentState() != embed::EmbedStates::UI_ACTIVE &&
+    !(m_rEmbedObj.getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_NOUIACTIVATE) )
     {
         try
         {
-            m_pEmbedObj->changeState( embed::EmbedStates::UI_ACTIVE );
+            m_rEmbedObj.changeState( embed::EmbedStates::UI_ACTIVE );
         }
         catch ( const css::embed::StateChangeInProgressException& )
         {
@@ -1273,7 +1272,14 @@ void DocumentHolder::ResizeHatchWindow()
     awt::Rectangle aHatchRect = AddBorderToArea( m_aObjRect );
     ResizeWindows_Impl( aHatchRect );
     uno::Reference< embed::XHatchWindow > xHatchWindow( m_xHatchWindow, uno::UNO_QUERY );
-    xHatchWindow->setHatchBorderSize( awt::Size( HATCH_BORDER_WIDTH, HATCH_BORDER_WIDTH ) );
+    sal_Int32 nHatchBorderWidth(getHatchBorderWidth());
+    xHatchWindow->setHatchBorderSize( awt::Size( nHatchBorderWidth, nHatchBorderWidth ) );
+}
+
+sal_Int32 DocumentHolder::getHatchBorderWidth()
+{
+    return m_rEmbedObj.getStatus(embed::Aspects::MSOLE_CONTENT)&embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE && \
+                            m_rEmbedObj.getCurrentState() != embed::EmbedStates::UI_ACTIVE ? 0 : 4;
 }
 
 void SAL_CALL DocumentHolder::deactivated(  )

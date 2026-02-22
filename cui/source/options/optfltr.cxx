@@ -26,6 +26,7 @@
 #include "optfltr.hxx"
 #include <strings.hrc>
 #include <dialmgr.hxx>
+#include <vcl/weld/Builder.hxx>
 
 enum class MSFltrPg2_CheckBoxEntries {
     Math,

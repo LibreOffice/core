@@ -53,25 +53,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="fileopen">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="tooltip-text" translatable="yes" context="hyperlinkdocpage|fileopen|tooltip_text">Open File</property>
-                <property name="image">image2</property>
-                <property name="always-show-image">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="fileopen-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|fileopen">Opens the Open dialog, where you can select a file.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkComboBoxText" id="path">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -92,6 +73,25 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="fileopen">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="hyperlinkdocpage|fileopen|tooltip_text">Open File</property>
+                <property name="image">image2</property>
+                <property name="always-show-image">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="fileopen-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|fileopen">Opens the Open dialog, where you can select a file.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
@@ -159,6 +159,23 @@
               </packing>
             </child>
             <child>
+              <object class="GtkEntry" id="target">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="target-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|target">Enter a URL for the file that you want to open when you click the hyperlink. If you do not specify a target frame, the file opens in the current document or frame.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="browse">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -174,23 +191,6 @@
               </object>
               <packing>
                 <property name="left-attach">2</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="target">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="target-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|target">Enter a URL for the file that you want to open when you click the hyperlink. If you do not specify a target frame, the file opens in the current document or frame.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
@@ -293,40 +293,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="indication">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="indication-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|indication">Specifies the visible text or button caption for the hyperlink.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="name">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="activates-default">True</property>
-                <property name="truncate-multiline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="name-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|name">Enter a name for the hyperlink.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
               <!-- n-columns=4 n-rows=1 -->
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
@@ -334,6 +300,22 @@
                 <property name="hexpand">True</property>
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
+                <child>
+                  <object class="GtkComboBoxText" id="frame">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="frame-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|frame">Enter the name of the frame that you want the linked file to open in, or select a predefined frame from the list. If you leave this box blank, the linked file opens in the current browser window.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkLabel" id="form_label">
                     <property name="visible">True</property>
@@ -381,26 +363,44 @@
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkComboBoxText" id="frame">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="frame-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|frame">Enter the name of the frame that you want the linked file to open in, or select a predefined frame from the list. If you leave this box blank, the linked file opens in the current browser window.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="indication">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="indication-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|indication">Specifies the visible text or button caption for the hyperlink.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="name">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="name-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|name">Enter a name for the hyperlink.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
           </object>

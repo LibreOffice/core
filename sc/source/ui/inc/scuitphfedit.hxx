@@ -25,6 +25,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 

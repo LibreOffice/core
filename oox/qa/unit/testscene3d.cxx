@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -30,11 +30,11 @@
 using namespace css;
 
 /// Covers tests for scene3d import and export, available since LO 24.8., see tdf#70039
-class TestScene3d : public UnoApiXmlTest
+class TestScene3d : public UnoApiTest
 {
 public:
     TestScene3d()
-        : UnoApiXmlTest(u"/oox/qa/unit/data/"_ustr)
+        : UnoApiTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
 

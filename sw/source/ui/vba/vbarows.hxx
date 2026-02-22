@@ -24,13 +24,16 @@
 #include <ooo/vba/word/XColumns.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextTable;
 
 typedef CollTestImplHelper< ooo::vba::word::XRows > SwVbaRows_BASE;
 
 class SwVbaRows : public SwVbaRows_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextTable > mxTextTable;
+    rtl::Reference< SwXTextTable > mxTextTable;
     css::uno::Reference< css::table::XTableRows > mxTableRows;
     sal_Int32 mnStartRowIndex;
     sal_Int32 mnEndRowIndex;
@@ -47,9 +50,9 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextTable >  xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows );
+    SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, rtl::Reference< SwXTextTable >  xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows );
     /// @throws css::uno::RuntimeException
-    SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextTable >  xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows, sal_Int32 nStarIndex, sal_Int32 nEndIndex );
+    SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, rtl::Reference< SwXTextTable >  xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows, sal_Int32 nStarIndex, sal_Int32 nEndIndex );
 
     // Attributes
     virtual ::sal_Int32 SAL_CALL getAlignment() override;

@@ -46,6 +46,7 @@
 #include <comphelper/extract.hxx>
 
 #include <vcl/settings.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace css;

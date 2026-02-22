@@ -48,6 +48,9 @@ public:
 protected:
     void testCeilingFloor(TestFilter eFormatType);
     void testFunctionsExcel2010(TestFilter eFormatType);
+    void testSwappedOutImageExport(TestFilter eFormatType);
+    void testLinkedGraphicRT(TestFilter eFormatType);
+    void testImageWithSpecialID(TestFilter eFormatType);
 };
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testBordersExchangeXLSX)
@@ -270,183 +273,179 @@ static OUString toString(const ScBigRange& rRange)
            + OUString::number(rRange.aEnd.Tab()) + ")";
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
+namespace
 {
-    struct CheckItem
+struct CheckItem
+{
+    sal_uLong mnActionId;
+    ScChangeActionType meType;
+
+    sal_Int32 mnStartCol;
+    sal_Int32 mnStartRow;
+    sal_Int32 mnStartTab;
+    sal_Int32 mnEndCol;
+    sal_Int32 mnEndRow;
+    sal_Int32 mnEndTab;
+
+    bool mbRowInsertedAtBottom;
+};
+
+bool checkRange(ScChangeActionType eType, const ScBigRange& rExpected, const ScBigRange& rActual)
+{
+    ScBigRange aExpected(rExpected), aActual(rActual);
+
+    switch (eType)
     {
-        sal_uLong mnActionId;
-        ScChangeActionType meType;
+        case SC_CAT_INSERT_ROWS:
+        {
+            // Ignore columns.
+            aExpected.aStart.SetCol(0);
+            aExpected.aEnd.SetCol(0);
+            aActual.aStart.SetCol(0);
+            aActual.aEnd.SetCol(0);
+        }
+        break;
+        default:;
+    }
 
-        sal_Int32 mnStartCol;
-        sal_Int32 mnStartRow;
-        sal_Int32 mnStartTab;
-        sal_Int32 mnEndCol;
-        sal_Int32 mnEndRow;
-        sal_Int32 mnEndTab;
+    return aExpected == aActual;
+}
 
-        bool mbRowInsertedAtBottom;
+bool check(ScDocument& rDoc)
+{
+    static const CheckItem aChecks[] = {
+        { 1, SC_CAT_CONTENT, 1, 1, 0, 1, 1, 0, false },
+        { 2, SC_CAT_INSERT_ROWS, 0, 2, 0, 0, 2, 0, true },
+        { 3, SC_CAT_CONTENT, 1, 2, 0, 1, 2, 0, false },
+        { 4, SC_CAT_INSERT_ROWS, 0, 3, 0, 0, 3, 0, true },
+        { 5, SC_CAT_CONTENT, 1, 3, 0, 1, 3, 0, false },
+        { 6, SC_CAT_INSERT_ROWS, 0, 4, 0, 0, 4, 0, true },
+        { 7, SC_CAT_CONTENT, 1, 4, 0, 1, 4, 0, false },
+        { 8, SC_CAT_INSERT_ROWS, 0, 5, 0, 0, 5, 0, true },
+        { 9, SC_CAT_CONTENT, 1, 5, 0, 1, 5, 0, false },
+        { 10, SC_CAT_INSERT_ROWS, 0, 6, 0, 0, 6, 0, true },
+        { 11, SC_CAT_CONTENT, 1, 6, 0, 1, 6, 0, false },
+        { 12, SC_CAT_INSERT_ROWS, 0, 7, 0, 0, 7, 0, true },
+        { 13, SC_CAT_CONTENT, 1, 7, 0, 1, 7, 0, false },
     };
 
-    struct
+    ScChangeTrack* pCT = rDoc.GetChangeTrack();
+    if (!pCT)
     {
-        bool checkRange(ScChangeActionType eType, const ScBigRange& rExpected,
-                        const ScBigRange& rActual)
+        std::cerr << "Change track instance doesn't exist." << std::endl;
+        return false;
+    }
+
+    sal_uLong nActionMax = pCT->GetActionMax();
+    if (nActionMax != 13)
+    {
+        std::cerr << "Unexpected highest action ID value." << std::endl;
+        return false;
+    }
+
+    for (const auto& rCheck : aChecks)
+    {
+        sal_uInt16 nActId = rCheck.mnActionId;
+        const ScChangeAction* pAction = pCT->GetAction(nActId);
+        if (!pAction)
         {
-            ScBigRange aExpected(rExpected), aActual(rActual);
-
-            switch (eType)
-            {
-                case SC_CAT_INSERT_ROWS:
-                {
-                    // Ignore columns.
-                    aExpected.aStart.SetCol(0);
-                    aExpected.aEnd.SetCol(0);
-                    aActual.aStart.SetCol(0);
-                    aActual.aEnd.SetCol(0);
-                }
-                break;
-                default:;
-            }
-
-            return aExpected == aActual;
+            std::cerr << "No action for action number " << nActId << " found." << std::endl;
+            return false;
         }
 
-        bool check(ScDocument& rDoc)
+        if (pAction->GetType() != rCheck.meType)
         {
-            static const CheckItem aChecks[] = {
-                { 1, SC_CAT_CONTENT, 1, 1, 0, 1, 1, 0, false },
-                { 2, SC_CAT_INSERT_ROWS, 0, 2, 0, 0, 2, 0, true },
-                { 3, SC_CAT_CONTENT, 1, 2, 0, 1, 2, 0, false },
-                { 4, SC_CAT_INSERT_ROWS, 0, 3, 0, 0, 3, 0, true },
-                { 5, SC_CAT_CONTENT, 1, 3, 0, 1, 3, 0, false },
-                { 6, SC_CAT_INSERT_ROWS, 0, 4, 0, 0, 4, 0, true },
-                { 7, SC_CAT_CONTENT, 1, 4, 0, 1, 4, 0, false },
-                { 8, SC_CAT_INSERT_ROWS, 0, 5, 0, 0, 5, 0, true },
-                { 9, SC_CAT_CONTENT, 1, 5, 0, 1, 5, 0, false },
-                { 10, SC_CAT_INSERT_ROWS, 0, 6, 0, 0, 6, 0, true },
-                { 11, SC_CAT_CONTENT, 1, 6, 0, 1, 6, 0, false },
-                { 12, SC_CAT_INSERT_ROWS, 0, 7, 0, 0, 7, 0, true },
-                { 13, SC_CAT_CONTENT, 1, 7, 0, 1, 7, 0, false },
-            };
+            std::cerr << "Unexpected action type for action number " << nActId << "." << std::endl;
+            return false;
+        }
 
-            ScChangeTrack* pCT = rDoc.GetChangeTrack();
-            if (!pCT)
-            {
-                std::cerr << "Change track instance doesn't exist." << std::endl;
-                return false;
-            }
+        const ScBigRange& rRange = pAction->GetBigRange();
+        ScBigRange aCheck(rCheck.mnStartCol, rCheck.mnStartRow, rCheck.mnStartTab, rCheck.mnEndCol,
+                          rCheck.mnEndRow, rCheck.mnEndTab);
 
-            sal_uLong nActionMax = pCT->GetActionMax();
-            if (nActionMax != 13)
-            {
-                std::cerr << "Unexpected highest action ID value." << std::endl;
-                return false;
-            }
+        if (!checkRange(pAction->GetType(), aCheck, rRange))
+        {
+            std::cerr << "Unexpected range for action number " << nActId
+                      << ": expected=" << toString(aCheck) << " actual=" << toString(rRange)
+                      << std::endl;
+            return false;
+        }
 
-            for (const auto& rCheck : aChecks)
+        switch (pAction->GetType())
+        {
+            case SC_CAT_INSERT_ROWS:
             {
-                sal_uInt16 nActId = rCheck.mnActionId;
-                const ScChangeAction* pAction = pCT->GetAction(nActId);
-                if (!pAction)
+                const ScChangeActionIns* p = static_cast<const ScChangeActionIns*>(pAction);
+                if (p->IsEndOfList() != rCheck.mbRowInsertedAtBottom)
                 {
-                    std::cerr << "No action for action number " << nActId << " found." << std::endl;
-                    return false;
-                }
-
-                if (pAction->GetType() != rCheck.meType)
-                {
-                    std::cerr << "Unexpected action type for action number " << nActId << "."
+                    std::cerr << "Unexpected end-of-list flag for action number " << nActId << "."
                               << std::endl;
                     return false;
                 }
-
-                const ScBigRange& rRange = pAction->GetBigRange();
-                ScBigRange aCheck(rCheck.mnStartCol, rCheck.mnStartRow, rCheck.mnStartTab,
-                                  rCheck.mnEndCol, rCheck.mnEndRow, rCheck.mnEndTab);
-
-                if (!checkRange(pAction->GetType(), aCheck, rRange))
-                {
-                    std::cerr << "Unexpected range for action number " << nActId
-                              << ": expected=" << toString(aCheck) << " actual=" << toString(rRange)
-                              << std::endl;
-                    return false;
-                }
-
-                switch (pAction->GetType())
-                {
-                    case SC_CAT_INSERT_ROWS:
-                    {
-                        const ScChangeActionIns* p = static_cast<const ScChangeActionIns*>(pAction);
-                        if (p->IsEndOfList() != rCheck.mbRowInsertedAtBottom)
-                        {
-                            std::cerr << "Unexpected end-of-list flag for action number " << nActId
-                                      << "." << std::endl;
-                            return false;
-                        }
-                    }
-                    break;
-                    default:;
-                }
             }
-
-            return true;
+            break;
+            default:;
         }
+    }
 
-        bool checkRevisionUserAndTime(ScDocument& rDoc, std::u16string_view rOwnerName)
-        {
-            ScChangeTrack* pCT = rDoc.GetChangeTrack();
-            if (!pCT)
-            {
-                std::cerr << "Change track instance doesn't exist." << std::endl;
-                return false;
-            }
+    return true;
+}
 
-            ScChangeAction* pAction = pCT->GetLast();
-            if (pAction->GetUser() != "Kohei Yoshida")
-            {
-                std::cerr << "Wrong user name." << std::endl;
-                return false;
-            }
+bool checkRevisionUserAndTime(ScDocument& rDoc, std::u16string_view rOwnerName)
+{
+    ScChangeTrack* pCT = rDoc.GetChangeTrack();
+    if (!pCT)
+    {
+        std::cerr << "Change track instance doesn't exist." << std::endl;
+        return false;
+    }
 
-            DateTime aDT = pAction->GetDateTime();
-            if (aDT.GetYear() != 2014 || aDT.GetMonth() != 7 || aDT.GetDay() != 11)
-            {
-                std::cerr << "Wrong time stamp." << std::endl;
-                return false;
-            }
+    ScChangeAction* pAction = pCT->GetLast();
+    if (pAction->GetUser() != "Kohei Yoshida")
+    {
+        std::cerr << "Wrong user name." << std::endl;
+        return false;
+    }
 
-            // Insert a new record to make sure the user and date-time are correct.
-            rDoc.SetString(ScAddress(1, 8, 0), u"New String"_ustr);
-            ScCellValue aEmpty;
-            pCT->AppendContent(ScAddress(1, 8, 0), aEmpty);
-            pAction = pCT->GetLast();
-            if (!pAction)
-            {
-                std::cerr << "Failed to retrieve last revision." << std::endl;
-                return false;
-            }
+    DateTime aDT = pAction->GetDateTime();
+    if (aDT.GetYear() != 2014 || aDT.GetMonth() != 7 || aDT.GetDay() != 11)
+    {
+        std::cerr << "Wrong time stamp." << std::endl;
+        return false;
+    }
 
-            if (rOwnerName != pAction->GetUser())
-            {
-                std::cerr << "Wrong user name." << std::endl;
-                return false;
-            }
+    // Insert a new record to make sure the user and date-time are correct.
+    rDoc.SetString(ScAddress(1, 8, 0), u"New String"_ustr);
+    ScCellValue aEmpty;
+    pCT->AppendContent(ScAddress(1, 8, 0), aEmpty);
+    pAction = pCT->GetLast();
+    if (!pAction)
+    {
+        std::cerr << "Failed to retrieve last revision." << std::endl;
+        return false;
+    }
 
-            DateTime aDTNew = pAction->GetDateTime();
-            if (aDTNew <= aDT)
-            {
-                std::cerr
-                    << "Time stamp of the new revision should be more recent than that of the "
-                       "last revision."
-                    << std::endl;
-                return false;
-            }
+    if (rOwnerName != pAction->GetUser())
+    {
+        std::cerr << "Wrong user name." << std::endl;
+        return false;
+    }
 
-            return true;
-        }
+    DateTime aDTNew = pAction->GetDateTime();
+    if (aDTNew <= aDT)
+    {
+        std::cerr << "Time stamp of the new revision should be more recent than that of the "
+                     "last revision."
+                  << std::endl;
+        return false;
+    }
 
-    } aTest;
+    return true;
+}
+} //namespace
 
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLS)
+{
     SvtUserOptions& rUserOpt = ScModule::get()->GetUserOptions();
     rUserOpt.SetToken(UserOptToken::FirstName, u"Export"_ustr);
     rUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
@@ -457,12 +456,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
 
     createScDoc("xls/track-changes/simple-cell-changes.xls");
     ScDocument* pDoc = getScDoc();
-    bool bGood = aTest.check(*pDoc);
+    bool bGood = check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Initial check failed (xls).", bGood);
 
     saveAndReload(TestFilter::XLS);
     pDoc = getScDoc();
-    bGood = aTest.check(*pDoc);
+    bGood = check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Check after reload failed (xls).", bGood);
 
     // fdo#81445 : Check the blank value string to make sure it's "<empty>".
@@ -474,22 +473,28 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
     CPPUNIT_ASSERT_EQUAL(u"Cell B2 changed from '<empty>' to '1'"_ustr, aDesc);
 
     pDoc = getScDoc();
-    bGood = aTest.checkRevisionUserAndTime(*pDoc, aOwnerName);
+    bGood = checkRevisionUserAndTime(*pDoc, aOwnerName);
     CPPUNIT_ASSERT_MESSAGE("Check revision and time failed after reload (xls).", bGood);
+}
 
-    // Now, test the xlsx variant the same way.
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
+{
+    SvtUserOptions& rUserOpt = ScModule::get()->GetUserOptions();
+    rUserOpt.SetToken(UserOptToken::FirstName, u"Export"_ustr);
+    rUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 
+    OUString aOwnerName = rUserOpt.GetFirstName() + " " + rUserOpt.GetLastName();
     createScDoc("xlsx/track-changes/simple-cell-changes.xlsx");
-    pDoc = getScDoc();
-    aTest.check(*pDoc);
+    ScDocument* pDoc = getScDoc();
+    bool bGood = check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Initial check failed (xlsx).", bGood);
 
     saveAndReload(TestFilter::XLSX);
     pDoc = getScDoc();
-    bGood = aTest.check(*pDoc);
+    bGood = check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Check after reload failed (xlsx).", bGood);
 
-    bGood = aTest.checkRevisionUserAndTime(*pDoc, aOwnerName);
+    bGood = checkRevisionUserAndTime(*pDoc, aOwnerName);
     CPPUNIT_ASSERT_MESSAGE("Check revision and time failed after reload (xlsx).", bGood);
 }
 
@@ -1110,66 +1115,76 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetProtectionODS)
     testSheetProtection_Impl(*pDoc);
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testSwappedOutImageExport)
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testSwappedOutImageExport_ODS)
 {
-    std::vector<TestFilter> aFilterNames{ TestFilter::ODS, TestFilter::XLS, TestFilter::XLSX };
+    testSwappedOutImageExport(TestFilter::ODS);
+}
 
-    for (size_t i = 0; i < aFilterNames.size(); ++i)
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testSwappedOutImageExport_XLS)
+{
+    testSwappedOutImageExport(TestFilter::XLS);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testSwappedOutImageExport_XLSX)
+{
+    testSwappedOutImageExport(TestFilter::XLSX);
+}
+
+void ScExportTest3::testSwappedOutImageExport(TestFilter eFormatType)
+{
+    // Check whether the export code swaps in the image which was swapped out before.
+    createScDoc("ods/document_with_two_images.ods");
+
+    const OString sFailedMessage
+        = OString::Concat("Failed on filter: ") + TestFilterNames.at(eFormatType).toUtf8();
+
+    // Export the document and import again for a check
+    saveAndReload(eFormatType);
+
+    // Check whether graphic exported well after it was swapped out
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIA->getByIndex(0),
+                                                                 UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
+                                                   UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
+                                 xDraws->getCount());
+
+    uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
+
+    // Check Graphic, Size
     {
-        // Check whether the export code swaps in the image which was swapped out before.
-        createScDoc("ods/document_with_two_images.ods");
+        uno::Reference<graphic::XGraphic> xGraphic;
+        XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
+                               xGraphic->getType() != graphic::GraphicType::EMPTY);
+        uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610),
+                                     xBitmap->getSize().Width);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381),
+                                     xBitmap->getSize().Height);
+    }
+    // Second Image
+    xImage.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+    XPropSet.set(xImage, uno::UNO_QUERY_THROW);
 
-        const OString sFailedMessage
-            = OString::Concat("Failed on filter: ") + TestFilterNames.at(aFilterNames[i]).toUtf8();
-
-        // Export the document and import again for a check
-        saveAndReload(aFilterNames[i]);
-
-        // Check whether graphic exported well after it was swapped out
-        uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-        uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
-        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIA->getByIndex(0),
-                                                                     UNO_QUERY_THROW);
-        uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                       UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
-                                     xDraws->getCount());
-
-        uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
-
-        // Check Graphic, Size
-        {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
-                                   xGraphic->getType() != graphic::GraphicType::EMPTY);
-            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610),
-                                         xBitmap->getSize().Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381),
-                                         xBitmap->getSize().Height);
-        }
-        // Second Image
-        xImage.set(xDraws->getByIndex(1), uno::UNO_QUERY);
-        XPropSet.set(xImage, uno::UNO_QUERY_THROW);
-
-        // Check Graphic, Size
-        {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
-                                   xGraphic->getType() != graphic::GraphicType::EMPTY);
-            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900),
-                                         xBitmap->getSize().Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600),
-                                         xBitmap->getSize().Height);
-        }
+    // Check Graphic, Size
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+        XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
+                               xGraphic->getType() != graphic::GraphicType::EMPTY);
+        uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900),
+                                     xBitmap->getSize().Width);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600),
+                                     xBitmap->getSize().Height);
     }
 }
 
@@ -1191,104 +1206,123 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSupBookVirtualPathXLS)
                                  aFormula);
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testLinkedGraphicRT)
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testLinkedGraphicRT_ODS)
 {
-    // Problem was with linked images
-    std::vector<TestFilter> aFilterNames{ TestFilter::ODS, TestFilter::XLS, TestFilter::XLSX };
-
-    for (size_t i = 0; i < aFilterNames.size(); ++i)
-    {
-        // Load the original file with one image
-        createScDoc("ods/document_with_linked_graphic.ods");
-        const OString sFailedMessage
-            = OString::Concat("Failed on filter: ") + TestFilterNames.at(aFilterNames[i]).toUtf8();
-
-        // Export the document and import again for a check
-        saveAndReload(aFilterNames[i]);
-
-        // Check whether graphic imported well after export
-        ScDocument* pDoc = getScDoc();
-        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDrawLayer != nullptr);
-        const SdrPage* pPage = pDrawLayer->GetPage(0);
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pPage != nullptr);
-        SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pObject != nullptr);
-        if (aFilterNames[i] == TestFilter::XLSX)
-        {
-            // FIXME: tdf#152036
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), !pObject->IsLinkedGraphic());
-        }
-        else
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pObject->IsLinkedGraphic());
-
-        const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(GraphicType::Bitmap),
-                                     int(rGraphicObj.GetGraphic().GetType()));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(864900),
-                                     rGraphicObj.GetGraphic().GetSizeBytes());
-    }
+    testLinkedGraphicRT(TestFilter::ODS);
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest3, testImageWithSpecialID)
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testLinkedGraphicRT_XLS)
 {
-    std::vector<TestFilter> aFilterNames{ TestFilter::ODS, TestFilter::XLS, TestFilter::XLSX };
+    testLinkedGraphicRT(TestFilter::XLS);
+}
 
-    for (size_t i = 0; i < aFilterNames.size(); ++i)
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testLinkedGraphicRT_XLSX)
+{
+    testLinkedGraphicRT(TestFilter::XLSX);
+}
+
+void ScExportTest3::testLinkedGraphicRT(TestFilter eFormatType)
+{
+    // Load the original file with one image
+    createScDoc("ods/document_with_linked_graphic.ods");
+    const OString sFailedMessage
+        = OString::Concat("Failed on filter: ") + TestFilterNames.at(eFormatType).toUtf8();
+
+    // Export the document and import again for a check
+    saveAndReload(eFormatType);
+
+    // Check whether graphic imported well after export
+    ScDocument* pDoc = getScDoc();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDrawLayer != nullptr);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pPage != nullptr);
+    SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pObject != nullptr);
+    if (eFormatType == TestFilter::XLSX)
     {
-        createScDoc("ods/images_with_special_IDs.ods");
+        // FIXME: tdf#152036
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), !pObject->IsLinkedGraphic());
+    }
+    else
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pObject->IsLinkedGraphic());
 
-        const OString sFailedMessage
-            = OString::Concat("Failed on filter: ") + TestFilterNames.at(aFilterNames[i]).toUtf8();
+    const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(GraphicType::Bitmap),
+                                 int(rGraphicObj.GetGraphic().GetType()));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(864900),
+                                 rGraphicObj.GetGraphic().GetSizeBytes());
+}
 
-        // Export the document and import again for a check
-        saveAndReload(aFilterNames[i]);
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testImageWithSpecialID_ODS)
+{
+    testImageWithSpecialID(TestFilter::ODS);
+}
 
-        // Check whether graphic was exported well
-        uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
-        uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
-        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIA->getByIndex(0),
-                                                                     UNO_QUERY_THROW);
-        uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
-                                                       UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
-                                     xDraws->getCount());
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testImageWithSpecialID_XLS)
+{
+    testImageWithSpecialID(TestFilter::XLSX);
+}
 
-        uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testImageWithSpecialID_XLSX)
+{
+    testImageWithSpecialID(TestFilter::XLSX);
+}
 
-        // Check Graphic, Size
-        {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
-                                   xGraphic->getType() != graphic::GraphicType::EMPTY);
-            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610),
-                                         xBitmap->getSize().Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381),
-                                         xBitmap->getSize().Height);
-        }
-        // Second Image
-        xImage.set(xDraws->getByIndex(1), uno::UNO_QUERY);
-        XPropSet.set(xImage, uno::UNO_QUERY_THROW);
+void ScExportTest3::testImageWithSpecialID(TestFilter eFormatType)
+{
+    createScDoc("ods/images_with_special_IDs.ods");
 
-        // Check Graphic, Size
-        {
-            uno::Reference<graphic::XGraphic> xGraphic;
-            XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
-                                   xGraphic->getType() != graphic::GraphicType::EMPTY);
-            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900),
-                                         xBitmap->getSize().Width);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600),
-                                         xBitmap->getSize().Height);
-        }
+    const OString sFailedMessage
+        = OString::Concat("Failed on filter: ") + TestFilterNames.at(eFormatType).toUtf8();
+
+    // Export the document and import again for a check
+    saveAndReload(eFormatType);
+
+    // Check whether graphic was exported well
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIA->getByIndex(0),
+                                                                 UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(),
+                                                   UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2),
+                                 xDraws->getCount());
+
+    uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> XPropSet(xImage, uno::UNO_QUERY_THROW);
+
+    // Check Graphic, Size
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+        XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
+                               xGraphic->getType() != graphic::GraphicType::EMPTY);
+        uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610),
+                                     xBitmap->getSize().Width);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381),
+                                     xBitmap->getSize().Height);
+    }
+    // Second Image
+    xImage.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+    XPropSet.set(xImage, uno::UNO_QUERY_THROW);
+
+    // Check Graphic, Size
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+        XPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(),
+                               xGraphic->getType() != graphic::GraphicType::EMPTY);
+        uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900),
+                                     xBitmap->getSize().Width);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600),
+                                     xBitmap->getSize().Height);
     }
 }
 
@@ -1782,77 +1816,79 @@ static void impl_testLegacyCellAnchoredRotatedShape(ScDocument& rDoc, const tool
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testLegacyCellAnchoredRotatedShape)
 {
-    {
-        // This example doc contains cell anchored shape that is rotated, the
-        // rotated shape is in fact clipped by the sheet boundaries (and thus
-        // is a good edge case test to see if we import it still correctly)
-        createScDoc("ods/legacycellanchoredrotatedclippedshape.ods");
+    // This example doc contains cell anchored shape that is rotated, the
+    // rotated shape is in fact clipped by the sheet boundaries (and thus
+    // is a good edge case test to see if we import it still correctly)
+    createScDoc("ods/legacycellanchoredrotatedclippedshape.ods");
 
-        ScDocument* pDoc = getScDoc();
-        // ensure the imported legacy rotated shape is in the expected position
-        tools::Rectangle aRect(6000, -2000, 8000, 4000);
-        // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
-        // terms of the rotated shape ) is more or less contains the correct info
-        ScDrawObjData aAnchor;
-        aAnchor.maStart.SetRow(0);
-        aAnchor.maStart.SetCol(5);
-        aAnchor.maEnd.SetRow(3);
-        aAnchor.maEnd.SetCol(7);
-        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
-        // test save and reload
-        // for some reason having this test in subsequent_export-test.cxx causes
-        // a core dump in editeng ( so moved to here )
-        saveAndReload(TestFilter::ODS);
-        pDoc = getScDoc();
-        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
-    }
-    {
-        // This example doc contains cell anchored shape that is rotated, the
-        // rotated shape is in fact clipped by the sheet boundaries, additionally
-        // the shape is completely hidden because the rows the shape occupies
-        // are hidden
-        createScDoc("ods/legacycellanchoredrotatedhiddenshape.ods");
-        ScDocument* pDoc = getScDoc();
-        // ensure the imported legacy rotated shape is in the expected position
-        tools::Rectangle aRect(6000, -2000, 8000, 4000);
+    ScDocument* pDoc = getScDoc();
+    // ensure the imported legacy rotated shape is in the expected position
+    tools::Rectangle aRect(6000, -2000, 8000, 4000);
+    // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
+    // terms of the rotated shape ) is more or less contains the correct info
+    ScDrawObjData aAnchor;
+    aAnchor.maStart.SetRow(0);
+    aAnchor.maStart.SetCol(5);
+    aAnchor.maEnd.SetRow(3);
+    aAnchor.maEnd.SetCol(7);
+    impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+    // test save and reload
+    // for some reason having this test in subsequent_export-test.cxx causes
+    // a core dump in editeng ( so moved to here )
+    saveAndReload(TestFilter::ODS);
+    pDoc = getScDoc();
+    impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+}
 
-        // ensure the imported (and converted) anchor (note we internally now store the anchor in
-        // terms of the rotated shape) is more or less contains the correct info
-        ScDrawObjData aAnchor;
-        aAnchor.maStart.SetRow(0);
-        aAnchor.maStart.SetCol(5);
-        aAnchor.maEnd.SetRow(3);
-        aAnchor.maEnd.SetCol(7);
-        pDoc->ShowRows(0, 9, 0, true); // show relevant rows
-        pDoc->SetDrawPageSize(0); // trigger recalcpos
-        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
-        // test save and reload
-        saveAndReload(TestFilter::ODS);
-        pDoc = getScDoc();
-        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
-    }
-    {
-        // This example doc contains cell anchored shape that is rotated
-        createScDoc("ods/legacycellanchoredrotatedshape.ods");
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testLegacyCellAnchoredRotatedShape2)
+{
+    // This example doc contains cell anchored shape that is rotated, the
+    // rotated shape is in fact clipped by the sheet boundaries, additionally
+    // the shape is completely hidden because the rows the shape occupies
+    // are hidden
+    createScDoc("ods/legacycellanchoredrotatedhiddenshape.ods");
+    ScDocument* pDoc = getScDoc();
+    // ensure the imported legacy rotated shape is in the expected position
+    tools::Rectangle aRect(6000, -2000, 8000, 4000);
 
-        ScDocument* pDoc = getScDoc();
-        // ensure the imported legacy rotated shape is in the expected position
-        tools::Rectangle aRect(6000, 3000, 8000, 9000);
-        // ensure the imported (and converted) anchor (note we internally now store the anchor in
-        // terms of the rotated shape) more or less contains the correct info
+    // ensure the imported (and converted) anchor (note we internally now store the anchor in
+    // terms of the rotated shape) is more or less contains the correct info
+    ScDrawObjData aAnchor;
+    aAnchor.maStart.SetRow(0);
+    aAnchor.maStart.SetCol(5);
+    aAnchor.maEnd.SetRow(3);
+    aAnchor.maEnd.SetCol(7);
+    pDoc->ShowRows(0, 9, 0, true); // show relevant rows
+    pDoc->SetDrawPageSize(0); // trigger recalcpos
+    impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+    // test save and reload
+    saveAndReload(TestFilter::ODS);
+    pDoc = getScDoc();
+    impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+}
 
-        ScDrawObjData aAnchor;
-        aAnchor.maStart.SetRow(3);
-        aAnchor.maStart.SetCol(6);
-        aAnchor.maEnd.SetRow(9);
-        aAnchor.maEnd.SetCol(8);
-        // test import
-        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
-        // test save and reload
-        saveAndReload(TestFilter::ODS);
-        pDoc = getScDoc();
-        impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
-    }
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testLegacyCellAnchoredRotatedShape3)
+{
+    // This example doc contains cell anchored shape that is rotated
+    createScDoc("ods/legacycellanchoredrotatedshape.ods");
+
+    ScDocument* pDoc = getScDoc();
+    // ensure the imported legacy rotated shape is in the expected position
+    tools::Rectangle aRect(6000, 3000, 8000, 9000);
+    // ensure the imported (and converted) anchor (note we internally now store the anchor in
+    // terms of the rotated shape) more or less contains the correct info
+
+    ScDrawObjData aAnchor;
+    aAnchor.maStart.SetRow(3);
+    aAnchor.maStart.SetCol(6);
+    aAnchor.maEnd.SetRow(9);
+    aAnchor.maEnd.SetCol(8);
+    // test import
+    impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
+    // test save and reload
+    saveAndReload(TestFilter::ODS);
+    pDoc = getScDoc();
+    impl_testLegacyCellAnchoredRotatedShape(*pDoc, aRect, aAnchor);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf113646)
@@ -2027,6 +2063,31 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf82254_csv_bom)
     // - Expected: 3
     // - Actual  : 0 (no byte order mark was read)
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(3), pStream->Tell());
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf170249)
+{
+    createScDoc("ods/tdf170249.ods");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c/x:f",
+                       u"INDEX($B2:$XFD2, 1, 2)");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testTdf170292)
+{
+    createScDoc("ods/tdf170292.ods");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:workbook/x:definedNames/x:definedName[1]", "name", u"_cat1");
+    assertXPathContent(pSheet, "/x:workbook/x:definedNames/x:definedName[2]",
+                       u"OFFSET(_cat1,0,2,,)");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

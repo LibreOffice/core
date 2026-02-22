@@ -9,6 +9,7 @@
  */
 
 #include <test/outputdevice.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 
 namespace vcl::test
 {

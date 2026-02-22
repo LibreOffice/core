@@ -23,6 +23,8 @@
 
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
 

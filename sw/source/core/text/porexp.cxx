@@ -195,7 +195,16 @@ void SwBlankPortion::FormatEOL( SwTextFormatInfo &rInf )
  */
 bool SwBlankPortion::Format( SwTextFormatInfo &rInf )
 {
-    const bool bFull = rInf.IsUnderflow() || SwExpandPortion::Format( rInf );
+    std::optional<SwTextSlot> oTextSlot;
+    if (!GetLen())
+    {
+        // This is a hook char of a field portion. Use expansion.
+        // FIXME: tdf#56085 the slot must use parent field portion text, to correctly format
+        // in the context of surrounding text
+        oTextSlot.emplace(&rInf, this, true, false);
+    }
+
+    const bool bFull = rInf.IsUnderflow() || SwTextPortion::Format(rInf);
     if( bFull && MayUnderflow( rInf, rInf.GetIdx(), rInf.IsUnderflow() ) )
     {
         Truncate();
@@ -211,7 +220,7 @@ void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
     // Draw field shade (can be disabled individually)
     if (!m_bMulti) // No gray background for multiportion brackets
         rInf.DrawViewOpt(*this, PortionType::Blank);
-    SwExpandPortion::Paint(rInf);
+    SwTextPortion::Paint(rInf);
 
     if (rInf.GetOpt().IsViewMetaChars() && rInf.GetOpt().IsHardBlank())
     {

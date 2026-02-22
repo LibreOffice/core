@@ -17,6 +17,12 @@
 #include <editeng/colritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <vcl/pdf/PDFAnnotAActionType.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/pdf/PDFFormFieldType.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
@@ -204,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckedCheckboxContentControlPDF)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a file with a checked checkbox content control:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -240,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFFontColor)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a document with a custom orange font color and a content control:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -273,7 +279,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownText)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a document with a dropdown: custom default text and 3 items:
     createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
@@ -342,10 +348,9 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFComments)
         comphelper::makePropertyValue(u"ExportNotes"_ustr, false),
         comphelper::makePropertyValue(u"ExportNotesInMargin"_ustr, true),
     };
-    saveWithParams({
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
-        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
-    });
+    save(TestFilter::PDF_WRITER, {
+                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                                 });
 
     // Then make sure the only widget for the content control has a correct position:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();

@@ -29,12 +29,6 @@ using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 XCommandInfo_impl::XCommandInfo_impl( TaskManager* pMyShell )
     : m_pMyShell( pMyShell )
 {
@@ -86,7 +80,7 @@ XCommandInfo_impl::getCommandInfoByName(
     if (pCommand != std::cend(m_pMyShell->m_sCommandInfo))
         return *pCommand;
 
-    throw UnsupportedCommandException( THROW_WHERE );
+    throw UnsupportedCommandException();
 }
 
 
@@ -99,7 +93,7 @@ XCommandInfo_impl::getCommandInfoByHandle(
     if (pCommand != std::cend(m_pMyShell->m_sCommandInfo))
         return *pCommand;
 
-    throw UnsupportedCommandException( THROW_WHERE );
+    throw UnsupportedCommandException();
 }
 
 

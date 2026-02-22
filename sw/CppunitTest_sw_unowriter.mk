@@ -84,4 +84,8 @@ ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 $(eval $(call gb_CppunitTest_set_non_application_font_use,sw_unowriter,abort))
 endif
 
+$(eval $(call gb_CppunitTest_add_arguments,sw_unowriter, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:

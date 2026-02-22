@@ -4,7 +4,7 @@
 
 It is suggested that you have the code open side-by-side and first read some part here and then the code that it talks about.
 
-## VLC Plugins and the UpdateSettings functions
+## VCL Plugins and the UpdateSettings functions
 
 LibreOffice VCL (a bunch of  interfaces and a base implementation) has four main platform  specific implementations (gtk, qt, win,
 osx). Each VCL plugin has an `UpdateSettings(AllSettings&  rSettings)` function somewhere. This function reads styling information

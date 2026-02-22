@@ -24,7 +24,6 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustrbuf.hxx>
 #include <i18nlangtag/lang.h>
 #include <memory>
@@ -32,6 +31,7 @@
 namespace com::sun::star::lang { struct Locale; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 inline constexpr OUString XML_WRITTENNUMBERSTYLES = u"WrittenNumberStyles"_ustr;
 

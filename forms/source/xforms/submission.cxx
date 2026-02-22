@@ -49,6 +49,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <frm_resource.hxx>
 #include <strings.hrc>

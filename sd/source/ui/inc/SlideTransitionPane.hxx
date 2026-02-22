@@ -113,7 +113,6 @@ private:
     std::shared_ptr<sdtools::EventMultiplexer> mpEventMultiplexer;
 
     std::unique_ptr<weld::IconView> mxTransitionsIconView;
-    std::unique_ptr<weld::ScrolledWindow> mxTransitionsScrollWindow;
     std::unique_ptr<weld::Frame> mxRepeatAutoFrame;
     std::unique_ptr<weld::ComboBox> mxLB_VARIANT;
     std::unique_ptr<weld::MetricSpinButton> mxCBX_duration;

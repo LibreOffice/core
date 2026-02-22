@@ -126,17 +126,15 @@ SC_SIMPLE_SERVICE_INFO( ScAutoFormatFieldObj, u"ScAutoFormatFieldObj"_ustr, u"co
 SC_SIMPLE_SERVICE_INFO( ScAutoFormatObj, u"ScAutoFormatObj"_ustr, u"com.sun.star.sheet.TableAutoFormat"_ustr )
 SC_SIMPLE_SERVICE_INFO( ScAutoFormatsObj, u"stardiv.StarCalc.ScAutoFormatsObj"_ustr, SCAUTOFORMATSOBJ_SERVICE )
 
-static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, std::u16string_view rName, sal_uInt16& rOutIndex )
+static bool lcl_FindAutoFormatIndex(const ScAutoFormat& rFormats, std::u16string_view rName,
+                                    sal_uInt16& rOutIndex)
 {
-    ScAutoFormat::const_iterator itBeg = rFormats.begin(), itEnd = rFormats.end();
-    for (ScAutoFormat::const_iterator it = itBeg; it != itEnd; ++it)
+    for (size_t i = 0; i < rFormats.size(); i++)
     {
-        const ScAutoFormatData *const pEntry = it->second.get();
-        const OUString& aEntryName = pEntry->GetName();
-        if ( aEntryName == rName )
+        const ScAutoFormatData* pData = rFormats.GetData(i);
+        if (pData->GetName() == rName)
         {
-            size_t nPos = std::distance(itBeg, it);
-            rOutIndex = nPos;
+            rOutIndex = i;
             return true;
         }
     }
@@ -201,10 +199,10 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
                 throw container::ElementExistException();
             }
 
-            std::unique_ptr<ScAutoFormatData> pNew(new ScAutoFormatData());
+            ScAutoFormatData* pNew = new ScAutoFormatData();
             pNew->SetName( aName );
 
-            if (pFormats->insert(std::move(pNew)) != pFormats->end())
+            if (pFormats->InsertAutoFormat(pNew))
             {
                 //! notify to other objects
                 pFormats->Save();
@@ -215,6 +213,8 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
                     pFormatObj->InitFormat( nNewIndex );    // can be used now
                     bDone = true;
                 }
+
+                ScGlobal::ResetAutoFormat();
             }
             else
             {
@@ -243,17 +243,16 @@ void SAL_CALL ScAutoFormatsObj::removeByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
-
-    ScAutoFormat::iterator it = pFormats->find(aName);
-    if (it == pFormats->end())
+    ScAutoFormatData* pData = pFormats->FindAutoFormat(aName);
+    if (!pData)
     {
         throw container::NoSuchElementException();
     }
-    pFormats->erase(it);
+    pFormats->ReleaseAutoFormat(aName);
 
     //! notify to other objects
     pFormats->Save();   // save immediately
-
+    ScGlobal::ResetAutoFormat();
 }
 
 // container::XEnumerationAccess
@@ -309,11 +308,11 @@ uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
     uno::Sequence<OUString> aSeq(pFormats->size());
     OUString* pAry = aSeq.getArray();
-    size_t i = 0;
-    for (const auto& rEntry : *pFormats)
+    for (size_t i = 0; i < pFormats->size(); i++)
     {
-        pAry[i] = rEntry.second->GetName();
-        ++i;
+        ScAutoFormatData* pData = pFormats->GetData(i);
+        if (pData)
+            pAry[i] = pData->GetName();
     }
     return aSeq;
 }
@@ -321,9 +320,8 @@ uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
 sal_Bool SAL_CALL ScAutoFormatsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nDummy;
-    return lcl_FindAutoFormatIndex(
-        *ScGlobal::GetOrCreateAutoFormat(), aName, nDummy );
+    auto pData = ScGlobal::GetOrCreateAutoFormat()->FindAutoFormat(aName);
+    return pData ? true : false;
 }
 
 ScAutoFormatObj::ScAutoFormatObj(sal_uInt16 nIndex) :
@@ -334,17 +332,6 @@ ScAutoFormatObj::ScAutoFormatObj(sal_uInt16 nIndex) :
 
 ScAutoFormatObj::~ScAutoFormatObj()
 {
-    //  If an AutoFormat object is released, then eventually changes are saved
-    //  so that they become visible in e.g Writer
-
-    if (IsInserted())
-    {
-        ScAutoFormat* pFormats = ScGlobal::GetAutoFormat();
-        if ( pFormats && pFormats->IsSaveLater() )
-            pFormats->Save();
-
-        // Save() resets flag SaveLater
-    }
 }
 
 void ScAutoFormatObj::InitFormat( sal_uInt16 nNewIndex )
@@ -412,7 +399,7 @@ OUString SAL_CALL ScAutoFormatObj::getName()
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
     if (IsInserted() && nFormatIndex < pFormats->size())
-        return pFormats->findByIndex(nFormatIndex)->GetName();
+        return pFormats->GetData(nFormatIndex)->GetName();
 
     return OUString();
 }
@@ -430,23 +417,9 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
         throw uno::RuntimeException();
     }
 
-    ScAutoFormat::iterator it = pFormats->begin();
-    std::advance(it, nFormatIndex);
-    ScAutoFormatData *const pData = it->second.get();
-    assert(pData && "AutoFormat data not available");
-
-    std::unique_ptr<ScAutoFormatData> pNew(new ScAutoFormatData(*pData));
-    pNew->SetName( aNewName );
-
-    pFormats->erase(it);
-    it = pFormats->insert(std::move(pNew));
-    if (it != pFormats->end())
+    if (ScAutoFormatData* pData = pFormats->GetData(nFormatIndex))
     {
-        ScAutoFormat::iterator itBeg = pFormats->begin();
-        nFormatIndex = std::distance(itBeg, it);
-
-        //! notify to other objects
-        pFormats->SetSaveLater(true);
+        pData->SetName(aNewName);
     }
     else
     {
@@ -472,27 +445,27 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
     if (!(IsInserted() && nFormatIndex < pFormats->size()))
         return;
 
-    ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
+    ScAutoFormatData* pData = pFormats->GetData(nFormatIndex);
     OSL_ENSURE(pData,"AutoFormat data not available");
 
     bool bBool = false;
     if (aPropertyName == SC_UNONAME_INCBACK && (aValue >>= bBool))
-        pData->SetIncludeBackground( bBool );
+        pData->SetBackground( bBool );
     else if (aPropertyName == SC_UNONAME_INCBORD && (aValue >>= bBool))
-        pData->SetIncludeFrame( bBool );
+        pData->SetFrame( bBool );
     else if (aPropertyName == SC_UNONAME_INCFONT && (aValue >>= bBool))
-        pData->SetIncludeFont( bBool );
+        pData->SetFont( bBool );
     else if (aPropertyName == SC_UNONAME_INCJUST && (aValue >>= bBool))
-        pData->SetIncludeJustify( bBool );
+        pData->SetJustify( bBool );
     else if (aPropertyName == SC_UNONAME_INCNUM && (aValue >>= bBool))
-        pData->SetIncludeValueFormat( bBool );
+        pData->SetValueFormat( bBool );
     else if (aPropertyName == SC_UNONAME_INCWIDTH && (aValue >>= bBool))
-        pData->SetIncludeWidthHeight( bBool );
+        pData->SetWidthHeight( bBool );
 
     // else error
 
     //! notify to other objects
-    pFormats->SetSaveLater(true);
+    pFormats->Save();
 }
 
 uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyName )
@@ -503,24 +476,24 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyNa
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
     if (IsInserted() && nFormatIndex < pFormats->size())
     {
-        ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
+        ScAutoFormatData* pData = pFormats->GetData(nFormatIndex);
         assert(pData && "AutoFormat data not available");
 
         bool bValue;
         bool bError = false;
 
         if (aPropertyName == SC_UNONAME_INCBACK)
-            bValue = pData->GetIncludeBackground();
+            bValue = pData->IsBackground();
         else if (aPropertyName == SC_UNONAME_INCBORD)
-            bValue = pData->GetIncludeFrame();
+            bValue = pData->IsFrame();
         else if (aPropertyName == SC_UNONAME_INCFONT)
-            bValue = pData->GetIncludeFont();
+            bValue = pData->IsFont();
         else if (aPropertyName == SC_UNONAME_INCJUST)
-            bValue = pData->GetIncludeJustify();
+            bValue = pData->IsJustify();
         else if (aPropertyName == SC_UNONAME_INCNUM)
-            bValue = pData->GetIncludeValueFormat();
+            bValue = pData->IsValueFormat();
         else if (aPropertyName == SC_UNONAME_INCWIDTH)
-            bValue = pData->GetIncludeWidthHeight();
+            bValue = pData->IsWidthHeight();
         else
             bError = true;      // unknown property
 
@@ -564,7 +537,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
     if ( !(pEntry && pEntry->nWID && nFormatIndex < pFormats->size()) )
         return;
 
-    ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
+    ScAutoFormatData* pData = pFormats->GetData(nFormatIndex);
 
     if ( IsScItemWid( pEntry->nWID ) )
     {
@@ -613,7 +586,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
 
             if (bDone)
                 //! Notify to other objects?
-                pFormats->SetSaveLater(true);
+                pFormats->Save();
         }
     }
     else
@@ -631,7 +604,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                         pData->PutItem( nFieldIndex, aOuter );
 
                         //! Notify for other objects?
-                        pFormats->SetSaveLater(true);
+                        pFormats->Save();
                     }
                 }
                 break;
@@ -646,7 +619,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                         pData->PutItem( nFieldIndex, aOuter );
 
                         //! Notify for other objects?
-                        pFormats->SetSaveLater(true);
+                        pFormats->Save();
                     }
                 }
                 break;
@@ -665,7 +638,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
 
     if ( pEntry && pEntry->nWID && nFormatIndex < pFormats->size() )
     {
-        const ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
+        const ScAutoFormatData* pData = pFormats->GetData(nFormatIndex);
 
         if ( IsScItemWid( pEntry->nWID ) )
         {

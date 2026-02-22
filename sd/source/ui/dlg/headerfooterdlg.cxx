@@ -40,6 +40,8 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/customweld.hxx>
 

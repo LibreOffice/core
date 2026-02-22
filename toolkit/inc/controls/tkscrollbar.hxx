@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <rtl/ref.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <com/sun/star/awt/XScrollBar.hpp>

@@ -20,6 +20,7 @@
 
 #include <svtools/toolbarmenu.hxx>
 #include <svx/colorwindow.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 class SfxDispatcher;
 

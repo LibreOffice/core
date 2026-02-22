@@ -49,13 +49,6 @@
         "dest-filename": "33e1e61fab06a547851ed308b4ffef42-dejavu-fonts-ttf-2.37.zip"
     },
     {
-        "url": "https://dev-www.libreoffice.org/src/@FONT_GENTIUM_TARBALL@",
-        "sha256": "@FONT_GENTIUM_SHA256SUM@",
-        "type": "file",
-        "dest": "external/tarballs",
-        "dest-filename": "@FONT_GENTIUM_TARBALL@"
-    },
-    {
         "url": "https://dev-www.libreoffice.org/src/@FONT_LIBERATION_NARROW_TARBALL@",
         "sha256": "@FONT_LIBERATION_NARROW_SHA256SUM@",
         "type": "file",

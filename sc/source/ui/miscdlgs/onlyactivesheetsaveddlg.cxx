@@ -20,6 +20,10 @@
 #include <scmod.hxx>
 #include <inputopt.hxx>
 
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+
 ScOnlyActiveSheetSavedDlg::ScOnlyActiveSheetSavedDlg(weld::Window* pParent)
     : GenericDialogController(pParent, u"modules/scalc/ui/onlyactivesheetsaveddialog.ui"_ustr,
                               u"OnlyActiveSheetSavedDialog"_ustr)

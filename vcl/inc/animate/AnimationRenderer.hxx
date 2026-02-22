@@ -22,6 +22,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
+#include <vcl/region.hxx>
 #include <vcl/vclptr.hxx>
 
 class Animation;

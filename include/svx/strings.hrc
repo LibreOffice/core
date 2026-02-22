@@ -1883,6 +1883,22 @@
 #define RID_SVXSTR_FOOTER                           NC_("RID_SVXSTR_FOOTER", "Footer")
 #define RID_SVXSTR_HEADER                           NC_("RID_SVXSTR_HEADER", "Header")
 
+// strings related to table autoformat styles dialog
+#define RID_SVXSTR_ADD_AUTOFORMAT_TITLE                    NC_("RID_SVXSTR_ADD_AUTOFORMAT_TITLE", "Add AutoFormat" )
+#define RID_SVXSTR_RENAME_AUTOFORMAT_TITLE                 NC_("RID_SVXSTR_RENAME_AUTOFORMAT_TITLE", "Rename AutoFormat" )
+#define RID_SVXSTR_ADD_AUTOFORMAT_LABEL                    NC_("RID_SVXSTR_ADD_AUTOFORMAT_LABEL", "Name" )
+#define RID_SVXSTR_DEL_AUTOFORMAT_TITLE                    NC_("RID_SVXSTR_DEL_AUTOFORMAT_TITLE", "Delete AutoFormat" )
+#define RID_SVXSTR_DEL_AUTOFORMAT_MSG                      NC_("RID_SVXSTR_DEL_AUTOFORMAT_MSG", "Do you want to delete the following AutoFormat?" )
+#define RID_SVXSTR_BTN_AUTOFORMAT_CLOSE                    NC_("RID_SVXSTR_BTN_AUTOFORMAT_CLOSE", "~Close" )
+#define RID_SVXSTR_JAN                                     NC_("RID_SVXSTR_JAN", "Jan" )
+#define RID_SVXSTR_FEB                                     NC_("RID_SVXSTR_FEB", "Feb" )
+#define RID_SVXSTR_MAR                                     NC_("RID_SVXSTR_MAR", "Mar" )
+#define RID_SVXSTR_NORTH                                   NC_("RID_SVXSTR_NORTH", "North" )
+#define RID_SVXSTR_MID                                     NC_("RID_SVXSTR_MID", "Mid" )
+#define RID_SVXSTR_SOUTH                                   NC_("RID_SVXSTR_SOUTH", "South" )
+#define RID_SVXSTR_SUM                                     NC_("RID_SVXSTR_SUM", "Total" )
+#define RID_SVXSTR_INVALID_AUTOFORMAT_NAME                 NC_("RID_SVXSTR_INVALID_AUTOFORMAT_NAME", "You have entered an invalid name.\nThe desired AutoFormat could not be created. \nTry again using a different name. \n(The name shouldn't contain '.' or '-')")
+
 /*--------------------------------------------------------------------
     Description: GraphicSizeCheck strings
  --------------------------------------------------------------------*/

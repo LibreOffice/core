@@ -17,6 +17,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_cond_format_merge, \
 
 $(eval $(call gb_CppunitTest_use_externals,sc_cond_format_merge, \
     boost_headers \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_cond_format_merge, \

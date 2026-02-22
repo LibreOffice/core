@@ -25,6 +25,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/event.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/help.hxx>

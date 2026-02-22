@@ -405,6 +405,14 @@ Adjust2Justification(const uno::Any& rAny)
             value = "center";
             break;
 
+        case style::ParagraphAdjust_START:
+            value = "start";
+            break;
+
+        case style::ParagraphAdjust_END:
+            value = "end";
+            break;
+
         default:
             break;
     }
@@ -428,6 +436,10 @@ Justification2Adjust( uno::Any& rAny, const gchar * value )
         nParagraphAdjust = style::ParagraphAdjust_BLOCK;
     else if( strncmp( value, STRNCMP_PARAM( "center" ) ) == 0 )
         nParagraphAdjust = style::ParagraphAdjust_CENTER;
+    else if( strncmp( value, STRNCMP_PARAM( "start" ) ) == 0 )
+        nParagraphAdjust = style::ParagraphAdjust_START;
+    else if( strncmp( value, STRNCMP_PARAM( "end" ) ) == 0 )
+        nParagraphAdjust = style::ParagraphAdjust_END;
     else
         return false;
 

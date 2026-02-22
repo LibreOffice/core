@@ -395,14 +395,14 @@ bool SwGetRefField::IsRefToNumItemCrossRefBookmark() const
         ::sw::mark::CrossRefNumItemBookmark::IsLegalName(m_sSetRefName);
 }
 
-const SwTextNode* SwGetRefField::GetReferencedTextNode(const SwTextNode* pTextNode, SwFrame* pFrame) const
+const SwTextNode* SwGetRefField::GetReferencedTextNode() const
 {
     SwGetRefFieldType *pTyp = dynamic_cast<SwGetRefFieldType*>(GetTyp());
     if (!pTyp)
         return nullptr;
     sal_Int32 nDummy = -1;
     return SwGetRefFieldType::FindAnchor( &pTyp->GetDoc(), m_sSetRefName, m_nSubType, m_nSeqNo, m_nFlags, &nDummy,
-                                          nullptr, nullptr, pTextNode, pFrame );
+                                          nullptr, nullptr, /*pTextNode*/nullptr, /*pFrame*/nullptr );
 }
 
 // strikethrough for tooltips using Unicode combining character
@@ -420,7 +420,7 @@ static OUString lcl_formatStringByCombiningCharacter(std::u16string_view sText, 
 OUString SwGetRefField::GetExpandedTextOfReferencedTextNode(
         SwRootFrame const& rLayout) const
 {
-    const SwTextNode* pReferencedTextNode( GetReferencedTextNode(/*pTextNode*/nullptr, /*pFrame*/nullptr) );
+    const SwTextNode* pReferencedTextNode( GetReferencedTextNode() );
     if ( !pReferencedTextNode )
         return OUString();
 
@@ -632,8 +632,8 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                 return;
 
             case ReferencesSubtype::Style:
-                nStart = 0;
-                nEnd = nLen;
+                nStart = nNumStart;
+                nEnd = nNumEnd;
                 break;
 
             default:
@@ -947,20 +947,21 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         OUString sTmp(GetPar1());
         if(ReferencesSubtype::SequenceField == m_nSubType)
         {
-            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( UIName(sTmp), SwGetPoolIdFromName::TxtColl );
+            SwPoolFormatId nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( UIName(sTmp), SwGetPoolIdFromName::TxtColl );
             switch( nPoolId )
             {
-                case RES_POOLCOLL_LABEL_ABB:
-                case RES_POOLCOLL_LABEL_TABLE:
-                case RES_POOLCOLL_LABEL_FRAME:
-                case RES_POOLCOLL_LABEL_DRAWING:
-                case RES_POOLCOLL_LABEL_FIGURE:
+                case SwPoolFormatId::COLL_LABEL_ABB:
+                case SwPoolFormatId::COLL_LABEL_TABLE:
+                case SwPoolFormatId::COLL_LABEL_FRAME:
+                case SwPoolFormatId::COLL_LABEL_DRAWING:
+                case SwPoolFormatId::COLL_LABEL_FIGURE:
                 {
                     ProgName sTmp2(sTmp);
                     SwStyleNameMapper::FillProgName(nPoolId, sTmp2) ;
                     sTmp = sTmp2.toString();
                 }
                 break;
+                default: break;
             }
         }
         else if (ReferencesSubtype::Style == m_nSubType)
@@ -1119,25 +1120,26 @@ void SwGetRefField::ConvertProgrammaticToUIName()
     if (rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rPar1, false))
         return;
 
-    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( ProgName(rPar1), SwGetPoolIdFromName::TxtColl );
+    SwPoolFormatId nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( ProgName(rPar1), SwGetPoolIdFromName::TxtColl );
     TranslateId pResId;
     switch( nPoolId )
     {
-        case RES_POOLCOLL_LABEL_ABB:
+        case SwPoolFormatId::COLL_LABEL_ABB:
             pResId = STR_POOLCOLL_LABEL_ABB;
         break;
-        case RES_POOLCOLL_LABEL_TABLE:
+        case SwPoolFormatId::COLL_LABEL_TABLE:
             pResId = STR_POOLCOLL_LABEL_TABLE;
         break;
-        case RES_POOLCOLL_LABEL_FRAME:
+        case SwPoolFormatId::COLL_LABEL_FRAME:
             pResId = STR_POOLCOLL_LABEL_FRAME;
         break;
-        case RES_POOLCOLL_LABEL_DRAWING:
+        case SwPoolFormatId::COLL_LABEL_DRAWING:
             pResId = STR_POOLCOLL_LABEL_DRAWING;
         break;
-        case RES_POOLCOLL_LABEL_FIGURE:
+        case SwPoolFormatId::COLL_LABEL_FIGURE:
             pResId = STR_POOLCOLL_LABEL_FIGURE;
         break;
+        default: break;
     }
     if (pResId)
         SetPar1(SwResId(pResId));
@@ -1292,7 +1294,10 @@ namespace
     SwTextNode* SearchForStyleAnchor(const SwTextNode* pSelf, SwNode* pCurrent,
                                     std::u16string_view rStyleName,
                                     sal_Int32 *const pStart, sal_Int32 *const pEnd,
-                                    bool bCaseSensitive = true)
+                                    TextFrameIndex nStartOffset = TextFrameIndex(0),
+                                    TextFrameIndex nEndOffset = TextFrameIndex(0),
+                                    bool bCaseSensitive = true,
+                                    bool bSearchBackward = false)
     {
         if (pCurrent == pSelf)
             return nullptr;
@@ -1314,7 +1319,67 @@ namespace
             return pTextNode;
         }
 
-        if (auto const pHints = pTextNode->GetpSwpHints())
+        bool bHasEndOffset = true;
+        if ( nEndOffset == TextFrameIndex(0) )
+        {
+            // search referred character formatting backward
+            // to get the last one in the node
+            nEndOffset = TextFrameIndex(pTextNode->GetText().getLength());
+            bHasEndOffset = false;
+        }
+
+        bool bHasHint = false;
+        auto const pHints = pTextNode->GetpSwpHints();
+        // first search backward
+        if ( pHints && bSearchBackward )
+        {
+            for (size_t i = pHints->Count(); i > 0; --i)
+            {
+                auto const*const pHint(pHints->Get(i - 1));
+                if (pHint->Which() == RES_TXTATR_CHARFMT)
+                {
+                    // not on the actual page yet
+                    if ( TextFrameIndex(pHint->GetStart()) > nEndOffset )
+                    {
+                        continue;
+                    }
+
+                    if (bCaseSensitive
+                        ? pHint->GetCharFormat().GetCharFormat()->HasName(rStyleName)
+                        : pHint->GetCharFormat().GetCharFormat()->GetName().toString().equalsIgnoreAsciiCase(rStyleName))
+                    {
+                        // if the recent hint (started before the previous one) is not adjacent,
+                        // return with the first start stored in pStart, i.e. with the last
+                        // continuous page text in the paragraph, which is formatted
+                        // with the requested character style
+                        if ( bHasHint && ( !pEnd || *pHint->End() != *pStart ) )
+                        {
+                            if ( TextFrameIndex(*pStart) < nEndOffset )
+                            {
+                                // found a reference on the page
+                                return pTextNode;
+                            }
+                            else
+                                // the previous was a reference after the page:
+                                // start a new one
+                                bHasHint = false;
+                        }
+
+                        if ( !bHasHint )
+                        {
+                            if (pEnd)
+                                *pEnd = *pHint->End();
+                            bHasHint = true;
+                        }
+
+                        *pStart = pHint->GetStart();
+                    }
+                }
+            }
+            if ( bHasHint && TextFrameIndex(*pStart) < nEndOffset && TextFrameIndex(*pStart) >= nStartOffset )
+                return pTextNode;
+        }
+        else if (pHints)
         {
             for (size_t i = 0, nCnt = pHints->Count(); i < nCnt; ++i)
             {
@@ -1325,15 +1390,50 @@ namespace
                         ? pHint->GetCharFormat().GetCharFormat()->HasName(rStyleName)
                         : pHint->GetCharFormat().GetCharFormat()->GetName().toString().equalsIgnoreAsciiCase(rStyleName))
                     {
-                        *pStart = pHint->GetStart();
+                        if ( !bHasHint )
+                        {
+                            // looking for the hints on the actual page, but the first
+                            // matching hint is after the end of the actual page
+                            if ( bHasEndOffset &&
+                                      TextFrameIndex(pHint->GetStart()) > nEndOffset )
+                            {
+                                return nullptr;
+                            }
+
+                            *pStart = pHint->GetStart();
+                            bHasHint = true;
+                        }
+                        // if the next hint is not adjacent, return with the last end stored in pEnd,
+                        // i.e. with the first continuous page text in the paragraph, which is formatted
+                        // with the requested character style
+                        else if ( !pEnd || *pEnd != pHint->GetStart() )
+                        {
+                            // return with the previous matching hint, if
+                            // 1) the previous matching hint was already on the page OR
+                            // 2) there is only a single paragraph on the page and
+                            //    the recent hint is there after the page
+                            if ( pEnd && ( TextFrameIndex(*pEnd) > nStartOffset  ||
+                                    ( bHasEndOffset &&
+                                      TextFrameIndex(pHint->GetStart()) > nEndOffset ) ) )
+                            {
+                                return pTextNode;
+                            }
+                            else
+                            {
+                                // start new matching
+                                *pStart = pHint->GetStart();
+                            }
+                        }
+
                         if (pEnd)
                         {
                             *pEnd = *pHint->End();
                         }
-                        return pTextNode;
                     }
                 }
             }
+            if ( bHasHint )
+                return pTextNode;
         }
 
         return nullptr;
@@ -1342,24 +1442,60 @@ namespace
     SwTextNode* SearchForStyleAnchor(const SwTextNode* pSelf, const SwNodes& rNodes, SwNodeOffset nNodeStart, SwNodeOffset nNodeEnd, bool bSearchBackward,
                                     std::u16string_view rStyleName,
                                     sal_Int32 *const pStart, sal_Int32 *const pEnd,
+                                    TextFrameIndex nPageStartOffset = TextFrameIndex(0),
+                                    TextFrameIndex nPageEndOffset = TextFrameIndex(0),
                                     bool bCaseSensitive = true)
     {
         if (!bSearchBackward)
         {
-            for (SwNodeOffset nCurrent = nNodeStart; nCurrent <= nNodeEnd; ++nCurrent)
+            SwNodeOffset nCurrent = nNodeStart;
+            // first node can have an offset for character styles, check that first
+            if ( nPageStartOffset != TextFrameIndex(0) )
             {
                 SwNode* pCurrent = rNodes[nCurrent];
-                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, bCaseSensitive);
+                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, nPageStartOffset,
+                                nNodeStart == nNodeEnd ? nPageEndOffset : TextFrameIndex(0), bCaseSensitive);
+                if (pFound)
+                    return pFound;
+
+                nCurrent++;
+            }
+
+            for (; nCurrent <= nNodeEnd; ++nCurrent)
+            {
+                SwNode* pCurrent = rNodes[nCurrent];
+                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, TextFrameIndex(0),
+                                nCurrent == nNodeEnd ? nPageEndOffset : TextFrameIndex(0), bCaseSensitive);
                 if (pFound)
                     return pFound;
             }
         }
         else
         {
-            for (SwNodeOffset nCurrent = nNodeEnd; nCurrent >= nNodeStart; --nCurrent)
+            SwNodeOffset nCurrent = nNodeEnd;
+
+            // first end node can have an offset for character styles, check that first
+            if ( nPageEndOffset != TextFrameIndex(0) )
             {
                 SwNode* pCurrent = rNodes[nCurrent];
-                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, bCaseSensitive);
+                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd,
+                                nNodeStart == nNodeEnd ? nPageStartOffset : TextFrameIndex(0),
+                                nPageEndOffset, bCaseSensitive, bSearchBackward);
+
+                if (pFound)
+                    return pFound;
+                // continue with the last but one paragraph on the page
+                if ( nCurrent >= nNodeStart )
+                    --nCurrent;
+            }
+
+            for (; nCurrent >= nNodeStart; --nCurrent)
+            {
+                SwNode* pCurrent = rNodes[nCurrent];
+                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd,
+                                nNodeStart == nCurrent ? nPageStartOffset : TextFrameIndex(0),
+                                TextFrameIndex(0), bCaseSensitive, bSearchBackward);
+
                 if (pFound)
                     return pFound;
             }
@@ -1547,7 +1683,7 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const SwMarkName&
     const OUString& sRefMarkStr = rRefMark.toString();
     OUString const styleName(
         (sRefMarkStr.getLength() == 1 && '1' <= sRefMarkStr[0] && sRefMarkStr[0] <= '9')
-        ? SwStyleNameMapper::GetProgName(RES_POOLCOLL_HEADLINE1 + sRefMarkStr[0] - '1', UIName(sRefMarkStr)).toString()
+        ? SwStyleNameMapper::GetProgName(SwPoolFormatId::COLL_HEADLINE1 + sRefMarkStr[0] - '1', UIName(sRefMarkStr)).toString()
         : sRefMarkStr);
 
     switch (elementType)
@@ -1591,6 +1727,8 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
 
     const SwNode* pPageStart(nullptr);
     const SwNode* pPageEnd(nullptr);
+    TextFrameIndex nPageStartOffset(0);
+    TextFrameIndex nPageEndOffset(0);
 
     if (pPageFrame)
     {
@@ -1603,6 +1741,10 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
             {
                 pPageStart = static_cast<const SwTextFrame*>(pPageStartFrame)
                                 ->GetTextNodeFirst();
+
+                // style-refs referring character style need offset data
+                nPageStartOffset = static_cast<const SwTextFrame*>(pPageStartFrame)
+                                ->GetOffset();
             }
             else
             {
@@ -1617,6 +1759,35 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
             {
                 pPageEnd = static_cast<const SwTextFrame*>(pPageEndFrame)
                             ->GetTextNodeFirst();
+
+                // style-refs referring character style need offset data
+
+                // set page end offset to the last character of the paragraph
+                auto pPage = static_cast<const SwTextFrame*>(pPageEndFrame);
+                nPageEndOffset = TextFrameIndex(pPage->GetText().getLength());
+
+                // adjust the end offset, if the paragraph continues on the next page
+                const SwPageFrame* pNextPage =
+                        static_cast<const SwPageFrame*>(pPageFrame->GetNext());
+                if ( pNextPage )
+                {
+                    // the get the page end offset, when the paragraph is continued on the
+                    // next page, check the first text frame of the next page
+                    const SwContentFrame* pNextPageStart =
+                            pNextPage->FindFirstBodyContent();
+                    if ( pNextPageStart && pNextPageStart->IsTextFrame() )
+                    {
+                        auto pNextPageTextNode = static_cast<const SwTextFrame*>(pNextPageStart)
+                           ->GetTextNodeFirst();
+                        if ( pNextPageTextNode == pPageEnd )
+                        {
+                           nPageEndOffset = static_cast<const SwTextFrame*>(pNextPageStart)
+                                ->GetOffset();
+                           // set end offset to the end of the first page
+                           nPageEndOffset--;
+                        }
+                    }
+                }
             }
             else
             {
@@ -1635,35 +1806,49 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
     SwNodeOffset nPageEnd = pPageEnd->GetIndex();
     const SwNodes& nodes = pDoc->GetNodes();
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageStart, nPageEnd, bFlagFromBottom, styleName, pStart, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageStart, nPageEnd, bFlagFromBottom, styleName, pStart, pEnd, nPageStartOffset, nPageEndOffset);
     if (pTextNd)
         return pTextNd;
 
     // 2. Search up from the top of the page
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd);
+    if ( nPageStartOffset != TextFrameIndex(0) )
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart, /*bBackwards*/true, styleName, pStart, pEnd, TextFrameIndex(0), nPageStartOffset);
+    else
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd, nPageStartOffset, nPageEndOffset);
     if (pTextNd)
         return pTextNd;
 
     // 3. Search down from the bottom of the page
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd);
+    if ( nPageEndOffset != TextFrameIndex(0) )
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd, nPageEndOffset);
+    else
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // Word has case insensitive styles. LO has case sensitive styles. If we didn't find
     // it yet, maybe we could with a case insensitive search. Let's do that
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageStart, nPageEnd, bFlagFromBottom, styleName, pStart, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageStart, nPageEnd, bFlagFromBottom, styleName, pStart, pEnd, nPageStartOffset, nPageEndOffset,
                                    false /* bCaseSensitive */);
     if (pTextNd)
         return pTextNd;
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd,
-                                   false /* bCaseSensitive */);
+    if ( nPageStartOffset != TextFrameIndex(0) )
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd,
+                                   TextFrameIndex(0), nPageStartOffset, false /* bCaseSensitive */);
+    else
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd,
+                                   nPageStartOffset, nPageEndOffset, false /* bCaseSensitive */);
     if (pTextNd)
         return pTextNd;
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd,
-                                   false /* bCaseSensitive */);
+    if ( nPageEndOffset != TextFrameIndex(0) )
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd,
+                                   nPageEndOffset, TextFrameIndex(0), false /* bCaseSensitive */);
+    else
+        pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd,
+                                   TextFrameIndex(0), TextFrameIndex(0), false /* bCaseSensitive */);
     return pTextNd;
 }
 
@@ -1706,12 +1891,12 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleOther(SwDoc* pDoc,
     // Again, we need to remember that Word styles are not case sensitive
 
     pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nReference, /*bBackwards*/true, styleName, pStart, pEnd,
-                                   false /* bCaseSensitive */);
+                                   TextFrameIndex(0), TextFrameIndex(0), false /* bCaseSensitive */);
     if (pTextNd)
         return pTextNd;
 
     pTextNd = SearchForStyleAnchor(pSelf, nodes, nReference + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd,
-                                   false /* bCaseSensitive */);
+                                   TextFrameIndex(0), TextFrameIndex(0), false /* bCaseSensitive */);
     return pTextNd;
 }
 

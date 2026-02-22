@@ -21,10 +21,12 @@
 
 #include <cmath>
 
+#include <com/sun/star/drawing/NormalsKind.hpp>
 #include <drawinglayer/primitive3d/sdrextrudeprimitive3d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <primitive3d/sdrdecompositiontools3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>

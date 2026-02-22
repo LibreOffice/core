@@ -21,6 +21,7 @@
 #include "fieldmappingimpl.hxx"
 #include "addresssettings.hxx"
 #include "abspilot.hxx"
+#include <vcl/weld/Builder.hxx>
 
 
 namespace abp

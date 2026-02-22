@@ -23,6 +23,7 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/macros.h>
 #include <tools/helpers.hxx>
@@ -53,20 +54,6 @@
 #endif
 
 #define WHEEL_EVENT_FACTOR 1.5
-
-static sal_uInt16 ImplGetModifierMask( unsigned int nMask )
-{
-    sal_uInt16 nRet = 0;
-    if( (nMask & NSEventModifierFlagShift) != 0 )
-        nRet |= KEY_SHIFT;
-    if( (nMask & NSEventModifierFlagControl) != 0 )
-        nRet |= KEY_MOD3;
-    if( (nMask & NSEventModifierFlagOption) != 0 )
-        nRet |= KEY_MOD2;
-    if( (nMask & NSEventModifierFlagCommand) != 0 )
-        nRet |= KEY_MOD1;
-    return nRet;
-}
 
 static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
 {
@@ -1691,6 +1678,20 @@ static NSString* getCurrentSelection()
     }
 }
 
+-(void)contextMenuKeyDown: (NSEvent*)pEvent
+{
+    SolarMutexGuard aGuard;
+
+    vcl::Window *pWin = ImplGetSVData()->mpWinData->mpFocusWin;
+    if( pWin )
+    {
+        CommandEvent aCEvt(Point(), CommandEventId::ContextMenu, false);
+        NotifyEvent aNCmdEvt( NotifyEventType::COMMAND, pWin, &aCEvt );
+
+        if ( !ImplCallPreNotify( aNCmdEvt ) )
+            pWin->Command( aCEvt );
+    }
+}
 
 -(void)keyDown: (NSEvent*)pEvent
 {
@@ -1713,19 +1714,22 @@ static NSString* getCurrentSelection()
         if( ! [self handleKeyDownException: pEvent] )
         {
             sal_uInt16 nKeyCode = ImplMapKeyCode( [pEvent keyCode] );
-            if ( nKeyCode == KEY_DELETE && mpLastMarkedText )
+            if ( mpLastMarkedText && ( nKeyCode == KEY_DELETE || nKeyCode == KEY_ESCAPE || nKeyCode == KEY_RETURN ) )
             {
-                // tdf#42437 Enable press-and-hold special character input method
-                // Emulate the press-and-hold behavior of the TextEdit
-                // application by deleting the marked text when only the
-                // Delete key is pressed and keep the marked text when the
-                // Backspace key or Fn-Delete keys are pressed.
-                if ( mbTextInputWantsInsertText )
+                if ( nKeyCode == KEY_DELETE )
                 {
-                    if ( [pEvent keyCode] == 51 )
-                        [self insertText:[NSString string] replacementRange:NSMakeRange( NSNotFound, 0 )];
-                    else
-                        [self insertText:[mpLastMarkedText string] replacementRange:NSMakeRange( 0, [mpLastMarkedText length] )];
+                    // tdf#42437 Enable press-and-hold special character input method
+                    // Emulate the press-and-hold behavior of the TextEdit
+                    // application by deleting the marked text when only the
+                    // Delete key is pressed and keep the marked text when the
+                    // Backspace key or Fn-Delete keys are pressed.
+                    if ( mbTextInputWantsInsertText )
+                    {
+                        if ( [pEvent keyCode] == 51 )
+                            [self insertText:[NSString string] replacementRange:NSMakeRange( NSNotFound, 0 )];
+                        else
+                            [self insertText:[mpLastMarkedText string] replacementRange:NSMakeRange( 0, [mpLastMarkedText length] )];
+                    }
                 }
 
                 // Related: tdf#170149 Calling [self interpretKeyEvents:] with
@@ -1745,7 +1749,7 @@ static NSString* getCurrentSelection()
                 // doing the following steps twice:
                 // - Arrowing into the input method's popup window
                 // - Arrowing out of the popup window
-                // - Pressing Delete or Backspace or Fn-Delete
+                // - Pressing Delete, Backspace, Fn-Delete, Escape, or Return
                 // The only way I have found to reset the input method is to
                 // deactivate and then reactivate the input method.
                 NSTextInputContext *pInputContext = [NSTextInputContext currentInputContext];

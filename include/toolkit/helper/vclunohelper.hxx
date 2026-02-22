@@ -20,24 +20,14 @@
 #pragma once
 
 #include <toolkit/dllapi.h>
-#include <com/sun/star/uno/Reference.h>
 
-#include <com/sun/star/awt/MouseEvent.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-
-#include <vcl/bitmap.hxx>
-#include <vcl/font.hxx>
-#include <vcl/region.hxx>
-#include <tools/mapunit.hxx>
-#include <tools/fldunit.hxx>
-#include <tools/poly.hxx>
-#include <toolkit/controls/unocontrolcontainer.hxx>
-#include <rtl/ref.hxx>
+namespace rtl { template <class reference_type> class Reference; }
 
 namespace com::sun::star::uno { template <typename > class Sequence; }
 
 namespace com::sun::star::uno {
     class XInterface;
+    template <class interface_type> class Reference;
 }
 
 namespace com::sun::star::awt {
@@ -51,19 +41,30 @@ namespace com::sun::star::awt {
     class XToolkit;
     class XFont;
     class XControlContainer;
+    struct MouseEvent;
     struct SimpleFontMetric;
     struct FontDescriptor;
     struct Rectangle;
     struct KeyEvent;
 }
 
+namespace vcl {
+    class Font;
+    class Region;
+    class Window;
+}
 
+namespace tools { class Polygon; }
+enum class FieldUnit : sal_uInt16;
+enum class MapUnit : sal_uInt8;
 enum class PointerStyle;
 
+class Bitmap;
 class FontMetric;
 class OutputDevice;
 class MouseEvent;
 class KeyEvent;
+class UnoControlContainer;
 
 class TOOLKIT_DLLPUBLIC VCLUnoHelper
 {

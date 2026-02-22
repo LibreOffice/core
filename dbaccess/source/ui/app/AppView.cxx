@@ -20,6 +20,7 @@
 #include "AppView.hxx"
 #include <strings.hrc>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/event.hxx>
 #include <vcl/weld/weld.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

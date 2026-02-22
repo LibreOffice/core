@@ -86,6 +86,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/svapp.hxx>
 #include <Outliner.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -4463,6 +4464,15 @@ void SdXImpressDocument::resetSelection()
     pSdrView->UnmarkAll();
 }
 
+void SdXImpressDocument::setPageZoom(int nPageZoom)
+{
+    SolarMutexGuard aGuard;
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return;
+    pViewShell->RememberPageZoom(nPageZoom);
+}
+
 void SdXImpressDocument::setClientVisibleArea(const ::tools::Rectangle& rRectangle)
 {
     SolarMutexGuard aGuard;
@@ -4472,6 +4482,9 @@ void SdXImpressDocument::setClientVisibleArea(const ::tools::Rectangle& rRectang
         return;
 
     pViewShell->GetViewShellBase().setLOKVisibleArea(rRectangle);
+
+    if (pViewShell->getCurrentPage()->IsCanvasPage())
+        pViewShell->RememberCanvasPageVisArea(rRectangle);
 }
 
 void SdXImpressDocument::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)

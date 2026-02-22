@@ -58,6 +58,7 @@
 #include <officecfg/Office/Writer.hxx>
 #include <unotbl.hxx>
 #include <unoparagraph.hxx>
+#include <unotextrange.hxx>
 
 #ifdef DBG_UTIL
 #include "PropertyMapHelper.hxx"
@@ -1235,8 +1236,10 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                 {
                     if (!oParagraphText) // do it only once
                     {
-                        uno::Reference<text::XParagraphCursor> xParagraph(
-                            rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(rParaProp.m_rEndParagraph), uno::UNO_QUERY_THROW );
+                        rtl::Reference<SwXTextCursor> xParagraph = dynamic_cast<SwXTextCursor*>(
+                            rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(rParaProp.m_rEndParagraph).get() );
+                        if (!xParagraph)
+                            throw uno::RuntimeException();
                         // select paragraph
                         xParagraph->gotoStartOfParagraph( true );
                         oParagraphText = xParagraph->getString();
@@ -1275,7 +1278,8 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     {
                         style::ParagraphAdjust eAdjust(style::ParagraphAdjust_CENTER);
                         aParaStyle >>= eAdjust;
-                        bCompatOverride = eAdjust == style::ParagraphAdjust_LEFT;
+                        bCompatOverride = (eAdjust == style::ParagraphAdjust_START)
+                                          || (eAdjust == style::ParagraphAdjust_LEFT);
                     }
 
                     // The wording is confusing here. Normally, the paragraph style DOES override the table-style.
@@ -1551,7 +1555,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                         std::vector<TableParagraph>::iterator aIt = pTableParagraphs->begin();
                         while ( aIt != pTableParagraphs->end() ) try
                         {
-                            if (!bApply && xTextRangeCompare->compareRegionStarts(rStartPara, aIt->m_rStartParagraph) == 0)
+                            if (!bApply && xTextRangeCompare->compareRegionStarts(rStartPara, static_cast<text::XSentenceCursor*>(aIt->m_rStartParagraph.get())) == 0)
                                 bApply = true;
                             if (bApply)
                             {
@@ -1729,12 +1733,12 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             sal_Int32 nTableWidthType = text::SizeType::FIX;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType);
             // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
-            uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert;
+            rtl::Reference<SwXText> xTextAppendAndConvert;
             if (m_rDMapper_Impl.GetCurrentXText())
             {
-                xTextAppendAndConvert.set(m_rDMapper_Impl.GetTopTextAppend(), uno::UNO_QUERY);
+                xTextAppendAndConvert = dynamic_cast<SwXText*>(m_rDMapper_Impl.GetTopTextAppend().get());
             }
-            uno::Reference<beans::XPropertySet> xFrameAnchor;
+            rtl::Reference<SwXTextRange> xFrameAnchor;
 
             // Writer layout has problems with redlines on floating table rows in footnotes, avoid
             // them.
@@ -1748,13 +1752,14 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 std::vector<OUString> redTable;
                 BeforeConvertToTextFrame(rFramedRedlines, redPos, redLen, redCell, redTable);
 
-                uno::Reference<text::XTextContent> xContent = xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
-                xFrameAnchor.set(xContent->getAnchor(), uno::UNO_QUERY);
+                rtl::Reference<SwXTextFrame> xContent = xTextAppendAndConvert->convertToSwTextFrame(xStart, xEnd, aFrameProperties);
+                if (xContent)
+                    xFrameAnchor = xContent->getSwAnchor();
 
                 bool bConvertToFloatingInFootnote = false;
-                if (xContent.is() && xContent->getAnchor().is())
+                if (xFrameAnchor)
                 {
-                    uno::Reference<lang::XServiceInfo> xText(xContent->getAnchor()->getText(), uno::UNO_QUERY);
+                    uno::Reference<lang::XServiceInfo> xText(xFrameAnchor->getText(), uno::UNO_QUERY);
                     if (xText.is())
                     {
                         bConvertToFloatingInFootnote = xText->supportsService(u"com.sun.star.text.Footnote"_ustr);
@@ -1764,34 +1769,24 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 // paragraph of the anchoring point of the floating table needs zero top and bottom
                 // margins, if the table was a not floating table in the footnote, otherwise
                 // docDefault margins could result bigger vertical spaces around the table
-                if ( bConvertToFloatingInFootnote && xContent.is() )
+                if ( bConvertToFloatingInFootnote && xFrameAnchor )
                 {
-                    uno::Reference<beans::XPropertySet> xParagraph(
-                                    xContent->getAnchor(), uno::UNO_QUERY);
-                    if ( xParagraph.is() )
-                    {
-                        xParagraph->setPropertyValue(u"ParaTopMargin"_ustr,
-                                    uno::Any(static_cast<sal_Int32>(0)));
-                        xParagraph->setPropertyValue(u"ParaBottomMargin"_ustr,
-                                    uno::Any(static_cast<sal_Int32>(0)));
-                    }
+                    xFrameAnchor->setPropertyValue(u"ParaTopMargin"_ustr,
+                                uno::Any(static_cast<sal_Int32>(0)));
+                    xFrameAnchor->setPropertyValue(u"ParaBottomMargin"_ustr,
+                                uno::Any(static_cast<sal_Int32>(0)));
                 }
 
-                if (xContent.is())
+                if (xFrameAnchor)
                 {
                     // By the time the frame is created, the anchor's paragraph marker character
                     // properties are already imported. Check if we need to disable "vanish", that
                     // would lead to a hidden floating table in Writer, but it does not in Word.
-                    uno::Reference<beans::XPropertySet> xParagraph(xContent->getAnchor(),
-                                                                   uno::UNO_QUERY);
-                    if (xParagraph.is())
+                    bool bCharHidden{};
+                    xFrameAnchor->getPropertyValue(u"CharHidden"_ustr) >>= bCharHidden;
+                    if (bCharHidden)
                     {
-                        bool bCharHidden{};
-                        xParagraph->getPropertyValue(u"CharHidden"_ustr) >>= bCharHidden;
-                        if (bCharHidden)
-                        {
-                            xParagraph->setPropertyValue(u"CharHidden"_ustr, uno::Any(false));
-                        }
+                        xFrameAnchor->setPropertyValue(u"CharHidden"_ustr, uno::Any(false));
                     }
                 }
 

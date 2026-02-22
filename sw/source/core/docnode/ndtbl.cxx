@@ -25,6 +25,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <string_view>
 #include <svl/stritem.hxx>
 #include <editeng/shaditem.hxx>
 #include <fmtfsize.hxx>
@@ -100,6 +101,7 @@
 #include <tools/datetimeutils.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <unordered_set>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
@@ -147,42 +149,24 @@ static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
 typedef std::map<SwFrameFormat *, SwTableBoxFormat *> DfltBoxAttrMap_t;
 typedef std::vector<DfltBoxAttrMap_t *> DfltBoxAttrList_t;
 
-static void
-lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
-        sal_uInt8 const nId, SwTableAutoFormat const*const pAutoFormat = nullptr)
+static void lcl_SetDfltBoxAttr(SwTableBox& rBox, size_t row, size_t col, size_t nRows, size_t nCols,
+                               sal_uInt8 const nId,
+                               SwTableAutoFormat const* const pAutoFormat = nullptr)
 {
-    DfltBoxAttrMap_t * pMap = rBoxFormatArr[ nId ];
-    if (!pMap)
-    {
-        pMap = new DfltBoxAttrMap_t;
-        rBoxFormatArr[ nId ] = pMap;
-    }
-
-    SwTableBoxFormat* pNewTableBoxFormat = nullptr;
     SwFrameFormat* pBoxFrameFormat = rBox.GetFrameFormat();
-    DfltBoxAttrMap_t::iterator const iter(pMap->find(pBoxFrameFormat));
-    if (pMap->end() != iter)
-    {
-        pNewTableBoxFormat = iter->second;
-    }
+
+    SwDoc& rDoc = pBoxFrameFormat->GetDoc();
+    SwTableBoxFormat* pNewTableBoxFormat = rDoc.MakeTableBoxFormat();
+    pNewTableBoxFormat->SetFormatAttr(pBoxFrameFormat->GetAttrSet().Get(RES_FRM_SIZE));
+
+    if (pAutoFormat)
+        pAutoFormat->UpdateToSet(const_cast<SfxItemSet&>(static_cast<SfxItemSet const&>(
+                                     pNewTableBoxFormat->GetAttrSet())),
+                                 row, col, nRows, nCols, rDoc.GetNumberFormatter());
     else
-    {
-        SwDoc& rDoc = pBoxFrameFormat->GetDoc();
-        // format does not exist, so create it
-        pNewTableBoxFormat = rDoc.MakeTableBoxFormat();
-        pNewTableBoxFormat->SetFormatAttr( pBoxFrameFormat->GetAttrSet().Get( RES_FRM_SIZE ) );
+        ::lcl_SetDfltBoxAttr(*pNewTableBoxFormat, nId);
 
-        if( pAutoFormat )
-            pAutoFormat->UpdateToSet( nId, false, false,
-                                    const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pNewTableBoxFormat->GetAttrSet())),
-                                    SwTableAutoFormatUpdateFlags::Box,
-                                    rDoc.GetNumberFormatter() );
-        else
-            ::lcl_SetDfltBoxAttr( *pNewTableBoxFormat, nId );
-
-        (*pMap)[pBoxFrameFormat] = pNewTableBoxFormat;
-    }
-    rBox.ChgFrameFormat( pNewTableBoxFormat );
+    rBox.ChgFrameFormat(pNewTableBoxFormat);
 }
 
 static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTableBoxFormat*> &rBoxFormatArr,
@@ -200,23 +184,19 @@ static SwTableBoxFormat *lcl_CreateDfltBoxFormat( SwDoc &rDoc, std::vector<SwTab
     return rBoxFormatArr[nId];
 }
 
-static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<SwTableBoxFormat*> &rBoxFormatArr,
-                                    const SwTableAutoFormat& rAutoFormat,
-                                    const sal_uInt16 nRows, const sal_uInt16 nCols, sal_uInt8 nId )
+static SwTableBoxFormat* lcl_CreateAFormatBoxFormat(SwDoc& rDoc,
+                                                    const SwTableAutoFormat& rAutoFormat,
+                                                    size_t row, size_t col, size_t nRows,
+                                                    size_t nCols)
 {
-    if( !rBoxFormatArr[nId] )
-    {
-        SwTableBoxFormat* pBoxFormat = rDoc.MakeTableBoxFormat();
-        rAutoFormat.UpdateToSet( nId, nRows==1, nCols==1,
-                                const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pBoxFormat->GetAttrSet())),
-                                SwTableAutoFormatUpdateFlags::Box,
-                                rDoc.GetNumberFormatter( ) );
-        if( USHRT_MAX != nCols )
-            pBoxFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable,
-                                            USHRT_MAX / nCols, 0 ));
-        rBoxFormatArr[ nId ] = pBoxFormat;
-    }
-    return rBoxFormatArr[nId];
+    SwTableBoxFormat* pBoxFormat = rDoc.MakeTableBoxFormat();
+    rAutoFormat.UpdateToSet(
+        const_cast<SfxItemSet&>(static_cast<SfxItemSet const&>(pBoxFormat->GetAttrSet())), row, col,
+        nRows, nCols, rDoc.GetNumberFormatter());
+
+    if (USHRT_MAX != nCols)
+        pBoxFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Variable, USHRT_MAX / nCols, 0));
+    return pBoxFormat;
 }
 
 static void lcl_transferTableBreaks(const SwTableBox& rParentCell, const SwTableNode& rDestTableNd,
@@ -407,13 +387,13 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     }
 
     // Start with inserting the Nodes and get the AutoFormat for the Table
-    SwTextFormatColl *pBodyColl = getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE ),
+    SwTextFormatColl *pBodyColl = getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TABLE ),
                  *pHeadColl = pBodyColl;
 
     bool bDfltBorders( rInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder );
 
     if( (rInsTableOpts.mnInsMode & SwInsertTableFlags::Headline) && (1 != nRows || !bDfltBorders) )
-        pHeadColl = getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE_HDLN );
+        pHeadColl = getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TABLE_HDLN );
 
     const sal_uInt16 nRowsToRepeat =
             SwInsertTableFlags::Headline == (rInsTableOpts.mnInsMode & SwInsertTableFlags::Headline) ?
@@ -533,20 +513,18 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         for( sal_uInt16 i = 0; i < nCols; ++i )
         {
-            SwTableBoxFormat *pBoxF;
+            SwTableBoxFormat* pBoxF;
             if( pTAFormat )
             {
-                sal_uInt8 nId = SwTableAutoFormat::CountPos(i, nCols, n, nRows);
-                pBoxF = ::lcl_CreateAFormatBoxFormat( *this, aBoxFormatArr, *pTAFormat,
-                                                nRows, nCols, nId );
+                pBoxF
+                    = ::lcl_CreateAFormatBoxFormat(*this, *pTAFormat, n, i, nRows, nCols);
 
                 // Set the Paragraph/Character Attributes if needed
                 if( pTAFormat->IsFont() || pTAFormat->IsJustify() )
                 {
                     aCharSet.ClearItem();
-                    pTAFormat->UpdateToSet( nId, nRows==1, nCols==1, aCharSet,
-                                        SwTableAutoFormatUpdateFlags::Char, nullptr );
-                    if( aCharSet.Count() )
+                    pTAFormat->UpdateToSet(aCharSet, n, i, nRows, nCols, nullptr);
+                    if (aCharSet.Count())
                         GetNodes()[ aNdIdx.GetIndex()+1 ]->GetContentNode()->
                             SetAttr( aCharSet );
                 }
@@ -771,7 +749,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
     SwTableNode* pTableNd = GetNodes().TextToTable(
             aRg, cCh, pTableFormat, pLineFormat, pBoxFormat,
-            getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ), pUndo );
+            getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ), pUndo );
 
     SwTable& rNdTable = pTableNd->GetTable();
 
@@ -832,22 +810,22 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                                             ? 12 : (4 * (1 + ((n-1) & 1 )))));
                     nId = nId + static_cast<sal_uInt8>(!i ? 0 :
                                 ( i+1 == nCols ? 3 : (1 + ((i-1) & 1))));
-                    if( bUseBoxFormat )
-                        ::lcl_SetDfltBoxAttr( *pBox, *aBoxFormatArr1, nId, pTAFormat );
+
+                    if (bUseBoxFormat)
+                        ::lcl_SetDfltBoxAttr(*pBox, n, i, nRows, nCols, nId, pTAFormat);
                     else
                     {
                         bChgSz = nullptr == (*aBoxFormatArr2)[ nId ];
-                        pBoxF = ::lcl_CreateAFormatBoxFormat( *this, *aBoxFormatArr2,
-                                                *pTAFormat, USHRT_MAX, USHRT_MAX, nId );
+                        pBoxF = ::lcl_CreateAFormatBoxFormat( *this,
+                                                *pTAFormat, n, i, USHRT_MAX, USHRT_MAX);
                     }
 
                     // Set Paragraph/Character Attributes if needed
                     if( pTAFormat->IsFont() || pTAFormat->IsJustify() )
                     {
                         aCharSet.ClearItem();
-                        pTAFormat->UpdateToSet( nId, nRows==1, nCols==1, aCharSet,
-                                            SwTableAutoFormatUpdateFlags::Char, nullptr );
-                        if( aCharSet.Count() )
+                        pTAFormat->UpdateToSet(aCharSet, n, i, nRows, nCols, nullptr);
+                        if (aCharSet.Count())
                         {
                             SwNodeOffset nSttNd = pBox->GetSttIdx()+1;
                             SwNodeOffset nEndNd = pBox->GetSttNd()->EndOfSectionIndex();
@@ -872,7 +850,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                 {
                     sal_uInt8 nId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
                     if( bUseBoxFormat )
-                        ::lcl_SetDfltBoxAttr( *pBox, *aBoxFormatArr1, nId );
+                        ::lcl_SetDfltBoxAttr( *pBox, n, i, nRows, nCols, nId );
                     else
                     {
                         bChgSz = nullptr == (*aBoxFormatArr2)[ nId ];
@@ -1798,6 +1776,27 @@ void SwDoc::InsertCol( const SwCursor& rCursor, sal_uInt16 nCnt, bool bBehind )
         InsertCol( aBoxes, nCnt, bBehind );
 }
 
+static void lcl_ResetTableFormat(SwTableBox* rBox, SwTableAutoFormat& rFormat, size_t nRow,
+                                 size_t nCol, size_t nRows, size_t nCols)
+{
+    SwNodeOffset nSttNd = rBox->GetSttIdx() + 1;
+    SwNodeOffset nEndNd = rBox->GetSttNd()->EndOfSectionIndex();
+    SwDoc& rDoc = rBox->GetFrameFormat()->GetDoc();
+
+    for (; nSttNd < nEndNd; ++nSttNd)
+    {
+        SwContentNode* pNd = rDoc.GetNodes()[nSttNd]->GetContentNode();
+        if (pNd)
+        {
+            SfxItemSet aDummySet(
+                SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_PARATR_LIST_END - 1>(
+                    rDoc.GetAttrPool()));
+
+            rFormat.RestoreToOriginal(pNd, aDummySet, nRow, nCol, nRows, nCols);
+        }
+    }
+}
+
 bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind, bool bInsertDummy )
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
@@ -1821,6 +1820,25 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind, 
     bool bRet(false);
     {
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+
+        // If the table has autoformat applied remove the autoformat content properties from the boxes
+        TableStyleName rStyleName = rTable.GetTableStyleName();
+        if (!rStyleName.isEmpty())
+        {
+            if (SwTableAutoFormat* pFormat = GetTableStyles().FindAutoFormat(rStyleName))
+            {
+                size_t nRows = rTable.GetTabLines().size();
+                for (auto rBox : rBoxes)
+                {
+                    auto pLine = rBox->GetUpper();
+                    size_t nRow = rTable.GetTabLines().GetPos(pLine);
+                    size_t nCols = pLine->GetTabBoxes().size();
+                    size_t nCol = pLine->GetBoxPos(rBox);
+
+                    lcl_ResetTableFormat(rBox, *pFormat, nRow, nCol, nRows, nCols);
+                }
+            }
+        }
 
         rTable.SwitchFormulasToInternalRepresentation();
         bRet = rTable.InsertCol(*this, rBoxes, nCnt, bBehind, bInsertDummy);
@@ -1873,6 +1891,26 @@ bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind, 
     bool bRet(false);
     {
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+
+        // If the table has autoformat applied remove the autoformat content properties from the boxes
+        TableStyleName rStyleName = rTable.GetTableStyleName();
+        if (!rStyleName.isEmpty())
+        {
+            if (SwTableAutoFormat* pFormat = GetTableStyles().FindAutoFormat(rStyleName))
+            {
+                size_t nRows = rTable.GetTabLines().size();
+                for (auto rBox : rBoxes)
+                {
+                    auto pLine = rBox->GetUpper();
+                    size_t nRow = rTable.GetTabLines().GetPos(pLine);
+                    size_t nCols = pLine->GetTabBoxes().size();
+                    size_t nCol = pLine->GetBoxPos(rBox);
+
+                    lcl_ResetTableFormat(rBox, *pFormat, nRow, nCol, nRows, nCols);
+                }
+            }
+        }
+
         rTable.SwitchFormulasToInternalRepresentation();
 
         bRet = rTable.InsertRow( *this, rBoxes, nCnt, bBehind, bInsertDummy );
@@ -2062,7 +2100,7 @@ void SwDoc::DelTable(SwTableNode *const pTableNd)
         {
             const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
             GetNodes().MakeTextNode( aTmpIdx.GetNode(),
-                        getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
+                        getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ) );
         }
 
         // Save the cursors (UNO and otherwise)
@@ -2125,7 +2163,7 @@ void SwDoc::DelTable(SwTableNode *const pTableNd)
         {
             const SwNodeIndex aTmpIdx( *pTableNd->EndOfSectionNode(), 1 );
             GetNodes().MakeTextNode( aTmpIdx.GetNode(),
-                        getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
+                        getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ) );
         }
 
         // Save the cursors (UNO and otherwise)
@@ -3323,7 +3361,7 @@ void SwNodes::SplitFloatingTableFrame(SwTableNode & rNewTableNode,
 
     // create new anchor node *before* existing one
     SwTextNode *const pNewAnchorNode{MakeTextNode(rAnchorNode,
-        m_rMyDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT))};
+        m_rMyDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_TEXT))};
     SwFormatAnchor anchor{rFlyFormat.GetAnchor()};
     SwPosition const pos{*pNewAnchorNode};
     anchor.SetAnchor(&pos);
@@ -3464,7 +3502,7 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
 
             // Insert a paragraph between the tables
             GetNodes().MakeTextNode( *pNew,
-                                getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
+                                getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT ) );
         }
     }
 
@@ -3872,15 +3910,23 @@ namespace {
 struct SetAFormatTabPara
 {
     SwTableAutoFormat& rTableFormat;
+    SwTableAutoFormat* pPrevFormat;
     SwUndoTableAutoFormat* pUndo;
-    sal_uInt16 nEndBox, nCurBox;
-    sal_uInt8 nAFormatLine, nAFormatBox;
+    sal_uInt16 nEndBox, nCurBox, nEndLine, nAFormatLine, nAFormatBox;
     bool bSingleRowTable;
 
-    explicit SetAFormatTabPara( const SwTableAutoFormat& rNew )
-        : rTableFormat( const_cast<SwTableAutoFormat&>(rNew) ), pUndo( nullptr ),
-        nEndBox( 0 ), nCurBox( 0 ), nAFormatLine( 0 ), nAFormatBox( 0 ), bSingleRowTable(false)
-    {}
+    explicit SetAFormatTabPara(const SwTableAutoFormat& rNew)
+        : rTableFormat(const_cast<SwTableAutoFormat&>(rNew))
+        , pPrevFormat(nullptr)
+        , pUndo(nullptr)
+        , nEndBox(0)
+        , nCurBox(0)
+        , nEndLine(0)
+        , nAFormatLine(0)
+        , nAFormatBox(0)
+        , bSingleRowTable(false)
+    {
+    }
 };
 
 }
@@ -3898,17 +3944,10 @@ static bool lcl_SetAFormatLine(FndLine_ & rLine, SetAFormatTabPara *pPara, bool 
     return true;
 }
 
-static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool bResetDirect)
+static bool lcl_SetAFormatBox(FndBox_& rBox, SetAFormatTabPara* pSetPara, bool bResetDirect)
 {
     if (!rBox.GetUpper()->GetUpper()) // Box on first level?
-    {
-        if( !pSetPara->nCurBox )
-            pSetPara->nAFormatBox = 0;
-        else if( pSetPara->nCurBox == pSetPara->nEndBox )
-            pSetPara->nAFormatBox = 3;
-        else //Even column(1) or Odd column(2)
-            pSetPara->nAFormatBox = static_cast<sal_uInt8>(1 + ((pSetPara->nCurBox-1) & 1));
-    }
+        pSetPara->nAFormatBox = pSetPara->nCurBox;
 
     if (rBox.GetBox()->GetSttNd())
     {
@@ -3919,13 +3958,20 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
                 pSetBox->SetDirectFormatting(false);
 
             SwDoc& rDoc = pSetBox->GetFrameFormat()->GetDoc();
-            SfxItemSet aCharSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1>(rDoc.GetAttrPool()));
+            SfxItemSet aCharSet(
+                SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_PARATR_LIST_END - 1>(
+                    rDoc.GetAttrPool()));
             SfxItemSet aBoxSet(rDoc.GetAttrPool(), aTableBoxSetRange);
-            sal_uInt8 nPos = pSetPara->nAFormatLine * 4 + pSetPara->nAFormatBox;
-            const bool bSingleRowTable = pSetPara->bSingleRowTable;
-            const bool bSingleColTable = pSetPara->nEndBox == 0;
-            pSetPara->rTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aCharSet, SwTableAutoFormatUpdateFlags::Char, nullptr);
-            pSetPara->rTableFormat.UpdateToSet(nPos, bSingleRowTable, bSingleColTable, aBoxSet, SwTableAutoFormatUpdateFlags::Box, rDoc.GetNumberFormatter());
+
+            size_t nRow = pSetPara->nAFormatLine, nCol = pSetPara->nAFormatBox,
+                   nRows = pSetPara->nEndLine, nCols = pSetPara->nEndBox;
+
+            pSetPara->rTableFormat.UpdateToSet(aCharSet, nRow, nCol, nRows, nCols, nullptr);
+            pSetPara->rTableFormat.UpdateToSet(aBoxSet, nRow, nCol, nRows, nCols,
+                                               rDoc.GetNumberFormatter());
+
+            if (pSetPara->pPrevFormat)
+                lcl_ResetTableFormat(pSetBox, *pSetPara->pPrevFormat, nRow, nCol, nRows, nCols);
 
             if (aCharSet.Count())
             {
@@ -4007,16 +4053,19 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes,
         GetIDocumentUndoRedo().DoUndo(false);
     }
 
+    TableStyleName aPrevFormat = pTableNd->GetTable().GetTableStyleName();
     if (pStyleNameToSet)
     {   // tdf#98226 do this here where undo can record it
         pTableNd->GetTable().SetTableStyleName(*pStyleNameToSet);
     }
 
-    rNew.RestoreTableProperties(table);
-
-    SetAFormatTabPara aPara( rNew );
+    const SwTableAutoFormat rStyle = *GetTableStyles().GetResolvedStyle(&rNew);
+    SetAFormatTabPara aPara(rStyle);
     FndLines_t& rFLns = pFndBox->GetLines();
     aPara.bSingleRowTable = rFLns.size() == 1;
+
+    if (!aPrevFormat.isEmpty())
+        aPara.pPrevFormat = GetTableStyles().FindAutoFormat(aPrevFormat);
 
     for (FndLines_t::size_type n = 0; n < rFLns.size(); ++n)
     {
@@ -4026,16 +4075,12 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes,
         FndBox_* pSaveBox = pLine->GetUpper();
         pLine->SetUpper( nullptr );
 
-        if( !n )
-            aPara.nAFormatLine = 0;
-        else if (static_cast<size_t>(n+1) == rFLns.size())
-            aPara.nAFormatLine = 3;
-        else
-            aPara.nAFormatLine = static_cast<sal_uInt8>(1 + ((n-1) & 1 ));
+        aPara.nAFormatLine = n;
+        aPara.nEndLine = rFLns.size();
 
         aPara.nAFormatBox = 0;
         aPara.nCurBox = 0;
-        aPara.nEndBox = pLine->GetBoxes().size()-1;
+        aPara.nEndBox = pLine->GetBoxes().size();
         aPara.pUndo = pUndo;
         for (auto const& it : pLine->GetBoxes())
         {
@@ -4074,10 +4119,6 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
     }
     if( aFndBox.GetLines().empty() )
         return false;
-
-    // Store table properties
-    SwTable &table = pTableNd->GetTable();
-    rGet.StoreTableProperties(table);
 
     FndBox_* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().size() &&
@@ -4135,8 +4176,61 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
 SwTableAutoFormatTable& SwDoc::GetTableStyles()
 {
     if (!m_pTableStyles)
-        m_pTableStyles.reset(new SwTableAutoFormatTable(SwModule::get()->GetAutoFormatTable()));
+        m_pTableStyles.reset(new SwTableAutoFormatTable);
     return *m_pTableStyles;
+}
+
+void SwDoc::ResetTableStyles(const OUString& sTableStyle, std::u16string_view sOldName)
+{
+    std::unordered_set<OUString> aUpdateStyles;
+    SwTableAutoFormatTable& pAutoFormats = GetTableStyles();
+
+    // Update Alignment
+    SwTableAutoFormat* pFormat = pAutoFormats.FindAutoFormat(sTableStyle);
+    for (size_t i = 0; i < ELEMENT_COUNT; i++)
+        pFormat->GetField(i)->UpdateAlignment();
+
+    // Identify the styles which require reapplying the style
+    for (size_t i = 0; i < pAutoFormats.size(); i++)
+    {
+        SwTableAutoFormat* pAutoFormat = pAutoFormats.GetData(i);
+        assert(pAutoFormat);
+        OUString sCurrentStyle = pAutoFormat->GetName().toString();
+        while (pAutoFormat)
+        {
+            OUString sStyle = pAutoFormat->GetName().toString();
+            if (sStyle == sTableStyle)
+            {
+                aUpdateStyles.insert(sCurrentStyle);
+                break;
+            }
+            pAutoFormat = pAutoFormats.FindAutoFormat(pAutoFormat->GetParent());
+        }
+    }
+
+    if (aUpdateStyles.size())
+    {
+        size_t nTableCount = GetTableFrameFormatCount(true);
+        for (size_t i = 0; i < nTableCount; ++i)
+        {
+            SwFrameFormat* pFrameFormat = &GetTableFrameFormat(i, true);
+            SwTable* pTable = SwTable::FindTable(pFrameFormat);
+            TableStyleName sStyle(pTable->GetTableStyleName().toString());
+
+            // if table has old-style name then update it with new name
+            if (sOldName != sTableStyle && sStyle.toString() == sOldName)
+            {
+                sStyle = TableStyleName(sTableStyle);
+                pTable->SetTableStyleName(sStyle);
+            }
+
+            if (aUpdateStyles.find(sStyle.toString()) != aUpdateStyles.end())
+            {
+                if (SwFEShell* pFEShell = GetDocShell()->GetFEShell())
+                    pFEShell->UpdateTableStyleFormatting(pTable->GetTableNode(), false, &sStyle);
+            }
+        }
+    }
 }
 
 UIName SwDoc::GetUniqueTableName() const

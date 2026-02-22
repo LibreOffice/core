@@ -22,12 +22,12 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 
 namespace com::sun::star::uno {
         class XComponentContext;
 }
 
+namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace com::sun::star::i18n { class XCollator; }
 namespace com::sun::star::lang { struct Locale; }
 

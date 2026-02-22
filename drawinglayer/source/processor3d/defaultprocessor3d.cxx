@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
@@ -245,7 +246,7 @@ namespace drawinglayer::processor3d
             if(rFillGraphicAttribute.getTiling())
             {
                 mpGeoTexSvx =
-                    std::make_shared<texture::GeoTexSvxBitmapExTiled>(
+                    std::make_shared<texture::GeoTexSvxBitmapTiled>(
                         aBitmap,
                         aGraphicRange,
                         rFillGraphicAttribute.getOffsetX(),
@@ -254,7 +255,7 @@ namespace drawinglayer::processor3d
             else
             {
                 mpGeoTexSvx =
-                    std::make_shared<texture::GeoTexSvxBitmapEx>(
+                    std::make_shared<texture::GeoTexSvxBitmap>(
                         aBitmap,
                         aGraphicRange);
             }

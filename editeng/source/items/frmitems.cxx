@@ -41,6 +41,7 @@
 #include <comphelper/processfactory.hxx>
 #include <utility>
 #include <vcl/GraphicObject.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/bigint.hxx>
 #include <svl/memberid.h>

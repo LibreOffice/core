@@ -20,6 +20,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 #include <uno/current_context.hxx>
 #include <unotools/filteroptions_settings.hxx>
 #include <unotools/ucbstreamhelper.hxx>

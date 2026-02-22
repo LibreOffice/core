@@ -21,7 +21,6 @@
 #define INCLUDED_SW_INC_UNOTEXTCURSOR_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
@@ -48,9 +47,9 @@ struct SwPosition;
 class SwXTextRange;
 class SfxItemPropertySet;
 
-typedef ::cppu::WeakImplHelper
-<   css::lang::XServiceInfo
-,   css::beans::XPropertySet
+typedef ::cppu::ImplInheritanceHelper
+<   OTextCursorHelper
+,   css::lang::XServiceInfo
 ,   css::beans::XPropertyState
 ,   css::beans::XMultiPropertySet
 ,   css::beans::XMultiPropertyStates
@@ -67,7 +66,6 @@ typedef ::cppu::WeakImplHelper
 
 class SW_DLLPUBLIC SwXTextCursor final
     : public SwXTextCursor_Base
-    , public OTextCursorHelper
 {
 
 private:

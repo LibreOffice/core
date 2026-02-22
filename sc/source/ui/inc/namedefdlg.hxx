@@ -11,6 +11,8 @@
 
 #include "anyrefdg.hxx"
 
+#include <vcl/weld/ComboBox.hxx>
+
 #include <map>
 
 class ScRangeName;

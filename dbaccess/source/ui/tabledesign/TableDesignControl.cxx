@@ -22,8 +22,11 @@
 #include <TableController.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <tools/mapunit.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <helpids.h>
 

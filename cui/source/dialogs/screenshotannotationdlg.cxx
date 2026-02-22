@@ -36,14 +36,19 @@
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
@@ -252,7 +257,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     maPicture(this),
     maSaveAsText(CuiResId(RID_CUISTR_SAVE_SCREENSHOT_AS))
 {
-    VclPtr<VirtualDevice> xParentDialogSurface(rParentDialog.screenshot());
+    ScopedVclPtr<VirtualDevice> xParentDialogSurface(rParentDialog.screenshot());
     maParentDialogSize = xParentDialogSurface->GetOutputSizePixel();
     maParentDialogBitmap = xParentDialogSurface->GetBitmap(Point(), maParentDialogSize);
     maDimmedDialogBitmap = maParentDialogBitmap;
@@ -274,51 +279,39 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
 
 
     // set screenshot image at DrawingArea, resize, set event listener
-    if (mxPicture)
-    {
-        maAllChildren = mrParentDialog.collect_screenshot_data();
+    maAllChildren = mrParentDialog.collect_screenshot_data();
 
-        // to make clear that maParentDialogBitmap is a background image, adjust
-        // luminance a bit for maDimmedDialogBitmap - other methods may be applied
-        maDimmedDialogBitmap.Adjust(-15, 0, 0, 0, 0);
+    // to make clear that maParentDialogBitmap is a background image, adjust
+    // luminance a bit for maDimmedDialogBitmap - other methods may be applied
+    maDimmedDialogBitmap.Adjust(-15, 0, 0, 0, 0);
 
-        // init paint buffering VirtualDevice
-        mxVirtualBufferDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::WITHOUT_ALPHA);
-        mxVirtualBufferDevice->SetOutputSizePixel(maParentDialogSize);
-        mxVirtualBufferDevice->SetFillColor(COL_TRANSPARENT);
+    // init paint buffering VirtualDevice
+    mxVirtualBufferDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(), DeviceFormat::WITHOUT_ALPHA);
+    mxVirtualBufferDevice->SetOutputSizePixel(maParentDialogSize);
+    mxVirtualBufferDevice->SetFillColor(COL_TRANSPARENT);
 
-        // initially set image for picture control
-        mxVirtualBufferDevice->DrawBitmap(Point(0, 0), maDimmedDialogBitmap);
+    // initially set image for picture control
+    mxVirtualBufferDevice->DrawBitmap(Point(0, 0), maDimmedDialogBitmap);
 
-        // set size for picture control, this will re-layout so that
-        // the picture control shows the whole dialog
-        maPicture.SetOutputSizePixel(maParentDialogSize);
-        mxPicture->set_size_request(maParentDialogSize.Width(), maParentDialogSize.Height());
+    // set size for picture control, this will re-layout so that
+    // the picture control shows the whole dialog
+    maPicture.SetOutputSizePixel(maParentDialogSize);
+    mxPicture->set_size_request(maParentDialogSize.Width(), maParentDialogSize.Height());
 
-        mxPicture->queue_draw();
-    }
+    mxPicture->queue_draw();
 
     // set some test text at VclMultiLineEdit and make read-only - only
     // copying content to clipboard is allowed
-    if (mxText)
-    {
-        mxText->set_size_request(400, mxText->get_height_rows(10));
-        OUString aHelpId = mrParentDialog.get_help_id();
-        Size aSizeCm = Application::GetDefaultDevice()->PixelToLogic(maParentDialogSize, MapMode(MapUnit::MapCM));
-        maMainMarkupText = lcl_ParagraphWithImage( aHelpId, aSizeCm );
-        mxText->set_text( maMainMarkupText );
-        mxText->set_editable(false);
-    }
+    mxText->set_size_request(400, mxText->get_height_rows(10));
+    OUString aHelpId = mrParentDialog.get_help_id();
+    Size aSizeCm = Application::GetDefaultDevice()->PixelToLogic(maParentDialogSize, MapMode(MapUnit::MapCM));
+    maMainMarkupText = lcl_ParagraphWithImage( aHelpId, aSizeCm );
+    mxText->set_text( maMainMarkupText );
+    mxText->set_editable(false);
 
     // set click handler for save button
-    if (mxSave)
-    {
-        mxSave->connect_clicked(LINK(this, ScreenshotAnnotationDlg_Impl, saveButtonHandler));
-    }
-    if(mxCopy)
-    {
-        mxCopy->connect_clicked(LINK(this, ScreenshotAnnotationDlg_Impl, copyButtonHandler));
-    }
+    mxSave->connect_clicked(LINK(this, ScreenshotAnnotationDlg_Impl, saveButtonHandler));
+    mxCopy->connect_clicked(LINK(this, ScreenshotAnnotationDlg_Impl, copyButtonHandler));
 }
 
 ScreenshotAnnotationDlg_Impl::~ScreenshotAnnotationDlg_Impl()

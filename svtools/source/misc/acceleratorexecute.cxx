@@ -20,6 +20,7 @@
 #include <memory>
 #include <svtools/acceleratorexecute.hxx>
 
+#include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
@@ -36,6 +37,7 @@
 
 #include <utility>
 #include <vcl/evntpost.hxx>
+#include <vcl/keycod.hxx>
 #include <sal/log.hxx>
 #include <vcl/lok.hxx>
 #include <rtl/ref.hxx>

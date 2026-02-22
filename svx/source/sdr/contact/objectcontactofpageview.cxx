@@ -41,6 +41,7 @@
 #include <comphelper/configuration.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <comphelper/lok.hxx>
 
 #include <memory>

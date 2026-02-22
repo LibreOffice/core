@@ -42,20 +42,29 @@ public:
     void                importTableColumn( SequenceInputStream& rStrm );
     /** Gets the name of this column. */
     const OUString&     getName() const;
-    /** Gets the attributes of this column. */
-    const TableColumnAttributes& getColumnAttributes() const;
     /** Imports XML column properties for the xmlColumnPr element. */
     void                importXmlColumnPr(const AttributeList& rAttribs);
     /** Returns access to the table column model data. */
     TableColumnModel& getModel() { return maModel; }
+    /** Gets the Total Row Label of this column. */
+    const std::optional<OUString>& getColumnRowLabel() const;
+    /** Gets the Subtotal function of this column. */
+    const std::optional<OUString>& getColumnSubTotal() const;
+    /** Gets the Custom function of this column. */
+    const std::optional<OUString>& getColumnFunction() const;
+    /** Sets the function of this column. */
+    void                setFunc( const OUString& rChars );
 
 private:
     OUString            maName;
     sal_Int32           mnId;
     sal_Int32           mnDataDxfId;
-    TableColumnAttributes maColumnAttributes;
 
     TableColumnModel    maModel;
+
+    std::optional<OUString> maRowLabel = std::nullopt;
+    std::optional<OUString> maSubTotal = std::nullopt;
+    std::optional<OUString> maFunction = std::nullopt;
 };
 
 class TableColumns : public WorkbookHelper

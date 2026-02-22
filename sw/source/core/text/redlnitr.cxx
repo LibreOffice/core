@@ -629,18 +629,18 @@ void SwAttrIter::InitFontAndAttrHandler(
         bool const*const pbVertLayoutLRBT)
 {
     // Build a font matching the default paragraph style:
-    SwFontAccess aFontAccess( &rPropsNode.GetTextFormatColl(), m_pViewShell );
+    const SwFontObj& rFontAccess = rPropsNode.GetTextFormatColl().GetFontObj(m_pViewShell);
     // It is possible that Init is called more than once, e.g., in a
     // SwTextFrame::FormatOnceMore situation or (since sw_redlinehide)
     // from SwAttrIter::Seek(); in the latter case SwTextSizeInfo::m_pFnt
     // is an alias of m_pFont so it must not be deleted!
     if (m_pFont)
     {
-        *m_pFont = aFontAccess.Get()->GetFont();
+        *m_pFont = rFontAccess.GetFont();
     }
     else
     {
-        m_pFont = new SwFont( aFontAccess.Get()->GetFont() );
+        m_pFont = new SwFont( rFontAccess.GetFont() );
     }
 
     // set font to vertical if frame layout is vertical
@@ -658,7 +658,7 @@ void SwAttrIter::InitFontAndAttrHandler(
     // If any further attributes for the paragraph are given in pAttrSet
     // consider them during construction of the default array, and apply
     // them to the font
-    m_aAttrHandler.Init(aFontAccess.Get()->GetDefault(), rTextNode.GetpSwAttrSet(),
+    m_aAttrHandler.Init(rFontAccess.GetDefault(), rTextNode.GetpSwAttrSet(),
            *rTextNode.getIDocumentSettingAccess(), m_pViewShell, *m_pFont,
            pbVertLayout ? *pbVertLayout : m_aAttrHandler.IsVertLayout(),
            bVertLayoutLRBT );
@@ -891,6 +891,15 @@ short SwRedlineItr::Seek(SwFont& rFnt,
         const SwRedlineTable& rTable = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable();
         ::std::optional<decltype(m_nAct)> oFirstMatch;
 
+        const SwDocShell* pDocShell = m_rDoc.GetDocShell();
+        const SwWrtShell* pWrtShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
+        SwRedlineRenderMode eRenderMode = SwRedlineRenderMode::Standard;
+        if (pWrtShell)
+        {
+            const SwViewOption* pOptions = pWrtShell->GetViewOptions();
+            eRenderMode = pOptions->GetRedlineRenderMode();
+        }
+
         for ( ; m_nAct < rTable.size() ; ++m_nAct)
         {
             decltype(m_nStart) nStart;
@@ -930,15 +939,18 @@ short SwRedlineItr::Seek(SwFont& rFnt,
                     }
 
                     if( 1 < pRed->GetStackCount() )
-                        FillHints( pRed->GetAuthor( 1 ), pRed->GetType( 1 ) );
-                    FillHints( pRed->GetAuthor(), pRed->GetType() );
+                        FillHints(pRed->GetAuthor(1), pRed->GetType(1), eRenderMode);
+                    FillHints(pRed->GetAuthor(), pRed->GetType(), eRenderMode);
 
                     SfxWhichIter aIter( *m_pSet );
 
                     // moved text: dark green with double underline or strikethrough
                     bool bDisplayMovedTextInGreen = officecfg::Office::Writer::Comparison::DisplayMovedTextInGreen::get();
-                    if ( bDisplayMovedTextInGreen && pRed->IsMoved() )
+                    if (bDisplayMovedTextInGreen && pRed->IsMoved()
+                        && eRenderMode == SwRedlineRenderMode::Standard)
                     {
+                        // Standard redline render mode, so move is more than just insert and
+                        // delete.
                         m_pSet->Put(SvxColorItem( COL_GREEN, RES_CHRATR_COLOR ));
                         if (SfxItemState::SET == m_pSet->GetItemState(RES_CHRATR_CROSSEDOUT, true))
                             m_pSet->Put(SvxCrossedOutItem( STRIKEOUT_DOUBLE, RES_CHRATR_CROSSEDOUT ));
@@ -1010,17 +1022,8 @@ short SwRedlineItr::Seek(SwFont& rFnt,
     return nRet + EnterExtend(rFnt, nNode, nNew);
 }
 
-void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType eType )
+void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType eType, SwRedlineRenderMode eRenderMode )
 {
-    const SwDocShell* pDocShell = m_rDoc.GetDocShell();
-    const SwWrtShell* pWrtShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
-    SwRedlineRenderMode eRenderMode = SwRedlineRenderMode::Standard;
-    if (pWrtShell)
-    {
-        const SwViewOption* pOptions = pWrtShell->GetViewOptions();
-        eRenderMode = pOptions->GetRedlineRenderMode();
-    }
-
     switch ( eType )
     {
         case RedlineType::Insert:

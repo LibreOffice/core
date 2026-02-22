@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <groupdlg.hxx>
+#include <vcl/weld/Builder.hxx>
 
 ScGroupDlg::ScGroupDlg(weld::Window* pParent, bool bUngroup, bool bRows)
     : GenericDialogController(pParent,

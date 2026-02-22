@@ -33,7 +33,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <tools/gen.hxx>
 #include <tools/link.hxx>
 
 #include <memory>
@@ -45,6 +44,7 @@ namespace com::sun::star::awt { class XTopWindowListener; }
 namespace com::sun::star::awt { class XVclContainerListener; }
 namespace vcl { class Window; }
 
+class Size;
 class VclWindowEvent;
 
 

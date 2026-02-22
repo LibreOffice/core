@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 #include <utility>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/gdimtf.hxx>
 
 #include "drawshapesubsetting.hxx"

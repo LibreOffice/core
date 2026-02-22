@@ -21,10 +21,21 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/frame/XModel.hpp>
-
 #include <framework/fwkdllapi.h>
-#include <vcl/window.hxx>
+#include <rtl/ustring.hxx>
+
+namespace com::sun::star::frame
+{
+class XModel;
+}
+namespace com::sun::star::uno
+{
+template <class interface_type> class Reference;
+}
+namespace vcl
+{
+class Window;
+}
 
 namespace framework::WindowStateHelper
 {

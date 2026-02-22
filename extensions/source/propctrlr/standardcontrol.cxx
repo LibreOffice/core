@@ -37,6 +37,7 @@
 #include <svx/svxids.hrc>
 
 #include <tools/datetime.hxx>
+#include <tools/fldunit.hxx>
 #include <unotools/datetime.hxx>
 #include <o3tl/string_view.hxx>
 

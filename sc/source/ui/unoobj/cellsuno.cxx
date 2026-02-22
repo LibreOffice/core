@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/types.h>
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <o3tl/safeint.hxx>
@@ -5183,12 +5184,18 @@ void SAL_CALL ScCellRangeObj::autoFormat( const OUString& aName )
     if ( pDocSh )
     {
         ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
-        ScAutoFormat::const_iterator it = pAutoFormat->find(aName);
-        if (it == pAutoFormat->end())
+        sal_Int16 nIndex = -1;
+        for (size_t i = 0; i < pAutoFormat->size(); i++)
+        {
+            if (ScAutoFormatData* pData = pAutoFormat->GetData(i))
+            {
+                if (pData->GetName() == aName)
+                    nIndex = i;
+            }
+        }
+        if (nIndex == -1)
             throw lang::IllegalArgumentException();
 
-        ScAutoFormat::const_iterator itBeg = pAutoFormat->begin();
-        size_t nIndex = std::distance(itBeg, it);
         pDocSh->GetDocFunc().AutoFormat(aRange, nullptr, nIndex, true);
 
     }

@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <tools/stream.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphic/BitmapHelper.hxx>

@@ -25,7 +25,7 @@
 #include "sourceprovider-scanner.hxx"
 #include "sourcetreeprovider.hxx"
 
-#if defined MACOSX
+#if defined MACOSX || defined LINUX
 #include <dirent.h>
 #include <osl/thread.h>
 #endif
@@ -38,7 +38,7 @@ namespace {
 // original spelling of a file name (not even with
 // osl_FileStatus_Mask_Validate):
 OUString getFileName(OUString const & uri, osl::FileStatus const & status) {
-#if defined MACOSX
+#if defined MACOSX || defined LINUX
     sal_Int32 i = uri.lastIndexOf('/') + 1;
     OUString path;
     if (osl::FileBase::getSystemPathFromFileURL(uri.copy(0, i), path)
@@ -59,7 +59,12 @@ OUString getFileName(OUString const & uri, osl::FileStatus const & status) {
     for (;;) {
         dirent ent;
         dirent * p;
+
+        // readdir_r() is deprecated in current POSIX
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         int e = readdir_r(d, &ent, &p);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+
         if (e != 0) {
             SAL_WARN("unoidl", "cannot readdir_r");
             closedir(d);

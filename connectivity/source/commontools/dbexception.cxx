@@ -242,7 +242,7 @@ void SQLExceptionInfo::doThrow()
 {
     if ( m_aContent.getValueTypeClass() == TypeClass_EXCEPTION )
         ::cppu::throwException( m_aContent );
-    throw RuntimeException();
+    throw RuntimeException("SQLExceptionInfo::doThrow: no valid exception content");
 }
 
 SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const SQLExceptionInfo& _rChainStart )

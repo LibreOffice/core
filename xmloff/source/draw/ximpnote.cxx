@@ -18,15 +18,18 @@
  */
 
 #include "ximpnote.hxx"
+#include "ximpshap.hxx"
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltoken.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 SdXMLNotesContext::SdXMLNotesContext(
     SdXMLImport& rImport, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
-    uno::Reference<drawing::XShapes> const& rShapes)
+    uno::Reference<drawing::XShapes> const& rShapes, bool ignorePageNumberInThumbnail)
     : SdXMLGenericPageContext(rImport, xAttrList, rShapes)
+    , mbIgnorePageNumberInThumbnail(ignorePageNumberInThumbnail)
 {
     OUString sStyleName, sPageMasterName;
 
@@ -88,5 +91,18 @@ SdXMLNotesContext::SdXMLNotesContext(
 }
 
 SdXMLNotesContext::~SdXMLNotesContext() {}
+
+uno::Reference<xml::sax::XFastContextHandler> SdXMLNotesContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
+{
+    auto pContext = SdXMLGenericPageContext::createFastChildContext(nElement, xAttrList);
+    if (nElement == XML_ELEMENT(DRAW, XML_PAGE_THUMBNAIL) && mbIgnorePageNumberInThumbnail)
+    {
+        assert(dynamic_cast<SdXMLPageShapeContext*>(pContext.get()));
+        auto pPageShapeContext = static_cast<SdXMLPageShapeContext*>(pContext.get());
+        pPageShapeContext->ignorePageNumber();
+    }
+    return pContext;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

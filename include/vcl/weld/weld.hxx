@@ -11,20 +11,15 @@
 
 #include <basegfx/range/b2irange.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
-#include <tools/date.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 #include <utility>
-#include <vcl/vclenum.hxx>
-#include <vcl/font.hxx>
-#include <vcl/vclptr.hxx>
-#include <vcl/windowstate.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 
 #include <assert.h>
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -48,9 +43,16 @@ namespace comphelper
 {
 class OAccessible;
 }
+namespace rtl
+{
+template <class reference_type> class Reference;
+}
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 enum class PointerStyle;
+enum class VclSizeGroupMode;
+class Color;
 class CommandEvent;
+class Date;
 class Formatter;
 class InputContext;
 class KeyEvent;
@@ -65,7 +67,11 @@ namespace vcl
 {
 class ILibreOfficeKitNotifier;
 typedef OutputDevice RenderContext;
+class Font;
+enum class WindowDataMask;
 }
+template <class reference_type> class VclPtr;
+
 namespace tools
 {
 class JsonWriter;
@@ -106,7 +112,7 @@ protected:
     bool notify_events_disabled() const { return m_nBlockNotify != 0; }
     void enable_notify_events() { --m_nBlockNotify; }
 
-    bool signal_command(const CommandEvent& rCEvt) { return m_aCommandHdl.Call(rCEvt); }
+    virtual bool signal_command(const CommandEvent& rCEvt) { return m_aCommandHdl.Call(rCEvt); }
     void signal_focus_in() { m_aFocusInHdl.Call(*this); }
     void signal_focus_out() { m_aFocusOutHdl.Call(*this); }
     bool signal_mnemonic_activate() { return m_aMnemonicActivateHdl.Call(*this); }
@@ -353,11 +359,6 @@ public:
 
     virtual std::unique_ptr<Container> weld_parent() const = 0;
 
-    //iterate upwards through the hierarchy starting at this widgets parent,
-    //calling func with their helpid until func returns true or we run out of
-    //parents
-    virtual void help_hierarchy_foreach(const std::function<bool(const OUString&)>& func) = 0;
-
     virtual OUString strip_mnemonic(const OUString& rLabel) const = 0;
 
     /* Escapes string contents which are interpreted by the UI.
@@ -441,54 +442,11 @@ public:
     virtual int get_child_top_attach(weld::Widget& rWidget) const = 0;
 };
 
-class VCL_DLLPUBLIC Paned : virtual public Widget
-{
-public:
-    // set pixel position of divider
-    virtual void set_position(int nPos) = 0;
-    // get pixel position of divider
-    virtual int get_position() const = 0;
-};
-
 class VCL_DLLPUBLIC Frame : virtual public Container
 {
 public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
-};
-
-class VCL_DLLPUBLIC Notebook : virtual public Widget
-{
-    friend class ::LOKTrigger;
-
-protected:
-    Link<const OUString&, bool> m_aLeavePageHdl;
-    Link<const OUString&, void> m_aEnterPageHdl;
-
-public:
-    virtual int get_current_page() const = 0;
-    virtual int get_page_index(const OUString& rIdent) const = 0;
-    virtual OUString get_page_ident(int nPage) const = 0;
-    virtual OUString get_current_page_ident() const = 0;
-    virtual void set_current_page(int nPage) = 0;
-    virtual void set_current_page(const OUString& rIdent) = 0;
-    virtual void remove_page(const OUString& rIdent) = 0;
-    virtual void insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
-                             const OUString* pIconName = nullptr)
-        = 0;
-    void append_page(const OUString& rIdent, const OUString& rLabel,
-                     const OUString* pIconName = nullptr)
-    {
-        insert_page(rIdent, rLabel, -1, pIconName);
-    }
-    virtual void set_tab_label_text(const OUString& rIdent, const OUString& rLabel) = 0;
-    virtual OUString get_tab_label_text(const OUString& rIdent) const = 0;
-    virtual void set_show_tabs(bool bShow) = 0;
-    virtual int get_n_pages() const = 0;
-    virtual weld::Container* get_page(const OUString& rIdent) const = 0;
-
-    void connect_leave_page(const Link<const OUString&, bool>& rLink) { m_aLeavePageHdl = rLink; }
-    void connect_enter_page(const Link<const OUString&, void>& rLink) { m_aEnterPageHdl = rLink; }
 };
 
 class VCL_DLLPUBLIC ScreenShotEntry
@@ -523,7 +481,6 @@ public:
     virtual bool get_resizable() const = 0;
     virtual Size get_size() const = 0;
     virtual Point get_position() const = 0;
-    virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const = 0;
 
     // returns whether the widget that has focus is within this Window
     // (its very possible to move this to weld::Container if that becomes
@@ -568,69 +525,6 @@ public:
         if (m_pWindow)
             m_pWindow->set_busy_cursor(false);
     }
-};
-
-class Button;
-
-class VCL_DLLPUBLIC Dialog : virtual public Window
-{
-private:
-    friend DialogController;
-    virtual bool runAsync(std::shared_ptr<DialogController> const& rxOwner,
-                          const std::function<void(sal_Int32)>& func)
-        = 0;
-
-public:
-    virtual void set_modal(bool bModal) = 0;
-    virtual bool get_modal() const = 0;
-
-    // center dialog on its parent
-    //
-    // bTrackGeometryRequests set to true tries to ensure the dialog will end
-    // up still centered on its parent windows final size, taking into account
-    // that there may currently be pending geometry requests for the parent not
-    // yet processed by the underlying toolkit
-    //
-    // for e.g gtk this will means the dialog is always centered even when
-    // resized, calling set_centered_on_parent with false will turn this
-    // off again.
-    virtual void set_centered_on_parent(bool bTrackGeometryRequests) = 0;
-
-    virtual int run() = 0;
-    // Run async without a controller
-    // @param self - must point to this, to enforce that the dialog was created/held by a shared_ptr
-    virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
-                          const std::function<void(sal_Int32)>& func)
-        = 0;
-    virtual void response(int response) = 0;
-    virtual void add_button(const OUString& rText, int response, const OUString& rHelpId = {}) = 0;
-    virtual std::unique_ptr<Button> weld_button_for_response(int response) = 0;
-    virtual std::unique_ptr<weld::Container> weld_content_area() = 0;
-
-    // with pOld of null, automatically find the old default widget and unset
-    // it, otherwise use as hint to the old default
-    virtual void change_default_button(weld::Button* pOld, weld::Button* pNew) = 0;
-    virtual bool is_default_button(const weld::Button* pCandidate) const = 0;
-
-    virtual inline void set_default_response(int nResponse);
-
-    // shrink the dialog down to shown just these widgets
-    virtual void collapse(weld::Widget& rEdit, weld::Widget* pButton) = 0;
-    // undo previous dialog collapse
-    virtual void undo_collapse() = 0;
-
-    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
-        = 0;
-};
-
-class VCL_DLLPUBLIC MessageDialog : virtual public Dialog
-{
-public:
-    virtual void set_primary_text(const OUString& rText) = 0;
-    virtual OUString get_primary_text() const = 0;
-    virtual void set_secondary_text(const OUString& rText) = 0;
-    virtual OUString get_secondary_text() const = 0;
-    virtual std::unique_ptr<Container> weld_message_area() = 0;
 };
 
 inline OUString toId(const void* pValue)
@@ -740,55 +634,6 @@ public:
 class VCL_DLLPUBLIC ToggleButton : virtual public Button, virtual public Toggleable
 {
     friend class ::LOKTrigger;
-};
-
-class VCL_DLLPUBLIC MenuButton : virtual public ToggleButton
-{
-    friend class ::LOKTrigger;
-
-    Link<const OUString&, void> m_aSelectHdl;
-
-protected:
-    void signal_selected(const OUString& rIdent) { m_aSelectHdl.Call(rIdent); }
-
-public:
-    void connect_selected(const Link<const OUString&, void>& rLink) { m_aSelectHdl = rLink; }
-
-    virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
-                             const OUString* pIconName, VirtualDevice* pImageSurface,
-                             TriState eCheckRadioFalse)
-        = 0;
-    void append_item(const OUString& rId, const OUString& rStr)
-    {
-        insert_item(-1, rId, rStr, nullptr, nullptr, TRISTATE_INDET);
-    }
-    void append_item_check(const OUString& rId, const OUString& rStr)
-    {
-        insert_item(-1, rId, rStr, nullptr, nullptr, TRISTATE_TRUE);
-    }
-    void append_item_radio(const OUString& rId, const OUString& rStr)
-    {
-        insert_item(-1, rId, rStr, nullptr, nullptr, TRISTATE_FALSE);
-    }
-    void append_item(const OUString& rId, const OUString& rStr, const OUString& rImage)
-    {
-        insert_item(-1, rId, rStr, &rImage, nullptr, TRISTATE_INDET);
-    }
-    void append_item(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
-    {
-        insert_item(-1, rId, rStr, nullptr, &rImage, TRISTATE_INDET);
-    }
-    virtual void insert_separator(int pos, const OUString& rId) = 0;
-    void append_separator(const OUString& rId) { insert_separator(-1, rId); }
-    virtual void remove_item(const OUString& rId) = 0;
-    virtual void clear() = 0;
-    virtual void set_item_sensitive(const OUString& rIdent, bool bSensitive) = 0;
-    virtual void set_item_active(const OUString& rIdent, bool bActive) = 0;
-    virtual void set_item_label(const OUString& rIdent, const OUString& rLabel) = 0;
-    virtual OUString get_item_label(const OUString& rIdent) const = 0;
-    virtual void set_item_visible(const OUString& rIdent, bool bVisible) = 0;
-
-    virtual void set_popover(weld::Widget* pPopover) = 0;
 };
 
 class VCL_DLLPUBLIC CheckButton : virtual public Toggleable
@@ -978,296 +823,10 @@ public:
     void connect_expanded(const Link<Expander&, void>& rLink) { m_aExpandedHdl = rLink; }
 };
 
-class VCL_DLLPUBLIC DrawingArea : virtual public Widget
-{
-public:
-    typedef std::pair<vcl::RenderContext&, const tools::Rectangle&> draw_args;
-
-protected:
-    Link<draw_args, void> m_aDrawHdl;
-    Link<Widget&, tools::Rectangle> m_aGetFocusRectHdl;
-    Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
-    // if handler returns true, drag is disallowed
-    Link<DrawingArea&, bool> m_aDragBeginHdl;
-    // return position of cursor, fill OUString& with surrounding text
-    Link<OUString&, int> m_aGetSurroundingHdl;
-    // attempt to delete the range, return true if successful
-    Link<const Selection&, bool> m_aDeleteSurroundingHdl;
-
-    OUString signal_query_tooltip(tools::Rectangle& rHelpArea)
-    {
-        return m_aQueryTooltipHdl.Call(rHelpArea);
-    }
-
-    int signal_im_context_get_surrounding(OUString& rSurroundingText)
-    {
-        if (!m_aGetSurroundingHdl.IsSet())
-            return -1;
-        return m_aGetSurroundingHdl.Call(rSurroundingText);
-    }
-
-    bool signal_im_context_delete_surrounding(const Selection& rRange)
-    {
-        return m_aDeleteSurroundingHdl.Call(rRange);
-    }
-
-public:
-    void connect_draw(const Link<draw_args, void>& rLink) { m_aDrawHdl = rLink; }
-    void connect_focus_rect(const Link<Widget&, tools::Rectangle>& rLink)
-    {
-        m_aGetFocusRectHdl = rLink;
-    }
-    void connect_query_tooltip(const Link<tools::Rectangle&, OUString>& rLink)
-    {
-        m_aQueryTooltipHdl = rLink;
-    }
-    void connect_drag_begin(const Link<DrawingArea&, bool>& rLink) { m_aDragBeginHdl = rLink; }
-    void connect_im_context_get_surrounding(const Link<OUString&, int>& rLink)
-    {
-        m_aGetSurroundingHdl = rLink;
-    }
-    void connect_im_context_delete_surrounding(const Link<const Selection&, bool>& rLink)
-    {
-        m_aDeleteSurroundingHdl = rLink;
-    }
-    virtual void queue_draw() = 0;
-    virtual void queue_draw_area(int x, int y, int width, int height) = 0;
-
-    virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferable,
-                                    sal_uInt8 eDNDConstants)
-        = 0;
-
-    virtual void set_cursor(PointerStyle ePointerStyle) = 0;
-
-    virtual Point get_pointer_position() const = 0;
-
-    virtual void set_input_context(const InputContext& rInputContext) = 0;
-    virtual void im_context_set_cursor_location(const tools::Rectangle& rCursorRect,
-                                                int nExtTextInputWidth)
-        = 0;
-
-    // use return here just to generate matching VirtualDevices
-    virtual OutputDevice& get_ref_device() = 0;
-
-    virtual rtl::Reference<comphelper::OAccessible> get_accessible_parent() = 0;
-    virtual a11yrelationset get_accessible_relation_set() = 0;
-    virtual AbsoluteScreenPixelPoint get_accessible_location_on_screen() = 0;
-
-private:
-    friend class ::LOKTrigger;
-
-    virtual void click(const Point&) = 0;
-
-    virtual void dblclick(const Point&){};
-
-    virtual void mouse_up(const Point&){};
-
-    virtual void mouse_down(const Point&){};
-
-    virtual void mouse_move(const Point&){};
-};
-
 enum class Placement
 {
     Under,
     End
-};
-
-class VCL_DLLPUBLIC Menu
-{
-    friend class ::LOKTrigger;
-
-    Link<const OUString&, void> m_aActivateHdl;
-
-protected:
-    void signal_activate(const OUString& rIdent) { m_aActivateHdl.Call(rIdent); }
-
-public:
-    virtual OUString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
-                                   Placement ePlace = Placement::Under)
-        = 0;
-
-    void connect_activate(const Link<const OUString&, void>& rLink) { m_aActivateHdl = rLink; }
-
-    virtual void set_sensitive(const OUString& rIdent, bool bSensitive) = 0;
-    virtual bool get_sensitive(const OUString& rIdent) const = 0;
-    virtual void set_label(const OUString& rIdent, const OUString& rLabel) = 0;
-    virtual OUString get_label(const OUString& rIdent) const = 0;
-    virtual void set_active(const OUString& rIdent, bool bActive) = 0;
-    virtual bool get_active(const OUString& rIdent) const = 0;
-    virtual void set_visible(const OUString& rIdent, bool bVisible) = 0;
-
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSurface,
-                        const css::uno::Reference<css::graphic::XGraphic>& rImage,
-                        TriState eCheckRadioFalse)
-        = 0;
-
-    virtual void set_item_help_id(const OUString& rIdent, const OUString& rHelpId) = 0;
-    virtual void remove(const OUString& rId) = 0;
-
-    virtual void clear() = 0;
-
-    virtual void insert_separator(int pos, const OUString& rId) = 0;
-    void append_separator(const OUString& rId) { insert_separator(-1, rId); }
-
-    void append(const OUString& rId, const OUString& rStr)
-    {
-        insert(-1, rId, rStr, nullptr, nullptr, nullptr, TRISTATE_INDET);
-    }
-    void append_check(const OUString& rId, const OUString& rStr)
-    {
-        insert(-1, rId, rStr, nullptr, nullptr, nullptr, TRISTATE_TRUE);
-    }
-    void append_radio(const OUString& rId, const OUString& rStr)
-    {
-        insert(-1, rId, rStr, nullptr, nullptr, nullptr, TRISTATE_FALSE);
-    }
-    void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
-    {
-        insert(-1, rId, rStr, &rImage, nullptr, nullptr, TRISTATE_INDET);
-    }
-    void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
-    {
-        insert(-1, rId, rStr, nullptr, &rImage, nullptr, TRISTATE_INDET);
-    }
-
-    // return the number of toplevel nodes
-    virtual int n_children() const = 0;
-
-    virtual OUString get_id(int pos) const = 0;
-
-    virtual ~Menu() {}
-};
-
-class VCL_DLLPUBLIC Popover : virtual public Container
-{
-    friend class ::LOKTrigger;
-
-private:
-    Link<weld::Popover&, void> m_aCloseHdl;
-
-protected:
-    void signal_closed() { m_aCloseHdl.Call(*this); }
-
-public:
-    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
-                               Placement ePlace = Placement::Under)
-        = 0;
-    virtual void popdown() = 0;
-
-    virtual void resize_to_request() = 0;
-
-    void connect_closed(const Link<weld::Popover&, void>& rLink) { m_aCloseHdl = rLink; }
-};
-
-class VCL_DLLPUBLIC Toolbar : virtual public Widget
-{
-    Link<const OUString&, void> m_aClickHdl;
-    Link<const OUString&, void> m_aToggleMenuHdl;
-
-protected:
-    friend class ::LOKTrigger;
-
-    void signal_clicked(const OUString& rIdent) { m_aClickHdl.Call(rIdent); }
-    void signal_toggle_menu(const OUString& rIdent) { m_aToggleMenuHdl.Call(rIdent); }
-
-public:
-    virtual void set_item_sensitive(const OUString& rIdent, bool bSensitive) = 0;
-    virtual bool get_item_sensitive(const OUString& rIdent) const = 0;
-    virtual void set_item_active(const OUString& rIdent, bool bActive) = 0;
-    virtual bool get_item_active(const OUString& rIdent) const = 0;
-    virtual void set_menu_item_active(const OUString& rIdent, bool bActive) = 0;
-    virtual bool get_menu_item_active(const OUString& rIdent) const = 0;
-    virtual void set_item_menu(const OUString& rIdent, weld::Menu* pMenu) = 0;
-    virtual void set_item_popover(const OUString& rIdent, weld::Widget* pPopover) = 0;
-    virtual void set_item_visible(const OUString& rIdent, bool bVisible) = 0;
-    virtual void set_item_help_id(const OUString& rIdent, const OUString& rHelpId) = 0;
-    virtual bool get_item_visible(const OUString& rIdent) const = 0;
-    virtual void set_item_label(const OUString& rIdent, const OUString& rLabel) = 0;
-    virtual OUString get_item_label(const OUString& rIdent) const = 0;
-    virtual void set_item_tooltip_text(const OUString& rIdent, const OUString& rTip) = 0;
-    virtual OUString get_item_tooltip_text(const OUString& rIdent) const = 0;
-    virtual void set_item_icon_name(const OUString& rIdent, const OUString& rIconName) = 0;
-    virtual void set_item_image_mirrored(const OUString& rIdent, bool bMirrored) = 0;
-    virtual void set_item_image(const OUString& rIdent,
-                                const css::uno::Reference<css::graphic::XGraphic>& rIcon)
-        = 0;
-    virtual void set_item_image(const OUString& rIdent, VirtualDevice* pDevice) = 0;
-
-    virtual void insert_item(int pos, const OUString& rId) = 0;
-    virtual void insert_separator(int pos, const OUString& rId) = 0;
-    void append_separator(const OUString& rId) { insert_separator(-1, rId); }
-
-    virtual int get_n_items() const = 0;
-    virtual OUString get_item_ident(int nIndex) const = 0;
-    virtual void set_item_ident(int nIndex, const OUString& rIdent) = 0;
-    virtual void set_item_label(int nIndex, const OUString& rLabel) = 0;
-    virtual void set_item_image(int nIndex,
-                                const css::uno::Reference<css::graphic::XGraphic>& rIcon)
-        = 0;
-    virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) = 0;
-    virtual void set_item_accessible_name(int nIndex, const OUString& rName) = 0;
-    virtual void set_item_accessible_name(const OUString& rIdent, const OUString& rName) = 0;
-
-    virtual vcl::ImageType get_icon_size() const = 0;
-    virtual void set_icon_size(vcl::ImageType eType) = 0;
-
-    // return what modifiers are held
-    virtual sal_uInt16 get_modifier_state() const = 0;
-
-    // This function returns the position a new item should be inserted if dnd
-    // is dropped at rPoint
-    virtual int get_drop_index(const Point& rPoint) const = 0;
-
-    void connect_clicked(const Link<const OUString&, void>& rLink) { m_aClickHdl = rLink; }
-    void connect_menu_toggled(const Link<const OUString&, void>& rLink)
-    {
-        m_aToggleMenuHdl = rLink;
-    }
-};
-
-class VCL_DLLPUBLIC Scrollbar : virtual public Widget
-{
-    Link<Scrollbar&, void> m_aValueChangeHdl;
-
-protected:
-    void signal_adjustment_value_changed() { m_aValueChangeHdl.Call(*this); }
-
-public:
-    virtual void adjustment_configure(int value, int lower, int upper, int step_increment,
-                                      int page_increment, int page_size)
-        = 0;
-    virtual int adjustment_get_value() const = 0;
-    virtual void adjustment_set_value(int value) = 0;
-    virtual int adjustment_get_upper() const = 0;
-    virtual void adjustment_set_upper(int upper) = 0;
-    virtual int adjustment_get_page_size() const = 0;
-    virtual void adjustment_set_page_size(int size) = 0;
-    virtual int adjustment_get_page_increment() const = 0;
-    virtual void adjustment_set_page_increment(int size) = 0;
-    virtual int adjustment_get_step_increment() const = 0;
-    virtual void adjustment_set_step_increment(int size) = 0;
-    virtual int adjustment_get_lower() const = 0;
-    virtual void adjustment_set_lower(int lower) = 0;
-
-    virtual int get_scroll_thickness() const = 0;
-    virtual void set_scroll_thickness(int nThickness) = 0;
-    virtual void set_scroll_swap_arrows(bool bSwap) = 0;
-
-    virtual ScrollType get_scroll_type() const = 0;
-
-    void connect_adjustment_value_changed(const Link<Scrollbar&, void>& rLink)
-    {
-        m_aValueChangeHdl = rLink;
-    }
-};
-
-class VCL_DLLPUBLIC ColorChooserDialog : virtual public Dialog
-{
-public:
-    virtual void set_color(const Color& rColor) = 0;
-    virtual Color get_color() const = 0;
 };
 
 class VCL_DLLPUBLIC SizeGroup
@@ -1278,12 +837,6 @@ public:
     virtual void set_mode(VclSizeGroupMode eMode) = 0;
     virtual ~SizeGroup() {}
 };
-
-void Dialog::set_default_response(int nResponse)
-{
-    std::unique_ptr<weld::Button> pButton = weld_button_for_response(nResponse);
-    change_default_button(nullptr, pButton.get());
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

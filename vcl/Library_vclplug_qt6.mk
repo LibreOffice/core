@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_externals,vclplug_qt6,\
     boost_headers \
     cairo \
     epoxy \
+    frozen \
     graphite \
     harfbuzz \
     icu_headers \
@@ -76,6 +77,8 @@ endif
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtAccessibleEventListener \
+    vcl/qt6/QtAccessibleInterimChildWidget \
+    vcl/qt6/QtAccessibleInterimParentWidget \
     vcl/qt6/QtAccessibleRegistry \
     vcl/qt6/QtAccessibleWidget \
     vcl/qt6/QtBitmap \
@@ -125,6 +128,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtInstanceMenuButton \
     vcl/qt6/QtInstanceMessageDialog \
     vcl/qt6/QtInstanceNotebook \
+    vcl/qt6/QtInstancePaned \
     vcl/qt6/QtInstancePopover \
     vcl/qt6/QtInstanceProgressBar \
     vcl/qt6/QtInstanceRadioButton \
@@ -153,6 +157,8 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtTimer \
     vcl/qt6/QtTools \
     vcl/qt6/QtTransferable \
+    vcl/qt6/QtTreeViewItemDelegate \
+    vcl/qt6/QtTreeViewModel \
     vcl/qt6/QtVirtualDevice \
     vcl/qt6/QtWidget \
     vcl/qt6/QtXAccessible \

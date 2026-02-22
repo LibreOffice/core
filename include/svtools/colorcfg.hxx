@@ -21,9 +21,10 @@
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
-#include <com/sun/star/uno/Sequence.h>
 #include <unotools/options.hxx>
 #include <memory>
+
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 namespace svtools{
 enum ColorConfigEntry : int
@@ -54,6 +55,7 @@ enum ColorConfigEntry : int
     HTMLUNKNOWN         ,
     CALCGRID            ,
     CALCCELLFOCUS       ,
+    CALCDBFOCUS         ,
     CALCPAGEBREAK       ,
     CALCPAGEBREAKMANUAL,
     CALCPAGEBREAKAUTOMATIC,
@@ -165,6 +167,7 @@ namespace {
         { std::u16string_view(u"HTMLUnknown"), false },
         { std::u16string_view(u"CalcGrid"), false },
         { std::u16string_view(u"CalcCellFocus"), false },
+        { std::u16string_view(u"CalcDBFocus"), false },
         { std::u16string_view(u"CalcPageBreak"), false },
         { std::u16string_view(u"CalcPageBreakManual"), false },
         { std::u16string_view(u"CalcPageBreakAutomatic"), false },
@@ -286,6 +289,7 @@ public:
     void                        DeleteScheme(const OUString& rScheme );
     void                        AddScheme(const OUString& rScheme );
     void                        LoadScheme(const OUString& rScheme );
+    void                        SetupTheme();
     const OUString&             GetCurrentSchemeName() const;
     void                        SetCurrentSchemeName(const OUString& rScheme);
 

@@ -14,6 +14,7 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 
 using namespace sfx2::sidebar;
 

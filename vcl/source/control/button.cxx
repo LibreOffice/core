@@ -25,6 +25,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/dialog.hxx>
@@ -51,6 +52,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <boost/property_tree/ptree.hpp>
 #include <tools/json_writer.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 
 
@@ -3576,7 +3578,8 @@ void CheckBox::SetState( TriState eState )
     {
         meState = eState;
         StateChanged( StateChangedType::State );
-        Toggle();
+        if (eState != TRISTATE_INDET) // just removing Toggle() fails at the ui test /tdf65334.py
+            Toggle();
     }
 }
 

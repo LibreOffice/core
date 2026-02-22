@@ -19,23 +19,28 @@
 
 #pragma once
 
+#include <tools/date.hxx>
+#include <svtools/borderline.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolbarmenu.hxx>
-#include <editeng/borderline.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <memory>
 
+namespace weld { class Builder; }
 namespace weld { class CustomWeld; }
 
 class Bitmap;
 class FontList;
 class VclSimpleEvent;
 class VirtualDevice;
+
+enum class SvxBorderLineStyle : sal_Int16;
+enum class FieldUnit : sal_uInt16;
 
 /** Utility class storing the border line width, style and colors. The widths
     are defined in Twips.
@@ -426,31 +431,35 @@ private:
 
 class SVT_DLLPUBLIC FontSizeBox
 {
-    const FontList* pFontList;
-    int             nSavedValue;
-    int             nMin;
-    int             nMax;
-    FieldUnit       eUnit;
-    sal_uInt16      nDecimalDigits;
-    sal_uInt16      nRelMin;
-    sal_uInt16      nRelMax;
-    sal_uInt16      nRelStep;
-    short           nPtRelMin;
-    short           nPtRelMax;
-    short           nPtRelStep;
-    bool            bRelativeMode:1,
-                    bRelative:1,
-                    bPtRelative:1,
-                    bStdSize:1;
+    const FontList* m_pFontList;
+    int m_nSavedValue;
+    int m_nMin;
+    int m_nMax;
+    FieldUnit m_eUnit;
+    sal_uInt16 m_nDecimalDigits;
+    sal_uInt16 m_nRelMin;
+    sal_uInt16 m_nRelMax;
+    sal_uInt16 m_nRelStep;
+    short m_nPtRelMin;
+    short m_nPtRelMax;
+    short m_nPtRelStep;
+    bool m_bRelativeMode : 1;
+    bool m_bRelative : 1;
+    bool m_bPtRelative : 1;
+    bool m_bStdSize : 1;
     Link<weld::ComboBox&, void> m_aChangeHdl;
     Link<weld::Widget&, void> m_aFocusOutHdl;
     std::unique_ptr<weld::ComboBox> m_xComboBox;
 
-    sal_uInt16 GetDecimalDigits() const { return nDecimalDigits; }
-    void SetDecimalDigits(sal_uInt16 nDigits) { nDecimalDigits = nDigits; }
-    FieldUnit GetUnit() const { return eUnit; }
-    void SetUnit(FieldUnit _eUnit) { eUnit = _eUnit; }
-    void SetRange(int nNewMin, int nNewMax) { nMin = nNewMin; nMax = nNewMax; }
+    sal_uInt16 GetDecimalDigits() const { return m_nDecimalDigits; }
+    void SetDecimalDigits(sal_uInt16 nDigits) { m_nDecimalDigits = nDigits; }
+    FieldUnit GetUnit() const { return m_eUnit; }
+    void SetUnit(FieldUnit _eUnit) { m_eUnit = _eUnit; }
+    void SetRange(int nNewMin, int nNewMax)
+    {
+        m_nMin = nNewMin;
+        m_nMax = nNewMax;
+    }
     void SetValue(int nNewValue, FieldUnit eInUnit);
 
     void InsertValue(int i);
@@ -466,15 +475,15 @@ public:
 
     void EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax, sal_uInt16 nStep = 5);
     void EnablePtRelativeMode(short nMin, short nMax, short nStep = 10);
-    bool IsRelativeMode() const { return bRelativeMode; }
+    bool IsRelativeMode() const { return m_bRelativeMode; }
     void SetRelative( bool bRelative );
-    bool IsRelative() const { return bRelative; }
+    bool IsRelative() const { return m_bRelative; }
     void SetPtRelative( bool bPtRel )
     {
-        bPtRelative = bPtRel;
+        m_bPtRelative = bPtRel;
         SetRelative(true);
     }
-    bool IsPtRelative() const { return bPtRelative; }
+    bool IsPtRelative() const { return m_bPtRelative; }
 
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_focus_out(const Link<weld::Widget&, void>& rLink) { m_aFocusOutHdl = rLink; }
@@ -487,8 +496,8 @@ public:
     int get_active() const { return m_xComboBox->get_active(); }
     int get_value() const;
     void set_value(int nValue);
-    void save_value() { nSavedValue = get_value(); }
-    int get_saved_value() const { return nSavedValue; }
+    void save_value() { m_nSavedValue = get_value(); }
+    int get_saved_value() const { return m_nSavedValue; }
     bool get_value_changed_from_saved() const { return get_value() != get_saved_value(); }
     int get_count() const { return m_xComboBox->get_count(); }
     OUString get_text(int i) const { return m_xComboBox->get_text(i); }

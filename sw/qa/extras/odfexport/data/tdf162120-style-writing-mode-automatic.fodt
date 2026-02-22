@@ -26,7 +26,7 @@
   </style:default-style>
   <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
   <style:style style:name="AutoStyle" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties style:writing-mode-automatic="true"/>
+   <style:paragraph-properties style:writing-mode-automatic="false"/>
   </style:style>
   <text:outline-style style:name="Outline">
    <text:outline-level-style text:level="1" loext:num-list-format="%1%" style:num-format="">
@@ -89,11 +89,11 @@
    <style:text-properties/>
   </style:style>
   <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties style:writing-mode-automatic="true"/>
+   <style:paragraph-properties style:writing-mode-automatic="false"/>
    <style:text-properties/>
   </style:style>
   <style:style style:name="P3" style:family="paragraph">
-   <style:paragraph-properties style:writing-mode-automatic="true"/>
+   <style:paragraph-properties style:writing-mode-automatic="false"/>
   </style:style>
   <style:style style:name="P4" style:family="paragraph">
    <loext:graphic-properties draw:fill="none" draw:fill-color="#ffffff"/>
@@ -127,17 +127,17 @@
    </text:sequence-decls>
    <text:p text:style-name="P1">This paragraph is normal</text:p>
    <text:p text:style-name="P1"/>
-   <text:p text:style-name="P2">This paragraph is auto</text:p>
+   <text:p text:style-name="P2">This paragraph is auto-off</text:p>
    <text:p text:style-name="P1"/>
    <text:p text:style-name="P1">This paragraph is also normal</text:p>
    <text:p text:style-name="P1"/>
-   <text:p text:style-name="AutoStyle">This paragraph is auto by a named style</text:p>
+   <text:p text:style-name="AutoStyle">This paragraph is auto-off by a named style</text:p>
    <text:p text:style-name="P1"/>
    <text:p text:style-name="P1"><draw:frame text:anchor-type="paragraph" draw:z-index="0" draw:name="Text Frame 1" draw:style-name="gr1" draw:text-style-name="P4" svg:width="15.452cm" svg:height="11.933cm" svg:x="0.804cm" svg:y="1.589cm">
      <draw:text-box>
       <text:p>This paragraph is normal too</text:p>
       <text:p/>
-      <text:p text:style-name="P3">But this one is auto</text:p>
+      <text:p text:style-name="P3">But this one is auto-off</text:p>
       <text:p/>
       <text:p>And finally, this one is normal</text:p>
      </draw:text-box>

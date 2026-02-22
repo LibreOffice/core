@@ -374,6 +374,10 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
             bNew = true;
         }
 
+        // In Writer, 'SwXTextCellStyle' instances require explicit parent linkage
+        if (GetFamily() == XmlStyleFamily::TABLE_CELL)
+            mxStyle->setParentStyle(GetParentName());
+
         Reference < XPropertySet > xPropSet( mxStyle, UNO_QUERY );
         Reference< XPropertySetInfo > xPropSetInfo =
                     xPropSet->getPropertySetInfo();

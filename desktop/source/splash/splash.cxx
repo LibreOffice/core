@@ -31,6 +31,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/math.hxx>
 #include <vcl/introwin.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
 #include <o3tl/string_view.hxx>
 

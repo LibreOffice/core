@@ -21,8 +21,9 @@
 
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
-#include <unotools/resmgr.hxx>
 #include <locale>
+
+struct TranslateId;
 
 SVT_DLLPUBLIC std::locale SvtResLocale();
 SVT_DLLPUBLIC OUString SvtResId(TranslateId aId);

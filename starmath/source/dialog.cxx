@@ -28,6 +28,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/settings.hxx>

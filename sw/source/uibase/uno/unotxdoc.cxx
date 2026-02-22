@@ -31,6 +31,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
+#include <vcl/themecolors.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/lokhelper.hxx>
@@ -253,9 +254,9 @@ static SwTextFormatColl *lcl_GetParaStyle(const UIName& rCollName, SwDoc& rDoc)
     SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( rCollName );
     if( !pColl )
     {
-        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+        const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(
             rCollName, SwGetPoolIdFromName::TxtColl );
-        if( USHRT_MAX != nId )
+        if( SwPoolFormatId::UNKNOWN != nId )
             pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
     }
     return pColl;
@@ -919,7 +920,7 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        const uno::Reference< text::XText >  xParent =
+        const uno::Reference< SwXText >  xParent =
             ::sw::CreateParentXText(GetDocOrThrow(),
                     *pResultCursor->GetPoint());
         xRet = *new SwXTextCursor(xParent, *pResultCursor);
@@ -941,7 +942,7 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        const uno::Reference< text::XText >  xParent =
+        const uno::Reference< SwXText >  xParent =
             ::sw::CreateParentXText(GetDocOrThrow(),
                     *pResultCursor->GetPoint());
 
@@ -3381,6 +3382,11 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
 Size SwXTextDocument::getDocumentSize()
 {
     SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
+    if (!pViewShell)
+    {
+        return Size();
+    }
+
     Size aDocSize = pViewShell->GetDocSize();
 
     return Size(aDocSize.Width()  + 2 * DOCUMENTBORDER,

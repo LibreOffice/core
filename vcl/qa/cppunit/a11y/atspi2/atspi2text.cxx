@@ -256,7 +256,9 @@ private:
                                   { style::ParagraphAdjust_RIGHT, std::string_view("right") },
                                   { style::ParagraphAdjust_BLOCK, std::string_view("fill") },
                                   { style::ParagraphAdjust_STRETCH, std::string_view("fill") },
-                                  { style::ParagraphAdjust_CENTER, std::string_view("center") } });
+                                  { style::ParagraphAdjust_CENTER, std::string_view("center") },
+                                  { style::ParagraphAdjust_START, std::string_view("start") },
+                                  { style::ParagraphAdjust_END, std::string_view("end") } });
     }
 
     bool checkShadow(std::string_view atspiValue, const beans::PropertyValue& property,

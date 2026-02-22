@@ -21,6 +21,7 @@
 
 #include "scdllapi.h"
 #include "refreshtimer.hxx"
+#include <rtl/ref.hxx>
 #include <sfx2/lnkbase.hxx>
 
 #include <sfx2/objsh.hxx>

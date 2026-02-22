@@ -29,12 +29,12 @@
 |*
 \************************************************************************/
 
-class AbstractSvxHpLinkDlg;
+class VclAbstractDialog;
 
 class SVX_DLLPUBLIC SvxHlinkDlgWrapper final : public SfxChildWindow
 {
 private:
-    VclPtr<AbstractSvxHpLinkDlg>   mpDlg;
+    VclPtr<VclAbstractDialog>   mpDlg;
 
 public:
     SvxHlinkDlgWrapper( vcl::Window*pParent, sal_uInt16 nId,
@@ -42,7 +42,7 @@ public:
     virtual ~SvxHlinkDlgWrapper() override;
 
     SFX_DECL_CHILDWINDOW_WITHID(SvxHlinkDlgWrapper);
-    virtual bool    QueryClose() override;
+
 };
 
 #endif // INCLUDED_SVX_HYPERDLG_HXX

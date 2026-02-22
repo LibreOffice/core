@@ -21,10 +21,11 @@
 
 #include <config_options.h>
 #include <framework/fwkdllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
 
 namespace com::sun::star::awt { class XPopupMenu; }
 namespace com::sun::star::container { class XIndexContainer; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace framework
 {

@@ -29,6 +29,8 @@
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>

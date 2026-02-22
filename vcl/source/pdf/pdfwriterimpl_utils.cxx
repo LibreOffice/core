@@ -102,7 +102,7 @@ void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer )
     while( nDiv-- )
         nFactor *= 10;
 
-    sal_Int32 nInt = nValue / nFactor;
+    const sal_Int32 nInt = nValue / nFactor;
     rBuffer.append( nInt );
     if (nFactor > 1 && nValue % nFactor)
     {
@@ -129,7 +129,7 @@ void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGr
 
     if( bConvertToGrey )
     {
-        sal_uInt8 cByte = rColor.GetLuminance();
+        const sal_uInt8 cByte = rColor.GetLuminance();
         appendDouble( cByte / 255.0, rBuffer );
     }
     else
@@ -240,6 +240,7 @@ void computeDocumentIdentifier(std::vector<sal_uInt8>& o_rIdentifier,
 
     osl_getSystemTime(&aGMT);
     osl_getLocalTimeFromSystemTime(&aGMT, &aTVal);
+    osl_getDateTimeFromTimeValue( &aTVal, &aDT );
     OStringBuffer aCreationMetaDateString(64);
 
     // i59651: we fill the Metadata date string as well, if PDF/A is requested

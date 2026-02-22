@@ -28,6 +28,7 @@
 #include <flddropdown.hxx>
 #include <comphelper/lok.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
@@ -333,8 +334,10 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, weld::TreeView&, void)
             if (IsFieldEdit())
             {
                 sal_Int32 nIdx{ 0 };
-                m_xCond1ED->set_text(GetCurField()->GetPar2().getToken(0, '|', nIdx));
-                m_xCond2ED->set_text(GetCurField()->GetPar2().getToken(0, '|', nIdx));
+                m_xCond1ED->set_text(
+                    GetCurField()->GetPar2().getToken(0, CONDITIONAL_FIELD_SEPARATOR, nIdx));
+                m_xCond2ED->set_text(
+                    GetCurField()->GetPar2().getToken(0, CONDITIONAL_FIELD_SEPARATOR, nIdx));
             }
 
             bName = bValue = true;
@@ -547,7 +550,8 @@ bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
             break;
 
         case SwFieldTypesEnum::ConditionalText:
-            aVal = m_xCond1ED->get_text() + "|" + m_xCond2ED->get_text();
+            aVal = OUString::Concat(m_xCond1ED->get_text())
+                   + OUStringChar(CONDITIONAL_FIELD_SEPARATOR) + m_xCond2ED->get_text();
             break;
         case SwFieldTypesEnum::Dropdown :
         {

@@ -10,7 +10,9 @@
 # we link all object files from these libraries into one, merged library
 gb_MERGE_LIBRARY_LIST := \
 	avmedia \
-	$(if $(filter WNT,$(OS)),avmediawin) \
+	$(call gb_Helper_optional,AVMEDIA, \
+		$(if $(filter WNT,$(OS)),avmediawin) \
+	) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl \
 		basprov \

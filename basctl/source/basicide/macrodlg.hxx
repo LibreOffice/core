@@ -30,7 +30,7 @@
 namespace basctl
 {
 
-enum MacroExitCode {
+enum class MacroExitCode {
     Macro_Close = 110,
     Macro_OkRun = 111,
     Macro_New   = 112,
@@ -40,7 +40,7 @@ enum MacroExitCode {
 class MacroChooser : public SfxDialogController
 {
 public:
-    enum Mode {
+    enum class Mode {
         All = 1,
         ChooseOnly = 2,
         Recording = 3,
@@ -77,7 +77,7 @@ private:
     std::unique_ptr<weld::Entry> m_xMacroNameEdit;
     std::unique_ptr<weld::Frame> m_xMacroLibsFrame;
     std::unique_ptr<SbTreeListBox> m_xBasicBox;
-    std::unique_ptr<weld::Label> m_xMacrosInTxt;
+    std::unique_ptr<weld::Frame> m_xExistingMacrosFrame;
     std::unique_ptr<weld::TreeView> m_xMacroBox;
     std::unique_ptr<weld::TreeIter> m_xMacroBoxIter;
     std::unique_ptr<weld::Button> m_xRunButton;

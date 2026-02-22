@@ -69,6 +69,8 @@ public:
         @param sValue   the name's symbolic value */
     void                SetSymbol( const OUString& rValue );
 
+    void SetScTokenArray( std::unique_ptr<ScTokenArray> pScTokArr, const ScAddress& rPos );
+
     /** Returns the original name (title) of this defined name. */
     const OUString& GetOrigName() const { return maOrigName; }
     /** Returns the Excel built-in name index of this defined name.
@@ -77,6 +79,9 @@ public:
 
     /** Returns the symbol value for this defined name. */
     const OUString& GetSymbol() const { return msSymbol; }
+
+    const ScAddress& GetPos() const { return maPos; }
+    ScTokenArray* GetScTokenArray() const { return mpScTokenArray.get(); }
 
     /** Returns true, if this is a document-global defined name. */
     bool         IsGlobal() const { return mnXclTab == EXC_NAME_GLOBAL; }
@@ -105,6 +110,8 @@ private:
     OUString            msSymbol;       /// The value of the symbol
     XclExpStringRef     mxName;         /// The name as Excel string object.
     XclTokenArrayRef    mxTokArr;       /// The definition of the defined name.
+    std::unique_ptr<ScTokenArray> mpScTokenArray;
+    ScAddress           maPos;
     sal_Unicode         mcBuiltIn;      /// The built-in index for built-in names.
     SCTAB               mnScTab;        /// The Calc sheet index for local names.
     sal_uInt16          mnFlags;        /// Additional flags for this defined name.
@@ -242,6 +249,12 @@ void XclExpName::SetTokenArray( const XclTokenArrayRef& xTokArr )
     mxTokArr = xTokArr;
 }
 
+void XclExpName::SetScTokenArray( std::unique_ptr<ScTokenArray> pScTokArr, const ScAddress& rPos )
+{
+    mpScTokenArray = std::move(pScTokArr);
+    maPos = rPos;
+}
+
 void XclExpName::SetLocalTab( SCTAB nScTab )
 {
     OSL_ENSURE( GetTabInfo().IsExportTab( nScTab ), "XclExpName::SetLocalTab - invalid sheet index" );
@@ -333,6 +346,38 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
     // Sheets where IsExportTab is not true are not exported, so use mnXclTab
     // (1 based) to get the sheetid as of the exported document's perspective.
     SCTAB nXlsxTab = mnXclTab - 1;
+    OUString sName = ScCompiler::SanitizeDefinedName(maOrigName, GetDoc());
+
+    // Regenerate symbol for external references
+    if (ScTokenArray* pScTokArr = GetScTokenArray())
+    {
+        formula::FormulaTokenArrayPlainIterator aIter(*pScTokArr);
+        formula::FormulaToken* t = aIter.First();
+        while (t)
+        {
+            if (t->GetType() == formula::svExternal)
+            {
+                formula::FormulaToken* pNext = aIter.PeekNext();
+
+                /*  Excel import generates svExternal tokens for invalid names and
+                for external/invalid function calls. For undefined names, new defined
+                name is created (XclExpFmlaCompImpl::ProcessExternal), this defined
+                name should follow OOXML conventions */
+                if (!pNext || (pNext->GetOpCode() != ocOpen))
+                {
+                    msSymbol = ScCompiler::SanitizeDefinedName(t->GetExternal(), GetDoc());
+                    break;
+                }
+            }
+            else if (t->IsExternalRef())
+            {
+                msSymbol = XclXmlUtils::ToOUString(GetCompileFormulaContext(), GetPos(), pScTokArr);
+                break;
+            }
+            t = aIter.Next();
+        }
+    }
+
     rWorkbook->startElement( XML_definedName,
             // OOXTODO: XML_comment, "",
             // OOXTODO: XML_customMenu, "",
@@ -342,7 +387,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_help, "",
             XML_hidden, ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
             XML_localSheetId, sax_fastparser::UseIf(OString::number(nXlsxTab), mnScTab != SCTAB_GLOBAL),
-            XML_name, maOrigName.toUtf8(),
+            XML_name, sName.toUtf8(),
             // OOXTODO: XML_publishToServer, "",
             // OOXTODO: XML_shortcutKey, "",
             // OOXTODO: XML_statusBar, "",
@@ -643,17 +688,19 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
     {
         XclTokenArrayRef xTokArr;
         OUString sSymbol;
+        std::unique_ptr<ScTokenArray> pScTokArrCopy
+            = std::make_unique<ScTokenArray>(pScTokArr->CloneValue());
+
         // MSO requires named ranges to have absolute sheet references
         if ( rRangeData.HasType( ScRangeData::Type::AbsPos ) || rRangeData.HasType( ScRangeData::Type::AbsArea ) )
         {
             // Don't modify the actual document; use a temporary copy to create the export formulas.
-            ScTokenArray aTokenCopy( pScTokArr->CloneValue() );
-            lcl_EnsureAbs3DToken(nTab, aTokenCopy.FirstToken());
+            lcl_EnsureAbs3DToken(nTab, pScTokArrCopy->FirstToken());
 
-            xTokArr = GetFormulaCompiler().CreateFormula(EXC_FMLATYPE_NAME, aTokenCopy);
+            xTokArr = GetFormulaCompiler().CreateFormula(EXC_FMLATYPE_NAME, *pScTokArrCopy);
             if ( GetOutput() != EXC_OUTPUT_BINARY )
             {
-                ScCompiler aComp(GetDoc(), rRangeData.GetPos(), aTokenCopy,
+                ScCompiler aComp(GetDoc(), rRangeData.GetPos(), *pScTokArrCopy,
                                  formula::FormulaGrammar::GRAM_OOXML);
                 aComp.CreateStringFromTokenArray( sSymbol );
             }
@@ -668,6 +715,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         }
         xName->SetTokenArray( xTokArr );
         xName->SetSymbol( sSymbol );
+        xName->SetScTokenArray( std::move(pScTokArrCopy), rRangeData.GetPos() );
 
         /*  Try to replace by existing built-in name - complete token array is
             needed for comparison, and due to the recursion problem above this

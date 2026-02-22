@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -24,8 +25,12 @@
 #include <svx/dialmgr.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/strings.hrc>
+#include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/vectorgraphicdata.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <comphelper/processfactory.hxx>

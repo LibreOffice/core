@@ -25,12 +25,14 @@
 #include <map>
 #include <memory>
 
+#include <comphelper/OAccessible.hxx>
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/customweld.hxx>

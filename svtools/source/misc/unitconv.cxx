@@ -20,6 +20,8 @@
 #include <o3tl/temporary.hxx>
 #include <svtools/unitconv.hxx>
 #include <tools/debug.hxx>
+#include <tools/fldunit.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>

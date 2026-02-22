@@ -36,6 +36,7 @@
 #include "sddllapi.h"
 #include "pres.hxx"
 #include "stlpool.hxx"
+#include "sdpage.hxx"
 
 namespace com::sun::star::xml::dom { class XNode; }
 namespace editeng { class SvxFieldItemUpdater; }
@@ -370,6 +371,8 @@ private:
 
     bool                mbNewOrLoadCompleted;
 
+    bool                mbDestroying = false;
+
     bool                mbOnlineSpell;
     bool                mbSummationOfParagraphs;
     sal_uInt16          mnStartWithPresentation; ///< 1-based starting slide# when presenting via command line parameter --show
@@ -412,6 +415,10 @@ private:
     bool mbResizeAllPages = true;
 
     sal_Int32 mnImagePreferredDPI;
+
+    rtl::Reference<SdPage> mpCanvasPage;
+
+    bool mbSkipCanvasPreviewUpdates = false;
 
     SAL_DLLPRIVATE virtual css::uno::Reference< css::frame::XModel > createUnoModel() override;
 
@@ -999,8 +1006,12 @@ public:
         bool bIsPageObj,
         const sal_Int32 nInsertPosition);
 
+    SAL_DLLPRIVATE bool HasCanvasPage() const { return mpCanvasPage.is(); }
 
-    SAL_DLLPRIVATE sal_uInt16 InsertCanvasPage ();
+    SAL_DLLPRIVATE void ImportCanvasPage();
+    SAL_DLLPRIVATE bool ValidateCanvasPage(const SdPage* pPage) const;
+
+    SAL_DLLPRIVATE sal_uInt16 GetOrInsertCanvasPage ();
 
     /** return the document fonts for latin, cjk and ctl according to the current
         languages set at this document */
@@ -1065,6 +1076,12 @@ public:
         SdDrawDocument* pBookmarkDoc = nullptr,
         bool bUndo = true,
         const OUString& sNewName = OUString());
+
+    void StoreCanvasPage(SdPage* pPage) { mpCanvasPage = pPage; }
+
+    /** Re-order the pages based on the position of their previews on canvas page.
+     */
+    void ReshufflePages();
 
 private:
 
@@ -1137,6 +1154,10 @@ private:
         sal_uInt16 nInsertionPoint,
         bool bIsPageBack,
         bool bIsPageObj);
+
+    SAL_DLLPRIVATE void populatePagePreviewsGrid();
+    SAL_DLLPRIVATE void updatePagePreviewsGrid(SdPage* pPage);
+    SAL_DLLPRIVATE void connectPagePreviews();
 
     SAL_DLLPRIVATE virtual void PageListChanged() override;
     SAL_DLLPRIVATE virtual void MasterPageListChanged() override;

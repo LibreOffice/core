@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include <tools/fontenum.hxx>
+#include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -33,10 +34,13 @@
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <o3tl/string_view.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <string_view>
+#include <optional>
 
 #include <hb-ot.h>
+#include <hb-subset.h>
 
 namespace vcl::font
 {
@@ -296,75 +300,326 @@ bool PhysicalFontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilit
 
 namespace
 {
-class RawFace
+std::optional<unsigned int> GetNamedInstanceIndex(hb_face_t* pHbFace,
+                                                  const std::vector<hb_variation_t>& rVariations)
 {
-public:
-    RawFace(hb_face_t* pFace)
-        : mpFace(hb_face_reference(pFace))
+    unsigned int nAxes = hb_ot_var_get_axis_count(pHbFace);
+    std::vector<hb_ot_var_axis_info_t> aAxisInfos(nAxes);
+    hb_ot_var_get_axis_infos(pHbFace, 0, &nAxes, aAxisInfos.data());
+
+    // Pre-fill the coordinates with axes defaults
+    std::vector<float> aCurrentCoords(nAxes);
+    for (unsigned int i = 0; i < nAxes; ++i)
+        aCurrentCoords[i] = aAxisInfos[i].default_value;
+
+    // Then update coordinates with the current variations
+    hb_ot_var_axis_info_t info;
+    for (const auto& rVariation : rVariations)
     {
+        if (hb_ot_var_find_axis_info(pHbFace, rVariation.tag, &info))
+            aCurrentCoords[info.axis_index] = rVariation.value;
     }
 
-    RawFace(const RawFace& rOther)
-        : mpFace(hb_face_reference(rOther.mpFace))
+    // Find a named instance that matches the current coordinates and return its index
+    unsigned int nInstances = hb_ot_var_get_named_instance_count(pHbFace);
+    std::vector<float> aInstanceCoords(nAxes);
+    for (unsigned int i = 0; i < nInstances; ++i)
     {
+        unsigned int nInstanceAxes = nAxes;
+        if (hb_ot_var_named_instance_get_design_coords(pHbFace, i, &nInstanceAxes,
+                                                       aInstanceCoords.data())
+            && aInstanceCoords == aCurrentCoords)
+        {
+            return i;
+        }
     }
 
-    ~RawFace() { hb_face_destroy(mpFace); }
-
-    RawFontData GetTable(uint32_t nTag) const
-    {
-        return RawFontData(hb_face_reference_table(mpFace, nTag));
-    }
-
-private:
-    hb_face_t* mpFace;
-};
-
-class TrueTypeFace final : public AbstractTrueTypeFont
-{
-    const RawFace m_aFace;
-    mutable std::array<RawFontData, NUM_TAGS> m_aTableList;
-
-    const RawFontData& table(sal_uInt32 nIdx) const
-    {
-        assert(nIdx < NUM_TAGS);
-        static const uint32_t aTags[NUM_TAGS] = {
-            T_maxp, T_glyf, T_head, T_loca, T_name, T_hhea, T_hmtx, T_cmap,
-            T_vhea, T_vmtx, T_OS2,  T_post, T_cvt,  T_prep, T_fpgm, T_CFF,
-        };
-        if (m_aTableList[nIdx].empty())
-            m_aTableList[nIdx] = std::move(m_aFace.GetTable(aTags[nIdx]));
-        return m_aTableList[nIdx];
-    }
-
-public:
-    TrueTypeFace(RawFace aFace, const FontCharMapRef rCharMap)
-        : AbstractTrueTypeFont(nullptr, rCharMap)
-        , m_aFace(std::move(aFace))
-    {
-    }
-
-    bool hasTable(sal_uInt32 nIdx) const override { return !table(nIdx).empty(); }
-    const sal_uInt8* table(sal_uInt32 nIdx, sal_uInt32& nSize) const override
-    {
-        auto& rTable = table(nIdx);
-        nSize = rTable.size();
-        return rTable.data();
-    }
-};
+    return std::nullopt;
 }
+
+OUString GetNamedInstancePSName(const PhysicalFontFace& rFontFace,
+                                const std::vector<hb_variation_t>& rVariations)
+{
+    hb_face_t* pHbFace = rFontFace.GetHbFace();
+    auto nIndex = GetNamedInstanceIndex(pHbFace, rVariations);
+    if (nIndex)
+    {
+        auto nPSNameID = hb_ot_var_named_instance_get_postscript_name_id(pHbFace, *nIndex);
+        if (nPSNameID != HB_OT_NAME_ID_INVALID)
+            return rFontFace.GetName(static_cast<NameID>(nPSNameID));
+    }
+
+    return OUString();
+}
+
+// Implements Adobe Technical Note #5902: “Generating PostScript Names for Fonts
+// Using OpenType Font Variations”
+// https://adobe-type-tools.github.io/font-tech-notes/pdfs/5902.AdobePSNameGeneration.pdf
+OUString GenerateVariableFontPSName(const PhysicalFontFace& rFace,
+                                    const std::vector<hb_variation_t>& rVariations)
+{
+    hb_face_t* pHbFace = rFace.GetHbFace();
+    OUString aPrefix = rFace.GetName(NAME_ID_VARIATIONS_PS_PREFIX);
+    if (aPrefix.isEmpty())
+    {
+        aPrefix = rFace.GetName(NAME_ID_TYPOGRAPHIC_FAMILY);
+        if (aPrefix.isEmpty())
+            aPrefix = rFace.GetName(NAME_ID_FONT_FAMILY);
+    }
+
+    if (aPrefix.isEmpty())
+        return OUString();
+
+    OUStringBuffer aName;
+    for (sal_Int32 i = 0; i < aPrefix.getLength(); ++i)
+    {
+        auto c = aPrefix[i];
+        if (rtl::isAsciiAlphanumeric(c))
+            aName.append(c);
+    }
+
+    if (auto nIndex = GetNamedInstanceIndex(pHbFace, rVariations))
+    {
+        aName.append('-');
+        auto nPSNameID = hb_ot_var_named_instance_get_subfamily_name_id(pHbFace, *nIndex);
+        OUString aSubFamilyName = rFace.GetName(static_cast<NameID>(nPSNameID));
+        for (sal_Int32 i = 0; i < aSubFamilyName.getLength(); ++i)
+        {
+            auto c = aSubFamilyName[i];
+            if (rtl::isAsciiAlphanumeric(c))
+                aName.append(c);
+        }
+    }
+    else
+    {
+        for (const auto& rVariation : rVariations)
+        {
+            hb_ot_var_axis_info_t info;
+            if (hb_ot_var_find_axis_info(pHbFace, rVariation.tag, &info))
+            {
+                if (rVariation.value == info.default_value)
+                    continue;
+                char aTag[5];
+                hb_tag_to_string(rVariation.tag, aTag);
+                aName.append("_" + OUString::number(rVariation.value)
+                             + o3tl::trim(OUString::createFromAscii(aTag)));
+            }
+        }
+    }
+
+    if (aName.getLength() > 127)
+    {
+        auto nIndex = aName.indexOf(u'-') + 1;
+        auto aHash = static_cast<sal_uInt32>(aName.copy(nIndex).makeStringAndClear().hashCode());
+        aName.truncate(nIndex);
+        aName.append(OUString::number(aHash, 16).toAsciiUpperCase() + "...");
+    }
+
+    return aName.makeStringAndClear();
+}
+}
+
+// These are “private” HarfBuzz metrics tags, they are supported by not exposed
+// in the public header. They are safe to use, HarfBuzz just does not want to
+// advertise them.
+constexpr auto ASCENT_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'a', 's', 'c'));
+constexpr auto DESCENT_OS2 = static_cast<hb_ot_metrics_tag_t>(HB_TAG('O', 'd', 's', 'c'));
+constexpr auto ASCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'a', 's', 'c'));
+constexpr auto DESCENT_HHEA = static_cast<hb_ot_metrics_tag_t>(HB_TAG('H', 'd', 's', 'c'));
 
 bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
-                                        const int nGlyphCount, FontSubsetInfo& rInfo) const
+                                        const int nGlyphCount, FontSubsetInfo& rInfo,
+                                        const std::vector<hb_variation_t>& rVariations) const
 {
-    // Prepare data for font subsetter.
-    TrueTypeFace aSftFont(RawFace(GetHbFace()), GetFontCharMap());
-    if (aSftFont.initialize() != SFErrCodes::Ok)
+    // Create subset input
+    hb_subset_input_t* pInput = hb_subset_input_create_or_fail();
+    comphelper::ScopeGuard aInputGuard([&]() { hb_subset_input_destroy(pInput); });
+    if (!pInput)
         return false;
 
-    // write subset into destination file
-    return CreateTTFfontSubset(aSftFont, rOutBuffer, pGlyphIds, pEncoding, nGlyphCount, rInfo);
+    // Add the requested glyph IDs to the subset input, and set up
+    // old-to-new glyph ID mapping so that each glyph appears at the
+    // GID position matching its encoding byte.
+    hb_set_t* pGlyphSet = hb_subset_input_glyph_set(pInput);
+    hb_map_t* pGlyphMap = hb_subset_input_old_to_new_glyph_mapping(pInput);
+    for (int i = 0; i < nGlyphCount; ++i)
+    {
+        hb_set_add(pGlyphSet, pGlyphIds[i]);
+        hb_map_set(pGlyphMap, pGlyphIds[i], pEncoding[i]);
+    }
+
+    // Keep only tables needed for PDF embedding, drop everything else.
+    // By default hb-subset keeps many tables; we use the DROP_TABLE set to
+    // remove all tables we don't need.
+    static constexpr hb_tag_t aKeepTables[] = {
+        HB_TAG('h', 'e', 'a', 'd'), HB_TAG('h', 'h', 'e', 'a'), HB_TAG('h', 'm', 't', 'x'),
+        HB_TAG('l', 'o', 'c', 'a'), HB_TAG('m', 'a', 'x', 'p'), HB_TAG('g', 'l', 'y', 'f'),
+        HB_TAG('C', 'F', 'F', ' '), HB_TAG('p', 'o', 's', 't'), HB_TAG('n', 'a', 'm', 'e'),
+        HB_TAG('O', 'S', '/', '2'), HB_TAG('c', 'v', 't', ' '), HB_TAG('f', 'p', 'g', 'm'),
+        HB_TAG('p', 'r', 'e', 'p'),
+    };
+
+    hb_set_t* pDropTableSet = hb_subset_input_set(pInput, HB_SUBSET_SETS_DROP_TABLE_TAG);
+    // Drop all tables except the ones we need
+    hb_set_invert(pDropTableSet);
+    for (auto nKeep : aKeepTables)
+        hb_set_del(pDropTableSet, nKeep);
+
+    hb_face_t* pHbFace = GetHbFace();
+    bool bIsVariableFont = hb_ot_var_has_data(pHbFace);
+    if (bIsVariableFont)
+    {
+        // Instance variable font. We first pin all axes to their default values, so we don’t have to
+        // enumerate all axes in the font. Then we pin the axes we want to instance to their specified
+        // values.
+        hb_subset_input_pin_all_axes_to_default(pInput, pHbFace);
+        for (const auto& rVariation : rVariations)
+            hb_subset_input_pin_axis_location(pInput, pHbFace, rVariation.tag, rVariation.value);
+    }
+
+    // Perform the subsettting
+    hb_face_t* pSubsetFace = hb_subset_or_fail(pHbFace, pInput);
+    comphelper::ScopeGuard aSubsetFaceGuard([&]() { hb_face_destroy(pSubsetFace); });
+    if (!pSubsetFace)
+        return false;
+
+    // Fill FontSubsetInfo
+
+    // If this is a named instance and it has a PostScript name, we want to use it.
+    if (bIsVariableFont)
+    {
+        rInfo.m_aPSName = GetNamedInstancePSName(*this, rVariations);
+        if (rInfo.m_aPSName.isEmpty() && !rVariations.empty())
+            rInfo.m_aPSName = GenerateVariableFontPSName(*this, rVariations);
+    }
+    if (rInfo.m_aPSName.isEmpty())
+        rInfo.m_aPSName = GetName(NAME_ID_POSTSCRIPT_NAME);
+
+    auto nUPEM = UnitsPerEm();
+
+    hb_font_t* pSubsetFont = hb_font_create(pSubsetFace);
+    comphelper::ScopeGuard aSubsetFontGuard([&]() { hb_font_destroy(pSubsetFont); });
+    hb_position_t nAscent, nDescent, nCapHeight;
+    // Try hhea first, then OS/2 similar to old FillFontSubsetInfo()
+    if (hb_ot_metrics_get_position(pSubsetFont, ASCENT_HHEA, &nAscent)
+        || hb_ot_metrics_get_position(pSubsetFont, ASCENT_OS2, &nAscent))
+        rInfo.m_nAscent = XUnits(nUPEM, nAscent);
+    if (hb_ot_metrics_get_position(pSubsetFont, DESCENT_HHEA, &nDescent)
+        || hb_ot_metrics_get_position(pSubsetFont, DESCENT_OS2, &nDescent))
+        rInfo.m_nDescent = XUnits(nUPEM, -nDescent);
+    if (hb_ot_metrics_get_position(pSubsetFont, HB_OT_METRICS_TAG_CAP_HEIGHT, &nCapHeight))
+        rInfo.m_nCapHeight = XUnits(nUPEM, nCapHeight);
+
+    hb_blob_t* pHeadBlob = hb_face_reference_table(pSubsetFace, HB_TAG('h', 'e', 'a', 'd'));
+    comphelper::ScopeGuard aHeadBlobGuard([&]() { hb_blob_destroy(pHeadBlob); });
+
+    unsigned int nHeadLen;
+    const char* pHead = hb_blob_get_data(pHeadBlob, &nHeadLen);
+    SvMemoryStream aStream(const_cast<char*>(pHead), nHeadLen, StreamMode::READ);
+    // Font data are big endian.
+    aStream.SetEndian(SvStreamEndian::BIG);
+    if (aStream.Seek(vcl::HEAD_yMax_offset) == vcl::HEAD_yMax_offset)
+    {
+        sal_Int16 xMin, yMin, xMax, yMax;
+        aStream.Seek(vcl::HEAD_xMin_offset);
+        aStream.ReadInt16(xMin);
+        aStream.ReadInt16(yMin);
+        aStream.ReadInt16(xMax);
+        aStream.ReadInt16(yMax);
+        rInfo.m_aFontBBox = tools::Rectangle(Point(XUnits(nUPEM, xMin), XUnits(nUPEM, yMin)),
+                                             Point(XUnits(nUPEM, xMax), XUnits(nUPEM, yMax)));
+    }
+
+    rInfo.m_bFilled = true;
+
+    hb_blob_t* pSubsetBlob = nullptr;
+    comphelper::ScopeGuard aBuilderBlobGuard([&]() { hb_blob_destroy(pSubsetBlob); });
+
+    // HarfBuzz creates a Unicode cmap, but we need a fake cmap based on pEncoding,
+    // so we use face builder construct a new face based in the subset table,
+    // and create a new cmap table and add it to the new face.
+    {
+        hb_face_t* pBuilderFace = hb_face_builder_create();
+        comphelper::ScopeGuard aBuilderFaceGuard([&]() { hb_face_destroy(pBuilderFace); });
+        unsigned int nSubsetTableCount = hb_face_get_table_tags(pSubsetFace, 0, nullptr, nullptr);
+        std::vector<hb_tag_t> aSubsetTableTags(nSubsetTableCount);
+        hb_face_get_table_tags(pSubsetFace, 0, &nSubsetTableCount, aSubsetTableTags.data());
+        for (unsigned int i = 0; i < nSubsetTableCount; ++i)
+        {
+            hb_blob_t* pTableBlob = hb_face_reference_table(pSubsetFace, aSubsetTableTags[i]);
+            hb_face_builder_add_table(pBuilderFace, aSubsetTableTags[i], pTableBlob);
+            hb_blob_destroy(pTableBlob);
+        }
+
+        // Build a cmap table with a format 0 subtable
+        SvMemoryStream aCmapStream;
+        aCmapStream.SetEndian(SvStreamEndian::BIG);
+
+        // cmap header
+        aCmapStream.WriteUInt16(0); // version
+        aCmapStream.WriteUInt16(1); // numTables
+
+        // Encoding record
+        aCmapStream.WriteUInt16(1); // platformID (Mac: 1)
+        aCmapStream.WriteUInt16(0); // encodingID (Roman: 0)
+        aCmapStream.WriteUInt32(12); // subtable offset
+
+        // Format 0 subtable
+        aCmapStream.WriteUInt16(0); // format
+        aCmapStream.WriteUInt16(262); // length
+        aCmapStream.WriteUInt16(0); // language
+
+        // glyphIdArray
+        for (int i = 0; i < 256; ++i)
+        {
+            if (i < nGlyphCount)
+                aCmapStream.WriteUInt8(pEncoding[i]);
+            else
+                aCmapStream.WriteUInt8(0);
+        }
+
+        hb_blob_t* pCmapBlob
+            = hb_blob_create(static_cast<const char*>(aCmapStream.GetData()), aCmapStream.Tell(),
+                             HB_MEMORY_MODE_DUPLICATE, nullptr, nullptr);
+        hb_face_builder_add_table(pBuilderFace, HB_TAG('c', 'm', 'a', 'p'), pCmapBlob);
+        hb_blob_destroy(pCmapBlob);
+
+        pSubsetBlob = hb_face_reference_blob(pBuilderFace);
+    }
+
+    hb_blob_t* pCFFBlob = hb_face_reference_table(pSubsetFace, HB_TAG('C', 'F', 'F', ' '));
+    comphelper::ScopeGuard aCFFBlobGuard([&]() { hb_blob_destroy(pCFFBlob); });
+    if (pCFFBlob != hb_blob_get_empty())
+    {
+        // Ideally we should be outputting a CFF (Type1C) font here, but I couldn’t get it to work.
+        // So we oconvert it to Type1 font instead.
+        // TODO: simplify CreateCFFfontSubset() to only do the conversion, since we already
+        // have the subsetted font.
+        rInfo.m_nFontType = FontType::TYPE1_PFB;
+
+        unsigned int nCffLen;
+        const unsigned char* pCffData
+            = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pCFFBlob, &nCffLen));
+
+        if (!ConvertCFFfontToType1(pCffData, nCffLen, rOutBuffer, rInfo))
+            return false;
+    }
+    else
+    {
+        rInfo.m_nFontType = FontType::SFNT_TTF;
+
+        unsigned int nSubsetLength;
+        const char* pSubsetData = nullptr;
+        pSubsetData = hb_blob_get_data(pSubsetBlob, &nSubsetLength);
+        if (!pSubsetData || !nSubsetLength)
+            return false;
+
+        rOutBuffer.assign(reinterpret_cast<const sal_uInt8*>(pSubsetData),
+                          reinterpret_cast<const sal_uInt8*>(pSubsetData) + nSubsetLength);
+    }
+
+    return true;
 }
 
 bool PhysicalFontFace::HasColorLayers() const

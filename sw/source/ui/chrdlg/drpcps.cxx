@@ -28,6 +28,7 @@
 
 #include <vcl/metric.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <svl/stritem.hxx>

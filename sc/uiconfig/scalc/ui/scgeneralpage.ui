@@ -4,7 +4,7 @@
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">0.5</property>
-    <property name="upper">99.99</property>
+    <property name="upper">99.98999999999999</property>
     <property name="value">1.25</property>
     <property name="step-increment">0.10</property>
     <property name="page-increment">0.10</property>
@@ -416,6 +416,11 @@
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="enter_paste_mode_cb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|enter_paste_mode_cb">Allows you to immediately paste the clipboard contents and clear it after pressing the Enter key.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>

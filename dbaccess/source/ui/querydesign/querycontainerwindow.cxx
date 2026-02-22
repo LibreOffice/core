@@ -19,6 +19,7 @@
 
 #include <querycontainerwindow.hxx>
 #include <QueryDesignView.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <JoinController.hxx>

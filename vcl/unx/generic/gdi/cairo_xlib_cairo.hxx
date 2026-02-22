@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <X11/Xlib.h>
+
 #include <sal/config.h>
 #include <vcl/cairo.hxx>
 #include <vcl/salgtype.hxx>

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <swrect.hxx>
 #include <swregion.hxx>
 #include <swtypes.hxx>
@@ -218,7 +220,7 @@ void SwRegionRects::Compress( CompressType type )
         // Instead of repeated erase() we Width(0) the elements, and now erase
         // all empty elements just once.
         if( bRemoved )
-            resize( std::remove_if(begin(), end(), [](const SwRect& rect) { return rect.IsEmpty(); }) - begin());
+            std::erase_if(*this , [](const SwRect& rect) { return rect.IsEmpty(); }) ;
         // Code paths setting bAgain alter elements of the vector, possibly breaking
         // the Y-axis optimization, so run another pass just to make sure. The adjacent-rects
         // merging code may possibly benefit from a repeated pass also if two pairs of merged

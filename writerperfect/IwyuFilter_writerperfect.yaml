@@ -1,5 +1,7 @@
 ---
 assumeFilename: writerperfect/source/common/WPXSvInputStream.cxx
+customAssumeFilenames:
+    writerperfect/source/writer/EPUBPackage.hxx: writerperfect/source/writer/EPUBPackage.cxx
 excludelist:
     writerperfect/inc/DocumentHandler.hxx:
     # Wrapper header for external library

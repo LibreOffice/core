@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <test/commontesttools.hxx>
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
@@ -71,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428_ignore_xml_declaration)
     CPPUNIT_ASSERT_EQUAL(u"HTML (StarWriter)"_ustr, aFilterName);
 }
 
-CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFilePPTX)
 {
     // Given an empty file, with a pptx extension
     // When loading the file
@@ -82,24 +85,36 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
     // Writer instead.
     CPPUNIT_ASSERT(
         supportsService(mxComponent, u"com.sun.star.presentation.PresentationDocument"_ustr));
+}
 
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFileODT)
+{
     // Now also test ODT
     loadFromFile(u"empty.odt");
     // Make sure it opens in Writer.
     CPPUNIT_ASSERT(supportsService(mxComponent, u"com.sun.star.text.TextDocument"_ustr));
+}
 
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFileODS)
+{
     // ... and ODS
     loadFromFile(u"empty.ods");
     // Make sure it opens in Calc.
     CPPUNIT_ASSERT(supportsService(mxComponent, u"com.sun.star.sheet.SpreadsheetDocument"_ustr));
+}
 
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFileODP)
+{
     // ... and ODP
     loadFromFile(u"empty.odp");
     // Without the accompanying fix in place, this test would have failed, as it was opened in
     // Writer instead.
     CPPUNIT_ASSERT(
         supportsService(mxComponent, u"com.sun.star.presentation.PresentationDocument"_ustr));
+}
 
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFileDOC)
+{
     // ... and DOC
     // Without the accompanying fix in place, this test would have failed, the import filter aborted
     // loading.
@@ -117,16 +132,12 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // i.e. opening worked, but saving back failed instead of producing a WW8 binary file.
         CPPUNIT_ASSERT_EQUAL(u"MS Word 97"_ustr, aFilterName);
     }
+}
 
-    // Now test with default templates set
-
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFilePPTX_Template)
+{
     SfxObjectFactory::SetStandardTemplate(u"com.sun.star.presentation.PresentationDocument"_ustr,
                                           createFileURL(u"impress.otp"));
-    SfxObjectFactory::SetStandardTemplate(u"com.sun.star.text.TextDocument"_ustr,
-                                          createFileURL(u"writer.ott"));
-    SfxObjectFactory::SetStandardTemplate(u"com.sun.star.sheet.SpreadsheetDocument"_ustr,
-                                          createFileURL(u"calc.ots"));
-
     loadFromFile(u"empty.pptx");
     {
         uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -137,7 +148,12 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(u"Title of Impress template"_ustr, xBox->getString());
     }
+}
 
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFileODT_Template)
+{
+    SfxObjectFactory::SetStandardTemplate(u"com.sun.star.text.TextDocument"_ustr,
+                                          createFileURL(u"writer.ott"));
     loadFromFile(u"empty.odt");
     {
         uno::Reference<text::XTextDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -148,7 +164,12 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(u"Writer template’s first line"_ustr, xParagraph->getString());
     }
+}
 
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFileODS_Template)
+{
+    SfxObjectFactory::SetStandardTemplate(u"com.sun.star.sheet.SpreadsheetDocument"_ustr,
+                                          createFileURL(u"calc.ots"));
     loadFromFile(u"empty.ods");
     {
         uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -158,7 +179,12 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(u"Calc template’s first cell"_ustr, xC->getString());
     }
+}
 
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFileODP_Template)
+{
+    SfxObjectFactory::SetStandardTemplate(u"com.sun.star.presentation.PresentationDocument"_ustr,
+                                          createFileURL(u"impress.otp"));
     loadFromFile(u"empty.odp");
     {
         uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -169,6 +195,12 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         // Make sure the template's text was loaded
         CPPUNIT_ASSERT_EQUAL(u"Title of Impress template"_ustr, xBox->getString());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFileDOC_Template)
+{
+    SfxObjectFactory::SetStandardTemplate(u"com.sun.star.text.TextDocument"_ustr,
+                                          createFileURL(u"writer.ott"));
     loadFromFile(u"empty.doc");
     {
         uno::Reference<text::XTextDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -188,12 +220,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
 CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile)
 {
     // Make sure that file locking is ON
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::UseDocumentSystemFileLocking::set(true, xChanges);
-        xChanges->commit();
-    }
+    ScopedConfigValue<officecfg::Office::Common::Misc::UseDocumentSystemFileLocking> aCfg(true);
 
     // Given a hybrid PDF file
 
@@ -277,7 +304,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf169154)
         = { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) };
 
     // Without the fix in place, this test would fail to load the file in RepairPackage mode
-    loadWithParams(createFileURL(u"tdf169154.doc"), aParams);
+    loadFromFile(u"tdf169154.doc", aParams);
     CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
 }
 }

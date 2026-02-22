@@ -9,7 +9,14 @@
 
 #pragma once
 #include <sal/types.h>
+#include <tools/long.hxx>
+#include <vcl/kernarray.hxx>
+
 #include <TextFrameIndex.hxx>
+#include <swdllapi.h>
+
+#include <span>
+#include <string_view>
 
 namespace sw::Justify
 {

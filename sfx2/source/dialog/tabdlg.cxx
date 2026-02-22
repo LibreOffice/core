@@ -29,7 +29,10 @@
 #include <sfx2/viewsh.hxx>
 #include <unotools/viewoptions.hxx>
 #include <utility>
+#include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/lok.hxx>
@@ -1196,7 +1199,7 @@ Bitmap SfxTabDialogController::createScreenshot() const
         const_cast<SfxTabDialogController*>(this)->Start_Impl();
     }
 
-    VclPtr<VirtualDevice> xDialogSurface(m_xDialog->screenshot());
+    ScopedVclPtr<VirtualDevice> xDialogSurface(m_xDialog->screenshot());
     return xDialogSurface->GetBitmap(Point(), xDialogSurface->GetOutputSizePixel());
 }
 

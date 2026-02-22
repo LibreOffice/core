@@ -40,6 +40,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <rtl/ustring.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 #include <comphelper/compbase.hxx>

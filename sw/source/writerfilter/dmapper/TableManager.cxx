@@ -29,6 +29,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
+#include <unoparagraph.hxx>
 
 using namespace com::sun::star;
 
@@ -406,8 +407,8 @@ void TableManager::HandleSmallerRows()
     //
     if (bIsDiffRowWidth)
     {
-        uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(
-            mpTableDataHandler->getDomainMapperImpl().GetTopTextAppend(), uno::UNO_QUERY);
+        rtl::Reference<SwXText> xTextAppendAndConvert = dynamic_cast<SwXText*>(
+            mpTableDataHandler->getDomainMapperImpl().GetTopTextAppend().get());
 
         for (unsigned int nRow = 0; nRow < nRows; ++nRow)
         {
@@ -420,17 +421,18 @@ void TableManager::HandleSmallerRows()
                     = pRowData->getCellEnd(pRowData->getCellCount() - 1);
                 std::vector<beans::PropertyValue> aProperties;
                 //TODO: is there a simpler way to create a new paragraph behind the current cell and get that range back?
-                uno::Reference<text::XTextRange> xNewCellTextRange
-                    = xTextAppendAndConvert->finishParagraphInsert(
+                rtl::Reference<SwXParagraph> xNewCellTextRange
+                    = xTextAppendAndConvert->finishSwParagraphInsert(
                         comphelper::containerToSequence(aProperties), xTextRange);
-                uno::Reference<text::XTextCursor> xNewCellTextCursor
-                    = xTextAppendAndConvert->createTextCursorByRange(xNewCellTextRange);
+                rtl::Reference<SwXTextCursor> xNewCellTextCursor
+                    = xTextAppendAndConvert->createXTextCursorByRange(xNewCellTextRange);
                 xNewCellTextCursor->collapseToEnd();
                 xNewCellTextCursor->goRight(1, false);
 
                 TablePropertyMapPtr pCellPropMap(new TablePropertyMap);
-                pRowData->addCell(xNewCellTextCursor, pCellPropMap);
-                pRowData->endCell(xNewCellTextCursor);
+                pRowData->addCell(static_cast<text::XSentenceCursor*>(xNewCellTextCursor.get()),
+                                  pCellPropMap);
+                pRowData->endCell(static_cast<text::XSentenceCursor*>(xNewCellTextCursor.get()));
                 pRowData->getProperties()->setValue(TablePropertyMap::TABLE_WIDTH, nMaxRowWidth);
                 // tdf#166953 the TableColumnSeparators property needs another
                 // separator for the extra cell added to it

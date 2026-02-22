@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>

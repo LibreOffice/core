@@ -17,6 +17,8 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 SwBaselineGridConfig::SwBaselineGridConfig(SwMasterUsrPref& rParent)
     : ConfigItem(u"Office.Writer/BaselineGrid"_ustr)
     , m_rParent(rParent)

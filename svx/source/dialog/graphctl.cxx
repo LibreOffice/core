@@ -23,6 +23,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <svx/graphctl.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>

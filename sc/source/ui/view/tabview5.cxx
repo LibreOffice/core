@@ -240,7 +240,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
         if (pGridWin[i])
         {
             if ( SC_SPLIT_BOTTOMLEFT != static_cast<ScSplitPos>(i) )
-                pDrawView->AddDeviceToPaintView(*pGridWin[i]->GetOutDev(), nullptr);
+                pDrawView->AddDeviceToPaintView(*pGridWin[i]->GetOutDev());
         }
     pDrawView->RecalcScale();
     for (i=0; i<4; i++)
@@ -273,7 +273,7 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
 {
     if (pDrawView)
     {
-        pDrawView->AddDeviceToPaintView(*pWin->GetOutDev(), nullptr);
+        pDrawView->AddDeviceToPaintView(*pWin->GetOutDev());
         pWin->DrawLayerCreated();
     }
     pWin->SetAutoSpellContext(mpSpellCheckCxt);

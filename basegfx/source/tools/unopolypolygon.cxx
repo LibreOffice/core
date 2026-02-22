@@ -23,7 +23,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>

@@ -74,6 +74,6 @@ enum class MathMLMathvariantValue
     Stretched
 };
 
-bool GetMathMLMathvariantValue(const OUString& rStr, MathMLMathvariantValue& rV);
+bool GetMathMLMathvariantValue(std::u16string_view rStr, MathMLMathvariantValue& rV);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

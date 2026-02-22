@@ -29,6 +29,7 @@
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/customweld.hxx>
 #include <vcl/weld/weld.hxx>
 

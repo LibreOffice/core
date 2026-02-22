@@ -1,5 +1,8 @@
 ---
 assumeFilename: sc/source/core/data/document.cxx
+customAssumeFilenames:
+    # Needs -I/...workdir/CustomTarget/oox/generated
+    sc/source/filter/inc/ : sc/source/filter/excel/excdoc.cxx
 excludelist:
     sc/sdi/scslots.hrc:
     # Needed for sdi files to compile
@@ -515,6 +518,9 @@ excludelist:
     sc/source/ui/inc/tpview.hxx:
     # Needed for VclPtr type
     - svx/colorbox.hxx
+    sc/source/ui/optdlg/opredlin.cxx:
+    # Needed for implicit ctor
+    - vcl/weld/Dialog.hxx
     sc/source/ui/unoobj/exceldetect.hxx:
     # base class has to be a complete type
     - com/sun/star/document/XExtendedFilterDetection.hpp

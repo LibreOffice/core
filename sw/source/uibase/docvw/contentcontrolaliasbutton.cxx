@@ -17,6 +17,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <HeaderFooterWin.hxx>
 #include <edtwin.hxx>

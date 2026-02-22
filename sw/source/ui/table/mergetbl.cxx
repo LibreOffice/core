@@ -18,6 +18,8 @@
  */
 
 #include <mergetbl.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
 
 SwMergeTableDlg::SwMergeTableDlg(weld::Window* pParent, bool& rWithPrev)
     : GenericDialogController(pParent, u"modules/swriter/ui/mergetabledialog.ui"_ustr,

@@ -21,6 +21,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
@@ -39,7 +40,9 @@
 #include <osl/diagnose.h>
 
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/TaskStopwatch.hxx>
 

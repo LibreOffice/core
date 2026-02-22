@@ -24,6 +24,8 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XHeaderFooter > SwVbaHeaderFooter_BASE;

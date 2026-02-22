@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <style:style style:name="standard" style:family="graphic">
+   <style:graphic-properties draw:fill="none"/>
+  </style:style>
+ </office:styles>
+ <office:body>
+  <office:presentation>
+   <draw:page>
+    <draw:frame svg:width="20cm" svg:height="3cm" svg:x="5mm" svg:y="5mm" presentation:class="title">
+     <draw:text-box>
+      <text:p>Slide One</text:p>
+     </draw:text-box>
+    </draw:frame>
+    <draw:frame svg:width="20cm" svg:height="9cm" svg:x="5mm" svg:y="4cm" presentation:class="outline">
+     <draw:text-box>
+      <text:list>
+       <text:list-item>
+        <text:p>One</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>Two</text:p>
+       </text:list-item>
+      </text:list>
+     </draw:text-box>
+    </draw:frame>
+    <presentation:notes>
+     <!-- First case: the 'draw:page-number' attribute is missing -->
+     <draw:page-thumbnail svg:width="20cm" svg:height="11cm" svg:x="5mm" svg:y="5mm" presentation:class="page"/>
+     <draw:frame svg:width="20cm" svg:height="13cm" svg:x="5mm" svg:y="12cm">
+      <draw:text-box/>
+     </draw:frame>
+    </presentation:notes>
+   </draw:page>
+   <draw:page>
+    <draw:frame svg:width="20cm" svg:height="3cm" svg:x="5mm" svg:y="5mm" presentation:class="title">
+     <draw:text-box>
+      <text:p>Slide Two</text:p>
+     </draw:text-box>
+    </draw:frame>
+    <draw:frame svg:width="20cm" svg:height="9cm" svg:x="5mm" svg:y="4cm" presentation:class="outline">
+     <draw:text-box>
+      <text:list>
+       <text:list-item>
+        <text:p>Foo</text:p>
+       </text:list-item>
+       <text:list-item>
+        <text:p>Bar</text:p>
+       </text:list-item>
+      </text:list>
+     </draw:text-box>
+    </draw:frame>
+    <presentation:notes>
+     <!-- Second case: the 'draw:page-number' attribute is wrong -->
+     <draw:page-thumbnail svg:width="20cm" svg:height="11cm" svg:x="5mm" svg:y="5mm" draw:page-number="1" presentation:class="page"/>
+     <draw:frame svg:width="20cm" svg:height="13cm" svg:x="5mm" svg:y="12cm">
+      <draw:text-box/>
+     </draw:frame>
+    </presentation:notes>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

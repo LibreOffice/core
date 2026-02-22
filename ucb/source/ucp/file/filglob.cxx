@@ -250,7 +250,7 @@ namespace fileaccess {
 
         if( errorCode ==  TaskHandlerErr::UNSUPPORTED_COMMAND )
         {
-            aAny <<= UnsupportedCommandException( OSL_LOG_PREFIX );
+            aAny <<= UnsupportedCommandException( u"" OSL_LOG_PREFIX ""_ustr );
             cancelCommandExecution( aAny,xEnv );
         }
         else if( errorCode == TaskHandlerErr::WRONG_SETPROPERTYVALUES_ARGUMENT ||

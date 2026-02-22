@@ -34,6 +34,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <rtl/ref.hxx>
 
+#include <PropertyForward.hxx>
+
 namespace rptui
 {
     class OPropertyMediator;

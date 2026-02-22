@@ -41,6 +41,8 @@
 #include <vcl/errinf.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 

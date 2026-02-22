@@ -12,7 +12,7 @@
 #include <memory>
 #include <string_view>
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/xmldiff.hxx>
 
 #include <drawdoc.hxx>
@@ -40,11 +40,11 @@
 
 using namespace ::com::sun::star;
 
-class SdModelTestBase : public UnoApiXmlTest
+class SdModelTestBase : public UnoApiTest
 {
 public:
     SdModelTestBase(const OUString& path)
-        : UnoApiXmlTest(path)
+        : UnoApiTest(path)
     {
     }
 
@@ -53,7 +53,7 @@ public:
         if (!pName)
             loadFromURL(u"private:factory/simpress"_ustr);
         else
-            loadFromFile(OUString::createFromAscii(pName), pPassword);
+            loadFromFile(OUString::createFromAscii(pName), /*rParams*/ {}, pPassword);
 
         uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(
@@ -67,7 +67,7 @@ public:
         if (!pName)
             loadFromURL(u"private:factory/sdraw"_ustr);
         else
-            loadFromFile(OUString::createFromAscii(pName), pPassword);
+            loadFromFile(OUString::createFromAscii(pName), /*rParams*/ {}, pPassword);
 
         uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr));

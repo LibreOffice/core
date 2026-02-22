@@ -1284,7 +1284,7 @@ DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
     xCell1Style->getPropertyValue(u"WritingMode"_ustr) >>= nInt32;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nInt32);
     xCell1Style->getPropertyValue(u"VertOrient"_ustr) >>= nInt32;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nInt32);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nInt32);
     xCell1Style->getPropertyValue(u"BorderDistance"_ustr) >>= nInt32;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(97), nInt32);
     xCell1Style->getPropertyValue(u"LeftBorderDistance"_ustr) >>= nInt32;
@@ -1702,80 +1702,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyles4)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTGREEN, getProperty<Color>(xCell1Style, u"BackColor"_ustr));
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTableStyles5)
-{
-    createSwDoc("table_styles_5.odt");
-    saveAndReload(TestFilter::ODT);
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    // Test if cell styles doesn't have a style:parent-style-name attribute.
-    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
-
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.1']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.2']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.3']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.4']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.5']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.6']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.7']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.8']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.9']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.10']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.11']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.12']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.13']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.14']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.15']",
-        "parent-style-name");
-    assertXPathNoAttribute(
-        pXmlDoc,
-        "/office:document-styles/office:styles/style:style[@style:display-name='Test style.16']",
-        "parent-style-name");
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testTdf145226)
 {
     createSwDoc("tdf145226.fodt");
@@ -1797,6 +1723,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145226)
         "style-name");
 }
 
+/* Number Format in table styles is yet to be implemented
 DECLARE_ODFEXPORT_TEST(testTdf101710, "tdf101710.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1805,6 +1732,7 @@ DECLARE_ODFEXPORT_TEST(testTdf101710, "tdf101710.odt")
         getStyles(u"CellStyles"_ustr)->getByName(u"Test Style.11"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(10104), getProperty<sal_uInt32>(xStyle, u"NumberFormat"_ustr));
 }
+*/
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129568)
 {

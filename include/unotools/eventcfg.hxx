@@ -20,10 +20,11 @@
 #define INCLUDED_UNOTOOLS_EVENTCFG_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <cppuhelper/implbase.hxx>
+
+namespace com::sun::star::beans { struct PropertyValue; }
 
 enum class GlobalEventId
 {

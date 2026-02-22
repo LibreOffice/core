@@ -26,6 +26,8 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <rtl/ref.hxx>
 
+#include <unotxdoc.hxx>
+
 class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XBookmarks > SwVbaBookmarks_BASE;

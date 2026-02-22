@@ -35,8 +35,10 @@
 #include <svx/sdsxyitm.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xfltrit.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <cuitabarea.hxx>
 #include <svx/dlgutil.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <cuitabline.hxx>
 
 using namespace com::sun::star;

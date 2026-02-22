@@ -31,6 +31,7 @@
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/families.hxx>
+#include <xmloff/xmltoken.hxx>
 #include "ximpshow.hxx"
 #include "layerimp.hxx"
 #include <animationimport.hxx>
@@ -247,8 +248,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >  SdXMLDrawPageContext:
                     uno::Reference< drawing::XDrawPage > xNotesDrawPage = xPresPage->getNotesPage();
                     if(xNotesDrawPage.is())
                     {
-                        // presentation:notes inside draw:page context
-                        return new SdXMLNotesContext( GetSdImport(), xAttrList, xNotesDrawPage);
+                        // presentation:notes inside draw:page context. Inside notes, thumbnails
+                        // are fixed to this page, and actual page number attribute must be ignored
+                        return new SdXMLNotesContext(GetSdImport(), xAttrList, xNotesDrawPage, true);
                     }
                 }
             }

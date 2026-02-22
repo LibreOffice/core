@@ -20,6 +20,7 @@
 #include <tablecolumnscontext.hxx>
 
 #include <tablecolumnsbuffer.hxx>
+#include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 
 namespace oox::xls {
@@ -32,20 +33,38 @@ TableColumnContext::TableColumnContext( WorksheetContextBase& rParent, TableColu
 {
 }
 
+void TableColumnContext::onCharacters( const rtl::OUString& rChars )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( totalsRowFormula ):
+            mrTableColumn.setFunc(rChars);
+        break;
+    }
+}
+
 ContextHandlerRef TableColumnContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch (nElement)
     {
         case XLS_TOKEN(xmlColumnPr):
             mrTableColumn.importXmlColumnPr( rAttribs );
-            break;
+        break;
+        case XLS_TOKEN(totalsRowFormula):
+        {
+            if (getCurrentElement() == XLS_TOKEN(tableColumn) &&
+                rAttribs.getToken(XML_t, XML_normal) != XML_TOKEN_INVALID)
+                return this;
+        }
+        break;
     }
     return nullptr;
 }
 
 void TableColumnContext::onStartElement( const AttributeList& rAttribs )
 {
-    mrTableColumn.importTableColumn( rAttribs );
+    if (getCurrentElement() == XLS_TOKEN(tableColumn))
+        mrTableColumn.importTableColumn( rAttribs );
 }
 
 ContextHandlerRef TableColumnContext::onCreateRecordContext( sal_Int32 /*nRecId*/, SequenceInputStream& /*rStrm*/ )

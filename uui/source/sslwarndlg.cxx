@@ -18,6 +18,7 @@
  */
 
 #include "sslwarndlg.hxx"
+#include <vcl/weld/Builder.hxx>
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 

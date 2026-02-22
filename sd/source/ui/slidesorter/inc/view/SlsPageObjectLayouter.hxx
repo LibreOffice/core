@@ -22,6 +22,7 @@
 #include <model/SlsSharedPageDescriptor.hxx>
 #include <tools/gen.hxx>
 #include <vcl/image.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace vcl { class Font; }
 namespace sd { class Window; }

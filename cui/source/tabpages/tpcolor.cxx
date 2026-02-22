@@ -21,6 +21,9 @@
 #include <i18nutil/unicode.hxx>
 #include <vcl/ColorDialog.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <strings.hrc>
@@ -32,6 +35,7 @@
 #include <dialmgr.hxx>
 #include <cuitabline.hxx>
 #include <sfx2/AdditionsDialogHelper.hxx>
+#include <svtools/dlgname.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <officecfg/Office/Common.hxx>
@@ -330,13 +334,12 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
         bValidColorName = (FindInCustomColors(aName) == -1);
     }
 
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    SvxNameDialog aNameDialog(GetFrameWeld(), aName, aDesc);
     sal_uInt16 nError = 1;
 
-    while (pDlg->Execute() == RET_OK)
+    while (aNameDialog.run() == RET_OK)
     {
-        aName = pDlg->GetName();
+        aName = aNameDialog.GetName();
 
         bValidColorName = (FindInCustomColors(aName) == -1);
         if (bValidColorName)
@@ -350,8 +353,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
         if (xWarnBox->run() != RET_OK)
             break;
     }
-
-    pDlg.disposeAndClear();
 
     if (!nError)
     {

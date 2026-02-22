@@ -11,6 +11,8 @@
 
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/inettbc.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <address.hxx>
 #include <docsh.hxx>
 #include <datastream.hxx>

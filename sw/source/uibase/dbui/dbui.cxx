@@ -18,6 +18,7 @@
  */
 
 #include <dbui.hxx>
+#include <vcl/weld/Builder.hxx>
 
 SaveMonitor::SaveMonitor(weld::Window *pParent)
     : GenericDialogController(pParent, u"modules/swriter/ui/savemonitordialog.ui"_ustr,

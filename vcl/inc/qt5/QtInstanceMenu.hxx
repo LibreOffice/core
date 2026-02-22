@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <vcl/weld/weld.hxx>
+#include <vcl/weld/Menu.hxx>
 
 #include <QtCore/QPointer>
 #include <QtWidgets/QMenu>
@@ -32,6 +32,7 @@ public:
     virtual bool get_sensitive(const OUString& rIdent) const override;
     virtual void set_label(const OUString& rIdent, const OUString& rLabel) override;
     virtual OUString get_label(const OUString& rIdent) const override;
+    virtual void set_tooltip_text(const OUString& rIdent, const OUString& rTip) override;
     virtual void set_active(const OUString& rIdent, bool bActive) override;
     virtual bool get_active(const OUString& rIdent) const override;
     virtual void set_visible(const OUString& rIdent, bool bVisible) override;
@@ -52,6 +53,8 @@ public:
 
     virtual OUString get_id(int nPos) const override;
 
+    QMenu* getMenu() const;
+
     static void setActionName(QAction& rAction, const OUString& rActionName);
 
 private:
@@ -61,6 +64,7 @@ private:
 
 private Q_SLOTS:
     void menuActionHovered(QAction* pAction);
+    void menuActionTriggered(QAction* pAction);
     void showHelp();
 };
 

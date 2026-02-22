@@ -21,6 +21,7 @@
 #include <unotools/searchopt.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/weld/Builder.hxx>
 #include "optjsearch.hxx"
 
 

@@ -226,7 +226,7 @@ SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
     if (0 != m_aComapeSet.Count())
     {
         nMinUsedWhichID = 5000; // SFX_WHICH_MAX+1;
-        for (SfxItemIter aIter(m_aComapeSet); !aIter.IsAtEnd(); aIter.NextItem())
+        for (SfxItemIter aIter(m_aComapeSet); !aIter.IsAtEnd(); aIter.Next())
         {
             const sal_uInt16 nCurrentWhich(aIter.GetCurWhich());
             if (SfxItemPool::IsSlot(nCurrentWhich))
@@ -282,13 +282,12 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
 
     const SfxItemSet& rSet = rTextNd.GetSwAttrSet();
 
-    SfxItemIter aIter( m_aComapeSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
     const SfxPoolItem* pFndItem;
     sal_uInt16 nWhich;
 
-    do
+    for (SfxItemIter aIter( m_aComapeSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if( IsInvalidItem( pItem ) )
         {
             nWhich = aIter.GetCurWhich();
@@ -316,9 +315,7 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
                 m_nFound++;
             }
         }
-
-        pItem = aIter.NextItem();
-    } while (pItem);
+    }
 }
 
 static bool
@@ -896,13 +893,12 @@ static bool lcl_Search( const SwContentNode& rCNd, const SfxItemSet& rCmpSet, bo
         return false;
 
     const SfxItemSet& rNdSet = rCNd.GetSwAttrSet();
-    SfxItemIter aIter( rCmpSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
     const SfxPoolItem* pNdItem;
     sal_uInt16 nWhich;
 
-    do
+    for (SfxItemIter aIter( rCmpSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if( IsInvalidItem( pItem ))
         {
             nWhich = aIter.GetCurWhich();
@@ -917,9 +913,7 @@ static bool lcl_Search( const SwContentNode& rCNd, const SfxItemSet& rCmpSet, bo
             if( !CmpAttr( rNdSet.Get( nWhich, !bNoColls ), *pItem ))
                 return false;
         }
-
-        pItem = aIter.NextItem();
-    } while (pItem);
+    }
     return true; // found
 }
 
@@ -1395,17 +1389,14 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             SfxItemPool* pPool = pReplSet->GetPool();
             SfxItemSet aSet( *pPool, pReplSet->GetRanges() );
 
-            SfxItemIter aIter( *pSet );
-            const SfxPoolItem* pItem = aIter.GetCurItem();
-            do
+            for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 // reset all that are not set with pool defaults
                 if( !IsInvalidItem( pItem ) && SfxItemState::SET !=
                     pReplSet->GetItemState( pItem->Which(), false ))
                     aSet.Put( pPool->GetUserOrPoolDefaultItem( pItem->Which() ));
-
-                pItem = aIter.NextItem();
-            } while (pItem);
+            }
             aSet.Put( *pReplSet );
             rCursor.GetDoc().getIDocumentContentOperations().InsertItemSet(
                     rCursor, aSet, SetAttrMode::DEFAULT, m_pLayout);

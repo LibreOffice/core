@@ -11,6 +11,8 @@
 #include <test/outputdevice.hxx>
 #include <vcl/gradient.hxx>
 
+#include <com/sun/star/awt/GradientStyle.hpp>
+
 namespace vcl::test
 {
 Bitmap OutputDeviceTestGradient::setupLinearGradient()

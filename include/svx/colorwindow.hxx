@@ -24,10 +24,14 @@
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/Palette.hxx>
 #include <vcl/toolboxid.hxx>
+#include <vcl/weld/MenuButton.hxx>
 
 typedef std::function<weld::Window*()> TopLevelParentFunction;
 
 namespace com::sun::star::frame { class XFrame; }
+
+namespace weld { class ComboBox; }
+namespace weld { class Toolbar; }
 
 class PaletteManager;
 class ToolBox;

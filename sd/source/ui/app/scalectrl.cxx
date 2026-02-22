@@ -21,6 +21,8 @@
 
 #include <vcl/commandevent.hxx>
 #include <vcl/status.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>

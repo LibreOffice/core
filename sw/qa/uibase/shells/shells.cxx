@@ -210,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyUrlContextMenu)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 32 (SfxItemState::DEFAULT)
     // - Actual  : 1 (SfxItemState::DISABLED)
-    // i.e. the menu item was not visible for biblio entry fields with an URL.
+    // i.e. the menu item was not visible for biblio entry fields with a URL.
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eStateOpen);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eStateCopy);
 }

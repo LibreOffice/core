@@ -33,6 +33,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/lok.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>

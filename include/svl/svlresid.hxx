@@ -12,7 +12,8 @@
 
 #include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
-#include <unotools/resmgr.hxx>
+
+struct TranslateId;
 
 SVL_DLLPUBLIC OUString SvlResId(TranslateId sContextAndId);
 

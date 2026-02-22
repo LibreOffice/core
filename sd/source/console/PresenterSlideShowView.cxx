@@ -25,6 +25,9 @@
 #include <PresenterHelper.hxx>
 #include <DrawController.hxx>
 #include <framework/ConfigurationController.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
+
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/Pointer.hpp>
@@ -158,18 +161,8 @@ void PresenterSlideShowView::LateInit()
     }
 
     // Read text for one past last slide.
-    PresenterConfigurationAccess aConfiguration (
-        mxComponentContext,
-        PresenterConfigurationAccess::msPresenterScreenRootName,
-        PresenterConfigurationAccess::READ_ONLY);
-    aConfiguration.GetConfigurationNode(
-        u"Presenter/Views/CurrentSlidePreview/"
-        "Strings/ClickToExitPresentationText/String"_ustr)
-        >>= msClickToExitPresentationText;
-    aConfiguration.GetConfigurationNode(
-        u"Presenter/Views/CurrentSlidePreview/"
-        "Strings/ClickToExitPresentationTitle/String"_ustr)
-        >>= msClickToExitPresentationTitle;
+    msClickToExitPresentationText = SdResId(STR_CLICKTOEXITPRESENTATION_TEXT);
+    msClickToExitPresentationTitle = SdResId(STR_CLICKTOEXITPRESENTATION_TITLE);
 }
 
 PresenterSlideShowView::~PresenterSlideShowView()

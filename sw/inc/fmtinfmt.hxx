@@ -29,6 +29,7 @@ class SvxMacro;
 class SvxMacroTableDtor;
 class SwTextINetFormat;
 enum class SvMacroItemId : sal_uInt16;
+enum class SwPoolFormatId : sal_uInt16;
 
 /// SfxPoolItem subclass that contains data about an inserted hyperlink / URL in Writer text. Its
 /// location is tracked by the wrapping SwTextINetFormat.
@@ -45,8 +46,8 @@ class SW_DLLPUBLIC SwFormatINetFormat final
     OUString msHyperlinkName;        ///< Name of the link.
     std::unique_ptr<SvxMacroTableDtor> mpMacroTable;
     SwTextINetFormat* mpTextAttr;         ///< My TextAttribute.
-    sal_uInt16 mnINetFormatId;
-    sal_uInt16 mnVisitedFormatId;
+    SwPoolFormatId mnINetFormatId;
+    SwPoolFormatId mnVisitedFormatId;
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SwFormatINetFormat)
     SwFormatINetFormat( OUString aURL, OUString aTarget );
@@ -94,7 +95,7 @@ public:
 
     void SetINetFormatAndId(
             const UIName& rNm,
-            const sal_uInt16 nId )
+            const SwPoolFormatId nId )
     {
         msINetFormatName = rNm;
         mnINetFormatId = nId;
@@ -105,14 +106,14 @@ public:
         return msINetFormatName;
     }
 
-    sal_uInt16 GetINetFormatId() const
+    SwPoolFormatId GetINetFormatId() const
     {
         return mnINetFormatId;
     }
 
     void SetVisitedFormatAndId(
             const UIName& rNm,
-            const sal_uInt16 nId )
+            const SwPoolFormatId nId )
     {
         msVisitedFormatName = rNm;
         mnVisitedFormatId = nId;
@@ -123,7 +124,7 @@ public:
         return msVisitedFormatName;
     }
 
-    sal_uInt16 GetVisitedFormatId() const
+    SwPoolFormatId GetVisitedFormatId() const
     {
         return mnVisitedFormatId;
     }

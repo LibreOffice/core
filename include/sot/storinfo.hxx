@@ -24,10 +24,10 @@
 #include <utility>
 #include <vector>
 #include <sot/sotdllapi.h>
-#include <sot/formats.hxx>
 
 class StgDirEntry;
 class SvStream;
+enum class SotClipboardFormatId : sal_uInt32;
 
 class SvStorageInfo
 {

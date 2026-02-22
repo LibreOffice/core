@@ -35,6 +35,7 @@
 #include <svx/dialogs.hrc>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;

@@ -17,6 +17,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <comphelper/attributelist.hxx>
 #include <comphelper/sequenceashashmap.hxx>

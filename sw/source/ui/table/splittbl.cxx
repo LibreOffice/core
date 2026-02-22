@@ -21,6 +21,8 @@
 #include <splittbl.hxx>
 #include <tblenum.hxx>
 
+#include <vcl/weld/Builder.hxx>
+
 SplitTable_HeadlineOption SwSplitTableDlg::m_eRememberedSplitOption
     = SplitTable_HeadlineOption::ContentCopy;
 

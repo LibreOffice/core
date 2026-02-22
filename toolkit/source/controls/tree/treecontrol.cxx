@@ -27,6 +27,7 @@
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <helper/property.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>

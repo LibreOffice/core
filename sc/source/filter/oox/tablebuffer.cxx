@@ -39,6 +39,15 @@ namespace oox::xls {
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
+TableStyleInfo::TableStyleInfo():
+    mbShowFirstColumn( false ),
+    mbShowLastColumn( false ),
+    mbShowRowStripes( false ),
+    mbShowColStripes( false )
+{
+    maStyleName = u"none"_ustr;
+}
+
 TableModel::TableModel() :
     mnId( -1 ),
     mnType( XML_worksheet ),
@@ -83,6 +92,15 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
     AddressConverter::convertToCellRangeUnchecked( maModel.maRange, aBinRange, nSheet );
     static const sal_Int32 spnTypes[] = { XML_worksheet, XML_TOKEN_INVALID, XML_TOKEN_INVALID, XML_queryTable };
     maModel.mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
+}
+
+void Table::importTableStyleInfo(const AttributeList& rAttribs)
+{
+    maStyleInfo.maStyleName = rAttribs.getString(XML_name, u"none"_ustr);
+    maStyleInfo.mbShowFirstColumn = rAttribs.getBool(XML_showFirstColumn, false);
+    maStyleInfo.mbShowLastColumn = rAttribs.getBool(XML_showLastColumn, false);
+    maStyleInfo.mbShowRowStripes = rAttribs.getBool(XML_showRowStripes, false);
+    maStyleInfo.mbShowColStripes = rAttribs.getBool(XML_showColumnStripes, false);
 }
 
 void Table::finalizeImport()
@@ -143,6 +161,12 @@ void Table::finalizeImport()
         // get formula token index of the database range
         if( !(xDatabaseRange->getPropertyValue(u"TokenIndex"_ustr) >>= mnTokenIndex))
             mnTokenIndex = -1;
+
+        xDatabaseRange->setPropertyValue( u"TableStyleName"_ustr, css::uno::Any(maStyleInfo.maStyleName));
+        xDatabaseRange->setPropertyValue( u"UseRowStripes"_ustr, css::uno::Any(maStyleInfo.mbShowRowStripes));
+        xDatabaseRange->setPropertyValue( u"UseColStripes"_ustr, css::uno::Any(maStyleInfo.mbShowColStripes));
+        xDatabaseRange->setPropertyValue( u"UseFirstColumnFormatting"_ustr, css::uno::Any(maStyleInfo.mbShowFirstColumn));
+        xDatabaseRange->setPropertyValue( u"UseLastColumnFormatting"_ustr, css::uno::Any(maStyleInfo.mbShowLastColumn));
     }
     catch( Exception& )
     {
@@ -158,9 +182,14 @@ void Table::applyAutoFilters()
     try
     {
         // get the range ( maybe we should cache the xDatabaseRange from finalizeImport )
-        PropertySet aDocProps(( Reference< css::beans::XPropertySet >(getDocument()) ));
-        Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
-        Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( maDBRangeName ), UNO_QUERY );
+        rtl::Reference<ScDatabaseRangeObj> xDatabaseRange;
+        ScDocShell* pDocSh = getScDocument().GetDocumentShell();
+        ScDBCollection* pNames = getScDocument().GetDBCollection();
+        if ( pDocSh && pNames
+             && pNames->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase( maDBRangeName )) != nullptr)
+            xDatabaseRange = new ScDatabaseRangeObj(pDocSh, maDBRangeName);
+        else
+            throw css::container::NoSuchElementException();
         maAutoFilters.finalizeImport( xDatabaseRange, maModel.maRange.aStart.Tab() );
     }
     catch( Exception& )

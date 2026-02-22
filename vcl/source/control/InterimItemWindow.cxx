@@ -9,6 +9,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/weld.hxx>
 #include <salobj.hxx>

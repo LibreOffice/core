@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
+#include <basegfx/range/b3drange.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <utility>
 

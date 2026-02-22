@@ -11,10 +11,10 @@
 
 #include "QtInstanceTreeIter.hxx"
 #include "QtInstanceItemView.hxx"
+#include "QtTreeViewModel.hxx"
 
 #include <vcl/weld/TreeView.hxx>
 
-#include <QtCore/QSortFilterProxyModel>
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QTreeView>
 
@@ -26,7 +26,7 @@ class QtInstanceTreeView : public QtInstanceItemView, public virtual weld::TreeV
 
     /** The model displayed in the tree view. The proxy model takes care of sorting
      *  if sorting is enabled. */
-    QSortFilterProxyModel* m_pModel;
+    QtTreeViewModel* m_pModel;
 
     /** The QStandardItemModel used as the source model for `m_pModel`. */
     QStandardItemModel* m_pSourceModel;
@@ -62,14 +62,10 @@ public:
 
     virtual void copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const override;
     virtual bool iter_previous_sibling(weld::TreeIter& rIter) const override;
-    virtual bool iter_next(weld::TreeIter& rIter) const override;
-    virtual bool iter_previous(weld::TreeIter& rIter) const override;
-    virtual bool iter_children(weld::TreeIter& rIter) const override;
+    virtual bool do_iter_children(weld::TreeIter& rIter) const override;
     virtual bool iter_parent(weld::TreeIter& rIter) const override;
     virtual int get_iter_depth(const weld::TreeIter& rIter) const override;
 
-    virtual int iter_compare(const weld::TreeIter& a, const weld::TreeIter& b) const override;
-    virtual bool iter_has_child(const weld::TreeIter& rIter) const override;
     virtual int iter_n_children(const weld::TreeIter& rIter) const override;
     virtual void set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel) override;
     virtual void set_text(const weld::TreeIter& rIter, const OUString& rStr,
@@ -162,6 +158,9 @@ public:
     using QtInstanceWidget::set_sensitive;
     using QtInstanceWidget::get_sensitive;
 
+    bool signalEditingStarted(const QModelIndex& rIndex);
+    bool signalEditingDone(const QModelIndex& rIndex, const QString& rNewText);
+
     // methods to get/set which roles are supported by the individual columns
     // based on the underlying GtkTreeViewColumns and their GtkCellRenderers
     static QList<QList<Qt::ItemDataRole>> columnRoles(QTreeView& rTreeView);
@@ -177,6 +176,7 @@ private:
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 
     void setImage(const weld::TreeIter& rIter, const QPixmap& rPixmap, int nCol);
+    void setTextEmphasis(const QModelIndex& rIndex, bool bOn);
 
     bool handleViewPortToolTipEvent(const QHelpEvent& rEvent);
 
@@ -185,6 +185,8 @@ private Q_SLOTS:
     void handleDataChanged(const QModelIndex& rTopLeft, const QModelIndex& rBottomRight,
                            const QVector<int>& rRoles);
     void handleSelectionChanged();
+    void signalCollapsing(const QModelIndex& rIndex);
+    void signalExpanding(const QModelIndex& rIndex);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

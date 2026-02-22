@@ -20,6 +20,7 @@
 #include <svx/sidebar/AreaTransparencyGradientPopup.hxx>
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <svx/xflftrit.hxx>
+#include <tools/fldunit.hxx>
 
 namespace svx::sidebar {
 

@@ -28,6 +28,7 @@
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 

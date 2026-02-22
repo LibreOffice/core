@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>

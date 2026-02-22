@@ -162,15 +162,28 @@ class SdtBlockHelper
 {
 public:
     SdtBlockHelper()
-        : m_nId(0)
-        , m_bStartedSdt(false)
+        : m_bStartedSdt(false)
+        , m_pStartPosition(nullptr)
         , m_bShowingPlaceHolder(false)
         , m_nTabIndex(0)
-        , m_nSdtPrToken(0)
     {}
 
-    sal_Int32 m_nId;
+    // m_bStartedSdt tracks whether startElementNS(XML_w, XML_sdt) has been written
     bool m_bStartedSdt;
+    // In order to cache the SdtBlockHelper value, some mechanism is needed to check its validity.
+    // Currently this is needed only for m_aParagraphSdt, so tracking the SwPosition is sufficient.
+
+    // If the SDT has not beeen started (!m_bStartedSdt) and the text positions do not match,
+    // then this SdtBlockHelper cache may be cleared and re-populated.
+    const SwPosition* m_pStartPosition; // only used by m_aParagraphSdt
+    std::vector<OUString> m_vBookmarkEnd; // only used by m_aParagraphSdt
+
+    // m_oSdtPrToken is a key GrabBag value, with a two-fold purpose:
+    // - the absence of m_oSdtPrToken also means that (XML_w, XML_sdt) should not be written
+    // - it describes the type of content control: richText(0), plainText, checkbox, dropdown...
+    std::optional<sal_Int32> m_oSdtPrToken;
+    // MS Word (silently) creates a random Id for an Sdt with a missing/zero/non-unique Id
+    std::optional<sal_Int32> m_oId;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pTokenChildren;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pTokenAttributes;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pTextAttrs;
@@ -183,17 +196,20 @@ public:
     OUString m_aTag;
     sal_Int32 m_nTabIndex;
     OUString m_aLock;
-    sal_Int32 m_nSdtPrToken;
 
-    void DeleteAndResetTheLists();
+    void clearGrabbagValues();
 
-    void WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing);
+    // pStartPosition must be nullptr unless this SdtBlockHelper is m_aParagraphSdt.
+    // ForceRichText (by not writing any SdtPrToken) to avoid creating a corrupt document.
+    void WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer,
+                       const SwPosition* pStartPosition, bool bForceRichText);
     void WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer);
 
     /// Closes a currently open SDT block.
     void EndSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer);
 
-    void GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
+    void GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt,
+                                 const SwPosition* pStartPosition);
 };
 
 /// The class that has handlers for various resource types when exporting as DOCX.
@@ -277,8 +293,6 @@ public:
     /// End of the tag that encloses the run.
     void EndRedline(const SwRedlineData* pRedlineData, bool bLastRun, bool bParagraphProps = false);
 
-    virtual void SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame ) override;
-    virtual void SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode ) override;
     virtual bool IsFlyProcessingPostponed() override;
     virtual void ResetFlyProcessingFlag() override;
 
@@ -873,7 +887,6 @@ private:
 
     /// Flag indicating that the header \ footer are being written
     bool m_bWritingHeaderFooter;
-    bool m_bAnchorLinkedToNode;
 
     /// Flag indicating that multiple runs of a field are being written
     bool m_bWritingField;
@@ -1085,14 +1098,14 @@ private:
     // store hardcoded value which was set during import.
     sal_Int32 m_nParaBeforeSpacing,m_nParaAfterSpacing;
 
+    // m_aParagraphSdt contains a grabbagged block content control that needs to be round-tripped
+    // because in LO it is not a native content control.
+    // Some content controls can span multiple paragraphs.
+    // It starts at the paragraph containing the 'SdtPr' grabbag property,
+    // and ends at the paragraph before the one containing the 'ParaSdtEndBefore' property.
     SdtBlockHelper m_aParagraphSdt;
+    // Same as m_aParagraphSdt except it ends on the run before the one containng 'SdtEndBefore'
     SdtBlockHelper m_aRunSdt;
-
-    /// State of the Fly at current position
-    FlyProcessingState m_nStateOfFlyFrame;
-
-    /// Same as m_aParagraphSdtPrAlias, but its content is available till the SDT is closed.
-    OUString m_aStartedParagraphSdtPrAlias;
 
     std::vector<std::map<SvxBoxItemLine, css::table::BorderLine2>> m_aTableStyleConfs;
 
@@ -1147,6 +1160,14 @@ public:
     void SetAlternateContentChoiceOpen( bool bAltContentChoiceOpen ) { m_bAlternateContentChoiceOpen = bAltContentChoiceOpen; }
     bool IsAlternateContentChoiceOpen( ) const { return m_bAlternateContentChoiceOpen; }
     void GetSdtEndBefore(const SdrObject* pSdrObj);
+
+    // returns m_aParagraphSdt's effective m_oSdtPrToken for the current node
+    std::optional<sal_Int32> GetGrabBagParaSdtPrToken();
+
+    // PlainText-y blockSdt content controls are considered corrupt if they contain a bookmarkEnd
+    bool DoesParaSdtPreventBookmarkEnd(const sal_Int32 nPos);
+    void WriteBookmarkEndWithParaSdt(const OUString& rString);
+
     bool IsFirstParagraph() const { return m_bIsFirstParagraph; }
 
     /// Stores the table export state to the passed context and resets own state.
@@ -1176,14 +1197,13 @@ public:
     static const sal_Int32 Tag_StartRun_2 = 7;
     static const sal_Int32 Tag_StartRun_3 = 8;
     static const sal_Int32 Tag_EndRun_1 = 9;
-    static const sal_Int32 Tag_EndRun_2 = 10;
-    static const sal_Int32 Tag_StartRunProperties = 11;
-    static const sal_Int32 Tag_InitCollectedRunProperties = 12;
-    static const sal_Int32 Tag_Redline_1 = 13;
-    static const sal_Int32 Tag_Redline_2 = 14;
-    static const sal_Int32 Tag_TableDefinition = 15;
-    static const sal_Int32 Tag_OutputFlyFrame = 16;
-    static const sal_Int32 Tag_StartSection = 17;
+    static const sal_Int32 Tag_StartRunProperties = 10;
+    static const sal_Int32 Tag_InitCollectedRunProperties = 11;
+    static const sal_Int32 Tag_Redline_1 = 12;
+    static const sal_Int32 Tag_Redline_2 = 13;
+    static const sal_Int32 Tag_TableDefinition = 14;
+    static const sal_Int32 Tag_OutputFlyFrame = 15;
+    static const sal_Int32 Tag_StartSection = 16;
 };
 
 /**

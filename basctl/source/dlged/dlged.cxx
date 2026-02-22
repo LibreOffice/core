@@ -42,6 +42,7 @@
 #include <tools/debug.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdpagv.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>

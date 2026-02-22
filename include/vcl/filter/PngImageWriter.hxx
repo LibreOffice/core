@@ -8,14 +8,28 @@
  */
 
 #include <vcl/dllapi.h>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <tools/stream.hxx>
-#include <vcl/graph.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+
+#include <array>
+#include <stdint.h>
 #include <vector>
 
 #pragma once
+
+class Graphic;
+class SvStream;
+namespace com::sun::star::beans
+{
+struct PropertyValue;
+}
+namespace com::sun::star::task
+{
+class XStatusIndicator;
+}
+namespace com::sun::star::uno
+{
+template <class E> class Sequence;
+}
 
 namespace vcl
 {

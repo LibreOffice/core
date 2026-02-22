@@ -528,8 +528,8 @@ void SwFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
         {
             SfxItemIter aNIter(*pChangeHint->m_pNew->GetChgSet());
             SfxItemIter aOIter(*pChangeHint->m_pOld->GetChgSet());
-            const SfxPoolItem* pNItem = aNIter.GetCurItem();
-            const SfxPoolItem* pOItem = aOIter.GetCurItem();
+            const SfxPoolItem* pNItem = aNIter.IsAtEnd() ? nullptr : aNIter.GetCurItem();
+            const SfxPoolItem* pOItem = aOIter.IsAtEnd() ? nullptr : aOIter.GetCurItem();
             do
             {
                 UpdateAttrFrame(pOItem, pNItem, eInvFlags);
@@ -2430,8 +2430,8 @@ void SwContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             const SwAttrSetChg& rNewSetChg = *pChangeHint->m_pNew;
             SfxItemIter aOIter(*rOldSetChg.GetChgSet());
             SfxItemIter aNIter(*rNewSetChg.GetChgSet());
-            const SfxPoolItem* pNItem = aNIter.GetCurItem();
-            const SfxPoolItem* pOItem = aOIter.GetCurItem();
+            const SfxPoolItem* pNItem = aNIter.IsAtEnd() ? nullptr : aNIter.GetCurItem();
+            const SfxPoolItem* pOItem = aOIter.IsAtEnd() ? nullptr : aOIter.GetCurItem();
             SwAttrSetChg aOldSet(rOldSetChg);
             SwAttrSetChg aNewSet(rNewSetChg);
             do

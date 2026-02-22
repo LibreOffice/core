@@ -49,6 +49,7 @@
 #include <utility>
 #include <vcl/bitmap.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/BitmapTools.hxx>

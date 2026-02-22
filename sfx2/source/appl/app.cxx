@@ -32,6 +32,7 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <basic/basmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/progress.hxx>

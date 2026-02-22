@@ -19,6 +19,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include "connpooloptions.hxx"
 #include "connpoolsettings.hxx"
 #include <rtl/ustrbuf.hxx>
@@ -27,6 +28,7 @@
 #include <strings.hrc>
 #include <dialmgr.hxx>
 #include <officecfg/Office/DataAccess.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
 

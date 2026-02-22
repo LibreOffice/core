@@ -29,6 +29,7 @@ my_example_dirs = \
     cpp/complextoolbarcontrols \
     cpp/counter \
     cpp/remoteclient \
+    cpp/SWriter \
     python/toolpanel \
     python/minimal-extension \
 

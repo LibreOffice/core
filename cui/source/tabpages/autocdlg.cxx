@@ -24,6 +24,7 @@
 #include <utility>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
@@ -33,6 +34,7 @@
 #include <sfx2/viewsh.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <unotools/fontdefs.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/module.hxx>

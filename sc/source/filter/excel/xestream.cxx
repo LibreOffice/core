@@ -817,7 +817,12 @@ OUString XclXmlUtils::ToOUString(
     else
     {
         if (nErrCode != FormulaError::NONE)
-            aCompiler.AppendErrorConstant( aBuffer, nErrCode);
+        {
+            if (nErrCode == FormulaError::NoMacro)
+                aCompiler.AppendErrorConstant(aBuffer, FormulaError::NoRef);
+            else
+                aCompiler.AppendErrorConstant(aBuffer, nErrCode);
+        }
         else
         {
             // No code SHOULD be an "error cell", assert caller thought of that
@@ -899,7 +904,24 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
         pStream->singleElement(XML_color,
             XML_rgb, XclXmlUtils::ToOString(rComplexColor.getFinalColor()));
     }
-    pStream->singleElement(nFontId, XML_val, rFontData.maName);
+
+    assert(!rFontData.maName.isEmpty() && "Font Name can't be empty");
+
+    constexpr sal_Int32 MAX_FONT_LENGTH = 31;
+    OUString sFont = rFontData.maName;
+    if (sFont.getLength() > MAX_FONT_LENGTH)
+    {
+        sFont = sFont.copy(0, MAX_FONT_LENGTH);
+        // Truncate till last semi-colon
+        if (rFontData.maName[MAX_FONT_LENGTH] != ';')
+        {
+            sal_Int32 nIndex = sFont.lastIndexOf(';');
+            if (nIndex != -1)
+                sFont = sFont.copy(0, nIndex);
+        }
+    }
+
+    pStream->singleElement(nFontId, XML_val, sFont);
     pStream->singleElement(XML_family, XML_val, OString::number(  rFontData.mnFamily ));
     if (rFontData.mnCharSet != 0)
         pStream->singleElement(XML_charset, XML_val, OString::number(rFontData.mnCharSet));
@@ -955,9 +977,7 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     const uno::Reference< XOutputStream >& xParentRelation,
     const char* sContentType,
     const OUString& sRelationshipType,
-    OUString* pRelationshipId,
-    // if bNoHeader is true, don't create a header (<?xml... ) line
-    bool bNoHeader /* = false */ )
+    OUString* pRelationshipId )
 {
     OUString sRelationshipId;
     if (xParentRelation.is())
@@ -969,7 +989,7 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
         *pRelationshipId = sRelationshipId;
 
     sax_fastparser::FSHelperPtr p = openFragmentStreamWithSerializer(
-            sFullStream, OUString::createFromAscii( sContentType ), bNoHeader );
+            sFullStream, OUString::createFromAscii( sContentType ), /*bNoHeader*/false );
 
     maOpenedStreamMap[ sFullStream ] = std::make_pair( sRelationshipId, p );
 
@@ -1036,7 +1056,6 @@ bool XclExpXmlStream::exportDocument()
     // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!
     // Instead, write via XOutputStream instance.
     rtl::Reference<SotStorage> rStorage;
-    drawingml::DrawingML::ResetMlCounters();
 
     auto& rGraphicExportCache = drawingml::GraphicExportCache::get();
 

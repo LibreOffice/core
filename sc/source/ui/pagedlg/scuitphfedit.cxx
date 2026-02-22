@@ -27,6 +27,8 @@
 #include <osl/time.h>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <unotools/useroptions.hxx>
 
@@ -738,6 +740,13 @@ IMPL_LINK( ScHFEditPage, ClickHdl, weld::Button&, rBtn, void )
 
     if (&rBtn == m_xBtnText.get())
     {
+        if ( !m_pEditFocus->HasSelection() )
+        {
+            ESelection aSel;
+            aSel.start.nIndex = 0;
+            aSel.end.nIndex = m_pEditFocus->GetEditEngine()->GetTextLen(0);
+            m_pEditFocus->GetEditView()->SetSelection(aSel);
+        }
         m_pEditFocus->SetCharAttributes();
     }
     else

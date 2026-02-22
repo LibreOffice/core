@@ -240,10 +240,10 @@ public:
     SortCondition&      createSortCondition();
 
     /** Applies the filter to the passed filter descriptor. */
-    void                finalizeImport( const css::uno::Reference< css::sheet::XDatabaseRange >& rxDatabaseRange,
+    void                finalizeImport( const rtl::Reference<ScDatabaseRangeObj>& rxDatabaseRange,
                                         sal_Int16 nSheet );
 
-    css::uno::Reference< css::sheet::XDatabaseRange > createDatabaseObject(sal_Int16 nSheet);
+    rtl::Reference<ScDatabaseRangeObj> createDatabaseObject(sal_Int16 nSheet);
 
 private:
     typedef RefVector< FilterColumn > FilterColumnVector;
@@ -270,7 +270,7 @@ public:
 
     /** Applies the filters to the passed database range object.
         @return  True = this buffer contains valid auto filter settings. */
-    bool                finalizeImport( const css::uno::Reference< css::sheet::XDatabaseRange >& rxDatabaseRange,
+    bool                finalizeImport( const rtl::Reference<ScDatabaseRangeObj>& rxDatabaseRange,
                                         sal_Int16 nSheet );
 
 private:

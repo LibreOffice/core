@@ -66,8 +66,11 @@ class ScNavigatorSettings;
 class ScDrawTransferObj;
 class ScCondFormatDlgData;
 class ScDispatchProviderInterceptor;
+class ScTableShell;
 
-namespace sc { class SparklineShell; }
+namespace sc {
+    class SparklineShell;
+}
 
 struct ScHeaderFieldData;
 
@@ -93,6 +96,7 @@ enum ObjectSelectionType
     OST_Graphic,
     OST_Media,
     OST_Sparkline,
+    OST_Table,
 };
 
 class ScFormEditData;
@@ -128,6 +132,7 @@ private:
     std::unique_ptr<ScEditShell>         pEditShell;
     std::unique_ptr<ScPivotShell>        pPivotShell;
     std::unique_ptr<sc::SparklineShell>  m_pSparklineShell;
+    std::unique_ptr<ScTableShell>        m_pTableShell;
     std::unique_ptr<ScAuditingShell>     pAuditingShell;
     std::unique_ptr<ScDrawFormShell>     pDrawFormShell;
     std::unique_ptr<ScCellShell>         pCellShell;
@@ -268,11 +273,15 @@ public:
     SC_DLLPUBLIC bool IsRefInputMode() const;
     void            ExecuteInputDirect();
 
-    void HandleDuplicateRecords(const css::uno::Reference<css::sheet::XSpreadsheet>& ActiveSheet,
-                                const css::table::CellRangeAddress& aRange, bool bRemove,
+    void HandleDuplicateRecordsHighlight(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
+                                const css::table::CellRangeAddress& aRange,
                                 bool bIncludesHeaders, bool bDuplicateRows,
                                 const std::vector<int>& rSelectedEntries);
-    css::uno::Reference<css::sheet::XSpreadsheet> GetRangeWithSheet(css::table::CellRangeAddress& rRangeData, bool& bHasData, bool bHasUnoArguments);
+    void HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSheetObj>& ActiveSheet,
+                                const css::table::CellRangeAddress& aRange,
+                                bool bIncludesHeaders, bool bDuplicateRows,
+                                const std::vector<int>& rSelectedEntries);
+    rtl::Reference<ScTableSheetObj> GetRangeWithSheet(css::table::CellRangeAddress& rRangeData, bool& bHasData, bool bHasUnoArguments);
     void            ExtendSingleSelection(css::table::CellRangeAddress& rRangeData);
 
     const ScInputHandler* GetInputHandler() const { return mpInputHandler.get(); }
@@ -332,6 +341,8 @@ public:
 
     void            SetPivotShell( bool bActive );
     void            SetSparklineShell(bool bActive);
+    void            SetTableShell(bool bActive);
+    void            UpdateContextShells();
     void            SetDialogDPObject( std::unique_ptr<ScDPObject> pObj );
     const ScDPObject* GetDialogDPObject() const { return pDialogDPObject.get(); }
 

@@ -137,6 +137,8 @@ class VCLPLUG_QT_PUBLIC QtFrame final : public QObject, public SalFrame
     bool isMaximized() const;
     void SetWindowStateImpl(Qt::WindowStates eState);
 
+    static int toQtKeyCode(sal_uInt16 nVclCode);
+
 private Q_SLOTS:
     void screenChanged(QScreen*);
 

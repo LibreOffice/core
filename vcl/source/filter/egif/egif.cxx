@@ -20,6 +20,8 @@
 
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
+#include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/alpha.hxx>

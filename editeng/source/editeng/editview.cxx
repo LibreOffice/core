@@ -47,6 +47,7 @@
 #include <editeng.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/window.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/unolingu.hxx>

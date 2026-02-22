@@ -826,6 +826,7 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
     }
     if (HostFilter::isExemptVerifyHost(m_URI.GetHost()))
     {
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_SSL_VERIFYPEER, 0L);
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_SSL_VERIFYHOST, 0L);
         assert(rc == CURLE_OK);
     }

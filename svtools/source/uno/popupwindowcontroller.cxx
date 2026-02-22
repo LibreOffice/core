@@ -22,9 +22,12 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/vclevent.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 
 using namespace ::com::sun::star;
 using namespace css::uno;

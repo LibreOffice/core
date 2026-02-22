@@ -32,6 +32,7 @@
 
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <strings.hrc>

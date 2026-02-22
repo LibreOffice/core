@@ -260,6 +260,7 @@ public:
     void loadMailMergeDocument(const OUString& filename)
     {
         assert(mnCurOutputType == text::MailMergeType::FILE);
+        dispose();
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         std::cout << filename << ",";
         loadFromURL(msMailMergeOutputURL + "/" + filename);

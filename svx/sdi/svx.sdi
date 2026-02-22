@@ -357,6 +357,21 @@ SfxVoidItem AutoFormat SID_AUTOFORMAT
     GroupId = SfxGroupId::Format;
 ]
 
+SfxVoidItem ResetAutoFormats SID_RESET_AUTOFORMATS
+(SfxStringItem aFormatName SID_AUTOFORMAT, SfxStringItem aOldName SID_RESET_AUTOFORMATS)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Table;
+]
 
 
 SfxStringItem BackgroundImage SID_GALLERY_BG_BRUSH
@@ -5914,7 +5929,12 @@ SvxULSpaceItem BelowSpacing SID_ATTR_PARA_BELOWSPACE
 
 
 SvxLineItem LineStyle SID_FRAME_LINESTYLE
-(SfxInt16Item LineStyle FN_PARAM_1, SfxInt16Item InnerLineWidth FN_PARAM_2, SfxInt16Item OuterLineWidth FN_PARAM_3, SfxInt16Item LineDistance FN_PARAM_4)
+(
+    SvxLineItem LineStyle SID_FRAME_LINESTYLE,
+    SfxInt16Item InnerLineWidth FN_PARAM_1,
+    SfxInt16Item OuterLineWidth FN_PARAM_2,
+    SfxInt16Item LineDistance FN_PARAM_3
+)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -13290,6 +13310,40 @@ SfxVoidItem GraphicSizeCheck SID_GRAPHIC_SIZE_CHECK
 
 SfxVoidItem ThemeDialog SID_THEME_DIALOG
 ()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+SfxVoidItem AddTheme SID_ADD_THEME
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+SfxVoidItem ApplyTheme SID_APPLY_THEME
+(SfxStringItem ThemeName FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

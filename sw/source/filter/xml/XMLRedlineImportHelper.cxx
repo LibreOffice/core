@@ -470,7 +470,7 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
 
         // create text section for redline
         SwTextFormatColl *pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool
-            (RES_POOLCOLL_STANDARD, false );
+            (SwPoolFormatId::COLL_STANDARD, false );
         SwStartNode* pRedlineNode = pDoc->GetNodes().MakeTextSection(
             pDoc->GetNodes().GetEndOfRedlines(),
             SwNormalStartNode,
@@ -827,7 +827,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         }
         if (pAutoStyle)
         {
-            sal_uInt16 nPoolFormatId = USHRT_MAX;
+            SwPoolFormatId nPoolFormatId = SwPoolFormatId::UNKNOWN;
             SwRedlineExtraData_FormatColl aExtraData(UIName(u""_ustr), nPoolFormatId, pAutoStyle);
             // aExtraData is copied here.
             pRedline->SetExtraData(&aExtraData);

@@ -54,7 +54,12 @@ OUString QtInstanceWindow::get_title() const
     return toOUString(getQWidget()->windowTitle());
 }
 
-void QtInstanceWindow::window_move(int, int) { assert(false && "Not implemented yet"); }
+void QtInstanceWindow::window_move(int x, int y)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getQWidget()->move(x, y); });
+}
 
 bool QtInstanceWindow::get_resizable() const
 {
@@ -85,12 +90,6 @@ Point QtInstanceWindow::get_position() const
     GetQtInstance().RunInMainThread(
         [&] { aPosition = toPoint(getQWidget()->geometry().topLeft()); });
     return aPosition;
-}
-
-AbsoluteScreenPixelRectangle QtInstanceWindow::get_monitor_workarea() const
-{
-    assert(false && "Not implemented yet");
-    return AbsoluteScreenPixelRectangle();
 }
 
 bool QtInstanceWindow::has_toplevel_focus() const
@@ -191,10 +190,33 @@ SystemEnvData QtInstanceWindow::get_system_data() const
 
 void QtInstanceWindow::resize_to_request() { queue_resize(); }
 
+void QtInstanceWindow::collectScreenShotData(QWidget& rWidget,
+                                             weld::ScreenShotCollection& rScreenShotCollection)
+{
+    if (!rWidget.isVisible())
+        return;
+
+    const QRect aGeometry(
+        rWidget.mapTo(rWidget.topLevelWidget(), rWidget.mapFromParent(rWidget.pos())),
+        rWidget.size());
+
+    const basegfx::B2IRange aRange(aGeometry.left(), aGeometry.top(), aGeometry.right(),
+                                   aGeometry.bottom());
+    if (!aGeometry.isEmpty())
+        rScreenShotCollection.emplace_back(QtInstanceWidget::getHelpId(rWidget), aRange);
+
+    for (QObject* pChild : rWidget.children())
+    {
+        if (pChild && pChild->isWidgetType())
+            collectScreenShotData(static_cast<QWidget&>(*pChild), rScreenShotCollection);
+    }
+}
+
 weld::ScreenShotCollection QtInstanceWindow::collect_screenshot_data()
 {
-    assert(false && "Not implemented yet");
-    return weld::ScreenShotCollection();
+    weld::ScreenShotCollection aScreenShotCollection;
+    collectScreenShotData(*getQWidget(), aScreenShotCollection);
+    return aScreenShotCollection;
 }
 
 VclPtr<VirtualDevice> QtInstanceWindow::screenshot()

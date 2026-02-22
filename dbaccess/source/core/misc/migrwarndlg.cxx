@@ -8,6 +8,7 @@
  */
 
 #include <migrwarndlg.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace dbaccess
 {

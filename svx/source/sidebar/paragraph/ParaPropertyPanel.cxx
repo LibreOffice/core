@@ -28,6 +28,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/unitconv.hxx>
+#include <tools/mapunit.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -125,6 +126,7 @@ void ParaPropertyPanel::HandleContextChange (
         case CombinedEnumContext(Application::Calc, Context::Cell):
         case CombinedEnumContext(Application::Calc, Context::Pivot):
         case CombinedEnumContext(Application::Calc, Context::Sparkline):
+        case CombinedEnumContext(Application::Calc, Context::Table):
         case CombinedEnumContext(Application::DrawImpress, Context::Text):
         case CombinedEnumContext(Application::DrawImpress, Context::OutlineText):
             set_hyphenation_base_visible(false);

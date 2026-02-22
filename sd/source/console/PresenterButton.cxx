@@ -234,14 +234,14 @@ void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
 void SAL_CALL PresenterButton::mousePressed (const css::awt::MouseEvent&)
 {
     ThrowIfDisposed();
-    meState = PresenterBitmapDescriptor::ButtonDown;
+    meState = PresenterBitmapDescriptor::Normal;
 }
 
 void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent&)
 {
     ThrowIfDisposed();
 
-    if (meState == PresenterBitmapDescriptor::ButtonDown)
+    if (meState == PresenterBitmapDescriptor::Normal)
     {
         OSL_ASSERT(mpPresenterController);
         mpPresenterController->DispatchUnoCommand(msAction);

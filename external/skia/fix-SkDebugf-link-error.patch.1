@@ -1,20 +1,21 @@
-diff -ur skia.org/src/ports/SkDebug_stdio.cpp skia/src/ports/SkDebug_stdio.cpp
---- skia.org/src/ports/SkDebug_stdio.cpp	2023-07-09 19:30:53.272682125 +0200
-+++ skia/src/ports/SkDebug_stdio.cpp	2023-07-09 19:34:44.812723870 +0200
-@@ -5,6 +5,7 @@
-  * found in the LICENSE file.
-  */
- 
-+#include "include/private/base/SkAPI.h"
+diff -ur skia/src/base/SkDebug.cpp skia/src/base/SkDebug.cpp
+--- skia/src/base/SkDebug.cpp	2023-07-09 19:30:53.272682125 +0200
++++ skia/src/base/SkDebug.cpp	2023-07-09 19:34:44.812723870 +0200
+@@ -7,7 +7,7 @@
  #include "include/private/base/SkDebug.h"
- #include "include/private/base/SkFeatures.h"
- #include "include/private/base/SkLoadUserConfig.h"
-@@ -13,7 +14,7 @@
- #include <stdarg.h>
- #include <stdio.h>
  
+ #include <cstdarg>
+-
++#include "include/private/base/SkAPI.h"
+ #include "include/private/base/SkAssert.h" // IWYU pragma: keep
+ #include "include/private/base/SkAttributes.h" // IWYU pragma: keep
+ #include "include/private/base/SkLog.h"
+@@ -19,7 +19,7 @@
+ #endif
+ 
+ #if !defined(SkDebugf)
 -void SkDebugf(const char format[], ...) {
 +SK_API void SkDebugf(const char format[], ...) {
      va_list args;
      va_start(args, format);
- #pragma GCC diagnostic push
+     SkLogVAList(SkLogPriority::kDebug, format, args);

@@ -17,10 +17,14 @@
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/numvset.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 namespace {
 

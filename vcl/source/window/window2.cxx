@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 
 #include <tools/helpers.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/event.hxx>

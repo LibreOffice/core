@@ -103,9 +103,9 @@ include/editeng/unotext.hxx:628
 include/filter/msfilter/svdfppt.hxx:541
     ProcessData aBackgroundColoredObjects ::std::vector<rtl::Reference<SdrObject> >
 include/LibreOfficeKit/LibreOfficeKitGtk.h:41
-    _LOKDocView aDrawingArea GtkDrawingArea
+    LOKDocViewStruct aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:46
-    _LOKDocViewClass parent_class GtkDrawingAreaClass
+    LOKDocViewClassStruct parent_class GtkDrawingAreaClass
 include/oox/vml/vmlshapecontext.hxx:117
     oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>
 include/registry/registry.hxx:34

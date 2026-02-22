@@ -51,6 +51,7 @@
 #include <svl/PasswordHelper.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
+#include <test/commontesttools.hxx>
 #include <vcl/image.hxx>
 
 #include <docufld.hxx> // for SwHiddenTextField::ParseIfFieldDefinition() method call
@@ -67,16 +68,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testMathObjectFlatExport)
 {
-    comphelper::ScopeGuard g([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Cache::Writer::OLE_Objects::set(20, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Cache::Writer::OLE_Objects::set(1, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Cache::Writer::OLE_Objects> aCfg(1);
     createSwDoc("2_MathType3.docx");
     saveAndReload(TestFilter::FODT); // doesn't happen with ODF package
 
@@ -493,12 +485,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFramebackgrounds)
 CPPUNIT_TEST_FIXTURE(Test, testSHA1Correct)
 {   // tdf#114939 this has both an affected password as well as content.xml
     const char* const sPass = "1012345678901234567890123456789012345678901234567890";
-    createSwDoc("sha1_correct.odt", sPass);
+    createSwDoc("sha1_correct.odt", /*rParams*/ {}, sPass);
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     getParagraph(1, u"012"_ustr);
 
-    saveAndReload(TestFilter::ODT, sPass);
+    saveAndReload(TestFilter::ODT, /*rParams*/ {}, sPass);
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     getParagraph(1, u"012"_ustr);
@@ -507,12 +499,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSHA1Correct)
 CPPUNIT_TEST_FIXTURE(Test, testSHA1Wrong)
 {   // tdf#114939 this has both an affected password as well as content.xml
     const char* const sPass = "1012345678901234567890123456789012345678901234567890";
-    createSwDoc("sha1_wrong.odt", sPass);
+    createSwDoc("sha1_wrong.odt", /*rParams*/ {}, sPass);
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     getParagraph(1, u"012"_ustr);
 
-    saveAndReload(TestFilter::ODT, sPass);
+    saveAndReload(TestFilter::ODT, /*rParams*/ {}, sPass);
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     getParagraph(1, u"012"_ustr);
@@ -915,17 +907,9 @@ DECLARE_ODFEXPORT_TEST(testTdf115815, "tdf115815.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo58949)
 {
-    comphelper::ScopeGuard g([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(true, pBatch);
-        pBatch->commit();
-    });
+    ScopedConfigValue<officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath> aCfg(
+        false);
 
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::set(false, pBatch);
-    pBatch->commit();
     createSwDoc("fdo58949.docx");
     saveAndReload(TestFilter::ODT);
 

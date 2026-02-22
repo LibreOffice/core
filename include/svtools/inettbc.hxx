@@ -22,14 +22,16 @@
 #include <memory>
 #include <rtl/ref.hxx>
 #include <svtools/svtdllapi.h>
-#include <tools/urlobj.hxx>
 
 #include <vcl/idle.hxx>
 #include <vcl/weld/ComboBox.hxx>
-#include <vcl/weld/weld.hxx>
 
 class SvtMatchContext_Impl;
 class SvtURLBox_Impl;
+
+enum class INetProtocol;
+
+namespace weld { class Widget; }
 
 class SVT_DLLPUBLIC SvtURLBox
 {

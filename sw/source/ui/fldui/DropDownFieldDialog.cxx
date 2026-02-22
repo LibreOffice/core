@@ -22,6 +22,9 @@
 #include <DropDownFieldDialog.hxx>
 #include <flddropdown.hxx>
 
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+
 #include <memory>
 
 using namespace ::com::sun::star;

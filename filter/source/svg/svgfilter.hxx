@@ -33,6 +33,7 @@
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <comphelper/errcode.hxx>
 #include <editeng/flditem.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>

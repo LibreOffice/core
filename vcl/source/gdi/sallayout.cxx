@@ -36,6 +36,7 @@
 
 #include <i18nlangtag/lang.h>
 
+#include <vcl/glyphitem.hxx>
 #include <vcl/svapp.hxx>
 
 #include <algorithm>

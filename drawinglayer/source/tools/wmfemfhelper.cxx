@@ -21,8 +21,10 @@
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/BitmapColor.hxx>
+#include <vcl/fntstyle.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
@@ -48,6 +50,7 @@
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <sal/log.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/gradient.hxx>

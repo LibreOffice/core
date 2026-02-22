@@ -136,7 +136,7 @@ class I18NUTIL_DLLPUBLIC PaperInfo
     tools::Long m_nPaperHeight; // height in 100thMM
 public:
     PaperInfo(Paper eType);
-    PaperInfo(tools::Long nPaperWidth, tools::Long nPaperHeight);
+    PaperInfo(tools::Long nPaperWidth, tools::Long nPaperHeight, bool bAlsoTryRotated = false);
 
     Paper getPaper() const { return m_eType; }
     tools::Long getWidth() const { return m_nPaperWidth; }

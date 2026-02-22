@@ -40,6 +40,8 @@
 #include <osl/diagnose.h>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 static bool bLastRelative = false;
 
@@ -896,8 +898,8 @@ void SwSvxNumBulletTabDialog::PageCreated(const OUString& rPageId, SfxTabPage& r
 {
     // set styles' names and metric
     UIName sNumCharFormat, sBulletCharFormat;
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFormat );
-    SwStyleNameMapper::FillUIName( RES_POOLCHR_BULLET_LEVEL, sBulletCharFormat );
+    SwStyleNameMapper::FillUIName( SwPoolFormatId::CHR_NUM_LEVEL, sNumCharFormat );
+    SwStyleNameMapper::FillUIName( SwPoolFormatId::CHR_BULLET_LEVEL, sBulletCharFormat );
 
     if (rPageId == "singlenum")
     {

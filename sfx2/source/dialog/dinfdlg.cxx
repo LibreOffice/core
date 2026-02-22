@@ -24,6 +24,8 @@
 #include <tools/urlobj.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <unotools/datetime.hxx>
@@ -1475,18 +1477,18 @@ namespace
 {
     void fillNameBox(weld::ComboBox& rNameBox)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_CB_PROPERTY_STRINGARRAY); ++i)
-            rNameBox.append_text(SfxResId(SFX_CB_PROPERTY_STRINGARRAY[i]));
+        for (const auto& rResId : SFX_CB_PROPERTY_STRINGARRAY)
+            rNameBox.append_text(SfxResId(rResId));
         Size aSize(rNameBox.get_preferred_size());
         rNameBox.set_size_request(aSize.Width(), aSize.Height());
     }
 
     void fillTypeBox(weld::ComboBox& rTypeBox)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(SFX_LB_PROPERTY_STRINGARRAY); ++i)
+        for (const auto& [rResId, rProperty] : SFX_LB_PROPERTY_STRINGARRAY)
         {
-            OUString sId(OUString::number(SFX_LB_PROPERTY_STRINGARRAY[i].second));
-            rTypeBox.append(sId, SfxResId(SFX_LB_PROPERTY_STRINGARRAY[i].first));
+            OUString sId(OUString::number(rProperty));
+            rTypeBox.append(sId, SfxResId(rResId));
         }
         rTypeBox.set_active(0);
         Size aSize(rTypeBox.get_preferred_size());

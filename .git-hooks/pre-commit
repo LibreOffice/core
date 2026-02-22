@@ -6,17 +6,15 @@
 # if it wants to stop the commit.
 
 use strict;
-use lib "solenv/clang-format";
-#use File::Copy;
-#use Cwd;
+use lib 'solenv/clang-format';
 
-$ENV{LC_ALL} = "C";
+$ENV{LC_ALL} = 'C';
 
 sub check_whitespaces($)
 {
-    my ($h) = @_;
+    my $h = shift;
     my $src_limited = "bas|c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|MK|mm|pmk|pl|pm|sdi|sh|src|tab|ui|vb|xcu|xml|xsl|py";
-    my $src_full = "bas|c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|mk|MK|mm|pmk|pl|pm|sdi|sh|src|tab|ui|vb|xcu|xml|xsl|py";
+    my $src_full = $src_limited . "|mk";
 
     my %modules = (basctl=>'basctl', chart2=>'chart', cui=>'cui', dbaccess=>'dba', desktop=>'dkt', editeng=>'editeng',
                    extensions=>'pcr', filter=>'flt', formula=>'for', fpicker=>'fps', framework=>'fwk', reportdesign=>'rpt',
@@ -27,6 +25,7 @@ sub check_whitespaces($)
     my $filename;
     my $reported_filename = "";
     my $lineno;
+
     sub bad_line
     {
         my ($why, $line, $file_filter) = @_;
@@ -176,32 +175,26 @@ sub check_author()
 
 sub check_style($)
 {
-    if (! -e "solenv/clang-format/ClangFormat.pm")
+    eval { require ClangFormat }; # see use lib on top of the file
+    if ($@) # exception
     {
         # Commit happens in a submodule.
         return;
     }
 
-    require ClangFormat;
-    ClangFormat->import();
-
-    my ($h) = @_;
+    my $h = shift;
     my $src = ClangFormat::get_extension_regex();
     my @bad_names = ();
     my @bad_renames = ();
     my $clang_format = ClangFormat::find();
 
-    ## Check if ClangFormat has get_excludelist or the old
-    ## get_blacklist
-    my $excluded_list_names;
-    eval    { ClangFormat::get_excludelist() };
-    if ($@) { $excluded_list_names = ClangFormat::get_blacklist(); }
-    else    { $excluded_list_names = ClangFormat::get_excludelist(); }
+    ## Check if ClangFormat has get_excludelist
+    my $excluded_list_names = ClangFormat::get_excludelist();
 
     # Get a list of renamed files.
     my %renames; # key is target pathname, value is source pathname
     open (IN, "git diff-index --cached --find-renames --diff-filter=R --name-status $h |")
-        || die "Cannot run git diff.";
+        or die "Cannot run git diff.";
     while (my $line = <IN>)
     {
         chomp $line;
@@ -210,7 +203,7 @@ sub check_style($)
     }
 
     # Get a list of non-deleted changed files.
-    open (FILES, "git diff-index --cached --diff-filter=AM --name-only $h |") ||  die "Cannot run git diff.";
+    open (FILES, "git diff-index --cached --diff-filter=AM --name-only $h |") or  die "Cannot run git diff.";
     while (my $filename = <FILES>)
     {
         chomp $filename;
@@ -317,7 +310,7 @@ sub check_style($)
 
 sub check_submodules($)
 {
-    my ($h) = @_;
+    my $h = shift;
 
     my $toplevel = `git rev-parse --show-toplevel`;
     chomp $toplevel;

@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/alloca.h>
 

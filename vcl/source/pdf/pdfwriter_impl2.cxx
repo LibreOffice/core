@@ -21,9 +21,11 @@
 
 #include <vcl/dibtools.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/graph.hxx>
 #include <pdf/IPDFEncryptor.hxx>
@@ -32,6 +34,7 @@
 
 #include <tools/helpers.hxx>
 #include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 
 #include <comphelper/fileformat.h>

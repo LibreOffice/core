@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/dialog/TableAutoFmtDlg.hxx>
 #include <dbinsdlg.hxx>
 
 #include <float.h>
@@ -42,6 +43,8 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <utility>
 #include <vcl/mnemonic.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <svl/style.hxx>
 #include <svl/zformat.hxx>
 #include <sfx2/htmlmode.hxx>
@@ -533,8 +536,8 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, weld::Button&, rButton, void 
 
         m_xLbTableDbColumn->clear();
         m_xLbTableCol->clear();
-        for (size_t n = 0; n < m_aDBColumns.size(); ++n)
-            m_xLbTableDbColumn->append_text(m_aDBColumns[n]->sColumn);
+        for (const auto& pColumn : m_aDBColumns)
+            m_xLbTableDbColumn->append_text(pColumn->sColumn);
 
         m_xLbTableDbColumn->thaw();
         m_xLbTableCol->thaw();
@@ -737,20 +740,15 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwInsertDBColAutoPilot, AutoFormatHdl, weld::Button&, void)
 {
-    SwAbstractDialogFactory& rFact = swui::GetFactory();
+    SwTableAutoFormatTable* pFormat(new SwTableAutoFormatTable);
+    SwWrtShell* rSh = m_rView.GetWrtShellPtr();
+    bool bRTL = rSh->IsCursorInTable() ? rSh->IsTableRightToLeft() : AllSettings::GetLayoutRTL();
 
-    VclPtr<AbstractSwAutoFormatDlg> pDlg(rFact.CreateSwAutoFormatDlg(m_xDialog.get(), m_rView.GetWrtShellPtr(), false, m_xTAutoFormat.get()));
-    pDlg->StartExecuteAsync(
-        [this, pDlg] (sal_Int32 nResult)->void
-        {
-            if (nResult == RET_OK)
-            {
-                pDlg->Apply();
-                m_xTAutoFormat = pDlg->FillAutoFormatOfIndex();
-            }
-            pDlg->disposeOnce();
-        }
-    );
+    SvxTableAutoFmtDlg aDlg(rSh->GetDoc()->GetTableStyles(), OUString(), m_xDialog.get(), true, bRTL);
+    if (aDlg.run() == RET_OK)
+    {
+        rSh->SetTableStyle(*pFormat->GetData(aDlg.GetIndex()));
+    }
 }
 
 IMPL_LINK(SwInsertDBColAutoPilot, TVSelectHdl, weld::TreeView&, rBox, void)
@@ -1177,9 +1175,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     pColl = rSh.FindTextFormatCollByName( UIName(sTmplNm) );
                     if( !pColl )
                     {
-                        const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+                        const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(
                             UIName(sTmplNm), SwGetPoolIdFromName::TxtColl );
-                        if( USHRT_MAX != nId )
+                        if( SwPoolFormatId::UNKNOWN != nId )
                             pColl = rSh.GetTextCollFromPool( nId );
                         else
                             pColl = rSh.MakeTextFormatColl( UIName(sTmplNm) );
@@ -1560,7 +1558,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
         pSubValues[3].Value <<= pColumn->bIsDBFormat;
 
         UIName sTmpUIName;
-        SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sTmpUIName );
+        SwStyleNameMapper::FillUIName( SwPoolFormatId::COLL_STANDARD, sTmpUIName );
         const SvNumberformat* pNF = rNFormatr.GetEntry( pColumn->nUsrNumFormat );
         LanguageType eLang;
         if( pNF )

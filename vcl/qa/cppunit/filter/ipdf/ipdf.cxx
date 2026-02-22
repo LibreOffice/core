@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     // Open it.
     uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) };
-    loadWithParams(maTempFile.GetURL(), aArgs);
+    loadFromURL(maTempFile.GetURL(), aArgs);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();

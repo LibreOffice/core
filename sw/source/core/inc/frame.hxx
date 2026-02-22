@@ -414,11 +414,11 @@ class SAL_DLLPUBLIC_RTTI SwFrame : public SwFrameAreaDefinition, public SwClient
     void UpdateAttrFrame( const SfxPoolItem*, const SfxPoolItem*, SwFrameInvFlags & );
     static void UpdateAttrFrameForFormatChange( SwFrameInvFlags & );
     SwFrame* GetIndNext_();
-    void SetDirFlags( bool bVert );
+    SW_DLLPUBLIC void SetDirFlags( bool bVert );
 
     const SwLayoutFrame* ImplGetNextLayoutLeaf( bool bFwd ) const;
 
-    SwPageFrame* ImplFindPageFrame();
+    SW_DLLPUBLIC SwPageFrame* ImplFindPageFrame();
 
 protected:
     std::unique_ptr<SwSortedObjs> m_pDrawObjs; // draw objects, can be null
@@ -976,6 +976,8 @@ public:
 
     /// Determines if the upper margin of this frame should be ignored.
     bool IsCollapseUpper() const;
+
+    bool IsInSplitButNotYetMovedFollow() const;
 };
 
 inline void SwFrame::InvalidateInfFlags()

@@ -34,10 +34,12 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Menu.hxx>
 
 #include <unordered_map>
 

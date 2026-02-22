@@ -101,7 +101,19 @@ protected:
         sal_Int16 rBreakType, sal_Int16 rWordType, const char* name, const OUString& rText);
 
 public:
-    typedef std::unordered_map< OString, std::shared_ptr< BI_ValueData > > BIMap;
+    struct StringHash
+    {
+        using is_transparent = void;
+        std::size_t operator()(const OString& v) const
+        {
+            return v.hashCode();
+        }
+        std::size_t operator()(std::string_view s) const
+        {
+            return rtl_str_hashCode_WithLength(s.data(), s.size());
+        }
+    };
+    typedef std::unordered_map< OString, std::shared_ptr< BI_ValueData >, StringHash, std::equal_to<> > BIMap;
 };
 
 }

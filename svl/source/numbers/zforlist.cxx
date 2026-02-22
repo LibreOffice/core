@@ -509,6 +509,31 @@ void SvNFLanguageData::ChangeStandardPrec(short nPrec)
     pFormatScanner->ChangeStandardPrec(nPrec);
 }
 
+sal_uInt16 SvNFLanguageData::GetStandardPrec() const
+{
+    return pFormatScanner->GetStandardPrec();
+}
+
+const OUString& SvNFLanguageData::GetTrueString() const
+{
+    return pFormatScanner->GetTrueString();
+}
+
+const OUString& SvNFLanguageData::GetFalseString() const
+{
+    return pFormatScanner->GetFalseString();
+}
+
+const OUString& SvNFLanguageData::GetCurAbbrev() const
+{
+    return pFormatScanner->GetCurAbbrev();
+}
+
+const NfKeywordTable& SvNFLanguageData::GetKeywords() const
+{
+    return pFormatScanner->GetKeywords();
+}
+
 const Date& SvNumberFormatter::GetNullDate() const
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );

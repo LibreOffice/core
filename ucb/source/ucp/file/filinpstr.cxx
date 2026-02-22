@@ -30,12 +30,6 @@
 using namespace fileaccess;
 using namespace com::sun::star;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 XInputStream_impl::XInputStream_impl( const OUString& aUncPath, bool bLock )
     : m_aFile( aUncPath ),
       m_nErrorCode( TaskHandlerErr::NO_ERROR ),
@@ -80,7 +74,7 @@ XInputStream_impl::readBytes(
                  uno::Sequence< sal_Int8 >& aData,
                  sal_Int32 nBytesToRead )
 {
-    if( ! m_nIsOpen ) throw io::IOException( THROW_WHERE );
+    if( ! m_nIsOpen ) throw io::IOException();
 
     aData.realloc(nBytesToRead);
         //TODO! translate memory exhaustion (if it were detectable...) into
@@ -89,7 +83,7 @@ XInputStream_impl::readBytes(
     sal_uInt64 nrc(0);
     if(m_aFile.read( aData.getArray(),sal_uInt64(nBytesToRead),nrc )
        != osl::FileBase::E_None)
-        throw io::IOException( THROW_WHERE );
+        throw io::IOException();
 
     // Shrink aData in case we read less than nBytesToRead (XInputStream
     // documentation does not tell whether this is required, and I do not know
@@ -104,7 +98,7 @@ XInputStream_impl::readSomeBytes(
                  sal_Int8* aData,
                  sal_Int32 nBytesToRead )
 {
-    if( ! m_nIsOpen ) throw io::IOException( THROW_WHERE );
+    if( ! m_nIsOpen ) throw io::IOException();
 
         //TODO! translate memory exhaustion (if it were detectable...) into
         // io::BufferSizeExceededException
@@ -112,7 +106,7 @@ XInputStream_impl::readSomeBytes(
     sal_uInt64 nrc(0);
     if(m_aFile.read( aData, sal_uInt64(nBytesToRead),nrc )
        != osl::FileBase::E_None)
-        throw io::IOException( THROW_WHERE );
+        throw io::IOException();
 
     return static_cast<sal_Int32>(nrc);
 }
@@ -148,7 +142,7 @@ XInputStream_impl::closeInput()
     {
         osl::FileBase::RC err = m_aFile.close();
         if( err != osl::FileBase::E_None )
-            throw io::IOException( THROW_WHERE );
+            throw io::IOException();
         m_nIsOpen = false;
     }
 }
@@ -158,9 +152,9 @@ void SAL_CALL
 XInputStream_impl::seek( sal_Int64 location )
 {
     if( location < 0 )
-        throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+        throw lang::IllegalArgumentException( u""_ustr, uno::Reference< uno::XInterface >(), 0 );
     if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
-        throw io::IOException( THROW_WHERE );
+        throw io::IOException();
 }
 
 
@@ -169,7 +163,7 @@ XInputStream_impl::getPosition()
 {
     sal_uInt64 uPos;
     if( osl::FileBase::E_None != m_aFile.getPos( uPos ) )
-        throw io::IOException( THROW_WHERE );
+        throw io::IOException();
     return sal_Int64( uPos );
 }
 
@@ -178,7 +172,7 @@ XInputStream_impl::getLength()
 {
     sal_uInt64 uEndPos;
     if ( m_aFile.getSize(uEndPos) != osl::FileBase::E_None )
-        throw io::IOException( THROW_WHERE );
+        throw io::IOException();
     return sal_Int64( uEndPos );
 }
 

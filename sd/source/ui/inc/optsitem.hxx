@@ -76,7 +76,6 @@ private:
     bool                    mbEnableModify  : 1;
 
     SAL_DLLPRIVATE void Commit( SdOptionsItem& rCfgItem ) const;
-    SAL_DLLPRIVATE css::uno::Sequence< OUString > GetPropertyNames() const;
 
 protected:
 
@@ -85,7 +84,7 @@ protected:
 
 protected:
 
-    virtual void            GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const = 0;
+    virtual css::uno::Sequence< OUString > GetPropertyNames() const = 0;
     virtual bool            ReadData( const css::uno::Any* pValues ) = 0;
     virtual bool            WriteData( css::uno::Any* pValues ) const = 0;
 
@@ -153,7 +152,7 @@ private:
 
 protected:
 
-    virtual void GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const override;
+    virtual css::uno::Sequence< OUString > GetPropertyNames() const  override;
     virtual bool ReadData( const css::uno::Any* pValues ) override;
     virtual bool WriteData( css::uno::Any* pValues ) const override;
 
@@ -260,7 +259,7 @@ class SdOptionsGrid : public SdOptionsGeneric, public SvxOptionsGrid
 {
 protected:
 
-    virtual void GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const override;
+    virtual css::uno::Sequence< OUString > GetPropertyNames() const  override;
     virtual bool ReadData( const css::uno::Any* pValues ) override;
     virtual bool WriteData( css::uno::Any* pValues ) const override;
 
@@ -326,7 +325,7 @@ private:
 
 protected:
 
-    virtual void GetPropNameArray( const char* const*& ppNames, sal_uLong& rCount ) const override;
+    virtual css::uno::Sequence< OUString > GetPropertyNames() const  override;
     virtual bool ReadData( const css::uno::Any* pValues ) override;
     virtual bool WriteData( css::uno::Any* pValues ) const override;
 

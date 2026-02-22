@@ -12,12 +12,13 @@
 
 #include <sal/config.h>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <libxml/tree.h>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <rtl/ustring.hxx>
 #include <test/xmldocptr.hxx>
 #include <vector>
 
 namespace tools { class XmlWriter; }
+namespace drawinglayer::primitive2d { class BasePrimitive2D; }
+namespace drawinglayer::primitive2d { class Primitive2DContainer; }
 
 namespace drawinglayer
 {

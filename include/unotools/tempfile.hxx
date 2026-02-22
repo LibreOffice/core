@@ -26,10 +26,13 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <tools/stream.hxx>
 #include <memory>
 #include <mutex>
 #include <optional>
+
+class SvFileStream;
+class SvStream;
+enum class StreamMode;
 
 namespace utl
 {

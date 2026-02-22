@@ -27,6 +27,8 @@
 #include <wrtsh.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -69,6 +71,7 @@ constexpr std::pair<OUString, TranslateId> options_list[]{
     { u"MsWordUlTrailSpace"_ustr, STR_COMPAT_OPT_UNDERLINETRAILINGSPACE },
     { u"BalanceSpacesAndIdeographicSpaces"_ustr, STR_COMPAT_OPT_BALANCESPACESANDIDEOGRAPHICSPACES },
     { u"AdjustTableLineHeightsToGridHeight"_ustr, STR_COMPAT_OPT_ADJUSTTABLELINEHEIGHTSTOGRIDHEIGHT },
+    { u"ListLabelAlignmentIgnoresDirection"_ustr, STR_COMPAT_OPT_LISTLABELALIGNMENTIGNORESDIRECTION },
 };
 
 // DocumentSettingId, negate?
@@ -101,6 +104,7 @@ std::pair<DocumentSettingId, bool> DocumentSettingForOption(const OUString& opti
         { u"MsWordUlTrailSpace"_ustr, { DocumentSettingId::MS_WORD_UL_TRAIL_SPACE, false } },
         { u"BalanceSpacesAndIdeographicSpaces"_ustr, { DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, false } },
         { u"AdjustTableLineHeightsToGridHeight"_ustr, { DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT, false } },
+        { u"ListLabelAlignmentIgnoresDirection"_ustr, { DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION, false } },
     };
     return map.at(option);
 }
@@ -358,6 +362,10 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT:
                         m_pWrtShell->SetAdjustTableLineHeightsToGridHeight(bChecked);
+                        break;
+
+                    case DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION:
+                        m_pWrtShell->SetListLabelAlignmentIgnoresDirection(bChecked);
                         break;
 
                     default:

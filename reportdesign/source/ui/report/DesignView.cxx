@@ -36,6 +36,7 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <algorithm>
 

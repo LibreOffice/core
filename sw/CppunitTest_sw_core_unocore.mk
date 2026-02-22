@@ -77,4 +77,8 @@ $(call gb_CppunitTest_get_target,sw_core_unocore): \
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_core_unocore))
 
+$(eval $(call gb_CppunitTest_add_arguments,sw_core_unocore, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:

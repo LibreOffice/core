@@ -33,6 +33,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/statusitem.hxx>
 

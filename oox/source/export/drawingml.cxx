@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <oox/drawingml/diagram/diagramhelper_oox.hxx>
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
@@ -120,8 +121,10 @@
 #include <unotools/fontdefs.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/gfxlink.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <rtl/strbuf.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
@@ -141,7 +144,7 @@
 #include <drawingml/presetgeometrynames.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -250,11 +253,6 @@ void WriteGradientPath(const basegfx::BGradient& rBGradient, const FSHelperPtr& 
 }
 }
 
-// not thread safe
-sal_Int32 DrawingML::mnDrawingMLCount = 0;
-sal_Int32 DrawingML::mnVmlCount = 0;
-sal_Int32 DrawingML::mnChartCount = 0;
-
 DrawingML::DrawingML(::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport)
     : meDocumentType(eDocumentType)
     , mpTextExport(pTextExport)
@@ -262,6 +260,7 @@ DrawingML::DrawingML(::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBa
     , mpFB(pFB)
     , mbIsBackgroundDark(false)
     , mbPlaceholder(false)
+    , mbDiagaramExport(false)
 {
     uno::Reference<beans::XPropertySet> xSettings(pFB->getModelFactory()->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     if (xSettings.is())
@@ -298,13 +297,6 @@ sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
     }
 
     return css::i18n::ScriptType::LATIN;
-}
-
-void DrawingML::ResetMlCounters()
-{
-    mnDrawingMLCount = 0;
-    mnVmlCount = 0;
-    mnChartCount = 0;
 }
 
 bool DrawingML::GetProperty( const Reference< XPropertySet >& rXPropertySet, const OUString& aName )
@@ -1688,39 +1680,6 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
     {
         eMediaType = Relationship::AUDIO;
     }
-    else
-    if (aMimeType == "application/vnd.sun.star.media")
-    {
-        // try to set something better
-        // TODO fix the importer to actually set the mimetype on import
-        if (aExtension.equalsIgnoreAsciiCase(".avi"))
-            aMimeType = "video/x-msvideo";
-        else if (aExtension.equalsIgnoreAsciiCase(".flv"))
-            aMimeType = "video/x-flv";
-        else if (aExtension.equalsIgnoreAsciiCase(".mp4"))
-            aMimeType = "video/mp4";
-        else if (aExtension.equalsIgnoreAsciiCase(".mov"))
-            aMimeType = "video/quicktime";
-        else if (aExtension.equalsIgnoreAsciiCase(".ogv"))
-            aMimeType = "video/ogg";
-        else if (aExtension.equalsIgnoreAsciiCase(".wmv"))
-            aMimeType = "video/x-ms-wmv";
-        else if (aExtension.equalsIgnoreAsciiCase(".wav"))
-        {
-            aMimeType = "audio/x-wav";
-            eMediaType = Relationship::AUDIO;
-        }
-        else if (aExtension.equalsIgnoreAsciiCase(".m4a"))
-        {
-            aMimeType = "audio/mp4";
-            eMediaType = Relationship::AUDIO;
-        }
-        else if (aExtension.equalsIgnoreAsciiCase(".mp3"))
-        {
-            aMimeType = "audio/mp3";
-            eMediaType = Relationship::AUDIO;
-        }
-    }
 
     OUString aVideoFileRelId;
     OUString aMediaRelId;
@@ -1831,7 +1790,10 @@ void DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const & rX
 
     sRelId = writeGraphicToStorage(aGraphic, bRelPathToMedia);
 
-    mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
+    if (isDiagaramExport())
+        mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_r, XML_embed), sRelId);
+    else
+        mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
 
     const auto& pVectorGraphicDataPtr = aGraphic.getVectorGraphicData();
 
@@ -2332,12 +2294,12 @@ void DrawingML::WriteTransformation(const Reference< XShape >& xShape, const too
 
     if (bIsGroupShape && (GetDocumentType() != DOCUMENT_DOCX || IsTopGroupObj(xShape)))
     {
-        mpFS->singleElementNS(XML_a, XML_chOff,
-            XML_x, OString::number(oox::drawingml::convertHmmToEmu(nChildLeft)),
-            XML_y, OString::number(oox::drawingml::convertHmmToEmu(nChildTop)));
-        mpFS->singleElementNS(XML_a, XML_chExt,
-            XML_cx, OString::number(oox::drawingml::convertHmmToEmu(rRect.GetWidth())),
-            XML_cy, OString::number(oox::drawingml::convertHmmToEmu(rRect.GetHeight())));
+        nX = std::min(oox::drawingml::convertHmmToEmu(nChildLeft), MAX_SIZE);
+        nY = std::min(oox::drawingml::convertHmmToEmu(nChildTop), MAX_SIZE);
+        mpFS->singleElementNS(
+            XML_a, XML_chOff, XML_x, OString::number(nX), XML_y, OString::number(nY));
+        mpFS->singleElementNS(
+            XML_a, XML_chExt, XML_cx, OString::number(nCx), XML_cy, OString::number(nCy));
     }
 
     mpFS->endElementNS( nXmlNamespace, XML_xfrm );
@@ -2356,6 +2318,25 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     bool bFlipVWrite = bFlipV && !bSuppressFlipping;
     bFlipH = bFlipH && !bFlippedBeforeRotation;
     bFlipV = bFlipV && !bFlippedBeforeRotation;
+
+    if (isDiagaramExport())
+    {
+        // need to offset from top-left of Diagram's GroupObject
+        SdrObject* pShape(SdrObject::getSdrObjectFromXShape(rXShape));
+
+        if (nullptr != pShape)
+        {
+            std::shared_ptr< svx::diagram::DiagramHelper_svx > pDiagramHelper(pShape->getDiagramHelperFromDiagramOrMember());
+
+            if (pDiagramHelper)
+            {
+                const Reference< XShape >& rRootShape(pDiagramHelper->getRootShape());
+                awt::Point aRootPos = rRootShape->getPosition();
+                aPos.X -= aRootPos.X;
+                aPos.Y -= aRootPos.Y;
+            }
+        }
+    }
 
     if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
     {
@@ -2926,11 +2907,18 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                                             sURL, bExtURL);
                 }
                 if (bExtURL)
-                    mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+                {
+                    if (isDiagaramExport())
+                        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)), FSNS(XML_r, XML_id), sRelId);
+                    else
+                        mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId);
+                }
                 else
+                {
                     mpFS->singleElementNS(
                         XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId, XML_action,
                         sURL.isEmpty() ? "ppaction://noaction" : "ppaction://hlinksldjump");
+                }
             }
             else
             {
@@ -3505,24 +3493,34 @@ sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >
     return 0;
 }
 
-const char* DrawingML::GetAlignment( style::ParagraphAdjust nAlignment, bool bPlaceHolder )
+const char* DrawingML::GetAlignment( style::ParagraphAdjust nAlignment, bool bRTL, bool bPlaceHolder )
 {
     const char* sAlignment = nullptr;
 
     switch( nAlignment )
     {
+        case style::ParagraphAdjust_START:
+            if (bRTL)
+                sAlignment = "r";
+            else if (bPlaceHolder)
+                sAlignment = "l";
+            break;
+        case style::ParagraphAdjust_END:
+            if (bRTL && bPlaceHolder)
+                sAlignment = "l";
+            else
+                sAlignment = "r";
+            break;
         case style::ParagraphAdjust_CENTER:
             sAlignment = "ctr";
             break;
         case style::ParagraphAdjust_RIGHT:
-        case style::ParagraphAdjust_END:
             sAlignment = "r";
             break;
         case style::ParagraphAdjust_BLOCK:
             sAlignment = "just";
             break;
         case style::ParagraphAdjust_LEFT:
-        case style::ParagraphAdjust_START:
             if (bPlaceHolder) // in case of PPTX placeholder objects, "l" is necessary for MSO
                 sAlignment = "l";
             break;
@@ -3665,7 +3663,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
                            XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nOutLevel > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number((bForceZeroIndent && nParaFirstLineIndent == 0) ? 0 : oox::drawingml::convertHmmToEmu(nParaFirstLineIndent)), (bForceZeroIndent || nParaFirstLineIndent != 0)),
-                           XML_algn, GetAlignment( nAlignment, mbPlaceholder ),
+                           XML_algn, GetAlignment( nAlignment, bRtl, mbPlaceholder ),
                            XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
     else
@@ -3673,7 +3671,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
                            XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nOutLevel > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number(!bForceZeroIndent ? oox::drawingml::convertHmmToEmu(nLineIndentation) : 0), (bForceZeroIndent || ( nLineIndentation != 0))),
-                           XML_algn, GetAlignment( nAlignment, mbPlaceholder ),
+                           XML_algn, GetAlignment( nAlignment, bRtl, mbPlaceholder ),
                            XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
 
@@ -4936,6 +4934,9 @@ void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
 
 bool IsValidOOXMLFormula(std::u16string_view sFormula)
 {
+    // NOTE: this list is not complete - just a first effort at a reasonable list,
+    // and most of these are not yet even generated by GetFormula()...
+
     // Accepted Formulas
     // "val n1"
     // "abs n1"
@@ -4944,49 +4945,98 @@ bool IsValidOOXMLFormula(std::u16string_view sFormula)
     // "max n1 n2"
     // "*/ n1 n2 n3"
     // "+- n1 n2 n3"
-    // "?: n1 n2 n3"
+    // "+/ n1 n2 n3"
+    // "?: n1 n2 n3" // ifelse
 
     // Below vector contains validTokens for the 1st token based on the number of tokens in the formula. The order is: 2, 3, 4
-    const std::vector<std::set<OUString>> validTokens
-        = { { "val", "abs", "sqrt" }, { "min", "max" }, { "*/", "+-", "?:" } };
-    const std::set<OUString> builtInVariables = { "w", "h", "t", "b", "l", "r" };
+    const std::vector<std::set<std::u16string_view>> validTokens =
+    {
+        { u"val", u"abs", u"sqrt" },
+        { u"min", u"max" },
+        { u"*/", u"+-", u"+/", u"?:" }
+    };
+    const std::set<std::u16string_view> builtInVariables =
+    {
+        u"w",
+        u"h",
+        u"t",
+        u"b",
+        u"l",
+        u"r"
+    };
     const std::vector<OUString> strTokens = comphelper::string::split(sFormula, ' ');
     sal_uInt16 nSize = strTokens.size();
 
-    if (nSize > 1 && nSize < 5)
+    if (nSize < 2 || nSize > 4)
+        return false;
+
+    auto aTokens = validTokens[nSize - 2];
+
+    // Check whether the 1st token is valid
+    if (aTokens.find(strTokens[0]) == aTokens.end())
+        return false;
+
+    // Check that the remaining tokens are either numbers or built-in variables
+    for (sal_Int16 i = 1; i < nSize; i++)
     {
-        auto aTokens = validTokens[nSize - 2];
+        OUString sVal = strTokens[i];
+        if (builtInVariables.find(sVal) != builtInVariables.end())
+            continue; // valid built-in variable
 
-        // Check whether the 1st token is valid
-        if (aTokens.find(strTokens[0]) == aTokens.end())
-            return false;
+        // TODO: recognize valid 'guide name' pointing to other equations or adjustments
 
-        // Check that the remaining tokens are either numbers or built-in variables
-        for (sal_Int16 i = 1; i < nSize; i++)
-        {
-            OUString sVal = strTokens[i];
-            sal_Int64 nVal = sVal.toInt64();
-            if (builtInVariables.find(sVal) == builtInVariables.end()
-                && OUString::number(nVal) != sVal)
-                return false;
-        }
-        return true;
+        if (OUString::number(sVal.toInt64()) != sVal)
+            return false; // not a simple number
     }
-    return false;
+    return true;
 }
 
-OUString GetFormula(const OUString& sEquation, const OUString& sReplace, const OUString& sNewStr)
+OUString GetFormula(const OUString& sEquation)
 {
+    assert(!sEquation.isEmpty() && "surely an equation would never be empty...");
+    // TODO: This needs to be completely re-written. It is extremely simplistic/minimal.
+    // What is needed here is the reverse of convertToOOEquation.
+
+    // WARNING: Almost all of the current logic here was created simply to avoid 'corrupt document'
+    // notices from MS Office. The 'correct position' of the actual glue-points might be very wrong.
+
+    // If the equation is numerical
+    sal_Int64 nValue = sEquation.toInt64();
+    if (!sEquation.isEmpty() && OUString::number(nValue) == sEquation)
+        return "val " + sEquation;
+
     OUString sFormula = sEquation;
-    size_t nPos = sFormula.indexOf(sReplace);
-    if (nPos != std::string::npos)
+
+    /* replace LO native placeholders with OOXML placeholders
+     * #1: e.g. 'logwidth'
+     * #2: e.g. 'logwidth/2'
+     * #3: e.g. '1234*logwidth/5678'
+     */
+
+    if (sEquation == "logwidth") // #1
+        return "val w";
+    if (sEquation == "logheight")
+        return "val h";
+    if (sEquation.startsWith("logwidth/")) // #2
+        sFormula = u"*/ 1 w "_ustr + sEquation.subView(9);
+    else if (sEquation.startsWith("logheight/"))
+        sFormula = u"*/ 1 h "_ustr + sEquation.subView(10);
+    else
     {
-        OUString sModifiedEquation = sFormula.replaceAt(nPos, sReplace.getLength(), sNewStr);
-        sFormula = "*/ " + sModifiedEquation;
+        size_t nPos = sFormula.indexOf("*logwidth/"); //#3
+        if (nPos != std::string::npos)
+            sFormula = "*/ " + sFormula.replaceAt(nPos, 10, " w ");
+        else
+        {
+            nPos = sFormula.indexOf("*logheight/");
+            if (nPos != std::string::npos)
+                sFormula = "*/ " + sFormula.replaceAt(nPos, 11, " h ");
+        }
     }
 
     if (IsValidOOXMLFormula(sFormula))
         return sFormula;
+    else SAL_WARN("oox.shape","invalid OOXML formula["<<sFormula<<"]");
 
     return OUString();
 }
@@ -4994,38 +5044,72 @@ OUString GetFormula(const OUString& sEquation, const OUString& sReplace, const O
 void prepareGluePoints(std::vector<Guide>& rGuideList,
                        const css::uno::Sequence<OUString>& aEquations,
                        const uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
-                       const bool bIsOOXML, const sal_Int32 nWidth, const sal_Int32 nHeight)
+                       const sal_Int32 nWidth, const sal_Int32 nHeight)
 {
     if (rGluePoints.hasElements())
     {
-        sal_Int32 nIndex = 1;
+        sal_Int32 nIndex = 0;
         for (auto const& rGluePoint : rGluePoints)
         {
+            ++nIndex;
             sal_Int32 nIdx1 = -1;
             sal_Int32 nIdx2 = -1;
-            rGluePoint.First.Value >>= nIdx1;
-            rGluePoint.Second.Value >>= nIdx2;
-
-            if (nIdx1 != -1 && nIdx2 != -1)
+            bool bValidIdx1 = false;
+            bool bValidIdx2 = false;
+            if (rGluePoint.First.Value >>= nIdx1)
             {
-                Guide aGuideX;
-                aGuideX.sName = "GluePoint"_ostr + OString::number(nIndex) + "X";
-                aGuideX.sFormula
-                    = (bIsOOXML && nIdx1 >= 0 && nIdx1 < aEquations.getLength())
-                          ? GetFormula(aEquations[nIdx1], "*logwidth/", " w ").toUtf8()
-                          : "*/ " + OString::number(nIdx1) + " w " + OString::number(nWidth);
-                rGuideList.push_back(aGuideX);
-
-                Guide aGuideY;
-                aGuideY.sName = "GluePoint"_ostr + OString::number(nIndex) + "Y";
-                aGuideY.sFormula
-                    = (bIsOOXML && nIdx2 >= 0 && nIdx2 < aEquations.getLength())
-                          ? GetFormula(aEquations[nIdx2], "*logheight/", " h ").toUtf8()
-                          : "*/ " + OString::number(nIdx2) + " h " + OString::number(nHeight);
-                rGuideList.push_back(aGuideY);
+                bValidIdx1 = rGluePoint.First.Type == EnhancedCustomShapeParameterType::EQUATION;
+                assert(!bValidIdx1 || nIdx1 >= 0); // It is always an index at least
+                // tdf#166335
+                // Sadly, these equation indexes  point to a (changed/enlarged) parsed collection,
+                // but aEquations is the un-parsed collection.
+                // For larger values, there is a good chance that the wrong equation is used.
+                // However, this is so complicated that we ignore that,
+                // and simply make sure we don't export corruption. Inaccuracy is fine...
+                bValidIdx1 = bValidIdx1 && nIdx1 < aEquations.getLength();
             }
+            else
+                continue;
 
-            nIndex++;
+            if (rGluePoint.Second.Value >>= nIdx2)
+            {
+                bValidIdx2 = rGluePoint.Second.Type == EnhancedCustomShapeParameterType::EQUATION;
+                assert(!bValidIdx2 || nIdx2 >= 0);
+                bValidIdx2 = bValidIdx2 && nIdx2 < aEquations.getLength();
+            }
+            else
+                continue;
+
+            Guide aGuideX;
+            Guide aGuideY;
+            if (bValidIdx1)
+            {
+                aGuideX.sFormula = GetFormula(aEquations[nIdx1]).toUtf8();
+                if (aGuideX.sFormula.isEmpty()) // !IsValidOOXMLFormula
+                    continue;
+            }
+            else
+            {
+                // nice TODO: avoid divide by zero, and simplify when multiplying by zero.
+
+                // confirmation needed: does a simple gluepoint number always mean nIdx1 * w / width
+                aGuideX.sFormula = "*/ " + OString::number(nIdx1) + " w " + OString::number(nWidth);
+            }
+            if (bValidIdx2)
+            {
+                aGuideY.sFormula = GetFormula(aEquations[nIdx2]).toUtf8();
+                if (aGuideY.sFormula.isEmpty()) // !IsValidOOXMLFormula
+                    continue;
+            }
+            else
+                aGuideY.sFormula
+                    = "*/ " + OString::number(nIdx2) + " h " + OString::number(nHeight);
+
+            aGuideX.sName = "GluePoint"_ostr + OString::number(nIndex) + "X";
+            rGuideList.push_back(aGuideX);
+
+            aGuideY.sName = "GluePoint"_ostr + OString::number(nIndex) + "Y";
+            rGuideList.push_back(aGuideY);
         }
     }
 }
@@ -5063,17 +5147,6 @@ bool DrawingML::WriteCustomGeometry(
 
     uno::Sequence<beans::PropertyValue> aPathProp;
     pPathProp->Value >>= aPathProp;
-
-    auto pShapeType = std::find_if(std::cbegin(*pGeometrySeq), std::cend(*pGeometrySeq),
-                                   [](const PropertyValue& rProp) { return rProp.Name == "Type"; });
-    bool bOOXML = false;
-    if (pShapeType != std::cend(*pGeometrySeq))
-    {
-        OUString sShapeType;
-        pShapeType->Value >>= sShapeType;
-        if (sShapeType.startsWith("ooxml"))
-            bOOXML = true;
-    }
 
     auto pEquationsProp
         = std::find_if(std::cbegin(*pGeometrySeq), std::cend(*pGeometrySeq),
@@ -5207,7 +5280,7 @@ bool DrawingML::WriteCustomGeometry(
     TextAreaRect aTextAreaRect;
     std::vector<Guide> aGuideList; // for now only for <a:rect>
     prepareTextArea(aCustomShape2d, aGuideList, aTextAreaRect);
-    prepareGluePoints(aGuideList, aEquationSeq, aGluePoints, bOOXML, nViewBoxWidth, nViewBoxHeight);
+    prepareGluePoints(aGuideList, aEquationSeq, aGluePoints, nViewBoxWidth, nViewBoxHeight);
     mpFS->startElementNS(XML_a, XML_custGeom);
     mpFS->singleElementNS(XML_a, XML_avLst);
     if (aGuideList.empty())
@@ -5219,6 +5292,7 @@ bool DrawingML::WriteCustomGeometry(
         mpFS->startElementNS(XML_a, XML_gdLst);
         for (auto const& elem : aGuideList)
         {
+            assert(IsValidOOXMLFormula(OUString::fromUtf8(elem.sFormula)));
             mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
         }
         mpFS->endElementNS(XML_a, XML_gdLst);
@@ -5655,8 +5729,8 @@ bool DrawingML::WriteCustomGeometrySegment(
             double fSwingAng = 0.0;
             rCustomShape2d.GetParameter(fSwingAng, rPairs[rnPairIndex + 1].Second, false, false);
             sal_Int32 nSwingAng(std::lround(fSwingAng * 60000));
-            mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, OString::number(fWR), XML_hR,
-                                OString::number(fHR), XML_stAng, OString::number(nStartAng),
+            mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)),
+                                XML_hR, OString::number(std::lround(fHR)), XML_stAng, OString::number(nStartAng),
                                 XML_swAng, OString::number(nSwingAng));
             double fPx = 0.0;
             double fPy = 0.0;
@@ -6740,42 +6814,114 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
 
 void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, sal_Int32 nDiagramId, sal_Int32 nShapeId)
 {
-    uno::Reference<xml::dom::XDocument> dataDom;
-    uno::Reference<xml::dom::XDocument> layoutDom;
-    uno::Reference<xml::dom::XDocument> styleDom;
-    uno::Reference<xml::dom::XDocument> colorDom;
-    uno::Reference<xml::dom::XDocument> drawingDom;
-    uno::Sequence<uno::Sequence<uno::Any>> xDataRelSeq;
-    uno::Sequence<uno::Any> diagramDrawing;
-
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
-
-    if (nullptr != pObj && pObj->isDiagram())
-    {
-        const std::shared_ptr< svx::diagram::IDiagramHelper >& rIDiagramHelper(pObj->getDiagramHelper());
-
-        if (rIDiagramHelper)
-        {
-            rIDiagramHelper->getDomPropertyValue("OOXData").Value >>= dataDom;
-            rIDiagramHelper->getDomPropertyValue("OOXLayout").Value >>= layoutDom;
-            rIDiagramHelper->getDomPropertyValue("OOXStyle").Value >>= styleDom;
-            rIDiagramHelper->getDomPropertyValue("OOXColor").Value >>= colorDom;
-            rIDiagramHelper->getDomPropertyValue("OOXDrawing").Value >>= diagramDrawing;
-            if (diagramDrawing.hasElements())
-                // if there is OOXDrawing property then set drawingDom here only.
-                diagramDrawing[0] >>= drawingDom;
-            rIDiagramHelper->getDomPropertyValue("OOXDiagramDataRels").Value >>= xDataRelSeq;
-        }
-    }
-
-    // check that we have the 4 mandatory XDocuments
-    // if not, there was an error importing and we won't output anything
-    if (!dataDom.is() || !layoutDom.is() || !styleDom.is() || !colorDom.is())
+    if (nullptr == pObj)
         return;
 
-    // generate a unique id
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rIDiagramHelper(pObj->getDiagramHelper());
+    if (!rIDiagramHelper)
+        return;
+
+    const DiagramHelper_oox* pAdvancedDiagramHelper = static_cast<DiagramHelper_oox*>(rIDiagramHelper.get());
+    if (nullptr == pAdvancedDiagramHelper)
+        return;
+
+    // check mandatory and originally imported DataDom OOXLayout
+    uno::Reference<xml::dom::XDocument> layoutDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXLayout) >>= layoutDom;
+    if (!layoutDom)
+        return;
+
+    // check mandatory and originally imported DataDom OOXStyle
+    uno::Reference<xml::dom::XDocument> styleDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXStyle) >>= styleDom;
+    if (!styleDom)
+        return;
+
+    // check mandatory and originally imported DataDom OOXColor
+    uno::Reference<xml::dom::XDocument> colorDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXColor) >>= colorDom;
+    if (!colorDom)
+        return;
+
+    // handle drawingDom OOXDrawing before OOXData. It may exist if Diagram is untouched
+    // from original import. it needs a drawingRelId that is referenced inside dataDom
+    uno::Reference<xml::dom::XDocument> drawingDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawing) >>= drawingDom;
+    static bool bForceAlwaysReCreate(nullptr != std::getenv("FORCE_RECREATE_DIAGRAM_DATADOMS"));
+    static bool bActivateAdvancedDiagramFeatures(nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
+
+    // check if re-creation is forced (for test purposes)
+    if (drawingDom && bForceAlwaysReCreate)
+        drawingDom.clear();
+
+    // add relation in any case. If we have a drawingDom the dataDom will be adapted,
+    // if drawingDom gets written it's needed to embed it there
+    OUString drawingRelId;
+
+    // CAUTION! We have stuff like testfdo79822 with file "fdo79822.docx"
+    // that do not originally have a drawingDom at all. The test mentions
+    // that this file was created in ms word 2007. In those cases we might
+    // try in the future to 'repair' stuff by writing a DrawingDom, but for
+    // now just do as version before did - write no DrawingDom at all if new
+    // features are not activated
+    const OUString drawingFileName("diagrams/drawing" + OUString::number(nDiagramId) + ".xml");
+    const OUString sRelationCompPrefix(GetRelationCompPrefix());
+    const OUString sDir(GetComponentDir());
+
+    if (bActivateAdvancedDiagramFeatures || drawingDom.is())
+    {
+        // only add Relation if we write a DrawingDom
+        drawingRelId = mpFB->addRelation(
+            mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDRAWING),
+            Concat2View(sRelationCompPrefix + drawingFileName));
+    }
+
+    if (!drawingDom && bActivateAdvancedDiagramFeatures)
+    {
+        // no drawingDom exists, so it was either not originally imported or the
+        // Diagram was changed, so it got deleted. write drawingDom directly as
+        // sub-content
+        uno::Reference<io::XOutputStream> xOutputStream = mpFB->openFragmentStream(
+            sDir + "/" + drawingFileName,
+            u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
+
+        if (xOutputStream)
+            pAdvancedDiagramHelper->writeDiagramOOXDrawing(*this, xOutputStream);
+    }
+
+    // check DataDom OOXData
+    uno::Reference<xml::dom::XDocument> dataDom;
+    rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXData) >>= dataDom;
+
+    // check if re-creation is forced (for test purposes)
+    if (dataDom && bForceAlwaysReCreate)
+        dataDom.clear();
+
+    // add data relation
+    const OUString dataFileName = "diagrams/data" + OUString::number(nDiagramId) + ".xml";
+    const OUString dataRelId =
+        mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDATA),
+                          Concat2View(sRelationCompPrefix + dataFileName));
+
+    if (!dataDom)
+    {
+        // no dataDom exists, so  the  Diagram was changed, so it got deleted.
+        // write dataDom directly as sub-content
+        // OUString dataFileName = u"diagrams/data"_ustr + OUString::number(nDiagramId) + u".xml"_ustr;
+        uno::Reference<io::XOutputStream> xOutputStream = mpFB->openFragmentStream(
+            sDir + u"/"_ustr + dataFileName,
+            u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
+
+        if (xOutputStream)
+            pAdvancedDiagramHelper->writeDiagramOOXData(*this, xOutputStream, drawingRelId);
+    }
+
+    // prepare AttributeList for export of this GroupObject representing the Diagram
+    // as reference to Diagram
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
+
     // id in cNvPr under cNvGraphicFramePr must be unique among shapes,
     // but can be different from diagram's own id
     const sal_Int32 nExpShapeId = nShapeId != -1 ? nShapeId : nDiagramId;
@@ -6832,14 +6978,6 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     mpFS->startElementNS(XML_a, XML_graphicData, XML_uri,
                          "http://schemas.openxmlformats.org/drawingml/2006/diagram");
 
-    OUString sRelationCompPrefix = GetRelationCompPrefix();
-
-    // add data relation
-    OUString dataFileName = "diagrams/data" + OUString::number(nDiagramId) + ".xml";
-    OUString dataRelId =
-        mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDATA),
-                          Concat2View(sRelationCompPrefix + dataFileName));
-
     // add layout relation
     OUString layoutFileName = "diagrams/layout" + OUString::number(nDiagramId) + ".xml";
     OUString layoutRelId = mpFB->addRelation(mpFS->getOutputStream(),
@@ -6858,33 +6996,6 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
                                               oox::getRelationship(Relationship::DIAGRAMCOLORS),
                                               Concat2View(sRelationCompPrefix + colorFileName));
 
-    OUString drawingFileName;
-    if (drawingDom.is())
-    {
-        // add drawing relation
-        drawingFileName = "diagrams/drawing" + OUString::number(nDiagramId) + ".xml";
-        OUString drawingRelId = mpFB->addRelation(
-            mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDRAWING),
-            Concat2View(sRelationCompPrefix + drawingFileName));
-
-        // the data dom contains a reference to the drawing relation. We need to update it with the new generated
-        // relation value before writing the dom to a file
-
-        // Get the dsp:damaModelExt node from the dom
-        uno::Reference<xml::dom::XNodeList> nodeList = dataDom->getElementsByTagNameNS(
-            u"http://schemas.microsoft.com/office/drawing/2008/diagram"_ustr, u"dataModelExt"_ustr);
-
-        // There must be one element only so get it
-        uno::Reference<xml::dom::XNode> node = nodeList->item(0);
-
-        // Get the list of attributes of the node
-        uno::Reference<xml::dom::XNamedNodeMap> nodeMap = node->getAttributes();
-
-        // Get the node with the relId attribute and set its new value
-        uno::Reference<xml::dom::XNode> relIdNode = nodeMap->getNamedItem(u"relId"_ustr);
-        relIdNode->setNodeValue(drawingRelId);
-    }
-
     mpFS->singleElementNS(XML_dgm, XML_relIds,
         FSNS(XML_xmlns, XML_dgm), mpFB->getNamespaceURL(OOX_NS(dmlDiagram)),
         FSNS(XML_xmlns, XML_r), mpFB->getNamespaceURL(OOX_NS(officeRel)),
@@ -6898,19 +7009,54 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     uno::Reference<xml::sax::XWriter> writer
         = xml::sax::Writer::create(comphelper::getProcessComponentContext());
 
-    OUString sDir = GetComponentDir();
+    if (dataDom)
+    {
+        if (!drawingRelId.isEmpty())
+        {
+            // NOTE: drawingRelId may be empty if bActivateAdvancedDiagramFeatures is
+            // set, see comments above
+            // the original and unchanged dataDom contains a reference to the drawing
+            // relation. We need to update it with the new generated relation value
+            // before writing the dom to the file
 
-    // write data file
-    serializer.set(dataDom, uno::UNO_QUERY);
-    uno::Reference<io::XOutputStream> xDataOutputStream = mpFB->openFragmentStream(
-        sDir + "/" + dataFileName,
-        u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
-    writer->setOutputStream(xDataOutputStream);
-    serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-                          uno::Sequence<beans::StringPair>());
+            // Get the dsp:damaModelExt node from the dom
+            uno::Reference<xml::dom::XNodeList> nodeList = dataDom->getElementsByTagNameNS(
+                u"http://schemas.microsoft.com/office/drawing/2008/diagram"_ustr, u"dataModelExt"_ustr);
 
-    // write the associated Images and rels for data file
-    writeDiagramRels(xDataRelSeq, xDataOutputStream, u"OOXDiagramDataRels", nDiagramId);
+            // There must be one element only so get it
+            uno::Reference<xml::dom::XNode> node = nodeList->item(0);
+
+            // Get the list of attributes of the node
+            uno::Reference<xml::dom::XNamedNodeMap> nodeMap = node->getAttributes();
+
+            // Get the node with the relId attribute and set its new value
+            uno::Reference<xml::dom::XNode> relIdNode = nodeMap->getNamedItem(u"relId"_ustr);
+            relIdNode->setNodeValue(drawingRelId);
+        }
+
+        // write originally imported & untouched data file
+        serializer.set(dataDom, uno::UNO_QUERY);
+        uno::Reference<io::XOutputStream> xDataOutputStream = mpFB->openFragmentStream(
+            sDir + "/" + dataFileName,
+            u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
+        writer->setOutputStream(xDataOutputStream);
+        serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
+                            uno::Sequence<beans::StringPair>());
+
+        // get originally imported OOXDataImageRels
+        uno::Sequence<uno::Sequence<uno::Any>> xDataImageRelSeq;
+        rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataImageRels)
+            >>= xDataImageRelSeq;
+
+        // get originally imported OOXDataHlinkRels
+        uno::Sequence<uno::Sequence<uno::Any>> xDataHlinkRelSeq;
+        rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataHlinkRels)
+            >>= xDataHlinkRelSeq;
+
+        // write the associated Images and rels for data file
+        writeDiagramImageRels(xDataImageRelSeq, xDataOutputStream, u"OOXDiagramDataRels", nDiagramId);
+        writeDiagramHlinkRels(xDataHlinkRelSeq, xDataOutputStream);
+    }
 
     // write layout file
     serializer.set(layoutDom, uno::UNO_QUERY);
@@ -6936,29 +7082,38 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence<beans::StringPair>());
 
-    // write drawing file
-    if (!drawingDom.is())
-        return;
+    if (drawingDom.is())
+    {
+        // write original and untouched drawingDom
+        serializer.set(drawingDom, uno::UNO_QUERY);
+        uno::Reference<io::XOutputStream> xDrawingOutputStream = mpFB->openFragmentStream(
+            sDir + "/" + drawingFileName, u"application/vnd.ms-office.drawingml.diagramDrawing+xml"_ustr);
+        writer->setOutputStream(xDrawingOutputStream);
+        serializer->serialize(
+            uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
+            uno::Sequence<beans::StringPair>());
 
-    serializer.set(drawingDom, uno::UNO_QUERY);
-    uno::Reference<io::XOutputStream> xDrawingOutputStream = mpFB->openFragmentStream(
-        sDir + "/" + drawingFileName, u"application/vnd.ms-office.drawingml.diagramDrawing+xml"_ustr);
-    writer->setOutputStream(xDrawingOutputStream);
-    serializer->serialize(
-        uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-        uno::Sequence<beans::StringPair>());
+        // get originally imported OOXDrawingImageRels
+        uno::Sequence<uno::Sequence<uno::Any>> xDrawingImageRelSeq;
+        rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawingImageRels)
+            >>= xDrawingImageRelSeq;
 
-    // write the associated Images and rels for drawing file
-    uno::Sequence<uno::Sequence<uno::Any>> xDrawingRelSeq;
-    diagramDrawing[1] >>= xDrawingRelSeq;
-    writeDiagramRels(xDrawingRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels", nDiagramId);
+                // get originally imported OOXDataHlinkRels
+        uno::Sequence<uno::Sequence<uno::Any>> xDrawingHlinkRelSeq;
+        rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawingHlinkRels)
+            >>= xDrawingHlinkRelSeq;
+
+        // write the associated Images and rels for data file
+        writeDiagramImageRels(xDrawingImageRelSeq, xDrawingOutputStream, u"OOXDiagramDrawingRels", nDiagramId);
+        writeDiagramHlinkRels(xDrawingHlinkRelSeq, xDrawingOutputStream);
+    }
 }
 
-void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
-                                 const uno::Reference<io::XOutputStream>& xOutStream,
-                                 std::u16string_view sGrabBagProperyName, int nDiagramId)
+void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
+                                      const uno::Reference<io::XOutputStream>& xOutStream,
+                                      std::u16string_view sGrabBagProperyName, int nDiagramId)
 {
-    // add image relationships of OOXData, OOXDiagram
+    // add image relationships of OOXData, SmartArtDiagram
     OUString sType(oox::getRelationship(Relationship::IMAGE));
     uno::Reference<xml::sax::XWriter> xWriter
         = xml::sax::Writer::create(comphelper::getProcessComponentContext());
@@ -7011,6 +7166,45 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
             TOOLS_WARN_EXCEPTION("oox.drawingml", "DrawingML::writeDiagramRels Failed to copy grabbaged Image");
         }
         dataImagebin->closeInput();
+    }
+}
+
+void DrawingML::writeDiagramHlinkRels(const uno::Sequence<uno::Sequence<uno::Any>>& xRelSeq,
+                                      const uno::Reference<io::XOutputStream>& xOutStream)
+{
+    uno::Reference<xml::sax::XWriter> xWriter
+        = xml::sax::Writer::create(comphelper::getProcessComponentContext());
+    xWriter->setOutputStream(xOutStream);
+
+    // retrieve the relationships from Sequence
+    for (sal_Int32 j = 0; j < xRelSeq.getLength(); j++)
+    {
+        // diagramDataRelTuple[0] => RID,
+        // diagramDataRelTuple[1] => Target
+        // diagramDataRelTuple[2] => Type
+        const uno::Sequence<uno::Any>& diagramDataRelTuple = xRelSeq[j];
+
+        OUString sRelId;
+        OUString sTarget;
+        OUString sType;
+        diagramDataRelTuple[0] >>= sRelId;
+        sRelId = sRelId.copy(3);
+        diagramDataRelTuple[1] >>= sTarget;
+        diagramDataRelTuple[2] >>= sType;
+
+        OUString sRelType;
+        bool bExtURL = true;
+        if (sType == u"slide")
+        {
+            sRelType = oox::getRelationship(Relationship::SLIDE);
+            bExtURL = false;
+        }
+        else
+            sRelType = oox::getRelationship(Relationship::HYPERLINK);
+
+        PropertySet aProps(xOutStream);
+        aProps.setAnyProperty(PROP_RelId, uno::Any(sRelId.toInt32()));
+        mpFB->addRelation(xOutStream, sRelType, sTarget, bExtURL);
     }
 }
 

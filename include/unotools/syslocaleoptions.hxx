@@ -24,10 +24,10 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/lang.h>
-#include <i18nlangtag/languagetag.hxx>
 #include <unotools/options.hxx>
 
 class SvtSysLocaleOptions_Impl;
+class LanguageTag;
 class LinkParamNone;
 template <typename Arg, typename Ret> class Link;
 

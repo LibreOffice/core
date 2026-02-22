@@ -20,6 +20,7 @@
 #include <memory>
 #include <SwSpellDialogChildWindow.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/acorrcfg.hxx>

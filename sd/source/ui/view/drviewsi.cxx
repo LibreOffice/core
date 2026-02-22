@@ -26,6 +26,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/float3d.hxx>
 #include <svx/f3dchild.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <strings.hrc>

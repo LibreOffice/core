@@ -50,6 +50,12 @@ void SAL_CALL DNDListenerContainer::resetRecognizer(  )
 {
 }
 
+bool DNDListenerContainer::hasDragGestureListeners() const
+{
+    std::unique_lock g(m_aMutex);
+    return maDragGestureListeners.getLength(g) > 0;
+}
+
 void SAL_CALL DNDListenerContainer::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
 {
     std::unique_lock g(m_aMutex);

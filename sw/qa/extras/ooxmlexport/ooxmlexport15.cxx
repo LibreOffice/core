@@ -41,9 +41,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131540)
 {
     createSwDoc("tdf131540.odt");
 
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -660,9 +657,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c14v2, "tdf135343_colu
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c12v3, "tdf135343_columnSectionBreak_c12v3.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // In this Word 20-3 v3, section one and two have different number of columns. It acts like a page break.
     uno::Reference<beans::XPropertySet> xTextSection = getProperty<uno::Reference<beans::XPropertySet>>(getParagraph(1, u"Four columns,"_ustr), u"TextSection"_ustr);
     uno::Reference<text::XTextColumns> xTextColumns = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, u"TextColumns"_ustr);
@@ -676,9 +670,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c12v3, "tdf135343_colu
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c15, "tdf135343_columnSectionBreak_c15.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Word 2013+ version - nextColumn breaks inside column sections are always handled like nextPage breaks.
     uno::Reference<beans::XPropertySet> xTextSection = getProperty<uno::Reference<beans::XPropertySet>>(getParagraph(12, u"RTL 2"_ustr), u"TextSection"_ustr);
     uno::Reference<text::XTextColumns> xTextColumns = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, u"TextColumns"_ustr);
@@ -837,9 +828,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135655)
 {
     createSwDoc("tdf135655.odt");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     const xmlDocUniquePtr pExpDoc = parseExport(u"word/document.xml"_ustr);
     const OUString sXFillColVal = getXPath(pExpDoc, "/w:document/w:body/w:p/w:r/w:object/v:shape", "fillcolor");
@@ -947,9 +935,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138345_numberingHighlight)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 8
-    skipValidation();
-
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 
     xmlDocUniquePtr pDump = parseLayoutDump();
@@ -962,9 +947,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
 
 DECLARE_OOXMLEXPORT_TEST(TestTdf135653, "tdf135653.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
     drawing::FillStyle nFillStyle = static_cast<drawing::FillStyle>(-1);
     xOLEProps->getPropertyValue(u"FillStyle"_ustr) >>= nFillStyle;
@@ -982,9 +964,6 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf135653, "tdf135653.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135665, "tdf135665.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     uno::Reference<beans::XPropertySet> xOLEProps1(getShape(1), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xOLEProps2(getShape(2), uno::UNO_QUERY_THROW);
     bool bSurroundContour1 = false;
@@ -1060,9 +1039,6 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorHeightFromBottomMarginHasFooter)
 
 DECLARE_OOXMLEXPORT_TEST(TestTdf132483, "tdf132483.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     uno::Reference<beans::XPropertySet> xOLEProps(getShape(1), uno::UNO_QUERY_THROW);
     sal_Int16 nVRelPos = -1;
     sal_Int16 nHRelPos = -1;
@@ -1111,9 +1087,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135667)
 {
     createSwDoc("tdf135667.odt");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
@@ -1156,9 +1129,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf137295)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135660, "tdf135660.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     const uno::Reference<drawing::XShape> xShape = getShape(1);
     const uno::Reference<beans::XPropertySet> xOLEProps(xShape, uno::UNO_QUERY_THROW);

@@ -50,6 +50,7 @@
 #include <com/sun/star/util/SearchAlgorithms.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 
+#include <vcl/weld/Builder.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/srchitem.hxx>

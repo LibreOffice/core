@@ -82,6 +82,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <i18nutil/transliteration.hxx>
+#include <i18nutil/guessparadirection.hxx>
 #include <sfx2/Metadatable.hxx>
 #include <sot/exchange.hxx>
 #include <svl/stritem.hxx>
@@ -89,10 +90,12 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
 #include <tools/globname.hxx>
+#include <editeng/autodiritem.hxx>
 #include <editeng/formatbreakitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <i18npool/breakiterator.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <tuple>
@@ -1282,7 +1285,7 @@ namespace //local functions originally from docfmt.cxx
                         {
                             // Get the item set that holds all the changes properties
                             std::shared_ptr<SfxItemSet> pChangesSet = pFormattingChanges->GetItemSet();
-                            xExtra.reset(new SwRedlineExtraData_FormatColl(UIName(u""_ustr), USHRT_MAX, pChangesSet));
+                            xExtra.reset(new SwRedlineExtraData_FormatColl(UIName(u""_ustr), SwPoolFormatId::UNKNOWN, pChangesSet));
                             break;
                         }
                     }
@@ -1325,7 +1328,7 @@ namespace //local functions originally from docfmt.cxx
 
             IStyleAccess& rStyleAccess = rDoc.GetIStyleAccess();
             std::shared_ptr<SfxItemSet> pAutoStyle = rStyleAccess.getAutomaticStyle(aSet, IStyleAccess::AUTO_STYLE_CHAR);
-            xExtra.reset(new SwRedlineExtraData_FormatColl(UIName(u""_ustr), USHRT_MAX, pAutoStyle));
+            xExtra.reset(new SwRedlineExtraData_FormatColl(UIName(u""_ustr), SwPoolFormatId::UNKNOWN, pAutoStyle));
         }
 
         pRedline->SetExtraData(xExtra.get() );
@@ -1703,11 +1706,11 @@ namespace //local functions originally from docfmt.cxx
 
             {
                 // If we have a PoolNumRule, create it if needed
-                sal_uInt16 nPoolId=0;
+                SwPoolFormatId nPoolId=SwPoolFormatId::ZERO;
                 const SwNumRuleItem* pRule = pOtherSet->GetItemIfSet( RES_PARATR_NUMRULE, false );
                 if( pRule &&
                     !rDoc.FindNumRulePtr( pRule->GetValue() ) &&
-                    USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
+                    SwPoolFormatId::UNKNOWN != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
                                     SwGetPoolIdFromName::NumRule )) )
                     rDoc.getIDocumentStylePoolAccess().GetNumRuleFromPool( nPoolId );
             }
@@ -3261,7 +3264,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertGraphic(
                             SwFrameFormat* pFrameFormat )
 {
     if( !pFrameFormat )
-        pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_GRAPHIC );
+        pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( SwPoolFormatId::FRM_GRAPHIC );
     SwGrfNode* pSwGrfNode = SwNodes::MakeGrfNode(
                             m_rDoc.GetNodes().GetEndOfAutotext(),
                             rGrfName, rFltName, pGraphic,
@@ -3275,13 +3278,13 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertEmbObject(
         const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
                         SfxItemSet* pFlyAttrSet)
 {
-    sal_uInt16 nId = RES_POOLFRM_OLE;
+    SwPoolFormatId nId = SwPoolFormatId::FRM_OLE;
     if (xObj.is())
     {
         SvGlobalName aClassName( xObj->getClassID() );
         if (SotExchange::IsMath(aClassName))
         {
-            nId = RES_POOLFRM_FORMEL;
+            nId = SwPoolFormatId::FRM_FORMEL;
         }
     }
 
@@ -3300,7 +3303,7 @@ SwFlyFrameFormat* DocumentContentOperationsManager::InsertOLE(const SwPaM &rRg, 
                         const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet)
 {
-    SwFrameFormat* pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_OLE );
+    SwFrameFormat* pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( SwPoolFormatId::FRM_OLE );
 
     return InsNoTextNode( *rRg.GetPoint(),
                             m_rDoc.GetNodes().MakeOLENode(
@@ -3518,7 +3521,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
             {
                 SwTextNode* pTextNd = m_rDoc.GetNodes().MakeTextNode(
                                         *pTableNd,
-                                        m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
+                                        m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_TEXT ));
                 if( pTextNd )
                 {
                     const_cast<SwPosition&>(rPos).Assign( pTableNd->GetIndex() - SwNodeOffset(1) );
@@ -3598,7 +3601,7 @@ bool DocumentContentOperationsManager::AppendTextNode( SwPosition& rPos )
         // so then one can be created!
         SwNodeIndex aIdx( rPos.GetNode(), 1 );
         pCurNode = m_rDoc.GetNodes().MakeTextNode( aIdx.GetNode(),
-                        m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
+                        m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ));
     }
     else
         pCurNode = pCurNode->AppendNode( rPos )->GetTextNode();
@@ -3817,6 +3820,59 @@ void DocumentContentOperationsManager::RemoveLeadingWhiteSpace(SwPaM& rPaM )
         SwNodeOffset nEnd = rSel.End()->GetNodeIndex();
         for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
             RemoveLeadingWhiteSpace(SwPosition(rSel.GetBound().GetNodes(), nPos));
+    }
+}
+
+void DocumentContentOperationsManager::AutoSetParagraphDirections(SwPaM& rPaM,
+                                                                  const SwRootFrame* pLayout)
+{
+    for (SwPaM& rSel : rPaM.GetRingContainer())
+    {
+        auto* pNode = rSel.GetPointNode().GetTextNode();
+        if (!pNode)
+        {
+            continue;
+        }
+
+        if (!pNode->GetSwAttrSet().GetItem(RES_PARATR_AUTOFRAMEDIR)->GetValue())
+        {
+            continue;
+        }
+
+        std::optional<bool> bIsCurrentlyRtl;
+        if (pLayout)
+        {
+            Point aPt;
+            std::pair<Point, bool> const tmp(aPt, false);
+            const SwTextFrame* pFrame
+                = static_cast<SwTextFrame*>(pNode->getLayoutFrame(pLayout, rPaM.GetPoint(), &tmp));
+            if (pFrame)
+            {
+                bIsCurrentlyRtl = pFrame->IsRightToLeft();
+            }
+        }
+
+        switch (i18nutil::GuessParagraphDirection(pNode->GetText()))
+        {
+            case i18nutil::ParagraphDirection::Ambiguous:
+                break;
+
+            case i18nutil::ParagraphDirection::LeftToRight:
+                if (bIsCurrentlyRtl.value_or(true))
+                {
+                    InsertPoolItem(rSel, SvxFrameDirectionItem{ SvxFrameDirection::Horizontal_LR_TB,
+                                                                RES_FRAMEDIR });
+                }
+                break;
+
+            case i18nutil::ParagraphDirection::RightToLeft:
+                if (!bIsCurrentlyRtl.value_or(false))
+                {
+                    InsertPoolItem(rSel, SvxFrameDirectionItem{ SvxFrameDirection::Horizontal_RL_TB,
+                                                                RES_FRAMEDIR });
+                }
+                break;
+        }
     }
 }
 
@@ -4095,6 +4151,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     // They are stored as matching the originals, so that we will be later
     // able to build the chains accordingly.
     std::vector< SwFrameFormat* > aVecSwFrameFormat;
+    aVecSwFrameFormat.reserve(aSet.size());
     std::set< ZSortFly >::const_iterator it=aSet.begin();
 
     while (it != aSet.end())
@@ -5195,9 +5252,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     SwTextNode* pSttTextNd = pStart->GetNode().GetTextNode();
     SwTextNode* pEndTextNd = pEnd->GetNode().GetTextNode();
     SwTextNode* pDestTextNd = aInsPos.GetNode().GetTextNode();
-    bool bDestTextNdEmpty = pDestTextNd && (pDestTextNd->GetText().isEmpty() || pDestTextNd->GetText() == "\n");
     bool bCopyCollFormat = !rDoc.IsInsOnlyTextGlossary() &&
-                        (  bDestTextNdEmpty ||
+                        ( (pDestTextNd && !pDestTextNd->GetText().getLength()) ||
                           ( !bOneNode && !rPos.GetContentIndex() ) );
     bool bCopyBookmarks = true;
     bool bCopyPageSource  = false;
@@ -5257,7 +5313,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 {
                     if( pStart->GetContentIndex() || bOneNode )
                         pDestTextNd = rDoc.GetNodes().MakeTextNode( aInsPos.GetNode(),
-                            rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
+                            rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD));
                     else
                     {
                         pDestTextNd = pSttTextNd->MakeCopy(rDoc, aInsPos.GetNode(), true)->GetTextNode();
@@ -5383,7 +5439,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             if( !pDestTextNd )
             {
                 pDestTextNd = rDoc.GetNodes().MakeTextNode( aInsPos.GetNode(),
-                            rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
+                            rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD));
                 oInsContentIndex->Assign(pDestTextNd, 0);
                 --aInsPos;
 

@@ -80,6 +80,7 @@
 #include <sqlmessage.hxx>
 #include <dlgsize.hxx>
 #include <svtools/editbrowsebox.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <svl/numuno.hxx>

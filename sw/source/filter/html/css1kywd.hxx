@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <rtl/ustring.hxx>
+
 #include <string_view>
 
 constexpr inline std::u16string_view sCSS_mimetype = u"text/css";
@@ -123,6 +125,8 @@ constexpr inline std::string_view sCSS1_PV_left = "left";
 constexpr inline std::string_view sCSS1_PV_center = "center";
 constexpr inline std::string_view sCSS1_PV_right = "right";
 constexpr inline std::string_view sCSS1_PV_justify = "justify";
+constexpr inline std::string_view sCSS1_PV_start = "start";
+constexpr inline std::string_view sCSS1_PV_end = "end";
 
 constexpr inline std::string_view sCSS1_P_text_indent = "text-indent";
 

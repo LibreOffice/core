@@ -20,12 +20,13 @@
 #define INCLUDED_UNOTOOLS_VIEWOPTIONS_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::beans { struct NamedValue; }
 namespace com::sun::star::container { class XNameAccess; }
+namespace com::sun::star::uno { template <typename> class Sequence; }
 
 /*-************************************************************************************************************
     @descr          Use these enum values to specify right list in configuration in which your view data are saved.

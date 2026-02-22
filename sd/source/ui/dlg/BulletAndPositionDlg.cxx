@@ -42,6 +42,7 @@
 #include <svl/stritem.hxx>
 #include <sal/log.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include <View.hxx>
 #include <drawdoc.hxx>
@@ -1212,10 +1213,6 @@ IMPL_LINK(SvxBulletAndPositionDlg, DistanceHdl_Impl, weld::MetricSpinButton&, rF
     {
         m_xDistBorderMF->set_text(u""_ustr);
     }
-
-    sal_Int32 aLastLevelLSpace
-        = pActNum->GetLevel(pActNum->GetLevelCount() - 1).GetAbsLSpace() / 40;
-    m_aPreviewWIN.set_size_request(aLastLevelLSpace, 300);
 }
 
 IMPL_LINK(SvxBulletAndPositionDlg, RelativeHdl_Impl, weld::Toggleable&, rBox, void)

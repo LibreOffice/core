@@ -24,7 +24,9 @@
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <utility>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
@@ -38,6 +40,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <svtools/indexentryres.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/urlobj.hxx>
 #include <column.hxx>
 #include <fmtfsize.hxx>
 #include <authfld.hxx>
@@ -477,9 +480,9 @@ bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const UIName& rName)
     if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle())
         return true;
 
-    const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+    const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(
         rName, SwGetPoolIdFromName::TxtColl);
-    return nId != USHRT_MAX &&
+    return nId != SwPoolFormatId::UNKNOWN &&
         ! rSh.GetTextCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle();
 }
 
@@ -1350,12 +1353,12 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
 
     if( nType & TO_ILLUSTRATION )
     {
-        UIName sName(SwStyleNameMapper::GetUIName(RES_POOLCOLL_LABEL_FIGURE, ProgName()));
+        UIName sName(SwStyleNameMapper::GetUIName(SwPoolFormatId::COLL_LABEL_FIGURE, ProgName()));
         m_xCaptionSequenceLB->set_active_text(sName.toString());
     }
     else if( nType & TO_TABLE )
     {
-        UIName sName(SwStyleNameMapper::GetUIName(RES_POOLCOLL_LABEL_TABLE, ProgName()));
+        UIName sName(SwStyleNameMapper::GetUIName(SwPoolFormatId::COLL_LABEL_TABLE, ProgName()));
         m_xCaptionSequenceLB->set_active_text(sName.toString());
     }
     else if( nType & TO_USER )
@@ -1637,7 +1640,7 @@ public:
         return m_aFormToken;
     }
 
-    void SetCharStyleName(const UIName& rSet, sal_uInt16 nPoolId)
+    void SetCharStyleName(const UIName& rSet, SwPoolFormatId nPoolId)
     {
         m_aFormToken.sCharStyleName = rSet;
         m_aFormToken.nPoolId = nPoolId;
@@ -1772,7 +1775,7 @@ public:
     void SetPrevNextLink(const Link<SwTOXButton&,void>& rLink) {m_aPrevNextControlLink = rLink;}
     const SwFormToken& GetFormToken() const {return m_aFormToken;}
 
-    void SetCharStyleName(const UIName& rSet, sal_uInt16 nPoolId)
+    void SetCharStyleName(const UIName& rSet, SwPoolFormatId nPoolId)
         {
             m_aFormToken.sCharStyleName = rSet;
             m_aFormToken.nPoolId = nPoolId;
@@ -2627,7 +2630,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
 IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, weld::ComboBox&, rBox, void)
 {
     OUString sEntry = rBox.get_active_text();
-    const sal_uInt16 nId = rBox.get_active_id().toUInt32();
+    const auto nId = SwPoolFormatId(rBox.get_active_id().toUInt32());
     const bool bEqualsNoCharStyle = sEntry == m_sNoCharStyle;
     m_xEditStylePB->set_sensitive(!bEqualsNoCharStyle);
     if (bEqualsNoCharStyle)
@@ -2749,7 +2752,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
         }
     }
     m_xMainEntryStyleLB->set_active_text(SwStyleNameMapper::GetUIName(
-                                           RES_POOLCHR_IDX_MAIN_ENTRY, ProgName()).toString());
+                                           SwPoolFormatId::CHR_IDX_MAIN_ENTRY, ProgName()).toString());
 }
 
  const TranslateId STR_TOKEN_ARY[] =

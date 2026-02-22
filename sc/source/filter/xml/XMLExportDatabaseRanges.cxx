@@ -292,12 +292,10 @@ private:
         OUString sConRes;
 
         svx::ODataAccessDescriptor aDescriptor;
+        // Normalize data source to handle both Name and Location formats
         aDescriptor.setDataSource(aParam.aDBName);
-        if (aDescriptor.has(svx::DataAccessDescriptorProperty::DataSource))
-        {
-            sDatabaseName = aParam.aDBName;
-        }
-        else if (aDescriptor.has(svx::DataAccessDescriptorProperty::ConnectionResource))
+        sDatabaseName = aDescriptor.getDataSource();
+        if (sDatabaseName.isEmpty() && aDescriptor.has(svx::DataAccessDescriptorProperty::ConnectionResource))
         {
             sConRes = aParam.aDBName;
         }

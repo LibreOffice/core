@@ -32,14 +32,14 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <libxml/xmlwriter.h>
 #include <vcl/canvastools.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 bool SdrObjGroup::isDiagram() const
 {
     return bool(mp_DiagramHelper);
 }
 
-const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObjGroup::getDiagramHelper() const
+const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObjGroup::getDiagramHelper() const
 {
     return mp_DiagramHelper;
 }
@@ -89,6 +89,16 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const & rSource)
 
     // copy local parameters
     maRefPoint  = rSource.maRefPoint;
+
+    static bool bActivateAdvancedDiagramFeatures(nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
+    if (bActivateAdvancedDiagramFeatures && rSource.getDiagramHelper())
+    {
+        // create complete clone of current DiagramData
+        mp_DiagramHelper.reset(rSource.getDiagramHelper()->clone());
+
+        // need to set new RootShape to newly created associated XShape
+        mp_DiagramHelper->getRootShape() = getUnoShape();
+    }
 }
 
 void SdrObjGroup::AddToHdlList(SdrHdlList& rHdlList) const
@@ -97,7 +107,7 @@ void SdrObjGroup::AddToHdlList(SdrHdlList& rHdlList) const
     if(!isDiagram())
         return;
 
-    svx::diagram::IDiagramHelper::AddAdditionalVisualization(*this, rHdlList);
+    svx::diagram::DiagramHelper_svx::AddAdditionalVisualization(*this, rHdlList);
 }
 
 SdrObjGroup::~SdrObjGroup()

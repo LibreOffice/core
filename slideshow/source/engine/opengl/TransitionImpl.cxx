@@ -34,6 +34,8 @@
 
 #include <algorithm>
 #include <array>
+#include <float.h>
+#include <math.h>
 
 #include <comphelper/random.hxx>
 

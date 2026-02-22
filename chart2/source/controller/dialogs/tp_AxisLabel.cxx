@@ -24,8 +24,10 @@
 
 #include <svx/chrtitem.hxx>
 #include <svx/sdangitm.hxx>
+#include <tools/fldunit.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace chart
 {

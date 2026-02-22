@@ -12,12 +12,13 @@
 #include <tools/urlobj.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/string_view.hxx>
+#include <test/commontesttools.hxx>
 
 // This file contains tests to check relative/absolute hyperlinks handling
 
 // decide if output link should be converted to absolute
-#define USE_ABSOLUTE true
-#define USE_RELATIVE false
+#define USE_ABSOLUTE false
+#define USE_RELATIVE true
 
 class Test : public SwModelTestBase
 {
@@ -27,12 +28,7 @@ public:
     {
     }
 
-    void SetAbsolute(bool bAbsolute)
-    {
-        auto xChanges = comphelper::ConfigurationChanges::create();
-        officecfg::Office::Common::Save::URL::FileSystem::set(!bAbsolute, xChanges);
-        xChanges->commit();
-    }
+    using SaveFilesystemURLCfg = officecfg::Office::Common::Save::URL::FileSystem;
 
     // link should be modified to be placed in temp dir - for testing relative links
     void UseTempDir()
@@ -62,7 +58,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeImport)
 {
-    SetAbsolute(USE_RELATIVE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_RELATIVE);
     createSwDoc("relative-link.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
@@ -73,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeImport)
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteImport)
 {
-    SetAbsolute(USE_ABSOLUTE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_ABSOLUTE);
     createSwDoc("relative-link.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
@@ -84,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteImport)
 
 CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteImport)
 {
-    SetAbsolute(USE_ABSOLUTE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_ABSOLUTE);
     createSwDoc("absolute-link.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
@@ -95,7 +91,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteImport)
 
 CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToRelativeImport)
 {
-    SetAbsolute(USE_RELATIVE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_RELATIVE);
     createSwDoc("absolute-link.docx");
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     uno::Reference<text::XTextRange> xText = getRun(xParagraph, 1);
@@ -106,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToRelativeImport)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123627_import)
 {
-    SetAbsolute(USE_RELATIVE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_RELATIVE);
     createSwDoc("tdf123627.docx");
     uno::Reference<text::XTextRange> xText = getRun(getParagraph(1), 1);
     OUString sTarget = getProperty<OUString>(xText, u"HyperLinkURL"_ustr);
@@ -118,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123627_import)
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeExport)
 {
-    SetAbsolute(USE_RELATIVE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_RELATIVE);
     createSwDoc("relative-link.docx");
     UseTempDir();
     saveAndReload(TestFilter::DOCX);
@@ -130,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteExport)
 {
-    SetAbsolute(USE_ABSOLUTE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_ABSOLUTE);
     createSwDoc("relative-link.docx");
     // Don't modify link.
     saveAndReload(TestFilter::DOCX);
@@ -143,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToRelativeExport)
 {
-    SetAbsolute(USE_RELATIVE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_RELATIVE);
     createSwDoc("absolute-link.docx");
     UseTempDir();
     saveAndReload(TestFilter::DOCX);
@@ -154,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToRelativeExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteExport)
 {
-    SetAbsolute(USE_ABSOLUTE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_ABSOLUTE);
     createSwDoc("absolute-link.docx");
     // Don't modify link.
     saveAndReload(TestFilter::DOCX);
@@ -167,7 +163,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123627_export)
 {
-    SetAbsolute(USE_RELATIVE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_RELATIVE);
     createSwDoc("tdf123627.docx");
     UseTempDir();
     saveAndReload(TestFilter::DOCX);
@@ -179,7 +175,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123627_export)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126590_export)
 {
-    SetAbsolute(USE_ABSOLUTE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_ABSOLUTE);
     createSwDoc("tdf126590.docx");
     // Don't modify link.
     saveAndReload(TestFilter::DOCX);
@@ -191,7 +187,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126590_export)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126768_export)
 {
-    SetAbsolute(USE_ABSOLUTE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_ABSOLUTE);
     createSwDoc("tdf126768.docx");
     // Don't modify link.
     saveAndReload(TestFilter::DOCX);
@@ -203,7 +199,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126768_export)
 
 CPPUNIT_TEST_FIXTURE(Test, testNon_ascii_link_export)
 {
-    SetAbsolute(USE_ABSOLUTE);
+    ScopedConfigValue<SaveFilesystemURLCfg> aCfg(USE_ABSOLUTE);
     createSwDoc("non_ascii_link.docx");
     // Don't modify link.
     saveAndReload(TestFilter::DOCX);

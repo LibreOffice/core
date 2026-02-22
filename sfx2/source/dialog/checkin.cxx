@@ -8,6 +8,9 @@
  */
 
 #include <checkin.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 SfxCheckinDialog::SfxCheckinDialog(weld::Window* pParent)
     : GenericDialogController( pParent, u"sfx/ui/checkin.ui"_ustr, u"CheckinDialog"_ustr)

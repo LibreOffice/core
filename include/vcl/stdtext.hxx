@@ -25,11 +25,11 @@
 #include <string_view>
 
 #include <rtl/ustring.hxx>
-#include <vcl/wintypes.hxx>
 #include <vcl/dllapi.h>
 
 class Image;
 namespace weld { class Widget; }
+enum class StandardButtonType;
 
 void VCL_DLLPUBLIC ShowServiceNotAvailableError(weld::Widget* pParent, std::u16string_view rServiceName, bool bError);
 

@@ -24,7 +24,11 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Toolbar.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 #include <svl/cjkoptions.hxx>
 

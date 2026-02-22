@@ -41,6 +41,8 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <com/sun/star/io/Pipe.hpp>
@@ -1405,8 +1407,8 @@ void createLibImpl(weld::Window* pWin, const ScriptDocument& rDocument,
                 BrowseMode nMode = pBasicBox->GetMode();
                 bool bDlgMode = ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules );
                 const auto sId = bDlgMode ? RID_BMP_DLGLIB : RID_BMP_MODLIB;
-                pBasicBox->AddEntry(aLibName, sId, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_LIBRARY));
-                pBasicBox->AddEntry(aModName, RID_BMP_MODULE, xRootEntry.get(), false, std::make_unique<Entry>(OBJ_TYPE_MODULE));
+                pBasicBox->AddEntry(aLibName, sId, xRootEntry.get(), false, std::make_unique<Entry>(EntryType::Library));
+                pBasicBox->AddEntry(aModName, RID_BMP_MODULE, xRootEntry.get(), false, std::make_unique<Entry>(EntryType::Module));
                 pBasicBox->set_cursor(*xRootEntry);
                 pBasicBox->select(*xRootEntry);
             }

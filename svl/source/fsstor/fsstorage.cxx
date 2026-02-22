@@ -44,6 +44,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <osl/diagnose.h>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>

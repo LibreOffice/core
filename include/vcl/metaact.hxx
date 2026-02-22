@@ -22,12 +22,10 @@
 
 #include <sal/config.h>
 
-#include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/poly.hxx>
 
 #include <vcl/dllapi.h>
-#include <vcl/rendercontext/State.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
@@ -36,9 +34,7 @@
 #include <vcl/hatch.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/metaactiontypes.hxx>
 #include <vcl/region.hxx>
-#include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/wall.hxx>
 #include <basegfx/utils/bgradient.hxx>
 
@@ -47,6 +43,11 @@
 
 class OutputDevice;
 enum class DrawTextFlags;
+enum class MetaActionType;
+enum class RasterOp;
+namespace rtl { template <class reference_type> class Reference; }
+namespace vcl { enum class PushFlags; }
+namespace vcl::text { enum class ComplexTextLayoutFlags : sal_uInt8; }
 
 struct ImplMetaReadData
 {

@@ -23,12 +23,15 @@
 #include <basic/sbxvar.hxx>
 #include <basic/sbuno.hxx>
 #include <osl/process.h>
+#include <vcl/bitmap.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/wintypes.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
@@ -938,7 +941,7 @@ void SbRtl_InStrRev(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Int(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     SbxVariableRef pArg = rPar.Get(1);
@@ -1861,99 +1864,91 @@ void SbRtl_TimeSerial(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_DateValue(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    // #39629 check GetSbData()->pInst, can be called from the URL line
+    std::shared_ptr<SvNumberFormatter> pFormatter;
+    if( GetSbData()->pInst )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        pFormatter = GetSbData()->pInst->GetNumberFormatter();
     }
     else
     {
-        // #39629 check GetSbData()->pInst, can be called from the URL line
-        std::shared_ptr<SvNumberFormatter> pFormatter;
-        if( GetSbData()->pInst )
-        {
-            pFormatter = GetSbData()->pInst->GetNumberFormatter();
-        }
-        else
-        {
-            sal_uInt32 n;   // Dummy
-            pFormatter = SbiInstance::PrepareNumberFormatter( n, n, n );
-        }
+        sal_uInt32 n;   // Dummy
+        pFormatter = SbiInstance::PrepareNumberFormatter( n, n, n );
+    }
 
-        LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
-        sal_uInt32 nIndex = pFormatter->GetStandardIndex( eLangType);
-        double fResult;
-        OUString aStr(rPar.Get(1)->GetOUString());
-        bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
-        SvNumFormatType nType = pFormatter->GetType( nIndex );
+    LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
+    sal_uInt32 nIndex = pFormatter->GetStandardIndex( eLangType);
+    double fResult;
+    OUString aStr(rPar.Get(1)->GetOUString());
+    bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
+    SvNumFormatType nType = pFormatter->GetType( nIndex );
 
-        // DateValue("February 12, 1969") raises error if the system locale is not en_US
-        // It seems that both locale number formatter and English number
-        // formatter are supported in Visual Basic.
-        if( !bSuccess && ( eLangType != LANGUAGE_ENGLISH_US ) )
-        {
-            // Try using LANGUAGE_ENGLISH_US to get the date value.
-            nIndex = pFormatter->GetStandardIndex( LANGUAGE_ENGLISH_US);
-            bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
-            nType = pFormatter->GetType( nIndex );
-        }
+    // DateValue("February 12, 1969") raises error if the system locale is not en_US
+    // It seems that both locale number formatter and English number
+    // formatter are supported in Visual Basic.
+    if( !bSuccess && ( eLangType != LANGUAGE_ENGLISH_US ) )
+    {
+        // Try using LANGUAGE_ENGLISH_US to get the date value.
+        nIndex = pFormatter->GetStandardIndex( LANGUAGE_ENGLISH_US);
+        bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
+        nType = pFormatter->GetType( nIndex );
+    }
 
-        if(bSuccess && (nType==SvNumFormatType::DATE || nType==SvNumFormatType::DATETIME))
+    if(bSuccess && (nType==SvNumFormatType::DATE || nType==SvNumFormatType::DATETIME))
+    {
+        if ( nType == SvNumFormatType::DATETIME )
         {
-            if ( nType == SvNumFormatType::DATETIME )
+            // cut time
+            if ( fResult  > 0.0 )
             {
-                // cut time
-                if ( fResult  > 0.0 )
-                {
-                    fResult = floor( fResult );
-                }
-                else
-                {
-                    fResult = ceil( fResult );
-                }
+                fResult = floor( fResult );
             }
-            rPar.Get(0)->PutDate(fResult);
+            else
+            {
+                fResult = ceil( fResult );
+            }
         }
-        else
-        {
-            StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
-        }
+        rPar.Get(0)->PutDate(fResult);
+    }
+    else
+    {
+        StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
     }
 }
 
 void SbRtl_TimeValue(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    std::shared_ptr<SvNumberFormatter> pFormatter;
+    if( GetSbData()->pInst )
+        pFormatter = GetSbData()->pInst->GetNumberFormatter();
+    else
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        sal_uInt32 n;
+        pFormatter = SbiInstance::PrepareNumberFormatter( n, n, n );
+    }
+
+    sal_uInt32 nIndex = 0;
+    double fResult;
+    bool bSuccess = pFormatter->IsNumberFormat(rPar.Get(1)->GetOUString(),
+                                               nIndex, fResult );
+    SvNumFormatType nType = pFormatter->GetType(nIndex);
+    if(bSuccess && (nType==SvNumFormatType::TIME||nType==SvNumFormatType::DATETIME))
+    {
+        if ( nType == SvNumFormatType::DATETIME )
+        {
+            // cut days
+            fResult = fmod( fResult, 1 );
+        }
+        rPar.Get(0)->PutDate(fResult);
     }
     else
     {
-        std::shared_ptr<SvNumberFormatter> pFormatter;
-        if( GetSbData()->pInst )
-            pFormatter = GetSbData()->pInst->GetNumberFormatter();
-        else
-        {
-            sal_uInt32 n;
-            pFormatter = SbiInstance::PrepareNumberFormatter( n, n, n );
-        }
-
-        sal_uInt32 nIndex = 0;
-        double fResult;
-        bool bSuccess = pFormatter->IsNumberFormat(rPar.Get(1)->GetOUString(),
-                                                   nIndex, fResult );
-        SvNumFormatType nType = pFormatter->GetType(nIndex);
-        if(bSuccess && (nType==SvNumFormatType::TIME||nType==SvNumFormatType::DATETIME))
-        {
-            if ( nType == SvNumFormatType::DATETIME )
-            {
-                // cut days
-                fResult = fmod( fResult, 1 );
-            }
-            rPar.Get(0)->PutDate(fResult);
-        }
-        else
-        {
-            StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
-        }
+        StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
     }
 }
 
@@ -2904,94 +2899,82 @@ void SbRtl_FileAttr(StarBASIC *, SbxArray & rPar, bool)
     // already opened files and the name doesn't matter there.
 
     if (rPar.Count() != 3)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    sal_Int16 nChannel = rPar.Get(1)->GetInteger();
+    SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
+    SbiStream* pSbStrm = pIO->GetStream( nChannel );
+    if ( !pSbStrm )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
+    }
+    sal_Int16 nRet;
+    if (rPar.Get(2)->GetInteger() == 1)
+    {
+        nRet = static_cast<sal_Int16>(pSbStrm->GetMode());
     }
     else
     {
-        sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
-        SbiStream* pSbStrm = pIO->GetStream( nChannel );
-        if ( !pSbStrm )
-        {
-            return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
-        }
-        sal_Int16 nRet;
-        if (rPar.Get(2)->GetInteger() == 1)
-        {
-            nRet = static_cast<sal_Int16>(pSbStrm->GetMode());
-        }
-        else
-        {
-            nRet = 0; // System file handle not supported
-        }
-        rPar.Get(0)->PutInteger(nRet);
+        nRet = 0; // System file handle not supported
     }
+    rPar.Get(0)->PutInteger(nRet);
 }
 void SbRtl_Loc(StarBASIC *, SbxArray & rPar, bool)
 {
     // No changes for UCB
     if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    sal_Int16 nChannel = rPar.Get(1)->GetInteger();
+    SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
+    SbiStream* pSbStrm = pIO->GetStream( nChannel );
+    if ( !pSbStrm )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
+    }
+    SvStream* pSvStrm = pSbStrm->GetStrm();
+    std::size_t nPos;
+    if( pSbStrm->IsRandom())
+    {
+        short nBlockLen = pSbStrm->GetBlockLen();
+        nPos = nBlockLen ? (pSvStrm->Tell() / nBlockLen) : 0;
+        nPos++; // block positions starting at 1
+    }
+    else if ( pSbStrm->IsText() )
+    {
+        nPos = pSbStrm->GetLine();
+    }
+    else if( pSbStrm->IsBinary() )
+    {
+        nPos = pSvStrm->Tell();
+    }
+    else if ( pSbStrm->IsSeq() )
+    {
+        nPos = ( pSvStrm->Tell()+1 ) / 128;
     }
     else
     {
-        sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
-        SbiStream* pSbStrm = pIO->GetStream( nChannel );
-        if ( !pSbStrm )
-        {
-            return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
-        }
-        SvStream* pSvStrm = pSbStrm->GetStrm();
-        std::size_t nPos;
-        if( pSbStrm->IsRandom())
-        {
-            short nBlockLen = pSbStrm->GetBlockLen();
-            nPos = nBlockLen ? (pSvStrm->Tell() / nBlockLen) : 0;
-            nPos++; // block positions starting at 1
-        }
-        else if ( pSbStrm->IsText() )
-        {
-            nPos = pSbStrm->GetLine();
-        }
-        else if( pSbStrm->IsBinary() )
-        {
-            nPos = pSvStrm->Tell();
-        }
-        else if ( pSbStrm->IsSeq() )
-        {
-            nPos = ( pSvStrm->Tell()+1 ) / 128;
-        }
-        else
-        {
-            nPos = pSvStrm->Tell();
-        }
-        rPar.Get(0)->PutLong(static_cast<sal_Int32>(nPos));
+        nPos = pSvStrm->Tell();
     }
+    rPar.Get(0)->PutLong(static_cast<sal_Int32>(nPos));
 }
 
 void SbRtl_Lof(StarBASIC *, SbxArray & rPar, bool)
 {
     // No changes for UCB
     if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    sal_Int16 nChannel = rPar.Get(1)->GetInteger();
+    SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
+    SbiStream* pSbStrm = pIO->GetStream( nChannel );
+    if ( !pSbStrm )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
     }
-    else
-    {
-        sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        SbiIoSystem* pIO = GetSbData()->pInst->GetIoSystem();
-        SbiStream* pSbStrm = pIO->GetStream( nChannel );
-        if ( !pSbStrm )
-        {
-            return StarBASIC::Error( ERRCODE_BASIC_BAD_CHANNEL );
-        }
-        SvStream* pSvStrm = pSbStrm->GetStrm();
-        sal_uInt64 const nLen = pSvStrm->TellEnd();
-        rPar.Get(0)->PutLong(static_cast<sal_Int32>(nLen));
-    }
+    SvStream* pSvStrm = pSbStrm->GetStrm();
+    sal_uInt64 const nLen = pSvStrm->TellEnd();
+    rPar.Get(0)->PutLong(static_cast<sal_Int32>(nLen));
 }
 
 

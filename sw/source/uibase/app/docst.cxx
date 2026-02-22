@@ -90,6 +90,7 @@
 #include <svl/ptitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <svx/dialog/TableStylesDlg.hxx>
 
 using namespace ::com::sun::star;
 
@@ -190,7 +191,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     else if (auto pColl = pShell->GetCurTextFormatColl())
                     {
                         aName = pColl->GetName();
-                        sal_uInt16 nId = pColl->GetPoolFormatId();
+                        SwPoolFormatId nId = pColl->GetPoolFormatId();
                         SwStyleNameMapper::FillProgName(nId, aProgName);
                     }
 
@@ -322,6 +323,62 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
     }
 }
 
+void SwDocShell::ApplyStyleSheetRequest(const OUString& aParam, sal_uInt16 nSlot, SfxRequest& rReq, SfxStyleFamily nFamily, SfxStyleSearchBits nMask, SwWrtShell* pActShell)
+{
+    if (!aParam.isEmpty() || nSlot == SID_STYLE_WATERCAN )
+    {
+        sal_uInt16 nRet = 0xffff;
+        bool bReturns = false;
+
+        switch(nSlot)
+        {
+            case SID_STYLE_EDIT:
+            case SID_STYLE_FONT:
+                Edit(rReq.GetFrameWeld(), UIName(aParam), {}, nFamily, nMask, false, (nSlot == SID_STYLE_FONT) ? u"font"_ustr : OUString(), pActShell);
+                break;
+            case SID_STYLE_DELETE:
+                Delete(aParam, nFamily);
+                break;
+            case SID_STYLE_HIDE:
+            case SID_STYLE_SHOW:
+                Hide(aParam, nFamily, nSlot == SID_STYLE_HIDE);
+                break;
+            case SID_STYLE_APPLY:
+                // Shell-switch in ApplyStyles
+                nRet = static_cast<sal_uInt16>(ApplyStyles(aParam, nFamily, pActShell, rReq.GetModifier() ));
+                bReturns = true;
+                break;
+            case SID_STYLE_WATERCAN:
+                nRet = static_cast<sal_uInt16>(DoWaterCan(aParam, nFamily));
+                bReturns = true;
+                break;
+            case SID_STYLE_UPDATE_BY_EXAMPLE:
+                UpdateStyle(UIName(aParam), nFamily, pActShell);
+                break;
+            case SID_STYLE_NEW_BY_EXAMPLE:
+                MakeByExample(UIName(aParam), nFamily, nMask, pActShell);
+                break;
+
+            default:
+                OSL_FAIL("Invalid SlotId");
+        }
+
+        // Update formatting toolbar buttons status
+        if (GetWrtShell()->GetSelectionType() == SelectionType::PostIt)
+            GetView()->GetViewFrame().GetBindings().InvalidateAll(false);
+
+        if (bReturns)
+        {
+            if(rReq.IsAPI()) // Basic only gets TRUE or FALSE
+                rReq.SetReturnValue(SfxUInt16Item(nSlot, sal_uInt16(nRet !=0)));
+            else
+                rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet));
+        }
+
+        rReq.Done();
+    }
+}
+
 // evaluate StyleSheet-Requests
 void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 {
@@ -413,12 +470,18 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
                         SfxStyleSheetBasePool& rPool = *GetStyleSheetPool();
-                        SfxNewStyleDlg aDlg(GetView()->GetFrameWeld(), rPool, nFamily);
-                        if (aDlg.run() == RET_OK)
-                        {
-                            aParam = aDlg.GetName();
-                            rReq.AppendItem(SfxStringItem(nSlot, aParam));
-                        }
+                        auto xDlg = std::make_shared<SfxNewStyleDlg>(GetView()->GetFrameWeld(), rPool, SfxStyleFamily::Para);
+                        auto xRequest = std::make_shared<SfxRequest>(rReq);
+                        rReq.Ignore();
+                        weld::GenericDialogController::runAsync(xDlg, [xDlg, xRequest=std::move(xRequest), this](sal_Int32 nResult){
+                            if (nResult == RET_OK) {
+                                OUString sName = xDlg->GetName();
+                                xRequest->AppendItem(SfxStringItem(SID_STYLE_NEW_BY_EXAMPLE, sName));
+                                ApplyStyleSheetRequest(sName, SID_STYLE_NEW_BY_EXAMPLE, *xRequest, SfxStyleFamily::Para,
+                                                       SfxStyleSearchBits::Auto, nullptr);
+                            }
+                        });
+                        return;
                     }
                     break;
 
@@ -522,58 +585,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     rReq.AppendItem(SfxStringItem(nSlot, aParam));
                 }
             }
-            if (!aParam.isEmpty() || nSlot == SID_STYLE_WATERCAN )
-            {
-                sal_uInt16 nRet = 0xffff;
-                bool bReturns = false;
 
-                switch(nSlot)
-                {
-                    case SID_STYLE_EDIT:
-                    case SID_STYLE_FONT:
-                        Edit(rReq.GetFrameWeld(), UIName(aParam), {}, nFamily, nMask, false, (nSlot == SID_STYLE_FONT) ? u"font"_ustr : OUString(), pActShell);
-                        break;
-                    case SID_STYLE_DELETE:
-                        Delete(aParam, nFamily);
-                        break;
-                    case SID_STYLE_HIDE:
-                    case SID_STYLE_SHOW:
-                        Hide(aParam, nFamily, nSlot == SID_STYLE_HIDE);
-                        break;
-                    case SID_STYLE_APPLY:
-                        // Shell-switch in ApplyStyles
-                        nRet = static_cast<sal_uInt16>(ApplyStyles(aParam, nFamily, pActShell, rReq.GetModifier() ));
-                        bReturns = true;
-                        break;
-                    case SID_STYLE_WATERCAN:
-                        nRet = static_cast<sal_uInt16>(DoWaterCan(aParam, nFamily));
-                        bReturns = true;
-                        break;
-                    case SID_STYLE_UPDATE_BY_EXAMPLE:
-                        UpdateStyle(UIName(aParam), nFamily, pActShell);
-                        break;
-                    case SID_STYLE_NEW_BY_EXAMPLE:
-                        MakeByExample(UIName(aParam), nFamily, nMask, pActShell);
-                        break;
-
-                    default:
-                        OSL_FAIL("Invalid SlotId");
-                }
-
-                // Update formatting toolbar buttons status
-                if (GetWrtShell()->GetSelectionType() == SelectionType::PostIt)
-                    GetView()->GetViewFrame().GetBindings().InvalidateAll(false);
-
-                if (bReturns)
-                {
-                    if(rReq.IsAPI()) // Basic only gets TRUE or FALSE
-                        rReq.SetReturnValue(SfxUInt16Item(nSlot, sal_uInt16(nRet !=0)));
-                    else
-                        rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet));
-                }
-
-                rReq.Done();
-            }
+            ApplyStyleSheetRequest(aParam, nSlot, rReq, nFamily, nMask, pActShell);
 
             break;
         }
@@ -851,8 +864,8 @@ void SwDocShell::Edit(
                     SwTextFormatColl* pColl = m_pWrtShell->FindTextFormatCollByName( rParent );
                     if(!pColl)
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::TxtColl);
-                        if(USHRT_MAX != nId)
+                        SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::TxtColl);
+                        if(SwPoolFormatId::UNKNOWN != nId)
                             pColl = m_pWrtShell->GetTextCollFromPool( nId );
                     }
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
@@ -874,8 +887,8 @@ void SwDocShell::Edit(
                     SwCharFormat* pCFormat = m_pWrtShell->FindCharFormatByName(rParent);
                     if(!pCFormat)
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::ChrFmt);
-                        if(USHRT_MAX != nId)
+                        SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::ChrFmt);
+                        if(SwPoolFormatId::UNKNOWN != nId)
                             pCFormat = m_pWrtShell->GetCharFormatFromPool( nId );
                     }
 
@@ -898,8 +911,8 @@ void SwDocShell::Edit(
                     SwFrameFormat* pFFormat = m_pWrtShell->GetDoc()->FindFrameFormatByName( rParent );
                     if(!pFFormat)
                     {
-                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::FrmFmt);
-                        if(USHRT_MAX != nId)
+                        SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, SwGetPoolIdFromName::FrmFmt);
+                        if(SwPoolFormatId::UNKNOWN != nId)
                             pFFormat = m_pWrtShell->GetFrameFormatFromPool( nId );
                     }
                     pDStyle->GetFrameFormat()->SetDerivedFrom( pFFormat );
@@ -926,6 +939,8 @@ void SwDocShell::Edit(
     if(!pStyle)
         return;
 
+    SwWrtShell* pCurrShell = pActShell ? pActShell : m_pWrtShell;
+
     // put dialogues together
     rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pStyle) ) );
     if( SfxStyleFamily::Para == nFamily )
@@ -940,6 +955,38 @@ void SwDocShell::Edit(
     else if( SfxStyleFamily::Char == nFamily )
     {
         ::ConvertAttrCharToGen(xTmp->GetItemSet());
+    }
+    else if( SfxStyleFamily::Table == nFamily )
+    {
+        SwTableAutoFormatTable& rTableStyles = GetDoc()->GetTableStyles();
+        const OUString sOldName = rName.toString();
+        SwTableAutoFormat* pData = rTableStyles.FindAutoFormat(sOldName);
+        if (pData)
+        {
+            SwTableAutoFormat pOld(*pData);
+
+            if (!rParent.isEmpty())
+                pData->SetParent(rParent.toString());
+            bool bRTL = pCurrShell->IsCursorInTable() ? pCurrShell->IsTableRightToLeft()
+                                                      : AllSettings::GetLayoutRTL();
+            SvxTableStylesDlg aDlg(GetView()->GetFrameWeld(), bNew, rTableStyles, *pData, bRTL);
+            aDlg.getDialog()->set_modal(true);
+            if (aDlg.run() == RET_OK)
+            {
+                const OUString sNewName = pData->GetName().toString();
+                GetDoc()->ResetTableStyles(sNewName, sOldName);
+                m_xDoc->BroadcastStyleOperation(UIName(sNewName), nFamily,
+                                                SfxHintId::StyleSheetModified);
+            }
+            else
+            {
+                rTableStyles.ReleaseAutoFormat(sOldName);
+                if (!bNew)
+                    rTableStyles.InsertAutoFormat(&pOld);
+            }
+            aDlg.getDialog()->set_modal(false);
+        }
+        return;
     }
 
     if(SfxStyleFamily::Page == nFamily || SfxStyleFamily::Para == nFamily)
@@ -964,7 +1011,6 @@ void SwDocShell::Edit(
         rSet.Put(SfxGrabBagItem(SID_ATTR_CHAR_GRABBAG, std::move(aGrabBagMap)));
     }
 
-    SwWrtShell* pCurrShell = pActShell ? pActShell : m_pWrtShell;
     if (nFamily == SfxStyleFamily::Frame)
     {
         SfxItemSet& rSet = xTmp->GetItemSet();
@@ -1543,7 +1589,7 @@ void SwDocShell::MakeByExample( const UIName &rName, SfxStyleFamily nFamily,
                 pColl->SetDerivedFrom(pDerivedFrom);
 
                     // set the mask at the Collection:
-                sal_uInt16 nId = pColl->GetPoolFormatId() & 0x87ff;
+                sal_uInt16 nId = sal_uInt16(pColl->GetPoolFormatId()) & 0x87ff;
                 switch( nMask & static_cast<SfxStyleSearchBits>(0x0fff) )
                 {
                     case SfxStyleSearchBits::SwText:
@@ -1566,7 +1612,7 @@ void SwDocShell::MakeByExample( const UIName &rName, SfxStyleFamily nFamily,
                         break;
                     default: break;
                 }
-                pColl->SetPoolFormatId(nId);
+                pColl->SetPoolFormatId(SwPoolFormatId(nId));
 
                 if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
                 {
@@ -1636,7 +1682,7 @@ void SwDocShell::MakeByExample( const UIName &rName, SfxStyleFamily nFamily,
             SwPageDesc& rSrc = const_cast<SwPageDesc&>(pCurrWrtShell->GetPageDesc( nPgDsc ));
             SwPageDesc& rDest = *const_cast<SwPageDesc*>(pStyle->GetPageDesc());
 
-            sal_uInt16 nPoolId = rDest.GetPoolFormatId();
+            SwPoolFormatId nPoolId = rDest.GetPoolFormatId();
             sal_uInt16 nHId = rDest.GetPoolHelpId();
             sal_uInt8 nHFId = rDest.GetPoolHlpFileId();
 

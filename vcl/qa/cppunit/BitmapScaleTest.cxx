@@ -10,10 +10,10 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-
 #include <vcl/bitmap.hxx>
 
 #include <tools/stream.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 
 #include <BitmapSymmetryCheck.hxx>

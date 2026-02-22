@@ -20,6 +20,7 @@
 #include <svgswitchnode.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
 namespace svgio::svgreader

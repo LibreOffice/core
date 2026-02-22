@@ -92,12 +92,13 @@ enum DATASOURCE_TYPE
 #define PAGE_DBSETUPWIZARD_JDBC                      10
 #define PAGE_DBSETUPWIZARD_ADO                       11
 #define PAGE_DBSETUPWIZARD_ODBC                      12
-#define PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET   13
+#define PAGE_DBSETUPWIZARD_SPREADSHEET               13
 #define PAGE_DBSETUPWIZARD_AUTHENTIFICATION          14
 #define PAGE_DBSETUPWIZARD_FINAL                     16
 #define PAGE_DBSETUPWIZARD_USERDEFINED               17
 #define PAGE_DBSETUPWIZARD_MYSQL_NATIVE              18
 #define PAGE_DBSETUPWIZARD_POSTGRES                  19
+#define PAGE_DBSETUPWIZARD_DOCUMENT                  20
 
 // ODsnTypeCollection
 class UNLESS_MERGELIBS_MORE(OOO_DLLPUBLIC_DBA) ODsnTypeCollection final

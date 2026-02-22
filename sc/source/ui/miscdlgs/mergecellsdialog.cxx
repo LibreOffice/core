@@ -9,6 +9,7 @@
  */
 
 #include <mergecellsdialog.hxx>
+#include <vcl/weld/Builder.hxx>
 
 static ScMergeCellsOption lastUsedMergeCellsOption = KeepContentHiddenCells;
 

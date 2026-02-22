@@ -21,6 +21,8 @@
 #include "menuitemlist.hxx"
 #include "menufloatingwindow.hxx"
 
+#include <comphelper/OAccessible.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/taskpanelist.hxx>

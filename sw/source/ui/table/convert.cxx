@@ -32,6 +32,8 @@
 #include <memory>
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sal/log.hxx>
 #include <shellres.hxx>
@@ -92,10 +94,9 @@ void SwConvertTableDlg::GetValues(sal_Unicode& rDelim, SwInsertTableOptions& rIn
 SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     : SfxDialogController(rView.GetFrameWeld(), u"modules/swriter/ui/converttexttable.ui"_ustr,
                           u"ConvertTextTableDialog"_ustr)
-    , m_nIndex(0)
-    , m_nDfltStylePos(0)
+    , m_nIndex(-1)
     , m_bCoreDataChanged(false)
-    , m_xTableTable(new SwTableAutoFormatTable(SwModule::get()->GetAutoFormatTable()))
+    , m_xTableTable(new SwTableAutoFormatTable)
     , m_xTabBtn(m_xBuilder->weld_radio_button(u"tabs"_ustr))
     , m_xSemiBtn(m_xBuilder->weld_radio_button(u"semicolons"_ustr))
     , m_xParaBtn(m_xBuilder->weld_radio_button(u"paragraph"_ustr))
@@ -114,10 +115,10 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     , m_xBtnFont(m_xBuilder->weld_check_button(u"fontcb"_ustr))
     , m_xBtnPattern(m_xBuilder->weld_check_button(u"patterncb"_ustr))
     , m_xBtnAlignment(m_xBuilder->weld_check_button(u"alignmentcb"_ustr))
+    , m_aWndPreview(rView.GetWrtShell().IsCursorInTable() ? rView.GetWrtShell().IsTableRightToLeft()
+                                                          : AllSettings::GetLayoutRTL())
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aWndPreview))
 {
-    m_aWndPreview.DetectRTL(&rView.GetWrtShell());
-
     const int nWidth = m_xLbFormat->get_approximate_digit_width() * 32;
     const int nHeight = m_xLbFormat->get_height_rows(8);
     m_xLbFormat->set_size_request(nWidth, nHeight);
@@ -182,18 +183,7 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     Init();
 }
 
-SwConvertTableDlg::~SwConvertTableDlg()
-{
-    try
-    {
-        if (m_bCoreDataChanged)
-            m_xTableTable->Save();
-    }
-    catch (...)
-    {
-    }
-    m_xTableTable.reset();
-}
+SwConvertTableDlg::~SwConvertTableDlg() { m_xTableTable.reset(); }
 
 void SwConvertTableDlg::Init()
 {
@@ -207,12 +197,10 @@ void SwConvertTableDlg::Init()
 
     m_xLbFormat->connect_selection_changed(LINK(this, SwConvertTableDlg, SelFormatHdl));
 
-    // Then the list to be expanded by the entry "- none -".
-    m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone);
-    m_nDfltStylePos = 1;
-    m_nIndex = 255;
+    size_t nCount = m_xTableTable->size();
+    m_nIndex = nCount ? 0 : -1;
 
-    for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size()); i < nCount; i++)
+    for (size_t i = 0; i < nCount; ++i)
     {
         SwTableAutoFormat const& rFormat = (*m_xTableTable)[i];
         m_xLbFormat->append_text(rFormat.GetName().toString());
@@ -220,7 +208,7 @@ void SwConvertTableDlg::Init()
             m_nIndex = i;
     }
 
-    m_xLbFormat->select(255 != m_nIndex ? (m_nDfltStylePos + m_nIndex) : 0);
+    m_xLbFormat->select(m_nIndex);
     SelFormatHdl(*m_xLbFormat);
 }
 
@@ -244,7 +232,7 @@ void SwConvertTableDlg::UpdateChecks(const SwTableAutoFormat& rFormat, bool bEna
 
 std::unique_ptr<SwTableAutoFormat> SwConvertTableDlg::FillAutoFormatOfIndex() const
 {
-    if (255 != m_nIndex)
+    if (m_nIndex != -1)
     {
         return std::make_unique<SwTableAutoFormat>((*m_xTableTable)[m_nIndex]);
     }
@@ -254,7 +242,7 @@ std::unique_ptr<SwTableAutoFormat> SwConvertTableDlg::FillAutoFormatOfIndex() co
 
 IMPL_LINK(SwConvertTableDlg, CheckHdl, weld::Toggleable&, rBtn, void)
 {
-    if (m_nIndex == 255)
+    if (m_nIndex == -1)
         return;
 
     SwTableAutoFormat& rData = (*m_xTableTable)[m_nIndex];
@@ -280,38 +268,22 @@ IMPL_LINK(SwConvertTableDlg, CheckHdl, weld::Toggleable&, rBtn, void)
             m_bCoreDataChanged = true;
         }
 
-        m_aWndPreview.NotifyChange(rData);
+        m_aWndPreview.NotifyChange(m_xTableTable->GetResolvedStyle(&rData));
         mxTAutoFormat = FillAutoFormatOfIndex();
     }
 }
 
 IMPL_LINK_NOARG(SwConvertTableDlg, SelFormatHdl, weld::TreeView&, void)
 {
-    sal_uInt8 nOldIdx = m_nIndex;
-    int nSelPos = m_xLbFormat->get_selected_index();
-    if (nSelPos >= m_nDfltStylePos)
+    m_nIndex = m_xLbFormat->get_selected_index();
+    if (m_nIndex == -1)
     {
-        m_nIndex = nSelPos - m_nDfltStylePos;
-        m_aWndPreview.NotifyChange((*m_xTableTable)[m_nIndex]);
-        UpdateChecks((*m_xTableTable)[m_nIndex], true);
-        mxTAutoFormat = FillAutoFormatOfIndex();
+        SAL_WARN("sw.ui", "No entry selected");
+        return;
     }
-    else
-    {
-        m_nIndex = 255;
-
-        SwTableAutoFormat aTmp(TableStyleName(SwViewShell::GetShellRes()->aStrNone));
-        aTmp.SetFont(false);
-        aTmp.SetJustify(false);
-        aTmp.SetFrame(false);
-        aTmp.SetBackground(false);
-        aTmp.SetValueFormat(false);
-        aTmp.SetWidthHeight(false);
-
-        if (nOldIdx != m_nIndex)
-            m_aWndPreview.NotifyChange(aTmp);
-        UpdateChecks(aTmp, false);
-    }
+    m_aWndPreview.NotifyChange(m_xTableTable->GetResolvedStyle(m_xTableTable->GetData(m_nIndex)));
+    UpdateChecks((*m_xTableTable)[m_nIndex], true);
+    mxTAutoFormat = FillAutoFormatOfIndex();
 }
 
 IMPL_LINK(SwConvertTableDlg, BtnHdl, weld::Toggleable&, rButton, void)

@@ -32,6 +32,7 @@ inline constexpr OUString PROP_BackGraphicTransparency = u"BackGraphicTransparen
 inline constexpr OUString PROP_BackTransparent = u"BackTransparent"_ustr;
 inline constexpr OUString PROP_BackgroundFullSize = u"BackgroundFullSize"_ustr;
 inline constexpr OUString PROP_BorderColor = u"BorderColor"_ustr;
+inline constexpr OUString PROP_Border = u"Border"_ustr;
 inline constexpr OUString PROP_BorderDistance = u"BorderDistance"_ustr;
 inline constexpr OUString PROP_BottomBorder = u"BottomBorder"_ustr;
 inline constexpr OUString PROP_BottomBorderDistance = u"BottomBorderDistance"_ustr;

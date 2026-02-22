@@ -51,7 +51,7 @@ class IconSet(UITestCase):
                 self.ui_test.close_dialog_through_button(xOKBtn)
 
             self.assertEqual(1, cond_formats.Length)
-            self.assertEqual(11, cond_formats.ConditionalFormats[0].getByIndex(0).Icons) # IconSet_4ArrowsGray
-            self.assertEqual(4, len(cond_formats.ConditionalFormats[0].getByIndex(0).IconSetEntries))
+            self.assertEqual(11, cond_formats.ConditionalFormats[0][0].Icons) # IconSet_4ArrowsGray
+            self.assertEqual(4, len(cond_formats.ConditionalFormats[0][0].IconSetEntries))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -22,6 +22,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <canvas/canvastools.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>

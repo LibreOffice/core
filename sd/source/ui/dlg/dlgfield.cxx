@@ -25,6 +25,7 @@
 #include <svx/langbox.hxx>
 #include <editeng/langitem.hxx>
 #include <unotools/useroptions.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <strings.hrc>
 #include <sdresid.hxx>

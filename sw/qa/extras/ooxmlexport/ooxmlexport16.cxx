@@ -31,6 +31,7 @@
 #include <o3tl/string_view.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -115,9 +116,6 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameWrapTextMode)
 {
     createSwDoc("tdf143432_Frame_WrapTextMode.odt");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     save(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -150,9 +148,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_glow_rotate)
     // Test fails on reload without fix with left: expected 1461 actual 2455; right: expected 1302
     // actual 4177; top: expected 1522 actual 2457; bottom: expected 1296, actual 4179
     verify();
-
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     verify();
@@ -208,7 +203,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_LeftMarginShadowLeft, "tdf142486_LeftMarg
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(953), getProperty<sal_Int32>(xFrame, u"LeftMargin"_ustr), 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf151384Hyperlink, "151384Hyperlink.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf151384Hyperlink)
 {
     createSwDoc("151384Hyperlink.odt");
     save(TestFilter::DOCX);
@@ -220,9 +215,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf151384Hyperlink, "151384Hyperlink.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 4
-    skipValidation();
-
     // This bugdoc has a groupshape (WPG) with a table inside its each member shape.
     // Before there was no table after import at all. From now, there must be 2 tables.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -493,13 +485,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148671)
     // Preserve tag on SDT blocks. (Before the fix, these were all lost)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag", 3);
+
+    // Must not have an empty a:graphic a:graphicData.
+    // Header2 defines a simple (not visible) VML shape,
+    // which does not have a DML counterpart.
+    // Without the accompanying fix, an empty DML a:graphic was exported,
+    // which MS Word considered egregious enough to report it as corrupt.
+    xmlDocUniquePtr pXmlHeader = parseExport(u"word/header1.xml"_ustr);
+    assertXPath(pXmlHeader, "//mc:AlternateContent", 0); // no DML alternative
+    assertXPath(pXmlHeader, "//w:pict", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 3
-    skipValidation();
-
     // Don't crash when document is opened
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
@@ -512,18 +510,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149649, "tdf149649.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf138771, "tdf138771.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Don't crash when document is imported
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf168017, "tdf168017.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 20
-    skipValidation();
-
     // Don't crash when document is imported
 }
 
@@ -536,9 +528,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberin
 CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
 {
     createSwDoc("tdf134619_numberingProps.doc");
-
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     // Get the third paragraph's numbering style's 1st level's bullet size
@@ -567,22 +556,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134951_duplicates)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
 {
-    bool bIsExportAsShading = !officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::get();
-    auto batch = comphelper::ConfigurationChanges::create();
-
-    // This function is run at the end of the test - returning the filter options to normal.
-    comphelper::ScopeGuard g(
-        [bIsExportAsShading, batch]
-        {
-            if (bIsExportAsShading)
-            {
-                officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(false, batch);
-                batch->commit();
-            }
-        });
     // For these test, ensure exporting CharBackground as w:highlight.
-    officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::set(true, batch);
-    batch->commit();
+    ScopedConfigValue<
+        officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting>
+        aCfg(true);
 
     createSwDoc("tdf135774_numberingShading.docx");
     save(TestFilter::DOCX);
@@ -727,9 +704,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
 CPPUNIT_TEST_FIXTURE(Test, testTdf139580)
 {
     createSwDoc("tdf139580.odt");
-
-    //FIXME: validation error in OOXML export: Errors: 21
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
     // Without the fix in place, this test would have crashed at export time
@@ -891,9 +865,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153874, "image_through_shape.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTextBoxZOrder, "testTextBoxZOrder.docx")
 {
-    //FIXME: validation error in OOXML export: Errors: 1
-    skipValidation();
-
     // Collect the z-order values of the textboxes
     std::vector<sal_uInt64> ShapeZorders;
     std::vector<sal_uInt64> FrameZorders;
@@ -1139,9 +1110,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 {
     createSwDoc("embedded_images.odt");
 
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
-
     saveAndReload(TestFilter::DOCX);
 
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
@@ -1163,9 +1131,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
 CPPUNIT_TEST_FIXTURE(Test, testTdf152152)
 {
     createSwDoc("artistic_effects.docx");
-
-    //FIXME: validation error in OOXML export: Errors: 2
-    skipValidation();
 
     saveAndReload(TestFilter::DOCX);
 

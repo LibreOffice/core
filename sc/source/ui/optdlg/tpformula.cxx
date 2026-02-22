@@ -30,6 +30,8 @@
 #include "calcoptionsdlg.hxx"
 
 #include <unotools/localedatawrapper.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
 
 ScTpFormulaOptions::ScTpFormulaOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pPage, pController, u"modules/scalc/ui/optformula.ui"_ustr, u"OptFormula"_ustr, &rCoreAttrs)

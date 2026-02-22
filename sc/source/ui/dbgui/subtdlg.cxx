@@ -24,6 +24,8 @@
 #include <scui_def.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 ScSubTotalDlg::ScSubTotalDlg(weld::Window* pParent, const SfxItemSet& rArgSet)
     : SfxTabDialogController(pParent, u"modules/scalc/ui/subtotaldialog.ui"_ustr, u"SubTotalDialog"_ustr, &rArgSet)

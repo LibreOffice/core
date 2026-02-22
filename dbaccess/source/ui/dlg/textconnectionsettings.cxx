@@ -21,6 +21,8 @@
 #include "TextConnectionHelper.hxx"
 #include <dsitems.hxx>
 #include <stringconstants.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 namespace dbaui
 {

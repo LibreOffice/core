@@ -152,9 +152,9 @@ void SvImpLBox::UpdateStringSorter()
 
 short SvImpLBox::UpdateContextBmpWidthVector( SvTreeListEntry const * pEntry, short nWidth )
 {
-    DBG_ASSERT( m_pView->pModel, "View and Model aren't valid!" );
+    DBG_ASSERT(m_pView->m_pModel, "View and Model aren't valid!");
 
-    sal_uInt16 nDepth = m_pView->pModel->GetDepth( pEntry );
+    sal_uInt16 nDepth = m_pView->m_pModel->GetDepth(pEntry);
     // initialize vector if necessary
     std::vector< short >::size_type nSize = m_aContextBmpWidthVector.size();
     while ( nDepth > nSize )
@@ -202,7 +202,7 @@ void SvImpLBox::UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEnt
 
 void SvImpLBox::UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry )
 {
-    sal_uInt16 nDepth = m_pView->pModel->GetDepth( pEntry );
+    sal_uInt16 nDepth = m_pView->m_pModel->GetDepth(pEntry);
     if( m_aContextBmpWidthVector.empty() )
         return;
     short nWidth = m_aContextBmpWidthVector[ nDepth ];

@@ -464,7 +464,7 @@ class AutofilterTest(UITestCase):
             xCloseButton.executeAction("CLICK", tuple())
 
 
-    def test_tdf138438(self):
+    def test_tdf138438_top_10_autofilter(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf138438.ods")) as doc:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")

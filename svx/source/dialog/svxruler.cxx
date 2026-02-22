@@ -26,6 +26,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <svl/eitem.hxx>
 #include <svl/rectitem.hxx>
@@ -37,6 +39,7 @@
 #include <svx/ruler.hxx>
 #include <svx/rulritem.hxx>
 #include <sfx2/viewsh.hxx>
+#include <tools/fldunit.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>

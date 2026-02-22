@@ -21,8 +21,8 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/toolsdllapi.h>
-#include <tools/gen.hxx>
 #include <tools/degree.hxx>
+#include <tools/long.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
@@ -57,8 +57,10 @@ enum class PolyFlags : sal_uInt8
     Symmetric // smooth and symmetrical transition between curves
 };
 
+class Point;
 class SvStream;
 class ImplPolygon;
+namespace tools { class Rectangle; }
 struct ImplPolyPolygon;
 
 namespace basegfx

@@ -22,6 +22,7 @@
 #include <svl/ctloptions.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <vcl/weld/Builder.hxx>
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 

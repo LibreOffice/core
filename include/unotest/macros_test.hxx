@@ -23,12 +23,6 @@
 #include <com/sun/star/uno/Any.h>
 #include <utility>
 
-struct TestMacroInfo
-{
-    OUString sFileBaseName;
-    OUString sMacroUrl;
-};
-
 class BasicDLL;
 class SvStream;
 
@@ -51,30 +45,6 @@ namespace unotest
 class OOO_DLLPUBLIC_UNOTEST MacrosTest
 {
 public:
-    class Resetter
-    {
-    private:
-        std::function<void()> m_Func;
-
-    public:
-        Resetter(std::function<void()> aFunc)
-            : m_Func(std::move(aFunc))
-        {
-        }
-        ~Resetter()
-        {
-            try
-            {
-                m_Func();
-            }
-            catch (...) // has to be reliable
-            {
-                fprintf(stderr, "resetter failed with exception\n");
-                abort();
-            }
-        }
-    };
-
     MacrosTest();
     ~MacrosTest();
 

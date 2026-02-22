@@ -49,6 +49,22 @@ namespace dbaui
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
     };
 
+    // ODocumentConnectionPageSetup
+    class ODocumentConnectionPageSetup final : public OConnectionTabPageSetup
+    {
+    public:
+        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
+        static std::unique_ptr<OGenericAdministrationPage> CreateDocumentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);
+        ODocumentConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs);
+        virtual ~ODocumentConnectionPageSetup() override;
+
+    private:
+        std::unique_ptr<weld::CheckButton> m_xPasswordrequired;
+
+        virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
+        virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
+    };
+
     // OTextConnectionPage
     class OTextConnectionPageSetup : public OConnectionTabPageSetup
     {

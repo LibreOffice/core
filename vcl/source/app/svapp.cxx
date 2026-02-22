@@ -20,6 +20,7 @@
 #include <config_features.h>
 #include <config_version.h>
 
+#include <i18nlangtag/languagetag.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
@@ -40,6 +41,7 @@
 
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/dialoghelper.hxx>
+#include <vcl/exceptiontypes.hxx>
 #include <vcl/lok.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/settings.hxx>

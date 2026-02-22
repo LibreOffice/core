@@ -25,6 +25,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
+#include <tools/color.hxx>
+#include <vcl/graph.hxx>
 #include "GlowSoftEgdeShadowTools.hxx"
 
 #ifdef DBG_UTIL

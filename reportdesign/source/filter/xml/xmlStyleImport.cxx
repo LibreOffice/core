@@ -19,6 +19,7 @@
 #include "xmlStyleImport.hxx"
 #include <xmloff/maptype.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/txtimppr.hxx>
 #include <xmloff/families.hxx>

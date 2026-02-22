@@ -28,7 +28,9 @@ class KFSalInstance final : public QtInstance
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode) override;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 12, 0)
     virtual bool GetUseReducedAnimation() override;
+#endif
 
 public:
     explicit KFSalInstance(std::unique_ptr<QApplication>& pQApp);

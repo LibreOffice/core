@@ -55,8 +55,10 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/dialoghelper.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -353,7 +355,6 @@ struct DialogImpl
     tools::Long    mnResult;
     bool    mbStartedModal;
     VclAbstractDialog::AsyncContext maEndCtx;
-    Link<const CommandEvent&, bool> m_aPopupMenuHdl;
     Link<void*, vcl::ILibreOfficeKitNotifier*> m_aInstallLOKNotifierHdl;
     bool    m_bLOKTunneling;
 
@@ -402,7 +403,7 @@ void Dialog::ImplInitDialogData()
 
 void Dialog::PixelInvalidate(const tools::Rectangle* pRectangle)
 {
-    if (!mpDialogImpl->m_bLOKTunneling)
+    if (!mpDialogImpl || !mpDialogImpl->m_bLOKTunneling)
         return;
 
     Window::PixelInvalidate(pRectangle);
@@ -719,11 +720,6 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
     const int n = std::min<CGFloat>([[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height);
     return Size(n-10, n-10);
 #endif
-}
-
-void Dialog::SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink)
-{
-    mpDialogImpl->m_aPopupMenuHdl = rLink;
 }
 
 void Dialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
@@ -1644,13 +1640,6 @@ void Dialog::Activate()
         xEventBroadcaster->documentEventOccured(aObject);
     }
     SystemWindow::Activate();
-}
-
-void Dialog::Command(const CommandEvent& rCEvt)
-{
-    if (mpDialogImpl->m_aPopupMenuHdl.Call(rCEvt))
-        return;
-    SystemWindow::Command(rCEvt);
 }
 
 struct TopLevelWindowLockerImpl

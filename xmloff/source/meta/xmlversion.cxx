@@ -26,6 +26,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <xmloff/xmltoken.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/IOException.hpp>

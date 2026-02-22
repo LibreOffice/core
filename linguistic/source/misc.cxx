@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <map>
 #include <optional>
 #include <sal/log.hxx>
 #include <svl/lngmisc.hxx>
@@ -250,39 +251,57 @@ static bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry )
 uno::Reference< XDictionaryEntry > SearchDicList(
         const uno::Reference< XSearchableDictionaryList > &xDicList,
         const OUString &rWord, LanguageType nLanguage,
-        bool bSearchPosDics, bool bSearchSpellEntry )
+        bool bSearchPosDics, bool bSearchSpellEntry,
+        std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    uno::Reference< XDictionaryEntry > xEntry;
-
     if (!xDicList.is())
-        return xEntry;
+        return uno::Reference< XDictionaryEntry >();
 
-    const uno::Sequence< uno::Reference< XDictionary > >
-            aDics( xDicList->getDictionaries() );
-
-    for (const uno::Reference<XDictionary>& axDic : aDics)
+    if (rDictionaryMap.empty())
     {
-        DictionaryType  eType = axDic->getDictionaryType();
-        LanguageType    nLang = LinguLocaleToLanguage( axDic->getLocale() );
-
-        if ( axDic.is() && axDic->isActive()
-            && (nLang == nLanguage  ||  LinguIsUnspecified( nLang)) )
+        const uno::Sequence< uno::Reference< XDictionary > >
+                aDics( xDicList->getDictionaries() );
+        for (const uno::Reference<XDictionary>& rxDic : aDics)
         {
-            // DictionaryType_MIXED is deprecated
-            SAL_WARN_IF(eType == DictionaryType_MIXED, "linguistic", "unexpected dictionary type");
-
-            if (   (!bSearchPosDics  &&  eType == DictionaryType_NEGATIVE)
-                || ( bSearchPosDics  &&  eType == DictionaryType_POSITIVE))
-            {
-                xEntry = axDic->getEntry( rWord );
-                if ( xEntry.is() && (bSearchSpellEntry || lcl_HasHyphInfo( xEntry )) )
-                    break;
-                xEntry = nullptr;
-            }
+            assert( rxDic.is() );
+            LanguageType nLang = LinguLocaleToLanguage( rxDic->getLocale() );
+            rDictionaryMap[nLang].push_back(rxDic);
         }
     }
+
+    auto lcl_search = [&rDictionaryMap, bSearchPosDics, bSearchSpellEntry, &rWord](LanguageType nLang)
+    {
+        auto it = rDictionaryMap.find(nLang);
+        if (it != rDictionaryMap.end())
+            for (const uno::Reference<XDictionary>& rxDic : it->second)
+            {
+                if ( rxDic->isActive() )
+                {
+                    DictionaryType  eType = rxDic->getDictionaryType();
+                    if (   (!bSearchPosDics  &&  eType == DictionaryType_NEGATIVE)
+                        || ( bSearchPosDics  &&  eType == DictionaryType_POSITIVE))
+                    {
+                        uno::Reference< XDictionaryEntry > xEntry = rxDic->getEntry( rWord );
+                        if ( xEntry.is() && (bSearchSpellEntry || lcl_HasHyphInfo( xEntry )) )
+                            return xEntry;
+                    }
+                }
+            }
+        return uno::Reference< XDictionaryEntry >();
+    };
+
+    uno::Reference< XDictionaryEntry > xEntry;
+    if ((xEntry = lcl_search(nLanguage)))
+        return xEntry;
+
+    // check the same list as in the LinguIsUnspecified() function
+    if ((xEntry = lcl_search(LANGUAGE_NONE)))
+        return xEntry;
+    if ((xEntry = lcl_search(LANGUAGE_UNDETERMINED)))
+        return xEntry;
+    xEntry = lcl_search(LANGUAGE_MULTIPLE);
 
     return xEntry;
 }

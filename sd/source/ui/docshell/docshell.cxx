@@ -50,6 +50,7 @@
 #include <sdmod.hxx>
 #include <View.hxx>
 #include <drawdoc.hxx>
+#include <slideshow.hxx>
 
 #include <ViewShell.hxx>
 #include <unomodel.hxx>
@@ -319,8 +320,11 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
                     bool bVisible = false;
                     if(bImpress)
                     {
-                        bVisible = sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(),
-                                                                      u"modules/simpress/ui/");
+                        // tdf#170719 only bother with NotebookBar
+                        // stuff, if this is not the running SlideShow
+                        if(!sd::SlideShow::IsRunning(mpViewShell->GetViewShellBase()))
+                            bVisible = sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(),
+                                                                         u"modules/simpress/ui/");
                     }
                     else
                     {
@@ -444,10 +448,10 @@ IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
     SdrObject* pObj = nullptr;
     SdrOutliner* pOutl = nullptr;
 
-    if(GetViewShell())
+    if(::sd::ViewShell* pViewSh = GetViewShell())
     {
-        pOutl = GetViewShell()->GetView()->GetTextEditOutliner();
-        pObj = GetViewShell()->GetView()->GetTextEditObject();
+        pOutl = pViewSh->GetView()->GetTextEditOutliner();
+        pObj = pViewSh->GetView()->GetTextEditObject();
     }
 
     mpDoc->ImpOnlineSpellCallback(&rInfo, pObj, pOutl);

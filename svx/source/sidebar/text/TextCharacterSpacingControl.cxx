@@ -25,9 +25,12 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <tools/fldunit.hxx>
 #include <TextCharacterSpacingPopup.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <tools/mapunit.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <helpids.h>
 
 #include <com/sun/star/beans/NamedValue.hpp>

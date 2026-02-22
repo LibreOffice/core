@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_DIALOG_SWDLGFACT_HXX
-#define INCLUDED_SW_SOURCE_UI_DIALOG_SWDLGFACT_HXX
+#pragma once
 
 #include <swabstdlg.hxx>
 
@@ -50,7 +49,6 @@
 #include <swrenamexnameddlg.hxx>
 #include <swuicnttab.hxx>
 #include <swuiidxmrk.hxx>
-#include <tautofmt.hxx>
 #include <utility>
 #include <wordcountdialog.hxx>
 #include <itabenum.hxx>
@@ -120,9 +118,6 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog(weld::Window* pParent, SwWrtShell &rSh) override;
 
-    virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pShell,
-                                                                  bool bSetAutoFormat = true,
-                                                                  const SwTableAutoFormat* pSelFormat = nullptr) override;
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) override;
 
     virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pSh) override;
@@ -210,7 +205,5 @@ public:
     virtual void ExecuteMMResultPrintDialog(weld::Window* pParent) override;
     virtual void ExecuteMMResultEmailDialog(weld::Window* pParent) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,6 +37,7 @@
 #include <svtools/unitconv.hxx>
 #include <osl/diagnose.h>
 #include <svl/grabbagitem.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <bitmaps.hlst>
 

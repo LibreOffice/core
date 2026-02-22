@@ -30,6 +30,7 @@
 #include <vcl/pdfwriter.hxx>
 #include <tools/degree.hxx>
 #include <o3tl/deleter.hxx>
+#include <map>
 #include <optional>
 
 struct ScCellInfo;
@@ -149,14 +150,16 @@ private:
         ScRefCellValue          maCell;
         const ScPatternAttr*    mpPattern;
         const SfxItemSet*       mpCondSet;
+        const SfxItemSet*       mpTableSet;
         const SfxItemSet*       mpPreviewFontSet;
         const ScPatternAttr*    mpOldPattern;
         const SfxItemSet*       mpOldCondSet;
+        const SfxItemSet*       mpOldTableSet;
         const SfxItemSet*       mpOldPreviewFontSet;
         RowInfo*                mpThisRowInfo;
         sc::MisspellRangeResult maMisspellRanges;
 
-        explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
+        explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, bool bCellIsValue);
 
         bool readCellContent(const ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields);
         void setPatternToEngine(bool bUseStyleColor);
@@ -321,6 +324,7 @@ private:
                            std::vector<std::unique_ptr<ScPatternAttr> >& aAltPatterns,
                            const ScPatternAttr*& pOldPattern,
                            const SfxItemSet*& pOldCondSet,
+                           const SfxItemSet*& pOldTableSet,
                            SvtScriptType& nOldScript,
                            ScDrawStringsVars& aVars,
                            bool& bProgress, tools::Long nPosX, tools::Long nPosY, bool bTaggedPDF,

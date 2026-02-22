@@ -23,6 +23,9 @@
 #include <svx/langbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 ScTextImportOptionsDlg::ScTextImportOptionsDlg(weld::Window* pParent)

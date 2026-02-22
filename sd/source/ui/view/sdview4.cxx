@@ -30,9 +30,11 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <vcl/gfxlink.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfread.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xbtmpit.hxx>
@@ -66,6 +68,7 @@
 #include <svtools/soerr.hxx>
 #include <sfx2/ipclient.hxx>
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 
 using namespace com::sun::star;
 

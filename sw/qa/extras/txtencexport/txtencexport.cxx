@@ -8,6 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 namespace
 {
@@ -39,8 +40,10 @@ protected:
 CPPUNIT_TEST_FIXTURE(TxtEncExportTest, testBulletsNotHidden)
 {
     createSwDoc("bullets.odt");
-    setFilterOptions(u"UTF8,,,,"_ustr);
-    save(TestFilter::TEXT_ENCODED);
+    save(TestFilter::TEXT_ENCODED, {
+                               comphelper::makePropertyValue(u"FilterOptions"_ustr, u"UTF8,,,,"_ustr),
+                           });
+
     OString aData = readExportedFile();
 
     OUString aString = OStringToOUString(
@@ -68,8 +71,9 @@ CPPUNIT_TEST_FIXTURE(TxtEncExportTest, testBulletsNotHidden)
 CPPUNIT_TEST_FIXTURE(TxtEncExportTest, testBulletsHidden)
 {
     createSwDoc("bullets.odt");
-    setFilterOptions(u"UTF8,,,,,false"_ustr);
-    save(TestFilter::TEXT_ENCODED);
+    save(TestFilter::TEXT_ENCODED, {
+                               comphelper::makePropertyValue(u"FilterOptions"_ustr, u"UTF8,,,,,false"_ustr),
+                           });
     OString aData = readExportedFile();
 
     OUString aString = OStringToOUString(

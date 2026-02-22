@@ -48,6 +48,7 @@ namespace com::sun::star::view { class XSelectionChangeListener; }
 
 class ScTabViewShell;
 class ScPreviewShell;
+class ScTableSheetObj;
 
 #define SC_VIEWPANE_ACTIVE  0xFFFF
 
@@ -283,6 +284,8 @@ public:
 
     // XSelectedSheetsSupplier
     virtual css::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets() override;
+
+    rtl::Reference< ScTableSheetObj > getActiveScSheet();
 };
 
 class ScPreviewObj final : public SfxBaseController,

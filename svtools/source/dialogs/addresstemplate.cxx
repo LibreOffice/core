@@ -30,6 +30,11 @@
 #include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -529,6 +534,7 @@ void AssignmentPersistentData::ImplCommit()
             SvtResId(STR_FIELD_PAGER),
             SvtResId(STR_FIELD_FAX),
             SvtResId(STR_FIELD_EMAIL),
+            SvtResId(STR_FIELD_GENDER),
             SvtResId(STR_FIELD_URL),
             SvtResId(STR_FIELD_TITLE ),
             SvtResId(STR_FIELD_POSITION),

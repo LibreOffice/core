@@ -389,31 +389,6 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     if (!pScDrawView)
         return false;
 
-    // #i123922# check if the drop was over an existing object; if yes, evtl. replace
-    // the graphic for a SdrGraphObj (including link state updates) or adapt the fill
-    // style for other objects
-    SdrPageView* pPageView = pScDrawView->GetSdrPageView();
-    if (pPageView)
-    {
-        SdrObject* pPickObj = pScDrawView->PickObj(rPos, pScDrawView->getHitTolLog(), pPageView);
-        if (pPickObj)
-        {
-            const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
-            SdrObject* pResult = pScDrawView->ApplyGraphicToObject(
-                *pPickObj,
-                rGraphic,
-                aBeginUndo,
-                rFile);
-
-            if (pResult)
-            {
-                // we are done; mark the modified/new object
-                pScDrawView->MarkObj(pResult, pScDrawView->GetSdrPageView());
-                return true;
-            }
-        }
-    }
-
     Point aPos( rPos );
     vcl::Window* pWin = GetActiveWin();
     MapMode aSourceMap = rGraphic.GetPrefMapMode();

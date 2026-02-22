@@ -35,6 +35,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <rtl/math.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>

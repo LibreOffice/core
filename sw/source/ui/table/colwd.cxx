@@ -18,6 +18,7 @@
  */
 
 #include <svtools/unitconv.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <colwd.hxx>
 #include <tablemgr.hxx>
 #include <wrtsh.hxx>

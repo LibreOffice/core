@@ -21,8 +21,7 @@
 
 #include <config_options.h>
 #include <framework/fwkdllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
 
 #include <memory>
 
@@ -30,6 +29,8 @@ namespace com::sun::star::document { class XUndoAction; }
 namespace com::sun::star::document { class XUndoManager; }
 namespace com::sun::star::document { class XUndoManagerListener; }
 namespace com::sun::star::util { class XModifyListener; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::uno { template <typename> class Sequence; }
 namespace framework { class IMutex; }
 
 class SfxUndoManager;

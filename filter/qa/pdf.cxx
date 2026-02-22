@@ -16,12 +16,15 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <tools/helpers.hxx>
 
 using namespace ::com::sun::star;
@@ -38,7 +41,6 @@ public:
     }
 
     void setUp() override;
-    void tearDown() override;
     void doTestCommentsInMargin(bool commentsInMarginEnabled);
 };
 
@@ -47,14 +49,6 @@ void Test::setUp()
     UnoApiTest::setUp();
 
     MacrosTest::setUpX509(m_directories, u"filter_pdf"_ustr);
-}
-
-void Test::tearDown()
-{
-    UnoApiTest::tearDown();
-
-    if (comphelper::LibreOfficeKit::isActive())
-        comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
@@ -202,17 +196,35 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
         CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->openPage(0)->getObjectCount());
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testCommentsInMargin)
+CPPUNIT_TEST_FIXTURE(Test, testCommentsInMarginEnabled) { doTestCommentsInMargin(true); }
+
+CPPUNIT_TEST_FIXTURE(Test, testCommentsInMarginDisabled) { doTestCommentsInMargin(false); }
+
+CPPUNIT_TEST_FIXTURE(Test, testCommentsInMarginEnabledTiledAnnotationsEnabled)
 {
-    // Test that setting/unsetting the "ExportNotesInMargin" property works correctly
-    doTestCommentsInMargin(true);
-    doTestCommentsInMargin(false);
     comphelper::LibreOfficeKit::setActive(true);
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
     doTestCommentsInMargin(true);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCommentsInMarginDisabledTiledAnnotationsEnabled)
+{
+    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
     doTestCommentsInMargin(false);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCommentsInMarginEnabledTiledAnnotationsDisabled)
+{
+    comphelper::LibreOfficeKit::setActive(true);
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
     doTestCommentsInMargin(true);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCommentsInMarginDisabledTiledAnnotationsDisabled)
+{
+    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
     doTestCommentsInMargin(false);
 }
 

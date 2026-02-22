@@ -42,6 +42,7 @@
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument2.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
+#include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>

@@ -254,7 +254,7 @@ sal_Int8 TreeListBox::AcceptDrop(const AcceptDropEvent& rEvt)
                 if (!m_xTreeView->iter_parent(*xParent))
                     xParent.reset();
             }
-            while (xParent && m_xTreeView->iter_compare(*xParent, *m_xDragedEntry) != 0)
+            while (xParent && !xParent->equal(*m_xDragedEntry))
             {
                 if (!m_xTreeView->iter_parent(*xParent))
                     xParent.reset();
@@ -267,8 +267,7 @@ sal_Int8 TreeListBox::AcceptDrop(const AcceptDropEvent& rEvt)
             // check if move is allowed
             if ( nDropOption & DND_ACTION_MOVE )
             {
-                if (!m_xDragedEntry || !xDropTarget ||
-                    m_xTreeView->iter_compare(*m_xDragedEntry, *xDropTarget) == 0 ||
+                if (!m_xDragedEntry || !xDropTarget || m_xDragedEntry->equal(*xDropTarget) ||
                     GetEntryPosByName(m_xTreeView->get_text(*m_xDragedEntry), xDropTarget.get()))
                 {
                     nDropOption = nDropOption & ~DND_ACTION_MOVE;//DND_ACTION_NONE;

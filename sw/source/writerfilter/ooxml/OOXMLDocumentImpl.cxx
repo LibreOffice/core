@@ -53,7 +53,11 @@ using namespace ::com::sun::star;
 namespace writerfilter::ooxml
 {
 
-OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, uno::Reference<task::XStatusIndicator> xStatusIndicator, bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
+OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream,
+                                     uno::Reference<task::XStatusIndicator> xStatusIndicator,
+                                     bool bSkipImages,
+                                     const uno::Sequence<beans::PropertyValue>& rDescriptor,
+                                     const rtl::Reference<oox::shape::ShapeFilterBase>& rxShapeFilterBase)
     : mpStream(std::move(pStream))
     , mxStatusIndicator(std::move(xStatusIndicator))
     , mnXNoteId(0)
@@ -66,6 +70,7 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, uno::Refere
     , m_rBaseURL(comphelper::SequenceAsHashMap(rDescriptor).getUnpackedValueOrDefault(u"DocumentBaseURL"_ustr, OUString()))
     , maMediaDescriptor(rDescriptor)
     , mxGraphicMapper(graphic::GraphicMapper::create(mpStream->getContext()))
+    , mxShapeFilterBase(rxShapeFilterBase)
 {
     pushShapeContext();
 }
@@ -247,7 +252,8 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
     OOXMLDocumentImpl * pTemp;
     // Do not pass status indicator to sub-streams: they are typically marginal in size, so we just track the main document for now.
     writerfilter::Reference<Stream>::Pointer_t pRet( pTemp =
-            new OOXMLDocumentImpl(std::move(pStream), uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor));
+            new OOXMLDocumentImpl(std::move(pStream), uno::Reference<task::XStatusIndicator>(),
+                                  mbSkipImages, maMediaDescriptor, getShapeFilterBase()));
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
     pTemp->mbIsSubstream = true;
@@ -259,7 +265,7 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const sal_Int
 {
     // See above, no status indicator for the note stream, either.
     OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(OOXMLDocumentFactory::createStream(mpStream, nType),
-            uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor);
+            uno::Reference<task::XStatusIndicator>(), mbSkipImages, maMediaDescriptor, nullptr);
     pDocument->setXNoteId(nId);
     pDocument->setModel(getModel());
     pDocument->setDrawPage(getDrawPage());
@@ -918,7 +924,7 @@ OOXMLDocumentFactory::createDocument
  const uno::Reference<task::XStatusIndicator>& xStatusIndicator,
  bool mbSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
-    return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages, rDescriptor);
+    return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages, rDescriptor, nullptr);
 }
 
 }

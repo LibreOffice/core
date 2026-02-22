@@ -20,9 +20,11 @@
 #ifndef INCLUDED_XMLOFF_XMLSETTINGSEXPORTCONTEXT_HXX
 #define INCLUDED_XMLOFF_XMLSETTINGSEXPORTCONTEXT_HXX
 
-#include <xmloff/xmltoken.hxx>
+#include <rtl/ustring.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace xmloff::token { enum XMLTokenEnum : sal_Int16; }
 
 
 namespace xmloff

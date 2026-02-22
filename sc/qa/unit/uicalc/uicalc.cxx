@@ -15,15 +15,18 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <condformathelper.hxx>
 #include <conditio.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
 #include <dpobject.hxx>
+#include <editeng/borderline.hxx>
 #include <formulaopt.hxx>
 #include <inputopt.hxx>
 #include <postit.hxx>
@@ -38,6 +41,8 @@ class ScUiCalcTest : public ScModelTestBase
 {
 public:
     ScUiCalcTest();
+
+    void verifyTdf162087();
 };
 
 ScUiCalcTest::ScUiCalcTest()
@@ -45,19 +50,22 @@ ScUiCalcTest::ScUiCalcTest()
 {
 }
 
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142854_GridVisibilityImportXlsxInHeadlessMode)
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142854_GridVisibilityImportXlsxInHeadlessMode_Globally)
 {
     // Tests are running in Headless mode
     // Import an ods file with 'Hide' global grid visibility setting.
     createScDoc("tdf126541_GridOffGlobally.ods");
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT(!pDoc->GetViewOptions().GetOption(sc::ViewOption::GRID));
+}
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142854_GridVisibilityImportXlsxInHeadlessMode)
+{
     // To avoid regression, in headless mode leave the bug tdf126541
     // It means Sheet based grid line visibility setting will overwrite the global setting.
     // If there is only 1 sheet in the document, it will not result visible problems.
     createScDoc("tdf126541_GridOff.xlsx");
-    pDoc = getScDoc();
+    ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT(!pDoc->GetViewOptions().GetOption(sc::ViewOption::GRID));
 }
 
@@ -86,6 +94,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
     save(TestFilter::ODS);
 
     // Open a new document
+    dispose();
     createScDoc();
     pDoc = getScDoc();
 
@@ -221,46 +230,52 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf151886)
 }
 #endif
 
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf162087)
+void ScUiCalcTest::verifyTdf162087()
 {
-    auto verify = [this]() {
-        ScDocument* pDoc = getScDoc();
-        insertArrayToCell(u"E5"_ustr, u"=myData[[#Data]]");
+    ScDocument* pDoc = getScDoc();
+    insertArrayToCell(u"E5"_ustr, u"=myData[[#Data]]");
 
-        CPPUNIT_ASSERT_EQUAL(u"Elisabeth"_ustr, pDoc->GetString(4, 4, 0));
-        CPPUNIT_ASSERT_EQUAL(u"Frieda"_ustr, pDoc->GetString(4, 5, 0));
-        CPPUNIT_ASSERT_EQUAL(u"Adele"_ustr, pDoc->GetString(4, 6, 0));
-        CPPUNIT_ASSERT_EQUAL(u"Berta"_ustr, pDoc->GetString(4, 7, 0));
-        CPPUNIT_ASSERT_EQUAL(u"total"_ustr, pDoc->GetString(4, 8, 0));
-        CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pDoc->GetString(5, 4, 0));
-        CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(5, 5, 0));
-        CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(5, 6, 0));
-        CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(5, 7, 0));
-        CPPUNIT_ASSERT_EQUAL(u"22"_ustr, pDoc->GetString(5, 8, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Elisabeth"_ustr, pDoc->GetString(4, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Frieda"_ustr, pDoc->GetString(4, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Adele"_ustr, pDoc->GetString(4, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Berta"_ustr, pDoc->GetString(4, 7, 0));
+    CPPUNIT_ASSERT_EQUAL(u"total"_ustr, pDoc->GetString(4, 8, 0));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pDoc->GetString(5, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(5, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(5, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(5, 7, 0));
+    CPPUNIT_ASSERT_EQUAL(u"22"_ustr, pDoc->GetString(5, 8, 0));
 
-        insertArrayToCell(u"H5"_ustr, u"=myData[[#Headers]]");
+    insertArrayToCell(u"H5"_ustr, u"=myData[[#Headers]]");
 
-        CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, pDoc->GetString(7, 4, 0));
-        CPPUNIT_ASSERT_EQUAL(u"Count"_ustr, pDoc->GetString(8, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, pDoc->GetString(7, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Count"_ustr, pDoc->GetString(8, 4, 0));
 
-        insertArrayToCell(u"K5"_ustr, u"=myData[[#All]]");
+    insertArrayToCell(u"K5"_ustr, u"=myData[[#All]]");
 
-        CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, pDoc->GetString(10, 4, 0));
-        CPPUNIT_ASSERT_EQUAL(u"Elisabeth"_ustr, pDoc->GetString(10, 5, 0));
-        CPPUNIT_ASSERT_EQUAL(u"Frieda"_ustr, pDoc->GetString(10, 6, 0));
-        CPPUNIT_ASSERT_EQUAL(u"Adele"_ustr, pDoc->GetString(10, 7, 0));
-        CPPUNIT_ASSERT_EQUAL(u"Berta"_ustr, pDoc->GetString(10, 8, 0));
-        CPPUNIT_ASSERT_EQUAL(u"total"_ustr, pDoc->GetString(10, 9, 0));
-        CPPUNIT_ASSERT_EQUAL(u"Count"_ustr, pDoc->GetString(11, 4, 0));
-        CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pDoc->GetString(11, 5, 0));
-        CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(11, 6, 0));
-        CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(11, 7, 0));
-        CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(11, 8, 0));
-        CPPUNIT_ASSERT_EQUAL(u"22"_ustr, pDoc->GetString(11, 9, 0));
-    };
+    CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, pDoc->GetString(10, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Elisabeth"_ustr, pDoc->GetString(10, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Frieda"_ustr, pDoc->GetString(10, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Adele"_ustr, pDoc->GetString(10, 7, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Berta"_ustr, pDoc->GetString(10, 8, 0));
+    CPPUNIT_ASSERT_EQUAL(u"total"_ustr, pDoc->GetString(10, 9, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Count"_ustr, pDoc->GetString(11, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pDoc->GetString(11, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(u"6"_ustr, pDoc->GetString(11, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(11, 7, 0));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(11, 8, 0));
+    CPPUNIT_ASSERT_EQUAL(u"22"_ustr, pDoc->GetString(11, 9, 0));
+}
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf162087_withoutUseEnglishFuncName)
+{
     createScDoc("tdf162087.ods");
-    verify();
+    verifyTdf162087();
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf162087_withUseEnglishFuncName)
+{
+    createScDoc("tdf162087.ods");
 
     // change UseEnglishFuncName to true
     ScDocShell* pDocSh = getScDocShell();
@@ -269,13 +284,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf162087)
     aFormulaOptions.SetUseEnglishFuncName(true);
     pDocSh->SetFormulaOptions(aFormulaOptions);
 
-    createScDoc("tdf162087.ods");
-    pDocSh = getScDocShell();
-
     // Without the fix in place, this test would have failed with
     // - Expected: Elisabeth
     // - Actual  : #NAME?
-    verify();
+    verifyTdf162087();
 
     aFormulaOptions.SetUseEnglishFuncName(bOldStatus);
     pDocSh->SetFormulaOptions(aFormulaOptions);
@@ -293,6 +305,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
     save(TestFilter::ODS);
 
     // Open a new document
+    dispose();
     createScDoc();
     pDoc = getScDoc();
 
@@ -329,6 +342,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     save(TestFilter::ODS);
 
     // Open a new document
+    dispose();
     createScDoc();
     pDoc = getScDoc();
 
@@ -343,6 +357,71 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
     // - Expected: 50
     // - Actual  : Err:507
     CPPUNIT_ASSERT_EQUAL(u"50"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf168438_check_LineStyle_uno_command)
+{
+    auto checkBorder = [](const editeng::SvxBorderLine* pLine) {
+        CPPUNIT_ASSERT(pLine);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pLine->GetColor());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pLine->GetInWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pLine->GetOutWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pLine->GetDistance());
+        CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::SOLID, pLine->GetBorderLineStyle());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(1), pLine->GetWidth());
+    };
+
+    auto checkBorder2 = [](const editeng::SvxBorderLine* pLine) {
+        CPPUNIT_ASSERT(pLine);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, pLine->GetColor());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pLine->GetInWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pLine->GetOutWidth());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pLine->GetDistance());
+        CPPUNIT_ASSERT_EQUAL(SvxBorderLineStyle::DOUBLE, pLine->GetBorderLineStyle());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(1), pLine->GetWidth());
+    };
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    table::BorderLine2 aLine(sal_Int32(COL_LIGHTRED), 0, 1, 0, table::BorderLineStyle::SOLID, 1);
+
+    // see SvxBoxItem::QueryValue for details
+    uno::Sequence<uno::Any> aOuterSeq{ uno::Any(aLine), // left
+                                       uno::Any(aLine), // right
+                                       uno::Any(aLine), // bottom
+                                       uno::Any(aLine), // top
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)),
+                                       uno::Any(static_cast<sal_Int32>(0)) };
+
+    uno::Sequence<uno::Any> aInnerSeq{};
+
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"OuterBorder"_ustr, aOuterSeq),
+                         comphelper::makePropertyValue(u"InnerBorder"_ustr, aInnerSeq) };
+    dispatchCommand(mxComponent, u".uno:SetBorderStyle"_ustr, aArgs);
+
+    const ScPatternAttr* pPat = pDoc->GetPattern(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pPat);
+    SvxBoxItem aBorderItem(pPat->GetItem(ATTR_BORDER));
+    checkBorder(aBorderItem.GetLeft());
+    checkBorder(aBorderItem.GetRight());
+    checkBorder(aBorderItem.GetBottom());
+    checkBorder(aBorderItem.GetTop());
+
+    table::BorderLine2 aLine2(sal_Int32(COL_LIGHTRED), 0, 1, 0, table::BorderLineStyle::DOUBLE, 1);
+    uno::Sequence aArgs2{ comphelper::makePropertyValue(u"LineStyle"_ustr, uno::Any(aLine2)) };
+
+    dispatchCommand(mxComponent, u".uno:LineStyle"_ustr, aArgs2);
+
+    pPat = pDoc->GetPattern(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pPat);
+    SvxBoxItem aBorderItem2(pPat->GetItem(ATTR_BORDER));
+    checkBorder2(aBorderItem2.GetLeft());
+    checkBorder2(aBorderItem2.GetRight());
+    checkBorder2(aBorderItem2.GetBottom());
+    checkBorder2(aBorderItem2.GetTop());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126577)
@@ -1678,6 +1757,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Open a new document
+    dispose();
     createScDoc();
     ScDocument* pDoc = getScDoc();
 
@@ -1789,6 +1869,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108292)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Open a new document
+    dispose();
     createScDoc();
     pDoc = getScDoc();
 
@@ -1822,6 +1903,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Open a new document
+    dispose();
     createScDoc();
     ScDocument* pDoc = getScDoc();
 
@@ -1866,6 +1948,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Open a new document
+    dispose();
     createScDoc();
     pDoc = getScDoc();
 

@@ -279,6 +279,20 @@ CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf167019)
     checkConditionalFormatList(*pDoc, aExpectedValues);
 }
 
+CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf170298_importHang)
+{
+    // Without the fix in place, this test would have hung at import time
+    createScDoc("xlsx/tdf170298.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    std::unordered_map<OUString, OUString> aExpectedValues
+        = { { "A7", "Formula is AND(NOT(ISBLANK(A$6)),ISBLANK(A7))" },
+            { "A7:AP7",
+              "Formula is AND(A$6<>\"Growth\",A$6<>\"\",MONTH(EDATE(A$7,1))<MONTH(TODAY()))" } };
+
+    checkConditionalFormatList(*pDoc, aExpectedValues);
+}
+
 CPPUNIT_TEST_FIXTURE(CondFormatTest, testTdf92963)
 {
     createScDoc("ods/tdf92963.ods");

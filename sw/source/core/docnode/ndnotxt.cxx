@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <osl/diagnose.h>
 #include <tools/poly.hxx>
 #include <svl/stritem.hxx>

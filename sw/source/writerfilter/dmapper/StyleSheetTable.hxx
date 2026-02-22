@@ -116,7 +116,7 @@ public:
     OUString CloneTOCStyle(FontTablePtr const& rFontTable, StyleSheetEntryPtr const pStyle, OUString const& rName);
     void ApplyClonedTOCStyles();
 
-    OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
+    OUString getOrCreateCharStyle( const PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
 
     void SetDefaultParaProps(PropertyIds eId, const css::uno::Any& rAny);
     PropertyMapPtr const & GetDefaultParaProps() const;

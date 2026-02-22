@@ -22,6 +22,7 @@
 #include <svx/colorwindow.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 class SfxDispatcher;

@@ -28,6 +28,9 @@
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 
 #include <osl/diagnose.h>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <scresid.hxx>
 #include <dpobject.hxx>

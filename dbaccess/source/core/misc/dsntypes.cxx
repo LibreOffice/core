@@ -414,8 +414,10 @@ void ODsnTypeCollection::fillPageIds(std::u16string_view _sURL,std::vector<sal_I
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_TEXT);
             break;
         case DST_CALC:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_SPREADSHEET);
+            break;
         case DST_WRITER:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET);
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_DOCUMENT);
             break;
         case DST_ODBC:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ODBC);

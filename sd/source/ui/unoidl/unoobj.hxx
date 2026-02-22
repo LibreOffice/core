@@ -22,6 +22,8 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <svx/unomaster.hxx>
 
+#include <span>
+
 namespace com::sun::star::beans { class XPropertySetInfo; }
 
 class SdXImpressDocument;

@@ -187,11 +187,11 @@ dbaccess/source/core/inc/databasecontext.hxx:73
 dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:79
     dbaccess::OSingleSelectQueryComposer m_aNeutralContext ::svxform::ONeutralParseContext
 drawinglayer/inc/texture/texture3d.hxx:55
-    drawinglayer::texture::GeoTexSvxBitmapEx maBitmapEx BitmapEx
+    drawinglayer::texture::GeoTexSvxBitmap maBitmapEx BitmapEx
 drawinglayer/inc/texture/texture3d.hxx:56
-    drawinglayer::texture::GeoTexSvxBitmapEx maBitmap Bitmap
+    drawinglayer::texture::GeoTexSvxBitmap maBitmap Bitmap
 drawinglayer/inc/texture/texture3d.hxx:58
-    drawinglayer::texture::GeoTexSvxBitmapEx maTransparence Bitmap
+    drawinglayer::texture::GeoTexSvxBitmap maTransparence Bitmap
 drawinglayer/source/tools/emfphelperdata.hxx:197
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
 drawinglayer/source/tools/emfphelperdata.hxx:198
@@ -249,9 +249,9 @@ include/filter/msfilter/svdfppt.hxx:886
 include/formula/formulahelper.hxx:39
     formula::FormulaHelper m_aSysLocale SvtSysLocale
 include/LibreOfficeKit/LibreOfficeKitGtk.h:41
-    _LOKDocView aDrawingArea GtkDrawingArea
+    LOKDocViewStruct aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:46
-    _LOKDocViewClass parent_class GtkDrawingAreaClass
+    LOKDocViewClassStruct parent_class GtkDrawingAreaClass
 include/oox/export/shapes.hxx:103
     oox::drawingml::ShapeExport maShapeMap ShapeHashMap
 include/registry/registry.hxx:34

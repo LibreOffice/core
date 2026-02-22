@@ -20,6 +20,8 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <mtrindlg.hxx>
+#include <tools/fldunit.hxx>
+#include <vcl/weld/Builder.hxx>
 
 ScMetricInputDlg::ScMetricInputDlg( weld::Window*         pParent,
                                     const OUString&  sDialogName,

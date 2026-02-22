@@ -20,10 +20,22 @@
 #pragma once
 
 #include "autofilterbuffer.hxx"
+#include "stylesbuffer.hxx"
 #include "tablecolumnsbuffer.hxx"
 #include "workbookhelper.hxx"
 
 namespace oox::xls {
+
+struct TableStyleInfo
+{
+    OUString maStyleName;
+    bool mbShowFirstColumn;
+    bool mbShowLastColumn;
+    bool mbShowRowStripes;
+    bool mbShowColStripes;
+
+    explicit TableStyleInfo();
+};
 
 struct TableModel
 {
@@ -51,6 +63,8 @@ public:
     AutoFilter&  createAutoFilter() { return maAutoFilters.createAutoFilter(); }
     /** Creates a new tableColumns handler and stores it internally. */
     TableColumns&  createTableColumns() { return maTableColumns.createTableColumns(); }
+    /** Imports the table style info attributes. */
+    void importTableStyleInfo( const AttributeList& rAttribs );
 
     /** Creates a database range from this tables. */
     void                finalizeImport();
@@ -79,6 +93,7 @@ public:
 
 private:
     TableModel          maModel;
+    TableStyleInfo      maStyleInfo;        /// Table style information.
     AutoFilterBuffer    maAutoFilters;      /// Filter settings for this table.
     TableColumnsBuffer  maTableColumns;     /// Column names of this table.
     OUString            maDBRangeName;      /// Name of the database range in the Calc document.

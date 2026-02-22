@@ -23,6 +23,7 @@
 #include <vcl/imapcirc.hxx>
 #include <vcl/imappoly.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <svl/urlbmk.hxx>
 
 #include <svx/svxids.hrc>

@@ -46,47 +46,6 @@ class SfxInt32Item;
 class SvxRotateModeItem;
 
 //////////////////////////////////////////////////////////////////////////////
-/// Struct with version numbers of the Items
-
-struct SVX_DLLPUBLIC AutoFormatVersions
-{
-public:
-    // BlockA
-    sal_uInt16 nFontVersion;
-    sal_uInt16 nFontHeightVersion;
-    sal_uInt16 nWeightVersion;
-    sal_uInt16 nPostureVersion;
-    sal_uInt16 nUnderlineVersion;
-    sal_uInt16 nOverlineVersion;
-    sal_uInt16 nCrossedOutVersion;
-    sal_uInt16 nContourVersion;
-    sal_uInt16 nShadowedVersion;
-    sal_uInt16 nColorVersion;
-    sal_uInt16 nBoxVersion;
-    sal_uInt16 nLineVersion;
-    sal_uInt16 nBrushVersion;
-    sal_uInt16 nAdjustVersion;
-
-    // BlockB
-    sal_uInt16 nHorJustifyVersion;
-    sal_uInt16 nVerJustifyVersion;
-    sal_uInt16 nOrientationVersion;
-    sal_uInt16 nMarginVersion;
-    sal_uInt16 nBoolVersion;
-    sal_uInt16 nInt32Version;
-    sal_uInt16 nRotateModeVersion;
-    sal_uInt16 nNumFormatVersion;
-
-    AutoFormatVersions();
-
-    void LoadBlockA( SvStream& rStream, sal_uInt16 nVer );
-    void LoadBlockB( SvStream& rStream, sal_uInt16 nVer );
-
-    static void WriteBlockA(SvStream& rStream, sal_uInt16 fileVersion);
-    static void WriteBlockB(SvStream& rStream, sal_uInt16 fileVersion);
-};
-
-//////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC AutoFormatBase
 {
@@ -209,11 +168,7 @@ public:
     void SetRotateAngle( const SfxInt32Item& rNew );
     void SetRotateMode( const SvxRotateModeItem& rNew );
 
-    bool LoadBlockA( SvStream& rStream, const AutoFormatVersions& rVersions, sal_uInt16 nVer );
-    bool LoadBlockB( SvStream& rStream, const AutoFormatVersions& rVersions, sal_uInt16 nVer );
 
-    bool SaveBlockA( SvStream& rStream, sal_uInt16 fileVersion ) const;
-    bool SaveBlockB( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
 #endif // INCLUDED_SVX_AUTOFORMATHELPER_HXX

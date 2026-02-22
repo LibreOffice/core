@@ -523,6 +523,9 @@ public:
                                                   const ScAddress& rFormulaPos);
 
     bool HasUnhandledPossibleImplicitIntersections() const { return !mUnhandledPossibleImplicitIntersections.empty(); }
+
+    SC_DLLPUBLIC static OUString SanitizeDefinedName(const OUString& rStr, const ScDocument& rDoc);
+
 #ifdef DBG_UTIL
     const std::set<OpCode>& UnhandledPossibleImplicitIntersectionsOpCodes() { return mUnhandledPossibleImplicitIntersectionsOpCodes; }
 #endif
@@ -553,6 +556,10 @@ private:
     virtual bool GetExcelName( OUString& rName ) const override;    // modify rName - input: exact name
 
     virtual formula::ParamClass GetForceArrayParameter( const formula::FormulaToken* pToken, sal_uInt16 nParam ) const override;
+
+    bool GetRefColRowNames(const formula::FormulaToken* pToken, ScComplexRefData& rRef,
+                           bool& bInList, FormulaError& nError, bool bLookUpColRowNames) const;
+    OUString CreateStringFromLabel(const formula::FormulaToken* pToken) const;
 
     /// Access the CharTable flags
     ScCharFlags GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )

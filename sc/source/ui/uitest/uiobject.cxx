@@ -142,35 +142,31 @@ void ScGridWinUIObject::execute(const OUString& rAction,
     if (rAction == "SELECT")
     {
         bool bExtend = false;
-        if (rParameters.find(u"EXTEND"_ustr) != rParameters.end())
+        if (auto itr = rParameters.find(u"EXTEND"_ustr); itr != rParameters.end())
         {
-            auto itr = rParameters.find(u"EXTEND"_ustr);
             if (itr->second.equalsIgnoreAsciiCase("true") || itr->second == "1")
                 bExtend = true;
         }
 
-        if (rParameters.find(u"CELL"_ustr) != rParameters.end())
+        if (auto itrCell = rParameters.find(u"CELL"_ustr); itrCell != rParameters.end())
         {
-            auto itr = rParameters.find(u"CELL"_ustr);
-            const OUString& rStr = itr->second;
+            const OUString& rStr = itrCell->second;
             ScAddress aAddr = get_address_from_string(mxGridWindow->getViewData().GetDocument(), rStr);
             ScDBFunc* pFunc = getDBFunc();
             pFunc->MarkRange(ScRange(aAddr), true, bExtend);
             mxGridWindow->CursorChanged();
         }
-        else if (rParameters.find(u"RANGE"_ustr) != rParameters.end())
+        else if (auto itrRange = rParameters.find(u"RANGE"_ustr); itrRange != rParameters.end())
         {
-            auto itr = rParameters.find(u"RANGE"_ustr);
-            const OUString rStr = itr->second;
+            const OUString rStr = itrRange->second;
             ScRange aRange = get_range_from_string(mxGridWindow->getViewData().GetDocument(), rStr);
             ScDBFunc* pFunc = getDBFunc();
             pFunc->MarkRange(aRange, true, bExtend);
             mxGridWindow->CursorChanged();
         }
-        else if (rParameters.find(u"TABLE"_ustr) != rParameters.end())
+        else if (auto itrTable = rParameters.find(u"TABLE"_ustr); itrTable != rParameters.end())
         {
-            auto itr = rParameters.find(u"TABLE"_ustr);
-            const OUString rStr = itr->second;
+            const OUString rStr = itrTable->second;
             sal_Int32 nTab = rStr.toUInt32();
             ScTabView* pTabView = mxGridWindow->getViewData().GetView();
             if (pTabView)
@@ -184,10 +180,9 @@ void ScGridWinUIObject::execute(const OUString& rAction,
                 }
             }
         }
-        else if (rParameters.find(u"OBJECT"_ustr) != rParameters.end())
+        else if (auto itrObject = rParameters.find(u"OBJECT"_ustr); itrObject != rParameters.end())
         {
-            auto itr = rParameters.find(u"OBJECT"_ustr);
-            const OUString rStr = itr->second;
+            const OUString rStr = itrObject->second;
 
             ScDrawView* pDrawView = getDrawView();
             pDrawView->SelectObject(rStr);
@@ -199,7 +194,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "DESELECT")
     {
-        if (rParameters.find(u"OBJECT"_ustr) != rParameters.end())
+        if ( rParameters.contains(u"OBJECT"_ustr) )
         {
             ScDrawView* pDrawView = getDrawView();
             pDrawView->UnmarkAll();
@@ -232,7 +227,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "LAUNCH")
     {
-        if ( rParameters.find(u"AUTOFILTER"_ustr) != rParameters.end())
+        if ( rParameters.contains(u"AUTOFILTER"_ustr) )
         {
             auto itrCol = rParameters.find(u"COL"_ustr);
             if (itrCol == rParameters.end())
@@ -251,7 +246,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             SCCOL nCol = itrCol->second.toUInt32();
             mxGridWindow->LaunchAutoFilterMenu(nCol, nRow);
         }
-        else if ( rParameters.find(u"PIVOTTABLE"_ustr) != rParameters.end())
+        else if ( rParameters.contains(u"PIVOTTABLE"_ustr) )
         {
             auto itrCol = rParameters.find(u"COL"_ustr);
             if (itrCol == rParameters.end())
@@ -270,7 +265,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             SCCOL nCol = itrCol->second.toUInt32();
             mxGridWindow->LaunchDPFieldMenu(nCol, nRow);
         }
-        else if ( rParameters.find(u"SELECTMENU"_ustr) != rParameters.end())
+        else if ( rParameters.contains(u"SELECTMENU"_ustr) )
         {
             auto itrCol = rParameters.find(u"COL"_ustr);
             if (itrCol == rParameters.end())
@@ -292,21 +287,20 @@ void ScGridWinUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "COMMENT")
     {
-        if ( rParameters.find(u"OPEN"_ustr) != rParameters.end() )
+        if ( rParameters.contains(u"OPEN"_ustr) )
         {
             ScViewFunc* pViewFunc = getViewFunc();
             pViewFunc->EditNote();
         }
-        else if ( rParameters.find(u"CLOSE"_ustr) != rParameters.end() )
+        else if ( rParameters.contains(u"CLOSE"_ustr) )
         {
             FuDraw* pDraw = dynamic_cast<FuDraw*>(getViewFunc()->GetDrawFuncPtr());
             assert(pDraw);
             ScViewData& rViewData = mxGridWindow->getViewData();
             rViewData.GetDispatcher().Execute( pDraw->GetSlotID() , SfxCallMode::SLOT | SfxCallMode::RECORD );
         }
-        else if ( rParameters.find(u"SETTEXT"_ustr) != rParameters.end() )
+        else if (auto itr = rParameters.find(u"SETTEXT"_ustr); itr != rParameters.end())
         {
-            auto itr = rParameters.find(u"SETTEXT"_ustr);
             const OUString rStr = itr->second;
             ScDocument& rDoc = mxGridWindow->getViewData().GetDocument();
             ScAddress aPos( mxGridWindow->getViewData().GetCurX() , mxGridWindow->getViewData().GetCurY() , mxGridWindow->getViewData().CurrentTabForData() );
@@ -328,9 +322,8 @@ void ScGridWinUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "SET")
     {
-        if (rParameters.find(u"ZOOM"_ustr) != rParameters.end())
+        if (auto itr = rParameters.find(u"ZOOM"_ustr); itr != rParameters.end())
         {
-            auto itr = rParameters.find(u"ZOOM"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nVal = aVal.toInt32();
             ScTabViewShell* pViewShell = getViewShell();

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
+#include <accessibility/vclxaccessiblestatusbaritem.hxx>
 #include <vcl/status.hxx>
 #include <vcl/vclptr.hxx>
 

@@ -35,6 +35,7 @@ enum class ColorType
     Finalized /// Finalized RGB color.
 };
 
+/// Used when ColorType == System
 enum class SystemColorType
 {
     Unused,
@@ -89,8 +90,10 @@ private:
     double mnComponent2 = 0.0; // Green, Saturation
     double mnComponent3 = 0.0; // Blue, Luminance
 
-    SystemColorType meSystemColorType = SystemColorType::Unused;
-    ::Color maLastColor;
+    SystemColorType meSystemColorType
+        = SystemColorType::Unused; /// Only used when ColorType == System
+    ::Color
+        maLastColor; /// Only used when ColorType == System, does not do anything useful right now.
 
     ThemeColorType meThemeColorType = ThemeColorType::Unknown;
     ThemeColorUsage meThemeColorUsage = ThemeColorUsage::Unknown;

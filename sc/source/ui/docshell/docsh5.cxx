@@ -24,6 +24,8 @@
 
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -318,8 +320,8 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             {
                 m_pDocument->CompileHybridFormula();
 
-                GetUndoManager()->AddUndoAction( std::make_unique<ScUndoDBData>( *this,
-                        std::move(pUndoColl),
+                GetUndoManager()->AddUndoAction( std::make_unique<ScUndoDBData>( *this, u""_ustr,
+                        std::move(pUndoColl), pNoNameData ? pNoNameData->GetName() : u""_ustr,
                         std::make_unique<ScDBCollection>( *pColl ) ) );
             }
 

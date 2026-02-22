@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_doc, \
     svt \
     tl \
     svl \
+    svx \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_core_doc,\
@@ -74,5 +75,9 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_core_doc, \
 ))
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_core_doc))
+
+$(eval $(call gb_CppunitTest_add_arguments,sw_core_doc, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
 
 # vim: set noet sw=4 ts=4:

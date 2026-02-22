@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <officecfg/Office/Draw.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace com::sun::star;
 

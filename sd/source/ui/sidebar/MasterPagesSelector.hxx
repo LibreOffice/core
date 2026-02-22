@@ -26,6 +26,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/IconView.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/idle.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
@@ -195,7 +196,7 @@ private:
         sal_uInt16 nIndex,
         MasterPageContainer::Token aToken);
 
-    static VclPtr<VirtualDevice> GetVirtualDevice(const Image& rPreview);
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(const Image& rPreview);
     static Bitmap GetPreviewAsBitmap(const Image& rPreview);
 };
 

@@ -21,12 +21,13 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <basegfx/range/b2drange.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/svapp.hxx>
+
+#include <functional>
 #include <span>
 
 // predefines
@@ -57,6 +58,7 @@ enum class ComplexTextLayoutFlags : sal_uInt8;
 namespace basegfx
 {
 class BColor;
+class B2DRange;
 }
 
 // access to one global impTimedRefDev incarnation in namespace drawinglayer::primitive

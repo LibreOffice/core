@@ -58,9 +58,12 @@
 #include <scresid.hxx>
 #include <scmod.hxx>
 #include <formulaopt.hxx>
+#include <defaulttablestyles.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/weld.hxx>
 
@@ -375,6 +378,9 @@ void WorkbookFragment::finalizeImport()
     if( !aThemeFragmentPath.isEmpty() )
         importOoxFragment(new ThemeFragmentHandler(getFilter(), aThemeFragmentPath, rOoxTheme, *pTheme));
     xGlobalSegment->setPosition( 0.25 );
+
+    DefaultOOXMLTableStyles aTableStyles(*this);
+    aTableStyles.importTableStyles();
 
     // read the styles substream (requires finalized theme buffer)
     OUString aStylesFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"styles" );

@@ -36,12 +36,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::packages;
 using namespace ::com::sun::star::xml::sax;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 ManifestWriter::ManifestWriter( const Reference < XComponentContext > & xContext )
 : m_xContext ( xContext )
 {
@@ -61,8 +55,7 @@ void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStr
     catch( SAXException& )
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw css::lang::WrappedTargetRuntimeException( THROW_WHERE,
-                        nullptr, anyEx );
+        throw css::lang::WrappedTargetRuntimeException( u""_ustr, nullptr, anyEx );
     }
 }
 

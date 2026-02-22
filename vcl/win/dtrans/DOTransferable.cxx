@@ -211,8 +211,8 @@ bool cmpAllContentTypeParameter(
 
 } // end namespace
 
-CDOTransferable::CDOTransferable(
-    const Reference< XComponentContext >& rxContext, IDataObjectPtr rDataObject ) :
+CDOTransferable::CDOTransferable(const Reference<XComponentContext>& rxContext,
+                                 sal::systools::COMReference<IDataObject> rDataObject) :
     m_rDataObject( rDataObject ),
     m_xContext( rxContext ),
     m_DataFormatTranslator( rxContext ),
@@ -425,8 +425,8 @@ void CDOTransferable::tryToGetIDataObjectIfAbsent()
 namespace
 {
 // Uses a fallback to try TYMED_ISTREAM instead of TYMED_HGLOBAL
-HRESULT getClipboardData_impl(const IDataObjectPtr& pDataObject, CFormatEtc& rFormatEtc,
-                              STGMEDIUM& rStgmedium)
+HRESULT getClipboardData_impl(const sal::systools::COMReference<IDataObject>& pDataObject,
+                              CFormatEtc& rFormatEtc, STGMEDIUM& rStgmedium)
 {
     const HRESULT hr = pDataObject->GetData( rFormatEtc, &rStgmedium );
     if (SUCCEEDED(hr))

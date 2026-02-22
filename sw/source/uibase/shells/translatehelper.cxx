@@ -32,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/htmltransferable.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <swdtflvr.hxx>
 #include <linguistic/translate.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>

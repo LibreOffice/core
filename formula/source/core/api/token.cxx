@@ -937,6 +937,11 @@ FormulaToken* FormulaTokenArray::AddStringXML( const OUString& rStr )
     return Add( new FormulaStringOpToken( ocStringXML, svl::SharedString( rStr ) ) );   // string not interned
 }
 
+FormulaToken* FormulaTokenArray::AddError( FormulaError nErr )
+{
+    return Add( new FormulaErrorToken( nErr ) );
+}
+
 FormulaToken* FormulaTokenArray::AddStringName( const OUString& rStr )
 {
     return Add( new FormulaStringOpToken( ocStringName, svl::SharedString( rStr ) ) );   // string not interned
@@ -968,7 +973,6 @@ void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
     }
     SetCombinedBitsRecalcMode( nBits );
 }
-
 
 bool FormulaTokenArray::HasMatrixDoubleRefOps() const
 {
@@ -1074,6 +1078,9 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp )
     switch (eOp)
     {
         case ocIf:
+        case ocMax:
+        case ocMin:
+        case ocSum:
 
         case ocExternal:
         case ocEuroConvert:
@@ -1112,8 +1119,9 @@ class FormulaMissingContext
     public:
             const FormulaToken* mpFunc;
             int                 mnCurArg;
+            bool                mbEmpty;    // no parameters: ()
 
-                    void    Clear() { mpFunc = nullptr; mnCurArg = 0; }
+                    void    Clear() { mpFunc = nullptr; mnCurArg = 0; mbEmpty = false; }
             inline  bool    AddDefaultArg( FormulaTokenArray* pNewArr, int nArg, double f ) const;
                     bool    AddMissingExternal( FormulaTokenArray* pNewArr ) const;
                     bool    AddMissing( FormulaTokenArray *pNewArr, const MissingConvention & rConv  ) const;
@@ -1192,6 +1200,24 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                             pNewArr->AddOpCode( ocTrue );   // 2nd, true() as function
                             pNewArr->AddOpCode( ocOpen );   // so the result is of logical type
                             pNewArr->AddOpCode( ocClose );  // and survives roundtrip
+                        }
+                        break;
+
+                    case ocMax:
+                    case ocMin:
+                        if ( mnCurArg == 0 && mbEmpty )
+                        {
+                            // Excel needs at least one parameter in MAX/MIN functions
+                            // In Calc empty MAX/MIN are Err:511
+                            pNewArr->AddError( FormulaError::NoValue );
+                        }
+                        break;
+
+                    case ocSum:
+                        if ( mnCurArg == 0 && mbEmpty )
+                        {
+                            // Excel needs at least one parameter in SUM function
+                            pNewArr->AddDouble( 0.0 );      // SUM() = 0
                         }
                         break;
 
@@ -1477,6 +1503,11 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
                     ++nFn;      // all following operations on _that_ function
                     pCtx[ nFn ].mpFunc = aIter.PeekPrevNoSpaces();
                     pCtx[ nFn ].mnCurArg = 0;
+                    FormulaToken* pNext = aIter.PeekNextNoSpaces();
+                    if (pNext != nullptr && pNext->GetOpCode() == ocClose)
+                        pCtx[ nFn ].mbEmpty = true;
+                    else
+                        pCtx[ nFn ].mbEmpty = false;
                     if (rConv.isPODF() && pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress)
                         pOcas[ nOcas++ ] = nFn;     // entering ADDRESS() if PODF
                     else if ((rConv.isODFF() || rConv.isOOXML()) && pCtx[ nFn ].mpFunc)

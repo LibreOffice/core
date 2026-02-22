@@ -40,6 +40,7 @@
 #include <tools/debug.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/fieldvalues.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <bitmaps.hlst>
 #include <vcl/tabs.hrc>

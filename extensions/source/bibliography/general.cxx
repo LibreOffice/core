@@ -30,6 +30,7 @@
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/mapunit.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <utility>
 #include <vcl/event.hxx>

@@ -38,6 +38,7 @@
 #include <unordered_set>
 
 class ScPatternCache;
+enum class ScTableStyleElement;
 
 namespace oox { class SequenceInputStream; }
 
@@ -217,6 +218,8 @@ public:
 
     /** Sets font formatting attributes for the passed element. */
     void                importAttribs( sal_Int32 nElement, const AttributeList& rAttribs );
+    /** Sets font formatting attributes for OOXML default table styles. */
+    void                setFontElements( const XlsColor& rColor, bool bWeight );
 
     /** Imports the FONT record from the passed stream. */
     void                importFont( SequenceInputStream& rStrm );
@@ -415,6 +418,8 @@ struct BorderModel
     BorderLineModel     maTop;              /// Top line format.
     BorderLineModel     maBottom;           /// Bottom line format.
     BorderLineModel     maDiagonal;         /// Diagonal line format.
+    BorderLineModel     maVertical;         /// Vertical line format.
+    BorderLineModel     maHorizontal;       /// Horizontal line format.
     bool                mbDiagTLtoBR;       /// True = top-left to bottom-right on.
     bool                mbDiagBLtoTR;       /// True = bottom-left to top-right on.
 
@@ -432,13 +437,18 @@ struct ApiBorderData
     ApiBorderLine       maRight;            /// Right line format
     ApiBorderLine       maTop;              /// Top line format
     ApiBorderLine       maBottom;           /// Bottom line format
+    ApiBorderLine       maVertical;         /// Vertical line format
+    ApiBorderLine       maHorizontal;           /// Horizontal line format
     model::ComplexColor maComplexColorLeft;
     model::ComplexColor maComplexColorRight;
     model::ComplexColor maComplexColorTop;
     model::ComplexColor maComplexColorBottom;
+    model::ComplexColor maComplexColorVertical;
+    model::ComplexColor maComplexColorHorizontal;
     ApiBorderLine       maTLtoBR;           /// Diagonal top-left to bottom-right line format.
     ApiBorderLine       maBLtoTR;           /// Diagonal bottom-left to top-right line format.
     bool                mbBorderUsed;       /// True = left/right/top/bottom line format used.
+    bool                mbVertHorz;         /// True = vert/horz line format used.
     bool                mbDiagUsed;         /// True = diagonal line format used.
 
     explicit            ApiBorderData();
@@ -463,6 +473,9 @@ public:
     void                importBorder( SequenceInputStream& rStrm );
     /** Imports a border from a DXF record from the passed stream. */
     void                importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm );
+
+    // for OOXML default table styles
+    void                setBorderElement(sal_Int32 nElement, const XlsColor& rColor, sal_Int32 nStyle);
 
     /** Final processing after import of all style settings. */
     void                finalizeImport( bool bRTL );
@@ -574,6 +587,9 @@ public:
     void                importDxfGradient( SequenceInputStream& rStrm );
     /** Imports gradient stop settings from a DXF record. */
     void                importDxfStop( SequenceInputStream& rStrm );
+
+    // for dealing with OOXML default table styles
+    void                setFillColors(const XlsColor& rFgColor, const XlsColor& rBgColor);
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();
@@ -700,6 +716,11 @@ public:
     /** Creates a new empty protection object. */
     ProtectionRef const & createProtection( bool bAlwaysNew = true );
 
+    // methods for OOXML default table style import
+    void setFill(const FillRef& xFill);
+    void setBorder(const BorderRef& xBorder);
+    void setFont(const FontRef& xFont);
+
     /** Inserts a new number format code. */
     void                importNumFmt( const AttributeList& rAttribs );
 
@@ -825,6 +846,39 @@ struct AutoFormatModel
     explicit            AutoFormatModel();
 };
 
+struct TableStyleElementInfo
+{
+    sal_Int32 mnDxfID;
+    sal_Int32 mnStripeCount;
+
+    TableStyleElementInfo();
+};
+
+typedef RefVector< Dxf > DxfVector;
+typedef RefVector< Border > BorderVector;
+typedef RefVector< Fill > FillVector;
+typedef RefVector< Font > FontVector;
+
+class TableStyle : public WorkbookHelper
+{
+    OUString maName;
+    std::unordered_map<ScTableStyleElement, TableStyleElementInfo> maTableStyleElements;
+    bool mbDefaultOOXMLStyle;
+    std::optional<OUString> maUIName;
+public:
+    explicit TableStyle( const WorkbookHelper& rHelper, bool bDefaultOOXMLStyle );
+
+    void setName(const OUString& rName);
+    void setUIName(const OUString& rName);
+    void importTableStyleElement(const AttributeList& rAttribs);
+    void finalizeImport(const DxfVector& mrDxfs);
+
+    // for OOXML default table styles
+    void setTableStyleElement(ScTableStyleElement eTableStyleElement, sal_Int32  nDxfId);
+};
+
+typedef std::shared_ptr< TableStyle > TableStyleRef;
+
 class StylesBuffer : public WorkbookHelper
 {
 public:
@@ -846,6 +900,8 @@ public:
     /** Creates a new empty differential formatting object. */
     DxfRef              createDxf();
     DxfRef              createExtDxf();
+
+    TableStyleRef createTableStyle();
 
     /** Appends a new color to the color palette. */
     void                importPaletteColor( const AttributeList& rAttribs );
@@ -910,12 +966,9 @@ public:
     const RefVector< Dxf >& getExtDxfs() const { return maExtDxfs; }
 
 private:
-    typedef RefVector< Font >                           FontVector;
-    typedef RefVector< Border >                         BorderVector;
-    typedef RefVector< Fill >                           FillVector;
     typedef RefVector< Xf >                             XfVector;
-    typedef RefVector< Dxf >                            DxfVector;
     typedef ::std::map< sal_Int32, OUString >    DxfStyleMap;
+    typedef RefVector< TableStyle > TableStyleVector;
 
     ColorPalette        maPalette;          /// Color palette.
     FontVector          maFonts;            /// List of font objects.
@@ -929,6 +982,7 @@ private:
     DxfVector           maExtDxfs;          /// List of differential extlst cell styles.
     mutable DxfStyleMap maDxfStyles;        /// Maps DXF identifiers to Calc style sheet names.
     mutable std::unordered_set<sal_Int32> maExtConditionalStyles;  /// DXF identifiers for ExtCondition which have been mapped to styles.
+    TableStyleVector    maTableStyles;
 };
 
 } // namespace oox::xls

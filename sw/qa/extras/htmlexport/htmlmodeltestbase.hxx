@@ -180,8 +180,6 @@ public:
     void ExportToReqif();
     /// Import using the C++ HTML import filter, with xhtmlns=reqif-xhtml.
     void ImportFromReqif(const OUString& rUrl);
-    /// Export using the C++ HTML export filter
-    void ExportToHTML();
 };
 
 OUString SwHtmlDomExportTest::GetObjectPath(const OUString& ext)
@@ -209,16 +207,10 @@ void SwHtmlDomExportTest::ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryS
 
 void SwHtmlDomExportTest::ExportToReqif()
 {
-    setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    save(TestFilter::HTML_WRITER);
-}
-
-void SwHtmlDomExportTest::ExportToHTML()
-{
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
-    };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER,
+         {
+             comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+         });
 }
 
 void SwHtmlDomExportTest::ImportFromReqif(const OUString& rUrl)
@@ -227,7 +219,7 @@ void SwHtmlDomExportTest::ImportFromReqif(const OUString& rUrl)
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
     };
-    loadWithParams(rUrl, aLoadProperties);
+    loadFromURL(rUrl, aLoadProperties);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

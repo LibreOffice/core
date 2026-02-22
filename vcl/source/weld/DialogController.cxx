@@ -8,7 +8,10 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 namespace weld
@@ -55,7 +58,7 @@ MessageDialogController::MessageDialogController(weld::Widget* pParent, const OU
 {
     if (!rRelocateId.isEmpty())
     {
-        m_xRelocate = m_xBuilder->weld_container(rRelocateId);
+        m_xRelocate = m_xBuilder->weld_widget(rRelocateId);
         m_xOrigParent = m_xRelocate->weld_parent();
         //fdo#75121, a bit tricky because the widgets we want to align with
         //don't actually exist in the ui description, they're implied

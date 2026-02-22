@@ -12,6 +12,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <utility>
 #include <vcl/font/FeatureParser.hxx>
+#include <vcl/vclenum.hxx>
 #include <FontFeatures.hxx>
 #include <unordered_set>
 
@@ -218,7 +219,7 @@ IMPL_LINK_NOARG(FontFeaturesDialog, ComboBoxSelectedHdl, weld::ComboBox&, void)
     updateFontPreview();
 }
 
-OUString FontFeaturesDialog::createFontNameWithFeatures()
+OUString FontFeaturesDialog::createFontNameWithFeatures() const
 {
     OUString sResultFontName;
     OUStringBuffer sNameSuffix;
@@ -260,16 +261,6 @@ OUString FontFeaturesDialog::createFontNameWithFeatures()
     if (!sNameSuffix.isEmpty())
         sResultFontName += OUStringChar(vcl::font::FeaturePrefix) + sNameSuffix;
     return sResultFontName;
-}
-
-short FontFeaturesDialog::run()
-{
-    short nResult = GenericDialogController::run();
-    if (nResult == RET_OK)
-    {
-        m_sResultFontName = createFontNameWithFeatures();
-    }
-    return nResult;
 }
 
 } // end svx namespace

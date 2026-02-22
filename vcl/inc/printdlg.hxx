@@ -27,6 +27,7 @@
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Notebook.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/customweld.hxx>
@@ -200,15 +201,20 @@ namespace vcl
         Size                                    maFirstPageSize;
 
         bool                                    mbShowLayoutFrame;
+        // cache is allowed, unless explicitly disabled for this update
+        bool mbUseCacheForPreview = true;
 
         Paper                                   mePaper;
 
         Idle maUpdatePreviewIdle;
         DECL_LINK(updatePreviewIdle, Timer*, void);
-        Idle maUpdatePreviewNoCacheIdle;
-        DECL_LINK(updatePreviewNoCacheIdle, Timer*, void);
 
-        DECL_LINK( ClickHdl, weld::Button&, void );
+        DECL_LINK(ClickOKCancelHdl, weld::Button&, void);
+        DECL_LINK(ClickForwardHdl, weld::Button&, void);
+        DECL_LINK(ClickBackwardHdl, weld::Button&, void);
+        DECL_LINK(ClickFirstHdl, weld::Button&, void);
+        DECL_LINK(ClickLastHdl, weld::Button&, void);
+        DECL_LINK(ClickSetupHdl, weld::Button&, void);
         DECL_LINK(SelectPrinterHdl, weld::ComboBox&, void);
         DECL_LINK(SelectPaperSidesHdl, weld::ComboBox&, void);
         DECL_LINK(SelectOrientationHdl, weld::ComboBox&, void);
@@ -219,7 +225,12 @@ namespace vcl
         DECL_LINK( FocusOutHdl, weld::Widget&, void );
         DECL_LINK( SpinModifyHdl, weld::SpinButton&, void );
         DECL_LINK( MetricSpinModifyHdl, weld::MetricSpinButton&, void );
-        DECL_LINK( ToggleHdl, weld::Toggleable&, void );
+        DECL_LINK(TogglePreviewHdl, weld::Toggleable&, void);
+        DECL_LINK(ToggleBorderHdl, weld::Toggleable&, void);
+        DECL_LINK(ToggleSingleJobsHdl, weld::Toggleable&, void);
+        DECL_LINK(ToggleCollateHdl, weld::Toggleable&, void);
+        DECL_LINK(ToggleReverseOrderHdl, weld::Toggleable&, void);
+        DECL_LINK(ToggleBrochureHdl, weld::Toggleable&, void);
 
         DECL_LINK( UIOption_CheckHdl, weld::Toggleable&, void );
         DECL_LINK( UIOption_RadioHdl, weld::Toggleable&, void );
@@ -231,6 +242,7 @@ namespace vcl
 
         void ImplDestroy();
         void preparePreview( bool i_bMayUseCache );
+        void schedulePreviewUpdate(bool i_bMayUseCache);
         void setupPaperSidesBox();
         void storeToSettings();
         void readFromSettings();

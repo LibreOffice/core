@@ -120,7 +120,7 @@ namespace
             bool bAsChar = rAnchor.GetAnchorId() ==
                     static_cast<RndStdIds>(css::text::TextContentAnchorType_AS_CHARACTER);
             if ( bAsChar &&
-                    !(pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING) )
+                    !(pParent && pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING) )
             {
                 continue;
             }
@@ -391,7 +391,7 @@ namespace sw
         {
             if( bExportParentItemSet )
             {
-                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
+                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.Next())
                 {
                     const SfxPoolItem* pItem(nullptr);
                     if(SfxItemState::SET == aIter.GetItemState(true, &pItem))
@@ -400,7 +400,7 @@ namespace sw
             }
             else if( rSet.Count())
             {
-                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
+                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.Next())
                     rItems[aIter.GetCurWhich()] = aIter.GetCurItem();
             }
 //            DeduplicateItems(rItems);
@@ -421,11 +421,11 @@ namespace sw
             {
                 if (pCharFormat->GetAttrSet().Count())
                 {
-                    SfxItemIter aIter(pCharFormat->GetAttrSet());
-                    const SfxPoolItem *pItem = aIter.GetCurItem();
-                    do
+                    for (SfxItemIter aIter( pCharFormat->GetAttrSet() ); !aIter.IsAtEnd(); aIter.Next())
+                    {
+                        const SfxPoolItem* pItem = aIter.GetCurItem();
                         rSet.ClearItem(pItem->Which());
-                    while ((pItem = aIter.NextItem()));
+                    }
                 }
             }
         }
@@ -450,9 +450,9 @@ namespace sw
             if (!pColl)
             {
                 // Collection not found, try in Pool ?
-                sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
+                SwPoolFormatId n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     SwGetPoolIdFromName::TxtColl);
-                if (n != SAL_MAX_UINT16)       // found or standard
+                if (n != SwPoolFormatId::UNKNOWN)       // found or standard
                     pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(n, false);
             }
             return pColl;
@@ -464,9 +464,9 @@ namespace sw
             if (!pFormat)
             {
                 // Collection not found, try in Pool ?
-                sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
+                SwPoolFormatId n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     SwGetPoolIdFromName::ChrFmt);
-                if (n != SAL_MAX_UINT16)       // found or standard
+                if (n != SwPoolFormatId::UNKNOWN)       // found or standard
                     pFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(n);
             }
             return pFormat;
@@ -508,7 +508,7 @@ namespace sw
         ww8::Frames GetFramesInNode(const ww8::Frames &rFrames, const SwNode &rNode)
         {
             ww8::Frames aRet;
-            std::copy_if(rFrames.begin(), rFrames.end(),
+            std::ranges::copy_if(rFrames,
                 std::back_inserter(aRet), anchoredto(rNode));
             return aRet;
         }

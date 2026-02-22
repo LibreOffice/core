@@ -166,6 +166,9 @@ public:
 
     virtual VclPtr<VclAbstractDialog> CreateUIPickerDialog(weld::Window* _pParent) = 0;
 
+    virtual VclPtr<VclAbstractDialog> CreateHyperlinkDialog(weld::Window* pParent,
+                                                            SfxChildWindow* pChildWindow) = 0;
+
     virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* _pParent) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateWelcomeDialog(weld::Window* pParent, const bool bIsFirstStart) =0;

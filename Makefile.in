@@ -197,7 +197,7 @@ clean-host:
 	rm -fr $(TESTINSTALLDIR)
 	rm -fr $(INSTDIR)
 	rm -fr $(WORKDIR)
-	rm -fr $(SRCDIR)/rust_uno/Cargo.lock $(SRCDIR)/rust_uno/src/generated $(SRCDIR)/rust_uno/target
+	rm -fr $(SRCDIR)/rust_uno/src/generated $(SRCDIR)/rust_uno/target
 
 clean-build:
 ifneq ($(CROSS_COMPILING),)
@@ -226,6 +226,7 @@ distclean : clean compilerplugins-clean mac-app-store-package.clean
         $(BUILDDIR)/bin/bffvalidator.sh \
         $(BUILDDIR)/bin/odfvalidator.sh \
         $(BUILDDIR)/bin/officeotron.sh \
+        $(BUILDDIR)/bin/verapdf.sh \
         $(BUILDDIR)/config.Build.log \
         $(BUILDDIR)/config.Build.warn \
         $(BUILDDIR)/config.log \

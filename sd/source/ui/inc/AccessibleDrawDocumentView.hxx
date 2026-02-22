@@ -36,9 +36,9 @@ namespace accessibility {
     Please see the documentation of the base class for further
     explanations of the individual methods.
 */
-class AccessibleDrawDocumentView final :
-    public AccessibleDocumentViewBase
-    ,public css::accessibility::XAccessibleGroupPosition
+class AccessibleDrawDocumentView final
+    : public cppu::ImplInheritanceHelper<AccessibleDocumentViewBase,
+                                         css::accessibility::XAccessibleGroupPosition>
 {
 public:
 
@@ -77,18 +77,6 @@ public:
 
     virtual void SAL_CALL
         propertyChange (const css::beans::PropertyChangeEvent& rEventObject) override;
-    //=====  XInterface  ======================================================
-
-    virtual css::uno::Any SAL_CALL
-        queryInterface (const css::uno::Type & rType) override;
-
-    virtual void SAL_CALL
-        acquire()
-        noexcept override;
-
-    virtual void SAL_CALL
-        release()
-        noexcept override;
 
     //=====  XAccessibleGroupPosition  =========================================
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL

@@ -20,11 +20,17 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFAnnotAActionType.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/pdf/PDFFormFieldType.hxx>
+#include <vcl/pdf/PDFPageObjectType.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <test/commontesttools.hxx>
 
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
@@ -216,7 +222,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159924)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159336)
 {
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     createSwDoc("tdf159336.odt");
     save(TestFilter::PDF_WRITER);
 
@@ -1032,7 +1038,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a file with a content control:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1079,7 +1085,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPlaceholderPDF)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a file with a content control, in placeholder mode:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1107,7 +1113,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a file with a checkbox content control:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1137,7 +1143,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a file with a dropdown content control:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1167,7 +1173,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF2)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     createSwDoc("tdf153040.docx");
 
     save(TestFilter::PDF_WRITER);
@@ -1192,7 +1198,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a file with a date content control:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1225,7 +1231,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a document with a custom 24pt font size and a content control:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1257,7 +1263,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a file with a combo box content control:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1288,7 +1294,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a file with a rich content control, its value set to "xxx<b>yyy</b>":
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1324,7 +1330,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testPlaceholderFieldPDF)
     if (!pPDFium)
         return;
 
-    SwExportFormFieldsGuard g;
+    ScopedConfigValue<officecfg::Office::Common::Filter::PDF::Export::ExportFormFields> aCfg(true);
     // Given a file with a text-type placeholder field:
     createSwDoc("placeholder.fodt");
 
@@ -1403,6 +1409,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
 
         nSectionAfterNBSPX_legacy_leftAligned = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32();
         nSectionAfterNBSPX_legacy_justified = getXPath(pXmlDoc, "//textarray[10]", "x").toInt32();
+        dispose();
     }
 
     // Measure the X of sections after NBSPs in a file with the option enabled
@@ -1417,6 +1424,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
             = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32();
         nSectionAfterNBSPX_optionDisabled_justified
             = getXPath(pXmlDoc, "//textarray[10]", "x").toInt32();
+        dispose();
     }
 
     // Measure the X of the sections after NBSPs in a file with the option enabled

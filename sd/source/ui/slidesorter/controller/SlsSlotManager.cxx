@@ -65,11 +65,11 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <svx/svxids.hrc>
-#include <svx/svxdlg.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
+#include <svtools/dlgname.hxx>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <osl/diagnose.h>
@@ -251,7 +251,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_INSERT_CANVAS_SLIDE:
         {
             SdDrawDocument* pDoc = pShell->GetDoc();
-            sal_uInt16 nCanvasPageIndex = pDoc->InsertCanvasPage();
+            sal_uInt16 nCanvasPageIndex = pDoc->GetOrInsertCanvasPage();
             SdPage* pCanvasPage = static_cast<SdPage*>(pDoc->GetPage(nCanvasPageIndex));
 
             view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
@@ -933,20 +933,17 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
     }
     else
     {
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         vcl::Window* pWin = mrSlideSorter.GetContentWindow();
-        ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
-                pWin ? pWin->GetFrameWeld() : nullptr,
-                aPageName, aDescr));
-        OUString aOldName = aNameDlg->GetName();
-        aNameDlg->SetText( aTitle );
-        aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ) );
-        aNameDlg->SetCheckNameTooltipHdl( LINK( this, SlotManager, RenameSlideTooltipHdl ) );
-        aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
+        SvxNameDialog aNameDlg(pWin ? pWin->GetFrameWeld() : nullptr, aPageName, aDescr);
+        OUString aOldName = aNameDlg.GetName();
+        aNameDlg.set_title(aTitle);
+        aNameDlg.SetCheckNameHdl(LINK(this, SlotManager, RenameSlideHdl));
+        aNameDlg.SetCheckNameTooltipHdl(LINK(this, SlotManager, RenameSlideTooltipHdl));
+        aNameDlg.SetEditHelpId(HID_SD_NAMEDIALOG_PAGE);
 
-        if( aNameDlg->Execute() == RET_OK )
+        if (aNameDlg.run() == RET_OK)
         {
-            OUString aNewName = aNameDlg->GetName();
+            OUString aNewName = aNameDlg.GetName();
             if (aNewName != aPageName)
             {
                 bool bResult =
@@ -955,9 +952,8 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
                 DBG_ASSERT( bResult, "Couldn't rename slide or page" );
             }
         }
-        OUString aNewName = aNameDlg->GetName();
-        collectUIInformation({{"OldName", aOldName}, {"NewName", aNewName}}, u"RENAME"_ustr);
-        aNameDlg.disposeAndClear();
+        OUString aNewName = aNameDlg.GetName();
+        collectUIInformation({ { "OldName", aOldName }, { "NewName", aNewName } }, u"RENAME"_ustr);
     }
     // Tell the slide sorter about the name change (necessary for
     // accessibility.)
@@ -965,7 +961,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
             (pSelectedPage->GetPageNum()-1)/2, aPageName);
 }
 
-IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool)
+IMPL_LINK(SlotManager, RenameSlideHdl, SvxNameDialog&, rDialog, bool)
 {
     OUString aNewName = rDialog.GetName();
 
@@ -979,7 +975,7 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool)
         || (mrSlideSorter.GetViewShell().GetDocSh()->IsNewPageNameValid( aNewName ) );
 }
 
-IMPL_STATIC_LINK_NOARG(SlotManager, RenameSlideTooltipHdl, AbstractSvxNameDialog&, OUString)
+IMPL_STATIC_LINK_NOARG(SlotManager, RenameSlideTooltipHdl, SvxNameDialog&, OUString)
 {
     return SdResId(STR_TOOLTIP_RENAME);
 }

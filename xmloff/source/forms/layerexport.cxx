@@ -27,6 +27,7 @@
 #include <xmloff/contextid.hxx>
 #include <xmloff/controlpropertyhdl.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include "controlpropertymap.hxx"

@@ -69,12 +69,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star;
 using namespace cppu;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
                                     const uno::Reference< XComponentContext >& xContext,
                                     sal_Int32 nFormat,
@@ -155,14 +149,14 @@ uno::Reference< io::XInputStream > const & ZipPackageStream::GetOwnSeekStream()
 uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCopy()
 {
     if ( m_nStreamMode != PACKAGE_STREAM_RAW || !GetOwnSeekStream().is() )
-        throw io::IOException(THROW_WHERE );
+        throw io::IOException();
 
     if ( m_xBaseEncryptionData.is() )
-        throw ZipIOException(THROW_WHERE "Encrypted stream without encryption data!" );
+        throw ZipIOException(u"Encrypted stream without encryption data!"_ustr );
 
     uno::Reference< io::XSeekable > xSeek( GetOwnSeekStream(), UNO_QUERY );
     if ( !xSeek.is() )
-        throw ZipIOException(THROW_WHERE "The stream must be seekable!" );
+        throw ZipIOException(u"The stream must be seekable!"_ustr );
 
     // skip header
     xSeek->seek( n_ConstHeaderSize + m_xBaseEncryptionData->m_aInitVector.getLength() +
@@ -238,7 +232,7 @@ uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
                     : PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
         }
         else
-            throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
+            throw uno::RuntimeException(u"No expected key is provided!"_ustr );
 
         for (const auto& rKey : m_aStorageEncryptionKeys)
             if ( rKey.Name == aNameToFind )
@@ -247,7 +241,7 @@ uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
         // empty keys are not allowed here
         // so it is not important whether there is no key, or the key is empty, it is an error
         if ( !aResult.hasElements() )
-            throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
+            throw uno::RuntimeException(u"No expected key is provided!"_ustr );
     }
     else
         aResult = m_aEncryptionKey;
@@ -270,7 +264,7 @@ sal_Int32 ZipPackageStream::GetStartKeyGenID() const
 uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( bool bAddHeaderForEncr )
 {
     if ( m_nStreamMode != PACKAGE_STREAM_DATA || !GetOwnSeekStream().is() || ( bAddHeaderForEncr && !m_bToBeEncrypted ) )
-        throw packages::NoEncryptionException(THROW_WHERE );
+        throw packages::NoEncryptionException(u""_ustr );
 
     Sequence< sal_Int8 > aKey;
 
@@ -278,7 +272,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     {
         aKey = GetEncryptionKey();
         if ( !aKey.hasElements() )
-            throw packages::NoEncryptionException(THROW_WHERE );
+            throw packages::NoEncryptionException(u""_ustr );
     }
 
     try
@@ -349,7 +343,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
     {
     }
 
-    throw io::IOException(THROW_WHERE );
+    throw io::IOException(u""_ustr );
 }
 
 // presumably the purpose of this is to transfer encrypted streams between
@@ -1006,7 +1000,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
 
     // this method can not be used together with old approach
     if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
-        throw packages::zip::ZipIOException(THROW_WHERE );
+        throw packages::zip::ZipIOException(u""_ustr );
 
     if ( IsPackageMember() )
     {
@@ -1098,12 +1092,12 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
 
     // this method can not be used together with old approach
     if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
-        throw packages::zip::ZipIOException(THROW_WHERE );
+        throw packages::zip::ZipIOException(u""_ustr );
 
     if ( IsPackageMember() )
     {
         if ( !m_bIsEncrypted || !GetEncryptionData().is() )
-            throw packages::NoEncryptionException(THROW_WHERE );
+            throw packages::NoEncryptionException(u""_ustr );
 
         return m_rZipPackage.getZipFile().getWrappedRawStream(aEntry, GetEncryptionData(),
             m_nOwnStreamOrigSize, msMediaType, m_rZipPackage.GetSharedMutexRef());
@@ -1118,7 +1112,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream()
             return TryToGetRawFromDataStream( true );
     }
 
-    throw packages::NoEncryptionException(THROW_WHERE );
+    throw packages::NoEncryptionException(u""_ustr );
 }
 
 void SAL_CALL ZipPackageStream::setDataStream( const uno::Reference< io::XInputStream >& aStream )
@@ -1138,7 +1132,7 @@ void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputSt
     if ( !ParsePackageRawStream() )
     {
         m_xStream = std::move(xOldStream);
-        throw packages::NoRawFormatException(THROW_WHERE );
+        throw packages::NoRawFormatException(u""_ustr );
     }
 
     // the raw stream MUST have seekable access
@@ -1157,7 +1151,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getPlainRawStream(
 
     // this method can not be used together with old approach
     if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
-        throw packages::zip::ZipIOException(THROW_WHERE );
+        throw packages::zip::ZipIOException(u""_ustr );
 
     if ( IsPackageMember() )
     {
@@ -1189,10 +1183,10 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     if ( aPropertyName == "MediaType" )
     {
         if ( m_rZipPackage.getFormat() != embed::StorageFormats::PACKAGE && m_rZipPackage.getFormat() != embed::StorageFormats::OFOPXML )
-            throw beans::PropertyVetoException(THROW_WHERE );
+            throw beans::PropertyVetoException(u""_ustr );
 
         if ( !(aValue >>= msMediaType) )
-            throw IllegalArgumentException(THROW_WHERE "MediaType must be a string!",
+            throw IllegalArgumentException(u"MediaType must be a string!"_ustr,
                                             uno::Reference< XInterface >(),
                                             2 );
 
@@ -1208,24 +1202,24 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     else if ( aPropertyName == "Size" )
     {
         if (!(aValue >>= m_nOwnStreamOrigSize))
-            throw IllegalArgumentException(THROW_WHERE "Wrong type for Size property!",
+            throw IllegalArgumentException(u"Wrong type for Size property!"_ustr,
                                             uno::Reference< XInterface >(),
                                             2 );
     }
     else if ( aPropertyName == "Encrypted" )
     {
         if ( m_rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
-            throw beans::PropertyVetoException(THROW_WHERE );
+            throw beans::PropertyVetoException(u""_ustr );
 
         bool bEnc = false;
         if ( !(aValue >>= bEnc) )
-            throw IllegalArgumentException(THROW_WHERE "Wrong type for Encrypted property!",
+            throw IllegalArgumentException(u"Wrong type for Encrypted property!"_ustr,
                                             uno::Reference< XInterface >(),
                                             2 );
 
         // In case of new raw stream, the stream must not be encrypted on storing
         if ( bEnc && m_nStreamMode == PACKAGE_STREAM_RAW )
-            throw IllegalArgumentException(THROW_WHERE "Raw stream can not be encrypted on storing",
+            throw IllegalArgumentException(u"Raw stream can not be encrypted on storing"_ustr,
                                             uno::Reference< XInterface >(),
                                             2 );
 
@@ -1237,7 +1231,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     else if ( aPropertyName == ENCRYPTION_KEY_PROPERTY )
     {
         if ( m_rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
-            throw beans::PropertyVetoException(THROW_WHERE );
+            throw beans::PropertyVetoException(u""_ustr );
 
         uno::Sequence< sal_Int8 > aNewKey;
 
@@ -1245,7 +1239,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         {
             OUString sTempString;
             if ( !(aValue >>= sTempString) )
-                throw IllegalArgumentException(THROW_WHERE "Wrong type for EncryptionKey property!",
+                throw IllegalArgumentException(u"Wrong type for EncryptionKey property!"_ustr,
                                                 uno::Reference< XInterface >(),
                                                 2 );
 
@@ -1280,12 +1274,12 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     else if ( aPropertyName == STORAGE_ENCRYPTION_KEYS_PROPERTY )
     {
         if ( m_rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
-            throw beans::PropertyVetoException(THROW_WHERE );
+            throw beans::PropertyVetoException(u""_ustr );
 
         uno::Sequence< beans::NamedValue > aKeys;
         if ( !( aValue >>= aKeys ) )
         {
-                throw IllegalArgumentException(THROW_WHERE "Wrong type for StorageEncryptionKeys property!",
+                throw IllegalArgumentException(u"Wrong type for StorageEncryptionKeys property!"_ustr,
                                                 uno::Reference< XInterface >(),
                                                 2 );
         }
@@ -1315,13 +1309,13 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         bool bCompr = false;
 
         if ( !(aValue >>= bCompr) )
-            throw IllegalArgumentException(THROW_WHERE "Wrong type for Compressed property!",
+            throw IllegalArgumentException(u"Wrong type for Compressed property!"_ustr,
                                             uno::Reference< XInterface >(),
                                             2 );
 
         // In case of new raw stream, the stream must not be encrypted on storing
         if ( bCompr && m_nStreamMode == PACKAGE_STREAM_RAW )
-            throw IllegalArgumentException(THROW_WHERE "Raw stream can not be encrypted on storing",
+            throw IllegalArgumentException(u"Raw stream can not be encrypted on storing"_ustr,
                                             uno::Reference< XInterface >(),
                                             2 );
 

@@ -37,9 +37,12 @@
 #include <svl/zformat.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/unohelp2.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/chinese_translation_unodialog.hxx>
@@ -272,6 +275,22 @@ void DeleteCells(ScTabViewShell* pTabViewShell, SfxRequest &rReq, DelCellCmd eCm
         }
     }
 }
+
+void DeleteContents(ScTabViewShell* pTabViewShell, SfxRequest &rReq, InsertDeleteFlags nFlags)
+{
+    if( nFlags != InsertDeleteFlags::NONE )
+    {
+        pTabViewShell->DeleteContents( nFlags );
+
+        if( ! rReq.IsAPI() )
+        {
+            OUString aFlags = FlagsToString( nFlags, InsertDeleteFlags::ALL );
+
+            rReq.AppendItem( SfxStringItem( SID_DELETE, aFlags ) );
+            rReq.Done();
+        }
+    }
+}
 }
 
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
@@ -471,17 +490,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_DELETE:
             {
-                InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
-
                 if ( pReqArgs!=nullptr && pTabViewShell->SelectionEditable() )
                 {
                     const   SfxPoolItem* pItem;
                     OUString aFlags('A');
 
+                    InsertDeleteFlags nFlags = InsertDeleteFlags::NONE;
                     if( pReqArgs->HasItem( SID_DELETE, &pItem ) )
                         aFlags = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                     nFlags |= FlagsFromString(aFlags, InsertDeleteFlags::ALL);
+
+                    DeleteContents(pTabViewShell, rReq, nFlags);
                 }
                 else
                 {
@@ -497,24 +517,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             pDlg->DisableObjects();
                         if (pDlg->Execute() == RET_OK)
                         {
-                            nFlags = pDlg->GetDelContentsCmdBits();
+                            InsertDeleteFlags nFlags = pDlg->GetDelContentsCmdBits();
+                            DeleteContents(pTabViewShell, rReq, nFlags);
                         }
                     }
                     else
                         pTabViewShell->ErrorMessage(aTester.GetMessageId());
-                }
-
-                if( nFlags != InsertDeleteFlags::NONE )
-                {
-                    pTabViewShell->DeleteContents( nFlags );
-
-                    if( ! rReq.IsAPI() )
-                    {
-                        OUString aFlags = FlagsToString( nFlags, InsertDeleteFlags::ALL );
-
-                        rReq.AppendItem( SfxStringItem( SID_DELETE, aFlags ) );
-                        rReq.Done();
-                    }
                 }
             }
             break;
@@ -2913,7 +2921,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( !aChars.isEmpty() )
                 {
                     vcl::Font aFont;
-                    pTabViewShell->GetSelectionPattern()->fillFontOnly(aFont, nullptr, nullptr, nullptr,
+                    pTabViewShell->GetSelectionPattern()->fillFontOnly(aFont, nullptr, nullptr, nullptr, nullptr,
                                                                 pTabViewShell->GetSelectionScriptType() );
                     if ( !aFontName.isEmpty() )
                         aFont = vcl::Font( aFontName, Size(1,1) );
@@ -2928,7 +2936,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 // font color doesn't matter here
                 vcl::Font aCurFont;
-                pTabViewShell->GetSelectionPattern()->fillFontOnly(aCurFont, nullptr, nullptr, nullptr,
+                pTabViewShell->GetSelectionPattern()->fillFontOnly(aCurFont, nullptr, nullptr, nullptr, nullptr,
                                                                 pTabViewShell->GetSelectionScriptType());
 
                 SfxAllItemSet aSet( GetPool() );

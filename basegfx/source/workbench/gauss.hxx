@@ -41,6 +41,8 @@
 
 #pragma once
 
+#include <utility>
+
 template <class Matrix, typename BaseType>
 bool eliminate(     Matrix&         matrix,
                     int             rows,

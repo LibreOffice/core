@@ -20,6 +20,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
+#include <tools/mapunit.hxx>
 #include <editeng/editeng.hxx>
 
 #include <poolhelp.hxx>

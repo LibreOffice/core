@@ -44,7 +44,6 @@
 #define STR_FULL_DISC_RETRY_BUTTON                  NC_("STR_FULL_DISC_RETRY_BUTTON", "Retry" )
 #define STR_FULL_DISC_MSG                           NC_("STR_FULL_DISC_MSG", "%PRODUCTNAME could not save important internal information due to insufficient free disk space at the following location:\n%PATH\n\nYou will not be able to continue working with %PRODUCTNAME without allocating more free disk space at that location.\n\nPress the 'Retry' button after you have allocated more free disk space to retry saving the data.\n\n" )
 #define STR_RESTORE_TOOLBARS                        NC_("STR_RESTORE_TOOLBARS", "~Reset" )
-#define STR_LOCK_TOOLBARS                           NC_("STR_LOCK_TOOLBARS", "~Lock Toolbars" )
 #define STR_CORRUPT_UICFG_SHARE                     NC_("STR_CORRUPT_UICFG_SHARE", "An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to reinstall the application." )
 #define STR_CORRUPT_UICFG_USER                      NC_("STR_CORRUPT_UICFG_USER", "An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to remove your user profile for the application." )
 #define STR_CORRUPT_UICFG_GENERAL                   NC_("STR_CORRUPT_UICFG_GENERAL", "An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to remove your user profile for the application first or try to reinstall the application." )

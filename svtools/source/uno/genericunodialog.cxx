@@ -31,6 +31,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/DialogController.hxx>
 
 using namespace css::uno;
 using namespace css::lang;

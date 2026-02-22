@@ -31,6 +31,9 @@ public:
     virtual void set_label(const OUString& rText) override;
     virtual OUString get_label() const override;
     virtual void set_label_wrap(bool bWrap) override;
+
+private Q_SLOTS:
+    void handleToggled();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -23,8 +23,10 @@
 
 #include <unotools/unotoolsdllapi.h>
 
-#include <tools/stream.hxx>
 #include <memory>
+
+class SvStream;
+enum class StreamMode;
 
 namespace com::sun::star::io
             {

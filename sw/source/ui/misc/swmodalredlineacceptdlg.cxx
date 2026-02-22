@@ -20,6 +20,7 @@
 #include <o3tl/deleter.hxx>
 #include <svx/ctredlin.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <redlndlg.hxx>
 #include <swmodalredlineacceptdlg.hxx>

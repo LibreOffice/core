@@ -19,6 +19,7 @@
 #include <TextUnderlinePopup.hxx>
 #include "TextUnderlineControl.hxx"
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 using namespace svx;
 

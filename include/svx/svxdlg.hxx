@@ -145,18 +145,6 @@ public:
     virtual css::uno::Reference< css::linguistic2::XDictionary >  GetNewDictionary() = 0;
 };
 
-class AbstractSvxNameDialog : public VclAbstractDialog
-{
-protected:
-    virtual ~AbstractSvxNameDialog() override = default;
-public:
-    virtual OUString GetName() = 0;
-    virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink ) = 0;
-    virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&,OUString>& rLink ) = 0;
-    virtual void    SetEditHelpId(const OUString&) = 0;
-    virtual void    SetText( const OUString& rStr ) = 0;
-};
-
 class AbstractSvxObjectNameDialog :public VclAbstractDialog
 {
 protected:
@@ -201,9 +189,6 @@ class AbstractSvxHpLinkDlg : public VclAbstractDialog
 {
 protected:
     virtual ~AbstractSvxHpLinkDlg() override = default;
-public:
-    virtual std::shared_ptr<SfxDialogController> GetController()  = 0;
-    virtual bool       QueryClose() = 0;
 };
 
 struct FmFoundRecordInformation;
@@ -363,15 +348,12 @@ public:
     virtual VclPtr<AbstractFmInputRecordNoDialog> CreateFmInputRecordNoDialog(weld::Window* pParent) = 0;
     virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog(weld::Window* pParent) = 0;
     virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog(weld::Window* pParent, const OUString& rName) = 0;
-    virtual VclPtr<AbstractSvxNameDialog> CreateSvxNameDialog(weld::Window* pParent,
-                                            const OUString& rName, const OUString& rDesc, const OUString& rTitle = u""_ustr ) = 0;
 
     // #i68101#
     virtual VclPtr<AbstractSvxObjectNameDialog> CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName) = 0;
     virtual VclPtr<AbstractSvxObjectTitleDescDialog> CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription, bool isDecorative) = 0;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxMultiPathDialog(weld::Window* pParent) = 0 ;
     virtual VclPtr<AbstractSvxMultiPathDialog>    CreateSvxPathSelectDialog(weld::Window* pParent) = 0 ;
-    virtual VclPtr<AbstractSvxHpLinkDlg>  CreateSvxHpLinkDlg(SfxChildWindow* pChild, SfxBindings* pBindings, weld::Window* pParent) = 0;
     virtual VclPtr<AbstractFmSearchDialog> CreateFmSearchDialog(weld::Window* pParent,
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,

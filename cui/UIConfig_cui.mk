@@ -96,10 +96,11 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/hatchpage \
 	cui/uiconfig/ui/hyperlinkdialog \
 	cui/uiconfig/ui/hyperlinkdocpage \
-	cui/uiconfig/ui/hyperlinkinternetpage \
 	cui/uiconfig/ui/hyperlinkmarkdialog \
-	cui/uiconfig/ui/hyperlinkmailpage \
 	cui/uiconfig/ui/hyperlinknewdocpage \
+	cui/uiconfig/ui/hyperlinkdlg \
+	cui/uiconfig/ui/hyperlinkinternetpage \
+	cui/uiconfig/ui/hyperlinkmailpage \
 	cui/uiconfig/ui/hyphenate \
 	cui/uiconfig/ui/iconchangedialog \
 	cui/uiconfig/ui/iconselectordialog \

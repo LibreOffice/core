@@ -80,7 +80,7 @@ public:
     SAL_DLLPRIVATE SdrCircObj(SdrModel& rSdrModel, SdrCircObj const & rSource);
 
     // 0=0.00Deg=3h 9000=90.00Deg=12h 18000=180.00Deg=9h 27000=270.00Deg=6h
-    // The circle is build up from StartAngle to EndWink anti-clockwise.
+    // The circle is built up from StartAngle to EndWink anti-clockwise.
     // If nNewStartAngle==nNewEndWink, then arc has an angle of 0 degrees.
     // If nNewStartAngle+36000==nNewEndWink, then the arc has angle of 360 degrees.
     SdrCircObj(

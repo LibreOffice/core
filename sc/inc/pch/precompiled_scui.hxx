@@ -173,7 +173,6 @@
 #include <scresid.hxx>
 #include <scui_def.hxx>
 #include <scuiasciiopt.hxx>
-#include <scuiautofmt.hxx>
 #include <scuiimoptdlg.hxx>
 #include <scuitphfedit.hxx>
 #include <shtabdlg.hxx>

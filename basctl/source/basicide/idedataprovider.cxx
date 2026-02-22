@@ -563,12 +563,9 @@ void IdeDataProvider::RefreshDocumentNodes()
     }
 
     // Remove old document nodes
-    m_aAllTopLevelNodes.erase(std::remove_if(m_aAllTopLevelNodes.begin(), m_aAllTopLevelNodes.end(),
-                                             [](const auto& pNode) {
-                                                 return pNode->eKind
-                                                        == IdeSymbolKind::ROOT_DOCUMENT_LIBS;
-                                             }),
-                              m_aAllTopLevelNodes.end());
+    std::erase_if(m_aAllTopLevelNodes, [](const auto& pNode) {
+        return pNode->eKind == IdeSymbolKind::ROOT_DOCUMENT_LIBS;
+    });
 
     // Re-add current document nodes
     AddDocumentNodesWithModules();

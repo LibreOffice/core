@@ -96,26 +96,6 @@ std::unique_ptr<PanelLayout> AllMasterPagesSelector::Create (
     return xSelector;
 }
 
-std::unique_ptr<PanelLayout> AllMasterPagesSelector::Create (
-    weld::Widget* pParent,
-    ViewShellBase& rViewShellBase)
-{
-    SdDrawDocument* pDocument = rViewShellBase.GetDocument();
-    if (pDocument == nullptr)
-        return nullptr;
-
-    auto pContainer = std::make_shared<MasterPageContainer>();
-
-    auto xSelector(std::make_unique<AllMasterPagesSelector>(
-            pParent,
-            *pDocument,
-            rViewShellBase,
-            pContainer));
-    xSelector->SetHelpId(HID_SD_TASK_PANE_PREVIEW_ALL);
-
-    return xSelector;
-}
-
 AllMasterPagesSelector::AllMasterPagesSelector(
     weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,

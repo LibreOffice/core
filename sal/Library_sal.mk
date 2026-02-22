@@ -171,7 +171,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/pipe \
 	sal/osl/unx/process \
 	sal/osl/unx/process_impl \
-	sal/osl/unx/profile \
 	sal/osl/unx/random \
 	sal/osl/unx/readwrite_helper \
 	sal/osl/unx/salinit \
@@ -235,7 +234,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/w32/pipe \
 	sal/osl/w32/process \
 	sal/osl/w32/procimpl \
-	sal/osl/w32/profile \
 	sal/osl/w32/random \
 	sal/osl/w32/salinit \
 	sal/osl/w32/security \

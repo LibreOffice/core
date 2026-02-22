@@ -30,6 +30,8 @@
 #include <svl/eitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svl/grabbagitem.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <uitool.hxx>
 #include <pagedesc.hxx>
 #include <pgfnote.hxx>

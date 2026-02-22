@@ -111,6 +111,7 @@ class SwContentTree final : public SfxListener
     std::map< void*, bool > mOutLineNodeMap;
     std::map<const void*, bool> m_aRegionNodeExpandMap;
     std::map<const void*, bool> m_aPostItNodeExpandMap;
+    std::map<const void*, bool> m_aIndexNodeExpandMap;
 
     sal_Int32           m_nActiveBlock;  // used to restore content types expand state
     sal_Int32           m_nHiddenBlock;
@@ -159,6 +160,7 @@ class SwContentTree final : public SfxListener
     void BringFootnotesToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);
     void BringTypesWithFlowFramesToAttention(const std::vector<const SwNode*>& rNodes,
                                              const bool bIncludeTopMargin = true);
+    void BringTextTOXMarksToAttention(std::vector<const SwTextAttr*>& rTextAttrsArr);
 
     /**
      * Before any data will be deleted, the last active entry has to be found.

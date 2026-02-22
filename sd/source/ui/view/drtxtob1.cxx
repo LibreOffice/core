@@ -27,6 +27,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/autodiritem.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
@@ -598,8 +599,8 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                     case SID_ATTR_PARA_ADJUST_CENTER:  eAdjst = SvxAdjust::Center;  eAnchor = SDRTEXTHORZADJUST_CENTER;  goto SET_ADJUST;
                     case SID_ATTR_PARA_ADJUST_RIGHT:  eAdjst = SvxAdjust::Right;  eAnchor = SDRTEXTHORZADJUST_RIGHT;  goto SET_ADJUST;
                     case SID_ATTR_PARA_ADJUST_BLOCK:  eAdjst = SvxAdjust::Block;  eAnchor = SDRTEXTHORZADJUST_BLOCK;  goto SET_ADJUST;
-                    case SID_ATTR_PARA_ADJUST_START:  eAdjst = SvxAdjust::Block;  eAnchor = SDRTEXTHORZADJUST_LEFT;  goto SET_ADJUST;
-                    case SID_ATTR_PARA_ADJUST_END:  eAdjst = SvxAdjust::Block;  eAnchor = SDRTEXTHORZADJUST_RIGHT;  goto SET_ADJUST;
+                    case SID_ATTR_PARA_ADJUST_START:  eAdjst = SvxAdjust::ParaStart;  eAnchor = SDRTEXTHORZADJUST_LEFT;  goto SET_ADJUST;
+                    case SID_ATTR_PARA_ADJUST_END:  eAdjst = SvxAdjust::ParaEnd;  eAnchor = SDRTEXTHORZADJUST_RIGHT;  goto SET_ADJUST;
 SET_ADJUST:
                     {
                         aNewAttr.Put(SvxAdjustItem(eAdjst, EE_PARA_JUST));
@@ -705,24 +706,14 @@ SET_ADJUST:
             else if ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ||
                       nSlot == SID_ATTR_PARA_RIGHT_TO_LEFT )
             {
-                bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
+                auto eFrameDirection = (nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT)
+                                           ? SvxFrameDirection::Horizontal_LR_TB
+                                           : SvxFrameDirection::Horizontal_RL_TB;
+                aNewAttr.Put(SvxFrameDirectionItem{ eFrameDirection, EE_PARA_WRITINGDIR });
 
-                SvxAdjust nAdjust = SvxAdjust::Left;
-                if( const SvxAdjustItem* pAdjustItem = aEditAttr.GetItemIfSet(EE_PARA_JUST) )
-                    nAdjust = pAdjustItem->GetAdjust();
-
-                if( bLeftToRight )
-                {
-                    aNewAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_LR_TB, EE_PARA_WRITINGDIR ) );
-                    if( nAdjust == SvxAdjust::Right )
-                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
-                }
-                else
-                {
-                    aNewAttr.Put( SvxFrameDirectionItem( SvxFrameDirection::Horizontal_RL_TB, EE_PARA_WRITINGDIR ) );
-                    if( nAdjust == SvxAdjust::Left )
-                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
-                }
+                // tdf#162120: The paragraph direction has been manually set by the user.
+                // Don't automatically adjust the paragraph direction anymore.
+                aNewAttr.Put(SvxAutoFrameDirectionItem{ false, EE_PARA_AUTOWRITINGDIR });
 
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();

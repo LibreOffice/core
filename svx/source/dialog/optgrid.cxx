@@ -28,6 +28,7 @@
 #include <officecfg/Office/Draw.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -102,7 +103,7 @@ bool  SvxGridItem::GetPresentation
 // TabPage Screen Settings
 SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, u"svx/ui/optgridpage.ui"_ustr, u"OptGridPage"_ustr, &rCoreSet)
-    , bAttrModified(false)
+    , m_bAttrModified(false)
     , m_Emode(WRITER_MODE)
     , m_xCbxUseGridsnap(m_xBuilder->weld_check_button(u"usegridsnap"_ustr))
     , m_xCbxUseGridsnapImg(m_xBuilder->weld_widget(u"lockusegridsnap"_ustr))
@@ -233,7 +234,7 @@ OUString SvxGridTabPage::GetAllStrings()
 
 bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
-    if ( bAttrModified )
+    if ( m_bAttrModified )
     {
         SvxGridItem aGridItem( SID_ATTR_GRID_OPTIONS );
 
@@ -252,7 +253,7 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
         rCoreSet->Put( aGridItem );
     }
-    return bAttrModified;
+    return m_bAttrModified;
 }
 
 void SvxGridTabPage::Reset( const SfxItemSet* rSet )
@@ -408,7 +409,7 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
     }
 
     ChangeGridsnapHdl_Impl(*m_xCbxUseGridsnap);
-    bAttrModified = false;
+    m_bAttrModified = false;
 }
 
 void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -459,7 +460,7 @@ DeactivateRC SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 IMPL_LINK(SvxGridTabPage, ChangeDrawHdl_Impl, weld::MetricSpinButton&, rField, void)
 {
-    bAttrModified = true;
+    m_bAttrModified = true;
     if (m_xCbxSynchronize->get_active())
     {
         if (&rField == m_xMtrFldDrawX.get())
@@ -483,7 +484,7 @@ IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl, weld::Toggleable&, void)
 
 IMPL_LINK(SvxGridTabPage, ChangeDivisionHdl_Impl, weld::SpinButton&, rField, void)
 {
-    bAttrModified = true;
+    m_bAttrModified = true;
     if (m_xCbxSynchronize->get_active())
     {
         if (m_xNumFldDivisionX.get() == &rField)
@@ -495,7 +496,7 @@ IMPL_LINK(SvxGridTabPage, ChangeDivisionHdl_Impl, weld::SpinButton&, rField, voi
 
 IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl, weld::Toggleable&, void)
 {
-    bAttrModified = true;
+    m_bAttrModified = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

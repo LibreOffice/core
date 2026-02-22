@@ -8,11 +8,15 @@
  */
 
 #include <iostream>
-#include <set>
 #include <memory>
 
 #include <o3tl/string_view.hxx>
 #include <string_view>
+
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_set.h>
+#include <frozen/unordered_map.h>
 
 #include "unoproduce.hxx"
 #include "rustproduce.hxx"
@@ -24,35 +28,39 @@
 #include <unoidl/unoidl.hxx>
 #include <codemaker/unotype.hxx>
 
-const std::unordered_set<std::string_view> UnoProducer::m_reservedKeywords
-    // Rust keywords that need special handling to avoid naming conflicts
-    = { "as",     "break", "const",  "continue", "crate", "else",  "enum",   "extern",
-        "false",  "fn",    "for",    "if",       "impl",  "in",    "let",    "loop",
-        "match",  "mod",   "move",   "mut",      "pub",   "ref",   "return", "Result",
-        "self",   "Self",  "static", "struct",   "super", "trait", "true",   "type",
-        "unsafe", "use",   "where",  "while",    "async", "await", "dyn",    "try" };
+namespace
+{
+// Rust keywords that need special handling to avoid naming conflicts
+constexpr auto aReservedKeywords
+    = frozen::make_unordered_set<std::string_view>(
+        { "as",     "break", "const",  "continue", "crate", "else",  "enum",   "extern",
+          "false",  "fn",    "for",    "if",       "impl",  "in",    "let",    "loop",
+          "match",  "mod",   "move",   "mut",      "pub",   "ref",   "return", "Result",
+          "self",   "Self",  "static", "struct",   "super", "trait", "true",   "type",
+          "unsafe", "use",   "where",  "while",    "async", "await", "dyn",    "try" });
 
-const std::unordered_map<std::string_view, OString> UnoProducer::m_baseTypes
-    // Maps UNO basic types to their Rust equivalents
-    // TODO: need to edit the core types Implemented manually
-    = { { "boolean", "bool"_ostr },
-        { "char", "char"_ostr },
-        { "byte", "i8"_ostr },
-        { "short", "i16"_ostr },
-        { "unsigned short", "u16"_ostr },
-        { "long", "i32"_ostr },
-        { "unsigned long", "u32"_ostr },
-        { "hyper", "i64"_ostr },
-        { "unsigned hyper", "u64"_ostr },
-        { "float", "f32"_ostr },
-        { "double", "f64"_ostr },
-        { "string", "String"_ostr },
-        { "void", "()"_ostr },
-        { "type", "uno::type"_ostr }, // TODO:
-        { "any", "uno::any"_ostr }, // TODO:
-        // TODO: These exception types need proper implementation
-        { "com.sun.star.uno.Exception", "com::sun::star::uno::Exception"_ostr } };
+// Maps UNO basic types to their Rust equivalents
+// TODO: need to edit the core types Implemented manually
+const auto aBaseTypes = frozen::make_unordered_map<std::string_view, OString>(
+    { { "boolean", "bool"_ostr },
+      { "char", "char"_ostr },
+      { "byte", "i8"_ostr },
+      { "short", "i16"_ostr },
+      { "unsigned short", "u16"_ostr },
+      { "long", "i32"_ostr },
+      { "unsigned long", "u32"_ostr },
+      { "hyper", "i64"_ostr },
+      { "unsigned hyper", "u64"_ostr },
+      { "float", "f32"_ostr },
+      { "double", "f64"_ostr },
+      { "string", "String"_ostr },
+      { "void", "()"_ostr },
+      { "type", "uno::type"_ostr }, // TODO:
+      { "any", "uno::any"_ostr }, // TODO:
+      // TODO: These exception types need proper implementation
+      { "com.sun.star.uno.Exception", "com::sun::star::uno::Exception"_ostr } });
 // Note: XInterface removed from baseTypes so it can be generated like other interfaces
+}
 
 std::string_view UnoProducer::splitName(std::string_view name)
 {
@@ -98,7 +106,7 @@ OString UnoProducer::getSafeIdentifier(std::string_view name, bool istype = fals
 {
     // Add underscore suffix to avoid Rust keyword conflicts
     OString temp = handleName(name, istype);
-    return m_reservedKeywords.contains(temp) ? temp + "_"_ostr : temp;
+    return aReservedKeywords.contains(temp) ? temp + "_"_ostr : temp;
 }
 
 OString UnoProducer::getSafeIdentifier(std::u16string_view name, bool istype = false)
@@ -204,7 +212,7 @@ void UnoProducer::produceType(const OString& name)
     m_typesProduced.insert(name);
 
     // Skip built-in types that don't need code generation
-    if (m_baseTypes.contains(name))
+    if (aBaseTypes.contains(name))
         return;
 
     OUString uname(b2u(name));

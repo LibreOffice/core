@@ -24,6 +24,7 @@
 
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/weld/ComboBox.hxx>
+#include <vcl/weld/MenuButton.hxx>
 
 #include <recentdocsview.hxx>
 #include <templatedefaultview.hxx>

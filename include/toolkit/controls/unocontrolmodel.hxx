@@ -34,11 +34,11 @@
 #include <comphelper/propshlp.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/uno3.hxx>
-#include <rtl/ref.hxx>
 
 #include <vector>
 #include <map>
 
+namespace rtl { template <class reference_type> class Reference; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 typedef std::map<sal_uInt16, css::uno::Any> ImplPropertyTable;

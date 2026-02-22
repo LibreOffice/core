@@ -261,7 +261,7 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
     if (aList.empty())
         return;
 
-    sal_Int32 nDrawing = drawingml::DrawingML::getNewDrawingUniqueId();
+    sal_Int32 nDrawing = rStrm.getNewDrawingUniqueId();
     OUString sId;
     // export in [Content_Types].xml
     sax_fastparser::FSHelperPtr pDrawing = rStrm.CreateOutputStream(
@@ -348,7 +348,7 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
     if( GetVmlObjectCount( rList ) == 0 )
         return;
 
-    sal_Int32 nDrawing = drawingml::DrawingML::getNewVMLUniqueId();
+    sal_Int32 nDrawing = rStrm.getNewVMLUniqueId();
     OUString sId;
     sax_fastparser::FSHelperPtr pVmlDrawing = rStrm.CreateOutputStream(
             XclXmlUtils::GetStreamName( "xl/", "drawings/vmlDrawing", nDrawing ),
@@ -1307,10 +1307,10 @@ bool ScURLTransformer::isExternalURL(const OUString& rURL) const
 
 void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 {
-    // Return early if unknown shape type, otherwise bogus drawing XML gets written
-    if (!ShapeExport::IsShapeTypeKnown(mxShape))
+    // Return early if unknown/invalid shape; otherwise bogus drawing XML gets written
+    if (!ShapeExport::IsValidShape(mxShape, drawingml::DOCUMENT_XLSX))
     {
-        SAL_INFO("sc.filter", "unknown shape");
+        SAL_INFO("sc.filter", "unknown or invalid/incomplete shape");
         return;
     }
 
@@ -1656,7 +1656,17 @@ void ExcEScenarioManager::Save( XclExpStream& rStrm )
 
 void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( aScenes.empty() )
+    bool bValidScenarios = false;
+    for (ExcEScenario& rScenario : aScenes)
+    {
+        if (rScenario.GetCells().size())
+        {
+            bValidScenarios = true;
+            break;
+        }
+    }
+
+    if (!bValidScenarios)
         return;
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
@@ -1666,8 +1676,11 @@ void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_sqref
     );
 
-    for( ExcEScenario& rScenario : aScenes )
-        rScenario.SaveXml( rStrm );
+    for (ExcEScenario& rScenario : aScenes)
+    {
+        if (rScenario.GetCells().size())
+            rScenario.SaveXml(rStrm);
+    }
 
     rWorkbook->endElement( XML_scenarios );
 }

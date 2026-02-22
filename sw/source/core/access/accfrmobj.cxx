@@ -98,7 +98,7 @@ SwAccessibleChild::~SwAccessibleChild() = default;
 void SwAccessibleChild::Init( const SdrObject* pDrawObj )
 {
     mpDrawObj = pDrawObj;
-    const SwVirtFlyDrawObj* pFlyDrawObj = dynamic_cast<const SwVirtFlyDrawObj*>(mpDrawObj);
+    const SwVirtFlyDrawObj* pFlyDrawObj = DynCastSwVirtFlyDrawObj(mpDrawObj);
     mpFrame = pFlyDrawObj ? pFlyDrawObj->GetFlyFrame() : nullptr;
     mpWindow = nullptr;
 }

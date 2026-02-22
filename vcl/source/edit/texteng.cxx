@@ -41,6 +41,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 
 #include <com/sun/star/i18n/WordType.hpp>
 

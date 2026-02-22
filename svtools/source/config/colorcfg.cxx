@@ -42,6 +42,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/themecolors.hxx>
+#include <vcl/vclevent.hxx>
 #include <officecfg/Office/UI.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -103,7 +104,7 @@ public:
     // get the configured value - if bSmart is set the default color setting is provided
     // instead of the automatic color
     ColorConfigValue        GetColorValue(ColorConfigEntry eEntry, bool bSmart = true) const;
-
+    void UpdateSettings();
     DECL_LINK( DataChangedEventListener, VclSimpleEvent&, void );
 };
 
@@ -551,6 +552,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_GRAY,         COL_GRAY        }, // HTMLUNKNOWN
         { COL_GRAY3,        COL_GRAY7       }, // CALCGRID
         { COL_LIGHTBLUE,    COL_LIGHTBLUE   }, // CALCCELLFOCUS
+        { COL_LIGHTGRAYBLUE, COL_LIGHTGRAYBLUE }, // CALCDBFOCUS
         { COL_BLUE,         COL_BLUE        }, // CALCPAGEBREAK
         { Color(0x2300dc),  Color(0x2300DC) }, // CALCPAGEBREAKMANUAL
         { COL_GRAY7,        COL_GRAY7       }, // CALCPAGEBREAKAUTOMATIC
@@ -607,6 +609,10 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
             break;
 
         case CALCCELLFOCUS:
+            aRet = Application::GetSettings().GetStyleSettings().GetAccentColor();
+            break;
+
+        case CALCDBFOCUS:
             aRet = Application::GetSettings().GetStyleSettings().GetAccentColor();
             break;
 
@@ -699,6 +705,76 @@ const OUString& ColorConfig_Impl::GetCurrentSchemeName()
     return GetLoadedScheme();
 }
 
+void ColorConfig_Impl::UpdateSettings()
+{
+    AllSettings aAllSettings(Application::GetSettings());
+    StyleSettings aStyleSettings(aAllSettings.GetStyleSettings());
+
+    Color aColor = GetColorValue(WINDOWCOLOR, true).nColor;
+    aStyleSettings.SetWindowColor(aColor);
+    aStyleSettings.BatchSetBackgrounds(aColor);
+    aStyleSettings.SetActiveTabColor(aColor);
+    aStyleSettings.SetHelpColor(aColor);
+
+    aColor = GetColorValue(BASECOLOR, true).nColor;
+    aStyleSettings.SetInactiveTabColor(aColor);
+    aStyleSettings.SetListBoxWindowBackgroundColor(aColor);
+    aStyleSettings.SetFieldColor(aColor);
+
+    aStyleSettings.SetDisableColor(GetColorValue(DISABLEDCOLOR, true).nColor);
+
+    aColor = GetColorValue(ACCENTCOLOR, true).nColor;
+    aStyleSettings.SetAccentColor(aColor);
+    aStyleSettings.SetHighlightColor(aColor);
+    aStyleSettings.SetListBoxWindowHighlightColor(aColor);
+    // aStyleSettings.SetLinkColor(aColor);
+
+    aColor = GetColorValue(WINDOWTEXTCOLOR, true).nColor;
+    aStyleSettings.SetListBoxWindowTextColor(aColor);
+    aStyleSettings.SetWindowTextColor(aColor);
+    aStyleSettings.SetRadioCheckTextColor(aColor);
+    aStyleSettings.SetLabelTextColor(aColor);
+    aStyleSettings.SetFieldTextColor(aColor);
+    aStyleSettings.SetTabTextColor(aColor);
+    aStyleSettings.SetHelpTextColor(aColor);
+    aStyleSettings.SetActiveTextColor(aColor);
+
+    aColor = GetColorValue(MENUBARHIGHLIGHTCOLOR, true).nColor;
+    aStyleSettings.SetListBoxWindowHighlightTextColor(aColor);
+    aColor = GetColorValue(MENUBARTEXTCOLOR, true).nColor;
+    aStyleSettings.SetMenuBarTextColor(aColor);
+    aColor = GetColorValue(MENUTEXTCOLOR, true).nColor;
+    aStyleSettings.SetMenuTextColor(aColor);
+
+    aColor = GetColorValue(BUTTONTEXTCOLOR, true).nColor;
+    aStyleSettings.SetButtonTextColor(aColor);
+    aStyleSettings.SetDefaultActionButtonTextColor(aColor);
+    aStyleSettings.SetActionButtonTextColor(aColor);
+    aStyleSettings.SetDefaultButtonTextColor(aColor);
+    aStyleSettings.SetDefaultButtonRolloverTextColor(aColor);
+    aStyleSettings.SetDefaultButtonPressedRolloverTextColor(aColor);
+    aStyleSettings.SetFlatButtonTextColor(aColor);
+    aStyleSettings.SetFlatButtonPressedRolloverTextColor(aColor);
+    aStyleSettings.SetFlatButtonRolloverTextColor(aColor);
+    aStyleSettings.SetButtonRolloverTextColor(aColor);
+    aStyleSettings.SetDefaultActionButtonRolloverTextColor(aColor);
+    aStyleSettings.SetDefaultActionButtonPressedRolloverTextColor(aColor);
+    aStyleSettings.SetActionButtonRolloverTextColor(aColor);
+    aStyleSettings.SetActionButtonPressedRolloverTextColor(aColor);
+    aStyleSettings.SetFieldRolloverTextColor(aColor);
+    aStyleSettings.SetButtonRolloverTextColor(aColor);
+    aStyleSettings.SetButtonPressedRolloverTextColor(aColor);
+
+    aColor = GetColorValue(SHADECOLOR, true).nColor;
+    aStyleSettings.SetShadowColor(aColor);
+
+    aColor = GetColorValue(MENUBARHIGHLIGHTTEXTCOLOR, true).nColor;
+    aStyleSettings.SetTabRolloverTextColor(aColor);
+
+    aAllSettings.SetStyleSettings(aStyleSettings);
+    Application::SetSettings(aAllSettings);
+}
+
 EditableColorConfig::EditableColorConfig() :
     m_pImpl(new ColorConfig_Impl),
     m_bModified(false)
@@ -742,6 +818,11 @@ void EditableColorConfig::LoadScheme(const OUString& rScheme )
     m_pImpl->CommitCurrentSchemeName();
 }
 
+void EditableColorConfig::SetupTheme()
+{
+    m_pImpl->SetupTheme();
+}
+
 const OUString& EditableColorConfig::GetCurrentSchemeName()const
 {
     return m_pImpl->GetLoadedScheme();
@@ -778,7 +859,10 @@ void EditableColorConfig::Commit()
     if(m_bModified)
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
+    {
         m_pImpl->Commit();
+        m_pImpl->UpdateSettings();
+    }
     m_bModified = false;
 }
 

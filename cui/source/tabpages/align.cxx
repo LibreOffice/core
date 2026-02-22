@@ -31,7 +31,10 @@
 #include <editeng/justifyitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/intitem.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 #define IID_BOTTOMLOCK 1
 #define IID_TOPLOCK    2

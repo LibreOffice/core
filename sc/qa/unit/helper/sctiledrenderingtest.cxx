@@ -23,33 +23,25 @@
 using namespace com::sun::star;
 
 ScTiledRenderingTest::ScTiledRenderingTest()
-    : UnoApiXmlTest(u"/sc/qa/unit/tiledrendering/data/"_ustr)
+    : UnoApiTest(u"/sc/qa/unit/tiledrendering/data/"_ustr)
     , m_callbackWrapper(&callback, this)
 {
 }
 
 void ScTiledRenderingTest::setUp()
 {
-    UnoApiXmlTest::setUp();
+    UnoApiTest::setUp();
 
     comphelper::LibreOfficeKit::setActive(true);
 }
 
 void ScTiledRenderingTest::tearDown()
 {
-    if (mxComponent.is())
-    {
-        mxComponent->dispose();
-        mxComponent.clear();
-    }
-
     m_callbackWrapper.clear();
 
     comphelper::LibreOfficeKit::resetCompatFlag();
 
-    comphelper::LibreOfficeKit::setActive(false);
-
-    UnoApiXmlTest::tearDown();
+    UnoApiTest::tearDown();
 }
 
 ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)

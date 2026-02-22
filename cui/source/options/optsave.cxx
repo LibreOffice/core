@@ -46,6 +46,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <unotools/confignode.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <sfx2/fcontnr.hxx>
 

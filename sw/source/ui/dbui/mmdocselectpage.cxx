@@ -22,6 +22,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfac.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
 #include "mmdocselectpage.hxx"

@@ -21,6 +21,7 @@
 
 #include <unotools/configitem.hxx>
 #include <tools/link.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include "scdllapi.h"
 
 class ScOptionsUtil

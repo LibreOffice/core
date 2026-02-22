@@ -9,9 +9,13 @@
  */
 
 #include <utility>
+#include <basegfx/vector/b2dsize.hxx>
 #include <vcl/VectorGraphicSearch.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFErrorType.hxx>
+#include <vcl/pdf/PDFFindFlags.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <sal/config.h>

@@ -16,6 +16,7 @@ $(call gb_CustomTarget_get_target,android/loandroid3) : \
 $(loandroid3_DIR)/done : $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),MAK)
+	cd $(SRCDIR)/android && $(MAKE) local.properties
 	cd $(SRCDIR)/android/source && $(MAKE) all
 ifeq ($(ENABLE_JAVA),TRUE)
 # Copy to $(BUILDDIR)/instsetoo_native as that is where the tinderbox build script

@@ -16,12 +16,16 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
+#include <tools/fldunit.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <sfx2/watermarkitem.hxx>
 #include <svtools/ctrltool.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/weld/Builder.hxx>
 
 static bool isLOKMobilePhone()
 {

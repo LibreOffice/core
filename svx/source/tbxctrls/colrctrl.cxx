@@ -29,6 +29,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/image.hxx>
 #include <vcl/transfer.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 
 #include <colrctrl.hxx>
 
@@ -157,9 +159,9 @@ bool SvxColorValueSet_docking::StartDrag()
     Color aItemColor( GetItemColor( nPos ) );
     OUString sItemText( GetItemText( nPos ) );
 
-    drawing::FillStyle eStyle = ((1 == nPos)
+    drawing::FillStyle eStyle = (nPos == GetItemCount())
                             ? drawing::FillStyle_NONE
-                            : drawing::FillStyle_SOLID);
+                            : drawing::FillStyle_SOLID;
 
     XFillColorItem const color(sItemText, aItemColor);
     XFillStyleItem const style(eStyle);
@@ -262,7 +264,7 @@ void SvxColorDockingWindow::FillValueSet()
 
     xColorSet->Clear();
 
-    xColorSet->addEntriesForXColorList(*pColorList, 2);
+    xColorSet->addEntriesForXColorList(*pColorList);
 
     // create the last entry for 'invisible/none'
     const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
@@ -278,7 +280,7 @@ void SvxColorDockingWindow::FillValueSet()
 
     Bitmap aBmp( pVD->GetBitmap( Point(), aColorSize ) );
 
-    xColorSet->InsertItem( sal_uInt16(1), Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
+    xColorSet->InsertItem(xColorSet->GetItemCount() + 1, Image(aBmp), SvxResId(RID_SVXSTR_INVISIBLE));
 }
 
 bool SvxColorDockingWindow::Close()
@@ -297,11 +299,13 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
     Color  aColor( xColorSet->GetItemColor( nPos ) );
     OUString aStr( xColorSet->GetItemText( nPos ) );
 
+    // ID of 'invisible/none' entry, see SvxColorDockingWindow::FillValueSet
+    const sal_uInt16 nIdNone = xColorSet->GetItemCount();
     if (xColorSet->IsLeftButton())
     {
         if ( gnLeftSlot == SID_ATTR_FILL_COLOR )
         {
-            if ( nPos == 1 )        // invisible
+            if (nPos == nIdNone)
             {
                 XFillStyleItem aXFillStyleItem( drawing::FillStyle_NONE );
                 pDispatcher->ExecuteList(gnLeftSlot, SfxCallMode::RECORD,
@@ -334,7 +338,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
                 }
             }
         }
-        else if ( nPos != 1 )       // invisible
+        else if (nPos != nIdNone)
         {
             SvxColorItem aLeftColorItem( aColor, gnLeftSlot );
             pDispatcher->ExecuteList(gnLeftSlot, SfxCallMode::RECORD,
@@ -345,7 +349,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
     {
         if ( gnRightSlot == SID_ATTR_LINE_COLOR )
         {
-            if( nPos == 1 )     // invisible
+            if (nPos == nIdNone)
             {
                 XLineStyleItem aXLineStyleItem( drawing::LineStyle_NONE );
                 pDispatcher->ExecuteList(gnRightSlot, SfxCallMode::RECORD,
@@ -381,7 +385,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
                         { &aXLineColorItem });
             }
         }
-        else if ( nPos != 1 )       // invisible
+        else if (nPos != nIdNone)
         {
             SvxColorItem aRightColorItem( aColor, gnRightSlot );
             pDispatcher->ExecuteList(gnRightSlot, SfxCallMode::RECORD,

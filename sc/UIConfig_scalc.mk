@@ -22,6 +22,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
 	sc/uiconfig/scalc/popupmenu/column_operations \
 	sc/uiconfig/scalc/popupmenu/conditional \
 	sc/uiconfig/scalc/popupmenu/conditional_easy \
+	sc/uiconfig/scalc/popupmenu/datatablemenu \
 	sc/uiconfig/scalc/popupmenu/draw \
 	sc/uiconfig/scalc/popupmenu/drawtext \
 	sc/uiconfig/scalc/popupmenu/form \
@@ -124,6 +125,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/dataproviderdlg \
 	sc/uiconfig/scalc/ui/definedatabaserangedialog \
 	sc/uiconfig/scalc/ui/definename \
+	sc/uiconfig/scalc/ui/definetablerangedialog \
 	sc/uiconfig/scalc/ui/deletecells \
 	sc/uiconfig/scalc/ui/deletecolumnentry \
 	sc/uiconfig/scalc/ui/deletecontents \
@@ -246,6 +248,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/sidebaralignment \
 	sc/uiconfig/scalc/ui/sidebarnumberformat \
 	sc/uiconfig/scalc/ui/sidebarcellappearance \
+	sc/uiconfig/scalc/ui/sidebardatabase \
 	sc/uiconfig/scalc/ui/simplerefdialog \
 	sc/uiconfig/scalc/ui/solverdlg \
 	sc/uiconfig/scalc/ui/solveroptionsdialog \
@@ -263,6 +266,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/subtotaloptionspage \
 	sc/uiconfig/scalc/ui/subtotalgrppage \
 	sc/uiconfig/scalc/ui/statisticsinfopage \
+	sc/uiconfig/scalc/ui/tablestylesbox \
 	sc/uiconfig/scalc/ui/tabcolordialog \
 	sc/uiconfig/scalc/ui/textimportoptions \
 	sc/uiconfig/scalc/ui/textimportcsv \

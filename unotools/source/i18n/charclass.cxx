@@ -23,6 +23,9 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/i18n/CharacterClassification.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <com/sun/star/i18n/ParseResult.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <utility>
 
 using namespace ::com::sun::star;

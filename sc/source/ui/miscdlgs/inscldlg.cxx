@@ -24,6 +24,8 @@
 #include <strings.hrc>
 #include <scresid.hxx>
 
+#include <vcl/weld/Builder.hxx>
+
 static sal_uInt8 nInsItemChecked = 0;
 
 ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, ScViewData& rViewData,

@@ -28,6 +28,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <comphelper/propertyvalue.hxx>
 
+#include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <ndgrf.hxx>
@@ -37,6 +38,10 @@
 #include <fmtfsize.hxx>
 #include <frameformats.hxx>
 #include <unotxdoc.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <bodyfrm.hxx>
+#include <txtfrm.hxx>
 
 namespace
 {
@@ -308,9 +313,11 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testOutlineLevel)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfBr)
 {
-    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     setImportFilterName(TestFilter::HTML_WRITER);
-    createSwDoc("reqif-br.xhtml");
+    createSwDoc("reqif-br.xhtml",
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        });
     // <reqif-xhtml:br/> was not recognized as a line break from a ReqIf file.
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("aaa\nbbb"));
 }
@@ -337,9 +344,11 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf80194_subscript)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfTable)
 {
-    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     setImportFilterName(TestFilter::HTML_WRITER);
-    createSwDoc("reqif-table.xhtml");
+    createSwDoc("reqif-table.xhtml",
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        });
     // to see this: soffice --infilter="HTML (StarWriter):xhtmlns=reqif-xhtml" sw/qa/extras/htmlimport/data/reqif-table.xhtml
     // Load a table with xhtmlns=reqif-xhtml filter param.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -462,9 +471,11 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf118579)
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfPageStyle)
 {
-    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     setImportFilterName(TestFilter::HTML_WRITER);
-    createSwDoc("reqif-page-style.xhtml");
+    createSwDoc("reqif-page-style.xhtml",
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        });
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: Standard, Actual  : HTML'.
     CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr,
@@ -486,8 +497,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"AllowedRTFOLEMimeTypes"_ustr, aTypes),
     };
-    OUString aURL = createFileURL(u"allowed-rtf-ole-mime-types.xhtml");
-    loadWithParams(aURL, aLoadProperties);
+    createSwDoc("allowed-rtf-ole-mime-types.xhtml", aLoadProperties);
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
                                                      uno::UNO_QUERY);
@@ -522,9 +532,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImg)
 {
     // Given an XHTML with an <object> (containing GIF) and an inner <object> (containing PNG, to be
     // ignored):
-    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     setImportFilterName(TestFilter::HTML_WRITER);
-    createSwDoc("ole-img.xhtml");
+    createSwDoc("ole-img.xhtml",
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        });
 
     // Then make sure the result is a single Writer image:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -541,9 +553,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleImgSvg)
 {
     // Given an XHTML with an <object> (containing SVG) and an inner <object> (containing PNG, to be
     // ignored):
-    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     setImportFilterName(TestFilter::HTML_WRITER);
-    createSwDoc("ole-img-svg.xhtml");
+    createSwDoc("ole-img-svg.xhtml",
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        });
 
     // Then make sure the result is a single Writer image:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -578,9 +592,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData)
 {
     // Given an XHTML with an <object> (containing non-image, non-OLE2 data) and an inner <object>
     // (containing PNG):
-    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     setImportFilterName(TestFilter::HTML_WRITER);
-    createSwDoc("ole-data.xhtml");
+    createSwDoc("ole-data.xhtml",
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        });
 
     // Then make sure the result is a single clickable Writer image:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -599,9 +615,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData)
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testOleData2)
 {
     // Given an XHTML with 2 objects: the first has a link, the second does not have:
-    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     setImportFilterName(TestFilter::HTML_WRITER);
-    createSwDoc("ole-data2.xhtml");
+    createSwDoc("ole-data2.xhtml",
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        });
 
     // Then make sure that the second image doesn't have a link set:
     uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
@@ -673,6 +691,42 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf155011)
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
                                               uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"HTML"_ustr, getProperty<OUString>(xCursor, u"PageStyleName"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTextAlignStartEnd)
+{
+    createSwWebDoc("text-align-start-end.html");
+
+    auto* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    auto* pRoot = pWrtShell->GetLayout();
+
+    CPPUNIT_ASSERT(pRoot->GetLower()->IsPageFrame());
+    auto* pPage = static_cast<SwPageFrame*>(pRoot->GetLower());
+
+    CPPUNIT_ASSERT(pPage->GetLower()->IsBodyFrame());
+    auto* pBody = static_cast<SwBodyFrame*>(pPage->GetLower());
+
+    CPPUNIT_ASSERT(pBody->GetLower()->IsTextFrame());
+    auto* pTextFrame = dynamic_cast<SwTextFrame*>(pBody->GetLower());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::ParaStart,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::ParaStart,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::ParaEnd,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
+
+    pTextFrame = dynamic_cast<SwTextFrame*>(pTextFrame->GetNext());
+    CPPUNIT_ASSERT_EQUAL(
+        SvxAdjust::ParaEnd,
+        pTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().Get(RES_PARATR_ADJUST).GetAdjust());
 }
 
 } // end of anonymous namespace

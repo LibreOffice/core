@@ -30,6 +30,7 @@
 #include <svtools/imagemgr.hxx>
 #include <svl/svlresid.hxx>
 #include <svl/svl.hrc>
+#include <unotools/resmgr.hxx>
 #include <utility>
 
 using namespace ::com::sun::star::uno;

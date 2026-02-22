@@ -1424,8 +1424,8 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
     }
     else
     {
-        SwFontAccess aFontAccess( pColl, pSh );
-        pFnt.reset(new SwFont( aFontAccess.Get()->GetFont() ));
+        const SwFontObj& rFontAccess = pColl->GetFontObj(pSh);
+        pFnt.reset(new SwFont( rFontAccess.GetFont() ));
         pFnt->CheckFontCacheId( pSh, pFnt->GetActual() );
     }
     OutputDevice* pOut = pSh->GetOut();

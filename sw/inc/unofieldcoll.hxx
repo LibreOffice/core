@@ -28,6 +28,7 @@
 #include "unocoll.hxx"
 
 class SwFieldType;
+class SwXFieldMaster;
 class SwXFieldEnumeration;
 
 typedef ::cppu::WeakImplHelper

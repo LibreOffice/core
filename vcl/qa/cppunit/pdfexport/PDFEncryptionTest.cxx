@@ -71,14 +71,11 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
     loadFromURL(u"private:factory/swriter"_ustr);
 
     // Save PDF
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    maMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
-        { { "SelectPdfVersion", uno::Any(sal_Int32(17)) },
-          { "EncryptFile", uno::Any(true) },
-          { "DocumentOpenPassword", uno::Any(u"secret"_ustr) } });
+    uno::Sequence<beans::PropertyValue> aFilterData
+        = comphelper::InitPropertySequence({ { "SelectPdfVersion", uno::Any(sal_Int32(17)) } });
     maMediaDescriptor["FilterData"] <<= aFilterData;
-    xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF_WRITER, maMediaDescriptor.getAsConstPropertyValueList(),
+         /*pPassword*/ "secret");
 
     // Load the exported result in PDFium
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
@@ -92,14 +89,11 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
     loadFromURL(u"private:factory/swriter"_ustr);
 
     // Save PDF
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    maMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
-        { { "SelectPdfVersion", uno::Any(sal_Int32(20)) },
-          { "EncryptFile", uno::Any(true) },
-          { "DocumentOpenPassword", uno::Any(u"secret"_ustr) } });
+    uno::Sequence<beans::PropertyValue> aFilterData
+        = comphelper::InitPropertySequence({ { "SelectPdfVersion", uno::Any(sal_Int32(20)) } });
     maMediaDescriptor["FilterData"] <<= aFilterData;
-    xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF_WRITER, maMediaDescriptor.getAsConstPropertyValueList(),
+         /*pPassword*/ "secret");
 
     // Load the exported result in PDFium
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);

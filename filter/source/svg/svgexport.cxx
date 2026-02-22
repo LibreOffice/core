@@ -50,11 +50,13 @@
 #include <i18nlangtag/lang.h>
 #include <svl/numformat.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/SvmReader.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>

@@ -26,6 +26,8 @@
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/app.hxx>
@@ -502,7 +504,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 break;
 
             // if we execute this ourself, then either the application does not implement an own handling for this,
-            // of we're on the top of the dispatcher stack, which means a control has the focus.
+            // or we're on the top of the dispatcher stack, which means a control has the focus.
             // In the latter case, we put the focus to the document window, otherwise, we focus the first control
             const bool bHasControlFocus = GetImpl()->HasControlFocus_Lock();
             if ( bHasControlFocus )

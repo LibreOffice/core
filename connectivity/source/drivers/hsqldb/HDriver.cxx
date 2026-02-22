@@ -37,6 +37,7 @@
 #include "HTerminateListener.hxx"
 #include <hsqldb/HCatalog.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/stream.hxx>
 #include <osl/file.h>
 #include <osl/process.h>
 #include <comphelper/namedvaluecollection.hxx>

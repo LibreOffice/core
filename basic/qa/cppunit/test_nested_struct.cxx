@@ -29,7 +29,7 @@ namespace
         void testFixedVarAssign();
         void testFixedVarAssignAlt(); // result is uno-ised and tested
         void testUnoAccess(); // fdo#60117 specific test
-        void testTdf134576();
+        void testTdf134576_resume_next_in_for_each();
 
         // Adds code needed to register the test suite
         CPPUNIT_TEST_SUITE(Nested_Struct);
@@ -44,7 +44,7 @@ namespace
         CPPUNIT_TEST(testFixedVarAssign);
         CPPUNIT_TEST(testFixedVarAssignAlt);
         CPPUNIT_TEST(testUnoAccess);
-        CPPUNIT_TEST(testTdf134576);
+        CPPUNIT_TEST(testTdf134576_resume_next_in_for_each);
 
         // End of test suite definition
         CPPUNIT_TEST_SUITE_END();
@@ -299,7 +299,7 @@ void Nested_Struct::testUnoAccess()
     CPPUNIT_ASSERT_EQUAL(200, result );
 }
 
-void Nested_Struct::testTdf134576()
+void Nested_Struct::testTdf134576_resume_next_in_for_each()
 {
     MacroSnippet myMacro(u"Function doUnitTest()\n"
                         "  On Error Resume Next\n"

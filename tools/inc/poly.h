@@ -20,6 +20,7 @@
 
 #include <sal/types.h>
 #include <memory>
+#include <tools/gen.hxx>
 #include <tools/poly.hxx>
 
 class SAL_WARN_UNUSED ImplPolygon

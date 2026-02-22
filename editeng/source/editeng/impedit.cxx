@@ -23,6 +23,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/urlfieldhelper.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/linguistic2/XDictionary.hpp>

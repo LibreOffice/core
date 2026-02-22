@@ -51,6 +51,16 @@
     <property name="step-increment">0.10</property>
     <property name="page-increment">1</property>
   </object>
+  <object class="GtkTreeStore" id="iconview_treestore">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name tooltip -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -120,10 +130,10 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="columnpage|columnft">Column</property>
+                    <property name="xalign">0</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
-                    <property name="xalign">0</property>
                     <accessibility>
                       <relation type="label-for" target="back"/>
                       <relation type="label-for" target="next"/>
@@ -140,11 +150,11 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label">_1</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">width1mf</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">width1mf</property>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -157,11 +167,11 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label">_2</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">width2mf</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">width2mf</property>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -174,11 +184,11 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label">_3</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">width3mf</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">width3mf</property>
                   </object>
                   <packing>
                     <property name="left-attach">4</property>
@@ -830,17 +840,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkDrawingArea" id="valueset">
-                    <property name="width-request">160</property>
-                    <property name="height-request">35</property>
+                  <object class="GtkIconView" id="iconview">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
+                    <property name="margin">6</property>
+                    <property name="model">iconview_treestore</property>
+                    <property name="columns">5</property>
+                    <property name="pixbuf-column">0</property>
+                    <property name="tooltip-column">2</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="valueset-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|valueset">Enter the number of columns that you want in the page, frame, or section.</property>
+                      <object class="AtkObject" id="iconview-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|iconview">Enter the number of columns that you want in the page, frame, or section.</property>
                       </object>
                     </child>
                   </object>

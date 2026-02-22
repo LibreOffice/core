@@ -10,18 +10,28 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/frame/XLayoutManager.hpp>
+#include <framework/layoutmanager.hxx>
 
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld/weld.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 class ToolbarTabPage : public SfxTabPage
 {
 private:
-    css::uno::Reference<css::frame::XLayoutManager> m_xLayoutManager;
+    rtl::Reference<framework::LayoutManager> m_xLayoutManager;
     std::unique_ptr<weld::TreeView> m_pToolbarList;
+    std::unique_ptr<weld::Label> m_pLockAllLabel;
+    std::unique_ptr<weld::CheckButton> m_pLockAll;
     virtual void Reset(const SfxItemSet* /* rSet*/) override;
+
+    void ShowToolbar(const OUString& sName, const bool bShow);
+    void LockToolbar(const OUString& sName, const bool bLock);
+    void SensitiveToolbar(const OUString& sName, const bool bSensitive);
+    void UpdateAllLocked();
+
     DECL_LINK(ToggleHdl, const weld::TreeView::iter_col&, void);
+    DECL_LINK(CheckBoxHdl, weld::Toggleable&, void);
 
 public:
     ToolbarTabPage(weld::Container* pPage, weld::DialogController* pController,

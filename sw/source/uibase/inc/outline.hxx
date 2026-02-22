@@ -22,6 +22,7 @@
 #include <memory>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/SpinButton.hxx>
 #include <swtypes.hxx>
 #include "numprevw.hxx"

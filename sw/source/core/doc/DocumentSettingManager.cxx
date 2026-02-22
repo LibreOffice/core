@@ -113,7 +113,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbMsWordCompGridMetrics(false), // tdf#129808
     mbNoClippingWithWrapPolygon(false),
     mbBalanceSpacesAndIdeographicSpaces(false),
-    mbAdjustTableLineHeightsToGridHeight(true) // tdf#167583
+    mbAdjustTableLineHeightsToGridHeight(true), // tdf#167583
+    mbListLabelAlignmentIgnoresDirection(false) // tdf#72640
 
     // COMPATIBILITY FLAGS END
 {
@@ -151,6 +152,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbIgnoreTabsAndBlanksForLineCalculation = aOptions.get(u"IgnoreTabsAndBlanksForLineCalculation"_ustr);
         mbBalanceSpacesAndIdeographicSpaces = aOptions.get(u"BalanceSpacesAndIdeographicSpaces"_ustr);
         mbAdjustTableLineHeightsToGridHeight = aOptions.get(u"AdjustTableLineHeightsToGridHeight"_ustr);
+        mbListLabelAlignmentIgnoresDirection = aOptions.get(u"ListLabelAlignmentIgnoresDirection"_ustr);
     }
     else
     {
@@ -172,6 +174,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbEmptyDbFieldHidesPara             = true;
         mbUseVariableWidthNBSP              = false;
         mbAdjustTableLineHeightsToGridHeight = true;
+        mbListLabelAlignmentIgnoresDirection = false;
     }
 
     // COMPATIBILITY FLAGS END
@@ -293,6 +296,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
             return mbForceTopAlignmentInCellWithFloatingAnchor;
         case DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT:
             return mbAdjustTableLineHeightsToGridHeight;
+        case DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION:
+            return mbListLabelAlignmentIgnoresDirection;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -639,6 +644,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT:
             mbAdjustTableLineHeightsToGridHeight = value;
             break;
+        case DocumentSettingId::LIST_LABEL_ALIGNMENT_IGNORES_DIRECTION:
+            mbListLabelAlignmentIgnoresDirection = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -824,6 +832,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbBalanceSpacesAndIdeographicSpaces = rSource.mbBalanceSpacesAndIdeographicSpaces;
     mbForceTopAlignmentInCellWithFloatingAnchor = rSource.mbForceTopAlignmentInCellWithFloatingAnchor;
     mbAdjustTableLineHeightsToGridHeight = rSource.mbAdjustTableLineHeightsToGridHeight;
+    mbListLabelAlignmentIgnoresDirection = rSource.mbListLabelAlignmentIgnoresDirection;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -1247,6 +1256,12 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(
         pWriter, BAD_CAST("value"),
         BAD_CAST(OString::boolean(mbAdjustTableLineHeightsToGridHeight).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbListLabelAlignmentIgnoresDirection"));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("value"),
+        BAD_CAST(OString::boolean(mbListLabelAlignmentIgnoresDirection).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);

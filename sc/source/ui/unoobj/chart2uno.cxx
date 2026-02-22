@@ -1544,10 +1544,7 @@ ScChart2DataProvider::createDataSource(
     //reorder labeled sequences according to aSequenceMapping
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqVector;
     aSeqVector.reserve(aSeqs.size());
-    for (auto const& aSeq : aSeqs)
-    {
-        aSeqVector.push_back(aSeq);
-    }
+    aSeqVector.insert(aSeqVector.end(), aSeqs.begin(), aSeqs.end());
 
     for (const sal_Int32 nNewIndex : aSequenceMapping)
     {

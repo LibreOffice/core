@@ -13,6 +13,7 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <officecfg/Office/Calc.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <tpcompatibility.hxx>
 #include <sc.hrc>

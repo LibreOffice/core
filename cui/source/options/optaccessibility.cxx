@@ -23,6 +23,7 @@
 #include <unotools/resmgr.hxx>
 #include <dialmgr.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace
 {

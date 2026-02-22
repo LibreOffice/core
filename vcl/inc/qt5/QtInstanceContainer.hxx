@@ -30,6 +30,9 @@ public:
 
 protected:
     virtual QLayout& getLayout() const;
+
+private:
+    static QWidget* findFocusableWidget(QWidget* pWidget);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

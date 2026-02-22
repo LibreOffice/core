@@ -29,6 +29,7 @@
 #include <framework/generictoolbarcontroller.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

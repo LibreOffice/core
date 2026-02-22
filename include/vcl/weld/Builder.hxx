@@ -11,7 +11,6 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/uitest/factory.hxx>
 
@@ -21,6 +20,8 @@ namespace comphelper
 {
 class OAccessible;
 }
+
+enum class FieldUnit : sal_uInt16;
 
 namespace weld
 {

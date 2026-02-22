@@ -25,6 +25,8 @@
 #include <svl/voiditem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/clipfmtitem.hxx>

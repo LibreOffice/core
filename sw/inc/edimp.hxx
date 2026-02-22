@@ -22,6 +22,7 @@
 #include <o3tl/sorted_vector.hxx>
 
 #include "nodeoffset.hxx"
+#include "node.hxx"
 
 class SwPaM;
 class SwNodeIndex;

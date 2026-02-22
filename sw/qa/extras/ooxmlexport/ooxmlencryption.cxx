@@ -22,43 +22,43 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testPasswordMSO2007)
 {
     const char* const sPass = "abc";
-    createSwDoc("Encrypted_MSO2007_abc.docx", sPass);
+    createSwDoc("Encrypted_MSO2007_abc.docx", /*rParams*/ {}, sPass);
     // Standard encryption format, AES 128, SHA1
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
-    saveAndReload(TestFilter::DOCX, sPass);
+    saveAndReload(TestFilter::DOCX, /*rParams*/ {}, sPass);
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPasswordMSO2010)
 {
     const char* const sPass = "abc";
-    createSwDoc("Encrypted_MSO2010_abc.docx", sPass);
+    createSwDoc("Encrypted_MSO2010_abc.docx", /*rParams*/ {}, sPass);
     // Agile encryption format, AES 128, CBC, SHA1
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
-    saveAndReload(TestFilter::DOCX, sPass);
+    saveAndReload(TestFilter::DOCX, /*rParams*/ {}, sPass);
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPasswordMSO2013)
 {
     const char* const sPass = "abc";
-    createSwDoc("Encrypted_MSO2013_abc.docx", sPass);
+    createSwDoc("Encrypted_MSO2013_abc.docx", /*rParams*/ {}, sPass);
     // Agile encryption format, AES 256, CBC, SHA512
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
-    saveAndReload(TestFilter::DOCX, sPass);
+    saveAndReload(TestFilter::DOCX, /*rParams*/ {}, sPass);
     CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPasswordLOStandard)
 {
     const char* const sPass = "abc";
-    createSwDoc("Encrypted_LO_Standard_abc.docx", sPass);
+    createSwDoc("Encrypted_LO_Standard_abc.docx", /*rParams*/ {}, sPass);
     // Standard encryption format, AES 128, SHA1
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
-    saveAndReload(TestFilter::DOCX, sPass);
+    saveAndReload(TestFilter::DOCX, /*rParams*/ {}, sPass);
     CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
 }
 

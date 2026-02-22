@@ -240,7 +240,7 @@ OUString checkFile(const OUString& pathname, const OUString& aCommand)
         try
         {
             sal::systools::COMReference<IShellLinkW> link(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER);
-            sal::systools::COMReference<IPersistFile> file(link, sal::systools::COM_QUERY_THROW);
+            auto file(link.QueryInterface<IPersistFile>(sal::systools::COM_QUERY_THROW()));
             sal::systools::ThrowIfFailed(file->Load(path, STGM_READ),
                                          "IPersistFile.Load failed");
             sal::systools::ThrowIfFailed(link->Resolve(nullptr, SLR_UPDATE | SLR_NO_UI),

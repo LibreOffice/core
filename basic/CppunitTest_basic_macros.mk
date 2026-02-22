@@ -19,7 +19,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basic_macros, \
 	basic/qa/cppunit/test_vba \
 	basic/qa/cppunit/test_global_as_new \
 	basic/qa/cppunit/test_global_array \
-	basic/qa/cppunit/test_tdf149714 \
+	basic/qa/cppunit/test_tdf149714_bits_per_pixel \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,basic_macros, \

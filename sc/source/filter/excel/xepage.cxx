@@ -387,8 +387,8 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
     std::set<SCCOL> aColBreaks;
     rDoc.GetAllColBreaks(aColBreaks, nScTab, false, true);
-    for (const auto& rColBreak : aColBreaks)
-        maData.maVerPageBreaks.push_back(rColBreak);
+    maData.maVerPageBreaks.insert(maData.maVerPageBreaks.end(), aColBreaks.begin(),
+                                  aColBreaks.end());
 }
 
 namespace {

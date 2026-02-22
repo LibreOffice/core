@@ -21,7 +21,6 @@
 #define INCLUDED_UNOTOOLS_MODULEOPTIONS_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <unotools/options.hxx>
@@ -29,6 +28,8 @@
 
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace com::sun::star::uno { template <typename> class Sequence; }
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation

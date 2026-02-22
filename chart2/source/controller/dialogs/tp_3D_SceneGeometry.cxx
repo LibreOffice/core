@@ -25,6 +25,7 @@
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/helpers.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>

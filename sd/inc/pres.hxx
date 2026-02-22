@@ -32,6 +32,7 @@ enum class PresObjKind
     Page,
     Handout,
     Notes,
+    PagePreview,
     Header,
     Footer,
     DateTime,

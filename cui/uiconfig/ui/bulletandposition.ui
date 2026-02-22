@@ -188,7 +188,6 @@
                     <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkTreeView" id="levellb">
-                        <property name="width-request">75</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="model">liststore1</property>
@@ -1111,7 +1110,7 @@
                             <property name="can-focus">False</property>
                             <child>
                               <object class="GtkDrawingArea" id="preview">
-                                <property name="width-request">150</property>
+                                <property name="width-request">225</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                               </object>

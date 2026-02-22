@@ -746,14 +746,17 @@ void OfPieChartDialogController::fillExtraControls(
 
         assert(!aValuesSeries.empty());
 
-        const uno::Reference< chart2::data::XDataSequence > xSeq( aValuesSeries.front()->getValues() );
+        if (!aValuesSeries.empty())
+        {
+            const uno::Reference< chart2::data::XDataSequence > xSeq( aValuesSeries.front()->getValues() );
 
-        // Allow all but one entry to be aggregated in the composite wedge
-        sal_Int32 nMaxCompositeSize = xSeq->getData().getLength() - 1;
+            // Allow all but one entry to be aggregated in the composite wedge
+            sal_Int32 nMaxCompositeSize = xSeq->getData().getLength() - 1;
 
-        if( nMaxCompositeSize < 2 )
-            nMaxCompositeSize = 2;
-        m_xMF_CompositeSize->set_max(nMaxCompositeSize);
+            if( nMaxCompositeSize < 2 )
+                nMaxCompositeSize = 2;
+            m_xMF_CompositeSize->set_max(nMaxCompositeSize);
+        }
     }
 }
 

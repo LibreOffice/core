@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <rtl/ref.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <dsntypes.hxx>

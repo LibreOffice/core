@@ -19,17 +19,19 @@
 #ifndef INCLUDED_SVL_ITEMPROP_HXX
 #define INCLUDED_SVL_ITEMPROP_HXX
 
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
-#include <svl/itemset.hxx>
 #include <svl/svldllapi.h>
 #include <o3tl/sorted_vector.hxx>
 #include <span>
 #include <string_view>
 #include <utility>
+
+class SfxItemSet;
+
+namespace com::sun::star::beans { class XPropertySetInfo; }
+namespace com::sun::star::beans { enum class PropertyState; }
 
 // values from com/sun/star/beans/PropertyAttribute
 #define PROPERTY_NONE 0
@@ -120,17 +122,21 @@ public:
     css::uno::Any
         getPropertyValue( const OUString &rName,
                                             const SfxItemSet& rSet ) const;
+    /// @param bIgnoreUnknownProperty if true, don't throw an exception when the property is not one we know about
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     static void setPropertyValue( const SfxItemPropertyMapEntry& rEntry,
                                           const css::uno::Any& aVal,
-                                          SfxItemSet& rSet );
+                                          SfxItemSet& rSet,
+                                  bool bIgnoreUnknownProperty = false);
+    /// @param bIgnoreUnknownProperty if true, don't throw an exception when the property is not one we know about
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::beans::UnknownPropertyException
     void                  setPropertyValue( const OUString& rPropertyName,
                                             const css::uno::Any& aVal,
-                                            SfxItemSet& rSet ) const;
+                                            SfxItemSet& rSet,
+                                            bool bIgnoreUnknownProperty = false) const;
 
     /// @throws css::beans::UnknownPropertyException
     css::beans::PropertyState

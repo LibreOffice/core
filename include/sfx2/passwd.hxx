@@ -22,8 +22,11 @@
 #include <sfx2/dllapi.h>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <optional>
 
 // defines ---------------------------------------------------------------
 
@@ -69,7 +72,10 @@ private:
 
     std::unique_ptr<weld::Button> m_xOKBtn;
 
-    std::array<std::unique_ptr<weld::ToggleButton>, 4> m_xPass;
+    std::unique_ptr<weld::ToggleButton> m_xBtn1;
+    std::unique_ptr<weld::ToggleButton> m_xBtn2;
+    std::unique_ptr<weld::ToggleButton> m_xBtn3;
+    std::unique_ptr<weld::ToggleButton> m_xBtn4;
 
     std::shared_ptr<weld::MessageDialog> m_xConfirmFailedDialog;
 

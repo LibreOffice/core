@@ -12,6 +12,8 @@
 #include "QtInstanceContainer.hxx"
 #include "QtInstanceWidget.hxx"
 
+#include <vcl/weld/Notebook.hxx>
+
 #include <QtWidgets/QTabWidget>
 
 #include <map>

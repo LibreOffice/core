@@ -454,6 +454,10 @@ rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< 
     {
         if( GetPage()->GetPageKind() == PageKind::Notes && GetPage()->IsMasterPage() )
             eObjKind = PresObjKind::Title;
+        else if (GetPage()->GetPageKind() == PageKind::Standard
+            && !GetPage()->IsMasterPage())
+            // might be a canvas page
+            eObjKind = PresObjKind::PagePreview;
         else
             eObjKind = PresObjKind::Page;
     }
@@ -1493,6 +1497,9 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
                 break;
             case PresObjKind::Handout:
                 aShapeType += "HandoutShape";
+                break;
+            case PresObjKind::PagePreview:
+                aShapeType += "PageShape";
                 break;
             case PresObjKind::Notes:
                 aShapeType += "NotesShape";

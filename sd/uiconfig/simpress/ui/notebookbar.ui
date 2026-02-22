@@ -4,6 +4,16 @@
   <requires lib="gtk+" version="3.24"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/colibre/cmd/ -->
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkMenu" id="Menu Addons">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -3705,7 +3715,7 @@
                                         <property name="visible">True</property>
                                         <property name="halign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="action_name">.uno:LeftPara</property>
+                                        <property name="action_name">.uno:StartPara</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -3729,7 +3739,7 @@
                                         <property name="visible">True</property>
                                         <property name="halign">center</property>
                                         <property name="hexpand">True</property>
-                                        <property name="action_name">.uno:RightPara</property>
+                                        <property name="action_name">.uno:EndPara</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -6603,6 +6613,64 @@
               </packing>
             </child>
             <child>
+              <object class="sfxlo-PriorityHBox" id="Design_Tab">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <child>
+                  <object class="sfxlo-PriorityMergedHBox" id="Design">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="sfxlo-NotebookbarToolBox" id="theme_colors_pane">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-start">5</property>
+                        <child>
+                          <object class="GtkToolButton" id="Theme-ThemeColorsPane">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="action-name">.uno:ThemeSelectorPanel</property>
+                            <property name="use-underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="DesignLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="impressnotebookbar|DesignLabel">~Design</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="position">4</property>
+                <property name="tab-fill">False</property>
+              </packing>
+            </child>
+            <child>
               <object class="sfxlo-PriorityHBox" id="Slide Show Tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -7135,7 +7203,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
             <child type="tab">
@@ -7146,7 +7214,7 @@
                 <property name="use_underline">True</property>
               </object>
               <packing>
-                <property name="position">4</property>
+                <property name="position">5</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -7754,7 +7822,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">5</property>
+                <property name="position">6</property>
               </packing>
             </child>
             <child type="tab">
@@ -7765,7 +7833,7 @@
                 <property name="use_underline">True</property>
               </object>
               <packing>
-                <property name="position">5</property>
+                <property name="position">6</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -9112,7 +9180,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">6</property>
+                <property name="position">7</property>
               </packing>
             </child>
             <child type="tab">
@@ -9123,7 +9191,7 @@
                 <property name="use_underline">True</property>
               </object>
               <packing>
-                <property name="position">6</property>
+                <property name="position">7</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -9864,7 +9932,7 @@
                                     <property name="visible">True</property>
                                     <property name="halign">center</property>
                                     <property name="hexpand">True</property>
-                                    <property name="action_name">.uno:LeftPara</property>
+                                    <property name="action_name">.uno:StartPara</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -9888,7 +9956,7 @@
                                     <property name="visible">True</property>
                                     <property name="halign">center</property>
                                     <property name="hexpand">True</property>
-                                    <property name="action_name">.uno:RightPara</property>
+                                    <property name="action_name">.uno:EndPara</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -10090,7 +10158,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">7</property>
+                <property name="position">8</property>
               </packing>
             </child>
             <child type="tab">
@@ -10104,7 +10172,7 @@
                 </style>
               </object>
               <packing>
-                <property name="position">7</property>
+                <property name="position">8</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -11394,7 +11462,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">8</property>
+                <property name="position">9</property>
               </packing>
             </child>
             <child type="tab">
@@ -11408,7 +11476,7 @@
                 </style>
               </object>
               <packing>
-                <property name="position">8</property>
+                <property name="position">9</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -13203,7 +13271,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">9</property>
+                <property name="position">10</property>
               </packing>
             </child>
             <child type="tab">
@@ -13220,7 +13288,7 @@
                 </style>
               </object>
               <packing>
-                <property name="position">9</property>
+                <property name="position">10</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -14144,7 +14212,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">10</property>
+                <property name="position">11</property>
               </packing>
             </child>
             <child type="tab">
@@ -14159,7 +14227,7 @@
                 </style>
               </object>
               <packing>
-                <property name="position">10</property>
+                <property name="position">11</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -14714,7 +14782,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">11</property>
+                <property name="position">12</property>
               </packing>
             </child>
             <child type="tab">
@@ -14728,7 +14796,7 @@
                 </style>
               </object>
               <packing>
-                <property name="position">11</property>
+                <property name="position">12</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -15606,7 +15674,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">12</property>
+                <property name="position">13</property>
               </packing>
             </child>
             <child type="tab">
@@ -15620,7 +15688,7 @@
                 </style>
               </object>
               <packing>
-                <property name="position">12</property>
+                <property name="position">13</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -16485,7 +16553,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">13</property>
+                <property name="position">14</property>
               </packing>
             </child>
             <child type="tab">
@@ -16499,7 +16567,7 @@
                 </style>
               </object>
               <packing>
-                <property name="position">13</property>
+                <property name="position">14</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -17379,7 +17447,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">14</property>
+                <property name="position">15</property>
               </packing>
             </child>
             <child type="tab">
@@ -17393,7 +17461,7 @@
                 </style>
               </object>
               <packing>
-                <property name="position">14</property>
+                <property name="position">15</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -18273,7 +18341,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">15</property>
+                <property name="position">16</property>
               </packing>
             </child>
             <child type="tab">
@@ -18287,7 +18355,7 @@
                 </style>
               </object>
               <packing>
-                <property name="position">15</property>
+                <property name="position">16</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -18404,7 +18472,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">16</property>
+                <property name="position">17</property>
               </packing>
             </child>
             <child type="tab">
@@ -18415,7 +18483,7 @@
                 <property name="use_underline">True</property>
               </object>
               <packing>
-                <property name="position">16</property>
+                <property name="position">17</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -19451,7 +19519,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">16</property>
+                <property name="position">18</property>
               </packing>
             </child>
             <child type="tab">
@@ -19462,7 +19530,7 @@
                 <property name="use_underline">True</property>
               </object>
               <packing>
-                <property name="position">16</property>
+                <property name="position">18</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>

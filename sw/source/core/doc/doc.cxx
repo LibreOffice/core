@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/TableAutoFmt.hxx>
 #include <config_features.h>
 
 #include <doc.hxx>
@@ -1254,15 +1255,14 @@ void SwDoc::ForEachOverlineItem( const std::function<bool(const SvxOverlineItem&
             }
         }
     }
-    const auto& aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
     const SwTableAutoFormatTable& rTableStyles = GetTableStyles();
     for (size_t i=0; i < rTableStyles.size(); ++i)
     {
         const SwTableAutoFormat& rTableStyle = rTableStyles[i];
-        for (const sal_uInt32 nBoxIndex : aTableTemplateMap)
+        for (size_t j = 0; j < ELEMENT_COUNT; j++)
         {
-            const SwAutoFormatProps& rBoxProps = rTableStyle.GetBoxFormat(nBoxIndex).GetProps();
-            const SvxOverlineItem rOverlineItem = rBoxProps.GetOverline();
+            const SwBoxAutoFormat& rBoxFormat = *rTableStyle.GetField(j);
+            const SvxOverlineItem rOverlineItem = rBoxFormat.GetOverline();
             if (!rFunc(rOverlineItem))
                 return;
         }
@@ -1271,8 +1271,8 @@ void SwDoc::ForEachOverlineItem( const std::function<bool(const SvxOverlineItem&
     for (size_t i=0; i < rCellStyleTable.size(); ++i)
     {
         const SwCellStyleDescriptor aCellStyle = rCellStyleTable[i];
-        const SwAutoFormatProps& rBoxProps = aCellStyle.GetAutoFormat().GetProps();
-        const SvxOverlineItem rOverlineItem = rBoxProps.GetOverline();
+        const SwBoxAutoFormat& rBoxFormat = aCellStyle.GetAutoFormat();
+        const SvxOverlineItem rOverlineItem = rBoxFormat.GetOverline();
         if (!rFunc(rOverlineItem))
             return;
     }
@@ -1695,10 +1695,10 @@ void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImp
             {
                 SwTextFormatColl* pMyColl = pNd->GetTextColl();
 
-                const sal_uInt16 nHeadLine = o3tl::narrowing<sal_uInt16>(
+                const SwPoolFormatId nHeadLine =
                             !pMyColl->IsAssignedToListLevelOfOutlineStyle()
-                            ? RES_POOLCOLL_HEADLINE2
-                            : RES_POOLCOLL_HEADLINE1 );
+                            ? SwPoolFormatId::COLL_HEADLINE2
+                            : SwPoolFormatId::COLL_HEADLINE1;
                 pMyColl = rExtDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nHeadLine );
                 pNd->ChgFormatColl( pMyColl );
             }

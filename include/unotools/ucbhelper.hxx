@@ -24,11 +24,11 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star {
     namespace uno {
         class Any;
+        template <class interface_type> class Reference;
         class XComponentContext;
     }
     namespace ucb{

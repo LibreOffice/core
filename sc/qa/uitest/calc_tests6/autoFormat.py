@@ -27,7 +27,6 @@ class autoFormat(UITestCase):
                 fontcb = xDialog.getChild("fontcb")
                 patterncb = xDialog.getChild("patterncb")
                 alignmentcb = xDialog.getChild("alignmentcb")
-                autofitcb = xDialog.getChild("autofitcb")
 
                 entry = formatlb.getChild("7") #Financial
                 entry.executeAction("SELECT", tuple())
@@ -36,7 +35,6 @@ class autoFormat(UITestCase):
                 fontcb.executeAction("CLICK", tuple())
                 patterncb.executeAction("CLICK", tuple())
                 alignmentcb.executeAction("CLICK", tuple())
-                autofitcb.executeAction("CLICK", tuple())
 
 
             #verify
@@ -48,7 +46,6 @@ class autoFormat(UITestCase):
                 fontcb = xDialog.getChild("fontcb")
                 patterncb = xDialog.getChild("patterncb")
                 alignmentcb = xDialog.getChild("alignmentcb")
-                autofitcb = xDialog.getChild("autofitcb")
 
                 entry = formatlb.getChild("7") #Financial
                 entry.executeAction("SELECT", tuple())
@@ -57,13 +54,11 @@ class autoFormat(UITestCase):
                 self.assertEqual(get_state_as_dict(fontcb)["Selected"], "false")
                 self.assertEqual(get_state_as_dict(patterncb)["Selected"], "false")
                 self.assertEqual(get_state_as_dict(alignmentcb)["Selected"], "false")
-                self.assertEqual(get_state_as_dict(autofitcb)["Selected"], "false")
                 numformatcb.executeAction("CLICK", tuple())
                 bordercb.executeAction("CLICK", tuple())
                 fontcb.executeAction("CLICK", tuple())
                 patterncb.executeAction("CLICK", tuple())
                 alignmentcb.executeAction("CLICK", tuple())
-                autofitcb.executeAction("CLICK", tuple())
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

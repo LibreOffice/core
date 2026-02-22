@@ -26,6 +26,7 @@
 #include <wrtsh.hxx>
 #include <fmtfld.hxx>
 #include <frmtool.hxx>
+#include <poolfmt.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -443,7 +444,7 @@ namespace
 
             if (!bSameSet)
             {
-                for (SfxItemIter aIter(aTmp); !aIter.IsAtEnd(); aIter.NextItem())
+                for (SfxItemIter aIter(aTmp); !aIter.IsAtEnd(); aIter.Next())
                 {
                     const sal_uInt16 nWhich(aIter.GetCurWhich());
                     if( SfxItemState::SET == aTmp.GetItemState( nWhich, false ) &&
@@ -458,7 +459,7 @@ namespace
             {
                 IStyleAccess& rStyleAccess = rDoc.GetIStyleAccess();
                 std::shared_ptr<SfxItemSet> pAutoStyle = rStyleAccess.getAutomaticStyle(aTmp2, IStyleAccess::AUTO_STYLE_CHAR);
-                return std::make_unique<SwRedlineExtraData_FormatColl>( pFromColl->GetName(), USHRT_MAX, pAutoStyle );
+                return std::make_unique<SwRedlineExtraData_FormatColl>( pFromColl->GetName(), SwPoolFormatId::UNKNOWN, pAutoStyle );
             }
         }
         return nullptr;

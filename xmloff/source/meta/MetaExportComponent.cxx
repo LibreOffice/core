@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/errcode.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <osl/diagnose.h>

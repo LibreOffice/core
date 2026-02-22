@@ -26,6 +26,11 @@
 #include "doceventnotifier.hxx"
 #include <basctl/scriptdocument.hxx>
 
+namespace weld
+{
+class ComboBox;
+}
+
 namespace basctl
 {
 /*!

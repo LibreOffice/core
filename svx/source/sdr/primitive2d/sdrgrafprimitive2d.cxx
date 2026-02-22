@@ -25,6 +25,7 @@
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <utility>
 
 namespace drawinglayer::primitive2d

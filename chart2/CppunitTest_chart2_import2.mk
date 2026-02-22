@@ -11,4 +11,8 @@
 
 $(eval $(call chart2_import_test,2))
 
+$(eval $(call gb_CppunitTest_add_arguments,chart2_import2, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:

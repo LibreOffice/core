@@ -46,8 +46,6 @@
 #include <xmloff/XMLPageExport.hxx>
 #include <comphelper/attributelist.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <tools/fldunit.hxx>
-#include <comphelper/errcode.hxx>
 
 #include <vector>
 #include <memory>
@@ -69,6 +67,7 @@ namespace com::sun::star::xml::sax { class XDocumentHandler; }
 namespace com::sun::star::xml::sax { class XExtendedDocumentHandler; }
 namespace com::sun::star::xml::sax { class XLocator; }
 
+class ErrCode;
 class SvXMLNamespaceMap;
 class SvXMLExport_Impl;
 class ProgressBarHelper;
@@ -78,6 +77,7 @@ class XMLImageMapExport;
 class XMLErrors;
 class LanguageTag;
 enum class SvXMLErrorFlags;
+enum class FieldUnit : sal_uInt16;
 
 // Shapes in Writer cannot be named via context menu (#i51726#)
 #include <unotools/moduleoptions.hxx>

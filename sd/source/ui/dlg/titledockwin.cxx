@@ -22,6 +22,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/event.hxx>
+#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/splitwin.hxx>
 #include <vcl/toolbox.hxx>

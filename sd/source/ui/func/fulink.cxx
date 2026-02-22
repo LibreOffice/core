@@ -30,6 +30,7 @@
 
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <officecfg/Office/Common.hxx>
 
 class SfxRequest;

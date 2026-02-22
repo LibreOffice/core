@@ -10,10 +10,33 @@
 #pragma once
 
 #include <comphelper/OAccessible.hxx>
-#include <vcl/weld/Builder.hxx>
+#include <o3tl/typed_flags_set.hxx>
+#include <vcl/weld/DrawingArea.hxx>
+#include <rtl/ref.hxx>
+#include <vcl/uitest/factory.hxx>
 #include <vcl/weld/weld.hxx>
 
 class InputContext;
+
+namespace weld
+{
+class Builder;
+
+// Reasons for invalidation, accumulated via OR between paints
+enum class InvalidateFlags : sal_uInt8
+{
+    NONE = 0x00,
+    Cursor = 0x01, // Cursor blink only
+    All = 0xff // Default
+};
+}
+
+namespace o3tl
+{
+template <> struct typed_flags<weld::InvalidateFlags> : is_typed_flags<weld::InvalidateFlags, 0xff>
+{
+};
+}
 
 namespace weld
 {
@@ -22,6 +45,7 @@ class VCL_DLLPUBLIC CustomWidgetController
 private:
     Size m_aSize;
     weld::DrawingArea* m_pDrawingArea;
+    InvalidateFlags m_eInvalidateFlags;
     DECL_LINK(DragBeginHdl, weld::DrawingArea&, bool);
 
 public:
@@ -46,19 +70,23 @@ public:
     void SetOutputSizePixel(const Size& rSize) { m_aSize = rSize; }
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) { m_pDrawingArea = pDrawingArea; }
     weld::DrawingArea* GetDrawingArea() const { return m_pDrawingArea; }
-    void Invalidate()
+    void Invalidate(InvalidateFlags eFlags = InvalidateFlags::All)
     {
+        m_eInvalidateFlags |= eFlags;
         if (!m_pDrawingArea)
             return;
         m_pDrawingArea->queue_draw();
     }
-    void Invalidate(const tools::Rectangle& rRect)
+    void Invalidate(const tools::Rectangle& rRect, InvalidateFlags eFlags = InvalidateFlags::All)
     {
+        m_eInvalidateFlags |= eFlags;
         if (!m_pDrawingArea)
             return;
         m_pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(),
                                         rRect.GetHeight());
     }
+    InvalidateFlags GetInvalidateFlags() const { return m_eInvalidateFlags; }
+    void ClearInvalidateFlags() { m_eInvalidateFlags = InvalidateFlags::NONE; }
     virtual void Show() { m_pDrawingArea->show(); }
     virtual void Hide() { m_pDrawingArea->hide(); }
     void SetCursor(void* pData) { m_pDrawingArea->set_cursor_data(pData); }
@@ -133,6 +161,7 @@ public:
     }
     CustomWidgetController()
         : m_pDrawingArea(nullptr)
+        , m_eInvalidateFlags(InvalidateFlags::NONE)
     {
     }
     virtual ~CustomWidgetController();

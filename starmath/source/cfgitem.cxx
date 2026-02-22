@@ -22,8 +22,10 @@
 #include <svl/eitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <comphelper/configuration.hxx>
+#include <unotools/fontdefs.hxx>
 #include <utility>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>

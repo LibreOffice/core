@@ -20,13 +20,17 @@
 #define INCLUDED_TOOLS_GENERICTYPESERIALIZER_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/color.hxx>
-#include <tools/gen.hxx>
-#include <tools/stream.hxx>
-#include <tools/fract.hxx>
+
+class Color;
+class Fraction;
+class Point;
+class Size;
+class SvStream;
 
 namespace tools
 {
+class Rectangle;
+
 class TOOLS_DLLPUBLIC GenericTypeSerializer
 {
 public:

@@ -28,6 +28,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/lineend.hxx>
+#include <tools/mapunit.hxx>
 #include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>

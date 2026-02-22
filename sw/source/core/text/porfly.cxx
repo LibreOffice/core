@@ -39,7 +39,9 @@
 
 #include <sortedobjs.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <PostItMgr.hxx>
+#include <viewopt.hxx>
 
 /**
  * class SwFlyPortion => we expect a frame-locale SwRect!
@@ -223,9 +225,10 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
     if(rInf.GetTextFrame()->IsVertical())
         rInf.GetTextFrame()->SwitchHorizontalToVertical(aRepaintRect);
 
+    SwViewShell* pViewShell = m_pFly->getRootFrame()->GetCurrShell();
     if(!((m_pFly->IsCompletePaint() ||
             m_pFly->getFrameArea().Overlaps(aRepaintRect)) &&
-            SwFlyFrame::IsPaint(m_pFly->GetVirtDrawObj(), *m_pFly->getRootFrame()->GetCurrShell())))
+            SwFlyFrame::IsPaint(m_pFly->GetVirtDrawObj(), *pViewShell)))
         return;
 
     SwRect aRect(m_pFly->getFrameArea());
@@ -239,7 +242,9 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
 
         // track changes: cross out the image, if it is deleted
         const SwFrame *pFrame = m_pFly->Lower();
-        if ( GetAuthor() != std::string::npos && IsDeleted() && pFrame )
+        SwRedlineRenderMode eRedlineRenderMode = rInf.GetOpt().GetRedlineRenderMode();
+        if (GetAuthor() != std::string::npos && IsDeleted() && pFrame
+            && eRedlineRenderMode == SwRedlineRenderMode::Standard)
         {
             SwRect aPaintRect( pFrame->GetPaintArea() );
 

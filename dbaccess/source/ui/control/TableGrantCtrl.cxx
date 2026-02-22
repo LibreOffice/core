@@ -28,6 +28,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/accessibility/AccessibleBrowseBox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <strings.hrc>

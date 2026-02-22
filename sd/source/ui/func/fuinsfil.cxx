@@ -18,6 +18,7 @@
  */
 
 #include <fuinsfil.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/outliner.hxx>
@@ -27,6 +28,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdundo.hxx>

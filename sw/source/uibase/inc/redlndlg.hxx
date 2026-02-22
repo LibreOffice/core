@@ -59,8 +59,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final : public SfxListener
     std::vector<std::unique_ptr<SwRedlineDataChild>>
                             m_RedlineChildren;
     // purely here so we don't leak
-    std::vector<std::unique_ptr<RedlinData>>
-                            m_RedlinData;
+    std::vector<std::unique_ptr<RedlineData>> m_RedlineData;
     SwRedlineDataParentSortArr m_aUsedSeqNo;
     Timer                   m_aSelectTimer;
     OUString                m_sInserted;
@@ -81,8 +80,8 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final : public SfxListener
 
     std::unique_ptr<SvxAcceptChgCtr> m_xTabPagesCTRL;
     std::unique_ptr<weld::Menu> m_xPopup, m_xSortMenu;
-    SvxTPView* m_pTPView;
-    SvxRedlinTable* m_pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    SvxTPView& m_rTPView;
+    SvxRedlineTable* m_pTable;
 
     bool m_bInitialSelect = true;
 

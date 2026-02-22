@@ -32,6 +32,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
 #include <memory>
 

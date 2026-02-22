@@ -588,18 +588,15 @@ ContextHandlerRef FillPropertiesContext::createFillContext(
     return nullptr;
 }
 
-SimpleFillPropertiesContext::SimpleFillPropertiesContext(ContextHandler2Helper const & rParent, model::ComplexColor& rColor, Color *pOOXColor)
+SimpleFillPropertiesContext::SimpleFillPropertiesContext(ContextHandler2Helper const & rParent, model::ComplexColor& rColor)
     : FillPropertiesContext(rParent, *this)
     , mrColor(rColor)
-    , mpOOXColor(pOOXColor)
 {
 }
 
 SimpleFillPropertiesContext::~SimpleFillPropertiesContext()
 {
     mrColor = getBestSolidColor().createComplexColor(getFilter().getGraphicHelper(), -1);
-    if (mpOOXColor)
-        *mpOOXColor = getBestSolidColor();
 }
 
 BlipExtensionContext::BlipExtensionContext(ContextHandler2Helper const & rParent, BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill)

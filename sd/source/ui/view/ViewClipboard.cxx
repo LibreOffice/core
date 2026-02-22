@@ -172,6 +172,11 @@ sal_uInt16 ViewClipboard::DetermineInsertPosition  ()
         if( pPage->IsSelected() )
             nInsertPos = nPage * 2 + 3;
     }
+    if (rDoc.HasCanvasPage())
+    {
+        if (nInsertPos == 1)
+            nInsertPos = 3;
+    }
 
     return nInsertPos;
 }

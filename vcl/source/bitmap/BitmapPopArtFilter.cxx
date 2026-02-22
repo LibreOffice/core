@@ -8,6 +8,10 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <tools/solar.h>
 
 #include <vcl/bitmap/BitmapPopArtFilter.hxx>

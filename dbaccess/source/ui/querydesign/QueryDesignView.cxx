@@ -48,6 +48,7 @@
 #include <querycontainerwindow.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <memory>
 #include <set>
 #include <string_view>

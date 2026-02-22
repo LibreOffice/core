@@ -22,6 +22,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/dibtools.hxx>
 #include <editeng/brushitem.hxx>
+#include <test/commontesttools.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -47,11 +48,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeAsOLE)
 
     // When exporting to XHTML:
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
 
     // Then make sure the PNG is embedded with an RTF wrapper:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -131,9 +131,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testJson)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When exporting to HTML, and specifying options as JSON:
-    setFilterOptions(u"{\"XhtmlNs\":{\"type\":\"string\", \"value\":\"reqif-xhtml\"},"
-                     "\"ShapeDPI\":{\"type\":\"long\",\"value\":\"192\"}}"_ustr);
-    save(TestFilter::HTML_WRITER);
+    save(TestFilter::HTML_WRITER,
+         {
+             comphelper::makePropertyValue(
+                 u"FilterOptions"_ustr,
+                 u"{\"XhtmlNs\":{\"type\":\"string\", \"value\":\"reqif-xhtml\"},"
+                 "\"ShapeDPI\":{\"type\":\"long\",\"value\":\"192\"}}"_ustr),
+         });
 
     // Then make sure those options are not ignored:
     // Without the accompanying fix in place, this test would have failed, as GetPngPath() expects
@@ -165,11 +169,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNGCustomDPI)
 
     // When exporting to XHTML:
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ShapeDPI"_ustr, nDPI),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
 
     // Then make sure the shape is embedded as a PNG:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -206,11 +209,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOleBmpTransparent)
 
     // When exporting to reqif with ExportImagesAsOLE=true:
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
 
     // Then make sure the transparent pixel turns into white:
     SvMemoryStream aOle1;
@@ -318,7 +320,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testOleEmfPreviewToHtml)
     createSwDoc("ole2.odt");
 
     // When exporting to HTML:
-    ExportToHTML();
+    save(TestFilter::HTML_WRITER);
 
     // Then make sure the <img> tag has matching file extension and data:
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
@@ -373,7 +375,12 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
     pWrtShell->Insert(u"test\n"_ustr);
 
     // When exporting to reqif-xhtml:
-    ExportToReqif();
+    setImportFilterName(TestFilter::HTML_WRITER);
+    saveAndReload(
+        TestFilter::HTML_WRITER,
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        });
 
     // Then make sure that we still have a single line-break:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -386,8 +393,6 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
     // Then test the import side:
     // Given an empty document:
     // When importing a <br> from reqif-xhtml:
-    ImportFromReqif(maTempFile.GetURL());
-
     // Then make sure that line-break is not lost:
     pWrtShell = getSwDocShell()->GetWrtShell();
     OUString aActual = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
@@ -409,11 +414,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTab)
 
     // When exporting to HTML, using LeadingTabWidth=2:
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"LeadingTabWidth"_ustr, static_cast<sal_Int32>(2)),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
 
     // Then make sure that leading tabs are replaced with 2 nbsps:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -437,10 +441,9 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
 
     // When exporting to plain HTML, using LeadingTabWidth=2:
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"LeadingTabWidth"_ustr, static_cast<sal_Int32>(2)),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
 
     // Then make sure that leading tabs are replaced with 2 nbsps:
     htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
@@ -819,12 +822,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSingleOleExport)
 
     // Store only the selection
     css::uno::Sequence<css::beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"RTFOLEMimeType"_ustr, u"text/rtf"_ustr),
         comphelper::makePropertyValue(u"SelectionOnly"_ustr, true),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
 
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
 
@@ -927,12 +929,16 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf156647_CellPaddingRoundtrip)
         CPPUNIT_ASSERT(aTableBorder.IsDistanceValid);
     }
     // When exporting to reqif-xhtml:
-    ExportToReqif();
+    setImportFilterName(TestFilter::HTML_WRITER);
+    saveAndReload(
+        TestFilter::HTML_WRITER,
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+        });
     // Make sure that we export it:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
     assertXPath(pXmlDoc, "//reqif-xhtml:table", "cellpadding", u"48"); // px
     // Now import it
-    ImportFromReqif(maTempFile.GetURL());
     // Then make sure that padding is not lost:
     {
         auto xTable = getParagraphOrTable(1);
@@ -966,10 +972,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_PreserveSpaces)
     pWrtShell->Insert(paraText);
 
     // When exporting to plain HTML, using PreserveSpaces:
-    saveWithParams({
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
-        comphelper::makePropertyValue(u"PreserveSpaces"_ustr, true),
-    });
+    setImportFilterName(TestFilter::HTML_WRITER);
+    saveAndReload(TestFilter::HTML_WRITER,
+                  {
+                      comphelper::makePropertyValue(u"PreserveSpaces"_ustr, true),
+                  });
 
     // Then make sure that "white-space: pre-wrap" is written into the paragraph's style:
     htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
@@ -980,9 +987,6 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_PreserveSpaces)
     assertXPathContent(pHtmlDoc, "/html/body/p", paraText);
 
     // Test import
-
-    setImportFilterName(TestFilter::HTML_WRITER);
-    loadFromURL(maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
 }
 
@@ -995,11 +999,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_PreserveSpaces)
     pWrtShell->Insert(paraText);
 
     // When exporting to ReqIF, using PreserveSpaces:
-    saveWithParams({
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
-        comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
-        comphelper::makePropertyValue(u"PreserveSpaces"_ustr, true),
-    });
+    setImportFilterName(TestFilter::HTML_WRITER);
+    saveAndReload(
+        TestFilter::HTML_WRITER,
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+            comphelper::makePropertyValue(u"PreserveSpaces"_ustr, true),
+        });
 
     // Then make sure that xml:space="preserve" attribute exists in the paragraph element:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -1008,10 +1014,6 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_PreserveSpaces)
     assertXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p", paraText);
 
     // Test import
-
-    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(TestFilter::HTML_WRITER);
-    loadFromURL(maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
 }
 
@@ -1042,10 +1044,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_NoPreserveSpaces)
     createSwDoc("test_no_space_preserve.fodt");
 
     // Export to plain HTML, using PreserveSpaces:
-    saveWithParams({
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
-        comphelper::makePropertyValue(u"PreserveSpaces"_ustr, true),
-    });
+    setImportFilterName(TestFilter::HTML_WRITER);
+    saveAndReload(TestFilter::HTML_WRITER,
+                  {
+                      comphelper::makePropertyValue(u"PreserveSpaces"_ustr, true),
+                  });
 
     htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pHtmlDoc);
@@ -1074,10 +1077,6 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_NoPreserveSpaces)
     assertXPath_NoWhiteSpaceInStyle(pHtmlDoc, "/html/body/p[11]");
 
     // Test import
-
-    setImportFilterName(TestFilter::HTML_WRITER);
-    loadFromURL(maTempFile.GetURL());
-
     CPPUNIT_ASSERT_EQUAL(u"No special spaces"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(u" Leading space"_ustr, getParagraph(2)->getString());
     CPPUNIT_ASSERT_EQUAL(u"Trailing space "_ustr, getParagraph(3)->getString());
@@ -1101,11 +1100,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoPreserveSpaces)
     createSwDoc("test_no_space_preserve.fodt");
 
     // Export to ReqIF, using PreserveSpaces:
-    saveWithParams({
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
-        comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
-        comphelper::makePropertyValue(u"PreserveSpaces"_ustr, true),
-    });
+    setImportFilterName(TestFilter::HTML_WRITER);
+    saveAndReload(
+        TestFilter::HTML_WRITER,
+        {
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+            comphelper::makePropertyValue(u"PreserveSpaces"_ustr, true),
+        });
 
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
 
@@ -1138,11 +1139,6 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_NoPreserveSpaces)
     assertXPathNoAttribute(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[11]", "space");
 
     // Test import
-
-    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
-    setImportFilterName(TestFilter::HTML_WRITER);
-    loadFromURL(maTempFile.GetURL());
-
     CPPUNIT_ASSERT_EQUAL(u"No special spaces"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(u" Leading space"_ustr, getParagraph(2)->getString());
     CPPUNIT_ASSERT_EQUAL(u"Trailing space "_ustr, getParagraph(3)->getString());
@@ -1165,11 +1161,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
 
     // When exporting to reqif with ExportFormulasAsPDF=true:
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportFormulasAsPDF"_ustr, true),
     };
-    saveWithParams(aStoreProperties);
+    save(TestFilter::HTML_WRITER, aStoreProperties);
 
     // Make sure that the formula is exported as PDF:
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
@@ -1221,7 +1216,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_Tdf160017_spanClosingOrder)
     // Given a document with a paragraph having explicit font color and character border properties:
     createSwDoc("char_border_and_font_color.fodt");
     // When exporting to HTML:
-    ExportToHTML();
+    save(TestFilter::HTML_WRITER);
     // Parse it as XML (strict!)
     // Without the fix, this would fail, because span and font elements closed in wrong order
     CPPUNIT_ASSERT(parseXml(maTempFile));
@@ -1231,7 +1226,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_Tdf160390)
 {
     // This document must not hang infinitely on HTML export
     createSwDoc("tdf160390.fodt");
-    ExportToHTML();
+    save(TestFilter::HTML_WRITER);
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_160867)
@@ -1239,7 +1234,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_160867)
     // Given a document with an image with hyperlink, and text with hyperlink, both in a frame:
     createSwDoc("tdf160867_image_with_link.fodt");
     // When exporting to HTML:
-    ExportToHTML();
+    save(TestFilter::HTML_WRITER);
     // Parse it as XML (strict!)
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
@@ -1279,7 +1274,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_161979)
 {
     // Given a document with two embedded metafiles:
     createSwDoc("tdf161979_metafile.fodt");
-    ExportToHTML();
+    save(TestFilter::HTML_WRITER);
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
     // First image: it has no EMF+ actions, and didn't use canvas rendering before the fix;
@@ -1325,28 +1320,18 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_161979)
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_exportAbsoluteURLs_ownRelative)
 {
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    Resetter resetter([
-        bInternetPreviousValue = officecfg::Office::Common::Save::URL::Internet::get(),
-        bFileSystemPreviousValue = officecfg::Office::Common::Save::URL::FileSystem::get(), pBatch
-    ]() {
-        officecfg::Office::Common::Save::URL::Internet::set(bInternetPreviousValue, pBatch);
-        officecfg::Office::Common::Save::URL::FileSystem::set(bFileSystemPreviousValue, pBatch);
-        return pBatch->commit();
-    });
     // Set saving absolute URLs
-    officecfg::Office::Common::Save::URL::Internet::set(false, pBatch);
-    officecfg::Office::Common::Save::URL::FileSystem::set(false, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Save::URL::Internet> aCfg1(false);
+    ScopedConfigValue<officecfg::Office::Common::Save::URL::FileSystem> aCfg2(false);
 
     createSwDoc("URLs.odt");
     // Export to ReqIF, using absolute URLs
-    saveWithParams({
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
-        comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
-        comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
-        comphelper::makePropertyValue(u"RelativeOwnObjectURL"_ustr, true),
-    });
+    save(TestFilter::HTML_WRITER,
+         {
+             comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+             comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
+             comphelper::makePropertyValue(u"RelativeOwnObjectURL"_ustr, true),
+         });
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
 
     // HTTP URL: must be absolute
@@ -1395,11 +1380,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_exportRelativeURLs)
 
     createSwDoc("URLs.odt");
     // Export to ReqIF, using relative URLs (the default)
-    saveWithParams({
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
-        comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
-        comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
-    });
+    save(TestFilter::HTML_WRITER,
+         {
+             comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
+             comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
+         });
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
 
     // HTTP URL: must be absolute
@@ -1446,26 +1431,16 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_exportRelativeURLs)
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_exportAbsoluteURLs_ownRelative)
 {
-    auto pBatch(comphelper::ConfigurationChanges::create());
-    Resetter resetter([
-        bInternetPreviousValue = officecfg::Office::Common::Save::URL::Internet::get(),
-        bFileSystemPreviousValue = officecfg::Office::Common::Save::URL::FileSystem::get(), pBatch
-    ]() {
-        officecfg::Office::Common::Save::URL::Internet::set(bInternetPreviousValue, pBatch);
-        officecfg::Office::Common::Save::URL::FileSystem::set(bFileSystemPreviousValue, pBatch);
-        return pBatch->commit();
-    });
     // Set saving absolute URLs
-    officecfg::Office::Common::Save::URL::Internet::set(false, pBatch);
-    officecfg::Office::Common::Save::URL::FileSystem::set(false, pBatch);
-    pBatch->commit();
+    ScopedConfigValue<officecfg::Office::Common::Save::URL::Internet> aCfg1(false);
+    ScopedConfigValue<officecfg::Office::Common::Save::URL::FileSystem> aCfg2(false);
 
     createSwDoc("URLs.odt");
     // Export to HTML, using absolute URLs
-    saveWithParams({
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
-        comphelper::makePropertyValue(u"RelativeOwnObjectURL"_ustr, true),
-    });
+    save(TestFilter::HTML_WRITER,
+         {
+             comphelper::makePropertyValue(u"RelativeOwnObjectURL"_ustr, true),
+         });
     htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
 
     // HTTP URL: must be absolute
@@ -1499,7 +1474,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_exportRelativeURLs)
 
     createSwDoc("URLs.odt");
     // Export to HTML, using relative URLs (the default)
-    ExportToHTML();
+    save(TestFilter::HTML_WRITER);
     htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
 
     // HTTP URL: must be absolute
@@ -1580,7 +1555,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_162426)
     // Given a document with an image with style:wrap="none":
     createSwDoc("tdf162426_image_with_wrap_none.fodt");
     // Before the fix, an assertion failed in HtmlWriter::attribute when exporting to HTML :
-    ExportToHTML();
+    save(TestFilter::HTML_WRITER);
 
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
@@ -1596,7 +1571,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_163873)
     // Given a document with an image with style:wrap="none":
     createSwDoc("tdf131728.docx");
     // Before the fix, an assertion failed in HtmlWriter::attribute when exporting to HTML :
-    ExportToHTML();
+    save(TestFilter::HTML_WRITER);
 
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
@@ -1635,6 +1610,26 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifNoObjectBorderExport)
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
     // Without the accompanying fix in place, this test would have failed
     assertXPath(pXmlDoc, "//reqif-xhtml:font", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTextAlignStartEnd)
+{
+    createSwDoc("text-align-start-end.fodt");
+
+    save(TestFilter::HTML_WRITER);
+
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/html/body/p", 4);
+    assertXPath(pDoc,
+                "/html/body/p[1]/descendant-or-self::*[contains(@style, 'text-align: start')]", 1);
+    assertXPath(pDoc,
+                "/html/body/p[2]/descendant-or-self::*[contains(@style, 'text-align: start')]", 1);
+    assertXPath(pDoc, "/html/body/p[3]/descendant-or-self::*[contains(@style, 'text-align: end')]",
+                1);
+    assertXPath(pDoc, "/html/body/p[4]/descendant-or-self::*[contains(@style, 'text-align: end')]",
+                1);
 }
 
 } // end of anonymous namespace

@@ -20,11 +20,12 @@
 
 #include <svtools/svtdllapi.h>
 #include <tools/globname.hxx>
-#include <sot/formats.hxx>
 
 #include <utility>
 #include <vector>
-#include <vcl/transfer.hxx>
+
+class TransferableDataHelper;
+enum class SotClipboardFormatId : sal_uInt32;
 
 class SvObjectServer
 {

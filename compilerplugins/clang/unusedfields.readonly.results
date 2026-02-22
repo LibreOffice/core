@@ -382,16 +382,16 @@ include/svl/ondemand.hxx:54
     OnDemandLocaleDataWrapper aSysLocale SvtSysLocale
 include/svx/annotation/Annotation.hxx:108
     sdr::annotation::Annotation maUniqueID UniqueID
-include/svx/diagram/IDiagramHelper.hxx:71
-    svx::diagram::IDiagramHelper mbUseDiagramThemeData _Bool
-include/svx/diagram/IDiagramHelper.hxx:80
-    svx::diagram::IDiagramHelper mbForceThemePtrRecreation _Bool
+include/svx/diagram/DiagramHelper_svx.hxx:71
+    svx::diagram::DiagramHelper_svx mbUseDiagramThemeData _Bool
+include/svx/diagram/DiagramHelper_svx.hxx:80
+    svx::diagram::DiagramHelper_svx mbForceThemePtrRecreation _Bool
 include/svx/EnhancedCustomShape2d.hxx:108
     EnhancedCustomShape2d::EquationResult bReady _Bool
 include/svx/graphctl.hxx:52
     GraphCtrl xVD ScopedVclPtrInstance<VirtualDevice>
-include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:49
-    sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
+include/svx/sdr/overlay/overlayanimatedbitmap.hxx:49
+    sdr::overlay::OverlayAnimatedBitmap mbOverlayState _Bool
 include/svx/svdetc.hxx:175
     SdrGlobalData maSysLocale SvtSysLocale
 include/svx/svdmark.hxx:139

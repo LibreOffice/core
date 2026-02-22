@@ -26,6 +26,8 @@
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/vclevent.hxx>
 
@@ -33,6 +35,7 @@
 #include <accessibility/vclxaccessiblecombobox.hxx>
 #include <listbox.hxx>
 #include <comphelper/lok.hxx>
+#include <tools/json_writer.hxx>
 #include <o3tl/string_view.hxx>
 
 struct ComboBoxBounds

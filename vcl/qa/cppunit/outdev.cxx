@@ -17,15 +17,20 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/print.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
 #include <bufferdevice.hxx>

@@ -36,7 +36,9 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/langtab.hxx>
+#include <tools/urlobj.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/transfer.hxx>
 #include <svl/urlbmk.hxx>

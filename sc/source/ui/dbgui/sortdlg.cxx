@@ -25,6 +25,8 @@
 #include <unotools/viewoptions.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/windowstate.hxx>
 
 ScSortDlg::ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialogController(pParent, u"modules/scalc/ui/sortdialog.ui"_ustr, u"SortDialog"_ustr, pArgSet)

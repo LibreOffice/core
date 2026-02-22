@@ -40,6 +40,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
 
 SwParaDlg::SwParaDlg(weld::Window *pParent,
                     SwView& rVw,

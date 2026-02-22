@@ -30,6 +30,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
+#include <tools/fldunit.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>

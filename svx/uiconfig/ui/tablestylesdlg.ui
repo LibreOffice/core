@@ -1,0 +1,1329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="svx">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkAdjustment" id="borderwidthadj">
+    <property name="lower">0.05</property>
+    <property name="upper">9</property>
+    <property name="value">0.05</property>
+    <property name="step-increment">0.25</property>
+    <property name="page-increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="paddingadj">
+    <property name="upper">2</property>
+    <property name="step-increment">0.02</property>
+    <property name="page-increment">1</property>
+  </object>
+  <object class="GtkDialog" id="TableStylesDialog">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes" context="TableStylesDialog|title">Table Styles</property>
+    <property name="resizable">False</property>
+    <property name="type-hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="topbox">
+        <property name="can-focus">False</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="buttonbox">
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="layout-style">end</property>
+            <child>
+              <object class="GtkButton" id="help">
+                <property name="label" translatable="yes" context="stock">Help</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="reset">
+                <property name="label" translatable="yes" context="reset|label">Reset</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancel">
+                <property name="label" translatable="yes" context="stock">Cancel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok">
+                <property name="label" translatable="yes" context="stock">OK</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="mainbox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">12</property>
+            <property name="spacing">24</property>
+            <child>
+              <object class="GtkBox" id="leftframe">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkFrame" id="basicframe">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label-xalign">0</property>
+                    <child>
+                      <object class="GtkBox" id="basic">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-top">6</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">3</property>
+                        <child>
+                          <object class="GtkBox" id="basicname">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="basicnamelb">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes" context="basicnamelb|label">Name:</property>
+                                <accessibility>
+                                  <relation type="label-for" target="basicnameentry"/>
+                                </accessibility>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="basicnameentry">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="basicnamelb"/>
+                                </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="basicnameentry-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="basicnameentry-atkobject|accessible-name">hello</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="basicnameentry-atkobject|accessible-description">how are you</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="linkedwith">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="linkedwithlb">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes" context="linkedwithlb|label">Inherit from:</property>
+                                <accessibility>
+                                  <relation type="label-for" target="linkedwithbox"/>
+                                </accessibility>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="linkedwithbox">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="has-entry">True</property>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="truncate-multiline">True</property>
+                                  </object>
+                                </child>
+                                <accessibility>
+                                  <relation type="labelled-by" target="linkedwithlb"/>
+                                </accessibility>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="basiclb"/>
+                        </accessibility>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel" id="basiclb">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="basiclb|label">Basic</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                        <accessibility>
+                          <relation type="label-for" target="basic"/>
+                        </accessibility>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkFrame" id="preview">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label-xalign">0</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="previewarea">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-top">6</property>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel" id="previewlb">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="previewlb|label">Preview</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                        <accessibility>
+                          <relation type="label-for" target="preview"/>
+                        </accessibility>
+                      </object>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="previewlb"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="rightframe">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label-xalign">0</property>
+                <child>
+                  <object class="GtkBox" id="properties">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">6</property>
+                    <property name="margin-top">6</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkBox" id="element">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="elementlb">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes" context="elementlb|label">Element:</property>
+                            <accessibility>
+                              <relation type="label-for" target="elementbox"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="elementbox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="active">1</property>
+                            <items>
+                              <item id="0" translatable="yes" context="elementbox|firstrow">First Row</item>
+                              <item id="1" translatable="yes" context="elementbox|lastrow">Last Row</item>
+                              <item id="2" translatable="yes" context="elementbox|firstcolumn">First Column</item>
+                              <item id="3" translatable="yes" context="elementbox|lastcolumn">Last Column</item>
+                              <item id="4" translatable="yes" context="elementbox|evenrows">Body</item>
+                              <item id="5" translatable="yes" context="elementbox|oddrows">Even Rows</item>
+                              <item id="6" translatable="yes" context="elementbox|evencolumns">Odd Rows</item>
+                              <item id="7" translatable="yes" context="elementbox|oddcolumns">Even Columns</item>
+                              <item id="8" translatable="yes" context="elementbox|body">Odd Columns</item>
+                              <item id="9" translatable="yes" context="elementbox|background">Background</item>
+                              <item id="10" translatable="yes" context="elementbox|firstrowevencolumn">First Row Even Columns</item>
+                              <item id="11" translatable="yes" context="elementbox|lastrowevencolumn">Last Row Even Columns</item>
+                              <item id="12" translatable="yes" context="elementbox|firstrowendcolumn">First Row End Column</item>
+                              <item id="13" translatable="yes" context="elementbox|firstrowstartcolumn">First Row Start Column</item>
+                              <item id="14" translatable="yes" context="elementbox|lastrowendcolumn">Last Row End Column</item>
+                              <item id="15" translatable="yes" context="elementbox|lastrowstartcolumn">Last Row Start Column</item>
+                            </items>
+                            <accessibility>
+                              <relation type="labelled-by" target="elementlb"/>
+                            </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="elementbox-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="elementbox-atkobject|accessible-name">something</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator" id="linebreak">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="elementstyle">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkFrame" id="cell">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label-xalign">0</property>
+                            <property name="shadow-type">none</property>
+                            <child>
+                              <object class="GtkBox" id="cellstyle">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="valign">center</property>
+                                <property name="margin-start">12</property>
+                                <property name="margin-top">6</property>
+                                <property name="spacing">12</property>
+                                <child>
+                                  <object class="GtkBox" id="cellcolor">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="valign">center</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="cellcolorlb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="cellcolorlb|label">Color:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="cellcolormb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuButton" id="cellcolormb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="focus-on-click">False</property>
+                                        <property name="receives-default">True</property>
+                                        <property name="valign">center</property>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="cellcolorlb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="cellpadding">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="cellpaddinglb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="cellpaddinglb|label">Padding:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="cellpaddingsb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="cellpaddingsb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="progress-pulse-step">0.02</property>
+                                        <property name="adjustment">paddingadj</property>
+                                        <property name="digits">2</property>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="cellpaddinglb"/>
+                                        </accessibility>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="cellpaddingsb-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes" context="cellpaddingsb-atkobject|accessible-name">something</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="cell_lb">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes" context="cell_lb|label">Cell</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                                <accessibility>
+                                  <relation type="label-for" target="cell"/>
+                                </accessibility>
+                              </object>
+                            </child>
+                            <accessibility>
+                              <relation type="labelled-by" target="cell_lb"/>
+                            </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="cell-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="cell-atkobject|accessible-name">cell</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkFrame" id="border">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label-xalign">0</property>
+                            <property name="shadow-type">none</property>
+                            <child>
+                              <!-- n-columns=2 n-rows=2 -->
+                              <object class="GtkGrid" id="borderprop">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="margin-start">12</property>
+                                <property name="margin-top">6</property>
+                                <property name="row-spacing">12</property>
+                                <property name="column-spacing">12</property>
+                                <child>
+                                  <object class="GtkBox" id="borderpadding">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="borderwidthlb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="borderwidthlb|label">Width:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="borderwidth"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBoxText" id="borderwidth">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="hexpand">False</property>
+                                        <items>
+                                          <item id="0" translatable="yes" context="borderpage|linewidthlb">Hairline (0.05pt)</item>
+                                          <item id="1" translatable="yes" context="borderpage|linewidthlb">Very thin (0.5pt)</item>
+                                          <item id="2" translatable="yes" context="borderpage|linewidthlb">Thin (0.75pt)</item>
+                                          <item id="3" translatable="yes" context="borderpage|linewidthlb">Medium (1.5pt)</item>
+                                          <item id="4" translatable="yes" context="borderpage|linewidthlb">Thick (2.25pt)</item>
+                                          <item id="5" translatable="yes" context="borderpage|linewidthlb">Extra thick (4.5pt)</item>
+                                        </items>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="borderwidthlb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="borderlayout">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="borderlayoutlb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="borderlayoutlb|label">Layout:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="borders"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkDrawingArea" id="borders">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="borderlayoutlb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="borderstyle">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="borderstylelb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="borderstylelb|label">Style:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="borderstylemb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuButton" id="borderstylemb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="focus-on-click">False</property>
+                                        <property name="receives-default">True</property>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="borderstylelb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="bordercolor">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="valign">center</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="bordercolorlb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="bordercolorlb|label">Color:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="bordercolormb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuButton" id="bordercolormb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="focus-on-click">False</property>
+                                        <property name="receives-default">True</property>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="bordercolorlb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">0</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="borderlb">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes" context="borderlb|label">Border</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                                <accessibility>
+                                  <relation type="label-for" target="border"/>
+                                </accessibility>
+                              </object>
+                            </child>
+                            <accessibility>
+                              <relation type="labelled-by" target="borderlb"/>
+                            </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="border-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes" context="border-atkobject|accessible-name">border</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkFrame" id="char">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label-xalign">0</property>
+                            <property name="shadow-type">none</property>
+                            <child>
+                              <!-- n-columns=2 n-rows=4 -->
+                              <object class="GtkGrid" id="charprop">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="margin-start">12</property>
+                                <property name="margin-top">6</property>
+                                <property name="row-spacing">12</property>
+                                <property name="column-spacing">12</property>
+                                <child>
+                                  <object class="GtkBox" id="charhori">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="charhorilb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="charhorilb|label">Horizontal:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="charhoritb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolbar" id="charhoritb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="leftalign">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="leftalign|tooltip-text">Align Left</property>
+                                            <property name="label" translatable="yes" context="leftalign|label">Align Left</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_alignleft.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="centeralign">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="centeralign|tooltip-text">Align Center</property>
+                                            <property name="label" translatable="yes" context="centeralign|label">Align Center</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_alignhorizontalcenter.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="rightalign">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="rightalign|tooltip-text">Align Right</property>
+                                            <property name="label" translatable="yes" context="rightalign|label">Align Right</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_alignright.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="charhorilb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="charvert">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="charvertlb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="charvertlb|label">Vertical:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="charverttb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolbar" id="charverttb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="topalign">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="topalign|tooltip-text">Align Top</property>
+                                            <property name="label" translatable="yes" context="topalign|label">Align Top</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_aligntop.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="vertcenteralign">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="vertcenteralign|tooltip-text">Center Verticaly</property>
+                                            <property name="label" translatable="yes" context="vertcenteralign|label">Align Center</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_alignverticalcenter.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="bottomalign">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="bottomalign|tooltip-text">Align Bottom</property>
+                                            <property name="label" translatable="yes" context="bottomalign|label">Align Bottom</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_alignbottom.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="charvertlb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="charname">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="charnamelb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="charnamelb|label">Name:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="charnamebox"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBoxText" id="charnamebox">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="has-entry">True</property>
+                                        <child internal-child="entry">
+                                          <object class="GtkEntry">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <property name="truncate-multiline">True</property>
+                                          </object>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="charnamelb"/>
+                                        </accessibility>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="charnamebox-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes" context="charnamebox-atkobject|accessible-name">box</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="charsize">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="charsizelb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="charsizelb|label">Size:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="charsizebox"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBoxText" id="charsizebox">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="has-entry">True</property>
+                                        <child internal-child="entry">
+                                          <object class="GtkEntry">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <property name="truncate-multiline">True</property>
+                                          </object>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="charsizelb"/>
+                                        </accessibility>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="charsizebox-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes" context="charsizebox-atkobject|accessible-name">helloworld</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="charcolor">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="valign">center</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="charcolorlb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="charcolorlb|label">Color:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="charcolormb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuButton" id="charcolormb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="focus-on-click">False</property>
+                                        <property name="receives-default">True</property>
+                                        <child>
+                                          <placeholder/>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="charcolorlb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="charstyle">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="charstylelb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="charstylelb|label">Style:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="charstyletb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolbar" id="charstyletb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="bold">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="bold|tooltip-text">Bold</property>
+                                            <property name="label" translatable="yes" context="bold|label">Bold</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_bold.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="italic">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="italic|tooltip-text">Italic</property>
+                                            <property name="label" translatable="yes" context="bold|label">Italic</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_italic.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="underline">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="underline|tooltip-text">Underline</property>
+                                            <property name="label" translatable="yes" context="underline|label">Underline</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_underline.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="charstylelb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="number">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <child>
+                                      <object class="GtkLabel" id="numberlb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="label" translatable="yes" context="numberlb|label">Number:</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="numbertb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolbar" id="numbertb">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="decimal">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="decimal|tooltip-text">Format as Number</property>
+                                            <property name="label" translatable="yes" context="decimal|label">Decimal</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_numberformatdecimal.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="percent">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="percent|tooltip-text">Format as Percentage</property>
+                                            <property name="label" translatable="yes" context="percent|label">Percent</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_numberformatpercent.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkToggleToolButton" id="currency">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="tooltip-text" translatable="yes" context="currency|tooltip-text">Format as Currency</property>
+                                            <property name="label" translatable="yes" context="currency|label">Currency</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="icon-name">cmd/lc_numberformatcurrency.png</property>
+                                            <property name="active">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="homogeneous">True</property>
+                                          </packing>
+                                        </child>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="numberlb"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="charlb">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes" context="charlb|label">Text</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                                <accessibility>
+                                  <relation type="label-for" target="char"/>
+                                </accessibility>
+                              </object>
+                            </child>
+                            <accessibility>
+                              <relation type="labelled-by" target="charlb"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <accessibility>
+                      <relation type="labelled-by" target="propertieslb"/>
+                    </accessibility>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="propertieslb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="propertieslb|label">Properties</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                    <accessibility>
+                      <relation type="label-for" target="properties"/>
+                    </accessibility>
+                  </object>
+                </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="rightframe-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="rightframe-atkobject|accessible-name">rightframe</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

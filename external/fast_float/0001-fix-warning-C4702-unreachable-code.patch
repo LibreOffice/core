@@ -1,0 +1,34 @@
+From 3c6a64b87d3491659a7a31520d3c1f3733f350bf Mon Sep 17 00:00:00 2001
+From: Xisco Fauli <xiscofauli@libreoffice.org>
+Date: Fri, 6 Feb 2026 11:28:34 +0100
+Subject: [PATCH] fix warning C4702: unreachable code
+
+---
+ include/fast_float/float_common.h | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/include/fast_float/float_common.h b/include/fast_float/float_common.h
+index f35920b..6bb4c59 100644
+--- a/include/fast_float/float_common.h
++++ b/include/fast_float/float_common.h
+@@ -313,8 +313,6 @@ fastfloat_strncasecmp3(UC const *actual_mixedcase,
+       return false;
+     }
+   }
+-
+-  return true;
+ }
+ 
+ template <typename UC>
+@@ -369,8 +367,6 @@ fastfloat_strncasecmp5(UC const *actual_mixedcase,
+       return false;
+     }
+   }
+-
+-  return true;
+ }
+ 
+ // Compares two ASCII strings in a case insensitive manner.
+-- 
+2.39.5
+

@@ -26,11 +26,13 @@
 #include <sal/log.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
+#include <vcl/fntstyle.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
@@ -2141,6 +2143,18 @@ void SVGActionWriter::ImplAddLineAttr( const LineInfo &rAttrs )
         }
     }
 
+    if (rAttrs.GetStyle() == LineStyle::Dash)
+    {
+        OUStringBuffer aDashArrayStr;
+        for (double x : rAttrs.GetDotDashArray())
+        {
+            if (!aDashArrayStr.isEmpty())
+                aDashArrayStr.append(",");
+            aDashArrayStr.append(x);
+        }
+        if (!aDashArrayStr.isEmpty())
+            mrExport.AddAttribute(u"stroke-dasharray"_ustr, aDashArrayStr.makeStringAndClear());
+    }
 }
 
 

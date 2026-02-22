@@ -23,6 +23,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/image.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 class ToolbarUnoDispatcher;

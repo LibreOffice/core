@@ -27,6 +27,8 @@
 
 #include <webp/encode.h>
 
+#include <vector>
+
 static int writerFunction(const uint8_t* data, size_t size, const WebPPicture* picture)
 {
     SvStream* stream = static_cast<SvStream*>(picture->custom_ptr);

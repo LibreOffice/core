@@ -308,6 +308,10 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
                 break;
 
+            case SfxHintId::ScDbAreasChanged:
+                UpdateContextShells();
+                break;
+
             default:
                 break;
         }

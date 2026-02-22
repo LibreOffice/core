@@ -59,6 +59,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <config_features.h>
 

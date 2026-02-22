@@ -66,6 +66,7 @@
 #include <unotxdoc.hxx>
 #include <unodraw.hxx>
 #include <unobasestyle.hxx>
+#include <unotextcursor.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -316,7 +317,9 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
                 {
                     throw uno::RuntimeException(u"Not implemented"_ustr );
                 }
-                uno::Reference< text::XParagraphCursor > xParagraphCursor( xTextCursor, uno::UNO_QUERY_THROW );
+                rtl::Reference< SwXTextCursor > xParagraphCursor = dynamic_cast<SwXTextCursor*>( xTextCursor.get() );
+                if (!xParagraphCursor)
+                    throw uno::RuntimeException();
                 for( sal_Int32 i=0; i<nCount; i++ )
                 {
                     if( ( eDirection == word::MOVE_UP ) && !xParagraphCursor->gotoPreviousParagraph( bExpand ) )
@@ -802,7 +805,9 @@ SwVbaSelection::Tables( const uno::Any& aIndex )
     xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
     if( xTextTable.is() )
     {
-            uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, mxModel, xTextTable );
+            auto pSwTextTable = dynamic_cast<SwXTextTable*>(xTextTable.get());
+            assert(pSwTextTable);
+            uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, mxModel, pSwTextTable );
             aRet <<= xVBATable;
             return aRet;
     }
@@ -907,7 +912,7 @@ uno::Any SAL_CALL SwVbaSelection::Rows( const uno::Any& index )
 
     sal_Int32 nStartRow = 0;
     sal_Int32 nEndRow = 0;
-    uno::Reference< text::XTextTable > xTextTable = GetXTextTable();
+    rtl::Reference< SwXTextTable > xTextTable = GetXTextTable();
     SwVbaTableHelper aTableHelper( xTextTable );
     nStartRow = aTableHelper.getTabRowIndex( sTLName );
     if( !sBRName.isEmpty() )
@@ -951,12 +956,16 @@ uno::Any SAL_CALL SwVbaSelection::Columns( const uno::Any& index )
     return uno::Any( xCol );
 }
 
-uno::Reference< text::XTextTable > SwVbaSelection::GetXTextTable() const
+rtl::Reference< SwXTextTable > SwVbaSelection::GetXTextTable() const
 {
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
     xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
-    return xTextTable;
+    if (!xTextTable)
+        return nullptr;
+    auto pSwTextTable = dynamic_cast<SwXTextTable*>(xTextTable.get());
+    assert(pSwTextTable);
+    return pSwTextTable;
 }
 
 bool SwVbaSelection::IsInTable() const
@@ -1141,11 +1150,13 @@ SwVbaSelection::Paragraphs( const uno::Any& aIndex )
 
     uno::Reference< text::XTextRange > xTextRange = mxTextViewCursor->getStart();
     uno::Reference< text::XText > xText = xTextRange->getText();
-    uno::Reference< text::XParagraphCursor > xParaCursor( xText->createTextCursor(), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXTextCursor > xParaCursor = dynamic_cast<SwXTextCursor*>( xText->createTextCursor().get() );
+    if (!xParaCursor)
+        throw uno::RuntimeException();
     xParaCursor->gotoStartOfParagraph( false );
     xParaCursor->gotoStartOfParagraph( true );
 
-    uno::Reference< text::XTextRange > xParaRange( xParaCursor, uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextRange > xParaRange( static_cast<text::XSentenceCursor*>(xParaCursor.get()) );
     uno::Reference< word::XParagraph > xParagraph = new SwVbaParagraph( mxParent, mxContext, mxModel, xParaRange );
 
     aRet <<= xParagraph;

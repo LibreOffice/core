@@ -21,6 +21,8 @@
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
 #include <tools/GenericTypeSerializer.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/stream.hxx>
 #include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>

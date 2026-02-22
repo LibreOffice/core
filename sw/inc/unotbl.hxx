@@ -75,7 +75,7 @@ class SW_DLLPUBLIC SwXCell final : public SwXCellBaseClass,
 
     // table position where pBox was found last
     size_t m_nFndPos;
-    css::uno::Reference<css::text::XText> m_xParentText;
+    css::uno::Reference<SwXText> m_xParentText;
     static size_t const NOTFOUND = SAL_MAX_SIZE;
 
     virtual const SwStartNode *GetStartNode() const override;
@@ -182,14 +182,14 @@ public:
     void Notify(const SfxHint&) override;
 };
 
-typedef cppu::WeakImplHelper<
+
+typedef cppu::ImplInheritanceHelper<
+    OTextCursorHelper,
     css::text::XTextTableCursor,
-    css::lang::XServiceInfo,
-    css::beans::XPropertySet> SwXTextTableCursor_Base;
+    css::lang::XServiceInfo> SwXTextTableCursor_Base;
 class SW_DLLPUBLIC SwXTextTableCursor final
     : public SwXTextTableCursor_Base
     , public SvtListener
-    , public OTextCursorHelper
 {
     SwFrameFormat* m_pFrameFormat;
     const SfxItemPropertySet* m_pPropSet;

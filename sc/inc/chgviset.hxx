@@ -39,7 +39,7 @@ private:
     OUString            aAuthorToShow;
     OUString            aComment;
     ScRangeList         aRangeList;
-    SvxRedlinDateMode   eDateMode;
+    SvxRedlineDateMode eDateMode;
     bool                bShowIt;
     bool                bIsDate;
     bool                bIsAuthor;
@@ -56,7 +56,7 @@ public:
     ScChangeViewSettings()
         : aFirstDateTime(DateTime::EMPTY)
         , aLastDateTime(DateTime::EMPTY)
-        , eDateMode(SvxRedlinDateMode::BEFORE)
+        , eDateMode(SvxRedlineDateMode::BEFORE)
         , bShowIt(false)
         , bIsDate(false)
         , bIsAuthor(false)
@@ -80,8 +80,8 @@ public:
     bool                HasDate() const {return bIsDate;}
     void                SetHasDate(bool bFlag) {bIsDate=bFlag;}
 
-    void                SetTheDateMode(SvxRedlinDateMode eDatMod){ eDateMode=eDatMod; }
-    SvxRedlinDateMode   GetTheDateMode() const { return eDateMode; }
+    void SetTheDateMode(SvxRedlineDateMode eDatMod) { eDateMode = eDatMod; }
+    SvxRedlineDateMode GetTheDateMode() const { return eDateMode; }
 
     void                SetTheFirstDateTime(const DateTime& aDateTime) {aFirstDateTime=aDateTime;}
     const DateTime&     GetTheFirstDateTime()const {return aFirstDateTime;}

@@ -30,12 +30,14 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageReader.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/weld/weldutils.hxx>
 

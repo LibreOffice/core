@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,oox_vml))
 
 $(eval $(call gb_CppunitTest_use_externals,oox_vml,\
 	boost_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,oox_vml, \

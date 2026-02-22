@@ -250,13 +250,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>(ImportWebpGraphic(aFileStream, aGraphic));
         }
-        else if (strcmp(argv[2], "sft") == 0)
-        {
-            SvFileStream aFileStream(out, StreamMode::READ);
-            std::vector<sal_uInt8> aData(aFileStream.remainingSize());
-            aFileStream.ReadBytes(aData.data(), aData.size());
-            ret = TestFontSubset(aData.data(), aData.size());
-        }
         else if (strcmp(argv[2], "eot") == 0)
         {
             SvFileStream aFileStream(out, StreamMode::READ);

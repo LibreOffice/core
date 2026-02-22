@@ -119,7 +119,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryClick)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
 
-    // When inserting a biblio entry field with an URL:
+    // When inserting a biblio entry field with a URL:
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);

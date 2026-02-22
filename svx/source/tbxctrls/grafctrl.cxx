@@ -22,6 +22,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <o3tl/string_view.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
 #include <svl/intitem.hxx>

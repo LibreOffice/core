@@ -25,6 +25,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/weld/Builder.hxx>
 
 using namespace svx;

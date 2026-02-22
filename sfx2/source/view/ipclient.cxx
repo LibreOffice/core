@@ -60,6 +60,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <tools/mapunit.hxx>
 #include <svtools/soerr.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>

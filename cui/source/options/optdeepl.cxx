@@ -20,6 +20,7 @@
 #include "optdeepl.hxx"
 #include <officecfg/Office/Linguistic.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/weld/Builder.hxx>
 
 OptDeeplTabPage::OptDeeplTabPage(weld::Container* pPage, weld::DialogController* pController,
                                  const SfxItemSet& rSet)

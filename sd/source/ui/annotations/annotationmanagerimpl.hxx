@@ -19,11 +19,18 @@
 
 #pragma once
 
+#include <DrawController.hxx>
+#include <sdpage.hxx>
+
 #include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 
 #include <comphelper/compbase.hxx>
+#include <svx/annotation/Annotation.hxx>
+#include <tools/link.hxx>
 
 namespace com::sun::star::drawing { class XDrawView; }
 namespace com::sun::star::office { class XAnnotationAccess; }

@@ -28,13 +28,13 @@
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
-#include <tools/mapunit.hxx>
 #include <tools/long.hxx>
 #include <boost/property_tree/ptree_fwd.hpp>
 #include <unordered_set>
 #include <unordered_map>
 
 class IntlWrapper;
+enum class MapUnit : sal_uInt8;
 
 #define SFX_ITEMS_MAXREF                    0xffffffff
 #define CONVERT_TWIPS                       0x80    // Uno conversion for measurement (for MemberId)
@@ -134,6 +134,7 @@ enum class SfxItemType : sal_uInt16
     SbxItemType,
     ScCondFormatItemType,
     ScConsolidateItemType,
+    ScDatabaseSettingItemType,
     ScHyphenateCellType,
     ScIndentItemType,
     ScInputStatusItemType,

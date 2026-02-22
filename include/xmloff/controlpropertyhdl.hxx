@@ -29,7 +29,8 @@
 #include <xmloff/prhdlfac.hxx>
 #include <rtl/ustring.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
-#include <xmloff/NamedBoolPropertyHdl.hxx>
+
+class XMLNamedBoolPropertyHdl;
 
 namespace xmloff
 {

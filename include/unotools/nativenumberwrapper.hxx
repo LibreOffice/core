@@ -22,11 +22,12 @@
 
 #include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XNativeNumberSupplier2; }
+namespace com::sun::star::i18n { struct NativeNumberXmlAttributes; }
+namespace com::sun::star::lang { struct Locale; }
 
 class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) NativeNumberWrapper
 {

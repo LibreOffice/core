@@ -18,6 +18,7 @@
  */
 
 
+#include <editeng/boxitem.hxx>
 #include <svl/itemset.hxx>
 #include <poolcach.hxx>
 #include <tools/debug.hxx>
@@ -68,7 +69,38 @@ const CellAttributeHolder& ScItemPoolCache::ApplyTo(const CellAttributeHolder& r
     }
     else
     {
-        pNewItem->GetItemSetWritable().Put(*pSetToPut);
+        // We preserve original cell's border formatting
+        if (pSetToPut->GetItemState(ATTR_BORDER, false) == SfxItemState::SET)
+        {
+            if (const SvxBoxItem* pOldBox = pAttr->GetItemSet().GetItemIfSet(ATTR_BORDER))
+            {
+                SvxBoxItem aNewBox(pSetToPut->Get(ATTR_BORDER));
+                if (!aNewBox.GetTop())
+                    aNewBox.SetLine(pOldBox->GetTop(), SvxBoxItemLine::TOP);
+                if (!aNewBox.GetBottom())
+                    aNewBox.SetLine(pOldBox->GetBottom(), SvxBoxItemLine::BOTTOM);
+                if (!aNewBox.GetLeft())
+                    aNewBox.SetLine(pOldBox->GetLeft(), SvxBoxItemLine::LEFT);
+                if (!aNewBox.GetRight())
+                    aNewBox.SetLine(pOldBox->GetRight(), SvxBoxItemLine::RIGHT);
+                if (!aNewBox.GetDistance(SvxBoxItemLine::RIGHT))
+                    aNewBox.SetAllDistances(pOldBox->GetDistance(SvxBoxItemLine::RIGHT));
+
+                // Adding the merged border properties to new cell
+                pNewItem->GetItemSetWritable().Put(aNewBox);
+
+                // Remove existing cell's border formatting
+                SfxItemSet aSet(*pSetToPut);
+                aSet.ClearItem(ATTR_BORDER);
+
+                // Adding remaining properties
+                pNewItem->GetItemSetWritable().Put(aSet);
+            }
+            else
+                pNewItem->GetItemSetWritable().Put(*pSetToPut);
+        }
+        else
+            pNewItem->GetItemSetWritable().Put(*pSetToPut);
     }
 
     m_aCache.emplace_back(rOrigItem, CellAttributeHolder(pNewItem, true));

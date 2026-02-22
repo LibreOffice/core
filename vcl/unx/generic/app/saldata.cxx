@@ -495,7 +495,7 @@ void X11SalData::XError( Display *pDisplay, XErrorEvent *pEvent )
             static Bool bOnce = False;
             if ( !bOnce )
             {
-                std::fprintf(stderr, "X-Error occurred in a request for X_OpenFont\n");
+                SAL_WARN("vcl", "X-Error occurred in a request for X_OpenFont");
                 EmitFontpathWarning();
 
                 bOnce = True ;

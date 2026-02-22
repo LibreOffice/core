@@ -8,10 +8,8 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict, select_by_text
-from uitest.test import DEFAULT_SLEEP
 
 import sys
-import time
 
 #Bug 99619 - query design segfault on redoing an undone table join creation
 class tdf99619(UITestCase):

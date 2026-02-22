@@ -193,7 +193,7 @@ private:
     void                UpdateAppFont( const XclFontData& rFontData, bool bHasCharSet );
 
 private:
-    std::vector< XclImpFont > maFontList; /// List of all FONT records in the Excel file.
+    std::vector<std::optional<XclImpFont>> maFontList; /// List of all FONT records in the Excel file.
     XclFontData         maAppFont;              /// Application font (for column width).
     XclImpFont          maFont4;                /// Built-in font with index 4.
     XclImpFont          maCtrlFont;             /// BIFF5 default form controls font (Helv,8pt,bold).

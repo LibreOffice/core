@@ -272,6 +272,8 @@ private:
     SVX_DLLPRIVATE bool IsOtherOptionsExpanded() const;
 
     SVX_DLLPRIVATE short executeSubDialog(VclAbstractDialog * dialog);
+    SVX_DLLPRIVATE void executeSubDialog(VclPtr<VclAbstractDialog> dialog,
+                                         const std::function<void(sal_Int32)>& func);
 
     DECL_DLLPRIVATE_LINK(PresentTimeoutHdl_Impl, Timer*, void);
 };

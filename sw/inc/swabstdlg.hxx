@@ -325,9 +325,6 @@ class AbstractSwAutoFormatDlg : public VclAbstractDialog
 {
 protected:
     virtual ~AbstractSwAutoFormatDlg() override = default;
-public:
-    virtual std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const = 0;
-    virtual void Apply() = 0;
 };
 
 class AbstractSwFieldDlg : public SfxAbstractTabDialog
@@ -538,9 +535,6 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog(weld::Window* pParent, SwWrtShell &rSh) = 0;
 
-    virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pShell,
-                                                                  bool bSetAutoFormat = true,
-                                                                  const SwTableAutoFormat* pSelFormat = nullptr ) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg(weld::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pSh) = 0;
 

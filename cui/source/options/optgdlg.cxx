@@ -23,6 +23,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
 #include <svtools/langhelp.hxx>
+#include <tools/fldunit.hxx>
 #include <unotools/lingucfg.hxx>
 #if defined(_WIN32)
 #include <unotools/resmgr.hxx>

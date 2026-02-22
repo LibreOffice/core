@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/stream.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/inettype.hxx>

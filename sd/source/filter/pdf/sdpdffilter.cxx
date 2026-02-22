@@ -23,6 +23,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svdograf.hxx>
 #include <o3tl/safeint.hxx>
+#include <tools/urlobj.hxx>
 
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
@@ -30,6 +31,8 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
+#include <vcl/pdf/PDFAnnotationMarker.hxx>
+#include <vcl/pdf/PDFAnnotationSubType.hxx>
 
 #include <Annotation.hxx>
 #include <DrawDocShell.hxx>

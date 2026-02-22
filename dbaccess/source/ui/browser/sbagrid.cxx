@@ -37,6 +37,7 @@
 #include <svl/numuno.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <vcl/accessibility/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/svapp.hxx>
 
 #include <cppuhelper/queryinterface.hxx>

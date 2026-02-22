@@ -45,27 +45,29 @@ public:
 
     const SfxPoolItem* GetCurItem() const
     {
-        if (IsAtEnd())
-            return nullptr;
-
+        assert(!IsAtEnd());
         return maCurrent->second;
     }
 
     sal_uInt16 GetCurWhich() const
     {
-        if (IsAtEnd())
-            return 0;
-
+        assert(!IsAtEnd());
         return maCurrent->first;
     }
 
     const SfxPoolItem* NextItem()
     {
+        maCurrent++;
         if (IsAtEnd())
             return nullptr;
+        else
+            return GetCurItem();
+    }
 
+    void Next()
+    {
+        assert(!IsAtEnd());
         maCurrent++;
-        return GetCurItem();
     }
 
     bool IsAtEnd() const { return maCurrent == m_rSet.m_aPoolItemMap.end(); }

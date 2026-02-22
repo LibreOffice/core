@@ -29,6 +29,8 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <vcl/window.hxx>
 #include <svl/intitem.hxx>
@@ -208,11 +210,6 @@ void StyleList::CreateContextMenu()
     mxMenu->set_sensitive(u"show"_ustr, m_bCanShow);
 
     const SfxStyleFamilyItem* pItem = GetFamilyItem();
-    if (pItem && pItem->GetFamily() == SfxStyleFamily::Table) //tdf#101648, no ui for this yet
-    {
-        mxMenu->set_sensitive(u"edit"_ustr, false);
-        mxMenu->set_sensitive(u"new"_ustr, false);
-    }
     if (pItem && pItem->GetFamily() == SfxStyleFamily::Pseudo)
     {
         const OUString aTemplName(GetSelectedEntry());
@@ -1795,7 +1792,7 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else
-        rRenderContext.SetTextColor(rStyleSettings.GetDialogTextColor());
+        rRenderContext.SetTextColor(rStyleSettings.GetWindowTextColor());
 
     bool bSuccess = false;
 

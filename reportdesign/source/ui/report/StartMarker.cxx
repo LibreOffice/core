@@ -18,6 +18,7 @@
  */
 #include <StartMarker.hxx>
 #include <UITools.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <bitmaps.hlst>
@@ -32,6 +33,8 @@
 
 #include <unotools/syslocale.hxx>
 #include <unotools/localedatawrapper.hxx>
+
+#include <com/sun/star/awt/GradientStyle.hpp>
 
 #define CORNER_SPACE     5
 

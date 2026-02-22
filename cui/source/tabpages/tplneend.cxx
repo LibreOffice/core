@@ -20,12 +20,15 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <strings.hrc>
+#include <svtools/dlgname.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/svdobj.hxx>
@@ -40,7 +43,6 @@
 #include <svx/xlnedit.hxx>
 #include <cuitabline.hxx>
 #include <cuitabarea.hxx>
-#include <svx/svxdlg.hxx>
 #include <dialmgr.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -285,13 +287,12 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
         std::unique_ptr<weld::MessageDialog> xWarningBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
         xWarningBox->run();
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+        SvxNameDialog aDlg(GetFrameWeld(), aName, aDesc);
         bool bLoop = true;
 
-        while( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
+        while (!bDifferent && bLoop && aDlg.run() == RET_OK)
         {
-            aName = pDlg->GetName();
+            aName = aDlg.GetName();
             bDifferent = true;
 
             for( tools::Long i = 0; i < nCount && bDifferent; i++ )
@@ -388,13 +389,12 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
                     bDifferent = false;
         }
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc ));
+        SvxNameDialog aDlg(GetFrameWeld(), aName, aDesc);
         bool bLoop = true;
 
-        while ( bLoop && pDlg->Execute() == RET_OK )
+        while (bLoop && aDlg.run() == RET_OK)
         {
-            aName = pDlg->GetName();
+            aName = aDlg.GetName();
             bDifferent = true;
 
             for( tools::Long i = 0; i < nCount && bDifferent; i++ )

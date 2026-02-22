@@ -13,6 +13,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sccomp_swarmsolvertest,\
 	sccomp/qa/unit/SwarmSolverTest \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,sccomp_swarmsolvertest,\
+    libxml2 \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,sccomp_swarmsolvertest,\
 	basegfx \
 	comphelper \

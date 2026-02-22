@@ -2564,6 +2564,41 @@ class SFScriptForge:
                 """
             ...
 
+        def EnterValue(self,
+                       prompt: str = ...,
+                       valuetype: Literal['', 'STRING', 'PASSWORD', 'BOOL', 'INTEGER', 'FLOAT',
+                       'DATE', 'TIME', 'DATETIME', 'COMBO', 'LIST', 'RADIO'] = ...,
+                       default: str | bool | int | float | datetime.datetime = ...,
+                       title: str = ...,
+                       choices: tuple[str, ...] = ...,
+                       format: str = ...,
+                       ) -> str | bool | int | float | datetime.datetime:
+            r"""
+                Displays a typed input box and returns the value entered by the user.
+                    Args
+                        ``prompt``: the message appearing above the input field. Defaults to the zero-length string.
+                        The use of \\n and \\t escape characters is allowed.
+
+                        ``valuetype``: determines the type of the expected value, either string, boolean, integer,
+                        float or date. It also determines the type of dialog control to display to the user. E.g. a
+                        checkbox for a boolean or a date field for a date. When 'PASSWORD', the entered characters are
+                        echoed as '*'.
+
+                        ``default``: the value displayed at box appearance. It must have the expected type.
+
+                        ``title``: the text appearing at the top of the box.
+
+                        ``choices``: the list of possible values (for ``valuetype`` = LIST, COMBO and RADIO only),
+                        as a tuple of strings.
+
+                        ``format``: the format in which to display and enter dates, times or numeric values.
+                        It is relative to the ``platform.FormatLocale`` property.
+                    Returns
+                        A scalar of the given type, as entered by the user.
+                        ``None`` when the user cancelled the dialog.
+                """
+            ...
+
         def GetDocument(
             self,
             windowname: str | XComponent | XOfficeDatabaseDocument = ...
@@ -2576,7 +2611,6 @@ class SFScriptForge:
                         or ``XOfficeDatabaseDocument``.
                     Returns
                         A ``Document`` object or one of its subclasses.
-
                 """
             ...
 

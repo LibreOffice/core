@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <comphelper/errcode.hxx>
 #include <xmloff/xmlexp.hxx>
 
 class SwXMLTextBlocks;

@@ -15,6 +15,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <o3tl/safeint.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 

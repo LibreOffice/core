@@ -17,8 +17,6 @@
 class SVX_DLLPUBLIC GenericDropDownFieldDialog : public weld::GenericDialogController
 {
     std::unique_ptr<weld::ComboBox> m_xComboBox;
-    std::unique_ptr<weld::Button> m_xOK;
-    std::unique_ptr<weld::Button> m_xCancel;
 
 public:
     GenericDropDownFieldDialog(weld::Widget* pParent, const OUString& rTitle);

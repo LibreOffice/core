@@ -22,10 +22,13 @@
 #include <tools/time.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclenum.hxx>
 #include <svl/itemset.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svx/svxids.hrc>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 
 #include <svx/postattr.hxx>
 #include <postdlg.hxx>

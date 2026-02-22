@@ -123,6 +123,11 @@ published service TextGraphicObject
      */
     [optional, property] com::sun::star::graphic::XGraphic Graphic;
 
+    /** if this is `FALSE`, the graphic is not visible.
+
+        @since LibreOffice 26.2
+     */
+    [ optional, property ] boolean Visible;
 };
 
 

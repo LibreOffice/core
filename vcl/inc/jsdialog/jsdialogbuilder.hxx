@@ -551,23 +551,29 @@ public:
 
 class JSListBox final : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
 {
+protected:
+    virtual void do_insert(int pos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
 public:
     JSListBox(JSDialogSender* pSender, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
     virtual void remove(int pos) override;
     virtual void do_set_active(int pos) override;
+    virtual void do_set_active_id(const OUString& rStr) override;
 };
 
 class JSComboBox final : public JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>,
                          public OnDemandRenderingHandler
 {
+protected:
+    virtual void do_insert(int pos, const OUString& rStr, const OUString* pId,
+                           const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
 public:
     JSComboBox(JSDialogSender* pSender, ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder,
                bool bTakeOwnership);
-    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
-                        const OUString* pIconName, VirtualDevice* pImageSurface) override;
+
     virtual void remove(int pos) override;
     void set_entry_text_without_notify(const OUString& rText);
     virtual void set_entry_text(const OUString& rText) override;

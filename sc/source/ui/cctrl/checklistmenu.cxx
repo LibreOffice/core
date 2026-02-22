@@ -29,12 +29,16 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Menu.hxx>
+#include <vcl/weld/Popover.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/json_writer.hxx>
 #include <svl/numformat.hxx>
+
+#include <com/sun/star/i18n/Calendar2.hpp>
 
 #include <document.hxx>
 #include <viewdata.hxx>

@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
 $(eval $(call gb_CppunitTest_use_externals,desktop_lib, \
     boost_headers \
     cairo \
+    libxml2 \
 ))
 ifeq ($(TLS),NSS)
 $(eval $(call gb_CppunitTest_use_externals,desktop_lib,\

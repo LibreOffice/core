@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYTOOLS_HXX
 #define INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYTOOLS_HXX
 
+#include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmap.hxx>
 #include <basegfx/vector/b2dsize.hxx>
@@ -65,7 +66,7 @@ public:
 // with the target position is given in discrete X,Y coordinates
 namespace drawinglayer::primitive2d
     {
-        class OverlayBitmapExPrimitive final : public DiscreteMetricDependentPrimitive2D
+        class OverlayBitmapPrimitive final : public DiscreteMetricDependentPrimitive2D
         {
         private:
             // The Bitmap to use, PixelSize is used
@@ -86,7 +87,7 @@ namespace drawinglayer::primitive2d
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
-            OverlayBitmapExPrimitive(
+            OverlayBitmapPrimitive(
                 const Bitmap& rBitmap,
                 const basegfx::B2DPoint& rBasePosition,
                 sal_uInt16 nCenterX,

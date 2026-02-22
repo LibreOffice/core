@@ -11,6 +11,7 @@
 
 #include "QtInstanceWindow.hxx"
 
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
 
 #include <QtWidgets/QAbstractButton>

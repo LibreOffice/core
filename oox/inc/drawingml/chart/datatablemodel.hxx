@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <oox/drawingml/chart/modelbase.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/shape.hxx>
+
 namespace oox::drawingml::chart
 {
 struct DataTableModel

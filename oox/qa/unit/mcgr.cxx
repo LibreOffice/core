@@ -7,18 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 using namespace ::com::sun::star;
 
 namespace
 {
 /// Covers tests for multi-color gradient (MCGR) feature, available since LO 7.6.0.
-class TestMCGR : public UnoApiXmlTest
+class TestMCGR : public UnoApiTest
 {
 public:
     TestMCGR()
-        : UnoApiXmlTest(u"/oox/qa/unit/data/"_ustr)
+        : UnoApiTest(u"/oox/qa/unit/data/"_ustr)
     {
     }
 };

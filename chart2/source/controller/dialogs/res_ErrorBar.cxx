@@ -32,6 +32,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <svl/stritem.hxx>
+#include <tools/fldunit.hxx>
 
 #define CHART_LB_FUNCTION_STD_ERROR     0
 #define CHART_LB_FUNCTION_STD_DEV       1

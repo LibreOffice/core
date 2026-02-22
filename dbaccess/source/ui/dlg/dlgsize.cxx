@@ -19,6 +19,8 @@
 
 #include <dlgsize.hxx>
 #include <o3tl/untaint.hxx>
+#include <tools/fldunit.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace dbaui
 {

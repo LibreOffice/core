@@ -34,6 +34,7 @@
 #include <sot/object.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/stream.hxx>
 
 #include <sfx2/shell.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>

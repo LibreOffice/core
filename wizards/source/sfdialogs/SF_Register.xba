@@ -428,6 +428,7 @@ Try:
 	&apos;	Create the view and associate model and view
 	Set oView = oProcessManager.createInstance(cstDialogView)
 	oView.setModel(oModel)
+	oView.setVisible(False)		&apos;	When absent, IsVisible() returns True although it is not !?
 
 	&apos;	Initialize the basic SF_Dialog instance to return to the user script
 	Set oDialog = New SF_Dialog

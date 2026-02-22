@@ -20,6 +20,8 @@
 #pragma once
 
 #include "sdfilter.hxx"
+#include "sdpage.hxx"
+
 class ErrCode;
 
 // SdCGMFilter

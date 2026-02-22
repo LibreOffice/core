@@ -426,14 +426,14 @@ static void lcl_GetMinMaxSize( sal_uLong& rMinNoAlignCnts, sal_uLong& rMaxNoAlig
     // The maximal width for a <PRE> paragraph is the minimal width
     const SwFormatColl *pColl = &pTextNd->GetAnyFormatColl();
     while( pColl && !pColl->IsDefault() &&
-            (USER_FMT & pColl->GetPoolFormatId()) )
+            (USER_FMT & sal_uInt16(pColl->GetPoolFormatId())) )
     {
         pColl = static_cast<const SwFormatColl *>(pColl->DerivedFrom());
     }
 
     // <NOBR> in the whole cell apply to text but not to tables.
     // Netscape only considers this for graphics.
-    if( (pColl && RES_POOLCOLL_HTML_PRE==pColl->GetPoolFormatId()) || bNoBreak )
+    if( (pColl && SwPoolFormatId::COLL_HTML_PRE==pColl->GetPoolFormatId()) || bNoBreak )
     {
         rMinNoAlignCnts = rMaxNoAlignCnts;
         rAbsMinNoAlignCnts = rMaxNoAlignCnts;

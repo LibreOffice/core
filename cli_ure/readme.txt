@@ -132,7 +132,7 @@ minor version of cli_uretypes.dll should be incremented. When building the versi
 is run that recognizes this and writes a cliureversion.mk file in the bin directory.
 cliureversion.mk contains all the entries of version.txt. The versions have been incremented 
 by the script. The script obtains the information of new types from unotype_statistics.txt
-which is build in offapi.
+which is built in offapi.
 
 The contents of cliureversion.mk is used when building the assemblies in this project. It 
 is also delivered so that instset_native (or instsetoo_native) can use it when building 
@@ -249,7 +249,7 @@ has the same old version but references  a different assembly. For example, say 
 cli_uretypes.dll with version 1 and a cli_ure.dll with version 1. cli_ure.dll references version 1 of
 cli_uretypes.dll. Now the version of cli_uretypes.dll changes to version 2 and its policy assembly is 
 adapted so that all code that uses version 1 now uses version 2. This would also allow cli_ure.dll
-o run with the new cli_uretypes.dll. If now cli_ure.dll is build, then it would reference 
+o run with the new cli_uretypes.dll. If now cli_ure.dll is built, then it would reference 
 cli_uretypes.dll version 2, because our build environment does not keep the older assembly. The old
 cli_uretypes.dll version 1 was replaced by version 2. cli_ure.dll now references cli_uretypes.dll version 2
 but still has the old version.

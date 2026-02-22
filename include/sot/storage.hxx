@@ -21,9 +21,7 @@
 #define INCLUDED_SOT_STORAGE_HXX
 
 #include <sot/object.hxx>
-#include <rtl/ref.hxx>
 #include <tools/stream.hxx>
-#include <tools/globname.hxx>
 #include <comphelper/errcode.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
@@ -31,10 +29,12 @@
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <typename > class Reference; }
+namespace rtl { template <class reference_type> class Reference; }
 
 enum class SotClipboardFormatId : sal_uInt32;
 
 class BaseStorageStream;
+class SvGlobalName;
 
 namespace SotTempStream
 {

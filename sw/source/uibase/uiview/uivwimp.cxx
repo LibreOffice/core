@@ -26,6 +26,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>

@@ -479,4 +479,17 @@
 #define STR_A11Y_PRESENTER_PREVIEW                      NC_("STR_A11Y_PRESENTER_PREVIEW", "Current Slide Info")
 #define STR_A11Y_PRESENTER_NOTES                        NC_("STR_A11Y_PRESENTER_NOTES", "Presenter Notes")
 
+#define STR_CLICKTOEXITPRESENTATION_TEXT                NC_("STR_CLICKTOEXITPRESENTATION_TEXT", "Click to exit presentation...")
+#define STR_CLICKTOEXITPRESENTATION_TITLE               NC_("STR_CLICKTOEXITPRESENTATION_TITLE", "Current Slide (end)")
+
+// Navigator slide/page navigation toolbox items tooltips
+#define STR_FIRST_SLIDE                                 NC_("STR_FIRST_SLIDE", "First Slide")
+#define STR_PREVIOUS_SLIDE                              NC_("STR_PREVIOUS_SLIDE", "Previous Slide")
+#define STR_NEXT_SLIDE                                  NC_("STR_NEXT_SLIDE", "Next Slide")
+#define STR_LAST_SLIDE                                  NC_("STR_LAST_SLIDE", "Last Slide")
+#define STR_FIRST_PAGE                                  NC_("STR_FIRST_PAGE", "First Page")
+#define STR_PREVIOUS_PAGE                               NC_("STR_PREVIOUS_PAGE", "Previous Page")
+#define STR_NEXT_PAGE                                   NC_("STR_NEXT_PAGE", "Next Page")
+#define STR_LAST_PAGE                                   NC_("STR_LAST_PAGE", "Last Page")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

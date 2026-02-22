@@ -22,6 +22,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
 #include <FltCallDialogParameter.hxx>
 #include "exportdialog.hxx"
 #include <tools/fldunit.hxx>

@@ -22,6 +22,7 @@
 #include "addresssettings.hxx"
 #include "abspilot.hxx"
 #include <tools/debug.hxx>
+#include <vcl/weld/Builder.hxx>
 
 
 namespace abp

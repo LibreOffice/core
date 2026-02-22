@@ -10,6 +10,7 @@
 #include <QueryPropertiesDialog.hxx>
 #include <strings.hrc>
 #include <core_resource.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace dbaui
 {

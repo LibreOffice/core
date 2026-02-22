@@ -41,6 +41,7 @@
 #include <sal/log.hxx>
 #include <xmloff/XMLSettingsExportContext.hxx>
 #include <xmloff/SettingsExportHelper.hxx>
+#include <xmloff/xmltoken.hxx>
 
 #include <stack>
 

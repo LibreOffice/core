@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,embeddedobj_general))
 
 $(eval $(call gb_CppunitTest_use_externals,embeddedobj_general,\
 	boost_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,embeddedobj_general, \

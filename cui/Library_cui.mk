@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,cui,\
     docmodel \
     drawinglayer \
     editeng \
+    fwk \
     i18nlangtag \
     i18nutil \
     $(if $(ENABLE_JAVA), \
@@ -120,20 +121,18 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/cuifmsearch \
     cui/source/dialogs/cuigaldlg \
     cui/source/dialogs/cuigrfflt \
-    cui/source/dialogs/cuihyperdlg \
     cui/source/dialogs/cuiimapwnd \
     cui/source/dialogs/cuitbxform \
-    cui/source/dialogs/dlgname \
     cui/source/dialogs/DiagramDialog \
     cui/source/dialogs/FontFeaturesDialog \
     cui/source/dialogs/hangulhanjadlg \
-    cui/source/dialogs/hldocntp \
-    cui/source/dialogs/hldoctp \
-    cui/source/dialogs/hlinettp \
-    cui/source/dialogs/hlmailtp \
     cui/source/dialogs/hlmarkwn \
-    cui/source/dialogs/hltpbase \
-    cui/source/dialogs/iconcdlg \
+    cui/source/dialogs/hyperlinktabpagebase\
+    cui/source/dialogs/hyperlinkdlg \
+    cui/source/dialogs/hyperlinkinternettabpage\
+    cui/source/dialogs/hyperlinkmailtabpage\
+    cui/source/dialogs/hyperlinkdoctabpage\
+    cui/source/dialogs/hyperlinknewdoctabpage\
     cui/source/dialogs/insdlg \
     cui/source/dialogs/insrc \
     cui/source/dialogs/linkdlg \

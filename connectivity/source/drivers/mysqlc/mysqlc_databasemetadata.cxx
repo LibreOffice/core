@@ -20,6 +20,7 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 #include <com/sun/star/sdbc/Deferrability.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>

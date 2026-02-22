@@ -134,7 +134,7 @@ void WriteRelationsInfoSequence(
         const uno::Reference< uno::XComponentContext >& rContext )
 {
     if ( !xOutStream.is() )
-        throw uno::RuntimeException("Invalid output stream");
+        throw uno::RuntimeException(u"Invalid output stream"_ustr);
 
     uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(rContext);
 
@@ -187,7 +187,7 @@ void WriteContentSequence(
         const uno::Reference< uno::XComponentContext >& rContext )
 {
     if ( !xOutStream.is() )
-        throw uno::RuntimeException("Invalid output stream");
+        throw uno::RuntimeException(u"Invalid output stream"_ustr);
 
     uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(rContext);
 
@@ -242,7 +242,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadSequence_Impl(
         const uno::Reference< uno::XComponentContext >& rContext )
 {
     if ( !rContext.is() || !xInStream.is() || nFormat > FORMAT_MAX_ID )
-        throw uno::RuntimeException("Invalid input stream or context");
+        throw uno::RuntimeException(u"Invalid input stream or context"_ustr);
 
 
     uno::Reference< css::xml::sax::XParser > xParser = css::xml::sax::Parser::create( rContext );
@@ -392,7 +392,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
                 m_aResultSeq.realloc( 2 );
 
             if ( m_aResultSeq.getLength() != 2 )
-                throw uno::RuntimeException("m_aResultSeq already has elements and is not reallocated to 2.");
+                throw uno::RuntimeException(u"m_aResultSeq already has elements and is not reallocated to 2."_ustr);
 
             auto pResultSeq = m_aResultSeq.getArray();
 
@@ -423,7 +423,7 @@ void SAL_CALL OFOPXMLHelper_Impl::startElement( const OUString& aName, const uno
                 m_aResultSeq.realloc( 2 );
 
             if ( m_aResultSeq.getLength() != 2 )
-                throw uno::RuntimeException("m_aResultSeq already has elements and is not reallocated to 2.");
+                throw uno::RuntimeException(u"m_aResultSeq already has elements and is not reallocated to 2."_ustr);
 
             auto pResultSeq = m_aResultSeq.getArray();
 

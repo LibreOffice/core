@@ -40,6 +40,8 @@
 #include <stlpool.hxx>
 #include <cellvalue.hxx>
 #include <mtvcellfunc.hxx>
+#include <dbdata.hxx>
+#include <tablestyle.hxx>
 
 #include <algorithm>
 #include <limits>
@@ -185,7 +187,7 @@ public:
 };
 
 void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
-        double fRowScale, SCROW nRow1, SCTAB nTab, SCROW& rYExtra, SCSIZE& rArrRow, SCROW& rRow2)
+        double fRowScale, SCROW nRow1, SCTAB nTab, SCROW& rYExtra, SCSIZE& rArrRow, SCROW& rRow2, std::unordered_map<SCROW, SCROW>& rRowLookup)
 {
     sal_uInt16 nDocHeight = pDoc->GetSheetOptimalMinRowHeight(nTab);
     SCROW nDocHeightEndRow = -1;
@@ -214,6 +216,7 @@ void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow
                 std::clamp(
                     nDocHeight * fRowScale, 1.0, double(std::numeric_limits<sal_uInt16>::max())));
 
+            rRowLookup.insert({nY, rArrRow});
             pThisRowInfo->nRowNo        = nY;               //TODO: case < 0 ?
             pThisRowInfo->nHeight       = nHeight;
             pThisRowInfo->bEmptyBack    = true;
@@ -370,13 +373,14 @@ void ScDocument::FillInfo(
     bool bAnyPreview = false;
 
     bool bTabProtect = IsTabProtected(nTab);
+    std::unordered_map<SCROW, SCROW> aRowLookup;
 
     // first only the entries for the entire column
 
     nArrRow=0;
     SCROW nYExtra = nRow2+1;
     initRowInfo(this, pRowInfo, rTabInfo.mnArrCapacity, fRowScale, nRow1,
-            nTab, nYExtra, nArrRow, nRow2);
+            nTab, nYExtra, nArrRow, nRow2, aRowLookup);
     nArrCount = nArrRow;                                      // incl. Dummys
 
     // Rotated text...
@@ -405,6 +409,66 @@ void ScDocument::FillInfo(
     ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
     if (pCondFormList)
         pCondFormList->startRendering();
+
+    ScRange aTargetRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+    std::vector<const ScDBData*> aDBData
+        = pDBCollection->GetAllNamedDBsInArea(nCol1, nRow1, nCol2, nRow2, nTab);
+    for (const ScDBData* pDBData : aDBData)
+    {
+        const ScTableStyleParam* pTableStyleInfo = pDBData->GetTableStyleInfo();
+        if (!pTableStyleInfo)
+            continue;
+
+        ScRange aDBRange;
+        pDBData->GetArea(aDBRange);
+        ScRange aIntersectionRange = aDBRange.Intersection(aTargetRange);
+        const ScTableStyle* pTableStyle = mpTableStyles->GetTableStyle(pTableStyleInfo->maStyleID);
+        if (!pTableStyle)
+            continue;
+
+        SCROW nNonEmptyRowsBeforePaintRange = -static_cast<SCROW>(pDBData->HasHeader());
+        if (aDBRange.aStart.Row() < aIntersectionRange.aStart.Row())
+        {
+            nNonEmptyRowsBeforePaintRange += this->CountNonFilteredRows(aDBRange.aStart.Row(), aIntersectionRange.aStart.Row() - 1, nTab);
+        }
+        SCROW nRowIndex = nNonEmptyRowsBeforePaintRange;
+        for (SCROW nRow = aIntersectionRange.aStart.Row(); nRow <= aIntersectionRange.aEnd.Row(); ++nRow)
+        {
+            auto itrRow = aRowLookup.find(nRow);
+            if (itrRow == aRowLookup.end())
+                continue;
+
+            RowInfo* pThisRowInfo = &pRowInfo[itrRow->second];
+            for (SCCOL nCol = aIntersectionRange.aStart.Col(); nCol <= aIntersectionRange.aEnd.Col(); ++nCol)
+            {
+                if (!ValidCol(nCol))
+                    continue;
+
+                ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
+
+                const SvxBrushItem* pBackground = pTableStyle->GetFillItem(*pDBData, nCol, nRow, nRowIndex);
+                if (pBackground)
+                {
+                    pInfo->maBackground = SfxPoolItemHolder(*pPool, pBackground);
+                    pThisRowInfo->bEmptyBack = false;
+                }
+
+                std::unique_ptr<SvxBoxItem> pLinesAttr = pTableStyle->GetBoxItem(*pDBData, nCol, nRow, nRowIndex);
+                if (pLinesAttr)
+                {
+                    pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pLinesAttr.get());
+                }
+
+                const SfxItemSet* pPoolItem = pTableStyle->GetFontItemSet(*pDBData, nCol, nRow, nRowIndex);
+                if (pPoolItem)
+                {
+                    pInfo->pTableFormatSet = pPoolItem;
+                }
+            }
+
+            ++nRowIndex;
+        }
+    }
 
     SCCOL nLastHiddenCheckedCol = -2;
     bool bColHidden = false;
@@ -474,7 +538,9 @@ void ScDocument::FillInfo(
                         }
 
                         const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);
+                        const SvxBrushItem* pExplicitBackground = pPattern->GetItemSet().GetItemIfSet(ATTR_BACKGROUND);
                         const SvxBoxItem* pLinesAttr = &pPattern->GetItem(ATTR_BORDER);
+                        const SvxBoxItem* pExplicitLinesAttr = pPattern->GetItemSet().GetItemIfSet(ATTR_BORDER);
 
                         const SvxLineItem* pTLBRLine = &pPattern->GetItem( ATTR_BORDER_TLBR );
                         const SvxLineItem* pBLTRLine = &pPattern->GetItem( ATTR_BORDER_BLTR );
@@ -535,7 +601,17 @@ void ScDocument::FillInfo(
 
                                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
                                 ScBasicCellInfo* pBasicInfo = &pThisRowInfo->basicCellInfo(nCol);
-                                pInfo->maBackground = SfxPoolItemHolder(*pPool, pBackground);
+                                if (pInfo->maBackground)
+                                {
+                                    if (pExplicitBackground)
+                                    {
+                                        pInfo->maBackground = SfxPoolItemHolder(*pPool, pExplicitBackground);
+                                    }
+                                }
+                                else
+                                {
+                                    pInfo->maBackground = SfxPoolItemHolder(*pPool, pBackground);
+                                }
                                 pInfo->pPatternAttr = pPattern;
                                 pInfo->bMerged      = bMerged;
                                 pInfo->bHOverlapped = bHOverlapped;
@@ -547,7 +623,17 @@ void ScDocument::FillInfo(
                                 pInfo->bPivotExpandButton = bPivotExpandButton;
                                 pInfo->bPivotPopupButtonMulti = bPivotPopupButtonMulti;
                                 pInfo->bFilterActive = bFilterActive;
-                                pInfo->pLinesAttr   = pLinesAttr;
+                                if (pInfo->maLinesAttr)
+                                {
+                                    if (pExplicitBackground)
+                                    {
+                                        pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pExplicitLinesAttr);
+                                    }
+                                }
+                                else
+                                {
+                                    pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pLinesAttr);
+                                }
                                 pInfo->mpTLBRLine   = pTLBRLine;
                                 pInfo->mpBLTRLine   = pBLTRLine;
                                 pInfo->pShadowAttr  = pShadowAttr;
@@ -670,7 +756,10 @@ void ScDocument::FillInfo(
 
                             // Border
                     if ( const SvxBoxItem* pItem = pCondSet->GetItemIfSet( ATTR_BORDER ) )
-                        pInfo->pLinesAttr = pItem;
+                    {
+                        pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pItem);
+                        pRowInfo[nArrRow].bEmptyBack = false;
+                    }
 
                     if ( const SvxLineItem* pItem = pCondSet->GetItemIfSet( ATTR_BORDER_TLBR ) )
                         pInfo->mpTLBRLine = pItem;
@@ -927,7 +1016,7 @@ void ScDocument::FillInfo(
         for( SCCOL nCol = nCol1 - 1; nCol <= nCol2 + 1; ++nCol ) // 1 more left and right
         {
             const ScCellInfo& rInfo = rThisRowInfo.cellInfo( nCol );
-            const SvxBoxItem* pBox = rInfo.pLinesAttr;
+            const SvxBoxItem* pBox = static_cast<const SvxBoxItem*>(rInfo.maLinesAttr.getItem());
             const SvxLineItem* pTLBR = rInfo.mpTLBRLine;
             const SvxLineItem* pBLTR = rInfo.mpBLTRLine;
 

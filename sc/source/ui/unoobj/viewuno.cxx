@@ -1083,6 +1083,11 @@ rtl::Reference<ScViewPaneObj> ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIn
 
 uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
 {
+    return getActiveScSheet();
+}
+
+rtl::Reference<ScTableSheetObj> ScTabViewObj::getActiveScSheet()
+{
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)

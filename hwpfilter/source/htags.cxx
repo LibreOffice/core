@@ -19,8 +19,11 @@
 
 #include "precompile.h"
 
+#ifdef _WIN32
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
+#endif
 
 #include <string.h>
 

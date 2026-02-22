@@ -2639,10 +2639,9 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
             if (pDest->GetpSwAttrSet())
             {
                 // check all items in the property set
-                SfxItemIter aIter( *pDest->GetpSwAttrSet() );
-                const SfxPoolItem* pItem = aIter.GetCurItem();
-                do
+                for (SfxItemIter aIter( *pDest->GetpSwAttrSet() ); !aIter.IsAtEnd(); aIter.Next())
                 {
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
                     // check current item
                     const sal_uInt16 nWhich = IsInvalidItem( pItem )
                         ? aIter.GetCurWhich()
@@ -2662,10 +2661,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
                         if (hasSwAttrSet)
                             break;
                     }
-
-                    // let's check next item
-                    pItem = aIter.NextItem();
-                } while (pItem);
+                }
             }
         }
 
@@ -4324,7 +4320,7 @@ int SwTextNode::GetAttrOutlineLevel(bool bInlineHeading) const
                 const SwFormat* pParent = pFrameFormat->DerivedFrom();
                 SwFormatAnchor const& rAnchor(pFrameFormat->GetAnchor());
                 bool bInlineHeadingFrame = pParent &&
-                        pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING &&
+                        pParent->GetPoolFormatId() == SwPoolFormatId::FRM_INLINE_HEADING &&
                         RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId();
                 const SwNodeIndex* pNdIdx = bInlineHeadingFrame
                                              ? pFrameFormat->GetContent().GetContentIdx()
@@ -5693,10 +5689,9 @@ void SwTextNode::TriggerNodeUpdate(const sw::AttrSetChangeHint& rHint)
             bool bReset(false);
 
             // ..on ItemChange from DrawingLayer FillAttributes
-            SfxItemIter aIter(*pNewValue->GetChgSet());
-
-            for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem && !bReset; pItem = aIter.NextItem())
+            for (SfxItemIter aIter( *pNewValue->GetChgSet() ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
             }
 

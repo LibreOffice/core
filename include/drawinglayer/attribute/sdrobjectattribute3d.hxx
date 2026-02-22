@@ -22,10 +22,6 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <com/sun/star/drawing/NormalsKind.hpp>
-#include <com/sun/star/drawing/TextureProjectionMode.hpp>
-#include <com/sun/star/drawing/TextureKind2.hpp>
-#include <com/sun/star/drawing/TextureMode.hpp>
 #include <o3tl/cow_wrapper.hxx>
 
 
@@ -35,6 +31,10 @@ namespace drawinglayer::attribute {
     class ImpSdr3DObjectAttribute;
     class MaterialAttribute3D;
 }
+namespace com::sun::star::drawing { enum class NormalsKind; }
+namespace com::sun::star::drawing { enum class TextureKind2; }
+namespace com::sun::star::drawing { enum class TextureMode; }
+namespace com::sun::star::drawing { enum class TextureProjectionMode; }
 
 
 namespace drawinglayer::attribute

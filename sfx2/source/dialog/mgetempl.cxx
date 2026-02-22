@@ -19,13 +19,17 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>
 #include <osl/diagnose.h>
+#include <tools/mapunit.hxx>
 
 #include <sfx2/styfitem.hxx>
 #include <sfx2/styledlg.hxx>

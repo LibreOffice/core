@@ -44,6 +44,7 @@
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
 #include <tools/gen.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -53,6 +54,7 @@
 
 #include <vcl/wmf.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/vcllayout.hxx>
 #include <o3tl/string_view.hxx>

@@ -29,6 +29,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/vclevent.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 namespace framework{

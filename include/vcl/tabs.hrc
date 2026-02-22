@@ -153,6 +153,10 @@ inline constexpr TabData RID_TAB_KEYBOARD{ NC_("RID_TAB_KEYBOARD", "Keyboard"), 
 inline constexpr TabData RID_TAB_EVENTS{ NC_("RID_TAB_EVENTS", "Events"), u"choosemacro.png"_ustr };
 // ui mode
 inline constexpr TabData RID_TAB_UIMODE{ NC_("RID_TAB_UIMODE", "UI Mode"), u"toggletabbarvisibility.png"_ustr };
+inline constexpr TabData RID_TAB_HLINTERNET{ NC_("RID_TAB_HLINTERNET", "~Internet"), u"res/hlinettp.png"_ustr };
+inline constexpr TabData RID_TAB_HLMAIL{ NC_("RID_TAB_HLMAIL", "~Mail"), u"res/hlmailtp.png"_ustr };
+inline constexpr TabData RID_TAB_HLDOC{ NC_("RID_TAB_HLDOC", "~Document"), u"res/hldoctp.png"_ustr };
+inline constexpr TabData RID_TAB_HLDOCN{ NC_("RID_TAB_HLDOCN", "~New Document"), u"res/hldocntp.png"_ustr };
 // envelope
 inline constexpr TabData RID_TAB_ENVELOPE{ NC_("RID_TAB_ENVELOPE", "Envelope"), u"insertenvelope.png"_ustr };
 inline constexpr TabData RID_TAB_ENV_FORMAT{ NC_("RID_TAB_ENV_FORMAT", "Format"), u"distributeverttop.png"_ustr };

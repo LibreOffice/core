@@ -13,6 +13,7 @@
 #include <svx/dlgutil.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
+#include <vcl/weld/Builder.hxx>
 
 #include <TextColumnsPage.hxx>
 

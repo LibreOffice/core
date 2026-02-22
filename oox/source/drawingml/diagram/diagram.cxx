@@ -26,6 +26,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
+#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <sal/log.hxx>
 #include <editeng/unoprnms.hxx>
 #include <drawingml/fillproperties.hxx>
@@ -37,10 +39,21 @@
 #include <svx/svdpage.hxx>
 #include <oox/ppt/pptimport.hxx>
 #include <comphelper/xmltools.hxx>
-
 #include "diagramlayoutatoms.hxx"
 #include "layoutatomvisitors.hxx"
 #include "diagramfragmenthandler.hxx"
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/io/TempFile.hpp>
+#include <oox/export/drawingml.hxx>
+
+#ifdef DBG_UTIL
+#include <osl/file.hxx>
+#include <o3tl/environment.hxx>
+#include <tools/stream.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <com/sun/star/embed/XRelationshipAccess.hpp>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -105,10 +118,10 @@ static void removeUnneededGroupShapes(const ShapePtr& pShape)
 }
 
 
-void Diagram::addTo( const ShapePtr & pParentShape, bool bCreate )
+void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentShape, bool bCreate )
 {
     if (pParentShape->getSize().Width == 0 || pParentShape->getSize().Height == 0)
-        SAL_WARN("oox.drawingml", "Diagram cannot be correctly laid out. Size: "
+        SAL_WARN("oox.drawingml", "SmartArtDiagram cannot be correctly laid out. Size: "
             << pParentShape->getSize().Width << "x" << pParentShape->getSize().Height);
 
     pParentShape->setChildSize(pParentShape->getSize());
@@ -133,7 +146,12 @@ void Diagram::addTo( const ShapePtr & pParentShape, bool bCreate )
     pBackground->setSubType(XML_rect);
     pBackground->getCustomShapeProperties()->setShapePresetType(XML_rect);
     pBackground->setSize(pParentShape->getSize());
-    pBackground->getFillProperties() = *mpData->getBackgroundShapeFillProperties();
+    if (mpData->getBackgroundShapeFillProperties())
+        pBackground->getFillProperties() = *mpData->getBackgroundShapeFillProperties();
+    // MoveProtect/SizeProtect..? Keep for now, but mnay be removed
+    // when IA needs change - the Diagram will be a closed GroupObject.
+    // If it gets 'broken' (un-grouped) the BGShape will keep that attributes,
+    // despite main reason to break that Diagram is probably to edit it.
     pBackground->setLocked(true);
 
     // create and set ModelID for BackgroundShape to allow later association
@@ -144,25 +162,155 @@ void Diagram::addTo( const ShapePtr & pParentShape, bool bCreate )
     aChildren.insert(aChildren.begin(), pBackground);
 }
 
-Diagram::Diagram()
+SmartArtDiagram::SmartArtDiagram()
 : maDiagramFontHeights()
+, mpData()
+, mpLayout()
+, maStyles()
+, maColors()
+, maDiagramPRDomMap()
 {
 }
 
-beans::PropertyValue Diagram::getDomPropertyValue(const OUString& rName) const
+SmartArtDiagram::SmartArtDiagram(SmartArtDiagram const& rSource)
+: maDiagramFontHeights()
+, mpData(rSource.mpData ? new DiagramData_oox(*rSource.mpData) : nullptr)
+, mpLayout(rSource.mpLayout)
+, maStyles(rSource.maStyles)
+, maColors(rSource.maColors)
+, maDiagramPRDomMap(rSource.maDiagramPRDomMap)
 {
-    const DiagramPRDomMap::const_iterator aHit = maDiagramPRDomMap.find(rName);
+}
+
+uno::Any SmartArtDiagram::getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const
+{
+    const DiagramPRDomMap::const_iterator aHit = maDiagramPRDomMap.find(aDomMapFlag);
 
     if (aHit != maDiagramPRDomMap.end())
         return aHit->second;
 
-    return beans::PropertyValue();
+    return uno::Any();
+}
+
+void SmartArtDiagram::setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const uno::Any& rValue)
+{
+    maDiagramPRDomMap[aDomMapFlag] = rValue;
+}
+
+void SmartArtDiagram::resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags)
+{
+    for (const auto& rEntry : aDomMapFlags)
+    {
+        maDiagramPRDomMap.erase(rEntry);
+
+        if (maDiagramPRDomMap.empty())
+            return;
+    }
+}
+
+bool SmartArtDiagram::checkMinimalDataDoms() const
+{
+    // check if re-creation is activated
+    static bool bActivateAdvancedDiagramFeatures(nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
+
+    if (!bActivateAdvancedDiagramFeatures && maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXData))
+        return false;
+
+    if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXLayout))
+        return false;
+
+    if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXStyle))
+        return false;
+
+    if (maDiagramPRDomMap.end() == maDiagramPRDomMap.find(svx::diagram::DomMapFlag::OOXColor))
+        return false;
+
+    return true;
+}
+
+void SmartArtDiagram::writeDiagramOOXData(DrawingML& rOriginalDrawingML, uno::Reference<io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const
+{
+    if (!xOutputStream)
+        return;
+
+    // re-create OOXData DomFile from model data
+    sax_fastparser::FSHelperPtr aFS = std::make_shared<sax_fastparser::FastSerializerHelper>(xOutputStream, true);
+    getData()->writeDiagramData(rOriginalDrawingML, aFS, rDrawingRelId);
+
+    // this call is *important*, without it xDocBuilder->parse below fails and some strange
+    // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
+    xOutputStream->closeOutput();
+
+#ifdef DBG_UTIL
+    uno::Reference< embed::XRelationshipAccess > xRelations( xOutputStream, uno::UNO_QUERY );
+    if( xRelations.is() )
+    {
+        const uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
+        for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
+        {
+            SAL_INFO("oox", "RelationData:");
+            for (const beans::StringPair& aPair : aSeq)
+                SAL_INFO("oox", "  Key: " << aPair.First << ", Value: " << aPair.Second);
+        }
+    }
+
+    const OUString env(o3tl::getEnvironment(u"DIAGRAM_DUMP_PATH"_ustr));
+    if(!env.isEmpty())
+    {
+        OUString url;
+        ::osl::FileBase::getFileURLFromSystemPath(env, url);
+        SvFileStream aOutStream(url + "data_T.xml", StreamMode::WRITE|StreamMode::TRUNC);
+        uno::Reference<io::XStream> xOutStream(new utl::OStreamWrapper(aOutStream));
+        uno::Reference<io::XStream> xInStream(xOutputStream, uno::UNO_QUERY);
+        comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(), xOutStream->getOutputStream());
+    }
+#endif
+}
+
+void SmartArtDiagram::writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, uno::Reference<io::XOutputStream>& xOutputStream) const
+{
+    if (!xOutputStream)
+        return;
+
+    // re-create OOXDrawing DomFile from model data
+    SAL_INFO("oox", "DiagramReCreate: creating DomMapFlag::OOXDrawing");
+    sax_fastparser::FSHelperPtr aFS = std::make_shared<sax_fastparser::FastSerializerHelper>(xOutputStream, true);
+    getData()->writeDiagramReplacement(rOriginalDrawingML, aFS);
+
+    // this call is *important*, without it xDocBuilder->parse below fails and some strange
+    // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
+    xOutputStream->closeOutput();
+
+#ifdef DBG_UTIL
+    uno::Reference< embed::XRelationshipAccess > xRelations( xOutputStream, uno::UNO_QUERY );
+    if( xRelations.is() )
+    {
+        const uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
+        for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
+        {
+            SAL_INFO("oox", "RelationDrawing:");
+            for (const beans::StringPair& aPair : aSeq)
+                SAL_INFO("oox", "  Key: " << aPair.First << ", Value: " << aPair.Second);
+        }
+    }
+
+    const OUString env(o3tl::getEnvironment(u"DIAGRAM_DUMP_PATH"_ustr));
+    if(!env.isEmpty())
+    {
+        OUString url;
+        ::osl::FileBase::getFileURLFromSystemPath(env, url);
+        SvFileStream aOutStream(url + "drawing_T.xml", StreamMode::WRITE|StreamMode::TRUNC);
+        uno::Reference<io::XStream> xOutStream(new utl::OStreamWrapper(aOutStream));
+        uno::Reference<io::XStream> xInStream(xOutputStream, uno::UNO_QUERY);
+        comphelper::OStorageHelper::CopyInputToOutput(xInStream->getInputStream(), xOutStream->getOutputStream());
+    }
+#endif
 }
 
 using ShapePairs
-    = std::map<std::shared_ptr<drawingml::Shape>, css::uno::Reference<css::drawing::XShape>>;
+    = std::map<std::shared_ptr<drawingml::Shape>, uno::Reference<drawing::XShape>>;
 
-void Diagram::syncDiagramFontHeights()
+void SmartArtDiagram::syncDiagramFontHeights()
 {
     // Each name represents a group of shapes, for which the font height should have the same
     // scaling.
@@ -210,12 +358,6 @@ void Diagram::syncDiagramFontHeights()
     maDiagramFontHeights.clear();
 }
 
-void Diagram::addDomPropertyValue(beans::PropertyValue& aValue)
-{
-    if (!aValue.Name.isEmpty())
-        maDiagramPRDomMap[aValue.Name] = aValue;
-}
-
 static uno::Reference<xml::dom::XDocument> loadFragment(
     core::XmlFilterBase& rFilter,
     const OUString& rFragmentPath )
@@ -234,14 +376,11 @@ static uno::Reference<xml::dom::XDocument> loadFragment(
 
 static void importFragment( core::XmlFilterBase& rFilter,
                      const uno::Reference<xml::dom::XDocument>& rXDom,
-                     const OUString& rDocName,
+                     svx::diagram::DomMapFlag aDomMapFlag,
                      const DiagramPtr& pDiagram,
                      const rtl::Reference< core::FragmentHandler >& rxHandler )
 {
-    beans::PropertyValue aValue;
-    aValue.Name = rDocName;
-    aValue.Value <<= rXDom;
-    pDiagram->addDomPropertyValue(aValue);
+    pDiagram->setOOXDomValue(aDomMapFlag, uno::Any(rXDom));
 
     uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(
         rXDom, uno::UNO_QUERY_THROW);
@@ -302,9 +441,9 @@ void loadDiagram( ShapePtr const & pShape,
                   const OUString& rColorStylePath,
                   const oox::core::Relations& rRelations )
 {
-    DiagramPtr pDiagram = std::make_shared<Diagram>();
+    DiagramPtr pDiagram = std::make_shared<SmartArtDiagram>();
 
-    OoxDiagramDataPtr pData = std::make_shared<DiagramData>();
+    OoxDiagramDataPtr pData = std::make_shared<DiagramData_oox>();
     pDiagram->setData( pData );
 
     DiagramLayoutPtr pLayout = std::make_shared<DiagramLayout>(*pDiagram);
@@ -323,17 +462,21 @@ void loadDiagram( ShapePtr const & pShape,
 
             importFragment(rFilter,
                            loadFragment(rFilter,xRefDataModel),
-                           u"OOXData"_ustr,
+                           svx::diagram::DomMapFlag::OOXData,
                            pDiagram,
                            xRefDataModel);
 
-            uno::Sequence< uno::Sequence< uno::Any > > aDataRelsMap(
-                pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter, xRefDataModel->getFragmentPath(), u"image" ));
+            uno::Sequence<uno::Sequence<uno::Any>> aDataImageRelsMap(
+                pShape->resolveRelationshipsOfTypeFromOfficeDoc(
+                    rFilter, xRefDataModel->getFragmentPath(), u"image"));
+            uno::Sequence<uno::Sequence<uno::Any>> aDataHlinkRelsMap(
+                pShape->resolveRelationshipsOfTypeFromOfficeDoc(
+                    rFilter, xRefDataModel->getFragmentPath(), u"hlink"));
 
-            beans::PropertyValue aValue;
-            aValue.Name = "OOXDiagramDataRels";
-            aValue.Value <<= aDataRelsMap;
-            pDiagram->addDomPropertyValue(aValue);
+            pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataImageRels,
+                                     uno::Any(aDataImageRelsMap));
+            pDiagram->setOOXDomValue(svx::diagram::DomMapFlag::OOXDataHlinkRels,
+                                     uno::Any(aDataHlinkRelsMap));
 
             // Pass the info to pShape
             for (auto const& extDrawing : pData->getExtDrawings())
@@ -356,7 +499,7 @@ void loadDiagram( ShapePtr const & pShape,
         }
 
         // Layout: always import to allow editing in the future. It's needed for
-        // AdvancedDiagramHelper::reLayout to re-create the oox::Shape(s) for the
+        // DiagramHelper_oox::reLayout to re-create the oox::Shape(s) for the
         // model. Without importing these the diagram model will be not complete.
         // NOTE: This also adds the DomMaps to rMainDomMap, so the lines
         //     DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
@@ -372,7 +515,7 @@ void loadDiagram( ShapePtr const & pShape,
 
             importFragment(rFilter,
                     loadFragment(rFilter,xRefLayout),
-                    u"OOXLayout"_ustr,
+                    svx::diagram::DomMapFlag::OOXLayout,
                     pDiagram,
                     xRefLayout);
         }
@@ -385,7 +528,7 @@ void loadDiagram( ShapePtr const & pShape,
 
             importFragment(rFilter,
                     loadFragment(rFilter,xRefQStyle),
-                    u"OOXStyle"_ustr,
+                    svx::diagram::DomMapFlag::OOXStyle,
                     pDiagram,
                     xRefQStyle);
         }
@@ -398,7 +541,7 @@ void loadDiagram( ShapePtr const & pShape,
 
             importFragment(rFilter,
                 loadFragment(rFilter,xRefColorStyle),
-                u"OOXColor"_ustr,
+                svx::diagram::DomMapFlag::OOXColor,
                 pDiagram,
                 xRefColorStyle);
         }
@@ -417,6 +560,9 @@ void loadDiagram( ShapePtr const & pShape,
         // collect data, init maps
         // for Diagram import, do - for now - NOT clear all oox::drawingml::Shape
         pData->buildDiagramDataModel(false);
+#ifdef DBG_UTIL
+        pData->dump();
+#endif
 
         // diagram loaded. now lump together & attach to shape
         // create own geometry if extLst is not present (no geometric
@@ -426,8 +572,9 @@ void loadDiagram( ShapePtr const & pShape,
         // already *filtered* version, see usage of DiagramShapeCounter
         // above. Moving to local bool, there might more conditions show
         // up
-        const bool bCreate(pShape->getExtDrawings().empty());
-        pDiagram->addTo(pShape, bCreate);
+        static bool bIgnoreExtDrawings(nullptr != std::getenv("DIAGRAM_IGNORE_EXTDRAWINGS"));
+        const bool bCreate(bIgnoreExtDrawings || pShape->getExtDrawings().empty());
+        pDiagram->createShapeHierarchyFromModel(pShape, bCreate);
 
         // Get the oox::Theme definition and - if available - move/secure the
         // original ImportData directly to the Diagram ModelData
@@ -436,7 +583,7 @@ void loadDiagram( ShapePtr const & pShape,
             pData->setThemeDocument(aTheme->getFragment()); //getTempFile());
 
         // Prepare support for the advanced DiagramHelper using Diagram & Theme data
-        pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr(), bCreate);
+        pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr());
     }
     catch (...)
     {

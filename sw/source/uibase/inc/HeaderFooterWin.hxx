@@ -15,6 +15,11 @@
 #include <vcl/timer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
+namespace weld
+{
+class MenuButton;
+}
+
 /**
  *  Button painter helper class used to paint a runtime button positioned to a writer frame.
  *  See header/footer button.

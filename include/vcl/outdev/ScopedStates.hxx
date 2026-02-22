@@ -12,6 +12,7 @@
 #define INCLUDED_VCL_SCOPEDSTATES_HXX
 
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 
 namespace vcl
 {

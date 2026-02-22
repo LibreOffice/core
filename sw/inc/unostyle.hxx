@@ -255,19 +255,19 @@ class SwXTextTableStyle final : public cppu::ImplInheritanceHelper
         LAST_ROW_STYLE,
         FIRST_COLUMN_STYLE,
         LAST_COLUMN_STYLE,
+        BODY_STYLE,
         EVEN_ROWS_STYLE,
         ODD_ROWS_STYLE,
         EVEN_COLUMNS_STYLE,
         ODD_COLUMNS_STYLE,
-        BODY_STYLE,
         BACKGROUND_STYLE,
         // loext namespace
-        FIRST_ROW_START_COLUMN_STYLE,
-        FIRST_ROW_END_COLUMN_STYLE,
-        LAST_ROW_START_COLUMN_STYLE,
-        LAST_ROW_END_COLUMN_STYLE,
         FIRST_ROW_EVEN_COLUMN_STYLE,
         LAST_ROW_EVEN_COLUMN_STYLE,
+        FIRST_ROW_END_COLUMN_STYLE,
+        FIRST_ROW_START_COLUMN_STYLE,
+        LAST_ROW_END_COLUMN_STYLE,
+        LAST_ROW_START_COLUMN_STYLE,
         STYLE_COUNT
     };
 
@@ -342,12 +342,13 @@ class SwXTextCellStyle final : public cppu::ImplInheritanceHelper
     /// UIName of the table style that contains this cell style
     TableStyleName m_sTableStyleUIName;
     /// There are no built-in cell style names - presumably these don't need to be converted.
+    OUString m_sParentName;
     UIName m_sName;
     /// If true, then it points to a core object, if false, then this is a created, but not-yet-inserted format.
     bool m_bPhysical;
 
  public:
-    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, TableStyleName sParentStyle);
+    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, UIName sName, TableStyleName sParentStyle);
     /// Create non physical style
     SwXTextCellStyle(SwDocShell* pDocShell, UIName sName);
 

@@ -75,6 +75,9 @@
 #include <frameformats.hxx>
 #include <textboxhelper.hxx>
 
+#include <sortedobjs.hxx>
+#include <cmdid.h>
+#include <sfx2/dispatch.hxx>
 
 using namespace ::com::sun::star;
 
@@ -276,10 +279,6 @@ void SwFEShell::SelectFlyFrame( SwFlyFrame& rFrame )
 
 void SwFEShell::UnfloatFlyFrame()
 {
-    GetIDocumentUndoRedo().StartUndo(SwUndoId::DELLAYFMT, nullptr);
-    comphelper::ScopeGuard g([this]
-                             { GetIDocumentUndoRedo().EndUndo(SwUndoId::DELLAYFMT, nullptr); });
-
     SwFlyFrame* pFly = GetSelectedFlyFrame();
     if (!pFly)
     {
@@ -298,6 +297,57 @@ void SwFEShell::UnfloatFlyFrame()
     if (!pFlyEnd)
     {
         return;
+    }
+
+    GetIDocumentUndoRedo().StartUndo(SwUndoId::UNFLOAT_FRAME_CONTENT, nullptr);
+    comphelper::ScopeGuard g(
+        [this]
+        {
+            GetIDocumentUndoRedo().EndUndo(SwUndoId::UNFLOAT_FRAME_CONTENT, nullptr);
+            EndAllAction();
+        });
+
+    StartAllAction();
+
+    // tdf#169651 Crash in: SwLayAction::FormatContent
+    // To avoid crash, dispatch FN_TOOL_ANCHOR_PARAGRAPH to change anchored objects that have an
+    // anchor id of FLY_AT_FLY to have an anchored id of FLY_AT_PARA before removing the containing
+    // fly frame.
+    if (pFly->GetDrawObjs())
+    {
+        for (size_t i = 0; pFly->GetDrawObjs() && i < pFly->GetDrawObjs()->size(); i++)
+        {
+            SwAnchoredObject* pAnchoredObj = (*pFly->GetDrawObjs())[i];
+            if (!pAnchoredObj)
+                continue;
+
+            const SwFrameFormat* pFrameFormat = pAnchoredObj->GetFrameFormat();
+            if (!pFrameFormat)
+                continue;
+
+            if (pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AT_FLY)
+                continue;
+
+            // if (SwFlyFrame* pFlyFrame = pAnchoredObj->DynCastFlyFrame())
+            //     SelectFlyFrame(*pFlyFrame);
+            // else
+            SelectObj(Point(), 0, pAnchoredObj->DrawObj());
+
+            auto pSfxViewShell = GetSfxViewShell();
+            assert(pSfxViewShell);
+            pSfxViewShell->GetDispatcher()->Execute(FN_TOOL_ANCHOR_PARAGRAPH,
+                                                        SfxCallMode::SYNCHRON);
+
+            // Check if anchor id changed.
+            if (pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AT_PARA)
+                continue;
+
+            // The fly frame should now have one less draw object anchored to it. Anchored
+            // objects are stored sorted. The next anchored object in the sorted objects vector
+            // should now be at the current index. Adjust the index variable value by -1 so the
+            // next pass of the for loop will set it to the same index as this pass.
+            i--;
+        }
     }
 
     // Create an empty paragraph after the table, so the frame's SwNodes section is non-empty after
@@ -322,6 +372,17 @@ void SwFEShell::UnfloatFlyFrame()
         return;
     }
 
+    // The anchor node could be a start node, indicating anchored to frame, move past it to the
+    // first content node. pFlyFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_FLY
+    if (pAnchor->IsStartNode())
+    {
+        SwNodeIndex aIdx(*pAnchor);
+        pAnchor = SwNodes::GoNext(&aIdx);
+        assert(pAnchor);
+        if (!pAnchor)
+            return;
+    }
+
     // Move the content outside of the text frame.
     SwNodeIndex aInsertPos(*pAnchor);
     rIDCO.MoveNodeRange(aRange, aInsertPos.GetNode(), SwMoveFlags::CREATEUNDOOBJ);
@@ -343,7 +404,7 @@ SwFlyFrame* SwFEShell::GetSelectedFlyFrame() const
 
         SdrObject *pO = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        SwVirtFlyDrawObj *pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pO);
+        SwVirtFlyDrawObj *pFlyObj = DynCastSwVirtFlyDrawObj(pO);
 
         return pFlyObj ? pFlyObj->GetFlyFrame() : nullptr;
     }
@@ -394,7 +455,7 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
     if( pFormat && RndStdIds::FLY_AT_FLY == pFormat->GetAnchor().GetAnchorId() )
     {
         const SwFrame* pFly;
-        if (SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj *>(pObj))
+        if (SwVirtFlyDrawObj* pFlyObj = DynCastSwVirtFlyDrawObj(pObj))
         {
             pFly = pFlyObj->GetFlyFrame()->GetAnchorFrame();
         }
@@ -507,7 +568,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     if ( RndStdIds::FLY_AS_CHAR == nAnchorId )
         return aRet;
 
-    bool bFlyFrame = dynamic_cast<SwVirtFlyDrawObj *>(pObj) != nullptr;
+    bool bFlyFrame = DynCastSwVirtFlyDrawObj(pObj) != nullptr;
 
     bool bTextBox = false;
     if (pFormat->Which() == RES_DRAWFRMFMT)
@@ -1300,9 +1361,9 @@ void SwFEShell::ResetFlyFrameAttr( const SfxItemSet* pSet )
 
     StartAllAction();
 
-    SfxItemIter aIter( *pSet );
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if( !IsInvalidItem( pItem ) )
         {
             sal_uInt16 nWhich = pItem->Which();
@@ -1629,7 +1690,7 @@ const SwFrameFormat* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
     pDView->SetHitTolerancePixel( 2 );
 
     SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO);
-    SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+    SwVirtFlyDrawObj* pFlyObj = DynCastSwVirtFlyDrawObj(pObj);
     if (pFlyObj)
     {
         SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
@@ -1697,7 +1758,7 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
     SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
     SdrObject* pObj = pDView->PickObj(rPt, pDView->getHitTolLog(), pPV);
-    SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
+    SwVirtFlyDrawObj* pFlyObj = DynCastSwVirtFlyDrawObj(pObj);
     if (pFlyObj)
     {
         SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
@@ -1744,7 +1805,7 @@ const SwFrameFormat* SwFEShell::GetFormatFromObj( const Point& rPt, SwRect** pRe
         if (pObj)
         {
            // first check it:
-            if (SwVirtFlyDrawObj* pFlyObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj))
+            if (SwVirtFlyDrawObj* pFlyObj = DynCastSwVirtFlyDrawObj(pObj))
                 pRet = pFlyObj->GetFormat();
             else if ( pObj->GetUserCall() ) //not for group objects
                 pRet = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFormat();
@@ -1809,7 +1870,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj )
             }
         }
     }
-    else if (const SwVirtFlyDrawObj *pFlyObj = dynamic_cast<const SwVirtFlyDrawObj*>(pInvestigatedObj))
+    else if (const SwVirtFlyDrawObj *pFlyObj = DynCastSwVirtFlyDrawObj(pInvestigatedObj))
     {
         const SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
         const SwFrame* pLower = pFly->Lower();
@@ -1923,7 +1984,7 @@ void SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
     aFrameSet.Set( pFormat->GetAttrSet() );
 
     // set size and position?
-    if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) == nullptr )
+    if( DynCastSwVirtFlyDrawObj( pObj) == nullptr )
     {
         // then let's do it:
         const tools::Rectangle &rBound = pObj->GetSnapRect();

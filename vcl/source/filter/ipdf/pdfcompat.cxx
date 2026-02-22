@@ -12,6 +12,7 @@
 #include <o3tl/string_view.hxx>
 #include <tools/solar.h>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdf/PDFErrorType.hxx>
 #include <vcl/pdf/pwdinteract.hxx>
 #include <sal/log.hxx>
 

@@ -60,6 +60,7 @@
 #include <utility>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <xmloff/autolayout.hxx>
@@ -422,7 +423,7 @@ namespace {
                                     SdResId(STR_IMPRESS_PRINT_UI_CONTENT),
                                     aHelpIds,
                                     u"PageContentType"_ustr ,
-                                    CreateChoice(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES)),
+                                    CreateChoice(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES, std::size(STR_IMPRESS_PRINT_UI_CONTENT_CHOICES)),
                                     0)
                                 );
 
@@ -447,7 +448,7 @@ namespace {
                                     SdResId(STR_IMPRESS_PRINT_UI_ORDER),
                                     aHelpIds,
                                     u"SlidesPerPageOrder"_ustr ,
-                                    CreateChoice(STR_IMPRESS_PRINT_UI_ORDER_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_ORDER_CHOICES)),
+                                    CreateChoice(STR_IMPRESS_PRINT_UI_ORDER_CHOICES, std::size(STR_IMPRESS_PRINT_UI_ORDER_CHOICES)),
                                     0,
                                     Sequence< sal_Bool >(),
                                     aSlidesPerPageOpt )
@@ -514,7 +515,7 @@ namespace {
                                 u""_ustr,
                                 aHelpIds,
                                 u"Quality"_ustr ,
-                                CreateChoice(STR_IMPRESS_PRINT_UI_QUALITY_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_QUALITY_CHOICES)),
+                                CreateChoice(STR_IMPRESS_PRINT_UI_QUALITY_CHOICES, std::size(STR_IMPRESS_PRINT_UI_QUALITY_CHOICES)),
                                 mbImpress ? officecfg::Office::Impress::Print::Other::Quality::get() :
                                             officecfg::Office::Draw::Print::Other::Quality::get() )
 
@@ -548,8 +549,8 @@ namespace {
                                 u""_ustr,
                                 aHelpIds,
                                 u"PageOptions"_ustr ,
-                                mbImpress ? CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES)) :
-                                            CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW)),
+                                mbImpress ? CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES, std::size(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES)) :
+                                            CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW, std::size(STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW)),
                                 nDefaultChoice,
                                 Sequence< sal_Bool >(),
                                 aPageOptionsOpt
@@ -643,16 +644,7 @@ namespace {
                     nPrintRange = 1;
                 }
             }
-/*
-            OUString aPrintRangeName( "PrintContent" );
-            aHelpIds.realloc( 1 );
-            aHelpIds[0] = ".HelpID:vcl:PrintDialog:PageContentType:ListBox";
-            AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt( "printpagesbox", OUString(),
-                                aHelpIds, aPrintRangeName,
-                                mbImpress ? CreateChoice( STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE ) ) :
-                                            CreateChoice( STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE ) ),
-                                nPrintRange ) );
-*/
+
             OUString aPrintRangeName( u"PrintContent"_ustr );
             aHelpIds = { u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0"_ustr,
                          u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"_ustr,
@@ -661,8 +653,8 @@ namespace {
 
             AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                 aHelpIds, aPrintRangeName,
-                                mbImpress ? CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE)) :
-                                            CreateChoice(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, SAL_N_ELEMENTS(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE)),
+                                mbImpress ? CreateChoice(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE, std::size(STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE)) :
+                                            CreateChoice(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE, std::size(STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE)),
                                 nPrintRange )
                             );
             // create an Edit dependent on "Pages" selected
@@ -694,7 +686,7 @@ namespace {
         Sequence<OUString> GetSlidesPerPageSequence()
         {
             const Sequence<OUString> aChoice (
-                CreateChoice(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES)));
+                CreateChoice(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES, std::size(STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES)));
             maSlidesPerPage.clear();
             maSlidesPerPage.push_back(0); // first is using the default
             std::transform(std::next(aChoice.begin()), aChoice.end(), std::back_inserter(maSlidesPerPage),

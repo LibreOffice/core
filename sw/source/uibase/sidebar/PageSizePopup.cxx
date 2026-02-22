@@ -19,6 +19,7 @@
 #include <PageSizePopup.hxx>
 #include "PageSizeControl.hxx"
 #include <vcl/toolbox.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 PageSizePopup::PageSizePopup(const css::uno::Reference<css::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())

@@ -379,7 +379,7 @@ const TranslateId aFuncStrIds[] = {
 
 OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc)
 {
-    assert(unsigned(eFunc) < SAL_N_ELEMENTS(aFuncStrIds));
+    assert(unsigned(eFunc) < std::size(aFuncStrIds));
     TranslateId pId = aFuncStrIds[eFunc];
     if (!pId)
         return rName;

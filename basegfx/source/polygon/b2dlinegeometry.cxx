@@ -24,7 +24,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>

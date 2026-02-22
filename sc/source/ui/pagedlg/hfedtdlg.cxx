@@ -30,6 +30,7 @@
 #include <svx/pageitem.hxx>
 
 #include <vcl/tabs.hrc>
+#include <vcl/weld/Dialog.hxx>
 
 ScHFEditDlg::ScHFEditDlg(weld::Window* pParent,
                          const SfxItemSet& rCoreSet,

@@ -18,6 +18,13 @@
 #include <libxml/parser.h>
 #include <sal/log.hxx>
 
+#include <com/sun/star/drawing/NormalsKind.hpp>
+#include <com/sun/star/drawing/TextureProjectionMode.hpp>
+#include <com/sun/star/drawing/TextureKind2.hpp>
+#include <com/sun/star/drawing/TextureMode.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
+
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>

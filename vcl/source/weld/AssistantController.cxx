@@ -9,6 +9,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/weld/AssistantController.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace weld
 {

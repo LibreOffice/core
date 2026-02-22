@@ -73,14 +73,14 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
 {
     if ( m_bNewFrame )
     {
-        sal_uInt16 nId;
+        SwPoolFormatId nId;
         switch ( nType )
         {
-            case Frmmgr_Type::TEXT:  nId = RES_POOLFRM_FRAME;    break;
-            case Frmmgr_Type::OLE:   nId = RES_POOLFRM_OLE;      break;
-            case Frmmgr_Type::GRF:   nId = RES_POOLFRM_GRAPHIC;  break;
+            case Frmmgr_Type::TEXT:  nId = SwPoolFormatId::FRM_FRAME;    break;
+            case Frmmgr_Type::OLE:   nId = SwPoolFormatId::FRM_OLE;      break;
+            case Frmmgr_Type::GRF:   nId = SwPoolFormatId::FRM_GRAPHIC;  break;
             // set defaults:
-            default:    nId=0; break;
+            default:    nId=SwPoolFormatId::ZERO; break;
         }
         m_aSet.SetParent( &m_pOwnSh->GetFormatFromPool( nId )->GetAttrSet());
         m_aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum, DFLT_WIDTH, DFLT_HEIGHT ));

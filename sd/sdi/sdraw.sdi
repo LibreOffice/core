@@ -1690,6 +1690,23 @@ SfxVoidItem InsertCanvasSlide SID_INSERT_CANVAS_SLIDE
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem ReshufflePages SID_SHUFFLE_PAGES
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]
+
 SfxVoidItem InsertPageField SID_INSERT_FLD_PAGE
 ()
 [

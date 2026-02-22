@@ -24,13 +24,11 @@
 #include <tools/globname.hxx>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
-#include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
@@ -44,11 +42,13 @@
 #include <mutex>
 #include <utility>
 
+namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
 namespace com::sun::star::datatransfer::dnd { class XDragGestureRecognizer; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::datatransfer::dnd { class XDropTarget; }
 
 template <typename Arg, typename Ret> class Link;
+enum class SotClipboardFormatId : sal_uInt32;
 
 class Bitmap;
 class GDIMetaFile;

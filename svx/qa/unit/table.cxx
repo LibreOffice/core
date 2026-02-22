@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -32,11 +32,11 @@ using namespace ::com::sun::star;
 namespace
 {
 /// Tests for svx/source/table/ code.
-class Test : public UnoApiXmlTest
+class Test : public UnoApiTest
 {
 public:
     Test()
-        : UnoApiXmlTest(u"svx/qa/unit/data/"_ustr)
+        : UnoApiTest(u"svx/qa/unit/data/"_ustr)
     {
     }
 

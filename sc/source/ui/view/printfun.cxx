@@ -1101,9 +1101,12 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         aFieldData.aTitle = rDocShell.GetTitle();
 
     const INetURLObject& rURLObj = rDocShell.GetMedium()->GetURLObject();
-    aFieldData.aLongDocName = rURLObj.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
+
+    // The doc names (long and short) are meant to be printed. They should be in human readable
+    // format, not with a URL encoding.
+    aFieldData.aLongDocName = rURLObj.GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
     if ( !aFieldData.aLongDocName.isEmpty() )
-        aFieldData.aShortDocName = rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
+        aFieldData.aShortDocName = rURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
     else
         aFieldData.aShortDocName = aFieldData.aLongDocName = aFieldData.aTitle;
 

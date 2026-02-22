@@ -15,6 +15,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <tools/fldunit.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdshitm.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <abstract.hxx>
+#include <vcl/weld/Builder.hxx>
 
 SwInsertAbstractDlg::SwInsertAbstractDlg(weld::Window* pParent)
     : SfxDialogController(pParent, u"modules/swriter/ui/abstractdialog.ui"_ustr,

@@ -10,6 +10,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <tools/datetime.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 
 Size getParagraphPreviewOptimalSize(const OutputDevice& rReference)

@@ -222,7 +222,7 @@ endef
 # DO NOT SORT ALPHABETICALLY: the libraries must be listed in dependency order,
 # otherwise cyclic dependencies ruin everything.
 # do not serialize on a partial build as that may fail due to missing deps.
-# the default goal is build (see Module.mk)
+# the default goal is built (see Module.mk)
 ifeq (,$(filter-out build check unitcheck slowcheck screenshot subsequentcheck uicheck coverage,$(MAKECMDGOALS)))
 $(eval $(call repositorymodule_serialize,\
 	scfilt \

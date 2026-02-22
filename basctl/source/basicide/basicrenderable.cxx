@@ -23,6 +23,7 @@
 #include <strings.hrc>
 
 #include <toolkit/awt/vclxdevice.hxx>
+#include <tools/mapunit.hxx>
 #include <tools/multisel.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/propertysequence.hxx>

@@ -19,6 +19,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/toolkit/group.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/settings.hxx>
 
 #define GROUP_BORDER            12

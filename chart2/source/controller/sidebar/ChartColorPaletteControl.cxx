@@ -18,9 +18,11 @@
  */
 
 #include <memory>
+#include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weld/Toolbar.hxx>
 
 #include <ChartColorPaletteHelper.hxx>
 #include "ChartColorPaletteControl.hxx"
@@ -109,7 +111,7 @@ void ChartColorPaletteControl::updateStatus(bool bForce)
         if (!getToolboxId(nId, &pToolBox) && !m_pToolbar)
             return;
 
-        auto pDev = VclPtr<VirtualDevice>::Create();
+        ScopedVclPtrInstance<VirtualDevice> pDev;
         renderSelectedColorPalette(pDev);
         auto aSelItemImg(pDev->GetBitmap(Point(), pDev->GetOutputSizePixel()));
         if (m_pToolbar)

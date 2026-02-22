@@ -23,6 +23,7 @@
 #include "mysqlc_statement.hxx"
 #include "mysqlc_subcomponent.hxx"
 #include "mysqlc_connection.hxx"
+#include "mysqlc_resultsetmetadata.hxx"
 
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>

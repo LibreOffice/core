@@ -19,6 +19,7 @@
 
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
+#include <tools/mapunit.hxx>
 
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
@@ -233,27 +234,6 @@ void SfxControllerItem::GetControlState
 )
 {
 }
-
-void SfxStatusForwarder::StateChangedAtToolBoxControl
-(
-    sal_uInt16          nSID,    // <SID> of the triggering slot
-    SfxItemState        eState,  // <SfxItemState> of 'pState'
-    const SfxPoolItem*  pState   // Slot-Status, NULL or IsInvalidItem()
-)
-
-{
-    pMaster->StateChangedAtToolBoxControl( nSID, eState, pState );
-}
-
-
-SfxStatusForwarder::SfxStatusForwarder(
-            sal_uInt16              nSlotId,
-            SfxControllerItem&  rMaster ):
-    SfxControllerItem( nSlotId, rMaster.GetBindings() ),
-    pMaster( &rMaster )
-{
-}
-
 
 SfxItemState SfxControllerItem::GetItemState
 (

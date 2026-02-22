@@ -28,6 +28,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <sfx2/objsh.hxx>
+#include <tools/mapunit.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <xmloff/xmlscripti.hxx>
@@ -638,7 +639,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
         else if (sName == "ShowChangesByDatetimeMode")
         {
             if (rChangeProp.Value >>= nTemp16)
-                aViewSettings.SetTheDateMode(static_cast<SvxRedlinDateMode>(nTemp16));
+                aViewSettings.SetTheDateMode(static_cast<SvxRedlineDateMode>(nTemp16));
         }
         else if (sName == "ShowChangesByDatetimeFirstDatetime")
         {

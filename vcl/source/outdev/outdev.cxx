@@ -22,11 +22,14 @@
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/graph.hxx>
 #include <tools/lazydelete.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/toolkit/unowrap.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
@@ -37,6 +40,7 @@
 #include <window.h>
 
 #include <com/sun/star/awt/DeviceCapability.hpp>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
@@ -495,8 +499,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 }
 
 void OutputDevice::CopyArea( const Point& rDestPt,
-                             const Point& rSrcPt,  const Size& rSrcSize,
-                             bool bWindowInvalidate )
+                             const Point& rSrcPt,  const Size& rSrcSize )
 {
     if ( ImplIsRecordLayout() )
         return;
@@ -528,7 +531,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
         AdjustTwoRect( aPosAry, GetOutputRectPixel() );
 
-        CopyDeviceArea( aPosAry, bWindowInvalidate );
+        CopyDeviceArea( aPosAry );
     }
 
     SetRasterOp( eOldRop );
@@ -536,7 +539,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
 // Direct OutputDevice drawing protected function
 
-void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, bool /*bWindowInvalidate*/)
+void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry )
 {
     if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
         return;

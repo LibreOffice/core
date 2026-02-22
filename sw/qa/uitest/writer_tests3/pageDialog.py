@@ -142,7 +142,8 @@ class WriterPageDialog(UITestCase):
 
     def test_paper_format(self):
 
-        lPaperFormat = ["A6", "A5", "A4", "A3", "B6 (ISO)", "B5 (ISO)", "B4 (ISO)", "Letter",
+        lPaperFormat = ["A6", "A5", "A4", "A3", "A2", "A1", "A0", "B6 (ISO)", "B5 (ISO)",
+            "B4 (ISO)", "B3 (ISO)", "B2 (ISO)", "B1 (ISO)", "B0 (ISO)", "Letter",
             "Legal", "Long Bond", "Tabloid", "B6 (JIS)", "B5 (JIS)", "B4 (JIS)", "16 Kai",
             "32 Kai", "Big 32 Kai", "User", "DL Envelope", "C6 Envelope", "C6/5 Envelope",
             "C5 Envelope", "C4 Envelope", "#6¾ Envelope", "#7¾ (Monarch) Envelope",

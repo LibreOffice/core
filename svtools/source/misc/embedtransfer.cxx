@@ -26,6 +26,7 @@
 #include <sot/exchange.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/stream.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gdimtf.hxx>

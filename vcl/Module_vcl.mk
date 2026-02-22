@@ -144,6 +144,11 @@ endif
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,vcl,\
     WinResTarget_vcl \
+))
+endif
+
+ifeq ($(OS)-$(USE_HEADLESS_CODE),WNT-)
+$(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_win \
 ))
 endif
@@ -209,7 +214,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_mmlfuzzer \
     Executable_mtpfuzzer \
     Executable_htmlfuzzer \
-    Executable_sftfuzzer \
     Executable_eotfuzzer \
     Executable_dbffuzzer \
     Executable_webpfuzzer \
@@ -223,6 +227,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
     CppunitTest_vcl_drawmode \
     CppunitTest_vcl_lifecycle \
     CppunitTest_vcl_bitmap_test \
+    CppunitTest_vcl_bitmapfilter_test \
     CppunitTest_vcl_bitmapprocessor_test \
     CppunitTest_vcl_cjk \
     CppunitTest_vcl_graphic_test \

@@ -84,6 +84,31 @@ using namespace ::com::sun::star;
 
 namespace
 {
+// True if the anchor is (directly or indirectly) in the document body.
+bool isAnchorInDocBody(const SwFrame& rAnchor)
+{
+    for (auto p = &rAnchor; p; p = p->FindFlyFrame()->GetAnchorFrame())
+    {
+        if (p->IsInDocBody())
+            return true;
+        if (!p->IsInFly())
+            return false;
+    }
+    return false;
+}
+
+// True means Word <= 2010 behavior
+bool isLegacyBehavior(const SwFlyFrame& rFly, const SwFrame& rAnchor)
+{
+    const auto* pFrameFormat = rFly.GetFrameFormat();
+    if (!pFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::TAB_OVER_MARGIN))
+        return false;
+    // Allow overlap with bottom margin / footer only in case we're relative to the page frame.
+    bool bVertPageFrame
+        = pFrameFormat->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME;
+    return bVertPageFrame || !isAnchorInDocBody(rAnchor);
+}
+
 /// Gets the bottom position which is a deadline for a split fly.
 SwTwips GetFlyAnchorBottom(SwFlyFrame& rFly, const SwFrame& rAnchor)
 {
@@ -101,13 +126,7 @@ SwTwips GetFlyAnchorBottom(SwFlyFrame& rFly, const SwFrame& rAnchor)
         return 0;
     }
 
-    const auto* pFrameFormat = rFly.GetFrameFormat();
-    const IDocumentSettingAccess& rIDSA = pFrameFormat->getIDocumentSettingAccess();
-    // Allow overlap with bottom margin / footer only in case we're relative to the page frame.
-    bool bVertPageFrame = pFrameFormat->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME;
-    bool bInBody = rAnchor.IsInDocBody();
-    bool bLegacy = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN) && (bVertPageFrame || !bInBody);
-    if (bLegacy)
+    if (isLegacyBehavior(rFly, rAnchor))
     {
         // Word <= 2010 style: the fly can overlap with the bottom margin / footer area in case the
         // fly height fits the body height and the fly bottom fits the page.
@@ -156,6 +175,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     m_bAutoPosition( false ),
     m_bDeleted( false ),
     m_nAuthor( std::string::npos ),
+    m_bInserted( false ),
     m_bValidContentPos( false )
 {
     mnFrameType = SwFrameType::Fly;
@@ -806,8 +826,8 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             {
                 SfxItemIter aNIter(*pChangeHint->m_pNew->GetChgSet());
                 SfxItemIter aOIter(*pChangeHint->m_pOld->GetChgSet());
-                const SfxPoolItem* pNItem = aNIter.GetCurItem();
-                const SfxPoolItem* pOItem = aOIter.GetCurItem();
+                const SfxPoolItem* pNItem = aNIter.IsAtEnd() ? nullptr : aNIter.GetCurItem();
+                const SfxPoolItem* pOItem = aOIter.IsAtEnd() ? nullptr : aOIter.GetCurItem();
                 SwAttrSetChg aOldSet(*pChangeHint->m_pOld);
                 SwAttrSetChg aNewSet(*pChangeHint->m_pNew);
                 do
@@ -1485,6 +1505,14 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
 void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "FlyFrame::Format, pAttrs is 0." );
+
+    if (GetDrawObj() && !GetDrawObj()->IsVisible())
+    {
+        SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+        aFrm.setSwRect(SwRect());
+        setFrameAreaSizeValid(true);
+        return;
+    }
 
     ColLock();
 
@@ -2276,6 +2304,77 @@ void SwFlyFrame::UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const
 SwFlyAtContentFrame* SwFlyFrame::DynCastFlyAtContentFrame()
 {
     return IsFlyAtContentFrame() ? static_cast<SwFlyAtContentFrame*>(this) : nullptr;
+}
+
+bool SwFlyFrame::IsSplitButNotYetMovedFollow() const
+{
+    if (IsFlySplitAllowed())
+    {
+        auto& rFlyAtContentFrame = static_cast<SwFlyAtContentFrame&>(const_cast<SwFlyFrame&>(*this));
+        if (rFlyAtContentFrame.IsFollow())
+        {
+            auto pThisAnchor = rFlyAtContentFrame.FindAnchorCharFrame();
+            if (!pThisAnchor)
+                return true; // no anchor frame has been created yet
+            auto pPrecedeAnchor = rFlyAtContentFrame.GetPrecede()->FindAnchorCharFrame();
+            assert(pPrecedeAnchor);
+            if (pThisAnchor->GetUpper() == pPrecedeAnchor->GetUpper())
+            {
+                // This is a just-split follow fly, and it is waiting to be moved to the next page
+                // together with its anchor. See SwFrame::GetNextFlyLeaf and its "nesting" case
+                // handling.
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool SwFlyFrame::GetRedlineRenderModeFrame(SvxBoxItem& rBoxItem) const
+{
+    // If we're in non-standard redline mode, then color deletes and inserts depending on the
+    // redline render mode. Similar to what SwFntObj::DrawText() does for redlined text.
+    const SwViewShell* pViewShell = getRootFrame()->GetCurrShell();
+    if (!pViewShell)
+    {
+        return false;
+    }
+
+    const SwViewOption* pViewOptions = pViewShell->GetViewOptions();
+    if (!pViewOptions)
+    {
+        return false;
+    }
+
+    SwRedlineRenderMode eRedlineRenderMode = pViewOptions->GetRedlineRenderMode();
+    std::optional<Color> oColor;
+    if (eRedlineRenderMode == SwRedlineRenderMode::OmitInserts && IsDeleted())
+    {
+        oColor.emplace(COL_RED);
+    }
+    else if (eRedlineRenderMode == SwRedlineRenderMode::OmitDeletes && IsInserted())
+    {
+        oColor.emplace(COL_GREEN);
+    }
+    if (!oColor)
+    {
+        return false;
+    }
+
+    editeng::SvxBorderLine aBorderLine;
+
+    // Set a logic value which is roughly 1 pixel wide, so the border is visible.
+    vcl::RenderContext* pOut = pViewShell->GetOut();
+    tools::Long nWidth = pOut ? pOut->PixelToLogic(Size(1, 1)).Width() : 0;
+    aBorderLine.SetWidth(nWidth);
+
+    aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::SOLID);
+    aBorderLine.SetColor(*oColor);
+    rBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::LEFT);
+    rBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::RIGHT);
+    rBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::TOP);
+    rBoxItem.SetLine(&aBorderLine, SvxBoxItemLine::BOTTOM);
+    return true;
 }
 
 SwTwips SwFlyFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool bTst)
@@ -3420,6 +3519,10 @@ void SwFlyFrame::dumpAsXml(xmlTextWriterPtr writer) const
 {
     (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("fly"));
     dumpAsXmlAttributes(writer);
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("deleted"), "%s",
+                                            BAD_CAST(OString::boolean(m_bDeleted).getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("inserted"), "%s",
+                                            BAD_CAST(OString::boolean(m_bInserted).getStr()));
 
     SwLayoutFrame::dumpAsXml(writer);
 

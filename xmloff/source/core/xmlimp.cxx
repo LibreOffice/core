@@ -33,6 +33,7 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlgrhlp.hxx>
+#include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -270,6 +271,10 @@ public:
                         else if (26 == year && month == 2)
                         {
                             mnGeneratorVersion = SvXMLImport::LO_262;
+                        }
+                        else if (26 == year && month == 8)
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_268;
                         }
                         else if (0 < year)
                         {

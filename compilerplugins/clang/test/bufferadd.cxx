@@ -117,6 +117,16 @@ void f7()
     OStringBuffer noelf7("xxx");
     noelf7 = "xxx" + noelf7 + "xxx";
 }
+char16_t rnd();
+void f8(sal_Int32 n)
+{
+    OUStringBuffer buf;
+    auto p = buf.appendUninitialized(n);
+    for (sal_Int32 i = 0; i != n; ++i)
+    {
+        *p++ = rnd();
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

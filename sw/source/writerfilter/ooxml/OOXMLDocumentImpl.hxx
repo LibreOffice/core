@@ -104,7 +104,10 @@ private:
     void resolveCommentsExtendedStream(Stream & rStream);
 
 public:
-    OOXMLDocumentImpl(OOXMLStream::Pointer_t  pStream, css::uno::Reference<css::task::XStatusIndicator> xStatusIndicator, bool bSkipImages, const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
+    OOXMLDocumentImpl(OOXMLStream::Pointer_t  pStream,
+                      css::uno::Reference<css::task::XStatusIndicator> xStatusIndicator,
+                      bool bSkipImages, const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
+                      const rtl::Reference<oox::shape::ShapeFilterBase>& rxShapeFilterBase);
     virtual ~OOXMLDocumentImpl() override;
 
     virtual void resolve(Stream & rStream) override;

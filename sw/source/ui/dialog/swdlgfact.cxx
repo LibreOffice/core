@@ -56,7 +56,6 @@
 #include <selglos.hxx>
 #include <splittbl.hxx>
 #include <srtdlg.hxx>
-#include <tautofmt.hxx>
 #include <tblnumfm.hxx>
 #include <wrap.hxx>
 #include <tabledlg.hxx>
@@ -628,27 +627,6 @@ public:
 VclPtr<AbstractSwSelGlossaryDlg> SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg(weld::Window *pParent, const OUString &rShortName)
 {
     return VclPtr<AbstractSwSelGlossaryDlg_Impl>::Create(pParent, rShortName);
-}
-
-namespace
-{
-class AbstractSwAutoFormatDlg_Impl
-    : public AbstractDialogImpl_NoSync<AbstractSwAutoFormatDlg, SwAutoFormatDlg>
-{
-public:
-    using AbstractDialogImpl_NoSync::AbstractDialogImpl_NoSync;
-    std::unique_ptr<SwTableAutoFormat> FillAutoFormatOfIndex() const override
-    {
-        return m_pDlg->FillAutoFormatOfIndex();
-    }
-    void Apply() override { m_pDlg->Apply(); }
-};
-}
-
-VclPtr<AbstractSwAutoFormatDlg> SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(weld::Window* pParent,
-    SwWrtShell* pShell, bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat)
-{
-    return VclPtr<AbstractSwAutoFormatDlg_Impl>::Create(pParent, pShell, bSetAutoFormat, pSelFormat);
 }
 
 VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType )

@@ -267,7 +267,7 @@ $(call gb_CppunitTest_get_target,$(1)) : $(if $(filter $(2),$(true)),, \
 	 )
 else ifeq ($(OS),MACOSX)
 $(call gb_CppunitTest_get_target,$(1)): $(call gb_Library_get_target,vclplug_osx)
-else ifeq ($(OS),WNT)
+else ifeq ($(OS)-$(USE_HEADLESS_CODE),WNT-)
 $(call gb_CppunitTest_get_target,$(1)): $(call gb_Library_get_target,vclplug_win)
 endif
 

@@ -23,7 +23,7 @@ $(eval $(call gb_ExternalProject_register_targets,firebird,\
 ))
 
 firebird_BUILDDIR = $(EXTERNAL_WORKDIR)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird
-firebird_VERSION := 3.0.7
+firebird_VERSION := 3.0.13
 
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_Trace_StartRange,firebird,EXTERNAL)
@@ -88,7 +88,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		&& LC_ALL=C $(MAKE) \
 			$(if $(ENABLE_DEBUG),Debug) SHELL='$(SHELL)' $(if $(filter LINUX,$(OS)),CXXFLAGS="$$CXXFLAGS") \
 			MATHLIB="$(if $(SYSTEM_LIBTOMMATH),$(LIBTOMMATH_LIBS),-L$(gb_UnpackedTarball_workdir)/libtommath -ltommath)" \
-			LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(gb_UnpackedTarball_workdir)/icu/source/lib)))' \
+			LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(gb_UnpackedTarball_workdir)/icu/source/lib)$(call gb_Helper_extend_ld_path,$(firebird_BUILDDIR)/lib)))' \
 		$(if $(filter MACOSX,$(OS)), \
 			&& install_name_tool -id @__________________________________________________OOO/libfbclient.dylib.$(firebird_VERSION) \
 				-delete_rpath @loader_path/.. \

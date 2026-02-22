@@ -55,6 +55,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>

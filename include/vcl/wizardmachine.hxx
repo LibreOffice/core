@@ -21,6 +21,7 @@
 #include <memory>
 #include <vcl/dllapi.h>
 #include <vcl/builderpage.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/weld/AssistantController.hxx>
 #include <vcl/weld/DialogController.hxx>
 

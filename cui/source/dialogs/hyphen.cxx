@@ -27,6 +27,9 @@
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <utility>
 
 #define HYPH_POS_CHAR       '='
@@ -35,7 +38,7 @@
 
 using namespace css;
 
-IMPL_LINK_NOARG(SvxHyphenWordDialog, CursorChangeHdl_Impl, weld::Entry&, void)
+IMPL_LINK_NOARG(SvxHyphenWordDialog, CursorChangeHdl_Impl, weld::TextWidget&, void)
 {
     int nStart, nEnd;
     m_xWordEdit->get_selection_bounds(nStart, nEnd);

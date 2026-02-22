@@ -47,7 +47,10 @@ OString osl::OUStringToOString(std::u16string_view s)
 
 #if HAVE_FEATURE_MACOSX_SANDBOX
 
+#include <premac.h>
 #include <Foundation/Foundation.h>
+#include <postmac.h>
+
 #include <Security/Security.h>
 #include <mach-o/dyld.h>
 

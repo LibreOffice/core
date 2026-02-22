@@ -173,20 +173,20 @@ namespace
     {
         static const SfxItemPropertyMapEntry aMap[] =
         {
-            { SC_UNO_CALCASSHOWN,  PROP_UNO_CALCASSHOWN ,  cppu::UnoType<bool>::get(),          0, 0},
-            { SC_UNO_DEFTABSTOP,   PROP_UNO_DEFTABSTOP  ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
-            { SC_UNO_IGNORECASE,   PROP_UNO_IGNORECASE  ,  cppu::UnoType<bool>::get(),          0, 0},
-            { SC_UNO_ITERENABLED,  PROP_UNO_ITERENABLED ,  cppu::UnoType<bool>::get(),          0, 0},
-            { SC_UNO_ITERCOUNT,    PROP_UNO_ITERCOUNT   ,  cppu::UnoType<sal_Int32>::get(),    0, 0},
-            { SC_UNO_ITEREPSILON,  PROP_UNO_ITEREPSILON ,  cppu::UnoType<double>::get(),       0, 0},
-            { SC_UNO_LOOKUPLABELS, PROP_UNO_LOOKUPLABELS,  cppu::UnoType<bool>::get(),          0, 0},
-            { SC_UNO_MATCHWHOLE,   PROP_UNO_MATCHWHOLE  ,  cppu::UnoType<bool>::get(),          0, 0},
-            { SC_UNO_NULLDATE,     PROP_UNO_NULLDATE    ,  cppu::UnoType<util::Date>::get(),   0, 0},
+            { SC_UNO_CALCASSHOWN,  static_cast<sal_uInt16>(ScPropUnoId::CalcAsShown) ,  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_DEFTABSTOP,   static_cast<sal_uInt16>(ScPropUnoId::DefTabStop)  ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
+            { SC_UNO_IGNORECASE,   static_cast<sal_uInt16>(ScPropUnoId::IgnoreCase)  ,  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_ITERENABLED,  static_cast<sal_uInt16>(ScPropUnoId::IterEnabled) ,  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_ITERCOUNT,    static_cast<sal_uInt16>(ScPropUnoId::IterCount)   ,  cppu::UnoType<sal_Int32>::get(),    0, 0},
+            { SC_UNO_ITEREPSILON,  static_cast<sal_uInt16>(ScPropUnoId::IterEpsilon) ,  cppu::UnoType<double>::get(),       0, 0},
+            { SC_UNO_LOOKUPLABELS, static_cast<sal_uInt16>(ScPropUnoId::LookupLabels),  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_MATCHWHOLE,   static_cast<sal_uInt16>(ScPropUnoId::MatchWhole)  ,  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_NULLDATE,     static_cast<sal_uInt16>(ScPropUnoId::NullDate)    ,  cppu::UnoType<util::Date>::get(),   0, 0},
             // SpreadsheetDocumentSettings supports "SpellOnline" so we must claim to support this here too
             { SC_UNO_SPELLONLINE,  0 ,                     cppu::UnoType<bool>::get(),          0, 0},
-            { SC_UNO_STANDARDDEC,  PROP_UNO_STANDARDDEC ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
-            { SC_UNO_REGEXENABLED, PROP_UNO_REGEXENABLED,  cppu::UnoType<bool>::get(),          0, 0},
-            { SC_UNO_WILDCARDSENABLED, PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),  0, 0},
+            { SC_UNO_STANDARDDEC,  static_cast<sal_uInt16>(ScPropUnoId::StandardDec),  cppu::UnoType<sal_Int16>::get(),    0, 0},
+            { SC_UNO_REGEXENABLED, static_cast<sal_uInt16>(ScPropUnoId::RegexEnabled),  cppu::UnoType<bool>::get(),          0, 0},
+            { SC_UNO_WILDCARDSENABLED, static_cast<sal_uInt16>(ScPropUnoId::WildcardsEnabled), cppu::UnoType<bool>::get(),  0, 0},
         };
         return aMap;
     }

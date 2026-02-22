@@ -578,7 +578,7 @@ void SwXMLImport::startDocument()
             // Insert all content into the new node
             pPaM->Move( fnMoveBackward );
             pDoc->SetTextFormatColl
-                ( *pPaM, pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false ) );
+                ( *pPaM, pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD, false ) );
         }
     }
 
@@ -1320,6 +1320,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bDropCapPunctuation = false;
     bool bDoNotMirrorRtlDrawObjs = false;
     bool bIgnoreHiddenCharsForLineCalculation = false;
+    bool bListLabelAlignmentIgnoresDirection = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
     const PropertyValue* currentDatabaseCommand = nullptr;
@@ -1434,6 +1435,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 else if (rValue.Name == "IgnoreHiddenCharsForLineCalculation")
                 {
                     bIgnoreHiddenCharsForLineCalculation = true;
+                }
+                else if (rValue.Name == "ListLabelAlignmentIgnoresDirection")
+                {
+                    bListLabelAlignmentIgnoresDirection = true;
                 }
             }
             catch( Exception& )
@@ -1629,6 +1634,15 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if ( !bDropCapPunctuation )
     {
         xProps->setPropertyValue( u"DropCapPunctuation"_ustr, Any( false ) );
+    }
+
+    // tdf#72640: LO 26.2 and previous versions stored fo:text-align incorrectly for lists.
+    // Other programs generate compliant ODTs, so only turn on the compat flag by default
+    // for known-bad generators.
+    if (!bListLabelAlignmentIgnoresDirection
+        && isGeneratorVersionOlderThan(SvXMLImport::AOO_4x, SvXMLImport::LO_268))
+    {
+        xProps->setPropertyValue(u"ListLabelAlignmentIgnoresDirection"_ustr, Any(true));
     }
 
     SwDoc *pDoc = getDoc();

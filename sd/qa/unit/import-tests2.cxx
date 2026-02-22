@@ -1501,6 +1501,18 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149985)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf166030)
+{
+    // Without the fix in place, no bullet spacing was applied
+    createSdImpressDoc("ppt/tdf166030.ppt");
+    const SdrPage* pPage = GetPage(1);
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET);
+    const SvxNumberFormat& rFmt = pNumFmt->GetNumRule().GetLevel(1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), rFmt.GetAbsLSpace());
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf150770)
 {
     // Without the fix in place, this test would have failed to load the file
@@ -1552,27 +1564,43 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testDescriptionImport)
     CPPUNIT_ASSERT_EQUAL(u"We Can Do It!"_ustr, sDesc);
 }
 
-CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf83247)
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf83247_odp_loopPause10)
 {
-    auto GetPause = [this](const OUString& sSrc) {
-        loadFromFile(sSrc);
-        uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(mxComponent,
-                                                                                  uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xPresentationProps(
-            xPresentationSupplier->getPresentation(), uno::UNO_QUERY_THROW);
+    // Check that presentation:pause attribute is imported correctly
+    loadFromFile(u"odp/loopPause10.odp");
+    uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(mxComponent,
+                                                                              uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
+                                                           uno::UNO_QUERY_THROW);
 
-        auto retVal = xPresentationProps->getPropertyValue(u"Pause"_ustr);
-        return retVal.get<sal_Int32>();
-    };
+    auto retVal = xPresentationProps->getPropertyValue(u"Pause"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), retVal.get<sal_Int32>());
+}
 
-    // 1. Check that presentation:pause attribute is imported correctly
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), GetPause(u"odp/loopPause10.odp"_ustr));
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf83247_odp_loopNoPause)
+{
+    // ODF compliance: if presentation:pause attribute is absent, it must be treated as 0
+    loadFromFile(u"odp/loopNoPause.odp");
+    uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(mxComponent,
+                                                                              uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
+                                                           uno::UNO_QUERY_THROW);
 
-    // 2. ODF compliance: if presentation:pause attribute is absent, it must be treated as 0
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetPause(u"odp/loopNoPause.odp"_ustr));
+    auto retVal = xPresentationProps->getPropertyValue(u"Pause"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), retVal.get<sal_Int32>());
+}
 
-    // 3. Import PPT: pause should be 0
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetPause(u"ppt/loopNoPause.ppt"_ustr));
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf83247_ppt_loopNoPause)
+{
+    // Import PPT: pause should be 0
+    loadFromFile(u"ppt/loopNoPause.ppt");
+    uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(mxComponent,
+                                                                              uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
+                                                           uno::UNO_QUERY_THROW);
+
+    auto retVal = xPresentationProps->getPropertyValue(u"Pause"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), retVal.get<sal_Int32>());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf47365)
@@ -2296,6 +2324,37 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf169524)
     sal_Int32 nLeftMargin;
     xParagraph->getPropertyValue(u"ParaLeftMargin"_ustr) >>= nLeftMargin;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nLeftMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf168109)
+{
+    createSdImpressDoc("odp/tdf168109.fodp");
+
+    // Slide 1
+    {
+        auto xPage = getPage(0).queryThrow<presentation::XPresentationPage>();
+        auto xNotesPage = xPage->getNotesPage();
+        auto xThumbnail = getShape(0, xNotesPage);
+        auto xDescriptor = xThumbnail.queryThrow<drawing::XShapeDescriptor>();
+
+        CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.PageShape"_ustr,
+                             xDescriptor->getShapeType());
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(1)),
+                             xThumbnail->getPropertyValue(u"PageNumber"_ustr));
+    }
+
+    // Slide 2
+    {
+        auto xPage = getPage(1).queryThrow<presentation::XPresentationPage>();
+        auto xNotesPage = xPage->getNotesPage();
+        auto xThumbnail = getShape(0, xNotesPage);
+        auto xDescriptor = xThumbnail.queryThrow<drawing::XShapeDescriptor>();
+
+        CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.PageShape"_ustr,
+                             xDescriptor->getShapeType());
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(2)),
+                             xThumbnail->getPropertyValue(u"PageNumber"_ustr));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

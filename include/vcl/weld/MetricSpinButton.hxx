@@ -10,8 +10,9 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <tools/fldunit.hxx>
 #include <vcl/weld/SpinButton.hxx>
+
+enum class FieldUnit : sal_uInt16;
 
 namespace weld
 {

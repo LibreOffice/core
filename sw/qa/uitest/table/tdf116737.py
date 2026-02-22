@@ -21,7 +21,7 @@ class tdf116737(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable") as xDialog:
 
                 formatlbinstable = xDialog.getChild("formatlbinstable")
-                entry = formatlbinstable.getChild("11") #Simple List Shaded
+                entry = formatlbinstable.getChild("10") #Simple List Shaded
                 entry.executeAction("SELECT", tuple())
 
 

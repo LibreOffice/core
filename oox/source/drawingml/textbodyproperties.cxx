@@ -128,6 +128,26 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         nOff = (nOff + 1) % aProps.size();
     }
 
+    // Check if left and right are set
+    if (maTextDistanceValues[0] && maTextDistanceValues[2])
+    {
+        double nWidth = rTextAreaSize.getWidth();
+
+        double nLeft = *maTextDistanceValues[0];
+        double nRight = *maTextDistanceValues[2];
+
+        // Check if left + right is more than text area width.
+        // If yes, we need to adjust the values as defined in OOXML.
+        // (Overload zero width to mean don't adjust)
+        if (nWidth > 0 && nLeft + nRight >= nWidth)
+        {
+            double diffFactor = (nLeft + nRight - nWidth) / 2.0;
+
+            maTextDistanceValues[0] = nLeft - diffFactor;
+            maTextDistanceValues[2] = nRight - diffFactor;
+        }
+    }
+
     // Check if bottom and top are set
     if (maTextDistanceValues[1] && maTextDistanceValues[3])
     {

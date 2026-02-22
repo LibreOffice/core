@@ -30,8 +30,8 @@ QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
                      &QtInstanceComboBox::signalChanged);
 }
 
-void QtInstanceComboBox::insert(int nPos, const OUString& rStr, const OUString* pId,
-                                const OUString* pIconName, VirtualDevice* pImageSurface)
+void QtInstanceComboBox::do_insert(int nPos, const OUString& rStr, const OUString* pId,
+                                   const OUString* pIconName, VirtualDevice* pImageSurface)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {

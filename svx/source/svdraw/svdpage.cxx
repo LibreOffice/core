@@ -408,6 +408,8 @@ rtl::Reference<SdrObject> SdrObjList::RemoveObject(size_t nObjNum)
 
     const size_t nCount = GetObjCount();
     rtl::Reference<SdrObject> pObj=maList[nObjNum];
+    if (pObj->IsDeleteProtect())
+        return nullptr;
     RemoveObjectFromContainer(nObjNum);
 
     DBG_ASSERT(pObj!=nullptr,"Object to remove not found.");
@@ -779,9 +781,11 @@ void SdrObjList::ImplReformatAllEdgeObjects(const SdrObjList& rObjList)
     for(size_t nIdx(0), nCount(rObjList.GetObjCount()); nIdx < nCount; ++nIdx)
     {
         SdrObject* pSdrObject(rObjList.GetObjectForNavigationPosition(nIdx));
-        const SdrObjList* pChildren(pSdrObject->getChildrenOfSdrObject());
-        const bool bIsGroup(nullptr != pChildren);
-        if(!bIsGroup)
+        if (const SdrObjList* pChildren = pSdrObject->getChildrenOfSdrObject())
+        {
+            ImplReformatAllEdgeObjects(*pChildren);
+        }
+        else
         {
             // Check IsVirtualObj because sometimes we get SwDrawVirtObj here
             if (pSdrObject->GetObjIdentifier() == SdrObjKind::Edge
@@ -790,10 +794,6 @@ void SdrObjList::ImplReformatAllEdgeObjects(const SdrObjList& rObjList)
                 SdrEdgeObj* pSdrEdgeObj = static_cast< SdrEdgeObj* >(pSdrObject);
                 pSdrEdgeObj->Reformat();
             }
-        }
-        else
-        {
-            ImplReformatAllEdgeObjects(*pChildren);
         }
     }
 }
@@ -1808,7 +1808,7 @@ SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 // #i75566# GetBackgroundColor -> GetPageBackgroundColor and bScreenDisplay hint value
 Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDisplay ) const
 {
-    Color aColor;
+    Color aColor(COL_WHITE);
 
     if(bScreenDisplay && (!pView || pView->GetApplicationDocumentColor() == COL_AUTO))
     {
@@ -1820,7 +1820,7 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDi
             aColor = aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor;
         }
     }
-    else
+    else if (pView)
     {
         aColor = pView->GetApplicationDocumentColor();
     }

@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <delcldlg.hxx>
+#include <vcl/weld/Builder.hxx>
 
 static sal_uInt8 nDelItemChecked = 0;
 

@@ -856,7 +856,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet(
     // I re-designed this to iterate over the source ItemSet (rSet) and add Items
     // as needed to the target ItemSet m_OldSet. This is tricky since some NonShareable
     // 'special' Items get special treatment.
-    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
+    for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.Next())
     {
         // check if Item is intended to be contained
         if (rSetArr.contains(aIter.GetCurWhich()))
@@ -1310,18 +1310,14 @@ void SwHistory::CopyFormatAttr(
     if(!rSet.Count())
         return;
 
-    SfxItemIter aIter(rSet);
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-    do
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         if(!IsInvalidItem(pItem))
         {
             AddPoolItem(pItem, pItem, nNodeIdx);
         }
-
-        pItem = aIter.NextItem();
-
-    } while(pItem);
+    }
 }
 
 void SwHistory::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -1494,9 +1490,10 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
 #ifndef NDEBUG
     if ( m_pHistory && bInserted )
     {
-        SfxItemIter aIter(rSet);
-        for (SfxPoolItem const* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
-        {   // check that the history recorded a hint to reset every item
+        for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
+        {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
+            // check that the history recorded a hint to reset every item
             sal_uInt16 const nWhich(pItem->Which());
             sal_uInt16 const nExpected(
                 (isCHRATR(nWhich) || RES_TXTATR_UNKNOWN_CONTAINER == nWhich)
@@ -1554,9 +1551,9 @@ void SwRegHistory::MakeSetWhichIds()
     }
     if( pSet && pSet->Count() )
     {
-        SfxItemIter aIter( *pSet );
-        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        for (SfxItemIter aIter( *pSet ); !aIter.IsAtEnd(); aIter.Next())
         {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
             sal_uInt16 nW = pItem->Which();
             m_WhichIdSet.insert( nW );
         }

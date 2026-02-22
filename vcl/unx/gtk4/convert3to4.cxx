@@ -1605,7 +1605,6 @@ void builder_add_from_gtk3_file(GtkBuilder* pBuilder, const OUString& rUri)
         sal_Int32 nRead = xInput->readBytes(bytes, std::max<sal_Int32>(nToRead, 4096));
         if (!nRead)
             break;
-        // fprintf(stderr, "text is %s\n", reinterpret_cast<const gchar*>(bytes.getArray()));
         bool rc = gtk_builder_add_from_string(
             pBuilder, reinterpret_cast<const gchar*>(bytes.getArray()), nRead, &err);
         if (!rc)

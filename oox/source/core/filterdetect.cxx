@@ -37,6 +37,7 @@
 
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <comphelper/docpasswordrequest.hxx>
 #include <o3tl/string_view.hxx>
 #include <utility>
 

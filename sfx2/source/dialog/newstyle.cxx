@@ -23,6 +23,10 @@
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 // Private methods ------------------------------------------------------

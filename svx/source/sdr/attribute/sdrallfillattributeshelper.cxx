@@ -19,6 +19,7 @@
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/utils/bgradient.hxx>

@@ -12,7 +12,8 @@
 #ifndef INCLUDED_I18NLANGTAG_APPLELANGID_H
 #define INCLUDED_I18NLANGTAG_APPLELANGID_H
 
-#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/i18nlangtagdllapi.h>
+class LanguageTag;
 
 enum class AppleLanguageId : unsigned short
 {

@@ -19,6 +19,7 @@
 #include <svx/svxids.hrc>
 #include <svx/xcolit.hxx>
 #include <svl/itemset.hxx>
+#include <tools/fldunit.hxx>
 
 namespace svx::sidebar
 {

@@ -57,7 +57,7 @@ namespace
 bool FootnoteSeparatorHeightFromParagraph(SwDoc& rDoc, SwTwips& rHeight)
 {
         const SwTextFormatColl* pDefaultParaFormat
-            = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+            = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(SwPoolFormatId::COLL_STANDARD);
         if (!pDefaultParaFormat)
         {
             return false;
@@ -69,8 +69,8 @@ bool FootnoteSeparatorHeightFromParagraph(SwDoc& rDoc, SwTwips& rHeight)
             return false;
         }
 
-        SwFontAccess aFontAccess(pDefaultParaFormat, pSh);
-        SwFont aFont(aFontAccess.Get()->GetFont());
+        const SwFontObj& rFontAccess = pDefaultParaFormat->GetFontObj(pSh);
+        SwFont aFont(rFontAccess.GetFont());
         OutputDevice& rOut = pSh->GetRefDev();
         rHeight = aFont.GetHeight(pSh, rOut);
         return true;

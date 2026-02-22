@@ -19,8 +19,12 @@
 
 #include <basic/sberrors.hxx>
 #include <tools/lineend.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Dialog.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weld.hxx>

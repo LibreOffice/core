@@ -18,6 +18,7 @@
  */
 
 #include "GlowSoftEgdeShadowTools.hxx"
+#include <tools/color.hxx>
 #include <vcl/bitmap/BitmapBasicMorphologyFilter.hxx>
 #include <vcl/bitmap/BitmapFilterStackBlur.hxx>
 

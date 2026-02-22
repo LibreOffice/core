@@ -10,8 +10,9 @@
 #include <sal/config.h>
 
 #include <string_view>
-#include <test/unoapixml_test.hxx>
+#include <test/unoapi_test.hxx>
 
+#include <comphelper/scopeguard.hxx>
 #include <sal/macros.h>
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
@@ -66,11 +67,11 @@ bool isValidTiledBackgroundId(const OUString& sId)
 
 }
 
-class SdSVGFilterTest : public UnoApiXmlTest
+class SdSVGFilterTest : public UnoApiTest
 {
 public:
     SdSVGFilterTest()
-        : UnoApiXmlTest(u"/sd/qa/unit/data/odp/"_ustr)
+        : UnoApiTest(u"/sd/qa/unit/data/odp/"_ustr)
     {
     }
 
@@ -269,7 +270,7 @@ public:
         aSysLocaleOptions.SetUILocaleConfigString(aLangISO);
 
         auto aSavedSettings = Application::GetSettings();
-        Resetter aResetter([&]() { Application::SetSettings(aSavedSettings); });
+        comphelper::ScopeGuard g([&]() { Application::SetSettings(aSavedSettings); });
         AllSettings aSettings(aSavedSettings);
         aSettings.SetLanguageTag(aLangISO, true);
         Application::SetSettings(aSettings);

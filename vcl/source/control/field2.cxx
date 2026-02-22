@@ -32,12 +32,14 @@
 #include <vcl/toolkit/field.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <vcl/weld/weldutils.hxx>
 
 #include <svdata.hxx>
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hdl>
+#include <com/sun/star/i18n/Calendar2.hpp>
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
@@ -3163,7 +3165,7 @@ namespace weld
         return Formatter::ParseResult(bRet ? TRISTATE_TRUE : TRISTATE_FALSE, fValue);
     }
 
-    IMPL_LINK(TimeFormatter, CursorChangedHdl, weld::Entry&, rEntry, void)
+    IMPL_LINK(TimeFormatter, CursorChangedHdl, weld::TextWidget&, rEntry, void)
     {
         int nStartPos, nEndPos;
         rEntry.get_selection_bounds(nStartPos, nEndPos);

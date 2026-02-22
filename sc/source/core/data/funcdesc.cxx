@@ -378,7 +378,7 @@ bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
     return (ScGlobal::GetCaseCollator().compareString(*a->mxFuncName, *b->mxFuncName ) < 0);
 }
 
-#define ENTRY(CODE) CODE, SAL_N_ELEMENTS(CODE)
+#define ENTRY(CODE) CODE, std::size(CODE)
 
 ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
     : mbEnglishFunctionNames( bEnglishFunctionNames )
@@ -818,7 +818,7 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
     // otherwise the sub resources within the resource blocks and the
     // resource blocks themselves would had to be ordered according to
     // OpCodes, which is utopian...
-    ScFuncDescCore const * pDescsEnd = aDescs + SAL_N_ELEMENTS(aDescs);
+    ScFuncDescCore const * pDescsEnd = aDescs + std::size(aDescs);
     for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
     {
         const ScFuncDescCore *pEntry = std::lower_bound(aDescs, pDescsEnd, i,
@@ -1236,7 +1236,7 @@ static void ScFuncRes(const ScFuncDescCore &rEntry, ScFuncDesc* pDesc, bool& rbS
         nVarArgsSet = 1;
         nArgs -= VAR_ARGS - nVarArgsSet;
     }
-    assert(nArgs <= SAL_N_ELEMENTS(rEntry.aOptionalArgs));
+    assert(nArgs <= std::size(rEntry.aOptionalArgs));
     if (nArgs)
     {
         pDesc->nVarArgsStart = nArgs - nVarArgsSet;

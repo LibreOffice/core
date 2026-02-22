@@ -22,6 +22,8 @@
    * Also provides analysis of the node functions
    */
 
+#include <cstdint>
+
 enum class SmNodeType : int_fast16_t
 {
     Table, // tree header

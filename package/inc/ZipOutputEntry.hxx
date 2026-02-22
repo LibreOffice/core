@@ -30,6 +30,7 @@
 #include <comphelper/threadpool.hxx>
 #include <unotools/tempfile.hxx>
 #include "CRC32.hxx"
+#include "ZipEntry.hxx"
 #include <atomic>
 #include <exception>
 

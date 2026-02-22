@@ -40,10 +40,13 @@
 #include <vcl/event.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weld/Entry.hxx>
 #include <rtl/ustring.hxx>
 #include <swabstdlg.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Toolbar.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

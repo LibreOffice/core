@@ -3152,7 +3152,7 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
             targetType == SwAuthorityField::TargetType::UseDisplayURL
             || targetType == SwAuthorityField::TargetType::UseTargetURL)
         {
-            // Since the target type specifies to use an URL, link to it
+            // Since the target type specifies to use a URL, link to it
             const OUString aURL = rAuthorityField.GetAbsoluteURL();
             if (aURL.getLength() == 0)
             {

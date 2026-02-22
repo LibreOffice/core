@@ -14,7 +14,10 @@ define sc_unoapi_common
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_$(1)))
 
-$(eval $(call gb_CppunitTest_use_external,sc_$(1),boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sc_$(1), \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_Library_use_common_precompiled_header,sc_$(1)))
 
@@ -33,6 +36,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_$(1), \
     sal \
     salhelper \
     sc \
+    sfx \
     subsequenttest \
     test \
     unotest \
@@ -43,6 +47,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_$(1), \
 
 $(eval $(call gb_CppunitTest_set_include,sc_$(1),\
     -I$(SRCDIR)/sc/inc \
+    -I$(SRCDIR)/sc/source/ui/inc \
     $$(INCLUDE) \
 ))
 

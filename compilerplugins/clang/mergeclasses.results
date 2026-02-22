@@ -517,7 +517,7 @@ merge detail::ScVbaHlinkContainerMember with ScVbaHyperlinks
 merge drawinglayer::primitive2d::ObjectAndViewTransformationDependentPrimitive2D with drawinglayer::primitive2d::DiscreteBitmapPrimitive2D
 merge drawinglayer::primitive2d::ViewTransformationDependentPrimitive2D with drawinglayer::primitive2d::WallpaperBitmapPrimitive2D
 merge drawinglayer::processor3d::DefaultProcessor3D with drawinglayer::processor3d::ZBufferProcessor3D
-merge drawinglayer::texture::GeoTexSvxBitmapEx with drawinglayer::texture::GeoTexSvxBitmapExTiled
+merge drawinglayer::texture::GeoTexSvxBitmap with drawinglayer::texture::GeoTexSvxBitmapTiled
 merge fileaccess::Notifier with fileaccess::BaseContent
 maybe merge filter::config::BaseContainer with cppu::ImplInheritanceHelper, in modules filter and cppuhelper
 maybe merge formula::ExternalReferenceHelper with ScExternalRefManager, in modules formula and sc
@@ -684,8 +684,8 @@ merge svx::IControllerFeatureInvalidation with FmXFormShell
 merge svx::IFocusObserver with svx::FmTextControlShell
 maybe merge svx::ODataAccessObjectTransferable with dbaui::ODataClipboard, in modules svx and dbaccess
 merge svx::RegistrationItemSetHolder with svx::DatabaseRegistrationDialog
-maybe merge svx::diagram::DiagramData with oox::drawingml::DiagramData, in modules svx and oox
-maybe merge svx::diagram::IDiagramHelper with oox::drawingml::AdvancedDiagramHelper, in modules svx and oox
+maybe merge svx::diagram::DiagramData_svx with oox::drawingml::DiagramData, in modules svx and oox
+maybe merge svx::diagram::DiagramHelper_svx with oox::drawingml::DiagramHelper_oox, in modules svx and oox
 maybe merge svx::sidebar::InspectorTextPanel with sw::sidebar::WriterInspectorTextPanel, in modules svx and sw
 merge svx::sidebar::SvxShapeCommandsMap with svx::sidebar::DefaultShapesPanel
 merge svxform::DispatchInterceptor with svxform::FormController

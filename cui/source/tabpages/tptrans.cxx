@@ -31,6 +31,7 @@
 #include <o3tl/untaint.hxx>
 #include <cuitabarea.hxx>
 #include <svl/intitem.hxx>
+#include <vcl/weld/Builder.hxx>
 
 using namespace com::sun::star;
 

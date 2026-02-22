@@ -23,6 +23,7 @@
 #include "wordvbahelper.hxx"
 #include "vbarange.hxx"
 #include <unotxdoc.hxx>
+#include <unotextcursor.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::word;
@@ -57,7 +58,9 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
         if( bRich )
         {
             // check if it is a blank paragraph
-            uno::Reference< text::XParagraphCursor > xParaCursor( xTC, uno::UNO_QUERY_THROW );
+            rtl::Reference< SwXTextCursor > xParaCursor = dynamic_cast<SwXTextCursor*>( xTC.get() );
+            if (!xParaCursor)
+                throw uno::RuntimeException();
             if( xParaCursor->isStartOfParagraph() && xParaCursor->isEndOfParagraph() )
             {
                 //remove the blank paragraph

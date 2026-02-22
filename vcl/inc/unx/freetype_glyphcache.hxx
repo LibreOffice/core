@@ -50,6 +50,7 @@ private:
     int                     mnFileSize;
     int                     mnRefCount;
     int                     mnLangBoost;
+    intptr_t                mnHandle;
 };
 
 // FreetypeFontInfo corresponds to an unscaled font face

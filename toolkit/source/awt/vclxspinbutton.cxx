@@ -23,6 +23,7 @@
 
 #include <vcl/toolkit/spin.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclevent.hxx>
 #include "vclxwindows_internal.hxx"
 
 namespace toolkit

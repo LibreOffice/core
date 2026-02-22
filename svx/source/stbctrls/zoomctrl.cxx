@@ -26,6 +26,8 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/status.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/Menu.hxx>
 #include <vcl/weld/weldutils.hxx>
 #include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
@@ -41,6 +43,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 

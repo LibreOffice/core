@@ -21,6 +21,8 @@
 #include <res_Titles.hxx>
 #include <ObjectNameProvider.hxx>
 
+#include <vcl/weld/Dialog.hxx>
+
 namespace chart
 {
 SchTitleDlg::SchTitleDlg(weld::Window* pWindow, const TitleDialogData& rInput)

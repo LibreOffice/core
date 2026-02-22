@@ -12,6 +12,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <libwps/libwps.h>
 

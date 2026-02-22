@@ -30,6 +30,7 @@
 #include <unonames.hxx>
 
 #include <svtools/valueset.hxx>
+#include <vcl/weld/ScrolledWindow.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace css;

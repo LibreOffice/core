@@ -19,13 +19,16 @@
 
 #pragma once
 
-#include <tools/color.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/weld/Entry.hxx>
 
+#include <memory>
+
 namespace weld { class Entry; }
 
+class Color;
 struct ImplSVEvent;
 
 namespace weld {

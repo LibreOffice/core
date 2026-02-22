@@ -28,6 +28,7 @@
 #include <svl/filenotation.hxx>
 #include <sfx2/docfilt.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/weld/Builder.hxx>
 
 namespace abp
 {

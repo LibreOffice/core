@@ -1430,7 +1430,7 @@ PresenterBitmapDescriptor::Mode Button::GetMode() const
     if ( ! IsEnabled())
         return PresenterBitmapDescriptor::Disabled;
     else if (mbIsPressed)
-        return PresenterBitmapDescriptor::ButtonDown;
+        return PresenterBitmapDescriptor::Normal;
     else if (mbIsOver)
         return PresenterBitmapDescriptor::MouseOver;
     else

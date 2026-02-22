@@ -19,198 +19,70 @@
 
 #pragma once
 
-/*************************************************************************
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    The structure of auto formatting should not be changed. It is used
-    by various code of Writer and Calc. If a change is necessary, the
-    source code of both applications must be changed!
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-**************************************************************************/
-
-#include <svl/poolitem.hxx>
-#include <svx/autoformathelper.hxx>
-
+#include <sal/types.h>
+#include <svx/TableAutoFmt.hxx>
+#include <svx/TableStylesParser.hxx>
 #include "scdllapi.h"
-#include "zforauto.hxx"
 
 #include <array>
 #include <memory>
-#include <map>
-#include <climits>
+#include "document.hxx"
 
-class SfxItemSet;
-class ScDocument;
-
-/**
-A binary blob of writer-specific data. This data typically consists of types that are
-unavailable to Calc (e.g. SwFmtVertOrient), or that Calc doesn't care about.
-
-@remarks Note that in autoformat versions prior to AUTOFORMAT_DATA_ID_31005, Calc
-logic handled and stored several writer-specific items (such as ScAutoFormatDataField::aAdjust).
-That logic was preserved. From _31005 onward, writer-specific data should be handled by
-blobs to avoid needlessly complicating the Calc logic.
-*/
-struct AutoFormatSwBlob
+class ScAutoFormatDataField : public SvxAutoFormatDataField
 {
-    std::unique_ptr<sal_uInt8[]> pData;
-    std::size_t size;
-
-    AutoFormatSwBlob() : size(0)
-    {
-    }
-    AutoFormatSwBlob(const AutoFormatSwBlob&) = delete;
-    const AutoFormatSwBlob& operator=(const AutoFormatSwBlob&) = delete;
-
-    void Reset()
-    {
-        pData.reset();
-        size = 0;
-    }
-};
-
-/// Struct with version numbers of the Items
-struct ScAfVersions : public AutoFormatVersions
-{
-private:
-    AutoFormatSwBlob swVersions;
-
-public:
-    ScAfVersions();
-
-    void Load( SvStream& rStream, sal_uInt16 nVer );
-    void Write(SvStream& rStream, sal_uInt16 fileVersion);
-};
-
-/// Contains all items for one cell of a table autoformat.
-class ScAutoFormatDataField : public AutoFormatBase
-{
-private:
-    AutoFormatSwBlob                            m_swFields;
-
-    // number format
-    ScNumFormatAbbrev                           aNumFormat;
-
 public:
     ScAutoFormatDataField();
-    ScAutoFormatDataField( const ScAutoFormatDataField& rCopy );
+    ScAutoFormatDataField(const ScAutoFormatDataField& rCopy);
+    ScAutoFormatDataField(const SvxAutoFormatDataField& rCopy);
     ~ScAutoFormatDataField();
 
-    // block assignment operator
-    ScAutoFormatDataField& operator=(const ScAutoFormatDataField& rRef) = delete;
-
-    // number format
-    const ScNumFormatAbbrev&    GetNumFormat() const    { return aNumFormat; }
-
-    // number format
-    void    SetNumFormat( const ScNumFormatAbbrev& rNumFormat )     { aNumFormat = rNumFormat; }
-
-    bool    Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer );
-    bool    Save( SvStream& rStream, sal_uInt16 fileVersion );
 };
 
-class SAL_DLLPUBLIC_RTTI ScAutoFormatData
+class SAL_DLLPUBLIC_RTTI ScAutoFormatData : public SvxAutoFormatData
 {
 private:
-    OUString               aName;
-    sal_uInt16                  nStrResId;
-    // common flags of Calc and Writer
-    bool                        bIncludeFont : 1;
-    bool                        bIncludeJustify : 1;
-    bool                        bIncludeFrame : 1;
-    bool                        bIncludeBackground : 1;
-
-    // Calc specific flags
-    bool                        bIncludeValueFormat : 1;
-    bool                        bIncludeWidthHeight : 1;
-
-    // Writer-specific data
-    AutoFormatSwBlob m_swFields;
-
-    std::array<std::unique_ptr<ScAutoFormatDataField>,16> ppDataField;
-
-    SAL_DLLPRIVATE ScAutoFormatDataField&       GetField( sal_uInt16 nIndex );
-    SAL_DLLPRIVATE const ScAutoFormatDataField& GetField( sal_uInt16 nIndex ) const;
+    std::array<std::unique_ptr<ScAutoFormatDataField>, ELEMENT_COUNT> mpDataField;
 
 public:
     ScAutoFormatData();
-    SC_DLLPUBLIC ScAutoFormatData( const ScAutoFormatData& rData );
-    SC_DLLPUBLIC ~ScAutoFormatData();
+    SC_DLLPUBLIC ScAutoFormatData(const ScAutoFormatData& rData);
+    SC_DLLPUBLIC ScAutoFormatData(const SvxAutoFormatData& rData);
 
-    void            SetName( const OUString& rName )              { aName = rName; nStrResId = USHRT_MAX; }
-    const OUString& GetName() const { return aName; }
+    ScAutoFormatDataField* GetField(size_t nIndex) override;
+    const ScAutoFormatDataField* GetField(size_t nIndex) const override;
+    bool SetField(size_t nIndex, const SvxAutoFormatDataField& aField) override;
+    SvxAutoFormatData* MakeCopy() const override { return new ScAutoFormatData(*this); };
+    SvxAutoFormatDataField* GetDefaultField() const override { return new ScAutoFormatDataField; };
 
-    bool            GetIncludeValueFormat() const               { return bIncludeValueFormat; }
-    bool            GetIncludeFont() const                      { return bIncludeFont; }
-    bool            GetIncludeJustify() const                   { return bIncludeJustify; }
-    bool            GetIncludeFrame() const                     { return bIncludeFrame; }
-    bool            GetIncludeBackground() const                { return bIncludeBackground; }
-    bool            GetIncludeWidthHeight() const               { return bIncludeWidthHeight; }
-
-    void            SetIncludeValueFormat( bool bValueFormat )  { bIncludeValueFormat = bValueFormat; }
-    void            SetIncludeFont( bool bFont )                { bIncludeFont = bFont; }
-    void            SetIncludeJustify( bool bJustify )          { bIncludeJustify = bJustify; }
-    void            SetIncludeFrame( bool bFrame )              { bIncludeFrame = bFrame; }
-    void            SetIncludeBackground( bool bBackground )    { bIncludeBackground = bBackground; }
-    void            SetIncludeWidthHeight( bool bWidthHeight )  { bIncludeWidthHeight = bWidthHeight; }
-
-    const SfxPoolItem*          GetItem( sal_uInt16 nIndex, sal_uInt16 nWhich ) const;
-    template<class T> const T*  GetItem( sal_uInt16 nIndex, TypedWhichId<T> nWhich ) const
+    const SfxPoolItem* GetItem(sal_uInt8 nIndex, sal_uInt16 nWhich) const;
+    template <class T> const T* GetItem(sal_uInt8 nIndex, TypedWhichId<T> nWhich) const
     {
         return static_cast<const T*>(GetItem(nIndex, sal_uInt16(nWhich)));
     }
-    void                        PutItem( sal_uInt16 nIndex, const SfxPoolItem& rItem );
-    void                        CopyItem( sal_uInt16 nToIndex, sal_uInt16 nFromIndex, sal_uInt16 nWhich );
+    void PutItem(size_t nIndex, const SfxPoolItem& rItem);
 
-    const ScNumFormatAbbrev&    GetNumFormat( sal_uInt16 nIndex ) const;
-
-    bool                        HasSameData( sal_uInt16 nIndex1, sal_uInt16 nIndex2 ) const;
-
-    void                        FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, const ScDocument& rDoc ) const;
-    void                        GetFromItemSet( sal_uInt16 nIndex, const SfxItemSet& rItemSet, const ScNumFormatAbbrev& rNumFormat );
-
-    bool                        Load( SvStream& rStream, const ScAfVersions& rVersions );
-    bool                        Save( SvStream& rStream, sal_uInt16 fileVersion );
+    void FillToItemSet(size_t nIndex, SfxItemSet& rItemSet) const;
 };
 
-struct DefaultFirstEntry {
-    bool operator() (const OUString& left, const OUString& right) const;
-};
-
-class SAL_DLLPUBLIC_RTTI ScAutoFormat
+class SAL_DLLPUBLIC_RTTI ScAutoFormat : public SvxAutoFormat
 {
-    typedef std::map<OUString, std::unique_ptr<ScAutoFormatData>, DefaultFirstEntry> MapType;
-    MapType m_Data;
-    bool mbSaveLater;
-    ScAfVersions m_aVersions;
-
-    ScAutoFormat(const ScAutoFormat&) = delete;
-    const ScAutoFormat operator=(const ScAutoFormat&) = delete;
+private:
+    struct Impl;
+    std::unique_ptr<Impl> mpImpl;
 
 public:
-    typedef MapType::const_iterator const_iterator;
-    typedef MapType::iterator iterator;
-
     ScAutoFormat();
-    void Load();
-    SC_DLLPUBLIC bool Save();
+    ~ScAutoFormat();
 
-    void SetSaveLater( bool bSet );
-    bool IsSaveLater() const { return mbSaveLater; }
-
-    const ScAutoFormatData* findByIndex(size_t nIndex) const;
-    SC_DLLPUBLIC ScAutoFormatData* findByIndex(size_t nIndex);
-    SC_DLLPUBLIC iterator find(const OUString& rName);
-
-    SC_DLLPUBLIC iterator insert(std::unique_ptr<ScAutoFormatData> pNew);
-    SC_DLLPUBLIC void erase(const iterator& it);
-
-    SC_DLLPUBLIC size_t size() const;
-    const_iterator begin() const;
-    const_iterator end() const;
-    SC_DLLPUBLIC iterator begin();
-    SC_DLLPUBLIC iterator end();
+    const ScAutoFormatData* GetData(size_t nIndex) const override;
+    ScAutoFormatData* GetData(size_t nIndex) override;
+    bool InsertAutoFormat(SvxAutoFormatData* pFormat) override;
+    ScAutoFormatData* ReleaseAutoFormat(const OUString& rName) override;
+    ScAutoFormatData* FindAutoFormat(const OUString& rName) const override;
+    const ScAutoFormatData* GetResolvedStyle(const SvxAutoFormatData* pData) const override;
+    SvxAutoFormatData* GetDefaultData() override { return new ScAutoFormatData();};
+    SvxAutoFormatDataField* GetDefaultField() override { return new ScAutoFormatDataField; };
+    size_t size() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,6 +32,7 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include "sprmids.hxx"
 #include <sal/log.hxx>
+#include <tools/globname.hxx>
 #include <osl/diagnose.h>
 
 #include <sot/exchange.hxx>

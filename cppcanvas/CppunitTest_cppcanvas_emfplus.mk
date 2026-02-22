@@ -29,7 +29,10 @@ $(eval $(call gb_CppunitTest_use_libraries,cppcanvas_emfplus, \
 	vcl \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,cppcanvas_emfplus,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,cppcanvas_emfplus, \
+	boost_headers \
+	libxml2 \
+))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,cppcanvas_emfplus))
 

@@ -58,6 +58,7 @@
 #include <preventduplicateinteraction.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -65,6 +66,7 @@
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
 #include <sfx2/app.hxx>

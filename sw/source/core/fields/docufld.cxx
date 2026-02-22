@@ -1352,14 +1352,14 @@ SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
     if(m_nSubType == SwFieldTypesEnum::ConditionalText)
     {
         sal_Int32 nPos = 0;
-        m_aTRUEText = rStr.getToken(0, '|', nPos);
+        m_aTRUEText = rStr.getToken(0, CONDITIONAL_FIELD_SEPARATOR, nPos);
 
         if(nPos != -1)
         {
-            m_aFALSEText = rStr.getToken(0, '|', nPos);
+            m_aFALSEText = rStr.getToken(0, CONDITIONAL_FIELD_SEPARATOR, nPos);
             if(nPos != -1)
             {
-                m_aContent = rStr.getToken(0, '|', nPos);
+                m_aContent = rStr.getToken(0, CONDITIONAL_FIELD_SEPARATOR, nPos);
                 m_bValid = true;
             }
         }
@@ -1493,7 +1493,7 @@ void SwHiddenTextField::SetPar2(const OUString& rStr)
 {
     if (m_nSubType == SwFieldTypesEnum::ConditionalText)
     {
-        sal_Int32 nPos = rStr.indexOf('|');
+        sal_Int32 nPos = rStr.indexOf(CONDITIONAL_FIELD_SEPARATOR);
         if (nPos == -1)
             m_aTRUEText = rStr;
         else
@@ -1513,7 +1513,7 @@ OUString SwHiddenTextField::GetPar2() const
     {
         return m_aTRUEText;
     }
-    return m_aTRUEText + "|" + m_aFALSEText;
+    return OUString::Concat(m_aTRUEText) + OUStringChar(CONDITIONAL_FIELD_SEPARATOR) + m_aFALSEText;
 }
 
 SwFieldTypesEnum SwHiddenTextField::GetSubType() const
@@ -2623,7 +2623,7 @@ std::unique_ptr<SwFieldType> SwJumpEditFieldType::Copy() const
 
 SwCharFormat* SwJumpEditFieldType::GetCharFormat()
 {
-    SwCharFormat* pFormat = m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_JUMPEDIT );
+    SwCharFormat* pFormat = m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( SwPoolFormatId::CHR_JUMPEDIT );
     m_aDep.StartListening(pFormat);
     return pFormat;
 }

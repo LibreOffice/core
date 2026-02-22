@@ -131,11 +131,11 @@ rtl::Reference<OParseColumn> OParseColumn::createColumnForResultSet( const Refer
     OUString sLabel = _rxResMetaData->getColumnLabel( _nColumnPos );
     // retrieve the name of the column
     // check for duplicate entries
-    if(_rColumns.find(sLabel) != _rColumns.end())
+    if(_rColumns.contains(sLabel))
     {
         OUString sAlias(sLabel);
         sal_Int32 searchIndex=1;
-        while(_rColumns.find(sAlias) != _rColumns.end())
+        while(_rColumns.contains(sAlias))
         {
             sAlias = sLabel + OUString::number(searchIndex++);
         }

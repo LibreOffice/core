@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/errcode.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <unotools/streamwrap.hxx>

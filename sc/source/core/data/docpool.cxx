@@ -23,7 +23,9 @@
 
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
+#include <unotools/fontdefs.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svl/itemiter.hxx>
@@ -290,10 +292,9 @@ static bool lcl_HFPresentation
             return false;
     }
 
-    SfxItemIter aIter( rSet );
-
-    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (SfxItemIter aIter( rSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         sal_uInt16 nWhich = pItem->Which();
 
         OUString aText;

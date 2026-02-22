@@ -19,7 +19,6 @@
 #pragma once
 
 #include <svtools/ctrlbox.hxx>
-#include <svtools/valueset.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
@@ -67,22 +66,6 @@ public:
     virtual ~SwColumnDlg() override;
 };
 
-class ColumnValueSet final : public ValueSet
-{
-public:
-    ColumnValueSet()
-        : ValueSet(nullptr)
-    {
-    }
-    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
-    {
-        ValueSet::SetDrawingArea(pDrawingArea);
-        SetStyle(WB_TABSTOP | WB_ITEMBORDER | WB_DOUBLEBORDER);
-    }
-    virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
-    virtual void StyleUpdated() override;
-};
-
 // column dialog now as TabPage
 class SwColumnPage final : public SfxTabPage
 {
@@ -101,10 +84,10 @@ class SwColumnPage final : public SfxTabPage
     bool            m_bHtmlMode;
     bool            m_bLockUpdate;
 
-    ColumnValueSet m_aDefaultVS;
     SwColExample m_aPgeExampleWN;
     SwColumnOnlyExample m_aFrameExampleWN;
 
+    std::unique_ptr<weld::IconView>  m_xDefaultIconView;
     std::unique_ptr<weld::SpinButton>  m_xCLNrEdt;
     std::unique_ptr<weld::CheckButton> m_xBalanceColsCB;
     std::unique_ptr<weld::Button> m_xBtnBack;
@@ -144,7 +127,7 @@ class SwColumnPage final : public SfxTabPage
     DECL_LINK(GapModify, weld::MetricSpinButton&, void);
     DECL_LINK(EdModify, weld::MetricSpinButton&, void);
     DECL_LINK(AutoWidthHdl, weld::Toggleable&, void );
-    DECL_LINK(SetDefaultsHdl, ValueSet *, void);
+    DECL_LINK(SetDefaultsHdl, weld::IconView&, void);
 
     DECL_LINK(Up, weld::Button&, void);
     DECL_LINK(Down, weld::Button&, void);
@@ -154,6 +137,7 @@ class SwColumnPage final : public SfxTabPage
     DECL_LINK(UpdateColMgrColorBox, ColorListBox&, void);
     void Timeout();
 
+    VclPtr<VirtualDevice> CreateIconViewImage(int nIndex);
     void            Update(const weld::MetricSpinButton* pInteractiveField);
     void            UpdateCols();
     void            Init();

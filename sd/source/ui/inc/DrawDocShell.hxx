@@ -38,8 +38,8 @@ class SdDrawDocument;
 class SdPage;
 class SfxPrinter;
 struct SpellCallbackInfo;
-class AbstractSvxNameDialog;
 class SfxUndoManager;
+class SvxNameDialog;
 
 namespace sd {
 
@@ -107,7 +107,7 @@ public:
     using SfxObjectShell::GetVisArea;
     using SfxShell::GetViewShell;
 
-    sd::ViewShell* GetViewShell() { return mpViewShell; }
+    SAL_RET_MAYBENULL sd::ViewShell* GetViewShell() { return mpViewShell; }
     ::sd::FrameView* GetFrameView();
 
     SdDrawDocument*         GetDoc() { return mpDoc;}
@@ -198,7 +198,7 @@ public:
     */
     virtual OutputDevice* GetDocumentRefDev() override;
 
-    DECL_DLLPRIVATE_LINK( RenameSlideHdl, AbstractSvxNameDialog&, bool );
+    DECL_DLLPRIVATE_LINK(RenameSlideHdl, SvxNameDialog&, bool);
 
     // ExecuteSpellPopup now handled by DrawDocShell
     DECL_DLLPRIVATE_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );

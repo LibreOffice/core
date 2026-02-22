@@ -22,11 +22,13 @@
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/rendercontext/SystemTextColorFlags.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 #include <vcl/vclevent.hxx>
 
 #include <sal/log.hxx>
+#include <tools/mapunit.hxx>
 #include <scrollbarvalue.hxx>
 
 /*  #i77549#

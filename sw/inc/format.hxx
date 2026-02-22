@@ -37,6 +37,7 @@ class IDocumentChartDataProviderAccess;
 class SwDoc;
 class SfxGrabBagItem;
 class SwTextGridItem;
+enum class SwPoolFormatId : sal_uInt16;
 
 namespace drawinglayer::attribute {
     class SdrAllFillAttributesHelper;
@@ -52,7 +53,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
     SwAttrSet m_aSet;
 
     sal_uInt16 m_nWhichId;
-    sal_uInt16 m_nPoolFormatId;        /**< Id for "automatically" created formats.
+    SwPoolFormatId m_nPoolFormatId;        /**< Id for "automatically" created formats.
                                        (is not hard attribution!!!) */
     sal_uInt32 m_nPoolHelpId;       ///< HelpId for this Pool-style.
     sal_uInt8 m_nPoolHlpFileId;     ///< FilePos to Doc to these style helps.
@@ -163,8 +164,8 @@ public:
     IDocumentChartDataProviderAccess& getIDocumentChartDataProviderAccess();
 
     /// Get and set Pool style IDs.
-    sal_uInt16 GetPoolFormatId() const { return m_nPoolFormatId; }
-    void SetPoolFormatId( sal_uInt16 nId ) { m_nPoolFormatId = nId; }
+    SwPoolFormatId GetPoolFormatId() const { return m_nPoolFormatId; }
+    void SetPoolFormatId( SwPoolFormatId nId ) { m_nPoolFormatId = nId; }
 
     /// Get and set Help-IDs for document templates.
     sal_uInt32 GetPoolHelpId() const { return m_nPoolHelpId; }

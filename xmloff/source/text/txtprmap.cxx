@@ -1056,6 +1056,7 @@ XMLPropertyMapEntry constexpr aXMLTableRowDefaultsMap[] =
 XMLPropertyMapEntry constexpr aXMLCellPropMap[] =
 {
     MC_E( PROP_BackColor,            XML_NAMESPACE_FO,    XML_BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MC_E( PROP_Border,               XML_NAMESPACE_FO,    XML_BORDER,           XML_TYPE_BORDER,                                   0 ),
     MC_E( PROP_LeftBorder,           XML_NAMESPACE_FO,    XML_BORDER_LEFT,      XML_TYPE_BORDER,                                   0 ),
     MC_E( PROP_RightBorder,          XML_NAMESPACE_FO,    XML_BORDER_RIGHT,     XML_TYPE_BORDER,                                   0 ),
     MC_E( PROP_TopBorder,            XML_NAMESPACE_FO,    XML_BORDER_TOP,       XML_TYPE_BORDER,                                   0 ),

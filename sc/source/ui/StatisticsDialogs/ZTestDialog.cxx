@@ -10,6 +10,8 @@
 
 #include <memory>
 
+#include <vcl/weld/Dialog.hxx>
+
 #include <reffact.hxx>
 #include <TableFillingAndNavigationTools.hxx>
 #include <ZTestDialog.hxx>

@@ -70,7 +70,7 @@
 #include <poolfmt.hxx>
 #include "ww8par.hxx"
 #include <breakit.hxx>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <i18npool/breakiterator.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "attributeoutputbase.hxx"
 #include "writerhelper.hxx"
@@ -90,6 +90,7 @@
 #include <o3tl/enumarray.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/urlobj.hxx>
 
 #include <algorithm>
 
@@ -1249,7 +1250,7 @@ const SfxPoolItem& MSWord_SdrAttrIter::GetItem( sal_uInt16 nWhich ) const
 void MSWord_SdrAttrIter::SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemSet& rSet)
 {
     SwTextFormatColl* pC = m_rExport.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool
-        (RES_POOLCOLL_STANDARD, false);
+        (SwPoolFormatId::COLL_STANDARD, false);
 
     SfxWhichIter aWhichIter(rSet);
     for (sal_uInt16 nEEWhich = aWhichIter.FirstWhich(); nEEWhich; nEEWhich = aWhichIter.NextWhich())
@@ -1285,14 +1286,12 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
     const SfxItemSet* pOldSet = m_rExport.GetCurItemSet();
     m_rExport.SetCurItemSet( &aSet );
 
-    SfxItemIter aIter( aSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-
     const SfxItemPool* pSrcPool = m_pEditPool,
                      * pDstPool = &m_rExport.m_rDoc.GetAttrPool();
 
-    do
+    for (SfxItemIter aIter( aSet ); !aIter.IsAtEnd(); aIter.Next())
     {
+        const SfxPoolItem* pItem = aIter.GetCurItem();
         sal_uInt16 nWhich = pItem->Which();
         if (pWhichsToIgnore && pWhichsToIgnore->find(nWhich) != pWhichsToIgnore->end())
             continue;
@@ -1311,7 +1310,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
             if (m_rExport.CollapseScriptsforWordOk(m_nScript,nWhich))
                 m_rExport.AttrOutput().OutputItem(*pI);
         }
-    } while ((pItem = aIter.NextItem()));
+    }
     m_rExport.SetCurItemSet( pOldSet );
 }
 

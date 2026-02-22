@@ -603,18 +603,15 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
         bool bOnlyAttrChg = false;
         if( pAttr && pAttr->Count() )
         {
-            SfxItemIter aIter( *pAttr );
-            const SfxPoolItem* pItem = aIter.GetCurItem();
-            do
+            for (SfxItemIter aIter( *pAttr ); !aIter.IsAtEnd(); aIter.Next())
             {
+                const SfxPoolItem* pItem = aIter.GetCurItem();
                 if (pFormat->GetFormatAttr(pItem->Which()) != *pItem)
                 {
                     bOnlyAttrChg = true;
                     break;
                 }
-
-                pItem = aIter.NextItem();
-            } while (pItem);
+            }
         }
 
         if( bOnlyAttrChg )

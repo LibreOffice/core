@@ -12,6 +12,7 @@
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/string_view.hxx>
+#include <tools/urlobj.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

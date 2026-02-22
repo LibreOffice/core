@@ -3763,6 +3763,14 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport const & rM
     rNumberFormat.SetBulletChar( nBuChar );
     rNumberFormat.SetBulletRelSize( static_cast<sal_uInt16>(nBulletHeight) );
     rNumberFormat.SetBulletColor( aCol );
+
+    // tdf#166030 When bullet is enabled but both offsets are 0 (which is the case for TextInShape)
+    // add some default indentation to match PowerPoint's behavior.
+    if ( nIsBullet && nTextOfs == 0 && nBulletOfs == 0 )
+    {
+        nTextOfs = 288;   // ~0.4 inch text indent (default PowerPoint bullet indent)
+        nBulletOfs = 0;   // bullet at left edge
+    }
     sal_uInt32 nAbsLSpace = convertMasterUnitToMm100(nTextOfs);
     sal_uInt32 nFirstLineOffset = nAbsLSpace - convertMasterUnitToMm100(nBulletOfs);
     rNumberFormat.SetAbsLSpace( nAbsLSpace );

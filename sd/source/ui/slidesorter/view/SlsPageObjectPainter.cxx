@@ -29,6 +29,7 @@
 #include <cache/SlsPageCache.hxx>
 #include <Window.hxx>
 #include <sdpage.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/virdev.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <osl/diagnose.h>

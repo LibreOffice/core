@@ -1324,11 +1324,12 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     bool const isHiddenNow(static_cast<SwTextFrame*>(this)->IsHiddenNowImpl());
     if (isHiddenNow)
     {
+        // Similar to respective code in MakePrtArea
         while (HasFollow())
         {
             static_cast<SwTextFrame&>(*this).JoinFrame();
         }
-        HideAndShowObjects();
+        static_cast<SwTextFrame*>(this)->HideHidden(); // also hides footnotes
     }
 
     std::optional<SwFrameDeleteGuard> oDeleteGuard(std::in_place, this);

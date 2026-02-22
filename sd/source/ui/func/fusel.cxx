@@ -20,6 +20,7 @@
 #include <fusel.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdopage.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/scene3d.hxx>
 #include <vcl/imapobj.hxx>
@@ -56,7 +57,7 @@
 #include <svx/svdundo.hxx>
 
 #include <svx/sdrhittesthelper.hxx>
-#include <svx/diagram/IDiagramHelper.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <svx/annotation/ObjectAnnotationData.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -351,6 +352,18 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                                 bReturn = pPV->EnterGroup(pObj);
                         }
                     }
+                    else if (pObj->GetObjIdentifier() == SdrObjKind::Page)
+                    {
+                        if (rMEvt.GetClicks() == 2)
+                        {
+                            if (DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(&mrViewShell))
+                            {
+                                SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pObj);
+                                sal_uInt16 nPageNum = (pPageObj->GetReferencedPage()->GetPageNum() - 1) / 2;
+                                pDrawViewShell->SwitchPage(nPageNum);
+                            }
+                        }
+                    }
                 }
 
                 // #i71727# replaced else here with two possibilities, once the original else (!pObj)
@@ -435,6 +448,27 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             pHdl=mpView->PickHandle(aMDPos);
                             if ( ! rMEvt.IsRight())
                                 mpView->BegDragObj(aMDPos, nullptr, pHdl, nDrgLog);
+
+                            if (comphelper::LibreOfficeKit::isActive())
+                            {
+                                if (pObj->GetObjIdentifier() == SdrObjKind::Page)
+                                {
+                                    SdPage* pPage = mrViewShell.GetActualPage();
+                                    if (pPage->IsCanvasPage())
+                                    {
+                                        ::tools::JsonWriter jsonWriter;
+                                        jsonWriter.put("commandName", "ReshufflePagePopup");
+                                        {
+                                            auto jsonState = jsonWriter.startNode("state");
+                                        }
+
+                                        OString aPayload = jsonWriter.finishAndGetAsOString();
+                                        if (pViewShell)
+                                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+
+                                    }
+                                }
+                            }
                         }
                         else
                         {

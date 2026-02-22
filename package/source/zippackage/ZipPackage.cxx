@@ -100,12 +100,6 @@ using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
-#if OSL_DEBUG_LEVEL > 0
-#define THROW_WHERE SAL_WHERE
-#else
-#define THROW_WHERE ""
-#endif
-
 namespace {
 
 class ActiveDataStreamer : public ::cppu::WeakImplHelper< XActiveDataStreamer >
@@ -199,16 +193,12 @@ void ZipPackage::checkZipEntriesWithDD()
                 if (!xStreamSI->supportsService("com.sun.star.packages.PackageStream"))
                 {
                     SAL_INFO("package", "entry STORED with data descriptor is folder: \"" << rEntry.sPath << "\"");
-                    throw ZipIOException(
-                        THROW_WHERE
-                        "entry STORED with data descriptor is folder");
+                    throw ZipIOException(u"entry STORED with data descriptor is folder"_ustr);
                 }
                 if (!xStream->getPropertyValue("WasEncrypted").get<bool>())
                 {
                     SAL_INFO("package", "entry STORED with data descriptor but not encrypted: \"" << rEntry.sPath << "\"");
-                    throw ZipIOException(
-                        THROW_WHERE
-                        "entry STORED with data descriptor but not encrypted");
+                    throw ZipIOException(u"entry STORED with data descriptor but not encrypted"_ustr);
                 }
             }
         }
@@ -456,7 +446,7 @@ void ZipPackage::parseManifest()
                                     m_bHasNonEncryptedEntries = true;
                             }
                             else
-                                throw ZipIOException(THROW_WHERE "Wrong content");
+                                throw ZipIOException(u"Wrong content"_ustr);
                         }
                     }
 
@@ -478,7 +468,7 @@ void ZipPackage::parseManifest()
 
     if ( !bManifestParsed && !m_bForceRecovery )
         throw ZipIOException(
-            THROW_WHERE "Could not parse manifest.xml" );
+            u"Could not parse manifest.xml"_ustr );
 
     static constexpr OUString sMimetype (u"mimetype"_ustr);
     if ( m_xRootFolder->hasByName( sMimetype ) )
@@ -533,7 +523,6 @@ void ZipPackage::parseManifest()
             if (mediaTypeXML != aPackageMediatype)
             {
                 throw ZipIOException(
-                    THROW_WHERE
                     "mimetype conflicts with manifest.xml, \""
                     + mediaTypeXML + "\" vs. \""
                     + aPackageMediatype + "\"" );
@@ -555,11 +544,11 @@ void ZipPackage::parseManifest()
             // in case of ODF1.2 documents without version in manifest.xml the property IsInconsistent
             // should be checked later
             throw ZipIOException(
-                THROW_WHERE "there are streams not referred in manifest.xml" );
+                u"there are streams not referred in manifest.xml"_ustr );
         }
         // all the streams should be encrypted with the same StartKey in ODF1.2
         // TODO/LATER: in future the exception should be thrown
-        // throw ZipIOException( THROW_WHERE "More than one Start Key Generation algorithm is specified!" );
+        // throw ZipIOException( u"More than one Start Key Generation algorithm is specified!"_ustr );
     }
 
     // in case it is a correct ODF1.2 document, the version must be set
@@ -577,7 +566,7 @@ void ZipPackage::parseContentType()
         static constexpr std::u16string_view aContentTypes(u"[Content_Types].xml");
         // the content type must exist in OFOPXML format!
         if ( !m_xRootFolder->hasByName( aContentTypes ) )
-            throw io::IOException(THROW_WHERE "Wrong format!" );
+            throw io::IOException(u"Wrong format!"_ustr );
 
         uno::Reference < io::XActiveDataSink > xSink;
         uno::Any aAny = m_xRootFolder->getByName( aContentTypes );
@@ -592,7 +581,7 @@ void ZipPackage::parseContentType()
                     ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, m_xContext );
 
                 if ( aContentTypeInfo.getLength() != 2 )
-                    throw io::IOException(THROW_WHERE );
+                    throw io::IOException(u""_ustr );
 
                 // set the implicit types first
                 for ( const auto& rPair : aContentTypeInfo[0] )
@@ -829,19 +818,19 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     else if ( aFormatName == OFOPXML_STORAGE_FORMAT_STRING )
                         m_nFormat = embed::StorageFormats::OFOPXML;
                     else
-                        throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
+                        throw lang::IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
                 }
                 else if ( aNamedValue.Value >>= nFormatID )
                 {
                     if (nFormatID != embed::StorageFormats::PACKAGE
                         && nFormatID != embed::StorageFormats::ZIP
                         && nFormatID != embed::StorageFormats::OFOPXML)
-                        throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
+                        throw lang::IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
 
                     m_nFormat = nFormatID;
                 }
                 else
-                    throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
+                    throw lang::IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 1 );
 
                 m_xRootFolder->setPackageFormat_Impl( m_nFormat );
             }
@@ -859,7 +848,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         else
         {
             // The URL is not acceptable
-            throw css::uno::Exception (THROW_WHERE "Bad arguments.",
+            throw css::uno::Exception (u"Bad arguments."_ustr,
                 getXWeak() );
         }
     }
@@ -922,7 +911,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         m_pZipFile.reset();
 
         throw css::packages::zip::ZipIOException (
-            THROW_WHERE "Bad Zip File, " + message,
+            "Bad Zip File, " + message,
             getXWeak() );
     }
 }
@@ -991,7 +980,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         if ( nIndex == nOldIndex )
             break;
         if ( !pCurrent->hasByName( sTemp ) )
-            throw NoSuchElementException(THROW_WHERE );
+            throw NoSuchElementException(u""_ustr );
 
         pPrevious = pCurrent;
         ZipContentInfo& rInfo = pCurrent->doGetByName(sTemp);
@@ -1017,7 +1006,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         return pCurrent->getByName( sTemp );
     }
 
-    throw NoSuchElementException(THROW_WHERE);
+    throw NoSuchElementException(u""_ustr);
 }
 
 sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
@@ -1165,7 +1154,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw WrappedTargetException(
-                THROW_WHERE "Error adding mimetype to the ZipOutputStream!",
+                u"Error adding mimetype to the ZipOutputStream!"_ustr,
                 getXWeak(),
                 anyEx );
     }
@@ -1472,7 +1461,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
                 throw aException;
 
             throw WrappedTargetException(
-                    THROW_WHERE "Problem writing the original content!",
+                    u"Problem writing the original content!"_ustr,
                     getXWeak(),
                     aCaught );
         }
@@ -1480,7 +1469,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         {
             // the document is written directly, although it was empty it is important to notify that the writing has failed
             // TODO/LATER: let the package be able to recover in this situation
-            OUString aErrTxt(THROW_WHERE "This package is unusable!");
+            OUString aErrTxt(u"This package is unusable!"_ustr);
             embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), OUString() );
             throw WrappedTargetException( aErrTxt,
                                             getXWeak(),
@@ -1551,7 +1540,7 @@ void SAL_CALL ZipPackage::commitChanges()
     if ( m_eMode == e_IMode_XInputStream )
     {
         IOException aException;
-        throw WrappedTargetException(THROW_WHERE "This package is read only!",
+        throw WrappedTargetException(u"This package is read only!"_ustr,
                 getXWeak(), Any ( aException ) );
     }
     // first the writeTempFile is called, if it returns a stream the stream should be written to the target
@@ -1564,7 +1553,7 @@ void SAL_CALL ZipPackage::commitChanges()
     catch (const ucb::ContentCreationException&)
     {
         css::uno::Any anyEx = cppu::getCaughtException();
-        throw WrappedTargetException(THROW_WHERE "Temporary file should be creatable!",
+        throw WrappedTargetException(u"Temporary file should be creatable!"_ustr,
                     getXWeak(), anyEx );
     }
     if ( xTempInStream.is() )
@@ -1578,7 +1567,7 @@ void SAL_CALL ZipPackage::commitChanges()
         catch( const uno::Exception& )
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            throw WrappedTargetException(THROW_WHERE "Temporary file should be seekable!",
+            throw WrappedTargetException(u"Temporary file should be seekable!"_ustr,
                     getXWeak(), anyEx );
         }
 
@@ -1590,7 +1579,7 @@ void SAL_CALL ZipPackage::commitChanges()
         catch( const io::IOException& )
         {
             css::uno::Any anyEx = cppu::getCaughtException();
-            throw WrappedTargetException(THROW_WHERE "Temporary file should be connectable!",
+            throw WrappedTargetException(u"Temporary file should be connectable!"_ustr,
                     getXWeak(), anyEx );
         }
 
@@ -1619,7 +1608,7 @@ void SAL_CALL ZipPackage::commitChanges()
             catch( const uno::Exception& )
             {
                 css::uno::Any anyEx = cppu::getCaughtException();
-                throw WrappedTargetException(THROW_WHERE "This package is read only!",
+                throw WrappedTargetException(u"This package is read only!"_ustr,
                         getXWeak(), anyEx );
             }
 
@@ -1719,7 +1708,7 @@ void SAL_CALL ZipPackage::commitChanges()
 
                     css::uno::Any anyEx = cppu::getCaughtException();
                     throw WrappedTargetException(
-                                                THROW_WHERE "This package may be read only!",
+                                                u"This package may be read only!"_ustr,
                                                 getXWeak(),
                                                 anyEx );
                 }
@@ -1752,7 +1741,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
         OSL_FAIL( "These calls are pretty simple, they should not fail!" );
     }
 
-    OUString aErrTxt(THROW_WHERE "This package is read only!");
+    OUString aErrTxt(u"This package is read only!"_ustr);
     embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), aTempURL );
     throw WrappedTargetException( aErrTxt,
                                     getXWeak(),
@@ -1771,7 +1760,7 @@ uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
         else if ( m_nStartKeyGenerationID == xml::crypto::DigestID::SHA1 )
             aNameToFind = PACKAGE_ENCRYPTIONDATA_SHA1CORRECT;
         else
-            throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
+            throw uno::RuntimeException(u"No expected key is provided!"_ustr );
 
         for (const auto& rKey : m_aStorageEncryptionKeys)
             if ( rKey.Name == aNameToFind )
@@ -1779,7 +1768,7 @@ uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
 
         if (!aResult.hasElements() && m_aStorageEncryptionKeys.hasElements())
         {   // tdf#159519 sanity check
-            throw uno::RuntimeException(THROW_WHERE "Expected key is missing!");
+            throw uno::RuntimeException(u"Expected key is missing!"_ustr);
         }
     }
     else
@@ -1827,11 +1816,11 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
       ||aPropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY
       ||aPropertyName == IS_INCONSISTENT_PROPERTY
       ||aPropertyName == MEDIATYPE_FALLBACK_USED_PROPERTY)
-        throw PropertyVetoException(THROW_WHERE );
+        throw PropertyVetoException(u""_ustr );
     else if ( aPropertyName == ENCRYPTION_KEY_PROPERTY )
     {
         if ( !( aValue >>= m_aEncryptionKey ) )
-            throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
+            throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 2 );
 
         m_aStorageEncryptionKeys.realloc( 0 );
     }
@@ -1841,7 +1830,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         // because of this support the storage has to operate with more than one key dependent on storage generation algorithm;
         // when this support is removed, the storage will get only one key from outside
         if ( !( aValue >>= m_aStorageEncryptionKeys ) )
-            throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
+            throw IllegalArgumentException(u""_ustr, uno::Reference< uno::XInterface >(), 2 );
 
         m_aEncryptionKey.realloc( 0 );
     }
@@ -1851,7 +1840,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         if ( m_pZipFile || !( aValue >>= aAlgorithms ) || !aAlgorithms.hasElements() )
         {
             // the algorithms can not be changed if the file has a persistence based on the algorithms ( m_pZipFile )
-            throw IllegalArgumentException(THROW_WHERE "unexpected algorithms list is provided.", uno::Reference< uno::XInterface >(), 2 );
+            throw IllegalArgumentException(u"unexpected algorithms list is provided."_ustr, uno::Reference< uno::XInterface >(), 2 );
         }
 
         for (const auto& rAlgorithm : aAlgorithms)
@@ -1862,7 +1851,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                 if ( !( rAlgorithm.Value >>= nID )
                   || ( nID != xml::crypto::DigestID::SHA256 && nID != xml::crypto::DigestID::SHA1 ) )
                 {
-                    throw IllegalArgumentException(THROW_WHERE "Unexpected start key generation algorithm is provided!", uno::Reference<uno::XInterface>(), 2);
+                    throw IllegalArgumentException(u"Unexpected start key generation algorithm is provided!"_ustr, uno::Reference<uno::XInterface>(), 2);
                 }
 
                 m_nStartKeyGenerationID = nID;
@@ -1875,7 +1864,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                       && nID != xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P
                       && nID != xml::crypto::KDFID::Argon2id))
                 {
-                    throw IllegalArgumentException(THROW_WHERE "Unexpected key derivation function provided!", uno::Reference<uno::XInterface>(), 2);
+                    throw IllegalArgumentException(u"Unexpected key derivation function provided!"_ustr, uno::Reference<uno::XInterface>(), 2);
                 }
                 m_nKeyDerivationFunctionID = nID;
             }
@@ -1887,7 +1876,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                       && nID != xml::crypto::CipherID::AES_CBC_W3C_PADDING
                       && nID != xml::crypto::CipherID::BLOWFISH_CFB_8))
                 {
-                    throw IllegalArgumentException(THROW_WHERE "Unexpected encryption algorithm is provided!", uno::Reference<uno::XInterface>(), 2);
+                    throw IllegalArgumentException(u"Unexpected encryption algorithm is provided!"_ustr, uno::Reference<uno::XInterface>(), 2);
                 }
 
                 m_nCommonEncryptionID = nID;
@@ -1903,7 +1892,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
                 if ( !( rAlgorithm.Value >>= nID )
                   || ( nID != xml::crypto::DigestID::SHA1_1K && nID != xml::crypto::DigestID::SHA256_1K ) )
                 {
-                    throw IllegalArgumentException(THROW_WHERE "Unexpected checksum algorithm is provided!", uno::Reference<uno::XInterface>(), 2);
+                    throw IllegalArgumentException(u"Unexpected checksum algorithm is provided!"_ustr, uno::Reference<uno::XInterface>(), 2);
                 }
 
                 m_oChecksumDigestID.emplace(nID);
@@ -1911,7 +1900,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
             else
             {
                 OSL_ENSURE( false, "Unexpected encryption algorithm is provided!" );
-                throw IllegalArgumentException(THROW_WHERE "unexpected algorithms list is provided.", uno::Reference< uno::XInterface >(), 2 );
+                throw IllegalArgumentException(u"unexpected algorithms list is provided."_ustr, uno::Reference< uno::XInterface >(), 2 );
             }
         }
     }
@@ -1920,7 +1909,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         uno::Sequence< uno::Sequence< beans::NamedValue > > aGpgProps;
         if ( !( aValue >>= aGpgProps ) || !aGpgProps.hasElements() )
         {
-            throw IllegalArgumentException(THROW_WHERE "unexpected Gpg properties are provided.", uno::Reference< uno::XInterface >(), 2 );
+            throw IllegalArgumentException(u"unexpected Gpg properties are provided."_ustr, uno::Reference< uno::XInterface >(), 2 );
         }
 
         m_aGpgProps = std::move(aGpgProps);
@@ -1941,7 +1930,7 @@ Any SAL_CALL ZipPackage::getPropertyValue( const OUString& PropertyName )
 {
     // TODO/LATER: Activate the check when zip-ucp is ready
     // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-    //  throw UnknownPropertyException(THROW_WHERE );
+    //  throw UnknownPropertyException();
 
     if ( PropertyName == ENCRYPTION_KEY_PROPERTY )
     {
