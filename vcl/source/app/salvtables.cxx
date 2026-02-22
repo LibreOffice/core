@@ -5737,7 +5737,13 @@ IMPL_LINK_NOARG(SalInstanceSpinButton, ActivateHdl, Edit&, bool)
 
 IMPL_LINK_NOARG(SalInstanceSpinButton, UpDownHdl, SpinField&, void) { signal_value_changed(); }
 
-IMPL_LINK_NOARG(SalInstanceSpinButton, LoseFocusHdl, Control&, void) { signal_value_changed(); }
+IMPL_LINK_NOARG(SalInstanceSpinButton, LoseFocusHdl, Control&, void)
+{
+    // tdf#134725 Don't signal for empty text, the Formatter has IsEmptyFieldEnabled
+    // enabled, so empty values are intended to be no-change.
+    if (!m_xButton->GetText().isEmpty())
+        signal_value_changed();
+}
 
 IMPL_LINK(SalInstanceSpinButton, OutputHdl, double, fValue, std::optional<OUString>)
 {
