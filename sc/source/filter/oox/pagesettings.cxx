@@ -48,6 +48,7 @@
 #include <stylesbuffer.hxx>
 #include <document.hxx>
 #include <biffhelper.hxx>
+#include <cellsuno.hxx>
 #include <filter/msfilter/util.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -319,11 +320,9 @@ void PageSettings::setFitToPagesMode( bool bFitToPages )
 void PageSettings::finalizeImport()
 {
     OUStringBuffer aStyleNameBuffer( "PageStyle_" );
-    Reference<container::XNamed> xSheetName(getSheet(), UNO_QUERY);
+    const rtl::Reference< ScTableSheetObj >& xSheetName(getSheet());
     if( xSheetName.is() )
         aStyleNameBuffer.append( xSheetName->getName() );
-    else
-        aStyleNameBuffer.append( static_cast< sal_Int32 >( getSheetIndex() + 1 ) );
     OUString aStyleName = aStyleNameBuffer.makeStringAndClear();
 
     Reference<style::XStyle> xStyle = createStyleObject(aStyleName, true);

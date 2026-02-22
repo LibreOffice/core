@@ -225,7 +225,7 @@ public:
     /** Returns the index of the current sheet. */
     SCTAB        getSheetIndex() const { return maUsedArea.aStart.Tab(); }
     /** Returns the XSpreadsheet interface of the current sheet. */
-    const Reference< XSpreadsheet >& getSheet() const { return mxSheet; }
+    const rtl::Reference< ScTableSheetObj >& getSheet() const { return mxSheet; }
 
     /** Returns the XCell interface for the passed cell address. */
     Reference< XCell >  getCell( const ScAddress& rAddress ) const;
@@ -409,7 +409,7 @@ private:
     ISegmentProgressBarRef mxRowProgress;   /// Progress bar for row/cell processing.
     ISegmentProgressBarRef mxFinalProgress; /// Progress bar for finalization.
     WorksheetType       meSheetType;        /// Type of this sheet.
-    Reference< XSpreadsheet > mxSheet;      /// Reference to the current sheet.
+    rtl::Reference< ScTableSheetObj > mxSheet;      /// Reference to the current sheet.
     bool                mbHasDefWidth;      /// True = default column width is set from defaultColWidth attribute.
 };
 
@@ -490,17 +490,15 @@ rtl::Reference<ScCellRangesObj> WorksheetGlobals::getCellRangeList( const ScRang
 
 Reference< XCellRange > WorksheetGlobals::getColumn( sal_Int32 nCol ) const
 {
-    Reference< XCellRange > xColumn;
     try
     {
-        Reference< XColumnRowRange > xColRowRange( mxSheet, UNO_QUERY_THROW );
-        Reference< XTableColumns > xColumns( xColRowRange->getColumns(), UNO_SET_THROW );
-        xColumn.set( xColumns->getByIndex( nCol ), UNO_QUERY );
+        if (mxSheet)
+            return mxSheet->getScColumns()->getScTableColumnByIndex( nCol );
     }
     catch( Exception& )
     {
     }
-    return xColumn;
+    return {};
 }
 
 Reference< XCellRange > WorksheetGlobals::getRow( sal_Int32 nRow ) const
@@ -508,9 +506,7 @@ Reference< XCellRange > WorksheetGlobals::getRow( sal_Int32 nRow ) const
     Reference< XCellRange > xRow;
     try
     {
-        Reference< XColumnRowRange > xColRowRange( mxSheet, UNO_QUERY_THROW );
-        Reference< XTableRows > xRows( xColRowRange->getRows(), UNO_SET_THROW );
-        xRow.set( xRows->getByIndex( nRow ), UNO_QUERY );
+        xRow = mxSheet->getScRows()->GetTableRowByIndex( nRow );
     }
     catch( Exception& )
     {
@@ -523,7 +519,8 @@ Reference< XDrawPage > WorksheetGlobals::getDrawPage() const
     Reference< XDrawPage > xDrawPage;
     try
     {
-        xDrawPage = Reference< XDrawPageSupplier >( mxSheet, UNO_QUERY_THROW )->getDrawPage();
+        if (mxSheet)
+            xDrawPage = mxSheet->getDrawPage();
     }
     catch( Exception& )
     {
@@ -1333,20 +1330,22 @@ void WorksheetGlobals::groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLa
 {
     try
     {
-        Reference< XSheetOutline > xOutline( mxSheet, UNO_QUERY_THROW );
-        if( bRows )
+        if (mxSheet)
         {
-            CellRangeAddress aRange( getSheetIndex(), 0, nFirstColRow, 0, nLastColRow );
-            xOutline->group( aRange, TableOrientation_ROWS );
-            if( bCollapse )
-                xOutline->hideDetail( aRange );
-        }
-        else
-        {
-            CellRangeAddress aRange( getSheetIndex(), nFirstColRow, 0, nLastColRow, 0 );
-            xOutline->group( aRange, TableOrientation_COLUMNS );
-            if( bCollapse )
-                xOutline->hideDetail( aRange );
+            if( bRows )
+            {
+                CellRangeAddress aRange( getSheetIndex(), 0, nFirstColRow, 0, nLastColRow );
+                mxSheet->group( aRange, TableOrientation_ROWS );
+                if( bCollapse )
+                    mxSheet->hideDetail( aRange );
+            }
+            else
+            {
+                CellRangeAddress aRange( getSheetIndex(), nFirstColRow, 0, nLastColRow, 0 );
+                mxSheet->group( aRange, TableOrientation_COLUMNS );
+                if( bCollapse )
+                    mxSheet->hideDetail( aRange );
+            }
         }
     }
     catch( Exception& )
@@ -1409,8 +1408,7 @@ void WorksheetGlobals::finalizeDrawings()
         drawing shapes to simplify calculation of shape coordinates. */
     if( maSheetViewSett.isSheetRightToLeft() )
     {
-        PropertySet aPropSet( mxSheet );
-        aPropSet.setProperty( PROP_TableLayout, WritingMode2::RL_TB );
+        mxSheet->setPropertyValue( u"TableLayout"_ustr, Any(WritingMode2::RL_TB) );
     }
 }
 
@@ -1444,7 +1442,7 @@ SCTAB WorksheetHelper::getSheetIndex() const
     return mrSheetGlob.getSheetIndex();
 }
 
-const Reference< XSpreadsheet >& WorksheetHelper::getSheet() const
+const rtl::Reference< ScTableSheetObj >& WorksheetHelper::getSheet() const
 {
     return mrSheetGlob.getSheet();
 }

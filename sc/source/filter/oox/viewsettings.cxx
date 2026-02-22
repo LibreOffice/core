@@ -43,6 +43,7 @@
 #include <worksheetbuffer.hxx>
 #include <vcl/svapp.hxx>
 #include <docuno.hxx>
+#include <cellsuno.hxx>
 
 namespace com::sun::star::container { class XNameContainer; }
 
@@ -353,8 +354,7 @@ void SheetViewSettings::finalizeImport()
     {
         // active tab/sheet cannot be hidden
         // always force it to be displayed
-        PropertySet aPropSet( getSheet() );
-        aPropSet.setProperty( PROP_IsVisible, true );
+        getSheet()->setPropertyValue( u"IsVisible"_ustr, Any(true) );
     }
     // visible area and current cursor position (selection not supported via API)
     ScAddress aFirstPos = xModel->maFirstPos;

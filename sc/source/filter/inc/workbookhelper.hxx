@@ -196,7 +196,7 @@ public:
     rtl::Reference< ScTableSheetObj >
                         getSheetFromDoc( sal_Int32 nSheet ) const;
     /** Returns a reference to the specified spreadsheet in the document model. */
-    css::uno::Reference< css::sheet::XSpreadsheet >
+    rtl::Reference< ScTableSheetObj >
                         getSheetFromDoc( const OUString& rSheet ) const;
 
     /** Returns the XCellRange interface for the passed cell range address. */

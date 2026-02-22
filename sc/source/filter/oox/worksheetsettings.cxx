@@ -32,6 +32,7 @@
 #include <document.hxx>
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
+#include <cellsuno.hxx>
 
 namespace oox::xls {
 
@@ -278,20 +279,20 @@ void WorksheetSettings::finalizeImport()
     }
 
     // VBA code name
-    PropertySet aPropSet( getSheet() );
-    aPropSet.setProperty( PROP_CodeName, maSheetSettings.maCodeName );
+    auto xSheet = getSheet();
+    xSheet->setPropertyValue( u"CodeName"_ustr, Any(maSheetSettings.maCodeName) );
 
     // sheet tab color
     if( !maSheetSettings.maTabColor.isAuto() )
     {
         ::Color nColor = maSheetSettings.maTabColor.getColor( getBaseFilter().getGraphicHelper() );
-        aPropSet.setProperty( PROP_TabColor, nColor );
+        xSheet->setPropertyValue( u"TabColor"_ustr, Any(nColor) );
     }
 
     // Summary data below or above the contents
     if ( !maSheetSettings.mbSummaryBelow )
     {
-        aPropSet.setProperty( PROP_TotalsRowBelow, false );
+        xSheet->setPropertyValue( u"TotalsRowBelow"_ustr, Any(false) );
     }
 }
 
