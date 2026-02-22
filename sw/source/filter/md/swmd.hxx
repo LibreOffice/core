@@ -82,7 +82,7 @@ class SwMarkdownParser
     // SfxMedium* m_pMedium;
     std::unique_ptr<char[]> m_pArr;
     std::unique_ptr<SwMdNumRuleInfo> m_pNumRuleInfo;
-    tools::Long m_nFilesize;
+    sal_uInt64 m_nFilesize;
 
     MDAttrStack m_aAttrStack;
 
