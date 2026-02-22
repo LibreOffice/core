@@ -17,7 +17,7 @@
     <property name="can-focus">False</property>
     <property name="icon-name">cmd/sc_additionsdialog.png</property>
   </object>
-  <object class="GtkTreeStore" id="liststore1">
+  <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name image -->
       <column type="GdkPixbuf"/>
@@ -27,7 +27,7 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkTreeStore" id="liststore2">
+  <object class="GtkListStore" id="liststore2">
     <columns>
       <!-- column-name image -->
       <column type="GdkPixbuf"/>
