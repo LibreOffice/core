@@ -1453,6 +1453,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf170565_empty_functions)
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[6]/x:c[2]/x:f", u"PRODUCT(,)");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf170963_row_breaks)
+{
+    createScDoc("ods/tdf170963_row_breaks.ods");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    const int nMaxRowBreaks = 1023;
+    // Original had 1026 row breaks, but the max Excel handles is 1023
+    // Without the fix all 1026 got exported
+    assertXPath(pSheet, "/x:worksheet/x:rowBreaks", "count", OUString::number(nMaxRowBreaks));
+    CPPUNIT_ASSERT_EQUAL(nMaxRowBreaks, countXPathNodes(pSheet, "/x:worksheet/x:rowBreaks/x:brk"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -200,14 +200,22 @@ void XclExpPageBreaks::SaveXml( XclExpXmlStream& rStrm )
 
     sal_Int32 nElement = GetRecId() == EXC_ID_HORPAGEBREAKS ? XML_rowBreaks : XML_colBreaks;
     sax_fastparser::FSHelperPtr& pWorksheet = rStrm.GetCurrentStream();
-    OString sNumPageBreaks = OString::number(  mrPageBreaks.size() );
+    // According to Part 1 Sections 18.3.1.14 and 18.3.1.74 in [MS-OI29500], the practical
+    // limit is 1023
+    const size_t nMaxPageBreaks = static_cast< size_t >( 1023 );
+    const size_t nNumPageBreaks = std::min( nMaxPageBreaks, mrPageBreaks.size() );
+    OString sNumPageBreaks = OString::number( nNumPageBreaks );
+    SAL_WARN_IF( nNumPageBreaks < mrPageBreaks.size(), "sc.filter",
+                 "Number of page breaks exceeds Office implementation maximum, limiting them to "
+                    + sNumPageBreaks + " and discarding the rest (total no. was "
+                    + OString::number(mrPageBreaks.size()) + ")" );
     pWorksheet->startElement( nElement,
             XML_count,              sNumPageBreaks,
             XML_manualBreakCount,   sNumPageBreaks );
-    for( const auto& rPageBreak : mrPageBreaks )
+    for( size_t nBreak = 0; nBreak < nNumPageBreaks; nBreak++ )
     {
         pWorksheet->singleElement( XML_brk,
-                XML_id,     OString::number(rPageBreak),
+                XML_id,     OString::number(mrPageBreaks[nBreak]),
                 XML_man,    "true",
                 XML_max,    OString::number(mnMaxPos),
                 XML_min,    "0"
