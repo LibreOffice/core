@@ -2190,40 +2190,46 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
     Reader* pRead = nullptr;
     OUString sData;
     bool bSkipInvalidateNumRules = false;
-    switch( nFormat )
+    bool bCheckStream = true;
+
+    if (nFormat == SotClipboardFormatId::STRING || nFormat == SotClipboardFormatId::MARKDOWN)
     {
-    case SotClipboardFormatId::STRING:
+        if( rData.GetString( nFormat, sData ) )
         {
-            pRead = ReadAscii;
-
-            const SwPosition& rInsertPosition = *rSh.GetCursor()->Start();
-            if (CanSkipInvalidateNumRules(rInsertPosition))
-            {
-                // Insertion point is not a numbering and we paste plain text: then no need to
-                // invalidate all numberings.
-                bSkipInvalidateNumRules = true;
-            }
-
-            if( rData.GetString( nFormat, sData ) )
-            {
-                pStream = new SvMemoryStream( const_cast<sal_Unicode *>(sData.getStr()),
+            bCheckStream = false;
+            pStream = new SvMemoryStream( const_cast<sal_Unicode *>(sData.getStr()),
                         sData.getLength() * sizeof( sal_Unicode ),
                         StreamMode::READ );
 #ifdef OSL_BIGENDIAN
-                pStream->SetEndian( SvStreamEndian::BIG );
+            pStream->SetEndian( SvStreamEndian::BIG );
 #else
-                pStream->SetEndian( SvStreamEndian::LITTLE );
+            pStream->SetEndian( SvStreamEndian::LITTLE );
 #endif
 
+            if (nFormat == SotClipboardFormatId::STRING)
+            {
+                const SwPosition& rInsertPosition = *rSh.GetCursor()->Start();
+                if (CanSkipInvalidateNumRules(rInsertPosition))
+                {
+                    // Insertion point is not a numbering and we paste plain text: then no need to
+                    // invalidate all numberings.
+                    bSkipInvalidateNumRules = true;
+                }
+
+                pRead = ReadAscii;
                 SwAsciiOptions aAOpt;
                 aAOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
                 pRead->GetReaderOpt().SetASCIIOpts( aAOpt );
-                break;
+            }
+            else
+            {
+                pRead = ReadMarkdown;
             }
         }
-        [[fallthrough]]; // because then test if we get a stream
+    }
 
-    default:
+    if (bCheckStream)
+    {
         if( (xStrm = rData.GetSotStorageStream( nFormat )) )
         {
             if( ( SotClipboardFormatId::HTML_SIMPLE == nFormat ) ||
@@ -2242,18 +2248,13 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
                 pStream = xStrm.get();
                 if( SotClipboardFormatId::RTF == nFormat || SotClipboardFormatId::RICHTEXT == nFormat)
                     pRead = SwReaderWriter::GetRtfReader();
-                else if( SotClipboardFormatId::MARKDOWN == nFormat )
-                {
-                    pRead = ReadMarkdown;
-                }
-                else if( !pRead )
+                else
                 {
                     pRead = ReadHTML;
                     pRead->SetReadUTF8( true );
                 }
             }
         }
-        break;
     }
 
     if( pStream && pRead )
