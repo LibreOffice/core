@@ -37,6 +37,7 @@
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
 #include <include/cef_app.h>
