@@ -714,6 +714,14 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
         aVector.push_back(aFlavor);
     }
 
+    if(bHaveText)
+    {
+        css::datatransfer::DataFlavor aFlavor;
+        aFlavor.MimeType = OUString("text/markdown");
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        aVector.push_back(std::move(aFlavor));
+    }
+
     return aVector;
 }
 
@@ -837,7 +845,7 @@ public:
         css::uno::Any aRet;
 
         css::datatransfer::DataFlavor aFlavor(rFlavor);
-        if (aFlavor.MimeType == "text/plain;charset=utf-16")
+        if (aFlavor.MimeType == "text/plain;charset=utf-16" || aFlavor.MimeType == "text/markdown")
             aFlavor.MimeType = "text/plain;charset=utf-8";
 
         GdkClipboard* clipboard = clipboard_get(m_eSelection);
