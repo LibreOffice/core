@@ -1092,10 +1092,14 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     // Update default line
                     ::editeng::SvxBorderLine aLine;
-                    const ::editeng::SvxBorderLine* pLine = pNewAttrs->Get(SID_FRAME_LINESTYLE).GetLine();
+                    const ::editeng::SvxBorderLine* pLine = nullptr;
+                    const SfxPoolItem* pLineStyleItem = nullptr;
+                    if (pNewAttrs->HasItem(SID_FRAME_LINESTYLE, &pLineStyleItem))
+                        pLine = static_cast<const SvxLineItem*>(pLineStyleItem)->GetLine();
 
                     const SfxPoolItem *pItem1, *pItem2, *pItem3;
-                    if (pNewAttrs->HasItem(FN_PARAM_1, &pItem1) &&
+                    if (pLine &&
+                            pNewAttrs->HasItem(FN_PARAM_1, &pItem1) &&
                             pNewAttrs->HasItem(FN_PARAM_2, &pItem2) &&
                             pNewAttrs->HasItem(FN_PARAM_3, &pItem3))
                     {
