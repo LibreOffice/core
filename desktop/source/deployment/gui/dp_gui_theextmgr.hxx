@@ -70,10 +70,8 @@ public:
 
     weld::Window* getDialog()
     {
-        if (m_xExtMgrDialog)
-            return m_xExtMgrDialog->getDialog();
-        if (m_xUpdReqDialog)
-            return m_xUpdReqDialog->getDialog();
+        if (DialogHelper* pHelper = getDialogHelper())
+            return pHelper->getDialog();
         return nullptr;
     }
     DialogHelper* getDialogHelper()
