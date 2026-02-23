@@ -462,17 +462,14 @@ void SfxDocTplService::init_Impl()
         if ( bNeedsUpdate )
         {
             aGuard.clear();
-            SolarMutexClearableGuard aSolarGuard;
+            SolarMutexGuard aSolarGuard;
 
-            VclPtrInstance< WaitWindow_Impl > pWin;
-            aSolarGuard.clear();
+            [[maybe_unused]] ScopedVclPtrInstance<WaitWindow_Impl> pWin;
             {
+                SolarMutexReleaser aSolarReleaser;
                 osl::MutexGuard anotherGuard(maMutex);
                 doUpdate();
             }
-            SolarMutexGuard aSecondSolarGuard;
-
-            pWin.disposeAndClear();
         }
         else if ( needsUpdate() )
             // the UI should be shown only on the first update

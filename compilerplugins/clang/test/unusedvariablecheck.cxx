@@ -33,6 +33,7 @@ int main()
         v4; // expected-error {{unused variable 'v4' [loplugin:unusedvariablecheck]}}
     S v5; // expected-error {{unused variable 'v5' [loplugin:unusedvariablecheck]}}
     S v6(nullptr);
+    [[maybe_unused]] S v7;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
