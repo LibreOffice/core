@@ -372,9 +372,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
             if ( nSalFrameStyle & SalFrameStyleFlags::SIZEABLE )
             {
                 pFrame->mbSizeBorder = true;
-                nSysStyle |= WS_THICKFRAME;
-                if ( !hWndParent )
-                    nSysStyle |= WS_MAXIMIZEBOX;
+                nSysStyle |= (WS_THICKFRAME | WS_MAXIMIZEBOX);
             }
             else
                 pFrame->mbFixBorder = true;
