@@ -172,9 +172,19 @@ public:
 
     void transform(const basegfx::B2DHomMatrix& rMatrix)
     {
+        const double m00 = rMatrix.get(0, 0);
+        const double m01 = rMatrix.get(0, 1);
+        const double m02 = rMatrix.get(0, 2);
+        const double m10 = rMatrix.get(1, 0);
+        const double m11 = rMatrix.get(1, 1);
+        const double m12 = rMatrix.get(1, 2);
+
         for (auto& point : maVector)
         {
-            point *= rMatrix;
+            const double x = point.getX();
+            const double y = point.getY();
+            point.setX(m00 * x + m01 * y + m02);
+            point.setY(m10 * x + m11 * y + m12);
         }
     }
 
@@ -1066,6 +1076,13 @@ public:
 
         if(moControlVector)
         {
+            const double m00 = rMatrix.get(0, 0);
+            const double m01 = rMatrix.get(0, 1);
+            const double m02 = rMatrix.get(0, 2);
+            const double m10 = rMatrix.get(1, 0);
+            const double m11 = rMatrix.get(1, 1);
+            const double m12 = rMatrix.get(1, 2);
+
             for(sal_uInt32 a(0); a < maPoints.count(); a++)
             {
                 basegfx::B2DPoint aCandidate = maPoints.getCoordinate(a);
@@ -1077,19 +1094,22 @@ public:
 
                     if(!rPrevVector.equalZero())
                     {
-                        basegfx::B2DVector aPrevVector(rMatrix * rPrevVector);
-                        moControlVector->setPrevVector(a, aPrevVector);
+                        const double x = rPrevVector.getX();
+                        const double y = rPrevVector.getY();
+                        moControlVector->setPrevVector(a, basegfx::B2DVector(m00 * x + m01 * y, m10 * x + m11 * y));
                     }
 
                     if(!rNextVector.equalZero())
                     {
-                        basegfx::B2DVector aNextVector(rMatrix * rNextVector);
-                        moControlVector->setNextVector(a, aNextVector);
+                        const double x = rNextVector.getX();
+                        const double y = rNextVector.getY();
+                        moControlVector->setNextVector(a, basegfx::B2DVector(m00 * x + m01 * y, m10 * x + m11 * y));
                     }
                 }
 
-                aCandidate *= rMatrix;
-                maPoints.setCoordinate(a, aCandidate);
+                const double x = aCandidate.getX();
+                const double y = aCandidate.getY();
+                maPoints.setCoordinate(a, basegfx::B2DPoint(m00 * x + m01 * y + m02, m10 * x + m11 * y + m12));
             }
 
             if(!moControlVector->isUsed())
