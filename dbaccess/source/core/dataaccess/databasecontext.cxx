@@ -484,11 +484,6 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
             // all the code should have been changed so that registration is by URL only
         m_aDatasourceProperties[ _rModelImpl.m_sName ] = aRememberProps.getPropertyValues();
     }
-    else
-    {
-        OSL_ENSURE(  sDocumentURL.isEmpty()  &&  _rModelImpl.m_sName.isEmpty() ,
-            "ODatabaseContext::storeTransientProperties: a non-empty data source which I do not know?!" );
-    }
 }
 
 void SAL_CALL ODatabaseContext::addContainerListener( const Reference< XContainerListener >& _rxListener )
