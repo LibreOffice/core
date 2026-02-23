@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
+#include <xmloff/xmlimppr.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -39,7 +40,6 @@ namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::frame { class XModel; }
 
 class SvXMLImport;
-class SvXMLImportPropertyMapper;
 class SvXMLStylesContext;
 class XMLSdPropHdlFactory;
 class XMLTableImport;
