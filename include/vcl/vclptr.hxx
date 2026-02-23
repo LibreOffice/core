@@ -65,6 +65,9 @@ template<typename T> constexpr bool isIncompleteOrDerivedFromVclReferenceBase(
 
 } // namespace vcl::detail
 
+template <class reference_type>
+class ScopedVclPtr;
+
 /**
  * A thin wrapper around rtl::Reference to implement the acquire and dispose semantics we want for references to vcl::Window subclasses.
  *
@@ -98,6 +101,12 @@ public:
     VclPtr (reference_type * pBody, __sal_NoAcquire)
         : m_rInnerRef(pBody, SAL_NO_ACQUIRE)
     {}
+
+    /** Prevent auto-conversion of ScopedVclPtr to VclPtr, which defeats the purpose of
+        ScopedVclPtr.
+    */
+    VclPtr (const ScopedVclPtr<reference_type> &) = delete;
+    VclPtr (ScopedVclPtr<reference_type> &&) = delete;
 
     /** Up-casting conversion constructor: Copies interface reference.
 
@@ -182,6 +191,12 @@ public:
         m_rInnerRef.set(pBody);
         return *this;
     }
+
+    /** Prevent auto-conversion of ScopedVclPtr to VclPtr, which defeats the purpose of
+        ScopedVclPtr.
+    */
+    VclPtr& operator=(const ScopedVclPtr<reference_type> &) = delete;
+    VclPtr& operator=(ScopedVclPtr<reference_type> &&) = delete;
 
     operator reference_type * () const
     {
