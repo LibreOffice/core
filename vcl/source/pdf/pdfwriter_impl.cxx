@@ -4967,7 +4967,7 @@ static void lcl_assignMeta(std::u16string_view aValue, OString& aMeta)
 {
     if (!aValue.empty())
     {
-        aMeta = OUStringToOString(comphelper::string::encodeForXml(aValue), RTL_TEXTENCODING_UTF8);
+        aMeta = OUStringToOString(aValue, RTL_TEXTENCODING_UTF8);
     }
 }
 
