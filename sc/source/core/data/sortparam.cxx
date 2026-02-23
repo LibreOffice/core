@@ -44,7 +44,8 @@ ScSortParam::ScSortParam( const ScSortParam& r ) :
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
         maKeyState( r.maKeyState ),
         aCollatorLocale( r.aCollatorLocale ), aCollatorAlgorithm( r.aCollatorAlgorithm ),
-        nCompatHeader( r.nCompatHeader )
+        nCompatHeader( r.nCompatHeader ),
+        meSortOrderType(r.meSortOrderType)
 {
 }
 
@@ -64,6 +65,7 @@ void ScSortParam::Clear()
     bHasHeader=bCaseSens=bUserDef = false;
     eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
     bByRow = bInplace = true;
+    meSortOrderType = SortOrderType::Ordered;
     aCollatorLocale = css::lang::Locale();
     aCollatorAlgorithm.clear();
 
@@ -93,6 +95,7 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     aCollatorLocale         = r.aCollatorLocale;
     aCollatorAlgorithm      = r.aCollatorAlgorithm;
     nCompatHeader   = r.nCompatHeader;
+    meSortOrderType = r.meSortOrderType;
 
     return *this;
 }
@@ -138,6 +141,7 @@ bool ScSortParam::operator==( const ScSortParam& rOther ) const
         && (aCollatorLocale.Country     == rOther.aCollatorLocale.Country)
         && (aCollatorLocale.Variant     == rOther.aCollatorLocale.Variant)
         && (aCollatorAlgorithm          == rOther.aCollatorAlgorithm)
+        && (meSortOrderType == rOther.meSortOrderType)
         && ( !maKeyState.empty() || !rOther.maKeyState.empty() )
         )
     {

@@ -1194,6 +1194,23 @@ SfxVoidItem DataSort SID_SORT
     GroupId = SfxGroupId::Data;
 ]
 
+SfxVoidItem Shuffle SID_SHUFFLE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Data;
+]
+
 
 SfxVoidItem DataForm SID_DATA_FORM
 ()

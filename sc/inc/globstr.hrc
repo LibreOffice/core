@@ -69,6 +69,7 @@
 #define STR_UNDO_SUBTOTALS                      NC_("STR_UNDO_SUBTOTALS", "Subtotals")
 #define STR_UNDO_TABLETOTALS                    NC_("STR_UNDO_TABLETOTALS", "Table Total Row")
 #define STR_UNDO_SORT                           NC_("STR_UNDO_SORT", "Sort")
+#define STR_UNDO_SHUFFLE                        NC_("STR_UNDO_SHUFFLE", "Shuffle")
 #define STR_UNDO_QUERY                          NC_("STR_UNDO_QUERY", "Filter")
 #define STR_UNDO_DBADDTABLE                     NC_("STR_UNDO_DBTABLE", "Create table")
 #define STR_UNDO_DBREMTABLE                     NC_("STR_UNDO_DBTABLE", "Delete table")

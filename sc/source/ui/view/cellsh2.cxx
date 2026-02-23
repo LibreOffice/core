@@ -54,6 +54,7 @@
 #include <validate.hxx>
 #include <datamapper.hxx>
 #include <datafdlg.hxx>
+#include <undosort.hxx>
 
 #include <scui_def.hxx>
 #include <scabstdlg.hxx>
@@ -429,7 +430,30 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 }
             }
             break;
+        case SID_SHUFFLE:
+            {
+                ScSortParam aSortParam;
+                ScViewData& rData = GetViewData();
+                pTabViewShell->GetDBData()->GetSortParam(aSortParam);
 
+                if (lcl_GetSortParam(rData, aSortParam))
+                {
+                    pTabViewShell->GetDBData()->GetSortParam(aSortParam);
+
+                    ScDocument& rDoc = rData.GetDocument();
+                    SCTAB nTab = rData.CurrentTabForData();
+                    bool bHasHeader = rDoc.HasColHeader(
+                        aSortParam.nCol1, aSortParam.nRow1,
+                        aSortParam.nCol2, aSortParam.nRow2, nTab);
+                    aSortParam.bHasHeader = bHasHeader;
+                    aSortParam.bByRow = true;
+                    aSortParam.meSortOrderType = SortOrderType::Random;
+
+                    pTabViewShell->Sort(aSortParam);
+                    rReq.Done();
+                }
+            }
+            break;
         case SID_SORT:
             {
                 if (ScDBData* pDBData = pTabViewShell->GetDBData())

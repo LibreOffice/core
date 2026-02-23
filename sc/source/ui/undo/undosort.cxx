@@ -21,7 +21,7 @@ UndoSort::UndoSort( ScDocShell& rDocSh, ReorderParam aParam ) :
 
 OUString UndoSort::GetComment() const
 {
-    return ScResId(STR_UNDO_SORT);
+    return ScResId(maParam.mbShuffle ? STR_UNDO_SHUFFLE : STR_UNDO_SORT);
 }
 
 void UndoSort::Undo()
