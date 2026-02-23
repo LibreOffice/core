@@ -68,7 +68,7 @@ public:
     bool isModified() const { return m_bModified; }
     void clearModified() { m_bModified = false; }
 
-    weld::Window* getDialog()
+    weld::Dialog* getDialog()
     {
         if (m_xExtMgrDialog)
             return m_xExtMgrDialog->getDialog();

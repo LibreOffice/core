@@ -182,7 +182,7 @@ void ServiceImpl::setDialogTitle( OUString const & title )
     if ( dp_gui::TheExtensionManager::s_ExtMgr.is() )
     {
         const SolarMutexGuard guard;
-        if (weld::Window* pDialog = dp_gui::TheExtensionManager::s_ExtMgr->getDialog())
+        if (weld::Dialog* pDialog = dp_gui::TheExtensionManager::s_ExtMgr->getDialog())
             pDialog->set_title(title);
     }
 }
