@@ -4490,8 +4490,31 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
         return;
 
     OSL_ENSURE(rPortion.GetLines().Count(), "Paragraph with no lines in ParaPortion::CalcHeight");
+    sal_Int32 nUrlYJump = 0;
     for (sal_Int32 nLine = 0; nLine < rPortion.GetLines().Count(); ++nLine)
-        rPortion.mnHeight += rPortion.GetLines()[nLine].GetHeight();
+    {
+        EditLine& rLine = rPortion.GetLines()[nLine];
+        if (nUrlYJump == 0)
+            rPortion.mnHeight += rLine.GetHeight();
+        else
+            nUrlYJump = 0;
+        for (sal_Int32 nPortion = rLine.GetStartPortion(); nPortion <= rLine.GetEndPortion();
+             nPortion++)
+        {
+            const TextPortion& rTextPortion = rPortion.GetTextPortions()[nPortion];
+            if (rTextPortion.GetKind() == PortionKind::FIELD)
+            {
+                ExtraPortionInfo* pExtraInfo = rTextPortion.GetExtraInfos();
+                if (pExtraInfo && pExtraInfo->lineBreaksList.size() > 1)
+                {
+                    // Use the same size calculation as in ImpEditEngine::Paint
+                    const sal_uInt16 nMaxAscent(rLine.GetMaxAscent());
+                    nUrlYJump = nMaxAscent * (pExtraInfo->lineBreaksList.size() - 1);
+                    rPortion.mnHeight += nUrlYJump;
+                }
+            }
+        }
+    }
 
     if (maStatus.IsOutliner())
         return;
