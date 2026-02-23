@@ -54,6 +54,9 @@
 
 #include <algorithm>
 
+#include <avmedia/mediaitem.hxx>
+#include <sfx2/objsh.hxx>
+
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -692,11 +695,38 @@ void SlideTransitionPane::openSoundFileDialog()
            aFileDialog.Execute() == ERRCODE_NONE )
     {
         OUString aFile = aFileDialog.GetPath();
+        bool bEmbedded = false;
+
+        // tdf#67544: Embed the sound file if "Link" is not checked
+        if (!aFileDialog.IsInsertAsLinkSelected())
+        {
+            SfxObjectShell* pShell = SfxObjectShell::Current();
+            if (pShell)
+            {
+                OUString aEmbeddedURL;
+                bool bSuccess = ::avmedia::EmbedMedia(pShell->GetModel(), aFile, aEmbeddedURL);
+                if (bSuccess && !aEmbeddedURL.isEmpty())
+                {
+                    aFile = aEmbeddedURL;
+                    bEmbedded = true;
+                }
+            }
+        }
+
         std::vector<OUString>::size_type nPos = 0;
         bValidSoundFile = lcl_findSoundInList( maSoundList, aFile, nPos );
 
         if( bValidSoundFile )
         {
+            bQuitLoop = true;
+        }
+        else if( bEmbedded )
+        {
+            // Embedded URL: add directly to sound list, skip gallery
+            maSoundList.push_back( aFile );
+            lcl_FillSoundListBox( maSoundList, *mxLB_SOUND );
+            nPos = maSoundList.size() - 1;
+            bValidSoundFile = true;
             bQuitLoop = true;
         }
         else // not in sound list
