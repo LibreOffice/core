@@ -480,7 +480,7 @@ void SwViewShell::ImplUnlockPaint(std::vector<LockPaintReason>& rReasons, bool b
         if ( (bInSizeNotify || bVirDev ) && VisArea().HasArea() && !comphelper::LibreOfficeKit::isActive())
         {
             //Refresh with virtual device to avoid flickering.
-            VclPtrInstance<VirtualDevice> pVout( *mpOut );
+            ScopedVclPtrInstance<VirtualDevice> pVout(*mpOut);
             pVout->SetMapMode( mpOut->GetMapMode() );
             Size aSize( VisArea().SSize() );
             aSize.AdjustWidth(20 );
@@ -522,7 +522,6 @@ void SwViewShell::ImplUnlockPaint(std::vector<LockPaintReason>& rReasons, bool b
                 GetWin()->EnablePaint( true );
                 InvalidateAll(rReasons);
             }
-            pVout.disposeAndClear();
         }
         else
         {
@@ -1531,7 +1530,7 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
 
         //create virtual device and set.
         const Size aPixSz = GetWin()->PixelToLogic(Size(1,1));
-        VclPtrInstance<VirtualDevice> pVout( *GetWin()->GetOutDev() );
+        ScopedVclPtrInstance<VirtualDevice> pVout(*GetWin()->GetOutDev());
         pVout->SetLineColor( GetWin()->GetOutDev()->GetLineColor() );
         pVout->SetFillColor( GetWin()->GetOutDev()->GetFillColor() );
         MapMode aMapMode( GetWin()->GetMapMode() );
@@ -1708,14 +1707,12 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
                         --mnLockPaint;
                 }
             }
-            pVout.disposeAndClear();
             GetWin()->PaintImmediately();
             if ( !Imp()->m_bStopSmooth )
                 --mnLockPaint;
             SetFirstVisPageInvalid();
             return true;
         }
-        pVout.disposeAndClear();
     }
 #endif
 
