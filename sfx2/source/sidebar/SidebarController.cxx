@@ -80,8 +80,9 @@ namespace
         if (rsDeckId == u"SdCustomAnimationDeck")
             return ".uno:CustomAnimation";
 
-        if (rsDeckId == u"PropertyDeck")
-            return vcl::EnumContext::Application::Impress == vcl::EnumContext::GetApplicationEnum(context.msApplication) ? ".uno:ModifyPage" : ".uno:Sidebar";
+        if (rsDeckId == u"PropertyDeck"
+            && vcl::EnumContext::Application::Impress == vcl::EnumContext::GetApplicationEnum(context.msApplication))
+            return ".uno:ModifyPage";
 
         if (rsDeckId == u"SdLayoutsDeck")
             return ".uno:ModifyPage";
