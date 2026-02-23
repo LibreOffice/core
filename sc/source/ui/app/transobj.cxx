@@ -220,6 +220,7 @@ void ScTransferObj::AddSupportedFormats()
 
     AddFormat( SotClipboardFormatId::RTF );
     AddFormat( SotClipboardFormatId::RICHTEXT );
+    AddFormat( SotClipboardFormatId::MARKDOWN );
     if ( m_aBlock.aStart == m_aBlock.aEnd )
     {
         AddFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT );
@@ -288,6 +289,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             nFormat == SotClipboardFormatId::HTML
             || nFormat == SotClipboardFormatId::RTF
             || nFormat == SotClipboardFormatId::RICHTEXT
+            || nFormat == SotClipboardFormatId::MARKDOWN
             || nFormat == SotClipboardFormatId::BITMAP
             || nFormat == SotClipboardFormatId::PNG;
 
@@ -300,6 +302,147 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
         if ( nFormat == SotClipboardFormatId::LINKSRCDESCRIPTOR || nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
         {
             bOK = SetTransferableObjectDescriptor( m_aObjDesc );
+        }
+        else if ( nFormat == SotClipboardFormatId::MARKDOWN && m_aBlock.aStart == m_aBlock.aEnd )
+        {
+            // Markdown from a single cell - use EditEngine
+            SCCOL nCol = m_aBlock.aStart.Col();
+            SCROW nRow = m_aBlock.aStart.Row();
+            SCTAB nTab = m_aBlock.aStart.Tab();
+            ScAddress aPos(nCol, nRow, nTab);
+
+            const ScPatternAttr* pPattern = m_pDoc->GetPattern(nCol, nRow, nTab);
+            if (pPattern)
+            {
+                ScTabEditEngine aEngine(*pPattern, m_pDoc->GetEditEnginePool(), *m_pDoc);
+                ScRefCellValue aCell(*m_pDoc, aPos);
+                if (aCell.getType() == CELLTYPE_EDIT)
+                {
+                    const EditTextObject* pObj = aCell.getEditText();
+                    aEngine.SetTextCurrentDefaults(*pObj);
+                }
+                else
+                {
+                    ScInterpreterContext& rContext = m_pDoc->GetNonThreadedContext();
+                    sal_uInt32 nNumFmt = pPattern->GetNumberFormat(rContext);
+                    const Color* pColor;
+                    OUString aText
+                        = ScCellFormat::GetString(aCell, nNumFmt, &pColor, &rContext, *m_pDoc);
+                    if (!aText.isEmpty())
+                        aEngine.SetTextCurrentDefaults(aText);
+                }
+
+                sal_Int32 nParCnt = aEngine.GetParagraphCount();
+                if (nParCnt == 0)
+                    nParCnt = 1;
+                ESelection aSel(0, 0, nParCnt - 1, aEngine.GetTextLen(nParCnt - 1));
+
+                uno::Reference<datatransfer::XTransferable> xEditTrans
+                    = aEngine.CreateTransferable(aSel);
+                TransferableDataHelper aEditHelper(xEditTrans);
+
+                std::unique_ptr<SvStream> xStrm = aEditHelper.GetSotStorageStream(rFlavor);
+                bOK = bool(xStrm);
+                if (bOK)
+                {
+                    SvMemoryStream aMemStm;
+                    aMemStm.WriteStream(*xStrm);
+                    aMemStm.Seek(0);
+                    bOK = SetAny(
+                        uno::Any(uno::Sequence<sal_Int8>(
+                            static_cast<const sal_Int8*>(aMemStm.GetData()),
+                            aMemStm.TellEnd())));
+                }
+            }
+        }
+        else if ( nFormat == SotClipboardFormatId::MARKDOWN && m_aBlock.aStart != m_aBlock.aEnd )
+        {
+            // Markdown table from multi-cell range
+            ScRange aRange = lcl_reduceBlock(*m_pDoc, m_aBlock);
+            SCTAB nTab = aRange.aStart.Tab();
+            SCCOL nStartCol = aRange.aStart.Col();
+            SCROW nStartRow = aRange.aStart.Row();
+            SCCOL nEndCol = aRange.aEnd.Col();
+            SCROW nEndRow = aRange.aEnd.Row();
+
+            // Helper to escape pipe and newline in cell values
+            auto fnEscapeCell = [](const OUString& rStr) -> OString {
+                OUString aEscaped = rStr.replaceAll(u"\\", u"\\\\")
+                                        .replaceAll(u"|", u"\\|")
+                                        .replaceAll(u"\n", u" ")
+                                        .replaceAll(u"\r", u"");
+                return OUStringToOString(aEscaped, RTL_TEXTENCODING_UTF8);
+            };
+
+            OStringBuffer aBuf;
+
+            // For single-row selections, output all data as a single row
+            // table using column letters as headers
+            bool bSingleRow = (nStartRow == nEndRow);
+            if (bSingleRow)
+            {
+                // Generate column headers (A, B, C, ...)
+                aBuf.append("|");
+                for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+                {
+                    aBuf.append(OString::Concat(" ") + OString::number(static_cast<int>(nCol - nStartCol + 1)) + " |");
+                }
+                aBuf.append("\n");
+
+                // Separator
+                aBuf.append("|");
+                for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+                {
+                    aBuf.append(" --- |");
+                }
+                aBuf.append("\n");
+
+                // Single data row
+                aBuf.append("|");
+                for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+                {
+                    OUString aCellStr = m_pDoc->GetString(nCol, nStartRow, nTab);
+                    aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
+                }
+                aBuf.append("\n");
+            }
+            else
+            {
+                // Header row (first row of selection)
+                aBuf.append("|");
+                for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+                {
+                    OUString aCellStr = m_pDoc->GetString(nCol, nStartRow, nTab);
+                    aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
+                }
+                aBuf.append("\n");
+
+                // Separator
+                aBuf.append("|");
+                for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+                {
+                    aBuf.append(" --- |");
+                }
+                aBuf.append("\n");
+
+                // Data rows
+                for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; nRow++)
+                {
+                    aBuf.append("|");
+                    for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+                    {
+                        OUString aCellStr = m_pDoc->GetString(nCol, nRow, nTab);
+                        aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
+                    }
+                    aBuf.append("\n");
+                }
+            }
+
+            OString aResult = aBuf.makeStringAndClear();
+            bOK = SetAny(
+                uno::Any(uno::Sequence<sal_Int8>(
+                    reinterpret_cast<const sal_Int8*>(aResult.getStr()),
+                    aResult.getLength())));
         }
         else if ( ( nFormat == SotClipboardFormatId::RTF || nFormat == SotClipboardFormatId::RICHTEXT ||
             nFormat == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) && m_aBlock.aStart == m_aBlock.aEnd )

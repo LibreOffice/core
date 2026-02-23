@@ -194,6 +194,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
             AddFormat( SotClipboardFormatId::STRING_TSVC );
             AddFormat( SotClipboardFormatId::RTF );
             AddFormat( SotClipboardFormatId::RICHTEXT );
+            AddFormat( SotClipboardFormatId::MARKDOWN );
             if ( eMode == SC_SELTRANS_CELL )
             {
                 AddFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT );
