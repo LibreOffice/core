@@ -4184,6 +4184,9 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     WriteXML( pDataObj->GetODFStream(), aSelection );
     pDataObj->GetODFStream().Seek( 0 );
 
+    WriteMarkdown( pDataObj->GetMarkdownStream(), aSelection );
+    pDataObj->GetMarkdownStream().Seek( 0 );
+
     //Dumping the ODFStream to a XML file for testing purpose
     /*
     std::filebuf afilebuf;
@@ -4298,6 +4301,31 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     {
                         SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
                         aNewSelection = Read( aRTFStream, rBaseURL, EETextFormat::Rtf, EditSelection(rPaM) );
+                    }
+                    bDone = true;
+                }
+                catch( const css::uno::Exception& )
+                {
+                }
+            }
+        }
+
+        if ( !bDone )
+        {
+            // Markdown
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::MARKDOWN, aFlavor );
+            if ( rxDataObj->isDataFlavorSupported( aFlavor )
+                && ( SotClipboardFormatId::NONE == format
+                    || SotClipboardFormatId::MARKDOWN == format ) )
+            {
+                try
+                {
+                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aMDStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
+                        aNewSelection = Read( aMDStream, rBaseURL, EETextFormat::Markdown, EditSelection(rPaM) );
                     }
                     bDone = true;
                 }

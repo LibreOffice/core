@@ -30,6 +30,7 @@ class EDITENG_DLLPUBLIC EditDataObject :  public ::cppu::WeakImplHelper<css::dat
 private:
     SvMemoryStream  maRTFData;
     SvMemoryStream  maODFData;
+    SvMemoryStream  maMarkdownData;
     OUString        maText;
     OUString        maOfficeBookmark;
 
@@ -39,6 +40,7 @@ public:
 
     SvMemoryStream& GetRTFStream() { return maRTFData; }
     SvMemoryStream& GetODFStream() { return maODFData; }
+    SvMemoryStream& GetMarkdownStream() { return maMarkdownData; }
     OUString&       GetString() { return maText; }
     OUString&       GetURL()    { return maOfficeBookmark; }
 
