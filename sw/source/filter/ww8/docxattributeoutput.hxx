@@ -173,7 +173,7 @@ public:
     // In order to cache the SdtBlockHelper value, some mechanism is needed to check its validity.
     // Currently this is needed only for m_aParagraphSdt, so tracking the SwPosition is sufficient.
 
-    // If the SDT has not beeen started (!m_bStartedSdt) and the text positions do not match,
+    // If the SDT has not been started (!m_bStartedSdt) and the text positions do not match,
     // then this SdtBlockHelper cache may be cleared and re-populated.
     const SwPosition* m_pStartPosition; // only used by m_aParagraphSdt
     std::vector<OUString> m_vBookmarkEnd; // only used by m_aParagraphSdt
@@ -1103,7 +1103,7 @@ private:
     // It starts at the paragraph containing the 'SdtPr' grabbag property,
     // and ends at the paragraph before the one containing the 'ParaSdtEndBefore' property.
     SdtBlockHelper m_aParagraphSdt;
-    // Same as m_aParagraphSdt except it ends on the run before the one containng 'SdtEndBefore'
+    // Same as m_aParagraphSdt except it ends on the run before the one containing 'SdtEndBefore'
     SdtBlockHelper m_aRunSdt;
 
     std::vector<std::map<SvxBoxItemLine, css::table::BorderLine2>> m_aTableStyleConfs;
