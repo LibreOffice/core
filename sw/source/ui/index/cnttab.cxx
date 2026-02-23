@@ -3011,13 +3011,12 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
         bool bPreStartLinkFound = false;
         bool bPreEndLinkFound = false;
 
-        SwTOXWidget* pControl = nullptr;
         SwTOXButton* pExchange = nullptr;
 
         auto it = m_aControlList.cbegin();
         for( ; it != m_aControlList.cend() && m_pActiveCtrl != it->get(); ++it )
         {
-            pControl = it->get();
+            SwTOXWidget* pControl = it->get();
 
             if( WindowType::EDIT != pControl->GetType())
             {
@@ -3048,7 +3047,7 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
         {
             for( ; it != m_aControlList.cend(); ++it )
             {
-                pControl = it->get();
+                SwTOXWidget* pControl = it->get();
 
                 if( pControl != m_pActiveCtrl &&
                     WindowType::EDIT != pControl->GetType())
