@@ -1889,7 +1889,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     {
         // This is the common case: "close sdt before the current run" was requested by the next run.
         // This is NOT common anymore. Hardly any runSdt's are grabbagged nowadays,
-        // but yes, if is is grabbagged, then this is the common way that it is closed.
+        // but yes, if it is grabbagged, then this is the common way that it is closed.
 
         m_aRunSdt.EndSdtBlock(m_pSerializer);
         m_bEndCharSdt = false;
