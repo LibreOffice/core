@@ -1706,6 +1706,18 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157517)
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152218)
+{
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "PDFUACompliance", uno::Any(true) },
+    }));
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    loadFromFile(u"tdf152218.odt");
+    // Without the fix in place, the validation would have failed
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152235)
 {
     // Enable PDF/UA
