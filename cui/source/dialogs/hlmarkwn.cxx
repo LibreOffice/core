@@ -361,8 +361,9 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
                         sal_Int32 nOutlineLevel = *o3tl::doAccess<sal_Int32>(aAny);
 
                         // pop until the top of stack entry has an outline level less than
-                        // the to be inserted heading outline level
-                        while (nOutlineLevel <= aHeadingsParentEntryStack.top().second)
+                        // the to be inserted heading outline level, but keep the sentinel
+                        while (aHeadingsParentEntryStack.size() > 1
+                               && nOutlineLevel <= aHeadingsParentEntryStack.top().second)
                             aHeadingsParentEntryStack.pop();
 
                         mxLbTree->insert(aHeadingsParentEntryStack.top().first.get(), -1,
