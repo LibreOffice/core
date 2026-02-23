@@ -63,4 +63,8 @@ $(eval $(call gb_Module_add_check_targets,postprocess,\
 ))
 endif
 
+$(eval $(call gb_Module_add_check_targets,postprocess,\
+	CppunitTest_singletons \
+))
+
 # vim: set noet sw=4 ts=4:
