@@ -18,6 +18,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svl/intitem.hxx>
 
 EditMDParser::EditMDParser(EditEngine* pEditEngine, const EditPaM& rPaM)
@@ -30,6 +31,9 @@ EditMDParser::EditMDParser(EditEngine* pEditEngine, const EditPaM& rPaM)
     , mbItalic(false)
     , mbStrikethrough(false)
     , mbCode(false)
+    , mbInCodeBlock(false)
+    , mnHeadingLevel(0)
+    , mnBlockQuoteDepth(0)
     , mnLinkStart(-1)
 {
 }
@@ -48,7 +52,8 @@ EditPaM EditMDParser::Parse(const OString& rMarkdown)
     parser.debug_log = nullptr;
     parser.syntax = nullptr;
 
-    md_parse(rMarkdown.getStr(), rMarkdown.getLength(), &parser, this);
+    int nRet = md_parse(rMarkdown.getStr(), rMarkdown.getLength(), &parser, this);
+    SAL_WARN_IF(nRet != 0, "editeng", "md_parse failed with error " << nRet);
 
     return maCurSel.Max();
 }
@@ -83,7 +88,7 @@ int EditMDParser::TextCb(MD_TEXTTYPE nType, const MD_CHAR* pText, MD_SIZE nSize,
     return 0;
 }
 
-void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
+void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* pDetail)
 {
     switch (nType)
     {
@@ -91,12 +96,49 @@ void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
             break;
 
         case MD_BLOCK_P:
-        case MD_BLOCK_H:
-        case MD_BLOCK_CODE:
-        case MD_BLOCK_QUOTE:
         {
             if (mbNeedParaBreak)
+            {
                 InsertParaBreak();
+                mbNeedParaBreak = false;
+            }
+            mbInParagraph = true;
+            break;
+        }
+
+        case MD_BLOCK_H:
+        {
+            if (mbNeedParaBreak)
+            {
+                InsertParaBreak();
+                mbNeedParaBreak = false;
+            }
+            mbInParagraph = true;
+            auto* pHDetail = static_cast<MD_BLOCK_H_DETAIL*>(pDetail);
+            mnHeadingLevel = static_cast<sal_Int16>(pHDetail->level);
+            break;
+        }
+
+        case MD_BLOCK_CODE:
+        {
+            if (mbNeedParaBreak)
+            {
+                InsertParaBreak();
+                mbNeedParaBreak = false;
+            }
+            mbInParagraph = true;
+            mbInCodeBlock = true;
+            break;
+        }
+
+        case MD_BLOCK_QUOTE:
+        {
+            mnBlockQuoteDepth++;
+            if (mbNeedParaBreak)
+            {
+                InsertParaBreak();
+                mbNeedParaBreak = false;
+            }
             mbInParagraph = true;
             break;
         }
@@ -105,6 +147,7 @@ void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
         {
             ListInfo aInfo;
             aInfo.bOrdered = false;
+            aInfo.nStart = 1;
             maListStack.push_back(aInfo);
             mnListDepth++;
             break;
@@ -114,6 +157,8 @@ void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
         {
             ListInfo aInfo;
             aInfo.bOrdered = true;
+            auto* pOLDetail = static_cast<MD_BLOCK_OL_DETAIL*>(pDetail);
+            aInfo.nStart = static_cast<sal_Int32>(pOLDetail->start);
             maListStack.push_back(aInfo);
             mnListDepth++;
             break;
@@ -122,7 +167,10 @@ void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
         case MD_BLOCK_LI:
         {
             if (mbNeedParaBreak)
+            {
                 InsertParaBreak();
+                mbNeedParaBreak = false;
+            }
             mbInParagraph = true;
 
             // Set bullet/numbering for this paragraph
@@ -144,7 +192,7 @@ void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
                     {
                         aFmt.SetNumberingType(SVX_NUM_ARABIC);
                         aFmt.SetLabelFollowedBy(SvxNumberFormat::LabelFollowedBy::LISTTAB);
-                        aFmt.SetStart(1);
+                        aFmt.SetStart(static_cast<sal_uInt16>(maListStack[nLevel].nStart));
                     }
                     else
                     {
@@ -161,6 +209,19 @@ void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
             break;
         }
 
+        case MD_BLOCK_HR:
+        {
+            if (mbNeedParaBreak)
+            {
+                InsertParaBreak();
+                mbNeedParaBreak = false;
+            }
+            // Insert a visual separator using a line of dashes
+            InsertText(u"\u2015\u2015\u2015"_ustr); // horizontal bar characters
+            mbNeedParaBreak = true;
+            break;
+        }
+
         default:
             break;
     }
@@ -174,11 +235,78 @@ void EditMDParser::LeaveBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
             break;
 
         case MD_BLOCK_P:
-        case MD_BLOCK_H:
-        case MD_BLOCK_CODE:
-        case MD_BLOCK_QUOTE:
         case MD_BLOCK_LI:
         {
+            mbInParagraph = false;
+            mbNeedParaBreak = true;
+            break;
+        }
+
+        case MD_BLOCK_H:
+        {
+            // Apply heading formatting to the current paragraph
+            if (mnHeadingLevel > 0)
+            {
+                sal_Int32 nPara = mpEditEngine->GetEditDoc().GetPos(maCurSel.Max().GetNode());
+                sal_Int32 nParaLen = mpEditEngine->GetTextLen(nPara);
+
+                // Apply bold and larger font size based on heading level
+                if (nParaLen > 0)
+                {
+                    SfxItemSet aSet(mpEditEngine->GetEmptyItemSet());
+                    aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+
+                    // Scale font size: H1=180%, H2=150%, H3=130%, H4=115%, H5/H6=100%
+                    sal_uInt32 nPct = 100;
+                    switch (mnHeadingLevel)
+                    {
+                        case 1:
+                            nPct = 180;
+                            break;
+                        case 2:
+                            nPct = 150;
+                            break;
+                        case 3:
+                            nPct = 130;
+                            break;
+                        case 4:
+                            nPct = 115;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (nPct > 100)
+                    {
+                        SvxFontHeightItem aHeight(
+                            mpEditEngine->GetEmptyItemSet().Get(EE_CHAR_FONTHEIGHT).GetHeight()
+                                * nPct / 100,
+                            100, EE_CHAR_FONTHEIGHT);
+                        aSet.Put(aHeight);
+                    }
+
+                    EditSelection aParaSel(EditPaM(maCurSel.Max().GetNode(), 0),
+                                           EditPaM(maCurSel.Max().GetNode(), nParaLen));
+                    mpEditEngine->SetAttribs(aParaSel, aSet);
+                }
+            }
+            mnHeadingLevel = 0;
+            mbInParagraph = false;
+            mbNeedParaBreak = true;
+            break;
+        }
+
+        case MD_BLOCK_CODE:
+        {
+            mbInCodeBlock = false;
+            mbInParagraph = false;
+            mbNeedParaBreak = true;
+            break;
+        }
+
+        case MD_BLOCK_QUOTE:
+        {
+            if (mnBlockQuoteDepth > 0)
+                mnBlockQuoteDepth--;
             mbInParagraph = false;
             mbNeedParaBreak = true;
             break;
@@ -189,7 +317,8 @@ void EditMDParser::LeaveBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
         {
             if (!maListStack.empty())
                 maListStack.pop_back();
-            mnListDepth--;
+            if (mnListDepth >= 0)
+                mnListDepth--;
             break;
         }
 
@@ -323,6 +452,26 @@ void EditMDParser::HandleText(MD_TEXTTYPE nType, const MD_CHAR* pText, MD_SIZE n
                 aText = u"'"_ustr;
             else if (aEntity == "&nbsp;")
                 aText = u"\u00A0"_ustr;
+            else if (aEntity.startsWith("&#x") || aEntity.startsWith("&#X"))
+            {
+                // Hex numeric entity: &#xHHHH;
+                OString aHex = aEntity.copy(3, aEntity.getLength() - 4); // strip &#x and ;
+                sal_uInt32 nCodePoint = aHex.toUInt32(16);
+                if (nCodePoint > 0 && nCodePoint <= 0x10FFFF)
+                    aText = OUString(&nCodePoint, 1);
+                else
+                    aText = OUString(pText, nSize, RTL_TEXTENCODING_UTF8);
+            }
+            else if (aEntity.startsWith("&#"))
+            {
+                // Decimal numeric entity: &#NNN;
+                OString aDec = aEntity.copy(2, aEntity.getLength() - 3); // strip &# and ;
+                sal_uInt32 nCodePoint = aDec.toUInt32();
+                if (nCodePoint > 0 && nCodePoint <= 0x10FFFF)
+                    aText = OUString(&nCodePoint, 1);
+                else
+                    aText = OUString(pText, nSize, RTL_TEXTENCODING_UTF8);
+            }
             else
                 aText = OUString(pText, nSize, RTL_TEXTENCODING_UTF8);
             InsertText(aText);
@@ -341,28 +490,36 @@ void EditMDParser::InsertText(const OUString& rText)
 
     maCurSel = EditSelection(mpEditEngine->InsertText(maCurSel, rText));
 
-    // Apply character formatting to the just-inserted text
-    if (mbBold || mbItalic || mbStrikethrough || mbCode)
+    // Always apply explicit character formatting to prevent attribute bleeding
+    // from adjacent formatted text via ContentNode::ExpandAttribs
+    bool bNeedMonospace = mbCode || mbInCodeBlock;
+    EditPaM aAttrStart(maCurSel.Max().GetNode(), nStartIndex);
+    EditPaM aAttrEnd(maCurSel.Max());
+    EditSelection aAttrSel(aAttrStart, aAttrEnd);
+
+    SfxItemSet aSet(mpEditEngine->GetEmptyItemSet());
+    aSet.Put(SvxWeightItem(mbBold ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT));
+    aSet.Put(SvxPostureItem(mbItalic ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC));
+    aSet.Put(
+        SvxCrossedOutItem(mbStrikethrough ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT));
+    if (bNeedMonospace)
     {
-        EditPaM aAttrStart(maCurSel.Max().GetNode(), nStartIndex);
-        EditPaM aAttrEnd(maCurSel.Max());
-        EditSelection aAttrSel(aAttrStart, aAttrEnd);
+        SvxFontItem aFont(FAMILY_MODERN, u"Courier New"_ustr, u""_ustr, PITCH_FIXED,
+                          RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO);
+        aSet.Put(aFont);
+    }
 
-        SfxItemSet aSet(mpEditEngine->GetEmptyItemSet());
-        if (mbBold)
-            aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
-        if (mbItalic)
-            aSet.Put(SvxPostureItem(ITALIC_NORMAL, EE_CHAR_ITALIC));
-        if (mbStrikethrough)
-            aSet.Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT));
-        if (mbCode)
-        {
-            SvxFontItem aFont(FAMILY_MODERN, u"Liberation Mono"_ustr, u""_ustr, PITCH_FIXED,
-                              RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO);
-            aSet.Put(aFont);
-        }
+    mpEditEngine->SetAttribs(aAttrSel, aSet);
 
-        mpEditEngine->SetAttribs(aAttrSel, aSet);
+    // Apply blockquote indent if we're inside a blockquote
+    if (mnBlockQuoteDepth > 0)
+    {
+        sal_Int32 nPara = mpEditEngine->GetEditDoc().GetPos(maCurSel.Max().GetNode());
+        SfxItemSet aParaItems(mpEditEngine->GetParaAttribs(nPara));
+        SvxLRSpaceItem aLR(EE_PARA_LRSPACE);
+        aLR.SetTextLeft(SvxIndentValue::twips(720 * mnBlockQuoteDepth));
+        aParaItems.Put(aLR);
+        mpEditEngine->SetParaAttribsOnly(nPara, aParaItems);
     }
 }
 

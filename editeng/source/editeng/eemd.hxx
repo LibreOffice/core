@@ -53,10 +53,14 @@ private:
     bool mbItalic;
     bool mbStrikethrough;
     bool mbCode;
+    bool mbInCodeBlock;
+    sal_Int16 mnHeadingLevel;
+    sal_Int32 mnBlockQuoteDepth;
 
     struct ListInfo
     {
         bool bOrdered;
+        sal_Int32 nStart;
     };
     std::vector<ListInfo> maListStack;
 
