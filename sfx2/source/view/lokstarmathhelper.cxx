@@ -220,7 +220,7 @@ void LokStarMathHelper::PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutpu
     const int nPartForCurView = pCurView->getPart();
 
     // Resizes the virtual device to contain the entries context
-    rDevice.SetOutputSizePixel({ nOutputWidth, nOutputHeight });
+    rDevice.SetOutputSizePixel({ nOutputWidth, nOutputHeight }, /*bErase*/ false);
 
     auto popIt = rDevice.ScopedPush(vcl::PushFlags::MAPMODE);
     MapMode aMapMode(rDevice.GetMapMode());
