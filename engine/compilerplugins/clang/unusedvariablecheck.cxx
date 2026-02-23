@@ -50,7 +50,7 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
     {
     if( ignoreLocation( var ))
         return true;
-    if( var->isReferenced() || var->isUsed())
+    if( var->isReferenced() || var->isUsed() || var->hasAttr<UnusedAttr>())
         return true;
     if( var->isDefinedOutsideFunctionOrMethod())
         return true;
