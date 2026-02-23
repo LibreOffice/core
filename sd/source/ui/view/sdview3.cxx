@@ -1547,6 +1547,32 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
 
+        if (ShouldTry(SotClipboardFormatId::MARKDOWN))
+        {
+            if (std::unique_ptr<SvStream> xStm
+                = rDataHelper.GetSotStorageStream(SotClipboardFormatId::MARKDOWN))
+            {
+                xStm->Seek(0);
+
+                OutlinerView* pOLV = GetTextEditOutlinerView();
+                if (pOLV)
+                {
+                    ::tools::Rectangle aRect(pOLV->GetOutputArea());
+                    Point aPos(pOLV->GetWindow()->PixelToLogic(maDropPos));
+                    if (aRect.Contains(aPos) || (!bDrag && IsTextEdit())
+                        || dynamic_cast<sd::NotesPanelViewShell*>(mpViewSh))
+                    {
+                        pOLV->Read(*xStm, EETextFormat::Markdown,
+                                   mpDocSh->GetHeaderAttributes());
+                        return true;
+                    }
+                }
+                if (SdrView::Paste(*xStm, EETextFormat::Markdown,
+                                   maDropPos, pPage, nPasteOptions))
+                    return true;
+            }
+        }
+
         bool bIsRTF = ShouldTry(SotClipboardFormatId::RTF);
         if (bIsRTF || ShouldTry(SotClipboardFormatId::RICHTEXT))
         {

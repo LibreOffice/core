@@ -43,6 +43,7 @@
 #include <svx/fmshell.hxx>
 #include <WindowUpdater.hxx>
 #include <sdxfer.hxx>
+#include <svx/svdogrp.hxx>
 
 #include <app.hrc>
 
@@ -648,11 +649,77 @@ uno::Reference<datatransfer::XTransferable> ViewShell::GetSelectionTransferable(
     if (!pSdrView)
         return uno::Reference<datatransfer::XTransferable>();
 
-    if (!pSdrView->GetTextEditObject())
+    if (pSdrView->GetTextEditObject())
+    {
+        EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+        return rEditView.getEditEngine().CreateTransferable(rEditView.GetSelection());
+    }
+
+    // Not in text-edit mode: extract text from selected shapes
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() == 0)
         return uno::Reference<datatransfer::XTransferable>();
 
-    EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
-    return rEditView.getEditEngine().CreateTransferable(rEditView.GetSelection());
+    SdDrawDocument* pDoc = GetDoc();
+    if (!pDoc)
+        return uno::Reference<datatransfer::XTransferable>();
+
+    SdrOutliner aOutliner(&pDoc->GetItemPool(), OutlinerMode::TextObject);
+    aOutliner.SetUpdateLayout(false);
+
+    // Recursive helper to collect text from objects, including group children
+    bool bFirst = true;
+    std::function<void(SdrObject*)> fnCollectText;
+    fnCollectText = [&](SdrObject* pObj) {
+        if (!pObj)
+            return;
+
+        // Recurse into group objects
+        if (auto* pGroup = dynamic_cast<SdrObjGroup*>(pObj))
+        {
+            SdrObjList* pList = pGroup->GetSubList();
+            if (pList)
+            {
+                for (size_t j = 0; j < pList->GetObjCount(); ++j)
+                    fnCollectText(pList->GetObj(j));
+            }
+            return;
+        }
+
+        const OutlinerParaObject* pParaObj = pObj->GetOutlinerParaObject();
+        if (!pParaObj)
+            return;
+
+        if (bFirst)
+        {
+            aOutliner.SetText(*pParaObj);
+            bFirst = false;
+        }
+        else
+        {
+            aOutliner.AddText(*pParaObj);
+        }
+    };
+
+    for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
+    {
+        fnCollectText(rMarkList.GetMark(i)->GetMarkedSdrObj());
+    }
+
+    if (bFirst) // no text found
+        return uno::Reference<datatransfer::XTransferable>();
+
+    aOutliner.SetUpdateLayout(true);
+
+    sal_Int32 nParaCount = aOutliner.GetParagraphCount();
+    if (nParaCount == 0)
+        return uno::Reference<datatransfer::XTransferable>();
+
+    EditEngine& rEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
+    sal_Int32 nLen = rEditEngine.GetTextLen(nParaCount - 1);
+    ESelection aSel(0, 0, nParaCount - 1, nLen);
+
+    return rEditEngine.CreateTransferable(aSel);
 }
 
 void ViewShell::SetGraphicMm100Position(bool bStart, const Point& rPosition)
