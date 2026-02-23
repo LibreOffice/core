@@ -274,7 +274,7 @@ class SwTokenWindow
 
 public:
     SwTokenWindow(std::unique_ptr<weld::Container> xParent);
-    weld::Grid* get_child_container() { return m_xCtrlParentWin.get(); }
+    weld::Grid& get_child_container() { return *m_xCtrlParentWin; }
     ~SwTokenWindow();
 
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }

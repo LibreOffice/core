@@ -1552,7 +1552,8 @@ class SwTOXEdit : public SwTOXWidget
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 public:
     SwTOXEdit(SwTokenWindow* pTokenWin, const SwFormToken& rToken)
-        : m_xBuilder(Application::CreateBuilder(pTokenWin->get_child_container(), u"modules/swriter/ui/toxentrywidget.ui"_ustr))
+        : m_xBuilder(Application::CreateBuilder(&pTokenWin->get_child_container(),
+                                                u"modules/swriter/ui/toxentrywidget.ui"_ustr))
         , m_aFormToken(rToken)
         , m_bNextControl(false)
         , m_pParent(pTokenWin)
@@ -1566,7 +1567,7 @@ public:
 
     virtual ~SwTOXEdit() override
     {
-        m_pParent->get_child_container()->move(m_xEntry.get(), nullptr);
+        m_pParent->get_child_container().move(m_xEntry.get(), nullptr);
     }
 
     virtual WindowType GetType() const override
@@ -1596,7 +1597,7 @@ public:
 
     virtual void set_grid_left_attach(int nPos) override
     {
-        m_pParent->get_child_container()->set_child_left_attach(*m_xEntry, nPos);
+        m_pParent->get_child_container().set_child_left_attach(*m_xEntry, nPos);
     }
 
     virtual void get_extents_relative_to(weld::Widget& rRelative, int& x, int& y, int& width, int& height) override
@@ -1713,7 +1714,8 @@ class SwTOXButton : public SwTOXWidget
     std::unique_ptr<weld::ToggleButton> m_xButton;
 public:
     SwTOXButton(SwTokenWindow* pTokenWin, const SwFormToken& rToken)
-        : m_xBuilder(Application::CreateBuilder(pTokenWin->get_child_container(), u"modules/swriter/ui/toxbuttonwidget.ui"_ustr))
+        : m_xBuilder(Application::CreateBuilder(&pTokenWin->get_child_container(),
+                                                u"modules/swriter/ui/toxbuttonwidget.ui"_ustr))
         , m_aFormToken(rToken)
         , m_bNextControl(false)
         , m_pParent(pTokenWin)
@@ -1726,7 +1728,7 @@ public:
 
     virtual ~SwTOXButton() override
     {
-        m_pParent->get_child_container()->move(m_xButton.get(), nullptr);
+        m_pParent->get_child_container().move(m_xButton.get(), nullptr);
     }
 
     virtual WindowType GetType() const override
@@ -1756,7 +1758,7 @@ public:
 
     virtual void set_grid_left_attach(int nPos) override
     {
-        m_pParent->get_child_container()->set_child_left_attach(*m_xButton, nPos);
+        m_pParent->get_child_container().set_child_left_attach(*m_xButton, nPos);
     }
 
     void get_extents_relative_to(weld::Widget& rRelative, int& x, int& y, int& width, int& height) override
