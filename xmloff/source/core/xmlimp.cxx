@@ -486,7 +486,7 @@ namespace {
         {
             try {
                 OUString streamName = u"l10n"_ustr;
-                if (xStorage && xStorage->isStreamElement(streamName))
+                if (xStorage && xStorage->hasByName(streamName) && xStorage->isStreamElement(streamName))
                 {
                     auto xIn = xStorage->openStreamElement(streamName, css::embed::ElementModes::READ|css::embed::ElementModes::NOCREATE);
                     if (!xIn)
