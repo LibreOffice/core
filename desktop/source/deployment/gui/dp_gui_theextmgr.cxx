@@ -148,7 +148,7 @@ void TheExtensionManager::SetText( const OUString &rTitle )
 {
     const SolarMutexGuard guard;
 
-    if (weld::Window* pDialog = getDialog())
+    if (weld::Dialog* pDialog = getDialog())
         pDialog->set_title( rTitle );
 }
 
@@ -157,7 +157,7 @@ void TheExtensionManager::ToTop()
 {
     const SolarMutexGuard guard;
 
-    if (weld::Window* pDialog = getDialog())
+    if (weld::Dialog* pDialog = getDialog())
         pDialog->present();
 }
 
@@ -196,7 +196,7 @@ sal_Int16 TheExtensionManager::execute()
 
 bool TheExtensionManager::isVisible()
 {
-    weld::Window* pDialog = getDialog();
+    weld::Dialog* pDialog = getDialog();
     return pDialog && pDialog->get_visible();
 }
 
