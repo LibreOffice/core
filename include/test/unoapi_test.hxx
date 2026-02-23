@@ -189,9 +189,9 @@ protected:
 
     rtl::Reference<TestInteractionHandler> xInteractionHandler;
 
+private:
     void validate(TestFilter eFilter);
 
-private:
     bool mbSkipValidation;
     OUString m_aBaseString;
 

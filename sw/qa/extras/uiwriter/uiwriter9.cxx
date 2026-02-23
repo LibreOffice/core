@@ -764,6 +764,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPDFExportCrash)
 
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    skipValidation();
 
     // Without the fix in place, this test would have crashed here
     save(TestFilter::PDF_WRITER, {

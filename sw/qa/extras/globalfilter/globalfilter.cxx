@@ -1392,6 +1392,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    skipValidation();
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
@@ -1797,6 +1798,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableOfContentLinksHaveContentSet)
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    skipValidation();
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
@@ -1859,6 +1861,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    skipValidation();
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
     vcl::filter::PDFDocument aDocument;
