@@ -21,7 +21,7 @@
 
 #include <sdr/properties/groupproperties.hxx>
 #include <svl/itemset.hxx>
-#include <svl/whiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <osl/diagnose.h>
@@ -72,21 +72,17 @@ namespace sdr::properties
             for (const rtl::Reference<SdrObject>& pObj : *pSub)
             {
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
-                SfxWhichIter aIter(rSet);
-                sal_uInt16 nWhich(aIter.FirstWhich());
-
-                while(nWhich)
+                for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.Next())
                 {
-                    if(SfxItemState::INVALID == aIter.GetItemState(false))
+                    const SfxPoolItem *pItem = aIter.GetCurItem();
+                    if(IsInvalidItem(pItem))
                     {
-                        moMergedItemSet->InvalidateItem(nWhich);
+                        moMergedItemSet->InvalidateItem(aIter.GetCurWhich());
                     }
                     else
                     {
-                        moMergedItemSet->MergeValue(rSet.Get(nWhich));
+                        moMergedItemSet->MergeValue(rSet.Get(aIter.GetCurWhich()));
                     }
-
-                    nWhich = aIter.NextWhich();
                 }
             }
 
