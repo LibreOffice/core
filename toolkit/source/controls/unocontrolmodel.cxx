@@ -210,7 +210,8 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             case BASEPROPERTY_BACKGROUNDCOLOR:
             case BASEPROPERTY_FILLCOLOR:
             case BASEPROPERTY_HIGHLIGHT_COLOR:
-            case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:            break;  // Void
+            case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:
+            case BASEPROPERTY_REFERER:                        break;  // Void
 
             case BASEPROPERTY_FONTRELIEF:
             case BASEPROPERTY_FONTEMPHASISMARK:
