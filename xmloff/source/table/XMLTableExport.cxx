@@ -609,7 +609,7 @@ void XMLTableExport::exportTableTemplates()
             {
             }
 
-            if (!xTableStyle->isInUse() && !bPhysical && !mbWriter)
+            if (!xTableStyle->isInUse() && !bPhysical)
                 continue;
 
             const TableStyleElement* pElements;

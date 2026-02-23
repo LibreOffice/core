@@ -199,11 +199,11 @@ class CheckStyle(unittest.TestCase):
         xTableStyle = xDoc.createInstance("com.sun.star.style.TableStyle")
         self.assertFalse(xTableStyle.isInUse())
         xDoc.StyleFamilies["TableStyles"].insertByName("Test Table Style", xTableStyle)
-        self.assertFalse(xTableStyle.isInUse())
+        self.assertTrue(xTableStyle.isInUse())
         xTable.setPropertyValue("TableTemplateName", "Test Table Style")
         self.assertTrue(xTableStyle.isInUse())
         xTable.setPropertyValue("TableTemplateName", "")
-        self.assertFalse(xTableStyle.isInUse())
+        self.assertTrue(xTableStyle.isInUse())
         xDoc.dispose()
 
     def test_CellFamily(self):

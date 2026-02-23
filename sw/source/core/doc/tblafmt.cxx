@@ -209,6 +209,29 @@ bool SwBoxAutoFormat::operator==(const SwBoxAutoFormat& rRight) const
     return GetBackground().GetColor() == rRight.GetBackground().GetColor();
 }
 
+bool SwBoxAutoFormat::IsSameAs(const SwBoxAutoFormat& rRight) const
+{
+    if (GetFont() == rRight.GetFont() && GetHeight() == rRight.GetHeight()
+        && GetWeight() == rRight.GetWeight() && GetPosture() == rRight.GetPosture() &&
+
+        GetCJKFont() == rRight.GetCJKFont() && GetCJKHeight() == rRight.GetCJKHeight()
+        && GetCJKWeight() == rRight.GetCJKWeight() && GetCJKPosture() == rRight.GetCJKPosture() &&
+
+        GetCTLFont() == rRight.GetCTLFont() && GetCTLHeight() == rRight.GetCTLHeight()
+        && GetCTLWeight() == rRight.GetCTLWeight() && GetCTLPosture() == rRight.GetCTLPosture() &&
+
+        GetUnderline() == rRight.GetUnderline() && GetColor() == rRight.GetColor()
+        && GetAdjust() == rRight.GetAdjust() && GetVerJustify() == rRight.GetVerJustify() &&
+
+        GetBackground() == rRight.GetBackground() &&
+
+        GetBox() == rRight.GetBox())
+    {
+        return true;
+    }
+    return false;
+}
+
 void SwBoxAutoFormat::SetXObject(rtl::Reference<SwXTextCellStyle> const& xObject)
 {
     m_xAutoFormatUnoObject = xObject.get();
@@ -559,6 +582,22 @@ void SwTableAutoFormat::FillToItemSet(size_t nIndex, SfxItemSet& rItemSet,
         else
             rItemSet.ClearItem(RES_BOXATR_FORMAT);
     }
+}
+
+bool SwTableAutoFormat::NeedsExport()
+{
+    const SwTableAutoFormat* rDefaultStyle
+        = SwModule::get()->GetAutoFormatTable().FindAutoFormat(GetName());
+
+    if (!rDefaultStyle || rDefaultStyle->GetParent() != GetParent())
+        return true;
+
+    for (size_t i = 0; i < ELEMENT_COUNT; i++)
+    {
+        if (!m_aBoxAutoFormat[i]->IsSameAs(*rDefaultStyle->GetField(i)))
+            return true;
+    }
+    return false;
 }
 
 bool SwTableAutoFormat::FirstRowEndColumnIsRow()
