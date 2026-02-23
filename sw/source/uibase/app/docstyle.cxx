@@ -2673,8 +2673,8 @@ SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
     mxStyleSheet->SetMask(_nMask) ;
     mxStyleSheet->SetFamily(eFam);
     mxStyleSheet->SetPhysical(true);
-    mxStyleSheet->SetParent(rParentStyleSheetName);
     mxStyleSheet->Create();
+    mxStyleSheet->SetParent(rParentStyleSheetName);
 
     return *mxStyleSheet;
 }
