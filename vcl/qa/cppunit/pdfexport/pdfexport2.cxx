@@ -807,6 +807,30 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion15)
     CPPUNIT_ASSERT_EQUAL(15, nFileVersion);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160196)
+{
+    // Create an empty document.
+    mxComponent = loadFromDesktop("private:factory/swriter");
+
+    // Add a title to avoid
+    // The Metadata stream as specified in ISO 32000-2:2020,
+    // 14.3 in the document catalog dictionary shall contain a dc:title entry
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
+        mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocumentPropertiesSupplier.is());
+    uno::Reference<document::XDocumentProperties> xDocumentProperties
+        = xDocumentPropertiesSupplier->getDocumentProperties();
+    xDocumentProperties->setTitle(u"Title"_ustr);
+
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) },
+                                           { "SelectPdfVersion", uno::Any(sal_Int32(20)) } }));
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    // Without the fix in place, the validation would have failed
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion20)
 {
     // Create an empty document.
