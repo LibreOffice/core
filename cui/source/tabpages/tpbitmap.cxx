@@ -973,7 +973,7 @@ tools::Long SvxBitmapTabPage::AddBitmap(const GraphicObject& rGraphicObject, con
     m_pBitmapList->Insert(std::move(xBitmapEntry), nLastPos);
 
     Bitmap aBitmap = m_pBitmapList->GetBitmapForPreview(nLastPos, aIconSize);
-    VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
+    ScopedVclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
     Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
 
     OUString sId = nLastPos > 0 ? m_xBitmapLB->get_id(nLastPos - 1) : OUString();
