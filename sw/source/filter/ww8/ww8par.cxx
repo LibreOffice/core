@@ -3026,10 +3026,7 @@ static std::size_t Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
 
         nConverted += nThisConverted;
 
-        if (
-            nInfo & RTL_TEXTTOUNICODE_INFO_UNDEFINED ||
-            nInfo & RTL_TEXTTOUNICODE_INFO_MBUNDEFINED
-           )
+        if (nInfo & (RTL_TEXTTOUNICODE_INFO_UNDEFINED | RTL_TEXTTOUNICODE_INFO_MBUNDEFINED))
         {
             sal_Size nOtherConverted;
             rtl_TextToUnicodeConverter hCP1252Converter =
