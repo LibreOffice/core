@@ -278,7 +278,7 @@ bool GalleryFileStorage::readModel(const GalleryObject* pObject, SdrModel& rMode
 
         if (xInputStream.is() && !xInputStream->GetError())
         {
-            xInputStream->SetBufferSize(STREAMBUF_SIZE);
+            xInputStream->SetBufferSize(16384);
             bRet = GallerySvDrawImport(*xInputStream, rModel);
             xInputStream->SetBufferSize(0);
         }
