@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
-#define INCLUDED_SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -55,8 +54,5 @@ namespace svxform::ControlLayouter
                     getDefaultDocumentTextStyle( const css::uno::Reference< css::beans::XPropertySet >& _rxModel );
 
 }
-
-
-#endif // INCLUDED_SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
