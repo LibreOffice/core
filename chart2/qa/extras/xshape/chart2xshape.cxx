@@ -26,7 +26,7 @@ public:
     {
     }
 
-    void testTdf150832();
+    void testTdf150832_dump_chart_shapes_from_xls();
     void testTdf149204();
     void testTdf151424();
     void testFdo75075();
@@ -40,7 +40,7 @@ public:
     void testTdf88154LabelRotatedLayout();
 
     CPPUNIT_TEST_SUITE(Chart2XShapeTest);
-    CPPUNIT_TEST(testTdf150832);
+    CPPUNIT_TEST(testTdf150832_dump_chart_shapes_from_xls);
     CPPUNIT_TEST(testTdf149204);
     CPPUNIT_TEST(testTdf151424);
     CPPUNIT_TEST(testFdo75075);
@@ -108,7 +108,7 @@ void Chart2XShapeTest::compareAgainstReference(std::u16string_view rDump,
             .getStr());
 }
 
-void Chart2XShapeTest::testTdf150832()
+void Chart2XShapeTest::testTdf150832_dump_chart_shapes_from_xls()
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
