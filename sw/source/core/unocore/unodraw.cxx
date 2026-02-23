@@ -1284,7 +1284,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 aValue >>= nRelOrient;
                 if (sw::GetAtPageRelOrientation(nRelOrient, true))
                 {
-                    SAL_WARN("sw.core", "SwXShape: fixing invalid horizontal RelOrientation for at-page anchor");
+                    SAL_INFO("sw.core", "SwXShape: fixing invalid horizontal RelOrientation for at-page anchor");
                     value <<= nRelOrient;
                 }
                 SfxItemPropertySet::setPropertyValue( *pEntry, value, aSet );
