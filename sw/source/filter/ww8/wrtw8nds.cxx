@@ -812,6 +812,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
      May have an anchored graphic to be placed, loop through sorted array
      and output all at this position
     */
+    FlyProcessingState nRet = FLY_NOT_PROCESSED;
     while ( maFlyIter != maFlyFrames.end() )
     {
         const SwPosition &rAnchor = maFlyIter->GetPosition();
@@ -819,7 +820,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 
         assert(nPos >= nSwPos && "a fly must get flagged as a nextAttr/CurrentPos");
         if ( nPos != nSwPos )
-            return FLY_NOT_PROCESSED ; // We haven't processed the fly
+            return nRet;
 
         const SdrObject* pSdrObj = maFlyIter->GetFrameFormat().FindRealSdrObject();
 
@@ -854,8 +855,13 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
             m_rExport.AttrOutput().OutputFlyFrame( *maFlyIter );
         }
         ++maFlyIter;
+
+        if (nRet != FLY_PROCESSED && m_rExport.AttrOutput().IsFlyProcessingPostponed())
+            nRet = FLY_POSTPONED;
+        else
+            nRet = FLY_PROCESSED; // at least one fly was processed
     }
-    return ( m_rExport.AttrOutput().IsFlyProcessingPostponed() ? FLY_POSTPONED : FLY_PROCESSED ) ;
+    return nRet;
 }
 
 bool SwWW8AttrIter::IsTextAttr( sal_Int32 nSwPos ) const
