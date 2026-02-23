@@ -54,7 +54,7 @@ to lingering pointers to freed objects.
 To fix this situation we now have a `VclPtr` - which is a smart
 reference-counting pointer (`include/vcl/vclptr.hxx`) which is
 designed to look and behave -very- much like a normal pointer
-to reduce code-thrash. `VclPtr` is used to wrap all `OutputDevice`
+to reduce code-thrash. `VclPtr` is used to wrap all `VclReferenceBase`
 derived classes thus:
 
 ```
