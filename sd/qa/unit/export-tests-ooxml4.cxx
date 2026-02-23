@@ -1886,6 +1886,31 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf114443_PPSX)
                 u"application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testConnectorShapeAnimationTarget)
+{
+    createSdImpressDoc("pptx/connector-shape-animations.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    const OUString sConnectorId = getXPath(
+        pXmlDoc, "/p:sld/p:cSld/p:spTree/p:cxnSp/p:nvCxnSpPr/p:cNvCxnSpPr/a:stCxn", "id");
+
+    const OUString sShapeId = getXPath(
+        pXmlDoc, "/p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:cNvPr", "id");
+
+    // Check connector and shape both have the same ID
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Connector and the shape doesn't have the same ID", sConnectorId,
+                                 sShapeId);
+
+    // Check animation spid matches ShapeId
+    assertXPath(pXmlDoc,
+                "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/"
+                "p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par[2]/p:cTn/p:childTnLst/p:set/"
+                "p:cBhvr/p:tgtEl/p:spTgt",
+                "spid", sShapeId);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

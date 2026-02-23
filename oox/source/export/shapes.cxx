@@ -1456,11 +1456,12 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     if (GetProperty(xShapeProps, u"OnClick"_ustr))
         mAny >>= eClickAction;
 
-    pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
-                         XML_id,     OString::number(GetNewShapeID(xShape)),
-                         XML_name,   GetShapeName(xShape),
-                         XML_descr,  sax_fastparser::UseIf(sDescr, !sDescr.isEmpty()),
-                         XML_hidden, sax_fastparser::UseIf("1", !bVisible));
+    sal_Int32 nShapeId = GetShapeID(xShape) == -1 ? GetNewShapeID(xShape) : GetTmpShapeID();
+
+    pFS->startElementNS(mnXmlNamespace, XML_cNvPr, XML_id, OString::number(nShapeId), XML_name,
+                        GetShapeName(xShape), XML_descr,
+                        sax_fastparser::UseIf(sDescr, !sDescr.isEmpty()), XML_hidden,
+                        sax_fastparser::UseIf("1", !bVisible));
 
     if (eClickAction != presentation::ClickAction_NONE)
     {
@@ -3072,9 +3073,13 @@ sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape >& rXShape, XmlFil
     auto it = mpShapeMap->find(rXShape);
     if (it == mpShapeMap->end())
         (*mpShapeMap)[rXShape] = nID;
+    else
+        nID = it->second;
 
     return nID;
 }
+
+sal_Int32 ShapeExport::GetTmpShapeID() { return GetFB()->GetUniqueId(); }
 
 sal_Int32 ShapeExport::GetShapeID( const Reference< XShape >& rXShape )
 {
