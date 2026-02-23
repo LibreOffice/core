@@ -139,7 +139,7 @@ ScFilterDlg::~ScFilterDlg()
 }
 
 namespace {
-VirtualDevice* lcl_getColorImage(const Color &rColor)
+ScopedVclPtr<VirtualDevice> lcl_getColorImage(const Color &rColor)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Size aImageSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
@@ -161,7 +161,7 @@ VirtualDevice* lcl_getColorImage(const Color &rColor)
 
     xDevice->DrawRect(aRect);
 
-    return xDevice.get();
+    return xDevice;
 }
 }
 
@@ -656,8 +656,7 @@ void ScFilterDlg::UpdateColorList(size_t nList)
         }
         else
         {
-            VirtualDevice* pDev = lcl_getColorImage(rColor);
-            maColorLbArr[nPos]->append(sId, OUString(), *pDev);
+            maColorLbArr[nPos]->append(sId, OUString(), *lcl_getColorImage(rColor));
         }
 
         const auto& rItem = rEntry.GetQueryItem();
