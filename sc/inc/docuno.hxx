@@ -518,7 +518,7 @@ public:
     rtl::Reference<ScTableSheetObj> GetSheetByName(const OUString& rName) const;
 };
 
-class ScTableColumnsObj final : public cppu::WeakImplHelper<
+class SAL_DLLPUBLIC_RTTI ScTableColumnsObj final : public cppu::WeakImplHelper<
                                 css::table::XTableColumns,
                                 css::container::XEnumerationAccess,
                                 css::container::XNameAccess,
@@ -587,7 +587,7 @@ public:
     SC_DLLPUBLIC rtl::Reference<ScTableColumnObj> getScTableColumnByIndex( sal_Int32 Index ) const;
 };
 
-class ScTableRowsObj final : public cppu::WeakImplHelper<
+class SAL_DLLPUBLIC_RTTI ScTableRowsObj final : public cppu::WeakImplHelper<
                                 css::table::XTableRows,
                                 css::container::XEnumerationAccess,
                                 css::beans::XPropertySet,
@@ -723,7 +723,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class ScScenariosObj final : public cppu::WeakImplHelper<
+class SAL_DLLPUBLIC_RTTI ScScenariosObj final : public cppu::WeakImplHelper<
                                 css::sheet::XScenarios,
                                 css::container::XEnumerationAccess,
                                 css::container::XIndexAccess,
