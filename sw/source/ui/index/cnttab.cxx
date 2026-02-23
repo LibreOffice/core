@@ -3012,7 +3012,7 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
         bool bPreEndLinkFound = false;
 
         SwTOXWidget* pControl = nullptr;
-        SwTOXWidget* pExchange = nullptr;
+        SwTOXButton* pExchange = nullptr;
 
         auto it = m_aControlList.cbegin();
         for( ; it != m_aControlList.cend() && m_pActiveCtrl != it->get(); ++it )
@@ -3021,8 +3021,8 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
 
             if( WindowType::EDIT != pControl->GetType())
             {
-                const SwFormToken& rNewToken =
-                                static_cast<const SwTOXButton*>(pControl)->GetFormToken();
+                SwTOXButton* pButton = static_cast<SwTOXButton*>(pControl);
+                const SwFormToken& rNewToken = pButton->GetFormToken();
 
                 if( TOKEN_LINK_START == rNewToken.eTokenType )
                 {
@@ -3036,7 +3036,7 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
                     else
                     {
                         bPreEndLinkFound = false;
-                        pExchange = pControl;
+                        pExchange = pButton;
                     }
                 }
             }
@@ -3053,15 +3053,15 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
                 if( pControl != m_pActiveCtrl &&
                     WindowType::EDIT != pControl->GetType())
                 {
-                    const SwFormToken& rNewToken =
-                                    static_cast<const SwTOXButton*>(pControl)->GetFormToken();
+                    SwTOXButton* pButton = static_cast<SwTOXButton*>(pControl);
+                    const SwFormToken& rNewToken = pButton->GetFormToken();
 
                     if( TOKEN_LINK_START == rNewToken.eTokenType )
                     {
                         if(bPostLinkStartFound)
                             break;
                         bPostLinkStartFound = true;
-                        pExchange = pControl;
+                        pExchange = pButton;
                     }
                     else if(TOKEN_LINK_END == rNewToken.eTokenType )
                     {
@@ -3087,8 +3087,8 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
             OSL_ENSURE(pExchange, "no control to exchange?");
             if(pExchange)
             {
-                static_cast<SwTOXButton*>(pExchange)->SetLinkEnd();
-                static_cast<SwTOXButton*>(pExchange)->SetText(m_aButtonTexts[TOKEN_LINK_END]);
+                pExchange->SetLinkEnd();
+                pExchange->SetText(m_aButtonTexts[TOKEN_LINK_END]);
             }
         }
 
@@ -3098,8 +3098,8 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
 
             if(pExchange)
             {
-                static_cast<SwTOXButton*>(pExchange)->SetLinkStart();
-                static_cast<SwTOXButton*>(pExchange)->SetText(m_aButtonTexts[TOKEN_LINK_START]);
+                pExchange->SetLinkStart();
+                pExchange->SetText(m_aButtonTexts[TOKEN_LINK_START]);
             }
         }
     }
