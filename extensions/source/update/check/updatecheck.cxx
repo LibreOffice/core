@@ -1430,8 +1430,6 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
 
 void UpdateCheck::showExtensionDialog()
 {
-    uno::Reference< uno::XInterface > xService;
-
     if( ! m_xContext.is() )
         throw uno::RuntimeException(
             u"UpdateCheck::showExtensionDialog(): empty component context"_ustr, uno::Reference< uno::XInterface > () );
@@ -1441,7 +1439,8 @@ void UpdateCheck::showExtensionDialog()
         throw uno::RuntimeException(
             u"UpdateCheck::showExtensionDialog(): unable to obtain service manager from component context"_ustr, uno::Reference< uno::XInterface > () );
 
-    xService = xServiceManager->createInstanceWithContext( u"com.sun.star.deployment.ui.PackageManagerDialog"_ustr, m_xContext );
+    uno::Reference<uno::XInterface> xService = xServiceManager->createInstanceWithContext(
+        u"com.sun.star.deployment.ui.PackageManagerDialog"_ustr, m_xContext);
     uno::Reference< task::XJobExecutor > xExecutable( xService, uno::UNO_QUERY );
     if ( xExecutable.is() )
         xExecutable->trigger( u"SHOW_UPDATE_DIALOG"_ustr );
