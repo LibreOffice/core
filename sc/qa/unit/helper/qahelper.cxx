@@ -786,6 +786,50 @@ ScRange ScUcalcTestBase::insertRangeData(
     return aRange;
 }
 
+ScRange ScUcalcTestBase::insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<OUString>>& rData)
+{
+    if (rData.empty())
+        return ScRange(ScAddress::INITIALIZE_INVALID);
+
+    ScAddress aPos = rPos;
+
+    SCCOL nColWidth = 1;
+    for (auto const& rRow : rData)
+        nColWidth = std::max<SCCOL>(nColWidth, rRow.size());
+
+    ScRange aRange(aPos);
+    aRange.aEnd.IncCol(nColWidth-1);
+    aRange.aEnd.IncRow(rData.size()-1);
+
+    clearRange(pDoc, aRange);
+
+    for (auto const& rRow : rData)
+    {
+        aPos.SetCol(rPos.Col());
+
+        for (OUString const& rString : rRow)
+        {
+            if (rString.isEmpty())
+            {
+                aPos.IncCol();
+                continue;
+            }
+
+            ScSetStringParam aParam; // Leave default.
+            aParam.meStartListening = sc::NoListening;
+            pDoc->SetString(aPos, rString, &aParam);
+
+            aPos.IncCol();
+        }
+
+        aPos.IncRow();
+    }
+
+    pDoc->StartAllListeners(aRange);
+    printRange(pDoc, aRange, "Range data content");
+    return aRange;
+}
+
 ScUndoCut* ScUcalcTestBase::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
 {
     ScDocument* pSrcDoc = &rDocSh.GetDocument();

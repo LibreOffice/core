@@ -107,8 +107,8 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos,
-                                       const std::vector<std::vector<const char*>>& rData);
+    ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<const char*>>& rData);
+    ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<OUString>>& rData);
     void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
     void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
                                         ScDocument* pClipDoc);

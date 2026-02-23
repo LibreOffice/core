@@ -37,6 +37,12 @@ struct ScQueryParam;
 class SdrObject;
 class ScPostIt;
 
+enum class SortOrderType
+{
+    Ordered,
+    Random
+};
+
 /** Sort by which color */
 enum class ScColorSortMode {
     None,
@@ -156,6 +162,7 @@ struct SC_DLLPUBLIC ScSortParam
     css::lang::Locale aCollatorLocale;
     OUString    aCollatorAlgorithm;
     sal_uInt16  nCompatHeader;
+    SortOrderType meSortOrderType = SortOrderType::Ordered;
 
     ScSortParam();
     ScSortParam( const ScSortParam& r );
@@ -363,6 +370,7 @@ struct ReorderParam
     bool mbHiddenFiltered;
     bool mbUpdateRefs;
     bool mbHasHeaders;
+    bool mbShuffle;
 
     /**
      * Reorder the position indices such that it can be used to undo the
@@ -375,6 +383,7 @@ struct ReorderParam
         , mbHiddenFiltered(false)
         , mbUpdateRefs(false)
         , mbHasHeaders(false)
+        , mbShuffle(false)
     {
     }
 };

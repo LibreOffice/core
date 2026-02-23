@@ -319,7 +319,17 @@ void initDataRows(
     }
 }
 
+// Shuffle - swap every cell with a random cell
+void lclShuffleArray(ScSortInfoArray* pArray, SCCOLROW nLow, SCCOLROW nHigh)
+{
+    for (SCCOLROW i = nHigh - nLow; i > 0; --i)
+    {
+        int nRandom = comphelper::rng::uniform_int_distribution(0, i);
+        pArray->Swap(nLow + i, nLow + nRandom);
+    }
 }
+
+} // anonymous namespace
 
 std::unique_ptr<ScSortInfoArray> ScTable::CreateSortInfoArray( const sc::ReorderParam& rParam )
 {
@@ -1754,8 +1764,12 @@ void ScTable::Sort(
     const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
     ScProgress* pProgress, sc::ReorderParam* pUndo )
 {
+    const bool bSortOrdered = rSortParam.meSortOrderType == SortOrderType::Ordered;
+
     sc::DelayDeletingBroadcasters delayDeletingBroadcasters(GetDoc());
-    InitSortCollator( rSortParam );
+    if (bSortOrdered)
+        InitSortCollator(rSortParam);
+
     bGlobalKeepQuery = bKeepQuery;
 
     if (pUndo)
@@ -1766,6 +1780,7 @@ void ScTable::Sort(
         pUndo->mbHiddenFiltered = bKeepQuery;
         pUndo->mbUpdateRefs = bUpdateRefs;
         pUndo->mbHasHeaders = rSortParam.bHasHeader;
+        pUndo->mbShuffle = !bSortOrdered;
     }
 
     // It is assumed that the data area has already been trimmed as necessary.
@@ -1775,7 +1790,8 @@ void ScTable::Sort(
     {
         const SCROW nLastRow = rSortParam.nRow2;
         const SCROW nRow1 = (rSortParam.bHasHeader ? rSortParam.nRow1 + 1 : rSortParam.nRow1);
-        if (nRow1 < nLastRow && !IsSorted(nRow1, nLastRow))
+        if (nRow1 < nLastRow
+            && (!bSortOrdered || !IsSorted(nRow1, nLastRow)))
         {
             if(pProgress)
                 pProgress->SetState( 0, nLastRow-nRow1 );
@@ -1786,7 +1802,11 @@ void ScTable::Sort(
             if ( nLastRow - nRow1 > 255 )
                 DecoladeRow(pArray.get(), nRow1, nLastRow);
 
-            QuickSort(pArray.get(), nRow1, nLastRow);
+            if (bSortOrdered)
+                QuickSort(pArray.get(), nRow1, nLastRow);
+            else
+                lclShuffleArray(pArray.get(), nRow1, nLastRow);
+
             if (pArray->IsUpdateRefs())
                 SortReorderByRowRefUpdate(pArray.get(), aSortParam.nCol1, aSortParam.nCol2, pProgress);
             else
@@ -1824,7 +1844,8 @@ void ScTable::Sort(
     {
         const SCCOL nLastCol = rSortParam.nCol2;
         const SCCOL nCol1 = (rSortParam.bHasHeader ? rSortParam.nCol1 + 1 : rSortParam.nCol1);
-        if (nCol1 < nLastCol && !IsSorted(nCol1, nLastCol))
+        if (nCol1 < nLastCol
+            && (!bSortOrdered || !IsSorted(nCol1, nLastCol)))
         {
             if(pProgress)
                 pProgress->SetState( 0, nLastCol-nCol1 );
@@ -1832,7 +1853,11 @@ void ScTable::Sort(
             std::unique_ptr<ScSortInfoArray> pArray( CreateSortInfoArray(
                         aSortParam, nCol1, nLastCol, bKeepQuery, bUpdateRefs));
 
-            QuickSort(pArray.get(), nCol1, nLastCol);
+            if (bSortOrdered)
+                QuickSort(pArray.get(), nCol1, nLastCol);
+            else
+                lclShuffleArray(pArray.get(), nCol1, nLastCol);
+
             SortReorderByColumn(pArray.get(), rSortParam.nRow1, rSortParam.nRow2,
                     rSortParam.aDataAreaExtras.mbCellFormats, pProgress);
             if (rSortParam.aDataAreaExtras.anyExtrasWanted() && !pArray->IsUpdateRefs())
@@ -1848,7 +1873,8 @@ void ScTable::Sort(
             }
         }
     }
-    DestroySortCollator();
+    if (bSortOrdered)
+        DestroySortCollator();
 }
 
 void ScTable::Reorder( const sc::ReorderParam& rParam )

@@ -386,8 +386,8 @@ class SvxZoomSliderItem;
 #define SID_OUTLINE_SHOW        (DATA_MENU_START + 26)
 #define SID_OUTLINE_MAKE        TypedWhichId<SfxStringItem>(DATA_MENU_START + 27)
 #define SID_OUTLINE_REMOVE      TypedWhichId<SfxStringItem>(DATA_MENU_START + 28)
-
-#define DATA_MENU_END           (DATA_MENU_START + 29)
+#define SID_SHUFFLE             (DATA_MENU_START + 29)
+#define DATA_MENU_END           (DATA_MENU_START + 30)
 
 #define TAB_POPUP_START         (DATA_MENU_END)
 #define FID_TAB_MENU_RENAME     (TAB_POPUP_START)

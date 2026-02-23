@@ -2372,6 +2372,202 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortEmbeddedNumberTypes)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestSort, testShuffle)
+{
+    // Check we shuffle the range, the data is still the same, and undo / redo work correctly
+
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    const std::vector<std::vector<OUString>> aData = {
+        { u"A"_ustr, u"B"_ustr },
+        { u"0"_ustr, u"1"_ustr },
+        { u"4"_ustr, u"3"_ustr },
+        { u"2"_ustr, u"4"_ustr },
+        { u"9"_ustr, u"8"_ustr },
+        { u"6"_ustr, u"9"_ustr },
+    };
+
+    // Insert data
+    ScRange aDataRange = insertRangeData(m_pDoc, {0, 0, 0}, aData);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(0, 0, 0), aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 5, 0), aDataRange.aEnd);
+
+    // Check Data
+    {
+        size_t i = 0;
+        for (auto const& rRow : aData)
+        {
+            CPPUNIT_ASSERT_EQUAL(rRow[0], m_pDoc->GetString(ScAddress(0, i, 0)));
+            CPPUNIT_ASSERT_EQUAL(rRow[1], m_pDoc->GetString(ScAddress(1, i, 0)));
+            i++;
+        }
+    }
+
+    // Define A1:B6 as sheet-local anonymous database range.
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 5)));
+
+    // Set up sort param with for shuffle
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 1;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 5;
+    aSortData.bHasHeader = true;
+    aSortData.bByRow = true;
+    aSortData.aDataAreaExtras.mbCellFormats = true;
+    aSortData.meSortOrderType = SortOrderType::Random;
+
+    ScDBDocFunc aFunc(*m_xDocShell);
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // First check the header, which should be untouched
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, m_pDoc->GetString(ScAddress(1, 0, 0)));
+
+    // Check Data
+    std::vector<size_t> aIndices;
+    std::vector<std::vector<OUString>> aShuffledData(6);
+    for (SCROW nRow = 0; nRow <= 5; nRow++)
+    {
+        OUString sValueA = m_pDoc->GetString(ScAddress(0, nRow, 0));
+        OUString sValueB = m_pDoc->GetString(ScAddress(1, nRow, 0));
+        aShuffledData[nRow] = { sValueA, sValueB };
+
+        std::optional<size_t> oIndex;
+        size_t i = 0;
+        for (auto const& rRow : aData)
+        {
+            if (rRow[0] == sValueA && rRow[1] == sValueB)
+            {
+                oIndex = i;
+                aIndices.push_back(i);
+                continue;
+            }
+            i++;
+        }
+        CPPUNIT_ASSERT(oIndex);
+    }
+    std::sort(aIndices.begin(), aIndices.end());
+    // Should be all unique values
+    bool bIsUnique = std::unique(aIndices.begin(), aIndices.end()) == aIndices.end();
+    std::vector<size_t> aExpected{0, 1, 2, 3, 4, 5};
+
+    CPPUNIT_ASSERT(bIsUnique);
+    CPPUNIT_ASSERT(std::ranges::equal(aIndices, aExpected));
+
+    // Verify undo
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    CPPUNIT_ASSERT_EQUAL(u"Shuffle"_ustr, pUndoMgr->GetUndoActionComment());
+
+    pUndoMgr->Undo();
+
+    // Check Data
+    {
+        size_t i = 0;
+        for (auto const& rRow : aData)
+        {
+            CPPUNIT_ASSERT_EQUAL(rRow[0], m_pDoc->GetString(ScAddress(0, i, 0)));
+            CPPUNIT_ASSERT_EQUAL(rRow[1], m_pDoc->GetString(ScAddress(1, i, 0)));
+            i++;
+        }
+    }
+
+    // Redo and verify data is still consistent.
+    pUndoMgr->Redo();
+
+    for (SCROW nRow = 0; nRow <= 5; nRow++)
+    {
+        OUString sValueA = m_pDoc->GetString(ScAddress(0, nRow, 0));
+        OUString sValueB = m_pDoc->GetString(ScAddress(1, nRow, 0));
+
+        CPPUNIT_ASSERT_EQUAL(aShuffledData[nRow][0], sValueA);
+        CPPUNIT_ASSERT_EQUAL(aShuffledData[nRow][1], sValueB);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(TestSort, testShuffleAndThenSort)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    ScDBDocFunc aFunc(*m_xDocShell);
+
+    const std::vector<std::vector<OUString>> aData = {
+        { u"A"_ustr, u"B"_ustr },
+        { u"0"_ustr, u"1"_ustr },
+        { u"4"_ustr, u"3"_ustr },
+        { u"2"_ustr, u"4"_ustr },
+        { u"9"_ustr, u"8"_ustr },
+        { u"6"_ustr, u"9"_ustr },
+    };
+
+    // Insert data
+    ScRange aDataRange = insertRangeData(m_pDoc, {0, 0, 0}, aData);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(0, 0, 0), aDataRange.aStart);
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 5, 0), aDataRange.aEnd);
+
+    // Define A1:B6 as sheet-local anonymous database range.
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 5)));
+
+    // Set up sort param with for shuffle
+    {
+        ScSortParam aSortData;
+        aSortData.nCol1 = 0;
+        aSortData.nCol2 = 1;
+        aSortData.nRow1 = 0;
+        aSortData.nRow2 = 5;
+        aSortData.bHasHeader = true;
+        aSortData.bByRow = true;
+        aSortData.aDataAreaExtras.mbCellFormats = true;
+        aSortData.meSortOrderType = SortOrderType::Random;
+
+        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        CPPUNIT_ASSERT(bSorted);
+    }
+
+    // Verify a sort after shuffle works correctly
+    {
+        ScSortParam aSortData;
+        aSortData.nCol1 = 0;
+        aSortData.nCol2 = 1;
+        aSortData.nRow1 = 0;
+        aSortData.nRow2 = 5;
+        aSortData.bHasHeader = true;
+        aSortData.bByRow = true;
+        aSortData.aDataAreaExtras.mbCellFormats = true;
+        aSortData.maKeyState[0].bDoSort = true;
+        aSortData.maKeyState[0].nField = 1;
+        aSortData.maKeyState[0].bAscending = true;
+        aSortData.maKeyState[0].aColorSortMode = ScColorSortMode::None;
+
+        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        CPPUNIT_ASSERT(bSorted);
+    }
+
+    // Check Header - should be untouched
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, m_pDoc->GetString(ScAddress(1, 0, 0)));
+
+    // Check Data
+    {
+        size_t i = 0;
+        for (auto const& rRow : aData)
+        {
+            CPPUNIT_ASSERT_EQUAL(rRow[0], m_pDoc->GetString(ScAddress(0, i, 0)));
+            CPPUNIT_ASSERT_EQUAL(rRow[1], m_pDoc->GetString(ScAddress(1, i, 0)));
+            i++;
+        }
+    }
+
+    // Verify undo
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    CPPUNIT_ASSERT_EQUAL(u"Sort"_ustr, pUndoMgr->GetUndoActionComment());
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

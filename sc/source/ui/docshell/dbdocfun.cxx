@@ -753,8 +753,10 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     sc::ReorderParam aUndoParam;
 
-    // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
-    if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
+    // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set),
+    // but always call it for random shuffle which doesn't need sort keys
+    if (aLocalParam.meSortOrderType == SortOrderType::Random
+        || (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort))
     {
         ScProgress aProgress(&rDocShell, ScResId(STR_PROGRESS_SORTING), 0, true);
         if (!bRepeatQuery)
@@ -769,10 +771,12 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
             std::make_unique<sc::UndoSort>(rDocShell, aUndoParam));
     }
 
-    pDBData->SetSortParam(rSortParam);
+    ScSortParam aSortParamData(rSortParam);
+    aSortParamData.meSortOrderType = SortOrderType::Ordered;
+    pDBData->SetSortParam(aSortParamData);
     // Remember additional settings on anonymous database ranges.
     if (pDBData == rDoc.GetAnonymousDBData( nTab) || rDoc.GetDBCollection()->getAnonDBs().has( pDBData))
-        pDBData->UpdateFromSortParam( rSortParam);
+        pDBData->UpdateFromSortParam(aSortParamData);
 
     if (SfxViewShell* pKitSomeViewForThisDoc = comphelper::LibreOfficeKit::isActive() ?
                                                rDocShell.GetBestViewShell(false) : nullptr)
