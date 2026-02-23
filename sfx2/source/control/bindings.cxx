@@ -1752,7 +1752,7 @@ uno::Reference < frame::XDispatch > SfxBindings::GetDispatch( const SfxSlot* pSl
         if ( !pCache )
             pCache = GetStateCache( pSlot->nSlotId );
 
-        DBG_ASSERT( pCache, "No cache for OfficeDispatch!" );
+        DBG_ASSERT( bMasterCommand || pCache, "No cache for OfficeDispatch!" );
         if ( pCache && !bMasterCommand )
             pCache->SetInternalDispatch( xRet );
     }
