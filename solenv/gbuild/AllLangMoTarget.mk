@@ -46,12 +46,17 @@ define gb_MoTarget_MoTarget
 $(call gb_MoTarget_get_target,$(1)) : LIBRARY = $(2)
 $(call gb_MoTarget_get_target,$(1)) : LANGUAGE = $(3)
 $(call gb_MoTarget_get_target,$(1)) : POLOCATION = $(2)
+$(call gb_MoTarget_get_target,$(1)) : $(wildcard $(gb_POLOCATION)/$(3)/$(2)/messages.po)
+$(gb_POLOCATION)/$(3)/$(2)/messages.po :
 $(call gb_AllLangMoTarget_get_clean_target,$(2)) : $(call gb_MoTarget_get_clean_target,$(1))
 
 endef
 
+# gb_MoTarget_set_polocation target polocation lang
 define gb_MoTarget_set_polocation
 $(call gb_MoTarget_get_target,$(1)) : POLOCATION = $(2)
+$(call gb_MoTarget_get_target,$(1)) : $(wildcard $(gb_POLOCATION)/$(3)/$(2)/messages.po)
+$(gb_POLOCATION)/$(3)/$(2)/messages.po :
 
 endef
 
@@ -94,7 +99,7 @@ endef
 
 define gb_AllLangMoTarget_set_polocation
 $(foreach lang,$(gb_AllLangMoTarget_LANGS),\
-        $(call gb_MoTarget_set_polocation,$(1)$(lang),$(2)))
+        $(call gb_MoTarget_set_polocation,$(1)$(lang),$(2),$(lang)))
 
 endef
 
