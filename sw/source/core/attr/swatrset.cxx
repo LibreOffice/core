@@ -38,6 +38,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <svl/whiter.hxx>
+#include <svl/itemiter.hxx>
 
 #include <svx/svdpool.hxx>
 #include <svx/sxenditm.hxx>
@@ -198,14 +199,11 @@ std::unique_ptr<SfxItemSet> SwAttrSet::Clone( bool bItems, SfxItemPool *pToPool 
             pTmpSet.reset(new SwAttrSet( *pAttrPool, GetRanges() ));
             if ( bItems )
             {
-                SfxWhichIter aIter(*pTmpSet);
-                sal_uInt16 nWhich = aIter.FirstWhich();
-                while ( nWhich )
+                for (SfxItemIter aIter(*pTmpSet); !aIter.IsAtEnd(); aIter.Next())
                 {
-                    const SfxPoolItem* pItem;
-                    if ( SfxItemState::SET == GetItemState( nWhich, false, &pItem ) )
+                    const SfxPoolItem *pItem = aIter.GetCurItem();
+                    if(!IsDisabledItem(pItem))
                         pTmpSet->Put( *pItem );
-                    nWhich = aIter.NextWhich();
                 }
             }
         }
