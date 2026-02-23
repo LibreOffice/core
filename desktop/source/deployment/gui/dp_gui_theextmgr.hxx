@@ -68,7 +68,7 @@ public:
     bool isModified() const { return m_bModified; }
     void clearModified() { m_bModified = false; }
 
-    weld::Window* getDialog()
+    weld::Dialog* getDialog()
     {
         if (DialogHelper* pHelper = getDialogHelper())
             return pHelper->getDialog();
