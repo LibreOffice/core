@@ -241,17 +241,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf92001)
     testDocumentLayout(u"tdf92001.odp", u"xml/tdf92001_", TestFilter::PPTX);
 }
 
-// GCC -mfpmath=387 rounding issues in lclPushMarkerProperties
-// (oox/source/drawingml/lineproperties.cxx); see mail sub-thread starting at
-// <https://lists.freedesktop.org/archives/libreoffice/2016-September/
-// 075211.html> "Re: Test File: sc/qa/unit/data/functions/fods/chiinv.fods:
-// fails with Assertion" for how "-mfpmath=sse -msse2" would fix that:
-#if !(defined LINUX && defined X86)
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf100491)
 {
     testDocumentLayout(u"tdf100491.pptx", u"xml/tdf100491_", TestFilter::NONE);
 }
-#endif
 
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf109317)
 {
