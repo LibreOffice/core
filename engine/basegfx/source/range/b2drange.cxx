@@ -37,15 +37,54 @@ namespace basegfx
 
     void B2DRange::transform(const B2DHomMatrix& rMatrix)
     {
-        if(!isEmpty() && !rMatrix.isIdentity())
+        if(isEmpty() || rMatrix.isIdentity())
+            return;
+
+        // Compute the AABB of the transformed box directly from matrix
+        // coefficients, instead of transforming all four corners and
+        // expanding. For an affine transform the extremes of each output
+        // coordinate are reached at corners chosen per coefficient: a
+        // non-negative coefficient pairs the input min with the output min,
+        // a negative coefficient pairs the input max with the output min.
+        // Translation is the same constant offset for min and max, so it
+        // is folded into the initial value below.
+        // (Arvo, Graphics Gems I, 1990.)
+
+        const double oldMinX = getMinX();
+        const double oldMaxX = getMaxX();
+        const double oldMinY = getMinY();
+        const double oldMaxY = getMaxY();
+
+        const double m00 = rMatrix.get(0, 0);
+        const double m01 = rMatrix.get(0, 1);
+        const double m10 = rMatrix.get(1, 0);
+        const double m11 = rMatrix.get(1, 1);
+
+        double newMinX = rMatrix.get(0, 2);
+        double newMaxX = newMinX;
+        double newMinY = rMatrix.get(1, 2);
+        double newMaxY = newMinY;
+
+        auto axis = [](const double matrixValue, const double inLow, const double inHigh, double& outLow, double& outHigh)
         {
-            const B2DRange aSource(*this);
-            reset();
-            expand(rMatrix * B2DPoint(aSource.getMinX(), aSource.getMinY()));
-            expand(rMatrix * B2DPoint(aSource.getMaxX(), aSource.getMinY()));
-            expand(rMatrix * B2DPoint(aSource.getMinX(), aSource.getMaxY()));
-            expand(rMatrix * B2DPoint(aSource.getMaxX(), aSource.getMaxY()));
-        }
+            if (matrixValue >= 0.0)
+            {
+                outLow += matrixValue * inLow;
+                outHigh += matrixValue * inHigh;
+            }
+            else
+            {
+                outLow += matrixValue * inHigh;
+                outHigh += matrixValue * inLow;
+            }
+        };
+
+        axis(m00, oldMinX, oldMaxX, newMinX, newMaxX);
+        axis(m01, oldMinY, oldMaxY, newMinX, newMaxX);
+        axis(m10, oldMinX, oldMaxX, newMinY, newMaxY);
+        axis(m11, oldMinY, oldMaxY, newMinY, newMaxY);
+
+        *this = B2DRange(newMinX, newMinY, newMaxX, newMaxY);
     }
 
     void B2DRange::translate(double fTranslateX, double fTranslateY)
