@@ -765,39 +765,37 @@ Reference< XStorage > const & ODatabaseModelImpl::getOrCreateRootStorage()
             aSource <<= m_sDocFileLocation;
         // TODO: shouldn't we also check URL?
 
-        OSL_ENSURE( aSource.hasValue(), "ODatabaseModelImpl::getOrCreateRootStorage: no source to create the storage from!" );
+        if ( !aSource.hasValue() )
+            return m_xDocumentStorage.getTyped();
 
-        if ( aSource.hasValue() )
+        Sequence< Any > aStorageCreationArgs{ aSource, Any(ElementModes::READWRITE) };
+
+        Reference< XStorage > xDocumentStorage;
+        OUString sURL;
+        aSource >>= sURL;
+        // Don't try to load a meta-URL as-is.
+        if (!sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:"))
         {
-            Sequence< Any > aStorageCreationArgs{ aSource, Any(ElementModes::READWRITE) };
-
-            Reference< XStorage > xDocumentStorage;
-            OUString sURL;
-            aSource >>= sURL;
-            // Don't try to load a meta-URL as-is.
-            if (!sURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:"))
+            try
             {
+                xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
+            }
+            catch( const Exception& )
+            {
+                m_bDocumentReadOnly = true;
+                aStorageCreationArgs.getArray()[1] <<= ElementModes::READ;
                 try
                 {
                     xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
                 }
                 catch( const Exception& )
                 {
-                    m_bDocumentReadOnly = true;
-                    aStorageCreationArgs.getArray()[1] <<= ElementModes::READ;
-                    try
-                    {
-                        xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), UNO_QUERY_THROW );
-                    }
-                    catch( const Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION("dbaccess");
-                    }
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
                 }
             }
-
-            impl_switchToStorage_throw( xDocumentStorage );
         }
+
+        impl_switchToStorage_throw( xDocumentStorage );
     }
     return m_xDocumentStorage.getTyped();
 }
