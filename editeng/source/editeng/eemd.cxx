@@ -166,7 +166,10 @@ void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* pDetail)
 
         case MD_BLOCK_LI:
         {
-            if (mbNeedParaBreak)
+            // Insert paragraph break if previous block requested one, or if we're
+            // already inside a paragraph (e.g. nested list item in a tight list where
+            // md4c doesn't wrap text in P blocks).
+            if (mbNeedParaBreak || mbInParagraph)
             {
                 InsertParaBreak();
                 mbNeedParaBreak = false;
