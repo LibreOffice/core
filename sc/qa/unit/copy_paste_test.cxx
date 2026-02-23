@@ -46,6 +46,20 @@ public:
     void tdf137625_autofillMergedUserlist();
     void tdf137624_autofillMergedMixed();
     void tdf122716_rtf_portion_encoding();
+    void testMarkdownImportTable();
+    void testMarkdownImportPlainText();
+    void testMarkdownImportFormattedText();
+    void testMarkdownImportMultiParagraph();
+    void testMarkdownImportIsSupported();
+    void testMarkdownImportHeading();
+    void testMarkdownImportList();
+    void testMarkdownImportTableWithEmptyCells();
+    void testMarkdownImportTableWithSpecialChars();
+    void testMarkdownImportEmptyStream();
+    void testMarkdownExportMultiRow();
+    void testMarkdownExportSingleRow();
+    void testMarkdownExportEscaping();
+    void testMarkdownExportSingleCell();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -64,6 +78,20 @@ public:
     CPPUNIT_TEST(tdf137625_autofillMergedUserlist);
     CPPUNIT_TEST(tdf137624_autofillMergedMixed);
     CPPUNIT_TEST(tdf122716_rtf_portion_encoding);
+    CPPUNIT_TEST(testMarkdownImportTable);
+    CPPUNIT_TEST(testMarkdownImportPlainText);
+    CPPUNIT_TEST(testMarkdownImportFormattedText);
+    CPPUNIT_TEST(testMarkdownImportMultiParagraph);
+    CPPUNIT_TEST(testMarkdownImportIsSupported);
+    CPPUNIT_TEST(testMarkdownImportHeading);
+    CPPUNIT_TEST(testMarkdownImportList);
+    CPPUNIT_TEST(testMarkdownImportTableWithEmptyCells);
+    CPPUNIT_TEST(testMarkdownImportTableWithSpecialChars);
+    CPPUNIT_TEST(testMarkdownImportEmptyStream);
+    CPPUNIT_TEST(testMarkdownExportMultiRow);
+    CPPUNIT_TEST(testMarkdownExportSingleRow);
+    CPPUNIT_TEST(testMarkdownExportEscaping);
+    CPPUNIT_TEST(testMarkdownExportSingleCell);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -129,6 +157,17 @@ void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument&
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
     pViewShell->GetViewData().GetMarkData().SetSelectedTabs(TabsInRange(aDstRange));
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+}
+
+OString lcl_getMarkdownExport(ScModelObj* pModelObj)
+{
+    auto xTransferable = pModelObj->getSelection();
+    auto aAny = xTransferable->getTransferData(
+        { u"text/markdown"_ustr, {}, {} });
+    css::uno::Sequence<sal_Int8> aBytes;
+    CPPUNIT_ASSERT(aAny >>= aBytes);
+    return OString(reinterpret_cast<const char*>(aBytes.getConstArray()),
+                   aBytes.getLength());
 }
 
 } // anonymous namespace
@@ -801,6 +840,329 @@ void ScCopyPasteTest::tdf122716_rtf_portion_encoding()
     // Windows-1252 encoding, and "Š" got exported as "\'8a". On import to Writer, font
     // encoding was used, and "\'8a" was interpreted as a Cyrillic alphabet character.
     CPPUNIT_ASSERT(rtf_string.indexOf("\\u352\\'3famp\\u363\\'3fnas") >= 0);
+}
+
+void ScCopyPasteTest::testMarkdownImportTable()
+{
+    // Given a markdown table:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScImportExport aObj(*pDoc, ScAddress(0, 0, 0));
+    aObj.SetImportBroadcast(true);
+
+    SvMemoryStream aStream;
+    aStream.WriteOString(
+        "| Name | Age |\n"
+        "| --- | --- |\n"
+        "| Alice | 30 |\n"
+        "| Bob | 25 |\n");
+    aStream.Seek(0);
+
+    // When importing as markdown:
+    CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Then the table should be populated into cells:
+    CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Age"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Alice"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Bob"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"25"_ustr, pDoc->GetString(ScAddress(1, 2, 0)));
+}
+
+void ScCopyPasteTest::testMarkdownImportPlainText()
+{
+    // Given plain markdown text (no formatting):
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScImportExport aObj(*pDoc, ScAddress(0, 0, 0));
+    aObj.SetImportBroadcast(true);
+
+    SvMemoryStream aStream;
+    aStream.WriteOString("Hello world");
+    aStream.Seek(0);
+
+    // When importing as markdown:
+    CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Then the text should appear in A1:
+    CPPUNIT_ASSERT_EQUAL(u"Hello world"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
+void ScCopyPasteTest::testMarkdownImportFormattedText()
+{
+    // Given markdown with bold and italic formatting:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScImportExport aObj(*pDoc, ScAddress(0, 0, 0));
+    aObj.SetImportBroadcast(true);
+
+    SvMemoryStream aStream;
+    aStream.WriteOString("**bold** and *italic*");
+    aStream.Seek(0);
+
+    // When importing as markdown:
+    CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Then the cell should contain the text (formatting is applied via HTML):
+    CPPUNIT_ASSERT_EQUAL(u"bold and italic"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
+void ScCopyPasteTest::testMarkdownImportMultiParagraph()
+{
+    // Given markdown with multiple paragraphs:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScImportExport aObj(*pDoc, ScAddress(0, 0, 0));
+    aObj.SetImportBroadcast(true);
+
+    SvMemoryStream aStream;
+    aStream.WriteOString("First\n\nSecond\n\nThird");
+    aStream.Seek(0);
+
+    // When importing as markdown:
+    CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Then paragraphs should populate consecutive rows:
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Third"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+}
+
+void ScCopyPasteTest::testMarkdownImportIsSupported()
+{
+    // Verify that MARKDOWN is a supported import format:
+    CPPUNIT_ASSERT(ScImportExport::IsFormatSupported(SotClipboardFormatId::MARKDOWN));
+}
+
+void ScCopyPasteTest::testMarkdownImportHeading()
+{
+    // Given markdown with headings:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScImportExport aObj(*pDoc, ScAddress(0, 0, 0));
+    aObj.SetImportBroadcast(true);
+
+    SvMemoryStream aStream;
+    aStream.WriteOString("# Title\n## Subtitle\nSome text\n");
+    aStream.Seek(0);
+
+    // When importing as markdown:
+    CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Then headings and text should populate consecutive rows:
+    CPPUNIT_ASSERT_EQUAL(u"Title"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Subtitle"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Some text"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+}
+
+void ScCopyPasteTest::testMarkdownImportList()
+{
+    // Given a markdown unordered list:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScImportExport aObj(*pDoc, ScAddress(0, 0, 0));
+    aObj.SetImportBroadcast(true);
+
+    SvMemoryStream aStream;
+    aStream.WriteOString("- Apple\n- Banana\n- Cherry\n");
+    aStream.Seek(0);
+
+    // When importing as markdown:
+    CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Then list items should populate consecutive rows:
+    CPPUNIT_ASSERT_EQUAL(u"Apple"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Banana"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Cherry"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+}
+
+void ScCopyPasteTest::testMarkdownImportTableWithEmptyCells()
+{
+    // Given a markdown table with empty cells:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScImportExport aObj(*pDoc, ScAddress(0, 0, 0));
+    aObj.SetImportBroadcast(true);
+
+    SvMemoryStream aStream;
+    aStream.WriteOString(
+        "| A | B | C |\n"
+        "| --- | --- | --- |\n"
+        "| 1 |  | 3 |\n"
+        "|  | 5 |  |\n");
+    aStream.Seek(0);
+
+    // When importing as markdown:
+    CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Then headers and data should be correct, including empty cells:
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, pDoc->GetString(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetString(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(2, 2, 0)));
+}
+
+void ScCopyPasteTest::testMarkdownImportTableWithSpecialChars()
+{
+    // Given a markdown table with escaped pipes and backslashes:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScImportExport aObj(*pDoc, ScAddress(0, 0, 0));
+    aObj.SetImportBroadcast(true);
+
+    SvMemoryStream aStream;
+    aStream.WriteOString(
+        "| H |\n"
+        "| --- |\n"
+        "| a\\|b |\n"
+        "| c\\\\d |\n");
+    aStream.Seek(0);
+
+    // When importing as markdown:
+    CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Then the escaped characters should be properly unescaped:
+    CPPUNIT_ASSERT_EQUAL(u"H"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"a|b"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"c\\d"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+}
+
+void ScCopyPasteTest::testMarkdownImportEmptyStream()
+{
+    // Given an empty markdown stream:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    ScImportExport aObj(*pDoc, ScAddress(0, 0, 0));
+    aObj.SetImportBroadcast(true);
+
+    SvMemoryStream aStream;
+    // Don't write anything - empty stream
+    aStream.Seek(0);
+
+    // When importing an empty stream as markdown:
+    // Then it should return false (no data) without crashing:
+    CPPUNIT_ASSERT(!aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+}
+
+void ScCopyPasteTest::testMarkdownExportMultiRow()
+{
+    // Given a 2-column, 3-row table:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScTabViewShell* pViewShell = getViewShell();
+
+    pDoc->SetString(ScAddress(0, 0, 0), u"Name"_ustr);
+    pDoc->SetString(ScAddress(1, 0, 0), u"Age"_ustr);
+    pDoc->SetString(ScAddress(0, 1, 0), u"Alice"_ustr);
+    pDoc->SetString(ScAddress(1, 1, 0), u"30"_ustr);
+    pDoc->SetString(ScAddress(0, 2, 0), u"Bob"_ustr);
+    pDoc->SetString(ScAddress(1, 2, 0), u"25"_ustr);
+
+    // Select A1:B3:
+    ScRange aRange(0, 0, 0, 1, 2, 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aRange);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // When exporting as markdown:
+    OString aResult = lcl_getMarkdownExport(pModelObj);
+
+    // Then the first row becomes the header:
+    CPPUNIT_ASSERT_EQUAL("| Name | Age |\n"
+        "| --- | --- |\n"
+        "| Alice | 30 |\n"
+        "| Bob | 25 |\n"_ostr, aResult);
+}
+
+void ScCopyPasteTest::testMarkdownExportSingleRow()
+{
+    // Given a single row with 3 cells:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScTabViewShell* pViewShell = getViewShell();
+
+    pDoc->SetString(ScAddress(0, 0, 0), u"X"_ustr);
+    pDoc->SetString(ScAddress(1, 0, 0), u"Y"_ustr);
+    pDoc->SetString(ScAddress(2, 0, 0), u"Z"_ustr);
+
+    // Select A1:C1:
+    ScRange aRange(0, 0, 0, 2, 0, 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aRange);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // When exporting as markdown:
+    OString aResult = lcl_getMarkdownExport(pModelObj);
+
+    // Then numbered column headers are generated:
+    CPPUNIT_ASSERT_EQUAL("| 1 | 2 | 3 |\n"
+        "| --- | --- | --- |\n"
+        "| X | Y | Z |\n"_ostr, aResult);
+}
+
+void ScCopyPasteTest::testMarkdownExportEscaping()
+{
+    // Given cells containing pipe and backslash characters:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScTabViewShell* pViewShell = getViewShell();
+
+    pDoc->SetString(ScAddress(0, 0, 0), u"Header"_ustr);
+    pDoc->SetString(ScAddress(0, 1, 0), u"a|b"_ustr);
+    pDoc->SetString(ScAddress(0, 2, 0), u"c\\d"_ustr);
+
+    // Select A1:A3:
+    ScRange aRange(0, 0, 0, 0, 2, 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aRange);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // When exporting as markdown:
+    OString aResult = lcl_getMarkdownExport(pModelObj);
+
+    // Then pipes and backslashes should be escaped:
+    CPPUNIT_ASSERT_EQUAL("| Header |\n"
+        "| --- |\n"
+        "| a\\|b |\n"
+        "| c\\\\d |\n"_ostr, aResult);
+}
+
+void ScCopyPasteTest::testMarkdownExportSingleCell()
+{
+    // Given a single cell with text:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetString(ScAddress(0, 0, 0), u"Hello world"_ustr);
+
+    // Cursor is on A1 by default (no range mark):
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // When exporting as markdown:
+    OString aResult = lcl_getMarkdownExport(pModelObj);
+
+    // Then output should contain the text without table markup:
+    CPPUNIT_ASSERT(aResult.indexOf("Hello world") >= 0);
+    CPPUNIT_ASSERT(aResult.indexOf("|") < 0);
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
