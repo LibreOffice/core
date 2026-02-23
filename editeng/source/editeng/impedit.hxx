@@ -1053,8 +1053,12 @@ public:
     void            Write(SvStream& rOutput, EETextFormat eFormat, const EditSelection& rSel);
     OString         GetSimpleHtml() const;
     ErrCode         WriteMarkdown(SvStream& rOutput, EditSelection aSel);
-    OString         GetSimpleMarkdown() const;
+    OString         GetSimpleMarkdown();
     EditPaM         ReadMarkdown(SvStream& rInput, EditSelection aSel);
+    void            WriteMarkdownContent(
+                        const std::function<void(std::string_view)>& rOut,
+                        sal_Int32 nStartNode, sal_Int32 nEndNode,
+                        sal_Int32 nStartPos, sal_Int32 nEndPos);
 
     std::unique_ptr<EditTextObject> CreateTextObject(sal_Int32 nPara, sal_Int32 nParas);
     std::unique_ptr<EditTextObject> CreateTextObject();

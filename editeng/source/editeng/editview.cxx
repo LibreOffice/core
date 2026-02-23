@@ -729,7 +729,7 @@ OString EditView::GetSimpleHtml() const
     return getImpl().getEditEngine().mpImpEditEngine->GetSimpleHtml();
 }
 
-OString EditView::GetSimpleMarkdown() const
+OString EditView::GetSimpleMarkdown()
 {
     return mpImpEditView->mpEditEngine->mpImpEditEngine->GetSimpleMarkdown();
 }

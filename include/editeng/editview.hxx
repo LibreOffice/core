@@ -289,7 +289,7 @@ public:
 
     SAL_DLLPRIVATE ErrCode             Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
     OString             GetSimpleHtml() const;
-    OString             GetSimpleMarkdown() const;
+    OString             GetSimpleMarkdown();
 
     void            SetBackgroundColor( const Color& rColor );
     Color const &   GetBackgroundColor() const;
