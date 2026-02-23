@@ -179,9 +179,8 @@ namespace frm
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::disposing( const EventObject& Source )
+    void SAL_CALL WindowStateGuard_Impl::disposing( const EventObject& /*Source*/ )
     {
-        OSL_ENSURE( Source.Source == m_xWindow, "WindowStateGuard_Impl::disposing: where does this come from?" );
         dispose();
     }
 
