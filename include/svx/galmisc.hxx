@@ -63,8 +63,6 @@ enum class SgaObjKind
 
 #define ID_IMAPINFO             2
 
-#define STREAMBUF_SIZE          16384L
-
 enum class GalleryGraphicImportRet
 {
     IMPORT_NONE, IMPORT_FILE
