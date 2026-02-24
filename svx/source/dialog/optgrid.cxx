@@ -58,13 +58,13 @@ static bool lcl_IsMetricSystem()
 }
 
 SvxOptionsGrid::SvxOptionsGrid() :
-    nFldDrawX       ( 100 ),
-    nFldDivisionX   ( 0 ),
-    nFldDrawY       ( 100 ),
-    nFldDivisionY   ( 0 ),
-    bUseGridsnap    ( false ),
-    bSynchronize    ( true ),
-    bGridVisible    ( false )
+    m_nFldDrawX       ( 100 ),
+    m_nFldDivisionX   ( 0 ),
+    m_nFldDrawY       ( 100 ),
+    m_nFldDivisionY   ( 0 ),
+    m_bUseGridsnap    ( false ),
+    m_bSynchronize    ( true ),
+    m_bGridVisible    ( false )
 {
 }
 
@@ -79,13 +79,13 @@ bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxGridItem& rItem = static_cast<const SvxGridItem&>(rAttr);
 
-    return (    bUseGridsnap == rItem.bUseGridsnap &&
-                bSynchronize == rItem.bSynchronize &&
-                bGridVisible == rItem.bGridVisible &&
-                nFldDrawX    == rItem.nFldDrawX    &&
-                nFldDivisionX== rItem.nFldDivisionX&&
-                nFldDrawY    == rItem.nFldDrawY    &&
-                nFldDivisionY== rItem.nFldDivisionY );
+    return (    m_bUseGridsnap == rItem.m_bUseGridsnap &&
+                m_bSynchronize == rItem.m_bSynchronize &&
+                m_bGridVisible == rItem.m_bGridVisible &&
+                m_nFldDrawX    == rItem.m_nFldDrawX    &&
+                m_nFldDivisionX== rItem.m_nFldDivisionX&&
+                m_nFldDrawY    == rItem.m_nFldDrawY    &&
+                m_nFldDivisionY== rItem.m_nFldDivisionY );
 }
 
 bool  SvxGridItem::GetPresentation
@@ -238,18 +238,18 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         SvxGridItem aGridItem( SID_ATTR_GRID_OPTIONS );
 
-        aGridItem.bUseGridsnap  = m_xCbxUseGridsnap->get_active();
-        aGridItem.bSynchronize  = m_xCbxSynchronize->get_active();
-        aGridItem.bGridVisible  = m_xCbxGridVisible->get_active();
+        aGridItem.m_bUseGridsnap  = m_xCbxUseGridsnap->get_active();
+        aGridItem.m_bSynchronize  = m_xCbxSynchronize->get_active();
+        aGridItem.m_bGridVisible  = m_xCbxGridVisible->get_active();
 
         MapUnit eUnit = rCoreSet->GetPool()->GetMetric( SID_ATTR_GRID_OPTIONS );
         tools::Long nX = GetCoreValue(  *m_xMtrFldDrawX, eUnit );
         tools::Long nY = GetCoreValue( *m_xMtrFldDrawY, eUnit );
 
-        aGridItem.nFldDrawX    = static_cast<sal_uInt32>(nX);
-        aGridItem.nFldDrawY    = static_cast<sal_uInt32>(nY);
-        aGridItem.nFldDivisionX = static_cast<tools::Long>(m_xNumFldDivisionX->get_value() - 1);
-        aGridItem.nFldDivisionY = static_cast<tools::Long>(m_xNumFldDivisionY->get_value() - 1);
+        aGridItem.m_nFldDrawX    = static_cast<sal_uInt32>(nX);
+        aGridItem.m_nFldDrawY    = static_cast<sal_uInt32>(nY);
+        aGridItem.m_nFldDivisionX = static_cast<tools::Long>(m_xNumFldDivisionX->get_value() - 1);
+        aGridItem.m_nFldDivisionY = static_cast<tools::Long>(m_xNumFldDivisionY->get_value() - 1);
 
         rCoreSet->Put( aGridItem );
     }
@@ -273,7 +273,7 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
             default:
                 break;
         }
-        m_xCbxUseGridsnap->set_active(pGridAttr->bUseGridsnap);
+        m_xCbxUseGridsnap->set_active(pGridAttr->m_bUseGridsnap);
         m_xCbxUseGridsnap->set_sensitive(!bReadOnly);
         m_xCbxUseGridsnapImg->set_visible(bReadOnly);
 
@@ -287,7 +287,7 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
             default:
                 break;
         }
-        m_xCbxSynchronize->set_active(pGridAttr->bSynchronize);
+        m_xCbxSynchronize->set_active(pGridAttr->m_bSynchronize);
         m_xCbxSynchronize->set_sensitive(!bReadOnly);
         m_xCbxSynchronizeImg->set_visible(bReadOnly);
 
@@ -301,13 +301,13 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
             default:
                 break;
         }
-        m_xCbxGridVisible->set_active(pGridAttr->bGridVisible);
+        m_xCbxGridVisible->set_active(pGridAttr->m_bGridVisible);
         m_xCbxGridVisible->set_sensitive(!bReadOnly);
         m_xCbxGridVisibleImg->set_visible(bReadOnly);
 
         MapUnit eUnit = rSet->GetPool()->GetMetric( SID_ATTR_GRID_OPTIONS );
-        SetMetricValue( *m_xMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
-        SetMetricValue( *m_xMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
+        SetMetricValue( *m_xMtrFldDrawX , pGridAttr->m_nFldDrawX, eUnit );
+        SetMetricValue( *m_xMtrFldDrawY , pGridAttr->m_nFldDrawY, eUnit );
 
         switch (m_Emode)
         {
@@ -377,8 +377,8 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
         m_xMtrFldDrawY->set_sensitive(!bReadOnly);
         m_xMtrFldDrawYImg->set_visible(bReadOnly);
 
-        m_xNumFldDivisionX->set_value(pGridAttr->nFldDivisionX + 1);
-        m_xNumFldDivisionY->set_value(pGridAttr->nFldDivisionY + 1);
+        m_xNumFldDivisionX->set_value(pGridAttr->m_nFldDivisionX + 1);
+        m_xNumFldDivisionY->set_value(pGridAttr->m_nFldDivisionY + 1);
 
         switch (m_Emode)
         {
@@ -417,7 +417,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
     const SvxGridItem* pGridAttr = nullptr;
     if( (pGridAttr = rSet.GetItemIfSet( SID_ATTR_GRID_OPTIONS , false )) )
     {
-        m_xCbxUseGridsnap->set_active(pGridAttr->bUseGridsnap);
+        m_xCbxUseGridsnap->set_active(pGridAttr->m_bUseGridsnap);
 
         ChangeGridsnapHdl_Impl(*m_xCbxUseGridsnap);
     }
