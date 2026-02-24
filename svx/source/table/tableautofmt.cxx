@@ -416,7 +416,7 @@ void SvxAutoFormatData::ResetAutoFormat(SvxAutoFormatData& pOld)
 
 SvxAutoFormat::~SvxAutoFormat() = default;
 
-void SvxAutoFormat::ResetParent(const OUString& rName)
+void SvxAutoFormat::ResetParent(std::u16string_view rName)
 {
     OUString sParent;
     if (size())

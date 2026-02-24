@@ -200,7 +200,7 @@ public:
     virtual SvxAutoFormatDataField* GetDefaultField() = 0;
     virtual const SvxAutoFormatData* GetResolvedStyle(const SvxAutoFormatData* pData) const = 0;
     virtual size_t size() const = 0;
-    virtual void ResetParent(const OUString& rName);
+    void ResetParent(std::u16string_view rName);
 
     static const SfxItemPropertySet& GetTablePropertySet();
 
