@@ -59,6 +59,7 @@
 #include <comphelper/emscriptenthreading.hxx>
 #include <config_emscripten.h>
 #include <config_vclplug.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/qt/QtUtils.hxx>
 #include <vcl/sysdata.hxx>
 #include <sal/log.hxx>
