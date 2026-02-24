@@ -71,7 +71,6 @@ class VCL_PLUGIN_PUBLIC GenericUnixSalData : public SalData
 public:
     GenericUnixSalData();
     virtual ~GenericUnixSalData() override;
-    virtual void Dispose();
 
     SalGenericDisplay* GetDisplay() const { return m_pDisplay; }
     void SetDisplay(SalGenericDisplay* pDisp) { m_pDisplay = pDisp; }

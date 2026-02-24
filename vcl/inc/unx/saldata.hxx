@@ -44,7 +44,7 @@ public:
     virtual ~X11SalData() override;
 
     void            Init();
-    virtual void            Dispose() override;
+    void Dispose();
 
     void                    DeleteDisplay(); // for shutdown
 

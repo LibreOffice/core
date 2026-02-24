@@ -369,11 +369,6 @@ GtkSalData::~GtkSalData()
 #endif
 }
 
-void GtkSalData::Dispose()
-{
-    deInitNWF();
-}
-
 /// Allows events to be processed, returns true if we processed an event.
 bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {

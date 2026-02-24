@@ -51,8 +51,6 @@ GenericUnixSalData::~GenericUnixSalData()
 #endif
 }
 
-void GenericUnixSalData::Dispose() {}
-
 #ifndef IOS
 void GenericUnixSalData::InitFreetypeManager() { m_pFreetypeManager.reset(new FreetypeManager); }
 #endif

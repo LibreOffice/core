@@ -231,7 +231,6 @@ public:
     virtual ~GtkSalData() override;
 
     void Init();
-    virtual void Dispose() override;
 
     static void initNWF();
     static void deInitNWF();
