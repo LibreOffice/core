@@ -111,7 +111,6 @@ public:
     SvxTableStylesDlg(weld::Window* pWindow, bool bNewStyle, SvxAutoFormat& pFormat,
                       SvxAutoFormatData& pData, bool bRTL);
     virtual ~SvxTableStylesDlg() override;
-    SvxAutoFormatData& GetFormat() { return mpData; };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

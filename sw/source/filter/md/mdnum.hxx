@@ -58,7 +58,6 @@ public:
     inline void Set(const SwMdNumRuleInfo& rInf);
     void Set(const SwTextNode& rTextNd);
 
-    explicit SwMdNumRuleInfo(const SwTextNode& rTextNd) { Set(rTextNd); }
     inline SwMdNumRuleInfo& operator=(const SwMdNumRuleInfo& rInf);
 
     inline void Clear();
@@ -67,7 +66,6 @@ public:
     SwNumRule* GetNumRule() { return m_pNumRule; }
     const SwNumRule* GetNumRule() const { return m_pNumRule; }
 
-    void SetDepth(sal_uInt16 nDepth) { m_nDeep = nDepth; }
     sal_uInt16 GetDepth() const { return m_nDeep; }
     void IncDepth() { ++m_nDeep; }
     void DecDepth()
@@ -76,10 +74,6 @@ public:
             --m_nDeep;
     }
     inline sal_uInt8 GetLevel() const;
-
-    bool IsRestart(const SwMdNumRuleInfo& rPrev) const;
-
-    bool IsNumbered() const { return m_bNumbered; }
 
     inline void SetNodeStartValue(sal_uInt8 nLvl, sal_uInt16 nVal = USHRT_MAX);
     sal_uInt16 GetNodeStartValue(sal_uInt8 nLvl) const { return m_aNumStarts[nLvl]; }

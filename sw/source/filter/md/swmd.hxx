@@ -157,7 +157,6 @@ public:
     SwMarkdownParser(SwDoc& rD, SwPaM& rCursor, SvStream& rIn, OUString aBaseURL, bool bReadNewDoc);
 
     SwMdNumRuleInfo& GetNumInfo() const { return *m_pNumRuleInfo; }
-    bool IsNewDoc() const { return m_bNewDoc; }
     ErrCode CallParser();
 
     ~SwMarkdownParser();

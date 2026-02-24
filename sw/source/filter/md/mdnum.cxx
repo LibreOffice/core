@@ -40,13 +40,4 @@ void SwMdNumRuleInfo::Set(const SwTextNode& rTextNd)
     }
 }
 
-bool SwMdNumRuleInfo::IsRestart(const SwMdNumRuleInfo& rPrev) const
-{
-    assert(rPrev.GetNumRule() == GetNumRule());
-
-    if (rPrev.GetDepth() < GetDepth())
-        return false;
-    return m_bRestart;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -86,7 +86,6 @@ public:
     void             SetTabEditable( sal_uInt16 nTab, bool bEditable );
 
     void             SetRole(SvTabListBoxRole e) { m_eRole = e; }
-    SvTabListBoxRole GetRole() const { return m_eRole; }
 
     virtual void     DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };

@@ -31,10 +31,9 @@ ImplFontCharMap::~ImplFontCharMap()
 {
 }
 
-ImplFontCharMap::ImplFontCharMap(bool bMicrosoftSymbolMap, std::vector<sal_uInt32> aRangeCodes)
+ImplFontCharMap::ImplFontCharMap(std::vector<sal_uInt32> aRangeCodes)
 :   maRangeCodes(std::move(aRangeCodes))
 ,   mnCharCount( 0 )
-,   m_bMicrosoftSymbolMap(bMicrosoftSymbolMap)
 {
     for (size_t i = 0; i < maRangeCodes.size(); i += 2)
     {
@@ -47,7 +46,7 @@ ImplFontCharMap::ImplFontCharMap(bool bMicrosoftSymbolMap, std::vector<sal_uInt3
 ImplFontCharMapRef const & ImplFontCharMap::getDefaultMap(bool bMicrosoftSymbolMap)
 {
     const auto& rRanges = bMicrosoftSymbolMap ? aDefaultSymbolRanges : aDefaultUnicodeRanges;
-    g_pDefaultImplFontCharMap = ImplFontCharMapRef(new ImplFontCharMap(bMicrosoftSymbolMap, rRanges));
+    g_pDefaultImplFontCharMap = ImplFontCharMapRef(new ImplFontCharMap(rRanges));
     return g_pDefaultImplFontCharMap;
 }
 
@@ -95,8 +94,8 @@ FontCharMap::FontCharMap( ImplFontCharMapRef pIFCMap )
 {
 }
 
-FontCharMap::FontCharMap(bool bMicrosoftSymbolMap, std::vector<sal_uInt32> aRangeCodes)
-    : mpImplFontCharMap(new ImplFontCharMap(bMicrosoftSymbolMap, std::move(aRangeCodes)))
+FontCharMap::FontCharMap(std::vector<sal_uInt32> aRangeCodes)
+    : mpImplFontCharMap(new ImplFontCharMap(std::move(aRangeCodes)))
 {
 }
 
@@ -115,8 +114,6 @@ bool FontCharMap::IsDefaultMap() const
 {
     return mpImplFontCharMap->isDefaultMap();
 }
-
-bool FontCharMap::isMicrosoftSymbolMap() const { return mpImplFontCharMap->m_bMicrosoftSymbolMap; }
 
 int FontCharMap::GetCharCount() const
 {

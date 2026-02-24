@@ -63,8 +63,6 @@ private:
     void PaintCells(vcl::RenderContext& rRenderContext);
 
     sal_uInt8 GetFormatIndex(size_t nCol, size_t nRow);
-    const SvxBoxItem& GetBoxItem(size_t nCol, size_t nRow) const;
-    const SvxLineItem& GetDiagItem(size_t nCol, size_t nRow, bool bTLBR) const;
 
     void DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow);
     void DrawBackground(vcl::RenderContext& rRenderContext);
