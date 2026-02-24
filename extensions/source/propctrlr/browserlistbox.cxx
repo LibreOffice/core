@@ -19,7 +19,7 @@
 
 #include "browserlistbox.hxx"
 #include "pcrcommon.hxx"
-#include "proplinelistener.hxx"
+#include "propcontroller.hxx"
 #include "propcontrolobserver.hxx"
 #include "linedescriptor.hxx"
 #include "inspectorhelpwindow.hxx"
@@ -354,7 +354,7 @@ void OBrowserListBox::CommitModified()
     m_pControlContextImpl->setNotificationMode(PropertyControlContext_Impl::eAsynchronously);
 }
 
-void OBrowserListBox::SetListener(IPropertyLineListener* _pListener)
+void OBrowserListBox::SetListener(OPropertyBrowserController* _pListener)
 {
     m_pLineListener = _pListener;
 }

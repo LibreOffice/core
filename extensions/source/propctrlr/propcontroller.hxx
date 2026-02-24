@@ -20,7 +20,6 @@
 #pragma once
 
 #include "composeduiupdate.hxx"
-#include "proplinelistener.hxx"
 #include "propcontrolobserver.hxx"
 #include "browserview.hxx"
 
@@ -57,15 +56,14 @@ typedef ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::awt::XFocusListener
                                css::inspection::XObjectInspector, css::lang::XInitialization>
     OPropertyBrowserController_Base;
 
-class OPropertyBrowserController : public ::comphelper::OMutexAndBroadcastHelper,
-                                   public OPropertyBrowserController_Base,
-                                   public css::inspection::XObjectInspectorUI
-    // that's intentionally *not* part of the OPropertyBrowserController_Base
-    // We do not want this to be available in queryInterface, getTypes, and the like.
-    ,
-                                   public IPropertyLineListener,
-                                   public IPropertyControlObserver,
-                                   public IPropertyExistenceCheck
+class OPropertyBrowserController
+    : public ::comphelper::OMutexAndBroadcastHelper,
+      public OPropertyBrowserController_Base,
+      public css::inspection::XObjectInspectorUI,
+      // that's intentionally *not* part of the OPropertyBrowserController_Base
+      // We do not want this to be available in queryInterface, getTypes, and the like.
+      public IPropertyControlObserver,
+      public IPropertyExistenceCheck
 {
 private:
     typedef std::multimap<sal_Int32, css::beans::Property> OrderedPropertyMap;
@@ -161,12 +159,11 @@ public:
     explicit OPropertyBrowserController(
         const css::uno::Reference<css::uno::XComponentContext>& _rxContext);
 
+    void Clicked(const OUString& _rName, bool _bPrimary);
+    void Commit(const OUString& _rName, const css::uno::Any& _rVal);
+
 protected:
     virtual ~OPropertyBrowserController() override;
-
-    // IPropertyLineListener
-    virtual void Clicked(const OUString& _rName, bool _bPrimary) override;
-    virtual void Commit(const OUString& _rName, const css::uno::Any& _rVal) override;
 
     // IPropertyControlObserver
     virtual void

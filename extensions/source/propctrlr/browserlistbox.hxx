@@ -36,9 +36,9 @@
 
 namespace pcr
 {
-class IPropertyLineListener;
 class IPropertyControlObserver;
 struct OLineDescriptor;
+class OPropertyBrowserController;
 class InspectorHelpWindow;
 class PropertyControlContext_Impl;
 
@@ -68,7 +68,7 @@ class OBrowserListBox final : public IButtonClickListener
     std::unique_ptr<InspectorHelpWindow> m_xHelpWindow;
     weld::Container* m_pInitialControlParent;
     ListBoxLines m_aLines;
-    IPropertyLineListener* m_pLineListener;
+    OPropertyBrowserController* m_pLineListener;
     IPropertyControlObserver* m_pControlObserver;
     css::uno::Reference<css::inspection::XPropertyControl> m_xActiveControl;
     sal_uInt16 m_nTheNameSize;
@@ -84,7 +84,7 @@ public:
     explicit OBrowserListBox(weld::Builder& rBuilder, weld::Container* pContainer);
     ~OBrowserListBox();
 
-    void SetListener(IPropertyLineListener* _pListener);
+    void SetListener(OPropertyBrowserController* _pListener);
     void SetObserver(IPropertyControlObserver* _pObserver);
 
     void EnableHelpSection(bool _bEnable);

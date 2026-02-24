@@ -30,9 +30,9 @@
 
 namespace pcr
 {
-    class IPropertyLineListener;
     class IPropertyControlObserver;
     struct OLineDescriptor;
+    class OPropertyBrowserController;
 
     //= OPropertyEditor
     class OPropertyEditor final
@@ -53,7 +53,7 @@ namespace pcr
         // controls initially have this parent before they are moved
         std::unique_ptr<weld::Container> m_xControlHoldingParent;
         css::uno::Reference<css::uno::XComponentContext> m_xContext;
-        IPropertyLineListener*      m_pListener;
+        OPropertyBrowserController* m_pListener;
         IPropertyControlObserver*   m_pObserver;
         sal_uInt16                  m_nNextId;
         Link<const OUString&,void>   m_aPageActivationHandler;
@@ -67,7 +67,7 @@ namespace pcr
         explicit OPropertyEditor(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
         ~OPropertyEditor();
 
-        void                        SetLineListener( IPropertyLineListener* );
+        void                        SetLineListener(OPropertyBrowserController*);
         void                        SetControlObserver( IPropertyControlObserver* );
 
         void                        EnableHelpSection( bool _bEnable );

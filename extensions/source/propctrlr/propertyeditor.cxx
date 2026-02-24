@@ -184,7 +184,7 @@ namespace pcr
         rPage.getListBox().SetListener( m_pListener );
     }
 
-    void OPropertyEditor::SetLineListener(IPropertyLineListener* pListener)
+    void OPropertyEditor::SetLineListener(OPropertyBrowserController* pListener)
     {
         m_pListener = pListener;
         forEachPage( &OPropertyEditor::setPageLineListener );

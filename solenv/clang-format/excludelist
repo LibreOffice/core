@@ -3547,7 +3547,6 @@ extensions/source/propctrlr/propertyhandler.hxx
 extensions/source/propctrlr/propertyinfo.hxx
 extensions/source/propctrlr/propeventtranslation.cxx
 extensions/source/propctrlr/propeventtranslation.hxx
-extensions/source/propctrlr/proplinelistener.hxx
 extensions/source/propctrlr/pushbuttonnavigation.cxx
 extensions/source/propctrlr/pushbuttonnavigation.hxx
 extensions/source/propctrlr/sqlcommanddesign.cxx
