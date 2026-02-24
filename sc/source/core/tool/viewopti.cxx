@@ -44,27 +44,27 @@ void ScGridOptions::SetDefaults()
 
     if ( ScOptionsUtil::IsMetricSystem() )
     {
-        nFldDrawX = 1000;   // 1cm
-        nFldDrawY = 1000;
+        m_nFldDrawX = 1000;   // 1cm
+        m_nFldDrawY = 1000;
     }
     else
     {
-        nFldDrawX = 1270;   // 0,5"
-        nFldDrawY = 1270;
+        m_nFldDrawX = 1270;   // 0,5"
+        m_nFldDrawY = 1270;
     }
-    nFldDivisionX = 1;
-    nFldDivisionY = 1;
+    m_nFldDivisionX = 1;
+    m_nFldDivisionY = 1;
 }
 
 bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 {
-    return (   nFldDrawX        == rCpy.nFldDrawX
-            && nFldDivisionX    == rCpy.nFldDivisionX
-            && nFldDrawY        == rCpy.nFldDrawY
-            && nFldDivisionY    == rCpy.nFldDivisionY
-            && bUseGridsnap     == rCpy.bUseGridsnap
-            && bSynchronize     == rCpy.bSynchronize
-            && bGridVisible     == rCpy.bGridVisible );
+    return (   m_nFldDrawX        == rCpy.m_nFldDrawX
+            && m_nFldDivisionX    == rCpy.m_nFldDivisionX
+            && m_nFldDrawY        == rCpy.m_nFldDrawY
+            && m_nFldDivisionY    == rCpy.m_nFldDivisionY
+            && m_bUseGridsnap     == rCpy.m_bUseGridsnap
+            && m_bSynchronize     == rCpy.m_bSynchronize
+            && m_bGridVisible     == rCpy.m_bGridVisible );
 }
 
 ScViewRenderingOptions::ScViewRenderingOptions()
