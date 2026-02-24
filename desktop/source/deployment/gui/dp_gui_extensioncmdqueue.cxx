@@ -245,7 +245,7 @@ private:
     void _acceptLicense( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                            const uno::Reference< deployment::XPackage > &xPackage );
 
-    enum Input { NONE, START, STOP };
+    enum class Input { NONE, START, STOP };
 
     uno::Reference< uno::XComponentContext > m_xContext;
     std::queue< TExtensionCmd >              m_queue;
@@ -597,7 +597,7 @@ ExtensionCmdQueue::Thread::Thread(DialogHelper& rDialogHelper, TheExtensionManag
     m_sRemovingPackages( DpResId( RID_STR_REMOVING_PACKAGES ) ),
     m_sDefaultCmd( DpResId( RID_STR_ADD_PACKAGES ) ),
     m_sAcceptLicense( DpResId( RID_STR_ACCEPT_LICENSE ) ),
-    m_eInput( NONE ),
+    m_eInput(Input::NONE),
     m_bStopped( false ),
     m_bWorking( false )
 {
@@ -665,7 +665,7 @@ void ExtensionCmdQueue::Thread::stop()
 {
     std::scoped_lock aGuard( m_mutex );
     m_bStopped = true;
-    m_eInput = STOP;
+    m_eInput = Input::STOP;
     m_wakeup.notify_all();
 }
 
@@ -694,17 +694,17 @@ void ExtensionCmdQueue::Thread::execute()
         Input eInput;
         {
             std::unique_lock aGuard( m_mutex );
-            while (m_eInput == NONE) {
+            while (m_eInput == Input::NONE) {
                 m_wakeup.wait(aGuard);
             }
             eInput = m_eInput;
-            m_eInput = NONE;
+            m_eInput = Input::NONE;
             nSize = m_queue.size();
             // coverity[missing_lock: FALSE] - maybe due to (by-design) unique_lock vs. scoped_lock?
             m_bWorking = false;
         }
 
-        if ( eInput == STOP )
+        if (eInput == Input::STOP)
             break;
 
         // We only install the extension which are currently in the queue.
@@ -1046,7 +1046,7 @@ void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)
         return;
 
     m_queue.push( rExtCmd );
-    m_eInput = START;
+    m_eInput = Input::START;
     m_wakeup.notify_all();
 }
 
