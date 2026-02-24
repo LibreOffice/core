@@ -122,7 +122,7 @@ namespace emfplushelper
 
         virtual ~EMFPPen() override;
 
-        void Read(SvStream& s, EmfPlusHelperData const & rR);
+        void Read(SvMemoryStream& s, EmfPlusHelperData const & rR, sal_uInt32 dataSize, bool bUseWholeStream);
 
         drawinglayer::attribute::StrokeAttribute GetStrokeAttribute(const double aTransformation) const;
     };
