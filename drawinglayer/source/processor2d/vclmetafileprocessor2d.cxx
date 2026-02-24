@@ -1078,7 +1078,46 @@ void VclMetafileProcessor2D::processFillGraphicPrimitive2D(
     }
 
     // all other cases: process recursively with original primitive
+    // If we are in PDF export and have vector data, pass this along
+    // as is done in processGraphicPrimitive2D
+    bool bUsingPDFExtOutDevData(false);
+    basegfx::B2DVector aTranslate, aScale;
+    static bool bSuppressPDFExtOutDevDataSupport(false); // loplugin:constvars:ignore
+
+    if (mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport)
+    {
+        const Graphic& rGraphic = rFillGraphicPrimitive2D.getFillGraphic().getGraphic();
+
+        if (rGraphic.IsGfxLink())
+        {
+            const basegfx::B2DHomMatrix& rTransform = rFillGraphicPrimitive2D.getTransformation();
+            double fRotate, fShearX;
+            rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+            if (basegfx::fTools::equalZero(fRotate) && (aScale.getX() > 0.0)
+                && (aScale.getY() > 0.0))
+            {
+                bUsingPDFExtOutDevData = true;
+                mpPDFExtOutDevData->BeginGroup();
+            }
+        }
+    }
+
+    // process recursively and add MetaFile comment
     process(rFillGraphicPrimitive2D);
+
+    if (!bUsingPDFExtOutDevData)
+        return;
+
+    const basegfx::B2DRange aCurrentRange(aTranslate.getX(), aTranslate.getY(),
+                                          aTranslate.getX() + aScale.getX(),
+                                          aTranslate.getY() + aScale.getY());
+    const tools::Rectangle aCurrentRect(
+        sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
+        sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
+
+    mpPDFExtOutDevData->EndGroup(rFillGraphicPrimitive2D.getFillGraphic().getGraphic(), 0,
+                                 aCurrentRect, aCurrentRect);
 }
 
 void VclMetafileProcessor2D::processGraphicPrimitive2D(
