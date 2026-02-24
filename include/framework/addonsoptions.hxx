@@ -21,13 +21,13 @@
 
 #include <config_options.h>
 #include <sal/types.h>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <framework/fwkdllapi.h>
 #include <memory>
 #include <vector>
 
 class Bitmap;
-namespace com::sun::star::beans { struct PropertyValue; }
 namespace osl { class Mutex; }
 
 /*-************************************************************************************************************
