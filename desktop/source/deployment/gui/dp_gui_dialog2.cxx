@@ -97,32 +97,6 @@ DialogHelper::~DialogHelper()
         Application::RemoveUserEvent( m_nEventID );
 }
 
-
-bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > &xPackage )
-{
-    return xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER;
-}
-
-bool DialogHelper::continueOnSharedExtension(const uno::Reference<deployment::XPackage>& xPackage,
-                                             TranslateId pResID, bool& bHadWarning)
-{
-    if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
-    {
-        const SolarMutexGuard guard;
-        incBusy();
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-            m_xDialog.get(), VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(pResID)));
-        bHadWarning = true;
-
-        bool bRet = RET_OK == xBox->run();
-        xBox.reset();
-        decBusy();
-        return bRet;
-    }
-    else
-        return true;
-}
-
 void DialogHelper::openWebBrowser(const OUString& sURL, const OUString& sTitle)
 {
     if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
@@ -537,6 +511,31 @@ void ExtMgrDialog::enableButtontoEnable( bool bEnable )
         m_xEnableBtn->set_label( DpResId( RID_CTX_ITEM_DISABLE ) );
         m_xEnableBtn->set_help_id( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
     }
+}
+
+bool ExtMgrDialog::IsSharedPkgMgr(const uno::Reference<deployment::XPackage>& xPackage)
+{
+    return xPackage->getRepositoryName() == SHARED_PACKAGE_MANAGER;
+}
+
+bool ExtMgrDialog::continueOnSharedExtension(const uno::Reference<deployment::XPackage>& xPackage,
+                                             TranslateId pResID, bool& bHadWarning)
+{
+    if (!bHadWarning && IsSharedPkgMgr(xPackage))
+    {
+        const SolarMutexGuard guard;
+        incBusy();
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+            m_xDialog.get(), VclMessageType::Warning, VclButtonsType::OkCancel, DpResId(pResID)));
+        bHadWarning = true;
+
+        bool bRet = RET_OK == xBox->run();
+        xBox.reset();
+        decBusy();
+        return bRet;
+    }
+    else
+        return true;
 }
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, weld::Button&, void)

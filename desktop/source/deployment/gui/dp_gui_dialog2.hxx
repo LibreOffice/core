@@ -74,10 +74,6 @@ public:
     virtual void    prepareChecking() = 0;
     virtual void    checkEntries() = 0;
 
-    static bool     IsSharedPkgMgr( const css::uno::Reference< css::deployment::XPackage > &);
-    bool continueOnSharedExtension(const css::uno::Reference<css::deployment::XPackage>&,
-                                   TranslateId pResID, bool& bHadWarning);
-
     void incBusy() { m_aBusy.incBusy(m_xDialog.get()); }
     void            decBusy() { m_aBusy.decBusy(); }
     bool            isBusy() const { return m_aBusy.isBusy(); }
@@ -169,6 +165,11 @@ public:
      * based on the value of bEnable.
      */
     void enableButtontoEnable( bool bEnable );
+
+private:
+    static bool IsSharedPkgMgr(const css::uno::Reference<css::deployment::XPackage>&);
+    bool continueOnSharedExtension(const css::uno::Reference<css::deployment::XPackage>&,
+                                   TranslateId pResID, bool& bHadWarning);
 };
 
 class UpdateRequiredDialog : public DialogHelper
