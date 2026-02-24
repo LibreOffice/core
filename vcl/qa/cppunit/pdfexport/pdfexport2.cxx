@@ -6761,6 +6761,26 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf118350StartEndParaAlign)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(99.0, aRect.at(23).getMinX(), /*delta*/ 10.0);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, tdf150076BackgroundPdf)
+{
+    loadFromFile(u"tdf150076.odt");
+    save(TestFilter::PDF_WRITER);
+
+    // Parse the export result.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
+    // Without the fix in place, this fails with:
+    // equality assertion failed
+    // - Expected: 5
+    // - Actual  : 3
+    // Where 5 means form (i.e. embedded PDF) and 3 means it's just an image
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Form, pPageObject->getType());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
