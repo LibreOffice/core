@@ -51,6 +51,7 @@
 #include <vcl/pdfread.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cmath>
+#include <libxml/xpathInternals.h>
 
 using namespace ::com::sun::star;
 
@@ -64,7 +65,17 @@ public:
         : UnoApiTest(u"/vcl/qa/cppunit/pdfexport/data/"_ustr)
     {
     }
+
+    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 };
+
+void PdfExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
+{
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("x"), BAD_CAST("adobe:ns:meta/"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("rdf"),
+                       BAD_CAST("http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dc"), BAD_CAST("http://purl.org/dc/elements/1.1/"));
+}
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160705)
 {
@@ -1404,6 +1415,45 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReexportDocumentWithComplexResources)
         }
     }
 #endif
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf170448)
+{
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"tdf170448.odt");
+    save(TestFilter::PDF_WRITER);
+
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    auto* pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    auto* pCatalogDictionary = pCatalog->GetDictionary();
+    CPPUNIT_ASSERT(pCatalogDictionary);
+    auto* pMetadataObject = pCatalogDictionary->LookupObject("Metadata"_ostr);
+    CPPUNIT_ASSERT(pMetadataObject);
+    auto* pMetadataDictionary = pMetadataObject->GetDictionary();
+    auto* pType = dynamic_cast<vcl::filter::PDFNameElement*>(
+        pMetadataDictionary->LookupElement("Type"_ostr));
+    CPPUNIT_ASSERT(pType);
+    CPPUNIT_ASSERT_EQUAL("Metadata"_ostr, pType->GetValue());
+
+    auto* pStreamObject = pMetadataObject->GetStream();
+    CPPUNIT_ASSERT(pStreamObject);
+    auto& rStream = pStreamObject->GetMemory();
+    rStream.Seek(0);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&rStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: ' " < > & - ‘ » - l’île (copié-collé du texte)
+    // - Actual  : &apos; &quot; &lt; &gt; &amp; - ‘ » - l’île (copié-collé du texte)
+    assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/dc:title/rdf:Alt/rdf:li",
+                       u"' \" < > & - ‘ » - l’île (copié-collé du texte)");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[1]/dc:description/rdf:Alt/rdf:li",
+                       u"' \" <>& - ' \" - l'île (écrit directement au clavier)");
 }
 
 // Tests that at export the PDF has the PDF/UA metadata properly set
