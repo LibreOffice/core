@@ -27,6 +27,7 @@
 #include <QtInstance.hxx>
 #include <QtMainWindow.hxx>
 #include <QtSvpGraphics.hxx>
+#include <QtTools.hxx>
 #include <QtTransferable.hxx>
 #if CHECK_ANY_QT_USING_X11
 #include <QtX11Support.hxx>
