@@ -13,6 +13,7 @@
 
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <tools/json_writer.hxx>
 #include "document.hxx"
 #include "scdllapi.h"
 #include "dbdata.hxx"
@@ -127,6 +128,8 @@ public:
     void DeleteTableStyle(const OUString& rName);
     const ScTableStyle* GetTableStyle(const OUString& rName) const;
     bool HasTableStyle() const { return maTableStyles.size() > 0; }
+
+    void generateJSON(tools::JsonWriter& rWriter) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
