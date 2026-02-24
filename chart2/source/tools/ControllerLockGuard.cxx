@@ -27,12 +27,14 @@ namespace chart
 ControllerLockGuardUNO::ControllerLockGuardUNO( rtl::Reference<::chart::ChartModel> xModel ) :
         mxModel(std::move( xModel ))
 {
-    mxModel->lockControllers();
+    if( mxModel.is())
+        mxModel->lockControllers();
 }
 
 ControllerLockGuardUNO::~ControllerLockGuardUNO()
 {
-    mxModel->unlockControllers();
+    if( mxModel.is())
+        mxModel->unlockControllers();
 }
 
 ControllerLockGuard::ControllerLockGuard( ChartModel& rModel ) :
