@@ -87,7 +87,6 @@ public:
     void SetText( const OUString &rTitle );
     void Show();
     void ToTop();
-    void Close();
     bool isVisible();
 
 
@@ -116,6 +115,9 @@ public:
 
     // XModifyListener
     virtual void SAL_CALL modified( css::lang::EventObject const & evt ) override;
+
+private:
+    void Close();
 };
 
 } // namespace dp_gui
