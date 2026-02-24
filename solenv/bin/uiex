@@ -8,7 +8,7 @@ from subprocess import check_output
 
 try:
     myopts, args = getopt.getopt(sys.argv[1:], "i:o:")
-except getopt.GetoptError as e:
+except getopt.GetoptError:
     print(" Syntax: uiex -i FileIn -o FileOut")
     print(" FileIn:   Source files (*.ui)")
     print(" FileOut:  Destination file (*.*)")

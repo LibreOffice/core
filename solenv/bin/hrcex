@@ -8,7 +8,7 @@ from subprocess import check_output, Popen, PIPE
 
 try:
     myopts, args = getopt.getopt(sys.argv[1:], "i:o:")
-except getopt.GetoptError as e:
+except getopt.GetoptError:
     print(" Syntax: hrcex -i FileIn -o FileOut")
     print(" FileIn:   Source files (*.hrc)")
     print(" FileOut:  Destination file (*.*)")

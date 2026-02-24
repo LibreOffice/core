@@ -116,7 +116,7 @@ def parse_reports_and_get_most_recent_report_from_last_page(signature, session):
         td_list = tr.find_all("td")
 
         currentID = td_list[0].a.text.strip()
-        currentVersion = int(''.join(re.findall("\d+", td_list[2].text)))
+        currentVersion = int(''.join(re.findall(r"\d+", td_list[2].text)))
         currentOS = td_list[3].text.strip()
 
         # get most recent version

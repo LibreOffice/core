@@ -64,14 +64,14 @@ libraryNames = {
 def get_current_version(libName):
     if "sqlite" in libName:
         # 3XXYYZZ -> 3.X.Y.Z
-        s = re.search("(\d{7})", libName )
+        s = re.search(r"(\d{7})", libName )
         if s:
             num = str(s.group(1))
             return parse("{}.{}.{}.{}".format(num[0], num[1:3], num[3:5], num[6:7]))
     else:
         libraryName = libName.replace("_", ".")
         libraryName = re.sub("[0-9a-f]{5,40}", "", libraryName) #SHA1
-        s = re.search("\d[\d\.]+\d", libraryName )
+        s = re.search(r"\d[\d\.]+\d", libraryName )
         if s:
             return parse(s.group())
 
@@ -97,9 +97,9 @@ def get_library_list(fileName):
         for libraryBranch in libraryBranches:
             if libraryName.lower().startswith(libraryBranch):
                 if libraryBranch == "postgres":
-                    branch = ''.join(re.findall("\d{1,2}", libraryName)[0])
+                    branch = ''.join(re.findall(r"\d{1,2}", libraryName)[0])
                 else:
-                    branch = ''.join(re.findall("\d{1,2}\.\d{1,2}", libraryName)[0])
+                    branch = ''.join(re.findall(r"\d{1,2}\.\d{1,2}", libraryName)[0])
                 branches[libraryBranch] = branch
                 print(libraryBranch + " is on branch: " + str(branch))
                 break
