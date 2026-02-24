@@ -61,7 +61,6 @@ extern "C"
         // initialize SalData
         X11SalData *pSalData = new X11SalData();
 
-        pSalData->Init();
         pInstance->SetLib( pSalData->GetLib() );
 
         return pInstance;
