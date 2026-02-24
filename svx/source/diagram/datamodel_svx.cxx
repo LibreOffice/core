@@ -29,42 +29,109 @@
 #include <utility>
 #include <sax/fastattribs.hxx>
 #include <com/sun/star/text/XText.hpp>
+#include <xmloff/xmltoken.hxx>
 
 using namespace ::oox;
 using namespace ::com::sun::star;
 
 namespace svx::diagram {
 
+TypeConstant getTypeConstantForName(std::u16string_view aName)
+{
+        if (u"Type" == aName) return TypeConstant::XML_type;
+        if (u"asst" == aName) return TypeConstant::XML_asst;
+        if (u"doc" == aName) return TypeConstant::XML_doc;
+        if (u"node" == aName) return TypeConstant::XML_node;
+        if (u"norm" == aName) return TypeConstant::XML_norm;
+        if (u"parOf" == aName) return TypeConstant::XML_parOf;
+        if (u"parTrans" == aName) return TypeConstant::XML_parTrans;
+        if (u"pres" == aName) return TypeConstant::XML_pres;
+        if (u"presOf" == aName) return TypeConstant::XML_presOf;
+        if (u"presParOf" == aName) return TypeConstant::XML_presParOf;
+        if (u"rel" == aName) return TypeConstant::XML_rel;
+        if (u"sibTrans" == aName) return TypeConstant::XML_sibTrans;
+        return TypeConstant::XML_none;
+}
+
+std::u16string_view getNameForTypeConstant(TypeConstant aTypeConstant)
+{
+    switch (aTypeConstant)
+    {
+        case TypeConstant::XML_type: return u"Type"; break;
+        case TypeConstant::XML_asst: return u"asst"; break;
+        case TypeConstant::XML_doc: return u"doc"; break;
+        case TypeConstant::XML_node: return u"node"; break;
+        case TypeConstant::XML_norm: return u"norm"; break;
+        case TypeConstant::XML_parOf: return u"parOf"; break;
+        case TypeConstant::XML_parTrans: return u"parTrans"; break;
+        case TypeConstant::XML_pres: return u"pres"; break;
+        case TypeConstant::XML_presOf: return u"presOf"; break;
+        case TypeConstant::XML_presParOf: return u"presParOf"; break;
+        case TypeConstant::XML_rel: return u"rel"; break;
+        case TypeConstant::XML_sibTrans: return u"sibTrans"; break;
+        case TypeConstant::XML_none: break;
+    }
+
+    return u"";
+}
+
 void addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint)
 {
-    if (TypeConstant::XML_none != aTypeConstant)
-    {
-        switch (aTypeConstant)
-        {
-            // *CAUTION!* here '::XML_type' is *not* the same as 'XML_type' which would
-            // namespace expand to oox::XML_type as in enum TypeConstant definitions (!)
-            case TypeConstant::XML_type: rAttributeList->add(::XML_type, "Type"); break;
-            case TypeConstant::XML_asst: rAttributeList->add(::XML_type, "asst"); break;
-            case TypeConstant::XML_doc: rAttributeList->add(::XML_type, "doc"); break;
-            case TypeConstant::XML_node: if(!bPoint) rAttributeList->add(::XML_type, "node"); break;
-            case TypeConstant::XML_norm: rAttributeList->add(::XML_type, "norm"); break;
-            case TypeConstant::XML_parOf: if(bPoint) rAttributeList->add(::XML_type, "parOf"); break;
-            case TypeConstant::XML_parTrans: rAttributeList->add(::XML_type, "parTrans"); break;
-            case TypeConstant::XML_pres: rAttributeList->add(::XML_type, "pres"); break;
-            case TypeConstant::XML_presOf: rAttributeList->add(::XML_type, "presOf"); break;
-            case TypeConstant::XML_presParOf: rAttributeList->add(::XML_type, "presParOf"); break;
-            case TypeConstant::XML_rel: rAttributeList->add(::XML_type, "rel"); break;
-            case TypeConstant::XML_sibTrans: rAttributeList->add(::XML_type, "sibTrans"); break;
-            default: break; // XML_none
-        }
-    }
+    if (TypeConstant::XML_none == aTypeConstant)
+        return;
+    if (TypeConstant::XML_node == aTypeConstant && bPoint)
+        return;
+    if (TypeConstant::XML_parOf == aTypeConstant && !bPoint)
+        return;
+
+    const std::u16string_view aName(getNameForTypeConstant(aTypeConstant));
+    // *CAUTION!* here '::XML_type' is *not* the same as 'XML_type' which would
+    // namespace expand to oox::XML_type as in enum TypeConstant definitions (!)
+    if (!aName.empty())
+        rAttributeList->add(::XML_type, aName);
+}
+
+void addTypeConstantToDiagramModelData(TypeConstant aTypeConstant, boost::property_tree::ptree& rTarget, bool bPoint)
+{
+    if (TypeConstant::XML_none == aTypeConstant)
+        return;
+    if (TypeConstant::XML_node == aTypeConstant && bPoint)
+        return;
+    if (TypeConstant::XML_parOf == aTypeConstant && !bPoint)
+        return;
+
+    const std::u16string_view aName(getNameForTypeConstant(aTypeConstant));
+    if (!aName.empty())
+        rTarget.put("XMLType", OUString(aName));
 }
 
 Connection::Connection()
 : mnXMLType( XML_parOf )
+, msModelId()
+, msSourceId()
+, msDestId()
+, msPresId()
+, msSibTransId()
+, msParTransId()
 , mnSourceOrder( 0 )
 , mnDestOrder( 0 )
 {
+}
+
+Connection::Connection(const boost::property_tree::ptree& rConnectionData)
+: mnXMLType( XML_parOf )
+, msModelId(OUString::fromUtf8(rConnectionData.get("modelId", "")))
+, msSourceId(OUString::fromUtf8(rConnectionData.get("srcId", "")))
+, msDestId(OUString::fromUtf8(rConnectionData.get("destId", "")))
+, msPresId(OUString::fromUtf8(rConnectionData.get("presId", "")))
+, msSibTransId(OUString::fromUtf8(rConnectionData.get("sibTransId", "")))
+, msParTransId(OUString::fromUtf8(rConnectionData.get("parTransId", "")))
+, mnSourceOrder(rConnectionData.get("srcOrd", 0))
+, mnDestOrder(rConnectionData.get("destOrd", 0))
+{
+    const OUString aXMLType(OUString::fromUtf8(rConnectionData.get("XMLType", "")));
+    if (!aXMLType.isEmpty())
+        mnXMLType = getTypeConstantForName(aXMLType);
 }
 
 void Connection::writeDiagramData(sax_fastparser::FSHelperPtr& rTarget)
@@ -93,6 +160,19 @@ void Connection::writeDiagramData(sax_fastparser::FSHelperPtr& rTarget)
     rTarget->singleElementNS(XML_dgm, XML_cxn, pAttributeList);
 }
 
+void Connection::addDiagramModelData(boost::property_tree::ptree& rTarget) const
+{
+    addTypeConstantToDiagramModelData(mnXMLType, rTarget, false); // XML_type
+    if (!msModelId.isEmpty()) rTarget.put("modelId", msModelId); // XML_modelId
+    if (!msSourceId.isEmpty()) rTarget.put("srcId", msSourceId); // XML_srcId
+    if (!msDestId.isEmpty()) rTarget.put("destId", msDestId); // XML_destId
+    if (!msPresId.isEmpty()) rTarget.put("presId", msPresId); // XML_presId
+    if (!msSibTransId.isEmpty()) rTarget.put("sibTransId", msSibTransId); // XML_sibTransId
+    if (!msParTransId.isEmpty()) rTarget.put("parTransId", msParTransId); // XML_parTransId
+    if (0 != mnSourceOrder) rTarget.put("srcOrd", mnSourceOrder); // XML_srcOrd
+    if (0 != mnDestOrder) rTarget.put("destOrd", mnDestOrder); // XML_destOrd
+}
+
 Point::Point()
 : mnXMLType(XML_node)
 , mnMaxChildren(-1)
@@ -119,6 +199,55 @@ Point::Point()
 , mbCustomText(false)
 , mbIsPlaceholder(false)
 {
+}
+
+Point::Point(const boost::property_tree::ptree& rPointData)
+: msCnxId(OUString::fromUtf8(rPointData.get("cxnId", "")))
+, msModelId(OUString::fromUtf8(rPointData.get("modelId", "")))
+, msColorTransformCategoryId(OUString::fromUtf8(rPointData.get("csCatId", "")))
+, msColorTransformTypeId(OUString::fromUtf8(rPointData.get("csTypeId", "")))
+, msLayoutCategoryId(OUString::fromUtf8(rPointData.get("loCatId", "")))
+, msLayoutTypeId(OUString::fromUtf8(rPointData.get("loTypeId", "")))
+, msPlaceholderText(OUString::fromUtf8(rPointData.get("phldrT", "")))
+, msPresentationAssociationId(OUString::fromUtf8(rPointData.get("presAssocID", "")))
+, msPresentationLayoutName(OUString::fromUtf8(rPointData.get("presName", "")))
+, msPresentationLayoutStyleLabel(OUString::fromUtf8(rPointData.get("presStyleLbl", "")))
+, msQuickStyleCategoryId(OUString::fromUtf8(rPointData.get("qsCatId", "")))
+, msQuickStyleTypeId(OUString::fromUtf8(rPointData.get("qsTypeId", "")))
+, msResizeHandles(OUString::fromUtf8(rPointData.get("resizeHandles", "")))
+, mnXMLType(XML_node)
+, mnMaxChildren(rPointData.get("chMax", -1))
+, mnPreferredChildren(rPointData.get("chPref", -1))
+, mnDirection(rPointData.get<int>("dir", XML_norm))
+, moHierarchyBranch()
+, mnCustomAngle(rPointData.get("custAng", -1))
+, mnPercentageNeighbourWidth(rPointData.get("custLinFactNeighborX", -1))
+, mnPercentageNeighbourHeight(rPointData.get("custLinFactNeighborY", -1))
+, mnPercentageOwnWidth(rPointData.get("custLinFactX", -1))
+, mnPercentageOwnHeight(rPointData.get("custLinFactY", -1))
+, mnIncludeAngleScale(rPointData.get("custRadScaleInc", -1))
+, mnRadiusScale(rPointData.get("custRadScaleRad", -1))
+, mnWidthScale(rPointData.get("custScaleX", -1))
+, mnHeightScale(rPointData.get("custScaleY", -1))
+, mnWidthOverride(rPointData.get("custSzX", -1))
+, mnHeightOverride(rPointData.get("custSzY", -1))
+, mnLayoutStyleCount(rPointData.get("presStyleCnt", -1))
+, mnLayoutStyleIndex(rPointData.get("presStyleIdx", -1))
+, mbOrgChartEnabled(rPointData.get("orgChart", false))
+, mbBulletEnabled(rPointData.get("bulletEnabled", false))
+, mbCoherent3DOffset(rPointData.get("coherent3DOff", false))
+, mbCustomHorizontalFlip(rPointData.get("custFlipHor", false))
+, mbCustomVerticalFlip(rPointData.get("custFlipVert", false))
+, mbCustomText(rPointData.get("custT", false))
+, mbIsPlaceholder(rPointData.get("phldr", false))
+{
+    const OUString aXMLType(OUString::fromUtf8(rPointData.get("XMLType", "")));
+    if (!aXMLType.isEmpty())
+        mnXMLType = getTypeConstantForName(aXMLType);
+
+    const boost::optional<sal_Int32> aBranch(rPointData.get_optional<int>("hierBranch"));
+    if (aBranch.has_value())
+        moHierarchyBranch = aBranch.value();
 }
 
 void Point::writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget)
@@ -151,11 +280,11 @@ void Point::writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget)
     if (-1 != mnLayoutStyleIndex) pAttributeList->add(XML_presStyleIdx, OUString::number(mnLayoutStyleIndex));
 
     static constexpr OUString aStrTrue = u"1"_ustr; // this uses "1", not "true"
-    if (true == mbCoherent3DOffset) pAttributeList->add(XML_coherent3DOff, aStrTrue);
-    if (true == mbCustomHorizontalFlip) pAttributeList->add(XML_custFlipHor, aStrTrue);
-    if (true == mbCustomVerticalFlip) pAttributeList->add(XML_custFlipVert, aStrTrue);
-    if (true == mbCustomText) pAttributeList->add(XML_custT, aStrTrue);
-    if (true == mbIsPlaceholder) pAttributeList->add(XML_phldr, aStrTrue);
+    if (mbCoherent3DOffset) pAttributeList->add(XML_coherent3DOff, aStrTrue);
+    if (mbCustomHorizontalFlip) pAttributeList->add(XML_custFlipHor, aStrTrue);
+    if (mbCustomVerticalFlip) pAttributeList->add(XML_custFlipVert, aStrTrue);
+    if (mbCustomText) pAttributeList->add(XML_custT, aStrTrue);
+    if (mbIsPlaceholder) pAttributeList->add(XML_phldr, aStrTrue);
 
     const bool bNeed_presLayoutVars(mbBulletEnabled
         || -1 != mnMaxChildren
@@ -198,6 +327,51 @@ void Point::writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget)
         rTarget->singleElementNS(XML_dgm, XML_prSet, pAttributeList);
 }
 
+void Point::addDiagramModelData(boost::property_tree::ptree& rTarget) const
+{
+    if (!msCnxId.isEmpty()) rTarget.put("cxnId", msCnxId); // XML_cxnId
+    if (!msModelId.isEmpty()) rTarget.put("modelId", msModelId); // XML_modelId
+    if (!msColorTransformCategoryId.isEmpty()) rTarget.put("csCatId", msColorTransformCategoryId); // XML_csCatId
+    if (!msColorTransformTypeId.isEmpty()) rTarget.put("csTypeId", msColorTransformTypeId); // XML_csTypeId
+    if (!msLayoutCategoryId.isEmpty()) rTarget.put("loCatId", msLayoutCategoryId); // XML_loCatId
+    if (!msLayoutTypeId.isEmpty()) rTarget.put("loTypeId", msLayoutTypeId); // XML_loTypeId
+    if (!msPlaceholderText.isEmpty()) rTarget.put("phldrT", msPlaceholderText); // XML_phldrT
+    if (!msPresentationAssociationId.isEmpty()) rTarget.put("presAssocID", msPresentationAssociationId); // XML_presAssocID
+    if (!msPresentationLayoutName.isEmpty()) rTarget.put("presName", msPresentationLayoutName); // XML_presName
+    if (!msPresentationLayoutStyleLabel.isEmpty()) rTarget.put("presStyleLbl", msPresentationLayoutStyleLabel); // XML_presStyleLbl
+    if (!msQuickStyleCategoryId.isEmpty()) rTarget.put("qsCatId", msQuickStyleCategoryId); // XML_qsCatId
+    if (!msQuickStyleTypeId.isEmpty()) rTarget.put("qsTypeId", msQuickStyleTypeId); // XML_qsTypeId
+    if (!msResizeHandles.isEmpty()) rTarget.put("resizeHandles", msResizeHandles); // XML_resizeHandles
+
+    addTypeConstantToDiagramModelData(mnXMLType, rTarget, true); // XML_type
+    if (-1 != mnMaxChildren) rTarget.put("chMax", mnMaxChildren); // XML_chMax
+    if (-1 != mnPreferredChildren) rTarget.put("chPref", mnPreferredChildren); // XML_chPref
+    if (XML_norm != mnDirection) rTarget.put("dir", mnDirection); // XML_dir
+    if (moHierarchyBranch.has_value()) rTarget.put("hierBranch", moHierarchyBranch.value()); // XML_hierBranch
+
+    if (-1 != mnCustomAngle) rTarget.put("custAng", mnCustomAngle); // XML_custAng
+    if (-1 != mnPercentageNeighbourWidth) rTarget.put("custLinFactNeighborX", mnPercentageNeighbourWidth); // XML_custLinFactNeighborX
+    if (-1 != mnPercentageNeighbourHeight) rTarget.put("custLinFactNeighborY", mnPercentageNeighbourHeight); // XML_custLinFactNeighborY
+    if (-1 != mnPercentageOwnWidth) rTarget.put("custLinFactX", mnPercentageOwnWidth); // XML_custLinFactX
+    if (-1 != mnPercentageOwnHeight) rTarget.put("custLinFactY", mnPercentageOwnHeight); // XML_custLinFactY
+    if (-1 != mnIncludeAngleScale) rTarget.put("custRadScaleInc", mnIncludeAngleScale); // XML_custRadScaleInc
+    if (-1 != mnRadiusScale) rTarget.put("custRadScaleRad", mnRadiusScale); // XML_custRadScaleRad
+    if (-1 != mnWidthScale) rTarget.put("custScaleX", mnWidthScale); // XML_custScaleX
+    if (-1 != mnHeightScale) rTarget.put("custScaleY", mnHeightScale); // XML_custScaleY
+    if (-1 != mnWidthOverride) rTarget.put("custSzX", mnWidthOverride); // XML_custSzX
+    if (-1 != mnHeightOverride) rTarget.put("custSzY", mnHeightOverride); // XML_custSzY
+    if (-1 != mnLayoutStyleCount) rTarget.put("presStyleCnt", mnLayoutStyleCount); // XML_presStyleCnt
+    if (-1 != mnLayoutStyleIndex) rTarget.put("presStyleIdx", mnLayoutStyleIndex); // XML_presStyleIdx
+
+    if (mbOrgChartEnabled) rTarget.put("orgChart", mbOrgChartEnabled); // XML_orgChart
+    if (mbBulletEnabled) rTarget.put("bulletEnabled", mbBulletEnabled); // XML_bulletEnabled
+    if (mbCoherent3DOffset) rTarget.put("coherent3DOff", mbCoherent3DOffset); // XML_coherent3DOff
+    if (mbCustomHorizontalFlip) rTarget.put("custFlipHor", mbCustomHorizontalFlip); // XML_custFlipHor
+    if (mbCustomVerticalFlip) rTarget.put("custFlipVert", mbCustomVerticalFlip); // XML_custFlipVert
+    if (mbCustomText) rTarget.put("custT", mbCustomText); // XML_custT
+    if (mbIsPlaceholder) rTarget.put("phldr", mbIsPlaceholder); // XML_phldr
+}
+
 DiagramData_svx::DiagramData_svx()
 : mxRootShape()
 , maExtDrawings()
@@ -225,6 +399,34 @@ DiagramData_svx::DiagramData_svx(DiagramData_svx const& rSource)
 // copy BackgroundShapeModelID, the BGSgape will need to be identified on reLayout
 , msBackgroundShapeModelID(rSource.msBackgroundShapeModelID)
 {
+}
+
+DiagramData_svx::DiagramData_svx(const boost::property_tree::ptree& rDiagramModel)
+: mxRootShape()
+, maExtDrawings()
+, maConnections()
+, maPoints()
+, mxThemeDocument()
+, maPointsPresNameMap()
+, maConnectionNameMap()
+, maPresOfNameMap()
+, msBackgroundShapeModelID(OUString::fromUtf8(rDiagramModel.get("BGShapeModelID", "")))
+{
+    const int nPtCnt(rDiagramModel.get_child("PtCnt").get_value<int>());
+    for (int a(0); a < nPtCnt; a++)
+    {
+        const OUString aName(OUString::Concat("Pt") + OUString::number(a));
+        boost::property_tree::ptree aPointData = rDiagramModel.get_child(aName.toUtf8().getStr());
+        maPoints.emplace_back(aPointData);
+    }
+
+    const int nConnCnt(rDiagramModel.get_child("ConnCnt").get_value<int>());
+    for (int a(0); a < nConnCnt; a++)
+    {
+        const OUString aName(OUString::Concat("Cn") + OUString::number(a));
+        boost::property_tree::ptree aConnectionData = rDiagramModel.get_child(aName.toUtf8().getStr());
+        maConnections.emplace_back(aConnectionData);
+    }
 }
 
 DiagramData_svx::~DiagramData_svx()
@@ -397,6 +599,44 @@ const Point* DiagramData_svx::getPointByModelID(std::u16string_view rModelID) co
             return &rCandidate;
 
     return nullptr;
+}
+
+void DiagramData_svx::addDiagramModelData(boost::property_tree::ptree& rTarget) const
+{
+    // write BGShapeModelID to boost::property_tree
+    rTarget.put("BGShapeModelID", getBackgroundShapeModelID());
+
+    // write points to boost::property_tree
+    const svx::diagram::Points& rPoints = getPoints();
+    if (!rPoints.empty())
+    {
+        rTarget.put("PtCnt", rPoints.size());
+        size_t count(0);
+
+        for (auto & point : rPoints)
+        {
+            boost::property_tree::ptree aPoints;
+            point.addDiagramModelData(aPoints);
+            const OUString aName(OUString::Concat("Pt") + OUString::number(count++));
+            rTarget.push_back(std::make_pair(aName.toUtf8().getStr(), aPoints));
+        }
+    }
+
+    // write connections to boost::property_tree
+    const svx::diagram::Connections& rConnections = getConnections();
+    if (!rConnections.empty())
+    {
+        rTarget.put("ConnCnt", rConnections.size());
+        size_t count(0);
+
+        for (auto & connection : rConnections)
+        {
+            boost::property_tree::ptree aConnections;
+            connection.addDiagramModelData(aConnections);
+            const OUString aName(OUString::Concat("Cn") + OUString::number(count++));
+            rTarget.push_back(std::make_pair(aName.toUtf8().getStr(), aConnections));
+        }
+    }
 }
 
 uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(const Point& rPoint) const

@@ -71,6 +71,7 @@ public:
         std::shared_ptr<::oox::drawingml::Theme> xTheme,
         css::awt::Size aImportSize);
     explicit DiagramHelper_oox(DiagramHelper_oox const& rSource);
+    explicit DiagramHelper_oox(const boost::property_tree::ptree& rDiagramModel);
     virtual ~DiagramHelper_oox();
 
     // re-create XShapes
@@ -110,6 +111,19 @@ public:
 
     // needed to create DiagramHelper_oox in svx' SdrObjGroup copy constructor
     virtual DiagramHelper_oox* clone() const override;
+
+    // write data to boost::property_tree
+    virtual void addDiagramModelData(boost::property_tree::ptree& rTarget) const override;
+};
+
+class DiagramHelperFactory_oox : public svx::diagram::DiagramHelperFactory_svx
+{
+public:
+    DiagramHelperFactory_oox();
+    virtual ~DiagramHelperFactory_oox();
+
+    // overloaded here to allow instantiation of a DiagramHelper_oox
+    virtual std::shared_ptr<svx::diagram::DiagramHelper_svx> createDiagramHelper_svx(boost::property_tree::ptree& rTarget) const override;
 };
 
 }

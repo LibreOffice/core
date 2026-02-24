@@ -114,6 +114,9 @@ public:
     virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier,
                                                          bool bAddText) const override;
 
+    virtual void SetDescription(const OUString& rStr) override;
+    virtual OUString GetDescription() const override;
+
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 };

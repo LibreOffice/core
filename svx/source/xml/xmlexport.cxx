@@ -51,8 +51,9 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
 
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
-
     Reference< lang::XComponent > xSourceDoc( xComponent );
+    Reference< frame::XModel > xSourceModel;
+
     try
     {
         if( !xSourceDoc.is() )
@@ -61,6 +62,10 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             xSourceDoc = pDrawingModel;
             pModel->setUnoModel( pDrawingModel );
         }
+
+        xSourceModel = Reference< frame::XModel >( xSourceDoc, UNO_QUERY );
+        if ( xSourceModel.is() )
+            xSourceModel->lockControllers();
 
         const uno::Reference< uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
@@ -123,6 +128,9 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
 
     if( xObjectHelper.is() )
         xObjectHelper->dispose();
+
+    if ( xSourceModel.is() )
+        xSourceModel->unlockControllers();
 
     return bDocRet;
 }

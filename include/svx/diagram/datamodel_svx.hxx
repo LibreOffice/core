@@ -35,6 +35,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <oox/token/tokens.hxx>
 #include <sax/fshelper.hxx>
+#include <boost/property_tree/ptree.hpp>
 
 namespace svx::diagram {
 
@@ -59,18 +60,21 @@ enum TypeConstant {
 struct SVXCORE_DLLPUBLIC Connection
 {
     Connection();
+    explicit Connection(const boost::property_tree::ptree& rConnectionData);
 
-    TypeConstant mnXMLType; // default is XML_parOf
-    OUString msModelId;
-    OUString msSourceId;
-    OUString msDestId;
-    OUString msParTransId;
-    OUString msPresId;
-    OUString msSibTransId;
-    sal_Int32 mnSourceOrder;
-    sal_Int32 mnDestOrder;
+    /* DEFAULT      Variable        varName    XML_Tag */
+    /* XML_parOf */ TypeConstant    mnXMLType; // XML_type
+    /* (empty)   */ OUString        msModelId; // XML_modelId
+    /* (empty)   */ OUString        msSourceId; // XML_srcId
+    /* (empty)   */ OUString        msDestId; // XML_destId
+    /* (empty)   */ OUString        msPresId; // XML_presId
+    /* (empty)   */ OUString        msSibTransId; // XML_sibTransId
+    /* (empty)   */ OUString        msParTransId; // XML_parTransId
+    /* 0         */ sal_Int32       mnSourceOrder; // XML_srcOrd
+    /* 0         */ sal_Int32       mnDestOrder; // XML_destOrd
 
     void writeDiagramData(sax_fastparser::FSHelperPtr& rTarget);
+    void addDiagramModelData(boost::property_tree::ptree& rTarget) const;
 };
 
 typedef std::vector< Connection > Connections;
@@ -80,57 +84,64 @@ typedef std::vector< Connection > Connections;
 struct SVXCORE_DLLPUBLIC Point
 {
     Point();
+    explicit Point(const boost::property_tree::ptree& rPointData);
 
     // PT: dgm:pt
     // PRS: dgm:prSet
     // PLV: dgm:presLayoutVars
 
-    /* PT  */ OUString msCnxId;
-    /* PT  */ OUString msModelId;
-    /* PRS */ OUString msColorTransformCategoryId;
-    /* PRS */ OUString msColorTransformTypeId;
-    /* PRS */ OUString msLayoutCategoryId;
-    /* PRS */ OUString msLayoutTypeId;
-    /* PRS */ OUString msPlaceholderText;
-    /* PRS */ OUString msPresentationAssociationId;
-    /* PRS */ OUString msPresentationLayoutName;
-    /* PRS */ OUString msPresentationLayoutStyleLabel;
-    /* PRS */ OUString msQuickStyleCategoryId;
-    /* PRS */ OUString msQuickStyleTypeId;
-    /* PLV */ OUString msResizeHandles;
+    /* TYP DEFAULT     Variable     varName  XML_Tag */
+    /* PT  (empty)  */ OUString     msCnxId; // XML_cxnId
+    /* PT  (empty)  */ OUString     msModelId; // XML_modelId
+    /* PRS (empty)  */ OUString     msColorTransformCategoryId; // XML_csCatId
+    /* PRS (empty)  */ OUString     msColorTransformTypeId; // XML_csTypeId
+    /* PRS (empty)  */ OUString     msLayoutCategoryId; // XML_loCatId
+    /* PRS (empty)  */ OUString     msLayoutTypeId; // XML_loTypeId
+    /* PRS (empty)  */ OUString     msPlaceholderText; // XML_phldrT
+    /* PRS (empty)  */ OUString     msPresentationAssociationId; // XML_presAssocID
+    /* PRS (empty)  */ OUString     msPresentationLayoutName; // XML_presName
+    /* PRS (empty)  */ OUString     msPresentationLayoutStyleLabel; // XML_presStyleLbl
+    /* PRS (empty)  */ OUString     msQuickStyleCategoryId; // XML_qsCatId
+    /* PRS (empty)  */ OUString     msQuickStyleTypeId; // XML_qsTypeId
+    /* PLV (empty)  */ OUString     msResizeHandles; // XML_resizeHandles
 
-    /* PT  */ TypeConstant mnXMLType; // default is XML_node
-    /* PLV */ sal_Int32 mnMaxChildren;
-    /* PLV */ sal_Int32 mnPreferredChildren;
-    /* PLV */ sal_Int32 mnDirection;
-    /* PLV */ std::optional<sal_Int32> moHierarchyBranch;
+    /* PT  XML_node */ TypeConstant mnXMLType; // default is XML_node // XML_type
+    /* PLV -1       */ sal_Int32    mnMaxChildren; // XML_chMax
+    /* PLV -1       */ sal_Int32    mnPreferredChildren; // XML_chPref
+    /* PLV XML_norm */ sal_Int32    mnDirection; // XML_dir
+    /* PLV (opt)    */ std::optional<sal_Int32> moHierarchyBranch; // XML_hierBranch
 
-    /* PRS */ sal_Int32 mnCustomAngle;
-    /* PRS */ sal_Int32 mnPercentageNeighbourWidth;
-    /* PRS */ sal_Int32 mnPercentageNeighbourHeight;
-    /* PRS */ sal_Int32 mnPercentageOwnWidth;
-    /* PRS */ sal_Int32 mnPercentageOwnHeight;
-    /* PRS */ sal_Int32 mnIncludeAngleScale;
-    /* PRS */ sal_Int32 mnRadiusScale;
-    /* PRS */ sal_Int32 mnWidthScale;
-    /* PRS */ sal_Int32 mnHeightScale;
-    /* PRS */ sal_Int32 mnWidthOverride;
-    /* PRS */ sal_Int32 mnHeightOverride;
-    /* PRS */ sal_Int32 mnLayoutStyleCount;
-    /* PRS */ sal_Int32 mnLayoutStyleIndex;
+    /* PRS -1       */ sal_Int32    mnCustomAngle; // XML_custAng
+    /* PRS -1       */ sal_Int32    mnPercentageNeighbourWidth; // XML_custLinFactNeighborX
+    /* PRS -1       */ sal_Int32    mnPercentageNeighbourHeight; // XML_custLinFactNeighborY
+    /* PRS -1       */ sal_Int32    mnPercentageOwnWidth; // XML_custLinFactX
+    /* PRS -1       */ sal_Int32    mnPercentageOwnHeight; // XML_custLinFactY
+    /* PRS -1       */ sal_Int32    mnIncludeAngleScale; // XML_custRadScaleInc
+    /* PRS -1       */ sal_Int32    mnRadiusScale; // XML_custRadScaleRad
+    /* PRS -1       */ sal_Int32    mnWidthScale; // XML_custScaleX
+    /* PRS -1       */ sal_Int32    mnHeightScale; // XML_custScaleY
+    /* PRS -1       */ sal_Int32    mnWidthOverride; // XML_custSzX
+    /* PRS -1       */ sal_Int32    mnHeightOverride; // XML_custSzY
+    /* PRS -1       */ sal_Int32    mnLayoutStyleCount; // XML_presStyleCnt
+    /* PRS -1       */ sal_Int32    mnLayoutStyleIndex; // XML_presStyleIdx
 
-    /* PLV */ bool mbOrgChartEnabled : 1;
-    /* PLV */ bool mbBulletEnabled : 1;
-    /* PRS */ bool mbCoherent3DOffset : 1;
-    /* PRS */ bool mbCustomHorizontalFlip : 1;
-    /* PRS */ bool mbCustomVerticalFlip : 1;
-    /* PRS */ bool mbCustomText : 1;
-    /* PRS */ bool mbIsPlaceholder : 1;
+    /* PLV (false)  */ bool         mbOrgChartEnabled : 1; // XML_orgChart
+    /* PLV (false)  */ bool         mbBulletEnabled : 1; // XML_bulletEnabled
+    /* PRS (false)  */ bool         mbCoherent3DOffset : 1; // XML_coherent3DOff
+    /* PRS (false)  */ bool         mbCustomHorizontalFlip : 1; // XML_custFlipHor
+    /* PRS (false)  */ bool         mbCustomVerticalFlip : 1; // XML_custFlipVert
+    /* PRS (false)  */ bool         mbCustomText : 1; // XML_custT
+    /* PRS (false)  */ bool         mbIsPlaceholder : 1; // XML_phldr
 
     void writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget);
+    void addDiagramModelData(boost::property_tree::ptree& rTarget) const;
 };
 
+TypeConstant SVXCORE_DLLPUBLIC getTypeConstantForName(std::u16string_view aName);
+std::u16string_view SVXCORE_DLLPUBLIC getNameForTypeConstant(TypeConstant aTypeConstant);
 void SVXCORE_DLLPUBLIC addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint);
+void SVXCORE_DLLPUBLIC addTypeConstantToDiagramModelData(TypeConstant aTypeConstant, boost::property_tree::ptree& rTarget, bool bPoint);
+
 typedef std::vector< Point >        Points;
 
 /** Snippet of Diagram ModelData for Diagram-defining data undo/redo
@@ -171,6 +182,7 @@ protected:
     // shall not be incarnated - target to use is oox::drawingml::DiagramData_oox
     DiagramData_svx();
     explicit DiagramData_svx(DiagramData_svx const& rSource);
+    explicit DiagramData_svx(const boost::property_tree::ptree& rDiagramModel);
 
 public:
     // access associated SdrObjGroup/XShape/RootShape
@@ -189,6 +201,7 @@ public:
 
     // read accesses
     Connections& getConnections() { return maConnections; }
+    const Connections& getConnections() const { return maConnections; }
     Points& getPoints() { return maPoints; }
     const Points& getPoints() const { return maPoints; }
     StringMap& getPresOfNameMap() { return maPresOfNameMap; }
@@ -216,6 +229,9 @@ public:
     OUString getTextForPoint(const Point& rPoint) const;
     css::uno::Reference<css::drawing::XShape> getXShapeByModelID(std::u16string_view rModelID) const;
     const Point* getPointByModelID(std::u16string_view rModelID) const;
+
+    // write data to boost::property_tree
+    void addDiagramModelData(boost::property_tree::ptree& rTarget) const;
 
 protected:
     // helpers

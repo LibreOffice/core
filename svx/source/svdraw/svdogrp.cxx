@@ -33,6 +33,8 @@
 #include <libxml/xmlwriter.h>
 #include <vcl/canvastools.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
+#include <boost/property_tree/info_parser.hpp>
 
 bool SdrObjGroup::isDiagram() const
 {
@@ -760,6 +762,88 @@ rtl::Reference<SdrObject> SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAd
     }
 
     return pGroup;
+}
+
+void SdrObjGroup::SetDescription(const OUString& rStr)
+{
+    static bool bActivateAdvancedDiagramFeatures(nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
+    if (!bActivateAdvancedDiagramFeatures)
+    {
+        SdrObject::SetDescription(rStr);
+        return;
+    }
+
+    OUString aOrigDescription(rStr);
+
+    if (!rStr.isEmpty() && getSdrModelFromSdrObject().isLocked())
+    {
+        // we maybe importing a Diagram. Try to get the Diagram ModelData and
+        // add needed Diagram ModelData
+        // NOTE: currently isLocked() is used  to identify import, that *may* have
+        //       to be made more specific in SdXMLImport
+        OUString aModelData;
+
+        // check if the identifying token is there
+        if (rStr.startsWith(u"SmartArtModelData:", &aModelData) && !aModelData.isEmpty())
+        {
+            // import to boost::property_tree
+            boost::property_tree::ptree aDiagramModel;
+            std::stringstream aStream(aModelData.toUtf8().getStr());
+
+            // try to read data
+            boost::property_tree::read_info(aStream, aDiagramModel);
+
+            if (!aDiagramModel.empty())
+            {
+                // extract possibly existing original description and set as target value
+                aOrigDescription = OUString::fromUtf8(aDiagramModel.get("origDesc", ""));
+
+                // parse content to a new Diagram DataModel
+                std::shared_ptr<svx::diagram::DiagramHelper_svx> aNewHelper(svx::diagram::DiagramHelperFactory_svx::getDiagramHelperFactory_svx().createDiagramHelper_svx(aDiagramModel));
+
+                mp_DiagramHelper = aNewHelper;
+                mp_DiagramHelper->getRootShape() = getUnoShape();
+            }
+        }
+    }
+
+    // call parent to set evtl. original description
+    SdrObject::SetDescription(aOrigDescription);
+}
+
+OUString SdrObjGroup::GetDescription() const
+{
+    static bool bActivateAdvancedDiagramFeatures(nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
+    if (!bActivateAdvancedDiagramFeatures)
+        return SdrObject::GetDescription();
+
+    // call parent to get original description
+    OUString aRetval(SdrObject::GetDescription());
+
+    if (mp_DiagramHelper && getSdrModelFromSdrObject().isLocked())
+    {
+        // we are a Diagram and are exporting. Get the Diagram ModelData and
+        // place it to the description
+        // NOTE: currently isLocked() is used  to identify export, that *may* have
+        //       to be made more specific in SdXMLExport
+        boost::property_tree::ptree aDiagramModel;
+
+        // get Diagram ModelData in property_tree
+        mp_DiagramHelper->addDiagramModelData(aDiagramModel);
+
+        // add original description if exists
+        if (!aRetval.isEmpty())
+            aDiagramModel.put("origDesc", aRetval);
+
+        // convert property_tree to OUString and return
+        std::stringstream aStream;
+        boost::property_tree::write_info(aStream, aDiagramModel);
+
+        // add identifying token at start
+        aRetval = u"SmartArtModelData:" + OUString::fromUtf8(aStream.str());
+    }
+
+    return aRetval;
 }
 
 void SdrObjGroup::dumpAsXml(xmlTextWriterPtr pWriter) const
