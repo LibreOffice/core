@@ -68,6 +68,8 @@ $(eval $(call gb_Library_use_libraries,msword,\
     ucbhelper \
     utl \
     vcl \
+    $(if $(filter -fsanitize=vptr,$(gb_CXX)),i18npool) \
+    $(if $(filter -fsanitize=vptr,$(gb_CXX)),salhelper) \
 ))
 
 $(eval $(call gb_Library_use_externals,msword,\

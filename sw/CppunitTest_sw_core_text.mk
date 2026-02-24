@@ -43,6 +43,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_text, \
     unotest \
     utl \
     vcl \
+    $(if $(filter -fsanitize=vptr,$(gb_CXX)),svxcore) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_core_text,\

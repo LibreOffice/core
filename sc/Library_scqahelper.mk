@@ -64,6 +64,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	ucbhelper \
 	unotest \
 	vcl \
+	$(if $(filter -fsanitize=vptr,$(gb_CXX)),salhelper) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scqahelper,\

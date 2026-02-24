@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
 	utl \
 	tl \
 	vcl \
+	$(if $(filter -fsanitize=vptr,$(gb_CXX)),svl) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,desktop_lib, \

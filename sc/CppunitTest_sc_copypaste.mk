@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_copypaste, \
     unotest \
     utl \
     vcl \
+    $(if $(filter -fsanitize=vptr,$(gb_CXX)),salhelper) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_copypaste,\

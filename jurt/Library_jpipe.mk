@@ -21,7 +21,9 @@ else
 
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(gb_CC)),)
+ifeq ($(filter -shared-libsan,$(CC) $(LDFLAGS)),)
 Library_jpipe__staticsalhack = TRUE
+endif
 endif
 endif
 

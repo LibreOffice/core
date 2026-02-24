@@ -45,9 +45,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
+ifeq ($(filter -shared-libsan,$(CC) $(LDFLAGS)),)
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/asan.patch.1 \
 ))
+endif
 endif
 endif
 

@@ -80,6 +80,7 @@ ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird, \
     external/firebird/sanitizer.patch \
     external/firebird/sanitizer-rtti.patch \
+    $(if $(filter -shared-libsan,$(CC) $(LDFLAGS)),,external/firebird/sanitizer-undefs.patch) \
 ))
 endif
 
