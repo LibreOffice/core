@@ -25,6 +25,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sax_xmlimport, \
     unotest \
     utl \
     salhelper \
+    $(if $(filter -fsanitize=vptr,$(gb_CXX)),tl) \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,sax_xmlimport,\

@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uibase_fldui, \
     svt \
     tl \
     svl \
+    $(if $(filter -fsanitize=vptr,$(gb_CXX)),salhelper) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_uibase_fldui,\

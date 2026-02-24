@@ -8837,8 +8837,8 @@ _ACEOF
         if ! $CXX $CXXFLAGS $CPPFLAGS $LINKFLAGSSHL -fPIC -fvisibility-inlines-hidden conftestlib1.cc -o libconftest1$DLLPOST >/dev/null 2>&5; then
             gccvisinlineshiddenok=no
         else
-            dnl At least Clang -fsanitize=address and -fsanitize=undefined are
-            dnl known to not work with -z defs (unsetting which makes the test
+            dnl At least Clang -fsanitize=address and -fsanitize=undefined (and no -shared-libsan)
+            dnl are known to not work with -z defs (unsetting which makes the test
             dnl moot, though):
             my_linkflagsnoundefs=$LINKFLAGSNOUNDEFS
             if test "$COM_IS_CLANG" = TRUE; then
@@ -8846,6 +8846,14 @@ _ACEOF
                     case $i in
                     -fsanitize=*)
                         my_linkflagsnoundefs=
+                        for i in $CXX $CXXFLAGS; do
+                            case $i in
+                            -shared-libsan)
+                                my_linkflagsnoundefs=$LINKFLAGSNOUNDEFS
+                                break
+                                ;;
+                            esac
+                        done
                         break
                         ;;
                     esac
@@ -9565,6 +9573,17 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     JAVAIFLAGS_FOR_BUILD=$JAVAIFLAGS
     JDK_FOR_BUILD=$JDK
     JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD=$JDK_SECURITYMANAGER_DISALLOWED
+fi
+
+if test -n "$JAVAINTERPRETER"; then
+    for i in $CXX $CXXFLAGS; do
+        case $i in
+        -shared-libsan)
+            JAVAINTERPRETER="env LD_PRELOAD=libclang_rt.asan.so $JAVAINTERPRETER"
+            break
+            ;;
+        esac
+    done
 fi
 
 AC_SUBST(JAVACFLAGS)

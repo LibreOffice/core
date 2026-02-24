@@ -22,6 +22,7 @@ $(eval $(call gb_Library_use_libraries,embindtest, \
     salhelper \
     tl \
     vcl \
+    $(if $(filter -fsanitize=vptr,$(gb_CXX)),comphelper) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,embindtest))

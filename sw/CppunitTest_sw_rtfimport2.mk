@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_rtfimport2, \
     vcl \
     tl \
     utl \
+    $(if $(filter -fsanitize=vptr,$(gb_CXX)),editeng) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_rtfimport2,\

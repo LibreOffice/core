@@ -21,15 +21,6 @@
 +_ZTI*
 --- builds/posix/make.defaults
 +++ builds/posix/make.defaults
-@@ -263,7 +263,7 @@
- # LINKER OPTIONS
- #
- 
--UNDEF_PLATFORM = -Wl,--no-undefined
-+UNDEF_PLATFORM =
- ifeq ($(TARGET),Debug)
-   UNDEF_FLAGS = $(UNDEF_PLATFORM)
- endif
 @@ -315,7 +315,7 @@
  LIB_LINK_MAPFILE= -Wl,--version-script,$(1)
  FIREBIRD_LIBRARY_LINK= -L$(LIB) -lfbclient $(MATHLIB)

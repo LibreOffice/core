@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tiledrendering, \
     vcl \
     tl \
     utl \
+    $(if $(filter -fsanitize=vptr,$(gb_CXX)),salhelper) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sc_tiledrendering,\
