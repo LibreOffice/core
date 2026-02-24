@@ -30,7 +30,6 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/graphic/XGraphicMapper.hpp>
 #include <oox/shape/ShapeContextHandler.hxx>
 #include <oox/drawingml/theme.hxx>
