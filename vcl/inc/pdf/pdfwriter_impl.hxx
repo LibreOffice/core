@@ -356,7 +356,7 @@ struct FontSubsetKey
 
     FontSubsetKey(const vcl::font::PhysicalFontFace* pFace, const LogicalFontInstance* pFont)
         : m_pFace(pFace)
-        , m_rVariations(pFace->GetVariations(*pFont))
+        , m_rVariations(pFont->GetVariations())
         , m_nHash(0)
     {
         o3tl::hash_combine(m_nHash, m_rVariations.size());
