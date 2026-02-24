@@ -669,7 +669,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
             // and show them as well. Show only if Page/MasterPage mode is matching.
             bool bRequireMasterPage = pPageView->GetPage() ? pPageView->GetPage()->IsMasterPage() : false;
             SdrViewIter::ForAllViews(pPageView->GetPage(),
-                [this, &bRequireMasterPage, &rPaintWindow] (SdrView* pView)
+                [this, &bRequireMasterPage, &rPaintWindow, &pPageView] (SdrView* pView)
                 {
                     SdrPageView* pCurrentPageView = pView->GetSdrPageView();
                     bool bIsCurrentMasterPage = (pCurrentPageView && pCurrentPageView->GetPage()) ?
@@ -680,7 +680,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
 
                     if (pView->IsTextEdit() && pView->GetSdrPageView())
                     {
-                        pView->TextEditDrawing(rPaintWindow);
+                        pView->TextEditDrawing(rPaintWindow, pPageView);
                     }
                     return false;
                 });

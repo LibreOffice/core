@@ -918,7 +918,7 @@ void SdrObjEditView::EditViewCursorRect(const tools::Rectangle& rRect, int nExtT
     mpTextEditWin->SetCursorRect(&rRect, nExtTextInputWidth);
 }
 
-void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
+void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow, SdrPageView* pPaintingPageView)
 {
     if (!comphelper::LibreOfficeKit::isActive())
     {
@@ -946,7 +946,11 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
 
     OutlinerView* pOLV = pActiveOutliner->GetView(0);
     SdrPage* pPage = GetSdrPageView()->GetPage();
-    pOLV->SetBackgroundColor(pPage->GetPageBackgroundColor(GetSdrPageView(), true));
+    // Use the painting view's SdrPageView for background color resolution when
+    // rendering another view's text edit, so auto-color text is resolved against
+    // the painting view's dark/light mode, not the editing view's.
+    SdrPageView* pBgPageView = pPaintingPageView ? pPaintingPageView : GetSdrPageView();
+    pOLV->SetBackgroundColor(pPage->GetPageBackgroundColor(pBgPageView, true));
     ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
 }
 

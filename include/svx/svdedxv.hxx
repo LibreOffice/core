@@ -174,7 +174,7 @@ public:
 
     // used to call the old ImpPaintOutlinerView. Will be replaced when the
     // outliner will be displayed on the overlay in edit mode.
-    void TextEditDrawing(SdrPaintWindow& rPaintWindow);
+    void TextEditDrawing(SdrPaintWindow& rPaintWindow, SdrPageView* pPaintingPageView = nullptr);
 
     // Actionhandling for macromode
     virtual bool IsAction() const override;
