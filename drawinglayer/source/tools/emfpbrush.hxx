@@ -20,6 +20,7 @@
 #pragma once
 
 #include "emfphelperdata.hxx"
+#include "emfpimage.hxx"
 #include <tools/color.hxx>
 
 namespace emfplushelper
@@ -114,6 +115,7 @@ namespace emfplushelper
         std::unique_ptr<::Color[]> surroundColors;
         std::unique_ptr<EMFPPath> path;
         EmfPlusHatchStyle hatchStyle;
+        std::unique_ptr<EMFPImage> textureImage;
 
         EMFPBrush();
         virtual ~EMFPBrush() override;
@@ -121,7 +123,7 @@ namespace emfplushelper
         sal_uInt32 GetType() const { return type; }
         const ::Color& GetColor() const { return solidColor; }
 
-        void Read(SvStream& s, EmfPlusHelperData const & rR);
+        void Read(SvMemoryStream& s, EmfPlusHelperData const & rR, sal_uInt32 dataSize, bool bUseWholeStream);
     };
 }
 

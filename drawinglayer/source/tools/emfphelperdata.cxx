@@ -28,11 +28,14 @@
 #include "emfpfont.hxx"
 #include "emfpstringformat.hxx"
 #include <wmfemfhelper.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
@@ -40,7 +43,6 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -273,14 +275,14 @@ namespace emfplushelper
             {
                 EMFPBrush *brush = new EMFPBrush();
                 maEMFPObjects[index].reset(brush);
-                brush->Read(rObjectStream, *this);
+                brush->Read(rObjectStream, *this, dataSize, bUseWholeStream);
                 break;
             }
             case EmfPlusObjectTypePen:
             {
                 EMFPPen *pen = new EMFPPen();
                 maEMFPObjects[index].reset(pen);
-                pen->Read(rObjectStream, *this);
+                pen->Read(rObjectStream, *this, dataSize, bUseWholeStream);
                 pen->penWidth = unitToPixel(pen->penWidth, pen->penUnit, Direction::horizontal);
                 break;
             }
@@ -771,12 +773,65 @@ namespace emfplushelper
                         polygon,
                         fillColor.getBColor()));
             }
-            else if (brush->type == BrushTypeTextureFill)
+            else if (brush->type == BrushTypeTextureFill && brush->textureImage)
             {
-                SAL_WARN("drawinglayer.emf", "EMF+\tTODO: implement BrushTypeTextureFill brush");
+                if (brush->textureImage->type != ImageDataTypeBitmap)
+                {
+                    SAL_WARN("drawinglayer.emf", "EMF+\tTextureFill: Metafiles type is not supported");
+                    return;
+                }
+
+                const Size aSizePx = brush->textureImage->graphic.GetSizePixel();
+                if (aSizePx.Width() <= 0 || aSizePx.Height() <= 0)
+                    return;
+
+                basegfx::B2DHomMatrix aBrushMatrix;
+                if (brush->additionalFlags & 0x02) // 0x02 = BrushDataTransform flag
+                    aBrushMatrix = brush->brush_transformation;
+
+                // Create a scaling matrix to map the normalized 1x1 range
+                // to the actual pixel dimensions of the texture.
+
+                const basegfx::B2DHomMatrix aTextureScale(
+                        /* Row 0, Column 0 */ aSizePx.Width(),
+                        /* Row 0, Column 1 */ 0.0,
+                        /* Row 0, Column 2 */ 0.0,
+                        /* Row 1, Column 0 */ 0.0,
+                        /* Row 1, Column 1 */ aSizePx.Height(),
+                        /* Row 1, Column 2 */ 0.0);
+
+                const basegfx::B2DHomMatrix aTotalMatrix = maMapTransform * aBrushMatrix * aTextureScale;
+
+                // Invert the matrix to transform the fill polygon from document space
+                // back into the local normalized texture space (0.0 to 1.0).
+                basegfx::B2DHomMatrix aInvTotalMatrix = aTotalMatrix;
+                if (!aInvTotalMatrix.invert())
+                {
+                    SAL_WARN("drawinglayer.emf", "EMF+\tTextureFill: Failed to invert transformation matrix");
+                    return;
+                }
+                basegfx::B2DPolyPolygon aLocalPolygon = polygon;
+                aLocalPolygon.transform(aInvTotalMatrix);
+
+                const bool bIsTiled = (brush->wrapMode != WrapModeClamp);
+
+                const drawinglayer::attribute::FillGraphicAttribute aFillAttribute(
+                    brush->textureImage->graphic,
+                    basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
+                    bIsTiled);
+
+                drawinglayer::primitive2d::Primitive2DReference xFillPrimitive =
+                    new drawinglayer::primitive2d::PolyPolygonGraphicPrimitive2D(
+                        aLocalPolygon,
+                        basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
+                        aFillAttribute);
+
+                mrTargetHolders.Current().append(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        aTotalMatrix,
+                        drawinglayer::primitive2d::Primitive2DContainer({ xFillPrimitive })));
             }
             else if (brush->type == BrushTypePathGradient || brush->type == BrushTypeLinearGradient)
-
             {
                 if (brush->type == BrushTypePathGradient && !(brush->additionalFlags & 0x1))
                 {

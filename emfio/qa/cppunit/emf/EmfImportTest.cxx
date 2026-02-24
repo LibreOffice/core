@@ -117,7 +117,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPolyPolygon)
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsTypeBitmap)
 {
-    // tdf#142941 EMF+ file with ObjectTypeImage, FillRects, DrawImagePoints ,records
+    // tdf#142941 EMF+ file with ObjectTypeImage, FillRects, DrawImagePoints
     // The test is checking the position of displaying bitmap with too large SrcRect
 
     Primitive2DSequence aSequence
@@ -145,6 +145,50 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsTypeBitmap)
         "ffffff,fdfdfd,fefefe,fefefe,ffffff,ffffff,fdfdfd,fffbfb,1e0000,8f4347,b13a3e,b82d32,"
         "bb3438,b73237,b63338,b33035,b63338,b83338,b9313b,b9313b,b83239,b83338,b63338,b53438,"
         "b63539,b53335,ba3236,a2393e,1c0000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFillRectsWithTextureBrush)
+{
+    // tdf#129342 tdf#170985 EMF+ file with ObjectTypeBrush, ObjectTypepen, FillRects
+    // The test is checking the position of displaying bitmap with too large SrcRect
+
+    Primitive2DSequence aSequence
+        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEmfPlusFillRectsWithTextureBrush.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "transform/polypolygongraphic", "transparency", u"0");
+    assertXPath(pDocument, aXPathPrefix + "transform/polypolygongraphic/mask/polypolygon", 1);
+
+    assertXPath(pDocument,
+                aXPathPrefix + "transform/polypolygongraphic/mask/fillgraphic/group/transform", 17);
+    assertXPath(pDocument,
+                aXPathPrefix
+                    + "transform/polypolygongraphic/mask/fillgraphic/group/transform/bitmap/data",
+                697);
+
+    assertXPath(
+        pDocument,
+        aXPathPrefix
+            + "transform/polypolygongraphic/mask/fillgraphic/group/transform[1]/bitmap/data",
+        41);
+    assertXPath(
+        pDocument,
+        aXPathPrefix
+            + "transform/polypolygongraphic/mask/fillgraphic/group/transform[1]/bitmap/data[30]",
+        "row",
+        u"fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,"
+        u"fefefe,fefefe,fefefe,fefefe,ffedfe,edf6f5,e6fffd,edfff8,e8f3e3,ffffef,fffbed,ffe8e1,"
+        u"f5f6e6,fff7f3,fff0f6,ffeff4,f6ffff,e9ffff,f2ffff,f4ebfe,fefefe,fcfcfc,fefefe,ffffff,"
+        u"ffffff,fdfdfd,fbfbfb,fdfdfd,fff6fd,fff9fc,fdfcfa,f6fdf6,f7fffb,f7fffa,f9fffa,f2f9f1,"
+        u"fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,"
+        u"fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe,fefefe");
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/line", "width", u"26");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/polypolygon", "minx", u"397");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/polypolygon", "miny", u"397");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawString)
