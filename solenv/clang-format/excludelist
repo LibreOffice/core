@@ -3535,8 +3535,6 @@ extensions/source/propctrlr/pcrcommon.hxx
 extensions/source/propctrlr/pcrstrings.hxx
 extensions/source/propctrlr/pcrunodialogs.cxx
 extensions/source/propctrlr/pcrunodialogs.hxx
-extensions/source/propctrlr/propcontroller.cxx
-extensions/source/propctrlr/propcontroller.hxx
 extensions/source/propctrlr/propcontrolobserver.hxx
 extensions/source/propctrlr/propertycomposer.cxx
 extensions/source/propctrlr/propertycomposer.hxx
