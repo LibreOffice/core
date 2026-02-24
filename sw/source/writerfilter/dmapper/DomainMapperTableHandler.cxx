@@ -1237,7 +1237,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     if (!oParagraphText) // do it only once
                     {
                         rtl::Reference<SwXTextCursor> xParagraph = dynamic_cast<SwXTextCursor*>(
-                            rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(rParaProp.m_rEndParagraph).get() );
+                            rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(static_cast<text::XSentenceCursor*>(rParaProp.m_rEndParagraph.get())).get() );
                         if (!xParagraph)
                             throw uno::RuntimeException();
                         // select paragraph
@@ -1337,7 +1337,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
         //    property is handled in SwXTextCursor::setPropertyValue.
         uno::Reference<beans::XPropertySet> xCursorProps(
             rParaProp.m_rEndParagraph->getText()->createTextCursorByRange(
-                rParaProp.m_rEndParagraph),
+                static_cast<text::XSentenceCursor*>(rParaProp.m_rEndParagraph.get())),
             uno::UNO_QUERY_THROW);
         xCursorProps->setPropertyValue(u"ParaAutoStyleDef"_ustr,
                                        uno::Any(comphelper::containerToSequence(aProps)));
@@ -1559,7 +1559,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                                 bApply = true;
                             if (bApply)
                             {
-                                bool bEndOfApply = (xTextRangeCompare->compareRegionEnds(rEndPara, aIt->m_rEndParagraph) == 0);
+                                bool bEndOfApply = (xTextRangeCompare->compareRegionEnds(rEndPara, static_cast<text::XSentenceCursor*>(aIt->m_rEndParagraph.get())) == 0);
                                 // tdf#153891 handle missing cell properties (exception in style handling?)
                                 if ( nCell < sal::static_int_cast<std::size_t>(aCellProperties[nRow].getLength()) )
                                     ApplyParagraphPropertiesFromTableStyle(*aIt, aAllTableParaProperties, aCellProperties[nRow][nCell]);

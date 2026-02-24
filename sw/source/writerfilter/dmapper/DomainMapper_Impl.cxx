@@ -3028,11 +3028,11 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 {
                     // table style has got bigger precedence than docDefault style
                     // collect these pending paragraph properties to process in endTable()
-                    uno::Reference<text::XTextCursor> xCur = xTextRange->getText( )->createTextCursor( );
+                    rtl::Reference<SwXTextCursor> xCur = dynamic_cast<SwXTextCursor*>(xTextRange->getText( )->createTextCursor().get());
                     xCur->gotoEnd(false);
                     xCur->goLeft(1, false);
                     rtl::Reference<SwXTextCursor> xParaCursor = dynamic_cast<SwXTextCursor*>
-                            (xTextRange->getText()->createTextCursorByRange(xCur).get());
+                            (xTextRange->getText()->createTextCursorByRange(static_cast<text::XSentenceCursor*>(xCur.get())).get());
                     if (!xParaCursor)
                         throw uno::RuntimeException();
                     xParaCursor->gotoStartOfParagraph(false);

@@ -652,7 +652,7 @@ typedef tools::SvRef< TablePropertyMap > TablePropertyMapPtr;
 struct TableParagraph
 {
     rtl::Reference<SwXTextCursor> m_rStartParagraph;
-    css::uno::Reference<css::text::XTextRange> m_rEndParagraph;
+    rtl::Reference<SwXTextCursor> m_rEndParagraph;
     PropertyMapPtr m_pPropertyMap;
     css::uno::Reference<css::beans::XPropertySet> m_rPropertySet;
 };
