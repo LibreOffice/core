@@ -199,6 +199,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"modules/smath/ui/savedefaultsdialog.ui",
     u"modules/smath/ui/smathsettings.ui",
     u"modules/smath/ui/spacingdialog.ui",
+    u"modules/spropctrlr/ui/labelselectiondialog.ui",
     u"modules/spropctrlr/ui/taborder.ui",
     u"modules/swriter/ui/addentrydialog.ui",
     u"modules/swriter/ui/assignfieldsdialog.ui",
