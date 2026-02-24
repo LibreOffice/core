@@ -159,7 +159,7 @@ public:
 
     // Sequence: Grab Bags: The CHAR_GRAB_BAG has Name "CharInteropGrabBag" and the PARA_GRAB_BAG has Name "ParaInteropGrabBag"
     // the contained properties are their Value.
-    css::uno::Sequence< css::beans::PropertyValue > GetPropertyValues( bool bCharGrabBag = true );
+    const std::vector<css::beans::PropertyValue>& GetPropertyValues( bool bCharGrabBag = true );
 
     std::vector< PropertyIds > GetPropertyIds();
 
