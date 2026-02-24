@@ -13,6 +13,7 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
+  <menu:menuitem menu:id=".uno:CalculatedFieldRun"/>
   <menu:menuitem menu:id=".uno:RecalcPivotTable"/>
   <menu:menuitem menu:id=".uno:DataPilotFilter"/>
   <menu:menuitem menu:id=".uno:DeletePivotTable"/>

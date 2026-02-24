@@ -233,6 +233,7 @@ public:
     void WriteToCache(ScDPCache& rCache) const;
 
     SC_DLLPUBLIC void SetCalculatedField(const std::shared_ptr<ScDPCache::CalculatedField>& pField);
+    void RemoveCalculatedField(const OUString& rFieldName);
 
     const std::vector<std::shared_ptr<ScDPCache::CalculatedField>>& GetCalculatedFields() const
     {

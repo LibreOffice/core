@@ -1209,6 +1209,14 @@ JSButton::JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilde
 {
 }
 
+void JSButton::set_label(const OUString& rText)
+{
+    OUString aPreviousLabel = get_label();
+    SalInstanceButton::set_label(rText);
+    if (aPreviousLabel != rText)
+        sendUpdate();
+}
+
 JSLinkButton::JSLinkButton(JSDialogSender* pSender, ::FixedHyperlink* pButton,
                            SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceLinkButton, ::FixedHyperlink>(pSender, pButton, pBuilder, bTakeOwnership)

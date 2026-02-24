@@ -14,7 +14,12 @@
 #include <PivotLayoutDialog.hxx>
 
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weld/MessageDialog.hxx>
 #include <pivot.hxx>
+
+#include <globstr.hrc>
+#include <scresid.hxx>
 
 ScPivotLayoutTreeList::ScPivotLayoutTreeList(std::unique_ptr<weld::TreeView> xControl)
     : ScPivotLayoutTreeListBase(std::move(xControl))
@@ -29,6 +34,11 @@ ScPivotLayoutTreeList::~ScPivotLayoutTreeList()
     {
         mpSubtotalDlg->Response(RET_CANCEL);
         mpSubtotalDlg.reset();
+    }
+
+    if (m_xInfoBox)
+    {
+        m_xInfoBox->response(RET_OK);
     }
 }
 
@@ -99,9 +109,19 @@ void ScPivotLayoutTreeList::InsertEntryForSourceTarget(weld::TreeView& rSource, 
     if (meType == PAGE_LIST && mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
         return;
 
-    // Don't allow to add "Calculated Fields" element to page fields
+    // Don't allow to add "Calculated Fields" element to non-data fields
     if (mpParent->IsCalculatedElement(pItemValue->maFunctionData.mnCol))
+    {
+        if (m_xInfoBox)
+            m_xInfoBox->response(RET_OK);
+
+        m_xInfoBox = std::shared_ptr<weld::MessageDialog>(Application::CreateMessageDialog(
+            mxControl.get(), VclMessageType::Warning, VclButtonsType::Ok,
+            ScResId(STR_PIVOT_CALC_FIELD_DRAG)));
+
+        m_xInfoBox->runAsync(m_xInfoBox, [this](sal_Int32) { m_xInfoBox = nullptr; });
         return;
+    }
 
     mpParent->ItemInserted(pOriginalItemValue, meType);
 

@@ -163,13 +163,13 @@ public:
 
     std::shared_ptr<CalculatedField> SetCalculatedField(const OUString& rFieldName, const std::shared_ptr<ScTokenArray>& pArray,
                                                         sal_Int32 nIndex);
+    void RemoveCalculatedField(const OUString& rFieldName);
     const CalculatedFieldsType& GetCalculatedFields() const { return maCalculatedFields; }
     SC_DLLPUBLIC const CalculatedField* GetCalculatedFieldByName(const OUString& rFieldName) const;
     tools::Long AppendGroupField();
     void ResetGroupItems(tools::Long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType);
     SCROW SetGroupItem(tools::Long nDim, const ScDPItemData& rData);
     SC_DLLPUBLIC void GetGroupDimMemberIds(tools::Long nDim, std::vector<SCROW>& rIds) const;
-    void ClearCalculatedFields();
     void ClearGroupFields();
     void ClearAllFields();
     SC_DLLPUBLIC const ScDPNumGroupInfo* GetNumGroupInfo(tools::Long nDim) const;

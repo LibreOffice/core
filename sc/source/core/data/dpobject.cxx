@@ -630,6 +630,60 @@ void ScDPObject::InsertCalculatedFieldToCache(sal_Int32 nIndex, const OUString& 
     }
 }
 
+void ScDPObject::RemoveCalculatedFieldFromCache(const OUString& rFieldName)
+{
+    ScDPCollection* pDPColl = mpDocument->GetDPCollection();
+    if (!pDPColl)
+        return;
+
+    if (IsSheetData())
+    {
+        const ScSheetSourceDesc* pDesc = GetSheetDesc();
+        if (!pDesc)
+            return;
+
+        TranslateId pErrId = pDesc->CheckSourceRange();
+        if (pErrId)
+            return;
+
+        if (pDesc->HasRangeName())
+        {
+            ScDPCollection::NameCaches& rCaches = pDPColl->GetNameCaches();
+            if (rCaches.hasCache(pDesc->GetRangeName()))
+            {
+                ScDPCache* pCache = rCaches.getExistingCache(pDesc->GetRangeName());
+                if (pCache)
+                    pCache->RemoveCalculatedField(rFieldName);
+            }
+        }
+        else
+        {
+            ScDPCollection::SheetCaches& rCaches = pDPColl->GetSheetCaches();
+            if (rCaches.hasCache(pDesc->GetSourceRange()))
+            {
+                ScDPCache* pCache = rCaches.getExistingCache(pDesc->GetSourceRange());
+                if (pCache)
+                    pCache->RemoveCalculatedField(rFieldName);
+            }
+        }
+    }
+    else if (IsImportData())
+    {
+        const ScImportSourceDesc* pDesc = GetImportSourceDesc();
+        if (!pDesc)
+            return;
+
+        ScDPCollection::DBCaches& rCaches = pDPColl->GetDBCaches();
+        if (rCaches.hasCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject))
+        {
+            ScDPCache* pCache = rCaches.getExistingCache(pDesc->GetCommandType(),
+                                                         pDesc->aDBName, pDesc->aObject);
+            if (pCache)
+                pCache->RemoveCalculatedField(rFieldName);
+        }
+    }
+}
+
 namespace {
 
 class DisableGetPivotData

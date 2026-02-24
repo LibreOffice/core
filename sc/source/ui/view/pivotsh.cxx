@@ -78,6 +78,23 @@ void ScPivotShell::Execute( const SfxRequest& rReq )
             pViewShell->DeletePivotTable();
             break;
 
+        case SID_PIVOT_CALCFIELD:
+        {
+            const ScDPObject* pDPObj = GetCurrDPObject();
+            if (pDPObj)
+            {
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                ScViewData& rViewData = pViewShell->GetViewData();
+                VclPtr<AbstractScPivotCalcFieldDlg> pDlg(
+                    pFact->CreateScPivotCalcFieldDlg(
+                        pViewShell->GetFrameWeld(), rViewData, pDPObj));
+                pDlg->StartExecuteAsync([pDlg](sal_Int32 /*nResult*/) {
+                    pDlg->disposeOnce();
+                });
+            }
+        }
+        break;
+
         case SID_DP_FILTER:
         {
             ScDPObject* pDPObj = GetCurrDPObject();
@@ -149,6 +166,7 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
         {
             case SID_PIVOT_RECALC:
             case SID_PIVOT_KILL:
+            case SID_PIVOT_CALCFIELD:
             {
                 //! move ReadOnly check to idl flags
                 if ( bDisable )

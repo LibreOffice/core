@@ -520,6 +520,7 @@ class JSButton final : public JSWidget<SalInstanceButton, ::Button>
 public:
     JSButton(JSDialogSender* pSender, ::Button* pButton, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership);
+    virtual void set_label(const OUString& rText) override;
 };
 
 class JSLinkButton final : public JSWidget<SalInstanceLinkButton, ::FixedHyperlink>

@@ -4361,6 +4361,24 @@ SfxVoidItem RecalcPivotTable SID_PIVOT_RECALC
 ]
 
 
+SfxVoidItem CalculatedFieldRun SID_PIVOT_CALCFIELD
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Data;
+]
+
+
 SfxVoidItem RefreshArrows SID_DETECTIVE_REFRESH
 ()
 [

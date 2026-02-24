@@ -39,6 +39,7 @@
 #include <mvtabdlg.hxx>
 #include <namecrea.hxx>
 #include <namepast.hxx>
+#include <PivotCalcFieldDialog.hxx>
 #include <pfiltdlg.hxx>
 #include <pvfundlg.hxx>
 #include <dpgroupdlg.hxx>
@@ -534,6 +535,22 @@ public:
 VclPtr<AbstractScNamePasteDlg> ScAbstractDialogFactory_Impl::CreateScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell)
 {
     return VclPtr<AbstractScNamePasteDlg_Impl>::Create(pParent, pShell);
+}
+
+namespace
+{
+class AbstractScPivotCalcFieldDlg_Impl
+    : public vcl::AbstractDialogImpl_Async<AbstractScPivotCalcFieldDlg, ScPivotCalcFieldDlg>
+{
+public:
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+};
+}
+
+VclPtr<AbstractScPivotCalcFieldDlg> ScAbstractDialogFactory_Impl::CreateScPivotCalcFieldDlg(
+    weld::Window* pParent, ScViewData& rViewData, const ScDPObject* pDPObj)
+{
+    return VclPtr<AbstractScPivotCalcFieldDlg_Impl>::Create(pParent, rViewData, pDPObj);
 }
 
 namespace

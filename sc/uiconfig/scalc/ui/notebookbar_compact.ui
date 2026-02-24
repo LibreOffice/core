@@ -133,6 +133,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="InsertCalculationD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:InsertCalculationNBLabel</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="RecalcPivotTableD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

@@ -1364,6 +1364,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"UngroupSparklines", { PayloadType::EnabledPayload, true } },
         { u"FormatSparklineMenu", { PayloadType::EnabledPayload, true } },
         { u"DataDataPilotRun", { PayloadType::EnabledPayload, true } },
+        { u"CalculatedFieldRun", { PayloadType::EnabledPayload, true } },
         { u"RecalcPivotTable", { PayloadType::EnabledPayload, true } },
         { u"DeletePivotTable", { PayloadType::EnabledPayload, true } },
         { u"NumberFormatDecDecimals", { PayloadType::EnabledPayload, true } },

@@ -355,6 +355,7 @@ class SvxZoomSliderItem;
 #define SID_SCENARIOS           TypedWhichId<SfxStringItem>(EXTRA_MENU_START + 12)
 #define SID_PIVOT_RECALC        (EXTRA_MENU_START + 14)
 #define SID_PIVOT_KILL          (EXTRA_MENU_START + 15)
+#define SID_PIVOT_CALCFIELD     (EXTRA_MENU_START + 16)
 
 #define FID_HARD_RECALC         (EXTRA_MENU_START + 18)
 #define FID_AUTOCOMPLETE        (EXTRA_MENU_START + 19)

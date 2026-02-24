@@ -191,6 +191,7 @@ public:
 
     SC_DLLPUBLIC void   InsertCalculatedFieldToCache(sal_Int32 nIndex, const OUString& rFieldName,
                                                      const std::shared_ptr<ScTokenArray>& pArray);
+    void                RemoveCalculatedFieldFromCache(const OUString& rFieldName);
 
     const ScSheetSourceDesc* GetSheetDesc() const { return mpSheetDescription.get(); }
     const ScImportSourceDesc* GetImportSourceDesc() const { return mpImportDescription.get(); }

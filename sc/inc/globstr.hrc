@@ -160,9 +160,12 @@
 #define STR_DATAPILOT_SUBTOTAL                  NC_("STR_DATAPILOT_SUBTOTAL", "The source range contains subtotals which may distort the results. Use it anyway?")
 #define STR_PIVOT_TOTAL                         NC_("STR_PIVOT_TOTAL", "Total")
 #define STR_PIVOT_DATA                          NC_("STR_PIVOT_DATA", "Data")
+#define STR_PIVOT_FIELD                         NC_("STR_PIVOT_FIELD", "Field")
 #define STR_PIVOT_GROUP                         NC_("STR_PIVOT_GROUP", "Group")
 #define STR_PIVOT_ROW_LABELS                    NC_("STR_PIVOT_ROW_LABELS", "Row Labels")
 #define STR_PIVOT_COL_LABELS                    NC_("STR_PIVOT_COL_LABELS", "Column Labels")
+#define STR_PIVOT_CALC_FIELD_NAME_ERROR         NC_("STR_PIVOT_CALC_FIELD_NAME_ERROR", "Calculated field could not be created\nbecause another field of the same name\nexists.")
+#define STR_PIVOT_CALC_FIELD_DRAG               NC_("STR_PIVOT_CALC_FIELD_DRAG", "The field you are moving is a calculated field and cannot be placed\nin that area of the Pivot table.")
 /* %1 will be replaced by STR_SELCOUNT_ROWARG, and %2 by STR_SELCOUNT_COLARG
    e.g. Selected: 1 row, 2 columns */
 #define STR_SELCOUNT                            NC_("STR_SELCOUNT", "Selected: %1, %2")

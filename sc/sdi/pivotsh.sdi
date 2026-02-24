@@ -19,6 +19,7 @@ interface Pivot
 {
     SID_PIVOT_RECALC    [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_PIVOT_KILL      [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_PIVOT_CALCFIELD [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_DP_FILTER       [ ExecMethod = Execute; StateMethod = GetState; ]
 }
 

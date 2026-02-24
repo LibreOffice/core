@@ -433,6 +433,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/dbgui/filtdlg \
     sc/source/ui/dbgui/foptmgr \
     sc/source/ui/dbgui/imoptdlg \
+    sc/source/ui/dbgui/PivotCalcFieldDialog \
     sc/source/ui/dbgui/PivotLayoutDialog \
     sc/source/ui/dbgui/PivotLayoutTreeListBase \
     sc/source/ui/dbgui/PivotLayoutTreeListData \

@@ -100,6 +100,10 @@ public:
 
     virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell) override;
 
+    virtual VclPtr<AbstractScPivotCalcFieldDlg> CreateScPivotCalcFieldDlg(weld::Window* pParent,
+                                                                          ScViewData& rViewData,
+                                                                          const ScDPObject* pDPObj) override;
+
     virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(weld::Window* pParent, const SfxItemSet& rArgSet,
                                                                     ScViewData& rViewData,
                                                                     sal_uInt16 nSourceTab) override;

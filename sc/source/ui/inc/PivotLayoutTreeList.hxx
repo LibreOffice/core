@@ -21,6 +21,7 @@ private:
     std::vector<ScDPName> maDataFieldNames;
 
     VclPtr<AbstractScDPSubtotalDlg> mpSubtotalDlg;
+    std::shared_ptr<weld::MessageDialog> m_xInfoBox;
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);

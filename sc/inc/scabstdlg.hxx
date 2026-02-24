@@ -278,6 +278,12 @@ public:
     virtual std::vector<OUString> GetSelectedNames() const = 0;
 };
 
+class AbstractScPivotCalcFieldDlg : public VclAbstractDialog
+{
+protected:
+    virtual             ~AbstractScPivotCalcFieldDlg() override = default;
+};
+
 class AbstractScPivotFilterDlg : public VclAbstractDialog
 {
 protected:
@@ -484,6 +490,10 @@ public:
         CreateNameFlags nFlags) = 0;
 
     virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg(weld::Window * pParent, ScDocShell* pShell) = 0;
+
+    virtual VclPtr<AbstractScPivotCalcFieldDlg> CreateScPivotCalcFieldDlg(weld::Window* pParent,
+                                                                          ScViewData& rViewData,
+                                                                          const ScDPObject* pDPObj) = 0;
 
     virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(weld::Window* pParent,
                                                                     const SfxItemSet& rArgSet,

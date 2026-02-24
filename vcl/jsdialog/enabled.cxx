@@ -180,6 +180,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/pagetemplatedialog.ui" },
         { u"modules/scalc/ui/paratemplatedialog.ui" },
         { u"modules/scalc/ui/pastespecial.ui" },
+        { u"modules/scalc/ui/pivotcalcfielddialog.ui" },
         { u"modules/scalc/ui/pivotfielddialog.ui" },
         { u"modules/scalc/ui/pivottablelayoutdialog.ui" },
         { u"modules/scalc/ui/protectsheetdlg.ui" },

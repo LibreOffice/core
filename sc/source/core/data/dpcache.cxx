@@ -1357,6 +1357,30 @@ std::shared_ptr<ScDPCache::CalculatedField> ScDPCache::SetCalculatedField(
     return newField;
 }
 
+void ScDPCache::RemoveCalculatedField(const OUString& rFieldName)
+{
+    auto it = std::find_if(maCalculatedFields.begin(), maCalculatedFields.end(),
+                           [&rFieldName](const std::shared_ptr<CalculatedField>& rField)
+                           { return rField->maFieldName.equalsIgnoreAsciiCase(rFieldName); });
+
+    if (it == maCalculatedFields.end())
+        return; // not found (e.g. newly-added-then-deleted, never persisted to cache)
+
+    maCalculatedFields.erase(it);
+
+    // Propagate removal to all referenced ScDPObjects (same pattern as SetCalculatedField)
+    for (ScDPObject* pRefObj : maRefObjects)
+    {
+        if (ScDPSaveData* pSaveData = pRefObj->GetSaveData())
+        {
+            if (ScDPDimCalcSaveData* pCalcSave = pSaveData->GetDimCalcData())
+            {
+                pCalcSave->RemoveCalculatedField(rFieldName);
+            }
+        }
+    }
+}
+
 const ScDPCache::CalculatedField* ScDPCache::GetCalculatedFieldByName(const OUString& rFieldName) const
 {
     auto aIt = std::find_if(maCalculatedFields.begin(), maCalculatedFields.end(),
@@ -1462,11 +1486,7 @@ struct ClearGroupItems
 
 }
 
-void ScDPCache::ClearCalculatedFields()
-{
-    // TODO: delete specific ones instead of clearing all.
-    maCalculatedFields.clear();
-}
+
 
 void ScDPCache::ClearGroupFields()
 {

@@ -834,4 +834,11 @@ void ScDPDimCalcSaveData::SetCalculatedField(const std::shared_ptr<ScDPCache::Ca
         *aIt = pField;
 }
 
+void ScDPDimCalcSaveData::RemoveCalculatedField(const OUString& rFieldName)
+{
+    std::erase_if(maCalculatedFields,
+                  [&rFieldName](const std::shared_ptr<ScDPCache::CalculatedField>& rField)
+                  { return rField->maFieldName.equalsIgnoreAsciiCase(rFieldName); });
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
