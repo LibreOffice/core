@@ -84,12 +84,12 @@ using namespace com::sun::star;
 
 namespace writerfilter::dmapper {
 
-uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues( bool bCharGrabBag )
+const std::vector<css::beans::PropertyValue> & PropertyMap::GetPropertyValues( bool bCharGrabBag )
 {
     using comphelper::makePropertyValue;
 
     if ( !m_aValues.empty() || m_vMap.empty() )
-        return comphelper::containerToSequence( m_aValues );
+        return m_aValues;
 
     size_t nCharGrabBag = 0;
     size_t nParaGrabBag = 0;
@@ -206,7 +206,7 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues( bool bChar
     if ( nRowGrabBag )
         m_aValues.push_back( makePropertyValue( u"RowInteropGrabBag"_ustr, uno::Any( aRowGrabBagValues ) ) );
 
-    return comphelper::containerToSequence( m_aValues );
+    return m_aValues;
 }
 
 std::vector< PropertyIds > PropertyMap::GetPropertyIds()
@@ -2169,19 +2169,19 @@ void SectionPropertyMap::ApplyProperties_( const rtl::Reference<SwXPageStyle>& x
     std::vector< uno::Any > vValues;
     {
         // Convert GetPropertyValues() value into something useful
-        const uno::Sequence< beans::PropertyValue > vPropVals = GetPropertyValues();
+        const std::vector< beans::PropertyValue >& vPropVals = GetPropertyValues();
 
         //Temporarily store the items that are in grab bags
         uno::Sequence< beans::PropertyValue > vCharVals;
         uno::Sequence< beans::PropertyValue > vParaVals;
-        const beans::PropertyValue* pCharGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( u"CharInteropGrabBag"_ustr ) );
+        auto pCharGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( u"CharInteropGrabBag"_ustr ) );
         if ( pCharGrabBag != vPropVals.end() )
             (pCharGrabBag->Value) >>= vCharVals;
-        const beans::PropertyValue* pParaGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( u"ParaInteropGrabBag"_ustr ) );
+        auto pParaGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( u"ParaInteropGrabBag"_ustr ) );
         if ( pParaGrabBag != vPropVals.end() )
             (pParaGrabBag->Value) >>= vParaVals;
 
-        for ( const beans::PropertyValue* pIter = vPropVals.begin(); pIter != vPropVals.end(); ++pIter )
+        for ( auto pIter = vPropVals.begin(); pIter != vPropVals.end(); ++pIter )
         {
             if ( pIter != pCharGrabBag && pIter != pParaGrabBag
                  && pIter->Name != "IsProtected" //section-only property

@@ -2669,7 +2669,7 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
             std::vector<beans::PropertyValue> aProperties;
             if (pParaContext)
             {
-                aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pParaContext->GetPropertyValues());
+                aProperties = pParaContext->GetPropertyValues();
 
                 // tdf#64222 filter out the "paragraph marker" formatting and
                 // set it as a separate paragraph property, not a empty hint at
@@ -3521,7 +3521,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
     {
         applyToggleAttributes(pPropertyMap);
         // If we are in comments, then disable CharGrabBag, comment text doesn't support that.
-        uno::Sequence<beans::PropertyValue> aValues = pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!IsInComments());
+        uno::Sequence<beans::PropertyValue> aValues = comphelper::containerToSequence(pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!IsInComments()));
 
         if (IsInTOC() || m_bStartIndex || m_bStartBibliography)
             for( auto& rValue : asNonConstRange(aValues) )
@@ -3577,8 +3577,8 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                 {
                     // It is content of hyperlink field. We need to create and remember
                     // character style for later applying to hyperlink
-                    PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(GetTopContext()->GetPropertyValues());
-                    OUString sHyperlinkStyleName = GetStyleSheetTable()->getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
+                    const PropertyValueVector_t& rProps = GetTopContext()->GetPropertyValues();
+                    OUString sHyperlinkStyleName = GetStyleSheetTable()->getOrCreateCharStyle(rProps, /*bAlwaysCreate=*/false);
                     GetTopFieldContext()->SetHyperlinkStyle(sHyperlinkStyleName);
                 }
 
@@ -4292,7 +4292,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         pTopContext->SetFootnote(xFootnote, sFootnoteCharStyleName);
         uno::Sequence< beans::PropertyValue > aFontProperties;
         if (GetTopContextOfType(CONTEXT_CHARACTER))
-            aFontProperties = GetTopContextOfType(CONTEXT_CHARACTER)->GetPropertyValues();
+            aFontProperties = comphelper::containerToSequence(GetTopContextOfType(CONTEXT_CHARACTER)->GetPropertyValues());
         appendTextContent( xFootnote, aFontProperties );
         m_aTextAppendStack.push(TextAppendContext(xFootnote,
                     xFootnote->createTextCursorByRange(xFootnote->getStart())));
@@ -5266,7 +5266,7 @@ bool DomainMapper_Impl::IsSdtEndBefore()
     if(!pContext)
         return false;
     bool bIsSdtEndBefore = false;
-    const uno::Sequence< beans::PropertyValue > currentCharProps = pContext->GetPropertyValues();
+    const std::vector< beans::PropertyValue > & currentCharProps = pContext->GetPropertyValues();
     for (const auto& rCurrentCharProp : currentCharProps)
     {
         if (rCurrentCharProp.Name == "CharInteropGrabBag")
@@ -5546,7 +5546,7 @@ void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
     {
         rtl::Reference<SwXLineBreak> xLineBreak = m_xTextDocument->createLineBreak();
         xLineBreak->setPropertyValue(u"Clear"_ustr, uno::Any(*m_StreamStateStack.top().oLineBreakClear));
-        appendTextContent(xLineBreak, pPropertyMap->GetPropertyValues());
+        appendTextContent(xLineBreak, comphelper::containerToSequence(pPropertyMap->GetPropertyValues()));
     }
     m_StreamStateStack.top().oLineBreakClear.reset();
 }
@@ -7009,7 +7009,7 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
         pRubyContext->Insert(PROP_CHAR_HEIGHT, aVal);
         pRubyContext->Insert(PROP_CHAR_HEIGHT_ASIAN, aVal);
     }
-    PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(pRubyContext->GetPropertyValues());
+    PropertyValueVector_t aProps = pRubyContext->GetPropertyValues();
     aInfo.sRubyStyle = m_rDMapper.getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
     PropertyMapPtr pCharContext(new PropertyMap());
     if (m_pLastCharacterContext)
@@ -8652,11 +8652,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                             PropertyMapPtr pCharTopContext = GetTopContextOfType(CONTEXT_CHARACTER);
                             if (pCharTopContext.is())
                             {
-                                uno::Sequence<beans::PropertyValue> aContextValues
+                                const std::vector<beans::PropertyValue>& rContextValues
                                     = pCharTopContext->GetPropertyValues(
                                         /*bCharGrabBag=*/!IsInComments());
                                 OUString sFontName = getPropertyName(PROP_CHAR_FONT_NAME);
-                                for (const beans::PropertyValue& rProperty : aContextValues)
+                                for (const beans::PropertyValue& rProperty : rContextValues)
                                 {
                                     if (!bHasFont || !rProperty.Name.startsWith(sFontName))
                                     {
@@ -8756,9 +8756,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                         xFieldInterface->setPropertyValue(u"Fields"_ustr, uno::Any(aValues));
                     }
 
-                    uno::Sequence<beans::PropertyValue> aValues
+                    const std::vector<beans::PropertyValue>& rValues
                         = m_aFieldStack.back()->getProperties()->GetPropertyValues();
-                    appendTextContent(xFieldInterface, aValues);
+                    appendTextContent(xFieldInterface, comphelper::containerToSequence(rValues));
                     pContext->m_bSetCitation = true;
                 }
                 break;
@@ -9189,7 +9189,7 @@ void DomainMapper_Impl::PopFieldContext()
                         if (m_pLastCharacterContext && IsRTFImport())
                             aMap.InsertProps(m_pLastCharacterContext);
                         aMap.InsertProps(m_aFieldStack.back()->getProperties());
-                        appendTextContent(xToInsert, aMap.GetPropertyValues());
+                        appendTextContent(xToInsert, comphelper::containerToSequence(aMap.GetPropertyValues()));
                         CheckRedline( xToInsert->getAnchor( ) );
                     }
                     else
@@ -9998,10 +9998,10 @@ void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )
     m_currentRedline->m_nToken = nToken;
 }
 
-void DomainMapper_Impl::SetCurrentRedlineRevertProperties( const uno::Sequence<beans::PropertyValue>& aProperties )
+void DomainMapper_Impl::SetCurrentRedlineRevertProperties( const std::vector<beans::PropertyValue>& aProperties )
 {
     assert(m_currentRedline);
-    m_currentRedline->m_aRevertProperties = aProperties;
+    m_currentRedline->m_aRevertProperties = comphelper::containerToSequence(aProperties);
 }
 
 

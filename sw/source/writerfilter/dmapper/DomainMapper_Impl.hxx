@@ -1115,7 +1115,7 @@ public:
     void SetCurrentRedlineDate( const OUString& sDate );
     void SetCurrentRedlineId( sal_Int32 nId );
     void SetCurrentRedlineToken( sal_Int32 nToken );
-    void SetCurrentRedlineRevertProperties( const css::uno::Sequence<css::beans::PropertyValue>& aProperties );
+    void SetCurrentRedlineRevertProperties( const std::vector< css::beans::PropertyValue >& aProperties );
     void SetCurrentRedlineIsRead();
     void RemoveTopRedline( );
     void SetCurrentRedlineInitials( const OUString& sInitials );

@@ -3226,7 +3226,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         resolveSprmProps(*this, rSprm );
 
         // Get all the properties that were processed in the 'rPrChange'->'rPr' XML node
-        uno::Sequence< beans::PropertyValue > currentRedlineRevertProperties = m_pImpl->GetTopContext()->GetPropertyValues();
+        std::vector< beans::PropertyValue > currentRedlineRevertProperties = m_pImpl->GetTopContext()->GetPropertyValues();
 
         // Pop back out the character properties that were on the run
         m_pImpl->PopProperties(CONTEXT_CHARACTER);
@@ -3246,7 +3246,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         resolveSprmProps(*this, rSprm );
 
         // Get all the properties that were processed in the 'pPrChange'->'pPr' XML node
-        uno::Sequence< beans::PropertyValue > currentRedlineRevertProperties = m_pImpl->GetTopContext()->GetPropertyValues();
+        std::vector< beans::PropertyValue > currentRedlineRevertProperties = m_pImpl->GetTopContext()->GetPropertyValues();
 
         // Pop back out the character properties that were on the run
         m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
@@ -4534,7 +4534,7 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
     if (aInfo.nSprmId == NS_ooxml::LN_CT_Ruby_rt)
     {
         PropertyMapPtr pContext = m_pImpl->GetTopContext();
-        PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(pContext->GetPropertyValues());
+        std::vector<css::beans::PropertyValue> aProps = pContext->GetPropertyValues();
         OUString sStyle = getOrCreateCharStyle(aProps, /*bAlwaysCreate=*/false);
         m_pImpl->SetRubyText(sText,sStyle);
         return;

@@ -1207,7 +1207,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                         }
                     }
 
-                    auto aPropValues = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pEntry->m_pProperties->GetPropertyValues());
+                    std::vector<beans::PropertyValue> aPropValues = pEntry->m_pProperties->GetPropertyValues();
 
                     if (bParaStyle || bCharStyle)
                     {
@@ -2140,8 +2140,8 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             // This is the built-in default style that every style inherits from
             rtl::Reference<SwXBaseStyle> xDefault = xParagraphStyles->getStyleByName(u"Paragraph style"_ustr);
 
-            const uno::Sequence< beans::PropertyValue > aPropValues = m_pDefaultParaProps->GetPropertyValues();
-            for( const auto& rPropValue : aPropValues )
+            const std::vector< beans::PropertyValue >& rPropValues = m_pDefaultParaProps->GetPropertyValues();
+            for( const auto& rPropValue : rPropValues )
             {
                 try
                 {
@@ -2161,8 +2161,8 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             if ( m_rDMapper.IsOOXMLImport() )
                 m_xTextDefaults->setPropertyValue( getPropertyName(PROP_CHAR_FONT_NAME), css::uno::Any(u"Times New Roman"_ustr) );
 
-            const uno::Sequence< beans::PropertyValue > aPropValues = m_pDefaultCharProps->GetPropertyValues();
-            for( const auto& rPropValue : aPropValues )
+            const std::vector< beans::PropertyValue >& rPropValues = m_pDefaultCharProps->GetPropertyValues();
+            for( const auto& rPropValue : rPropValues )
             {
                 try
                 {

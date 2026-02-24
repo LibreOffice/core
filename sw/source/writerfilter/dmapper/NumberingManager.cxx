@@ -177,9 +177,9 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
 {
     PropertyValueVector_t rProperties;
 
-    const uno::Sequence< beans::PropertyValue > vPropVals = PropertyMap::GetPropertyValues();
+    const std::vector< beans::PropertyValue >& rPropVals = PropertyMap::GetPropertyValues();
     const bool bIsSymbol(GetBulletChar().getLength() <= 1);
-    for( const auto& rPropNal : vPropVals )
+    for( const auto& rPropNal : rPropVals )
         if (! IgnoreForCharStyle(rPropNal.Name, bIsSymbol))
             rProperties.emplace_back(rPropNal.Name, 0, rPropNal.Value, beans::PropertyState_DIRECT_VALUE);
 
@@ -294,7 +294,7 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
     if( hasFirstLineIndent && hasIndentAt )
         return; // has them all, nothing to add
 
-    const uno::Sequence< beans::PropertyValue > aParaProps = m_pParaStyle->m_pProperties->GetPropertyValues( );
+    const std::vector< beans::PropertyValue >& rParaProps = m_pParaStyle->m_pProperties->GetPropertyValues( );
 
     // ParaFirstLineIndent -> FirstLineIndent
     // ParaLeftMargin -> IndentAt
@@ -304,7 +304,7 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
     const OUString sParaLeftMargin = getPropertyName(
             PROP_PARA_LEFT_MARGIN );
 
-    for ( const auto& rParaProp : aParaProps )
+    for ( const auto& rParaProp : rParaProps )
     {
         if ( !hasFirstLineIndent && rParaProp.Name == sParaIndent )
         {

@@ -684,7 +684,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             }
         }
 
-        rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
+        rInfo.aTableProperties = comphelper::containerToSequence(m_aTableProperties->GetPropertyValues());
         rInfo.aTablePropertyIds = m_aTableProperties->GetPropertyIds();
 
 #ifdef DBG_UTIL
@@ -967,7 +967,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     }
                     (*aCellIterator)->Erase(PROP_HORIZONTAL_MERGE);
                 }
-                pSingleCellProperties[nCell] = (*aCellIterator)->GetPropertyValues();
+                pSingleCellProperties[nCell] = comphelper::containerToSequence((*aCellIterator)->GetPropertyValues());
 #ifdef DBG_UTIL
                 TagLogger::getInstance().endElement();
 #endif
@@ -1125,7 +1125,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
                 rRow->Insert(PROP_SIZE_TYPE, uno::Any(text::SizeType::FIX));
             }
 
-            aRowPropertiesRange[nRow] = rRow->GetPropertyValues();
+            aRowPropertiesRange[nRow] = comphelper::containerToSequence(rRow->GetPropertyValues());
 #ifdef DBG_UTIL
             rRow->dumpXml();
             lcl_DumpPropertyValues(aRowProperties[nRow]);
