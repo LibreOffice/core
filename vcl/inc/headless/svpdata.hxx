@@ -18,8 +18,6 @@ public:
         : GenericUnixSalData()
     {
     }
-    virtual void ErrorTrapPush() override {}
-    virtual bool ErrorTrapPop(bool /*bIgnoreError*/ = true) override { return false; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

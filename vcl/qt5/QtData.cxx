@@ -210,10 +210,6 @@ QCursor& QtData::getCursor(PointerStyle ePointerStyle)
     return *m_aCursors[ePointerStyle];
 }
 
-void QtData::ErrorTrapPush() {}
-
-bool QtData::ErrorTrapPop(bool /*bIgnoreError*/) { return false; }
-
 bool QtData::noNativeControls()
 {
     static const bool bNoNative = (getenv("SAL_VCL_QT_NO_NATIVE") != nullptr);

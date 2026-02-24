@@ -36,9 +36,6 @@ public:
     explicit QtData();
     virtual ~QtData() override;
 
-    virtual void ErrorTrapPush() override;
-    virtual bool ErrorTrapPop(bool bIgnoreError = true) override;
-
     QCursor& getCursor(PointerStyle ePointerStyle);
 
     static bool noNativeControls();
