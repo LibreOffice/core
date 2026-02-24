@@ -8,6 +8,10 @@
  */
 
 #include <tablestyle.hxx>
+#include <sc.hrc>
+#include <sfx2/bindings.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 ScTableStyle::ScTableStyle(const OUString& rName, const std::optional<OUString>& rUIName)
     : mnFirstRowStripeSize(1)
@@ -880,14 +884,24 @@ sal_Int32 ScTableStyle::GetFirstColumnStripeSize() const { return mnFirstColStri
 
 sal_Int32 ScTableStyle::GetSecondColumnStripeSize() const { return mnSecondColStripeSize; }
 
-ScTableStyles::ScTableStyles() {}
+ScTableStyles::ScTableStyles(SfxBindings* pBindings)
+    : mpBindings(pBindings)
+{
+}
 
 void ScTableStyles::AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle)
 {
     maTableStyles.insert({ pTableStyle->GetName(), std::move(pTableStyle) });
+    if (mpBindings)
+        mpBindings->Invalidate(SID_TABLE_STYLES);
 }
 
-void ScTableStyles::DeleteTableStyle(const OUString& rName) { maTableStyles.erase(rName); }
+void ScTableStyles::DeleteTableStyle(const OUString& rName)
+{
+    maTableStyles.erase(rName);
+    if (mpBindings)
+        mpBindings->Invalidate(SID_TABLE_STYLES);
+}
 
 const ScTableStyle* ScTableStyles::GetTableStyle(const OUString& rName) const
 {

@@ -142,7 +142,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, ScDocShell* pDocShell ) :
         pEOFormulaTree( nullptr ),
         pFormulaTrack( nullptr ),
         pEOFormulaTrack( nullptr ),
-        mpTableStyles(new ScTableStyles),
+        mpTableStyles(new ScTableStyles(GetViewBindings())),
         pPreviewCellStyle( nullptr ),
         maPreviewSelection(*mxSheetLimits),
         nUnoObjectId( 0 ),
