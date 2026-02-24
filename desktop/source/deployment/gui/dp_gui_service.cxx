@@ -250,7 +250,7 @@ void ServiceImpl::startExecuteModal(
         {
             myExtMgr->checkUpdates();
             if ( bCloseDialog )
-                myExtMgr->Close();
+                rDialog.getDialog()->response(RET_CANCEL);
             else
                 myExtMgr->ToTop();
         }
