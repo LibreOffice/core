@@ -47,6 +47,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfile.hxx>
+#include <svl/itemset.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 
