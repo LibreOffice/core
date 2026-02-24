@@ -2152,7 +2152,7 @@ static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleShee
 ///  9 indicates that numbering should be at body level (aka disabled) - rarely used by MSWord.
 ///  0-8 are the nine valid numbering levels.
 sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
-                                  const PropertyMapPtr& pParaContext)
+                                  const ParagraphPropertyMapPtr& pParaContext)
 {
     sal_Int16 nListLevel = -1;
     if (pParaContext)
@@ -2225,7 +2225,7 @@ void DomainMapper_Impl::ValidateListLevel(const OUString& sStyleIdentifierD)
     }
 }
 
-void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove, const bool bNoNumbering )
+void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaContext, const bool bRemove, const bool bNoNumbering )
 {
     if (m_bDiscardHeaderFooter)
         return;
@@ -2248,7 +2248,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             if (pFieldContext->GetFieldId() == FIELD_IF || pFieldContext->GetFieldId() == FIELD_REF)
             {
                 // Conditional text fields can't contain newlines, finish the paragraph later.
-                FieldParagraph aFinish{pPropertyMap, bRemove};
+                FieldParagraph aFinish{pParaContext, bRemove};
                 pFieldContext->GetParagraphsToFinish().push_back(aFinish);
                 return;
             }
@@ -2259,7 +2259,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     TagLogger::getInstance().startElement("finishParagraph");
 #endif
 
-    ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     if (m_aTextAppendStack.empty())
         return;
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
@@ -2406,7 +2405,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     // apply INHERITED autospacing only if top margin is not set
     if ( bIsAutoSet || bNoTopmargin )
     {
-        GetAnyProperty(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, pPropertyMap) >>= nBeforeAutospacing;
+        GetAnyProperty(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, pParaContext.get()) >>= nBeforeAutospacing;
         // tdf#137655 only w:beforeAutospacing=0 was specified, but not PARA_TOP_MARGIN
         // (see default_spacing = -1 in processing of LN_CT_Spacing_beforeAutospacing)
         if (bNoTopmargin && nBeforeAutospacing == convertTwipToMm100(-1))
@@ -2442,7 +2441,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     bool bAppliedBottomAutospacing = false;
     if (bIsAutoSet || bNoBottomMargin)
     {
-        GetAnyProperty(PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, pPropertyMap) >>= nAfterAutospacing;
+        GetAnyProperty(PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, pParaContext.get()) >>= nAfterAutospacing;
         if (bNoBottomMargin && nAfterAutospacing == convertTwipToMm100(-1))
         {
             sal_Int32 nStyleAuto = -1;
@@ -2482,7 +2481,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
             // The paragraph style is vital to knowing all the frame properties.
             std::optional<PropertyMap::Property> aParaStyle
-                = pPropertyMap->getProperty(PROP_PARA_STYLE_NAME);
+                = pParaContext->getProperty(PROP_PARA_STYLE_NAME);
             if (aParaStyle)
             {
                 OUString sName;
@@ -2666,11 +2665,11 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     lcl_AddRange(pToBeSavedProperties, xTextAppend, rAppendContext);
                 }
             }
-            applyToggleAttributes(pPropertyMap); // for paragraph marker formatting
+            applyToggleAttributes(pParaContext.get()); // for paragraph marker formatting
             std::vector<beans::PropertyValue> aProperties;
-            if (pPropertyMap)
+            if (pParaContext)
             {
-                aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pPropertyMap->GetPropertyValues());
+                aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pParaContext->GetPropertyValues());
 
                 // tdf#64222 filter out the "paragraph marker" formatting and
                 // set it as a separate paragraph property, not a empty hint at
@@ -2937,7 +2936,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 }
                             }
 
-                            sal_Int16 nCurrentLevel = GetListLevel(pEntry, pPropertyMap);
+                            sal_Int16 nCurrentLevel = GetListLevel(pEntry, pParaContext);
                             if (nCurrentLevel == -1)
                                 nCurrentLevel = 0;
 
@@ -3211,7 +3210,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 xParaProps->setPropertyValue(u"ParaLeftMargin"_ustr, aMargin);
                             else if (isNumberingViaStyle)
                             {
-                                const sal_Int32 nParaLeftMargin = getNumberingProperty(nListId, GetListLevel(pEntry, pPropertyMap), u"IndentAt"_ustr);
+                                const sal_Int32 nParaLeftMargin = getNumberingProperty(nListId, GetListLevel(pEntry, pParaContext), u"IndentAt"_ustr);
                                 if (nParaLeftMargin != 0)
                                     xParaProps->setPropertyValue(u"ParaLeftMargin"_ustr, uno::Any(nParaLeftMargin));
                             }
@@ -3229,7 +3228,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                 xParaProps->setPropertyValue(u"ParaFirstLineIndent"_ustr, aMargin);
                             else if (isNumberingViaStyle)
                             {
-                                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, GetListLevel(pEntry, pPropertyMap), u"FirstLineIndent"_ustr);
+                                const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, GetListLevel(pEntry, pParaContext), u"FirstLineIndent"_ustr);
                                 if (nFirstLineIndent != 0)
                                     xParaProps->setPropertyValue(u"ParaFirstLineIndent"_ustr, uno::Any(nFirstLineIndent));
                             }
@@ -7279,7 +7278,8 @@ DomainMapper_Impl::StartIndexSectionChecked(std::u16string_view sServiceName)
 {
     if (m_StreamStateStack.top().bParaChanged)
     {
-        finishParagraph(GetTopContextOfType(CONTEXT_PARAGRAPH), false); // resets bParaChanged
+        auto pParaContext = static_cast<ParagraphPropertyMap*>(GetTopContextOfType(CONTEXT_PARAGRAPH).get());
+        finishParagraph(pParaContext, false); // resets bParaChanged
         PopProperties(CONTEXT_PARAGRAPH);
         PushProperties(CONTEXT_PARAGRAPH);
         SetIsFirstRun(true);

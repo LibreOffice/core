@@ -5421,7 +5421,8 @@ void DomainMapper::finishParagraph(const bool bRemove, const bool bNoNumbering)
 {
     if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::datePicker)
         m_pImpl->m_pSdtHelper->createDateContentControl();
-    m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH), bRemove, bNoNumbering);
+    auto pParaContext = static_cast<ParagraphPropertyMap*>(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH).get());
+    m_pImpl->finishParagraph(pParaContext, bRemove, bNoNumbering);
     if (bRemove || mbIsLastPara)
         m_pImpl->RemoveLastParagraph();
     mbIsLastPara = false; // handle other subdocuments
