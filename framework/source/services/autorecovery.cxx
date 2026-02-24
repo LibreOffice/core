@@ -4012,9 +4012,9 @@ void SAL_CALL AutoRecovery::setFastPropertyValue_NoBroadcast(      sal_Int32    
 void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                                                  sal_Int32      nHandle) const
 {
-    switch(nHandle)
+    switch(static_cast<AutoRecoveryPropHandle>(nHandle))
     {
-        case AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA :
+        case AutoRecoveryPropHandle::ExistsRecoveryData :
                 {
                     bool bSessionData = officecfg::Office::Recovery::RecoveryInfo::SessionData::get();
                     bool bRecoveryData = !m_lDocCache.empty();
@@ -4028,11 +4028,11 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                 }
                 break;
 
-        case AUTORECOVERY_PROPHANDLE_CRASHED :
+        case AutoRecoveryPropHandle::Crashed :
                 aValue <<= officecfg::Office::Recovery::RecoveryInfo::Crashed::get();
                 break;
 
-        case AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA :
+        case AutoRecoveryPropHandle::ExistsSessionData :
                 aValue <<= officecfg::Office::Recovery::RecoveryInfo::SessionData::get();
                 break;
     }
@@ -4042,9 +4042,9 @@ css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor()
 {
     return
     {
-        css::beans::Property( AUTORECOVERY_PROPNAME_CRASHED            , AUTORECOVERY_PROPHANDLE_CRASHED            , cppu::UnoType<bool>::get() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( AUTORECOVERY_PROPNAME_EXISTS_RECOVERYDATA, AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA, cppu::UnoType<bool>::get() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( AUTORECOVERY_PROPNAME_EXISTS_SESSIONDATA , AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA , cppu::UnoType<bool>::get() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( AutoRecoveryPropNames[AutoRecoveryPropHandle::Crashed]            , static_cast<sal_Int32>(AutoRecoveryPropHandle::Crashed)            , cppu::UnoType<bool>::get() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( AutoRecoveryPropNames[AutoRecoveryPropHandle::ExistsRecoveryData] , static_cast<sal_Int32>(AutoRecoveryPropHandle::ExistsRecoveryData) , cppu::UnoType<bool>::get() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( AutoRecoveryPropNames[AutoRecoveryPropHandle::ExistsSessionData]  , static_cast<sal_Int32>(AutoRecoveryPropHandle::ExistsSessionData)  , cppu::UnoType<bool>::get() , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
     };
 }
 

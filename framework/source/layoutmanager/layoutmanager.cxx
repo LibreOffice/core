@@ -126,13 +126,13 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
     m_aAsyncLayoutTimer.SetTimeout( 50 );
     m_aAsyncLayoutTimer.SetInvokeHandler( LINK( this, LayoutManager, AsyncLayoutHdl ) );
 
-    registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, css::beans::PropertyAttribute::TRANSIENT, &m_bAutomaticToolbars, cppu::UnoType<decltype(m_bAutomaticToolbars)>::get() );
-    registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, beans::PropertyAttribute::TRANSIENT, &m_bHideCurrentUI, cppu::UnoType<decltype(m_bHideCurrentUI)>::get() );
-    registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT, LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT, beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::READONLY, &m_nLockCount, cppu::UnoType<decltype(m_nLockCount)>::get()  );
-    registerProperty( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, beans::PropertyAttribute::TRANSIENT, &m_bMenuBarCloseButton, cppu::UnoType<decltype(m_bMenuBarCloseButton)>::get() );
-    registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), css::uno::Any(false) );
-    registerProperty( LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE, LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE, beans::PropertyAttribute::TRANSIENT, &m_bPreserveContentSize, cppu::UnoType<decltype(m_bPreserveContentSize)>::get() );
-    registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHTOOLTIP, LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP, beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), css::uno::Any(false) );
+    registerProperty( LayoutManagerPropNames[LayoutManagerPropHandle::AutomaticToolbars], static_cast<sal_Int32>(LayoutManagerPropHandle::AutomaticToolbars), css::beans::PropertyAttribute::TRANSIENT, &m_bAutomaticToolbars, cppu::UnoType<decltype(m_bAutomaticToolbars)>::get() );
+    registerProperty( LayoutManagerPropNames[LayoutManagerPropHandle::HideCurrentUI], static_cast<sal_Int32>(LayoutManagerPropHandle::HideCurrentUI), beans::PropertyAttribute::TRANSIENT, &m_bHideCurrentUI, cppu::UnoType<decltype(m_bHideCurrentUI)>::get() );
+    registerProperty( LayoutManagerPropNames[LayoutManagerPropHandle::LockCount], static_cast<sal_Int32>(LayoutManagerPropHandle::LockCount), beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::READONLY, &m_nLockCount, cppu::UnoType<decltype(m_nLockCount)>::get()  );
+    registerProperty( LayoutManagerPropNames[LayoutManagerPropHandle::MenuBarCloser], static_cast<sal_Int32>(LayoutManagerPropHandle::MenuBarCloser), beans::PropertyAttribute::TRANSIENT, &m_bMenuBarCloseButton, cppu::UnoType<decltype(m_bMenuBarCloseButton)>::get() );
+    registerPropertyNoMember( LayoutManagerPropNames[LayoutManagerPropHandle::RefreshVisibility], static_cast<sal_Int32>(LayoutManagerPropHandle::RefreshVisibility), beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), css::uno::Any(false) );
+    registerProperty( LayoutManagerPropNames[LayoutManagerPropHandle::PreserveContentSize], static_cast<sal_Int32>(LayoutManagerPropHandle::PreserveContentSize), beans::PropertyAttribute::TRANSIENT, &m_bPreserveContentSize, cppu::UnoType<decltype(m_bPreserveContentSize)>::get() );
+    registerPropertyNoMember( LayoutManagerPropNames[LayoutManagerPropHandle::RefreshToolTip], static_cast<sal_Int32>(LayoutManagerPropHandle::RefreshToolTip), beans::PropertyAttribute::TRANSIENT, cppu::UnoType<bool>::get(), css::uno::Any(false) );
 }
 
 LayoutManager::~LayoutManager()
@@ -3035,16 +3035,19 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
 void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       nHandle,
                                                                const uno::Any& aValue  )
 {
-    if ( (nHandle != LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY) && (nHandle != LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP) )
-        LayoutManager_PBase::setFastPropertyValue_NoBroadcast( nHandle, aValue );
-
-    switch( nHandle )
+    if ( (nHandle != static_cast<sal_Int32>(LayoutManagerPropHandle::RefreshVisibility)) &&
+         (nHandle != static_cast<sal_Int32>(LayoutManagerPropHandle::RefreshToolTip)) )
     {
-        case LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER:
+        LayoutManager_PBase::setFastPropertyValue_NoBroadcast( nHandle, aValue );
+    }
+
+    switch( static_cast<LayoutManagerPropHandle>(nHandle) )
+    {
+        case LayoutManagerPropHandle::MenuBarCloser:
             implts_updateMenuBarClose();
             break;
 
-        case LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY:
+        case LayoutManagerPropHandle::RefreshVisibility:
         {
             bool bValue(false);
             if (( aValue >>= bValue ) && bValue )
@@ -3060,11 +3063,11 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       n
             break;
         }
 
-        case LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI:
+        case LayoutManagerPropHandle::HideCurrentUI:
             implts_setCurrentUIVisibility( !m_bHideCurrentUI );
             break;
 
-        case LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP:
+        case LayoutManagerPropHandle::RefreshToolTip:
             if (m_xToolbarManager.is())
                 m_xToolbarManager->updateToolbarsTips();
             break;

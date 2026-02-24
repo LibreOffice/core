@@ -3222,7 +3222,7 @@ void XFrameImpl::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::X
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         xFrameProps->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xLayoutProps(xLayoutManager, css::uno::UNO_QUERY_THROW);
-        xLayoutProps->setPropertyValue(LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, css::uno::Any(bState));
+        xLayoutProps->setPropertyValue(LayoutManagerPropNames[LayoutManagerPropHandle::MenuBarCloser], css::uno::Any(bState));
     }
     catch(const css::uno::RuntimeException&)
         { throw; }

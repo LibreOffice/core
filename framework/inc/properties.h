@@ -49,24 +49,28 @@ inline constexpr o3tl::enumarray<FramePropHandle, OUString> FramePropNames =
 };
 
 /** properties for "LayoutManager" class */
+enum class LayoutManagerPropHandle
+{
+    MenuBarCloser,
+    AutomaticToolbars,
+    RefreshVisibility,
+    HideCurrentUI,
+    LockCount,
+    PreserveContentSize,
+    RefreshToolTip,
+    LAST = RefreshToolTip
+};
 
-inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER = u"MenuBarCloser"_ustr;
-inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS = u"AutomaticToolbars"_ustr;
-inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY = u"RefreshContextToolbarVisibility"_ustr;
-inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI = u"HideCurrentUI"_ustr;
-inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT = u"LockCount"_ustr;
-inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE = u"PreserveContentSize"_ustr;
-inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_REFRESHTOOLTIP = u"RefreshContextToolbarToolTip"_ustr;
-
-#define LAYOUTMANAGER_PROPNAME_MENUBARCLOSER            LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER
-
-#define LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER          0
-#define LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS      1
-#define LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY      2
-#define LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI          3
-#define LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT              4
-#define LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE  5
-#define LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP         6
+inline constexpr o3tl::enumarray<LayoutManagerPropHandle, OUString> LayoutManagerPropNames =
+{
+    u"MenuBarCloser"_ustr,
+    u"AutomaticToolbars"_ustr,
+    u"RefreshContextToolbarVisibility"_ustr,
+    u"HideCurrentUI"_ustr,
+    u"LockCount"_ustr,
+    u"PreserveContentSize"_ustr,
+    u"RefreshContextToolbarToolTip"_ustr
+};
 
 /** properties for "UICommandDescription" class */
 inline constexpr OUString UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST = u"private:resource/image/commandimagelist"_ustr;
@@ -77,18 +81,20 @@ inline constexpr OUString UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST
 #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON            8
 
 /** properties for "AutoRecovery" class */
+enum class AutoRecoveryPropHandle
+{
+    ExistsRecoveryData,
+    ExistsSessionData,
+    Crashed,
+    LAST = Crashed
+};
 
-inline constexpr OUString AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA = u"ExistsRecoveryData"_ustr;
-inline constexpr OUString AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA = u"ExistsSessionData"_ustr;
-inline constexpr OUString AUTORECOVERY_PROPNAME_ASCII_CRASHED = u"Crashed"_ustr;
-
-#define AUTORECOVERY_PROPNAME_EXISTS_RECOVERYDATA       AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA
-#define AUTORECOVERY_PROPNAME_EXISTS_SESSIONDATA        AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA
-#define AUTORECOVERY_PROPNAME_CRASHED                   AUTORECOVERY_PROPNAME_ASCII_CRASHED
-
-#define AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA     0
-#define AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA      1
-#define AUTORECOVERY_PROPHANDLE_CRASHED                 2
+inline constexpr o3tl::enumarray<AutoRecoveryPropHandle, OUString> AutoRecoveryPropNames =
+{
+    u"ExistsRecoveryData"_ustr,
+    u"ExistsSessionData"_ustr,
+    u"Crashed"_ustr
+};
 
 /** properties for Filter config */
 
