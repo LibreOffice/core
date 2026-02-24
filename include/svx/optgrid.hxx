@@ -31,32 +31,32 @@ namespace weld { class Widget; }
 class SVX_DLLPUBLIC SvxOptionsGrid
 {
 protected:
-    sal_uInt32  nFldDrawX;
-    sal_uInt32  nFldDivisionX;
-    sal_uInt32  nFldDrawY;
-    sal_uInt32  nFldDivisionY;
-    bool        bUseGridsnap:1;
-    bool        bSynchronize:1;
-    bool        bGridVisible:1;
+    sal_uInt32  m_nFldDrawX;
+    sal_uInt32  m_nFldDivisionX;
+    sal_uInt32  m_nFldDrawY;
+    sal_uInt32  m_nFldDivisionY;
+    bool        m_bUseGridsnap:1;
+    bool        m_bSynchronize:1;
+    bool        m_bGridVisible:1;
 
 public:
     SvxOptionsGrid();
 
-    void    SetFieldDrawX(    sal_uInt32 nSet){nFldDrawX      = nSet;}
-    void    SetFieldDivisionX(sal_uInt32 nSet){nFldDivisionX  = nSet;}
-    void    SetFieldDrawY   ( sal_uInt32 nSet){nFldDrawY      = nSet;}
-    void    SetFieldDivisionY(sal_uInt32 nSet){nFldDivisionY  = nSet;}
-    void    SetUseGridSnap( bool bSet ) {bUseGridsnap   = bSet;}
-    void    SetSynchronize( bool bSet ) {bSynchronize   = bSet;}
-    void    SetGridVisible( bool bSet ) {bGridVisible   = bSet;}
+    void    SetFieldDrawX(    sal_uInt32 nSet){m_nFldDrawX      = nSet;}
+    void    SetFieldDivisionX(sal_uInt32 nSet){m_nFldDivisionX  = nSet;}
+    void    SetFieldDrawY   ( sal_uInt32 nSet){m_nFldDrawY      = nSet;}
+    void    SetFieldDivisionY(sal_uInt32 nSet){m_nFldDivisionY  = nSet;}
+    void    SetUseGridSnap( bool bSet ) {m_bUseGridsnap   = bSet;}
+    void    SetSynchronize( bool bSet ) {m_bSynchronize   = bSet;}
+    void    SetGridVisible( bool bSet ) {m_bGridVisible   = bSet;}
 
-    sal_uInt32  GetFieldDrawX(    ) const {  return nFldDrawX;    }
-    sal_uInt32  GetFieldDivisionX() const {  return nFldDivisionX;}
-    sal_uInt32  GetFieldDrawY   ( ) const {  return nFldDrawY;    }
-    sal_uInt32  GetFieldDivisionY() const {  return nFldDivisionY;}
-    bool        GetUseGridSnap( ) const {  return bUseGridsnap; }
-    bool        GetSynchronize( ) const {  return bSynchronize; }
-    bool        GetGridVisible( ) const {  return bGridVisible; }
+    sal_uInt32  GetFieldDrawX(    ) const {  return m_nFldDrawX;    }
+    sal_uInt32  GetFieldDivisionX() const {  return m_nFldDivisionX;}
+    sal_uInt32  GetFieldDrawY   ( ) const {  return m_nFldDrawY;    }
+    sal_uInt32  GetFieldDivisionY() const {  return m_nFldDivisionY;}
+    bool        GetUseGridSnap( ) const {  return m_bUseGridsnap; }
+    bool        GetSynchronize( ) const {  return m_bSynchronize; }
+    bool        GetGridVisible( ) const {  return m_bGridVisible; }
 };
 
 class SVX_DLLPUBLIC SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
