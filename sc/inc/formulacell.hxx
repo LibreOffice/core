@@ -265,7 +265,7 @@ public:
     bool            MarkUsedExternalReferences();
     // Returns true if the cell was interpreted as part of the formula group.
     // The parameters may limit which subset of the formula group should be interpreted, if possible.
-    bool Interpret(SCROW nStartOffset = -1, SCROW nEndOffset = -1);
+    SC_DLLPUBLIC bool Interpret(SCROW nStartOffset = -1, SCROW nEndOffset = -1);
     bool IsIterCell() const { return bIsIterCell; }
     sal_uInt16 GetSeenInIteration() const { return nSeenInIteration; }
 
@@ -349,7 +349,7 @@ public:
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
     sc::MatrixEdge  GetMatrixEdge( const ScDocument& rDoc, ScAddress& rOrgPos ) const;
     SC_DLLPUBLIC FormulaError GetErrCode();   // interpret first if necessary
-    FormulaError    GetRawError() const;  // don't interpret, just return code or result error
+    SC_DLLPUBLIC FormulaError    GetRawError() const;  // don't interpret, just return code or result error
     bool            GetErrorOrValue( FormulaError& rErr, double& rVal );
     SC_DLLPUBLIC sc::FormulaResultValue GetResult();
     SC_DLLPUBLIC sc::FormulaResultValue GetResult() const;

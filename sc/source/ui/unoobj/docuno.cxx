@@ -101,6 +101,7 @@
 #include <docuno.hxx>
 #include <drwlayer.hxx>
 #include <forbiuno.hxx>
+#include <formuladepchain.hxx>
 #include <formulagroup.hxx>
 #include <gridwin.hxx>
 #include <hints.hxx>
@@ -1367,6 +1368,46 @@ OString ScModelObj::getViewRenderState(SfxViewShell* pViewShell)
         return getTabViewRenderState(*pTabViewShell);
 
     return OString();
+}
+
+bool ScModelObj::supportsCommand(std::u16string_view rCommand)
+{
+    return rCommand == u"FormulaDepChain";
+}
+
+void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+{
+    OString aCommand(rCommand);
+    if (aCommand.startsWith(".uno:FormulaDepChain"))
+    {
+        rJsonWriter.put("commandName", ".uno:FormulaDepChain");
+
+        if (!pDocShell)
+        {
+            auto aValues = rJsonWriter.startNode("commandValues");
+            rJsonWriter.put("hasError", false);
+            rJsonWriter.put("reason", "internal_error");
+            return;
+        }
+
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
+        if (!pViewShell)
+        {
+            auto aValues = rJsonWriter.startNode("commandValues");
+            rJsonWriter.put("hasError", false);
+            rJsonWriter.put("reason", "internal_error");
+            return;
+        }
+
+        const ScViewData& rViewData = pViewShell->GetViewData();
+        ScAddress aCurPos(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNumber());
+
+        {
+            auto aValues = rJsonWriter.startNode("commandValues");
+            ScFormulaDepChain::getFormulaDependencyChain(rDoc, aCurPos, rJsonWriter);
+        }
+    }
 }
 
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
