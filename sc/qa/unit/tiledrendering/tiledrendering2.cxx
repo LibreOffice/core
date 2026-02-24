@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
     SfxLokHelper::setView(nView1);
     Scheduler::ProcessEventsToIdle();
 
-    auto it = aView2.m_aStateChanges.find(".uno:Sidebar");
+    auto it = aView2.m_aStateChanges.find(".uno:SidebarDeck.PropertyDeck");
     CPPUNIT_ASSERT(it != aView2.m_aStateChanges.end());
     std::string aLocale = it->second.get<std::string>("locale");
     CPPUNIT_ASSERT_EQUAL(std::string("de-DE"), aLocale);
