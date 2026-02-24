@@ -581,7 +581,7 @@ void SwRootFrame::RemoveMasterObjs( SdrPage *pPg )
     for( size_t i = pPg ? pPg->GetObjCount() : 0; i; )
     {
         SdrObject* pObj = pPg->GetObj( --i );
-        if( dynamic_cast< const SwFlyDrawObj *>( pObj ) !=  nullptr )
+        if (pObj->GetObjIdentifier() == SdrObjKind::SwFlyDrawObjIdentifier && !pObj->IsSwVirtFlyDrawObj())
             pPg->RemoveObject( i );
     }
 }
