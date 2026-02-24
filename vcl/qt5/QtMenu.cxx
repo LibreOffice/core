@@ -15,6 +15,7 @@
 #include <QtFrame.hxx>
 #include <QtInstance.hxx>
 #include <QtMainWindow.hxx>
+#include <QtTools.hxx>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QtWidgets/QActionGroup>
