@@ -467,6 +467,22 @@ void DiagramHelper_svx::AddAdditionalVisualization(const SdrObjGroup& rTarget, S
     rHdlList.AddHdl(std::move(pHdl));
 }
 
+DiagramHelperFactory_svx::DiagramHelperFactory_svx()
+{
+}
+
+DiagramHelperFactory_svx& DiagramHelperFactory_svx::getDiagramHelperFactory_svx()
+{
+    assert(nullptr != pSingleGlobalDiagramHelperFactory_svx && "DiagramHelperFactory not yet initialized (!)");
+    return *pSingleGlobalDiagramHelperFactory_svx;
+}
+
+// init gobal member var of DiagramHelperFactory_svx. This will then be set
+// by DiagramHelperFactory_oox::DiagramHelperFactory_oox when
+// aSingleGlobalDiagramHelperFactory_oox gets incarnated by oox library at
+// that librarys load time
+DiagramHelperFactory_svx* DiagramHelperFactory_svx::pSingleGlobalDiagramHelperFactory_svx = nullptr;
+
 }} // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

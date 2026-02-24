@@ -63,6 +63,16 @@ DiagramHelper_oox::DiagramHelper_oox(DiagramHelper_oox const& rSource)
 {
 }
 
+DiagramHelper_oox::DiagramHelper_oox(const boost::property_tree::ptree& rDiagramModel)
+    : DiagramHelper_svx()
+    , mpDiagramPtr(new SmartArtDiagram(rDiagramModel))
+    , mpDiagramThemePtr()
+    , maDiagramImportSize()
+    , msNewNodeId()
+    , msNewNodeText()
+{
+}
+
 DiagramHelper_oox::~DiagramHelper_oox() {}
 
 void DiagramHelper_oox::moveDiagramModelDataFromOldToNewXShape(
@@ -303,7 +313,7 @@ OUString DiagramHelper_oox::getDiagramString() const
         return mpDiagramPtr->getData()->getDiagramString();
     }
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 std::vector<std::pair<OUString, OUString>>
@@ -516,6 +526,45 @@ DiagramHelper_oox* DiagramHelper_oox::clone() const
 
     return new DiagramHelper_oox(*this);
 }
+
+void DiagramHelper_oox::addDiagramModelData(boost::property_tree::ptree& rTarget) const
+{
+    if (!mpDiagramPtr)
+        return;
+
+    mpDiagramPtr->addDiagramModelData(rTarget);
+}
+
+DiagramHelperFactory_oox::DiagramHelperFactory_oox()
+    : DiagramHelperFactory_svx()
+{
+    // make clear that this is supposed to happen only once
+    assert(nullptr == pSingleGlobalDiagramHelperFactory_svx
+           && "DiagramHelperFactory initialized multiple times (!)");
+
+    // directly assign created instance to global pointer in svx for access from there
+    if (nullptr == pSingleGlobalDiagramHelperFactory_svx)
+        pSingleGlobalDiagramHelperFactory_svx = this;
+}
+
+DiagramHelperFactory_oox::~DiagramHelperFactory_oox()
+{
+    if (this == pSingleGlobalDiagramHelperFactory_svx)
+        pSingleGlobalDiagramHelperFactory_svx = nullptr;
+}
+
+std::shared_ptr<svx::diagram::DiagramHelper_svx>
+DiagramHelperFactory_oox::createDiagramHelper_svx(boost::property_tree::ptree& rTarget) const
+{
+    // from here we can instantiate DiagramHelper_oox and return
+    return std::make_shared<DiagramHelper_oox>(rTarget);
+}
+
+// this is the global needed anchor in oox module for an instantiation of
+// DiagramHelperFactory_oox and thus for DiagramHelperFactory_svx. This
+// is needed since in svx where a Diagram has to be imported an instance
+// of DiagramHelper_oox needs to be instantiated, but svx cannot access oox
+static DiagramHelperFactory_oox aSingleGlobalDiagramHelperFactory_oox;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

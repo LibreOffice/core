@@ -130,6 +130,7 @@ class SmartArtDiagram
 public:
     explicit SmartArtDiagram();
     explicit SmartArtDiagram(SmartArtDiagram const& rSource);
+    explicit SmartArtDiagram(const boost::property_tree::ptree& rDiagramModel);
     void setData( const OoxDiagramDataPtr& pData )
         { mpData = pData; }
     const OoxDiagramDataPtr& getData() const
@@ -159,7 +160,13 @@ public:
     void writeDiagramOOXData(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const;
     void writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
 
+    // write data to boost::property_tree
+    void addDiagramModelData(boost::property_tree::ptree& rTarget) const;
+
 private:
+    // helper for addDiagramModelData
+    void addDomTreeToModelData(svx::diagram::DomMapFlag aId, std::u16string_view aName, boost::property_tree::ptree& rTarget) const;
+
     // This contains groups of shapes: automatic font size is the same in each group.
     oox::core::NamedShapePairs maDiagramFontHeights;
 

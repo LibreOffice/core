@@ -134,6 +134,27 @@ public:
 
     // needed to create DiagramHelper_oox in svx' SdrObjGroup copy constructor
     virtual DiagramHelper_svx* clone() const = 0;
+
+    // write data to boost::property_tree
+    virtual void addDiagramModelData(boost::property_tree::ptree& rTarget) const = 0;
+};
+
+class SVXCORE_DLLPUBLIC DiagramHelperFactory_svx
+{
+protected:
+    // do prohibit direct instantiation, only DiagramHelper_oox is intended
+    DiagramHelperFactory_svx();
+
+    // keep global var of this module hidden
+    static DiagramHelperFactory_svx* pSingleGlobalDiagramHelperFactory_svx;
+
+public:
+    // try to access global static single instance of DiagramHelperFactory
+    static DiagramHelperFactory_svx& getDiagramHelperFactory_svx();
+
+    // virtual call to instantiate a new DiagramHelper, overloaded in oox to
+    // allow instantiation of a DiagramHelper_oox
+    virtual std::shared_ptr<svx::diagram::DiagramHelper_svx> createDiagramHelper_svx(boost::property_tree::ptree& rTarget) const = 0;
 };
 
 }} // end of namespace
