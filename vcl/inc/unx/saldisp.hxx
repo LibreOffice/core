@@ -149,7 +149,6 @@ class SalXLib
 public:
     SalXLib();
     ~SalXLib();
-    void    Init();
 
     bool    Yield( bool bWait, bool bHandleAllCurrentEvents );
     void    Wakeup();
