@@ -897,4 +897,61 @@ const ScTableStyle* ScTableStyles::GetTableStyle(const OUString& rName) const
     return maTableStyles.find(rName)->second.get();
 }
 
+namespace
+{
+std::string_view tableStyleElementName(ScTableStyleElement eElement)
+{
+    switch (eElement)
+    {
+        case ScTableStyleElement::WholeTable:
+            return "WholeTable";
+        case ScTableStyleElement::FirstColumnStripe:
+            return "FirstColumnStripe";
+        case ScTableStyleElement::SecondColumnStripe:
+            return "SecondColumnStripe";
+        case ScTableStyleElement::FirstRowStripe:
+            return "FirstRowStripe";
+        case ScTableStyleElement::SecondRowStripe:
+            return "SecondRowStripe";
+        case ScTableStyleElement::LastColumn:
+            return "LastColumn";
+        case ScTableStyleElement::FirstColumn:
+            return "FirstColumn";
+        case ScTableStyleElement::HeaderRow:
+            return "HeaderRow";
+        case ScTableStyleElement::TotalRow:
+            return "TotalRow";
+        case ScTableStyleElement::FirstHeaderCell:
+            return "FirstHeaderCell";
+        case ScTableStyleElement::LastHeaderCell:
+            return "LastHeaderCell";
+    }
+    return {};
+}
+}
+
+void ScTableStyles::generateJSON(tools::JsonWriter& rWriter) const
+{
+    auto aStylesArray = rWriter.startArray("TableStyles");
+
+    for (auto const & [ rName, pStyle ] : maTableStyles)
+    {
+        auto aStyleStruct = rWriter.startStruct();
+        rWriter.put("Name", pStyle->GetName().toUtf8());
+        rWriter.put("UIName", pStyle->GetUIName().toUtf8());
+
+        auto aElementsArray = rWriter.startArray("Elements");
+        for (auto const & [ eElement, pPattern ] : pStyle->GetSetPatterns())
+        {
+            const SvxBrushItem* pBrush = pPattern->GetItemSet().GetItemIfSet(ATTR_BACKGROUND);
+            if (!pBrush)
+                continue;
+
+            auto aElementStruct = rWriter.startStruct();
+            rWriter.put("Type", tableStyleElementName(eElement));
+            rWriter.put("FillColor", pBrush->GetColor().AsRGBHexString().toUtf8());
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
