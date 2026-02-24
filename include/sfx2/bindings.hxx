@@ -30,6 +30,7 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <tools/link.hxx>
+#include <svl/poolitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/typedwhich.hxx>
 
@@ -54,7 +55,6 @@ class SfxWorkWindow;
 struct SfxFoundCache_Impl;
 class SfxFoundCacheArr_Impl;
 class SfxPoolItemHolder;
-class SfxPoolItem;
 class SfxRequest;
 class SfxShell;
 enum class SfxItemState;
