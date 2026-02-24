@@ -1166,8 +1166,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135976)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
 {
-// FIXME: disabled on Windows because of a not reproducible problem (not related to the patch)
-#if !defined(_WIN32)
     // check move down with redlining
     createSwDoc("tdf39721.fodt");
     SwDoc* pDoc = getSwDoc();
@@ -1216,7 +1214,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(sOrigText, xTextDocument->getText()->getString());
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145066_bad_paragraph_deletion)
