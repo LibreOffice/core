@@ -14,7 +14,8 @@
 
 #include <android/androidinst.hxx>
 #include <headless/svpdummies.hxx>
-#include <headless/svpdata.hxx>
+#include <unx/gendata.hxx>
+
 #include <osl/detail/android-bootstrap.h>
 #include <rtl/strbuf.hxx>
 #include <vcl/settings.hxx>
@@ -159,7 +160,7 @@ extern "C" SalInstance *create_SalInstance()
 {
     LOGI("Android: create_SalInstance!");
     AndroidSalInstance* pInstance = new AndroidSalInstance( std::make_unique<SvpSalYieldMutex>() );
-    new SvpSalData();
+    new GenericUnixSalData();
     return pInstance;
 }
 

@@ -75,8 +75,8 @@
 #endif
 
 #if ENABLE_HEADLESS
-#include <headless/svpdata.hxx>
 #include <headless/svpinst.hxx>
+#include <unx/gendata.hxx>
 #endif
 
 namespace {
@@ -85,7 +85,7 @@ namespace {
 SalInstance* svp_create_SalInstance()
 {
     SvpSalInstance* pInstance = new SvpSalInstance(std::make_unique<SvpSalYieldMutex>());
-    new SvpSalData();
+    new GenericUnixSalData();
     return pInstance;
 }
 #endif

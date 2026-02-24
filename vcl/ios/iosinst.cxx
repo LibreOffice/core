@@ -23,10 +23,10 @@
 
 #include "ios/iosinst.hxx"
 #include "quartz/salgdi.h"
-#include "headless/svpdata.hxx"
 #include "headless/svpdummies.hxx"
 #include "quartz/utils.h"
 #include "quartz/SystemFontList.hxx"
+#include "unx/gendata.hxx"
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
@@ -147,7 +147,7 @@ SalData::~SalData()
 extern "C" SalInstance *create_SalInstance()
 {
     IosSalInstance* pInstance = new IosSalInstance( std::make_unique<SvpSalYieldMutex>() );
-    new SvpSalData();
+    new GenericUnixSalData();
     return pInstance;
 }
 

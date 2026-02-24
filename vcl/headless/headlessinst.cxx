@@ -8,8 +8,8 @@
  */
 #include <headless/svpinst.hxx>
 #include <headless/svpdummies.hxx>
-#include <headless/svpdata.hxx>
 #include <staticsalinstance.hxx>
+#include <unx/gendata.hxx>
 #include <unistd.h>
 
 namespace {
@@ -52,7 +52,7 @@ SalSystem *HeadlessSalInstance::CreateSalSystem()
 extern "C" SalInstance *create_SalInstance()
 {
     HeadlessSalInstance* pInstance = new HeadlessSalInstance(std::make_unique<SvpSalYieldMutex>());
-    new SvpSalData();
+    new GenericUnixSalData();
     return pInstance;
 }
 
