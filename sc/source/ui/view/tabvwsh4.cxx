@@ -78,6 +78,7 @@
 #include <preview.hxx>
 #include <documentlinkmgr.hxx>
 #include <gridwin.hxx>
+#include <tablestyle.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

@@ -108,6 +108,7 @@
 #include <sheetevents.hxx>
 #include <formulacell.hxx>
 #include <documentlinkmgr.hxx>
+#include <tablestyle.hxx>
 #include <memory>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <helpids.h>
@@ -2484,6 +2485,20 @@ void ScDocShell::GetState( SfxItemSet &rSet )
 
             case SID_TABLES_COUNT:
                 rSet.Put( SfxInt16Item( nWhich, m_pDocument->GetTableCount() ) );
+                break;
+
+            case SID_TABLE_STYLES:
+                {
+                    ScTableStyles* pStyles = m_pDocument->GetTableStyles();
+                    if (pStyles)
+                    {
+                        tools::JsonWriter aTree;
+                        pStyles->generateJSON(aTree);
+                        OString aStr = aTree.finishAndGetAsOString();
+                        rSet.Put(
+                            SfxStringItem( nWhich, OStringToOUString( aStr, RTL_TEXTENCODING_UTF8 ) ) );
+                    }
+                }
                 break;
 
             case SID_ATTR_YEAR2000 :

@@ -113,6 +113,8 @@ public:
 
 class SC_DLLPUBLIC ScTableStyles
 {
+    SfxBindings* mpBindings;
+
 private:
     ScTableStyles(ScTableStyles const&) = delete;
     ScTableStyles(ScTableStyles&&) = delete;
@@ -122,7 +124,7 @@ private:
     std::unordered_map<OUString, std::unique_ptr<ScTableStyle>> maTableStyles;
 
 public:
-    ScTableStyles();
+    ScTableStyles(SfxBindings* pBindings);
 
     void AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle);
     void DeleteTableStyle(const OUString& rName);
