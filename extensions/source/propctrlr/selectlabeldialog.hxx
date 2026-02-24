@@ -26,39 +26,45 @@
 
 namespace pcr
 {
-    // OSelectLabelDialog
-    class OSelectLabelDialog final : public weld::GenericDialogController
+// OSelectLabelDialog
+class OSelectLabelDialog final : public weld::GenericDialogController
+{
+    css::uno::Reference<css::beans::XPropertySet> m_xControlModel;
+    OUString m_sRequiredService;
+    OUString m_aRequiredControlImage;
+    std::unique_ptr<weld::TreeIter> m_xInitialSelection;
+    // the entry data of the listbox entries
+    std::vector<std::unique_ptr<css::uno::Reference<css::beans::XPropertySet>>> m_xUserData;
+    css::uno::Reference<css::beans::XPropertySet> m_xInitialLabelControl;
+
+    css::uno::Reference<css::beans::XPropertySet> m_xSelectedControl;
+    std::unique_ptr<weld::TreeIter> m_xLastSelected;
+    bool m_bLastSelected;
+    bool m_bHaveAssignableControl;
+
+    std::unique_ptr<weld::Label> m_xMainDesc;
+    std::unique_ptr<weld::TreeView> m_xControlTree;
+    std::unique_ptr<weld::TreeIter> m_xScratchIter;
+    std::unique_ptr<weld::CheckButton> m_xNoAssignment;
+
+public:
+    OSelectLabelDialog(weld::Window* pParent,
+                       css::uno::Reference<css::beans::XPropertySet> const& _xControlModel);
+    virtual ~OSelectLabelDialog() override;
+
+    css::uno::Reference<css::beans::XPropertySet> GetSelected() const
     {
-        css::uno::Reference< css::beans::XPropertySet >   m_xControlModel;
-        OUString m_sRequiredService;
-        OUString m_aRequiredControlImage;
-        std::unique_ptr<weld::TreeIter> m_xInitialSelection;
-        // the entry data of the listbox entries
-        std::vector<std::unique_ptr<css::uno::Reference<css::beans::XPropertySet>>> m_xUserData;
-        css::uno::Reference< css::beans::XPropertySet >   m_xInitialLabelControl;
+        return m_xNoAssignment->get_active() ? css::uno::Reference<css::beans::XPropertySet>()
+                                             : m_xSelectedControl;
+    }
 
-        css::uno::Reference< css::beans::XPropertySet >   m_xSelectedControl;
-        std::unique_ptr<weld::TreeIter> m_xLastSelected;
-        bool m_bLastSelected;
-        bool m_bHaveAssignableControl;
+private:
+    sal_Int32 InsertEntries(const css::uno::Reference<css::uno::XInterface>& _xContainer,
+                            const weld::TreeIter& rContainerEntry);
 
-        std::unique_ptr<weld::Label> m_xMainDesc;
-        std::unique_ptr<weld::TreeView> m_xControlTree;
-        std::unique_ptr<weld::TreeIter> m_xScratchIter;
-        std::unique_ptr<weld::CheckButton> m_xNoAssignment;
-
-    public:
-        OSelectLabelDialog(weld::Window* pParent, css::uno::Reference< css::beans::XPropertySet > const & _xControlModel);
-        virtual ~OSelectLabelDialog() override;
-
-        css::uno::Reference< css::beans::XPropertySet >  GetSelected() const { return m_xNoAssignment->get_active() ? css::uno::Reference< css::beans::XPropertySet > () : m_xSelectedControl; }
-
-    private:
-        sal_Int32 InsertEntries(const css::uno::Reference< css::uno::XInterface >& _xContainer, const weld::TreeIter& rContainerEntry);
-
-        DECL_LINK(OnEntrySelected, weld::TreeView&, void);
-        DECL_LINK(OnNoAssignmentClicked, weld::Toggleable&, void);
-    };
-}   // namespace pcr
+    DECL_LINK(OnEntrySelected, weld::TreeView&, void);
+    DECL_LINK(OnNoAssignmentClicked, weld::Toggleable&, void);
+};
+} // namespace pcr
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
