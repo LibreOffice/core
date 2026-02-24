@@ -25,6 +25,7 @@
 
 #include "QtFrame.hxx"
 #include "QtGraphics.hxx"
+#include "QtTools.hxx"
 
 class QtPainter final : public QPainter
 {
