@@ -234,6 +234,49 @@ window.L.Map = window.L.Evented.extend({
 		//Last modified time of document saved state
 		this._lastModDateValue = '';
 
+		// Last part for which Doc_PartChanged was fired
+		this._lastPart = -1;
+		this._lastPartCount = -1;
+		this._lastPartDocType = '';
+		
+		var fireDocPartChanged = function(part, partCount, docType) {
+			var normalizedPart = Number(part);
+			var normalizedPartCount = Number(partCount);
+
+			if (!Number.isInteger(normalizedPart) || !Number.isInteger(normalizedPartCount)) {
+				return;
+			}
+
+			if (normalizedPart !== this._lastPart || normalizedPartCount !== this._lastPartCount || docType !== this._lastPartDocType) {
+				this._lastPart = normalizedPart;
+				this._lastPartCount = normalizedPartCount;
+				this._lastPartDocType = docType;
+				this.fire('postMessage', {msgId: 'Doc_PartChanged', args: { Part: normalizedPart + 1, PartCount: normalizedPartCount, DocType: docType }});
+			}
+		}.bind(this);
+
+		this.on('pagenumberchanged', function(e) {
+			if (!e) {
+				return;
+			}
+
+			fireDocPartChanged(e.currentPage, e.pages, e.docType);
+		}, this);
+
+		this.on('updateparts', function(e) {
+			if (!e) {
+				return;
+			}
+
+			// Fall back to the docLayer's current values so we still emit Doc_PartChanged
+			var docLayer = this._docLayer;
+			var selectedPart = e.selectedPart !== undefined ? e.selectedPart : (docLayer ? docLayer._selectedPart : undefined);
+			var parts = e.parts !== undefined ? e.parts : (docLayer ? docLayer._parts : undefined);
+			var docType = e.docType !== undefined ? e.docType : (docLayer ? docLayer._docType : undefined);
+
+			fireDocPartChanged(selectedPart, parts, docType);
+		}, this);
+
 		this.on('commandstatechanged', function(e) {
 			if (e.commandName === '.uno:ModifiedStatus') {
 				this._everModified = this._everModified || (e.state === 'true');

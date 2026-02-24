@@ -4173,6 +4173,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			if (this._selectedPart !== partToSelect) {
 				this._selectedPart = partToSelect;
 				app.socket.sendMessage('setclientpart part=' + this._selectedPart);
+				// Fire updateparts for postMessage listeners (e.g. Doc_PartChanged)
+				this._map.fire('updateparts', {
+					selectedPart: this._selectedPart,
+					parts: this._parts,
+					docType: this._docType
+				});
 			}
 			this._preview._scrollToPart();
 			this.highlightCurrentPart(partToSelect);
