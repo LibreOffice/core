@@ -26,8 +26,9 @@
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
@@ -61,6 +62,7 @@
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
@@ -726,6 +728,15 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.endElement();
             }
             break;
+
+            case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D:
+            {
+                rWriter.startElement("fillgraphic");
+                runDecomposeAndRecurse(pBasePrimitive, rWriter);
+                rWriter.endElement();
+            }
+            break;
+
             case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D:
             {
                 const auto& rHiddenGeometryPrimitive2D
@@ -845,6 +856,20 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.endElement();
             }
             break;
+
+            case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D:
+            {
+                const auto& rPolyPolygonGraphicPrimitive2D
+                    = static_cast<const PolyPolygonGraphicPrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("polypolygongraphic");
+                rWriter.attribute(
+                    "transparency",
+                    std::lround(100 * rPolyPolygonGraphicPrimitive2D.getTransparency()));
+                runDecomposeAndRecurse(pBasePrimitive, rWriter);
+                rWriter.endElement();
+            }
+            break;
+
             case PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D:
             {
                 const auto& rPolyPolygonStrokePrimitive2D

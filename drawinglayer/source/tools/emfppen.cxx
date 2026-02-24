@@ -178,7 +178,7 @@ namespace emfplushelper
         return drawinglayer::attribute::StrokeAttribute();
     }
 
-    void EMFPPen::Read(SvStream& s, EmfPlusHelperData const & rR)
+    void EMFPPen::Read(SvMemoryStream& s, EmfPlusHelperData const & rR, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_Int32 lineJoin = EmfPlusLineJoinTypeMiter;
         sal_uInt32 graphicsVersion, penType;
@@ -373,7 +373,7 @@ namespace emfplushelper
             customEndCapLen = 0;
         }
 
-        EMFPBrush::Read(s, rR);
+        EMFPBrush::Read(s, rR, dataSize, bUseWholeStream);
     }
 }
 
