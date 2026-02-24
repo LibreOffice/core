@@ -101,6 +101,13 @@ public: // TODO: make data members private
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
     const vcl::font::FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
 
+    void SetVariations(const std::vector<hb_variation_t>& rVariations)
+    {
+        m_aVariations = rVariations;
+        mxVariations.reset();
+    }
+    const std::vector<hb_variation_t>& GetVariations() const;
+
     const vcl::font::PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
     vcl::font::PhysicalFontFace* GetFontFace() { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
@@ -148,6 +155,8 @@ private:
     double m_nAveWidthFactor;
     rtl::Reference<vcl::font::PhysicalFontFace> m_pFontFace;
     std::optional<bool> m_xbIsGraphiteFont;
+    std::vector<hb_variation_t> m_aVariations;
+    mutable std::optional<std::vector<hb_variation_t>> mxVariations;
 
     mutable hb_draw_funcs_t* m_pHbDrawFuncs = nullptr;
     basegfx::B2DPolygon m_aDrawPolygon;

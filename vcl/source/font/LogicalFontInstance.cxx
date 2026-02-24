@@ -60,6 +60,26 @@ LogicalFontInstance::~LogicalFontInstance()
         hb_draw_funcs_destroy(m_pHbDrawFuncs);
 }
 
+const std::vector<hb_variation_t>& LogicalFontInstance::GetVariations() const
+{
+    if (!mxVariations)
+    {
+        mxVariations = GetFontFace()->GetVariations(*this);
+        for (const auto& rVariation : m_aVariations)
+        {
+            auto it = std::find_if(mxVariations->begin(), mxVariations->end(),
+                                   [&rVariation](const hb_variation_t& rOther) {
+                                       return rOther.tag == rVariation.tag;
+                                   });
+            if (it != mxVariations->end())
+                it->value = rVariation.value;
+            else
+                mxVariations->push_back(rVariation);
+        }
+    }
+    return *mxVariations;
+}
+
 hb_font_t* LogicalFontInstance::InitHbFont()
 {
     auto pFace = GetFontFace();
@@ -71,9 +91,9 @@ hb_font_t* LogicalFontInstance::InitHbFont()
     hb_font_set_scale(pHbFont, nUPEM, nUPEM);
     hb_ot_font_set_funcs(pHbFont);
 
-    auto aVariations = pFace->GetVariations(*this);
-    if (!aVariations.empty())
-        hb_font_set_variations(pHbFont, aVariations.data(), aVariations.size());
+    const auto& rVariations = GetVariations();
+    if (!rVariations.empty())
+        hb_font_set_variations(pHbFont, rVariations.data(), rVariations.size());
 
     // If we are applying artificial italic, instruct HarfBuzz to do the same
     // so that mark positioning is also transformed.
