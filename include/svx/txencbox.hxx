@@ -84,6 +84,8 @@ public:
     int get_active() const { return m_xControl->get_active(); }
     void show() { m_xControl->show(); }
     void hide() { m_xControl->hide(); }
+
+    weld::ComboBox& getComboBox() { return *m_xControl; }
 };
 
 class SVX_DLLPUBLIC SvxTextEncodingTreeView
@@ -149,6 +151,8 @@ public:
     {
         m_xControl->set_size_request(nWidth, nHeight);
     }
+
+    weld::TreeView& getTreeView() { return *m_xControl; }
 };
 
 #endif

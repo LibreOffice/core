@@ -135,6 +135,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
         m_xDialog->set_help_id(m_xDialog->get_help_id() + "?config=NonTextImport");
         m_xLbCharset->show();
         m_xTvCharset->hide();
+        m_xFtCharset->set_mnemonic_widget(&m_xLbCharset->getComboBox());
     }
     else
     {
@@ -142,6 +143,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
         m_xEncGrid->set_vexpand(true);
         m_xLbCharset->hide();
         m_xTvCharset->show();
+        m_xFtCharset->set_mnemonic_widget(&m_xTvCharset->getTreeView());
     }
 
     OUString sFieldSep(SCSTR_FIELDSEP);
