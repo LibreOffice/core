@@ -647,7 +647,7 @@ ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
     std::unique_ptr<weld::Widget> xBox = m_xBuilder->weld_widget(u"aboveparaspacingbox"_ustr);
     xBox->set_cargo_text(MakeCustomProperty(SvxResId(RID_ABOVE), u"aboveparaspacing"));
     xBox = m_xBuilder->weld_widget(u"belowparaspacingbox"_ustr);
-    xBox->set_cargo_text(MakeCustomProperty(SvxResId(RID_BELOW), u"beforetextindentbox"));
+    xBox->set_cargo_text(MakeCustomProperty(SvxResId(RID_BELOW), u"beforetextindent"));
     xBox = m_xBuilder->weld_widget(u"beforetextindentbox"_ustr);
     xBox->set_cargo_text(MakeCustomProperty(SvxResId(RID_BEFORE), u"beforetextindent"));
     xBox = m_xBuilder->weld_widget(u"aftertextindentbox"_ustr);
