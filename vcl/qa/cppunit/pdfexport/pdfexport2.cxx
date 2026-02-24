@@ -32,7 +32,6 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
-#include <tools/XmlWalker.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <unotools/streamwrap.hxx>
@@ -75,6 +74,8 @@ void PdfExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("rdf"),
                        BAD_CAST("http://www.w3.org/1999/02/22-rdf-syntax-ns#"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dc"), BAD_CAST("http://purl.org/dc/elements/1.1/"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pdfuaid"),
+                       BAD_CAST("http://www.aiim.org/pdfua/ns/id/"));
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160705)
@@ -1491,51 +1492,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfUaMetadata)
     CPPUNIT_ASSERT(pStreamObject);
     auto& rStream = pStreamObject->GetMemory();
     rStream.Seek(0);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&rStream);
+    CPPUNIT_ASSERT(pXmlDoc);
 
-    // Search for the PDF/UA marker in the metadata
-
-    tools::XmlWalker aWalker;
-    CPPUNIT_ASSERT(aWalker.open(&rStream));
-    CPPUNIT_ASSERT_EQUAL(std::string_view("xmpmeta"), aWalker.name());
-
-    bool bPdfUaMarkerFound = false;
-    OString aPdfUaPart;
-
-    aWalker.children();
-    while (aWalker.isValid())
-    {
-        if (aWalker.name() == "RDF"
-            && aWalker.namespaceHref() == "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-        {
-            aWalker.children();
-            while (aWalker.isValid())
-            {
-                if (aWalker.name() == "Description"
-                    && aWalker.namespaceHref() == "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-                {
-                    aWalker.children();
-                    while (aWalker.isValid())
-                    {
-                        if (aWalker.name() == "part"
-                            && aWalker.namespaceHref() == "http://www.aiim.org/pdfua/ns/id/")
-                        {
-                            aPdfUaPart = aWalker.content();
-                            bPdfUaMarkerFound = true;
-                        }
-                        aWalker.next();
-                    }
-                    aWalker.parent();
-                }
-                aWalker.next();
-            }
-            aWalker.parent();
-        }
-        aWalker.next();
-    }
-    aWalker.parent();
-
-    CPPUNIT_ASSERT(bPdfUaMarkerFound);
-    CPPUNIT_ASSERT_EQUAL("1"_ostr, aPdfUaPart);
+    assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/pdfuaid:part", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf139736)
