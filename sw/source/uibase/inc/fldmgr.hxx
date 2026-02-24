@@ -73,7 +73,6 @@ struct SwInsertField_Data
     SwWrtShell* m_pSh;
     sal_Unicode m_cSeparator;
     bool m_bIsAutomaticLanguage;
-    css::uno::Any m_aDBDataSource;
     css::uno::Any m_aDBConnection;
     css::uno::Any m_aDBColumn;
     weld::Widget* m_pParent; // parent widget used for SwWrtShell::StartInputFieldDlg()

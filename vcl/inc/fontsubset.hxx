@@ -50,7 +50,6 @@ public: // TODO: make subsetter results private and provide accessor methods ins
     int                     m_nCapHeight = 0;
     tools::Rectangle        m_aFontBBox;
     FontType                m_nFontType = FontType::NO_FONT; ///< font-type of subset result
-    bool                    m_bFilled = false;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

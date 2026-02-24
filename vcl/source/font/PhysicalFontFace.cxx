@@ -531,8 +531,6 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
                                              Point(XUnits(nUPEM, xMax), XUnits(nUPEM, yMax)));
     }
 
-    rInfo.m_bFilled = true;
-
     hb_blob_t* pSubsetBlob = nullptr;
     comphelper::ScopeGuard aBuilderBlobGuard([&]() { hb_blob_destroy(pSubsetBlob); });
 

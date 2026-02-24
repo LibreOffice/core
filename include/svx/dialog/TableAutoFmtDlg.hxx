@@ -28,9 +28,7 @@ class SVX_DLLPUBLIC SvxTableAutoFmtDlg : public weld::GenericDialogController
 {
 private:
     // Resource strings
-    OUString maStrTitle;
     OUString maStrLabel;
-    OUString maStrClose;
     OUString maStrDelMsg;
     OUString maStrDelTitle;
     OUString maStrRename;

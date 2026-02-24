@@ -1247,7 +1247,6 @@ bool SwFieldMgr::InsertField(
             if( !(nSubType & SwDBFieldSubType::OwnFormat) ) // determine database format
             {
                 Reference< XDataSource> xSource;
-                rData.m_aDBDataSource >>= xSource;
                 Reference<XConnection> xConnection;
                 rData.m_aDBConnection >>= xConnection;
                 Reference<XPropertySet> xColumn;

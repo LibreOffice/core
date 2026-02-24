@@ -127,7 +127,6 @@ class SVX_DLLPUBLIC SvxTableStylesExport : public SvXMLExport
 {
 private:
     SvxAutoFormat& mpAutoFormat;
-    std::map<OUString, std::unique_ptr<SvxAutoFormatDataField>> maCellStyles;
 
     void exportTableTemplate(const SvxAutoFormatData& rData);
     void exportCellStyle(const SvxAutoFormatDataField& rField, OUString& rStyleName,

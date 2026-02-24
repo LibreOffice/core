@@ -27,8 +27,6 @@ class MDTable
 {
     const SwTable* m_pTable;
     SwMarkdownParser* m_pParser;
-    sal_Int32 m_nRow;
-    sal_Int32 m_nCol;
     sal_Int32 m_nCurRow;
     sal_Int32 m_nCurCol;
 
@@ -36,8 +34,6 @@ public:
     MDTable(SwMarkdownParser* pParser)
         : m_pTable(nullptr)
         , m_pParser(pParser)
-        , m_nRow(-1)
-        , m_nCol(-1)
         , m_nCurRow(-1)
         , m_nCurCol(-1)
     {
@@ -50,17 +46,12 @@ public:
     sal_Int32 GetCurRow() { return m_nCurRow; }
     sal_Int32 GetCurCol() { return m_nCurCol; }
 
-    void SetTable(const SwTable* pTable, sal_Int32 nRow, sal_Int32 nCol);
+    void SetTable(const SwTable* pTable);
     inline void IncCurRow();
     inline void IncCurCol();
 };
 
-void MDTable::SetTable(const SwTable* pTable, sal_Int32 nRow, sal_Int32 nCol)
-{
-    m_pTable = pTable;
-    m_nRow = nRow;
-    m_nCol = nCol;
-}
+void MDTable::SetTable(const SwTable* pTable) { m_pTable = pTable; }
 
 void SwMarkdownParser::StartTable(sal_Int32 nRow, sal_Int32 nCol)
 {
@@ -74,7 +65,7 @@ void SwMarkdownParser::StartTable(sal_Int32 nRow, sal_Int32 nCol)
     const SwTable* pTable
         = m_xDoc->InsertTable(SwInsertTableOptions(SwInsertTableFlags::All, 1), *m_pPam->GetPoint(),
                               nRow, nCol, text::HoriOrientation::FULL);
-    m_xTable->SetTable(pTable, nRow, nCol);
+    m_xTable->SetTable(pTable);
 }
 
 void SwMarkdownParser::EndTable()

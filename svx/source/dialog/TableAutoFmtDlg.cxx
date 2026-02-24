@@ -61,9 +61,7 @@ SvxTableAutoFmtDlg::SvxTableAutoFmtDlg(SvxAutoFormat& rFormat, const OUString& s
                                        weld::Window* pParent, bool bWriter, bool bRTL)
     : weld::GenericDialogController(pParent, u"svx/ui/tableautofmtdlg.ui"_ustr,
                                     u"AutoFormatTableDialog"_ustr)
-    , maStrTitle(SvxResId(RID_SVXSTR_ADD_AUTOFORMAT_TITLE))
     , maStrLabel(SvxResId(RID_SVXSTR_ADD_AUTOFORMAT_LABEL))
-    , maStrClose(SvxResId(RID_SVXSTR_BTN_AUTOFORMAT_CLOSE))
     , maStrDelMsg(SvxResId(RID_SVXSTR_DEL_AUTOFORMAT_MSG))
     , maStrDelTitle(SvxResId(RID_SVXSTR_DEL_AUTOFORMAT_TITLE))
     , maStrRename(SvxResId(RID_SVXSTR_RENAME_AUTOFORMAT_TITLE))

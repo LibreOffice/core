@@ -1884,12 +1884,10 @@
 #define RID_SVXSTR_HEADER                           NC_("RID_SVXSTR_HEADER", "Header")
 
 // strings related to table autoformat styles dialog
-#define RID_SVXSTR_ADD_AUTOFORMAT_TITLE                    NC_("RID_SVXSTR_ADD_AUTOFORMAT_TITLE", "Add AutoFormat" )
 #define RID_SVXSTR_RENAME_AUTOFORMAT_TITLE                 NC_("RID_SVXSTR_RENAME_AUTOFORMAT_TITLE", "Rename AutoFormat" )
 #define RID_SVXSTR_ADD_AUTOFORMAT_LABEL                    NC_("RID_SVXSTR_ADD_AUTOFORMAT_LABEL", "Name" )
 #define RID_SVXSTR_DEL_AUTOFORMAT_TITLE                    NC_("RID_SVXSTR_DEL_AUTOFORMAT_TITLE", "Delete AutoFormat" )
 #define RID_SVXSTR_DEL_AUTOFORMAT_MSG                      NC_("RID_SVXSTR_DEL_AUTOFORMAT_MSG", "Do you want to delete the following AutoFormat?" )
-#define RID_SVXSTR_BTN_AUTOFORMAT_CLOSE                    NC_("RID_SVXSTR_BTN_AUTOFORMAT_CLOSE", "~Close" )
 #define RID_SVXSTR_JAN                                     NC_("RID_SVXSTR_JAN", "Jan" )
 #define RID_SVXSTR_FEB                                     NC_("RID_SVXSTR_FEB", "Feb" )
 #define RID_SVXSTR_MAR                                     NC_("RID_SVXSTR_MAR", "Mar" )
