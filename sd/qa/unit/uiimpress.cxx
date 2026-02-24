@@ -2163,6 +2163,36 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166647_userpaint)
     CPPUNIT_ASSERT_EQUAL(size_t(2), pViewShell->GetActualPage()->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf130586)
+{
+    createSdImpressDoc();
+    checkCurrentPageNumber(1);
+
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    checkCurrentPageNumber(2);
+
+    dispatchCommand(mxComponent, u".uno:AssignLayout?WhatLayout:long=1"_ustr, {});
+    checkCurrentPageNumber(2);
+
+    // Undo x2 (undo layout change, then undo insert slide)
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    checkCurrentPageNumber(2);
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    checkCurrentPageNumber(1);
+
+    // Redo x2 (redo insert slide, then redo layout change)
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    checkCurrentPageNumber(2);
+
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+
+    // Without the fix, this would fail with
+    // - Expected: 2
+    // - Actual  : 1
+    checkCurrentPageNumber(2);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf168835)
 {
     createSdImpressDoc("pptx/tdf168835.pptx");
