@@ -934,8 +934,14 @@ JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMe
                                                    eButtonType);
 
     // SetLOKNotifier() asserts that xMessageDialog has no LOKNotifier already.
-    if (pNotifier && !xMessageDialog->GetLOKNotifier())
-        xMessageDialog->SetLOKNotifier(pNotifier);
+    auto* pExistingNotifier = xMessageDialog->GetLOKNotifier();
+    if (pNotifier)
+    {
+        if (!pExistingNotifier)
+            xMessageDialog->SetLOKNotifier(pNotifier);
+        else if (pExistingNotifier != pNotifier)
+            SAL_WARN("vcl", "A different notifier already exists for the MessageDialog");
+    }
 
     pNotifier = xMessageDialog->GetLOKNotifier();
     if (pNotifier)
