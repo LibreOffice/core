@@ -1632,10 +1632,10 @@ Reference< XShape > const & Shape::createAndInsert(
             = get3DProperties().getShape3DAttributes(rGraphicHelper, nFillPhClr);
         bool bHas3DProps = aCamera3DEffects.hasElements() || aLightRig3DEffects.hasElements()
                            || aShape3DEffects.hasElements();
-        if (bHas3DProps)
+        if (bHas3DProps && getEffectProperties().maSoftEdge.moRad.has_value())
         {
             // 3D properties override softeEdge
-            getEffectProperties().maSoftEdge.moRad = 0;
+            getEffectProperties().maSoftEdge.moRad.reset();
         }
 
         // applying properties
