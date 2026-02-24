@@ -604,6 +604,8 @@ public:
     explicit ParagraphPropertyMap() {}
 };
 
+typedef tools::SvRef< ParagraphPropertyMap > ParagraphPropertyMapPtr;
+
 class TablePropertyMap
     : public PropertyMap
 {
@@ -653,7 +655,7 @@ struct TableParagraph
 {
     rtl::Reference<SwXTextCursor> m_rStartParagraph;
     rtl::Reference<SwXTextCursor> m_rEndParagraph;
-    PropertyMapPtr m_pPropertyMap;
+    ParagraphPropertyMapPtr m_pPropertyMap;
     css::uno::Reference<css::beans::XPropertySet> m_rPropertySet;
 };
 
