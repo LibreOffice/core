@@ -54,8 +54,6 @@ class VCL_PLUGIN_PUBLIC GenericUnixSalData : public SalData
 #endif
 
     SalGenericDisplay* m_pDisplay;
-    // cached hostname to avoid slow lookup
-    OUString m_aHostname;
 
 #ifndef IOS
     std::unique_ptr<FreetypeManager> m_pFreetypeManager;
@@ -72,13 +70,6 @@ public:
 
     SalGenericDisplay* GetDisplay() const { return m_pDisplay; }
     void SetDisplay(SalGenericDisplay* pDisp) { m_pDisplay = pDisp; }
-
-    const OUString& GetHostname()
-    {
-        if (m_aHostname.isEmpty())
-            osl_getLocalHostname(&m_aHostname.pData);
-        return m_aHostname;
-    }
 
 #ifndef IOS
 

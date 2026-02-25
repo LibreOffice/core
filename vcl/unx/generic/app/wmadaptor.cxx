@@ -2144,7 +2144,7 @@ void WMAdaptor::setPID( X11SalFrame const * i_pFrame ) const
 */
 void WMAdaptor::setClientMachine( X11SalFrame const * i_pFrame ) const
 {
-    OString aWmClient( OUStringToOString( GetGenericUnixSalData()->GetHostname(), RTL_TEXTENCODING_ASCII_US ) );
+    OString aWmClient(OUStringToOString(GetX11SalData()->GetHostname(), RTL_TEXTENCODING_ASCII_US));
     XTextProperty aClientProp = { reinterpret_cast<unsigned char *>(const_cast<char *>(aWmClient.getStr())), XA_STRING, 8, sal::static_int_cast<unsigned long>( aWmClient.getLength() ) };
     XSetWMClientMachine( m_pDisplay, i_pFrame->GetShellWindow(), &aClientProp );
 }

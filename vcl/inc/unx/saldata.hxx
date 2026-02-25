@@ -35,6 +35,9 @@ class X11SalData final : public GenericUnixSalData
         XErrorHandler   m_aHandler;
     };
 
+    // cached hostname to avoid slow lookup
+    OUString m_aHostname;
+
     // for transient storage of unicode strings eg. 'u123' by input methods
     OUString m_aUnicodeEntry;
 
@@ -46,6 +49,13 @@ class X11SalData final : public GenericUnixSalData
 public:
     X11SalData();
     virtual ~X11SalData() override;
+
+    const OUString& GetHostname()
+    {
+        if (m_aHostname.isEmpty())
+            osl_getLocalHostname(&m_aHostname.pData);
+        return m_aHostname;
+    }
 
     OUString& GetUnicodeCommand() { return m_aUnicodeEntry; }
 
