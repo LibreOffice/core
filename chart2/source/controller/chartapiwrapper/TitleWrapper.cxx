@@ -38,6 +38,7 @@
 
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <utility>
 
@@ -243,9 +244,15 @@ TitleWrapper::TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
         m_spChart2ModelContact(std::move( spChart2ModelContact )),
         m_eTitleType(eTitleType)
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "TitleWrapper: ChartModel is gone, skip title creation");
+        return;
+    }
+    ControllerLockGuardUNO aCtrlLockGuard( xModel );
     if( !getTitleObject().is() ) //#i83831# create an empty title at the model, thus references to properties can be mapped correctly
-        TitleHelper::createTitle( m_eTitleType, OUString(), m_spChart2ModelContact->getDocumentModel(), m_spChart2ModelContact->m_xContext );
+        TitleHelper::createTitle( m_eTitleType, OUString(), xModel, m_spChart2ModelContact->m_xContext );
 }
 
 TitleWrapper::~TitleWrapper()

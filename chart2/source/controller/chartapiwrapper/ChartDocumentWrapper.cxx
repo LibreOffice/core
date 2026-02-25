@@ -453,7 +453,13 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
 
     try
     {
-        rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *m_spChart2ModelContact->getDocumentModel(), m_spChart2ModelContact->m_xContext,bNewValue );
+        rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+        if( !xModel )
+        {
+            SAL_WARN("chart2", "ChartModel expired, skip operation");
+            return;
+        }
+        rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *xModel, m_spChart2ModelContact->m_xContext,bNewValue );
         if(xLegend.is())
         {
             bool bOldValue = true;
@@ -474,8 +480,14 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
     Any aRet;
     try
     {
+        rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+        if( !xModel )
+        {
+            SAL_WARN("chart2", "ChartModel expired, skip operation");
+            return aRet;
+        }
         rtl::Reference< Legend > xLegend =
-            LegendHelper::getLegend( *m_spChart2ModelContact->getDocumentModel() );
+            LegendHelper::getLegend( *xModel );
         if( xLegend.is())
             aRet = xLegend->getPropertyValue(u"Show"_ustr);
         else
@@ -656,7 +668,13 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getTitle()
 {
     if( !m_xTitle.is()  )
     {
-        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+        rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+        if( !xModel )
+        {
+            SAL_WARN("chart2", "ChartModel expired, skip operation");
+            return m_xTitle;
+        }
+        ControllerLockGuardUNO aCtrlLockGuard( xModel );
         m_xTitle = new TitleWrapper( TitleHelper::MAIN_TITLE, m_spChart2ModelContact );
     }
     return m_xTitle;
@@ -666,7 +684,13 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getSubTitle()
 {
     if( !m_xSubTitle.is() )
     {
-        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+        rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+        if( !xModel )
+        {
+            SAL_WARN("chart2", "ChartModel expired, skip operation");
+            return m_xSubTitle;
+        }
+        ControllerLockGuardUNO aCtrlLockGuard( xModel );
         m_xSubTitle = new TitleWrapper( TitleHelper::SUB_TITLE, m_spChart2ModelContact );
     }
     return m_xSubTitle;
@@ -755,7 +779,13 @@ void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& x
     if( !xNewData.is() )
         return;
 
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "ChartModel expired, skip operation");
+        return;
+    }
+    ControllerLockGuardUNO aCtrlLockGuard( xModel );
     m_xChartData.set( new ChartDataWrapper( m_spChart2ModelContact, xNewData ) );
 }
 
@@ -933,7 +963,13 @@ void ChartDocumentWrapper::impl_resetAddIn()
 
 void ChartDocumentWrapper::setBaseDiagram( const OUString& rBaseDiagram )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "ChartModel expired, skip operation");
+        return;
+    }
+    ControllerLockGuardUNO aCtrlLockGuard( xModel );
     m_aBaseDiagram = rBaseDiagram;
 
     uno::Reference< XDiagram > xDiagram( ChartDocumentWrapper::createInstance( rBaseDiagram ), uno::UNO_QUERY );
@@ -946,7 +982,13 @@ void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAdd
     if( m_xAddIn == xAddIn )
         return;
 
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "ChartModel expired, skip operation");
+        return;
+    }
+    ControllerLockGuardUNO aCtrlLockGuard( xModel );
     impl_resetAddIn();
     m_xAddIn = xAddIn;
     // initialize AddIn with this as chart document
