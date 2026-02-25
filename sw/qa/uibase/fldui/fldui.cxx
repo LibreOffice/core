@@ -20,6 +20,7 @@
 #include <fldmgr.hxx>
 #include <authfld.hxx>
 #include <ndtxt.hxx>
+#include <docufld.hxx>
 
 using namespace com::sun::star;
 
@@ -117,6 +118,27 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmark)
     // i.e. no refmark was created, only the hard to read Type=12 created a refmark.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aAttrs.size());
     CPPUNIT_ASSERT_EQUAL(u"aaabbbccc"_ustr, pTextNode->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf45048SubtypeDescription)
+{
+    // Create an empty document
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    // Insert a filename field containing a specific format
+    SwFieldMgr aFieldMgr(pWrtShell);
+    SwInsertField_Data aFieldData(SwFieldTypesEnum::DocumentStatistics,
+                                  static_cast<sal_uInt32>(SwDocStatSubType::Page), u""_ustr,
+                                  u""_ustr, SVX_NUM_PAGEDESC);
+    CPPUNIT_ASSERT(aFieldMgr.InsertField(aFieldData));
+    pWrtShell->SttEndDoc(true);
+
+    // Without the accompanying fix in place, this test would have failed with :
+    // - Expected: Statistics: Pages
+    // - Actual  : Statistics
+    // i.e. the description of the subtype ("Pages") was not included
+    CPPUNIT_ASSERT_EQUAL(u"Statistics: Pages"_ustr, aFieldMgr.GetCurField()->GetFieldName());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf56126InsertConditionalFieldWithVerticalSeparator)

@@ -48,6 +48,7 @@
 #include <chpfld.hxx>
 #include <flddat.hxx>
 #include <usrfld.hxx>
+#include <fldmgr.hxx>
 
 using namespace ::com::sun::star;
 
@@ -334,6 +335,18 @@ OUString SwField::GetFieldName() const
             (pDateTimeField->GetSubType() & SwDateTimeSubType::Date) ? SwFieldTypesEnum::Date : SwFieldTypesEnum::Time;
     }
     OUString sRet = SwFieldType::GetTypeStr( nTypeId );
+
+    // tdf#45048 - add subtype description for document statistics fields
+    if (nTypeId == SwFieldTypesEnum::DocumentStatistics)
+    {
+        std::vector<OUString> aDocStatSubTypesList;
+        SwFieldMgr().GetSubTypes(SwFieldTypesEnum::DocumentStatistics, aDocStatSubTypesList);
+        const auto nSubType
+            = static_cast<sal_uInt16>(static_cast<const SwDocStatField*>(this)->GetSubType());
+        if (nSubType < aDocStatSubTypesList.size())
+            sRet += ": " + aDocStatSubTypesList[nSubType];
+    }
+
     if (IsFixed())
     {
         sRet += " " + SwViewShell::GetShellRes()->aFixedStr;
