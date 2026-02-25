@@ -1127,7 +1127,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     aExport.SetDelimiter( u'\0' );
 
                     SvMemoryStream aStream;
-                    aStream.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
+                    aStream.SetStreamEncoding( RTL_TEXTENCODING_UNICODE );
                     aStream.ResetEndianSwap();
                     aExport.ExportStream( aStream, OUString(), SotClipboardFormatId::STRING );
 

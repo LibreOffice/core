@@ -444,7 +444,7 @@ void ModulWindow::LoadBasic()
         // tdf#139196 - import macros using either default or utf-8 text encoding
         pStream->StartReadingUnicodeText(RTL_TEXTENCODING_UTF8);
         if (pStream->Tell() == 3)
-            pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+            pStream->SetStreamEncoding(RTL_TEXTENCODING_UTF8);
         GetEditView()->Read( *pStream );
         GetEditEngine()->SetUpdateMode( true );
         GetEditorWindow().PaintImmediately();
@@ -487,7 +487,7 @@ void ModulWindow::SaveBasicSource()
         EnterWait();
         AssertValidEditEngine();
         // tdf#139196 - export macros using utf-8 including BOM
-        pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+        pStream->SetStreamEncoding(RTL_TEXTENCODING_UTF8);
         pStream->WriteUChar(0xEF).WriteUChar(0xBB).WriteUChar(0xBF);
         GetEditEngine()->Write( *pStream );
         aMedium.Commit();

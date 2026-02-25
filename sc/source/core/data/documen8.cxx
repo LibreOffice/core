@@ -765,7 +765,7 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
     sal_uInt16 nCount(0);
     rStream.ReadUInt16( nCount );
 
-    const rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
+    const rtl_TextEncoding eCharSet = rStream.GetStreamEncoding();
     const size_t nMinStringSize = eCharSet == RTL_TEXTENCODING_UNICODE ? sizeof(sal_uInt32) : sizeof(sal_uInt16);
     const size_t nMinRecordSize = 1 + nMinStringSize*3;
     const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;

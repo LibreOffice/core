@@ -297,7 +297,7 @@ void SwEditShell::ApplyAutoMark()
         Push();
         // tdf#106899 - import tox concordance file using the appropriate character set
         rStrm.DetectEncoding();
-        rtl_TextEncoding eChrSet = rStrm.GetStreamCharSet();
+        rtl_TextEncoding eChrSet = rStrm.GetStreamEncoding();
         if (eChrSet == RTL_TEXTENCODING_DONTKNOW)
             eChrSet = ::osl_getThreadTextEncoding();
 

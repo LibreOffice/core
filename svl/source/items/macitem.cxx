@@ -97,7 +97,7 @@ void SvxMacroTableDtor::Read( SvStream& rStrm )
 
     auto nMacro = o3tl::make_unsigned(nReadMacro);
 
-    const size_t nMinStringSize = rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE ? 4 : 2;
+    const size_t nMinStringSize = rStrm.GetStreamEncoding() == RTL_TEXTENCODING_UNICODE ? 4 : 2;
     size_t nMinRecordSize = 2 + 2*nMinStringSize;
     if( SVX_MACROTBL_VERSION40 <= nVersion )
         nMinRecordSize+=2;

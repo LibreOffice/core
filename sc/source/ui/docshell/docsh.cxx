@@ -1380,7 +1380,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 SvStream* pInStream = rMedium.GetInStream();
                 if (pInStream)
                 {
-                    pInStream->SetStreamCharSet( aOptions.GetCharSet() );
+                    pInStream->SetStreamEncoding( aOptions.GetCharSet() );
                     pInStream->Seek( 0 );
                     bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL(), SotClipboardFormatId::STRING );
                     eError = bRet ? ERRCODE_NONE : SCERR_IMPORT_CONNECT;
@@ -2025,8 +2025,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
     bool bShowFormulas    = rAsciiOpt.bSaveFormulas;
     bool bIncludeBOM      = rAsciiOpt.bIncludeBOM;
 
-    rtl_TextEncoding eOldCharSet = rStream.GetStreamCharSet();
-    rStream.SetStreamCharSet( eCharSet );
+    rtl_TextEncoding eOldCharSet = rStream.GetStreamEncoding();
+    rStream.SetStreamEncoding( eCharSet );
     SvStreamEndian nOldNumberFormatInt = rStream.GetEndian();
     OString aStrDelimEncoded;    // only used if not Unicode
     OUString aStrDelimDecoded;     // only used if context encoding
@@ -2430,7 +2430,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
         endlub( rStream );
     }
 
-    rStream.SetStreamCharSet( eOldCharSet );
+    rStream.SetStreamEncoding( eOldCharSet );
     rStream.SetEndian( nOldNumberFormatInt );
 }
 

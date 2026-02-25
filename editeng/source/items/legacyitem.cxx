@@ -140,7 +140,7 @@ namespace legacy
             if ( nDoLoad & LOAD_LINK )
             {
                 // UNICODE: rStrm >> aRel;
-                OUString aRel = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
+                OUString aRel = rStrm.ReadUniOrByteString(rStrm.GetStreamEncoding());
 
                 // TODO/MBA: how can we get a BaseURL here?!
                 OSL_FAIL("No BaseURL!");
@@ -152,7 +152,7 @@ namespace legacy
             if ( nDoLoad & LOAD_FILTER )
             {
                 // UNICODE: rStrm >> maStrFilter;
-                rItem.SetGraphicFilter(rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet()));
+                rItem.SetGraphicFilter(rStrm.ReadUniOrByteString(rStrm.GetStreamEncoding()));
             }
 
             rStrm.ReadSChar( nPos );
@@ -189,12 +189,12 @@ namespace legacy
                 // TODO/MBA: how to get a BaseURL?!
                 OUString aRel = INetURLObject::GetRelURL( u"", rItem.GetGraphicLink() );
                 // UNICODE: rStrm << aRel;
-                rStrm.WriteUniOrByteString(aRel, rStrm.GetStreamCharSet());
+                rStrm.WriteUniOrByteString(aRel, rStrm.GetStreamEncoding());
             }
             if ( !rItem.GetGraphicFilter().isEmpty() )
             {
                 // UNICODE: rStrm << rItem.GetGraphicFilter();
-                rStrm.WriteUniOrByteString(rItem.GetGraphicFilter(), rStrm.GetStreamCharSet());
+                rStrm.WriteUniOrByteString(rItem.GetGraphicFilter(), rStrm.GetStreamEncoding());
             }
             rStrm.WriteSChar( rItem.GetGraphicPos() );
             return rStrm;

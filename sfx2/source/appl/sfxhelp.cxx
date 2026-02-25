@@ -897,7 +897,7 @@ static bool impl_showOfflineHelp(const OUString& rURL, weld::Widget* pDialogPare
     ::utl::TempFileNamed aTempFile(u"NewHelp", true, aExtension, parent, false );
 
     SvStream* pStream = aTempFile.GetStream(StreamMode::WRITE);
-    pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+    pStream->SetStreamEncoding(RTL_TEXTENCODING_UTF8);
 
     OUString aTempStr = SHTML1 + SHTML2 +
         aBaseInstallPath + "/" + HelpLocaleString() + SHTML3 +

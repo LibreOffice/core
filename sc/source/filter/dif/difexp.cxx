@@ -54,9 +54,9 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument& rDoc,
     OSL_ENSURE( rRange.aStart.Tab() == rRange.aEnd.Tab(),
         "ScExportDif(): only one table please!" );
 
-    const rtl_TextEncoding eStreamCharSet = rOut.GetStreamCharSet();
+    const rtl_TextEncoding eStreamCharSet = rOut.GetStreamEncoding();
     if ( eStreamCharSet != eCharSet )
-        rOut.SetStreamCharSet( eCharSet );
+        rOut.SetStreamEncoding( eCharSet );
 
     sal_Unicode cStrDelim('"');
     OString aStrDelimEncoded;    // only used if not Unicode
@@ -253,7 +253,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument& rDoc,
     aOS.setLength(0);
 
     // restore original value
-    rOut.SetStreamCharSet( eStreamCharSet );
+    rOut.SetStreamEncoding( eStreamCharSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

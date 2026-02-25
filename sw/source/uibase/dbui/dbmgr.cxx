@@ -1000,7 +1000,7 @@ static rtl::Reference<SwMailMessage> lcl_CreateMailFromDoc(
         if( !pInStream )
             return pMessage;
 
-        pInStream->SetStreamCharSet( sMailEncoding );
+        pInStream->SetStreamEncoding( sMailEncoding );
         OStringBuffer sLine;
         while ( pInStream->ReadLine( sLine ) )
         {

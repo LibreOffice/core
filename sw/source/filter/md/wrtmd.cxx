@@ -1019,7 +1019,7 @@ ErrCode SwMDWriter::WriteStream()
 {
     CollectFlys();
 
-    Strm().SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+    Strm().SetStreamEncoding(RTL_TEXTENCODING_UTF8);
     if (m_bShowProgress)
         ::StartProgress(STR_STATSTR_W4WWRITE, 0, sal_Int32(m_pDoc->GetNodes().Count()),
                         m_pDoc->GetDocShell());

@@ -1051,7 +1051,7 @@ void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterO
     if (aCharSet == aDetect)
     {
         stream.DetectEncoding();
-        eCharSet = stream.GetStreamCharSet();
+        eCharSet = stream.GetStreamEncoding();
     }
     else if (!aCharSet.empty())
         eCharSet = o3tl::toInt32(aCharSet);

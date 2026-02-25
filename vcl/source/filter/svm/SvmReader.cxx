@@ -47,7 +47,7 @@ public:
         , m_eOrigCharSet(m_rData.meActualCharSet)
     {
         ++m_rData.mnParseDepth;
-        m_rData.meActualCharSet = rIStm.GetStreamCharSet();
+        m_rData.meActualCharSet = rIStm.GetStreamEncoding();
     }
     bool TooDeep() const { return m_rData.mnParseDepth > 1024; }
     ~DepthGuard()

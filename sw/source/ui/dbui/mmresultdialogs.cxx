@@ -1209,7 +1209,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
                 SfxMedium aMedium( aName.GetValue(),    StreamMode::READ);
                 SvStream* pInStream = aMedium.GetInStream();
                 if(pInStream)
-                    pInStream->SetStreamCharSet( eEncoding );
+                    pInStream->SetStreamEncoding( eEncoding );
                 else
                 {
                     OSL_FAIL("no output file created?");

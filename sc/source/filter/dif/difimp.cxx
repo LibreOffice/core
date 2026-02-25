@@ -221,10 +221,10 @@ DifParser::DifParser( SvStream& rNewIn, const ScDocument& rDoc, rtl_TextEncoding
     , pNumFormatter(rDoc.GetFormatTable())
     , rIn(rNewIn)
 {
-    if ( rIn.GetStreamCharSet() != eCharSet )
+    if ( rIn.GetStreamEncoding() != eCharSet )
     {
         OSL_FAIL( "CharSet passed overrides and modifies StreamCharSet" );
-        rIn.SetStreamCharSet( eCharSet );
+        rIn.SetStreamEncoding( eCharSet );
     }
     rIn.StartReadingUnicodeText( eCharSet );
 }
@@ -396,7 +396,7 @@ bool DifParser::ReadNextLine( OUString& rStr )
 {
     if( aLookAheadLine.isEmpty() )
     {
-        return rIn.ReadUniOrByteStringLine( rStr, rIn.GetStreamCharSet() );
+        return rIn.ReadUniOrByteStringLine( rStr, rIn.GetStreamEncoding() );
     }
     else
     {
@@ -414,7 +414,7 @@ bool DifParser::LookAhead()
     bool bValidStructure = false;
 
     OSL_ENSURE( aLookAheadLine.isEmpty(), "*DifParser::LookAhead(): LookAhead called twice in a row" );
-    rIn.ReadUniOrByteStringLine( aLookAheadLine, rIn.GetStreamCharSet() );
+    rIn.ReadUniOrByteStringLine( aLookAheadLine, rIn.GetStreamEncoding() );
 
     pCurrentBuffer = aLookAheadLine.getStr();
 

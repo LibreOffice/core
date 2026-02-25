@@ -81,7 +81,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const char* pExtString 
         if( pExtString )
         {
             OString s = OString::Concat("QPRO_") + pExtString;
-            nPush = aPool.Store(eOc, OStringToOUString(s, maIn.GetStreamCharSet()));
+            nPush = aPool.Store(eOc, OStringToOUString(s, maIn.GetStreamEncoding()));
             aPool << nPush;
         }
         else
@@ -247,7 +247,7 @@ ConvErr QProToSc::Convert( const ScDocument& rDoc, std::unique_ptr<ScTokenArray>
             }
             if( nFmla[ i ] == 0x06 )
             {
-                OUString aTmp(::read_zeroTerminated_uInt8s_ToOUString(maIn, maIn.GetStreamCharSet()));
+                OUString aTmp(::read_zeroTerminated_uInt8s_ToOUString(maIn, maIn.GetStreamEncoding()));
                 sStringArray[ nStringCount ] = aTmp;
                 nStringCount++;
                 SAFEDEC_OR_RET(nRef, aTmp.getLength() + 1, ConvErr::Count);

@@ -225,7 +225,7 @@ SwSrcView::~SwSrcView()
 void SwSrcView::SaveContentTo(SfxMedium& rMed)
 {
     SvStream* pOutStream = rMed.GetOutStream();
-    pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(m_eLoadEncoding));
+    pOutStream->SetStreamEncoding(lcl_GetStreamCharSet(m_eLoadEncoding));
     m_aEditWin->Write( *pOutStream );
 }
 
@@ -257,7 +257,7 @@ void SwSrcView::SaveContent(const OUString& rTmpFile)
 {
     SfxMedium aMedium( rTmpFile, StreamMode::WRITE);
     SvStream* pOutStream = aMedium.GetOutStream();
-    pOutStream->SetStreamCharSet( lcl_GetStreamCharSet(m_eLoadEncoding) );
+    pOutStream->SetStreamEncoding( lcl_GetStreamCharSet(m_eLoadEncoding) );
     m_aEditWin->Write(*pOutStream);
     aMedium.Commit();
 }
@@ -301,7 +301,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 SfxMedium aMedium( xFP->getSelectedFiles().getConstArray()[0],
                                     StreamMode::WRITE | StreamMode::SHARE_DENYNONE );
                 SvStream* pOutStream = aMedium.GetOutStream();
-                pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(m_eLoadEncoding));
+                pOutStream->SetStreamEncoding(lcl_GetStreamCharSet(m_eLoadEncoding));
                 m_aEditWin->Write( *pOutStream );
                 aMedium.Commit();
             }
@@ -326,7 +326,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 SvStream* pOutStream = pMed->GetOutStream();
                 pOutStream->Seek(0);
                 pOutStream->SetStreamSize(0);
-                pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(m_eLoadEncoding));
+                pOutStream->SetStreamEncoding(lcl_GetStreamCharSet(m_eLoadEncoding));
                 m_aEditWin->Write( *pOutStream );
                 pMed->CloseOutStream();
                 pMed->Commit();
@@ -783,7 +783,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
                 eDestEnc = eHeaderEnc;
                 m_aEditWin->SetTextEncoding(eDestEnc);
             }
-            pStream->SetStreamCharSet( eDestEnc );
+            pStream->SetStreamEncoding( eDestEnc );
             pStream->Seek(0);
             TextEngine* pTextEngine = m_aEditWin->GetTextEngine();
             pTextEngine->EnableUndo(false);
@@ -821,7 +821,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             aMedium.Commit();
             SvStream* pInStream = aMedium.GetInStream();
             pInStream->Seek(0);
-            pInStream->SetStreamCharSet( eDestEnc );
+            pInStream->SetStreamEncoding( eDestEnc );
 
             m_aEditWin->Read(*pInStream);
         }

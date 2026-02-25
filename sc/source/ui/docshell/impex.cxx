@@ -285,7 +285,7 @@ bool ScImportExport::ExportData( std::u16string_view rMimeType,
     SvMemoryStream aStrm;
     SotClipboardFormatId fmtId = SotExchange::GetFormatIdFromMimeType(rMimeType);
     if (fmtId == SotClipboardFormatId::STRING)
-        aStrm.SetStreamCharSet(RTL_TEXTENCODING_UNICODE);
+        aStrm.SetStreamEncoding(RTL_TEXTENCODING_UNICODE);
     // mba: no BaseURL for data exchange
     if (ExportStream(aStrm, OUString(), fmtId))
     {
@@ -323,7 +323,7 @@ bool ScImportExport::ImportString( const OUString& rText, SotClipboardFormatId n
             rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
             OString aTmp( rText.getStr(), rText.getLength(), eEnc );
             SvMemoryStream aStrm( const_cast<char *>(aTmp.getStr()), aTmp.getLength() * sizeof(char), StreamMode::READ );
-            aStrm.SetStreamCharSet( eEnc );
+            aStrm.SetStreamEncoding( eEnc );
             aStrm.ResetEndianSwap(); //! no swapping in memory
             return ImportStream( aStrm, OUString(), nFmt );
         }
@@ -344,7 +344,7 @@ bool ScImportExport::ExportString( OUString& rText, SotClipboardFormatId nFmt )
     //  nSizeLimit not needed for OUString
 
     SvMemoryStream aStrm;
-    aStrm.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
+    aStrm.SetStreamEncoding( RTL_TEXTENCODING_UNICODE );
     aStrm.ResetEndianSwap(); //! no swapping in memory
     // mba: no BaseURL for data exc
     if( ExportStream( aStrm, OUString(), nFmt ) )
@@ -369,7 +369,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, So
         nSizeLimit = SAL_MAX_UINT16;
 
     SvMemoryStream aStrm;
-    aStrm.SetStreamCharSet( eEnc );
+    aStrm.SetStreamEncoding( eEnc );
     aStrm.ResetEndianSwap(); //! no swapping in memory
     // mba: no BaseURL for data exchange
     if( ExportStream( aStrm, OUString(), nFmt ) )
@@ -910,7 +910,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nEndRow = aRange.aEnd.Row();
     sal_uInt64 nOldPos = rStrm.Tell();
-    rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
+    rStrm.StartReadingUnicodeText( rStrm.GetStreamEncoding() );
     bool   bData = !bSingle;
     if( !bSingle)
         bOk = StartPaste();
@@ -923,7 +923,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
         rStrm.Seek( nOldPos );
         for( ;; )
         {
-            rStrm.ReadUniOrByteStringLine( aLine, rStrm.GetStreamCharSet(), nArbitraryLineLengthLimit );
+            rStrm.ReadUniOrByteStringLine( aLine, rStrm.GetStreamEncoding(), nArbitraryLineLengthLimit );
             // tdf#125440 When inserting tab separated string, consider quotes as field markers
             DoubledQuoteMode mode = aLine.indexOf("\t") >= 0 ? DoubledQuoteMode::ESCAPE : DoubledQuoteMode::KEEP_ALL;
             if( rStrm.eof() )
@@ -1504,7 +1504,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     sal_uInt64 const nRemaining = rStrm.remainingSize();
     std::unique_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
             ScResId( STR_LOAD_DOC ), nRemaining, true ));
-    rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
+    rStrm.StartReadingUnicodeText( rStrm.GetStreamEncoding() );
     // tdf#82254 - check whether to include a byte-order-mark in the output
     if (nOldPos != rStrm.Tell())
         mbIncludeBOM = true;
@@ -2062,7 +2062,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
         {
             //! allow unicode
             (void)rStrm.ReadLine( aByteLine );
-            aLine = OStringToOUString(aByteLine, rStrm.GetStreamCharSet());
+            aLine = OStringToOUString(aByteLine, rStrm.GetStreamEncoding());
             if( rStrm.eof() )
                 break;
             bool bInvalidCol = false;
@@ -2688,7 +2688,7 @@ ScImportStringStream::ScImportStringStream( const OUString& rStr )
     : SvMemoryStream( const_cast<sal_Unicode *>(rStr.getStr()),
             rStr.getLength() * sizeof(sal_Unicode), StreamMode::READ)
 {
-    SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
+    SetStreamEncoding( RTL_TEXTENCODING_UNICODE );
     ResetEndianSwap();
 }
 
@@ -2714,7 +2714,7 @@ Label_RetryWithNewSep:
     }
 
     OUString aStr;
-    rStream.ReadUniOrByteStringLine(aStr, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
+    rStream.ReadUniOrByteStringLine(aStr, rStream.GetStreamEncoding(), nArbitraryLineLengthLimit);
 
     if (bEmbeddedLineBreak)
     {
@@ -2832,7 +2832,7 @@ Label_RetryWithNewSep:
             {
                 nLastOffset = aStr.getLength();
                 OUString aNext;
-                rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
+                rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamEncoding(), nArbitraryLineLengthLimit);
                 if (!rStream.eof())
                     aStr += "\n" + aNext;
             }

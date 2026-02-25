@@ -160,7 +160,7 @@ ScQProReader::ScQProReader(SvStream* pStream)
     if( mpStream )
     {
         mpStream->SetBufferSize( 65535 );
-        mpStream->SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
+        mpStream->SetStreamEncoding( RTL_TEXTENCODING_MS_1252 );
     }
 }
 
@@ -314,7 +314,7 @@ bool ScQProReader::nextRecord()
 
 OUString ScQProReader::readString(sal_uInt16 nLength)
 {
-    return read_uInt8s_ToOUString(*mpStream, nLength, mpStream->GetStreamCharSet());
+    return read_uInt8s_ToOUString(*mpStream, nLength, mpStream->GetStreamEncoding());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

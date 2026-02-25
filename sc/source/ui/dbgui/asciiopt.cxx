@@ -125,7 +125,7 @@ void ScAsciiOptions::ReadFromString( std::u16string_view rString, SvStream* pStr
         if ( bDetectCharSet && pStream4Detect )
         {
             pStream4Detect->DetectEncoding();
-            eCharSet = pStream4Detect->GetStreamCharSet();
+            eCharSet = pStream4Detect->GetStreamEncoding();
         }
         else if (!bDetectCharSet)
             eCharSet = ScGlobal::GetCharsetValue( aToken );

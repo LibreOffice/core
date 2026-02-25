@@ -59,7 +59,7 @@ SvStream& SvmWriter::Write(const GDIMetaFile& rMetaFile)
 
     ImplMetaWriteData aWriteData;
 
-    aWriteData.meActualCharSet = mrStream.GetStreamCharSet();
+    aWriteData.meActualCharSet = mrStream.GetStreamEncoding();
 
     MetaAction* pAct = const_cast<GDIMetaFile&>(rMetaFile).FirstAction();
     while (pAct)
@@ -82,7 +82,7 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
     BitmapChecksumOctetArray aBCOA;
     BitmapChecksum nCrc = 0;
 
-    aWriteData.meActualCharSet = aMemStm.GetStreamCharSet();
+    aWriteData.meActualCharSet = aMemStm.GetStreamEncoding();
 
     for (size_t i = 0, nObjCount = rMetaFile.GetActionSize(); i < nObjCount; i++)
     {

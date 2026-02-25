@@ -99,7 +99,7 @@ void ScScreenshotTest::initialize()
     mpFact = ScAbstractDialogFactory::Create();
 
     SvMemoryStream* pNewMemStream = new SvMemoryStream(const_cast<sal_Unicode *>(mCsv.getStr()), mCsv.getLength() * sizeof(sal_Unicode), StreamMode::READ);
-    pNewMemStream->SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
+    pNewMemStream->SetStreamEncoding( RTL_TEXTENCODING_UNICODE );
     pNewMemStream->ResetEndianSwap();
     mpStream.reset(pNewMemStream);
 }

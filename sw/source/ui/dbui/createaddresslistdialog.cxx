@@ -259,7 +259,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
         if(pStream)
         {
             pStream->SetLineDelimiter( LINEEND_LF );
-            pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+            pStream->SetStreamEncoding(RTL_TEXTENCODING_UTF8);
 
             OUString sLine;
             bool bRead = pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
@@ -445,7 +445,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, weld::Button&, void)
     SfxMedium aMedium( m_sURL, StreamMode::READWRITE|StreamMode::TRUNC );
     SvStream* pStream = aMedium.GetOutStream();
     pStream->SetLineDelimiter( LINEEND_LF );
-    pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+    pStream->SetStreamEncoding(RTL_TEXTENCODING_UTF8);
 
     lcl_WriteValues(&(m_pCSVData->aDBColumnHeaders), pStream);
 

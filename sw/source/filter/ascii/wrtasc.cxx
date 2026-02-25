@@ -121,8 +121,8 @@ ErrCode SwASCWriter::WriteStream()
         (RTL_TEXTENCODING_UCS2 == GetAsciiOptions().GetCharSet() ||
         RTL_TEXTENCODING_UTF8 == GetAsciiOptions().GetCharSet());
 
-    rtl_TextEncoding eOld = Strm().GetStreamCharSet();
-    Strm().SetStreamCharSet( GetAsciiOptions().GetCharSet() );
+    rtl_TextEncoding eOld = Strm().GetStreamEncoding();
+    Strm().SetStreamEncoding( GetAsciiOptions().GetCharSet() );
 
     // Output all areas of the pam into the ASC file
     do {
@@ -205,7 +205,7 @@ ErrCode SwASCWriter::WriteStream()
         }
     } while( CopyNextPam( &pPam ) ); // Until all pams are processed
 
-    Strm().SetStreamCharSet( eOld );
+    Strm().SetStreamEncoding( eOld );
 
     if( m_bShowProgress )
         ::EndProgress( m_pDoc->GetDocShell() );

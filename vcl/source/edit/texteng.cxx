@@ -2415,12 +2415,12 @@ bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
 
     OStringBuffer aLine;
     bool bDone = rInput.ReadLine( aLine );
-    OUString aTmpStr(OStringToOUString(aLine, rInput.GetStreamCharSet()));
+    OUString aTmpStr(OStringToOUString(aLine, rInput.GetStreamEncoding()));
     while ( bDone )
     {
         aSel = ImpInsertText( aSel, aTmpStr );
         bDone = rInput.ReadLine( aLine );
-        aTmpStr = OStringToOUString(aLine, rInput.GetStreamCharSet());
+        aTmpStr = OStringToOUString(aLine, rInput.GetStreamEncoding());
         if ( bDone )
             aSel = ImpInsertParaBreak( aSel.GetEnd() );
     }
@@ -2457,7 +2457,7 @@ void TextEngine::Write( SvStream& rOutput )
             ? aSel.GetEnd().GetIndex() : pNode->GetText().getLength();
 
         const OUString aText = pNode->GetText().copy( nStartPos, nEndPos-nStartPos );
-        rOutput.WriteLine(OUStringToOString(aText, rOutput.GetStreamCharSet()));
+        rOutput.WriteLine(OUStringToOString(aText, rOutput.GetStreamEncoding()));
     }
 }
 

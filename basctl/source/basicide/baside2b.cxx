@@ -127,7 +127,7 @@ std::u16string_view const cSuffixes = u"%&!#@$";
 OUString getTextEngineText (ExtTextEngine& rEngine)
 {
     SvMemoryStream aMemStream;
-    aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
+    aMemStream.SetStreamEncoding( RTL_TEXTENCODING_UTF8 );
     aMemStream.SetLineDelimiter( LINEEND_LF );
     rEngine.Write( aMemStream );
     std::size_t nSize = aMemStream.Tell();
@@ -142,7 +142,7 @@ void setTextEngineText (ExtTextEngine& rEngine, std::u16string_view aStr)
     OString aUTF8Str = OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
     SvMemoryStream aMemStream( const_cast<char *>(aUTF8Str.getStr()), aUTF8Str.getLength(),
         StreamMode::READ );
-    aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
+    aMemStream.SetStreamEncoding( RTL_TEXTENCODING_UTF8 );
     aMemStream.SetLineDelimiter( LINEEND_LF );
     rEngine.Read(aMemStream);
 }

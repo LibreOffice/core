@@ -4007,7 +4007,7 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
     AutoMarkEntry* pToInsert = nullptr;
     // tdf#108910, tdf#125496 - read index entries using the appropriate character set
     rInStr.DetectEncoding();
-    rtl_TextEncoding eTEnc = rInStr.GetStreamCharSet();
+    rtl_TextEncoding eTEnc = rInStr.GetStreamEncoding();
     if (eTEnc == RTL_TEXTENCODING_DONTKNOW)
         eTEnc = osl_getThreadTextEncoding();
     while (rInStr.good())
@@ -4157,7 +4157,7 @@ IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl, weld::Button&, void)
                                     : StreamMode::WRITE| StreamMode::TRUNC );
         SvStream* pStrm = aMed.GetOutStream();
         // tdf#108910, tdf#125496 - write index entries using the utf8 text encoding
-        pStrm->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
+        pStrm->SetStreamEncoding( RTL_TEXTENCODING_UTF8 );
         if( !pStrm->GetError() )
         {
             m_xEntriesBB->WriteEntries( *pStrm );

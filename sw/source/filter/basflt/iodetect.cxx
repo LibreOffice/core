@@ -245,7 +245,7 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
 {
     SvMemoryStream aStream(const_cast<char*>(pBuf), rLen, StreamMode::READ);
     aStream.DetectEncoding();
-    rtl_TextEncoding eCharSet = aStream.GetStreamCharSet();
+    rtl_TextEncoding eCharSet = aStream.GetStreamEncoding();
     auto nBomSize = aStream.Tell();
     pBuf += nBomSize;
     rLen -= nBomSize;

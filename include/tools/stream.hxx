@@ -159,7 +159,7 @@ private:
     ErrCode         m_nError;
     SvStreamCompressFlags m_nCompressMode;
     LineEnd         m_eLineDelimiter;
-    rtl_TextEncoding m_eStreamCharSet;
+    rtl_TextEncoding m_eStreamEncoding;
 
     // Encryption
     OString m_aCryptMaskKey;// aCryptMaskKey.getLength != 0  -> Encryption used
@@ -214,9 +214,8 @@ public:
 
     void SetCryptMaskKey(const OString& rCryptMaskKey);
 
-    void            SetStreamCharSet( rtl_TextEncoding eCharSet )
-                        { m_eStreamCharSet = eCharSet; }
-    rtl_TextEncoding GetStreamCharSet() const { return m_eStreamCharSet; }
+    void SetStreamEncoding(rtl_TextEncoding eEncoding) { m_eStreamEncoding = eEncoding; }
+    rtl_TextEncoding GetStreamEncoding() const { return m_eStreamEncoding; }
 
     void            SetLineDelimiter( LineEnd eLineEnd )
                         { m_eLineDelimiter = eLineEnd; }
@@ -308,26 +307,26 @@ public:
               @endcode
               causing endless loops ...
     */
-    bool            ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
+    bool            ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcEncoding,
                                         sal_Int32 nMaxBytesToRead = 0xFFFE );
-    bool            WriteByteStringLine( std::u16string_view rStr, rtl_TextEncoding eDestCharSet );
+    bool            WriteByteStringLine( std::u16string_view rStr, rtl_TextEncoding eDestEncoding );
 
     /// Switch to no endian swapping and write 0xfeff
     void            StartWritingUnicodeText();
 
-    /** If eReadBomCharSet==RTL_TEXTENCODING_DONTKNOW: read 16bit, if 0xfeff do
+    /** If eReadBomEncoding==RTL_TEXTENCODING_DONTKNOW: read 16bit, if 0xfeff do
         nothing (UTF-16), if 0xfffe switch endian swapping (UTF-16), if 0xefbb
         or 0xbbef read another byte and check for UTF-8. If no UTF-* BOM was
         detected put all read bytes back. This means that if 2 bytes were read
         it was an UTF-16 BOM, if 3 bytes were read it was an UTF-8 BOM. There
         is no UTF-7, UTF-32 or UTF-EBCDIC BOM detection!
 
-        If eReadBomCharSet!=RTL_TEXTENCODING_DONTKNOW: only read a BOM of that
+        If eReadBomEncoding!=RTL_TEXTENCODING_DONTKNOW: only read a BOM of that
         encoding and switch endian swapping if UTF-16 and 0xfffe. */
-    void            StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
+    void StartReadingUnicodeText(rtl_TextEncoding eReadBomEncoding);
 
     /** Try StartWritingUnicodeText; if failed, use ICU to detect encoding from data.
-        After the function, the position is after BOM (if any); GetStreamCharSet
+        After the function, the position is after BOM (if any); GetStreamEncoding
         returns the detected encoding; GetEndian returns the detected endianness
         (for UTF-16). */
     void DetectEncoding();
@@ -340,16 +339,16 @@ public:
     */
     SAL_DLLPRIVATE bool ReadUniStringLine(OUString& rStr, sal_Int32 nMaxCodepointsToRead);
     /** Read a 32bit length prefixed sequence of utf-16 if
-        eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise read a 16bit length
-        prefixed sequence of bytes and convert from eSrcCharSet */
-    OUString        ReadUniOrByteString(rtl_TextEncoding eSrcCharSet);
+        eSrcEncoding==RTL_TEXTENCODING_UNICODE, otherwise read a 16bit length
+        prefixed sequence of bytes and convert from eSrcEncoding */
+    OUString ReadUniOrByteString(rtl_TextEncoding eSrcEncoding);
     /** Write a 32bit length prefixed sequence of utf-16 if
-        eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise convert to eSrcCharSet
+        eDestEncoding==RTL_TEXTENCODING_UNICODE, otherwise convert to eDestEncoding
         and write a 16bit length prefixed sequence of bytes */
-    SvStream&       WriteUniOrByteString( std::u16string_view rStr, rtl_TextEncoding eDestCharSet );
+    SvStream& WriteUniOrByteString(std::u16string_view rStr, rtl_TextEncoding eDestEncoding);
 
-    /** Read a line of Unicode if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
-        otherwise read a line of Bytecode and convert from eSrcCharSet
+    /** Read a line of Unicode if eSrcEncoding==RTL_TEXTENCODING_UNICODE,
+        otherwise read a line of Bytecode and convert from eSrcEncoding
 
         @param nMaxCodepointsToRead
                    Maximum of codepoints (2 bytes if Unicode, bytes if not
@@ -363,23 +362,23 @@ public:
               @endcode
               causing endless loops ...
     */
-    bool            ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
+    bool            ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcEncoding,
                                              sal_Int32 nMaxCodepointsToRead = 0xFFFE );
     /** Write a sequence of Unicode characters if
-        eDestCharSet==RTL_TEXTENCODING_UNICODE, otherwise write a sequence of
-        Bytecodes converted to eDestCharSet. Write trailing zero, if bZero is true. */
-    bool            WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding eDestCharSet, bool bZero = false);
+        eDestEncoding==RTL_TEXTENCODING_UNICODE, otherwise write a sequence of
+        Bytecodes converted to eDestEncoding. Write trailing zero, if bZero is true. */
+    bool            WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding eDestEncoding, bool bZero = false);
     bool            WriteUnicodeOrByteText(std::u16string_view rStr)
-                    { return WriteUnicodeOrByteText(rStr, GetStreamCharSet(), /*bZero*/false); }
+                    { return WriteUnicodeOrByteText(rStr, GetStreamEncoding(), /*bZero*/false); }
 
-    /** Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
-        otherwise write as Bytecode converted to eDestCharSet.
+    /** Write a Unicode character if eDestEncoding==RTL_TEXTENCODING_UNICODE,
+        otherwise write as Bytecode converted to eDestEncoding.
 
         This may result in more than one byte being written if a multi byte
         encoding (e.g. UTF7, UTF8) is chosen. */
-    bool            WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet );
+    bool            WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestEncoding );
     bool            WriteUniOrByteChar( sal_Unicode ch )
-                    { return WriteUniOrByteChar( ch, GetStreamCharSet() ); }
+                    { return WriteUniOrByteChar( ch, GetStreamEncoding() ); }
 
     void            SetBufferSize( sal_uInt16 m_nBufSize );
     sal_uInt16      GetBufferSize() const { return m_nBufSize; }
@@ -441,7 +440,7 @@ inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
 TOOLS_DLLPUBLIC SvStream& endl( SvStream& rStr );
 /// same as endl() but Unicode
 TOOLS_DLLPUBLIC SvStream& endlu( SvStream& rStr );
-/// call endlu() if m_eStreamCharSet==RTL_TEXTECODING_UNICODE otherwise endl()
+/// call endlu() if m_eStreamEncoding==RTL_TEXTECODING_UNICODE otherwise endl()
 TOOLS_DLLPUBLIC SvStream& endlub( SvStream& rStr );
 
 /// Attempt to read nUnits 8bit units to an OString, returned OString's
