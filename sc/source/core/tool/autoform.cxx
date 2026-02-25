@@ -214,13 +214,13 @@ bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
     if( 0 == rVersions.nNumFormatVersion )
     {
         // --- from 680/dr25 on: store strings as UTF-8
-        rtl_TextEncoding eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
+        rtl_TextEncoding eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamEncoding();
         aNumFormat.Load( rStream, eCharSet );
     }
 
     //  adjust charset in font
     rtl_TextEncoding eSysSet = osl_getThreadTextEncoding();
-    rtl_TextEncoding eSrcSet = rStream.GetStreamCharSet();
+    rtl_TextEncoding eSrcSet = rStream.GetStreamEncoding();
     if( eSrcSet != eSysSet && m_aFont->GetCharSet() == eSrcSet )
         m_aFont->SetCharSet(eSysSet);
 
@@ -604,7 +604,7 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
                 RTL_TEXTENCODING_UTF8);
         }
         else
-            aName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
+            aName = rStream.ReadUniOrByteString( rStream.GetStreamEncoding() );
 
         if( AUTOFORMAT_DATA_ID_552 <= nVer )
         {
@@ -852,7 +852,7 @@ void ScAutoFormat::Load()
                     OSL_FAIL( "header contains more/newer data" );
                     rStream.Seek( nPos + nCnt );
                 }
-                rStream.SetStreamCharSet( GetSOLoadTextEncoding( nChrSet ) );
+                rStream.SetStreamEncoding( GetSOLoadTextEncoding( nChrSet ) );
                 rStream.SetVersion( SOFFICE_FILEFORMAT_40 );
             }
 

@@ -255,7 +255,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
 
             rtl_TextEncoding aStreamEncoding = RTL_TEXTENCODING_UTF8;
             if( nSystem == JOBSET_FILE364_SYSTEM )
-                aStreamEncoding = rIStream.GetStreamCharSet();
+                aStreamEncoding = rIStream.GetStreamEncoding();
 
             ImplJobSetup& rJobData = rJobSetup.ImplGetData();
 

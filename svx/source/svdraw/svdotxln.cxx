@@ -216,7 +216,7 @@ bool SdrTextObj::LoadText(const OUString& rFileName, rtl_TextEncoding eCharSet)
 
     if( pIStm )
     {
-        pIStm->SetStreamCharSet(GetSOLoadTextEncoding(eCharSet));
+        pIStm->SetStreamEncoding(GetSOLoadTextEncoding(eCharSet));
 
         char cRTF[5];
         cRTF[4] = 0;

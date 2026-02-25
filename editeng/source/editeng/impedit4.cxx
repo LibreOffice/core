@@ -134,12 +134,12 @@ EditPaM ImpEditEngine::ReadText( SvStream& rInput, EditSelection aSel )
     EditPaM aPaM = aSel.Max();
 
     OUString aTmpStr;
-    bool bDone = rInput.ReadByteStringLine( aTmpStr, rInput.GetStreamCharSet() );
+    bool bDone = rInput.ReadByteStringLine( aTmpStr, rInput.GetStreamEncoding() );
     while ( bDone )
     {
         aPaM = ImpInsertText( EditSelection( aPaM, aPaM ), aTmpStr );
         aPaM = ImpInsertParaBreak( aPaM );
-        bDone = rInput.ReadByteStringLine( aTmpStr, rInput.GetStreamCharSet() );
+        bDone = rInput.ReadByteStringLine( aTmpStr, rInput.GetStreamEncoding() );
     }
     return aPaM;
 }

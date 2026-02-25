@@ -277,7 +277,7 @@ namespace svt
             // #116281# Keep office installation relocatable. Never store
             // any direct references to office installation directory.
             sURL = m_xOfficeInstDirs->makeRelocatableURL( sURL );
-            m_rStorage.WriteUniOrByteString( sURL, m_rStorage.GetStreamCharSet() );
+            m_rStorage.WriteUniOrByteString( sURL, m_rStorage.GetStreamEncoding() );
         }
     };
 
@@ -355,7 +355,7 @@ namespace svt
             // initialize them with their (local) names
             while ( nChildren-- )
             {
-                OUString sURL = m_rStorage.ReadUniOrByteString(m_rStorage.GetStreamCharSet());
+                OUString sURL = m_rStorage.ReadUniOrByteString(m_rStorage.GetStreamEncoding());
                 sURL = m_xOfficeInstDirs->makeAbsoluteURL( sURL );
                 rChildren.push_back( new TemplateContent( INetURLObject( sURL ) ) );
             }
@@ -670,7 +670,7 @@ namespace svt
         m_aPreviousState.reserve( nRootDirectories );
         while ( nRootDirectories-- )
         {
-            OUString sURL = m_pCacheStream->ReadUniOrByteString(m_pCacheStream->GetStreamCharSet());
+            OUString sURL = m_pCacheStream->ReadUniOrByteString(m_pCacheStream->GetStreamEncoding());
             // #116281# Keep office installation relocatable. Never store
             // any direct references to office installation directory.
             sURL = getOfficeInstDirs()->makeAbsoluteURL( sURL );
@@ -721,7 +721,7 @@ namespace svt
         }
 
         if ( m_pCacheStream )
-            m_pCacheStream->SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
+            m_pCacheStream->SetStreamEncoding( RTL_TEXTENCODING_UTF8 );
 
         return nullptr != m_pCacheStream;
     }

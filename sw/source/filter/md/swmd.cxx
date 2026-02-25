@@ -842,7 +842,7 @@ ErrCode SwMarkdownParser::CallParser()
 {
     // use utf8
     m_rInput.DetectEncoding();
-    const rtl_TextEncoding eSrcEnc = m_rInput.GetStreamCharSet();
+    const rtl_TextEncoding eSrcEnc = m_rInput.GetStreamEncoding();
     if (eSrcEnc == RTL_TEXTENCODING_DONTKNOW)
     {
         return ERRCODE_IO_INVALIDCHAR;

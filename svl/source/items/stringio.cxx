@@ -23,12 +23,12 @@
 
 OUString readByteString(SvStream& rStream)
 {
-    return rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
+    return rStream.ReadUniOrByteString(rStream.GetStreamEncoding());
 }
 
 void writeByteString(SvStream& rStream, std::u16string_view rString)
 {
-    rStream.WriteUniOrByteString(rString, rStream.GetStreamCharSet());
+    rStream.WriteUniOrByteString(rString, rStream.GetStreamEncoding());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

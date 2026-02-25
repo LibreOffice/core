@@ -233,7 +233,7 @@ INetMIMEMessageStream::INetMIMEMessageStream(
     nChildIndex(0)
 {
     assert(pMsg != nullptr);
-    maMsgBuffer.SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);
+    maMsgBuffer.SetStreamEncoding(RTL_TEXTENCODING_ASCII_US);
     pRead = pWrite = mvBuffer.data();
 }
 

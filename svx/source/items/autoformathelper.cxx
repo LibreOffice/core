@@ -266,7 +266,7 @@ bool AutoFormatBase::LoadBlockA( SvStream& rStream, const AutoFormatVersions& rV
 {
     legacy::SvxFont::Create(*m_aFont, rStream, rVersions.nFontVersion);
 
-    if( rStream.GetStreamCharSet() == m_aFont->GetCharSet() )
+    if( rStream.GetStreamEncoding() == m_aFont->GetCharSet() )
     {
         m_aFont->SetCharSet(::osl_getThreadTextEncoding());
     }

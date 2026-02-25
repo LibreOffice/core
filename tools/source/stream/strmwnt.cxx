@@ -95,7 +95,7 @@ static ErrCode GetSvError( DWORD nWntError )
 SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nMode, std::optional<rtl_TextEncoding> oStreamEncoding )
 {
     if (oStreamEncoding)
-        SetStreamCharSet(*oStreamEncoding);
+        SetStreamEncoding(*oStreamEncoding);
     bIsOpen             = false;
     nLockCounter        = 0;
     m_isWritable        = false;

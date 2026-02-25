@@ -83,7 +83,7 @@ ScDdeLink::ScDdeLink( ScDocument& rD, SvStream& rStream, ScMultipleReadHeader& r
 {
     rHdr.StartEntry();
 
-    rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
+    rtl_TextEncoding eCharSet = rStream.GetStreamEncoding();
     aAppl = rStream.ReadUniOrByteString( eCharSet );
     aTopic = rStream.ReadUniOrByteString( eCharSet );
     aItem = rStream.ReadUniOrByteString( eCharSet );
@@ -105,7 +105,7 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 {
     rHdr.StartEntry();
 
-    rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
+    rtl_TextEncoding eCharSet = rStream.GetStreamEncoding();
     rStream.WriteUniOrByteString( aAppl, eCharSet );
     rStream.WriteUniOrByteString( aTopic, eCharSet );
     rStream.WriteUniOrByteString( aItem, eCharSet );

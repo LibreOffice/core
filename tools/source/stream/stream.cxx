@@ -288,7 +288,7 @@ SvStream::SvStream() :
 #else
    , m_eLineDelimiter(LINEEND_CRLF) // DOS-Format
 #endif
-   , m_eStreamCharSet(osl_getThreadTextEncoding())
+   , m_eStreamEncoding(osl_getThreadTextEncoding())
 
    , m_nCryptMask(0)
 
@@ -389,12 +389,12 @@ void SvStream::ResetError()
     ClearError();
 }
 
-bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
+bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcEncoding,
                                        sal_Int32 nMaxBytesToRead )
 {
     OStringBuffer aStr;
     bool bRet = ReadLine( aStr, nMaxBytesToRead);
-    rStr = OStringToOUString(aStr, eSrcCharSet);
+    rStr = OStringToOUString(aStr, eSrcEncoding);
     return bRet;
 }
 
@@ -565,13 +565,13 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
     return bEnd;
 }
 
-bool SvStream::ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
+bool SvStream::ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcEncoding,
                                             sal_Int32 nMaxCodepointsToRead )
 {
-    if ( eSrcCharSet == RTL_TEXTENCODING_UNICODE )
+    if (eSrcEncoding == RTL_TEXTENCODING_UNICODE)
         return ReadUniStringLine( rStr, nMaxCodepointsToRead );
     else
-        return ReadByteStringLine( rStr, eSrcCharSet, nMaxCodepointsToRead );
+        return ReadByteStringLine(rStr, eSrcEncoding, nMaxCodepointsToRead);
 }
 
 OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
@@ -645,9 +645,9 @@ static std::size_t write_uInt16s_FromOUString(SvStream& rStrm, std::u16string_vi
     return nWritten;
 }
 
-bool SvStream::WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding eDestCharSet, bool bZero)
+bool SvStream::WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding eDestEncoding, bool bZero)
 {
-    if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
+    if (eDestEncoding == RTL_TEXTENCODING_UNICODE)
     {
         write_uInt16s_FromOUString(*this, rStr, rStr.size());
         if (bZero)
@@ -655,7 +655,7 @@ bool SvStream::WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding
     }
     else
     {
-        OString aStr(OUStringToOString(rStr, eDestCharSet));
+        OString aStr(OUStringToOString(rStr, eDestEncoding));
         WriteBytes(aStr.getStr(), aStr.getLength());
         if (bZero)
             WriteChar(0);
@@ -665,7 +665,7 @@ bool SvStream::WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding
 
 bool SvStream::WriteByteStringLine( std::u16string_view rStr )
 {
-    return WriteLine(OUStringToOString(rStr, GetStreamCharSet()));
+    return WriteLine(OUStringToOString(rStr, GetStreamEncoding()));
 }
 
 bool SvStream::WriteLine(std::string_view rStr)
@@ -675,13 +675,13 @@ bool SvStream::WriteLine(std::string_view rStr)
     return m_nError == ERRCODE_NONE;
 }
 
-bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet )
+bool SvStream::WriteUniOrByteChar(sal_Unicode ch, rtl_TextEncoding eDestEncoding)
 {
-    if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
+    if (eDestEncoding == RTL_TEXTENCODING_UNICODE)
         WriteUnicode(ch);
     else
     {
-        OString aStr(&ch, 1, eDestCharSet);
+        OString aStr(&ch, 1, eDestEncoding);
         WriteBytes(aStr.getStr(), aStr.getLength());
     }
     return m_nError == ERRCODE_NONE;
@@ -696,11 +696,11 @@ void SvStream::StartWritingUnicodeText()
     WriteUInt16(0xfeff);
 }
 
-void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
+void SvStream::StartReadingUnicodeText(rtl_TextEncoding eReadBomEncoding)
 {
-    if (!(  eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
-            eReadBomCharSet == RTL_TEXTENCODING_UNICODE ||
-            eReadBomCharSet == RTL_TEXTENCODING_UTF8))
+    if (!(  eReadBomEncoding == RTL_TEXTENCODING_DONTKNOW ||
+            eReadBomEncoding == RTL_TEXTENCODING_UNICODE ||
+            eReadBomEncoding == RTL_TEXTENCODING_UTF8))
         return;    // nothing to read
 
     const sal_uInt64 nOldPos = Tell();
@@ -710,8 +710,8 @@ void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
     switch ( nFlag )
     {
         case 0xfe: // UTF-16BE?
-            if (    eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
-                    eReadBomCharSet == RTL_TEXTENCODING_UNICODE)
+            if (    eReadBomEncoding == RTL_TEXTENCODING_DONTKNOW ||
+                    eReadBomEncoding == RTL_TEXTENCODING_UNICODE)
             {
                 ReadUChar(nFlag);
                 if (nFlag == 0xff)
@@ -722,8 +722,8 @@ void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
             }
         break;
         case 0xff: // UTF-16LE?
-            if (    eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
-                    eReadBomCharSet == RTL_TEXTENCODING_UNICODE)
+            if (    eReadBomEncoding == RTL_TEXTENCODING_DONTKNOW ||
+                    eReadBomEncoding == RTL_TEXTENCODING_UNICODE)
             {
                 ReadUChar(nFlag);
                 if (nFlag == 0xfe)
@@ -734,8 +734,8 @@ void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
             }
         break;
         case 0xef: // UTF-8?
-            if (    eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
-                    eReadBomCharSet == RTL_TEXTENCODING_UTF8)
+            if (    eReadBomEncoding == RTL_TEXTENCODING_DONTKNOW ||
+                    eReadBomEncoding == RTL_TEXTENCODING_UTF8)
             {
                 ReadUChar(nFlag);
                 if (nFlag == 0xbb)
@@ -788,7 +788,7 @@ void SvStream::DetectEncoding()
         });
 
     const sal_uInt64 nOrigPos = Tell();
-    SetStreamCharSet(RTL_TEXTENCODING_DONTKNOW);
+    SetStreamEncoding(RTL_TEXTENCODING_DONTKNOW);
     StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
     if (!good())
         return;
@@ -796,12 +796,12 @@ void SvStream::DetectEncoding()
     const sal_uInt64 nBomSize = Tell() - nOrigPos;
     if (nBomSize == 2)
     {
-        SetStreamCharSet(RTL_TEXTENCODING_UCS2);
+        SetStreamEncoding(RTL_TEXTENCODING_UCS2);
         return;
     }
     if (nBomSize == 3)
     {
-        SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+        SetStreamEncoding(RTL_TEXTENCODING_UTF8);
         return;
     }
 
@@ -837,7 +837,7 @@ void SvStream::DetectEncoding()
         return;
 
     rtl_TextEncoding eEncoding = it->second;
-    SetStreamCharSet(eEncoding);
+    SetStreamEncoding(eEncoding);
     if (eEncoding == RTL_TEXTENCODING_UCS2)
     {
         if (it->first == "UTF-16LE")
@@ -1138,21 +1138,21 @@ sal_uInt64 SvStream::WriteStream( SvStream& rStream, sal_uInt64 nSize )
     return nSize - nWriteSize;
 }
 
-OUString SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
+OUString SvStream::ReadUniOrByteString(rtl_TextEncoding eSrcEncoding)
 {
     // read UTF-16 string directly from stream ?
-    if (eSrcCharSet == RTL_TEXTENCODING_UNICODE)
+    if (eSrcEncoding == RTL_TEXTENCODING_UNICODE)
         return read_uInt32_lenPrefixed_uInt16s_ToOUString(*this);
-    return read_uInt16_lenPrefixed_uInt8s_ToOUString(*this, eSrcCharSet);
+    return read_uInt16_lenPrefixed_uInt8s_ToOUString(*this, eSrcEncoding);
 }
 
-SvStream& SvStream::WriteUniOrByteString( std::u16string_view rStr, rtl_TextEncoding eDestCharSet )
+SvStream& SvStream::WriteUniOrByteString(std::u16string_view rStr, rtl_TextEncoding eDestEncoding)
 {
     // write UTF-16 string directly into stream ?
-    if (eDestCharSet == RTL_TEXTENCODING_UNICODE)
+    if (eDestEncoding == RTL_TEXTENCODING_UNICODE)
         write_uInt32_lenPrefixed_uInt16s_FromOUString(*this, rStr);
     else
-        write_uInt16_lenPrefixed_uInt8s_FromOUString(*this, rStr, eDestCharSet);
+        write_uInt16_lenPrefixed_uInt8s_FromOUString(*this, rStr, eDestEncoding);
     return *this;
 }
 
@@ -1550,7 +1550,7 @@ SvStream& endlu( SvStream& rStrm )
 
 SvStream& endlub( SvStream& rStrm )
 {
-    if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
+    if (rStrm.GetStreamEncoding() == RTL_TEXTENCODING_UNICODE)
         return endlu( rStrm );
     else
         return endl( rStrm );
