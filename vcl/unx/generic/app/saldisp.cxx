@@ -536,14 +536,14 @@ void SalX11Display::Init()
 
 void SalX11Display::SetupInput()
 {
-    GetGenericUnixSalData()->ErrorTrapPush();
+    GetX11SalData()->ErrorTrapPush();
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp_ );
     XSync( pDisp_, False );
 
-    bool bError = GetGenericUnixSalData()->ErrorTrapPop( false );
-    GetGenericUnixSalData()->ErrorTrapPush();
+    bool bError = GetX11SalData()->ErrorTrapPop(false);
+    GetX11SalData()->ErrorTrapPush();
     pKbdExtension->UseExtension( ! bError );
-    GetGenericUnixSalData()->ErrorTrapPop();
+    GetX11SalData()->ErrorTrapPop();
 
     SetKbdExtension( pKbdExtension );
 }

@@ -30,6 +30,7 @@
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
 
+#include <unx/saldata.hxx>
 #include <unx/salinst.h>
 #include <unx/saldisp.hxx>
 #include <unx/salobj.h>
@@ -123,7 +124,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                 << static_cast<unsigned int>
                 (aVisID));
 #endif
-        GetGenericUnixSalData()->ErrorTrapPush();
+        GetX11SalData()->ErrorTrapPush();
 
         // create colormap for visual - there might not be one
         pObject->maColormap = aAttribs.colormap = XCreateColormap(
@@ -141,7 +142,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                            pVisual,
                            CWEventMask|CWColormap, &aAttribs );
         XSync( pDisp, False );
-        if( GetGenericUnixSalData()->ErrorTrapPop( false ) )
+        if (GetX11SalData()->ErrorTrapPop(false))
         {
             pObject->maSecondary = None;
             delete pObject;
@@ -150,7 +151,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
         XReparentWindow( pDisp, pObject->maSecondary, pObject->maPrimary, 0, 0 );
     }
 
-    GetGenericUnixSalData()->ErrorTrapPush();
+    GetX11SalData()->ErrorTrapPush();
     if( bShow ) {
         XMapWindow( pDisp, pObject->maSecondary );
         XMapWindow( pDisp, pObject->maPrimary );
@@ -162,7 +163,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     rObjData.pVisual       = pVisual;
 
     XSync(pDisp, False);
-    if( GetGenericUnixSalData()->ErrorTrapPop( false ) )
+    if (GetX11SalData()->ErrorTrapPop(false))
     {
         delete pObject;
         return nullptr;
@@ -240,7 +241,7 @@ X11SalObject::~X11SalObject()
     std::list<SalObject*>& rObjects = vcl_sal::getSalDisplay()->getSalObjects();
     rObjects.remove( this );
 
-    GetGenericUnixSalData()->ErrorTrapPush();
+    GetX11SalData()->ErrorTrapPush();
     ::Window aObjectParent = maParentWin;
     XSetWindowBackgroundPixmap(static_cast<Display*>(maSystemChildData.pDisplay), aObjectParent, None);
     if ( maSecondary )
@@ -250,7 +251,7 @@ X11SalObject::~X11SalObject()
     if ( maColormap )
         XFreeColormap(static_cast<Display*>(maSystemChildData.pDisplay), maColormap);
     XSync( static_cast<Display*>(maSystemChildData.pDisplay), False );
-    GetGenericUnixSalData()->ErrorTrapPop();
+    GetX11SalData()->ErrorTrapPop();
 }
 
 void

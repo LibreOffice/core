@@ -531,7 +531,7 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
 {
     getDisplay()->registerFrame( this );
     // permanently ignore errors from our unruly children ...
-    GetGenericUnixSalData()->ErrorTrapPush();
+    GetGtkSalData()->ErrorTrapPush();
     m_bDefaultPos       = true;
     m_bDefaultSize      = true;
     Init( pSysData );
@@ -5541,13 +5541,13 @@ void GtkSalFrame::IMHandler::createIMContext()
     g_signal_connect( m_pIMContext, "preedit_end",
                       G_CALLBACK (signalIMPreeditEnd), this );
 
-    GetGenericUnixSalData()->ErrorTrapPush();
+    GetGtkSalData()->ErrorTrapPush();
     im_context_set_client_widget(m_pIMContext, m_pFrame->getMouseEventWidget());
 #if GTK_CHECK_VERSION(4, 0, 0)
     gtk_event_controller_key_set_im_context(m_pFrame->m_pKeyController, m_pIMContext);
 #endif
     gtk_im_context_focus_in( m_pIMContext );
-    GetGenericUnixSalData()->ErrorTrapPop();
+    GetGtkSalData()->ErrorTrapPop();
     m_bFocused = true;
 
 }
@@ -5558,12 +5558,12 @@ void GtkSalFrame::IMHandler::deleteIMContext()
         return;
 
     // first give IC a chance to deinitialize
-    GetGenericUnixSalData()->ErrorTrapPush();
+    GetGtkSalData()->ErrorTrapPush();
 #if GTK_CHECK_VERSION(4, 0, 0)
     gtk_event_controller_key_set_im_context(m_pFrame->m_pKeyController, nullptr);
 #endif
     im_context_set_client_widget(m_pIMContext, nullptr);
-    GetGenericUnixSalData()->ErrorTrapPop();
+    GetGtkSalData()->ErrorTrapPop();
     // destroy old IC
     g_object_unref( m_pIMContext );
     m_pIMContext = nullptr;
@@ -5584,9 +5584,9 @@ void GtkSalFrame::IMHandler::updateIMSpotLocation()
     aArea.y = aPosEvent.mnY;
     aArea.width = aPosEvent.mnWidth;
     aArea.height = aPosEvent.mnHeight;
-    GetGenericUnixSalData()->ErrorTrapPush();
+    GetGtkSalData()->ErrorTrapPush();
     gtk_im_context_set_cursor_location( m_pIMContext, &aArea );
-    GetGenericUnixSalData()->ErrorTrapPop();
+    GetGtkSalData()->ErrorTrapPop();
 }
 
 void GtkSalFrame::IMHandler::sendEmptyCommit()
@@ -5630,9 +5630,9 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
     m_bFocused = bFocusIn;
     if( bFocusIn )
     {
-        GetGenericUnixSalData()->ErrorTrapPush();
+        GetGtkSalData()->ErrorTrapPush();
         gtk_im_context_focus_in( m_pIMContext );
-        GetGenericUnixSalData()->ErrorTrapPop();
+        GetGtkSalData()->ErrorTrapPop();
         if( m_aInputEvent.mpTextAttr )
         {
             sendEmptyCommit();
@@ -5642,9 +5642,9 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
     }
     else
     {
-        GetGenericUnixSalData()->ErrorTrapPush();
+        GetGtkSalData()->ErrorTrapPush();
         gtk_im_context_focus_out( m_pIMContext );
-        GetGenericUnixSalData()->ErrorTrapPop();
+        GetGtkSalData()->ErrorTrapPop();
         // cancel an eventual event posted to begin preedit again
         GtkSalFrame::getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput );
     }

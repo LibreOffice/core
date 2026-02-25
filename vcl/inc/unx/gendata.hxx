@@ -103,12 +103,6 @@ public:
     }
 
 #endif
-
-    // Mostly useful for remote protocol backends
-    virtual void ErrorTrapPush(){};
-
-    // true on error
-    virtual bool ErrorTrapPop(bool /* bIgnoreError */ = true) { return false; };
 };
 
 inline GenericUnixSalData* GetGenericUnixSalData()

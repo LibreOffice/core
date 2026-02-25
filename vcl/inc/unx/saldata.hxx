@@ -52,8 +52,9 @@ public:
     static void             Timeout();
 
     // X errors
-    virtual void            ErrorTrapPush() override;
-    virtual bool            ErrorTrapPop( bool bIgnoreError = true ) override;
+    void ErrorTrapPush();
+    // true on error
+    bool ErrorTrapPop(bool bIgnoreError = true);
     void                    XError( Display *pDisp, XErrorEvent *pEvent );
     bool                    HasXErrorOccurred() const
                                 { return m_aXErrorHandlerStack.back().m_bWas; }
