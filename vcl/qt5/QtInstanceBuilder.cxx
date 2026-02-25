@@ -356,6 +356,7 @@ constexpr auto SUPPORTED_WITH_QT_PARENT = frozen::make_unordered_set<std::u16str
     u"modules/spropctrlr/ui/browserpage.ui",
     u"modules/spropctrlr/ui/colorlistbox.ui",
     u"modules/spropctrlr/ui/combobox.ui",
+    u"modules/spropctrlr/ui/datefield.ui",
     u"modules/spropctrlr/ui/formproperties.ui",
     u"modules/spropctrlr/ui/listbox.ui",
     u"modules/spropctrlr/ui/multiline.ui",
