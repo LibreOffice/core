@@ -191,7 +191,11 @@ void UnoApiTest::validate(TestFilter eFilter)
     utl::TempFileNamed aOutput;
     aOutput.EnableKillingFile();
     OUString aOutputFile = aOutput.GetFileName();
-    OUString aCommand = aValidator + " " + maTempFile.GetFileName() + " > " + aOutputFile + " 2>&1";
+    OUString aCommand = aValidator + " " + maTempFile.GetFileName() + " > " + aOutputFile;
+    if (var != "VERAPDF")
+    {
+        aCommand += " 2>&1";
+    }
 
 #if !defined _WIN32
     // For now, this is only needed by some Linux ASan builds, so keep it simply and disable it on
