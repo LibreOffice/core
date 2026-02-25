@@ -37,6 +37,7 @@
 #include <tools/gen.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/event.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/qt/QtUtils.hxx>
 #include <vcl/vclenum.hxx>
 
@@ -173,6 +174,8 @@ Image toImage(const QImage& rImage);
 QFont toQtFont(const vcl::Font& rVclFont);
 
 bool toVclFont(const QFont& rQFont, const css::lang::Locale& rLocale, vcl::Font& rVclFont);
+
+const QCursor& toQCursor(PointerStyle ePointerStyle);
 
 QMessageBox::Icon vclMessageTypeToQtIcon(VclMessageType eType);
 QString vclMessageTypeToQtTitle(VclMessageType eType);

@@ -799,7 +799,7 @@ void QtFrame::SetPointer(PointerStyle ePointerStyle)
             return;
         m_ePointerStyle = ePointerStyle;
 
-        m_pQWidget->setCursor(GetQtData()->getCursor(ePointerStyle));
+        m_pQWidget->setCursor(toQCursor(ePointerStyle));
     });
 }
 

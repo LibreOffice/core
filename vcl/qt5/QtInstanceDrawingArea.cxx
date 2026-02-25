@@ -59,8 +59,7 @@ void QtInstanceDrawingArea::enable_drag_source(rtl::Reference<TransferDataContai
 void QtInstanceDrawingArea::set_cursor(PointerStyle ePointerStyle)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread(
-        [&] { getQWidget()->setCursor(GetQtData()->getCursor(ePointerStyle)); });
+    GetQtInstance().RunInMainThread([&] { getQWidget()->setCursor(toQCursor(ePointerStyle)); });
 }
 
 Point QtInstanceDrawingArea::get_pointer_position() const
