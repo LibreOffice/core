@@ -32,6 +32,7 @@
 #include <sfx2/strings.hrc>
 #include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
+#include <tools/hostfilter.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdograf.hxx>
 #include <svl/stritem.hxx>
@@ -775,7 +776,15 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
         aBaseURL = mpDoc->GetDocSh()->GetMedium()->GetBaseURL();
 
     if( !aStr.isEmpty() && aURL.GetProtocol() == INetProtocol::NotValid )
-        aURL = INetURLObject( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl() ) );
+    {
+        INetURLObject aResult( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aStr, URIHelper::GetMaybeFileHdl() ) );
+
+        OUString sCandidate = aResult.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        if (!HostFilter::isFileUrlForbidden(sCandidate))
+            aURL = aResult;
+        else
+            SAL_WARN( "sd", "SdTPAction::FillItemSet: blocked display of local file: \"" << sCandidate << "\"");
+    }
 
     // get adjusted file name
     aStr = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
