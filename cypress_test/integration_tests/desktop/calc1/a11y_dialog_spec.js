@@ -131,7 +131,7 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         } else if (buggyCalcDialogs.includes(command)) {
             it.skip(`Dialog ${command} (buggy)`, function () {});
         } else {
-            it.skip(`Common Dialog ${command}`, function () {
+            it(`Common Dialog ${command}`, function () {
                 if (!hasLinguisticData && a11yHelper.needsLinguisticData(command)) {
                     this._runnable.title += ' (skipped: missing linguistic data)';
                     this.skip();
@@ -268,7 +268,7 @@ describe(['tagdesktop'], 'Accessibility Calc Dialog Tests', { testIsolation: fal
         a11yHelper.handleDialog(win, 1, '', true);
     });
 
-    it.skip('PDF export warning dialog', function () {
+    it('PDF export warning dialog', function () {
         a11yHelper.testPDFExportWarningDialog(win);
     });
 

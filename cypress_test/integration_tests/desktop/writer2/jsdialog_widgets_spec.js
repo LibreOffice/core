@@ -23,35 +23,35 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog widgets visual te
 		});
 	});
 
-	it.skip('Combobox', function() {
+	it('Combobox', function() {
 		cy.cGet('#combo_box_enable').compareSnapshot('combobox_enable', 0.1);
 		cy.cGet('#combo_box_disable').compareSnapshot('combobox_disable', 0.1);
 	});
 
-	it.skip('Edit field', function() {
+	it('Edit field', function() {
 		cy.cGet('#entry_box_1').compareSnapshot('edit_enabled', 0.1);
 		cy.cGet('#entry_box_2').compareSnapshot('edit_disabled', 0.1);
 	});
 
-	it.skip('Checkbox', function() {
+	it('Checkbox', function() {
 		cy.cGet('#check_btn_1').compareSnapshot('checkbox_checked', 0.1);
 		cy.cGet('#check_btn_2').compareSnapshot('checkbox', 0.1);
 		cy.cGet('#check_btn_3').compareSnapshot('checkbox_disabled_checked', 0.1);
 		cy.cGet('#check_btn_4').compareSnapshot('checkbox_disabled', 0.1);
 	});
 
-	it.skip('Radio button', function() {
+	it('Radio button', function() {
 		cy.cGet('#radio_btn_1').compareSnapshot('radio_checked', 0.1);
 		cy.cGet('#radio_btn_2').compareSnapshot('radio', 0.1);
 		cy.cGet('#radio_btn_3').compareSnapshot('radio_disabled_checked', 0.1);
 		cy.cGet('#radio_btn_4').compareSnapshot('radio_disabled', 0.1);
 	});
 
-	it.skip('Treelistbox no-headers', function() {
+	it('Treelistbox no-headers', function() {
 		cy.cGet('#contenttree').compareSnapshot('treeview_no_headers', 0.05);
 	});
 
-	it.skip('Treelistbox focus', function() {
+	it('Treelistbox focus', function() {
 		cy.cGet('#link_btn_2').click();
 		helper.assertFocus('id','link_btn_2');
 		// since no entry is selected the first entry should get focused
@@ -77,7 +77,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'JSDialog widgets visual te
 		cy.cGet('#contenttree').should('not.have.attr', 'tabindex');
 	});
 
-	it.skip('Treelistbox with-headers', function() {
+	it('Treelistbox with-headers', function() {
 		cy.cGet('#contenttree2').compareSnapshot('treeview_headers', 0.12);
 
 		// use sort feature

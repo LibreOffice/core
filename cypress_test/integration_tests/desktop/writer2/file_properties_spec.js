@@ -16,7 +16,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', func
 		});
 	});
 
-	it.skip('Add File Description.', function() {
+	it('Add File Description.', function() {
 		writerHelper.openFileProperties(this.win);
 
 		cy.cGet('#tabcontrol-2').click();
@@ -37,7 +37,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', func
 		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
 	});
 
-	it.skip('Add Custom Property.', function() {
+	it('Add Custom Property.', function() {
 		writerHelper.openFileProperties(this.win);
 
 		cy.cGet('#tabcontrol-3').click();
@@ -60,7 +60,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', func
 		cy.cGet('#cancel.ui-pushbutton-wrapper').click();
 	});
 
-	it.skip('Add Custom Duration Property.', function() {
+	it('Add Custom Duration Property.', function() {
 		writerHelper.openFileProperties(this.win);
 
 		cy.cGet('#tabcontrol-3').click();
@@ -90,7 +90,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'File Property Tests', func
 		cy.cGet('#cancel.ui-pushbutton-wrapper button').click();
 	});
 
-	it.skip('Add Custom Yes/No Property.', function() {
+	it('Add Custom Yes/No Property.', function() {
 		writerHelper.openFileProperties(this.win);
 
 		cy.cGet('#tabcontrol-3').click();

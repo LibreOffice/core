@@ -139,7 +139,7 @@ describe(['tagdesktop'], 'Top toolbar tests.', function() {
 		cy.cGet('#copy-paste-container p a').should('have.attr', 'href', 'http://www.something.com/');
 	});
 
-	it.skip('Insert mail hyperlink.', function() {
+	it('Insert mail hyperlink.', function() {
 		helper.setDummyClipboardForCopy();
 
 		cy.cGet('#Insert-tab-label').click();
