@@ -739,6 +739,10 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const css::uno::Sequence<c
       {
           [array addObject: NSPasteboardTypeTIFF];
       }
+      else if (flavors[i].MimeType == "text/markdown")
+      {
+          [array addObject: NSPasteboardTypeString];
+      }
       else
       {
           const NSString* str = openOfficeToSystemFlavor(flavors[i], bNeedDummyInternalFlavor, bIsSystemClipboard);
@@ -763,17 +767,31 @@ css::uno::Sequence<css::datatransfer::DataFlavor> DataFlavorMapper::typesArrayTo
 {
   int nFormats = [types count];
   Sequence<DataFlavor> flavors;
+  bool bHaveText = false;
 
   for (int i = 0; i < nFormats; i++)
   {
       NSString* sysFormat = [types objectAtIndex: i];
       DataFlavor oOOFlavor = systemToOpenOfficeFlavor(sysFormat);
 
+      if (oOOFlavor.MimeType == u"text/plain;charset=utf-16")
+          bHaveText = true;
+
       if (isValidFlavor(oOOFlavor))
       {
           flavors.realloc(flavors.getLength() + 1);
           flavors.getArray()[flavors.getLength() - 1] = oOOFlavor;
       }
+  }
+
+  if (bHaveText)
+  {
+      DataFlavor aFlavor;
+      aFlavor.MimeType = u"text/markdown"_ustr;
+      aFlavor.DataType = cppu::UnoType<OUString>::get();
+      assert(isValidFlavor(aFlavor));
+      flavors.realloc(flavors.getLength() + 1);
+      flavors.getArray()[flavors.getLength() - 1] = aFlavor;
   }
 
   return flavors;

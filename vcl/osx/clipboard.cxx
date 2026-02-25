@@ -319,7 +319,11 @@ void SAL_CALL AquaClipboard::flushClipboard()
 
         for (sal_uInt32 i = 0; i < nFlavors; i++)
         {
-            const NSString* sysType = mpDataFlavorMapper->openOfficeToSystemFlavor(flavorList[i], bInternal);
+            datatransfer::DataFlavor aFlavor = flavorList[i];
+            if (aFlavor.MimeType == "text/markdown")
+                aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
+
+            const NSString* sysType = mpDataFlavorMapper->openOfficeToSystemFlavor(aFlavor, bInternal);
 
             if (sysType != nullptr)
             {
