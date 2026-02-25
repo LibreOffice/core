@@ -432,25 +432,28 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             break;
         case SID_SHUFFLE:
             {
-                ScSortParam aSortParam;
-                ScViewData& rData = GetViewData();
-                pTabViewShell->GetDBData()->GetSortParam(aSortParam);
-
-                if (lcl_GetSortParam(rData, aSortParam))
+                if (ScDBData* pDBData = pTabViewShell->GetDBData())
                 {
-                    pTabViewShell->GetDBData()->GetSortParam(aSortParam);
+                    ScSortParam aSortParam;
+                    ScViewData& rData = GetViewData();
+                    pDBData->GetSortParam(aSortParam);
 
-                    ScDocument& rDoc = rData.GetDocument();
-                    SCTAB nTab = rData.CurrentTabForData();
-                    bool bHasHeader = rDoc.HasColHeader(
-                        aSortParam.nCol1, aSortParam.nRow1,
-                        aSortParam.nCol2, aSortParam.nRow2, nTab);
-                    aSortParam.bHasHeader = bHasHeader;
-                    aSortParam.bByRow = true;
-                    aSortParam.meSortOrderType = SortOrderType::Random;
+                    if (lcl_GetSortParam(rData, aSortParam))
+                    {
+                        pDBData->GetSortParam(aSortParam);
 
-                    pTabViewShell->Sort(aSortParam);
-                    rReq.Done();
+                        ScDocument& rDoc = rData.GetDocument();
+                        SCTAB nTab = rData.CurrentTabForData();
+                        bool bHasHeader = rDoc.HasColHeader(
+                            aSortParam.nCol1, aSortParam.nRow1,
+                            aSortParam.nCol2, aSortParam.nRow2, nTab);
+                        aSortParam.bHasHeader = bHasHeader;
+                        aSortParam.bByRow = true;
+                        aSortParam.meSortOrderType = SortOrderType::Random;
+
+                        pTabViewShell->Sort(aSortParam);
+                        rReq.Done();
+                    }
                 }
             }
             break;
