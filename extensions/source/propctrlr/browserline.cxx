@@ -18,6 +18,7 @@
  */
 
 #include "browserline.hxx"
+#include "browserlistbox.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
@@ -379,10 +380,7 @@ void OBrowserLine::SetTitleWidth(sal_uInt16 nWidth)
     FullFillTitleString();
 }
 
-void OBrowserLine::SetClickListener(IButtonClickListener* _pListener)
-{
-    m_pClickListener = _pListener;
-}
+void OBrowserLine::SetClickListener(OBrowserListBox* _pListener) { m_pClickListener = _pListener; }
 
 IMPL_LINK(OBrowserLine, OnButtonClicked, weld::Button&, rButton, void)
 {

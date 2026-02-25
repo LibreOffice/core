@@ -31,15 +31,7 @@ const sal_Int16 CompleteLine = 0x4000;
 namespace pcr
 {
 class OBrowserLine;
-
-class IButtonClickListener
-{
-public:
-    virtual void buttonClicked(OBrowserLine* pLine, bool bPrimary) = 0;
-
-protected:
-    ~IButtonClickListener() {}
-};
+class OBrowserListBox;
 
 class OBrowserLine
 {
@@ -56,7 +48,7 @@ private:
     weld::Widget* m_pControlWindow;
     weld::Button* m_pBrowseButton;
     weld::Button* m_pAdditionalBrowseButton;
-    IButtonClickListener* m_pClickListener;
+    OBrowserListBox* m_pClickListener;
     sal_uInt16 m_nNameWidth;
     sal_uInt16 m_nEnableFlags;
     bool m_bIndentTitle;
@@ -100,7 +92,7 @@ public:
 
     void SetReadOnly(bool bReadOnly);
 
-    void SetClickListener(IButtonClickListener* pListener);
+    void SetClickListener(OBrowserListBox* pListener);
 
     void IndentTitle(bool bIndent);
 

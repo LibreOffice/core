@@ -61,7 +61,7 @@ struct ListBoxLine
 };
 typedef std::vector<ListBoxLine> ListBoxLines;
 
-class OBrowserListBox final : public IButtonClickListener
+class OBrowserListBox final
 {
     std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
     std::unique_ptr<weld::Grid> m_xLinesPlayground;
@@ -116,10 +116,9 @@ public:
     void activateNextControl(
         const css::uno::Reference<css::inspection::XPropertyControl>& CurrentControl);
 
-private:
-    // IButtonClickListener
-    void buttonClicked(OBrowserLine* _pLine, bool _bPrimary) override;
+    void buttonClicked(OBrowserLine* _pLine, bool _bPrimary);
 
+private:
     /** retrieves the index of a given control in our line list
             @param _rxControl
                 The control to lookup. Must denote a control of one of the lines in ->m_aLines
