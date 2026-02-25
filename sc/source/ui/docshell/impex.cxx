@@ -923,7 +923,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
         rStrm.Seek( nOldPos );
         for( ;; )
         {
-            rStrm.ReadUniOrByteStringLine( aLine, rStrm.GetStreamEncoding(), nArbitraryLineLengthLimit );
+            rStrm.ReadUniOrByteStringLine( aLine, nArbitraryLineLengthLimit );
             // tdf#125440 When inserting tab separated string, consider quotes as field markers
             DoubledQuoteMode mode = aLine.indexOf("\t") >= 0 ? DoubledQuoteMode::ESCAPE : DoubledQuoteMode::KEEP_ALL;
             if( rStrm.eof() )
@@ -2714,7 +2714,7 @@ Label_RetryWithNewSep:
     }
 
     OUString aStr;
-    rStream.ReadUniOrByteStringLine(aStr, rStream.GetStreamEncoding(), nArbitraryLineLengthLimit);
+    rStream.ReadUniOrByteStringLine(aStr, nArbitraryLineLengthLimit);
 
     if (bEmbeddedLineBreak)
     {
@@ -2832,7 +2832,7 @@ Label_RetryWithNewSep:
             {
                 nLastOffset = aStr.getLength();
                 OUString aNext;
-                rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamEncoding(), nArbitraryLineLengthLimit);
+                rStream.ReadUniOrByteStringLine(aNext, nArbitraryLineLengthLimit);
                 if (!rStream.eof())
                     aStr += "\n" + aNext;
             }

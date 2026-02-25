@@ -173,10 +173,10 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingRedlines)
 
     // Save as a markdown document
     save(TestFilter::MD);
-    SvFileStream fileStream(maTempFile.GetURL(), StreamMode::READ);
+    SvFileStream fileStream(maTempFile.GetURL(), StreamMode::READ, RTL_TEXTENCODING_UTF8);
     OUString aParagraph;
     // 1st paragraph
-    CPPUNIT_ASSERT(fileStream.ReadUniOrByteStringLine(aParagraph, RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT(fileStream.ReadUniOrByteStringLine(aParagraph));
     // Check that the insert/delete redlines were exported as <del>/<ins> elements
     std::u16string_view expected
         = uR"(<del title="Author: Author 1" datetime="2019-04-23T09:25:00"> </del>)";
@@ -186,10 +186,10 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingRedlines)
     // The insert starts on the first paragraph, and ends on the second
     CPPUNIT_ASSERT(aParagraph.indexOf("</ins>") < 0);
     // An empty line between paragraphs
-    CPPUNIT_ASSERT(fileStream.ReadUniOrByteStringLine(aParagraph, RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT(fileStream.ReadUniOrByteStringLine(aParagraph));
     CPPUNIT_ASSERT(aParagraph.isEmpty());
     // 2nd paragraph
-    CPPUNIT_ASSERT(fileStream.ReadUniOrByteStringLine(aParagraph, RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT(fileStream.ReadUniOrByteStringLine(aParagraph));
     CPPUNIT_ASSERT(aParagraph.indexOf("</ins>") >= 0);
 }
 

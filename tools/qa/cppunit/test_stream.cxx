@@ -343,7 +343,8 @@ namespace
             CPPUNIT_ASSERT(!s.IsEndianSwap());
             CPPUNIT_ASSERT_EQUAL(sal_uInt64(2), s.Tell()); // after BOM
             OUString read;
-            CPPUNIT_ASSERT(s.ReadUniOrByteStringLine(read, RTL_TEXTENCODING_UNICODE));
+            s.SetStreamEncoding(RTL_TEXTENCODING_UNICODE);
+            CPPUNIT_ASSERT(s.ReadUniOrByteStringLine(read));
             // Without the fix in place, this would fail with
             // - Expected: abc
             // - Actual  : 愀戀挀

@@ -907,7 +907,8 @@ void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding eCha
     separators = "";
 
     stream.StartReadingUnicodeText(eCharSet);
-    while (stream.ReadUniOrByteStringLine(sLine, eCharSet) && (tools::Time::GetSystemTicks() - nStartTime < nTimeout))
+    stream.SetStreamEncoding(eCharSet);
+    while (stream.ReadUniOrByteStringLine(sLine) && (tools::Time::GetSystemTicks() - nStartTime < nTimeout))
     {
         if (sLine.isEmpty())
             continue;

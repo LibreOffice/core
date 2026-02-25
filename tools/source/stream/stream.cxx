@@ -562,9 +562,10 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
     return bEnd;
 }
 
-bool SvStream::ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcEncoding,
-                                            sal_Int32 nMaxCodepointsToRead )
+bool SvStream::ReadUniOrByteStringLine( OUString& rStr,
+                                        sal_Int32 nMaxCodepointsToRead )
 {
+    auto eSrcEncoding = GetStreamEncoding();
     if (eSrcEncoding == RTL_TEXTENCODING_UNICODE)
         return ReadUniStringLine( rStr, nMaxCodepointsToRead );
     else
