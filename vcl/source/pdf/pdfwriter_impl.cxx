@@ -1130,10 +1130,17 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                 aWriter.writeKeyAndReference("/NS", iterator->second);
         }
         aLine.append("/S/");
-        if( !rEle.m_aAlias.isEmpty() )
-            aLine.append( rEle.m_aAlias );
-        else
+        if (m_aContext.Version >= PDFWriter::PDFVersion::PDF_2_0)
+        {
             aLine.append( getStructureTag(*rEle.m_oType) );
+        }
+        else
+        {
+            if( !rEle.m_aAlias.isEmpty() )
+                aLine.append( rEle.m_aAlias );
+            else
+                aLine.append( getStructureTag(*rEle.m_oType) );
+        }
         if (m_StructElemObjsWithID.find(rEle.m_nObject) != m_StructElemObjsWithID.end())
         {
             aLine.append("\n/ID ");
