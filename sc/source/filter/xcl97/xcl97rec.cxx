@@ -25,6 +25,7 @@
 #include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/unoapi.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <tools/urlobj.hxx>
@@ -1318,6 +1319,13 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     SdrObject* pObject = SdrObject::getSdrObjectFromXShape(mxShape);
     if (pObject)
     {
+        if (pObject->GetObjIdentifier() == SdrObjKind::Graphic)
+        {
+            auto pGrafObj = dynamic_cast<const SdrGrafObj*>(pObject);
+            if (pGrafObj && pGrafObj->GetGraphic().GetType() == GraphicType::NONE)
+                return;
+        }
+
         ScDocument& rDoc = rStrm.GetRoot().GetDoc();
         ScDetectiveFunc aDetFunc(rDoc, mnScTab);
         ScAddress       aPosition;
