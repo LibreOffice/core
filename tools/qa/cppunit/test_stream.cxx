@@ -13,6 +13,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
+#include <cstddef>
+#include <cstring>
 #include <sstream>
 
 //Tests for eofbit/badbit/goodbit/failbit
@@ -30,6 +32,7 @@ namespace
         void test_readline();
         void test_makereadonly();
         void test_write_unicode();
+        void test_write_from_self();
 
         CPPUNIT_TEST_SUITE(Test);
         CPPUNIT_TEST(test_stdstream);
@@ -39,6 +42,7 @@ namespace
         CPPUNIT_TEST(test_readline);
         CPPUNIT_TEST(test_makereadonly);
         CPPUNIT_TEST(test_write_unicode);
+        CPPUNIT_TEST(test_write_from_self);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -346,6 +350,34 @@ namespace
             CPPUNIT_ASSERT_EQUAL(write, read);
             aTempFile.CloseStream();
         }
+    }
+
+    // Regression test for a heap-use-after-free where PutData reads from a dangling pointer after
+    // ReAllocateMemory freed the old buffer:
+    void Test::test_write_from_self()
+    {
+        // Use a tiny initial size and resize offset so we can easily force a reallocation:
+        SvMemoryStream stream(16, 16);
+        // Disable SvStream's internal buffering so that WriteBytes calls PutData directly with our
+        // pointer, rather than copying into an intermediate buffer:
+        stream.SetBufferSize(0);
+        constexpr std::size_t patternLen = 15;
+        char const pattern[patternLen + 1] = "0123456789ABCDE";
+        stream.WriteBytes(pattern, patternLen); // nearly fills 16-byte buffer
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, stream.GetError());
+        // Writing 15 bytes from the internal pointer will exceed the current
+        // 16-byte buffer and force a reallocation:
+        stream.WriteBytes(stream.GetData(), patternLen);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, stream.GetError());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(patternLen * 2), stream.GetSize());
+        stream.Seek(0);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, stream.GetError());
+        char result[patternLen * 2];
+        std::size_t const nRead = stream.ReadBytes(result, patternLen * 2);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, stream.GetError());
+        CPPUNIT_ASSERT_EQUAL(patternLen * 2, nRead);
+        CPPUNIT_ASSERT_EQUAL(0, std::memcmp(result, pattern, patternLen));
+        CPPUNIT_ASSERT_EQUAL(0, std::memcmp(result + patternLen, pattern, patternLen));
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);
