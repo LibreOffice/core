@@ -116,7 +116,7 @@ public:
 SvFileStream* EmbeddedDBPerformanceTest::getWordListStream()
 {
     OUString wlPath = createFileURL(u"wordlist");
-    return new SvFileStream(wlPath, StreamMode::READ);
+    return new SvFileStream(wlPath, StreamMode::READ, RTL_TEXTENCODING_UTF8);
 }
 
 void EmbeddedDBPerformanceTest::printTimes(
@@ -233,7 +233,7 @@ void EmbeddedDBPerformanceTest::performPreparedStatementInsertTest(
     TimeValue aStart, aMiddle, aEnd;
     osl_getSystemTime(&aStart);
 
-    while (pFile->ReadByteStringLine(aWord, RTL_TEXTENCODING_UTF8))
+    while (pFile->ReadByteStringLine(aWord))
     {
         xParameters->setInt(1, aID++);
         xParameters->setString(2, aWord);
@@ -269,7 +269,7 @@ void EmbeddedDBPerformanceTest::performStatementInsertTest(
     TimeValue aStart, aMiddle, aEnd;
     osl_getSystemTime(&aStart);
 
-    while (pFile->ReadByteStringLine(aWord, RTL_TEXTENCODING_UTF8))
+    while (pFile->ReadByteStringLine(aWord))
     {
         xStatement->execute(
             "INSERT INTO \"PFTESTTABLE\" ( \"ID\", "

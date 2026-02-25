@@ -386,12 +386,11 @@ void SvStream::ResetError()
     ClearError();
 }
 
-bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcEncoding,
-                                       sal_Int32 nMaxBytesToRead )
+bool SvStream::ReadByteStringLine( OUString& rStr, sal_Int32 nMaxBytesToRead )
 {
     OStringBuffer aStr;
     bool bRet = ReadLine( aStr, nMaxBytesToRead);
-    rStr = OStringToOUString(aStr, eSrcEncoding);
+    rStr = OStringToOUString(aStr, GetStreamEncoding());
     return bRet;
 }
 
@@ -569,7 +568,7 @@ bool SvStream::ReadUniOrByteStringLine( OUString& rStr,
     if (eSrcEncoding == RTL_TEXTENCODING_UNICODE)
         return ReadUniStringLine( rStr, nMaxCodepointsToRead );
     else
-        return ReadByteStringLine(rStr, eSrcEncoding, nMaxCodepointsToRead);
+        return ReadByteStringLine(rStr, nMaxCodepointsToRead);
 }
 
 OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)

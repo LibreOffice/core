@@ -307,7 +307,7 @@ public:
               @endcode
               causing endless loops ...
     */
-    bool            ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcEncoding,
+    bool            ReadByteStringLine( OUString& rStr,
                                         sal_Int32 nMaxBytesToRead = 0xFFFE );
 
     /** Write a line of bytes. Uses stream encoding set on the stream.

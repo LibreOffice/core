@@ -436,6 +436,7 @@ void OFlatTable::construct()
     m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
                                 nSize > 100000  ? 16384 :
                                 nSize > 10000   ? 4096  : 1024);
+    m_pFileStream->SetStreamEncoding(m_pConnection->getTextEncoding());
 
     fillColumns(aAppLocale);
 
@@ -845,13 +846,12 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
 
 bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos, const bool nonEmpty)
 {
-    const rtl_TextEncoding nEncoding = m_pConnection->getTextEncoding();
     m_aCurrentLine = QuotedTokenizedString();
     do
     {
         if (pStartPos)
             *pStartPos = static_cast<sal_Int32>(m_pFileStream->Tell());
-        m_pFileStream->ReadByteStringLine(m_aCurrentLine, nEncoding, 262144);
+        m_pFileStream->ReadByteStringLine(m_aCurrentLine, 262144);
         if (m_pFileStream->eof())
             return false;
 
@@ -902,7 +902,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
             if (isQuoted)
             {
                 nLastOffset = sLine.Len();
-                m_pFileStream->ReadByteStringLine(sLine,nEncoding);
+                m_pFileStream->ReadByteStringLine(sLine);
                 if ( !m_pFileStream->eof() )
                 {
                     OUString aStr = m_aCurrentLine.GetString() + "\n" + sLine.GetString();

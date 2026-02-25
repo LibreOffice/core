@@ -262,7 +262,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             pStream->SetStreamEncoding(RTL_TEXTENCODING_UTF8);
 
             OUString sLine;
-            bool bRead = pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
+            bool bRead = pStream->ReadByteStringLine( sLine );
 
             if(bRead && !sLine.isEmpty())
             {
@@ -280,7 +280,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 }
                 while (nIndex > 0);
             }
-            while(pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 ))
+            while(pStream->ReadByteStringLine( sLine ))
             {
                 std::vector<OUString> aNewData;
                 //analyze data line

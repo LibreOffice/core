@@ -4007,13 +4007,12 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
     AutoMarkEntry* pToInsert = nullptr;
     // tdf#108910, tdf#125496 - read index entries using the appropriate character set
     rInStr.DetectEncoding();
-    rtl_TextEncoding eTEnc = rInStr.GetStreamEncoding();
-    if (eTEnc == RTL_TEXTENCODING_DONTKNOW)
-        eTEnc = osl_getThreadTextEncoding();
+    if (rInStr.GetStreamEncoding() == RTL_TEXTENCODING_DONTKNOW)
+        rInStr.SetStreamEncoding(osl_getThreadTextEncoding());
     while (rInStr.good())
     {
         OUString sLine;
-        rInStr.ReadByteStringLine( sLine, eTEnc );
+        rInStr.ReadByteStringLine( sLine );
 
         // # -> comment
         // ; -> delimiter between entries ->
