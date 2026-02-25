@@ -233,11 +233,9 @@ class GtkSalFrame final : public SalFrame
 
     GtkSalMenu*                     m_pSalMenu;
 
-#if ENABLE_DBUS && ENABLE_GIO
     private:
     friend void on_registrar_available (GDBusConnection*, const gchar*, const gchar*, gpointer);
     friend void on_registrar_unavailable (GDBusConnection*, const gchar*, gpointer);
-#endif
     guint                           m_nWatcherId;
 
     void Init( SalFrame* pParent, SalFrameStyleFlags nStyle );
