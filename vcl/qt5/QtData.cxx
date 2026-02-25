@@ -19,25 +19,9 @@
 
 #include <QtData.hxx>
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QStyle>
-
 QtData::QtData()
     : GenericUnixSalData()
 {
-    ImplSVData* pSVData = ImplGetSVData();
-
-    pSVData->maNWFData.mbDockingAreaSeparateTB = true;
-    pSVData->maNWFData.mbFlatMenu = true;
-    pSVData->maNWFData.mbRolloverMenubar = true;
-    pSVData->maNWFData.mbNoFocusRects = true;
-    pSVData->maNWFData.mbNoFocusRectsForFlatButtons = true;
-
-    QStyle* style = QApplication::style();
-    pSVData->maNWFData.mnMenuFormatBorderX = style->pixelMetric(QStyle::PM_MenuPanelWidth)
-                                             + style->pixelMetric(QStyle::PM_MenuHMargin);
-    pSVData->maNWFData.mnMenuFormatBorderY = style->pixelMetric(QStyle::PM_MenuPanelWidth)
-                                             + style->pixelMetric(QStyle::PM_MenuVMargin);
 }
 
 // outline dtor b/c of FreetypeManager incomplete type
