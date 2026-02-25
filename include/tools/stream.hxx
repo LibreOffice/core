@@ -374,14 +374,12 @@ public:
     bool            WriteUnicodeOrByteText(std::u16string_view rStr)
                     { return WriteUnicodeOrByteText(rStr, GetStreamEncoding(), /*bZero*/false); }
 
-    /** Write a Unicode character if eDestEncoding==RTL_TEXTENCODING_UNICODE,
-        otherwise write as Bytecode converted to eDestEncoding.
+    /** Write a Unicode character if GetStreamEncoding()==RTL_TEXTENCODING_UNICODE,
+        otherwise write as Bytecode converted to GetStreamEncoding().
 
         This may result in more than one byte being written if a multi byte
         encoding (e.g. UTF7, UTF8) is chosen. */
-    bool            WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestEncoding );
-    bool            WriteUniOrByteChar( sal_Unicode ch )
-                    { return WriteUniOrByteChar( ch, GetStreamEncoding() ); }
+    bool            WriteUniOrByteChar( sal_Unicode ch );
 
     void            SetBufferSize( sal_uInt16 m_nBufSize );
     sal_uInt16      GetBufferSize() const { return m_nBufSize; }

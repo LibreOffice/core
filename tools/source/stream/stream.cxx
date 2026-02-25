@@ -672,8 +672,9 @@ bool SvStream::WriteLine(std::string_view rStr)
     return m_nError == ERRCODE_NONE;
 }
 
-bool SvStream::WriteUniOrByteChar(sal_Unicode ch, rtl_TextEncoding eDestEncoding)
+bool SvStream::WriteUniOrByteChar(sal_Unicode ch)
 {
+    auto eDestEncoding = GetStreamEncoding();
     if (eDestEncoding == RTL_TEXTENCODING_UNICODE)
         WriteUnicode(ch);
     else

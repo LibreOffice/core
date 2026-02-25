@@ -210,9 +210,9 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument& rDoc,
                     OUString strFrom(cStrDelim);
                     OUString strTo = strFrom + strFrom;
                     aTmpStr = aTmpStr.replaceAll(strFrom, strTo);
-                    rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
+                    rOut.WriteUniOrByteChar( cStrDelim );
                     rOut.WriteUnicodeOrByteText(aTmpStr, eCharSet);
-                    rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
+                    rOut.WriteUniOrByteChar( cStrDelim );
                 }
                 else if ( bContextOrNotAsciiEncoding )
                 {
@@ -224,9 +224,9 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument& rDoc,
                     OUString aStrTo = aStrDelimDecoded + aStrDelimDecoded;
                     aStrDec = aStrDec.replaceAll(aStrDelimDecoded, aStrTo);
                     // write byte re-encoded
-                    rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
+                    rOut.WriteUniOrByteChar( cStrDelim );
                     rOut.WriteUnicodeOrByteText( aStrDec, eCharSet );
-                    rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
+                    rOut.WriteUniOrByteChar( cStrDelim );
                 }
                 else
                 {
@@ -239,7 +239,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument& rDoc,
                     rOut.WriteBytes(aStrEnc.getStr(), aStrEnc.getLength());
                     rOut.WriteBytes(aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
                 }
-                rOut.WriteUniOrByteChar( '\n', eCharSet );
+                rOut.WriteUniOrByteChar( '\n' );
             }
         }
         aPrgrsBar.SetState( nRowCnt );
