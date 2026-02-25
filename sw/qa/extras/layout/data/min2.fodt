@@ -1,0 +1,320 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<office:document xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta><meta:generator>Collabora_Office/25.04.9.1$Linux_X86_64 LibreOffice_project/2853d108adde0c3ee82e729c99d284a2a9fdd626</meta:generator><meta:creation-date>2009-11-03T15:47:08.980000000</meta:creation-date><dc:language>de-DE</dc:language><meta:editing-cycles>170</meta:editing-cycles><meta:editing-duration>P1DT32M10S</meta:editing-duration><dc:date>2026-02-10T10:45:40.242000000</dc:date><dc:title/><meta:document-statistic meta:table-count="2" meta:image-count="0" meta:object-count="0" meta:page-count="2" meta:paragraph-count="11" meta:word-count="51" meta:character-count="480" meta:non-whitespace-character-count="407"/><meta:user-defined meta:name="Info 1"/><meta:user-defined meta:name="Info 2"/><meta:user-defined meta:name="Info 3"/><meta:user-defined meta:name="Info 4"/></office:meta>
+ <office:font-face-decls>
+  <style:font-face style:name="Arial" svg:font-family="Arial" style:font-pitch="variable"/>
+  <style:font-face style:name="Arial Unicode MS" svg:font-family="'Arial Unicode MS'" style:font-pitch="variable"/>
+  <style:font-face style:name="HG Mincho Light J" svg:font-family="'HG Mincho Light J'" style:font-pitch="variable"/>
+  <style:font-face style:name="Noto Sans" svg:font-family="'Noto Sans'" style:font-pitch="variable"/>
+  <style:font-face style:name="Thorndale" svg:font-family="Thorndale" style:font-family-generic="roman" style:font-pitch="variable"/>
+  </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="graphic">
+   <style:graphic-properties svg:stroke-color="#808080" draw:fill-color="#cfe7f5" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:start-line-spacing-horizontal="0.283cm" draw:start-line-spacing-vertical="0.283cm" draw:end-line-spacing-horizontal="0.283cm" draw:end-line-spacing-vertical="0.283cm" style:writing-mode="lr-tb" style:flow-with-text="true"/>
+   <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict" loext:tab-stop-distance="0cm" style:font-independent-line-spacing="false">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Thorndale" fo:font-size="12pt" fo:language="de" fo:country="DE" style:font-name-asian="HG Mincho Light J" style:font-size-asian="12pt" style:language-asian="zxx" style:country-asian="none" style:font-name-complex="Arial Unicode MS" style:font-size-complex="12pt" style:language-complex="zxx" style:country-complex="none"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.249cm" style:writing-mode="lr-tb"/>
+   <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Thorndale" fo:font-size="12pt" fo:language="de" fo:country="DE" style:font-name-asian="HG Mincho Light J" style:font-size-asian="12pt" style:language-asian="zxx" style:country-asian="none" style:font-name-complex="Arial Unicode MS" style:font-size-complex="12pt" style:language-complex="zxx" style:country-complex="none" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="no-limit" loext:hyphenation-zone="no-limit"/>
+  </style:default-style>
+  <style:default-style style:family="table">
+   <style:table-properties table:border-model="separating"/>
+  </style:default-style>
+  <style:default-style style:family="table-row">
+   <style:table-row-properties fo:keep-together="always"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column"/>
+   <style:text-properties style:font-name="Arial" fo:font-family="Arial" style:font-pitch="variable" fo:hyphenate="true" fo:hyphenation-remain-char-count="4" fo:hyphenation-push-char-count="4" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="no-limit" loext:hyphenation-zone="no-limit"/>
+  </style:style>
+  <style:style style:name="Footer" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="8.5cm" style:type="center"/>
+     <style:tab-stop style:position="17.002cm" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+  </style:style>
+  <style:style style:name="TVS_20_Standard" style:display-name="TVS Standard" style:family="paragraph" style:master-page-name="">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="108%" fo:text-align="start" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column" style:page-number="auto"/>
+   <style:text-properties style:font-name="Noto Sans" fo:font-family="'Noto Sans'" style:font-pitch="variable" fo:font-size="11pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="4" fo:hyphenation-push-char-count="4" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="no-limit" loext:hyphenation-zone="no-limit"/>
+  </style:style>
+  <style:style style:name="TVS_20_Unsichtbar" style:display-name="TVS Unsichtbar" style:family="paragraph" style:parent-style-name="TVS_20_Standard" style:master-page-name="">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="start" style:justify-single-word="false" style:page-number="auto"/>
+   <style:text-properties style:font-name="Noto Sans" fo:font-family="'Noto Sans'" style:font-pitch="variable" fo:font-size="2pt"/>
+  </style:style>
+  <style:style style:name="TVS_20_Freitext" style:display-name="TVS Freitext" style:family="paragraph" style:parent-style-name="TVS_20_Standard">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.409cm" style:contextual-spacing="false" fo:line-height="108%" fo:text-align="start" style:justify-single-word="false"/>
+   <style:text-properties style:font-name="Noto Sans" fo:font-family="'Noto Sans'" style:font-pitch="variable" fo:font-size="11pt"/>
+  </style:style>
+  <style:style style:name="TVS_20_Grußformel" style:display-name="TVS Grußformel" style:family="paragraph" style:parent-style-name="TVS_20_Standard" style:next-style-name="TVS_20_Zeichnung">
+   <style:paragraph-properties fo:margin-top="0.771cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="start" style:justify-single-word="false" fo:keep-with-next="always"/>
+   <style:text-properties style:font-name="Noto Sans" fo:font-family="'Noto Sans'" style:font-pitch="variable" fo:font-size="11pt"/>
+  </style:style>
+  <style:style style:name="TVS_20_Zeichnung" style:display-name="TVS Zeichnung" style:family="paragraph" style:parent-style-name="TVS_20_Standard" style:next-style-name="TVS_20_Freitext">
+   <style:paragraph-properties fo:margin-top="1.06cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="150%" fo:text-align="start" style:justify-single-word="false"/>
+   <style:text-properties style:font-name="Noto Sans" fo:font-family="'Noto Sans'" style:font-pitch="variable" fo:font-size="11pt"/>
+  </style:style>
+  <style:style style:name="TVS_20_RBB" style:display-name="TVS RBB" style:family="paragraph" style:parent-style-name="TVS_20_Standard" style:master-page-name="">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="150%" fo:text-align="justify" style:justify-single-word="false" style:page-number="auto"/>
+   <style:text-properties style:font-name="Noto Sans" fo:font-family="'Noto Sans'" style:font-pitch="variable" fo:font-size="10pt" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="TVS_20_RBBÜberschrift" style:display-name="TVS RBBÜberschrift" style:family="paragraph" style:parent-style-name="TVS_20_Standard" style:next-style-name="TVS_20_RBB" style:master-page-name="">
+   <loext:graphic-properties draw:fill="none" draw:fill-color="#cfe7f5"/>
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.011cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="start" style:justify-single-word="false" style:page-number="auto" fo:background-color="transparent">
+    <style:tab-stops/>
+   </style:paragraph-properties>
+   <style:text-properties style:font-name="Noto Sans" fo:font-family="'Noto Sans'" style:font-pitch="variable" fo:font-size="10pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="TVS_20_DSGVO" style:display-name="TVS DSGVO" style:family="paragraph" style:parent-style-name="TVS_20_Standard">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" fo:hyphenation-keep="auto" loext:hyphenation-keep-type="column"/>
+   <style:text-properties style:font-name="Noto Sans" fo:font-family="'Noto Sans'" style:font-pitch="variable" fo:font-size="8pt" fo:hyphenate="false" fo:hyphenation-remain-char-count="4" fo:hyphenation-push-char-count="4" loext:hyphenation-no-caps="false" loext:hyphenation-no-last-word="false" loext:hyphenation-word-char-count="no-limit" loext:hyphenation-zone="no-limit"/>
+  </style:style>
+  <style:style style:name="Footnote_20_Symbol" style:display-name="Footnote Symbol" style:family="text"/>
+  <style:style style:name="Endnote_20_Symbol" style:display-name="Endnote Symbol" style:family="text"/>
+  <style:style style:name="TVS_20_Fett" style:display-name="TVS Fett" style:family="text">
+   <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Footnote_20_anchor" style:display-name="Footnote anchor" style:family="text">
+   <style:text-properties style:text-position="super 58%"/>
+  </style:style>
+  <style:style style:name="Endnote_20_anchor" style:display-name="Endnote anchor" style:family="text">
+   <style:text-properties style:text-position="super 58%"/>
+  </style:style>
+  <style:style style:name="Frame" style:family="graphic">
+   <style:graphic-properties svg:width="7.696cm" fo:min-height="3.519cm" text:anchor-type="page" style:wrap="parallel" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" draw:fill="none">
+    <style:columns fo:column-count="1" fo:column-gap="0cm"/>
+   </style:graphic-properties>
+  </style:style>
+  <text:outline-style style:name="Outline">
+   <text:outline-level-style text:level="1" loext:num-list-format="%1%" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="2" loext:num-list-format="%2%" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="3" loext:num-list-format="%3%" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="4" loext:num-list-format="%4%" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="5" loext:num-list-format="%5%" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="6" loext:num-list-format="%6%" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="7" loext:num-list-format="%7%" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="8" loext:num-list-format="%8%" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="9" loext:num-list-format="%9%" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+   <text:outline-level-style text:level="10" loext:num-list-format="%10%" style:num-format="">
+    <style:list-level-properties/>
+   </text:outline-level-style>
+  </text:outline-style>
+  <text:notes-configuration text:note-class="footnote" text:citation-style-name="Footnote_20_Symbol" text:citation-body-style-name="Footnote_20_anchor" text:master-page-name="Standard" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+  <text:notes-configuration text:note-class="endnote" text:citation-style-name="Endnote_20_Symbol" text:citation-body-style-name="Endnote_20_anchor" text:master-page-name="Endnote" style:num-format="1" text:start-value="0"/>
+  <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
+  <style:default-page-layout>
+   <style:page-layout-properties style:writing-mode="lr-tb" style:layout-grid-standard-mode="true"/>
+  </style:default-page-layout>
+  </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="TextTabelle1" style:family="table">
+   <style:table-properties style:width="17.3cm" fo:break-before="auto" fo:break-after="auto" table:align="margins" fo:background-color="transparent">
+    <style:background-image/>
+   </style:table-properties>
+  </style:style>
+  <style:style style:name="TextTabelle1.A" style:family="table-column">
+   <style:table-column-properties style:column-width="17.3cm" style:rel-column-width="65535*"/>
+  </style:style>
+  <style:style style:name="TextTabelle1.1" style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:style>
+  <style:style style:name="TextTabelle1.A1" style:family="table-cell">
+   <style:table-cell-properties fo:padding-left="0cm" fo:padding-right="0.101cm" fo:padding-top="0.101cm" fo:padding-bottom="0.101cm" fo:border="none"/>
+  </style:style>
+  <style:style style:name="Tabelle1" style:family="table">
+   <style:table-properties style:width="17.3cm" fo:break-before="auto" fo:break-after="auto" table:align="margins" fo:background-color="transparent">
+    <style:background-image/>
+   </style:table-properties>
+  </style:style>
+  <style:style style:name="Tabelle1.A" style:family="table-column">
+   <style:table-column-properties style:column-width="17.3cm" style:rel-column-width="65535*"/>
+  </style:style>
+  <style:style style:name="Tabelle1.1" style:family="table-row">
+   <style:table-row-properties fo:background-color="transparent" fo:keep-together="auto">
+    <style:background-image/>
+   </style:table-row-properties>
+  </style:style>
+  <style:style style:name="Tabelle1.A1" style:family="table-cell">
+   <style:table-cell-properties fo:background-color="#ffdbb6" fo:padding-left="0cm" fo:padding-right="0.101cm" fo:padding-top="0.101cm" fo:padding-bottom="0.101cm" fo:border="none">
+    <style:background-image/>
+   </style:table-cell-properties>
+  </style:style>
+  <style:style style:name="Tabelle1.2" style:family="table-row">
+   <style:table-row-properties fo:keep-together="auto"/>
+  </style:style>
+  <style:style style:name="Tabelle1.A2" style:family="table-cell">
+   <style:table-cell-properties fo:padding-left="0cm" fo:padding-right="0.101cm" fo:padding-top="0.101cm" fo:padding-bottom="0.101cm" fo:border="none"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="P2" style:family="paragraph" style:parent-style-name="TVS_20_Unsichtbar" style:master-page-name="FABrief_5f_S1">
+   <style:paragraph-properties style:page-number="auto"/>
+  </style:style>
+  <style:style style:name="P3" style:family="paragraph" style:parent-style-name="TVS_20_Freitext">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="P4" style:family="paragraph" style:parent-style-name="TVS_20_Freitext">
+   <style:text-properties/>
+  </style:style>
+  <style:style style:name="P5" style:family="paragraph" style:parent-style-name="TVS_20_RBBÜberschrift">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.101cm" style:contextual-spacing="false"/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:font-size="2pt" fo:font-weight="normal" style:font-size-asian="1.75pt" style:font-weight-asian="normal" style:font-size-complex="2pt" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties style:protect="size position" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left" style:horizontal-rel="paragraph" fo:padding="0cm" fo:border="none" style:shadow="none" draw:shadow-opacity="100%" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true">
+    <style:columns fo:column-count="1" fo:column-gap="0cm"/>
+   </style:graphic-properties>
+  </style:style>
+  <style:style style:name="fr2" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:protect="content size position" style:wrap="none" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left" style:horizontal-rel="paragraph" fo:padding="0.049cm" fo:border="0.11pt solid #000000"/>
+  </style:style>
+  <style:style style:name="Sect1" style:family="section">
+   <style:section-properties style:editable="false">
+    <style:columns fo:column-count="1" fo:column-gap="0cm"/>
+   </style:section-properties>
+  </style:style>
+  <style:style style:name="Sect2" style:family="section">
+   <style:section-properties fo:background-color="#ffff00" style:editable="false">
+    <style:columns fo:column-count="1" fo:column-gap="0cm"/>
+    <style:background-image/>
+   </style:section-properties>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:paper-tray-name="[From printer settings]" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" fo:border="none" fo:padding="0cm" style:shadow="none" fo:background-color="transparent" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="44" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.706cm" style:layout-grid-snap-to="true" draw:fill="none" draw:fill-color="#cfe7f5" draw:secondary-fill-color="#729fcf" draw:gradient-step-count="0" draw:fill-hatch-solid="false" draw:opacity="100%" draw:fill-image-width="0cm" draw:fill-image-height="0cm" style:repeat="repeat" draw:fill-image-ref-point-x="0%" draw:fill-image-ref-point-y="0%" draw:fill-image-ref-point="center" draw:tile-repeat-offset="0% vertical" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+    <style:columns fo:column-count="1" fo:column-gap="0cm"/>
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:page-layout style:name="pm4" style:page-usage="mirrored">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:paper-tray-name="[From printer settings]" style:print-orientation="portrait" fo:margin-top="1.199cm" fo:margin-bottom="1cm" fo:margin-left="2cm" fo:margin-right="1.7cm" fo:border="none" fo:padding="0cm" style:shadow="none" fo:background-color="transparent" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="44" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.706cm" style:layout-grid-snap-to="true" draw:fill="none" draw:fill-color="#cfe7f5" draw:secondary-fill-color="#729fcf" draw:gradient-step-count="0" draw:fill-hatch-solid="false" draw:opacity="100%" draw:fill-image-width="0cm" draw:fill-image-height="0cm" style:repeat="repeat" draw:fill-image-ref-point-x="0%" draw:fill-image-ref-point-y="0%" draw:fill-image-ref-point="center" draw:tile-repeat-offset="0% vertical" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+    <style:columns fo:column-count="1" fo:column-gap="0cm"/>
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:page-layout style:name="pm6">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="44" style:layout-grid-base-height="0.55cm" style:layout-grid-ruby-height="0cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="true" style:layout-grid-display="true" style:layout-grid-base-width="0.37cm" style:layout-grid-snap-to="true" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+    <style:footnote-sep style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-layout>
+  <style:page-layout style:name="pm8">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" style:num-format="1" style:paper-tray-name="[From printer settings]" style:print-orientation="portrait" fo:margin-top="11cm" fo:margin-bottom="1.199cm" fo:margin-left="2cm" fo:margin-right="1.7cm" fo:border="none" fo:padding="0cm" style:shadow="none" fo:background-color="transparent" style:writing-mode="lr-tb" style:layout-grid-color="#c0c0c0" style:layout-grid-lines="44" style:layout-grid-base-height="0.706cm" style:layout-grid-ruby-height="0.353cm" style:layout-grid-mode="none" style:layout-grid-ruby-below="false" style:layout-grid-print="false" style:layout-grid-display="false" style:layout-grid-base-width="0.706cm" style:layout-grid-snap-to="true" draw:fill="none" draw:fill-color="#cfe7f5" draw:secondary-fill-color="#729fcf" draw:gradient-step-count="0" draw:fill-hatch-solid="false" draw:opacity="100%" draw:fill-image-width="0cm" draw:fill-image-height="0cm" style:repeat="repeat" draw:fill-image-ref-point-x="0%" draw:fill-image-ref-point-y="0%" draw:fill-image-ref-point="center" draw:tile-repeat-offset="0% vertical" style:footnote-max-height="0cm" loext:margin-gutter="0cm">
+    <style:columns fo:column-count="1" fo:column-gap="0cm"/>
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:line-style="none" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:page-layout-properties>
+   <style:header-style/>
+   <style:footer-style>
+    <style:header-footer-properties svg:height="3.5cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.199cm" fo:border="none" fo:padding="0cm" style:shadow="none" fo:background-color="transparent" style:dynamic-spacing="false" draw:fill="none" draw:fill-color="#ffffff" draw:secondary-fill-color="#729fcf" draw:gradient-step-count="0" draw:fill-hatch-solid="false" draw:opacity="100%" draw:fill-image-width="0cm" draw:fill-image-height="0cm" style:repeat="repeat" draw:fill-image-ref-point-x="0%" draw:fill-image-ref-point-y="0%" draw:fill-image-ref-point="center" draw:tile-repeat-offset="0% vertical"/>
+   </style:footer-style>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none" draw:background-size="full" draw:fill-color="#cfe7f5" draw:secondary-fill-color="#729fcf" draw:gradient-step-count="0" draw:fill-hatch-solid="false" draw:opacity="100%" draw:fill-image-width="0cm" draw:fill-image-height="0cm" style:repeat="repeat" draw:fill-image-ref-point-x="0%" draw:fill-image-ref-point-y="0%" draw:fill-image-ref-point="center" draw:tile-repeat-offset="0% vertical"/>
+  </style:style>
+  <style:style style:name="dp2" style:family="drawing-page">
+   <style:drawing-page-properties draw:background-size="full"/>
+  </style:style>
+  </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1" draw:style-name="dp1"/>
+  <style:master-page style:name="FABrief_5f_S2" style:display-name="FABrief_S2" style:page-layout-name="pm4" draw:style-name="dp1"/>
+  <style:master-page style:name="Endnote" style:page-layout-name="pm6" draw:style-name="dp2"/>
+  <style:master-page style:name="FABrief_5f_S1" style:display-name="FABrief_S1" style:page-layout-name="pm8" draw:style-name="dp1" style:next-style-name="FABrief_5f_S2">
+   <style:footer>
+    <text:p text:style-name="Footer"><draw:frame draw:style-name="fr1" draw:name="ES_FUSSZEILE" text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" svg:width="17.3cm" svg:height="3.3cm" draw:z-index="0">
+      <draw:text-box>
+       <text:p text:style-name="P1"><text:span text:style-name="TVS_20_Fett"><text:span text:style-name="T1"/></text:span></text:p>
+      </draw:text-box>
+     </draw:frame><text:s/></text:p>
+   </style:footer>
+  </style:master-page>
+  </office:master-styles>
+ <office:body>
+  <office:text text:use-soft-page-breaks="true">
+   <text:variable-decls>
+   </text:variable-decls>
+   <text:sequence-decls>
+    <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+    <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
+   </text:sequence-decls>
+   <text:user-field-decls>
+    </text:user-field-decls>
+   <text:section text:style-name="Sect1" text:name="CopyA">
+    <text:p text:style-name="P2"/>
+    <table:table table:name="TextTabelle1" table:style-name="TextTabelle1">
+     <table:table-column table:style-name="TextTabelle1.A"/>
+     <table:table-row table:style-name="TextTabelle1.1">
+      <table:table-cell table:style-name="TextTabelle1.A1" office:value-type="string">
+       <text:p text:style-name="TVS_20_Freitext"><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/></text:p>
+      </table:table-cell>
+     </table:table-row>
+    </table:table>
+    <text:section text:style-name="Sect2" text:name="BereichErlaeuterungen">
+     <text:p text:style-name="P3">Erläuterungen: </text:p>
+     <text:p text:style-name="P3"></text:p>
+     <text:p text:style-name="P3"></text:p>
+     <text:p text:style-name="P3"></text:p>
+     <text:p text:style-name="P3"></text:p>
+    </text:section>
+    <table:table table:name="Tabelle1" table:style-name="Tabelle1">
+     <table:table-column table:style-name="Tabelle1.A"/>
+     <table:table-row table:style-name="Tabelle1.1">
+      <table:table-cell table:style-name="Tabelle1.A1" office:value-type="string">
+       <text:p text:style-name="P4"><text:line-break/></text:p>
+       <text:p text:style-name="P4"/>
+       <text:p text:style-name="P4"><text:line-break/><text:line-break/></text:p>
+      </table:table-cell>
+     </table:table-row>
+     <text:soft-page-break/>
+     <table:table-row table:style-name="Tabelle1.2">
+      <table:table-cell table:style-name="Tabelle1.A2" office:value-type="string">
+       <text:p text:style-name="P5">:</text:p>
+       <text:p text:style-name="TVS_20_RBB"><text:line-break/><text:line-break/></text:p>
+       <text:p text:style-name="TVS_20_RBB"><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/><text:line-break/> </text:p>
+      </table:table-cell>
+     </table:table-row>
+    </table:table>
+    <text:p text:style-name="TVS_20_Grußformel"/>
+    <text:p text:style-name="TVS_20_Zeichnung"/>
+    <text:p text:style-name="TVS_20_Unsichtbar"><draw:frame draw:style-name="fr2" draw:name="DSGVO" text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" svg:width="17.3cm" svg:height="2.2cm" draw:z-index="1">
+      <draw:text-box>
+       <text:p text:style-name="TVS_20_DSGVO"><text:span text:style-name="TVS_20_Fett">Datenschutzhinweis:</text:span> </text:p>
+      </draw:text-box>
+     </draw:frame><text:s/><text:s/></text:p>
+   </text:section>
+   <text:p text:style-name="TVS_20_Standard"/>
+  </office:text>
+ </office:body>
+</office:document>
