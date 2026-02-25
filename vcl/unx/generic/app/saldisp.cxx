@@ -190,6 +190,44 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
     return rVI.visualid == nDefVID;
 }
 
+static int DisplayHasEvent(int fd, void* data)
+{
+    auto pDisplay = static_cast<SalX11Display*>(data);
+    SAL_WARN_IF(ConnectionNumber(pDisplay->GetDisplay()) != fd, "vcl",
+                "wrong fd in DisplayHasEvent");
+    if (!pDisplay->IsDisplay())
+        return 0;
+
+    bool result;
+
+    SolarMutexGuard aGuard;
+    result = pDisplay->IsEvent();
+    return int(result);
+}
+
+static int DisplayQueue(int fd, void* data)
+{
+    auto pDisplay = static_cast<SalX11Display*>(data);
+    SAL_WARN_IF(ConnectionNumber(pDisplay->GetDisplay()) != fd, "vcl",
+                "wrong fd in DisplayHasEvent");
+    int result;
+
+    SolarMutexGuard aGuard;
+    result = XEventsQueued(pDisplay->GetDisplay(), QueuedAfterReading);
+    return result;
+}
+
+static int DisplayYield(int fd, void* data)
+{
+    auto pDisplay = static_cast<SalX11Display*>(data);
+    SAL_WARN_IF(ConnectionNumber(pDisplay->GetDisplay()) != fd, "vcl",
+                "wrong fd in DisplayHasEvent");
+
+    SolarMutexGuard aGuard;
+    pDisplay->Yield();
+    return 1;
+}
+
 SalDisplay::SalDisplay( Display *display ) :
         pXLib_( nullptr ),
         mpKbdExtension( nullptr ),
@@ -279,43 +317,6 @@ void SalDisplay::doDestruct()
 
     if( pData->GetDisplay() == static_cast<const SalGenericDisplay *>( this ) )
         pData->SetDisplay( nullptr );
-}
-
-static int DisplayHasEvent( int fd, void * data )
-{
-  auto pDisplay = static_cast<SalX11Display *>(data);
-  SAL_WARN_IF( ConnectionNumber( pDisplay->GetDisplay() ) != fd, "vcl",
-              "wrong fd in DisplayHasEvent" );
-  if( ! pDisplay->IsDisplay() )
-      return 0;
-
-  bool result;
-
-  SolarMutexGuard aGuard;
-  result = pDisplay->IsEvent();
-  return int(result);
-}
-static int DisplayQueue( int fd, void * data )
-{
-  auto pDisplay = static_cast<SalX11Display *>(data);
-  SAL_WARN_IF( ConnectionNumber( pDisplay->GetDisplay() ) != fd, "vcl",
-              "wrong fd in DisplayHasEvent" );
-  int result;
-
-  SolarMutexGuard aGuard;
-  result =  XEventsQueued( pDisplay->GetDisplay(),
-                        QueuedAfterReading );
-  return result;
-}
-static int DisplayYield( int fd, void * data )
-{
-  auto pDisplay = static_cast<SalX11Display *>(data);
-  SAL_WARN_IF( ConnectionNumber( pDisplay->GetDisplay() ) != fd, "vcl",
-              "wrong fd in DisplayHasEvent" );
-
-  SolarMutexGuard aGuard;
-  pDisplay->Yield();
-  return 1;
 }
 
 SalX11Display::SalX11Display( Display *display )
