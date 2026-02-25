@@ -2745,14 +2745,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                                                 nCurrentPos + ofs + nLen);
 
                 AttrOutput().RunText( aSnippet, eChrSet, aSymbolFont );
-
-                if (ofs == 1 && nNextAttr == nEnd)
-                {
-                    // tdf#152200: There could be flys anchored after the last position; make sure
-                    // to provide a separate run after field character to write them
-                    AttrOutput().EndRun(&rNode, nCurrentPos, -1, nNextAttr == nEnd);
-                    AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
-                }
             }
 
             if ( aAttrIter.IsDropCap( nNextAttr ) )
@@ -2778,12 +2770,10 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     else
                     {
                         // insert final graphic anchors if any before CR
-                        if (pSdt && *pSdt->GetEnd() == nEnd && aAttrIter.HasFlysAt(nEnd))
+                        if (nEnd && aAttrIter.HasFlysAt(nEnd))
                         {
-                            // Close the content control run before exporting final flies,
-                            // otherwise the flies will be moved into the Sdt run,
-                            // which (for a non-richText Sdt) will be considered corrupt in MS Word.
-                            AttrOutput().EndRun(&rNode, nCurrentPos, nLen, /*bLastRun=*/false);
+                            // Don't mix ending flies with the content of the last run
+                            AttrOutput().EndRun(&rNode, nCurrentPos, nLen);
                             nLen = 0;
                             nCurrentPos = nEnd;
                             AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
@@ -2841,6 +2831,13 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     AttrOutput().WritePostitFieldReference();
 
                     // insert final graphic anchors if any before CR
+                    if (nEnd && aAttrIter.HasFlysAt(nEnd))
+                    {
+                        AttrOutput().EndRun(&rNode, nCurrentPos, nLen);
+                        nLen = 0;
+                        nCurrentPos = nEnd;
+                        AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
+                    }
                     aAttrIter.OutFlys(nEnd);
                     // insert final bookmarks if any before CR and after flys
                     AppendBookmarks( rNode, nEnd, 1 );
