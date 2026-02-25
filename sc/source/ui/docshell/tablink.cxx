@@ -49,6 +49,7 @@
 #include <global.hxx>
 #include <hints.hxx>
 #include <dociter.hxx>
+#include <tools/hostfilter.hxx>
 #include <formula/opcode.hxx>
 #include <formulaiter.hxx>
 #include <tokenarray.hxx>
@@ -150,6 +151,12 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
     OUString aNewUrl = ScGlobal::GetAbsDocName(rNewFile, pImpl->m_pDocSh);
     bool bNewUrlName = aFileName != aNewUrl;
+
+    if (HostFilter::isFileUrlForbidden(aNewUrl))
+    {
+        SAL_WARN("sc.ui", "ScTableLink::Refresh: blocked file path: \"" << aNewUrl << "\"");
+        return false;
+    }
 
     std::shared_ptr<const SfxFilter> pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)

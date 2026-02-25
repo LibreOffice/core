@@ -36,6 +36,7 @@
 #include <sfx2/opengrf.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/objsh.hxx>
+#include <tools/hostfilter.hxx>
 #include "fileobj.hxx"
 #include <sfx2/strings.hrc>
 #include <vcl/svapp.hxx>
@@ -155,6 +156,12 @@ bool SvFileObject::LoadFile_Impl()
     // We are still at Loading!!
     if( bWaitForData || !bLoadAgain || xMed.is() )
         return false;
+
+    if (HostFilter::isFileUrlForbidden(sFileNm))
+    {
+        SAL_WARN("sfx.appl", "SvFileObject::LoadFile_Impl: blocked file path: \"" << sFileNm << "\"");
+        return false;
+    }
 
     // at the moment on the current DocShell
     xMed = new SfxMedium( sFileNm, sReferer, StreamMode::STD_READ );

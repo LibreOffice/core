@@ -8,7 +8,9 @@
  */
 
 #include <tools/hostfilter.hxx>
+#include <osl/file.hxx>
 #include <regex>
+#include <vector>
 
 static std::regex g_AllowedHostsRegex("");
 static OUString g_ExceptVerifyHost;
@@ -49,6 +51,72 @@ bool HostFilter::isExemptVerifyHost(const std::u16string_view rHost)
         return std::regex_match(OUString(rHost).toUtf8().getStr(), g_AllowedHostsRegex);
 
     return false;
+}
+
+static bool g_AllowedExtRefPathsConfigured = false;
+static std::vector<OUString> g_AllowedExtRefPaths;
+
+void HostFilter::setAllowedExtRefPaths(const char* sPaths)
+{
+    g_AllowedExtRefPathsConfigured = true;
+    g_AllowedExtRefPaths.clear();
+
+    if (!sPaths || sPaths[0] == '\0')
+        return;
+
+    OString sPathList(sPaths);
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OString sPath = sPathList.getToken(0, ':', nIndex);
+        if (sPath.isEmpty())
+            continue;
+
+        OUString aSysPath = OStringToOUString(sPath, RTL_TEXTENCODING_UTF8);
+        OUString aFileUrl;
+        if (osl::FileBase::getFileURLFromSystemPath(aSysPath, aFileUrl) != osl::FileBase::E_None)
+            continue;
+
+        // Normalize relative paths and .. segments (does not resolve symlinks)
+        OUString aNormalized;
+        if (osl::FileBase::getAbsoluteFileURL(OUString(), aFileUrl, aNormalized)
+            == osl::FileBase::E_None)
+        {
+            if (!aNormalized.endsWith("/"))
+                aNormalized += "/";
+            g_AllowedExtRefPaths.push_back(aNormalized);
+        }
+        else
+        {
+            if (!aFileUrl.endsWith("/"))
+                aFileUrl += "/";
+            g_AllowedExtRefPaths.push_back(aFileUrl);
+        }
+    } while (nIndex >= 0);
+}
+
+bool HostFilter::isFileUrlForbidden(const OUString& rFileUrl)
+{
+    if (!g_AllowedExtRefPathsConfigured)
+        return false;
+
+    if (!rFileUrl.startsWithIgnoreAsciiCase("file:"))
+        return false;
+
+    // Normalize relative paths and .. segments (does not resolve symlinks)
+    OUString aNormalized;
+    if (osl::FileBase::getAbsoluteFileURL(OUString(), rFileUrl, aNormalized)
+        != osl::FileBase::E_None)
+        return true;
+
+    // Case-sensitive comparison: assumes a case-sensitive filesystem (i.e. Linux).
+    for (const auto& rAllowed : g_AllowedExtRefPaths)
+    {
+        if (aNormalized.startsWith(rAllowed))
+            return false;
+    }
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

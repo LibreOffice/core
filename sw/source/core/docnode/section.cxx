@@ -63,6 +63,7 @@
 #include <unosection.hxx>
 #include <calbck.hxx>
 #include <fmtclds.hxx>
+#include <tools/hostfilter.hxx>
 #include <algorithm>
 #include <utility>
 #include "ndsect.hxx"
@@ -1164,6 +1165,12 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
             OUString sRange;
             sfx2::LinkManager::GetDisplayNames( this, nullptr, &sFileName,
                                                     &sRange, &sFilter );
+
+            if (HostFilter::isFileUrlForbidden(sFileName))
+            {
+                SAL_WARN("sw.core", "SwIntrnlSectRefLink::DataChanged: blocked file path: \"" << sFileName << "\"");
+                break;
+            }
 
             RedlineFlags eOldRedlineFlags = RedlineFlags::NONE;
             SfxObjectShellRef xDocSh;

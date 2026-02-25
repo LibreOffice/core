@@ -48,6 +48,12 @@ sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, co
         return ERROR_GENERAL;
     }
 
+    if (HostFilter::isFileUrlForbidden(aURL))
+    {
+        SAL_WARN("sc.ui", "ScWebServiceLink::DataChanged: blocked file path: \"" << aURL << "\"");
+        return ERROR_GENERAL;
+    }
+
     css::uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess
         = css::ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
     if (!xFileAccess.is())

@@ -86,6 +86,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <o3tl/string_view.hxx>
 #include <openuriexternally.hxx>
+#include <tools/hostfilter.hxx>
 
 #include <officecfg/Office/ProtocolHandler.hxx>
 #include <officecfg/Office/Security.hxx>
@@ -784,6 +785,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     const SfxStringItem* pFileName = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
     assert(pFileName && "SID_FILE_NAME is required");
     OUString aFileName = pFileName->GetValue();
+
+    if (HostFilter::isFileUrlForbidden(aFileName))
+    {
+        SAL_WARN("sfx.appl", "SID_OPENDOC: blocked file path: \"" << aFileName << "\"");
+        return;
+    }
 
     OUString aReferer;
     const SfxStringItem* pRefererItem = rReq.GetArg<SfxStringItem>(SID_REFERER);

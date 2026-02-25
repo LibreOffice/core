@@ -2552,6 +2552,12 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         return nullptr;
     }
 
+    if (HostFilter::isFileUrlForbidden(aFile))
+    {
+        SAL_WARN( "sc.ui", "ScExternalRefManager::loadSrcDocument: blocked access to local file: \"" << aFile << "\"");
+        return nullptr;
+    }
+
     OUString aOptions = pFileData->maFilterOptions;
     if ( !pFileData->maFilterName.isEmpty() )
         rFilter = pFileData->maFilterName;      // don't overwrite stored filter with guessed filter

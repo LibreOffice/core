@@ -45,6 +45,7 @@
 
 #include <scabstdlg.hxx>
 #include <clipparam.hxx>
+#include <tools/hostfilter.hxx>
 
 
 ScAreaLink::ScAreaLink( ScDocShell* pShell, OUString aFile,
@@ -231,6 +232,12 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
     OUString aNewUrl( ScGlobal::GetAbsDocName( rNewFile, m_pDocSh ) );
     bool bNewUrlName = (aNewUrl != aFileName);
+
+    if (HostFilter::isFileUrlForbidden(aNewUrl))
+    {
+        SAL_WARN("sc.ui", "ScAreaLink::Refresh: blocked file path: \"" << aNewUrl << "\"");
+        return false;
+    }
 
     std::shared_ptr<const SfxFilter> pFilter = m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
