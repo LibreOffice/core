@@ -18,6 +18,7 @@
  */
 
 #include <QtData.hxx>
+#include <QtTools.hxx>
 
 #include <QtGui/QBitmap>
 #include <QtGui/QCursor>
@@ -55,21 +56,7 @@ QtData::~QtData() {}
 
 static QCursor* getQCursorFromIconTheme(const OUString& rIconName, int nXHot, int nYHot)
 {
-    const OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-    const OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
-    auto xMemStream = ImageTree::get().getImageStream(rIconName, sIconTheme, sUILang);
-    if (!xMemStream)
-        return nullptr;
-    auto nLength = xMemStream->TellEnd();
-    if (!nLength)
-    {
-        SAL_WARN("vcl.qt", "Cannot load cursor pixmap from empty stream.");
-        return nullptr;
-    }
-
-    const unsigned char* pData = static_cast<const unsigned char*>(xMemStream->GetData());
-    QPixmap aPixmap;
-    aPixmap.loadFromData(pData, nLength);
+    QPixmap aPixmap = loadQPixmapIcon(rIconName);
     return new QCursor(aPixmap, nXHot, nYHot);
 }
 
