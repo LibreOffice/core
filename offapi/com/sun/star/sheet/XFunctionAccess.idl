@@ -45,6 +45,9 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
             <dt>`string`</dt>
             <dd>for a textual value.</dd>
 
+            <dt>`void`</dt>
+            <dd>to skip supplying a value for an optional argument. (since LibreOffice 26.8)</dd>
+
             <dt>`long[][]` or `double[][]`</dt>
             <dd>for an array of numeric values.</dd>
 

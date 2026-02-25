@@ -1126,6 +1126,28 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testVbaOnTime)
     CPPUNIT_ASSERT_EQUAL(42.0, pDoc->GetValue(0, 0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMissingCallFunctionArgument)
+{
+    // tdf#168267: Test that we can pass void as an argument to FunctionAccess::callFunction in
+    // order to skip an argument.
+
+    Reference<css::lang::XMultiServiceFactory> xMSF = comphelper::getProcessServiceFactory();
+    css::uno::Reference<css::sheet::XFunctionAccess> xFunc(
+        xMSF->createInstance(u"com.sun.star.sheet.FunctionAccess"_ustr), UNO_QUERY_THROW);
+
+    css::uno::Any aRet
+        = xFunc->callFunction("REGEX", {
+                                           css::uno::Any(u"abcdeed§ba"_ustr),
+                                           css::uno::Any(u"d."_ustr),
+                                           css::uno::Any(), // void value for the replacement
+                                           css::uno::Any(2),
+                                       });
+
+    // The call to REGEX should return the matched string because the “replacement” parameter is
+    // missing
+    CPPUNIT_ASSERT_EQUAL(Any(u"d§"_ustr), aRet);
+}
+
 ScMacrosTest::ScMacrosTest()
       : ScModelTestBase(u"/sc/qa/extras/testdocuments"_ustr)
 {

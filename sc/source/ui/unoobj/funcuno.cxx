@@ -561,6 +561,11 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
             rArg >>= aUStr;
             aTokenArr.AddString(rSPool.intern(aUStr));
         }
+        else if ( eClass == uno::TypeClass_VOID )
+        {
+            // Interpret the VOID type as a missing argument
+            aTokenArr.AddOpCode(ocMissing);
+        }
         else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<sal_Int16> >>::get() ) )
         {
             ArrayOfArrayProc<sal_Int16>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
