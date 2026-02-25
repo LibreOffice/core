@@ -941,8 +941,7 @@ void OPropertyBrowserController::doInspection()
         // obtain the properties of the object
         std::vector<Property> aProperties;
 
-        PropertyHandlerArray aPropertyHandlers;
-        getPropertyHandlers(m_aInspectedObjects, aPropertyHandlers);
+        PropertyHandlerArray aPropertyHandlers = getPropertyHandlers(m_aInspectedObjects);
 
         PropertyHandlerArray::iterator aHandler(aPropertyHandlers.begin());
         while (aHandler != aPropertyHandlers.end())
@@ -1387,12 +1386,12 @@ Reference<XPropertyHandler> lcl_createHandler(const Reference<XComponentContext>
 }
 }
 
-void OPropertyBrowserController::getPropertyHandlers(const InterfaceArray& _rObjects,
-                                                     PropertyHandlerArray& _rHandlers)
+OPropertyBrowserController::PropertyHandlerArray
+OPropertyBrowserController::getPropertyHandlers(const InterfaceArray& _rObjects)
 {
-    _rHandlers.resize(0);
+    PropertyHandlerArray aHandlers;
     if (_rObjects.empty())
-        return;
+        return aHandlers;
 
     Sequence<Any> aHandlerFactories;
     if (m_xModel.is())
@@ -1406,7 +1405,7 @@ void OPropertyBrowserController::getPropertyHandlers(const InterfaceArray& _rObj
             if (xHandler.is())
             {
                 xHandler->inspect(_rObjects[0]);
-                _rHandlers.push_back(xHandler);
+                aHandlers.push_back(xHandler);
             }
         }
         else
@@ -1428,12 +1427,14 @@ void OPropertyBrowserController::getPropertyHandlers(const InterfaceArray& _rObj
 
             // then create a handler which composes information out of those single handlers
             if (!aSingleHandlers.empty())
-                _rHandlers.push_back(new PropertyComposer(std::move(aSingleHandlers)));
+                aHandlers.push_back(new PropertyComposer(std::move(aSingleHandlers)));
         }
     }
 
     // note that the handlers will not be used by our caller, if they indicate that there are no
     // properties they feel responsible for
+
+    return aHandlers;
 }
 
 bool OPropertyBrowserController::impl_findObjectProperty_nothrow(

@@ -233,7 +233,7 @@ private:
 
     /** retrieves special property handlers for our introspectee
         */
-    void getPropertyHandlers(const InterfaceArray& _rObjects, PropertyHandlerArray& _rHandlers);
+    PropertyHandlerArray getPropertyHandlers(const InterfaceArray& _rObjects);
 
     /** called when a property changed, to broadcast any handlers which might have
             registered for this property
