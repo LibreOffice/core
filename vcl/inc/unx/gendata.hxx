@@ -94,7 +94,7 @@ public:
 
 inline GenericUnixSalData* GetGenericUnixSalData()
 {
-    return static_cast<GenericUnixSalData*>(ImplGetSVData()->mpSalData);
+    return static_cast<GenericUnixSalData*>(GetSalData());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

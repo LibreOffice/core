@@ -54,7 +54,7 @@
 
 X11SalData* GetX11SalData()
 {
-    return static_cast<X11SalData*>(ImplGetSVData()->mpSalData);
+    return static_cast<X11SalData*>(GetSalData());
 }
 
 extern "C" {

@@ -290,7 +290,7 @@ public:
 
 inline GtkSalData* GetGtkSalData()
 {
-    return static_cast<GtkSalData*>(ImplGetSVData()->mpSalData);
+    return static_cast<GtkSalData*>(GetSalData());
 }
 inline GdkDisplay *GtkSalData::GetGdkDisplay()
 {
