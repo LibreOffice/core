@@ -97,7 +97,7 @@ void WrappedStockProperty::setPropertyValue( const css::uno::Any& rOuterValue, c
     try
     {
         // locked controllers
-        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+        ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
         xTemplate->changeDiagram( xDiagram );
     }
     catch( const uno::Exception & )

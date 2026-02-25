@@ -68,6 +68,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
+#include <sal/log.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -681,7 +682,13 @@ awt::Point SAL_CALL DiagramWrapper::getPosition()
 
 void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "ChartModel expired, skip operation");
+        return;
+    }
+    ControllerLockGuardUNO aCtrlLockGuard( xModel );
     Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
     if( !xProp.is() )
         return;
@@ -711,7 +718,13 @@ awt::Size SAL_CALL DiagramWrapper::getSize()
 
 void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "ChartModel expired, skip operation");
+        return;
+    }
+    ControllerLockGuardUNO aCtrlLockGuard( xModel );
     Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
     if( !xProp.is() )
         return;
@@ -744,7 +757,13 @@ OUString SAL_CALL DiagramWrapper::getShapeType()
 
 void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning()
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "ChartModel expired, skip operation");
+        return;
+    }
+    ControllerLockGuardUNO aCtrlLockGuard( xModel );
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
     {
@@ -766,8 +785,14 @@ sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  )
 }
 void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPositionRect )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
-    DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getDocumentModel(), rPositionRect );
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "ChartModel expired, skip operation");
+        return;
+    }
+    ControllerLockGuardUNO aCtrlLockGuard( xModel );
+    DiagramHelper::setDiagramPositioning( xModel, rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, uno::Any(true) );
@@ -794,8 +819,14 @@ awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionExcludingAxes(  
 }
 void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPositionRect )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
-    DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getDocumentModel(), rPositionRect );
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "ChartModel expired, skip operation");
+        return;
+    }
+    ControllerLockGuardUNO aCtrlLockGuard( xModel );
+    DiagramHelper::setDiagramPositioning( xModel, rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue(u"PosSizeExcludeAxes"_ustr, uno::Any(false) );
@@ -806,7 +837,13 @@ awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  
 }
 void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect )
 {
-    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "ChartModel expired, skip operation");
+        return;
+    }
+    ControllerLockGuardUNO aCtrlLockGuard( xModel );
     awt::Rectangle aRect( m_spChart2ModelContact->SubstractAxisTitleSizes(rPositionRect) );
     DiagramWrapper::setDiagramPositionIncludingAxes( aRect );
 }
@@ -1554,7 +1591,13 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
     try
     {
         // locked controllers
-        ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getDocumentModel() );
+        rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+        if( !xModel )
+        {
+            SAL_WARN("chart2", "ChartModel expired, skip operation");
+            return;
+        }
+        ControllerLockGuardUNO aCtrlLockGuard( xModel );
         uno::Reference< beans::XPropertySet > xProp( static_cast<cppu::OWeakObject*>(xTemplate.get()), uno::UNO_QUERY );
         xProp->setPropertyValue( u"NumberOfLines"_ustr, uno::Any(nNewValue) );
         xTemplate->changeDiagram( xDiagram );
@@ -1833,7 +1876,13 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( u"Property IncludeHiddenCells requires boolean value"_ustr, nullptr, 0 );
 
-    m_spChart2ModelContact->getDocumentModel()->setIncludeHiddenCells(bNewValue);
+    rtl::Reference<ChartModel> xModel( m_spChart2ModelContact->getDocumentModel() );
+    if( !xModel )
+    {
+        SAL_WARN("chart2", "ChartModel expired, skip operation");
+        return;
+    }
+    xModel->setIncludeHiddenCells(bNewValue);
 }
 
 Any WrappedIncludeHiddenCellsProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const

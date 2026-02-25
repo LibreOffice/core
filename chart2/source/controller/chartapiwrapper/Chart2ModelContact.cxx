@@ -132,33 +132,58 @@ void Chart2ModelContact::getExplicitValuesForAxis(
 sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForAxis(
             const rtl::Reference< ::chart::Axis >& xAxis )
 {
+    rtl::Reference<ChartModel> xChartModel( m_xChartModel );
+    if( !xChartModel )
+    {
+        SAL_WARN("chart2", "Chart2ModelContact: ChartModel expired");
+        return 0;
+    }
     rtl::Reference< BaseCoordinateSystem > xCooSys(
         AxisHelper::getCoordinateSystemOfAxis(
-              xAxis, m_xChartModel.get()->getFirstChartDiagram() ) );
+              xAxis, xChartModel->getFirstChartDiagram() ) );
 
     return ChartView::getExplicitNumberFormatKeyForAxis( xAxis, xCooSys
-              , m_xChartModel.get() );
+              , xChartModel );
 }
 
 awt::Size Chart2ModelContact::GetPageSize() const
 {
-    return m_xChartModel.get()->getPageSize();
+    rtl::Reference<ChartModel> xChartModel( m_xChartModel );
+    if( !xChartModel )
+    {
+        SAL_WARN("chart2", "Chart2ModelContact: ChartModel expired");
+        return awt::Size();
+    }
+    return xChartModel->getPageSize();
 }
 
 awt::Rectangle Chart2ModelContact::SubstractAxisTitleSizes( const awt::Rectangle& rPositionRect )
 {
+    rtl::Reference<ChartModel> xChartModel( m_xChartModel );
+    if( !xChartModel )
+    {
+        SAL_WARN("chart2", "Chart2ModelContact: ChartModel expired");
+        return rPositionRect;
+    }
     awt::Rectangle aRect = ChartView::AddSubtractAxisTitleSizes(
-        *m_xChartModel.get(), getChartView().get(), rPositionRect, true );
+        *xChartModel, getChartView().get(), rPositionRect, true );
     return aRect;
 }
 
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
 {
+    rtl::Reference<ChartModel> xChartModel( m_xChartModel );
+    if( !xChartModel )
+    {
+        SAL_WARN("chart2", "Chart2ModelContact: ChartModel expired");
+        return awt::Rectangle(0,0,0,0);
+    }
+
     awt::Rectangle aRect( GetDiagramRectangleIncludingAxes() );
 
     //add axis title sizes to the diagram size
     aRect = ChartView::AddSubtractAxisTitleSizes(
-        *m_xChartModel.get(), getChartView().get(), aRect, false );
+        *xChartModel, getChartView().get(), aRect, false );
 
     return aRect;
 }
@@ -166,10 +191,16 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
 {
     awt::Rectangle aRect(0,0,0,0);
-    rtl::Reference< Diagram > xDiagram = m_xChartModel.get()->getFirstChartDiagram();
+    rtl::Reference<ChartModel> xChartModel( m_xChartModel );
+    if( !xChartModel )
+    {
+        SAL_WARN("chart2", "Chart2ModelContact: ChartModel expired");
+        return aRect;
+    }
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
 
     if( xDiagram && xDiagram->getDiagramPositioningMode() == DiagramPositioningMode::Including )
-        aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel.get());
+        aRect = DiagramHelper::getDiagramRectangleFromModel(xChartModel);
     else
     {
         rtl::Reference< ChartView > const & rxChartView = getChartView();
@@ -182,10 +213,16 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
 awt::Rectangle Chart2ModelContact::GetDiagramRectangleExcludingAxes() const
 {
     awt::Rectangle aRect(0,0,0,0);
-    rtl::Reference< Diagram > xDiagram = m_xChartModel.get()->getFirstChartDiagram();
+    rtl::Reference<ChartModel> xChartModel( m_xChartModel );
+    if( !xChartModel )
+    {
+        SAL_WARN("chart2", "Chart2ModelContact: ChartModel expired");
+        return aRect;
+    }
+    rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
 
     if( xDiagram && xDiagram->getDiagramPositioningMode() == DiagramPositioningMode::Excluding )
-        aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel.get());
+        aRect = DiagramHelper::getDiagramRectangleFromModel(xChartModel);
     else
     {
         rtl::Reference< ChartView > const & rxChartView = getChartView();
@@ -201,8 +238,14 @@ awt::Size Chart2ModelContact::GetLegendSize() const
     rtl::Reference< ChartView > const & rxChartView = getChartView();
     if( rxChartView )
     {
-        rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *m_xChartModel.get() );
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
+        rtl::Reference<ChartModel> xChartModel( m_xChartModel );
+        if( !xChartModel )
+        {
+            SAL_WARN("chart2", "Chart2ModelContact: ChartModel expired");
+            return aSize;
+        }
+        rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *xChartModel );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, xChartModel ) );
         aSize = ToSize( rxChartView->getRectangleOfObject( aCID ) );
     }
     return aSize;
@@ -214,8 +257,14 @@ awt::Point Chart2ModelContact::GetLegendPosition() const
     rtl::Reference< ChartView > const & rxChartView = getChartView();
     if( rxChartView )
     {
-        rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *m_xChartModel.get() );
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
+        rtl::Reference<ChartModel> xChartModel( m_xChartModel );
+        if( !xChartModel )
+        {
+            SAL_WARN("chart2", "Chart2ModelContact: ChartModel expired");
+            return aPoint;
+        }
+        rtl::Reference< Legend > xLegend = LegendHelper::getLegend( *xChartModel );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, xChartModel ) );
         aPoint = ToPoint( rxChartView->getRectangleOfObject( aCID ) );
     }
     return aPoint;
