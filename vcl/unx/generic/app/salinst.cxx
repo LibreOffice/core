@@ -85,7 +85,7 @@ X11SalInstance::~X11SalInstance()
     // close session management
     SessionManagerClient::close();
 
-    // dispose SalDisplay list from SalData
+    // dispose SalX11Display list from SalData
     // would be done in a static destructor else which is
     // a little late
     GetX11SalData()->Dispose();
@@ -221,7 +221,7 @@ void X11SalInstance::AddToRecentDocumentList(const OUString&, const OUString&, c
 
 void X11SalInstance::PostPrintersChanged()
 {
-    SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    SalX11Display* pDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     for (auto pSalFrame : pDisp->getFrames() )
         pDisp->PostEvent( pSalFrame, nullptr, SalEvent::PrinterChanged );
 }

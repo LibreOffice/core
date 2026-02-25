@@ -75,7 +75,7 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphic
 
 void X11SalGraphics::Init(X11SalVirtualDevice *pDevice, SalColormap* pColormap, bool bDeleteColormap, bool bAlphaMaskTransparent)
 {
-    SalDisplay *pDisplay  = pDevice->GetDisplay();
+    SalX11Display* pDisplay  = pDevice->GetDisplay();
     m_nXScreen = pDevice->GetXScreenNumber();
 
     int nVisualDepth = pDisplay->GetColormap( m_nXScreen ).GetVisual().GetDepth();

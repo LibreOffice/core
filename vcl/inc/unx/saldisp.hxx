@@ -39,7 +39,7 @@
 
 #include <vclpluginapi.h>
 
-class   SalDisplay;
+class SalX11Display;
 
 
 /* From <X11/Intrinsic.h> */
@@ -91,7 +91,7 @@ struct OwnershipFlag {
 
 class SalColormap
 {
-    const SalDisplay*       m_pDisplay;
+    const SalX11Display*    m_pDisplay;
     Colormap                m_hColormap;
     std::vector<Color>      m_aPalette;         // Pseudocolor
     SalVisual               m_aVisual;
@@ -101,7 +101,7 @@ class SalColormap
     Pixel                   m_nUsed;            // Pseudocolor
 
 public:
-    SalColormap( const SalDisplay*  pSalDisplay,
+    SalColormap( const SalX11Display* pSalDisplay,
                  Colormap           hColormap,
                  SalX11Screen       nXScreen );
     SalColormap( sal_uInt16         nDepth );
@@ -113,7 +113,7 @@ public:
     SalColormap & operator =(SalColormap &&) = default;
 
     Colormap            GetXColormap() const { return m_hColormap; }
-    const SalDisplay*   GetDisplay() const { return m_pDisplay; }
+    const SalX11Display* GetDisplay() const { return m_pDisplay; }
     inline  Display*            GetXDisplay() const;
     const SalVisual&    GetVisual() const { return m_aVisual; }
     Pixel               GetWhitePixel() const { return m_nWhitePixel; }
@@ -192,7 +192,7 @@ public:
     virtual ~GLX11Window() override;
 };
 
-class VCLPLUG_GEN_PUBLIC SalDisplay : public SalGenericDisplay
+class VCLPLUG_GEN_PUBLIC SalX11Display : public SalGenericDisplay
 {
 public:
 
@@ -261,7 +261,6 @@ protected:
 
     mutable Time    m_nLastUserEventTime; // mutable because changed on first access
 
-    virtual void    Dispatch( XEvent *pEvent ) = 0;
     SAL_DLLPRIVATE void InitXinerama();
     SAL_DLLPRIVATE void InitRandR( ::Window aRoot ) const;
     SAL_DLLPRIVATE static void DeInitRandR();
@@ -273,11 +272,18 @@ protected:
 public:
     SAL_DLLPRIVATE static bool BestVisual(Display *pDisp, int nScreen, XVisualInfo &rVI);
 
-    SAL_DLLPRIVATE SalDisplay( Display* pDisp );
+    SAL_DLLPRIVATE SalX11Display(Display* pDisp);
 
-    virtual        ~SalDisplay() override;
+    virtual ~SalX11Display() override;
 
     SAL_DLLPRIVATE void Init();
+
+    void Dispatch(XEvent* pEvent);
+    void Yield();
+    virtual void TriggerUserEventProcessing() override;
+
+    bool IsEvent();
+    void SetupInput();
 
 #ifdef DBG_UTIL
     void            PrintInfo() const;
@@ -344,30 +350,16 @@ public:
 inline  Display *SalColormap::GetXDisplay() const
 { return m_pDisplay->GetDisplay(); }
 
-class SalX11Display final : public SalDisplay
-{
-public:
-             SalX11Display( Display* pDisp );
-    virtual ~SalX11Display() override;
-
-    virtual void        Dispatch( XEvent *pEvent ) override;
-    void        Yield();
-    virtual void        TriggerUserEventProcessing() override;
-
-    bool                IsEvent();
-    void                SetupInput();
-};
-
 namespace vcl_sal {
     // get foreign key names
     OUString getKeysymReplacementName(
         std::u16string_view pLang,
         KeySym nSymbol );
 
-    inline SalDisplay *getSalDisplay(GenericUnixSalData const * data)
+    inline SalX11Display* getSalDisplay(GenericUnixSalData const * data)
     {
         assert(data != nullptr);
-        return static_cast<SalDisplay *>(data->GetDisplay());
+        return static_cast<SalX11Display*>(data->GetDisplay());
     }
 }
 

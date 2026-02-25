@@ -518,7 +518,7 @@ void SessionManagerClient::open(SalSession * pSession)
             pClientID = nullptr;
         }
 
-        SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+        SalX11Display* pDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
         if( pDisp->GetDrawable(pDisp->GetDefaultXScreen()) && !m_aClientID.isEmpty() )
         {
             SAL_INFO("vcl.sm.debug", "  SmcOpenConnection open: pDisp->GetDrawable = true");

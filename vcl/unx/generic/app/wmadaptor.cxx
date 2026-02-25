@@ -49,7 +49,7 @@ class NetWMAdaptor : public WMAdaptor
     void initAtoms();
     virtual bool isValid() const override;
 public:
-    explicit NetWMAdaptor( SalDisplay* );
+    explicit NetWMAdaptor(SalX11Display*);
 
     virtual void setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const override;
     virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const override;
@@ -69,7 +69,7 @@ class GnomeWMAdaptor : public WMAdaptor
     void initAtoms();
     virtual bool isValid() const override;
 public:
-    explicit GnomeWMAdaptor( SalDisplay * );
+    explicit GnomeWMAdaptor(SalX11Display*);
 
     virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const override;
     virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const override;
@@ -173,7 +173,7 @@ static int compareProtocol( const void* pLeft, const void* pRight )
 }
 }
 
-std::unique_ptr<WMAdaptor> WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
+std::unique_ptr<WMAdaptor> WMAdaptor::createWMAdaptor(SalX11Display* pSalDisplay)
 {
     std::unique_ptr<WMAdaptor> pAdaptor;
 
@@ -217,7 +217,7 @@ std::unique_ptr<WMAdaptor> WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
  *  WMAdaptor constructor
  */
 
-WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
+WMAdaptor::WMAdaptor(SalX11Display* pDisplay) :
         m_pSalDisplay( pDisplay ),
         m_bEnableAlwaysOnTopWorks( false ),
         m_bLegacyPartialFullscreen( false ),
@@ -332,7 +332,7 @@ WMAdaptor::~WMAdaptor()
  *  NetWMAdaptor constructor
  */
 
-NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
+NetWMAdaptor::NetWMAdaptor(SalX11Display* pSalDisplay) :
         WMAdaptor( pSalDisplay )
 {
     // currently all _NET WMs do transient like expected
@@ -516,7 +516,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
  *  GnomeWMAdaptor constructor
  */
 
-GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
+GnomeWMAdaptor::GnomeWMAdaptor(SalX11Display* pSalDisplay) :
         WMAdaptor( pSalDisplay ),
         m_bValid( false )
 {

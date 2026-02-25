@@ -68,7 +68,7 @@ class X11SalFrame final : public SalFrame
     bool            mbTransientForRoot;
     std::list< X11SalFrame* > maChildren; // List of child frames
 
-    SalDisplay     *pDisplay_;
+    SalX11Display* pDisplay_;
     SalX11Screen    m_nXScreen;
     ::Window        mhWindow;
     cairo_surface_t* mpSurface;
@@ -167,7 +167,7 @@ public:
     void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen,
                           SystemParentData const * pParentData, bool bUseGeometry = false );
 
-    SalDisplay* GetDisplay() const
+    SalX11Display* GetDisplay() const
     {
         return pDisplay_;
     }

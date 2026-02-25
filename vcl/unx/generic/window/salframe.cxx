@@ -95,7 +95,7 @@ static ::Window  hPresentationWindow = None, hPresFocusWindow = None;
 static ::std::list< ::Window > aPresentationReparentList;
 static int          nVisibleFloats      = 0;
 
-static void doReparentPresentationDialogues( SalDisplay const * pDisplay )
+static void doReparentPresentationDialogues(SalX11Display const * pDisplay )
 {
     GetGenericUnixSalData()->ErrorTrapPush();
     for (auto const& elem : aPresentationReparentList)
@@ -784,7 +784,7 @@ X11SalFrame::~X11SalFrame()
     if( mpParent )
         mpParent->maChildren.remove( this );
 
-    // deregister on SalDisplay
+    // deregister on SalX11Display
     pDisplay_->deregisterFrame( this );
 
     // unselect all events, some may be still in the queue anyway

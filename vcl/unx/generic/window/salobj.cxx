@@ -59,7 +59,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
 
     pObject->mpParent = pParent;
 
-    SalDisplay* pSalDisp        = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    SalX11Display* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     const SystemEnvData& rEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
     ::Window aObjectParent      = static_cast<::Window>(rEnv.GetWindowHandle(pParent));
@@ -469,7 +469,7 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
 
 void X11SalObject::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs)
 {
-    SalDisplay* pSalDisp        = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    SalX11Display* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     Display* pDisp              = pSalDisp->GetDisplay();
     ::Window aObjectParent      = maParentWin;
 

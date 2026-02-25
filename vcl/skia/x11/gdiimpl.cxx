@@ -147,7 +147,7 @@ void X11SkiaSalGraphicsImpl::Flush() { performFlush(); }
 
 std::unique_ptr<skwindow::WindowContext> createVulkanWindowContext(bool temporary)
 {
-    SalDisplay* salDisplay = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    SalX11Display* salDisplay = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     const XVisualInfo* visual;
     XVisualInfo* visuals = nullptr;
     if (!temporary)

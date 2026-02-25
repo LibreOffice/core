@@ -107,7 +107,7 @@ void RandRWrapper::releaseWrapper()
 #include <cstdio>
 #endif
 
-void SalDisplay::InitRandR( ::Window aRoot ) const
+void SalX11Display::InitRandR(::Window aRoot) const
 {
     #ifdef USE_RANDR
     RandRWrapper::get( GetDisplay() ).XRRSelectInput( GetDisplay(), aRoot, RRScreenChangeNotifyMask );
@@ -117,17 +117,17 @@ void SalDisplay::InitRandR( ::Window aRoot ) const
     #endif
 }
 
-void SalDisplay::DeInitRandR()
+void SalX11Display::DeInitRandR()
 {
     #ifdef USE_RANDR
     RandRWrapper::releaseWrapper();
 #if OSL_DEBUG_LEVEL > 1
-    SAL_INFO("vcl.app", "SalDisplay::DeInitRandR().");
+    SAL_INFO("vcl.app", "SalX11Display::DeInitRandR().");
 #endif
     #endif
 }
 
-void SalDisplay::processRandREvent( XEvent* pEvent )
+void SalX11Display::processRandREvent( XEvent* pEvent )
 {
 #ifdef USE_RANDR
     XConfigureEvent* pCnfEvent=reinterpret_cast<XConfigureEvent*>(pEvent);

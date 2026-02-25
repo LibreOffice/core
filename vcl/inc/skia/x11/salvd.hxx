@@ -15,7 +15,7 @@
 
 class X11SkiaSalVirtualDevice final : public SalVirtualDevice
 {
-    SalDisplay* mpDisplay;
+    SalX11Display* mpDisplay;
     std::unique_ptr<X11SalGraphics> mpGraphics;
     bool mbGraphicsAcquired; // is Graphics used
     SalX11Screen mnXScreen;
@@ -34,7 +34,7 @@ public:
     virtual tools::Long GetWidth() const override { return mnWidth; }
     virtual tools::Long GetHeight() const override { return mnHeight; }
 
-    SalDisplay* GetDisplay() const { return mpDisplay; }
+    SalX11Display* GetDisplay() const { return mpDisplay; }
     const SalX11Screen& GetXScreenNumber() const { return mnXScreen; }
 
     virtual SalGraphics* AcquireGraphics() override;

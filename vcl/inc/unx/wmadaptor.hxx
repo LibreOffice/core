@@ -27,7 +27,7 @@
 #include "salframe.h"
 #include <vector>
 
-class SalDisplay;
+class SalX11Display;
 class X11SalFrame;
 
 namespace vcl_sal {
@@ -123,8 +123,8 @@ public:
     static const int decoration_All         = 0x10000000;
 
 protected:
-    SalDisplay*             m_pSalDisplay;      // Display to use
-    Display*                m_pDisplay;         // X Display of SalDisplay
+    SalX11Display*          m_pSalDisplay;      // Display to use
+    Display*                m_pDisplay;         // X Display of SalX11Display
     OUString                m_aWMName;
     Atom                    m_aWMAtoms[ NetAtomMax];
     int                     m_nDesktops;
@@ -138,7 +138,7 @@ protected:
     bool                    m_bWMshouldSwitchWorkspace;
     bool                    m_bWMshouldSwitchWorkspaceInit;
 
-    WMAdaptor( SalDisplay * )
+    WMAdaptor(SalX11Display*)
 ;
     void initAtoms();
     bool getNetWmName();
@@ -154,9 +154,9 @@ public:
     virtual ~WMAdaptor();
 
     /*
-     *  creates a valid WMAdaptor instance for the SalDisplay
+     *  creates a valid WMAdaptor instance for the SalX11Display
      */
-    static std::unique_ptr<WMAdaptor> createWMAdaptor( SalDisplay* );
+    static std::unique_ptr<WMAdaptor> createWMAdaptor(SalX11Display*);
 
     /*
      *  may return an empty string if the window manager could

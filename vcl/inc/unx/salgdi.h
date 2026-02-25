@@ -53,7 +53,7 @@ public:
     X11Common();
 
     const SalColormap& GetColormap() const { return *m_pColormap; }
-    const SalDisplay* GetDisplay() const { return GetColormap().GetDisplay(); }
+    const SalX11Display* GetDisplay() const { return GetColormap().GetDisplay(); }
     const SalVisual& GetVisual() const { return GetColormap().GetVisual(); }
     Display* GetXDisplay() const { return GetColormap().GetXDisplay(); }
     Drawable GetDrawable() const { return m_hDrawable; }
@@ -128,7 +128,7 @@ private:
 
 public:
     Drawable GetDrawable() const { return maX11Common.GetDrawable(); }
-    const SalDisplay* GetDisplay() const { return maX11Common.GetDisplay(); }
+    const SalX11Display* GetDisplay() const { return maX11Common.GetDisplay(); }
     const SalVisual& GetVisual() const { return maX11Common.GetVisual(); }
     Display* GetXDisplay() const { return maX11Common.GetXDisplay(); }
 };

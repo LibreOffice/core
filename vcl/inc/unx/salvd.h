@@ -34,7 +34,7 @@ typedef struct _cairo_surface cairo_surface_t;
 
 class X11SalVirtualDevice final : public SalVirtualDevice
 {
-    SalDisplay      *pDisplay_;
+    SalX11Display* pDisplay_;
     std::unique_ptr<X11SalGraphics> pGraphics_;
 
     Pixmap          hDrawable_;
@@ -60,7 +60,7 @@ public:
     {
         return pDisplay_->GetDisplay();
     }
-    SalDisplay *GetDisplay() const
+    SalX11Display* GetDisplay() const
     {
         return pDisplay_;
     }
