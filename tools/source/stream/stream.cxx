@@ -39,6 +39,12 @@
 
 #include <comphelper/fileformat.h>
 #include <comphelper/fileurl.hxx>
+#include <comphelper/scopeguard.hxx>
+
+#include <unicode/ucsdet.h>
+
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 static void swapNibbles(unsigned char &c)
 {
@@ -740,6 +746,100 @@ void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
     }
     if (bGetBack)
         Seek(nOldPos);      // no BOM, pure data
+}
+
+void SvStream::DetectEncoding()
+{
+    static constexpr auto mapEncodings
+        = frozen::make_unordered_map<std::string_view, rtl_TextEncoding>({
+            { "UTF-8", RTL_TEXTENCODING_UTF8 },
+            { "UTF-16BE", RTL_TEXTENCODING_UCS2 },
+            { "UTF-16LE", RTL_TEXTENCODING_UCS2 },
+            //{ "UTF-32BE", RTL_TEXTENCODING_UCS4 },
+            //{ "UTF-32LE", RTL_TEXTENCODING_UCS4 },
+            { "Shift_JIS", RTL_TEXTENCODING_SHIFT_JIS },
+            { "ISO-2022-JP", RTL_TEXTENCODING_ISO_2022_JP },
+            { "ISO-2022-CN", RTL_TEXTENCODING_ISO_2022_CN },
+            { "ISO-2022-KR", RTL_TEXTENCODING_ISO_2022_KR },
+            { "GB18030", RTL_TEXTENCODING_GB_18030 },
+            { "Big5", RTL_TEXTENCODING_BIG5 },
+            { "EUC-JP", RTL_TEXTENCODING_EUC_JP },
+            { "EUC-KR", RTL_TEXTENCODING_EUC_KR },
+            { "ISO-8859-1", RTL_TEXTENCODING_ISO_8859_1 },
+            { "ISO-8859-2", RTL_TEXTENCODING_ISO_8859_2 },
+            { "ISO-8859-5", RTL_TEXTENCODING_ISO_8859_5 },
+            { "ISO-8859-6", RTL_TEXTENCODING_ISO_8859_6 },
+            { "ISO-8859-7", RTL_TEXTENCODING_ISO_8859_7 },
+            { "ISO-8859-8", RTL_TEXTENCODING_ISO_8859_8 },
+            { "ISO-8859-9", RTL_TEXTENCODING_ISO_8859_9 },
+            { "windows-1250", RTL_TEXTENCODING_MS_1250 },
+            { "windows-1251", RTL_TEXTENCODING_MS_1251 },
+            { "windows-1252", RTL_TEXTENCODING_MS_1252 },
+            { "windows-1253", RTL_TEXTENCODING_MS_1253 },
+            { "windows-1254", RTL_TEXTENCODING_MS_1254 },
+            { "windows-1255", RTL_TEXTENCODING_MS_1255 },
+            { "windows-1256", RTL_TEXTENCODING_MS_1256 },
+            { "KOI8-R", RTL_TEXTENCODING_KOI8_R },
+        });
+
+    const sal_uInt64 nOrigPos = Tell();
+    SetStreamCharSet(RTL_TEXTENCODING_DONTKNOW);
+    StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
+    if (!good())
+        return;
+
+    const sal_uInt64 nBomSize = Tell() - nOrigPos;
+    if (nBomSize == 2)
+    {
+        SetStreamCharSet(RTL_TEXTENCODING_UCS2);
+        return;
+    }
+    if (nBomSize == 3)
+    {
+        SetStreamCharSet(RTL_TEXTENCODING_UTF8);
+        return;
+    }
+
+    assert(nBomSize == 0); // we are at nOrigPos
+    char bytes[4096] = { 0 };
+    size_t nRead = ReadBytes(bytes, sizeof(bytes));
+    Seek(nOrigPos);
+    ResetError();
+
+    if (nRead == 0)
+        return;
+
+    UErrorCode uerr = U_ZERO_ERROR;
+    UCharsetDetector* ucd = ucsdet_open(&uerr);
+    if (!U_SUCCESS(uerr))
+        return;
+    comphelper::ScopeGuard ucsdet_close_guard([ucd] { ucsdet_close(ucd); });
+
+    ucsdet_setText(ucd, bytes, nRead, &uerr);
+    if (!U_SUCCESS(uerr))
+        return;
+
+    const UCharsetMatch* match = ucsdet_detect(ucd, &uerr);
+    if (!U_SUCCESS(uerr))
+        return;
+
+    const char* pEncodingName = ucsdet_getName(match, &uerr);
+    if (!U_SUCCESS(uerr) || !pEncodingName)
+        return;
+
+    const auto it = mapEncodings.find(pEncodingName);
+    if (it == mapEncodings.end())
+        return;
+
+    rtl_TextEncoding eEncoding = it->second;
+    SetStreamCharSet(eEncoding);
+    if (eEncoding == RTL_TEXTENCODING_UCS2)
+    {
+        if (it->first == "UTF-16LE")
+            SetEndian(SvStreamEndian::LITTLE);
+        else if (it->first == "UTF-16BE")
+            SetEndian(SvStreamEndian::BIG);
+    }
 }
 
 sal_uInt64 SvStream::SeekRel(sal_Int64 const nPos)

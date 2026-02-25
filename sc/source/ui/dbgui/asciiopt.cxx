@@ -121,13 +121,11 @@ void ScAsciiOptions::ReadFromString( std::u16string_view rString, SvStream* pStr
     if ( nPos >= 0 )
     {
         const std::u16string_view aToken = o3tl::getToken(rString, 0, ',', nPos);
-        SvStreamEndian endian;
         bool bDetectCharSet = aToken == pStrDet;
         if ( bDetectCharSet && pStream4Detect )
         {
-            SfxObjectShell::DetectCharSet(*pStream4Detect, eCharSet, endian);
-            if (eCharSet == RTL_TEXTENCODING_UNICODE)
-                pStream4Detect->SetEndian(endian);
+            pStream4Detect->DetectEncoding();
+            eCharSet = pStream4Detect->GetStreamCharSet();
         }
         else if (!bDetectCharSet)
             eCharSet = ScGlobal::GetCharsetValue( aToken );

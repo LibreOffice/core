@@ -240,87 +240,15 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
     return SwIoSystem::GetFilterOfFormat(FILTER_TEXT);
 }
 
-rtl_TextEncoding SwIoSystem::GetTextEncoding(SvStream& rStrm)
-{
-    sal_uLong nLen, nOrig;
-    char aBuf[4096];
-    nOrig = nLen = rStrm.ReadBytes(aBuf, sizeof(aBuf));
-
-    rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
-    const bool bRet = SwIoSystem::IsDetectableText(aBuf, nLen, &eCharSet, nullptr, nullptr, nullptr);
-    if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
-        rStrm.SeekRel(-(tools::Long(nLen)));
-    else
-        rStrm.SeekRel(-(tools::Long(nOrig)));
-
-    return eCharSet;
-}
-
 bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
     rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool *pBom)
 {
-    bool bSwap = false;
-    rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
-    bool bLE = true;
-    bool bBom = false;
-    /*See if it's a known unicode type*/
-    if (rLen >= 2)
-    {
-        sal_uLong nHead=0;
-        if (rLen > 2 && sal_uInt8(pBuf[0]) == 0xEF && sal_uInt8(pBuf[1]) == 0xBB &&
-            sal_uInt8(pBuf[2]) == 0xBF)
-        {
-            eCharSet = RTL_TEXTENCODING_UTF8;
-            nHead = 3;
-            bBom = true;
-        }
-        else if (sal_uInt8(pBuf[0]) == 0xFE && sal_uInt8(pBuf[1]) == 0xFF)
-        {
-            eCharSet = RTL_TEXTENCODING_UCS2;
-            bLE = false;
-            nHead = 2;
-            bBom = true;
-        }
-        else if (sal_uInt8(pBuf[1]) == 0xFE && sal_uInt8(pBuf[0]) == 0xFF)
-        {
-            eCharSet = RTL_TEXTENCODING_UCS2;
-            nHead = 2;
-            bBom = true;
-        }
-        pBuf+=nHead;
-        rLen-=nHead;
-    }
-    /*See unicode type again without BOM*/
-    if (rLen >= 1 && eCharSet == RTL_TEXTENCODING_DONTKNOW)
-    {
-        UErrorCode uerr = U_ZERO_ERROR;
-        UCharsetDetector* ucd = ucsdet_open(&uerr);
-        ucsdet_setText(ucd, pBuf, rLen, &uerr);
-        if (const UCharsetMatch* match = ucsdet_detect(ucd, &uerr))
-        {
-            const char* pEncodingName = ucsdet_getName(match, &uerr);
-
-            if (U_SUCCESS(uerr) && !strcmp("UTF-8", pEncodingName))
-            {
-                eCharSet = RTL_TEXTENCODING_UTF8; // UTF-8
-            }
-            else if (U_SUCCESS(uerr) && !strcmp("UTF-16BE", pEncodingName))
-            {
-                eCharSet = RTL_TEXTENCODING_UCS2; // UTF-16BE
-                bLE = false;
-            }
-            else if (U_SUCCESS(uerr) && !strcmp("UTF-16LE", pEncodingName))
-            {
-                eCharSet = RTL_TEXTENCODING_UCS2; // UTF-16LE
-            }
-            else if (U_SUCCESS(uerr) && !strcmp("GB18030", pEncodingName))
-            {
-                eCharSet = RTL_TEXTENCODING_GB_18030;
-            }
-        }
-
-        ucsdet_close(ucd);
-    }
+    SvMemoryStream aStream(const_cast<char*>(pBuf), rLen, StreamMode::READ);
+    aStream.DetectEncoding();
+    rtl_TextEncoding eCharSet = aStream.GetStreamCharSet();
+    auto nBomSize = aStream.Tell();
+    pBuf += nBomSize;
+    rLen -= nBomSize;
 
     bool bCR = false, bLF = false, bIsBareUnicode = false;
 
@@ -352,14 +280,8 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
         {
             nNewLen = rLen/2;
             memcpy(pNewBuf, pBuf, rLen);
-#ifdef OSL_LITENDIAN
-            bool const bNativeLE = true;
-#else
-            bool const bNativeLE = false;
-#endif
-            if (bLE != bNativeLE)
+            if (aStream.IsEndianSwap())
             {
-                bSwap = true;
                 for (sal_uLong n = 0; n < nNewLen; ++n)
                     pNewBuf[n] = OSL_SWAPWORD(pNewBuf[n]);
             }
@@ -417,11 +339,11 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
     if (pCharSet)
         *pCharSet = eCharSet;
     if (pSwap)
-        *pSwap = bSwap;
+        *pSwap = aStream.IsEndianSwap();
     if (pLineEnd)
         *pLineEnd = eLineEnd;
     if (pBom)
-        *pBom = bBom;
+        *pBom = nBomSize != 0;
 
     return !bIsBareUnicode;
 }

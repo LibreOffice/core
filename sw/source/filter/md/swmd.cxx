@@ -842,28 +842,13 @@ ErrCodeMsg MarkdownReader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rP
 ErrCode SwMarkdownParser::CallParser()
 {
     // use utf8
-    m_rInput.StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
-    if (!m_rInput.good())
+    m_rInput.DetectEncoding();
+    const rtl_TextEncoding eSrcEnc = m_rInput.GetStreamCharSet();
+    if (eSrcEnc == RTL_TEXTENCODING_DONTKNOW)
     {
         return ERRCODE_IO_INVALIDCHAR;
     }
 
-    rtl_TextEncoding eSrcEnc;
-    const sal_uInt64 nPos = m_rInput.Tell(); //bom size
-    if (nPos == 2)
-        eSrcEnc = RTL_TEXTENCODING_UCS2;
-    else if (nPos == 3)
-        eSrcEnc = RTL_TEXTENCODING_UTF8;
-    else
-    {
-        SvStreamEndian eEndian;
-        SfxObjectShell::DetectCharSet(m_rInput, eSrcEnc, eEndian);
-        if (eSrcEnc == RTL_TEXTENCODING_DONTKNOW)
-            return ERRCODE_IO_INVALIDCHAR;
-        m_rInput.SetEndian(eEndian);
-    }
-
-    m_rInput.ResetError();
     const sal_uInt64 nFilesize = m_rInput.remainingSize();
     OString sUtf8Data;
 

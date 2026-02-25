@@ -125,7 +125,6 @@
 #include <guisaveas.hxx>
 #include "objstor.hxx"
 #include "exoticfileloadexception.hxx"
-#include <unicode/ucsdet.h>
 #include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
@@ -881,78 +880,6 @@ bool SfxObjectShell::DoLoadExternal( SfxMedium *pMed )
     return LoadExternal(*pMedium);
 }
 
-const ::std::unordered_map<std::string, rtl_TextEncoding>  mapCharSets =
-                            {{"UTF-8", RTL_TEXTENCODING_UTF8},
-                            {"UTF-16BE", RTL_TEXTENCODING_UCS2},
-                            {"UTF-16LE", RTL_TEXTENCODING_UCS2},
-                            {"UTF-32BE", RTL_TEXTENCODING_UCS4},
-                            {"UTF-32LE", RTL_TEXTENCODING_UCS4},
-                            {"Shift_JIS", RTL_TEXTENCODING_SHIFT_JIS},
-                            {"ISO-2022-JP", RTL_TEXTENCODING_ISO_2022_JP},
-                            {"ISO-2022-CN", RTL_TEXTENCODING_ISO_2022_CN},
-                            {"ISO-2022-KR", RTL_TEXTENCODING_ISO_2022_KR},
-                            {"GB18030", RTL_TEXTENCODING_GB_18030},
-                            {"Big5", RTL_TEXTENCODING_BIG5},
-                            {"EUC-JP", RTL_TEXTENCODING_EUC_JP},
-                            {"EUC-KR", RTL_TEXTENCODING_EUC_KR},
-                            {"ISO-8859-1", RTL_TEXTENCODING_ISO_8859_1},
-                            {"ISO-8859-2", RTL_TEXTENCODING_ISO_8859_2},
-                            {"ISO-8859-5", RTL_TEXTENCODING_ISO_8859_5},
-                            {"ISO-8859-6", RTL_TEXTENCODING_ISO_8859_6},
-                            {"ISO-8859-7", RTL_TEXTENCODING_ISO_8859_7},
-                            {"ISO-8859-8", RTL_TEXTENCODING_ISO_8859_8},
-                            {"ISO-8859-9", RTL_TEXTENCODING_ISO_8859_9},
-                            {"windows-1250", RTL_TEXTENCODING_MS_1250},
-                            {"windows-1251", RTL_TEXTENCODING_MS_1251},
-                            {"windows-1252", RTL_TEXTENCODING_MS_1252},
-                            {"windows-1253", RTL_TEXTENCODING_MS_1253},
-                            {"windows-1254", RTL_TEXTENCODING_MS_1254},
-                            {"windows-1255", RTL_TEXTENCODING_MS_1255},
-                            {"windows-1256", RTL_TEXTENCODING_MS_1256},
-                            {"KOI8-R", RTL_TEXTENCODING_KOI8_R}};
-
-void SfxObjectShell::DetectCharSet(SvStream& stream, rtl_TextEncoding& eCharSet, SvStreamEndian &endian)
-{
-    constexpr size_t buffsize = 4096;
-    sal_Int8 bytes[buffsize] = { 0 };
-    sal_uInt64 nInitPos = stream.Tell();
-    sal_Int32 nRead = stream.ReadBytes(bytes, buffsize);
-
-    stream.Seek(nInitPos);
-    eCharSet = RTL_TEXTENCODING_DONTKNOW;
-
-    if (!nRead)
-        return;
-
-    UErrorCode uerr = U_ZERO_ERROR;
-    UCharsetDetector* ucd = ucsdet_open(&uerr);
-    if (!U_SUCCESS(uerr))
-        return;
-
-    const UCharsetMatch* match = nullptr;
-    const char* pEncodingName = nullptr;
-    ucsdet_setText(ucd, reinterpret_cast<const char*>(bytes), nRead, &uerr);
-    if (U_SUCCESS(uerr))
-        match = ucsdet_detect(ucd, &uerr);
-
-    if (U_SUCCESS(uerr))
-        pEncodingName = ucsdet_getName(match, &uerr);
-
-    if (U_SUCCESS(uerr) && pEncodingName)
-    {
-        const auto it = mapCharSets.find(pEncodingName);
-        if (it != mapCharSets.end())
-            eCharSet = it->second;
-
-        if (eCharSet == RTL_TEXTENCODING_UNICODE && !strcmp("UTF-16LE", pEncodingName))
-            endian = SvStreamEndian::LITTLE;
-        else if (eCharSet == RTL_TEXTENCODING_UNICODE && !strcmp("UTF-16BE", pEncodingName))
-            endian = SvStreamEndian::BIG;
-    }
-
-    ucsdet_close(ucd);
-}
-
 void SfxObjectShell::DetectCsvSeparators(SvStream& stream, rtl_TextEncoding eCharSet, OUString& separators, sal_Unicode cStringDelimiter)
 {
     OUString sLine;
@@ -1123,10 +1050,8 @@ void SfxObjectShell::DetectCsvFilterOptions(SvStream& stream, OUString& aFilterO
     // Detect charset
     if (aCharSet == aDetect)
     {
-        SvStreamEndian endian;
-        DetectCharSet(stream, eCharSet, endian);
-        if (eCharSet == RTL_TEXTENCODING_UNICODE)
-            stream.SetEndian(endian);
+        stream.DetectEncoding();
+        eCharSet = stream.GetStreamCharSet();
     }
     else if (!aCharSet.empty())
         eCharSet = o3tl::toInt32(aCharSet);

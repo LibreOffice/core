@@ -455,7 +455,6 @@ public:
     const css::uno::Sequence< css::beans::PropertyValue >& GetModifyPasswordInfo() const;
     bool                        SetModifyPasswordInfo( const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
 
-    static void                 DetectCharSet(SvStream& stream, rtl_TextEncoding& eCharSet, SvStreamEndian& endian);
     static void                 DetectCsvSeparators(SvStream& stream, rtl_TextEncoding eCharSet, OUString& separators, sal_Unicode cStringDelimiter);
     static void                 DetectCsvFilterOptions(SvStream& stream, OUString& aFilterOptions);
     static void                 DetectFilterOptions(SfxMedium* pMedium);

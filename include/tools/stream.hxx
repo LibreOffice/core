@@ -326,6 +326,12 @@ public:
         encoding and switch endian swapping if UTF-16 and 0xfffe. */
     void            StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
 
+    /** Try StartWritingUnicodeText; if failed, use ICU to detect encoding from data.
+        After the function, the position is after BOM (if any); GetStreamCharSet
+        returns the detected encoding; GetEndian returns the detected endianness
+        (for UTF-16). */
+    void DetectEncoding();
+
     /** Read a line of Unicode.
 
         @param nMaxCodepointsToRead

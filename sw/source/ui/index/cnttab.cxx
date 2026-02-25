@@ -4006,7 +4006,8 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
 {
     AutoMarkEntry* pToInsert = nullptr;
     // tdf#108910, tdf#125496 - read index entries using the appropriate character set
-    rtl_TextEncoding eTEnc = SwIoSystem::GetTextEncoding(rInStr);
+    rInStr.DetectEncoding();
+    rtl_TextEncoding eTEnc = rInStr.GetStreamCharSet();
     if (eTEnc == RTL_TEXTENCODING_DONTKNOW)
         eTEnc = osl_getThreadTextEncoding();
     while (rInStr.good())
