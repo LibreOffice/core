@@ -11,7 +11,6 @@
 #include <QtInstanceDrawingArea.moc>
 
 #include <QtAccessibleWidget.hxx>
-#include <QtData.hxx>
 
 #include <vcl/qt/QtUtils.hxx>
 

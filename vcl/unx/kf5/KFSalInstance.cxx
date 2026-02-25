@@ -27,8 +27,6 @@
 
 #include <sal/log.hxx>
 
-#include <QtData.hxx>
-
 #include "KFFilePicker.hxx"
 #include "KFSalInstance.hxx"
 

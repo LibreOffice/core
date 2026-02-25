@@ -11,9 +11,9 @@
 
 #include <config_cairo_canvas.h>
 
-#include <QtData.hxx>
 #include <QtFrame.hxx>
 #include <QtGraphics_Controls.hxx>
+#include <QtInstance.hxx>
 #include <QtSvpGraphics.hxx>
 #include <QtSvpSurface.hxx>
 #include <QtTools.hxx>
@@ -23,7 +23,7 @@
 QtSvpGraphics::QtSvpGraphics(QtFrame* pFrame)
     : m_pFrame(pFrame)
 {
-    if (!QtData::noNativeControls())
+    if (!QtInstance::noNativeControls())
         m_pWidgetDraw.reset(new QtGraphics_Controls(*this));
     if (m_pFrame)
         setDevicePixelRatioF(m_pFrame->devicePixelRatioF());

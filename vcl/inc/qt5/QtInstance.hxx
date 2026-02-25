@@ -246,6 +246,9 @@ public:
 
     QtFrame* activePopup() const { return m_pActivePopup; }
     void setActivePopup(QtFrame*);
+
+    static bool noNativeControls();
+    static bool noWeldedWidgets();
 };
 
 inline QtInstance& GetQtInstance()

@@ -21,7 +21,6 @@
 #include <QtFrame.hxx>
 #include <QtFrame.moc>
 
-#include <QtData.hxx>
 #include <QtDragAndDrop.hxx>
 #include <QtGraphics.hxx>
 #include <QtInstance.hxx>
@@ -1000,7 +999,7 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
-        if (QtData::noNativeControls())
+        if (QtInstance::noNativeControls())
             return;
         QtCustomStyle::LoadCustomStyle(GetUseDarkMode());
 

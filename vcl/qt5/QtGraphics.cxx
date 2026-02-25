@@ -19,10 +19,10 @@
 
 #include <QtGraphics.hxx>
 
-#include <QtData.hxx>
 #include <QtFont.hxx>
 #include <QtFrame.hxx>
 #include <QtGraphics_Controls.hxx>
+#include <QtInstance.hxx>
 #include <QtPainter.hxx>
 
 #include <QtGui/QImage>
@@ -39,7 +39,7 @@ QtGraphics::QtGraphics( QtFrame *pFrame, QImage *pQImage )
 
     if (!initWidgetDrawBackends(false))
     {
-        if (!QtData::noNativeControls())
+        if (!QtInstance::noNativeControls())
             m_pWidgetDraw.reset(new QtGraphics_Controls(*this));
     }
     if (m_pFrame)
