@@ -356,10 +356,11 @@ namespace vcl_sal {
         std::u16string_view pLang,
         KeySym nSymbol );
 
-    inline SalX11Display* getSalDisplay(GenericUnixSalData const * data)
+    inline SalX11Display* getSalDisplay()
     {
-        assert(data != nullptr);
-        return static_cast<SalX11Display*>(data->GetDisplay());
+        const GenericUnixSalData* pData = GetGenericUnixSalData();
+        assert(pData != nullptr);
+        return static_cast<SalX11Display*>(pData->GetDisplay());
     }
 }
 

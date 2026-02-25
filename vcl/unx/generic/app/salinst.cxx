@@ -154,8 +154,7 @@ static Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 
 bool X11SalInstance::AnyInput(VclInputFlags nType)
 {
-    GenericUnixSalData *pData = GetGenericUnixSalData();
-    Display *pDisplay  = vcl_sal::getSalDisplay(pData)->GetDisplay();
+    Display* pDisplay = vcl_sal::getSalDisplay()->GetDisplay();
     bool bRet = false;
 
     if( (nType & VclInputFlags::TIMER) && (mpXLib && mpXLib->CheckTimeout(false)) )
@@ -221,7 +220,7 @@ void X11SalInstance::AddToRecentDocumentList(const OUString&, const OUString&, c
 
 void X11SalInstance::PostPrintersChanged()
 {
-    SalX11Display* pDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    SalX11Display* pDisp = vcl_sal::getSalDisplay();
     for (auto pSalFrame : pDisp->getFrames() )
         pDisp->PostEvent( pSalFrame, nullptr, SalEvent::PrinterChanged );
 }

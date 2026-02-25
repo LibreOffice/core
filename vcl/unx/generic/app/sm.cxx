@@ -295,7 +295,7 @@ IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pStateVal, void 
           task of the quick-starter)
         */
         *pSmRestartHint = SmRestartNever;
-        for (auto pSalFrame : vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames() )
+        for (auto pSalFrame : vcl_sal::getSalDisplay()->getFrames())
         {
             vcl::Window *pWindow = pSalFrame->GetWindow();
             if (pWindow && pWindow->IsVisible())
@@ -395,7 +395,7 @@ IMPL_STATIC_LINK_NOARG( SessionManagerClient, ShutDownHdl, void*, void )
         m_pSession->CallCallback( &aEvent );
     }
 
-    SalFrame *pAnyFrame = vcl_sal::getSalDisplay(GetGenericUnixSalData())->anyFrame();
+    SalFrame* pAnyFrame = vcl_sal::getSalDisplay()->anyFrame();
     SAL_INFO("vcl.sm.debug", "  rFrames.empty() = " << (pAnyFrame ? "true" : "false"));
     if( pAnyFrame )
         pAnyFrame->CallCallback( SalEvent::Shutdown, nullptr );
@@ -518,7 +518,7 @@ void SessionManagerClient::open(SalSession * pSession)
             pClientID = nullptr;
         }
 
-        SalX11Display* pDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+        SalX11Display* pDisp = vcl_sal::getSalDisplay();
         if( pDisp->GetDrawable(pDisp->GetDefaultXScreen()) && !m_aClientID.isEmpty() )
         {
             SAL_INFO("vcl.sm.debug", "  SmcOpenConnection open: pDisp->GetDrawable = true");
@@ -853,7 +853,7 @@ void ICEWatchProc(
     }
 
     SAL_INFO( "vcl.sm.debug", "  ICE connection     on " << IceConnectionNumber( ice_conn ) );
-    SAL_INFO( "vcl.sm.debug", "  Display connection is " << ConnectionNumber( vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDisplay() ) );
+    SAL_INFO( "vcl.sm.debug", "  Display connection is " << ConnectionNumber(vcl_sal::getSalDisplay()->GetDisplay()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -59,7 +59,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
 
     pObject->mpParent = pParent;
 
-    SalX11Display* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    SalX11Display* pSalDisp = vcl_sal::getSalDisplay();
     const SystemEnvData& rEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
     ::Window aObjectParent      = static_cast<::Window>(rEnv.GetWindowHandle(pParent));
@@ -223,7 +223,7 @@ X11SalObject::X11SalObject()
     , maColormap(0)
     , mbVisible(false)
 {
-    maSystemChildData.pDisplay  = vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDisplay();
+    maSystemChildData.pDisplay = vcl_sal::getSalDisplay()->GetDisplay();
     maSystemChildData.SetWindowHandle(None);
     maSystemChildData.pSalFrame = nullptr;
     maSystemChildData.pWidget       = nullptr;
@@ -231,13 +231,13 @@ X11SalObject::X11SalObject()
     maSystemChildData.toolkit = SystemEnvData::Toolkit::Gen;
     maSystemChildData.platform = SystemEnvData::Platform::Xcb;
 
-    std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getSalObjects();
+    std::list<SalObject*>& rObjects = vcl_sal::getSalDisplay()->getSalObjects();
     rObjects.push_back( this );
 }
 
 X11SalObject::~X11SalObject()
 {
-    std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getSalObjects();
+    std::list<SalObject*>& rObjects = vcl_sal::getSalDisplay()->getSalObjects();
     rObjects.remove( this );
 
     GetGenericUnixSalData()->ErrorTrapPush();
@@ -387,7 +387,7 @@ static sal_uInt16 sal_GetCode( int state )
 
 bool X11SalObject::Dispatch( XEvent* pEvent )
 {
-    std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getSalObjects();
+    std::list<SalObject*>& rObjects = vcl_sal::getSalDisplay()->getSalObjects();
 
     for (auto const& elem : rObjects)
     {
@@ -469,7 +469,7 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
 
 void X11SalObject::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs)
 {
-    SalX11Display* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    SalX11Display* pSalDisp = vcl_sal::getSalDisplay();
     Display* pDisp              = pSalDisp->GetDisplay();
     ::Window aObjectParent      = maParentWin;
 

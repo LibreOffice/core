@@ -708,13 +708,11 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     m_nXScreen( 0 ),
     maAlwaysOnTopRaiseTimer( "vcl::X11SalFrame maAlwaysOnTopRaiseTimer" )
 {
-    GenericUnixSalData *pData = GetGenericUnixSalData();
-
     mpParent                    = static_cast< X11SalFrame* >( pParent );
 
     mbTransientForRoot          = false;
 
-    pDisplay_                   = vcl_sal::getSalDisplay(pData);
+    pDisplay_ = vcl_sal::getSalDisplay();
     // insert frame in framelist
     pDisplay_->registerFrame( this );
 
@@ -2299,12 +2297,12 @@ SalFrame::SalPointerState X11SalFrame::GetPointerState()
 
 KeyIndicatorState X11SalFrame::GetIndicatorState()
 {
-    return vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetIndicatorState();
+    return vcl_sal::getSalDisplay()->GetIndicatorState();
 }
 
 void X11SalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )
 {
-    vcl_sal::getSalDisplay(GetGenericUnixSalData())->SimulateKeyPress(nKeyCode);
+    vcl_sal::getSalDisplay()->SimulateKeyPress(nKeyCode);
 }
 
 namespace

@@ -38,7 +38,7 @@ X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, t
 {
     assert(mpGraphics);
 
-    mpDisplay = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    mpDisplay = vcl_sal::getSalDisplay();
     mnXScreen = static_cast<const X11SalGraphics&>(rGraphics).GetScreenNumber();
     mnWidth = nDX;
     mnHeight = nDY;
@@ -56,7 +56,7 @@ X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, t
     // TODO Check where a VirtualDevice is created from SystemGraphicsData
     assert(false);
 
-    mpDisplay = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    mpDisplay = vcl_sal::getSalDisplay();
     mnXScreen = static_cast<const X11SalGraphics&>(rGraphics).GetScreenNumber();
     mnWidth = nDX;
     mnHeight = nDY;

@@ -119,7 +119,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Lo
     bool bDeleteColormap = false;
 
     nDepth_                 = eFormat == DeviceFormat::WITH_ALPHA ? 32 : rGraphics.GetBitCount();
-    pDisplay_               = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    pDisplay_ = vcl_sal::getSalDisplay();
 
     nDX_ = nDX;
     nDY_ = nDY;
@@ -158,7 +158,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Lo
     bool bDeleteColormap = false;
 
     sal_uInt16 nBitCount = rGraphics.GetBitCount();
-    pDisplay_               = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    pDisplay_ = vcl_sal::getSalDisplay();
     nDepth_                 = nBitCount;
 
     assert(rData.hDrawable != None);

@@ -126,7 +126,7 @@ void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pSurface, 
     if( nXScreen != m_nXScreen )
     {
         FreeColorMap();
-        maX11Common.m_pColormap = &vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetColormap( nXScreen );
+        maX11Common.m_pColormap = &vcl_sal::getSalDisplay()->GetColormap(nXScreen);
         m_nXScreen = nXScreen;
     }
 
@@ -136,7 +136,7 @@ void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pSurface, 
 void X11SalGraphics::Init( X11SalFrame& rFrame, Drawable aTarget,
                            SalX11Screen nXScreen )
 {
-    maX11Common.m_pColormap = &vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetColormap(nXScreen);
+    maX11Common.m_pColormap = &vcl_sal::getSalDisplay()->GetColormap(nXScreen);
     m_nXScreen  = nXScreen;
 
     m_pFrame    = &rFrame;

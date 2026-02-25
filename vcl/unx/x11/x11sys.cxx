@@ -42,21 +42,21 @@ X11SalSystem::~X11SalSystem()
 // for the moment only handle xinerama case
 unsigned int X11SalSystem::GetDisplayScreenCount()
 {
-    SalX11Display* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    SalX11Display* pSalDisp = vcl_sal::getSalDisplay();
     return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() :
            pSalDisp->GetXScreenCount();
 }
 
 unsigned int X11SalSystem::GetDisplayBuiltInScreen()
 {
-    SalX11Display* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    SalX11Display* pSalDisp = vcl_sal::getSalDisplay();
     return pSalDisp->GetDefaultXScreen().getXScreen();
 }
 
 AbsoluteScreenPixelRectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     AbsoluteScreenPixelRectangle aRet;
-    SalX11Display* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
+    SalX11Display* pSalDisp = vcl_sal::getSalDisplay();
     if( pSalDisp->IsXinerama() )
     {
         const std::vector< AbsoluteScreenPixelRectangle >& rScreens = pSalDisp->GetXineramaScreens();
