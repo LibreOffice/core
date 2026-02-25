@@ -1027,11 +1027,21 @@ void PDFWriterImpl::emitNamespaces()
         if (!updateObject(nObject))
             return;
 
-        COSWriter aWriter(m_aContext.Encryption.getParams(), m_pPDFEncryptor);
+        OStringBuffer aLine;
+        COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
         aWriter.startObject(nObject);
         aWriter.startDict();
         aWriter.write("/Type", "/Namespace");
         aWriter.writeKeyAndLiteral("/NS", sNamespace);
+        if( ! m_aRoleMap.empty() )
+        {
+            aLine.append( "/RoleMapNS<<" );
+            for (auto const& role : m_aRoleMap)
+            {
+                aLine.append( "/" + role.first + "/" + role.second + "\n" );
+            }
+            aLine.append( ">>\n" );
+        }
         aWriter.endDict();
         aWriter.endObject();
 
@@ -1130,17 +1140,10 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                 aWriter.writeKeyAndReference("/NS", iterator->second);
         }
         aLine.append("/S/");
-        if (m_aContext.Version >= PDFWriter::PDFVersion::PDF_2_0)
-        {
-            aLine.append( getStructureTag(*rEle.m_oType) );
-        }
+        if( !rEle.m_aAlias.isEmpty() )
+            aLine.append( rEle.m_aAlias );
         else
-        {
-            if( !rEle.m_aAlias.isEmpty() )
-                aLine.append( rEle.m_aAlias );
-            else
-                aLine.append( getStructureTag(*rEle.m_oType) );
-        }
+            aLine.append( getStructureTag(*rEle.m_oType) );
         if (m_StructElemObjsWithID.find(rEle.m_nObject) != m_StructElemObjsWithID.end())
         {
             aLine.append("\n/ID ");
