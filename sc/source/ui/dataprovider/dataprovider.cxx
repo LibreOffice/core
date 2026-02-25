@@ -17,6 +17,7 @@
 #include <unotools/charclass.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/hostfilter.hxx>
 
 #include "htmldataprovider.hxx"
 #include "xmldataprovider.hxx"
@@ -32,6 +33,12 @@ namespace sc {
 
 std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL, OStringBuffer& rBuffer)
 {
+    if (HostFilter::isFileUrlForbidden(rURL))
+    {
+        SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked file path: \"" << rURL << "\"");
+        return nullptr;
+    }
+
     try
     {
         uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess = ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() );

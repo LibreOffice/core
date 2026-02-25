@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <comphelper/multicontainer2.hxx>
 
@@ -45,6 +46,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <tools/hostfilter.hxx>
 
 #include "persistence.hxx"
 
@@ -181,6 +183,13 @@ void OCommonEmbeddedObject::LinkInit_Impl(
             prop.Value >>= m_aLinkFilterName;
 
     OSL_ENSURE( m_aLinkURL.getLength() && m_aLinkFilterName.getLength(), "Filter and URL must be provided!" );
+
+    if (HostFilter::isFileUrlForbidden(m_aLinkURL))
+    {
+        SAL_WARN("embeddedobj.common", "LinkInit_Impl: blocked file path: \"" << m_aLinkURL << "\"");
+        m_aLinkURL.clear();
+        throw io::IOException(u"blocked external reference path"_ustr);
+    }
 
     m_bReadOnly = true;
     if ( m_aLinkFilterName.getLength() )
