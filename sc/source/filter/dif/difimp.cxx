@@ -396,7 +396,7 @@ bool DifParser::ReadNextLine( OUString& rStr )
 {
     if( aLookAheadLine.isEmpty() )
     {
-        return rIn.ReadUniOrByteStringLine( rStr, rIn.GetStreamEncoding() );
+        return rIn.ReadUniOrByteStringLine( rStr );
     }
     else
     {
@@ -414,7 +414,7 @@ bool DifParser::LookAhead()
     bool bValidStructure = false;
 
     OSL_ENSURE( aLookAheadLine.isEmpty(), "*DifParser::LookAhead(): LookAhead called twice in a row" );
-    rIn.ReadUniOrByteStringLine( aLookAheadLine, rIn.GetStreamEncoding() );
+    rIn.ReadUniOrByteStringLine( aLookAheadLine );
 
     pCurrentBuffer = aLookAheadLine.getStr();
 

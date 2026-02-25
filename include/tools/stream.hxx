@@ -350,8 +350,8 @@ public:
         and write a 16bit length prefixed sequence of bytes */
     SvStream& WriteUniOrByteString(std::u16string_view rStr, rtl_TextEncoding eDestEncoding);
 
-    /** Read a line of Unicode if eSrcEncoding==RTL_TEXTENCODING_UNICODE,
-        otherwise read a line of Bytecode and convert from eSrcEncoding
+    /** Read a line of Unicode if GetStreamEncoding()==RTL_TEXTENCODING_UNICODE,
+        otherwise read a line of Bytecode and convert from GetStreamEncoding().
 
         @param nMaxCodepointsToRead
                    Maximum of codepoints (2 bytes if Unicode, bytes if not
@@ -365,7 +365,7 @@ public:
               @endcode
               causing endless loops ...
     */
-    bool            ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcEncoding,
+    bool            ReadUniOrByteStringLine( OUString& rStr,
                                              sal_Int32 nMaxCodepointsToRead = 0xFFFE );
     /** Write a sequence of Unicode characters if
         eDestEncoding==RTL_TEXTENCODING_UNICODE, otherwise write a sequence of
