@@ -152,7 +152,7 @@
                 <property name="valign">center</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="drawingareaWN_EXAMPLE-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="tocdialog|example-atkobject">Preview</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="textgridpage|drawingareaWN_EXAMPLE-atkobject">Preview</property>
                   </object>
                 </child>
               </object>

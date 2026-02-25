@@ -910,7 +910,7 @@
                 <property name="valign">center</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pageexample-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="tocdialog|example-atkobject">Preview</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="columnpage|pageexample-atkobject">Preview</property>
                   </object>
                 </child>
               </object>
@@ -927,7 +927,7 @@
                 <property name="valign">center</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="frameexample-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes" context="tocdialog|example-atkobject">Preview</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="columnpage|frameexample-atkobject">Preview</property>
                   </object>
                 </child>
               </object>
