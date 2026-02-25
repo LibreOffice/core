@@ -108,6 +108,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,tl,\
 
 $(eval $(call gb_Library_use_externals,tl,\
 	boost_headers \
+	frozen \
+	icu_headers \
+	icui18n \
+	icuuc \
 	zlib \
 	libxml2 \
 ))
