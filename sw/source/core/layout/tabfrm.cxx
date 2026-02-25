@@ -3260,6 +3260,10 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         if ( nOldHeight != aRectFnSet.GetHeight(getFramePrintArea()) )
         {
             setFrameAreaSizeValid(false);
+            if (GetLower())
+            {   // ensure first row is repositioned
+                GetLower()->InvalidatePos_();
+            }
         }
     }
 
