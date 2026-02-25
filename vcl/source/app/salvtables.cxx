@@ -136,9 +136,10 @@ OUString SalFrame::DumpSetPosSize(tools::Long nX, tools::Long nY, tools::Long nW
     return aBuffer.makeStringAndClear();
 }
 
-SalInstance::SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex)
+SalInstance::SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex, SalData* pSalData)
     : m_pYieldMutex(std::move(pMutex))
 {
+    SetSalData(pSalData);
 }
 
 SalInstance::~SalInstance() {}

@@ -149,7 +149,7 @@ void ImplReleaseTempFonts(SalData&);
 
 HCURSOR ImplLoadSalCursor( int nId );
 HBITMAP ImplLoadSalBitmap( int nId );
-bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon );
+bool ImplLoadSalIcon(int nId, HICON& rIcon, HICON& rSmallIcon, SalData* pSalData = nullptr);
 
 void ImplInitSalGDI();
 void ImplFreeSalGDI();

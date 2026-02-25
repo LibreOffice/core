@@ -283,7 +283,6 @@ SalData::SalData()
 
     initKeyCodeMap();
 
-    SetSalData( this );
     initNWF();
 
     static Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -293,7 +292,6 @@ SalData::SalData()
 SalData::~SalData()
 {
     deInitNWF();
-    SetSalData( nullptr );
 
     if (gdiplusToken)
         Gdiplus::GdiplusShutdown(gdiplusToken);
@@ -353,7 +351,7 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
     aWndClassEx.hbrBackground   = nullptr;
     aWndClassEx.lpszMenuName    = nullptr;
     aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAMEW;
-    ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
+    ImplLoadSalIcon(SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm, pSalData);
     if ( !RegisterClassExW( &aWndClassEx ) )
         return nullptr;
 
@@ -383,7 +381,7 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
     if ( !hComWnd )
         return nullptr;
 
-    WinSalInstance* pInst = new WinSalInstance;
+    WinSalInstance* pInst = new WinSalInstance(pSalData);
 
     // init instance (only one instance in this version !!!)
     pSalData->mpInstance   = pInst;
@@ -397,8 +395,8 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
 }
 }
 
-WinSalInstance::WinSalInstance()
-    : SalInstance(std::make_unique<SalYieldMutex>())
+WinSalInstance::WinSalInstance(SalData* pSalData)
+    : SalInstance(std::make_unique<SalYieldMutex>(), pSalData)
     , mhInst( nullptr )
     , mhComWnd( nullptr )
     , m_nNoYieldLock( 0 )

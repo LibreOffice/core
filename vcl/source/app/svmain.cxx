@@ -603,6 +603,7 @@ void DeInitVCL()
     // weird segment violations.
 #if defined LINUX
     delete pSVData->mpSalData;
+    pSVData->mpSalData = nullptr;
 #endif
 
     if( pOwnSvApp )

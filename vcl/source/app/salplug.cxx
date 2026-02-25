@@ -84,9 +84,7 @@ namespace {
 #if ENABLE_HEADLESS
 SalInstance* svp_create_SalInstance()
 {
-    SvpSalInstance* pInstance = new SvpSalInstance(std::make_unique<SvpSalYieldMutex>());
-    new GenericUnixSalData();
-    return pInstance;
+    return new SvpSalInstance(std::make_unique<SvpSalYieldMutex>(), new GenericUnixSalData);
 }
 #endif
 

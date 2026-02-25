@@ -30,7 +30,7 @@
 #include <unx/glyphcache.hxx>
 #include <printerinfomanager.hxx>
 
-SalData::SalData() { SetSalData(this); }
+SalData::SalData() {}
 
 SalData::~SalData() {}
 

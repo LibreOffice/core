@@ -55,6 +55,7 @@ struct SystemParentData;
 struct SalPrinterQueueInfo;
 class ImplJobSetup;
 class OpenGLContext;
+class SalData;
 class SalGraphics;
 class SalFrame;
 class SalObject;
@@ -94,7 +95,7 @@ protected:
 #endif
 
 public:
-    SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex);
+    SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex, SalData* pSalData);
     virtual ~SalInstance();
 
     bool supportsOpenGL() const { return m_bSupportsOpenGL; }

@@ -42,7 +42,7 @@ AndroidSalInstance *AndroidSalInstance::getInstance()
 }
 
 AndroidSalInstance::AndroidSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
-    : SvpSalInstance( std::move(pMutex) )
+    : SvpSalInstance(std::move(pMutex), new GenericUnixSalData)
 {
     // FIXME: remove when uniPoll & runLoop is the only Android entry point.
     int res = (lo_get_javavm())->AttachCurrentThread(&m_pJNIEnv, NULL);
@@ -160,7 +160,6 @@ extern "C" SalInstance *create_SalInstance()
 {
     LOGI("Android: create_SalInstance!");
     AndroidSalInstance* pInstance = new AndroidSalInstance( std::make_unique<SvpSalYieldMutex>() );
-    new GenericUnixSalData();
     return pInstance;
 }
 

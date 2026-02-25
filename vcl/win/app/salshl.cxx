@@ -52,11 +52,12 @@ HBITMAP ImplLoadSalBitmap( int nId )
     return hBitmap;
 }
 
-bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
+bool ImplLoadSalIcon(int nId, HICON& rIcon, HICON& rSmallIcon, SalData* pSalData)
 {
     SAL_WARN_IF( !aSalShlData.mhInst, "vcl", "no DLL instance handle" );
 
-    SalData* pSalData = GetSalData();
+    if (!pSalData)
+        pSalData = GetSalData();
 
     // check the cache first
     SalIcon *pSalIcon = pSalData->mpFirstIcon;

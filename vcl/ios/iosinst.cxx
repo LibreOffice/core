@@ -47,7 +47,7 @@ IosSalInstance *IosSalInstance::getInstance()
 }
 
 IosSalInstance::IosSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
-    : SvpSalInstance( std::move(pMutex) )
+    : SvpSalInstance(std::move(pMutex), new GenericUnixSalData)
 {
 }
 
@@ -135,7 +135,6 @@ SalData::SalData() :
     mxRGBSpace( CGColorSpaceCreateDeviceRGB() ),
     mxGraySpace( CGColorSpaceCreateDeviceGray() )
 {
-    SetSalData(this);
 }
 
 SalData::~SalData()
@@ -146,9 +145,7 @@ SalData::~SalData()
 
 extern "C" SalInstance *create_SalInstance()
 {
-    IosSalInstance* pInstance = new IosSalInstance( std::make_unique<SvpSalYieldMutex>() );
-    new GenericUnixSalData();
-    return pInstance;
+    return new IosSalInstance(std::make_unique<SvpSalYieldMutex>());
 }
 
 int IosSalSystem::ShowNativeDialog( const OUString& rTitle,

@@ -56,21 +56,15 @@ extern "C"
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
 
-        X11SalInstance* pInstance = new X11SalInstance( std::make_unique<SalYieldMutex>() );
-
-        // initialize SalData
-        X11SalData *pSalData = new X11SalData();
-
-        pInstance->SetLib( pSalData->GetLib() );
-
-        return pInstance;
+        return new X11SalInstance(std::make_unique<SalYieldMutex>());
     }
 }
 
 X11SalInstance::X11SalInstance(std::unique_ptr<SalYieldMutex> pMutex)
-    : SalGenericInstance(std::move(pMutex))
-    , mpXLib(nullptr)
+    : SalGenericInstance(std::move(pMutex), new X11SalData)
 {
+    mpXLib = GetX11SalData()->GetLib();
+
     ImplSVData* pSVData = ImplGetSVData();
     // [-loplugin:ostr] if we use a literal here, we get use-after-free on shutdown
     pSVData->maAppData.mxToolkitName = OUString("x11");

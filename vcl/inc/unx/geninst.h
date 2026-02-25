@@ -49,8 +49,11 @@ protected:
     bool           mbPrinterInit;
 
 public:
-    SalGenericInstance( std::unique_ptr<comphelper::SolarMutex> pMutex )
-        : SalInstance(std::move(pMutex)), mbPrinterInit(false) {}
+    SalGenericInstance(std::unique_ptr<comphelper::SolarMutex> pMutex, SalData* pSalData)
+        : SalInstance(std::move(pMutex), pSalData)
+        , mbPrinterInit(false)
+    {
+    }
     virtual ~SalGenericInstance() override;
 
     // Printing

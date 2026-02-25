@@ -23,7 +23,7 @@ public:
 };
 
 HeadlessSalInstance::HeadlessSalInstance(std::unique_ptr<SalYieldMutex> pMutex)
-    : SvpSalInstance(std::move(pMutex))
+    : SvpSalInstance(std::move(pMutex), new GenericUnixSalData)
 {
 }
 
@@ -51,9 +51,7 @@ SalSystem *HeadlessSalInstance::CreateSalSystem()
 
 extern "C" SalInstance *create_SalInstance()
 {
-    HeadlessSalInstance* pInstance = new HeadlessSalInstance(std::make_unique<SvpSalYieldMutex>());
-    new GenericUnixSalData();
-    return pInstance;
+    return new HeadlessSalInstance(std::make_unique<SvpSalYieldMutex>());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

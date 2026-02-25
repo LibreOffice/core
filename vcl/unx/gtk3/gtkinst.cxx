@@ -190,10 +190,6 @@ extern "C"
 
         GtkInstance* pInstance = new GtkInstance( std::move(pYieldMutex) );
         SAL_INFO("vcl.gtk", "creating GtkInstance " << pInstance);
-
-        // Create SalData, this does not leak
-        new GtkSalData();
-
         return pInstance;
     }
 }
@@ -234,7 +230,7 @@ static VclInputFlags categorizeEvent(const GdkEvent *pEvent)
 #endif
 
 GtkInstance::GtkInstance( std::unique_ptr<SalYieldMutex> pMutex )
-    : SvpSalInstance( std::move(pMutex) )
+    : SvpSalInstance(std::move(pMutex), new GtkSalData)
     , m_pTimer(nullptr)
     , bNeedsInit(true)
     , m_pLastCairoFontOptions(nullptr)

@@ -40,7 +40,7 @@ public:
     unsigned            m_nNoYieldLock;
 
 public:
-    WinSalInstance();
+    WinSalInstance(SalData* pSalData);
     virtual ~WinSalInstance() override;
 
     virtual void AfterAppInit() override;

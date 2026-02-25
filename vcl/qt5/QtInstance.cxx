@@ -268,7 +268,7 @@ OUString QtInstance::constructToolkitID(std::u16string_view sTKname)
 }
 
 QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp)
-    : SalGenericInstance(std::make_unique<QtYieldMutex>())
+    : SalGenericInstance(std::make_unique<QtYieldMutex>(), new QtData)
     , m_bUseCairo(nullptr == getenv("SAL_VCL_QT_USE_QFONT"))
     , m_pTimer(nullptr)
     , m_bSleeping(false)
@@ -1040,8 +1040,6 @@ VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
 
     QtInstance* pInstance = new QtInstance(pQApp);
     pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
-
-    new QtData();
 
     return pInstance;
 }

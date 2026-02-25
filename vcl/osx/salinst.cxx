@@ -318,8 +318,6 @@ void ImplSalYieldMutexRelease()
 extern "C" {
 VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
 {
-    SalData* pSalData = new SalData;
-
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.plist", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
     unlink([[NSString stringWithFormat:@"%@/Library/Saved Application State/%s.savedState/restorecount.txt", NSHomeDirectory(), MACOSX_BUNDLE_IDENTIFIER] UTF8String]);
@@ -336,8 +334,9 @@ VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
     // activate our delegate methods
     [NSApp setDelegate: NSApp];
 
-    SAL_WARN_IF( pSalData->mpInstance != nullptr, "vcl", "more than one instance created" );
     AquaSalInstance* pInst = new AquaSalInstance;
+    SalData* pSalData = GetSalData();
+    SAL_WARN_IF( pSalData->mpInstance != nullptr, "vcl", "more than one instance created" );
 
     // init instance (only one instance in this version !!!)
     pSalData->mpInstance = pInst;
@@ -354,7 +353,7 @@ VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
 }
 
 AquaSalInstance::AquaSalInstance()
-    : SalInstance(std::make_unique<SalYieldMutex>())
+    : SalInstance(std::make_unique<SalYieldMutex>(), new SalData)
     , mnActivePrintJobs( 0 )
     , mbNoYieldLock( false )
     , mbTimerProcessed( false )
