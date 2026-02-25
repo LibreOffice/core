@@ -218,6 +218,9 @@ VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
     // activate our delegate methods
     [NSApp setDelegate: NSApp];
 
+    if (Application::IsHeadlessModeEnabled())
+        [NSApp setActivationPolicy: NSApplicationActivationPolicyProhibited];
+
     AquaSalInstance* pInst = new AquaSalInstance;
 
     // this one is for outside AquaSalInstance::Yield
