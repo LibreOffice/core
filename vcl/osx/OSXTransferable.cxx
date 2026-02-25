@@ -100,13 +100,17 @@ OSXTransferable::~OSXTransferable()
   [mPasteboard release];
 }
 
-Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
+Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& rFlavor )
 {
-  if (!isValidFlavor(aFlavor) || !isDataFlavorSupported(aFlavor))
+  if (!isValidFlavor(rFlavor) || !isDataFlavorSupported(rFlavor))
   {
       throw UnsupportedFlavorException("AquaClipboard: Unsupported data flavor",
                                        static_cast<XTransferable*>(this));
   }
+
+  DataFlavor aFlavor(rFlavor);
+  if (aFlavor.MimeType == "text/markdown")
+      aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
 
   bool bInternal(false);
   NSString const * sysFormat =
