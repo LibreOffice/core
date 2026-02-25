@@ -2622,7 +2622,7 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 
 void X11SalFrame::beginUnicodeSequence()
 {
-    OUString& rSeq( GetGenericUnixSalData()->GetUnicodeCommand() );
+    OUString& rSeq(GetX11SalData()->GetUnicodeCommand());
     vcl::DeletionListener aDeleteWatch( this );
 
     if( !rSeq.isEmpty() )
@@ -2646,7 +2646,7 @@ void X11SalFrame::beginUnicodeSequence()
 bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
 {
     bool bRet = false;
-    OUString& rSeq( GetGenericUnixSalData()->GetUnicodeCommand() );
+    OUString& rSeq(GetX11SalData()->GetUnicodeCommand());
     if( !rSeq.isEmpty() )
     {
         // range check
@@ -2676,7 +2676,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
 
 bool X11SalFrame::endUnicodeSequence()
 {
-    OUString& rSeq( GetGenericUnixSalData()->GetUnicodeCommand() );
+    OUString& rSeq(GetX11SalData()->GetUnicodeCommand());
 
     vcl::DeletionListener aDeleteWatch( this );
     if( rSeq.getLength() > 1 && rSeq.getLength() < 6 )

@@ -56,8 +56,6 @@ class VCL_PLUGIN_PUBLIC GenericUnixSalData : public SalData
     SalGenericDisplay* m_pDisplay;
     // cached hostname to avoid slow lookup
     OUString m_aHostname;
-    // for transient storage of unicode strings eg. 'u123' by input methods
-    OUString m_aUnicodeEntry;
 
 #ifndef IOS
     std::unique_ptr<FreetypeManager> m_pFreetypeManager;
@@ -81,8 +79,6 @@ public:
             osl_getLocalHostname(&m_aHostname.pData);
         return m_aHostname;
     }
-
-    OUString& GetUnicodeCommand() { return m_aUnicodeEntry; }
 
 #ifndef IOS
 

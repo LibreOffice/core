@@ -34,6 +34,10 @@ class X11SalData final : public GenericUnixSalData
         bool            m_bWas;
         XErrorHandler   m_aHandler;
     };
+
+    // for transient storage of unicode strings eg. 'u123' by input methods
+    OUString m_aUnicodeEntry;
+
     std::vector< XErrorStackEntry > m_aXErrorHandlerStack;
     XIOErrorHandler m_aOrigXIOErrorHandler;
 
@@ -42,6 +46,8 @@ class X11SalData final : public GenericUnixSalData
 public:
     X11SalData();
     virtual ~X11SalData() override;
+
+    OUString& GetUnicodeCommand() { return m_aUnicodeEntry; }
 
     void Dispose();
 
