@@ -362,6 +362,7 @@ constexpr auto SUPPORTED_WITH_QT_PARENT = frozen::make_unordered_set<std::u16str
     u"modules/spropctrlr/ui/multiline.ui",
     u"modules/spropctrlr/ui/numericfield.ui",
     u"modules/spropctrlr/ui/textfield.ui",
+    u"modules/spropctrlr/ui/timefield.ui",
     u"modules/spropctrlr/ui/urlcontrol.ui",
     u"modules/swriter/ui/addressfragment.ui",
     u"modules/swriter/ui/assignfragment.ui",
