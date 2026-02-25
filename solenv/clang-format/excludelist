@@ -3482,8 +3482,6 @@ extensions/source/propctrlr/cellbindinghandler.cxx
 extensions/source/propctrlr/cellbindinghandler.hxx
 extensions/source/propctrlr/cellbindinghelper.cxx
 extensions/source/propctrlr/cellbindinghelper.hxx
-extensions/source/propctrlr/commoncontrol.cxx
-extensions/source/propctrlr/commoncontrol.hxx
 extensions/source/propctrlr/composeduiupdate.cxx
 extensions/source/propctrlr/composeduiupdate.hxx
 extensions/source/propctrlr/controlfontdialog.cxx
