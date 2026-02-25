@@ -527,7 +527,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreakInFirstPara)
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br","type",u"page");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:br","type",u"page");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO78284)

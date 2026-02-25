@@ -354,6 +354,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf170908_delText)
     // delText must be inside a w:del or MS Word considers the document to be corrupt
     assertXPath(pXmlDoc, "//w:delText", 1); // there is a delTree element
     CPPUNIT_ASSERT_EQUAL(1, countXPathNodes(pXmlDoc, "//w:del/w:r/w:delText")); // must be in w:del
+
+    // tdf#170516 drawing after plainText control
+    assertXPath(pXmlDoc, "//mc:AlternateContent", 1); // only one drawing
+    const int nRunsBeforeDelText = countXPathNodes(pXmlDoc, "//w:delText/preceding::w:r");
+    const int nRunsBeforeAnchor = countXPathNodes(pXmlDoc, "//mc:AlternateContent/preceding::w:r");
+
+    // The text should be in a separate (preceding) run from the floating stuff
+    CPPUNIT_ASSERT_GREATER(nRunsBeforeDelText, nRunsBeforeAnchor);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf170952_delText)
