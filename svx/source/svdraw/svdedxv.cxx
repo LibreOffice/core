@@ -2469,15 +2469,12 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             WhichRangesContainer pNewWhichTable
                 = RemoveWhichRange(pSet->GetRanges(), EE_ITEMS_START, EE_ITEMS_END);
             SfxItemSet aSet(GetModel().GetItemPool(), std::move(pNewWhichTable));
-            SfxWhichIter aIter(aSet);
-            sal_uInt16 nWhich = aIter.FirstWhich();
-            while (nWhich != 0)
+            for (SfxItemIter aIter(aSet); !aIter.IsAtEnd(); aIter.Next())
             {
-                const SfxPoolItem* pItem;
-                SfxItemState eState = pSet->GetItemState(nWhich, false, &pItem);
-                if (eState == SfxItemState::SET)
-                    aSet.Put(*pItem);
-                nWhich = aIter.NextWhich();
+                const SfxPoolItem* pItem = aIter.GetCurItem();
+                if (IsDisabledItem(pItem))
+                    continue;
+                aSet.Put(*pItem);
             }
 
             if (mxSelectionController.is())

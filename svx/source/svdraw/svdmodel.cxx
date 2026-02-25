@@ -27,7 +27,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svl/whiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svl/asiancfg.hxx>
 #include <svx/compatflags.hxx>
 #include <svx/xbtmpit.hxx>
@@ -1684,49 +1684,45 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
     if( !(pSourceSet && pDestSet && (pSourceSet != pDestSet )) )
         return;
 
-    SfxWhichIter aWhichIter(*pSourceSet);
-    sal_uInt16 nWhich(aWhichIter.FirstWhich());
-    const SfxPoolItem *pPoolItem;
-
-    while(nWhich)
+    for (SfxItemIter aIter(*pSourceSet); !aIter.IsAtEnd(); aIter.Next())
     {
-        if(SfxItemState::SET == aWhichIter.GetItemState(false, &pPoolItem))
+        const SfxPoolItem *pPoolItem = aIter.GetCurItem();
+        if(IsDisabledItem(pPoolItem))
+            continue;
+
+        std::unique_ptr<SfxPoolItem> pResultItem;
+
+        switch( aIter.GetCurWhich() )
         {
-            std::unique_ptr<SfxPoolItem> pResultItem;
-
-            switch( nWhich )
-            {
-            case XATTR_FILLBITMAP:
-                pResultItem = static_cast<const XFillBitmapItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
-                break;
-            case XATTR_LINEDASH:
-                pResultItem = static_cast<const XLineDashItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
-                break;
-            case XATTR_LINESTART:
-                pResultItem = static_cast<const XLineStartItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
-                break;
-            case XATTR_LINEEND:
-                pResultItem = static_cast<const XLineEndItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
-                break;
-            case XATTR_FILLGRADIENT:
-                pResultItem = static_cast<const XFillGradientItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
-                break;
-            case XATTR_FILLFLOATTRANSPARENCE:
-                // allow all kinds of XFillFloatTransparenceItem to be set
-                pResultItem = static_cast<const XFillFloatTransparenceItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
-                break;
-            case XATTR_FILLHATCH:
-                pResultItem = static_cast<const XFillHatchItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
-                break;
-            }
-
-            // set item
-            if( pResultItem )
-                pDestSet->Put(std::move(pResultItem));
-            else
-                pDestSet->Put(*pPoolItem);
+        case XATTR_FILLBITMAP:
+            pResultItem = static_cast<const XFillBitmapItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
+            break;
+        case XATTR_LINEDASH:
+            pResultItem = static_cast<const XLineDashItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
+            break;
+        case XATTR_LINESTART:
+            pResultItem = static_cast<const XLineStartItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
+            break;
+        case XATTR_LINEEND:
+            pResultItem = static_cast<const XLineEndItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
+            break;
+        case XATTR_FILLGRADIENT:
+            pResultItem = static_cast<const XFillGradientItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
+            break;
+        case XATTR_FILLFLOATTRANSPARENCE:
+            // allow all kinds of XFillFloatTransparenceItem to be set
+            pResultItem = static_cast<const XFillFloatTransparenceItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
+            break;
+        case XATTR_FILLHATCH:
+            pResultItem = static_cast<const XFillHatchItem*>(pPoolItem)->checkForUniqueItem( rNewModel );
+            break;
         }
-        nWhich = aWhichIter.NextWhich();
+
+        // set item
+        if( pResultItem )
+            pDestSet->Put(std::move(pResultItem));
+        else
+            pDestSet->Put(*pPoolItem);
     }
 }
 
