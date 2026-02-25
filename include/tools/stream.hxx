@@ -332,7 +332,7 @@ public:
         After the function, the position is after BOM (if any); GetStreamEncoding
         returns the detected encoding; GetEndian returns the detected endianness
         (for UTF-16). */
-    void DetectEncoding();
+    void DetectEncoding(size_t maxBytes = 4096);
 
     /** Read a line of Unicode.
 

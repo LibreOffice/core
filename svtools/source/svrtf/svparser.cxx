@@ -192,51 +192,11 @@ sal_uInt32 SvParser<T>::GetNextChar()
     // maintained by SaveState/RestoreState.
     if( bSwitchToUCS2 && 0 == rInput.Tell() )
     {
-        rInput.StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
-        if (rInput.good())
-        {
-            sal_uInt64 nPos = rInput.Tell();
-            if (nPos == 2)
-                eSrcEnc = RTL_TEXTENCODING_UCS2;
-            else if (nPos == 3)
-                SetSrcEncoding(RTL_TEXTENCODING_UTF8);
-            else // Try to detect encoding without BOM
-            {
-                std::vector<char> buf(65535); // Arbitrarily chosen 64KiB buffer
-                const size_t nSize = rInput.ReadBytes(buf.data(), buf.size());
-                rInput.Seek(0);
-                if (nSize > 0)
-                {
-                    UErrorCode uerr = U_ZERO_ERROR;
-                    UCharsetDetector* ucd = ucsdet_open(&uerr);
-                    ucsdet_setText(ucd, buf.data(), nSize, &uerr);
-                    if (const UCharsetMatch* match = ucsdet_detect(ucd, &uerr))
-                    {
-                        const char* pEncodingName = ucsdet_getName(match, &uerr);
-
-                        if (U_SUCCESS(uerr))
-                        {
-                            if (strcmp("UTF-8", pEncodingName) == 0)
-                            {
-                                SetSrcEncoding(RTL_TEXTENCODING_UTF8);
-                            }
-                            else if (strcmp("UTF-16LE", pEncodingName) == 0)
-                            {
-                                eSrcEnc = RTL_TEXTENCODING_UCS2;
-                                rInput.SetEndian(SvStreamEndian::LITTLE);
-                            }
-                            else if (strcmp("UTF-16BE", pEncodingName) == 0)
-                            {
-                                eSrcEnc = RTL_TEXTENCODING_UCS2;
-                                rInput.SetEndian(SvStreamEndian::BIG);
-                            }
-                        }
-                    }
-
-                    ucsdet_close(ucd);
-                }
-            }
-        }
+        rInput.DetectEncoding(65535); // Arbitrarily chosen 64KiB buffer
+        if (rInput.GetStreamEncoding() == RTL_TEXTENCODING_UCS2)
+            eSrcEnc = RTL_TEXTENCODING_UCS2;
+        else if (rInput.GetStreamEncoding() == RTL_TEXTENCODING_UTF8)
+            SetSrcEncoding(RTL_TEXTENCODING_UTF8);
         bSwitchToUCS2 = false;
     }
 

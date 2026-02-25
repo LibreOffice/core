@@ -748,7 +748,7 @@ void SvStream::StartReadingUnicodeText(rtl_TextEncoding eReadBomEncoding)
         Seek(nOldPos);      // no BOM, pure data
 }
 
-void SvStream::DetectEncoding()
+void SvStream::DetectEncoding(size_t maxBytes)
 {
     static constexpr auto mapEncodings
         = frozen::make_unordered_map<std::string_view, rtl_TextEncoding>({
@@ -801,8 +801,8 @@ void SvStream::DetectEncoding()
     }
 
     assert(nBomSize == 0); // we are at nOrigPos
-    char bytes[4096] = { 0 };
-    size_t nRead = ReadBytes(bytes, sizeof(bytes));
+    auto bytes = std::make_unique<char[]>(maxBytes);
+    size_t nRead = ReadBytes(bytes.get(), maxBytes);
     Seek(nOrigPos);
     ResetError();
 
@@ -815,7 +815,7 @@ void SvStream::DetectEncoding()
         return;
     comphelper::ScopeGuard ucsdet_close_guard([ucd] { ucsdet_close(ucd); });
 
-    ucsdet_setText(ucd, bytes, nRead, &uerr);
+    ucsdet_setText(ucd, bytes.get(), nRead, &uerr);
     if (!U_SUCCESS(uerr))
         return;
 
