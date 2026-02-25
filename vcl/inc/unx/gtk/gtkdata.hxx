@@ -241,9 +241,9 @@ public:
     bool Yield( bool bWait, bool bHandleAllCurrentEvents );
     inline GdkDisplay *GetGdkDisplay();
 
-    void ErrorTrapPush();
+    static void ErrorTrapPush();
     // true on error
-    bool ErrorTrapPop(bool bIgnoreError = true);
+    static bool ErrorTrapPop(bool bIgnoreError = true);
 
     inline GtkSalDisplay *GetGtkDisplay() const;
     void setException(const std::exception_ptr& exception) { m_aException = exception; }

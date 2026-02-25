@@ -56,7 +56,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
         rpCsr = nullptr;
 
     if ( getenv( "SAL_IGNOREXERRORS" ) )
-        GetGtkSalData()->ErrorTrapPush(); // and leak the trap
+        GtkSalData::ErrorTrapPush(); // and leak the trap
 
     gtk_widget_set_default_direction(AllSettings::GetLayoutRTL() ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR);
 }
