@@ -79,8 +79,10 @@ public:
     virtual void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 
+#if HAVE_FEATURE_GPGVERIFY
     void testPreserveMacroTemplateSignature12(TestFilter eFilterName);
     void testPreserveMacroTemplateSignature10(TestFilter eFilterName);
+#endif
 
 protected:
     uno::Reference<security::XCertificate>
