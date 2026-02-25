@@ -51,6 +51,30 @@ QtInstanceFormattedSpinButton::QtInstanceFormattedSpinButton(QtDoubleSpinBox* pS
 
 QWidget* QtInstanceFormattedSpinButton::getQWidget() const { return m_pSpinBox; }
 
+void QtInstanceFormattedSpinButton::connect_changed(const Link<weld::Entry&, void>& rLink)
+{
+    if (m_pFormatter)
+    {
+        // once a formatter is set, it takes over "changed"
+        m_pFormatter->connect_changed(rLink);
+        return;
+    }
+
+    QtInstanceEntry::connect_changed(rLink);
+}
+
+void QtInstanceFormattedSpinButton::connect_focus_out(const Link<weld::Widget&, void>& rLink)
+{
+    if (m_pFormatter)
+    {
+        // once a formatter is set, it takes over "focus-out"
+        m_pFormatter->connect_focus_out(rLink);
+        return;
+    }
+
+    QtInstanceEntry::connect_focus_out(rLink);
+}
+
 Formatter& QtInstanceFormattedSpinButton::GetFormatter()
 {
     SolarMutexGuard g;

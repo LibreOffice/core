@@ -32,6 +32,9 @@ public:
 
     virtual QWidget* getQWidget() const override;
 
+    virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override;
+    virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override;
+
     virtual Formatter& GetFormatter() override;
     virtual void SetFormatter(weld::EntryFormatter* pFormatter) override;
 
