@@ -2251,10 +2251,10 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                     // import.
                     aString = "sep=" + OUStringChar(cDelim);
                     if (cStrDelim != 0)
-                        rStream.WriteUniOrByteChar( '"', eCharSet);
+                        rStream.WriteUniOrByteChar( '"');
                     rStream.WriteUnicodeOrByteText(aString, eCharSet);
                     if (cStrDelim != 0)
-                        rStream.WriteUniOrByteChar( '"', eCharSet);
+                        rStream.WriteUniOrByteChar( '"');
                     endlub( rStream );
                     ++nStartRow;
                 }
@@ -2468,10 +2468,10 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                         }
 
                         if ( bNeedQuotes || bForceQuotes )
-                            rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
+                            rStream.WriteUniOrByteChar( cStrDelim );
                         rStream.WriteUnicodeOrByteText(aUniString, eCharSet);
                         if ( bNeedQuotes || bForceQuotes )
-                            rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
+                            rStream.WriteUniOrByteChar( cStrDelim );
                     }
                     else
                     {
@@ -2507,10 +2507,10 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
 
                             // write byte re-encoded
                             if ( bNeedQuotes || bForceQuotes )
-                                rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
+                                rStream.WriteUniOrByteChar( cStrDelim );
                             rStream.WriteUnicodeOrByteText( aStrDec, eCharSet );
                             if ( bNeedQuotes || bForceQuotes )
-                                rStream.WriteUniOrByteChar( cStrDelim, eCharSet );
+                                rStream.WriteUniOrByteChar( cStrDelim );
                         }
                         else
                         {
