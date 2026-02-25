@@ -48,6 +48,11 @@ std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL,
     if (HostFilter::isForbidden(aURLObject.GetHost()))
     {
         SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked host: \"" << rURL << "\"");
+    }
+
+    if (HostFilter::isFileUrlForbidden(rURL))
+    {
+        SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked file path: \"" << rURL << "\"");
         return nullptr;
     }
 
