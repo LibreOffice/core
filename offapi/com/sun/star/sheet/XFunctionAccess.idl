@@ -72,7 +72,7 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
             Possible types for the result are:
 
             <dl>
-            <dt>`VOID`</dt>
+            <dt>`void`</dt>
             <dd>if no result is available.</dd>
 
             <dt>`double`</dt>
