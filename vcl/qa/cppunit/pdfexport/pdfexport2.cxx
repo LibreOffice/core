@@ -76,6 +76,8 @@ void PdfExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dc"), BAD_CAST("http://purl.org/dc/elements/1.1/"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pdfuaid"),
                        BAD_CAST("http://www.aiim.org/pdfua/ns/id/"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pdfaid"),
+                       BAD_CAST("http://www.aiim.org/pdfa/ns/id/"));
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160705)
@@ -1496,6 +1498,46 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfUaMetadata)
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/pdfuaid:part", u"1");
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf153472)
+{
+    // Use PDF/A-1b
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "SelectPdfVersion", uno::Any(sal_Int32(1)) } }));
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
+    vcl::filter::PDFDocument aDocument;
+    loadFromURL(u"private:factory/swriter"_ustr);
+    skipValidation();
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    auto* pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    auto* pCatalogDictionary = pCatalog->GetDictionary();
+    CPPUNIT_ASSERT(pCatalogDictionary);
+    auto* pMetadataObject = pCatalogDictionary->LookupObject("Metadata"_ostr);
+    CPPUNIT_ASSERT(pMetadataObject);
+    auto* pMetadataDictionary = pMetadataObject->GetDictionary();
+    auto* pType = dynamic_cast<vcl::filter::PDFNameElement*>(
+        pMetadataDictionary->LookupElement("Type"_ostr));
+    CPPUNIT_ASSERT(pType);
+    CPPUNIT_ASSERT_EQUAL("Metadata"_ostr, pType->GetValue());
+
+    auto* pStreamObject = pMetadataObject->GetStream();
+    CPPUNIT_ASSERT(pStreamObject);
+    auto& rStream = pStreamObject->GetMemory();
+    rStream.Seek(0);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&rStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/pdfaid:part", u"1");
+    assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/pdfaid:conformance", u"B");
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf139736)
