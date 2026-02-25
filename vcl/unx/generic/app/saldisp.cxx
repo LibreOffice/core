@@ -273,14 +273,6 @@ SalX11Display::~SalX11Display()
         pDisp_ = nullptr;
     }
 
-    if( pDisp_ )
-    {
-        doDestruct();
-#if OSL_DEBUG_LEVEL > 1
-        SAL_INFO("vcl.app", "display " << pDisp_ << " closed.");
-#endif
-        pDisp_ = nullptr;
-    }
     // don't do this in doDestruct since RandR extension adds hooks into Display
     // that is XCloseDisplay still needs the RandR library if it was used
     DeInitRandR();
