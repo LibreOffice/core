@@ -184,8 +184,10 @@ static ErrCode GetSvError( oslFileError nErrno )
     return nRetVal;
 }
 
-SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nOpenMode )
+SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nOpenMode, std::optional<rtl_TextEncoding> oStreamEncoding )
 {
+    if (oStreamEncoding)
+        SetStreamEncoding(*oStreamEncoding);
     bIsOpen             = false;
     m_isWritable        = false;
 

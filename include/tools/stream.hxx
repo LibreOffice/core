@@ -309,7 +309,10 @@ public:
     */
     bool            ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcEncoding,
                                         sal_Int32 nMaxBytesToRead = 0xFFFE );
-    bool            WriteByteStringLine( std::u16string_view rStr, rtl_TextEncoding eDestEncoding );
+
+    /** Write a line of bytes. Uses stream encoding set on the stream.
+    */
+    bool            WriteByteStringLine( std::u16string_view rStr );
 
     /// Switch to no endian swapping and write 0xfeff
     void            StartWritingUnicodeText();
@@ -584,10 +587,13 @@ private:
     virtual void    FlushData() override;
 
 public:
-                    // Switches to Read StreamMode on failed attempt of Write opening
-                    SvFileStream( const OUString& rFileName, StreamMode eOpenMode );
-                    SvFileStream();
-                    virtual ~SvFileStream() override;
+    /*
+     * @param eOpenMode Switches to Read StreamMode on failed attempt of Write opening
+     * @param eStreamEncoding if not specified, defaults to osl_getThreadTextEncoding()
+    */
+    SvFileStream( const OUString& rFileName, StreamMode eOpenMode, std::optional<rtl_TextEncoding> oStreamEncoding = {} );
+    SvFileStream();
+    virtual ~SvFileStream() override;
 
     virtual void    ResetError() override;
 

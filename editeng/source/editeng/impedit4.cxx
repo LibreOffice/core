@@ -252,7 +252,7 @@ ErrCode ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
                 nEndPos = aSel.Max().GetIndex();
         }
         OUString aTmpStr = EditDoc::GetParaAsString( pNode, nStartPos, nEndPos );
-        rOutput.WriteByteStringLine( aTmpStr, rOutput.GetStreamEncoding() );
+        rOutput.WriteByteStringLine( aTmpStr );
     }
 
     return rOutput.GetError();

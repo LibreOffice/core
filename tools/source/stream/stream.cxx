@@ -658,9 +658,9 @@ bool SvStream::WriteUnicodeOrByteText(std::u16string_view rStr, rtl_TextEncoding
     return m_nError == ERRCODE_NONE;
 }
 
-bool SvStream::WriteByteStringLine(std::u16string_view rStr, rtl_TextEncoding eDestEncoding)
+bool SvStream::WriteByteStringLine( std::u16string_view rStr )
 {
-    return WriteLine(OUStringToOString(rStr, eDestEncoding));
+    return WriteLine(OUStringToOString(rStr, GetStreamEncoding()));
 }
 
 bool SvStream::WriteLine(std::string_view rStr)

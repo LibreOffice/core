@@ -415,7 +415,7 @@ void lcl_WriteValues(const std::vector<OUString> *pFields, SvStream* pStream)
             sLine.append("\t\"" + *aIter + "\"");
         }
     }
-    pStream->WriteByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
+    pStream->WriteByteStringLine( sLine );
 }
 
 }

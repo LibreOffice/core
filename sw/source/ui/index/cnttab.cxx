@@ -4075,7 +4075,7 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         if(!pEntry->sComment.isEmpty())
         {
             // tdf#108910, tdf#125496 - write index entries using the utf8 text encoding
-            rOutStr.WriteByteStringLine( Concat2View("#" + pEntry->sComment), RTL_TEXTENCODING_UTF8 );
+            rOutStr.WriteByteStringLine( Concat2View("#" + pEntry->sComment) );
         }
 
         OUString sWrite( pEntry->sSearch + ";" +
@@ -4088,7 +4088,7 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
 
         if( sWrite.getLength() > 5 )
             // tdf#108910, tdf#125496 - write index entries using the utf8 text encoding
-            rOutStr.WriteByteStringLine( sWrite, RTL_TEXTENCODING_UTF8 );
+            rOutStr.WriteByteStringLine( sWrite );
     }
 }
 

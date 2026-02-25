@@ -1471,23 +1471,24 @@ static OUString buildFontMenuName(const OUString& FontMenuNameDBUrl,
     OUString longFontName = fontName;
 
     // create FontMenuName
-    SvFileStream FontMenuNameDB(FontMenuNameDBUrl, StreamMode::READWRITE | StreamMode::TRUNC);
+    SvFileStream FontMenuNameDB(FontMenuNameDBUrl, StreamMode::READWRITE | StreamMode::TRUNC,
+                                RTL_TEXTENCODING_UTF8);
     OUString postScriptFontName = u"["_ustr + postScriptName + u"]"_ustr;
-    FontMenuNameDB.WriteByteStringLine(postScriptFontName, RTL_TEXTENCODING_UTF8);
+    FontMenuNameDB.WriteByteStringLine(postScriptFontName);
     SAL_INFO("sd.filter",
              "wrote basefont name: " << postScriptFontName << " to: " << FontMenuNameDBUrl);
     OUString setFontName = "f=" + fontName;
-    FontMenuNameDB.WriteByteStringLine(setFontName, RTL_TEXTENCODING_UTF8);
+    FontMenuNameDB.WriteByteStringLine(setFontName);
     SAL_INFO("sd.filter", "wrote family name: " << setFontName << " to: " << FontMenuNameDBUrl);
     if (!isSimpleFamilyName(Weight))
     {
         longFontName = fontName + " " + OUString::createFromAscii(Weight);
         OUString setLongFontName = "l=" + fontName + " " + OUString::createFromAscii(Weight);
-        FontMenuNameDB.WriteByteStringLine(setLongFontName, RTL_TEXTENCODING_UTF8);
+        FontMenuNameDB.WriteByteStringLine(setLongFontName);
         SAL_INFO("sd.filter",
                  "wrote long family name: " << setLongFontName << " to: " << FontMenuNameDBUrl);
         OUString styleName = "s=" + OUString::createFromAscii(Weight);
-        FontMenuNameDB.WriteByteStringLine(styleName, RTL_TEXTENCODING_UTF8);
+        FontMenuNameDB.WriteByteStringLine(styleName);
         SAL_INFO("sd.filter", "wrote style name: " << styleName << " to: " << FontMenuNameDBUrl);
     }
     FontMenuNameDB.Close();
