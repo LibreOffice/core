@@ -1022,11 +1022,21 @@ void PDFWriterImpl::emitNamespaces()
         if (!updateObject(nObject))
             return;
 
-        COSWriter aWriter(m_aContext.Encryption.getParams(), m_pPDFEncryptor);
+        OStringBuffer aLine;
+        COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
         aWriter.startObject(nObject);
         aWriter.startDict();
         aWriter.write("/Type", "/Namespace");
         aWriter.writeKeyAndLiteral("/NS", sNamespace);
+        if( ! m_aRoleMap.empty() )
+        {
+            aLine.append( "/RoleMapNS<<" );
+            for (auto const& role : m_aRoleMap)
+            {
+                aLine.append( "/" + role.first + "/" + role.second + "\n" );
+            }
+            aLine.append( ">>\n" );
+        }
         aWriter.endDict();
         aWriter.endObject();
 
