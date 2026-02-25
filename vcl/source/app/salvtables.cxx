@@ -5591,6 +5591,13 @@ void SalInstanceIconView::set_item_accessible_name(int pos, const OUString& rNam
     pEntry->SetAccessibleName(rName);
 }
 
+void SalInstanceIconView::set_item_accessible_description(int pos, const OUString& rDescription)
+{
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(pos);
+    assert(pEntry);
+    pEntry->SetAccessibleDescription(rDescription);
+}
+
 tools::Rectangle SalInstanceIconView::get_rect(int pos) const
 {
     SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);

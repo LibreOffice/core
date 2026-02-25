@@ -16933,6 +16933,35 @@ private:
 #endif
     }
 
+    virtual void set_item_accessible_description(int pos, const OUString& rDescription) override
+    {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        (void)pos;
+        (void)rDescription;
+#else
+        AtkObject* pAtkObject = gtk_widget_get_accessible(GTK_WIDGET(m_pIconView));
+        if (!pAtkObject)
+            return;
+
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        {
+            GtkTreePath* pPath = gtk_tree_model_get_path(GTK_TREE_MODEL(m_pTreeStore), &iter);
+            assert(gtk_tree_path_get_depth(pPath) == 1);
+            int* indices = gtk_tree_path_get_indices(pPath);
+            const int nIndex = indices[0];
+            assert(nIndex < atk_object_get_n_accessible_children(pAtkObject)
+                   && "item index too high for ItemView's accessible child count");
+
+            AtkObject* pChild = atk_object_ref_accessible_child(pAtkObject, nIndex);
+            atk_object_set_description(pChild, rDescription.toUtf8().getStr());
+            g_object_unref(pChild);
+            gtk_tree_path_free(pPath);
+        }
+#endif
+    }
+
     virtual void do_remove(int pos) override
     {
         disable_notify_events();

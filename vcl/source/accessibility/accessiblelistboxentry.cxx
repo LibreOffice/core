@@ -354,6 +354,15 @@ OUString SAL_CALL AccessibleListBoxEntry::getAccessibleDescription(  )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
+    ensureAlive();
+
+    if (SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath(m_aEntryPath))
+    {
+        OUString sDesc = pEntry->GetAccessibleDescription();
+        if (!sDesc.isEmpty())
+            return sDesc;
+    }
+
     return OUString();
 }
 

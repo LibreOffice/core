@@ -1970,6 +1970,7 @@ public:
     virtual void set_id(int pos, const OUString& rId) override;
 
     virtual void set_item_accessible_name(int pos, const OUString& rName) override;
+    virtual void set_item_accessible_description(int pos, const OUString& rDescription) override;
 
     virtual OUString get_text(const weld::TreeIter& rIter) const override;
 
