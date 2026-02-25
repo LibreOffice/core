@@ -73,7 +73,7 @@ namespace dbp
     };
 
     OControlWizardPage::OControlWizardPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OUString& rID)
-        : OControlWizardPage_Base(pPage, pWizard, rUIXMLDescription, rID)
+        : vcl::OWizardPage(pPage, pWizard, rUIXMLDescription, rID)
         , m_pDialog(pWizard)
     {
         m_xContainer->set_size_request(m_xContainer->get_approximate_digit_width() * WIZARD_SIZE_X,
@@ -197,7 +197,7 @@ namespace dbp
             m_xFormContentType->set_label(compmodule::ModuleRes(pCommandTypeResourceId));
         }
 
-        OControlWizardPage_Base::initializePage();
+        vcl::OWizardPage::initializePage();
     }
 
     OControlWizard::OControlWizard(weld::Window* _pParent,

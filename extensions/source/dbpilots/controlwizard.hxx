@@ -43,8 +43,7 @@ namespace dbp
     };
 
     class OControlWizard;
-    typedef ::vcl::OWizardPage OControlWizardPage_Base;
-    class OControlWizardPage : public OControlWizardPage_Base
+    class OControlWizardPage : public vcl::OWizardPage
     {
         OControlWizard* m_pDialog;
         std::unique_ptr<weld::Label> m_xFormDatasourceLabel;
