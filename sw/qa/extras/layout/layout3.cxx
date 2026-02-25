@@ -187,6 +187,25 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128966)
     xmlXPathFreeObject(pXmlObj);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTableMoveFwdBadFirstRowPos)
+{
+    createSwDoc("min2.fodt");
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    pWrtShell->Down(false, 18);
+    pWrtShell->SplitNode(false);
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/infos/bounds", "top", u"18086");
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/infos/bounds", "top", u"18086");
+    // the problem was that the row top was at about 28469 and below bottom of the tab frame
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row[1]/infos/bounds", "top", u"18086");
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row[1]/cell[1]/infos/bounds", "top",
+                u"18086");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161718)
 {
     createSwDoc("tdf161718.docx");
