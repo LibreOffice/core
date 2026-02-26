@@ -704,7 +704,6 @@ void SvStream::StartReadingUnicodeText(rtl_TextEncoding eReadBomEncoding)
         return;    // nothing to read
 
     const sal_uInt64 nOldPos = Tell();
-    bool bGetBack = true;
     unsigned char nFlag(0);
     ReadUChar( nFlag );
     switch ( nFlag )
@@ -716,8 +715,9 @@ void SvStream::StartReadingUnicodeText(rtl_TextEncoding eReadBomEncoding)
                 ReadUChar(nFlag);
                 if (nFlag == 0xff)
                 {
+                    SetStreamEncoding(RTL_TEXTENCODING_UNICODE);
                     SetEndian(SvStreamEndian::BIG);
-                    bGetBack = false;
+                    return;
                 }
             }
         break;
@@ -728,8 +728,9 @@ void SvStream::StartReadingUnicodeText(rtl_TextEncoding eReadBomEncoding)
                 ReadUChar(nFlag);
                 if (nFlag == 0xfe)
                 {
+                    SetStreamEncoding(RTL_TEXTENCODING_UNICODE);
                     SetEndian(SvStreamEndian::LITTLE);
-                    bGetBack = false;
+                    return;
                 }
             }
         break;
@@ -742,15 +743,17 @@ void SvStream::StartReadingUnicodeText(rtl_TextEncoding eReadBomEncoding)
                 {
                     ReadUChar(nFlag);
                     if (nFlag == 0xbf)
-                        bGetBack = false; // it is UTF-8
+                    {
+                        SetStreamEncoding(RTL_TEXTENCODING_UTF8);
+                        return;
+                    }
                 }
             }
         break;
         default:
             ;   // nothing
     }
-    if (bGetBack)
-        Seek(nOldPos);      // no BOM, pure data
+    Seek(nOldPos); // no BOM, pure data
 }
 
 void SvStream::DetectEncoding(size_t maxBytes)
@@ -792,20 +795,10 @@ void SvStream::DetectEncoding(size_t maxBytes)
     StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
     if (!good())
         return;
+    if (GetStreamEncoding() != RTL_TEXTENCODING_DONTKNOW)
+        return; // BOM detected, encoding already set
 
-    const sal_uInt64 nBomSize = Tell() - nOrigPos;
-    if (nBomSize == 2)
-    {
-        SetStreamEncoding(RTL_TEXTENCODING_UCS2);
-        return;
-    }
-    if (nBomSize == 3)
-    {
-        SetStreamEncoding(RTL_TEXTENCODING_UTF8);
-        return;
-    }
-
-    assert(nBomSize == 0); // we are at nOrigPos
+    assert(Tell() - nOrigPos == 0); // we are at nOrigPos
     auto bytes = std::make_unique<char[]>(maxBytes);
     size_t nRead = ReadBytes(bytes.get(), maxBytes);
     Seek(nOrigPos);
