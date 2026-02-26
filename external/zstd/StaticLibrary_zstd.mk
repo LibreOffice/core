@@ -16,6 +16,7 @@ $(eval $(call gb_StaticLibrary_set_warnings_disabled,zstd))
 $(eval $(call gb_StaticLibrary_set_include,zstd,\
     -I$(gb_UnpackedTarball_workdir)/zstd/lib \
     -I$(gb_UnpackedTarball_workdir)/zstd/lib/common \
+    -I$(gb_UnpackedTarball_workdir)/zstd/lib/compress \
     -I$(gb_UnpackedTarball_workdir)/zstd/lib/decompress \
     $$(INCLUDE) \
 ))
@@ -26,6 +27,20 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,zstd,\
     UnpackedTarball/zstd/lib/common/fse_decompress \
     UnpackedTarball/zstd/lib/common/xxhash \
     UnpackedTarball/zstd/lib/common/zstd_common \
+    UnpackedTarball/zstd/lib/compress/fse_compress \
+    UnpackedTarball/zstd/lib/compress/hist \
+    UnpackedTarball/zstd/lib/compress/huf_compress \
+    UnpackedTarball/zstd/lib/compress/zstd_compress \
+    UnpackedTarball/zstd/lib/compress/zstd_compress_literals \
+    UnpackedTarball/zstd/lib/compress/zstd_compress_sequences \
+    UnpackedTarball/zstd/lib/compress/zstd_compress_superblock \
+    UnpackedTarball/zstd/lib/compress/zstd_double_fast \
+    UnpackedTarball/zstd/lib/compress/zstd_fast \
+    UnpackedTarball/zstd/lib/compress/zstd_lazy \
+    UnpackedTarball/zstd/lib/compress/zstd_ldm \
+    UnpackedTarball/zstd/lib/compress/zstd_opt \
+    UnpackedTarball/zstd/lib/compress/zstd_preSplit \
+    UnpackedTarball/zstd/lib/compress/zstdmt_compress \
     UnpackedTarball/zstd/lib/decompress/huf_decompress \
     UnpackedTarball/zstd/lib/decompress/zstd_ddict \
     UnpackedTarball/zstd/lib/decompress/zstd_decompress \
