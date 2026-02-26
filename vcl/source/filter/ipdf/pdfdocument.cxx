@@ -2884,7 +2884,28 @@ bool PDFNameElement::Read(SvStream& rStream)
             SAL_INFO("vcl.filter", "PDFNameElement::Read: m_aValue is '" << m_aValue << "'");
             return true;
         }
-        aBuf.append(ch);
+        // Parse hexadecimal escapes
+        if (ch == '#')
+        {
+            unsigned char hex1, hex2;
+            rStream.ReadUChar(hex1);
+            rStream.ReadUChar(hex2);
+            if (!rStream.eof() && rtl::isAsciiHexDigit(hex1) && rtl::isAsciiHexDigit(hex2))
+            {
+                unsigned char hexBuf[2] = { hex1, hex2 };
+                aBuf.append(static_cast<char>(
+                    OString(reinterpret_cast<const char*>(hexBuf), 2).toInt32(16)));
+            }
+            else
+            {
+                SAL_WARN("vcl.filter", "PDFNameElement::Read: invalid hex escape");
+                return false;
+            }
+        }
+        else
+        {
+            aBuf.append(ch);
+        }
         rStream.ReadChar(ch);
     }
 
