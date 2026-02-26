@@ -78,6 +78,7 @@
 #include <svx/sdrpagewindow.hxx>
 #include <svx/svdpagv.hxx>
 #include <comphelper/lok.hxx>
+#include <shellres.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <tools/UnitConversion.hxx>
 
@@ -2830,6 +2831,8 @@ void SwViewShell::ApplyAccessibilityOptions()
 
 ShellResource* SwViewShell::GetShellRes()
 {
+    if (spShellRes)
+        spShellRes->RebuildIfNeeded();
     return spShellRes;
 }
 

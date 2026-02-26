@@ -77,12 +77,16 @@ struct SW_DLLPUBLIC ShellResource
 
     ShellResource();
 
+    void RebuildIfNeeded();
+
 private:
+    void Build();
     void GetAutoFormatNameLst_() const;
     mutable std::optional<std::vector<OUString>> mxAutoFormatNameLst;
     OUString        sPageDescFirstName;
     OUString        sPageDescFollowName;
     OUString        sPageDescName;
+    OUString        m_aUILanguage;
 };
 
 inline const std::vector<OUString>& ShellResource::GetAutoFormatNameLst() const

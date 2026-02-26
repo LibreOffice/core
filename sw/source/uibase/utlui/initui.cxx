@@ -32,6 +32,7 @@
 #include <utlui.hrc>
 #include <authfld.hxx>
 #include <unotools/syslocale.hxx>
+#include <comphelper/lok.hxx>
 
 // Global Pointer
 
@@ -105,38 +106,56 @@ const TranslateId FLD_DOCINFO_ARY[] =
 };
 
 ShellResource::ShellResource()
-    : aPostItAuthor( SwResId( STR_POSTIT_AUTHOR ) ),
-    aPostItPage( SwResId( STR_POSTIT_PAGE ) ),
-    aPostItLine( SwResId( STR_POSTIT_LINE ) ),
-
-    aCalc_Syntax( SwResId( STR_CALC_SYNTAX ) ),
-    aCalc_ZeroDiv( SwResId( STR_CALC_ZERODIV ) ),
-    aCalc_Brack( SwResId( STR_CALC_BRACK ) ),
-    aCalc_Pow( SwResId( STR_CALC_POW ) ),
-    aCalc_Overflow( SwResId( STR_CALC_OVERFLOW ) ),
-    aCalc_Default( SwResId( STR_CALC_DEFAULT ) ),
-    aCalc_Error( SwResId( STR_CALC_ERROR ) ),
-
-    // #i81002#
-    aGetRefField_RefItemNotFound( SwResId( STR_GETREFFLD_REFITEMNOTFOUND ) ),
-    aStrNone( SwResId( STR_TEMPLATE_NONE )),
-    aFixedStr( SwResId( STR_FIELD_FIXED )),
-    sDurationFormat( SwResId( STR_DURATION_FORMAT )),
-
-    aTOXIndexName(          SwResId(STR_TOI)),
-    aTOXUserName(           SwResId(STR_TOU)),
-    aTOXContentName(        SwResId(STR_TOC)),
-    aTOXIllustrationsName(  SwResId(STR_TOX_ILL)),
-    aTOXObjectsName(        SwResId(STR_TOX_OBJ)),
-    aTOXTablesName(         SwResId(STR_TOX_TBL)),
-    aTOXAuthoritiesName(    SwResId(STR_TOX_AUTH)),
-    aTOXCitationName(    SwResId(STR_TOX_CITATION)),
-    sPageDescFirstName(     SwResId(STR_PAGEDESC_FIRSTNAME)),
-    sPageDescFollowName(    SwResId(STR_PAGEDESC_FOLLOWNAME)),
-    sPageDescName(          SwResId(STR_PAGEDESC_NAME))
 {
+    Build();
+}
+
+void ShellResource::Build()
+{
+    aPostItAuthor = SwResId(STR_POSTIT_AUTHOR);
+    aPostItPage = SwResId(STR_POSTIT_PAGE);
+    aPostItLine = SwResId(STR_POSTIT_LINE);
+    aCalc_Syntax = SwResId(STR_CALC_SYNTAX);
+    aCalc_ZeroDiv = SwResId(STR_CALC_ZERODIV);
+    aCalc_Brack = SwResId(STR_CALC_BRACK);
+    aCalc_Pow = SwResId(STR_CALC_POW);
+    aCalc_Overflow = SwResId(STR_CALC_OVERFLOW);
+    aCalc_Default = SwResId(STR_CALC_DEFAULT);
+    aCalc_Error = SwResId(STR_CALC_ERROR);
+    aGetRefField_RefItemNotFound = SwResId(STR_GETREFFLD_REFITEMNOTFOUND);
+    aStrNone = SwResId(STR_TEMPLATE_NONE);
+    aFixedStr = SwResId(STR_FIELD_FIXED);
+    sDurationFormat = SwResId(STR_DURATION_FORMAT);
+    aTOXIndexName = SwResId(STR_TOI);
+    aTOXUserName = SwResId(STR_TOU);
+    aTOXContentName = SwResId(STR_TOC);
+    aTOXIllustrationsName = SwResId(STR_TOX_ILL);
+    aTOXObjectsName = SwResId(STR_TOX_OBJ);
+    aTOXTablesName = SwResId(STR_TOX_TBL);
+    aTOXAuthoritiesName = SwResId(STR_TOX_AUTH);
+    aTOXCitationName = SwResId(STR_TOX_CITATION);
+    sPageDescFirstName = SwResId(STR_PAGEDESC_FIRSTNAME);
+    sPageDescFollowName = SwResId(STR_PAGEDESC_FOLLOWNAME);
+    sPageDescName = SwResId(STR_PAGEDESC_NAME);
+
+    aDocInfoLst.clear();
     for (auto const& aID : FLD_DOCINFO_ARY)
         aDocInfoLst.push_back(SwResId(aID));
+
+    mxAutoFormatNameLst.reset();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        m_aUILanguage = comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
+}
+
+void ShellResource::RebuildIfNeeded()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    OUString aCurrLang = comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
+    if (aCurrLang != m_aUILanguage)
+        Build();
 }
 
 OUString ShellResource::GetPageDescName(sal_uInt16 nNo, PageNameMode eMode)
