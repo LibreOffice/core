@@ -7126,7 +7126,7 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW
                 m_nColBreakStatus = COLBRK_POSTPONE;
             break;
         case msword::PageBreak:
-            if ( pSectionInfo )
+            if (pSectionInfo && !m_bOpenedParaPr)
             {
                 // Detect when the current node is the last node in the
                 // document: the last section is written explicitly in
@@ -7188,7 +7188,7 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW
             }
             else if ( m_bParagraphOpened )
             {
-                if (bBreakAfter)
+                if (bBreakAfter || m_bOpenedParaPr)
                     // tdf#128889
                     m_bPageBreakAfter = true;
                 else
