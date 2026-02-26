@@ -79,6 +79,12 @@ void PdfExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://www.aiim.org/pdfua/ns/id/"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pdfaid"),
                        BAD_CAST("http://www.aiim.org/pdfa/ns/id/"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pdfaExtension"),
+                       BAD_CAST("http://www.aiim.org/pdfa/ns/extension/"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pdfaSchema"),
+                       BAD_CAST("http://www.aiim.org/pdfa/ns/schema#"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pdfaProperty"),
+                       BAD_CAST("http://www.aiim.org/pdfa/ns/property#"));
 }
 
 xmlDocUniquePtr PdfExportTest2::parseMetadata()
@@ -1787,6 +1793,68 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157517)
     loadFromFile(u"tdf157517.odt");
     // Without the fix in place, the validation would have failed
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+
+    xmlDocUniquePtr pXmlDoc = parseMetadata();
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:namespaceURI",
+                       u"http://www.aiim.org/pdfua/ns/id/");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:prefix",
+                       u"pdfuaid");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:schema",
+                       u"PDF/UA identification schema");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[1]/pdfaProperty:category",
+                       u"internal");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[1]/pdfaProperty:description",
+                       u"PDF/UA version identifier");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[1]/pdfaProperty:name",
+                       u"part");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[1]/pdfaProperty:valueType",
+                       u"Integer");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[2]/pdfaProperty:category",
+                       u"internal");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[2]/pdfaProperty:description",
+                       u"PDF/UA amendment identifier");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[2]/pdfaProperty:name",
+                       u"amd");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[2]/pdfaProperty:valueType",
+                       u"Text");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[3]/pdfaProperty:category",
+                       u"internal");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[3]/pdfaProperty:description",
+                       u"PDF/UA corrigenda identifier");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[3]/pdfaProperty:name",
+                       u"corr");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[3]/pdfaExtension:schemas/rdf:Bag/rdf:li/"
+                       "pdfaSchema:property/rdf:Seq/rdf:li[3]/pdfaProperty:valueType",
+                       u"Text");
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152218)
