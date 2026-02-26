@@ -521,10 +521,6 @@ static OString getTabViewRenderState(ScTabViewShell& rTabViewShell)
     OString aThemeName = OUStringToOString(rViewRenderingOptions.GetColorSchemeName(), RTL_TEXTENCODING_UTF8);
     aState.append(aThemeName);
 
-    sc::SheetViewID nSheetViewID = rTabViewShell.GetViewData().GetSheetViewID();
-    if (nSheetViewID >= 0)
-        aState.append(";VS:" + OString::number(nSheetViewID));
-
     return aState.makeStringAndClear();
 }
 
