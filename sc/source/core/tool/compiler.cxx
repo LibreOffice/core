@@ -5480,8 +5480,18 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
     switch (t->GetType())
     {
         case svExternalName:
-            rBuffer.append(
-                pConv->makeExternalNameStr(nUsedFileId, *pFileName, t->GetString().getString()));
+        {
+            FormulaToken* p = maArrIterator.PeekNextNoSpaces();
+            OUString sName = t->GetString().getString();
+            if (p && p->GetOpCode() == ocOpen)
+            {
+                OUString sUDPrefix = mxSymbols->getSymbol(ocUDExternal);
+                if (FormulaGrammar::isOOXML(meGrammar) && !sName.matchIgnoreAsciiCase(sUDPrefix))
+                    sName = sUDPrefix + sName;
+            }
+
+            rBuffer.append(pConv->makeExternalNameStr(nUsedFileId, *pFileName, sName));
+        }
         break;
         case svExternalSingleRef:
             pConv->makeExternalRefStr(rDoc.GetSheetLimits(),
