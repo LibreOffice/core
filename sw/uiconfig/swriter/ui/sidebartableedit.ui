@@ -119,6 +119,11 @@
                 <property name="homogeneous">False</property>
               </packing>
             </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="insert-atkobject">
+                <property name="AtkObject::accessible-role">grouping</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -189,6 +194,11 @@
                 <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="select-atkobject">
+                <property name="AtkObject::accessible-role">grouping</property>
+              </object>
             </child>
           </object>
           <packing>
@@ -398,6 +408,11 @@
                 <property name="homogeneous">True</property>
               </packing>
             </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="delete-atkobject">
+                <property name="AtkObject::accessible-role">grouping</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -457,6 +472,11 @@
                 <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="split_merge-atkobject">
+                <property name="AtkObject::accessible-role">grouping</property>
+              </object>
             </child>
           </object>
           <packing>
@@ -593,6 +613,11 @@
                 <property name="expand">False</property>
                 <property name="homogeneous">False</property>
               </packing>
+            </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="misc-atkobject">
+                <property name="AtkObject::accessible-role">grouping</property>
+              </object>
             </child>
           </object>
           <packing>
