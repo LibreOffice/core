@@ -262,7 +262,7 @@ ErrCode SwASCIIParser::ReadChars()
     sal_Unicode *pStart = nullptr, *pEnd = nullptr, *pLastStt = nullptr;
     tools::Long nReadCnt = 0, nLineLen = 0;
     sal_Unicode cLastCR = 0;
-    bool bSwapUnicode = false;
+    bool bSwapUnicode;
 
     const SwAsciiOptions* pUseMe = &m_rOpt;
     SwAsciiOptions aEmpty;
@@ -271,27 +271,19 @@ ErrCode SwASCIIParser::ReadChars()
         && aEmpty.GetLanguage() == m_rOpt.GetLanguage()
         && aEmpty.GetParaFlags() == m_rOpt.GetParaFlags())
     {
-        sal_Size nLen, nOrig;
-        nOrig = nLen = m_rInput.ReadBytes(m_pArr.get(), ASC_BUFFLEN);
-        rtl_TextEncoding eCharSet;
         LineEnd eLineEnd;
         bool bHasBom;
-        const bool bRet
-            = SwIoSystem::IsDetectableText(m_pArr.get(), nLen, &eCharSet,
-                                            &bSwapUnicode, &eLineEnd, &bHasBom);
+        const bool bRet = SwIoSystem::IsDetectableText(m_rInput, ASC_BUFFLEN, &eLineEnd, &bHasBom);
         if (!bRet)
             return ERRCODE_IO_BROKENPACKAGE;
 
-        OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must have failed");
-        if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
+        const rtl_TextEncoding eCharSet = m_rInput.GetStreamEncoding();
+        if (eCharSet != RTL_TEXTENCODING_DONTKNOW)
         {
             aEmpty.SetCharSet(eCharSet);
             aEmpty.SetParaFlags(eLineEnd);
             aEmpty.SetIncludeBOM(bHasBom);
-            m_rInput.SeekRel(-(tools::Long(nLen)));
         }
-        else
-            m_rInput.SeekRel(-(tools::Long(nOrig)));
         pUseMe=&aEmpty;
     }
     m_usedAsciiOptions = *pUseMe;
@@ -310,9 +302,10 @@ ErrCode SwASCIIParser::ReadChars()
         bSwapUnicode = false;
         hContext = rtl_createTextToUnicodeContext( hConverter );
     }
-    else if (pUseMe != &aEmpty)  //Already successfully figured out type
+    else
     {
-        m_rInput.StartReadingUnicodeText(currentCharSet);
+        if (pUseMe != &aEmpty) // Already successfully figured out type
+            m_rInput.StartReadingUnicodeText(currentCharSet);
         bSwapUnicode = m_rInput.IsEndianSwap();
     }
 
