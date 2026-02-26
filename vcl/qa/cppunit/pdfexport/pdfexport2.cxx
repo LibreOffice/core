@@ -1500,6 +1500,54 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfUaMetadata)
     assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/pdfuaid:part", u"1");
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf138792)
+{
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"tdf138792.odt");
+    skipValidation();
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    auto* pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    auto* pCatalogDictionary = pCatalog->GetDictionary();
+    CPPUNIT_ASSERT(pCatalogDictionary);
+    auto* pMetadataObject = pCatalogDictionary->LookupObject("Metadata"_ostr);
+    CPPUNIT_ASSERT(pMetadataObject);
+    auto* pMetadataDictionary = pMetadataObject->GetDictionary();
+    auto* pType = dynamic_cast<vcl::filter::PDFNameElement*>(
+        pMetadataDictionary->LookupElement("Type"_ostr));
+    CPPUNIT_ASSERT(pType);
+    CPPUNIT_ASSERT_EQUAL("Metadata"_ostr, pType->GetValue());
+
+    auto* pStreamObject = pMetadataObject->GetStream();
+    CPPUNIT_ASSERT(pStreamObject);
+    auto& rStream = pStreamObject->GetMemory();
+    rStream.Seek(0);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&rStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/dc:date/rdf:Seq/rdf:li");
+    assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/dc:format",
+                       u"application/pdf");
+    assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/dc:title/rdf:Alt/rdf:li",
+                       u"Test document title");
+    assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/dc:creator/rdf:Seq/rdf:li",
+                       u"Gabor Kelemen LO");
+    assertXPathContent(pXmlDoc,
+                       "/x:xmpmeta/rdf:RDF/rdf:Description[1]/dc:description/rdf:Alt/rdf:li",
+                       u"Test subject");
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf153472)
 {
     // Use PDF/A-1b
