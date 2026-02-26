@@ -1140,7 +1140,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMissingCallFunctionArgument)
                                            css::uno::Any(u"abcdeed§ba"_ustr),
                                            css::uno::Any(u"d."_ustr),
                                            css::uno::Any(), // void value for the replacement
-                                           css::uno::Any(2),
+                                           css::uno::Any(sal_Int32(2)),
                                        });
 
     // The call to REGEX should return the matched string because the “replacement” parameter is
