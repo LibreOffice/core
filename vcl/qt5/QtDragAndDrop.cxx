@@ -11,6 +11,7 @@
 #include <QtDragAndDrop.moc>
 
 #include <QtFrame.hxx>
+#include <QtTools.hxx>
 #include <QtTransferable.hxx>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
