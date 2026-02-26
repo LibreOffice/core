@@ -55,24 +55,27 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     // InitOptions sets the document languages, must be called before CreateStandardStyles
     InitOptions(false);
 
-    m_aDocument.GetStyleSheetPool()->CreateStandardStyles();
-    m_aDocument.UpdStlShtPtrsFrmNms();
-
-    if (!m_bUcalcTest)
+    if (ScStyleSheetPool* pStyleSheetPool = m_aDocument.GetStyleSheetPool())
     {
-        /* Create styles that are imported through Orcus */
+        pStyleSheetPool->CreateStandardStyles();
+        m_aDocument.UpdStlShtPtrsFrmNms();
 
-        OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
-        rtl::Bootstrap::expandMacros(aURL);
-
-        OUString aPath;
-        osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
-
-        ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
-        if (pOrcus)
+        if (!m_bUcalcTest)
         {
-            pOrcus->importODS_Styles(m_aDocument, aPath);
-            m_aDocument.GetStyleSheetPool()->setAllStandard();
+            /* Create styles that are imported through Orcus */
+
+            OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
+            rtl::Bootstrap::expandMacros(aURL);
+
+            OUString aPath;
+            osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
+
+            ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+            if (pOrcus)
+            {
+                pOrcus->importODS_Styles(m_aDocument, aPath);
+                pStyleSheetPool->setAllStandard();
+            }
         }
     }
 

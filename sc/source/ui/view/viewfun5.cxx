@@ -601,7 +601,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             SfxFilterMatcher aMatcher(ScDocShell::Factory().GetFilterContainer()->GetName());
             if (auto pFilter = aMatcher.GetFilter4ClipBoardId(SotClipboardFormatId::BIFF_12))
             {
-                ScDocShellRef pClipShell(new ScDocShell(SfxModelFlags::NONE));
+                ScDocShellRef pClipShell(new ScDocShell(SfxModelFlags::NONE, SCDOCMODE_CLIP));
                 SCTAB nSrcTab = 0;
                 pClipShell->GetDocument().ResetClip(pDoc, nSrcTab);
                 SfxMedium aMed;

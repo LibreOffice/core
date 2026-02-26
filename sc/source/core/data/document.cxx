@@ -6042,12 +6042,12 @@ ScPatternAttr* ScDocument::GetDefPattern() const
 
 ScDocumentPool* ScDocument::GetPool()
 {
-    return mxPoolHelper->GetDocPool();
+    return mxPoolHelper ? mxPoolHelper->GetDocPool() : nullptr;
 }
 
 ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
 {
-    return mxPoolHelper->GetStylePool();
+    return mxPoolHelper ? mxPoolHelper->GetStylePool() : nullptr;
 }
 
 SCSIZE ScDocument::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
