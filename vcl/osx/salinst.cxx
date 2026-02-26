@@ -586,7 +586,14 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
                 // the front of the event queue so no more events will be
                 // dispatched until live resizing ends. Surprisingly, live
                 // resizing appears to end in the next mouse down event.
-                if ( ImplGetSVData()->mpWinData->mbIsLiveResize && [pEvent type] == NSEventTypeLeftMouseUp )
+                // In certain cases, ImplGetSVData()->mpWinData->mbIsLiveResize
+                // remains set to true because the current event needs to be
+                // dispatched for ImplGetSVData()->mpWinData->mbIsLiveResize
+                // to be reset to false. This causes dispatching to become an
+                // infinite wait for the current NSEventTypeLeftMouseUp event
+                // to get dispatched. So query the native window directly to
+                // get the real live resizing status.
+                if ( [pEvent type] == NSEventTypeLeftMouseUp && [pEvent window] && [[pEvent window] inLiveResize] )
                 {
                     [NSApp postEvent: pEvent atStart: YES];
                     return false;
