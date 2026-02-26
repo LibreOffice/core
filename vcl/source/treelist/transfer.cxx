@@ -99,8 +99,8 @@ SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const Transferable
     rOStm.WriteInt32( rObjDesc.maSize.Height() );
     rOStm.WriteInt32( rObjDesc.maDragStartPos.X() );
     rOStm.WriteInt32( rObjDesc.maDragStartPos.Y() );
-    rOStm.WriteUniOrByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
-    rOStm.WriteUniOrByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
+    rOStm.WriteUniOrByteString( rObjDesc.maTypeName );
+    rOStm.WriteUniOrByteString( rObjDesc.maDisplayName );
     rOStm.WriteUInt32( nSig1 ).WriteUInt32( nSig2 );
 
     const sal_uInt64 nLastPos = rOStm.Tell();

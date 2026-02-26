@@ -552,8 +552,8 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont, tools::Long
     VersionCompatWrite aCompat( rOStm, 5 );
 
     TypeSerializer aSerializer(rOStm);
-    rOStm.WriteUniOrByteString( rImplFont.GetFamilyName(), rOStm.GetStreamEncoding() );
-    rOStm.WriteUniOrByteString( rImplFont.GetStyleName(), rOStm.GetStreamEncoding() );
+    rOStm.WriteUniOrByteString( rImplFont.GetFamilyName() );
+    rOStm.WriteUniOrByteString( rImplFont.GetStyleName() );
     aSerializer.writeSize(rImplFont.maAverageFontSize);
 
     rOStm.WriteUInt16( GetStoreCharSet( rImplFont.GetCharSet() ) );

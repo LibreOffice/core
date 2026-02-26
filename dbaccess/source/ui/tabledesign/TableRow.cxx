@@ -92,9 +92,9 @@ namespace dbaui
         if(pFieldDesc)
         {
             _rStr.WriteInt32( 1 );
-            _rStr.WriteUniOrByteString(pFieldDesc->GetName(), _rStr.GetStreamEncoding());
-            _rStr.WriteUniOrByteString(pFieldDesc->GetDescription(), _rStr.GetStreamEncoding());
-            _rStr.WriteUniOrByteString(pFieldDesc->GetHelpText(), _rStr.GetStreamEncoding());
+            _rStr.WriteUniOrByteString(pFieldDesc->GetName());
+            _rStr.WriteUniOrByteString(pFieldDesc->GetDescription());
+            _rStr.WriteUniOrByteString(pFieldDesc->GetHelpText());
             double nValue = 0.0;
             Any aValue = pFieldDesc->GetControlDefault();
             if ( aValue >>= nValue )
@@ -105,7 +105,7 @@ namespace dbaui
             else
             {
                 _rStr.WriteInt32( 2 );
-                _rStr.WriteUniOrByteString(::comphelper::getString(aValue), _rStr.GetStreamEncoding());
+                _rStr.WriteUniOrByteString(::comphelper::getString(aValue));
             }
 
             _rStr.WriteInt32( pFieldDesc->GetType() );

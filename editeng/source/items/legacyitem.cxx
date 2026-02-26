@@ -189,12 +189,12 @@ namespace legacy
                 // TODO/MBA: how to get a BaseURL?!
                 OUString aRel = INetURLObject::GetRelURL( u"", rItem.GetGraphicLink() );
                 // UNICODE: rStrm << aRel;
-                rStrm.WriteUniOrByteString(aRel, rStrm.GetStreamEncoding());
+                rStrm.WriteUniOrByteString(aRel);
             }
             if ( !rItem.GetGraphicFilter().isEmpty() )
             {
                 // UNICODE: rStrm << rItem.GetGraphicFilter();
-                rStrm.WriteUniOrByteString(rItem.GetGraphicFilter(), rStrm.GetStreamEncoding());
+                rStrm.WriteUniOrByteString(rItem.GetGraphicFilter());
             }
             rStrm.WriteSChar( rItem.GetGraphicPos() );
             return rStrm;

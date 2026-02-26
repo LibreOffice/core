@@ -1149,6 +1149,11 @@ OUString SvStream::ReadUniOrByteString(rtl_TextEncoding eSrcEncoding)
     return read_uInt16_lenPrefixed_uInt8s_ToOUString(*this, eSrcEncoding);
 }
 
+SvStream& SvStream::WriteUniOrByteString(std::u16string_view rStr)
+{
+    return WriteUniOrByteString(rStr, GetStreamEncoding());
+}
+
 SvStream& SvStream::WriteUniOrByteString(std::u16string_view rStr, rtl_TextEncoding eDestEncoding)
 {
     // write UTF-16 string directly into stream ?

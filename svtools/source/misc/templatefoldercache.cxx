@@ -278,7 +278,7 @@ namespace svt
             // #116281# Keep office installation relocatable. Never store
             // any direct references to office installation directory.
             sURL = m_xOfficeInstDirs->makeRelocatableURL( sURL );
-            m_rStorage.WriteUniOrByteString( sURL, m_rStorage.GetStreamEncoding() );
+            m_rStorage.WriteUniOrByteString( sURL );
         }
     };
 

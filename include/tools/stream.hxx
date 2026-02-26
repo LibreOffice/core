@@ -353,6 +353,10 @@ public:
         eDestEncoding==RTL_TEXTENCODING_UNICODE, otherwise convert to eDestEncoding
         and write a 16bit length prefixed sequence of bytes */
     SvStream& WriteUniOrByteString(std::u16string_view rStr, rtl_TextEncoding eDestEncoding);
+    /** Write a 32bit length prefixed sequence of utf-16 if
+        GetStreamEncoding()==RTL_TEXTENCODING_UNICODE, otherwise convert to GetStreamEncoding()
+        and write a 16bit length prefixed sequence of bytes */
+    SvStream& WriteUniOrByteString(std::u16string_view rStr);
 
     /** Read a line of Unicode if GetStreamEncoding()==RTL_TEXTENCODING_UNICODE,
         otherwise read a line of Bytecode and convert from GetStreamEncoding().

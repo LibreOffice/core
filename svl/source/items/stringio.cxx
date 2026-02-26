@@ -23,7 +23,7 @@
 
 void writeByteString(SvStream& rStream, std::u16string_view rString)
 {
-    rStream.WriteUniOrByteString(rString, rStream.GetStreamEncoding());
+    rStream.WriteUniOrByteString(rString);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
