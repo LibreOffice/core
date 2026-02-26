@@ -4227,16 +4227,25 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
                 break;
             case SvxBreak::PageAfter:
             case SvxBreak::PageBoth:
+            {
+                const WW8_SepInfo* pCurrentSection = GetExport().Sections().CurrentSectionInfo();
+                auto pTextNode = dynamic_cast<const SwTextNode*>(GetExport().m_pOutFormatNode);
+                // If a section break has already been identified/made, then just skip this break.
+                if (pTextNode && pCurrentSection && pCurrentSection->pPDNd)
+                {
+                    if (pCurrentSection->pPDNd->GetIndex() > pTextNode->GetIndex())
+                        return;
+                }
+
                 nC = msword::PageBreak;
                 // #i76300# - check for follow page description,
                 // if current writing attributes of a paragraph.
-                if ( dynamic_cast< const SwTextNode* >( GetExport().m_pOutFormatNode ) &&
-                     GetExport().GetCurItemSet() )
+                if (pTextNode && GetExport().GetCurItemSet())
                 {
                     bCheckForFollowPageDesc = true;
                 }
                 break;
-
+            }
             default:
                 break;
         }
@@ -4249,7 +4258,7 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
             {
                 bFollowPageDescWritten =
                     GetExport().OutputFollowPageDesc( GetExport().GetCurItemSet(),
-                            dynamic_cast<const SwTextNode*>( GetExport().m_pOutFormatNode ) );
+                        static_cast<const SwTextNode*>(GetExport().m_pOutFormatNode));
             }
             if ( !bFollowPageDescWritten )
             {
