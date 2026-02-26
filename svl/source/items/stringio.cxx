@@ -21,8 +21,6 @@
 
 #include <tools/stream.hxx>
 
-OUString readByteString(SvStream& rStream) { return rStream.ReadUniOrByteString(); }
-
 void writeByteString(SvStream& rStream, std::u16string_view rString)
 {
     rStream.WriteUniOrByteString(rString, rStream.GetStreamEncoding());
