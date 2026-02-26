@@ -341,6 +341,7 @@ constexpr auto SUPPORTED_WITH_QT_PARENT = frozen::make_unordered_set<std::u16str
     u"filter/ui/pdfuserinterfacepage.ui",
     u"filter/ui/pdfviewpage.ui",
     u"modules/scalc/ui/conditionalentry.ui",
+    u"modules/scalc/ui/conditionaliconset.ui",
     u"modules/scalc/ui/printeroptions.ui",
     u"modules/scalc/ui/sortcriteriapage.ui",
     u"modules/scalc/ui/sortkey.ui",
