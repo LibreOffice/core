@@ -1962,7 +1962,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
     auto pTypeT00 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT00->Lookup("Type"_ostr));
     CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pTypeT00->GetValue());
     auto pST00 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT00->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Contents#20Heading"_ostr, pST00->GetValue());
+    CPPUNIT_ASSERT_EQUAL("Contents Heading"_ostr, pST00->GetValue());
 
     auto pRefKidT1 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKidsTv[1]);
     CPPUNIT_ASSERT(pRefKidT1);
@@ -1984,7 +1984,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
     auto pTypeT10 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT10->Lookup("Type"_ostr));
     CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pTypeT10->GetValue());
     auto pST10 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT10->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Contents#201"_ostr, pST10->GetValue());
+    CPPUNIT_ASSERT_EQUAL("Contents 1"_ostr, pST10->GetValue());
 
     auto pKidsT10 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObjectT10->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pKidsT10);
@@ -2021,7 +2021,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
     auto pTypeT20 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT20->Lookup("Type"_ostr));
     CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pTypeT20->GetValue());
     auto pST20 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT20->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Contents#201"_ostr, pST20->GetValue());
+    CPPUNIT_ASSERT_EQUAL("Contents 1"_ostr, pST20->GetValue());
 
     auto pKidsT20 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObjectT20->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pKidsT20);
@@ -2058,7 +2058,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157817)
     auto pTypeT30 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT30->Lookup("Type"_ostr));
     CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pTypeT30->GetValue());
     auto pST30 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectT30->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Contents#201"_ostr, pST30->GetValue());
+    CPPUNIT_ASSERT_EQUAL("Contents 1"_ostr, pST30->GetValue());
 
     auto pKidsT30 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObjectT30->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pKidsT30);
@@ -2984,7 +2984,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
     auto pType12 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject12->Lookup("Type"_ostr));
     CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType12->GetValue());
     auto pS12 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject12->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Text#20body"_ostr, pS12->GetValue());
+    CPPUNIT_ASSERT_EQUAL("Text body"_ostr, pS12->GetValue());
 
     auto pKids12 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject12->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pKids12);
@@ -3058,7 +3058,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
     auto pType13 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject13->Lookup("Type"_ostr));
     CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType13->GetValue());
     auto pS13 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject13->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Text#20body"_ostr, pS13->GetValue());
+    CPPUNIT_ASSERT_EQUAL("Text body"_ostr, pS13->GetValue());
 
     auto pKids13 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject13->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pKids13);
@@ -3131,7 +3131,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
     auto pType14 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject14->Lookup("Type"_ostr));
     CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType14->GetValue());
     auto pS14 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject14->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Text#20body"_ostr, pS14->GetValue());
+    CPPUNIT_ASSERT_EQUAL("Text body"_ostr, pS14->GetValue());
 
     auto pKids14 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject14->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pKids14);
@@ -3205,7 +3205,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf157397)
     auto pType16 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject16->Lookup("Type"_ostr));
     CPPUNIT_ASSERT_EQUAL("StructElem"_ostr, pType16->GetValue());
     auto pS16 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject16->Lookup("S"_ostr));
-    CPPUNIT_ASSERT_EQUAL("Text#20body"_ostr, pS16->GetValue());
+    CPPUNIT_ASSERT_EQUAL("Text body"_ostr, pS16->GetValue());
 
     auto pKids16 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject16->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pKids16);
