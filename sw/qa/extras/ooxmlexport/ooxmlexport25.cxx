@@ -41,6 +41,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148057_columnBreak, "tdf148057_columnBreak.docx"
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf171025_pageAfter, "tdf171025_pageAfter.docx")
+{
+    // given a document with a LO specialty pageAfter break
+    // coupled with IsPlausableSingleWordSection
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf171038_pageAfter)
 {
     // given a document with a LO-specialty PageAfter break
