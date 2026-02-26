@@ -255,13 +255,14 @@ void lcl_RemoveTextEditOutlinerViews(SdrObjEditView const* pThis, SdrPageView co
             return;
 
         SdrOutliner* pOutliner = pView->GetTextEditOutliner();
-        for (size_t nView = 0; nView < pOutliner->GetViewCount(); ++nView)
+        for (size_t nView = pOutliner->GetViewCount(); nView > 0;)
         {
+            nView--;
             OutlinerView* pOutlinerView = pOutliner->GetView(nView);
             if (pOutlinerView->GetWindow()->GetOutDev() != pOutputDevice)
                 continue;
 
-            pOutliner->RemoveView(pOutlinerView);
+            pOutliner->RemoveView(nView);
             delete pOutlinerView;
         }
     });
@@ -1644,7 +1645,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
     SdrEndTextEditKind eRet = SdrEndTextEditKind::Unchanged;
     rtl::Reference<SdrTextObj> pTEObj = mxWeakTextEditObj.get();
-    vcl::Window* pTEWin = mpTextEditWin;
+    VclPtr<vcl::Window> pTEWin = mpTextEditWin;
     OutlinerView* pTEOutlinerView = mpTextEditOutlinerView;
     vcl::Cursor* pTECursorBuffer = m_pTextEditCursorBuffer;
     SdrUndoManager* pUndoEditUndoManager = nullptr;
@@ -1863,17 +1864,20 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 // may not own the zeroth one
                 delete pOLV;
             }
-            aRect.Union(m_aTextEditArea);
-            aRect.Union(m_aMinTextEditArea);
-            aRect = pWin->LogicToPixel(aRect);
-            aRect.AdjustLeft(-nMorePix);
-            aRect.AdjustTop(-nMorePix);
-            aRect.AdjustRight(nMorePix);
-            aRect.AdjustBottom(nMorePix);
-            aRect = pWin->PixelToLogic(aRect);
-            InvalidateOneWin(*pWin->GetOutDev(), aRect);
-            pWin->GetOutDev()->SetFillColor();
-            pWin->GetOutDev()->SetLineColor(COL_BLACK);
+            if (pWin && !pWin->isDisposed())
+            {
+                aRect.Union(m_aTextEditArea);
+                aRect.Union(m_aMinTextEditArea);
+                aRect = pWin->LogicToPixel(aRect);
+                aRect.AdjustLeft(-nMorePix);
+                aRect.AdjustTop(-nMorePix);
+                aRect.AdjustRight(nMorePix);
+                aRect.AdjustBottom(nMorePix);
+                aRect = pWin->PixelToLogic(aRect);
+                InvalidateOneWin(*pWin->GetOutDev(), aRect);
+                pWin->GetOutDev()->SetFillColor();
+                pWin->GetOutDev()->SetLineColor(COL_BLACK);
+            }
         }
         // and now the Outliner itself
         if (!mbTextEditDontDelete)
@@ -2596,6 +2600,7 @@ void SdrObjEditView::DeleteDeviceFromPaintView(OutputDevice& rOldDev)
             if (pOLV && pOLV->GetWindow() == rOldDev.GetOwnerWindow())
             {
                 mpTextEditOutliner->RemoveView(i);
+                delete pOLV;
             }
         }
     }
