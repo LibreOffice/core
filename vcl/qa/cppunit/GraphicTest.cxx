@@ -875,12 +875,12 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
 
     // Check size in pixels
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Height());
 
     // Set and check the PrefSize
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1349), aGraphic.GetPrefSize().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1349), aGraphic.GetPrefSize().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1323), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1323), aGraphic.GetPrefSize().Height());
     aGraphic.SetPrefSize(Size(200, 100));
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
@@ -895,8 +895,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Height());
 
     // SWAP IN
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
@@ -908,8 +908,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Height());
 }
 
 CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithoutGfxLink)
@@ -942,12 +942,12 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithoutGfxLi
     CPPUNIT_ASSERT_EQUAL(u"Origin URL"_ustr, aGraphic.getOriginURL());
 
     // Check size in pixels
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Height());
 
     // Set and check the PrefSize
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1349), aGraphic.GetPrefSize().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1349), aGraphic.GetPrefSize().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1323), aGraphic.GetPrefSize().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1323), aGraphic.GetPrefSize().Height());
     aGraphic.SetPrefSize(Size(200, 100));
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
@@ -962,8 +962,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithoutGfxLi
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Height());
 
     // SWAP IN
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
@@ -975,8 +975,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_SVG_WithoutGfxLi
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aGraphic.GetPrefSize().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aGraphic.GetPrefSize().Height());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(51), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(50), aGraphic.GetSizePixel().Height());
 }
 
 CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingVectorGraphic_PDF_WithGfxLink)
@@ -1259,8 +1259,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testLoadSVGZ)
     Graphic aGraphic = loadGraphic(u"TypeDetectionExample.svgz");
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     const auto[scalingX, scalingY] = getDPIScaling();
-    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingX), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingY), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(99 * scalingX), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(99 * scalingY), aGraphic.GetSizePixel().Height());
 }
 
 CPPUNIT_TEST_FIXTURE(GraphicTest, testTdf156016)
@@ -1271,8 +1271,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testTdf156016)
     Graphic aGraphic = loadGraphic(u"tdf156016.svg");
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     const auto[scalingX, scalingY] = getDPIScaling();
-    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingX), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingY), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(99 * scalingX), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(99 * scalingY), aGraphic.GetSizePixel().Height());
 }
 
 CPPUNIT_TEST_FIXTURE(GraphicTest, testTdf149545)
@@ -1283,8 +1283,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testTdf149545)
     Graphic aGraphic = loadGraphic(u"tdf149545.svg");
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     const auto[scalingX, scalingY] = getDPIScaling();
-    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingX), aGraphic.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingY), aGraphic.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(99 * scalingX), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(99 * scalingY), aGraphic.GetSizePixel().Height());
 }
 
 CPPUNIT_TEST_FIXTURE(GraphicTest, testAvailableThreaded)

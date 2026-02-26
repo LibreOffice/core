@@ -24,7 +24,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <svgdocument.hxx>
@@ -619,14 +619,13 @@ namespace svgio::svgreader
                             // This is needed since e.g. an SdrObject using this as graphic will
                             // create a mapping transformation to exactly map the content to its
                             // real life size
-                            const drawinglayer::primitive2d::Primitive2DReference xLine(
-                                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                                    basegfx::utils::createPolygonFromRect(
-                                        aSvgCanvasRange),
+                            const drawinglayer::primitive2d::Primitive2DReference xRect(
+                                new drawinglayer::primitive2d::FilledRectanglePrimitive2D(
+                                    aSvgCanvasRange,
                                     basegfx::BColor(0.0, 0.0, 0.0)));
                             const drawinglayer::primitive2d::Primitive2DReference xHidden(
                                 new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
-                                    drawinglayer::primitive2d::Primitive2DContainer { xLine }));
+                                    drawinglayer::primitive2d::Primitive2DContainer { xRect }));
 
                             aSequence.push_back(xHidden);
                         }
@@ -702,14 +701,13 @@ namespace svgio::svgreader
             // tdf#118232 No geometry, Outermost SVG element and we have a ViewBox.
             // Create a HiddenGeometry Primitive containing an expanded
             // hairline geometry to have the size contained
-            const drawinglayer::primitive2d::Primitive2DReference xLine(
-                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                    basegfx::utils::createPolygonFromRect(
-                        *getViewBox()),
+            const drawinglayer::primitive2d::Primitive2DReference xRect(
+                new drawinglayer::primitive2d::FilledRectanglePrimitive2D(
+                    *getViewBox(),
                     basegfx::BColor(0.0, 0.0, 0.0)));
             const drawinglayer::primitive2d::Primitive2DReference xHidden(
                 new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
-                    drawinglayer::primitive2d::Primitive2DContainer { xLine }));
+                    drawinglayer::primitive2d::Primitive2DContainer { xRect }));
 
             rTarget.push_back(xHidden);
         }

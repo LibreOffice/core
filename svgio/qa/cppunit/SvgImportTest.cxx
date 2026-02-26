@@ -1377,8 +1377,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBehaviourWhenWidthAndHeightIsOrIsNotSet)
         double fWidth = (aRange.getWidth() / 2540.0) * 96.0;
         double fHeight = (aRange.getHeight() / 2540.0) * 96.0;
 
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.0, fWidth, 1E-12);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.0, fHeight, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, fWidth, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, fHeight, 1E-12);
     }
 
     {
@@ -1402,8 +1402,8 @@ CPPUNIT_TEST_FIXTURE(Test, testBehaviourWhenWidthAndHeightIsOrIsNotSet)
         double fWidth = (aRange.getWidth() / 2540.0) * 96.0;
         double fHeight = (aRange.getHeight() / 2540.0) * 96.0;
 
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.0, fWidth, 1E-12);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(11.0, fHeight, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, fWidth, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0, fHeight, 1E-12);
     }
 }
 
