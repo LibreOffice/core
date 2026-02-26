@@ -3768,7 +3768,7 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport const & rM
     // add some default indentation to match PowerPoint's behavior.
     if ( nIsBullet && nTextOfs == 0 && nBulletOfs == 0 )
     {
-        nTextOfs = 288;   // ~0.4 inch text indent (default PowerPoint bullet indent)
+        nTextOfs = 216;   // 3/8 inch text indent (~0.95 cm, default PowerPoint bullet indent)
         nBulletOfs = 0;   // bullet at left edge
     }
     sal_uInt32 nAbsLSpace = convertMasterUnitToMm100(nTextOfs);

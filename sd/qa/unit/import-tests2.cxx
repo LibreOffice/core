@@ -1510,7 +1510,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf166030)
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET);
     const SvxNumberFormat& rFmt = pNumFmt->GetNumRule().GetLevel(1);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1270), rFmt.GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(953), rFmt.GetAbsLSpace());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf150770)
