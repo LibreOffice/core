@@ -11,6 +11,7 @@
 
 #include "helper/qahelper.hxx"
 #include <comphelper/servicehelper.hxx>
+#include <cppu/unotype.hxx>
 
 #include <docsh.hxx>
 #include <docfunc.hxx>
@@ -163,11 +164,10 @@ OString lcl_getMarkdownExport(ScModelObj* pModelObj)
 {
     auto xTransferable = pModelObj->getSelection();
     auto aAny = xTransferable->getTransferData(
-        { u"text/markdown"_ustr, {}, {} });
-    css::uno::Sequence<sal_Int8> aBytes;
-    CPPUNIT_ASSERT(aAny >>= aBytes);
-    return OString(reinterpret_cast<const char*>(aBytes.getConstArray()),
-                   aBytes.getLength());
+        { u"text/markdown"_ustr, {}, cppu::UnoType<OUString>::get() });
+    OUString aMarkdown;
+    CPPUNIT_ASSERT(aAny >>= aMarkdown);
+    return OUStringToOString(aMarkdown, RTL_TEXTENCODING_UTF8);
 }
 
 } // anonymous namespace

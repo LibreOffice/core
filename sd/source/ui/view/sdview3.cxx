@@ -1549,10 +1549,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if (ShouldTry(SotClipboardFormatId::MARKDOWN))
         {
-            if (std::unique_ptr<SvStream> xStm
-                = rDataHelper.GetSotStorageStream(SotClipboardFormatId::MARKDOWN))
+            OUString sMDString;
+            if (rDataHelper.GetString(SotClipboardFormatId::MARKDOWN, sMDString))
             {
-                xStm->Seek(0);
+                OString aUTF8 = OUStringToOString(sMDString, RTL_TEXTENCODING_UTF8);
+                SvMemoryStream aStm(const_cast<char*>(aUTF8.getStr()),
+                                    aUTF8.getLength(), StreamMode::READ);
 
                 OutlinerView* pOLV = GetTextEditOutlinerView();
                 if (pOLV)
@@ -1562,12 +1564,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if (aRect.Contains(aPos) || (!bDrag && IsTextEdit())
                         || dynamic_cast<sd::NotesPanelViewShell*>(mpViewSh))
                     {
-                        pOLV->Read(*xStm, EETextFormat::Markdown,
+                        pOLV->Read(aStm, EETextFormat::Markdown,
                                    mpDocSh->GetHeaderAttributes());
                         return true;
                     }
                 }
-                if (SdrView::Paste(*xStm, EETextFormat::Markdown,
+                if (SdrView::Paste(aStm, EETextFormat::Markdown,
                                    maDropPos, pPage, nPasteOptions))
                     return true;
             }

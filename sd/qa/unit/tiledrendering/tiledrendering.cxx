@@ -18,11 +18,14 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/hash.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editids.hrc>
+#include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/outlobj.hxx>
@@ -4463,6 +4466,95 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     }
 
     pXImpressDocument->postSlideshowCleanup();
+}
+
+namespace {
+
+/// Test-local XTransferable that provides markdown content.
+class MarkdownTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
+{
+    css::datatransfer::DataFlavor m_aFlavor;
+    OUString m_aString;
+
+public:
+    MarkdownTransferable(std::string_view rMarkdown)
+    {
+        m_aFlavor.MimeType = "text/markdown";
+        m_aFlavor.HumanPresentableName = "text/markdown";
+        m_aFlavor.DataType = cppu::UnoType<OUString>::get();
+        m_aString = OUString(rMarkdown.data(), rMarkdown.size(), RTL_TEXTENCODING_UTF8);
+    }
+
+    css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
+    {
+        if (rFlavor.MimeType == m_aFlavor.MimeType && rFlavor.DataType == m_aFlavor.DataType)
+            return css::uno::Any(m_aString);
+        return {};
+    }
+
+    css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+    {
+        return { m_aFlavor };
+    }
+
+    sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override
+    {
+        return rFlavor.MimeType == m_aFlavor.MimeType && rFlavor.DataType == m_aFlavor.DataType;
+    }
+};
+
+} // anonymous namespace
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteMarkdownInEditMode)
+{
+    // Given a document with a textbox in text edit mode:
+    SdXImpressDocument* pXImpressDocument = createDoc("paste-undo.fodp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME);
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+
+    // Select all text:
+    rEditView.SetSelection(ESelection(0, 0, EE_PARA_MAX, EE_TEXTPOS_MAX));
+
+    // Set markdown content on the clipboard:
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClip = rEditView.GetClipboard();
+    CPPUNIT_ASSERT(xClip.is());
+    xClip->setContents(new MarkdownTransferable("**bold** text"),
+                       css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>());
+
+    // When pasting:
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the pasted text should contain "bold text" with bold formatting:
+    SdrOutliner* pOutliner = pView->GetTextEditOutliner();
+    CPPUNIT_ASSERT(pOutliner);
+    const EditEngine& rEditEngine = pOutliner->GetEditEngine();
+    OUString aText = rEditEngine.GetText();
+
+    // Verify the markdown was parsed - text should contain the content:
+    CPPUNIT_ASSERT_MESSAGE("Pasted text should contain 'bold'",
+                           aText.indexOf("bold") >= 0);
+    CPPUNIT_ASSERT_MESSAGE("Pasted text should contain 'text'",
+                           aText.indexOf("text") >= 0);
+    // The markdown asterisks should have been stripped (not literal **bold**):
+    CPPUNIT_ASSERT_MESSAGE("Markdown should be parsed, not literal asterisks",
+                           aText.indexOf("**") < 0);
+
+    // Verify "bold" has WEIGHT_BOLD attribute by checking attributes at its position:
+    OUString aPara0 = rEditEngine.GetText(sal_Int32(0));
+    sal_Int32 nBoldStart = aPara0.indexOf("bold");
+    CPPUNIT_ASSERT(nBoldStart >= 0);
+    SfxItemSet aAttrs = rEditEngine.GetAttribs(0, nBoldStart, nBoldStart + 4);
+    const SvxWeightItem& rWeight = aAttrs.Get(EE_CHAR_WEIGHT);
+    CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, rWeight.GetWeight());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -59,7 +59,9 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
     }
     else if ( nT == SotClipboardFormatId::MARKDOWN )
     {
-        aAny <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >(GetMarkdownStream().GetData()), GetMarkdownStream().TellEnd() );
+        SvMemoryStream& rStream = GetMarkdownStream();
+        OString aUTF8(static_cast<const char*>(rStream.GetData()), rStream.TellEnd());
+        aAny <<= OStringToOUString(aUTF8, RTL_TEXTENCODING_UTF8);
     }
     else
     {

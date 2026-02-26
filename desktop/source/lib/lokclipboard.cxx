@@ -181,6 +181,11 @@ void LOKTransferable::initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor
         aMimeType = "text/plain;charset=utf-16";
         rFlavor.DataType = cppu::UnoType<OUString>::get();
     }
+    else if (aMimeType.startsWith("text/markdown"))
+    {
+        aMimeType = "text/markdown";
+        rFlavor.DataType = cppu::UnoType<OUString>::get();
+    }
     else if (aMimeType == "application/x-libreoffice-tsvc")
         rFlavor.DataType = cppu::UnoType<OUString>::get();
     else

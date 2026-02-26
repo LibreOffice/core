@@ -341,17 +341,11 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                     = aEngine.CreateTransferable(aSel);
                 TransferableDataHelper aEditHelper(xEditTrans);
 
-                std::unique_ptr<SvStream> xStrm = aEditHelper.GetSotStorageStream(rFlavor);
-                bOK = bool(xStrm);
+                OUString aMarkdown;
+                bOK = aEditHelper.GetString(SotClipboardFormatId::MARKDOWN, aMarkdown);
                 if (bOK)
                 {
-                    SvMemoryStream aMemStm;
-                    aMemStm.WriteStream(*xStrm);
-                    aMemStm.Seek(0);
-                    bOK = SetAny(
-                        uno::Any(uno::Sequence<sal_Int8>(
-                            static_cast<const sal_Int8*>(aMemStm.GetData()),
-                            aMemStm.TellEnd())));
+                    bOK = SetAny(uno::Any(aMarkdown));
                 }
             }
         }
@@ -440,9 +434,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             OString aResult = aBuf.makeStringAndClear();
             bOK = SetAny(
-                uno::Any(uno::Sequence<sal_Int8>(
-                    reinterpret_cast<const sal_Int8*>(aResult.getStr()),
-                    aResult.getLength())));
+                uno::Any(OStringToOUString(aResult, RTL_TEXTENCODING_UTF8)));
         }
         else if ( ( nFormat == SotClipboardFormatId::RTF || nFormat == SotClipboardFormatId::RICHTEXT ||
             nFormat == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) && m_aBlock.aStart == m_aBlock.aEnd )

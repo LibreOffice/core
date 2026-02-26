@@ -4321,10 +4321,12 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 try
                 {
                     uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                    uno::Sequence< sal_Int8 > aSeq;
-                    aData >>= aSeq;
+                    OUString aMDString;
+                    aData >>= aMDString;
                     {
-                        SvMemoryStream aMDStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
+                        OString aUTF8 = OUStringToOString(aMDString, RTL_TEXTENCODING_UTF8);
+                        SvMemoryStream aMDStream(const_cast<char*>(aUTF8.getStr()),
+                                                  aUTF8.getLength(), StreamMode::READ);
                         aNewSelection = Read( aMDStream, rBaseURL, EETextFormat::Markdown, EditSelection(rPaM) );
                     }
                     bDone = true;
