@@ -41,6 +41,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148057_columnBreak, "tdf148057_columnBreak.docx"
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf171038_pageAfter)
+{
+    // given a document with a LO-specialty PageAfter break
+    // coupled with !IsPlausableSingleWordSection
+    createSwDoc("tdf171038_pageAfter.docx");
+
+    saveAndReload(TestFilter::DOCX);
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sectPr", 2); // there are two section breaks
+    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:p/w:pPr/w:sectPr", 0); // would be corrupt document
+    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:sectPr", 1); // one is in the paragraph rPr
+    assertXPath(pXmlDoc, "//w:body/w:sectPr", 1); // the other is at the end of the document
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf166544_noTopMargin_fields, "tdf166544_noTopMargin_fields.docx")
 {
     // given a document with a hyperlink field containing a page break
