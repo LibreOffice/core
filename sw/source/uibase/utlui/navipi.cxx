@@ -849,6 +849,12 @@ SwNavigationPI::~SwNavigationPI()
 
     EndListening(*SfxGetpApp());
 
+    // disconnect binding listeners before destroying widgets, so that
+    // NotifyItemUpdate() can't be called on already-destroyed weld wrappers
+    m_aDocFullName.dispose();
+    m_aPageStats.dispose();
+    m_aNavElement.dispose();
+
     if (m_oObjectShell)
     {
         if (m_oObjectShell->Is())
@@ -874,10 +880,6 @@ SwNavigationPI::~SwNavigationPI()
     m_xContent4ToolBox.reset();
     m_xContent5ToolBox.reset();
     m_xContent6ToolBox.reset();
-
-    m_aDocFullName.dispose();
-    m_aPageStats.dispose();
-    m_aNavElement.dispose();
 }
 
 void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
@@ -920,7 +922,8 @@ void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
                         break;
                     SwVisiblePageNumbers aVisiblePageNumbers;
                     rSh.GetFirstLastVisPageNumbers(aVisiblePageNumbers, *pView);
-                    m_xGotoPageSpinButton->set_text(OUString::number(aVisiblePageNumbers.nFirstPhy));
+                    if (m_xGotoPageSpinButton)
+                        m_xGotoPageSpinButton->set_text(OUString::number(aVisiblePageNumbers.nFirstPhy));
                 }
             }
         }
