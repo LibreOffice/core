@@ -1069,7 +1069,7 @@ void PrintDialog::updatePageSize(int nOrientation)
         aSize = getJobPageSize();
 
     aPrt->SetPrintPageSize(aSize);
-    aPrt->SetUsePrintDialogSetting(true);
+    aPrt->SetUsePrintDialogSetting(nOrientation != ORIENTATION_AUTOMATIC);
 }
 
 void PrintDialog::updateOrientationBox( const bool bAutomatic )
