@@ -345,6 +345,10 @@ public:
         eSrcEncoding==RTL_TEXTENCODING_UNICODE, otherwise read a 16bit length
         prefixed sequence of bytes and convert from eSrcEncoding */
     OUString ReadUniOrByteString(rtl_TextEncoding eSrcEncoding);
+    /** Read a 32bit length prefixed sequence of utf-16 if
+        GetStreamEncoding()==RTL_TEXTENCODING_UNICODE, otherwise read a 16bit length
+        prefixed sequence of bytes and convert from GetStreamEncoding() */
+    OUString ReadUniOrByteString();
     /** Write a 32bit length prefixed sequence of utf-16 if
         eDestEncoding==RTL_TEXTENCODING_UNICODE, otherwise convert to eDestEncoding
         and write a 16bit length prefixed sequence of bytes */

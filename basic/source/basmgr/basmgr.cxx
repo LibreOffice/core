@@ -397,15 +397,15 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
         pInfo->bDoLoad = bDoLoad;
 
         // The name of the lib...
-        OUString aName = rSStream.ReadUniOrByteString(rSStream.GetStreamEncoding());
+        OUString aName = rSStream.ReadUniOrByteString();
         pInfo->SetLibName( aName );
 
         // Absolute path...
-        OUString aStorageName = rSStream.ReadUniOrByteString(rSStream.GetStreamEncoding());
+        OUString aStorageName = rSStream.ReadUniOrByteString();
         pInfo->SetStorageName( aStorageName );
 
         // Relative path...
-        OUString aRelStorageName = rSStream.ReadUniOrByteString(rSStream.GetStreamEncoding());
+        OUString aRelStorageName = rSStream.ReadUniOrByteString();
         pInfo->SetRelStorageName( aRelStorageName );
 
         if ( nVer >= 2 )
@@ -750,7 +750,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
         // and it proceeds ...
     }
     xManagerStream->Seek( nBasicEndOff+1 ); // +1: 0x00 as separator
-    OUString aLibs = xManagerStream->ReadUniOrByteString(xManagerStream->GetStreamEncoding());
+    OUString aLibs = xManagerStream->ReadUniOrByteString();
     xManagerStream->SetBufferSize( 0 );
     xManagerStream.clear(); // Close stream
 
@@ -908,8 +908,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
                 xBasicStream->ReadUInt32( nPasswordMarker );
                 if ( ( nPasswordMarker == PASSWORD_MARKER ) && !xBasicStream->eof() )
                 {
-                    OUString aPassword = xBasicStream->ReadUniOrByteString(
-                        xBasicStream->GetStreamEncoding());
+                    OUString aPassword = xBasicStream->ReadUniOrByteString();
                     pLibInfo->SetPassword( aPassword );
                 }
                 xBasicStream->SetCryptMaskKey(OString());

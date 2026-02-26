@@ -223,9 +223,9 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
 
     rStream.ReadInt16( nCharTextDistance );
 
-    sPrefix = rStream.ReadUniOrByteString( rStream.GetStreamEncoding() );
-    sSuffix = rStream.ReadUniOrByteString( rStream.GetStreamEncoding() );
-    sCharStyleName = rStream.ReadUniOrByteString( rStream.GetStreamEncoding() );
+    sPrefix = rStream.ReadUniOrByteString();
+    sSuffix = rStream.ReadUniOrByteString();
+    sCharStyleName = rStream.ReadUniOrByteString();
 
     sal_uInt16 hasGraphicBrush = 0;
     rStream.ReadUInt16( hasGraphicBrush );
