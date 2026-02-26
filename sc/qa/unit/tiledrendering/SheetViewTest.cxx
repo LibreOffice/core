@@ -1530,6 +1530,93 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSorting_NonAutoFilterRange)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewAndSwitchTab)
+{
+    // Test that creating a sheet view, removing it, switching to another tab
+    // and switching back shows the correct data (not an empty sheet).
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument& rDocument = *pModelObj->GetDocument();
+
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    // Insert a second sheet
+    uno::Sequence<beans::PropertyValue> aArgsInsert(comphelper::InitPropertySequence(
+        { { "Name", uno::Any(u"Sheet2"_ustr) }, { "Index", uno::Any(sal_Int16(2)) } }));
+    dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgsInsert);
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDocument.GetTableCount());
+
+    // Go back to the first sheet
+    pTabView1->SetTabNo(0);
+
+    // Put some data in the first sheet
+    rDocument.SetString(ScAddress(0, 0, 0), u"ABC"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(0, 0, 0)));
+
+    // Create a sheet view on the first sheet
+    createNewSheetViewInCurrentView();
+
+    // Verify we are now on the sheet view tab
+    CPPUNIT_ASSERT(rDocument.GetTableSheetViewID(pTabView1->GetViewData().GetTabNumber())
+                   != sc::DefaultSheetViewID);
+
+    // Remove the sheet view
+    removeSheetViewInCurrentView();
+
+    // Should be back on the default tab (first sheet)
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+
+    // Switch to the second sheet
+    pTabView1->SetTabNo(1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView1->GetViewData().GetTabNumber());
+
+    // Switch back to the first sheet
+    pTabView1->SetTabNo(0);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+
+    // Verify the data is still visible (not an empty sheet)
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(0, 0, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testNewViewOpensInDefaultView)
+{
+    // Test that opening a new view while on a sheet view tab opens the new
+    // view on the default tab, not on the sheet view tab.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Setup first view
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    // Verify we start on tab 0 (default)
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+
+    // Create a sheet view - view 1 should move to the sheet view tab
+    createNewSheetViewInCurrentView();
+
+    // Create a new view - simulates a new user or new window
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+
+    ScTestViewCallback aView2;
+    ScTabViewShell* pTabView2 = aView2.getTabViewShell();
+
+    CPPUNIT_ASSERT(pTabView1 != pTabView2);
+
+    // View 1 should be open on sheet view tab
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView1->GetViewData().GetTabNumber());
+    CPPUNIT_ASSERT(pTabView1->GetViewData().GetSheetViewID() != sc::DefaultSheetViewID);
+
+    // The view 2 should open on the default tab
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
+    CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID, pTabView2->GetViewData().GetSheetViewID());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
