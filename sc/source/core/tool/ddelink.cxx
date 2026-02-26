@@ -104,10 +104,9 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 {
     rHdr.StartEntry();
 
-    rtl_TextEncoding eCharSet = rStream.GetStreamEncoding();
-    rStream.WriteUniOrByteString( aAppl, eCharSet );
-    rStream.WriteUniOrByteString( aTopic, eCharSet );
-    rStream.WriteUniOrByteString( aItem, eCharSet );
+    rStream.WriteUniOrByteString( aAppl );
+    rStream.WriteUniOrByteString( aTopic );
+    rStream.WriteUniOrByteString( aItem );
 
     bool bHasValue = ( pResult != nullptr );
     rStream.WriteBool( bHasValue );
