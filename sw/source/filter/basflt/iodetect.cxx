@@ -240,56 +240,33 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
     return SwIoSystem::GetFilterOfFormat(FILTER_TEXT);
 }
 
-bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
-    rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool *pBom)
+bool SwIoSystem::IsDetectableText(SvStream& rStream, sal_uLong nMaxBuf, LineEnd* pLineEnd,
+                                  bool* pBom)
 {
-    SvMemoryStream aStream(const_cast<char*>(pBuf), rLen, StreamMode::READ);
-    aStream.DetectEncoding();
-    rtl_TextEncoding eCharSet = aStream.GetStreamEncoding();
-    auto nBomSize = aStream.Tell();
-    pBuf += nBomSize;
-    rLen -= nBomSize;
+    const auto nOrigPos = rStream.Tell();
+    rStream.DetectEncoding(nMaxBuf);
+    const auto nNewPos = rStream.Tell();
+    nMaxBuf -= nNewPos - nOrigPos;
 
+    const rtl_TextEncoding eCharSet = rStream.GetStreamEncoding();
     bool bCR = false, bLF = false, bIsBareUnicode = false;
 
     if (eCharSet != RTL_TEXTENCODING_DONTKNOW)
     {
-        std::unique_ptr<sal_Unicode[]> aWork(new sal_Unicode[rLen+1]);
-        sal_Unicode *pNewBuf = aWork.get();
-        std::size_t nNewLen;
+        OUString aCRLFBuffer;
         if (eCharSet != RTL_TEXTENCODING_UCS2)
         {
-            nNewLen = rLen;
-            rtl_TextToUnicodeConverter hConverter =
-                rtl_createTextToUnicodeConverter(eCharSet);
-            rtl_TextToUnicodeContext hContext =
-                rtl_createTextToUnicodeContext(hConverter);
-
-            sal_Size nCntBytes;
-            sal_uInt32 nInfo;
-            nNewLen = rtl_convertTextToUnicode( hConverter, hContext, pBuf,
-                rLen, pNewBuf, nNewLen,
-                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
-                  RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-                  RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT), &nInfo, &nCntBytes);
-
-            rtl_destroyTextToUnicodeContext(hConverter, hContext);
-            rtl_destroyTextToUnicodeConverter(hConverter);
+            aCRLFBuffer = read_uInt8s_ToOUString(rStream, nMaxBuf, eCharSet);
         }
         else
         {
-            nNewLen = rLen/2;
-            memcpy(pNewBuf, pBuf, rLen);
-            if (aStream.IsEndianSwap())
-            {
-                for (sal_uLong n = 0; n < nNewLen; ++n)
-                    pNewBuf[n] = OSL_SWAPWORD(pNewBuf[n]);
-            }
+            aCRLFBuffer = read_uInt16s_ToOUString(rStream, nMaxBuf / 2);
         }
+        rStream.Seek(nNewPos);
 
-        for (sal_uLong nCnt = 0; nCnt < nNewLen; ++nCnt, ++pNewBuf)
+        for (sal_Int32 i = 0; i < aCRLFBuffer.getLength(); ++i)
         {
-            switch (*pNewBuf)
+            switch (aCRLFBuffer[i])
             {
                 case 0xA:
                     bLF = true;
@@ -304,12 +281,14 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
     }
     else
     {
-        for( sal_uLong nCnt = 0; nCnt < rLen; ++nCnt, ++pBuf )
+        OString aCRLFBuffer = read_uInt8s_ToOString(rStream, nMaxBuf);
+        rStream.Seek(nNewPos);
+        for (sal_Int32 i = 0; i < aCRLFBuffer.getLength(); ++i)
         {
-            switch (*pBuf)
+            switch (aCRLFBuffer[i])
             {
                 case 0x0:
-                    if( nCnt + 1 < rLen && !*(pBuf+1) )
+                    if (i + 1 < aCRLFBuffer.getLength() && !aCRLFBuffer[i + 1])
                         return false;
                     bIsBareUnicode = true;
                     break;
@@ -336,14 +315,10 @@ bool SwIoSystem::IsDetectableText(const char* pBuf, sal_uLong &rLen,
     else
         eLineEnd = bCR ? ( bLF ? LINEEND_CRLF : LINEEND_CR ) : LINEEND_LF;
 
-    if (pCharSet)
-        *pCharSet = eCharSet;
-    if (pSwap)
-        *pSwap = aStream.IsEndianSwap();
     if (pLineEnd)
         *pLineEnd = eLineEnd;
     if (pBom)
-        *pBom = nBomSize != 0;
+        *pBom = nNewPos != nOrigPos;
 
     return !bIsBareUnicode;
 }
