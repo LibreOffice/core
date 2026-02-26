@@ -40,6 +40,8 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/fileurl.hxx>
 
+#include <boost/core/pointer_in_range.hpp>
+
 static void swapNibbles(unsigned char &c)
 {
     unsigned char nSwapTmp=c;
@@ -1546,7 +1548,8 @@ std::size_t SvMemoryStream::PutData( const void* pData, std::size_t nCount )
         }
         else
         {
-            const bool bSourceDataIsInsideBuffer = pData >= pBuf && pData < (pBuf + nSize);
+            const bool bSourceDataIsInsideBuffer = boost::pointer_in_range(
+                static_cast<sal_uInt8 const *>(pData), pBuf, pBuf + nSize);
             std::ptrdiff_t const offset = bSourceDataIsInsideBuffer ? static_cast<const char*>(pData) - reinterpret_cast<const char*>(pBuf) : 0;
             tools::Long nNewResize;
             if( nSize && nSize > nResize )
