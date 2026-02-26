@@ -66,6 +66,7 @@ public:
     }
 
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
+    xmlDocUniquePtr parseMetadata();
 };
 
 void PdfExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
@@ -78,6 +79,34 @@ void PdfExportTest2::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://www.aiim.org/pdfua/ns/id/"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pdfaid"),
                        BAD_CAST("http://www.aiim.org/pdfa/ns/id/"));
+}
+
+xmlDocUniquePtr PdfExportTest2::parseMetadata()
+{
+    vcl::filter::PDFDocument aDocument;
+    // Parse the export result.
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    auto* pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    auto* pCatalogDictionary = pCatalog->GetDictionary();
+    CPPUNIT_ASSERT(pCatalogDictionary);
+    auto* pMetadataObject = pCatalogDictionary->LookupObject("Metadata"_ostr);
+    CPPUNIT_ASSERT(pMetadataObject);
+    auto* pMetadataDictionary = pMetadataObject->GetDictionary();
+    auto* pType = dynamic_cast<vcl::filter::PDFNameElement*>(
+        pMetadataDictionary->LookupElement("Type"_ostr));
+    CPPUNIT_ASSERT(pType);
+    CPPUNIT_ASSERT_EQUAL("Metadata"_ostr, pType->GetValue());
+
+    auto* pStreamObject = pMetadataObject->GetStream();
+    CPPUNIT_ASSERT(pStreamObject);
+    auto& rStream = pStreamObject->GetMemory();
+    rStream.Seek(0);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&rStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+    return pXmlDoc;
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160705)
@@ -1422,33 +1451,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testReexportDocumentWithComplexResources)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf170448)
 {
-    vcl::filter::PDFDocument aDocument;
     loadFromFile(u"tdf170448.odt");
     save(TestFilter::PDF_WRITER);
 
-    // Parse the export result.
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
-
-    auto* pCatalog = aDocument.GetCatalog();
-    CPPUNIT_ASSERT(pCatalog);
-    auto* pCatalogDictionary = pCatalog->GetDictionary();
-    CPPUNIT_ASSERT(pCatalogDictionary);
-    auto* pMetadataObject = pCatalogDictionary->LookupObject("Metadata"_ostr);
-    CPPUNIT_ASSERT(pMetadataObject);
-    auto* pMetadataDictionary = pMetadataObject->GetDictionary();
-    auto* pType = dynamic_cast<vcl::filter::PDFNameElement*>(
-        pMetadataDictionary->LookupElement("Type"_ostr));
-    CPPUNIT_ASSERT(pType);
-    CPPUNIT_ASSERT_EQUAL("Metadata"_ostr, pType->GetValue());
-
-    auto* pStreamObject = pMetadataObject->GetStream();
-    CPPUNIT_ASSERT(pStreamObject);
-    auto& rStream = pStreamObject->GetMemory();
-    rStream.Seek(0);
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&rStream);
-    CPPUNIT_ASSERT(pXmlDoc);
-
+    xmlDocUniquePtr pXmlDoc = parseMetadata();
     // Without the fix in place, this test would have failed with
     // - Expected: ' " < > & - ‘ » - l’île (copié-collé du texte)
     // - Actual  : &apos; &quot; &lt; &gt; &amp; - ‘ » - l’île (copié-collé du texte)
@@ -1474,29 +1480,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfUaMetadata)
     skipValidation();
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
-    // Parse the export result.
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
-
-    auto* pCatalog = aDocument.GetCatalog();
-    CPPUNIT_ASSERT(pCatalog);
-    auto* pCatalogDictionary = pCatalog->GetDictionary();
-    CPPUNIT_ASSERT(pCatalogDictionary);
-    auto* pMetadataObject = pCatalogDictionary->LookupObject("Metadata"_ostr);
-    CPPUNIT_ASSERT(pMetadataObject);
-    auto* pMetadataDictionary = pMetadataObject->GetDictionary();
-    auto* pType = dynamic_cast<vcl::filter::PDFNameElement*>(
-        pMetadataDictionary->LookupElement("Type"_ostr));
-    CPPUNIT_ASSERT(pType);
-    CPPUNIT_ASSERT_EQUAL("Metadata"_ostr, pType->GetValue());
-
-    auto* pStreamObject = pMetadataObject->GetStream();
-    CPPUNIT_ASSERT(pStreamObject);
-    auto& rStream = pStreamObject->GetMemory();
-    rStream.Seek(0);
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&rStream);
-    CPPUNIT_ASSERT(pXmlDoc);
-
+    xmlDocUniquePtr pXmlDoc = parseMetadata();
     assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/pdfuaid:part", u"1");
 }
 
@@ -1513,29 +1497,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf138792)
     skipValidation();
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
-    // Parse the export result.
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
-
-    auto* pCatalog = aDocument.GetCatalog();
-    CPPUNIT_ASSERT(pCatalog);
-    auto* pCatalogDictionary = pCatalog->GetDictionary();
-    CPPUNIT_ASSERT(pCatalogDictionary);
-    auto* pMetadataObject = pCatalogDictionary->LookupObject("Metadata"_ostr);
-    CPPUNIT_ASSERT(pMetadataObject);
-    auto* pMetadataDictionary = pMetadataObject->GetDictionary();
-    auto* pType = dynamic_cast<vcl::filter::PDFNameElement*>(
-        pMetadataDictionary->LookupElement("Type"_ostr));
-    CPPUNIT_ASSERT(pType);
-    CPPUNIT_ASSERT_EQUAL("Metadata"_ostr, pType->GetValue());
-
-    auto* pStreamObject = pMetadataObject->GetStream();
-    CPPUNIT_ASSERT(pStreamObject);
-    auto& rStream = pStreamObject->GetMemory();
-    rStream.Seek(0);
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&rStream);
-    CPPUNIT_ASSERT(pXmlDoc);
-
+    xmlDocUniquePtr pXmlDoc = parseMetadata();
     assertXPath(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/dc:date/rdf:Seq/rdf:li");
     assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/dc:format",
                        u"application/pdf");
@@ -1561,29 +1523,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf153472)
     skipValidation();
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 
-    // Parse the export result.
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    CPPUNIT_ASSERT(aDocument.Read(aStream));
-
-    auto* pCatalog = aDocument.GetCatalog();
-    CPPUNIT_ASSERT(pCatalog);
-    auto* pCatalogDictionary = pCatalog->GetDictionary();
-    CPPUNIT_ASSERT(pCatalogDictionary);
-    auto* pMetadataObject = pCatalogDictionary->LookupObject("Metadata"_ostr);
-    CPPUNIT_ASSERT(pMetadataObject);
-    auto* pMetadataDictionary = pMetadataObject->GetDictionary();
-    auto* pType = dynamic_cast<vcl::filter::PDFNameElement*>(
-        pMetadataDictionary->LookupElement("Type"_ostr));
-    CPPUNIT_ASSERT(pType);
-    CPPUNIT_ASSERT_EQUAL("Metadata"_ostr, pType->GetValue());
-
-    auto* pStreamObject = pMetadataObject->GetStream();
-    CPPUNIT_ASSERT(pStreamObject);
-    auto& rStream = pStreamObject->GetMemory();
-    rStream.Seek(0);
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&rStream);
-    CPPUNIT_ASSERT(pXmlDoc);
-
+    xmlDocUniquePtr pXmlDoc = parseMetadata();
     assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/pdfaid:part", u"1");
     assertXPathContent(pXmlDoc, "/x:xmpmeta/rdf:RDF/rdf:Description[1]/pdfaid:conformance", u"B");
 }
