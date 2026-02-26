@@ -3293,7 +3293,12 @@ SalInstanceEntry::SalInstanceEntry(Edit* pEntry, SalInstanceBuilder* pBuilder, b
     m_xEntry->SetTextFilter(&m_aTextFilter);
 }
 
-void SalInstanceEntry::do_set_text(const OUString& rText) { m_xEntry->SetText(rText); }
+void SalInstanceEntry::do_set_text(const OUString& rText)
+{
+    if (m_xEntry->isDisposed())
+        return;
+    m_xEntry->SetText(rText);
+}
 
 OUString SalInstanceEntry::get_text() const { return m_xEntry->GetText(); }
 
