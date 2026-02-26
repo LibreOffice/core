@@ -1487,6 +1487,10 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
         {
             SolarMutexGuard aSolarGuard;
             m_pDrawModelWrapper->lockControllers();
+            // Don't send deferred ObjectChange notifications to the parent
+            // document's SdrPaintView, that triggers unwanted
+            // graphicselection: EMPTY callbacks via ImpComeBackHdl.
+            m_pDrawModelWrapper->getSdrModel().setIgnoreDeferredObjectChanges(true);
         }
 
         //create chart view
@@ -1521,6 +1525,7 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
 
     {
         SolarMutexGuard aSolarGuard;
+        m_pDrawModelWrapper->getSdrModel().setIgnoreDeferredObjectChanges(false);
         m_pDrawModelWrapper->unlockControllers();
     }
 
