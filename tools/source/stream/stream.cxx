@@ -41,6 +41,8 @@
 #include <comphelper/fileurl.hxx>
 #include <comphelper/scopeguard.hxx>
 
+#include <boost/core/pointer_in_range.hpp>
+
 #include <unicode/ucsdet.h>
 
 #include <frozen/bits/elsa_std.h>
@@ -1646,7 +1648,8 @@ std::size_t SvMemoryStream::PutData( const void* pData, std::size_t nCount )
         }
         else
         {
-            const bool bSourceDataIsInsideBuffer = pData >= pBuf && pData < (pBuf + nSize);
+            const bool bSourceDataIsInsideBuffer = boost::pointer_in_range(
+                static_cast<sal_uInt8 const *>(pData), pBuf, pBuf + nSize);
             std::ptrdiff_t const offset = bSourceDataIsInsideBuffer ? static_cast<const char*>(pData) - reinterpret_cast<const char*>(pBuf) : 0;
             tools::Long nNewResize;
             if( nSize && nSize > nResize )
