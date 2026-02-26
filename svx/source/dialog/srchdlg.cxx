@@ -597,6 +597,8 @@ void SvxSearchDialog::SetSearchLabel(const OUString& rStr)
 
     if (rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND))
         m_xSearchLB->set_entry_message_type(weld::EntryMessageType::Error);
+    else
+        m_xSearchLB->set_entry_message_type(weld::EntryMessageType::Normal);
 }
 
 void SvxSearchDialog::ApplyTransliterationFlags_Impl( TransliterationFlags nSettings )
