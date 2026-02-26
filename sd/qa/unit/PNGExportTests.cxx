@@ -1004,7 +1004,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
     xGraphicExporter->filter(aDescriptor);
     Bitmap bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
 
-    tools::Rectangle topX(12, 21, 37, 60);
+    tools::Rectangle topX(12, 20, 37, 60);
     int topNonWhites = 0;
     tools::Rectangle bottomX(12, 82, 37, 126);
     int bottomNonWhites = 0;

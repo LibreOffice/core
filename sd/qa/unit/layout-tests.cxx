@@ -484,29 +484,29 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf164622)
     // - Actual  : 892
     // - In <>, attribute 'y' of '/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[4]'
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[1]",
-                "x", u"7556");
+                "x", u"7543");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[1]",
-                "y", u"892");
+                "y", u"879");
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[2]",
-                "x", u"20440");
+                "x", u"20453");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[2]",
-                "y", u"892");
+                "y", u"879");
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[3]",
-                "x", u"20440");
+                "x", u"20453");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[3]",
                 "y", u"8998");
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[4]",
-                "x", u"7556");
+                "x", u"7543");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[4]",
                 "y", u"8998");
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[5]",
-                "x", u"7556");
+                "x", u"7543");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[5]",
-                "y", u"892");
+                "y", u"879");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)

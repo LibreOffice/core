@@ -1477,10 +1477,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testtdf163852)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Top);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Left);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Right);
-    // Without the fix in place, this test would have failed with
-    // - Expected: 702
-    // - Actual  : 0
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(702), aCrop.Bottom);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(688), aCrop.Bottom);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149785)

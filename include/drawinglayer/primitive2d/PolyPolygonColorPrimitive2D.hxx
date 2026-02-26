@@ -68,8 +68,7 @@ public:
     sometimes useful for simpler tasks and decomposes to a
     more generalized PolyPolygonColorPrimitive2D (see above)
 */
-class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) FilledRectanglePrimitive2D final
-    : public BasePrimitive2D
+class DRAWINGLAYER_DLLPUBLIC FilledRectanglePrimitive2D final : public BasePrimitive2D
 {
 private:
     /// the  geometry
