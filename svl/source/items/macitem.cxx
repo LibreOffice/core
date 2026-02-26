@@ -115,8 +115,8 @@ void SvxMacroTableDtor::Read( SvStream& rStrm )
         sal_uInt16 nCurKey, eType = STARBASIC;
         OUString aLibName, aMacName;
         rStrm.ReadUInt16( nCurKey );
-        aLibName = readByteString(rStrm);
-        aMacName = readByteString(rStrm);
+        aLibName = rStrm.ReadUniOrByteString();
+        aMacName = rStrm.ReadUniOrByteString();
 
         if( SVX_MACROTBL_VERSION40 <= nVersion )
             rStrm.ReadUInt16( eType );
