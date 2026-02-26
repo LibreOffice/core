@@ -1136,6 +1136,11 @@ sal_uInt64 SvStream::WriteStream( SvStream& rStream, sal_uInt64 nSize )
     return nSize - nWriteSize;
 }
 
+OUString SvStream::ReadUniOrByteString()
+{
+    return ReadUniOrByteString(GetStreamEncoding());
+}
+
 OUString SvStream::ReadUniOrByteString(rtl_TextEncoding eSrcEncoding)
 {
     // read UTF-16 string directly from stream ?

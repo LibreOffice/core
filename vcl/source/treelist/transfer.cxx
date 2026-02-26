@@ -133,8 +133,8 @@ static void TryReadTransferableObjectDescriptor(SvStream& rIStm,
     sal_Int32 dragStartPosX, dragStartPosY;
     rIStm.ReadInt32(dragStartPosX).ReadInt32(dragStartPosY);
 
-    const OUString typeName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
-    const OUString displayName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
+    const OUString typeName = rIStm.ReadUniOrByteString();
+    const OUString displayName = rIStm.ReadUniOrByteString();
 
     sal_uInt32 nSig1, nSig2;
     rIStm.ReadUInt32(nSig1).ReadUInt32(nSig2);

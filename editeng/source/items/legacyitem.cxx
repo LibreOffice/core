@@ -140,7 +140,7 @@ namespace legacy
             if ( nDoLoad & LOAD_LINK )
             {
                 // UNICODE: rStrm >> aRel;
-                OUString aRel = rStrm.ReadUniOrByteString(rStrm.GetStreamEncoding());
+                OUString aRel = rStrm.ReadUniOrByteString();
 
                 // TODO/MBA: how can we get a BaseURL here?!
                 OSL_FAIL("No BaseURL!");
@@ -152,7 +152,7 @@ namespace legacy
             if ( nDoLoad & LOAD_FILTER )
             {
                 // UNICODE: rStrm >> maStrFilter;
-                rItem.SetGraphicFilter(rStrm.ReadUniOrByteString(rStrm.GetStreamEncoding()));
+                rItem.SetGraphicFilter(rStrm.ReadUniOrByteString());
             }
 
             rStrm.ReadSChar( nPos );
