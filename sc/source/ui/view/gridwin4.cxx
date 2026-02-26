@@ -1711,6 +1711,9 @@ bool ScGridWindow::InvalidateByForeignEditView(EditView* pEditView)
     tools::Long nX = rViewData.GetCurXForTab(nRefTabNo);
     tools::Long nY = rViewData.GetCurYForTab(nRefTabNo);
 
+    if (nX < 0 || nY < 0)
+        return false;
+
     tools::Rectangle aPixRect = getViewData().GetEditArea(eWhich, nX, nY, this, nullptr, true);
     tools::Rectangle aLogicRect = PixelToLogic(aPixRect, getViewData().GetLogicMode());
     Invalidate(pEditView->IsNegativeX() ? lcl_negateRectX(aLogicRect) : aLogicRect);
