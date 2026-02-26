@@ -443,8 +443,6 @@ void ModulWindow::LoadBasic()
         GetEditEngine()->SetUpdateMode( false );
         // tdf#139196 - import macros using either default or utf-8 text encoding
         pStream->StartReadingUnicodeText(RTL_TEXTENCODING_UTF8);
-        if (pStream->Tell() == 3)
-            pStream->SetStreamEncoding(RTL_TEXTENCODING_UTF8);
         GetEditView()->Read( *pStream );
         GetEditEngine()->SetUpdateMode( true );
         GetEditorWindow().PaintImmediately();
