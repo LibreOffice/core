@@ -25,7 +25,6 @@
 #include <tools/stream.hxx>
 
 #include <svl/macitem.hxx>
-#include <stringio.hxx>
 #include <algorithm>
 #include <utility>
 
@@ -142,8 +141,8 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
             break;
         const SvxMacro& rMac = rEntry.second;
         rStream.WriteUInt16( static_cast<sal_uInt16>(rEntry.first) );
-        writeByteString(rStream, rMac.GetLibName());
-        writeByteString(rStream, rMac.GetMacName());
+        rStream.WriteUniOrByteString(rMac.GetLibName());
+        rStream.WriteUniOrByteString(rMac.GetMacName());
 
         if( SVX_MACROTBL_VERSION40 <= nVersion )
             rStream.WriteUInt16( rMac.GetScriptType() );
