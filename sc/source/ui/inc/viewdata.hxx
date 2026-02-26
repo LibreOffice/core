@@ -417,7 +417,7 @@ public:
 
     void SetSheetViewID(sc::SheetViewID nID);
 
-    sc::SheetViewID GetSheetViewID() const;
+    SC_DLLPUBLIC sc::SheetViewID GetSheetViewID() const;
 
     sc::SheetViewID GetSheetViewIDForSheet(SCTAB nTab) const;
 
