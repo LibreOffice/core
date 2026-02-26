@@ -217,10 +217,14 @@ public class _XAccessibleContext extends MultiMethodTest {
             }
 
             if (!bOK) {
-                log.println("Expected: " + util.utils.getImplName(oObj));
+                log.println(
+                    "Expected: " + util.utils.getImplName(oObj) + ": "
+                    + AccessibilityTools.accessibleToString(oObj));
 
                 if (childAC != null) {
-                    log.println("Getting: " + util.utils.getImplName(childAC));
+                    log.println(
+                        "Getting: " + util.utils.getImplName(childAC) + ": "
+                        + AccessibilityTools.accessibleToString(childAC));
                 }
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
