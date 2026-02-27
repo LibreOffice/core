@@ -44,8 +44,6 @@
 #include <svtools/langhelp.hxx>
 #include <unotools/bootstrap.hxx> //utl::Bootstrap::getBuildIdData
 #include <unotools/configmgr.hxx> //ConfigManager::
-
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <vcl/unohelp2.hxx>
 
 #include <config_feature_opencl.h>
@@ -266,8 +264,7 @@ OUString AboutDialog::GetCopyrightString()
 IMPL_LINK_NOARG(AboutDialog, HandleClick, weld::Button&, void)
 {
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard
-        = css::datatransfer::clipboard::SystemClipboard::create(
-            comphelper::getProcessComponentContext());
+        = m_pVersionLabel->get_clipboard();
 
     OUString sInfo = "Version: " + m_pVersionLabel->get_label()
                      + "\n" // version
