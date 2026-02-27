@@ -43,7 +43,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -265,7 +264,7 @@ void SvxShowCharSet::createContextMenu(const Point& rPosition)
 void SvxShowCharSet::CopyToClipboard(const OUString& rOUStr)
 {
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
-        css::datatransfer::clipboard::SystemClipboard::create(comphelper::getProcessComponentContext());
+        GetDrawingArea()->get_clipboard();
 
     if (!xClipboard.is())
         return;
