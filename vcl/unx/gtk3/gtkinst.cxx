@@ -1629,8 +1629,9 @@ GtkInstance::CreateClipboard(const Sequence<Any>& arguments)
 
     SelectionType eSelection = (sel == "CLIPBOARD") ? SELECTION_CLIPBOARD : SELECTION_PRIMARY;
 
-    if (m_aClipboards[eSelection].is())
-        return m_aClipboards[eSelection];
+    auto aIt = m_aClipboards.find(eSelection);
+    if (aIt != m_aClipboards.end())
+        return aIt->second;
 
     Reference<css::datatransfer::clipboard::XClipboard> xClipboard(new VclGtkClipboard(eSelection));
     m_aClipboards[eSelection] = xClipboard;

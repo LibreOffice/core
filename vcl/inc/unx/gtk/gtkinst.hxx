@@ -297,7 +297,8 @@ public:
 
 private:
     GtkSalTimer *m_pTimer;
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_aClipboards[2];
+    std::unordered_map<SelectionType, css::uno::Reference<css::datatransfer::clipboard::XClipboard>>
+        m_aClipboards;
     bool                        IsTimerExpired();
     bool                        bNeedsInit;
     cairo_font_options_t*       m_pLastCairoFontOptions;
