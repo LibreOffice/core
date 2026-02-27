@@ -37,6 +37,7 @@
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -44,7 +45,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XToolkitExperimental.hpp>
 #include <com/sun/star/awt/XToolkitRobot.hpp>
@@ -63,6 +63,7 @@
 #include <tools/link.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/idletask.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/wintypes.hxx>
@@ -2063,13 +2064,14 @@ css::uno::Reference< css::datatransfer::dnd::XDropTarget > SAL_CALL VCLXToolkit:
 
 css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToolkit::getClipboard( const OUString& clipboardName )
 {
+    SolarMutexGuard g;
+
     if( clipboardName.isEmpty() )
     {
         if( !mxClipboard.is() )
         {
             // remember clipboard here
-            mxClipboard = css::datatransfer::clipboard::SystemClipboard::create(
-                comphelper::getProcessComponentContext());
+            mxClipboard = GetSystemClipboard();
         }
 
         return mxClipboard;
