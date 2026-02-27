@@ -2280,6 +2280,24 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf168109)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf163741)
+{
+    createSdImpressDoc("pptx/tdf163741.pptx");
+
+    // Shape "Shape 1" has <p:ph type="body" idx="4294967295"/>.
+    // idx=4294967295 (UINT32_MAX) is a sentinel meaning "no placeholder link".
+    // It must NOT match any layout placeholder; font size should come from
+    // the slide master's bodyStyle (18pt), not from a layout placeholder (10pt).
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    double fCharHeight = 0;
+    xPropSet->getPropertyValue(u"CharHeight"_ustr) >>= fCharHeight;
+    CPPUNIT_ASSERT_EQUAL(18.0, fCharHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

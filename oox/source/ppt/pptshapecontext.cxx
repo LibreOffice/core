@@ -72,17 +72,23 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
 
             mpShapePtr->setSubType( nSubType );
 
+            bool bSkipPlaceholderLookup = false;
             if( rAttribs.hasAttribute( XML_idx ) )
             {
-                sal_Int32 nSubTypeIndex = rAttribs.getInteger( XML_idx, 0 );
-                mpShapePtr->setSubTypeIndex( nSubTypeIndex );
-
-                if(!oSubType.has_value() && pMasterPersist)
+                sal_uInt32 nUnsignedIdx = rAttribs.getUnsigned( XML_idx, 0 );
+                bSkipPlaceholderLookup = (nUnsignedIdx == SAL_MAX_UINT32);
+                sal_Int32 nSubTypeIndex = static_cast<sal_Int32>(nUnsignedIdx);
+                if (!bSkipPlaceholderLookup)
                 {
-                    pTmpPlaceholder = PPTShape::findPlaceholderByIndex( nSubTypeIndex, pMasterPersist->getShapes()->getChildren() );
+                    mpShapePtr->setSubTypeIndex( nSubTypeIndex );
 
-                    if(pTmpPlaceholder)
-                        nSubType = pTmpPlaceholder->getSubType(); // When we don't have type attribute on slide but have on slidelayout we have to use it instead of default type
+                    if(!oSubType.has_value() && pMasterPersist)
+                    {
+                        pTmpPlaceholder = PPTShape::findPlaceholderByIndex( nSubTypeIndex, pMasterPersist->getShapes()->getChildren() );
+
+                        if(pTmpPlaceholder)
+                            nSubType = pTmpPlaceholder->getSubType(); // When we don't have type attribute on slide but have on slidelayout we have to use it instead of default type
+                    }
                 }
             }
 
@@ -132,7 +138,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                               default:
                                   break;
                         }
-                        if ( nFirstPlaceholder )
+                        if ( nFirstPlaceholder && !bSkipPlaceholderLookup )
                         {
                               oox::drawingml::ShapePtr pPlaceholder;
                               if ( eShapeLocation == Layout )       // for layout objects the referenced object can be found within the same shape tree
