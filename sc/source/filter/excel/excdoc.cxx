@@ -638,12 +638,9 @@ void ExcTable::FillAsTableXml()
 
     aRecList.AppendRecord( xPageSett );
 
+    std::unique_ptr<XclExpImgData> pImgData(xPageSett->getGraphicExport());
     // all MSODRAWING and OBJ stuff of this sheet goes here
-    aRecList.AppendRecord( GetObjectManager().ProcessDrawing( GetSdrPage( mnScTab ) ) );
-
-    XclExpImgData* pImgData = xPageSett->getGraphicExport();
-    if (pImgData)
-        aRecList.AppendRecord(pImgData);
+    aRecList.AppendRecord( GetObjectManager().ProcessDrawing( GetSdrPage( mnScTab ), std::move(pImgData) ) );
 
     // <tableParts> after <drawing> and before <extLst>
     aRecList.AppendRecord( GetTablesManager().GetTablesBySheet( mnScTab));

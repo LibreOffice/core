@@ -132,6 +132,11 @@ std::unique_ptr<XclObj> XclExpObjList::pop_back ()
     return ret;
 }
 
+void XclExpObjList::SetImageData(std::unique_ptr<XclExpImgData> pImgData)
+{
+    m_pImgData = std::move(pImgData);
+}
+
 void XclExpObjList::EndSheet()
 {
     // Is there still something in the stream? -> The solver container
@@ -398,10 +403,16 @@ void XclExpObjList::SaveXml( XclExpXmlStream& rStrm )
         pSolverContainer->SaveXml( rStrm );
 
     if( maObjs.empty())
+    {
+        if (m_pImgData)
+            m_pImgData->SaveXml(rStrm);
         return;
+    }
 
     SaveDrawingMLObjects( *this, rStrm );
     SaveVmlObjects( *this, rStrm );
+    if (m_pImgData)
+        m_pImgData->SaveXml(rStrm);
     SaveFormControlObjects( *this, rStrm );
 }
 

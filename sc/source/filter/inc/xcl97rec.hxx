@@ -27,6 +27,7 @@
 #include <svx/svdobj.hxx>
 #include <oox/export/drawingml.hxx>
 
+class XclExpImgData;
 class XclObj;
 class XclExpMsoDrawing;
 class SdrCaptionObj;
@@ -75,7 +76,7 @@ public:
     iterator end () { return maObjs.end(); }
 
     XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet.get(); }
-
+    void SetImageData(std::unique_ptr<XclExpImgData> pImgData);
                                 /// close groups and DgContainer opened in ctor
     void                EndSheet();
 
@@ -88,6 +89,7 @@ private:
     XclEscherEx&        mrEscherEx;
     std::unique_ptr<XclExpMsoDrawing> pMsodrawingPerSheet;
     std::unique_ptr<XclExpMsoDrawing> pSolverContainer;
+    std::unique_ptr<XclExpImgData> m_pImgData;
 
     std::vector<std::unique_ptr<XclObj>> maObjs;
 };
