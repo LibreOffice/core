@@ -1639,6 +1639,7 @@ void Application::EnableSafeMode()
 void Application::ShowNativeErrorBox(const OUString& sTitle  ,
                                      const OUString& sMessage)
 {
+    ImplHideSplash();
     ImplGetSalSystem()->ShowNativeMessageBox(sTitle, sMessage);
 }
 

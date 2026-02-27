@@ -41,8 +41,6 @@ void SalGenericSystem::ShowNativeMessageBox(const OUString& rTitle, const OUStri
 {
     std::vector< OUString > aButtons;
 
-    ImplHideSplash();
-
     aButtons.push_back( u"OK"_ustr );
     ShowNativeDialog(rTitle, rMessage, aButtons);
 }

@@ -166,7 +166,6 @@ AbsoluteScreenPixelRectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigne
 
 void WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
 {
-    ImplHideSplash();
     MessageBoxW(nullptr, o3tl::toW(rMessage.getStr()), o3tl::toW(rTitle.getStr()),
                 MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | MB_DEFBUTTON1);
 }

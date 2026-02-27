@@ -122,7 +122,6 @@ static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
     return false;
 }
 
-// Called by native error dialog popup implementations
 void ImplHideSplash()
 {
     ImplSVData* pSVData = ImplGetSVData();
