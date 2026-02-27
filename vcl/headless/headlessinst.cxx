@@ -30,15 +30,13 @@ HeadlessSalInstance::HeadlessSalInstance(std::unique_ptr<SalYieldMutex> pMutex)
 class HeadlessSalSystem : public SvpSalSystem {
 public:
     HeadlessSalSystem() : SvpSalSystem() {}
-    virtual int ShowNativeDialog( const OUString& rTitle,
-                                  const OUString& rMessage,
-                                  const std::vector< OUString >& ) override
+
+    virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override
     {
         SAL_INFO("vcl.headless",
                 "LibreOffice - dialog '"
                 << rTitle << "': '"
                 << rMessage << "'");
-        return 0;
     }
 };
 

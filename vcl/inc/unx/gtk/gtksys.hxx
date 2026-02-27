@@ -29,9 +29,7 @@ public:
     virtual unsigned int  GetDisplayScreenCount() override;
     virtual unsigned int  GetDisplayBuiltInScreen() override;
     virtual AbsoluteScreenPixelRectangle GetDisplayScreenPosSizePixel(unsigned int nScreen) override;
-    virtual int           ShowNativeDialog (const OUString&              rTitle,
-                                            const OUString&              rMessage,
-                                            const std::vector< OUString >& rButtons) override;
+    virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override;
     SalX11Screen      GetDisplayDefaultXScreen()
             { return getXScreenFromDisplayScreen( GetDisplayBuiltInScreen() ); }
     SalX11Screen      getXScreenFromDisplayScreen(unsigned int nDisplayScreen);

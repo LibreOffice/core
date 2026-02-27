@@ -77,7 +77,7 @@ AbsoluteScreenPixelRectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigne
     return aRet;
 }
 
-int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMessage, const std::vector< OUString >& rButtons )
+void X11SalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->mpIntroWindow )
@@ -88,12 +88,10 @@ int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMes
                                                rMessage));
     xWarn->set_title(rTitle);
 
-    sal_uInt16 nButton = 0;
-    for (auto const& button : rButtons)
-        xWarn->add_button(button, nButton++);
+    xWarn->add_button(u"OK"_ustr, 0);
     xWarn->set_default_response(0);
 
-    return xWarn->run();
+    xWarn->run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@ public:
     virtual unsigned int GetDisplayScreenCount() override;
     virtual AbsoluteScreenPixelRectangle
     GetDisplayScreenPosSizePixel(unsigned int nScreen) override;
-    virtual int ShowNativeDialog(const OUString& rTitle, const OUString& rMessage,
-                                 const std::vector<OUString>& rButtons) override;
+    virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

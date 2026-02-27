@@ -86,9 +86,8 @@ class AndroidSalSystem : public SvpSalSystem {
 public:
     AndroidSalSystem() : SvpSalSystem() {}
     virtual ~AndroidSalSystem() {}
-    virtual int ShowNativeDialog( const OUString& rTitle,
-                                  const OUString& rMessage,
-                                  const std::vector< OUString >& rButtons );
+
+    virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override;
 };
 
 SalSystem *AndroidSalInstance::CreateSalSystem()
@@ -163,11 +162,8 @@ extern "C" SalInstance *create_SalInstance()
     return pInstance;
 }
 
-int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
-                                        const OUString& rMessage,
-                                        const std::vector< OUString >& rButtons )
+void AndroidSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
 {
-    (void)rButtons;
     LOGI("LibreOffice native dialog '%s': '%s'",
          OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
          OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
@@ -192,7 +188,6 @@ int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
     }
     else
         LOGE("VCL not initialized");
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

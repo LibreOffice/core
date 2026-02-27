@@ -20,6 +20,7 @@
 #pragma once
 
 #include <unx/gensys.h>
+#include <vector>
 
 class X11SalSystem final : public SalGenericSystem
 {
@@ -31,9 +32,7 @@ public:
     virtual unsigned int GetDisplayScreenCount() override;
     virtual unsigned int GetDisplayBuiltInScreen() override;
     virtual AbsoluteScreenPixelRectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) override;
-    virtual int ShowNativeDialog( const OUString& rTitle,
-                                  const OUString& rMessage,
-                                  const std::vector< OUString >& rButtons ) override;
+    virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

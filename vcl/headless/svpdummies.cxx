@@ -47,10 +47,8 @@ AbsoluteScreenPixelRectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigne
     return aRect;
 }
 
-int SvpSalSystem::ShowNativeDialog( const OUString&, const OUString&,
-                                    const std::vector< OUString >& )
+void SvpSalSystem::ShowNativeMessageBox(const OUString&, const OUString&)
 {
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

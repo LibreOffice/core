@@ -22,9 +22,6 @@ AbsoluteScreenPixelRectangle QtSystem::GetDisplayScreenPosSizePixel(unsigned int
     return AbsoluteScreenPixelRectangle(toRectangle(scaledQRect(qRect, qApp->devicePixelRatio())));
 }
 
-int QtSystem::ShowNativeDialog(const OUString&, const OUString&, const std::vector<OUString>&)
-{
-    return 0;
-}
+void QtSystem::ShowNativeMessageBox(const OUString&, const OUString&) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

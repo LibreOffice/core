@@ -20,21 +20,12 @@
 #pragma once
 
 #include <salsys.hxx>
-#include <vector>
 
-/*
- * Helps de-tangle the rather horrible ShowNativeMessageBox API
- */
 class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
 {
  public:
     SalGenericSystem();
     virtual ~SalGenericSystem() override;
-    virtual int ShowNativeDialog( const OUString& rTitle,
-                                  const OUString& rMessage,
-                                  const std::vector< OUString >& rButtons ) = 0;
-
-    virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override;
 
 #if !defined(ANDROID) && !defined(IOS)
     // Simple helpers for X11 WM_CLASS hints

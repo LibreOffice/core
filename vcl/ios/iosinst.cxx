@@ -59,9 +59,7 @@ class IosSalSystem : public SvpSalSystem {
 public:
     IosSalSystem() : SvpSalSystem() {}
     virtual ~IosSalSystem() {}
-    virtual int ShowNativeDialog( const OUString& rTitle,
-                                  const OUString& rMessage,
-                                  const std::vector< OUString >& rButtons );
+    virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override;
 };
 
 SalSystem *IosSalInstance::CreateSalSystem()
@@ -148,12 +146,8 @@ extern "C" SalInstance *create_SalInstance()
     return new IosSalInstance(std::make_unique<SvpSalYieldMutex>());
 }
 
-int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
-                                    const OUString& rMessage,
-                                    const std::vector< OUString >& rButtons )
+void IosSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
 {
-    (void)rButtons;
-
     NSLog(@"%@: %@", [CreateNSString(rTitle) autorelease], [CreateNSString(rMessage) autorelease]);
 
     return 0;

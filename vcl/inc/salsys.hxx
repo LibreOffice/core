@@ -23,9 +23,6 @@
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
 
-// Button identifier for ShowNativeMessageBox
-const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK = 1;
-
 class VCL_PLUGIN_PUBLIC SalSystem
 {
 public:

@@ -297,8 +297,7 @@ gint gtk_dialog_run(GtkDialog* pDialog)
 
 #endif
 
-int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMessage,
-                                    const std::vector< OUString >& rButtonNames)
+void GtkSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
 {
     OString aTitle (OUStringToOString (rTitle, RTL_TEXTENCODING_UTF8));
     OString aMessage (OUStringToOString (rMessage, RTL_TEXTENCODING_UTF8));
@@ -309,22 +308,16 @@ int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMes
                       "message-type", int(GTK_MESSAGE_WARNING),
                       "text", aMessage.getStr(),
                       nullptr));
-    int nButton = 0;
-    for (auto const& buttonName : rButtonNames)
-        gtk_dialog_add_button (pDialog, MapToGtkAccelerator(buttonName).getStr(), nButton++);
-    gtk_dialog_set_default_response (pDialog, 0/*nDefaultButton*/);
+    gtk_dialog_add_button (pDialog, MapToGtkAccelerator(u"OK"_ustr).getStr(), 0);
+    gtk_dialog_set_default_response (pDialog, 0);
 
-    nButton = gtk_dialog_run (pDialog);
-    if (nButton < 0)
-        nButton = -1;
+    gtk_dialog_run (pDialog);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     gtk_widget_destroy(GTK_WIDGET(pDialog));
 #else
     gtk_window_destroy(GTK_WINDOW(pDialog));
 #endif
-
-    return nButton;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
