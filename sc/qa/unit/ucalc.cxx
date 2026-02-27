@@ -7151,56 +7151,203 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentModelAccessor_getDocumentCurrencies)
 
 CPPUNIT_TEST_FIXTURE(Test, testOverwriteContent)
 {
-    m_pDoc->InsertTab(0, u"Tab1"_ustr);
-    m_pDoc->InsertTab(1, u"Tab2"_ustr);
-    m_pDoc->InsertTab(2, u"Tab3"_ustr);
+    m_pDoc->InsertTab(0, u"Tab0"_ustr);
+    m_pDoc->InsertTab(1, u"Tab1"_ustr);
+    m_pDoc->InsertTab(2, u"Tab2"_ustr);
+    m_pDoc->InsertTab(3, u"Tab3"_ustr);
+
+    // For cross table formula checking (forward and backward)
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 99.0); // Tab0.A1
+    m_pDoc->SetValue(ScAddress(0, 0, 3), 66.0); // Tab3.A1
 
     std::vector<std::vector<OUString>> aData = {
-        { u"C1"_ustr, u"C2"_ustr, u"C3"_ustr },
-        {  u"7"_ustr,  u"1"_ustr,  u"A"_ustr },
-        {  u"3"_ustr,  u"2"_ustr,   u""_ustr },
-        {  u"2"_ustr,  u"4"_ustr,  u"B"_ustr },
-        {  u"4"_ustr,  u"3"_ustr,  u"B"_ustr }
+        { u"Column 1"_ustr, u"Column 2"_ustr, u"Column 3"_ustr,   },
+        {  u"7"_ustr,       u"A"_ustr,        u"=A2+5"_ustr },
+        {  u"=2+2"_ustr,    u"C"_ustr,        u"=Tab3.A1"_ustr }, // forward cross-tab reference
+        {  u"=A3-2"_ustr,   u"D"_ustr,        u"=SUM(A2:A6)"_ustr },
+        {  u"3"_ustr,       u"B"_ustr,        u"=C3-60"_ustr },
+        {  u"5"_ustr,       u"E"_ustr,        u"=Tab0.A1"_ustr }, // backward cross-tab reference
     };
 
-    // Populate cells.
     for (size_t i = 0; i < aData.size(); ++i)
     {
         for (size_t j = 0; j < aData[0].size(); ++j)
         {
             if (!aData[i][j].isEmpty())
             {
-                m_pDoc->SetString(j, i, 0, aData[i][j]);
+                m_pDoc->SetString(j, i, 1, aData[i][j]);
             }
         }
     }
+    m_pDoc->CalcAll();
 
-    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
+    // Verify Tab1 values and formulas before overwrite
+    {
+        CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 3, 1))); // A3-2=2
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0, 5, 1)));
+
+        CPPUNIT_ASSERT_EQUAL(u"A"_ustr, m_pDoc->GetString(ScAddress(1, 1, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"C"_ustr, m_pDoc->GetString(ScAddress(1, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"D"_ustr, m_pDoc->GetString(ScAddress(1, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"B"_ustr, m_pDoc->GetString(ScAddress(1, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"E"_ustr, m_pDoc->GetString(ScAddress(1, 5, 1)));
+
+        CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(2, 1, 1))); // =A2+5=12
+        CPPUNIT_ASSERT_EQUAL(66.0, m_pDoc->GetValue(ScAddress(2, 2, 1))); // =Tab3.A1
+        CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(2, 3, 1))); // =SUM(A2:A6)
+        CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(2, 4, 1)));  // =C3-60
+        CPPUNIT_ASSERT_EQUAL(99.0, m_pDoc->GetValue(ScAddress(2, 5, 1))); // =Tab0.A1
+    }
+
+    // Tab2 should be empty
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1, 2, 2)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2, 3, 2)));
 
-    m_pDoc->OverwriteContent(0, 1);
+    // Overwrite Tab2 with Tab1 content
+    m_pDoc->OverwriteContent(1, 2);
 
-    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
-    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+    // Tab1 should be unchanged
+    {
+        CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0, 5, 1)));
 
-    m_pDoc->SetString(0, 1, 0, u"9.0"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"A"_ustr, m_pDoc->GetString(ScAddress(1, 1, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"C"_ustr, m_pDoc->GetString(ScAddress(1, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"D"_ustr, m_pDoc->GetString(ScAddress(1, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"B"_ustr, m_pDoc->GetString(ScAddress(1, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"E"_ustr, m_pDoc->GetString(ScAddress(1, 5, 1)));
 
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
-    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(2, 1, 1)));
+        CPPUNIT_ASSERT_EQUAL(66.0, m_pDoc->GetValue(ScAddress(2, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(2, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(2, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(99.0, m_pDoc->GetValue(ScAddress(2, 5, 1)));
+    }
 
+    // Tab2 values should match Tab1 and the formulas adjusted if needed
+    {
+        CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 2, 2)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 3, 2)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 4, 2)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0, 5, 2)));
 
-    m_pDoc->OverwriteContent(0, 1);
+        CPPUNIT_ASSERT_EQUAL(u"A"_ustr, m_pDoc->GetString(ScAddress(1, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"C"_ustr, m_pDoc->GetString(ScAddress(1, 2, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"D"_ustr, m_pDoc->GetString(ScAddress(1, 3, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"B"_ustr, m_pDoc->GetString(ScAddress(1, 4, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"E"_ustr, m_pDoc->GetString(ScAddress(1, 5, 2)));
 
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
-    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(2, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(66.0, m_pDoc->GetValue(ScAddress(2, 2, 2)));
+        CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(2, 3, 2)));
+        CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(2, 4, 2)));
+        CPPUNIT_ASSERT_EQUAL(99.0, m_pDoc->GetValue(ScAddress(2, 5, 2)));
+    }
 
-    m_pDoc->DeleteTab(0);
-    m_pDoc->DeleteTab(1);
+    // Check Tab2 formulas were copied correctly
+    {
+        CPPUNIT_ASSERT_EQUAL(u"=2+2"_ustr, m_pDoc->GetFormula(0, 2, 2));
+        CPPUNIT_ASSERT_EQUAL(u"=A3-2"_ustr, m_pDoc->GetFormula(0, 3, 2));
+        CPPUNIT_ASSERT_EQUAL(u"=A2+5"_ustr, m_pDoc->GetFormula(2, 1, 2));
+        CPPUNIT_ASSERT_EQUAL(u"='Tab3'.A1"_ustr, m_pDoc->GetFormula(2, 2, 2));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(A2:A6)"_ustr, m_pDoc->GetFormula(2, 3, 2));
+        CPPUNIT_ASSERT_EQUAL(u"=C3-60"_ustr, m_pDoc->GetFormula(2, 4, 2));
+        CPPUNIT_ASSERT_EQUAL(u"=Tab0.A1"_ustr, m_pDoc->GetFormula(2, 5, 2));
+    }
+
+    // Change Tab1 and see if it affects Tab2
+    m_pDoc->SetValue(ScAddress(0, 1, 1), 10.0); // 7 -> 10
+    m_pDoc->CalcAll();
+
+    // Check Tab 1
+    {
+        CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0, 1, 1)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0, 5, 1)));
+
+        CPPUNIT_ASSERT_EQUAL(u"A"_ustr, m_pDoc->GetString(ScAddress(1, 1, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"C"_ustr, m_pDoc->GetString(ScAddress(1, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"D"_ustr, m_pDoc->GetString(ScAddress(1, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"B"_ustr, m_pDoc->GetString(ScAddress(1, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"E"_ustr, m_pDoc->GetString(ScAddress(1, 5, 1)));
+
+        CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(ScAddress(2, 1, 1)));
+        CPPUNIT_ASSERT_EQUAL(66.0, m_pDoc->GetValue(ScAddress(2, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(24.0, m_pDoc->GetValue(ScAddress(2, 3, 1))); // =SUM(A2:A6)=10+4+2+3+5
+        CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(2, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(99.0, m_pDoc->GetValue(ScAddress(2, 5, 1)));
+    }
+
+    // Check Tab 2
+    {
+        CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 2, 2)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 3, 2)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 4, 2)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0, 5, 2)));
+
+        CPPUNIT_ASSERT_EQUAL(u"A"_ustr, m_pDoc->GetString(ScAddress(1, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"C"_ustr, m_pDoc->GetString(ScAddress(1, 2, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"D"_ustr, m_pDoc->GetString(ScAddress(1, 3, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"B"_ustr, m_pDoc->GetString(ScAddress(1, 4, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"E"_ustr, m_pDoc->GetString(ScAddress(1, 5, 2)));
+
+        CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(2, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(66.0, m_pDoc->GetValue(ScAddress(2, 2, 2)));
+        CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(2, 3, 2)));
+        CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(2, 4, 2)));
+        CPPUNIT_ASSERT_EQUAL(99.0, m_pDoc->GetValue(ScAddress(2, 5, 2)));
+    }
+
+    // Overwrite Tab2 again with updated Tab1
+    m_pDoc->OverwriteContent(1, 2);
+
+    // Check Tab 2
+    {
+        CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 2, 2)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 3, 2)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 4, 2)));
+        CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0, 5, 2)));
+
+        CPPUNIT_ASSERT_EQUAL(u"A"_ustr, m_pDoc->GetString(ScAddress(1, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"C"_ustr, m_pDoc->GetString(ScAddress(1, 2, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"D"_ustr, m_pDoc->GetString(ScAddress(1, 3, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"B"_ustr, m_pDoc->GetString(ScAddress(1, 4, 2)));
+        CPPUNIT_ASSERT_EQUAL(u"E"_ustr, m_pDoc->GetString(ScAddress(1, 5, 2)));
+
+        CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(ScAddress(2, 1, 2)));
+        CPPUNIT_ASSERT_EQUAL(66.0, m_pDoc->GetValue(ScAddress(2, 2, 2)));
+        CPPUNIT_ASSERT_EQUAL(24.0, m_pDoc->GetValue(ScAddress(2, 3, 2)));
+        CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(2, 4, 2)));
+        CPPUNIT_ASSERT_EQUAL(99.0, m_pDoc->GetValue(ScAddress(2, 5, 2)));
+    }
+
+    // Check formulas are still the same
+    {
+        CPPUNIT_ASSERT_EQUAL(u"=2+2"_ustr, m_pDoc->GetFormula(0, 2, 2));
+        CPPUNIT_ASSERT_EQUAL(u"=A3-2"_ustr, m_pDoc->GetFormula(0, 3, 2));
+        CPPUNIT_ASSERT_EQUAL(u"=A2+5"_ustr, m_pDoc->GetFormula(2, 1, 2));
+        CPPUNIT_ASSERT_EQUAL(u"='Tab3'.A1"_ustr, m_pDoc->GetFormula(2, 2, 2));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(A2:A6)"_ustr, m_pDoc->GetFormula(2, 3, 2));
+        CPPUNIT_ASSERT_EQUAL(u"=C3-60"_ustr, m_pDoc->GetFormula(2, 4, 2));
+        CPPUNIT_ASSERT_EQUAL(u"=Tab0.A1"_ustr, m_pDoc->GetFormula(2, 5, 2));
+    }
+
+    m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

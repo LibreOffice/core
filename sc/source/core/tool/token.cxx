@@ -2703,6 +2703,44 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument& rOldDoc, const ScAddres
     }
 }
 
+void ScTokenArray::AdjustRelativeTabRefs( SCTAB nDelta )
+{
+    TokenPointers aPtrs( pCode.get(), nLen, pRPN, nRPN, true);
+    for (size_t j=0; j<2; ++j)
+    {
+        FormulaToken** pp = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; pp != pEnd; ++pp)
+        {
+            FormulaToken* p = aPtrs.getHandledToken(j,pp);
+            if (!p)
+                continue;
+
+            switch ( p->GetType() )
+            {
+                case svDoubleRef:
+                {
+                    ScComplexRefData& rRef = *p->GetDoubleRef();
+                    if (rRef.Ref1.IsTabRel() && rRef.Ref1.Tab() != 0)
+                        rRef.Ref1.IncTab(-nDelta);
+                    if (rRef.Ref2.IsTabRel() && rRef.Ref2.Tab() != 0)
+                        rRef.Ref2.IncTab(-nDelta);
+                    break;
+                }
+                case svSingleRef:
+                {
+                    ScSingleRefData& rRef = *p->GetSingleRef();
+                    if (rRef.IsTabRel() && rRef.Tab() != 0)
+                        rRef.IncTab(-nDelta);
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }
+}
+
 void ScTokenArray::AdjustSheetLocalNameReferences( SCTAB nOldTab, SCTAB nNewTab )
 {
     TokenPointers aPtrs( pCode.get(), nLen, pRPN, nRPN, false);

@@ -1337,7 +1337,7 @@ void ScTable::StartListeningFormulaCells(
 void ScTable::CopyToTable(
     sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData,
-    bool bAsLink, bool bColRowFlags, bool bGlobalNamesToLocal, bool bCopyCaptions )
+    bool bAsLink, bool bColRowFlags, ScCloneFlags nCloneFlags, bool bCopyCaptions )
 {
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
         return;
@@ -1377,7 +1377,7 @@ void ScTable::CopyToTable(
         pDestTab->CreateColumnIfNotExists(ClampToAllocatedColumns(nCol2)); // avoid repeated resizing
         for (SCCOL i = nCol1; i <= ClampToAllocatedColumns(nCol2); i++)
             aCol[i].CopyToColumn(rCxt, nRow1, nRow2, bToUndoDoc ? nFlags : nTempFlags, bMarked,
-                                 pDestTab->CreateColumnIfNotExists(i), pMarkData, bAsLink, bGlobalNamesToLocal);
+                                 pDestTab->CreateColumnIfNotExists(i), pMarkData, bAsLink, nCloneFlags);
         // tdf#154044: Restore from the default column data
         if (bFromUndoDoc && (nFlags & InsertDeleteFlags::ATTRIB) && nCol2 >= aCol.size())
         {

@@ -288,6 +288,7 @@ friend class sc::ColumnSpanSet;
 friend class sc::RangeColumnSpanSet;
 friend class sc::EditTextIterator;
 friend class sc::FormulaGroupAreaListener;
+friend class sc::TableContentCopier;
 
 public:
                 ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
@@ -584,7 +585,7 @@ public:
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab,
         const ScMarkData* pMarkData, bool bAsLink, bool bColRowFlags,
-        bool bGlobalNamesToLocal, bool bCopyCaptions );
+        ScCloneFlags nCloneFlags, bool bCopyCaptions );
 
     void CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab, bool bCloneCaption );
 

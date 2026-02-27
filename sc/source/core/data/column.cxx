@@ -1349,14 +1349,14 @@ class CopyByCloneHandler
 
 public:
     CopyByCloneHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos,
-            InsertDeleteFlags nCopyFlags, svl::SharedStringPool* pSharedStringPool, bool bGlobalNamesToLocal) :
+            InsertDeleteFlags nCopyFlags, svl::SharedStringPool* pSharedStringPool, ScCloneFlags nCloneFlags) :
         mrSrcCol(rSrcCol),
         mrDestCol(rDestCol),
         mpDestPos(pDestPos),
         mpSharedStringPool(pSharedStringPool),
         mnCopyFlags(nCopyFlags),
         meListenType(sc::SingleCellListening),
-        mnFormulaCellCloneFlags(bGlobalNamesToLocal ? ScCloneFlags::NamesToLocal : ScCloneFlags::Default)
+        mnFormulaCellCloneFlags(nCloneFlags)
     {
         if (mpDestPos)
             maDestPos = *mpDestPos;
@@ -1522,7 +1522,7 @@ public:
 void ScColumn::CopyToColumn(
     sc::CopyToDocContext& rCxt,
     SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked, ScColumn& rColumn,
-    const ScMarkData* pMarkData, bool bAsLink, bool bGlobalNamesToLocal) const
+    const ScMarkData* pMarkData, bool bAsLink, ScCloneFlags nCloneFlags) const
 {
     if (bMarked)
     {
@@ -1579,7 +1579,7 @@ void ScColumn::CopyToColumn(
             (GetDoc().GetPool() != rColumn.GetDoc().GetPool()) ?
             &rColumn.GetDoc().GetSharedStringPool() : nullptr;
         CopyByCloneHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags,
-                pSharedStringPool, bGlobalNamesToLocal);
+                pSharedStringPool, nCloneFlags);
         aFunc.setStartListening(rCxt.isStartListening());
         sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
     }

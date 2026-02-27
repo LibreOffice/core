@@ -2173,7 +2173,7 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
         pTab->CopyToTable(
             aCxt, aNewRange.aStart.Col(), aNewRange.aStart.Row(), aNewRange.aEnd.Col(), aNewRange.aEnd.Row(),
             nFlags, bOnlyMarked, pDestTab, pMarks, false, bColRowFlags,
-            /*bGlobalNamesToLocal*/false, /*bCopyCaptions*/true);
+            ScCloneFlags::Default, /*bCopyCaptions*/true);
     }
 
     rDestDoc.StartAllListeners(aNewRange);
@@ -3380,12 +3380,12 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                     maTabs[i]->CopyToTable(aMixCxt, nStartCol,nStartRow, nEndCol,nEndRow,
                                            InsertDeleteFlags::CONTENTS, false, pMixDoc->maTabs[i].get(),
                                            /*pMarkData*/nullptr, /*bAsLink*/false, /*bColRowFlags*/true,
-                                           /*bGlobalNamesToLocal*/false, /*bCopyCaptions*/true );
+                                           ScCloneFlags::Default, /*bCopyCaptions*/true );
                 }
                 maTabs[i]->DeleteArea( nStartCol,nStartRow, nEndCol,nEndRow, nDelFlags);
                 pSourceTable->CopyToTable(aCxt, nStartCol,nStartRow, nEndCol,nEndRow,
                                              nFlags, false, maTabs[i].get(), nullptr, bAsLink,
-                                             /*bColRowFlags*/true, /*bGlobalNamesToLocal*/false, /*bCopyCaptions*/true );
+                                             /*bColRowFlags*/true, ScCloneFlags::Default, /*bCopyCaptions*/true );
 
                 if (bDoMix)
                     maTabs[i]->MixData(aMixDocCxt, nStartCol,nStartRow, nEndCol,nEndRow,
@@ -3445,14 +3445,14 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
                     sc::CopyToDocContext aMixCxt(*pMixDoc);
                     maTabs[i]->CopyToTable(aMixCxt, nStartCol,nStartRow, nEndCol,nEndRow,
                                            InsertDeleteFlags::CONTENTS, true, pMixDoc->maTabs[i].get(), &rMark,
-                                           /*bAsLink*/false, /*bColRowFlags*/true, /*bGlobalNamesToLocal*/false,
+                                           /*bAsLink*/false, /*bColRowFlags*/true, ScCloneFlags::Default,
                                            /*bCopyCaptions*/true );
                 }
 
                 maTabs[i]->DeleteSelection( nDelFlags, rMark );
                 pSourceTable->CopyToTable(aCxt, nStartCol,nStartRow, nEndCol,nEndRow,
                                              nFlags, true, maTabs[i].get(), &rMark, bAsLink,
-                                             /*bColRowFlags*/true, /*bGlobalNamesToLocal*/false, /*bCopyCaptions*/true );
+                                             /*bColRowFlags*/true, ScCloneFlags::Default, /*bCopyCaptions*/true );
 
                 if (bDoMix)
                     maTabs[i]->MixMarked(aMixDocCxt, rMark, nFunction, bSkipEmpty, pMixDoc->maTabs[i].get());
