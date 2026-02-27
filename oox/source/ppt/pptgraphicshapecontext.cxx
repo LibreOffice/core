@@ -60,11 +60,13 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
         mpShapePtr->setSubType( nSubType );
         OUString sIdx( rAttribs.getStringDefaulted( XML_idx ) );
         bool bHasIdx = !sIdx.isEmpty();
-        sal_Int32 nIdx = sIdx.toInt32();
-        if( rAttribs.hasAttribute( XML_idx ) )
+        sal_uInt32 nUnsignedIdx = rAttribs.getUnsigned( XML_idx, 0 );
+        bool bSkipPlaceholderLookup = (bHasIdx && nUnsignedIdx == SAL_MAX_UINT32);
+        sal_Int32 nIdx = static_cast<sal_Int32>(nUnsignedIdx);
+        if( rAttribs.hasAttribute( XML_idx ) && !bSkipPlaceholderLookup )
             mpShapePtr->setSubTypeIndex( nIdx );
 
-        if ( nSubType || bHasIdx )
+        if ( (nSubType || bHasIdx) && !bSkipPlaceholderLookup )
         {
             PPTShape* pPPTShapePtr = dynamic_cast< PPTShape* >( mpShapePtr.get() );
             if ( pPPTShapePtr )
