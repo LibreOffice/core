@@ -73,7 +73,7 @@ well.
 +extern char* appx_fonts_get_dirs();
  #endif
  
- static FcChar8 *__fc_userdir = NULL;
+ static void
 @@ -1264,6 +1264,7 @@
  #endif
      FcChar8  *parent = NULL, *retval = NULL;
