@@ -246,17 +246,17 @@ SalData::SalData()
                                        sal::systools::CoInitializeGuard::WhenFailed::NoThrow)
          // put main thread in Single Threaded Apartment (STA)
 {
-    mhInst = nullptr;           // default instance handle
-    mnCmdShow = 0;              // default frame show style
-    mhSalObjMsgHook = nullptr;  // hook to get interesting msg for SalObject
-    mhWantLeaveMsg = nullptr;   // window handle, that want a MOUSELEAVE message
-    mpInstance = nullptr;  // pointer of first instance
-    mpFirstFrame = nullptr;     // pointer of first frame
-    mpFirstObject = nullptr;    // pointer of first object window
-    mpFirstVD = nullptr;        // first VirDev
-    mpFirstPrinter = nullptr;   // first printing printer
-    mh50Bmp = nullptr;          // 50% Bitmap
-    mh50Brush = nullptr;        // 50% Brush
+    mhInst = nullptr;
+    mnCmdShow = 0;
+    mhSalObjMsgHook = nullptr;
+    mhWantLeaveMsg = nullptr;
+    mpInstance = nullptr;
+    mpFirstFrame = nullptr;
+    mpFirstObject = nullptr;
+    mpFirstVD = nullptr;
+    mpFirstPrinter = nullptr;
+    mh50Bmp = nullptr;
+    mh50Brush = nullptr;
     int i;
     for(i=0; i<MAX_STOCKPEN; i++)
     {
@@ -268,13 +268,13 @@ SalData::SalData()
         maStockBrushColorAry[i] = 0;
         mhStockBrushAry[i] = nullptr;
     }
-    mnStockPenCount = 0;        // count of static pens
-    mnStockBrushCount = 0;      // count of static brushes
-    mnSalObjWantKeyEvt = 0;     // KeyEvent for the SalObj hook
-    mbObjClassInit = false;     // is SALOBJECTCLASS initialised
-    mnAppThreadId = 0;          // Id from Application-Thread
+    mnStockPenCount = 0;
+    mnStockBrushCount = 0;
+    mnSalObjWantKeyEvt = 0;
+    mbObjClassInit = false;
+    mnAppThreadId = 0;
     mpTempFontItem = nullptr;
-    mbThemeChanged = false;     // true if visual theme was changed: throw away theme handles
+    mbThemeChanged = false;
     mbThemeMenuSupport = false;
 
     // init with NULL
