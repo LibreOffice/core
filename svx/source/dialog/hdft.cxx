@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/lok.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <svl/itemiter.hxx>
 #include <sfx2/objsh.hxx>
@@ -172,8 +173,12 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
         m_xBackgroundBtn->set_help_id( u"SVX_HID_FOOTER_BUTTONMORE"_ustr );
 
         // uitest
-        m_xCntSharedBox->set_buildable_name(m_xCntSharedBox->get_buildable_name() + "-footer");
-        m_xCntSharedFirstBox->set_buildable_name(m_xCntSharedFirstBox->get_buildable_name() + "-footer");
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            m_xCntSharedBox->set_buildable_name(m_xCntSharedBox->get_buildable_name() + "-footer");
+            m_xCntSharedFirstBox->set_buildable_name(m_xCntSharedFirstBox->get_buildable_name()
+                                                     + "-footer");
+        }
     }
     else //Header
     {
@@ -183,8 +188,12 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
         m_xTurnOnBox = m_xBuilder->weld_check_button(u"checkHeaderOn"_ustr);
 
         // uitest
-        m_xCntSharedBox->set_buildable_name(m_xCntSharedBox->get_buildable_name() + "-header");
-        m_xCntSharedFirstBox->set_buildable_name(m_xCntSharedFirstBox->get_buildable_name() + "-header");
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            m_xCntSharedBox->set_buildable_name(m_xCntSharedBox->get_buildable_name() + "-header");
+            m_xCntSharedFirstBox->set_buildable_name(m_xCntSharedFirstBox->get_buildable_name()
+                                                     + "-header");
+        }
     }
     m_xTurnOnBox->show();
 
