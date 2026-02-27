@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/sysdata.hxx>
-#include <unx/gensys.h>
+#include <salsys.hxx>
 #include <salobj.hxx>
 
 class SvpSalObject final : public SalObject
@@ -42,7 +42,7 @@ public:
     virtual const SystemEnvData&    GetSystemData() const override;
 };
 
-class SvpSalSystem : public SalGenericSystem
+class SvpSalSystem : public SalSystem
 {
 public:
     SvpSalSystem() {}

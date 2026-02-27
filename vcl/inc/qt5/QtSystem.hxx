@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include <unx/gensys.h>
+#include <salsys.hxx>
 
-class QtSystem final : public SalGenericSystem
+class QtSystem final : public SalSystem
 {
 public:
     virtual unsigned int GetDisplayScreenCount() override;
