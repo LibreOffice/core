@@ -44,6 +44,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 #include "QtFilePicker.hxx"
 #include <salinst.hxx>
 
+class QtClipboard;
 class QtFrame;
 class QtTimer;
 
@@ -74,8 +75,7 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
     const bool m_bUseCairo;
     QtTimer* m_pTimer;
     bool m_bSleeping;
-    std::unordered_map<OUString, css::uno::Reference<css::datatransfer::clipboard::XClipboard>>
-        m_aClipboards;
+    std::unordered_map<OUString, rtl::Reference<QtClipboard>> m_aClipboards;
 
     std::unique_ptr<QApplication> m_pQApplication;
     std::vector<FreeableCStr> m_pFakeArgvFreeable;

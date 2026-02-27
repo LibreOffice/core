@@ -17,6 +17,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <QtGui/QClipboard>
 
@@ -63,8 +64,7 @@ signals:
 
 public:
     // factory function to construct only valid QtClipboard objects by name
-    static css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-    create(const OUString& aModeString);
+    static rtl::Reference<QtClipboard> create(const OUString& aModeString);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

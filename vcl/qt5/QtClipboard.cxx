@@ -47,8 +47,7 @@ QtClipboard::QtClipboard(const QClipboard::Mode eMode)
             Qt::QueuedConnection);
 }
 
-css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-QtClipboard::create(const OUString& aModeString)
+rtl::Reference<QtClipboard> QtClipboard::create(const OUString& aModeString)
 {
     static const std::map<OUString, QClipboard::Mode> aNameToClipboardMap
         = { { "CLIPBOARD", QClipboard::Clipboard }, { "PRIMARY", QClipboard::Selection } };

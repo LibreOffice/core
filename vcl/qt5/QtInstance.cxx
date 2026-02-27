@@ -668,12 +668,12 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     if (it != m_aClipboards.end())
         return it->second;
 
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard
+    rtl::Reference<QtClipboard> pClipboard
         = EmscriptenLightweightRunInMainThread([&sel] { return QtClipboard::create(sel); });
-    if (xClipboard.is())
-        m_aClipboards[sel] = xClipboard;
+    if (pClipboard.is())
+        m_aClipboards[sel] = pClipboard;
 
-    return xClipboard;
+    return pClipboard;
 }
 
 css::uno::Reference<css::datatransfer::dnd::XDragSource>
