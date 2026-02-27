@@ -78,8 +78,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    static Sequence< OUString > getSupportedServiceNames_static();
-
     /*
      * XClipboard
      */
@@ -110,12 +108,6 @@ public:
 
 }
 
-Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
-{
-    Sequence< OUString > aRet { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
-    return aRet;
-}
-
 OUString GenericClipboard::getImplementationName()
 {
     return u"com.sun.star.datatransfer.VCLGenericClipboard"_ustr;
@@ -123,7 +115,8 @@ OUString GenericClipboard::getImplementationName()
 
 Sequence< OUString > GenericClipboard::getSupportedServiceNames()
 {
-    return getSupportedServiceNames_static();
+    Sequence<OUString> aRet { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
+    return aRet;
 }
 
 sal_Bool GenericClipboard::supportsService( const OUString& ServiceName )
