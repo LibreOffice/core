@@ -50,22 +50,15 @@ Sequence< OUString > x11::Xdnd_dropTarget_getSupportedServiceNames()
 }
 
 css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-X11SalInstance::CreateClipboard(const Sequence<Any>& arguments)
+X11SalInstance::CreateClipboard(ClipboardSelectionType eSelection)
 {
     if ( o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest() )
-        return SalInstance::CreateClipboard( arguments );
+        return SalInstance::CreateClipboard(eSelection);
 
     SelectionManager& rManager = SelectionManager::get();
     rManager.initialize();
 
-    OUString sel;
-    if (!arguments.hasElements()) {
-        sel = "CLIPBOARD";
-    } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
-        throw css::lang::IllegalArgumentException(
-            u"bad X11SalInstance::CreateClipboard arguments"_ustr,
-            css::uno::Reference<css::uno::XInterface>(), -1);
-    }
+    const OUString sel = eSelection == ClipboardSelectionType::Clipboard ? u"CLIPBOARD"_ustr : u"PRIMARY"_ustr;
     Atom nSelection = rManager.getAtom(sel);
 
     std::unordered_map< Atom, css::uno::Reference< XClipboard > >::iterator it = m_aInstances.find( nSelection );

@@ -75,7 +75,7 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
     const bool m_bUseCairo;
     QtTimer* m_pTimer;
     bool m_bSleeping;
-    std::unordered_map<OUString, rtl::Reference<QtClipboard>> m_aClipboards;
+    std::unordered_map<ClipboardSelectionType, rtl::Reference<QtClipboard>> m_aClipboards;
 
     std::unique_ptr<QApplication> m_pQApplication;
     std::vector<FreeableCStr> m_pFakeArgvFreeable;
@@ -221,7 +221,7 @@ public:
     createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&) override;
 
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-    CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
+    CreateClipboard(ClipboardSelectionType eSelection) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>

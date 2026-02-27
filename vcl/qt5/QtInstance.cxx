@@ -646,42 +646,28 @@ QtInstance::createFolderPicker(const css::uno::Reference<css::uno::XComponentCon
 }
 
 css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
+QtInstance::CreateClipboard(ClipboardSelectionType eSelection)
 {
-    OUString sel;
-    if (arguments.getLength() == 0)
-    {
-        sel = "CLIPBOARD";
-    }
-    else if (arguments.getLength() != 1 || !(arguments[0] >>= sel))
-    {
-        throw css::lang::IllegalArgumentException(u"bad QtInstance::CreateClipboard arguments"_ustr,
-                                                  css::uno::Reference<css::uno::XInterface>(), -1);
-    }
-
     // This could also use RunInMain, but SolarMutexGuard is enough
     // since at this point we're not accessing the clipboard, just get the
     // accessor to the clipboard.
     SolarMutexGuard aGuard;
 
-    auto it = m_aClipboards.find(sel);
+    auto it = m_aClipboards.find(eSelection);
     if (it != m_aClipboards.end())
         return it->second;
 
-    rtl::Reference<QtClipboard> pClipboard = EmscriptenLightweightRunInMainThread([&sel] {
-        static const std::map<OUString, QClipboard::Mode> aNameToClipboardMap
-            = { { "CLIPBOARD", QClipboard::Clipboard }, { "PRIMARY", QClipboard::Selection } };
-
+    rtl::Reference<QtClipboard> pClipboard = EmscriptenLightweightRunInMainThread([&eSelection] {
         assert(QApplication::clipboard()->thread() == qApp->thread());
 
-        auto iter = aNameToClipboardMap.find(sel);
-        if (iter != aNameToClipboardMap.end() && QtClipboard::isSupported(iter->second))
-            return rtl::Reference<QtClipboard>(new QtClipboard(iter->second));
-        SAL_WARN("vcl.qt", "Ignoring unrecognized clipboard type: '" << sel << "'");
+        const QClipboard::Mode eClipboardMode = toQClipboardMode(eSelection);
+        if (QtClipboard::isSupported(eClipboardMode))
+            return rtl::Reference<QtClipboard>(new QtClipboard(eClipboardMode));
+        SAL_WARN("vcl.qt", "Ignoring unsupported clipboard mode: '" << eClipboardMode << "'");
         return rtl::Reference<QtClipboard>();
     });
     if (pClipboard.is())
-        m_aClipboards[sel] = pClipboard;
+        m_aClipboards[eSelection] = pClipboard;
 
     return pClipboard;
 }

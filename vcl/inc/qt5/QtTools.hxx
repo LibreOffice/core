@@ -21,6 +21,9 @@
 
 #include <config_vclplug.h>
 
+#include <ClipboardSelectionType.hxx>
+
+#include <QtGui/QClipboard>
 #include <QtCore/QDate>
 #include <QtCore/QPoint>
 #include <QtCore/QRect>
@@ -101,6 +104,8 @@ Qt::Alignment toQtAlignment(TxtAlign eAlign);
 
 Qt::CheckState toQtCheckState(TriState eTristate);
 TriState toVclTriState(Qt::CheckState eTristate);
+
+QClipboard::Mode toQClipboardMode(ClipboardSelectionType eSelection);
 
 Qt::DropActions toQtDropActions(sal_Int8 dragOperation);
 sal_Int8 toVclDropActions(Qt::DropActions dragOperation);

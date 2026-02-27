@@ -74,6 +74,20 @@ Qt::CheckState toQtCheckState(TriState eTristate)
     }
 };
 
+QClipboard::Mode toQClipboardMode(ClipboardSelectionType eSelection)
+{
+    switch (eSelection)
+    {
+        case ClipboardSelectionType::Clipboard:
+            return QClipboard::Mode::Clipboard;
+        case ClipboardSelectionType::Primary:
+            return QClipboard::Mode::Selection;
+        default:
+            assert(false && "unhandled ClipboardSelectionType value");
+            return QClipboard::Mode::Clipboard;
+    }
+}
+
 TriState toVclTriState(Qt::CheckState eTristate)
 {
     switch (eTristate)

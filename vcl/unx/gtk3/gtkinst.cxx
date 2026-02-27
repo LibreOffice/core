@@ -1614,22 +1614,10 @@ void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::cl
 }
 
 Reference<css::datatransfer::clipboard::XClipboard>
-GtkInstance::CreateClipboard(const Sequence<Any>& arguments)
+GtkInstance::CreateClipboard(ClipboardSelectionType eSelection)
 {
     if ( o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest() )
-        return SalInstance::CreateClipboard( arguments );
-
-    OUString sel;
-    if (!arguments.hasElements()) {
-        sel = "CLIPBOARD";
-    } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
-        throw css::lang::IllegalArgumentException(
-            u"bad GtkInstance::CreateClipboard arguments"_ustr,
-            css::uno::Reference<css::uno::XInterface>(), -1);
-    }
-
-    ClipboardSelectionType eSelection = (sel == "CLIPBOARD") ? ClipboardSelectionType::Clipboard
-                                                             : ClipboardSelectionType::Primary;
+        return SalInstance::CreateClipboard(eSelection);
 
     auto aIt = m_aClipboards.find(eSelection);
     if (aIt != m_aClipboards.end())

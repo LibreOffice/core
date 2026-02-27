@@ -39,10 +39,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
 uno::Reference<css::datatransfer::clipboard::XClipboard>
-AquaSalInstance::CreateClipboard(const Sequence<Any>& i_rArguments)
+AquaSalInstance::CreateClipboard(ClipboardSelectionType eSelection)
 {
     if ( Application::IsHeadlessModeEnabled() || o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest() )
-        return SalInstance::CreateClipboard( i_rArguments );
+        return SalInstance::CreateClipboard(eSelection);
 
     SalData* pSalData = GetSalData();
     if( ! pSalData->mxClipboard.is() )

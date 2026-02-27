@@ -225,12 +225,6 @@ public:
     css::uno::Reference<css::datatransfer::XTransferable> const & GetTransferable() const { return m_xTrans; }
 };
 
-enum class ClipboardSelectionType
-{
-    Clipboard = 0,
-    Primary = 1
-};
-
 class GtkSalTimer;
 class GtkInstance final : public SvpSalInstance
 {
@@ -277,7 +271,7 @@ public:
         createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
 
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-    CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
+    CreateClipboard(ClipboardSelectionType eSelection) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>

@@ -29,6 +29,7 @@
 #include <vcl/weld/ColorChooserDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
+#include "ClipboardSelectionType.hxx"
 #include "displayconnectiondispatch.hxx"
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -201,7 +202,7 @@ public:
 
     // dtrans implementation
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-    CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments);
+    CreateClipboard(ClipboardSelectionType eSelection);
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv);
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>

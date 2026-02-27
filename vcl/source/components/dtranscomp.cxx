@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
+#include <ClipboardSelectionType.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
 
@@ -191,7 +192,22 @@ vcl_SystemClipboard_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
-    auto xClipboard = GetSalInstance()->CreateClipboard( args );
+
+    ClipboardSelectionType eSelection = ClipboardSelectionType::Clipboard;
+    if (args.hasElements())
+    {
+        OUString sSel;
+        if (args.getLength() != 1 || !(args[0] >>= sSel))
+        {
+            throw css::lang::IllegalArgumentException(
+                u"Invalid arguments to create clipboard"_ustr,
+                css::uno::Reference<css::uno::XInterface>(), -1);
+        }
+        eSelection = (sSel == u"CLIPBOARD") ? ClipboardSelectionType::Clipboard
+                                            : ClipboardSelectionType::Primary;
+    }
+
+    auto xClipboard = GetSalInstance()->CreateClipboard(eSelection);
     if (xClipboard.is())
         xClipboard->acquire();
     return xClipboard.get();
@@ -352,11 +368,11 @@ void GenericDropTarget::setDefaultActions( sal_Int8)
 *   SalInstance generic
 */
 Reference<css::datatransfer::clipboard::XClipboard>
-SalInstance::CreateClipboard(const Sequence<Any>& arguments)
+SalInstance::CreateClipboard(ClipboardSelectionType eSelection)
 {
-    if (arguments.hasElements()) {
+    if (eSelection != ClipboardSelectionType::Clipboard) {
         throw css::lang::IllegalArgumentException(
-            u"non-empty SalInstance::CreateClipboard arguments"_ustr, {}, -1);
+            u"unsupported SalInstance::CreateClipboard argument"_ustr, {}, -1);
     }
 #ifdef IOS
     return new vcl::GenericClipboard();

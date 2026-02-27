@@ -357,7 +357,7 @@ uno::Sequence<OUString> SAL_CALL CWinClipboard::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
-                                        css::uno::Sequence<css::uno::Any> const& args)
+                                        css::uno::Sequence<css::uno::Any> const&)
 {
     // We run unit tests in parallel, which is a problem when touching a shared resource
     // like the system clipboard, so rather use the dummy GenericClipboard.
@@ -366,7 +366,8 @@ dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
     if (bRunningUnitTest)
     {
         SolarMutexGuard aGuard;
-        auto xClipboard = ImplGetSVData()->mpDefInst->CreateClipboard(args);
+        auto xClipboard
+            = ImplGetSVData()->mpDefInst->CreateClipboard(ClipboardSelectionType::Clipboard);
         if (xClipboard.is())
             xClipboard->acquire();
         return xClipboard.get();
