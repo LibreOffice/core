@@ -37,7 +37,7 @@ class QtClipboard final
 
     osl::Mutex m_aMutex;
     const OUString m_aClipboardName;
-    const QClipboard::Mode m_aClipboardMode;
+    const QClipboard::Mode m_eClipboardMode;
     // has to be set, if LO changes the QClipboard itself, so it won't instantly lose
     // ownership by it's self-triggered QClipboard::changed handler
     bool m_bOwnClipboardChange;
@@ -50,13 +50,13 @@ class QtClipboard final
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
 
-    bool isOwner(const QClipboard::Mode aMode);
-    static bool isSupported(const QClipboard::Mode aMode);
+    bool isOwner(const QClipboard::Mode eMode);
+    static bool isSupported(const QClipboard::Mode eMode);
 
-    explicit QtClipboard(OUString aModeString, const QClipboard::Mode aMode);
+    explicit QtClipboard(OUString aModeString, const QClipboard::Mode eMode);
 
 private Q_SLOTS:
-    void handleChanged(QClipboard::Mode mode);
+    void handleChanged(QClipboard::Mode eMode);
     void handleClearClipboard();
 
 signals:
