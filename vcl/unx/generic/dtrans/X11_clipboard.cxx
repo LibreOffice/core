@@ -52,8 +52,7 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
 #endif
 }
 
-css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-X11Clipboard::create( SelectionManager& rManager, Atom aSelection )
+rtl::Reference<X11Clipboard> X11Clipboard::create(SelectionManager& rManager, Atom aSelection)
 {
     rtl::Reference<X11Clipboard> cb(new X11Clipboard(rManager, aSelection));
     if( aSelection != None )

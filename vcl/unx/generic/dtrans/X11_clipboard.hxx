@@ -50,9 +50,7 @@ namespace x11 {
         void clearContents();
 
     public:
-
-        static css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-        create( SelectionManager& rManager, Atom aSelection );
+        static rtl::Reference<X11Clipboard> create(SelectionManager& rManager, Atom aSelection);
 
         virtual ~X11Clipboard() override;
 

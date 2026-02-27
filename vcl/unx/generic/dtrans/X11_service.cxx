@@ -61,11 +61,11 @@ X11SalInstance::CreateClipboard(ClipboardSelectionType eSelection)
     const OUString sel = eSelection == ClipboardSelectionType::Clipboard ? u"CLIPBOARD"_ustr : u"PRIMARY"_ustr;
     Atom nSelection = rManager.getAtom(sel);
 
-    std::unordered_map< Atom, css::uno::Reference< XClipboard > >::iterator it = m_aInstances.find( nSelection );
+    auto it = m_aInstances.find(nSelection);
     if( it != m_aInstances.end() )
         return it->second;
 
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> pClipboard = X11Clipboard::create( rManager, nSelection );
+    rtl::Reference<X11Clipboard> pClipboard = X11Clipboard::create(rManager, nSelection);
     m_aInstances[ nSelection ] = pClipboard;
 
     return pClipboard;
