@@ -477,10 +477,10 @@ DiagramHelperFactory_svx& DiagramHelperFactory_svx::getDiagramHelperFactory_svx(
     return *pSingleGlobalDiagramHelperFactory_svx;
 }
 
-// init gobal member var of DiagramHelperFactory_svx. This will then be set
+// init global member var of DiagramHelperFactory_svx. This will then be set
 // by DiagramHelperFactory_oox::DiagramHelperFactory_oox when
 // aSingleGlobalDiagramHelperFactory_oox gets incarnated by oox library at
-// that librarys load time
+// that libraries load time
 DiagramHelperFactory_svx* DiagramHelperFactory_svx::pSingleGlobalDiagramHelperFactory_svx = nullptr;
 
 }} // end of namespace
