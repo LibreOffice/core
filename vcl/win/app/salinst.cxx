@@ -113,7 +113,7 @@ void SalYieldMutex::BeforeReleaseHandler()
 /// this function to avoid deadlock
 void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 {
-    WinSalInstance* pInst = GetSalData()->mpInstance;
+    WinSalInstance* pInst = GetWinSalInstance();
     if ( pInst && pInst->IsMainThread() )
     {
         if ( pInst->m_nNoYieldLock )
@@ -153,7 +153,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 
 sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
 {
-    WinSalInstance* pInst = GetSalData()->mpInstance;
+    WinSalInstance* pInst = GetWinSalInstance();
     if ( pInst && pInst->m_nNoYieldLock && pInst->IsMainThread() )
         return 1;
 
@@ -166,7 +166,7 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
 
 bool SalYieldMutex::tryToAcquire()
 {
-    WinSalInstance* pInst = GetSalData()->mpInstance;
+    WinSalInstance* pInst = GetWinSalInstance();
     if ( pInst )
     {
         if ( pInst->m_nNoYieldLock && pInst->IsMainThread() )
@@ -180,20 +180,20 @@ bool SalYieldMutex::tryToAcquire()
 
 void ImplSalYieldMutexAcquireWithWait( sal_uInt32 nCount )
 {
-    WinSalInstance* pInst = GetSalData()->mpInstance;
+    WinSalInstance* pInst = GetWinSalInstance();
     if ( pInst )
         pInst->GetYieldMutex()->acquire( nCount );
 }
 
 bool ImplSalYieldMutexTryToAcquire()
 {
-    WinSalInstance* pInst = GetSalData()->mpInstance;
+    WinSalInstance* pInst = GetWinSalInstance();
     return pInst && pInst->GetYieldMutex()->tryToAcquire();
 }
 
 void ImplSalYieldMutexRelease()
 {
-    WinSalInstance* pInst = GetSalData()->mpInstance;
+    WinSalInstance* pInst = GetWinSalInstance();
     if ( pInst )
     {
         GdiFlush();
@@ -203,10 +203,10 @@ void ImplSalYieldMutexRelease()
 
 bool SalYieldMutex::IsCurrentThread() const
 {
-    if ( !GetSalData()->mpInstance->m_nNoYieldLock )
+    if (!GetWinSalInstance()->m_nNoYieldLock)
         return SolarMutex::IsCurrentThread();
     else
-        return GetSalData()->mpInstance->IsMainThread();
+        return GetWinSalInstance()->IsMainThread();
 }
 
 void SalData::initKeyCodeMap()
@@ -250,7 +250,6 @@ SalData::SalData()
     mnCmdShow = 0;
     mhSalObjMsgHook = nullptr;
     mhWantLeaveMsg = nullptr;
-    mpInstance = nullptr;
     mpFirstFrame = nullptr;
     mpFirstObject = nullptr;
     mpFirstVD = nullptr;
@@ -381,9 +380,6 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
         return nullptr;
 
     WinSalInstance* pInst = new WinSalInstance(pSalData);
-
-    // init instance (only one instance in this version !!!)
-    pSalData->mpInstance   = pInst;
     pInst->mhInst    = pSalData->mhInst;
     pInst->mhComWnd  = hComWnd;
 
@@ -440,7 +436,7 @@ bool ImplSalYield(const bool bWait, const bool bHandleAllCurrentEvents)
     static sal_uInt32 nLastTicks = 0;
 
     // we should never yield in m_nNoYieldLock mode!
-    const bool bNoYieldLock = (GetSalData()->mpInstance->m_nNoYieldLock > 0);
+    const bool bNoYieldLock = (GetWinSalInstance()->m_nNoYieldLock > 0);
     assert(!bNoYieldLock);
     if (bNoYieldLock)
         return false;
@@ -546,7 +542,7 @@ namespace
 struct NoYieldLockGuard
 {
     NoYieldLockGuard()
-        : counter(InSendMessage() ? GetSalData()->mpInstance->m_nNoYieldLock : dummy())
+        : counter(InSendMessage() ? GetWinSalInstance()->m_nNoYieldLock : dummy())
     {
         ++counter;
     }
@@ -605,7 +601,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             {
                 NoYieldLockGuard g;
                 nRet = reinterpret_cast<LRESULT>(
-                    ImplSalCreateFrame(GetSalData()->mpInstance, reinterpret_cast<HWND>(lParam),
+                    ImplSalCreateFrame(GetWinSalInstance(), reinterpret_cast<HWND>(lParam),
                                        static_cast<SalFrameStyleFlags>(wParam)));
             }
             break;
@@ -646,7 +642,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             {
                 NoYieldLockGuard g;
                 nRet = reinterpret_cast<LRESULT>(ImplSalCreateObject(
-                    GetSalData()->mpInstance, reinterpret_cast<WinSalFrame*>(lParam)));
+                    GetWinSalInstance(), reinterpret_cast<WinSalFrame*>(lParam)));
             }
             break;
         case (SAL_MSG_DESTROYOBJECT):
@@ -772,7 +768,7 @@ LRESULT WinSalInstance::SendWndMessage_impl(HWND hWnd, UINT Msg, WPARAM wParam, 
 
 LRESULT WinSalInstance::SendWndMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-    return GetSalData()->mpInstance->SendWndMessage_impl(hWnd, Msg, wParam, lParam);
+    return GetWinSalInstance()->SendWndMessage_impl(hWnd, Msg, wParam, lParam);
 }
 
 LRESULT WinSalInstance::SendComWndMessage(UINT Msg, WPARAM wParam, LPARAM lParam) const

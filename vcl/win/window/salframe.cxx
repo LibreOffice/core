@@ -957,10 +957,10 @@ WinSalFrame::~WinSalFrame()
     {
         HDC hDC = mpGraphics->getHDC();
         mpGraphics->setHDC(nullptr);
-        if (pSalData->mpInstance->IsMainThread())
+        if (GetWinSalInstance()->IsMainThread())
             ReleaseDC(mhWnd, hDC);
         else
-            pSalData->mpInstance->SendComWndMessage(
+            GetWinSalInstance()->SendComWndMessage(
                 SAL_MSG_RELEASEDC, reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC));
         delete mpGraphics;
         mpGraphics = nullptr;
@@ -996,16 +996,14 @@ SalGraphics* WinSalFrame::AcquireGraphics()
     if (!mhWnd || mbGraphicsAcquired)
         return nullptr;
 
-    SalData* pSalData = GetSalData();
-
     if (!mpGraphics)
     {
         HDC hDC;
-        if (pSalData->mpInstance->IsMainThread())
+        if (GetWinSalInstance()->IsMainThread())
             hDC = GetDC(mhWnd);
         else
             hDC = reinterpret_cast<HDC>(
-                static_cast<sal_IntPtr>(pSalData->mpInstance->SendComWndMessage(
+                static_cast<sal_IntPtr>(GetWinSalInstance()->SendComWndMessage(
                     SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(mhWnd), 0)));
         if (!hDC)
             return nullptr;
@@ -1451,17 +1449,17 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
         bHadGraphics = true;
         HDC hDC = mpGraphics->getHDC();
         mpGraphics->setHDC(nullptr);
-        if (pSalData->mpInstance->IsMainThread())
+        if (GetWinSalInstance()->IsMainThread())
             ReleaseDC(mhWnd, hDC);
         else
-            pSalData->mpInstance->SendComWndMessage(SAL_MSG_RELEASEDC, reinterpret_cast<WPARAM>(mhWnd),
+            GetWinSalInstance()->SendComWndMessage(SAL_MSG_RELEASEDC, reinterpret_cast<WPARAM>(mhWnd),
                                                     reinterpret_cast<LPARAM>(hDC));
     }
 
     // create a new hwnd with the same styles
     HWND hWndParent = hNewParentWnd;
     // forward to main thread
-    HWND hWnd = reinterpret_cast<HWND>(static_cast<sal_IntPtr>(pSalData->mpInstance->SendComWndMessage(
+    HWND hWnd = reinterpret_cast<HWND>(static_cast<sal_IntPtr>(GetWinSalInstance()->SendComWndMessage(
                                         bAsChild ? SAL_MSG_RECREATECHILDHWND : SAL_MSG_RECREATEHWND,
                                         reinterpret_cast<WPARAM>(hWndParent), reinterpret_cast<LPARAM>(mhWnd) )));
 
@@ -1473,11 +1471,11 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
     {
         mpGraphics->setHWND( hWnd );
         HDC hDC;
-        if (pSalData->mpInstance->IsMainThread())
+        if (GetWinSalInstance()->IsMainThread())
             hDC = GetDC( hWnd );
         else
             hDC = reinterpret_cast<HDC>(
-                static_cast<sal_IntPtr>(pSalData->mpInstance->SendComWndMessage(
+                static_cast<sal_IntPtr>(GetWinSalInstance()->SendComWndMessage(
                     SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(hWnd), 0)));
         if (hDC)
             mpGraphics->setHDC( hDC );
@@ -1494,7 +1492,7 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
     systemChildren.clear();
 
     // Now destroy original HWND in the thread where it was created.
-    pSalData->mpInstance->SendComWndMessage(
+    GetWinSalInstance()->SendComWndMessage(
                      SAL_MSG_DESTROYHWND, WPARAM(0), reinterpret_cast<LPARAM>(hWndOld));
 }
 

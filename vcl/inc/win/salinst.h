@@ -24,6 +24,7 @@
 #include <osl/conditn.hxx>
 
 #include <salinst.hxx>
+#include <svdata.hxx>
 #include <win/salframe.h>
 
 class SalYieldMutex;
@@ -97,6 +98,8 @@ private:
     // Sends a message to a window, making sure to unlock solar mutex if necessary
     LRESULT SendWndMessage_impl(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) const;
 };
+
+inline WinSalInstance* GetWinSalInstance() { return static_cast<WinSalInstance*>(GetSalInstance()); }
 
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, SalFrameStyleFlags nSalFrameStyle );
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent );

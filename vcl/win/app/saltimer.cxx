@@ -39,7 +39,7 @@ void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
 void WinSalTimer::ImplStop()
 {
     SalData *const pSalData = GetSalData();
-    const WinSalInstance *pInst = pSalData->mpInstance;
+    const WinSalInstance *pInst = GetWinSalInstance();
     assert( !pInst || pSalData->mnAppThreadId == GetCurrentThreadId() );
 
     if ( m_bSetTimerRunning )
@@ -65,7 +65,7 @@ void WinSalTimer::ImplStart( sal_uInt64 nMS )
 {
 #if !defined NDEBUG
     SalData* pSalData = GetSalData();
-    assert( !pSalData->mpInstance || pSalData->mnAppThreadId == GetCurrentThreadId() );
+    assert(!GetWinSalInstance() || pSalData->mnAppThreadId == GetCurrentThreadId());
 #endif
 
     // DueTime parameter is a DWORD, which is always an unsigned 32bit
@@ -87,7 +87,7 @@ void WinSalTimer::ImplStart( sal_uInt64 nMS )
     {
         // so we don't block the nested message queue in move and resize
         // with posted 0ms SAL_MSG_TIMER_CALLBACK messages
-        SetTimer( GetSalData()->mpInstance->mhComWnd, m_aWmTimerId,
+        SetTimer(GetWinSalInstance()->mhComWnd, m_aWmTimerId,
                   USER_TIMER_MINIMUM, nullptr );
         m_bSetTimerRunning = true;
     }
@@ -110,7 +110,7 @@ WinSalTimer::~WinSalTimer()
 
 void WinSalTimer::Start( sal_uInt64 nMS )
 {
-    WinSalInstance *pInst = GetSalData()->mpInstance;
+    WinSalInstance *pInst = GetWinSalInstance();
     if ( pInst && !pInst->IsMainThread() )
     {
         bool const ret = PostMessageW(pInst->mhComWnd,
@@ -123,7 +123,7 @@ void WinSalTimer::Start( sal_uInt64 nMS )
 
 void WinSalTimer::Stop()
 {
-    WinSalInstance *pInst = GetSalData()->mpInstance;
+    WinSalInstance *pInst = GetWinSalInstance();
     if ( pInst && !pInst->IsMainThread() )
     {
         bool const ret = PostMessageW(pInst->mhComWnd,
@@ -144,7 +144,7 @@ void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
     {
         WinSalTimer *pTimer = static_cast<WinSalTimer*>( data );
         bool const ret = PostMessageW(
-            GetSalData()->mpInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK,
+            GetWinSalInstance()->mhComWnd, SAL_MSG_TIMER_CALLBACK,
             static_cast<WPARAM>(pTimer->GetNextEventVersion()), 0 );
 #if OSL_DEBUG_LEVEL > 0
         if (!ret) // SEH prevents using SAL_WARN here?
@@ -197,7 +197,7 @@ void WinSalTimer::ImplHandle_WM_TIMER( const WPARAM aWPARAM )
         return;
 
     m_bSetTimerRunning = false;
-    KillTimer( GetSalData()->mpInstance->mhComWnd, m_aWmTimerId );
+    KillTimer(GetWinSalInstance()->mhComWnd, m_aWmTimerId);
     ImplHandleElapsedTimer();
 }
 

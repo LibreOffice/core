@@ -32,7 +32,7 @@ namespace
 {
 void PostMessageToComWnd(UINT nMsg)
 {
-    bool const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd, nMsg, 0, 0);
+    bool const ret = PostMessageW(GetWinSalInstance()->mhComWnd, nMsg, 0, 0);
     SAL_WARN_IF(!ret, "vcl.schedule", "ERROR: PostMessage() failed!");
 }
 }
