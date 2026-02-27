@@ -1550,12 +1550,10 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                 bDraw = GetOpt().IsTab();
             break;
         case PortionType::SoftHyphen:
-            if ( GetOpt().IsViewMetaChars() )
-                bDraw = GetOpt().IsSoftHyph();
+            bDraw = GetOpt().IsSoftHyph();
             break;
         case PortionType::Blank:
-            if ( GetOpt().IsViewMetaChars() )
-                bDraw = GetOpt().IsHardBlank();
+            bDraw = GetOpt().IsHardBlank();
             break;
         case PortionType::ControlChar:
             if ( GetOpt().IsViewMetaChars() )
