@@ -29,11 +29,10 @@
 #include <emscripten.h>
 #endif
 
-QtClipboard::QtClipboard(OUString aModeString, const QClipboard::Mode eMode)
+QtClipboard::QtClipboard(const QClipboard::Mode eMode)
     : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                     css::datatransfer::clipboard::XFlushableClipboard,
                                     XServiceInfo>(m_aMutex)
-    , m_aClipboardName(std::move(aModeString))
     , m_eClipboardMode(eMode)
     , m_bOwnClipboardChange(false)
     , m_bDoClear(false)
@@ -58,7 +57,7 @@ QtClipboard::create(const OUString& aModeString)
 
     auto iter = aNameToClipboardMap.find(aModeString);
     if (iter != aNameToClipboardMap.end() && isSupported(iter->second))
-        return new QtClipboard(aModeString, iter->second);
+        return new QtClipboard(iter->second);
     SAL_WARN("vcl.qt", "Ignoring unrecognized clipboard type: '" << aModeString << "'");
     return nullptr;
 }
@@ -262,7 +261,19 @@ sal_Bool QtClipboard::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-OUString QtClipboard::getName() { return m_aClipboardName; }
+OUString QtClipboard::getName()
+{
+    switch (m_eClipboardMode)
+    {
+        case QClipboard::Clipboard:
+            return u"CLIPBOARD"_ustr;
+        case QClipboard::Selection:
+            return u"PRIMARY"_ustr;
+        default:
+            assert(false && "unexpected clipboard mode");
+            return OUString();
+    }
+}
 
 sal_Int8 QtClipboard::getRenderingCapabilities() { return 0; }
 

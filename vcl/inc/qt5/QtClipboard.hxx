@@ -36,7 +36,6 @@ class QtClipboard final
     Q_OBJECT
 
     osl::Mutex m_aMutex;
-    const OUString m_aClipboardName;
     const QClipboard::Mode m_eClipboardMode;
     // has to be set, if LO changes the QClipboard itself, so it won't instantly lose
     // ownership by it's self-triggered QClipboard::changed handler
@@ -53,7 +52,7 @@ class QtClipboard final
     bool isOwner(const QClipboard::Mode eMode);
     static bool isSupported(const QClipboard::Mode eMode);
 
-    explicit QtClipboard(OUString aModeString, const QClipboard::Mode eMode);
+    explicit QtClipboard(const QClipboard::Mode eMode);
 
 private Q_SLOTS:
     void handleChanged(QClipboard::Mode eMode);
