@@ -47,20 +47,6 @@ QtClipboard::QtClipboard(const QClipboard::Mode eMode)
             Qt::QueuedConnection);
 }
 
-rtl::Reference<QtClipboard> QtClipboard::create(const OUString& aModeString)
-{
-    static const std::map<OUString, QClipboard::Mode> aNameToClipboardMap
-        = { { "CLIPBOARD", QClipboard::Clipboard }, { "PRIMARY", QClipboard::Selection } };
-
-    assert(QApplication::clipboard()->thread() == qApp->thread());
-
-    auto iter = aNameToClipboardMap.find(aModeString);
-    if (iter != aNameToClipboardMap.end() && isSupported(iter->second))
-        return new QtClipboard(iter->second);
-    SAL_WARN("vcl.qt", "Ignoring unrecognized clipboard type: '" << aModeString << "'");
-    return nullptr;
-}
-
 void QtClipboard::flushClipboard()
 {
     SolarMutexGuard g;

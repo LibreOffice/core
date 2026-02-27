@@ -668,8 +668,18 @@ QtInstance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
     if (it != m_aClipboards.end())
         return it->second;
 
-    rtl::Reference<QtClipboard> pClipboard
-        = EmscriptenLightweightRunInMainThread([&sel] { return QtClipboard::create(sel); });
+    rtl::Reference<QtClipboard> pClipboard = EmscriptenLightweightRunInMainThread([&sel] {
+        static const std::map<OUString, QClipboard::Mode> aNameToClipboardMap
+            = { { "CLIPBOARD", QClipboard::Clipboard }, { "PRIMARY", QClipboard::Selection } };
+
+        assert(QApplication::clipboard()->thread() == qApp->thread());
+
+        auto iter = aNameToClipboardMap.find(sel);
+        if (iter != aNameToClipboardMap.end() && QtClipboard::isSupported(iter->second))
+            return rtl::Reference<QtClipboard>(new QtClipboard(iter->second));
+        SAL_WARN("vcl.qt", "Ignoring unrecognized clipboard type: '" << sel << "'");
+        return rtl::Reference<QtClipboard>();
+    });
     if (pClipboard.is())
         m_aClipboards[sel] = pClipboard;
 

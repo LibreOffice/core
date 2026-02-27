@@ -51,9 +51,6 @@ class QtClipboard final
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
 
     bool isOwner(const QClipboard::Mode eMode);
-    static bool isSupported(const QClipboard::Mode eMode);
-
-    explicit QtClipboard(const QClipboard::Mode eMode);
 
 private Q_SLOTS:
     void handleChanged(QClipboard::Mode eMode);
@@ -63,8 +60,9 @@ signals:
     void clearClipboard();
 
 public:
-    // factory function to construct only valid QtClipboard objects by name
-    static rtl::Reference<QtClipboard> create(const OUString& aModeString);
+    explicit QtClipboard(const QClipboard::Mode eMode);
+
+    static bool isSupported(const QClipboard::Mode eMode);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
