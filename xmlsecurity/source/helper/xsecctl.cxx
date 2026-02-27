@@ -626,13 +626,8 @@ void XSecController::exportSignature(
             xDocumentHandler->endElement( u"SignatureMethod"_ustr );
 
             /* Write Reference element */
-            int j;
-            int refNum = vReferenceInfors.size();
-
-            for(j=0; j<refNum; ++j)
+            for(const auto& refInfor: vReferenceInfors)
             {
-                const SignatureReferenceInformation& refInfor = vReferenceInfors[j];
-
                 pAttributeList = new comphelper::AttributeList();
                 if ( refInfor.nType != SignatureReferenceType::SAMEDOCUMENT )
                 /*
