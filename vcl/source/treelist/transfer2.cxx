@@ -462,9 +462,8 @@ Reference<XClipboard> GetSystemClipboard()
     // On Windows, the css.datatransfer.clipboard.SystemClipboard UNO service is implemented as a
     // single-instance service (dtrans_CWinClipboard_get_implementation in
     // vcl/win/dtrans/WinClipboard.cxx) that needs timely disposing to join a spawned thread
-    // (done in DeInitVCL, vcl/source/app/svmain.cxx), while on other platforms it is implemented as
-    // a multi-instance service (ClipboardFactory, vcl/source/components/dtranscomp.cxx) so we
-    // should not hold on to a single instance here:
+    // (done in DeInitVCL, vcl/source/app/svmain.cxx), while on other platforms multiple instances
+    // are used, so we should not hold on to a single instance here:
 #if defined _WIN32
     DBG_TESTSOLARMUTEX();
     auto const data = ImplGetSVData();
@@ -494,8 +493,7 @@ Reference<XClipboard> GetSystemClipboard()
 #endif
         else
         {
-            xClipboard = css::datatransfer::clipboard::SystemClipboard::create(
-                comphelper::getProcessComponentContext());
+            xClipboard = GetSalInstance()->CreateClipboard(ClipboardSelectionType::Clipboard);
         }
     }
     catch (DeploymentException const &) {}
