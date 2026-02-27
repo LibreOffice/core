@@ -2035,7 +2035,7 @@ static bool lcl_TabContainsReference(const OUString& rString)
         return true;
     }
 
-    // Check for A1 style refernce
+    // Check for A1 style reference
     while (nPos < nLen && rtl::isAsciiAlpha(static_cast<unsigned char>(rString[nPos])))
         nPos++;
 
