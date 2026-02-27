@@ -39,6 +39,13 @@ struct RefUpdateResult;
 struct TokenStringContext;
 class ColRowReorderMapType;
 
+/** If the target tab was inserted, or an existing tab was used. */
+enum class TargetTabState
+{
+    Existing,
+    Inserted,
+};
+
 }
 
 struct ScRawToken;
@@ -151,12 +158,15 @@ public:
      */
     void AdjustAbsoluteRefs( const ScDocument& rOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bCheckCopyArea );
 
-    /** Adjust relative tab references when copying a formula between tabs when
-        overwriting a tab. Non-zero relative tab offsets are decremented by
-        input delta value so they still resolve to the original target sheet
-        from the new position. Same-sheet relative refs with offset 0 are left
-        unchanged. */
-    void AdjustRelativeTabRefs(SCTAB nDelta);
+    /** Adjust relative tab references when copying a formula to a new table.
+        Non-zero relative tab offsets are recalculated so they still resolve
+        to the original target sheet from the new position. Same-sheet
+        relative refs (offset 0) are not modified.
+        If the target tab was newly inserted, the references pointing to
+        tabs at or after the insertion point are additionally shifted by
+        one. */
+    void AdjustRelativeTabRefs(SCTAB nOldTab, SCTAB nNewTab,
+        sc::TargetTabState eMode = sc::TargetTabState::Existing);
 
     /** When copying a sheet-local named expression, move sheet references that
         point to the originating sheet to point to the new sheet instead.
