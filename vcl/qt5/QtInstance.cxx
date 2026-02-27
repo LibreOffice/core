@@ -660,10 +660,9 @@ QtInstance::CreateClipboard(ClipboardSelectionType eSelection)
     rtl::Reference<QtClipboard> pClipboard = EmscriptenLightweightRunInMainThread([&eSelection] {
         assert(QApplication::clipboard()->thread() == qApp->thread());
 
-        const QClipboard::Mode eClipboardMode = toQClipboardMode(eSelection);
-        if (QtClipboard::isSupported(eClipboardMode))
-            return rtl::Reference<QtClipboard>(new QtClipboard(eClipboardMode));
-        SAL_WARN("vcl.qt", "Ignoring unsupported clipboard mode: '" << eClipboardMode << "'");
+        if (QtClipboard::isSupported(toQClipboardMode(eSelection)))
+            return rtl::Reference<QtClipboard>(new QtClipboard(eSelection));
+        SAL_WARN("vcl.qt", "Ignoring unsupported selection type");
         return rtl::Reference<QtClipboard>();
     });
     if (pClipboard.is())

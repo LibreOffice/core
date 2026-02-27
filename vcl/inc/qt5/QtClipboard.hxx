@@ -59,7 +59,7 @@ signals:
     void clearClipboard();
 
 public:
-    explicit QtClipboard(const QClipboard::Mode eMode);
+    explicit QtClipboard(ClipboardSelectionType eSelection);
 
     static bool isSupported(const QClipboard::Mode eMode);
 
@@ -72,7 +72,6 @@ public:
         const css::uno::Reference<css::datatransfer::XTransferable>& xTrans,
         const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
         override;
-    virtual OUString SAL_CALL getName() override;
 
     // XFlushableClipboard
     virtual void SAL_CALL flushClipboard() override;

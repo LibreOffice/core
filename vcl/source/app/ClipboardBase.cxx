@@ -11,9 +11,10 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-ClipboardBase::ClipboardBase()
+ClipboardBase::ClipboardBase(ClipboardSelectionType eSelectionType)
     : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                     css::lang::XServiceInfo>(m_aMutex)
+    , m_eSelectionType(eSelectionType)
 {
 }
 
@@ -27,6 +28,20 @@ css::uno::Sequence<OUString> ClipboardBase::getSupportedServiceNames()
 sal_Bool ClipboardBase::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
+}
+
+OUString ClipboardBase::getName()
+{
+    switch (m_eSelectionType)
+    {
+        case ClipboardSelectionType::Clipboard:
+            return u"CLIPBOARD"_ustr;
+        case ClipboardSelectionType::Primary:
+            return u"PRIMARY"_ustr;
+        default:
+            assert(false && "unhandled clipboard selection type");
+            return OUString();
+    }
 }
 
 sal_Int8 ClipboardBase::getRenderingCapabilities() { return 0; }

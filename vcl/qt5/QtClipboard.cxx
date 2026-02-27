@@ -17,6 +17,7 @@
 #include <QtWidgets/QApplication>
 
 #include <QtInstance.hxx>
+#include <QtTools.hxx>
 #include <QtTransferable.hxx>
 
 #include <cassert>
@@ -29,9 +30,9 @@
 #include <emscripten.h>
 #endif
 
-QtClipboard::QtClipboard(const QClipboard::Mode eMode)
-    : ImplInheritanceHelper()
-    , m_eClipboardMode(eMode)
+QtClipboard::QtClipboard(ClipboardSelectionType eSelectionType)
+    : ImplInheritanceHelper(eSelectionType)
+    , m_eClipboardMode(toQClipboardMode(eSelectionType))
     , m_bOwnClipboardChange(false)
     , m_bDoClear(false)
 {
@@ -232,20 +233,6 @@ void QtClipboard::handleChanged(QClipboard::Mode eMode)
 OUString QtClipboard::getImplementationName()
 {
     return u"com.sun.star.datatransfer.QtClipboard"_ustr;
-}
-
-OUString QtClipboard::getName()
-{
-    switch (m_eClipboardMode)
-    {
-        case QClipboard::Clipboard:
-            return u"CLIPBOARD"_ustr;
-        case QClipboard::Selection:
-            return u"PRIMARY"_ustr;
-        default:
-            assert(false && "unexpected clipboard mode");
-            return OUString();
-    }
 }
 
 void QtClipboard::addClipboardListener(

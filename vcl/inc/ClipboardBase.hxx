@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "ClipboardSelectionType.hxx"
+
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase.hxx>
@@ -21,16 +23,23 @@ class VCL_DLLPUBLIC ClipboardBase
     : public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                            css::lang::XServiceInfo>
 {
+    const ClipboardSelectionType m_eSelectionType;
+
 protected:
     osl::Mutex m_aMutex;
 
-    ClipboardBase();
+    explicit ClipboardBase(ClipboardSelectionType eSelectionType);
     virtual ~ClipboardBase() override;
+
+    ClipboardSelectionType GetSelectionType() { return m_eSelectionType; }
 
 public:
     // XServiceInfo
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    // XClipboard
+    virtual OUString SAL_CALL getName() override;
 
     // XClipboardEx
     virtual sal_Int8 SAL_CALL getRenderingCapabilities() override;

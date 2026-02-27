@@ -950,7 +950,6 @@ class VclGtkClipboard
     : public cppu::ImplInheritanceHelper<ClipboardBase,
                                          datatransfer::clipboard::XFlushableClipboard>
 {
-    ClipboardSelectionType m_eSelection;
     gulong                                                   m_nOwnerChangedSignalId;
     ImplSVEvent*                                             m_pSetClipboardEvent;
     Reference<css::datatransfer::XTransferable>              m_aContents;
@@ -989,8 +988,6 @@ public:
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
 
-    virtual OUString SAL_CALL getName() override;
-
     /*
      * XFlushableClipboard
      */
@@ -1027,7 +1024,7 @@ Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents()
     {
         //tdf#93887 This is the system clipboard/selection. We fetch it when we are not
         //the owner of the clipboard and have not already fetched it.
-        m_aContents = new GtkClipboardTransferable(m_eSelection);
+        m_aContents = new GtkClipboardTransferable(GetSelectionType());
 #if GTK_CHECK_VERSION(4, 0, 0)
         if (m_pClipboardContent)
             transerable_content_set_transferable(m_pClipboardContent, m_aContents.get());
@@ -1367,14 +1364,13 @@ void VclToGtkHelper::setSelectionData(const Reference<css::datatransfer::XTransf
 #endif
 
 VclGtkClipboard::VclGtkClipboard(ClipboardSelectionType eSelection)
-    : ImplInheritanceHelper()
-    , m_eSelection(eSelection)
+    : ImplInheritanceHelper(eSelection)
     , m_pSetClipboardEvent(nullptr)
 #if GTK_CHECK_VERSION(4, 0, 0)
     , m_pClipboardContent(nullptr)
 #endif
 {
-    GdkClipboard* clipboard = clipboard_get(m_eSelection);
+    GdkClipboard* clipboard = clipboard_get(GetSelectionType());
 #if GTK_CHECK_VERSION(4, 0, 0)
     m_nOwnerChangedSignalId = g_signal_connect(clipboard, "changed",
                                                G_CALLBACK(handle_owner_change), this);
@@ -1389,17 +1385,17 @@ void VclGtkClipboard::flushClipboard()
 #if !GTK_CHECK_VERSION(4, 0, 0)
     SolarMutexGuard aGuard;
 
-    if (m_eSelection != ClipboardSelectionType::Clipboard)
+    if (GetSelectionType() != ClipboardSelectionType::Clipboard)
         return;
 
-    GdkClipboard* clipboard = clipboard_get(m_eSelection);
+    GdkClipboard* clipboard = clipboard_get(GetSelectionType());
     gtk_clipboard_store(clipboard);
 #endif
 }
 
 VclGtkClipboard::~VclGtkClipboard()
 {
-    GdkClipboard* clipboard = clipboard_get(m_eSelection);
+    GdkClipboard* clipboard = clipboard_get(GetSelectionType());
     g_signal_handler_disconnect(clipboard, m_nOwnerChangedSignalId);
     if (!m_aGtkTargets.empty())
     {
@@ -1481,7 +1477,7 @@ void VclGtkClipboard::SyncGtkClipboard()
 
 void VclGtkClipboard::SetGtkClipboard()
 {
-    GdkClipboard* clipboard = clipboard_get(m_eSelection);
+    GdkClipboard* clipboard = clipboard_get(GetSelectionType());
 #if GTK_CHECK_VERSION(4, 0, 0)
     m_pClipboardContent = TRANSFERABLE_CONTENT(transerable_content_new(&m_aConversionHelper, m_aContents.get()));
     transerable_content_set_detach_clipboard_link(m_pClipboardContent, LINK(this, VclGtkClipboard, DetachClipboard));
@@ -1516,7 +1512,7 @@ void VclGtkClipboard::setContents(
     std::vector< Reference< datatransfer::clipboard::XClipboardListener > > aListeners( m_aListeners );
     datatransfer::clipboard::ClipboardEvent aEv;
 
-    GdkClipboard* clipboard = clipboard_get(m_eSelection);
+    GdkClipboard* clipboard = clipboard_get(GetSelectionType());
     if (!m_aGtkTargets.empty())
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -1562,12 +1558,6 @@ void VclGtkClipboard::setContents(
     {
         listener->changedContents( aEv );
     }
-}
-
-OUString VclGtkClipboard::getName()
-{
-    return (m_eSelection == ClipboardSelectionType::Clipboard) ? u"CLIPBOARD"_ustr
-                                                               : u"PRIMARY"_ustr;
 }
 
 void VclGtkClipboard::addClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
