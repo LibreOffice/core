@@ -30,9 +30,7 @@
 #endif
 
 QtClipboard::QtClipboard(const QClipboard::Mode eMode)
-    : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
-                                    css::datatransfer::clipboard::XFlushableClipboard,
-                                    XServiceInfo>(m_aMutex)
+    : ImplInheritanceHelper()
     , m_eClipboardMode(eMode)
     , m_bOwnClipboardChange(false)
     , m_bDoClear(false)
@@ -236,16 +234,6 @@ OUString QtClipboard::getImplementationName()
     return u"com.sun.star.datatransfer.QtClipboard"_ustr;
 }
 
-css::uno::Sequence<OUString> QtClipboard::getSupportedServiceNames()
-{
-    return { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
-}
-
-sal_Bool QtClipboard::supportsService(const OUString& ServiceName)
-{
-    return cppu::supportsService(this, ServiceName);
-}
-
 OUString QtClipboard::getName()
 {
     switch (m_eClipboardMode)
@@ -259,8 +247,6 @@ OUString QtClipboard::getName()
             return OUString();
     }
 }
-
-sal_Int8 QtClipboard::getRenderingCapabilities() { return 0; }
 
 void QtClipboard::addClipboardListener(
     const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)

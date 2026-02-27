@@ -456,6 +456,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/customweld \
     vcl/source/app/dbggui \
     vcl/source/app/dndhelp \
+    vcl/source/app/ClipboardBase \
     vcl/source/app/DropTarget \
     vcl/source/app/help \
     vcl/source/app/i18nhelp \

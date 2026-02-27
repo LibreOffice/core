@@ -10,7 +10,8 @@
 
 #pragma once
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <ClipboardBase.hxx>
+
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
@@ -30,13 +31,11 @@
  **/
 class QtClipboard final
     : public QObject,
-      public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
-                                           css::datatransfer::clipboard::XFlushableClipboard,
-                                           css::lang::XServiceInfo>
+      public cppu::ImplInheritanceHelper<ClipboardBase,
+                                         css::datatransfer::clipboard::XFlushableClipboard>
 {
     Q_OBJECT
 
-    osl::Mutex m_aMutex;
     const QClipboard::Mode m_eClipboardMode;
     // has to be set, if LO changes the QClipboard itself, so it won't instantly lose
     // ownership by it's self-triggered QClipboard::changed handler
@@ -66,8 +65,6 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XClipboard
     virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
@@ -76,9 +73,6 @@ public:
         const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
         override;
     virtual OUString SAL_CALL getName() override;
-
-    // XClipboardEx
-    virtual sal_Int8 SAL_CALL getRenderingCapabilities() override;
 
     // XFlushableClipboard
     virtual void SAL_CALL flushClipboard() override;

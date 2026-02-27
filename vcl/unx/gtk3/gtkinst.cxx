@@ -15,6 +15,7 @@
 #include <string.h>
 #include <string_view>
 
+#include <ClipboardBase.hxx>
 #include <dndhelper.hxx>
 #include <tools/date.hxx>
 #include <o3tl/test_info.hxx>
@@ -945,14 +946,11 @@ public:
     }
 };
 
-class VclGtkClipboard :
-        public cppu::WeakComponentImplHelper<
-        datatransfer::clipboard::XSystemClipboard,
-        datatransfer::clipboard::XFlushableClipboard,
-        XServiceInfo>
+class VclGtkClipboard
+    : public cppu::ImplInheritanceHelper<ClipboardBase,
+                                         datatransfer::clipboard::XFlushableClipboard>
 {
     ClipboardSelectionType m_eSelection;
-    osl::Mutex                                               m_aMutex;
     gulong                                                   m_nOwnerChangedSignalId;
     ImplSVEvent*                                             m_pSetClipboardEvent;
     Reference<css::datatransfer::XTransferable>              m_aContents;
@@ -979,10 +977,7 @@ public:
     /*
      * XServiceInfo
      */
-
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /*
      * XClipboard
@@ -995,12 +990,6 @@ public:
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
 
     virtual OUString SAL_CALL getName() override;
-
-    /*
-     * XClipboardEx
-     */
-
-    virtual sal_Int8 SAL_CALL getRenderingCapabilities() override;
 
     /*
      * XFlushableClipboard
@@ -1030,17 +1019,6 @@ public:
 OUString VclGtkClipboard::getImplementationName()
 {
     return u"com.sun.star.datatransfer.VclGtkClipboard"_ustr;
-}
-
-Sequence< OUString > VclGtkClipboard::getSupportedServiceNames()
-{
-    Sequence<OUString> aRet { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
-    return aRet;
-}
-
-sal_Bool VclGtkClipboard::supportsService( const OUString& ServiceName )
-{
-    return cppu::supportsService(this, ServiceName);
 }
 
 Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents()
@@ -1389,9 +1367,7 @@ void VclToGtkHelper::setSelectionData(const Reference<css::datatransfer::XTransf
 #endif
 
 VclGtkClipboard::VclGtkClipboard(ClipboardSelectionType eSelection)
-    : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
-                                    datatransfer::clipboard::XFlushableClipboard, XServiceInfo>
-        (m_aMutex)
+    : ImplInheritanceHelper()
     , m_eSelection(eSelection)
     , m_pSetClipboardEvent(nullptr)
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -1592,11 +1568,6 @@ OUString VclGtkClipboard::getName()
 {
     return (m_eSelection == ClipboardSelectionType::Clipboard) ? u"CLIPBOARD"_ustr
                                                                : u"PRIMARY"_ustr;
-}
-
-sal_Int8 VclGtkClipboard::getRenderingCapabilities()
-{
-    return 0;
 }
 
 void VclGtkClipboard::addClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
