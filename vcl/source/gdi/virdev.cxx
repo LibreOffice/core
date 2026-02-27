@@ -300,14 +300,14 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     }
     else
     {
-        std::unique_ptr<SalVirtualDevice> pNewVirDev;
         // we need a graphics
         if ( !mpGraphics && !AcquireGraphics() )
             return false;
 
         assert(mpGraphics);
 
-        pNewVirDev = GetSalInstance()->CreateVirtualDevice(*mpGraphics, nNewWidth, nNewHeight, meFormatAndAlpha, bAlphaMaskTransparent);
+        std::unique_ptr<SalVirtualDevice> pNewVirDev = GetSalInstance()->CreateVirtualDevice(
+            *mpGraphics, nNewWidth, nNewHeight, meFormatAndAlpha, bAlphaMaskTransparent);
         if ( pNewVirDev )
         {
             SalGraphics* pGraphics = pNewVirDev->AcquireGraphics();
