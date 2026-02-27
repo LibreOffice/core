@@ -49,11 +49,7 @@ void QtTimer::timeoutActivated()
     SolarMutexGuard aGuard;
 #endif
     if (Application::IsUseSystemEventLoop())
-    {
-        const ImplSVData* pSVData = ImplGetSVData();
-        assert(pSVData && pSVData->mpDefInst);
-        static_cast<QtInstance*>(pSVData->mpDefInst)->DispatchUserEvents(true);
-    }
+        GetQtInstance().DispatchUserEvents(true);
     CallCallback();
 }
 
