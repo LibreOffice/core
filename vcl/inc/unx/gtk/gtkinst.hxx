@@ -225,7 +225,11 @@ public:
     css::uno::Reference<css::datatransfer::XTransferable> const & GetTransferable() const { return m_xTrans; }
 };
 
-enum SelectionType { SELECTION_CLIPBOARD = 0, SELECTION_PRIMARY = 1 };
+enum class ClipboardSelectionType
+{
+    Clipboard = 0,
+    Primary = 1
+};
 
 class GtkSalTimer;
 class GtkInstance final : public SvpSalInstance
@@ -297,7 +301,8 @@ public:
 
 private:
     GtkSalTimer *m_pTimer;
-    std::unordered_map<SelectionType, css::uno::Reference<css::datatransfer::clipboard::XClipboard>>
+    std::unordered_map<ClipboardSelectionType,
+                       css::uno::Reference<css::datatransfer::clipboard::XClipboard>>
         m_aClipboards;
     bool                        IsTimerExpired();
     bool                        bNeedsInit;

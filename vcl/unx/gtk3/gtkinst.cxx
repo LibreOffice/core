@@ -801,14 +801,16 @@ css::uno::Sequence<sal_Int8> read_transfer_result::get_as_sequence() const
 
 namespace {
 
-GdkClipboard* clipboard_get(SelectionType eSelection)
+GdkClipboard* clipboard_get(ClipboardSelectionType eSelection)
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
-    if (eSelection == SELECTION_CLIPBOARD)
+    if (eSelection == ClipboardSelectionType::Clipboard)
         return gdk_display_get_clipboard(gdk_display_get_default());
     return gdk_display_get_primary_clipboard(gdk_display_get_default());
 #else
-    return gtk_clipboard_get(eSelection == SELECTION_CLIPBOARD ? GDK_SELECTION_CLIPBOARD : GDK_SELECTION_PRIMARY);
+    return gtk_clipboard_get(eSelection == ClipboardSelectionType::Clipboard
+                                 ? GDK_SELECTION_CLIPBOARD
+                                 : GDK_SELECTION_PRIMARY);
 #endif
 }
 
@@ -844,11 +846,10 @@ void read_clipboard_async_completed(GObject* source, GAsyncResult* res, gpointer
 class GtkClipboardTransferable : public GtkTransferable
 {
 private:
-    SelectionType m_eSelection;
+    ClipboardSelectionType m_eSelection;
 
 public:
-
-    explicit GtkClipboardTransferable(SelectionType eSelection)
+    explicit GtkClipboardTransferable(ClipboardSelectionType eSelection)
         : m_eSelection(eSelection)
     {
     }
@@ -950,7 +951,7 @@ class VclGtkClipboard :
         datatransfer::clipboard::XFlushableClipboard,
         XServiceInfo>
 {
-    SelectionType                                            m_eSelection;
+    ClipboardSelectionType m_eSelection;
     osl::Mutex                                               m_aMutex;
     gulong                                                   m_nOwnerChangedSignalId;
     ImplSVEvent*                                             m_pSetClipboardEvent;
@@ -972,8 +973,7 @@ class VclGtkClipboard :
 #endif
 
 public:
-
-    explicit VclGtkClipboard(SelectionType eSelection);
+    explicit VclGtkClipboard(ClipboardSelectionType eSelection);
     virtual ~VclGtkClipboard() override;
 
     /*
@@ -1388,7 +1388,7 @@ void VclToGtkHelper::setSelectionData(const Reference<css::datatransfer::XTransf
 }
 #endif
 
-VclGtkClipboard::VclGtkClipboard(SelectionType eSelection)
+VclGtkClipboard::VclGtkClipboard(ClipboardSelectionType eSelection)
     : cppu::WeakComponentImplHelper<datatransfer::clipboard::XSystemClipboard,
                                     datatransfer::clipboard::XFlushableClipboard, XServiceInfo>
         (m_aMutex)
@@ -1413,7 +1413,7 @@ void VclGtkClipboard::flushClipboard()
 #if !GTK_CHECK_VERSION(4, 0, 0)
     SolarMutexGuard aGuard;
 
-    if (m_eSelection != SELECTION_CLIPBOARD)
+    if (m_eSelection != ClipboardSelectionType::Clipboard)
         return;
 
     GdkClipboard* clipboard = clipboard_get(m_eSelection);
@@ -1590,7 +1590,8 @@ void VclGtkClipboard::setContents(
 
 OUString VclGtkClipboard::getName()
 {
-    return (m_eSelection == SELECTION_CLIPBOARD) ? u"CLIPBOARD"_ustr : u"PRIMARY"_ustr;
+    return (m_eSelection == ClipboardSelectionType::Clipboard) ? u"CLIPBOARD"_ustr
+                                                               : u"PRIMARY"_ustr;
 }
 
 sal_Int8 VclGtkClipboard::getRenderingCapabilities()
@@ -1627,7 +1628,8 @@ GtkInstance::CreateClipboard(const Sequence<Any>& arguments)
             css::uno::Reference<css::uno::XInterface>(), -1);
     }
 
-    SelectionType eSelection = (sel == "CLIPBOARD") ? SELECTION_CLIPBOARD : SELECTION_PRIMARY;
+    ClipboardSelectionType eSelection = (sel == "CLIPBOARD") ? ClipboardSelectionType::Clipboard
+                                                             : ClipboardSelectionType::Primary;
 
     auto aIt = m_aClipboards.find(eSelection);
     if (aIt != m_aClipboards.end())
