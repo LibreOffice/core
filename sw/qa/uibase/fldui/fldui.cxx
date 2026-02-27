@@ -134,7 +134,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf45048SubtypeDescription)
     CPPUNIT_ASSERT(aFieldMgr.InsertField(aFieldData));
     pWrtShell->SttEndDoc(true);
 
-    // Without the accompanying fix in place, this test would have failed with :
+    // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Statistics: Pages
     // - Actual  : Statistics
     // i.e. the description of the subtype ("Pages") was not included
