@@ -33,7 +33,6 @@
 #include <libxml/xmlwriter.h>
 #include <vcl/canvastools.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
-#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <boost/property_tree/info_parser.hpp>
 
 bool SdrObjGroup::isDiagram() const
