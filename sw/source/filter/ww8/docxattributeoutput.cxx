@@ -2235,7 +2235,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     {
         EndRedline(m_pRedlineData.back());
     }
-    assert(m_pRedlineData.size());
+
     m_pRedlineData.pop_back();
 
     DoWriteBookmarksStart(m_rFinalBookmarksStart);
