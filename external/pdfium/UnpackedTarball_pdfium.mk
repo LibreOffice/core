@@ -29,6 +29,7 @@ endif
 # TODO, attempt upstream
 pdfium_patches += ofz451333752.patch
 pdfium_patches += extractpatterns.patch
+pdfium_patches += container-stream-concepts.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 

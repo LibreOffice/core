@@ -1,0 +1,32 @@
+--- core/fxcrt/cfx_read_only_container_stream.h	2026-02-27 12:34:05.172587036 +0100
++++ core/fxcrt/cfx_read_only_container_stream.h	2026-02-27 12:34:22.968580294 +0100
+@@ -35,19 +35,18 @@
+   CONSTRUCT_VIA_MAKE_RETAIN;
+
+  private:
+-  explicit CFX_ReadOnlyContainerStream(Container data)
+-    requires(HasPtrSpanMethod<Container>)
+-      : CFX_ReadOnlySpanStream(pdfium::as_bytes(data->span())),
+-        data_(std::move(data)) {}
+-
+-  explicit CFX_ReadOnlyContainerStream(Container data)
+-    requires(HasSpanMethod<Container>)
+-      : CFX_ReadOnlySpanStream(pdfium::as_bytes(data.span())),
+-        data_(std::move(data)) {}
++  static pdfium::span<const uint8_t> GetSpanFromData(const Container& data) {
++    if constexpr (HasPtrSpanMethod<Container>) {
++      return pdfium::as_bytes(data->span());
++    } else if constexpr (HasSpanMethod<Container>) {
++      return pdfium::as_bytes(data.span());
++    } else {
++      return pdfium::as_byte_span(data);
++    }
++  }
+
+   explicit CFX_ReadOnlyContainerStream(Container data)
+-    requires(!HasSpanMethod<Container> && !HasPtrSpanMethod<Container>)
+-      : CFX_ReadOnlySpanStream(pdfium::as_byte_span(data)),
++      : CFX_ReadOnlySpanStream(GetSpanFromData(data)),
+         data_(std::move(data)) {}
+
+   ~CFX_ReadOnlyContainerStream() override {
