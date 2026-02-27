@@ -60,17 +60,13 @@ bool ImplLoadSalIcon(int nId, HICON& rIcon, HICON& rSmallIcon, SalData* pSalData
         pSalData = GetSalData();
 
     // check the cache first
-    SalIcon *pSalIcon = pSalData->mpFirstIcon;
-    while( pSalIcon )
+    auto aIt = pSalData->maIconCache.find(nId);
+    if (aIt != pSalData->maIconCache.end())
     {
-        if( pSalIcon->nId != nId )
-            pSalIcon = pSalIcon->pNext;
-        else
-        {
-            rIcon       = pSalIcon->hIcon;
-            rSmallIcon  = pSalIcon->hSmallIcon;
-            return (rSmallIcon != nullptr);
-        }
+        SalIcon* pSalIcon = aIt->second;
+        rIcon = pSalIcon->hIcon;
+        rSmallIcon  = pSalIcon->hSmallIcon;
+        return (rSmallIcon != nullptr);
     }
 
     // Try at first to load the icons from the application exe file
@@ -103,8 +99,7 @@ bool ImplLoadSalIcon(int nId, HICON& rIcon, HICON& rSmallIcon, SalData* pSalData
     if( rIcon )
     {
         // add to icon cache
-        pSalData->mpFirstIcon = new SalIcon{
-            nId, rIcon, rSmallIcon, pSalData->mpFirstIcon};
+        pSalData->maIconCache[nId] = new SalIcon{rIcon, rSmallIcon};
     }
 
     return (rSmallIcon != nullptr);

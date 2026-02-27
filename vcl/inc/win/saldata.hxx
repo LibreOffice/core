@@ -35,6 +35,7 @@
 
 #include <set>
 #include <map>
+#include <unordered_map>
 
 class AutoTimer;
 class WinSalInstance;
@@ -69,10 +70,8 @@ struct HDCCache
 
 struct SalIcon
 {
-    int     nId;
     HICON   hIcon;
     HICON   hSmallIcon;
-    SalIcon *pNext;
 };
 
 class SalData : public sal::systools::CoInitializeGuard
@@ -115,7 +114,7 @@ public:
     WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent that should be processed by SalObj-Hook
     bool                    mbObjClassInit;         // is SALOBJECTCLASS initialised
     DWORD                   mnAppThreadId;          // Id from Application-Thread
-    SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
+    std::unordered_map<int, SalIcon*> maIconCache;  // icon cache
     TempFontItem*           mpTempFontItem;         // LibreOffice own fonts (shared and embedded)
     bool                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
     bool                    mbThemeMenuSupport;

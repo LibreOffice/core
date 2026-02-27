@@ -105,16 +105,14 @@ void ImplFreeSalGDI()
     ImplClearHDCCache( pSalData );
 
     // delete icon cache
-    SalIcon* pIcon = pSalData->mpFirstIcon;
-    pSalData->mpFirstIcon = nullptr;
-    while( pIcon )
+    for (auto aIt : pSalData->maIconCache)
     {
-        SalIcon* pTmp = pIcon->pNext;
+        SalIcon* pIcon = aIt.second;
         DestroyIcon( pIcon->hIcon );
         DestroyIcon( pIcon->hSmallIcon );
         delete pIcon;
-        pIcon = pTmp;
     }
+    pSalData->maIconCache.clear();
 
     // delete temporary font list
     ImplReleaseTempFonts(*pSalData);

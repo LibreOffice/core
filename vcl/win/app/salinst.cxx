@@ -273,7 +273,6 @@ SalData::SalData()
     mnSalObjWantKeyEvt = 0;     // KeyEvent for the SalObj hook
     mbObjClassInit = false;     // is SALOBJECTCLASS initialised
     mnAppThreadId = 0;          // Id from Application-Thread
-    mpFirstIcon = nullptr;      // icon cache, points to first icon, NULL if none
     mpTempFontItem = nullptr;
     mbThemeChanged = false;     // true if visual theme was changed: throw away theme handles
     mbThemeMenuSupport = false;
