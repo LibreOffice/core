@@ -334,6 +334,7 @@ private:
     bool                bSelCtrlMouseClick:1;       // special selection handling for ctrl-mouse-click
     bool                bMoveArea:1;
     bool                bEditHighlight:1;
+    bool                bEditAdjustIsForNumber:1;
 
     bool                bGrowing;
     sal_Int16           nFormulaBarLines;           // Visible lines in the formula bar
@@ -555,6 +556,8 @@ public:
 
     SvxAdjust       GetEditAdjust() const {return eEditAdjust; }
     void            SetEditAdjust( SvxAdjust eNewEditAdjust ) { eEditAdjust = eNewEditAdjust; }
+    bool            GetEditAdjustIsForNumber() const { return bEditAdjustIsForNumber; }
+    void            SetEditAdjustIsForNumber(bool bNew) { bEditAdjustIsForNumber = bNew; }
 
                     // TRUE: Cell is merged
     bool            GetMergeSizePixel( SCCOL nX, SCROW nY, tools::Long& rSizeXPix, tools::Long& rSizeYPix ) const;

@@ -827,6 +827,7 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
         bSelCtrlMouseClick( false ),
         bMoveArea ( false ),
         bEditHighlight ( false ),
+        bEditAdjustIsForNumber ( false ),
         bGrowing (false),
         nFormulaBarLines(1),
         m_nLOKPageUpDownOffset( 0 )
@@ -1693,11 +1694,23 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
         //  For growing use only the alignment value from the attribute, numbers
         //  (existing or started) with default alignment extend to the right.
-        bool bGrowCentered = ( eJust == SvxCellHorJustify::Center );
-        bool bGrowToLeft = ( eJust == SvxCellHorJustify::Right );      // visual left
+        // tdf#144296: Except RTL languages, which should extend to the left
+        // tdf#65563: ...and new cells with ambiguous adjust, which can do either
+        bool bGrowCentered = (eJust == SvxCellHorJustify::Center);
+        bool bGrowToLeft = (eJust == SvxCellHorJustify::Right); // visual left
+        if (eJust == SvxCellHorJustify::Standard && GetEditAdjust() == SvxAdjust::Right
+            && !GetEditAdjustIsForNumber())
+        {
+            // tdf#144296: Right-adjusted standard non-number cells contain RTL text.
+            // These should extend to the left, in proper reading order.
+            bGrowToLeft = true;
+        }
+
+        bool bGrowDynamic = (GetEditAdjust() == SvxAdjust::ParaStart);
+
         bool bLOKRTLInvert = (bLOKActive && bLayoutRTL);
-        if ( bAsianVertical )
-            bGrowCentered = bGrowToLeft = false;   // keep old behavior for asian mode
+        if (bAsianVertical)
+            bGrowCentered = bGrowToLeft = bGrowDynamic = false; // keep old behavior for asian mode
 
         tools::Long nSizeXPix, nSizeXPTwips = 0;
 
@@ -1738,6 +1751,12 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                     tools::Long nRightPTwips = nGridWidthTwips - aPTwipsRect.Right();
                     nSizeXPTwips = aPTwipsRect.GetWidth() + 2 * std::min(nLeftPTwips, nRightPTwips);
                 }
+            }
+            else if (bGrowDynamic)
+            {
+                nSizeXPix = aPixRect.GetWidth();
+                if (bLOKPrintTwips)
+                    nSizeXPTwips = aPTwipsRect.GetWidth();
             }
             else if ( (bGrowToLeft && !bLOKRTLInvert) || (!bGrowToLeft && bLOKRTLInvert) )
             {
@@ -1950,14 +1969,106 @@ void ScViewData::EditGrowX()
         SAL_WARN("sc.viewdata", "No Pattern Found for: Col: " << nEditCol << ", Row: " << nEditRow << ", Tab: " << nCurrentTab);
         pPattern = &rLocalDoc.getCellAttributeHelper().getDefaultCellAttribute();
     }
-    SvxCellHorJustify eJust = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
-    bool bGrowCentered = ( eJust == SvxCellHorJustify::Center );
-    bool bGrowToLeft = ( eJust == SvxCellHorJustify::Right );      // visual left
+    SvxCellHorJustify eJust = pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue();
+    bool bGrowCentered = (eJust == SvxCellHorJustify::Center);
+    bool bGrowToLeft = (eJust == SvxCellHorJustify::Right); // visual left
+    if (eJust == SvxCellHorJustify::Standard && GetEditAdjust() == SvxAdjust::Right
+        && !GetEditAdjustIsForNumber())
+    {
+        // tdf#144296: Right-adjusted standard non-number cells contain RTL text.
+        // These should extend to the left, in proper reading order.
+        bGrowToLeft = true;
+    }
+
+    bool bGrowDynamic = (GetEditAdjust() == SvxAdjust::ParaStart);
+
+    // tdf#65563: When typing with an IME, the initial adjust may be unknown. In this
+    // case, it will be logically set to ParaStart, and the physical adjust may change
+    // during input. Check the EE contents for the current para direction and set up
+    // grow/move as if it had the same logical adjust.
+    bool bGrowDynamicRTL = false;
+    if (bGrowDynamic)
+    {
+        bGrowDynamicRTL = pEngine->IsRightToLeft(0);
+
+        // Set this to intentionally reuse the left/right growth logic.
+        // Note that the move logic for ParaStart is intentionally different.
+        bGrowToLeft = bGrowDynamicRTL;
+    }
+
     bool bGrowBackwards = bGrowToLeft;                          // logical left
     if ( bLayoutRTL )
         bGrowBackwards = !bGrowBackwards;                       // invert on RTL sheet
-    if ( bAsianVertical )
-        bGrowCentered = bGrowToLeft = bGrowBackwards = false;   // keep old behavior for asian mode
+    if (bAsianVertical)
+        bGrowCentered = bGrowToLeft = bGrowBackwards = bGrowDynamic
+            = false; // keep old behavior for asian mode
+
+    if (bGrowDynamic)
+    {
+        bChanged = true;
+
+        // The entire edit area and position may change after every keystroke.
+        // Reset everything and re-grow from the origin cell.
+        const ScMergeAttr* pMergeAttr = &pPattern->GetItem(ATTR_MERGE);
+        nEditEndCol = nEditCol;
+        if (pMergeAttr->GetColMerge() > 1)
+            nEditEndCol += pMergeAttr->GetColMerge() - 1;
+        nEditStartCol = nEditCol;
+
+        auto aTempArea = ScEditUtil(mrDoc, nEditCol, nEditRow, CurrentTabForData(),
+                           GetScrPos(nEditCol, nEditRow, eWhich), pWin->GetOutDev(), nPPTX, nPPTY,
+                           GetZoomX(), GetZoomY())
+                    .GetEditArea(pPattern, true);
+        aTempArea = pWin->PixelToLogic(aTempArea, GetLogicMode());
+        aArea.SetLeft(aTempArea.Left());
+        aArea.SetRight(aTempArea.Right());
+
+        if (bGrowToLeft)
+        {
+            Size aPaperSize = pEngine->GetPaperSize();
+            aPaperSize.setWidth(aArea.Right());
+            pEngine->SetPaperSize(aPaperSize);
+        }
+        else
+        {
+            tools::Long nGridWidthPx = pView->GetGridWidth(eHWhich);
+            Size aGridSize{ nGridWidthPx, 1 };
+            aGridSize = pWin->PixelToLogic(aGridSize, GetLogicMode());
+
+            Size aPaperSize = pEngine->GetPaperSize();
+            aPaperSize.setWidth(aGridSize.Width() - aArea.Left());
+            pEngine->SetPaperSize(aPaperSize);
+        }
+
+        if (bLOKPrintTwips)
+        {
+            auto aTempAreaPTwips = ScEditUtil(mrDoc, nEditCol, nEditRow, CurrentTabForData(),
+                                     GetPrintTwipsPos(nEditCol, nEditRow), pWin->GetOutDev(), nPPTX,
+                                     nPPTY, GetZoomX(), GetZoomY(), true /* bInPrintTwips */)
+                              .GetEditArea(pPattern, true);
+            aAreaPTwips.SetLeft(aTempAreaPTwips.Left());
+            aAreaPTwips.SetRight(aTempAreaPTwips.Right());
+
+            if (bGrowToLeft)
+            {
+                Size aPaperSize = pEngine->GetLOKSpecialPaperSize();
+                aPaperSize.setWidth(aAreaPTwips.Right());
+                pEngine->SetLOKSpecialPaperSize(aPaperSize);
+            }
+            else
+            {
+                tools::Long nGridWidthPx = pView->GetGridWidth(eHWhich);
+                Size aGridSize{ nGridWidthPx, 1 };
+                aGridSize
+                    = OutputDevice::LogicToLogic(pWin->PixelToLogic(aGridSize, GetLogicMode()),
+                                                 GetLogicMode(), MapMode{ MapUnit::MapTwip });
+
+                Size aPaperSize = pEngine->GetLOKSpecialPaperSize();
+                aPaperSize.setWidth(aGridSize.Width() - aAreaPTwips.Left());
+                pEngine->SetLOKSpecialPaperSize(aPaperSize);
+            }
+        }
+    }
 
     bool bUnevenGrow = false;
     if ( bGrowCentered )
@@ -2099,7 +2210,7 @@ void ScViewData::EditGrowX()
     if (!bChanged)
         return;
 
-    if ( bMoveArea || bGrowCentered || bGrowBackwards || bLayoutRTL )
+    if (bMoveArea || bGrowCentered || bGrowDynamic || bGrowBackwards || bLayoutRTL)
     {
         tools::Rectangle aVis = pCurView->GetVisArea();
         tools::Rectangle aVisPTwips;
@@ -2123,6 +2234,31 @@ void ScViewData::EditGrowX()
                 tools::Long nVisSizePTwips = aAreaPTwips.GetWidth();
                 aVisPTwips.SetLeft( nCenterPTwips - nVisSizePTwips / 2 );
                 aVisPTwips.SetRight( aVisPTwips.Left() + nVisSizePTwips - 1 );
+            }
+        }
+        else if (bGrowDynamic)
+        {
+            if (bGrowDynamicRTL)
+            {
+                aVis.SetRight(aSize.Width() - 1);
+                aVis.SetLeft(aSize.Width() - aArea.GetWidth());
+
+                if (bLOKPrintTwips)
+                {
+                    aVisPTwips.SetRight(aSizePTwips.Width() - 1);
+                    aVisPTwips.SetLeft(aSizePTwips.Width() - aAreaPTwips.GetWidth());
+                }
+            }
+            else
+            {
+                aVis.SetLeft(0);
+                aVis.SetRight(aArea.GetWidth());
+
+                if (bLOKPrintTwips)
+                {
+                    aVisPTwips.SetLeft(0);
+                    aVisPTwips.SetRight(aArea.GetWidth());
+                }
             }
         }
         else if ( bGrowToLeft )

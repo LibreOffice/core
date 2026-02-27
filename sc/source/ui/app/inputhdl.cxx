@@ -29,12 +29,15 @@
 #include <editeng/acorrcfg.hxx>
 #include <formula/errorcodes.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/autodiritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/frmdir.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/unolingu.hxx>
@@ -96,6 +99,8 @@
 #include <gridwin.hxx>
 #include <output.hxx>
 #include <fillinfo.hxx>
+#include <unicode/uchar.h>
+#include <unicode/ubidi.h>
 
 using namespace formula;
 
@@ -2420,23 +2425,93 @@ void ScInputHandler::ForgetLastPattern()
         NotifyChange( pLastState.get(), true );
 }
 
+namespace
+{
+bool CharIsRTL(sal_Unicode cTyped)
+{
+    switch (u_charDirection(cTyped))
+    {
+        case U_RIGHT_TO_LEFT:
+        case U_RIGHT_TO_LEFT_ARABIC:
+        case U_RIGHT_TO_LEFT_EMBEDDING:
+        case U_RIGHT_TO_LEFT_OVERRIDE:
+            return true;
+
+        default:
+            return false;
+    }
+}
+}
+
 void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
 {
     SvxAdjust eSvxAdjust;
+    bool bAllowAutoRtl = false;
+    bool bAdjustForNumber = false;
     switch (eAttrAdjust)
     {
         case SvxCellHorJustify::Standard:
+            if (cTyped)
             {
-                bool bNumber = false;
-                if (cTyped)                                     // Restarted
-                    bNumber = (cTyped>='0' && cTyped<='9');     // Only ciphers are numbers
-                else if ( pActiveViewSh )
+                // Restarted, and at least one character of input is known
+                if (cTyped >= '0' && cTyped <= '9')
                 {
-                    ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
-                    bNumber = ( rDoc.GetCellType( aCursorPos ) == CELLTYPE_VALUE );
+                    // User seems to be typing a number cell
+                    eSvxAdjust = SvxAdjust::Right;
+                    bAdjustForNumber = true;
+                    break;
                 }
-                eSvxAdjust = bNumber ? SvxAdjust::Right : SvxAdjust::Left;
+
+                // User seems to be typing a new text cell. Base the initial alignment on
+                // the direction of the new char, per getAlignmentFromContext().
+                eSvxAdjust = SvxAdjust::Left;
+                if(CharIsRTL(cTyped))
+                {
+                    eSvxAdjust = SvxAdjust::ParaStart;
+                    bAllowAutoRtl = true;
+                }
+                break;
             }
+
+            if (pActiveViewSh)
+            {
+                // Base the initial alignment on the cell contents, if any
+                // Value-type cells should be right adjusted
+                ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
+                if (rDoc.GetCellType(aCursorPos) == CELLTYPE_VALUE)
+                {
+                    eSvxAdjust = SvxAdjust::Right;
+                    bAdjustForNumber = true;
+                    break;
+                }
+
+                // Cells with an explit RTL writing direction are always right adjusted
+                if (pLastPattern)
+                {
+                    SvxFrameDirection eDir = pLastPattern->GetItem(ATTR_WRITINGDIR).GetValue();
+                    if (eDir == SvxFrameDirection::Horizontal_RL_TB)
+                    {
+                        eSvxAdjust = SvxAdjust::Right;
+                        break;
+                    }
+                }
+
+                // Cells that start with an RTL character should be right adjusted
+                OUString aStr = rDoc.GetString(aCursorPos);
+                if (aStr.getLength() > 0)
+                {
+                    sal_Int32 nIdx = 0;
+                    bool bFirstCharRTL = CharIsRTL(aStr.iterateCodePoints(&nIdx));
+                    eSvxAdjust = bFirstCharRTL ? SvxAdjust::Right : SvxAdjust::Left;
+                    break;
+                }
+            }
+
+            // tdf#65563: Special case, a new cell has been created by the user interacting
+            // with an IME, but none of the text is known yet. Let EditEngine guess the
+            // correct alignment dynamically with ParaStart and automatic RTL.
+            eSvxAdjust = SvxAdjust::ParaStart;
+            bAllowAutoRtl = true;
             break;
         case SvxCellHorJustify::Block:
             eSvxAdjust = SvxAdjust::Block;
@@ -2462,11 +2537,13 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
     }
 
     pEditDefaults->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
+    pEditDefaults->Put(SvxAutoFrameDirectionItem{ bAllowAutoRtl, EE_PARA_AUTOWRITINGDIR });
     mpEditEngine->SetDefaults( *pEditDefaults );
 
     if ( pActiveViewSh )
     {
         pActiveViewSh->GetViewData().SetEditAdjust( eSvxAdjust );
+        pActiveViewSh->GetViewData().SetEditAdjustIsForNumber(bAdjustForNumber);
     }
     mpEditEngine->SetVertical( bAsianVertical );
 }
@@ -3338,6 +3415,25 @@ void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUStrin
                 ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
                 pCellAttrs = std::make_unique<ScPatternAttr>(rDoc.getCellAttributeHelper());
                 pCellAttrs->GetFromEditItemSet( &*pCommonAttrs );
+            }
+
+            // tdf#144296: Cell direction may have changed automatically due to editing cell
+            // contents. Direction is semantically meaningful for RTL languages, so preserve
+            // this updated value after editing.
+            if (SfxItemState eState = aPara1Attribs.GetItemState(EE_PARA_WRITINGDIR, false, &pItem);
+                eState == SfxItemState::SET)
+            {
+                auto eDirection = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
+                if (eDirection != SvxFrameDirection::Environment)
+                {
+                    if (!pCellAttrs)
+                    {
+                        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
+                        pCellAttrs = std::make_unique<ScPatternAttr>(rDoc.getCellAttributeHelper());
+                    }
+
+                    pCellAttrs->ItemSetPut(SvxFrameDirectionItem{ eDirection, ATTR_WRITINGDIR });
+                }
             }
         }
 
