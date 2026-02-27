@@ -23,11 +23,11 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/color.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/unohelp.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
 #include <test/a11y/XAccessibleTextTester.hxx>
@@ -587,9 +587,7 @@ void XAccessibleTextTester::testCopyText()
 
 OUString XAccessibleTextTester::getSystemClipboardText()
 {
-    css::uno::Reference<css::datatransfer::clipboard::XSystemClipboard> xClipboard
-        = css::datatransfer::clipboard::SystemClipboard::create(
-            comphelper::getProcessComponentContext());
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard = GetSystemClipboard();
 
     css::uno::Reference<css::datatransfer::XTransferable> xTrans = xClipboard->getContents();
 
