@@ -34,8 +34,7 @@ class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
                                   const OUString& rMessage,
                                   const std::vector< OUString >& rButtons ) = 0;
 
-    virtual int ShowNativeMessageBox( const OUString& rTitle,
-                                      const OUString& rMessage) override;
+    virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override;
 
 #if !defined(ANDROID) && !defined(IOS)
     // Simple helpers for X11 WM_CLASS hints

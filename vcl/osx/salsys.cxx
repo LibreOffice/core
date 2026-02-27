@@ -89,8 +89,7 @@ static NSString* getStandardString( StandardButtonType nButtonId, bool bUseResou
     return aText.isEmpty() ? nil : CreateNSString( aText);
 }
 
-int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
-                                        const OUString& rMessage )
+void AquaSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
 {
     NSString* pTitle = CreateNSString( rTitle );
     NSString* pMessage = CreateNSString( rMessage );
@@ -98,7 +97,7 @@ int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
     NSString* pDefText = getStandardString( StandardButtonType::OK, false/*bUseResources*/ );
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.10 NSRunAlertPanel
-    int nResult = NSRunAlertPanel( pTitle, @"%@", pDefText, nil, nil, pMessage );
+    NSRunAlertPanel(pTitle, @"%@", pDefText, nil, nil, pMessage);
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
     if( pTitle )
@@ -107,12 +106,6 @@ int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
         [pMessage release];
     if( pDefText )
         [pDefText release];
-
-    int nRet = 0;
-    if( nResult == 1 )
-        nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK;
-
-    return nRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

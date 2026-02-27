@@ -164,14 +164,11 @@ AbsoluteScreenPixelRectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigne
     return m_aMonitors[nScreen].m_aArea;
 }
 
-int WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
+void WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
 {
     ImplHideSplash();
-    return MessageBoxW(
-        nullptr,
-        o3tl::toW(rMessage.getStr()),
-        o3tl::toW(rTitle.getStr()),
-        MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | MB_DEFBUTTON1);
+    MessageBoxW(nullptr, o3tl::toW(rMessage.getStr()), o3tl::toW(rTitle.getStr()),
+                MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | MB_DEFBUTTON1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

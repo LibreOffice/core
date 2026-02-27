@@ -34,8 +34,7 @@ public:
     virtual unsigned int GetDisplayScreenCount() override;
     virtual AbsoluteScreenPixelRectangle GetDisplayScreenPosSizePixel( unsigned int nScreen ) override;
 
-    virtual int ShowNativeMessageBox( const OUString& rTitle,
-                                      const OUString& rMessage) override;
+    virtual void ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

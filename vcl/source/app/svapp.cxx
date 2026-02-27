@@ -1639,12 +1639,7 @@ void Application::EnableSafeMode()
 void Application::ShowNativeErrorBox(const OUString& sTitle  ,
                                      const OUString& sMessage)
 {
-    int btn = ImplGetSalSystem()->ShowNativeMessageBox(
-            sTitle,
-            sMessage);
-    if (btn != SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK) {
-        SAL_WARN( "vcl", "ShowNativeMessageBox returned " << btn);
-    }
+    ImplGetSalSystem()->ShowNativeMessageBox(sTitle, sMessage);
 }
 
 const OUString& Application::GetDesktopEnvironment()
