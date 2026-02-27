@@ -85,7 +85,6 @@
 #include <svtools/apearcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/restartdialog.hxx>
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <vcl/unohelp2.hxx>
 
 #if defined(_WIN32)
@@ -591,8 +590,7 @@ IMPL_LINK_NOARG(OfaViewTabPage, OnCopySkiaLog, weld::Button&, void)
 {
 #if HAVE_FEATURE_SKIA
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
-        css::datatransfer::clipboard::SystemClipboard::create(
-            comphelper::getProcessComponentContext());
+        m_xSkiaLog->get_clipboard();
     OUString sInfo = SkiaHelper::readLog();
     vcl::unohelper::TextDataObject::CopyStringTo(sInfo, xClipboard);
     m_xSkiaLog->set_from_icon_name(RID_SVXBMP_COPY);
