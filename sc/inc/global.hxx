@@ -263,11 +263,16 @@ enum class ScCloneFlags{
 
 /** If set, global named expressions will be converted to sheet-local named
     expressions. */
-    NamesToLocal   = 0x0004
+    NamesToLocal   = 0x0004,
+
+    /** If set, cross-sheet references will be adjusted during copying to
+    compensate for the difference of the tab index between source and
+    destination cells. */
+    AdjustCrossSheetRefs = 0x0008
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ScCloneFlags> : is_typed_flags<ScCloneFlags, 0x0007> {};
+    template<> struct typed_flags<ScCloneFlags> : is_typed_flags<ScCloneFlags, 0x000f> {};
 }
 
 enum CellType
