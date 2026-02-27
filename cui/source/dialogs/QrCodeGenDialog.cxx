@@ -33,6 +33,9 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #endif
 
+#if ZXING_VERSION_MAJOR >= 3
+#include <ZXingCpp.h>
+#else
 #include <BarcodeFormat.h>
 #include <BitMatrix.h>
 #include <MultiFormatWriter.h>
@@ -48,6 +51,7 @@
 #if ZXING_VERSION_MAJOR < 2
 #include <TextUtfEncoding.h>
 #endif
+#endif // ZXING_VERSION_MAJOR >= 3
 
 #endif // ENABLE_ZXING
 
@@ -86,50 +90,54 @@ using namespace css::graphic;
 namespace
 {
 #if ENABLE_ZXING
-// Implementation adapted from the answer: https://stackoverflow.com/questions/10789059/create-qr-code-in-vector-image/60638350#60638350
-#if !HAVE_ZXING_TOSVG
-OString ConvertToSVGFormat(const ZXing::BitMatrix& bitmatrix)
+OString GenerateQRCode(const css::drawing::BarCode& rBarCode)
 {
-    OStringBuffer sb;
-    const int width = bitmatrix.width();
-    const int height = bitmatrix.height();
-    sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-              "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 "
-              + OString::number(width) + " " + OString::number(height)
-              + "\" stroke=\"none\">\n"
-                "<path d=\"");
-    for (int i = 0; i < height; ++i)
+    OString o = OUStringToOString(rBarCode.Payload, RTL_TEXTENCODING_UTF8);
+    std::string QRText(o);
+#if ZXING_VERSION_MAJOR >= 3
+    char bqrEcc = 'L';
+    switch (rBarCode.ErrorCorrection)
     {
-        for (int j = 0; j < width; ++j)
+        case css::drawing::BarCodeErrorCorrection::LOW:
         {
-            if (bitmatrix.get(j, i))
-            {
-                sb.append("M" + OString::number(j) + "," + OString::number(i) + "h1v1h-1z");
-            }
+            bqrEcc = 'L';
+            break;
+        }
+        case css::drawing::BarCodeErrorCorrection::MEDIUM:
+        {
+            bqrEcc = 'M';
+            break;
+        }
+        case css::drawing::BarCodeErrorCorrection::QUARTILE:
+        {
+            bqrEcc = 'Q';
+            break;
+        }
+        case css::drawing::BarCodeErrorCorrection::HIGH:
+        {
+            bqrEcc = 'H';
+            break;
         }
     }
-    sb.append("\"/>\n</svg>");
-    return sb.makeStringAndClear();
-}
-#endif
 
-std::string GetBarCodeType(int type)
-{
-    switch (type)
+    ZXing::Barcode barcode;
+    if (rBarCode.Type == 1)
     {
-        case 1:
-            return "Code128";
-        default:
-            return "QRCode";
+        ZXing::CreatorOptions options(ZXing::BarcodeFormat::Code128);
+        barcode = ZXing::CreateBarcodeFromText(QRText, options);
     }
-}
-
-OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRBorder, int aQRType)
-{
+    else
+    {
+        ZXing::CreatorOptions options(ZXing::BarcodeFormat::QRCode,
+                                      std::string("ecLevel=") + bqrEcc);
+        barcode = ZXing::CreateBarcodeFromText(QRText, options);
+    }
+    return OString(ZXing::WriteBarcodeToSVG(barcode));
+#else
     // Associated ZXing error correction levels (0-8) to our constants arbitrarily.
     int bqrEcc = 1;
 
-    switch (aQRECC)
+    switch (rBarCode.ErrorCorrection)
     {
         case css::drawing::BarCodeErrorCorrection::LOW:
         {
@@ -153,12 +161,9 @@ OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRB
         }
     }
 
-    OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_UTF8);
-    std::string QRText(o);
-    ZXing::BarcodeFormat format = ZXing::BarcodeFormatFromString(GetBarCodeType(aQRType));
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto writer = ZXing::MultiFormatWriter(format).setMargin(aQRBorder).setEccLevel(bqrEcc);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    ZXing::BarcodeFormat format
+        = rBarCode.Type == 1 ? ZXing::BarcodeFormat::Code128 : ZXing::BarcodeFormat::QRCode;
+    auto writer = ZXing::MultiFormatWriter(format).setMargin(rBarCode.Border).setEccLevel(bqrEcc);
     writer.setEncoding(ZXing::CharacterSet::UTF8);
 #if ZXING_VERSION_MAJOR >= 2
     ZXing::BitMatrix bitmatrix = writer.encode(QRText, 0, 0);
@@ -168,10 +173,31 @@ OString GenerateQRCode(std::u16string_view aQRText, tools::Long aQRECC, int aQRB
 #if HAVE_ZXING_TOSVG
     return OString(ZXing::ToSVG(bitmatrix));
 #else
-    return ConvertToSVGFormat(bitmatrix);
+    // Implementation adapted from the answer: https://stackoverflow.com/questions/10789059/create-qr-code-in-vector-image/60638350#60638350
+    OStringBuffer sb;
+    const int width = bitmatrix.width();
+    const int height = bitmatrix.height();
+    sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 "
+              + OString::number(width) + " " + OString::number(height)
+              + "\" stroke=\"none\">\n"
+                "<path d=\"");
+    for (int i = 0; i < height; ++i)
+    {
+        for (int j = 0; j < width; ++j)
+        {
+            if (bitmatrix.get(j, i))
+            {
+                sb.append("M" + OString::number(j) + "," + OString::number(i) + "h1v1h-1z");
+            }
+        }
+    }
+    sb.append("\"/>\n</svg>");
+    return sb.makeStringAndClear();
 #endif
+#endif // ZXING_VERSION_MAJOR >= 3
 }
-#endif
+#endif //ENABLE_ZXING
 
 } // anonymous namespace
 
@@ -318,8 +344,7 @@ void QrCodeGenDialog::Apply()
     aBarCode.Border = m_xSpinBorder->get_value();
 
     // Read svg and replace placeholder texts
-    OString aSvgImage = GenerateQRCode(aBarCode.Payload, aBarCode.ErrorCorrection, aBarCode.Border,
-                                       aBarCode.Type);
+    OString aSvgImage = GenerateQRCode(aBarCode);
 
     // Insert/Update graphic
     SvMemoryStream aSvgStream(4096, 4096);

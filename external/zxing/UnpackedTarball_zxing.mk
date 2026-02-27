@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,zxing,$(ZXING_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
 	external/zxing/0001-add-ZXVersion-h.patch \
+	external/zxing/cassert.patch \
+	external/zxing/0001-Silence-deprecated-declarations-warnings-on-Windows-.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

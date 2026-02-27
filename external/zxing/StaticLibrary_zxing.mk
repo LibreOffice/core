@@ -21,15 +21,16 @@ $(eval $(call gb_StaticLibrary_set_warnings_disabled,zxing))
 
 $(eval $(call gb_StaticLibrary_set_include,zxing,\
 	-I$(gb_UnpackedTarball_workdir)/zxing/core/src/ \
+	-I$(gb_UnpackedTarball_workdir)/zxing/core/src/libzint/ \
 	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_StaticLibrary_add_cxxflags,zxing,\
-       -DZXING_INTERNAL \
+	-DZXING_INTERNAL \
+	-DZXING_USE_ZINT \
+	-DZXING_WRITERS \
 ))
 
-# The list below is created with
-# find workdir/UnpackedTarball/zxing/core/ -name "*.cpp" ! -name '*DecodeHints.cpp' | LC_COLLATE=C sort | sed -e 's/^/\t/' -e 's/$/ \\/' -e 's/workdir\///' -e 's/\.cpp//'
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/Barcode \
 	UnpackedTarball/zxing/core/src/BarcodeFormat \
@@ -41,6 +42,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/CharacterSet \
 	UnpackedTarball/zxing/core/src/ConcentricFinder \
 	UnpackedTarball/zxing/core/src/Content \
+	UnpackedTarball/zxing/core/src/CreateBarcode \
 	UnpackedTarball/zxing/core/src/ECI \
 	UnpackedTarball/zxing/core/src/Error \
 	UnpackedTarball/zxing/core/src/GTIN \
@@ -50,6 +52,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/GridSampler \
 	UnpackedTarball/zxing/core/src/HRI \
 	UnpackedTarball/zxing/core/src/HybridBinarizer \
+	UnpackedTarball/zxing/core/src/JSON \
 	UnpackedTarball/zxing/core/src/MultiFormatReader \
 	UnpackedTarball/zxing/core/src/MultiFormatWriter \
 	UnpackedTarball/zxing/core/src/PerspectiveTransform \
@@ -64,23 +67,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/WriteBarcode \
 	UnpackedTarball/zxing/core/src/ZXingC \
 	UnpackedTarball/zxing/core/src/ZXingCpp \
-	UnpackedTarball/zxing/core/src/aztec/AZDecoder \
-	UnpackedTarball/zxing/core/src/aztec/AZDetector \
-	UnpackedTarball/zxing/core/src/aztec/AZEncoder \
-	UnpackedTarball/zxing/core/src/aztec/AZHighLevelEncoder \
-	UnpackedTarball/zxing/core/src/aztec/AZReader \
-	UnpackedTarball/zxing/core/src/aztec/AZToken \
-	UnpackedTarball/zxing/core/src/aztec/AZWriter \
-	UnpackedTarball/zxing/core/src/datamatrix/DMBitLayout \
-	UnpackedTarball/zxing/core/src/datamatrix/DMDataBlock \
-	UnpackedTarball/zxing/core/src/datamatrix/DMDecoder \
-	UnpackedTarball/zxing/core/src/datamatrix/DMDetector \
-	UnpackedTarball/zxing/core/src/datamatrix/DMECEncoder \
-	UnpackedTarball/zxing/core/src/datamatrix/DMHighLevelEncoder \
-	UnpackedTarball/zxing/core/src/datamatrix/DMReader \
-	UnpackedTarball/zxing/core/src/datamatrix/DMSymbolInfo \
-	UnpackedTarball/zxing/core/src/datamatrix/DMVersion \
-	UnpackedTarball/zxing/core/src/datamatrix/DMWriter \
 	UnpackedTarball/zxing/core/src/maxicode/MCBitMatrixParser \
 	UnpackedTarball/zxing/core/src/maxicode/MCDecoder \
 	UnpackedTarball/zxing/core/src/maxicode/MCReader \
@@ -109,21 +95,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/oned/ODUPCEANCommon \
 	UnpackedTarball/zxing/core/src/oned/ODUPCEWriter \
 	UnpackedTarball/zxing/core/src/oned/ODWriterHelper \
-	UnpackedTarball/zxing/core/src/pdf417/PDFBarcodeValue \
-	UnpackedTarball/zxing/core/src/pdf417/PDFBoundingBox \
-	UnpackedTarball/zxing/core/src/pdf417/PDFCodewordDecoder \
-	UnpackedTarball/zxing/core/src/pdf417/PDFDecoder \
-	UnpackedTarball/zxing/core/src/pdf417/PDFDetectionResult \
-	UnpackedTarball/zxing/core/src/pdf417/PDFDetectionResultColumn \
-	UnpackedTarball/zxing/core/src/pdf417/PDFDetector \
-	UnpackedTarball/zxing/core/src/pdf417/PDFEncoder \
-	UnpackedTarball/zxing/core/src/pdf417/PDFHighLevelEncoder \
-	UnpackedTarball/zxing/core/src/pdf417/PDFModulusGF \
-	UnpackedTarball/zxing/core/src/pdf417/PDFModulusPoly \
-	UnpackedTarball/zxing/core/src/pdf417/PDFReader \
-	UnpackedTarball/zxing/core/src/pdf417/PDFScanningDecoder \
-	UnpackedTarball/zxing/core/src/pdf417/PDFWriter \
-	UnpackedTarball/zxing/core/src/pdf417/ZXBigInteger \
 	UnpackedTarball/zxing/core/src/qrcode/QRBitMatrixParser \
 	UnpackedTarball/zxing/core/src/qrcode/QRCodecMode \
 	UnpackedTarball/zxing/core/src/qrcode/QRDataBlock \
@@ -140,7 +111,29 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,zxing,\
-	UnpackedTarball/zxing/core/src/libzueci/zueci \
+	UnpackedTarball/zxing/core/src/libzint/2of5inter_based \
+	UnpackedTarball/zxing/core/src/libzint/2of5inter \
+	UnpackedTarball/zxing/core/src/libzint/codabar \
+	UnpackedTarball/zxing/core/src/libzint/code128 \
+	UnpackedTarball/zxing/core/src/libzint/code \
+	UnpackedTarball/zxing/core/src/libzint/common \
+	UnpackedTarball/zxing/core/src/libzint/dxfilmedge \
+	UnpackedTarball/zxing/core/src/libzint/eci \
+	UnpackedTarball/zxing/core/src/libzint/filemem \
+	UnpackedTarball/zxing/core/src/libzint/general_field \
+	UnpackedTarball/zxing/core/src/libzint/gs1 \
+	UnpackedTarball/zxing/core/src/libzint/large \
+	UnpackedTarball/zxing/core/src/libzint/library \
+	UnpackedTarball/zxing/core/src/libzint/medical \
+	UnpackedTarball/zxing/core/src/libzint/output \
+	UnpackedTarball/zxing/core/src/libzint/qr \
+	UnpackedTarball/zxing/core/src/libzint/raster \
+	UnpackedTarball/zxing/core/src/libzint/reedsol \
+	UnpackedTarball/zxing/core/src/libzint/rss \
+	UnpackedTarball/zxing/core/src/libzint/stubs \
+	UnpackedTarball/zxing/core/src/libzint/svg \
+	UnpackedTarball/zxing/core/src/libzint/upcean \
+	UnpackedTarball/zxing/core/src/libzint/vector \
 ))
 
 # vim: set noet sw=4 ts=4:

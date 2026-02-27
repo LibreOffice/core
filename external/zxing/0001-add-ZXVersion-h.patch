@@ -1,8 +1,6 @@
-# Generated with 'cmake -DZXING_WRITERS=OLD'
-
 --- /dev/null	2023-12-10 14:00:18.140142051 +0100
 +++ a/core/src/Version.h	2023-12-22 21:38:22.466302568 +0100
-@@ -0,0 +1,28 @@
+@@ -0,0 +1,22 @@
 +/*
 +* Copyright 2019 Nu-book Inc.
 +* Copyright 2023 Axel Waggershauser
@@ -11,18 +9,12 @@
 +
 +#pragma once
 +
-+#define ZXING_READERS
-+#define ZXING_WRITERS
-+
 +#define ZXING_ENABLE_1D 1
-+#define ZXING_ENABLE_AZTEC 1
-+#define ZXING_ENABLE_DATAMATRIX 1
-+#define ZXING_ENABLE_MAXICODE 1
-+#define ZXING_ENABLE_PDF417 1
++#define ZXING_ENABLE_AZTEC 0
++#define ZXING_ENABLE_DATAMATRIX 0
++#define ZXING_ENABLE_MAXICODE 0
++#define ZXING_ENABLE_PDF417 0
 +#define ZXING_ENABLE_QRCODE 1
-+
-+/* #undef ZXING_EXPERIMENTAL_API */
-+/* #undef ZXING_USE_ZINT */
 +
 +// Version numbering
 +#define ZXING_VERSION_MAJOR 3
