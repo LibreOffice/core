@@ -956,7 +956,6 @@ void ImageMap::Read( SvStream& rIStm )
 
     if ( !memcmp( cMagic, IMAPMAGIC, sizeof( cMagic ) ) )
     {
-        IMapCompat* pCompat;
         sal_uInt16  nCount;
 
         // delete old content
@@ -970,11 +969,11 @@ void ImageMap::Read( SvStream& rIStm )
         rIStm.ReadUInt16( nCount );
         read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); // Dummy
 
-        pCompat = new IMapCompat( rIStm, StreamMode::READ );
+        {
+            IMapCompat aCompat( rIStm, StreamMode::READ );
+            // here one can read in newer versions
+        }
 
-        // here one can read in newer versions
-
-        delete pCompat;
         ImpReadImageMap( rIStm, nCount );
 
     }
