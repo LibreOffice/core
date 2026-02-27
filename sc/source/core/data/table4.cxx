@@ -3073,6 +3073,12 @@ void ScTable::UpdateInsertTabAbs(SCTAB nTable)
         aCol[i].UpdateInsertTabAbs(nTable);
 }
 
+void ScTable::AdjustRelativeTabRefs(SCTAB nOldTab, SCTAB nNewTab, sc::TargetTabState eMode)
+{
+    for (SCCOL i=0; i < aCol.size(); i++)
+        aCol[i].AdjustRelativeTabRefs(nOldTab, nNewTab, eMode);
+}
+
 bool ScTable::GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
                                     const ScMarkData& rMark) const
 {

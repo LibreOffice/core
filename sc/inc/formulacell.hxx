@@ -318,6 +318,7 @@ public:
 
     void            UpdateInsertTab( const sc::RefUpdateInsertTabContext& rCxt );
     void            UpdateInsertTabAbs(SCTAB nTable);
+    void            AdjustRelativeTabRefs(SCTAB nOldTab, SCTAB nNewTab, sc::TargetTabState eMode);
     void            UpdateDeleteTab( const sc::RefUpdateDeleteTabContext& rCxt );
     void            UpdateMoveTab( const sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
     bool            TestTabRefAbs(SCTAB nTable);

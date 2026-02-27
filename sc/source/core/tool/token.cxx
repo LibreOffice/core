@@ -2703,8 +2703,25 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument& rOldDoc, const ScAddres
     }
 }
 
-void ScTokenArray::AdjustRelativeTabRefs( SCTAB nDelta )
+namespace
 {
+
+void adjustRelativeTabRef(ScSingleRefData& rRef, SCTAB nOldTab, SCTAB nNewTab, bool bInsertedTab)
+{
+    if (!rRef.IsTabRel() || rRef.Tab() == 0)
+        return;
+    SCTAB nAbsTarget = nOldTab + rRef.Tab();
+    if (bInsertedTab && nAbsTarget >= nNewTab)
+        nAbsTarget++;
+    SCTAB nNewOffset = nAbsTarget - nNewTab;
+    rRef.IncTab(nNewOffset - rRef.Tab());
+}
+
+} // anonymous namespace
+
+void ScTokenArray::AdjustRelativeTabRefs(SCTAB nOldTab, SCTAB nNewTab, sc::TargetTabState eMode)
+{
+    const bool bInsertedTab = (eMode == sc::TargetTabState::Inserted);
     TokenPointers aPtrs( pCode.get(), nLen, pRPN, nRPN, true);
     for (size_t j=0; j<2; ++j)
     {
@@ -2721,17 +2738,14 @@ void ScTokenArray::AdjustRelativeTabRefs( SCTAB nDelta )
                 case svDoubleRef:
                 {
                     ScComplexRefData& rRef = *p->GetDoubleRef();
-                    if (rRef.Ref1.IsTabRel() && rRef.Ref1.Tab() != 0)
-                        rRef.Ref1.IncTab(-nDelta);
-                    if (rRef.Ref2.IsTabRel() && rRef.Ref2.Tab() != 0)
-                        rRef.Ref2.IncTab(-nDelta);
+                    adjustRelativeTabRef(rRef.Ref1, nOldTab, nNewTab, bInsertedTab);
+                    adjustRelativeTabRef(rRef.Ref2, nOldTab, nNewTab, bInsertedTab);
                     break;
                 }
                 case svSingleRef:
                 {
                     ScSingleRefData& rRef = *p->GetSingleRef();
-                    if (rRef.IsTabRel() && rRef.Tab() != 0)
-                        rRef.IncTab(-nDelta);
+                    adjustRelativeTabRef(rRef, nOldTab, nNewTab, bInsertedTab);
                     break;
                 }
                 default:

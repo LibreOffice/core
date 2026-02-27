@@ -1340,6 +1340,7 @@ private:
     void FillFormula(
         const ScFormulaCell* pSrcCell, SCCOL nDestCol, SCROW nDestRow, bool bLast );
     void        UpdateInsertTabAbs(SCTAB nNewPos);
+    void        AdjustRelativeTabRefs(SCTAB nOldTab, SCTAB nNewTab, sc::TargetTabState eMode);
     bool        GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
                                     const ScMarkData& rMark) const;
     bool        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark ) const;

@@ -2612,6 +2612,22 @@ public:
     }
 };
 
+/** For adjusting relative tab references. */
+class RelativeTabRefUpdater
+{
+    SCTAB mnOldTab;
+    SCTAB mnNewTab;
+    sc::TargetTabState meMode;
+public:
+    RelativeTabRefUpdater(SCTAB nOldTab, SCTAB nNewTab, sc::TargetTabState eMode) :
+        mnOldTab(nOldTab), mnNewTab(nNewTab), meMode(eMode) {}
+
+    void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
+    {
+        pCell->AdjustRelativeTabRefs(mnOldTab, mnNewTab, meMode);
+    }
+};
+
 class UsedRangeNameFinder
 {
     sc::UpdatedRangeNames& mrIndexes;
@@ -3040,6 +3056,12 @@ void ScColumn::UpdateInsertTabAbs(SCTAB nNewPos)
     sc::ProcessFormulaEditText(maCells, aFunc);
     if (aFunc.isModified())
         CellStorageModified();
+}
+
+void ScColumn::AdjustRelativeTabRefs(SCTAB nOldTab, SCTAB nNewTab, sc::TargetTabState eMode)
+{
+    RelativeTabRefUpdater aFunc(nOldTab, nNewTab, eMode);
+    sc::ProcessFormula(maCells, aFunc);
 }
 
 void ScColumn::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo )

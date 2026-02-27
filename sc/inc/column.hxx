@@ -608,6 +608,7 @@ public:
     bool GetDataEntries( SCROW nRow, std::set<ScTypedStrData>& rStrings) const;
 
     void UpdateInsertTabAbs(SCTAB nNewPos);
+    void AdjustRelativeTabRefs(SCTAB nOldTab, SCTAB nNewTab, sc::TargetTabState eMode);
     bool    TestTabRefAbs(SCTAB nTable) const;
     bool    GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& rData) const;
 
