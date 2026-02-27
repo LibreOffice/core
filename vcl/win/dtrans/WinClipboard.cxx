@@ -74,10 +74,8 @@ void releaseAsync(css::uno::Reference<css::datatransfer::XTransferable>& ref)
 }
 
 /*XEventListener,*/
-CWinClipboard::CWinClipboard(const uno::Reference<uno::XComponentContext>& rxContext,
-                             const OUString& aClipboardName)
+CWinClipboard::CWinClipboard(const uno::Reference<uno::XComponentContext>& rxContext)
     : m_xContext(rxContext)
-    , m_itsName(aClipboardName)
 {
     // necessary to reassociate from
     // the static callback function
@@ -230,7 +228,7 @@ OUString SAL_CALL CWinClipboard::getName()
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
-    return m_itsName;
+    return OUString();
 }
 
 // XFlushableClipboard
@@ -375,7 +373,7 @@ dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
     }
     else
     {
-        return cppu::acquire(new CWinClipboard(context, ""));
+        return cppu::acquire(new CWinClipboard(context));
     }
 }
 

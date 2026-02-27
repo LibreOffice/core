@@ -55,7 +55,6 @@ class CWinClipboard final
     friend CXNotifyingDataObject::~CXNotifyingDataObject();
 
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
-    const OUString m_itsName;
     CMtaOleClipboard m_MtaOleClipboard;
     CXNotifyingDataObject* m_pNewOwnClipContent = nullptr; // until onClipboardContentChanged
     CXNotifyingDataObject* m_pCurrentOwnClipContent = nullptr;
@@ -76,8 +75,7 @@ class CWinClipboard final
     css::uno::Reference<css::datatransfer::XTransferable> getContents_noLock();
 
 public:
-    CWinClipboard(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-                  const OUString& aClipboardName);
+    CWinClipboard(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~CWinClipboard() override;
 
     // XClipboard
