@@ -260,6 +260,7 @@
           <menu:menuitem menu:id=".uno:InsertLinebreak"/>
           <menu:menuitem menu:id=".uno:InsertColumnBreak"/>
           <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:InsertLandscapePage"/>
           <menu:menuitem menu:id=".uno:InsertBreak"/>
         </menu:menupopup>
       </menu:menu>

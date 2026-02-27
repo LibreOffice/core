@@ -462,6 +462,8 @@
 #define STR_COPY_UNDO                           NC_("STR_COPY_UNDO", "Copy: $1")
 #define STR_REPLACE_UNDO                        NC_("STR_REPLACE_UNDO", "Replace $1 $2 $3")
 #define STR_INSERT_PAGE_BREAK_UNDO              NC_("STR_INSERT_PAGE_BREAK_UNDO", "Insert page break")
+#define STR_INSERT_PORTRAIT_PAGE                NC_("STR_INSERT_PORTRAIT_PAGE", "Insert Portrait Page Break")
+#define STR_INSERT_LANDSCAPE_PAGE               NC_("STR_INSERT_LANDSCAPE_PAGE", "Insert Landscape Page Break")
 #define STR_INSERT_COLUMN_BREAK_UNDO            NC_("STR_INSERT_COLUMN_BREAK_UNDO", "Insert column break")
 #define STR_INSERT_ENV_UNDO                     NC_("STR_INSERT_ENV_UNDO", "Insert Envelope")
 #define STR_DRAG_AND_COPY                       NC_("STR_DRAG_AND_COPY", "Copy: $1")

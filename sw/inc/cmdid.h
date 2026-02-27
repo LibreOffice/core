@@ -236,6 +236,7 @@ class SwUINumRuleItem;
 #define FN_INSERT_CHECKBOX_CONTENT_CONTROL (FN_INSERT + 21)  /* Checkbox content control */
 #define FN_INSERT_OBJECT_DLG    (FN_INSERT + 22)    /* Object */
 #define FN_INSERT_PAGEBREAK     (FN_INSERT + 23)    /* Page break*/
+#define FN_INSERT_LANDSCAPE_PAGE    (FN_INSERT + 55)
 #define FN_INSERT_DROPDOWN_CONTENT_CONTROL (FN_INSERT + 24)  /* Dropdown content control */
 #define FN_CONTENT_CONTROL_PROPERTIES (FN_INSERT + 25)  /* Content control properties */
 #define FN_INSERT_PICTURE_CONTENT_CONTROL (FN_INSERT + 26) /* Picture content control */

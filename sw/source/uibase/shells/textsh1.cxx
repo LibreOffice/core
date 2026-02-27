@@ -92,6 +92,8 @@
 #include <editeng/acorrcfg.hxx>
 #include <swabstdlg.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <poolfmt.hxx>
+#include <SwStyleNameMapper.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -957,6 +959,57 @@ void SwTextShell::Execute(SfxRequest &rReq)
         pArgs->GetItemState(GetPool().GetWhichIDFromSlotID(nSlot), false, &pItem);
     switch( nSlot )
     {
+        case FN_INSERT_LANDSCAPE_PAGE:
+        {
+            SwWrtShell& rSh = GetShell();
+
+            rSh.StartAllAction();
+            rSh.StartUndo(SwUndoId::INSERT);
+
+            const SwPageDesc& rPageDesc = rSh.GetPageDesc(rSh.GetCurPageDesc());
+            const bool bIsLandscape = rPageDesc.GetLandscape();
+
+            UIName aStandardName;
+            SwStyleNameMapper::FillUIName(SwPoolFormatId::PAGE_STANDARD, aStandardName);
+            UIName aLandscapeName;
+            SwStyleNameMapper::FillUIName(SwPoolFormatId::PAGE_LANDSCAPE, aLandscapeName);
+
+            UIName aOriginalStyle = rSh.GetCurPageStyle();
+            if (aOriginalStyle.isEmpty() || (bIsLandscape && aOriginalStyle == aLandscapeName))
+            {
+                aOriginalStyle = aStandardName;
+            }
+
+            UIName aTargetStyle = bIsLandscape ? aStandardName : aLandscapeName;
+
+            if (rSh.HasSelection())
+            {
+                if (!rSh.IsCursorPtAtEnd())
+                    rSh.SwapPam();
+
+                rSh.Push();
+                rSh.ClearMark();
+
+                rSh.InsertPageBreak(&aOriginalStyle);
+
+                rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+
+                rSh.SwapPam();
+                rSh.ClearMark();
+
+                rSh.InsertPageBreak(&aTargetStyle);
+            }
+            else
+            {
+                rSh.InsertPageBreak(&aTargetStyle);
+            }
+
+            rSh.EndUndo(SwUndoId::INSERT);
+            rSh.EndAllAction();
+
+            rReq.Done();
+            break;
+        }
         case SID_UNICODE_NOTATION_TOGGLE:
         {
             tools::Long nMaxUnits = 256;
@@ -3881,6 +3934,25 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             if( rSh.CursorInsideInputField() || rSh.CursorInsideContentControl() )
             {
                 rSet.DisableItem( nWhich );
+            }
+            break;
+
+        case FN_INSERT_LANDSCAPE_PAGE:
+            if( rSh.CursorInsideInputField() || rSh.CursorInsideContentControl() )
+            {
+                rSet.DisableItem( nWhich );
+            }
+            else
+            {
+                const SwPageDesc& rPageDesc = rSh.GetPageDesc(rSh.GetCurPageDesc());
+                if (rPageDesc.GetLandscape())
+                {
+                    rSet.Put(SfxStringItem(nWhich, SwResId(STR_INSERT_PORTRAIT_PAGE)));
+                }
+                else
+                {
+                    rSet.Put(SfxStringItem(nWhich, SwResId(STR_INSERT_LANDSCAPE_PAGE)));
+                }
             }
             break;
 

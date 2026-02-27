@@ -277,6 +277,13 @@ interface BaseText
         StateMethod = GetState ;
     ]
 
+FN_INSERT_LANDSCAPE_PAGE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor" ;
+    ]
+
     FN_INSERT_PAGEBREAK // status(final|play)
     [
         ExecMethod = ExecInsert ;
