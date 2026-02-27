@@ -848,6 +848,12 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
         }
 
         pCode->AdjustAbsoluteRefs( rCell.rDocument, rCell.aPos, aPos, bCopyBetweenDocs );
+
+        if ((nCloneFlags & ScCloneFlags::AdjustCrossSheetRefs) != ScCloneFlags::Default)
+        {
+            SCTAB nDelta = aPos.Tab() - rCell.aPos.Tab();
+            pCode->AdjustRelativeTabRefs(nDelta);
+        }
     }
 
     if (!rDocument.IsClipOrUndo())

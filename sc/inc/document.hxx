@@ -226,6 +226,8 @@ namespace sc {
 
 typedef std::map<OUString, Bitmap> IconSetBitmapMap;
 
+class TableContentCopier;
+
 }
 
 namespace com::sun::star {
@@ -358,6 +360,7 @@ friend class ScColumn;
 friend struct ScRefCellValue;
 friend class ScDocumentImport;
 friend class sc::EditTextIterator;
+friend class sc::TableContentCopier;
 friend struct ScMutationGuard;
 friend struct ScMutationDisable;
 
@@ -1078,7 +1081,6 @@ public:
     bool                        MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress = nullptr );
     SC_DLLPUBLIC bool           CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyMarked = nullptr );
 
-    void CopyContent(SCTAB nSourceTabNo, SCTAB nTargetTabNo, const ScMarkData* pOnlyMarked, sc::RefUpdateInsertTabContext& rContext);
     bool OverwriteContent(SCTAB nSourceTabNo, SCTAB nTargetTabNo);
 
     SC_DLLPUBLIC bool      TransferTab(ScDocument& rSrcDoc, SCTAB nSrcPos, SCTAB nDestPos,
