@@ -24,6 +24,7 @@ pdfium_patches += system-fast_float.diff
 
 # TODO, attempt upstream
 pdfium_patches += ofz451333752.patch
+pdfium_patches += container-stream-concepts.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
