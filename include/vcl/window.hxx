@@ -1205,7 +1205,7 @@ public:
 
     // Clipboard/Selection interfaces
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > GetClipboard();
-    /// Sets a custom clipboard for the window's frame, instead of creating it on-demand using css::datatransfer::clipboard::SystemClipboard.
+    /// Sets a custom clipboard for the window's frame, instead of using the system clipboard on demand
     void SetClipboard(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & xClipboard);
 
     /*
