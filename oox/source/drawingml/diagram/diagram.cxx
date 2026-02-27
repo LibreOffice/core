@@ -55,8 +55,6 @@
 #ifdef DBG_UTIL
 #include <osl/file.hxx>
 #include <o3tl/environment.hxx>
-#include <tools/stream.hxx>
-#include <unotools/streamwrap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #endif
