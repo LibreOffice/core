@@ -36,6 +36,7 @@
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/transfer.hxx>
 
+#include <salinst.hxx>
 #include <svdata.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -507,14 +508,10 @@ Reference<XClipboard> GetSystemPrimarySelection()
     Reference<XClipboard> xSelection;
     try
     {
-        const Reference<XComponentContext>& xContext(comphelper::getProcessComponentContext());
 #if USING_X11
-        // A hack, making the primary selection available as an instance
-        // of the SystemClipboard service on X11:
-        Sequence< Any > args{ Any(u"PRIMARY"_ustr) };
-        xSelection.set(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr, args, xContext), UNO_QUERY_THROW);
+        xSelection = GetSalInstance()->CreateClipboard(ClipboardSelectionType::Primary);
 #else
+        const Reference<XComponentContext>& xContext(comphelper::getProcessComponentContext());
         static Reference< XClipboard > s_xSelection(
             xContext->getServiceManager()->createInstanceWithContext(
                 "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext), UNO_QUERY);

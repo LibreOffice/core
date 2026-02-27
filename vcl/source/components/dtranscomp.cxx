@@ -152,6 +152,8 @@ vcl_SystemClipboard_get_implementation(
     SolarMutexGuard aGuard;
 
     ClipboardSelectionType eSelection = ClipboardSelectionType::Clipboard;
+    // in the past, GetSystemPrimarySelection (vcl/source/treelist/transfer2.cxx)
+    // used to pass a param of "PRIMARY" here to use primary selection
     if (args.hasElements())
     {
         OUString sSel;
