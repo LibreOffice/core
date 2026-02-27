@@ -423,7 +423,7 @@ public:
 
     /** Processes a drawing page and returns the record block containing all
         related records (MSODRAWING, OBJ, TXO, charts, etc.). */
-    rtl::Reference< XclExpRecordBase > ProcessDrawing( const SdrPage* pSdrPage );
+    rtl::Reference< XclExpRecordBase > ProcessDrawing( const SdrPage* pSdrPage, std::unique_ptr<XclExpImgData> pImgData = nullptr);
     /** Processes a collection of UNO shapes and returns the record block
         containing all related records (MSODRAWING, OBJ, TXO, charts, etc.). */
     rtl::Reference< XclExpRecordBase > ProcessDrawing( const css::uno::Reference< css::drawing::XShapes >& rxShapes );
