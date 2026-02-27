@@ -142,7 +142,7 @@ Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const Bit
         }
     }
 
-    mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+    mxSalBmp = GetSalInstance()->CreateSalBitmap();
     mxSalBmp->Create(rSizePixel, ePixelFormat, *pPal);
 }
 
@@ -154,7 +154,7 @@ static Bitmap createBitmapFromColorAndAlpha(const Bitmap& rColorBitmap, const Bi
     {
         Size aSize = rColorBitmap.GetSizePixel();
         static const BitmapPalette aPalEmpty;
-        std::shared_ptr<SalBitmap> xSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+        std::shared_ptr<SalBitmap> xSalBmp = GetSalInstance()->CreateSalBitmap();
         const bool bSuccess = xSalBmp->Create(aSize, vcl::PixelFormat::N32_BPP, aPalEmpty);
         if (!bSuccess)
         {
@@ -511,7 +511,7 @@ BitmapChecksum Bitmap::GetChecksum() const
         // the buffer in SalBitmap::updateChecksum;
         // so, we need to update the imp bitmap for this bitmap instance
         // as we do in BitmapInfoAccess::ImplCreate
-        std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        std::shared_ptr<SalBitmap> xNewImpBmp(GetSalInstance()->CreateSalBitmap());
         if (xNewImpBmp->Create(*mxSalBmp))
         {
             Bitmap* pThis = const_cast<Bitmap*>(this);
@@ -528,7 +528,7 @@ void Bitmap::ImplMakeUnique()
     if (mxSalBmp && mxSalBmp.use_count() > 1)
     {
         std::shared_ptr<SalBitmap> xOldImpBmp = mxSalBmp;
-        mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+        mxSalBmp = GetSalInstance()->CreateSalBitmap();
         (void)mxSalBmp->Create(*xOldImpBmp);
     }
 }
@@ -874,7 +874,7 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay ) const
 
     if( mxSalBmp && pDispGraphics )
     {
-        std::shared_ptr<SalBitmap> xImpDispBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        std::shared_ptr<SalBitmap> xImpDispBmp(GetSalInstance()->CreateSalBitmap());
         if (xImpDispBmp->Create(*mxSalBmp, *pDispGraphics))
             aDispBmp.ImplSetSalBitmap(xImpDispBmp);
     }
@@ -898,7 +898,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         {
             if (mxSalBmp->GetBitCount() == 8 && HasGreyPalette8Bit())
                 return true;
-            std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+            std::shared_ptr<SalBitmap> xImpBmp(GetSalInstance()->CreateSalBitmap());
             // frequently used conversion for creating alpha masks
             if (xImpBmp->Create(*mxSalBmp) && xImpBmp->InterpretAs8Bit())
             {
@@ -909,7 +909,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         if (eConversion == BmpConversion::N8BitGreys)
         {
-            std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+            std::shared_ptr<SalBitmap> xImpBmp(GetSalInstance()->CreateSalBitmap());
             if (xImpBmp->Create(*mxSalBmp) && xImpBmp->ConvertToGreyscale())
             {
                 ImplSetSalBitmap(xImpBmp);
@@ -1413,7 +1413,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     if (mxSalBmp && mxSalBmp->ScalingSupported())
     {
         // implementation specific scaling
-        std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        std::shared_ptr<SalBitmap> xImpBmp(GetSalInstance()->CreateSalBitmap());
         if (xImpBmp->Create(*mxSalBmp) && xImpBmp->Scale(rScaleX, rScaleY, nScaleFlag))
         {
             ImplSetSalBitmap(xImpBmp);
@@ -2310,7 +2310,7 @@ bool Bitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas > 
         }
     }
 
-    std::shared_ptr<SalBitmap> pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+    std::shared_ptr<SalBitmap> pSalBmp = GetSalInstance()->CreateSalBitmap();
     Size aLocalSize(rSize);
     if( pSalBmp->Create( xBitmapCanvas, aLocalSize ) )
     {

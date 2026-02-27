@@ -92,7 +92,7 @@ void AlphaMask::Erase( sal_uInt8 cTransparency )
 
 void AlphaMask::BlendWith(const AlphaMask& rOther)
 {
-    std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+    std::shared_ptr<SalBitmap> xImpBmp(GetSalInstance()->CreateSalBitmap());
     if (xImpBmp->Create(*maBitmap.ImplGetSalBitmap()) && xImpBmp->AlphaBlendWith(*rOther.maBitmap.ImplGetSalBitmap()))
     {
         maBitmap.ImplSetSalBitmap(xImpBmp);

@@ -648,8 +648,8 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
     else
         bCollateCopy = false;
 
-    ImplSVData* pSVData = ImplGetSVData();
-    mpPrinter = pSVData->mpDefInst->CreatePrinter( mpInfoPrinter );
+    SalInstance* pSalInstance = GetSalInstance();
+    mpPrinter = pSalInstance->CreatePrinter( mpInfoPrinter );
 
     if (!mpPrinter)
         return false;
@@ -782,7 +782,7 @@ bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::Printer
 
                 if( nJobIteration < nJobs-1 )
                 {
-                    mpPrinter = pSVData->mpDefInst->CreatePrinter( mpInfoPrinter );
+                    mpPrinter = pSalInstance->CreatePrinter(mpInfoPrinter);
 
                     if ( mpPrinter )
                         mbPrinting              = true;

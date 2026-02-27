@@ -191,7 +191,7 @@ void Application::EnableUICoverage(bool bEnable)
 {
     bEnableUICoverage = bEnable;
     if (!bEnableUICoverage)
-        ImplGetSVData()->mpDefInst->getUsedUIList().clear();
+        GetSalInstance()->getUsedUIList().clear();
 }
 
 void Application::UICoverageReport(tools::JsonWriter& rJson,
@@ -200,7 +200,7 @@ void Application::UICoverageReport(tools::JsonWriter& rJson,
 {
     auto resultNode = rJson.startNode("result");
 
-    const auto& entries = ImplGetSVData()->mpDefInst->getUsedUIList();
+    const auto& entries = GetSalInstance()->getUsedUIList();
     if (!entries.empty())
     {
         auto childrenNode = rJson.startArray("used");
@@ -266,10 +266,10 @@ void Application::UICoverageReport(tools::JsonWriter& rJson,
 
 std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent, const OUString &rUIFile, bool bMobile, sal_uInt64 nLOKWindowId)
 {
-    ImplSVData* pSVData = ImplGetSVData();
+    SalInstance* pSalInstance = GetSalInstance();
 
     if (bEnableUICoverage)
-        pSVData->mpDefInst->getUsedUIList().insert(rUIFile);
+        pSalInstance->getUsedUIList().insert(rUIFile);
 
     if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
@@ -292,15 +292,15 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
-    return pSVData->mpDefInst->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
+    return pSalInstance->CreateBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 }
 
 std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId)
 {
-    ImplSVData* pSVData = ImplGetSVData();
+    SalInstance* pSalInstance = GetSalInstance();
 
     if (bEnableUICoverage)
-        pSVData->mpDefInst->getUsedUIList().insert(rUIFile);
+        pSalInstance->getUsedUIList().insert(rUIFile);
 
     if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
@@ -317,7 +317,7 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
 
-    return pSVData->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
+    return pSalInstance->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
 }
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
@@ -327,12 +327,12 @@ weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, Vcl
     if (comphelper::LibreOfficeKit::isActive())
         return JSInstanceBuilder::CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage, pNotifier);
     else
-        return ImplGetSVData()->mpDefInst->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
+        return GetSalInstance()->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
 }
 
 weld::Window* Application::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)
 {
-    return ImplGetSVData()->mpDefInst->GetFrameWeld(rWindow);
+    return GetSalInstance()->GetFrameWeld(rWindow);
 }
 
 // static

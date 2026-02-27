@@ -411,11 +411,8 @@ OUString Printer::GetDefaultPrinterName()
 {
     static const char* pEnv = getenv( "SAL_DISABLE_DEFAULTPRINTER" );
     if( !pEnv || !*pEnv )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
+        return GetSalInstance()->GetDefaultPrinter();
 
-        return pSVData->mpDefInst->GetDefaultPrinter();
-    }
     return OUString();
 }
 
@@ -590,9 +587,9 @@ void Printer::ReleaseGraphics(bool bRelease)
 
 void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
 {
-    ImplSVData* pSVData = ImplGetSVData();
+    SalInstance* pSalInstance = GetSalInstance();
     // #i74084# update info for this specific SalPrinterQueueInfo
-    pSVData->mpDefInst->GetPrinterQueueState( pInfo );
+    pSalInstance->GetPrinterQueueState(pInfo);
 
     // Test whether the driver actually matches the JobSetup
     ImplJobSetup& rData = maJobSetup.ImplGetData();
@@ -613,7 +610,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
     rData.SetPrinterName( maPrinterName );
     rData.SetDriver( maDriver );
 
-    mpInfoPrinter   = pSVData->mpDefInst->CreateInfoPrinter( pInfo, &rData );
+    mpInfoPrinter = pSalInstance->CreateInfoPrinter(pInfo, &rData);
     mpPrinter       = nullptr;
     mpJobGraphics   = nullptr;
     ImplUpdateJobSetupPaper( maJobSetup );

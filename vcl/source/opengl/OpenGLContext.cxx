@@ -93,7 +93,7 @@ void OpenGLContext::dispose()
 
 rtl::Reference<OpenGLContext> OpenGLContext::Create()
 {
-    return rtl::Reference<OpenGLContext>(ImplGetSVData()->mpDefInst->CreateOpenGLContext());
+    return rtl::Reference<OpenGLContext>(GetSalInstance()->CreateOpenGLContext());
 }
 
 void OpenGLContext::requestLegacyContext()

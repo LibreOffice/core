@@ -191,7 +191,7 @@ vcl_SystemClipboard_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
-    auto xClipboard = ImplGetSVData()->mpDefInst->CreateClipboard( args );
+    auto xClipboard = GetSalInstance()->CreateClipboard( args );
     if (xClipboard.is())
         xClipboard->acquire();
     return xClipboard.get();

@@ -507,7 +507,7 @@ void Application::Yield()
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplQuitMsg, void*, void )
 {
     assert(ImplGetSVData()->maAppData.mbAppQuit);
-    ImplGetSVData()->mpDefInst->DoQuit();
+    GetSalInstance()->DoQuit();
 }
 
 void Application::Quit()
@@ -518,8 +518,7 @@ void Application::Quit()
 
 comphelper::SolarMutex& Application::GetSolarMutex()
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    return *(pSVData->mpDefInst->GetYieldMutex());
+    return *(GetSalInstance()->GetYieldMutex());
 }
 
 bool Application::IsMainThread()
@@ -529,14 +528,12 @@ bool Application::IsMainThread()
 
 sal_uInt32 Application::ReleaseSolarMutex()
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mpDefInst->ReleaseYieldMutex(true);
+    return GetSalInstance()->ReleaseYieldMutex(true);
 }
 
 void Application::AcquireSolarMutex( sal_uInt32 nCount )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpDefInst->AcquireYieldMutex( nCount );
+    GetSalInstance()->AcquireYieldMutex( nCount );
 }
 
 bool Application::IsInMain()
@@ -567,7 +564,7 @@ sal_uInt16 Application::GetDispatchLevel()
 
 bool Application::AnyInput( VclInputFlags nType )
 {
-    return ImplGetSVData()->mpDefInst->AnyInput( nType );
+    return GetSalInstance()->AnyInput( nType );
 }
 
 sal_uInt64 Application::GetLastInputInterval()
@@ -1663,8 +1660,7 @@ const OUString& Application::GetDesktopEnvironment()
 
 void Application::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService)
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType, rDocumentService);
+    GetSalInstance()->AddToRecentDocumentList(rFileUrl, rMimeType, rDocumentService);
 }
 
 // MT: AppEvent was in oldsv.cxx, but is still needed...
@@ -1674,22 +1670,19 @@ void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 
 bool Application::hasNativeFileSelection()
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mpDefInst->hasNativeFileSelection();
+    return GetSalInstance()->hasNativeFileSelection();
 }
 
 Reference< ui::dialogs::XFilePicker2 >
 Application::createFilePicker( const Reference< uno::XComponentContext >& xSM )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mpDefInst->createFilePicker( xSM );
+    return GetSalInstance()->createFilePicker( xSM );
 }
 
 Reference< ui::dialogs::XFolderPicker2 >
 Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mpDefInst->createFolderPicker( xSM );
+    return GetSalInstance()->createFolderPicker(xSM);
 }
 
 void Application::setDeInitHook(Link<LinkParamNone*,void> const & hook) {

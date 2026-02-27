@@ -111,7 +111,7 @@ public:
 }
 
 VCLSession::VCLSession()
-        : m_xSession( ImplGetSVData()->mpDefInst->CreateSalSession() ),
+        : m_xSession(GetSalInstance()->CreateSalSession()),
           m_bInteractionRequested( false ),
           m_bInteractionGranted( false ),
           m_bInteractionDone( false ),

@@ -54,7 +54,7 @@ BitmapInfoAccess::BitmapInfoAccess(const Bitmap& rBitmap, BitmapAccessMode nMode
 
     if (!mpBuffer)
     {
-        std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+        std::shared_ptr<SalBitmap> xNewImpBmp(GetSalInstance()->CreateSalBitmap());
         if (xNewImpBmp->Create(*xImpBmp))
         {
             xImpBmp = std::move(xNewImpBmp);

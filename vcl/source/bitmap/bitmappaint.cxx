@@ -44,7 +44,7 @@ bool Bitmap::Erase(const Color& rFillColor)
         return true;
 
     // implementation specific replace
-    std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+    std::shared_ptr<SalBitmap> xImpBmp(GetSalInstance()->CreateSalBitmap());
     if (xImpBmp->Create(*mxSalBmp) && xImpBmp->Erase(rFillColor))
     {
         ImplSetSalBitmap(xImpBmp);

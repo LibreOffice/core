@@ -742,7 +742,7 @@ bool OpenGLHelper::supportsOpenGL()
 {
     if( getenv("SAL_DISABLEGL") != nullptr )
         return false;
-    if (!ImplGetSVData()->mpDefInst->supportsOpenGL())
+    if (!GetSalInstance()->supportsOpenGL())
         return false;
     if( isDeviceDenylisted())
         return false;

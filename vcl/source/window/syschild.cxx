@@ -86,7 +86,7 @@ static void ImplSysChildProc( SystemChildWindow* pInst, SalObjEvent nEvent )
 
 void SystemChildWindow::ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow )
 {
-    mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame(), pData, bShow );
+    mpWindowImpl->mpSysObj = GetSalInstance()->CreateObject(pParent->ImplGetFrame(), pData, bShow);
 
     Window::ImplInit( pParent, nStyle, nullptr );
 
@@ -121,7 +121,7 @@ void SystemChildWindow::dispose()
     Hide();
     if ( mpWindowImpl && mpWindowImpl->mpSysObj )
     {
-        ImplGetSVData()->mpDefInst->DestroyObject( mpWindowImpl->mpSysObj );
+        GetSalInstance()->DestroyObject( mpWindowImpl->mpSysObj );
         mpWindowImpl->mpSysObj = nullptr;
     }
     Window::dispose();
@@ -182,7 +182,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle() const
 
 void* SystemChildWindow::CreateGStreamerSink()
 {
-    return ImplGetSVData()->mpDefInst->CreateGStreamerSink(this);
+    return GetSalInstance()->CreateGStreamerSink(this);
 }
 
 #if defined( MACOSX )

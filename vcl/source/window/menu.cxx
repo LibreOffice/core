@@ -2414,7 +2414,7 @@ MenuBar::MenuBar()
       mbHideBtnVisible(false),
       mbDisplayable(true)
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this);
+    mpSalMenu = GetSalInstance()->CreateMenu(true, this);
 }
 
 MenuBar::MenuBar( const MenuBar& rMenu )
@@ -2423,7 +2423,7 @@ MenuBar::MenuBar( const MenuBar& rMenu )
       mbHideBtnVisible(false),
       mbDisplayable(true)
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this);
+    mpSalMenu = GetSalInstance()->CreateMenu(true, this);
     *this = rMenu;
 }
 
@@ -2735,12 +2735,12 @@ MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {
 
 PopupMenu::PopupMenu()
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
+    mpSalMenu = GetSalInstance()->CreateMenu(false, this);
 }
 
 PopupMenu::PopupMenu( const PopupMenu& rMenu )
 {
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
+    mpSalMenu = GetSalInstance()->CreateMenu(false, this);
     *this = rMenu;
 }
 
