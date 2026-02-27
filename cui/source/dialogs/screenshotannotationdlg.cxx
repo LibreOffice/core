@@ -26,7 +26,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -332,11 +331,9 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, copyButtonHandler, weld::Button&, 
 
     // Create a BitmapTransferable
     rtl::Reference<TransferableHelper> xClipCntnr = new BitmapTransferable(aTargetBitmap);
-    // Get the system clipboard
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
-        css::datatransfer::clipboard::SystemClipboard::create(
-            comphelper::getProcessComponentContext());
 
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+        mxCopy->get_clipboard();
     if (xClipboard.is())
     {
         // Copy the BitmapTransferable to the clipboard
