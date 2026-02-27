@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
+#include <ClipboardBase.hxx>
 #include <ClipboardSelectionType.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
@@ -55,28 +56,21 @@ namespace vcl
 namespace {
 
 // generic implementation to satisfy SalInstance
-class GenericClipboard :
-        public comphelper::WeakComponentImplHelper<
-        datatransfer::clipboard::XSystemClipboard,
-        XServiceInfo
-        >
+class GenericClipboard : public ClipboardBase
 {
     Reference< css::datatransfer::XTransferable >                           m_aContents;
     Reference< css::datatransfer::clipboard::XClipboardOwner >              m_aOwner;
     std::vector< Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
 
 public:
-
     GenericClipboard()
+        : ClipboardBase(ClipboardSelectionType::Clipboard)
     {}
 
     /*
      * XServiceInfo
      */
-
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /*
      * XClipboard
@@ -87,14 +81,6 @@ public:
     virtual void SAL_CALL setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
-
-    virtual OUString SAL_CALL getName() override;
-
-    /*
-     * XClipboardEx
-     */
-
-    virtual sal_Int8 SAL_CALL getRenderingCapabilities() override;
 
     /*
      * XClipboardNotifier
@@ -113,20 +99,9 @@ OUString GenericClipboard::getImplementationName()
     return u"com.sun.star.datatransfer.VCLGenericClipboard"_ustr;
 }
 
-Sequence< OUString > GenericClipboard::getSupportedServiceNames()
-{
-    Sequence<OUString> aRet { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
-    return aRet;
-}
-
-sal_Bool GenericClipboard::supportsService( const OUString& ServiceName )
-{
-    return cppu::supportsService(this, ServiceName);
-}
-
 Reference< css::datatransfer::XTransferable > GenericClipboard::getContents()
 {
-    std::unique_lock aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
     return m_aContents;
 }
 
@@ -134,7 +109,7 @@ void GenericClipboard::setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
 {
-    std::unique_lock aGuard( m_aMutex );
+    osl::ClearableMutexGuard aGuard(m_aMutex);
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
     Reference< datatransfer::XTransferable > xOldContents( m_aContents );
     m_aContents = xTrans;
@@ -144,7 +119,7 @@ void GenericClipboard::setContents(
     datatransfer::clipboard::ClipboardEvent aEv;
     aEv.Contents = m_aContents;
 
-    aGuard.unlock();
+    aGuard.clear();
 
     if( xOldOwner.is() && xOldOwner != xClipboardOwner )
         xOldOwner->lostOwnership( this, xOldContents );
@@ -154,26 +129,16 @@ void GenericClipboard::setContents(
     }
 }
 
-OUString GenericClipboard::getName()
-{
-    return u"CLIPBOARD"_ustr;
-}
-
-sal_Int8 GenericClipboard::getRenderingCapabilities()
-{
-    return 0;
-}
-
 void GenericClipboard::addClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
 {
-    std::unique_lock aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     m_aListeners.push_back( listener );
 }
 
 void GenericClipboard::removeClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
 {
-    std::unique_lock aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aMutex);
 
     std::erase(m_aListeners, listener);
 }
