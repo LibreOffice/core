@@ -140,7 +140,7 @@ private:
 
     void            UpdateControl(bool bDisableCtrls = false);
     void            ResetAttrs();
-    void            WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
+    void            WaitInEffect( sal_Int64 nMilliSeconds, sal_Int64 nTime,
                                         SfxProgress* pStbMgr ) const;
     Fraction        GetScale();
 };

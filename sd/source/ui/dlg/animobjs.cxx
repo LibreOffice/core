@@ -279,7 +279,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
         pProgress.reset(new SfxProgress( nullptr, u"Animator:"_ustr, nFullTime )); // "Animator:" here we should think about something smart
     }
 
-    sal_uLong nTmpTime = 0;
+    sal_uInt64 nTmpTime = 0;
     size_t i = 0;
     bool bCount = i < nCount;
     if (bCount)
@@ -300,7 +300,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
                 ::tools::Time const & rTime = m_FrameList[i].second;
 
                 m_xFormatter->SetTime( rTime );
-                sal_uLong nTime = rTime.GetMSFromTime();
+                sal_Int32 nTime = rTime.GetMSFromTime();
 
                 WaitInEffect( nTime, nTmpTime, pProgress.get() );
                 nTmpTime += nTime;
@@ -499,7 +499,7 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl, weld::SpinButton&, void)
 
 IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl, weld::FormattedSpinButton&, void)
 {
-    sal_uLong nPos = m_xNumFldBitmap->get_value() - 1;
+    sal_Int64 nPos = m_xNumFldBitmap->get_value() - 1;
 
     ::tools::Time & rTime = m_FrameList[nPos].second;
 
@@ -617,7 +617,7 @@ void AnimationWindow::ResetAttrs()
     UpdateControl();
 }
 
-void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
+void AnimationWindow::WaitInEffect( sal_Int64 nMilliSeconds, sal_Int64 nTime,
                                     SfxProgress* pProgress ) const
 {
     sal_uInt64 aEnd = ::tools::Time::GetSystemTicks() + nMilliSeconds;
