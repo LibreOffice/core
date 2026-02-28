@@ -181,4 +181,48 @@ class Test(UITestCase):
                 xAcceleratorPage.getChild("office").executeAction("CLICK", tuple())
                 self.assertEqual(get_state_as_dict(xScope)["Enabled"], "false")
 
+    def test_multiple_scopes(self):
+        # tdf#171077 Test setting accelerators in multiple scopes at the same time without closing
+        # the dialog in between changing the scope
+        with self.ui_test.create_doc_in_start_center("writer") as xDoc1, \
+             self.ui_test.load_empty_file("writer") as xDoc2:
+            with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog") as xDialog:
+                # Set a shortcut on the global scope
+                self.assign_key(xDialog, "office", "F7", ".uno:EditBookmark")
+                # Set a shortcut on the module scope
+                self.assign_key(xDialog, "module", "F7", ".uno:Credits")
+                # Set a shortcut in the first document
+                self.assign_key(xDialog, "Untitled 1", "F7", "Spelling")
+                # Set a shortcut in the second document
+                self.assign_key(xDialog, "Untitled 2", "F7", ".uno:OptionsSecurityDialog")
+
+                # Switch back to the first document and make sure the binding is still in the list
+                xAcceleratorPage = xDialog.getChild("AccelConfigPage")
+                xScope = xAcceleratorPage.getChild("savein")
+                select_by_text(xScope, "Untitled 1")
+                xShortcuts = xAcceleratorPage.getChild("shortcuts")
+                select_key(xShortcuts, "F7")
+                self.assertEqual(get_state_as_dict(xShortcuts)["SelectEntryText"].split("\t")[1],
+                                 "Spelling")
+
+            # Check that all the accelerators made it into the configs
+            xGlobalAccelCfg = self.xContext.ServiceManager.createInstance(
+                'com.sun.star.ui.GlobalAcceleratorConfiguration')
+            xKeyEvent = KeyEvent()
+            xKeyEvent.KeyCode = Key.F7
+            self.assertEqual(xGlobalAccelCfg.getCommandByKeyEvent(xKeyEvent), ".uno:EditBookmark")
+
+            xModuleAccelCfg = self.xContext.ServiceManager.createInstanceWithArguments(
+                'com.sun.star.ui.ModuleAcceleratorConfiguration',
+                ('com.sun.star.text.TextDocument',))
+            self.assertEqual(xModuleAccelCfg.getCommandByKeyEvent(xKeyEvent), ".uno:Credits")
+
+            xDocAccelCfg = xDoc1.getUIConfigurationManager().getShortCutManager()
+            self.assertEqual(xDocAccelCfg.getCommandByKeyEvent(xKeyEvent),
+                             ".uno:SpellingAndGrammarDialog")
+
+            xDocAccelCfg = xDoc2.getUIConfigurationManager().getShortCutManager()
+            self.assertEqual(xDocAccelCfg.getCommandByKeyEvent(xKeyEvent),
+                             ".uno:OptionsSecurityDialog")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

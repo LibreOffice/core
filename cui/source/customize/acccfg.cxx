@@ -843,6 +843,21 @@ struct AcceleratorSaveInData
 };
 }
 
+// Pairs a reference to an accelerator configuration with a list of assignments
+struct AssignmentData
+{
+    AssignmentData(const uno::Reference<ui::XAcceleratorConfiguration>& xAccMgr)
+        : m_xAccMgr(xAccMgr)
+        // Create an array with an empty string for each key
+        , m_aAssignments(std::size(KEYCODE_ARRAY))
+    {
+    }
+
+    uno::Reference<ui::XAcceleratorConfiguration> m_xAccMgr;
+    // A list of assignments using the same indices as KEYCODE_ARRAY
+    std::vector<OUString> m_aAssignments;
+};
+
 // Helper class to listen for components being disposed so we can
 // remove them from the SaveIn combobox
 class ComponentDisposedListener : public ::cppu::WeakImplHelper<lang::XEventListener>
@@ -892,6 +907,12 @@ void ComponentDisposedListener::disposing(const lang::EventObject& rEvent)
                 m_pAccelCfgPage->m_xSaveInListBox->hide();
                 m_pAccelCfgPage->m_xDocumentButton->hide();
             }
+
+            // Abandon any assignment data for this document
+            std::erase_if(m_pAccelCfgPage->m_aAssignmentData,
+                          [pData](const AssignmentData& rAssignmentData) {
+                              return rAssignmentData.m_xAccMgr == pData->m_xAccMgr;
+                          });
 
             pData->m_xModel->removeEventListener(this);
 
@@ -1108,15 +1129,35 @@ void SfxAcceleratorConfigPage::InitAccCfg()
     }
 }
 
-void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfiguration>& xAccMgr)
+void SfxAcceleratorConfigPage::LoadAcceleratorConfig(
+    const css::uno::Reference<css::ui::XAcceleratorConfiguration>& xAccMgr)
 {
-    if (!xAccMgr.is())
-        return;
+    std::vector<OUString>& rAssignments = GetAssignments();
 
-    // Initially set all of the assignments to an empty string
-    m_aAssignments.clear();
-    m_aAssignments.resize(KEYCODE_ARRAY_SIZE);
+    // Reset all of the assignments
+    for (auto& rAssignment : rAssignments)
+        rAssignment.clear();
 
+    // Assign all commands to its shortcuts - reading the accelerator config.
+    uno::Sequence<awt::KeyEvent> lKeys = xAccMgr->getAllKeyEvents();
+
+    for (sal_Int32 i = 0, nKeys = lKeys.getLength(); i < nKeys; ++i)
+    {
+        const awt::KeyEvent& aAWTKey = lKeys[i];
+        vcl::KeyCode aKeyCode = svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
+
+        const sal_uInt16* pKeycodePos = std::find(KEYCODE_ARRAY, KEYCODE_ARRAY + KEYCODE_ARRAY_SIZE,
+                                                  aKeyCode.GetCode() | aKeyCode.GetModifier());
+
+        if (pKeycodePos >= KEYCODE_ARRAY + KEYCODE_ARRAY_SIZE)
+            continue;
+
+        rAssignments[pKeycodePos - KEYCODE_ARRAY] = xAccMgr->getCommandByKeyEvent(aAWTKey);
+    }
+}
+
+void SfxAcceleratorConfigPage::Init()
+{
     if (!m_bStylesInfoInitialized)
     {
         uno::Reference<frame::XController> xController;
@@ -1131,6 +1172,8 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
         m_bStylesInfoInitialized = true;
     }
 
+    const std::vector<OUString>& rAssignments = GetAssignments();
+
     // Insert all editable accelerators into list box. It is possible
     // that some accelerators are not mapped on the current system/keyboard
     // but we don't want to lose these mappings.
@@ -1142,39 +1185,14 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
             continue;
         m_xEntriesBox->append(OUString::number(i1), sKey);
         int nPos = m_xEntriesBox->n_children() - 1;
-        m_xEntriesBox->set_text(nPos, OUString(), 1);
-        m_xEntriesBox->set_sensitive(nPos, !IsReservedKeyCode(aKey));
-    }
-
-    // Assign all commands to its shortcuts - reading the accelerator config.
-    uno::Sequence<awt::KeyEvent> lKeys = xAccMgr->getAllKeyEvents();
-    sal_Int32 c2 = lKeys.getLength();
-    sal_Int32 i2 = 0;
-
-    for (i2 = 0; i2 < c2; ++i2)
-    {
-        const awt::KeyEvent& aAWTKey = lKeys[i2];
-        vcl::KeyCode aKeyCode = svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
-        OUString sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
-
-        const sal_uInt16* pKeyCode
-            = std::find(KEYCODE_ARRAY, KEYCODE_ARRAY + KEYCODE_ARRAY_SIZE, aKeyCode.GetFullCode());
-
-        if (pKeyCode < KEYCODE_ARRAY + KEYCODE_ARRAY_SIZE)
-            m_aAssignments[pKeyCode - KEYCODE_ARRAY] = sCommand;
-
-        sal_Int32 nPos = MapKeyCodeToPos(aKeyCode);
-
-        if (nPos == -1)
-            continue;
-
-        OUString sLabel = GetLabel4Command(sCommand);
-
+        OUString sLabel = GetLabel4Command(rAssignments[i1]);
         m_xEntriesBox->set_text(nPos, sLabel, 1);
+        m_xEntriesBox->set_sensitive(nPos, !IsReservedKeyCode(aKey));
     }
 }
 
-void SfxAcceleratorConfigPage::Apply(const uno::Reference<ui::XAcceleratorConfiguration>& xAccMgr)
+void SfxAcceleratorConfigPage::Apply(const uno::Reference<ui::XAcceleratorConfiguration>& xAccMgr,
+                                     const std::vector<OUString>& rAssignments)
 {
     if (!xAccMgr.is())
         return;
@@ -1182,11 +1200,11 @@ void SfxAcceleratorConfigPage::Apply(const uno::Reference<ui::XAcceleratorConfig
     // Go through the list from the bottom to the top ...
     // because logical accelerator must be preferred instead of
     // physical ones!
-    for (int i = 0, nCount = m_aAssignments.size(); i < nCount; ++i)
+    for (int i = 0, nCount = rAssignments.size(); i < nCount; ++i)
     {
         vcl::KeyCode aKey = KEYCODE_ARRAY[i];
         awt::KeyEvent aAWTKey = svt::AcceleratorExecute::st_VCLKey2AWTKey(aKey);
-        OUString sCommand = m_aAssignments[i];
+        OUString sCommand = rAssignments[i];
 
         try
         {
@@ -1206,6 +1224,26 @@ void SfxAcceleratorConfigPage::Apply(const uno::Reference<ui::XAcceleratorConfig
 }
 
 void SfxAcceleratorConfigPage::ResetConfig() { m_xEntriesBox->clear(); }
+
+std::vector<OUString>* SfxAcceleratorConfigPage::FindAssignments()
+{
+    for (auto& rAssignmentData : m_aAssignmentData)
+    {
+        if (rAssignmentData.m_xAccMgr == m_xAct)
+            return &rAssignmentData.m_aAssignments;
+    }
+
+    return nullptr;
+}
+
+std::vector<OUString>& SfxAcceleratorConfigPage::GetAssignments()
+{
+    if (std::vector<OUString>* pAssignments = FindAssignments())
+        return *pAssignments;
+
+    // Lazily create the data
+    return m_aAssignmentData.emplace_back(m_xAct).m_aAssignments;
+}
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ImplUpdateDataHdl, Timer*, void)
 {
@@ -1249,7 +1287,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default, weld::Button&, void)
 
     m_xEntriesBox->freeze();
     ResetConfig();
-    Init(m_xAct);
+    LoadAcceleratorConfig(m_xAct);
+    Init();
     m_xEntriesBox->thaw();
     m_xEntriesBox->select(0);
     SelectHdl(*m_xEntriesBox);
@@ -1267,7 +1306,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl, weld::Button&, void)
     if (sLabel.isEmpty())
         sLabel = GetLabel4Command(sNewCommand);
 
-    m_aAssignments[nKeyPos] = sNewCommand;
+    GetAssignments()[nKeyPos] = sNewCommand;
     m_xEntriesBox->set_text(nPos, sLabel, 1);
 
     SelectHdl(m_xFunctionBox->get_widget());
@@ -1284,13 +1323,15 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl, weld::Button&, void)
 
     // remove function name from selected entry
     m_xEntriesBox->set_text(nPos, OUString(), 1);
-    m_aAssignments[nKeyPos].clear();
+    GetAssignments()[nKeyPos].clear();
 
     SelectHdl(m_xFunctionBox->get_widget());
 }
 
 IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
 {
+    const std::vector<OUString>& rAssignments = GetAssignments();
+
     if (&rListBox == m_xEntriesBox.get())
     {
         OUString nSelectedId = m_xEntriesBox->get_selected_id();
@@ -1306,7 +1347,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
 
             if (!IsReservedKeyCode(KEYCODE_ARRAY[nKeyPos]))
             {
-                OUString sCommand = m_aAssignments[nKeyPos];
+                OUString sCommand = rAssignments[nKeyPos];
                 if (!sCommand.isEmpty())
                     m_xRemoveButton->set_sensitive(true);
                 m_xChangeButton->set_sensitive(sCommand != sPossibleNewCommand);
@@ -1349,7 +1390,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
 
             if (!IsReservedKeyCode(KEYCODE_ARRAY[nKeyPos]))
             {
-                OUString sCommand = m_aAssignments[nKeyPos];
+                OUString sCommand = rAssignments[nKeyPos];
                 if (!sCommand.isEmpty())
                     m_xRemoveButton->set_sensitive(true);
                 m_xChangeButton->set_sensitive(sCommand != sPossibleNewCommand
@@ -1363,7 +1404,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
                 for (int i = 0, nCount = m_xEntriesBox->n_children(); i < nCount; ++i)
                 {
                     sal_uInt32 nEntryKeyPos = m_xEntriesBox->get_id(i).toUInt32();
-                    if (m_aAssignments[nEntryKeyPos] == sPossibleNewCommand)
+                    if (rAssignments[nEntryKeyPos] == sPossibleNewCommand)
                     {
                         vcl::KeyCode aKey(KEYCODE_ARRAY[nEntryKeyPos]);
                         m_xKeyBox->append(OUString::number(nEntryKeyPos), aKey.GetName());
@@ -1427,7 +1468,11 @@ void SfxAcceleratorConfigPage::HandleScopeChanged()
 
     m_xEntriesBox->freeze();
     ResetConfig();
-    Init(m_xAct);
+    // If we don’t have any saved assignments for this scope then load from the accelerator
+    // configuration
+    if (FindAssignments() == nullptr && m_xAct.is())
+        LoadAcceleratorConfig(m_xAct);
+    Init();
     m_xEntriesBox->thaw();
 
     m_xGroupLBox->Init(m_xContext, m_xFrame, m_sModuleLongName, true);
@@ -1487,7 +1532,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
 
             m_xEntriesBox->freeze();
             ResetConfig();
-            Init(xTempAccMgr);
+            LoadAcceleratorConfig(xTempAccMgr);
+            Init();
             m_xEntriesBox->thaw();
             if (m_xEntriesBox->n_children())
             {
@@ -1615,10 +1661,26 @@ void SfxAcceleratorConfigPage::StartFileDialog(StartFileDialogType nType, const 
 
 bool SfxAcceleratorConfigPage::FillItemSet(SfxItemSet*)
 {
-    Apply(m_xAct);
+    for (const AssignmentData& rAssignmentData : m_aAssignmentData)
+    {
+        Apply(rAssignmentData.m_xAccMgr, rAssignmentData.m_aAssignments);
+
+        try
+        {
+            rAssignmentData.m_xAccMgr->store();
+        }
+        catch (const uno::RuntimeException&)
+        {
+            throw;
+        }
+        catch (const uno::Exception&)
+        {
+            return false;
+        }
+    }
+
     try
     {
-        m_xAct->store();
         css::uno::Reference<css::beans::XPropertySet> xFrameProps(m_xFrame,
                                                                   css::uno::UNO_QUERY_THROW);
         css::uno::Reference<css::frame::XLayoutManager> xLayoutManager;
