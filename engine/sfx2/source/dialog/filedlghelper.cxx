@@ -2077,7 +2077,6 @@ void SaveLastDirectory(OUString const& sContext, OUString const& sDirectory)
 void FileDialogHelper_Impl::saveConfig()
 {
     uno::Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
-    Any aValue;
 
     if ( ! xDlg.is() )
         return;
@@ -2089,15 +2088,13 @@ void FileDialogHelper_Impl::saveConfig()
         try
         {
             // tdf#61358 - remember the last "insert as link" state
-            aValue = xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
             bool bLink = false;
-            aValue >>= bLink;
+            xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bLink;
             OUString aUserData(GRF_CONFIG_STR);
             SetToken(aUserData, 0, ' ', OUString::number(static_cast<sal_Int32>(bLink)));
 
-            aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
             bool bValue = false;
-            aValue >>= bValue;
+            xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0) >>= bValue;
             SetToken( aUserData, 1, ' ', OUString::number( static_cast<sal_Int32>(bValue) ) );
 
             INetURLObject aObj( getPath() );
@@ -2131,9 +2128,8 @@ void FileDialogHelper_Impl::saveConfig()
         {
             try
             {
-                aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 );
                 bool bAutoExt = true;
-                aValue >>= bAutoExt;
+                xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0) >>= bAutoExt;
                 SetToken( aUserData, 0, ' ', OUString::number( static_cast<sal_Int32>(bAutoExt) ) );
                 bWriteConfig = true;
             }
@@ -2154,9 +2150,8 @@ void FileDialogHelper_Impl::saveConfig()
         {
             try
             {
-                aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
                 bool bSelection = true;
-                aValue >>= bSelection;
+                xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0) >>= bSelection;
                 if ( comphelper::string::getTokenCount(aUserData, ' ') < 3 )
                     aUserData += " ";
                 SetToken( aUserData, 2, ' ', OUString::number( static_cast<sal_Int32>(bSelection) ) );
