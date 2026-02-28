@@ -955,7 +955,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*
 }
 
 // Return number of links in sfx2::LinkManager
-sal_uLong SdDrawDocument::GetLinkCount() const
+size_t SdDrawDocument::GetLinkCount() const
 {
     return m_pLinkManager->GetLinks().size();
 }

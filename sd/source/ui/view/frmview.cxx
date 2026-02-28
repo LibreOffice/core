@@ -74,7 +74,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
         if ( pDocShell )
         {
             // document is loaded, is there a FrameView?
-            sal_uLong nSdViewShellCount = 0;
+            size_t nSdViewShellCount = 0;
             SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell);
 
             while (pSfxViewFrame)

@@ -857,7 +857,7 @@ public:
     SAL_DLLPRIVATE void                InsertObject(SdrObject* pObj);
     SAL_DLLPRIVATE void                RemoveObject(SdrObject* pObj);
 
-    SAL_DLLPRIVATE sal_uLong           GetLinkCount() const;
+    SAL_DLLPRIVATE size_t           GetLinkCount() const;
 
     SAL_DLLPRIVATE std::vector<std::unique_ptr<sd::FrameView>>& GetFrameViewList() { return maFrameViewList; }
     SdCustomShowList* GetCustomShowList(bool bCreate = false);
@@ -877,7 +877,7 @@ public:
     SAL_DLLPRIVATE void                NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool );
     SAL_DLLPRIVATE bool                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
 
-    SAL_DLLPRIVATE ::sd::FrameView* GetFrameView(sal_uLong nPos) {
+    SAL_DLLPRIVATE ::sd::FrameView* GetFrameView(size_t nPos) {
         return nPos < maFrameViewList.size() ? maFrameViewList[nPos].get() : nullptr; }
 
     /** deprecated*/
