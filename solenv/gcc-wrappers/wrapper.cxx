@@ -240,8 +240,25 @@ std::string processccargs(const std::vector<std::string>& rawargs, std::string &
     return args;
 }
 
+
+// Convert /cygdrive/X/... to X:\... for CreateProcess compatibility
+static std::string convertCygwinPath(const std::string& path)
+{
+    if (path.compare(0, 10, "/cygdrive/") == 0 && path.length() > 11 && path[11] == '/') {
+        std::string result;
+        result += static_cast<char>(toupper(path[10]));
+        result += ':';
+        result += path.substr(11);
+        for (auto& c : result) {
+            if (c == '/') c = '\\';
+        }
+        return result;
+    }
+    return path;
+}
 int startprocess(std::string command, std::string args, bool verbose)
 {
+    command = convertCygwinPath(command);
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
     SECURITY_ATTRIBUTES sa;

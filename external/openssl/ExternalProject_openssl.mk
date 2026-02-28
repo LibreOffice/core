@@ -68,7 +68,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build): export PERL:=$(if $(M
 $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_Trace_StartRange,openssl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		CONFIGURE_INSIST=1 $(PERL) Configure $(OPENSSL_PLATFORM) no-tests no-multilib \
+		CONFIGURE_INSIST=1 $(PERL) Configure $(OPENSSL_PLATFORM) no-tests no-multilib no-asm \
 		&& $(if $(JOM),$(JOM) $(wordlist 1,2,$(PARALLELISM_OPTION)),nmake) -f makefile \
 			$(if $(call gb_Module__symbols_enabled,openssl),DEBUG_FLAGS_VALUE="$(gb_DEBUGINFO_FLAGS)") \
 	)

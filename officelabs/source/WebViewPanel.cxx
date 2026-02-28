@@ -53,6 +53,8 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <sfx2/docfac.hxx>
 
 #include <include/cef_app.h>
@@ -901,13 +903,27 @@ void WebViewPanel::detectDocument()
     SAL_INFO("officelabs.cef",
              "detectDocument: factory=" << sFactory << " appType=" << sAppType);
 
-    // For Writer: also bind the text document interface
+    // Bind the appropriate document interface based on app type
     if (sAppType == "writer")
     {
         css::uno::Reference<css::text::XTextDocument> xTextDoc(
             pShell->GetModel(), css::uno::UNO_QUERY);
         if (xTextDoc.is())
             m_pDocController->setDocument(xTextDoc);
+    }
+    else if (sAppType == "calc")
+    {
+        css::uno::Reference<css::sheet::XSpreadsheetDocument> xCalcDoc(
+            pShell->GetModel(), css::uno::UNO_QUERY);
+        if (xCalcDoc.is())
+            m_pDocController->setCalcDocument(xCalcDoc);
+    }
+    else if (sAppType == "impress" || sAppType == "draw")
+    {
+        css::uno::Reference<css::drawing::XDrawPagesSupplier> xDrawDoc(
+            pShell->GetModel(), css::uno::UNO_QUERY);
+        if (xDrawDoc.is())
+            m_pDocController->setImpressDocument(xDrawDoc);
     }
 }
 
