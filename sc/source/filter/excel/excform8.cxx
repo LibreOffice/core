@@ -780,13 +780,16 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                 ExternalTabInfo aExtInfo;
                 if (!Read3DTabReference(nIxti, nTabFirst, nTabLast, aExtInfo))
                 {
-                    aPool << ocBad;
-                    aPool >> aStack;
-                    break;
+                    aSRD.SetRelTab(0);
+                    aSRD.SetFlag3D(false);
+                    nTabFirst = nTabLast = 0;
+                    aExtInfo.mbExternal = false;
                 }
-
-                aSRD.SetAbsTab(nTabFirst);
-                aSRD.SetFlag3D(true);
+                else
+                {
+                    aSRD.SetAbsTab(nTabFirst);
+                    aSRD.SetFlag3D(true);
+                }
 
                 ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeNameOrCond );
 
