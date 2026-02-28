@@ -319,6 +319,10 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
             aAbsName = aObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         }
     }
+
+    if (aAbsName.endsWith("/"))
+        aAbsName = aAbsName.copy(0, aAbsName.getLength() - 1);
+
     return aAbsName;
 }
 
