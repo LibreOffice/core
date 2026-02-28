@@ -366,8 +366,7 @@ dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
     if (bRunningUnitTest)
     {
         SolarMutexGuard aGuard;
-        auto xClipboard
-            = ImplGetSVData()->mpDefInst->CreateClipboard(ClipboardSelectionType::Clipboard);
+        auto xClipboard = GetSalInstance()->CreateClipboard(ClipboardSelectionType::Clipboard);
         if (xClipboard.is())
             xClipboard->acquire();
         return xClipboard.get();
