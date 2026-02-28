@@ -8,7 +8,7 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_url_for_data_file
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf146019(UITestCase):
 
@@ -24,6 +24,10 @@ class tdf146019(UITestCase):
 
                 xFileName = xOpenDialog.getChild("file_name")
                 xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf146019.jpg")}))
+
+                xLink = xOpenDialog.getChild("link")
+                if get_state_as_dict(xLink)['Selected'] == "true" :
+                    xLink.executeAction("CLICK", tuple())
 
             # Before the fix, a dialog was displayed at this point
 
