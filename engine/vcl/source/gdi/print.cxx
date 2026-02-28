@@ -878,7 +878,7 @@ void Printer::dispose()
 
     ImplReleaseGraphics();
     if ( mpInfoPrinter )
-        ImplGetSVData()->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
+        GetSalInstance()->DestroyInfoPrinter(mpInfoPrinter);
     if ( mpDisplayDev )
         mpDisplayDev.disposeAndClear();
     else
@@ -1015,8 +1015,6 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
     if ( IsJobActive() || IsPrinting() )
         return false;
 
-    ImplSVData* pSVData = ImplGetSVData();
-
     mbDefPrinter        = pPrinter->mbDefPrinter;
     maPrintFile         = pPrinter->maPrintFile;
     mbPrintFile         = pPrinter->mbPrintFile;
@@ -1031,7 +1029,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         if ( !IsDisplayPrinter() )
         {
             ReleaseGraphics();
-            pSVData->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
+            GetSalInstance()->DestroyInfoPrinter(mpInfoPrinter);
             mpFontInstance.clear();
             mpFontFaceCollection.reset();
             // clean up font list
@@ -1058,7 +1056,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         }
         else
         {
-            pSVData->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
+            GetSalInstance()->DestroyInfoPrinter(mpInfoPrinter);
 
             mpFontInstance.clear();
             mpFontFaceCollection.reset();
