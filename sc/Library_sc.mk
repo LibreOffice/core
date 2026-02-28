@@ -29,6 +29,32 @@ $(eval $(call gb_Library_add_defs,sc,\
     -DSC_INFO_OSVERSION=\"$(OS)\" \
 ))
 
+# === CEF WebView support (conditional on --with-cef) ===
+ifeq ($(ENABLE_CEF),TRUE)
+
+$(eval $(call gb_Library_add_defs,sc,\
+    -DHAVE_FEATURE_CEF \
+))
+
+$(eval $(call gb_Library_set_include,sc,\
+    -I$(SRCDIR)/sc/source/core/inc \
+    -I$(SRCDIR)/sc/source/filter/inc \
+    -I$(SRCDIR)/sc/source/ui/inc \
+    -I$(SRCDIR)/sc/inc \
+    -I$(SRCDIR)/officelabs/inc \
+    -I$(CEF_DIR) \
+    -I$(CEF_DIR)/include \
+    -I$(WORKDIR)/SdiTarget/sc/sdi \
+    $$(INCLUDE) \
+))
+
+$(eval $(call gb_Library_use_libraries,sc,\
+    officelabs \
+))
+
+endif
+# === End CEF ===
+
 # there is an odd case of this about std::function in dataproviderdlg.cxx that resists more localised suppression
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_cxxflags,sc,\

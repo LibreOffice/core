@@ -82,6 +82,7 @@ public:
     DocumentController* getDocController() const { return m_pDocController.get(); }
 
 private:
+    void initOrReattachCefBrowser();
     void initCefBrowser();
     void reattachCefBrowser();
     OUString getUIUrl() const;

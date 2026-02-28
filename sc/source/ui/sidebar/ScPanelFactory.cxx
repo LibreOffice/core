@@ -19,6 +19,10 @@
 
 #include "ScPanelFactory.hxx"
 
+#ifdef HAVE_FEATURE_CEF
+#include <officelabs/WebViewPanel.hxx>
+#endif
+
 #include "AlignmentPropertyPanel.hxx"
 #include "CellAppearancePropertyPanel.hxx"
 #include "NumberFormatPropertyPanel.hxx"
@@ -99,6 +103,12 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
         {
             xPanel = ScDatabasePropertyPanel::Create( pParent, xFrame, pBindings );
         }
+#ifdef HAVE_FEATURE_CEF
+        else if (rsResourceURL.endsWith("/AIAssistantPanel"))
+        {
+            xPanel = officelabs::WebViewPanel::Create(pParent, pBindings);
+        }
+#endif
 
         if (xPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(

@@ -9,6 +9,7 @@
  *   getDocument  - Read document text via DocumentController
  *   getSelection - Get current selection
  *   applyEdit    - Apply/reject a pending edit
+ *   getAppType   - Get current application type ("writer", "calc", "impress")
  *
  * THREADING: m_pPanel is std::atomic because it's read on the CEF IO
  *            thread (OnQuery) and written on the VCL thread (setPanel).
@@ -60,6 +61,7 @@ private:
     void handleGetSelection(CefRefPtr<Callback> callback);
     void handleApplyEdit(const std::string& json,
                          CefRefPtr<Callback> callback);
+    void handleGetAppType(CefRefPtr<Callback> callback);
 
     std::atomic<WebViewPanel*> m_pPanel;
 };

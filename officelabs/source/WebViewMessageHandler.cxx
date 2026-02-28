@@ -158,6 +158,13 @@ bool WebViewMessageHandler::OnQuery(
         return true;
     }
 
+    if (req.find("\"type\":\"getAppType\"") != std::string::npos
+        || req.find("\"type\": \"getAppType\"") != std::string::npos)
+    {
+        handleGetAppType(callback);
+        return true;
+    }
+
     // Unknown request type
     SAL_WARN("officelabs.cef", "Unknown cefQuery type: " << req.substr(0, 50));
     callback->Failure(404, "Unknown request type");
@@ -291,6 +298,36 @@ void WebViewMessageHandler::handleApplyEdit(
         {
             cb->Failure(400, "Unknown action");
         }
+    });
+}
+
+void WebViewMessageHandler::handleGetAppType(CefRefPtr<Callback> callback)
+{
+    WebViewPanel* panel = m_pPanel.load(std::memory_order_acquire);
+    if (!panel)
+    {
+        callback->Success("{\"appType\":\"writer\"}");
+        return;
+    }
+
+    CefRefPtr<Callback> cb = callback;
+
+    postToVclThread([this, cb]() {
+        WebViewPanel* p = m_pPanel.load(std::memory_order_acquire);
+        if (!p)
+        {
+            cb->Success("{\"appType\":\"writer\"}");
+            return;
+        }
+
+        p->detectDocument();
+
+        DocumentController* dc = p->getDocController();
+        OUString appType = dc ? dc->getApplicationType() : u"writer"_ustr;
+
+        OString utf8AppType = OUStringToOString(appType, RTL_TEXTENCODING_UTF8);
+        std::string response = "{\"appType\":\"" + std::string(utf8AppType.getStr()) + "\"}";
+        cb->Success(response);
     });
 }
 

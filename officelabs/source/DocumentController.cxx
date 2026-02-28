@@ -42,7 +42,8 @@ void DocumentController::setDocument(const uno::Reference<text::XTextDocument>& 
 
 OUString DocumentController::getApplicationType()
 {
-    // CEF sidebar is currently wired in Writer.
+    if (!m_sAppType.isEmpty())
+        return m_sAppType;
     return u"writer"_ustr;
 }
 

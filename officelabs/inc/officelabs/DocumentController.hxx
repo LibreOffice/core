@@ -23,13 +23,15 @@ private:
     css::uno::Reference<css::text::XTextDocument> m_xDocument;
     css::uno::Reference<css::text::XText> m_xText;
     css::uno::Reference<css::frame::XController> m_xController;
+    OUString m_sAppType;  // "writer", "calc", "impress", or "draw"
 
 public:
     DocumentController();
     ~DocumentController();
 
     void setDocument(const css::uno::Reference<css::text::XTextDocument>& xDoc);
-    bool hasDocument() const { return m_xDocument.is(); }
+    void setAppType(const OUString& sAppType) { m_sAppType = sAppType; }
+    bool hasDocument() const { return m_xDocument.is() || !m_sAppType.isEmpty(); }
 
     OUString getApplicationType();
     OUString getDocumentText();

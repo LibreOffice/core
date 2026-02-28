@@ -47,6 +47,31 @@ $(eval $(call gb_Library_set_include,sd,\
 	-I$(WORKDIR)/SdiTarget/sd/sdi \
 ))
 
+# === CEF WebView support (conditional on --with-cef) ===
+ifeq ($(ENABLE_CEF),TRUE)
+
+$(eval $(call gb_Library_add_defs,sd,\
+	-DHAVE_FEATURE_CEF \
+))
+
+$(eval $(call gb_Library_set_include,sd,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/sd/inc \
+	-I$(SRCDIR)/sd/source/ui/inc \
+	-I$(SRCDIR)/sd/source/ui/slidesorter/inc \
+	-I$(SRCDIR)/officelabs/inc \
+	-I$(CEF_DIR) \
+	-I$(CEF_DIR)/include \
+	-I$(WORKDIR)/SdiTarget/sd/sdi \
+))
+
+$(eval $(call gb_Library_use_libraries,sd,\
+	officelabs \
+))
+
+endif
+# === End CEF ===
+
 $(eval $(call gb_Library_add_defs,sd,\
 	-DSD_DLLIMPLEMENTATION \
 	-DSDUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,sdui))\" \

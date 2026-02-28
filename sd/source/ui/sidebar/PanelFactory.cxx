@@ -31,6 +31,10 @@
 #include <TableDesignPane.hxx>
 #include "SlideBackground.hxx"
 
+#ifdef HAVE_FEATURE_CEF
+#include <officelabs/WebViewPanel.hxx>
+#endif
+
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
@@ -115,6 +119,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         xControl = std::make_unique<NavigatorWrapper>(pParent, *pBase, pBindings);
     else if (rsUIElementResourceURL.endsWith("/SlideBackgroundPanel"))
         xControl = std::make_unique<SlideBackground>(pParent, *pBase, xFrame, pBindings);
+#ifdef HAVE_FEATURE_CEF
+    else if (rsUIElementResourceURL.endsWith("/AIAssistantPanel"))
+        xControl = officelabs::WebViewPanel::Create(pParent, pBindings);
+#endif
 
     if (!xControl)
         throw lang::IllegalArgumentException();

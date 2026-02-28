@@ -1,10 +1,10 @@
 # LibreOffice Fork - Architecture
 
-> Last updated: Feb 13, 2026
+> Last updated: Feb 28, 2026
 
 ## Overview
 
-This is a fork of LibreOffice with a custom `officelabs/` module that embeds a CEF (Chromium Embedded Framework) browser panel in the Writer sidebar. The CEF panel hosts the React chat UI and provides IPC between JavaScript and the C++ document layer via cefQuery.
+This is a fork of LibreOffice with a custom `officelabs/` module that embeds a CEF (Chromium Embedded Framework) browser panel in the sidebar of **Writer, Calc, and Impress**. Each document window gets its own independent CEF browser via the per-frame architecture (`PerFrameCefState` map). The CEF panel hosts the React chat UI and provides IPC between JavaScript and the C++ document layer via cefQuery.
 
 ## Module Structure
 
@@ -12,11 +12,11 @@ This is a fork of LibreOffice with a custom `officelabs/` module that embeds a C
 libreoffice-fork/
 +-- officelabs/                         # Custom OfficeLabs module
 |   +-- source/
-|   |   +-- CefInit.cxx                # CEF lifecycle singleton (3.4 KB)
-|   |   +-- WebViewPanel.cxx           # CEF sidebar panel host (15 KB)
-|   |   +-- WebViewMessageHandler.cxx  # cefQuery IPC routing (7.7 KB)
-|   |   +-- DocumentController.cxx     # UNO document API (13.4 KB)
-|   |   +-- AgentConnection.cxx        # HTTP client for VCL fallback (38.7 KB)
+|   |   +-- CefInit.cxx                # CEF lifecycle singleton
+|   |   +-- WebViewPanel.cxx           # Per-frame CEF sidebar host (PerFrameCefState map)
+|   |   +-- WebViewMessageHandler.cxx  # cefQuery IPC routing
+|   |   +-- DocumentController.cxx     # UNO document API + app type detection
+|   |   +-- AgentConnection.cxx        # HTTP client for VCL fallback
 |   |   +-- cef_subprocess_main.cxx    # CEF subprocess entry point
 |   +-- inc/officelabs/
 |   |   +-- CefInit.hxx
@@ -34,7 +34,11 @@ libreoffice-fork/
 |   +-- Makefile
 +-- sw/source/uibase/sidebar/
 |   +-- AIAssistantPanel.cxx            # VCL fallback (non-CEF builds)
-|   +-- SwPanelFactory.cxx             # Panel registration (#ifdef HAVE_FEATURE_CEF)
+|   +-- SwPanelFactory.cxx             # Writer panel registration (#ifdef HAVE_FEATURE_CEF)
++-- sc/source/ui/sidebar/
+|   +-- ScPanelFactory.cxx             # Calc panel registration (#ifdef HAVE_FEATURE_CEF)
++-- sd/source/ui/sidebar/
+|   +-- PanelFactory.cxx              # Impress panel registration (#ifdef HAVE_FEATURE_CEF)
 +-- external/cef/                       # CEF v144 SDK
 ```
 
@@ -49,12 +53,17 @@ libreoffice-fork/
   - Remote debugging port 9222
 - Manages CefApp, CefBrowserProcessHandler
 
-### WebViewPanel.cxx - CEF Sidebar Host
-- Embeds CefBrowser in a VCL SystemChildWindow
+### WebViewPanel.cxx - CEF Sidebar Host (Per-Frame Architecture)
+- **Per-frame browser**: Each LO document frame gets its own `PerFrameCefState` (browser, popup, router, handler, client)
+- State stored in `std::map<HWND, PerFrameCefState> s_perFrameState` keyed by LO frame HWND
+- `initOrReattachCefBrowser()`: unified entry — resolves frame HWND → look up map → reattach or create new browser
+- `s_allPanels` broadcast: `WM_ACTIVATE` calls `syncCefWindowSize()` on ALL panels for instant transitions
+- All panels visible simultaneously — no hide-when-inactive restriction
+- Z-order: `HWND_TOP` only for active frame; inactive at natural Z-order
+- `WM_NCDESTROY`: erases map entry; Windows auto-destroys owned popup
 - URL loading priority:
   1. `OFFICELABS_UI_DEV_URL` env var (dev: `http://localhost:5173`)
   2. Bundled `file://` path to `instdir/program/officelabs-ui/index.html`
-- Resize handling: CefBrowser resized on VCL panel resize
 - `postToVclThread()` helper: dispatches callbacks from CEF threads to VCL main thread using `PostUserEvent(LINK_NONMEMBER())`
 
 ### WebViewMessageHandler.cxx - IPC Routing
