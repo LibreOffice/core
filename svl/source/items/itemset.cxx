@@ -496,6 +496,12 @@ SfxItemState SfxItemSet::GetItemState_ForIter(PoolItemMap::const_iterator aHit, 
 
 SfxItemState SfxItemSet::GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const
 {
+    if (m_pAccessTracker && !m_bAccessTrackerIgnore) {
+        if (std::find(m_pAccessTracker->begin(), m_pAccessTracker->end(), nWhich)
+                == m_pAccessTracker->end())
+            m_pAccessTracker->push_back(nWhich);
+    }
+
     PoolItemMap::const_iterator aHit(m_aPoolItemMap.find(nWhich));
 
     if (aHit != m_aPoolItemMap.end())
@@ -519,6 +525,12 @@ SfxItemState SfxItemSet::GetItemState_ForWhichID( SfxItemState eState, sal_uInt1
 
 bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
 {
+    if (m_pAccessTracker && !m_bAccessTrackerIgnore) {
+        if (std::find(m_pAccessTracker->begin(), m_pAccessTracker->end(), nWhich)
+                == m_pAccessTracker->end())
+            m_pAccessTracker->push_back(nWhich);
+    }
+
     const bool bRet(SfxItemState::SET == GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, true, ppItem));
 
     // we need to reset ppItem when it was *not* set by GetItemState_ForWhichID
@@ -921,6 +933,12 @@ const SfxPoolItem* SfxItemSet::GetItem(sal_uInt16 nId, bool bSearchInParent) con
 
 const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
 {
+    if (m_pAccessTracker && !m_bAccessTrackerIgnore) {
+        if (std::find(m_pAccessTracker->begin(), m_pAccessTracker->end(), nWhich)
+                == m_pAccessTracker->end())
+            m_pAccessTracker->push_back(nWhich);
+    }
+
     PoolItemMap::const_iterator aHit(m_aPoolItemMap.find(nWhich));
 
     if (aHit != m_aPoolItemMap.end())

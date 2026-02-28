@@ -458,6 +458,7 @@ bool SvxTransparenceTabPage::InitPreview(const SfxItemSet& rSet)
     }
 
     // Get fillstyle for preview
+    rSet.SetAccessTrackerIgnore(true);
     rXFSet.Put ( rSet.Get(XATTR_FILLSTYLE) );
     rXFSet.Put ( rSet.Get(XATTR_FILLCOLOR) );
     rXFSet.Put ( rSet.Get(XATTR_FILLGRADIENT) );
@@ -469,6 +470,7 @@ bool SvxTransparenceTabPage::InitPreview(const SfxItemSet& rSet)
     m_aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
 
     bBitmap = rSet.Get(XATTR_FILLSTYLE).GetValue() == drawing::FillStyle_BITMAP;
+    rSet.SetAccessTrackerIgnore(false);
 
     // show the right preview window
     if ( bBitmap )

@@ -231,6 +231,8 @@
 #define STR_TABPAGE_INVALIDNAME                 NC_("STR_TABPAGE_INVALIDNAME", "This name is already in use.")
 #define STR_TABPAGE_INVALIDSTYLE                NC_("STR_TABPAGE_INVALIDSTYLE", "This Style does not exist.")
 #define STR_TABPAGE_INVALIDPARENT               NC_("STR_TABPAGE_INVALIDPARENT", "This Style cannot be used as a base Style,\nbecause it would result in a recursive reference.")
+#define STR_RESET_PROPERTY_TOOLTIP              NC_("STR_RESET_PROPERTY_TOOLTIP", "Reset this property to inherit from parent style")
+#define STR_NO_MODIFIED_PROPERTIES              NC_("STR_NO_MODIFIED_PROPERTIES", "All properties are inherited from parent style.")
 #define STR_POOL_STYLE_NAME                     NC_("STR_POOL_STYLE_NAME", "Name already exists as a default Style.\nPlease choose another name.")
 #define STR_DELETE_STYLE_USED                   NC_("STR_DELETE_STYLE_USED", "One or more of the selected styles is in use in this document.\nIf you will delete it, text or objects using these styles will revert to the parent style.\nDo you still wish to delete these styles?\n")
 #define STR_DELETE_STYLE                        NC_("STR_DELETE_STYLE", "Styles in use: ")

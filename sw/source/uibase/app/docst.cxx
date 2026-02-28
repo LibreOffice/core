@@ -20,6 +20,7 @@
 #include <config_wasm_strip.h>
 
 #include <memory>
+#include <set>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -653,6 +654,11 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
         // reset indent attributes at paragraph style, if a list style
         // will be applied and no indent attributes will be applied.
         m_xTmp->SetItemSet( aSet, false, true );
+
+        // Reset properties that user explicitly removed via property chips
+        const std::set<sal_uInt16>& rInvalidated = m_pDlg->GetInvalidatedWhichIds();
+        if (!rInvalidated.empty())
+            m_xTmp->ResetItems(rInvalidated);
     }
     else
     {

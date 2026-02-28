@@ -69,6 +69,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/strarray.hxx>
 #include <names.hxx>
 
 using namespace com::sun::star;
@@ -1201,6 +1202,275 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
     }
 
     return SfxStyleSheetBase::GetDescription(eUnit);
+}
+
+std::vector<std::pair<sal_uInt16, OUString>> SwDocStyleSheet::GetItemPresentation(
+    MapUnit eMetric, const SfxItemSet* pWorkingSet)
+{
+    std::vector<std::pair<sal_uInt16, OUString>> aResult;
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
+
+    // Get parent item set for comparison
+    const SfxItemSet* pParentSet = nullptr;
+    SfxStyleSheetBase* pParentStyle = nullptr;
+    if (!GetParent().isEmpty())
+    {
+        pParentStyle = m_pPool->Find(GetParent(), nFamily);
+        if (pParentStyle)
+            pParentSet = &pParentStyle->GetItemSet();
+    }
+
+    if (SfxStyleFamily::Page == nFamily)
+    {
+        if (!pSet)
+            GetItemSet();
+
+        SfxItemIter aIter(*pSet);
+
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        {
+            if (!IsInvalidItem(pItem))
+            {
+                // Only show items that are explicitly SET in this style, not inherited from parent
+                if (pSet->GetItemState(pItem->Which(), false) != SfxItemState::SET)
+                    continue;
+
+                // Skip items identical to parent
+                if (pParentSet)
+                {
+                    const SfxPoolItem* pParentItem = nullptr;
+                    if (pParentSet->GetItemState(pItem->Which(), true, &pParentItem) == SfxItemState::SET
+                        && pParentItem && *pParentItem == *pItem)
+                        continue;
+                }
+
+                // Skip items whose value equals the pool default
+                if (*pItem == pSet->GetPool()->GetUserOrPoolDefaultItem(pItem->Which()))
+                    continue;
+
+                switch (pItem->Which())
+                {
+                    case RES_LR_SPACE:
+                    case SID_ATTR_PAGE_SIZE:
+                    case SID_ATTR_PAGE_MAXSIZE:
+                    case SID_ATTR_PAGE_PAPERBIN:
+                    case SID_ATTR_BORDER_INNER:
+                        break;
+                    default:
+                    {
+                        OUString aItemPresentation;
+                        if (!IsInvalidItem(pItem) &&
+                            m_pPool->GetPool().GetPresentation(
+                                *pItem, eMetric, aItemPresentation, aIntlWrapper))
+                        {
+                            if (!aItemPresentation.isEmpty())
+                            {
+                                // If there isn't "Name: value", try adding the name
+                                if (aItemPresentation.indexOf(": ") == -1)
+                                {
+                                    sal_uInt16 nSlotId = m_pPool->GetPool().GetSlotId(pItem->Which());
+                                    sal_uInt32 nIdx = SvxAttrNameTable::FindIndex(nSlotId);
+                                    OUString aAttrName = SvxAttrNameTable::GetString(nIdx);
+                                    if (aAttrName.isEmpty())
+                                    {
+                                        // Fallback for Writer-specific WhichId
+                                        static const std::map<sal_uInt16, TranslateId> aSwAttrNames = {
+                                            { sal_uInt16(RES_PARATR_OUTLINELEVEL),      STR_ATTR_OUTLINE_LEVEL },
+                                            { sal_uInt16(RES_PARATR_LIST_LEVEL),        STR_ATTR_LIST_LEVEL },
+                                            { sal_uInt16(RES_PARATR_LIST_ISRESTART),    STR_ATTR_LIST_RESTART },
+                                            { sal_uInt16(RES_PARATR_LIST_RESTARTVALUE), STR_ATTR_LIST_RESTART_VALUE },
+                                            { sal_uInt16(RES_PARATR_AUTOFRAMEDIR),      STR_ATTR_TEXT_DIRECTION },
+                                            { sal_uInt16(RES_CHRATR_HIDDEN),            STR_ATTR_HIDDEN },
+                                            { sal_uInt16(XATTR_FILLSTYLE),              STR_ATTR_FILL_STYLE },
+                                            { sal_uInt16(XATTR_FILLGRADIENT),           STR_ATTR_GRADIENT },
+                                            { sal_uInt16(XATTR_GRADIENTSTEPCOUNT),      STR_ATTR_GRADIENT_STEPS },
+                                        };
+                                        auto itW = aSwAttrNames.find(pItem->Which());
+                                        if (itW != aSwAttrNames.end())
+                                            aAttrName = SwResId(itW->second);
+                                    }
+                                    if (!aAttrName.isEmpty())
+                                        aItemPresentation = aAttrName + ": " + aItemPresentation;
+                                }
+                                aResult.emplace_back(pItem->Which(), aItemPresentation);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return aResult;
+    }
+
+    if (SfxStyleFamily::Frame == nFamily || SfxStyleFamily::Para == nFamily || SfxStyleFamily::Char == nFamily)
+    {
+        if (!pSet)
+            GetItemSet();
+
+        const SfxItemSet* pCheckSet = pWorkingSet ? pWorkingSet : pSet;
+
+        const drawing::FillStyle eFillStyle(pCheckSet->Get(XATTR_FILLSTYLE).GetValue());
+        const bool bUseFloatTransparence(pCheckSet->Get(XATTR_FILLFLOATTRANSPARENCE).IsEnabled());
+
+        SfxItemIter aIter(*pSet);
+
+        for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+        {
+            if (!IsInvalidItem(pItem))
+            {
+                // Only show items that are explicitly SET in this style, not inherited from parent
+                if (pCheckSet->GetItemState(pItem->Which(), false) != SfxItemState::SET)
+                    continue;
+
+                // Skip items identical to parent
+                if (pParentSet)
+                {
+                    const SfxPoolItem* pParentItem = nullptr;
+                    if (pParentSet->GetItemState(pItem->Which(), true, &pParentItem) == SfxItemState::SET
+                        && pParentItem && *pParentItem == *pItem)
+                        continue;
+                }
+
+                switch (pItem->Which())
+                {
+                    case SID_ATTR_AUTO_STYLE_UPDATE:
+                    case RES_PAGEDESC:
+                    case SID_ATTR_PARA_PAGENUM:
+                    case SID_ATTR_PARA_MODEL:
+                    case RES_BREAK:
+                        // Skip these - they have special handling in GetDescription
+                        break;
+                    default:
+                    {
+                        OUString aItemPresentation;
+                        if (!IsInvalidItem(pItem) &&
+                            m_pPool->GetPool().GetPresentation(
+                                *pItem, eMetric, aItemPresentation, aIntlWrapper))
+                        {
+                            bool bIsDefault = false;
+                            switch (pItem->Which())
+                            {
+                                case XATTR_FILLCOLOR:
+                                    bIsDefault = (drawing::FillStyle_SOLID == eFillStyle);
+                                    break;
+                                case XATTR_FILLGRADIENT:
+                                    bIsDefault = (drawing::FillStyle_GRADIENT == eFillStyle);
+                                    break;
+                                case XATTR_FILLHATCH:
+                                    bIsDefault = (drawing::FillStyle_HATCH == eFillStyle);
+                                    break;
+                                case XATTR_FILLBITMAP:
+                                    bIsDefault = (drawing::FillStyle_BITMAP == eFillStyle);
+                                    break;
+                                case XATTR_FILLTRANSPARENCE:
+                                    bIsDefault = !bUseFloatTransparence;
+                                    break;
+                                case XATTR_FILLFLOATTRANSPARENCE:
+                                    bIsDefault = bUseFloatTransparence;
+                                    break;
+                                case XATTR_GRADIENTSTEPCOUNT:
+                                    bIsDefault = bUseFloatTransparence;
+                                    break;
+                                case RES_CHRATR_CJK_FONT:
+                                case RES_CHRATR_CJK_FONTSIZE:
+                                case RES_CHRATR_CJK_LANGUAGE:
+                                case RES_CHRATR_CJK_POSTURE:
+                                case RES_CHRATR_CJK_WEIGHT:
+                                    if (SvtCJKOptions::IsCJKFontEnabled())
+                                        bIsDefault = true;
+                                    aItemPresentation = SwResId(STR_CJK_FONT) + aItemPresentation;
+                                        break;
+                                case RES_CHRATR_CTL_FONT:
+                                case RES_CHRATR_CTL_FONTSIZE:
+                                case RES_CHRATR_CTL_LANGUAGE:
+                                case RES_CHRATR_CTL_POSTURE:
+                                case RES_CHRATR_CTL_WEIGHT:
+                                    if (SvtCTLOptions::IsCTLFontEnabled())
+                                        bIsDefault = true;
+                                    aItemPresentation = SwResId(STR_CTL_FONT) + aItemPresentation;
+                                    break;
+                                case RES_CHRATR_FONT:
+                                case RES_CHRATR_FONTSIZE:
+                                case RES_CHRATR_LANGUAGE:
+                                case RES_CHRATR_POSTURE:
+                                case RES_CHRATR_WEIGHT:
+                                    aItemPresentation = SwResId(STR_WESTERN_FONT) + aItemPresentation;
+                                    [[fallthrough]];
+                                default:
+                                    bIsDefault = true;
+                            }
+                            if (bIsDefault && !aItemPresentation.isEmpty())
+                            {
+                                // If there isn't "Name: value", try adding the name
+                                if (aItemPresentation.indexOf(": ") == -1)
+                                {
+                                    sal_uInt16 nSlotId = m_pPool->GetPool().GetSlotId(pItem->Which());
+                                    sal_uInt32 nIdx = SvxAttrNameTable::FindIndex(nSlotId);
+                                    OUString aAttrName = SvxAttrNameTable::GetString(nIdx);
+                                    if (aAttrName.isEmpty())
+                                    {
+                                        // Fallback for Writer-specific WhichId
+                                        static const std::map<sal_uInt16, TranslateId> aSwAttrNames = {
+                                            { sal_uInt16(RES_PARATR_OUTLINELEVEL),      STR_ATTR_OUTLINE_LEVEL },
+                                            { sal_uInt16(RES_PARATR_LIST_LEVEL),        STR_ATTR_LIST_LEVEL },
+                                            { sal_uInt16(RES_PARATR_LIST_ISRESTART),    STR_ATTR_LIST_RESTART },
+                                            { sal_uInt16(RES_PARATR_LIST_RESTARTVALUE), STR_ATTR_LIST_RESTART_VALUE },
+                                            { sal_uInt16(RES_PARATR_AUTOFRAMEDIR),      STR_ATTR_TEXT_DIRECTION },
+                                            { sal_uInt16(RES_CHRATR_HIDDEN),            STR_ATTR_HIDDEN },
+                                            { sal_uInt16(XATTR_FILLSTYLE),              STR_ATTR_FILL_STYLE },
+                                            { sal_uInt16(XATTR_FILLGRADIENT),           STR_ATTR_GRADIENT },
+                                            { sal_uInt16(XATTR_GRADIENTSTEPCOUNT),      STR_ATTR_GRADIENT_STEPS },
+                                        };
+                                        auto itW = aSwAttrNames.find(pItem->Which());
+                                        if (itW != aSwAttrNames.end())
+                                            aAttrName = SwResId(itW->second);
+                                    }
+                                    if (!aAttrName.isEmpty())
+                                        aItemPresentation = aAttrName + ": " + aItemPresentation;
+                                }
+                                aResult.emplace_back(pItem->Which(), aItemPresentation);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return aResult;
+    }
+
+    if (SfxStyleFamily::Pseudo == nFamily)
+    {
+        return aResult;
+    }
+
+    return SfxStyleSheetBase::GetItemPresentation(eMetric);
+}
+
+void SwDocStyleSheet::ResetItems(const std::set<sal_uInt16>& rWhichIds)
+{
+    if (rWhichIds.empty())
+        return;
+
+    std::vector<sal_uInt16> aIds(rWhichIds.begin(), rWhichIds.end());
+
+    if (nFamily == SfxStyleFamily::Para)
+    {
+        SwTextFormatColl* pColl = m_rDoc.FindTextFormatCollByName(UIName(aName));
+        if (pColl)
+            m_rDoc.ResetAttrAtFormat(aIds, *pColl);
+    }
+    else if (nFamily == SfxStyleFamily::Char)
+    {
+        SwCharFormat* pCharFormat = m_rDoc.FindCharFormatByName(UIName(aName));
+        if (pCharFormat)
+            m_rDoc.ResetAttrAtFormat(aIds, *pCharFormat);
+    }
+    else if (nFamily == SfxStyleFamily::Frame)
+    {
+        SwFrameFormat* pFrameFormat = m_rDoc.FindFrameFormatByName(UIName(aName));
+        if (pFrameFormat)
+            m_rDoc.ResetAttrAtFormat(aIds, *pFrameFormat);
+    }
 }
 
 // Set names

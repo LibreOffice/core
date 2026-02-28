@@ -37,9 +37,15 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/lok.hxx>
+#include <editeng/editids.hrc>
+#include <svx/xdef.hxx>
 
 #include <sfx2/strings.hrc>
 #include <helpids.h>
+#include <map>
+#include <set>
+
+
 
 using namespace ::com::sun::star::uno;
 
@@ -60,6 +66,7 @@ namespace {
 struct Data_Impl
 {
     OUString sId;                 // The ID
+    OUString sLabel;              // The tab label
     CreateTabPage fnCreatePage;   // Pointer to Factory
     GetTabPageRanges fnGetRanges; // Pointer to Ranges-Function
     std::unique_ptr<SfxTabPage> xTabPage;         // The TabPage itself
@@ -595,7 +602,6 @@ bool SfxTabDialogController::DeactivatePage(std::u16string_view aPage)
     if (m_pSet)
     {
         SfxItemSet aTmp( *m_pSet->GetPool(), m_pSet->GetRanges() );
-
         if (pPage->HasExchangeSupport())
             nRet = pPage->DeactivatePage(&aTmp);
         else
@@ -605,6 +611,12 @@ bool SfxTabDialogController::DeactivatePage(std::u16string_view aPage)
         {
             m_xExampleSet->Put( aTmp );
             m_pOutSet->Put( aTmp );
+
+            // Re-clear any items that were explicitly invalidated by user
+            for (sal_uInt16 nWhich : m_aInvalidatedWhichIds)
+            {
+                m_xExampleSet->ClearItem(nWhich);
+            }
         }
     }
     else
@@ -817,6 +829,16 @@ short SfxTabDialogController::Ok()
     if (m_bStandardPushed)
         bModified = true;
 
+    if (!m_aInvalidatedWhichIds.empty())
+            bModified = true;
+
+    // Re-apply user-requested property resets after FillItemSet
+    for (sal_uInt16 nWhich : m_aInvalidatedWhichIds)
+    {
+        if (m_pOutSet)
+            m_pOutSet->ClearItem(nWhich);
+    }
+
     return bModified ? RET_OK : RET_CANCEL;
 }
 
@@ -877,11 +899,9 @@ void SfxTabDialogController::AddTabPage(const OUString &rName /* Page ID */,
 }
 
 /*  [Description]
-
     Add a page to the dialog. The Rider text is passed on, the page has no
     counterpart in the TabControl in the resource of the dialogue.
 */
-
 void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
                                         const OUString& rRiderText,
                                         CreateTabPage pCreateFunc, /* Pointer to the Factory Method */
@@ -890,6 +910,10 @@ void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
     AddTabPage(rName, pCreateFunc, nullptr);
     m_xTabCtrl->append_page(rName, rRiderText, pIconName);
+    // Save the label in Data_Impl
+    auto it = Find(m_pImpl->aData, rName);
+    if (it != m_pImpl->aData.end())
+        (*it)->sLabel = rRiderText;
 }
 
 void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
@@ -901,6 +925,10 @@ void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
     AddTabPage(rName, pCreateFunc, pRangesFunc);
     m_xTabCtrl->append_page(rName, rRiderText, &rIconName);
+    // Save the label in Data_Impl
+    auto it = Find(m_pImpl->aData, rName);
+    if (it != m_pImpl->aData.end())
+        (*it)->sLabel = rRiderText;
 }
 
 void SfxTabDialogController::AddTabPage(const OUString &rName,
@@ -918,6 +946,10 @@ void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& r
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
     AddTabPage(rName, nPageCreateId);
     m_xTabCtrl->append_page(rName, rRiderText, pIconName);
+    // Save the label in Data_Impl
+    auto it = Find(m_pImpl->aData, rName);
+    if (it != m_pImpl->aData.end())
+        (*it)->sLabel = rRiderText;
 }
 
 void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& rRiderText,
@@ -1036,7 +1068,6 @@ void SfxTabDialogController::RemoveTabPage(const OUString& rId)
 void SfxTabDialogController::Start_Impl()
 {
     CreatePages();
-
     setPreviewsToSamePlace();
 
     assert(m_pImpl->aData.size() == static_cast<size_t>(m_xTabCtrl->get_n_pages())
@@ -1081,6 +1112,204 @@ void SfxTabDialogController::ShowPage(const OUString& rIdent)
 OUString SfxTabDialogController::GetCurPageId() const
 {
     return m_xTabCtrl->get_current_page_ident();
+}
+
+void SfxTabDialogController::ResetTabPage(std::u16string_view rPageId)
+{
+    SfxTabPage* pPage = GetTabPage(rPageId);
+    if (pPage)
+    {
+        const SfxItemSet* pSet = m_xExampleSet ? m_xExampleSet.get() : m_pSet.get();
+        if (pSet)
+        {
+            pPage->Reset(pSet);
+        }
+    }
+}
+
+void SfxTabDialogController::ResetAllTabPages()
+{
+    const SfxItemSet* pSet = m_xExampleSet ? m_xExampleSet.get() : m_pSet.get();
+    if (!pSet)
+        return;
+
+    for (auto const& elem : m_pImpl->aData)
+    {
+        if (elem->xTabPage)
+        {
+            elem->xTabPage->Reset(pSet);
+        }
+    }
+}
+
+void SfxTabDialogController::InvalidateItem(sal_uInt16 nWhich)
+{
+    m_aInvalidatedWhichIds.insert(nWhich);
+
+    if (m_xExampleSet)
+    {
+        m_xExampleSet->ClearItem(nWhich);
+    }
+    if (m_pOutSet)
+        m_pOutSet->InvalidateItem(nWhich);
+
+    if (!m_pSet)
+        return;
+
+    const SfxItemPool* pPool = m_pSet->GetPool();
+    if (!pPool)
+        return;
+
+    sal_uInt16 nSlotId = pPool->GetSlotId(nWhich);
+
+    for (auto const& elem : m_pImpl->aData)
+    {
+        if (!elem->xTabPage)
+            continue;
+
+        bool bFound = false;
+
+        if (elem->fnGetRanges)
+        {
+            const WhichRangesContainer aRanges = elem->fnGetRanges();
+
+            for (const auto& rPair : aRanges)
+            {
+                // Check 1: via SlotId
+                if (nSlotId >= rPair.first && nSlotId <= rPair.second)
+                {
+                    bFound = true;
+                    break;
+                }
+
+                // Check 2: iterate each slot, convert to WhichId
+                for (sal_uInt16 nSlot = rPair.first; nSlot <= rPair.second; ++nSlot)
+                {
+                    if (pPool->GetWhichIDFromSlotID(nSlot) == nWhich)
+                    {
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (bFound)
+                    break;
+            }
+        }
+
+        if (bFound)
+        {
+            const SfxItemSet* pResetSet = m_xExampleSet ? m_xExampleSet.get() : m_pSet.get();
+            if (pResetSet)
+            {
+                elem->xTabPage->Reset(pResetSet);
+            }
+        }
+        else
+        {
+            elem->bRefresh = true;
+        }
+    }
+}
+
+void SfxTabDialogController::BuildWhichToTabMap()
+{
+    if (!m_aWhichToTabMap.empty())
+        return;
+
+    const SfxItemSet* pSet = m_xExampleSet ? m_xExampleSet.get() : m_pSet.get();
+    if (!pSet)
+        return;
+
+    const SfxItemPool* pPool = m_pSet ? m_pSet->GetPool() : nullptr;
+
+    // Passata 1: tracker (copre le tab che accedono via Get/GetItemState)
+    for (auto const& elem : m_pImpl->aData)
+    {
+        if (!elem->xTabPage)
+            continue;
+
+        std::vector<sal_uInt16> aAccessed;
+        pSet->SetAccessTracker(&aAccessed);
+        elem->xTabPage->Reset(pSet);
+        pSet->SetAccessTracker(nullptr);
+
+        for (int i = 0; i < static_cast<int>(aAccessed.size()); ++i)
+        {
+            sal_uInt16 nWhich = aAccessed[i];
+            if (m_aWhichToTabMap.find(nWhich) == m_aWhichToTabMap.end())
+            {
+                m_aWhichToTabMap[nWhich] = elem->sId;
+                m_aWhichOrderMap[nWhich] = i;
+            }
+        }
+    }
+
+    // Passata 2: GetRanges (copre le tab che accedono ItemSet interni)
+    if (pPool)
+    {
+        for (auto const& elem : m_pImpl->aData)
+        {
+            if (!elem->fnGetRanges)
+                continue;
+
+            const WhichRangesContainer aRanges = elem->fnGetRanges();
+            for (const auto& rPair : aRanges)
+            {
+                for (sal_uInt16 nSlot = rPair.first; nSlot <= rPair.second; ++nSlot)
+                {
+                    sal_uInt16 nWhich = pPool->GetWhichIDFromSlotID(nSlot);
+                    // Solo se non già classificato dal tracker
+                    if (m_aWhichToTabMap.find(nWhich) == m_aWhichToTabMap.end())
+                        m_aWhichToTabMap[nWhich] = elem->sId;
+                }
+            }
+        }
+    }
+
+    // Restore delle tab page
+    for (auto const& elem : m_pImpl->aData)
+    {
+        if (!elem->xTabPage)
+            continue;
+        if (elem->xTabPage->DeferResetToFirstActivation())
+            elem->bRefresh = true;
+        else
+            elem->xTabPage->Reset(pSet);
+    }
+}
+
+OUString SfxTabDialogController::GetTabPageNameForWhich(sal_uInt16 nWhich) const
+{
+    auto it = m_aWhichToTabMap.find(nWhich);
+    if (it != m_aWhichToTabMap.end())
+        return it->second;
+    return OUString();
+}
+
+OUString SfxTabDialogController::GetTabPageLabel(const OUString& rPageId) const
+{
+    // First try to get the label from Data_Impl
+    auto it = Find(m_pImpl->aData, rPageId);
+    if (it != m_pImpl->aData.end() && !(*it)->sLabel.isEmpty())
+        return (*it)->sLabel;
+
+    // Then try from the notebook
+    OUString sLabel = m_xTabCtrl->get_tab_label_text(rPageId);
+    if (!sLabel.isEmpty())
+        return sLabel;
+
+    // Last resort: return the page ID itself
+    return rPageId;
+}
+
+std::vector<OUString> SfxTabDialogController::GetTabPageIds() const
+{
+    std::vector<OUString> aResult;
+    for (auto const& elem : m_pImpl->aData)
+    {
+        aResult.push_back(elem->sId);
+    }
+    return aResult;
 }
 
 short SfxTabDialogController::run()

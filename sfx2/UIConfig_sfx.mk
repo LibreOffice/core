@@ -56,6 +56,9 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/password \
 	sfx2/uiconfig/ui/notebookbarpopup \
 	sfx2/uiconfig/ui/printeroptionsdialog \
+	sfx2/uiconfig/ui/propertychip \
+	sfx2/uiconfig/ui/propertychiprow \
+	sfx2/uiconfig/ui/propertycategoryrow \
 	sfx2/uiconfig/ui/querysavedialog \
 	sfx2/uiconfig/ui/quickfind \
 	sfx2/uiconfig/ui/saveastemplatedlg \

@@ -39,12 +39,32 @@
 #include <svl/itemset.hxx>
 #include <svl/numformat.hxx>
 #include <svl/hint.hxx>
+#include <unotools/intlwrapper.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/zformat.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <attrib.hxx>
 
 #include <globstr.hrc>
+#include <strings.hrc>
 #include <scresid.hxx>
 #include <sc.hrc>
+
+#include <svx/strarray.hxx>
+#include <svx/svxids.hrc>
+#include <svl/numformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/intitem.hxx>
+#include <svl/ilstitem.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/eitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <scitems.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
+#include <document.hxx>
+#include <docsh.hxx>
+#include <sfx2/objsh.hxx>
 
 constexpr auto TWO_CM = o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip); // 1134
 constexpr auto HFDIST_CM = o3tl::convert(250, o3tl::Length::mm100, o3tl::Length::twip); // 142
@@ -272,6 +292,175 @@ SfxItemSet& ScStyleSheet::GetItemSet()
     }
 
     return *pSet;
+}
+
+std::vector<std::pair<sal_uInt16, OUString>> ScStyleSheet::GetItemPresentation(
+    MapUnit eMetric, const SfxItemSet* pWorkingSet)
+{
+    std::vector<std::pair<sal_uInt16, OUString>> aResult;
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
+
+    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet* pCheckSet = pWorkingSet ? pWorkingSet : &rSet;
+
+    // Get parent item set for comparison
+    const SfxItemSet* pParentSet = nullptr;
+    SfxStyleSheetBase* pParentStyle = nullptr;
+    if (!GetParent().isEmpty())
+    {
+        pParentStyle = m_pPool->Find(GetParent(), GetFamily());
+        if (pParentStyle)
+            pParentSet = &pParentStyle->GetItemSet();
+    }
+
+    // Get the number formatter for ATTR_VALUE_FORMAT
+    SvNumberFormatter* pFormatter = nullptr;
+    if (ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(SfxObjectShell::Current()))
+    {
+        pFormatter = pDocSh->GetDocument().GetFormatTable();
+    }
+
+    SfxItemIter aIter(rSet);
+
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    {
+        if (IsInvalidItem(pItem))
+            continue;
+
+        sal_uInt16 nWhich = pItem->Which();
+
+        // Only show items explicitly SET in this style (not inherited)
+        if (pCheckSet->GetItemState(nWhich, false) != SfxItemState::SET)
+            continue;
+
+        // Skip items identical to parent
+        if (pParentSet)
+        {
+            const SfxPoolItem* pParentItem = nullptr;
+            if (pParentSet->GetItemState(nWhich, true, &pParentItem) == SfxItemState::SET
+                && pParentItem && *pParentItem == *pItem)
+                continue;
+        }
+
+        // Skip items equal to pool default
+        if (*pItem == rSet.GetPool()->GetUserOrPoolDefaultItem(nWhich))
+            continue;
+
+        // Skip internal/structural items that don't make sense as chips
+        switch (nWhich)
+        {
+            case SID_ATTR_BORDER_INNER:
+            case SID_ATTR_PARA_MODEL:
+            case SID_ATTR_PAGE_SIZE:
+            case SID_ATTR_PAGE_MAXSIZE:
+            case SID_ATTR_PAGE_PAPERBIN:
+                continue;
+            default:
+                break;
+        }
+
+        OUString aItemPresentation;
+
+        // Special handling for number format: the default GetPresentation
+        // just returns the raw format key (e.g. "10122")
+        if (nWhich == ATTR_VALUE_FORMAT && pFormatter)
+        {
+            sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+            const SvNumberformat* pEntry = pFormatter->GetEntry(nFormat);
+            if (pEntry)
+            {
+                OUString sFormatStr = pEntry->GetFormatstring();
+                // Truncate very long format strings
+                if (sFormatStr.getLength() > 40)
+                    sFormatStr = OUString::Concat(sFormatStr.subView(0, 37)) + "...";
+                aItemPresentation = SvxAttrNameTable::GetString(
+                    SvxAttrNameTable::FindIndex(
+                        rSet.GetPool()->GetSlotId(nWhich)));
+                if (aItemPresentation.isEmpty())
+                    aItemPresentation = ScResId(STR_ATTR_NUM_FORMAT);
+                aItemPresentation += ": " + sFormatStr;
+            }
+            else
+            {
+                continue;  // Skip unresolvable format keys
+            }
+        }
+        else
+        {
+            // Standard presentation via pool
+            if (!m_pPool->GetPool().GetPresentation(
+                    *pItem, eMetric, aItemPresentation, aIntlWrapper))
+                continue;
+
+            if (aItemPresentation.isEmpty())
+                continue;
+
+            // Add attribute name prefix if not already present
+            if (aItemPresentation.indexOf(": ") == -1)
+            {
+                sal_uInt16 nSlotId = rSet.GetPool()->GetSlotId(nWhich);
+                sal_uInt32 nIdx = SvxAttrNameTable::FindIndex(nSlotId);
+                OUString aAttrName = SvxAttrNameTable::GetString(nIdx);
+
+                // Fallback for Calc-specific WhichIds not in SvxAttrNameTable
+                if (aAttrName.isEmpty())
+                {
+                    // You may want to add string resources in sc/inc/strings.hrc
+                    // for now using English fallbacks that you can later replace
+                    // with proper NC_ macros
+                    switch (nWhich)
+                    {
+                        case ATTR_PROTECTION:
+                            aAttrName = ScResId(STR_ATTR_PROTECTION);
+                            break;
+                        case ATTR_ROTATE_VALUE:
+                            aAttrName = ScResId(STR_ATTR_ROTATION);
+                            break;
+                        case ATTR_ROTATE_MODE:
+                            aAttrName = ScResId(STR_ATTR_ROTATION_MODE);
+                            break;
+                        case ATTR_WRITINGDIR:
+                            aAttrName = ScResId(STR_ATTR_TEXT_DIR);
+                            break;
+                        case ATTR_LINEBREAK:
+                            aAttrName = ScResId(STR_ATTR_WRAP_TEXT);
+                            break;
+                        case ATTR_SHRINKTOFIT:
+                            aAttrName = ScResId(STR_ATTR_SHRINK_FIT);
+                            break;
+                        case ATTR_STACKED:
+                            aAttrName = ScResId(STR_ATTR_STACKED);
+                            break;
+                        case ATTR_HOR_JUSTIFY:
+                            aAttrName = ScResId(STR_ATTR_H_ALIGN);
+                            break;
+                        case ATTR_VER_JUSTIFY:
+                            aAttrName = ScResId(STR_ATTR_V_ALIGN);
+                            break;
+                        case ATTR_INDENT:
+                            aAttrName = ScResId(STR_ATTR_INDENT);
+                            break;
+                        case ATTR_MARGIN:
+                            aAttrName = ScResId(STR_ATTR_SPACING);
+                            break;
+                        case ATTR_VERTICAL_ASIAN:
+                            aAttrName = ScResId(STR_ATTR_ASIAN_LAYOUT);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (!aAttrName.isEmpty())
+                    aItemPresentation = aAttrName + ": " + aItemPresentation;
+            }
+        }
+
+        if (!aItemPresentation.isEmpty())
+            aResult.emplace_back(nWhich, aItemPresentation);
+    }
+
+    return aResult;
 }
 
 bool ScStyleSheet::IsUsed() const

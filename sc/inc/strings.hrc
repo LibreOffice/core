@@ -445,6 +445,19 @@
 #define STR_DUPLICATERECORDS_DATACONATINSROWHEADERS    NC_("STR_DUPLICATERECORDS_DATACONATINSROWHEADERS", "Data contains row headers")
 #define STR_DUPLICATERECORDS_DATACONATINSCOLUMNHEADERS NC_("STR_DUPLICATERECORDS_DATACONATINSCOLUMNHEADERS", "Data contains column headers")
 
+#define STR_ATTR_PROTECTION    NC_("STR_ATTR_PROTECTION", "Protection")
+#define STR_ATTR_ROTATION      NC_("STR_ATTR_ROTATION", "Rotation")
+#define STR_ATTR_ROTATION_MODE NC_("STR_ATTR_ROTATION_MODE", "Rotation Mode")
+#define STR_ATTR_TEXT_DIR      NC_("STR_ATTR_TEXT_DIR", "Text Direction")
+#define STR_ATTR_WRAP_TEXT     NC_("STR_ATTR_WRAP_TEXT", "Wrap Text")
+#define STR_ATTR_SHRINK_FIT   NC_("STR_ATTR_SHRINK_FIT", "Shrink to Fit")
+#define STR_ATTR_STACKED      NC_("STR_ATTR_STACKED", "Stacked")
+#define STR_ATTR_H_ALIGN      NC_("STR_ATTR_H_ALIGN", "Horizontal Alignment")
+#define STR_ATTR_V_ALIGN      NC_("STR_ATTR_V_ALIGN", "Vertical Alignment")
+#define STR_ATTR_INDENT       NC_("STR_ATTR_INDENT", "Indent")
+#define STR_ATTR_SPACING      NC_("STR_ATTR_SPACING", "Spacing")
+#define STR_ATTR_NUM_FORMAT   NC_("STR_ATTR_NUM_FORMAT", "Number Format")
+#define STR_ATTR_ASIAN_LAYOUT   NC_("STR_ATTR_ASIAN_LAYOUT", "Asian Layout Mode")
 
 #define STR_CONTENT_WITH_UNKNOWN_ENCRYPTION NC_("STR_CONTENT_WITH_UNKNOWN_ENCRYPTION", "Document contains DRM content that is encrypted with an unknown encryption method. Only the un-encrypted content will be shown.")
 

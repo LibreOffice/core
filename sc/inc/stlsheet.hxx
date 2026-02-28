@@ -54,6 +54,9 @@ public:
 
     /// Fix for expensive dynamic_cast
     virtual bool isScStyleSheet() const override { return true; }
+
+    virtual std::vector<std::pair<sal_uInt16, OUString>> GetItemPresentation(
+            MapUnit eMetric, const SfxItemSet* pWorkingSet = nullptr) override;
 private:
     virtual             ~ScStyleSheet() override;
 

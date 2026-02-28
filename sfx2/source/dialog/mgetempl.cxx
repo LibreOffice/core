@@ -45,8 +45,140 @@
 
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sal/log.hxx>
+
+#include <algorithm>
 
 #include "mgetempl.hxx"
+
+// PropertyChip implementation
+PropertyChip::PropertyChip(weld::Box* pParent, SfxManageStyleSheetPage* pPage,
+                           sal_uInt16 nWhich, const OUString& rText)
+    : m_xBuilder(Application::CreateBuilder(pParent, u"sfx/ui/propertychip.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"PropertyChip"_ustr))
+    , m_xLabel(m_xBuilder->weld_label(u"label"_ustr))
+    , m_xRemoveBtn(m_xBuilder->weld_toolbar(u"removebar"_ustr))
+    , m_pPage(pPage)
+    , m_sText(rText)
+    , m_nWhich(nWhich)
+{
+    // For texts longer than one line, insert manual newlines.
+    static constexpr int MAX_LINE_CHARS = 100;
+    if (rText.getLength() > MAX_LINE_CHARS)
+    {
+        OUStringBuffer aBuf;
+        int nLineLen = 0;
+        for (sal_Int32 i = 0; i < rText.getLength(); ++i)
+        {
+            sal_Unicode c = rText[i];
+            aBuf.append(c);
+            nLineLen++;
+            if (nLineLen >= MAX_LINE_CHARS && (c == ' ' || c == ',' || c == ';' || c == '&'))
+            {
+                aBuf.append('\n');
+                nLineLen = 0;
+            }
+        }
+        m_xLabel->set_label(aBuf.makeStringAndClear());
+    }
+    else
+    {
+        m_xLabel->set_label(rText);
+    }
+    m_xLabel->set_tooltip_text(rText);
+    m_xRemoveBtn->connect_clicked(LINK(this, PropertyChip, RemoveHdl));
+}
+
+PropertyChip::~PropertyChip()
+{
+    if (m_xContainer)
+        m_xContainer->set_visible(false);
+}
+
+IMPL_LINK_NOARG(PropertyChip, RemoveHdl, const OUString&, void)
+{
+    m_pPage->ResetPropertyToParent(m_nWhich);
+}
+
+// PropertyCategoryRow implementation
+PropertyCategoryRow::PropertyCategoryRow(weld::Box* pParentBox, std::u16string_view rLabel)
+    : m_xBuilder(Application::CreateBuilder(pParentBox, u"sfx/ui/propertycategoryrow.ui"_ustr))
+    , m_xContainer(m_xBuilder->weld_container(u"PropertyCategoryRow"_ustr))
+    , m_xLabel(m_xBuilder->weld_label(u"label"_ustr))
+    , m_xChipsBox(m_xBuilder->weld_container(u"chipsbox"_ustr))
+{
+    m_xLabel->set_label(OUString::Concat(rLabel) + ":");
+}
+
+PropertyCategoryRow::~PropertyCategoryRow()
+{
+    m_aChips.clear();
+    m_aChipRows.clear();
+    if (m_xContainer)
+        m_xContainer->set_visible(false);
+}
+
+weld::Box* PropertyCategoryRow::EnsureCurrentRow(int nChipChars)
+{
+    if (m_aChipRows.empty()
+        || (m_aChipRows.back()->nTotalChars + nChipChars > MAX_CHARS_PER_ROW
+            && m_aChipRows.back()->nTotalChars > 0))
+    {
+        auto pRow = std::make_unique<ChipRow>();
+        pRow->xBuilder = Application::CreateBuilder(
+            m_xChipsBox.get(), u"sfx/ui/propertychiprow.ui"_ustr);
+        pRow->xBox = pRow->xBuilder->weld_box(u"PropertyChipRow"_ustr);
+        pRow->xBox->show();
+        pRow->nTotalChars = 0;
+        m_aChipRows.push_back(std::move(pRow));
+    }
+    return m_aChipRows.back()->xBox.get();
+}
+
+void PropertyCategoryRow::AddChip(SfxManageStyleSheetPage* pPage, sal_uInt16 nWhich, const OUString& rText)
+{
+    int nTextLen = rText.getLength();
+    int nChipChars = nTextLen + 3;
+    weld::Box* pCurrentRow = EnsureCurrentRow(nChipChars);
+    m_aChips.emplace_back(std::make_unique<PropertyChip>(pCurrentRow, pPage, nWhich, rText));
+    m_aChipRows.back()->nTotalChars += nChipChars;
+}
+
+void PropertyCategoryRow::RemoveChip(sal_uInt16 nWhich)
+{
+    struct ChipData
+    {
+        sal_uInt16 nWhich;
+        OUString sText;
+    };
+    std::vector<ChipData> aData;
+
+    SfxManageStyleSheetPage* pPage = nullptr;
+    for (const auto& pChip : m_aChips)
+    {
+        if (pChip->GetWhich() == nWhich)
+            continue;
+        if (!pPage)
+            pPage = pChip->GetPage();
+        aData.push_back({pChip->GetWhich(), pChip->GetText()});
+    }
+
+    // Hide rows before destroying
+    for (auto& pRow : m_aChipRows)
+    {
+        if (pRow->xBox)
+            pRow->xBox->set_visible(false);
+    }
+
+    m_aChips.clear();
+    m_aChipRows.clear();
+
+    if (pPage)
+    {
+        for (const auto& d : aData)
+            AddChip(pPage, d.nWhich, d.sText);
+    }
+}
 
 /*  SfxManageStyleSheetPage Constructor
  *
@@ -72,6 +204,10 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
     , m_xFilterFt(m_xBuilder->weld_label(u"categoryft"_ustr))
     , m_xFilterLb(m_xBuilder->weld_combo_box(u"category"_ustr))
     , m_xDescFt(m_xBuilder->weld_label(u"desc"_ustr))
+    , m_xEditViewBox(m_xBuilder->weld_box(u"editviewbox"_ustr))
+    , m_xEditPropsBtn(m_xBuilder->weld_toggle_button(u"editprops"_ustr))
+    , m_xViewPropsBtn(m_xBuilder->weld_toggle_button(u"viewprops"_ustr))
+    , m_xPropBox(m_xBuilder->weld_box(u"propbox"_ustr))
 {
     m_xFollowLb->make_sorted();
     // tdf#120188 like SwCharURLPage limit the width of the style combos
@@ -258,10 +394,13 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
     m_xBaseLb->connect_changed(LINK(this, SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl));
     m_xEditStyleBtn->connect_clicked(LINK(this, SfxManageStyleSheetPage, EditStyleHdl_Impl));
     m_xEditLinkStyleBtn->connect_clicked(LINK(this, SfxManageStyleSheetPage, EditLinkStyleHdl_Impl));
+    m_xEditPropsBtn->connect_toggled(LINK(this, SfxManageStyleSheetPage, EditPropsHdl_Impl));
+    m_xViewPropsBtn->connect_toggled(LINK(this, SfxManageStyleSheetPage, ViewPropsHdl_Impl));
 }
 
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 {
+    m_aPropertyRows.clear();
     pItem = nullptr;
     pStyle = nullptr;
 }
@@ -299,6 +438,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 /*  [Description]
 
     Set attribute description. Get the set metric for this.
+    Also builds property chips if the style has a parent.
 */
 
 {
@@ -325,7 +465,195 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
         default:
             OSL_FAIL( "non supported field unit" );
     }
-    m_xDescFt->set_label(pStyle->GetDescription(eUnit));
+
+    // If style has a parent, show description text and Edit button
+    if (pStyle->HasParentSupport() && !pStyle->GetParent().isEmpty())
+    {
+        if (m_bEditMode)
+        {
+            m_xDescFt->hide();
+            m_bInToggleHandler = true;
+            m_xEditPropsBtn->set_active(true);
+            m_xViewPropsBtn->set_active(false);
+            m_bInToggleHandler = false;
+            BuildPropertyChips_Impl();
+        }
+        else
+        {
+            m_xDescFt->set_label(pStyle->GetDescription(eUnit));
+            m_xDescFt->show();
+            m_bInToggleHandler = true;
+            m_xEditPropsBtn->set_active(false);
+            m_xViewPropsBtn->set_active(true);
+            m_bInToggleHandler = false;
+        }
+        m_xEditViewBox->show();
+    }
+    else
+    {
+        // No parent - show the full description, no Edit button
+        m_aPropertyRows.clear();
+        m_xDescFt->set_label(pStyle->GetDescription(eUnit));
+        m_xDescFt->show();
+        m_xEditPropsBtn->hide();
+        m_xEditViewBox->hide();
+    }
+}
+
+void SfxManageStyleSheetPage::BuildPropertyChips_Impl()
+
+/*  [Description]
+
+    Build property chips for all properties in this style that differ from the parent.
+    Each chip shows the property name/value and has an X button to reset it to parent.
+    Chips are grouped by tab page.
+*/
+
+{
+    m_aPropertyRows.clear();
+
+    if (!pStyle->HasParentSupport() || pStyle->GetParent().isEmpty())
+        return;
+
+    MapUnit eUnit = MapUnit::MapCM;
+    FieldUnit eFieldUnit(FieldUnit::CM);
+    SfxModule* pModule = SfxModule::GetActiveModule();
+    if (pModule)
+    {
+        eFieldUnit = pModule->GetFieldUnit();
+    }
+
+    switch (eFieldUnit)
+    {
+        case FieldUnit::MM:      eUnit = MapUnit::MapMM; break;
+        case FieldUnit::CM:
+        case FieldUnit::M:
+        case FieldUnit::KM:      eUnit = MapUnit::MapCM; break;
+        case FieldUnit::POINT:
+        case FieldUnit::PICA:    eUnit = MapUnit::MapPoint; break;
+        case FieldUnit::INCH:
+        case FieldUnit::FOOT:
+        case FieldUnit::MILE:    eUnit = MapUnit::MapInch; break;
+        default:
+            break;
+    }
+
+    // Get the dialog controller to find tab page names
+    SfxTabDialogController* pDlgController = static_cast<SfxTabDialogController*>(GetDialogController());
+    if (pDlgController)
+        pDlgController->BuildWhichToTabMap();
+
+    // Use the virtual method to get individual property presentations
+    const SfxItemSet* pWorkingSet = pDlgController ? pDlgController->GetExampleSet() : nullptr;
+    std::vector<std::pair<sal_uInt16, OUString>> aItems = pStyle->GetItemPresentation(eUnit, pWorkingSet);
+
+    // Group items by tab page
+    std::map<OUString, std::vector<std::pair<sal_uInt16, OUString>>> aGroupedItems;
+
+    for (const auto& rItem : aItems)
+    {
+        // Skip items that user has explicitly reset
+        if (m_aResetWhichIds.find(rItem.first) != m_aResetWhichIds.end())
+            continue;
+
+        OUString sTabId;
+        if (pDlgController)
+        {
+            sTabId = pDlgController->GetTabPageNameForWhich(rItem.first);
+        }
+
+        if (sTabId.isEmpty())
+        {
+            continue;  // skip unclassifiable items
+        }
+
+        aGroupedItems[sTabId].push_back(rItem);
+    }
+
+    // Create category rows in tab order (not alphabetical)
+    std::vector<OUString> aTabOrder;
+    if (pDlgController)
+    {
+        aTabOrder = pDlgController->GetTabPageIds();
+    }
+    // Add "other" at the end for items not matching any tab
+    aTabOrder.push_back("other");
+
+    for (const auto& sTabId : aTabOrder)
+    {
+        auto itGroup = aGroupedItems.find(sTabId);
+        if (itGroup == aGroupedItems.end())
+            continue;  // No items for this tab
+
+        OUString sLabel;
+        if (pDlgController && sTabId != "other")
+        {
+            sLabel = pDlgController->GetTabPageLabel(sTabId);
+        }
+        if (sLabel.isEmpty())
+            sLabel = sTabId;
+
+        auto pRow = std::make_unique<PropertyCategoryRow>(m_xPropBox.get(), sLabel);
+
+        auto& aItemVec = itGroup->second;
+        std::sort(aItemVec.begin(), aItemVec.end(),
+            [&](const auto& a, const auto& b) {
+                auto itA = pDlgController->GetWhichOrder(a.first);
+                auto itB = pDlgController->GetWhichOrder(b.first);
+                return itA < itB;
+            });
+
+        for (const auto& rItem : itGroup->second)
+        {
+            pRow->AddChip(this, rItem.first, rItem.second);
+        }
+
+        m_aPropertyRows[sTabId] = std::move(pRow);
+    }
+
+    for (const auto& sTabId : aTabOrder)
+    {
+        auto it = m_aPropertyRows.find(sTabId);
+        if (it != m_aPropertyRows.end())
+            it->second->Show();
+    }
+
+    if (m_aPropertyRows.empty())
+    {
+        m_xDescFt->set_label(SfxResId(STR_NO_MODIFIED_PROPERTIES));
+        m_xDescFt->show();
+    }
+}
+
+void SfxManageStyleSheetPage::ResetPropertyToParent(sal_uInt16 nWhich)
+{
+    SfxItemSet& rSet = pStyle->GetItemSet();
+
+    // Clear this item to restore inheritance
+    rSet.ClearItem(nWhich);
+
+    // Track that user has reset this property
+    m_aResetWhichIds.insert(nWhich);
+
+    bModified = true;
+
+    // Invalidate this item in the dialog's output set
+    SfxTabDialogController* pDlgController = static_cast<SfxTabDialogController*>(GetDialogController());
+    if (pDlgController)
+    {
+        pDlgController->InvalidateItem(nWhich);
+    }
+
+    // Rebuild all chips from scratch — this avoids FlowBox residue issues
+    m_aPropertyRows.clear();
+    BuildPropertyChips_Impl();
+
+    // If no rows left, show the "all inherited" message
+    if (m_aPropertyRows.empty())
+    {
+        m_xDescFt->set_label(SfxResId(STR_NO_MODIFIED_PROPERTIES));
+        m_xDescFt->show();
+    }
 }
 
 IMPL_LINK_NOARG(SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, weld::ComboBox&, void)
@@ -355,6 +683,38 @@ IMPL_LINK_NOARG(SfxManageStyleSheetPage, EditLinkStyleHdl_Impl, weld::Button&, v
     OUString aTemplName(m_xBaseLb->get_active_text());
     if (aTemplName != SfxResId(STR_NONE))
         Execute_Impl( SID_STYLE_EDIT, aTemplName, static_cast<sal_uInt16>(pStyle->GetFamily()) );
+}
+
+IMPL_LINK_NOARG(SfxManageStyleSheetPage, EditPropsHdl_Impl, weld::Toggleable&, void)
+{
+    if (m_bInToggleHandler)
+        return;
+    m_bInToggleHandler = true;
+
+    m_xEditPropsBtn->set_active(true);
+    m_xViewPropsBtn->set_active(false);
+
+    m_bEditMode = true;
+    m_xDescFt->hide();
+    BuildPropertyChips_Impl();
+
+    m_bInToggleHandler = false;
+}
+
+IMPL_LINK_NOARG(SfxManageStyleSheetPage, ViewPropsHdl_Impl, weld::Toggleable&, void)
+{
+    if (m_bInToggleHandler)
+        return;
+    m_bInToggleHandler = true;
+
+    m_xViewPropsBtn->set_active(true);
+    m_xEditPropsBtn->set_active(false);
+
+    m_bEditMode = false;
+    m_aPropertyRows.clear();
+    SetDescriptionText_Impl();
+
+    m_bInToggleHandler = false;
 }
 
 // Internal: Perform functions through the Dispatcher
@@ -453,7 +813,6 @@ bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
 
     return bModified;
 }
-
 
 void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
 
@@ -555,6 +914,14 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 */
 
 {
+    // Rebuild property chips when returning to this page in edit mode,
+    // so that changes made in other tab pages are reflected immediately.
+    if (m_bEditMode)
+    {
+        m_aPropertyRows.clear();
+        BuildPropertyChips_Impl();
+    }
+
     SetDescriptionText_Impl();
 
     // It is a style with auto update? (SW only)

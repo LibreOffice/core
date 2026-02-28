@@ -94,6 +94,7 @@
 #include <translatelangselect.hxx>
 #include <copyfielddlg.hxx>
 #include <SwGridTabPage.hxx>
+#include <set>
 
 using namespace css::frame;
 using namespace css::uno;
@@ -375,6 +376,7 @@ public:
         return this->m_pDlg->GetInputRanges(pItem);
     }
     void SetInputSet(const SfxItemSet* pInSet) override { this->m_pDlg->SetInputSet(pInSet); }
+    const std::set<sal_uInt16>& GetInvalidatedWhichIds() const override { return this->m_pDlg->GetInvalidatedWhichIds(); }
     // From class Window.
     void SetText(const OUString& rStr) override { this->m_pDlg->set_title(rStr); }
 };

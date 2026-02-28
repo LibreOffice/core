@@ -357,6 +357,7 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
     virtual void        ChangesApplied() override;
 };
 

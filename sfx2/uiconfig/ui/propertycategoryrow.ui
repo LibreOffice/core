@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="sfx">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkBox" id="PropertyCategoryRow">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">0</property>
+    <property name="margin-bottom">2</property>
+    <child>
+      <object class="GtkLabel" id="label">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">start</property>
+        <property name="xalign">0</property>
+        <property name="label">Category:</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="label-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes" context="propertycategoryrow|label">Property category name</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="chipsbox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">0</property>
+        <property name="margin-start">12</property>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+      </packing>
+    </child>
+  </object>
+</interface>

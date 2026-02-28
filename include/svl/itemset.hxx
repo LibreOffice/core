@@ -28,6 +28,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/typedwhich.hxx>
 #include <svl/whichranges.hxx>
+#include <set>
 
 class SfxItemPool;
 
@@ -90,6 +91,8 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
     SfxItemPool*      m_pPool;         ///< pool that stores the items
     const SfxItemSet* m_pParent;       ///< derivation
     sal_uInt16        m_nRegister;     ///< number of items with NeedsSurrogateSupport
+    mutable std::vector<sal_uInt16>* m_pAccessTracker = nullptr;
+    mutable bool m_bAccessTrackerIgnore = false;
 
 #ifdef DBG_UTIL
     sal_uInt16          m_nRegisteredSfxItemIter;
@@ -244,6 +247,8 @@ public:
     void                        SetRanges( WhichRangesContainer&& );
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return m_pParent; }
+    void SetAccessTracker(std::vector<sal_uInt16>* pTracker) const { m_pAccessTracker = pTracker; }
+    void SetAccessTrackerIgnore(bool b) const { m_bAccessTrackerIgnore = b; }
 
     bool                        operator==(const SfxItemSet &) const;
     size_t                      GetHashCode() const;

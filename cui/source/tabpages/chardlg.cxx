@@ -154,11 +154,13 @@ void SvxCharBasePage::ActivatePage(const SfxItemSet& rSet)
 void SvxCharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
+    rSet.SetAccessTrackerIgnore(true);
     if (rSet.GetItemState(nWhich)>=SfxItemState::DEFAULT)
     {
         const SvxCharScaleWidthItem &rItem = static_cast<const SvxCharScaleWidthItem&>( rSet.Get( nWhich ) );
         m_aPreviewWin.SetFontWidthScale(rItem.GetValue());
     }
+    rSet.SetAccessTrackerIgnore(false);
 }
 
 void SvxCharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )

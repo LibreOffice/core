@@ -22,6 +22,7 @@
 #include <memory>
 #include <unordered_map>
 #include <string_view>
+#include <set>
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -32,6 +33,7 @@
 #include <svl/itemset.hxx>
 #include <svl/setitem.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <map>
 
 class Bitmap;
 class SfxTabPage;
@@ -80,9 +82,11 @@ private:
     std::unique_ptr<SfxItemSet>           m_pOutSet;
     std::unique_ptr<TabDlg_Impl>          m_pImpl;
     WhichRangesContainer                  m_pRanges;
+    std::map<sal_uInt16, OUString>        m_aWhichToTabMap;
     OUString             m_sAppPageId;
     bool                m_bStandardPushed;
     std::unique_ptr<SfxAllItemSet>       m_xItemSet;
+    std::map<sal_uInt16, int> m_aWhichOrderMap;
 
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(DeactivatePageHdl, const OUString&, bool);
@@ -92,6 +96,7 @@ private:
 
 protected:
     virtual short               Ok();
+    std::set<sal_uInt16>        m_aInvalidatedWhichIds;
     virtual void                RefreshInputSet();
     virtual SfxItemSet*         CreateInputItemSet(const OUString& rName);
     virtual void                PageCreated(const OUString &rName, SfxTabPage &rPage);
@@ -161,6 +166,23 @@ public:
     void                ShowPage(const OUString& rName);  // SetCurPageId + call Activate on it
     OUString             GetCurPageId() const;
     SfxTabPage*         GetCurTabPage() const { return GetTabPage(GetCurPageId()); }
+    void                ResetTabPage(std::u16string_view rPageId);
+    void                ResetAllTabPages();
+    void                InvalidateItem(sal_uInt16 nWhich);
+    OUString            GetTabPageNameForWhich(sal_uInt16 nWhich) const;
+    void                BuildWhichToTabMap();
+    OUString            GetTabPageLabel(const OUString& rPageId) const;
+    std::vector<OUString> GetTabPageIds() const;
+    int GetWhichOrder(sal_uInt16 nWhich) const {
+        auto it = m_aWhichOrderMap.find(nWhich);
+        return it != m_aWhichOrderMap.end() ? it->second : INT_MAX;
+    }
+    const SfxItemSet* GetExampleSet() const override { return m_xExampleSet.get(); }
+
+    /// Subclasses can override to provide additional WhichId→tab mappings
+    /// that the access tracker cannot determine correctly.
+    virtual std::map<sal_uInt16, OUString> GetWhichToTabOverrides() const { return {}; }
+    const std::set<sal_uInt16>& GetInvalidatedWhichIds() const { return m_aInvalidatedWhichIds; }
 
     // may provide local slots converted by Map
     const WhichRangesContainer& GetInputRanges( const SfxItemPool& );
@@ -180,8 +202,6 @@ public:
     virtual short       run() override;
     static bool runAsync(const std::shared_ptr<SfxTabDialogController>& rController,
                          const std::function<void(sal_Int32)>&);
-
-    virtual const SfxItemSet* GetExampleSet() const override { return m_xExampleSet.get(); }
 
     void                SetApplyHandler(const Link<weld::Button&,void>& _rHdl);
 

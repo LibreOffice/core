@@ -34,6 +34,9 @@
 #include <memory>
 #include <optional>
 
+#include <vector>
+#include <utility>
+
 // This is used as a flags enum in sw/, but only there,
 // so I don't pull in o3tl::typed_flags here
 enum class SfxStyleFamily {
@@ -163,6 +166,11 @@ public:
     virtual bool HasClearParentSupport() const; // Default false
     virtual bool IsUsed() const;                // Default true
     virtual OUString GetDescription( MapUnit eMetric );
+
+    /// Returns individual property presentations for building UI chips
+    /// Each pair contains: WhichId and presentation string
+    virtual std::vector<std::pair<sal_uInt16, OUString>> GetItemPresentation(
+        MapUnit eMetric, const SfxItemSet* pWorkingSet = nullptr);
 
     virtual OUString GetUsedBy() { return OUString(); }
 

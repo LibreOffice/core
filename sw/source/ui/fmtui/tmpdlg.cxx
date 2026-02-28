@@ -267,7 +267,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
 
 short SwTemplateDlgController::Ok()
 {
-    short nRet = SfxTabDialogController::Ok();
+    short nRet = SfxStyleDialogController::Ok();
     if( RET_OK == nRet )
     {
         const SfxPoolItem *pOutItem, *pExItem;

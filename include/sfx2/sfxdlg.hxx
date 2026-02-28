@@ -64,6 +64,11 @@ public:
     virtual void                SetCurPageId( const OUString &rName ) = 0;
     virtual WhichRangesContainer GetInputRanges( const SfxItemPool& ) = 0;
     virtual void                SetInputSet( const SfxItemSet* pInSet ) = 0;
+    virtual const std::set<sal_uInt16>& GetInvalidatedWhichIds() const
+    {
+        static const std::set<sal_uInt16> empty;
+        return empty;
+    }
 };
 
 class SfxAbstractApplyTabDialog : virtual public SfxAbstractTabDialog

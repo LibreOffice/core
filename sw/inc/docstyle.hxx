@@ -132,6 +132,9 @@ public:
     virtual bool            HasParentSupport() const override;
     virtual bool            HasClearParentSupport() const override;
     virtual OUString        GetDescription(MapUnit eUnit) override;
+    virtual std::vector<std::pair<sal_uInt16, OUString>> GetItemPresentation(
+        MapUnit eMetric, const SfxItemSet* pWorkingSet = nullptr) override;
+    void ResetItems(const std::set<sal_uInt16>& rWhichIds);
 
     virtual OUString GetUsedBy() override;
 

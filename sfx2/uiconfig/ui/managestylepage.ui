@@ -245,18 +245,115 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <object class="GtkLabel" id="desc">
+          <object class="GtkBox" id="containsbox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-start">12</property>
+            <property name="margin-start">24</property>
             <property name="margin-top">6</property>
-            <property name="wrap">True</property>
-            <property name="max-width-chars">52</property>
-            <property name="xalign">0</property>
-            <property name="yalign">0</property>
-            <attributes>
-              <attribute name="scale" value="0.90000000000000002"/>
-            </attributes>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="desc">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="wrap">True</property>
+                <property name="max-width-chars">52</property>
+                <property name="xalign">0</property>
+                <property name="yalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="0.90000000000000002"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="propscroll">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">automatic</property>
+                <property name="shadow-type">none</property>
+                <property name="min-content-height">60</property>
+                <property name="max-content-height">200</property>
+                <child>
+                  <object class="GtkViewport" id="propviewport">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkBox" id="propbox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">4</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="editviewbox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">horizontal</property>
+                <property name="spacing">0</property>
+                <property name="halign">start</property>
+                <property name="margin-top">6</property>
+                <child>
+                  <object class="GtkToggleButton" id="viewprops">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="label" translatable="yes" context="managestylepage|viewprops">View</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="viewprops-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="managestylepage|viewprops">View style properties as description text</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="editprops">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="label" translatable="yes" context="managestylepage|editprops">Edit</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="editprops-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="managestylepage|editprops">Edit style properties as interactive chips</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
           </object>
         </child>
         <child type="label">
@@ -271,7 +368,7 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
+        <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>

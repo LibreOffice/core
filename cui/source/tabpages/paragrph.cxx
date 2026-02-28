@@ -3056,10 +3056,18 @@ SvxAsianTabPage::SvxAsianTabPage(weld::Container* pPage, weld::DialogController*
     , m_xHangingPunctCB(m_xBuilder->weld_check_button(u"checkHangPunct"_ustr))
     , m_xScriptSpaceCB(m_xBuilder->weld_check_button(u"checkApplySpacing"_ustr))
 {
+    SetExchangeSupport();
 }
 
 SvxAsianTabPage::~SvxAsianTabPage()
 {
+}
+
+DeactivateRC SvxAsianTabPage::DeactivatePage( SfxItemSet* pSet )
+{
+    if ( pSet )
+        FillItemSet( pSet );
+    return DeactivateRC::LeavePage;
 }
 
 std::unique_ptr<SfxTabPage> SvxAsianTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)

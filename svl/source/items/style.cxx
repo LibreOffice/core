@@ -364,6 +364,55 @@ OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
     return aDesc.makeStringAndClear();
 }
 
+std::vector<std::pair<sal_uInt16, OUString>> SfxStyleSheetBase::GetItemPresentation(MapUnit eMetric, const SfxItemSet* /*pWorkingSet*/)
+{
+    std::vector<std::pair<sal_uInt16, OUString>> aResult;
+    SfxItemIter aIter(GetItemSet());
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
+
+    // Get parent item set for comparison
+    const SfxItemSet* pParentSet = nullptr;
+    SfxStyleSheetBase* pParentStyle = nullptr;
+    if (!GetParent().isEmpty())
+    {
+        pParentStyle = m_pPool->Find(GetParent(), GetFamily());
+        if (pParentStyle)
+            pParentSet = &pParentStyle->GetItemSet();
+    }
+
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    {
+        if (IsInvalidItem(pItem))
+            continue;
+
+        sal_uInt16 nWhich = pItem->Which();
+
+        // Only include items that are set in this style (not inherited)
+        if (GetItemSet().GetItemState(nWhich, false) != SfxItemState::SET)
+            continue;
+
+        // Skip items identical to parent
+        if (pParentSet)
+        {
+            const SfxPoolItem* pParentItem = nullptr;
+            if (pParentSet->GetItemState(nWhich, true, &pParentItem) == SfxItemState::SET
+                && pParentItem && *pParentItem == *pItem)
+                continue;
+        }
+
+        OUString aItemPresentation;
+        if (m_pPool->GetPool().GetPresentation(*pItem, eMetric, aItemPresentation, aIntlWrapper))
+        {
+            if (!aItemPresentation.isEmpty())
+            {
+
+                aResult.emplace_back(nWhich, aItemPresentation);
+            }
+        }
+    }
+    return aResult;
+}
+
 inline bool SfxStyleSheetIterator::IsTrivialSearch() const
 {
     return (( nMask & SfxStyleSearchBits::AllVisible ) == SfxStyleSearchBits::AllVisible) &&
