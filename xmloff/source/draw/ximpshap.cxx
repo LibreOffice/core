@@ -49,6 +49,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <xexptran.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -1725,6 +1726,51 @@ void SdXMLControlShapeContext::startFastElement (sal_Int32 nElement,
     }
 
     SetStyle();
+
+    // tdf#156707 if fo:border was not in the auto style, apply the control
+    // model's own default (which varies per control type) to the shape
+    if (const XMLPropStyleContext* pDocStyle = dynamic_cast<const XMLPropStyleContext*>(FindAutoStyle()))
+    {
+        SvXMLImportPropertyMapper* pImpMapper = GetImport().GetShapeImport()->GetPropertySetMapper();
+        const rtl::Reference<XMLPropertySetMapper>& rMapper = pImpMapper->getPropertySetMapper();
+
+        bool bHasBorder = false;
+        for (const auto& rProp : pDocStyle->GetProperties())
+        {
+            if (rProp.mnIndex < 0)
+                continue;
+            if (rMapper->GetEntryAPIName(rProp.mnIndex) == "ControlBorder")
+            {
+                bHasBorder = true;
+                break;
+            }
+        }
+
+        if (!bHasBorder)
+        {
+            uno::Reference<drawing::XControlShape> xControl(mxShape, uno::UNO_QUERY);
+            if (xControl.is())
+            {
+                uno::Reference<beans::XPropertySet> xControlModel(xControl->getControl(), uno::UNO_QUERY);
+                if (xControlModel.is())
+                {
+                    uno::Reference<beans::XPropertySetInfo> xInfo(xControlModel->getPropertySetInfo());
+                    if (xInfo.is() && xInfo->hasPropertyByName(u"Border"_ustr))
+                    {
+                        uno::Reference<beans::XPropertyState> xPropState(xControlModel, uno::UNO_QUERY);
+                        if (xPropState.is())
+                        {
+                            uno::Any aDefault = xPropState->getPropertyDefault(u"Border"_ustr);
+                            uno::Reference<beans::XPropertySet> xShapePropSet(mxShape, uno::UNO_QUERY);
+                            if (xShapePropSet.is())
+                                xShapePropSet->setPropertyValue(u"ControlBorder"_ustr, aDefault);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     SetLayer();
 
     // set pos, size, shear and rotate

@@ -445,17 +445,29 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 {
                     uno::Reference< beans::XPropertySet > xControlModel(xControl->getControl(), uno::UNO_QUERY);
                     DBG_ASSERT(xControlModel.is(), "XMLShapeExport::collectShapeAutoStyles: no control model on the control shape!");
+                    const rtl::Reference<XMLPropertySetMapper>& rMapper = GetPropertySetMapper()->getPropertySetMapper();
 
                     OUString sNumberStyle = mrExport.GetFormExport()->getControlNumberStyle(xControlModel);
                     if (!sNumberStyle.isEmpty())
                     {
-                        sal_Int32 nIndex = GetPropertySetMapper()->getPropertySetMapper()->FindEntryIndex(CTF_SD_CONTROL_SHAPE_DATA_STYLE);
+                        sal_Int32 nIndex = rMapper->FindEntryIndex(CTF_SD_CONTROL_SHAPE_DATA_STYLE);
                             // TODO : this retrieval of the index could be moved into the ctor, holding the index
                             //          as member, thus saving time.
                         DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
 
                         XMLPropertyState aNewState(nIndex, uno::Any(sNumberStyle));
                         aPropStates.push_back(aNewState);
+                    }
+
+                    // tdf#156707 always export ControlBorder for control shapes, even when property state is DEFAULT_VALUE
+                    sal_Int32 nBorderIndex = rMapper->FindEntryIndex("ControlBorder", XML_NAMESPACE_FO, GetXMLToken(XML_BORDER));
+                    if (nBorderIndex != -1)
+                    {
+                        if (!std::any_of(aPropStates.cbegin(), aPropStates.cend(),
+                            [nBorderIndex](const XMLPropertyState& rProp) { return rProp.mnIndex == nBorderIndex; }))
+                        {
+                            aPropStates.emplace_back(nBorderIndex, xPropSet->getPropertyValue(u"ControlBorder"_ustr));
+                        }
                     }
                 }
             }

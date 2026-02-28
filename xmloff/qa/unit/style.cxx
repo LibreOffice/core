@@ -304,13 +304,28 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTdf156707)
     xShape = getShape(1);
     xShapeProperties.set(xShape, uno::UNO_QUERY_THROW);
     xShapeProperties->getPropertyValue(u"ControlBorder"_ustr) >>= nBorderStyle;
-    // since tdf#152974, this shape SHOULD ACTUALLY have a 3d border (1), NOT a flat one(2).
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("DID YOU FIX ME?", sal_uInt16(2), nBorderStyle);
+    // since tdf#152974, this shape should have a 3d border (1), not a flat one(2).
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), nBorderStyle);
 
     xShape = getShape(2);
     xShapeProperties.set(xShape, uno::UNO_QUERY_THROW);
     xShapeProperties->getPropertyValue(u"ControlBorder"_ustr) >>= nBorderStyle;
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), nBorderStyle);
+
+    // Verify export: fo:border must be written for all three control shapes
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    static constexpr OString sStylePath = "/office:document-content/office:automatic-styles/"
+                                          "style:style[@style:name='"_ostr;
+    static constexpr OString sGfxProps = "']/style:graphic-properties[@fo:border]"_ostr;
+
+    // Get the auto style name from each draw:control element
+    OUString sStyle0 = getXPath(pXmlDoc, "(//draw:control)[1]", "style-name");
+    OUString sStyle1 = getXPath(pXmlDoc, "(//draw:control)[2]", "style-name");
+    OUString sStyle2 = getXPath(pXmlDoc, "(//draw:control)[3]", "style-name");
+
+    assertXPath(pXmlDoc, sStylePath + sStyle0.toUtf8() + sGfxProps, 1);
+    assertXPath(pXmlDoc, sStylePath + sStyle1.toUtf8() + sGfxProps, 1);
+    assertXPath(pXmlDoc, sStylePath + sStyle2.toUtf8() + sGfxProps, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTdf167358)
