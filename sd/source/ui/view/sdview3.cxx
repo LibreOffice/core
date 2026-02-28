@@ -1596,7 +1596,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             maDropFileVector.clear();
 
-            for( sal_uLong i = 0, nCount = aDropFileList.Count(); i < nCount; i++ )
+            for( size_t i = 0, nCount = aDropFileList.Count(); i < nCount; i++ )
                 maDropFileVector.push_back( aDropFileList.GetFile( i ) );
 
             maDropInsertFileIdle.Start();

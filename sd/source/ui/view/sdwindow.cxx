@@ -151,13 +151,13 @@ void Window::CalcMinZoom()
     // area (also called application area) to completely fill the
     // window.
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
-    sal_uLong nX = static_cast<sal_uLong>(static_cast<double>(aWinSize.Width())
+    tools::Long nX = static_cast<tools::Long>(static_cast<double>(aWinSize.Width())
         * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Width()));
-    sal_uLong nY = static_cast<sal_uLong>(static_cast<double>(aWinSize.Height())
+    tools::Long nY = static_cast<tools::Long>(static_cast<double>(aWinSize.Height())
         * double(ZOOM_MULTIPLICATOR) / static_cast<double>(maViewSize.Height()));
 
     // Decide whether to take the larger or the smaller factor.
-    sal_uLong nFact = std::min(nX, nY);
+    tools::Long nFact = std::min(nX, nY);
 
     // The factor is transformed according to the current zoom factor.
     nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
@@ -395,25 +395,25 @@ void Window::SetZoomIntegral(::tools::Long nZoom)
         // rectangle being fully visible (when translated accordingly) as
         // large as possible in the output area independently in both
         // coordinate directions .
-        sal_uLong nX(0);
-        sal_uLong nY(0);
+        tools::Long nX(0);
+        tools::Long nY(0);
 
         const Size aWinSize( PixelToLogic(GetOutputSizePixel()) );
         if(rZoomRect.GetHeight())
         {
-            nX = static_cast<sal_uLong>(static_cast<double>(aWinSize.Height())
+            nX = static_cast<tools::Long>(static_cast<double>(aWinSize.Height())
                * double(ZOOM_MULTIPLICATOR) / static_cast<double>(rZoomRect.GetHeight()));
         }
 
         if(rZoomRect.GetWidth())
         {
-            nY = static_cast<sal_uLong>(static_cast<double>(aWinSize.Width())
+            nY = static_cast<tools::Long>(static_cast<double>(aWinSize.Width())
                 * double(ZOOM_MULTIPLICATOR) / static_cast<double>(rZoomRect.GetWidth()));
         }
 
         // Use the smaller one of both so that the zoom rectangle will be
         // fully visible with respect to both coordinate directions.
-        sal_uLong nFact = std::min(nX, nY);
+        tools::Long nFact = std::min(nX, nY);
 
         // Transform the current zoom factor so that it leads to the desired
         // scaling.
@@ -469,24 +469,24 @@ void Window::SetZoomIntegral(::tools::Long nZoom)
         // rectangle being fully visible (when translated accordingly) as
         // large as possible in the output area independently in both
         // coordinate directions .
-        sal_uLong nX(0);
-        sal_uLong nY(0);
+        tools::Long nX(0);
+        tools::Long nY(0);
 
         if(rZoomRect.GetHeight())
         {
-            nX = static_cast<sal_uLong>(static_cast<double>(aWinSize.Height())
+            nX = static_cast<tools::Long>(static_cast<double>(aWinSize.Height())
                * double(ZOOM_MULTIPLICATOR) / static_cast<double>(rZoomRect.GetHeight()));
         }
 
         if(rZoomRect.GetWidth())
         {
-            nY = static_cast<sal_uLong>(static_cast<double>(aWinSize.Width())
+            nY = static_cast<tools::Long>(static_cast<double>(aWinSize.Width())
                 * double(ZOOM_MULTIPLICATOR) / static_cast<double>(rZoomRect.GetWidth()));
         }
 
         // Use the smaller one of both so that the zoom rectangle will be
         // fully visible with respect to both coordinate directions.
-        sal_uLong nFact = std::min(nX, nY);
+        tools::Long nFact = std::min(nX, nY);
 
         // Transform the current zoom factor so that it leads to the desired
         // scaling.

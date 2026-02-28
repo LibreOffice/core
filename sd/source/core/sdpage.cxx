@@ -2039,7 +2039,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                                 SfxItemSet& rSet = pTitleSheet->GetItemSet();
 
                                 const SvxFontHeightItem& rOldHgt = rSet.Get(EE_CHAR_FONTHEIGHT);
-                                sal_uLong nFontHeight = rOldHgt.GetHeight();
+                                sal_uInt32 nFontHeight = rOldHgt.GetHeight();
                                 nFontHeight = ::tools::Long(nFontHeight * static_cast<double>(aFractY));
                                 rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
@@ -2077,7 +2077,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                                     SfxItemSet aTempSet(pOutlineSheet->GetItemSet());
 
                                     const SvxFontHeightItem& rOldHgt = aTempSet.Get(EE_CHAR_FONTHEIGHT);
-                                    sal_uLong nFontHeight = rOldHgt.GetHeight();
+                                    sal_uInt32 nFontHeight = rOldHgt.GetHeight();
                                     nFontHeight = ::tools::Long(nFontHeight * static_cast<double>(aFractY));
                                     aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
@@ -2128,8 +2128,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
 
                             if (pNotesSheet)
                             {
-                                sal_uLong nHeight = pObj->GetLogicRect().GetSize().Height();
-                                sal_uLong nFontHeight = static_cast<sal_uLong>(nHeight * 0.0741);
+                                sal_uInt32 nHeight = pObj->GetLogicRect().GetSize().Height();
+                                sal_uInt32 nFontHeight = nHeight * 0.0741;
                                 SfxItemSet& rSet = pNotesSheet->GetItemSet();
                                 rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT ));
                                 rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK ));

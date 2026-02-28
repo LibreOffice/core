@@ -573,8 +573,8 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 
     mrOutliner.SetParaFlag( pPara, ParaFlag::ISPAGE );
     // how many titles are there before the new title paragraph?
-    sal_uLong nExample = 0;            // position of the "example" page
-    sal_uLong nTarget  = 0;            // position of insertion
+    sal_uInt16 nExample = 0;            // position of the "example" page
+    sal_uInt16 nTarget  = 0;            // position of insertion
     while(pPara)
     {
         pPara = GetPrevTitle(pPara);
@@ -611,13 +611,13 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     **********************************************************************/
 
     // this page is exemplary
-    SdPage* pExample = mrDoc.GetSdPage(static_cast<sal_uInt16>(nExample), PageKind::Standard);
+    SdPage* pExample = mrDoc.GetSdPage(nExample, PageKind::Standard);
     rtl::Reference<SdPage> pPage = mrDoc.AllocSdPage(false);
 
     pPage->SetLayoutName(pExample->GetLayoutName());
 
     // insert (page)
-    mrDoc.InsertPage(pPage.get(), static_cast<sal_uInt16>(nTarget) * 2 + 1);
+    mrDoc.InsertPage(pPage.get(), nTarget * 2 + 1);
     if( isRecordingUndo() )
         AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pPage));
 
@@ -648,7 +648,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     /**********************************************************************
     |* now the notes page
     \*********************************************************************/
-    pExample = mrDoc.GetSdPage(static_cast<sal_uInt16>(nExample), PageKind::Notes);
+    pExample = mrDoc.GetSdPage(nExample, PageKind::Notes);
     rtl::Reference<SdPage> pNotesPage = mrDoc.AllocSdPage(false);
 
     pNotesPage->SetLayoutName(pExample->GetLayoutName());
@@ -656,7 +656,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     pNotesPage->SetPageKind(PageKind::Notes);
 
     // insert (notes page)
-    mrDoc.InsertPage(pNotesPage.get(), static_cast<sal_uInt16>(nTarget) * 2 + 2);
+    mrDoc.InsertPage(pNotesPage.get(), nTarget * 2 + 2);
     if( isRecordingUndo() )
         AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
@@ -692,7 +692,7 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aPa
         return;
 
     // how many titles are in front of the title paragraph in question?
-    sal_uLong nPos = 0;
+    sal_uInt16 nPos = 0;
     while(pPara)
     {
         pPara = GetPrevTitle(pPara);
@@ -700,13 +700,13 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aPa
     }
 
     // delete page and notes page
-    sal_uInt16 nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
+    sal_uInt16 nAbsPos = nPos * 2 + 1;
     SdrPage* pPage = mrDoc.GetPage(nAbsPos);
     if( isRecordingUndo() )
         AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
     mrDoc.RemovePage(nAbsPos);
 
-    nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
+    nAbsPos = nPos * 2 + 1;
     pPage = mrDoc.GetPage(nAbsPos);
     if( isRecordingUndo() )
         AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
@@ -809,7 +809,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
         // the paragraph was a page but now becomes a normal paragraph
 
         // how many titles are before the title paragraph in question?
-        sal_uLong nPos = 0;
+        sal_uInt16 nPos = 0;
         Paragraph* pParagraph = pPara;
         while(pParagraph)
         {
@@ -819,13 +819,13 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
         }
         // delete page and notes page
 
-        sal_uInt16 nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
+        sal_uInt16 nAbsPos = nPos * 2 + 1;
         SdrPage* pPage = mrDoc.GetPage(nAbsPos);
         if( isRecordingUndo() )
             AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
         mrDoc.RemovePage(nAbsPos);
 
-        nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
+        nAbsPos = nPos * 2 + 1;
         pPage = mrDoc.GetPage(nAbsPos);
         if( isRecordingUndo() )
             AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
@@ -854,7 +854,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
     else if ( (pOutliner->GetPrevDepth() == 1) && ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) == 2 ) )
     {
         // how many titles are in front of the title paragraph in question?
-        sal_Int32 nPos = -1;
+        sal_Int16 nPos = -1;
 
         Paragraph* pParagraph = pPara;
         while(pParagraph)
@@ -866,7 +866,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
 
         if(nPos >= 0)
         {
-            SdPage*pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPos), PageKind::Standard);
+            SdPage*pPage = mrDoc.GetSdPage( nPos, PageKind::Standard);
 
             if(pPage && pPage->GetPresObj(PresObjKind::Text))
                 pOutliner->SetDepth( pPara, 0 );
@@ -874,7 +874,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
 
     }
     // how many titles are in front of the title paragraph in question?
-    sal_Int32 nPos = -1;
+    sal_Int16 nPos = -1;
 
     Paragraph* pTempPara = pPara;
     while(pTempPara)
@@ -887,7 +887,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
     if( nPos < 0 )
         return;
 
-    SdPage* pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPos), PageKind::Standard );
+    SdPage* pPage = mrDoc.GetSdPage( nPos, PageKind::Standard );
 
     if( !pPage )
         return;
