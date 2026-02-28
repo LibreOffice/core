@@ -204,3 +204,6 @@ gdbtrace.log
 
 # Build config backups (not the main log)
 config_host-*.mk
+
+# gcc-wrapper build artifacts
+solenv/gcc-wrappers/*.obj

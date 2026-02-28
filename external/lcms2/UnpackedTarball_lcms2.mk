@@ -21,7 +21,6 @@ $(eval $(call gb_UnpackedTarball_set_patchflags,lcms2,--binary))
 endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,lcms2,\
-	external/lcms2/lcms2-2.4-windows.patch \
 	external/lcms2/0002-mark-more-const.patch.1 \
 	external/lcms2/0003-mark-more-const.patch.1 \
 ))
