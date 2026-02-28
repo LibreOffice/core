@@ -36,6 +36,7 @@
 #include <xmlmultiimagehelper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+class SvXMLStyleContext;
 template<typename EnumT> struct SvXMLEnumMapEntry;
 
 // common shape context
@@ -82,6 +83,7 @@ protected:
 
     /** if bSupportsStyle is false, auto styles will be set but not a style */
     void SetStyle( bool bSupportsStyle = true );
+    const SvXMLStyleContext* FindAutoStyle();
     void SetLayer();
     void SetThumbnail();
 

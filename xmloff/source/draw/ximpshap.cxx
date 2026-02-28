@@ -605,6 +605,15 @@ void SdXMLShapeContext::SetTransformation()
     xPropSet->setPropertyValue(u"Transformation"_ustr, Any(aUnoMatrix));
 }
 
+const SvXMLStyleContext* SdXMLShapeContext::FindAutoStyle()
+{
+    if (maDrawStyleName.isEmpty())
+        return nullptr;
+    if (const SvXMLStylesContext* pAutoStyles = GetImport().GetShapeImport()->GetAutoStylesContext())
+        return pAutoStyles->FindStyleChildContext(mnStyleFamily, maDrawStyleName);
+    return nullptr;
+}
+
 void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 {
     try
@@ -619,14 +628,8 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             if(maDrawStyleName.isEmpty())
                 break;
 
-            const SvXMLStyleContext* pStyle = nullptr;
-            bool bAutoStyle(false);
-
-            if(GetImport().GetShapeImport()->GetAutoStylesContext())
-                pStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(mnStyleFamily, maDrawStyleName);
-
-            if(pStyle)
-                bAutoStyle = true;
+            const SvXMLStyleContext* pStyle = FindAutoStyle();
+            bool bAutoStyle = pStyle != nullptr;
 
             if(!pStyle && GetImport().GetShapeImport()->GetStylesContext())
                 pStyle = GetImport().GetShapeImport()->GetStylesContext()->FindStyleChildContext(mnStyleFamily, maDrawStyleName);
