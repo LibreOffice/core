@@ -480,6 +480,9 @@ OUString XclExpHyperlink::BuildFileName(
     INetURLObject aURLObject( rUrl );
     OUString aDosName(bEncoded ? aURLObject.GetMainURL(INetURLObject::DecodeMechanism::ToIUri)
                                : aURLObject.getFSysPath(FSysStyle::Dos));
+    if (aDosName.endsWith("/"))
+        aDosName = aDosName.copy(0, aDosName.getLength() - 1);
+
     rnLevel = 0;
     rbRel = rRoot.IsRelUrl();
 
