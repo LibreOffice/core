@@ -42,21 +42,16 @@ class SfxMacroInfoItem;
 struct TAccInfo
 {
 public:
-    TAccInfo(sal_Int32 nKeyPos, sal_Int32 nListPos, const vcl::KeyCode& aKey)
+    TAccInfo(sal_Int32 nKeyPos, const vcl::KeyCode& aKey)
         : m_nKeyPos(nKeyPos)
-        , m_nListPos(nListPos)
         , m_sCommand()
         , m_aKey(aKey)
     {
     }
 
-    bool isConfigured() const
-    {
-        return (m_nKeyPos > -1 && m_nListPos > -1 && !m_sCommand.isEmpty());
-    }
+    bool isConfigured() const { return (m_nKeyPos > -1 && !m_sCommand.isEmpty()); }
 
     sal_Int32 m_nKeyPos;
-    sal_Int32 m_nListPos;
     OUString m_sCommand;
     vcl::KeyCode m_aKey;
 };

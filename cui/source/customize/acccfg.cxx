@@ -1145,7 +1145,7 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
         OUString sKey = aKey.GetName();
         if (sKey.isEmpty())
             continue;
-        TAccInfo* pEntry = new TAccInfo(i1, 0 /*nListPos*/, aKey);
+        TAccInfo* pEntry = new TAccInfo(i1, aKey);
         m_xEntriesBox->append(weld::toId(pEntry), sKey);
         int nPos = m_xEntriesBox->n_children() - 1;
         m_xEntriesBox->set_text(nPos, OUString(), 1);
