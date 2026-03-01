@@ -83,6 +83,7 @@
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="category-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="functionpanel|category-atkobject">Category</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="functionpanel|extended_tip|category">Displays the available functions.</property>
                       </object>
                     </child>
