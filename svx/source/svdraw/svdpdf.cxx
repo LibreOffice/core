@@ -19,6 +19,7 @@
 
 #include <svdpdf.hxx>
 
+#include <limits>
 #include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/canvastools.hxx>
@@ -2167,7 +2168,14 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
 
     float fWidth = pPageObject->getStrokeWidth();
     const double dWidth = 0.5 * fabs(std::hypot(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
-    mnLineWidth = convertPointToMm100(dWidth);
+    const double fLineWidth = convertPointToMm100(dWidth);
+    if (fLineWidth < 0 || fLineWidth > std::numeric_limits<sal_Int32>::max())
+    {
+        SAL_WARN("sd.filter", "Ignoring bogus line width: " << fLineWidth);
+        mnLineWidth = 0;
+    }
+    else
+        mnLineWidth = static_cast<sal_Int32>(fLineWidth);
 
     vcl::pdf::PDFFillMode nFillMode = vcl::pdf::PDFFillMode::Alternate;
     bool bStroke = true; // Assume we have to draw, unless told otherwise.
