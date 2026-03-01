@@ -3008,10 +3008,10 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
         //<insert> LS
         //<insert> LE
         //<insert>
-        bool bPreStartLinkFound = false;
         bool bPreEndLinkFound = false;
 
         SwTOXButton* pExchange = nullptr;
+        SwTOXButton* pMatchingLinkStart = nullptr; // track unmatched LS before cursor
 
         auto it = m_aControlList.cbegin();
         for( ; it != m_aControlList.cend() && m_pActiveCtrl != it->get(); ++it )
@@ -3025,13 +3025,13 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
 
                 if( TOKEN_LINK_START == rNewToken.eTokenType )
                 {
-                    bPreStartLinkFound = true;
+                    pMatchingLinkStart = pButton;
                     pExchange = nullptr;
                 }
                 else if(TOKEN_LINK_END == rNewToken.eTokenType)
                 {
-                    if( bPreStartLinkFound )
-                        bPreStartLinkFound = false;
+                    if (pMatchingLinkStart)
+                        pMatchingLinkStart = nullptr;
                     else
                     {
                         bPreEndLinkFound = false;
@@ -3043,7 +3043,7 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
 
         bool bPostLinkStartFound = false;
 
-        if(!bPreStartLinkFound && !bPreEndLinkFound)
+        if(!pMatchingLinkStart && !bPreEndLinkFound)
         {
             for( ; it != m_aControlList.cend(); ++it )
             {
@@ -3075,10 +3075,12 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
             }
         }
 
-        if(bPreStartLinkFound)
+        if(pMatchingLinkStart)
         {
             aToInsertToken.eTokenType = TOKEN_LINK_END;
             aToInsertToken.sText =  m_aButtonTexts[TOKEN_LINK_END];
+            const SwFormToken& rStartTok = pMatchingLinkStart->GetFormToken();
+            aToInsertToken.sCharStyleName = rStartTok.sCharStyleName;
         }
 
         if(bPostLinkStartFound)
