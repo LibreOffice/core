@@ -531,19 +531,20 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/navipi/navipi \
     sc/source/ui/navipi/scenwnd \
     sc/source/ui/operation/ApplyAttributesOperation \
+    sc/source/ui/operation/ClearItemsOperation \
     sc/source/ui/operation/DeleteCellOperation \
     sc/source/ui/operation/DeleteContentOperation \
     sc/source/ui/operation/InsertCellsOperation \
     sc/source/ui/operation/InsertSheetViewOperation \
     sc/source/ui/operation/Operation \
     sc/source/ui/operation/OperationType \
+    sc/source/ui/operation/QueryOperation \
     sc/source/ui/operation/SetEditTextOperation \
     sc/source/ui/operation/SetFormulaOperation \
     sc/source/ui/operation/SetNormalStringOperation \
     sc/source/ui/operation/SetStringOperation \
     sc/source/ui/operation/SetValueOperation \
     sc/source/ui/operation/SortOperation \
-    sc/source/ui/operation/QueryOperation \
     sc/source/ui/pagedlg/areasdlg \
     sc/source/ui/pagedlg/tphfedit \
     sc/source/ui/sidebar/AlignmentPropertyPanel \

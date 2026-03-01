@@ -119,6 +119,7 @@
 #include <operation/SetFormulaOperation.hxx>
 #include <operation/SetEditTextOperation.hxx>
 #include <operation/ApplyAttributesOperation.hxx>
+#include <operation/ClearItemsOperation.hxx>
 #include <operation/InsertCellsOperation.hxx>
 #include <operation/InsertSheetViewOperation.hxx>
 #include <basic/basmgr.hxx>
@@ -3141,50 +3142,8 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
 
 void ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, bool bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-
-    ScDocument& rDoc = rDocShell.GetDocument();
-    bool bUndo (rDoc.IsUndoEnabled());
-
-    if (!CheckSheetViewProtection(sc::OperationType::ClearItems))
-        return;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, rMark);
-    if (!aTester.IsEditable())
-    {
-        if (!bApi)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
-        return;
-    }
-
-    //  #i12940# ClearItems is called (from setPropertyToDefault) directly with uno object's cached
-    //  MarkData (GetMarkData), so rMark must be changed to multi selection for ClearSelectionItems
-    //  here.
-
-    ScMarkData aMultiMark = rMark;
-    aMultiMark.SetMarking(false);       // for MarkToMulti
-    aMultiMark.MarkToMulti();
-    const ScRange& aMarkRange = aMultiMark.GetMultiMarkArea();
-
-    if (bUndo)
-    {
-        SCTAB nStartTab = aMarkRange.aStart.Tab();
-        SCTAB nEndTab = aMarkRange.aEnd.Tab();
-
-        ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( rDoc, nStartTab, nEndTab );
-        rDoc.CopyToDocument( aMarkRange, InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &aMultiMark );
-
-        rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoClearItems>( &rDocShell, aMultiMark, std::move(pUndoDoc), pWhich ) );
-    }
-
-    rDoc.ClearSelectionItems( pWhich, aMultiMark );
-
-    rDocShell.PostPaint( aMarkRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
-    aModificator.SetDocumentModified();
-
-    //! Bindings-Invalidate etc.?
+    sc::ClearItemsOperation aOperation(rDocShell, rMark, pWhich, bApi);
+    aOperation.run();
 }
 
 bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bApi )
