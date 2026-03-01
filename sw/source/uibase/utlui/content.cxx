@@ -8264,9 +8264,9 @@ void SwContentTree::BringDrawingObjectsToAttention(std::vector<const SdrObject*>
     {
         if (pObject)
         {
-            tools::Rectangle aRect(pObject->GetLogicRect());
-            if (!aRect.IsEmpty())
-                aRanges.emplace_back(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+            const tools::Rectangle& rRect = pObject->GetSnapRect();
+            if (!rRect.IsEmpty())
+                aRanges.emplace_back(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom());
         }
     }
     OverlayObject(std::move(aRanges));
