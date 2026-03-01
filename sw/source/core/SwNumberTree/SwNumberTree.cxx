@@ -396,7 +396,7 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
         for (auto& rpChild : mChildren)
             rpChild->mpParent = pDest;
 
-        pDest->mChildren.insert(mChildren.begin(), mChildren.end());
+        pDest->mChildren.merge(mChildren);
         mChildren.clear();
         // <stl::set.clear()> destroys all existing iterators.
         // Thus, <mItLastValid> is also destroyed and reset becomes necessary
