@@ -28,7 +28,7 @@ $(eval $(call gb_Library_add_defs,slideshow,\
 $(eval $(call gb_Library_use_sdk_api,slideshow))
 
 $(eval $(call gb_Library_use_libraries,slideshow,\
-    $(call gb_Helper_optional,AVMEDIA,avmedia) \
+    avmedia \
     basegfx \
     canvastools \
     comphelper \
