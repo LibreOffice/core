@@ -1188,14 +1188,10 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
 
 SvxCharacterMap::~SvxCharacterMap()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
-    {
-        if (m_nShowRenderIdleEvent)
-            Application::RemoveUserEvent(m_nShowRenderIdleEvent);
-        if (m_nSearchRenderIdleEvent)
-            Application::RemoveUserEvent(m_nSearchRenderIdleEvent);
-    }
-
+    if (m_nShowRenderIdleEvent)
+        Application::RemoveUserEvent(m_nShowRenderIdleEvent);
+    if (m_nSearchRenderIdleEvent)
+        Application::RemoveUserEvent(m_nSearchRenderIdleEvent);
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, DecimalCodeChangeHdl, weld::Entry&, void)
