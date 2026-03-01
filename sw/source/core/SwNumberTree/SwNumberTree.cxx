@@ -336,19 +336,18 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
     // move children
     if (aItUpper != mChildren.end())
     {
-        tSwNumberTreeChildren::iterator aIt;
-        for (aIt = aItUpper; aIt != mChildren.end(); ++aIt)
-            (*aIt)->mpParent = &_rDestNode;
-
-        _rDestNode.mChildren.insert(aItUpper, mChildren.end());
-
         // #i60652#
-        // Because <mChildren.erase(aItUpper, mChildren.end())> could destroy
-        // the element, which is referenced by <mItLastValid>, it's needed to
-        // adjust <mItLastValid> before erasing <aIt>.
+        // Adjust <mItLastValid> before modifying mChildren, because
+        // erase/extract could destroy the element it references.
         SetLastValid( mChildren.end() );
 
-        mChildren.erase(aItUpper, mChildren.end());
+        for (auto aIt = aItUpper; aIt != mChildren.end(); )
+        {
+            (*aIt)->mpParent = &_rDestNode;
+            auto aItNext = std::next(aIt);
+            _rDestNode.mChildren.insert(mChildren.extract(aIt));
+            aIt = aItNext;
+        }
 
         // #i60652#
         if ( !mChildren.empty() )
