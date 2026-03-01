@@ -81,7 +81,7 @@ bool AllowDim(tools::Long nDim)
     static bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
     {
-        constexpr auto numCairoMax(1 << 23);
+        constexpr auto numCairoMax(1 << 22);
         if (nDim > numCairoMax || nDim < -numCairoMax)
         {
             SAL_WARN("vcl", "skipping huge dimension: " << nDim);
@@ -216,6 +216,12 @@ MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd,
 
 void MetaLineAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowPoint(pOut->LogicToPixel(maStartPt)) ||
+        !AllowPoint(pOut->LogicToPixel(maEndPt)))
+    {
+        return;
+    }
+
     if( maLineInfo.IsDefault() )
         pOut->DrawLine( maStartPt, maEndPt );
     else
