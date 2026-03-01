@@ -43,8 +43,10 @@
 #include <vcl/font.hxx>
 #include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/dibtools.hxx>
@@ -1624,6 +1626,11 @@ Bitmap PDFiumBitmapImpl::createBitmapFromBuffer()
     const int nWidth = getWidth();
     const int nHeight = getHeight();
     const int nStride = getStride();
+
+    sal_Int64 nResult = 0;
+    if (comphelper::IsFuzzing()
+        && (o3tl::checked_multiply<sal_Int64>(nWidth, nHeight, nResult) || nResult > 4000000))
+        return aBitmap;
 
     switch (eFormat)
     {
