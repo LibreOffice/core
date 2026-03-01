@@ -1725,10 +1725,13 @@ static SwCellFrame* lcl_FindCorrespondingCellFrame( const SwRowFrame& rOrigRow,
     while ( pCell != &rOrigCell && !pCell->IsAnLower( &rOrigCell ) )
     {
         pCell = static_cast<const SwCellFrame*>(pCell->GetNext());
-        pCorrCell = static_cast<SwCellFrame*>(pCorrCell->GetNext());
+        pCorrCell = static_cast<SwCellFrame*>(pCorrCell ? pCorrCell->GetNext() : nullptr);
     }
 
     assert(pCell && pCorrCell && "lcl_FindCorrespondingCellFrame does not work");
+
+    if ( !pCell || !pCorrCell )
+        return nullptr;
 
     if ( pCell != &rOrigCell )
     {
