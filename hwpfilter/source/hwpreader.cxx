@@ -1485,6 +1485,11 @@ void HwpReader::makePageStyle()
          pmCount = 512;
      }
 
+     OUString sBackInfoEncoded;
+     // Do this once, so if we need it we don't end up with many duplicate strings of the background image
+     if (hwpinfo.back_info.isset && hwpinfo.back_info.type == 2 && hwpinfo.back_info.size > 0)
+         sBackInfoEncoded = base64_encode_string(reinterpret_cast<unsigned char*>(hwpinfo.back_info.data.data()), hwpinfo.back_info.size);
+
      for( int i = 0 ; i < pmCount ; i++ ){
          mxList->addAttribute(u"style:name"_ustr, sXML_CDATA, "pm" + OUString::number(i + 1));
          startEl(u"style:page-master"_ustr);
@@ -1679,7 +1684,7 @@ void HwpReader::makePageStyle()
              if( hwpinfo.back_info.type == 2 ){
                  startEl(u"office:binary-data"_ustr);
                  mxList->clear();
-                 chars(base64_encode_string(reinterpret_cast<unsigned char*>(hwpinfo.back_info.data.data()), hwpinfo.back_info.size));
+                 chars(sBackInfoEncoded);
                  endEl(u"office:binary-data"_ustr);
              }
              endEl(u"style:background-image"_ustr);
