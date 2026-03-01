@@ -270,7 +270,7 @@ private:
         std::vector<SparklineValue> const& rValueList = rSparklineValues.getValuesList();
         std::vector<basegfx::B2DPolygon> aPolygons;
         aPolygons.emplace_back();
-        double numebrOfSteps = rValueList.size() - 1;
+        double numberOfSteps = rValueList.size() - 1;
         double xStep = 0;
         double nDelta = nMax - nMin;
 
@@ -289,7 +289,7 @@ private:
                 double nValue = rSparklineValue.maValue;
 
                 double nP = (nValue - nMin) / nDelta;
-                double x = rRectangle.GetWidth() * (xStep / numebrOfSteps);
+                double x = rRectangle.GetWidth() * (xStep / numberOfSteps);
                 double y = rRectangle.GetHeight() - rRectangle.GetHeight() * nP;
 
                 aPolygon.append({ x, y });
