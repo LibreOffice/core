@@ -4460,6 +4460,57 @@ CPPUNIT_TEST_FIXTURE(Test, testSearchCells)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf106137_UnicodeEscapeInReplacement)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // test basic unicode escape expansion
+    // unicode values in replacement strings should expand to Unicode character when regular expressions is selected
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"hello world"_ustr);
+
+    SvxSearchItem aItem(SID_SEARCH_ITEM);
+    aItem.SetSearchString(u"world"_ustr);
+    aItem.SetReplaceString(u"\\u0041\\u0042\\u0043"_ustr);
+    aItem.SetCommand(SvxSearchCmd::REPLACE_ALL);
+    aItem.SetRegExp(true);
+
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
+    aMarkData.SelectOneTable(0);
+    SCCOL nCol = 0;
+    SCROW nRow = 0;
+    SCTAB nTab = 0;
+    ScRangeList aMatchedRanges;
+    OUString aUndoStr;
+    bool bClamped = false;
+
+    m_pDoc->SearchAndReplace(aItem, nCol, nRow, nTab, aMarkData, aMatchedRanges, aUndoStr, nullptr,
+                             bClamped);
+    CPPUNIT_ASSERT_EQUAL(u"hello ABC"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // test Backreference edge case
+    // \uXXXX in replacement template should expand before back-references are substituted,
+    // so that the 'searched' content containing literal \u sequences is not accidentally expanded
+
+    // Insert text that contains an actual escaped unicode string
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"find \\u0042"_ustr); // A2
+
+    // Capture the literal "\u0042" in a regex group
+    aItem.SetSearchString(u"(find .*)"_ustr);
+    // Replace with \u0041 (which should become 'A') + the backreference
+    aItem.SetReplaceString(u"\\u0041 $1"_ustr);
+
+    nCol = 0;
+    nRow = 0;
+    nTab = 0;
+    m_pDoc->SearchAndReplace(aItem, nCol, nRow, nTab, aMarkData, aMatchedRanges, aUndoStr, nullptr,
+                             bClamped);
+
+    // shouldn't be 'A find B'
+    CPPUNIT_ASSERT_EQUAL(u"A find \\u0042"_ustr, m_pDoc->GetString(ScAddress(0, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFormulaPosition)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);

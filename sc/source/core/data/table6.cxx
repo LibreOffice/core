@@ -32,6 +32,7 @@
 #include <markdata.hxx>
 #include <editutil.hxx>
 #include <postit.hxx>
+#include <i18nutil/unicodeescape.hxx>
 
 namespace {
 
@@ -185,6 +186,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         OUString sReplStr = rSearchItem.GetReplaceString();
         if (rSearchItem.GetRegExp())
         {
+            sReplStr = i18nutil::processUnicodeEscapes(sReplStr);
             utl::TextSearch::ReplaceBackReferences( sReplStr, aString, aSearchResult );
             OUStringBuffer aStrBuffer(aString);
             aStrBuffer.remove(nStart, nEnd-nStart+1);
