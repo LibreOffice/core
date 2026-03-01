@@ -45,8 +45,6 @@ public:
     TAccInfo(sal_Int32 nKeyPos, sal_Int32 nListPos, const vcl::KeyCode& aKey)
         : m_nKeyPos(nKeyPos)
         , m_nListPos(nListPos)
-        , m_bIsConfigurable(true) /**< it's important to set true as default -
-                                                because only fix entries will be disabled later... */
         , m_sCommand()
         , m_aKey(aKey)
     {
@@ -59,7 +57,6 @@ public:
 
     sal_Int32 m_nKeyPos;
     sal_Int32 m_nListPos;
-    bool m_bIsConfigurable;
     OUString m_sCommand;
     vcl::KeyCode m_aKey;
 };
@@ -91,6 +88,8 @@ private:
     OUString aFilterCfgStr;
     SfxStylesInfo_Impl m_aStylesInfo;
     bool m_bStylesInfoInitialized;
+    // Array of reserved key codes in sorted order
+    std::vector<sal_uInt16> m_aReservedKeyCodes;
 
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::ui::XAcceleratorConfiguration> m_xGlobal;
@@ -155,6 +154,8 @@ private:
     void AddFrameToSaveInComboBox(const css::uno::Reference<css::frame::XFrame>& xFrame);
     void FillSaveInComboBox();
     void HandleScopeChanged();
+    bool IsReservedKeyCode(const vcl::KeyCode& rCode) const;
+    static std::vector<sal_uInt16> GetReservedKeyCodes();
 
 public:
     SfxAcceleratorConfigPage(weld::Container* pPage, weld::DialogController* pController,

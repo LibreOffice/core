@@ -951,6 +951,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     , aFilterAllStr(SfxResId(STR_SFX_FILTERNAME_ALL))
     , aFilterCfgStr(CuiResId(RID_CUISTR_FILTERNAME_CFG))
     , m_bStylesInfoInitialized(false)
+    , m_aReservedKeyCodes(GetReservedKeyCodes())
     , m_aUpdateDataTimer("SfxAcceleratorConfigPage UpdateDataTimer")
     , m_xEntriesBox(m_xBuilder->weld_tree_view(u"shortcuts"_ustr))
     , m_xOfficeButton(m_xBuilder->weld_radio_button(u"office"_ustr))
@@ -1026,6 +1027,28 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
 
     m_aUpdateDataTimer.SetInvokeHandler(LINK(this, SfxAcceleratorConfigPage, ImplUpdateDataHdl));
     m_aUpdateDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
+}
+
+std::vector<sal_uInt16> SfxAcceleratorConfigPage::GetReservedKeyCodes()
+{
+    std::vector<sal_uInt16> aReservedKeyCodes;
+    size_t nKeyCodes = Application::GetReservedKeyCodeCount();
+
+    aReservedKeyCodes.reserve(nKeyCodes);
+
+    for (size_t i = 0; i < nKeyCodes; ++i)
+        aReservedKeyCodes.push_back(Application::GetReservedKeyCode(i)->GetFullCode());
+
+    // Sort the key codes so we can do a binary chop on it
+    std::sort(aReservedKeyCodes.begin(), aReservedKeyCodes.end());
+
+    return aReservedKeyCodes;
+}
+
+bool SfxAcceleratorConfigPage::IsReservedKeyCode(const vcl::KeyCode& rKeyCode) const
+{
+    return std::binary_search(m_aReservedKeyCodes.begin(), m_aReservedKeyCodes.end(),
+                              rKeyCode.GetFullCode());
 }
 
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
@@ -1126,7 +1149,7 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
         m_xEntriesBox->append(weld::toId(pEntry), sKey);
         int nPos = m_xEntriesBox->n_children() - 1;
         m_xEntriesBox->set_text(nPos, OUString(), 1);
-        m_xEntriesBox->set_sensitive(nPos, true);
+        m_xEntriesBox->set_sensitive(nPos, !IsReservedKeyCode(aKey));
     }
 
     // Assign all commands to its shortcuts - reading the accelerator config.
@@ -1148,27 +1171,8 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
         m_xEntriesBox->set_text(nPos, sLabel, 1);
 
         TAccInfo* pEntry = weld::fromId<TAccInfo*>(m_xEntriesBox->get_id(nPos));
-        pEntry->m_bIsConfigurable = true;
 
         pEntry->m_sCommand = sCommand;
-    }
-
-    // Map the VCL hardcoded key codes and mark them as not changeable
-    size_t c3 = Application::GetReservedKeyCodeCount();
-    size_t i3 = 0;
-    for (i3 = 0; i3 < c3; ++i3)
-    {
-        const vcl::KeyCode* pKeyCode = Application::GetReservedKeyCode(i3);
-        sal_Int32 nPos = MapKeyCodeToPos(*pKeyCode);
-
-        if (nPos == -1)
-            continue;
-
-        // Hardcoded function mapped so no ID possible and mark entry as not changeable
-        TAccInfo* pEntry = weld::fromId<TAccInfo*>(m_xEntriesBox->get_id(nPos));
-        pEntry->m_bIsConfigurable = false;
-
-        m_xEntriesBox->set_sensitive(nPos, false);
     }
 }
 
@@ -1304,7 +1308,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
         m_xRemoveButton->set_sensitive(false);
         m_xChangeButton->set_sensitive(false);
 
-        if (pEntry && pEntry->m_bIsConfigurable)
+        if (pEntry && !IsReservedKeyCode(pEntry->m_aKey))
         {
             if (pEntry->isConfigured())
                 m_xRemoveButton->set_sensitive(true);
@@ -1344,7 +1348,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, SelectHdl, weld::TreeView&, rListBox, void)
         {
             OUString sPossibleNewCommand = m_xFunctionBox->GetCurCommand();
 
-            if (pEntry->m_bIsConfigurable)
+            if (!IsReservedKeyCode(pEntry->m_aKey))
             {
                 if (pEntry->isConfigured())
                     m_xRemoveButton->set_sensitive(true);
