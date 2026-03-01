@@ -221,6 +221,8 @@ void MetaLineAction::Execute( OutputDevice* pOut )
     {
         return;
     }
+    if (!AllowDim(pOut->LogicToPixel(Size(maLineInfo.GetWidth(), 0)).Width()))
+        return;
 
     if( maLineInfo.IsDefault() )
         pOut->DrawLine( maStartPt, maEndPt );
@@ -475,6 +477,8 @@ MetaPolyLineAction::MetaPolyLineAction( tools::Polygon aPoly, LineInfo aLineInfo
 void MetaPolyLineAction::Execute( OutputDevice* pOut )
 {
     if (!AllowRect(pOut->LogicToPixel(maPoly.GetBoundRect())))
+        return;
+    if (!AllowDim(pOut->LogicToPixel(Size(maLineInfo.GetWidth(), 0)).Width()))
         return;
 
     if( maLineInfo.IsDefault() )
