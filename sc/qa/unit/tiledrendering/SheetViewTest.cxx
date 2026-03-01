@@ -257,13 +257,13 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
 
     // Check what sheet we currently have selected for view 1 & 2
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
-    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView2->GetViewData().GetTabNumber());
 
     // Sort AutoFilter descending
     sortDescendingForCell(u"A1");
 
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
-    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView2->GetViewData().GetTabNumber());
 
     // Check view 2 - sorted
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }), getValues(pTabView2, 0, 1, 4));
@@ -701,7 +701,8 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
         CPPUNIT_ASSERT(pSheetViewManager);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->size());
 
-        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+        // View is now on the sheet view tab
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView1->GetViewData().GetTabNumber());
         auto pSheetView1 = pSheetViewManager->get(0);
         CPPUNIT_ASSERT_EQUAL(SCTAB(1), pSheetView1->getTableNumber());
 
@@ -715,7 +716,8 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
     createNewSheetViewInCurrentView();
 
     {
-        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+        // View is now on the latest sheet view tab
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView1->GetViewData().GetTabNumber());
 
         CPPUNIT_ASSERT_EQUAL(SCTAB(4), rDocument.GetTableCount());
         CPPUNIT_ASSERT_EQUAL(u"NewTab"_ustr, rDocument.GetAllTableNames()[0]);
@@ -776,7 +778,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
         CPPUNIT_ASSERT(pSheetViewManager);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->size());
 
-        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView1->GetViewData().GetTabNumber());
         auto pSheetView1 = pSheetViewManager->get(0);
         CPPUNIT_ASSERT_EQUAL(SCTAB(1), pSheetView1->getTableNumber());
 
@@ -789,7 +791,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
     createNewSheetViewInCurrentView();
 
     {
-        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabView1->GetViewData().GetTabNumber());
 
         CPPUNIT_ASSERT_EQUAL(SCTAB(3), rDocument.GetTableCount());
         CPPUNIT_ASSERT_EQUAL(u"Hoja1"_ustr, rDocument.GetAllTableNames()[0]);
@@ -919,7 +921,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
 
         createNewSheetViewInCurrentView();
 
-        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabViewSheetView->GetViewData().GetTabNumber());
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
     }
 
@@ -928,13 +930,13 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
         SfxLokHelper::setView(aDefaultView.getViewID());
         Scheduler::ProcessEventsToIdle();
 
-        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabViewSheetView->GetViewData().GetTabNumber());
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
 
         // Sort AutoFilter ascending
         sortAscendingForCell(u"A1");
 
-        CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
+        CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabViewSheetView->GetViewData().GetTabNumber());
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewDefaultView->GetViewData().GetTabNumber());
 
         // Check values

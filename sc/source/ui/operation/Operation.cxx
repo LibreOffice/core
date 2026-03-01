@@ -62,19 +62,21 @@ ScAddress Operation::convertAddress(ScAddress const& rAddress)
     if (!pSheetView)
         return rAddress;
 
+    SCTAB nSheetViewTab = pViewData->GetTabNumber();
+    SCTAB nDefaultTab = pViewData->GetDefaultViewTab();
+
     ScAddress aAddress = rAddress;
 
-    // Change the tab number if it is the one from sheet view
-    if (aAddress.Tab() == pViewData->CurrentTabForData())
-        aAddress.SetTab(pViewData->GetTabNumber());
+    // Change the tab number from sheet view tab to default tab
+    if (aAddress.Tab() == nSheetViewTab)
+        aAddress.SetTab(nDefaultTab);
 
     // Should be the default view tab
-    if (aAddress.Tab() != pViewData->GetTabNumber())
+    if (aAddress.Tab() != nDefaultTab)
         return aAddress;
 
     SCCOL nColumn = aAddress.Col();
     SCROW nRow = aAddress.Row();
-    SCTAB nTab = aAddress.Tab();
 
     SCROW nReversedRow = pSheetView->reverseSortingToDefaultView(nRow, nColumn);
 
@@ -82,7 +84,7 @@ ScAddress Operation::convertAddress(ScAddress const& rAddress)
     if (nReversedRow == nRow)
         return aAddress;
 
-    return ScAddress(nColumn, nReversedRow, nTab);
+    return ScAddress(nColumn, nReversedRow, nDefaultTab);
 }
 
 ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
@@ -95,12 +97,12 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
     if (!pSheetView)
         return rMarkData;
 
+    SCTAB nSheetViewTab = pViewData->GetTabNumber();
+    SCTAB nDefaultViewTab = pViewData->GetDefaultViewTab();
+
     ScMarkData aNewMark(rMarkData);
     aNewMark.MarkToMulti();
     bool bChanged = false;
-
-    SCTAB nDefaultViewTab = pViewData->GetTabNumber();
-    SCTAB nSheetViewTab = pViewData->CurrentTabForData();
 
     // Adjust tab to default view in ranges
     if (nSheetViewTab == aNewMark.GetArea().aStart.Tab()
@@ -192,10 +194,7 @@ void Operation::syncSheetViews()
         return;
 
     auto& rDocument = mpViewData->GetDocument();
-    SCTAB nTab = mpViewData->GetTabNumber();
-
-    if (rDocument.IsSheetViewHolder(nTab))
-        return;
+    SCTAB nTab = mpViewData->GetDefaultViewTab();
 
     std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nTab);
     if (!pManager || pManager->isEmpty())
