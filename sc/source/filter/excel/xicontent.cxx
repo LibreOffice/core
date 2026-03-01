@@ -452,11 +452,14 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     XclRangeList aRowXclRanges, aColXclRanges;
     rStrm >> aRowXclRanges >> aColXclRanges;
 
+    // ofz#421950541 bodge-around for timeout
+    const size_t nMaxRanges = comphelper::IsFuzzing() ? 4 : SAL_MAX_SIZE;
+
     // row label ranges
     ScRangeList aRowScRanges;
     rAddrConv.ConvertRangeList( aRowScRanges, aRowXclRanges, nScTab, false );
     xLabelRangesRef = rDoc.GetRowNameRangesRef();
-    for ( size_t i = 0, nRanges = aRowScRanges.size(); i < nRanges; ++i )
+    for ( size_t i = 0, nRanges = std::min(aRowScRanges.size(), nMaxRanges); i < nRanges; ++i )
     {
         const ScRange & rScRange = aRowScRanges[ i ];
         ScRange aDataRange( rScRange );
@@ -478,7 +481,7 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     rAddrConv.ConvertRangeList( aColScRanges, aColXclRanges, nScTab, false );
     xLabelRangesRef = rDoc.GetColNameRangesRef();
 
-    for ( size_t i = 0, nRanges = aColScRanges.size(); i < nRanges; ++i )
+    for ( size_t i = 0, nRanges = std::min(aColScRanges.size(), nMaxRanges); i < nRanges; ++i )
     {
         const ScRange & rScRange = aColScRanges[ i ];
         ScRange aDataRange( rScRange );
