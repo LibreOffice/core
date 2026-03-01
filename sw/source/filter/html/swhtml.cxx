@@ -5666,6 +5666,7 @@ bool TestImportHTML(SvStream &rStream)
 
     SwPaM aPaM(pD->GetNodes().GetEndOfContent(), SwNodeOffset(-1));
     pD->SetInReading(true);
+    pD->SetInXMLImport(true);
     bool bRet = false;
     try
     {
@@ -5677,6 +5678,7 @@ bool TestImportHTML(SvStream &rStream)
     catch (const std::out_of_range&)
     {
     }
+    pD->SetInXMLImport(false);
     pD->SetInReading(false);
 
     return bRet;
