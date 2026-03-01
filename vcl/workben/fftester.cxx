@@ -63,6 +63,7 @@
 #include <filter/XpmReader.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
+#include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 #include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>
@@ -115,6 +116,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         OUString in(argv[1], strlen(argv[1]), RTL_TEXTENCODING_UTF8);
         OUString out;
         osl::File::getFileURLFromSystemPath(in, out);
+
+        OUString cwd;
+        osl_getProcessWorkingDir(&cwd.pData);
+        osl::File::getAbsoluteFileURL(cwd, out, out);
 
         tools::extendApplicationEnvironment();
 
