@@ -61,6 +61,7 @@
 #include <xmloff/maptype.hxx>
 
 #include <xmloff/xmlnumi.hxx>
+#include <algorithm>
 #include <optional>
 
 using namespace ::com::sun::star;
@@ -407,12 +408,14 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
         // Generate list format string, based on this
         sListFormat = std::make_optional(sPrefix);
 
-        for (int i = 1; i <= nNumDisplayLevels; i++)
+        // Can't display more levels than exist
+        sal_Int32 nDisplayLevels = std::min<sal_Int32>(nNumDisplayLevels, nLevel + 1);
+        for (int i = 1; i <= nDisplayLevels; i++)
         {
             *sListFormat += "%";
-            *sListFormat += OUString::number(nLevel - nNumDisplayLevels + i + 1);
+            *sListFormat += OUString::number(nLevel - nDisplayLevels + i + 1);
             *sListFormat += "%";
-            if (i != nNumDisplayLevels)
+            if (i != nDisplayLevels)
                 *sListFormat += ".";     // Default separator for older ODT
         }
 
