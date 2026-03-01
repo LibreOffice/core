@@ -137,7 +137,7 @@ private:
     Timer m_aUpdateDataTimer;
     i18nutil::SearchOptions2 m_options;
 
-    bool bIsFirtsInitialize;
+    bool bIsFirstInitialize;
     std::vector<OptionsPageIdInfo*> m_aTreePageIds;
     typedef std::vector<std::pair<sal_uInt16, std::vector<sal_uInt16>>> VectorOfMatchedIds;
 

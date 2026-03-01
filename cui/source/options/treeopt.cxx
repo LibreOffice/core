@@ -458,7 +458,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, bool fromExten
     , m_xSearchEdit(m_xBuilder->weld_entry(u"searchEntry"_ustr))
     , m_pParent(pParent)
     , m_aUpdateDataTimer("OfaTreeOptionsDialog UpdateDataTimer")
-    , bIsFirtsInitialize(true)
+    , bIsFirstInitialize(true)
     , sTitle(m_xDialog->get_title())
     , bForgetSelection(false)
     , bIsFromExtensionManager(fromExtensionManager)
@@ -790,7 +790,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ImplUpdateDataHdl, Timer*, void)
     // Pause redraw
     xTreeLB->freeze();
 
-    if (bIsFirtsInitialize)
+    if (bIsFirstInitialize)
     {
         m_xSearchEdit->freeze();
         xTreeLB->hide();
@@ -799,7 +799,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ImplUpdateDataHdl, Timer*, void)
 
         m_xSearchEdit->thaw();
         xTreeLB->show();
-        bIsFirtsInitialize = false;
+        bIsFirstInitialize = false;
     }
 
     // Apply the search filter
