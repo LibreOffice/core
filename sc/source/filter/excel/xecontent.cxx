@@ -727,15 +727,10 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
             mnType = EXC_CF_TYPE_NONE;
             OSL_FAIL( "XclExpCF::WriteBody - unknown condition type" );
     }
-}
-
-void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
-{
-
-    // *** formulas ***
 
     XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
 
+    // Explicity registers external references if the formula contains any
     std::unique_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateFlatCopiedTokenArray( 0 ) );
     mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
 
@@ -744,7 +739,10 @@ void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
         xScTokArr = mrFormatEntry.CreateFlatCopiedTokenArray( 1 );
         mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
     }
+}
 
+void XclExpCFImpl::WriteBody( XclExpStream& rStrm )
+{
     // *** mode and comparison operator ***
 
     rStrm << mnType << mnOperator;
