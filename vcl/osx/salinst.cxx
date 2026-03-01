@@ -588,8 +588,24 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
                 // resizing appears to end in the next mouse down event.
                 if ( ImplGetSVData()->mpWinData->mbIsLiveResize && [pEvent type] == NSEventTypeLeftMouseUp )
                 {
-                    [NSApp postEvent: pEvent atStart: YES];
-                    return false;
+                    // After dragging a window with the Option key pressed (see
+                    // https://bugs.documentfoundation.org/show_bug.cgi?id=170740#c6),
+                    // ImplGetSVData()->mpWinData->mbIsLiveResize remains set
+                    // to true because the current event needs to be dispatched
+                    // for ImplGetSVData()->mpWinData->mbIsLiveResize to be
+                    // reset to false. This causes dispatching to become an
+                    // infinite wait for the current NSEventTypeLeftMouseUp
+                    // event to get dispatched. So query the native window
+                    // directly to get the real live resizing status.
+                    // Important note: at least on macOS 26.3 Tahoe, calling
+                    // -[NSEvent window] is very slow so call it only when
+                    // ImplGetSVData()->mpWinData->mbIsLiveResize is true.
+                    NSWindow *pEventWindow = [pEvent window];
+                    if ( [pEventWindow inLiveResize] )
+                    {
+                        [NSApp postEvent: pEvent atStart: YES];
+                        return false;
+                    }
                 }
 
                 [NSApp sendEvent: pEvent];
