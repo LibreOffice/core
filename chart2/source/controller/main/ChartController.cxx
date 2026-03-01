@@ -636,7 +636,10 @@ rtl::Reference<::chart::ChartModel> ChartController::getChartModel()
 
 rtl::Reference<::chart::Diagram> ChartController::getFirstDiagram()
 {
-    return getChartModel()->getFirstChartDiagram();
+    rtl::Reference<::chart::ChartModel> xModel = getChartModel();
+    if (!xModel)
+        return nullptr;
+    return xModel->getFirstChartDiagram();
 }
 
 uno::Any SAL_CALL ChartController::getViewData()
