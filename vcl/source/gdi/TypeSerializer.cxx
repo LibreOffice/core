@@ -76,8 +76,23 @@ void TypeSerializer::readGradient(Gradient& rGradient)
         nAngle = 0;
     }
     rGradient.SetAngle(Degree10(nAngle));
+    if (nBorder > 100)
+    {
+        SAL_WARN("vcl", "border out of range " << nBorder);
+        nBorder = 100;
+    }
     rGradient.SetBorder(nBorder);
+    if (nOffsetX > 100)
+    {
+        SAL_WARN("vcl", "offset x out of range " << nOffsetX);
+        nOffsetX = 100;
+    }
     rGradient.SetOfsX(nOffsetX);
+    if (nOffsetY > 100)
+    {
+        SAL_WARN("vcl", "offset y out of range " << nOffsetY);
+        nOffsetY = 100;
+    }
     rGradient.SetOfsY(nOffsetY);
     rGradient.SetStartIntensity(nIntensityStart);
     rGradient.SetEndIntensity(nIntensityEnd);
