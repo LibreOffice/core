@@ -163,7 +163,7 @@ public:
     int GetLastPosSortedByEnd(sal_Int32 nEndPos) const;
     SwTextAttr * GetSortedByEnd( size_t nPos ) const
     {
-        assert( !(nPos != 0 && m_EndMapNeedsSortingRange.first != SAL_MAX_INT32) && "going to trigger a resort in the middle of an iteration, that's bad" );
+        assert( (nPos == 0 || m_EndMapNeedsSortingRange.first == SAL_MAX_INT32) && "going to trigger a resort in the middle of an iteration, that's bad" );
         if (m_EndMapNeedsSortingRange.first != SAL_MAX_INT32)
             ResortEndMap();
         return m_HintsByEnd[nPos];
@@ -172,7 +172,7 @@ public:
     size_t GetFirstPosSortedByWhichAndStart(sal_uInt16 nWhich) const;
     SwTextAttr * GetSortedByWhichAndStart( size_t nPos ) const
     {
-        assert( !(nPos != 0 && m_WhichMapNeedsSortingRange.first.first != SAL_MAX_INT32) && "going to trigger a resort in the middle of an iteration, that's bad" );
+        assert( (nPos == 0 || m_WhichMapNeedsSortingRange.first.first == SAL_MAX_INT32) && "going to trigger a resort in the middle of an iteration, that's bad" );
         if (m_WhichMapNeedsSortingRange.first.first != SAL_MAX_INT32)
             ResortWhichMap();
         return m_HintsByWhichAndStart[nPos];
