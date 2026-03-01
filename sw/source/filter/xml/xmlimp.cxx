@@ -1916,7 +1916,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
         {
             uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
             // discourage very long paragraphs for fuzzing performance
-            if (xPara && xPara->getString().getLength() > 15000)
+            if (xPara && xPara->getString().getLength() > 4000)
             {
                 ret = false;
                 break;
