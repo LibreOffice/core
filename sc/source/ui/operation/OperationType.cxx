@@ -116,6 +116,8 @@ std::string_view operationTypeString(OperationType eOperation)
             return "SparklineGroupChange";
         case OperationType::EnterData:
             return "EnterData";
+        case OperationType::InsertSheetView:
+            return "InsertSheetView";
     }
     return "";
 }

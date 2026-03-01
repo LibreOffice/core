@@ -24,8 +24,10 @@
 #include <formula/grammar.hxx>
 #include <tabbgcolor.hxx>
 #include <unotools/resmgr.hxx>
+#include <SheetViewTypes.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 #include <map>
 
@@ -151,6 +153,7 @@ public:
                                        bool bCut, bool bRecord, bool bPaint, bool bApi );
 
     SC_DLLPUBLIC bool InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
+    std::pair<sc::SheetViewID, SCTAB> InsertSheetView( SCTAB nTab, bool bRecord );
     SC_DLLPUBLIC bool RenameTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
     bool            DeleteTable( SCTAB nTab, bool bRecord );
 

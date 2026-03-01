@@ -677,8 +677,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                                 && comphelper::LibreOfficeKit::isCompatFlagSet(
                                        comphelper::LibreOfficeKit::Compat::scNoGridBackground);
 
-    SCTAB nTab = aOutputData.mnTab;
-    nTab = rDoc.GetDefaultViewTableNumber(nTab); // convert to default view tab
+    SCTAB nViewTab = aOutputData.mnTab; // the actual view tab (may be sheet view tab)
+    SCTAB nTab = rDoc.GetDefaultViewTableNumber(nViewTab); // default/logical tab for structural lookups
     SCCOL nX1 = aOutputData.mnX1;
     SCROW nY1 = aOutputData.mnY1;
     SCCOL nX2 = aOutputData.mnX2;
@@ -721,7 +721,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     EditView*   pEditView = nullptr;
     bool        bEditMode = mrViewData.HasEditView(eWhich);
-    if ( bEditMode && mrViewData.GetRefTabNo() == nTab )
+    if ( bEditMode && mrViewData.GetRefTabNo() == nViewTab )
     {
         SCCOL nEditCol;
         SCROW nEditRow;
@@ -803,7 +803,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         aDrawingRectLogic = PixelToLogic(aDrawingRectPixel, aDrawMode);
     }
 
-    bool bInPlaceEditing = bEditMode && (mrViewData.GetRefTabNo() == mrViewData.GetTabNumber());
+    bool bInPlaceEditing = bEditMode && (mrViewData.GetRefTabNo() == nViewTab);
     vcl::Cursor* pInPlaceCrsr = nullptr;
     bool bInPlaceVisCursor = false;
     if (bInPlaceEditing)
@@ -1133,7 +1133,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
             if (!(bOtherEditMode
                   && ( nCol2 >= nX1 && nCol1 <= nX2 && nRow2 >= nY1 && nRow1 <= nY2 )
-                  && rOtherViewData.GetRefTabNo() == nTab))
+                  && rOtherViewData.GetRefTabNo() == nViewTab))
                 continue; // only views where in place editing is occurring need to be rendered
 
             EditView* pOtherEditView = rOtherViewData.GetEditView(eOtherWhich);

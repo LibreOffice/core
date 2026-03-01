@@ -53,7 +53,7 @@ bool SheetViewOperationsTester::check(OperationType eOperationType) const
         return true;
 
     auto& rDocument = mpViewData->GetDocument();
-    SCTAB nTab = mpViewData->GetTabNumber();
+    SCTAB nTab = mpViewData->GetDefaultViewTab();
 
     // Never allow direct changes to the data holder sheet of the sheet view.
     if (rDocument.IsSheetViewHolder(nTab))

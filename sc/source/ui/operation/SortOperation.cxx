@@ -60,12 +60,12 @@ bool SortOperation::runImplementation()
     ScSortParam aLocalParam(mrSortParam);
 
     // If we are in a sheet view and aren't sorting auto-filtered cell range, we need
-    // to sync the sorted cells. If this is the case then  we need to convert the tab
-    // from the sheet view tab to default view tab.
+    // to sync the sorted cells. If this is the case then we need to convert the tab
+    // from the sheet view tab to the default view tab.
     if (mpViewData && rDoc.IsSheetViewHolder(mnTab) && !pDBData->HasAutoFilter())
     {
         SCTAB nSheetViewTab = mnTab;
-        mnTab = mpViewData->GetTabNumber();
+        mnTab = rDoc.GetDefaultViewTableNumber(nSheetViewTab);
 
         if (aLocalParam.nSourceTab == nSheetViewTab)
             aLocalParam.nSourceTab = mnTab;
