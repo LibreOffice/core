@@ -1288,6 +1288,7 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
                 if (o3tl::checked_add<sal_Int64>(nEnd64DirOffset, nEnd64DirSize, end)
                     || nLoc64End64Offset < end
                     || nEnd64DirOffset < 0
+                    || nEnd64DirSize < 0
                     || nLoc64End64Offset - nEnd64DirSize != nEnd64DirOffset)
                 {
                     throw ZipException(u"Invalid Zip64 end (bad central directory size)"_ustr);
