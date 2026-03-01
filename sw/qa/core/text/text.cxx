@@ -1510,7 +1510,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFloattableAnchorNextPage)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rPage1Objs.size());
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf89288)
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf89288_KerningBehaviorBetweenScriptTypes)
 {
     // Given a document with 2 paragraphs of mixed Complex and Western text,
     // and 2 other paragraphs of mixed Western and Asian text:
