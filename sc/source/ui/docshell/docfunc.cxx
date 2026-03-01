@@ -120,6 +120,7 @@
 #include <operation/SetEditTextOperation.hxx>
 #include <operation/ApplyAttributesOperation.hxx>
 #include <operation/InsertCellsOperation.hxx>
+#include <operation/InsertSheetViewOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
@@ -2357,6 +2358,14 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
         rDocShell.ErrorMessage(STR_TABINSERT_ERROR);
 
     return bSuccess;
+}
+
+std::pair<sc::SheetViewID, SCTAB> ScDocFunc::InsertSheetView( SCTAB nTab, bool bRecord )
+{
+    sc::InsertSheetViewOperation aOperation(rDocShell, nTab, bRecord);
+    if (!aOperation.run())
+        return { sc::InvalidSheetViewID, -1 };
+    return { aOperation.getSheetViewID(), aOperation.getSheetViewTab() };
 }
 
 bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )

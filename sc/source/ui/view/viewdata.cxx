@@ -4503,41 +4503,46 @@ void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& 
 
 SCTAB ScViewData::CurrentTabForData() const
 {
-    if (!pThisTab)
-        return GetTabNumber();
-    auto nSheetViewID = GetSheetViewID();
-    if (nSheetViewID != sc::DefaultSheetViewID)
-    {
-        SCTAB nTab = mrDoc.GetSheetViewNumber(GetTabNumber(), nSheetViewID);
-        if (ValidTab(nTab))
-            return nTab;
-        SAL_WARN("sc.ui","ScViewData::CurrentTabForData - invalid tab: " << nTab);
-    }
     return GetTabNumber();
+}
+
+sc::SheetViewID ScViewData::GetSheetViewID() const
+{
+    return mrDoc.GetTableSheetViewID(GetTabNumber());
 }
 
 void ScViewData::SetSheetViewID(sc::SheetViewID nID)
 {
-    pThisTab->mnSheetViewID = nID;
-
-    CalcPPT();
-    RecalcPixPos();
+    if (nID != sc::DefaultSheetViewID)
+    {
+        // Get the default tab (in case we're currently on a sheet view tab)
+        SCTAB nDefaultTab = GetDefaultViewTab();
+        SCTAB nSheetViewTab = mrDoc.GetSheetViewNumber(nDefaultTab, nID);
+        if (ValidTab(nSheetViewTab))
+            SetTabNo(nSheetViewTab);
+    }
+    else
+    {
+        // Returning to default view — switch back to the default tab
+        SCTAB nDefaultTab = GetDefaultViewTab();
+        if (nDefaultTab != GetTabNumber())
+            SetTabNo(nDefaultTab);
+    }
 }
 
 sc::SheetViewID ScViewData::GetSheetViewIDForSheet(SCTAB nTab) const
 {
-    if (!IsValidTabNumber(nTab))
-        return sc::InvalidSheetViewID;
-
-    if (!maTabData[nTab])
-        return sc::InvalidSheetViewID;
-
-    return maTabData[nTab]->mnSheetViewID;
+    return mrDoc.GetTableSheetViewID(nTab);
 }
 
 std::shared_ptr<sc::SheetViewManager> ScViewData::GetCurrentSheetViewManager() const
 {
-    return GetDocument().GetSheetViewManager(GetTabNumber());
+    return GetDocument().GetSheetViewManager(GetDefaultViewTab());
+}
+
+SCTAB ScViewData::GetDefaultViewTab() const
+{
+    return mrDoc.GetDefaultViewTableNumber(GetTabNumber());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -582,6 +582,7 @@
 #define STR_UNDO_EDIT_SPARKLINE                 NC_("STR_UNDO_EDIT_SPARKLINE", "Edit Sparkline")
 #define STR_UNDO_THEME_CHANGE                   NC_("STR_UNDO_THEME_CHANGE", "Theme Change")
 #define STR_UNDO_THEME_COLOR_CHANGE             NC_("STR_UNDO_THEME_COLOR_CHANGE", "Theme Color Change")
+#define STR_UNDO_INSERT_SHEET_VIEW              NC_("STR_UNDO_INSERT_SHEET_VIEW", "Insert Sheet View")
 #define STR_ERR_INSERT_CELLS                    NC_("STR_ERR_INSERT_CELLS", "Failed to insert cells")
 #define STR_SOLVER_ENGINE                       NC_("STR_SOLVER_ENGINE", "Solver Engine:")
 #define STR_SENSITIVITY                         NC_("STR_SENSITIVITY", "Sensitivity")

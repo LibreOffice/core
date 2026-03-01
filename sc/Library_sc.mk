@@ -533,6 +533,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/DeleteCellOperation \
     sc/source/ui/operation/DeleteContentOperation \
     sc/source/ui/operation/InsertCellsOperation \
+    sc/source/ui/operation/InsertSheetViewOperation \
     sc/source/ui/operation/Operation \
     sc/source/ui/operation/OperationType \
     sc/source/ui/operation/SetEditTextOperation \
@@ -602,6 +603,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/undo/UndoUngroupSparklines \
     sc/source/ui/undo/UndoGroupSparklines \
     sc/source/ui/undo/UndoEditSparkline \
+    sc/source/ui/undo/UndoInsertSheetView \
     sc/source/ui/undo/UndoThemeChange \
     sc/source/ui/unoobj/ChartRangeSelectionListener \
     sc/source/ui/unoobj/addruno \

@@ -1134,6 +1134,17 @@ SCTAB ScDocument::GetDefaultViewTableNumber(SCTAB nTab) const
     return nTab;
 }
 
+sc::SheetViewID ScDocument::GetTableSheetViewID(SCTAB nTab) const
+{
+    if (ScTable const* pTable = FetchTable(nTab))
+    {
+        sc::SheetViewID nID = pTable->GetSheetViewID();
+        if (nID != sc::InvalidSheetViewID)
+            return nID;
+    }
+    return sc::DefaultSheetViewID;
+}
+
 std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
 {
     if (ScTable* pTable = FetchTable(nTab))
@@ -1144,7 +1155,6 @@ std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
             if (ScTable* pSheetViewTable = FetchTable(nSheetViewTab))
             {
                 auto nSheetViewID = pTable->GetSheetViewManager()->create(pSheetViewTable);
-                pSheetViewTable->SetVisible(false);
                 pSheetViewTable->SetSheetViewHolder(nSheetViewID, pTable);
                 return { nSheetViewID, nSheetViewTab };
             }

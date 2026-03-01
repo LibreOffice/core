@@ -248,7 +248,6 @@ private:
 
     bool            bShowGrid;                  // per sheet show grid lines option.
     bool            mbOldCursorValid;           // "virtual" Cursor position when combined
-    sc::SheetViewID mnSheetViewID = sc::DefaultSheetViewID;
 
                     ScViewDataTable(const ScDocument *pDoc = nullptr);
 
@@ -421,14 +420,14 @@ public:
 
     void SetSheetViewID(sc::SheetViewID nID);
 
-    sc::SheetViewID GetSheetViewID() const
-    {
-        return pThisTab->mnSheetViewID;
-    }
+    sc::SheetViewID GetSheetViewID() const;
 
     sc::SheetViewID GetSheetViewIDForSheet(SCTAB nTab) const;
 
     std::shared_ptr<sc::SheetViewManager> GetCurrentSheetViewManager() const;
+
+    /** Returns the default view tab for the sheet view */
+    SCTAB GetDefaultViewTab() const;
 
     SCCOL           MaxCol() const                          { return mrDoc.MaxCol(); }
     SCROW           MaxRow() const                          { return mrDoc.MaxRow(); }

@@ -66,6 +66,7 @@ enum class OperationType
     SparklineGroupDelete,
     SparklineGroupChange,
     EnterData,
+    InsertSheetView,
 };
 
 std::string_view operationTypeString(OperationType eType);
