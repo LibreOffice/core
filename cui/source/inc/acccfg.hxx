@@ -39,23 +39,6 @@ class SfxMacroInfoItem;
 
 // class SfxAcceleratorConfigPage ----------------------------------------
 
-struct TAccInfo
-{
-public:
-    TAccInfo(sal_Int32 nKeyPos, const vcl::KeyCode& aKey)
-        : m_nKeyPos(nKeyPos)
-        , m_sCommand()
-        , m_aKey(aKey)
-    {
-    }
-
-    bool isConfigured() const { return (m_nKeyPos > -1 && !m_sCommand.isEmpty()); }
-
-    sal_Int32 m_nKeyPos;
-    OUString m_sCommand;
-    vcl::KeyCode m_aKey;
-};
-
 namespace sfx2
 {
 class FileDialogHelper;
@@ -85,6 +68,9 @@ private:
     bool m_bStylesInfoInitialized;
     // Array of reserved key codes in sorted order
     std::vector<sal_uInt16> m_aReservedKeyCodes;
+
+    // Array mapping key code index to a command. The indices are the same as for KEYCODE_ARRAY.
+    std::vector<OUString> m_aAssignments;
 
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
     css::uno::Reference<css::ui::XAcceleratorConfiguration> m_xGlobal;
