@@ -76,6 +76,32 @@ void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScaleY )
     }
 }
 
+bool AllowDim(tools::Long nDim)
+{
+    static bool bFuzzing = comphelper::IsFuzzing();
+    if (bFuzzing)
+    {
+        constexpr auto numCairoMax(1 << 23);
+        if (nDim > numCairoMax || nDim < -numCairoMax)
+        {
+            SAL_WARN("vcl", "skipping huge dimension: " << nDim);
+            return false;
+        }
+    }
+    return true;
+}
+
+bool AllowPoint(const Point& rPoint)
+{
+    return AllowDim(rPoint.X()) && AllowDim(rPoint.Y());
+}
+
+bool AllowRect(const tools::Rectangle& rRect)
+{
+    return AllowPoint(rRect.TopLeft()) && AllowPoint(rRect.BottomRight()) &&
+           AllowDim(rRect.GetHeight()) && AllowDim(rRect.GetWidth());
+}
+
 } //anonymous namespace
 
 MetaAction::MetaAction() :
@@ -221,32 +247,6 @@ MetaRectAction::MetaRectAction( const tools::Rectangle& rRect ) :
     MetaAction  ( MetaActionType::RECT ),
     maRect      ( rRect )
 {}
-
-static bool AllowDim(tools::Long nDim)
-{
-    static bool bFuzzing = comphelper::IsFuzzing();
-    if (bFuzzing)
-    {
-        constexpr auto numCairoMax(1 << 23);
-        if (nDim > numCairoMax || nDim < -numCairoMax)
-        {
-            SAL_WARN("vcl", "skipping huge dimension: " << nDim);
-            return false;
-        }
-    }
-    return true;
-}
-
-static bool AllowPoint(const Point& rPoint)
-{
-    return AllowDim(rPoint.X()) && AllowDim(rPoint.Y());
-}
-
-static bool AllowRect(const tools::Rectangle& rRect)
-{
-    return AllowPoint(rRect.TopLeft()) && AllowPoint(rRect.BottomRight()) &&
-           AllowDim(rRect.GetHeight()) && AllowDim(rRect.GetWidth());
-}
 
 void MetaRectAction::Execute( OutputDevice* pOut )
 {
