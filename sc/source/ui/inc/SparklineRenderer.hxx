@@ -267,11 +267,17 @@ private:
             nMin = *rAttributes.getManualMin();
 
         std::vector<SparklineValue> const& rValueList = rSparklineValues.getValuesList();
+        if (rValueList.size() <= 1)
+            return;
+
+        double nDelta = nMax - nMin;
+        if (nDelta == 0)
+            return;
+
         std::vector<basegfx::B2DPolygon> aPolygons;
         aPolygons.emplace_back();
         double numberOfSteps = rValueList.size() - 1;
         double xStep = 0;
-        double nDelta = nMax - nMin;
 
         std::vector<SparklineMarker> aMarkers;
         size_t nValueIndex = 0;
@@ -413,6 +419,12 @@ private:
             nMin = *rAttributes.getManualMin();
 
         std::vector<SparklineValue> const& rValueList = rSparklineValues.getValuesList();
+        if (rValueList.empty())
+            return;
+
+        double nDelta = nMax - nMin;
+        if (nDelta == 0)
+            return;
 
         basegfx::B2DPolygon aPolygon;
         basegfx::B2DHomMatrix aMatrix;
@@ -420,7 +432,6 @@ private:
 
         double xStep = 0;
         double numberOfSteps = rValueList.size();
-        double nDelta = nMax - nMin;
 
         double nColumnSize = rRectangle.GetWidth() / numberOfSteps;
         nColumnSize = nColumnSize - (nColumnSize * 0.3);
