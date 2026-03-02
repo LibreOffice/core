@@ -1057,12 +1057,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_REMOVE_SHEET_VIEW:
             RemoveCurrentSheetView();
         break;
-        case FID_SWITCH_TO_NEXT_SHEET_VIEW:
-            SwitchSheetView(sc::SwitchSheetViewDirection::Next);
-        break;
-        case FID_SWITCH_TO_PREVIOUS_SHEET_VIEW:
-            SwitchSheetView(sc::SwitchSheetViewDirection::Previous);
-        break;
         case FID_EXIT_SHEET_VIEW:
             ExitSheetView();
         break;
