@@ -50,6 +50,10 @@ $(eval $(call gb_Library_add_defs,sw,\
 	-DSWUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,swui))\" \
 ))
 
+$(eval $(call gb_Library_use_system_win32_libs,sw,\
+    shlwapi \
+))
+
 $(eval $(call gb_Library_use_libraries,sw,\
     avmedia \
     basegfx \

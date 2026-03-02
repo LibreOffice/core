@@ -21,15 +21,21 @@
 #include <string_view>
 
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <unotools/transliterationwrapper.hxx>
 
 #include <vcl/errinf.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/fstathelper.hxx>
+#include <ucbhelper/content.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <o3tl/string_view.hxx>
@@ -40,8 +46,14 @@
 
 #include <unoatxt.hxx>
 #include <swerror.h>
+#include <strings.hrc>
 
 #include <memory>
+
+#ifdef _WIN32
+#include <o3tl/char16_t2wchar_t.hxx>
+#include <shlwapi.h>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -358,7 +370,7 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
     m_PathArr.clear();
 
     std::vector<OUString> aDirArr;
-    std::vector<OUString> aInvalidPaths;
+    decltype(m_aInvalidPaths) aInvalidPaths;
     if (!m_aPath.isEmpty())
     {
         sal_Int32 nIndex = 0;
@@ -374,10 +386,30 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
                 continue;
             }
             aDirArr.push_back(sPth);
-            if( !FStatHelper::IsFolder( sPth ) )
-                aInvalidPaths.push_back(sPth);
-            else
-                m_PathArr.push_back(sPth);
+            try
+            {
+                ::ucbhelper::Content content{sPth,
+                    uno::Reference<ucb::XCommandEnvironment>{},
+                    ::comphelper::getProcessComponentContext()};
+                if (content.isFolder())
+                {
+                    m_PathArr.push_back(sPth);
+                }
+                else
+                {
+                    aInvalidPaths.push_back({sPth, {}});
+                }
+            }
+            catch (ucb::InteractiveIOException const& e)
+            {
+                TOOLS_INFO_EXCEPTION("sw.ui", "AutoText path IO Exception: ");
+                aInvalidPaths.emplace_back(sPth, e.Code);
+            }
+            catch (...)
+            {
+                TOOLS_INFO_EXCEPTION("sw.ui", "AutoText path Exception: ");
+                aInvalidPaths.push_back({sPth, {}});
+            }
         }
         while (nIndex>=0);
     }
@@ -389,11 +421,9 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
         if (bPathChanged || (m_aInvalidPaths != aInvalidPaths))
         {
             m_aInvalidPaths = std::move(aInvalidPaths);
-            // wrong path, that means AutoText directory doesn't exist
+            // AutoText directory not accessible or doesn't exist
+            ShowError();
 
-            ErrorHandler::HandleError( ErrCodeMsg(
-                                    ERR_AUTOPATH_ERROR, lcl_makePath(m_aInvalidPaths),
-                                    DialogMask::ButtonsOk | DialogMask::MessageError ) );
             m_bError = true;
         }
         else
@@ -411,8 +441,37 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
 
 void SwGlossaries::ShowError()
 {
-    ErrCodeMsg nPathError(ERR_AUTOPATH_ERROR, lcl_makePath(m_aInvalidPaths), DialogMask::ButtonsOk );
-    ErrorHandler::HandleError( nPathError );
+    std::vector<OUString> netaccess;
+    std::vector<OUString> others;
+    for (auto const& it : m_aInvalidPaths)
+    {
+#ifdef _WIN32
+        OUString path;
+        if (it.second && *it.second == ucb::IOErrorCode_ACCESS_DENIED
+            && osl::FileBase::getSystemPathFromFileURL(it.first, path) == osl::FileBase::E_None
+            && PathIsNetworkPathW(o3tl::toW(path.getStr())) == TRUE)
+        {
+            netaccess.emplace_back(it.first);
+        }
+        else
+#endif
+        {
+            others.emplace_back(it.first);
+        }
+    }
+    if (!netaccess.empty())
+    {
+        std::unique_ptr<weld::MessageDialog> const xDialog{
+            Application::CreateMessageDialog(nullptr,
+                VclMessageType::Error, VclButtonsType::Close,
+                SwResId(STR_ERR_GLOS_NET_PATH_ACCESS) + u"\n\n" + lcl_makePath(netaccess))};
+        xDialog->run();
+    }
+    if (!others.empty())
+    {
+        ErrCodeMsg nPathError(ERR_AUTOPATH_ERROR, lcl_makePath(others), DialogMask::ButtonsOk);
+        ErrorHandler::HandleError( nPathError );
+    }
 }
 
 OUString SwGlossaries::GetExtension()
