@@ -41,6 +41,8 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <swdtflvr.hxx>
@@ -3321,6 +3323,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf158454)
     emulateTyping(u"กงศุลสังเกตุกระทันหัน ");
     sReplaced = u"อนุญาต กงสุลสังเกตกะทันหัน อนุญาต กงสุลสังเกตกะทันหัน (จบ)"_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf152030)
+{
+    createSwDoc("tdf152030.odt");
+
+    // Ensure a TOC exists initially
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexesSupplier->getDocumentIndexes();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexes->getCount());
+
+    // Select entire document (ensures TOC is fully included)
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    // Delete Selection
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
+
+    // After fix: TOC should be deleted
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexes->getCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
