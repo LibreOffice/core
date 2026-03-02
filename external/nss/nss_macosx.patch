@@ -39,7 +39,6 @@ diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
  
  ifeq (,$(filter-out ppc ppc64,$(CPU_ARCH)))
  ifneq ($(NSS_DISABLE_CRYPTO_VSX),0)
- 	NSS_DISABLE_CRYPTO_VSX=1
 @@ -54,12 +56,16 @@
  endif
  
