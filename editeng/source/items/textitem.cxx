@@ -82,6 +82,7 @@
 #include <editeng/itemtype.hxx>
 #include <editeng/scripthintitem.hxx>
 #include <editeng/eerdll.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <docmodel/color/ComplexColorJSON.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/color/ComplexColor.hxx>
@@ -110,6 +111,7 @@ SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkIte
 SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0_deg10, false, TypedWhichId<SvxCharRotateItem>(0));}
 SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidthItem(100, TypedWhichId<SvxCharScaleWidthItem>(0));}
 SfxPoolItem* SvxCharReliefItem::CreateDefault() {return new SvxCharReliefItem(FontRelief::NONE, 0);}
+SfxPoolItem* SvxOpticalSizingItem::CreateDefault() {return new SvxOpticalSizingItem(false, 0);}
 
 // class SvxFontListItem -------------------------------------------------
 
@@ -3021,6 +3023,34 @@ void SvxRsidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%" SAL_PRIuUINT32, GetValue());
     (void)xmlTextWriterEndElement(pWriter);
+}
+
+// class SvxOpticalSizingItem --------------------------------------------
+
+SvxOpticalSizingItem::SvxOpticalSizingItem( const bool bOpticalSizing, const sal_uInt16 nId ) :
+    SfxBoolItem( nId, bOpticalSizing )
+{
+}
+
+SvxOpticalSizingItem* SvxOpticalSizingItem::Clone( SfxItemPool * ) const
+{
+    return new SvxOpticalSizingItem( *this );
+}
+
+bool SvxOpticalSizingItem::GetPresentation
+(
+    SfxItemPresentation /*ePres*/,
+    MapUnit             /*eCoreUnit*/,
+    MapUnit             /*ePresUnit*/,
+    OUString&           rText, const IntlWrapper& /*rIntl*/
+)   const
+{
+    TranslateId pId = RID_SVXITEMS_OPTICALSIZING_FALSE;
+
+    if ( GetValue() )
+        pId = RID_SVXITEMS_OPTICALSIZING_TRUE;
+    rText = EditResId(pId);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
