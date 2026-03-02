@@ -258,7 +258,7 @@ $(call gb_CppunitTest_get_target,$(1)) : $(if $(filter $(2),$(true)),, \
         $(if $(ENABLE_QT5),$(call gb_Library_get_target,vclplug_qt5)) \
         $(if $(ENABLE_QT6),$(call gb_Library_get_target,vclplug_qt6)) \
 	 )
-else ifeq ($(OS),MACOSX)
+else ifeq ($(OS)-$(USE_HEADLESS_CODE),MACOSX-)
 $(call gb_CppunitTest_get_target,$(1)): $(call gb_Library_get_target,vclplug_osx)
 else ifeq ($(OS)-$(USE_HEADLESS_CODE),WNT-)
 $(call gb_CppunitTest_get_target,$(1)): $(call gb_Library_get_target,vclplug_win)

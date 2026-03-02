@@ -137,6 +137,11 @@ endif
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,vcl,\
     Package_osxres \
+))
+endif
+
+ifeq ($(OS)-$(USE_HEADLESS_CODE),MACOSX-)
+$(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_osx \
 ))
 endif
