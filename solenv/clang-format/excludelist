@@ -14704,7 +14704,6 @@ vcl/unx/generic/dtrans/X11_dndcontext.cxx
 vcl/unx/generic/dtrans/X11_dndcontext.hxx
 vcl/unx/generic/dtrans/X11_droptarget.cxx
 vcl/unx/generic/dtrans/X11_selection.cxx
-vcl/unx/generic/dtrans/X11_selection.hxx
 vcl/unx/generic/dtrans/X11_service.cxx
 vcl/unx/generic/dtrans/X11_transferable.cxx
 vcl/unx/generic/dtrans/X11_transferable.hxx
