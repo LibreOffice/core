@@ -28,7 +28,7 @@ class SalI18N_InputContext
 
 private:
 
-    Bool    mbUseable; // system supports current locale ?
+    bool mbUseable; // system supports current locale ?
     XIC     maContext;
 
     XIMStyle mnSupportedPreeditStyle;
@@ -54,7 +54,7 @@ private:
 
 public:
 
-    Bool UseContext() const { return mbUseable; }
+    bool UseContext() const { return mbUseable; }
     bool IsPreeditMode() const { return maClientData.eState == PreeditStatus::Active; }
     XIC  GetContext() const { return maContext; }
 

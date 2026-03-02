@@ -21,8 +21,6 @@
 
 #include <X11/Xlib.h>
 
-#define bUseInputMethodDefault True
-
 class SalI18N_InputMethod
 {
     bool        mbUseable;  // system supports locale as well as status

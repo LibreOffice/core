@@ -121,7 +121,7 @@ const XIMStyle g_nSupportedStatusStyle(
 // Constructor for an InputContext (IC)
 
 SalI18N_InputContext::SalI18N_InputContext(X11SalFrame* pFrame) :
-        mbUseable( True ),
+        mbUseable(true),
         maContext( nullptr ),
         mnSupportedPreeditStyle(
                                 XIMPreeditCallbacks |
@@ -319,7 +319,7 @@ SalI18N_InputContext::SalI18N_InputContext(X11SalFrame* pFrame) :
         SAL_WARN("vcl.app", "input context creation failed.");
 #endif
 
-        mbUseable = False;
+        mbUseable = false;
 
         if ( mpAttributes != nullptr )
             XFree( mpAttributes );
@@ -388,7 +388,7 @@ void
 SalI18N_InputContext::HandleDestroyIM()
 {
     maContext = nullptr;      // don't change
-    mbUseable = False;
+    mbUseable = false;
 }
 
 //  make sure, the input method gets all the X-Events it needs, this is only

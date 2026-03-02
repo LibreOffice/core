@@ -208,7 +208,7 @@ SalI18N_InputMethod::SetLocale()
             SetSystemEnvironment( "C" );
 #endif
             if (! IsXWindowCompatibleLocale(locale))
-                mbUseable = False;
+                mbUseable = false;
         }
     }
 
@@ -218,7 +218,7 @@ SalI18N_InputMethod::SetLocale()
         SAL_WARN("vcl.app",
                 "I18N: Can't set X modifiers for locale \""
                 << locale << "\".");
-        mbUseable = False;
+        mbUseable = false;
     }
 }
 
@@ -233,7 +233,7 @@ SalI18N_InputMethod::PosixLocale()
 // Constructor / Destructor / Initialisation
 
 SalI18N_InputMethod::SalI18N_InputMethod( )
-    : mbUseable( bUseInputMethodDefault )
+    : mbUseable(true)
     , maMethod( nullptr )
     , mpStyles( nullptr )
 {
@@ -340,7 +340,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
         {
             if (   XGetIMValues(maMethod, XNQueryInputStyle, &mpStyles, nullptr)
                 != nullptr)
-                mbUseable = False;
+                mbUseable = false;
 #if OSL_DEBUG_LEVEL > 1
             SAL_INFO("vcl.app", "Creating Mono-Lingual InputMethod.");
             PrintInputStyle( mpStyles );
@@ -348,7 +348,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
         }
         else
         {
-            mbUseable = False;
+            mbUseable = false;
         }
     }
 
@@ -401,7 +401,7 @@ SalI18N_InputMethod::FilterEvent( XEvent *pEvent, ::Window window    )
 void
 SalI18N_InputMethod::HandleDestroyIM()
 {
-    mbUseable       = False;
+    mbUseable = false;
     maMethod        = nullptr;
 }
 
