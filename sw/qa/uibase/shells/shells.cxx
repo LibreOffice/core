@@ -1032,6 +1032,35 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
     CPPUNIT_ASSERT(bool(it == docStructure.end()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines_UnusedFirstPageHeader)
+{
+    // The document contains tracked changes in the header of the first page, but the import code
+    // eventually creates a page style without a separate first page header, so that header is not
+    // actually used in the document. The tracked changes are not removed from the document (they
+    // are kept in document nodes, as well as the nodes of the now-unused header). Interesting,
+    // that save-and-reload gets rid of the redlines.
+    //
+    // The problem used to be, that collecting redlines for the "ExtractDocumentStructure" command
+    // crashed, when tried to dereference orphaned redline's XText unconditionally (its parent
+    // XText was empty, defined by sw::CreateParentXText).
+    //
+    // It is unclear to me, what is the correct behavior here:
+    // - Maybe we should preserve the separate first header (and its redlines);
+    // - Maybe we should make sure to drop the unused nodes (header and its redlines);
+    // - Maybe we just need to handle the orphaned redlines without a crash.
+    //
+    // Here I only check that the document doesn't crash (no test of count of redlines, nor their
+    // properties).
+
+    createSwDoc("tracked-change-in-unused-first-page-header.docx");
+
+    tools::JsonWriter aJsonWriter;
+    // Before the fix, this crashed:
+    getSwTextDoc()->getCommandValues(aJsonWriter,
+                                     ".uno:ExtractDocumentStructure?filter=trackchanges");
+    aJsonWriter.finishAndGetAsOString(); // writer must be finished
+}
+
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines_textBeforeAfter)
 {
     // The document here has a series of insert/delete/format changes having different times.
