@@ -32,6 +32,9 @@ typedef tools::SvRef<SwDocShell> SwDocShellRef;
 #endif
 #include <cppuhelper/weakref.hxx>
 
+#include <com/sun/star/ucb/IOErrorCode.hpp>
+
+#include <optional>
 #include <vector>
 #include <swdllapi.h>
 
@@ -46,7 +49,7 @@ class SW_DLLPUBLIC SwGlossaries
     UnoAutoTextEntries      m_aGlossaryEntries;
 
     OUString                m_aPath;
-    std::vector<OUString>   m_aInvalidPaths;
+    std::vector<std::pair<OUString, std::optional<css::ucb::IOErrorCode>>> m_aInvalidPaths;
     std::vector<OUString>   m_PathArr;
     std::vector<OUString>   m_GlosArr;
     bool                m_bError;
