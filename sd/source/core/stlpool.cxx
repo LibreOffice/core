@@ -41,6 +41,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/cmapitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <svl/hint.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
@@ -249,6 +250,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
                 rSet.Put( makeSdrTextAutoGrowHeightItem(false) );
                 // #i16874# enable kerning by default but only for new documents
                 rSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
+                // tdf#153368 Optical sizing by default but only for new documents
+                rSet.Put(SvxOpticalSizingItem(true, EE_CHAR_OPTICALSIZING));
 
                 vcl::Font f( GetBulletFont() );
                 PutNumBulletItem( pSheet, f );
@@ -359,6 +362,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         // #i16874# enable kerning by default but only for new documents
         rTitleSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
+        // tdf#153368 Optical sizing by default but only for new documents
+        rTitleSet.Put(SvxOpticalSizingItem(true, EE_CHAR_OPTICALSIZING));
 
         aBulletFont.SetFontSize(Size(0,1552));                  // 44 pt
         PutNumBulletItem( pSheet, aBulletFont );
@@ -405,6 +410,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         // #i16874# enable kerning by default but only for new documents
         rSubtitleSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
+        // tdf#153368 Optical sizing by default but only for new documents
+        rSubtitleSet.Put(SvxOpticalSizingItem(true, EE_CHAR_OPTICALSIZING));
         aSvxLRSpaceItem.SetTextLeft(SvxIndentValue::zero());
         rSubtitleSet.Put(aSvxLRSpaceItem);
 
@@ -454,6 +461,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
                                      SvxIndentValue::twips(-600.0), EE_PARA_LRSPACE));
         // #i16874# enable kerning by default but only for new documents
         rNotesSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
+        // tdf#153368 Optical sizing by default but only for new documents
+        rNotesSet.Put(SvxOpticalSizingItem(true, EE_CHAR_OPTICALSIZING));
 
 /* #i35937# */
 
@@ -479,6 +488,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         // #i16874# enable kerning by default but only for new documents
         rBackgroundObjectsSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
         rBackgroundObjectsSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
+        // tdf#153368 Optical sizing by default but only for new documents
+        rBackgroundObjectsSet.Put(SvxOpticalSizingItem(true, EE_CHAR_OPTICALSIZING));
     }
 
     /**************************************************************************
@@ -498,6 +509,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         rBackgroundSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         // #i16874# enable kerning by default but only for new documents
         rBackgroundSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
+        // tdf#153368 Optical sizing by default but only for new documents
+        rBackgroundSet.Put(SvxOpticalSizingItem(true, EE_CHAR_OPTICALSIZING));
     }
 
     DBG_ASSERT( !bCheck || !bCreated, "missing layout style sheets detected!" );

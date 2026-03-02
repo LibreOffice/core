@@ -75,6 +75,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/emphasismarkitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/cmapitem.hxx>
@@ -271,6 +272,9 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // #i16874# enable kerning by default but only for new documents
     rISet.Put(SvxAutoKernItem(true, EE_CHAR_PAIRKERNING));
+
+    // tdf#153368 Optical sizing by default but only for new documents
+    rISet.Put(SvxOpticalSizingItem(true, EE_CHAR_OPTICALSIZING));
 
     // Bullet
     // BulletItem and BulletFont for title and outline
