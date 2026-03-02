@@ -2558,6 +2558,106 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTableBordersTransparancy)
                          Color(ColorTransparency, aBorderLine.Color));
 }
 
+// CharOpticalSizing should be enabled by default for new documents
+CPPUNIT_TEST_FIXTURE(SdExportTest, testOpticalSizing1)
+{
+    createSdImpressDoc();
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->insertNewByIndex(0),
+                                                 uno::UNO_SET_THROW);
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage, uno::UNO_QUERY_THROW);
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr), uno::UNO_QUERY_THROW);
+    xShapes->add(xShape);
+
+    uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY_THROW);
+    xText->setString(u"test"_ustr);
+
+    {
+        // It should be true by default for new documents
+        uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xProps));
+        uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+        uno::Reference<beans::XPropertySet> xRunProps(xRun, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(true,
+                             xRunProps->getPropertyValue(u"CharOpticalSizing"_ustr).get<bool>());
+
+        // and it should survive save-and-reload
+        saveAndReload(TestFilter::ODP);
+        uno::Reference<beans::XPropertySet> xProps2(getShapeFromPage(0, 1));
+        uno::Reference<text::XTextRange> const xParagraph2(getParagraphFromShape(0, xProps2));
+        uno::Reference<text::XTextRange> xRun2(getRunFromParagraph(0, xParagraph2));
+        uno::Reference<beans::XPropertySet> xRunProps2(xRun2, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(true,
+                             xRunProps2->getPropertyValue(u"CharOpticalSizing"_ustr).get<bool>());
+    }
+
+    {
+        // Setting it manually should set it in contents
+        uno::Reference<beans::XPropertySet> xProps(getShapeFromPage(0, 1));
+        uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xProps));
+        uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+        uno::Reference<beans::XPropertySet> xRunProps(xRun, uno::UNO_QUERY_THROW);
+        xRunProps->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(true));
+        save(TestFilter::ODP);
+        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+        assertXPath(pXmlDoc,
+                    "//style:style/style:text-properties[@loext:font-optical-sizing='auto']", 1);
+
+        // and it should survive save-and-reload
+        saveAndReload(TestFilter::ODP);
+        uno::Reference<beans::XPropertySet> xProps2(getShapeFromPage(0, 1));
+        uno::Reference<text::XTextRange> const xParagraph2(getParagraphFromShape(0, xProps2));
+        uno::Reference<text::XTextRange> xRun2(getRunFromParagraph(0, xParagraph2));
+        uno::Reference<beans::XPropertySet> xRunProps2(xRun2, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(true,
+                             xRunProps2->getPropertyValue(u"CharOpticalSizing"_ustr).get<bool>());
+        pXmlDoc = parseExport(u"content.xml"_ustr);
+        assertXPath(pXmlDoc,
+                    "//style:style/style:text-properties[@loext:font-optical-sizing='auto']", 1);
+    }
+
+    {
+        // It can also be disabled
+        uno::Reference<beans::XPropertySet> xProps(getShapeFromPage(0, 1));
+        uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xProps));
+        uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+        uno::Reference<beans::XPropertySet> xRunProps(xRun, uno::UNO_QUERY_THROW);
+        xRunProps->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(false));
+        save(TestFilter::ODP);
+        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+        assertXPath(pXmlDoc,
+                    "//style:style/style:text-properties[@loext:font-optical-sizing='none']", 1);
+
+        // and it should survive save-and-reload
+        saveAndReload(TestFilter::ODP);
+        uno::Reference<beans::XPropertySet> xProps2(getShapeFromPage(0, 1));
+        uno::Reference<text::XTextRange> const xParagraph2(getParagraphFromShape(0, xProps2));
+        uno::Reference<text::XTextRange> xRun2(getRunFromParagraph(0, xParagraph2));
+        uno::Reference<beans::XPropertySet> xRunProps2(xRun2, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(false,
+                             xRunProps2->getPropertyValue(u"CharOpticalSizing"_ustr).get<bool>());
+        pXmlDoc = parseExport(u"content.xml"_ustr);
+        assertXPath(pXmlDoc,
+                    "//style:style/style:text-properties[@loext:font-optical-sizing='none']", 1);
+    }
+}
+
+// CharOpticalSizing should be disabled by default for old documents
+CPPUNIT_TEST_FIXTURE(SdExportTest, testOpticalSizing2)
+{
+    createSdImpressDoc("odp/transparent_background.odp");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0));
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xRunProps(xRun, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(false, xRunProps->getPropertyValue(u"CharOpticalSizing"_ustr).get<bool>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
