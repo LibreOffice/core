@@ -290,9 +290,8 @@ InternalDataProvider::InternalDataProvider()
 
 InternalDataProvider::InternalDataProvider(
     const rtl::Reference< ChartModel > & xModel,
-    bool bConnectToModel,
-    bool bDefaultDataInColumns)
-:   m_bDataInColumns( bDefaultDataInColumns )
+    bool bConnectToModel)
+:   m_bDataInColumns( true )
 {
     if (!xModel.is())
         return;
@@ -313,9 +312,9 @@ InternalDataProvider::InternalDataProvider(
                         xModel, aRangeString, aSequenceMapping, m_bDataInColumns, bFirstCellAsLabel, bHasCategories ));
 
                 // #i120559# if no data was available, restore default
-                if(!bSomethingDetected && m_bDataInColumns != bDefaultDataInColumns)
+                if(!bSomethingDetected && !m_bDataInColumns)
                 {
-                    m_bDataInColumns = bDefaultDataInColumns;
+                    m_bDataInColumns = true;
                 }
             }
 
