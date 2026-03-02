@@ -1295,7 +1295,11 @@ FcPattern *FontConfigFontOptions::GetPattern() const
     return mpPattern;
 }
 
-void FontConfigFontOptions::SyncPattern(const OString& rFileName, sal_uInt32 nIndex, sal_uInt32 nVariation, bool bEmbolden)
+#ifndef FC_FONT_VARIATIONS
+#define FC_FONT_VARIATIONS "fontvariations"
+#endif
+
+void FontConfigFontOptions::SyncPattern(const OString& rFileName, sal_uInt32 nIndex, sal_uInt32 nVariation, bool bEmbolden, const std::vector<hb_variation_t>& rVariations)
 {
     FcPatternDel(mpPattern, FC_FILE);
     FcPatternAddString(mpPattern, FC_FILE, reinterpret_cast<FcChar8 const *>(rFileName.getStr()));
@@ -1304,6 +1308,21 @@ void FontConfigFontOptions::SyncPattern(const OString& rFileName, sal_uInt32 nIn
     FcPatternAddInteger(mpPattern, FC_INDEX, nFcIndex);
     FcPatternDel(mpPattern, FC_EMBOLDEN);
     FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
+
+    FcPatternDel(mpPattern, FC_FONT_VARIATIONS);
+    if (!rVariations.empty())
+    {
+        OStringBuffer aVariationsString;
+        char buf[128];
+        for (const auto& rVariation : rVariations)
+        {
+            if (!aVariationsString.isEmpty())
+                aVariationsString.append(',');
+            hb_variation_to_string(const_cast<hb_variation_t*>(&rVariation), buf, sizeof(buf));
+            aVariationsString.append(buf);
+        }
+        FcPatternAddString(mpPattern, FC_FONT_VARIATIONS, reinterpret_cast<const FcChar8*>(aVariationsString.getStr()));
+    }
 }
 
 std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const FontAttributes& rInfo, int nSize)

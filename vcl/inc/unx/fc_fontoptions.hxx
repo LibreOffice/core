@@ -21,6 +21,8 @@
 
 #include <rtl/string.hxx>
 #include <vcl/dllapi.h>
+#include <hb.h>
+#include <vector>
 
 typedef struct _FcPattern   FcPattern;
 class VCL_DLLPUBLIC FontConfigFontOptions
@@ -30,7 +32,9 @@ public:
                             mpPattern(pPattern) {}
                         ~FontConfigFontOptions();
 
-    void                SyncPattern(const OString& rFileName, sal_uInt32 nFontFace, sal_uInt32 nFontVariation, bool bEmbolden);
+    void                SyncPattern(const OString& rFileName, sal_uInt32 nFontFace,
+                                    sal_uInt32 nFontVariation, bool bEmbolden,
+                                    const std::vector<hb_variation_t>& rFontVariations);
     FcPattern*          GetPattern() const;
     static void         cairo_font_options_substitute(FcPattern* pPattern);
 private:

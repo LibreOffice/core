@@ -476,7 +476,7 @@ const FontConfigFontOptions* FreetypeFont::GetFontOptions() const
     if (!mxFontOptions)
     {
         mxFontOptions = GetFCFontOptions(mxFontInfo->GetFontAttributes(), mrFontInstance.GetFontSelectPattern().mnHeight);
-        mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), GetFontFaceVariation(), mrFontInstance.NeedsArtificialBold());
+        mxFontOptions->SyncPattern(GetFontFileName(), GetFontFaceIndex(), GetFontFaceVariation(), mrFontInstance.NeedsArtificialBold(), mrFontInstance.GetVariations());
     }
     return mxFontOptions.get();
 }
