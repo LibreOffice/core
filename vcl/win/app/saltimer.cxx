@@ -38,9 +38,8 @@ void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
 // this must run on the main thread too
 void WinSalTimer::ImplStop()
 {
-    SalData *const pSalData = GetSalData();
     const WinSalInstance *pInst = GetWinSalInstance();
-    assert( !pInst || pSalData->mnAppThreadId == GetCurrentThreadId() );
+    assert( !pInst || GetSalData()->mnAppThreadId == GetCurrentThreadId() );
 
     if ( m_bSetTimerRunning )
     {
@@ -63,10 +62,7 @@ void WinSalTimer::ImplStop()
 
 void WinSalTimer::ImplStart( sal_uInt64 nMS )
 {
-#if !defined NDEBUG
-    SalData* pSalData = GetSalData();
-    assert(!GetWinSalInstance() || pSalData->mnAppThreadId == GetCurrentThreadId());
-#endif
+    assert(!GetWinSalInstance() || GetSalData()->mnAppThreadId == GetCurrentThreadId());
 
     // DueTime parameter is a DWORD, which is always an unsigned 32bit
     if (nMS > SAL_MAX_UINT32)
