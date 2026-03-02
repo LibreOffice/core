@@ -136,57 +136,6 @@ OUString SalFrame::DumpSetPosSize(tools::Long nX, tools::Long nY, tools::Long nW
     return aBuffer.makeStringAndClear();
 }
 
-SalInstance::SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex, SalData* pSalData)
-    : m_pYieldMutex(std::move(pMutex))
-{
-    SetSalData(pSalData);
-}
-
-SalInstance::~SalInstance() {}
-
-comphelper::SolarMutex* SalInstance::GetYieldMutex() { return m_pYieldMutex.get(); }
-
-void SalInstance::DestroyInfoPrinter(SalInfoPrinter* pPrinter) { delete pPrinter; }
-
-sal_uInt32 SalInstance::ReleaseYieldMutex(bool all) { return m_pYieldMutex->release(all); }
-
-void SalInstance::AcquireYieldMutex(sal_uInt32 nCount) { m_pYieldMutex->acquire(nCount); }
-
-std::unique_ptr<SalSession> SalInstance::CreateSalSession() { return nullptr; }
-
-OpenGLContext* SalInstance::CreateOpenGLContext()
-{
-    assert(!m_bSupportsOpenGL);
-    std::abort();
-}
-
-std::unique_ptr<SalMenu> SalInstance::CreateMenu(bool, Menu*)
-{
-    // default: no native menus
-    return nullptr;
-}
-
-std::unique_ptr<SalMenuItem> SalInstance::CreateMenuItem(const SalItemParams&) { return nullptr; }
-
-bool SalInstance::CallEventCallback(const void* pEvent)
-{
-    return m_pEventInst.is() && m_pEventInst->dispatchEvent(pEvent);
-}
-
-bool SalInstance::DoExecute(int&)
-{
-    // can't run on system event loop without implementing DoExecute and DoQuit
-    if (Application::IsUseSystemEventLoop())
-        std::abort();
-    return false;
-}
-
-void SalInstance::DoQuit()
-{
-    if (Application::IsUseSystemEventLoop())
-        std::abort();
-}
-
 SalTimer::~SalTimer() {}
 
 void SalBitmap::DropScaledCache()
@@ -6918,22 +6867,6 @@ SalInstanceBuilder::~SalInstanceBuilder()
     m_aOwnedToplevel.disposeAndClear();
 }
 
-std::unique_ptr<weld::Builder>
-SalInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
-{
-    SalInstanceWidget* pParentInstance = dynamic_cast<SalInstanceWidget*>(pParent);
-    vcl::Window* pParentWidget = pParentInstance ? pParentInstance->getWidget() : nullptr;
-    return std::make_unique<SalInstanceBuilder>(pParentWidget, rUIRoot, rUIFile);
-}
-
-std::unique_ptr<weld::Builder> SalInstance::CreateInterimBuilder(vcl::Window* pParent,
-                                                                 const OUString& rUIRoot,
-                                                                 const OUString& rUIFile, bool,
-                                                                 sal_uInt64)
-{
-    return std::make_unique<SalInstanceBuilder>(pParent, rUIRoot, rUIFile);
-}
-
 void SalInstanceWindow::help()
 {
     //show help for widget with keyboard focus
@@ -6986,37 +6919,6 @@ void SalInstanceWindow::help()
         }
     }
     pHelp->Start(sHelpId, pSource);
-}
-
-weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent,
-                                                      VclMessageType eMessageType,
-                                                      VclButtonsType eButtonsType,
-                                                      const OUString& rPrimaryMessage)
-{
-    SalInstanceWidget* pParentInstance = dynamic_cast<SalInstanceWidget*>(pParent);
-    SystemWindow* pParentWidget = pParentInstance ? pParentInstance->getSystemWindow() : nullptr;
-    VclPtrInstance<MessageDialog> xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType,
-                                                 eButtonsType);
-    return new SalInstanceMessageDialog(xMessageDialog, nullptr, true);
-}
-
-std::unique_ptr<weld::ColorChooserDialog>
-SalInstance::CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
-{
-    std::unique_ptr<ColorPickerDialog> pColorPickerDialog
-        = std::make_unique<ColorPickerDialog>(pParent, COL_BLACK, eMode);
-    return std::make_unique<SalInstanceColorChooserDialog>(std::move(pColorPickerDialog));
-}
-
-weld::Window* SalInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)
-{
-    UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
-    if (!pWrapper)
-        return nullptr;
-    VclPtr<vcl::Window> xWindow = pWrapper->GetWindow(rWindow);
-    if (!xWindow)
-        return nullptr;
-    return xWindow->GetFrameWeld();
 }
 
 weld::Window* SalFrame::GetFrameWeld() const
