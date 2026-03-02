@@ -176,11 +176,6 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     return pPrinter;
 }
 
-void SvpSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
-{
-    delete pPrinter;
-}
-
 std::unique_ptr<SalPrinter> SvpSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     // create and initialize SalPrinter

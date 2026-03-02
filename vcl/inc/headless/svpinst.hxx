@@ -152,7 +152,6 @@ public:
     // JobSetup
     SAL_DLLPRIVATE virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData ) override;
-    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) override;
     SAL_DLLPRIVATE virtual std::unique_ptr<SalPrinter> CreatePrinter( SalInfoPrinter* pInfoPrinter ) override;
 
     virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) override;

@@ -49,11 +49,6 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* /* pQueu
     return NULL;
 }
 
-void SvpSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
-{
-    delete pPrinter;
-}
-
 void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* /* pList */ )
 {
 }
