@@ -1584,6 +1584,17 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testEmptyPivotFieldsTable)
                          css::container::NoSuchElementException);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testForumEn29552)
+{
+    createScDoc("xls/forum-en-29552.xls");
+    save(TestFilter::XLSX);
+
+    CPPUNIT_ASSERT_THROW(parseExport(u"xl/revisions/revisionHeaders.xml"_ustr),
+                         css::container::NoSuchElementException);
+    CPPUNIT_ASSERT_THROW(parseExport(u"xl/revisions/userNames.xml"_ustr),
+                         css::container::NoSuchElementException);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

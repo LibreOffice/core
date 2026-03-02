@@ -1506,6 +1506,9 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
         pScAction = pPrevAction;
     }
 
+    if (aActionStack.empty())
+        return;
+
     // build record list
     if (GetOutput() == EXC_OUTPUT_BINARY)
     {
