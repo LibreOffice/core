@@ -272,6 +272,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xKerningMF;
     std::unique_ptr<weld::CheckButton> m_xPairKerningBtn;
     std::unique_ptr<weld::CheckButton> m_xNoHyphenationBtn;
+    std::unique_ptr<weld::CheckButton> m_xOpticalSizingBtn;
 
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -284,6 +285,7 @@ private:
     DECL_LINK(KerningModifyHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ValueChangedHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ScaleWidthModifyHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(OpticalSizingHdl_Impl, weld::Toggleable&, void);
     void FontModifyHdl_Impl();
 
 public:

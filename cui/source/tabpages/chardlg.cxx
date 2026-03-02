@@ -44,6 +44,7 @@
 #include <editeng/autokernitem.hxx>
 #include <editeng/nhypitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/cuicharmap.hxx>
@@ -78,7 +79,8 @@ const WhichRangesContainer SvxCharNamePage::pNameRanges(svl::Items<
     SID_ATTR_CHAR_COLOR, SID_ATTR_CHAR_COLOR,
     SID_ATTR_CHAR_LANGUAGE, SID_ATTR_CHAR_LANGUAGE,
     SID_ATTR_CHAR_CJK_FONT, SID_ATTR_CHAR_CJK_WEIGHT,
-    SID_ATTR_CHAR_CTL_FONT, SID_ATTR_CHAR_CTL_WEIGHT
+    SID_ATTR_CHAR_CTL_FONT, SID_ATTR_CHAR_CTL_WEIGHT,
+    SID_ATTR_CHAR_OPTICAL_SIZING, SID_ATTR_CHAR_OPTICAL_SIZING
 >);
 
 const WhichRangesContainer SvxCharEffectsPage::pEffectsRanges(svl::Items<
@@ -375,7 +377,8 @@ namespace
                     const SvxLanguageBox* _pLanguageLB,
                     const FontList* _pFontList,
                     sal_uInt16 _nFontWhich,
-                    sal_uInt16 _nFontHeightWhich)
+                    sal_uInt16 _nFontHeightWhich,
+                    sal_uInt16 _nOpticalSizingWhich)
     {
         Size aSize = _rFont.GetFontSize();
         aSize.setWidth( 0 );
@@ -433,6 +436,10 @@ namespace
         _rFont.SetWeight( aFontMetrics.GetWeightMaybeAskConfig() );
         _rFont.SetItalic( aFontMetrics.GetItalicMaybeAskConfig() );
         _rFont.SetFontSize( aFontMetrics.GetFontSize() );
+        bool bOpticalSizing = false;
+        if (_pPage->GetItemSet().GetItemState(_nOpticalSizingWhich) >= SfxItemState::DEFAULT)
+            bOpticalSizing = static_cast<const SvxOpticalSizingItem&>(_pPage->GetItemSet().Get(_nOpticalSizingWhich)).GetValue();
+        _rFont.SetOpticalSizing(bOpticalSizing);
 
         return aFontMetrics;
     }
@@ -450,21 +457,21 @@ void SvxCharNamePage::UpdatePreview_Impl()
     FontMetric aWestFontMetric = calcFontMetrics(rFont, this, m_xWestFontNameLB.get(),
         m_xWestFontStyleLB.get(), m_xWestFontSizeLB.get(), m_xWestFontLanguageLB.get(),
         &rFontList, GetWhich(SID_ATTR_CHAR_FONT),
-        GetWhich(SID_ATTR_CHAR_FONTHEIGHT));
+        GetWhich(SID_ATTR_CHAR_FONTHEIGHT), GetWhich(SID_ATTR_CHAR_OPTICAL_SIZING));
 
     m_xWestFontTypeFT->set_label(rFontList.GetFontMapText(aWestFontMetric));
 
     FontMetric aEastFontMetric = calcFontMetrics(rCJKFont, this, m_xEastFontNameLB.get(),
         m_xEastFontStyleLB.get(), m_xEastFontSizeLB.get(), m_xEastFontLanguageLB.get(),
         &rFontList, GetWhich(SID_ATTR_CHAR_CJK_FONT),
-        GetWhich(SID_ATTR_CHAR_CJK_FONTHEIGHT));
+        GetWhich(SID_ATTR_CHAR_CJK_FONTHEIGHT), GetWhich(SID_ATTR_CHAR_OPTICAL_SIZING));
 
     m_xEastFontTypeFT->set_label(rFontList.GetFontMapText(aEastFontMetric));
 
     FontMetric aCTLFontMetric = calcFontMetrics(rCTLFont,
         this, m_xCTLFontNameLB.get(), m_xCTLFontStyleLB.get(), m_xCTLFontSizeLB.get(),
         m_xCTLFontLanguageLB.get(), &rFontList, GetWhich(SID_ATTR_CHAR_CTL_FONT),
-        GetWhich(SID_ATTR_CHAR_CTL_FONTHEIGHT));
+        GetWhich(SID_ATTR_CHAR_CTL_FONTHEIGHT), GetWhich(SID_ATTR_CHAR_OPTICAL_SIZING));
 
     m_xCTLFontTypeFT->set_label(rFontList.GetFontMapText(aCTLFontMetric));
 
@@ -1243,6 +1250,7 @@ bool SvxCharNamePage::FillItemSet( SfxItemSet* rSet )
     bool bModified = FillItemSet_Impl( *rSet, Western );
     bModified |= FillItemSet_Impl( *rSet, Asian );
     bModified |= FillItemSet_Impl( *rSet, Ctl );
+
     return bModified;
 }
 
@@ -2445,6 +2453,7 @@ SvxCharPositionPage::SvxCharPositionPage(weld::Container* pPage, weld::DialogCon
     , m_xKerningMF(m_xBuilder->weld_metric_spin_button(u"kerningsb"_ustr, FieldUnit::POINT))
     , m_xPairKerningBtn(m_xBuilder->weld_check_button(u"pairkerning"_ustr))
     , m_xNoHyphenationBtn(m_xBuilder->weld_check_button(u"nohyphenation"_ustr))
+    , m_xOpticalSizingBtn(m_xBuilder->weld_check_button(u"opticalsizing"_ustr))
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWin));
 #ifdef IOS
@@ -2488,6 +2497,7 @@ void SvxCharPositionPage::Initialize()
     m_xFitToLineCB->connect_toggled(LINK(this, SvxCharPositionPage, FitToLineHdl_Impl));
     m_xKerningMF->connect_value_changed(LINK(this, SvxCharPositionPage, KerningModifyHdl_Impl));
     m_xScaleWidthMF->connect_value_changed(LINK(this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl));
+    m_xOpticalSizingBtn->connect_toggled(LINK(this, SvxCharPositionPage, OpticalSizingHdl_Impl));
 }
 
 void SvxCharPositionPage::UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
@@ -2639,6 +2649,20 @@ IMPL_LINK(SvxCharPositionPage, ValueChangedHdl_Impl, weld::MetricSpinButton&, rF
 IMPL_LINK_NOARG(SvxCharPositionPage, ScaleWidthModifyHdl_Impl, weld::MetricSpinButton&, void)
 {
     m_aPreviewWin.SetFontWidthScale(sal_uInt16(m_xScaleWidthMF->get_value(FieldUnit::PERCENT)));
+}
+
+IMPL_LINK_NOARG(SvxCharPositionPage, OpticalSizingHdl_Impl, weld::Toggleable&, void)
+{
+    SvxFont& rFont = GetPreviewFont();
+    SvxFont& rCJKFont = GetPreviewCJKFont();
+    SvxFont& rCTLFont = GetPreviewCTLFont();
+
+    bool bOpticalSizing = m_xOpticalSizingBtn->get_active();
+    rFont.SetOpticalSizing(bOpticalSizing);
+    rCJKFont.SetOpticalSizing(bOpticalSizing);
+    rCTLFont.SetOpticalSizing(bOpticalSizing);
+
+    m_aPreviewWin.Invalidate();
 }
 
 DeactivateRC SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
@@ -2820,6 +2844,20 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     else
         m_xNoHyphenationBtn->set_active(false);
 
+    // Optical Sizing
+    nWhich = GetWhich(SID_ATTR_CHAR_OPTICAL_SIZING);
+    if (rSet->GetItemState(nWhich) >= SfxItemState::DEFAULT)
+    {
+        const SvxOpticalSizingItem& rItem = static_cast<const SvxOpticalSizingItem&>(rSet->Get(nWhich));
+        m_xOpticalSizingBtn->set_active(rItem.GetValue());
+    }
+    else
+        m_xOpticalSizingBtn->set_active(false);
+    bool bOpticalSizing = m_xOpticalSizingBtn->get_active();
+    rFont.SetOpticalSizing(bOpticalSizing);
+    rCJKFont.SetOpticalSizing(bOpticalSizing);
+    rCTLFont.SetOpticalSizing(bOpticalSizing);
+
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if ( rSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
@@ -2899,6 +2937,7 @@ void SvxCharPositionPage::ChangesApplied()
     m_xKerningMF->save_value();
     m_xPairKerningBtn->save_state();
     m_xNoHyphenationBtn->save_state();
+    m_xOpticalSizingBtn->save_state();
 }
 
 bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
@@ -2998,6 +3037,16 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
+        rSet->InvalidateItem(nWhich);
+
+    // Optical Sizing
+    nWhich = GetWhich(SID_ATTR_CHAR_OPTICAL_SIZING);
+    if (m_xOpticalSizingBtn->get_state_changed_from_saved())
+    {
+        rSet->Put(SvxOpticalSizingItem(m_xOpticalSizingBtn->get_active(), GetWhich(SID_ATTR_CHAR_OPTICAL_SIZING)));
+        bModified = true;
+    }
+    else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
         rSet->InvalidateItem(nWhich);
 
     // Scale Width

@@ -500,6 +500,54 @@
       </packing>
     </child>
     <child>
+      <object class="GtkFrame" id="frame9">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <object class="GtkBox" id="box9">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkCheckButton" id="opticalsizing">
+                <property name="label" translatable="yes" context="positionpage|opticalsizing">Auto</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes" context="positionpage|opticalsizing">Enable optical font sizing based on font's point size for fonts that support it</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label25">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="positionpage|label25">Optical Font Sizing</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -534,7 +582,7 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="pack-type">end</property>
-        <property name="position">4</property>
+        <property name="position">5</property>
       </packing>
     </child>
   </object>
