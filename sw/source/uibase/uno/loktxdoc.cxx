@@ -1014,8 +1014,12 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, SwDocShell* pDo
             HideNewerShowOlder prepare(pSwXRedline->GetRedline()->GetTimeStamp(), rTable);
             auto xStart = pSwXRedline->getPropertyValue(UNO_NAME_REDLINE_START)
                               .query<css::text::XTextRange>();
+            if (xStart && !xStart->getText())
+                xStart.clear();
             auto xEnd = pSwXRedline->getPropertyValue(UNO_NAME_REDLINE_END)
                             .query<css::text::XTextRange>();
+            if (xEnd && !xEnd->getText())
+                xEnd.clear();
             if (xStart)
             {
                 auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
