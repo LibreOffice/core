@@ -66,8 +66,6 @@ class SwMDWriter : public Writer
 public:
     SW_DLLPUBLIC explicit SwMDWriter(const OUString& rBaseURL);
 
-    bool isInTable() const { return m_bOutTable; }
-    SwNodeOffset StartNodeIndex() const { return m_nStartNodeIndex; }
     void SetListLevelPrefixSize(int nListLevel, int nPrefixSize);
     const std::map<int, int>& GetListLevelPrefixSizes() const { return m_aListLevelPrefixSizes; }
     std::stack<SwMDTableInfo>& GetTableInfos() { return m_aTableInfos; }
@@ -83,7 +81,6 @@ private:
     void Out_SwDoc(SwPaM* pPam);
     void CollectFlys();
 
-    bool m_bOutTable = false;
     SwNodeOffset m_nStartNodeIndex{ 0 };
     /// List level -> prefix size map, e.g. "1. " size is 3.
     std::map<int, int> m_aListLevelPrefixSizes;

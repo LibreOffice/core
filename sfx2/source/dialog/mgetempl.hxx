@@ -94,12 +94,7 @@ public:
     PropertyCategoryRow(weld::Box* pParentBox, std::u16string_view rLabel);
     ~PropertyCategoryRow();
     void AddChip(SfxManageStyleSheetPage* pPage, sal_uInt16 nWhich, const OUString& rText);
-    void RemoveChip(sal_uInt16 nWhich);
-    bool IsEmpty() const { return m_aChips.empty(); }
     void Show() { if (m_xContainer) m_xContainer->set_visible(true); }
-    void Hide() { if (m_xContainer) m_xContainer->set_visible(false); }
-    OUString GetLabel() const { return m_xLabel->get_label(); }
-    int GetChipRowCount() const { return static_cast<int>(m_aChipRows.size()); }
 };
 
 class SfxManageStyleSheetPage final : public SfxTabPage

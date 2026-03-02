@@ -56,7 +56,6 @@ public:
     }
 
     inline void Set(const SwMdNumRuleInfo& rInf);
-    void Set(const SwTextNode& rTextNd);
 
     inline SwMdNumRuleInfo& operator=(const SwMdNumRuleInfo& rInf);
 

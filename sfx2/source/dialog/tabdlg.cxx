@@ -1114,34 +1114,6 @@ OUString SfxTabDialogController::GetCurPageId() const
     return m_xTabCtrl->get_current_page_ident();
 }
 
-void SfxTabDialogController::ResetTabPage(std::u16string_view rPageId)
-{
-    SfxTabPage* pPage = GetTabPage(rPageId);
-    if (pPage)
-    {
-        const SfxItemSet* pSet = m_xExampleSet ? m_xExampleSet.get() : m_pSet.get();
-        if (pSet)
-        {
-            pPage->Reset(pSet);
-        }
-    }
-}
-
-void SfxTabDialogController::ResetAllTabPages()
-{
-    const SfxItemSet* pSet = m_xExampleSet ? m_xExampleSet.get() : m_pSet.get();
-    if (!pSet)
-        return;
-
-    for (auto const& elem : m_pImpl->aData)
-    {
-        if (elem->xTabPage)
-        {
-            elem->xTabPage->Reset(pSet);
-        }
-    }
-}
-
 void SfxTabDialogController::InvalidateItem(sal_uInt16 nWhich)
 {
     m_aInvalidatedWhichIds.insert(nWhich);

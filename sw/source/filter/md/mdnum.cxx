@@ -22,22 +22,4 @@
 
 #include "mdnum.hxx"
 
-void SwMdNumRuleInfo::Set(const SwTextNode& rTextNd)
-{
-    const SwNumRule* pTextNdNumRule(rTextNd.GetNumRule());
-    if (pTextNdNumRule && pTextNdNumRule != rTextNd.GetDoc().GetOutlineNumRule())
-    {
-        m_pNumRule = const_cast<SwNumRule*>(pTextNdNumRule);
-        m_nDeep = o3tl::narrowing<sal_uInt16>(m_pNumRule ? rTextNd.GetActualListLevel() + 1 : 0);
-        m_bNumbered = rTextNd.IsCountedInList();
-        m_bRestart = rTextNd.IsListRestart() && !rTextNd.HasAttrListRestartValue();
-    }
-    else
-    {
-        m_pNumRule = nullptr;
-        m_nDeep = 0;
-        m_bNumbered = m_bRestart = false;
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

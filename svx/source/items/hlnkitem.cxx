@@ -42,24 +42,6 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem )
 
 };
 
-SvxHyperlinkItem::SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich, OUString aName, OUString aURL,
-                                    OUString aTarget, OUString aIntName, SvxLinkInsertMode eTyp,
-                                    HyperDialogEvent nEvents, SvxMacroTableDtor const *pMacroTbl, bool showName, bool showText, OUString aReplacementText):
-    SfxPoolItem (_nWhich ),
-    sName       (std::move(aName)),
-    sURL        (std::move(aURL)),
-    sTarget     (std::move(aTarget)),
-    eType       (eTyp),
-    sReplacementText (std::move(aReplacementText)),
-    m_showName    (showName),
-    m_showText    (showText),
-    sIntName (std::move(aIntName)),
-    nMacroEvents (nEvents)
-{
-    if (pMacroTbl)
-        pMacroTable.reset( new SvxMacroTableDtor ( *pMacroTbl ) );
-}
-
 SvxHyperlinkItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const
 {
     return new SvxHyperlinkItem( *this );

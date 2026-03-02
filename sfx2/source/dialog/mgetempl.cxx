@@ -144,42 +144,6 @@ void PropertyCategoryRow::AddChip(SfxManageStyleSheetPage* pPage, sal_uInt16 nWh
     m_aChipRows.back()->nTotalChars += nChipChars;
 }
 
-void PropertyCategoryRow::RemoveChip(sal_uInt16 nWhich)
-{
-    struct ChipData
-    {
-        sal_uInt16 nWhich;
-        OUString sText;
-    };
-    std::vector<ChipData> aData;
-
-    SfxManageStyleSheetPage* pPage = nullptr;
-    for (const auto& pChip : m_aChips)
-    {
-        if (pChip->GetWhich() == nWhich)
-            continue;
-        if (!pPage)
-            pPage = pChip->GetPage();
-        aData.push_back({pChip->GetWhich(), pChip->GetText()});
-    }
-
-    // Hide rows before destroying
-    for (auto& pRow : m_aChipRows)
-    {
-        if (pRow->xBox)
-            pRow->xBox->set_visible(false);
-    }
-
-    m_aChips.clear();
-    m_aChipRows.clear();
-
-    if (pPage)
-    {
-        for (const auto& d : aData)
-            AddChip(pPage, d.nWhich, d.sText);
-    }
-}
-
 /*  SfxManageStyleSheetPage Constructor
  *
  *  initializes the list box with the templates

@@ -166,8 +166,6 @@ public:
     void                ShowPage(const OUString& rName);  // SetCurPageId + call Activate on it
     OUString             GetCurPageId() const;
     SfxTabPage*         GetCurTabPage() const { return GetTabPage(GetCurPageId()); }
-    void                ResetTabPage(std::u16string_view rPageId);
-    void                ResetAllTabPages();
     void                InvalidateItem(sal_uInt16 nWhich);
     OUString            GetTabPageNameForWhich(sal_uInt16 nWhich) const;
     void                BuildWhichToTabMap();

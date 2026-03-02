@@ -69,13 +69,6 @@ public:
                 SfxPoolItem(_nWhich )
     { eType = HLINK_DEFAULT; nMacroEvents=HyperDialogEvent::NONE; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
-    SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> nWhich, OUString aName, OUString aURL,
-                                    OUString aTarget, OUString aIntName,
-                                    SvxLinkInsertMode eTyp,
-                                    HyperDialogEvent nEvents,
-                                    SvxMacroTableDtor const *pMacroTbl,
-                                    bool showName = true, bool showText = true,
-                                    OUString aReplacementText = OUString());
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SvxHyperlinkItem* Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -94,10 +87,8 @@ public:
     const   OUString& GetTargetFrame() const { return sTarget; }
     void    SetTargetFrame(const OUString& rTarget) { sTarget = rTarget; }
 
-    bool GetShowName() const { return m_showName; }
     void    SetShowName(const bool show) { m_showName = show; }
 
-    bool GetShowText() const { return m_showText; }
     void    SetShowText(const bool show) { m_showText = show; }
 
     SvxLinkInsertMode GetInsertMode() const { return eType; }
@@ -112,7 +103,6 @@ public:
     HyperDialogEvent GetMacroEvents() const { return nMacroEvents; }
 
     const OUString& GetReplacementText() const { return sReplacementText; }
-    void    SetReplacementText(const OUString& rReplacementText) { sReplacementText = rReplacementText; }
 
 };
 
