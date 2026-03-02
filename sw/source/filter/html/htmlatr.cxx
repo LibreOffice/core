@@ -45,6 +45,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <fchrfmt.hxx>
 #include <fmtautofmt.hxx>
 #include <fmtfsize.hxx>
@@ -3316,7 +3317,7 @@ const SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_BIDIRTL */            nullptr,
 /* RES_CHRATR_UNUSED3 */            nullptr,
 /* RES_CHRATR_SCRIPT_HINT */        nullptr,
-/* RES_CHRATR_OPTICAL_SIZING */     nullptr,
+/* RES_CHRATR_OPTICAL_SIZING */     OutHTML_CSS1Attr,
 
 /* RES_TXTATR_REFMARK */            nullptr,
 /* RES_TXTATR_TOXMARK */            nullptr,
