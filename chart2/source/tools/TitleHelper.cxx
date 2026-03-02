@@ -206,6 +206,8 @@ rtl::Reference< Title > TitleHelper::createTitle(
 
     if( !xTitled.is() )
     {
+        if( !xModel )
+            return xTitle;
         rtl::Reference< Diagram > xDiagram( xModel->getFirstChartDiagram() );
         rtl::Reference< Axis > xAxis;
         switch( eTitleType )
@@ -272,7 +274,7 @@ rtl::Reference< Title > TitleHelper::createTitle(
             try
             {
                 bool bDummy = false;
-                bool bIsVertical = xDiagram->getVertical( bDummy, bDummy );
+                bool bIsVertical = xDiagram && xDiagram->getVertical( bDummy, bDummy );
 
                 if( (!bIsVertical && eTitleType == TitleHelper::Y_AXIS_TITLE)
                     || (bIsVertical && eTitleType == TitleHelper::X_AXIS_TITLE)
