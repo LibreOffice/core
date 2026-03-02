@@ -22,7 +22,6 @@
 #include <string_view>
 
 #include <QtInstance.hxx>
-#include <QtPrinter.hxx>
 
 #include <printerinfomanager.hxx>
 
@@ -73,7 +72,7 @@ void QtInstance::DestroyInfoPrinter(SalInfoPrinter* pPrinter) { delete pPrinter;
 std::unique_ptr<SalPrinter> QtInstance::CreatePrinter(SalInfoPrinter* pInfoPrinter)
 {
     // create and initialize SalPrinter
-    QtPrinter* pPrinter = new QtPrinter(pInfoPrinter);
+    PspSalPrinter* pPrinter = new PspSalPrinter(pInfoPrinter);
     pPrinter->m_aJobData = static_cast<PspSalInfoPrinter*>(pInfoPrinter)->m_aJobData;
 
     return std::unique_ptr<SalPrinter>(pPrinter);
