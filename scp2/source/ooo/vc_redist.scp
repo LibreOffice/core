@@ -67,7 +67,7 @@ MergeModule WINDOWS_X64_MERGEMODULE
     Feature = gm_Root;
     Name = WINDOWS_X64_MERGEMODULE_FILE;
     RootDir = "TARGETDIR";
-    ComponentCondition = "VC_REDIST=1";
+    ComponentCondition = "VC_REDIST=1 AND NOT VCRUNTIMEINSTALLED";
     Attributes_Add = "0x10";
 End
 
