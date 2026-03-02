@@ -107,10 +107,9 @@ public:
         const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& listener) override;
 };
 
-class SelectionManager
-    : public cppu::ImplInheritanceHelper<DisplayEventHandler, css::datatransfer::dnd::XDragSource,
-                                         css::frame::XTerminateListener>,
-      public SelectionAdaptor
+class SelectionManager : public cppu::WeakImplHelper<css::datatransfer::dnd::XDragSource,
+                                                     css::frame::XTerminateListener>,
+                         public SelectionAdaptor
 {
     static std::unordered_map<OUString, SelectionManager*>& getInstances();
 
@@ -423,8 +422,8 @@ public:
 
     void initialize();
 
-    virtual bool handleEvent(const void* pEvent) override;
-    void shutdown() noexcept override;
+    bool handleEvent(const void* pEvent);
+    void shutdown() noexcept;
 
     // XDragSource
     virtual sal_Bool SAL_CALL isDragImageSupported() override;

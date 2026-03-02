@@ -30,17 +30,15 @@
 #include <mutex>
 #include <vector>
 
-class DisplayEventHandler : public cppu::WeakImplHelper<>
+namespace x11
 {
-public:
-    virtual bool handleEvent(const void* pEvent) = 0;
-    virtual void shutdown() noexcept = 0;
-};
+class SelectionManager;
+}
 
 class X11DisplayConnectionDispatch final : public vcl::DisplayConnectionDispatch
 {
     std::mutex m_aMutex;
-    std::vector<rtl::Reference<DisplayEventHandler>> m_aHandlers;
+    std::vector<rtl::Reference<x11::SelectionManager>> m_aHandlers;
 
 public:
     X11DisplayConnectionDispatch();
@@ -51,8 +49,8 @@ public:
 
     bool dispatchEvent(const void* pEvent);
 
-    void addEventHandler(const rtl::Reference<DisplayEventHandler>& handler);
-    void removeEventHandler(const rtl::Reference<DisplayEventHandler>& handler);
+    void addEventHandler(const rtl::Reference<x11::SelectionManager>& handler);
+    void removeEventHandler(const rtl::Reference<x11::SelectionManager>& handler);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

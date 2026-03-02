@@ -20,6 +20,7 @@
 #include <salinst.hxx>
 #include <svdata.hxx>
 #include <unx/X11DisplayConnectionDispatch.hxx>
+#include <unx/X11_selection.hxx>
 #include <unx/salinst.h>
 
 #include <tools/debug.hxx>
@@ -50,13 +51,13 @@ void X11DisplayConnectionDispatch::terminate()
     SolarMutexReleaser aRel;
 
     std::scoped_lock aGuard(m_aMutex);
-    std::vector<rtl::Reference<DisplayEventHandler>> aLocalList(m_aHandlers);
+    std::vector<rtl::Reference<x11::SelectionManager>> aLocalList(m_aHandlers);
     for (auto const& elem : aLocalList)
         elem->shutdown();
 }
 
 void X11DisplayConnectionDispatch::addEventHandler(
-    const rtl::Reference<DisplayEventHandler>& handler)
+    const rtl::Reference<x11::SelectionManager>& handler)
 {
     std::scoped_lock aGuard(m_aMutex);
 
@@ -64,7 +65,7 @@ void X11DisplayConnectionDispatch::addEventHandler(
 }
 
 void X11DisplayConnectionDispatch::removeEventHandler(
-    const rtl::Reference<DisplayEventHandler>& handler)
+    const rtl::Reference<x11::SelectionManager>& handler)
 {
     std::scoped_lock aGuard(m_aMutex);
 
@@ -75,7 +76,7 @@ bool X11DisplayConnectionDispatch::dispatchEvent(const void* pEvent)
 {
     SolarMutexReleaser aRel;
 
-    std::vector<rtl::Reference<DisplayEventHandler>> handlers;
+    std::vector<rtl::Reference<x11::SelectionManager>> handlers;
     {
         std::scoped_lock aGuard(m_aMutex);
         handlers = m_aHandlers;
