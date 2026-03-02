@@ -41,8 +41,8 @@ void SvxXMeasurePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Size aSize(getPreviewStripSize(pDrawingArea->get_ref_device()));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
 
-    pModel.reset(new SdrModel(nullptr, nullptr, true));
-    pMeasureObj = new SdrMeasureObj(*pModel, Point(), Point());
+    m_pModel.reset(new SdrModel(nullptr, nullptr, true));
+    m_pMeasureObj = new SdrMeasureObj(*m_pModel, Point(), Point());
 
     ResizeImpl(aSize);
     Invalidate();
@@ -57,9 +57,9 @@ void SvxXMeasurePreview::ResizeImpl(const Size& rSize)
 
     Size aSize = rRefDevice.PixelToLogic(rSize);
     Point aPt1(aSize.Width() / 5, static_cast<tools::Long>(aSize.Height() / 2));
-    pMeasureObj->SetPoint(aPt1, 0);
+    m_pMeasureObj->SetPoint(aPt1, 0);
     Point aPt2(aSize.Width() * 4 / 5, static_cast<tools::Long>(aSize.Height() / 2));
-    pMeasureObj->SetPoint(aPt2, 1);
+    m_pMeasureObj->SetPoint(aPt2, 1);
 }
 
 void SvxXMeasurePreview::Resize()
@@ -81,12 +81,12 @@ void SvxXMeasurePreview::Paint(vcl::RenderContext& rRenderContext, const tools::
 
     bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
     rRenderContext.SetDrawMode(bHighContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
-    pMeasureObj->SingleObjectPainter(rRenderContext);
+    m_pMeasureObj->SingleObjectPainter(rRenderContext);
 }
 
 void SvxXMeasurePreview::SetAttributes(const SfxItemSet& rInAttrs)
 {
-    pMeasureObj->SetMergedItemSetAndBroadcast(rInAttrs);
+    m_pMeasureObj->SetMergedItemSetAndBroadcast(rInAttrs);
 
     Invalidate();
 }
