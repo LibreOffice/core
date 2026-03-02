@@ -1239,7 +1239,12 @@ void JSEntry::do_set_text(const OUString& rText)
     sendUpdate();
 }
 
-void JSEntry::set_text_without_notify(const OUString& rText) { SalInstanceEntry::set_text(rText); }
+void JSEntry::set_text_without_notify(const OUString& rText)
+{
+    disable_notify_events();
+    SalInstanceEntry::do_set_text(rText);
+    enable_notify_events();
+}
 
 void JSEntry::replace_selection(const OUString& rText)
 {
@@ -1436,7 +1441,9 @@ void JSFormattedSpinButton::do_set_text(const OUString& rText)
 
 void JSFormattedSpinButton::set_text_without_notify(const OUString& rText)
 {
-    SalInstanceFormattedSpinButton::set_text(rText);
+    disable_notify_events();
+    SalInstanceFormattedSpinButton::do_set_text(rText);
+    enable_notify_events();
 }
 
 JSMessageDialog::JSMessageDialog(JSDialogSender* pSender, ::MessageDialog* pDialog,
@@ -1682,7 +1689,9 @@ void JSTextView::do_set_text(const OUString& rText)
 
 void JSTextView::set_text_without_notify(const OUString& rText)
 {
-    SalInstanceTextView::set_text(rText);
+    disable_notify_events();
+    SalInstanceTextView::do_set_text(rText);
+    enable_notify_events();
 }
 
 void JSTextView::do_replace_selection(const OUString& rText)
