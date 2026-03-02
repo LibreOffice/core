@@ -62,11 +62,9 @@ void PrinterInfoManager::initialize()
     // ???
 }
 
-void PrinterInfoManager::listPrinters( ::std::vector< OUString >& rVector ) const
+std::vector<OUString> PrinterInfoManager::listPrinters() const
 {
-    (void) this;
-
-    rVector.clear();
+    return {};
 }
 
 const PrinterInfo& PrinterInfoManager::getPrinterInfo(

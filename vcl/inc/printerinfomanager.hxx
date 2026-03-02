@@ -129,7 +129,7 @@ public:
     Type getType() const { return m_eType; }
 
     // lists the names of all known printers
-    void listPrinters( std::vector< OUString >& rVector ) const;
+    std::vector<OUString> listPrinters() const;
 
     // gets info about a named printer
     const PrinterInfo& getPrinterInfo( const OUString& rPrinter ) const;

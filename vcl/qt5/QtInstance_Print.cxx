@@ -59,9 +59,8 @@ void QtInstance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
         // #i62663# synchronize possible asynchronouse printer detection now
         rManager.checkPrintersChanged(true);
     }
-    ::std::vector<OUString> aPrinters;
-    rManager.listPrinters(aPrinters);
 
+    std::vector<OUString> aPrinters = rManager.listPrinters();
     for (const auto& rPrinter : aPrinters)
     {
         const PrinterInfo& rInfo(rManager.getPrinterInfo(rPrinter));
