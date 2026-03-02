@@ -31,32 +31,6 @@
 
 using namespace psp;
 
-/*
- *  static helpers
- */
-
-static OUString getPdfDir(const PrinterInfo& rInfo)
-{
-    OUString aDir;
-    sal_Int32 nIndex = 0;
-    while (nIndex != -1)
-    {
-        OUString aToken(rInfo.m_aFeatures.getToken(0, ',', nIndex));
-        if (aToken.startsWith("pdf="))
-        {
-            sal_Int32 nPos = 0;
-            aDir = aToken.getToken(1, '=', nPos);
-            if (aDir.isEmpty())
-                if (auto const env = getenv("HOME"))
-                {
-                    aDir = OStringToOUString(std::string_view(env), osl_getThreadTextEncoding());
-                }
-            break;
-        }
-    }
-    return aDir;
-}
-
 SalInfoPrinter* QtInstance::CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,
                                               ImplJobSetup* pJobSetup)
 {
@@ -98,16 +72,9 @@ void QtInstance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
         pInfo->maLocation = rInfo.m_aLocation;
         pInfo->maComment = rInfo.m_aComment;
 
-        sal_Int32 nIndex = 0;
-        while (nIndex != -1)
-        {
-            OUString aToken(rInfo.m_aFeatures.getToken(0, ',', nIndex));
-            if (aToken.startsWith("pdf="))
-            {
-                pInfo->maLocation = ::getPdfDir(rInfo);
-                break;
-            }
-        }
+        OUString sPdfDir;
+        if (getPdfDir(rInfo, sPdfDir))
+            pInfo->maLocation = sPdfDir;
 
         pList->Add(std::move(pInfo));
     }
