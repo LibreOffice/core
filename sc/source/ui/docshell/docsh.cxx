@@ -28,6 +28,9 @@
 #include <editeng/justifyitem.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/classids.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <o3tl/string_view.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <formula/errorcodes.hxx>
 #include <vcl/stdtext.hxx>
@@ -1370,8 +1373,137 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if ( const SfxStringItem* pOptionsItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
             {
-                aOptions.ReadFromString( pOptionsItem->GetValue(), rMedium.GetInStream() );
-                bOptInit = true;
+                OUString sFilterOptions = pOptionsItem->GetValue();
+
+                if (!sFilterOptions.isEmpty() && sFilterOptions.startsWith("{"))
+                {
+                    // JSON filter options (e.g. from convert-to API)
+                    // Start with sensible defaults, then override from JSON
+                    aOptions.SetCharSet(RTL_TEXTENCODING_UTF8);
+                    aOptions.SetFieldSeps( OUString(',') );
+                    aOptions.SetTextSep( '"' );
+
+                    try
+                    {
+                        std::vector<css::beans::PropertyValue> aProps
+                            = comphelper::JsonToPropertyValues(sFilterOptions.toUtf8());
+                        for (const auto& rProp : aProps)
+                        {
+                            if (rProp.Name == "FieldSeparator")
+                            {
+                                OUString sVal;
+                                rProp.Value >>= sVal;
+                                if (!sVal.isEmpty())
+                                    aOptions.SetFieldSeps( OUString(sVal[0]) );
+                            }
+                            else if (rProp.Name == "TextDelimiter")
+                            {
+                                OUString sVal;
+                                rProp.Value >>= sVal;
+                                aOptions.SetTextSep( sVal.isEmpty() ? 0 : sVal[0] );
+                            }
+                            else if (rProp.Name == "CharacterSet")
+                            {
+                                OUString sVal;
+                                rProp.Value >>= sVal;
+                                aOptions.SetCharSet(ScGlobal::GetCharsetValue(sVal));
+                            }
+                            else if (rProp.Name == "MergeDelimiters")
+                            {
+                                bool bVal = false;
+                                rProp.Value >>= bVal;
+                                aOptions.SetMergeSeps(bVal);
+                            }
+                            else if (rProp.Name == "RemoveSpace")
+                            {
+                                bool bVal = false;
+                                rProp.Value >>= bVal;
+                                aOptions.SetRemoveSpace(bVal);
+                            }
+                            else if (rProp.Name == "QuotedFieldAsText")
+                            {
+                                bool bVal = false;
+                                rProp.Value >>= bVal;
+                                aOptions.SetQuotedAsText(bVal);
+                            }
+                            else if (rProp.Name == "DetectSpecialNumber")
+                            {
+                                bool bVal = false;
+                                rProp.Value >>= bVal;
+                                aOptions.SetDetectSpecialNumber(bVal);
+                            }
+                            else if (rProp.Name == "DetectScientificNumber")
+                            {
+                                bool bVal = false;
+                                rProp.Value >>= bVal;
+                                aOptions.SetDetectScientificNumber(bVal);
+                            }
+                            else if (rProp.Name == "EvaluateFormulas")
+                            {
+                                bool bVal = false;
+                                rProp.Value >>= bVal;
+                                aOptions.SetEvaluateFormulas(bVal);
+                            }
+                            else if (rProp.Name == "SkipEmptyCells")
+                            {
+                                bool bVal = false;
+                                rProp.Value >>= bVal;
+                                aOptions.SetSkipEmptyCells(bVal);
+                            }
+                            else if (rProp.Name == "StartRow")
+                            {
+                                sal_Int32 nVal = 1;
+                                rProp.Value >>= nVal;
+                                aOptions.SetStartRow(nVal);
+                            }
+                            else if (rProp.Name == "FixedWidth")
+                            {
+                                bool bVal = false;
+                                rProp.Value >>= bVal;
+                                aOptions.SetFixedLen(bVal);
+                            }
+                            else if (rProp.Name == "ColumnFormat")
+                            {
+                                // Slash-separated column/format pairs, e.g. "1/5/2/1/3/10"
+                                // Format codes: 1=Standard 2=Text 3=MDY 4=DMY 5=YMD 9=Skip 10=English
+                                OUString sVal;
+                                rProp.Value >>= sVal;
+                                if (!sVal.isEmpty())
+                                {
+                                    ScCsvExpDataVec aDataVec;
+                                    const sal_Int32 nInfoCount
+                                        = comphelper::string::getTokenCount(sVal, '/') / 2;
+                                    sal_Int32 nP = 0;
+                                    for (sal_Int32 nInfo = 0; nInfo < nInfoCount; ++nInfo)
+                                    {
+                                        sal_Int32 nStart = o3tl::toInt32(o3tl::getToken(sVal, 0, '/', nP));
+                                        sal_uInt8 nFmt = static_cast<sal_uInt8>(o3tl::toInt32(o3tl::getToken(sVal, 0, '/', nP)));
+                                        aDataVec.emplace_back(nStart, nFmt);
+                                    }
+                                    if (!aDataVec.empty())
+                                        aOptions.SetColumnInfo(aDataVec);
+                                }
+                            }
+                            else if (rProp.Name == "Language")
+                            {
+                                OUString sVal;
+                                rProp.Value >>= sVal;
+                                if (!sVal.isEmpty())
+                                    aOptions.SetLanguage(LanguageTag::convertToLanguageType(sVal));
+                            }
+                        }
+                    }
+                    catch (const std::exception& e)
+                    {
+                        SAL_WARN("sc.filter", "CSV JSON import filter options parse error: " << e.what());
+                    }
+                    bOptInit = true;
+                }
+                else
+                {
+                    aOptions.ReadFromString( sFilterOptions, rMedium.GetInStream() );
+                    bOptInit = true;
+                }
             }
 
             if ( !bOptInit )
@@ -2542,17 +2674,111 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             sItStr = pOptionsItem->GetValue();
         }
 
-        if ( sItStr.isEmpty() )
-        {
-            //  default for ascii export (from API without options):
-            //  UTF-8 encoding, comma, double quotes
-
-            ScImportOptions aDefOptions(',', '"', RTL_TEXTENCODING_UTF8);
-            sItStr = aDefOptions.BuildString();
-        }
-
         weld::WaitObject aWait( GetActiveDialogParent() );
-        ScImportOptions aOptions( sItStr );
+        ScImportOptions aOptions(',', '"', RTL_TEXTENCODING_UTF8);
+
+        if (!sItStr.isEmpty() && sItStr.startsWith("{"))
+        {
+            // JSON filter options (e.g. from convert-to API)
+            try
+            {
+                std::vector<css::beans::PropertyValue> aProps
+                    = comphelper::JsonToPropertyValues(sItStr.toUtf8());
+                for (const auto& rProp : aProps)
+                {
+                    if (rProp.Name == "FieldSeparator")
+                    {
+                        OUString sVal;
+                        rProp.Value >>= sVal;
+                        if (!sVal.isEmpty())
+                            aOptions.nFieldSepCode = sVal[0];
+                    }
+                    else if (rProp.Name == "TextDelimiter")
+                    {
+                        OUString sVal;
+                        rProp.Value >>= sVal;
+                        aOptions.nTextSepCode = sVal.isEmpty() ? 0 : sVal[0];
+                    }
+                    else if (rProp.Name == "CharacterSet")
+                    {
+                        OUString sVal;
+                        rProp.Value >>= sVal;
+                        aOptions.SetTextEncoding(ScGlobal::GetCharsetValue(sVal));
+                    }
+                    else if (rProp.Name == "QuoteAllText")
+                    {
+                        bool bVal = false;
+                        rProp.Value >>= bVal;
+                        aOptions.bQuoteAllText = bVal;
+                    }
+                    else if (rProp.Name == "SaveAsShown")
+                    {
+                        bool bVal = false;
+                        rProp.Value >>= bVal;
+                        aOptions.bSaveAsShown = bVal;
+                    }
+                    else if (rProp.Name == "SaveNumberAsSuch")
+                    {
+                        bool bVal = false;
+                        rProp.Value >>= bVal;
+                        aOptions.bSaveNumberAsSuch = bVal;
+                    }
+                    else if (rProp.Name == "SaveFormulas")
+                    {
+                        bool bVal = false;
+                        rProp.Value >>= bVal;
+                        aOptions.bSaveFormulas = bVal;
+                    }
+                    else if (rProp.Name == "RemoveSpace")
+                    {
+                        bool bVal = false;
+                        rProp.Value >>= bVal;
+                        aOptions.bRemoveSpace = bVal;
+                    }
+                    else if (rProp.Name == "EvaluateFormulas")
+                    {
+                        bool bVal = false;
+                        rProp.Value >>= bVal;
+                        aOptions.bEvaluateFormulas = bVal;
+                    }
+                    else if (rProp.Name == "IncludeBOM")
+                    {
+                        bool bVal = false;
+                        rProp.Value >>= bVal;
+                        aOptions.bIncludeBOM = bVal;
+                    }
+                    else if (rProp.Name == "Sheet")
+                    {
+                        // Accept string (sheet name) or long (1-based number)
+                        OUString sVal;
+                        sal_Int32 nVal = 0;
+                        if (rProp.Value >>= sVal)
+                        {
+                            // Resolve sheet name to 1-based index
+                            SCTAB nTab;
+                            if (m_pDocument->GetTable(sVal, nTab))
+                                aOptions.nSheetToExport = nTab + 1;
+                            else
+                                SetError(SCERR_EXPORT_DATA);
+                        }
+                        else if (rProp.Value >>= nVal)
+                        {
+                            aOptions.nSheetToExport = nVal;
+                        }
+                    }
+                }
+            }
+            catch (const std::exception& e)
+            {
+                SAL_WARN("sc.filter", "CSV JSON filter options parse error: " << e.what());
+            }
+        }
+        else if (!sItStr.isEmpty())
+        {
+            // Legacy comma-separated token filter options
+            aOptions = ScImportOptions(sItStr);
+        }
+        // else: keep defaults (UTF-8, comma, double-quote)
 
         if (aOptions.nSheetToExport)
         {

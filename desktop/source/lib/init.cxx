@@ -3877,7 +3877,11 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         bool bTakeOwnership = false;
         bool bCreateFromTemplate = false;
         MediaDescriptor aSaveMediaDescriptor;
+        if (!aFilterOptions.startsWith("{"))
         {
+            // Token-based filter options: scan for and remove special keywords.
+            // JSON options pass through unchanged — no keywords expected, and
+            // splitting on commas would needlessly mangle the JSON string.
             OUStringBuffer aFilteredBuf;
             sal_Int32 nIndex = 0;
             bool bFirst = true;
