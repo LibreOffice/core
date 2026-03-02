@@ -138,6 +138,9 @@ private:
     /// Letter spacing
     short mnLetterSpacing;
 
+    /// Optical sizing
+    bool mbOpticalSizing;
+
 protected:
     /// local decomposition.
     virtual Primitive2DReference
@@ -158,7 +161,7 @@ public:
                                  attribute::FontAttribute aFontAttribute, css::lang::Locale aLocale,
                                  const basegfx::BColor& rFontColor,
                                  const Color& rTextFillColor = COL_TRANSPARENT,
-                                 short nLetterSpacing = 0);
+                                 short nLetterSpacing = 0, bool bOpticalSizing = false);
 
     /** get text outlines as polygons and their according ObjectTransformation. Handles all
         the necessary VCL outline extractions, scaling adaptations and other stuff.
@@ -178,6 +181,7 @@ public:
     const basegfx::BColor& getFontColor() const { return maFontColor; }
     const Color& getTextFillColor() const { return maTextFillColor; }
     short getLetterSpacing() const { return mnLetterSpacing; }
+    bool getOpticalSizing() const { return mbOpticalSizing; }
 
     /// helpers for determining various decoration states
     virtual bool hasTextRelief() const;

@@ -465,6 +465,7 @@ namespace drawinglayer::primitive2d
             const basegfx::BColor& rFontColor,
             const Color& rFillColor,
             short nLetterSpacing,
+            bool bOpticalSizing,
 
             // local parameters
             const basegfx::BColor& rOverlineColor,
@@ -490,7 +491,8 @@ namespace drawinglayer::primitive2d
                 rLocale,
                 rFontColor,
                 rFillColor,
-                nLetterSpacing),
+                nLetterSpacing,
+                bOpticalSizing),
             maBufferedBrokenUpText(),
             maBufferedDecorationGeometry(),
             maOverlineColor(rOverlineColor),

@@ -420,6 +420,7 @@ namespace svgio::svgreader
                     aFill,
                     COL_TRANSPARENT,
                     0,
+                    false,
 
                     // extra props for decorated
                     aDecoColor,

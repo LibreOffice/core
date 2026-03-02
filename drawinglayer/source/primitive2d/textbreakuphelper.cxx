@@ -148,6 +148,7 @@ namespace drawinglayer::primitive2d
                         mrSource.getFontColor(),
                         mrSource.getTextFillColor(),
                         mrSource.getLetterSpacing(),
+                        mrSource.getOpticalSizing(),
 
                         pTextDecoratedPortionPrimitive2D->getOverlineColor(),
                         pTextDecoratedPortionPrimitive2D->getTextlineColor(),
@@ -180,7 +181,8 @@ namespace drawinglayer::primitive2d
                         mrSource.getLocale(),
                         mrSource.getFontColor(),
                         COL_TRANSPARENT,
-                        mrSource.getLetterSpacing()));
+                        mrSource.getLetterSpacing(),
+                        mrSource.getOpticalSizing()));
             }
         }
 
