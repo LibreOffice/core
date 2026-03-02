@@ -67,8 +67,6 @@ SalInfoPrinter* QtInstance::CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,
     return pPrinter;
 }
 
-void QtInstance::DestroyInfoPrinter(SalInfoPrinter* pPrinter) { delete pPrinter; }
-
 std::unique_ptr<SalPrinter> QtInstance::CreatePrinter(SalInfoPrinter* pInfoPrinter)
 {
     // create and initialize SalPrinter
