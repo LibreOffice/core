@@ -18,7 +18,8 @@
  */
 
 #include "X11_dndcontext.hxx"
-#include "X11_selection.hxx"
+
+#include <unx/X11_selection.hxx>
 
 using namespace cppu;
 using namespace x11;

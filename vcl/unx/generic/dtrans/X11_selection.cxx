@@ -41,11 +41,12 @@
 
 #include <sal/macros.h>
 
-#include "X11_selection.hxx"
 #include "X11_clipboard.hxx"
 #include "X11_transferable.hxx"
 #include "X11_dndcontext.hxx"
 #include "bmp.hxx"
+
+#include <unx/X11_selection.hxx>
 
 #include <vcl/svapp.hxx>
 #include <o3tl/string_view.hxx>

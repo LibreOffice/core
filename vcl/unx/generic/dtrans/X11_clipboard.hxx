@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "X11_selection.hxx"
+#include <unx/X11_selection.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
 #include <cppuhelper/compbase.hxx>

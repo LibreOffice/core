@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <unx/X11_selection.hxx>
+
 #include <cppuhelper/supportsservice.hxx>
-#include "X11_selection.hxx"
 
 using namespace x11;
 using namespace com::sun::star::uno;
