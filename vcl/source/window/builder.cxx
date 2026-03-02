@@ -254,7 +254,8 @@ void Application::UICoverageReport(tools::JsonWriter& rJson,
             rJson.putSimpleValue(entry);
     }
 
-    std::vector<OUString> missingCommonSidebarUIs = jsdialog::completeCommonSidebarList(entries);
+    std::vector<OUString> missingCommonSidebarUIs = jsdialog::completeCommonSidebarList(entries,
+            docType);
     rJson.put("CompleteCommonSidebarCoverage", missingCommonSidebarUIs.empty());
     if (!missingCommonSidebarUIs.empty())
     {

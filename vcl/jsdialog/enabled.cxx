@@ -690,6 +690,10 @@ std::vector<OUString> completeCalcSidebarList(const o3tl::sorted_vector<OUString
     std::vector<OUString> missing;
     for (const auto& entry : SidebarList)
     {
+        // Skip this one for now, it can only be seen in certain xlsx documents
+        if (entry == u"modules/scalc/ui/sidebardatabase.ui")
+            continue;
+
         OUString sEntry(entry);
         if (sEntry.startsWith("modules/scalc/") && !entries.contains(sEntry))
             missing.push_back(sEntry);
@@ -697,7 +701,8 @@ std::vector<OUString> completeCalcSidebarList(const o3tl::sorted_vector<OUString
     return missing;
 }
 
-std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUString>& entries)
+std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUString>& entries,
+                                                /*LibreOfficeKitDocumentType*/ int docType)
 {
     std::vector<OUString> missing;
     for (const auto& entry : SidebarList)
@@ -722,26 +727,46 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
         // Skip this one, theme related, disabled at the moment
         else if (entry == u"modules/schart/ui/sidebartheme.ui")
             continue;
-        // Skip this one, in practice it appears in draw/impress
-        // TODO: it should probably be made to appear in writer too
-        else if (entry == u"svx/ui/mediaplayback.ui")
-            continue;
         // Skip this one, I don't think it can appear in practice
         else if (entry == u"svx/ui/sidebargallery.ui")
             continue;
-        // Skip this one, its context means it cannot appear in writer
-        else if (entry == u"svx/ui/sidebarshadow.ui")
-            continue;
-        // Skip this one, its context means it cannot appear in writer
-        else if (entry == u"svx/ui/sidebartexteffect.ui")
-            continue;
-        // Skip this one, its context means it cannot appear in writer
-        else if (entry == u"svx/ui/sidebarlists.ui")
-            continue;
-        // Skip this one, its context means it can only appear in draw/impress
-        else if (entry == u"svx/ui/defaultshapespanel.ui")
-            continue;
-        else if (!entries.contains(sEntry))
+
+        if (docType != LOK_DOCTYPE_TEXT)
+        {
+            // These only appear in writer
+            if (entry == u"svx/ui/accessibilitycheckentry.ui" ||
+                entry == u"svx/ui/accessibilitychecklevel.ui" ||
+                entry == u"svx/ui/inspectortextpanel.ui")
+            {
+                continue;
+            }
+        }
+
+        if (docType == LOK_DOCTYPE_TEXT)
+        {
+            // Skip this one, its context means it cannot appear in writer
+            if (entry == u"svx/ui/sidebarshadow.ui")
+                continue;
+            // Skip this one, its context means it cannot appear in writer
+            else if (entry == u"svx/ui/sidebartexteffect.ui")
+                continue;
+        }
+
+        if (docType != LOK_DOCTYPE_PRESENTATION && docType != LOK_DOCTYPE_DRAWING)
+        {
+            // Skip this one, in practice it appears in draw/impress
+            // TODO: it should probably be made to appear in writer/calc too
+            if (entry == u"svx/ui/mediaplayback.ui")
+                continue;
+            // Skip this one, its context means it can only appear in draw/impress
+            else if (entry == u"svx/ui/defaultshapespanel.ui")
+                continue;
+            // Skip this one, its context means it can only appear in draw/impress
+            else if (entry == u"svx/ui/sidebarlists.ui")
+                continue;
+        }
+
+        if (!entries.contains(sEntry))
             missing.push_back(sEntry);
     }
     return missing;
