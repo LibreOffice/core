@@ -118,6 +118,11 @@
                 <property name="visible">True</property>
                 <property name="tooltip-text" translatable="yes" context="paragraph_style_toggle_btn|tooltip_text">Paragraph Styles</property>
                 <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="paragraphstyles-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="inspectortextpanel|paragraphstyles-atkobject">Paragraph Styles</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -129,6 +134,11 @@
                 <property name="visible">True</property>
                 <property name="tooltip-text" translatable="yes" context="character_style_toggle_btn|tooltip_text">Character Styles</property>
                 <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="characterstyles-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="inspectortextpanel|characterstyles-atkobject">Character Styles</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -140,6 +150,11 @@
                 <property name="visible">True</property>
                 <property name="tooltip-text" translatable="yes" context="direct_formatting_toggle_btn|tooltip_text">Direct Formatting</property>
                 <property name="use-underline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="directformatting-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="inspectortextpanel|directformatting-atkobject">Direct Formatting</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
