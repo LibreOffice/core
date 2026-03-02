@@ -23,38 +23,23 @@ diff -ru a/nspr/configure b/nspr/configure
 diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
 --- a/a/nss/coreconf/Darwin.mk	2014-09-29 16:50:22.992304799 +0100
 +++ b/b/nss/coreconf/Darwin.mk	2014-09-29 16:51:59.214931953 +0100
-@@ -20,35 +20,37 @@
- 
- ifeq (,$(filter-out i%86,$(CPU_ARCH)))
- ifdef USE_64
-+ifeq (,$(findstring -arch ,$(CC)))
- CC              += -arch x86_64
- CCC             += -arch x86_64
-+endif
- override CPU_ARCH	= x86_64
- else
- OS_REL_CFLAGS	= -Di386
-+ifeq (,$(findstring -arch ,$(CC)))
- CC              += -arch i386
- CCC             += -arch i386
-+endif
- override CPU_ARCH	= x86
+@@ -20,6 +20,7 @@
+ CPU_ARCH	:= $(shell uname -p)
  endif
--else ifeq (,$(filter-out aarch64 arm,$(CPU_ARCH)))
--CC              += -arch arm64
--CCC             += -arch arm64
--override CPU_ARCH	= aarch64
--else ifeq (powerpc,$(CPU_ARCH))
--OS_REL_CFLAGS	= -Dppc
--CC              += -arch ppc
--CCC             += -arch ppc
--override CPU_ARCH	= ppc
+ 
++ifeq (,$(findstring -arch ,$(CC)))
+ ifeq (,$(filter-out i%86 x86_64,$(CPU_ARCH)))
+ ifdef USE_64
+ CC              += -arch x86_64
+@@ -46,6 +47,7 @@
  else
--   $(error Unknown CPU architecture)
-+ifeq (arm,$(CPU_ARCH))
-+# Nothing set for arm currently.
-+else
-+endif
+    $(error Unknown CPU architecture)
+ endif
++endif # findstring -arch
+ 
+ ifeq (,$(filter-out ppc ppc64,$(CPU_ARCH)))
+ ifneq ($(NSS_DISABLE_CRYPTO_VSX),0)
+@@ -54,12 +56,16 @@
  endif
  
  ifneq (,$(MACOS_SDK_DIR))
