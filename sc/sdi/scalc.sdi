@@ -6051,23 +6051,6 @@ SfxBoolItem ToggleFormula   FID_TOGGLEFORMULA
     GroupId = SfxGroupId::View
 ]
 
-SfxInt32Item CurrentSheetVIew FID_CURRENT_SHEET_VIEW
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Format;
-]
-
 SfxBoolItem NewSheetView FID_NEW_SHEET_VIEW
 [
     /* flags */
@@ -6104,12 +6087,13 @@ SfxBoolItem RemoveSheetView FID_REMOVE_SHEET_VIEW
     GroupId = SfxGroupId::View
 ]
 
-SfxBoolItem SelectSheetView FID_SELECT_SHEET_VIEW
+SfxVoidItem SelectSheetView FID_SELECT_SHEET_VIEW
+(SfxInt32Item SheetViewID FN_PARAM_1)
 [
     /* flags */
     AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,

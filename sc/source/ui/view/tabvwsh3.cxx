@@ -1062,25 +1062,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         break;
         case FID_SELECT_SHEET_VIEW:
         {
-            ScViewData& rViewData = GetViewData();
-            auto pDialog = std::make_shared<sc::SelectSheetViewDialog>(GetFrameWeld(), rViewData);
-            weld::DialogController::runAsync(pDialog, [this, pDialog](sal_uInt32 nResult) {
-                if (RET_OK != nResult)
-                    return;
-
-                sc::SheetViewID nID = pDialog->getSelectedSheetViewID();
-                if (nID != sc::InvalidSheetViewID)
-                {
-                    SelectSheetView(nID);
-                }
-            });
-            rReq.Done();
-        }
-        break;
-        case FID_CURRENT_SHEET_VIEW:
-        {
             const SfxPoolItem* pItem = nullptr;
-            if (pReqArgs != nullptr && pReqArgs->HasItem(FID_CURRENT_SHEET_VIEW, &pItem))
+            if (pReqArgs != nullptr && pReqArgs->HasItem(FN_PARAM_1, &pItem))
             {
                 const sal_Int32 nValue = static_cast<const SfxInt32Item*>(pItem)->GetValue();
                 sc::SheetViewID nID(nValue);
@@ -1088,6 +1071,21 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     SelectSheetView(nID);
                 }
+            }
+            else
+            {
+                ScViewData& rViewData = GetViewData();
+                auto pDialog = std::make_shared<sc::SelectSheetViewDialog>(GetFrameWeld(), rViewData);
+                weld::DialogController::runAsync(pDialog, [this, pDialog](sal_uInt32 nResult) {
+                    if (RET_OK != nResult)
+                        return;
+
+                    sc::SheetViewID nID = pDialog->getSelectedSheetViewID();
+                    if (nID != sc::InvalidSheetViewID)
+                    {
+                        SelectSheetView(nID);
+                    }
+                });
             }
             rReq.Done();
         }

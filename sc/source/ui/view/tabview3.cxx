@@ -2116,7 +2116,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     rBindings.Invalidate( SID_STYLE_FAMILY4 );      // Designer
     rBindings.Invalidate( SID_TABLES_COUNT );
 
-    rBindings.Invalidate(FID_CURRENT_SHEET_VIEW);
+    rBindings.Invalidate(FID_SELECT_SHEET_VIEW);
 
     if (pScMod->IsRefDialogOpen())
     {

@@ -2082,7 +2082,7 @@ void ScViewFunc::SheetViewChanged()
             if (pTabViewShell && pTabViewShell->GetDocId() == nDocID)
             {
                 SfxBindings& rBindings = pTabViewShell->GetViewFrame().GetBindings();
-                rBindings.Invalidate(FID_CURRENT_SHEET_VIEW);
+                rBindings.Invalidate(FID_SELECT_SHEET_VIEW);
             }
             pViewShell = SfxViewShell::GetNext(*pViewShell);
         }

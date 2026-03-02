@@ -97,7 +97,7 @@
           </packing>
         </child>
         <child>
-          <object class="sfxlo-NotebookbarToolBox" id="CurrentViewToolBox">
+          <object class="sfxlo-NotebookbarToolBox" id="SelectSheetViewToolBox">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="valign">center</property>
@@ -105,9 +105,9 @@
             <property name="toolbar_style">icons</property>
             <property name="show_arrow">False</property>
             <child>
-              <object class="GtkToolButton" id="Home-CurrentSheetView">
+              <object class="GtkToolButton" id="Home-SelectSheetView">
                 <property name="visible">True</property>
-                <property name="action_name">.uno:CurrentSheetView</property>
+                <property name="action_name">.uno:SelectSheetView</property>
               </object>
               <packing>
                 <property name="expand">True</property>

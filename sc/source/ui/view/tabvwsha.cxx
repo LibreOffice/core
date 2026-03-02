@@ -411,16 +411,6 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     }
                 }
                 break;
-            case FID_CURRENT_SHEET_VIEW:
-                {
-                    // TODO: This is a HACK - Set unique values so we force an update to the ToolBar every time
-                    // an invalidation occurs. This probably needs to be changed to a custom item or something,
-                    // or do it in another way.
-                    static sal_Int32 n = 0;
-                    rSet.ClearItem(FID_CURRENT_SHEET_VIEW);
-                    rSet.Put(SfxInt32Item(FID_CURRENT_SHEET_VIEW, n++));
-                }
-                break;
             case FID_NORMALVIEWMODE:
             case FID_PAGEBREAKMODE:
                 // always handle both slots - they exclude each other
