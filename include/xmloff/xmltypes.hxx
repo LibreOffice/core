@@ -303,6 +303,8 @@
 
 #define XML_TYPE_TEXT_SCRIPT_TYPE       (XML_TEXT_TYPES_START + 134)
 
+#define XML_TYPE_TEXT_FONT_OPTICAL_SIZING (XML_TEXT_TYPES_START + 135)
+
 #endif // INCLUDED_XMLOFF_XMLTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

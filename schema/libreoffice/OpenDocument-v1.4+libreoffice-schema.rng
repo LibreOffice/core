@@ -4010,6 +4010,18 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
 
   <!-- TODO no proposal -->
+  <rng:define name="style-text-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:font-optical-sizing">
+        <rng:choice>
+          <rng:value>auto</rng:value>
+          <rng:value>none</rng:value>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
+  <!-- TODO no proposal -->
   <rng:define name="style-graphic-properties-elements" combine="interleave">
     <rng:optional>
         <rng:ref name="loext-stroke-complex-color"/>

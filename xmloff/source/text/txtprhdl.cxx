@@ -1393,6 +1393,10 @@ static const XMLPropertyHandler *GetPropertyHandler
     case XML_TYPE_TEXT_FONT_RELIEF:
         pHdl = new XMLConstantsPropertyHandler( pXML_FontRelief_Enum, XML_TOKEN_INVALID );
         break;
+    case XML_TYPE_TEXT_FONT_OPTICAL_SIZING:
+        pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_AUTO ),
+                                            GetXMLToken( XML_NONE ) );
+        break;
     case XML_TYPE_TEXT_ROTATION_ANGLE:
         pHdl = new XMLTextRotationAnglePropHdl_Impl;
         break;
