@@ -825,6 +825,11 @@
                                     <property name="can-focus">True</property>
                                     <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                                     <property name="hexpand">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="csvruler-atkobject">
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="textimportcsv|csvruler-atkobject">Column break positions</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -839,6 +844,11 @@
                                     <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                                     <property name="hexpand">True</property>
                                     <property name="vexpand">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="csvgrid-atkobject">
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="textimportcsv|csvgrid-atkobject">Data preview</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
