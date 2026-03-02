@@ -76,7 +76,10 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData& rData )
         }
     }
 
-    SetCurPageId( static_cast<sal_uInt16>(rViewData.GetTabNumber()) + 1 );
+    SCTAB nCurTab = rViewData.GetTabNumber();
+    if (!rDoc.IsVisible(nCurTab))
+        nCurTab = rViewData.GetDefaultViewTab();
+    SetCurPageId(sal_uInt16(nCurTab) + 1);
 
     SetSizePixel( Size(SC_TABBAR_DEFWIDTH, 0) );
 
@@ -97,9 +100,10 @@ IMPL_LINK(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, u"modules/scalc/ui/pagelistmenu.ui"_ustr));
     std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
-    sal_uInt16 nCurPageId = GetCurPageId();
-
     ScDocument& rDoc = rViewData.GetDocument();
+    SCTAB nDefaultOfView = rViewData.GetDefaultViewTab();
+    sal_uInt16 nCurPageId = sal_uInt16(nDefaultOfView) + 1;
+
     SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB i=0; i<nCount; ++i)
     {
@@ -264,7 +268,10 @@ void ScTabControl::Select()
 
         for (i=0; i<nCount; i++)
             SelectPage( static_cast<sal_uInt16>(i)+1, rMark.GetTableSelect(i) );
-        SetCurPageId( static_cast<sal_uInt16>(rViewData.GetTabNumber()) + 1 );
+        SCTAB nLockedCurTab = rViewData.GetTabNumber();
+        if (!rDoc.IsVisible(nLockedCurTab))
+            nLockedCurTab = rViewData.GetDefaultViewTab();
+        SetCurPageId(sal_uInt16(nLockedCurTab) + 1);
 
         return;
     }
@@ -273,8 +280,17 @@ void ScTabControl::Select()
     if (!nCurId) return;            // for Excel import it can happen that everything is hidden
     sal_uInt16 nPage = nCurId - 1;
 
+    // If user clicked a default tab that has a last-active sheet view, restore it
+    {
+        SCTAB nClickedTab = SCTAB(nPage);
+        SCTAB nLastViewTab = rViewData.GetLastSheetViewTab(nClickedTab);
+        if (nLastViewTab != nClickedTab && !rDoc.IsVisible(nLastViewTab))
+            nPage = sal_uInt16(nLastViewTab);
+    }
+
     // OLE-inplace deactivate
-    if ( nPage != static_cast<sal_uInt16>(rViewData.GetTabNumber()) )
+    SCTAB nDefaultSheet = rDoc.GetDefaultViewTableNumber(SCTAB(nPage));
+    if (nDefaultSheet != rViewData.GetDefaultViewTab())
         rViewData.GetView()->DrawMarkListHasChanged();
 
     //  InputEnterHandler onlw when not reference input
@@ -395,7 +411,11 @@ void ScTabControl::UpdateStatus()
             }
         }
     }
-    SetCurPageId( static_cast<sal_uInt16>(rViewData.GetTabNumber()) + 1 );
+    SCTAB nCurrentTab = rViewData.GetTabNumber();
+    // If on a hidden sheet view tab, show the default tab as current selected one in the tab bar
+    if (!rDoc.IsVisible(nCurrentTab))
+        nCurrentTab = rViewData.GetDefaultViewTab();
+    SetCurPageId(sal_uInt16(nCurrentTab) + 1);
 
     if (bActive)
     {

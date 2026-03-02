@@ -2135,6 +2135,9 @@ void ScViewFunc::RemoveCurrentSheetView()
     // Switch back to the default tab before deleting
     SetTabNo(nDefaultTab);
 
+    // Last sheet view tab is the deleted one, so reset
+    GetViewData().ClearLastSheetViewTab(nDefaultTab);
+
     // DeleteTable also removes the sheet view from the manager
     GetViewData().GetDocFunc().DeleteTable(nSheetViewTab, true);
 

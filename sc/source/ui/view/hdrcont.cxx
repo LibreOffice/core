@@ -340,12 +340,16 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             sc::SheetViewID nSheetViewID = rViewData.GetSheetViewID();
             if (nSheetViewID >= 0)
             {
-                auto pSheetManager = rViewData.GetDocument().GetSheetViewManager(rViewData.GetTabNumber());
-                auto pSheetView = pSheetManager->get(nSheetViewID);
-                if (pSheetView->isSynced())
-                    aFaceColor.Merge(COL_LIGHTBLUE, 220);
-                else
-                    aFaceColor.Merge(COL_LIGHTRED, 220);
+                SCTAB nDefaultTab = rViewData.GetDefaultViewTab();
+                auto pSheetManager = rViewData.GetDocument().GetSheetViewManager(nDefaultTab);
+                if (pSheetManager)
+                {
+                    auto pSheetView = pSheetManager->get(nSheetViewID);
+                    if (pSheetView->isSynced())
+                        aFaceColor.Merge(COL_LIGHTBLUE, 220);
+                    else
+                        aFaceColor.Merge(COL_LIGHTRED, 220);
+                }
             }
         }
         if (bDark)
