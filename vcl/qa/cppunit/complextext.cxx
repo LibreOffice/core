@@ -24,6 +24,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<double>
 #include <vcl/virdev.hxx>
 // workaround MSVC2015 issue with std::unique_ptr
 #include <sallayout.hxx>
+#include <tools/mapunit.hxx>
 
 
 #if HAVE_MORE_FONTS
@@ -870,6 +871,55 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf163761)
     {
         CPPUNIT_ASSERT_EQUAL(aRefCharIndices.at(i), aCharIndices.at(i));
     }
+}
+
+// Load a variable font with opsz axis, and enable optical sizing.
+// In this particular font, at the two ends of the opsz axis, some characters produce different
+// glyphs. So we check that the glyphs are different for different point sizes.
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testOpticalSizing)
+{
+#if HAVE_MORE_FONTS
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetMapMode(MapMode(MapUnit::MapPoint));
+
+    bool bAdded = addFont(pOutDev, u"Fraunces-VariableFont_opsz,wght.ttf", u"Fraunces");
+    CPPUNIT_ASSERT_EQUAL(true, bAdded);
+
+    auto aText = u"nh"_ustr;
+
+    // Test with small font size
+    vcl::Font aFont1{ u"Fraunces"_ustr, u"Regular"_ustr, Size{ 0, 9 } };
+    aFont1.SetOpticalSizing(true);
+    pOutDev->SetFont(aFont1);
+
+    auto pLayout1 = pOutDev->ImplLayout(aText, /*nIndex*/ 0, /*nLen*/ aText.getLength());
+
+    std::vector<sal_GlyphId> aGlyphs1;
+    const GlyphItem* pGlyph = nullptr;
+    basegfx::B2DPoint stPos;
+    int nCurrPos = 0;
+    while (pLayout1->GetNextGlyph(&pGlyph, stPos, nCurrPos))
+        aGlyphs1.push_back(pGlyph->glyphId());
+
+    // Test with large font size
+    vcl::Font aFont2{ u"Fraunces"_ustr, u"Regular"_ustr, Size{ 0, 144 } };
+    aFont2.SetOpticalSizing(true);
+    pOutDev->SetFont(aFont2);
+
+    auto pLayout2 = pOutDev->ImplLayout(aText, /*nIndex*/ 0, /*nLen*/ aText.getLength());
+
+    std::vector<sal_GlyphId> aGlyphs2;
+    pGlyph = nullptr;
+    nCurrPos = 0;
+    while (pLayout2->GetNextGlyph(&pGlyph, stPos, nCurrPos))
+        aGlyphs2.push_back(pGlyph->glyphId());
+
+    // Check that the glyphs are different for different point sizes
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aGlyphs1.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aGlyphs2.size());
+    CPPUNIT_ASSERT(aGlyphs1.at(0) != aGlyphs2.at(0));
+    CPPUNIT_ASSERT(aGlyphs1.at(1) != aGlyphs2.at(1));
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
