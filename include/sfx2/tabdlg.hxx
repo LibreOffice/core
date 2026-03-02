@@ -179,9 +179,6 @@ public:
     }
     const SfxItemSet* GetExampleSet() const override { return m_xExampleSet.get(); }
 
-    /// Subclasses can override to provide additional WhichId→tab mappings
-    /// that the access tracker cannot determine correctly.
-    virtual std::map<sal_uInt16, OUString> GetWhichToTabOverrides() const { return {}; }
     const std::set<sal_uInt16>& GetInvalidatedWhichIds() const { return m_aInvalidatedWhichIds; }
 
     // may provide local slots converted by Map
