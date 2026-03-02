@@ -45,6 +45,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #if ENABLE_YRS
 #include <editeng/frmdiritem.hxx>
 #include <editeng/hngpnctitem.hxx>
@@ -319,6 +320,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
         case EE_CHAR_SCRIPT_HINT:
         {
             return new EditCharAttribScriptHint(rPool, rAttr, nS, nE);
+        }
+        break;
+        case EE_CHAR_OPTICALSIZING:
+        {
+            return new EditCharAttribOpticalSizing(rPool, rAttr, nS, nE );
         }
         break;
         default:
@@ -1224,7 +1230,13 @@ void YrsInsertAttribImplImpl(YrsWrite const& yw, SfxPoolItem const& rItm,
         // these aren't editable?
 //constexpr TypedWhichId<SvXMLAttrContainerItem> EE_CHAR_XMLATTRIBS     (EE_CHAR_START+27);
 //constexpr TypedWhichId<SfxGrabBagItem>         EE_CHAR_GRABBAG        (EE_CHAR_START+30);
-
+        case EE_CHAR_OPTICALSIZING:
+        {
+            SvxOpticalSizingItem const& rItem{static_cast<SvxOpticalSizingItem const&>(rItm)};
+            attr = yinput_bool(rItem.GetValue() ? Y_TRUE : Y_FALSE);
+            attrName = "EE_CHAR_OPTICALSIZING";
+            break;
+        }
         default:
             assert(false);
     }
@@ -1581,6 +1593,8 @@ char const* YrsWhichToAttrName(sal_Int16 const nWhich)
             return "EE_PARA_JUST_METHOD";
         case EE_PARA_VER_JUST:
             return "EE_PARA_VER_JUST";
+        case EE_CHAR_OPTICALSIZING:
+            return "EE_CHAR_OPTICALSIZING";
         default:
             assert(false);
             abort();
@@ -1822,6 +1836,10 @@ void YrsImplInsertAttr(SfxItemSet & rSet, ::std::vector<sal_uInt16> *const pRemo
     else if (strcmp(pKey, "EE_PARA_VER_JUST") == 0)
     {
         nWhich = EE_PARA_VER_JUST;
+    }
+    else if (strcmp(pKey, "EE_CHAR_OPTICALSIZING") == 0)
+    {
+        nWhich = EE_CHAR_OPTICALSIZING;
     }
     else if (pKey[0] == 'E' && pKey[1] == 'E' && pKey[2] == '_')
     {
@@ -2451,6 +2469,13 @@ void YrsImplInsertAttr(SfxItemSet & rSet, ::std::vector<sal_uInt16> *const pRemo
             auto const value{YrsReadInt(rValue)};
             yvalidate(::std::underlying_type_t<SvxCellVerJustify>(SvxCellVerJustify::Standard) <= value && value <= ::std::underlying_type_t<SvxCellVerJustify>(SvxCellVerJustify::Block));
             SvxVerJustifyItem const item{SvxCellVerJustify(value), nWhich};
+            rSet.Put(item);
+            break;
+        }
+        case EE_CHAR_OPTICALSIZING:
+        {
+            yvalidate(rValue.tag == Y_JSON_BOOL);
+            SvxOpticalSizingItem const item{rValue.value.flag == Y_TRUE, nWhich};
             rSet.Put(item);
             break;
         }
@@ -3280,6 +3305,8 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, S
         rFont.SetEmphasisMark( rSet.Get( EE_CHAR_EMPHASISMARK ).GetEmphasisMark() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_RELIEF ) == SfxItemState::SET ) )
         rFont.SetRelief( rSet.Get( EE_CHAR_RELIEF ).GetValue() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OPTICALSIZING ) == SfxItemState::SET ) )
+        rFont.SetOpticalSizing( rSet.Get( EE_CHAR_OPTICALSIZING ).GetValue() );
 
     // Operator == compares the individual members of the font if the impl pointer is
     // not equal. If all members are the same, this assignment makes

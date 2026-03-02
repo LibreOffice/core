@@ -311,6 +311,7 @@ enum class SfxItemType : sal_uInt16
     SvxAdjustItemType,
     SvxAutoFrameDirectionItemType,
     SvxAutoKernItemType,
+    SvxOpticalSizingItemType,
     SvxB3DVectorItemType,
     SvxBitmapListItemType,
     SvxBlinkItemType,
