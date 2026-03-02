@@ -3326,6 +3326,9 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
 
 Size SwXTextDocument::getDocumentSize()
 {
+    if (!m_pDocShell)
+        return Size();
+
     SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
     if (!pViewShell)
     {
@@ -3342,6 +3345,9 @@ void SwXTextDocument::setPart(int nPart, bool /*bAllowChangeFocus*/)
 {
     SolarMutexGuard aGuard;
 
+    if (!m_pDocShell)
+        return;
+
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
     if (!pWrtShell)
         return;
@@ -3353,6 +3359,9 @@ int SwXTextDocument::getParts()
 {
     SolarMutexGuard aGuard;
 
+    if (!m_pDocShell)
+        return 0;
+
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
     if (!pWrtShell)
         return 0;
@@ -3363,6 +3372,9 @@ int SwXTextDocument::getParts()
 OUString SwXTextDocument::getPartPageRectangles()
 {
     SolarMutexGuard aGuard;
+
+    if (!m_pDocShell)
+        return OUString();
 
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
     if (!pWrtShell)
@@ -3390,6 +3402,9 @@ bool SwXTextDocument::isMimeTypeSupported()
 {
     SolarMutexGuard aGuard;
 
+    if (!m_pDocShell)
+        return false;
+
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
     if (!pWrtShell)
         return false;
@@ -3407,6 +3422,9 @@ bool SwXTextDocument::isMimeTypeSupported()
 
 void SwXTextDocument::setClientVisibleArea(const tools::Rectangle& rRectangle)
 {
+    if (!m_pDocShell)
+        return;
+
     if (SwView* pView = m_pDocShell->GetView())
     {
         // set the PgUp/PgDown offset
@@ -3448,6 +3466,9 @@ void SwXTextDocument::setClientZoom(int nTilePixelWidth_, int /*nTilePixelHeight
 PointerStyle SwXTextDocument::getPointer()
 {
     SolarMutexGuard aGuard;
+
+    if (!m_pDocShell)
+        return PointerStyle::Arrow;
 
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
     if (!pWrtShell)
@@ -3779,6 +3800,9 @@ int SwXTextDocument::getPart()
 {
     SolarMutexGuard aGuard;
 
+    if (!m_pDocShell)
+        return 0;
+
     SwView* pView = m_pDocShell->GetView();
     if (!pView)
         return 0;
@@ -3801,6 +3825,8 @@ OUString SwXTextDocument::getPartHash(int nPart)
 VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
 {
     SolarMutexGuard aGuard;
+    if (!m_pDocShell)
+        return {};
     SwView* pView = m_pDocShell->GetView();
     if (!pView)
         return {};
