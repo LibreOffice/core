@@ -246,6 +246,7 @@ private:
     SCCOL           nMaxTiledCol;
     SCROW           nMaxTiledRow;
 
+    SCTAB           nLastSheetViewTab; // last active sheet view
     bool            bShowGrid;                  // per sheet show grid lines option.
     bool            mbOldCursorValid;           // "virtual" Cursor position when combined
 
@@ -428,6 +429,9 @@ public:
 
     /** Returns the default view tab for the sheet view */
     SCTAB GetDefaultViewTab() const;
+
+    SCTAB GetLastSheetViewTab(SCTAB nDefaultTab) const;
+    void ClearLastSheetViewTab(SCTAB nDefaultTab);
 
     SCCOL           MaxCol() const                          { return mrDoc.MaxCol(); }
     SCROW           MaxRow() const                          { return mrDoc.MaxRow(); }

@@ -330,7 +330,8 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             sc::SheetViewID nSheetViewID = rViewData.GetSheetViewID();
             if (nSheetViewID >= 0)
             {
-                auto pSheetManager = rViewData.GetDocument().GetSheetViewManager(rViewData.GetTabNumber());
+                SCTAB nDefaultTab = rViewData.GetDefaultViewTab();
+                auto pSheetManager = rViewData.GetDocument().GetSheetViewManager(nDefaultTab);
                 if (pSheetManager)
                 {
                     auto pSheetView = pSheetManager->get(nSheetViewID);

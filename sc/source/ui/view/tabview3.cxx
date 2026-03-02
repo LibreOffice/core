@@ -1923,7 +1923,9 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
 
     SCTAB nTabCount = rDoc.GetTableCount();
     SCTAB nOldPos = nTab;
-    while (!rDoc.IsVisible(nTab))              // search for next visible
+
+    // Search for next visible
+    while (!rDoc.IsVisible(nTab) && !rDoc.IsSheetViewHolder(nTab))
     {
         bool bUp = (nTab>=nOldPos);
         if (bUp)
@@ -1978,7 +1980,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     bool bAllSelected = true;
     for (SCTAB nSelTab = 0; nSelTab < nTabCount; ++nSelTab)
     {
-        if (!rDoc.IsVisible(nSelTab) || rMark.GetTableSelect(nSelTab))
+        if ((!rDoc.IsVisible(nSelTab) && !rDoc.IsSheetViewHolder(nSelTab)) || rMark.GetTableSelect(nSelTab))
         {
             if (nTab == nSelTab)
                 // This tab is already in selection.  Keep the current

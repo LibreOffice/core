@@ -523,6 +523,7 @@ ScViewDataTable::ScViewDataTable(const ScDocument *pDoc) :
                 aHeightHelper(pDoc, false),
                 nMaxTiledCol( 20 ),
                 nMaxTiledRow( 50 ),
+                nLastSheetViewTab(sc::DefaultSheetViewID),
                 bShowGrid( true ),
                 mbOldCursorValid( false )
 {
@@ -2439,6 +2440,18 @@ void ScViewData::SetTabNo( SCTAB nNewTab )
         return;
     }
 
+    // Remember the current sheet view tab on the default sheet's per-tab data
+    if (ValidTab(mnTabNumber))
+    {
+        SCTAB nDefaultOfOld = mrDoc.GetDefaultViewTableNumber(mnTabNumber);
+        if (nDefaultOfOld != mnTabNumber
+            && nDefaultOfOld < SCTAB(maTabData.size())
+            && maTabData[nDefaultOfOld])
+        {
+            maTabData[nDefaultOfOld]->nLastSheetViewTab = mnTabNumber;
+        }
+    }
+
     mnTabNumber = nNewTab;
     CreateTabData(mnTabNumber);
     pThisTab = maTabData[mnTabNumber].get();
@@ -3974,7 +3987,10 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             {
                 SCTAB nTab(0);
                 if (GetDocument().GetTable(sTabName, nTab))
-                    mnTabNumber = nTab;
+                {
+                    // When opening a new window we shouldn't see a sheet view
+                    mnTabNumber = GetDocument().GetDefaultViewTableNumber(nTab);
+                }
             }
         }
         else if (sName == SC_HORIZONTALSCROLLBARWIDTH)
@@ -4543,6 +4559,28 @@ std::shared_ptr<sc::SheetViewManager> ScViewData::GetCurrentSheetViewManager() c
 SCTAB ScViewData::GetDefaultViewTab() const
 {
     return mrDoc.GetDefaultViewTableNumber(GetTabNumber());
+}
+
+SCTAB ScViewData::GetLastSheetViewTab(SCTAB nDefaultTab) const
+{
+    if (nDefaultTab >= 0
+        && nDefaultTab < static_cast<SCTAB>(maTabData.size())
+        && maTabData[nDefaultTab]
+        && maTabData[nDefaultTab]->nLastSheetViewTab != sc::DefaultSheetViewID)
+    {
+        return maTabData[nDefaultTab]->nLastSheetViewTab;
+    }
+    return nDefaultTab;
+}
+
+void ScViewData::ClearLastSheetViewTab(SCTAB nDefaultTab)
+{
+    if (nDefaultTab >= 0
+        && nDefaultTab < static_cast<SCTAB>(maTabData.size())
+        && maTabData[nDefaultTab])
+    {
+        maTabData[nDefaultTab]->nLastSheetViewTab = sc::DefaultSheetViewID;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1155,6 +1155,7 @@ std::pair<sc::SheetViewID, SCTAB> ScDocument::CreateNewSheetView(SCTAB nTab)
             if (ScTable* pSheetViewTable = FetchTable(nSheetViewTab))
             {
                 auto nSheetViewID = pTable->GetSheetViewManager()->create(pSheetViewTable);
+                pSheetViewTable->SetVisible(false);
                 pSheetViewTable->SetSheetViewHolder(nSheetViewID, pTable);
                 return { nSheetViewID, nSheetViewTab };
             }

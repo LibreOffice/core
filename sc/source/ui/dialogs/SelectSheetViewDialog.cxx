@@ -40,8 +40,6 @@ SelectSheetViewDialog::SelectSheetViewDialog(weld::Window* pParent, ScViewData& 
 {
     m_xEntryTree->connect_changed(LINK(this, SelectSheetViewDialog, NameModifyHdl));
 
-    ScDocument& rDocument = mrViewData.GetDocument();
-
     m_xEntryTree->clear();
 
     m_xEntryTree->freeze();
@@ -49,7 +47,7 @@ SelectSheetViewDialog::SelectSheetViewDialog(weld::Window* pParent, ScViewData& 
     OUString sActiveID = u"-1"_ustr;
     m_xEntryTree->append(u"-1"_ustr, SheetViewManager::defaultViewName());
 
-    if (auto pSheetManager = rDocument.GetSheetViewManager(mrViewData.GetTabNumber()))
+    if (auto pSheetManager = mrViewData.GetCurrentSheetViewManager())
     {
         for (auto const& rSheetView : pSheetManager->iterateValidSheetViews())
         {
