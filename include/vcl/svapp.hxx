@@ -56,7 +56,6 @@ class Accelerator;
 class Help;
 class OutputDevice;
 namespace vcl {
-    class DisplayConnectionDispatch;
     class KeyCode;
     class Window;
 }
@@ -803,14 +802,6 @@ public:
      @param     nUserEvent      User event to remove
     */
     static void                 RemoveUserEvent( ImplSVEvent * nUserEvent );
-
-    /** Get the DisplayConnection.
-
-    It allows toolkits to send display events to the application.
-
-    This is only used by the gen/x11 VCL plugin.
-    */
-    static rtl::Reference<vcl::DisplayConnectionDispatch> GetDisplayConnection();
 
     /** @deprecated AppEvent is used only in the Desktop class now. However, it is
      intended to notify the application that an event has occurred. It was in oldsv.cxx,

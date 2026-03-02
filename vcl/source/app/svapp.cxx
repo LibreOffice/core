@@ -63,7 +63,6 @@
 #include <salframe.hxx>
 #include <salsys.hxx>
 #include <svdata.hxx>
-#include <displayconnectiondispatch.hxx>
 #include <window.h>
 #include <accmgr.hxx>
 #include <strings.hrc>
@@ -1569,19 +1568,6 @@ void UnoWrapperBase::SetUnoWrapper( UnoWrapperBase* pWrapper )
     ImplSVData* pSVData = ImplGetSVData();
     SAL_WARN_IF( pSVData->mpUnoWrapper, "vcl", "SetUnoWrapper: Wrapper already exists" );
     pSVData->mpUnoWrapper = pWrapper;
-}
-
-rtl::Reference<vcl::DisplayConnectionDispatch> Application::GetDisplayConnection()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if( !pSVData->mxDisplayConnection.is() )
-    {
-        pSVData->mxDisplayConnection.set( new vcl::DisplayConnectionDispatch );
-        pSVData->mxDisplayConnection->start();
-    }
-
-    return pSVData->mxDisplayConnection;
 }
 
 void Application::SetFilterHdl( const Link<ConvertData&,bool>& rLink )
