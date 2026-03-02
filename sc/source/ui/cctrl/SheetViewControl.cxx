@@ -13,10 +13,11 @@
 #include <svl/intitem.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/voiditem.hxx>
 
 using namespace sc;
 
-SFX_IMPL_TOOLBOX_CONTROL(SheetViewControl, SfxInt32Item);
+SFX_IMPL_TOOLBOX_CONTROL(SheetViewControl, SfxVoidItem);
 
 SheetViewControl::SheetViewControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
@@ -47,17 +48,7 @@ void SheetViewControl::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemStat
 
     rToolBox.EnableItem(nId, SfxItemState::DISABLED != eState);
 
-    switch (eState)
-    {
-        case SfxItemState::DEFAULT:
-        {
-            pSheetViewBox->Update(rViewData);
-            break;
-        }
-
-        default:
-            break;
-    }
+    pSheetViewBox->Update(rViewData);
 
     SfxToolBoxControl::StateChangedAtToolBoxControl(nSID, eState, pState);
 }
