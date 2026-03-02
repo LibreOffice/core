@@ -59,7 +59,6 @@ public:
     // Printing
     virtual SalInfoPrinter*     CreateInfoPrinter      ( SalPrinterQueueInfo* pQueueInfo,
                                                          ImplJobSetup* pSetupData ) override;
-    virtual void                DestroyInfoPrinter     ( SalInfoPrinter* pPrinter ) override;
     virtual std::unique_ptr<SalPrinter> CreatePrinter  ( SalInfoPrinter* pInfoPrinter ) override;
     virtual void                GetPrinterQueueInfo    ( ImplPrnQueueList* pList ) override;
     virtual void                GetPrinterQueueState   ( SalPrinterQueueInfo* pInfo ) override;

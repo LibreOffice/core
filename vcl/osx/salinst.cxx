@@ -923,7 +923,7 @@ void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    delete pPrinter;
+    SalInstance::DestroyInfoPrinter(pPrinter);
 }
 
 // We need to re-encode file urls because osl_getFileURLFromSystemPath converts

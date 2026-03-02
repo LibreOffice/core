@@ -1053,12 +1053,6 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     return pPrinter;
 }
 
-void WinSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
-{
-    delete pPrinter;
-}
-
-
 WinSalInfoPrinter::WinSalInfoPrinter() :
     m_hDC(nullptr),
     m_pGraphics(nullptr),

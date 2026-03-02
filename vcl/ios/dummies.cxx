@@ -77,11 +77,6 @@ SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo* /* p
     return NULL;
 }
 
-void SalGenericInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
-{
-    delete pPrinter;
-}
-
 void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* /* pList */ )
 {
 }

@@ -143,7 +143,7 @@ public:
     // JobSetup
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData ) = 0;
-    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) = 0;
+    virtual void DestroyInfoPrinter(SalInfoPrinter* pPrinter);
     virtual std::unique_ptr<SalPrinter> CreatePrinter( SalInfoPrinter* pInfoPrinter ) = 0;
 
     virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) = 0;

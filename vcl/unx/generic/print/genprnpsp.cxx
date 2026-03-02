@@ -291,11 +291,6 @@ SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo*    p
     return pPrinter;
 }
 
-void SalGenericInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
-{
-    delete pPrinter;
-}
-
 std::unique_ptr<SalPrinter> SalGenericInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     mbPrinterInit = true;
