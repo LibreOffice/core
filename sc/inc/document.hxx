@@ -2441,7 +2441,7 @@ public:
     SC_DLLPUBLIC SCTAB GetDefaultViewTableNumber(SCTAB nTab) const;
 
     /** Returns the sheet view ID for a given tab. */
-    sc::SheetViewID GetTableSheetViewID(SCTAB nTab) const;
+    SC_DLLPUBLIC sc::SheetViewID GetTableSheetViewID(SCTAB nTab) const;
 
 private:
     ScDocument(const ScDocument& r) = delete;

@@ -70,13 +70,6 @@ struct ScDataFormFragment
 namespace sc
 {
 
-/** Direction of searching for the sheet view to switch to relative to the current sheet view. */
-enum class SwitchSheetViewDirection
-{
-    Next,
-    Previous
-};
-
 }
 
 class ScViewFunc : public ScTabView
@@ -369,7 +362,6 @@ public:
     // SheetView methods
     void MakeNewSheetView();
     void RemoveCurrentSheetView();
-    void SwitchSheetView(sc::SwitchSheetViewDirection eDirection);
     void ExitSheetView(); // Switch to default view
     void SelectSheetView(sc::SheetViewID nSelectSheetViewID);
 

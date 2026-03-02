@@ -2133,19 +2133,6 @@ void ScViewFunc::RemoveCurrentSheetView()
     SheetViewChanged();
 }
 
-void ScViewFunc::SwitchSheetView(sc::SwitchSheetViewDirection eDirection)
-{
-    ScDocument& rDocument = GetViewData().GetDocument();
-    SCTAB nTab = GetViewData().GetDefaultViewTab();
-    auto pSheetManager = rDocument.GetSheetViewManager(nTab);
-    sc::SheetViewID nSheetViewID = GetViewData().GetSheetViewID();
-
-    sc::SheetViewID nSwitchSheetViewID = eDirection == sc::SwitchSheetViewDirection::Next
-                                            ? pSheetManager->getNextSheetView(nSheetViewID)
-                                            : pSheetManager->getPreviousSheetView(nSheetViewID);
-    SelectSheetView(nSwitchSheetViewID);
-}
-
 void ScViewFunc::ExitSheetView()
 {
     SelectSheetView(sc::DefaultSheetViewID);

@@ -121,12 +121,6 @@ public:
     /** Returns a range that iterates only over valid (non-null) sheet views. */
     SheetViewRange iterateValidSheetViews() const { return SheetViewRange(maViews); }
 
-    /** Calculate the next sheet view ID from the current ID. */
-    SheetViewID getNextSheetView(SheetViewID nID);
-
-    /** Calculate the previous sheet view ID from the current ID. */
-    SheetViewID getPreviousSheetView(SheetViewID nID);
-
     void unsyncAllSheetViews();
 
     static OUString defaultViewName();
