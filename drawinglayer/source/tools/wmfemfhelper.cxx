@@ -1127,6 +1127,7 @@ namespace wmfemfhelper
                     aFillColor,
                     rFont.GetFixKerning(),
                     100, 0,
+                    rFont.GetOpticalSizing(),
 
                     // attributes for TextDecoratedPortionPrimitive2D
                     rProperty.getOverlineColorActive() ? rProperty.getOverlineColor() : aFontColor,
@@ -1156,7 +1157,9 @@ namespace wmfemfhelper
                     std::move(aLocale),
                     aFontColor,
                     COL_TRANSPARENT,
-                    rFont.GetFixKerning());
+                    rFont.GetFixKerning(),
+                    100, 0,
+                    rFont.GetOpticalSizing());
             }
         }
 

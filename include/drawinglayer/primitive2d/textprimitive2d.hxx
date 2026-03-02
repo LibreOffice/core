@@ -144,6 +144,9 @@ private:
     /// Escapement percentage (for superscript/subscript), 0 = normal
     sal_Int32 mnEscapement{ 0 };
 
+    /// Optical sizing
+    bool mbOpticalSizing;
+
 protected:
     /// local decomposition.
     virtual Primitive2DReference
@@ -165,7 +168,7 @@ public:
                                  const basegfx::BColor& rFontColor,
                                  const Color& rTextFillColor = COL_TRANSPARENT,
                                  short nLetterSpacing = 0, sal_uInt8 nProportionalFontSize = 100,
-                                 short nEscapement = 0);
+                                 short nEscapement = 0, bool bOpticalSizing = false);
 
     /** get text outlines as polygons and their according ObjectTransformation. Handles all
         the necessary VCL outline extractions, scaling adaptations and other stuff.
@@ -187,6 +190,7 @@ public:
     short getLetterSpacing() const { return mnLetterSpacing; }
     sal_Int32 getProportionalFontSize() const { return mnProportionalFontSize; }
     sal_Int32 getEscapement() const { return mnEscapement; }
+    bool getOpticalSizing() const { return mbOpticalSizing; }
 
     /// helpers for determining various decoration states
     virtual bool hasTextRelief() const;
