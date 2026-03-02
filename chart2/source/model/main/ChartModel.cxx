@@ -792,10 +792,10 @@ void SAL_CALL ChartModel::createInternalDataProvider( sal_Bool bCloneExistingDat
     if( !hasInternalDataProvider() )
     {
         if( bCloneExistingData )
-            m_xInternalDataProvider = new InternalDataProvider( this, /*bConnectToModel*/true, /*bDefaultDataInColumns*/ true );
+            m_xInternalDataProvider = new InternalDataProvider( this, /*bConnectToModel*/true );
         else
         {
-            m_xInternalDataProvider = new InternalDataProvider( nullptr, /*bConnectToModel*/true, /*bDefaultDataInColumns*/ true );
+            m_xInternalDataProvider = new InternalDataProvider( nullptr, /*bConnectToModel*/true );
             m_xInternalDataProvider->setChartModel(this);
         }
         m_xDataProvider.set( m_xInternalDataProvider );

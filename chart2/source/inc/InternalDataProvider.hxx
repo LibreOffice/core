@@ -74,8 +74,7 @@ public:
     // (DataInColumns) that will be used when no data is available
     explicit InternalDataProvider(
         const rtl::Reference< ::chart::ChartModel > & xChartDoc,
-        bool bConnectToModel,
-        bool bDefaultDataInColumns );
+        bool bConnectToModel );
     explicit InternalDataProvider( const InternalDataProvider & rOther );
     virtual ~InternalDataProvider() override;
 
