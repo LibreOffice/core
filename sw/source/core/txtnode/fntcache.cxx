@@ -1528,9 +1528,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         TextFrameIndex nCnt(rInf.GetText().getLength());
         if ( nCnt < rInf.GetIdx() )
-            assert(false); // layout bug, not handled below
-        else
-            nCnt = nCnt - rInf.GetIdx();
+        {
+            assert(false); // layout bug
+            return;
+        }
+        nCnt = nCnt - rInf.GetIdx();
         nCnt = std::min(nCnt, rInf.GetLen());
         sal_Unicode cChPrev = rInf.GetText()[sal_Int32(rInf.GetIdx())];
 

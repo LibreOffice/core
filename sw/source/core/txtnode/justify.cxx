@@ -101,6 +101,9 @@ sal_Int32 GetModelPosition(const KernArray& rKernArray, sal_Int32 nLen, tools::L
 void SpaceDistribution(KernArray& rKernArray, std::u16string_view aText, sal_Int32 nStt,
                        sal_Int32 nLen, tools::Long nSpaceAdd, tools::Long nKern, bool bNoHalfSpace)
 {
+    if (nLen <= 0)
+        return;
+
     assert(nStt + nLen <= sal_Int32(aText.size()));
     assert(nLen <= sal_Int32(rKernArray.size()));
     // nSpaceSum contains the sum of the intermediate space distributed
