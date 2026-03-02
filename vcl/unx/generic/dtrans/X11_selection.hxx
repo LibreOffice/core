@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <displayconnectiondispatch.hxx>
 #include <DropTarget.hxx>
+#include <unx/X11DisplayConnectionDispatch.hxx>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -115,7 +115,7 @@ namespace x11 {
 
     };
 
-    class SelectionManager : public cppu::ImplInheritanceHelper<vcl::DisplayEventHandler,
+    class SelectionManager : public cppu::ImplInheritanceHelper<DisplayEventHandler,
                                                                 css::datatransfer::dnd::XDragSource,
                                                                 css::frame::XTerminateListener>,
                              public SelectionAdaptor
@@ -214,7 +214,7 @@ namespace x11 {
         ::osl::Condition            m_aDragRunning;
         ::Window                    m_aWindow;
         css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
-        rtl::Reference<vcl::X11DisplayConnectionDispatch> m_xDisplayConnection;
+        rtl::Reference<X11DisplayConnectionDispatch> m_xDisplayConnection;
         Time                        m_nSelectionTimestamp;
 
         // members used for Xdnd

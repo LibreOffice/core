@@ -83,7 +83,6 @@ typedef struct _cairo_font_options cairo_font_options_t;
 class VCL_DLLPUBLIC SalInstance
 {
 private:
-    rtl::Reference<vcl::X11DisplayConnectionDispatch> m_pEventInst;
     const std::unique_ptr<comphelper::SolarMutex> m_pYieldMutex;
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_clipboard;
     o3tl::sorted_vector<OUString> m_usedUI;
@@ -192,15 +191,6 @@ public:
     virtual std::unique_ptr<weld::ColorChooserDialog>
     CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode);
     virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
-
-    // methods for X11DisplayConnectionDispatch
-
-    void SetEventCallback(rtl::Reference<vcl::X11DisplayConnectionDispatch> const& pInstance)
-    {
-        m_pEventInst = pInstance;
-    }
-
-    bool CallEventCallback(const void* pEvent);
 
     // dtrans implementation
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>

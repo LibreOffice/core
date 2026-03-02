@@ -17,81 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/svapp.hxx>
-#include <tools/debug.hxx>
-
 #include <displayconnectiondispatch.hxx>
-#include <svdata.hxx>
-#include <salinst.hxx>
 
 using namespace vcl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::awt;
 
 DisplayConnectionDispatch::DisplayConnectionDispatch()
 {
 }
 
 DisplayConnectionDispatch::~DisplayConnectionDispatch() {}
-
-X11DisplayConnectionDispatch::X11DisplayConnectionDispatch() {}
-
-X11DisplayConnectionDispatch::~X11DisplayConnectionDispatch() {}
-
-void X11DisplayConnectionDispatch::start()
-{
-    DBG_TESTSOLARMUTEX();
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpDefInst->SetEventCallback( this );
-}
-
-void X11DisplayConnectionDispatch::terminate()
-{
-    DBG_TESTSOLARMUTEX();
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if( pSVData )
-    {
-        pSVData->mpDefInst->SetEventCallback( nullptr );
-    }
-
-    SolarMutexReleaser aRel;
-
-    std::scoped_lock aGuard( m_aMutex );
-    std::vector<rtl::Reference<DisplayEventHandler>> aLocalList(m_aHandlers);
-    for (auto const& elem : aLocalList)
-        elem->shutdown();
-}
-
-void X11DisplayConnectionDispatch::addEventHandler(
-    const rtl::Reference<DisplayEventHandler>& handler)
-{
-    std::scoped_lock aGuard( m_aMutex );
-
-    m_aHandlers.push_back( handler );
-}
-
-void X11DisplayConnectionDispatch::removeEventHandler(
-    const rtl::Reference<DisplayEventHandler>& handler)
-{
-    std::scoped_lock aGuard( m_aMutex );
-
-    std::erase(m_aHandlers, handler);
-}
-
-bool X11DisplayConnectionDispatch::dispatchEvent(const void* pEvent)
-{
-    SolarMutexReleaser aRel;
-
-    std::vector<rtl::Reference<DisplayEventHandler>> handlers;
-    {
-        std::scoped_lock aGuard( m_aMutex );
-        handlers = m_aHandlers;
-    }
-    for (auto const& handle : handlers)
-        if (handle->handleEvent(pEvent))
-            return true;
-    return false;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

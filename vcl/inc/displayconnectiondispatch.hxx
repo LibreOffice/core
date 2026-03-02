@@ -19,22 +19,10 @@
 
 #pragma once
 
-#include <sal/config.h>
-#include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <rtl/ref.hxx>
+#include <cppuhelper/weak.hxx>
 #include <vcl/dllapi.h>
-#include <mutex>
-#include <vector>
 
 namespace vcl {
-
-class DisplayEventHandler : public cppu::WeakImplHelper<>
-{
-public:
-    virtual bool handleEvent(const void* pEvent) = 0;
-    virtual void shutdown() noexcept = 0;
-};
 
 class VCL_DLLPUBLIC DisplayConnectionDispatch : public cppu::OWeakObject
 {
@@ -44,24 +32,6 @@ public:
 
     virtual void terminate() = 0;
 };
-
-class VCL_DLLPUBLIC X11DisplayConnectionDispatch final : public DisplayConnectionDispatch
-{
-    std::mutex                      m_aMutex;
-    std::vector<rtl::Reference<DisplayEventHandler>> m_aHandlers;
-public:
-    X11DisplayConnectionDispatch();
-    ~X11DisplayConnectionDispatch() override;
-
-    void start();
-    void terminate() override;
-
-    bool dispatchEvent(const void* pEvent);
-
-    void addEventHandler(const rtl::Reference<DisplayEventHandler>& handler);
-    void removeEventHandler(const rtl::Reference<DisplayEventHandler>& handler);
-};
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

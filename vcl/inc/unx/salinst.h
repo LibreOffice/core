@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "X11DisplayConnectionDispatch.hxx"
+
 #include <salinst.hxx>
 #include <unx/geninst.h>
 
@@ -32,6 +34,7 @@ class SalX11Display;
 class X11SalInstance final : public SalGenericInstance
 {
 private:
+    rtl::Reference<X11DisplayConnectionDispatch> m_pEventInst;
     std::unordered_map< Atom, css::uno::Reference< css::datatransfer::clipboard::XClipboard > > m_aInstances;
 
     SalXLib *mpXLib;
@@ -88,7 +91,20 @@ public:
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
     /** Get the DisplayConnection. It allows to send display events to the application. */
-    static rtl::Reference<vcl::X11DisplayConnectionDispatch> GetDisplayConnection();
+    static rtl::Reference<X11DisplayConnectionDispatch> GetDisplayConnection();
+
+    // methods for X11DisplayConnectionDispatch
+    void SetEventCallback(rtl::Reference<X11DisplayConnectionDispatch> const& pInstance)
+    {
+        m_pEventInst = pInstance;
+    }
+
+    bool CallEventCallback(const void* pEvent);
 };
+
+inline X11SalInstance* GetX11SalInstance()
+{
+    return static_cast<X11SalInstance*>(GetSalInstance());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,11 +62,6 @@ std::unique_ptr<SalMenu> SalInstance::CreateMenu(bool, Menu*)
 
 std::unique_ptr<SalMenuItem> SalInstance::CreateMenuItem(const SalItemParams&) { return nullptr; }
 
-bool SalInstance::CallEventCallback(const void* pEvent)
-{
-    return m_pEventInst.is() && m_pEventInst->dispatchEvent(pEvent);
-}
-
 bool SalInstance::DoExecute(int&)
 {
     // can't run on system event loop without implementing DoExecute and DoQuit

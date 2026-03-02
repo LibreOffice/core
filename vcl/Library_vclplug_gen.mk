@@ -75,6 +75,7 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
+    vcl/unx/generic/app/X11DisplayConnectionDispatch \
     vcl/unx/generic/app/i18n_cb \
     vcl/unx/generic/app/i18n_ic \
     vcl/unx/generic/app/i18n_im \

@@ -52,6 +52,7 @@
 #include <unx/i18n_xkb.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
+#include <unx/salinst.h>
 #include <salinst.hxx>
 #include <unx/salframe.h>
 #include <vcl/keycodes.hxx>
@@ -1880,8 +1881,7 @@ void SalX11Display::Dispatch(XEvent* pEvent)
             return;
     }
 
-    SalInstance* pInstance = GetSalInstance();
-    pInstance->CallEventCallback(pEvent);
+    GetX11SalInstance()->CallEventCallback(pEvent);
 
     switch( pEvent->type )
     {
