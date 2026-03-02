@@ -44,6 +44,7 @@ FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
     , meLanguage( rFont.GetLanguage() )
     , mbVertical( rFont.IsVertical() )
     , mbNonAntialiased(bNonAntialias)
+    , mbOpticalSizing(rFont.GetOpticalSizing())
     , mbEmbolden( false )
 {
     maTargetName = GetFamilyName();
@@ -79,6 +80,7 @@ FontSelectPattern::FontSelectPattern( const PhysicalFontFace& rFontData,
     , meLanguage( 0 )
     , mbVertical( bVertical )
     , mbNonAntialiased( false )
+    , mbOpticalSizing( false )
     , mbEmbolden( false )
 {
     maTargetName = maSearchName = GetFamilyName();
@@ -108,6 +110,8 @@ size_t FontSelectPattern::hashCode() const
     nHash += 41 * static_cast<sal_uInt16>(meLanguage);
     if( mbVertical )
         nHash += 53;
+    if( mbOpticalSizing )
+        nHash += 61;
     return nHash;
 }
 
@@ -141,6 +145,9 @@ bool FontSelectPattern::operator==(const FontSelectPattern& rOther) const
         return false;
 
     if (mbNonAntialiased != rOther.mbNonAntialiased)
+        return false;
+
+    if (mbOpticalSizing != rOther.mbOpticalSizing)
         return false;
 
     if (mbEmbolden != rOther.mbEmbolden)

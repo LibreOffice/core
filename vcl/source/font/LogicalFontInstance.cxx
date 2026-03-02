@@ -41,6 +41,7 @@ LogicalFontInstance::LogicalFontInstance(const vcl::font::PhysicalFontFace& rFon
     , m_pHbFont(nullptr)
     , m_nAveWidthFactor(1.0f)
     , m_pFontFace(&const_cast<vcl::font::PhysicalFontFace&>(rFontFace))
+    , m_bOpticalSizing(rFontSelData.mbOpticalSizing)
 {
 }
 
@@ -67,6 +68,9 @@ const std::vector<hb_variation_t>& LogicalFontInstance::GetVariations() const
         mxVariations = GetFontFace()->GetVariations(*this);
         hb_face_t* pHbFace = GetFontFace()->GetHbFace();
         auto aVariations = m_aVariations;
+        if (m_bOpticalSizing && m_fPointSize > 0)
+            aVariations.push_back({ HB_TAG('o', 'p', 's', 'z'), m_fPointSize });
+
         for (auto& rVariation : aVariations)
         {
             hb_ot_var_axis_info_t info;

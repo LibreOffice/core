@@ -128,7 +128,8 @@ private:
                         mbConfigLookup:1,   // config lookup should only be done once
                         mbShadow:1,
                         mbVertical:1,
-                        mbTransparent:1;    // compatibility, now on output device
+                        mbTransparent:1,    // compatibility, now on output device
+                        mbOpticalSizing:1;
 
     // deprecated variables - device independent
     Color               maColor;            // compatibility, now on output device

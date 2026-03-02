@@ -137,6 +137,9 @@ public:
     short               GetFixKerning() const;
     bool                IsFixKerning() const;
 
+    void                SetOpticalSizing( bool bOpticalSizing );
+    bool                GetOpticalSizing() const;
+
     void                SetOutline( bool bOutline );
     bool                IsOutline() const;
     void                SetShadow( bool bShadow );

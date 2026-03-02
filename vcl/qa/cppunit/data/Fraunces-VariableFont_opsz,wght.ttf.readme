@@ -1,0 +1,8 @@
+This is a subset copy of Fraunces font licensed under Open Font License and
+obtained from:
+
+  https://fonts.google.com/specimen/Fraunces
+
+And subset using hb-subset to keep only the opsz and wght axes:
+
+  hb-subset --keep-everything --variations=SOFT=drop,WONK=drop Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf -o Fraunces-VariableFont_opsz,wght.ttf

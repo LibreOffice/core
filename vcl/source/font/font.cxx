@@ -243,6 +243,17 @@ void Font::SetWeight( FontWeight eWeight )
         mpImplFont->SetWeight( eWeight );
 }
 
+void Font::SetOpticalSizing( bool bOpticalSizing )
+{
+    if (GetOpticalSizing() != bOpticalSizing)
+        mpImplFont->mbOpticalSizing = bOpticalSizing;
+}
+
+bool Font::GetOpticalSizing() const
+{
+    return mpImplFont->mbOpticalSizing;
+}
+
 void Font::SetWidthType( FontWidth eWidth )
 {
     if (std::as_const(mpImplFont)->GetWidthTypeNoAsk() != eWidth)
@@ -404,6 +415,7 @@ void Font::Merge( const vcl::Font& rFont )
     SetKerning( rFont.IsKerning() ? FontKerning::FontSpecific : FontKerning::NONE );
     SetOutline( rFont.IsOutline() );
     SetShadow( rFont.IsShadow() );
+    SetOpticalSizing( rFont.GetOpticalSizing() );
     SetRelief( rFont.GetRelief() );
 }
 
@@ -975,6 +987,7 @@ ImplFont::ImplFont() :
     mbShadow( false ),
     mbVertical( false ),
     mbTransparent( true ),
+    mbOpticalSizing( false ),
     maColor( COL_TRANSPARENT ),
     maFillColor( COL_TRANSPARENT ),
     mbWordLine( false ),
@@ -1008,6 +1021,7 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     mbShadow( rImplFont.mbShadow ),
     mbVertical( rImplFont.mbVertical ),
     mbTransparent( rImplFont.mbTransparent ),
+    mbOpticalSizing( rImplFont.mbOpticalSizing ),
     maColor( rImplFont.maColor ),
     maFillColor( rImplFont.maFillColor ),
     mbWordLine( rImplFont.mbWordLine ),
@@ -1062,7 +1076,8 @@ bool ImplFont::EqualIgnoreColor( const ImplFont& rOther ) const
     ||  (mbShadow       != rOther.mbShadow)
     ||  (meKerning      != rOther.meKerning)
     ||  (mnSpacing      != rOther.mnSpacing)
-    ||  (mbTransparent  != rOther.mbTransparent) )
+    ||  (mbTransparent  != rOther.mbTransparent)
+    ||  (mbOpticalSizing!= rOther.mbOpticalSizing) )
         return false;
 
     return true;
@@ -1108,6 +1123,7 @@ size_t ImplFont::GetHashValueIgnoreColor() const
     o3tl::hash_combine( hash, meKerning );
     o3tl::hash_combine( hash, mnSpacing );
     o3tl::hash_combine( hash, mbTransparent );
+    o3tl::hash_combine( hash, mbOpticalSizing );
 
     return hash;
 }

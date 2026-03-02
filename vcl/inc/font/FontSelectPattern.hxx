@@ -68,6 +68,7 @@ public:
     LanguageType    meLanguage;                 // text language
     bool            mbVertical;                 // vertical mode of requested font
     bool            mbNonAntialiased;           // true if antialiasing is disabled
+    bool            mbOpticalSizing;            // true if optical sizing is enabled
 
     bool            mbEmbolden;                 // Force emboldening
     ItalicMatrix    maItalicMatrix;             // Force matrix for slant

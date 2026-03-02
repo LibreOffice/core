@@ -22,6 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/mapunit.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
 #include <comphelper/configuration.hxx>
@@ -726,6 +727,16 @@ bool OutputDevice::ImplNewFont() const
     {
         SAL_WARN("vcl.gdi", "OutputDevice::ImplNewFont(): no LogicalFontInstance, no Font");
         return false;
+    }
+
+
+    // Compute font size in points for optical sizing.
+    if (!pFontInstance->GetPointSize())
+    {
+        auto nHeight = maFont.GetFontHeight();
+        auto eFrom = MapToO3tlLength(GetMapMode().GetMapUnit());
+        float fPointSize = o3tl::convert(float(nHeight), eFrom, o3tl::Length::pt);
+        pFontInstance->SetPointSize(fPointSize);
     }
 
     // mark when lower layers need to get involved
