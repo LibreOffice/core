@@ -876,6 +876,9 @@
                               <object class="GtkComboBoxText" id="destination-list">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="destination-radio-named-range"/>
+                                </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="destination-list-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="pivottablelayoutdialog|extended_tip|destination-list">Select the area where you want to display the results of the pivot table.</property>
@@ -897,6 +900,9 @@
                                 <property name="use-underline">True</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">destination-radio-new-sheet</property>
+                                <accessibility>
+                                  <relation type="label-for" target="destination-list"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -996,6 +1002,9 @@
                                 <property name="use-underline">True</property>
                                 <property name="draw-indicator">True</property>
                                 <property name="group">source-radio-selection</property>
+                                <accessibility>
+                                  <relation type="label-for" target="source-list"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -1006,6 +1015,9 @@
                               <object class="GtkComboBoxText" id="source-list">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="source-radio-named-range"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left-attach">1</property>
