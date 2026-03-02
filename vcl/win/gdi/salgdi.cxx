@@ -107,10 +107,9 @@ void ImplFreeSalGDI()
     // delete icon cache
     for (auto aIt : pSalData->maIconCache)
     {
-        SalIcon* pIcon = aIt.second;
-        DestroyIcon( pIcon->hIcon );
-        DestroyIcon( pIcon->hSmallIcon );
-        delete pIcon;
+        SalIcon& rIcon = aIt.second;
+        DestroyIcon(rIcon.hIcon);
+        DestroyIcon(rIcon.hSmallIcon);
     }
     pSalData->maIconCache.clear();
 

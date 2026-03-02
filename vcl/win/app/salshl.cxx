@@ -63,9 +63,9 @@ bool ImplLoadSalIcon(int nId, HICON& rIcon, HICON& rSmallIcon, SalData* pSalData
     auto aIt = pSalData->maIconCache.find(nId);
     if (aIt != pSalData->maIconCache.end())
     {
-        SalIcon* pSalIcon = aIt->second;
-        rIcon = pSalIcon->hIcon;
-        rSmallIcon  = pSalIcon->hSmallIcon;
+        SalIcon& rSalIcon = aIt->second;
+        rIcon = rSalIcon.hIcon;
+        rSmallIcon  = rSalIcon.hSmallIcon;
         return (rSmallIcon != nullptr);
     }
 
@@ -99,7 +99,7 @@ bool ImplLoadSalIcon(int nId, HICON& rIcon, HICON& rSmallIcon, SalData* pSalData
     if( rIcon )
     {
         // add to icon cache
-        pSalData->maIconCache[nId] = new SalIcon{rIcon, rSmallIcon};
+        pSalData->maIconCache[nId] = SalIcon{rIcon, rSmallIcon};
     }
 
     return (rSmallIcon != nullptr);
