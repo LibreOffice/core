@@ -32,17 +32,20 @@ DisplayConnectionDispatch::DisplayConnectionDispatch()
 {
 }
 
-DisplayConnectionDispatch::~DisplayConnectionDispatch()
-{}
+DisplayConnectionDispatch::~DisplayConnectionDispatch() {}
 
-void DisplayConnectionDispatch::start()
+X11DisplayConnectionDispatch::X11DisplayConnectionDispatch() {}
+
+X11DisplayConnectionDispatch::~X11DisplayConnectionDispatch() {}
+
+void X11DisplayConnectionDispatch::start()
 {
     DBG_TESTSOLARMUTEX();
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpDefInst->SetEventCallback( this );
 }
 
-void DisplayConnectionDispatch::terminate()
+void X11DisplayConnectionDispatch::terminate()
 {
     DBG_TESTSOLARMUTEX();
     ImplSVData* pSVData = ImplGetSVData();
@@ -60,14 +63,15 @@ void DisplayConnectionDispatch::terminate()
         elem->shutdown();
 }
 
-void DisplayConnectionDispatch::addEventHandler(const rtl::Reference<DisplayEventHandler>& handler)
+void X11DisplayConnectionDispatch::addEventHandler(
+    const rtl::Reference<DisplayEventHandler>& handler)
 {
     std::scoped_lock aGuard( m_aMutex );
 
     m_aHandlers.push_back( handler );
 }
 
-void DisplayConnectionDispatch::removeEventHandler(
+void X11DisplayConnectionDispatch::removeEventHandler(
     const rtl::Reference<DisplayEventHandler>& handler)
 {
     std::scoped_lock aGuard( m_aMutex );
@@ -75,7 +79,7 @@ void DisplayConnectionDispatch::removeEventHandler(
     std::erase(m_aHandlers, handler);
 }
 
-bool DisplayConnectionDispatch::dispatchEvent(const void* pEvent)
+bool X11DisplayConnectionDispatch::dispatchEvent(const void* pEvent)
 {
     SolarMutexReleaser aRel;
 

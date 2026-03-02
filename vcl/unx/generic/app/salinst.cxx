@@ -228,17 +228,20 @@ std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
     return std::make_shared<SvpSalBitmap>();
 }
 
-rtl::Reference<vcl::DisplayConnectionDispatch> X11SalInstance::GetDisplayConnection()
+rtl::Reference<vcl::X11DisplayConnectionDispatch> X11SalInstance::GetDisplayConnection()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if (!pSVData->mxDisplayConnection.is())
     {
-        pSVData->mxDisplayConnection.set(new vcl::DisplayConnectionDispatch);
-        pSVData->mxDisplayConnection->start();
+        rtl::Reference<vcl::X11DisplayConnectionDispatch> pDisplayConnection(
+            new vcl::X11DisplayConnectionDispatch);
+        pSVData->mxDisplayConnection = pDisplayConnection;
+        pDisplayConnection->start();
+        return pDisplayConnection;
     }
 
-    return pSVData->mxDisplayConnection;
+    return dynamic_cast<vcl::X11DisplayConnectionDispatch*>(pSVData->mxDisplayConnection.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

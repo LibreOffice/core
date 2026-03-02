@@ -36,16 +36,25 @@ public:
     virtual void shutdown() noexcept = 0;
 };
 
-class VCL_DLLPUBLIC DisplayConnectionDispatch final : public cppu::OWeakObject
+class VCL_DLLPUBLIC DisplayConnectionDispatch : public cppu::OWeakObject
+{
+public:
+    DisplayConnectionDispatch();
+    virtual ~DisplayConnectionDispatch();
+
+    virtual void terminate() = 0;
+};
+
+class VCL_DLLPUBLIC X11DisplayConnectionDispatch final : public DisplayConnectionDispatch
 {
     std::mutex                      m_aMutex;
     std::vector<rtl::Reference<DisplayEventHandler>> m_aHandlers;
 public:
-    DisplayConnectionDispatch();
-    ~DisplayConnectionDispatch() override;
+    X11DisplayConnectionDispatch();
+    ~X11DisplayConnectionDispatch() override;
 
     void start();
-    void terminate();
+    void terminate() override;
 
     bool dispatchEvent(const void* pEvent);
 

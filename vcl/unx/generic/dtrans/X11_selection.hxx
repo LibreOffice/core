@@ -214,7 +214,7 @@ namespace x11 {
         ::osl::Condition            m_aDragRunning;
         ::Window                    m_aWindow;
         css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
-        rtl::Reference<vcl::DisplayConnectionDispatch> m_xDisplayConnection;
+        rtl::Reference<vcl::X11DisplayConnectionDispatch> m_xDisplayConnection;
         Time                        m_nSelectionTimestamp;
 
         // members used for Xdnd

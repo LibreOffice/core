@@ -88,7 +88,7 @@ public:
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
     /** Get the DisplayConnection. It allows to send display events to the application. */
-    static rtl::Reference<vcl::DisplayConnectionDispatch> GetDisplayConnection();
+    static rtl::Reference<vcl::X11DisplayConnectionDispatch> GetDisplayConnection();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
