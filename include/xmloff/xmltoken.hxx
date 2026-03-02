@@ -877,6 +877,7 @@ namespace xmloff::token {
         XML_FONT_NAME,
         XML_FONT_NAME_ASIAN,
         XML_FONT_NAME_COMPLEX,
+        XML_FONT_OPTICAL_SIZING,
         XML_FONT_PITCH,
         XML_FONT_PITCH_ASIAN,
         XML_FONT_PITCH_COMPLEX,

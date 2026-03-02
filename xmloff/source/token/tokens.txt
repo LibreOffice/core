@@ -794,6 +794,7 @@ font-kerning
 font-name
 font-name-asian
 font-name-complex
+font-optical-sizing
 font-pitch
 font-pitch-asian
 font-pitch-complex

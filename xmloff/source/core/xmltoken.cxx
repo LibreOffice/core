@@ -889,6 +889,7 @@ namespace xmloff::token {
         TOKEN( "font-name",                       XML_FONT_NAME ),
         TOKEN( "font-name-asian",                 XML_FONT_NAME_ASIAN ),
         TOKEN( "font-name-complex",               XML_FONT_NAME_COMPLEX ),
+        TOKEN( "font-optical-sizing",             XML_FONT_OPTICAL_SIZING ),
         TOKEN( "font-pitch",                      XML_FONT_PITCH ),
         TOKEN( "font-pitch-asian",                XML_FONT_PITCH_ASIAN ),
         TOKEN( "font-pitch-complex",              XML_FONT_PITCH_COMPLEX ),
