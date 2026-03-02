@@ -39,6 +39,9 @@ TitleDialogData::TitleDialogData( std::optional<ReferenceSizeProvider> pRefSizeP
 
 void TitleDialogData::readFromModel( const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
+    if (!xChartModel)
+        return;
+
     rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
 
     //get possibilities

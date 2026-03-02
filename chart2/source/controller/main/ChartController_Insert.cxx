@@ -291,11 +291,14 @@ void ChartController::executeDispatch_InsertTitles()
                                                 xUndoGuard=std::move(xUndoGuard)](int nResult){
             if ( nResult == RET_OK )
             {
+                rtl::Reference<ChartModel> xModel = getChartModel();
+                if (!xModel)
+                    return;
                 // lock controllers till end of block
-                ControllerLockGuardUNO aCLGuard( getChartModel() );
+                ControllerLockGuardUNO aCLGuard( xModel );
                 TitleDialogData aDialogOutput( impl_createReferenceSizeProvider() );
                 aDlg->getResult( aDialogOutput );
-                bool bChanged = aDialogOutput.writeDifferenceToModel( getChartModel(), m_xCC, xDialogInput.get() );
+                bool bChanged = aDialogOutput.writeDifferenceToModel( xModel, m_xCC, xDialogInput.get() );
                 if( bChanged )
                     xUndoGuard->commit();
             }
