@@ -382,6 +382,38 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
     }
 
     CTFontRef pCTFont = rFont.GetCTFont();
+    CTFontRef pVarFont = nullptr;
+    comphelper::ScopeGuard aVarFontGuard([&]() { if (pVarFont) CFRelease(pVarFont); });
+    const auto& rVariations = rFont.GetVariations();
+    if (!rVariations.empty())
+    {
+        CFMutableDictionaryRef pVarDict = CFDictionaryCreateMutable(kCFAllocatorDefault, rVariations.size(),
+                                                                     &kCFTypeDictionaryKeyCallBacks,
+                                                                     &kCFTypeDictionaryValueCallBacks);
+        for (const auto& rVariation : rVariations)
+        {
+            hb_tag_t nTag = rVariation.tag;
+            CFNumberRef pTag = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &nTag);
+            double fValue = rVariation.value;
+            CFNumberRef pValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberDoubleType, &fValue);
+            CFDictionaryAddValue(pVarDict, pTag, pValue);
+            CFRelease(pTag);
+            CFRelease(pValue);
+        }
+        CFDictionaryRef pAttrDict = CFDictionaryCreate(kCFAllocatorDefault,
+                                                       (const void**)&kCTFontVariationAttribute,
+                                                       (const void**)&pVarDict, 1,
+                                                       &kCFTypeDictionaryKeyCallBacks,
+                                                       &kCFTypeDictionaryValueCallBacks);
+        CTFontDescriptorRef pVarDesc = CTFontDescriptorCreateWithAttributes(pAttrDict);
+        pVarFont = CTFontCreateCopyWithAttributes(pCTFont, 0.0, nullptr, pVarDesc);
+        pCTFont = pVarFont;
+
+        CFRelease(pVarDesc);
+        CFRelease(pAttrDict);
+        CFRelease(pVarDict);
+    }
+
     CGAffineTransform aRotMatrix = CGAffineTransformMakeRotation(-rFont.mfFontRotation);
 
     basegfx::B2DPoint aPos;
