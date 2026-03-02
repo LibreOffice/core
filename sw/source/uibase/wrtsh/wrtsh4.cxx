@@ -18,8 +18,11 @@
  */
 
 #include <wrtsh.hxx>
+#include <viscrs.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/string.hxx>
+#include <sfx2/lokhelper.hxx>
 
 // Private methods, which move the cursor over search.
 // The removal of the selection must be made on the level above.
@@ -242,10 +245,34 @@ std::optional<OString> SwWrtShell::getLOKPayload(int nType, int nViewId) const
         case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
             return GetVisibleCursor()->getLOKPayload(nType, nViewId);
         case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        {
+            // Aggregate selection rectangles from all cursors in the ring.
+            // In add mode (CTRL+click multi-selection), the actual selections
+            // are stored in ring cursors, while m_pCurrentCursor may be empty.
+            // Without aggregation, callback only reads from m_pCurrentCursor and send an empty payload,
+            // clearing the selection on the online side.
+            std::vector<OString> aAllRects;
+            for (const SwPaM& rPaM : GetCursor_()->GetRingContainer())
+            {
+                const SwShellCursor* pShCursor = dynamic_cast<const SwShellCursor*>(&rPaM);
+                if (!pShCursor)
+                    continue;
+                for (size_t i = 0; i < pShCursor->size(); ++i)
+                {
+                    const SwRect& rRect = (*pShCursor)[i];
+                    aAllRects.push_back(rRect.SVRect().toString());
+                }
+            }
+            OString sRect = comphelper::string::join("; ", aAllRects);
+            if (nType == LOK_CALLBACK_TEXT_SELECTION)
+                return sRect;
+            else // LOK_CALLBACK_TEXT_VIEW_SELECTION
+                return SfxLokHelper::makePayloadJSON(GetSfxViewShell(), nViewId, "selection", sRect);
+        }
         case LOK_CALLBACK_TEXT_SELECTION_START:
         case LOK_CALLBACK_TEXT_SELECTION_END:
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
-            return GetCursor_()->getLOKPayload(nType, nViewId);
+            return GetCursor_()->getLOKPayload(nType);
     }
     abort();
 }

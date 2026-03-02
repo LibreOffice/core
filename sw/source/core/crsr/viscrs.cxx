@@ -530,7 +530,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         pSelectionRectangles->push_back(sRect);
 }
 
-std::optional<OString> SwSelPaintRects::getLOKPayload(int nType, int nViewId) const
+std::optional<OString> SwSelPaintRects::getLOKPayload(int nType) const
 {
     switch( nType )
     {
@@ -562,23 +562,6 @@ std::optional<OString> SwSelPaintRects::getLOKPayload(int nType, int nViewId) co
                     return aEndRect.SVRect().toString();
                 return {};
             }
-        }
-        break;
-        case LOK_CALLBACK_TEXT_SELECTION:
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
-        {
-            std::vector<OString> aRect;
-            aRect.reserve(size());
-            for (size_type i = 0; i < size(); ++i)
-            {
-                const SwRect& rRect = (*this)[i];
-                aRect.push_back(rRect.SVRect().toString());
-            }
-            OString sRect = comphelper::string::join("; ", aRect);
-            if( nType == LOK_CALLBACK_TEXT_SELECTION )
-                return sRect;
-            else // LOK_CALLBACK_TEXT_VIEW_SELECTION
-                return SfxLokHelper::makePayloadJSON(GetShell()->GetSfxViewShell(), nViewId, "selection", sRect);
         }
         break;
     }

@@ -138,7 +138,7 @@ public:
     static void Get1PixelInLogic( const SwViewShell& rSh,
                                     tools::Long* pX = nullptr, tools::Long* pY = nullptr );
 
-    std::optional<OString> getLOKPayload(int nType, int nViewId) const;
+    std::optional<OString> getLOKPayload(int nType) const;
 };
 
 /// Represents the current text cursor of one opened edit window.
