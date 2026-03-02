@@ -52,6 +52,7 @@
 #include <editeng/widwitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/orphitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <utility>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
@@ -283,6 +284,7 @@ struct SvxCSS1ItemIds
     sal_uInt16 nKerning;
     sal_uInt16 nCaseMap;
     sal_uInt16 nBlink;
+    sal_uInt16 nOpticalSizing;
 
     sal_uInt16 nLineSpacing;
     sal_uInt16 nAdjust;
@@ -738,6 +740,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, OUString aBaseURL,
     aItemIds.nKerning = initTrueWhich( SID_ATTR_CHAR_KERNING );
     aItemIds.nCaseMap = initTrueWhich( SID_ATTR_CHAR_CASEMAP );
     aItemIds.nBlink = initTrueWhich( SID_ATTR_FLASH );
+    aItemIds.nOpticalSizing = initTrueWhich( SID_ATTR_CHAR_OPTICAL_SIZING );
 
     aItemIds.nLineSpacing = initTrueWhich( SID_ATTR_PARA_LINESPACE );
     aItemIds.nAdjust = initTrueWhich( SID_ATTR_PARA_ADJUST );
@@ -1240,6 +1243,28 @@ static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
                 rItemSet.Put( SvxCaseMapItem( static_cast<SvxCaseMap>(nCaseMap),
                                                 aItemIds.nCaseMap ) );
             }
+            break;
+        }
+    default:
+        break;
+    }
+}
+
+static void ParseCSS1_font_optical_sizing( const CSS1Expression *pExpr,
+                                    SfxItemSet &rItemSet,
+                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
+                                    const SvxCSS1Parser& /*rParser*/ )
+{
+    assert(pExpr && "no expression");
+
+    switch( pExpr->GetType() )
+    {
+    case CSS1_IDENT:
+        {
+            if( o3tl::equalsIgnoreAsciiCase( pExpr->GetString(), sCSS1_PV_auto ) )
+                rItemSet.Put( SvxOpticalSizingItem( true, aItemIds.nOpticalSizing ) );
+            else if( o3tl::equalsIgnoreAsciiCase( pExpr->GetString(), sCSS1_PV_none ) )
+                rItemSet.Put( SvxOpticalSizingItem( false, aItemIds.nOpticalSizing ) );
             break;
         }
     default:
@@ -3099,6 +3124,7 @@ CSS1PropEntry constexpr aCSS1PropFnTab[] =
     { sCSS1_P_float, ParseCSS1_float },
     { sCSS1_P_font, ParseCSS1_font },
     { sCSS1_P_font_family, ParseCSS1_font_family },
+    { sCSS1_P_font_optical_sizing, ParseCSS1_font_optical_sizing },
     { sCSS1_P_font_size, ParseCSS1_font_size },
     { sCSS1_P_font_style, ParseCSS1_font_style },
     { sCSS1_P_font_variant, ParseCSS1_font_variant },

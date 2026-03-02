@@ -1598,6 +1598,9 @@ HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
     case RES_CHRATR_BACKGROUND:
         ppAttr = &m_xAttrTab->pCharBrush;
         break;
+    case RES_CHRATR_OPTICAL_SIZING:
+        ppAttr = &m_xAttrTab->pOpticalSizing;
+        break;
     case RES_CHRATR_BOX:
         ppAttr = &m_xAttrTab->pCharBox;
         break;

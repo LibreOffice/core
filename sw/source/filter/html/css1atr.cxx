@@ -48,6 +48,7 @@
 #include <editeng/spltitem.hxx>
 #include <editeng/orphitem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/svdobj.hxx>
 #include <editeng/langitem.hxx>
@@ -2549,6 +2550,16 @@ static SwHTMLWriter& OutCSS1_SvxHidden( SwHTMLWriter& rWrt, const SfxPoolItem& r
     return rWrt;
 }
 
+static SwHTMLWriter& OutCSS1_SvxOpticalSizing( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
+{
+    if( static_cast<const SvxOpticalSizingItem&>(rHt).GetValue() )
+        rWrt.OutCSS1_PropertyAscii( sCSS1_P_font_optical_sizing, sCSS1_PV_auto );
+    else
+        rWrt.OutCSS1_PropertyAscii( sCSS1_P_font_optical_sizing, sCSS1_PV_none );
+
+    return rWrt;
+}
+
 static SwHTMLWriter& OutCSS1_SvxFontWeight( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 {
     sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
@@ -3465,7 +3476,7 @@ SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_CHRATR_BIDIRTL */            nullptr,
 /* RES_CHRATR_UNUSED3 */            nullptr,
 /* RES_CHRATR_SCRIPT_HINT */        nullptr,
-/* RES_CHRATR_OPTICAL_SIZING */     nullptr,
+/* RES_CHRATR_OPTICAL_SIZING */     OutCSS1_SvxOpticalSizing,
 
 /* RES_TXTATR_REFMARK */            nullptr,
 /* RES_TXTATR_TOXMARK */            nullptr,

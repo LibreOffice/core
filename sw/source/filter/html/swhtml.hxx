@@ -128,6 +128,7 @@ struct HTMLAttrTable
     HTMLAttr* pLanguageCJK;
     HTMLAttr* pLanguageCTL;
     HTMLAttr* pCharBox;
+    HTMLAttr* pOpticalSizing;
 };
 
 class HTMLAttr

@@ -1651,6 +1651,33 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifNoTypeInUL)
     // Without the accompanying fix in place, this test would have failed
     assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:ul/reqif-xhtml:li/reqif-xhtml:ul", "type");
 }
+
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testOpticalSizing)
+{
+    createSwDoc();
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1);
+    xRun->setString(u"text"_ustr);
+    uno::Reference<beans::XPropertySet> xCursor(xRun, uno::UNO_QUERY);
+
+    xCursor->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(false));
+    saveAndReload(TestFilter::HTML_WRITER);
+
+    uno::Reference<beans::XPropertySet> xRetCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRetCursor, u"CharOpticalSizing"_ustr));
+
+    dispose();
+
+    createSwDoc();
+    uno::Reference<text::XTextRange> xRun2 = getRun(getParagraph(1), 1);
+    xRun2->setString(u"text"_ustr);
+    uno::Reference<beans::XPropertySet> xCursor2(xRun2, uno::UNO_QUERY);
+
+    xCursor2->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(true));
+    saveAndReload(TestFilter::HTML_WRITER);
+
+    uno::Reference<beans::XPropertySet> xRetCursor2(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xRetCursor2, u"CharOpticalSizing"_ustr));
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
