@@ -34,6 +34,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/themecolors.hxx>
 #include <bitmaps.hlst>
 #include <svl/itemset.hxx>
 
@@ -276,8 +277,25 @@ void GalleryIconView::drawTransparenceBackground(vcl::RenderContext& rOut, const
 {
     // draw checkered background
     static const sal_uInt32 nLen(8);
-    static const Color aW(COL_WHITE);
-    static const Color aG(0xef, 0xef, 0xef);
+    static Color aW(COL_WHITE);
+    static Color aG(0xef, 0xef, 0xef);
+    static bool bCheckedAppearanceMode = false;
+    static bool bIsDarkMode = false;
+
+    if (!bCheckedAppearanceMode)
+    {
+        bIsDarkMode = MiscSettings::GetAppColorMode() == AppearanceMode::DARK
+                      || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO
+                          && MiscSettings::GetUseDarkMode());
+        bCheckedAppearanceMode = true;
+    }
+
+    if (bIsDarkMode)
+    {
+        aW = COL_BLACK;
+        aW.SetAlpha(90); // 90 looks good, no fancy logic otherwise to use 90 here.
+        aG = COL_TRANSPARENT;
+    }
 
     rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
 }
