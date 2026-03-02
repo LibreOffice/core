@@ -760,20 +760,129 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractChart)
     std::string_view aCommand(".uno:ExtractDocumentStructure?filter=charts");
     getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
 
-    OString aExpectedStr
-        = "{ \"DocStructure\": { \"Charts.ByEmbedIndex.0\": { \"name\": \"Object1\", \"title\": "
-          "\"Paid leave days\", \"subtitle\": \"Subtitle2\", \"RowDescriptions\": [ \"James\", "
-          "\"Mary\", \"Patricia\", \"David\"], \"ColumnDescriptions\": [ \"2022\", \"2023\"], "
-          "\"DataValues\": [ [ \"22\", \"24\"], [ \"18\", \"16\"], [ \"32\", \"32\"], "
-          "[ \"25\", \"23\"]]}, "
-          "\"Charts.ByEmbedIndex.1\": { \"name\": \"Object2\", \"title\": \"Fixed issues\", "
-          "\"subtitle\": \"Subtitle1\", \"RowDescriptions\": [ \"\"], \"ColumnDescriptions\": [ \" "
-          "\"], \"DataValues\": [ [ \"NaN\"]]}, \"Charts.ByEmbedIndex.2\": { \"name\": "
-          "\"Object3\", \"title\": \"Employees from countries\", \"subtitle\": \"Subtitle3\", "
-          "\"RowDescriptions\": [ \"\"], \"ColumnDescriptions\": [ \"Column 1\"], \"DataValues\": "
-          "[ [ \"NaN\"]]}}}"_ostr;
+    std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
 
-    CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
+    boost::property_tree::ptree aDocStructure = aTree.get_child("DocStructure");
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aDocStructure.size());
+    auto it = aDocStructure.begin();
+
+    // Chart 0
+    {
+        CPPUNIT_ASSERT(it != aDocStructure.end());
+        const auto & [ name, chart ] = *it;
+        CPPUNIT_ASSERT_EQUAL("Charts.ByEmbedIndex.0"s, name);
+        CPPUNIT_ASSERT_EQUAL("Object1"s, chart.get<std::string>("name"));
+        CPPUNIT_ASSERT_EQUAL("Paid leave days"s, chart.get<std::string>("title"));
+        CPPUNIT_ASSERT_EQUAL("Subtitle2"s, chart.get<std::string>("subtitle"));
+
+        std::vector<std::string> aRowDescs;
+        for (const auto & [ k, v ] : chart.get_child("RowDescriptions"))
+            aRowDescs.push_back(v.get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aRowDescs.size());
+        CPPUNIT_ASSERT_EQUAL("James"s, aRowDescs[0]);
+        CPPUNIT_ASSERT_EQUAL("Mary"s, aRowDescs[1]);
+        CPPUNIT_ASSERT_EQUAL("Patricia"s, aRowDescs[2]);
+        CPPUNIT_ASSERT_EQUAL("David"s, aRowDescs[3]);
+
+        std::vector<std::string> aColDescs;
+        for (const auto & [ k, v ] : chart.get_child("ColumnDescriptions"))
+            aColDescs.push_back(v.get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aColDescs.size());
+        CPPUNIT_ASSERT_EQUAL("2022"s, aColDescs[0]);
+        CPPUNIT_ASSERT_EQUAL("2023"s, aColDescs[1]);
+
+        std::vector<std::vector<std::string>> aDataValues;
+        for (const auto & [ k, row ] : chart.get_child("DataValues"))
+        {
+            std::vector<std::string> aRow;
+            for (const auto & [ k2, val ] : row)
+                aRow.push_back(val.get_value<std::string>());
+            aDataValues.push_back(aRow);
+        }
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aDataValues.size());
+        CPPUNIT_ASSERT_EQUAL("22"s, aDataValues[0][0]);
+        CPPUNIT_ASSERT_EQUAL("24"s, aDataValues[0][1]);
+        CPPUNIT_ASSERT_EQUAL("18"s, aDataValues[1][0]);
+        CPPUNIT_ASSERT_EQUAL("16"s, aDataValues[1][1]);
+        CPPUNIT_ASSERT_EQUAL("32"s, aDataValues[2][0]);
+        CPPUNIT_ASSERT_EQUAL("32"s, aDataValues[2][1]);
+        CPPUNIT_ASSERT_EQUAL("25"s, aDataValues[3][0]);
+        CPPUNIT_ASSERT_EQUAL("23"s, aDataValues[3][1]);
+
+        ++it;
+    }
+
+    // Chart 1
+    {
+        CPPUNIT_ASSERT(it != aDocStructure.end());
+        const auto & [ name, chart ] = *it;
+        CPPUNIT_ASSERT_EQUAL("Charts.ByEmbedIndex.1"s, name);
+        CPPUNIT_ASSERT_EQUAL("Object2"s, chart.get<std::string>("name"));
+        CPPUNIT_ASSERT_EQUAL("Fixed issues"s, chart.get<std::string>("title"));
+        CPPUNIT_ASSERT_EQUAL("Subtitle1"s, chart.get<std::string>("subtitle"));
+
+        std::vector<std::string> aRowDescs;
+        for (const auto & [ k, v ] : chart.get_child("RowDescriptions"))
+            aRowDescs.push_back(v.get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aRowDescs.size());
+        CPPUNIT_ASSERT_EQUAL(""s, aRowDescs[0]);
+
+        std::vector<std::string> aColDescs;
+        for (const auto & [ k, v ] : chart.get_child("ColumnDescriptions"))
+            aColDescs.push_back(v.get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aColDescs.size());
+        CPPUNIT_ASSERT_EQUAL(" "s, aColDescs[0]);
+
+        std::vector<std::vector<std::string>> aDataValues;
+        for (const auto & [ k, row ] : chart.get_child("DataValues"))
+        {
+            std::vector<std::string> aRow;
+            for (const auto & [ k2, val ] : row)
+                aRow.push_back(val.get_value<std::string>());
+            aDataValues.push_back(aRow);
+        }
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aDataValues.size());
+        CPPUNIT_ASSERT_EQUAL("NaN"s, aDataValues[0][0]);
+
+        ++it;
+    }
+
+    // Chart 2
+    {
+        CPPUNIT_ASSERT(it != aDocStructure.end());
+        const auto & [ name, chart ] = *it;
+        CPPUNIT_ASSERT_EQUAL("Charts.ByEmbedIndex.2"s, name);
+        CPPUNIT_ASSERT_EQUAL("Object3"s, chart.get<std::string>("name"));
+        CPPUNIT_ASSERT_EQUAL("Employees from countries"s, chart.get<std::string>("title"));
+        CPPUNIT_ASSERT_EQUAL("Subtitle3"s, chart.get<std::string>("subtitle"));
+
+        std::vector<std::string> aRowDescs;
+        for (const auto & [ k, v ] : chart.get_child("RowDescriptions"))
+            aRowDescs.push_back(v.get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aRowDescs.size());
+        CPPUNIT_ASSERT_EQUAL(""s, aRowDescs[0]);
+
+        std::vector<std::string> aColDescs;
+        for (const auto & [ k, v ] : chart.get_child("ColumnDescriptions"))
+            aColDescs.push_back(v.get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aColDescs.size());
+        CPPUNIT_ASSERT_EQUAL("Column 1"s, aColDescs[0]);
+
+        std::vector<std::vector<std::string>> aDataValues;
+        for (const auto & [ k, row ] : chart.get_child("DataValues"))
+        {
+            std::vector<std::string> aRow;
+            for (const auto & [ k2, val ] : row)
+                aRow.push_back(val.get_value<std::string>());
+            aDataValues.push_back(aRow);
+        }
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aDataValues.size());
+        CPPUNIT_ASSERT_EQUAL("NaN"s, aDataValues[0][0]);
+
+        ++it;
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureDocProperties)
