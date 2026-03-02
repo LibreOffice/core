@@ -41,7 +41,10 @@
 #include <comphelper/fileurl.hxx>
 #include <comphelper/scopeguard.hxx>
 
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 108600
 #include <boost/core/pointer_in_range.hpp>
+#endif
 
 #include <unicode/ucsdet.h>
 
@@ -1652,8 +1655,12 @@ std::size_t SvMemoryStream::PutData( const void* pData, std::size_t nCount )
         }
         else
         {
+#if BOOST_VERSION < 108600
+            const bool bSourceDataIsInsideBuffer = std::less_equal<sal_uInt8 const *>()(pBuf, static_cast<sal_uInt8 const *>(pData)) && std::less<sal_uInt8 const *>()(static_cast<sal_uInt8 const *>(pData), pBuf + nSize);
+#else
             const bool bSourceDataIsInsideBuffer = boost::pointer_in_range(
                 static_cast<sal_uInt8 const *>(pData), pBuf, pBuf + nSize);
+#endif
             std::ptrdiff_t const offset = bSourceDataIsInsideBuffer ? static_cast<const char*>(pData) - reinterpret_cast<const char*>(pBuf) : 0;
             tools::Long nNewResize;
             if( nSize && nSize > nResize )
