@@ -126,6 +126,38 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     }
     ScDrawView* pDrawView = rViewSh.GetScDrawView();
 
+    // #i123922# check if an existing object is selected; if yes, evtl. replace
+    // the graphic for a SdrGraphObj (including link state updates) or adapt the fill
+    // style for other objects
+    if(pDrawView)
+    {
+        const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
+        if (1 == rMarkList.GetMarkCount())
+        {
+            SdrObject* pPickObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+            if(pPickObj)
+            {
+                //sal_Int8 nAction(DND_ACTION_MOVE);
+                //Point aPos;
+                const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
+
+                SdrObject* pResult = pDrawView->ApplyGraphicToObject(
+                    *pPickObj,
+                    rGraphic1,
+                    aBeginUndo,
+                    bAsLink ? rFileName : OUString());
+
+                if(pResult)
+                {
+                    // we are done; mark the modified/new object
+                    pDrawView->MarkObj(pResult, pDrawView->GetSdrPageView());
+                    return;
+                }
+            }
+        }
+    }
+
     //  set the size so the graphic has its original pixel size
     //  at 100% view scale (as in SetMarkedOriginalSize),
     //  instead of respecting the current view scale
