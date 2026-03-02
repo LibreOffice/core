@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_skia, \
 $(eval $(call gb_CppunitTest_use_externals,vcl_skia, \
 	boost_headers \
 	$(if $(filter SKIA,$(BUILD_TYPE)),skia) \
+	harfbuzz \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_skia))

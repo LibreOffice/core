@@ -381,7 +381,8 @@ void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout)
         }
     }
 
-    sk_sp<SkTypeface> typeface = SkMakeTypefaceFromCTFont(rFont.GetCTFont());
+    sk_sp<SkTypeface> typeface
+        = SkiaHelper::applyVariations(SkMakeTypefaceFromCTFont(rFont.GetCTFont()), rFont);
     SkFont font(typeface);
     font.setSize(nHeight);
     //    font.setScaleX(rFont.mfFontStretch); TODO
