@@ -665,6 +665,8 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         const SvxTwoLinesItem* pTwoLinesItem = pAttrSet->GetItemIfSet( RES_CHRATR_TWO_LINES );
         if( pTwoLinesItem && pTwoLinesItem->GetValue() )
             SetVertical( 0_deg10 );
+        if( const SvxOpticalSizingItem* pItem = pAttrSet->GetItemIfSet( RES_CHRATR_OPTICAL_SIZING ) )
+            SetOpticalSizing( pItem->GetValue() );
     }
     else
     {
@@ -854,6 +856,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         m_aSub[ SwFontScript::CJK ].m_bSmallCapsPercentage66 = true;
         m_aSub[ SwFontScript::CTL ].m_bSmallCapsPercentage66 = true;
     }
+    SetOpticalSizing( pAttrSet->GetOpticalSizing().GetValue() );
 }
 
 SwFont::~SwFont()

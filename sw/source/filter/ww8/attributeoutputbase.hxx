@@ -48,6 +48,7 @@ class SvxShadowedItem;
 class SvxUnderlineItem;
 class SvxWeightItem;
 class SvxAutoKernItem;
+class SvxOpticalSizingItem;
 class SvxBlinkItem;
 class SvxBrushItem;
 class XFillStyleItem;
@@ -398,6 +399,9 @@ protected:
 
     /// Sfx item RES_CHRATR_AUTOKERN
     virtual void CharAutoKern( const SvxAutoKernItem& ) = 0;
+
+    /// Sfx item RES_CHRATR_OPTICAL_SIZING
+    virtual void CharOpticalSizing( const SvxOpticalSizingItem& ) = 0;
 
     /// Sfx item RES_CHRATR_BLINK
     virtual void CharAnimatedText( const SvxBlinkItem& ) = 0;

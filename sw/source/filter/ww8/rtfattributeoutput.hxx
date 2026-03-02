@@ -301,6 +301,9 @@ protected:
     /// Sfx item RES_CHRATR_AUTOKERN
     void CharAutoKern(const SvxAutoKernItem& rAutoKern) override;
 
+    /// Sfx item RES_CHRATR_OPTICAL_SIZING
+    void CharOpticalSizing(const SvxOpticalSizingItem& rOpticalSizing) override;
+
     /// Sfx item RES_CHRATR_BLINK
     void CharAnimatedText(const SvxBlinkItem& rBlink) override;
 
@@ -554,6 +557,8 @@ private:
                                   bool assoc) const;
     static void OutputCharWeightAssoc(const SvxWeightItem& rWeight, OStringBuffer& buf, bool assoc);
     static void OutputCharAutoKern(const SvxAutoKernItem& rAutoKern, OStringBuffer& buf);
+    static void OutputCharOpticalSizing(const SvxOpticalSizingItem& rOpticalSizing,
+                                        OStringBuffer& buf);
     static void OutputCharAnimatedText(const SvxBlinkItem& rBlink, OStringBuffer& buf);
     void OutputCharBackground(const SvxBrushItem& rBrush, OStringBuffer& buf) const;
     static void OutputCharRotate(const SvxCharRotateItem& rRotate, OStringBuffer& buf);

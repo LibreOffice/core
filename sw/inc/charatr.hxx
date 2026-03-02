@@ -43,6 +43,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/scripthintitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 
 // implementation of the character attribute methods of SwAttrSet
 
@@ -112,6 +113,8 @@ inline const SvxCharReliefItem   &SwAttrSet::GetCharRelief( bool bInP ) const
     {   return Get( RES_CHRATR_RELIEF, bInP ); }
 inline const SvxCharHiddenItem   &SwAttrSet::GetCharHidden( bool bInP ) const
     {   return Get( RES_CHRATR_HIDDEN, bInP ); }
+inline const SvxOpticalSizingItem&SwAttrSet::GetOpticalSizing(bool bInP) const
+    {   return Get( RES_CHRATR_OPTICAL_SIZING,bInP); }
 
 // implementation of the character attribute methods of SwFormat
 
