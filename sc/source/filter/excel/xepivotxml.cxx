@@ -32,6 +32,7 @@
 #include <sax/fshelper.hxx>
 #include <svl/numformat.hxx>
 #include <miscuno.hxx>
+#include <rtl/math.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
@@ -400,7 +401,8 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
             aDPTypes.insert(eType);
             if (eType == ScDPItemData::Value)
             {
-                double fVal = rFieldItem.GetValue();
+                // Rounds the value to 15 digits
+                double fVal = rtl::math::approxValue(rFieldItem.GetValue());
                 fMin = std::min(fMin, fVal);
                 fMax = std::max(fMax, fVal);
 
