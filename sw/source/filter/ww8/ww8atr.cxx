@@ -64,6 +64,7 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/autokernitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/twolinesitem.hxx>
@@ -1314,6 +1315,11 @@ void WW8AttributeOutput::CharAutoKern( const SvxAutoKernItem& rAutoKern )
     m_rWW8Export.InsUInt16( NS_sprm::CHpsKern::val );
 
     m_rWW8Export.InsUInt16( rAutoKern.GetValue() ? 2 : 0 );
+}
+
+void WW8AttributeOutput::CharOpticalSizing( const SvxOpticalSizingItem& )
+{
+    // MSOffice has no equivalent for optical sizing, so nothing is exported.
 }
 
 void WW8AttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
@@ -5771,6 +5777,9 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_CHRATR_AUTOKERN:
             CharAutoKern(rHt.StaticWhichCast(RES_CHRATR_AUTOKERN));
+            break;
+        case RES_CHRATR_OPTICAL_SIZING:
+            CharOpticalSizing(rHt.StaticWhichCast(RES_CHRATR_OPTICAL_SIZING));
             break;
         case RES_CHRATR_BLINK:
             CharAnimatedText(rHt.StaticWhichCast(RES_CHRATR_BLINK));

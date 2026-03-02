@@ -44,6 +44,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/nhypitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <viewopt.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
@@ -115,18 +116,19 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
      0, // RES_CHRATR_GRABBAG,                   // 43
      0, // RES_CHRATR_BIDIRTL,                   // 44
      0, // RES_CHRATR_UNUSED3,                   // 45
-    39, // RES_CHRATR_SCRIPT_HINT,               // 46
-    40, // RES_TXTATR_REFMARK,                   // 47
-    41, // RES_TXTATR_TOXMARK,                   // 48
-    42, // RES_TXTATR_META,                      // 49
-    42, // RES_TXTATR_METAFIELD,                 // 50
+    39, // RES_CHRATR_SCRIPT_HINT,               // 45
+    40, // RES_CHRATR_OPTICAL_SIZING             // 46
+    41, // RES_TXTATR_REFMARK,                   // 47
+    42, // RES_TXTATR_TOXMARK,                   // 48
+    43, // RES_TXTATR_META,                      // 49
+    43, // RES_TXTATR_METAFIELD,                 // 50
      0, // RES_TXTATR_AUTOFMT,                   // 51
      0, // RES_TXTATR_INETFMT                    // 52
      0, // RES_TXTATR_CHARFMT,                   // 53
-    43, // RES_TXTATR_CJK_RUBY,                  // 54
+    44, // RES_TXTATR_CJK_RUBY,                  // 54
      0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 55
-    44, // RES_TXTATR_INPUTFIELD                 // 56
-    45, // RES_TXTATR_CONTENTCONTROL             // 57
+    45, // RES_TXTATR_INPUTFIELD                 // 56
+    46, // RES_TXTATR_CONTENTCONTROL             // 57
 };
 
 namespace CharFormat
@@ -831,6 +833,9 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
                 rFnt.SetVertical(m_pDefaultArray[ nRotateStack ]->StaticWhichCast(RES_CHRATR_ROTATE).GetValue(), m_bVertLayout);
             break;
         }
+        case RES_CHRATR_OPTICAL_SIZING :
+            rFnt.SetOpticalSizing( rItem.StaticWhichCast(RES_CHRATR_OPTICAL_SIZING).GetValue() );
+            break;
         case RES_TXTATR_CJK_RUBY :
             rFnt.SetVertical( 0_deg10, m_bVertLayout );
             break;

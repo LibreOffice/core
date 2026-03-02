@@ -126,6 +126,7 @@ static std::map<sal_uInt16,OUString> & GetItemWhichMap()
         { RES_CHRATR_HIDDEN , "CHRATR_HIDDEN" },
         { RES_CHRATR_BOX , "CHRATR_BOX" },
         { RES_CHRATR_SHADOW , "CHRATR_SHADOW" },
+        { RES_CHRATR_OPTICAL_SIZING , "CHRATR_OPTICAL_SIZING" },
         { RES_TXTATR_AUTOFMT , "TXTATR_AUTOFMT" },
         { RES_TXTATR_INETFMT , "TXTATR_INETFMT" },
         { RES_TXTATR_REFMARK , "TXTATR_REFMARK" },

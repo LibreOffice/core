@@ -49,6 +49,7 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/autokernitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charscaleitem.hxx>
@@ -515,6 +516,9 @@ void RtfAttributeOutput::OutputFormattingItem(const SfxPoolItem& item, OStringBu
             break;
         case RES_CHRATR_AUTOKERN:
             OutputCharAutoKern(item.StaticWhichCast(RES_CHRATR_AUTOKERN), buf);
+            break;
+        case RES_CHRATR_OPTICAL_SIZING:
+            OutputCharOpticalSizing(item.StaticWhichCast(RES_CHRATR_OPTICAL_SIZING), buf);
             break;
         case RES_CHRATR_BLINK:
             OutputCharAnimatedText(item.StaticWhichCast(RES_CHRATR_BLINK), buf);
@@ -3205,10 +3209,20 @@ void RtfAttributeOutput::CharAutoKern(const SvxAutoKernItem& rAutoKern)
     m_aCharFormatting.Put(rAutoKern);
 }
 
+void RtfAttributeOutput::CharOpticalSizing(const SvxOpticalSizingItem& rOpticalSizing)
+{
+    m_aCharFormatting.Put(rOpticalSizing);
+}
+
 void RtfAttributeOutput::OutputCharAutoKern(const SvxAutoKernItem& rAutoKern, OStringBuffer& buf)
 {
     buf.append(OOO_STRING_SVTOOLS_RTF_KERNING);
     buf.append(static_cast<sal_Int32>(rAutoKern.GetValue() ? 1 : 0));
+}
+
+void RtfAttributeOutput::OutputCharOpticalSizing(const SvxOpticalSizingItem&, OStringBuffer&)
+{
+    // MSOffice has no equivalent for optical sizing, so nothing is exported.
 }
 
 void RtfAttributeOutput::CharAnimatedText(const SvxBlinkItem& rBlink)

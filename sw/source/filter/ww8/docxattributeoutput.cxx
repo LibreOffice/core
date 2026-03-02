@@ -56,6 +56,7 @@
 #include <oox/export/drawingml.hxx>
 
 #include <editeng/autokernitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
@@ -5263,6 +5264,9 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
         case RES_CHRATR_AUTOKERN:
             bMustWrite = rHt.StaticWhichCast(RES_CHRATR_AUTOKERN).GetValue();
             break;
+        case RES_CHRATR_OPTICAL_SIZING:
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_OPTICAL_SIZING).GetValue();
+            break;
         case RES_CHRATR_BLINK:
             bMustWrite = rHt.StaticWhichCast(RES_CHRATR_BLINK).GetValue();
             break;
@@ -8398,6 +8402,11 @@ void DocxAttributeOutput::CharAutoKern( const SvxAutoKernItem& rAutoKern )
     // kerning is based on half-point sizes, so 2 enables kerning for fontsize 1pt or higher. (1 is treated as size 12, and 0 is treated as disabled.)
     const OString sFontSize = OString::number( static_cast<sal_uInt32>(rAutoKern.GetValue()) * 2 );
     m_pSerializer->singleElementNS(XML_w, XML_kern, FSNS(XML_w, XML_val), sFontSize);
+}
+
+void DocxAttributeOutput::CharOpticalSizing( const SvxOpticalSizingItem& )
+{
+    // MSOffice has no equivalent for optical sizing, so nothing is exported.
 }
 
 void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )

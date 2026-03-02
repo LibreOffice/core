@@ -2167,6 +2167,44 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName2)
 #endif
 }
 
+// This test docuemnt embeds a variable font with opsz axis, and sets the text in the same font but
+// different point sizes. The font should be embedded multiple times as different instances
+// corresponding to the different opsz values.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testOpticalSizing)
+{
+// Embedding variable fonts does not work on Linux, only the default instance is enumerated
+// https://bugs.documentfoundation.org/show_bug.cgi?id=155853
+#if defined MACOSX || defined _WIN32
+    loadFromFile(u"testOpticalSizing.odt");
+    save(TestFilter::PDF_WRITER);
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    std::set<OString> aFontNames;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (pType && pType->GetValue() == "Font")
+        {
+            auto pName
+                = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
+            aFontNames.insert(pName->GetValue().copy(7)); // skip the subset id
+        }
+    }
+
+    std::set<OString> aExpected{ "Fraunces_144opsz_400wght"_ostr, "Fraunces_80opsz_400wght"_ostr,
+                                 "Fraunces_60opsz_400wght"_ostr,  "Fraunces_40opsz_400wght"_ostr,
+                                 "Fraunces_20opsz_400wght"_ostr,  "Fraunces-Regular"_ostr };
+
+    CPPUNIT_ASSERT_EQUAL(aExpected, aFontNames);
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157679)
 {
     // Import the bugdoc and export as PDF.

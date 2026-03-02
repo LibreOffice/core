@@ -1558,7 +1558,63 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_directories)
     CPPUNIT_ASSERT_EQUAL(0, nMatches);
 }
 
+// CharOpticalSizing should be enabled by default for new documents
+CPPUNIT_TEST_FIXTURE(Test, testOpticalSizing1)
+{
+    createSwDoc();
 
+    {
+        // It should be true by default for new documents
+        uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xCursor, u"CharOpticalSizing"_ustr));
+
+        // and it should survive save-and-reload
+        saveAndReload(TestFilter::ODT);
+        uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xRun, u"CharOpticalSizing"_ustr));
+    }
+
+    {
+        // Setting it manually should set it in contents
+        uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+        xCursor->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(true));
+        save(TestFilter::ODT);
+        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+        assertXPath(pXmlDoc, "//style:style/style:text-properties[@loext:font-optical-sizing='auto']", 1);
+
+        // and it should survive save-and-reload
+        saveAndReload(TestFilter::ODT);
+        uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xRun, u"CharOpticalSizing"_ustr));
+        pXmlDoc = parseExport(u"content.xml"_ustr);
+        assertXPath(pXmlDoc, "//style:style/style:text-properties[@loext:font-optical-sizing='auto']", 1);
+    }
+
+    {
+        // It can also be disabled
+        uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+        xCursor->setPropertyValue(u"CharOpticalSizing"_ustr, uno::Any(false));
+        save(TestFilter::ODT);
+        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+        assertXPath(pXmlDoc, "//style:style/style:text-properties[@loext:font-optical-sizing='none']", 1);
+
+        // and it should survive save-and-reload
+        saveAndReload(TestFilter::ODT);
+        uno::Reference<beans::XPropertySet> xRun3(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRun3, u"CharOpticalSizing"_ustr));
+        pXmlDoc = parseExport(u"content.xml"_ustr);
+        assertXPath(pXmlDoc, "//style:style/style:text-properties[@loext:font-optical-sizing='none']", 1);
+    }
+
+}
+
+// CharOpticalSizing should be disabled by default for old documents
+CPPUNIT_TEST_FIXTURE(Test, testOpticalSizing2)
+{
+    createSwDoc("allow-overlap.odt");
+    uno::Reference<beans::XPropertySet> xCursor(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xCursor, u"CharOpticalSizing"_ustr));
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

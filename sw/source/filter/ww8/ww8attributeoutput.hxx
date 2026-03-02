@@ -252,6 +252,9 @@ protected:
     /// Sfx item RES_CHRATR_AUTOKERN
     virtual void CharAutoKern( const SvxAutoKernItem& ) override;
 
+    /// Sfx item RES_CHRATR_OPTICAL_SIZING
+    virtual void CharOpticalSizing( const SvxOpticalSizingItem& ) override;
+
     /// Sfx item RES_CHRATR_BLINK
     virtual void CharAnimatedText( const SvxBlinkItem& ) override;
 

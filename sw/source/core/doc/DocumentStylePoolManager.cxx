@@ -57,6 +57,7 @@
 #include <editeng/charrotateitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>

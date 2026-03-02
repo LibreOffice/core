@@ -172,6 +172,7 @@
         CTL_FONT_PROPERTIES \
         { UNO_NAME_CHAR_KERNING,                        RES_CHRATR_KERNING,            cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, CONVERT_TWIPS                          }, \
         { UNO_NAME_CHAR_NO_HYPHENATION,                 RES_CHRATR_NOHYPHEN,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { UNO_NAME_CHAR_OPTICAL_SIZING,                 RES_CHRATR_OPTICAL_SIZING,     cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { UNO_NAME_CHAR_SHADOWED,                       RES_CHRATR_SHADOWED,           cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { UNO_NAME_CHAR_CONTOURED,                      RES_CHRATR_CONTOUR,            cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, 0                                      }, \
         { UNO_NAME_DROP_CAP_FORMAT,                     RES_PARATR_DROP,               cppu::UnoType<css::style::DropCapFormat>::get(),    PropertyAttribute::MAYBEVOID, MID_DROPCAP_FORMAT     | CONVERT_TWIPS }, \
@@ -446,6 +447,7 @@
                     { UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE, RES_MARGIN_FIRSTLINE, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_FIRST_LINE_REL_INDENT|CONVERT_TWIPS},\
                     { UNO_NAME_CHAR_KERNING, RES_CHRATR_KERNING    ,  cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,  CONVERT_TWIPS},\
                     { UNO_NAME_CHAR_NO_HYPHENATION, RES_CHRATR_NOHYPHEN   ,   cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},\
+                    { UNO_NAME_CHAR_OPTICAL_SIZING, RES_CHRATR_OPTICAL_SIZING ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},\
                     { UNO_NAME_CHAR_SHADOWED, RES_CHRATR_SHADOWED  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},\
                     { UNO_NAME_CHAR_CONTOURED, RES_CHRATR_CONTOUR,    cppu::UnoType<bool>::get()  ,       PROPERTY_NONE, 0},\
                     { UNO_NAME_DROP_CAP_FORMAT, RES_PARATR_DROP,        cppu::UnoType<css::style::DropCapFormat>::get()  , PROPERTY_NONE, MID_DROPCAP_FORMAT|CONVERT_TWIPS     },\

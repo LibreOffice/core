@@ -76,6 +76,7 @@ class SvxLanguageItem;
 class SvxLineSpacingItem;
 class SvxNoHyphenItem;
 class SvxOpaqueItem;
+class SvxOpticalSizingItem;
 class SvxOrphansItem;
 class SvxOverlineItem;
 class SvxPaperBinItem;
@@ -244,7 +245,9 @@ inline constexpr TypedWhichId<SfxGrabBagItem> RES_CHRATR_GRABBAG(RES_CHRATR_BEGI
 inline constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_BIDIRTL(RES_CHRATR_BEGIN + 43);
 inline constexpr TypedWhichId<SfxInt16Item> RES_CHRATR_UNUSED3(RES_CHRATR_BEGIN + 44);
 inline constexpr TypedWhichId<SvxScriptHintItem> RES_CHRATR_SCRIPT_HINT(RES_CHRATR_BEGIN + 45);
-inline constexpr sal_uInt16 RES_CHRATR_END(RES_CHRATR_BEGIN + 46);
+inline constexpr TypedWhichId<SvxOpticalSizingItem> RES_CHRATR_OPTICAL_SIZING(RES_CHRATR_BEGIN
+                                                                              + 46);
+inline constexpr sal_uInt16 RES_CHRATR_END(RES_CHRATR_BEGIN + 47);
 
 // this Attribute used only in a TextNodes SwpAttr-Array
 inline constexpr sal_uInt16 RES_TXTATR_BEGIN(RES_CHRATR_END);

@@ -103,6 +103,7 @@ class SwSubFont final : public SvxFont
     inline void SetWordLineMode( const bool bWordLineMode );
     inline void SetEmphasisMark( const FontEmphasisMark eValue );
     inline void SetRelief( const FontRelief eNew );
+    inline void SetOpticalSizing( bool bOpticalSizing );
 
     // methods for sub-/superscript
     inline void SetEscapement( const short nNewEsc );
@@ -235,6 +236,7 @@ public:
     inline void SetFixKerning( const short nNewKern );
     inline void SetCaseMap( const SvxCaseMap eNew );
     inline void SetEmphasisMark( const FontEmphasisMark eValue );
+    inline void SetOpticalSizing( bool bOpticalSizing );
 
     // methods for sub-/superscript
     inline void SetEscapement( const short nNewEsc );
@@ -705,6 +707,20 @@ inline void SwFont::SetEmphasisMark( const FontEmphasisMark eValue )
     m_aSub[SwFontScript::Latin].SetEmphasisMark( eValue );
     m_aSub[SwFontScript::CJK].SetEmphasisMark( eValue );
     m_aSub[SwFontScript::CTL].SetEmphasisMark( eValue );
+}
+
+inline void SwSubFont::SetOpticalSizing( bool bOpticalSizing )
+{
+    m_nFontCacheId = nullptr;
+    Font::SetOpticalSizing( bOpticalSizing );
+}
+
+inline void SwFont::SetOpticalSizing( bool bOpticalSizing )
+{
+    m_bFontChg = true;
+    m_aSub[SwFontScript::Latin].SetOpticalSizing( bOpticalSizing );
+    m_aSub[SwFontScript::CJK].SetOpticalSizing( bOpticalSizing );
+    m_aSub[SwFontScript::CTL].SetOpticalSizing( bOpticalSizing );
 }
 
 inline void SwFont::SetPropWidth( const sal_uInt16 nNew )

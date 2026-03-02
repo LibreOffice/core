@@ -47,6 +47,7 @@
 #include <editeng/orphitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
+#include <editeng/opticalsizingitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/rendercontext/GetDefaultFontFlags.hxx>
 #include <vcl/svapp.hxx>
@@ -301,6 +302,9 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
     //#i16874# AutoKerning as default for new documents
     m_xDoc->SetDefault( SvxAutoKernItem( true, RES_CHRATR_AUTOKERN ) );
+
+    // tdf#153368 Optical sizing as default for new documents
+    m_xDoc->SetDefault( SvxOpticalSizingItem( true, RES_CHRATR_OPTICAL_SIZING ) );
 
     // #i42080# - Due to the several calls of method <SetDefault(..)>
     // at the document instance, the document is modified. Thus, reset this
