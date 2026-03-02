@@ -64,8 +64,9 @@ void SkiaTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGr
         fontManager
             = SkFontMgr_New_FontConfig(FcConfigReference(nullptr), SkFontScanner_Make_FreeType());
     }
-    sk_sp<SkTypeface> typeface
-        = SkFontMgr_createTypefaceFromFcPattern(fontManager, rFont.GetFontOptions()->GetPattern());
+    sk_sp<SkTypeface> typeface = SkiaHelper::applyVariations(
+        SkFontMgr_createTypefaceFromFcPattern(fontManager, rFont.GetFontOptions()->GetPattern()),
+        rInstance);
     SkFont font(typeface);
     font.setSize(nHeight);
     font.setScaleX(nWidth / nHeight);

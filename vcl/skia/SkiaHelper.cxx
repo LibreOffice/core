@@ -57,6 +57,8 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 #include <SkRuntimeEffect.h>
 #include <SkStream.h>
 #include <SkTileMode.h>
+#include <SkTypeface.h>
+#include <SkFontArguments.h>
 #include <skia_compiler.hxx>
 #include <skia_opts.hxx>
 #if defined(MACOSX)
@@ -907,6 +909,29 @@ void dump(const sk_sp<SkImage>& image, const char* file)
     sk_sp<SkData> data = stream.detachAsData();
     std::ofstream ostream(file, std::ios::binary);
     ostream.write(static_cast<const char*>(data->data()), data->size());
+}
+
+sk_sp<SkTypeface> applyVariations(const sk_sp<SkTypeface>& skTypeface,
+                                  const LogicalFontInstance& font)
+{
+    const auto& variations = font.GetVariations();
+    if (variations.empty() || !skTypeface)
+        return skTypeface;
+
+    std::vector<SkFontArguments::VariationPosition::Coordinate> skCoords;
+    skCoords.reserve(variations.size());
+    for (const auto& var : variations)
+        skCoords.push_back({ var.tag, var.value });
+
+    SkFontArguments fontArgs;
+    SkFontArguments::VariationPosition varPosition
+        = { skCoords.data(), static_cast<int>(skCoords.size()) };
+    fontArgs.setVariationDesignPosition(varPosition);
+
+    sk_sp<SkTypeface> variationFace = skTypeface->makeClone(fontArgs);
+    if (variationFace)
+        return variationFace;
+    return skTypeface;
 }
 
 #ifdef DBG_UTIL

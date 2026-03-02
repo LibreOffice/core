@@ -27,12 +27,14 @@
 #include <driverblocklist.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/salgtype.hxx>
+#include <font/LogicalFontInstance.hxx>
 
 #include <test/GraphicsRenderTests.hxx>
 
 #include <premac.h>
 #include <SkRegion.h>
 #include <SkSurface.h>
+#include <SkTypeface.h>
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
@@ -137,6 +139,9 @@ uint32_t getSkImageChecksum(sk_sp<SkImage> image);
 VCL_DLLPUBLIC const SkSurfaceProps* surfaceProps();
 // Set pixel geometry to be used by SkSurfaceProps.
 VCL_DLLPUBLIC void setPixelGeometry(SkPixelGeometry pixelGeometry);
+
+VCL_DLLPUBLIC sk_sp<SkTypeface> applyVariations(const sk_sp<SkTypeface>& skTypeface,
+                                                const LogicalFontInstance& font);
 
 inline bool isUnitTestRunning(const char* name = nullptr)
 {

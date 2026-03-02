@@ -268,6 +268,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
             if (!typeface)
                 return false;
         }
+        typeface = SkiaHelper::applyVariations(typeface, rWinFont);
         // Cache the typeface.
         rWinFont.SetSkiaTypeface(typeface, dwrite);
     }
