@@ -36,8 +36,6 @@ private:
 
     SalXLib *mpXLib;
 
-    SalX11Display* CreateDisplay() const;
-
 public:
     explicit X11SalInstance(std::unique_ptr<SalYieldMutex> pMutex);
     virtual ~X11SalInstance() override;

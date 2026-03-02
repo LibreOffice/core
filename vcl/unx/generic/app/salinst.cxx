@@ -89,11 +89,6 @@ X11SalInstance::~X11SalInstance()
 #endif
 }
 
-SalX11Display* X11SalInstance::CreateDisplay() const
-{
-    return new SalX11Display( mpXLib->GetDisplay() );
-}
-
 // AnyInput from sv/mow/source/app/svapp.cxx
 
 namespace {
@@ -205,7 +200,7 @@ void X11SalInstance::AfterAppInit()
     assert( mpXLib->GetDisplay() );
     assert( mpXLib->GetInputMethod() );
 
-    SalX11Display *pSalDisplay = CreateDisplay();
+    SalX11Display* pSalDisplay = new SalX11Display(mpXLib->GetDisplay());
     mpXLib->GetInputMethod()->CreateMethod( mpXLib->GetDisplay() );
     pSalDisplay->SetupInput();
 }
