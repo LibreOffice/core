@@ -9,6 +9,7 @@
 #
 
 fuzzer_externals = \
+    abw \
     boost_headers \
     orcus \
     orcus-parser \
@@ -16,6 +17,7 @@ fuzzer_externals = \
     boost_filesystem \
     boost_iostreams \
     curl \
+    ebook \
     harfbuzz \
     graphite \
     cairo \
@@ -36,6 +38,8 @@ fuzzer_externals = \
     libpng \
     libtiff \
     libwebp \
+    mwaw \
+    odfgen \
     pdfium \
     afdko \
     md4c \
@@ -44,6 +48,11 @@ fuzzer_externals = \
     mythes \
     hyphen \
     hunspell \
+    revenge \
+    staroffice \
+    wpd \
+    wpg \
+    wps \
     zlib \
     zxcvbn-c \
     argon2 \
@@ -173,6 +182,7 @@ fuzzer_calc_libraries = \
     guesslang \
 
 fuzzer_writer_libraries = \
+    writerperfect \
     msword \
     sw \
     swd \
