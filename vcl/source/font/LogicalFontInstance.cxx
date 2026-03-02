@@ -65,8 +65,14 @@ const std::vector<hb_variation_t>& LogicalFontInstance::GetVariations() const
     if (!mxVariations)
     {
         mxVariations = GetFontFace()->GetVariations(*this);
-        for (const auto& rVariation : m_aVariations)
+        hb_face_t* pHbFace = GetFontFace()->GetHbFace();
+        auto aVariations = m_aVariations;
+        for (auto& rVariation : aVariations)
         {
+            hb_ot_var_axis_info_t info;
+            if (hb_ot_var_find_axis_info(pHbFace, rVariation.tag, &info))
+                rVariation.value = std::clamp(rVariation.value, info.min_value, info.max_value);
+
             auto it = std::find_if(mxVariations->begin(), mxVariations->end(),
                                    [&rVariation](const hb_variation_t& rOther) {
                                        return rOther.tag == rVariation.tag;
