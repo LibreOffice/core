@@ -213,7 +213,7 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
             OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
             if( aToken.startsWith( "pdf=" ) )
             {
-                pInfo->maLocation = getPdfDir( rInfo );
+                pInfo->maLocation = ::getPdfDir(rInfo);
                 break;
             }
         }

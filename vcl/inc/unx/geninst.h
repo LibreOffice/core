@@ -23,6 +23,8 @@
 
 #include <memory>
 #include <comphelper/solarmutex.hxx>
+
+#include <printerinfomanager.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
 #include <unx/genprn.h>
@@ -77,6 +79,7 @@ protected:
     static void configurePspInfoPrinter( PspSalInfoPrinter* pInfoPrinter,
                                          SalPrinterQueueInfo const * pQueueInfo,
                                          ImplJobSetup* pSetupData );
+    static bool getPdfDir(const psp::PrinterInfo& rInfo, OUString& rDir);
 };
 
 inline SalGenericInstance *GetGenericInstance()
