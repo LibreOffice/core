@@ -1499,7 +1499,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     }
                     bOptInit = true;
                 }
-                else
+                else if (!sFilterOptions.isEmpty())
                 {
                     aOptions.ReadFromString( sFilterOptions, rMedium.GetInStream() );
                     bOptInit = true;

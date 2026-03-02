@@ -17,6 +17,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/docfile.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 
@@ -592,6 +593,46 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportExportJsonRoundTrip)
     CPPUNIT_ASSERT_EQUAL(u"Item;One"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(3.14, pDoc->GetValue(ScAddress(1, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(u"a \"quoted\" note"_ustr, pDoc->GetString(ScAddress(2, 1, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportEmptyFilterOptions)
+{
+    // Write a comma-separated CSV file
+    utl::TempFileNamed aTempFile;
+    aTempFile.EnableKillingFile();
+    {
+        SvFileStream aStream(aTempFile.GetURL(), StreamMode::WRITE);
+        aStream.WriteOString("Name,Value,Note\nAlpha,100,first\nBeta,200,second\n");
+        aStream.Flush();
+    }
+
+    // Load with explicitly empty FilterOptions (simulates convert-to API without
+    // infilterOptions). Before the fix, ReadFromString("") left the default semicolon
+    // separator and set bOptInit=true, preventing the comma/UTF-8 fallback defaults.
+    std::vector<css::beans::PropertyValue> aFilterOptions;
+    css::beans::PropertyValue aFilterName;
+    aFilterName.Name = "FilterName";
+    aFilterName.Value <<= u"Text - txt - csv (StarCalc)"_ustr;
+    aFilterOptions.push_back(aFilterName);
+    css::beans::PropertyValue aFilterOpts;
+    aFilterOpts.Name = "FilterOptions";
+    aFilterOpts.Value <<= OUString();
+    aFilterOptions.push_back(aFilterOpts);
+    loadWithParams(aTempFile.GetURL(), comphelper::containerToSequence(aFilterOptions));
+
+    ScDocument* pDoc = getScDoc();
+
+    // With the fix, commas are detected as field separators (fallback defaults apply).
+    // Without the fix, each line is imported as a single cell.
+    CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Value"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Note"_ustr, pDoc->GetString(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Alpha"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(100.0, pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"first"_ustr, pDoc->GetString(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Beta"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(200.0, pDoc->GetValue(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"second"_ustr, pDoc->GetString(ScAddress(2, 2, 0)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
