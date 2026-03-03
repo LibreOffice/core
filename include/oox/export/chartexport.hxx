@@ -216,7 +216,7 @@ private:
     void exportVaryColors(const css::uno::Reference<css::chart2::XChartType>& xChartType);
     void exportCandleStickSeries(
         const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>>& aSeriesSeq,
-        bool& rPrimaryAxes, sal_uInt32& nIdx);
+        bool& rPrimaryAxes);
 
     void exportSeriesText(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq );
