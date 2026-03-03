@@ -79,7 +79,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     {
         // reuse existing shape
         ShapePtr pShape = rAtom.getExistingShape();
-        if (rAtom.setupShape(pShape, pNewNode, mnCurrIdx))
+        if (rAtom.setupShape(mrDgm, pShape, pNewNode, mnCurrIdx))
         {
             pShape->setInternalName(rAtom.getName());
             rAtom.addNodeShape(pShape);
@@ -98,7 +98,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
                      "processing shape type "
                          << (pShape->getCustomShapeProperties()->getShapePresetType()));
 
-            if (rAtom.setupShape(pShape, pNewNode, mnCurrIdx))
+            if (rAtom.setupShape(mrDgm, pShape, pNewNode, mnCurrIdx))
             {
                 pShape->setInternalName(rAtom.getName());
                 xCurrParent->addChild(pShape);
@@ -203,11 +203,10 @@ void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 {
     if (meLookFor == ALGORITHM)
     {
-        const PresPointShapeMap aMap
-            = rAtom.getLayoutNode().getDiagram().getLayout()->getPresPointShapeMap();
+        const PresPointShapeMap aMap = mrDgm.getLayout()->getPresPointShapeMap();
         auto pShape = aMap.find(mpCurrentNode);
         if (pShape != aMap.end())
-            rAtom.layoutShape(pShape->second, maConstraints, maRules);
+            rAtom.layoutShape(mrDgm, pShape->second, maConstraints, maRules);
     }
 }
 

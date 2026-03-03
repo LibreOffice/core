@@ -460,6 +460,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     pDoc->StopWorkStartupDelay();
 
     mxModel->lockControllers();
+    pDoc->incImportExport();
 
     /** property map for import info set */
     static PropertyMapEntry const aImportInfoMap[] =
@@ -646,6 +647,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     if( mxModel.is() )
         mxModel->unlockControllers();
+    pDoc->decImportExport();
 
     if( nRet == ERRCODE_NONE )
         pDoc->UpdateAllLinks();
@@ -767,9 +769,11 @@ bool SdXMLFilter::Export()
     }
 
     bool bLocked = mxModel->hasControllersLocked();
+    SdDrawDocument* pDoc = mrDocShell.GetDoc();
 
     try
     {
+        pDoc->incImportExport();
         mxModel->lockControllers();
 
         uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel, uno::UNO_QUERY );
@@ -842,7 +846,7 @@ bool SdXMLFilter::Export()
             // create helper for graphic and ole export if we have a storage
             if( xStorage.is() )
             {
-                xObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *mrDocShell.GetDoc()->GetPersist(), SvXMLEmbeddedObjectHelperMode::Write );
+                xObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *pDoc->GetPersist(), SvXMLEmbeddedObjectHelperMode::Write );
                 xObjectResolver = xObjectHelper.get();
 
                 xGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Write );
@@ -980,6 +984,7 @@ bool SdXMLFilter::Export()
     }
     if ( !bLocked )
         mxModel->unlockControllers();
+    pDoc->decImportExport();
 
     if( xGraphicHelper )
         xGraphicHelper->dispose();

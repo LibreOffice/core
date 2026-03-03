@@ -262,8 +262,7 @@ void Shape::prepareDiagramHelper(
     {
         mpDiagramHelper = new DiagramHelper_oox(
             rDiagramPtr,
-            rTheme,
-            getSize());
+            rTheme);
     }
 }
 

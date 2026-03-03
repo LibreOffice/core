@@ -453,7 +453,7 @@ void DiagramHelper_svx::connectToSdrObjGroup(css::uno::Reference< css::drawing::
     rxRootShape = rTarget;
     pGroupObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
     if (nullptr != pGroupObject)
-        pGroupObject->mp_DiagramHelper.reset(this);;
+        pGroupObject->mp_DiagramHelper.reset(this);
 }
 
 void DiagramHelper_svx::AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList)

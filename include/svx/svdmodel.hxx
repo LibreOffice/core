@@ -151,6 +151,7 @@ class SVXCORE_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase
     friend void impAddIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSdrModel);
     friend void impRemoveIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSdrModel);
     std::unordered_set< SdrObject* >  maAllIncarnatedObjects;
+    sal_uInt16 mnImExCnt;
 protected:
     std::vector<rtl::Reference<SdrPage>> maMasterPages;
     std::vector<rtl::Reference<SdrPage>> maPages;
@@ -622,6 +623,10 @@ public:
 
     bool IsVOCInvalidationIsReliable() const { return mbVOCInvalidationIsReliable; }
     void SetVOCInvalidationIsReliable(bool b) { mbVOCInvalidationIsReliable = b; }
+
+    bool isInImportExport() { return 0 != mnImExCnt; }
+    void incImportExport() { mnImExCnt++; }
+    void decImportExport() { if(mnImExCnt) mnImExCnt--; }
 };
 
 /*

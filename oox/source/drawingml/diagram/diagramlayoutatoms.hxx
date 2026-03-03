@@ -182,7 +182,7 @@ public:
     void addParam( sal_Int32 nType, sal_Int32 nVal )
         { maMap[nType]=nVal; }
     sal_Int32 getVerticalShapesCount(const ShapePtr& rShape);
-    void layoutShape( const ShapePtr& rShape,
+    void layoutShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape,
                       const std::vector<Constraint>& rConstraints,
                       const std::vector<Rule>& rRules );
 
@@ -226,7 +226,7 @@ public:
 class CompositeAlg
 {
 public:
-    static void layoutShapeChildren(AlgAtom& rAlg, const ShapePtr& rShape,
+    static void layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAlg, const ShapePtr& rShape,
                                     const std::vector<Constraint>& rConstraints);
 
 private:
@@ -261,7 +261,7 @@ public:
     const OUString& getRef() const
         { return msRef; }
     virtual void accept( LayoutAtomVisitor& ) override;
-    LayoutAtomPtr getRefAtom();
+    LayoutAtomPtr getRefAtom(const SmartArtDiagram& rDgm);
 
 private:
     IteratorAttr maIter;
@@ -276,11 +276,11 @@ class ConditionAtom
 public:
     explicit ConditionAtom(LayoutNode& rLayoutNode, bool isElse, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
     virtual void accept( LayoutAtomVisitor& ) override;
-    bool getDecision(const svx::diagram::Point* pPresPoint) const;
+    bool getDecision(const SmartArtDiagram& rDgm, const svx::diagram::Point* pPresPoint) const;
 
 private:
     static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
-    sal_Int32 getNodeCount(const svx::diagram::Point* pPresPoint) const;
+    sal_Int32 getNodeCount(const SmartArtDiagram& rDgm, const svx::diagram::Point* pPresPoint) const;
 
     bool          mIsElse;
     IteratorAttr  maIter;
@@ -300,19 +300,40 @@ public:
     virtual void accept( LayoutAtomVisitor& ) override;
 };
 
+// I have cleaned LayoutNode from the member 'SmartArtDiagram& mrDgm'
+// since LayoutNode is model data and with that in place it would have
+// been necessary to deep-clone or re-import the complete DiagramLayout,
+// just to make sure that those members of SmartArtDiagram& will
+// reference the correct - newly created - SmartArtDiagram.
+// That again would have been hard to keep under control due to
+// LayoutNodes hosting a full hierarchy of LayoutNodes in it's base
+// class LayoutAtom, so complicated deep-copy and need of virtual Clone
+// method at LayoutAtom to do the right thing for all eight derivations
+// of it.
+// This is now no longer needed. It can just stay shared, thus the
+// DiagramLayoutPtr gets just copied above. This reflects that the
+// layout mechanism hosted by these atoms is not changed itself, but
+// used (in some ForEach manner) to create the shapes, so does not
+// need to be changed itself.
+// It gets now just additionally referenced by the SmartArtDiagram copy
+// costructor. That is for non-deep copy/paste where this copy operator
+// is used.
+// For deep copy the SmartArtDiagram constructor with import from
+// boost::property_tree has to be used which will have to re-import
+// the layout model data to mpLayout anyways.
+// Instead of having SmartArtDiagram as member it now will be handed
+// as needed to import contexts (LayoutNodeContext and derivatives).
+// All those classes are used temporarily and are not part of the model.
+// It also gets handed over for shape re-creation in LayoutAtomVisitorBase
+// and it's derivates. Also those classes are used temporarily and are
+// not part of the model.
 class LayoutNode
     : public LayoutAtom
 {
 public:
     typedef std::map<sal_Int32, OUString> VarMap;
 
-    LayoutNode(SmartArtDiagram& rDgm)
-        : LayoutAtom(*this)
-        , mrDgm(rDgm)
-        , mnChildOrder(0)
-    {
-    }
-    SmartArtDiagram& getDiagram() { return mrDgm; }
+    LayoutNode();
     virtual void accept( LayoutAtomVisitor& ) override;
     VarMap & variables()
         { return mVariables; }
@@ -332,14 +353,13 @@ public:
     void addNodeShape(const ShapePtr& pShape)
         { mpNodeShapes.push_back(pShape); }
 
-    bool setupShape( const ShapePtr& rShape,
+    bool setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape,
                      const svx::diagram::Point* pPresNode,
                      sal_Int32 nCurrIdx ) const;
 
     const LayoutNode* getParentLayoutNode() const;
 
 private:
-    SmartArtDiagram& mrDgm;
     VarMap                       mVariables;
     OUString                     msMoveWith;
     OUString                     msStyleLabel;

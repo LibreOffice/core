@@ -36,7 +36,7 @@ void LayoutAtomVisitorBase::visit(ChooseAtom& rAtom)
     for (const auto& pChild : rAtom.getChildren())
     {
         const ConditionAtomPtr pCond = std::dynamic_pointer_cast<ConditionAtom>(pChild);
-        if (pCond && pCond->getDecision(mpCurrentNode))
+        if (pCond && pCond->getDecision(mrDgm, mpCurrentNode))
         {
             SAL_INFO("oox.drawingml", "Entering if node: " << pCond->getName());
             pCond->accept(*this);
@@ -54,7 +54,7 @@ void LayoutAtomVisitorBase::visit(ForEachAtom& rAtom)
 {
     if (!rAtom.getRef().isEmpty())
     {
-        if (LayoutAtomPtr pRefAtom = rAtom.getRefAtom())
+        if (LayoutAtomPtr pRefAtom = rAtom.getRefAtom(mrDgm))
             pRefAtom->accept(*this);
         return;
     }
