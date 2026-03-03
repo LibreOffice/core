@@ -9,7 +9,7 @@
 
 import os
 from uitest.framework import UITestCase
-from uitest.uihelper.common import type_text
+from uitest.uihelper.common import type_text, select_by_text
 
 class insertQrCode(UITestCase):
 
@@ -34,5 +34,26 @@ class insertQrCode(UITestCase):
                 self.assertEqual(element.BarCodeProperties.Payload, "www.libreoffice.org")
                 self.assertEqual(element.BarCodeProperties.ErrorCorrection, 1)
                 self.assertEqual(element.BarCodeProperties.Border, 1)
+                self.assertEqual(element.BarCodeProperties.Type, 0)
+
+    def test_insert_bar_code_gen(self):
+        if os.getenv('ENABLE_ZXING') == 'TRUE':
+
+            with self.ui_test.create_doc_in_start_center("calc") as document:
+                with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode") as xDialog:
+
+                    # Get elements in the Dialog Box
+                    xURL = xDialog.getChild("edit_text")
+                    xType = xDialog.getChild("choose_type")
+
+                    type_text(xURL, "www.libreoffice.org") #set the QR code
+                    select_by_text(xType, "Barcode")
+
+                # check the QR code in the document
+                element = document.Sheets[0].DrawPage[0]
+                self.assertEqual(element.BarCodeProperties.Payload, "www.libreoffice.org")
+                self.assertEqual(element.BarCodeProperties.ErrorCorrection, 1)
+                self.assertEqual(element.BarCodeProperties.Border, 1)
+                self.assertEqual(element.BarCodeProperties.Type, 1)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
