@@ -341,15 +341,9 @@ sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
 
     if (COL_AUTO == crBack)
     {
-        uno::Reference<XAccessible> xAccDoc = getAccessibleParent();
-        if (xAccDoc.is())
-        {
-            uno::Reference<XAccessibleComponent> xComponentDoc(xAccDoc, uno::UNO_QUERY);
-            if (xComponentDoc.is())
-            {
-                crBack = Color(ColorTransparency, xComponentDoc->getBackground());
-            }
-        }
+        rtl::Reference<SwAccessibleContext> pAccDoc = getAccessibleParentImpl();
+        if (pAccDoc.is())
+            crBack = Color(ColorTransparency, pAccDoc->getBackground());
     }
     return sal_Int32(crBack);
 }
