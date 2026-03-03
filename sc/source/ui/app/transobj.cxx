@@ -41,6 +41,7 @@
 #include <sfx2/docfile.hxx>
 
 #include <transobj.hxx>
+#include <address.hxx>
 #include <patattr.hxx>
 #include <cellvalue.hxx>
 #include <cellform.hxx>
@@ -375,24 +376,24 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             bool bSingleRow = (nStartRow == nEndRow);
             if (bSingleRow)
             {
-                // Generate column headers (A, B, C, ...)
-                aBuf.append("|");
+                // Header row: "Row" corner cell + column letters
+                aBuf.append("| Row |");
                 for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
                 {
-                    aBuf.append(OString::Concat(" ") + OString::number(static_cast<int>(nCol - nStartCol + 1)) + " |");
+                    aBuf.append(OString::Concat(" ") + OUStringToOString(ScColToAlpha(nCol), RTL_TEXTENCODING_UTF8) + " |");
                 }
                 aBuf.append("\n");
 
-                // Separator
-                aBuf.append("|");
+                // Separator (one extra for row-number column)
+                aBuf.append("| --- |");
                 for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
                 {
                     aBuf.append(" --- |");
                 }
                 aBuf.append("\n");
 
-                // Single data row
-                aBuf.append("|");
+                // Single data row with row number
+                aBuf.append(OString::Concat("| ") + OString::number(static_cast<int>(nStartRow + 1)) + " |");
                 for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
                 {
                     OUString aCellStr = m_pDoc->GetString(nCol, nStartRow, nTab);
@@ -402,27 +403,26 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             }
             else
             {
-                // Header row (first row of selection)
-                aBuf.append("|");
+                // Header row: "Row" corner cell + column letters
+                aBuf.append("| Row |");
                 for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
                 {
-                    OUString aCellStr = m_pDoc->GetString(nCol, nStartRow, nTab);
-                    aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
+                    aBuf.append(OString::Concat(" ") + OUStringToOString(ScColToAlpha(nCol), RTL_TEXTENCODING_UTF8) + " |");
                 }
                 aBuf.append("\n");
 
-                // Separator
-                aBuf.append("|");
+                // Separator (one extra for row-number column)
+                aBuf.append("| --- |");
                 for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
                 {
                     aBuf.append(" --- |");
                 }
                 aBuf.append("\n");
 
-                // Data rows
-                for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; nRow++)
+                // Data rows (all rows, with row numbers)
+                for (SCROW nRow = nStartRow; nRow <= nEndRow; nRow++)
                 {
-                    aBuf.append("|");
+                    aBuf.append(OString::Concat("| ") + OString::number(static_cast<int>(nRow + 1)) + " |");
                     for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
                     {
                         OUString aCellStr = m_pDoc->GetString(nCol, nRow, nTab);

@@ -1083,11 +1083,12 @@ void ScCopyPasteTest::testMarkdownExportMultiRow()
     // When exporting as markdown:
     OString aResult = lcl_getMarkdownExport(pModelObj);
 
-    // Then the first row becomes the header:
-    CPPUNIT_ASSERT_EQUAL("| Name | Age |\n"
-        "| --- | --- |\n"
-        "| Alice | 30 |\n"
-        "| Bob | 25 |\n"_ostr, aResult);
+    // Then column letters become headers and row numbers appear in the first column:
+    CPPUNIT_ASSERT_EQUAL("| Row | A | B |\n"
+        "| --- | --- | --- |\n"
+        "| 1 | Name | Age |\n"
+        "| 2 | Alice | 30 |\n"
+        "| 3 | Bob | 25 |\n"_ostr, aResult);
 }
 
 void ScCopyPasteTest::testMarkdownExportSingleRow()
@@ -1111,10 +1112,10 @@ void ScCopyPasteTest::testMarkdownExportSingleRow()
     // When exporting as markdown:
     OString aResult = lcl_getMarkdownExport(pModelObj);
 
-    // Then numbered column headers are generated:
-    CPPUNIT_ASSERT_EQUAL("| 1 | 2 | 3 |\n"
-        "| --- | --- | --- |\n"
-        "| X | Y | Z |\n"_ostr, aResult);
+    // Then column letters become headers and the row number appears in the first column:
+    CPPUNIT_ASSERT_EQUAL("| Row | A | B | C |\n"
+        "| --- | --- | --- | --- |\n"
+        "| 1 | X | Y | Z |\n"_ostr, aResult);
 }
 
 void ScCopyPasteTest::testMarkdownExportEscaping()
@@ -1138,11 +1139,12 @@ void ScCopyPasteTest::testMarkdownExportEscaping()
     // When exporting as markdown:
     OString aResult = lcl_getMarkdownExport(pModelObj);
 
-    // Then pipes and backslashes should be escaped:
-    CPPUNIT_ASSERT_EQUAL("| Header |\n"
-        "| --- |\n"
-        "| a\\|b |\n"
-        "| c\\\\d |\n"_ostr, aResult);
+    // Then pipes and backslashes should be escaped, with column letters and row numbers:
+    CPPUNIT_ASSERT_EQUAL("| Row | A |\n"
+        "| --- | --- |\n"
+        "| 1 | Header |\n"
+        "| 2 | a\\|b |\n"
+        "| 3 | c\\\\d |\n"_ostr, aResult);
 }
 
 void ScCopyPasteTest::testMarkdownExportSingleCell()
