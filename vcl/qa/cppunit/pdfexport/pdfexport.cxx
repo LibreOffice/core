@@ -2167,7 +2167,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName2)
 #endif
 }
 
-// This test docuemnt embeds a variable font with opsz axis, and sets the text in the same font but
+// This test document embeds a variable font with opsz axis, and sets the text in the same font but
 // different point sizes. The font should be embedded multiple times as different instances
 // corresponding to the different opsz values.
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testOpticalSizing)
