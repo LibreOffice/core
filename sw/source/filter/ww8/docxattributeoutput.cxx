@@ -8863,6 +8863,7 @@ void DocxAttributeOutput::WritePendingPlaceholder()
         return;
     const SwField* pField = m_PendingPlaceholder;
     m_PendingPlaceholder = nullptr;
+    StartRedline(m_pRedlineData.back());
     m_pSerializer->startElementNS(XML_w, XML_sdt);
     m_pSerializer->startElementNS(XML_w, XML_sdtPr);
     if( !pField->GetPar2().isEmpty())
@@ -8877,6 +8878,7 @@ void DocxAttributeOutput::WritePendingPlaceholder()
     m_pSerializer->endElementNS( XML_w, XML_r );
     m_pSerializer->endElementNS( XML_w, XML_sdtContent );
     m_pSerializer->endElementNS( XML_w, XML_sdt );
+    EndRedline(m_pRedlineData.back());
 }
 
 void DocxAttributeOutput::SetField( const SwField& rField, ww::eField eType, const OUString& rCmd )

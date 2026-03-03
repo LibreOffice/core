@@ -395,6 +395,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf170908_delText)
     CPPUNIT_ASSERT_GREATER(nRunsBeforeDelText, nRunsBeforeAnchor);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf170908_delText_sdt)
+{
+    // Given a document with a deleted, exported-with-WritePendingPlaceholder sdt
+
+    createSwDoc("tdf170908_delText_sdt.odt");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // delText must be inside a w:del or MS Word considers the document to be corrupt
+    assertXPath(pXmlDoc, "//w:delText", 1); // there is only one delTree element
+    assertXPath(pXmlDoc, "//w:del/w:sdt/w:sdtContent/w:r/w:delText", 1); // the whole sdt is deleted
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf170952_delText)
 {
     // Given a document with deleted text at the end of the paragraph
