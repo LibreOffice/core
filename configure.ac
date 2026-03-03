@@ -7139,7 +7139,7 @@ find_msms()
     local version="$1"
 
     AC_MSG_CHECKING([for MSVC $version merge modules directory])
-    local my_msm_file="Microsoft_VC${version}_CRT_x86.msm"
+    local my_msm_file="Microsoft_VC${version}_CRT_x64.msm"
     local my_msm_dir
 
     echo "$as_me:$LINENO: searching for $my_msm_file" >&5

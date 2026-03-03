@@ -35,8 +35,6 @@
     #define WINDOWS_X86_MERGEMODULE gid_MergeModule_Microsoft_VC141_CRT_x86
     #define WINDOWS_X86_MERGEMODULE_FILE "Microsoft_VC141_CRT_x86.msm"
 #else
-    // The next string will result in "malformed par file" error, terminating build as expected.
-    // Possibly a new version of CRT was enabled in configure.ac, but not handled here yet?
     error: unknown VC redist version WITH_VC_REDIST. Check configure.ac
 #endif
 #endif
@@ -48,13 +46,13 @@ MergeModule WINDOWS_X86_MERGEMODULE
     Feature = gm_Root;
     Name = WINDOWS_X86_MERGEMODULE_FILE;
     RootDir = "TARGETDIR";
-    ComponentCondition = "VC_REDIST=1";
+    ComponentCondition = "VC_REDIST=1 AND NOT VCRTX86INSTALLED";
     Attributes_Add = "0x10";
 End
 
 #endif
 
-#if defined(WINDOWS_X64) && defined(WINDOWS_X64_MERGEMODULE)
+#if defined(WINDOWS_X64_MERGEMODULE)
 
 /* Attributes: msidbComponentAttributesPermanent = 0x10 */
 MergeModule WINDOWS_X64_MERGEMODULE

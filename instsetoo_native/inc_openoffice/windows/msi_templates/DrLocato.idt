@@ -2,3 +2,5 @@ Signature_	Parent	Path	Depth
 s72	S72	S255	I2
 DrLocator	Signature_	Parent	Path
 win81s14		[SystemFolder]	
+vcrt140x64		[System64Folder]	
+vcrt140x86		[SystemFolder]	

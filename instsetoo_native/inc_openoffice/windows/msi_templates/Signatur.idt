@@ -5,3 +5,5 @@ Signature	Signature
 # language, and we need language-independent comparison, we use a value that is at
 # least 1 less (see note at https://msdn.microsoft.com/en-us/library/aa371853).
 win81s14	kernel32.dll	6.3.9600.17030						
+vcrt140x64	msvcp140.dll	14.29.30133.0						
+vcrt140x86	msvcp140.dll	14.29.30133.0						
