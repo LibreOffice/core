@@ -3531,14 +3531,13 @@ void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChar
         aSplitDataSeries.push_back({});
     }
 
-    sal_uInt32 nIdx = 0;
     for (const auto& splitDataSeries : aSplitDataSeries)
     {
         pFS->startElement(FSNS(XML_c, XML_stockChart));
 
         bool bPrimaryAxes = true;
         if (splitDataSeries.hasElements())
-            exportCandleStickSeries(splitDataSeries, bPrimaryAxes, nIdx);
+            exportCandleStickSeries(splitDataSeries, bPrimaryAxes);
 
         // export stock properties
         Reference< css::chart::XStatisticDisplay > xStockPropProvider(mxDiagram, uno::UNO_QUERY);
@@ -3940,7 +3939,7 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
 }
 
 void ChartExport::exportCandleStickSeries(
-    const Sequence<Reference<chart2::XDataSeries>>& aSeriesSeq, bool& rPrimaryAxes, sal_uInt32& nIdx)
+    const Sequence<Reference<chart2::XDataSeries>>& aSeriesSeq, bool& rPrimaryAxes)
 {
     for( const Reference< chart2::XDataSeries >& xSeries : aSeriesSeq )
     {
@@ -3969,8 +3968,8 @@ void ChartExport::exportCandleStickSeries(
                         FSHelperPtr pFS = GetFS();
                         pFS->startElement(FSNS(XML_c, XML_ser));
 
-                        pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, OString::number(++nIdx));
-                        pFS->singleElement(FSNS(XML_c, XML_order), XML_val, OString::number(nIdx));
+                        pFS->singleElement(FSNS(XML_c, XML_idx), XML_val, OString::number(mnSeriesCount));
+                        pFS->singleElement(FSNS(XML_c, XML_order), XML_val, OString::number(mnSeriesCount++));
 
                         // export label
                         if( xLabelSeq.is() )

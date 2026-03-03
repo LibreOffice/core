@@ -2251,6 +2251,41 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCombinedChartsAxesSharing)
     CPPUNIT_ASSERT_EQUAL(barChartAxis2, scatterChart1Axis2);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest, testForumFr59757)
+{
+    createScDoc("xls/forum-fr-59757.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pChart = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pChart);
+
+    // stock chart
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:idx", "val",
+                u"0");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:order", "val",
+                u"0");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[2]/c:idx", "val",
+                u"1");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[2]/c:order", "val",
+                u"1");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[3]/c:idx", "val",
+                u"2");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[3]/c:order", "val",
+                u"2");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[4]/c:idx", "val",
+                u"3");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[4]/c:order", "val",
+                u"3");
+
+    // line chart
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:idx", "val", u"4");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:order", "val",
+                u"4");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:idx", "val", u"5");
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[2]/c:order", "val",
+                u"5");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
