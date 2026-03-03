@@ -213,6 +213,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
 
         virtual void    LoseFocus() override;
         virtual void    GetFocus() override;
+        virtual void    StateChanged(StateChangedType nStateChange) override;
 
         virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
         void        SetSizePixel( const Size& rNewSize ) override;
