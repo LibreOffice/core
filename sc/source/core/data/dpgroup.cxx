@@ -468,7 +468,11 @@ ScDPGroupTableData::ScDPGroupTableData( const std::shared_ptr<ScDPTableData>& pS
     OSL_ENSURE( pSource, "ScDPGroupTableData: pSource can't be NULL" );
 
     CreateCacheTable();
-    nSourceCount = pSource->GetColumnCount();               // real columns, excluding data layout
+    // nSourceCount is the raw source column count (excluding calculated fields).
+    // Group dimensions are placed right after source columns at index nSourceCount+i,
+    // which matches the cache's group field index space (mnColumnCount+i).
+    // Calculated fields come after group dimensions in this proxy's index space.
+    nSourceCount = pSource->GetColumnCount() - pSource->GetCalculatedColumnCount();
     pNumGroups.reset( new ScDPNumGroupDimension[nSourceCount] );
 }
 
@@ -479,7 +483,9 @@ ScDPGroupTableData::~ScDPGroupTableData()
 void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )
 {
     ScDPGroupDimension aNewGroup( rGroup );
-    aNewGroup.SetGroupDim( GetColumnCount() );      // new dimension will be at the end
+    // Group dimensions are placed right after source columns: [source 0..N-1] [groups N..N+G-1]
+    // This ensures nGroupDim = N+i matches the cache's group field index space.
+    aNewGroup.SetGroupDim( nSourceCount + aGroups.size() );
     aGroups.push_back( aNewGroup );
 }
 
@@ -503,7 +509,9 @@ sal_Int32 ScDPGroupTableData::GetDimensionIndex( std::u16string_view rName )
 
 sal_Int32 ScDPGroupTableData::GetColumnCount()
 {
-    return nSourceCount + aGroups.size();
+    // Dimension layout: [source 0..N-1] [groups N..N+G-1] [calc fields N+G..N+G+C-1]
+    // DataLayout is at N+G+C (one past the end, not counted here).
+    return nSourceCount + aGroups.size() + pSourceData->GetCalculatedColumnCount();
 }
 
 sal_Int32 ScDPGroupTableData::GetCalculatedColumnCount()
@@ -528,15 +536,12 @@ sal_Int32  ScDPGroupTableData::GetMembersCount( sal_Int32 nDim )
 }
 const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( sal_Int32  nColumn )
 {
-    if ( nColumn >= nSourceCount )
+    sal_Int32 nGroupCount = aGroups.size();
+    if ( nColumn >= nSourceCount && nColumn < nSourceCount + nGroupCount )
     {
-        if ( getIsDataLayoutDimension( nColumn) )     // data layout dimension?
-            nColumn = nSourceCount;                         // index of data layout in source data
-        else
-        {
-            const ScDPGroupDimension& rGroupDim = aGroups[nColumn - nSourceCount];
-            return rGroupDim.GetColumnEntries( GetCacheTable() );
-        }
+        // Group dimension zone [N, N+G-1]
+        const ScDPGroupDimension& rGroupDim = aGroups[nColumn - nSourceCount];
+        return rGroupDim.GetColumnEntries( GetCacheTable() );
     }
 
     if ( IsNumGroupDimension( nColumn ) )
@@ -556,31 +561,55 @@ const ScDPItemData* ScDPGroupTableData::GetMemberById( sal_Int32 nDim, sal_Int32
 
 OUString ScDPGroupTableData::getDimensionName(sal_Int32 nColumn)
 {
-    if ( nColumn >= nSourceCount )
+    sal_Int32 nGroupCount = aGroups.size();
+    if ( nColumn >= nSourceCount && nColumn < nSourceCount + nGroupCount )
     {
-        if ( nColumn == sal::static_int_cast<tools::Long>( nSourceCount + aGroups.size() ) )     // data layout dimension?
-            nColumn = nSourceCount;                         // index of data layout in source data
-        else
-            return aGroups[nColumn - nSourceCount].GetName();
+        // Group dimension zone [N, N+G-1]
+        return aGroups[nColumn - nSourceCount].GetName();
     }
 
+    if ( nColumn >= nSourceCount + nGroupCount )
+    {
+        // Calc fields or DataLayout zone [N+G, ...].
+        // Cannot delegate directly to source — the source's getIsDataLayoutDimension
+        // checks nColumn == N+C, which collides with our calc field indices when groups exist.
+        if ( getIsDataLayoutDimension(nColumn) )
+        {
+            // DataLayout: remap to source's DataLayout position (N+C = nColumn - G)
+            return pSourceData->getDimensionName( nColumn - nGroupCount );
+        }
+        // Calc field: query cache directly, bypassing the source's
+        // getIsDataLayoutDimension check which would misidentify this index.
+        // Use CalcFieldToCacheIndex to map proxy position to actual OOXML mnIndex,
+        // since calc fields can appear before groups in OOXML ordering.
+        return GetCacheTable().getCache().GetDimensionName( CalcFieldToCacheIndex(nColumn) );
+    }
+
+    // Source columns [0, N-1]
     return pSourceData->getDimensionName( nColumn );
 }
 
 bool ScDPGroupTableData::getIsDataLayoutDimension(sal_Int32 nColumn)
 {
-    // position of data layout dimension is moved from source data
-    return ( nColumn == sal::static_int_cast<tools::Long>( nSourceCount + aGroups.size() ) );    // data layout dimension?
+    // DataLayout is at position N+G+C (after source, groups, and calc fields).
+    return ( nColumn == sal::static_int_cast<tools::Long>( nSourceCount + aGroups.size()
+             + pSourceData->GetCalculatedColumnCount() ) );
 }
 
 bool ScDPGroupTableData::IsDateDimension(sal_Int32 nDim)
 {
-    if ( nDim >= nSourceCount )
+    sal_Int32 nGroupCount = aGroups.size();
+    if ( nDim >= nSourceCount && nDim < nSourceCount + nGroupCount )
     {
-        if ( nDim == sal::static_int_cast<tools::Long>( nSourceCount + aGroups.size() ) )        // data layout dimension?
-            nDim = nSourceCount;                            // index of data layout in source data
-        else
-            nDim = aGroups[nDim - nSourceCount].GetSourceDim();  // look at original dimension
+        // Group dimension — look at original source dimension
+        nDim = aGroups[nDim - nSourceCount].GetSourceDim();
+    }
+    else if ( nDim >= nSourceCount + nGroupCount )
+    {
+        // Calc fields and DataLayout are not date dimensions.
+        // Do not delegate to source — its getIsDataLayoutDimension check
+        // would collide with our calc field indices when groups exist.
+        return false;
     }
 
     return pSourceData->IsDateDimension( nDim );
@@ -588,30 +617,46 @@ bool ScDPGroupTableData::IsDateDimension(sal_Int32 nDim)
 
 bool ScDPGroupTableData::IsCalculatedDimension(sal_Int32 nDim)
 {
-    //TODO
-    return pSourceData->IsCalculatedDimension(nDim);
+    sal_Int32 nGroupCount = aGroups.size();
+    if ( nDim >= nSourceCount && nDim < nSourceCount + nGroupCount )
+        return false;   // group dimensions are not calculated fields
+    // Remap calc field proxy index to actual cache mnIndex, since source's
+    // isCalculatedField() matches by mnIndex which depends on OOXML ordering.
+    return pSourceData->IsCalculatedDimension( CalcFieldToCacheIndex(nDim) );
 }
 
 OUString ScDPGroupTableData::GetCalculation(sal_Int32 nDim)
 {
-    //TODO
-    return pSourceData->GetCalculation(nDim);
+    sal_Int32 nGroupCount = aGroups.size();
+    if ( nDim >= nSourceCount && nDim < nSourceCount + nGroupCount )
+        return OUString();   // group dimensions have no calculation
+    // Remap calc field proxy index to actual cache mnIndex.
+    return pSourceData->GetCalculation( CalcFieldToCacheIndex(nDim) );
 }
 
 const ScTokenArray* ScDPGroupTableData::GetCalculationToken(sal_Int32 nDim)
 {
-    //TODO
-    return pSourceData->GetCalculationToken(nDim);
+    sal_Int32 nGroupCount = aGroups.size();
+    if ( nDim >= nSourceCount && nDim < nSourceCount + nGroupCount )
+        return nullptr;   // group dimensions have no calculation token
+    // Remap calc field proxy index to actual cache mnIndex.
+    return pSourceData->GetCalculationToken( CalcFieldToCacheIndex(nDim) );
 }
 
 sal_uInt32 ScDPGroupTableData::GetNumberFormat(sal_Int32 nDim)
 {
-    if ( nDim >= nSourceCount )
+    sal_Int32 nGroupCount = aGroups.size();
+    if ( nDim >= nSourceCount && nDim < nSourceCount + nGroupCount )
     {
-        if ( nDim == sal::static_int_cast<tools::Long>( nSourceCount + aGroups.size() ) )        // data layout dimension?
-            nDim = nSourceCount;                            // index of data layout in source data
-        else
-            nDim = aGroups[nDim - nSourceCount].GetSourceDim();  // look at original dimension
+        // Group dimension — use the original source dimension's format
+        nDim = aGroups[nDim - nSourceCount].GetSourceDim();
+    }
+    else if ( nDim >= nSourceCount + nGroupCount )
+    {
+        // Calc fields and DataLayout — return 0 (general format).
+        // Do not delegate to source — its getIsDataLayoutDimension check
+        // would collide with our calc field indices when groups exist.
+        return 0;
     }
 
     return pSourceData->GetNumberFormat( nDim );
@@ -1013,12 +1058,32 @@ bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, sal_I
 
 sal_Int32 ScDPGroupTableData::GetSourceDim( sal_Int32 nDim )
 {
-    if ( getIsDataLayoutDimension( nDim ) )
-        return nSourceCount;
-    if (  nDim >= nSourceCount && nDim < nSourceCount +static_cast<tools::Long>(aGroups.size())  )
+    sal_Int32 nGroupCount = aGroups.size();
+    if ( nDim >= nSourceCount && nDim < nSourceCount + nGroupCount )
     {
+        // Group dimension — return the original source dimension
         const ScDPGroupDimension& rGroupDim = aGroups[nDim - nSourceCount];
         return  rGroupDim.GetSourceDim();
+    }
+    // Source columns, calc fields, DataLayout — return as-is.
+    // Calc field indices match OOXML numbering (already includes groups).
+    return nDim;
+}
+
+sal_Int32 ScDPGroupTableData::CalcFieldToCacheIndex( sal_Int32 nDim ) const
+{
+    sal_Int32 nGroupCount = aGroups.size();
+    sal_Int32 nCalcStart = nSourceCount + nGroupCount;
+    sal_Int32 nCalcCount = pSourceData->GetCalculatedColumnCount();
+    if ( nDim >= nCalcStart && nDim < nCalcStart + nCalcCount )
+    {
+        // Calc field at proxy position k — look up its actual OOXML field index
+        // (mnIndex) from the cache. The proxy layout [source][groups][calc] doesn't
+        // necessarily match OOXML ordering where calc fields can appear before groups.
+        sal_Int32 k = nDim - nCalcStart;
+        const auto& rCalcFields = GetCacheTable().getCache().GetCalculatedFields();
+        if (k >= 0 && k < sal::static_int_cast<sal_Int32>(rCalcFields.size()))
+            return rCalcFields[k]->mnIndex;
     }
     return nDim;
 }

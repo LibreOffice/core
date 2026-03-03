@@ -125,6 +125,10 @@ class ScDPGroupTableData final : public ScDPTableData
     void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<sal_Int32>& rDims);
     virtual sal_Int32                GetSourceDim( sal_Int32 nDim ) override;
 
+    /// Maps a proxy dimension index in the calc field zone [N+G, N+G+C) to the
+    /// actual cache mnIndex (OOXML field index). Returns nDim unchanged for other zones.
+    sal_Int32   CalcFieldToCacheIndex( sal_Int32 nDim ) const;
+
     bool        IsNumGroupDimension( tools::Long nDimension ) const;
     void GetNumGroupInfo(tools::Long nDimension, ScDPNumGroupInfo& rInfo);
 

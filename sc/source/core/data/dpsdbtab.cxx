@@ -80,7 +80,7 @@ void ScDatabaseDPData::DisposeData()
 sal_Int32 ScDatabaseDPData::GetColumnCount()
 {
     CreateCacheTable();
-    return GetCacheTable().getColSize();
+    return GetCacheTable().getColSize() + GetCacheTable().getCalculatedColumnCount();
 }
 
 sal_Int32 ScDatabaseDPData::GetCalculatedColumnCount()
@@ -103,7 +103,7 @@ OUString ScDatabaseDPData::getDimensionName(sal_Int32 nColumn)
 
 bool ScDatabaseDPData::getIsDataLayoutDimension(sal_Int32 nColumn)
 {
-    return ( nColumn == GetCacheTable().getColSize());
+    return ( nColumn == GetCacheTable().getColSize() + GetCacheTable().getCalculatedColumnCount());
 }
 
 bool ScDatabaseDPData::IsDateDimension(sal_Int32 /* nDim */)
@@ -135,11 +135,11 @@ void ScDatabaseDPData::SetEmptyFlags( bool /* bIgnoreEmptyRows */, bool /* bRepe
 
 void ScDatabaseDPData::CreateCacheTable()
 {
-    if (!aCacheTable.empty())
-        // cache table already created.
-        return;
+    if (aCacheTable.empty())
+        aCacheTable.fillTable();
 
-    aCacheTable.fillTable();
+    if (aCacheTable.emptycalcfields())
+        aCacheTable.fillCalcFieldTable();
 }
 
 void ScDatabaseDPData::FilterCacheTable(std::vector<ScDPFilteredCache::Criterion>&& rCriteria, std::unordered_set<sal_Int32>&& rCatDims)
