@@ -33,8 +33,8 @@ std::vector<SCCOLROW> mergeOrder(std::vector<SCCOLROW> const& rExistingOrder,
 
 void SortOrderReverser::addOrderIndices(SortOrderInfo const& rSortInfo)
 {
-    bool bKeyStatesEqual = std::equal(rSortInfo.maKeyStates.begin(), rSortInfo.maKeyStates.begin(),
-                                      maSortInfo.maKeyStates.begin());
+    bool bKeyStatesEqual = std::equal(rSortInfo.maKeyStates.begin(), rSortInfo.maKeyStates.end(),
+                                      maSortInfo.maKeyStates.begin(), maSortInfo.maKeyStates.end());
 
     if (bKeyStatesEqual && maSortInfo.mnFirstRow == rSortInfo.mnFirstRow
         && maSortInfo.mnLastRow == rSortInfo.mnLastRow)

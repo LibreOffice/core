@@ -92,6 +92,85 @@ CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testCombiningSortOrder)
                               aReverser.maSortInfo.maOrder.begin()));
 }
 
+CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testCombiningDifferentKeyStatesReplaces)
+{
+    ScSortKeyState aKeyAscending;
+    aKeyAscending.nField = 0;
+    aKeyAscending.bDoSort = true;
+    aKeyAscending.bAscending = true;
+    aKeyAscending.aColorSortMode = ScColorSortMode::None;
+
+    ScSortKeyState aKeyDescending;
+    aKeyDescending.nField = 0;
+    aKeyDescending.bDoSort = true;
+    aKeyDescending.bAscending = false;
+    aKeyDescending.aColorSortMode = ScColorSortMode::None;
+
+    sc::SortOrderReverser aReverser;
+
+    // First sort: ascending on column 0
+    aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, { aKeyAscending } });
+
+    // Second sort: descending on column 0 - different key state, should replace
+    aReverser.addOrderIndices({ 0, 0, 5, 8, { 4, 3, 2, 1 }, { aKeyDescending } });
+
+    // The order should be replaced, not merged - so it's the second sort's order
+    std::vector<SCCOLROW> aExpectedOrder{ 4, 3, 2, 1 };
+    CPPUNIT_ASSERT_EQUAL(aExpectedOrder.size(), aReverser.maSortInfo.maOrder.size());
+    CPPUNIT_ASSERT(std::equal(aExpectedOrder.begin(), aExpectedOrder.end(),
+                              aReverser.maSortInfo.maOrder.begin()));
+
+    // And key state should be the second sort's
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aReverser.maSortInfo.maKeyStates.size());
+    CPPUNIT_ASSERT_EQUAL(false, aReverser.maSortInfo.maKeyStates[0].bAscending);
+}
+
+CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testCombiningSameKeyStatesMerges)
+{
+    ScSortKeyState aKeyAscending;
+    aKeyAscending.nField = 0;
+    aKeyAscending.bDoSort = true;
+    aKeyAscending.bAscending = true;
+    aKeyAscending.aColorSortMode = ScColorSortMode::None;
+
+    sc::SortOrderReverser aReverser;
+
+    // First sort: ascending on column 0
+    aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, { aKeyAscending } });
+
+    // Second sort: same key state, should merge
+    aReverser.addOrderIndices({ 0, 0, 5, 8, { 4, 3, 2, 1 }, { aKeyAscending } });
+
+    // The order should be merged (same as testCombiningSortOrder)
+    std::vector<SCCOLROW> aExpectedOrder{ 2, 4, 1, 3 };
+    CPPUNIT_ASSERT_EQUAL(aExpectedOrder.size(), aReverser.maSortInfo.maOrder.size());
+    CPPUNIT_ASSERT(std::equal(aExpectedOrder.begin(), aExpectedOrder.end(),
+                              aReverser.maSortInfo.maOrder.begin()));
+
+    // Key state should be preserved
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aReverser.maSortInfo.maKeyStates.size());
+    CPPUNIT_ASSERT_EQUAL(true, aReverser.maSortInfo.maKeyStates[0].bAscending);
+}
+
+CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testCombiningDifferentRowRangeReplaces)
+{
+    sc::SortOrderReverser aReverser;
+
+    // First sort on rows 5-8
+    aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+
+    // Second sort on rows 10-13 - different range, should replace
+    aReverser.addOrderIndices({ 0, 0, 10, 13, { 4, 3, 2, 1 }, {} });
+
+    // The order should be replaced with the second sort's values
+    std::vector<SCCOLROW> aExpectedOrder{ 4, 3, 2, 1 };
+    CPPUNIT_ASSERT_EQUAL(aExpectedOrder.size(), aReverser.maSortInfo.maOrder.size());
+    CPPUNIT_ASSERT(std::equal(aExpectedOrder.begin(), aExpectedOrder.end(),
+                              aReverser.maSortInfo.maOrder.begin()));
+    CPPUNIT_ASSERT_EQUAL(SCROW(10), aReverser.maSortInfo.mnFirstRow);
+    CPPUNIT_ASSERT_EQUAL(SCROW(13), aReverser.maSortInfo.mnLastRow);
+}
+
 CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testResort)
 {
     {
