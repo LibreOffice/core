@@ -1,0 +1,11 @@
+--- a/core/src/CreateBarcode.cpp	2026-03-03 14:41:48.255770172 +0100
++++ b/core/src/CreateBarcode.cpp	2026-03-03 14:42:12.911576522 +0100
+@@ -45,6 +45,8 @@
+ 	// structured_append (idx, cnt, ID)
+
+ 	mutable unique_zint_symbol zint;
++
++	Data(BarcodeFormat format, std::string options) : format(format), options(std::move(options)) {}
+ };
+
+ // TODO: check return type
