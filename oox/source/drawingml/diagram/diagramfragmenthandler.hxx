@@ -43,15 +43,15 @@ private:
 class DiagramLayoutFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
-    DiagramLayoutFragmentHandler(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, DiagramLayoutPtr xDataPtr);
+    DiagramLayoutFragmentHandler(SmartArtDiagram& rDgm, oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, DiagramLayoutPtr xDataPtr);
     virtual ~DiagramLayoutFragmentHandler() noexcept override;
 
     virtual void SAL_CALL endDocument() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
-
     DiagramLayoutPtr    mpDataPtr;
+    SmartArtDiagram& mrDgm;
 };
 
 class DiagramQStylesFragmentHandler : public ::oox::core::FragmentHandler2

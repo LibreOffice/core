@@ -547,7 +547,7 @@ void CompositeAlg::applyConstraintToLayout(const Constraint& rConstraint,
     }
 }
 
-void CompositeAlg::layoutShapeChildren(AlgAtom& rAlg, const ShapePtr& rShape,
+void CompositeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAlg, const ShapePtr& rShape,
                                        const std::vector<Constraint>& rConstraints)
 {
     LayoutPropertyMap aProperties;
@@ -701,7 +701,7 @@ void CompositeAlg::layoutShapeChildren(AlgAtom& rAlg, const ShapePtr& rShape,
         nVertMax = std::max(aPos.Y + aSize.Height, nVertMax);
 
         NamedShapePairs& rDiagramFontHeights
-            = rAlg.getLayoutNode().getDiagram().getDiagramFontHeights();
+            = const_cast<SmartArtDiagram&>(rDgm).getDiagramFontHeights();
         auto it = rDiagramFontHeights.find(aCurrShape->getInternalName());
         if (it != rDiagramFontHeights.end())
         {
@@ -785,11 +785,11 @@ void ForEachAtom::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-LayoutAtomPtr ForEachAtom::getRefAtom()
+LayoutAtomPtr ForEachAtom::getRefAtom(const SmartArtDiagram& rDgm)
 {
     if (!msRef.isEmpty())
     {
-        const LayoutAtomMap& rLayoutAtomMap = getLayoutNode().getDiagram().getLayout()->getLayoutAtomMap();
+        const LayoutAtomMap& rLayoutAtomMap = rDgm.getLayout()->getLayoutAtomMap();
         LayoutAtomMap::const_iterator pRefAtom = rLayoutAtomMap.find(msRef);
         if (pRefAtom != rLayoutAtomMap.end())
             return pRefAtom->second;
@@ -834,10 +834,10 @@ namespace
  * Takes the connection list from rLayoutNode, navigates from rFrom on an edge
  * of type nType, using a direction determined by bSourceToDestination.
  */
-OUString navigate(LayoutNode& rLayoutNode, svx::diagram::TypeConstant nType, std::u16string_view rFrom,
+OUString navigate(const SmartArtDiagram& rDgm, svx::diagram::TypeConstant nType, std::u16string_view rFrom,
                   bool bSourceToDestination)
 {
-    for (const auto& rConnection : rLayoutNode.getDiagram().getData()->getConnections())
+    for (const auto& rConnection : rDgm.getData()->getConnections())
     {
         if (rConnection.mnXMLType != nType)
             continue;
@@ -868,18 +868,18 @@ sal_Int32 calcMaxDepth(std::u16string_view rNodeName, const svx::diagram::Connec
 }
 }
 
-sal_Int32 ConditionAtom::getNodeCount(const svx::diagram::Point* pPresPoint) const
+sal_Int32 ConditionAtom::getNodeCount(const SmartArtDiagram& rDgm, const svx::diagram::Point* pPresPoint) const
 {
     sal_Int32 nCount = 0;
     OUString sNodeId = pPresPoint->msPresentationAssociationId;
 
     // HACK: special case - count children of first child
     if (maIter.maAxis.size() == 2 && maIter.maAxis[0] == XML_ch && maIter.maAxis[1] == XML_ch)
-        sNodeId = navigate(mrLayoutNode, svx::diagram::TypeConstant::XML_parOf, sNodeId, /*bSourceToDestination*/ true);
+        sNodeId = navigate(rDgm, svx::diagram::TypeConstant::XML_parOf, sNodeId, /*bSourceToDestination*/ true);
 
     if (!sNodeId.isEmpty())
     {
-        for (const auto& aCxn : mrLayoutNode.getDiagram().getData()->getConnections())
+        for (const auto& aCxn : rDgm.getData()->getConnections())
             if (aCxn.mnXMLType == svx::diagram::TypeConstant::XML_parOf && aCxn.msSourceId == sNodeId)
                 nCount++;
     }
@@ -887,7 +887,7 @@ sal_Int32 ConditionAtom::getNodeCount(const svx::diagram::Point* pPresPoint) con
     return nCount;
 }
 
-bool ConditionAtom::getDecision(const svx::diagram::Point* pPresPoint) const
+bool ConditionAtom::getDecision(const SmartArtDiagram& rDgm, const svx::diagram::Point* pPresPoint) const
 {
     if (mIsElse)
         return true;
@@ -907,9 +907,9 @@ bool ConditionAtom::getDecision(const svx::diagram::Point* pPresPoint) const
             {
                 // If <dgm:hierBranch> is missing in the current presentation
                 // point, ask the parent.
-                OUString aParent = navigate(mrLayoutNode, svx::diagram::TypeConstant::XML_presParOf, pPresPoint->msModelId,
+                OUString aParent = navigate(rDgm, svx::diagram::TypeConstant::XML_presParOf, pPresPoint->msModelId,
                                             /*bSourceToDestination*/ false);
-                const svx::diagram::Point* it(mrLayoutNode.getDiagram().getData()->getPointByModelID(aParent));
+                const svx::diagram::Point* it(rDgm.getData()->getPointByModelID(aParent));
                 if (nullptr != it)
                 {
                     const svx::diagram::Point* pParent = it;
@@ -923,11 +923,11 @@ bool ConditionAtom::getDecision(const svx::diagram::Point* pPresPoint) const
     }
 
     case XML_cnt:
-        return compareResult(maCond.mnOp, getNodeCount(pPresPoint), maCond.msVal.toInt32());
+        return compareResult(maCond.mnOp, getNodeCount(rDgm, pPresPoint), maCond.msVal.toInt32());
 
     case XML_maxDepth:
     {
-        sal_Int32 nMaxDepth = calcMaxDepth(pPresPoint->msPresentationAssociationId, mrLayoutNode.getDiagram().getData()->getConnections());
+        sal_Int32 nMaxDepth = calcMaxDepth(pPresPoint->msPresentationAssociationId, rDgm.getData()->getConnections());
         return compareResult(maCond.mnOp, nMaxDepth, maCond.msVal.toInt32());
     }
 
@@ -1069,12 +1069,10 @@ sal_Int32 AlgAtom::getVerticalShapesCount(const ShapePtr& rShape)
 namespace
 {
 /// Does the first data node of this shape have customized text properties?
-bool HasCustomText(const ShapePtr& rShape, LayoutNode& rLayoutNode)
+bool HasCustomText(const SmartArtDiagram& rDgm, const ShapePtr& rShape)
 {
-    const PresPointShapeMap& rPresPointShapeMap
-        = rLayoutNode.getDiagram().getLayout()->getPresPointShapeMap();
-    const DiagramData_oox::StringMap& rPresOfNameMap
-        = rLayoutNode.getDiagram().getData()->getPresOfNameMap();
+    const PresPointShapeMap& rPresPointShapeMap = rDgm.getLayout()->getPresPointShapeMap();
+    const DiagramData_oox::StringMap& rPresOfNameMap = rDgm.getData()->getPresOfNameMap();
     // Get the first presentation node of the shape.
     const svx::diagram::Point* pPresNode = nullptr;
     for (const auto& rPair : rPresPointShapeMap)
@@ -1095,7 +1093,7 @@ bool HasCustomText(const ShapePtr& rShape, LayoutNode& rLayoutNode)
             for (const auto& rPair : itPresToData->second)
             {
                 const DiagramData_oox::SourceIdAndDepth& rItem = rPair.second;
-                const svx::diagram::Point* it(rLayoutNode.getDiagram().getData()->getPointByModelID(rItem.msSourceId));
+                const svx::diagram::Point* it(rDgm.getData()->getPointByModelID(rItem.msSourceId));
                 if (nullptr != it)
                 {
                     pDataNode = it;
@@ -1115,7 +1113,7 @@ bool HasCustomText(const ShapePtr& rShape, LayoutNode& rLayoutNode)
 }
 }
 
-void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>& rConstraints,
+void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, const std::vector<Constraint>& rConstraints,
                           const std::vector<Rule>& rRules)
 {
     if (mnType != XML_lin)
@@ -1133,7 +1131,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
     {
         case XML_composite:
         {
-            CompositeAlg::layoutShapeChildren(*this, rShape, rConstraints);
+            CompositeAlg::layoutShapeChildren(rDgm, *this, rShape, rConstraints);
             break;
         }
 
@@ -1415,8 +1413,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 if (rConstraint.mnType == XML_primFontSz && rConstraint.mnFor == XML_des
                     && rConstraint.mnOperator == XML_equ)
                 {
-                    NamedShapePairs& rDiagramFontHeights
-                        = getLayoutNode().getDiagram().getDiagramFontHeights();
+                    NamedShapePairs& rDiagramFontHeights = const_cast<SmartArtDiagram&>(rDgm).getDiagramFontHeights();
                     auto it = rDiagramFontHeights.find(rConstraint.msForName);
                     if (it == rDiagramFontHeights.end())
                     {
@@ -1723,7 +1720,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                             aRun->getTextCharacterProperties().moHeight = fFontSize * 100;
             }
 
-            if (!HasCustomText(rShape, getLayoutNode()))
+            if (!HasCustomText(rDgm, rShape))
             {
                 // No customized text properties: enable autofit.
                 pTextBody->getTextProperties().maPropertyMap.setProperty(
@@ -1855,12 +1852,18 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
         << rShape->getSize().Width << "," << rShape->getSize().Height << ")");
 }
 
+LayoutNode::LayoutNode()
+    : LayoutAtom(*this)
+    , mnChildOrder(0)
+{
+}
+
 void LayoutNode::accept( LayoutAtomVisitor& rVisitor )
 {
     rVisitor.visit(*this);
 }
 
-bool LayoutNode::setupShape( const ShapePtr& rShape, const svx::diagram::Point* pPresNode, sal_Int32 nCurrIdx ) const
+bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape, const svx::diagram::Point* pPresNode, sal_Int32 nCurrIdx ) const
 {
     SAL_INFO(
         "oox.drawingml",
@@ -1868,9 +1871,9 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const svx::diagram::Point* 
             << "\", modelId \"" << pPresNode->msModelId << "\"");
 
     // have the presentation node - now, need the actual data node:
-    const DiagramData_oox::StringMap::const_iterator aNodeName = mrDgm.getData()->getPresOfNameMap().find(
+    const DiagramData_oox::StringMap::const_iterator aNodeName = rDgm.getData()->getPresOfNameMap().find(
         pPresNode->msModelId);
-    if( aNodeName != mrDgm.getData()->getPresOfNameMap().end() )
+    if( aNodeName != rDgm.getData()->getPresOfNameMap().end() )
     {
         // Calculate the depth of what is effectively the topmost element.
         sal_Int32 nMinDepth = std::numeric_limits<sal_Int32>::max();
@@ -1884,14 +1887,14 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const svx::diagram::Point* 
         {
             const DiagramData_oox::SourceIdAndDepth& rItem = rPair.second;
             // pPresNode is the presentation node of the aDataNode2 data node.
-            const svx::diagram::Point* pDataNode2(mrDgm.getData()->getPointByModelID(rItem.msSourceId));
+            const svx::diagram::Point* pDataNode2(rDgm.getData()->getPointByModelID(rItem.msSourceId));
             if (nullptr == pDataNode2)
             {
                 //busted, skip it
                 continue;
             }
 
-            Shape* pDataNode2Shape(mrDgm.getData()->getOrCreateAssociatedShape(*pDataNode2));
+            Shape* pDataNode2Shape(rDgm.getData()->getOrCreateAssociatedShape(*pDataNode2));
             if (nullptr == pDataNode2Shape)
             {
                 //busted, skip it
@@ -1968,7 +1971,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const svx::diagram::Point* 
                 " processing shape type "
                 << rShape->getCustomShapeProperties()->getShapePresetType()
                 << " for layout node named \"" << msName << "\"");
-        Shape* pPresNodeShape(mrDgm.getData()->getOrCreateAssociatedShape(*pPresNode));
+        Shape* pPresNodeShape(rDgm.getData()->getOrCreateAssociatedShape(*pPresNode));
         if (nullptr != pPresNodeShape)
             rShape->getFillProperties().assignUsed(pPresNodeShape->getFillProperties());
     }
@@ -1982,8 +1985,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const svx::diagram::Point* 
         aStyleLabel = msStyleLabel;
     if( !aStyleLabel.isEmpty() )
     {
-        const DiagramQStyleMap::const_iterator aStyle = mrDgm.getStyles().find(aStyleLabel);
-        if( aStyle != mrDgm.getStyles().end() )
+        const DiagramQStyleMap::const_iterator aStyle = rDgm.getStyles().find(aStyleLabel);
+        if( aStyle != rDgm.getStyles().end() )
         {
             const DiagramStyle& rStyle = aStyle->second;
             rShape->getShapeStyleRefs()[XML_fillRef] = rStyle.maFillStyle;
@@ -1996,8 +1999,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const svx::diagram::Point* 
             SAL_WARN("oox.drawingml", "Style " << aStyleLabel << " not found");
         }
 
-        const DiagramColorMap::const_iterator aColor = mrDgm.getColors().find(aStyleLabel);
-        if( aColor != mrDgm.getColors().end() )
+        const DiagramColorMap::const_iterator aColor = rDgm.getColors().find(aStyleLabel);
+        if( aColor != rDgm.getColors().end() )
         {
             // Take the nth color from the color list in case we are the nth shape in a
             // <dgm:forEach> loop.

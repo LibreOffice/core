@@ -66,6 +66,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
         xSourceModel = Reference< frame::XModel >( xSourceDoc, UNO_QUERY );
         if ( xSourceModel.is() )
             xSourceModel->lockControllers();
+        pModel->incImportExport();
 
         const uno::Reference< uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
@@ -131,6 +132,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
 
     if ( xSourceModel.is() )
         xSourceModel->unlockControllers();
+    pModel->decImportExport();
 
     return bDocRet;
 }
@@ -175,7 +177,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
 
         if ( xTargetModel.is() )
             xTargetModel->lockControllers();
-
+        pModel->incImportExport();
 
         xGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
         xGraphicStorageHandler = xGraphicHelper.get();
@@ -236,6 +238,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
 
     if ( xTargetModel.is() )
         xTargetModel->unlockControllers();
+    pModel->decImportExport();
 
     return bRet;
 }

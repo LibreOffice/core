@@ -30,11 +30,13 @@ using namespace ::oox::core;
 namespace oox::drawingml {
 
 // CT_DiagramDefinition
-DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper const & rParent,
+DiagramDefinitionContext::DiagramDefinitionContext( SmartArtDiagram& rDgm,
+                                                    ContextHandler2Helper const & rParent,
                                                     const AttributeList& rAttributes,
                                                     DiagramLayoutPtr pLayout )
     : ContextHandler2( rParent )
     , mpLayout(std::move( pLayout ))
+    , mrDgm(rDgm)
 {
     mpLayout->setDefStyle( rAttributes.getStringDefaulted( XML_defStyle ) );
     OUString sValue = rAttributes.getStringDefaulted( XML_minVer );
@@ -67,12 +69,12 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
         break;
     case DGM_TOKEN( layoutNode ):
     {
-        LayoutNodePtr pNode = std::make_shared<LayoutNode>(mpLayout->getDiagram());
+        LayoutNodePtr pNode = std::make_shared<LayoutNode>();
         mpLayout->getNode() = pNode;
         pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
         pNode->setMoveWith( rAttribs.getStringDefaulted( XML_moveWith ) );
         pNode->setStyleLabel( rAttribs.getStringDefaulted( XML_styleLbl ) );
-        return new LayoutNodeContext( *this, rAttribs, pNode );
+        return new LayoutNodeContext(mrDgm, *this, rAttribs, pNode );
     }
      case DGM_TOKEN( clrData ):
         // TODO, does not matter for the UI. skip.

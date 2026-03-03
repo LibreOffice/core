@@ -30,6 +30,7 @@
 #include <sdr/contact/viewcontactofgroup.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <libxml/xmlwriter.h>
 #include <vcl/canvastools.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
@@ -763,6 +764,51 @@ rtl::Reference<SdrObject> SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAd
     return pGroup;
 }
 
+bool SdrObjGroup::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
+{
+    // has no geometry itself, so just use SnapRect to get from sub-content.
+    // note that this already *includes* possible offsets from Writer Anchor,
+    // so do not check for that and correct below
+    tools::Rectangle aRectangle(GetSnapRect());
+
+    // convert to transformation values
+    basegfx::B2DTuple aScale(aRectangle.GetWidth(), aRectangle.GetHeight());
+    basegfx::B2DTuple aTranslate(aRectangle.Left(), aRectangle.Top());
+
+    // build matrix
+    rMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
+
+    return false;
+}
+
+void SdrObjGroup::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
+{
+    // break up matrix
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate, fShearX;
+    rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
+    // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
+    if(aScale.getX() < 0.0 && aScale.getY() < 0.0)
+    {
+        aScale.setX(fabs(aScale.getX()));
+        aScale.setY(fabs(aScale.getY()));
+    }
+
+    // build BaseRect
+    Point aPoint(basegfx::fround<tools::Long>(aTranslate.getX()),
+                 basegfx::fround<tools::Long>(aTranslate.getY()));
+    tools::Rectangle aBaseRect(aPoint, Size(basegfx::fround<tools::Long>(aScale.getX()),
+                                            basegfx::fround<tools::Long>(aScale.getY())));
+
+    // set BaseRect: Call to SetSnapRect works relative to GetSnapRect() where
+    // possible offsets from Writer Anchor is already included, it then does a
+    // relative change to new SnapRect
+    SetSnapRect(aBaseRect);
+}
+
 void SdrObjGroup::SetDescription(const OUString& rStr)
 {
     static bool bActivateAdvancedDiagramFeatures(nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
@@ -774,12 +820,10 @@ void SdrObjGroup::SetDescription(const OUString& rStr)
 
     OUString aOrigDescription(rStr);
 
-    if (!rStr.isEmpty() && getSdrModelFromSdrObject().isLocked())
+    if (!rStr.isEmpty() && getSdrModelFromSdrObject().isInImportExport())
     {
         // we maybe importing a Diagram. Try to get the Diagram ModelData and
         // add needed Diagram ModelData
-        // NOTE: currently isLocked() is used  to identify import, that *may* have
-        //       to be made more specific in SdXMLImport
         OUString aModelData;
 
         // check if the identifying token is there
@@ -819,12 +863,10 @@ OUString SdrObjGroup::GetDescription() const
     // call parent to get original description
     OUString aRetval(SdrObject::GetDescription());
 
-    if (mp_DiagramHelper && getSdrModelFromSdrObject().isLocked())
+    if (mp_DiagramHelper && getSdrModelFromSdrObject().isInImportExport())
     {
         // we are a Diagram and are exporting. Get the Diagram ModelData and
         // place it to the description
-        // NOTE: currently isLocked() is used  to identify export, that *may* have
-        //       to be made more specific in SdXMLExport
         boost::property_tree::ptree aDiagramModel;
 
         // get Diagram ModelData in property_tree

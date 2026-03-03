@@ -131,6 +131,7 @@ public:
     explicit SmartArtDiagram();
     explicit SmartArtDiagram(SmartArtDiagram const& rSource);
     explicit SmartArtDiagram(const boost::property_tree::ptree& rDiagramModel);
+    ~SmartArtDiagram();
     void setData( const OoxDiagramDataPtr& pData )
         { mpData = pData; }
     const OoxDiagramDataPtr& getData() const

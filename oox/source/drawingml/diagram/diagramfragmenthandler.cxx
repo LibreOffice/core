@@ -63,11 +63,13 @@ DiagramDataFragmentHandler::onCreateContext( ::sal_Int32 aElement,
     return this;
 }
 
-DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( XmlFilterBase& rFilter,
+DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( SmartArtDiagram& rDgm,
+                                                        XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
                                                         DiagramLayoutPtr xDataPtr )
     : FragmentHandler2( rFilter, rFragmentPath )
     , mpDataPtr(std::move( xDataPtr ))
+    , mrDgm(rDgm)
 {
 }
 
@@ -88,7 +90,7 @@ DiagramLayoutFragmentHandler::onCreateContext( ::sal_Int32 aElement,
     switch( aElement )
     {
     case DGM_TOKEN( layoutDef ):
-        return new DiagramDefinitionContext( *this, rAttribs, mpDataPtr );
+        return new DiagramDefinitionContext( mrDgm, *this, rAttribs, mpDataPtr );
     default:
         break;
     }

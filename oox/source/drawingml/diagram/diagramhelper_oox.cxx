@@ -43,11 +43,9 @@ namespace oox::drawingml
 bool DiagramHelper_oox::hasDiagramData() const { return mpDiagramPtr && mpDiagramPtr->getData(); }
 
 DiagramHelper_oox::DiagramHelper_oox(std::shared_ptr<SmartArtDiagram> xDiagramPtr,
-                                     std::shared_ptr<::oox::drawingml::Theme> xTheme,
-                                     awt::Size aImportSize)
+                                     std::shared_ptr<::oox::drawingml::Theme> xTheme)
     : mpDiagramPtr(std::move(xDiagramPtr))
     , mpDiagramThemePtr(std::move(xTheme))
-    , maDiagramImportSize(aImportSize)
     , msNewNodeId()
     , msNewNodeText()
 {
@@ -57,7 +55,6 @@ DiagramHelper_oox::DiagramHelper_oox(DiagramHelper_oox const& rSource)
     : DiagramHelper_svx(rSource)
     , mpDiagramPtr(rSource.mpDiagramPtr ? new SmartArtDiagram(*rSource.mpDiagramPtr) : nullptr)
     , mpDiagramThemePtr(rSource.mpDiagramThemePtr)
-    , maDiagramImportSize(rSource.maDiagramImportSize)
     , msNewNodeId()
     , msNewNodeText()
 {
@@ -67,7 +64,6 @@ DiagramHelper_oox::DiagramHelper_oox(const boost::property_tree::ptree& rDiagram
     : DiagramHelper_svx()
     , mpDiagramPtr(new SmartArtDiagram(rDiagramModel))
     , mpDiagramThemePtr()
-    , maDiagramImportSize()
     , msNewNodeId()
     , msNewNodeText()
 {
@@ -115,11 +111,23 @@ void DiagramHelper_oox::reLayout()
     pTarget->TRGetBaseGeometry(aTransformation, aPolyPolygon);
 
     // create temporary oox::Shape as target. No longer needed is to keep/remember
-    // the original oox::Shape to do that. Use original Size and Pos from initial import
-    // to get the same layout(s)
+    // the original oox::Shape to do that. Use local model data from Diagram root
+    // shape to get the same layout(s)
     oox::drawingml::ShapePtr pShapePtr = std::make_shared<Shape>("com.sun.star.drawing.GroupShape");
     pShapePtr->setDiagramType();
-    pShapePtr->setSize(maDiagramImportSize);
+
+    // set the Size, this is important to let the layout mechanism work
+    // correctly. Since we use the XShape/SdrObject hierarchy as part of
+    // the model data, get size from there.
+    // Create bounding range using unit coordinates and the object
+    // transformation
+    const basegfx::B2DRange aRootRange(aTransformation * basegfx::B2DPoint(0, 0), // top-left
+                                       aTransformation * basegfx::B2DPoint(1, 1)); // bottom-right
+
+    // also need to convert to Emu used by mso and thus in oox::Shape stuff
+    pShapePtr->setSize(
+        awt::Size(oox::drawingml::convertHmmToEmu(basegfx::fround(aRootRange.getWidth())),
+                  oox::drawingml::convertHmmToEmu(basegfx::fround(aRootRange.getHeight()))));
 
     // remember existing DrawingLayerModelData. Do this before createShapeHierarchyFromModel
     // below, that will create a new BackgroundShapeModelID and the BGShape would

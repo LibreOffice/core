@@ -40,10 +40,10 @@ class IfContext
     : public LayoutNodeContext
 {
 public:
-    IfContext( ContextHandler2Helper const & rParent,
+    IfContext( SmartArtDiagram& rDgm, ContextHandler2Helper const & rParent,
                const AttributeList& rAttribs,
                const ConditionAtomPtr& pAtom )
-        : LayoutNodeContext( rParent, rAttribs, pAtom )
+        : LayoutNodeContext( rDgm, rParent, rAttribs, pAtom )
     {}
 };
 
@@ -98,9 +98,10 @@ class ChooseContext
     : public ContextHandler2
 {
 public:
-    ChooseContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, LayoutAtomPtr pNode )
+    ChooseContext( SmartArtDiagram& rDgm, ContextHandler2Helper const & rParent, const AttributeList& rAttribs, LayoutAtomPtr pNode )
         : ContextHandler2( rParent )
         , mpNode(std::move( pNode ))
+        , mrDgm(rDgm)
         {
             msName = rAttribs.getStringDefaulted( XML_name );
         }
@@ -116,14 +117,14 @@ public:
                 // CT_When
                 ConditionAtomPtr pNode = std::make_shared<ConditionAtom>(mpNode->getLayoutNode(), false, rAttribs.getFastAttributeList());
                 LayoutAtom::connect(mpNode, pNode);
-                return new IfContext( *this, rAttribs, pNode );
+                return new IfContext( mrDgm, *this, rAttribs, pNode );
             }
             case DGM_TOKEN( else ):
             {
                 // CT_Otherwise
                 ConditionAtomPtr pNode = std::make_shared<ConditionAtom>(mpNode->getLayoutNode(), true, rAttribs.getFastAttributeList());
                 LayoutAtom::connect(mpNode, pNode);
-                return new IfContext( *this, rAttribs, pNode );
+                return new IfContext( mrDgm, *this, rAttribs, pNode );
             }
             default:
                 break;
@@ -134,19 +135,20 @@ public:
 private:
     OUString msName;
     LayoutAtomPtr mpNode;
+    SmartArtDiagram& mrDgm;
 };
 
 class ForEachContext
     : public LayoutNodeContext
 {
 public:
-    ForEachContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, const ForEachAtomPtr& pAtom )
-        : LayoutNodeContext( rParent, rAttribs, pAtom )
+    ForEachContext( SmartArtDiagram& rDgm, ContextHandler2Helper const & rParent, const AttributeList& rAttribs, const ForEachAtomPtr& pAtom )
+        : LayoutNodeContext( rDgm, rParent, rAttribs, pAtom )
         {
             pAtom->setRef(rAttribs.getStringDefaulted(XML_ref));
             pAtom->iterator().loadFromXAttr( rAttribs.getFastAttributeList() );
 
-            LayoutAtomMap& rLayoutAtomMap = pAtom->getLayoutNode().getDiagram().getLayout()->getLayoutAtomMap();
+            LayoutAtomMap& rLayoutAtomMap = getDiagram().getLayout()->getLayoutAtomMap();
             rLayoutAtomMap[pAtom->getName()] = pAtom;
         }
 };
@@ -174,11 +176,12 @@ private:
 }
 
 // CT_LayoutNode
-LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper const & rParent,
+LayoutNodeContext::LayoutNodeContext( SmartArtDiagram& rDgm, ContextHandler2Helper const & rParent,
                                       const AttributeList& rAttribs,
                                       const LayoutAtomPtr& pAtom )
     : ContextHandler2( rParent )
     , mpNode( pAtom )
+    , mrDgm(rDgm)
 {
     assert( pAtom && "Node must NOT be NULL" );
     mpNode->setName( rAttribs.getStringDefaulted( XML_name ) );
@@ -196,7 +199,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     {
     case DGM_TOKEN( layoutNode ):
     {
-        LayoutNodePtr pNode = std::make_shared<LayoutNode>(mpNode->getLayoutNode().getDiagram());
+        LayoutNodePtr pNode = std::make_shared<LayoutNode>();
         LayoutAtom::connect(mpNode, pNode);
 
         if (rAttribs.hasAttribute(XML_chOrder))
@@ -218,7 +221,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
 
         pNode->setMoveWith( rAttribs.getStringDefaulted( XML_moveWith ) );
         pNode->setStyleLabel( rAttribs.getStringDefaulted( XML_styleLbl ) );
-        return new LayoutNodeContext( *this, rAttribs, pNode );
+        return new LayoutNodeContext( getDiagram(), *this, rAttribs, pNode );
     }
     case DGM_TOKEN( shape ):
     {
@@ -261,14 +264,14 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         // CT_Choose
         LayoutAtomPtr pAtom = std::make_shared<ChooseAtom>(mpNode->getLayoutNode());
         LayoutAtom::connect(mpNode, pAtom);
-        return new ChooseContext( *this, rAttribs, std::move(pAtom) );
+        return new ChooseContext( getDiagram(), *this, rAttribs, std::move(pAtom) );
     }
     case DGM_TOKEN( forEach ):
     {
         // CT_ForEach
         ForEachAtomPtr pAtom = std::make_shared<ForEachAtom>(mpNode->getLayoutNode(), rAttribs.getFastAttributeList());
         LayoutAtom::connect(mpNode, pAtom);
-        return new ForEachContext( *this, rAttribs, pAtom );
+        return new ForEachContext( getDiagram(), *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( constrLst ):
         // CT_Constraints

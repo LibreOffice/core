@@ -119,6 +119,9 @@ public:
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
+
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;
+    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

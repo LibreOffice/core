@@ -144,6 +144,7 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
@@ -2302,7 +2303,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         return;
 
     SfxBindings& rBindings = mrViewData.GetBindings();
-    if (bEEMouse && mrViewData.HasEditView( eWhich ))
+    const bool bHasEditView(mrViewData.HasEditView( eWhich ));
+    if (bEEMouse && bHasEditView)
     {
         EditView*   pEditView;
         SCCOL       nEditCol;
@@ -2341,6 +2343,42 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         rBindings.Invalidate( SID_HYPERLINK_GETLINK );
         bEEMouse = false;
         return;
+    }
+
+    if (!bHasEditView)
+    {
+        SdrView* pSdrView(mrViewData.GetView()->GetScDrawView());
+        if (nullptr != pSdrView)
+        {
+            const Point aDocPos(PixelToLogic(aCurMousePos));
+            SdrHdl* pHdl(pSdrView->PickHandle(aDocPos));
+
+            if (nullptr != pHdl)
+            {
+                SdrObject* pSingleObj(nullptr);
+                const SdrMarkList& rMarkList(pSdrView->GetMarkedObjectList());
+
+                if (1 == rMarkList.GetMarkCount())
+                    pSingleObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+                if (nullptr != pSingleObj)
+                {
+                    // Check for click on svx::diagram::DiagramFrameHdl
+                    // - if we hit a SdrHdl
+                    // - if single object is selected
+                    //   - and it is a Diagram
+                    if(pHdl && nullptr != pSingleObj && pSingleObj->isDiagram())
+                    {
+                        svx::diagram::DiagramFrameHdl* pDiagramFrameHdl(dynamic_cast<svx::diagram::DiagramFrameHdl*>(pHdl));
+                        if(nullptr != pDiagramFrameHdl)
+                        {
+                            // let the DiagramFrameHdl decide what to do
+                            svx::diagram::DiagramFrameHdl::clicked(aDocPos);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     if (bDPMouse)

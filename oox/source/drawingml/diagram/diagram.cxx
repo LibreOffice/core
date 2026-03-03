@@ -176,6 +176,16 @@ SmartArtDiagram::SmartArtDiagram()
 {
 }
 
+SmartArtDiagram::SmartArtDiagram(SmartArtDiagram const& rSource)
+: maDiagramFontHeights()
+, mpData(rSource.mpData ? new DiagramData_oox(*rSource.mpData) : nullptr)
+, mpLayout(rSource.mpLayout)
+, maStyles(rSource.maStyles)
+, maColors(rSource.maColors)
+, maDiagramPRDomMap(rSource.maDiagramPRDomMap)
+{
+}
+
 SmartArtDiagram::SmartArtDiagram(const boost::property_tree::ptree& rDiagramModel)
 : maDiagramFontHeights()
 , mpData(std::make_shared<DiagramData_oox>(rDiagramModel))
@@ -213,8 +223,15 @@ SmartArtDiagram::SmartArtDiagram(const boost::property_tree::ptree& rDiagramMode
 
             // import DomTree to mpLayout
             uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(aDomTree, uno::UNO_QUERY_THROW);
-            rtl::Reference< core::FragmentHandler > xRefLayout(new DiagramLayoutFragmentHandler(*xPPTImport, "internal", mpLayout));
+            rtl::Reference< core::FragmentHandler > xRefLayout(new DiagramLayoutFragmentHandler(*this, *xPPTImport, "internal", mpLayout));
             xPPTImport->importFragment(xRefLayout, xSerializer);
+
+            // Data is loaded, so we already have Points and Connections. Also
+            // need to rebuild buffers for layouting (maPointsPresNameMap,
+            // maConnectionNameMap, maPresOfNameMap). Call with false due to
+            // we are in ODF import and have no oox::Shapes to delete and do
+            // *not* want these to be created (would not hurt, but not needed)
+            // getData()->buildDiagramDataModel(false);
         }
 
         if (!aOOXStyleDOM.isEmpty())
@@ -259,13 +276,7 @@ SmartArtDiagram::SmartArtDiagram(const boost::property_tree::ptree& rDiagramMode
     }
 }
 
-SmartArtDiagram::SmartArtDiagram(SmartArtDiagram const& rSource)
-: maDiagramFontHeights()
-, mpData(rSource.mpData ? new DiagramData_oox(*rSource.mpData) : nullptr)
-, mpLayout(rSource.mpLayout)
-, maStyles(rSource.maStyles)
-, maColors(rSource.maColors)
-, maDiagramPRDomMap(rSource.maDiagramPRDomMap)
+SmartArtDiagram::~SmartArtDiagram()
 {
 }
 
@@ -654,7 +665,7 @@ void loadDiagram( ShapePtr const & pShape,
         if (!rLayoutPath.isEmpty())
         {
             rtl::Reference< core::FragmentHandler > xRefLayout(
-                    new DiagramLayoutFragmentHandler( rFilter, rLayoutPath,
+                    new DiagramLayoutFragmentHandler( *pDiagram, rFilter, rLayoutPath,
                                                       std::move(pLayout) ));
 
             importFragment(rFilter,

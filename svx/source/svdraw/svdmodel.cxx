@@ -121,7 +121,8 @@ struct SdrModelImpl
 
 
 SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHelper, bool bDisablePropertyFiles)
-    : m_eObjUnit(SdrEngineDefaults::GetMapUnit())
+    : mnImExCnt(0)
+    , m_eObjUnit(SdrEngineDefaults::GetMapUnit())
     , m_eUIUnit(FieldUnit::MM)
     , m_aUIScale(Fraction(1,1))
     , m_nUIUnitDecimalMark(0)

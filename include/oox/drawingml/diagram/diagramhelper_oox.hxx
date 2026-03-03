@@ -45,10 +45,8 @@ class DrawingML;
 // - im/export Diagram model to other representations
 class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
 {
-    const std::shared_ptr< SmartArtDiagram >         mpDiagramPtr;
+    const std::shared_ptr< SmartArtDiagram >    mpDiagramPtr;
     std::shared_ptr<::oox::drawingml::Theme>    mpDiagramThemePtr;
-
-    css::awt::Size maDiagramImportSize;
 
     // data values set by addDiagramNode to be used by next reLayout call
     // when a new ode gets added
@@ -68,8 +66,7 @@ protected:
 public:
     DiagramHelper_oox(
         std::shared_ptr< SmartArtDiagram > xDiagramPtr,
-        std::shared_ptr<::oox::drawingml::Theme> xTheme,
-        css::awt::Size aImportSize);
+        std::shared_ptr<::oox::drawingml::Theme> xTheme);
     explicit DiagramHelper_oox(DiagramHelper_oox const& rSource);
     explicit DiagramHelper_oox(const boost::property_tree::ptree& rDiagramModel);
     virtual ~DiagramHelper_oox();

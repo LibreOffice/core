@@ -62,6 +62,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/svxacorr.hxx>
@@ -4763,6 +4764,37 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             rSh.GetView().GetViewFrame().GetBindings().InvalidateAll(false);
             return; // SdrView's event evaluated
         }
+
+        const Point aDocPos(PixelToLogic(rMEvt.GetPosPixel()));
+        SdrHdl* pHdl(pSdrView->PickHandle(aDocPos));
+
+        if (nullptr != pHdl)
+        {
+            SdrObject* pSingleObj(nullptr);
+            const SdrMarkList& rMarkList(pSdrView->GetMarkedObjectList());
+
+            if (1 == rMarkList.GetMarkCount())
+                pSingleObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+            if (nullptr != pSingleObj)
+            {
+                // Check for click on svx::diagram::DiagramFrameHdl
+                // - if we hit a SdrHdl
+                // - if single object is selected
+                //   - and it is a Diagram
+                if(pHdl && nullptr != pSingleObj && pSingleObj->isDiagram())
+                {
+                    svx::diagram::DiagramFrameHdl* pDiagramFrameHdl(dynamic_cast<svx::diagram::DiagramFrameHdl*>(pHdl));
+                    if(nullptr != pDiagramFrameHdl)
+                    {
+                        // let the DiagramFrameHdl decide what to do
+                        svx::diagram::DiagramFrameHdl::clicked(aDocPos);
+                    }
+                }
+            }
+        }
+
+
     }
     // only process MouseButtonUp when the Down went to that windows as well.
     if ( !m_bMBPressed )
