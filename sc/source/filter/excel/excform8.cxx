@@ -353,7 +353,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                     case 0x10:              //  RadicalLel  4       -       err
                     case 0x1D:              //  SxName      4       -       val
                         aIn.Ignore( 4 );
-                        aPool << ocBad;
+                        aPool << ocErrName;
                         aPool >> aStack;
                         break;
                     default:
