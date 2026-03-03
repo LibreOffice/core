@@ -972,29 +972,86 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureDocProperties)
     auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pXTextDocument->getCommandValues(aJsonWriter, aCommand);
 
-    OString aExpectedStr
-        = "{ \"DocStructure\": { \"DocumentProperties\": { \"Author\": \"Author TxT\", "
-          "\"Generator\": \"Generator TxT\", \"CreationDate\": \"2024-01-21T14:45:00\", "
-          "\"Title\": \"Title TxT\", \"Subject\": \"Subject TxT\", \"Description\": "
-          "\"Description TxT\", \"Keywords\": [ ], \"Language\": \"en-GB\", "
-          "\"ModifiedBy\": \"ModifiedBy TxT\", \"ModificationDate\": "
-          "\"2024-05-23T10:05:50.159530766\", \"PrintedBy\": \"PrintedBy TxT\", \"PrintDate\": "
-          "\"0000-00-00T00:00:00\", \"TemplateName\": \"TemplateName TxT\", \"TemplateURL\": "
-          "\"TemplateURL TxT\", \"TemplateDate\": \"0000-00-00T00:00:00\", \"AutoloadURL\": \"\", "
-          "\"AutoloadSecs\": 0, \"DefaultTarget\": \"DefaultTarget TxT\", \"DocumentStatistics\": "
-          "{ \"PageCount\": 300, \"TableCount\": 60, \"ImageCount\": 10, \"ObjectCount\": 0, "
-          "\"ParagraphCount\": 2880, \"WordCount\": 78680, \"CharacterCount\": 485920, "
-          "\"NonWhitespaceCharacterCount\": 411520}, \"EditingCycles\": 12, \"EditingDuration\": "
-          "12345, \"Contributor\": [ \"Contributor1 TxT\", \"Contributor2 TXT\"], \"Coverage\": "
-          "\"Coverage TxT\", \"Identifier\": \"Identifier TxT\", \"Publisher\": [ "
-          "\"Publisher TxT\", \"Publisher2 TXT\"], \"Relation\": [ \"Relation TxT\", "
-          "\"Relation2 TXT\"], \"Rights\": \"Rights TxT\", \"Source\": \"Source TxT\", \"Type\": "
-          "\"Type TxT\", \"UserDefinedProperties\": { \"NewPropName Bool\": { \"type\": "
-          "\"boolean\", \"value\": true}, \"NewPropName Numb\": { \"type\": \"long\", "
-          "\"value\": 1245}, \"NewPropName Str\": { \"type\": \"boolean\", \"value\": false}, "
-          "\"NewPropName float\": { \"type\": \"float\", \"value\": 12.45}}}}}"_ostr;
+    std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
 
-    CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
+    boost::property_tree::ptree aDocProps = aTree.get_child("DocStructure.DocumentProperties");
+
+    CPPUNIT_ASSERT_EQUAL("Author TxT"s, aDocProps.get<std::string>("Author"));
+    CPPUNIT_ASSERT_EQUAL("Generator TxT"s, aDocProps.get<std::string>("Generator"));
+    CPPUNIT_ASSERT_EQUAL("2024-01-21T14:45:00"s, aDocProps.get<std::string>("CreationDate"));
+    CPPUNIT_ASSERT_EQUAL("Title TxT"s, aDocProps.get<std::string>("Title"));
+    CPPUNIT_ASSERT_EQUAL("Subject TxT"s, aDocProps.get<std::string>("Subject"));
+    CPPUNIT_ASSERT_EQUAL("Description TxT"s, aDocProps.get<std::string>("Description"));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aDocProps.get_child("Keywords").size());
+    CPPUNIT_ASSERT_EQUAL("en-GB"s, aDocProps.get<std::string>("Language"));
+    CPPUNIT_ASSERT_EQUAL("ModifiedBy TxT"s, aDocProps.get<std::string>("ModifiedBy"));
+    CPPUNIT_ASSERT_EQUAL("2024-05-23T10:05:50.159530766"s,
+                         aDocProps.get<std::string>("ModificationDate"));
+    CPPUNIT_ASSERT_EQUAL("PrintedBy TxT"s, aDocProps.get<std::string>("PrintedBy"));
+    CPPUNIT_ASSERT_EQUAL("0000-00-00T00:00:00"s, aDocProps.get<std::string>("PrintDate"));
+    CPPUNIT_ASSERT_EQUAL("TemplateName TxT"s, aDocProps.get<std::string>("TemplateName"));
+    CPPUNIT_ASSERT_EQUAL("TemplateURL TxT"s, aDocProps.get<std::string>("TemplateURL"));
+    CPPUNIT_ASSERT_EQUAL("0000-00-00T00:00:00"s, aDocProps.get<std::string>("TemplateDate"));
+    CPPUNIT_ASSERT_EQUAL(""s, aDocProps.get<std::string>("AutoloadURL"));
+    CPPUNIT_ASSERT_EQUAL("0"s, aDocProps.get<std::string>("AutoloadSecs"));
+    CPPUNIT_ASSERT_EQUAL("DefaultTarget TxT"s, aDocProps.get<std::string>("DefaultTarget"));
+
+    // DocumentStatistics
+    boost::property_tree::ptree aStats = aDocProps.get_child("DocumentStatistics");
+    CPPUNIT_ASSERT_EQUAL("300"s, aStats.get<std::string>("PageCount"));
+    CPPUNIT_ASSERT_EQUAL("60"s, aStats.get<std::string>("TableCount"));
+    CPPUNIT_ASSERT_EQUAL("10"s, aStats.get<std::string>("ImageCount"));
+    CPPUNIT_ASSERT_EQUAL("0"s, aStats.get<std::string>("ObjectCount"));
+    CPPUNIT_ASSERT_EQUAL("2880"s, aStats.get<std::string>("ParagraphCount"));
+    CPPUNIT_ASSERT_EQUAL("78680"s, aStats.get<std::string>("WordCount"));
+    CPPUNIT_ASSERT_EQUAL("485920"s, aStats.get<std::string>("CharacterCount"));
+    CPPUNIT_ASSERT_EQUAL("411520"s, aStats.get<std::string>("NonWhitespaceCharacterCount"));
+
+    CPPUNIT_ASSERT_EQUAL("12"s, aDocProps.get<std::string>("EditingCycles"));
+    CPPUNIT_ASSERT_EQUAL("12345"s, aDocProps.get<std::string>("EditingDuration"));
+
+    // Array properties
+    std::vector<std::string> aContributor;
+    for (const auto & [ k, v ] : aDocProps.get_child("Contributor"))
+        aContributor.push_back(v.get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aContributor.size());
+    CPPUNIT_ASSERT_EQUAL("Contributor1 TxT"s, aContributor[0]);
+    CPPUNIT_ASSERT_EQUAL("Contributor2 TXT"s, aContributor[1]);
+
+    CPPUNIT_ASSERT_EQUAL("Coverage TxT"s, aDocProps.get<std::string>("Coverage"));
+    CPPUNIT_ASSERT_EQUAL("Identifier TxT"s, aDocProps.get<std::string>("Identifier"));
+
+    std::vector<std::string> aPublisher;
+    for (const auto & [ k, v ] : aDocProps.get_child("Publisher"))
+        aPublisher.push_back(v.get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aPublisher.size());
+    CPPUNIT_ASSERT_EQUAL("Publisher TxT"s, aPublisher[0]);
+    CPPUNIT_ASSERT_EQUAL("Publisher2 TXT"s, aPublisher[1]);
+
+    std::vector<std::string> aRelation;
+    for (const auto & [ k, v ] : aDocProps.get_child("Relation"))
+        aRelation.push_back(v.get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aRelation.size());
+    CPPUNIT_ASSERT_EQUAL("Relation TxT"s, aRelation[0]);
+    CPPUNIT_ASSERT_EQUAL("Relation2 TXT"s, aRelation[1]);
+
+    CPPUNIT_ASSERT_EQUAL("Rights TxT"s, aDocProps.get<std::string>("Rights"));
+    CPPUNIT_ASSERT_EQUAL("Source TxT"s, aDocProps.get<std::string>("Source"));
+    CPPUNIT_ASSERT_EQUAL("Type TxT"s, aDocProps.get<std::string>("Type"));
+
+    // UserDefinedProperties
+    boost::property_tree::ptree aUserProps = aDocProps.get_child("UserDefinedProperties");
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aUserProps.size());
+    CPPUNIT_ASSERT_EQUAL("boolean"s, aUserProps.get<std::string>("NewPropName Bool.type"));
+    CPPUNIT_ASSERT_EQUAL("true"s, aUserProps.get<std::string>("NewPropName Bool.value"));
+    CPPUNIT_ASSERT_EQUAL("long"s, aUserProps.get<std::string>("NewPropName Numb.type"));
+    CPPUNIT_ASSERT_EQUAL("1245"s, aUserProps.get<std::string>("NewPropName Numb.value"));
+    CPPUNIT_ASSERT_EQUAL("boolean"s, aUserProps.get<std::string>("NewPropName Str.type"));
+    CPPUNIT_ASSERT_EQUAL("false"s, aUserProps.get<std::string>("NewPropName Str.value"));
+    CPPUNIT_ASSERT_EQUAL("float"s, aUserProps.get<std::string>("NewPropName float.type"));
+    CPPUNIT_ASSERT_EQUAL("12.45"s, aUserProps.get<std::string>("NewPropName float.value"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
