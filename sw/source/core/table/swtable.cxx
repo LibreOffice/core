@@ -2239,8 +2239,7 @@ OUString SwTableBox::GetName() const
     }
 
     const SwTable& rTable = m_pStartNode->FindTableNode()->GetTable();
-    sal_uInt16 nPos;
-    OUString sNm, sTmp;
+    OUString sNm;
     const SwTableBox* pBox = this;
     do {
         const SwTableLine* pLine = pBox->GetUpper();
@@ -2248,8 +2247,8 @@ OUString SwTableBox::GetName() const
         const SwTableLines* pLines = pLine->GetUpper()
                 ? &pLine->GetUpper()->GetTabLines() : &rTable.GetTabLines();
 
-        nPos = pLines->GetPos( pLine ) + 1;
-        sTmp = OUString::number( nPos );
+        sal_uInt16 nPos = pLines->GetPos(pLine) + 1;
+        OUString sTmp = OUString::number(nPos);
         if( !sNm.isEmpty() )
             sNm = sTmp + "." + sNm;
         else
