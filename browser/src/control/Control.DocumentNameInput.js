@@ -137,7 +137,7 @@ window.L.Control.DocumentNameInput = window.L.Control.extend({
 			el.focus(function() { $(this).blur(); });
 			// Call decodeURIComponent twice: Reverse both our encoding and the encoding of
 			// the name in the file system.
-			el.val(decodeURIComponent(decodeURIComponent(this.map.options.doc.replace(/.*\//, '')))
+			el.val(window.ThisIsTheEmscriptenApp ? this.map['wopi'].BaseFileName : decodeURIComponent(decodeURIComponent(this.map.options.doc.replace(/.*\//, '')))
 							  // To conveniently see the initial visualViewport scale and size, un-comment the following line.
 							  // + ' (' + window.visualViewport.scale + '*' + window.visualViewport.width + 'x' + window.visualViewport.height + ')'
 							  // TODO: Yes, it would be better to see it change as you rotate the device or invoke Split View.

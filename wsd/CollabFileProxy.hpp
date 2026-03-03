@@ -12,29 +12,22 @@
 #pragma once
 
 #include "RequestDetails.hpp"
-#include "wopi/CheckFileInfo.hpp"
 
 #include <net/HttpRequest.hpp>
 #include <net/Socket.hpp>
-
-#include <Poco/JSON/Object.h>
 
 #include <istream>
 #include <memory>
 #include <string>
 
-/// Proxies file download/upload through the /co/collab endpoint.
-/// Takes WOPISrc from URL and access_token from cookie.
+/// Proxies file download/upload through the /co/collab endpoint
+/// using token-based authentication.
 class CollabFileProxy: public std::enable_shared_from_this<CollabFileProxy>
 {
 public:
     CollabFileProxy(std::string id, const RequestDetails& requestDetails,
                     const std::shared_ptr<StreamSocket>& socket,
-                    const std::string& wopiSrc, const std::string& accessToken,
-                    bool isUpload);
-
-    void handleRequest(std::istream& message, const std::shared_ptr<TerminatingPoll>& poll,
-                       SocketDisposition& disposition);
+                    const std::string& wopiSrc, const std::string& accessToken);
 
     /// Handle a fetch request with a pre-authorized URL (from WebSocket token)
     /// This bypasses CheckFileInfo since the token already validated access.
@@ -48,18 +41,9 @@ public:
                              const std::shared_ptr<TerminatingPoll>& poll,
                              SocketDisposition& disposition);
 
-    /// Handle download/upload with pre-validated WOPI info from CollabBroker.
-    /// This bypasses CheckFileInfo since the collab session already authenticated.
-    void handleDirectRequest(std::istream& message,
-                             Poco::JSON::Object::Ptr wopiInfo,
-                             const std::shared_ptr<TerminatingPoll>& poll,
-                             SocketDisposition& disposition);
-
 private:
     inline void logPrefix(std::ostream& os) const { os << '#' << _logFD << ": "; }
 
-    void checkFileInfo(const std::shared_ptr<TerminatingPoll>& poll, const Poco::URI& uri,
-                       int redirectionLimit);
     void doDownload(const std::shared_ptr<TerminatingPoll>& poll, const Poco::URI& uri,
                     int redirectionLimit);
     void doUpload(const std::shared_ptr<TerminatingPoll>& poll, const Poco::URI& uri,
@@ -70,9 +54,7 @@ private:
     const std::weak_ptr<StreamSocket> _socket;
     const std::string _wopiSrc;
     const std::string _accessToken;
-    const bool _isUpload;
     std::shared_ptr<http::Session> _httpSession;
-    std::shared_ptr<CheckFileInfo> _checkFileInfo;
     std::string _uploadBody;
     int _logFD;
 };

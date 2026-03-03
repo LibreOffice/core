@@ -39,10 +39,6 @@ class CollabEndpointTest : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCollabInvalidFirstMessage);
     CPPUNIT_TEST(testCollabBrokerUserListJson);
     CPPUNIT_TEST(testCollabBrokerFindOrCreate);
-    CPPUNIT_TEST(testCollabDownloadMissingWopiSrc);
-    CPPUNIT_TEST(testCollabDownloadMissingCookie);
-    CPPUNIT_TEST(testCollabUploadMissingWopiSrc);
-    CPPUNIT_TEST(testCollabUploadMissingCookie);
     CPPUNIT_TEST(testCollabInvalidJsonMessage);
     CPPUNIT_TEST(testCollabUnknownMessageType);
 
@@ -54,10 +50,6 @@ class CollabEndpointTest : public CPPUNIT_NS::TestFixture
     void testCollabInvalidFirstMessage();
     void testCollabBrokerUserListJson();
     void testCollabBrokerFindOrCreate();
-    void testCollabDownloadMissingWopiSrc();
-    void testCollabDownloadMissingCookie();
-    void testCollabUploadMissingWopiSrc();
-    void testCollabUploadMissingCookie();
     void testCollabInvalidJsonMessage();
     void testCollabUnknownMessageType();
 
@@ -266,88 +258,6 @@ void CollabEndpointTest::testCollabBrokerFindOrCreate()
     }
 
     TST_LOG("findOrCreateCollabBroker correctly manages brokers");
-}
-
-void CollabEndpointTest::testCollabDownloadMissingWopiSrc()
-{
-    constexpr auto testname = __func__;
-
-    TST_LOG("Testing /co/collab/download with missing WOPISrc parameter");
-
-    // Try to download without WOPISrc - should get HTTP 400 Bad Request
-    const std::string path = "/co/collab/download";
-
-    const std::shared_ptr<const http::Response> httpResponse =
-        http::get(_uri.toString(), path);
-
-    // Should return 400 Bad Request
-    LOK_ASSERT_EQUAL(http::StatusCode::BadRequest, httpResponse->statusLine().statusCode());
-
-    TST_LOG("Correctly rejected download without WOPISrc");
-}
-
-void CollabEndpointTest::testCollabDownloadMissingCookie()
-{
-    constexpr auto testname = __func__;
-
-    TST_LOG("Testing /co/collab/download with missing access_token cookie");
-
-    // Try to download with WOPISrc but no cookie - should get HTTP 401 Unauthorized
-    const std::string wopiSrc = "http%3A%2F%2Fexample.com%2Fwopi%2Ffiles%2F123";
-    const std::string path = "/co/collab/download?WOPISrc=" + wopiSrc;
-
-    const std::shared_ptr<const http::Response> httpResponse =
-        http::get(_uri.toString(), path);
-
-    // Should return 401 Unauthorized
-    LOK_ASSERT_EQUAL(http::StatusCode::Unauthorized, httpResponse->statusLine().statusCode());
-
-    TST_LOG("Correctly rejected download without access_token cookie");
-}
-
-void CollabEndpointTest::testCollabUploadMissingWopiSrc()
-{
-    constexpr auto testname = __func__;
-
-    TST_LOG("Testing /co/collab/upload with missing WOPISrc parameter");
-
-    // Try to upload without WOPISrc - should get HTTP 400 Bad Request
-    const std::string path = "/co/collab/upload";
-
-    http::Request request(path, http::Request::VERB_POST);
-    request.setBody("test file content", "application/octet-stream");
-
-    auto httpSession = http::Session::create(_uri.toString());
-    const std::shared_ptr<const http::Response> httpResponse =
-        httpSession->syncRequest(request);
-
-    // Should return 400 Bad Request
-    LOK_ASSERT_EQUAL(http::StatusCode::BadRequest, httpResponse->statusLine().statusCode());
-
-    TST_LOG("Correctly rejected upload without WOPISrc");
-}
-
-void CollabEndpointTest::testCollabUploadMissingCookie()
-{
-    constexpr auto testname = __func__;
-
-    TST_LOG("Testing /co/collab/upload with missing access_token cookie");
-
-    // Try to upload with WOPISrc but no cookie - should get HTTP 401 Unauthorized
-    const std::string wopiSrc = "http%3A%2F%2Fexample.com%2Fwopi%2Ffiles%2F123";
-    const std::string path = "/co/collab/upload?WOPISrc=" + wopiSrc;
-
-    http::Request request(path, http::Request::VERB_POST);
-    request.setBody("test file content", "application/octet-stream");
-
-    auto httpSession = http::Session::create(_uri.toString());
-    const std::shared_ptr<const http::Response> httpResponse =
-        httpSession->syncRequest(request);
-
-    // Should return 401 Unauthorized
-    LOK_ASSERT_EQUAL(http::StatusCode::Unauthorized, httpResponse->statusLine().statusCode());
-
-    TST_LOG("Correctly rejected upload without access_token cookie");
 }
 
 void CollabEndpointTest::testCollabInvalidJsonMessage()

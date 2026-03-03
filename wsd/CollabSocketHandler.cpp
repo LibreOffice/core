@@ -251,11 +251,7 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
     const std::string type = json->optValue<std::string>("type", std::string());
     const std::string requestId = json->optValue<std::string>("requestId", std::string());
 
-    if (type == "getfileinfo")
-    {
-        handleGetFileInfo(requestId);
-    }
-    else if (type == "fetch")
+    if (type == "fetch")
     {
         const std::string stream = json->optValue<std::string>("stream", "contents");
         const std::string ifNoneMatch = json->optValue<std::string>("ifNoneMatch", std::string());
@@ -275,108 +271,6 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
             << ",\"requestId\":\"" << JsonUtil::escapeJSONValue(requestId) << "\"}";
         sendTextMessage(oss.str());
     }
-}
-
-void CollabSocketHandler::handleGetFileInfo(const std::string& requestId)
-{
-    LOG_INF("Collab: handling getfileinfo request");
-
-    std::ostringstream oss;
-    oss << "{\"type\":\"fileinfo\"";
-
-    if (!requestId.empty())
-        oss << ",\"requestId\":\"" << JsonUtil::escapeJSONValue(requestId) << "\"";
-
-    // Add basic file info from WOPI
-    if (_wopiInfo)
-    {
-        // File metadata
-        const std::string filename = _wopiInfo->optValue<std::string>("BaseFileName", std::string());
-        const int64_t size = _wopiInfo->optValue<int64_t>("Size", 0);
-        const std::string lastModified = _wopiInfo->optValue<std::string>("LastModifiedTime", std::string());
-        const std::string version = _wopiInfo->optValue<std::string>("Version", std::string());
-
-        oss << ",\"filename\":\"" << JsonUtil::escapeJSONValue(filename) << "\"";
-        oss << ",\"size\":" << size;
-        if (!lastModified.empty())
-            oss << ",\"lastModified\":\"" << JsonUtil::escapeJSONValue(lastModified) << "\"";
-        if (!version.empty())
-            oss << ",\"version\":\"" << JsonUtil::escapeJSONValue(version) << "\"";
-
-        // User info
-        oss << ",\"userId\":\"" << JsonUtil::escapeJSONValue(_userId) << "\"";
-        oss << ",\"username\":\"" << JsonUtil::escapeJSONValue(_username) << "\"";
-        oss << ",\"canWrite\":" << (_userCanWrite ? "true" : "false");
-
-        // Available streams with URLs
-        oss << ",\"streams\":{";
-
-        // Primary contents stream (always available)
-        oss << "\"contents\":{";
-        oss << "\"url\":\"" << JsonUtil::escapeJSONValue(buildDownloadUrl("contents")) << "\"";
-        oss << ",\"available\":true";
-        oss << "}";
-
-        // FileUrl - direct download URL if provided by WOPI host
-        const std::string fileUrl = _wopiInfo->optValue<std::string>("FileUrl", std::string());
-        oss << ",\"fileUrl\":{";
-        if (!fileUrl.empty())
-        {
-            oss << "\"url\":\"" << JsonUtil::escapeJSONValue(fileUrl) << "\"";
-            oss << ",\"available\":true";
-        }
-        else
-        {
-            oss << "\"available\":false";
-        }
-        oss << "}";
-
-        // UserSettingsUri - for autotext, dictionaries, etc.
-        const std::string userSettingsUri = _wopiInfo->optValue<std::string>("UserSettingsUri", std::string());
-        oss << ",\"userSettings\":{";
-        if (!userSettingsUri.empty())
-        {
-            oss << "\"url\":\"" << JsonUtil::escapeJSONValue(userSettingsUri) << "\"";
-            oss << ",\"available\":true";
-        }
-        else
-        {
-            oss << "\"available\":false";
-        }
-        oss << "}";
-
-        // TemplateSource - template URL
-        const std::string templateSource = _wopiInfo->optValue<std::string>("TemplateSource", std::string());
-        oss << ",\"templateSource\":{";
-        if (!templateSource.empty())
-        {
-            oss << "\"url\":\"" << JsonUtil::escapeJSONValue(templateSource) << "\"";
-            oss << ",\"available\":true";
-        }
-        else
-        {
-            oss << "\"available\":false";
-        }
-        oss << "}";
-
-        oss << "}"; // close streams
-
-        // Additional WOPI capabilities
-        oss << ",\"capabilities\":{";
-        oss << "\"supportsLocks\":" << (_wopiInfo->optValue<bool>("SupportsLocks", false) ? "true" : "false");
-        oss << ",\"supportsRename\":" << (_wopiInfo->optValue<bool>("SupportsRename", false) ? "true" : "false");
-        oss << ",\"supportsUpdate\":" << (_wopiInfo->optValue<bool>("SupportsUpdate", true) ? "true" : "false");
-        oss << "}";
-    }
-    else
-    {
-        oss << ",\"error\":\"No WOPI info available\"";
-    }
-
-    oss << "}";
-
-    sendTextMessage(oss.str());
-    LOG_DBG("Collab: sent fileinfo response");
 }
 
 void CollabSocketHandler::handleFetch(const std::string& stream, const std::string& requestId,
@@ -473,6 +367,13 @@ void CollabSocketHandler::handleFetch(const std::string& stream, const std::stri
     if (!requestId.empty())
         oss << ",\"requestId\":\"" << JsonUtil::escapeJSONValue(requestId) << "\"";
     oss << ",\"url\":\"" << JsonUtil::escapeJSONValue(downloadUrl.str()) << "\"";
+    if (stream == "contents" && _wopiInfo)
+    {
+        const std::string filename =
+            _wopiInfo->optValue<std::string>("BaseFileName", std::string());
+        if (!filename.empty())
+            oss << ",\"filename\":\"" << JsonUtil::escapeJSONValue(filename) << "\"";
+    }
     oss << "}";
 
     sendTextMessage(oss.str());
@@ -552,16 +453,6 @@ void CollabSocketHandler::onFetchComplete(const std::string& /* requestId */,
                                            const std::shared_ptr<http::Session>& /* session */)
 {
     // No longer used - fetch is now via HTTP download URL
-}
-
-std::string CollabSocketHandler::buildDownloadUrl(const std::string& stream) const
-{
-    // Build the /co/collab/download URL for the given stream
-    std::ostringstream oss;
-    oss << "/co/collab/download?WOPISrc=" << Uri::encode(_wopiSrc);
-    if (stream != "contents")
-        oss << "&stream=" << Uri::encode(stream);
-    return oss.str();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

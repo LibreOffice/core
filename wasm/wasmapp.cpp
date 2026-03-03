@@ -14,20 +14,26 @@
 #include "wasmapp.hpp"
 
 #include <common/Log.hpp>
+#include <common/Uri.hpp>
 #include <common/Util.hpp>
 #include <net/FakeSocket.hpp>
 #include <wsd/COOLWSD.hpp>
 
 #include <emscripten/fetch.h>
 
+#include <algorithm>
 #include <cassert>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <memory>
+#include <optional>
+#include <string>
 
 int coolwsd_server_socket_fd = -1;
 
-static char const * tempFile; // null when operating on a local file in the Emscripten file system
+static std::optional<std::string> tempFile;
+    // empty when operating on a local file in the Emscripten file system
 static std::string remoteUrl;
 static std::string fileURL;
 static int fakeClientFd;
@@ -148,25 +154,25 @@ struct FileClose {
 }
 
 void saveToServer() {
-    if (tempFile == nullptr) {
+    if (!tempFile) {
         return;
     }
     long n;
     std::unique_ptr<char[]> buf;
     {
-        auto const f = std::unique_ptr<FILE, FileClose>(std::fopen(tempFile, "r"));
+        auto const f = std::unique_ptr<FILE, FileClose>(std::fopen(tempFile->c_str(), "r"));
         if (f.get() == nullptr) {
-            LOG_WRN("Failed to open " << tempFile << " for reading"); //TODO
+            LOG_WRN("Failed to open " << *tempFile << " for reading"); //TODO
             return;
         }
         int e = std::fseek(f.get(), 0, SEEK_END);
         if (e != 0) {
-            LOG_WRN("Failed to seek in " << tempFile); //TODO
+            LOG_WRN("Failed to seek in " << *tempFile); //TODO
             return;
         }
         n = std::ftell(f.get());
         if (n == -1) {
-            LOG_WRN("Failed to get size of " << tempFile); //TODO
+            LOG_WRN("Failed to get size of " << *tempFile); //TODO
             return;
         }
         buf = std::make_unique<char[]>(n);
@@ -174,7 +180,7 @@ void saveToServer() {
         std::size_t n2 = std::fread(buf.get(), 1, n, f.get());
         assert(n >= 0);
         if (n2 != static_cast<unsigned long>(n)) {
-            LOG_WRN("Failed to get read " << tempFile); //TODO
+            LOG_WRN("Failed to get read " << *tempFile); //TODO
             return;
         }
     }
@@ -188,7 +194,7 @@ void saveToServer() {
             console.error('collabSaveToServer not available');
         }
     }, buf.get(), n);
-    LOG_TRC("Initiated save of " << tempFile << " (" << n << " bytes) via JS callback");
+    LOG_TRC("Initiated save of " << *tempFile << " (" << n << " bytes) via JS callback");
 }
 
 int main(int argc, char* argv_main[])
@@ -241,12 +247,45 @@ int main(int argc, char* argv_main[])
                 {
                     printf("Finished downloading %llu bytes from URL %s.\n", fetch->numBytes,
                            fetch->url);
-                    tempFile = "/tempdoc";
-                    FILE* f = fopen(tempFile, "w");
+                    // Use the original filename from WOPI if available:
+                    std::uint32_t n;
+                    std::unique_ptr<char, void (*)(char *)> p(
+                        static_cast<char *>(
+                            MAIN_THREAD_EM_ASM_PTR({
+                                if (globalThis.collabFilename === undefined) {
+                                    return null;
+                                }
+                                const n = lengthBytesUTF8(globalThis.collabFilename);
+                                const p = _malloc(n + 1);
+                                if (!p) { // guard against ABORTING_MALLOC=0
+                                    throw new Error("out of memory");
+                                }
+                                stringToUTF8(globalThis.collabFilename, p, n + 1);
+                                HEAP32[$0 >> 2] = n;
+                                return p;
+                            }, &n)),
+                        [](char * p) { std::free(p); });
+                    std::string filename;
+                    if (p) {
+                        filename.assign(p.get(), n);
+                    }
+                    std::replace_if(
+                        filename.begin(), filename.end(),
+                        [](char c) { return c == '\0' || c == '/'; }, '_');
+                    if (filename.empty()) {
+                        filename = "_";
+                    }
+                    //TODO: Use distinct mktemp-style directories if there can be multiple files
+                    // open simultaneously:
+                    tempFile = "/tempdoc/" + filename;
+                    // With the Emscripten file system, there's no length limit on how long the
+                    // tempFile pathname can be (though core sal code likely has some PATH_MAX
+                    // limits, would should eventually be addressed one way or another):
+                    FILE* f = fopen(tempFile->c_str(), "w");
                     const int wrote = fwrite(fetch->data, 1, fetch->numBytes, f);
                     fclose(f);
-                    printf("Wrote %d bytes into %s\n", wrote, tempFile);
-                    fileURL = std::string("file://") + tempFile;
+                    printf("Wrote %d bytes into %s\n", wrote, tempFile->c_str());
+                    fileURL = "file://" + Uri::encode(*tempFile);
                 }
                 else
                 {

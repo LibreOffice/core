@@ -21,76 +21,20 @@
 #include <Protocol.hpp>
 #include <RequestDetails.hpp>
 #include <SigUtil.hpp>
-#include <Storage.hpp>
-#include <common/JsonUtil.hpp>
 #include <wopi/StorageConnectionManager.hpp>
 
 #include <Poco/URI.h>
 
-#include <iterator>
-
 CollabFileProxy::CollabFileProxy(std::string id, const RequestDetails& requestDetails,
                                  const std::shared_ptr<StreamSocket>& socket,
-                                 const std::string& wopiSrc, const std::string& accessToken,
-                                 bool isUpload)
+                                 const std::string& wopiSrc, const std::string& accessToken)
     : _id(std::move(id))
     , _requestDetails(requestDetails)
     , _socket(socket)
     , _wopiSrc(wopiSrc)
     , _accessToken(accessToken)
-    , _isUpload(isUpload)
     , _logFD(socket->getFD())
 {
-}
-
-void CollabFileProxy::handleRequest(std::istream& message,
-                                    const std::shared_ptr<TerminatingPoll>& poll,
-                                    SocketDisposition& disposition)
-{
-    LOG_INF("CollabFileProxy: handling " << (_isUpload ? "upload" : "download")
-            << " request for WOPISrc [" << Anonymizer::anonymizeUrl(_wopiSrc) << ']');
-
-    std::shared_ptr<StreamSocket> socket = _socket.lock();
-    if (!socket)
-    {
-        LOG_ERR("CollabFileProxy: invalid socket for ["
-                << Anonymizer::anonymizeUrl(_wopiSrc) << ']');
-        return;
-    }
-
-    // Build the WOPI URI with access_token
-    Poco::URI wopiUri(_wopiSrc);
-    wopiUri.addQueryParameter("access_token", _accessToken);
-    const Poco::URI uriPublic = RequestDetails::sanitizeURI(wopiUri.toString());
-
-    // Validate storage type
-    const StorageBase::StorageType storageType =
-        StorageBase::validate(uriPublic, /*takeOwnership=*/false);
-
-    if (storageType != StorageBase::StorageType::Wopi)
-    {
-        LOG_ERR("CollabFileProxy: unsupported storage type for ["
-                << Anonymizer::anonymizeUrl(_wopiSrc) << ']');
-        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
-        return;
-    }
-
-    // Save upload body if this is an upload request
-    if (_isUpload && _requestDetails.isPost())
-    {
-        _uploadBody = std::string(std::istreambuf_iterator<char>(message), {});
-    }
-
-    // Transfer to poll and start CheckFileInfo
-    disposition.setTransfer(*poll,
-        [this, &poll, uriPublic](const std::shared_ptr<Socket>& moveSocket)
-        {
-            LOG_TRC('#' << moveSocket->getFD()
-                        << ": CollabFileProxy: starting CheckFileInfo for ["
-                        << Anonymizer::anonymizeUrl(_wopiSrc) << ']');
-
-            checkFileInfo(poll, uriPublic, HTTP_REDIRECTION_LIMIT);
-        });
 }
 
 void CollabFileProxy::handleFetchRequest(const std::string& streamUrl,
@@ -158,178 +102,6 @@ void CollabFileProxy::handleUploadRequest(const std::string& targetUrl, std::ist
 
             doUpload(poll, uri, _uploadBody);
         });
-}
-
-void CollabFileProxy::handleDirectRequest(std::istream& message,
-                                          Poco::JSON::Object::Ptr wopiInfo,
-                                          const std::shared_ptr<TerminatingPoll>& poll,
-                                          SocketDisposition& disposition)
-{
-    LOG_INF("CollabFileProxy: handling direct " << (_isUpload ? "upload" : "download")
-            << " request for WOPISrc [" << Anonymizer::anonymizeUrl(_wopiSrc) << ']');
-
-    std::shared_ptr<StreamSocket> socket = _socket.lock();
-    if (!socket)
-    {
-        LOG_ERR("CollabFileProxy: invalid socket for direct request");
-        return;
-    }
-
-    if (!wopiInfo)
-    {
-        LOG_ERR("CollabFileProxy: no WOPI info for direct request");
-        HttpHelper::sendErrorAndShutdown(http::StatusCode::InternalServerError, socket);
-        return;
-    }
-
-    // Check write permission for upload
-    if (_isUpload)
-    {
-        bool userCanWrite = false;
-        JsonUtil::findJSONValue(wopiInfo, "UserCanWrite", userCanWrite);
-        if (!userCanWrite)
-        {
-            LOG_ERR("CollabFileProxy: user cannot write to ["
-                    << Anonymizer::anonymizeUrl(_wopiSrc) << ']');
-            HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket);
-            return;
-        }
-    }
-
-    // Save upload body if this is an upload request
-    if (_isUpload && _requestDetails.isPost())
-    {
-        _uploadBody = std::string(std::istreambuf_iterator<char>(message), {});
-    }
-
-    // Build WOPI URL with access token
-    Poco::URI wopiUri(_wopiSrc);
-    wopiUri.addQueryParameter("access_token", _accessToken);
-    const Poco::URI baseUri = RequestDetails::sanitizeURI(wopiUri.toString());
-
-    // Transfer to poll and execute
-    disposition.setTransfer(*poll,
-        [this, poll, baseUri, wopiInfo, keepalive = shared_from_this()](
-            const std::shared_ptr<Socket>& moveSocket)
-        {
-            LOG_TRC('#' << moveSocket->getFD()
-                        << ": CollabFileProxy: executing direct request for ["
-                        << Anonymizer::anonymizeUrl(_wopiSrc) << ']');
-
-            if (!_isUpload)
-            {
-                // For downloads, check FileUrl first, then default to /contents
-                std::string fileUrl;
-                JsonUtil::findJSONValue(wopiInfo, "FileUrl", fileUrl);
-
-                if (!fileUrl.empty())
-                {
-                    try
-                    {
-                        LOG_INF("CollabFileProxy: GetFile using FileUrl: "
-                                << Anonymizer::anonymizeUrl(fileUrl));
-                        doDownload(poll, Poco::URI(fileUrl), HTTP_REDIRECTION_LIMIT);
-                        return;
-                    }
-                    catch (const std::exception& ex)
-                    {
-                        LOG_ERR("CollabFileProxy: FileUrl download failed: " << ex.what());
-                        // Fall through to default URL
-                    }
-                }
-
-                // Use default URL with /contents suffix
-                Poco::URI uriObject(baseUri);
-                uriObject.setPath(uriObject.getPath() + "/contents");
-                doDownload(poll, uriObject, HTTP_REDIRECTION_LIMIT);
-            }
-            else
-            {
-                // Upload to /contents
-                Poco::URI uriObject(baseUri);
-                uriObject.setPath(uriObject.getPath() + "/contents");
-                doUpload(poll, uriObject, _uploadBody);
-            }
-        });
-}
-
-void CollabFileProxy::checkFileInfo(const std::shared_ptr<TerminatingPoll>& poll,
-                                    const Poco::URI& uri, int redirectLimit)
-{
-    auto cfiContinuation = [this, poll, uri](CheckFileInfo& /* checkFileInfo */)
-    {
-        const std::string uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
-
-        std::shared_ptr<StreamSocket> socket = _socket.lock();
-        if (!socket)
-        {
-            LOG_ERR("CollabFileProxy: invalid socket during CheckFileInfo for ["
-                    << uriAnonym << ']');
-            return;
-        }
-
-        if (_checkFileInfo && _checkFileInfo->state() == CheckFileInfo::State::Pass &&
-            _checkFileInfo->wopiInfo())
-        {
-            Poco::JSON::Object::Ptr object = _checkFileInfo->wopiInfo();
-
-            // Check if user has write permission for upload
-            if (_isUpload)
-            {
-                bool userCanWrite = false;
-                JsonUtil::findJSONValue(object, "UserCanWrite", userCanWrite);
-                if (!userCanWrite)
-                {
-                    LOG_ERR("CollabFileProxy: user cannot write to ["
-                            << uriAnonym << ']');
-                    HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket);
-                    return;
-                }
-            }
-
-            // For downloads, check FileUrl first, then default to /contents
-            if (!_isUpload)
-            {
-                std::string fileUrl;
-                JsonUtil::findJSONValue(object, "FileUrl", fileUrl);
-
-                if (!fileUrl.empty())
-                {
-                    try
-                    {
-                        LOG_INF("CollabFileProxy: GetFile using FileUrl: "
-                                << Anonymizer::anonymizeUrl(fileUrl));
-                        doDownload(poll, Poco::URI(fileUrl), HTTP_REDIRECTION_LIMIT);
-                        return;
-                    }
-                    catch (const std::exception& ex)
-                    {
-                        LOG_ERR("CollabFileProxy: FileUrl download failed: " << ex.what());
-                        // Fall through to default URL
-                    }
-                }
-
-                // Use default URL with /contents suffix
-                Poco::URI uriObject(uri);
-                uriObject.setPath(uriObject.getPath() + "/contents");
-                doDownload(poll, uriObject, HTTP_REDIRECTION_LIMIT);
-            }
-            else
-            {
-                // Upload to /contents
-                Poco::URI uriObject(uri);
-                uriObject.setPath(uriObject.getPath() + "/contents");
-                doUpload(poll, uriObject, _uploadBody);
-            }
-            return;
-        }
-
-        LOG_ERR("CollabFileProxy: CheckFileInfo failed for [" << uriAnonym << ']');
-        HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, socket);
-    };
-
-    _checkFileInfo = std::make_shared<CheckFileInfo>(poll, uri, std::move(cfiContinuation));
-    _checkFileInfo->checkFileInfo(redirectLimit);
 }
 
 void CollabFileProxy::doDownload(const std::shared_ptr<TerminatingPoll>& poll,

@@ -628,6 +628,11 @@ class EMSCRIPTENAppInitializer extends MobileAppInitializer {
 		window.postMobileDebug   = function(msg) { console.log('COOL Debug: ' + msg); };
 
 		window.userInterfaceMode = 'notebookbar';
+
+		// Default to viewing-only mode unless the integrator says otherwise:
+		if (window.coolParams.get('startreadonly') === '') {
+			window.coolParams.set('startreadonly', 'true');
+		}
 	}
 }
 
@@ -2319,7 +2324,7 @@ function showWelcomeSVG() {
 						clearTimeout(timeoutId);
 						if (msg.url) {
 							global.app.console.log('Collab fetch URL: ' + msg.url);
-							resolve(msg.url);
+							resolve({url: msg.url, filename: msg.filename});
 						} else {
 							global.collabWs.close();
 							reject(new Error('Collab fetch response missing URL'));

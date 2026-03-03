@@ -67,6 +67,7 @@
 #endif
 #include <wsd/COOLWSDServer.hpp>
 #include <wsd/ClientRequestDispatcher.hpp>
+#include <wsd/CollabBroker.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/PlatformDesktop.hpp>
 #include <wsd/PlatformMobile.hpp>
@@ -2910,6 +2911,12 @@ void PrisonPoll::wakeupHook()
         COOLWSD::cleanupDocBrokers();
         SigUtil::checkForwardSigUsr2(forwardSigUsr2);
     }
+
+#if !MOBILEAPP
+    cleanupCollabBrokers();
+    cleanupCollabFetchRequests();
+    cleanupCollabUploadRequests();
+#endif
 }
 
 #if !MOBILEAPP

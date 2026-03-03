@@ -114,27 +114,30 @@ if (window.coolParams.get('starterMode')) {
 	}
 	return;
 }
-else if (window.coolParams.get('welcome'))
-	map.uiManager.initializeNonInteractiveUI();
-else
-	map.uiManager.initializeBasicUI();
 
-if (wopiSrc === '' && filePath === '' && !window.ThisIsAMobileApp) {
-	map.uiManager.showInfoModal('wrong-wopi-src-modal', '', errorMessages.wrongwopisrc, '', _('OK'), null, false);
-}
-if (host === '' && !window.ThisIsAMobileApp) {
-	map.uiManager.showInfoModal('empty-host-url-modal', '', errorMessages.emptyhosturl, '', _('OK'), null, false);
-}
+var initEmscriptenModule = function(docKind, docDescriptor) {
+	globalThis.Module = createEmscriptenModule(docKind, docDescriptor);
+	globalThis.Module.onRuntimeInitialized = function() {
+		map.loadDocument(global.socket);
+	};
+	createOnlineModule(globalThis.Module);
+};
+
+var initUI = function() {
+	if (window.coolParams.get('welcome'))
+		map.uiManager.initializeNonInteractiveUI();
+	else
+		map.uiManager.initializeBasicUI();
+
+	if (wopiSrc === '' && filePath === '' && !window.ThisIsAMobileApp) {
+		map.uiManager.showInfoModal('wrong-wopi-src-modal', '', errorMessages.wrongwopisrc, '', _('OK'), null, false);
+	}
+	if (host === '' && !window.ThisIsAMobileApp) {
+		map.uiManager.showInfoModal('empty-host-url-modal', '', errorMessages.emptyhosturl, '', _('OK'), null, false);
+	}
+};
 
 if (window.ThisIsTheEmscriptenApp) {
-	var initEmscriptenModule = function(docKind, docDescriptor) {
-		globalThis.Module = createEmscriptenModule(docKind, docDescriptor);
-		globalThis.Module.onRuntimeInitialized = function() {
-			map.loadDocument(global.socket);
-		};
-		createOnlineModule(globalThis.Module);
-	};
-
 	if (isWopi) {
 		// Use collab WebSocket endpoint to get a download URL
 		var docParamsString = $.param(docParams);
@@ -146,27 +149,39 @@ if (window.ThisIsTheEmscriptenApp) {
 		// with the file bytes, and we handle the token exchange and upload.
 		globalThis.collabSaveToServer = function(fileBytes) {
 			window.app.console.log('WASM: collabSaveToServer called with ' + fileBytes.length + ' bytes');
+			map.fire('showbusy', {label: _('Saving...')});
 			global.collabUploadFile(fullDocUrl, accessToken, fileBytes).then(function() {
 				window.app.console.log('WASM: save completed successfully');
+				map.fire('hidebusy');
 			}).catch(function(err) {
 				window.app.console.error('WASM: save failed: ' + err.message);
+				map.fire('hidebusy');
 			});
 		};
 
-		global.collabFetchFile(fullDocUrl, accessToken).then(function(downloadUrl) {
-			window.app.console.log('WASM: Using collab fetch URL: ' + downloadUrl);
-			initEmscriptenModule('collab', downloadUrl);
+		global.collabFetchFile(fullDocUrl, accessToken).then(function(result) {
+			window.app.console.log('WASM: Using collab fetch URL: ' + result.url);
+			if (result.filename) {
+				map['wopi'].BaseFileName = result.filename;
+				map['wopi'].BreadcrumbDocName = result.filename;
+				globalThis.collabFilename = result.filename;
+			}
+			initUI();
+			initEmscriptenModule('collab', result.url);
 		}).catch(function(err) {
 			window.app.console.error('WASM: Collab fetch failed: ' + err.message + ', falling back to direct fetch');
+			initUI();
 			// Fallback to old /wasm/ endpoint
 			var encodedWOPI = encodeURIComponent(fullDocUrl);
 			initEmscriptenModule('server', encodedWOPI);
 		});
 	} else {
+		initUI();
 		// Local file, use directly
 		initEmscriptenModule('local', docURL);
 	}
 } else {
+	initUI();
 	map.loadDocument(global.socket);
 }
 
