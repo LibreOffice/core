@@ -2251,6 +2251,18 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf155368)
     assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "wrapText", u"false");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest, testCombinedChartAxesCount)
+{
+    createScDoc("xls/forum-mso-de-37362.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pChart = parseExport(u"xl/charts/chart1.xml"_ustr);
+    CPPUNIT_ASSERT(pChart);
+
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:catAx", 2);
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:valAx", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

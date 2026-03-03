@@ -4326,22 +4326,33 @@ void ChartExport::exportDataPoints(
 
 void ChartExport::exportAxesId(bool bPrimaryAxes, bool bCheckCombinedAxes)
 {
-    sal_Int32 nAxisIdx, nAxisIdy;
-    bool bPrimaryAxisExists = false;
-    bool bSecondaryAxisExists = false;
-    // let's check which axis already exists and which axis is attached to the actual dataseries
-    if (maAxes.size() >= 2)
+    sal_Int32 nAxisIdx = -1, nAxisIdy = -1;
+    bool bCreateAxes = true;
+
+    // tdf#114181 keep axes of combined charts - search for existing pairs
+    if (bCheckCombinedAxes)
     {
-        bPrimaryAxisExists = bPrimaryAxes && maAxes[1].nAxisType == AXIS_PRIMARY_Y;
-        bSecondaryAxisExists = !bPrimaryAxes && maAxes[1].nAxisType == AXIS_SECONDARY_Y;
+        const AxesType eWantedX = bPrimaryAxes ? AXIS_PRIMARY_X : AXIS_SECONDARY_X;
+        const AxesType eWantedY = bPrimaryAxes ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
+
+        sal_Int32 nFoundX = -1, nFoundY = -1;
+        for (const auto& rAxis : maAxes)
+        {
+            if (rAxis.nAxisType == eWantedX)
+                nFoundX = rAxis.nAxisId;
+            else if (rAxis.nAxisType == eWantedY)
+                nFoundY = rAxis.nAxisId;
+        }
+
+        if (nFoundX != -1 && nFoundY != -1)
+        {
+            bCreateAxes = false;
+            nAxisIdx = nFoundX;
+            nAxisIdy = nFoundY;
+        }
     }
-    // tdf#114181 keep axes of combined charts
-    if ( bCheckCombinedAxes && ( bPrimaryAxisExists || bSecondaryAxisExists ) )
-    {
-        nAxisIdx = maAxes[0].nAxisId;
-        nAxisIdy = maAxes[1].nAxisId;
-    }
-    else
+
+    if (bCreateAxes)
     {
         nAxisIdx = lcl_generateRandomValue();
         nAxisIdy = lcl_generateRandomValue();
@@ -4350,6 +4361,7 @@ void ChartExport::exportAxesId(bool bPrimaryAxes, bool bCheckCombinedAxes)
         maAxes.emplace_back( eXAxis, nAxisIdx, nAxisIdy );
         maAxes.emplace_back( eYAxis, nAxisIdy, nAxisIdx );
     }
+
     FSHelperPtr pFS = GetFS();
     pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdx));
     pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdy));
