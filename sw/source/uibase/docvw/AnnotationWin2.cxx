@@ -970,6 +970,19 @@ void SwAnnotationWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     }
 }
 
+// tdf#170645 During a save the UI is disabled/insensitive so in GTK the
+// widget with focus will lose it, so restore that when enabled/sensitive
+void SwAnnotationWin::StateChanged(StateChangedType nStateChange)
+{
+    InterimItemWindow::StateChanged(nStateChange);
+    if (nStateChange == StateChangedType::Enable && IsEnabled()
+        && mrMgr.GetActiveSidebarWin() == this
+        && mxSidebarTextControl && !mxSidebarTextControl->HasFocus())
+    {
+        mxSidebarTextControl->GrabFocus();
+    }
+}
+
 void SwAnnotationWin::ShowNote()
 {
     SetPosAndSize();
