@@ -306,7 +306,7 @@ public:
 // just to make sure that those members of SmartArtDiagram& will
 // reference the correct - newly created - SmartArtDiagram.
 // That again would have been hard to keep under control due to
-// LayoutNodes hosting a full hierarchy of LayoutNodes in it's base
+// LayoutNodes hosting a full hierarchy of LayoutNodes in its base
 // class LayoutAtom, so complicated deep-copy and need of virtual Clone
 // method at LayoutAtom to do the right thing for all eight derivations
 // of it.
@@ -316,7 +316,7 @@ public:
 // used (in some ForEach manner) to create the shapes, so does not
 // need to be changed itself.
 // It gets now just additionally referenced by the SmartArtDiagram copy
-// costructor. That is for non-deep copy/paste where this copy operator
+// constructor. That is for non-deep copy/paste where this copy operator
 // is used.
 // For deep copy the SmartArtDiagram constructor with import from
 // boost::property_tree has to be used which will have to re-import
