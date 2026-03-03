@@ -52,17 +52,11 @@
 
 #include <svx/strarray.hxx>
 #include <svx/svxids.hrc>
-#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/eitem.hxx>
-#include <editeng/boxitem.hxx>
-#include <scitems.hxx>
-#include <globstr.hrc>
-#include <scresid.hxx>
-#include <document.hxx>
 #include <docsh.hxx>
 #include <sfx2/objsh.hxx>
 
