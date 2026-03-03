@@ -427,11 +427,10 @@ public:
             m_pSender->sendClosePopup(nWindowId);
     }
 
-    virtual void set_buildable_name(const OUString& rName) override
+    virtual void set_buildable_name(const OUString&) override
     {
-        SalInstanceWidget::set_buildable_name(rName);
-        assert(false); // we remember old name in GetLOKWeldWidgetsMap()
-        // TODO: implement renaming or avoid it for LOK
+        // we remember old name in GetLOKWeldWidgetsMap()
+        // Therefore, avoid renaming for LOK
     }
 };
 
