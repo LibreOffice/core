@@ -1,3 +1,5 @@
 Signature	FileName	MinVersion	MaxVersion	MinSize	MaxSize	MinDate	MaxDate	Languages
 s72	s255	S20	S20	I4	I4	I4	I4	S255
 Signature	Signature
+vcrt140x64	msvcp140.dll	14.29.30133.0						
+vcrt140x86	msvcp140.dll	14.29.30133.0						

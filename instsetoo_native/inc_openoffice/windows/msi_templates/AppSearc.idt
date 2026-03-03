@@ -2,4 +2,5 @@ Property	Signature_
 s72	s72
 AppSearch	Property	Signature_
 WINMAJORVER	WinMajorVer
-VCRUNTIMEINSTALLED	VCRuntimex64
+VCRUNTIMEINSTALLED	vcrt140x64
+VCRTX86INSTALLED	vcrt140x86

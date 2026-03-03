@@ -53,14 +53,14 @@ MergeModule WINDOWS_X86_MERGEMODULE
     Feature = gm_Root;
     Name = WINDOWS_X86_MERGEMODULE_FILE;
     RootDir = "TARGETDIR";
-    ComponentCondition = "VC_REDIST=1";
+    ComponentCondition = "VC_REDIST=1 AND NOT VCRTX86INSTALLED";
     Attributes_Add = "0x10";
 End
 
 #endif
 
 /* merge modules file for x64 contains the arm64 ones */
-#if (defined(WINDOWS_X64) || defined(WINDOWS_AARCH64)) && defined(WINDOWS_X64_MERGEMODULE)
+#if defined(WINDOWS_X64_MERGEMODULE)
 
 /* Attributes: msidbComponentAttributesPermanent = 0x10 */
 MergeModule WINDOWS_X64_MERGEMODULE
