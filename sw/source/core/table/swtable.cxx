@@ -2187,16 +2187,17 @@ void SwTableBox::ChgFrameFormat(SwTableBoxFormat* pNewFormat, bool bNeedToReregi
 
 // Return the name of this box. This is determined dynamically
 // resulting from the position in the lines/boxes/tables.
-void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm )
+OUString sw_GetTableBoxColStr(sal_uInt16 nCol)
 {
     const sal_uInt16 coDiff = 52;   // 'A'-'Z' 'a' - 'z'
 
+    OUString sName;
     do {
         const sal_uInt16 nCalc = nCol % coDiff;
         if( nCalc >= 26 )
-            rNm = OUStringChar( sal_Unicode('a' - 26 + nCalc) ) + rNm;
+            sName = OUStringChar(sal_Unicode('a' - 26 + nCalc)) + sName;
         else
-            rNm = OUStringChar( sal_Unicode('A' + nCalc) ) + rNm;
+            sName = OUStringChar(sal_Unicode('A' + nCalc)) + sName;
 
         nCol = nCol - nCalc;
         if( 0 == nCol )
@@ -2204,6 +2205,8 @@ void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm )
         nCol /= coDiff;
         --nCol;
     } while( true );
+
+    return sName;
 }
 
 Point SwTableBox::GetCoordinates() const
@@ -2260,7 +2263,7 @@ OUString SwTableBox::GetName() const
         if( nullptr != pBox )
             sNm = sTmp + "." + sNm;
         else
-            sw_GetTableBoxColStr( nPos, sNm );
+            sNm = sw_GetTableBoxColStr(nPos) + sNm;
 
     } while( pBox );
     return sNm;

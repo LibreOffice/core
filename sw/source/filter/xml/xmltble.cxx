@@ -312,8 +312,7 @@ static OUString lcl_xmltble_appendBoxPrefix(std::u16string_view rNamePrefix,
 {
     if( bTop )
     {
-        OUString sTmp;
-        sw_GetTableBoxColStr( o3tl::narrowing<sal_uInt16>(nCol), sTmp );
+        const OUString sTmp = sw_GetTableBoxColStr(o3tl::narrowing<sal_uInt16>(nCol));
         return OUString::Concat(rNamePrefix) + "." + sTmp + OUString::number(nRow + 1);
     }
     return OUString::Concat(rNamePrefix)
@@ -645,8 +644,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             {
                 if( bTop )
                 {
-                    OUString sTmp;
-                    sw_GetTableBoxColStr( nColumn, sTmp );
+                    const OUString sTmp = sw_GetTableBoxColStr(nColumn);
                     pColumn->SetStyleName( OUString::Concat(rNamePrefix) + "." + sTmp );
                 }
                 else

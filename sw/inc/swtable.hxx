@@ -57,7 +57,7 @@ struct Parm;
 class SwServerObject;
 class SwHistory;
 
-void sw_GetTableBoxColStr( sal_uInt16 nCol, OUString& rNm );
+OUString sw_GetTableBoxColStr(sal_uInt16 nCol);
 
 class SwTableLines
 {

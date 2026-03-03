@@ -493,8 +493,7 @@ OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 {
     if (nColumn < 0 || nRow < 0)
         return OUString();
-    OUString sCellName;
-    sw_GetTableBoxColStr( static_cast< sal_uInt16 >(nColumn), sCellName );
+    const OUString sCellName = sw_GetTableBoxColStr(static_cast<sal_uInt16>(nColumn));
     return sCellName + OUString::number( nRow + 1 );
 }
 
