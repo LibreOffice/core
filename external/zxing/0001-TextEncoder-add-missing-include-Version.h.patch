@@ -1,0 +1,30 @@
+From 475a022e0c85edfc58b525bb7debe40df455b380 Mon Sep 17 00:00:00 2001
+From: axxel <awagger@gmail.com>
+Date: Tue, 3 Mar 2026 13:23:16 +0100
+Subject: [PATCH] TextEncoder: add missing #include "Version.h"
+
+Fails to compile with -DZXING_READERS=OFF -DZXING_WRITERS=NEW and without
+precompiled headers.
+
+Thanks to @x1sc0 for reporting this (showed up in LibreOffice's own build
+system).
+---
+ core/src/TextEncoder.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/core/src/TextEncoder.cpp b/core/src/TextEncoder.cpp
+index 06dc524d..afcaef85 100644
+--- a/core/src/TextEncoder.cpp
++++ b/core/src/TextEncoder.cpp
+@@ -9,6 +9,8 @@
+ #include "ECI.h"
+ #include "Utf.h"
+ #include "ZXAlgorithms.h"
++#include "Version.h"
++
+ #ifdef ZXING_USE_ZINT
+ #include <zint.h>
+ #else
+-- 
+2.39.5
+

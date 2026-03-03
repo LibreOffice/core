@@ -27,8 +27,6 @@ $(eval $(call gb_StaticLibrary_set_include,zxing,\
 
 $(eval $(call gb_StaticLibrary_add_cxxflags,zxing,\
 	-DZXING_INTERNAL \
-	-DZXING_USE_ZINT \
-	-DZXING_WRITERS \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\

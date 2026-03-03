@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
 	external/zxing/cassert.patch \
 	external/zxing/0001-Silence-deprecated-declarations-warnings-on-Windows-.patch \
 	external/zxing/macOS14.patch \
+	external/zxing/0001-TextEncoder-add-missing-include-Version.h.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
