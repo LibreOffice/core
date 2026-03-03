@@ -542,9 +542,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf134817_HeaderFooterTextWith2SectionXL
     CPPUNIT_ASSERT(pDoc);
 
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddHeader",
-                       u"&L&\"Abadi,Regular\"&11aaa&\"Bembo,Regular\"&20bbb");
+                       u"&L&\"Abadi\"&11aaa&\"Bembo\"&20bbb");
     assertXPathContent(pDoc, "/x:worksheet/x:headerFooter/x:oddFooter",
-                       u"&R&\"Cambria,Regular\"&14camb&\"Dante,Regular\"&18dant");
+                       u"&R&\"Cambria\"&14camb&\"Dante\"&18dant");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf121718_UseFirstPageNumberXLSX)
