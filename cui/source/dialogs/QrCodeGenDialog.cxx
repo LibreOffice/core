@@ -210,12 +210,19 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
               m_xBuilder->weld_radio_button(u"button_medium"_ustr),
               m_xBuilder->weld_radio_button(u"button_quartile"_ustr),
               m_xBuilder->weld_radio_button(u"button_high"_ustr) }
+    , m_xLabelMargin(m_xBuilder->weld_label(u"label_margin"_ustr))
     , m_xSpinBorder(m_xBuilder->weld_spin_button(u"edit_margin"_ustr))
     , m_xComboType(m_xBuilder->weld_combo_box(u"choose_type"_ustr))
 #if ENABLE_ZXING
     , mpParent(pParent)
 #endif
 {
+#if ZXING_VERSION_MAJOR >= 3
+    // The new API simply does not allow to specify an arbitrary number of margin pixels.
+    m_xLabelMargin->hide();
+    m_xSpinBorder->hide();
+#endif
+
     m_xEdittext->set_size_request(m_xEdittext->get_approximate_digit_width() * 28,
                                   m_xEdittext->get_height_rows(6));
     if (!bEditExisting)
