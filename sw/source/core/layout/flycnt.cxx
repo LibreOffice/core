@@ -1140,6 +1140,9 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
     ::lcl_CalcDownDist( nUp, aNew, pUpFrame );
     SwDistance nDown = nUp;
     bool bNegAllowed = true;// Make it possible to leave the negative section once.
+    // if rNew is FAR_AWAY the up search will always fail and can be very long
+    // on large documents
+    const bool bNewFarAway = rNew.getX() == FAR_AWAY  && rNew.getY() == FAR_AWAY;
     do
     {
         pUpLst = pUpFrame; nUpLst = nUp;
@@ -1174,7 +1177,7 @@ const SwContentFrame *FindAnchor( const SwFrame *pOldAnch, const Point &rNew,
                 nUpLst = nUp;
             }
         }
-    } while (pUpFrame && ((bNegAllowed && nUp.m_nMain < 0) || (nUp <= nUpLst)));
+    } while (!bNewFarAway && pUpFrame && ((bNegAllowed && nUp.m_nMain < 0) || (nUp <= nUpLst)));
 
     const SwContentFrame *pDownLst;
     const SwContentFrame *pDownFrame = pCnt;
