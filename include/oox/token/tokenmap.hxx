@@ -25,6 +25,7 @@
 #include <string_view>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -34,7 +35,7 @@ namespace oox {
 namespace TokenMap
 {
 /** Returns the token identifier for a UTF8 string passed in pToken */
-sal_Int32 getTokenFromUtf8(std::string_view token);
+OOX_DLLPUBLIC sal_Int32 getTokenFromUtf8(std::string_view token);
 
 /** Returns the token identifier for the passed Unicode token name. */
 inline sal_Int32 getTokenFromUnicode(std::u16string_view rUnicodeName)
@@ -43,7 +44,7 @@ inline sal_Int32 getTokenFromUnicode(std::u16string_view rUnicodeName)
 }
 
 /** Returns the UTF8 name of the passed token identifier as byte sequence. */
-css::uno::Sequence<sal_Int8> const& getUtf8TokenName(sal_Int32 nToken);
+OOX_DLLPUBLIC css::uno::Sequence<sal_Int8> const& getUtf8TokenName(sal_Int32 nToken);
 
 /** Returns the name of the passed token identifier as OUString. */
 inline OUString getUnicodeTokenName(sal_Int32 nToken)

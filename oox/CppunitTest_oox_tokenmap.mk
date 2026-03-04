@@ -18,46 +18,10 @@ $(eval $(call gb_CppunitTest_use_custom_headers,oox_tokenmap,oox/generated))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,oox_tokenmap))
 
-$(eval $(call gb_CppunitTest_use_library_objects,oox_tokenmap,oox))
-
-ifeq ($(TLS),OPENSSL)
-$(eval $(call gb_CppunitTest_use_externals,oox_tokenmap,\
-	openssl \
-	openssl_headers \
-))
-else
-ifeq ($(TLS),NSS)
-$(eval $(call gb_CppunitTest_use_externals,oox_tokenmap,\
-       plc4 \
-       nss3 \
-))
-endif
-endif
-
 $(eval $(call gb_CppunitTest_use_libraries,oox_tokenmap,\
-    $(call gb_Helper_optional,AVMEDIA,avmedia) \
-    basegfx \
-    comphelper \
     cppu \
-    cppuhelper \
-    docmodel \
-    editeng \
-    drawinglayer \
-    msfilter \
+    oox \
     sal \
-    i18nlangtag \
-    sax \
-    sfx \
-    svl \
-    svt \
-    svx \
-    svxcore \
-    sot \
-    tl \
-    utl \
-    vcl \
-    xo \
-    xmlscript \
 ))
 
 # vim: set noet sw=4 ts=4:
