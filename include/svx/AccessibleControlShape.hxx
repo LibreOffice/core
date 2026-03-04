@@ -83,9 +83,6 @@ private:
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
 
-    //---  XServiceInfo  ---------------------------------------
-    virtual OUString SAL_CALL getImplementationName( ) override;
-
     //---  XInterface  -----------------------------------------
     DECLARE_XINTERFACE( )
 

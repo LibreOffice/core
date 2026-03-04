@@ -275,11 +275,6 @@ void SAL_CALL AccessibleControlShape::grabFocus()
     }
 }
 
-OUString SAL_CALL AccessibleControlShape::getImplementationName()
-{
-    return u"com.sun.star.comp.accessibility.AccessibleControlShape"_ustr;
-}
-
 OUString AccessibleControlShape::CreateAccessibleBaseName()
 {
     OUString sName;
