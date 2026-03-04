@@ -99,8 +99,7 @@ OUString SAL_CALL AccessibleIconChoiceCtrl::getImplementationName()
 
 Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrl::getSupportedServiceNames()
 {
-    return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
-            u"com.sun.star.awt.AccessibleIconChoiceControl"_ustr};
+    return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 
 // XAccessibleContext
