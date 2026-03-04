@@ -204,13 +204,13 @@ void SwFrame::CheckDirChange()
         if ( IsCellFrame() && GetUpper() )
         {
             if ( IsVertical() != GetUpper()->IsVertical() &&
-                 static_cast<SwCellFrame*>(this)->GetTabBox()->getRowSpan() == 1 )
+                 static_cast<SwCellFrame*>(this)->GetTabBox().getRowSpan() == 1 )
             {
                 enum {
                     MIN_VERT_CELL_HEIGHT = 1135
                 };
 
-                SwTableLine* pLine = const_cast<SwTableLine*>(static_cast<SwCellFrame*>(this)->GetTabBox()->GetUpper());
+                SwTableLine* pLine = const_cast<SwTableLine*>(static_cast<SwCellFrame*>(this)->GetTabBox().GetUpper());
                 SwFrameFormat* pFrameFormat = pLine->GetFrameFormat();
                 SwFormatFrameSize aNew( pFrameFormat->GetFrameSize() );
                 if ( SwFrameSize::Fixed != aNew.GetHeightSizeType() )
@@ -602,7 +602,7 @@ SwRect SwFrame::GetPaintArea() const
     {
         if( pTmp->IsCellFrame() && pTmp->GetUpper() &&
             pTmp->GetUpper()->IsVertical() != pTmp->IsVertical() )
-            nRowSpan = static_cast<const SwCellFrame*>(pTmp)->GetTabBox()->getRowSpan();
+            nRowSpan = static_cast<const SwCellFrame*>(pTmp)->GetTabBox().getRowSpan();
         tools::Long nTmpRight = aRectFnSet.GetRight(pTmp->getFrameArea());
         tools::Long nTmpLeft = aRectFnSet.GetLeft(pTmp->getFrameArea());
         if( pTmp->IsRowFrame() && nRowSpan > 1 )

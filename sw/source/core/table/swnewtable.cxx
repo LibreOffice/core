@@ -593,7 +593,7 @@ static void lcl_InvalidateCellFrame( const SwTableBox& rBox )
     SwIterator<SwCellFrame,SwFormat> aIter( *rBox.GetFrameFormat() );
     for( SwCellFrame* pCell = aIter.First(); pCell; pCell = aIter.Next() )
     {
-        if( pCell->GetTabBox() == &rBox )
+        if (&pCell->GetTabBox() == &rBox)
         {
             pCell->InvalidateSize();
             SwFrame* pLower = pCell->GetLower();

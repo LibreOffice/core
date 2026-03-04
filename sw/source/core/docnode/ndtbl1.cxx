@@ -918,14 +918,14 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                     aBox.SetDistance( pSetBox->GetDistance( k ), k );
             }
 
-            SwTableBox *pBox = const_cast<SwTableBox*>(pCell->GetTabBox());
-            SwFrameFormat *pNewFormat = SwTableFormatCmp::FindNewFormat( aFormatCmp, pBox->GetFrameFormat(), nType );
+            SwTableBox& rBox = const_cast<SwTableBox&>(pCell->GetTabBox());
+            SwFrameFormat* pNewFormat = SwTableFormatCmp::FindNewFormat(aFormatCmp, rBox.GetFrameFormat(), nType);
             if ( nullptr != pNewFormat )
-                pBox->ChgFrameFormat( static_cast<SwTableBoxFormat*>(pNewFormat) );
+                rBox.ChgFrameFormat(static_cast<SwTableBoxFormat*>(pNewFormat));
             else
             {
-                SwFrameFormat *pOld = pBox->GetFrameFormat();
-                SwFrameFormat *pNew = pBox->ClaimFrameFormat();
+                SwFrameFormat* pOld = rBox.GetFrameFormat();
+                SwFrameFormat* pNew = rBox.ClaimFrameFormat();
                 pNew->SetFormatAttr( aBox );
                 aFormatCmp.push_back(std::make_unique<SwTableFormatCmp>(pOld, pNew, nType));
             }
@@ -1008,7 +1008,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
             if ( pTab->IsFollow() && pTab->IsInHeadline( *pCell ) )
                 continue;
 
-            const_cast<SwTableBox*>(pCell->GetTabBox())->ClaimFrameFormat();
+            const_cast<SwTableBox&>(pCell->GetTabBox()).ClaimFrameFormat();
             SwFrameFormat *pFormat = pCell->GetFormat();
             std::unique_ptr<SvxBoxItem> aBox(pFormat->GetBox().Clone());
 

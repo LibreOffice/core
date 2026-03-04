@@ -57,9 +57,9 @@ bool SwAccessibleCell::IsSelected()
     {
         if( pCSh->IsTableMode() )
         {
-            const SwTableBox* pBox = GetCellFrame().GetTabBox();
+            const SwTableBox& rBox = GetCellFrame().GetTabBox();
             SwSelBoxes const& rBoxes(pCSh->GetTableCursor()->GetSelectedBoxes());
-            bRet = rBoxes.find(pBox) != rBoxes.end();
+            bRet = rBoxes.find(&rBox) != rBoxes.end();
         }
     }
 
@@ -96,7 +96,7 @@ SwAccessibleCell::SwAccessibleCell(std::shared_ptr<SwAccessibleMap> const& pInit
     , m_aSelectionHelper( *this )
     , m_bIsSelected( false )
 {
-    OUString sBoxName( pCellFrame->GetTabBox()->GetName() );
+    OUString sBoxName(pCellFrame->GetTabBox().GetName());
     SetName( sBoxName );
 
     m_bIsSelected = IsSelected();
@@ -255,7 +255,7 @@ const SwCellFrame& SwAccessibleCell::GetCellFrame() const
 
 SwFrameFormat* SwAccessibleCell::GetTableBoxFormat() const
 {
-    return GetCellFrame().GetTabBox()->GetFrameFormat();
+    return GetCellFrame().GetTabBox().GetFrameFormat();
 }
 
 //Implement TableCell currentValue

@@ -2809,7 +2809,7 @@ SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, boo
                         if ( pThisCell->GetLayoutRowSpan() > 1 )
                         {
                             SwCellFrame& rEndCell = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( false ));
-                            if ( -1 == rEndCell.GetTabBox()->getRowSpan() )
+                            if ( -1 == rEndCell.GetTabBox().getRowSpan() )
                                 pToGrow = rEndCell.GetUpper();
                             else
                             {

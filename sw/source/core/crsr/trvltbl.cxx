@@ -216,9 +216,9 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
         else
         {
             // will become point of table cursor
-            pStart = aCells[bVert ? 0 : (bRow ? 2 : 1)]->GetTabBox();
+            pStart = &aCells[bVert ? 0 : (bRow ? 2 : 1)]->GetTabBox();
             // will become mark of table cursor
-            pEnd = aCells[bVert ? 3 : (bRow ? 1 : 2)]->GetTabBox();
+            pEnd = &aCells[bVert ? 3 : (bRow ? 1 : 2)]->GetTabBox();
         }
     }
 
@@ -761,7 +761,7 @@ OUString SwCursorShell::GetBoxNms() const
         if( !pFrame )
             return sNm;
 
-        sNm = static_cast<SwCellFrame*>(pFrame)->GetTabBox()->GetName() + ":";
+        sNm = static_cast<SwCellFrame*>(pFrame)->GetTabBox().GetName() + ":";
         pPos = m_pTableCursor->End();
     }
     else
@@ -782,7 +782,7 @@ OUString SwCursorShell::GetBoxNms() const
         } while ( pFrame && !pFrame->IsCellFrame() );
 
         if( pFrame )
-            sNm += static_cast<SwCellFrame*>(pFrame)->GetTabBox()->GetName();
+            sNm += static_cast<SwCellFrame*>(pFrame)->GetTabBox().GetName();
     }
     return sNm;
 }

@@ -541,7 +541,7 @@ static OUString lcl_CellText(const SwCellFrame* pFrame)
     OUString result;
     int n = 0;
 
-    const SwStartNode* pStartNode = pFrame->GetTabBox()->GetSttNd();
+    const SwStartNode* pStartNode = pFrame->GetTabBox().GetSttNd();
     const SwEndNode* pEndNode = pStartNode->EndOfSectionNode();
     const SwNodes& nodes = pStartNode->GetNodes();
 
@@ -567,7 +567,7 @@ static OUString lcl_CellText(const SwCellFrame* pFrame)
 
 static OString lcl_CellInfo(const SwCellFrame* pFrame)
 {
-    const OUString text = "CellInfo: " + pFrame->GetTabBox()->GetName() + " Text: " + lcl_CellText(pFrame);
+    const OUString text = "CellInfo: " + pFrame->GetTabBox().GetName() + " Text: " + lcl_CellText(pFrame);
     return OUStringToOString(text, RTL_TEXTENCODING_ASCII_US);
 }
 

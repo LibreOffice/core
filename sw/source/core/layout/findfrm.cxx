@@ -1843,7 +1843,7 @@ SwCellFrame* SwCellFrame::GetPreviousCell() const
                 SwRowFrame* pMasterRow = static_cast<SwRowFrame*>(pMaster->GetLastLower());
                 if ( pMasterRow )
                     pRet = lcl_FindCorrespondingCellFrame( *static_cast<const SwRowFrame*>(pRow), *this, *pMasterRow, false );
-                if ( pRet && pRet->GetTabBox()->getRowSpan() < 1 )
+                if (pRet && pRet->GetTabBox().getRowSpan() < 1)
                     pRet = &const_cast<SwCellFrame&>(pRet->FindStartEndOfRowSpanCell( true ));
             }
         }
@@ -1861,7 +1861,7 @@ const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart ) const
         return *this;
 
     OSL_ENSURE( pTableFrame &&
-            (  (bStart && GetTabBox()->getRowSpan() < 1) ||
+            (  (bStart && GetTabBox().getRowSpan() < 1) ||
               (!bStart && GetLayoutRowSpan() > 1) ),
             "SwCellFrame::FindStartRowSpanCell: No rowspan, no table, no cookies" );
 
@@ -1898,14 +1898,14 @@ const SwCellFrame& SwCellFrame::FindStartEndOfRowSpanCell( bool bStart ) const
         // is set) we assure that we find a rMasterBox that has a SwCellFrame in
         // the current table frame:
         const SwTableBox& rMasterBox = bStart ?
-                                       GetTabBox()->FindStartOfRowSpan( *pTable, nMax ) :
-                                       GetTabBox()->FindEndOfRowSpan( *pTable, nMax );
+                                       GetTabBox().FindStartOfRowSpan(*pTable, nMax) :
+                                       GetTabBox().FindEndOfRowSpan(*pTable, nMax);
 
         SwIterator<SwCellFrame,SwFormat> aIter( *rMasterBox.GetFrameFormat() );
 
         for ( SwCellFrame* pMasterCell = aIter.First(); pMasterCell; pMasterCell = aIter.Next() )
         {
-            if ( pMasterCell->GetTabBox() == &rMasterBox )
+            if (&pMasterCell->GetTabBox() == &rMasterBox)
             {
                 const SwTabFrame* pMasterTable = static_cast<const SwTabFrame*>(pMasterCell->GetUpper()->GetUpper());
 

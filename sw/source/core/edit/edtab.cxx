@@ -313,8 +313,8 @@ bool SwEditShell::GetTableBoxFormulaAttrs( SfxItemSet& rSet ) const
 
         if (pFrame)
         {
-            auto pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
-            aBoxes.insert(pBox);
+            SwTableBox& rBox = const_cast<SwTableBox&>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
+            aBoxes.insert(&rBox);
         }
     }
 
@@ -351,8 +351,8 @@ void SwEditShell::SetTableBoxFormulaAttrs( const SfxItemSet& rSet )
             } while ( pFrame && !pFrame->IsCellFrame() );
             if ( pFrame )
             {
-                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
-                aBoxes.insert( pBox );
+                SwTableBox& rBox = const_cast<SwTableBox&>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
+                aBoxes.insert(&rBox);
             }
         } while( false );
     }
@@ -383,7 +383,7 @@ bool SwEditShell::IsTableBoxTextFormat() const
             pFrame = pFrame->GetUpper();
         } while ( pFrame && !pFrame->IsCellFrame() );
         if ( pFrame )
-            pBox = static_cast<SwCellFrame*>(pFrame)->GetTabBox();
+            pBox = &static_cast<SwCellFrame*>(pFrame)->GetTabBox();
     }
 
     if( !pBox )
@@ -421,7 +421,7 @@ OUString SwEditShell::GetTableBoxText() const
                 pFrame = pFrame->GetUpper();
             } while ( pFrame && !pFrame->IsCellFrame() );
             if ( pFrame )
-                pBox = static_cast<SwCellFrame*>(pFrame)->GetTabBox();
+                pBox = &static_cast<SwCellFrame*>(pFrame)->GetTabBox();
         }
 
         SwNodeOffset nNd;

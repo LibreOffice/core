@@ -1425,7 +1425,7 @@ SwTableBox* SwTable::GetTableBox( SwNodeOffset nSttIdx )
         while ( pFrame && !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();
         if ( pFrame )
-            pRet = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
+            pRet = &const_cast<SwTableBox&>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
     }
 
     // In case the layout doesn't exist yet or anything else goes wrong.
@@ -2159,7 +2159,7 @@ SwTableBoxFormat* SwTableBox::ClaimFrameFormat()
             // re-register SwCellFrame objects that know me
             SwIterator<SwCellFrame,SwFormat> aFrameIter( *pRet );
             for( SwCellFrame* pCell = aFrameIter.First(); pCell; pCell = aFrameIter.Next() )
-                if( pCell->GetTabBox() == this )
+                if (&pCell->GetTabBox() == this)
                     pCell->RegisterToFormat( *pNewFormat );
 
             // re-register myself
@@ -3179,8 +3179,8 @@ const SwCellFrame * SwTableCellInfo::Impl::getNextTableBoxsCellFrame(const SwFra
     while ((pFrame = getNextCellFrame(pFrame)) != nullptr)
     {
         const SwCellFrame * pCellFrame = static_cast<const SwCellFrame *>(pFrame);
-        const SwTableBox * pTabBox = pCellFrame->GetTabBox();
-        auto aIt = m_HandledTableBoxes.insert(pTabBox);
+        const SwTableBox& rTabBox = pCellFrame->GetTabBox();
+        auto aIt = m_HandledTableBoxes.insert(&rTabBox);
         if (aIt.second)
         {
             pResult = pCellFrame;
@@ -3239,7 +3239,7 @@ const SwTableBox * SwTableCellInfo::getTableBox() const
     const SwTableBox * pRet = nullptr;
 
     if (getCellFrame() != nullptr)
-        pRet = getCellFrame()->GetTabBox();
+        pRet = &getCellFrame()->GetTabBox();
 
     return pRet;
 }

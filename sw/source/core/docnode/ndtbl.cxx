@@ -2686,7 +2686,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
         return;
 
     SwTabFrame *pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
-    const SwTableBox* pBox = pBoxFrame->GetTabBox();
+    const SwTableBox& rBox = pBoxFrame->GetTabBox();
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
     SwRectFnSet aRectFnSet(*pTab);
@@ -2701,7 +2701,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     rFill.SetRight   ( aRectFnSet.GetRight(pTab->getFramePrintArea()));
     rFill.SetRightMax( nRightMax - nLeftMin );
 
-    pTab->GetTable()->GetTabCols( rFill, pBox );
+    pTab->GetTable()->GetTabCols(rFill, &rBox);
 }
 
 // Here are some little helpers used in SwDoc::GetTabRows
@@ -2726,7 +2726,7 @@ static bool lcl_IsFrameInColumn( const SwCellFrame& rFrame, SwSelBoxes const & r
 {
     for (size_t i = 0; i < rBoxes.size(); ++i)
     {
-        if ( rFrame.GetTabBox() == rBoxes[ i ] )
+        if (&rFrame.GetTabBox() == rBoxes[i])
             return true;
     }
 
@@ -2877,7 +2877,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     if( pBoxFrame )
     {
         pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
-        pBox = pBoxFrame->GetTabBox();
+        pBox = &pBoxFrame->GetTabBox();
     }
     else
     {
@@ -3013,12 +3013,12 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
 
                             if ( pContent && pContent->IsTextFrame() )
                             {
-                                const SwTableBox* pBox = static_cast<const SwCellFrame*>(pFrame)->GetTabBox();
-                                const sal_Int32 nRowSpan = pBox->getRowSpan();
+                                const SwTableBox& rBox = static_cast<const SwCellFrame*>(pFrame)->GetTabBox();
+                                const sal_Int32 nRowSpan = rBox.getRowSpan();
                                 if( nRowSpan > 0 ) // Not overlapped
                                     pTextFrame = static_cast<const SwTextFrame*>(pContent);
                                 if( nRowSpan < 2 ) // Not overlapping for row height
-                                    pLine = pBox->GetUpper();
+                                    pLine = rBox.GetUpper();
                                 if( pLine && pTextFrame ) // always for old table model
                                 {
                                     // The new row height must not to be calculated from an overlapping box

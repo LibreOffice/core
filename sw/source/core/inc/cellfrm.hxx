@@ -46,7 +46,7 @@ public:
     // #i103961#
     virtual void Cut() override;
 
-    const SwTableBox* GetTabBox() const { return &m_rTabBox; }
+    const SwTableBox& GetTabBox() const { return m_rTabBox; }
 
     // used for breaking table rows:
     SwCellFrame* GetFollowCell() const;

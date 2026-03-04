@@ -215,8 +215,8 @@ void SwAccessibleTableData_Impl::GetSelection(
                 OSL_ENSURE( pLower->IsCellFrame(), "lower is not a cell frame" );
                 const SwCellFrame *pCFrame =
                         static_cast < const SwCellFrame * >( pLower );
-                const SwTableBox* pBox = pCFrame->GetTabBox();
-                if( rSelBoxes.find( pBox ) == rSelBoxes.end() )
+                const SwTableBox& rBox = pCFrame->GetTabBox();
+                if (rSelBoxes.find(&rBox) == rSelBoxes.end())
                 {
                     const Int32Set_Impl rRowsOrCols =
                         bColumns ? maColumns : maRows;
@@ -510,7 +510,7 @@ const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int64 nChildIndex ) const
         {
             const SwCellFrame* pCellFrame =
                 static_cast<const SwCellFrame*>( pChildFrame );
-            pBox = pCellFrame->GetTabBox();
+            pBox = &pCellFrame->GetTabBox();
         }
     }
 
@@ -960,8 +960,8 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
         if( pSelBoxes )
         {
             const SwCellFrame *pCFrame = static_cast < const SwCellFrame * >( pFrame );
-            const SwTableBox* pBox = pCFrame->GetTabBox();
-            bRet = pSelBoxes->find( pBox ) != pSelBoxes->end();
+            const SwTableBox& rBox = pCFrame->GetTabBox();
+            bRet = pSelBoxes->find(&rBox) != pSelBoxes->end();
         }
     }
 

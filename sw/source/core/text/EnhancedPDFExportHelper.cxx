@@ -370,7 +370,7 @@ void const* lcl_GetKeyFromFrame( const SwFrame& rFrame )
     {
         const SwTabFrame* pTabFrame = rFrame.FindTabFrame();
         const SwTable* pTable = pTabFrame->GetTable();
-        pKey = static_cast<void const *>(& static_cast<const SwCellFrame&>(rFrame).GetTabBox()->FindStartOfRowSpan(*pTable));
+        pKey = static_cast<void const *>(& static_cast<const SwCellFrame&>(rFrame).GetTabBox().FindStartOfRowSpan(*pTable));
     }
     else if (rFrame.IsFootnoteFrame())
     {
@@ -984,7 +984,7 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
             if ( pFrame->IsCellFrame() )
             {
                 const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(pFrame);
-                nVal =  pThisCell->GetTabBox()->getRowSpan();
+                nVal =  pThisCell->GetTabBox().getRowSpan();
                 if ( nVal > 1 )
                     mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::RowSpan, nVal );
 

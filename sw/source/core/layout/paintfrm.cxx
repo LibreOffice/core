@@ -2399,7 +2399,7 @@ void SwTabFramePainter::HandleFrame(const SwLayoutFrame& rLayoutFrame, const SwR
     {
         const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(&rLayoutFrame);
         const SwRowFrame* pRowFrame = static_cast<const SwRowFrame*>(pThisCell->GetUpper());
-        const tools::Long nRowSpan = pThisCell->GetTabBox()->getRowSpan();
+        const tools::Long nRowSpan = pThisCell->GetTabBox().getRowSpan();
         if ( !pRowFrame->IsRowSpanLine() || nRowSpan > 1 || nRowSpan < -1 )
         {
             SwBorderAttrAccess aAccess( SwFrame::GetCache(), &rLayoutFrame );
@@ -2824,7 +2824,7 @@ static bool lcl_IsLastVisibleCellBeforeHiddenCellAtTheEndOfRow(
         && rBoxItem.GetLeft()
         // last visible table cell isn't equal to the last cell:
         // there are invisible deleted cells in Hide Changes mode
-        && pThisRowFrame->GetTabLine()->GetTabBoxes().back() != pThisCell->GetTabBox();
+        && pThisRowFrame->GetTabLine()->GetTabBoxes().back() != &pThisCell->GetTabBox();
 }
 
 void SwTabFramePainter::InsertFollowTopBorder(const SwFrame& rFrame, const SvxBoxItem& rBoxItem,
@@ -6906,7 +6906,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     }
     else if ( IsCellFrame() && !bHideTableRedlines )
     {
-        RedlineType eType = static_cast<const SwCellFrame*>(this)->GetTabBox()->GetRedlineType();
+        RedlineType eType = static_cast<const SwCellFrame*>(this)->GetTabBox().GetRedlineType();
         if ( RedlineType::Delete == eType || RedlineType::Insert == eType )
         {
             pCol = RedlineType::Delete == eType ? COL_AUTHOR_TABLE_DEL : COL_AUTHOR_TABLE_INS;

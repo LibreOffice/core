@@ -2034,9 +2034,9 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
                             (bReadOnlyAvailable ||
                              !pCell->GetFormat()->GetProtect().IsContentProtected()))
                         {
-                            SwTableBox* pInsBox = const_cast<SwTableBox*>(
+                            SwTableBox& rInsBox = const_cast<SwTableBox&>(
                                 static_cast<const SwCellFrame*>(pCell)->GetTabBox());
-                            aNew.insert( pInsBox );
+                            aNew.insert(&rInsBox);
                         }
                         if ( pCell->GetNext() )
                         {
@@ -2580,7 +2580,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
         //Now the frames between, if there are any
         bool const bBody = pStartFrame->IsInDocBody();
         const SwTableBox* pCellBox = pStartFrame->GetUpper()->IsCellFrame() ?
-            static_cast<const SwCellFrame*>(pStartFrame->GetUpper())->GetTabBox() : nullptr;
+            &static_cast<const SwCellFrame*>(pStartFrame->GetUpper())->GetTabBox() : nullptr;
         assert(pSh);
         if (pSh->IsSelectAll())
             pCellBox = nullptr;
@@ -2605,7 +2605,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
             // If pStartFrame is inside a SwCellFrame, consider only frames which are inside the
             // same cell frame (or its follow cell)
             const SwTableBox* pTmpCellBox = pContent->GetUpper()->IsCellFrame() ?
-                static_cast<const SwCellFrame*>(pContent->GetUpper())->GetTabBox() : nullptr;
+                &static_cast<const SwCellFrame*>(pContent->GetUpper())->GetTabBox() : nullptr;
             if (pSh->IsSelectAll())
                 pTmpCellBox = nullptr;
             if ( bBody == pContent->IsInDocBody() &&

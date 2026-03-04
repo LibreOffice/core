@@ -314,12 +314,12 @@ void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
                         OSL_ENSURE( pCell->IsCellFrame(), "Frame without Cell" );
                         if( ::IsFrameInTableSel( pUnion->GetUnion(), pCell ) )
                         {
-                            SwTableBox* pBox = const_cast<SwTableBox*>(
+                            SwTableBox& rBox = const_cast<SwTableBox&>(
                                 static_cast<const SwCellFrame*>(pCell)->GetTabBox());
                             // check for cell protection??
                             if( !bChkProtected ||
-                                !pBox->GetFrameFormat()->GetProtect().IsContentProtected() )
-                                rBoxes.insert( pBox );
+                                !rBox.GetFrameFormat()->GetProtect().IsContentProtected() )
+                                rBoxes.insert(&rBox);
 
                             if ( pCells )
                             {
@@ -739,7 +739,7 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
                         sal_uInt16 nWhichId = 0;
                         for( size_t n = rBoxes.size(); n; )
                         {
-                            nWhichId = rBoxes[ --n ]->GetTabBox()->IsFormulaOrValueBox();
+                            nWhichId = rBoxes[ --n ]->GetTabBox().IsFormulaOrValueBox();
                             if( USHRT_MAX != nWhichId )
                                 break;
                         }
@@ -810,7 +810,7 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
                             for( size_t n = rBoxes.size(); n; )
                             {
                                 nWhichId = rBoxes[ --n ]
-                                    ->GetTabBox()->IsFormulaOrValueBox();
+                                    ->GetTabBox().IsFormulaOrValueBox();
                                 if( USHRT_MAX != nWhichId )
                                     break;
                             }
@@ -990,7 +990,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     if( rUnion.Top() <= pCell->getFrameArea().Top() &&
                         rUnion.Bottom() >= pCell->getFrameArea().Bottom() )
                     {
-                        SwTableBox* pBox = const_cast<SwTableBox*>(static_cast<const SwCellFrame*>(pCell)->GetTabBox());
+                        SwTableBox* pBox = &const_cast<SwTableBox&>(static_cast<const SwCellFrame*>(pCell)->GetTabBox());
 
                         // only overlap to the right?
                         if( ( rUnion.Left() - COLFUZZY ) <= pCell->getFrameArea().Left() &&
@@ -1583,8 +1583,7 @@ static void lcl_FindStartEndRow( const SwLayoutFrame *&rpStart,
                 if( n )
                 {
                     const SwCellFrame* pCellFrame = static_cast<const SwCellFrame*>(aSttArr[ n-1 ]);
-                    const SwTableLines& rLns = pCellFrame->
-                                                GetTabBox()->GetTabLines();
+                    const SwTableLines& rLns = pCellFrame->GetTabBox().GetTabLines();
                     if( rLns[ 0 ] == static_cast<const SwRowFrame*>(aSttArr[ n ])->GetTabLine() &&
                         rLns[ rLns.size() - 1 ] ==
                                     static_cast<const SwRowFrame*>(aEndArr[ n ])->GetTabLine() )

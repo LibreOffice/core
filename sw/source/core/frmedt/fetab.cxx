@@ -762,7 +762,7 @@ void SwFEShell::GetTabCols_(SwTabCols &rToFill, const SwFrame *pBox) const
                 if (m_pColumnCache->pLastCellFrame != pBox)
                 {
                     pTab->GetTable()->GetTabCols( *m_pColumnCache->pLastCols,
-                                        static_cast<const SwCellFrame*>(pBox)->GetTabBox(), true);
+                                        &static_cast<const SwCellFrame*>(pBox)->GetTabBox(), true);
                     m_pColumnCache->pLastCellFrame = pBox;
                 }
                 rToFill = *m_pColumnCache->pLastCols;
@@ -1153,8 +1153,8 @@ void SwFEShell::UnProtectCells()
         } while ( pFrame && !pFrame->IsCellFrame() );
         if( pFrame )
         {
-            SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
-            aBoxes.insert( pBox );
+            SwTableBox& rBox = const_cast<SwTableBox&>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
+            aBoxes.insert(&rBox);
         }
     }
 
@@ -1197,8 +1197,8 @@ bool SwFEShell::CanUnProtectCells() const
             } while ( pFrame && !pFrame->IsCellFrame() );
             if( pFrame )
             {
-                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
-                aBoxes.insert( pBox );
+                SwTableBox& rBox = const_cast<SwTableBox&>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
+                aBoxes.insert(&rBox);
             }
         }
         if( !aBoxes.empty() )
@@ -1367,8 +1367,8 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
         if (!pFrame)
             return false;
 
-        SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
-        aBoxes.insert( pBox );
+        SwTableBox& rBox = const_cast<SwTableBox&>(static_cast<SwCellFrame*>(pFrame)->GetTabBox());
+        aBoxes.insert(&rBox);
     }
 
     for (SwTableBox *pBox : aBoxes)
@@ -1533,7 +1533,7 @@ bool SwFEShell::DeleteTableSel()
         // position they'll be set to the old position
         while( !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();
-        ParkCursor( *static_cast<SwCellFrame*>(pFrame)->GetTabBox()->GetSttNd() );
+        ParkCursor(*static_cast<SwCellFrame*>(pFrame)->GetTabBox().GetSttNd());
 
         bRet = GetDoc()->DeleteRowCol( aBoxes );
 
@@ -2029,8 +2029,8 @@ bool SwFEShell::SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDr
                 pFrame = static_cast<const SwCellFrame*>( static_cast<const SwLayoutFrame*>( pLower )->Lower() );
                 pLower = pFrame ? pFrame->Lower() : nullptr;
             }
-            if( pFrame && pFrame->GetTabBox()->GetSttNd() &&
-                pFrame->GetTabBox()->GetSttNd()->IsInProtectSect() )
+            if( pFrame && pFrame->GetTabBox().GetSttNd() &&
+                pFrame->GetTabBox().GetSttNd()->IsInProtectSect() )
                 pFrame = nullptr;
         }
 
@@ -2149,8 +2149,8 @@ SwTab SwFEShell::WhichMouseTabCol( const Point &rPt ) const
             pFrame = static_cast<const SwCellFrame*>(static_cast<const SwLayoutFrame*>(pLower)->Lower());
             pLower = pFrame ? pFrame->Lower() : nullptr;
         }
-        if( pFrame && ((pFrame->GetTabBox()->GetSttNd() &&
-            pFrame->GetTabBox()->GetSttNd()->IsInProtectSect()) || (pFrame->GetTabBox()->getRowSpan() < 0)))
+        if( pFrame && ((pFrame->GetTabBox().GetSttNd() &&
+            pFrame->GetTabBox().GetSttNd()->IsInProtectSect()) || (pFrame->GetTabBox().getRowSpan() < 0)))
             pFrame = nullptr;
     }
 
@@ -2413,7 +2413,7 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
 
     /** The cells are destroyed in here */
     GetDoc()->SetColRowWidthHeight(
-                    *const_cast<SwTableBox*>(static_cast<SwCellFrame*>(pFrame)->GetTabBox()),
+                    const_cast<SwTableBox&>(static_cast<SwCellFrame*>(pFrame)->GetTabBox()),
                     eType, nDiff, nLogDiff );
 
     ClearFEShellTabCols(*GetDoc(), nullptr);
@@ -2430,7 +2430,7 @@ static bool lcl_IsFormulaSelBoxes( const SwTable& rTable, const SwTableBoxFormul
     {
         SwTableBox* pBox = aBoxes[ --nSelBoxes ];
 
-        if( std::none_of(rCells.begin(), rCells.end(), [&pBox](SwCellFrame* pFrame) { return pFrame->GetTabBox() == pBox; }) )
+        if( std::none_of(rCells.begin(), rCells.end(), [&pBox](SwCellFrame* pFrame) { return &pFrame->GetTabBox() == pBox; }) )
             return false;
     }
 
@@ -2453,7 +2453,7 @@ void SwFEShell::GetAutoSum( OUString& rFormula ) const
         for( size_t n = aCells.size(); n; )
         {
             SwCellFrame* pCFrame = aCells[ --n ];
-            sal_uInt16 nBoxW = pCFrame->GetTabBox()->IsFormulaOrValueBox();
+            sal_uInt16 nBoxW = pCFrame->GetTabBox().IsFormulaOrValueBox();
             if( !nBoxW )
                 break;
 
@@ -2465,13 +2465,13 @@ void SwFEShell::GetAutoSum( OUString& rFormula ) const
                 // formula only if box is contained
                 if( RES_BOXATR_FORMULA == nBoxW &&
                     !::lcl_IsFormulaSelBoxes( *pTab->GetTable(), pCFrame->
-                    GetTabBox()->GetFrameFormat()->GetTableBoxFormula(), aCells))
+                    GetTabBox().GetFrameFormat()->GetTableBoxFormula(), aCells))
                 {
                     nW = RES_BOXATR_VALUE;
                     // restore previous spaces!
                     for( size_t i = aCells.size(); n+1 < i; )
                     {
-                        sFields = "|<" + aCells[--i]->GetTabBox()->GetName() + ">"
+                        sFields = "|<" + aCells[--i]->GetTabBox().GetName() + ">"
                             + sFields;
                     }
                 }
@@ -2483,7 +2483,7 @@ void SwFEShell::GetAutoSum( OUString& rFormula ) const
                 // search for values, Value/Formula/Text found -> include
                 if( RES_BOXATR_FORMULA == nBoxW &&
                     ::lcl_IsFormulaSelBoxes( *pTab->GetTable(), pCFrame->
-                        GetTabBox()->GetFrameFormat()->GetTableBoxFormula(), aCells ))
+                        GetTabBox().GetFrameFormat()->GetTableBoxFormula(), aCells ))
                     break;
                 else if( USHRT_MAX != nBoxW )
                     sFields = OUStringChar(cListDelim) + sFields;
@@ -2497,7 +2497,7 @@ void SwFEShell::GetAutoSum( OUString& rFormula ) const
                 if( RES_BOXATR_FORMULA == nBoxW )
                 {
                     if( !::lcl_IsFormulaSelBoxes( *pTab->GetTable(), pCFrame->
-                        GetTabBox()->GetFrameFormat()->GetTableBoxFormula(), aCells ))
+                        GetTabBox().GetFrameFormat()->GetTableBoxFormula(), aCells ))
                     {
                         // redo only for values!
 
@@ -2506,8 +2506,7 @@ void SwFEShell::GetAutoSum( OUString& rFormula ) const
                         // restore previous spaces!
                         for( size_t i = aCells.size(); n+1 < i; )
                         {
-                            sFields = "|<" + aCells[--i]->GetTabBox()->GetName() + ">"
-                                + sFields;
+                            sFields = "|<" + aCells[--i]->GetTabBox().GetName() + ">" + sFields;
                         }
                     }
                     else
@@ -2523,7 +2522,7 @@ void SwFEShell::GetAutoSum( OUString& rFormula ) const
                 // possibly allow texts??
                 break;
 
-            sFields = "<" + pCFrame->GetTabBox()->GetName() + ">" + sFields;
+            sFields = "<" + pCFrame->GetTabBox().GetName() + ">" + sFields;
         }
     }
 

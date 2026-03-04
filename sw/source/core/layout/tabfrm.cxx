@@ -348,7 +348,7 @@ static void lcl_ShrinkCellsAndAllContent( SwRowFrame& rRow )
     while ( pCurrMasterCell )
     {
         // NEW TABLES
-        SwCellFrame& rToAdjust = pCurrMasterCell->GetTabBox()->getRowSpan() < 1 ?
+        SwCellFrame& rToAdjust = pCurrMasterCell->GetTabBox().getRowSpan() < 1 ?
                                const_cast<SwCellFrame&>(pCurrMasterCell->FindStartEndOfRowSpanCell( true )) :
                                *pCurrMasterCell;
 
@@ -507,7 +507,7 @@ static void lcl_MoveRowContent( SwRowFrame& rSourceLine, SwRowFrame& rDestLine )
             {
                 // NEW TABLES
                 SwCellFrame* pDestCell = pCurrDestCell;
-                if ( pDestCell->GetTabBox()->getRowSpan() < 1 )
+                if ( pDestCell->GetTabBox().getRowSpan() < 1 )
                     pDestCell = & const_cast<SwCellFrame&>(pDestCell->FindStartEndOfRowSpanCell( true ));
 
                 // Find last content
@@ -855,7 +855,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
             SwCellFrame* pCurrMasterCell = static_cast<SwCellFrame*>(rLastLine.Lower());
             while ( pCurrMasterCell )
             {
-                if ( !pCurrMasterCell->ContainsContent() && pCurrMasterCell->GetTabBox()->getRowSpan() >= 1 )
+                if (!pCurrMasterCell->ContainsContent() && pCurrMasterCell->GetTabBox().getRowSpan() >= 1)
                 {
                     bRet = false;
                     break;
@@ -945,7 +945,7 @@ static tools::Long lcl_GetMaximumLayoutRowSpan( const SwRowFrame& rRow )
         const SwCellFrame* pLower = static_cast<const SwCellFrame*>( pCurrentRowFrame->Lower());
         while ( pLower )
         {
-            if ( pLower->GetTabBox()->getRowSpan() < 0 )
+            if (pLower->GetTabBox().getRowSpan() < 0)
             {
                 ++nRet;
                 bNextRow = true;
@@ -1305,7 +1305,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
                      pCellFrame;
                      pCellFrame = static_cast<const SwCellFrame*>(pCellFrame->GetNext()))
                 {
-                    if (pCellFrame->GetTabBox()->getRowSpan() > 1) // Master cell
+                    if (pCellFrame->GetTabBox().getRowSpan() > 1) // Master cell
                     {
                         bCellSpanCanSplit = true;
                         break;
@@ -1434,7 +1434,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
         const SwCellFrame* pCellFrame = static_cast<const SwCellFrame*>(pFollowRow->GetLower());
         while ( pCellFrame )
         {
-            if ( pCellFrame->GetTabBox()->getRowSpan() < 1 )
+            if (pCellFrame->GetTabBox().getRowSpan() < 1)
             {
                 pLastRow = static_cast<SwRowFrame*>(pRow->GetPrev());
                 break;
@@ -1744,7 +1744,7 @@ void SwInvalidateAll( SwFrame *pFrame, tools::Long nBottom )
             if (pFrame->IsCellFrame())
             {
                 SwCellFrame* pThisCell = static_cast<SwCellFrame*>(pFrame);
-                if ( pThisCell->GetTabBox()->getRowSpan() < 1 )
+                if (pThisCell->GetTabBox().getRowSpan() < 1)
                 {
                     pToInvalidate = & const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( true ));
                     pToInvalidate->InvalidatePos_();
@@ -1932,7 +1932,7 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
             if (pFrame->IsCellFrame())
             {
                 SwCellFrame* pThisCell = static_cast<SwCellFrame*>(pFrame);
-                if ( pThisCell->GetTabBox()->getRowSpan() < 1 )
+                if (pThisCell->GetTabBox().getRowSpan() < 1)
                 {
                     SwCellFrame& rToCalc = const_cast<SwCellFrame&>(pThisCell->FindStartEndOfRowSpanCell( true ));
                     bRet |= !rToCalc.isFrameAreaDefinitionValid();
@@ -2402,7 +2402,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                      pCellFrame;
                      pCellFrame = static_cast<const SwCellFrame*>(pCellFrame->GetNext()))
                 {
-                    if (pCellFrame->GetTabBox()->getRowSpan() > 1) // Master cell
+                    if (pCellFrame->GetTabBox().getRowSpan() > 1) // Master cell
                     {
                         bCellSpanCanSplit = true;
                         break;
@@ -3001,7 +3001,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                  pLower = pLower->GetNext())
                             {
                                 auto pCellFrame = static_cast<const SwCellFrame*>(pLower);
-                                if (pCellFrame->GetTabBox()->getRowSpan() != 1)
+                                if (pCellFrame->GetTabBox().getRowSpan() != 1)
                                 {
                                     // The cell has a rowspan, don't split the row itself in this
                                     // case (but just move it forward, i.e. split between the rows).
@@ -5486,7 +5486,7 @@ void SwRowFrame::AdjustCells( const SwTwips nHeight, const bool bHeight )
 
             // Current frame is a covered frame:
             // Set new height for covered cell and adjust master cell:
-            if ( pCellFrame->GetTabBox()->getRowSpan() < 1 )
+            if (pCellFrame->GetTabBox().getRowSpan() < 1)
             {
                 // Set height of current (covered) cell to new line height.
                 const tools::Long nDiff = nHeight - aRectFnSet.GetHeight(pCellFrame->getFrameArea());
@@ -6105,7 +6105,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         }
     }
     // #i26945#
-    tools::Long nRemaining = GetTabBox()->getRowSpan() >= 1 ?
+    tools::Long nRemaining = GetTabBox().getRowSpan() >= 1 ?
                       ::lcl_CalcMinCellHeight( this, pTab->IsConsiderObjsForMinCellHeight(), pAttrs ) :
                       0;
     if ( !isFrameAreaSizeValid() )
@@ -6137,7 +6137,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 if ( pTab->GetTable()->IsNewModel() )
                 {
                     // 1. sum of widths of cells up to this cell (in model)
-                    const SwTableLine* pTabLine = GetTabBox()->GetUpper();
+                    const SwTableLine* pTabLine = GetTabBox().GetUpper();
                     const SwTableBoxes& rBoxes = pTabLine->GetTabBoxes();
                     const SwTableBox* pTmpBox = nullptr;
 
@@ -6148,7 +6148,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                         pTmpBox = rBoxes[ i++ ];
                         nSumWidth += pTmpBox->GetFrameFormat()->GetFrameSize().GetWidth();
                     }
-                    while ( pTmpBox != GetTabBox() );
+                    while (pTmpBox != &GetTabBox());
 
                     // 2. calculate actual width of cells up to this one
                     double nTmpWidth = nSumWidth;
@@ -6370,7 +6370,7 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     if(rHint.GetId() == SfxHintId::SwTableBoxFormatChanged)
     {
         auto pNewFormatHint = static_cast<const sw::TableBoxFormatChanged*>(&rHint);
-        if(GetTabBox() != &pNewFormatHint->m_rTableBox)
+        if (&GetTabBox() != &pNewFormatHint->m_rTableBox)
             return;
         RegisterToFormat(const_cast<SwTableBoxFormat&>(pNewFormatHint->m_rNewFormat));
         InvalidateSize();
@@ -6394,7 +6394,7 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     else if(rHint.GetId() == SfxHintId::SwMoveTableBox)
     {
         auto pMoveTableBoxHint = static_cast<const sw::MoveTableBoxHint*>(&rHint);
-        if(GetTabBox() != &pMoveTableBoxHint->m_rTableBox)
+        if (&GetTabBox() != &pMoveTableBoxHint->m_rTableBox)
             return;
         const_cast<SwFrameFormat*>(&pMoveTableBoxHint->m_rNewFormat)->Add(*this);
         InvalidateAll();
@@ -6504,8 +6504,7 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 
 tools::Long SwCellFrame::GetLayoutRowSpan() const
 {
-    const SwTableBox *pTabBox = GetTabBox();
-    tools::Long nRet = pTabBox ? pTabBox->getRowSpan() : 0;
+    tools::Long nRet = GetTabBox().getRowSpan();
     if ( nRet < 1 )
     {
         const SwFrame* pRow = GetUpper();
@@ -6974,7 +6973,7 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
                 const SwCellFrame* pLower2 = static_cast<const SwCellFrame*>(pFirstRow->Lower());
                 while ( pLower2 )
                 {
-                    if ( 1 == pLower2->GetTabBox()->getRowSpan() )
+                    if (1 == pLower2->GetTabBox().getRowSpan())
                     {
                         const SwTwips nCellHeight = lcl_CalcMinCellHeight( pLower2, true );
                         nMaxHeight = std::max( nCellHeight, nMaxHeight );

@@ -125,7 +125,7 @@ bool SwAccessibleChild::IsFrameAccessible(const SwFrame& rFrame, bool bPagePrevi
         return false;
 
     if (rFrame.IsCellFrame()
-        && static_cast<const SwCellFrame&>(rFrame).GetTabBox()->GetSttNd() == nullptr)
+        && static_cast<const SwCellFrame&>(rFrame).GetTabBox().GetSttNd() == nullptr)
         return false;
 
     if (rFrame.IsInCoveredCell())
