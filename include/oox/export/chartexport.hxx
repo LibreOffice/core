@@ -183,9 +183,7 @@ private:
                           bool bIsChartex);
     void exportData_chartex( const css::uno::Reference<
                               css::chart::XChartDocument >& rChartDoc);
-    void exportExternalData( const css::uno::Reference<
-                              css::chart::XChartDocument >& rChartDoc,
-                              bool bIsChartex);
+    void exportExternalData(bool bIsChartex);
     void exportLegend( const css::uno::Reference<
                           css::chart::XChartDocument >& rChartDoc,
                           bool bIsChartex);
@@ -332,6 +330,8 @@ public:
     void InitRangeSegmentationProperties(
         const css::uno::Reference<
             css::chart2::XChartDocument > & xChartDoc );
+
+    OOX_DLLPUBLIC OUString GetExternalDataPath() const;
 };
 
 }

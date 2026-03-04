@@ -115,6 +115,31 @@ using oox::vml::VMLExport;
 
 using sw::mark::MarkBase;
 
+namespace
+{
+
+uno::Sequence<beans::PropertyValue>
+lcl_getEmbeddingsList(const rtl::Reference<SwXTextDocument>& xTextDoc)
+{
+    uno::Sequence<beans::PropertyValue> aRet;
+
+    if (!xTextDoc->getPropertySetInfo()->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
+        return aRet;
+
+    uno::Sequence<beans::PropertyValue> xPropertyList;
+    xTextDoc->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= xPropertyList;
+    auto pProp = std::find_if(
+        std::cbegin(xPropertyList), std::cend(xPropertyList),
+        [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXEmbeddings"; });
+
+    if (pProp != std::cend(xPropertyList))
+        pProp->Value >>= aRet;
+
+    return aRet;
+}
+
+} // end anonymous namespace
+
 AttributeOutputBase& DocxExport::AttrOutput() const
 {
     return *m_pAttrOutput;
@@ -422,6 +447,31 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
 
         aChartExport.mbLinkToExternalData = false;
         break;
+    }
+
+    // verify that the to-be-embedded-file being linked to is available and valid.
+    if (aChartExport.mbLinkToExternalData)
+    {
+        // missing or zero-sized embedded files are reported as corrupt by MS Word
+        aChartExport.mbLinkToExternalData = false; // assume something wrong until proven valid
+        const OUString rExternalDataPath = aChartExport.GetExternalDataPath();
+        if (!rExternalDataPath.isEmpty())
+        {
+            for (const auto& rEmbedding : lcl_getEmbeddingsList(m_xTextDoc))
+            {
+                if (rEmbedding.Name == rExternalDataPath)
+                {
+                    uno::Reference<io::XInputStream> embeddingsStream;
+                    rEmbedding.Value >>= embeddingsStream;
+                    if (embeddingsStream)
+                    {
+                        uno::Reference<io::XSeekable> xSeekable(embeddingsStream, uno::UNO_QUERY);
+                        if (xSeekable && xSeekable->getLength())
+                            aChartExport.mbLinkToExternalData = true;
+                    }
+                }
+            }
+        }
     }
 
     aChartExport.ExportContent();
@@ -1923,18 +1973,7 @@ void DocxExport::WriteEmbeddings()
     if (!pShell)
         return;
 
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = m_xTextDoc->getPropertySetInfo();
-    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( !xPropSetInfo->hasPropertyByName( aName ) )
-        return;
-
-    uno::Sequence< beans::PropertyValue > embeddingsList;
-    uno::Sequence< beans::PropertyValue > propList;
-    m_xTextDoc->getPropertyValue( aName ) >>= propList;
-    auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
-        [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXEmbeddings"; });
-    if (pProp != std::cend(propList))
-        pProp->Value >>= embeddingsList;
+    uno::Sequence<beans::PropertyValue> embeddingsList = lcl_getEmbeddingsList(m_xTextDoc);
     for (const auto& rEmbedding : embeddingsList)
     {
         OUString embeddingPath = rEmbedding.Name;
