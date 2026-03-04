@@ -1003,6 +1003,9 @@ QHash<QAccessible::Attribute, QVariant> QtAccessibleWidget::attributes() const
         return aQtAttrs;
 
     const OUString sAttrs = xAttributes->getExtendedAttributes();
+    if (sAttrs.isEmpty())
+        return aQtAttrs;
+
     sal_Int32 nIndex = 0;
     do
     {

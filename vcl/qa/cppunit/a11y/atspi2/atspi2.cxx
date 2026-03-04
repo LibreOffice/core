@@ -329,25 +329,31 @@ void Atspi2TestTree::compareObjects(const uno::Reference<accessibility::XAccessi
         sal_Int32 nIndex = 0;
 
         const auto atspiAttrs = pAtspiAccessible.getAttributes();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Only one of AT-SPI attributes or attributes via "
+                                     "XAccessibleExtendedAttributes are empty",
+                                     sExtendedAttrs.isEmpty(), atspiAttrs.empty());
 
-        do
+        if (!sExtendedAttrs.isEmpty())
         {
-            OUString sProperty = sExtendedAttrs.getToken(0, ';', nIndex);
+            do
+            {
+                OUString sProperty = sExtendedAttrs.getToken(0, ';', nIndex);
 
-            sal_Int32 nColonPos = 0;
-            const OString sPropertyName = OUStringToOString(
-                o3tl::getToken(sProperty, 0, ':', nColonPos), RTL_TEXTENCODING_UTF8);
-            const OString sPropertyValue = OUStringToOString(
-                o3tl::getToken(sProperty, 0, ':', nColonPos), RTL_TEXTENCODING_UTF8);
+                sal_Int32 nColonPos = 0;
+                const OString sPropertyName = OUStringToOString(
+                    o3tl::getToken(sProperty, 0, ':', nColonPos), RTL_TEXTENCODING_UTF8);
+                const OString sPropertyValue = OUStringToOString(
+                    o3tl::getToken(sProperty, 0, ':', nColonPos), RTL_TEXTENCODING_UTF8);
 
-            const auto atspiAttrIter = atspiAttrs.find(std::string(sPropertyName));
-            CPPUNIT_ASSERT_MESSAGE(std::string("Missing attribute: ") + sPropertyName.getStr(),
-                                   atspiAttrIter != atspiAttrs.end());
-            CPPUNIT_ASSERT_EQUAL(std::string_view(sPropertyName),
-                                 std::string_view(atspiAttrIter->first));
-            CPPUNIT_ASSERT_EQUAL(std::string_view(sPropertyValue),
-                                 std::string_view(atspiAttrIter->second));
-        } while (nIndex >= 0 && nIndex < sExtendedAttrs.getLength());
+                const auto atspiAttrIter = atspiAttrs.find(std::string(sPropertyName));
+                CPPUNIT_ASSERT_MESSAGE(std::string("Missing attribute: ") + sPropertyName.getStr(),
+                                       atspiAttrIter != atspiAttrs.end());
+                CPPUNIT_ASSERT_EQUAL(std::string_view(sPropertyName),
+                                     std::string_view(atspiAttrIter->first));
+                CPPUNIT_ASSERT_EQUAL(std::string_view(sPropertyValue),
+                                     std::string_view(atspiAttrIter->second));
+            } while (nIndex >= 0 && nIndex < sExtendedAttrs.getLength());
+        }
     }
 
     // relations
