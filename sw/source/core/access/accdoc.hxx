@@ -21,7 +21,6 @@
 
 #include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include "accselectionhelper.hxx"
 #include <vcl/window.hxx>
 
@@ -76,13 +75,12 @@ public:
     virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
 };
 
-using SwAccessibleDocument_BASE = cppu::ImplInheritanceHelper<SwAccessibleDocumentBase,
-                                                              css::accessibility::XAccessibleSelection,
-                                                              css::accessibility::XAccessibleExtendedAttributes>;
 /**
  * access to an accessible Writer document
  */
-class SwAccessibleDocument : public SwAccessibleDocument_BASE
+class SwAccessibleDocument
+    : public cppu::ImplInheritanceHelper<SwAccessibleDocumentBase,
+                                         css::accessibility::XAccessibleSelection>
 {
     // Implementation for XAccessibleSelection interface
     SwAccessibleSelectionHelper maSelectionHelper;

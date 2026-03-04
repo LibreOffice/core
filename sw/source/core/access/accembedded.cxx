@@ -32,7 +32,7 @@ using namespace ::com::sun::star::accessibility;
 
 SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
     std::shared_ptr<SwAccessibleMap> const& pInitMap, const SwFlyFrame* pFlyFrame)
-    : ImplInheritanceHelper(pInitMap, AccessibleRole::EMBEDDED_OBJECT, pFlyFrame)
+    : SwAccessibleNoTextFrame(pInitMap, AccessibleRole::EMBEDDED_OBJECT, pFlyFrame)
 {
 }
 

@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/implbase3.hxx>
-#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <svx/IAccessibleViewForwarder.hxx>
 
 class ScTabViewShell;
@@ -39,9 +38,9 @@ namespace utl
 }
 
 class ScAccessibleDocument final
-    : public cppu::ImplInheritanceHelper<
-          ScAccessibleDocumentBase, css::accessibility::XAccessibleSelection,
-          css::accessibility::XAccessibleExtendedAttributes, css::view::XSelectionChangeListener>,
+    : public cppu::ImplInheritanceHelper<ScAccessibleDocumentBase,
+                                         css::accessibility::XAccessibleSelection,
+                                         css::view::XSelectionChangeListener>,
       public accessibility::IAccessibleViewForwarder
 {
 public:

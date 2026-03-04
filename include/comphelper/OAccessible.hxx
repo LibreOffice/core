@@ -21,6 +21,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -38,6 +39,7 @@ class COMPHELPER_DLLPUBLIC OAccessible
       public cppu::WeakComponentImplHelper<css::accessibility::XAccessible,
                                            css::accessibility::XAccessibleContext2,
                                            css::accessibility::XAccessibleEventBroadcaster,
+                                           css::accessibility::XAccessibleExtendedAttributes,
                                            css::accessibility::XAccessibleExtendedComponent>
 {
     friend class OContextEntryGuard;
@@ -89,6 +91,9 @@ public:
         as retrieved via getAccessibleParent()->getAccessibleContext.</p>
     */
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
+
+    // XAccessibleExtendedAttributes
+    virtual OUString SAL_CALL getExtendedAttributes() override;
 
 protected:
     // OComponentHelper

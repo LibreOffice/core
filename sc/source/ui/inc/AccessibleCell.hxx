@@ -23,8 +23,6 @@
 #include "AccessibleCellBase.hxx"
 #include "viewdata.hxx"
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
@@ -34,19 +32,14 @@ namespace utl { class AccessibleRelationSetHelper; }
 class ScTabViewShell;
 class ScAccessibleDocument;
 
-typedef cppu::ImplHelper1< css::accessibility::XAccessibleExtendedAttributes>
-                    ScAccessibleCellAttributeImpl;
-
 using css::accessibility::AccessibleRelationType;
 
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleCell</code> service.
 */
-class ScAccessibleCell final
-    :   public  ScAccessibleCellBase,
-        public  accessibility::AccessibleStaticTextBase,
-        public  ScAccessibleCellAttributeImpl
+class ScAccessibleCell final : public ScAccessibleCellBase,
+                               public accessibility::AccessibleStaticTextBase
 {
 public:
     static rtl::Reference<ScAccessibleCell> create(

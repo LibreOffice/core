@@ -286,7 +286,7 @@ void SwAccessibleDocument::GetStates( sal_Int64& rStateSet )
 
 SwAccessibleDocument::SwAccessibleDocument(
         std::shared_ptr<SwAccessibleMap> const& pInitMap)
-    : SwAccessibleDocument_BASE(pInitMap)
+    : ImplInheritanceHelper(pInitMap)
     , maSelectionHelper(*this)
 {
     SetName(pInitMap->GetDocName());

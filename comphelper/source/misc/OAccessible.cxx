@@ -194,6 +194,8 @@ Locale SAL_CALL OAccessible::getLocale()
     return xParentContext->getLocale();
 }
 
+OUString SAL_CALL OAccessible::getExtendedAttributes() { return OUString(); }
+
 Reference<XAccessibleContext> OAccessible::implGetParentContext()
 {
     Reference< XAccessible > xParent = getAccessibleParent();

@@ -27,7 +27,6 @@
 #include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include "accselectionhelper.hxx"
 #include <unordered_map>
@@ -56,8 +55,7 @@ using SwAccessibleParagraph_BASE = cppu::ImplInheritanceHelper<SwAccessibleConte
                                                                css::accessibility::XAccessibleTextMarkup,
                                                                css::accessibility::XAccessibleMultiLineText,
                                                                css::accessibility::XAccessibleTextAttributes,
-                                                               css::accessibility::XAccessibleTextSelection,
-                                                               css::accessibility::XAccessibleExtendedAttributes>;
+                                                               css::accessibility::XAccessibleTextSelection>;
 class SwAccessibleParagraph :
         public SfxListener,
         public SwAccessibleParagraph_BASE

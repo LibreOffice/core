@@ -110,17 +110,14 @@ void SAL_CALL ScAccessibleCell::disposing()
 
     //=====  XInterface  =====================================================
 
-IMPLEMENT_FORWARD_XINTERFACE3( ScAccessibleCell, ScAccessibleCellBase, AccessibleStaticTextBase, ScAccessibleCellAttributeImpl )
+IMPLEMENT_FORWARD_XINTERFACE2(ScAccessibleCell, ScAccessibleCellBase, AccessibleStaticTextBase)
 
     //=====  XTypeProvider  ===================================================
 
 css::uno::Sequence< css::uno::Type > SAL_CALL ScAccessibleCell::getTypes()
 {
-    return ::comphelper::concatSequences(
-        ScAccessibleCellBase::getTypes(),
-        AccessibleStaticTextBase::getTypes(),
-        ScAccessibleCellAttributeImpl::getTypes()
-    );
+    return ::comphelper::concatSequences(ScAccessibleCellBase::getTypes(),
+                                         AccessibleStaticTextBase::getTypes());
 }
 IMPLEMENT_GET_IMPLEMENTATION_ID( ScAccessibleCell )
 

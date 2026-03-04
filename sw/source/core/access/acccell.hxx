@@ -29,8 +29,7 @@ class SwFrameFormat;
 
 using SwAccessibleCell_BASE = cppu::ImplInheritanceHelper<SwAccessibleContext,
                                                           css::accessibility::XAccessibleValue,
-                                                          css::accessibility::XAccessibleSelection,
-                                                          css::accessibility::XAccessibleExtendedAttributes>;
+                                                          css::accessibility::XAccessibleSelection>;
 class SwAccessibleCell : public SwAccessibleCell_BASE
 {
     // Implementation for XAccessibleSelection interface

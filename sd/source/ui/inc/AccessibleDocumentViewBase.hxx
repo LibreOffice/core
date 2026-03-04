@@ -31,8 +31,6 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <tools/link.hxx>
 
-#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
-
 #include "Window.hxx"
 
 namespace com::sun::star::accessibility { class XAccessible; }
@@ -83,8 +81,7 @@ class AccessibleDocumentViewBase
         public IAccessibleViewForwarderListener,
         public css::beans::XPropertyChangeListener,
         public css::awt::XWindowListener,
-        public css::awt::XFocusListener,
-        public css::accessibility::XAccessibleExtendedAttributes
+        public css::awt::XFocusListener
 {
 public:
     /** Create a new object.  Note that the caller has to call the

@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleGroupPosition.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #include <com/sun/star/awt/Point.hpp>
@@ -81,7 +80,6 @@ class IAccessibleParent;
 class SVX_DLLPUBLIC AccessibleShape
     : public cppu::ImplInheritanceHelper<
           AccessibleContextBase, css::accessibility::XAccessibleSelection,
-          css::accessibility::XAccessibleExtendedAttributes,
           css::accessibility::XAccessibleGroupPosition, css::accessibility::XAccessibleHypertext,
           css::document::XShapeEventListener, css::lang::XUnoTunnel>,
       public IAccessibleViewForwarderListener

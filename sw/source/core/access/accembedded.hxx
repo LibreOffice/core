@@ -21,12 +21,9 @@
 
 #include "accnotextframe.hxx"
 
-#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <cppuhelper/implbase.hxx>
 
-class SwAccessibleEmbeddedObject
-    : public cppu::ImplInheritanceHelper<SwAccessibleNoTextFrame,
-                                         css::accessibility::XAccessibleExtendedAttributes>
+class SwAccessibleEmbeddedObject : public SwAccessibleNoTextFrame
 
 {
 protected:
