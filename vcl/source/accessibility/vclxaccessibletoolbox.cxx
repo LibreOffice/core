@@ -512,18 +512,6 @@ void SAL_CALL VCLXAccessibleToolBox::disposing()
     m_aAccessibleChildren.clear();
 }
 
-// XServiceInfo
-OUString VCLXAccessibleToolBox::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleToolBox"_ustr;
-}
-
-Sequence< OUString > VCLXAccessibleToolBox::getSupportedServiceNames()
-{
-    return comphelper::concatSequences(VCLXAccessibleComponent::getSupportedServiceNames(),
-                                       std::initializer_list<OUString>{u"com.sun.star.accessibility.AccessibleToolBox"_ustr});
-}
-
 // XAccessibleContext
 sal_Int64 SAL_CALL VCLXAccessibleToolBox::getAccessibleChildCount(  )
 {
