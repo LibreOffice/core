@@ -108,7 +108,7 @@ public:
     rtl::Reference<SwXTextDocument> const & GetTextDocument() const;
     css::uno::Reference<css::text::XTextRange> GetCurrentTextRange();
 
-    OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
+    OUString getOrCreateCharStyle( const PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
     StyleSheetTablePtr const & GetStyleSheetTable( );
     SettingsTablePtr const & GetSettingsTable();
     GraphicZOrderHelper& graphicZOrderHelper();

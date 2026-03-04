@@ -381,7 +381,7 @@ IMPL_STATIC_LINK_NOARG(ScDBFunc, InstallKitNotifierHdl, void*, vcl::ICOKitNotifi
     return GetpApp();
 }
 
-void ScDBFunc::ApplyAutoFilter(ScDocShell& rDocSh, ScViewData& rViewData, ScDBData* pDBData,
+void ScDBFunc::ApplyAutoFilter(ScDocShell& rDocSh, const ScViewData& rViewData, ScDBData* pDBData,
                                SCROW nRow, SCTAB nTab, const ScQueryParam& aParam)
 {
     ScDocument& rDoc = rViewData.GetDocument();

@@ -651,7 +651,7 @@ static auto RecursiveContains(SwStartNode const& rRedlineSection, SwNode const& 
 namespace
 {
 /// Similar to GetRedlineTypeIgnoringAdditonalFormat(), but for import purposes.
-RedlineType GetRedlineTypeIgnoringAdditonalFormatForImport(RedlineInfo& rRedlineInfo)
+RedlineType GetRedlineTypeIgnoringAdditonalFormatForImport(const RedlineInfo& rRedlineInfo)
 {
     RedlineType eType = rRedlineInfo.eType;
 
@@ -848,7 +848,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 namespace
 {
 /// Similar to CanCombineTypesForAcceptReject(), but for import purposes.
-bool CanCombineTypesForImport(RedlineInfo* pRedlineInfo)
+bool CanCombineTypesForImport(const RedlineInfo* pRedlineInfo)
 {
     if (!pRedlineInfo->pNextRedline)
     {

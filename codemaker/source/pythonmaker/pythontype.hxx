@@ -62,18 +62,18 @@ public:
 private:
     void addImportLine(const rtl::OString& importLine);
     std::vector<unoidl::PlainStructTypeEntity::Member>
-    getAllStructMembers(unoidl::PlainStructTypeEntity* entity);
+    getAllStructMembers(const unoidl::PlainStructTypeEntity* entity);
     std::vector<unoidl::ExceptionTypeEntity::Member>
-    getAllExceptionMembers(unoidl::ExceptionTypeEntity* entity);
-    void generateEnum(unoidl::EnumTypeEntity* entity);
-    void generateConstantGroup(unoidl::ConstantGroupEntity* entity);
-    void generateTypedef(unoidl::TypedefEntity* entity);
-    void generateStruct(unoidl::PlainStructTypeEntity* entity);
-    void generatePolyStruct(unoidl::PolymorphicStructTypeTemplateEntity* entity);
-    void generateException(unoidl::ExceptionTypeEntity* entity);
-    void generateInterface(unoidl::InterfaceTypeEntity* entity);
-    void generateService(unoidl::SingleInterfaceBasedServiceEntity* entity);
-    void generateSingleton(unoidl::InterfaceBasedSingletonEntity* entity);
+    getAllExceptionMembers(const unoidl::ExceptionTypeEntity* entity);
+    void generateEnum(const unoidl::EnumTypeEntity* entity);
+    void generateConstantGroup(const unoidl::ConstantGroupEntity* entity);
+    void generateTypedef(const unoidl::TypedefEntity* entity);
+    void generateStruct(const unoidl::PlainStructTypeEntity* entity);
+    void generatePolyStruct(const unoidl::PolymorphicStructTypeTemplateEntity* entity);
+    void generateException(const unoidl::ExceptionTypeEntity* entity);
+    void generateInterface(const unoidl::InterfaceTypeEntity* entity);
+    void generateService(const unoidl::SingleInterfaceBasedServiceEntity* entity);
+    void generateSingleton(const unoidl::InterfaceBasedSingletonEntity* entity);
     void indent();
     void dedent();
     rtl::OString getIndent() const;

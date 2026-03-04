@@ -22,7 +22,7 @@
 
 namespace oox::drawingml::chart
 {
-model::StyleEntry StyleEntryModel::toStyleEntry(oox::core::XmlFilterBase& rFilter)
+model::StyleEntry StyleEntryModel::toStyleEntry(const oox::core::XmlFilterBase& rFilter)
 {
     std::shared_ptr<PropertyMap> aCharMap = std::make_shared<PropertyMap>();
     if (mrTextCharacterProperties)

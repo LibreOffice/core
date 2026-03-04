@@ -805,7 +805,7 @@ bool DrawViewShell::IsSelected(sal_uInt16 nPage)
 
 namespace
 {
-void notifyLinkAnnotations(SfxViewShell* pViewShell, SdPage* pPage)
+void notifyLinkAnnotations(const SfxViewShell* pViewShell, const SdPage* pPage)
 {
     if (!pViewShell || !pPage)
         return;

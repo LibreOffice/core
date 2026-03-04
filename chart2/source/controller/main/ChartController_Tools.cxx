@@ -161,7 +161,7 @@ bool lcl_deleteDataCurve(
 }
 
 bool lcl_arePropertiesSame(const std::vector<Reference<beans::XPropertySet>>& xProperties,
-                           OUString& aPropName)
+                           const OUString& aPropName)
 {
     if (xProperties.size() == 1)
         return true;

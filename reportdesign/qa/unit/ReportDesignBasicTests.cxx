@@ -31,8 +31,8 @@ class RptBasicTest : public ReportDesignTestBase
 {
 public:
     void testLoadingAndSaving(const OUString& rFilterName, const OUString& rReportName,
-                              Reference<frame::XComponentLoader>& xComponentLoader,
-                              Reference<XConnection>& xActiveConnection);
+                              const Reference<frame::XComponentLoader>& xComponentLoader,
+                              const Reference<XConnection>& xActiveConnection);
 };
 
 CPPUNIT_TEST_FIXTURE(RptBasicTest, roundTripTest)
@@ -116,8 +116,8 @@ CPPUNIT_TEST_FIXTURE(RptBasicTest, multiGroupingSameFieldIntervals)
 }
 
 void RptBasicTest::testLoadingAndSaving(const OUString& rFilterName, const OUString& rReportName,
-                                        Reference<frame::XComponentLoader>& xComponentLoader,
-                                        Reference<XConnection>& xActiveConnection)
+                                        const Reference<frame::XComponentLoader>& xComponentLoader,
+                                        const Reference<XConnection>& xActiveConnection)
 {
     ::comphelper::NamedValueCollection aLoadArgs;
     aLoadArgs.put(u"ActiveConnection"_ustr, xActiveConnection);

@@ -70,7 +70,7 @@ void KitSearchTest::lcl_replace(const OUString& rKey, const OUString& rReplace, 
 
 namespace
 {
-SdrObject* lclGetSelectedObject(sd::ViewShell* pViewShell)
+SdrObject* lclGetSelectedObject(const sd::ViewShell* pViewShell)
 {
     SdrView* pSdrView = pViewShell->GetView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();

@@ -31,7 +31,7 @@ public:
 
 namespace
 {
-void checkConditionalFormatList(ScDocument& rDoc,
+void checkConditionalFormatList(const ScDocument& rDoc,
                                 std::unordered_map<OUString, OUString>& rExpectedValues)
 {
     ScConditionalFormatList* pList = rDoc.GetCondFormList(0);

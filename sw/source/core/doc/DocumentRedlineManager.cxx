@@ -1019,7 +1019,7 @@ namespace
 
     /// Given a redline that has an other underlying redline, drop the redline on top.
     /// Used to accept a format on top of insert/delete, no changes to the text node string.
-    bool lcl_AcceptOuterFormat(SwRedlineTable& rArr, SwRedlineTable::size_type& rPos)
+    bool lcl_AcceptOuterFormat(const SwRedlineTable& rArr, const SwRedlineTable::size_type& rPos)
     {
         SwRangeRedline* pRedl = rArr[rPos];
         return pRedl->PopData();
@@ -1027,7 +1027,7 @@ namespace
 
     /// Given a redline that has an other underlying redline, drop the redline on top & restore the
     /// old doc model. Used to reject a format on top of insert/delete.
-    bool lcl_RejectOuterFormat(SwRedlineTable& rArr, SwRedlineTable::size_type& rPos)
+    bool lcl_RejectOuterFormat(const SwRedlineTable& rArr, const SwRedlineTable::size_type& rPos)
     {
         SwRangeRedline* pRedl = rArr[rPos];
         SwDoc& rDoc = pRedl->GetDoc();
@@ -1182,7 +1182,7 @@ namespace
 
 /// Decides if it's OK to combine two types of redlines next to each other, e.g. insert and
 /// delete-on-insert can be combined if accepting an insert.
-bool CanCombineTypesForAcceptReject(SwRedlineData& rInnerData, SwRangeRedline& rOuterRedline)
+bool CanCombineTypesForAcceptReject(const SwRedlineData& rInnerData, const SwRangeRedline& rOuterRedline)
 {
     if (rInnerData.GetType() == RedlineType::Delete)
     {
@@ -1222,7 +1222,7 @@ bool CanCombineTypesForAcceptReject(SwRedlineData& rInnerData, SwRangeRedline& r
 /// Decides if it's OK to combine this rInnerData having 2 types with an outer rOuterRedline for
 /// accept or reject purposes. E.g. format-on-delete and delete can be combined if accepting a
 /// delete.
-bool CanReverseCombineTypesForAcceptReject(SwRangeRedline& rOuterRedline, SwRedlineData& rInnerData)
+bool CanReverseCombineTypesForAcceptReject(const SwRangeRedline& rOuterRedline, const SwRedlineData& rInnerData)
 {
     switch (rOuterRedline.GetType())
     {

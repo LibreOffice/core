@@ -738,7 +738,7 @@ void PresenterScreen::ProcessLayout (
 }
 
 void PresenterScreen::ProcessViewDescriptions (
-    PresenterConfigurationAccess& rConfiguration)
+    const PresenterConfigurationAccess& rConfiguration)
 {
     try
     {

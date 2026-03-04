@@ -110,7 +110,7 @@ bool isLegacyBehavior(const SwFlyFrame& rFly, const SwFrame& rAnchor)
 }
 
 /// Gets the bottom position which is a deadline for a split fly.
-SwTwips GetFlyAnchorBottom(SwFlyFrame& rFly, const SwFrame& rAnchor)
+SwTwips GetFlyAnchorBottom(const SwFlyFrame& rFly, const SwFrame& rAnchor)
 {
     SwRectFnSet aRectFnSet(rFly);
 

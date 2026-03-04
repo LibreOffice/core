@@ -919,7 +919,7 @@ void SwView::ExecNumberingOutline(SfxItemPool & rPool)
     );
 }
 
-void SwView::ExecNavigatorWin(SfxRequest& rReq)
+void SwView::ExecNavigatorWin(const SfxRequest& rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();

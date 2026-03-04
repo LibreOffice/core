@@ -820,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104445)
 
 namespace
 {
-bool checkPatternValues(std::vector<sal_uInt8>& rExpected, Bitmap& rBitmap)
+bool checkPatternValues(std::vector<sal_uInt8>& rExpected, const Bitmap& rBitmap)
 {
     bool bResult = true;
 

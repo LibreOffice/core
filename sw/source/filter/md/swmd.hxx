@@ -131,7 +131,7 @@ class SwMarkdownParser
     void BeginCodeBlock();
     void EndCodeBlock();
 
-    void InsertText(OUString& aStr);
+    void InsertText(const OUString& aStr);
     void SetAttrs(SwPaM& rRange);
     void ClearAttrs();
 

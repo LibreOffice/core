@@ -30,7 +30,7 @@ ThemeColorsPaneBase::ThemeColorsPaneBase(std::unique_ptr<weld::IconView> xIconVi
 
 ThemeColorsPaneBase::~ThemeColorsPaneBase() = default;
 
-void ThemeColorsPaneBase::initColorSets(model::Theme* pTheme)
+void ThemeColorsPaneBase::initColorSets(const model::Theme* pTheme)
 {
     maColorSets.clear();
     if (mxIconViewThemeColors)

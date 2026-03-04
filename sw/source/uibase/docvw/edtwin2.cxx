@@ -316,7 +316,7 @@ OUString SwEditWin::ClipLongToolTip(const OUString& rText)
 }
 
 static OString getTooltipPayload(const OUString& tooltip, const SwRect& rect,
-                                 SwWrtShell& rSh,
+                                 const SwWrtShell& rSh,
                                  const SwRangeRedline* pRedline = nullptr)
 {
     tools::JsonWriter writer;

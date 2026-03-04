@@ -32,7 +32,7 @@ protected:
     std::vector<model::ColorSet> maColorSets;
     std::shared_ptr<model::ColorSet> mpCurrentColorSet;
 
-    void initColorSets(model::Theme* pTheme = nullptr);
+    void initColorSets(const model::Theme* pTheme = nullptr);
     static ScopedVclPtr<VirtualDevice> CreateColorSetPreview(const model::ColorSet& rColorSet);
 
 public:

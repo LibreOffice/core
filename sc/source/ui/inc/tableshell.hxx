@@ -32,7 +32,7 @@ public:
     ScTableShell(ScTabViewShell* pView);
     virtual ~ScTableShell() override;
 
-    void ExecuteDatabaseSettings(SfxRequest& rReq);
+    void ExecuteDatabaseSettings(const SfxRequest& rReq);
     void GetDatabaseSettings(SfxItemSet& rSet);
 
 private:

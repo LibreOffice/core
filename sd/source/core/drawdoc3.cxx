@@ -2048,7 +2048,7 @@ void SdDrawDocument::Merge(SdrModel& rSourceModel,
 }
 
 SdPage* SdDrawDocument::AddNewMasterPageFromExisting(
-    SdPage* pSourceMasterPage,
+    const SdPage* pSourceMasterPage,
     SdDrawDocument* pBookmarkDoc,
     bool bUndo,
     const OUString& sNewName)

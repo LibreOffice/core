@@ -719,7 +719,7 @@ void lcl_AdaptAndNormalizeLightDirections(std::vector<basegfx::B3DVector>& rLigh
     Does nothing if property does not exist.
     @param [in] rPropertyMap should contain valid value in RotateAngle property
     @param [out] fX, fY rotation angle in unit rad with orientation as in API.*/
-void lcl_getXYAnglesFromMap(oox::PropertyMap& rPropertyMap, double& rfX, double& rfY)
+void lcl_getXYAnglesFromMap(const oox::PropertyMap& rPropertyMap, double& rfX, double& rfY)
 {
     if (!rPropertyMap.hasProperty(oox::PROP_RotateAngle))
         return;

@@ -43,7 +43,7 @@ struct StyleEntryModel
     TextCharacterPropsRef mrTextCharacterProperties;
     TextBodyPropsRef mxBodyPr;
 
-    model::StyleEntry toStyleEntry(oox::core::XmlFilterBase& rFilter);
+    model::StyleEntry toStyleEntry(const oox::core::XmlFilterBase& rFilter);
 };
 
 // Holds the contents of a cs:CT_ChartStyle

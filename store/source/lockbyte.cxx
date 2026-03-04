@@ -828,7 +828,7 @@ template< class T > struct ResourceHolder
         return tmp;
     }
 
-    ResourceHolder & operator= (ResourceHolder & rhs)
+    ResourceHolder & operator= (const ResourceHolder & rhs)
     {
         reset (rhs.release());
         return *this;

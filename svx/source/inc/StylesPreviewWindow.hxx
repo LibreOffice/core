@@ -124,7 +124,7 @@ protected:
     DECL_LINK(GetPreviewImage, const weld::encoded_image_query&, bool);
 
 public:
-    StylesPreviewWindow_Base(weld::Builder& xBuilder, StylePreviewList& rDefaultStyles,
+    StylesPreviewWindow_Base(weld::Builder& xBuilder, const StylePreviewList& rDefaultStyles,
                              const css::uno::Reference<css::frame::XFrame>& xFrame);
     ~StylesPreviewWindow_Base();
 
@@ -142,7 +142,7 @@ private:
 class StylesPreviewWindow_Impl final : public InterimItemWindow, public StylesPreviewWindow_Base
 {
 public:
-    StylesPreviewWindow_Impl(vcl::Window* pParent, StylePreviewList& rDefaultStyles,
+    StylesPreviewWindow_Impl(vcl::Window* pParent, const StylePreviewList& rDefaultStyles,
                              const css::uno::Reference<css::frame::XFrame>& xFrame);
     ~StylesPreviewWindow_Impl();
 

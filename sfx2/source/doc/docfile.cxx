@@ -4023,7 +4023,7 @@ bool SfxMedium::IsOriginallyLoadedReadOnly() const
 
 bool SfxMedium::HasRestrictedFonts() const { return pImpl->hasRestrictedFonts; }
 
-void SfxMedium::TransferEmbeddedFontsTo(SfxMedium& target)
+void SfxMedium::TransferEmbeddedFontsTo(const SfxMedium& target)
 {
     target.pImpl->hasRestrictedFonts = target.pImpl->hasRestrictedFonts || pImpl->hasRestrictedFonts;
     target.pImpl->m_aEmbeddedFonts.insert(target.pImpl->m_aEmbeddedFonts.end(),

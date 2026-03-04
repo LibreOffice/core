@@ -277,7 +277,7 @@ private:
     /** Writes the ftSbs sub structure containing scrollbar data. */
     void                WriteSbs( XclExpStream& rStrm );
     /** Writes an anchor, if empty calculates one form XShape */
-    void                WriteAnchor( sax_fastparser::FSHelperPtr& rTarget, bool bIsDrawing ) const;
+    void                WriteAnchor( const sax_fastparser::FSHelperPtr& rTarget, bool bIsDrawing ) const;
 
 private:
     const css::uno::Reference< css::drawing::XShape > mxShape;

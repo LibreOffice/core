@@ -805,7 +805,7 @@ void KitHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, b
     }
 }
 
-void KitHelper::notifyCurrentPageSizeChangedAllViews(vcl::ITiledRenderable *pDoc)
+void KitHelper::notifyCurrentPageSizeChangedAllViews(const vcl::ITiledRenderable *pDoc)
 {
     if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
         return;

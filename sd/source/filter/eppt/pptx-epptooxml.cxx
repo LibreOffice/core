@@ -128,7 +128,7 @@ using namespace oox;
 
 namespace
 {
-rtl::Reference<FastAttributeList> presentationNamespaces(oox::core::XmlFilterBase& rFilter)
+rtl::Reference<FastAttributeList> presentationNamespaces(const oox::core::XmlFilterBase& rFilter)
 {
     rtl::Reference<FastAttributeList> pAttributes = FastSerializerHelper::createAttrList();
     pAttributes->add(FSNS(XML_xmlns, XML_a), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8));
@@ -140,7 +140,7 @@ rtl::Reference<FastAttributeList> presentationNamespaces(oox::core::XmlFilterBas
     return pAttributes;
 }
 
-rtl::Reference<FastAttributeList> presentationPrNamespaces(oox::core::XmlFilterBase& rFilter)
+rtl::Reference<FastAttributeList> presentationPrNamespaces(const oox::core::XmlFilterBase& rFilter)
 {
     rtl::Reference<FastAttributeList> pAttributes = FastSerializerHelper::createAttrList();
     pAttributes->add(FSNS(XML_xmlns, XML_a), OUStringToOString(rFilter.getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8));

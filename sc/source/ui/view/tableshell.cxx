@@ -58,7 +58,7 @@ const ScDBData* ScTableShell::GetTableDBDataAtCursor()
                                                       ScDBDataPortion::AREA);
 }
 
-void ScTableShell::ExecuteDatabaseSettings(SfxRequest& rReq)
+void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
 {
     const SfxItemSet* pSet = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();

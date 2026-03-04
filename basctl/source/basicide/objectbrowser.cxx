@@ -104,7 +104,7 @@ bool IsExpandable(const IdeSymbolInfo& rSymbol)
 }
 
 std::shared_ptr<const IdeSymbolInfo>
-GetSymbolForIter(const weld::TreeIter& rIter, weld::TreeView& rTree,
+GetSymbolForIter(const weld::TreeIter& rIter, const weld::TreeView& rTree,
                  const std::map<OUString, std::shared_ptr<IdeSymbolInfo>>& rIndex)
 {
     const OUString sId = rTree.get_id(rIter);
@@ -552,7 +552,7 @@ OUString BuildDoxygenUrl(const IdeSymbolInfo& rSymbol)
            + u".html"_ustr + sAnchor;
 }
 
-void ShowDocsError(vcl::Window* pParent, const OUString& sPrimaryText,
+void ShowDocsError(const vcl::Window* pParent, const OUString& sPrimaryText,
                    const OUString& sSecondaryText = OUString())
 {
     if (!pParent)
@@ -569,7 +569,7 @@ void ShowDocsError(vcl::Window* pParent, const OUString& sPrimaryText,
     xBox->run();
 }
 
-void OpenDoxygenDocumentation(vcl::Window* pParent, const IdeSymbolInfo& rSymbol)
+void OpenDoxygenDocumentation(const vcl::Window* pParent, const IdeSymbolInfo& rSymbol)
 {
     OUString sUrl = BuildDoxygenUrl(rSymbol);
     SAL_INFO("basctl", "OpenDoxygenDocumentation: Built URL='" << sUrl << "' for symbol '"

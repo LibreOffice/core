@@ -488,7 +488,7 @@ SwUndoCpyDoc::SwUndoCpyDoc( const SwPaM& rPam )
 {
 }
 
-SwUndoCopyHeaderFooter::SwUndoCopyHeaderFooter(SwDoc& rDoc, SwNode& rSttNd, const UIName& rFmtName)
+SwUndoCopyHeaderFooter::SwUndoCopyHeaderFooter(const SwDoc& rDoc, const SwNode& rSttNd, const UIName& rFmtName)
     : SwUndo(SwUndoId::COPY_HEADER_FOOTER, rDoc)
     , m_aOff(rSttNd.GetIndex())
     , m_aFmtName(rFmtName)
@@ -500,7 +500,7 @@ SwUndoCopyHeaderFooter::SwUndoCopyHeaderFooter(SwDoc& rDoc, SwNode& rSttNd, cons
 {
 }
 
-static const SfxPoolItem* lcl_itemForFormat(SwFrameFormat& rFmt, bool bIsHeader)
+static const SfxPoolItem* lcl_itemForFormat(const SwFrameFormat& rFmt, bool bIsHeader)
 {
     sal_uInt16 nAttr = bIsHeader ? sal_uInt16(RES_HEADER) : sal_uInt16(RES_FOOTER);
     const SfxPoolItem* pItem;
@@ -510,7 +510,7 @@ static const SfxPoolItem* lcl_itemForFormat(SwFrameFormat& rFmt, bool bIsHeader)
     return pItem;
 }
 
-static bool lcl_checkMatchesFormat(SwFrameFormat& rFmt, bool bIsHeader, SwNodeOffset aOff)
+static bool lcl_checkMatchesFormat(const SwFrameFormat& rFmt, bool bIsHeader, SwNodeOffset aOff)
 {
     const SfxPoolItem* pItem = lcl_itemForFormat(rFmt, bIsHeader);
     if (!pItem)
