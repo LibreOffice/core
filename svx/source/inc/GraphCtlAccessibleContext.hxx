@@ -53,7 +53,7 @@ class SdrView;
 class SvxGraphCtrlAccessibleContext final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
                                          css::accessibility::XAccessibleSelection,
-                                         css::lang::XServiceInfo, css::lang::XServiceName>,
+                                         css::lang::XServiceInfo>,
       public SfxListener,
       public ::accessibility::IAccessibleViewForwarder
 {
@@ -88,9 +88,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService (const OUString& sServiceName) override;
     virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
-
-    // XServiceName
-    virtual OUString SAL_CALL getServiceName() override;
 
     // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;

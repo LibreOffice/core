@@ -319,12 +319,6 @@ Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedService
     return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
 }
 
-// XServiceName
-OUString SvxGraphCtrlAccessibleContext::getServiceName()
-{
-    return u"com.sun.star.accessibility.AccessibleContext"_ustr;
-}
-
 // XAccessibleSelection
 void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int64 nIndex )
 {
