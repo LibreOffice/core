@@ -2258,12 +2258,16 @@ OUString SwTableBox::GetName() const
             sNm = sTmp;
 
         nPos = pBox->GetUpper()->GetBoxPos( pBox );
-        sTmp = OUString::number(nPos + 1);
         pBox = pLine->GetUpper();
-        if( nullptr != pBox )
+        if (pBox)
+        {
+            sTmp = OUString::number(nPos + 1);
             sNm = sTmp + "." + sNm;
+        }
         else
+        {
             sNm = sw_GetTableBoxColStr(nPos) + sNm;
+        }
 
     } while( pBox );
     return sNm;
