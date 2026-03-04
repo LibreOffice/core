@@ -47,8 +47,6 @@ service AccessibleToolBox
        <li>Name: The name of a tool box is its localized label.</li>
        <li>Description: The description of a tool box is its localized
            help text.</li>
-       <li>Children: There exists children of type com::sun::star::awt::AccessibleToolBoxItem.
-       </li>
        <li>Parent: The parent is the window that contains the tool box.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
