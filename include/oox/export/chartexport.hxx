@@ -175,8 +175,7 @@ private:
                            bool bIncludeTable );
     void exportChart( const css::uno::Reference<
                           css::chart::XChartDocument >& rChartDoc );
-    void exportExternalData( const css::uno::Reference<
-                              css::chart::XChartDocument >& rChartDoc );
+    void exportExternalData();
     void exportLegend( const css::uno::Reference<
                           css::chart::XChartDocument >& rChartDoc );
     void exportTitle( const css::uno::Reference< css::drawing::XShape >& xShape,
@@ -279,6 +278,8 @@ public:
     void InitRangeSegmentationProperties(
         const css::uno::Reference<
             css::chart2::XChartDocument > & xChartDoc );
+
+    OOX_DLLPUBLIC OUString GetExternalDataPath() const;
 };
 
 }

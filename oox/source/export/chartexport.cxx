@@ -82,6 +82,8 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XStreamListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
@@ -972,7 +974,7 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
         exportShapeProps( xPropSet );
 
     //XML_externalData
-    exportExternalData(xChartDoc);
+    exportExternalData();
 
     // export additional shapes in chart
     exportAdditionalShapes(xChartDoc);
@@ -980,27 +982,38 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     pFS->endElement( FSNS( XML_c, XML_chartSpace ) );
 }
 
-void ChartExport::exportExternalData( const Reference< css::chart::XChartDocument >& xChartDoc )
+OUString ChartExport::GetExternalDataPath() const
+{
+    OUString sRet;
+
+    const Reference<css::chart::XChartDocument> xChartDoc(getModel(), uno::UNO_QUERY);
+    if (!xChartDoc.is())
+        return sRet;
+
+    const Reference<beans::XPropertySet> xDocPropSet(xChartDoc->getDiagram(), uno::UNO_QUERY);
+    if (!xDocPropSet.is())
+        return sRet;
+
+    try
+    {
+        Any aAny(xDocPropSet->getPropertyValue(u"ExternalData"_ustr));
+        aAny >>= sRet;
+    }
+    catch(beans::UnknownPropertyException&)
+    {
+    }
+
+    return sRet;
+}
+
+void ChartExport::exportExternalData()
 {
     // Embedded external data is grab bagged for docx file hence adding export part of
     // external data for docx files only.
     if(!mbLinkToExternalData || GetDocumentType() != DOCUMENT_DOCX)
         return;
 
-    OUString externalDataPath;
-    Reference< beans::XPropertySet > xDocPropSet( xChartDoc->getDiagram(), uno::UNO_QUERY );
-    if( xDocPropSet.is())
-    {
-        try
-        {
-            Any aAny( xDocPropSet->getPropertyValue( u"ExternalData"_ustr ));
-            aAny >>= externalDataPath;
-        }
-        catch( beans::UnknownPropertyException & )
-        {
-            SAL_WARN("oox", "Required property not found in ChartDocument");
-        }
-    }
+    const OUString externalDataPath = GetExternalDataPath();
     if(externalDataPath.isEmpty())
         return;
 
