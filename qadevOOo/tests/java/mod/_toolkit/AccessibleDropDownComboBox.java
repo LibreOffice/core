@@ -78,10 +78,7 @@ public class AccessibleDropDownComboBox extends TestCase {
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBO_BOX,
-                                             "", "AccessibleDropDownComboBox");
-
-        log.println("ImplementationName " + utils.getImplName(oObj));
+        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBO_BOX);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
