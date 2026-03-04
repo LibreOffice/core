@@ -586,8 +586,40 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
                 // the front of the event queue so no more events will be
                 // dispatched until live resizing ends. Surprisingly, live
                 // resizing appears to end in the next mouse down event.
-                if ( ImplGetSVData()->mpWinData->mbIsLiveResize && [pEvent type] == NSEventTypeLeftMouseUp )
+                bool bRepostEvent = false;
+                if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
+                    bRepostEvent = ( [pEvent type] == NSEventTypeLeftMouseUp );
+
+                // tdf#170740 only repost the same left mouse up event once
+                // Dragging a window's titlebar with the Option key pressed
+                // may trigger live resizing. Unlike normal live resizing,
+                // live resizing while Option-dragging a window needs
+                // left mouse up events to be dispatched to end live
+                // resizing. So if we keep reposting the same left mouse up
+                // event, LibreOffice will go into an infinite loop waiting
+                // for live resizing to end.
+                // Reposting last mouse up events is still needed to
+                // prevent tdf#155092 during normal live resizing so allow
+                // last mouse up events to be reposted but only once.
+                // The purpose of reposting is to skip native event
+                // dispatching during this pass and only let native timers
+                // run. This lets pending LibreOffice resizing and
+                // repainting timers run before the left mouse up event is
+                // dispatched.
+                static NSEvent *pLastRepostedEvent = nil;
+                if ( pLastRepostedEvent )
                 {
+                    [pLastRepostedEvent release];
+                    pLastRepostedEvent = nil;
+                }
+                // Only repost event if pLastRepostedEvent was already nil.
+                // Reposting an event while waiting to dispatch a previously
+                // reposted event can cause incorrect ordering of native events
+                // in the native queue. So, to be safe, resume normal event
+                // dispatching.
+                else if ( bRepostEvent )
+                {
+                    pLastRepostedEvent = [pEvent retain];
                     [NSApp postEvent: pEvent atStart: YES];
                     return false;
                 }
