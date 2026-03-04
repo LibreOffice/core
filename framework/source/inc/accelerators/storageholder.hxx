@@ -62,7 +62,7 @@ class StorageHolder final
                     Storage.clear();
                 }
 
-                css::uno::Reference<css::embed::XStorage> getStorage(const std::unique_lock<std::mutex>&) const
+                const css::uno::Reference<css::embed::XStorage>& getStorage(const std::unique_lock<std::mutex>&) const
                 {
                     return Storage;
                 }

@@ -196,11 +196,17 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
     {
         return;
     }
+    // template function
+    if (dc.Function("toString").Struct("assertion_traits"))
+        return;
     // not sure why, but changing these causes problems
     if (dc.Function("lcl_createColorMapFromShapeProps")
         || dc.Function("getAPIAnglesFrom3DProperties").Class("Scene3DHelper")
         || dc.Function("FillSeriesSimple").Class("ScTable")
         || dc.Function("FillAutoSimple").Class("ScTable"))
+        return;
+    // passing a bool flag by const& so we can cancel a loop inside the function
+    if (dc.Function("TranslateDocumentCancellable"))
         return;
 
     unsigned n = functionDecl->getNumParams();

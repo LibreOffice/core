@@ -212,7 +212,7 @@ public:
 
     SD_DLLPUBLIC const rtl::Reference<sd::framework::ConfigurationController> & getConfigurationController();
 
-    rtl::Reference<sd::framework::ModuleController> getModuleController();
+    const rtl::Reference<sd::framework::ModuleController> & getModuleController();
 
     // XSlideSorterSelectionSupplier
     virtual css::uno::Any SAL_CALL getSlideSorterSelection(  ) override;

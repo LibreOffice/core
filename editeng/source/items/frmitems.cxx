@@ -672,7 +672,7 @@ void SvxLRSpaceItem::SetLeft(SvxIndentValue stL, const sal_uInt16 nProp)
     }
 }
 
-SvxIndentValue SvxLRSpaceItem::GetLeft() const { return m_stLeftMargin; }
+const SvxIndentValue & SvxLRSpaceItem::GetLeft() const { return m_stLeftMargin; }
 
 sal_Int32 SvxLRSpaceItem::ResolveLeft(const SvxFontUnitMetrics& rMetrics) const
 {
@@ -692,9 +692,9 @@ void SvxRightMarginItem::SetRight(SvxIndentValue stR, const sal_uInt16 nProp)
     }
 }
 
-SvxIndentValue SvxRightMarginItem::GetRight() const { return m_stRightMargin; }
+const SvxIndentValue & SvxRightMarginItem::GetRight() const { return m_stRightMargin; }
 
-SvxIndentValue SvxLRSpaceItem::GetRight() const { return m_stRightMargin; }
+const SvxIndentValue & SvxLRSpaceItem::GetRight() const { return m_stRightMargin; }
 
 sal_Int32 SvxRightMarginItem::ResolveRight(const SvxFontUnitMetrics& rMetrics) const
 {
@@ -794,7 +794,7 @@ void SvxLRSpaceItem::SetTextLeft(SvxIndentValue stL, const sal_uInt16 nProp)
     }
 }
 
-SvxIndentValue SvxLRSpaceItem::GetTextFirstLineOffset() const
+const SvxIndentValue & SvxLRSpaceItem::GetTextFirstLineOffset() const
 {
     return m_stFirstLineOffset;
 }
@@ -804,7 +804,7 @@ sal_Int32 SvxLRSpaceItem::ResolveTextFirstLineOffset(const SvxFontUnitMetrics& r
     return m_stFirstLineOffset.Resolve(rMetrics);
 }
 
-SvxIndentValue SvxTextLeftMarginItem::GetTextLeft() const { return m_stTextLeftMargin; }
+const SvxIndentValue & SvxTextLeftMarginItem::GetTextLeft() const { return m_stTextLeftMargin; }
 
 sal_Int32 SvxTextLeftMarginItem::ResolveTextLeft(const SvxFontUnitMetrics& rMetrics) const
 {
@@ -1308,7 +1308,7 @@ void SvxFirstLineIndentItem::SetTextFirstLineOffset(SvxIndentValue stValue, sal_
     }
 }
 
-SvxIndentValue SvxFirstLineIndentItem::GetTextFirstLineOffset() const
+const SvxIndentValue & SvxFirstLineIndentItem::GetTextFirstLineOffset() const
 {
     return m_stFirstLineOffset;
 }

@@ -747,14 +747,14 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
 
 OUString URIHelper::FindFirstDOIInText(std::u16string_view rText,
                                        sal_Int32 & rBegin,
-                                       const sal_Int32 & rEnd,
+                                       sal_Int32 nEnd,
                                        CharClass const & rCharClass)
 {
-    if (rBegin > rEnd || rEnd > static_cast<sal_Int32>(rText.size()))
+    if (rBegin > nEnd || nEnd > static_cast<sal_Int32>(rText.size()))
         return OUString();
 
     sal_Int32 start = 7;
-    sal_Int32 count = rEnd-rBegin;
+    sal_Int32 count = nEnd-rBegin;
     OUString candidate(rText.substr(rBegin, count));
     // Match with regex "doi:10\.\d{4,9}\/[-._;()\/:a-zA-Z0-9]+"
     if (candidate.startsWithIgnoreAsciiCase("doi:10."))
@@ -800,7 +800,7 @@ OUString URIHelper::FindFirstDOIInText(std::u16string_view rText,
             return OUString::Concat("https://doi.org/")+candidate.subView(4);
         }
     }
-    rBegin = rEnd;
+    rBegin = nEnd;
     return OUString();
 }
 

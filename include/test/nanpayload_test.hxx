@@ -54,9 +54,9 @@ public:
         m_bSupported = true;
     }
 
-    bool getIfSupported() { return m_bSupported; }
+    bool getIfSupported() const { return m_bSupported; }
 
-    std::string getMessage() { return m_aMessage; }
+    const std::string& getMessage() const { return m_aMessage; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -495,10 +495,10 @@ struct ElementData
     OUString maElementSource;
     OUString maHelpText;
     int maPos;
-    ElementData(const OUString& aElementSource, const OUString& aHelpText, const int& aPos)
+    ElementData(const OUString& aElementSource, const OUString& aHelpText, const int nPos)
         : maElementSource(aElementSource)
         , maHelpText(aHelpText)
-        , maPos(aPos)
+        , maPos(nPos)
     {
     }
 };

@@ -851,7 +851,7 @@ rtl::Reference< SvxShape > ChartView::getShapeForCID( const OUString& rObjectCID
     return xShape2;
 }
 
-awt::Rectangle ChartView::getDiagramRectangleExcludingAxes()
+const awt::Rectangle & ChartView::getDiagramRectangleExcludingAxes()
 {
     impl_updateView();
     return m_aResultingDiagramRectangleExcludingAxes;
@@ -907,7 +907,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
     return aRet;
 }
 
-std::shared_ptr< DrawModelWrapper > ChartView::getDrawModelWrapper()
+const std::shared_ptr< DrawModelWrapper > & ChartView::getDrawModelWrapper()
 {
     return m_pDrawModelWrapper;
 }

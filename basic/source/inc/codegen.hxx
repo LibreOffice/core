@@ -89,7 +89,7 @@ struct ParamInfoFlag{
     static void setFlagFor(sal_uInt32& val, const ParamInfo &&pe){
         val |= static_cast<sal_uInt32>(pe);
     };
-    static bool checkFlagFor(const sal_uInt32& val, const ParamInfo &&pe){
+    static bool checkFlagFor(sal_uInt32 val, const ParamInfo &&pe){
         return val & static_cast<sal_uInt32>(pe);
     };
 };

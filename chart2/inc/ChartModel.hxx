@@ -547,7 +547,7 @@ public:
     std::optional<ChartGradientPalette> getCurrentGradientPalette() const;
     void applyGradientPaletteToDataSeries(const ChartGradientPalette& rColorPalette);
 
-    std::optional<css::util::DateTime> getNullDate() const;
+    const std::optional<css::util::DateTime> & getNullDate() const;
     void changeNullDate(const css::util::DateTime& aNullDate);
 
 private:

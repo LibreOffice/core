@@ -92,7 +92,7 @@ public:
     /** Return the URL of the resource.  Arguments supplied on creation are
         stripped away.  Use getFullResourceURL() to access them.
     */
-    OUString getResourceURL() const;
+    const OUString & getResourceURL() const;
 
     /** Return a URL object of the resource URL that may contain arguments.
     */

@@ -52,7 +52,7 @@ public:
     }
 
     int getRequestCount() const { return mnRequestCount; }
-    OUString getRequestedFontName() const { return maRequestedFontName; }
+    const OUString& getRequestedFontName() const { return maRequestedFontName; }
 
     virtual void SAL_CALL handle(uno::Reference<task::XInteractionRequest> const& rRequest) override
     {

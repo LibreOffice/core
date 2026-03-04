@@ -499,7 +499,7 @@ public:
     OUString getA11yFocusedParagraph() const;
     int getA11yCaretPosition() const;
     void SetSigningCertificate(const svl::crypto::CertificateOrName& rCertificateOrName);
-    svl::crypto::CertificateOrName GetSigningCertificate() const;
+    const svl::crypto::CertificateOrName & GetSigningCertificate() const;
 
     // These are used for visual signing: SetSignPDFCertificate() is called when the signature
     // line is inserted, and GetSignPDFCertificate() is used by the signing code to get the already

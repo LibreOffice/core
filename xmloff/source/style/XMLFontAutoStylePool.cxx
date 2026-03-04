@@ -516,7 +516,7 @@ void SvXMLExport::exportFonts(const std::vector<XMLFontAutoStylePoolEntry_Impl*>
     }
 }
 
-std::unordered_map<OString, OUString> SvXMLExport::getEmbeddedFontFiles() const
+const std::unordered_map<OString, OUString> & SvXMLExport::getEmbeddedFontFiles() const
 {
     return m_aEmbeddedFontFiles;
 }

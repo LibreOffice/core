@@ -67,7 +67,7 @@ public:
 
     const UIName& GetFormatName() const        { return m_sFormatNm; }
     void SetItemSet( const std::shared_ptr<SfxItemSet>& pSet );
-    std::shared_ptr<SfxItemSet> GetItemSet( ) const { return m_pSet; }
+    const std::shared_ptr<SfxItemSet> & GetItemSet( ) const { return m_pSet; }
     void SetFormatAll( bool bAll )               { m_bFormatAll = bAll; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;

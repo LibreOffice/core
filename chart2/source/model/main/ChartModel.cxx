@@ -1669,7 +1669,7 @@ void ChartModel::changeNullDate(const css::util::DateTime& aNullDate)
     }
 }
 
-std::optional<css::util::DateTime> ChartModel::getNullDate() const
+const std::optional<css::util::DateTime> & ChartModel::getNullDate() const
 {
     return m_aNullDate;
 }

@@ -67,7 +67,7 @@ public:
     void dispose();
 
     bool isMisspelled(SCCOL nCol, SCROW nRow) const;
-    MisspellRangeResult getMisspellRanges(SCCOL nCol, SCROW nRow) const;
+    const MisspellRangeResult& getMisspellRanges(SCCOL nCol, SCROW nRow) const;
     void setMisspellRanges(SCCOL nCol, SCROW nRow, const MisspellRangeResult& rRangeResult);
 
     void reset();

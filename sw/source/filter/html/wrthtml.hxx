@@ -622,7 +622,7 @@ public:
     sal_Int32 indexOfDotLeaders( SwPoolFormatId nPoolId, std::u16string_view rText );
 
     /// Determines the prefix string needed to respect the requested namespace alias.
-    OString GetNamespace() const { return maNamespace; }
+    const OString & GetNamespace() const { return maNamespace; }
 
     bool IsPrettyPrint() const { return !m_bSpacePreserve && m_bPrettyPrint; }
     bool IsLFPossible() const { return !m_bSpacePreserve && m_bLFPossible; }

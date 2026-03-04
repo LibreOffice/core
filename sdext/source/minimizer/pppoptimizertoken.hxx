@@ -63,7 +63,7 @@ enum PPPOptimizerTokenEnum
 };
 
 PPPOptimizerTokenEnum TKGet(const OUString&);
-OUString TKGet(const PPPOptimizerTokenEnum);
+const OUString& TKGet(const PPPOptimizerTokenEnum);
 
 #endif
 

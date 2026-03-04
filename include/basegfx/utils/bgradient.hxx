@@ -145,7 +145,7 @@ public:
 
     void changeStartAndEnd(BColor const& rStart, BColor const& rEnd);
 
-    BColor getStopColor(size_t i) const { return maStops[i].getStopColor(); }
+    const BColor& getStopColor(size_t i) const { return maStops[i].getStopColor(); }
 
     void removeLastStop() { return maStops.pop_back(); }
 

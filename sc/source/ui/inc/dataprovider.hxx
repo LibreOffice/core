@@ -59,8 +59,8 @@ public:
     bool IsRequestedTerminate();
     void Terminate();
     void EndThread();
-    bool IsParseError() { return mbIsParseError; }
-    auto GetLastException() { return mpLastException; }
+    bool IsParseError() const { return mbIsParseError; }
+    const std::exception_ptr & GetLastException() const { return mpLastException; }
 
     virtual void execute() override;
 };

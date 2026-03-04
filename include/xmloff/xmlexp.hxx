@@ -316,7 +316,7 @@ public:
     // doesn't handle some style-specific content like headers/footers. These methods are for
     // passing the "already embedded" information from one instance to another.
 
-    std::unordered_map<OString, OUString> getEmbeddedFontFiles() const;
+    const std::unordered_map<OString, OUString> & getEmbeddedFontFiles() const;
     void setEmbeddedFontFiles(const std::unordered_map<OString, OUString>&);
 
     // XExporter

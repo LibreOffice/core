@@ -569,7 +569,7 @@ const rtl::Reference<framework::ConfigurationController> &
     return mxConfigurationController;
 }
 
-rtl::Reference<framework::ModuleController> DrawController::getModuleController()
+const rtl::Reference<framework::ModuleController> & DrawController::getModuleController()
 {
     ThrowIfDisposed();
 

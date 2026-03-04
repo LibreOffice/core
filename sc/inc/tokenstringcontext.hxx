@@ -66,7 +66,7 @@ public:
     {
         m_oODFSavingVersion = eDefaultVersion;
     }
-    std::optional<SvtSaveOptions::ODFSaneDefaultVersion> getODFSavingVersion()
+    const std::optional<SvtSaveOptions::ODFSaneDefaultVersion>& getODFSavingVersion() const
     {
         return m_oODFSavingVersion;
     }
