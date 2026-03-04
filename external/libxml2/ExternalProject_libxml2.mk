@@ -35,9 +35,9 @@ else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_Trace_StartRange,libxml2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		$(gb_RUN_CONFIGURE) ./configure --disable-ipv6 --without-iconv --without-python --without-zlib --with-sax1 \
+		$(gb_RUN_CONFIGURE) ./configure --without-iconv --without-python --without-zlib --with-sax1 \
 			--without-lzma \
-			$(if $(debug),--with-run-debug) \
+			$(if $(debug),--with-debug) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
