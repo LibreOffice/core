@@ -437,6 +437,11 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
     if (!pInput)
         return false;
 
+#if HB_VERSION_ATLEAST(13, 0, 0)
+    // If the font has CFF2 table, we need to downgrade it to CFF, as we can’t embed CFF2 in PDF.
+    hb_subset_input_set_flags(pInput, HB_SUBSET_FLAGS_DOWNGRADE_CFF2);
+#endif
+
     // Add the requested glyph IDs to the subset input, and set up
     // old-to-new glyph ID mapping so that each glyph appears at the
     // GID position matching its encoding byte.
@@ -456,7 +461,7 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
         HB_TAG('l', 'o', 'c', 'a'), HB_TAG('m', 'a', 'x', 'p'), HB_TAG('g', 'l', 'y', 'f'),
         HB_TAG('C', 'F', 'F', ' '), HB_TAG('p', 'o', 's', 't'), HB_TAG('n', 'a', 'm', 'e'),
         HB_TAG('O', 'S', '/', '2'), HB_TAG('c', 'v', 't', ' '), HB_TAG('f', 'p', 'g', 'm'),
-        HB_TAG('p', 'r', 'e', 'p'),
+        HB_TAG('p', 'r', 'e', 'p'), HB_TAG('C', 'F', 'F', '2'),
     };
 
     hb_set_t* pDropTableSet = hb_subset_input_set(pInput, HB_SUBSET_SETS_DROP_TABLE_TAG);

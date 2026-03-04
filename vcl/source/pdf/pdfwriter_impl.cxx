@@ -5521,7 +5521,12 @@ void PDFWriterImpl::registerGlyph(const sal_GlyphId nFontGlyphId,
     // PDF doesn't support CFF2 table and we currently don't convert them to
     // Type 1 (like we do with CFF table), so embed as Type 3 fonts.
     // Non-CFF2 variable fonts are instanced via hb-subset and embedded normally.
+    // With HarfBuzz 13.0.0, we downgrade CFF2 to CFF when subsetting.
+#if HB_VERSION_ATLEAST(13, 0, 0)
+    bool bCFF2 = false;
+#else
     bool bCFF2 = !pFace->GetRawFontData(HB_TAG('C', 'F', 'F', '2')).empty();
+#endif
 
     if (pFace->IsColorFont() || bCFF2)
     {

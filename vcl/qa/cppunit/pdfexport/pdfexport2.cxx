@@ -28,7 +28,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <basegfx/vector/b2dsize.hxx>
-#include <test/unoapi_test.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
@@ -52,7 +51,29 @@
 #include <cmath>
 #include <libxml/xpathInternals.h>
 
+#if !defined _WIN32
+#include <set>
+static std::ostream& operator<<(std::ostream& rStream, const std::set<rtl::OString>& rSet);
+#endif
+
+#include <test/unoapi_test.hxx>
+
 using namespace ::com::sun::star;
+
+#if !defined _WIN32
+static std::ostream& operator<<(std::ostream& rStream, const std::set<OString>& rSet)
+{
+    rStream << "{ ";
+    for (auto it = rSet.begin(); it != rSet.end(); ++it)
+    {
+        if (it != rSet.begin())
+            rStream << ", ";
+        rStream << *it;
+    }
+    rStream << " }";
+    return rStream;
+}
+#endif
 
 namespace
 {
@@ -5202,7 +5223,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
     // Check that all fonts in the document are Type 3 fonts
-    int nFonts = 0;
+    std::set<OString> aFontNames;
     for (const auto& aElement : aDocument.GetElements())
     {
         auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
@@ -5214,24 +5235,23 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf155161)
             auto pSubtype
                 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
             CPPUNIT_ASSERT(pSubtype);
-            CPPUNIT_ASSERT_EQUAL("Type3"_ostr, pSubtype->GetValue());
-
-            auto pName = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Name"_ostr));
+            CPPUNIT_ASSERT_EQUAL("Type1"_ostr, pSubtype->GetValue());
+            auto pName
+                = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
             CPPUNIT_ASSERT(pName);
-            CPPUNIT_ASSERT_EQUAL("Cantarell-Regular"_ostr, pName->GetValue());
-
-            nFonts++;
+            aFontNames.insert(pName->GetValue().copy(7)); // skip the subset id
         }
     }
 
 #ifdef MACOSX
     // There must be two fonts
-    CPPUNIT_ASSERT_EQUAL(2, nFonts);
+    std::set<OString> aExpected{ "Cantarell-Regular"_ostr, "Cantarell-Bold"_ostr };
 #else
     // But it seems that embedded variable fonts don’t register all supported
     // styles on Linux, so the bold and regular text use the same regular font.
-    CPPUNIT_ASSERT(nFonts);
+    std::set<OString> aExpected{ "Cantarell-Regular"_ostr };
 #endif
+    CPPUNIT_ASSERT_EQUAL(aExpected, aFontNames);
 #endif
 }
 

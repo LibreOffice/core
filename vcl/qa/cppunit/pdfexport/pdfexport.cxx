@@ -1874,23 +1874,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_2)
             auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
             if (pType && pType->GetValue() == "Font")
             {
-                // Static font identified under "BaseFont"
                 auto pName
                     = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
-                OString fontName;
-                if (pName)
-                {
-                    fontName = pName->GetValue().copy(7); // skip the subset id
-                }
-                else // Variable font identified under "Name", try that
-                {
-                    pName
-                        = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Name"_ostr));
-                    CPPUNIT_ASSERT_MESSAGE("No 'BaseFont' or 'Name' element found for font!",
-                                           pName);
-                    fontName = pName->GetValue();
-                }
-                CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", "ReemKufi"_ostr, fontName);
+                CPPUNIT_ASSERT(pName);
+                OString aFontName = pName->GetValue().copy(7); // skip the subset id
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", "ReemKufi"_ostr, aFontName);
 
                 auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(
                     pObject->Lookup("ToUnicode"_ostr));
