@@ -42,6 +42,7 @@
 #include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
 
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
+#include <com/sun/star/document/XInteractionFilterOptions.hpp>
 
 #include "../../inc/lib/init.hxx"
 
@@ -149,9 +150,6 @@ bool ShouldFallbackToStandard(const uno::Reference<task::XInteractionRequest>& x
         return true;
 
     if (document::BrokenPackageRequest aStruct; request >>= aStruct)
-        return true;
-
-    if (document::FilterOptionsRequest aStruct; request >>= aStruct)
         return true;
 
     if (document::FontsDisallowEditingRequest aStruct; request >>= aStruct)
@@ -371,6 +369,29 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
     return true;
 }
 
+bool LOKInteractionHandler::handleFilterOptionsRequest(
+        const uno::Sequence<uno::Reference<task::XInteractionContinuation>>& rContinuations,
+        const uno::Any& rRequest)
+{
+    document::FilterOptionsRequest aFilterOptionsRequest;
+    if (!(rRequest >>= aFilterOptionsRequest))
+        return false;
+
+    // Accept the provided/default filter options without showing a dialog,
+    // same as QuietInteraction did. This lets CSV files (and other formats
+    // that need import filter options) load in batch/silent mode.
+    for (auto const& cont : rContinuations)
+    {
+        uno::Reference<document::XInteractionFilterOptions> xFOptions(cont, uno::UNO_QUERY);
+        if (xFOptions.is())
+        {
+            xFOptions->select();
+            return true;
+        }
+    }
+    return false;
+}
+
 sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
         const uno::Reference<task::XInteractionRequest>& xRequest)
 {
@@ -384,6 +405,9 @@ sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
         return true;
 
     if (handlePasswordRequest(aContinuations, request))
+        return true;
+
+    if (handleFilterOptionsRequest(aContinuations, request))
         return true;
 
     if (ShouldFallbackToStandard(xRequest))
