@@ -1351,7 +1351,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
                     {   // Outer
                         for ( SCROW j=0; j < nRowSpan; j++ )
                         {
-                            sal_uLong nRowKey = nRow + j;
+                            SCROW nRowKey = nRow + j;
                             SCROW nR = (*pTab1)[ nRowKey ];
                             if ( !nR )
                                 (*pTab1)[ nRowKey ] = nRowsPerRow1;
@@ -1385,7 +1385,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
                         }
                         for ( SCROW j=0; j < nRows; j++ )
                         {
-                            sal_uLong nRowKey = nRow + j;
+                            SCROW nRowKey = nRow + j;
                             (*pTab2)[ nRowKey ] = nRowsPerRow2;
                         }
                     }
