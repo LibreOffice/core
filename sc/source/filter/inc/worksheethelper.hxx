@@ -38,6 +38,8 @@ namespace com::sun::star {
     namespace table { class XCellRange; }
 }
 
+namespace oox::xls::nsv { struct NamedSheetViewData; }
+
 namespace oox::xls {
 
 class AutoFilterBuffer;
@@ -221,6 +223,9 @@ public:
 
     ExtLst&             getExtLst() const;
 
+    /** Sets the named sheet views data for this sheet. */
+    void setNamedSheetViews(std::vector<nsv::NamedSheetViewData>&& rData);
+
     /** Sets a column or row page break described in the passed struct. */
     void                setPageBreak( const PageBreakModel& rModel, bool bRowBreak );
     /** Inserts the hyperlink URL into the spreadsheet. */
@@ -276,6 +281,9 @@ public:
     void                finalizeWorksheetImport();
     /** Final import of drawing objects. Has to be called after all content has been imported */
     void finalizeDrawingImport();
+
+    /** Finalizes the import of named sheet views, by creating the sheet views from the data. */
+    void finalizeNamedSheetViews();
 
     void                setCellFormula( const ScAddress& rTokenAddress, const OUString&  );
 

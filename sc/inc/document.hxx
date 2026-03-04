@@ -2428,7 +2428,7 @@ public:
     /* Sheet View */
 
     /** Creates a new sheet view for the table, using the sheet view table */
-    std::pair<sc::SheetViewID, SCTAB> CreateNewSheetView(SCTAB nTab);
+    SC_DLLPUBLIC std::pair<sc::SheetViewID, SCTAB> CreateNewSheetView(SCTAB nTab);
 
     /** Return the sheet view table for the ID */
     SCTAB GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID);

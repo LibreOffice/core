@@ -72,6 +72,7 @@
 #include <columnspanset.hxx>
 #include <dbdata.hxx>
 #include <cellsuno.hxx>
+#include <NamedSheetViewImporter.hxx>
 #include <fmtuno.hxx>
 
 #include <svl/stritem.hxx>
@@ -272,6 +273,12 @@ public:
     /** returns the ExtLst entries that need to be filled */
     ExtLst&      getExtLst() { return maExtLst; }
 
+    /** Sets the named sheet views data for this sheet. */
+    void setNamedSheetViews(std::vector<nsv::NamedSheetViewData>&& rData)
+    {
+        maNamedSheetViewImporter.setNamedSheetViews(std::move(rData));
+    }
+
     /** Sets a column or row page break described in the passed struct. */
     void                setPageBreak( const PageBreakModel& rModel, bool bRowBreak );
     /** Inserts the hyperlink URL into the spreadsheet. */
@@ -317,6 +324,9 @@ public:
     void                finalizeWorksheetImport();
 
     void finalizeDrawingImport();
+
+    /** Creates sheet views from imported named sheet view data and applies filters/sort. */
+    void finalizeNamedSheetViews();
 
     /// Allow the threaded importer to override our progress bar impl.
     virtual ISegmentProgressBarRef getRowProgress() override
@@ -391,6 +401,7 @@ private:
     SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
     VmlDrawingPtr       mxVmlDrawing;       /// Collection of all VML shapes.
     ExtLst              maExtLst;           /// List of extended elements
+    nsv::NamedSheetViewImporter maNamedSheetViewImporter; /// Named sheet view importer.
     OUString            maDrawingPath;      /// Path to DrawingML fragment.
     OUString            maVmlDrawingPath;   /// Path to legacy VML drawing fragment.
     awt::Size                maDrawPageSize;     /// Current size of the drawing page in 1/100 mm.
@@ -416,6 +427,7 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, ISegmentProgr
     maSheetSett( *this ),
     maPageSett( *this ),
     maSheetViewSett( *this ),
+    maNamedSheetViewImporter(*this, nSheet),
     mxProgressBar(std::move( xProgressBar )),
     mbFastRowProgress( false ),
     meSheetType( eSheetType ),
@@ -992,6 +1004,11 @@ void WorksheetGlobals::finalizeWorksheetImport()
     lclUpdateProgressBar( mxFinalProgress, 1.0 );
 }
 
+void WorksheetGlobals::finalizeNamedSheetViews()
+{
+    maNamedSheetViewImporter.finalizeImport();
+}
+
 void WorksheetGlobals::finalizeDrawingImport()
 {
     finalizeDrawings();
@@ -1527,6 +1544,11 @@ ExtLst& WorksheetHelper::getExtLst() const
     return mrSheetGlob.getExtLst();
 }
 
+void WorksheetHelper::setNamedSheetViews(std::vector<nsv::NamedSheetViewData>&& rData)
+{
+    mrSheetGlob.setNamedSheetViews(std::move(rData));
+}
+
 void WorksheetHelper::setPageBreak( const PageBreakModel& rModel, bool bRowBreak )
 {
     mrSheetGlob.setPageBreak( rModel, bRowBreak );
@@ -1626,6 +1648,11 @@ void WorksheetHelper::finalizeWorksheetImport()
 void WorksheetHelper::finalizeDrawingImport()
 {
     mrSheetGlob.finalizeDrawingImport();
+}
+
+void WorksheetHelper::finalizeNamedSheetViews()
+{
+    mrSheetGlob.finalizeNamedSheetViews();
 }
 
 void WorksheetHelper::setCellFormula( const ScAddress& rTokenAddress, const OUString& rTokenStr )

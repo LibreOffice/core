@@ -644,6 +644,12 @@ void FilterColumn::importFilterColumn( SequenceInputStream& rStrm )
     mbShowButton = getFlag( nFlags, BIFF12_FILTERCOLUMN_SHOWBUTTON );
 }
 
+void FilterColumn::setColumnData(sal_Int32 nColId, std::shared_ptr<FilterSettingsBase> xSettings)
+{
+    mnColId = nColId;
+    mxSettings = std::move(xSettings);
+}
+
 ApiFilterSettings FilterColumn::finalizeImport()
 {
     ApiFilterSettings aSettings;
@@ -704,6 +710,11 @@ void AutoFilter::importSortState( const AttributeList& rAttribs, sal_Int16 nShee
 {
     OUString aRangeStr = rAttribs.getString( XML_ref, OUString() );
     AddressConverter::convertToCellRangeUnchecked(maSortRange, aRangeStr, nSheet, getScDocument());
+}
+
+void AutoFilter::setRange(const ScRange& rRange)
+{
+    maRange = rRange;
 }
 
 FilterColumn& AutoFilter::createFilterColumn()

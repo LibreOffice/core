@@ -9,8 +9,7 @@
 
 #include <NamedSheetViewFragment.hxx>
 
-#include <biffhelper.hxx>
-#include <richstringcontext.hxx>
+#include <sal/log.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <autofiltercontext.hxx>
@@ -89,6 +88,7 @@ ContextHandlerRef SortRuleContext::onCreateContext(sal_Int32 nElement,
 {
     switch (nElement)
     {
+        case XNSV_TOKEN(sortCondition):
         case XLS14_TOKEN(sortCondition):
             mrSortRuleData.maRef = rAttribs.getString(XML_ref, {}); // required
             mrSortRuleData.mbDescending = rAttribs.getBool(XML_descending, false); // optional
@@ -156,12 +156,6 @@ ContextHandlerRef NamedSheetViewContext::onCreateContext(sal_Int32 nElement,
 {
     switch (nElement)
     {
-        case XNSV_TOKEN(namedSheetView):
-        {
-            mrNamedSheetViewData.maName = rAttribs.getString(XML_name, {});
-            mrNamedSheetViewData.maID = rAttribs.getString(XML_id, {});
-            return this;
-        }
         case XNSV_TOKEN(nsvFilter):
         {
             auto& rNsvFilter = mrNamedSheetViewData.maNsvFilters.emplace_back();
@@ -184,16 +178,29 @@ NamedSheetViewFragment::NamedSheetViewFragment(WorksheetHelper const& rHelper,
 }
 
 ContextHandlerRef NamedSheetViewFragment::onCreateContext(sal_Int32 nElement,
-                                                          AttributeList const& /*rAttribs*/)
+                                                          AttributeList const& rAttribs)
 {
     switch (nElement)
     {
         case XNSV_TOKEN(namedSheetViews):
         {
-            return new NamedSheetViewContext(*this, maNamedSheetViews.emplace_back());
+            return this;
+        }
+        case XNSV_TOKEN(namedSheetView):
+        {
+            auto& rData = maNamedSheetViews.emplace_back();
+            rData.maName = rAttribs.getString(XML_name, {});
+            rData.maID = rAttribs.getString(XML_id, {});
+            return new NamedSheetViewContext(*this, rData);
         }
     }
     return nullptr;
+}
+
+void NamedSheetViewFragment::finalizeImport()
+{
+    if (!maNamedSheetViews.empty())
+        setNamedSheetViews(std::move(maNamedSheetViews));
 }
 
 } // namespace oox::xls::nsv

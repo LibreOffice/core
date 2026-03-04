@@ -556,6 +556,12 @@ void WorkbookFragment::finalizeImport()
         pHelper->finalizeDrawingImport();
     }
 
+    // Create sheet view tabs as late as possible.
+    for (WorksheetHelper* pHelper : aHelpers)
+    {
+        pHelper->finalizeNamedSheetViews();
+    }
+
     for( auto& [rxSheetGlob, rxFragment] : aSheetFragments )
     {
         // delete fragment object and WorkbookGlobals object, will free all allocated sheet buffers
