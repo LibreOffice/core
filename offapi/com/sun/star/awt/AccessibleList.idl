@@ -51,14 +51,6 @@ service AccessibleList
        <li>Name: The name of a list is its localized label.</li>
        <li>Description: The description of a list is its localized
            help text.</li>
-       <li>Parent: The parent can be of type
-            <ul>
-            <li>com::sun::star::awt::AccessibleComboBox</li>
-            <li>com::sun::star::awt::AccessibleListBox</li>
-            <li>com::sun::star::awt::AccessibleDropDownListBox</li>
-            <li>com::sun::star::awt::AccessibleDropDownComboBox</li>
-            </ul>
-       </li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>

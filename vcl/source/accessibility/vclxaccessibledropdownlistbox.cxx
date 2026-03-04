@@ -29,16 +29,4 @@ VCLXAccessibleDropDownListBox::VCLXAccessibleDropDownListBox (ListBox* pListBox)
 {
 }
 
-// XServiceInfo
-OUString VCLXAccessibleDropDownListBox::getImplementationName()
-{
-    return u"com.sun.star.comp.toolkit.AccessibleDropDownListBox"_ustr;
-}
-
-Sequence< OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNames()
-{
-    return comphelper::concatSequences(VCLXAccessibleBox::getSupportedServiceNames(),
-                                       std::initializer_list<OUString>{u"com.sun.star.accessibility.AccessibleDropDownListBox"_ustr});
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

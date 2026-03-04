@@ -35,11 +35,6 @@ class VCLXAccessibleDropDownListBox final : public VCLXAccessibleBox
 public:
     VCLXAccessibleDropDownListBox(ListBox* pListBox);
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    // Return drop down list box specific services.
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-
 private:
     virtual ~VCLXAccessibleDropDownListBox() override = default;
 };

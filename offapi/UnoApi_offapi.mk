@@ -487,7 +487,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/awt,\
 	AccessibleCheckBox \
 	AccessibleComboBox \
 	AccessibleDropDownComboBox \
-	AccessibleDropDownListBox \
 	AccessibleEdit \
 	AccessibleFixedText \
 	AccessibleList \
