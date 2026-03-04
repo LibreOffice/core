@@ -194,7 +194,7 @@ class ScXMLExport : public SvXMLExport
     void WriteLabelRanges(const ScDocument& rDoc, const css::uno::Reference< css::container::XIndexAccess >& xRangesIAccess, bool bColumn);
     void WriteNamedExpressions(const ScDocument& rDoc);
     void WriteExternalDataMapping(ScDocument& rDoc);
-    void WriteExternalDataTransformations(ScDocument& rDoc, const std::vector<std::shared_ptr<sc::DataTransformation>>& rDataTransformations);
+    void WriteExternalDataTransformations(const ScDocument& rDoc, const std::vector<std::shared_ptr<sc::DataTransformation>>& rDataTransformations);
     void WriteDataStream(ScDocument& rDoc);
     void WriteNamedRange(const ScDocument& rDoc, ScRangeName* pRangeName);
     void exportSparklineGroups(ScDocument& rDoc, SCTAB nTab);

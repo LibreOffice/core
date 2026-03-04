@@ -1002,7 +1002,7 @@ public:
     void                    DrawText_ToPosition( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation );
     void                    DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bHardClip );
     void                    UpdateViews( EditView* pCurView = nullptr );
-    Point CalculateTextPaintStartPosition(ImpEditView& rView) const;
+    Point CalculateTextPaintStartPosition(const ImpEditView& rView) const;
     void                    DrawText_ToEditView( TextHierarchyBreakup& rHelper, ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
     void StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aClipRect, StripPortionsHelper& rStripPortionsHelper);
 

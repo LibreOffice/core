@@ -532,7 +532,7 @@ void OBrowserListBox::ShowEntry(sal_uInt16 nPos)
     m_xScrolledWindow->vadjustment_set_value(nThumbPos);
 }
 
-void OBrowserListBox::buttonClicked(OBrowserLine* _pLine, bool _bPrimary)
+void OBrowserListBox::buttonClicked(const OBrowserLine* _pLine, bool _bPrimary)
 {
     DBG_ASSERT(_pLine, "OBrowserListBox::buttonClicked: invalid browser line!");
     if (_pLine && m_pLineListener)

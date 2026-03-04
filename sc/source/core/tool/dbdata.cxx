@@ -2282,7 +2282,7 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
 
 namespace {
 
-bool intersectsRange(const ScDBData* pDBData, ScRange& rRange)
+bool intersectsRange(const ScDBData* pDBData, const ScRange& rRange)
 {
     ScRange aRange;
     pDBData->GetArea(aRange);

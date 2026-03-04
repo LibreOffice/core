@@ -535,7 +535,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf148820)
 
 namespace
 {
-void lcl_TestNumberFormat(ScDocument& rDoc, const OUString& rFormatStrOK)
+void lcl_TestNumberFormat(const ScDocument& rDoc, const OUString& rFormatStrOK)
 {
     sal_uInt32 nNumberFormat = rDoc.GetNumberFormat(0, 0, 0);
     const SvNumberformat* pNumberFormat = rDoc.GetFormatTable()->GetEntry(nNumberFormat);

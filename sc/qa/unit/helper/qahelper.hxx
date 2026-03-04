@@ -123,7 +123,7 @@ public:
                                         bool bCreateUndo);
     bool insertRangeNames(ScDocument* pDoc, ScRangeName* pNames, const RangeNameDef* p,
                                        const RangeNameDef* pEnd);
-    OUString getRangeByName(ScDocument* pDoc, const OUString& aRangeName);
+    OUString getRangeByName(const ScDocument* pDoc, const OUString& aRangeName);
     void printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                            const char* pCaption = nullptr);
     void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption,
@@ -173,7 +173,7 @@ public:
 
     const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage);
 
-    ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj);
+    ScRangeList getChartRanges(const ScDocument& rDoc, const SdrOle2Obj& rChartObj);
 
     void testFormats(ScDocument* pDoc,std::u16string_view sFormat);
 
@@ -181,7 +181,7 @@ public:
     void typeString(std::u16string_view rStr);
     void insertStringToCell(const OUString& rCell, std::u16string_view rStr);
     void insertArrayToCell(const OUString& rCell, std::u16string_view rStr);
-    void insertNewSheet(ScDocument& rDoc);
+    void insertNewSheet(const ScDocument& rDoc);
     void executeAutoSum();
     void selectObjectByName(std::u16string_view rObjName);
     void checkCurrentCursorPosition(ScDocShell& rDocSh, std::u16string_view rStr);

@@ -473,7 +473,7 @@ void PythonStubGenerator::addImportLine(const OString& importLine)
 }
 
 std::vector<unoidl::PlainStructTypeEntity::Member>
-PythonStubGenerator::getAllStructMembers(unoidl::PlainStructTypeEntity* entity)
+PythonStubGenerator::getAllStructMembers(const unoidl::PlainStructTypeEntity* entity)
 {
     std::vector<unoidl::PlainStructTypeEntity::Member> members;
 
@@ -498,7 +498,8 @@ PythonStubGenerator::getAllStructMembers(unoidl::PlainStructTypeEntity* entity)
     return members;
 }
 
-void PythonStubGenerator::generatePolyStruct(unoidl::PolymorphicStructTypeTemplateEntity* entity)
+void PythonStubGenerator::generatePolyStruct(
+    const unoidl::PolymorphicStructTypeTemplateEntity* entity)
 {
     addImportLine("from typing import TypeVar, Generic"_ostr); //imports to handle generic types
     OStringBuffer typeVarBuffer;
@@ -593,7 +594,7 @@ void PythonStubGenerator::generatePolyStruct(unoidl::PolymorphicStructTypeTempla
 }
 
 std::vector<unoidl::ExceptionTypeEntity::Member>
-PythonStubGenerator::getAllExceptionMembers(unoidl::ExceptionTypeEntity* entity)
+PythonStubGenerator::getAllExceptionMembers(const unoidl::ExceptionTypeEntity* entity)
 {
     std::vector<unoidl::ExceptionTypeEntity::Member> members;
 
@@ -622,7 +623,7 @@ PythonStubGenerator::getAllExceptionMembers(unoidl::ExceptionTypeEntity* entity)
     return members;
 }
 
-void PythonStubGenerator::generateEnum(unoidl::EnumTypeEntity* entity)
+void PythonStubGenerator::generateEnum(const unoidl::EnumTypeEntity* entity)
 {
     //just using the enum package provided in python itself
     addImportLine("import enum"_ostr);
@@ -652,7 +653,7 @@ void PythonStubGenerator::generateEnum(unoidl::EnumTypeEntity* entity)
     dedent();
 }
 
-void PythonStubGenerator::generateConstantGroup(unoidl::ConstantGroupEntity* entity)
+void PythonStubGenerator::generateConstantGroup(const unoidl::ConstantGroupEntity* entity)
 {
     m_buffer.append("class ");
     m_buffer.append(m_pySafeClassName);
@@ -738,7 +739,7 @@ void PythonStubGenerator::generateConstantGroup(unoidl::ConstantGroupEntity* ent
     dedent();
 }
 
-void PythonStubGenerator::generateTypedef(unoidl::TypedefEntity* entity)
+void PythonStubGenerator::generateTypedef(const unoidl::TypedefEntity* entity)
 {
     OUString originalUnoType = entity->getType();
     OString pythonTypeHintForOriginal = mapUnoTypeToPythonHint(
@@ -754,7 +755,7 @@ void PythonStubGenerator::generateTypedef(unoidl::TypedefEntity* entity)
     m_buffer.append("\n");
 }
 
-void PythonStubGenerator::generateStruct(unoidl::PlainStructTypeEntity* entity)
+void PythonStubGenerator::generateStruct(const unoidl::PlainStructTypeEntity* entity)
 {
     // Handle the base class (inheritance)
     OString baseClass = "object"_ostr; // Default base for Python classes
@@ -822,7 +823,7 @@ void PythonStubGenerator::generateStruct(unoidl::PlainStructTypeEntity* entity)
     dedent();
 }
 
-void PythonStubGenerator::generateException(unoidl::ExceptionTypeEntity* entity)
+void PythonStubGenerator::generateException(const unoidl::ExceptionTypeEntity* entity)
 {
     // Determine the base class for Python stub
     OString baseClass;
@@ -899,7 +900,7 @@ void PythonStubGenerator::generateException(unoidl::ExceptionTypeEntity* entity)
     dedent();
 }
 
-void PythonStubGenerator::generateInterface(unoidl::InterfaceTypeEntity* entity)
+void PythonStubGenerator::generateInterface(const unoidl::InterfaceTypeEntity* entity)
 {
     // Determine and generate the list of base classes.
     OStringBuffer baseClassesStr;
@@ -1060,7 +1061,7 @@ void PythonStubGenerator::generateInterface(unoidl::InterfaceTypeEntity* entity)
     dedent();
 }
 
-void PythonStubGenerator::generateService(unoidl::SingleInterfaceBasedServiceEntity* entity)
+void PythonStubGenerator::generateService(const unoidl::SingleInterfaceBasedServiceEntity* entity)
 {
     m_buffer.append("class ");
     m_buffer.append(m_pySafeClassName);
@@ -1164,7 +1165,7 @@ void PythonStubGenerator::generateService(unoidl::SingleInterfaceBasedServiceEnt
     dedent();
 }
 
-void PythonStubGenerator::generateSingleton(unoidl::InterfaceBasedSingletonEntity* entity)
+void PythonStubGenerator::generateSingleton(const unoidl::InterfaceBasedSingletonEntity* entity)
 {
     // A singleton is represented as a class with a static 'get' method.
     // The class itself is just a namespace for this method.

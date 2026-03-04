@@ -243,7 +243,9 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
       || fqn == "static_txtattr_cast"
       || fqn == "ScFormatShell::ExecuteStyle"
       || fqn == "SwContentIndexReg::MoveTo"
-      || fqn == "svt::OGenericUnoAsyncDialog::UnoAsyncDialogEntryGuard::UnoAsyncDialogEntryGuard")
+      || fqn == "svt::OGenericUnoAsyncDialog::UnoAsyncDialogEntryGuard::UnoAsyncDialogEntryGuard"
+      || fqn == "SwMarkdownParser::enter_block_callback"
+      || fqn == "SwMarkdownParser::enter_span_callback")
         return false;
 
     // calculate the ones we want to check

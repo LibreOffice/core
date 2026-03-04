@@ -674,7 +674,7 @@ void ScViewFunc::EnterDataToCurrentCell(const OUString& rString, const EditTextO
 
 namespace
 {
-bool checkFormula(ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString)
+bool checkFormula(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString)
 {
     // do not check formula if it is a text cell
     sal_uInt32 format = rDoc.GetNumberFormat(nCol, nRow, nTab );
@@ -3365,7 +3365,7 @@ void ScViewFunc::InsertNameList()
         pDocSh->UpdateOle(GetViewData());
 }
 
-void ScViewFunc::UpdateSelectionArea(const ScMarkData& rSel, ScPatternAttr* pAttr,
+void ScViewFunc::UpdateSelectionArea(const ScMarkData& rSel, const ScPatternAttr* pAttr,
                                      bool adjustHeight)
 {
     ScDocShell* pDocShell = GetViewData().GetDocShell();

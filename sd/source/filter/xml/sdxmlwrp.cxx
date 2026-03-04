@@ -735,7 +735,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     return nRet == ERRCODE_NONE;
 }
 
-bool IsSlideSorterPaste(::sd::DrawDocShell& rDocSh)
+bool IsSlideSorterPaste(const ::sd::DrawDocShell& rDocSh)
 {
     uno::Reference<document::XDocumentProperties> xSource = rDocSh.getDocProperties();
     uno::Reference<beans::XPropertyContainer> xSourcePropertyContainer = xSource->getUserDefinedProperties();

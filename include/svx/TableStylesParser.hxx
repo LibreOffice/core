@@ -59,7 +59,7 @@ public:
                       std::unique_ptr<SvxAutoFormatDataField> pField);
     const TableStyle* getCellStyle(const OUString& rName);
     void addTableTemplate(const OUString& rsStyleName, const XMLTableTemplate& xTableTemplate,
-                          std::bitset<6>& rUseSet);
+                          const std::bitset<6>& rUseSet);
     SvxAutoFormat& GetFormat() { return mpAutoFormat; }
     void finishStyles();
 };
@@ -120,7 +120,7 @@ public:
 
     virtual void Finish(bool bOverwrite) override;
 
-    void setPropertyValue(OUString& rPropName, const css::uno::Any& aValue);
+    void setPropertyValue(const OUString& rPropName, const css::uno::Any& aValue);
 };
 
 class SVX_DLLPUBLIC SvxTableStylesExport : public SvXMLExport
@@ -129,8 +129,8 @@ private:
     SvxAutoFormat& mpAutoFormat;
 
     void exportTableTemplate(const SvxAutoFormatData& rData);
-    void exportCellStyle(const SvxAutoFormatDataField& rField, OUString& rStyleName,
-                         OUString& rParentName);
+    void exportCellStyle(const SvxAutoFormatDataField& rField, const OUString& rStyleName,
+                         const OUString& rParentName);
     void exportCellProperties(const SvxAutoFormatDataField& rField,
                               const SvxAutoFormatDataField& rParent);
     void exportParaProperties(const SvxAutoFormatDataField& rField,

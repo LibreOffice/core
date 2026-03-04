@@ -2002,7 +2002,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawPolyPolygonAlpha2)
     CPPUNIT_ASSERT_EQUAL(RED_TRANSPARENT, pVDev->GetPixel(Point(1, 1)));
 }
 
-static size_t ClipGradientTest(GDIMetaFile& rMtf, size_t nIndex)
+static size_t ClipGradientTest(const GDIMetaFile& rMtf, size_t nIndex)
 {
     MetaAction* pAction = rMtf.GetAction(nIndex);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a comment action", MetaActionType::COMMENT,

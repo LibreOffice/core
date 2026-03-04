@@ -91,7 +91,7 @@ public:
     virtual std::shared_ptr< svx::diagram::DiagramDataState > extractDiagramDataState() const override;
     virtual void applyDiagramDataState(const std::shared_ptr< svx::diagram::DiagramDataState >& rState) override;
 
-    void doAnchor(css::uno::Reference<css::drawing::XShape>& rTarget);
+    void doAnchor(const css::uno::Reference<css::drawing::XShape>& rTarget);
     const std::shared_ptr< ::oox::drawingml::Theme >& getOrCreateThemePtr(
         const rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
 

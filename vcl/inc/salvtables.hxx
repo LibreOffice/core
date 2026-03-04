@@ -1584,7 +1584,7 @@ protected:
 
     bool IsDummyEntry(SvTreeListEntry* pEntry) const;
 
-    SvTreeListEntry* GetPlaceHolderChild(SvTreeListEntry* pEntry) const;
+    SvTreeListEntry* GetPlaceHolderChild(const SvTreeListEntry* pEntry) const;
 
     static void set_font_color(SvTreeListEntry* pEntry, const Color& rColor);
 

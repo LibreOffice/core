@@ -970,7 +970,7 @@ void QtBuilder::setEntryProperties(QLineEdit& rLineEdit, stringmap& rProps)
         rLineEdit.setEchoMode(QLineEdit::Password);
 }
 
-void QtBuilder::setItemViewProperties(QAbstractItemView& rIconView, stringmap& rProps)
+void QtBuilder::setItemViewProperties(const QAbstractItemView& rIconView, stringmap& rProps)
 {
     auto aIt = rProps.find(u"activate-on-single-click"_ustr);
     if (aIt != rProps.end() && toBool(aIt->second))

@@ -50,7 +50,7 @@ class ScNoteOverlay : public Timer
 public:
     ScNoteOverlay(
         ScGridWindow& rScGridWindow,
-        ScAddress& aPos,
+        const ScAddress& aPos,
         OUString aUser,
         bool bLeftEdge,
         bool bForce,

@@ -230,7 +230,7 @@ sal_uInt16 toVclKeyCode(int nKeyval, Qt::KeyboardModifiers eModifiers)
     }
 }
 
-KeyEvent toVclKeyEvent(QKeyEvent& rEvent)
+KeyEvent toVclKeyEvent(const QKeyEvent& rEvent)
 {
     const sal_uInt16 nKeyCode = toVclKeyCode(rEvent.key(), rEvent.modifiers());
     const QString sText = rEvent.text();
@@ -251,7 +251,7 @@ sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons)
     return nCode;
 }
 
-MouseEvent toVclMouseEvent(QMouseEvent& rEvent)
+MouseEvent toVclMouseEvent(const QMouseEvent& rEvent)
 {
     const Point aPos = toPoint(rEvent.pos());
     const sal_uInt16 nClicks = rEvent.type() == QMouseEvent::MouseButtonDblClick ? 2 : 1;

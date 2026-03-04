@@ -128,7 +128,7 @@ const TableStyle* SvxTableStylesImport::getCellStyle(const OUString& rName)
 
 void SvxTableStylesImport::addTableTemplate(const OUString& rsStyleName,
                                             const XMLTableTemplate& xTableTemplate,
-                                            std::bitset<6>& rUseSet)
+                                            const std::bitset<6>& rUseSet)
 {
     auto xPtr = std::make_shared<XMLTableTemplate>(xTableTemplate);
     maTableTemplates.emplace_back(rsStyleName, xPtr);
@@ -272,7 +272,7 @@ void SvxCellStyleContext::Finish(bool)
     mpImport->addCellStyle(GetName(), GetParentName(), std::move(mpField));
 }
 
-void SvxCellStyleContext::setPropertyValue(OUString& rPropName, const css::uno::Any& aValue)
+void SvxCellStyleContext::setPropertyValue(const OUString& rPropName, const css::uno::Any& aValue)
 {
     try
     {
@@ -659,7 +659,7 @@ void SvxTableStylesExport::exportTableTemplate(const SvxAutoFormatData& rData)
 }
 
 void SvxTableStylesExport::exportCellStyle(const SvxAutoFormatDataField& rField,
-                                           OUString& rStyleName, OUString& rParentName)
+                                           const OUString& rStyleName, const OUString& rParentName)
 {
     AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, rStyleName);
     AddAttribute(XML_NAMESPACE_STYLE, XML_FAMILY, "table-cell");
@@ -720,7 +720,7 @@ static OUString lcl_getBorderLineStyle(SvxBorderLineStyle rLineStyle)
     }
 }
 
-static OUString lcl_getBorderStyle(editeng::SvxBorderLine& rBorder)
+static OUString lcl_getBorderStyle(const editeng::SvxBorderLine& rBorder)
 {
     OUStringBuffer strBuffer;
     sax::Converter::convertMeasure(strBuffer, rBorder.GetWidth(),

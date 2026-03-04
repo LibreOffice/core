@@ -1238,7 +1238,7 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
                                       /*pWrapAttrList=*/nullptr, /*bOOxmlExport=*/true, mnShapeId);
 }
 
-void XclExpTbxControlObj::WriteAnchor(sax_fastparser::FSHelperPtr& rTarget, bool bIsDrawing) const
+void XclExpTbxControlObj::WriteAnchor(const sax_fastparser::FSHelperPtr& rTarget, bool bIsDrawing) const
 {
     tools::Rectangle aAreaFrom;
     tools::Rectangle aAreaTo;

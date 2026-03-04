@@ -112,8 +112,8 @@ public:
 
      */
     static void convertFromModel(
-                    oox::core::XmlFilterBase& rFilter,
-                    StyleModel& rChartStyleModel,
+                    const oox::core::XmlFilterBase& rFilter,
+                    const StyleModel& rChartStyleModel,
                     const css::uno::Reference< css::chart2::XChartStyle >& rxChartStyle);
 
 private:

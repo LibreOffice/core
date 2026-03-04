@@ -195,7 +195,7 @@ private:
     /** Read the view descriptions from the configuration.
     */
     void ProcessViewDescriptions (
-        PresenterConfigurationAccess& rConfiguration);
+        const PresenterConfigurationAccess& rConfiguration);
 
     /** Called by ProcessViewDescriptions for a single entry.
     */

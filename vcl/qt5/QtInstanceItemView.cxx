@@ -255,7 +255,7 @@ QItemSelectionModel& QtInstanceItemView::getSelectionModel() const
     return *pSelectionModel;
 }
 
-void QtInstanceItemView::enableActivateOnSingleClick(QAbstractItemView& rItemView)
+void QtInstanceItemView::enableActivateOnSingleClick(const QAbstractItemView& rItemView)
 {
     QObject::connect(&rItemView, &QAbstractItemView::clicked, &rItemView,
                      &QAbstractItemView::activated);

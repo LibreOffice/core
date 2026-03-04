@@ -123,7 +123,7 @@ private:
     std::unique_ptr<SvxRedlineTable> m_xLbConflicts;
 
     OUString            GetConflictString( const ScConflictsListEntry& rConflictEntry );
-    void                SetActionString(ScChangeAction& rAction, ScDocument& rDoc, const weld::TreeIter& rEntry);
+    void                SetActionString(const ScChangeAction& rAction, ScDocument& rDoc, const weld::TreeIter& rEntry);
     void                HandleListBoxSelection();
 
     void                SetConflictAction(const weld::TreeIter& rRootEntry, ScConflictAction eConflictAction);

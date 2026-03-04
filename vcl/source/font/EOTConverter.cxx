@@ -23,7 +23,7 @@ namespace
 {
 // Writes padding, length and string data to font output
 void writeNameTableString(font::TTFFont& rFont,
-                          std::unique_ptr<NameTableHandler>& pNameTableHandler,
+                          const std::unique_ptr<NameTableHandler>& pNameTableHandler,
                           font::NameID eNameID, std::vector<sal_uInt8>& rEotOutput)
 {
     sal_uInt64 nOffset = 0;

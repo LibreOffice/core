@@ -806,7 +806,7 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
     }
 }
 
-void SfxLokHelper::notifyCurrentPageSizeChangedAllViews(vcl::ITiledRenderable *pDoc)
+void SfxLokHelper::notifyCurrentPageSizeChangedAllViews(const vcl::ITiledRenderable *pDoc)
 {
     if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
         return;

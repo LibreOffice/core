@@ -15,7 +15,7 @@ constexpr sal_Int32 MAX_SEARCH_CHARS = 2000;
 
 namespace comphelper
 {
-bool IsMarkdownData(OUString& rData)
+bool IsMarkdownData(const OUString& rData)
 {
     icu::UnicodeString ustr(rData.getStr(), std::min(rData.getLength(), MAX_SEARCH_CHARS));
 

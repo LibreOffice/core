@@ -61,7 +61,7 @@ Shape* DiagramData_oox::getOrCreateAssociatedShape(const svx::diagram::Point& rP
     return rShapePtr.get();
 }
 
-void DiagramData_oox::writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget)
+void DiagramData_oox::writeDiagramReplacement(DrawingML& rOriginalDrawingML, const sax_fastparser::FSHelperPtr& rTarget)
 {
     if (!rTarget)
         return;
@@ -110,7 +110,7 @@ void DiagramData_oox::writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax
     rTarget->endDocument();
 }
 
-void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget, std::u16string_view rDrawingRelId)
+void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, const sax_fastparser::FSHelperPtr& rTarget, std::u16string_view rDrawingRelId)
 {
     if (!rTarget)
         return;

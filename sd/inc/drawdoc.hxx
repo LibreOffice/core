@@ -1072,7 +1072,7 @@ public:
      *  @return The newly created master page.
      */
     SdPage* AddNewMasterPageFromExisting(
-        SdPage* pSourceMasterPage,
+        const SdPage* pSourceMasterPage,
         SdDrawDocument* pBookmarkDoc = nullptr,
         bool bUndo = true,
         const OUString& sNewName = OUString());
@@ -1156,7 +1156,7 @@ private:
         bool bIsPageObj);
 
     SAL_DLLPRIVATE void populatePagePreviewsGrid();
-    SAL_DLLPRIVATE void updatePagePreviewsGrid(SdPage* pPage);
+    SAL_DLLPRIVATE void updatePagePreviewsGrid(const SdPage* pPage);
     SAL_DLLPRIVATE void connectPagePreviews();
 
     SAL_DLLPRIVATE virtual void PageListChanged() override;

@@ -196,7 +196,7 @@ OUString getMasterTextFieldType(SdrObject* pObject)
     return aType;
 }
 
-bool isGroup(SdrObject* pObject) { return pObject->getChildrenOfSdrObject() != nullptr; }
+bool isGroup(const SdrObject* pObject) { return pObject->getChildrenOfSdrObject() != nullptr; }
 
 /// Sets visible for all kinds of polypolys in the container
 void changePolyPolys(
@@ -898,7 +898,7 @@ void writeBoundingBox(::tools::JsonWriter& aJsonWriter, const SdrObject* pObject
 }
 
 void writeAnimated(::tools::JsonWriter& aJsonWriter, AnimationLayerInfo const& rLayerInfo,
-                   SdrObject* pObject, sal_Int32 nParagraph = -1,
+                   const SdrObject* pObject, sal_Int32 nParagraph = -1,
                    const Color& rFontColor = COL_AUTO)
 {
     aJsonWriter.put("type", "animated");

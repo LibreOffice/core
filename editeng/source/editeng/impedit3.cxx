@@ -4055,7 +4055,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
     }
 }
 
-Point ImpEditEngine::CalculateTextPaintStartPosition(ImpEditView& rView) const
+Point ImpEditEngine::CalculateTextPaintStartPosition(const ImpEditView& rView) const
 {
     Point aStartPos;
 

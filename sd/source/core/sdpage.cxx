@@ -1514,7 +1514,7 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
     }
 }
 
-static void GetAutoLayoutCustomPromptTexts( SdPage& rPage, const LayoutDescriptor& rDescriptor, std::array<OUString, MAX_PRESOBJS>& rCustomPrompts )
+static void GetAutoLayoutCustomPromptTexts( const SdPage& rPage, const LayoutDescriptor& rDescriptor, std::array<OUString, MAX_PRESOBJS>& rCustomPrompts )
 {
     // init layout shapes with their corresponding prompt text (if they have)
     // for each presentation shape kind

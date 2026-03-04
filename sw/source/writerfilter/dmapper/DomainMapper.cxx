@@ -5287,7 +5287,7 @@ uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()
     return m_pImpl->m_xInsertTextRange;
 }
 
-OUString DomainMapper::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate )
+OUString DomainMapper::getOrCreateCharStyle( const PropertyValueVector_t& rCharProperties, bool bAlwaysCreate )
 {
     StyleSheetTablePtr pStyleSheets = m_pImpl->GetStyleSheetTable();
     return pStyleSheets->getOrCreateCharStyle( rCharProperties, bAlwaysCreate );

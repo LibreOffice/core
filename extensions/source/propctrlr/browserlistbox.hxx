@@ -116,7 +116,7 @@ public:
     void activateNextControl(
         const css::uno::Reference<css::inspection::XPropertyControl>& CurrentControl);
 
-    void buttonClicked(OBrowserLine* _pLine, bool _bPrimary);
+    void buttonClicked(const OBrowserLine* _pLine, bool _bPrimary);
 
 private:
     /** retrieves the index of a given control in our line list

@@ -36,28 +36,28 @@ ScPivotTableFormatsImportExport::ScPivotTableFormatsImportExport()
 {
 }
 
-ScAddress parseAddress(ScDocument& rDoc, OUString const& rAddressString)
+ScAddress parseAddress(const ScDocument& rDoc, OUString const& rAddressString)
 {
     ScAddress aAddress;
     aAddress.Parse(rAddressString, rDoc);
     return aAddress;
 }
 
-Color getBackgroundColor(ScDocument& rDoc, OUString const& rAddressString)
+Color getBackgroundColor(const ScDocument& rDoc, OUString const& rAddressString)
 {
     const ScPatternAttr* pPattern = rDoc.GetPattern(parseAddress(rDoc, rAddressString));
     const SvxBrushItem& rItem = pPattern->GetItem(ATTR_BACKGROUND);
     return rItem.GetColor();
 }
 
-Color getFontColor(ScDocument& rDoc, OUString const& rAddressString)
+Color getFontColor(const ScDocument& rDoc, OUString const& rAddressString)
 {
     const ScPatternAttr* pPattern = rDoc.GetPattern(parseAddress(rDoc, rAddressString));
     const SvxColorItem& rItem = pPattern->GetItem(ATTR_FONT_COLOR);
     return rItem.getColor();
 }
 
-bool getCellProtection(ScDocument& rDoc, OUString const& rAddressString)
+bool getCellProtection(const ScDocument& rDoc, OUString const& rAddressString)
 {
     const ScPatternAttr* pPattern = rDoc.GetPattern(parseAddress(rDoc, rAddressString));
     const ScProtectionAttr& rItem = pPattern->GetItem(ATTR_PROTECTION);
@@ -197,7 +197,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertDataFieldInColumnAndTwoRowFields_DataColor(*getScDoc());
 }
 
-void assertSingleDataFieldInColumn_DataColor(ScDocument& rDoc)
+void assertSingleDataFieldInColumn_DataColor(const ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"J8"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"J12"_ustr));
@@ -213,7 +213,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertSingleDataFieldInColumn_DataColor(*getScDoc());
 }
 
-void assertTwoRowTwoColumnFields_DataColor(ScDocument& rDoc)
+void assertTwoRowTwoColumnFields_DataColor(const ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I7"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0xFFC000), getBackgroundColor(rDoc, u"J8"_ustr));
@@ -255,7 +255,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertDataFieldInRow_DataColor(*getScDoc());
 }
 
-void assertMultipleSelections(ScDocument& rDoc)
+void assertMultipleSelections(const ScDocument& rDoc)
 {
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I5"_ustr));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I6"_ustr));

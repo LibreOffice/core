@@ -3623,7 +3623,7 @@ bool SalInstanceTreeView::IsDummyEntry(SvTreeListEntry* pEntry) const
     return o3tl::trim(m_xTreeView->GetEntryText(pEntry)) == u"<dummy>";
 }
 
-SvTreeListEntry* SalInstanceTreeView::GetPlaceHolderChild(SvTreeListEntry* pEntry) const
+SvTreeListEntry* SalInstanceTreeView::GetPlaceHolderChild(const SvTreeListEntry* pEntry) const
 {
     if (pEntry->HasChildren())
     {

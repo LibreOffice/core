@@ -671,7 +671,7 @@ public:
     }
 }
 
-void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
+void DrawViewShell::FuTransformDocumentStructure(const SfxRequest& rReq)
 {
     // get the parameter, what to transform
     OUString aDataJson;

@@ -1776,7 +1776,7 @@ void SwDoc::InsertCol( const SwCursor& rCursor, sal_uInt16 nCnt, bool bBehind )
         InsertCol( aBoxes, nCnt, bBehind );
 }
 
-static void lcl_ResetTableFormat(SwTableBox* rBox, SwTableAutoFormat& rFormat, size_t nRow,
+static void lcl_ResetTableFormat(SwTableBox* rBox, const SwTableAutoFormat& rFormat, size_t nRow,
                                  size_t nCol, size_t nRows, size_t nCols)
 {
     SwNodeOffset nSttNd = rBox->GetSttIdx() + 1;

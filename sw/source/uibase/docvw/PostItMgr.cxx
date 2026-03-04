@@ -403,7 +403,7 @@ private:
     RedlineFlags m_eRestreFlags;
 };
 
-bool isOwnFileFormat(SfxMedium* pMedium)
+bool isOwnFileFormat(const SfxMedium* pMedium)
 {
     // Assume that unsaved documents are own format
     return !pMedium || !pMedium->GetFilter() || pMedium->GetFilter()->IsOwnFormat();

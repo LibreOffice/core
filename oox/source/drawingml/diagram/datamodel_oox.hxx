@@ -57,8 +57,8 @@ public:
     Shape* getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand = false) const;
 
     // helpers to write some specific DiagramDoms
-    void writeDiagramReplacement(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget);
-    void writeDiagramData(DrawingML& rOriginalDrawingML, sax_fastparser::FSHelperPtr& rTarget, std::u16string_view rDrawingRelId);
+    void writeDiagramReplacement(DrawingML& rOriginalDrawingML, const sax_fastparser::FSHelperPtr& rTarget);
+    void writeDiagramData(DrawingML& rOriginalDrawingML, const sax_fastparser::FSHelperPtr& rTarget, std::u16string_view rDrawingRelId);
 
 private:
     // The model definition, the parts *only* available in oox. Also look for already

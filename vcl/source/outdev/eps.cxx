@@ -25,7 +25,7 @@
 #include <salgdi.hxx>
 
 bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
-                            const GfxLink& rGfxLink, GDIMetaFile* pSubst )
+                            const GfxLink& rGfxLink, const GDIMetaFile* pSubst )
 {
     if ( mpMetaFile )
     {

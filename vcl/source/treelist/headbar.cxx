@@ -1292,7 +1292,7 @@ rtl::Reference<comphelper::OAccessible> HeaderBar::CreateAccessible()
     return mpAccessible;
 }
 
-void HeaderBar::SetAccessible(rtl::Reference<comphelper::OAccessible>& rAccessible)
+void HeaderBar::SetAccessible(const rtl::Reference<comphelper::OAccessible>& rAccessible)
 {
     mpAccessible = rAccessible;
 }

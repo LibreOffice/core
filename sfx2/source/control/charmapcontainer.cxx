@@ -73,7 +73,7 @@ void SfxCharmapContainer::init(const Link<const CharAndFont&, void>& rActivateHd
     m_xFavIconView->connect_command(LINK(this, SfxCharmapContainer, FavContextMenuHdl));
 }
 
-ScopedVclPtr<VirtualDevice> SfxCharmapContainer::CreateIcon(weld::IconView& rIconView,
+ScopedVclPtr<VirtualDevice> SfxCharmapContainer::CreateIcon(const weld::IconView& rIconView,
                                                       const OUString& rFont, const OUString& rText)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();

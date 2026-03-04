@@ -501,7 +501,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTableInShape)
 // Since ODF 1.4 it is available as draw:extrusion-metal-type in the standard.
 namespace
 {
-void lcl_assertMetalProperties(std::string_view sInfo, uno::Reference<drawing::XShape>& rxShape,
+void lcl_assertMetalProperties(std::string_view sInfo,
+                               const uno::Reference<drawing::XShape>& rxShape,
                                sal_Int16 nExpectedMetalType)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
@@ -696,7 +697,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePolar)
 
 namespace
 {
-void lcl_assertSpecularityProperty(std::string_view sInfo, uno::Reference<drawing::XShape>& rxShape)
+void lcl_assertSpecularityProperty(std::string_view sInfo,
+                                   const uno::Reference<drawing::XShape>& rxShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGeoPropSeq;

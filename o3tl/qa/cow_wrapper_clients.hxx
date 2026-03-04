@@ -173,7 +173,7 @@ struct BogusRefCountPolicy
         }
         return rCount != 0;
     }
-    static std::size_t getCount( ref_count_t& rCount) { return rCount; }
+    static std::size_t getCount( const ref_count_t& rCount) { return rCount; }
 };
 
 class cow_wrapper_client5

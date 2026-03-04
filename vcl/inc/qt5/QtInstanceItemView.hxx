@@ -66,7 +66,7 @@ public:
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
 
-    static void enableActivateOnSingleClick(QAbstractItemView& rItemView);
+    static void enableActivateOnSingleClick(const QAbstractItemView& rItemView);
 
 protected:
     QModelIndex modelIndex(int nRow, int nCol = 0,

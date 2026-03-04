@@ -156,8 +156,8 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
 // ===========
 // ChartStyleConverter
 // ===========
-void ChartStyleConverter::convertFromModel(XmlFilterBase& rFilter,
-        StyleModel& rChartStyleModel,
+void ChartStyleConverter::convertFromModel(const XmlFilterBase& rFilter,
+        const StyleModel& rChartStyleModel,
         const Reference< XChartStyle >& rxChartStyle)
 {
     OSL_ENSURE( rxChartStyle.is(), "ChartStyleConverter::convertFromModel - missing chart style" );

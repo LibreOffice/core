@@ -354,7 +354,7 @@ public:
                                     SCROW nEndRow , SCCOL nEndCol ,
                                     std::vector<std::unique_ptr<ScDataFormFragment>>& rEdits,
                                     sal_uInt16 aColLength);
-    void UpdateSelectionArea(const ScMarkData& rSel, ScPatternAttr* pAttr = nullptr,
+    void UpdateSelectionArea(const ScMarkData& rSel, const ScPatternAttr* pAttr = nullptr,
                              bool adjustHeight = true);
 
     void            OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset);

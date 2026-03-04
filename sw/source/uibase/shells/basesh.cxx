@@ -213,7 +213,7 @@ static bool lcl_UpdateContourDlg( SwWrtShell &rSh, SelectionType nSel )
 
 /// See SubSoftFixed definition.
 /// It may only be unlocked on explicit user action (e.g. "Update All" button click).
-static void lcl_UnlockSoftFixed( SwWrtShell &rSh )
+static void lcl_UnlockSoftFixed( const SwWrtShell &rSh )
 {
     SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo);
     std::vector<SwFormatField*> vFields;

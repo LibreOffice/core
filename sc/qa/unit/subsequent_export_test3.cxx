@@ -311,7 +311,7 @@ bool checkRange(ScChangeActionType eType, const ScBigRange& rExpected, const ScB
     return aExpected == aActual;
 }
 
-bool check(ScDocument& rDoc)
+bool check(const ScDocument& rDoc)
 {
     static const CheckItem aChecks[] = {
         { 1, SC_CAT_CONTENT, 1, 1, 0, 1, 1, 0, false },
@@ -502,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTabColorsXLSX)
 {
     struct
     {
-        bool checkContent(ScDocument& rDoc)
+        bool checkContent(const ScDocument& rDoc)
         {
             std::vector<OUString> aTabNames = rDoc.GetAllTableNames();
 
@@ -721,7 +721,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLSX)
 {
     struct
     {
-        bool checkContent(ScDocument& rDoc)
+        bool checkContent(const ScDocument& rDoc)
         {
             SCTAB nTabCount = rDoc.GetTableCount();
             if (nTabCount != 2)
@@ -815,7 +815,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaStringResultExportXLSX)
 {
     struct
     {
-        bool checkContent(ScDocument& rDoc)
+        bool checkContent(const ScDocument& rDoc)
         {
             {
                 // B2:B7 should show A,B,...,F.
@@ -1090,7 +1090,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testRelativePathsODS)
 
 namespace
 {
-void testSheetProtection_Impl(ScDocument& rDoc)
+void testSheetProtection_Impl(const ScDocument& rDoc)
 {
     CPPUNIT_ASSERT(rDoc.IsTabProtected(0));
     const ScTableProtection* pTabProtection = rDoc.GetTabProtection(0);

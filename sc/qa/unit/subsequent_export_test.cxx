@@ -619,7 +619,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testXfDefaultValuesXLSX)
     assertXPath(pSheet, "/x:styleSheet/x:cellXfs/x:xf", 14);
 }
 
-static auto verifySpreadsheet13(char const* const pTestName, ScDocument& rDoc) -> void
+static auto verifySpreadsheet13(char const* const pTestName, const ScDocument& rDoc) -> void
 {
     // OFFICE-2173 table:tab-color
     CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, Color(0xff3838), rDoc.GetTabBgColor(0));

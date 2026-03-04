@@ -604,7 +604,7 @@ void SwMarkdownParser::EndCodeBlock()
     ClearAttrs();
 }
 
-void SwMarkdownParser::InsertText(OUString& aStr)
+void SwMarkdownParser::InsertText(const OUString& aStr)
 {
     SwContentNode* pCnd = m_pPam->GetPointContentNode();
     sal_Int32 nStartPos = m_pPam->GetPoint()->GetContentIndex();

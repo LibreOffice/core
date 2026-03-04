@@ -567,7 +567,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testWriterImageNoCapture)
     CPPUNIT_ASSERT_LESS(nPageLeft, nImageLeft);
 }
 
-SwRect lcl_getVisibleFlyObjRect(SwWrtShell* pWrtShell)
+SwRect lcl_getVisibleFlyObjRect(const SwWrtShell* pWrtShell)
 {
     SwRootFrame* pRoot = pWrtShell->GetLayout();
     SwPageFrame* pPage = static_cast<SwPageFrame*>(pRoot->GetLower());

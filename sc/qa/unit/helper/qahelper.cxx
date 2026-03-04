@@ -336,7 +336,7 @@ void ScModelTestBase::insertArrayToCell(const OUString& rCell, std::u16string_vi
     Scheduler::ProcessEventsToIdle();
 }
 
-void ScModelTestBase::insertNewSheet(ScDocument& rDoc)
+void ScModelTestBase::insertNewSheet(const ScDocument& rDoc)
 {
     sal_Int16 nTabs = rDoc.GetTableCount();
 
@@ -486,7 +486,7 @@ static std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rCha
     return aRangeReps;
 }
 
-ScRangeList ScModelTestBase::getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj)
+ScRangeList ScModelTestBase::getChartRanges(const ScDocument& rDoc, const SdrOle2Obj& rChartObj)
 {
     std::vector<OUString> aRangeReps = getChartRangeRepresentations(rChartObj);
     ScRangeList aRanges;
@@ -950,7 +950,7 @@ bool ScUcalcTestBase::insertRangeNames(
     return true;
 }
 
-OUString ScUcalcTestBase::getRangeByName(ScDocument* pDoc, const OUString& aRangeName)
+OUString ScUcalcTestBase::getRangeByName(const ScDocument* pDoc, const OUString& aRangeName)
 {
     ScRangeData* pName = pDoc->GetRangeName()->findByUpperName(aRangeName.toAsciiUpperCase());
     CPPUNIT_ASSERT(pName);

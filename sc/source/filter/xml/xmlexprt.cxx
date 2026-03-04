@@ -4208,7 +4208,7 @@ void ScXMLExport::WriteExternalDataMapping(ScDocument& rDoc)
     }
 }
 
-void ScXMLExport::WriteExternalDataTransformations(ScDocument& rDoc, const std::vector<std::shared_ptr<sc::DataTransformation>>& aDataTransformations)
+void ScXMLExport::WriteExternalDataTransformations(const ScDocument& rDoc, const std::vector<std::shared_ptr<sc::DataTransformation>>& aDataTransformations)
 {
     SvXMLElementExport aTransformations(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_TRANSFORMATIONS, true, true);
     for (auto& itr : aDataTransformations)

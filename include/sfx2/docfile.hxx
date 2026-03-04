@@ -112,7 +112,7 @@ public:
     void SetOriginallyReadOnly(bool val);
     void AddEmbeddedFonts(const css::uno::Sequence<css::beans::StringPair>& fonts);
     // Transfers the embedded font list to another medium (passing ownership)
-    void TransferEmbeddedFontsTo(SfxMedium& target);
+    void TransferEmbeddedFontsTo(const SfxMedium& target);
     void AddToCheckEditableWorkerList();
     void SetWorkerReloadEvent(ImplSVEvent* pEvent);
     ImplSVEvent* GetWorkerReloadEvent() const;

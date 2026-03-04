@@ -40,7 +40,7 @@ using namespace sdr::table;
 
 namespace
 {
-void CreateTitleDescription(SdrObject* pObject, OUStringBuffer& rHtml)
+void CreateTitleDescription(const SdrObject* pObject, OUStringBuffer& rHtml)
 {
     rHtml.append("<h2>");
     rHtml.append(pObject->GetTitle());

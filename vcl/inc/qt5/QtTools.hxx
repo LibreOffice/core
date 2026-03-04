@@ -169,9 +169,9 @@ typedef std::unique_ptr<cairo_surface_t, CairoDeleter> UniqueCairoSurface;
 
 sal_uInt16 toVclKeyboardModifiers(Qt::KeyboardModifiers eKeyModifiers);
 sal_uInt16 toVclKeyCode(int nKeyval, Qt::KeyboardModifiers eModifiers);
-KeyEvent toVclKeyEvent(QKeyEvent& rEvent);
+KeyEvent toVclKeyEvent(const QKeyEvent& rEvent);
 sal_uInt16 toVclMouseButtons(Qt::MouseButtons eButtons);
-MouseEvent toVclMouseEvent(QMouseEvent& rEvent);
+MouseEvent toVclMouseEvent(const QMouseEvent& rEvent);
 
 QImage toQImage(const Image& rImage);
 Image toImage(const QImage& rImage);

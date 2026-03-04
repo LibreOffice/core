@@ -96,7 +96,7 @@ Graphic makeUnloadedGraphic(std::u16string_view sType, bool alpha = false)
     return rGraphicFilter.ImportUnloadedGraphic(aStream);
 }
 
-bool checkBitmap(Graphic& rGraphic)
+bool checkBitmap(const Graphic& rGraphic)
 {
     bool bResult = true;
 

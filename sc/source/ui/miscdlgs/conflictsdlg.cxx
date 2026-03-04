@@ -385,7 +385,7 @@ OUString ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflic
     return aString;
 }
 
-void ScConflictsDlg::SetActionString(ScChangeAction& rAction, ScDocument& rDoc, const weld::TreeIter& rEntry)
+void ScConflictsDlg::SetActionString(const ScChangeAction& rAction, ScDocument& rDoc, const weld::TreeIter& rEntry)
 {
 
     weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();

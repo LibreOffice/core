@@ -57,7 +57,7 @@ public:
 };
 
 // Similar to getCharacterBaseWidth but this time from the top, for U+30E8 (it's straight at the top, not at the bottom).
-static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& start)
+static tools::Long getCharacterTopWidth(const VirtualDevice* device, const Point& start)
 {
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
     BitmapScopedReadAccess access(bitmap);
@@ -76,7 +76,7 @@ static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& star
 }
 
 // The same, but from the right side, for U+30E8 (it's straight on the right side, not the left one).
-static tools::Long getCharacterRightSideHeight(VirtualDevice* device, const Point& start)
+static tools::Long getCharacterRightSideHeight(const VirtualDevice* device, const Point& start)
 {
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
     BitmapScopedReadAccess access(bitmap);

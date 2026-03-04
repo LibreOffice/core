@@ -53,7 +53,7 @@ protected:
     void setLineHeightForReferenceStyle(const uint16_t nPage, const sal_uInt16 nLineHeight);
 
     void moveObject(SdrObject* pObject, const sal_uInt16 nKey);
-    void resizeObjectUpward(SdrObject* pObject, const SwTwips nDragDistance);
+    void resizeObjectUpward(const SdrObject* pObject, const SwTwips nDragDistance);
 
     SdrObject* findObject(const uint16_t nPage, const uint16_t nFlyFrame);
 };
@@ -442,7 +442,8 @@ void SwPageLineSpacingTest::moveObject(SdrObject* pObject, const sal_uInt16 nKey
     }
 }
 
-void SwPageLineSpacingTest::resizeObjectUpward(SdrObject* pObject, const SwTwips nDragDistance)
+void SwPageLineSpacingTest::resizeObjectUpward(const SdrObject* pObject,
+                                               const SwTwips nDragDistance)
 {
     CPPUNIT_ASSERT(pObject);
 

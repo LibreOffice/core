@@ -432,7 +432,7 @@ void DiagramHelper_svx::disconnectFromSdrObjGroup()
     }
 }
 
-void DiagramHelper_svx::connectToSdrObjGroup(css::uno::Reference< css::drawing::XShape >& rTarget)
+void DiagramHelper_svx::connectToSdrObjGroup(const css::uno::Reference< css::drawing::XShape >& rTarget)
 {
     SdrObjGroup* pGroupObject(nullptr);
     uno::Reference< drawing::XShape >& rxRootShape(accessRootShape());

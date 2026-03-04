@@ -20,7 +20,7 @@ ScTableStyle::ScTableStyle(const OUString& rName, const std::optional<OUString>&
 {
 }
 
-bool ScTableStyle::HasFontAttrSet(ScPatternAttr* pPattern)
+bool ScTableStyle::HasFontAttrSet(const ScPatternAttr* pPattern)
 {
     // TODO: maybe different pPatterns can have different font attributes, and
     // now we only check if any font attribute is set on a pattern.

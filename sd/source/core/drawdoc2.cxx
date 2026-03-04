@@ -1733,7 +1733,7 @@ void SdDrawDocument::populatePagePreviewsGrid()
     }
 }
 
-void SdDrawDocument::updatePagePreviewsGrid(SdPage* pPage)
+void SdDrawDocument::updatePagePreviewsGrid(const SdPage* pPage)
 {
     if (mbSkipCanvasPreviewUpdates)
         return;

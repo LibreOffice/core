@@ -38,7 +38,7 @@ class MediaObjectBar final
 public:
     SFX_DECL_INTERFACE( SD_IF_SDDRAWMEDIAOBJECTBAR )
 
-    MediaObjectBar (ViewShell& rSdViewShell, ::sd::View* pSdView);
+    MediaObjectBar (const ViewShell& rSdViewShell, ::sd::View* pSdView);
     virtual ~MediaObjectBar() override;
 
     void            GetState( SfxItemSet& rSet );

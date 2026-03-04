@@ -227,7 +227,7 @@ public:
     void        SetKeepFmt(bool bSet)           { bKeepFmt = bSet; }
     bool        IsStripData() const             { return bStripData; }
     void        SetStripData(bool bSet)         { bStripData = bSet; }
-    void        SetTableType(OUString& sTableType) { aTableType = sTableType; }
+    void        SetTableType(const OUString& sTableType) { aTableType = sTableType; }
     const OUString& GetTableType() const           { return aTableType; }
 
     void        SetContainer( ScDBDataContainerBase* pContainer ) { mpContainer = pContainer; }

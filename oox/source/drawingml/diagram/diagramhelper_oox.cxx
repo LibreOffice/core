@@ -441,7 +441,7 @@ void DiagramHelper_oox::applyDiagramDataState(const DiagramDataStatePtr& rState)
     mpDiagramPtr->getData()->applyDiagramDataState(rState);
 }
 
-void DiagramHelper_oox::doAnchor(uno::Reference<drawing::XShape>& rTarget)
+void DiagramHelper_oox::doAnchor(const uno::Reference<drawing::XShape>& rTarget)
 {
     if (!mpDiagramPtr || !rTarget)
     {

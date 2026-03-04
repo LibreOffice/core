@@ -163,7 +163,7 @@ public:
 
     // methods to get/set which roles are supported by the individual columns
     // based on the underlying GtkTreeViewColumns and their GtkCellRenderers
-    static QList<QList<Qt::ItemDataRole>> columnRoles(QTreeView& rTreeView);
+    static QList<QList<Qt::ItemDataRole>> columnRoles(const QTreeView& rTreeView);
     static void setColumnRoles(QTreeView& rTreeView,
                                const QList<QList<Qt::ItemDataRole>>& rDataRoles);
 

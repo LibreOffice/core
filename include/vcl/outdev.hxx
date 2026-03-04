@@ -1918,7 +1918,7 @@ public:
         that's too much for now, wrote \#i107046# for this */
     bool                        DrawEPS(
                                     const Point& rPt, const Size& rSz,
-                                    const GfxLink& rGfxLink, GDIMetaFile* pSubst = nullptr );
+                                    const GfxLink& rGfxLink, const GDIMetaFile* pSubst = nullptr );
     ///@}
 
 public:

@@ -875,7 +875,7 @@ public:
 };
 
 /** Combines all the data in RowOrColumnMemberResultData and writes the row/column items */
-void writeRowColumnItems(sal_Int32 nItemElement, RowOrColumnMemberResultData& rMemberResultData, sax_fastparser::FSHelperPtr& pStream)
+void writeRowColumnItems(sal_Int32 nItemElement, RowOrColumnMemberResultData& rMemberResultData, const sax_fastparser::FSHelperPtr& pStream)
 {
     if (rMemberResultData.maItemsData.empty() || rMemberResultData.maFieldOrder.empty())
     {

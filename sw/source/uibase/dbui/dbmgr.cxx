@@ -356,7 +356,7 @@ static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<sdbc::XDat
     }
 }
 
-static bool lcl_MoveAbsolute(SwDSParam* pParam, tools::Long nAbsPos)
+static bool lcl_MoveAbsolute(const SwDSParam* pParam, tools::Long nAbsPos)
 {
     bool bRet = false;
     try

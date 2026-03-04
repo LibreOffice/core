@@ -1675,7 +1675,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testNamedTableRef)
 
 namespace
 {
-void testCells(ScDocument* pDoc)
+void testCells(const ScDocument* pDoc)
 {
     {
         const EditTextObject* pObj = pDoc->GetEditText(ScAddress(0, 0, 0));

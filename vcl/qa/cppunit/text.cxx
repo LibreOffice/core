@@ -70,7 +70,7 @@ static bool isBlack(Color col)
 // In other words, go up in y direction until a black pixel is found,
 // then return the horizontal width of the area of those pixels.
 // For 'L' this gives the width of the base of the character.
-static tools::Long getCharacterBaseWidth(VirtualDevice* device, const Point& start)
+static tools::Long getCharacterBaseWidth(const VirtualDevice* device, const Point& start)
 {
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
     BitmapScopedReadAccess access(bitmap);
@@ -89,7 +89,7 @@ static tools::Long getCharacterBaseWidth(VirtualDevice* device, const Point& sta
 }
 
 // Similar to above but this time from the top, for U+30E8 (it's straight at the top, not at the bottom).
-static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& start)
+static tools::Long getCharacterTopWidth(const VirtualDevice* device, const Point& start)
 {
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
     BitmapScopedReadAccess access(bitmap);
@@ -110,7 +110,7 @@ static tools::Long getCharacterTopWidth(VirtualDevice* device, const Point& star
 // Similar to above, but this time return the pixel height of the left-most
 // line of the character, going right from the starting point.
 // For 'L' this gives the height of the left line.
-static tools::Long getCharacterLeftSideHeight(VirtualDevice* device, const Point& start)
+static tools::Long getCharacterLeftSideHeight(const VirtualDevice* device, const Point& start)
 {
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
     BitmapScopedReadAccess access(bitmap);

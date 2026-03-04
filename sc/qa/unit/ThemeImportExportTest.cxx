@@ -163,7 +163,7 @@ sal_Int32 roundToPercent(sal_Int16 n100Percent)
     return sal_Int32(std::round(double(n100Percent) / 100.0));
 }
 
-void checkCellBackgroundThemeColor(ScDocument* pDoc)
+void checkCellBackgroundThemeColor(const ScDocument* pDoc)
 {
     // A1
     {
@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellBackgroundThemeColorODF)
     checkCellBackgroundThemeColor(getScDoc());
 }
 
-void checkCellTextThemeColor(ScDocument* pDoc)
+void checkCellTextThemeColor(const ScDocument* pDoc)
 {
     // B1
     {
@@ -305,7 +305,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellTextThemeColorODF)
     checkCellTextThemeColor(getScDoc());
 }
 
-void checkCellBorderThemeColor(ScDocument* pDoc)
+void checkCellBorderThemeColor(const ScDocument* pDoc)
 {
     // C1
     {

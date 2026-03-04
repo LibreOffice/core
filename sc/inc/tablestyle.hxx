@@ -71,7 +71,7 @@ private:
 public:
     ScTableStyle(const OUString& rName, const std::optional<OUString>& rUIName);
 
-    static bool HasFontAttrSet(ScPatternAttr* pPattern);
+    static bool HasFontAttrSet(const ScPatternAttr* pPattern);
     const SfxItemSet* GetFontItemSet(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
                                      SCROW nRowIndex) const;
     const SvxBrushItem* GetFillItem(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,

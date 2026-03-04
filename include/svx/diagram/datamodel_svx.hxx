@@ -73,7 +73,7 @@ struct SVXCORE_DLLPUBLIC Connection
     /* 0         */ sal_Int32       mnSourceOrder; // XML_srcOrd
     /* 0         */ sal_Int32       mnDestOrder; // XML_destOrd
 
-    void writeDiagramData(sax_fastparser::FSHelperPtr& rTarget);
+    void writeDiagramData(const sax_fastparser::FSHelperPtr& rTarget);
     void addDiagramModelData(boost::property_tree::ptree& rTarget) const;
 };
 
@@ -133,13 +133,13 @@ struct SVXCORE_DLLPUBLIC Point
     /* PRS (false)  */ bool         mbCustomText : 1; // XML_custT
     /* PRS (false)  */ bool         mbIsPlaceholder : 1; // XML_phldr
 
-    void writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget);
+    void writeDiagramData_data(const sax_fastparser::FSHelperPtr& rTarget);
     void addDiagramModelData(boost::property_tree::ptree& rTarget) const;
 };
 
 TypeConstant SVXCORE_DLLPUBLIC getTypeConstantForName(std::u16string_view aName);
 std::u16string_view SVXCORE_DLLPUBLIC getNameForTypeConstant(TypeConstant aTypeConstant);
-void SVXCORE_DLLPUBLIC addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint);
+void SVXCORE_DLLPUBLIC addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint);
 void SVXCORE_DLLPUBLIC addTypeConstantToDiagramModelData(TypeConstant aTypeConstant, boost::property_tree::ptree& rTarget, bool bPoint);
 
 typedef std::vector< Point >        Points;

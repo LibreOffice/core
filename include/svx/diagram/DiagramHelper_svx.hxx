@@ -118,7 +118,7 @@ public:
     bool ForceThemePtrRecreation() const { return mbForceThemePtrRecreation; };
 
     // connect/disconnect to/from Group
-    void connectToSdrObjGroup(css::uno::Reference< css::drawing::XShape >& rTarget);
+    void connectToSdrObjGroup(const css::uno::Reference< css::drawing::XShape >& rTarget);
     void disconnectFromSdrObjGroup();
 
     static void AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList);

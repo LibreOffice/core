@@ -53,10 +53,10 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
 
     // write GDI Metafile to a file in data directory
     // only use this for new tests to create the svm file
-    void writeToFile(GDIMetaFile& rMetaFile, std::u16string_view rName);
+    void writeToFile(const GDIMetaFile& rMetaFile, std::u16string_view rName);
 
     GDIMetaFile writeAndReadStream(
-        GDIMetaFile& rMetaFile, std::u16string_view rName = std::u16string_view());
+        const GDIMetaFile& rMetaFile, std::u16string_view rName = std::u16string_view());
 
     GDIMetaFile readFile(std::u16string_view sName);
 
@@ -314,7 +314,7 @@ static GDIMetaFile readMetafile(const OUString& rUrl)
     return aResultMetafile;
 }
 
-static void writeMetaFile(GDIMetaFile& rInputMetafile, const OUString& rUrl)
+static void writeMetaFile(const GDIMetaFile& rInputMetafile, const OUString& rUrl)
 {
     SvFileStream aFileStream(rUrl, StreamMode::WRITE);
     aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -323,7 +323,7 @@ static void writeMetaFile(GDIMetaFile& rInputMetafile, const OUString& rUrl)
     aFileStream.Close();
 }
 
-void SvmTest::writeToFile(GDIMetaFile& rMetaFile, std::u16string_view rName)
+void SvmTest::writeToFile(const GDIMetaFile& rMetaFile, std::u16string_view rName)
 {
     if (rName.empty())
         return;
@@ -331,7 +331,7 @@ void SvmTest::writeToFile(GDIMetaFile& rMetaFile, std::u16string_view rName)
     writeMetaFile(rMetaFile, sFilePath);
 }
 
-GDIMetaFile SvmTest::writeAndReadStream(GDIMetaFile& rMetaFile, std::u16string_view rName)
+GDIMetaFile SvmTest::writeAndReadStream(const GDIMetaFile& rMetaFile, std::u16string_view rName)
 {
     if (!rName.empty())
         writeToFile(rMetaFile, rName);

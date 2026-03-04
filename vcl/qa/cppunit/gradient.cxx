@@ -33,7 +33,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-static size_t TestLinearStripes(GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
+static size_t TestLinearStripes(const GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
 {
     nIndex++;
     MetaAction* pAction = rMtf.GetAction(nIndex);
@@ -98,7 +98,7 @@ void VclGradientTest::testAddGradientActions_rect_linear()
     TestLinearStripes(aMtf, 3, nIndex);
 }
 
-static size_t TestAxialStripes(GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
+static size_t TestAxialStripes(const GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
 {
     nIndex++;
     MetaAction* pAction = rMtf.GetAction(nIndex);
@@ -173,7 +173,7 @@ void VclGradientTest::testAddGradientActions_rect_axial()
     TestAxialStripes(aMtf, 3, nIndex);
 }
 
-static size_t TestComplexStripes(GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
+static size_t TestComplexStripes(const GDIMetaFile& rMtf, size_t nTimes, size_t nIndex)
 {
     nIndex++;
     MetaAction* pAction = rMtf.GetAction(nIndex);

@@ -373,7 +373,7 @@ public:
 
     using Window::GetChildCount;
     sal_uInt32          GetChildCount( SvTreeListEntry const * pParent ) const;
-    sal_uInt32          GetLevelChildCount( SvTreeListEntry* pParent ) const;
+    sal_uInt32          GetLevelChildCount( const SvTreeListEntry* pParent ) const;
 
     SvViewDataEntry* GetViewDataEntry( SvTreeListEntry const * pEntry ) const;
     SvViewDataItem*  GetViewDataItem(SvTreeListEntry const *, SvLBoxItem const *);
@@ -616,7 +616,7 @@ public:
     bool            Expand( SvTreeListEntry* pParent );
     bool            Collapse( SvTreeListEntry* pParent );
     bool            Select( SvTreeListEntry* pEntry, bool bSelect=true );
-    sal_uInt32      SelectChildren( SvTreeListEntry* pParent, bool bSelect );
+    sal_uInt32      SelectChildren( const SvTreeListEntry* pParent, bool bSelect );
     void            SelectAll( bool bSelect );
 
     void SetCurEntry( SvTreeListEntry* _pEntry );

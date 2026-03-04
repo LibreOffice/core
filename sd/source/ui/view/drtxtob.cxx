@@ -126,7 +126,7 @@ void TextObjectBar::GetCharState( SfxItemSet& rSet )
     GetCharStateImpl(mrViewShell, mpView, rSet);
 }
 
-void TextObjectBar::GetCharStateImpl(ViewShell& rViewShell, const ::sd::View* pView, SfxItemSet& rSet)
+void TextObjectBar::GetCharStateImpl(const ViewShell& rViewShell, const ::sd::View* pView, SfxItemSet& rSet)
 {
     SfxItemSet  aCharAttrSet( pView->GetDoc().GetPool() );
     pView->GetAttributes( aCharAttrSet );
@@ -155,7 +155,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 /**
  * Status of attribute items.
  */
-void TextObjectBar::GetAttrStateImpl(ViewShell& rViewShell, ::sd::View* pView, SfxItemSet& rSet, SfxShell* pTextObjectBar)
+void TextObjectBar::GetAttrStateImpl(const ViewShell& rViewShell, ::sd::View* pView, SfxItemSet& rSet, SfxShell* pTextObjectBar)
 {
     SfxWhichIter        aIter( rSet );
     sal_uInt16              nWhich = aIter.FirstWhich();

@@ -78,7 +78,7 @@ public:
     SwMailMergeLayoutPage(weld::Container* pPage, SwMailMergeWizard* pWizard);
     virtual ~SwMailMergeLayoutPage() override;
 
-    static SwFrameFormat*        InsertAddressAndGreeting(SwView& rView,
+    static SwFrameFormat*        InsertAddressAndGreeting(const SwView& rView,
                                             SwMailMergeConfigItem& rConfigItem,
                                             const Point& rAddressPos,
                                             bool bAlignToBody);

@@ -311,7 +311,7 @@ class SwUndoCopyHeaderFooter final : public SwUndo, private SwUndoSaveSection
     bool m_bIsFirstLeft;
 
 public:
-    SwUndoCopyHeaderFooter(SwDoc& rDoc, SwNode& rSttNd, const UIName& rFmtName);
+    SwUndoCopyHeaderFooter(const SwDoc& rDoc, const SwNode& rSttNd, const UIName& rFmtName);
 
     virtual void UndoImpl(::sw::UndoRedoContext & rContext) override;
     virtual void RedoImpl(::sw::UndoRedoContext & rContext) override;

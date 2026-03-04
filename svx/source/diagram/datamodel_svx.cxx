@@ -75,7 +75,7 @@ std::u16string_view getNameForTypeConstant(TypeConstant aTypeConstant)
     return u"";
 }
 
-void addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint)
+void addTypeConstantToFastAttributeList(TypeConstant aTypeConstant, const rtl::Reference<sax_fastparser::FastAttributeList>& rAttributeList, bool bPoint)
 {
     if (TypeConstant::XML_none == aTypeConstant)
         return;
@@ -134,7 +134,7 @@ Connection::Connection(const boost::property_tree::ptree& rConnectionData)
         mnXMLType = getTypeConstantForName(aXMLType);
 }
 
-void Connection::writeDiagramData(sax_fastparser::FSHelperPtr& rTarget)
+void Connection::writeDiagramData(const sax_fastparser::FSHelperPtr& rTarget)
 {
     if (!rTarget)
         return;
@@ -250,7 +250,7 @@ Point::Point(const boost::property_tree::ptree& rPointData)
         moHierarchyBranch = aBranch.value();
 }
 
-void Point::writeDiagramData_data(sax_fastparser::FSHelperPtr& rTarget)
+void Point::writeDiagramData_data(const sax_fastparser::FSHelperPtr& rTarget)
 {
     rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList(sax_fastparser::FastSerializerHelper::createAttrList());
 

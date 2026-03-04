@@ -312,7 +312,7 @@ public:
 
     /** Creates and returns the accessible object of the header bar. */
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
-    void SetAccessible(rtl::Reference<comphelper::OAccessible>& rAccessible);
+    void SetAccessible(const rtl::Reference<comphelper::OAccessible>& rAccessible);
 };
 
 #endif // INCLUDED_VCL_HEADBAR_HXX

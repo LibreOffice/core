@@ -810,7 +810,7 @@ sal_uInt32 SvTreeListBox::GetChildCount( SvTreeListEntry const * pParent ) const
     return m_pModel->GetChildCount(pParent);
 }
 
-sal_uInt32 SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
+sal_uInt32 SvTreeListBox::GetLevelChildCount( const SvTreeListEntry* _pParent ) const
 {
 
     //if _pParent is 0, then pEntry is the first child of the root.
@@ -2166,7 +2166,7 @@ bool SvTreeListBox::Select( SvTreeListEntry* pEntry, bool bSelect )
     return bRetVal;
 }
 
-sal_uInt32 SvTreeListBox::SelectChildren( SvTreeListEntry* pParent, bool bSelect )
+sal_uInt32 SvTreeListBox::SelectChildren( const SvTreeListEntry* pParent, bool bSelect )
 {
     pImpl->DestroyAnchor();
     sal_uInt32 nRet = 0;

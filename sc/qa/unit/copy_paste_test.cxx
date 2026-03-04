@@ -111,7 +111,7 @@ ScMarkData::MarkedTabsType TabsInRange(const ScRange& r)
     return aResult;
 }
 
-void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument& rDoc, ScTabViewShell* pViewShell)
+void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, const ScDocument& rDoc, ScTabViewShell* pViewShell)
 {
     ScDocument aClipDoc(SCDOCMODE_CLIP);
 

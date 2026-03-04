@@ -449,7 +449,7 @@ namespace
 {
 // Change style of all text nodes between start and end node for the SwTextFootnote to the
 // style of the type of note it is.
-void lcl_ChgFormatColl(SwDoc* pDoc, SwTextFootnote* pTextFootnote, SwUndoChangeFootNote* pUndo)
+void lcl_ChgFormatColl(SwDoc* pDoc, const SwTextFootnote* pTextFootnote, SwUndoChangeFootNote* pUndo)
 {
     SwTextFormatColl* pChangeToTextFormatColl
         = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(

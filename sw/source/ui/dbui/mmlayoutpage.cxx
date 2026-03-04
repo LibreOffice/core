@@ -220,7 +220,7 @@ bool SwMailMergeLayoutPage::commitPage(::vcl::WizardTypes::CommitPageReason eRea
     return true;
 }
 
-SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView& rView,
+SwFrameFormat*  SwMailMergeLayoutPage::InsertAddressAndGreeting(const SwView& rView,
         SwMailMergeConfigItem& rConfigItem,
         const Point& rAddressPosition,
         bool bAlignToBody)
