@@ -72,6 +72,7 @@ public:
     // XAccessibleExtendedAttributes
     OUString SAL_CALL getExtendedAttributes() override;
 private:
+    const SwCellFrame& GetCellFrame() const;
     SwFrameFormat* GetTableBoxFormat() const;
 
 public:

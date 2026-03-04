@@ -57,9 +57,7 @@ bool SwAccessibleCell::IsSelected()
     {
         if( pCSh->IsTableMode() )
         {
-            const SwCellFrame *pCFrame =
-                static_cast< const SwCellFrame * >( GetFrame() );
-            const SwTableBox* pBox = pCFrame->GetTabBox();
+            const SwTableBox* pBox = GetCellFrame().GetTabBox();
             SwSelBoxes const& rBoxes(pCSh->GetTableCursor()->GetSelectedBoxes());
             bRet = rBoxes.find(pBox) != rBoxes.end();
         }
@@ -248,15 +246,16 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
 
-// XAccessibleValue
+const SwCellFrame& SwAccessibleCell::GetCellFrame() const
+{
+    const SwFrame* pSwFrame = GetFrame();
+    assert(pSwFrame && pSwFrame->IsCellFrame());
+    return static_cast<const SwCellFrame&>(*pSwFrame);
+}
 
 SwFrameFormat* SwAccessibleCell::GetTableBoxFormat() const
 {
-    assert(GetFrame());
-    assert(GetFrame()->IsCellFrame());
-
-    const SwCellFrame* pCellFrame = static_cast<const SwCellFrame*>( GetFrame() );
-    return pCellFrame->GetTabBox()->GetFrameFormat();
+    return GetCellFrame().GetTabBox()->GetFrameFormat();
 }
 
 //Implement TableCell currentValue
