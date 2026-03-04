@@ -976,10 +976,9 @@ namespace vcl
             skipBackwardUntil(static_cast<WizardTypes::WizardState>(nCurItemId));
     }
 
-    OUString RoadmapWizard::getStateDisplayName( WizardTypes::WizardState /* _nState */)
+    OUString RoadmapWizard::getStateDisplayName( WizardTypes::WizardState nState )
     {
-        SAL_WARN("vcl", "RoadmapWizard::getStateDisplayName: no name available for this state!");
-        return OUString();
+        return OUString::number(nState);
     }
 
     void RoadmapWizard::InsertRoadmapItem(int nItemIndex, const OUString& rText, int nItemId, bool bEnable)
