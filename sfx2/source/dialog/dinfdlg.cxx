@@ -1714,19 +1714,16 @@ void CustomPropertiesWindow::CreateNewLine()
 
     m_aCustomPropertiesLines.emplace_back( pNewLine );
 
-    // this breaks online's jsdialogbuilder
-    if (!comphelper::LibreOfficeKit::isActive()){
-        // for ui-testing. Distinguish the elements in the lines
-        sal_uInt16 nSize = m_aCustomPropertiesLines.size();
-        pNewLine->m_xNameBox->set_buildable_name(
-            pNewLine->m_xNameBox->get_buildable_name() + OUString::number(nSize));
-        pNewLine->m_xTypeBox->set_buildable_name(
-            pNewLine->m_xTypeBox->get_buildable_name() + OUString::number(nSize));
-        pNewLine->m_xValueEdit->set_buildable_name(
-            pNewLine->m_xValueEdit->get_buildable_name() + OUString::number(nSize));
-        pNewLine->m_xRemoveButton->set_buildable_name(
-            pNewLine->m_xRemoveButton->get_buildable_name() + OUString::number(nSize));
-    }
+    // for ui-testing. Distinguish the elements in the lines
+    sal_uInt16 nSize = m_aCustomPropertiesLines.size();
+    pNewLine->m_xNameBox->set_buildable_name(pNewLine->m_xNameBox->get_buildable_name()
+                                             + OUString::number(nSize));
+    pNewLine->m_xTypeBox->set_buildable_name(pNewLine->m_xTypeBox->get_buildable_name()
+                                             + OUString::number(nSize));
+    pNewLine->m_xValueEdit->set_buildable_name(pNewLine->m_xValueEdit->get_buildable_name()
+                                               + OUString::number(nSize));
+    pNewLine->m_xRemoveButton->set_buildable_name(pNewLine->m_xRemoveButton->get_buildable_name()
+                                                  + OUString::number(nSize));
 
     pNewLine->DoTypeHdl(*pNewLine->m_xTypeBox);
 }

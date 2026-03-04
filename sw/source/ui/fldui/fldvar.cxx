@@ -87,16 +87,13 @@ SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* p
     //enable 'active' language selection
     m_xNumFormatLB->SetShowLanguageControl(true);
 
-    if (!comphelper::LibreOfficeKit::isActive())
-    {
-        // uitests
-        m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-var");
-        m_xNameED->set_buildable_name(m_xNameED->get_buildable_name() + "-var");
-        m_xValueED->set_buildable_name(m_xValueED->get_buildable_name() + "-var");
-        m_xNumFormatLB->set_buildable_name(m_xNumFormatLB->get_buildable_name() + "-var");
-        m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-var");
-        m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-var");
-    }
+    // uitests
+    m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-var");
+    m_xNameED->set_buildable_name(m_xNameED->get_buildable_name() + "-var");
+    m_xValueED->set_buildable_name(m_xValueED->get_buildable_name() + "-var");
+    m_xNumFormatLB->set_buildable_name(m_xNumFormatLB->get_buildable_name() + "-var");
+    m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-var");
+    m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-var");
 }
 
 SwFieldVarPage::~SwFieldVarPage()
