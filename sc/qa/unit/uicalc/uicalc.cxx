@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <condformathelper.hxx>
 #include <conditio.hxx>
 #include <document.hxx>
@@ -1805,6 +1806,27 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf86166)
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144296_automatic_cell_direction)
+{
+    createScDoc();
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+
+    css::uno::Reference<css::sheet::XCellRangesAccess> xSheets(xDoc->getSheets(),
+                                                               css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::table::XCell> xCell = xSheets->getCellByPosition(0, 0, 0);
+    uno::Reference<beans::XPropertySet> xProp(xCell, css::uno::UNO_QUERY_THROW);
+
+    sal_Int16 eWritingMode = text::WritingMode2::LR_TB;
+    xProp->getPropertyValue(u"WritingMode"_ustr) >>= eWritingMode;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::PAGE), eWritingMode);
+
+    insertStringToCell(u"A1"_ustr, u"א");
+
+    xProp->getPropertyValue(u"WritingMode"_ustr) >>= eWritingMode;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::RL_TB), eWritingMode);
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf158802)
