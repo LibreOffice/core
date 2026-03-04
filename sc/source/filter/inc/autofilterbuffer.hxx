@@ -193,6 +193,9 @@ public:
     FilterSettingsBase& createFilterSettings()
         { mxSettings = std::make_shared<FilterSettingsType>( *this ); return *mxSettings; }
 
+    /** Sets column ID and filter settings from external data. */
+    void setColumnData(sal_Int32 nColId, std::shared_ptr<FilterSettingsBase> xSettings);
+
     /** Returns converted UNO API filter settings representing all filter
         settings of this column. */
     ApiFilterSettings   finalizeImport();
@@ -238,6 +241,9 @@ public:
     FilterColumn&       createFilterColumn();
 
     SortCondition&      createSortCondition();
+
+    /** Sets the filter range directly. */
+    void setRange(const ScRange& rRange);
 
     /** Applies the filter to the passed filter descriptor. */
     void                finalizeImport( const css::uno::Reference< css::sheet::XDatabaseRange >& rxDatabaseRange,

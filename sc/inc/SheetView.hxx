@@ -80,6 +80,7 @@ public:
     SheetViewID getID() const { return mnID; }
 
     OUString const& GetName() const { return maName; }
+    void SetName(OUString const& rName) { maName = rName; }
 
     /** A sheet view is valid if the pointer to the table is set */
     bool isValid() const;
