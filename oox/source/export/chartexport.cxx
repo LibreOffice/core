@@ -3138,7 +3138,7 @@ void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChart
         if (splitDataSeries.hasElements())
             exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
-        createAxes(bPrimaryAxes, false, false);
+        createAxes(bPrimaryAxes, true, false);
         //exportAxesId(bPrimaryAxes);
 
         pFS->endElement(FSNS(XML_c, nTypeId));
@@ -3242,7 +3242,7 @@ void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartTy
             }
         }
 
-        createAxes(bPrimaryAxes, false, false);
+        createAxes(bPrimaryAxes, true, false);
 
         pFS->endElement(FSNS(XML_c, nTypeId));
     }
@@ -3267,7 +3267,7 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
         if (splitDataSeries.hasElements())
             exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
-        createAxes(bPrimaryAxes, false, false);
+        createAxes(bPrimaryAxes, true, false);
 
         pFS->endElement(FSNS(XML_c, XML_bubbleChart));
     }
@@ -3469,7 +3469,7 @@ void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChar
     exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
-    createAxes(bPrimaryAxes, false, false);
+    createAxes(bPrimaryAxes, true, false);
 
     pFS->endElement( FSNS( XML_c, XML_radarChart ) );
 }
@@ -3499,7 +3499,7 @@ void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType 
     bool bPrimaryAxes = true;
     if (pSeries)
         exportSeries_chart(xChartType, *pSeries, bPrimaryAxes);
-    createAxes(bPrimaryAxes, false, false);
+    createAxes(bPrimaryAxes, true, false);
     //exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
@@ -3548,7 +3548,7 @@ void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChar
             exportUpDownBars(xChartType);
         }
 
-        createAxes(bPrimaryAxes, false, false);
+        createAxes(bPrimaryAxes, true, false);
 
         pFS->endElement(FSNS(XML_c, XML_stockChart));
     }
@@ -3623,7 +3623,7 @@ void ChartExport::exportSurfaceChart( const Reference< chart2::XChartType >& xCh
     exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
-    createAxes(bPrimaryAxes, false, false);
+    createAxes(bPrimaryAxes, true, false);
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
