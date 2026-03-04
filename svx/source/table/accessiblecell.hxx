@@ -73,10 +73,6 @@ public:
     virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
     virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
-
     // IAccessibleViewForwarderListener
     virtual void ViewForwarderChanged() override;
 

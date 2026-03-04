@@ -323,24 +323,6 @@ void SAL_CALL AccessibleCell::removeAccessibleEventListener( const Reference<XAc
         mpText->RemoveEventListener (rxListener);
 }
 
-
-// XServiceInfo
-
-
-OUString SAL_CALL AccessibleCell::getImplementationName()
-{
-    return u"AccessibleCell"_ustr;
-}
-
-
-Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames()
-{
-    ensureAlive();
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleCell"_ustr };
-    return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
-}
-
-
 // IAccessibleViewForwarderListener
 
 
