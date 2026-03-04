@@ -44,8 +44,6 @@ service AccessibleIconChoiceControl
        <li>Name: The name of an icon choice control is IconChoiceControl.</li>
        <li>Description: The description of an icon choice control is its localized
            help text.</li>
-       <li>Children: There exists children of type com::sun::star::awt::AccessibleIconChoiceControlEntry.
-        </li>
        <li>Parent: The parent is the window that contains the icon choice control.</li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
