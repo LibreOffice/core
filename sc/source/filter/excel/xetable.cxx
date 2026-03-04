@@ -1029,6 +1029,19 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                     bValid = false;
                     break;
                 }
+                else if (t->GetOpCode() == ocUDExternal && t->GetType() == formula::svExternal)
+                {
+                    OUString sUDName(t->GetExternal());
+                    OUString sSanitizedName = sUDName.replaceAll(" ", "_");
+                    if (sUDName != sSanitizedName)
+                    {
+                        sal_uInt16 nIndex = aIter.GetIndex();
+                        aTokenArray.ReplaceToken(
+                            nIndex - 1,
+                            new formula::FormulaExternalToken(ocUDExternal, sSanitizedName),
+                            formula::FormulaTokenArray::CODE_ONLY);
+                    }
+                }
                 t = aIter.Next();
             }
         }
