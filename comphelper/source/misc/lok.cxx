@@ -445,7 +445,7 @@ void setInitialClientVisibleArea(const awt::Rectangle& rClientVisibleArea)
     g_aInitialClientVisibleArea = rClientVisibleArea;
 }
 
-awt::Rectangle getInitialClientVisibleArea() { return g_aInitialClientVisibleArea; }
+const awt::Rectangle & getInitialClientVisibleArea() { return g_aInitialClientVisibleArea; }
 
 } // namespace
 

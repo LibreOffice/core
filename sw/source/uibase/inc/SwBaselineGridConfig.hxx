@@ -21,7 +21,7 @@ class SwBaselineGridConfig final : public utl::ConfigItem
 private:
     SwMasterUsrPref& m_rParent;
 
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static const css::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void ImplCommit() override;
 

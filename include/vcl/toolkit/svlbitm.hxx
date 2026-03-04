@@ -78,7 +78,7 @@ public:
                             ~SvLBoxButtonData();
 
     static SvBmp            GetIndex( SvItemStateFlags nItemState );
-    Size                    GetSize();
+    const Size &            GetSize();
     void                    SetLink( const Link<SvLBoxButtonData*,void>& rLink) { aLink=rLink; }
     bool                    IsRadio() const;
     // as buttons are not derived from LinkHdl

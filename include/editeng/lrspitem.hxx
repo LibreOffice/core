@@ -152,7 +152,7 @@ public:
 
     void SetTextLeft(SvxIndentValue stL, const sal_uInt16 nProp = 100);
     sal_Int32 ResolveTextLeft(const SvxFontUnitMetrics& rMetrics) const;
-    SvxIndentValue GetTextLeft() const;
+    const SvxIndentValue & GetTextLeft() const;
 
     DECLARE_ITEM_TYPE_FUNCTION(SvxTextLeftMarginItem)
     explicit SvxTextLeftMarginItem(const sal_uInt16 nId);
@@ -198,7 +198,7 @@ public:
     sal_uInt16 GetPropTextFirstLineOffset() const;
 
     void SetTextFirstLineOffset(SvxIndentValue stValue, sal_uInt16 nProp = 100);
-    SvxIndentValue GetTextFirstLineOffset() const;
+    const SvxIndentValue & GetTextFirstLineOffset() const;
     sal_Int32 ResolveTextFirstLineOffset(const SvxFontUnitMetrics& rMetrics) const;
 
     DECLARE_ITEM_TYPE_FUNCTION(SvxFirstLineIndentItem)
@@ -239,7 +239,7 @@ public:
     void SetRight(SvxIndentValue stR, const sal_uInt16 nProp = 100);
 
     // Query/direct setting of the absolute values
-    SvxIndentValue GetRight() const;
+    const SvxIndentValue & GetRight() const;
     sal_Int32 ResolveRight(const SvxFontUnitMetrics& rMetrics) const;
     sal_Int32 ResolveRightFixedPart() const;
     sal_Int32 ResolveRightVariablePart(const SvxFontUnitMetrics& rMetrics) const;
@@ -386,9 +386,9 @@ public:
     void SetRight(SvxIndentValue stR, const sal_uInt16 nProp = 100);
 
     // Query/direct setting of the absolute values
-    SvxIndentValue GetLeft() const;
+    const SvxIndentValue & GetLeft() const;
     sal_Int32 ResolveLeft(const SvxFontUnitMetrics& rMetrics) const;
-    SvxIndentValue GetRight() const;
+    const SvxIndentValue & GetRight() const;
     sal_Int32 ResolveRight(const SvxFontUnitMetrics& rMetrics) const;
     bool IsAutoFirst()  const { return bAutoFirst; }
     void SetAutoFirst( const bool bNew ) { bAutoFirst = bNew; }
@@ -406,7 +406,7 @@ public:
     sal_Int32 ResolveTextLeft(const SvxFontUnitMetrics& rMetrics) const;
 
     void SetTextFirstLineOffset(SvxIndentValue stValue, sal_uInt16 nProp = 100);
-    SvxIndentValue GetTextFirstLineOffset() const;
+    const SvxIndentValue & GetTextFirstLineOffset() const;
     sal_Int32 ResolveTextFirstLineOffset(const SvxFontUnitMetrics& rMetrics) const;
 
     void SetPropTextFirstLineOffset( const sal_uInt16 nProp )

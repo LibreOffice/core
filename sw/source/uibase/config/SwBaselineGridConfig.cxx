@@ -27,7 +27,7 @@ SwBaselineGridConfig::SwBaselineGridConfig(SwMasterUsrPref& rParent)
     EnableNotification(GetPropertyNames());
 }
 
-css::uno::Sequence<OUString> SwBaselineGridConfig::GetPropertyNames()
+const css::uno::Sequence<OUString>& SwBaselineGridConfig::GetPropertyNames()
 {
     static css::uno::Sequence<OUString> aNames{
         u"VisibleGrid"_ustr, // 0

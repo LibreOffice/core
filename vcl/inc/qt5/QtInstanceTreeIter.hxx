@@ -20,7 +20,7 @@ public:
     explicit QtInstanceTreeIter(QModelIndex aModelIndex);
     virtual bool equal(const TreeIter& rOther) const override;
 
-    QModelIndex modelIndex() const { return m_aModelIndex; }
+    const QModelIndex& modelIndex() const { return m_aModelIndex; }
     void setModelIndex(const QModelIndex& aIndex) { m_aModelIndex = aIndex; }
 };
 

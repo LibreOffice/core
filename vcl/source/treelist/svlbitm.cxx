@@ -68,7 +68,7 @@ SvBmp SvLBoxButtonData::GetIndex( SvItemStateFlags nItemState )
     return nIdx;
 }
 
-Size SvLBoxButtonData::GetSize()
+const Size & SvLBoxButtonData::GetSize()
 {
     if (!bDataOk)
         SetWidthAndHeight();

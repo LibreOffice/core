@@ -83,12 +83,12 @@ ResourceId::~ResourceId()
     mpURL.reset();
 }
 
-OUString ResourceId::getResourceURL() const
+const OUString & ResourceId::getResourceURL() const
 {
     if (!maResourceURLs.empty())
         return maResourceURLs[0];
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
 util::URL ResourceId::getFullResourceURL()

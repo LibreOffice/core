@@ -110,7 +110,7 @@ using namespace ::com::sun::star::i18n;
     FALSE if no numeral element is found.
 */
 static bool SplitString(const OUString &sWhole, const LanguageTag& rLanguageTag, OUString &sPrefix,
-                        OUString &sSuffix, double &fNum, const bool &bInteger = false)
+                        OUString &sSuffix, double &fNum, const bool bInteger = false)
 {
     // Get prefix element, search for any digit and stop.
     sal_Int32 nPos = 0;
@@ -197,7 +197,7 @@ static bool SplitString(const OUString &sWhole, const LanguageTag& rLanguageTag,
 static short Compare(const OUString &sInput1, const OUString &sInput2,
                      const LanguageTag& rLanguageTag, const bool bCaseSens,
                      const ScUserListData* pData, const CollatorWrapper *pCW,
-                     const bool& bInteger = false)
+                     const bool bInteger = false)
 {
     OUString sStr1( sInput1 ), sStr2( sInput2 ), sPre1, sSuf1, sPre2, sSuf2;
 

@@ -171,7 +171,7 @@ public:
      * depending on the size of the slide and the desired size. The size can differ,
      * because the it must match the slide aspect ratio.
      **/
-    Size calculateAndSetSizePixel(Size const& rDesiredSizePixel);
+    const Size& calculateAndSetSizePixel(Size const& rDesiredSizePixel);
 
     /** Renders one layer
      *

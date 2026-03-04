@@ -131,9 +131,9 @@ public:
     */
     css::awt::Rectangle getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect=false );
 
-    css::awt::Rectangle getDiagramRectangleExcludingAxes();
+    const css::awt::Rectangle & getDiagramRectangleExcludingAxes();
 
-    std::shared_ptr< DrawModelWrapper > getDrawModelWrapper();
+    const std::shared_ptr< DrawModelWrapper > & getDrawModelWrapper();
 
     // ___XTransferable___
     virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;

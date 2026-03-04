@@ -119,10 +119,10 @@ public:
     void SetFlags( SvTLEntryFlags nFlags );
 
     void SetTextColor( std::optional<Color> xColor ) { mxTextColor = xColor; }
-    OUString GetAccessibleName() { return m_sAccessibleName; }
+    const OUString & GetAccessibleName() { return m_sAccessibleName; }
     void SetAccessibleName(const OUString& rName) { m_sAccessibleName = rName; };
 
-    OUString GetToolTip() { return m_sToolTip; };
+    const OUString & GetToolTip() { return m_sToolTip; };
     void SetToolTip(const OUString& rToolTip) { m_sToolTip = rToolTip; };
 
     std::optional<Color> const & GetTextColor() const { return mxTextColor; }

@@ -825,7 +825,7 @@ public:
     void SetEmptyPresObj(bool bEpt);
     bool IsEmptyPresObj() const { return m_bEmptyPresObj;}
     void SetCustomPromptText(const OUString& aVal);
-    OUString GetCustomPromptText() const { return m_aCustomPromptText; }
+    const OUString & GetCustomPromptText() const { return m_aCustomPromptText; }
     void SetNotVisibleAsMaster(bool bFlg);
     bool IsNotVisibleAsMaster() const { return m_bNotVisibleAsMaster;}
     void SetUserCall(SdrObjUserCall* pUser);

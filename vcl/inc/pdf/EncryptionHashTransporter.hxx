@@ -52,19 +52,19 @@ public:
 
     void invalidate() { m_pDigest.reset(); }
 
-    std::vector<sal_uInt8> getU() { return mU; }
+    const std::vector<sal_uInt8>& getU() const { return mU; }
     void setU(std::vector<sal_uInt8> const& rU) { mU = rU; }
 
-    std::vector<sal_uInt8> getUE() { return mUE; }
+    const std::vector<sal_uInt8>& getUE() const { return mUE; }
     void setUE(std::vector<sal_uInt8> const& rUE) { mUE = rUE; }
 
-    std::vector<sal_uInt8> getO() { return mO; }
+    const std::vector<sal_uInt8>& getO() const { return mO; }
     void setO(std::vector<sal_uInt8> const& rO) { mO = rO; }
 
-    std::vector<sal_uInt8> getOE() { return mOE; }
+    const std::vector<sal_uInt8>& getOE() const { return mOE; }
     void setOE(std::vector<sal_uInt8> const& rOE) { mOE = rOE; }
 
-    std::vector<sal_uInt8> getEncryptionKey() { return maEncryptionKey; }
+    const std::vector<sal_uInt8>& getEncryptionKey() const { return maEncryptionKey; }
     void setEncryptionKey(std::vector<sal_uInt8> const& rEncryptionKey)
     {
         maEncryptionKey = rEncryptionKey;

@@ -101,7 +101,7 @@ PPPOptimizerTokenEnum TKGet( const OUString& rToken )
     return eRetValue;
 }
 
-OUString TKGet( const PPPOptimizerTokenEnum eToken )
+const OUString & TKGet( const PPPOptimizerTokenEnum eToken )
 {
     return pTokenTableArray[ eToken ].pS;
 }

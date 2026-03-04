@@ -70,7 +70,7 @@ protected:
     void GetDataFromCommonFields(OUString& aStrName, OUString& aStrIntName, OUString& aStrFrame,
                                  SvxLinkInsertMode& eMode);
 
-    static OUString GetSchemeFromURL(std::u16string_view rStrUrl);
+    static const OUString& GetSchemeFromURL(std::u16string_view rStrUrl);
 
     virtual bool ShouldOpenMarkWnd() { return false; }
     virtual void SetMarkWndShouldOpen(bool bOpen) { m_bMarkWndOpen = bOpen; }

@@ -173,7 +173,7 @@ COMPHELPER_DLLPUBLIC ViewShellDocId getDocId();
 
 COMPHELPER_DLLPUBLIC void
 setInitialClientVisibleArea(const css::awt::Rectangle& rClientVisibleArea);
-COMPHELPER_DLLPUBLIC css::awt::Rectangle getInitialClientVisibleArea();
+COMPHELPER_DLLPUBLIC const css::awt::Rectangle& getInitialClientVisibleArea();
 }
 
 #endif // INCLUDED_COMPHELPER_LOK_HXX

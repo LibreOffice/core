@@ -533,7 +533,7 @@ public:
     void applyColorPaletteToDataSeries(const ChartColorPalette& rColorPalette);
     void onDocumentThemeChanged();
 
-    std::optional<css::util::DateTime> getNullDate() const;
+    const std::optional<css::util::DateTime> & getNullDate() const;
     void changeNullDate(const css::util::DateTime& aNullDate);
 
 private:

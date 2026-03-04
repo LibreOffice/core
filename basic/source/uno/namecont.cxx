@@ -97,7 +97,7 @@ static bool GbMigrationSuppressErrors = false;
 // Implementation class NameContainer
 
 // Methods XElementAccess
-Type NameContainer::getElementType()
+const Type & NameContainer::getElementType()
 {
     return mType;
 }

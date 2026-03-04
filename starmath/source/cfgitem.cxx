@@ -662,7 +662,7 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
     OSL_ENSURE( bOK, "read FontFormat failed" );
 }
 
-css::uno::Sequence<OUString> SmMathConfig::LoadUserDefinedNames()
+const css::uno::Sequence<OUString> & SmMathConfig::LoadUserDefinedNames()
 {
     m_sUserDefinedNames = GetNodeNames(USER_DEFINED_LIST);
     return m_sUserDefinedNames;

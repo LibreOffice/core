@@ -112,7 +112,7 @@ public:
     CallDataType getType() const { return m_eType; }
     sal_Int32 getElement() const { return m_nElement; }
     const ::rtl::OUString& getChars() { return m_aChars; }
-    css::uno::Reference<css::xml::sax::XFastAttributeList> getAttributes() const
+    const css::uno::Reference<css::xml::sax::XFastAttributeList>& getAttributes() const
     {
         return m_aAttributes;
     }

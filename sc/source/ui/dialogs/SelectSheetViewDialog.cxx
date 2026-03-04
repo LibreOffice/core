@@ -30,7 +30,7 @@ public:
     {
     }
 
-    OUString getName() const { return mpSheetView->GetName(); }
+    const OUString& getName() const { return mpSheetView->GetName(); }
     sc::SheetViewID getSheetViewID() const { return mnSheetViewID; }
 };
 

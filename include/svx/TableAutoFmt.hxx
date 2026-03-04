@@ -108,7 +108,7 @@ public:
         if (prop < PROP_COUNT)
             mSetProperties[prop] = set;
     }
-    std::bitset<PROP_COUNT> GetPropertySet() const { return mSetProperties; }
+    const std::bitset<PROP_COUNT>& GetPropertySet() const { return mSetProperties; }
     void SetPropertySet(std::bitset<PROP_COUNT> aSet) { mSetProperties = aSet; }
 };
 

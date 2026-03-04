@@ -167,12 +167,12 @@ public:
 private:
 
     bool RejectRedlineRange(SwRedlineTable::size_type nPosOrigin,
-                            const SwRedlineTable::size_type& nPosStart,
-                            const SwRedlineTable::size_type& nPosEnd, bool bCallDelete,
+                            const SwRedlineTable::size_type nPosStart,
+                            const SwRedlineTable::size_type nPosEnd, bool bCallDelete,
                             bool bDirect);
     bool AcceptRedlineRange(SwRedlineTable::size_type nPosOrigin,
-                            const SwRedlineTable::size_type& nPosStart,
-                            const SwRedlineTable::size_type& nPosEnd, bool bCallDelete,
+                            const SwRedlineTable::size_type nPosStart,
+                            const SwRedlineTable::size_type nPosEnd, bool bCallDelete,
                             bool bDirect);
     bool AcceptMovedRedlines(sal_uInt32 nMovedID, bool bCallDelete);
     bool RejectMovedRedlines(sal_uInt32 nMovedID, bool bCallDelete);

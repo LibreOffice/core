@@ -209,7 +209,7 @@ struct SpellCheckContext::SpellCheckResult
         maRanges = rMisspells;
     }
 
-    MisspellRangeResult query(SCCOL nCol, SCROW nRow) const
+    const MisspellRangeResult & query(SCCOL nCol, SCROW nRow) const
     {
         assert(mnCol == nCol);
         assert(mnRow == nRow);
@@ -258,7 +258,7 @@ bool SpellCheckContext::isMisspelled(SCCOL nCol, SCROW nRow) const
     return mpResult->query(nCol, nRow).mpRanges;
 }
 
-sc::MisspellRangeResult SpellCheckContext::getMisspellRanges(
+const sc::MisspellRangeResult & SpellCheckContext::getMisspellRanges(
     SCCOL nCol, SCROW nRow ) const
 {
     const_cast<SpellCheckContext*>(this)->ensureResults(nCol, nRow);

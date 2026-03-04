@@ -30,7 +30,7 @@ public:
 
     virtual bool hasChildren(const QModelIndex& rIndex = QModelIndex()) const override;
 
-    std::vector<int> editableColumns() const;
+    const std::vector<int>& editableColumns() const;
     void setEditableColumns(const std::vector<int>& rEditableColumns);
 
     bool getChildrenOnDemand(const QModelIndex& rIndex) const;

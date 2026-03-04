@@ -39,7 +39,7 @@ bool QtTreeViewModel::hasChildren(const QModelIndex& rIndex) const
     return QSortFilterProxyModel::hasChildren(rIndex);
 }
 
-std::vector<int> QtTreeViewModel::editableColumns() const
+const std::vector<int>& QtTreeViewModel::editableColumns() const
 {
     assert(std::ranges::is_sorted(m_aEditableColumns));
     return m_aEditableColumns;

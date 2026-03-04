@@ -1005,10 +1005,10 @@ namespace
 
     /// Given a redline that has another underlying redline, drop that underlying redline.
     /// Used to accept an insert or rejecting a delete, i.e. no changes to the text node strings.
-    bool lcl_DeleteInnerRedline(const SwRedlineTable& rArr, const SwRedlineTable::size_type& rPos,
+    bool lcl_DeleteInnerRedline(const SwRedlineTable& rArr, const SwRedlineTable::size_type nPos,
                                       int nDepth)
     {
-        SwRangeRedline* pRedl = rArr[rPos];
+        SwRangeRedline* pRedl = rArr[nPos];
         SwDoc& rDoc = pRedl->GetDoc();
         SwPaM const updatePaM(*pRedl->Start(), *pRedl->End());
 
@@ -1019,17 +1019,17 @@ namespace
 
     /// Given a redline that has an other underlying redline, drop the redline on top.
     /// Used to accept a format on top of insert/delete, no changes to the text node string.
-    bool lcl_AcceptOuterFormat(const SwRedlineTable& rArr, const SwRedlineTable::size_type& rPos)
+    bool lcl_AcceptOuterFormat(const SwRedlineTable& rArr, const SwRedlineTable::size_type nPos)
     {
-        SwRangeRedline* pRedl = rArr[rPos];
+        SwRangeRedline* pRedl = rArr[nPos];
         return pRedl->PopData();
     }
 
     /// Given a redline that has an other underlying redline, drop the redline on top & restore the
     /// old doc model. Used to reject a format on top of insert/delete.
-    bool lcl_RejectOuterFormat(const SwRedlineTable& rArr, const SwRedlineTable::size_type& rPos)
+    bool lcl_RejectOuterFormat(const SwRedlineTable& rArr, const SwRedlineTable::size_type nPos)
     {
-        SwRangeRedline* pRedl = rArr[rPos];
+        SwRangeRedline* pRedl = rArr[nPos];
         SwDoc& rDoc = pRedl->GetDoc();
         SwPaM aPam(*(pRedl->Start()), *(pRedl->End()));
         rDoc.ResetAttrs(aPam);
@@ -3374,8 +3374,8 @@ const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos
 }
 
 bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOrigin,
-                                                const SwRedlineTable::size_type& nPosStart,
-                                                const SwRedlineTable::size_type& nPosEnd,
+                                                const SwRedlineTable::size_type nPosStart,
+                                                const SwRedlineTable::size_type nPosEnd,
                                                 bool bCallDelete, bool bDirect)
 {
     bool bRet = false;
@@ -3718,8 +3718,8 @@ void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam
 }
 
 bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOrigin,
-                                                const SwRedlineTable::size_type& nPosStart,
-                                                const SwRedlineTable::size_type& nPosEnd,
+                                                const SwRedlineTable::size_type nPosStart,
+                                                const SwRedlineTable::size_type nPosEnd,
                                                 bool bCallDelete, bool bDirect)
 {
     bool bRet = false;

@@ -82,7 +82,7 @@ public:
                        std::unique_lock<std::mutex>& guard);
 
     // Methods XElementAccess
-    css::uno::Type getElementType();
+    const css::uno::Type & getElementType();
     sal_Bool hasElements();
 
     // Methods XNameAccess

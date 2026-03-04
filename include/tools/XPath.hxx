@@ -54,7 +54,7 @@ class TOOLS_DLLPUBLIC XPathObject final
 public:
     XPathObject(xmlXPathObjectPtr pXPathObject, std::string_view aString);
     ~XPathObject();
-    std::string_view getPathString() { return maPath; }
+    const std::string_view& getPathString() { return maPath; }
     sal_Int32 count();
     OUString attribute(const char* pAttribute);
     OUString content();

@@ -38,7 +38,7 @@
 
 // Subtotals group tabpage:
 
-ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet, const sal_uInt16& rTabNumber)
+ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet, const sal_uInt16 nTabNumber)
     : SfxTabPage(pPage, pController, u"modules/scalc/ui/subtotalgrppage.ui"_ustr, u"SubTotalGrpPage"_ustr, &rArgSet)
     , aStrNone(ScResId(SCSTR_NONE))
     , aStrColumn(ScResId(SCSTR_COLUMN_LETTER))
@@ -64,8 +64,8 @@ ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogControl
     Init();
 
     // UI tests
-    mxLbGroup->set_buildable_name(mxLbGroup->get_buildable_name() + OUString::number(rTabNumber));
-    mxLbColumns->set_buildable_name(mxLbColumns->get_buildable_name() + OUString::number(rTabNumber));
+    mxLbGroup->set_buildable_name(mxLbGroup->get_buildable_name() + OUString::number(nTabNumber));
+    mxLbColumns->set_buildable_name(mxLbColumns->get_buildable_name() + OUString::number(nTabNumber));
 }
 
 ScTpSubTotalGroup::~ScTpSubTotalGroup()

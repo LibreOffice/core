@@ -2826,7 +2826,7 @@ void SfxViewShell::SetSigningCertificate(const svl::crypto::CertificateOrName& r
     pImpl->m_aSigningCertificate = rCertificate;
 }
 
-svl::crypto::CertificateOrName SfxViewShell::GetSigningCertificate() const
+const svl::crypto::CertificateOrName & SfxViewShell::GetSigningCertificate() const
 {
     return pImpl->m_aSigningCertificate;
 }

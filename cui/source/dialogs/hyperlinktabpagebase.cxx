@@ -101,12 +101,12 @@ void HyperlinkTabPageBase::GetDataFromCommonFields(OUString& aStrName, OUString&
     eMode = (m_xForm->get_active() == 1) ? HLINK_BUTTON : HLINK_FIELD;
 }
 
-OUString HyperlinkTabPageBase::GetSchemeFromURL(std::u16string_view rStrUrl)
+const OUString& HyperlinkTabPageBase::GetSchemeFromURL(std::u16string_view rStrUrl)
 {
     INetURLObject aURL(rStrUrl);
     if (aURL.GetProtocol() != INetProtocol::NotValid)
         return INetURLObject::GetScheme(aURL.GetProtocol());
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void HyperlinkTabPageBase::ShowMarkWnd()

@@ -165,7 +165,7 @@ public:
     const SmFormat& GetStandardFormat() const;
     void SetStandardFormat(const SmFormat& rFormat, bool bSaveFontFormatList = false);
 
-    css::uno::Sequence<OUString> LoadUserDefinedNames();
+    const css::uno::Sequence<OUString>& LoadUserDefinedNames();
     void GetUserDefinedFormula(std::u16string_view sName, OUString& sFormula);
     bool HasUserDefinedFormula(std::u16string_view sName);
     void SaveUserDefinedFormula(std::u16string_view sName, const OUString& sElement);

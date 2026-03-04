@@ -834,7 +834,7 @@ void SlideshowLayerRenderer::setupMasterPageFields()
     }
 }
 
-Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePixel)
+const Size& SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePixel)
 {
     double fRatio = double(mrPage.GetHeight()) / mrPage.GetWidth();
     Size aSize(rDesiredSizePixel.Width(), ::tools::Long(rDesiredSizePixel.Width() * fRatio));

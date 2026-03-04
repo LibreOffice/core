@@ -2393,7 +2393,7 @@ Reference< XEnumerationAccess > SwXTextDocument::getRedlines(  )
     return getSwRedlines();
 }
 
-rtl::Reference< SwXRedlines > SwXTextDocument::getSwRedlines(  )
+const rtl::Reference< SwXRedlines > & SwXTextDocument::getSwRedlines(  )
 {
     if(!mxXRedlines.is())
     {
