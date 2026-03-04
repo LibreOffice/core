@@ -38,13 +38,12 @@ sal_uInt32 SvxColorIconView::getEntryEdgeLength()
 }
 
 void SvxColorIconView::addEntriesForXColorList(weld::IconView& pIconView,
-                                               const XColorList& rXColorList,
-                                               sal_uInt32 nStartIndex)
+                                               const XColorList& rXColorList)
 {
     const sal_uInt32 nColorCount(rXColorList.Count());
     ScopedVclPtr<VirtualDevice> pVDev = createColorDevice();
 
-    for (sal_uInt32 nIndex(0); nIndex < nColorCount; nIndex++, nStartIndex++)
+    for (sal_uInt32 nIndex(0); nIndex < nColorCount; nIndex++)
     {
         const XColorEntry* pEntry = rXColorList.GetColor(nIndex);
 
