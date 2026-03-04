@@ -61,7 +61,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf171038_pageAfter)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:sectPr", 2); // there are two section breaks
     assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:p/w:pPr/w:sectPr", 0); // would be corrupt document
-    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:sectPr", 1); // one is in the paragraph rPr
+    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:sectPr", 1); // one is in the paragraph pPr
     assertXPath(pXmlDoc, "//w:body/w:sectPr", 1); // the other is at the end of the document
 }
 
