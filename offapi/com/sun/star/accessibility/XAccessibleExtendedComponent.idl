@@ -55,7 +55,7 @@ interface XAccessibleExtendedComponent : XAccessibleComponent
 
         @return
             Returns the localized tool tip text of the object.  If tool tips
-            are not supported and empty string is returned.
+            are not supported an empty string is returned.
     */
     string getToolTipText ();
 };
