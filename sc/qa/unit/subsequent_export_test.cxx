@@ -2263,6 +2263,30 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testCombinedChartAxesCount)
     assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:valAx", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest, testCombinedChartsAxesSharing)
+{
+    createScDoc("xls/forum-mso-de-48440.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pChart = parseExport(u"xl/charts/chart3.xml"_ustr);
+    CPPUNIT_ASSERT(pChart);
+
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:catAx", 1);
+    assertXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:valAx", 3);
+
+    OUString barChartAxis1
+        = getXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:axId[1]", "val");
+    OUString scatterChart1Axis1
+        = getXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart[1]/c:axId[1]", "val");
+    CPPUNIT_ASSERT_EQUAL(barChartAxis1, scatterChart1Axis1);
+
+    OUString barChartAxis2
+        = getXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:axId[2]", "val");
+    OUString scatterChart1Axis2
+        = getXPath(pChart, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart[1]/c:axId[2]", "val");
+    CPPUNIT_ASSERT_EQUAL(barChartAxis2, scatterChart1Axis2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

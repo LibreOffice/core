@@ -2201,7 +2201,9 @@ void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChart
         bool bPrimaryAxes = true;
         if (splitDataSeries.hasElements())
             exportSeries(xChartType, splitDataSeries, bPrimaryAxes);
-        exportAxesId(bPrimaryAxes);
+
+        bool bCheckCombinedAxes = !maAxes.empty();
+        exportAxesId(bPrimaryAxes, bCheckCombinedAxes);
 
         pFS->endElement(FSNS(XML_c, nTypeId));
     }
@@ -2304,7 +2306,8 @@ void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartTy
             }
         }
 
-        exportAxesId(bPrimaryAxes);
+        bool bCheckCombinedAxes = !maAxes.empty();
+        exportAxesId(bPrimaryAxes, bCheckCombinedAxes);
 
         pFS->endElement(FSNS(XML_c, nTypeId));
     }
@@ -2329,7 +2332,8 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
         if (splitDataSeries.hasElements())
             exportSeries(xChartType, splitDataSeries, bPrimaryAxes);
 
-        exportAxesId(bPrimaryAxes);
+        bool bCheckCombinedAxes = !maAxes.empty();
+        exportAxesId(bPrimaryAxes, bCheckCombinedAxes);
 
         pFS->endElement(FSNS(XML_c, XML_bubbleChart));
     }
@@ -2493,7 +2497,9 @@ void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChar
     exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
-    exportAxesId(bPrimaryAxes);
+
+    bool bCheckCombinedAxes = !maAxes.empty();
+    exportAxesId(bPrimaryAxes, bCheckCombinedAxes);
 
     pFS->endElement( FSNS( XML_c, XML_radarChart ) );
 }
@@ -2523,7 +2529,9 @@ void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType 
     bool bPrimaryAxes = true;
     if (pSeries)
         exportSeries(xChartType, *pSeries, bPrimaryAxes);
-    exportAxesId(bPrimaryAxes);
+
+    bool bCheckCombinedAxes = !maAxes.empty();
+    exportAxesId(bPrimaryAxes, bCheckCombinedAxes);
 
     pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
 }
@@ -2571,7 +2579,8 @@ void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChar
             exportUpDownBars(xChartType);
         }
 
-        exportAxesId(bPrimaryAxes);
+        bool bCheckCombinedAxes = !maAxes.empty();
+        exportAxesId(bPrimaryAxes, bCheckCombinedAxes);
 
         pFS->endElement(FSNS(XML_c, XML_stockChart));
     }
@@ -2646,7 +2655,9 @@ void ChartExport::exportSurfaceChart( const Reference< chart2::XChartType >& xCh
     exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
-    exportAxesId(bPrimaryAxes);
+
+    bool bCheckCombinedAxes = !maAxes.empty();
+    exportAxesId(bPrimaryAxes, bCheckCombinedAxes);
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
