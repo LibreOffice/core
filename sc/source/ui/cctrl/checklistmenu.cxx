@@ -875,62 +875,69 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, LockCheckedHdl, weld::Toggleable&, void)
 {
     bool bLockCheckedEntries = mxChkLockChecked->get_active();
 
-    // go over the members visible in the popup, and remember which one is
-    // checked, and which one is not by setting `mbMarked` to `true`; by default
-    // `mbMarked` is `false`, we clear all the marks when lock is unchecked, see
-    // at the end of this callback.
-    mpChecks->all_foreach([this](weld::TreeIter& rEntry){
-        if (mpChecks->get_toggle(rEntry) == TRISTATE_TRUE)
-        {
-            for (auto& aMember : maMembers)
-            {
-                if (aMember.maName == mpChecks->get_text(rEntry))
-                {
-                    aMember.mbMarked = true;
-                    /*
-                     * if there are multiple entries with the same
-                     * name in the range, they all show up as a single
-                     * entry in the autofilter, so we can break
-                     */
-                    break;
-                }
-            }
-        }
-
-        return false;
-    });
-
-    mpChecks->freeze();
-    mpChecks->clear();
-    mpChecks->thaw();
-
-    OUString aSearchText = mxEdSearch->get_text();
-    if (aSearchText.isEmpty())
+    if (mbHasDates)
     {
-        /*
-         * when we click on lock, all the checked entries are marked and
-         * this `true` tells `initMembers` to check only the currently
-         * checked entries.
-         *
-         * when lock is unchecked we want that the entries which were locked
-         * and checked now become unlocked and checked so that we can select
-         * or deselect more entries, still we want only the marked (selected)
-         * entries to remain selected, thus this `true` is valid even in the
-         * uncheck case.
-         */
-        initMembers(-1, true);
+        // TODO: flesh it out later
     }
     else
     {
-        std::vector<int> aShownIndexes;
-        loadSearchedMembers(aShownIndexes, maMembers, aSearchText, true);
-        std::vector<int> aFixedWidths { mnCheckWidthReq };
+        // go over the members visible in the popup, and remember which one is
+        // checked, and which one is not by setting `mbMarked` to `true`; by default
+        // `mbMarked` is `false`, we clear all the marks when lock is unchecked, see
+        // at the end of this callback.
+        mpChecks->all_foreach([this](weld::TreeIter& rEntry){
+            if (mpChecks->get_toggle(rEntry) == TRISTATE_TRUE)
+            {
+                for (auto& aMember : maMembers)
+                {
+                    if (aMember.maName == mpChecks->get_text(rEntry))
+                    {
+                        aMember.mbMarked = true;
+                        /*
+                         * if there are multiple entries with the same
+                         * name in the range, they all show up as a single
+                         * entry in the autofilter, so we can break
+                         */
+                        break;
+                    }
+                }
+            }
 
-        // insert the members, remember whether checked or unchecked.
-        mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes, &bLockCheckedEntries](weld::TreeIter& rIter, int i) {
-            size_t nIndex = aShownIndexes[i];
-            insertMember(*mpChecks, rIter, maMembers[nIndex], maMembers[nIndex].mbMarked, bLockCheckedEntries);
-        }, nullptr, &aFixedWidths);
+            return false;
+        });
+
+        mpChecks->freeze();
+        mpChecks->clear();
+        mpChecks->thaw();
+
+        OUString aSearchText = mxEdSearch->get_text();
+        if (aSearchText.isEmpty())
+        {
+            /*
+             * when we click on lock, all the checked entries are marked and
+             * this `true` tells `initMembers` to check only the currently
+             * checked entries.
+             *
+             * when lock is unchecked we want that the entries which were locked
+             * and checked now become unlocked and checked so that we can select
+             * or deselect more entries, still we want only the marked (selected)
+             * entries to remain selected, thus this `true` is valid even in the
+             * uncheck case.
+             */
+            initMembers(-1, true);
+        }
+        else
+        {
+            std::vector<int> aShownIndexes;
+            loadSearchedMembers(aShownIndexes, maMembers, aSearchText, true);
+            std::vector<int> aFixedWidths { mnCheckWidthReq };
+
+            // insert the members, remember whether checked or unchecked.
+            mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes, &bLockCheckedEntries](weld::TreeIter& rIter, int i) {
+                size_t nIndex = aShownIndexes[i];
+                insertMember(*mpChecks, rIter, maMembers[nIndex], maMembers[nIndex].mbMarked, bLockCheckedEntries);
+            }, nullptr, &aFixedWidths);
+        }
     }
 
     // unmarking should happen after the members are inserted

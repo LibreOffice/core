@@ -33,7 +33,7 @@ struct ScCheckListMember
     OUString                 maName; // node name
     OUString                 maRealName;
     double                   mnValue; // number value of filter condition
-    bool                     mbVisible;
+    bool                     mbVisible; // represents the visibility on the sheet and not in the autofilter menu
     bool                     mbMarked;
     bool                     mbHiddenByOtherFilter;
     bool                     mbDate;
