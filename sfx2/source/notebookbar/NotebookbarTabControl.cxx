@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <chrono>
 #include <vcl/builderfactory.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/tabpage.hxx>
@@ -220,6 +222,30 @@ void NotebookbarTabControl::KeyInput( const KeyEvent& rKEvt )
         }
     }
     return NotebookbarTabControlBase::KeyInput( rKEvt );
+}
+
+void NotebookbarTabControl::Command( const CommandEvent& rCEvt )
+{
+    if ( rCEvt.GetCommand() == CommandEventId::Wheel )
+    {
+        const CommandWheelData* pData = rCEvt.GetWheelData();
+        if ( pData && !pData->GetModifier()
+             && pData->GetMode() == CommandWheelMode::SCROLL
+             && pData->GetDelta() != 0 )
+        {
+            // Debounce: require at least 100 ms between tab switches so that
+            // casual scrolling does not rapidly cycle through tabs.
+            auto now = std::chrono::steady_clock::now();
+            static constexpr auto debounceMs = std::chrono::milliseconds(100);
+            if ( now - m_lastTabSwitch >= debounceMs )
+            {
+                m_lastTabSwitch = now;
+                ImplActivateTabPage( pData->GetDelta() < 0 );
+            }
+            return;
+        }
+    }
+    NotebookbarTabControlBase::Command( rCEvt );
 }
 
 bool NotebookbarTabControl::EventNotify( NotifyEvent& rNEvt )
