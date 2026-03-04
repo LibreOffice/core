@@ -51,8 +51,6 @@ service AccessibleList
        <li>Name: The name of a list is its localized label.</li>
        <li>Description: The description of a list is its localized
            help text.</li>
-       <li>Children: There exists children.
-            Each child is of type com::sun::star::awt::AccessibleListItem. </li>
        <li>Parent: The parent can be of type
             <ul>
             <li>com::sun::star::awt::AccessibleComboBox</li>

@@ -163,8 +163,7 @@ sal_Bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > VCLXAccessibleListItem::getSupportedServiceNames()
 {
-    return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
-            u"com.sun.star.accessibility.AccessibleListItem"_ustr};
+    return {u"com.sun.star.accessibility.AccessibleContext"_ustr};
 }
 
 // XAccessibleContext
