@@ -5792,7 +5792,7 @@ bool SwRowFrame::ShouldRowKeepWithNext( const bool bCheckParents ) const
 
 SwCellFrame::SwCellFrame(const SwTableBox &rBox, SwFrame* pSib, bool bInsertContent)
     : SwLayoutFrame( rBox.GetFrameFormat(), pSib )
-    , m_pTabBox( &rBox )
+    , m_rTabBox(rBox)
 {
     mnFrameType = SwFrameType::Cell;
 

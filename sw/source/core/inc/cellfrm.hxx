@@ -27,7 +27,7 @@ class SwTableBox;
 /// SwCellFrame is one table cell in the document layout.
 class SW_DLLPUBLIC SwCellFrame final : public SwLayoutFrame
 {
-    const SwTableBox* m_pTabBox;
+    const SwTableBox& m_rTabBox;
 
     virtual void DestroyImpl() override;
     virtual ~SwCellFrame() override;
@@ -46,7 +46,7 @@ public:
     // #i103961#
     virtual void Cut() override;
 
-    const SwTableBox *GetTabBox() const { return m_pTabBox; }
+    const SwTableBox* GetTabBox() const { return &m_rTabBox; }
 
     // used for breaking table rows:
     SwCellFrame* GetFollowCell() const;
