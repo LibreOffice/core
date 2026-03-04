@@ -2223,10 +2223,10 @@ Point SwTableBox::GetCoordinates() const
     do {
         const SwTableLine* pLine = pBox->GetUpper();
         // at the first level?
-        const SwTableLines* pLines = pLine->GetUpper()
-                ? &pLine->GetUpper()->GetTabLines() : &rTable.GetTabLines();
+        const SwTableLines& rLines
+            = pLine->GetUpper() ? pLine->GetUpper()->GetTabLines() : rTable.GetTabLines();
 
-        nY = pLines->GetPos( pLine ) + 1 ;
+        nY = rLines.GetPos(pLine) + 1;
         nX = pBox->GetUpper()->GetBoxPos( pBox ) + 1;
         pBox = pLine->GetUpper();
     } while( pBox );
