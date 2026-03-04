@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <chrono>
 #include <vcl/tabctrl.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
@@ -25,11 +26,14 @@ public:
     ~NotebookbarTabControl() override;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual void Command( const CommandEvent& rCEvt ) override;
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
     virtual void StateChanged(StateChangedType nStateChange) override;
     virtual Size calculateRequisition() const override;
 
 private:
+    // time-based debounce: track when the last tab switch via scroll happened
+    std::chrono::steady_clock::time_point m_lastTabSwitch{};
     static void FillShortcutsToolBox(css::uno::Reference<css::uno::XComponentContext> const & xContext,
                                           const css::uno::Reference<css::frame::XFrame>& xFrame,
                                           const OUString& aModuleName,
