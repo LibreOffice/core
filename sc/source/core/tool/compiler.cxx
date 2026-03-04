@@ -2072,9 +2072,10 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
     sal_Int32 nContFlags = nStartFlags | KParseTokens::ANY_NUMBER;
     ParseResult aRes = ScGlobal::getCharClass().parsePredefinedToken(
         KParseType::IDENTNAME, rString, 0, nStartFlags, OUString(), nContFlags, OUString());
+    bool bKeyWord = (rString == "FALSE" || rString == "TRUE");
     bool bNeedsQuote
         = (!((aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rString.getLength())
-           || lcl_TabContainsReference(rString));
+           || lcl_TabContainsReference(rString) || bKeyWord);
 
     switch ( eConv )
     {
