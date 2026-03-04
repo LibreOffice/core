@@ -165,16 +165,6 @@ public:
         release()
         noexcept override;
 
-    //=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual OUString SAL_CALL
-        getImplementationName() override;
-
-    virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames() override;
-
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL

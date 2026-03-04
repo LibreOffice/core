@@ -358,21 +358,6 @@ void SAL_CALL
     AccessibleContextBase::release ();
 }
 
-// XServiceInfo
-
-OUString SAL_CALL
-    AccessibleDocumentViewBase::getImplementationName()
-{
-    return u"AccessibleDocumentViewBase"_ustr;
-}
-
-css::uno::Sequence< OUString> SAL_CALL
-    AccessibleDocumentViewBase::getSupportedServiceNames()
-{
-    ensureAlive();
-    return AccessibleContextBase::getSupportedServiceNames ();
-}
-
 void AccessibleDocumentViewBase::impl_dispose()
 {
     // Unregister from VCL Window.
