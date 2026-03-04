@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "NamedSheetViewFragment.hxx"
 #include "excelhandlers.hxx"
 #include "autofilterbuffer.hxx"
 
@@ -150,8 +149,9 @@ public:
 private:
     virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
                                                          AttributeList const& rAttribs) override;
+    virtual void finalizeImport() override;
 };
 
-} // namespace oox::xls
+} // namespace oox::xls::nsv
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

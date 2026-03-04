@@ -175,6 +175,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/personsfragment \
 	sc/source/filter/oox/threadedcommentsfragment \
 	sc/source/filter/oox/NamedSheetViewFragment \
+	sc/source/filter/oox/NamedSheetViewImporter \
 	sc/source/filter/oox/condformatbuffer \
 	sc/source/filter/oox/condformatcontext \
 	sc/source/filter/oox/connectionsbuffer \
