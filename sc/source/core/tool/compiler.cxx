@@ -5597,6 +5597,9 @@ OUString ScCompiler::SanitizeDefinedName(const OUString& rStr, const ScDocument&
 
     OUString sName = aBuffer.makeStringAndClear();
 
+    if (sName.isEmpty())
+        bValidName = false;
+
     // Name can't be a valid cell reference
     if ((ScAddress().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_A1) != ScRefFlags::ZERO)
         || (ScRange().Parse(sName, rDoc, ::formula::FormulaGrammar::CONV_XL_R1C1)
