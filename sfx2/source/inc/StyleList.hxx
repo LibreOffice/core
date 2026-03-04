@@ -152,8 +152,8 @@ private:
     void DropHdl(const OUString& rStyle, const OUString& rParent);
 
     void MenuSelect(const OUString& rIdent);
-    void PrepareMenu(const Point& rPos);
-    void ShowMenu(const CommandEvent& rCEvt);
+    Point PrepareMenu(const CommandEvent& rContextMenuEvent);
+    void ShowMenu(const Point& rPos);
     void CreateContextMenu();
 
     void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);

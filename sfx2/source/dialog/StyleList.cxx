@@ -601,17 +601,28 @@ void StyleList::DropHdl(const OUString& rStyle, const OUString& rParent)
     m_bDontUpdate = false;
 }
 
-void StyleList::PrepareMenu(const Point& rPos)
+Point StyleList::PrepareMenu(const CommandEvent& rContextMenuEvent)
 {
     weld::TreeView* pTreeView = m_xTreeBox->get_visible() ? m_xTreeBox.get() : m_xFmtLb.get();
-    std::unique_ptr<weld::TreeIter> xIter = pTreeView->get_dest_row_at_pos(rPos, false);
-    if (xIter && !pTreeView->is_selected(*xIter))
+    if (rContextMenuEvent.IsMouseEvent())
     {
-        pTreeView->unselect_all();
-        pTreeView->set_cursor(*xIter);
-        pTreeView->select(*xIter);
+        const Point& rPos = rContextMenuEvent.GetMousePosPixel();
+        std::unique_ptr<weld::TreeIter> xIter = pTreeView->get_dest_row_at_pos(rPos, false);
+        if (xIter && !pTreeView->is_selected(*xIter))
+        {
+            pTreeView->unselect_all();
+            pTreeView->set_cursor(*xIter);
+            pTreeView->select(*xIter);
+        }
+        FmtSelectHdl(*pTreeView);
+        return rPos;
     }
-    FmtSelectHdl(*pTreeView);
+    else
+    {
+        if (std::unique_ptr<weld::TreeIter> pSelected = pTreeView->get_selected())
+            return pTreeView->get_row_area(*pSelected).Center();
+        return {};
+    }
 }
 
 /** Internal structure for the establishment of the hierarchical view */
@@ -1582,12 +1593,12 @@ IMPL_LINK_NOARG(StyleList, Clear, void*, void)
 
 IMPL_LINK(StyleList, OnPopupEnd, const OUString&, sCommand, void) { MenuSelect(sCommand); }
 
-void StyleList::ShowMenu(const CommandEvent& rCEvt)
+void StyleList::ShowMenu(const Point& rPos)
 {
     CreateContextMenu();
     weld::TreeView* pTreeView = m_xTreeBox->get_visible() ? m_xTreeBox.get() : m_xFmtLb.get();
     mxMenu->connect_activate(LINK(this, StyleList, OnPopupEnd));
-    mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1)));
+    mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rPos, Size(1, 1)));
 }
 
 void StyleList::MenuSelect(const OUString& rIdent)
@@ -1990,7 +2001,7 @@ IMPL_LINK(StyleList, PopupFlatMenuHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    PrepareMenu(rCEvt.GetMousePosPixel());
+    const Point aPos = PrepareMenu(rCEvt);
 
     if (m_xFmtLb->count_selected_rows() <= 0)
     {
@@ -1998,7 +2009,7 @@ IMPL_LINK(StyleList, PopupFlatMenuHdl, const CommandEvent&, rCEvt, bool)
         m_pParentDialog->EnableDel(false, this);
     }
 
-    ShowMenu(rCEvt);
+    ShowMenu(aPos);
 
     return true;
 }
@@ -2008,9 +2019,9 @@ IMPL_LINK(StyleList, PopupTreeMenuHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    PrepareMenu(rCEvt.GetMousePosPixel());
+    const Point aPos = PrepareMenu(rCEvt);
 
-    ShowMenu(rCEvt);
+    ShowMenu(aPos);
 
     return true;
 }
