@@ -224,7 +224,6 @@ sal_Int64 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleIndexInParent(  )
 
 sal_Int16 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleRole(  )
 {
-    //return AccessibleRole::LABEL;
     return AccessibleRole::LIST_ITEM;
 }
 
