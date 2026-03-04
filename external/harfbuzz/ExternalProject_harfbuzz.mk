@@ -58,6 +58,9 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) : | $(call gb_Externa
 			-Dcpp_std=$(subst -std:,,$(subst -std=,,$(filter -std%,$(CXXFLAGS_CXX11)))) \
 			-Dtests=disabled \
 			-Dutilities=disabled \
+			-Dsubset=enabled \
+			-Draster=disabled \
+			-Dvector=disabled \
 			-Dicu=enabled \
 			-Dicu_builtin=true \
 			-Dgraphite2=enabled \
