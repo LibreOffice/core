@@ -769,6 +769,28 @@ DECLARE_OOXMLEXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx"
     CPPUNIT_ASSERT_EQUAL(Color( 0xce, 0xce, 0xce ), aColor);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf143269_zeroSizeEmbeddings)
+{
+    // Given a (broken) document that contains a word/embeddings xlsx file that is size 0
+    createSwDoc("tdf143269_zeroSizeEmbeddings.docx");
+    save(TestFilter::DOCX);
+
+    // MS Word reports corrupt if embeddings/file referred is zero-sized
+    xmlDocUniquePtr pXmlChart1 = parseExport(u"word/charts/chart1.xml"_ustr);
+    assertXPath(pXmlChart1, "//c:externalData", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf143269_missingEmbeddings)
+{
+    // Given a XLSX->ODT document (I presume) that has lost the word/embeddings xlsx file
+    createSwDoc("tdf143269_missingEmbeddings.odt");
+    save(TestFilter::DOCX);
+
+    // MS Word reports corrupt if embeddings/file referred to does not exist
+    xmlDocUniquePtr pXmlChart1 = parseExport(u"word/charts/chart1.xml"_ustr);
+    assertXPath(pXmlChart1, "//c:externalData", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testChartSize, "chart-size.docx")
 {
     // When chart was in a TextFrame, its size was too large.

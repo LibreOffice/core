@@ -85,6 +85,8 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XStreamListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
@@ -1470,7 +1472,7 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
         // chartData
         pFS->startElement(FSNS(XML_cx, XML_chartData));
 
-        exportExternalData(xChartDoc, true);
+        exportExternalData(true);
         exportData_chartex(xChartDoc);
 
         pFS->endElement(FSNS(XML_cx, XML_chartData));
@@ -1505,7 +1507,7 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     // TODO for chartex
     if (!bIsChartex) {
         //XML_externalData
-        exportExternalData(xChartDoc, false);
+        exportExternalData(false);
     }
 
     // export additional shapes in chart
@@ -1821,8 +1823,31 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
     }
 }
 
-void ChartExport::exportExternalData( const Reference< css::chart::XChartDocument >& xChartDoc,
-        bool bIsChartex)
+OUString ChartExport::GetExternalDataPath() const
+{
+    OUString sRet;
+
+    const Reference<css::chart::XChartDocument> xChartDoc(getModel(), uno::UNO_QUERY);
+    if (!xChartDoc.is())
+        return sRet;
+
+    const Reference<beans::XPropertySet> xDocPropSet(xChartDoc->getDiagram(), uno::UNO_QUERY);
+    if (!xDocPropSet.is())
+        return sRet;
+
+    try
+    {
+        Any aAny(xDocPropSet->getPropertyValue(u"ExternalData"_ustr));
+        aAny >>= sRet;
+    }
+    catch(beans::UnknownPropertyException&)
+    {
+    }
+
+    return sRet;
+}
+
+void ChartExport::exportExternalData(bool bIsChartex)
 {
     if (bIsChartex) return; // TODO!!
     // Embedded external data is grab bagged for docx file hence adding export part of
@@ -1830,20 +1855,7 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
     if(!mbLinkToExternalData || GetDocumentType() != DOCUMENT_DOCX)
         return;
 
-    OUString externalDataPath;
-    Reference< beans::XPropertySet > xDocPropSet( xChartDoc->getDiagram(), uno::UNO_QUERY );
-    if( xDocPropSet.is())
-    {
-        try
-        {
-            Any aAny( xDocPropSet->getPropertyValue( u"ExternalData"_ustr ));
-            aAny >>= externalDataPath;
-        }
-        catch( beans::UnknownPropertyException & )
-        {
-            SAL_WARN("oox", "Required property not found in ChartDocument");
-        }
-    }
+    const OUString externalDataPath = GetExternalDataPath();
     if(externalDataPath.isEmpty())
         return;
 
