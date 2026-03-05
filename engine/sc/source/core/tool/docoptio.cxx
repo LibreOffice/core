@@ -67,6 +67,7 @@ void ScDocOptions::ResetDocOptions()
     bFormulaWildcardsEnabled= true;
     eFormulaSearchType  = utl::SearchParam::SearchType::Wildcard;
     bWriteCalcConfig    = true;
+    bIgnoreLineBreaks   = false;
 }
 
 void ScDocOptions::SetFormulaRegexEnabled( bool bVal )

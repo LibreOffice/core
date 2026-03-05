@@ -32,6 +32,7 @@
 #include <addressconverter.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
+#include <docoptio.hxx>
 #include <scerrors.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -110,6 +111,11 @@ bool ExcelFilter::importDocument()
             ScDocShell* pDocSh = rDoc.GetDocumentShell();
             assert( pDocSh );
             pDocSh->SetInitialLinkUpdate( pDocSh->GetMedium());
+
+            // ignore line breaks for XLSX documents.
+            ScDocOptions aDocOpt = rDoc.GetDocOptions();
+            aDocOpt.SetIgnoreLineBreaks(true);
+            rDoc.SetDocOptions(aDocOpt);
 
             bool bRet = importFragment( xWorkbookFragment);
             if (bRet && !pDocSh->GetErrorCode())
