@@ -28,6 +28,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
+#include <unordered_map>
 
 namespace comphelper
 {
@@ -147,6 +148,8 @@ protected:
     /// @throws css::uno::RuntimeException
     virtual css::awt::Rectangle implGetBounds(  ) = 0;
 
+    // Helper for implementing XAccessibleExtendedAttributes::getExtendedAttributes
+    virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes();
 
 public:
     // XAccessibleComponent - default implementations which can be implemented using <method>implGetBounds</method>

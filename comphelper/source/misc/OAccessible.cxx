@@ -194,7 +194,19 @@ Locale SAL_CALL OAccessible::getLocale()
     return xParentContext->getLocale();
 }
 
-OUString SAL_CALL OAccessible::getExtendedAttributes() { return OUString(); }
+std::unordered_map<OUString, OUString> OAccessible::implGetExtendedAttributes() { return {}; }
+
+OUString SAL_CALL OAccessible::getExtendedAttributes()
+{
+    OExternalLockGuard aGuard(this);
+
+    OUString sAttrs;
+    const std::unordered_map<OUString, OUString> aAttributes = implGetExtendedAttributes();
+    for (const auto& rAttribute : aAttributes)
+        sAttrs += rAttribute.first + u":" + rAttribute.second + u";";
+
+    return sAttrs;
+}
 
 Reference<XAccessibleContext> OAccessible::implGetParentContext()
 {
