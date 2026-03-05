@@ -37,7 +37,6 @@ public:
     HWND                mhComWnd;
 
     osl::Condition      maWaitingYieldCond;
-    unsigned            m_nNoYieldLock;
 
 public:
     WinSalInstance();
