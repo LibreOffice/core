@@ -9,8 +9,20 @@
 
 from uitest.framework import UITestCase
 from com.sun.star.awt import Point
+from contextlib import contextmanager
+from sys import platform
 import pathlib
 import tempfile
+
+@contextmanager
+def CreateNamedTemporaryFile():
+    if platform == 'win32':
+        # On Windows, we are guaranteed to have delete_on_close (introduced in 3.12).
+        # With delete_on_close=False, it is possible to open file again.
+        tf = tempfile.NamedTemporaryFile(suffix=".odg", delete_on_close=False)
+    else:
+        tf = tempfile.NamedTemporaryFile(suffix=".odg")
+    yield tf
 
 class tdf170386(UITestCase):
     def test_tdf170386(self):
@@ -28,7 +40,7 @@ class tdf170386(UITestCase):
         # object used to collect text properties on save wasn't notified on the changes that
         # happened when the model was locked.
 
-        with tempfile.NamedTemporaryFile(suffix=".odg") as temp:
+        with CreateNamedTemporaryFile() as temp:
             url = pathlib.Path(temp.name).as_uri()
 
             with self.ui_test.create_doc_in_start_center("draw") as xModel:
