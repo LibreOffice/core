@@ -3883,6 +3883,17 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
                 fDescent += aTextLayouter.getTextHeight() * (250.0 / 1000.0);
         }
 
+        const sal_uInt8 nProportionalFontSize(rTextCandidate.getProportionalFontSize());
+        assert(nProportionalFontSize > 0);
+        if (nProportionalFontSize != 100)
+        {
+            const double fScale(100.0 / nProportionalFontSize);
+            const double fEscOffset(rTextCandidate.getEscapement() / -100.0
+                                    * aDecTrans.getScale().getY() * fScale);
+            fAscent = fEscOffset + fAscent * fScale;
+            fDescent = fDescent * fScale - fEscOffset;
+        }
+
         renderTextBackground(rTextCandidate, fAscent, fDescent, aFullTextTransform,
                              pSalLayout->GetTextWidth());
     }

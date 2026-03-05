@@ -1131,6 +1131,7 @@ namespace wmfemfhelper
                     aFillColor,
                     rFont.GetFixKerning(),
                     rFont.GetOpticalSizing(),
+                    100, 0,
 
                     // attributes for TextDecoratedPortionPrimitive2D
                     rProperty.getOverlineColorActive() ? rProperty.getOverlineColor() : aFontColor,

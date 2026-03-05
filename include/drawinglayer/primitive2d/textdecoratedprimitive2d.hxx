@@ -91,6 +91,8 @@ namespace drawinglayer::primitive2d
                 const Color& rFillColor,
                 short nLetterSpacing,
                 bool bOpticalSizing,
+                sal_uInt8 nProportionalFontSize,
+                short nEscapement,
 
                 /// local parameters
                 const basegfx::BColor& rOverlineColor,

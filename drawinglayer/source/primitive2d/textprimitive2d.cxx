@@ -206,7 +206,7 @@ TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     sal_Int32 nTextLength, std::vector<double>&& rDXArray, std::vector<sal_Bool>&& rKashidaArray,
     attribute::FontAttribute aFontAttribute, css::lang::Locale aLocale,
     const basegfx::BColor& rFontColor, const Color& rTextFillColor, short nLetterSpacing,
-    bool bOpticalSizing)
+    bool bOpticalSizing, sal_uInt8 nProportionalFontSize, short nEscapement)
     : maTextTransform(std::move(rNewTransform))
     , maText(std::move(rText))
     , mnTextPosition(nTextPosition)
@@ -219,6 +219,8 @@ TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     , maTextFillColor(rTextFillColor)
     , mnLetterSpacing(nLetterSpacing)
     , mbOpticalSizing(bOpticalSizing)
+    , mnProportionalFontSize(nProportionalFontSize)
+    , mnEscapement(nEscapement)
 {
 #if OSL_DEBUG_LEVEL > 0
     const sal_Int32 aStringLength(getText().getLength());
@@ -272,7 +274,9 @@ bool TextSimplePortionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive)
                 && getFontAttribute() == rCompare.getFontAttribute()
                 && LocalesAreEqual(getLocale(), rCompare.getLocale())
                 && getFontColor() == rCompare.getFontColor()
-                && maTextFillColor == rCompare.maTextFillColor);
+                && maTextFillColor == rCompare.maTextFillColor
+                && getProportionalFontSize() == rCompare.getProportionalFontSize()
+                && getEscapement() == rCompare.getEscapement());
     }
 
     return false;

@@ -2086,7 +2086,7 @@ bool SvxEscapementItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_ESC_HEIGHT:
         {
             sal_Int8 nVal = sal_Int8();
-            if( (rVal >>= nVal) && (nVal <= 100))
+            if( (rVal >>= nVal) && (nVal > 0) && (nVal <= 100))
                 nProp = nVal;
             else
                 return false;

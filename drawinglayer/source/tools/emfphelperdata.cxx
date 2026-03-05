@@ -1791,6 +1791,7 @@ namespace emfplushelper
                                             COL_TRANSPARENT,   // Fill Color
                                             0,
                                             false,
+                                            100, 0,
                                             color.getBColor(), // OverlineColor
                                             color.getBColor(), // TextlineColor
                                             drawinglayer::primitive2d::TEXT_LINE_NONE,
@@ -2291,6 +2292,7 @@ namespace emfplushelper
                                                     COL_TRANSPARENT,
                                                     0,
                                                     false,
+                                                    100, 0,
                                                     color.getBColor(),
                                                     color.getBColor(),
                                                     drawinglayer::primitive2d::TEXT_LINE_NONE,

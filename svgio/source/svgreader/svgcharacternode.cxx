@@ -421,6 +421,7 @@ namespace svgio::svgreader
                     COL_TRANSPARENT,
                     0,
                     false,
+                    100, 0,
 
                     // extra props for decorated
                     aDecoColor,
