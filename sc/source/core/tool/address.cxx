@@ -22,6 +22,7 @@
 #include <string_view>
 
 #include <address.hxx>
+#include <rangelst.hxx>
 #include <global.hxx>
 #include <compiler.hxx>
 #include <document.hxx>
@@ -1612,6 +1613,37 @@ ScRange ScRange::Intersection( const ScRange& rOther ) const
         return ScRange(ScAddress::INITIALIZE_INVALID);
 
     return ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+}
+
+ScRangeList ScRange::Subtract( const ScRange& rOther ) const
+{
+    ScRangeList aRanges;
+    ScRange aInt = Intersection(rOther);
+    if (!aInt.IsValid())
+    {
+        // No overlap — the entire range is the remainder.
+        aRanges.push_back(*this);
+        return aRanges;
+    }
+
+    SCTAB nTab = aStart.Tab();
+    SCCOL nSC = aStart.Col(), nEC = aEnd.Col();
+    SCROW nSR = aStart.Row(), nER = aEnd.Row();
+
+    // Top strip (full width, rows above intersection)
+    if (nSR < aInt.aStart.Row())
+        aRanges.push_back(ScRange(nSC, nSR, nTab, nEC, aInt.aStart.Row() - 1, nTab));
+    // Bottom strip (full width, rows below intersection)
+    if (aInt.aEnd.Row() < nER)
+        aRanges.push_back(ScRange(nSC, aInt.aEnd.Row() + 1, nTab, nEC, nER, nTab));
+    // Left strip (intersection rows, columns left of intersection)
+    if (nSC < aInt.aStart.Col())
+        aRanges.push_back(ScRange(nSC, aInt.aStart.Row(), nTab, aInt.aStart.Col() - 1, aInt.aEnd.Row(), nTab));
+    // Right strip (intersection rows, columns right of intersection)
+    if (aInt.aEnd.Col() < nEC)
+        aRanges.push_back(ScRange(aInt.aEnd.Col() + 1, aInt.aStart.Row(), nTab, nEC, aInt.aEnd.Row(), nTab));
+
+    return aRanges;
 }
 
 void ScRange::ExtendTo( const ScRange& rRange )

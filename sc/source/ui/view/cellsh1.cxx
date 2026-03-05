@@ -77,6 +77,7 @@
 #include <dbdata.hxx>
 #include <docsh.hxx>
 #include <cliputil.hxx>
+#include <clipparam.hxx>
 #include <markdata.hxx>
 #include <colorscale.hxx>
 #include <condformatdlg.hxx>
@@ -1668,9 +1669,34 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 pTabViewShell->PasteFromSystem(SotClipboardFormatId::LINK);  // DDE insert
                             else
                             {
-                                pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
-                                    nFunction, bSkipEmpty, bTranspose, bAsLink,
-                                    eMoveMode, InsertDeleteFlags::NONE, true );    // allow warning dialog
+                                ScDocument* pPasteDoc = pOwnClip->GetDocument();
+                                const ScClipParam& rClipParam = pPasteDoc->GetClipParam();
+
+                                // For matrix clips (origin or non-origin), Paste
+                                // Special pastes values only from the original
+                                // selection — no array expansion.
+                                if (!rClipParam.maOriginMatrixRanges.empty()
+                                    || !rClipParam.maMatrixRanges.empty())
+                                {
+                                    const ScRange& rOrigRange = rClipParam.maOriginalRange;
+                                    SCTAB nClipTab = rOrigRange.aStart.Tab();
+
+                                    auto pValDoc = std::make_shared<ScDocument>(SCDOCMODE_CLIP);
+                                    pValDoc->ResetClip(pPasteDoc, nClipTab);
+                                    pPasteDoc->CopyStaticToDocument(rOrigRange, nClipTab, *pValDoc);
+                                    ScClipParam aValParam(rOrigRange, false);
+                                    pValDoc->SetClipParam(aValParam);
+
+                                    pTabViewShell->PasteFromClip( nFlags, pValDoc.get(),
+                                        nFunction, bSkipEmpty, bTranspose, bAsLink,
+                                        eMoveMode, InsertDeleteFlags::NONE, true );
+                                }
+                                else
+                                {
+                                    pTabViewShell->PasteFromClip( nFlags, pPasteDoc,
+                                        nFunction, bSkipEmpty, bTranspose, bAsLink,
+                                        eMoveMode, InsertDeleteFlags::NONE, true );
+                                }
                             }
                         }
 

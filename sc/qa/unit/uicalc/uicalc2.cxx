@@ -1819,6 +1819,314 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf170567_paste_Biff12_and_save_ODS)
     xClipboard->setContents({}, {});
 }
 
+// tdf#166791 — copy/paste of ranges that overlap array (matrix) formulas.
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf166791_PasteArrayOriginCell)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Disable replace cell warning
+    ScModule* pMod = ScModule::get();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldReplaceCellsWarn = aInputOption.GetReplaceCellsWarn();
+    aInputOption.SetReplaceCellsWarn(false);
+    pMod->SetInputOptions(aInputOption);
+
+    // --- Build the source data (A1:D3) ---
+    for (SCROW r = 0; r < 3; ++r)
+        for (SCCOL c = 0; c < 4; ++c)
+            pDoc->SetValue(c, r, 0, static_cast<double>(r + 1 + c * 3));
+
+    // Verify a few source cells.
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 0, 0))); // A1
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(1, 0, 0))); // B1
+    CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(ScAddress(3, 2, 0))); // D3
+
+    // --- Enter the TRANSPOSE array formula in G1:I4 ---
+    // TRANSPOSE($A$1:$D$3) transposes a 4-col x 3-row range into 3-col x 4-row.
+    insertArrayToCell(u"G1:I4"_ustr, u"=TRANSPOSE($A$1:$D$3)");
+
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(6, 0, 0))); // G1
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(8, 0, 0))); // I1
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(6, 1, 0))); // G2
+    CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(ScAddress(8, 3, 0))); // I4
+
+    // --- Surrounding dummy values for mixed-range tests ---
+    for (SCROW r = 0; r < 4; ++r)
+        pDoc->SetValue(5, r, 0, 100.0 + r); // F1:F4 = 100,101,102,103
+    for (SCROW r = 0; r < 4; ++r)
+        pDoc->SetValue(9, r, 0, 200.0 + r); // J1:J4 = 200,201,202,203
+
+    // ================================================================
+    // Scenario 1: Copy just the origin cell (G1) -> Ctrl+V -> full 3x4
+    //             matrix should expand at the destination.
+    // ================================================================
+    goToCell(u"G1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    goToCell(u"A10"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // The full transposed matrix should appear at A10:C13.
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 9, 0))); // A10
+    CPPUNIT_ASSERT_EQUAL(4.0, pDoc->GetValue(ScAddress(0, 10, 0))); // A11
+    CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(ScAddress(2, 12, 0))); // C13
+
+    // Verify it is an array formula, not just values.
+    CPPUNIT_ASSERT_EQUAL(u"{=TRANSPOSE($A$1:$D$3)}"_ustr, pDoc->GetFormula(0, 9, 0));
+
+    // Undo should remove the pasted matrix entirely.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(2, 12, 0)));
+
+    // Redo should restore it.
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(ScAddress(2, 12, 0)));
+
+    // Clean up for next scenario.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // ================================================================
+    // Scenario 2: Copy a column through the matrix (G1:G4) -> Ctrl+V
+    //             -> full matrix should still expand.
+    // ================================================================
+    goToCell(u"G1:G4"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    goToCell(u"A10"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // Full matrix at A10:C13.
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 9, 0))); // A10
+    CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(ScAddress(2, 12, 0))); // C13
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // ================================================================
+    // Scenario 3: Copy a row through the matrix (G1:I1) -> Ctrl+V
+    //             -> full matrix should expand.
+    // ================================================================
+    goToCell(u"G1:I1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    goToCell(u"A10"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // Full matrix at A10:C13.
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(ScAddress(2, 12, 0)));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // ================================================================
+    // Scenario 4: Copy mixed range including non-matrix cells + origin.
+    //             F1:G4 = dummy values in F + origin column G.
+    //             -> Ctrl+V: F values paste at 1 col, matrix expands.
+    // ================================================================
+    goToCell(u"F1:G4"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    goToCell(u"A10"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // A10:A13 should have dummy values from F column.
+    CPPUNIT_ASSERT_EQUAL(100.0, pDoc->GetValue(ScAddress(0, 9, 0))); // A10
+    CPPUNIT_ASSERT_EQUAL(103.0, pDoc->GetValue(ScAddress(0, 12, 0))); // A13
+
+    // B10:D13 should have the full transposed matrix.
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 9, 0))); // B10
+    CPPUNIT_ASSERT_EQUAL(12.0, pDoc->GetValue(ScAddress(3, 12, 0))); // D13
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // ================================================================
+    // Scenario 5: Copy only non-origin reference cells (H1:I1, no
+    //             origin G1) -> Ctrl+V -> since all selected cells are
+    //             matrix references, nothing should be pasted.
+    // ================================================================
+    goToCell(u"H1:I1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    goToCell(u"A10"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // All cells should be empty — reference cells are skipped.
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(1, 9, 0)));
+
+    // Nothing was pasted, so no undo needed.
+
+    // ================================================================
+    // Scenario 6: Copy non-origin cells mixed with non-matrix cells.
+    //             H1:J1 = matrix refs H1:I1 + value 200 in J1.
+    //             -> Ctrl+V -> only the J1 value should be pasted.
+    // ================================================================
+    goToCell(u"H1:J1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    goToCell(u"A10"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // The clip range is narrowed to J1 only (matrix refs removed).
+    // J1 maps to the destination start: A10 = 200.
+    CPPUNIT_ASSERT_EQUAL(200.0, pDoc->GetValue(ScAddress(0, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(1, 9, 0)));
+
+    // Restore settings.
+    aInputOption.SetReplaceCellsWarn(bOldReplaceCellsWarn);
+    pMod->SetInputOptions(aInputOption);
+}
+
+// Paste Special (values only) of array formula ranges.
+// Uses the same source layout as testTdf166791_PasteArrayOriginCell.
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf166791_PasteSpecialArrayOriginCell)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Disable replace cell warning
+    ScModule* pMod = ScModule::get();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldReplaceCellsWarn = aInputOption.GetReplaceCellsWarn();
+    aInputOption.SetReplaceCellsWarn(false);
+    pMod->SetInputOptions(aInputOption);
+
+    // --- Build the source data (A1:D3) ---
+    for (SCROW r = 0; r < 3; ++r)
+        for (SCCOL c = 0; c < 4; ++c)
+            pDoc->SetValue(c, r, 0, static_cast<double>(r + 1 + c * 3));
+
+    // --- Enter the TRANSPOSE array formula in G1:I4 ---
+    insertArrayToCell(u"G1:I4"_ustr, u"=TRANSPOSE($A$1:$D$3)");
+
+    // --- Surrounding dummy values ---
+    for (SCROW r = 0; r < 4; ++r)
+        pDoc->SetValue(5, r, 0, 100.0 + r); // F1:F4 = 100,101,102,103
+    for (SCROW r = 0; r < 4; ++r)
+        pDoc->SetValue(9, r, 0, 200.0 + r); // J1:J4 = 200,201,202,203
+
+    // Helper lambda for Paste Special (values only).
+    auto pasteSpecialValues = [this]() {
+        uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
+            { { "Flags", uno::Any(u"V"_ustr) },
+              { "FormulaCommand", uno::Any(sal_uInt16(ScPasteFunc::NONE)) },
+              { "SkipEmptyCells", uno::Any(false) },
+              { "Transpose", uno::Any(false) },
+              { "AsLink", uno::Any(false) },
+              { "MoveMode", uno::Any(sal_uInt16(InsCellCmd::INS_NONE)) } });
+        dispatchCommand(mxComponent, u".uno:InsertContents"_ustr, aArgs);
+    };
+
+    // ================================================================
+    // Scenario 1: Paste Special origin cell G1 -> values only.
+    //             No array expansion, just the value.
+    // ================================================================
+    goToCell(u"G1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    goToCell(u"A10"_ustr);
+    pasteSpecialValues();
+
+    // Only A10 should have a value (1.0), no expansion.
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(1, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 10, 0)));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // ================================================================
+    // Scenario 2: Paste Special mixed range F1:G4 -> values only.
+    //             Should paste labels + values, no expansion.
+    // ================================================================
+    goToCell(u"F1:G4"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    goToCell(u"A10"_ustr);
+    pasteSpecialValues();
+
+    // A10:A13 = F column values, B10:B13 = G column values.
+    CPPUNIT_ASSERT_EQUAL(100.0, pDoc->GetValue(ScAddress(0, 9, 0))); // A10 = F1 value
+    CPPUNIT_ASSERT_EQUAL(103.0, pDoc->GetValue(ScAddress(0, 12, 0))); // A13 = F4 value
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 9, 0))); // B10 = G1 value
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(1, 12, 0))); // B13 = G4 value
+    // C10 should be empty (no expansion beyond original 2-col selection).
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(2, 9, 0)));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // ================================================================
+    // Scenario 3: Paste Special non-origin cells H1:J1 -> values only.
+    //             Should paste values of all cells including matrix refs.
+    // ================================================================
+    goToCell(u"H1:J1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    goToCell(u"A10"_ustr);
+    pasteSpecialValues();
+
+    // H1,I1 numeric matrix values + J1 numeric dummy value all paste.
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 9, 0))); // A10 = H1 value
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(1, 9, 0))); // B10 = I1 value
+    CPPUNIT_ASSERT_EQUAL(200.0, pDoc->GetValue(ScAddress(2, 9, 0))); // C10 = J1 value
+
+    // Restore settings.
+    aInputOption.SetReplaceCellsWarn(bOldReplaceCellsWarn);
+    pMod->SetInputOptions(aInputOption);
+}
+
+// tdf#166791 — verify that relative references are shifted when copying
+// the origin cell of an array formula to a different location.
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf166791_PasteArrayOriginCellRefShifting)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Disable replace cell warning
+    ScModule* pMod = ScModule::get();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldReplaceCellsWarn = aInputOption.GetReplaceCellsWarn();
+    aInputOption.SetReplaceCellsWarn(false);
+    pMod->SetInputOptions(aInputOption);
+
+    // --- Build source data (A1:C2) ---
+    pDoc->SetValue(0, 0, 0, 1.0); // A1
+    pDoc->SetValue(1, 0, 0, 2.0); // B1
+    pDoc->SetValue(2, 0, 0, 3.0); // C1
+    pDoc->SetValue(0, 1, 0, 4.0); // A2
+    pDoc->SetValue(1, 1, 0, 5.0); // B2
+    pDoc->SetValue(2, 1, 0, 6.0); // C2
+
+    // --- Enter TRANSPOSE with relative references in E1:F4 (2 col x 3 row) ---
+    insertArrayToCell(u"E1:F4"_ustr, u"=TRANSPOSE(A1:C2)");
+
+    CPPUNIT_ASSERT_EQUAL(u"{=TRANSPOSE(A1:C2)}"_ustr, pDoc->GetFormula(4, 0, 0));
+
+    // Copy origin cell E1 to I5 (col+4, row+4).
+    // Relative refs should shift: A1:C2 -> E5:G6.
+    goToCell(u"E1"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    goToCell(u"I5"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // Matrix should expand to I5:J7 (2 cols x 3 rows).
+    CPPUNIT_ASSERT_EQUAL(u"{=TRANSPOSE(E5:G6)}"_ustr, pDoc->GetFormula(8, 4, 0));
+
+    // Undo should remove the pasted matrix.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(8, 4, 0)));
+
+    // Redo should restore the shifted formula.
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"{=TRANSPOSE(E5:G6)}"_ustr, pDoc->GetFormula(8, 4, 0));
+
+    // Restore settings.
+    aInputOption.SetReplaceCellsWarn(bOldReplaceCellsWarn);
+    pMod->SetInputOptions(aInputOption);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

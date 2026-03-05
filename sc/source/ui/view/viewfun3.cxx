@@ -59,6 +59,7 @@
 #include <editable.hxx>
 #include <docuno.hxx>
 #include <clipparam.hxx>
+#include <formulacell.hxx>
 #include <undodat.hxx>
 #include <drawview.hxx>
 #include <cliputil.hxx>
@@ -86,6 +87,101 @@ void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUSt
     aDescription.aKeyWord = "ScGridWinUIObject";
 
     UITestLogger::getInstance().logEvent(aDescription);
+}
+
+/// Result of scanning a selection for matrix formula overlap.
+struct MatrixOverlapInfo
+{
+    ScRangeList maOriginMatrixRanges; ///< Full matrix ranges whose origin IS in the selection
+    ScRangeList maNonOriginRanges;    ///< Non-origin matrix ranges (origin - top left cell - NOT in selection)
+
+    bool hasNonOriginMatrices() const { return !maNonOriginRanges.empty(); }
+};
+
+/// Scan the selection for ALL matrix formula cells and classify them.
+/// The selection range (rRange) is NOT modified.
+/// Matrices whose origin IS in the selection are collected in maOriginMatrixRanges.
+/// Matrices whose origin is NOT in the selection are collected in maNonOriginRanges.
+MatrixOverlapInfo lcl_DetectMatrixOverlap(ScDocument& rDoc, const ScRange& rRange)
+{
+    MatrixOverlapInfo aInfo;
+    std::vector<ScRange> aAllMatrices;
+
+    auto isKnownMatrix = [&aAllMatrices](const ScRange& rMat) {
+        return std::find(aAllMatrices.begin(), aAllMatrices.end(), rMat) != aAllMatrices.end();
+    };
+
+    auto isInsideKnownMatrix = [&aAllMatrices](const ScAddress& rPos) {
+        for (const auto& rMat : aAllMatrices)
+            if (rMat.Contains(rPos))
+                return true;
+        return false;
+    };
+
+    // Single pass: scan the original selection for matrix cells.
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+        {
+            ScAddress aPos(nCol, nRow, rRange.aStart.Tab());
+            if (isInsideKnownMatrix(aPos))
+                continue;
+
+            ScFormulaCell* pFC = rDoc.GetFormulaCell(aPos);
+            if (!pFC || pFC->GetMatrixFlag() == ScMatrixMode::NONE)
+                continue;
+
+            ScRange aMatRange;
+            if (!rDoc.GetMatrixFormulaRange(aPos, aMatRange))
+                continue;
+
+            if (isKnownMatrix(aMatRange))
+                continue;
+
+            aAllMatrices.push_back(aMatRange);
+        }
+    }
+
+    // Categorise each matrix: origin in selection vs. not.
+    // Matrices fully contained by the selection need no special handling —
+    // normal copy/paste already works (HasSelectedBlockMatrixFragment would
+    // have returned false for these).  See tdf#100582.
+    for (const auto& rMat : aAllMatrices)
+    {
+        if (rRange.Contains(rMat))
+            continue;
+
+        if (rRange.Contains(rMat.aStart))
+            aInfo.maOriginMatrixRanges.push_back(rMat);
+        else
+            aInfo.maNonOriginRanges.push_back(rMat);
+    }
+
+    return aInfo;
+}
+
+/// For non-origin matrix overlap, try to narrow the clip doc's maRanges to a
+/// single sub-range that excludes the matrix intersection.  This is only
+/// attempted for a single non-origin matrix where the geometric subtraction
+/// yields exactly one rectangle.  For multiple matrices or complex geometry,
+/// maRanges is left unchanged and paste-time handles it via a temp doc.
+void lcl_NarrowClipRangesForNonOrigin(ScDocument* pClipDoc,
+                                      const ScRange& rOriginalRange,
+                                      const ScRangeList& rMatrixRanges)
+{
+    // Narrowing optimisation: only for a single non-origin matrix.
+    // Multiple matrices produce complex shapes — let paste-time handle it.
+    if (rMatrixRanges.size() != 1)
+        return;
+
+    ScRangeList aSubRanges = rOriginalRange.Subtract(rMatrixRanges[0]);
+
+    // For a single sub-range, the normal single-range paste handles it.
+    // For 0 or 2+ sub-ranges, keep the original range — paste-time will
+    // use the temp doc fallback (clear matrix intersections, bSkipEmpty).
+    ScClipParam& rStoredParam = pClipDoc->GetClipParam();
+    if (aSubRanges.size() == 1)
+        rStoredParam.maRanges = aSubRanges;
 }
 
 }
@@ -224,13 +320,37 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
 bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut, bool bIncludeObjects )
 {
     ScRange aRange = rRanges[0];
-    ScClipParam aClipParam( aRange, bCut );
-    aClipParam.maRanges = rRanges;
     ScDocument& rDoc = GetViewData().GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
 
-    if (rDoc.HasSelectedBlockMatrixFragment( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), rMark ) )
-        return false;
+    // Check for partial matrix overlap (fragment).  Fully-contained
+    // matrices are fine — only fragments need special handling.
+    bool bHasFragment = rDoc.HasSelectedBlockMatrixFragment(
+            aRange.aStart.Col(), aRange.aStart.Row(),
+            aRange.aEnd.Col(), aRange.aEnd.Row(), rMark);
+
+    MatrixOverlapInfo aMatInfo;
+    ScRange aCopyRange = aRange;
+
+    if (bHasFragment)
+    {
+        // Classify each partial overlap as origin-in-selection vs. not.
+        aMatInfo = lcl_DetectMatrixOverlap(rDoc, aRange);
+
+        // Expand the internal copy range to include origin matrices
+        // so their formulas end up in the clip doc.
+        for (size_t i = 0; i < aMatInfo.maOriginMatrixRanges.size(); ++i)
+            aCopyRange.ExtendTo(aMatInfo.maOriginMatrixRanges[i]);
+    }
+
+    ScClipParam aClipParam( aCopyRange, bCut );
+
+    if (bHasFragment)
+    {
+        aClipParam.maOriginalRange = aRange;
+        aClipParam.maMatrixRanges = aMatInfo.maNonOriginRanges;
+        aClipParam.maOriginMatrixRanges = aMatInfo.maOriginMatrixRanges;
+    }
 
     std::shared_ptr<ScDocument> pSysClipDoc;
     if ( !pClipDoc )                                    // no clip doc specified
@@ -248,7 +368,7 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
 
     if ( pSysClipDoc && bIncludeObjects )
     {
-        bool bAnyOle = rDoc.HasOLEObjectsInArea( aRange );
+        bool bAnyOle = rDoc.HasOLEObjectsInArea( aCopyRange );
         // Update ScGlobal::xDrawClipDocShellRef.
         ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle, pSysClipDoc ) );
     }
@@ -268,6 +388,14 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
     }
 
     rDoc.CopyToClip( aClipParam, pClipDoc, &rMark, false, bIncludeObjects );
+
+    if (bHasFragment)
+    {
+        // Reset maRanges in the clip doc to the original selection so that
+        // marching ants (UpdateCopySourceOverlay) show only what the user selected.
+        pClipDoc->GetClipParam().maRanges = ScRangeList( aRange );
+    }
+
     if (ScDrawLayer* pDrawLayer = pClipDoc->GetDrawLayer())
     {
         ScClipParam& rClipDocClipParam = pClipDoc->GetClipParam();
@@ -288,7 +416,10 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
         ScDrawLayer::SetGlobalDrawPersist(nullptr);
         ScGlobal::SetClipDocName( rDoc.GetDocumentShell()->GetTitle( SFX_TITLE_FULLNAME ) );
     }
-    pClipDoc->ExtendMerge( aRange, true );
+    pClipDoc->ExtendMerge( aCopyRange, true );
+
+    if (bHasFragment && aMatInfo.hasNonOriginMatrices())
+        lcl_NarrowClipRangesForNonOrigin(pClipDoc, aRange, aMatInfo.maNonOriginRanges);
 
     if ( pSysClipDoc )
     {
@@ -351,6 +482,9 @@ bool ScViewFunc::CopyToClipMultiRange( const ScDocument* pInputClipDoc, const Sc
         for ( size_t i = 1; i < aClipParam.maRanges.size(); ++i )
         {
             p = &aClipParam.maRanges[i];
+
+            // Multi-range copy has no origin-matrix expansion logic,
+            // so block copies that include matrix fragments.
             if ( rDoc.HasSelectedBlockMatrixFragment(
                 p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), rMark) )
             {
@@ -442,28 +576,51 @@ rtl::Reference<ScTransferObj> ScViewFunc::CopyToTransferable()
     {
         ScDocument& rDoc = GetViewData().GetDocument();
         ScMarkData& rMark = GetViewData().GetMarkData();
-        if ( !rDoc.HasSelectedBlockMatrixFragment(
-                        aRange.aStart.Col(), aRange.aStart.Row(),
-                        aRange.aEnd.Col(),   aRange.aEnd.Row(),
-                        rMark ) )
+
+        bool bHasFragment = rDoc.HasSelectedBlockMatrixFragment(
+                aRange.aStart.Col(), aRange.aStart.Row(),
+                aRange.aEnd.Col(), aRange.aEnd.Row(), rMark);
+
+        MatrixOverlapInfo aMatInfo;
+        ScRange aCopyRange = aRange;
+
+        if (bHasFragment)
         {
-            ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));    // create one (deleted by ScTransferObj)
-
-            bool bAnyOle = rDoc.HasOLEObjectsInArea( aRange, &rMark );
-            ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
-
-            ScClipParam aClipParam(aRange, false);
-            rDoc.CopyToClip(aClipParam, pClipDoc.get(), &rMark, false, true);
-
-            ScDrawLayer::SetGlobalDrawPersist(nullptr);
-            pClipDoc->ExtendMerge( aRange, true );
-
-            ScDocShell* pDocSh = GetViewData().GetDocShell();
-            TransferableObjectDescriptor aObjDesc;
-            pDocSh->FillTransferableObjectDescriptor( aObjDesc );
-            aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-            return new ScTransferObj( std::move(pClipDoc), std::move(aObjDesc) );
+            aMatInfo = lcl_DetectMatrixOverlap(rDoc, aRange);
+            for (size_t i = 0; i < aMatInfo.maOriginMatrixRanges.size(); ++i)
+                aCopyRange.ExtendTo(aMatInfo.maOriginMatrixRanges[i]);
         }
+
+        ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));    // create one (deleted by ScTransferObj)
+
+        bool bAnyOle = rDoc.HasOLEObjectsInArea( aCopyRange, &rMark );
+        ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
+
+        ScClipParam aClipParam(aCopyRange, false);
+
+        if (bHasFragment)
+        {
+            aClipParam.maOriginalRange = aRange;
+            aClipParam.maMatrixRanges = aMatInfo.maNonOriginRanges;
+            aClipParam.maOriginMatrixRanges = aMatInfo.maOriginMatrixRanges;
+        }
+
+        rDoc.CopyToClip(aClipParam, pClipDoc.get(), &rMark, false, true);
+
+        if (bHasFragment)
+            pClipDoc->GetClipParam().maRanges = ScRangeList( aRange );
+
+        ScDrawLayer::SetGlobalDrawPersist(nullptr);
+        pClipDoc->ExtendMerge( aCopyRange, true );
+
+        if (bHasFragment && aMatInfo.hasNonOriginMatrices())
+            lcl_NarrowClipRangesForNonOrigin(pClipDoc.get(), aRange, aMatInfo.maNonOriginRanges);
+
+        ScDocShell* pDocSh = GetViewData().GetDocShell();
+        TransferableObjectDescriptor aObjDesc;
+        pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+        aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+        return new ScTransferObj( std::move(pClipDoc), std::move(aObjDesc) );
     }
     else if (eMarkType == SC_MARK_MULTI)
     {

@@ -39,6 +39,18 @@ struct SC_DLLPUBLIC ScClipParam
     /** Was this clip transposed? */
     bool mbTransposed = false;
 
+    /** The user's original selected range before matrix handling.
+     *  Valid only when maOriginMatrixRanges or maMatrixRanges is non-empty. */
+    ScRange             maOriginalRange;
+    /** Non-origin matrix ranges detected during copy.
+     *  Used at paste time to identify cells to skip (Ctrl+V) or
+     *  convert to values (Ctrl+Shift+V). */
+    ScRangeList         maMatrixRanges;
+    /** Full ranges of matrices whose origin cell IS inside the original
+     *  selection.  At paste time each of these is pasted at its full
+     *  extent, independently of the original selection width. */
+    ScRangeList         maOriginMatrixRanges;
+
     ScClipParam();
     ScClipParam(const ScRange& rRange, bool bCutMode);
 

@@ -118,8 +118,11 @@ bool EnterMatrixOperation::runImplementation()
         if (mbRecord)
         {
             //! take selected sheets into account also when undoing
+            std::unique_ptr<ScTokenArray> pUndoArray;
+            if (mpTokenArray)
+                pUndoArray = mpTokenArray->Clone();
             mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoEnterMatrix>(
-                mrDocShell, aRange, std::move(pUndoDoc), maString));
+                mrDocShell, aRange, std::move(pUndoDoc), maString, std::move(pUndoArray)));
         }
 
         syncSheetViews();
