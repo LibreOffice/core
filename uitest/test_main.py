@@ -135,14 +135,16 @@ if __name__ == '__main__':
         usage()
         sys.exit()
 
-    result = unittest.TextTestRunner(stream=sys.stdout, verbosity=2).run(test_suite)
-    print("Tests run: %d" % result.testsRun)
-    print("Tests failed: %d" % len(result.failures))
-    print("Tests errors: %d" % len(result.errors))
-    print("Tests skipped: %d" % len(result.skipped))
-    if connection:
-        connection.tearDown()
-        connection.kill()
+    try:
+        result = unittest.TextTestRunner(stream=sys.stdout, verbosity=2).run(test_suite)
+        print("Tests run: %d" % result.testsRun)
+        print("Tests failed: %d" % len(result.failures))
+        print("Tests errors: %d" % len(result.errors))
+        print("Tests skipped: %d" % len(result.skipped))
+    finally:
+        if connection:
+            connection.tearDown()
+            connection.kill()
     if not result.wasSuccessful():
         sys.exit(1)
     sys.exit(0)
