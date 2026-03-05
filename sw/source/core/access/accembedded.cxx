@@ -48,9 +48,7 @@ OUString SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
         return {};
 
     OUString style = "style:";
-    SwContentFrame* pCFrame;
-    pCFrame = pFFrame->ContainsContent();
-    if (pCFrame)
+    if (SwContentFrame* pCFrame = pFFrame->ContainsContent())
     {
         assert(pCFrame->IsNoTextFrame());
         SwContentNode* const pCNode = static_cast<SwNoTextFrame*>(pCFrame)->GetNode();
