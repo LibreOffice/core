@@ -184,6 +184,16 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             aFont.SetTransparent(aFillColor.IsTransparent());
             aFont.SetFillColor(aFillColor);
 
+            const sal_uInt8 nProportionalFontSize(rTextCandidate.getProportionalFontSize());
+            assert(nProportionalFontSize > 0);
+            const bool bManualBackground(!aFillColor.IsTransparent()
+                                         && nProportionalFontSize != 100);
+            if (bManualBackground)
+            {
+                aFont.SetTransparent(true);
+                aFont.SetFillColor(COL_TRANSPARENT);
+            }
+
             // handle additional font attributes
             const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP = nullptr;
             if (rTextCandidate.getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)
@@ -454,6 +464,32 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             // font size
             mpOutputDevice->SetFont(aFont);
             mpOutputDevice->SetTextColor(Color(aRGBFontColor));
+
+            if (bManualBackground)
+            {
+                FontMetric aFM = mpOutputDevice->GetFontMetric();
+                tools::Long nPropAsc = aFM.GetAscent();
+                tools::Long nPropDesc = aFM.GetDescent();
+                double fScale = 100.0 / nProportionalFontSize;
+                double fEscOff
+                    = rTextCandidate.getEscapement() / -100.0 * aResultFontSize.Height() * fScale;
+                tools::Long nAdjAsc = basegfx::fround<tools::Long>(fEscOff + nPropAsc * fScale);
+                tools::Long nAdjDesc = basegfx::fround<tools::Long>(nPropDesc * fScale - fEscOff);
+                tools::Long nTextWidth
+                    = !aDXArray.empty()
+                          ? basegfx::fround<tools::Long>(aDXArray.back())
+                          : mpOutputDevice->GetTextWidth(rTextCandidate.getText(),
+                                                         rTextCandidate.getTextPosition(),
+                                                         rTextCandidate.getTextLength());
+
+                auto aScopedPush = mpOutputDevice->ScopedPush(vcl::PushFlags::FILLCOLOR
+                                                              | vcl::PushFlags::LINECOLOR);
+                mpOutputDevice->SetFillColor(aFillColor);
+                mpOutputDevice->SetLineColor();
+                mpOutputDevice->DrawRect(
+                    tools::Rectangle(aStartPoint.X(), aStartPoint.Y() - nAdjAsc,
+                                     aStartPoint.X() + nTextWidth, aStartPoint.Y() + nAdjDesc));
+            }
 
             if (!aDXArray.empty())
             {

@@ -138,6 +138,12 @@ private:
     /// Letter spacing
     short mnLetterSpacing;
 
+    /// Proportional font size (for superscript/subscript), 100 = normal. Must be > 0.
+    sal_Int32 mnProportionalFontSize{ 100 };
+
+    /// Escapement percentage (for superscript/subscript), 0 = normal
+    sal_Int32 mnEscapement{ 0 };
+
 protected:
     /// local decomposition.
     virtual Primitive2DReference
@@ -158,7 +164,8 @@ public:
                                  attribute::FontAttribute aFontAttribute, css::lang::Locale aLocale,
                                  const basegfx::BColor& rFontColor,
                                  const Color& rTextFillColor = COL_TRANSPARENT,
-                                 short nLetterSpacing = 0);
+                                 short nLetterSpacing = 0, sal_uInt8 nProportionalFontSize = 100,
+                                 short nEscapement = 0);
 
     /** get text outlines as polygons and their according ObjectTransformation. Handles all
         the necessary VCL outline extractions, scaling adaptations and other stuff.
@@ -178,6 +185,8 @@ public:
     const basegfx::BColor& getFontColor() const { return maFontColor; }
     const Color& getTextFillColor() const { return maTextFillColor; }
     short getLetterSpacing() const { return mnLetterSpacing; }
+    sal_Int32 getProportionalFontSize() const { return mnProportionalFontSize; }
+    sal_Int32 getEscapement() const { return mnEscapement; }
 
     /// helpers for determining various decoration states
     virtual bool hasTextRelief() const;

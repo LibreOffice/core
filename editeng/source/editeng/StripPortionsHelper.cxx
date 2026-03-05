@@ -200,7 +200,7 @@ buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
             rNewTransform, rText, rInfo.mnTextStart, rInfo.mnTextLen, std::vector(rDXArray),
             std::move(aKashidaArray), rFontAttribute,
             rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(), aBFontColor, aTextFillColor,
-            rInfo.mrFont.GetFixKerning(),
+            rInfo.mrFont.GetFixKerning(), rInfo.mrFont.GetPropr(), rInfo.mrFont.GetEscapement(),
 
             // attributes for TextDecoratedPortionPrimitive2D
             aBOverlineColor, aBUnderlineColor, eFontOverline, eFontLineStyle, bUnderlineAbove,
@@ -214,7 +214,7 @@ buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
             rNewTransform, rText, rInfo.mnTextStart, rInfo.mnTextLen, std::vector(rDXArray),
             std::move(aKashidaArray), rFontAttribute,
             rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(), aBFontColor, aTextFillColor,
-            rInfo.mrFont.GetFixKerning());
+            rInfo.mrFont.GetFixKerning(), rInfo.mrFont.GetPropr(), rInfo.mrFont.GetEscapement());
     }
 
     return pNewPrimitive;
