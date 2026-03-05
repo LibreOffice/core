@@ -5780,7 +5780,10 @@ bool ScCompiler::GetRefColRowNames(const FormulaToken* pToken, ScComplexRefData&
                 bFound = true;
         }
         if (!bFound)
+        {
             nError = FormulaError::NoRef;
+            return false;
+        }
         else
         {
             if (bSingle)
