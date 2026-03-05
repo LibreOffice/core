@@ -83,7 +83,10 @@ public:
 
     void testIntermediateOverflow()
     {
-        tools::Long nLarge = 1LL << 30;
+// Fails on Windows 32-bit. See include/tools/long.hxx
+#if defined _WIN64 || !defined _WIN32
+        constexpr tools::Long nLarge = static_cast<tools::Long>(1LL << 30);
+        constexpr tools::Long nExpected = static_cast<tools::Long>(25400000000);
 
         MapMode aSource(MapUnit::MapInch);
         aSource.SetScaleX(Fraction(nLarge, 1));
@@ -102,7 +105,8 @@ public:
         Point aResult = OutputDevice::LogicToLogic(aPt, aSource, aDest);
 
         // Expected: 10,000,000 inches = 25,400,000,000 100thMM
-        CPPUNIT_ASSERT_EQUAL(tools::Long(25400000000), aResult.X());
+        CPPUNIT_ASSERT_EQUAL(nExpected, aResult.X());
+#endif
     }
 
     void testRoundingBehavior()
@@ -132,6 +136,8 @@ public:
 
     void testOverflowProtectionPositive()
     {
+// Fails on Windows 32-bit. See include/tools/long.hxx
+#if defined _WIN64 || !defined _WIN32
         // Scenario: Convert Inch to MM (IsSimple() == true)
         // Factor: 127 / 5 (1 inch = 25.4 mm = 254/10 = 127/5)
         //
@@ -139,8 +145,9 @@ public:
         // 1. N * 127 > INT64_MAX (9.22e18)  --> Triggers overflow flag in o3tl::convert
         // 2. (N * 127) / 5 < INT64_MAX      --> Final result fits in tools::Long
 
-        constexpr tools::Long nInput = 100000000000000000LL; // 1e17
-        constexpr tools::Long nExpected = 2540000000000000000LL; // 2.54e18
+        constexpr tools::Long nInput = static_cast<tools::Long>(100000000000000000LL); // 1e17
+        constexpr tools::Long nExpected
+            = static_cast<tools::Long>(2540000000000000000LL); // 2.54e18
 
         MapMode aSource(MapUnit::MapInch);
         MapMode aDest(MapUnit::MapMM);
@@ -153,13 +160,16 @@ public:
         Point aResult = OutputDevice::LogicToLogic(aPt, aSource, aDest);
 
         CPPUNIT_ASSERT_EQUAL(nExpected, aResult.X());
+#endif
     }
 
     void testOverflowProtectionNegative()
     {
+// Fails on Windows 32-bit. See include/tools/long.hxx
+#if defined _WIN64 || !defined _WIN32
         // Same as above, but testing negative handling in BigInt path
-        constexpr tools::Long nInput = -100000000000000000LL; // -1e17
-        constexpr tools::Long nExpected = -2540000000000000000LL;
+        constexpr tools::Long nInput = static_cast<tools::Long>(-100000000000000000LL); // -1e17
+        constexpr tools::Long nExpected = static_cast<tools::Long>(-2540000000000000000LL);
 
         MapMode aSource(MapUnit::MapInch);
         MapMode aDest(MapUnit::MapMM);
@@ -168,6 +178,7 @@ public:
         Point aResult = OutputDevice::LogicToLogic(aPt, aSource, aDest);
 
         CPPUNIT_ASSERT_EQUAL(nExpected, aResult.X());
+#endif
     }
 
     void testRounding()
