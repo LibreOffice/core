@@ -2422,9 +2422,18 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                 bSdrModelIdle = pSdrModel->IsWriterIdle();
                 pSdrModel->SetWriterIdle(true);
             }
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                // Let the LOK anyInput() mechanism know that we're inside the idle layout.
+                comphelper::LibreOfficeKit::setIdleLayouting(true);
+            }
 
             aAction.Action(m_pImp->GetShell()->GetOut());
 
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                comphelper::LibreOfficeKit::setIdleLayouting(false);
+            }
             if (pSdrModel)
             {
                 pSdrModel->SetWriterIdle(bSdrModelIdle);
