@@ -21,10 +21,10 @@
 
 using namespace ::com::sun::star;
 
-class ScCsvJsonFilterTest : public ScModelTestBase
+class ScExportTest5 : public ScModelTestBase
 {
 public:
-    ScCsvJsonFilterTest()
+    ScExportTest5()
         : ScModelTestBase(u"sc/qa/unit/data"_ustr)
     {
     }
@@ -47,7 +47,7 @@ protected:
 
 // --- CSV Export Tests ---
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonFieldSeparator)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonFieldSeparator)
 {
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -61,7 +61,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonFieldSeparator)
     CPPUNIT_ASSERT_MESSAGE("Tab separator should be used", aData.indexOf("A\tB\tC") >= 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonTextDelimiter)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonTextDelimiter)
 {
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonTextDelimiter)
                            aData.indexOf("'plain'") >= 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonSaveAsShown)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonSaveAsShown)
 {
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonSaveAsShown)
     CPPUNIT_ASSERT_MESSAGE("Full precision expected", aData.indexOf("1.23456789") >= 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonSaveFormulas)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonSaveFormulas)
 {
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -109,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonSaveFormulas)
     CPPUNIT_ASSERT_MESSAGE("Formula should be exported", aData.indexOf("=A1+B1") >= 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonSaveNumberAsSuch)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonSaveNumberAsSuch)
 {
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -124,7 +124,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonSaveNumberAsSuch)
     CPPUNIT_ASSERT_MESSAGE("Number should not be quoted", aData.indexOf("\"42\"") < 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonIncludeBOM)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonIncludeBOM)
 {
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -142,7 +142,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonIncludeBOM)
     CPPUNIT_ASSERT_EQUAL('\xBF', buf[2]);
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonNoBOM)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonNoBOM)
 {
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonNoBOM)
     CPPUNIT_ASSERT_EQUAL("test"_ostr, OString(buf, 4));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonSheet)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonSheet)
 {
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -174,7 +174,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonSheet)
     CPPUNIT_ASSERT_MESSAGE("Should not contain first sheet data", aData.indexOf("first_sheet") < 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonSheetByName)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonSheetByName)
 {
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -190,7 +190,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonSheetByName)
     CPPUNIT_ASSERT_MESSAGE("Should not contain first sheet data", aData.indexOf("first_sheet") < 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonDefaults)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonDefaults)
 {
     // When JSON is used but no options specified, defaults should apply:
     // UTF-8, comma separator, double-quote delimiter
@@ -206,7 +206,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonDefaults)
     CPPUNIT_ASSERT_MESSAGE("Comma separator by default", aData.indexOf("hello,world") >= 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonMultipleOptions)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonMultipleOptions)
 {
     createScDoc();
     ScDocument* pDoc = getScDoc();
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonMultipleOptions)
     CPPUNIT_ASSERT_MESSAGE("Formula should be present", aData.indexOf("=B1*2") >= 0);
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonLegacyFallback)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvExportJsonLegacyFallback)
 {
     // Non-JSON filter options should still work (legacy format)
     createScDoc();
@@ -240,7 +240,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvExportJsonLegacyFallback)
 
 // --- CSV Import Tests ---
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonFieldSeparator)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonFieldSeparator)
 {
     // Create a document, export with semicolons, then reimport with JSON options
     createScDoc();
@@ -270,7 +270,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonFieldSeparator)
     CPPUNIT_ASSERT_EQUAL(30.0, pDoc->GetValue(ScAddress(2, 1, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonStartRow)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonStartRow)
 {
     // Create a CSV with header rows we want to skip
     createScDoc();
@@ -296,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonStartRow)
     CPPUNIT_ASSERT_EQUAL(100.0, pDoc->GetValue(ScAddress(1, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonQuotedFieldAsText)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonQuotedFieldAsText)
 {
     // Write a CSV file with a quoted number
     utl::TempFileNamed aTempFile;
@@ -319,7 +319,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonQuotedFieldAsText)
     CPPUNIT_ASSERT_EQUAL(u"12345"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonDetectSpecialNumber)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonDetectSpecialNumber)
 {
     // Create CSV with a date-like string
     createScDoc();
@@ -343,7 +343,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonDetectSpecialNumber)
     CPPUNIT_ASSERT_MESSAGE("Date should be imported as text", pDoc->HasStringData(1, 0, 0));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonEvaluateFormulas)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonEvaluateFormulas)
 {
     // Create CSV with a formula
     createScDoc();
@@ -366,7 +366,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonEvaluateFormulas)
     CPPUNIT_ASSERT_EQUAL(u"=A1*2"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonEvaluateFormulasTrue)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonEvaluateFormulasTrue)
 {
     // Create CSV with a formula
     createScDoc();
@@ -389,7 +389,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonEvaluateFormulasTrue)
     CPPUNIT_ASSERT_EQUAL(20.0, pDoc->GetValue(ScAddress(1, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonRemoveSpace)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonRemoveSpace)
 {
     // Write a CSV file with spaces around values manually
     createScDoc();
@@ -411,7 +411,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonRemoveSpace)
     CPPUNIT_ASSERT_EQUAL(u"world"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonColumnFormat)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonColumnFormat)
 {
     // Write a CSV file with values that could be interpreted as numbers
     utl::TempFileNamed aTempFile;
@@ -442,7 +442,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonColumnFormat)
     CPPUNIT_ASSERT_EQUAL(u"456"_ustr, pDoc->GetString(ScAddress(2, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonColumnFormatSkip)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonColumnFormatSkip)
 {
     // Write a CSV file to test Skip column format
     utl::TempFileNamed aTempFile;
@@ -465,7 +465,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonColumnFormatSkip)
     CPPUNIT_ASSERT_EQUAL(u"keep2"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonMergeDelimiters)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonMergeDelimiters)
 {
     // Create CSV with multiple consecutive separators
     createScDoc();
@@ -489,7 +489,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonMergeDelimiters)
     CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonFixedWidth)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonFixedWidth)
 {
     // Write a fixed-width text file manually
     utl::TempFileNamed aTempFile;
@@ -515,7 +515,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonFixedWidth)
     CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDoc->GetString(ScAddress(2, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonFixedWidthTextFormat)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonFixedWidthTextFormat)
 {
     // Write a fixed-width text file with numbers that should be kept as text
     utl::TempFileNamed aTempFile;
@@ -542,7 +542,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonFixedWidthTextFormat)
     CPPUNIT_ASSERT_EQUAL(u"05551234567"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonLegacyFallback)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportJsonLegacyFallback)
 {
     // Non-JSON import filter options should still work (legacy format)
     createScDoc();
@@ -564,7 +564,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportJsonLegacyFallback)
     CPPUNIT_ASSERT_EQUAL(u"Y"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportExportJsonRoundTrip)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportExportJsonRoundTrip)
 {
     // Full round-trip: create doc, export with JSON options, reimport with JSON options
     createScDoc();
@@ -595,7 +595,7 @@ CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportExportJsonRoundTrip)
     CPPUNIT_ASSERT_EQUAL(u"a \"quoted\" note"_ustr, pDoc->GetString(ScAddress(2, 1, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScCsvJsonFilterTest, testCsvImportEmptyFilterOptions)
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testCsvImportEmptyFilterOptions)
 {
     // Write a comma-separated CSV file
     utl::TempFileNamed aTempFile;
