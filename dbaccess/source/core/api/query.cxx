@@ -169,7 +169,7 @@ void OQuery::rebuildColumns()
             xColumns = OPrivateColumns::createWithIntrinsicNames(
                 aParseColumns, xDBMeta->supportsMixedCaseQuotedIdentifiers(), *this, m_aMutex ).release();
             if ( !xColumns.is() )
-                throw RuntimeException();
+                throw RuntimeException(u"dbaccess: OQuery::impl_initColumns_nothrow: failed to create columns"_ustr);
         }
 
         const Sequence<OUString> aColNames = xColumns->getElementNames();
