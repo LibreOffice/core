@@ -86,7 +86,7 @@ class tdf132714(UITestCase):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
             # open DataRanges dialog window
-            xChartMain = xChartMainTop.getChild("chart_window")
+            xChartMain = self.xUITest.getTopFocusWindow().getChild("chart_window")
             xSeriesObj =  xChartMain.getChild("CID/Page=")
 
             # Without the fix in place, this test would have crashed here
