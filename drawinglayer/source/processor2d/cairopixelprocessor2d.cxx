@@ -3885,6 +3885,7 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
 
         const sal_uInt8 nProportionalFontSize(rTextCandidate.getProportionalFontSize());
         assert(nProportionalFontSize > 0);
+        double fBgWidth(pSalLayout->GetTextWidth());
         if (nProportionalFontSize != 100)
         {
             const double fScale(100.0 / nProportionalFontSize);
@@ -3892,10 +3893,27 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
                                     * aDecTrans.getScale().getY() * fScale);
             fAscent = fEscOffset + fAscent * fScale;
             fDescent = fDescent * fScale - fEscOffset;
+
+            // trim trailing whitespace from background width to not have background over
+            // trailing whitespace, since that looks like an error for the user.
+            const auto& rDXArray(rTextCandidate.getDXArray());
+            if (!rDXArray.empty())
+            {
+                const OUString& rText(rTextCandidate.getText());
+                sal_Int32 nLast(rTextCandidate.getTextPosition() + rTextCandidate.getTextLength()
+                                - 1);
+                sal_Int32 nFirst(rTextCandidate.getTextPosition());
+                while (nLast >= nFirst && rText[nLast] == ' ')
+                    nLast--;
+                sal_Int32 nTrimmedLen(nLast - nFirst + 1);
+                if (nTrimmedLen > 0 && nTrimmedLen < rTextCandidate.getTextLength())
+                    fBgWidth = rDXArray[nTrimmedLen - 1];
+                else if (nTrimmedLen <= 0)
+                    fBgWidth = 0;
+            }
         }
 
-        renderTextBackground(rTextCandidate, fAscent, fDescent, aFullTextTransform,
-                             pSalLayout->GetTextWidth());
+        renderTextBackground(rTextCandidate, fAscent, fDescent, aFullTextTransform, fBgWidth);
     }
 
     // get TextColor early, may have to be modified
