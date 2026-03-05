@@ -399,36 +399,35 @@ void SwAccessibleDocument::deselectAccessibleChild(
     maSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
 
-OUString SAL_CALL SwAccessibleDocument::getExtendedAttributes()
+std::unordered_map<OUString, OUString> SwAccessibleDocument::implGetExtendedAttributes()
 {
-    SolarMutexGuard g;
-
     SwDoc* pDoc = GetMap() ? GetShell().GetDoc() : nullptr;
 
     if (!pDoc)
-        return OUString();
+        return {};
     SwCursorShell* pCursorShell = GetCursorShell();
     if( !pCursorShell )
-        return OUString();
+        return {};
 
     SwFEShell* pFEShell = dynamic_cast<SwFEShell*>(pCursorShell);
     if (!pFEShell)
-        return OUString();
+        return {};
 
     OUString sDisplay;
     sal_uInt16 nPage, nLogPage;
     pFEShell->GetPageNumber(-1,true,nPage,nLogPage,sDisplay);
 
-    OUString sValue = "page-name:" + sDisplay +
-        ";page-number:" +
-        OUString::number( nPage ) +
-        ";total-pages:" +
-        OUString::number( pCursorShell->GetPageCnt() ) + ";";
+    std::unordered_map<OUString, OUString> aAttributes
+        = { { u"page-name"_ustr, sDisplay },
+            { u"page-number"_ustr, OUString::number(nPage) },
+            { u"total-pages"_ustr, OUString::number(pCursorShell->GetPageCnt()) } };
 
     // cursor position relative to the page
     Point aCursorPagePos = pFEShell->GetCursorPagePos();
-    sValue += "cursor-position-in-page-horizontal:" + OUString::number(aCursorPagePos.getX())
-            + ";cursor-position-in-page-vertical:" + OUString::number(aCursorPagePos.getY()) + ";";
+    aAttributes.emplace(u"cursor-position-in-page-horizontal"_ustr,
+                        OUString::number(aCursorPagePos.getX()));
+    aAttributes.emplace(u"cursor-position-in-page-vertical"_ustr,
+                        OUString::number(aCursorPagePos.getY()));
 
     SwContentFrame* pCurrFrame = pCursorShell->GetCurrFrame();
     SwPageFrame* pCurrPage = pCurrFrame->FindPageFrame();
@@ -520,12 +519,9 @@ OUString SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         }
     }
 
-    sValue += "line-number:" + OUString::number( nLineNum ) + ";";
+    aAttributes.emplace(u"line-number"_ustr, OUString::number(nLineNum));
 
     SwFrame* pCurrCol=static_cast<SwFrame*>(pCurrFrame)->FindColFrame();
-
-    sValue += "column-number:";
-
     int nCurrCol = 1;
     if(pCurrCol!=nullptr)
     {
@@ -548,12 +544,12 @@ OUString SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             }
         }
     }
-    sValue += OUString::number( nCurrCol ) + ";";
+    aAttributes.emplace(u"column-number"_ustr, OUString::number(nCurrCol));
 
     const SwFormatCol &rFormatCol=pCurrPage->GetAttrSet()->GetCol();
     sal_uInt16 nColCount=rFormatCol.GetNumCols();
     nColCount = nColCount>0?nColCount:1;
-    sValue += "total-columns:" + OUString::number( nColCount ) + ";";
+    aAttributes.emplace(u"total-columns"_ustr, OUString::number(nColCount));
 
     SwSectionFrame* pCurrSctFrame=static_cast<SwFrame*>(pCurrFrame)->FindSctFrame();
     if(pCurrSctFrame!=nullptr && pCurrSctFrame->GetSection()!=nullptr )
@@ -566,7 +562,7 @@ OUString SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         sectionName = sectionName.replaceFirst( "," , "\\," );
         sectionName = sectionName.replaceFirst( ":" , "\\:" );
 
-        sValue += "section-name:" + sectionName + ";";
+        aAttributes.emplace(u"section-name"_ustr, sectionName);
 
         //section-columns-number
 
@@ -585,18 +581,16 @@ OUString SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                 }
             }
         }
-        sValue += "section-columns-number:" +
-            OUString::number( nCurrCol ) + ";";
+        aAttributes.emplace(u"section-columns-number"_ustr, OUString::number(nCurrCol));
 
         //section-total-columns
         const SwFormatCol &rFormatSctCol=pCurrSctFrame->GetAttrSet()->GetCol();
         sal_uInt16 nSctColCount=rFormatSctCol.GetNumCols();
         nSctColCount = nSctColCount>0?nSctColCount:1;
-        sValue += "section-total-columns:" +
-            OUString::number( nSctColCount ) + ";";
+        aAttributes.emplace(u"section-total-columns"_ustr, OUString::number(nSctColCount));
     }
 
-    return sValue;
+    return aAttributes;
 }
 
 sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()

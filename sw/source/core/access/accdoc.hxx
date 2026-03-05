@@ -86,6 +86,8 @@ class SwAccessibleDocument
     SwAccessibleSelectionHelper maSelectionHelper;
 
 protected:
+    virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes() override;
+
     // Set states for getAccessibleStateSet.
     // This derived class additionally sets MULTISELECTABLE(1)
     virtual void GetStates( sal_Int64& rStateSet ) override;
@@ -113,8 +115,6 @@ public:
     // index has to be treated as global child index.
     virtual void SAL_CALL deselectAccessibleChild(
         sal_Int64 nChildIndex ) override;
-
-    virtual OUString SAL_CALL getExtendedAttributes() override;
 
     // thread safe C++ interface
 
