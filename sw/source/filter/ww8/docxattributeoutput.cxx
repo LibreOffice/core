@@ -152,6 +152,7 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -5834,6 +5835,12 @@ void DocxAttributeOutput::WritePostponedChart()
 
         if( xChartDoc.is() )
         {
+            // At minimum, a PlotArea is needed or else MS Word complains about an invalid file
+            uno::Reference<chart2::XCoordinateSystemContainer>
+                xBCooSysCnt(xChartDoc->getFirstDiagram(), uno::UNO_QUERY);
+            if (!xBCooSysCnt.is())
+                continue;
+
             SAL_INFO("sw.ww8", "DocxAttributeOutput::WriteOLE2Obj: export chart ");
 
             m_rExport.SdrExporter().startDMLAnchorInline(rChart.frame, rChart.size);
