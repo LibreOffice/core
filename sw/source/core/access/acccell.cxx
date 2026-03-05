@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <vcl/accessibility/AccessibleAttribute.hxx>
 #include <vcl/svapp.hxx>
 #include <cellfrm.hxx>
 #include <tabfrm.hxx>
@@ -301,14 +302,33 @@ uno::Any SwAccessibleCell::getMinimumIncrement(  )
 
 std::unordered_map<OUString, OUString> SwAccessibleCell::implGetExtendedAttributes()
 {
+    std::unordered_map<OUString, OUString> aAttributes;
+
+    // extract row/col index name attributes from cell name
+    const OUString sQualifiedName = GetCellFrame().GetTabBox().GetName();
+    if (!sQualifiedName.isEmpty())
+    {
+        // SwTableBox::GetName returns path including hierarchy, only last part is of interest
+        std::u16string_view sCellName = sQualifiedName;
+        const int nLastCellNameIndex = sQualifiedName.lastIndexOf(u'.');
+        if (nLastCellNameIndex >= 0)
+        {
+            assert(sQualifiedName.getLength() > nLastCellNameIndex);
+            sCellName = sQualifiedName.subView(nLastCellNameIndex + 1);
+        }
+        // cell name consists of column name (using letters) and row name (using digits)
+        const size_t nRowNameStartIndex = sCellName.find_first_of(u"0123456789");
+        assert(nRowNameStartIndex >= 0 && "Cell name doesn't contain a row number");
+        aAttributes.emplace(AccessibleAttribute::ColIndexText, sCellName.substr(0, nRowNameStartIndex));
+        aAttributes.emplace(AccessibleAttribute::RowIndexText, sCellName.substr(nRowNameStartIndex));
+    }
+
     SwFrameFormat *pFrameFormat = GetTableBoxFormat();
     assert(pFrameFormat);
-
     const SwTableBoxFormula& tbl_formula = pFrameFormat->GetTableBoxFormula();
-
     OUString sFormula = tbl_formula.GetFormula();
     if (sFormula.isEmpty())
-        return {};
+        return aAttributes;
 
     // ensure the use of readable cell references (like "<A1>") instead of internal pointers
     if (const SwTabFrame* pTabFrame = m_pAccTable ? m_pAccTable->GetTabFrame() : nullptr)
@@ -326,7 +346,9 @@ std::unordered_map<OUString, OUString> SwAccessibleCell::implGetExtendedAttribut
                    .replaceAll(u"=", u"\\=")
                    .replaceAll(u",", u"\\,")
                    .replaceAll(u":", u"\\:");
-    return { { u"Formula"_ustr, sFormula } };
+    aAttributes.emplace(u"Formula"_ustr, sFormula);
+
+    return aAttributes;
 }
 
 sal_Int32 SAL_CALL SwAccessibleCell::getBackground()
