@@ -1686,6 +1686,8 @@ namespace {
 void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& xChartDoc)
 {
     Reference< chart2::XCoordinateSystemContainer > xBCooSysCnt( mxNewDiagram, uno::UNO_QUERY );
+    // MS Word considers a chart corrupt if it doesn't have a c:plotArea
+    assert(xBCooSysCnt.is());
     if( ! xBCooSysCnt.is())
         return;
 

@@ -775,6 +775,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143269_missingEmbeddings)
     assertXPath(pXmlChart1, "//c:externalData", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf143269_emptyChart)
+{
+    // Given a LO-authored chart that is completely empty
+
+    createSwDoc("tdf143269_emptyChart.odt");
+    save(TestFilter::DOCX);
+
+    // MS Word reports corrupt if a chart is empty - it needs to be skipped
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//c:chart", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testChartSize, "chart-size.docx")
 {
     // When chart was in a TextFrame, its size was too large.
