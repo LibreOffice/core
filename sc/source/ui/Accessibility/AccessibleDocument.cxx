@@ -2084,20 +2084,18 @@ ScAddress   ScAccessibleDocument::GetCurCellAddress() const
     return mpViewShell ? mpViewShell->GetViewData().GetCurPos() : ScAddress();
 }
 
-OUString SAL_CALL ScAccessibleDocument::getExtendedAttributes()
+std::unordered_map<OUString, OUString> ScAccessibleDocument::implGetExtendedAttributes()
 {
-    SolarMutexGuard g;
-
     sal_uInt16 sheetIndex;
     OUString sSheetName;
     sheetIndex = getVisibleTable();
     if(GetDocument()==nullptr)
-        return OUString();
+        return {};
+
     GetDocument()->GetName(sheetIndex,sSheetName);
-    OUString sValue = "page-name:" + sSheetName +
-        ";page-number:" + OUString::number(sheetIndex+1) +
-        ";total-pages:" + OUString::number(GetDocument()->GetTableCount()) + ";";
-    return sValue;
+    return { { u"page-name"_ustr, sSheetName },
+             { u"page-number"_ustr, OUString::number(sheetIndex + 1) },
+             { u"total-pages"_ustr, OUString::number(GetDocument()->GetTableCount()) } };
 }
 
 sal_Int32 SAL_CALL ScAccessibleDocument::getForeground(  )

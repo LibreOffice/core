@@ -92,7 +92,6 @@ public:
     virtual OUString SAL_CALL
         getAccessibleName() override;
 
-    virtual OUString SAL_CALL getExtendedAttributes() override ;
     ///=====  XAccessibleSelection  ===========================================
 
     virtual void SAL_CALL
@@ -165,6 +164,8 @@ public:
         GetAccessibleSpreadsheet();
 
 protected:
+    virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes() override;
+
     /// Return this object's description.
     virtual OUString
         createAccessibleDescription() override;
