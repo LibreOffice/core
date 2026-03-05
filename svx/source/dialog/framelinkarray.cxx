@@ -24,6 +24,7 @@
 #include <unordered_set>
 #include <algorithm>
 #include <o3tl/hash_combine.hxx>
+#include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
@@ -1406,6 +1407,16 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
 {
     DBG_FRAME_CHECK_COLROW( nFirstCol, nFirstRow, "CreateB2DPrimitiveRange" );
     DBG_FRAME_CHECK_COLROW( nLastCol, nLastRow, "CreateB2DPrimitiveRange" );
+
+    // Bail out if indices are out of range
+    if (nFirstCol < 0 || nFirstRow < 0 || nLastCol >= GetColCount() || nLastRow >= GetRowCount())
+    {
+        SAL_WARN("svx.dialog", "CreateB2DPrimitiveRange indices out of range: "
+            "nFirstCol=" << nFirstCol << " nFirstRow=" << nFirstRow
+            << " nLastCol=" << nLastCol << " nLastRow=" << nLastRow
+            << " ColCount=" << GetColCount() << " RowCount=" << GetRowCount());
+        return drawinglayer::primitive2d::Primitive2DContainer();
+    }
 
 #ifdef OPTICAL_CHECK_CLIPRANGE_FOR_MERGED_CELL
     std::vector<basegfx::B2DRange> aClipRanges;

@@ -1542,6 +1542,13 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 
     // *** draw the array ***
 
+    if (nColCount < 3 || nRowCount < 3)
+    {
+        SAL_WARN("sc.ui", "DrawFrame: unexpected array size:"
+            " nColCount=" << nColCount << " nRowCount=" << nRowCount);
+        return;
+    }
+
     size_t nFirstCol = 1;
     size_t nFirstRow = 1;
     size_t nLastCol = nColCount - 2;
