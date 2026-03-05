@@ -463,9 +463,9 @@ static OUString ReplaceFourChar(const OUString& oldOUString)
         .replaceAll(u":", u"\\:");
 }
 
-OUString SAL_CALL ScAccessibleCell::getExtendedAttributes()
+std::unordered_map<OUString, OUString> ScAccessibleCell::implGetExtendedAttributes()
 {
-    SolarMutexGuard aGuard;
+    std::unordered_map<OUString, OUString> aAttributes;
 
     // report row and column index text via attributes as specified in ARIA which map
     // to attributes of the same name for AT-SPI2, IAccessible2, UIA
@@ -473,30 +473,29 @@ OUString SAL_CALL ScAccessibleCell::getExtendedAttributes()
     // https://www.w3.org/TR/core-aam-1.2/#ariaColIndexText
     const OUString sRowIndexText = maCellAddress.Format(ScRefFlags::ROW_VALID);
     const OUString sColIndexText = maCellAddress.Format(ScRefFlags::COL_VALID);
-    OUString sAttributes = "rowindextext:" + sRowIndexText + ";colindextext:" + sColIndexText + ";";
+    aAttributes.emplace(u"rowindextext"_ustr, sRowIndexText);
+    aAttributes.emplace(u"colindextext"_ustr, sColIndexText);
 
     if (mpViewShell)
     {
         const OUString sFormula = mpViewShell->GetFormula(maCellAddress) ;
         if (!sFormula.isEmpty())
-            sAttributes += u"Formula:" + ReplaceFourChar(sFormula.copy(1)) + u";";
+            aAttributes.emplace(u"Formula"_ustr, ReplaceFourChar(sFormula.copy(1)));
 
-        sAttributes += "Note:" + ReplaceFourChar(GetAllDisplayNote()) + ";" +
-            getShadowAttrs() + //the string returned contains the spliter ";"
-            getBorderAttrs();//the string returned contains the spliter ";"
+        aAttributes.emplace(u"Note"_ustr, ReplaceFourChar(GetAllDisplayNote()));
+        for (const auto& rAttr : getShadowAttrs())
+            aAttributes.insert(rAttr);
+        for (const auto& rAttr : getBorderAttrs())
+            aAttributes.insert(rAttr);
         //end of cell attributes
         if( mpDoc )
         {
-            sAttributes += "isdropdown:";
-            if( IsDropdown() )
-                sAttributes += "true";
-            else
-                sAttributes += "false";
-            sAttributes += ";";
+            const OUString sDropDownValue = IsDropdown() ? u"true"_ustr : u"false"_ustr;
+            aAttributes.emplace(u"isdropdown"_ustr, sDropDownValue);
         }
     }
 
-    return sAttributes;
+    return aAttributes;
 }
 
 // cell has its own ParaIndent property, so when calling character attributes on cell, the ParaIndent should replace the ParaLeftMargin if its value is not zero.

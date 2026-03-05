@@ -84,6 +84,8 @@ public:
     virtual void SAL_CALL grabFocus(  ) override;
 
 protected:
+    virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes() override;
+
     /// Return the object's current bounding box relative to the desktop.
     virtual AbsoluteScreenPixelRectangle GetBoundingBoxOnScreen() override;
 
@@ -110,8 +112,6 @@ public:
     virtual css::uno::Reference<
         css::accessibility::XAccessibleRelationSet> SAL_CALL
            getAccessibleRelationSet() override;
-
-    virtual OUString SAL_CALL getExtendedAttributes() override;
 
     // Override this method to handle cell's ParaIndent attribute specially.
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;

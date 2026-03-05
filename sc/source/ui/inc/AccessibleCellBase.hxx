@@ -93,10 +93,9 @@ protected:
 
     /// @throw css::uno::RuntimeException
     OUString GetAllDisplayNote() const;
-    /// @throw css::uno::RuntimeException
-    OUString getShadowAttrs() const;
-    /// @throw css::uno::RuntimeException
-    OUString getBorderAttrs();
+    std::unordered_map<OUString, OUString> getShadowAttrs() const;
+    std::unordered_map<OUString, OUString> getBorderAttrs();
+
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }
 };
