@@ -3305,20 +3305,18 @@ bool SwAccessibleParagraph::IsBlockQuote()
     return false;
 }
 
-OUString SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
+std::unordered_map<OUString, OUString> SwAccessibleParagraph::implGetExtendedAttributes()
 {
-    SolarMutexGuard g;
-
-    OUString strHeading;
+    std::unordered_map<OUString, OUString> aAttributes;
     if (m_nHeadingLevel >= 0)
     {
         // report heading level using the "level" object attribute as specified in ARIA,
         // maps to attributes of the same name for AT-SPI, IAccessible2, UIA
         // https://www.w3.org/TR/core-aam-1.2/#ariaLevelHeading
-        strHeading = "level:" + OUString::number(m_nHeadingLevel) + ";";
+        aAttributes.emplace(u"level"_ustr, OUString::number(m_nHeadingLevel));
     }
 
-    return strHeading;
+    return aAttributes;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

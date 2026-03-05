@@ -158,6 +158,7 @@ public:
     bool IsHeading() const;
 
 protected:
+    virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes() override;
 
     // Set states for getAccessibleStateSet.
     // This derived class additionally sets MULTILINE(1), MULTISELECTABLE(+),
@@ -327,8 +328,6 @@ public:
     virtual sal_Int32 SAL_CALL getSeletedPositionEnd( sal_Int32 nSelectedPortionIndex ) override;
     virtual sal_Bool SAL_CALL removeSelection( sal_Int32 selectionIndex ) override;
     virtual sal_Int32 SAL_CALL addSelection(sal_Int32 startOffset, sal_Int32 endOffset) override;
-    // XAccessibleExtendedAttributes
-    virtual OUString SAL_CALL getExtendedAttributes() override;
     sal_Int32 GetRealHeadingLevel();
     bool IsBlockQuote();
 
