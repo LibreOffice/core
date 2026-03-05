@@ -4598,6 +4598,19 @@ std::set<std::string> collectPrimitiveTypes(const boost::property_tree::ptree& r
     });
     return aTypes;
 }
+
+/// Collect all "text" values from the JSON primitive tree.
+std::vector<std::string> collectPrimitiveTexts(const boost::property_tree::ptree& rTree)
+{
+    std::vector<std::string> aTexts;
+    forEachPrimitive(rTree, [&aTexts](const boost::property_tree::ptree& rNode)
+    {
+        auto oText = rNode.get_optional<std::string>("text");
+        if (oText)
+            aTexts.push_back(*oText);
+    });
+    return aTexts;
+}
 } // anonymous namespace
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
@@ -4647,7 +4660,18 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
     // Collect all primitive types in the JSON tree.
     std::set<std::string> aTypes = collectPrimitiveTypes(aTree);
 
-    CPPUNIT_ASSERT_MESSAGE("Should contain polyPolygonColor", aTypes.count("polyPolygonColor") > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting polyPolygonColor", aTypes.count("polyPolygonColor") > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting textSimplePortion", aTypes.count("textSimplePortion") > 0);
+
+    // Verify that field placeholders have been replaced.
+    std::vector<std::string> aTexts = collectPrimitiveTexts(aTree);
+    for (const auto& rText : aTexts)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("<number> was not replaced", std::string::npos, rText.find("<number>"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("<date/time> was not replaced", std::string::npos, rText.find("<date/time>"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("<footer> was not replaced", std::string::npos, rText.find("<footer>"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("<header> was not replaced", std::string::npos, rText.find("<header>"));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

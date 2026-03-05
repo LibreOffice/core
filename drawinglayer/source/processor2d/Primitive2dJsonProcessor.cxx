@@ -22,6 +22,9 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
 
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -107,6 +110,54 @@ void writeBitmapData(tools::JsonWriter& rWriter, const Bitmap& rBitmap)
 }
 
 } // end anonymous namespace
+
+void Primitive2dJsonProcessor::writeTextPortionScaled(
+    const TextSimplePortionPrimitive2D& rPrimitive)
+{
+    writeMatrixScaled("matrix", rPrimitive.getTextTransform());
+
+    // Extract font size from the text transform matrix scale
+    const basegfx::B2DHomMatrix& rMatrix = rPrimitive.getTextTransform();
+    const double fFontScaleY = std::hypot(rMatrix.get(1, 0), rMatrix.get(1, 1)) * mfScaleFactor;
+    mrWriter.put("fontSize", fFontScaleY);
+    mrWriter.put("text", rPrimitive.getText());
+    mrWriter.put("textPosition", rPrimitive.getTextPosition());
+    mrWriter.put("textLength", rPrimitive.getTextLength());
+    mrWriter.put("fontcolor", colorToHex(rPrimitive.getFontColor()));
+
+    if (rPrimitive.getTextFillColor() != COL_TRANSPARENT)
+        mrWriter.put("fillcolor", colorToHex(rPrimitive.getTextFillColor().getBColor()));
+
+    if (rPrimitive.getLetterSpacing() != 0)
+        mrWriter.put("letterSpacing",
+                     static_cast<double>(rPrimitive.getLetterSpacing()) * mfScaleFactor);
+
+    // Font attributes
+    const drawinglayer::attribute::FontAttribute& rFontAttr = rPrimitive.getFontAttribute();
+    mrWriter.put("familyname", rFontAttr.getFamilyName());
+
+    if (!rFontAttr.getStyleName().isEmpty())
+        mrWriter.put("stylename", rFontAttr.getStyleName());
+
+    mrWriter.put("weight", rFontAttr.getWeight());
+
+    if (rFontAttr.getItalic())
+        mrWriter.put("italic", true);
+    if (rFontAttr.getOutline())
+        mrWriter.put("outline", true);
+    if (rFontAttr.getRTL())
+        mrWriter.put("rtl", true);
+    if (rFontAttr.getMonospaced())
+        mrWriter.put("monospaced", true);
+
+    // Handle character advance widths
+    if (!rPrimitive.getDXArray().empty())
+    {
+        auto aDxArray = mrWriter.startArray("dxarray");
+        for (double fValue : rPrimitive.getDXArray())
+            mrWriter.putSimpleValue(OUString::number(fValue * mfScaleFactor));
+    }
+}
 
 // Write matrix as 6 elements. Scale all components (unit conversion).
 void Primitive2dJsonProcessor::writeMatrixScaled(std::string_view sName,
@@ -306,18 +357,105 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         }
         break;
 
+        case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const TextSimplePortionPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "textSimplePortion");
+            writeTextPortionScaled(rPrimitive);
+        }
+        break;
+
+        case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const TextDecoratedPortionPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "textDecoratedPortion");
+            writeTextPortionScaled(rPrimitive);
+
+            // Decoration properties
+            if (rPrimitive.getFontUnderline() != TEXT_LINE_NONE)
+            {
+                mrWriter.put("underline", sal_Int32(rPrimitive.getFontUnderline()));
+                mrWriter.put("underlineColor", colorToHex(rPrimitive.getTextlineColor()));
+                if (rPrimitive.getUnderlineAbove())
+                    mrWriter.put("underlineAbove", true);
+            }
+
+            if (rPrimitive.getFontOverline() != TEXT_LINE_NONE)
+            {
+                mrWriter.put("overline", sal_Int32(rPrimitive.getFontOverline()));
+                mrWriter.put("overlineColor", colorToHex(rPrimitive.getOverlineColor()));
+            }
+
+            if (rPrimitive.getTextStrikeout() != TEXT_STRIKEOUT_NONE)
+                mrWriter.put("strikeout", sal_Int32(rPrimitive.getTextStrikeout()));
+
+            if (rPrimitive.getTextEmphasisMark() != TEXT_FONT_EMPHASIS_MARK_NONE)
+            {
+                mrWriter.put("emphasisMark", sal_Int32(rPrimitive.getTextEmphasisMark()));
+                if (rPrimitive.getEmphasisMarkAbove())
+                    mrWriter.put("emphasisMarkAbove", true);
+                if (rPrimitive.getEmphasisMarkBelow())
+                    mrWriter.put("emphasisMarkBelow", true);
+            }
+
+            if (rPrimitive.getTextRelief() != TEXT_RELIEF_NONE)
+                mrWriter.put("relief", sal_Int32(rPrimitive.getTextRelief()));
+
+            if (rPrimitive.getShadow())
+                mrWriter.put("shadow", true);
+
+            if (rPrimitive.getWordLineMode())
+                mrWriter.put("wordLineMode", true);
+        }
+        break;
+
         default:
         {
-            // Encode module and local ID so we know the origin
-            // Modules: 0=drawinglayer, 1=svx, 2=sd, 3=sw, 4=sc
-            static constexpr auto aModuleNames
-                = std::to_array<std::string_view>({ "drawinglayer", "svx", "sd", "sw", "sc" });
-            sal_uInt32 nModule = nId >> 16;
-            sal_uInt32 nLocalId = nId & 0xFFFF;
-            std::string_view aModule
-                = nModule < aModuleNames.size() ? aModuleNames[nModule] : "other";
-            mrWriter.put("type", rtl::Concat2View(OString::Concat(aModule) + ":"
-                                                  + OString::number(sal_Int32(nLocalId))));
+            const char* pTypeName = nullptr;
+            switch (nId)
+            {
+                // Text hierarchy (structural text grouping)
+                case PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D:
+                    pTypeName = "textHierarchyField";
+                    break;
+                case PRIMITIVE2D_ID_TEXTHIERARCHYLINEPRIMITIVE2D:
+                    pTypeName = "textHierarchyLine";
+                    break;
+                case PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D:
+                    pTypeName = "textHierarchyParagraph";
+                    break;
+                case PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D:
+                    pTypeName = "textHierarchyBlock";
+                    break;
+                case PRIMITIVE2D_ID_TEXTHIERARCHYBULLETPRIMITIVE2D:
+                    pTypeName = "textHierarchyBullet";
+                    break;
+                case PRIMITIVE2D_ID_TEXTHIERARCHYEMPHASISMARKPRIMITIVE2D:
+                    pTypeName = "textHierarchyEmphasisMark";
+                    break;
+                default:
+                    break;
+            }
+
+            if (pTypeName)
+            {
+                mrWriter.put("type", pTypeName);
+            }
+            else
+            {
+                // Encode module and local ID so we know the origin
+                // Modules: 0=drawinglayer, 1=svx, 2=sd, 3=sw, 4=sc
+                static constexpr auto aModuleNames
+                    = std::to_array<std::string_view>({ "drawinglayer", "svx", "sd", "sw", "sc" });
+                sal_uInt32 nModule = nId >> 16;
+                sal_uInt32 nLocalId = nId & 0xFFFF;
+                std::string_view aModule
+                    = nModule < aModuleNames.size() ? aModuleNames[nModule] : "other";
+                mrWriter.put("type", rtl::Concat2View(OString::Concat(aModule) + ":"
+                                                      + OString::number(sal_Int32(nLocalId))));
+            }
 
             Primitive2DContainer aContainer;
             rBasePrimitive.get2DDecomposition(aContainer, maViewInformation2D);
