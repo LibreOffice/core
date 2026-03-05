@@ -1644,7 +1644,39 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         {
             case SvxAdjust::Center:
             {
-                tools::Long n = ( nMaxLineWidth - aTextSize.Width() ) / 2;
+                // tdf#168135: exclude trailing spaces from centering width
+                tools::Long nCenterWidth = aTextSize.Width();
+                const OUString aStr(pNode->GetString());
+                sal_Int32 nLineEnd = pLine->GetEnd();
+                sal_Int32 nLineStart = pLine->GetStart();
+                sal_Int32 nTrimEnd = nLineEnd;
+                while (nTrimEnd > nLineStart && aStr[nTrimEnd - 1] == ' ')
+                    nTrimEnd--;
+                if (nTrimEnd < nLineEnd)
+                {
+                    // Subtract trailing space widths from centering width
+                    sal_Int32 nPos = nLineEnd;
+                    for (sal_Int32 nPart = pLine->GetEndPortion();
+                         nPart >= pLine->GetStartPortion() && nPos > nTrimEnd; nPart--)
+                    {
+                        TextPortion& rP = rParaPortion.GetTextPortions()[nPart];
+                        sal_Int32 nPortStart = nPos - rP.GetLen();
+                        if (nTrimEnd <= nPortStart)
+                        {
+                            nCenterWidth -= rP.GetSize().Width();
+                        }
+                        else if (nTrimEnd < nPos && rP.GetKind() == PortionKind::TEXT)
+                        {
+                            sal_Int32 nArrayBase = nPortStart - nLineStart;
+                            sal_Int32 nTrimIdx = nTrimEnd - nPortStart - 1;
+                            tools::Long nTrimmedW
+                                = pLine->GetCharPosArray()[nArrayBase + nTrimIdx];
+                            nCenterWidth -= (rP.GetSize().Width() - nTrimmedW);
+                        }
+                        nPos = nPortStart;
+                    }
+                }
+                tools::Long n = ( nMaxLineWidth - nCenterWidth ) / 2;
                 n += nStartX;  // Indentation is kept.
                 pLine->SetStartPosX( n );
             }
