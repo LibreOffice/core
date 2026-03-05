@@ -29,12 +29,11 @@ class SwAccessibleEmbeddedObject : public SwAccessibleNoTextFrame
 protected:
     virtual ~SwAccessibleEmbeddedObject() override;
 
+    virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes() override;
+
 public:
     SwAccessibleEmbeddedObject(std::shared_ptr<SwAccessibleMap> const& pInitMap,
                                const SwFlyFrame* pFlyFrame);
-
-    // XAccessibleExtendedAttributes
-    virtual OUString SAL_CALL getExtendedAttributes() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

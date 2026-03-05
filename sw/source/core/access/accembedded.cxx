@@ -38,27 +38,23 @@ SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
 
 SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject() {}
 
-// XAccessibleExtendedAttributes
-OUString SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
+std::unordered_map<OUString, OUString> SwAccessibleEmbeddedObject::implGetExtendedAttributes()
 {
-    SolarMutexGuard g;
-
     SwFlyFrame* pFFrame = getFlyFrame();
     if (!pFFrame)
         return {};
 
-    OUString style = "style:";
+    OUString sStyleValue;
     if (SwContentFrame* pCFrame = pFFrame->ContainsContent())
     {
         assert(pCFrame->IsNoTextFrame());
         SwContentNode* const pCNode = static_cast<SwNoTextFrame*>(pCFrame)->GetNode();
         if (pCNode)
         {
-            style += static_cast<SwOLENode*>(pCNode)->GetOLEObj().GetStyleString();
+            sStyleValue = static_cast<SwOLENode*>(pCNode)->GetOLEObj().GetStyleString();
         }
     }
-    style += ";";
-    return style;
+    return { { u"style"_ustr, sStyleValue } };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
