@@ -492,9 +492,6 @@ bool XclImpExtName::CreateOleData(const ScDocument& rDoc, const OUString& rUrl,
     const ScMatrix& rCache = moMOper->GetCache();
     SCSIZE nC, nR;
     rCache.GetDimensions(nC, nR);
-    if (!nC || !nR)
-        // cache matrix is empty.
-        return false;
 
     ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(rUrl);

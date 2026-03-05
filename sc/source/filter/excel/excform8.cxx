@@ -40,34 +40,26 @@ namespace {
  * Extract a file path from OLE link path.  An OLE link path is expected to
  * be in the following format:
  *
- * Excel.Sheet.8 \3 [file path]
+ * Excel.Sheet.8  [file path]
+ * Excel.Sheet.12 [file path]
  */
 bool extractFilePath(const OUString& rUrl, OUString& rPath)
 {
-    const char* prefix = "Excel.Sheet.8\3";
-    size_t nPrefixLen = ::std::strlen(prefix);
+    OUString prefix1 = "Excel.Sheet.8", prefix2 = "Excel.Sheet.12";
+    sal_Int32 nStart = -1;
 
-    sal_Int32 n = rUrl.getLength();
-    if (n <= static_cast<sal_Int32>(nPrefixLen))
-        // needs to have the specified prefix.
+    if (rUrl.startsWith(prefix1))
+        nStart = prefix1.getLength();
+    else if (rUrl.startsWith(prefix2))
+        nStart = prefix2.getLength();
+
+    if (nStart < 0)
         return false;
 
-    OUStringBuffer aBuf;
-    const sal_Unicode* p = rUrl.getStr();
-    for (size_t i = 0; i < o3tl::make_unsigned(n); ++i, ++p)
-    {
-        if (i < nPrefixLen)
-        {
-            sal_Unicode pc = static_cast<sal_Unicode>(*prefix++);
-            if (pc != *p)
-                return false;
+    if (nStart < rUrl.getLength() && rUrl[nStart] == u'\3')
+        nStart++;
 
-            continue;
-        }
-        aBuf.append(*p);
-    }
-
-    rPath = aBuf.makeStringAndClear();
+    rPath = rUrl.copy(nStart);
     return true;
 }
 
