@@ -119,6 +119,7 @@
 #include <operation/SetFormulaOperation.hxx>
 #include <operation/SetEditTextOperation.hxx>
 #include <operation/ApplyAttributesOperation.hxx>
+#include <operation/AutoFormatOperation.hxx>
 #include <operation/ClearItemsOperation.hxx>
 #include <operation/EnterMatrixOperation.hxx>
 #include <operation/InsertCellsOperation.hxx>
@@ -130,8 +131,6 @@
 
 using namespace com::sun::star;
 using ::std::vector;
-
-#define AUTOFORMAT_WARN_SIZE 0x10ffffUL
 
 bool ScDocFunc::CheckSheetViewProtection(sc::OperationType eOperation)
 {
@@ -3223,126 +3222,8 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
 bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
                             sal_uInt16 nFormatNo, bool bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-
-    ScDocument& rDoc = rDocShell.GetDocument();
-    SCCOL nStartCol = rRange.aStart.Col();
-    SCROW nStartRow = rRange.aStart.Row();
-    SCTAB nStartTab = rRange.aStart.Tab();
-    SCCOL nEndCol = rRange.aEnd.Col();
-    SCROW nEndRow = rRange.aEnd.Row();
-    SCTAB nEndTab = rRange.aEnd.Tab();
-
-    bool bRecord = true;
-    if (!rDoc.IsUndoEnabled())
-        bRecord = false;
-    ScMarkData aMark(rDoc.GetSheetLimits());
-    if (pTabMark)
-        aMark = *pTabMark;
-    else
-    {
-        for (SCTAB nTab=nStartTab; nTab<=nEndTab; nTab++)
-            aMark.SelectTable( nTab, true );
-    }
-
-    ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
-
-    if (!CheckSheetViewProtection(sc::OperationType::AutoFormat))
-        return false;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
-    if ( nFormatNo < pAutoFormat->size() && aTester.IsEditable() )
-    {
-        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
-
-        bool bSize = pAutoFormat->findByIndex(nFormatNo)->GetIncludeWidthHeight();
-        if (sal_uInt64(nEndCol - nStartCol + 1) * sal_uInt64(nEndRow - nStartRow + 1) > AUTOFORMAT_WARN_SIZE)
-        {
-            std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
-                                                           VclMessageType::Warning, VclButtonsType::YesNo,
-                                                           ScResId(STR_AUTOFORMAT_WAIT_WARNING)));
-            xQueryBox->set_default_response(RET_NO);
-            if (xQueryBox->run() != RET_YES)
-                return false;
-        }
-
-        SCTAB nTabCount = rDoc.GetTableCount();
-        ScDocumentUniquePtr pUndoDoc;
-        if ( bRecord )
-        {
-            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( rDoc, nStartTab, nStartTab, bSize, bSize );
-            for (const auto& rTab : aMark)
-            {
-                if (rTab >= nTabCount)
-                    break;
-
-                if (rTab != nStartTab)
-                    pUndoDoc->AddUndoTab( rTab, rTab, bSize, bSize );
-            }
-
-            ScRange aCopyRange = rRange;
-            aCopyRange.aStart.SetTab(0);
-            aCopyRange.aStart.SetTab(nTabCount-1);
-            rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, false, *pUndoDoc, &aMark );
-            if (bSize)
-            {
-                rDoc.CopyToDocument( nStartCol,0,0, nEndCol,rDoc.MaxRow(),nTabCount-1,
-                                                            InsertDeleteFlags::NONE, false, *pUndoDoc, &aMark );
-                rDoc.CopyToDocument( 0,nStartRow,0, rDoc.MaxCol(),nEndRow,nTabCount-1,
-                                                            InsertDeleteFlags::NONE, false, *pUndoDoc, &aMark );
-            }
-            rDoc.BeginDrawUndo();
-        }
-
-        rDoc.AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo, aMark );
-
-        if (bSize)
-        {
-            std::vector<sc::ColRowSpan> aCols(1, sc::ColRowSpan(nStartCol,nEndCol));
-            std::vector<sc::ColRowSpan> aRows(1, sc::ColRowSpan(nStartRow,nEndRow));
-
-            for (const auto& rTab : aMark)
-            {
-                if (rTab >= nTabCount)
-                    break;
-
-                SetWidthOrHeight(true, aCols, rTab, SC_SIZE_VISOPT, STD_EXTRA_WIDTH, false, true);
-                SetWidthOrHeight(false, aRows, rTab, SC_SIZE_VISOPT, 0, false, false);
-                rDocShell.PostPaint( 0,0,rTab, rDoc.MaxCol(),rDoc.MaxRow(),rTab,
-                                PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
-            }
-        }
-        else
-        {
-            for (const auto& rTab : aMark)
-            {
-                if (rTab >= nTabCount)
-                    break;
-
-                bool bAdj = AdjustRowHeight( ScRange(nStartCol, nStartRow, rTab,
-                                                     nEndCol, nEndRow, rTab), false, bApi );
-                if (bAdj)
-                    rDocShell.PostPaint( 0,nStartRow,rTab, rDoc.MaxCol(),rDoc.MaxRow(),rTab,
-                                        PaintPartFlags::Grid | PaintPartFlags::Left );
-                else
-                    rDocShell.PostPaint( nStartCol, nStartRow, rTab,
-                                        nEndCol, nEndRow, rTab, PaintPartFlags::Grid );
-            }
-        }
-
-        if ( bRecord )      // only now is Draw-Undo available
-        {
-            rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoAutoFormat>( &rDocShell, rRange, std::move(pUndoDoc), aMark, bSize, nFormatNo ) );
-        }
-
-        aModificator.SetDocumentModified();
-    }
-    else if (!bApi)
-        rDocShell.ErrorMessage(aTester.GetMessageId());
-
-    return false;
+    sc::AutoFormatOperation aOperation(*this, rDocShell, rRange, pTabMark, nFormatNo, bApi);
+    return aOperation.run();
 }
 
 bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
