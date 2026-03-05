@@ -127,8 +127,6 @@ public:
     virtual void SAL_CALL deselectAccessibleChild(
         sal_Int64 nSelectedChildIndex ) override;
 
-    // ====== XAccessibleExtendedAttributes =====================================
-    virtual OUString SAL_CALL getExtendedAttributes() override;
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
     //=====  XAccessibleGroupPosition  =========================================
@@ -217,6 +215,7 @@ public:
 
     // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
+    virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes() override;
 
     //=====  XAccessibleComponent  ============================================
 

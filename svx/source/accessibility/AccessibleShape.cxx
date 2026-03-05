@@ -730,16 +730,15 @@ void SAL_CALL AccessibleShape::deselectAccessibleChild( sal_Int64 )
 
 }
 
-// XAccessibleExtendedAttributes
-OUString SAL_CALL AccessibleShape::getExtendedAttributes()
+std::unordered_map<OUString, OUString> AccessibleShape::implGetExtendedAttributes()
 {
     if (getAccessibleRole() != AccessibleRole::SHAPE)
-        return OUString();
+        return {};
 
     if (m_pShape)
-        return "style:" + GetStyle() + ";";
+        return { { u"style"_ustr, GetStyle() } };
 
-    return OUString();
+    return {};
 }
 
 // XTypeProvider
