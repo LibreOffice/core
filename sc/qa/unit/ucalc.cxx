@@ -4930,6 +4930,28 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoFill)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf55960_FillSeriesPrecision)
+{
+    m_pDoc->InsertTab(0, u"tdf55960"_ustr);
+
+    m_pDoc->SetValue(0, 0, 0, -2.0);
+    m_pDoc->SetValue(0, 1, 0, -1.95);
+
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
+    aMarkData.SelectTable(0, true);
+
+    // Autofill should preserve the detected 0.05 step without accumulating
+    // floating point artifacts around zero.
+    m_pDoc->Fill(0, 0, 0, 1, nullptr, aMarkData, 80, FILL_TO_BOTTOM, FILL_AUTO);
+
+    CPPUNIT_ASSERT_EQUAL(-1.0, m_pDoc->GetValue(ScAddress(0, 20, 0)));
+    CPPUNIT_ASSERT_EQUAL( 0.0, m_pDoc->GetValue(ScAddress(0, 40, 0)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0, 60, 0)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0, 80, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testAutoFillSimple)
 {
     m_pDoc->InsertTab(0, u"test"_ustr);
