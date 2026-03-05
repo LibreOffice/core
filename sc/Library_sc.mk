@@ -534,6 +534,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/ClearItemsOperation \
     sc/source/ui/operation/DeleteCellOperation \
     sc/source/ui/operation/DeleteContentOperation \
+    sc/source/ui/operation/EnterMatrixOperation \
     sc/source/ui/operation/InsertCellsOperation \
     sc/source/ui/operation/InsertSheetViewOperation \
     sc/source/ui/operation/Operation \

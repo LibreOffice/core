@@ -120,6 +120,7 @@
 #include <operation/SetEditTextOperation.hxx>
 #include <operation/ApplyAttributesOperation.hxx>
 #include <operation/ClearItemsOperation.hxx>
+#include <operation/EnterMatrixOperation.hxx>
 #include <operation/InsertCellsOperation.hxx>
 #include <operation/InsertSheetViewOperation.hxx>
 #include <basic/basmgr.hxx>
@@ -3348,91 +3349,9 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         const ScTokenArray* pTokenArray, const OUString& rString, bool bApi, bool bEnglish,
         const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
-    if (ScViewData::SelectionFillDOOM( rRange ))
-        return false;
-
-    ScDocShellModificator aModificator( rDocShell );
-
-    bool bSuccess = false;
-    ScDocument& rDoc = rDocShell.GetDocument();
-    SCCOL nStartCol = rRange.aStart.Col();
-    SCROW nStartRow = rRange.aStart.Row();
-    SCTAB nStartTab = rRange.aStart.Tab();
-    SCCOL nEndCol = rRange.aEnd.Col();
-    SCROW nEndRow = rRange.aEnd.Row();
-    SCTAB nEndTab = rRange.aEnd.Tab();
-
-    ScMarkData aMark(rDoc.GetSheetLimits());
-    if (pTabMark)
-        aMark = *pTabMark;
-    else
-    {
-        for (SCTAB nTab=nStartTab; nTab<=nEndTab; nTab++)
-            aMark.SelectTable( nTab, true );
-    }
-
-    if (!CheckSheetViewProtection(sc::OperationType::EnterMatrix))
-        return false;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
-    if ( aTester.IsEditable() )
-    {
-        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
-
-        ScDocumentUniquePtr pUndoDoc;
-
-        const bool bUndo(rDoc.IsUndoEnabled());
-        if (bUndo)
-        {
-            //! take selected sheets into account also when undoing
-            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( rDoc, nStartTab, nEndTab );
-            rDoc.CopyToDocument( rRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pUndoDoc );
-        }
-
-        // use TokenArray if given, string (and flags) otherwise
-        if ( pTokenArray )
-        {
-            rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, OUString(), pTokenArray, eGrammar);
-        }
-        else if ( rDoc.IsImportingXML() )
-        {
-            ScTokenArray aCode(rDoc);
-            aCode.AssignXMLString( rString,
-                    ((eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) ? rFormulaNmsp : OUString()));
-            rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, OUString(), &aCode, eGrammar);
-            rDoc.IncXMLImportedFormulaCount( rString.getLength() );
-        }
-        else if (bEnglish)
-        {
-            ScCompiler aComp( rDoc, rRange.aStart, eGrammar);
-            std::unique_ptr<ScTokenArray> pCode = aComp.CompileString( rString );
-            rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, OUString(), pCode.get(), eGrammar);
-        }
-        else
-            rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, rString, nullptr, eGrammar);
-
-        if (bUndo)
-        {
-            //! take selected sheets into account also when undoing
-            rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoEnterMatrix>( &rDocShell, rRange, std::move(pUndoDoc), rString ) );
-        }
-
-        //  Err522 painting of DDE-Formulas will be intercepted during interpreting
-        rDocShell.PostPaint( nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab, PaintPartFlags::Grid );
-        aModificator.SetDocumentModified();
-
-        bSuccess = true;
-    }
-    else if (!bApi)
-        rDocShell.ErrorMessage(aTester.GetMessageId());
-
-    return bSuccess;
+    sc::EnterMatrixOperation aOperation(rDocShell, rRange, pTabMark, pTokenArray,
+                                        rString, bApi, bEnglish, rFormulaNmsp, eGrammar);
+    return aOperation.run();
 }
 
 bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
