@@ -249,6 +249,7 @@ private:
     DECL_LINK(LockCheckedHdl, weld::Toggleable&, void);
 
     void Check(const weld::TreeIter* pIter);
+    void MarkCheckedMembers();
 
     DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
 
