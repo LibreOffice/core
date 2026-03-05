@@ -2286,6 +2286,25 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testForumFr59757)
                 u"5");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest, testColumnBounds)
+{
+    createScDoc("xls/forum-mso-en4-368528.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc,
+                       "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:from/xdr:col",
+                       u"0"); // earlier -1
+
+    pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc,
+                       "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
+                       "mc:Choice/x:control/x:controlPr/x:anchor/x:from/xdr:col",
+                       u"0"); // earlier -1
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
