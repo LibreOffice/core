@@ -2251,23 +2251,17 @@ OUString SwTableBox::GetName() const
                 ? &pLine->GetUpper()->GetTabLines() : &rTable.GetTabLines();
 
         sal_uInt16 nPos = pLines->GetPos(pLine) + 1;
-        OUString sTmp = OUString::number(nPos);
         if( !sNm.isEmpty() )
-            sNm = sTmp + "." + sNm;
+            sNm = OUString::number(nPos) + "." + sNm;
         else
-            sNm = sTmp;
+            sNm = OUString::number(nPos);
 
         nPos = pBox->GetUpper()->GetBoxPos( pBox );
         pBox = pLine->GetUpper();
         if (pBox)
-        {
-            sTmp = OUString::number(nPos + 1);
-            sNm = sTmp + "." + sNm;
-        }
+            sNm = OUString::number(nPos + 1) + "." + sNm;
         else
-        {
             sNm = sw_GetTableBoxColStr(nPos) + sNm;
-        }
 
     } while( pBox );
     return sNm;
