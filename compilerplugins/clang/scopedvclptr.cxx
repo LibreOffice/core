@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cassert>
 #include <string>
 
 #include "check.hxx"
@@ -177,27 +178,31 @@ private:
 bool ScopedVclPtrCheck::isVclPtrToVirtualDevice(QualType qType)
 {
     auto check = loplugin::TypeCheck(qType);
-    if (!check.Class("VclPtr").GlobalNamespace())
+    if (!check.TemplateSpecializationClass().Class("VclPtr").GlobalNamespace())
         return false;
 
-    const clang::Type* pType = qType.getTypePtr();
-    if (!pType)
-        return false;
+    const auto* pTemplate = qType->getAs<TemplateSpecializationType>();
+    assert(pTemplate != nullptr);
 
-    const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
-    if (!pRecordDecl)
+    auto const args = pTemplate->template_arguments();
+    if (args.size() < 1)
+    {
+        if (isDebugMode())
+        {
+            report(DiagnosticsEngine::Fatal, "Unexpected VclPtr specialization");
+        }
         return false;
+    }
 
-    const auto* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
-    if (!pTemplate)
-        return false;
-
-    if (pTemplate->getTemplateArgs().size() < 1)
-        return false;
-
-    const TemplateArgument& rArg = pTemplate->getTemplateArgs()[0];
+    const TemplateArgument& rArg = args[0];
     if (rArg.getKind() != TemplateArgument::ArgKind::Type)
+    {
+        if (isDebugMode())
+        {
+            report(DiagnosticsEngine::Fatal, "Unexpected VclPtr specialization");
+        }
         return false;
+    }
 
     return bool(loplugin::TypeCheck(rArg.getAsType()).Class("VirtualDevice").GlobalNamespace());
 }
