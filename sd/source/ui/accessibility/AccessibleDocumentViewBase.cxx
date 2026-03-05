@@ -581,7 +581,7 @@ OUString SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
     if (auto pDrViewSh = dynamic_cast<::sd::DrawViewShell* > (mpViewShell))
     {
         OUString sDisplay;
-        OUString sName = u"page-name:"_ustr;
+        static constexpr OUString sName = u"page-name:"_ustr;
         // MT IA2: Not used...
         // SdPage*  pCurrPge = pDrViewSh->getCurrentPage();
         SdDrawDocument* pDoc = pDrViewSh->GetDoc();
@@ -599,7 +599,6 @@ OUString SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             + ";";
         if(pDrViewSh->IsLayerModeActive() && pDrViewSh->GetLayerTabControl()) // #i87182#
         {
-            sName = "page-name:";
             sValue = sName;
             OUString sLayerName(pDrViewSh->GetLayerTabControl()->GetLayerName(pDrViewSh->GetLayerTabControl()->GetCurPageId()) );
             sDisplay = pDrViewSh->GetLayerTabControl()->GetPageText(pDrViewSh->GetLayerTabControl()->GetCurPageId());
@@ -612,8 +611,7 @@ OUString SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
                     const OUString& layerAltText = aSdrLayer->GetTitle();
                     if (!layerAltText.isEmpty())
                     {
-                        sName = " ";
-                        sDisplay += sName + layerAltText;
+                        sDisplay += u" " + layerAltText;
                     }
                 }
             }
