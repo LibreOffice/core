@@ -1532,6 +1532,24 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf137543XLSX)
         u"_xlfn.LET(_xlpm.first,B5:E15,_xlfn.CHOOSEROWS(_xlpm.first, 1, 3, 5, 7, 9, 11))");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testEmptyPivotFieldsTable)
+{
+    createScDoc("xls/forum-mso-en4-147004.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDoc = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:workbook/x:pivotCaches", 0);
+
+    CPPUNIT_ASSERT_THROW(parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr),
+                         css::container::NoSuchElementException);
+    CPPUNIT_ASSERT_THROW(parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr),
+                         css::container::NoSuchElementException);
+    CPPUNIT_ASSERT_THROW(parseExport(u"xl/pivotCache/pivotCacheRecords1.xml"_ustr),
+                         css::container::NoSuchElementException);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

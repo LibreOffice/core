@@ -144,11 +144,22 @@ XclExpXmlPivotCaches::XclExpXmlPivotCaches( const XclExpRoot& rRoot ) :
 void XclExpXmlPivotCaches::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& pWorkbookStrm = rStrm.GetCurrentStream();
-    pWorkbookStrm->startElement(XML_pivotCaches);
+    bool bStartedPivotCaches = false;
 
     for (size_t i = 0, n = maCaches.size(); i < n; ++i)
     {
         const Entry& rEntry = maCaches[i];
+        const ScDPCache& rCache = *rEntry.mpCache;
+
+        size_t nFieldCount = rCache.GetFieldCount() + rCache.GetGroupFieldCount();
+        if (nFieldCount == 0)
+            continue;
+
+        if (!bStartedPivotCaches)
+        {
+            bStartedPivotCaches = true;
+            pWorkbookStrm->startElement(XML_pivotCaches);
+        }
 
         sal_Int32 nCacheId = i + 1;
         OUString aRelId;
@@ -169,7 +180,8 @@ void XclExpXmlPivotCaches::SaveXml( XclExpXmlStream& rStrm )
         rStrm.PopStream();
     }
 
-    pWorkbookStrm->endElement(XML_pivotCaches);
+    if (bStartedPivotCaches)
+        pWorkbookStrm->endElement(XML_pivotCaches);
 }
 
 void XclExpXmlPivotCaches::SetCaches( std::vector<Entry>&& rCaches )
@@ -672,6 +684,16 @@ void XclExpXmlPivotTables::SaveXml( XclExpXmlStream& rStrm )
         const ScDPObject& rObj = *rTable.mpTable;
         sal_Int32 nCacheId = rTable.mnCacheId;
         sal_Int32 nPivotId = rTable.mnPivotId;
+
+        const XclExpXmlPivotCaches::Entry* pCacheEntry = mrCaches.GetCache(nCacheId);
+        if (!pCacheEntry)
+                continue;
+
+        const ScDPCache& rCache = *pCacheEntry->mpCache;
+
+        size_t nFieldCount = rCache.GetFieldCount() + rCache.GetGroupFieldCount();
+        if (nFieldCount == 0)
+            continue;
 
         sax_fastparser::FSHelperPtr pPivotStrm = rStrm.CreateOutputStream(
             XclXmlUtils::GetStreamName("xl/pivotTables/", "pivotTable", nPivotId),
