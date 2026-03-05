@@ -87,15 +87,31 @@ ScAutoFormatDataField::ScAutoFormatDataField()
 
 ScAutoFormatDataField::ScAutoFormatDataField(const ScAutoFormatDataField& rCopy)
     : SvxAutoFormatDataField(rCopy)
+    , m_aStacked(rCopy.m_aStacked->Clone())
+    , m_aMargin(rCopy.m_aMargin->Clone())
+    , m_aLinebreak(rCopy.m_aLinebreak->Clone())
+    , m_aRotateAngle(rCopy.m_aRotateAngle->Clone())
+    , m_aRotateMode(rCopy.m_aRotateMode->Clone())
 {
 }
 
 ScAutoFormatDataField::ScAutoFormatDataField(const SvxAutoFormatDataField& rCopy)
     : SvxAutoFormatDataField(rCopy)
+    , m_aStacked(std::make_unique<ScVerticalStackCell>(ATTR_STACKED))
+    , m_aMargin(std::make_unique<SvxMarginItem>(ATTR_MARGIN))
+    , m_aLinebreak(std::make_unique<ScLineBreakCell>(ATTR_LINEBREAK))
+    , m_aRotateAngle(std::make_unique<ScRotateValueItem>(0_deg100))
+    , m_aRotateMode(std::make_unique<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE))
 {
 }
 
 ScAutoFormatDataField::~ScAutoFormatDataField() {}
+
+void ScAutoFormatDataField::SetStacked( const SfxBoolItem& rNew ) { m_aStacked.reset(rNew.Clone()); }
+void ScAutoFormatDataField::SetMargin( const SvxMarginItem& rNew ) { m_aMargin.reset(rNew.Clone()); }
+void ScAutoFormatDataField::SetLinebreak( const SfxBoolItem& rNew ) { m_aLinebreak.reset(rNew.Clone()); }
+void ScAutoFormatDataField::SetRotateAngle( const SfxInt32Item& rNew ) { m_aRotateAngle.reset(rNew.Clone()); }
+void ScAutoFormatDataField::SetRotateMode( const SvxRotateModeItem& rNew ) { m_aRotateMode.reset(rNew.Clone()); }
 
 ScAutoFormatData::ScAutoFormatData()
 {

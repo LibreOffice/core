@@ -81,16 +81,8 @@ protected:
     // Writer specific
     std::unique_ptr<SvxAdjustItem>          m_aAdjust;
 
-    // Calc specific
     std::unique_ptr<SvxHorJustifyItem>      m_aHorJustify;
     std::unique_ptr<SvxVerJustifyItem>      m_aVerJustify;
-    std::unique_ptr<SfxBoolItem>            m_aStacked;
-    std::unique_ptr<SvxMarginItem>          m_aMargin;
-    std::unique_ptr<SfxBoolItem>            m_aLinebreak;
-
-    // from SO5, 504k on, rotated text
-    std::unique_ptr<SfxInt32Item>           m_aRotateAngle;
-    std::unique_ptr<SvxRotateModeItem>      m_aRotateMode;
 
     // assignment-op is protected due to this being a tooling
     // class, so callers need to be aware of what they do
@@ -130,11 +122,6 @@ public:
     const SvxAdjustItem     &GetAdjust() const      { return *m_aAdjust; }
     const SvxHorJustifyItem& GetHorJustify() const { return *m_aHorJustify; }
     const SvxVerJustifyItem& GetVerJustify() const { return *m_aVerJustify; }
-    const SfxBoolItem& GetStacked() const { return *m_aStacked; }
-    const SvxMarginItem& GetMargin() const { return *m_aMargin; }
-    const SfxBoolItem& GetLinebreak() const { return *m_aLinebreak; }
-    const SfxInt32Item& GetRotateAngle() const { return *m_aRotateAngle; }
-    const SvxRotateModeItem& GetRotateMode() const { return *m_aRotateMode; }
 
     // The set-methods.
     void SetFont( const SvxFontItem& rNew );
@@ -162,11 +149,6 @@ public:
     void SetAdjust( const SvxAdjustItem& rNew );
     void SetHorJustify( const SvxHorJustifyItem& rNew );
     void SetVerJustify( const SvxVerJustifyItem& rNew );
-    void SetStacked( const SfxBoolItem& rNew );
-    void SetMargin( const SvxMarginItem& rNew );
-    void SetLinebreak( const SfxBoolItem& rNew );
-    void SetRotateAngle( const SfxInt32Item& rNew );
-    void SetRotateMode( const SvxRotateModeItem& rNew );
 
 
 };

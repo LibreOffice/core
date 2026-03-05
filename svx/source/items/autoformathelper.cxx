@@ -67,11 +67,6 @@ void AutoFormatBase::SetBackground( const SvxBrushItem& rNew )      { m_aBackgro
 void AutoFormatBase::SetAdjust( const SvxAdjustItem& rNew )         { m_aAdjust.reset(rNew.Clone()); }
 void AutoFormatBase::SetHorJustify( const SvxHorJustifyItem& rNew ) { m_aHorJustify.reset(rNew.Clone()); }
 void AutoFormatBase::SetVerJustify( const SvxVerJustifyItem& rNew ) { m_aVerJustify.reset(rNew.Clone()); }
-void AutoFormatBase::SetStacked( const SfxBoolItem& rNew ) { m_aStacked.reset(rNew.Clone()); }
-void AutoFormatBase::SetMargin( const SvxMarginItem& rNew ) { m_aMargin.reset(rNew.Clone()); }
-void AutoFormatBase::SetLinebreak( const SfxBoolItem& rNew ) { m_aLinebreak.reset(rNew.Clone()); }
-void AutoFormatBase::SetRotateAngle( const SfxInt32Item& rNew ) { m_aRotateAngle.reset(rNew.Clone()); }
-void AutoFormatBase::SetRotateMode( const SvxRotateModeItem& rNew ) { m_aRotateMode.reset(rNew.Clone()); }
 
 AutoFormatBase::AutoFormatBase()
 {
@@ -102,12 +97,7 @@ AutoFormatBase::AutoFormatBase( const AutoFormatBase& rNew )
     m_aBackground(rNew.m_aBackground->Clone()),
     m_aAdjust(rNew.m_aAdjust->Clone()),
     m_aHorJustify(rNew.m_aHorJustify->Clone()),
-    m_aVerJustify(rNew.m_aVerJustify->Clone()),
-    m_aStacked(rNew.m_aStacked->Clone()),
-    m_aMargin(rNew.m_aMargin->Clone()),
-    m_aLinebreak(rNew.m_aLinebreak->Clone()),
-    m_aRotateAngle(rNew.m_aRotateAngle->Clone()),
-    m_aRotateMode(rNew.m_aRotateMode->Clone())
+    m_aVerJustify(rNew.m_aVerJustify->Clone())
 {
 }
 
@@ -149,11 +139,6 @@ AutoFormatBase& AutoFormatBase::operator=(const AutoFormatBase& rRef)
     SetAdjust(rRef.GetAdjust());
     SetHorJustify(rRef.GetHorJustify());
     SetVerJustify(rRef.GetVerJustify());
-    SetStacked(rRef.GetStacked());
-    SetMargin(rRef.GetMargin());
-    SetLinebreak(rRef.GetLinebreak());
-    SetRotateAngle(rRef.GetRotateAngle());
-    SetRotateMode(rRef.GetRotateMode());
 
     return *this;
 }

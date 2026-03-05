@@ -24,18 +24,40 @@
 #include <svx/TableStylesParser.hxx>
 #include "scdllapi.h"
 
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svx/algitem.hxx>
+#include <svx/rotmodit.hxx>
+
 #include <array>
 #include <memory>
 #include "document.hxx"
 
 class ScAutoFormatDataField : public SvxAutoFormatDataField
 {
+    std::unique_ptr<SfxBoolItem> m_aStacked;
+    std::unique_ptr<SvxMarginItem> m_aMargin;
+    std::unique_ptr<SfxBoolItem> m_aLinebreak;
+    std::unique_ptr<SfxInt32Item> m_aRotateAngle;
+    std::unique_ptr<SvxRotateModeItem> m_aRotateMode;
+
 public:
     ScAutoFormatDataField();
     ScAutoFormatDataField(const ScAutoFormatDataField& rCopy);
     ScAutoFormatDataField(const SvxAutoFormatDataField& rCopy);
     ~ScAutoFormatDataField();
 
+    const SfxBoolItem& GetStacked() const { return *m_aStacked; }
+    const SvxMarginItem& GetMargin() const { return *m_aMargin; }
+    const SfxBoolItem& GetLinebreak() const { return *m_aLinebreak; }
+    const SfxInt32Item& GetRotateAngle() const { return *m_aRotateAngle; }
+    const SvxRotateModeItem& GetRotateMode() const { return *m_aRotateMode; }
+
+    void SetStacked( const SfxBoolItem& rNew );
+    void SetMargin( const SvxMarginItem& rNew );
+    void SetLinebreak( const SfxBoolItem& rNew );
+    void SetRotateAngle( const SfxInt32Item& rNew );
+    void SetRotateMode( const SvxRotateModeItem& rNew );
 };
 
 class SAL_DLLPUBLIC_RTTI ScAutoFormatData : public SvxAutoFormatData
