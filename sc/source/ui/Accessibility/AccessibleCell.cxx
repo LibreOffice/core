@@ -42,6 +42,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <editeng/brushitem.hxx>
+#include <vcl/accessibility/AccessibleAttribute.hxx>
 #include <vcl/svapp.hxx>
 
 #include <AccessibleSpreadsheet.hxx>
@@ -465,16 +466,11 @@ static OUString ReplaceFourChar(const OUString& oldOUString)
 
 std::unordered_map<OUString, OUString> ScAccessibleCell::implGetExtendedAttributes()
 {
-    std::unordered_map<OUString, OUString> aAttributes;
-
-    // report row and column index text via attributes as specified in ARIA which map
-    // to attributes of the same name for AT-SPI2, IAccessible2, UIA
-    // https://www.w3.org/TR/core-aam-1.2/#ariaRowIndexText
-    // https://www.w3.org/TR/core-aam-1.2/#ariaColIndexText
     const OUString sRowIndexText = maCellAddress.Format(ScRefFlags::ROW_VALID);
     const OUString sColIndexText = maCellAddress.Format(ScRefFlags::COL_VALID);
-    aAttributes.emplace(u"rowindextext"_ustr, sRowIndexText);
-    aAttributes.emplace(u"colindextext"_ustr, sColIndexText);
+    std::unordered_map<OUString, OUString> aAttributes
+        = { { AccessibleAttribute::RowIndexText, sRowIndexText },
+            { AccessibleAttribute::ColIndexText, sColIndexText } };
 
     if (mpViewShell)
     {
