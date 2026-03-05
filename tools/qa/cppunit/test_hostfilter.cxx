@@ -52,6 +52,7 @@ void TestHostFilter::testEmptyAllowlist()
     HostFilter::setAllowedExtRefPaths("");
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///home/user/doc.ods"_ustr));
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///tmp/doc.ods"_ustr));
+    HostFilter::resetAllowedExtRefPaths();
 }
 
 void TestHostFilter::testNonFileUrl()
@@ -61,6 +62,7 @@ void TestHostFilter::testNonFileUrl()
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"http://example.com/doc.ods"_ustr));
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"https://example.com/doc.ods"_ustr));
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"ftp://example.com/doc.ods"_ustr));
+    HostFilter::resetAllowedExtRefPaths();
 }
 
 void TestHostFilter::testAllowedPath()
@@ -72,6 +74,7 @@ void TestHostFilter::testAllowedPath()
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"file:///tmp/docs/sub/sheet.ods"_ustr));
     // file outside allowed directory is blocked
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///home/user/doc.ods"_ustr));
+    HostFilter::resetAllowedExtRefPaths();
 }
 
 void TestHostFilter::testSiblingDirectoryNotAllowed()
@@ -81,6 +84,7 @@ void TestHostFilter::testSiblingDirectoryNotAllowed()
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"file:///tmp/user/doc.ods"_ustr));
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///tmp/username/doc.ods"_ustr));
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///tmp/usera/doc.ods"_ustr));
+    HostFilter::resetAllowedExtRefPaths();
 }
 
 void TestHostFilter::testParentDirectoryNotAllowed()
@@ -90,6 +94,7 @@ void TestHostFilter::testParentDirectoryNotAllowed()
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///tmp/secret.ods"_ustr));
     // unrelated path is not allowed
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///var/data/doc.ods"_ustr));
+    HostFilter::resetAllowedExtRefPaths();
 }
 
 void TestHostFilter::testMultiplePaths()
@@ -99,6 +104,7 @@ void TestHostFilter::testMultiplePaths()
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"file:///tmp/a/doc.ods"_ustr));
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"file:///tmp/b/doc.ods"_ustr));
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///tmp/c/doc.ods"_ustr));
+    HostFilter::resetAllowedExtRefPaths();
 }
 
 void TestHostFilter::testEncodedFileUrl()
@@ -109,6 +115,7 @@ void TestHostFilter::testEncodedFileUrl()
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"file:///tmp/my%20docs/sub/sheet.ods"_ustr));
     // encoded URL outside allowed path is still blocked
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///tmp/other%20docs/sheet.ods"_ustr));
+    HostFilter::resetAllowedExtRefPaths();
 }
 
 void TestHostFilter::testParentDirectorySegments()
@@ -118,6 +125,7 @@ void TestHostFilter::testParentDirectorySegments()
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///tmp/docs/../other/sheet.ods"_ustr));
     // .. segments that stay within the allowed directory are permitted
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"file:///tmp/docs/sub/../sheet.ods"_ustr));
+    HostFilter::resetAllowedExtRefPaths();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestHostFilter);
