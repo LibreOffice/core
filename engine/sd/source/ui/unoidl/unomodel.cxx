@@ -2049,15 +2049,17 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 namespace
 {
 /// Serializes Draw/Impress slide to JSON primitives.
+/// nPart selects the page (0-based); when -1, the current view page is used.
 class VectorContentWriter
 {
     static constexpr double constTwipConversionFactor
         = o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip);
 
 public:
-    VectorContentWriter(SdDrawDocument* pDocument, SdXImpressDocument* pModel)
+    VectorContentWriter(SdDrawDocument* pDocument, SdXImpressDocument* pModel, sal_Int32 nPart = -1)
         : mpDocument(pDocument)
         , mpModel(pModel)
+        , mnPart(nPart)
     {
     }
 
@@ -2077,26 +2079,35 @@ private:
     SdPage* resolveCurrentPage()
     {
         sal_uInt16 nCurrentPage = 0;
-        DrawViewShell* pViewSh
-            = mpModel->GetDocShell()
-                  ? dynamic_cast<DrawViewShell*>(mpModel->GetDocShell()->GetViewShell())
-                  : nullptr;
-        if (pViewSh)
+        if (mnPart >= 0)
         {
-            SdPage* pActualPage = pViewSh->GetActualPage();
-            if (pActualPage)
+            nCurrentPage = static_cast<sal_uInt16>(mnPart);
+        }
+        else
+        {
+            // Fall back to the active view page
+            DrawViewShell* pViewSh = mpModel->GetDocShell()
+                ? dynamic_cast<DrawViewShell*>(mpModel->GetDocShell()->GetViewShell())
+                : nullptr;
+            if (pViewSh)
             {
-                // In Impress there are slide and then notes pages interleaved.
-                // We are interested only in slides for now.
-                nCurrentPage = (pActualPage->GetPageNum() - 1) / 2;
+                SdPage* pActualPage = pViewSh->GetActualPage();
+                if (pActualPage)
+                {
+                    // In Impress there are slide and then notes pages interleaved.
+                    // We are interested only in slides for now.
+                    nCurrentPage = (pActualPage->GetPageNum() - 1) / 2;
+                }
             }
         }
+        mnResolvedPage = nCurrentPage;
         return mpDocument->GetSdPage(nCurrentPage, PageKind::Standard);
     }
 
-    static void writeHeader(tools::JsonWriter& rWriter, SdPage* pPage)
+    void writeHeader(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         rWriter.put("type", "vectortile");
+        rWriter.put("part", sal_Int32(mnResolvedPage));
 
         rWriter.put("slideWidth",
                     static_cast<sal_Int64>(pPage->GetWidth() * constTwipConversionFactor));
@@ -2204,6 +2215,8 @@ private:
 
     SdDrawDocument* mpDocument;
     SdXImpressDocument* mpModel;
+    sal_Int32 mnPart;
+    sal_uInt16 mnResolvedPage = 0;
     std::optional<drawinglayer::Primitive2dJsonProcessor> maProcessor;
 };
 
@@ -2232,9 +2245,14 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
     }
     else if (o3tl::starts_with(rCommand, aVectorTile))
     {
+        sal_Int32 nPart = -1;
+        auto it = aMap.find(u"part"_ustr);
+        if (it != aMap.end())
+            nPart = it->second.toInt32();
+
         if (mpDoc)
         {
-            VectorContentWriter aContentWriter(mpDoc, this);
+            VectorContentWriter aContentWriter(mpDoc, this, nPart);
             aContentWriter.write(rJsonWriter);
         }
     }
