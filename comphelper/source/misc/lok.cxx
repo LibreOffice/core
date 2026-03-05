@@ -18,6 +18,7 @@
 #ifdef _WIN32
 #include <tools/UnixWrappers.h>
 #endif
+#include <vcl/task.hxx>
 
 #include <iostream>
 
@@ -33,6 +34,8 @@ static bool g_bForkedChild(false);
 static bool g_bPartInInvalidation(false);
 
 static bool g_bTiledPainting(false);
+
+static bool g_bIdleLayouting(false);
 
 static bool g_bDialogPainting(false);
 
@@ -154,6 +157,11 @@ void setTiledPainting(bool bTiledPainting)
 bool isTiledPainting()
 {
     return g_bTiledPainting;
+}
+
+void setIdleLayouting(bool bIdleLayouting)
+{
+    g_bIdleLayouting = bIdleLayouting;
 }
 
 void setDialogPainting(bool bDialogPainting)
@@ -371,7 +379,18 @@ bool anyInput()
     // Ignore input events during background save.
     if (!g_bForkedChild && g_pAnyInputCallback && g_pAnyInputCallbackData)
     {
-        int nMostUrgentPriority = g_pMostUrgentPriorityGetter();
+        int nMostUrgentPriority;
+        if (g_bIdleLayouting)
+        {
+            // Report idle priority instead of querying the scheduler.  Various unrelated tasks
+            // (timers, paint idles) may be queued at high priority, which would cause the LOK
+            // client to not interrupt, preventing the idle layout from stopping.
+            nMostUrgentPriority = static_cast<int>(TaskPriority::DEFAULT_IDLE);
+        }
+        else
+        {
+            nMostUrgentPriority = g_pMostUrgentPriorityGetter();
+        }
         bRet = g_pAnyInputCallback(g_pAnyInputCallbackData, nMostUrgentPriority);
     }
 

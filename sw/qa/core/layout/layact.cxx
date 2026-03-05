@@ -10,8 +10,11 @@
 #include <swmodeltestbase.hxx>
 
 #include <vcl/scheduler.hxx>
+#include <vcl/idle.hxx>
+#include <comphelper/lok.hxx>
 
 #include <IDocumentLayoutAccess.hxx>
+#include <unotxdoc.hxx>
 #include <anchoredobject.hxx>
 #include <docsh.hxx>
 #include <flyfrm.hxx>
@@ -129,6 +132,78 @@ CPPUNIT_TEST_FIXTURE(Test, testBadSplitSection)
     // Without the fix in place, it would have failed, the section was split between page 1 and page
     // 2.
     CPPUNIT_ASSERT(!pSection->GetFollow());
+}
+
+/// anyInput callback that doesn't interrupt for high-priority tasks.
+class PriorityAwareAnyInputCallback final
+{
+public:
+    static bool callback(void* /*pData*/, int nPriority)
+    {
+        // Only interrupt if all ready tasks are low priority.
+        return nPriority < 0 || nPriority > static_cast<int>(TaskPriority::REPAINT);
+    }
+
+    PriorityAwareAnyInputCallback()
+    {
+        comphelper::LibreOfficeKit::setAnyInputCallback(&callback, this,
+                                                        Scheduler::GetMostUrgentTaskPriority);
+    }
+
+    ~PriorityAwareAnyInputCallback()
+    {
+        comphelper::LibreOfficeKit::setAnyInputCallback(nullptr, nullptr,
+                                                        []() -> int { return -1; });
+    }
+};
+
+CPPUNIT_TEST_FIXTURE(Test, testIdleLayoutingAnyInput)
+{
+    // Set up LOK:
+    comphelper::LibreOfficeKit::setActive(true);
+
+    // Given a document with 3 pages, the first page is visible:
+    createSwDoc();
+    getSwTextDoc()->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+    pWrtShell->InsertPageBreak();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    SwPageFrame* pPage1 = pLayout->GetLower()->DynCastPageFrame();
+    pWrtShell->setLOKVisibleArea(pPage1->getFrameArea().SVRect());
+    // Visible page is calculated, the rest is not:
+    pWrtShell->StartAllAction();
+    pPage1->InvalidateContent();
+    SwPageFrame* pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    pPage2->InvalidateContent();
+    SwPageFrame* pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    pPage3->InvalidateContent();
+    pWrtShell->EndAllAction();
+    CPPUNIT_ASSERT(!pPage1->IsInvalidContent());
+    CPPUNIT_ASSERT(pPage2->IsInvalidContent());
+    CPPUNIT_ASSERT(pPage3->IsInvalidContent());
+
+    // When idle layout runs and we have a scheduled high priority task together with an any input
+    // callback:
+    Idle aHighPrioTask("test task");
+    aHighPrioTask.SetPriority(TaskPriority::DEFAULT);
+    aHighPrioTask.Start();
+    PriorityAwareAnyInputCallback aAnyInput;
+    pWrtShell->LayoutIdle();
+
+    // Then make sure async layout calculates page 2 but stops before page 3:
+    CPPUNIT_ASSERT(!pPage1->IsInvalidContent());
+    CPPUNIT_ASSERT(!pPage2->IsInvalidContent());
+    // Without the fix in place, the idle layout would calculate all pages because the
+    // high-priority task caused the any input callback not to interrupt.
+    CPPUNIT_ASSERT(pPage3->IsInvalidContent());
+
+    // Tear down LOK:
+    aHighPrioTask.Stop();
+    Scheduler::ProcessEventsToIdle();
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 }
 
