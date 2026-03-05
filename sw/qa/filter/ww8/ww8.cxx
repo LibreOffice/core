@@ -639,6 +639,13 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownEmptyItem)
     assertXPath(pXmlDoc, "//w:dropDownList/w:listItem", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testOfzDelflyinrange)
+{
+    // Without the fix in place,
+    // loading the document would crash in DelFlyInRange.
+    createSwDoc("ofz-delflyinrange-1.doc");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, tdf71749_with_footnote)
 {
     // Without the fix in place,
