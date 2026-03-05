@@ -143,6 +143,7 @@ public:
 
     // OAccessible
     virtual css::awt::Rectangle implGetBounds() override;
+    virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes() override;
 
     //=====  XAccessibleComponent  ============================================
 
@@ -190,8 +191,6 @@ public:
 
     virtual void SAL_CALL focusGained (const css::awt::FocusEvent& e) override;
     virtual void SAL_CALL focusLost (const css::awt::FocusEvent& e) override;
-    //----------------------------xAttribute----------------------------
-    virtual OUString SAL_CALL getExtendedAttributes() override;
      ::sd::ViewShell* mpViewShell;
 private:
 
