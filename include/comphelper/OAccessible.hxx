@@ -94,7 +94,7 @@ public:
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
     // XAccessibleExtendedAttributes
-    virtual OUString SAL_CALL getExtendedAttributes() override;
+    virtual OUString SAL_CALL getExtendedAttributes() override final;
 
 protected:
     // OComponentHelper
