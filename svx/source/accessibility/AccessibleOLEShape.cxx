@@ -71,13 +71,12 @@ Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActio
     throw lang::IndexOutOfBoundsException();
 }
 
-// XAccessibleExtendedAttributes
-OUString SAL_CALL AccessibleOLEShape::getExtendedAttributes()
+std::unordered_map<OUString, OUString> AccessibleOLEShape::implGetExtendedAttributes()
 {
-    if (m_pShape)
-        return "style:" + static_cast<SdrOle2Obj*>(m_pShape)->GetStyleString() + ";";
+    if (!m_pShape)
+        return {};
 
-    return OUString();
+    return { { u"style"_ustr, static_cast<SdrOle2Obj*>(m_pShape)->GetStyleString() } };
 }
 
 /// Set this object's name if is different to the current name.

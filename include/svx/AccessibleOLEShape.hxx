@@ -59,9 +59,9 @@ public:
         css::accessibility::XAccessibleKeyBinding> SAL_CALL getAccessibleActionKeyBinding (
             sal_Int32 nIndex) override;
 
-// ====== XAccessibleExtendedAttributes =====================================
-    virtual OUString SAL_CALL getExtendedAttributes() override;
 protected:
+    virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes() override;
+
     /// Create a name string that contains the accessible name.
     virtual OUString
         CreateAccessibleBaseName () override;
