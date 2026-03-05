@@ -30,6 +30,7 @@
 #include <svl/cintitem.hxx>
 #include <svl/stritem.hxx>
 #include <fmtanchr.hxx>
+#include <fmtcntnt.hxx>
 #include <fmtfld.hxx>
 #include <redline.hxx>
 #include <pam.hxx>
@@ -497,6 +498,25 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             if (pFormat != nullptr)
             {
                 MakePoint(rEntry, aRegion);
+                // Check that the anchor is not inside its own content section, causing infinite
+                // regress in DelFlyInRange.
+                const SwNodeIndex* pContentIdx = pFormat->GetContent().GetContentIdx();
+                if (pContentIdx && pFormat->Which() == RES_FLYFRMFMT)
+                {
+                    SwNodeOffset nAnchor = aRegion.GetPoint()->GetNodeIndex();
+                    SwNodeOffset nContentStart = pContentIdx->GetIndex();
+                    SwNodeOffset nContentEnd = pContentIdx->GetNode().EndOfSectionNode()->GetIndex();
+                    if (nAnchor > nContentStart && nAnchor < nContentEnd)
+                    {
+                        SAL_WARN("sw", "fly frame anchored to its own content");
+                        // Move the PaM out of the fly content before deleting, anywhere else
+                        // will presumably do
+                        aRegion.DeleteMark();
+                        *aRegion.GetPoint() = rTmpPos;
+                        m_rDoc.getIDocumentLayoutAccess().DelLayoutFormat(pFormat);
+                        break;
+                    }
+                }
                 SwFormatAnchor aAnchor(pFormat->GetAnchor());
                 aAnchor.SetAnchor(aRegion.GetPoint());
                 pFormat->SetFormatAttr(aAnchor);
