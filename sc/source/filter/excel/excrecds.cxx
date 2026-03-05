@@ -18,6 +18,7 @@
  */
 
 #include <excrecds.hxx>
+#include <export/ExportTools.hxx>
 
 #include <map>
 #include <filter/msfilter/countryid.hxx>
@@ -894,23 +895,8 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             // CT_DateGroupItems
             for (const auto& rDateValue : maDateValues)
             {
-                OString aStr = OUStringToOString(rDateValue, RTL_TEXTENCODING_UTF8);
-                rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
-                sal_Int32 aDateGroup[3] = { XML_year, XML_month, XML_day };
-                sal_Int32 idx = 0;
-                for (size_t i = 0; idx >= 0 && i < 3; i++)
-                {
-                    OString kw = aStr.getToken(0, '-', idx);
-                    kw = kw.trim();
-                    if (!kw.isEmpty())
-                    {
-                        pAttrList->add(aDateGroup[i], kw);
-                    }
-                }
-                // TODO: date filter can only handle YYYY-MM-DD date formats, so XML_dateTimeGrouping value
-                // will be "day" as default, until date filter cannot handle HH:MM:SS.
-                pAttrList->add(XML_dateTimeGrouping, "day");
-                rWorksheet->singleElement(XML_dateGroupItem, pAttrList);
+                OString aDateString = OUStringToOString(rDateValue, RTL_TEXTENCODING_UTF8);
+                oox::xls::writeDateGroupItem(rWorksheet, XML_dateGroupItem, aDateString);
             }
             rWorksheet->endElement(XML_filters);
         }
