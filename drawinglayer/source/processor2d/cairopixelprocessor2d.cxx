@@ -3781,8 +3781,13 @@ void CairoPixelProcessor2D::renderTextBackground(
     basegfx::BColor aFillColor(getFillColor(rTextCandidate.getTextFillColor().getBColor()));
     aFillColor = maBColorModifierStack.getModifiedColor(aFillColor);
     cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(), aFillColor.getBlue());
+    // Disable anti-aliasing so adjacent background rectangles share exact pixel
+    // edges with no visible seam between them.
+    cairo_antialias_t eOldAA = cairo_get_antialias(mpRT);
+    cairo_set_antialias(mpRT, CAIRO_ANTIALIAS_NONE);
     cairo_rectangle(mpRT, 0.0, -fAscent, fTextWidth, fAscent + fDescent);
     cairo_fill(mpRT);
+    cairo_set_antialias(mpRT, eOldAA);
     cairo_restore(mpRT);
 }
 
