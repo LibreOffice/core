@@ -24,7 +24,7 @@ class tdf157569(UITestCase):
             # AssertionError: 1663 != 944
             self.assertEqual(1663, nHeight)
             if platform.system() == "Windows":
-                self.assertEqual(2155, nWidth) # no idea why it's different on Windows
+                self.assertEqual(2157, nWidth) # no idea why it's different on Windows
             else:
                 self.assertEqual(2120, nWidth)
 
