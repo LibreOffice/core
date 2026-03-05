@@ -33,6 +33,10 @@ public:
     /// "block all file URLs"
     static void setAllowedExtRefPaths(const char* sPaths);
 
+    /// Reset AllowedExtRefPaths as if it was never called, back to
+    /// default allow all state.
+    static void resetAllowedExtRefPaths();
+
     /// Return true when rFileUrl is a file:// URL that is outside any
     /// directory registered with setAllowedExtRefPaths. Non-file URLs
     /// are always allowed.

@@ -56,6 +56,12 @@ bool HostFilter::isExemptVerifyHost(const std::u16string_view rHost)
 static bool g_AllowedExtRefPathsConfigured = false;
 static std::vector<OUString> g_AllowedExtRefPaths;
 
+void HostFilter::resetAllowedExtRefPaths()
+{
+    g_AllowedExtRefPaths.clear();
+    g_AllowedExtRefPathsConfigured = false;
+}
+
 void HostFilter::setAllowedExtRefPaths(const char* sPaths)
 {
     g_AllowedExtRefPathsConfigured = true;
