@@ -77,7 +77,7 @@ CellLineStylePopup::~CellLineStylePopup()
 {
 }
 
-VclPtr<VirtualDevice> CellLineStylePopup::CreateImage(int nIndex)
+ScopedVclPtr<VirtualDevice> CellLineStylePopup::CreateImage(int nIndex)
 {
     VclPtr<VirtualDevice> pDev = mxCellLineStyleTreeView->create_virtual_device();
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
