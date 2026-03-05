@@ -299,10 +299,8 @@ uno::Any SwAccessibleCell::getMinimumIncrement(  )
     return uno::Any();
 }
 
-OUString SAL_CALL SwAccessibleCell::getExtendedAttributes()
+std::unordered_map<OUString, OUString> SwAccessibleCell::implGetExtendedAttributes()
 {
-    SolarMutexGuard g;
-
     SwFrameFormat *pFrameFormat = GetTableBoxFormat();
     assert(pFrameFormat);
 
@@ -310,7 +308,7 @@ OUString SAL_CALL SwAccessibleCell::getExtendedAttributes()
 
     OUString sFormula = tbl_formula.GetFormula();
     if (sFormula.isEmpty())
-        return OUString();
+        return {};
 
     // ensure the use of readable cell references (like "<A1>") instead of internal pointers
     if (const SwTabFrame* pTabFrame = m_pAccTable ? m_pAccTable->GetTabFrame() : nullptr)
@@ -328,7 +326,7 @@ OUString SAL_CALL SwAccessibleCell::getExtendedAttributes()
                    .replaceAll(u"=", u"\\=")
                    .replaceAll(u",", u"\\,")
                    .replaceAll(u":", u"\\:");
-    return "Formula:" + sFormula + ";";
+    return { { u"Formula"_ustr, sFormula } };
 }
 
 sal_Int32 SAL_CALL SwAccessibleCell::getBackground()

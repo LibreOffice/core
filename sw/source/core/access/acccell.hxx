@@ -44,6 +44,8 @@ class SwAccessibleCell : public SwAccessibleCell_BASE
     rtl::Reference<SwAccessibleTable> m_pAccTable;
 
 protected:
+    virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes() override;
+
     // Set states for getAccessibleStateSet.
     // This derived class additionally sets SELECTABLE(1) and SELECTED(+)
     virtual void GetStates( sal_Int64& rStateSet ) override;
@@ -68,8 +70,6 @@ public:
 
     virtual void InvalidatePosOrSize( const SwRect& rFrame ) override;
 
-    // XAccessibleExtendedAttributes
-    OUString SAL_CALL getExtendedAttributes() override;
 private:
     const SwCellFrame& GetCellFrame() const;
     SwFrameFormat* GetTableBoxFormat() const;
