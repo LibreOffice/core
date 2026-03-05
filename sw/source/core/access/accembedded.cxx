@@ -43,25 +43,23 @@ OUString SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
 {
     SolarMutexGuard g;
 
-    OUString style;
     SwFlyFrame* pFFrame = getFlyFrame();
+    if (!pFFrame)
+        return {};
 
-    if (pFFrame)
+    OUString style = "style:";
+    SwContentFrame* pCFrame;
+    pCFrame = pFFrame->ContainsContent();
+    if (pCFrame)
     {
-        style = "style:";
-        SwContentFrame* pCFrame;
-        pCFrame = pFFrame->ContainsContent();
-        if (pCFrame)
+        assert(pCFrame->IsNoTextFrame());
+        SwContentNode* const pCNode = static_cast<SwNoTextFrame*>(pCFrame)->GetNode();
+        if (pCNode)
         {
-            assert(pCFrame->IsNoTextFrame());
-            SwContentNode* const pCNode = static_cast<SwNoTextFrame*>(pCFrame)->GetNode();
-            if (pCNode)
-            {
-                style += static_cast<SwOLENode*>(pCNode)->GetOLEObj().GetStyleString();
-            }
+            style += static_cast<SwOLENode*>(pCNode)->GetOLEObj().GetStyleString();
         }
-        style += ";";
     }
+    style += ";";
     return style;
 }
 
