@@ -16,6 +16,8 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <comphelper/OAccessible.hxx>
+#include <vcl/accessibility/AccessibleAttribute.hxx>
+
 #include <unx/gtk/gtkframe.hxx>
 #include <gtk/gtk.h>
 #include <o3tl/string_view.hxx>
@@ -343,7 +345,7 @@ static void applyObjectAttribute(GtkAccessible* pGtkAccessible, std::u16string_v
 {
     assert(pGtkAccessible);
 
-    if (rName == u"colindextext")
+    if (rName == AccessibleAttribute::ColIndexText)
     {
         gtk_accessible_update_relation(pGtkAccessible, GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT,
                                        rValue.toUtf8().getStr(), -1);
@@ -353,7 +355,7 @@ static void applyObjectAttribute(GtkAccessible* pGtkAccessible, std::u16string_v
         const int nLevel = o3tl::toInt32(rValue);
         gtk_accessible_update_property(pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_LEVEL, nLevel, -1);
     }
-    else if (rName == u"rowindextext")
+    else if (rName == AccessibleAttribute::RowIndexText)
     {
         gtk_accessible_update_relation(pGtkAccessible, GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT,
                                        rValue.toUtf8().getStr(), -1);
