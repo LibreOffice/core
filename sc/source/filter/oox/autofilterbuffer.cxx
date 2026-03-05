@@ -731,11 +731,16 @@ void AutoFilter::finalizeImport(const rtl::Reference<ScDatabaseRangeObj>& rxData
         return;
 
     // set some common properties for the auto filter range
-    xFilterDesc->setPropertyValue(u"IsCaseSensitive"_ustr, css::uno::Any(false));
-    xFilterDesc->setPropertyValue(u"SkipDuplicates"_ustr, css::uno::Any(false));
-    xFilterDesc->setPropertyValue(u"Orientation"_ustr, css::uno::Any(TableOrientation_ROWS));
-    xFilterDesc->setPropertyValue(u"ContainsHeader"_ustr, css::uno::Any(true));
-    xFilterDesc->setPropertyValue(u"SaveOutputPosition"_ustr, css::uno::Any(false));
+    ScQueryParam aQueryParam1;
+    xFilterDesc->GetData(aQueryParam1);
+
+    aQueryParam1.bCaseSens = false;
+    aQueryParam1.bDuplicate = true;
+    aQueryParam1.bByRow = true;
+    aQueryParam1.bHasHeader = true;
+    aQueryParam1.bDestPers = false;
+
+    xFilterDesc->PutData(aQueryParam1);
 
     // resulting list of all UNO API filter fields
     ::std::vector<TableFilterField3> aFilterFields;
@@ -914,12 +919,18 @@ void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
     // set some common properties for the filter descriptor
     ScDocShell* pDocSh = getScDocument().GetDocumentShell();
     rtl::Reference<ScRangeFilterDescriptor> xFilterDesc = new ScRangeFilterDescriptor(pDocSh, xDatabaseRange.get());
-    xFilterDesc->setPropertyValue(u"IsCaseSensitive"_ustr, css::uno::Any(false));
-    xFilterDesc->setPropertyValue(u"SkipDuplicates"_ustr, css::uno::Any(false));
-    xFilterDesc->setPropertyValue(u"Orientation"_ustr, css::uno::Any(TableOrientation_ROWS));
-    xFilterDesc->setPropertyValue(u"ContainsHeader"_ustr, css::uno::Any(true));
+
+    ScQueryParam aQueryParam2;
+    xFilterDesc->GetData(aQueryParam2);
+
+    aQueryParam2.bCaseSens = false;
+    aQueryParam2.bDuplicate = true;
+    aQueryParam2.bByRow = true;
+    aQueryParam2.bHasHeader = true;
     // criteria range may contain wildcards, but these are incompatible with REs
-    xFilterDesc->setPropertyValue(u"RegularExpressions"_ustr, css::uno::Any(false));
+    aQueryParam2.eSearchType = utl::SearchParam::SearchType::Normal;
+
+    xFilterDesc->PutData(aQueryParam2);
 
     // position of output data (if built-in defined name 'Extract' exists)
     DefinedNameRef xExtractName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_EXTRACT, nSheet );
