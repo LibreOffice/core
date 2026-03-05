@@ -3473,6 +3473,8 @@ void set_message_type(Edit* pEntry, weld::EntryMessageType eType)
 
 void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
 {
+    if (m_xEntry->isDisposed())
+        return;
     ::set_message_type(m_xEntry, eType);
 }
 
