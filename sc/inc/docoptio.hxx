@@ -38,6 +38,7 @@ class SC_DLLPUBLIC ScDocOptions
     bool       bIsIgnoreCase;           ///< ignore case for comparisons?
     bool       bIsIter;                 ///< iterations for circular refs
     bool       bCalcAsShown;            ///< calculate as shown (wrt precision)
+    bool       bIgnoreLineBreaks;       ///< ignore line breaks when referencing cells, default is false.
     bool       bMatchWholeCell;         ///< search criteria must match the whole cell
     bool       bLookUpColRowNames;      ///< determine column-/row titles automagically
     mutable bool bFormulaRegexEnabled;    ///< regular expressions in formulas enabled, only when reading settings
@@ -53,6 +54,8 @@ public:
     void   SetMatchWholeCell( bool bVal )   { bMatchWholeCell = bVal; }
     bool   IsIgnoreCase() const             { return bIsIgnoreCase; }
     void   SetIgnoreCase( bool bVal )       { bIsIgnoreCase = bVal; }
+    bool   IsIgnoreLineBreaks() const       { return bIgnoreLineBreaks; }
+    void   SetIgnoreLineBreaks( bool bVal ) { bIgnoreLineBreaks = bVal; }
     bool   IsIter() const                   { return bIsIter; }
     void   SetIter( bool bVal )             { bIsIter = bVal; }
     sal_uInt16 GetIterCount() const         { return nIterCount; }

@@ -128,6 +128,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     aDocOpt.SetFormulaRegexEnabled( false );    // regular expressions? what's that?
     aDocOpt.SetFormulaWildcardsEnabled( true ); // Excel uses wildcard expressions
     aDocOpt.SetLookUpColRowNames( false );      // default: no natural language refs
+    aDocOpt.SetIgnoreLineBreaks( true );        // for .xls documents
     rD.SetDocOptions( aDocOpt );
 }
 

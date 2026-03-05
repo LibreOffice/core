@@ -250,6 +250,21 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, const ScRefCellValue
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
             rStr = rCell.getSharedString(mrDoc, mrStrPool);
+
+            // Excel ignores line breaks in cell references, so remove them if the option is set.
+            if (mrDoc.GetDocOptions().IsIgnoreLineBreaks())
+            {
+                const OUString& aOrigStr = rStr.getString();
+                sal_Int32 nLen = aOrigStr.getLength();
+                OUStringBuffer aBuf(nLen);
+                for (sal_Int32 i = 0; i < nLen; ++i)
+                {
+                    sal_Unicode c = aOrigStr[i];
+                    if (c != '\n' && c != '\r')
+                        aBuf.append(c);
+                }
+                rStr = mrStrPool.intern(aBuf.makeStringAndClear());
+            }
         break;
         case CELLTYPE_FORMULA:
         {
