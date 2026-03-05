@@ -178,16 +178,34 @@ SwBoxAutoFormat::~SwBoxAutoFormat() {}
 
 SwBoxAutoFormat& SwBoxAutoFormat::operator=(const SwBoxAutoFormat& rRef)
 {
-    // check self-assignment
     if (this == &rRef)
-    {
         return *this;
-    }
 
-    // call baseclass implementation
-    AutoFormatBase::operator=(rRef);
-
-    // copy local members - this will use ::Clone() on all involved Items
+    SetFont(rRef.GetFont());
+    SetHeight(rRef.GetHeight());
+    SetWeight(rRef.GetWeight());
+    SetPosture(rRef.GetPosture());
+    SetCJKFont(rRef.GetCJKFont());
+    SetCJKHeight(rRef.GetCJKHeight());
+    SetCJKWeight(rRef.GetCJKWeight());
+    SetCJKPosture(rRef.GetCJKPosture());
+    SetCTLFont(rRef.GetCTLFont());
+    SetCTLHeight(rRef.GetCTLHeight());
+    SetCTLWeight(rRef.GetCTLWeight());
+    SetCTLPosture(rRef.GetCTLPosture());
+    SetUnderline(rRef.GetUnderline());
+    SetOverline(rRef.GetOverline());
+    SetCrossedOut(rRef.GetCrossedOut());
+    SetContour(rRef.GetContour());
+    SetShadowed(rRef.GetShadowed());
+    SetColor(rRef.GetColor());
+    SetBox(rRef.GetBox());
+    SetTLBR(rRef.GetTLBR());
+    SetBLTR(rRef.GetBLTR());
+    SetBackground(rRef.GetBackground());
+    SetAdjust(rRef.GetAdjust());
+    SetHorJustify(rRef.GetHorJustify());
+    SetVerJustify(rRef.GetVerJustify());
     SetTextOrientation(rRef.GetTextOrientation());
     SetVerticalAlignment(rRef.GetVerticalAlignment());
     SetNumFormatString(rRef.GetNumFormatString());

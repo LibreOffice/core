@@ -84,10 +84,6 @@ protected:
     std::unique_ptr<SvxHorJustifyItem>      m_aHorJustify;
     std::unique_ptr<SvxVerJustifyItem>      m_aVerJustify;
 
-    // assignment-op is protected due to this being a tooling
-    // class, so callers need to be aware of what they do
-    AutoFormatBase& operator=(const AutoFormatBase&);
-
     AutoFormatBase();
     AutoFormatBase( const AutoFormatBase& rNew );
     ~AutoFormatBase();

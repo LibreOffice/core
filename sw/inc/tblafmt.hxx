@@ -54,7 +54,6 @@ public:
     SwBoxAutoFormat(const SvxAutoFormatDataField& rNew);
     ~SwBoxAutoFormat();
 
-    /// assignment-op (still used)
     SwBoxAutoFormat& operator=(const SwBoxAutoFormat& rRef);
 
     /// Comparing based of boxes backgrounds.
