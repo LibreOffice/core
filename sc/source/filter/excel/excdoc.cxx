@@ -46,6 +46,7 @@
 #include <XclExpChangeTrack.hxx>
 #include <xepivotxml.hxx>
 #include <xedbdata.hxx>
+#include <export/NamedSheetViews.hxx>
 #include <xlcontent.hxx>
 #include <xlname.hxx>
 #include <xllink.hxx>
@@ -646,6 +647,8 @@ void ExcTable::FillAsTableXml()
 
     // <tableParts> after <drawing> and before <extLst>
     aRecList.AppendRecord( GetTablesManager().GetTablesBySheet( mnScTab));
+
+    aRecList.AppendNewRecord(new xcl::exp::NamedSheetViews(GetRoot(), mnScTab));
 
     aRecList.AppendRecord( xExtLst );
 }

@@ -11,6 +11,7 @@
 #include <oox/export/ColorExportUtils.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
+#include <sax/fastattribs.hxx>
 #include <xestream.hxx>
 
 namespace oox::xls
@@ -39,6 +40,44 @@ void writeComplexColor(sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
     {
         writeComplexColor(pFS, nElement, rComplexColor, rComplexColor.getFinalColor());
     }
+}
+
+void writeDateGroupItem(const sax_fastparser::FSHelperPtr& pStream, sal_Int32 nElement,
+                        std::string_view aDateString)
+{
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttrList
+        = sax_fastparser::FastSerializerHelper::createAttrList();
+
+    // Tokenize on '-' to extract year, month, day components.
+    // The date string may be partial: "YYYY", "YYYY-MM", or "YYYY-MM-DD".
+    static constexpr sal_Int32 aDateTokens[] = { XML_year, XML_month, XML_day };
+    const char* pGrouping = "year";
+
+    size_t nStart = 0;
+    for (size_t i = 0; i < 3 && nStart < aDateString.size(); ++i)
+    {
+        size_t nSep = aDateString.find('-', nStart);
+        std::string_view aPart;
+        if (nSep != std::string_view::npos)
+            aPart = aDateString.substr(nStart, nSep - nStart);
+        else
+            aPart = aDateString.substr(nStart);
+
+        if (!aPart.empty())
+            pAttrList->add(aDateTokens[i], aPart);
+
+        if (i == 1)
+            pGrouping = "month";
+        else if (i == 2)
+            pGrouping = "day";
+
+        if (nSep == std::string_view::npos)
+            break;
+        nStart = nSep + 1;
+    }
+
+    pAttrList->add(XML_dateTimeGrouping, pGrouping);
+    pStream->singleElement(nElement, pAttrList);
 }
 }
 
