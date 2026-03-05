@@ -124,6 +124,7 @@
 #include <operation/EnterMatrixOperation.hxx>
 #include <operation/InsertCellsOperation.hxx>
 #include <operation/InsertSheetViewOperation.hxx>
+#include <operation/MultipleOpsOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
@@ -3238,63 +3239,8 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
 bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
                             const ScTabOpParam& rParam, bool bRecord, bool bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-
-    bool bSuccess = false;
-    ScDocument& rDoc = rDocShell.GetDocument();
-    SCCOL nStartCol = rRange.aStart.Col();
-    SCROW nStartRow = rRange.aStart.Row();
-    SCTAB nStartTab = rRange.aStart.Tab();
-    SCCOL nEndCol = rRange.aEnd.Col();
-    SCROW nEndRow = rRange.aEnd.Row();
-    SCTAB nEndTab = rRange.aEnd.Tab();
-
-    if (bRecord && !rDoc.IsUndoEnabled())
-        bRecord = false;
-
-    ScMarkData aMark(rDoc.GetSheetLimits());
-    if (pTabMark)
-        aMark = *pTabMark;
-    else
-    {
-        for (SCTAB nTab=nStartTab; nTab<=nEndTab; nTab++)
-            aMark.SelectTable( nTab, true );
-    }
-
-    if (!CheckSheetViewProtection(sc::OperationType::TabOperation))
-        return false;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
-    if ( aTester.IsEditable() )
-    {
-        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
-        rDoc.SetDirty( rRange, false );
-        if ( bRecord )
-        {
-            //! take selected sheets into account also when undoing
-            ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( rDoc, nStartTab, nEndTab );
-            rDoc.CopyToDocument( rRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pUndoDoc );
-
-            rDocShell.GetUndoManager()->AddUndoAction(
-                    std::make_unique<ScUndoTabOp>( &rDocShell,
-                                     nStartCol, nStartRow, nStartTab,
-                                     nEndCol, nEndRow, nEndTab, std::move(pUndoDoc),
-                                     rParam.aRefFormulaCell,
-                                     rParam.aRefFormulaEnd,
-                                     rParam.aRefRowCell,
-                                     rParam.aRefColCell,
-                                     rParam.meMode) );
-        }
-        rDoc.InsertTableOp(rParam, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
-        rDocShell.PostPaintGridAll();
-        aModificator.SetDocumentModified();
-        bSuccess = true;
-    }
-    else if (!bApi)
-        rDocShell.ErrorMessage(aTester.GetMessageId());
-
-    return bSuccess;
+    sc::MultipleOpsOperation aOperation(rDocShell, rRange, pTabMark, rParam, bRecord, bApi);
+    return aOperation.run();
 }
 
 static ScDirection DirFromFillDir( FillDir eDir )
