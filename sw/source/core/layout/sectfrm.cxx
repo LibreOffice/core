@@ -147,10 +147,15 @@ void SwSectionFrame::Init()
     const SwFormatCol &rCol = GetFormat()->GetCol();
     if( ( rCol.GetNumCols() > 1 || IsAnyNoteAtEnd() ) && !IsInFootnote() )
     {
-        const SwFormatCol *pOld = Lower() ? &rCol : new SwFormatCol;
-        ChgColumns( *pOld, rCol, IsAnyNoteAtEnd() );
-        if (!SfxPoolItem::areSame( pOld, &rCol ))
-            delete pOld;
+        if (Lower())
+        {
+            ChgColumns( rCol, rCol, IsAnyNoteAtEnd() );
+        }
+        else
+        {
+            SwFormatCol aOld;
+            ChgColumns( aOld, rCol, IsAnyNoteAtEnd() );
+        }
     }
 }
 
