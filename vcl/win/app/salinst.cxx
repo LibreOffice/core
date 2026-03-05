@@ -86,9 +86,6 @@ protected:
 
 public:
     explicit SalYieldMutex();
-
-    virtual bool              IsCurrentThread() const override;
-    virtual bool              tryToAcquire() override;
 };
 
 SalYieldMutex::SalYieldMutex()
@@ -116,8 +113,6 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
     WinSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst && pInst->IsMainThread() )
     {
-        if ( pInst->m_nNoYieldLock )
-            return;
         // tdf#96887 If this is the main thread, then we must wait for two things:
         // - the yield mutex being unlocked
         // - SendMessage() being triggered
@@ -153,29 +148,11 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 
 sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
 {
-    WinSalInstance* pInst = GetSalData()->mpInstance;
-    if ( pInst && pInst->m_nNoYieldLock && pInst->IsMainThread() )
-        return 1;
-
     sal_uInt32 nCount = comphelper::SolarMutex::doRelease( bUnlockAll );
     // wake up ImplSalYieldMutexAcquireWithWait() after release
     if ( 0 == m_nCount )
         m_condition.set();
     return nCount;
-}
-
-bool SalYieldMutex::tryToAcquire()
-{
-    WinSalInstance* pInst = GetSalData()->mpInstance;
-    if ( pInst )
-    {
-        if ( pInst->m_nNoYieldLock && pInst->IsMainThread() )
-            return true;
-        else
-            return comphelper::SolarMutex::tryToAcquire();
-    }
-    else
-        return false;
 }
 
 void ImplSalYieldMutexAcquireWithWait( sal_uInt32 nCount )
@@ -199,14 +176,6 @@ void ImplSalYieldMutexRelease()
         GdiFlush();
         pInst->GetYieldMutex()->release();
     }
-}
-
-bool SalYieldMutex::IsCurrentThread() const
-{
-    if ( !GetSalData()->mpInstance->m_nNoYieldLock )
-        return SolarMutex::IsCurrentThread();
-    else
-        return GetSalData()->mpInstance->IsMainThread();
 }
 
 void SalData::initKeyCodeMap()
@@ -435,7 +404,6 @@ WinSalInstance::WinSalInstance()
     : SalInstance(std::make_unique<SalYieldMutex>())
     , mhInst( nullptr )
     , mhComWnd( nullptr )
-    , m_nNoYieldLock( 0 )
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("win");
@@ -483,12 +451,6 @@ bool ImplSalYield(const bool bWait, const bool bHandleAllCurrentEvents)
 {
     // used to abort further message processing on tick count wraps
     static sal_uInt32 nLastTicks = 0;
-
-    // we should never yield in m_nNoYieldLock mode!
-    const bool bNoYieldLock = (GetSalData()->mpInstance->m_nNoYieldLock > 0);
-    assert(!bNoYieldLock);
-    if (bNoYieldLock)
-        return false;
 
     MSG aMsg;
     bool bWasMsg = false, bWasTimeoutMsg = false;
@@ -586,26 +548,6 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     return bDidWork;
 }
 
-namespace
-{
-struct NoYieldLockGuard
-{
-    NoYieldLockGuard()
-        : counter(InSendMessage() ? GetSalData()->mpInstance->m_nNoYieldLock : dummy())
-    {
-        ++counter;
-    }
-    ~NoYieldLockGuard() { --counter; }
-    static decltype(WinSalInstance::m_nNoYieldLock)& dummy()
-    {
-        DBG_TESTSOLARMUTEX(); // called when !InSendMessage()
-        static decltype(WinSalInstance::m_nNoYieldLock) n = 0;
-        return n;
-    }
-    decltype(WinSalInstance::m_nNoYieldLock)& counter;
-};
-}
-
 LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, bool& rDef )
 {
     LRESULT nRet = 0;
@@ -646,33 +588,21 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             pTimer->ImplStop();
             break;
 
-        case (SAL_MSG_CREATEFRAME):
-            {
-                NoYieldLockGuard g;
-                nRet = reinterpret_cast<LRESULT>(
-                    ImplSalCreateFrame(GetSalData()->mpInstance, reinterpret_cast<HWND>(lParam),
-                                       static_cast<SalFrameStyleFlags>(wParam)));
-            }
+        case SAL_MSG_CREATEFRAME:
+            nRet = reinterpret_cast<LRESULT>(
+                ImplSalCreateFrame(GetSalData()->mpInstance, reinterpret_cast<HWND>(lParam),
+                                   static_cast<SalFrameStyleFlags>(wParam)));
             break;
-        case (SAL_MSG_RECREATEHWND):
-            {
-                NoYieldLockGuard g;
-                nRet = reinterpret_cast<LRESULT>(ImplSalReCreateHWND(
-                    reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), false));
-            }
+        case SAL_MSG_RECREATEHWND:
+            nRet = reinterpret_cast<LRESULT>(ImplSalReCreateHWND(
+                reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), false));
             break;
-        case (SAL_MSG_RECREATECHILDHWND):
-            {
-                NoYieldLockGuard g;
-                nRet = reinterpret_cast<LRESULT>(ImplSalReCreateHWND(
-                    reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), true));
-            }
+        case SAL_MSG_RECREATECHILDHWND:
+            nRet = reinterpret_cast<LRESULT>(ImplSalReCreateHWND(
+                reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), true));
             break;
-        case (SAL_MSG_DESTROYFRAME):
-            {
-                NoYieldLockGuard g;
-                delete reinterpret_cast<SalFrame*>(lParam);
-            }
+        case SAL_MSG_DESTROYFRAME:
+            delete reinterpret_cast<SalFrame*>(lParam);
             break;
 
         case SAL_MSG_DESTROYHWND:
@@ -687,31 +617,19 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             }
             break;
 
-        case (SAL_MSG_CREATEOBJECT):
-            {
-                NoYieldLockGuard g;
-                nRet = reinterpret_cast<LRESULT>(ImplSalCreateObject(
-                    GetSalData()->mpInstance, reinterpret_cast<WinSalFrame*>(lParam)));
-            }
+        case SAL_MSG_CREATEOBJECT:
+            nRet = reinterpret_cast<LRESULT>(
+                ImplSalCreateObject(GetSalData()->mpInstance, reinterpret_cast<WinSalFrame*>(lParam)));
             break;
-        case (SAL_MSG_DESTROYOBJECT):
-            {
-                NoYieldLockGuard g;
-                delete reinterpret_cast<SalObject*>(lParam);
-            }
+        case SAL_MSG_DESTROYOBJECT:
+            delete reinterpret_cast<SalObject*>(lParam);
             break;
-        case (SAL_MSG_GETCACHEDDC):
-            {
-                NoYieldLockGuard g;
-                nRet = reinterpret_cast<LRESULT>(
-                    GetDCEx(reinterpret_cast<HWND>(wParam), nullptr, 0x00000002L));
-            }
+        case SAL_MSG_GETCACHEDDC:
+            nRet = reinterpret_cast<LRESULT>(
+                GetDCEx(reinterpret_cast<HWND>(wParam), nullptr, DCX_CACHE));
             break;
-        case (SAL_MSG_RELEASEDC):
-            {
-                NoYieldLockGuard g;
-                ReleaseDC(reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam));
-            }
+        case SAL_MSG_RELEASEDC:
+            ReleaseDC(reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam));
             break;
 
         case SAL_MSG_TIMER_CALLBACK:
@@ -810,7 +728,7 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
 LRESULT WinSalInstance::SendWndMessage_impl(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) const
 {
     std::optional<SolarMutexReleaser> oReleaser;
-    if (!IsMainThread())
+    if (GetCurrentThreadId() != GetWindowThreadProcessId(hWnd, nullptr))
         oReleaser.emplace();
     return SendMessageW(hWnd, Msg, wParam, lParam);
 }
