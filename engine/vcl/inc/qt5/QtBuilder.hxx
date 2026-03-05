@@ -11,7 +11,10 @@
 
 #include <vector>
 
+#include <sal/types.h>
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 #include <QtCore/QObject>
+SAL_WNODEPRECATED_DECLARATIONS_POP
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QDoubleSpinBox>

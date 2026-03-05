@@ -22,7 +22,10 @@
 #include <memory>
 #include <thread>
 
+#include <sal/types.h>
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 #include <QObject>
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 #include "filepicker_ipc_commands.hxx"
 

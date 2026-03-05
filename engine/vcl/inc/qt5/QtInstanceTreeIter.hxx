@@ -9,7 +9,10 @@
 
 #pragma once
 
+#include <sal/types.h>
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 #include <QtGui/QStandardItemModel>
+SAL_WNODEPRECATED_DECLARATIONS_POP
 #include <vcl/weld.hxx>
 
 class QtInstanceTreeIter final : public weld::TreeIter
