@@ -625,7 +625,7 @@ void ScDocument::FillInfo(
                                 pInfo->bFilterActive = bFilterActive;
                                 if (pInfo->maLinesAttr)
                                 {
-                                    if (pExplicitBackground)
+                                    if (pExplicitLinesAttr)
                                     {
                                         pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pExplicitLinesAttr);
                                     }
