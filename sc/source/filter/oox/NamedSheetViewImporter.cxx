@@ -13,7 +13,9 @@
 #include <addressconverter.hxx>
 #include <autofilterbuffer.hxx>
 #include <datauno.hxx>
+#include <dbdata.hxx>
 #include <document.hxx>
+#include <queryparam.hxx>
 #include <SheetView.hxx>
 #include <SheetViewManager.hxx>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
@@ -103,6 +105,17 @@ void NamedSheetViewImporter::finalizeImport()
                     {
                         xDatabaseRange->setPropertyValue(u"AutoFilter"_ustr, css::uno::Any(true));
                         aAutoFilter.finalizeImport(xDatabaseRange, nViewTab);
+
+                        // Execute the filter query to actually hide rows
+                        ScDBData* pDBData = rDoc.GetAnonymousDBData(nViewTab);
+                        ScDocShell* pFilterDocShell = rDoc.GetDocumentShell();
+                        if (pDBData && pFilterDocShell)
+                        {
+                            ScQueryParam aQueryParam;
+                            pDBData->GetQueryParam(aQueryParam);
+                            ScDBDocFunc aDBDocFunc(*pFilterDocShell);
+                            aDBDocFunc.Query(nViewTab, aQueryParam, nullptr, false, false);
+                        }
                     }
                 }
                 catch (const css::uno::Exception&)
