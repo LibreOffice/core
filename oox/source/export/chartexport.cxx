@@ -1038,6 +1038,12 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     if( !xChartDoc.is() )
         return;
 
+    // At minimum, a PlotArea is needed or else MS Word complains about an invalid file
+    uno::Reference<chart2::XCoordinateSystemContainer>
+        xBCooSysCnt(xChartDoc->getFirstDiagram(), uno::UNO_QUERY);
+    if (!xBCooSysCnt.is())
+        return;
+
     // We need to get the new diagram here so we can know if this is a chartex
     // chart.
     mxNewDiagram.set( xChartDoc->getFirstDiagram());
