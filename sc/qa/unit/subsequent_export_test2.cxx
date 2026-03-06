@@ -1200,7 +1200,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testValidationCopyPaste)
 
     // Copy B1 from src doc to clip
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScRange aSrcRange(1, 0, 1);
+    ScRange aSrcRange(1, 0, 0);
     ScClipParam aClipParam(aSrcRange, false);
     ScMarkData aMark(pDoc->GetSheetLimits());
     aMark.SetMarkArea(aSrcRange);
@@ -1221,7 +1221,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testValidationCopyPaste)
     xmlDocUniquePtr pDocXml = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDocXml);
     assertXPathContent(pDocXml, "/x:worksheet/x:dataValidations/x:dataValidation/x:formula1",
-                       u"#REF!");
+                       u"Sheet1!$A$1:$A$3");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf115159)
