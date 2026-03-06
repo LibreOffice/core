@@ -11797,26 +11797,17 @@ static bool IsDBCS(sal_Unicode currentChar)
             return block >= from;
     return false;
 }
-static sal_Int32 lcl_getLengthB( std::u16string_view str, sal_Int32 nPos )
+static sal_Int32 getLengthB(std::u16string_view str)
 {
-    sal_Int32 index = 0;
     sal_Int32 length = 0;
-    while ( index < nPos )
+    for (size_t index = 0; index < str.size(); ++index)
     {
         if (IsDBCS(str[index]))
             length += 2;
         else
             length++;
-        index++;
     }
     return length;
-}
-static sal_Int32 getLengthB(std::u16string_view str)
-{
-    if(str.empty())
-        return 0;
-    else
-        return lcl_getLengthB( str, str.size() );
 }
 void ScInterpreter::ScLenB()
 {
@@ -11991,7 +11982,7 @@ void ScInterpreter::ScFindB()
         else
         {
             // obtain byte value of nPos
-            int nBytePos = lcl_getLengthB( aBuf, nPos );
+            int nBytePos = getLengthB(aBuf.subView(0, nPos));
             PushDouble( nBytePos + nStart );
         }
     }
@@ -12036,7 +12027,7 @@ void ScInterpreter::ScSearchB()
         else
         {
             // obtain byte value of nPos
-            int nBytePos = lcl_getLengthB( aSubStr, nPos );
+            int nBytePos = getLengthB(aSubStr.subView(0, nPos));
             PushDouble( nBytePos + nStart );
         }
     }
