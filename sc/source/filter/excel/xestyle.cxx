@@ -3377,7 +3377,9 @@ void XclExpXmlTableStyle::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->startElement( XML_tableStyle, XML_count, OString::number(maTableElements.size()), XML_name, maStyleName.toUtf8());
     for (auto& rTableStyleElement : maTableElements)
     {
-        rStyleSheet->singleElement( XML_tableStyleElement, XML_dxfId, OString::number(rTableStyleElement.second), XML_type, aTableStyleElementToOOXML.find(rTableStyleElement.first)->second);
+        const auto aFind = aTableStyleElementToOOXML.find(rTableStyleElement.first);
+        assert(aFind != aTableStyleElementToOOXML.end() && "will be found, see aTableStyleElementToOOXML above");
+        rStyleSheet->singleElement( XML_tableStyleElement, XML_dxfId, OString::number(rTableStyleElement.second), XML_type, aFind->second);
     }
     rStyleSheet->endElement(XML_tableStyle);
 }
