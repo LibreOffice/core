@@ -270,6 +270,7 @@ public:
     int get_active() const { return m_xControl->get_active(); }
     void set_active(int nPos) { m_xControl->set_active(nPos); }
     void set_active_text(const OUString& rStr) { m_xControl->set_active_text(rStr); }
+    int find_text(const OUString& rStr) const { return m_xControl->find_text(rStr); }
     OUString get_active_text() const { return m_xControl->get_active_text(); }
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
     int get_count() const { return m_xControl->get_count(); }

@@ -293,34 +293,26 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
             *m_pnLineEndListState = ChangeType::NONE;
 
-            nPos = m_xLbLineStyle->get_active();
             OUString sNone( comphelper::LibreOfficeKit::isActive() ? SvxResId( RID_SVXSTR_INVISIBLE )
                 : SvxResId( RID_SVXSTR_NONE ) );
 
+            auto sActiveStyle = m_xLbStartStyle->get_active_text();
             m_xLbStartStyle->clear();
             m_xLbStartStyle->append_text(sNone);
-
             m_xLbStartStyle->Fill( m_pLineEndList );
-            nCount = m_xLbStartStyle->get_count();
-            if( nCount == 0 )
-                ; // This case should never occur
-            else if( nCount <= nPos )
-                m_xLbStartStyle->set_active(0);
-            else
-                m_xLbStartStyle->set_active(nPos);
 
+            // tdf#126040 - load previously selected start line style index
+            auto nStylePos = m_xLbStartStyle->find_text(sActiveStyle);
+            m_xLbStartStyle->set_active(nStylePos == -1 ? 0 : nStylePos);
+
+            sActiveStyle = m_xLbEndStyle->get_active_text();
             m_xLbEndStyle->clear();
             m_xLbEndStyle->append_text(sNone);
-
             m_xLbEndStyle->Fill( m_pLineEndList, false );
-            nCount = m_xLbEndStyle->get_count();
 
-            if( nCount == 0 )
-                ; // This case should never occur
-            else if( nCount <= nPos )
-                m_xLbEndStyle->set_active(0);
-            else
-                m_xLbEndStyle->set_active(nPos);
+            // tdf#126040 - load previously selected end line style index
+            nStylePos = m_xLbEndStyle->find_text(sActiveStyle);
+            m_xLbEndStyle->set_active(nStylePos == -1 ? 0 : nStylePos);
         }
         INetURLObject aLineURL( m_pLineEndList->GetPath() );
 
