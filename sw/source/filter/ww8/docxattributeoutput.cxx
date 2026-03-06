@@ -5655,10 +5655,13 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->startElementNS(XML_a, XML_xfrm, xFrameAttributes);
 
     m_pSerializer->singleElementNS(XML_a, XML_off, XML_x, "0", XML_y, "0");
-    // clamp to >=0, negative values are not valid here
-    OString aWidth( OString::number( std::max(sal_Int64(0), TwipsToEMU( aSize.Width() )) ) );
-    OString aHeight( OString::number( std::max(sal_Int64(0), TwipsToEMU( aSize.Height() )) ) );
-    m_pSerializer->singleElementNS(XML_a, XML_ext, XML_cx, aWidth, XML_cy, aHeight);
+
+    // MS Word reports the document as corrupt if not positive, Int32 value
+    const sal_Int32 nWidth = std::clamp<sal_Int64>(TwipsToEMU(aSize.Width()), 0, SAL_MAX_INT32);
+    const sal_Int32 nHeight = std::clamp<sal_Int64>(TwipsToEMU(aSize.Height()), 0, SAL_MAX_INT32);
+    m_pSerializer->singleElementNS(
+        XML_a, XML_ext, XML_cx, OString::number(nWidth), XML_cy, OString::number(nHeight));
+
     m_pSerializer->endElementNS( XML_a, XML_xfrm );
     m_pSerializer->startElementNS(XML_a, XML_prstGeom, XML_prst, "rect");
     m_pSerializer->singleElementNS(XML_a, XML_avLst);
