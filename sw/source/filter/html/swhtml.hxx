@@ -149,6 +149,8 @@ class HTMLAttr
     HTMLAttr *m_pNext;   // still to close attributes with different values
     HTMLAttr *m_pPrev;   // already closed but not set attributes
     HTMLAttr **m_ppHead; // list head
+    sal_uInt16 m_nChainDepth; // depth of m_pNext chain
+    static constexpr sal_uInt16 MAX_CHAIN_DEPTH = 1024;
 
     HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
                HTMLAttr **pHd, std::shared_ptr<HTMLAttrTable> xAttrTab );
@@ -533,7 +535,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     // start/end an attribute
     // ppDepAttr indicated an attribute table entry, which attribute has to be
     // set, before the attribute is closed
-    void NewAttr(const std::shared_ptr<HTMLAttrTable>& rAttrTab, HTMLAttr **ppAttr, const SfxPoolItem& rItem);
+    bool NewAttr(const std::shared_ptr<HTMLAttrTable>& rAttrTab, HTMLAttr **ppAttr, const SfxPoolItem& rItem);
     bool EndAttr( HTMLAttr *pAttr, bool bChkEmpty=true );
     void DeleteAttr( HTMLAttr* pAttr );
 

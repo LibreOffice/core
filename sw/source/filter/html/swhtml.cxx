@@ -3105,7 +3105,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
     aFields.clear();
 }
 
-void SwHTMLParser::NewAttr(const std::shared_ptr<HTMLAttrTable>& rAttrTable, HTMLAttr **ppAttr, const SfxPoolItem& rItem )
+bool SwHTMLParser::NewAttr(const std::shared_ptr<HTMLAttrTable>& rAttrTable, HTMLAttr **ppAttr, const SfxPoolItem& rItem )
 {
     // Font height and font colour as well as escape attributes may not be
     // combined. Therefore they're saved in a list and in it the last opened
@@ -3113,12 +3113,17 @@ void SwHTMLParser::NewAttr(const std::shared_ptr<HTMLAttrTable>& rAttrTable, HTM
     // attributes count is just incremented.
     if( *ppAttr )
     {
+        // limit chain depth to avoid getting stuck in BuildPortions
+        if ((*ppAttr)->m_nChainDepth >= HTMLAttr::MAX_CHAIN_DEPTH)
+            return false;
         HTMLAttr *pAttr = new HTMLAttr(*m_pPam->GetPoint(), rItem, ppAttr, rAttrTable);
+        pAttr->m_nChainDepth = (*ppAttr)->m_nChainDepth + 1;
         pAttr->InsertNext( *ppAttr );
         (*ppAttr) = pAttr;
     }
     else
         (*ppAttr) = new HTMLAttr(*m_pPam->GetPoint(), rItem, ppAttr, rAttrTable);
+    return true;
 }
 
 bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
@@ -5539,7 +5544,8 @@ HTMLAttr::HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
     m_xAttrTab(std::move( xAttrTab )),
     m_pNext( nullptr ),
     m_pPrev( nullptr ),
-    m_ppHead( ppHd )
+    m_ppHead( ppHd ),
+    m_nChainDepth( 0 )
 {
 }
 
@@ -5556,7 +5562,8 @@ HTMLAttr::HTMLAttr( const HTMLAttr &rAttr, const SwNode &rEndPara,
     m_xAttrTab(std::move( xAttrTab )),
     m_pNext( nullptr ),
     m_pPrev( nullptr ),
-    m_ppHead( ppHd )
+    m_ppHead( ppHd ),
+    m_nChainDepth( 0 )
 {
 }
 

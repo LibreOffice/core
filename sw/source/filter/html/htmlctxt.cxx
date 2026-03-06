@@ -768,11 +768,12 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         if( ppAttr )
         {
             // Set the attribute
-            NewAttr(m_xAttrTab, ppAttr, *pItem);
-
-            // and save context information
-            HTMLAttrs &rAttrs = pContext->GetAttrs();
-            rAttrs.push_back( *ppAttr );
+            if (NewAttr(m_xAttrTab, ppAttr, *pItem))
+            {
+                // and save context information
+                HTMLAttrs &rAttrs = pContext->GetAttrs();
+                rAttrs.push_back( *ppAttr );
+            }
         }
     }
 
@@ -791,7 +792,8 @@ void SwHTMLParser::InsertAttr( HTMLAttr **ppAttr, const SfxPoolItem & rItem,
     }
 
     // Set the attribute
-    NewAttr(m_xAttrTab, ppAttr, rItem);
+    if (!NewAttr(m_xAttrTab, ppAttr, rItem))
+        return;
 
     // save context information
     HTMLAttrs &rAttrs = pCntxt->GetAttrs();
