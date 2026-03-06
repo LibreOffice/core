@@ -122,6 +122,7 @@
 #include <operation/AutoFormatOperation.hxx>
 #include <operation/ClearItemsOperation.hxx>
 #include <operation/EnterMatrixOperation.hxx>
+#include <operation/FillSeriesOperation.hxx>
 #include <operation/FillSimpleOperation.hxx>
 #include <operation/InsertCellsOperation.hxx>
 #include <operation/InsertSheetViewOperation.hxx>
@@ -3244,18 +3245,6 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
     return aOperation.run();
 }
 
-static ScDirection DirFromFillDir( FillDir eDir )
-{
-    if (eDir==FILL_TO_BOTTOM)
-        return DIR_BOTTOM;
-    else if (eDir==FILL_TO_RIGHT)
-        return DIR_RIGHT;
-    else if (eDir==FILL_TO_TOP)
-        return DIR_TOP;
-    else // if (eDir==FILL_TO_LEFT)
-        return DIR_LEFT;
-}
-
 bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
                             FillDir eDir, bool bApi )
 {
@@ -3268,137 +3257,9 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
                             double fStart, double fStep, double fMax,
                             bool bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-
-    bool bSuccess = false;
-    ScDocument& rDoc = rDocShell.GetDocument();
-    SCCOL nStartCol = rRange.aStart.Col();
-    SCROW nStartRow = rRange.aStart.Row();
-    SCTAB nStartTab = rRange.aStart.Tab();
-    SCCOL nEndCol = rRange.aEnd.Col();
-    SCROW nEndRow = rRange.aEnd.Row();
-    SCTAB nEndTab = rRange.aEnd.Tab();
-
-    bool bRecord = true;
-    if (!rDoc.IsUndoEnabled())
-        bRecord = false;
-
-    ScMarkData aMark(rDoc.GetSheetLimits());
-    if (pTabMark)
-        aMark = *pTabMark;
-    else
-    {
-        for (SCTAB nTab=nStartTab; nTab<=nEndTab; nTab++)
-            aMark.SelectTable( nTab, true );
-    }
-
-    if (!CheckSheetViewProtection(sc::OperationType::FillSeries))
-        return false;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
-    if ( aTester.IsEditable() )
-    {
-        weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
-
-        ScRange aSourceArea = rRange;
-        ScRange aDestArea   = rRange;
-
-        SCSIZE nCount = rDoc.GetEmptyLinesInBlock(
-                aSourceArea.aStart.Col(), aSourceArea.aStart.Row(), aSourceArea.aStart.Tab(),
-                aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), aSourceArea.aEnd.Tab(),
-                DirFromFillDir(eDir) );
-
-        //  keep at least one row/column as source range
-        SCSIZE nTotLines = ( eDir == FILL_TO_BOTTOM || eDir == FILL_TO_TOP ) ?
-            static_cast<SCSIZE>( aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1 ) :
-            static_cast<SCSIZE>( aSourceArea.aEnd.Col() - aSourceArea.aStart.Col() + 1 );
-        if ( nCount >= nTotLines )
-        {
-            assert(nTotLines > 0 && "coverity 2023.12.2");
-            nCount = nTotLines - 1;
-        }
-
-        switch (eDir)
-        {
-            case FILL_TO_BOTTOM:
-                aSourceArea.aEnd.SetRow( sal::static_int_cast<SCROW>( aSourceArea.aEnd.Row() - nCount ) );
-                break;
-            case FILL_TO_RIGHT:
-                aSourceArea.aEnd.SetCol( sal::static_int_cast<SCCOL>( aSourceArea.aEnd.Col() - nCount ) );
-                break;
-            case FILL_TO_TOP:
-                aSourceArea.aStart.SetRow( sal::static_int_cast<SCROW>( aSourceArea.aStart.Row() + nCount ) );
-                break;
-            case FILL_TO_LEFT:
-                aSourceArea.aStart.SetCol( sal::static_int_cast<SCCOL>( aSourceArea.aStart.Col() + nCount ) );
-                break;
-        }
-
-        ScDocumentUniquePtr pUndoDoc;
-        if ( bRecord )
-        {
-            SCTAB nTabCount = rDoc.GetTableCount();
-            SCTAB nDestStartTab = aDestArea.aStart.Tab();
-
-            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( rDoc, nDestStartTab, nDestStartTab );
-            for (const auto& rTab : aMark)
-            {
-                if (rTab >= nTabCount)
-                    break;
-
-                if (rTab != nDestStartTab)
-                    pUndoDoc->AddUndoTab( rTab, rTab );
-            }
-
-            rDoc.CopyToDocument(
-                aDestArea.aStart.Col(), aDestArea.aStart.Row(), 0,
-                aDestArea.aEnd.Col(), aDestArea.aEnd.Row(), nTabCount-1,
-                InsertDeleteFlags::AUTOFILL, false, *pUndoDoc, &aMark );
-        }
-
-        if (aDestArea.aStart.Col() <= aDestArea.aEnd.Col() &&
-            aDestArea.aStart.Row() <= aDestArea.aEnd.Row())
-        {
-            if ( fStart != MAXDOUBLE )
-            {
-                SCCOL nValX = (eDir == FILL_TO_LEFT) ? aDestArea.aEnd.Col() : aDestArea.aStart.Col();
-                SCROW nValY = (eDir == FILL_TO_TOP ) ? aDestArea.aEnd.Row() : aDestArea.aStart.Row();
-                SCTAB nTab = aDestArea.aStart.Tab();
-                rDoc.SetValue( nValX, nValY, nTab, fStart );
-            }
-
-            sal_uLong nProgCount;
-            if (eDir == FILL_TO_BOTTOM || eDir == FILL_TO_TOP)
-                nProgCount = aSourceArea.aEnd.Col() - aSourceArea.aStart.Col() + 1;
-            else
-                nProgCount = aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1;
-            nProgCount *= nCount;
-            ScProgress aProgress( rDoc.GetDocumentShell(),
-                    ScResId(STR_FILL_SERIES_PROGRESS), nProgCount, true );
-
-            rDoc.Fill( aSourceArea.aStart.Col(), aSourceArea.aStart.Row(),
-                        aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), &aProgress,
-                        aMark, nCount, eDir, eCmd, eDateCmd, fStep, fMax );
-            AdjustRowHeight(rRange, true, bApi);
-
-            rDocShell.PostPaintGridAll();
-            aModificator.SetDocumentModified();
-        }
-
-        if ( bRecord )      // only now is Draw-Undo available
-        {
-            rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoAutoFill>( &rDocShell, aDestArea, aSourceArea, std::move(pUndoDoc), aMark,
-                                    eDir, eCmd, eDateCmd, fStart, fStep, fMax) );
-        }
-
-        bSuccess = true;
-    }
-    else if (!bApi)
-        rDocShell.ErrorMessage(aTester.GetMessageId());
-
-    return bSuccess;
+    sc::FillSeriesOperation aOperation(*this, rDocShell, rRange, pTabMark, eDir, eCmd, eDateCmd,
+                                       fStart, fStep, fMax, bApi);
+    return aOperation.run();
 }
 
 bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
