@@ -705,7 +705,6 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 while (pNode /*&& pNode->IsStartNode()
                        && pNode->GetStartNode()->GetStartNodeType()
                               == SwStartNodeType::SwFlyStartNode*/
-                       && pFrameFormat
                        && pFrameFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_FLY
                        && (pFrameFormat = pNode->GetFlyFormat()))
                 {
