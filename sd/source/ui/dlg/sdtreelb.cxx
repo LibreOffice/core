@@ -824,23 +824,26 @@ IMPL_LINK(SdPageObjsTLV, EditedEntryHdl, const IterString&, rIterString, bool)
 
     // set the new name
     const auto aEntryId = m_xTreeView->get_id(rIterString.first);
-    if (aEntryId.toInt64() == 1)
+    if (::sd::DrawDocShell* pDocShell = m_pDoc->GetDocSh())
     {
-        // page name
-        if (::sd::DrawDocShell* pDocShell = m_pDoc->GetDocSh())
+        if (::sd::ViewShell* pViewShell = GetViewShellForDocShell(*pDocShell))
         {
-            if (::sd::ViewShell* pViewShell = GetViewShellForDocShell(*pDocShell))
+            SdPage* pPage = pViewShell->GetActualPage();
+            if (aEntryId.toInt64() == 1)
             {
-                SdPage* pPage = pViewShell->GetActualPage();
+                // page name
                 pPage->SetName(rIterString.second);
+            }
+            else if (SdrObject* pCursorEntryObject = weld::fromId<SdrObject*>(aEntryId))
+            {
+                // object name
+                pCursorEntryObject->SetName(rIterString.second);
+                pPage->notifyObjectRenamed(pCursorEntryObject);
             }
         }
     }
-    else if (SdrObject* pCursorEntryObject = weld::fromId<SdrObject*>(aEntryId))
-    {
-        // object name
-        pCursorEntryObject->SetName(rIterString.second);
-    }
+
+
 
     return true;
 }
