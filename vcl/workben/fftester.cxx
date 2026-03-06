@@ -119,7 +119,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         OUString cwd;
         osl_getProcessWorkingDir(&cwd.pData);
-        osl::File::getAbsoluteFileURL(cwd, out, out);
+        (void)osl::File::getAbsoluteFileURL(cwd, out, out);
 
         tools::extendApplicationEnvironment();
 
