@@ -234,7 +234,9 @@ private:
     bool mbCancel;
     std::unordered_map<OUString, css::uno::Any> maAdditionalProperties;
 
-    std::unique_ptr<TabPageImpl> mpImpl;
+    bool mbStandard;
+    SfxOkDialogController* mpSfxDialogController;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
 
 protected:
     SfxTabPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, const SfxItemSet *rAttrSet);

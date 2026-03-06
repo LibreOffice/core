@@ -51,16 +51,6 @@ using namespace ::com::sun::star::uno;
 
 constexpr OUString USERITEM_NAME = u"UserItem"_ustr;
 
-
-struct TabPageImpl
-{
-    bool                        mbStandard;
-    SfxOkDialogController*      mpSfxDialogController;
-    css::uno::Reference< css::frame::XFrame > mxFrame;
-
-    TabPageImpl() : mbStandard(false), mpSfxDialogController(nullptr) {}
-};
-
 namespace {
 
 struct Data_Impl
@@ -125,15 +115,12 @@ static auto Find(const SfxTabDlgData_Impl& rArr, std::u16string_view rId)
 
 void SfxTabPage::SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
-    if (mpImpl)
-        mpImpl->mxFrame = xFrame;
+    mxFrame = xFrame;
 }
 
 css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
 {
-    if (mpImpl)
-        return mpImpl->mxFrame;
-    return css::uno::Reference< css::frame::XFrame >();
+    return mxFrame;
 }
 
 static bool isLOKMobilePhone()
@@ -149,9 +136,10 @@ SfxTabPage::SfxTabPage(weld::Container* pPage, weld::DialogController* pControll
     , mpSet(rAttrSet)
     , mbHasExchangeSupport(false)
     , mbCancel(false)
-    , mpImpl(new TabPageImpl)
+    , mbStandard(false)
+    , mpSfxDialogController(nullptr)
 {
-    mpImpl->mpSfxDialogController = dynamic_cast<SfxOkDialogController*>(m_pDialogController);
+    mpSfxDialogController = dynamic_cast<SfxOkDialogController*>(m_pDialogController);
 }
 
 SfxTabPage::~SfxTabPage()
@@ -163,7 +151,6 @@ SfxTabPage::~SfxTabPage()
             xParent->move(m_xContainer.get(), nullptr);
     }
     m_xContainer.reset();
-    mpImpl.reset();
     m_xBuilder.reset();
 }
 
@@ -275,7 +262,7 @@ const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
     sal_uInt16 nWh = GetWhich( nSlot, bDeep );
     const SfxPoolItem* pItem = nullptr;
 
-    if (mpImpl->mbStandard && rOldSet.GetParent())
+    if (mbStandard && rOldSet.GetParent())
         pItem = GetItem( *rOldSet.GetParent(), nSlot );
     else if ( rSet.GetParent() &&
               SfxItemState::INVALID == rSet.GetItemState( nWh ) )
@@ -296,13 +283,13 @@ void SfxTabPage::ChangesApplied()
 
 void SfxTabPage::SetDialogController(SfxOkDialogController* pDialog)
 {
-    mpImpl->mpSfxDialogController = pDialog;
-    m_pDialogController = mpImpl->mpSfxDialogController;
+    mpSfxDialogController = pDialog;
+    m_pDialogController = mpSfxDialogController;
 }
 
 SfxOkDialogController* SfxTabPage::GetDialogController() const
 {
-    return mpImpl->mpSfxDialogController;
+    return mpSfxDialogController;
 }
 
 OUString SfxTabPage::GetHelpId() const
@@ -321,8 +308,8 @@ weld::Window* SfxTabPage::GetFrameWeld() const
 
 const SfxItemSet* SfxTabPage::GetDialogExampleSet() const
 {
-    if (mpImpl->mpSfxDialogController)
-        return mpImpl->mpSfxDialogController->GetExampleSet();
+    if (mpSfxDialogController)
+        return mpSfxDialogController->GetExampleSet();
     return nullptr;
 }
 
@@ -524,7 +511,7 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
     // Set all Items as new  -> the call the current Page Reset()
     assert((*it)->xTabPage && "the Page is gone");
     (*it)->xTabPage->Reset(&aTmpSet);
-    (*it)->xTabPage->mpImpl->mbStandard = true;
+    (*it)->xTabPage->mbStandard = true;
 }
 
 IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OUString&, rPage, void)
