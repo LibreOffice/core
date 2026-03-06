@@ -169,6 +169,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
+#include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/LokControlHandler.hxx>
@@ -2042,9 +2043,181 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     SfxBaseModel::Notify( rBC, rHint );
 }
 
-void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+namespace
+{
+/// Serializes Draw/Impress slide to JSON primitives.
+class VectorContentWriter
+{
+    static constexpr double constTwipConversionFactor
+        = o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip);
+
+public:
+    VectorContentWriter(SdDrawDocument* pDocument, SdXImpressDocument* pModel)
+        : mpDocument(pDocument)
+        , mpModel(pModel)
+    {
+    }
+
+    void write(tools::JsonWriter& rWriter)
+    {
+        SdPage* pPage = resolveCurrentPage();
+        if (!pPage)
+            return;
+
+        writeHeader(rWriter, pPage);
+        setupProcessor(rWriter, pPage);
+        writeMasterPage(rWriter, pPage);
+        writePageObjects(rWriter, pPage);
+    }
+
+private:
+    SdPage* resolveCurrentPage()
+    {
+        sal_uInt16 nCurrentPage = 0;
+        DrawViewShell* pViewSh
+            = mpModel->GetDocShell()
+                  ? dynamic_cast<DrawViewShell*>(mpModel->GetDocShell()->GetViewShell())
+                  : nullptr;
+        if (pViewSh)
+        {
+            SdPage* pActualPage = pViewSh->GetActualPage();
+            if (pActualPage)
+            {
+                // In Impress there are slide and then notes pages interleaved.
+                // We are interested only in slides for now.
+                nCurrentPage = (pActualPage->GetPageNum() - 1) / 2;
+            }
+        }
+        return mpDocument->GetSdPage(nCurrentPage, PageKind::Standard);
+    }
+
+    static void writeHeader(tools::JsonWriter& rWriter, SdPage* pPage)
+    {
+        rWriter.put("type", "vectortile");
+
+        rWriter.put("slideWidth",
+                    static_cast<sal_Int64>(pPage->GetWidth() * constTwipConversionFactor));
+        rWriter.put("slideHeight",
+                    static_cast<sal_Int64>(pPage->GetHeight() * constTwipConversionFactor));
+    }
+
+    void setupProcessor(tools::JsonWriter& rWriter, SdPage* pPage)
+    {
+        maProcessor.emplace(rWriter);
+        maProcessor->setScaleFactor(constTwipConversionFactor);
+
+        // Set up ViewInformation2D with visualized page
+        drawinglayer::geometry::ViewInformation2D aViewInfo;
+        css::uno::Reference<css::drawing::XDrawPage> xDrawPage(pPage->getUnoPage(),
+                                                               css::uno::UNO_QUERY);
+        if (xDrawPage.is())
+            aViewInfo.setVisualizedPage(xDrawPage);
+        maProcessor->setViewInformation2D(aViewInfo);
+    }
+
+    void writeMasterPage(tools::JsonWriter& rWriter, SdPage* pPage)
+    {
+        auto aMasterNode = rWriter.startNode("masterPage");
+        auto aPrimArray = rWriter.startArray("primitives");
+
+        // ViewContactOfSdrPage fixed child order:
+        //   0=Background, 1=Shadow, 2=Fill, 3=MasterPage
+
+        // PageFill: always produces a solid fill for the slide background
+        {
+            sdr::contact::ViewContact& rPageFillVC = pPage->GetViewContact().GetViewContact(2);
+            drawinglayer::primitive2d::Primitive2DContainer aFillPrimitives;
+            rPageFillVC.getViewIndependentPrimitive2DContainer(aFillPrimitives);
+            if (!aFillPrimitives.empty())
+                maProcessor->decomposeAndWrite(aFillPrimitives);
+        }
+
+        if (!pPage->TRG_HasMasterPage())
+            return;
+
+        // MasterPageDescriptor: adds a background fill if the master page defines one.
+        sdr::contact::ViewContact& rMasterVC = pPage->GetViewContact().GetViewContact(3);
+        drawinglayer::primitive2d::Primitive2DContainer aBackgroundPrimitives;
+        rMasterVC.getViewIndependentPrimitive2DContainer(aBackgroundPrimitives);
+        if (!aBackgroundPrimitives.empty())
+            maProcessor->decomposeAndWrite(aBackgroundPrimitives);
+
+        // Master page objects: objects on the master page.
+        // We need to filter out (header, footer, datetime, slidenumber) placeholders
+        // depending on the current page's settings.
+        SdPage* pMasterPage = dynamic_cast<SdPage*>(&pPage->TRG_GetMasterPage());
+        if (!pMasterPage)
+            return;
+
+        const sd::HeaderFooterSettings& rSettings = pPage->getHeaderFooterSettings();
+
+        for (size_t i = 0; i < pMasterPage->GetObjCount(); ++i)
+        {
+            SdrObject* pObject = pMasterPage->GetObj(i);
+            if (!pObject)
+                continue;
+
+            // Filter hidden header/footer placeholders
+            PresObjKind eKind = pMasterPage->GetPresObjKind(pObject);
+            if ((eKind == PresObjKind::Header && !rSettings.mbHeaderVisible)
+                || (eKind == PresObjKind::Footer && !rSettings.mbFooterVisible)
+                || (eKind == PresObjKind::DateTime && !rSettings.mbDateTimeVisible)
+                || (eKind == PresObjKind::SlideNumber && !rSettings.mbSlideNumberVisible))
+                continue;
+
+            drawinglayer::primitive2d::Primitive2DContainer aObjPrimitives;
+            pObject->GetViewContact().getViewIndependentPrimitive2DContainer(aObjPrimitives);
+            if (!aObjPrimitives.empty())
+                maProcessor->decomposeAndWrite(aObjPrimitives);
+        }
+    }
+
+    void writePageObjects(tools::JsonWriter& rWriter, SdPage* pPage)
+    {
+        auto aObjectsArray = rWriter.startArray("objects");
+
+        for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+        {
+            SdrObject* pObject = pPage->GetObj(i);
+            if (!pObject)
+                continue;
+
+            // Get view-independent primitives
+            drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
+            pObject->GetViewContact().getViewIndependentPrimitive2DContainer(aPrimitives);
+
+            if (aPrimitives.empty())
+                continue;
+
+            auto pObjectNode = rWriter.startStruct();
+            rWriter.put("id", static_cast<sal_Int64>(pObject->GetUniqueID()));
+            rWriter.put("name", pObject->GetName());
+            {
+                auto aPrimitiveArray = rWriter.startArray("primitives");
+                maProcessor->decomposeAndWrite(aPrimitives);
+            }
+        }
+    }
+
+    SdDrawDocument* mpDocument;
+    SdXImpressDocument* mpModel;
+    std::optional<drawinglayer::Primitive2dJsonProcessor> maProcessor;
+};
+
+} // anonymous namespace
+
+bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
+{
+    if (rCommand == u".uno:VectorTile")
+        return true;
+    return false;
+}
+
+void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
+                                          std::string_view rCommand)
 {
     static constexpr OStringLiteral aExtractDocStructure(".uno:ExtractDocumentStructure");
+    static constexpr OStringLiteral aVectorTile(".uno:VectorTile");
 
     std::map<OUString, OUString> aMap
         = SfxLokHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
@@ -2053,6 +2226,14 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter, std:
     {
         auto commentsNode = rJsonWriter.startNode("DocStructure");
         GetDocStructureSlides(rJsonWriter, this, aMap);
+    }
+    else if (o3tl::starts_with(rCommand, aVectorTile))
+    {
+        if (mpDoc)
+        {
+            VectorContentWriter aContentWriter(mpDoc, this);
+            aContentWriter.write(rJsonWriter);
+        }
     }
 }
 

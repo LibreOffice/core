@@ -12,6 +12,9 @@
 #include <app.hrc>
 #include <test/helper/transferable.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <functional>
+#include <set>
+#include <vector>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -4555,6 +4558,96 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteMarkdownInEditMode)
     SfxItemSet aAttrs = rEditEngine.GetAttribs(0, nBoldStart, nBoldStart + 4);
     const SvxWeightItem& rWeight = aAttrs.Get(EE_CHAR_WEIGHT);
     CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, rWeight.GetWeight());
+}
+
+namespace
+{
+/// Recursively traverse the JSON tree
+void forEachPrimitive(const boost::property_tree::ptree& rNode,
+                      const std::function<void(const boost::property_tree::ptree&)>& rVisitor)
+{
+    // Did we found a primitive
+    if (rNode.get_optional<std::string>("type"))
+        rVisitor(rNode);
+
+    // Recurse into arrays
+    for (const char* pArrayName : { "children", "primitives", "objects" })
+    {
+        auto aChildOpt = rNode.get_child_optional(pArrayName);
+        if (aChildOpt)
+        {
+            for (const auto& rChild : *aChildOpt)
+                forEachPrimitive(rChild.second, rVisitor);
+        }
+    }
+
+    // Recurse into sub-nodes
+    auto aMasterOpt = rNode.get_child_optional("masterPage");
+    if (aMasterOpt)
+        forEachPrimitive(*aMasterOpt, rVisitor);
+}
+
+/// Collect all primitive types in the JSON tree
+std::set<std::string> collectPrimitiveTypes(const boost::property_tree::ptree& rTree)
+{
+    std::set<std::string> aTypes;
+    forEachPrimitive(rTree, [&aTypes](const boost::property_tree::ptree& rNode) {
+        auto sType = rNode.get_optional<std::string>("type");
+        if (sType)
+            aTypes.insert(*sType);
+    });
+    return aTypes;
+}
+} // anonymous namespace
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("SlideExample.odp");
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    // Request vector content for the current slide
+    tools::JsonWriter aJsonWriter;
+    pXImpressDocument->getCommandValues(aJsonWriter, ".uno:VectorTile");
+    OString aResult = aJsonWriter.finishAndGetAsOString();
+
+    // Is JSON empty
+    CPPUNIT_ASSERT(!aResult.isEmpty());
+
+    // Parse and verify JSON structure
+    std::stringstream aStream(std::string(aResult.getStr(), aResult.getLength()));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    // Must have a "vectortile"
+    CPPUNIT_ASSERT_EQUAL(std::string("vectortile"), aTree.get<std::string>("type"));
+
+    // Slide dimensions must be present
+    CPPUNIT_ASSERT(aTree.get_optional<int>("slideWidth"));
+    CPPUNIT_ASSERT(aTree.get_optional<int>("slideHeight"));
+
+    // Check master page
+    auto oMaster = aTree.get_child_optional("masterPage");
+    CPPUNIT_ASSERT(oMaster);
+    auto& aMasterPrimitives = oMaster->get_child("primitives");
+    CPPUNIT_ASSERT(!aMasterPrimitives.empty());
+
+    // Check slide objects
+    auto& aObjects = aTree.get_child("objects");
+    size_t nNumberOfObjects = 0;
+    for (const auto& rObject : aObjects)
+    {
+        ++nNumberOfObjects;
+        CPPUNIT_ASSERT(rObject.second.get_optional<std::string>("id"));
+        CPPUNIT_ASSERT(rObject.second.get_child_optional("primitives"));
+    }
+
+    // Check number of objects is what we expect.
+    CPPUNIT_ASSERT_EQUAL(size_t(10), nNumberOfObjects);
+
+    // Collect all primitive types in the JSON tree.
+    std::set<std::string> aTypes = collectPrimitiveTypes(aTree);
+
+    CPPUNIT_ASSERT_MESSAGE("Should contain polyPolygonColor", aTypes.count("polyPolygonColor") > 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
