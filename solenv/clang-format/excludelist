@@ -5297,6 +5297,7 @@ include/sax/tools/converter.hxx
 include/sax/tools/documenthandleradapter.hxx
 include/sfx2/DocumentMetadataAccess.hxx
 include/sfx2/Metadatable.hxx
+include/sfx2/SfxTabPage.hxx
 include/sfx2/StyleManager.hxx
 include/sfx2/StylePreviewRenderer.hxx
 include/sfx2/XmlIdRegistry.hxx
@@ -10004,6 +10005,7 @@ sfx2/source/control/thumbnailviewitemacc.cxx
 sfx2/source/control/thumbnailviewitemacc.hxx
 sfx2/source/control/thumbnailviewitem.cxx
 sfx2/source/control/unoctitm.cxx
+sfx2/source/dialog/SfxTabPage.cxx
 sfx2/source/dialog/backingcomp.cxx
 sfx2/source/dialog/backingwindow.cxx
 sfx2/source/dialog/basedlgs.cxx

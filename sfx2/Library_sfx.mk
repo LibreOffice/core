@@ -175,6 +175,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/devtools/ObjectInspectorTreeHandler \
     sfx2/source/devtools/ObjectInspectorWidgets \
     sfx2/source/dialog/AdditionsDialogHelper \
+    sfx2/source/dialog/SfxTabPage \
     sfx2/source/dialog/basedlgs \
     sfx2/source/dialog/checkin \
     sfx2/source/dialog/dialoghelper \
