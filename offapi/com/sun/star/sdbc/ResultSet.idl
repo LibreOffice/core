@@ -86,14 +86,14 @@ published service ResultSet
 
     /** freeing all resources of a result set.
 
-                <p>
-                The creating statement will still be open after disposing.
-                </p>
+        <p>
+        The creating statement will still be open after disposing.
+        </p>
 
-                <p>
-                This interface is mandatory only for JDBC conformance,
-                otherwise it is optional.
-                </p>
+        <p>
+        This interface is mandatory only for JDBC conformance,
+        otherwise it is optional.
+        </p>
      */
     [optional] interface XCloseable;
 
@@ -127,9 +127,9 @@ published service ResultSet
 
     /** is the interface for updating row data to the database.
 
-                <p>
-                The implementation is optional.
-                </p>
+        <p>
+        The implementation is optional.
+        </p>
      */
     [optional] interface XResultSetUpdate;
 
@@ -146,9 +146,9 @@ published service ResultSet
 
     /** is the interface for updating the data of the current row.
 
-                <p>
-                The implementation is optional.
-                </p>
+        <p>
+        The implementation is optional.
+        </p>
      */
     [optional] interface XRowUpdate;
 

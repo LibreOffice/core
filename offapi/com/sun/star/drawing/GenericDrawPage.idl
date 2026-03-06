@@ -42,11 +42,11 @@ published service GenericDrawPage
 
     /** manages the Shapes of this page.
 
-                <p>It also lets you add new Shapes. The program currently
-                requires that these Shapes be created by the factory of
-                the document.
+        <p>It also lets you add new Shapes. The program currently
+        requires that these Shapes be created by the factory of
+        the document.
 
-                @see    DrawingDocument
+        @see    DrawingDocument
      */
     interface com::sun::star::drawing::XShapes;
 
@@ -67,7 +67,7 @@ published service GenericDrawPage
 
     /** Gets or sets the name of this page.
 
-                <p>Duplicated page names inside a document are not allowed.
+        <p>Duplicated page names inside a document are not allowed.
      */
     [optional] interface com::sun::star::container::XNamed;
 

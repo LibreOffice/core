@@ -28,10 +28,10 @@ published interface XDebugging: com::sun::star::uno::XInterface
 {
     /** returns the source code line where the breakpoint was set.
 
-                <p>The value can differ from the parameter
-                <var>nSourceCodeLine</var> when this is not a valid line to
-                place it.  -1 indicates that the breakpoint cannot be set at
-                this position.
+        <p>The value can differ from the parameter
+        <var>nSourceCodeLine</var> when this is not a valid line to
+        place it.  -1 indicates that the breakpoint cannot be set at
+        this position.
      */
     long setBreakPoint( [in] string aModuleName,
              [in] long nSourceCodeLine,

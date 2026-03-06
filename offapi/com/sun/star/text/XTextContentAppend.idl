@@ -28,9 +28,9 @@ interface XTextContentAppend : com::sun::star::uno::XInterface
 
         /** appends a text content at the end of the text.
 
-                <p> The sequence can contain all the properties defined by the service
-                Paragraph.
-        </p>
+            <p> The sequence can contain all the properties defined by the service
+            Paragraph.
+            </p>
 
         @param TextContent
             contains the object to be inserted.

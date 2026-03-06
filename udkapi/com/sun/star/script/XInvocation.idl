@@ -88,22 +88,22 @@ published interface XInvocation: com::sun::star::uno::XInterface
         ( XInvocation::hasMethod(),
         XInvocation::invoke() )!</p>
 
-                @param aName
-                    specifies the name of the method.
+        @param aName
+            specifies the name of the method.
      */
     boolean hasMethod( [in] string aName );
 
     /** returns `TRUE` if the property with the specified name exists, else `FALSE`.
 
-                <p>This optimizes the calling sequence
-                ( XInvocation::hasProperty(),
-                XInvocation::getValue() ) or
+        <p>This optimizes the calling sequence
+        ( XInvocation::hasProperty(),
+        XInvocation::getValue() ) or
 
-                ( XInvocation::hasProperty(),
-                XInvocation::setValue() )!
+        ( XInvocation::hasProperty(),
+        XInvocation::setValue() )!
 
-                    @param aName
-                specifies the name of the property.
+        @param aName
+            specifies the name of the property.
      */
     boolean hasProperty( [in] string aName );
 

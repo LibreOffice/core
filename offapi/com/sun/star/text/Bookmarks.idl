@@ -28,12 +28,12 @@ published service Bookmarks
 
     /** makes it possible to access the bookmarks by their names.
 
-                <p>All contents support the service Bookmark.
+        <p>All contents support the service Bookmark.
      */
     interface com::sun::star::container::XNameAccess;
     /** makes it possible to access the bookmarks by their index.
 
-                <p>All contents support the service Bookmark.
+        <p>All contents support the service Bookmark.
      */
     interface com::sun::star::container::XIndexAccess;
 

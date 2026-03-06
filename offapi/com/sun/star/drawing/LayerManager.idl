@@ -39,8 +39,8 @@ published service LayerManager
 
     /** gives access to the existing Layers by name.
 
-                <p>The contents of the collection all support Layer
-                returned by XLayer.
+        <p>The contents of the collection all support Layer
+        returned by XLayer.
      */
     interface com::sun::star::container::XNameAccess;
 

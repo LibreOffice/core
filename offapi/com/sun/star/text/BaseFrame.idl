@@ -53,8 +53,8 @@ published service BaseFrame
     interface com::sun::star::beans::XPropertySet;
     /** This interface specifies the name of this text frame.
 
-                <p>The name may be set automatically by the container if it is not
-                set when inserted. In this case a random, unique name is assigned.
+        <p>The name may be set automatically by the container if it is not
+        set when inserted. In this case a random, unique name is assigned.
      */
     interface com::sun::star::container::XNamed;
     /** contains the name of the frame style that is applied to this object.

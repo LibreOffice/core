@@ -29,9 +29,9 @@ published service NumberingRules
 {
     /** provides access to the levels of the numbering rule.
 
-                <p>The numbering rules are levels of property values. Each
-                level contains equal properties.</p>
-                @see NumberingLevel
+        <p>The numbering rules are levels of property values. Each
+        level contains equal properties.</p>
+        @see NumberingLevel
      */
         interface com::sun::star::container::XIndexReplace;
 

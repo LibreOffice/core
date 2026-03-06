@@ -58,7 +58,7 @@ published service PrintOptions
     /** if set to TRUE, the corresponding XPrintable.print() request will
         be executed synchronous.
 
-            <p>Default is the asynchronous print mode.</p>
+        <p>Default is the asynchronous print mode.</p>
 
         @attention  Using of this property with TRUE as value is highly recommended.
                 Otherwise following actions (as e.g. closing the corresponding model) can fail.

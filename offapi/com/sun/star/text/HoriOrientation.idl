@@ -27,11 +27,11 @@ published constants HoriOrientation
 {
     /** no hard alignment is applied.
 
-                <p>For text tables this means that the tables position is
-                defined by the left and right margins.
+        <p>For text tables this means that the tables position is
+        defined by the left and right margins.
 
-                <p>For frame objects (text frames, graphics,...) this means
-                that the position is defined by a left offset.
+        <p>For frame objects (text frames, graphics,...) this means
+        that the position is defined by a left offset.
      */
     const short NONE = 0;
 

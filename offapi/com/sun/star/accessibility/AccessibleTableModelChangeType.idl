@@ -21,19 +21,19 @@ module com { module sun { module star { module accessibility {
 
 /** Type of a change made to a table model.
 
-        <p>The value of this constants group are used by the
-        AccessibleTableModelChange structure to specify the
-        type of change that has been made to a table model.</p>
+    <p>The value of this constants group are used by the
+    AccessibleTableModelChange structure to specify the
+    type of change that has been made to a table model.</p>
 
-        <p>Four of the constants,
-        AccessibleTableModelChangeType::ROWS_INSERTED,
-        AccessibleTableModelChangeType::COLUMNS_INSERTED,
-        AccessibleTableModelChangeType::ROWS_REMOVED and
-        AccessibleTableModelChangeType::COLUMNS_REMOVED describe
-        changes to the table's geometry.  One or more rows or columns have
-        been inserted or removed.  In contrast, the remaining constant
-        AccessibleTabelModelChangeType::UPDATE specifies a
-        change of the table's content.</p>
+    <p>Four of the constants,
+    AccessibleTableModelChangeType::ROWS_INSERTED,
+    AccessibleTableModelChangeType::COLUMNS_INSERTED,
+    AccessibleTableModelChangeType::ROWS_REMOVED and
+    AccessibleTableModelChangeType::COLUMNS_REMOVED describe
+    changes to the table's geometry.  One or more rows or columns have
+    been inserted or removed.  In contrast, the remaining constant
+    AccessibleTabelModelChangeType::UPDATE specifies a
+    change of the table's content.</p>
 
     @since OOo 1.1.2
 */

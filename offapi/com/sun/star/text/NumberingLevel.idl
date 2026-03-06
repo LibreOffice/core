@@ -167,63 +167,63 @@ published service NumberingLevel
 
         /** position and space mode
 
-                <p>
-                Specifies the position and space mode of the numbering level.
-                For valid values see com::sun::star::text::PositionAndSpaceMode.
-                If it equals LABEL_WIDTH_AND_POSITION, properties Adjust,
-                LeftMargin, SymbolTextDistance and FirstLineOffset are used.
-                If it equals LABEL_ALIGNMENT, properties Adjust, LabelFollowedBy,
-                ListtabStopPosition, FirstLineIndent, IndentAt are used.
-                </p>
+            <p>
+            Specifies the position and space mode of the numbering level.
+            For valid values see com::sun::star::text::PositionAndSpaceMode.
+            If it equals LABEL_WIDTH_AND_POSITION, properties Adjust,
+            LeftMargin, SymbolTextDistance and FirstLineOffset are used.
+            If it equals LABEL_ALIGNMENT, properties Adjust, LabelFollowedBy,
+            ListtabStopPosition, FirstLineIndent, IndentAt are used.
+            </p>
 
-                @since OOo 3.0
+            @since OOo 3.0
         */
         [optional, property] short PositionAndSpaceMode;
 
         /** character following the list label
 
-                <p>
-                Specifies the character following the list label.
-                For valid values see com::sun::star::text::LabelFollow.
-                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
-                </p>
+            <p>
+            Specifies the character following the list label.
+            For valid values see com::sun::star::text::LabelFollow.
+            Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
+            </p>
 
-                @since OOo 3.0
+            @since OOo 3.0
         */
         [optional, property] short LabelFollowedBy;
 
         /** list tab position
 
-                <p>
-                Specifies the position of the list tab stop - only non-negative
-                values are allowed.
-                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT
-                and LabelFollowedBy equal LABELFOLLOW_LISTTAB
-                </p>
+            <p>
+            Specifies the position of the list tab stop - only non-negative
+            values are allowed.
+            Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT
+            and LabelFollowedBy equal LABELFOLLOW_LISTTAB
+            </p>
 
-                @since OOo 3.0
+            @since OOo 3.0
         */
         [optional, property] long ListtabStopPosition;
 
         /** additional line indent for the first text line
 
-                <p>
-                Specifies the first line indent.
-                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
-                </p>
+            <p>
+            Specifies the first line indent.
+            Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
+            </p>
 
-                @since OOo 3.0
+            @since OOo 3.0
         */
         [optional, property] long FirstLineIndent;
 
         /** indentation of the text lines
 
-                <p>
-                Specifies the indent of the text lines
-                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
-                </p>
+            <p>
+            Specifies the indent of the text lines
+            Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
+            </p>
 
-                @since OOo 3.0
+            @since OOo 3.0
         */
         [optional, property] long IndentAt;
 };

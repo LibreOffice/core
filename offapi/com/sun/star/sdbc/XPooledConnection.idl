@@ -23,7 +23,7 @@
 
 /** defines a pooled connection which can share an unused connection.
 
-<!-- JRH: unclear meaning -->
+    <!-- JRH: unclear meaning -->
 
     <p>
     PoolConnections are handled by the connection pool.

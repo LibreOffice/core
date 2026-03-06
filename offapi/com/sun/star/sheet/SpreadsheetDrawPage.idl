@@ -46,11 +46,11 @@ published service SpreadsheetDrawPage
 
     /** manages the com::sun::star::drawing::Shapes of this page.
 
-                <p>It also lets you add new com::sun::star::drawing::Shapes. The program currently
-                requires that these com::sun::star::drawing::Shapes be created by the factory of
-                the document.
+        <p>It also lets you add new com::sun::star::drawing::Shapes. The program currently
+        requires that these com::sun::star::drawing::Shapes be created by the factory of
+        the document.
 
-                @see SpreadsheetDocument
+        @see SpreadsheetDocument
      */
     interface com::sun::star::drawing::XDrawPage;
 
