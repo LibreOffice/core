@@ -1930,8 +1930,30 @@ void ScInterpreter::PushMatrix(const ScMatrixRef& pMat)
 
 void ScInterpreter::PushError( FormulaError nError )
 {
+    // Avoid some heap allocation/free work by storing an array
+    // of error token objects we can use that never need to be allocated or freed.
+    constexpr auto gFirstError = FormulaError::IllegalChar;
+    constexpr auto gLastError = FormulaError::LinkFormulaNeedingCheck;
+    constexpr auto nNumErrorTokens = static_cast<int>(gLastError) - static_cast<int>(gFirstError) + 1;
+    static const auto gErrorTokens = []()
+    {
+        std::array<FormulaErrorToken, nNumErrorTokens> aVec;
+        for (int i = 0; i < nNumErrorTokens; i++)
+        {
+            FormulaError err = static_cast<FormulaError>(i + static_cast<int>(gFirstError));
+            aVec[i] = FormulaErrorToken(err);
+            // given them an elevated ref-count so they are never deleted
+            aVec[i].IncRef();
+        }
+        return aVec;
+    }();
+
     SetError( nError );     // only sets error if not already set
-    PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
+
+    if (nGlobalError >= gFirstError && nGlobalError <= gLastError)
+        PushTempTokenWithoutError( &gErrorTokens[static_cast<int>(nGlobalError) - static_cast<int>(gFirstError)]);
+    else
+        PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
 }
 
 void ScInterpreter::PushParameterExpected()

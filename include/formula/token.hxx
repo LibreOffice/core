@@ -30,6 +30,7 @@
 #include <formula/opcode.hxx>
 #include <formula/types.hxx>
 #include <formula/paramclass.hxx>
+#include <formula/errorcodes.hxx>
 #include <osl/interlck.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -39,7 +40,6 @@ class ScJumpMatrix;
 class ScMatrix;
 struct ScComplexRefData;
 struct ScSingleRefData;
-enum class FormulaError : sal_uInt16;
 
 namespace formula
 {
@@ -515,6 +515,8 @@ class FORMULA_DLLPUBLIC FormulaErrorToken final : public FormulaToken
 {
          FormulaError          nError;
 public:
+                                FormulaErrorToken() :
+                                    FormulaToken( svError ), nError( FormulaError::IllegalChar ) {}
                                 FormulaErrorToken( FormulaError nErr ) :
                                     FormulaToken( svError ), nError( nErr) {}
                                 FormulaErrorToken( const FormulaErrorToken& r ) :
@@ -524,6 +526,13 @@ public:
     virtual FormulaError        GetError() const override;
     virtual void                SetError( FormulaError nErr ) override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
+
+    // we do some performance stuff in ScInterpreter::PushError that needs this
+    FormulaErrorToken& operator=( const FormulaErrorToken& rOther )
+    {
+        nError = rOther.nError;
+        return *this;
+    }
 };
 
 
