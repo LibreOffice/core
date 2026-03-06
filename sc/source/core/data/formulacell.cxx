@@ -5033,7 +5033,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             {
                 context = aContextGetterGuard.GetInterpreterContextForThreadIdx(i);
                 assert(!context->pInterpreter);
-                aInterpreters[i].reset(new ScInterpreter(this, rDocument, *context, mxGroup->mpTopCell->aPos, *pCode, true));
+                aInterpreters[i].reset(new ScInterpreter(this, rDocument, *context, mxGroup->mpTopCell->aPos, *pCode));
                 context->pInterpreter = aInterpreters[i].get();
                 rDocument.SetupContextFromNonThreadedContext(*context, i);
                 rThreadPool.pushTask(std::make_unique<Executor>(aTag, i, nThreadCount, &rDocument, context, mxGroup->mpTopCell->aPos,

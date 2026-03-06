@@ -80,9 +80,6 @@ using namespace formula;
 
 #define ADDIN_MAXSTRLEN 256
 
-thread_local std::unique_ptr<ScTokenStack> ScInterpreter::pGlobalStack;
-thread_local bool ScInterpreter::bGlobalStackInUse = false;
-
 // document access functions
 
 void ScInterpreter::ReplaceCell( ScAddress& rPos )
@@ -3799,7 +3796,7 @@ void ScInterpreter::ScTTT()
 }
 
 ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument& rDoc, ScInterpreterContext& rContext,
-        const ScAddress& rPos, ScTokenArray& r, bool bForGroupThreading )
+        const ScAddress& rPos, ScTokenArray& r )
     : aCode(r)
     , aPos(rPos)
     , pArr(&r)
@@ -3834,30 +3831,10 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument& rDoc, ScInterpre
     }
     else
         bMatrixFormula = false;
-
-    // Let's not use the global stack while formula-group-threading.
-    // as it complicates its life-cycle mgmt since for threading formula-groups,
-    // ScInterpreter is preallocated (in main thread) for each worker thread.
-    if (!bGlobalStackInUse && !bForGroupThreading)
-    {
-        bGlobalStackInUse = true;
-        if (!pGlobalStack)
-            pGlobalStack.reset(new ScTokenStack);
-        pStackObj = pGlobalStack.get();
-    }
-    else
-    {
-        pStackObj = new ScTokenStack;
-    }
-    pStack = pStackObj->pPointer;
 }
 
 ScInterpreter::~ScInterpreter()
 {
-    if ( pStackObj == pGlobalStack.get() )
-        bGlobalStackInUse = false;
-    else
-        delete pStackObj;
 }
 
 void ScInterpreter::Init( ScFormulaCell* pCell, const ScAddress& rPos, ScTokenArray& rTokArray )
@@ -3910,12 +3887,6 @@ void ScInterpreter::MergeCalcConfig()
 {
     maCalcConfig = GetOrCreateGlobalConfig();
     maCalcConfig.MergeDocumentSpecific( mrDoc.GetCalcConfig());
-}
-
-void ScInterpreter::GlobalExit()
-{
-    OSL_ENSURE(!bGlobalStackInUse, "who is still using the TokenStack?");
-    pGlobalStack.reset();
 }
 
 namespace {
