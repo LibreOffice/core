@@ -141,15 +141,16 @@
  
 --- src/common/classes/alloc.h
 +++ src/common/classes/alloc.h
-@@ -290,6 +290,7 @@
- #pragma warning(disable : 4595)		// non-member operator new or delete functions may not be declared inline
- #endif
+@@ -295,40 +295,60 @@
+ 
+ // operators new and delete
  
 +#if !defined USE_ASAN
  inline void* operator new(size_t s ALLOC_PARAMS)
  {
  	return MemoryPool::globalAlloc(s ALLOC_PASS_ARGS);
-@@ -298,16 +299,26 @@
+ }
+ inline void* operator new[](size_t s ALLOC_PARAMS)
  {
  	return MemoryPool::globalAlloc(s ALLOC_PASS_ARGS);
  }
@@ -176,7 +177,8 @@
  inline void operator delete(void* mem ALLOC_PARAMS) throw()
  {
  	MemoryPool::globalFree(mem);
-@@ -316,14 +327,23 @@
+ }
+ inline void operator delete[](void* mem ALLOC_PARAMS) throw()
  {
  	MemoryPool::globalFree(mem);
  }
@@ -199,7 +201,7 @@
 +#endif
  }
  
- #if _MSC_VER >= 1900
+ #ifdef DEBUG_GDS_ALLOC
 --- src/include/firebird.h
 +++ src/include/firebird.h
 @@ -38,8 +38,17 @@
