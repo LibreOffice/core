@@ -15,11 +15,14 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <swmodeltestbase.hxx>
 #include <doc.hxx>
@@ -27,6 +30,7 @@
 #include <formatlinebreak.hxx>
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
+#include <unotxdoc.hxx>
 #include <fmtanchr.hxx>
 #include <view.hxx>
 #include <itabenum.hxx>
@@ -654,6 +658,38 @@ CPPUNIT_TEST_FIXTURE(Test, testCutFontworkObject)
     // the fontwork object was not properly deleted when cut.
     CPPUNIT_ASSERT(pFontworkObj == nullptr);
 }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMultiSelectionTextSelectionCallback)
+{
+    // Given a document with "ABC" and LOK active:
+    comphelper::LibreOfficeKit::setActive(true);
+    createSwDoc();
+    SwXTextDocument* pTextDocument = getSwTextDoc();
+    pTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    int nViewId = SfxLokHelper::getView(*pWrtShell->GetSfxViewShell());
+    pWrtShell->Insert(u"ABC"_ustr);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+
+    // When having a multi-selection: "A" is selected and also the cursor is after "B":
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    // Move past "B" without selecting (ctrl+click equivalent):
+    pWrtShell->EnterAddMode();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    // Then the LOK text selection payload should not be empty:
+    std::optional<OString> aPayload
+        = pWrtShell->getLOKPayload(LOK_CALLBACK_TEXT_SELECTION, nViewId);
+    CPPUNIT_ASSERT(aPayload.has_value());
+    // Without the fix in place, this test would have failed, only the non-range "after B" selection
+    // was part of the payload.
+    CPPUNIT_ASSERT(!aPayload->isEmpty());
+
+    // Tear down LOK:
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

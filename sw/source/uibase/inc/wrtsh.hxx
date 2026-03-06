@@ -166,7 +166,7 @@ public:
     void    ToggleExtMode();
     bool    IsExtMode() const { return m_bExtMode; }
 
-    void    EnterAddMode();
+    SW_DLLPUBLIC void EnterAddMode();
     void    LeaveAddMode();
     void    ToggleAddMode();
     bool    IsAddMode() const { return m_bAddMode; }
@@ -537,7 +537,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void SetEnteringStdMode(bool bEnteringStdMode) { m_bEnteringStdMode = bEnteringStdMode; }
     bool IsEnteringStdMode() const { return m_bEnteringStdMode; }
 
-    std::optional<OString> getLOKPayload(int nType, int nViewId) const;
+    SW_DLLPUBLIC std::optional<OString> getLOKPayload(int nType, int nViewId) const;
 
 private:
 
