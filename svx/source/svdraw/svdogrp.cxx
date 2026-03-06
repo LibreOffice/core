@@ -842,9 +842,7 @@ void SdrObjGroup::SetDescription(const OUString& rStr)
                 aOrigDescription = OUString::fromUtf8(aDiagramModel.get("origDesc", ""));
 
                 // parse content to a new Diagram DataModel
-                std::shared_ptr<svx::diagram::DiagramHelper_svx> aNewHelper(svx::diagram::DiagramHelperFactory_svx::getDiagramHelperFactory_svx().createDiagramHelper_svx(aDiagramModel));
-
-                mp_DiagramHelper = aNewHelper;
+                mp_DiagramHelper = svx::diagram::DiagramHelperFactory_svx::getDiagramHelperFactory_svx().createDiagramHelper_svx(aDiagramModel);
                 mp_DiagramHelper->getRootShape() = getUnoShape();
             }
         }

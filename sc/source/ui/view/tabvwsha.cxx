@@ -1050,7 +1050,8 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
         case SID_STYLE_SHOW:
         case SID_STYLE_NEW_BY_EXAMPLE:
             {
-                auto lambda = [pStylePool, nSlotId, xOldData, xNewData, eFamily, this](SfxRequest& rRequest, const OUString& rStyleName)
+                auto lambda = [pStylePool, nSlotId, xOldData=std::move(xOldData),
+                               xNewData=std::move(xNewData), eFamily, this](SfxRequest& rRequest, const OUString& rStyleName)
                 {
                     SfxStyleSheetBase* pApplyStyleSheet = pStylePool->Find(rStyleName, eFamily);
                     xOldData->InitFromStyle(pApplyStyleSheet);
@@ -1070,7 +1071,8 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     auto xDlg = std::make_shared<SfxNewStyleDlg>(pDialogParent, *pStylePool, eFamily);
                     auto xRequest = std::make_shared<SfxRequest>(rReq);
                     rReq.Ignore();
-                    weld::GenericDialogController::runAsync(xDlg,[xDlg, xRequest, lambda](sal_Int32 nResult){
+                    weld::GenericDialogController::runAsync(xDlg,[xDlg, xRequest=std::move(xRequest),
+                                                                  lambda=std::move(lambda)](sal_Int32 nResult){
                         if (nResult == RET_OK) {
                             lambda(*xRequest, xDlg->GetName());
                         }
