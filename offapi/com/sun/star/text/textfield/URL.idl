@@ -22,6 +22,10 @@ module com { module sun { module star { module text { module textfield {
 
 /** specifies service of text field that displays a URL
 
+    Note that this can’t be used to insert a link into a Writer
+    document. Instead you should use the HyperLinkURL property on the
+    text.
+
     @see com::sun::star::text::TextField
 */
 published service URL
