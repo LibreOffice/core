@@ -176,10 +176,8 @@ static int compareProtocol( const void* pLeft, const void* pRight )
 
 std::unique_ptr<WMAdaptor> WMAdaptor::createWMAdaptor(SalX11Display* pSalDisplay)
 {
-    std::unique_ptr<WMAdaptor> pAdaptor;
-
     // try a NetWM
-    pAdaptor.reset(new NetWMAdaptor( pSalDisplay ));
+    std::unique_ptr<WMAdaptor> pAdaptor(new NetWMAdaptor(pSalDisplay));
     if( ! pAdaptor->isValid() )
     {
         pAdaptor.reset();
