@@ -68,7 +68,32 @@ void AutoFormatBase::SetAdjust( const SvxAdjustItem& rNew )         { m_aAdjust.
 void AutoFormatBase::SetHorJustify( const SvxHorJustifyItem& rNew ) { m_aHorJustify.reset(rNew.Clone()); }
 void AutoFormatBase::SetVerJustify( const SvxVerJustifyItem& rNew ) { m_aVerJustify.reset(rNew.Clone()); }
 
-AutoFormatBase::AutoFormatBase()
+AutoFormatBase::AutoFormatBase(const AutoFormatWhichIds& rIds)
+    : m_aFont(std::make_unique<SvxFontItem>(rIds.nFont))
+    , m_aHeight(std::make_unique<SvxFontHeightItem>(240, 100, rIds.nHeight))
+    , m_aWeight(std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, rIds.nWeight))
+    , m_aPosture(std::make_unique<SvxPostureItem>(ITALIC_NONE, rIds.nPosture))
+    , m_aCJKFont(std::make_unique<SvxFontItem>(rIds.nCJKFont))
+    , m_aCJKHeight(std::make_unique<SvxFontHeightItem>(240, 100, rIds.nCJKHeight))
+    , m_aCJKWeight(std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, rIds.nCJKWeight))
+    , m_aCJKPosture(std::make_unique<SvxPostureItem>(ITALIC_NONE, rIds.nCJKPosture))
+    , m_aCTLFont(std::make_unique<SvxFontItem>(rIds.nCTLFont))
+    , m_aCTLHeight(std::make_unique<SvxFontHeightItem>(240, 100, rIds.nCTLHeight))
+    , m_aCTLWeight(std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, rIds.nCTLWeight))
+    , m_aCTLPosture(std::make_unique<SvxPostureItem>(ITALIC_NONE, rIds.nCTLPosture))
+    , m_aUnderline(std::make_unique<SvxUnderlineItem>(LINESTYLE_NONE, rIds.nUnderline))
+    , m_aOverline(std::make_unique<SvxOverlineItem>(LINESTYLE_NONE, rIds.nOverline))
+    , m_aCrossedOut(std::make_unique<SvxCrossedOutItem>(STRIKEOUT_NONE, rIds.nCrossedOut))
+    , m_aContour(std::make_unique<SvxContourItem>(false, rIds.nContour))
+    , m_aShadowed(std::make_unique<SvxShadowedItem>(false, rIds.nShadowed))
+    , m_aColor(std::make_unique<SvxColorItem>(rIds.nColor))
+    , m_aBox(std::make_unique<SvxBoxItem>(rIds.nBox))
+    , m_aTLBR(std::make_unique<SvxLineItem>(rIds.nTLBR))
+    , m_aBLTR(std::make_unique<SvxLineItem>(rIds.nBLTR))
+    , m_aBackground(std::make_unique<SvxBrushItem>(rIds.nBackground))
+    , m_aAdjust(std::make_unique<SvxAdjustItem>(SvxAdjust::Left, rIds.nAdjust))
+    , m_aHorJustify(std::make_unique<SvxHorJustifyItem>(SvxCellHorJustify::Standard, rIds.nHorJustify))
+    , m_aVerJustify(std::make_unique<SvxVerJustifyItem>(SvxCellVerJustify::Standard, rIds.nVerJustify))
 {
 }
 

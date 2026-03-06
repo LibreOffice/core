@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 #include <memory>
 
-class SvStream;
 class SvxFontItem;
 class SvxFontHeightItem;
 class SvxWeightItem;
@@ -40,12 +39,37 @@ class SvxBrushItem;
 class SvxAdjustItem;
 class SvxHorJustifyItem;
 class SvxVerJustifyItem;
-class SfxBoolItem;
-class SvxMarginItem;
-class SfxInt32Item;
-class SvxRotateModeItem;
 
 //////////////////////////////////////////////////////////////////////////////
+
+struct SVX_DLLPUBLIC AutoFormatWhichIds
+{
+    sal_uInt16 nFont;
+    sal_uInt16 nHeight;
+    sal_uInt16 nWeight;
+    sal_uInt16 nPosture;
+    sal_uInt16 nCJKFont;
+    sal_uInt16 nCJKHeight;
+    sal_uInt16 nCJKWeight;
+    sal_uInt16 nCJKPosture;
+    sal_uInt16 nCTLFont;
+    sal_uInt16 nCTLHeight;
+    sal_uInt16 nCTLWeight;
+    sal_uInt16 nCTLPosture;
+    sal_uInt16 nUnderline;
+    sal_uInt16 nOverline;
+    sal_uInt16 nCrossedOut;
+    sal_uInt16 nContour;
+    sal_uInt16 nShadowed;
+    sal_uInt16 nColor;
+    sal_uInt16 nBox;
+    sal_uInt16 nTLBR;
+    sal_uInt16 nBLTR;
+    sal_uInt16 nBackground;
+    sal_uInt16 nAdjust;
+    sal_uInt16 nHorJustify;
+    sal_uInt16 nVerJustify;
+};
 
 class SVX_DLLPUBLIC AutoFormatBase
 {
@@ -84,7 +108,7 @@ protected:
     std::unique_ptr<SvxHorJustifyItem>      m_aHorJustify;
     std::unique_ptr<SvxVerJustifyItem>      m_aVerJustify;
 
-    AutoFormatBase();
+    AutoFormatBase(const AutoFormatWhichIds& rIds);
     AutoFormatBase( const AutoFormatBase& rNew );
     ~AutoFormatBase();
 

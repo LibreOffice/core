@@ -146,6 +146,11 @@ const SfxItemPropertySet& SvxAutoFormat::GetTablePropertySet()
     return aSvxTablePropertySet;
 }
 
+SvxAutoFormatDataField::SvxAutoFormatDataField(const AutoFormatWhichIds& rIds)
+    : AutoFormatBase(rIds)
+{
+}
+
 SvxAutoFormatDataField::SvxAutoFormatDataField(const SvxAutoFormatDataField& rCopy)
     : AutoFormatBase(rCopy)
     , mSetProperties(rCopy.mSetProperties)

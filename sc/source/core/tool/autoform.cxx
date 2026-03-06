@@ -46,43 +46,42 @@
 using namespace com::sun::star::beans;
 using namespace com::sun::star;
 
+constexpr AutoFormatWhichIds aScWhichIds = {
+    ATTR_FONT,             // nFont
+    ATTR_FONT_HEIGHT,      // nHeight
+    ATTR_FONT_WEIGHT,      // nWeight
+    ATTR_FONT_POSTURE,     // nPosture
+    ATTR_CJK_FONT,         // nCJKFont
+    ATTR_CJK_FONT_HEIGHT,  // nCJKHeight
+    ATTR_CJK_FONT_WEIGHT,  // nCJKWeight
+    ATTR_CJK_FONT_POSTURE, // nCJKPosture
+    ATTR_CTL_FONT,         // nCTLFont
+    ATTR_CTL_FONT_HEIGHT,  // nCTLHeight
+    ATTR_CTL_FONT_WEIGHT,  // nCTLWeight
+    ATTR_CTL_FONT_POSTURE, // nCTLPosture
+    ATTR_FONT_UNDERLINE,   // nUnderline
+    ATTR_FONT_OVERLINE,    // nOverline
+    ATTR_FONT_CROSSEDOUT,  // nCrossedOut
+    ATTR_FONT_CONTOUR,     // nContour
+    ATTR_FONT_SHADOWED,    // nShadowed
+    ATTR_FONT_COLOR,       // nColor
+    ATTR_BORDER,           // nBox
+    ATTR_BORDER_TLBR,      // nTLBR
+    ATTR_BORDER_BLTR,      // nBLTR
+    ATTR_BACKGROUND,       // nBackground
+    0,                     // nAdjust
+    ATTR_HOR_JUSTIFY,      // nHorJustify
+    ATTR_VER_JUSTIFY,      // nVerJustify
+};
+
 ScAutoFormatDataField::ScAutoFormatDataField()
+    : SvxAutoFormatDataField(aScWhichIds)
+    , m_aStacked(std::make_unique<ScVerticalStackCell>(ATTR_STACKED))
+    , m_aMargin(std::make_unique<SvxMarginItem>(ATTR_MARGIN))
+    , m_aLinebreak(std::make_unique<ScLineBreakCell>(ATTR_LINEBREAK))
+    , m_aRotateAngle(std::make_unique<ScRotateValueItem>(0_deg100))
+    , m_aRotateMode(std::make_unique<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE))
 {
-    // need to set default instances for base class AutoFormatBase here
-    // due to resource defines (e.g. ATTR_FONT) which are not available
-    // in svx and different in the different usages of derivations
-    m_aFont = std::make_unique<SvxFontItem>(ATTR_FONT);
-    m_aHeight = std::make_unique<SvxFontHeightItem>(240, 100, ATTR_FONT_HEIGHT);
-    m_aWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, ATTR_FONT_WEIGHT);
-    m_aPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, ATTR_FONT_POSTURE);
-    m_aCJKFont = std::make_unique<SvxFontItem>(ATTR_CJK_FONT);
-    m_aCJKHeight = std::make_unique<SvxFontHeightItem>(240, 100, ATTR_CJK_FONT_HEIGHT);
-    m_aCJKWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT);
-    m_aCJKPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, ATTR_CJK_FONT_POSTURE);
-    m_aCTLFont = std::make_unique<SvxFontItem>(ATTR_CTL_FONT);
-    m_aCTLHeight = std::make_unique<SvxFontHeightItem>(240, 100, ATTR_CTL_FONT_HEIGHT);
-    m_aCTLWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT);
-    m_aCTLPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, ATTR_CTL_FONT_POSTURE);
-    m_aUnderline = std::make_unique<SvxUnderlineItem>(LINESTYLE_NONE, ATTR_FONT_UNDERLINE);
-    m_aOverline = std::make_unique<SvxOverlineItem>(LINESTYLE_NONE, ATTR_FONT_OVERLINE);
-    m_aCrossedOut = std::make_unique<SvxCrossedOutItem>(STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT);
-    m_aContour = std::make_unique<SvxContourItem>(false, ATTR_FONT_CONTOUR);
-    m_aShadowed = std::make_unique<SvxShadowedItem>(false, ATTR_FONT_SHADOWED);
-    m_aColor = std::make_unique<SvxColorItem>(ATTR_FONT_COLOR);
-    m_aBox = std::make_unique<SvxBoxItem>(ATTR_BORDER);
-    m_aTLBR = std::make_unique<SvxLineItem>(ATTR_BORDER_TLBR);
-    m_aBLTR = std::make_unique<SvxLineItem>(ATTR_BORDER_BLTR);
-    m_aBackground = std::make_unique<SvxBrushItem>(ATTR_BACKGROUND);
-    m_aAdjust = std::make_unique<SvxAdjustItem>(SvxAdjust::Left, 0);
-    m_aHorJustify
-        = std::make_unique<SvxHorJustifyItem>(SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY);
-    m_aVerJustify
-        = std::make_unique<SvxVerJustifyItem>(SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY);
-    m_aStacked = std::make_unique<ScVerticalStackCell>(ATTR_STACKED);
-    m_aMargin = std::make_unique<SvxMarginItem>(ATTR_MARGIN);
-    m_aLinebreak = std::make_unique<ScLineBreakCell>(ATTR_LINEBREAK);
-    m_aRotateAngle = std::make_unique<ScRotateValueItem>(0_deg100);
-    m_aRotateMode = std::make_unique<SvxRotateModeItem>(SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE);
 }
 
 ScAutoFormatDataField::ScAutoFormatDataField(const ScAutoFormatDataField& rCopy)

@@ -61,40 +61,45 @@
 
 SwBoxAutoFormat* SwTableAutoFormat::s_pDefaultBoxAutoFormat = nullptr;
 
+constexpr AutoFormatWhichIds aSwWhichIds = {
+    RES_CHRATR_FONT,         // nFont
+    RES_CHRATR_FONTSIZE,     // nHeight
+    RES_CHRATR_WEIGHT,       // nWeight
+    RES_CHRATR_POSTURE,      // nPosture
+    RES_CHRATR_CJK_FONT,     // nCJKFont
+    RES_CHRATR_CJK_FONTSIZE, // nCJKHeight
+    RES_CHRATR_CJK_WEIGHT,   // nCJKWeight
+    RES_CHRATR_CJK_POSTURE,  // nCJKPosture
+    RES_CHRATR_CTL_FONT,     // nCTLFont
+    RES_CHRATR_CTL_FONTSIZE, // nCTLHeight
+    RES_CHRATR_CTL_WEIGHT,   // nCTLWeight
+    RES_CHRATR_CTL_POSTURE,  // nCTLPosture
+    RES_CHRATR_UNDERLINE,    // nUnderline
+    RES_CHRATR_OVERLINE,     // nOverline
+    RES_CHRATR_CROSSEDOUT,   // nCrossedOut
+    RES_CHRATR_CONTOUR,      // nContour
+    RES_CHRATR_SHADOWED,     // nShadowed
+    RES_CHRATR_COLOR,        // nColor
+    RES_BOX,                 // nBox
+    0,                       // nTLBR
+    0,                       // nBLTR
+    RES_BACKGROUND,          // nBackground
+    RES_PARATR_ADJUST,       // nAdjust
+    0,                       // nHorJustify
+    0,                       // nVerJustify
+};
+
 SwBoxAutoFormat::SwBoxAutoFormat()
+    : SvxAutoFormatDataField(aSwWhichIds)
+    , m_aTextOrientation(
+          std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR))
+    , m_aVerticalAlignment(std::make_unique<SwFormatVertOrient>(0, text::VertOrientation::TOP,
+                                                                text::RelOrientation::FRAME))
 {
-    // need to set default instances for base class AutoFormatBase here
-    // due to resource defines (e.g. RES_CHRATR_FONT) which are not available
-    // in svx and different in the different usages of derivations
-    m_aFont = std::make_unique<SvxFontItem>(*GetDfltAttr(RES_CHRATR_FONT));
-    m_aHeight = std::make_unique<SvxFontHeightItem>(240, 100, RES_CHRATR_FONTSIZE);
-    m_aWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, RES_CHRATR_WEIGHT);
-    m_aPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, RES_CHRATR_POSTURE);
-    m_aCJKFont = std::make_unique<SvxFontItem>(*GetDfltAttr(RES_CHRATR_CJK_FONT));
-    m_aCJKHeight = std::make_unique<SvxFontHeightItem>(240, 100, RES_CHRATR_CJK_FONTSIZE);
-    m_aCJKWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT);
-    m_aCJKPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, RES_CHRATR_CJK_POSTURE);
-    m_aCTLFont = std::make_unique<SvxFontItem>(*GetDfltAttr(RES_CHRATR_CTL_FONT));
-    m_aCTLHeight = std::make_unique<SvxFontHeightItem>(240, 100, RES_CHRATR_CTL_FONTSIZE);
-    m_aCTLWeight = std::make_unique<SvxWeightItem>(WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT);
-    m_aCTLPosture = std::make_unique<SvxPostureItem>(ITALIC_NONE, RES_CHRATR_CTL_POSTURE);
-    m_aUnderline = std::make_unique<SvxUnderlineItem>(LINESTYLE_NONE, RES_CHRATR_UNDERLINE);
-    m_aOverline = std::make_unique<SvxOverlineItem>(LINESTYLE_NONE, RES_CHRATR_OVERLINE);
-    m_aCrossedOut = std::make_unique<SvxCrossedOutItem>(STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT);
-    m_aContour = std::make_unique<SvxContourItem>(false, RES_CHRATR_CONTOUR);
-    m_aShadowed = std::make_unique<SvxShadowedItem>(false, RES_CHRATR_SHADOWED);
-    m_aColor = std::make_unique<SvxColorItem>(COL_AUTO, RES_CHRATR_COLOR);
-    m_aBox = std::make_unique<SvxBoxItem>(RES_BOX);
-    m_aTLBR = std::make_unique<SvxLineItem>(0);
-    m_aBLTR = std::make_unique<SvxLineItem>(0);
-    m_aBackground = std::make_unique<SvxBrushItem>(RES_BACKGROUND);
-    m_aAdjust = std::make_unique<SvxAdjustItem>(SvxAdjust::Left, RES_PARATR_ADJUST);
-    m_aHorJustify = std::make_unique<SvxHorJustifyItem>(SvxCellHorJustify::Standard, 0);
-    m_aVerJustify = std::make_unique<SvxVerJustifyItem>(SvxCellVerJustify::Standard, 0);
-    m_aTextOrientation
-        = std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR);
-    m_aVerticalAlignment = std::make_unique<SwFormatVertOrient>(0, text::VertOrientation::TOP,
-                                                                text::RelOrientation::FRAME);
+    SetFont(*GetDfltAttr(RES_CHRATR_FONT));
+    SetCJKFont(*GetDfltAttr(RES_CHRATR_CJK_FONT));
+    SetCTLFont(*GetDfltAttr(RES_CHRATR_CTL_FONT));
+    SetColor(SvxColorItem(COL_AUTO, RES_CHRATR_COLOR));
     m_aVerticalAlignment->SetWhich(RES_VERT_ORIENT);
     SetSysLanguage(::GetAppLanguage());
     SetNumFormatLanguage(::GetAppLanguage());

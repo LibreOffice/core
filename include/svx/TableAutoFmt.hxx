@@ -84,7 +84,7 @@ private:
     std::bitset<Autoformat::PROP_COUNT> mSetProperties;
 
 public:
-    SvxAutoFormatDataField(){};
+    SvxAutoFormatDataField(const AutoFormatWhichIds& rIds);
     SvxAutoFormatDataField(const SvxAutoFormatDataField& rCopy);
 
     virtual ~SvxAutoFormatDataField() = default;
