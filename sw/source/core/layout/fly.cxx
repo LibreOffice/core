@@ -1283,7 +1283,7 @@ void SwFlyFrame::UpdateAttrForFormatChange( SwFormat *pOldFormat, SwFormat *pNew
 
         SwFormatURL aURL( GetFormat()->GetURL() );
 
-        if (aURL.GetMap() && pOldFormat)
+        if (aURL.GetMap())
         {
             const SwFormatFrameSize &rOld = pOldFormat->GetFrameSize();
             //#35091# Can be "times zero", when loading the template
