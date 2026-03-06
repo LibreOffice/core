@@ -1722,6 +1722,67 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_ClearItemsOperation)
                          getTextWeight(pDocument, 0, 1, 4, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_EnterMatrix_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Switch to sheet view and enter matrix formulas
+    {
+        switchToSheetView();
+
+        // Current state default view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Current state sheet view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // Modify Sheet View A3 : 4 -> ={14} (matrix formula)
+        pDocShell->GetDocFunc().EnterMatrix(ScRange(0, 2, 1, 0, 2, 1), nullptr, nullptr,
+                                            u"={14}"_ustr, true, true, OUString(),
+                                            formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+
+        // Default view: translated A3 to A4 : 4 -> 14
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"14", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Sheet view: A3 : 4 -> 14, and resort
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"5", u"7", u"14" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // Modify Default view A2 : 7 -> ={17} (matrix formula)
+        pDocShell->GetDocFunc().EnterMatrix(ScRange(0, 1, 0, 0, 1, 0), nullptr, nullptr,
+                                            u"={17}"_ustr, true, true, OUString(),
+                                            formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
+
+        // Default view: A2 : 7 -> 17
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"17", u"5", u"14", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Sheet view: translated A2 to A4 : 7 -> 17, and resort
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"5", u"14", u"17" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
