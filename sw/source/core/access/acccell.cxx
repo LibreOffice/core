@@ -318,7 +318,7 @@ std::unordered_map<OUString, OUString> SwAccessibleCell::implGetExtendedAttribut
         }
         // cell name consists of column name (using letters) and row name (using digits)
         const size_t nRowNameStartIndex = sCellName.find_first_of(u"0123456789");
-        assert(nRowNameStartIndex >= 0 && "Cell name doesn't contain a row number");
+        assert(nRowNameStartIndex != std::u16string_view::npos && "Cell name doesn't contain a row number");
         aAttributes.emplace(AccessibleAttribute::ColIndexText, sCellName.substr(0, nRowNameStartIndex));
         aAttributes.emplace(AccessibleAttribute::RowIndexText, sCellName.substr(nRowNameStartIndex));
     }
