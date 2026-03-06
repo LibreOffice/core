@@ -15,7 +15,11 @@
 #include <vcl/scheduler.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sctestviewcallback.hxx>
+#include <docfunc.hxx>
+#include <docsh.hxx>
 #include <docuno.hxx>
+#include <markdata.hxx>
+#include <scitems.hxx>
 #include <SheetView.hxx>
 #include <SheetViewManager.hxx>
 
@@ -1615,6 +1619,107 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testNewViewOpensInDefaultView)
     // The view 2 should open on the default tab
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
     CPPUNIT_ASSERT_EQUAL(sc::DefaultSheetViewID, pTabView2->GetViewData().GetSheetViewID());
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_ClearItemsOperation)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Switch to Sheet View and Create, sort descending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Default view: 4, 5, 3, 7
+    // Sheet view: 7, 5, 4, 3 (sorted)
+
+    // Set A2 and A3 bold in sheet view
+    {
+        switchToSheetView();
+        setCellBold(u"A2");
+        setCellBold(u"A3");
+    }
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"B" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+
+    // Switch to Default View and call ClearItems on A4:A5
+    {
+        switchToDefaultView();
+
+        ScMarkData aMark(pDocument->GetSheetLimits());
+        aMark.SelectTable(0, true);
+        aMark.SetMarkArea(ScRange(0, 3, 0, 0, 4, 0));
+        sal_uInt16 aWhich[] = { ATTR_FONT_WEIGHT, 0 };
+        pDocShell->GetDocFunc().ClearItems(aMark, aWhich, true);
+    }
+
+    // Default view: A4 is N so no change, A5 should change from B -> N
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+
+    // Sheet view: A4 -> A5 and A5 -> A2, so A2 should change from B -> N
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_ClearItemsOperation)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Switch to Sheet View and Create, sort descending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Default view: 4, 5, 3, 7
+    // Sheet view: 7, 5, 4, 3 (sorted)
+
+    // Set all cells bold from sheet view
+    {
+        switchToSheetView();
+        setCellBold(u"A2:A5");
+    }
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"B", u"B" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"B", u"B" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+
+    // Call ClearItems on A3:A4 on sheet view
+    {
+        switchToSheetView();
+
+        ScMarkData aMark(pDocument->GetSheetLimits());
+        aMark.SelectTable(1, true);
+        aMark.SetMarkArea(ScRange(0, 2, 1, 0, 3, 1));
+        sal_uInt16 aWhich[] = { ATTR_FONT_WEIGHT, 0 };
+        pDocShell->GetDocFunc().ClearItems(aMark, aWhich, true);
+    }
+
+    // Sheet view: A3, A4 changed from B -> N
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"N", u"N", u"B" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+
+    // Default view: A3 -> A3, A4 -> A2, so A2 and A3 from B -> N
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"B", u"B" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

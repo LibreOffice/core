@@ -34,9 +34,6 @@ bool ClearItemsOperation::runImplementation()
     ScDocument& rDoc = mrDocShell.GetDocument();
     bool bUndo(rDoc.IsUndoEnabled());
 
-    if (!checkSheetViewProtection())
-        return false;
-
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, mrMark);
     if (!aTester.IsEditable())
     {
@@ -49,7 +46,7 @@ bool ClearItemsOperation::runImplementation()
     //  MarkData (GetMarkData), so rMark must be changed to multi selection for ClearSelectionItems
     //  here.
 
-    ScMarkData aMultiMark = mrMark;
+    ScMarkData aMultiMark = convertMark(mrMark);
     aMultiMark.SetMarking(false); // for MarkToMulti
     aMultiMark.MarkToMulti();
     const ScRange& aMarkRange = aMultiMark.GetMultiMarkArea();
@@ -68,6 +65,8 @@ bool ClearItemsOperation::runImplementation()
     }
 
     rDoc.ClearSelectionItems(mpWhich, aMultiMark);
+
+    syncSheetViews();
 
     mrDocShell.PostPaint(aMarkRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE);
     aModificator.SetDocumentModified();
