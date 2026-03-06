@@ -220,7 +220,7 @@ void UnoApiTest::validate(TestFilter eFilter)
 
     if (eFormat == ValidationFormat::PDF)
     {
-        if (aContentOUString.indexOf("isCompliant=\"true\"") == -1)
+        if (aContentOUString.indexOf("isCompliant=\"false\"") != -1)
         {
             SAL_WARN("test", aContentOUString);
             CPPUNIT_FAIL("VeraPDF validation failed: document is not compliant");
@@ -373,8 +373,22 @@ void UnoApiTest::save(TestFilter eFilter, const uno::Sequence<beans::PropertyVal
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
-    // FIXME: Don't validate pdf files by default for now
-    if (!mbSkipValidation && eFilter != TestFilter::PDF_WRITER)
+    if (eFilter == TestFilter::PDF_WRITER)
+    {
+        comphelper::SequenceAsHashMap aFilterData;
+        if (aMediaDescriptor.contains(u"FilterData"_ustr))
+            aFilterData = aMediaDescriptor[u"FilterData"_ustr];
+        bool bPDFUACompliance(
+            aFilterData.getUnpackedValueOrDefault(u"PDFUACompliance"_ustr, false));
+        sal_Int32 nSelectPdfVersion(
+            aFilterData.getUnpackedValueOrDefault(u"SelectPdfVersion"_ustr, sal_Int32(0)));
+        // Only validate PDF/UA, PDF/A-1b, PDF/A-2b or PDF/A-3b
+        if (!bPDFUACompliance && nSelectPdfVersion != 1 && nSelectPdfVersion != 2
+            && nSelectPdfVersion != 3)
+            skipValidation();
+    }
+
+    if (!mbSkipValidation)
         validate(eFilter);
 }
 

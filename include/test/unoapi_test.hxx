@@ -177,9 +177,8 @@ protected:
 
     rtl::Reference<TestInteractionHandler> xInteractionHandler;
 
-    void validate(TestFilter eFilter);
-
 private:
+    void validate(TestFilter eFilter);
     void setTestInteractionHandler(const char* pPassword,
                                    std::vector<css::beans::PropertyValue>& rFilterOptions);
 
