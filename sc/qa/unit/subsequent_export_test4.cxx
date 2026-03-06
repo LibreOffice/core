@@ -1118,21 +1118,22 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testButtonFormControlXlsxExport)
     assertXPathNoAttribute(pDoc, "//x:controlPr", "macro");
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest4, testMacrosInXLSX)
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testMacrosInXLSX_Regular)
 {
-    // Array formula
+    // Regular formula
     createScDoc("xls/formula_with_macros.xls");
     save(TestFilter::XLSX);
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[1]/x:f", 0);
+}
 
-    dispose();
-
-    // Regular formula
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testMacrosInXLSX_Array)
+{
+    // Array formula
     createScDoc("xls/array_formula_with_macros.xls");
     save(TestFilter::XLSX);
-    pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[2]/x:c[2]/x:f", u"");
 }
