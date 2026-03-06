@@ -18,6 +18,7 @@
  */
 #include "pyuno_impl.hxx"
 
+#include <cassert>
 #include <vector>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -140,6 +141,8 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
             return nullptr;
         }
 
+        assert(nParams > 0
+               && "nParams >= 1 after bounds check against nMinParams which is always >= 1");
         css::uno::Sequence<css::uno::Any> aParams(nParams - 1);
         css::uno::Any* pParams = aParams.getArray();
 
