@@ -2169,7 +2169,8 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     float fWidth = pPageObject->getStrokeWidth();
     const double dWidth = 0.5 * fabs(std::hypot(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
     const double fLineWidth = convertPointToMm100(dWidth);
-    if (fLineWidth < 0 || fLineWidth > std::numeric_limits<sal_Int32>::max())
+    if (std::isnan(fLineWidth) || fLineWidth < 0
+        || fLineWidth > std::numeric_limits<sal_Int32>::max())
     {
         SAL_WARN("sd.filter", "Ignoring bogus line width: " << fLineWidth);
         mnLineWidth = 0;
