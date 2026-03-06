@@ -1885,9 +1885,13 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
             pFS->startElementNS(XML_a, XML_xfrm);
         }
         pFS->singleElementNS(XML_a, XML_off, XML_x, "0", XML_y, "0");
-        OString aWidth(OString::number(TwipsToEMU(aSize.Width())));
-        OString aHeight(OString::number(TwipsToEMU(aSize.Height())));
-        pFS->singleElementNS(XML_a, XML_ext, XML_cx, aWidth, XML_cy, aHeight);
+
+        // MS Word reports the document as corrupt if not positive, Int32 value
+        const sal_Int32 nW = std::clamp<sal_Int64>(TwipsToEMU(aSize.Width()), 0, SAL_MAX_INT32);
+        const sal_Int32 nH = std::clamp<sal_Int64>(TwipsToEMU(aSize.Height()), 0, SAL_MAX_INT32);
+        pFS->singleElementNS(XML_a, XML_ext, XML_cx, OString::number(nW), XML_cy,
+                             OString::number(nH));
+
         pFS->endElementNS(XML_a, XML_xfrm);
         OUString shapeType = u"rect"_ustr;
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
