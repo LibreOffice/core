@@ -11770,30 +11770,33 @@ struct UBlockScript {
 
 }
 
-const UBlockScript scriptList[] = {
+constexpr UBlockScript scriptList[] = {
     {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO},
-    {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_HANGUL_SYLLABLES},
-    {UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS,UBLOCK_CJK_RADICALS_SUPPLEMENT },
-    {UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS,UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS},
+    {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS},
     {UBLOCK_CJK_COMPATIBILITY_FORMS, UBLOCK_CJK_COMPATIBILITY_FORMS},
     {UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS},
     {UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT},
     {UBLOCK_CJK_STROKES, UBLOCK_CJK_STROKES}
 };
+static_assert(std::ranges::all_of(scriptList, [](const auto& r) { return r.from <= r.to; }));
+static_assert(std::ranges::is_sorted(scriptList,
+                                     [](const auto& l, const auto& r)
+                                     {
+                                         // avoid interleaving ranges; without the second part,
+                                         // this would pass the check: {{0, 10}, {5, 15}}
+                                         return (l.to < r.from || l.from < r.to);
+                                     }));
 static bool IsDBCS(sal_Unicode currentChar)
 {
     // for the locale of ja-JP, character U+0x005c and U+0x20ac should be ScriptType::Asian
     if( (currentChar == 0x005c || currentChar == 0x20ac) &&
           (MsLangId::getConfiguredSystemLanguage() == LANGUAGE_JAPANESE) )
         return true;
-    sal_uInt16 i;
-    bool bRet = false;
     UBlockCode block = ublock_getCode(currentChar);
-    for ( i = 0; i < SAL_N_ELEMENTS(scriptList); i++) {
-        if (block <= scriptList[i].to) break;
-    }
-    bRet = (i < SAL_N_ELEMENTS(scriptList) && block >= scriptList[i].from);
-    return bRet;
+    for (auto [from, to] : scriptList) // scriptList is sorted ascending
+        if (block <= to) // only the first block with to >= block can contain block
+            return block >= from;
+    return false;
 }
 static sal_Int32 lcl_getLengthB( std::u16string_view str, sal_Int32 nPos )
 {
