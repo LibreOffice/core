@@ -2239,11 +2239,13 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
     if (pViewShell2 && pViewShell2 == this)
     {
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        assert(pTabViewShell);
-        ScInputHandler* pInputHdl = pTabViewShell->GetInputHandler();
-        if (pInputHdl && pInputHdl->IsFormulaMode())
+        if (pTabViewShell)
         {
-            pInputHdl->SetMode(SC_INPUT_NONE);
+            ScInputHandler* pInputHdl = pTabViewShell->GetInputHandler();
+            if (pInputHdl && pInputHdl->IsFormulaMode())
+            {
+                pInputHdl->SetMode(SC_INPUT_NONE);
+            }
         }
     }
 
