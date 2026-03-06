@@ -51,12 +51,15 @@ bool EnterMatrixOperation::runImplementation()
 
     bool bSuccess = false;
     ScDocument& rDoc = mrDocShell.GetDocument();
-    SCCOL nStartCol = maRange.aStart.Col();
-    SCROW nStartRow = maRange.aStart.Row();
-    SCTAB nStartTab = maRange.aStart.Tab();
-    SCCOL nEndCol = maRange.aEnd.Col();
-    SCROW nEndRow = maRange.aEnd.Row();
-    SCTAB nEndTab = maRange.aEnd.Tab();
+
+    ScRange aRange = convertRange(maRange);
+
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCTAB nStartTab = aRange.aStart.Tab();
+    SCCOL nEndCol = aRange.aEnd.Col();
+    SCROW nEndRow = aRange.aEnd.Row();
+    SCTAB nEndTab = aRange.aEnd.Tab();
 
     ScMarkData aMark(rDoc.GetSheetLimits());
     if (mpTabMark)
@@ -66,9 +69,6 @@ bool EnterMatrixOperation::runImplementation()
         for (SCTAB nTab = nStartTab; nTab <= nEndTab; nTab++)
             aMark.SelectTable(nTab, true);
     }
-
-    if (!checkSheetViewProtection())
-        return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(
         rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
@@ -86,7 +86,7 @@ bool EnterMatrixOperation::runImplementation()
             //! take selected sheets into account also when undoing
             pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
             pUndoDoc->InitUndo(rDoc, nStartTab, nEndTab);
-            rDoc.CopyToDocument(maRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false,
+            rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false,
                                 *pUndoDoc);
         }
 
@@ -108,7 +108,7 @@ bool EnterMatrixOperation::runImplementation()
         }
         else if (mbEnglish)
         {
-            ScCompiler aComp(rDoc, maRange.aStart, meGrammar);
+            ScCompiler aComp(rDoc, aRange.aStart, meGrammar);
             std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(maString);
             rDoc.InsertMatrixFormula(nStartCol, nStartRow, nEndCol, nEndRow, aMark, OUString(),
                                      pCode.get(), meGrammar, mbCheckForSpill);
@@ -124,8 +124,10 @@ bool EnterMatrixOperation::runImplementation()
             if (mpTokenArray)
                 pUndoArray = mpTokenArray->Clone();
             mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoEnterMatrix>(
-                mrDocShell, maRange, std::move(pUndoDoc), maString, std::move(pUndoArray)));
+                mrDocShell, aRange, std::move(pUndoDoc), maString, std::move(pUndoArray)));
         }
+
+        syncSheetViews();
 
         //  Err522 painting of DDE-Formulas will be intercepted during interpreting
         mrDocShell.PostPaint(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,

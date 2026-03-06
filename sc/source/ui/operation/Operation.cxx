@@ -65,15 +65,11 @@ ScAddress Operation::convertAddress(ScAddress const& rAddress)
     SCTAB nSheetViewTab = pViewData->GetTabNumber();
     SCTAB nDefaultTab = pViewData->GetDefaultViewTab();
 
-    ScAddress aAddress = rAddress;
+    // Only convert addresses that are on the sheet view tab
+    if (rAddress.Tab() != nSheetViewTab)
+        return rAddress;
 
-    // Change the tab number from sheet view tab to default tab
-    if (aAddress.Tab() == nSheetViewTab)
-        aAddress.SetTab(nDefaultTab);
-
-    // Should be the default view tab
-    if (aAddress.Tab() != nDefaultTab)
-        return aAddress;
+    ScAddress aAddress(rAddress.Col(), rAddress.Row(), nDefaultTab);
 
     SCCOL nColumn = aAddress.Col();
     SCROW nRow = aAddress.Row();
@@ -85,6 +81,11 @@ ScAddress Operation::convertAddress(ScAddress const& rAddress)
         return aAddress;
 
     return ScAddress(nColumn, nReversedRow, nDefaultTab);
+}
+
+ScRange Operation::convertRange(ScRange const& rRange)
+{
+    return ScRange(convertAddress(rRange.aStart), convertAddress(rRange.aEnd));
 }
 
 ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
