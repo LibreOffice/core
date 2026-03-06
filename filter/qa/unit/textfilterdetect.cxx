@@ -217,51 +217,48 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFileDOC_Template)
 // there, let it be Windows-only, since the original issue tested here was Windows-specific.
 // See https://lists.freedesktop.org/archives/libreoffice/2023-December/091265.html for details.
 #ifdef _WIN32
-CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile)
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile_Writer)
 {
     // Make sure that file locking is ON
     ScopedConfigValue<officecfg::Office::Common::Misc::UseDocumentSystemFileLocking> aCfg(true);
 
     // Given a hybrid PDF file
 
-    {
-        // Created in Writer
-        utl::TempFileNamed nonAsciiName(u"абв_αβγ_");
-        nonAsciiName.EnableKillingFile();
-        CPPUNIT_ASSERT_EQUAL(
-            osl::FileBase::E_None,
-            osl::File::copy(createFileURL(u"hybrid_writer.pdf"), nonAsciiName.GetURL()));
-        loadFromURL(nonAsciiName.GetURL());
-        // Make sure it opens in Writer.
-        // Without the accompanying fix in place, this test would have failed on Windows, as it was
-        // opened in Draw instead.
-        CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
-    }
+    // Created in Writer
+    utl::TempFileNamed nonAsciiName(u"абв_αβγ_");
+    nonAsciiName.EnableKillingFile();
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::File::copy(createFileURL(u"hybrid_writer.pdf"),
+                                                                nonAsciiName.GetURL()));
+    loadFromURL(nonAsciiName.GetURL());
+    // Make sure it opens in Writer.
+    // Without the accompanying fix in place, this test would have failed on Windows, as it was
+    // opened in Draw instead.
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.text.TextDocument"));
+}
 
-    {
-        // Created in Calc
-        utl::TempFileNamed nonAsciiName(u"абв_αβγ_");
-        nonAsciiName.EnableKillingFile();
-        CPPUNIT_ASSERT_EQUAL(
-            osl::FileBase::E_None,
-            osl::File::copy(createFileURL(u"hybrid_calc.pdf"), nonAsciiName.GetURL()));
-        loadFromURL(nonAsciiName.GetURL());
-        // Make sure it opens in Calc.
-        CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.sheet.SpreadsheetDocument"));
-    }
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile_Calc)
+{
+    // Created in Calc
+    utl::TempFileNamed nonAsciiName(u"абв_αβγ_");
+    nonAsciiName.EnableKillingFile();
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::File::copy(createFileURL(u"hybrid_calc.pdf"), nonAsciiName.GetURL()));
+    loadFromURL(nonAsciiName.GetURL());
+    // Make sure it opens in Calc.
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.sheet.SpreadsheetDocument"));
+}
 
-    {
-        // Created in Impress
-        utl::TempFileNamed nonAsciiName(u"абв_αβγ_");
-        nonAsciiName.EnableKillingFile();
-        CPPUNIT_ASSERT_EQUAL(
-            osl::FileBase::E_None,
-            osl::File::copy(createFileURL(u"hybrid_impress.pdf"), nonAsciiName.GetURL()));
-        loadFromURL(nonAsciiName.GetURL());
-        // Make sure it opens in Impress.
-        CPPUNIT_ASSERT(
-            supportsService(mxComponent, "com.sun.star.presentation.PresentationDocument"));
-    }
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile_Impress)
+{
+    // Created in Impress
+    utl::TempFileNamed nonAsciiName(u"абв_αβγ_");
+    nonAsciiName.EnableKillingFile();
+    CPPUNIT_ASSERT_EQUAL(
+        osl::FileBase::E_None,
+        osl::File::copy(createFileURL(u"hybrid_impress.pdf"), nonAsciiName.GetURL()));
+    loadFromURL(nonAsciiName.GetURL());
+    // Make sure it opens in Impress.
+    CPPUNIT_ASSERT(supportsService(mxComponent, "com.sun.star.presentation.PresentationDocument"));
 }
 #endif // _WIN32
 
