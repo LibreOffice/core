@@ -460,6 +460,16 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
             pPrinter->SetMapMode( MapMode( MapUnit::Map100thMM ) );
             pPrinter->SetPaperSizeUser( aCurSize );
 
+            Size aPrintPageSize( aCurSize );
+            if( mePageOrientation == Orientation::Landscape )
+            {
+                // swap width and height
+                tools::Long n = aPrintPageSize.Width();
+                aPrintPageSize.setWidth(aPrintPageSize.Height());
+                aPrintPageSize.setHeight(n);
+            }
+            pPrinter->SetPrintPageSize( aPrintPageSize );
+
             // create view
             NSView* pPrintView = [[AquaPrintView alloc] initWithController: &i_rController withInfoPrinter: this];
 
