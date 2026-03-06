@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include <scitems.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -570,7 +569,6 @@ void ScGlobal::Clear()
     maInputHandlerFunctionNames.clear();
     ScParameterClassification::Exit();
     ScCompiler::DeInit();
-    ScInterpreter::GlobalExit(); // Delete static Stack
 
     xEmptyBrushItem.reset();
     xButtonBrushItem.reset();

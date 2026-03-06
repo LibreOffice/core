@@ -208,8 +208,6 @@ public:
     static void SetGlobalConfig(const ScCalcConfig& rConfig);
     static const ScCalcConfig& GetGlobalConfig();
 
-    static void GlobalExit();           // called by ScGlobal::Clear()
-
     /** Detect if string should be used as regular expression or wildcard
         expression or literal string.
      */
@@ -235,9 +233,6 @@ private:
     static ScCalcConfig& GetOrCreateGlobalConfig();
     static ScCalcConfig *mpGlobalConfig;
 
-    static thread_local std::unique_ptr<ScTokenStack>  pGlobalStack;
-    static thread_local bool                           bGlobalStackInUse;
-
     ScCalcConfig maCalcConfig;
     formula::FormulaTokenIterator aCode;
     ScAddress   aPos;
@@ -253,8 +248,7 @@ private:
     ScFormulaCell* pMyFormulaCell;      // the cell of this formula expression
 
     const formula::FormulaToken* pCur;  // current token
-    ScTokenStack* pStackObj;            // contains the stacks
-    const formula::FormulaToken ** pStack;  // the current stack
+    const formula::FormulaToken* pStack[ MAXSTACK ]; // the current stack
     FormulaError nGlobalError;          // global (local to this formula expression) error
     sal_uInt16  sp;                     // stack pointer
     sal_uInt16  maxsp;                  // the maximal used stack pointer
@@ -1124,7 +1118,7 @@ private:
 
 public:
     ScInterpreter( ScFormulaCell* pCell, ScDocument& rDoc, ScInterpreterContext& rContext,
-                    const ScAddress&, ScTokenArray&, bool bForGroupThreading = false );
+                    const ScAddress&, ScTokenArray& );
     ~ScInterpreter();
 
     // Used only for threaded formula-groups.
