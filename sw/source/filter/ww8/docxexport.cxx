@@ -454,12 +454,12 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
     {
         // missing or zero-sized embedded files are reported as corrupt by MS Word
         aChartExport.mbLinkToExternalData = false; // assume something wrong until proven valid
-        const OUString rExternalDataPath = aChartExport.GetExternalDataPath();
-        if (!rExternalDataPath.isEmpty())
+        const OUString sExternalDataPath = aChartExport.GetExternalDataPath();
+        if (!sExternalDataPath.isEmpty())
         {
             for (const auto& rEmbedding : lcl_getEmbeddingsList(m_xTextDoc))
             {
-                if (rEmbedding.Name == rExternalDataPath)
+                if (rEmbedding.Name == sExternalDataPath)
                 {
                     uno::Reference<io::XInputStream> embeddingsStream;
                     rEmbedding.Value >>= embeddingsStream;
@@ -467,7 +467,10 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
                     {
                         uno::Reference<io::XSeekable> xSeekable(embeddingsStream, uno::UNO_QUERY);
                         if (xSeekable && xSeekable->getLength())
+                        {
                             aChartExport.mbLinkToExternalData = true;
+                            break;
+                        }
                     }
                 }
             }
