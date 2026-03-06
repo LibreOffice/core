@@ -1482,6 +1482,15 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
+    <table:table-row>
+     <table:table-cell table:formula="of:=FINDB(&quot;A&quot;;&quot;🙁🙂A&quot;)"/>
+     <table:table-cell office:value-type="float" office:value="5"/>
+     <table:table-cell table:formula="of:=[.A32]=[.B32]"/>
+     <table:table-cell table:formula="of:=FORMULA([.A32])"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" office:string-value="tdf#171165: emoji (and other SMP characters not in specific blocks) take two bytes, as in Excel"/>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
     <calcext:conditional-formats>
      <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C50">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>

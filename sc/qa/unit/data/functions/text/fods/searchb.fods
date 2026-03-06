@@ -1517,96 +1517,20 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="11"/>
     </table:table-row>
+    <table:table-row>
+     <table:table-cell table:formula="of:=SEARCHB(&quot;a&quot;;&quot;🙁🙂A&quot;)"/>
+     <table:table-cell office:value-type="float" office:value="5"/>
+     <table:table-cell table:formula="of:=[.A33]=[.B33]"/>
+     <table:table-cell table:formula="of:=FORMULA([.A33])"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" office:string-value="tdf#171165: emoji (and other SMP characters not in specific blocks) take two bytes, as in Excel"/>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C2">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C100">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C3:Sheet2.C3">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C3"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C3"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C3"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C4:Sheet2.C4">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C4"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C4"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C4"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C6:Sheet2.C6">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C6"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C6"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C6"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C7:Sheet2.C7">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C7"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C7"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C7"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C9:Sheet2.C9">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C9"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C9"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C9"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C5:Sheet2.C5">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C5"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C5"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C5"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C8:Sheet2.C8">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C8"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C8"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C8"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C10:Sheet2.C10">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C10"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C10"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C10"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C15:Sheet2.C15">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C15"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C15"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C15"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C11:Sheet2.C11">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C11"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C11"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C11"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C12:Sheet2.C12">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C12"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C12"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C12"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C13:Sheet2.C13">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C13"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C13"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C13"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C14:Sheet2.C14">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C14"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C14"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C14"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C17:Sheet2.C30">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C17"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C17"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C17"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C16:Sheet2.C16">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C16"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C16"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C16"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C31:Sheet2.C31">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C31"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C31"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C31"/>
-     </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C32:Sheet2.C32">
-      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C32"/>
-      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C32"/>
-      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C32"/>
      </calcext:conditional-format>
     </calcext:conditional-formats>
    </table:table>

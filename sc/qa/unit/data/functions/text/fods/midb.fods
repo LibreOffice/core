@@ -916,66 +916,13 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce9" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce16"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
+    <table:table-row>
+     <table:table-cell table:formula="of:=MIDB(&quot;🙁🙂A&quot;;3;2)"/>
+     <table:table-cell office:value-type="string" office:string-value="🙂"/>
+     <table:table-cell table:formula="of:=[.A6]=[.B6]"/>
+     <table:table-cell table:formula="of:=FORMULA([.A6])"/>
+     <table:table-cell office:value-type="string" office:string-value="tdf#171165: emoji (and other SMP characters not in specific blocks) take two bytes, as in Excel"/>
      <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce17"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro5" table:number-rows-repeated="27">
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:style-name="ce17"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce17"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="39">
-     <table:table-cell table:style-name="ce23"/>
-     <table:table-cell table:style-name="ce24"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="186">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell table:style-name="ce11"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048313">
-     <table:table-cell table:number-columns-repeated="9"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
     <calcext:conditional-formats>
      <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C262">
