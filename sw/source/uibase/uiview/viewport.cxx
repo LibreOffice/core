@@ -1189,13 +1189,22 @@ bool SwView::UpdateScrollbars()
             if ( bVScrollVisible != m_pVScrollbar->IsScrollbarVisible(true) )
                 bRet = true;
         }
-        if (m_pHScrollbar)
+        if (m_pHScrollbar && m_pWrtShell)
         {
             const bool bHScrollVisible = m_pHScrollbar->IsScrollbarVisible(true);
-            m_pHScrollbar->DocSzChgd( aTmpSz );
-            m_pHScrollbar->ViewPortChgd( aTmpRect );
-            if ( bHScrollVisible != m_pHScrollbar->IsScrollbarVisible(true) )
-                bRet = true;
+            if( m_pWrtShell->GetViewOptions()->GetZoomType() == SvxZoomType::PAGEWIDTH)
+            {
+                ShowHScrollbar(false);
+                if (bHScrollVisible)
+                    bRet = true;
+            }
+            else
+            {
+                m_pHScrollbar->DocSzChgd( aTmpSz );
+                m_pHScrollbar->ViewPortChgd( aTmpRect );
+                if ( bHScrollVisible != m_pHScrollbar->IsScrollbarVisible(true) )
+                    bRet = true;
+            }
         }
     }
     return bRet;
