@@ -55,12 +55,20 @@ protected:
     /** Synchronizes the sheet views and the default view */
     void syncSheetViews();
 
+    /** Check if the input is on a sheet view tab */
+    bool isInputOnSheetView() const;
+
+    /** Check if we can run the operation or not */
+    virtual bool canRunTheOperation() const { return true; }
+
+    /** Operation implementation */
+    virtual bool runImplementation() = 0;
+
 public:
     Operation(OperationType eType, bool bRecord, bool bApi);
 
+    /** Run the operation */
     bool run();
-
-    virtual bool runImplementation() = 0;
 };
 
 } // end sc namespace
