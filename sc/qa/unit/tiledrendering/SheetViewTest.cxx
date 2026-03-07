@@ -2093,6 +2093,72 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillSeries_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillAuto_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Switch to sheet view and fill auto
+    {
+        switchToSheetView();
+
+        // Current state default view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Current state sheet view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // FillAuto source A2:A3 on default view (index 0), FILL_TO_BOTTOM, nCount=2
+        // Source: 7, 5 (step -2), fills A4:A5 with 3, 1
+        ScRange aFillRange(0, 1, 0, 0, 2, 0);
+        pDocShell->GetDocFunc().FillAuto(aFillRange, nullptr, FILL_TO_BOTTOM, FILL_AUTO, FILL_DAY,
+                                         2, 1.0, 100.0, true, true);
+
+        // Default view: 7, 5, 3, 1
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"3", u"1" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Sheet view: synced and re-sorted
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"3", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+
+    // Try to FillAuto on the sheet view — should be blocked because it intersects autofilter
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        ScRange aFillRange(0, 1, nSheetViewTab, 0, 2, nSheetViewTab);
+        bool bResult = pDocShell->GetDocFunc().FillAuto(
+            aFillRange, nullptr, FILL_TO_BOTTOM, FILL_AUTO, FILL_DAY, 2, 1.0, 100.0, true, true);
+        CPPUNIT_ASSERT(!bResult);
+
+        // Values should remain unchanged
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"3", u"1" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"3", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
