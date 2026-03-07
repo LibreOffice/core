@@ -122,6 +122,7 @@
 #include <operation/AutoFormatOperation.hxx>
 #include <operation/ChangeIndentOperation.hxx>
 #include <operation/ClearItemsOperation.hxx>
+#include <operation/ConvertFormulaToValueOperation.hxx>
 #include <operation/EnterMatrixOperation.hxx>
 #include <operation/FillAutoOperation.hxx>
 #include <operation/FillSeriesOperation.hxx>
@@ -3912,38 +3913,8 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
 
 void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction )
 {
-    ScDocShellModificator aModificator(rDocShell);
-    ScDocument& rDoc = rDocShell.GetDocument();
-    bool bRecord = true;
-    if (!rDoc.IsUndoEnabled())
-        bRecord = false;
-
-    if (!CheckSheetViewProtection(sc::OperationType::ConvertFormulaToValue))
-        return;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestRange(rDoc, rRange, sc::EditAction::Unknown);
-    if (!aTester.IsEditable())
-    {
-        if (bInteraction)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
-        return;
-    }
-
-    sc::TableValues aUndoVals(rRange);
-    sc::TableValues* pUndoVals = bRecord ? &aUndoVals : nullptr;
-
-    rDoc.ConvertFormulaToValue(rRange, pUndoVals);
-
-    if (bRecord && pUndoVals)
-    {
-        rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<sc::UndoFormulaToValue>(&rDocShell, *pUndoVals));
-    }
-
-    rDocShell.PostPaint(rRange, PaintPartFlags::Grid);
-    rDocShell.PostDataChanged();
-    rDoc.BroadcastCells(rRange, SfxHintId::ScDataChanged);
-    aModificator.SetDocumentModified();
+    sc::ConvertFormulaToValueOperation aOperation(rDocShell, rRange, bInteraction);
+    aOperation.run();
 }
 
 void ScDocFunc::EnterListAction(TranslateId pNameResId)
