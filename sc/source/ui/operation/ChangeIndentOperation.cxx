@@ -39,10 +39,9 @@ bool ChangeIndentOperation::runImplementation()
     ScDocument& rDoc = mrDocShell.GetDocument();
     bool bUndo(rDoc.IsUndoEnabled());
 
-    if (!checkSheetViewProtection())
-        return false;
+    ScMarkData aMark = convertMark(mrMark);
 
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, mrMark);
+    ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, aMark);
     if (!aTester.IsEditable())
     {
         if (!mbApi)
@@ -50,16 +49,16 @@ bool ChangeIndentOperation::runImplementation()
         return false;
     }
 
-    const ScRange& mrMarkRange = mrMark.GetMultiMarkArea();
+    const ScRange& aMarkRange = aMark.GetMultiMarkArea();
 
     if (bUndo)
     {
-        SCTAB nStartTab = mrMarkRange.aStart.Tab();
+        SCTAB nStartTab = aMarkRange.aStart.Tab();
         SCTAB nTabCount = rDoc.GetTableCount();
 
         ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
         pUndoDoc->InitUndo(rDoc, nStartTab, nStartTab);
-        for (const auto& rTab : mrMark)
+        for (const auto& rTab : aMark)
         {
             if (rTab >= nTabCount)
                 break;
@@ -68,18 +67,20 @@ bool ChangeIndentOperation::runImplementation()
                 pUndoDoc->AddUndoTab(rTab, rTab);
         }
 
-        ScRange aCopyRange = mrMarkRange;
+        ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount - 1);
-        rDoc.CopyToDocument(aCopyRange, InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &mrMark);
+        rDoc.CopyToDocument(aCopyRange, InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &aMark);
 
         mrDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoIndent>(&mrDocShell, mrMark, std::move(pUndoDoc), mbIncrement));
+            std::make_unique<ScUndoIndent>(&mrDocShell, aMark, std::move(pUndoDoc), mbIncrement));
     }
 
-    rDoc.ChangeSelectionIndent(mbIncrement, mrMark);
+    rDoc.ChangeSelectionIndent(mbIncrement, aMark);
 
-    mrDocShell.PostPaint(mrMarkRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE);
+    syncSheetViews();
+
+    mrDocShell.PostPaint(aMarkRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE);
     aModificator.SetDocumentModified();
 
     SfxBindings* pBindings = mrDocShell.GetViewBindings();
