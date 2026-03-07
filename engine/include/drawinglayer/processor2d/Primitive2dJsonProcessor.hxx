@@ -16,6 +16,9 @@
 #include <basegfx/range/b2drange.hxx>
 #include <rtl/string.hxx>
 
+class Bitmap;
+class Graphic;
+
 namespace basegfx
 {
 class B2DHomMatrix;
@@ -33,6 +36,7 @@ class Primitive2DContainer;
 
 namespace drawinglayer::attribute
 {
+class FillGradientAttribute;
 class FillHatchAttribute;
 class FillGraphicAttribute;
 class LineAttribute;
@@ -91,6 +95,11 @@ private:
                                    const drawinglayer::attribute::LineStartEndAttribute& rArrow);
     void
     writeTextPortionScaled(const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rPrim);
+
+    void writeGraphicData(const Graphic& rGraphic);
+    void writeBitmapData(const Bitmap& rBitmap);
+    void writeGradient(const drawinglayer::attribute::FillGradientAttribute& rGradient,
+                       std::string_view sNodeName = "gradient");
 
     tools::JsonWriter& mrWriter;
     double mfScaleFactor = 1.0;

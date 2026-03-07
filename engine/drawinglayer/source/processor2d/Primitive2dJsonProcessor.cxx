@@ -64,8 +64,6 @@
 
 using namespace drawinglayer::primitive2d;
 
-namespace drawinglayer
-{
 namespace
 {
 // TODO: Move to a tool class or maybe BColor itself and reuse elsewhere
@@ -73,9 +71,12 @@ OString colorToHex(const basegfx::BColor& rColor)
 {
     return "#" + Color(rColor).AsRGBHexString().toUtf8();
 }
+} // end anonymous namespace
 
+namespace drawinglayer
+{
 /// Write graphic data as base64 data URL, preferring native browser-supported formats.
-void writeGraphicData(tools::JsonWriter& rWriter, const Graphic& rGraphic)
+void Primitive2dJsonProcessor::writeGraphicData(const Graphic& rGraphic)
 {
     // TODO: Probably better to send images separately
     if (rGraphic.IsGfxLink())
@@ -111,7 +112,7 @@ void writeGraphicData(tools::JsonWriter& rWriter, const Graphic& rGraphic)
                 reinterpret_cast<const sal_Int8*>(aLink.GetData()), aLink.GetDataSize());
             OStringBuffer aBase64(pMime);
             comphelper::Base64::encode(aBase64, aSequence);
-            rWriter.put("data", aBase64);
+            mrWriter.put("data", aBase64);
             return;
         }
     }
@@ -125,70 +126,67 @@ void writeGraphicData(tools::JsonWriter& rWriter, const Graphic& rGraphic)
                                                aStream.Tell());
         OStringBuffer aBase64("data:image/png;base64,");
         comphelper::Base64::encode(aBase64, aSequence);
-        rWriter.put("data", aBase64);
+        mrWriter.put("data", aBase64);
     }
 }
 
 /// Write bitmap data as base64, preferring native format if the Bitmap has one.
-void writeBitmapData(tools::JsonWriter& rWriter, const Bitmap& rBitmap)
+void Primitive2dJsonProcessor::writeBitmapData(const Bitmap& rBitmap)
 {
-    writeGraphicData(rWriter, Graphic(rBitmap));
+    writeGraphicData(Graphic(rBitmap));
 }
 
-void writeGradient(tools::JsonWriter& rWriter,
-                   const drawinglayer::attribute::FillGradientAttribute& rGradient,
-                   std::string_view sNodeName = "gradient")
+void Primitive2dJsonProcessor::writeGradient(
+    const drawinglayer::attribute::FillGradientAttribute& rGradient, std::string_view sNodeName)
 {
-    auto aGradientNode = rWriter.startNode(sNodeName);
+    auto aGradientNode = mrWriter.startNode(sNodeName);
 
     switch (rGradient.getStyle())
     {
         case css::awt::GradientStyle_LINEAR:
-            rWriter.put("style", "linear");
+            mrWriter.put("style", "linear");
             break;
         case css::awt::GradientStyle_AXIAL:
-            rWriter.put("style", "axial");
+            mrWriter.put("style", "axial");
             break;
         case css::awt::GradientStyle_RADIAL:
-            rWriter.put("style", "radial");
+            mrWriter.put("style", "radial");
             break;
         case css::awt::GradientStyle_ELLIPTICAL:
-            rWriter.put("style", "elliptical");
+            mrWriter.put("style", "elliptical");
             break;
         case css::awt::GradientStyle_SQUARE:
-            rWriter.put("style", "square");
+            mrWriter.put("style", "square");
             break;
         case css::awt::GradientStyle_RECT:
-            rWriter.put("style", "rect");
+            mrWriter.put("style", "rect");
             break;
         default:
-            rWriter.put("style", "unknown");
+            mrWriter.put("style", "unknown");
             break;
     }
 
-    rWriter.put("angle", rGradient.getAngle());
-    rWriter.put("border", rGradient.getBorder());
-    rWriter.put("offsetX", rGradient.getOffsetX());
-    rWriter.put("offsetY", rGradient.getOffsetY());
+    mrWriter.put("angle", rGradient.getAngle());
+    mrWriter.put("border", rGradient.getBorder());
+    mrWriter.put("offsetX", rGradient.getOffsetX());
+    mrWriter.put("offsetY", rGradient.getOffsetY());
 
     if (rGradient.getSteps() > 0)
-        rWriter.put("steps", sal_Int64(rGradient.getSteps()));
+        mrWriter.put("steps", sal_Int64(rGradient.getSteps()));
 
     // Color stops
     const basegfx::BColorStops& rStops = rGradient.getColorStops();
     if (!rStops.empty())
     {
-        auto aStopsArray = rWriter.startArray("colorStops");
+        auto aStopsArray = mrWriter.startArray("colorStops");
         for (const auto& rStop : rStops)
         {
-            auto aStopNode = rWriter.startStruct();
-            rWriter.put("offset", rStop.getStopOffset());
-            rWriter.put("color", colorToHex(rStop.getStopColor()));
+            auto aStopNode = mrWriter.startStruct();
+            mrWriter.put("offset", rStop.getStopOffset());
+            mrWriter.put("color", colorToHex(rStop.getStopColor()));
         }
     }
 }
-
-} // end anonymous namespace
 
 void Primitive2dJsonProcessor::writeRangeScaled(std::string_view sName,
                                                 const basegfx::B2DRange& rRange)
@@ -236,7 +234,7 @@ void Primitive2dJsonProcessor::writeFillGraphicScaled(
 
     const basegfx::B2DRange& rRange = rFillGraphic.getGraphicRange();
     writeRangeScaled("graphicRange", rRange);
-    writeGraphicData(mrWriter, rFillGraphic.getGraphic());
+    writeGraphicData(rFillGraphic.getGraphic());
 }
 
 void Primitive2dJsonProcessor::writeLineAttributeScaled(
@@ -491,7 +489,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("width", aSizePixel.getWidth());
             mrWriter.put("height", aSizePixel.getHeight());
             mrWriter.put("checksum", static_cast<sal_Int64>(rBitmap.GetChecksum()));
-            writeBitmapData(mrWriter, rBitmap);
+            writeBitmapData(rBitmap);
         }
         break;
 
@@ -667,10 +665,10 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("type", "fillGradient");
             writeRangeScaled("outputRange", rPrimitive.getOutputRange());
             writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
-            writeGradient(mrWriter, rPrimitive.getFillGradient());
+            writeGradient(rPrimitive.getFillGradient());
 
             if (rPrimitive.hasAlphaGradient())
-                writeGradient(mrWriter, rPrimitive.getAlphaGradient(), "alphaGradient");
+                writeGradient(rPrimitive.getAlphaGradient(), "alphaGradient");
 
             if (rPrimitive.hasTransparency())
                 mrWriter.put("transparency", rPrimitive.getTransparency());
@@ -684,10 +682,10 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("type", "polyPolygonGradient");
             writePathScaled(rPrimitive.getB2DPolyPolygon());
             writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
-            writeGradient(mrWriter, rPrimitive.getFillGradient());
+            writeGradient(rPrimitive.getFillGradient());
 
             if (rPrimitive.hasAlphaGradient())
-                writeGradient(mrWriter, rPrimitive.getAlphaGradient(), "alphaGradient");
+                writeGradient(rPrimitive.getAlphaGradient(), "alphaGradient");
 
             if (rPrimitive.hasTransparency())
                 mrWriter.put("transparency", rPrimitive.getTransparency());
@@ -755,7 +753,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 {
                     mrWriter.put("type", "graphic");
                     writeMatrixScaled("matrix", rPrimitive.getTransform());
-                    writeGraphicData(mrWriter, rGraphic);
+                    writeGraphicData(rGraphic);
                     break;
                 }
             }
@@ -822,7 +820,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const Size aSizePixel(rGraphic.GetSizePixel());
             mrWriter.put("width", sal_Int64(aSizePixel.getWidth()));
             mrWriter.put("height", sal_Int64(aSizePixel.getHeight()));
-            writeGraphicData(mrWriter, rGraphic);
+            writeGraphicData(rGraphic);
         }
         break;
 
@@ -845,7 +843,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("type", "polyPolygonAlphaGradient");
             mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
             writePathScaled(rPrimitive.getB2DPolyPolygon());
-            writeGradient(mrWriter, rPrimitive.getAlphaGradient(), "alphaGradient");
+            writeGradient(rPrimitive.getAlphaGradient(), "alphaGradient");
         }
         break;
 
@@ -863,7 +861,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("width", aSizePixel.getWidth());
             mrWriter.put("height", aSizePixel.getHeight());
             mrWriter.put("checksum", sal_Int64(rBitmap.GetChecksum()));
-            writeBitmapData(mrWriter, rBitmap);
+            writeBitmapData(rBitmap);
         }
         break;
 
