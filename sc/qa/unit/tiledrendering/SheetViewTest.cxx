@@ -24,6 +24,7 @@
 #include <SheetViewManager.hxx>
 #include <attrib.hxx>
 #include <editeng/brushitem.hxx>
+#include <i18nutil/transliteration.hxx>
 #include <paramisc.hxx>
 
 using namespace css;
@@ -2180,6 +2181,56 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillAuto_DefaultAndSheetView)
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"3", u"5", u"7" }),
                              getValues(mpTabViewSheetView, 0, 1, 4));
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_TransliterateText_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter_Extended.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Create new sheet view and sort ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Default view at Column B: aaa, rrr, ccc, sss
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"aaa", u"rrr", u"ccc", u"sss" }),
+                         getValues(mpTabViewDefaultView, 1, 1, 4));
+    // Sheet view at Column B: sss, ccc, rrr, aaa
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"sss", u"ccc", u"rrr", u"aaa" }),
+                         getValues(mpTabViewSheetView, 1, 1, 4));
+
+    // Transliterate B2:B5 to uppercase from sheet view
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        ScMarkData aMark(pDocument->GetSheetLimits());
+        aMark.SelectTable(nSheetViewTab, true);
+        aMark.SetMarkArea(ScRange(1, 1, nSheetViewTab, 1, 4, nSheetViewTab));
+        pDocShell->GetDocFunc().TransliterateText(aMark, TransliterationFlags::LOWERCASE_UPPERCASE,
+                                                  true);
+    }
+
+    // Sheet view: text is uppercased, ascending order
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"SSS", u"CCC", u"RRR", u"AAA" }),
+                         getValues(mpTabViewSheetView, 1, 1, 4));
+
+    // Default view: synced, descending order, uppercased
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"AAA", u"RRR", u"CCC", u"SSS" }),
+                         getValues(mpTabViewDefaultView, 1, 1, 4));
 }
 
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeIndent_DefaultAndSheetView)
