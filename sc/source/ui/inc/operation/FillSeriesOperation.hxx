@@ -34,6 +34,7 @@ private:
     double mfStep;
     double mfMax;
 
+    bool canRunTheOperation() const override;
     bool runImplementation() override;
 
 public:
