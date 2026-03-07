@@ -120,6 +120,7 @@
 #include <operation/SetEditTextOperation.hxx>
 #include <operation/ApplyAttributesOperation.hxx>
 #include <operation/AutoFormatOperation.hxx>
+#include <operation/ChangeIndentOperation.hxx>
 #include <operation/ClearItemsOperation.hxx>
 #include <operation/EnterMatrixOperation.hxx>
 #include <operation/FillAutoOperation.hxx>
@@ -3152,75 +3153,8 @@ void ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, b
 
 bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-
-    ScDocument& rDoc = rDocShell.GetDocument();
-    bool bUndo(rDoc.IsUndoEnabled());
-
-    if (!CheckSheetViewProtection(sc::OperationType::ChangeIndent))
-        return false;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, rMark);
-    if (!aTester.IsEditable())
-    {
-        if (!bApi)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
-        return false;
-    }
-
-    const ScRange& aMarkRange = rMark.GetMultiMarkArea();
-
-    if (bUndo)
-    {
-        SCTAB nStartTab = aMarkRange.aStart.Tab();
-        SCTAB nTabCount = rDoc.GetTableCount();
-
-        ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( rDoc, nStartTab, nStartTab );
-        for (const auto& rTab : rMark)
-        {
-            if (rTab >= nTabCount)
-                break;
-
-            if (rTab != nStartTab)
-                pUndoDoc->AddUndoTab( rTab, rTab );
-        }
-
-        ScRange aCopyRange = aMarkRange;
-        aCopyRange.aStart.SetTab(0);
-        aCopyRange.aEnd.SetTab(nTabCount-1);
-        rDoc.CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, true, *pUndoDoc, &rMark );
-
-        rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoIndent>( &rDocShell, rMark, std::move(pUndoDoc), bIncrement ) );
-    }
-
-    rDoc.ChangeSelectionIndent( bIncrement, rMark );
-
-    rDocShell.PostPaint( aMarkRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
-    aModificator.SetDocumentModified();
-
-    SfxBindings* pBindings = rDocShell.GetViewBindings();
-    if (pBindings)
-    {
-        pBindings->Invalidate( SID_ALIGNLEFT );         // ChangeIndent aligns left
-        pBindings->Invalidate( SID_ALIGNRIGHT );
-        pBindings->Invalidate( SID_ALIGNBLOCK );
-        pBindings->Invalidate( SID_ALIGNCENTERHOR );
-        pBindings->Invalidate( SID_ATTR_LRSPACE );
-        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_LEFT );
-        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_RIGHT );
-        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_BLOCK );
-        pBindings->Invalidate( SID_ATTR_PARA_ADJUST_CENTER);
-        // pseudo slots for Format menu
-        pBindings->Invalidate( SID_ALIGN_ANY_HDEFAULT );
-        pBindings->Invalidate( SID_ALIGN_ANY_LEFT );
-        pBindings->Invalidate( SID_ALIGN_ANY_HCENTER );
-        pBindings->Invalidate( SID_ALIGN_ANY_RIGHT );
-        pBindings->Invalidate( SID_ALIGN_ANY_JUSTIFIED );
-    }
-
-    return true;
+    sc::ChangeIndentOperation aOperation(rDocShell, rMark, bIncrement, bApi);
+    return aOperation.run();
 }
 
 bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,

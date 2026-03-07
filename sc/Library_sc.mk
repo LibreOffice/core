@@ -532,6 +532,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/navipi/scenwnd \
     sc/source/ui/operation/ApplyAttributesOperation \
     sc/source/ui/operation/AutoFormatOperation \
+    sc/source/ui/operation/ChangeIndentOperation \
     sc/source/ui/operation/ClearItemsOperation \
     sc/source/ui/operation/DeleteCellOperation \
     sc/source/ui/operation/DeleteContentOperation \
