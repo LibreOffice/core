@@ -4642,7 +4642,32 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
     auto oMaster = aTree.get_child_optional("masterPage");
     CPPUNIT_ASSERT(oMaster);
     auto& aMasterPrimitives = oMaster->get_child("primitives");
-    CPPUNIT_ASSERT(!aMasterPrimitives.empty());
+    // Master page: white fill + gradient background + 4 placeholder sdrRectangles
+    size_t nNumberOfMasterPrimitives = 0;
+    bool bHasWhiteFill = false;
+    bool bHasGradient = false;
+    for (const auto& rPrimitive : aMasterPrimitives)
+    {
+        ++nNumberOfMasterPrimitives;
+        std::string sType = rPrimitive.second.get<std::string>("type");
+        if (sType == "polyPolygonColor")
+        {
+            std::string sColor = rPrimitive.second.get<std::string>("color");
+            if (sColor == "#ffffff")
+                bHasWhiteFill = true;
+        }
+        else if (sType == "polyPolygonGradient")
+        {
+            bHasGradient = true;
+            // Verify gradient has color stops
+            auto& rGradient = rPrimitive.second.get_child("gradient");
+            CPPUNIT_ASSERT_EQUAL(std::string("linear"), rGradient.get<std::string>("style"));
+            CPPUNIT_ASSERT(rGradient.get_child_optional("colorStops"));
+        }
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(6), nNumberOfMasterPrimitives);
+    CPPUNIT_ASSERT_MESSAGE("Expecting white page fill", bHasWhiteFill);
+    CPPUNIT_ASSERT_MESSAGE("Expecting gradient background", bHasGradient);
 
     // Check slide objects
     auto& aObjects = aTree.get_child("objects");
