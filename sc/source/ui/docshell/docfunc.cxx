@@ -129,6 +129,7 @@
 #include <operation/InsertCellsOperation.hxx>
 #include <operation/InsertSheetViewOperation.hxx>
 #include <operation/MultipleOpsOperation.hxx>
+#include <operation/SetNoteTextOperation.hxx>
 #include <operation/TransliterateTextOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
@@ -973,32 +974,8 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 
 void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-
-    ScDocument& rDoc = rDocShell.GetDocument();
-
-    if (!CheckSheetViewProtection(sc::OperationType::SetNoteText))
-        return;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row());
-    if (!aTester.IsEditable())
-    {
-        if (!bApi)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
-        return;
-    }
-
-    OUString aNewText = convertLineEnd(rText, GetSystemLineEnd()); //! is this necessary ???
-
-    if( ScPostIt* pNote = (!aNewText.isEmpty()) ? rDoc.GetOrCreateNote( rPos ) : rDoc.GetNote(rPos) )
-        pNote->SetText( rPos, aNewText );
-
-    //! Undo !!!
-
-    rDoc.SetStreamValid(rPos.Tab(), false);
-
-    rDocShell.PostPaintCell( rPos );
-    aModificator.SetDocumentModified();
+    sc::SetNoteTextOperation aOperation(rDocShell, rPos, rText, bApi);
+    aOperation.run();
 }
 
 void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi )
