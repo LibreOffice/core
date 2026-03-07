@@ -730,8 +730,8 @@ SKIA_TARBALL := skia-m142-f4ed99d2443962782cf5f8b4dd27179f131e7cbe.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-SQLITE3_SHA256SUM := 6e2a845a493026bdbad0618b2b5a0cf48584faab47384480ed9f592d912f23ec
-SQLITE3_TARBALL := sqlite-amalgamation-3510200.zip
+SQLITE3_SHA256SUM := 45d0fea15971dd1300e5b509f48ca134621e10d9297713b64618fbca21b325fa
+SQLITE3_TARBALL := sqlite-amalgamation-3520000.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
