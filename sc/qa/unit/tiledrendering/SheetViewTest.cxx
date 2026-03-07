@@ -1964,6 +1964,70 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_EnterMatrix_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillSimple_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Switch to sheet view and fill simple
+    {
+        switchToSheetView();
+
+        // Current state default view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Current state sheet view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // FillSimple A2:A3 on default view (index 0), FILL_TO_BOTTOM
+        // Copies A2 to A3 (value 7)
+        pDocShell->GetDocFunc().FillSimple(ScRange(0, 1, 0, 0, 2, 0), nullptr, FILL_TO_BOTTOM,
+                                           true);
+
+        // Default view: A3 changed from 5 -> 7
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"7", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Sheet view: synced and re-sorted
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"7", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+
+    // Try to FillSimple on the sheet view — should be blocked because it intersects autofilter
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        bool bResult = pDocShell->GetDocFunc().FillSimple(
+            ScRange(0, 1, nSheetViewTab, 0, 2, nSheetViewTab), nullptr, FILL_TO_BOTTOM, true);
+        CPPUNIT_ASSERT(!bResult);
+
+        // Values should remain unchanged
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"7", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"7", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -11,7 +11,6 @@
 
 #include <autoform.hxx>
 #include <columnspanset.hxx>
-#include <dbdata.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>
 #include <editable.hxx>
@@ -41,32 +40,9 @@ AutoFormatOperation::AutoFormatOperation(ScDocFunc& rDocFunc, ScDocShell& rDocSh
 {
 }
 
-bool AutoFormatOperation::canRunTheOperation() const { return !isInputOnSheetViewAutoFilter(); }
-
-bool AutoFormatOperation::isInputOnSheetViewAutoFilter() const
+bool AutoFormatOperation::canRunTheOperation() const
 {
-    ScDocument& rDoc = mrDocShell.GetDocument();
-
-    // Only block if the range is on a sheet view tab, not the default view
-    if (!rDoc.IsSheetViewHolder(maRange.aStart.Tab()))
-        return false;
-
-    ScDBCollection* pDBCollection = rDoc.GetDBCollection();
-    if (!pDBCollection)
-        return false;
-
-    SCTAB nTab = maRange.aStart.Tab();
-    for (ScDBData* pDBData : pDBCollection->GetAllDBsFromTab(nTab))
-    {
-        if (!pDBData->HasAutoFilter())
-            continue;
-
-        ScRange aDBRange;
-        pDBData->GetArea(aDBRange);
-        if (maRange.Intersects(aDBRange))
-            return true;
-    }
-    return false;
+    return !isInputOnSheetViewAutoFilter(maRange);
 }
 
 bool AutoFormatOperation::runImplementation()
