@@ -249,7 +249,7 @@ public:
      */
     void SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab );
 
-    void ConvertFormulaToValue( const ScRange& rRange, bool bInteraction );
+    SC_DLLPUBLIC void ConvertFormulaToValue( const ScRange& rRange, bool bInteraction );
 
     SC_DLLPUBLIC bool InsertSparklines(ScRange const& rDataRange, ScRange const& rSparklineRange,
                                        const std::shared_ptr<sc::SparklineGroup>& pSparklineGroup);

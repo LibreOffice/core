@@ -2234,6 +2234,53 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_TransliterateText_DefaultAndSheetView)
                          getValues(mpTabViewDefaultView, 1, 1, 4));
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ConvertFormulaToValue_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    // Set up formulas
+    pDocument->SetString(ScAddress(0, 0, 0), u"=10+20"_ustr);
+    pDocument->SetString(ScAddress(0, 1, 0), u"=30+40"_ustr);
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+    // Verify formulas exist on both tabs
+    CPPUNIT_ASSERT(pDocument->GetFormulaCell(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT(pDocument->GetFormulaCell(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT(pDocument->GetFormulaCell(ScAddress(0, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT(pDocument->GetFormulaCell(ScAddress(0, 1, nSheetViewTab)));
+
+    // Convert formulas to values from sheet view
+    {
+        switchToSheetView();
+        pDocShell->GetDocFunc().ConvertFormulaToValue(
+            ScRange(0, 0, nSheetViewTab, 0, 1, nSheetViewTab), false);
+    }
+
+    // Sheet view: formula converted, values preserved
+    CPPUNIT_ASSERT(!pDocument->GetFormulaCell(ScAddress(0, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT(!pDocument->GetFormulaCell(ScAddress(0, 1, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(0, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT_EQUAL(70.0, pDocument->GetValue(ScAddress(0, 1, nSheetViewTab)));
+
+    // Default view: synced — formulas also converted
+    CPPUNIT_ASSERT(!pDocument->GetFormulaCell(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT(!pDocument->GetFormulaCell(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(70.0, pDocument->GetValue(ScAddress(0, 1, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SetNoteText_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
