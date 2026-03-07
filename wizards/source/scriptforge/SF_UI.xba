@@ -217,6 +217,7 @@ Dim oEnum As Object					&apos;	com.sun.star.container.XEnumeration
 Dim oComp As Object					&apos;	com.sun.star.lang.XComponent
 Dim vWindow As Window				&apos;	A single component
 Dim oContainer As Object			&apos;	com.sun.star.awt.XWindow
+Dim bMaximized As Boolean			&apos;	True when window is maximized
 Const cstThisSub = &quot;UI.Activate&quot;
 Const cstSubArgs = &quot;WindowName&quot;
 
@@ -242,9 +243,11 @@ Try:
 					Set oContainer = vWindow.Frame.ContainerWindow
 					With oContainer
 						If .isVisible() = False Then .setVisible(True)
+						bMaximized = .IsMaximized
 						.IsMinimized = False
 						.setFocus()
 						.toFront()				&apos;	Force window change in Linux
+						If bMaximized Then .IsMaximized = True	&apos;	Re-maximized only when True
 						Wait 1					&apos;	Bypass desynchro issue in Linux
 					End With
 					bActivate = True
