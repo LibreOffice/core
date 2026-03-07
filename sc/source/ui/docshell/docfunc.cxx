@@ -129,6 +129,7 @@
 #include <operation/InsertCellsOperation.hxx>
 #include <operation/InsertSheetViewOperation.hxx>
 #include <operation/MultipleOpsOperation.hxx>
+#include <operation/TransliterateTextOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
@@ -640,62 +641,8 @@ bool ScDocFunc::DeleteCell(
 bool ScDocFunc::TransliterateText( const ScMarkData& rMark, TransliterationFlags nType,
                                     bool bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-
-    ScDocument& rDoc = rDocShell.GetDocument();
-    bool bRecord = true;
-    if (!rDoc.IsUndoEnabled())
-        bRecord = false;
-
-    if (!CheckSheetViewProtection(sc::OperationType::TransliterateText))
-        return false;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, rMark);
-    if (!aTester.IsEditable())
-    {
-        if (!bApi)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
-        return false;
-    }
-
-    ScMarkData aMultiMark = rMark;
-    aMultiMark.SetMarking(false);       // for MarkToMulti
-    aMultiMark.MarkToMulti();
-    const ScRange& aMarkRange = aMultiMark.GetMultiMarkArea();
-
-    if (bRecord)
-    {
-        SCTAB nStartTab = aMarkRange.aStart.Tab();
-        SCTAB nTabCount = rDoc.GetTableCount();
-
-        ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( rDoc, nStartTab, nStartTab );
-        for (const auto& rTab : rMark)
-        {
-            if (rTab >= nTabCount)
-                break;
-
-            if (rTab != nStartTab)
-                pUndoDoc->AddUndoTab( rTab, rTab );
-        }
-
-        ScRange aCopyRange = aMarkRange;
-        aCopyRange.aStart.SetTab(0);
-        aCopyRange.aEnd.SetTab(nTabCount-1);
-        rDoc.CopyToDocument(aCopyRange, InsertDeleteFlags::CONTENTS, true, *pUndoDoc, &aMultiMark);
-
-        rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoTransliterate>( &rDocShell, aMultiMark, std::move(pUndoDoc), nType ) );
-    }
-
-    rDoc.TransliterateText( aMultiMark, nType );
-
-    if (!AdjustRowHeight( aMarkRange, true, true ))
-        rDocShell.PostPaint( aMarkRange, PaintPartFlags::Grid );
-
-    aModificator.SetDocumentModified();
-
-    return true;
+    sc::TransliterateTextOperation aOperation(*this, rDocShell, rMark, nType, bApi);
+    return aOperation.run();
 }
 
 bool ScDocFunc::SetNormalString(bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi )
