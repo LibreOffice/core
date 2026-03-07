@@ -137,6 +137,10 @@ protected:
      */
     void          assertXPathDoubleValue(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttribute,
                               double expectedValue, double delta);
+    void          assertXPathDoubleValue(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const char* pAttribute,
+                              double expectedValue, double delta)
+    { assertXPathDoubleValue(pXmlDoc, rXPath.getStr(), pAttribute, expectedValue, delta); }
+
     /**
      * Assert that pXPath exists, and returns exactly nNumberOfNodes nodes (1 by default).
      * Also useful for checking that we do _not_ export some node (nNumberOfNodes == 0).

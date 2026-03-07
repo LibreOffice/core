@@ -118,12 +118,12 @@ void writePolyPolygon(::tools::XmlWriter& rWriter, const basegfx::B2DPolyPolygon
 {
     rWriter.startElement("polypolygon");
     const basegfx::B2DRange aB2DRange(rB2DPolyPolygon.getB2DRange());
-    rWriter.attributeDouble("height", aB2DRange.getHeight());
-    rWriter.attributeDouble("width", aB2DRange.getWidth());
-    rWriter.attributeDouble("minx", aB2DRange.getMinX());
-    rWriter.attributeDouble("miny", aB2DRange.getMinY());
-    rWriter.attributeDouble("maxx", aB2DRange.getMaxX());
-    rWriter.attributeDouble("maxy", aB2DRange.getMaxY());
+    rWriter.attribute("height", aB2DRange.getHeight());
+    rWriter.attribute("width", aB2DRange.getWidth());
+    rWriter.attribute("minx", aB2DRange.getMinX());
+    rWriter.attribute("miny", aB2DRange.getMinY());
+    rWriter.attribute("maxx", aB2DRange.getMaxX());
+    rWriter.attribute("maxy", aB2DRange.getMaxY());
     rWriter.attribute("path", basegfx::utils::exportToSvgD(rB2DPolyPolygon, true, true, false));
 
     for (basegfx::B2DPolygon const& rPolygon : rB2DPolyPolygon)
@@ -134,8 +134,8 @@ void writePolyPolygon(::tools::XmlWriter& rWriter, const basegfx::B2DPolyPolygon
             basegfx::B2DPoint const& rPoint = rPolygon.getB2DPoint(i);
 
             rWriter.startElement("point");
-            rWriter.attributeDouble("x", rPoint.getX());
-            rWriter.attributeDouble("y", rPoint.getY());
+            rWriter.attribute("x", rPoint.getX());
+            rWriter.attribute("y", rPoint.getY());
             rWriter.endElement();
         }
         rWriter.endElement();
@@ -789,8 +789,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
                      iter != aPositions.end(); ++iter)
                 {
                     rWriter.startElement("point");
-                    rWriter.attributeDouble("x", iter->getX());
-                    rWriter.attributeDouble("y", iter->getY());
+                    rWriter.attribute("x", iter->getX());
+                    rWriter.attribute("y", iter->getY());
                     rWriter.endElement();
                 }
 
@@ -979,7 +979,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                     for (size_t iDx = 0; iDx < aDx.size(); ++iDx)
                     {
                         OString sName = "dx" + OString::number(iDx);
-                        rWriter.attributeDouble(sName.getStr(), aDx[iDx]);
+                        rWriter.attribute(sName.getStr(), aDx[iDx]);
                     }
                 }
                 rWriter.endElement();
@@ -1057,9 +1057,9 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 basegfx::B2DPoint aStartPoint = rSvgRadialGradientPrimitive2D.getStart();
                 rWriter.attribute("startx", aStartPoint.getX());
                 rWriter.attribute("starty", aStartPoint.getY());
-                rWriter.attributeDouble("radius", rSvgRadialGradientPrimitive2D.getRadius());
+                rWriter.attribute("radius", rSvgRadialGradientPrimitive2D.getRadius());
                 writeSpreadMethod(rWriter, rSvgRadialGradientPrimitive2D.getSpreadMethod());
-                rWriter.attributeDouble(
+                rWriter.attribute(
                     "opacity",
                     rSvgRadialGradientPrimitive2D.getGradientEntries().front().getOpacity());
 
@@ -1085,7 +1085,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.attribute("endx", aEndAttribute.getX());
                 rWriter.attribute("endy", aEndAttribute.getY());
                 writeSpreadMethod(rWriter, rSvgLinearGradientPrimitive2D.getSpreadMethod());
-                rWriter.attributeDouble(
+                rWriter.attribute(
                     "opacity",
                     rSvgLinearGradientPrimitive2D.getGradientEntries().front().getOpacity());
 
@@ -1175,7 +1175,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.startElement("shadow");
                 rWriter.attribute("color",
                                   convertColorToString(rShadowPrimitive2D.getShadowColor()));
-                rWriter.attributeDouble("blur", rShadowPrimitive2D.getShadowBlur());
+                rWriter.attribute("blur", rShadowPrimitive2D.getShadowBlur());
 
                 rWriter.startElement("transform");
                 writeMatrix(rWriter, rShadowPrimitive2D.getShadowTransform());
@@ -1205,7 +1205,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 const auto& rSoftEdgePrimitive2D
                     = static_cast<const SoftEdgePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("softedge");
-                rWriter.attributeDouble("radius", rSoftEdgePrimitive2D.getRadius());
+                rWriter.attribute("radius", rSoftEdgePrimitive2D.getRadius());
 
                 decomposeAndWrite(rSoftEdgePrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
