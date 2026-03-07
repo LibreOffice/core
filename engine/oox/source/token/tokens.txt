@@ -862,6 +862,7 @@ bentConnector4
 bentConnector5
 bentUpArrow
 bestFit
+bestFitOnly
 between
 bevel
 bevelB
@@ -2874,6 +2875,7 @@ inactiveCaptionText
 includeHiddenRowCol
 includeNewItemsInFilter
 includePrintSettings
+inclusive
 ind
 indefinite
 indent
@@ -3889,6 +3891,7 @@ overflow
 overflowPunct
 overhead
 overlap
+overlapping
 overlay
 override
 overrideClrMapping
@@ -4274,6 +4277,7 @@ quadBezTo
 quadrants
 qualifier
 quarter
+quartileMethod
 quarters
 query
 queryCache
@@ -5147,10 +5151,10 @@ subject
 subscript
 subsetted
 subtotal
-subtotals
 subtotalCaption
 subtotalHiddenItems
 subtotalTop
+subtotals
 suff
 suggestedsigner
 suggestedsigner2

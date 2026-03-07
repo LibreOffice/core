@@ -4009,30 +4009,49 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
             Reference<beans::XPropertySet> xSeriesProp(rSeries, uno::UNO_QUERY);
             if (xSeriesProp.is())
             {
-                uno::Any aConnLines = xSeriesProp->getPropertyValue(
-                    u"ConnectorLines"_ustr);
-                uno::Any aMeanLine = xSeriesProp->getPropertyValue(
-                    u"MeanLine"_ustr);
-                uno::Any aMeanMarker = xSeriesProp->getPropertyValue(
-                    u"MeanMarker"_ustr);
-                uno::Any aNonoutliers = xSeriesProp->getPropertyValue(
-                    u"Nonoutliers"_ustr);
-                uno::Any aOutliers = xSeriesProp->getPropertyValue(
-                    u"Outliers"_ustr);
+                OUString sParentLabelLayout;
+                uno::Any aParentLL = xSeriesProp->getPropertyValue(u"ParentLabelLayout"_ustr);
+                bool bHasParentLL = (aParentLL >>= sParentLabelLayout);
 
-                const bool bHasAny = aConnLines.hasValue() || aMeanLine.hasValue()
+                OUString sRegionLabelLayout;
+                uno::Any aRegionLL = xSeriesProp->getPropertyValue(u"RegionLabelLayout"_ustr);
+                bool bHasRegionLL = (aRegionLL >>= sRegionLabelLayout);
+
+                uno::Any aConnLines = xSeriesProp->getPropertyValue(u"ConnectorLines"_ustr);
+                uno::Any aMeanLine = xSeriesProp->getPropertyValue(u"MeanLine"_ustr);
+                uno::Any aMeanMarker = xSeriesProp->getPropertyValue(u"MeanMarker"_ustr);
+                uno::Any aNonoutliers = xSeriesProp->getPropertyValue(u"Nonoutliers"_ustr);
+                uno::Any aOutliers = xSeriesProp->getPropertyValue(u"Outliers"_ustr);
+                bool bHasVisibility = aConnLines.hasValue() || aMeanLine.hasValue()
                             || aMeanMarker.hasValue() || aNonoutliers.hasValue()
                             || aOutliers.hasValue();
 
-                uno::Any aIntervalClosed = xSeriesProp->getPropertyValue(
-                            u"IntervalClosed"_ustr);
+                OUString sQuartileMethod;
+                uno::Any aQM = xSeriesProp->getPropertyValue(u"QuartileMethod"_ustr);
+                bool bHasQM = (aQM >>= sQuartileMethod);
+
+                uno::Sequence<sal_Int32> aSubtotalIndices;
+                uno::Any aSubtotals = xSeriesProp->getPropertyValue(u"SubtotalIndices"_ustr);
+                bool bHasSubtotals = (aSubtotals >>= aSubtotalIndices);
+
+                uno::Any aIntervalClosed = xSeriesProp->getPropertyValue( u"IntervalClosed"_ustr);
                 const bool bHasIC = aIntervalClosed.hasValue();
 
-                if (bHasAny || bHasIC)
+                bool bHasAny = bHasParentLL || bHasRegionLL || bHasVisibility
+                            || bHasQM || bHasSubtotals || bHasIC;
+                if (bHasAny)
                 {
                     pFS->startElement(FSNS(XML_cx, XML_layoutPr));
 
-                    if (bHasAny)
+                    if (bHasParentLL)
+                        pFS->singleElement(FSNS(XML_cx, XML_parentLabelLayout),
+                            XML_val, sParentLabelLayout);
+
+                    if (bHasRegionLL)
+                        pFS->singleElement(FSNS(XML_cx, XML_regionLabelLayout),
+                            XML_val, sRegionLabelLayout);
+
+                    if (bHasVisibility)
                     {
                         bool bConnLines = false, bMeanLine = false,
                                  bMeanMarker = false, bNonoutliers = false,
@@ -4067,6 +4086,19 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                                 assert(false);
                                 break;
                         }
+                    }
+
+                    if (bHasQM)
+                        pFS->singleElement(FSNS(XML_cx, XML_statistics),
+                            XML_quartileMethod, sQuartileMethod);
+
+                    if (bHasSubtotals)
+                    {
+                        pFS->startElement(FSNS(XML_cx, XML_subtotals));
+                        for (sal_Int32 nIdx : aSubtotalIndices)
+                            pFS->singleElement(FSNS(XML_cx, XML_idx),
+                                XML_val, OString::number(nIdx));
+                        pFS->endElement(FSNS(XML_cx, XML_subtotals));
                     }
 
                     pFS->endElement(FSNS(XML_cx, XML_layoutPr));

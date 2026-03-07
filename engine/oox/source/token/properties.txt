@@ -426,6 +426,7 @@ ParaRightMargin
 ParaTabStops
 ParaTabStopDefaultDistance
 ParaTopMargin
+ParentLabelLayout
 Path
 PercentageNumberFormat
 PersistName
@@ -456,6 +457,7 @@ ProgressValueMax
 ProgressValueMin
 ProjectionMode
 Protected
+QuartileMethod
 RadiusRangeMaximum
 RadiusRangeMinimum
 RangeXMaximum
@@ -472,6 +474,7 @@ Reference
 ReferenceDevice
 ReferenceSheet
 RefreshPeriod
+RegionLabelLayout
 RegularExpressions
 RelId
 RelativeHeight
@@ -579,6 +582,7 @@ StringItemList
 StyleIndex
 SubPieType
 SubViewSize
+SubtotalIndices
 Subtotals
 Suffix
 Surround

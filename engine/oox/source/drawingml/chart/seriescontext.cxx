@@ -830,10 +830,10 @@ ContextHandlerRef LayoutPropsContext::onCreateContext( sal_Int32 nElement, const
             switch( nElement )
             {
                 case CX_TOKEN( parentLabelLayout ):
-                    // TODO
+                    mrModel.mosParentLabelLayout = rAttribs.getString( XML_val );
                     return nullptr;
                 case CX_TOKEN( regionLabelLayout ):
-                    // TODO
+                    mrModel.mosRegionLabelLayout = rAttribs.getString( XML_val );
                     return nullptr;
                 case CX_TOKEN( visibility ):
                     mrModel.mobVisibilityConnectorLines = rAttribs.getBool( XML_connectorLines );
@@ -863,15 +863,29 @@ ContextHandlerRef LayoutPropsContext::onCreateContext( sal_Int32 nElement, const
                     // TODO
                     return nullptr;
                 case CX_TOKEN( statistics ):
-                    // TODO
+                    mrModel.mosQuartileMethod = rAttribs.getString( XML_quartileMethod );
                     return nullptr;
                 case CX_TOKEN( subtotals ):
-                    // TODO
-                    return nullptr;
+                    return this;
                 case CX_TOKEN( extLst ):
                     // TODO
                     return nullptr;
             }
+            break;
+        case CX_TOKEN( subtotals ):
+            switch( nElement )
+            {
+                case CX_TOKEN( idx ):
+                {
+                    sal_Int32 nVal = rAttribs.getInteger( XML_val, -1 );
+                    if (nVal >= 0)
+                        mrModel.maSubtotalIndices.push_back( nVal );
+                    return nullptr;
+                }
+                default:
+                    return nullptr;
+            }
+            break;
     }
     return ContextBase::onCreateContext( nElement, rAttribs );
 }

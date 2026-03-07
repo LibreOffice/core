@@ -177,6 +177,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexElementsXLSX_boxWhisker)
     assertXPath(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:visibility", "meanMarker", u"1");
     assertXPath(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:visibility", "nonoutliers", u"0");
     assertXPath(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:visibility", "outliers", u"1");
+    assertXPath(pXmlDoc, sSeriesPath + "/cx:layoutPr/cx:statistics", "quartileMethod",
+                u"exclusive");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_clusteredColumn)
@@ -233,6 +235,10 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_clusteredColumn)
                 "layoutId", u"regionMap");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"RegionMap");
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:layoutPr/"
+                "cx:regionLabelLayout",
+                "val", u"bestFitOnly");
     // ====
     loadFromFile(u"xlsx/sunburst.xlsx");
     save(TestFilter::XLSX);
@@ -243,6 +249,10 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_clusteredColumn)
                 "layoutId", u"sunburst");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"Sunburst");
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:layoutPr/"
+                "cx:parentLabelLayout",
+                "val", u"overlapping");
     // ====
     loadFromFile(u"xlsx/treemap.xlsx");
     save(TestFilter::XLSX);

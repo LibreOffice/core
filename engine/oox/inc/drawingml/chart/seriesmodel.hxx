@@ -203,6 +203,12 @@ struct LayoutPropsModel
     std::optional<bool> mobVisibilityNonoutliers;
     std::optional<bool> mobVisibilityOutliers;
 
+    // Chartex layoutPr: label layout, statistics, subtotals
+    std::optional<OUString> mosParentLabelLayout;
+    std::optional<OUString> mosRegionLabelLayout;
+    std::optional<OUString> mosQuartileMethod;
+    std::vector<sal_Int32>  maSubtotalIndices;
+
 };
 
 enum class DataSourceType: sal_Int32

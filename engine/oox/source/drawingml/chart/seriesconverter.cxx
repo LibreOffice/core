@@ -987,8 +987,17 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         if (rLPR->mobVisibilityOutliers.has_value())
             aSeriesProp.setProperty(PROP_Outliers, rLPR->mobVisibilityOutliers.value());
 
+        // chartex other series layout properties: parentLabelLayout, regionLabelLayout, statistics, subtotals
+        if (rLPR->mosParentLabelLayout.has_value())
+            aSeriesProp.setProperty(PROP_ParentLabelLayout, rLPR->mosParentLabelLayout.value());
+        if (rLPR->mosRegionLabelLayout.has_value())
+            aSeriesProp.setProperty(PROP_RegionLabelLayout, rLPR->mosRegionLabelLayout.value());
+        if (rLPR->mosQuartileMethod.has_value())
+            aSeriesProp.setProperty(PROP_QuartileMethod, rLPR->mosQuartileMethod.value());
+        if (!rLPR->maSubtotalIndices.empty())
+            aSeriesProp.setProperty(PROP_SubtotalIndices,
+                comphelper::containerToSequence(rLPR->maSubtotalIndices));
     }
-
     return xDataSeries;
 }
 
