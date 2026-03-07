@@ -39,10 +39,7 @@ bool TransliterateTextOperation::runImplementation()
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
-    if (!checkSheetViewProtection())
-        return false;
-
-    ScMarkData aMultiMark = mrMark;
+    ScMarkData aMultiMark = convertMark(mrMark);
     aMultiMark.SetMarking(false); // for MarkToMulti
     aMultiMark.MarkToMulti();
     const ScRange& aMarkRange = aMultiMark.GetMultiMarkArea();
@@ -81,6 +78,8 @@ bool TransliterateTextOperation::runImplementation()
     }
 
     rDoc.TransliterateText(aMultiMark, mnType);
+
+    syncSheetViews();
 
     if (!mrDocFunc.AdjustRowHeight(aMarkRange, true, true))
         mrDocShell.PostPaint(aMarkRange, PaintPartFlags::Grid);
