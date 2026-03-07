@@ -124,6 +124,9 @@ namespace
 
 void ScSimpleUndo::EndUndo()
 {
+    // After undo we need to restore the sheet views as well.
+    SyncSheetViews();
+
     {
         // rhbz#1352881 Temporarily turn off undo generation during
         // SetDocumentModified
@@ -156,6 +159,9 @@ void ScSimpleUndo::EndRedo()
     if (pDetectiveUndo)
         pDetectiveUndo->Redo();
 
+    // After redo we need to restore the sheet views as well.
+    SyncSheetViews();
+
     {
         // rhbz#1352881 Temporarily turn off undo generation during
         // SetDocumentModified
@@ -172,6 +178,17 @@ void ScSimpleUndo::EndRedo()
     }
 
     pDocShell->SetInUndo( false );
+}
+
+void ScSimpleUndo::SyncSheetViews()
+{
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return;
+
+    ScDocument& rDocument = pDocShell->GetDocument();
+    SCTAB nDefaultViewTable = rDocument.GetDefaultViewTableNumber(pViewData->GetTabNumber());
+    rDocument.SyncSheetViews(nDefaultViewTable);
 }
 
 void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )

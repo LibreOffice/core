@@ -2443,6 +2443,14 @@ public:
     /** Returns the sheet view ID for a given tab. */
     SC_DLLPUBLIC sc::SheetViewID GetTableSheetViewID(SCTAB nTab) const;
 
+    /** Synchronizes all sheet views for the given default view table.
+     *
+     * Specifically, it goes through all sheet views and overwrites the
+     * content of the sheet view table with the content of default view table,
+     * then reapplies the sheet views's sorting and filtering for the auto-filter.
+     */
+    void SyncSheetViews(SCTAB nDefaultViewTable);
+
 private:
     ScDocument(const ScDocument& r) = delete;
 

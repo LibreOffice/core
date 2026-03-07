@@ -29,6 +29,10 @@
 #include <bcaslot.hxx>
 #include <broadcast.hxx>
 #include <SheetViewManager.hxx>
+#include <SheetView.hxx>
+#include <dbdata.hxx>
+#include <queryparam.hxx>
+#include <sortparam.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -1198,6 +1202,56 @@ SCTAB ScDocument::GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID)
         assert(false && "a non valid sheet view is unexpected...");
     }
     return -1;
+}
+
+void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
+{
+    std::shared_ptr<sc::SheetViewManager> pManager = GetSheetViewManager(nDefaultViewTable);
+    if (!pManager || pManager->isEmpty())
+        return;
+
+    // Iterate all valid sheet views
+    for (auto& rSheetView : pManager->iterateValidSheetViews())
+    {
+        SCTAB nSheetViewTab = rSheetView.getTableNumber();
+        // Get the current query (filter) state of the auto-filter
+        std::optional<ScQueryParam> oQueryParam;
+        ScDBData* pNoNameData = GetAnonymousDBData(nSheetViewTab);
+        if (pNoNameData && pNoNameData->HasAutoFilter())
+        {
+            if (pNoNameData->HasQueryParam())
+            {
+                oQueryParam.emplace();
+                pNoNameData->GetQueryParam(*oQueryParam);
+            }
+        }
+
+        // Overwrite the content from the default view table
+        OverwriteContent(nDefaultViewTable, nSheetViewTab);
+
+        // Revert the sorting of the default view table.
+        // It can happen that the default view was sorted after the sheet view
+        // was created.
+        if (auto const& rReorderParameters = rSheetView.getReorderParameters())
+        {
+            sc::ReorderParam aReorderParameters(*rReorderParameters);
+            aReorderParameters.maSortRange.aStart.SetTab(nSheetViewTab);
+            aReorderParameters.maSortRange.aEnd.SetTab(nSheetViewTab);
+            aReorderParameters.reverse();
+            Reorder(aReorderParameters);
+        }
+
+        // Sort the sheet view if it was sorted before
+        auto const& oSortParam = rSheetView.getSortParam();
+        if (oSortParam)
+        {
+            rSheetView.resetSortOrder();
+            Sort(nSheetViewTab, *oSortParam, false, false, nullptr, nullptr);
+        }
+        // Apply the stored query state (if available)
+        if (oQueryParam)
+            Query(nSheetViewTab, *oQueryParam, false, false);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

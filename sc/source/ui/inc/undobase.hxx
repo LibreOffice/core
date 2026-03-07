@@ -61,6 +61,8 @@ protected:
     void            BeginRedo();
     void            EndRedo();
 
+    void SyncSheetViews();
+
     void BroadcastChanges( const ScRange& rRange );
 
     /**
