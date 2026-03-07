@@ -56,6 +56,7 @@
 #include <com/sun/star/connection/Acceptor.hpp>
 #include <com/sun/star/connection/Connector.hpp>
 #include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
 #include <salhelper/thread.hxx>
