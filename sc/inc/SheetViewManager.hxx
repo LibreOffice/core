@@ -121,8 +121,6 @@ public:
     /** Returns a range that iterates only over valid (non-null) sheet views. */
     SheetViewRange iterateValidSheetViews() const { return SheetViewRange(maViews); }
 
-    void unsyncAllSheetViews();
-
     static OUString defaultViewName();
 
     std::optional<SortOrderReverser> const& getSortOrder() const { return moSortOrder; }

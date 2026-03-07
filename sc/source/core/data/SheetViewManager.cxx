@@ -58,14 +58,6 @@ std::shared_ptr<SheetView> SheetViewManager::get(SheetViewID nID) const
     return std::shared_ptr<SheetView>();
 }
 
-void SheetViewManager::unsyncAllSheetViews()
-{
-    for (auto& rSheetView : iterateValidSheetViews())
-    {
-        rSheetView.unsync();
-    }
-}
-
 OUString SheetViewManager::generateName()
 {
     maNameCounter++;

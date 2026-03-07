@@ -662,21 +662,12 @@ OUString ScModelObj::getPartInfo( int nPart )
     const sc::SheetViewID nSheetViewID = pViewData->GetSheetViewIDForSheet(nPart);
     if (nSheetViewID != sc::DefaultSheetViewID)
     {
-        bool nSheetViewSynced = true;
-        if (auto pSheetViewManager = rDocument.GetSheetViewManager(nPart))
-        {
-            if (auto pSheetView = pSheetViewManager->get(nSheetViewID))
-            {
-                nSheetViewSynced = pSheetView->isSynced();
-            }
-        }
         SCTAB nDefaultViewTableNumber = rDocument.GetDefaultViewTableNumber(nPart);
         sal_Int64 nDefaultViewHashCode;
         rDocument.GetHashCode(nDefaultViewTableNumber, nDefaultViewHashCode);
 
         jsonWriter.put("sheetviewid", int32_t(nSheetViewID));
         jsonWriter.put("defaultviewhash", int64_t(nDefaultViewHashCode));
-        jsonWriter.put("sheetviewsynced", uint32_t(nSheetViewSynced));
     }
 
     OUString tabName;
