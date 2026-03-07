@@ -155,7 +155,7 @@ void XmlWriter::attribute(const char* name, const sal_Int64 aNumber)
     attribute(name, OString::number(aNumber));
 }
 
-void XmlWriter::attributeDouble(const char* name, const double aNumber)
+void XmlWriter::attribute(const char* name, const double aNumber)
 {
     attribute(name, OString::number(aNumber));
 }

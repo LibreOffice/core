@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
     // i.e. the shadow origin was not the top right corner for scaling (larger x position, so it was
     // visible on the right of the shape as well).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-705), fShadowX);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-685), fShadowY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-684), fShadowY);
 }
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
@@ -102,32 +102,32 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
         // - Actual  : 162
         // - In <>, attribute 'xy13' of '(//shadow/transform)[1]' incorrect value.
         // i.e. shadow alignment was ignored while scaling the shadow.
-        assertXPath(pDocument, "(//shadow/transform)[1]", "xy13", u"-568");
-        assertXPath(pDocument, "(//shadow/transform)[1]", "xy23", u"162");
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[1]", "xy13", -567.8, 0.001);
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[1]", "xy23", 162.3, 0.001);
 
-        assertXPath(pDocument, "(//shadow/transform)[2]", "xy13", u"-1795");
-        assertXPath(pDocument, "(//shadow/transform)[2]", "xy23", u"162");
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[2]", "xy13", -1794.55, 0.001);
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[2]", "xy23", 162.3, 0.001);
 
-        assertXPath(pDocument, "(//shadow/transform)[3]", "xy13", u"-3021");
-        assertXPath(pDocument, "(//shadow/transform)[3]", "xy23", u"161");
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[3]", "xy13", -3021.3, 0.001);
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[3]", "xy23", 161.1, 0.001);
 
-        assertXPath(pDocument, "(//shadow/transform)[4]", "xy13", u"-568");
-        assertXPath(pDocument, "(//shadow/transform)[4]", "xy23", u"-749");
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[4]", "xy13", -567.8, 0.001);
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[4]", "xy23", -749.25, 0.001);
 
-        assertXPath(pDocument, "(//shadow/transform)[5]", "xy13", u"-3021");
-        assertXPath(pDocument, "(//shadow/transform)[5]", "xy23", u"-750");
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[5]", "xy13", -3021.3, 0.001);
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[5]", "xy23", -750.45, 0.001);
 
-        assertXPath(pDocument, "(//shadow/transform)[6]", "xy13", u"-567");
-        assertXPath(pDocument, "(//shadow/transform)[6]", "xy23", u"-1692");
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[6]", "xy13", -566.6, 0.001);
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[6]", "xy23", -1691.7, 0.001);
 
-        assertXPath(pDocument, "(//shadow/transform)[7]", "xy13", u"-1795");
-        assertXPath(pDocument, "(//shadow/transform)[7]", "xy23", u"-1693");
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[7]", "xy13", -1794.55, 0.001);
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[7]", "xy23", -1693.0, 0.001);
 
-        assertXPath(pDocument, "(//shadow/transform)[8]", "xy13", u"-3023");
-        assertXPath(pDocument, "(//shadow/transform)[8]", "xy23", u"-1692");
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[8]", "xy13", -3022.5, 0.001);
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[8]", "xy23", -1691.7, 0.001);
 
-        assertXPath(pDocument, "(//shadow/transform)[9]", "xy13", u"-1795");
-        assertXPath(pDocument, "(//shadow/transform)[9]", "xy23", u"-750");
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[9]", "xy13", -1794.55, 0.001);
+        assertXPathDoubleValue(pDocument, "(//shadow/transform)[9]", "xy23", -750.45, 0.001);
     }
     {
         // Page 2 contains a table with shadow alignment center
@@ -144,8 +144,8 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
         // - Expected: -5196
         // - Actual  : 0
         // - In<>, attribute 'xy13' of '//shadow/transform' incorrect value.
-        assertXPath(pDocument, "//shadow/transform", "xy13", u"-5196");
-        assertXPath(pDocument, "//shadow/transform", "xy23", u"-2290");
+        assertXPathDoubleValue(pDocument, "//shadow/transform", "xy13", -5196.45, 0.001);
+        assertXPathDoubleValue(pDocument, "//shadow/transform", "xy23", -2290.05, 0.001);
     }
 }
 

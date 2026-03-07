@@ -59,13 +59,15 @@ public:
     void attribute(const char* sTagName, sal_Int64 aNumber);
     template <o3tl::integral T> void attribute(const char* sTagName, T aNumber)
     {
-        return attribute(sTagName, static_cast<sal_Int64>(aNumber));
+        attribute(sTagName, static_cast<sal_Int64>(aNumber));
     }
-    template <o3tl::floating_point T> void attribute(const char* sTagName, T aNumber)
+    template <class T>
+    typename std::enable_if<std::is_enum<T>::value, void>::type attribute(const char* sTagName,
+                                                                          T aNumber)
     {
-        return attribute(sTagName, basegfx::fround64(aNumber));
+        attribute(sTagName, static_cast<sal_Int64>(aNumber));
     }
-    void attributeDouble(const char* sTagName, double aNumber);
+    void attribute(const char* sTagName, double aNumber);
     void attributeBase64(const char* sTagName, std::vector<sal_uInt8> const& rValueInBytes);
     void attributeBase64(const char* sTagName, std::vector<char> const& rValueInBytes);
 
