@@ -2028,6 +2028,71 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillSimple_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillSeries_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Switch to sheet view and fill series
+    {
+        switchToSheetView();
+
+        // Current state default view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Current state sheet view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // FillSeries A2:A5 on default view (index 0), FILL_TO_BOTTOM, FILL_LINEAR
+        // start=40, step=-10: fills 40, 30, 20, 10
+        pDocShell->GetDocFunc().FillSeries(ScRange(0, 1, 0, 0, 4, 0), nullptr, FILL_TO_BOTTOM,
+                                           FILL_LINEAR, FILL_DAY, 40.0, -10.0, 0.0, true);
+
+        // Default view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"40", u"30", u"20", u"10" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Sheet view: synced and re-sorted
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"10", u"20", u"30", u"40" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+
+    // Try to FillSeries on the sheet view — should be blocked because it intersects autofilter
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        bool bResult = pDocShell->GetDocFunc().FillSeries(
+            ScRange(0, 1, nSheetViewTab, 0, 4, nSheetViewTab), nullptr, FILL_TO_BOTTOM, FILL_LINEAR,
+            FILL_DAY, 100.0, 100.0, 0.0, true);
+        CPPUNIT_ASSERT(!bResult);
+
+        // Values should remain unchanged
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"40", u"30", u"20", u"10" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"10", u"20", u"30", u"40" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

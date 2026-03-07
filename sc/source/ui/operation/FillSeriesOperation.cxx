@@ -58,18 +58,25 @@ FillSeriesOperation::FillSeriesOperation(ScDocFunc& rDocFunc, ScDocShell& rDocSh
 {
 }
 
+bool FillSeriesOperation::canRunTheOperation() const
+{
+    return !isInputOnSheetViewAutoFilter(maRange);
+}
+
 bool FillSeriesOperation::runImplementation()
 {
     ScDocShellModificator aModificator(mrDocShell);
 
     bool bSuccess = false;
     ScDocument& rDoc = mrDocShell.GetDocument();
-    SCCOL nStartCol = maRange.aStart.Col();
-    SCROW nStartRow = maRange.aStart.Row();
-    SCTAB nStartTab = maRange.aStart.Tab();
-    SCCOL nEndCol = maRange.aEnd.Col();
-    SCROW nEndRow = maRange.aEnd.Row();
-    SCTAB nEndTab = maRange.aEnd.Tab();
+
+    ScRange aRange = convertRange(maRange);
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCTAB nStartTab = aRange.aStart.Tab();
+    SCCOL nEndCol = aRange.aEnd.Col();
+    SCROW nEndRow = aRange.aEnd.Row();
+    SCTAB nEndTab = aRange.aEnd.Tab();
 
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
@@ -83,17 +90,14 @@ bool FillSeriesOperation::runImplementation()
             aMark.SelectTable(nTab, true);
     }
 
-    if (!checkSheetViewProtection())
-        return false;
-
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(
         rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
     if (aTester.IsEditable())
     {
         weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
 
-        ScRange aSourceArea = maRange;
-        ScRange aDestArea = maRange;
+        ScRange aSourceArea = aRange;
+        ScRange aDestArea = aRange;
 
         SCSIZE nCount = rDoc.GetEmptyLinesInBlock(
             aSourceArea.aStart.Col(), aSourceArea.aStart.Row(), aSourceArea.aStart.Tab(),
@@ -178,7 +182,9 @@ bool FillSeriesOperation::runImplementation()
             rDoc.Fill(aSourceArea.aStart.Col(), aSourceArea.aStart.Row(), aSourceArea.aEnd.Col(),
                       aSourceArea.aEnd.Row(), &aProgress, aMark, nCount, meDir, meCmd, meDateCmd,
                       mfStep, mfMax);
-            mrDocFunc.AdjustRowHeight(maRange, true, mbApi);
+            mrDocFunc.AdjustRowHeight(aRange, true, mbApi);
+
+            syncSheetViews();
 
             mrDocShell.PostPaintGridAll();
             aModificator.SetDocumentModified();
