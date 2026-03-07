@@ -11761,16 +11761,8 @@ void ScInterpreter::ScLeft()
     PushString( aStr );
 }
 
-namespace {
-
-struct UBlockScript {
-    UBlockCode from;
-    UBlockCode to;
-};
-
-}
-
-constexpr UBlockScript scriptList[] = {
+// sorted list of inclusive ranges (pairs "from block ... to block")
+constexpr std::pair<UBlockCode, UBlockCode> scriptList[] = {
     {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO},
     {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_HANGUL_SYLLABLES},
     {UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS},
@@ -11779,13 +11771,13 @@ constexpr UBlockScript scriptList[] = {
     {UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT},
     {UBLOCK_CJK_STROKES, UBLOCK_CJK_STROKES}
 };
-static_assert(std::ranges::all_of(scriptList, [](const auto& r) { return r.from <= r.to; }));
+static_assert(std::ranges::all_of(scriptList, [](const auto& r) { return r.first <= r.second; }));
 static_assert(std::ranges::is_sorted(scriptList,
                                      [](const auto& l, const auto& r)
                                      {
                                          // avoid interleaving ranges; without the second part,
                                          // this would pass the check: {{0, 10}, {5, 15}}
-                                         return (l.to < r.from || l.from < r.to);
+                                         return (l.second < r.first || l.first < r.second);
                                      }));
 static sal_Int32 ByteLen(sal_Unicode currentChar)
 {
