@@ -22,6 +22,7 @@
 #include <scitems.hxx>
 #include <SheetView.hxx>
 #include <SheetViewManager.hxx>
+#include <attrib.hxx>
 #include <editeng/brushitem.hxx>
 #include <paramisc.hxx>
 
@@ -152,6 +153,28 @@ protected:
             }
             else
                 aString += u", \""_ustr + aColor + u"\""_ustr;
+        }
+        return aString;
+    }
+
+    // Writes to string the indent state for a row range, Y = indented, N = not indented
+    static OUString getIndent(ScDocument* pDocument, SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
+                              SCTAB nTab)
+    {
+        OUString aString;
+        bool bFirst = true;
+        for (SCROW nRow = nStartRow; nRow <= nEndRow; nRow++)
+        {
+            const ScPatternAttr* pPattern = pDocument->GetPattern(nCol, nRow, nTab);
+            const ScIndentItem& rIndent = pPattern->GetItem(ATTR_INDENT);
+            OUString aValue = rIndent.GetValue() > 0 ? u"Y"_ustr : u"N"_ustr;
+            if (bFirst)
+            {
+                bFirst = false;
+                aString = u"\""_ustr + aValue + u"\""_ustr;
+            }
+            else
+                aString += u", \""_ustr + aValue + u"\""_ustr;
         }
         return aString;
     }
@@ -2157,6 +2180,54 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillAuto_DefaultAndSheetView)
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"3", u"5", u"7" }),
                              getValues(mpTabViewSheetView, 0, 1, 4));
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeIndent_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Switch to Sheet view and change indent on A2:A3
+    // Sheet view ascending: 3, 4, 5, 7
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        ScMarkData aMark(pDocument->GetSheetLimits());
+        aMark.SelectTable(nSheetViewTab, true);
+        aMark.SetMarkArea(ScRange(0, 1, nSheetViewTab, 0, 2, nSheetViewTab));
+        aMark.MarkToMulti();
+        pDocShell->GetDocFunc().ChangeIndent(aMark, true, true);
+    }
+
+    // Sheet view: A2,A3 indented, A4,A5 not
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 1));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"Y", u"Y", u"N", u"N" }),
+                         getIndent(pDocument, 0, 1, 4, 1));
+
+    // Default view: A4,A5 indented (A4 is A3, A5 is A2)
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"Y", u"Y" }),
+                         getIndent(pDocument, 0, 1, 4, 0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
