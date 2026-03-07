@@ -1878,8 +1878,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_2)
                     = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("BaseFont"_ostr));
                 CPPUNIT_ASSERT(pName);
                 OString aFontName = pName->GetValue().copy(7); // skip the subset id
+#if defined _WIN32
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", "ReemKufi-Regular"_ostr,
+                                             aFontName);
+#else
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font name", "ReemKufi"_ostr, aFontName);
-
+#endif
                 auto pToUnicodeRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(
                     pObject->Lookup("ToUnicode"_ostr));
                 CPPUNIT_ASSERT(pToUnicodeRef);
@@ -2107,12 +2111,17 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName1)
         }
     }
 
+#if defined MACOSX
     std::set<OString> aExpected{ "STIXTwoText"_ostr,
                                  "STIXTwoTextRoman-Bold"_ostr,
                                  "STIXTwoText-Italic"_ostr,
                                  "STIXTwoTextItalic-BoldItalic"_ostr,
                                  "STIXTwoTextRoman-SemiBold"_ostr,
                                  "STIXTwoTextItalic-SemiBoldItalic"_ostr };
+#else
+    std::set<OString> aExpected{ "STIXTwoTextRoman-Bold"_ostr, "STIXTwoTextItalic-BoldItalic"_ostr,
+                                 "STIXTwoTextItalic-Italic"_ostr, "STIXTwoTextRoman-Regular"_ostr };
+#endif
 
     CPPUNIT_ASSERT_EQUAL(aExpected, aFontNames);
 #endif
@@ -2145,11 +2154,16 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVariableFontPSName2)
         }
     }
 
+#if defined MACOSX
     std::set<OString> aExpected{
         "SourceCodePro-Regular"_ostr,  "SourceCodePro-Bold"_ostr,
         "SourceCodePro-Italic"_ostr,   "SourceCodePro-BoldItalic"_ostr,
         "SourceCodePro-SemiBold"_ostr, "SourceCodePro-SemiBoldItalic"_ostr
     };
+#else
+    std::set<OString> aExpected{ "SourceCodePro-Regular"_ostr, "SourceCodePro-Bold"_ostr,
+                                 "SourceCodePro-Italic"_ostr, "SourceCodePro-BoldItalic"_ostr };
+#endif
 
     CPPUNIT_ASSERT_EQUAL(aExpected, aFontNames);
 #endif
@@ -2185,9 +2199,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testOpticalSizing)
         }
     }
 
+#if defined MACOSX
     std::set<OString> aExpected{ "Fraunces_144opsz_400wght"_ostr, "Fraunces_80opsz_400wght"_ostr,
                                  "Fraunces_60opsz_400wght"_ostr,  "Fraunces_40opsz_400wght"_ostr,
                                  "Fraunces_20opsz_400wght"_ostr,  "Fraunces-Regular"_ostr };
+#else
+    std::set<OString> aExpected{ "DejaVuSans"_ostr };
+#endif
 
     CPPUNIT_ASSERT_EQUAL(aExpected, aFontNames);
 #endif
