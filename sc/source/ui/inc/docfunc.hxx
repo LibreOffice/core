@@ -108,7 +108,7 @@ public:
     bool DeleteCell(
         const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord, bool bApi );
 
-    bool            TransliterateText( const ScMarkData& rMark, TransliterationFlags nType,
+    SC_DLLPUBLIC bool TransliterateText( const ScMarkData& rMark, TransliterationFlags nType,
                                                bool bApi );
 
     bool            SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi );
