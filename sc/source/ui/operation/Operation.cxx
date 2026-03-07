@@ -243,6 +243,35 @@ void Operation::syncSheetViews()
 
 bool Operation::isInputOnSheetView() const { return getCurrentSheetView(mpViewData) != nullptr; }
 
+bool Operation::isInputOnSheetViewAutoFilter(ScRange const& rRange) const
+{
+    if (!mpViewData)
+        return false;
+
+    ScDocument& rDoc = mpViewData->GetDocument();
+
+    // Only relevant if the range is on a sheet view tab
+    if (!rDoc.IsSheetViewHolder(rRange.aStart.Tab()))
+        return false;
+
+    ScDBCollection* pDBCollection = rDoc.GetDBCollection();
+    if (!pDBCollection)
+        return false;
+
+    SCTAB nTab = rRange.aStart.Tab();
+    for (ScDBData* pDBData : pDBCollection->GetAllDBsFromTab(nTab))
+    {
+        if (!pDBData->HasAutoFilter())
+            continue;
+
+        ScRange aDBRange;
+        pDBData->GetArea(aDBRange);
+        if (rRange.Intersects(aDBRange))
+            return true;
+    }
+    return false;
+}
+
 bool Operation::checkSheetViewProtection()
 {
     sc::SheetViewOperationsTester aSheetViewTester(mpViewData);

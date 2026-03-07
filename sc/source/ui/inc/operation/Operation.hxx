@@ -58,6 +58,9 @@ protected:
     /** Check if the input is on a sheet view tab */
     bool isInputOnSheetView() const;
 
+    /** Check if a range is on a sheet view tab and intersects with any autofilter */
+    bool isInputOnSheetViewAutoFilter(ScRange const& rRange) const;
+
     /** Check if we can run the operation or not */
     virtual bool canRunTheOperation() const { return true; }
 

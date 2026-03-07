@@ -29,6 +29,7 @@ private:
     ScMarkData const* mpTabMark;
     FillDir meDir;
 
+    bool canRunTheOperation() const override;
     bool runImplementation() override;
 
 public:
