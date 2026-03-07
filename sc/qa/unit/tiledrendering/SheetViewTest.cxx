@@ -215,6 +215,10 @@ protected:
         gotoCell(aCellAddress);
         dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
     }
+
+    void undo() { dispatchCommand(mxComponent, u".uno:Undo"_ustr, {}); }
+
+    void redo() { dispatchCommand(mxComponent, u".uno:Redo"_ustr, {}); }
 };
 
 /** Test class that contains methods commonly used for testing sync of sheet views. */
@@ -2373,6 +2377,318 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeIndent_DefaultAndSheetView)
                          getValues(pDocument, 0, 1, 4, 0));
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"Y", u"Y" }),
                          getIndent(pDocument, 0, 1, 4, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testUndo_DefaultView_DeleteContent)
+{
+    // Test undo of DeleteContents from the default view with a sheet view present.
+    // After undo, both views should be consistent.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    // Switch to Sheet View and Create, sort descending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Default view and and sheet view state
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(pDocument, 0, 1, 4, 1));
+
+    // Clear content in default view
+    {
+        switchToDefaultView();
+        gotoCell(u"A4");
+        dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    }
+
+    // State after delete
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"" }),
+                         getValues(pDocument, 0, 1, 4, 1));
+
+    // Undo from default view
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // After undo: default should be restored
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+
+    // Sheet view should also be synced back
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(pDocument, 0, 1, 4, 1));
+
+    // Redo from default view
+    {
+        switchToDefaultView();
+        redo();
+    }
+
+    // State after delete
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"" }),
+                         getValues(pDocument, 0, 1, 4, 1));
+
+    // Undo from default view
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // Default view and and sheet view state
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(pDocument, 0, 1, 4, 1));
+
+    // Clear content in sheet view
+    {
+        switchToSheetView();
+        gotoCell(u"A4");
+        dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    }
+
+    // State after delete
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    // Sheet view was resorted
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"3", u"" }),
+                         getValues(pDocument, 0, 1, 4, 1));
+
+    // Undo from sheet view
+    {
+        switchToSheetView();
+        undo();
+    }
+
+    // Default view and and sheet view state
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(pDocument, 0, 1, 4, 1));
+
+    // Redo from sheet view
+    {
+        switchToSheetView();
+        redo();
+    }
+
+    // State after delete
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"", u"5", u"3", u"7" }),
+                         getValues(pDocument, 0, 1, 4, 0));
+    // Sheet view was resorted
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"3", u"" }),
+                         getValues(pDocument, 0, 1, 4, 1));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testUndo_DefaultView_ClearItems)
+{
+    // Test undo of ClearItems (bold removal) from the default view with a sheet view present.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Switch to Sheet View and Create, sort descending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Set A2 and A3 bold in sheet view (values 7 and 5)
+    {
+        switchToSheetView();
+        setCellBold(u"A2");
+        setCellBold(u"A3");
+    }
+
+    // Default: N, B, N, B (rows with 5 and 7 are bold)
+    // Sheet: B, B, N, N
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"B" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+
+    // Clear bold on A4:A5 in default view (values 3 and 7)
+    {
+        switchToDefaultView();
+
+        ScMarkData aMark(pDocument->GetSheetLimits());
+        aMark.SelectTable(0, true);
+        aMark.SetMarkArea(ScRange(0, 3, 0, 0, 4, 0));
+        sal_uInt16 aWhich[] = { ATTR_FONT_WEIGHT, 0 };
+        pDocShell->GetDocFunc().ClearItems(aMark, aWhich, true);
+    }
+
+    // After clear: A5(7) was bold -> now N
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+
+    // Undo from default view
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // After undo: default should be restored
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"B" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+
+    // Sheet view should also be synced back
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+
+    // Redo from default view
+    {
+        switchToDefaultView();
+        redo();
+    }
+
+    // After redo: same as after clear
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+
+    // Undo from default view
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // Default view and sheet view state restored
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"B" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+
+    // Clear bold on A2:A3 in sheet view
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        ScMarkData aMark(pDocument->GetSheetLimits());
+        aMark.SelectTable(nSheetViewTab, true);
+        aMark.SetMarkArea(ScRange(0, 1, nSheetViewTab, 0, 2, nSheetViewTab));
+        sal_uInt16 aWhich[] = { ATTR_FONT_WEIGHT, 0 };
+        pDocShell->GetDocFunc().ClearItems(aMark, aWhich, true);
+    }
+
+    // After clear from sheet view: all bold cleared
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+
+    // Undo from sheet view
+    {
+        switchToSheetView();
+        undo();
+    }
+
+    // Default view and sheet view state restored
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"B", u"N", u"B" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"B", u"B", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+
+    // Redo from sheet view
+    {
+        switchToSheetView();
+        redo();
+    }
+
+    // After redo: all bold cleared
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"N" }),
+                         getTextWeight(pDocument, 0, 1, 4, 1));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testUndo_DefaultView_FillSeries)
+{
+    // Test undo of FillSeries from default view with a sheet view present.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Current statw default view and sheet view
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // FillSeries: start=40, step=-10 -> 40, 30, 20, 10
+    {
+        switchToDefaultView();
+        pDocShell->GetDocFunc().FillSeries(ScRange(0, 1, 0, 0, 4, 0), nullptr, FILL_TO_BOTTOM,
+                                           FILL_LINEAR, FILL_DAY, 40.0, -10.0, 0.0, true);
+    }
+
+    // After fill: the default view should have the decreasing values
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"40", u"30", u"20", u"10" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    // Sheet view has ascending sorting
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"10", u"20", u"30", u"40" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Undo from default view
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // After undo: default and sheet view should be restored
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Redo from default view
+    {
+        switchToDefaultView();
+        redo();
+    }
+
+    // Values are back
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"40", u"30", u"20", u"10" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"10", u"20", u"30", u"40" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
