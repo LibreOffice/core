@@ -25,6 +25,12 @@
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
+#include <drawinglayer/attribute/lineattribute.hxx>
+#include <drawinglayer/attribute/strokeattribute.hxx>
+#include <drawinglayer/attribute/linestartendattribute.hxx>
 
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -110,6 +116,90 @@ void writeBitmapData(tools::JsonWriter& rWriter, const Bitmap& rBitmap)
 }
 
 } // end anonymous namespace
+
+void Primitive2dJsonProcessor::writeLineAttributeScaled(
+    const drawinglayer::attribute::LineAttribute& rLineAttribute)
+{
+    auto aLineNode = mrWriter.startNode("line");
+    mrWriter.put("color", colorToHex(rLineAttribute.getColor()));
+    mrWriter.put("width", rLineAttribute.getWidth() * mfScaleFactor);
+
+    switch (rLineAttribute.getLineJoin())
+    {
+        case basegfx::B2DLineJoin::NONE:
+            mrWriter.put("linejoin", "none");
+            break;
+        case basegfx::B2DLineJoin::Bevel:
+            mrWriter.put("linejoin", "bevel");
+            break;
+        case basegfx::B2DLineJoin::Miter:
+            mrWriter.put("linejoin", "miter");
+            break;
+        case basegfx::B2DLineJoin::Round:
+            mrWriter.put("linejoin", "round");
+            break;
+        default:
+            mrWriter.put("linejoin", "unknown");
+            break;
+    }
+
+    switch (rLineAttribute.getLineCap())
+    {
+        case css::drawing::LineCap::LineCap_BUTT:
+            mrWriter.put("linecap", "butt");
+            break;
+        case css::drawing::LineCap::LineCap_ROUND:
+            mrWriter.put("linecap", "round");
+            break;
+        case css::drawing::LineCap::LineCap_SQUARE:
+            mrWriter.put("linecap", "square");
+            break;
+        default:
+            mrWriter.put("linecap", "unknown");
+            break;
+    }
+}
+
+void Primitive2dJsonProcessor::writeStrokeAttributeScaled(
+    const drawinglayer::attribute::StrokeAttribute& rStroke)
+{
+    if (rStroke.isDefault())
+        return;
+
+    auto aStrokeNode = mrWriter.startNode("stroke");
+    mrWriter.put("fullDotDashLen", rStroke.getFullDotDashLen() * mfScaleFactor);
+
+    const auto& rDashArray = rStroke.getDotDashArray();
+    if (!rDashArray.empty())
+    {
+        auto aDashArrayNode = mrWriter.startArray("dotDashArray");
+        for (double fValue : rDashArray)
+            mrWriter.putSimpleValue(OUString::number(fValue * mfScaleFactor));
+    }
+}
+
+void Primitive2dJsonProcessor::writeArrowAttributeScaled(
+    std::string_view sName, const drawinglayer::attribute::LineStartEndAttribute& rArrow)
+{
+    if (!rArrow.isActive())
+        return;
+
+    auto aArrowNode = mrWriter.startNode(sName);
+    mrWriter.put("width", rArrow.getWidth() * mfScaleFactor);
+    mrWriter.put("centered", rArrow.isCentered());
+
+    // Arrow polygon is in arbitrary coordinates.
+    mrWriter.put("path",
+                 basegfx::utils::exportToSvgD(rArrow.getB2DPolyPolygon(), true, true, false));
+
+    // Reference point in path coordinates (the point placed at the line endpoint).
+    // Non-centered: top-center of the bounding box.
+    // Centered: center of bbox.
+    const basegfx::B2DRange aRange(rArrow.getB2DPolyPolygon().getB2DRange());
+    mrWriter.put("tipX", aRange.getCenter().getX());
+    mrWriter.put("tipY",
+                 rArrow.isCentered() ? aRange.getCenter().getY() : aRange.getMinimum().getY());
+}
 
 void Primitive2dJsonProcessor::writeTextPortionScaled(
     const TextSimplePortionPrimitive2D& rPrimitive)
@@ -408,6 +498,44 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
 
             if (rPrimitive.getWordLineMode())
                 mrWriter.put("wordLineMode", true);
+        }
+        break;
+
+        case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const PolygonStrokePrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "polygonStroke");
+            const basegfx::B2DPolyPolygon aScaled
+                = scalePolyPolygon(basegfx::B2DPolyPolygon(rPrimitive.getB2DPolygon()));
+            mrWriter.put("path", basegfx::utils::exportToSvgD(aScaled, true, true, false));
+            writeLineAttributeScaled(rPrimitive.getLineAttribute());
+            writeStrokeAttributeScaled(rPrimitive.getStrokeAttribute());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const PolyPolygonStrokePrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "polyPolygonStroke");
+            writePathScaled(rPrimitive.getB2DPolyPolygon());
+            writeLineAttributeScaled(rPrimitive.getLineAttribute());
+            writeStrokeAttributeScaled(rPrimitive.getStrokeAttribute());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const PolygonStrokeArrowPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "polygonStrokeArrow");
+            const basegfx::B2DPolyPolygon aScaled
+                = scalePolyPolygon(basegfx::B2DPolyPolygon(rPrimitive.getB2DPolygon()));
+            mrWriter.put("path", basegfx::utils::exportToSvgD(aScaled, true, true, false));
+            writeLineAttributeScaled(rPrimitive.getLineAttribute());
+            writeStrokeAttributeScaled(rPrimitive.getStrokeAttribute());
+            writeArrowAttributeScaled("start", rPrimitive.getStart());
+            writeArrowAttributeScaled("end", rPrimitive.getEnd());
         }
         break;
 

@@ -4662,6 +4662,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
 
     CPPUNIT_ASSERT_MESSAGE("Expecting polyPolygonColor", aTypes.count("polyPolygonColor") > 0);
     CPPUNIT_ASSERT_MESSAGE("Expecting textSimplePortion", aTypes.count("textSimplePortion") > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting polygonStrokeArrow", aTypes.count("polygonStrokeArrow") > 0);
 
     // Verify that field placeholders have been replaced.
     std::vector<std::string> aTexts = collectPrimitiveTexts(aTree);
