@@ -31,6 +31,12 @@
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/attribute/linestartendattribute.hxx>
+#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGradientPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <drawinglayer/attribute/fillhatchattribute.hxx>
 
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -115,7 +121,96 @@ void writeBitmapData(tools::JsonWriter& rWriter, const Bitmap& rBitmap)
     writeGraphicData(rWriter, Graphic(rBitmap));
 }
 
+void writeGradient(tools::JsonWriter& rWriter,
+                   const drawinglayer::attribute::FillGradientAttribute& rGradient,
+                   std::string_view sNodeName = "gradient")
+{
+    auto aGradientNode = rWriter.startNode(sNodeName);
+
+    switch (rGradient.getStyle())
+    {
+        case css::awt::GradientStyle_LINEAR:
+            rWriter.put("style", "linear");
+            break;
+        case css::awt::GradientStyle_AXIAL:
+            rWriter.put("style", "axial");
+            break;
+        case css::awt::GradientStyle_RADIAL:
+            rWriter.put("style", "radial");
+            break;
+        case css::awt::GradientStyle_ELLIPTICAL:
+            rWriter.put("style", "elliptical");
+            break;
+        case css::awt::GradientStyle_SQUARE:
+            rWriter.put("style", "square");
+            break;
+        case css::awt::GradientStyle_RECT:
+            rWriter.put("style", "rect");
+            break;
+        default:
+            rWriter.put("style", "unknown");
+            break;
+    }
+
+    rWriter.put("angle", rGradient.getAngle());
+    rWriter.put("border", rGradient.getBorder());
+    rWriter.put("offsetX", rGradient.getOffsetX());
+    rWriter.put("offsetY", rGradient.getOffsetY());
+
+    if (rGradient.getSteps() > 0)
+        rWriter.put("steps", sal_Int64(rGradient.getSteps()));
+
+    // Color stops
+    const basegfx::BColorStops& rStops = rGradient.getColorStops();
+    if (!rStops.empty())
+    {
+        auto aStopsArray = rWriter.startArray("colorStops");
+        for (const auto& rStop : rStops)
+        {
+            auto aStopNode = rWriter.startStruct();
+            rWriter.put("offset", rStop.getStopOffset());
+            rWriter.put("color", colorToHex(rStop.getStopColor()));
+        }
+    }
+}
+
 } // end anonymous namespace
+
+void Primitive2dJsonProcessor::writeRangeScaled(std::string_view sName,
+                                                const basegfx::B2DRange& rRange)
+{
+    auto aArray = mrWriter.startArray(sName);
+    mrWriter.putSimpleValue(OUString::number(rRange.getMinX() * mfScaleFactor));
+    mrWriter.putSimpleValue(OUString::number(rRange.getMinY() * mfScaleFactor));
+    mrWriter.putSimpleValue(OUString::number(rRange.getMaxX() * mfScaleFactor));
+    mrWriter.putSimpleValue(OUString::number(rRange.getMaxY() * mfScaleFactor));
+}
+
+void Primitive2dJsonProcessor::writeHatchScaled(
+    const drawinglayer::attribute::FillHatchAttribute& rHatch)
+{
+    auto aHatchNode = mrWriter.startNode("hatch");
+
+    switch (rHatch.getStyle())
+    {
+        case drawinglayer::attribute::HatchStyle::Single:
+            mrWriter.put("style", "single");
+            break;
+        case drawinglayer::attribute::HatchStyle::Double:
+            mrWriter.put("style", "double");
+            break;
+        case drawinglayer::attribute::HatchStyle::Triple:
+            mrWriter.put("style", "triple");
+            break;
+    }
+
+    mrWriter.put("distance", rHatch.getDistance() * mfScaleFactor);
+    mrWriter.put("angle", rHatch.getAngle());
+    mrWriter.put("color", colorToHex(rHatch.getColor()));
+
+    if (rHatch.isFillBackground())
+        mrWriter.put("fillBackground", true);
+}
 
 void Primitive2dJsonProcessor::writeLineAttributeScaled(
     const drawinglayer::attribute::LineAttribute& rLineAttribute)
@@ -539,11 +634,80 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         }
         break;
 
+        case PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const FillGradientPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "fillGradient");
+            writeRangeScaled("outputRange", rPrimitive.getOutputRange());
+            writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
+            writeGradient(mrWriter, rPrimitive.getFillGradient());
+
+            if (rPrimitive.hasAlphaGradient())
+                writeGradient(mrWriter, rPrimitive.getAlphaGradient(), "alphaGradient");
+
+            if (rPrimitive.hasTransparency())
+                mrWriter.put("transparency", rPrimitive.getTransparency());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const PolyPolygonGradientPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "polyPolygonGradient");
+            writePathScaled(rPrimitive.getB2DPolyPolygon());
+            writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
+            writeGradient(mrWriter, rPrimitive.getFillGradient());
+
+            if (rPrimitive.hasAlphaGradient())
+                writeGradient(mrWriter, rPrimitive.getAlphaGradient(), "alphaGradient");
+
+            if (rPrimitive.hasTransparency())
+                mrWriter.put("transparency", rPrimitive.getTransparency());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const FillHatchPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "fillHatch");
+            writeRangeScaled("outputRange", rPrimitive.getOutputRange());
+            writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
+            mrWriter.put("backgroundColor", colorToHex(rPrimitive.getBColor()));
+            writeHatchScaled(rPrimitive.getFillHatch());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const PolyPolygonHatchPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "polyPolygonHatch");
+            writePathScaled(rPrimitive.getB2DPolyPolygon());
+            writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
+            mrWriter.put("backgroundColor", colorToHex(rPrimitive.getBackgroundColor()));
+            writeHatchScaled(rPrimitive.getFillHatch());
+        }
+        break;
+
         default:
         {
             const char* pTypeName = nullptr;
             switch (nId)
             {
+                // SVG gradient decomposition
+                case PRIMITIVE2D_ID_SVGLINEARGRADIENTPRIMITIVE2D:
+                    pTypeName = "svgLinearGradient";
+                    break;
+                case PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D:
+                    pTypeName = "svgRadialGradient";
+                    break;
+                case PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D:
+                    pTypeName = "svgLinearAtom";
+                    break;
+                case PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D:
+                    pTypeName = "svgRadialAtom";
+                    break;
                 // Text hierarchy (structural text grouping)
                 case PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D:
                     pTypeName = "textHierarchyField";
