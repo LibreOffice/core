@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <string_view>
-
 #pragma once
 
 class ScViewData;
@@ -17,10 +15,7 @@ namespace sc
 {
 enum class OperationType;
 
-/** Tester for operations on sheet views and default views
- *
- * Tests if an operation can be performed in a sheet view or the operation on the default view unsyncs the sheet view(s).
- */
+/** Tester for operations on sheet views and default views */
 class SheetViewOperationsTester
 {
     ScViewData* mpViewData;

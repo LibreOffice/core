@@ -534,16 +534,8 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_DefaultVi
     auto pSheetViewManager = pDocument->GetSheetViewManager(SCTAB(0));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->size());
 
-    auto pSheetView1 = pSheetViewManager->get(0);
-    CPPUNIT_ASSERT_EQUAL(true, pSheetView1->isSynced());
-    auto pSheetView2 = pSheetViewManager->get(1);
-    CPPUNIT_ASSERT_EQUAL(true, pSheetView2->isSynced());
-
-    // Sort, which will unsync sheet views
+    // Sort on default view
     sortDescendingForCell(u"A1");
-
-    CPPUNIT_ASSERT_EQUAL(false, pSheetView1->isSynced());
-    CPPUNIT_ASSERT_EQUAL(false, pSheetView2->isSynced());
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetViewChanged)
@@ -600,19 +592,10 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetView
     auto pSheetViewManager = pDocument->GetSheetViewManager(SCTAB(0));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->size());
 
-    auto pSheetView1 = pSheetViewManager->get(0);
-    CPPUNIT_ASSERT_EQUAL(true, pSheetView1->isSynced());
-
-    auto pSheetView2 = pSheetViewManager->get(1);
-    CPPUNIT_ASSERT_EQUAL(true, pSheetView2->isSynced());
-
-    // Sort, which will unsync sheet views
+    // Sort on sheet view 1
     SfxLokHelper::setView(aView1.getViewID());
     Scheduler::ProcessEventsToIdle();
     sortDescendingForCell(u"A1");
-
-    CPPUNIT_ASSERT_EQUAL(false, pSheetView1->isSynced());
-    CPPUNIT_ASSERT_EQUAL(true, pSheetView2->isSynced());
 }
 
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_ODF)
