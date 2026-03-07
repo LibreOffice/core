@@ -195,7 +195,7 @@ public:
 
     SC_DLLPUBLIC bool FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
                                         FillDir eDir, bool bApi );
-    bool            FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
+    SC_DLLPUBLIC bool FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
                                         FillDir    eDir, FillCmd eCmd, FillDateCmd    eDateCmd,
                                         double fStart, double fStep, double fMax,
                                         bool bApi );
