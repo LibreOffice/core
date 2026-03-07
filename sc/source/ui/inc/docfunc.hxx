@@ -180,7 +180,7 @@ public:
 
     SC_DLLPUBLIC void ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, bool bApi );
     bool            ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bApi );
-    bool            AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
+    SC_DLLPUBLIC bool AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
                                         sal_uInt16 nFormatNo, bool bApi );
 
     SC_DLLPUBLIC bool

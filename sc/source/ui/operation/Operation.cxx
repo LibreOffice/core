@@ -241,6 +241,8 @@ void Operation::syncSheetViews()
     }
 }
 
+bool Operation::isInputOnSheetView() const { return getCurrentSheetView(mpViewData) != nullptr; }
+
 bool Operation::checkSheetViewProtection()
 {
     sc::SheetViewOperationsTester aSheetViewTester(mpViewData);
@@ -250,9 +252,18 @@ bool Operation::checkSheetViewProtection()
 bool Operation::run()
 {
     SAL_INFO("sc.op", "Running operation '" << operationTypeString(meType) << "'.");
-    bool bResult = runImplementation();
-    SAL_INFO("sc.op", "Operation '" << operationTypeString(meType)
-                                    << (bResult ? "' succeeded." : "' failed."));
+    bool bResult = false;
+    if (canRunTheOperation())
+    {
+        bResult = runImplementation();
+        SAL_INFO("sc.op", "Operation '" << operationTypeString(meType)
+                                        << (bResult ? "' succeeded." : "' failed."));
+    }
+    else
+    {
+        SAL_INFO("sc.op", "Operation '" << operationTypeString(meType)
+                                        << "' can not be run using this input data.");
+    }
     return bResult;
 }
 }

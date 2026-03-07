@@ -11,6 +11,7 @@
 
 #include <autoform.hxx>
 #include <columnspanset.hxx>
+#include <dbdata.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>
 #include <editable.hxx>
@@ -40,17 +41,47 @@ AutoFormatOperation::AutoFormatOperation(ScDocFunc& rDocFunc, ScDocShell& rDocSh
 {
 }
 
+bool AutoFormatOperation::canRunTheOperation() const { return !isInputOnSheetViewAutoFilter(); }
+
+bool AutoFormatOperation::isInputOnSheetViewAutoFilter() const
+{
+    ScDocument& rDoc = mrDocShell.GetDocument();
+
+    // Only block if the range is on a sheet view tab, not the default view
+    if (!rDoc.IsSheetViewHolder(maRange.aStart.Tab()))
+        return false;
+
+    ScDBCollection* pDBCollection = rDoc.GetDBCollection();
+    if (!pDBCollection)
+        return false;
+
+    SCTAB nTab = maRange.aStart.Tab();
+    for (ScDBData* pDBData : pDBCollection->GetAllDBsFromTab(nTab))
+    {
+        if (!pDBData->HasAutoFilter())
+            continue;
+
+        ScRange aDBRange;
+        pDBData->GetArea(aDBRange);
+        if (maRange.Intersects(aDBRange))
+            return true;
+    }
+    return false;
+}
+
 bool AutoFormatOperation::runImplementation()
 {
     ScDocShellModificator aModificator(mrDocShell);
 
     ScDocument& rDoc = mrDocShell.GetDocument();
-    SCCOL nStartCol = maRange.aStart.Col();
-    SCROW nStartRow = maRange.aStart.Row();
-    SCTAB nStartTab = maRange.aStart.Tab();
-    SCCOL nEndCol = maRange.aEnd.Col();
-    SCROW nEndRow = maRange.aEnd.Row();
-    SCTAB nEndTab = maRange.aEnd.Tab();
+
+    ScRange aRange = convertRange(maRange);
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCTAB nStartTab = aRange.aStart.Tab();
+    SCCOL nEndCol = aRange.aEnd.Col();
+    SCROW nEndRow = aRange.aEnd.Row();
+    SCTAB nEndTab = aRange.aEnd.Tab();
 
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
@@ -65,9 +96,6 @@ bool AutoFormatOperation::runImplementation()
     }
 
     ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
-
-    if (!checkSheetViewProtection())
-        return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(
         rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
@@ -102,7 +130,7 @@ bool AutoFormatOperation::runImplementation()
                     pUndoDoc->AddUndoTab(rTab, rTab, bSize, bSize);
             }
 
-            ScRange aCopyRange = maRange;
+            ScRange aCopyRange = aRange;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aStart.SetTab(nTabCount - 1);
             rDoc.CopyToDocument(aCopyRange, InsertDeleteFlags::ATTRIB, false, *pUndoDoc, &aMark);
@@ -157,8 +185,10 @@ bool AutoFormatOperation::runImplementation()
         if (mbRecord) // only now is Draw-Undo available
         {
             mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoAutoFormat>(
-                &mrDocShell, maRange, std::move(pUndoDoc), aMark, bSize, mnFormatNo));
+                &mrDocShell, aRange, std::move(pUndoDoc), aMark, bSize, mnFormatNo));
         }
+
+        syncSheetViews();
 
         aModificator.SetDocumentModified();
         return true;

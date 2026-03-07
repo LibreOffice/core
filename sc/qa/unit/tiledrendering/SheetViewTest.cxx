@@ -22,6 +22,7 @@
 #include <scitems.hxx>
 #include <SheetView.hxx>
 #include <SheetViewManager.hxx>
+#include <editeng/brushitem.hxx>
 
 using namespace css;
 
@@ -130,6 +131,27 @@ protected:
                 aString += u", \""_ustr + aWeight + u"\""_ustr;
         }
 
+        return aString;
+    }
+
+    static OUString getBackgroundColor(ScDocument* pDocument, SCCOL nCol, SCROW nStartRow,
+                                       SCROW nEndRow, SCTAB nTab)
+    {
+        OUString aString;
+        bool bFirst = true;
+        for (SCROW nRow = nStartRow; nRow <= nEndRow; nRow++)
+        {
+            const ScPatternAttr* pPattern = pDocument->GetPattern(nCol, nRow, nTab);
+            const SvxBrushItem& rBrush = pPattern->GetItem(ATTR_BACKGROUND);
+            OUString aColor = rBrush.GetColor().AsRGBHexString();
+            if (bFirst)
+            {
+                bFirst = false;
+                aString = u"\""_ustr + aColor + u"\""_ustr;
+            }
+            else
+                aString += u", \""_ustr + aColor + u"\""_ustr;
+        }
         return aString;
     }
 
@@ -1720,6 +1742,84 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_ClearItemsOperation)
     // Default view: A3 -> A3, A4 -> A2, so A2 and A3 from B -> N
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"B", u"B" }),
                          getTextWeight(pDocument, 0, 1, 4, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_AutoFormat_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Switch to sheet view and apply AutoFormat
+    {
+        switchToSheetView();
+
+        // Current state default view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+
+        // Current state sheet view
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // Initial text weights
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"N", u"N", u"N", u"N" }),
+                             getTextWeight(pDocument, 0, 1, 4, 1));
+
+        // Apply AutoFormat (format 0) to A2:A5 on default view (index 0)
+        pDocShell->GetDocFunc().AutoFormat(ScRange(0, 1, 0, 0, 4, 0), nullptr, 0, true);
+
+        // Values should remain unchanged after AutoFormat
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // First row is defined as header row, so we can exploit that to test resorting.
+        // Default view: AutoFormat applies blue to first row, gray to others
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"000080", u"cccccc", u"cccccc", u"cccccc" }),
+                             getBackgroundColor(pDocument, 0, 1, 4, 0));
+
+        // Sheet view: background colors synced and re-sorted
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"cccccc", u"cccccc", u"cccccc", u"000080" }),
+                             getBackgroundColor(pDocument, 0, 1, 4, 1));
+    }
+
+    // AutoFormat on the sheet view should be blocked - input intersects autofilter
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        bool bResult = pDocShell->GetDocFunc().AutoFormat(
+            ScRange(0, 1, nSheetViewTab, 0, 4, nSheetViewTab), nullptr, 1, true);
+
+        // Returns false because the running is blocked
+        CPPUNIT_ASSERT(!bResult);
+
+        // Background colors should remain unchanged
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"000080", u"cccccc", u"cccccc", u"cccccc" }),
+                             getBackgroundColor(pDocument, 0, 1, 4, 0));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"cccccc", u"cccccc", u"cccccc", u"000080" }),
+                             getBackgroundColor(pDocument, 0, 1, 4, nSheetViewTab));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_EnterMatrix_DefaultAndSheetView)
