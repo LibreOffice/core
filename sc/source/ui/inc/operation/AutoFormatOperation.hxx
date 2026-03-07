@@ -29,8 +29,6 @@ private:
     ScMarkData const* mpTabMark;
     sal_uInt16 mnFormatNo;
 
-    bool isInputOnSheetViewAutoFilter() const;
-
     bool canRunTheOperation() const override;
     bool runImplementation() override;
 

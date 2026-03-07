@@ -193,7 +193,7 @@ public:
     SC_DLLPUBLIC bool TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
                                    const ScTabOpParam& rParam, bool bRecord, bool bApi );
 
-    bool            FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
+    SC_DLLPUBLIC bool FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
                                         FillDir eDir, bool bApi );
     bool            FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
                                         FillDir    eDir, FillCmd eCmd, FillDateCmd    eDateCmd,

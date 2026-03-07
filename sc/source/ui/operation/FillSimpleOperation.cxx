@@ -99,13 +99,18 @@ FillSimpleOperation::FillSimpleOperation(ScDocFunc& rDocFunc, ScDocShell& rDocSh
 {
 }
 
+bool FillSimpleOperation::canRunTheOperation() const
+{
+    return !isInputOnSheetViewAutoFilter(maRange);
+}
+
 bool FillSimpleOperation::runImplementation()
 {
     ScDocShellModificator aModificator(mrDocShell);
     ScDocument& rDoc = mrDocShell.GetDocument();
 
     bool bSuccess = false;
-    ScRange aRange = maRange;
+    ScRange aRange = convertRange(maRange);
     adjustFillRangeForAdjacentCopy(rDoc, aRange, meDir);
 
     SCCOL nStartCol = aRange.aStart.Col();
@@ -126,9 +131,6 @@ bool FillSimpleOperation::runImplementation()
         for (SCTAB nTab = nStartTab; nTab <= nEndTab; nTab++)
             aMark.SelectTable(nTab, true);
     }
-
-    if (!checkSheetViewProtection())
-        return false;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(
         rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
@@ -202,6 +204,8 @@ bool FillSimpleOperation::runImplementation()
                 &mrDocShell, aDestArea, aSourceArea, std::move(pUndoDoc), aMark, meDir, FILL_SIMPLE,
                 FILL_DAY, MAXDOUBLE, 1.0, 1e307));
         }
+
+        syncSheetViews();
 
         mrDocShell.PostPaintGridAll();
         aModificator.SetDocumentModified();
