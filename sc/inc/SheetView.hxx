@@ -63,7 +63,6 @@ class SC_DLLPUBLIC SheetView
 {
 private:
     ScTable* mpTable = nullptr;
-    bool mbSynced = true;
     OUString maName;
 
     std::optional<SortOrderReverser> moSortOrder;
@@ -85,12 +84,6 @@ public:
 
     /** A sheet view is valid if the pointer to the table is set */
     bool isValid() const;
-
-    /** Mark the sheet view as unsynced (not synced). */
-    void unsync() { mbSynced = false; }
-
-    /** Is the sheet view synced with its default view. */
-    bool isSynced() const { return mbSynced; }
 
     std::optional<SortOrderReverser> const& getSortOrder() const { return moSortOrder; }
     void resetSortOrder() { moSortOrder.reset(); }
