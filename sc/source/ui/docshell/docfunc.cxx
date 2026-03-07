@@ -98,20 +98,14 @@
 #include <validat.hxx>
 #include <SparklineGroup.hxx>
 #include <SparklineAttributes.hxx>
-#include <SparklineData.hxx>
-#include <undo/UndoInsertSparkline.hxx>
-#include <undo/UndoDeleteSparkline.hxx>
-#include <undo/UndoDeleteSparklineGroup.hxx>
-#include <undo/UndoEditSparklineGroup.hxx>
-#include <undo/UndoUngroupSparklines.hxx>
-#include <undo/UndoGroupSparklines.hxx>
-#include <undo/UndoEditSparkline.hxx>
 #include <SheetViewOperationsTester.hxx>
 #include <config_features.h>
 
 #include <memory>
 #include <operation/OperationType.hxx>
 #include <operation/DeleteContentOperation.hxx>
+#include <operation/DeleteSparklineGroupOperation.hxx>
+#include <operation/DeleteSparklineOperation.hxx>
 #include <operation/DeleteCellOperation.hxx>
 #include <operation/SetNormalStringOperation.hxx>
 #include <operation/SetValueOperation.hxx>
@@ -121,17 +115,22 @@
 #include <operation/ApplyAttributesOperation.hxx>
 #include <operation/AutoFormatOperation.hxx>
 #include <operation/ChangeIndentOperation.hxx>
+#include <operation/ChangeSparklineGroupAttributesOperation.hxx>
+#include <operation/ChangeSparklineOperation.hxx>
 #include <operation/ClearItemsOperation.hxx>
 #include <operation/ConvertFormulaToValueOperation.hxx>
 #include <operation/EnterMatrixOperation.hxx>
 #include <operation/FillAutoOperation.hxx>
 #include <operation/FillSeriesOperation.hxx>
 #include <operation/FillSimpleOperation.hxx>
+#include <operation/GroupSparklinesOperation.hxx>
 #include <operation/InsertCellsOperation.hxx>
 #include <operation/InsertSheetViewOperation.hxx>
+#include <operation/InsertSparklinesOperation.hxx>
 #include <operation/MultipleOpsOperation.hxx>
 #include <operation/SetNoteTextOperation.hxx>
 #include <operation/TransliterateTextOperation.hxx>
+#include <operation/UngroupSparklinesOperation.hxx>
 #include <basic/basmgr.hxx>
 #include <set>
 #include <vector>
@@ -3934,172 +3933,45 @@ void ScDocFunc::EndListAction()
 bool ScDocFunc::InsertSparklines(ScRange const& rDataRange, ScRange const& rSparklineRange,
                                  const std::shared_ptr<sc::SparklineGroup>& pSparklineGroup)
 {
-    if (!CheckSheetViewProtection(sc::OperationType::SparklineInsert))
-        return false;
-
-    std::vector<sc::SparklineData> aSparklineDataVector;
-
-    if (rSparklineRange.aStart.Col() == rSparklineRange.aEnd.Col())
-    {
-        sal_Int32 nOutputRowSize = rSparklineRange.aEnd.Row() - rSparklineRange.aStart.Row();
-
-        auto eInputOrientation = sc::calculateOrientation(nOutputRowSize, rDataRange);
-
-        if (eInputOrientation == sc::RangeOrientation::Unknown)
-            return false;
-
-        sal_Int32 nIndex = 0;
-
-        for (ScAddress aAddress = rSparklineRange.aStart; aAddress.Row() <= rSparklineRange.aEnd.Row();
-             aAddress.IncRow())
-        {
-            ScRange aInputRangeSlice = rDataRange;
-            if (eInputOrientation == sc::RangeOrientation::Row)
-            {
-                aInputRangeSlice.aStart.SetRow(rDataRange.aStart.Row() + nIndex);
-                aInputRangeSlice.aEnd.SetRow(rDataRange.aStart.Row() + nIndex);
-            }
-            else
-            {
-                aInputRangeSlice.aStart.SetCol(rDataRange.aStart.Col() + nIndex);
-                aInputRangeSlice.aEnd.SetCol(rDataRange.aStart.Col() + nIndex);
-            }
-
-            aSparklineDataVector.emplace_back(aAddress, aInputRangeSlice);
-
-            nIndex++;
-        }
-    }
-    else if (rSparklineRange.aStart.Row() == rSparklineRange.aEnd.Row())
-    {
-        sal_Int32 nOutputColSize = rSparklineRange.aEnd.Col() - rSparklineRange.aStart.Col();
-
-        auto eInputOrientation = sc::calculateOrientation(nOutputColSize, rDataRange);
-
-        if (eInputOrientation == sc::RangeOrientation::Unknown)
-            return false;
-
-        sal_Int32 nIndex = 0;
-
-        for (ScAddress aAddress = rSparklineRange.aStart; aAddress.Col() <= rSparklineRange.aEnd.Col();
-             aAddress.IncCol())
-        {
-            ScRange aInputRangeSlice = rDataRange;
-            if (eInputOrientation == sc::RangeOrientation::Row)
-            {
-                aInputRangeSlice.aStart.SetRow(rDataRange.aStart.Row() + nIndex);
-                aInputRangeSlice.aEnd.SetRow(rDataRange.aStart.Row() + nIndex);
-            }
-            else
-            {
-                aInputRangeSlice.aStart.SetCol(rDataRange.aStart.Col() + nIndex);
-                aInputRangeSlice.aEnd.SetCol(rDataRange.aStart.Col() + nIndex);
-            }
-
-            aSparklineDataVector.emplace_back(aAddress, aInputRangeSlice);
-
-            nIndex++;
-        }
-    }
-
-    if (aSparklineDataVector.empty())
-        return false;
-
-    auto pUndoInsertSparkline = std::make_unique<sc::UndoInsertSparkline>(rDocShell, aSparklineDataVector, pSparklineGroup);
-    // insert the sparkline by "redoing"
-    pUndoInsertSparkline->Redo();
-    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoInsertSparkline));
-
-    return true;
+    sc::InsertSparklinesOperation aOperation(rDocShell, rDataRange, rSparklineRange, pSparklineGroup);
+    return aOperation.run();
 }
 
 bool ScDocFunc::DeleteSparkline(ScAddress const& rAddress)
 {
-    auto& rDocument = rDocShell.GetDocument();
-
-    if (!rDocument.HasSparkline(rAddress))
-        return false;
-
-    if (!CheckSheetViewProtection(sc::OperationType::SparklineDelete))
-        return false;
-
-
-    auto pUndoDeleteSparkline = std::make_unique<sc::UndoDeleteSparkline>(rDocShell, rAddress);
-    // delete sparkline by "redoing"
-    pUndoDeleteSparkline->Redo();
-    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoDeleteSparkline));
-
-    return true;
+    sc::DeleteSparklineOperation aOperation(rDocShell, rAddress);
+    return aOperation.run();
 }
 
 bool ScDocFunc::DeleteSparklineGroup(std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup, SCTAB nTab)
 {
-    if (!pSparklineGroup)
-        return false;
-
-    auto& rDocument = rDocShell.GetDocument();
-
-    if (!rDocument.HasTable(nTab))
-        return false;
-
-    if (!CheckSheetViewProtection(sc::OperationType::SparklineGroupDelete))
-        return false;
-
-    auto pUndo = std::make_unique<sc::UndoDeleteSparklineGroup>(rDocShell, pSparklineGroup, nTab);
-    // delete sparkline group  by "redoing"
-    pUndo->Redo();
-    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
-    return true;
+    sc::DeleteSparklineGroupOperation aOperation(rDocShell, pSparklineGroup, nTab);
+    return aOperation.run();
 }
 
 bool ScDocFunc::ChangeSparklineGroupAttributes(std::shared_ptr<sc::SparklineGroup> const& pExistingSparklineGroup,
                                                sc::SparklineAttributes const& rNewAttributes)
 {
-    if (!CheckSheetViewProtection(sc::OperationType::SparklineGroupChange))
-        return false;
-
-
-    auto pUndo = std::make_unique<sc::UndoEditSparklneGroup>(rDocShell, pExistingSparklineGroup, rNewAttributes);
-    // change sparkline group attributes by "redoing"
-    pUndo->Redo();
-    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
-    return true;
+    sc::ChangeSparklineGroupAttributesOperation aOperation(rDocShell, pExistingSparklineGroup, rNewAttributes);
+    return aOperation.run();
 }
 
 bool ScDocFunc::GroupSparklines(ScRange const& rRange, std::shared_ptr<sc::SparklineGroup> const& rpGroup)
 {
-    if (!CheckSheetViewProtection(sc::OperationType::SparklineGroup))
-        return false;
-
-    auto pUndo = std::make_unique<sc::UndoGroupSparklines>(rDocShell, rRange, rpGroup);
-    // group sparklines by "redoing"
-    pUndo->Redo();
-    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
-    return true;
+    sc::GroupSparklinesOperation aOperation(rDocShell, rRange, rpGroup);
+    return aOperation.run();
 }
 
 bool ScDocFunc::UngroupSparklines(ScRange const& rRange)
 {
-    if (!CheckSheetViewProtection(sc::OperationType::SparklineUngroup))
-        return false;
-
-    auto pUndo = std::make_unique<sc::UndoUngroupSparklines>(rDocShell, rRange);
-    // ungroup sparklines by "redoing"
-    pUndo->Redo();
-    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
-    return true;
+    sc::UngroupSparklinesOperation aOperation(rDocShell, rRange);
+    return aOperation.run();
 }
 
 bool ScDocFunc::ChangeSparkline(std::shared_ptr<sc::Sparkline> const& rpSparkline, SCTAB nTab, ScRangeList const& rDataRange)
 {
-    if (!CheckSheetViewProtection(sc::OperationType::SparklineChange))
-        return false;
-
-    auto pUndo = std::make_unique<sc::UndoEditSparkline>(rDocShell, rpSparkline, nTab, rDataRange);
-    // change sparkline by "redoing"
-    pUndo->Redo();
-    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
-    return true;
+    sc::ChangeSparklineOperation aOperation(rDocShell, rpSparkline, nTab, rDataRange);
+    return aOperation.run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
