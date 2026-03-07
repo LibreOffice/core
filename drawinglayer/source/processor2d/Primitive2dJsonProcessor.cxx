@@ -37,6 +37,14 @@
 #include <drawinglayer/primitive2d/PolyPolygonHatchPrimitive2D.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonAlphaGradientPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/patternfillprimitive2d.hxx>
 
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -210,6 +218,19 @@ void Primitive2dJsonProcessor::writeHatchScaled(
 
     if (rHatch.isFillBackground())
         mrWriter.put("fillBackground", true);
+}
+
+void Primitive2dJsonProcessor::writeFillGraphicScaled(
+    const drawinglayer::attribute::FillGraphicAttribute& rFillGraphic)
+{
+    auto aFillNode = mrWriter.startNode("fillGraphic");
+    mrWriter.put("tiling", rFillGraphic.getTiling());
+    mrWriter.put("offsetX", rFillGraphic.getOffsetX());
+    mrWriter.put("offsetY", rFillGraphic.getOffsetY());
+
+    const basegfx::B2DRange& rRange = rFillGraphic.getGraphicRange();
+    writeRangeScaled("graphicRange", rRange);
+    writeGraphicData(mrWriter, rFillGraphic.getGraphic());
 }
 
 void Primitive2dJsonProcessor::writeLineAttributeScaled(
@@ -687,6 +708,176 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
             mrWriter.put("backgroundColor", colorToHex(rPrimitive.getBackgroundColor()));
             writeHatchScaled(rPrimitive.getFillHatch());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const FillGraphicPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "fillGraphic");
+            writeMatrixScaled("matrix", rPrimitive.getTransformation());
+            writeFillGraphicScaled(rPrimitive.getFillGraphic());
+
+            if (rPrimitive.hasTransparency())
+                mrWriter.put("transparency", rPrimitive.getTransparency());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const PolyPolygonGraphicPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "polyPolygonGraphic");
+            writePathScaled(rPrimitive.getB2DPolyPolygon());
+            writeRangeScaled("definitionRange", rPrimitive.getDefinitionRange());
+            writeFillGraphicScaled(rPrimitive.getFillGraphic());
+
+            if (rPrimitive.hasTransparency())
+                mrWriter.put("transparency", rPrimitive.getTransparency());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const GraphicPrimitive2D&>(rBasePrimitive);
+            const Graphic& rGraphic = rPrimitive.getGraphicObject().GetGraphic();
+
+            // Handle SVG images specially - send without conversion as native image data.
+            if (auto pVectorData = rGraphic.getVectorGraphicData())
+            {
+                if (pVectorData->getType() == VectorGraphicDataType::Svg)
+                {
+                    mrWriter.put("type", "graphic");
+                    writeMatrixScaled("matrix", rPrimitive.getTransform());
+                    writeGraphicData(mrWriter, rGraphic);
+                    break;
+                }
+            }
+
+            // Non-SVG vector graphics should be decomposed into primitives.
+            // The decomposition already applies the graphic's transform matrix, so
+            // children are in the same coordinate space as all other primitives.
+            if (rGraphic.GetType() == GraphicType::GdiMetafile || rGraphic.getVectorGraphicData())
+            {
+                mrWriter.put("type", "graphic");
+                mrWriter.put("vector", true);
+
+                Primitive2DContainer aContainer;
+                rPrimitive.get2DDecomposition(aContainer, maViewInformation2D);
+                if (!aContainer.empty())
+                {
+                    auto aChildArray = mrWriter.startArray("children");
+                    decomposeAndWrite(aContainer);
+                }
+                break;
+            }
+
+            // Bitmap graphic: encode as image data
+            mrWriter.put("type", "graphic");
+            writeMatrixScaled("matrix", rPrimitive.getTransform());
+
+            const GraphicAttr& rAttributes = rPrimitive.getGraphicAttr();
+            if (rAttributes.IsCropped())
+            {
+                auto aCropNode = mrWriter.startNode("crop");
+                mrWriter.put("left", double(rAttributes.GetLeftCrop()) * mfScaleFactor);
+                mrWriter.put("top", double(rAttributes.GetTopCrop()) * mfScaleFactor);
+                mrWriter.put("right", double(rAttributes.GetRightCrop()) * mfScaleFactor);
+                mrWriter.put("bottom", double(rAttributes.GetBottomCrop()) * mfScaleFactor);
+            }
+
+            if (rAttributes.IsTransparent())
+                mrWriter.put("alpha", sal_Int32(rAttributes.GetAlpha()));
+
+            if (rAttributes.GetRotation() != 0_deg10)
+                mrWriter.put("rotation", rAttributes.GetRotation().get());
+
+            if (rAttributes.IsMirrored())
+                mrWriter.put("mirror", sal_Int32(rAttributes.GetMirrorFlags()));
+
+            if (rAttributes.IsSpecialDrawMode())
+            {
+                switch (rAttributes.GetDrawMode())
+                {
+                    case GraphicDrawMode::Greys:
+                        mrWriter.put("drawMode", "greys");
+                        break;
+                    case GraphicDrawMode::Mono:
+                        mrWriter.put("drawMode", "mono");
+                        break;
+                    case GraphicDrawMode::Watermark:
+                        mrWriter.put("drawMode", "watermark");
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            const Size aSizePixel(rGraphic.GetSizePixel());
+            mrWriter.put("width", sal_Int64(aSizePixel.getWidth()));
+            mrWriter.put("height", sal_Int64(aSizePixel.getHeight()));
+            writeGraphicData(mrWriter, rGraphic);
+        }
+        break;
+
+        case PRIMITIVE2D_ID_POLYPOLYGONRGBAPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const PolyPolygonRGBAPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "polyPolygonRGBA");
+            mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
+            writePathScaled(rPrimitive.getB2DPolyPolygon());
+
+            if (rPrimitive.hasTransparency())
+                mrWriter.put("transparency", rPrimitive.getTransparency());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_POLYPOLYGONALPHAGRADIENTPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const PolyPolygonAlphaGradientPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "polyPolygonAlphaGradient");
+            mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
+            writePathScaled(rPrimitive.getB2DPolyPolygon());
+            writeGradient(mrWriter, rPrimitive.getAlphaGradient(), "alphaGradient");
+        }
+        break;
+
+        case PRIMITIVE2D_ID_BITMAPALPHAPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const BitmapAlphaPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "bitmapAlpha");
+            writeMatrixScaled("matrix", rPrimitive.getTransform());
+
+            if (rPrimitive.hasTransparency())
+                mrWriter.put("transparency", rPrimitive.getTransparency());
+
+            const Bitmap& rBitmap = rPrimitive.getBitmap();
+            const Size aSizePixel(rBitmap.GetSizePixel());
+            mrWriter.put("width", aSizePixel.getWidth());
+            mrWriter.put("height", aSizePixel.getHeight());
+            mrWriter.put("checksum", sal_Int64(rBitmap.GetChecksum()));
+            writeBitmapData(mrWriter, rBitmap);
+        }
+        break;
+
+        case PRIMITIVE2D_ID_PATTERNFILLPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const PatternFillPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "patternFill");
+            writePathScaled(rPrimitive.getMask());
+
+            writeRangeScaled("referenceRange", rPrimitive.getReferenceRange());
+
+            const Primitive2DContainer& rChildren = rPrimitive.getChildren();
+            if (!rChildren.empty())
+            {
+                double fSavedScale = mfScaleFactor;
+                mfScaleFactor = 1.0;
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rChildren);
+                mfScaleFactor = fSavedScale;
+            }
         }
         break;
 
