@@ -45,6 +45,12 @@
 #include <drawinglayer/primitive2d/PolyPolygonAlphaGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/patternfillprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/glowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -881,6 +887,133 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         }
         break;
 
+        case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const UnifiedTransparencePrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "unifiedTransparence");
+            mrWriter.put("transparence", rPrimitive.getTransparence());
+            {
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rPrimitive.getChildren());
+            }
+        }
+        break;
+
+        case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const TransparencePrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "transparence");
+            {
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rPrimitive.getChildren());
+            }
+            {
+                auto aTranspArray = mrWriter.startArray("transparence");
+                decomposeAndWrite(rPrimitive.getTransparence());
+            }
+        }
+        break;
+
+        case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const ModifiedColorPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "modifiedColor");
+            const basegfx::BColorModifierSharedPtr& rModifier = rPrimitive.getColorModifier();
+            mrWriter.put("modifier", rModifier->getModifierName());
+
+            // Output modifier-specific parameters so the client can apply the modification
+            if (rModifier->getBColorModifierType() == basegfx::BColorModifierType::BCMType_replace)
+            {
+                const auto& rReplace
+                    = static_cast<const basegfx::BColorModifier_replace&>(*rModifier);
+                mrWriter.put("color", colorToHex(rReplace.getBColor()));
+            }
+
+            {
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rPrimitive.getChildren());
+            }
+        }
+        break;
+
+        case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const ShadowPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "shadow");
+            mrWriter.put("color", colorToHex(rPrimitive.getShadowColor()));
+            mrWriter.put("blur", rPrimitive.getShadowBlur() * mfScaleFactor);
+            writeMatrixTranslationScaled("matrix", rPrimitive.getShadowTransform());
+            {
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rPrimitive.getChildren());
+            }
+        }
+        break;
+
+        case PRIMITIVE2D_ID_GLOWPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const GlowPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "glow");
+            mrWriter.put("color", colorToHex(rPrimitive.getGlowColor().getBColor()));
+            mrWriter.put("radius", rPrimitive.getGlowRadius() * mfScaleFactor);
+            {
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rPrimitive.getChildren());
+            }
+        }
+        break;
+
+        case PRIMITIVE2D_ID_BACKGROUNDCOLORPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const BackgroundColorPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "backgroundcolor");
+            mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
+            if (rPrimitive.getTransparency() > 0.0)
+                mrWriter.put("transparency", rPrimitive.getTransparency());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_FILLEDRECTANGLEPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const FilledRectanglePrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "filledRectangle");
+            mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
+            const basegfx::B2DRange& rRange = rPrimitive.getB2DRange();
+            auto aBoundsArray = mrWriter.startArray("bounds");
+            mrWriter.putSimpleValue(OUString::number(rRange.getMinX() * mfScaleFactor));
+            mrWriter.putSimpleValue(OUString::number(rRange.getMinY() * mfScaleFactor));
+            mrWriter.putSimpleValue(OUString::number(rRange.getMaxX() * mfScaleFactor));
+            mrWriter.putSimpleValue(OUString::number(rRange.getMaxY() * mfScaleFactor));
+        }
+        break;
+
+        case PRIMITIVE2D_ID_LINERECTANGLEPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const LineRectanglePrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "lineRectangle");
+            mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
+            const basegfx::B2DRange& rRange = rPrimitive.getB2DRange();
+            auto aBoundsArray = mrWriter.startArray("bounds");
+            mrWriter.putSimpleValue(OUString::number(rRange.getMinX() * mfScaleFactor));
+            mrWriter.putSimpleValue(OUString::number(rRange.getMinY() * mfScaleFactor));
+            mrWriter.putSimpleValue(OUString::number(rRange.getMaxX() * mfScaleFactor));
+            mrWriter.putSimpleValue(OUString::number(rRange.getMaxY() * mfScaleFactor));
+        }
+        break;
+
+        case PRIMITIVE2D_ID_SINGLELINEPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const SingleLinePrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "singleLine");
+            mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
+            mrWriter.put("startX", rPrimitive.getStart().getX() * mfScaleFactor);
+            mrWriter.put("startY", rPrimitive.getStart().getY() * mfScaleFactor);
+            mrWriter.put("endX", rPrimitive.getEnd().getX() * mfScaleFactor);
+            mrWriter.put("endY", rPrimitive.getEnd().getY() * mfScaleFactor);
+        }
+        break;
+
         default:
         {
             const char* pTypeName = nullptr;
@@ -917,6 +1050,13 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                     break;
                 case PRIMITIVE2D_ID_TEXTHIERARCHYEMPHASISMARKPRIMITIVE2D:
                     pTypeName = "textHierarchyEmphasisMark";
+                    break;
+                // Other drawinglayer primitives
+                case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
+                    pTypeName = "softEdge";
+                    break;
+                case PRIMITIVE2D_ID_EXCLUSIVEEDITVIEWPRIMITIVE2D:
+                    pTypeName = "exclusiveEditView";
                     break;
                 default:
                     break;

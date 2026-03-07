@@ -4694,10 +4694,17 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorTile)
     // Collect all primitive types in the JSON tree.
     std::set<std::string> aTypes = collectPrimitiveTypes(aTree);
 
+    // Verify specific primitive types are present
     CPPUNIT_ASSERT_MESSAGE("Expecting polyPolygonColor", aTypes.count("polyPolygonColor") > 0);
     CPPUNIT_ASSERT_MESSAGE("Expecting textSimplePortion", aTypes.count("textSimplePortion") > 0);
     CPPUNIT_ASSERT_MESSAGE("Expecting polygonStrokeArrow", aTypes.count("polygonStrokeArrow") > 0);
     CPPUNIT_ASSERT_MESSAGE("Expecting graphic", aTypes.count("graphic") > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting shadow", aTypes.count("shadow") > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting glow", aTypes.count("glow") > 0);
+    CPPUNIT_ASSERT_MESSAGE("Expecting polyPolygonAlphaGradient", aTypes.count("polyPolygonAlphaGradient") > 0);
+
+    // No unknown primitives
+    CPPUNIT_ASSERT_MESSAGE("No 'unknown' primitive type expected", aTypes.count("unknown") == 0);
 
     // Verify that field placeholders have been replaced.
     std::vector<std::string> aTexts = collectPrimitiveTexts(aTree);
