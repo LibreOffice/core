@@ -44,17 +44,24 @@ FillAutoOperation::FillAutoOperation(ScDocFunc& rDocFunc, ScDocShell& rDocShell,
 {
 }
 
+bool FillAutoOperation::canRunTheOperation() const
+{
+    return !isInputOnSheetViewAutoFilter(mrRange);
+}
+
 bool FillAutoOperation::runImplementation()
 {
     ScDocShellModificator aModificator(mrDocShell);
 
     ScDocument& rDoc = mrDocShell.GetDocument();
-    SCCOL nStartCol = mrRange.aStart.Col();
-    SCROW nStartRow = mrRange.aStart.Row();
-    SCTAB nStartTab = mrRange.aStart.Tab();
-    SCCOL nEndCol = mrRange.aEnd.Col();
-    SCROW nEndRow = mrRange.aEnd.Row();
-    SCTAB nEndTab = mrRange.aEnd.Tab();
+
+    ScRange aRange = convertRange(mrRange);
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCTAB nStartTab = aRange.aStart.Tab();
+    SCCOL nEndCol = aRange.aEnd.Col();
+    SCROW nEndRow = aRange.aEnd.Row();
+    SCTAB nEndTab = aRange.aEnd.Tab();
 
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
@@ -68,8 +75,8 @@ bool FillAutoOperation::runImplementation()
             aMark.SelectTable(nTab, true);
     }
 
-    ScRange aSourceArea = mrRange;
-    ScRange aDestArea = mrRange;
+    ScRange aSourceArea = aRange;
+    ScRange aDestArea = aRange;
 
     switch (meDir)
     {
@@ -101,9 +108,6 @@ bool FillAutoOperation::runImplementation()
             OSL_FAIL("Wrong direction with FillAuto");
             break;
     }
-
-    if (!checkSheetViewProtection())
-        return false;
 
     //      Test for cell protection
     //!     Source range can be protected !!!
@@ -169,6 +173,8 @@ bool FillAutoOperation::runImplementation()
               mfMax);
 
     mrDocFunc.AdjustRowHeight(aDestArea, true, mbApi);
+
+    syncSheetViews();
 
     if (mbRecord) // only now is Draw-Undo available
     {
