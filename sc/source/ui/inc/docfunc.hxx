@@ -132,7 +132,7 @@ public:
 
     SC_DLLPUBLIC bool ShowNote( const ScAddress& rPos, bool bShow );
 
-    void            SetNoteText( const ScAddress& rPos, const OUString& rNoteText, bool bApi );
+    SC_DLLPUBLIC void SetNoteText( const ScAddress& rPos, const OUString& rNoteText, bool bApi );
     void            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi );
     SC_DLLPUBLIC void ImportNote( const ScAddress& rPos,
                                   std::unique_ptr<GenerateNoteCaption> xGenerator,
