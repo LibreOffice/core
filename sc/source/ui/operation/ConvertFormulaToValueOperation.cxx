@@ -32,11 +32,10 @@ bool ConvertFormulaToValueOperation::runImplementation()
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
-    if (!checkSheetViewProtection())
-        return false;
+    ScRange aRange = convertRange(maRange);
 
     ScEditableTester aTester
-        = ScEditableTester::CreateAndTestRange(rDoc, maRange, sc::EditAction::Unknown);
+        = ScEditableTester::CreateAndTestRange(rDoc, aRange, sc::EditAction::Unknown);
     if (!aTester.IsEditable())
     {
         if (!mbApi)
@@ -44,10 +43,10 @@ bool ConvertFormulaToValueOperation::runImplementation()
         return false;
     }
 
-    sc::TableValues aUndoVals(maRange);
+    sc::TableValues aUndoVals(aRange);
     sc::TableValues* pUndoVals = mbRecord ? &aUndoVals : nullptr;
 
-    rDoc.ConvertFormulaToValue(maRange, pUndoVals);
+    rDoc.ConvertFormulaToValue(aRange, pUndoVals);
 
     if (mbRecord && pUndoVals)
     {
@@ -55,9 +54,11 @@ bool ConvertFormulaToValueOperation::runImplementation()
             std::make_unique<sc::UndoFormulaToValue>(&mrDocShell, *pUndoVals));
     }
 
-    mrDocShell.PostPaint(maRange, PaintPartFlags::Grid);
+    syncSheetViews();
+
+    mrDocShell.PostPaint(aRange, PaintPartFlags::Grid);
     mrDocShell.PostDataChanged();
-    rDoc.BroadcastCells(maRange, SfxHintId::ScDataChanged);
+    rDoc.BroadcastCells(aRange, SfxHintId::ScDataChanged);
     aModificator.SetDocumentModified();
 
     return true;
