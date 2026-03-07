@@ -537,6 +537,8 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/ChangeSparklineOperation \
     sc/source/ui/operation/ClearItemsOperation \
     sc/source/ui/operation/ConvertFormulaToValueOperation \
+    sc/source/ui/operation/CreatePivotTableOperation \
+    sc/source/ui/operation/DataPilotUpdateOperation \
     sc/source/ui/operation/DeleteCellOperation \
     sc/source/ui/operation/DeleteContentOperation \
     sc/source/ui/operation/DeleteSparklineGroupOperation \
@@ -553,6 +555,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/Operation \
     sc/source/ui/operation/OperationType \
     sc/source/ui/operation/QueryOperation \
+    sc/source/ui/operation/RemovePivotTableOperation \
     sc/source/ui/operation/SetEditTextOperation \
     sc/source/ui/operation/SetNoteTextOperation \
     sc/source/ui/operation/SetFormulaOperation \
@@ -562,6 +565,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/SortOperation \
     sc/source/ui/operation/TransliterateTextOperation \
     sc/source/ui/operation/UngroupSparklinesOperation \
+    sc/source/ui/operation/UpdatePivotTableOperation \
     sc/source/ui/pagedlg/areasdlg \
     sc/source/ui/pagedlg/tphfedit \
     sc/source/ui/sidebar/AlignmentPropertyPanel \
