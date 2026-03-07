@@ -301,6 +301,7 @@ class GtkSalFrame final : public SalFrame
     static void         signalFocusLeave(GtkEventControllerFocus* pController, gpointer frame);
 #else
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
+    static gboolean     signalA11yBlockFocusOut( GtkWidget*, GdkEventFocus*, gpointer );
 #endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static void         signalSetFocus(GtkWindow* pWindow, GtkWidget* pWidget, gpointer frame);

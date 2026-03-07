@@ -1152,6 +1152,10 @@ void GtkSalFrame::InitCommon()
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pLongPress), GTK_PHASE_TARGET);
 
 #if !GTK_CHECK_VERSION(4,0,0)
+    // tdf#156699 block focus-out-event on toplevel windows when a popup is open.
+    // This is prevent GTK from emitting window:deactivate (see signalA11yBlockFocusOut)
+    if (GTK_IS_WINDOW(m_pWindow))
+        g_signal_connect(G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalA11yBlockFocusOut), this);
     g_signal_connect_after( G_OBJECT(m_pWindow), "focus-in-event", G_CALLBACK(signalFocus), this );
     g_signal_connect_after( G_OBJECT(m_pWindow), "focus-out-event", G_CALLBACK(signalFocus), this );
     if (GTK_IS_WINDOW(m_pWindow)) // i.e. not if it's a GtkEventBox which doesn't have the signal
@@ -4093,6 +4097,32 @@ void GtkSalFrame::DrawingAreaFocusInOut(SalEvent nEventType)
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
+/*
+ tdf#156699 When we show a (GTK_WINDOW_POPUP) popup we call
+ gdk_seat_grab on it, otherwise it doesn't get any keyboard input.
+
+ That takes focus from the parent frame, which causes focus-out-event on
+ the parent GtkWindow.
+
+ GTK's (gtkaccessibility.c window_focus) then emits window:deactivate on the
+ AtkObject.
+
+ Orca then ignores focus events from widgets inside the popup, presumably
+ because the popups parent is deactivated from its perspective.
+
+ So, block the focus-out-event while a float-grab popup is open. Since the
+ event is blocked, gtk_window_is_active and gtk_window_has_toplevel_focus
+ remain true, and GtkWindowAccessible continues to report ATK_STATE_ACTIVE.
+
+ If there turns out to be problems with this approach, we could try patching
+ ref_state_set to intercept it and retain ATK_STATE_ENABLED for frames which
+ have popups with focus in them.
+*/
+gboolean GtkSalFrame::signalA11yBlockFocusOut(GtkWidget*, GdkEventFocus*, gpointer)
+{
+    return m_nFloats > 0;
+}
+
 gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
