@@ -33,11 +33,10 @@ bool SetNoteTextOperation::runImplementation()
 
     ScDocument& rDoc = mrDocShell.GetDocument();
 
-    if (!checkSheetViewProtection())
-        return false;
+    ScAddress aPos = convertAddress(maPos);
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
-        rDoc, maPos.Tab(), maPos.Col(), maPos.Row(), maPos.Col(), maPos.Row());
+        rDoc, aPos.Tab(), aPos.Col(), aPos.Row(), aPos.Col(), aPos.Row());
     if (!aTester.IsEditable())
     {
         if (!mbApi)
@@ -47,14 +46,16 @@ bool SetNoteTextOperation::runImplementation()
 
     OUString aNewText = convertLineEnd(maText, GetSystemLineEnd()); //! is this necessary ???
 
-    if (ScPostIt* pNote = (!aNewText.isEmpty()) ? rDoc.GetOrCreateNote(maPos) : rDoc.GetNote(maPos))
-        pNote->SetText(maPos, aNewText);
+    if (ScPostIt* pNote = (!aNewText.isEmpty()) ? rDoc.GetOrCreateNote(aPos) : rDoc.GetNote(aPos))
+        pNote->SetText(aPos, aNewText);
 
     //! Undo !!!
 
-    rDoc.SetStreamValid(maPos.Tab(), false);
+    rDoc.SetStreamValid(aPos.Tab(), false);
 
-    mrDocShell.PostPaintCell(maPos);
+    syncSheetViews();
+
+    mrDocShell.PostPaintCell(aPos);
     aModificator.SetDocumentModified();
 
     return true;

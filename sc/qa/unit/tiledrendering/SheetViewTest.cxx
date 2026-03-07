@@ -19,6 +19,7 @@
 #include <docsh.hxx>
 #include <docuno.hxx>
 #include <markdata.hxx>
+#include <postit.hxx>
 #include <scitems.hxx>
 #include <SheetView.hxx>
 #include <SheetViewManager.hxx>
@@ -2231,6 +2232,52 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_TransliterateText_DefaultAndSheetView)
     // Default view: synced, descending order, uppercased
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"AAA", u"RRR", u"CCC", u"SSS" }),
                          getValues(mpTabViewDefaultView, 1, 1, 4));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SetNoteText_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Default view descending: 7, 5, 4, 3
+    // Sheet view ascending: 3, 4, 5, 7
+
+    // Set note on A2 in sheet view
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        pDocShell->GetDocFunc().SetNoteText(ScAddress(0, 1, nSheetViewTab), u"Hello Note"_ustr,
+                                            true);
+    }
+
+    // Sheet view: note on A2
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    ScPostIt* pNoteSheet = pDocument->GetNote(ScAddress(0, 1, nSheetViewTab));
+    CPPUNIT_ASSERT(pNoteSheet);
+    CPPUNIT_ASSERT_EQUAL(u"Hello Note"_ustr, pNoteSheet->GetText());
+
+    // Default view: note synced to the cell A5
+    ScPostIt* pNoteDefault = pDocument->GetNote(ScAddress(0, 4, 0));
+    CPPUNIT_ASSERT(pNoteDefault);
+    CPPUNIT_ASSERT_EQUAL(u"Hello Note"_ustr, pNoteDefault->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeIndent_DefaultAndSheetView)
