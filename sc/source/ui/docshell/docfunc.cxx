@@ -127,6 +127,7 @@
 #include <operation/InsertCellsOperation.hxx>
 #include <operation/InsertSheetViewOperation.hxx>
 #include <operation/InsertSparklinesOperation.hxx>
+#include <operation/MergeCellsOperation.hxx>
 #include <operation/MoveBlockOperation.hxx>
 #include <operation/MultipleOpsOperation.hxx>
 #include <operation/ReplaceNoteTextOperation.hxx>
@@ -2755,123 +2756,8 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
 
 bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bool bRecord, bool bApi, bool bEmptyMergedCells /*=false*/ )
 {
-    using ::std::set;
-
-    ScDocShellModificator aModificator( rDocShell );
-
-    SCCOL nStartCol = rOption.mnStartCol;
-    SCROW nStartRow = rOption.mnStartRow;
-    SCCOL nEndCol = rOption.mnEndCol;
-    SCROW nEndRow = rOption.mnEndRow;
-    if ((nStartCol == nEndCol && nStartRow == nEndRow) || rOption.maTabs.empty())
-    {
-        // Nothing to do.  Bail out quickly
-        return true;
-    }
-
-    ScDocument& rDoc = rDocShell.GetDocument();
-    SCTAB nTab1 = *rOption.maTabs.begin(), nTab2 = *rOption.maTabs.rbegin();
-
-    if (bRecord && !rDoc.IsUndoEnabled())
-        bRecord = false;
-
-    if (!CheckSheetViewProtection(sc::OperationType::MergeCells))
-        return false;
-
-    for (const auto& rTab : rOption.maTabs)
-    {
-
-        ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, rTab, nStartCol, nStartRow, nEndCol, nEndRow);
-        if (!aTester.IsEditable())
-        {
-            if (!bApi)
-                rDocShell.ErrorMessage(aTester.GetMessageId());
-            return false;
-        }
-
-        if ( rDoc.HasAttrib( nStartCol, nStartRow, rTab, nEndCol, nEndRow, rTab,
-                                HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
-        {
-            // "Merge of already merged cells not possible"
-            if (!bApi)
-                rDocShell.ErrorMessage(STR_MSSG_MERGECELLS_0);
-            return false;
-        }
-    }
-
-    ScDocumentUniquePtr pUndoDoc;
-    bool bNeedContentsUndo = false;
-    for (const SCTAB nTab : rOption.maTabs)
-    {
-        bool bIsBlockEmpty = ( nStartRow == nEndRow )
-                             ? rDoc.IsEmptyData( nStartCol+1,nStartRow, nEndCol,nEndRow, nTab )
-                             : rDoc.IsEmptyData( nStartCol,nStartRow+1, nStartCol,nEndRow, nTab ) &&
-                               rDoc.IsEmptyData( nStartCol+1,nStartRow, nEndCol,nEndRow, nTab );
-        bool bNeedContents = bContents && !bIsBlockEmpty;
-        bool bNeedEmpty = bEmptyMergedCells && !bIsBlockEmpty && !bNeedContents; // if DoMergeContents then cells are emptied
-
-        if (bRecord)
-        {
-            // test if the range contains other notes which also implies that we need an undo document
-            bool bHasNotes = rDoc.HasNote(nTab, nStartCol, nStartRow, nEndCol, nEndRow);
-            if (!pUndoDoc)
-            {
-                pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-                pUndoDoc->InitUndo(rDoc, nTab1, nTab2);
-            }
-            // note captions are collected by drawing undo
-            rDoc.CopyToDocument( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                  InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc );
-            if( bHasNotes )
-                rDoc.BeginDrawUndo();
-        }
-
-        if (bNeedContents)
-            rDoc.DoMergeContents( nStartCol,nStartRow, nEndCol,nEndRow,  nTab );
-        else if ( bNeedEmpty )
-            rDoc.DoEmptyBlock( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
-        rDoc.DoMerge( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
-
-        if (rOption.mbCenter)
-        {
-            rDoc.ApplyAttr( nStartCol, nStartRow, nTab, SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY ) );
-            rDoc.ApplyAttr( nStartCol, nStartRow, nTab, SvxVerJustifyItem( SvxCellVerJustify::Center, ATTR_VER_JUSTIFY ) );
-        }
-
-        if ( !AdjustRowHeight( ScRange( 0,nStartRow,nTab, rDoc.MaxCol(),nEndRow,nTab ), true, bApi ) )
-            rDocShell.PostPaint( nStartCol, nStartRow, nTab,
-                                 nEndCol, nEndRow, nTab, PaintPartFlags::Grid );
-        if (bNeedContents || rOption.mbCenter)
-        {
-            ScRange aRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab);
-            rDoc.SetDirty(aRange, true);
-        }
-
-        bool bDone = ScDetectiveFunc(rDoc, nTab).DeleteAll( ScDetectiveDelete::Circles );
-        if(bDone)
-           DetectiveMarkInvalid(nTab);
-
-        bNeedContentsUndo |= bNeedContents;
-    }
-
-    if (pUndoDoc)
-    {
-        std::unique_ptr<SdrUndoGroup> pDrawUndo = rDoc.GetDrawLayer() ? rDoc.GetDrawLayer()->GetCalcUndo() : nullptr;
-        rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoMerge>(&rDocShell, rOption, bNeedContentsUndo, std::move(pUndoDoc), std::move(pDrawUndo)) );
-    }
-
-    aModificator.SetDocumentModified();
-
-    SfxBindings* pBindings = rDocShell.GetViewBindings();
-    if (pBindings)
-    {
-        pBindings->Invalidate( FID_MERGE_ON );
-        pBindings->Invalidate( FID_MERGE_OFF );
-        pBindings->Invalidate( FID_MERGE_TOGGLE );
-    }
-
-    return true;
+    sc::MergeCellsOperation aOperation(rDocShell, rOption, bContents, bRecord, bApi, bEmptyMergedCells);
+    return aOperation.run();
 }
 
 bool ScDocFunc::UnmergeCells( const ScRange& rRange, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge )
