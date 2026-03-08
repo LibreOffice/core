@@ -549,6 +549,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/FillSimpleOperation \
     sc/source/ui/operation/GroupSparklinesOperation \
     sc/source/ui/operation/InsertCellsOperation \
+    sc/source/ui/operation/InsertNameListOperation \
     sc/source/ui/operation/InsertSheetViewOperation \
     sc/source/ui/operation/InsertSparklinesOperation \
     sc/source/ui/operation/MergeCellsOperation \
