@@ -215,7 +215,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 SCTAB nTab = rViewData.CurrentTabForData();
                 OUString aDocName = GetViewData().GetDocShell()->GetTitle(SFX_TITLE_FULLNAME);
                 sal_uInt16 nDoc = 0;
-                bool bCpy = true;
 
                 SfxObjectShell* pSh = SfxObjectShell::GetFirst();
                 ScDocShell* pScSh = nullptr;
@@ -239,7 +238,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     pSh = SfxObjectShell::GetNext( *pSh );
                 }
 
-                MoveTable( nDoc, nTab + 1, bCpy );
+                MoveTable(nDoc, nTab + 1, true);
             }
             break;
 
@@ -994,6 +993,15 @@ void ScTabViewShell::DoMoveTableFromDialog( SfxRequest& rReq, const VclPtr<Abstr
     sal_uInt16 nDoc = pDlg->GetSelectedDocument();
     SCTAB nTab = pDlg->GetSelectedTable();
     bool bCpy = pDlg->GetCopyTable();
+    if (!bCpy)
+    {
+        SCTAB nOldIndex = GetViewData().GetMarkData().GetFirstSelected();
+        if (nTab > nOldIndex)
+        {
+            // move right: target index will be one less after source tab is removed
+            --nTab;
+        }
+    }
     bool bRna = pDlg->GetRenameTable();
     OUString aTabName;
     // Leave aTabName string empty, when Rename is FALSE.
