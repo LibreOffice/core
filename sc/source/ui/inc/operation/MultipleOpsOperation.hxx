@@ -27,6 +27,7 @@ private:
     ScMarkData const* mpTabMark;
     ScTabOpParam maParam;
 
+    ScRefAddress convertRefAddress(ScRefAddress const& rRefAddress);
     bool runImplementation() override;
 
 public:
