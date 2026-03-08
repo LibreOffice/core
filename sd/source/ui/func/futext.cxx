@@ -403,7 +403,10 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
                         if( mpView->IsTextEdit() )
                         {
-                            mpView->SdrEndTextEdit();
+                            // Pass bDontDeleteReally=true so that a newly-created,
+                            // still-empty text frame is preserved for the drag that
+                            // follows immediately below (BegDragObj).
+                            mpView->SdrEndTextEdit(/*bDontDeleteReally=*/true);
                             bJustEndedEdit = true;
 
                             if(aVEvt.mpHdl)
