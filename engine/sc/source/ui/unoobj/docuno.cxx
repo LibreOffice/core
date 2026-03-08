@@ -2939,7 +2939,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     const ScRange* pSelRange = nullptr;
     if ( bSinglePageSheets )
     {
-        awt::Size aPageSize;
         SCCOL nStartCol;
         SCROW nStartRow;
         rDoc.GetDataStart( nSelRenderer, nStartCol, nStartRow );
@@ -2954,9 +2953,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab()));
 
-        aPageSize.Width = aMMRect.GetWidth();
-        aPageSize.Height = aMMRect.GetHeight();
-
         //Set visible tab
         SCTAB nVisTab = rDoc.GetVisibleTab();
         if (nVisTab != nSelRenderer)
@@ -2969,7 +2965,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         rDoc.GetName(nVisTab, aTabName);
         lcl_PDFExportHelper(pDev, aTabName, bIsFirstPage);
 
-        pDocShell->DoDraw(pDev, Point(0,0), Size(aPageSize.Width, aPageSize.Height), JobSetup());
+        pDocShell->DoDraw(pDev, Point(0, 0), aMMRect.GetSize(), JobSetup());
 
         vcl::PDFExtOutDevData* pPDFData = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
         if (pPDFData && pPDFData->GetIsExportTaggedPDF() && bIsLastPage)
