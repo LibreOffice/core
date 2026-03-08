@@ -18,6 +18,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/tempfile.hxx>
 #include <docsh.hxx>
 #include <editutil.hxx>
@@ -47,7 +48,8 @@ public:
 
     // helpers
 private:
-    void exportToPDF(const uno::Reference<frame::XModel>& xModel, const ScRange& range);
+    void exportToPDF(const uno::Reference<frame::XModel>& xModel, const ScRange& range,
+                     const std::initializer_list<css::beans::PropertyValue>& params = {});
 
     void exportToPDFWithUnoCommands(const OUString& rRange);
 
@@ -74,6 +76,7 @@ public:
     void testTdf84012();
     void testTdf78897();
     void testForcepoint97();
+    void testTdf156893();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
     CPPUNIT_TEST(testPopupRectangleSize_Tdf162955);
@@ -92,6 +95,7 @@ public:
     CPPUNIT_TEST(testTdf84012);
     CPPUNIT_TEST(testTdf78897);
     CPPUNIT_TEST(testForcepoint97);
+    CPPUNIT_TEST(testTdf156893);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -136,7 +140,8 @@ bool ScPDFExportTest::hasTextInPdf(const char* sText, bool& bFound)
     return (nRead == nFileSize);
 }
 
-void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, const ScRange& range)
+void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, const ScRange& range,
+                                  const std::initializer_list<css::beans::PropertyValue>& params)
 {
     // get XSpreadsheet
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
@@ -169,7 +174,8 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
 
     // init set of params for storeToURL() call
     css::uno::Sequence<css::beans::PropertyValue> seqArguments{
-        comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+        comphelper::makePropertyValue(u"FilterData"_ustr,
+                                      comphelper::concatSequences(aFilterData, params)),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"calc_pdf_Export"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL())
     };
@@ -915,6 +921,33 @@ void ScPDFExportTest::testForcepoint97()
     // A1:H81
     ScRange range1(0, 0, 0, 7, 81, 0);
     exportToPDF(xModel, range1);
+}
+
+void ScPDFExportTest::testTdf156893()
+{
+    // Given a spreadsheet with a large number of rows, the whole-sheet export to PDF should export
+    // all rows.
+    loadFromFile(u"23000_rows.fods");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1:A23000
+    ScRange range(0, 0, 0, 0, 22999, 0);
+    exportToPDF(xModel, range, { comphelper::makePropertyValue(u"SinglePageSheets"_ustr, true) });
+
+    // Parse the export result
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first page
+    auto pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // Without the fix, this failed with
+    // - Expected: 23000
+    // - Actual  : 1022
+    CPPUNIT_ASSERT_EQUAL(23000, pPdfPage->getObjectCount());
+    CPPUNIT_ASSERT_EQUAL(u"Last row"_ustr,
+                         pPdfPage->getObject(22999)->getText(pPdfPage->getTextPage()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPDFExportTest);
