@@ -23,6 +23,7 @@
 #include <SheetView.hxx>
 #include <SheetViewManager.hxx>
 #include <editeng/brushitem.hxx>
+#include <paramisc.hxx>
 
 using namespace css;
 
@@ -1819,6 +1820,86 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_AutoFormat_DefaultAndSheetView)
                              getBackgroundColor(pDocument, 0, 1, 4, 0));
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"cccccc", u"cccccc", u"cccccc", u"000080" }),
                              getBackgroundColor(pDocument, 0, 1, 4, nSheetViewTab));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MultipleOps_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    // Set up 2 views: for default view and for sheet view 1
+    setupViews();
+
+    // Add another view for sheet view 2
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aSheetView2;
+    int nSheetView2 = aSheetView2.getViewID();
+
+    // Set up data, which will be duplicated to default view and sheet views
+    // A1 = 1 - input cell
+    // B1 = =A1*10 - formula
+    // variable inputs:
+    // A3 = 2
+    // A4 = 3
+    // A5 = 4
+    pDocument->SetValue(ScAddress(0, 0, 0), 1);
+    pDocument->SetString(ScAddress(1, 0, 0), u"=A1*10"_ustr);
+    pDocument->SetValue(ScAddress(0, 2, 0), 2);
+    pDocument->SetValue(ScAddress(0, 3, 0), 3);
+    pDocument->SetValue(ScAddress(0, 4, 0), 4);
+
+    // Check value
+    CPPUNIT_ASSERT_EQUAL(10.0, pDocument->GetValue(ScAddress(1, 0, 0)));
+
+    // Create sheet view 1
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    // Create sheet view 2
+    {
+        SfxLokHelper::setView(nSheetView2);
+        Scheduler::ProcessEventsToIdle();
+        createNewSheetViewInCurrentView();
+    }
+
+    // Perform Multiple Operations from sheet view 1
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+        ScTabOpParam aParam;
+        aParam.aRefFormulaCell = ScRefAddress(1, 0, nSheetViewTab);
+        aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
+        aParam.aRefColCell = ScRefAddress(0, 0, nSheetViewTab);
+        aParam.meMode = ScTabOpParam::Column;
+
+        // Apply Multiple Operations on A3:B5 — fills B3:B5 with 20, 30, 40
+        pDocShell->GetDocFunc().TabOp(ScRange(0, 2, nSheetViewTab, 1, 4, nSheetViewTab), nullptr,
+                                      aParam, true, true);
+
+        // Verify results in default view (index 0)
+        SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+        CPPUNIT_ASSERT_EQUAL(u"20"_ustr, pDocument->GetString(ScAddress(1, 2, nDefaultViewTab)));
+        CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDocument->GetString(ScAddress(1, 3, nDefaultViewTab)));
+        CPPUNIT_ASSERT_EQUAL(u"40"_ustr, pDocument->GetString(ScAddress(1, 4, nDefaultViewTab)));
+
+        // Verify same results in sheet view 1
+        CPPUNIT_ASSERT_EQUAL(u"20"_ustr, pDocument->GetString(ScAddress(1, 2, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDocument->GetString(ScAddress(1, 3, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(u"40"_ustr, pDocument->GetString(ScAddress(1, 4, nSheetViewTab)));
+
+        // Verify same results in sheet view 2
+        SCTAB nSheetView2Tab = aSheetView2.getTabViewShell()->GetViewData().GetTabNumber();
+        CPPUNIT_ASSERT_EQUAL(u"20"_ustr, pDocument->GetString(ScAddress(1, 2, nSheetView2Tab)));
+        CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDocument->GetString(ScAddress(1, 3, nSheetView2Tab)));
+        CPPUNIT_ASSERT_EQUAL(u"40"_ustr, pDocument->GetString(ScAddress(1, 4, nSheetView2Tab)));
     }
 }
 
