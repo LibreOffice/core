@@ -1915,6 +1915,132 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MultipleOps_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MoveBlock_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Put data in column C (outside autofilter range) on default view
+    pDocument->SetString(ScAddress(2, 0, 0), u"Hello"_ustr);
+    pDocument->SetValue(ScAddress(2, 1, 0), 10.0);
+    pDocument->SetValue(ScAddress(2, 2, 0), 20.0);
+
+    // Move block from default view: C1:C3 -> D1:D3 (outside autofilter)
+    {
+        switchToDefaultView();
+
+        bool bMoved = pDocShell->GetDocFunc().MoveBlock(
+            ScRange(2, 0, 0, 2, 2, 0), ScAddress(3, 0, 0), true, true, false, true);
+        CPPUNIT_ASSERT(bMoved);
+
+        // Verify on default view
+        CPPUNIT_ASSERT_EQUAL(OUString(), pDocument->GetString(ScAddress(2, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDocument->GetString(ScAddress(3, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(10.0, pDocument->GetValue(ScAddress(3, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(20.0, pDocument->GetValue(ScAddress(3, 2, 0)));
+
+        // Verify synced on sheet view
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        CPPUNIT_ASSERT_EQUAL(OUString(), pDocument->GetString(ScAddress(2, 0, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDocument->GetString(ScAddress(3, 0, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(10.0, pDocument->GetValue(ScAddress(3, 1, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(20.0, pDocument->GetValue(ScAddress(3, 2, nSheetViewTab)));
+    }
+
+    // Move block from sheet view: D1:D3 -> E1:E3 (outside autofilter)
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+        bool bMoved = pDocShell->GetDocFunc().MoveBlock(
+            ScRange(3, 0, nSheetViewTab, 3, 2, nSheetViewTab), ScAddress(4, 0, nSheetViewTab), true,
+            true, false, true);
+        CPPUNIT_ASSERT(bMoved);
+
+        // Verify on default view
+        CPPUNIT_ASSERT_EQUAL(OUString(), pDocument->GetString(ScAddress(3, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDocument->GetString(ScAddress(4, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(10.0, pDocument->GetValue(ScAddress(4, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(20.0, pDocument->GetValue(ScAddress(4, 2, 0)));
+
+        // Verify synced on sheet view
+        CPPUNIT_ASSERT_EQUAL(OUString(), pDocument->GetString(ScAddress(3, 0, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDocument->GetString(ScAddress(4, 0, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(10.0, pDocument->GetValue(ScAddress(4, 1, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(20.0, pDocument->GetValue(ScAddress(4, 2, nSheetViewTab)));
+    }
+
+    // Move block from default view inside autofilter: A2:A3 -> C2:C3
+    {
+        switchToDefaultView();
+
+        bool bMoved = pDocShell->GetDocFunc().MoveBlock(
+            ScRange(0, 1, 0, 0, 2, 0), ScAddress(2, 1, 0), true, true, false, true);
+        CPPUNIT_ASSERT(bMoved);
+
+        // Verify A2:A3 cleared and C2:C3 has values on default view
+        CPPUNIT_ASSERT_EQUAL(OUString(), pDocument->GetString(ScAddress(0, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString(), pDocument->GetString(ScAddress(0, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL(7.0, pDocument->GetValue(ScAddress(2, 1, 0)));
+        CPPUNIT_ASSERT_EQUAL(5.0, pDocument->GetValue(ScAddress(2, 2, 0)));
+
+        // Verify autofilter column on both views
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"", u"", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"", u"" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+
+    // Undo the move inside autofilter
+    {
+        switchToDefaultView();
+        undo();
+
+        // Verify autofilter values restored
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+
+    // Move block on the sheet view should be blocked as source intersects autofilter
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+        // Try to move A2:A3 -> C2:C3 on sheet view tab
+        bool bResult = pDocShell->GetDocFunc().MoveBlock(
+            ScRange(0, 1, nSheetViewTab, 0, 2, nSheetViewTab), ScAddress(2, 1, nSheetViewTab), true,
+            true, false, true);
+        CPPUNIT_ASSERT(!bResult);
+
+        // Values should remain unchanged
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_EnterMatrix_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
