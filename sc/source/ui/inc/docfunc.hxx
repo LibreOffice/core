@@ -149,7 +149,7 @@ public:
     bool            DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark,
                               DelCellCmd eCmd, bool bApi );
 
-    bool            MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
+    SC_DLLPUBLIC bool MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                        bool bCut, bool bRecord, bool bPaint, bool bApi );
 
     SC_DLLPUBLIC bool InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );

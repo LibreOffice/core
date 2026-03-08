@@ -36,19 +36,28 @@ MoveBlockOperation::MoveBlockOperation(ScDocShell& rDocShell, const ScRange& rSo
 {
 }
 
+bool MoveBlockOperation::canRunTheOperation() const
+{
+    return !isInputOnSheetViewAutoFilter(maSource)
+           && !isInputOnSheetViewAutoFilter(ScRange(maDestPos));
+}
+
 bool MoveBlockOperation::runImplementation()
 {
     ScDocShellModificator aModificator(mrDocShell);
 
-    SCCOL nStartCol = maSource.aStart.Col();
-    SCROW nStartRow = maSource.aStart.Row();
-    SCTAB nStartTab = maSource.aStart.Tab();
-    SCCOL nEndCol = maSource.aEnd.Col();
-    SCROW nEndRow = maSource.aEnd.Row();
-    SCTAB nEndTab = maSource.aEnd.Tab();
-    SCCOL nDestCol = maDestPos.Col();
-    SCROW nDestRow = maDestPos.Row();
-    SCTAB nDestTab = maDestPos.Tab();
+    ScRange aSource = convertRange(maSource);
+    ScAddress aDestPos = convertAddress(maDestPos);
+
+    SCCOL nStartCol = aSource.aStart.Col();
+    SCROW nStartRow = aSource.aStart.Row();
+    SCTAB nStartTab = aSource.aStart.Tab();
+    SCCOL nEndCol = aSource.aEnd.Col();
+    SCROW nEndRow = aSource.aEnd.Row();
+    SCTAB nEndTab = aSource.aEnd.Tab();
+    SCCOL nDestCol = aDestPos.Col();
+    SCROW nDestRow = aDestPos.Row();
+    SCTAB nDestTab = aDestPos.Tab();
 
     ScDocument& rDoc = mrDocShell.GetDocument();
     if (!rDoc.ValidRow(nStartRow) || !rDoc.ValidRow(nEndRow) || !rDoc.ValidRow(nDestRow))
@@ -79,10 +88,10 @@ bool MoveBlockOperation::runImplementation()
     ScMarkData aSourceMark(rDoc.GetSheetLimits());
     for (nTab = nStartTab; nTab <= nEndTab; nTab++)
         aSourceMark.SelectTable(nTab, true); // select source
-    aSourceMark.SetMarkArea(maSource);
+    aSourceMark.SetMarkArea(aSource);
 
     ScDocShellRef aDragShellRef;
-    if (rDoc.HasOLEObjectsInArea(maSource))
+    if (rDoc.HasOLEObjectsInArea(aSource))
     {
         aDragShellRef = new ScDocShell; // DocShell needs a Ref immediately
         aDragShellRef->DoInitNew();
@@ -135,9 +144,6 @@ bool MoveBlockOperation::runImplementation()
             mrDocShell.ErrorMessage(STR_PASTE_FULL);
         return false;
     }
-
-    if (!checkSheetViewProtection())
-        return false;
 
     //  Test for cell protection
 
@@ -220,7 +226,7 @@ bool MoveBlockOperation::runImplementation()
             if (rDoc.HasAttrib(nDestCol, nDestRow, nDestTab, nUndoEndCol, nUndoEndRow, nDestEndTab,
                                HasAttrFlags::Merged | HasAttrFlags::Overlapped))
             {
-                rDoc.CopyFromClip(maSource, aSourceMark, InsertDeleteFlags::ALL, nullptr,
+                rDoc.CopyFromClip(aSource, aSourceMark, InsertDeleteFlags::ALL, nullptr,
                                   pClipDoc.get());
                 for (nTab = nStartTab; nTab <= nEndTab; nTab++)
                 {
@@ -236,7 +242,7 @@ bool MoveBlockOperation::runImplementation()
                 return false;
             }
 
-        bSourceHeight = mrDocShell.GetDocFunc().AdjustRowHeight(maSource, false, mbApi);
+        bSourceHeight = mrDocShell.GetDocFunc().AdjustRowHeight(aSource, false, mbApi);
     }
 
     ScRange aPasteDest(nDestCol, nDestRow, nDestTab, nDestEndCol, nDestEndRow, nDestEndTab);
@@ -358,6 +364,8 @@ bool MoveBlockOperation::runImplementation()
                                  nEndTab, nFlags, nSourceExt);
         }
     }
+
+    syncSheetViews();
 
     aModificator.SetDocumentModified();
 
