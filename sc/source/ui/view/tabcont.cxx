@@ -551,7 +551,13 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
         SCTAB nPos = GetPrivatDropPos( rEvt.maPosPixel );
         HideDropPos();
 
-        if ( nPos == pData->pCellTransfer->GetVisibleTab() && rEvt.mnAction == DND_ACTION_MOVE )
+        SCTAB nOldPos = pData->pCellTransfer->GetVisibleTab();
+        if (rEvt.mnAction == DND_ACTION_MOVE && nPos > nOldPos)
+        {
+            // when moving to the right, the position is one less after removing the table
+            --nPos;
+        }
+        if (nPos == nOldPos && rEvt.mnAction == DND_ACTION_MOVE)
         {
             // #i83005# do nothing - don't move to the same position
             // (too easily triggered unintentionally, and might take a long time in large documents)
