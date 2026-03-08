@@ -26,6 +26,7 @@ private:
     bool mbCut;
     bool mbPaint;
 
+    bool canRunTheOperation() const override;
     bool runImplementation() override;
 
 public:
