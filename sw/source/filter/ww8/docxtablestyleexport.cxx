@@ -189,6 +189,7 @@ void DocxTableStyleExport::Impl::tableStyleTcBorder(
                                                           { "space", XML_space },
                                                           { "themeColor", XML_themeColor },
                                                           { "themeTint", XML_themeTint },
+                                                          { "themeShade", XML_themeShade },
                                                           { nullptr, 0 } };
 
     if (!rTcBorder.hasElements())
