@@ -43,24 +43,23 @@ bool SubTotalsOperation::runImplementation()
     //  - mark new range (from DBData)
     //  - SelectionChanged (?)
 
+    SCTAB nTab = convertTab(mnTab);
+
     bool bDo = !maParam.bRemoveOnly; // false = only delete
 
     ScDocument& rDoc = mrDocShell.GetDocument();
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
     ScDBData* pDBData
-        = rDoc.GetDBAtArea(mnTab, maParam.nCol1, maParam.nRow1, maParam.nCol2, maParam.nRow2);
+        = rDoc.GetDBAtArea(nTab, maParam.nCol1, maParam.nRow1, maParam.nCol2, maParam.nRow2);
     if (!pDBData)
     {
         OSL_FAIL("SubTotals: no DBData");
         return false;
     }
 
-    if (!checkSheetViewProtection())
-        return false;
-
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
-        rDoc, mnTab, 0, maParam.nRow1 + 1, rDoc.MaxCol(), rDoc.MaxRow());
+        rDoc, nTab, 0, maParam.nRow1 + 1, rDoc.MaxCol(), rDoc.MaxRow());
     if (!aTester.IsEditable())
     {
         if (!mbApi)
@@ -68,7 +67,7 @@ bool SubTotalsOperation::runImplementation()
         return false;
     }
 
-    if (rDoc.HasAttrib(maParam.nCol1, maParam.nRow1 + 1, mnTab, maParam.nCol2, maParam.nRow2, mnTab,
+    if (rDoc.HasAttrib(maParam.nCol1, maParam.nRow1 + 1, nTab, maParam.nCol2, maParam.nRow2, nTab,
                        HasAttrFlags::Merged | HasAttrFlags::Overlapped))
     {
         if (!mbApi)
@@ -79,7 +78,7 @@ bool SubTotalsOperation::runImplementation()
     bool bOk = true;
     if (maParam.bReplace)
     {
-        if (rDoc.TestRemoveSubTotals(mnTab, maParam))
+        if (rDoc.TestRemoveSubTotals(nTab, maParam))
         {
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                 ScDocShell::GetActiveDialogParent(), VclMessageType::Question,
@@ -107,7 +106,7 @@ bool SubTotalsOperation::runImplementation()
 
         SCTAB nTabCount = rDoc.GetTableCount();
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        ScOutlineTable* pTable = rDoc.GetOutlineTable(mnTab);
+        ScOutlineTable* pTable = rDoc.GetOutlineTable(nTab);
         if (pTable)
         {
             pUndoTab.reset(new ScOutlineTable(*pTable));
@@ -118,18 +117,18 @@ bool SubTotalsOperation::runImplementation()
             pTable->GetColArray().GetRange(nOutStartCol, nOutEndCol);
             pTable->GetRowArray().GetRange(nOutStartRow, nOutEndRow);
 
-            pUndoDoc->InitUndo(rDoc, mnTab, mnTab, true, true);
-            rDoc.CopyToDocument(static_cast<SCCOL>(nOutStartCol), 0, mnTab,
-                                static_cast<SCCOL>(nOutEndCol), rDoc.MaxRow(), mnTab,
+            pUndoDoc->InitUndo(rDoc, nTab, nTab, true, true);
+            rDoc.CopyToDocument(static_cast<SCCOL>(nOutStartCol), 0, nTab,
+                                static_cast<SCCOL>(nOutEndCol), rDoc.MaxRow(), nTab,
                                 InsertDeleteFlags::NONE, false, *pUndoDoc);
-            rDoc.CopyToDocument(0, nOutStartRow, mnTab, rDoc.MaxCol(), nOutEndRow, mnTab,
+            rDoc.CopyToDocument(0, nOutStartRow, nTab, rDoc.MaxCol(), nOutEndRow, nTab,
                                 InsertDeleteFlags::NONE, false, *pUndoDoc);
         }
         else
-            pUndoDoc->InitUndo(rDoc, mnTab, mnTab, false, bOldFilter);
+            pUndoDoc->InitUndo(rDoc, nTab, nTab, false, bOldFilter);
 
         //  secure data range - incl. filtering result
-        rDoc.CopyToDocument(0, maParam.nRow1 + 1, mnTab, rDoc.MaxCol(), maParam.nRow2, mnTab,
+        rDoc.CopyToDocument(0, maParam.nRow1 + 1, nTab, rDoc.MaxCol(), maParam.nRow2, nTab,
                             InsertDeleteFlags::ALL, false, *pUndoDoc);
 
         //  all formulas because of references
@@ -145,20 +144,20 @@ bool SubTotalsOperation::runImplementation()
             pUndoDB.reset(new ScDBCollection(*pDocDB));
     }
 
-    //      rDoc.SetOutlineTable( mnTab, NULL );
-    ScOutlineTable* pOut = rDoc.GetOutlineTable(mnTab);
+    //      rDoc.SetOutlineTable( nTab, NULL );
+    ScOutlineTable* pOut = rDoc.GetOutlineTable(nTab);
     if (pOut)
         pOut->GetRowArray().RemoveAll(); // only delete row outlines
 
     if (maParam.bReplace)
-        rDoc.RemoveSubTotals(mnTab, aNewParam);
+        rDoc.RemoveSubTotals(nTab, aNewParam);
     bool bSuccess = true;
     if (bDo)
     {
         // sort
         if (maParam.bDoSort)
         {
-            pDBData->SetArea(mnTab, aNewParam.nCol1, aNewParam.nRow1, aNewParam.nCol2,
+            pDBData->SetArea(nTab, aNewParam.nCol1, aNewParam.nRow1, aNewParam.nCol2,
                              aNewParam.nRow2);
 
             //  set partial result field to before the sorting
@@ -168,21 +167,21 @@ bool SubTotalsOperation::runImplementation()
             pDBData->GetSortParam(aOldSort);
             ScSortParam aSortParam(aNewParam, aOldSort);
             ScDBDocFunc aDBDocFunc(mrDocShell);
-            aDBDocFunc.SortTab(mnTab, aSortParam, false, false, mbApi);
+            aDBDocFunc.SortTab(nTab, aSortParam, false, false, mbApi);
         }
 
-        bSuccess = rDoc.DoSubTotals(mnTab, aNewParam);
-        rDoc.SetDrawPageSize(mnTab);
+        bSuccess = rDoc.DoSubTotals(nTab, aNewParam);
+        rDoc.SetDrawPageSize(nTab);
     }
-    ScRange aDirtyRange(aNewParam.nCol1, aNewParam.nRow1, mnTab, aNewParam.nCol2, aNewParam.nRow2,
-                        mnTab);
+    ScRange aDirtyRange(aNewParam.nCol1, aNewParam.nRow1, nTab, aNewParam.nCol2, aNewParam.nRow2,
+                        nTab);
     rDoc.SetDirty(aDirtyRange, true);
 
     if (mbRecord)
     {
         //          ScDBData* pUndoDBData = pDBData ? new ScDBData( *pDBData ) : NULL;
         mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoSubTotals>(
-            &mrDocShell, mnTab, maParam, aNewParam.nRow2, std::move(pUndoDoc),
+            &mrDocShell, nTab, maParam, aNewParam.nRow2, std::move(pUndoDoc),
             std::move(pUndoTab), // pUndoDBData,
             std::move(pUndoRange), std::move(pUndoDB)));
     }
@@ -196,12 +195,15 @@ bool SubTotalsOperation::runImplementation()
 
     // memorize
     pDBData->SetSubTotalParam(aNewParam);
-    pDBData->SetArea(mnTab, aNewParam.nCol1, aNewParam.nRow1, aNewParam.nCol2, aNewParam.nRow2);
+    pDBData->SetArea(nTab, aNewParam.nCol1, aNewParam.nRow1, aNewParam.nCol2, aNewParam.nRow2);
     rDoc.CompileDBFormula();
 
-    mrDocShell.PostPaint(ScRange(0, 0, mnTab, rDoc.MaxCol(), rDoc.MaxRow(), mnTab),
+    mrDocShell.PostPaint(ScRange(0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
                          PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
                              | PaintPartFlags::Size);
+
+    syncSheetViews();
+
     aModificator.SetDocumentModified();
 
     return true;
