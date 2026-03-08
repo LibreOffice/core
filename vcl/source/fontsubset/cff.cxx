@@ -820,7 +820,7 @@ public: // TODO: is public really needed?
     void    clear() { mnStackIdx = 0;}
 
     // accessing the charstring hints
-    void    addHints( bool bVerticalHints);
+    bool    addHints( bool bVerticalHints);
 
     // accessing other charstring specifics
     void    updateWidth( bool bUseFirstVal);
@@ -893,21 +893,19 @@ inline void CffSubsetterContext::updateWidth( bool bUseFirstVal)
     }
 }
 
-void CffSubsetterContext::addHints( bool bVerticalHints)
+bool CffSubsetterContext::addHints( bool bVerticalHints)
 {
     // the first charstring value may a charwidth instead of a charwidth
     updateWidth( (mnStackIdx & 1) != 0);
     // return early (e.g. no implicit hints for hintmask)
     if( !mnStackIdx)
-        return;
+        return true;
 
     // copy the remaining values to the hint arrays
-    // assert( (mnStackIdx & 1) == 0); // depends on called subrs
     if( mnStackIdx & 1) --mnStackIdx;//#######
-    // TODO: if( !bSubr) assert( mnStackIdx >= 2);
 
     if (o3tl::make_unsigned(mnHintSize + mnStackIdx) > std::size(mnHintStack))
-        return;
+        return false;
 
     ValType nHintOfs = 0;
     for( int i = 0; i < mnStackIdx; ++i) {
@@ -920,6 +918,7 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
 
     // clear all values from the stack
     mnStackIdx = 0;
+    return true;
 }
 
 void CffSubsetterContext::readDictOp()
@@ -1252,7 +1251,8 @@ bool CffSubsetterContext::convertOneTypeOp()
         break;
     case TYPE2OP::HSTEM:
     case TYPE2OP::VSTEM:
-        addHints( nType2Op == TYPE2OP::VSTEM );
+        if (!addHints( nType2Op == TYPE2OP::VSTEM ))
+            return false;
         for( i = 0; i < mnHintSize; i+=2 ) {
             writeType1Val( mnHintStack[i]);
             writeType1Val( mnHintStack[i+1] - mnHintStack[i]);
@@ -1261,11 +1261,13 @@ bool CffSubsetterContext::convertOneTypeOp()
         break;
     case TYPE2OP::HSTEMHM:
     case TYPE2OP::VSTEMHM:
-        addHints( nType2Op == TYPE2OP::VSTEMHM);
+        if (!addHints( nType2Op == TYPE2OP::VSTEMHM))
+            return false;
         break;
     case TYPE2OP::CNTRMASK:
         // TODO: replace cntrmask with vstem3/hstem3
-        addHints( true);
+        if (!addHints( true))
+            return false;
         {
         U8 nMaskBit = 0;
         U8 nMaskByte = 0;
@@ -1285,7 +1287,8 @@ bool CffSubsetterContext::convertOneTypeOp()
         }
         break;
     case TYPE2OP::HINTMASK:
-        addHints( true);
+        if (!addHints( true))
+            return false;
         {
         sal_Int32 nHintMask = 0;
         int nCntrBits[2] = {0,0};
@@ -2019,7 +2022,8 @@ bool CffSubsetterContext::initialCffRead()
     // prepare access to the NameIndex
     mnNameIdxBase = nHeaderSize;
     mpReadPtr = mpBasePtr + nHeaderSize;
-    seekIndexEnd( mnNameIdxBase);
+    if (!seekIndexEnd( mnNameIdxBase))
+        return false;
 
     // get the TopDict index
     const sal_Int32 nTopDictBase = getReadOfs();
@@ -2090,11 +2094,13 @@ bool CffSubsetterContext::initialCffRead()
         // get the PrivateDict index
         // (we got mnPrivDictSize and mnPrivDictBase from TOPDICT or FDArray)
         if( mpCffLocal->mnPrivDictSize != 0) {
-            assert( mpCffLocal->mnPrivDictSize > 0);
+            if ( mpCffLocal->mnPrivDictSize <= 0)
+                return false;
             // get the PrivDict data
             mpReadPtr = mpBasePtr + mpCffLocal->mnPrivDictBase;
             mpReadEnd = mpReadPtr + mpCffLocal->mnPrivDictSize;
-            assert( mpReadEnd <= mpBaseEnd);
+            if ( mpReadEnd > mpBaseEnd)
+                return false;
             // read PrivDict details
             while( mpReadPtr < mpReadEnd)
                 readDictOp();
@@ -2130,7 +2136,6 @@ OString CffSubsetterContext::getString( int nStringID)
     comphelper::ValueRestorationGuard pReadEnd(mpReadEnd);
     nStringID -= nStdStrings;
     int nLen = seekIndexData( mnStringIdxBase, nStringID);
-    // assert( nLen >= 0);
     // TODO: just return the undecorated name
     if( nLen < 0) {
         return "name[" + OString::number(nStringID) + "].notfound!";
@@ -2167,11 +2172,13 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
                 if( pReadPtr + 4 > mpBaseEnd)
                     return -1;
                 const U16 nRangeCount = (pReadPtr[0]<<8) + pReadPtr[1];
-                assert( nRangeCount > 0);
-                assert( nRangeCount <= mnCharStrCount);
+                if ( nRangeCount <= 0)
+                    return -1;
+                if ( nRangeCount > mnCharStrCount)
+                    return -1;
                 U16 nPrev = (pReadPtr[2]<<8) + pReadPtr[3];
-                assert( nPrev == 0);
-                (void)nPrev;
+                if ( nPrev != 0)
+                    return -1;
                 pReadPtr += 4;
                 // TODO? binary search
                 for( int i = 0; i < nRangeCount; ++i) {
@@ -2179,7 +2186,8 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
                         return -1;
                     const U8 nFDIdx = pReadPtr[0];
                     const U16 nNext = (pReadPtr[1]<<8) + pReadPtr[2];
-                    assert( nPrev < nNext);
+                    if ( nPrev >= nNext)
+                        return -1;
                     if( nGlyphIndex < nNext)
                         return nFDIdx;
                     pReadPtr += 3;
@@ -2198,8 +2206,6 @@ int CffSubsetterContext::getGlyphSID( int nGlyphIndex) const
 {
     if( nGlyphIndex == 0)
         return 0;       // ".notdef"
-    assert( nGlyphIndex >= 0);
-    assert( nGlyphIndex < mnCharStrCount);
     if( (nGlyphIndex < 0) || (nGlyphIndex >= mnCharStrCount))
         return -1;
 
