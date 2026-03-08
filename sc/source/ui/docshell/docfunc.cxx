@@ -128,6 +128,7 @@
 #include <operation/InsertSheetViewOperation.hxx>
 #include <operation/InsertSparklinesOperation.hxx>
 #include <operation/MultipleOpsOperation.hxx>
+#include <operation/ReplaceNoteTextOperation.hxx>
 #include <operation/SetNoteTextOperation.hxx>
 #include <operation/TransliterateTextOperation.hxx>
 #include <operation/UngroupSparklinesOperation.hxx>
@@ -980,72 +981,8 @@ void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
 
 void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-    ScDocument& rDoc = rDocShell.GetDocument();
-
-    if (!CheckSheetViewProtection(sc::OperationType::ReplaceNoteText))
-        return;
-
-    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row());
-    if (aTester.IsEditable())
-    {
-        ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        SfxUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : nullptr;
-
-        ScNoteData aOldData;
-        std::unique_ptr<ScPostIt> pOldNote = rDoc.ReleaseNote( rPos );
-        sal_uInt32 nNoteId = 0;
-        if( pOldNote )
-        {
-            nNoteId = pOldNote->GetId();
-            // ensure existing caption object before draw undo tracking starts
-            pOldNote->GetOrCreateCaption( rPos );
-            // rescue note data for undo
-            aOldData = pOldNote->GetNoteData();
-        }
-
-        // collect drawing undo actions for deleting/inserting caption objects
-        if( pUndoMgr )
-            pDrawLayer->BeginCalcUndo(false);
-
-        // delete the note (creates drawing undo action for the caption object)
-        bool hadOldNote(pOldNote);
-        pOldNote.reset();
-
-        // create new note (creates drawing undo action for the new caption object)
-        ScNoteData aNewData;
-        ScPostIt* pNewNote = nullptr;
-        if( (pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true, nNoteId )) )
-        {
-            if( pAuthor ) pNewNote->SetAuthor( *pAuthor );
-            if( pDate ) pNewNote->SetDate( *pDate );
-
-            // rescue note data for undo
-            aNewData = pNewNote->GetNoteData();
-        }
-
-        // create the undo action
-        if( pUndoMgr && (aOldData.mxCaption || aNewData.mxCaption) )
-            pUndoMgr->AddUndoAction( std::make_unique<ScUndoReplaceNote>( rDocShell, rPos, aOldData, aNewData, pDrawLayer->GetCalcUndo() ) );
-
-        // repaint cell (to make note marker visible)
-        rDocShell.PostPaintCell( rPos );
-
-        rDoc.SetStreamValid(rPos.Tab(), false);
-
-        aModificator.SetDocumentModified();
-
-        // Let our LOK clients know about the new/modified note
-        if (pNewNote)
-        {
-            ScDocShell::LOKCommentNotify(hadOldNote ? LOKCommentNotificationType::Modify : LOKCommentNotificationType::Add,
-                                         rDoc, rPos, pNewNote);
-        }
-    }
-    else if (!bApi)
-    {
-        rDocShell.ErrorMessage(aTester.GetMessageId());
-    }
+    sc::ReplaceNoteTextOperation aOperation(rDocShell, rPos, rNoteText, pAuthor, pDate, bApi);
+    aOperation.run();
 }
 
 void ScDocFunc::ImportNote( const ScAddress& rPos,
