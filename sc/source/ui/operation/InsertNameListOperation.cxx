@@ -33,10 +33,12 @@ bool InsertNameListOperation::runImplementation()
 {
     ScDocShellModificator aModificator(mrDocShell);
 
+    ScAddress aStartPos = convertAddress(maStartPos);
+
     bool bDone = false;
     ScDocument& rDoc = mrDocShell.GetDocument();
     const bool bRecord = rDoc.IsUndoEnabled();
-    SCTAB nTab = maStartPos.Tab();
+    SCTAB nTab = aStartPos.Tab();
 
     //local names have higher priority than global names
     ScRangeName* pLocalList = rDoc.GetRangeName(nTab);
@@ -58,13 +60,10 @@ bool InsertNameListOperation::runImplementation()
 
     if (nValidCount)
     {
-        SCCOL nStartCol = maStartPos.Col();
-        SCROW nStartRow = maStartPos.Row();
+        SCCOL nStartCol = aStartPos.Col();
+        SCROW nStartRow = aStartPos.Row();
         SCCOL nEndCol = nStartCol + 1;
         SCROW nEndRow = nStartRow + static_cast<SCROW>(nValidCount) - 1;
-
-        if (!checkSheetViewProtection())
-            return false;
 
         ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
             rDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow);
@@ -134,6 +133,8 @@ bool InsertNameListOperation::runImplementation()
                     ScRange(0, nStartRow, nTab, rDoc.MaxCol(), nEndRow, nTab), true, true))
                 mrDocShell.PostPaint(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
                                      PaintPartFlags::Grid);
+
+            syncSheetViews();
 
             aModificator.SetDocumentModified();
             bDone = true;
