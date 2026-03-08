@@ -1,0 +1,268 @@
+From 27e73983efcbd38e94d6e63e2f7e8d0d4fcebc1d Mon Sep 17 00:00:00 2001
+From: Xisco Fauli <xiscofauli@libreoffice.org>
+Date: Mon, 9 Mar 2026 12:03:23 +0100
+Subject: [PATCH] Revert "Fix for most cases of #7522 (#7828)"
+
+This reverts commit 375afe2f8d128986da37171507850e619d465501.
+---
+ src/jrd/Mapping.cpp | 138 +++++++++++++++++---------------------------
+ src/jrd/Mapping.h   |   1 -
+ src/jrd/jrd.cpp     |   4 --
+ src/yvalve/why.cpp  |   9 ---
+ 4 files changed, 53 insertions(+), 99 deletions(-)
+
+diff --git a/src/jrd/Mapping.cpp b/src/jrd/Mapping.cpp
+index 31c33a6868..7c3e68c630 100644
+--- a/src/jrd/Mapping.cpp
++++ b/src/jrd/Mapping.cpp
+@@ -602,7 +602,6 @@ class MappingIpc FB_FINAL : public Firebird::IpcObject
+ public:
+ 	explicit MappingIpc(MemoryPool&)
+ 		: processId(getpid()),
+-		  globalNamespace(true),
+ 		  cleanupSync(*getDefaultMemoryPool(), clearDelivery, THREAD_high)
+ 	{ }
+ 
+@@ -653,90 +652,74 @@ public:
+ 
+ 		setup();
+ 
+-		// If current process runs as embedded, have no access to the global
+-		// namespace and is the only user of shared memory - shutdown own mapping
+-		// to let future service process to create same mapping in global namespace.
++		Guard gShared(this);
+ 
+-		const bool embedded = MasterInterfacePtr()->serverMode(-1) < 0;
+-		bool shutdownShmem = embedded && !globalNamespace;
++		MappingHeader* sMem = sharedMemory->getHeader();
++		target.copyTo(sMem->databaseForReset, sizeof(sMem->databaseForReset));
+ 
+-		{  // Guard scope
+-			Guard gShared(this);
+-
+-			MappingHeader* sMem = sharedMemory->getHeader();
+-			target.copyTo(sMem->databaseForReset, sizeof(sMem->databaseForReset));
++		// Set currentProcess
++		sMem->currentProcess = -1;
++		for (unsigned n = 0; n < sMem->processes; ++n)
++		{
++			MappingHeader::Process* p = &sMem->process[n];
++			if (!(p->flags & MappingHeader::FLAG_ACTIVE))
++				continue;
+ 
+-			// Set currentProcess
+-			sMem->currentProcess = -1;
+-			for (unsigned n = 0; n < sMem->processes; ++n)
++			if (p->id == processId)
+ 			{
+-				MappingHeader::Process* p = &sMem->process[n];
+-				if (!(p->flags & MappingHeader::FLAG_ACTIVE))
+-					continue;
+-
+-				if (p->id == processId)
+-				{
+-					sMem->currentProcess = n;
+-					break;
+-				}
++				sMem->currentProcess = n;
++				break;
+ 			}
++		}
+ 
+-			if (sMem->currentProcess < 0)
++		if (sMem->currentProcess < 0)
++		{
++			// did not find current process
++			// better ignore delivery than fail in it
++			gds__log("MappingIpc::clearMap() failed to find current process %d in shared memory", processId);
++			return;
++		}
++		MappingHeader::Process* current = &sMem->process[sMem->currentProcess];
++
++		// Deliver
++		for (unsigned n = 0; n < sMem->processes; ++n)
++		{
++			MappingHeader::Process* p = &sMem->process[n];
++			if (!(p->flags & MappingHeader::FLAG_ACTIVE))
++				continue;
++
++			if (p->id == processId)
+ 			{
+-				// did not find current process
+-				// better ignore delivery than fail in it
+-				gds__log("MappingIpc::clearMap() failed to find current process %d in shared memory", processId);
+-				return;
++				MAP_DEBUG(fprintf(stderr, "Internal resetMap(%s)\n", sMem->databaseForReset));
++				resetMap(sMem->databaseForReset);
++				continue;
+ 			}
+-			MappingHeader::Process* current = &sMem->process[sMem->currentProcess];
+ 
+-			// Deliver
+-			for (unsigned n = 0; n < sMem->processes; ++n)
++			SLONG value = sharedMemory->eventClear(&current->callbackEvent);
++			p->flags |= MappingHeader::FLAG_DELIVER;
++			if (sharedMemory->eventPost(&p->notifyEvent) != FB_SUCCESS)
+ 			{
+-				MappingHeader::Process* p = &sMem->process[n];
+-				if (!(p->flags & MappingHeader::FLAG_ACTIVE))
+-					continue;
+-
+-				if (p->id == processId)
+-				{
+-					MAP_DEBUG(fprintf(stderr, "Internal resetMap(%s)\n", sMem->databaseForReset));
+-					resetMap(sMem->databaseForReset);
+-					continue;
+-				}
+-
+-				SLONG value = sharedMemory->eventClear(&current->callbackEvent);
+-				p->flags |= MappingHeader::FLAG_DELIVER;
+-				if (sharedMemory->eventPost(&p->notifyEvent) != FB_SUCCESS)
+-				{
+-					(Arg::Gds(isc_random) << "Error posting notifyEvent in mapping shared memory").raise();
+-				}
++				(Arg::Gds(isc_random) << "Error posting notifyEvent in mapping shared memory").raise();
++			}
+ 
+-				int tout = 0;
+-				while (sharedMemory->eventWait(&current->callbackEvent, value, 10000) != FB_SUCCESS)
++			int tout = 0;
++			while (sharedMemory->eventWait(&current->callbackEvent, value, 10000) != FB_SUCCESS)
++			{
++				if (!ISC_check_process_existence(p->id))
+ 				{
+-					if (!ISC_check_process_existence(p->id))
+-					{
+-						MAP_DEBUG(fprintf(stderr, "clearMapping: dead process found %d", p->id));
+-
+-						p->flags &= ~MappingHeader::FLAG_ACTIVE;
+-						sharedMemory->eventFini(&p->notifyEvent);
+-						sharedMemory->eventFini(&p->callbackEvent);
+-						break;
+-					}
++					MAP_DEBUG(fprintf(stderr, "clearMapping: dead process found %d", p->id));
+ 
+-					if (++tout >= 1000) // 10 sec
+-						(Arg::Gds(isc_random) << "Timeout when waiting callback from other process.").raise();
++					p->flags &= ~MappingHeader::FLAG_ACTIVE;
++					sharedMemory->eventFini(&p->notifyEvent);
++					sharedMemory->eventFini(&p->callbackEvent);
++					break;
+ 				}
+ 
+-				if (p->flags & MappingHeader::FLAG_ACTIVE)
+-					shutdownShmem = false;
+-
+-				MAP_DEBUG(fprintf(stderr, "Notified pid %d about reset map %s\n", p->id, sMem->databaseForReset));
++				if (++tout >= 1000) // 10 sec
++					(Arg::Gds(isc_random) << "Timeout when waiting callback from other process.").raise();
+ 			}
+-		}  // Guard scope
+-
+-		if (shutdownShmem)
+-			shutdown();
++			MAP_DEBUG(fprintf(stderr, "Notified pid %d about reset map %s\n", p->id, sMem->databaseForReset));
++		}
+ 	}
+ 
+ 	void setup()
+@@ -747,11 +730,6 @@ public:
+ 		if (sharedMemory)
+ 			return;
+ 
+-		const bool embedded = MasterInterfacePtr()->serverMode(-1) < 0;
+-#ifdef WIN_NT
+-		globalNamespace = fb_utils::isGlobalKernelPrefix();
+-#endif
+-
+ 		AutoSharedMemory tempSharedMemory;
+ 		try
+ 		{
+@@ -762,10 +740,7 @@ public:
+ 		{
+ 			StaticStatusVector s;
+ 			ex.stuffException(s);
+-			if (!embedded)
+-			{
+-				iscLogException("MappingIpc: Cannot initialize the shared memory region", ex);
+-			}
++			iscLogException("MappingIpc: Cannot initialize the shared memory region", ex);
+ 			throw;
+ 		}
+ 		fb_assert(tempSharedMemory->getHeader()->mhb_header_version == MemoryHeader::HEADER_VERSION);
+@@ -961,7 +936,6 @@ private:
+ 	Mutex initMutex;
+ 	const SLONG processId;
+ 	unsigned process;
+-	bool globalNamespace;
+ 	Semaphore startupSemaphore;
+ 	ThreadFinishSync<MappingIpc*> cleanupSync;
+ };
+@@ -1302,12 +1276,6 @@ void clearMap(const char* dbName)
+ 	mappingIpc->clearMap(dbName);
+ }
+ 
+-void initMappingIpc()
+-{
+-	mappingIpc->setup();
+-}
+-
+-
+ const Format* GlobalMappingScan::getFormat(thread_db* tdbb, jrd_rel* relation) const
+ {
+ 	jrd_tra* const transaction = tdbb->getTransaction();
+diff --git a/src/jrd/Mapping.h b/src/jrd/Mapping.h
+index 988e77f90a..b5e068d5a0 100644
+--- a/src/jrd/Mapping.h
++++ b/src/jrd/Mapping.h
+@@ -42,7 +42,6 @@ bool mapUser(Firebird::string& name, Firebird::string& trusted_role, Firebird::s
+ 	const char* alias, const char* db, const char* securityDb, Firebird::ICryptKeyCallback* cryptCb,
+ 	Firebird::IAttachment* att, bool logMsgs);
+ void clearMap(const char* dbName);
+-void initMappingIpc();
+ void shutdownMappingIpc();
+ 
+ class GlobalMappingScan : public VirtualTableScan
+diff --git a/src/jrd/jrd.cpp b/src/jrd/jrd.cpp
+index 145716cbcd..5fee5b916e 100644
+--- a/src/jrd/jrd.cpp
++++ b/src/jrd/jrd.cpp
+@@ -2456,10 +2456,6 @@ JAttachment* JProvider::createDatabase(CheckStatusWrapper* user_status, const ch
+ 	RefDeb(DEB_AR_JATT, "JProvider::createDatabase");
+ 	try
+ 	{
+-		// In case of problems when creating shared memory, it is better to
+-		// fail early, before attempt to create database file.
+-		initMappingIpc();
+-
+ 		ThreadContextHolder tdbb(user_status);
+ 		MutexEnsureUnlock guardDbInit(dbInitMutex, FB_FUNCTION);
+ 
+diff --git a/src/yvalve/why.cpp b/src/yvalve/why.cpp
+index 72a05ce501..0d936705aa 100644
+--- a/src/yvalve/why.cpp
++++ b/src/yvalve/why.cpp
+@@ -5756,20 +5756,11 @@ YAttachment* Dispatcher::attachOrCreateDatabase(Firebird::CheckStatusWrapper* st
+ 				return r;
+ 			}
+ 
+-			if (currentStatus != status &&
+-				currentStatus->getErrors()[1] != isc_unavailable &&
+-				status->getErrors()[1] == isc_instance_conflict)
+-			{
+-				status->setErrors(currentStatus->getErrors());
+-				status->setWarnings(currentStatus->getWarnings());
+-			}
+-
+ 			switch (currentStatus->getErrors()[1])
+ 			{
+ 			case isc_io_error:
+ 			case isc_lock_dir_access:
+ 			case isc_no_priv:
+-			case isc_instance_conflict:
+ 				currentStatus = &tempCheckStatusWrapper;
+ 				// fall down...
+ 			case isc_unavailable:
+-- 
+2.39.5
+

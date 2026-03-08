@@ -23,7 +23,7 @@ $(eval $(call gb_ExternalProject_register_targets,firebird,\
 ))
 
 firebird_BUILDDIR = $(EXTERNAL_WORKDIR)/gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird
-firebird_VERSION := 3.0.11
+firebird_VERSION := 3.0.12
 
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_Trace_StartRange,firebird,EXTERNAL)

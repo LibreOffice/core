@@ -27,6 +27,9 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,firebird,\
 # * external/firebird/0001-Revert-Backported-fix-for-7122-Invalid-state-of-mapp.patch.1 is a revert
 #   of <https://github.com/FirebirdSQL/firebird/commit/585b2d133a3891b58b7aeb4ddd3ccd124168abf0>
 #   "Backported fix for #7122: Invalid state of mapping cache after replacement of database":
+# * external/firebird/0001-Revert-Fix-for-most-cases-of-7522-7828.patch.1 is a revert
+#   of <https://github.com/FirebirdSQL/firebird/commit/375afe2f8d128986da37171507850e619d465501>
+#   "Fix for most cases of #7522 (#7828)":
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 		external/firebird/firebird-Engine12.patch \
@@ -46,6 +49,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
     external/firebird/configure-c99.patch \
     external/firebird/Wincompatible-function-pointer-types.patch \
 	external/firebird/0001-Revert-Backported-fix-for-7122-Invalid-state-of-mapp.patch.1 \
+	external/firebird/0001-Revert-Fix-for-most-cases-of-7522-7828.patch.1 \
 	external/firebird/mold.patch \
     external/firebird/c++26.patch \
     external/firebird/c++20.patch \
@@ -55,7 +59,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	external/firebird/firebird-cygwin-msvc.patch \
 	external/firebird/firebird-cygwin-msvc-warnings.patch \
-	external/firebird/firebird-vs2017.patch.1 \
 ))
 endif
 

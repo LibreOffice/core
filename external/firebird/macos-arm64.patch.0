@@ -26,10 +26,10 @@
      MAKEFILE_POSTFIX=darwin
 --- src/common/common.h
 +++ src/common/common.h
-@@ -234,6 +234,12 @@
- #define DARWINPPC64
- #define FB_CPU CpuPowerPc64
+@@ -246,6 +246,12 @@
+ #define DARWIN64		// Wrong, bad, but I follow HEAD rules for a while
  #endif
+ 
 +#ifdef __aarch64__
 +// This means x86_64, but does it matter? There is no arch_arm64, arch_aarch64, arch_darwin_arm64,
 +// or arch_darwin_aarch64 in the P_ARCH enum in src/remote/protocol.h.
@@ -42,7 +42,7 @@
 --- src/jrd/license.h
 +++ src/jrd/license.h
 @@ -128,6 +128,9 @@
- #if defined(ARM)
+ #if defined(ARM) || defined(ARM64)
  #define FB_PLATFORM     "UA"
  #endif
 +#if defined(__aarch64__)
@@ -96,14 +96,3 @@
 +SO_LINK_LIBS+=-liconv
 +
 +include $(ROOT)/gen/darwin.defaults
---- src/isql/InputDevices.cpp
-+++ src/isql/InputDevices.cpp
-@@ -23,7 +23,7 @@
- 
- #include "firebird.h"
- #if defined(DARWIN) && !defined(IOS)
--#if defined(i386) || defined(__x86_64__)
-+#if defined(i386) || defined(__x86_64__) || defined(__arm64__)
- #include <architecture/i386/io.h>
- #else
- #include <io.h>

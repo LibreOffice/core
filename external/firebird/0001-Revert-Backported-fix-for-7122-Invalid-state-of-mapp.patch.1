@@ -38,19 +38,6 @@ index a891103b53..66be146060 100644
  	isc_dpb_address = byte(1);
  	isc_dpb_addr_protocol = byte(1);
  	isc_dpb_addr_endpoint = byte(2);
-diff --git a/src/jrd/Mapping.h b/src/jrd/Mapping.h
-index b5e068d5a0..3ab1c70c92 100644
---- a/src/jrd/Mapping.h
-+++ b/src/jrd/Mapping.h
-@@ -44,7 +44,7 @@ bool mapUser(Firebird::string& name, Firebird::string& trusted_role, Firebird::s
- void clearMap(const char* dbName);
- void shutdownMappingIpc();
- 
--class GlobalMappingScan : public VirtualTableScan
-+class GlobalMappingScan: public VirtualTableScan
- {
- public:
- 	GlobalMappingScan(CompilerScratch* csb, const Firebird::string& alias,
 diff --git a/src/jrd/jrd.cpp b/src/jrd/jrd.cpp
 index 43be48c5a6..4200780aa6 100644
 --- a/src/jrd/jrd.cpp
@@ -133,10 +120,10 @@ diff --git a/src/utilities/nbackup/nbackup.cpp b/src/utilities/nbackup/nbackup.c
 index e5384bf67a..4703079d67 100644
 --- a/src/utilities/nbackup/nbackup.cpp
 +++ b/src/utilities/nbackup/nbackup.cpp
-@@ -281,7 +281,7 @@ public:
- 		username(_username), role(_role), password(_password),
+@@ -282,7 +282,7 @@
  		run_db_triggers(_run_db_triggers), direct_io(_direct_io),
- 		dbase(0), backup(0), decompress(_deco), childId(0), db_size_pages(0),
+ 		dbase(INVALID_HANDLE_VALUE), backup(INVALID_HANDLE_VALUE),
+ 		decompress(_deco), childId(0), db_size_pages(0),
 -		m_odsNumber(0), m_silent(false), m_printed(false), m_flash_map(false)
 +		m_odsNumber(0), m_silent(false), m_printed(false)
  	{

@@ -284,9 +284,9 @@
  
  	static void globalFree(void* mem) throw ();
  	void deallocate(void* mem) throw ();
-@@ -289,20 +289,20 @@
- 
- // operators new and delete
+@@ -290,20 +290,20 @@
+ #pragma warning(disable : 4595)		// non-member operator new or delete functions may not be declared inline
+ #endif
  
 -inline void* operator new(size_t s ALLOC_PARAMS) throw (OOM_EXCEPTION)
 +inline void* operator new(size_t s ALLOC_PARAMS)
