@@ -6732,6 +6732,28 @@ static void lcl_GetColRowDeltas(const ScRange& rRange, SCCOL& rXDelta, SCROW& rY
     rYDelta = rRange.aEnd.Row() - rRange.aStart.Row();
 }
 
+/* tdf#114479 Grow the SumRange token to match the Range geometry.
+
+  SUMIF(Range, Criterion, SumRange) operates on cells in SumRange where the
+  corresponding cell in Range matches Criterion. We don't care about the Criterion,
+  its just the Range and SumRange
+
+  The way IterateParametersIf works for this 3 arg case is: "Save only the
+  upperleft cell in case of cell range. The geometry of the 3rd parameter is
+  taken from the 1st parameter." So if the Range has 10 rows and the SumRange
+  had 1 row, the SumRange is expanded to 10 rows to match the Range geometry.
+
+  The dependency calculator needs to know what cells the formula depends on, so
+  in a case where the SumRange would be expanded by IterateParametersIf then this
+  pre-expands it so it provides the real range that the formula depends on so
+  the dependency determination is correct.
+
+ Example 1 (the original tdf#114479 motivation):
+   SUMIF($A$1:$A$10, "x", $D$1)
+   Range is 10 rows, SumRange is a single cell. At runtime cells D1:D10 are
+   accessed. The original token $D$1 is expanded to $D$1:$D$10 so the
+   dependency calculator sees all 10 cells.
+*/
 bool ScCompiler::AdjustSumRangeShape(const ScComplexRefData& rBaseRange, ScComplexRefData& rSumRange)
 {
     ScRange aAbs = rSumRange.toAbs(rDoc, aPos);
