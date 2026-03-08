@@ -1669,7 +1669,8 @@ void RtfAttributeOutput::SectionBreak(sal_uInt8 nC, bool /*bBreakAfter*/,
     switch (nC)
     {
         case msword::ColumnBreak:
-            m_nColBreakNeeded = true;
+            if (!m_rExport.m_bOutKF)
+                m_nColBreakNeeded = true;
             break;
         case msword::PageBreak:
             if (pSectionInfo)
