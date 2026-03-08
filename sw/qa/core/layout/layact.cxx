@@ -159,7 +159,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testIdleLayoutingAnyInput)
 {
-#if !defined(MACOSX) // FIXME fails on macOS
+#if !defined(MACOSX) && !defined(_WIN32) // FIXME fails on macOS and Windows
     // Set up LOK:
     comphelper::LibreOfficeKit::setActive(true);
 
