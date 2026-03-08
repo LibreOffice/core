@@ -545,13 +545,16 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
                                              Point(XUnits(nUPEM, xMax), XUnits(nUPEM, yMax)));
     }
 
-    hb_blob_t* pSubsetBlob = nullptr;
-    comphelper::ScopeGuard aBuilderBlobGuard([&]() { hb_blob_destroy(pSubsetBlob); });
-
-    // HarfBuzz creates a Unicode cmap, but we need a fake cmap based on pEncoding,
-    // so we use face builder construct a new face based in the subset table,
-    // and create a new cmap table and add it to the new face.
+    hb_blob_t* pCFFBlob = hb_face_reference_table(pSubsetFace, HB_TAG('C', 'F', 'F', ' '));
+    comphelper::ScopeGuard aCFFBlobGuard([&]() { hb_blob_destroy(pCFFBlob); });
+    if (pCFFBlob == hb_blob_get_empty())
     {
+        // This is not a font with CFF table, so we will create a TTF font subset.
+        rInfo.m_nFontType = FontType::SFNT_TTF;
+
+        // HarfBuzz creates a Unicode cmap, but we need a fake cmap based on pEncoding,
+        // so we use face builder construct a new face based in the subset table,
+        // and create a new cmap table and add it to the new face.
         hb_face_t* pBuilderFace = hb_face_builder_create();
         comphelper::ScopeGuard aBuilderFaceGuard([&]() { hb_face_destroy(pBuilderFace); });
         unsigned int nSubsetTableCount = hb_face_get_table_tags(pSubsetFace, 0, nullptr, nullptr);
@@ -597,12 +600,18 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
         hb_face_builder_add_table(pBuilderFace, HB_TAG('c', 'm', 'a', 'p'), pCmapBlob);
         hb_blob_destroy(pCmapBlob);
 
-        pSubsetBlob = hb_face_reference_blob(pBuilderFace);
-    }
+        hb_blob_t* pSubsetBlob = hb_face_reference_blob(pBuilderFace);
+        comphelper::ScopeGuard aBuilderBlobGuard([&]() { hb_blob_destroy(pSubsetBlob); });
 
-    hb_blob_t* pCFFBlob = hb_face_reference_table(pSubsetFace, HB_TAG('C', 'F', 'F', ' '));
-    comphelper::ScopeGuard aCFFBlobGuard([&]() { hb_blob_destroy(pCFFBlob); });
-    if (pCFFBlob != hb_blob_get_empty())
+        unsigned int nSubsetLength;
+        const char* pSubsetData = hb_blob_get_data(pSubsetBlob, &nSubsetLength);
+        if (!pSubsetData || !nSubsetLength)
+            return false;
+
+        rOutBuffer.assign(reinterpret_cast<const sal_uInt8*>(pSubsetData),
+                          reinterpret_cast<const sal_uInt8*>(pSubsetData) + nSubsetLength);
+    }
+    else
     {
         // Ideally we should be outputting a CFF (Type1C) font here, but I couldn’t get it to work.
         // So we oconvert it to Type1 font instead.
@@ -611,24 +620,16 @@ bool PhysicalFontFace::CreateFontSubset(std::vector<sal_uInt8>& rOutBuffer,
         rInfo.m_nFontType = FontType::TYPE1_PFB;
 
         unsigned int nCffLen;
-        const unsigned char* pCffData
-            = reinterpret_cast<const unsigned char*>(hb_blob_get_data(pCFFBlob, &nCffLen));
-
-        if (!ConvertCFFfontToType1(pCffData, nCffLen, rOutBuffer, rInfo))
-            return false;
-    }
-    else
-    {
-        rInfo.m_nFontType = FontType::SFNT_TTF;
-
-        unsigned int nSubsetLength;
-        const char* pSubsetData = nullptr;
-        pSubsetData = hb_blob_get_data(pSubsetBlob, &nSubsetLength);
-        if (!pSubsetData || !nSubsetLength)
+        const char* pCffData = hb_blob_get_data(pCFFBlob, &nCffLen);
+        if (!pCffData || !nCffLen)
             return false;
 
-        rOutBuffer.assign(reinterpret_cast<const sal_uInt8*>(pSubsetData),
-                          reinterpret_cast<const sal_uInt8*>(pSubsetData) + nSubsetLength);
+        if (!ConvertCFFfontToType1(reinterpret_cast<const unsigned char*>(pCffData), nCffLen,
+                                   rOutBuffer, rInfo))
+        {
+            SAL_WARN("vcl.fonts.cff", "Failed to convert CFF data to Type 1 font");
+            return false;
+        }
     }
 
     return true;
