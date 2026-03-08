@@ -429,7 +429,7 @@ bool SdrMarkView::MarkGluePoints(const tools::Rectangle* pRect, bool bUnmark)
                     {
                         Point aPos(rGP.GetAbsolutePos(*pObj));
                         if (pRect==nullptr || pRect->Contains(aPos)) {
-                            bool bContains = rPts.find( rGP.GetId() ) != rPts.end();
+                            bool bContains = rPts.contains( rGP.GetId() );
                             if (!bUnmark && !bContains) {
                                 bChgd=true;
                                 rPts.insert(rGP.GetId());
@@ -499,7 +499,7 @@ bool SdrMarkView::MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, bool bUnm
         if (nMarkPos!=SAL_MAX_SIZE) {
             SdrMark* pM=rMarkList.GetMark(nMarkPos);
             SdrUShortCont& rPts = pM->GetMarkedGluePoints();
-            bool bContains = rPts.find( nId ) != rPts.end();
+            bool bContains = rPts.contains( nId );
             if (!bUnmark && !bContains) {
                 bChgd=true;
                 rPts.insert(nId);
@@ -528,7 +528,7 @@ bool SdrMarkView::IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const
     if (nPos!=SAL_MAX_SIZE) {
         const SdrMark* pM=rMarkList.GetMark(nPos);
         const SdrUShortCont& rPts = pM->GetMarkedGluePoints();
-        bRet = rPts.find( nId ) != rPts.end();
+        bRet = rPts.contains( nId );
     }
     return bRet;
 }
