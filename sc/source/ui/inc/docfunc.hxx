@@ -228,7 +228,7 @@ public:
     void            ModifyAllRangeNames(const std::map<OUString, ScRangeName>& rRangeMap);
 
     bool            CreateNames( const ScRange& rRange, CreateNameFlags nFlags, bool bApi, SCTAB nTab = -1 ); // -1 for global range names
-    bool            InsertNameList( const ScAddress& rStartPos, bool bApi );
+    SC_DLLPUBLIC bool InsertNameList(const ScAddress& rStartPos, bool bApi);
 
     void            InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                                             const OUString& rOptions, const OUString& rSource,
