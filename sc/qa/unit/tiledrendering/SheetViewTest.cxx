@@ -28,6 +28,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <paramisc.hxx>
 #include <cellmergeoption.hxx>
+#include <rangenam.hxx>
 
 using namespace css;
 
@@ -2929,6 +2930,64 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MergeCells_DefaultAndSheetView)
         CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDocument->GetString(ScAddress(0, 0, nSheetView2Tab)));
         CPPUNIT_ASSERT(pDocument->HasAttrib(0, 0, nSheetView2Tab, 1, 1, nSheetView2Tab,
                                             HasAttrFlags::Merged | HasAttrFlags::Overlapped));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertNameList_DefaultAndSheetView)
+{
+    // Insert name list inserts the list of the named ranges into the sheet.
+    // We should sync that to all sheet views
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    // Set up 3 views: default view, sheet view 1, sheet view 2
+    setupViews();
+
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView3;
+    int nView3ID = aView3.getViewID();
+
+    // Add a named range so InsertNameList has something to insert
+    ScRangeName* pGlobalNames = pDocument->GetRangeName();
+    ScRangeData* pRangeData = new ScRangeData(*pDocument, u"TestRange"_ustr, u"$A$10:$B$20"_ustr);
+    pGlobalNames->insert(pRangeData);
+
+    // Create sheet view 1
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    // Create sheet view 2
+    {
+        SfxLokHelper::setView(nView3ID);
+        Scheduler::ProcessEventsToIdle();
+        createNewSheetViewInCurrentView();
+    }
+
+    // Insert name list from sheet view 1 at A1
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+        bool bInserted
+            = pDocShell->GetDocFunc().InsertNameList(ScAddress(0, 0, nSheetViewTab), true);
+        CPPUNIT_ASSERT(bInserted);
+
+        // Verify on default view: A1 should have the range name
+        CPPUNIT_ASSERT_EQUAL(u"TestRange"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
+
+        // Verify synced to sheet views
+        CPPUNIT_ASSERT_EQUAL(u"TestRange"_ustr,
+                             pDocument->GetString(ScAddress(0, 0, nSheetViewTab)));
+
+        SCTAB nSheetView2Tab = aView3.getTabViewShell()->GetViewData().GetTabNumber();
+        CPPUNIT_ASSERT_EQUAL(u"TestRange"_ustr,
+                             pDocument->GetString(ScAddress(0, 0, nSheetView2Tab)));
     }
 }
 
