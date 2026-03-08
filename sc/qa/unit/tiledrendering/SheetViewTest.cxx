@@ -29,6 +29,9 @@
 #include <paramisc.hxx>
 #include <cellmergeoption.hxx>
 #include <rangenam.hxx>
+#include <dbdocfun.hxx>
+#include <dbdata.hxx>
+#include <subtotalparam.hxx>
 
 using namespace css;
 
@@ -2988,6 +2991,92 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertNameList_DefaultAndSheetView)
         SCTAB nSheetView2Tab = aView3.getTabViewShell()->GetViewData().GetTabNumber();
         CPPUNIT_ASSERT_EQUAL(u"TestRange"_ustr,
                              pDocument->GetString(ScAddress(0, 0, nSheetView2Tab)));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SubTotals_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    // Set up 3 views: default view, sheet view 1, sheet view 2
+    setupViews();
+
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView3;
+    int nView3ID = aView3.getViewID();
+
+    // Set up data with headers and values for subtotals
+    // Column A: Category, Column B: Values
+    pDocument->SetString(ScAddress(0, 0, 0), u"Category"_ustr);
+    pDocument->SetString(ScAddress(1, 0, 0), u"Value"_ustr);
+    pDocument->SetString(ScAddress(0, 1, 0), u"A"_ustr);
+    pDocument->SetString(ScAddress(0, 2, 0), u"A"_ustr);
+    pDocument->SetString(ScAddress(0, 3, 0), u"B"_ustr);
+    pDocument->SetValue(ScAddress(1, 1, 0), 10.0);
+    pDocument->SetValue(ScAddress(1, 2, 0), 20.0);
+    pDocument->SetValue(ScAddress(1, 3, 0), 30.0);
+
+    // Create a DB area for the data range
+    ScDBData* pDBData = new ScDBData(u"TestDB"_ustr, 0, 0, 0, 1, 3);
+    pDocument->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+
+    // Create sheet view 1
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    // Create sheet view 2
+    {
+        SfxLokHelper::setView(nView3ID);
+        Scheduler::ProcessEventsToIdle();
+        createNewSheetViewInCurrentView();
+    }
+
+    // Run subtotals from sheet view 1
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+        ScSubTotalParam aParam;
+        aParam.bReplace = false;
+        aParam.bDoSort = false;
+        aParam.nCol1 = 0;
+        aParam.nRow1 = 0;
+        aParam.nCol2 = 1;
+        aParam.nRow2 = 3;
+        aParam.aGroups[0].bActive = true;
+        aParam.aGroups[0].nField = 0; // group by column A
+        SCCOL nSubCols[] = { 1 }; // subtotal on column B
+        ScSubTotalFunc nFunctions[] = { SUBTOTAL_FUNC_SUM };
+        aParam.SetSubTotals(0, nSubCols, nFunctions, 1);
+
+        ScDBDocFunc aDBDocFunc(*pDocShell);
+        aDBDocFunc.DoSubTotals(nSheetViewTab, aParam, true, true);
+
+        // After subtotals, new rows are inserted with subtotal results
+        // Row layout: Header(0), A 10(1), A 20(2), A Sum(3), B 30(4), B Sum(5), Grand Total(6)
+
+        // Verify on default view
+        CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(1, 3, 0)));
+        CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(1, 5, 0)));
+        CPPUNIT_ASSERT_EQUAL(60.0, pDocument->GetValue(ScAddress(1, 6, 0)));
+
+        // Verify sync to sheet view 1
+        CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(1, 3, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(1, 5, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(60.0, pDocument->GetValue(ScAddress(1, 6, nSheetViewTab)));
+
+        // Verify sync to sheet view 2
+        SCTAB nSheetView2Tab = aView3.getTabViewShell()->GetViewData().GetTabNumber();
+        CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(1, 3, nSheetView2Tab)));
+        CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(1, 5, nSheetView2Tab)));
+        CPPUNIT_ASSERT_EQUAL(60.0, pDocument->GetValue(ScAddress(1, 6, nSheetView2Tab)));
     }
 }
 

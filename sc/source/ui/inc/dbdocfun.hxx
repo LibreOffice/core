@@ -71,8 +71,7 @@ public:
     SC_DLLPUBLIC bool           Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                             const ScRange* pAdvSource, bool bRecord, bool bApi );
 
-    void            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
-                                 bool bRecord, bool bApi );
+    SC_DLLPUBLIC void DoSubTotals(SCTAB nTab, const ScSubTotalParam& rParam, bool bRecord, bool bApi);
 
     void            DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const ScSubTotalParam& rParam,
                                       bool bRecord, bool bApi );

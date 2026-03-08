@@ -10,6 +10,7 @@
 #pragma once
 
 #include <operation/OperationType.hxx>
+#include <types.hxx>
 
 class ScMarkData;
 class ScAddress;
@@ -42,6 +43,9 @@ protected:
     ScViewData* mpViewData;
 
     bool checkSheetViewProtection();
+
+    /** Convert a tab from a sheet view to the tab in the default view. */
+    SCTAB convertTab(SCTAB nTab);
 
     /** Convert address from a sheet view to the address in default view, take sorting into account. */
     ScAddress convertAddress(ScAddress const& rAddress);
