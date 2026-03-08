@@ -31,55 +31,70 @@ MultipleOpsOperation::MultipleOpsOperation(ScDocShell& rDocShell, const ScRange&
 {
 }
 
+ScRefAddress MultipleOpsOperation::convertRefAddress(ScRefAddress const& rRefAddress)
+{
+    ScAddress aConverted = convertAddress(rRefAddress.GetAddress());
+    ScRefAddress aResult;
+    aResult.Set(aConverted, rRefAddress.IsRelCol(), rRefAddress.IsRelRow(), rRefAddress.IsRelTab());
+    return aResult;
+}
+
 bool MultipleOpsOperation::runImplementation()
 {
     ScDocShellModificator aModificator(mrDocShell);
 
+    ScRange aRange = convertRange(maRange);
+    ScTabOpParam aParam;
+    aParam.aRefFormulaCell = convertRefAddress(maParam.aRefFormulaCell);
+    aParam.aRefFormulaEnd = convertRefAddress(maParam.aRefFormulaEnd);
+    aParam.aRefRowCell = convertRefAddress(maParam.aRefRowCell);
+    aParam.aRefColCell = convertRefAddress(maParam.aRefColCell);
+    aParam.meMode = maParam.meMode;
+
     bool bSuccess = false;
     ScDocument& rDoc = mrDocShell.GetDocument();
-    SCCOL nStartCol = maRange.aStart.Col();
-    SCROW nStartRow = maRange.aStart.Row();
-    SCTAB nStartTab = maRange.aStart.Tab();
-    SCCOL nEndCol = maRange.aEnd.Col();
-    SCROW nEndRow = maRange.aEnd.Row();
-    SCTAB nEndTab = maRange.aEnd.Tab();
+    SCCOL nStartCol = aRange.aStart.Col();
+    SCROW nStartRow = aRange.aStart.Row();
+    SCTAB nStartTab = aRange.aStart.Tab();
+    SCCOL nEndCol = aRange.aEnd.Col();
+    SCROW nEndRow = aRange.aEnd.Row();
+    SCTAB nEndTab = aRange.aEnd.Tab();
 
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
     ScMarkData aMark(rDoc.GetSheetLimits());
     if (mpTabMark)
-        aMark = *mpTabMark;
+        aMark = convertMark(*mpTabMark);
     else
     {
         for (SCTAB nTab = nStartTab; nTab <= nEndTab; nTab++)
             aMark.SelectTable(nTab, true);
     }
 
-    if (!checkSheetViewProtection())
-        return false;
-
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(
         rDoc, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
     if (aTester.IsEditable())
     {
         weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
-        rDoc.SetDirty(maRange, false);
+        rDoc.SetDirty(aRange, false);
         if (mbRecord)
         {
             //! take selected sheets into account also when undoing
             ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
             pUndoDoc->InitUndo(rDoc, nStartTab, nEndTab);
-            rDoc.CopyToDocument(maRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false,
+            rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false,
                                 *pUndoDoc);
 
             mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoTabOp>(
                 &mrDocShell, nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
-                std::move(pUndoDoc), maParam.aRefFormulaCell, maParam.aRefFormulaEnd,
-                maParam.aRefRowCell, maParam.aRefColCell, maParam.meMode));
+                std::move(pUndoDoc), aParam.aRefFormulaCell, aParam.aRefFormulaEnd,
+                aParam.aRefRowCell, aParam.aRefColCell, aParam.meMode));
         }
 
-        rDoc.InsertTableOp(maParam, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
+        rDoc.InsertTableOp(aParam, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
+
+        syncSheetViews();
         mrDocShell.PostPaintGridAll();
         aModificator.SetDocumentModified();
         bSuccess = true;

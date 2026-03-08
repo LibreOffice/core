@@ -190,7 +190,7 @@ public:
                                          const OUString& rFormulaNmsp,
                                          const formula::FormulaGrammar::Grammar );
 
-    bool            TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
+    SC_DLLPUBLIC bool TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
                                    const ScTabOpParam& rParam, bool bRecord, bool bApi );
 
     bool            FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
