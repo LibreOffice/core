@@ -526,7 +526,7 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
 
     //  Assemble data
 
-    ScTableInfo aTabInfo(nY1, nY2, true);
+    ScTableInfo aTabInfo(nY1, nY2, false);
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
                    nScaleX, nScaleY, false, bFormula );
     lcl_HidePrint( aTabInfo, nX1, nX2 );
