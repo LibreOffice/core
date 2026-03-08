@@ -49,24 +49,30 @@ Operation::Operation(OperationType eType, bool bRecord, bool bApi)
 {
 }
 
+SCTAB Operation::convertTab(SCTAB nTab)
+{
+    std::shared_ptr<SheetView> pSheetView = getCurrentSheetView(mpViewData);
+    if (!pSheetView)
+        return nTab;
+
+    SCTAB nSheetViewTab = mpViewData->GetTabNumber();
+    if (nTab != nSheetViewTab)
+        return nTab;
+
+    return mpViewData->GetDefaultViewTab();
+}
+
 ScAddress Operation::convertAddress(ScAddress const& rAddress)
 {
-    ScViewData* pViewData = mpViewData;
+    SCTAB nConvertedTab = convertTab(rAddress.Tab());
 
-    std::shared_ptr<SheetView> pSheetView = getCurrentSheetView(pViewData);
-
-    // We get a valid pSheetView if we currently are in a sheet view, otherwise we don't need to convert
-    if (!pSheetView)
+    // Tab was not converted, so no need to convert the address
+    if (nConvertedTab == rAddress.Tab())
         return rAddress;
 
-    SCTAB nSheetViewTab = pViewData->GetTabNumber();
-    SCTAB nDefaultTab = pViewData->GetDefaultViewTab();
+    ScAddress aAddress(rAddress.Col(), rAddress.Row(), nConvertedTab);
 
-    // Only convert addresses that are on the sheet view tab
-    if (rAddress.Tab() != nSheetViewTab)
-        return rAddress;
-
-    ScAddress aAddress(rAddress.Col(), rAddress.Row(), nDefaultTab);
+    std::shared_ptr<SheetView> pSheetView = getCurrentSheetView(mpViewData);
 
     SCCOL nColumn = aAddress.Col();
     SCROW nRow = aAddress.Row();
@@ -77,7 +83,7 @@ ScAddress Operation::convertAddress(ScAddress const& rAddress)
     if (nReversedRow == nRow)
         return aAddress;
 
-    return ScAddress(nColumn, nReversedRow, nDefaultTab);
+    return ScAddress(nColumn, nReversedRow, nConvertedTab);
 }
 
 ScRange Operation::convertRange(ScRange const& rRange)
