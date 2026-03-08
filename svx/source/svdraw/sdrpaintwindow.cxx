@@ -63,7 +63,7 @@ CandidateMgr::~CandidateMgr()
 {
     for (VclPtr<vcl::Window>& pCandidate : m_aCandidates)
     {
-        if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
+        if (m_aDeletedCandidates.contains(pCandidate))
             continue;
         pCandidate->RemoveEventListener(LINK(this, CandidateMgr, WindowEventListener));
     }
@@ -101,14 +101,14 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window const & rWindow, tools::
     for (const auto& rpCandidate : m_aCandidates)
     {
         pCandidate = rpCandidate.get();
-        if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
+        if (m_aDeletedCandidates.contains(pCandidate))
             continue;
         //rhbz#1007697 this can cause the window itself to be
         //deleted. So we are listening to see if that happens
         //and if so, then skip the update
         pCandidate->Invalidate(InvalidateFlags::NoTransparent|InvalidateFlags::Children);
         // important: actually paint the child here!
-        if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
+        if (m_aDeletedCandidates.contains(pCandidate))
             continue;
         pCandidate->PaintImmediately();
     }
