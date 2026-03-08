@@ -27,6 +27,7 @@
 #include <editeng/brushitem.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <paramisc.hxx>
+#include <cellmergeoption.hxx>
 
 using namespace css;
 
@@ -2867,6 +2868,68 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testUndo_DefaultView_FillSeries)
                          getValues(mpTabViewDefaultView, 0, 1, 4));
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"10", u"20", u"30", u"40" }),
                          getValues(mpTabViewSheetView, 0, 1, 4));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MergeCells_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    // Set up 3 views: default view, sheet view 1, sheet view 2
+    setupViews();
+
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView3;
+    int nView3ID = aView3.getViewID();
+
+    // Put data in cells that will be merged
+    pDocument->SetString(ScAddress(0, 0, 0), u"Hello"_ustr);
+    pDocument->SetValue(ScAddress(1, 0, 0), 42.0);
+
+    // Create sheet view 1
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    // Create sheet view 2
+    {
+        SfxLokHelper::setView(nView3ID);
+        Scheduler::ProcessEventsToIdle();
+        createNewSheetViewInCurrentView();
+    }
+
+    // Merge cells A1:B2 from sheet view 1
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+        ScCellMergeOption aMergeOption(0, 0, 1, 1);
+        aMergeOption.maTabs.insert(nSheetViewTab);
+
+        bool bMerged = pDocShell->GetDocFunc().MergeCells(aMergeOption, false, true, true);
+        CPPUNIT_ASSERT(bMerged);
+
+        // Verify on default view: A1 should have the content, merge flag set
+        CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDocument->GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT(pDocument->HasAttrib(0, 0, 0, 1, 1, 0,
+                                            HasAttrFlags::Merged | HasAttrFlags::Overlapped));
+
+        // Verify on sheet view 1
+        CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDocument->GetString(ScAddress(0, 0, nSheetViewTab)));
+        CPPUNIT_ASSERT(pDocument->HasAttrib(0, 0, nSheetViewTab, 1, 1, nSheetViewTab,
+                                            HasAttrFlags::Merged | HasAttrFlags::Overlapped));
+
+        // Verify on sheet view 2
+        SCTAB nSheetView2Tab = aView3.getTabViewShell()->GetViewData().GetTabNumber();
+        CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDocument->GetString(ScAddress(0, 0, nSheetView2Tab)));
+        CPPUNIT_ASSERT(pDocument->HasAttrib(0, 0, nSheetView2Tab, 1, 1, nSheetView2Tab,
+                                            HasAttrFlags::Merged | HasAttrFlags::Overlapped));
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

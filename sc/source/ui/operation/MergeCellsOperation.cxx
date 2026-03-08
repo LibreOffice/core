@@ -40,26 +40,34 @@ bool MergeCellsOperation::runImplementation()
 {
     ScDocShellModificator aModificator(mrDocShell);
 
-    SCCOL nStartCol = maOption.mnStartCol;
-    SCROW nStartRow = maOption.mnStartRow;
-    SCCOL nEndCol = maOption.mnEndCol;
-    SCROW nEndRow = maOption.mnEndRow;
-    if ((nStartCol == nEndCol && nStartRow == nEndRow) || maOption.maTabs.empty())
+    ScCellMergeOption aOption(maOption);
+    {
+        std::set<SCTAB> aConvertedTabs;
+        for (SCTAB nTab : aOption.maTabs)
+        {
+            ScAddress aConverted = convertAddress(ScAddress(0, 0, nTab));
+            aConvertedTabs.insert(aConverted.Tab());
+        }
+        aOption.maTabs = aConvertedTabs;
+    }
+
+    SCCOL nStartCol = aOption.mnStartCol;
+    SCROW nStartRow = aOption.mnStartRow;
+    SCCOL nEndCol = aOption.mnEndCol;
+    SCROW nEndRow = aOption.mnEndRow;
+    if ((nStartCol == nEndCol && nStartRow == nEndRow) || aOption.maTabs.empty())
     {
         // Nothing to do.  Bail out quickly
         return true;
     }
 
     ScDocument& rDoc = mrDocShell.GetDocument();
-    SCTAB nTab1 = *maOption.maTabs.begin(), nTab2 = *maOption.maTabs.rbegin();
+    SCTAB nTab1 = *aOption.maTabs.begin(), nTab2 = *aOption.maTabs.rbegin();
 
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
-    if (!checkSheetViewProtection())
-        return false;
-
-    for (const auto& rTab : maOption.maTabs)
+    for (const auto& rTab : aOption.maTabs)
     {
         ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
             rDoc, rTab, nStartCol, nStartRow, nEndCol, nEndRow);
@@ -82,7 +90,7 @@ bool MergeCellsOperation::runImplementation()
 
     ScDocumentUniquePtr pUndoDoc;
     bool bNeedContentsUndo = false;
-    for (const SCTAB nTab : maOption.maTabs)
+    for (const SCTAB nTab : aOption.maTabs)
     {
         bool bIsBlockEmpty
             = (nStartRow == nEndRow)
@@ -116,7 +124,7 @@ bool MergeCellsOperation::runImplementation()
             rDoc.DoEmptyBlock(nStartCol, nStartRow, nEndCol, nEndRow, nTab);
         rDoc.DoMerge(nStartCol, nStartRow, nEndCol, nEndRow, nTab);
 
-        if (maOption.mbCenter)
+        if (aOption.mbCenter)
         {
             rDoc.ApplyAttr(nStartCol, nStartRow, nTab,
                            SvxHorJustifyItem(SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY));
@@ -128,7 +136,7 @@ bool MergeCellsOperation::runImplementation()
                 ScRange(0, nStartRow, nTab, rDoc.MaxCol(), nEndRow, nTab), true, mbApi))
             mrDocShell.PostPaint(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
                                  PaintPartFlags::Grid);
-        if (bNeedContents || maOption.mbCenter)
+        if (bNeedContents || aOption.mbCenter)
         {
             ScRange aRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab);
             rDoc.SetDirty(aRange, true);
@@ -146,8 +154,10 @@ bool MergeCellsOperation::runImplementation()
         std::unique_ptr<SdrUndoGroup> pDrawUndo
             = rDoc.GetDrawLayer() ? rDoc.GetDrawLayer()->GetCalcUndo() : nullptr;
         mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoMerge>(
-            &mrDocShell, maOption, bNeedContentsUndo, std::move(pUndoDoc), std::move(pDrawUndo)));
+            &mrDocShell, aOption, bNeedContentsUndo, std::move(pUndoDoc), std::move(pDrawUndo)));
     }
+
+    syncSheetViews();
 
     aModificator.SetDocumentModified();
 
