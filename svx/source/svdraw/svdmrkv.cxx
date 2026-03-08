@@ -1585,7 +1585,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
                     if (bPoly)
                     {
-                        bool bSelected= rMrkPnts.find( sal_uInt16(i-nSiz0) ) != rMrkPnts.end();
+                        bool bSelected= rMrkPnts.contains( sal_uInt16(i-nSiz0) );
                         pHdl->SetSelected(bSelected);
                         if (mbPlusHdlAlways || bSelected)
                         {

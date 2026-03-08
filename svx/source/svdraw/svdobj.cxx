@@ -3290,7 +3290,7 @@ void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
         }
     }
 
-    for (sal_uInt32 n = 1; rNameSet.find(sName) != rNameSet.end(); n++)
+    for (sal_uInt32 n = 1; rNameSet.contains(sName); n++)
         sName = sRootName + " " + OUString::number(n);
     rNameSet.insert(sName);
 
