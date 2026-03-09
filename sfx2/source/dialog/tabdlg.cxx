@@ -1031,12 +1031,7 @@ OUString SfxTabDialogController::GetTabPageNameForWhich(sal_uInt16 nWhich) const
 
 OUString SfxTabDialogController::GetTabPageLabel(const OUString& rPageId) const
 {
-    OUString sLabel = m_xTabCtrl->get_tab_label_text(rPageId);
-    if (!sLabel.isEmpty())
-        return sLabel;
-
-    // Last resort: return the page ID itself
-    return rPageId;
+    return m_xTabCtrl->get_tab_label_text(rPageId);
 }
 
 std::vector<OUString> SfxTabDialogController::GetTabPageIds() const
