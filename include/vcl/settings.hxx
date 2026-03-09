@@ -672,6 +672,13 @@ public:
     // 0 auto, 1 light, 2, dark
     static void                     SetDarkMode(int nMode);
     static int                      GetDarkMode();
+
+    enum class AppColorMode
+    {
+        Auto = 0,
+        Light = 1,
+        Dark = 2
+    };
     // return if dark mode is active, resolving 'auto' to dark (true) or light (false)
     static bool                     GetUseDarkMode();
     static void                     SetAppColorMode(int nMode);

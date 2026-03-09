@@ -59,6 +59,7 @@
 #include <memory>
 #include "justify.hxx"
 #include <svtools/colorcfg.hxx>
+#include <basegfx/color/bcolortools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2385,6 +2386,56 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                     nNewColor = COL_WHITE;
                 else
                     nNewColor = COL_BLACK;
+            }
+        }
+        else if (svtools::ColorConfig::IsDarkMode())
+        {
+            std::optional<Color> oColor;
+            if (GetFont())
+                oColor = GetFont()->GetBackColor();
+
+            // If there is no explicit character background/highlight
+            if (!oColor || *oColor == COL_TRANSPARENT)
+            {
+                const SvxBrushItem* pItem;
+                SwRect aOrigBackRect;
+                drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
+
+                if (GetFrame()->GetBackgroundBrush(aFillAttributes, pItem, oColor, aOrigBackRect,
+                                                   false, /*bConsiderTextBox=*/true))
+                {
+                    if (aFillAttributes && aFillAttributes->isUsed())
+                    {
+                        oColor = Color(
+                            aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));
+                    }
+                    if (!oColor)
+                    {
+                        oColor = pItem->GetColor();
+                    }
+                    if (*oColor == COL_TRANSPARENT)
+                        oColor.reset();
+                }
+                else
+                    oColor.reset();
+
+                if (!oColor)
+                    oColor = aGlobalRetoucheColor;
+
+                if (oColor)
+                {
+                    nNewColor = rFnt.GetColor();
+                    if (oColor.value().IsDark())
+                    {
+                        const sal_uInt8 nOriginalAlpha = nNewColor.GetAlpha();
+                        nNewColor = Color(basegfx::utils::getLightVariant(nNewColor.getBColor()));
+                        nNewColor.SetAlpha(nOriginalAlpha);
+                    }
+                    if (nNewColor != rFnt.GetColor())
+                    {
+                        bChgFntColor = true;
+                    }
+                }
             }
         }
     }

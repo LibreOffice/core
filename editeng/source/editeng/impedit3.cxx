@@ -50,6 +50,7 @@
 #include <TextPortion.hxx>
 
 #include <svtools/colorcfg.hxx>
+#include <basegfx/color/bcolortools.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/asiancfg.hxx>
 
@@ -3003,6 +3004,42 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                 rFont.SetColor( COL_WHITE );
             else
                 rFont.SetColor( COL_BLACK );
+        }
+    }
+    else if (pOut)
+    {
+        const bool bPrinting(OUTDEV_PRINTER == pOut->GetOutDevType());
+        const bool bPDFExporting(OUTDEV_PDF == pOut->GetOutDevType());
+
+        if (!bPrinting && !bPDFExporting && svtools::ColorConfig::IsDarkMode())
+        {
+            Color aBackgroundColor = rFont.GetFillColor();
+            if (aBackgroundColor == COL_TRANSPARENT || aBackgroundColor == COL_AUTO)
+                aBackgroundColor = GetBackgroundColor();
+
+            const SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
+            if (pKitSh)
+            {
+                if (aBackgroundColor == COL_AUTO)
+                    aBackgroundColor = pKitSh->GetColorConfigColor(svtools::DOCCOLOR);
+            }
+            else
+            {
+                if (aBackgroundColor == COL_AUTO)
+                    aBackgroundColor = GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            }
+
+            if (aBackgroundColor != COL_AUTO)
+            {
+                Color aNewColor = rFont.GetColor();
+                if (aBackgroundColor.IsDark())
+                {
+                    const sal_uInt8 nOriginalAlpha = aNewColor.GetAlpha();
+                    aNewColor = Color(basegfx::utils::getLightVariant(aNewColor.getBColor()));
+                    aNewColor.SetAlpha(nOriginalAlpha);
+                }
+                rFont.SetColor(aNewColor);
+            }
         }
     }
 

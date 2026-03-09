@@ -779,6 +779,14 @@ const OUString& ColorConfig::GetCurrentSchemeName()
     return m_pImpl->GetLoadedScheme();
 }
 
+bool ColorConfig::IsDarkMode()
+{
+    return MiscSettings::GetAppColorMode() == static_cast<int>(MiscSettings::AppColorMode::Dark)
+           || (MiscSettings::GetAppColorMode() == static_cast<int>(MiscSettings::AppColorMode::Auto)
+               && MiscSettings::GetUseDarkMode())
+           || (ColorConfig::GetCurrentSchemeName() == "Dark");
+}
+
 IMPL_LINK( ColorConfig, DataChangedHdl, VclSimpleEvent&, rEvent, void )
 {
     if (rEvent.GetId() == VclEventId::ApplicationDataChanged)

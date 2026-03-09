@@ -190,6 +190,76 @@ namespace basegfx::utils
         }
     }
 
+    BColor convertSRGBToLinearRGB(const BColor& rRGB)
+    {
+        auto convert = [](double nValue) {
+            return (nValue < 0.04045) ? (nValue / 12.92) : std::pow((nValue + 0.055) / 1.055, 2.4);
+        };
+        return BColor(convert(rRGB.getRed()), convert(rRGB.getGreen()), convert(rRGB.getBlue()));
+    }
+
+    BColor convertLinearRGBToSRGB(const BColor& rLinearRGB)
+    {
+        auto convert = [](double nValue) {
+            return (nValue <= 0.0031308) ? (nValue * 12.92) : (1.055 * std::pow(nValue, 1.0 / 2.4) - 0.055);
+        };
+        return BColor(convert(rLinearRGB.getRed()), convert(rLinearRGB.getGreen()), convert(rLinearRGB.getBlue()));
+    }
+
+    BColor getLightVariant(BColor aColor)
+    {
+        // Sanitize input: clamp each channel to [0, 1].
+        aColor.clamp();
+
+        // Saturation in sRGB space, used to set the luminance cap.
+        // Highly saturated colors get a lower cap so they don't wash out to white.
+        double maxChannel = std::max({ aColor.getRed(), aColor.getGreen(), aColor.getBlue() });
+        double minChannel = std::min({ aColor.getRed(), aColor.getGreen(), aColor.getBlue() });
+        double saturation = (maxChannel < 0.001) ? 0.0 : (maxChannel - minChannel) / maxChannel;
+
+        BColor aLinear = convertSRGBToLinearRGB(aColor);
+        double Y = aColor.getWCAGLuminance();
+
+        // L_max: max output luminance. Goes from L_max_max for gray colors down to
+        // L_max_min for highly saturated colors.
+        const double L_max_max = 1.0;
+        const double L_max_min = 0.50;
+        const double L_max = L_max_max - (saturation * (L_max_max - L_max_min));
+        // L_min: min output luminance.
+        const double L_min = 0.50;
+
+        // Flip the input luminance [0, 1] into the range [L_max, L_min].
+        // Dark input becomes bright, bright input becomes darker.
+        double Y_target = L_max - (Y * (L_max - L_min));
+
+        double r, g, b;
+        if (Y < 0.001)
+        {
+            r = g = b = Y_target;
+        }
+        else
+        {
+            // Scale each channel by the same ratio to reach the target luminance.
+            double ratio = Y_target / Y;
+            r = aLinear.getRed() * ratio;
+            g = aLinear.getGreen() * ratio;
+            b = aLinear.getBlue() * ratio;
+        }
+
+        // If a channel went above 1.0, desaturate just enough to bring the
+        // brightest channel back to 1.0 while preserving the hue.
+        double max_c = std::max({ r, g, b });
+        if (max_c > 1.0)
+        {
+            double desaturate = (1.0 - Y_target) / (max_c - Y_target);
+            r = Y_target + (r - Y_target) * desaturate;
+            g = Y_target + (g - Y_target) * desaturate;
+            b = Y_target + (b - Y_target) * desaturate;
+        }
+
+        return convertLinearRGBToSRGB(BColor(r, g, b));
+    }
+
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

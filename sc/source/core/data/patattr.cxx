@@ -27,6 +27,7 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <svtools/colorcfg.hxx>
+#include <basegfx/color/bcolortools.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/eeitem.hxx>
@@ -866,6 +867,39 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
             aColor = aSysTextColor;
         }
     }
+    else if (svtools::ColorConfig::IsDarkMode())
+    {
+        const SvxBrushItem* pItem
+            = lcl_populateresult(ATTR_BACKGROUND, rItemSet, pCondSet, pTableSet);
+
+        Color aBackColor;
+        if (pItem)
+            aBackColor = pItem->GetColor();
+
+        if (aBackColor == COL_TRANSPARENT)
+        {
+            if (pBackConfigColor)
+                aBackColor = *pBackConfigColor;
+            else if (SfxViewShell::Current())
+            {
+                ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+                if (pViewShell)
+                    aBackColor = pViewShell->GetViewRenderingData().GetDocColor();
+                else
+                    aBackColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            }
+            else
+                aBackColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+        }
+
+        if (aBackColor.IsDark())
+        {
+            const sal_uInt8 nOriginalAlpha = aColor.GetAlpha();
+            aColor = Color(basegfx::utils::getLightVariant(aColor.getBColor()));
+            aColor.SetAlpha(nOriginalAlpha);
+        }
+    }
+
     aComplexColor.setFinalColor(aColor);
     rComplexColor = std::move(aComplexColor);
 }

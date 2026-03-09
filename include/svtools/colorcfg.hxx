@@ -313,6 +313,7 @@ public:
     //  1 gets the default color on dark mod.
     static Color            GetDefaultColor(ColorConfigEntry eEntry, int nMod = -1);
     static const OUString& GetCurrentSchemeName();
+    static bool IsDarkMode();
 
     static void             LoadThemeColorsFromRegistry();
     void                    SetupTheme();
