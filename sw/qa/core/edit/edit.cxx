@@ -526,9 +526,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
 
     // Tear down LOK:
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
-    mxComponent->dispose();
-    mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

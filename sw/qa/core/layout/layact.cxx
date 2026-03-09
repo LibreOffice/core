@@ -201,9 +201,6 @@ CPPUNIT_TEST_FIXTURE(Test, testIdleLayoutingAnyInput)
     // Tear down LOK:
     aHighPrioTask.Stop();
     Scheduler::ProcessEventsToIdle();
-    mxComponent->dispose();
-    mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 }
 
