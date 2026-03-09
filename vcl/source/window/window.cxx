@@ -3383,6 +3383,10 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (!IsVisible())
         rJsonWriter.put("visible", false);
 
+    const OUString& rTooltip = GetQuickHelpText();
+    if (!rTooltip.isEmpty())
+        rJsonWriter.put("tooltip", rTooltip);
+
     if (vcl::Window* pChild = mpWindowImpl->mpFirstChild)
     {
         auto childrenNode = rJsonWriter.startArray("children");
