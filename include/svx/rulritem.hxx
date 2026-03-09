@@ -199,11 +199,11 @@ public:
 
 class SVX_DLLPUBLIC SvxObjectItem final : public SfxPoolItem
 {
-    tools::Long nStartX;   /* Start in x direction */
-    tools::Long nEndX;     /* End in x direction */
-    tools::Long nStartY;   /* Start in y direction */
-    tools::Long nEndY;     /* End in y direction */
-    bool bLimits;   /* boundary limit control by the application */
+    tools::Long m_nStartX;   /* Start in x direction */
+    tools::Long m_nEndX;     /* End in x direction */
+    tools::Long m_nStartY;   /* Start in y direction */
+    tools::Long m_nEndY;     /* End in y direction */
+    bool m_bLimits;   /* boundary limit control by the application */
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
 
@@ -225,10 +225,10 @@ public:
                   tools::Long nStartY, tools::Long nEndY);
     SvxObjectItem(SvxObjectItem const &) = default;
 
-    tools::Long GetStartX() const { return nStartX;}
-    tools::Long GetEndX() const { return nEndX;}
-    tools::Long GetStartY() const { return nStartY;}
-    tools::Long GetEndY() const { return nEndY;}
+    tools::Long GetStartX() const { return m_nStartX;}
+    tools::Long GetEndX() const { return m_nEndX;}
+    tools::Long GetStartY() const { return m_nStartY;}
+    tools::Long GetEndY() const { return m_nEndY;}
 
     void SetStartX(tools::Long lValue);
     void SetEndX(tools::Long lValue);
