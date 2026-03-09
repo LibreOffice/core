@@ -16,11 +16,11 @@ $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/ifbclient.
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/Engine12.dll,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/plugins/Engine12.dll))
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/intl/fbintl.dll,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/intl/fbintl.dll))
 else ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbclient.dylib.3.0.12,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/lib/libfbclient.dylib.3.0.12))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbclient.dylib.3.0.13,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/lib/libfbclient.dylib.3.0.13))
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libEngine12.dylib,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/plugins/libEngine12.dylib))
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/intl/libfbintl.dylib,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/intl/libfbintl.dylib))
 else ifeq ($(DISABLE_DYNLOADING),)
-$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbclient.so.2,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/lib/libfbclient.so.3.0.12))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbclient.so.2,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/lib/libfbclient.so.3.0.13))
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libEngine12.so,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/plugins/libEngine12.so))
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/intl/libfbintl.so,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/intl/libfbintl.so))
 endif
