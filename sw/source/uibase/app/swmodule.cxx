@@ -217,11 +217,12 @@ void SwDLL::RegisterFactories()
     // is created by Sfx.
     SvtModuleOptions aOptions;
     if (comphelper::IsFuzzing() || aOptions.IsWriterInstalled())
+    {
         SwView::RegisterFactory         ( SFX_INTERFACE_SFXDOCSH );
+        SwWebView::RegisterFactory      ( SFX_INTERFACE_SFXMODULE );
+    }
 
 #if HAVE_FEATURE_DESKTOP
-    SwWebView::RegisterFactory        ( SFX_INTERFACE_SFXMODULE );
-
     if (comphelper::IsFuzzing() || aOptions.IsWriterInstalled())
     {
         SwSrcView::RegisterFactory      ( SfxInterfaceId(6) );
