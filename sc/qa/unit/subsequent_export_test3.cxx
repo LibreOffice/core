@@ -2111,6 +2111,31 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testPictureTagOrder)
     assertXPath(pSheet, "/x:worksheet/x:picture/following-sibling::mc:AlternateContent", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testfdo55572)
+{
+    createScDoc("xls/fdo55572-1.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pWorkbook);
+
+    assertXPathContent(
+        pWorkbook, "/x:workbook/x:definedNames/x:definedName[1]",
+        u"'Analisi Venduto per Aliquota IV'!$L$3"); // analisi venduto per aliquota iv!r3c12
+    assertXPathContent(
+        pWorkbook, "/x:workbook/x:definedNames/x:definedName[2]",
+        u"'Analisi Venduto per Aliquota IV'!$O$3"); // analisi venduto per aliquota iv!r3c15
+    assertXPathContent(
+        pWorkbook, "/x:workbook/x:definedNames/x:definedName[3]",
+        u"'Analisi Venduto per Aliquota IV'!$L$5"); // analisi venduto per aliquota iv!r5c12
+    assertXPathContent(
+        pWorkbook, "/x:workbook/x:definedNames/x:definedName[4]",
+        u"'Analisi Venduto per Aliquota IV'!$O$5"); // analisi venduto per aliquota iv!r5c15
+    assertXPathContent(
+        pWorkbook, "/x:workbook/x:definedNames/x:definedName[5]",
+        u"'Analisi Venduto per Aliquota IV'!$A$7"); // analisi venduto per aliquota iv!r7c1
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

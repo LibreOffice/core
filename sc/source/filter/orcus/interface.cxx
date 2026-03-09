@@ -245,6 +245,43 @@ void ScOrcusNamedExpression::set_named_expression(std::string_view name, std::st
 {
     maName = OUString(name.data(), name.size(), mrGlobalSettings.getTextEncoding());
     maExpr = OUString(expression.data(), expression.size(), mrGlobalSettings.getTextEncoding());
+
+    formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::extractRefConvention(mrGlobalSettings.getCalcGrammar());
+
+    std::vector<OUString> aTables = mrDoc.getDoc().GetAllTableNames();
+    for (const auto& aTable : aTables)
+    {
+        OUString aReqTable = aTable;
+        ScCompiler::CheckTabQuotes(aReqTable, eConv);
+
+        if (aReqTable.indexOf('\'') == -1)
+            continue;
+
+        sal_Int32 nPos = 0;
+        while ((nPos = maExpr.indexOf(aTable, nPos)) != -1)
+        {
+            bool bQuoted = (nPos > 0 && maExpr[nPos - 1] == '\'');
+            bool bIsCompleteTableName = false;
+            sal_Int32 nLen = aTable.getLength();
+            sal_Int32 nEndPos = nPos + nLen;
+            if (nEndPos < maExpr.getLength())
+            {
+                sal_Unicode cEndChar = maExpr[nEndPos];
+                if (cEndChar == '!' || cEndChar == ':')
+                    bIsCompleteTableName = true;
+            }
+
+            if (!bQuoted && bIsCompleteTableName)
+            {
+                maExpr = maExpr.replaceAt(nPos, nLen, aReqTable);
+                nPos += aReqTable.getLength();
+            }
+            else
+            {
+                nPos += nLen;
+            }
+        }
+    }
 }
 
 void ScOrcusNamedExpression::set_named_range(std::string_view /*name*/, std::string_view /*range*/)
