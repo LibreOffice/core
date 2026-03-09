@@ -73,7 +73,7 @@ FilterCache::FilterCache()
     sStandardProps[i++] = PROPNAME_DOCUMENTSERVICE;
     sStandardProps[i++] = PROPNAME_EXPORTEXTENSION;
     sStandardProps[i++] = PROPNAME_FLAGS; // must be last.
-    assert(i == SAL_N_ELEMENTS(sStandardProps));
+    assert(i == std::size(sStandardProps));
 
     // E_READ_NOTHING -> creative nothingness.
     m_aStandardProps[E_READ_STANDARD] =
@@ -94,7 +94,7 @@ FilterCache::FilterCache()
     sTypeProps[i++] = PROPNAME_EXTENSIONS;
     sTypeProps[i++] = PROPNAME_PREFERRED;
     sTypeProps[i++] = PROPNAME_CLIPBOARDFORMAT;
-    assert(i == SAL_N_ELEMENTS(sTypeProps));
+    assert(i == std::size(sTypeProps));
 
     // E_READ_NOTHING -> more creative nothingness.
     m_aTypeProps[E_READ_STANDARD] =
