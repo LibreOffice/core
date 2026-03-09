@@ -859,11 +859,9 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
         if( pObj->IsChart() ) //charts never should be stretched see #i84323# for example
             aObjAreaSize = aDrawSize;
 
-        Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
-        Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-        aScaleWidth.ReduceInaccurate(10);       // compatible to the SdrOle2Obj
-        aScaleHeight.ReduceInaccurate(10);
-        pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
+        double fScaleWidth = static_cast<double>(aDrawSize.Width()) / aObjAreaSize.Width();
+        double fScaleHeight = static_cast<double>(aDrawSize.Height()) / aObjAreaSize.Height();
+        pSdClient->SetSizeScale(fScaleWidth, fScaleHeight);
 
         // visible section is only changed in-place!
         aRect.SetSize(aObjAreaSize);
