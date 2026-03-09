@@ -624,11 +624,11 @@ bool SvxColumnItem::IsConsistent() const
 bool SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-       nStartX == static_cast<const SvxObjectItem&>(rCmp).nStartX &&
-       nEndX == static_cast<const SvxObjectItem&>(rCmp).nEndX &&
-       nStartY == static_cast<const SvxObjectItem&>(rCmp).nStartY &&
-       nEndY == static_cast<const SvxObjectItem&>(rCmp).nEndY &&
-       bLimits == static_cast<const SvxObjectItem&>(rCmp).bLimits;
+       m_nStartX == static_cast<const SvxObjectItem&>(rCmp).m_nStartX &&
+       m_nEndX == static_cast<const SvxObjectItem&>(rCmp).m_nEndX &&
+       m_nStartY == static_cast<const SvxObjectItem&>(rCmp).m_nStartY &&
+       m_nEndY == static_cast<const SvxObjectItem&>(rCmp).m_nEndY &&
+       m_bLimits == static_cast<const SvxObjectItem&>(rCmp).m_bLimits;
 }
 
 bool SvxObjectItem::GetPresentation(
@@ -649,11 +649,11 @@ SvxObjectItem* SvxObjectItem::Clone(SfxItemPool *) const
 SvxObjectItem::SvxObjectItem( tools::Long nSX, tools::Long nEX,
                               tools::Long nSY, tools::Long nEY ) :
     SfxPoolItem (SID_RULER_OBJECT),
-    nStartX     (nSX),
-    nEndX       (nEX),
-    nStartY     (nSY),
-    nEndY       (nEY),
-    bLimits     (false)
+    m_nStartX     (nSX),
+    m_nEndX       (nEX),
+    m_nStartY     (nSY),
+    m_nEndY       (nEY),
+    m_bLimits     (false)
 {}
 
 bool SvxObjectItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -662,19 +662,19 @@ bool SvxObjectItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch (nMemberId)
     {
         case MID_START_X:
-            rVal <<= nStartX;
+            rVal <<= m_nStartX;
             break;
         case MID_START_Y:
-            rVal <<= nStartY;
+            rVal <<= m_nStartY;
             break;
         case MID_END_X:
-            rVal <<= nEndX;
+            rVal <<= m_nEndX;
             break;
         case MID_END_Y:
-            rVal <<= nEndY;
+            rVal <<= m_nEndY;
             break;
         case MID_LIMIT:
-            rVal <<= bLimits;
+            rVal <<= m_bLimits;
             break;
         default:
             OSL_FAIL( "Wrong MemberId" );
@@ -691,19 +691,19 @@ bool SvxObjectItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     switch (nMemberId)
     {
         case MID_START_X:
-            bRet = (rVal >>= nStartX);
+            bRet = (rVal >>= m_nStartX);
             break;
         case MID_START_Y:
-            bRet = (rVal >>= nStartY);
+            bRet = (rVal >>= m_nStartY);
             break;
         case MID_END_X:
-            bRet = (rVal >>= nEndX);
+            bRet = (rVal >>= m_nEndX);
             break;
         case MID_END_Y:
-            bRet = (rVal >>= nEndY);
+            bRet = (rVal >>= m_nEndY);
             break;
         case MID_LIMIT:
-            bRet = (rVal >>= bLimits);
+            bRet = (rVal >>= m_bLimits);
             break;
         default: OSL_FAIL( "Wrong MemberId" );
     }
@@ -714,22 +714,22 @@ bool SvxObjectItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 
 void SvxObjectItem::SetStartX(tools::Long lValue)
 {
-    nStartX = lValue;
+    m_nStartX = lValue;
 }
 
 void SvxObjectItem::SetEndX(tools::Long lValue)
 {
-    nEndX = lValue;
+    m_nEndX = lValue;
 }
 
 void SvxObjectItem::SetStartY(tools::Long lValue)
 {
-    nStartY = lValue;
+    m_nStartY = lValue;
 }
 
 void SvxObjectItem::SetEndY(tools::Long lValue)
 {
-    nEndY = lValue;
+    m_nEndY = lValue;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
