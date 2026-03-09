@@ -18,6 +18,8 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/PieChartSubType.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
 
 using uno::Reference;
 using beans::XPropertySet;
@@ -489,6 +491,30 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsGrabBag)
        }
    }
    CPPUNIT_ASSERT(bEmbeddings); // Grab Bag has all the expected elements
+}
+
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTdf115558_footnote_chart)
+{
+    // For now Linux and Windows behavior is different, Writer on Linux
+    // doesn't seem to import the chart properly as chart, see tdf#170015
+    // Retest and update this test after that is fixed
+#ifdef _WIN32
+    loadFromFile(u"docx/tdf115558_footnote_chart.docx");
+    save(TestFilter::DOCX);
+
+    // Without the fix the embedded XLSX file would be missing from the exported archive
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"word/embeddings/Microsoft_Excel_Worksheet1.xlsx"_ustr)));
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"word/charts/_rels/chart1.xml.rels"_ustr);
+    assertXPath(pXmlDocRels,
+                "/rels:Relationships/rels:Relationship[@Target='../embeddings/"
+                "Microsoft_Excel_Worksheet1.xlsx']",
+                1);
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAreaChartLoad)
