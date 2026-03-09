@@ -105,11 +105,25 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
     createSdImpressDoc("pptx/tdf128212.pptx");
     xmlDocUniquePtr pXmlDoc = parseLayout();
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: 7795
-    // - Actual  : 12068
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "x", u"4523");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "y", u"7795");
+    // The position of the rotated text depends on the calculated text size. This depends on
+    // rendering, so it differs a bit on different platforms. Hence rather big delta here.
+
+    // translation
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "mapunit", u"MapRelative");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        331.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x").toDouble(), 3.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        9420.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y").toDouble(), 10.0);
+    // no scaling
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scalex", u"(1/1)");
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scaley", u"(1/1)");
+
+    // text position
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        4760.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x").toDouble(), 3.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        -2250.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y").toDouble(), 3.0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)

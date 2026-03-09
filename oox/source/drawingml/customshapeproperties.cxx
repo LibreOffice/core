@@ -227,6 +227,8 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
         if( mnTextPreRotateAngle )
             aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextPreRotateAngle );
+        if (mnTextCameraZRotateAngle)
+            aPropertyMap.setProperty(PROP_TextCameraZRotateAngle, mnTextCameraZRotateAngle);
         if (moTextAreaRotateAngle.has_value())
             aPropertyMap.setProperty(PROP_TextRotateAngle, moTextAreaRotateAngle.value());
         // Note 1: If Equations are defined - they are processed using internal div by 360 coordinates
