@@ -73,6 +73,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/effectspage.ui" },
         { u"cui/ui/eventassigndialog.ui" },
         { u"cui/ui/fontfeaturesdialog.ui" },
+        { u"cui/ui/fontfragment.ui" },
         { u"cui/ui/formatcellsdialog.ui" },
         { u"cui/ui/formatnumberdialog.ui" },
         { u"cui/ui/gradientpage.ui" },
