@@ -137,9 +137,124 @@ public:
                                      utils::rgb2hsv(BColor(.5, .25, .25)));
     }
 
+    void linearRGBTest()
+    {
+        double tolerance = 1e-6;
+
+        BColor srgbMid(0.5, 0.5, 0.5);
+        BColor linearMid = utils::convertSRGBToLinearRGB(srgbMid);
+        double expectedMid = std::pow((0.5 + 0.055) / 1.055, 2.4);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("sRGB to linear", expectedMid, linearMid.getRed(),
+                                             tolerance);
+        BColor srgbBack = utils::convertLinearRGBToSRGB(linearMid);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("linear to sRGB roundtrip", 0.5, srgbBack.getRed(),
+                                             tolerance);
+
+        BColor srgbLow(0.04, 0.04, 0.04);
+        BColor linearLow = utils::convertSRGBToLinearRGB(srgbLow);
+        double expectedLow = 0.04 / 12.92;
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("sRGB to linear", expectedLow, linearLow.getRed(),
+                                             tolerance);
+
+        BColor srgbHigh(0.8, 0.8, 0.8);
+        BColor linearHigh = utils::convertSRGBToLinearRGB(srgbHigh);
+        double expectedHigh = std::pow((0.8 + 0.055) / 1.055, 2.4);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("sRGB to linear", expectedHigh, linearHigh.getRed(),
+                                             tolerance);
+
+        BColor testColors[] = { BColor(0.0, 0.0, 0.0), BColor(0.2, 0.2, 0.2), BColor(0.5, 0.5, 0.5),
+                                BColor(0.8, 0.8, 0.8), BColor(1.0, 1.0, 1.0) };
+        for (const auto& color : testColors)
+        {
+            BColor roundtrip = utils::convertLinearRGBToSRGB(utils::convertSRGBToLinearRGB(color));
+            for (int i = 0; i < 3; i++)
+            {
+                double tol = (color[i] < 0.04045) ? 1e-4 : 1e-3;
+                if (color[i] == 0.0)
+                    tol = 1e-6;
+                if (color[i] == 1.0)
+                    tol = 1e-3;
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("sRGB -> linear -> sRGB roundtrip", color[i],
+                                                     roundtrip[i], tol);
+            }
+        }
+    }
+
+    void getLightVariantTest()
+    {
+        double tolerance = 1e-6;
+
+        std::vector<BColor> darkColors
+            = { BColor(0.0, 0.0, 0.0), BColor(0.1, 0.1, 0.1), BColor(0.2, 0.1, 0.1),
+                BColor(0.0, 0.0, 0.5), BColor(0.3, 0.1, 0.2) };
+
+        for (const auto& color : darkColors)
+        {
+            BColor light = utils::getLightVariant(color);
+            double luminance = light.getWCAGLuminance();
+            bool inRange = luminance >= (0.5 - tolerance) && luminance <= (1.0 + tolerance);
+            std::ostringstream msg;
+            msg << "Dark color should have luminance in [0.5, 1], got " << luminance;
+            CPPUNIT_ASSERT_MESSAGE(msg.str(), inRange);
+        }
+
+        std::vector<BColor> lightColors = { BColor(0.9, 0.9, 0.9), BColor(1.0, 1.0, 1.0),
+                                            BColor(0.8, 0.8, 0.7), BColor(0.7, 0.8, 0.9) };
+
+        for (const auto& color : lightColors)
+        {
+            BColor light = utils::getLightVariant(color);
+            double luminance = light.getWCAGLuminance();
+            bool inRange = luminance >= (0.5 - tolerance) && luminance <= (1.0 + tolerance);
+            std::ostringstream msg;
+            msg << "Light color should have luminance in [0.5, 1], got " << luminance;
+            CPPUNIT_ASSERT_MESSAGE(msg.str(), inRange);
+        }
+
+        std::vector<BColor> outOfRangeColors
+            = { BColor(-0.5, 0.5, 0.5),   BColor(0.5, -0.5, 0.5), BColor(0.5, 0.5, -0.5),
+                BColor(1.5, 0.5, 0.5),    BColor(0.5, 1.5, 0.5),  BColor(0.5, 0.5, 1.5),
+                BColor(-1.0, -1.0, -1.0), BColor(2.0, 2.0, 2.0),  BColor(-0.3, 1.2, -0.7) };
+
+        for (const auto& color : outOfRangeColors)
+        {
+            BColor light = utils::getLightVariant(color);
+            double luminance = light.getWCAGLuminance();
+            bool inRange = luminance >= (0.5 - tolerance) && luminance <= (1.0 + tolerance);
+            bool channelsValid = light.getRed() >= 0.0 && light.getRed() <= 1.0
+                                 && light.getGreen() >= 0.0 && light.getGreen() <= 1.0
+                                 && light.getBlue() >= 0.0 && light.getBlue() <= 1.0;
+            std::ostringstream msg;
+            msg << "Out-of-range color should have luminance in [0.5, 1], got " << luminance;
+            CPPUNIT_ASSERT_MESSAGE(msg.str(), inRange);
+            CPPUNIT_ASSERT_MESSAGE("Out-of-range color output should have channels in [0, 1]",
+                                   channelsValid);
+        }
+
+        std::vector<BColor> trivialColors
+            = { BColor(0.0, 0.0, 0.0), BColor(1.0, 1.0, 1.0), BColor(0.5, 0.5, 0.5) };
+
+        for (const auto& color : trivialColors)
+        {
+            BColor light = utils::getLightVariant(color);
+            double luminance = light.getWCAGLuminance();
+            bool inRange = luminance >= (0.5 - tolerance) && luminance <= (1.0 + tolerance);
+            bool channelsValid = light.getRed() >= 0.0 && light.getRed() <= 1.0
+                                 && light.getGreen() >= 0.0 && light.getGreen() <= 1.0
+                                 && light.getBlue() >= 0.0 && light.getBlue() <= 1.0;
+            std::ostringstream msg;
+            msg << "Trivial color should have luminance in [0.5, 1], got " << luminance;
+            CPPUNIT_ASSERT_MESSAGE(msg.str(), inRange);
+            CPPUNIT_ASSERT_MESSAGE("Trivial color output should have channels in [0, 1]",
+                                   channelsValid);
+        }
+    }
+
     CPPUNIT_TEST_SUITE(bcolor);
     CPPUNIT_TEST(hslTest);
     CPPUNIT_TEST(hsvTest);
+    CPPUNIT_TEST(linearRGBTest);
+    CPPUNIT_TEST(getLightVariantTest);
     CPPUNIT_TEST_SUITE_END();
 };
 

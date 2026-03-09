@@ -26,6 +26,7 @@
 
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <basegfx/color/bcolortools.hxx>
 
 namespace basegfx
 {
@@ -167,6 +168,12 @@ namespace basegfx
             mnX = 1.0 - mnX;
             mnY = 1.0 - mnY;
             mnZ = 1.0 - mnZ;
+        }
+
+        double getWCAGLuminance() const
+        {
+            BColor aLinear = utils::convertSRGBToLinearRGB(*this);
+            return aLinear.getRed() * 0.2126 + aLinear.getGreen() * 0.7152 + aLinear.getBlue() * 0.0722;
         }
 
         static const BColor& getEmptyBColor()

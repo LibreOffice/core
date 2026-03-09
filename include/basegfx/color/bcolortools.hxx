@@ -38,6 +38,14 @@ BASEGFX_DLLPUBLIC BColor rgb2hsv(const BColor& rRGBColor);
 /// Transform from HSV to RGB
 BASEGFX_DLLPUBLIC BColor hsv2rgb(const BColor& rHSVColor);
 
+/// Convert sRGB [0,1] channel to linearRGB [0,1].
+BASEGFX_DLLPUBLIC BColor convertSRGBToLinearRGB(const BColor& rRGB);
+/// Convert linearRGB [0,1] channel to sRGB [0,1].
+BASEGFX_DLLPUBLIC BColor convertLinearRGBToSRGB(const BColor& rLinearRGB);
+
+/// Map a color to a lighter variant so it stays readable on a dark background.
+BASEGFX_DLLPUBLIC BColor getLightVariant(BColor aColor);
+
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

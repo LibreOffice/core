@@ -704,6 +704,14 @@ const OUString& ColorConfig_Impl::GetCurrentSchemeName()
     return GetLoadedScheme();
 }
 
+bool ColorConfig::IsDarkMode()
+{
+    return MiscSettings::GetAppColorMode() == AppearanceMode::DARK
+           || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO
+               && MiscSettings::GetUseDarkMode())
+           || (ColorConfig::GetCurrentSchemeName() == "Dark");
+}
+
 EditableColorConfig::EditableColorConfig() :
     m_pImpl(new ColorConfig_Impl),
     m_bModified(false)
