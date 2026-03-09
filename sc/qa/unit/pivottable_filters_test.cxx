@@ -2644,6 +2644,221 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testFirstHeaderRowZero)
     assertXPath(pDoc, "/x:pivotTableDefinition/x:location", "firstHeaderRow", u"0");
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSX)
+{
+    createScDoc("xlsx/pivot-table/calcfields.xlsx");
+    saveAndReload(TestFilter::XLSX);
+
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->ReloadAllLinks();
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll();
+
+    // "SUM - Field1"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"480"_ustr, pDoc->GetString(ScAddress(3, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"640"_ustr, pDoc->GetString(ScAddress(3, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"1160"_ustr, pDoc->GetString(ScAddress(3, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"2280"_ustr, pDoc->GetString(ScAddress(3, 5, 1)));
+    }
+    // "SUM - Field2"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDoc->GetString(ScAddress(4, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, pDoc->GetString(ScAddress(4, 3, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"60"_ustr, pDoc->GetString(ScAddress(4, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"132"_ustr, pDoc->GetString(ScAddress(4, 5, 1)));
+    }
+    // "SUM - Field3"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(ScAddress(5, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(ScAddress(5, 5, 1)));
+    }
+    // "SUM - Field4"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 2, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 5, 1)));
+    }
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pDocXml = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+    // dataFields
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[3]", "name",
+                u"Sum - Field1");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[3]", "fld", u"3");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[3]", "subtotal", u"sum");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[3]", "numFmtId", u"164");
+
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[6]", "name",
+                u"Sum - Field4");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[6]", "fld", u"6");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[6]", "subtotal", u"sum");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[6]", "numFmtId", u"164");
+    // cacheFields
+    pDocXml = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField", 7);
+    // cacheField - 1st calculated field
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name",
+                u"Field1");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "formula",
+                u"'Field A'*20");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "databaseField",
+                u"0");
+    // cacheField - 2nd calculated field
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "name",
+                u"Field2");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "formula",
+                u"SUM('Field A', 'Field B')");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "databaseField",
+                u"0");
+    // cacheField - 3rd calculated field
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "name",
+                u"Field3");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "formula",
+                u"Name*2");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "databaseField",
+                u"0");
+    // cacheField - 4th calculated field
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[7]", "name",
+                u"Field4");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[7]", "formula",
+                u"2/0");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[7]", "databaseField",
+                u"0");
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields2XLSX)
+{
+    createScDoc("xlsx/pivot-table/onlycalcfields.xlsx");
+    saveAndReload(TestFilter::XLSX);
+
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->ReloadAllLinks();
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll();
+
+    // "SUM - Field1"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"144"_ustr, pDoc->GetString(ScAddress(1, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"320"_ustr, pDoc->GetString(ScAddress(1, 5, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"116"_ustr, pDoc->GetString(ScAddress(1, 6, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"2052"_ustr, pDoc->GetString(ScAddress(1, 7, 1)));
+    }
+    // "SUM - Field2"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"288"_ustr, pDoc->GetString(ScAddress(2, 4, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"640"_ustr, pDoc->GetString(ScAddress(2, 5, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"232"_ustr, pDoc->GetString(ScAddress(2, 6, 1)));
+        CPPUNIT_ASSERT_EQUAL(u"4104"_ustr, pDoc->GetString(ScAddress(2, 7, 1)));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testGroupAndCalcFieldXLSX)
+{
+    createScDoc("xlsx/pivot-table/groupwithcalcfields.xlsx");
+    saveAndReload(TestFilter::XLSX);
+
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->ReloadAllLinks();
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll();
+
+    // "a2 - group"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"a2"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"Group1"_ustr, pDoc->GetString(ScAddress(0, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"Group2"_ustr, pDoc->GetString(ScAddress(0, 5, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"Total Result"_ustr, pDoc->GetString(ScAddress(0, 6, 0)));
+    }
+    // "SUM of a"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"45"_ustr, pDoc->GetString(ScAddress(1, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"126"_ustr, pDoc->GetString(ScAddress(1, 5, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"171"_ustr, pDoc->GetString(ScAddress(1, 6, 0)));
+    }
+    // "SUM of b"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"54"_ustr, pDoc->GetString(ScAddress(2, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"135"_ustr, pDoc->GetString(ScAddress(2, 5, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"189"_ustr, pDoc->GetString(ScAddress(2, 6, 0)));
+    }
+    // "SUM of c"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"63"_ustr, pDoc->GetString(ScAddress(3, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"144"_ustr, pDoc->GetString(ScAddress(3, 5, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"207"_ustr, pDoc->GetString(ScAddress(3, 6, 0)));
+    }
+    // "SUM - Field1"
+    {
+        CPPUNIT_ASSERT_EQUAL(u"3402"_ustr, pDoc->GetString(ScAddress(4, 4, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"19440"_ustr, pDoc->GetString(ScAddress(4, 5, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"39123"_ustr, pDoc->GetString(ScAddress(4, 6, 0)));
+    }
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pDocXml = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[4]/x:items", "count",
+                u"2");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[4]/x:items/x:item[1]",
+                "x", u"0");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[4]/x:items/x:item[2]",
+                "x", u"1");
+
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:rowFields", "count", u"1");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:rowFields/x:field", "x", u"3");
+
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[4]", "name",
+                u"Sum - Field1");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[4]", "fld", u"4");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[4]", "subtotal", u"sum");
+    assertXPath(pDocXml, "/x:pivotTableDefinition/x:dataFields/x:dataField[4]", "numFmtId", u"164");
+
+    // cacheFields
+    pDocXml = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField", 5);
+
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]", "name", u"a2");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:fieldGroup",
+                "base", u"0");
+    // discretePr
+    assertXPath(pDocXml,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:fieldGroup/x:discretePr",
+                "count", u"18");
+    assertXPath(
+        pDocXml,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:fieldGroup/x:discretePr/x:x[1]",
+        "v", u"0");
+    assertXPath(
+        pDocXml,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:fieldGroup/x:discretePr/x:x[9]",
+        "v", u"0");
+    assertXPath(
+        pDocXml,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:fieldGroup/x:discretePr/x:x[10]",
+        "v", u"1");
+    assertXPath(
+        pDocXml,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:fieldGroup/x:discretePr/x:x[18]",
+        "v", u"1");
+    // groupItems
+    assertXPath(
+        pDocXml,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:fieldGroup/x:groupItems/x:s[1]",
+        "v", u"Group1");
+    assertXPath(
+        pDocXml,
+        "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[4]/x:fieldGroup/x:groupItems/x:s[2]",
+        "v", u"Group2");
+    // cache calculated field
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "name",
+                u"Field1");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "formula",
+                u"b* c");
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "databaseField",
+                u"0");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,6 +20,9 @@
 #include <tabprotection.hxx>
 #include <undomanager.hxx>
 
+#include <compiler.hxx>
+#include <tokenarray.hxx>
+
 #include <formula/errorcodes.hxx>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
@@ -2880,6 +2883,205 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableFilterValueUndoRedo)
         bSuccess = aFunc.RemovePivotTable(*pDPObject, true, true);
         CPPUNIT_ASSERT_MESSAGE("Failed to remove pivot table object.", bSuccess);
     }
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCalculatedField)
+{
+    /**
+     * Test inserting and removing a calculated field via the core API
+     * (InsertCalculatedFieldToCache / RemoveCalculatedFieldFromCache),
+     * verifying that computed values appear correctly in the pivot output.
+     *
+     * Source data has multiple rows per name (grouping) and two numeric
+     * columns (Sales, Bonus) so the calculated field formula exercises
+     * real aggregation across grouped rows.
+     */
+    m_pDoc->InsertTab(0, u"Data"_ustr);
+    m_pDoc->InsertTab(1, u"Table"_ustr);
+
+    // Dimension definition
+    static const DPFieldDef aFields[] = {
+        { u"Name",  sheet::DataPilotFieldOrientation_ROW,    ScGeneralFunction::NONE, false },
+        { u"Sales", sheet::DataPilotFieldOrientation_DATA,   ScGeneralFunction::SUM,  false },
+        { u"Bonus", sheet::DataPilotFieldOrientation_HIDDEN, ScGeneralFunction::SUM,  false },
+    };
+
+    // Raw data — multiple rows per name to exercise grouping/aggregation
+    const char* aData[][3] = {
+        { "Andy",   "30", "10" },
+        { "Andy",   "20", "5"  },
+        { "Andy",   "45", "15" },
+        { "David",  "12", "4"  },
+        { "Edward", "8",  "3"  },
+        { "Frank",  "15", "5"  },
+        { "Frank",  "45", "20" },
+        { "Frank",  "45", "10" },
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t const nDataCount = SAL_N_ELEMENTS(aData);
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           size_t(1), pDPs->GetCount());
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    // --- Phase 1: Initial output without calculated field ---
+    // Andy: 30+20+45=95, David: 12, Edward: 8, Frank: 15+45+45=105
+    ScRange aOutRange = refresh(pDPObj);
+    {
+        std::vector<std::vector<const char*>> aOutputCheck = {
+            { "Name", "Sum - Sales" },
+            { "Andy",   "95" },
+            { "David",  "12" },
+            { "Edward", "8" },
+            { "Frank",  "105" },
+            { "Total Result", "220" },
+        };
+
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "Initial pivot output without calculated field");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed (Phase 1)", bSuccess);
+    }
+
+    // --- Phase 2: Insert calculated field (CalcField1 = SUM(Sales; Bonus)) ---
+
+    // Compile formula using the same approach as PivotCalcFieldDialog::ValidateFormula
+    ScAddress aAddr(ScAddress::INITIALIZE_INVALID);
+    ScCompiler aComp(*m_pDoc, aAddr, m_pDoc->GetGrammar(), true, false);
+    aComp.SetAvailablePivotFields(u"Sales"_ustr);
+    aComp.SetAvailablePivotFields(u"Bonus"_ustr);
+    std::shared_ptr<ScTokenArray> pArray(aComp.CompileString(u"SUM(Sales; Bonus)"_ustr));
+    CPPUNIT_ASSERT_MESSAGE("Failed to compile calculated field formula.", pArray != nullptr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula compilation should have no errors.",
+                           FormulaError::NONE, pArray->GetCodeError());
+    CPPUNIT_ASSERT_MESSAGE("Compiled formula should have tokens.", pArray->GetLen() > 0);
+    aComp.CompileTokenArray(); // Generate RPN tokens
+
+    // Calculated field index = number of source columns (3: Name, Sales, Bonus)
+    sal_Int32 nCalcFieldIndex = 3;
+    pDPObj->InsertCalculatedFieldToCache(nCalcFieldIndex, u"CalcField1"_ustr, pArray);
+
+    // Add CalcField1 as a second DATA dimension and move data layout to COLUMN
+    ScDPSaveData aSaveData(*pDPObj->GetSaveData());
+    ScDPSaveDimension* pCalcDim = aSaveData.GetNewDimensionByName(u"CalcField1"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("CalcField1 dimension should be created.", pCalcDim != nullptr);
+    pCalcDim->SetOrientation(sheet::DataPilotFieldOrientation_DATA);
+    pCalcDim->SetFunction(ScGeneralFunction::SUM);
+
+    // Move data layout to column so that each data field gets its own column
+    ScDPSaveDimension* pDataLayout = aSaveData.GetDataLayoutDimension();
+    pDataLayout->SetOrientation(sheet::DataPilotFieldOrientation_COLUMN);
+
+    pDPObj->SetSaveData(aSaveData);
+    pDPObj->ClearTableData();
+    aOutRange = refresh(pDPObj);
+    {
+        std::vector<std::vector<const char*>> aOutputCheck = {
+            { nullptr, "Data", nullptr },
+            { "Name", "Sum - Sales", "Sum - CalcField1" },
+            { "Andy",   "95",  "125" },
+            { "David",  "12",  "16" },
+            { "Edward", "8",   "11" },
+            { "Frank",  "105", "140" },
+            { "Total Result", "220", "292" },
+        };
+
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "Pivot output with calculated field");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed (Phase 2)", bSuccess);
+    }
+
+    // --- Phase 2b: Insert a second calculated field that references the first ---
+    // CalcField2 = CalcField1 * 0.5 (half of Sales + Bonus)
+    {
+        ScAddress aAddr2(ScAddress::INITIALIZE_INVALID);
+        ScCompiler aComp2(*m_pDoc, aAddr2, m_pDoc->GetGrammar(), true, false);
+        aComp2.SetAvailablePivotFields(u"Sales"_ustr);
+        aComp2.SetAvailablePivotFields(u"Bonus"_ustr);
+        aComp2.SetAvailablePivotFields(u"CalcField1"_ustr);
+        std::shared_ptr<ScTokenArray> pArray2(aComp2.CompileString(u"CalcField1 * 0.5"_ustr));
+        CPPUNIT_ASSERT_MESSAGE("Failed to compile CalcField2 formula.", pArray2 != nullptr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("CalcField2 formula should have no errors.",
+                               FormulaError::NONE, pArray2->GetCodeError());
+        aComp2.CompileTokenArray();
+
+        // CalcField2 index = 4 (3 source columns + 1 existing calc field)
+        sal_Int32 nCalcField2Index = 4;
+        pDPObj->InsertCalculatedFieldToCache(nCalcField2Index, u"CalcField2"_ustr, pArray2);
+
+        ScDPSaveData aSaveData2b(*pDPObj->GetSaveData());
+        ScDPSaveDimension* pCalcDim2 = aSaveData2b.GetNewDimensionByName(u"CalcField2"_ustr);
+        CPPUNIT_ASSERT_MESSAGE("CalcField2 dimension should be created.", pCalcDim2 != nullptr);
+        pCalcDim2->SetOrientation(sheet::DataPilotFieldOrientation_DATA);
+        pCalcDim2->SetFunction(ScGeneralFunction::SUM);
+
+        pDPObj->SetSaveData(aSaveData2b);
+        pDPObj->ClearTableData();
+        aOutRange = refresh(pDPObj);
+        {
+            std::vector<std::vector<const char*>> aOutputCheck = {
+                { nullptr, "Data", nullptr, nullptr },
+                { "Name", "Sum - Sales", "Sum - CalcField1", "Sum - CalcField2" },
+                { "Andy",   "95",  "125", "62.5" },
+                { "David",  "12",  "16",  "8" },
+                { "Edward", "8",   "11",  "5.5" },
+                { "Frank",  "105", "140", "70" },
+                { "Total Result", "220", "292", "146" },
+            };
+
+            bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                               "Pivot output with two calculated fields");
+            CPPUNIT_ASSERT_MESSAGE("Table output check failed (Phase 2b)", bSuccess);
+        }
+    }
+
+    // --- Phase 3: Remove both calculated fields, verify cleanup ---
+    pDPObj->RemoveCalculatedFieldFromCache(u"CalcField2"_ustr);
+    pDPObj->RemoveCalculatedFieldFromCache(u"CalcField1"_ustr);
+
+    // Remove both calc field dimensions from save data and restore data layout to ROW
+    ScDPSaveData aSaveData2(*pDPObj->GetSaveData());
+    aSaveData2.RemoveDimensionByName(u"CalcField2"_ustr);
+    aSaveData2.RemoveDimensionByName(u"CalcField1"_ustr);
+    ScDPSaveDimension* pDataLayout2 = aSaveData2.GetDataLayoutDimension();
+    pDataLayout2->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
+
+    pDPObj->SetSaveData(aSaveData2);
+    pDPObj->ClearTableData();
+    aOutRange = refresh(pDPObj);
+    {
+        // Back to Phase 1 layout
+        std::vector<std::vector<const char*>> aOutputCheck = {
+            { "Name", "Sum - Sales" },
+            { "Andy",   "95" },
+            { "David",  "12" },
+            { "Edward", "8" },
+            { "Frank",  "105" },
+            { "Total Result", "220" },
+        };
+
+        bool bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck,
+                                           "Pivot output after removing calculated field");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed (Phase 3)", bSuccess);
+    }
+
+    // --- Phase 4: Cleanup ---
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", size_t(0), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           size_t(0), pDPs->GetSheetCaches().size());
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
