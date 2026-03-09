@@ -1252,6 +1252,12 @@ void JSEntry::replace_selection(const OUString& rText)
     sendUpdate();
 }
 
+void JSEntry::set_width_chars(int nChars)
+{
+    SalInstanceEntry::set_width_chars(nChars);
+    sendUpdate();
+}
+
 JSListBox::JSListBox(JSDialogSender* pSender, ::ListBox* pListBox, SalInstanceBuilder* pBuilder,
                      bool bTakeOwnership)
     : JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>(pSender, pListBox, pBuilder,

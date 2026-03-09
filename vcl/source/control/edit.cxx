@@ -2904,6 +2904,9 @@ void Edit::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     if (IsPassword())
         rJsonWriter.put("password", true);
+
+    if (mnWidthInChars != -1)
+        rJsonWriter.put("widthInChars", mnWidthInChars);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

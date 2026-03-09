@@ -547,6 +547,7 @@ public:
     virtual void do_set_text(const OUString& rText) override;
     void set_text_without_notify(const OUString& rText);
     virtual void replace_selection(const OUString& rText) override;
+    virtual void set_width_chars(int nChars) override;
 };
 
 class JSListBox final : public JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>
