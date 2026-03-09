@@ -915,6 +915,16 @@ bool QtInstance::noWeldedWidgets()
     return bNoWeldedWidgets;
 }
 
+bool QtInstance::isQtWeldingEnabled()
+{
+    if (noWeldedWidgets())
+        return false;
+
+    // for now, require explicitly enabling use of QtInstanceBuilder via SAL_VCL_QT_USE_WELDED_WIDGETS
+    static const bool bUseWeldedWidgets = (getenv("SAL_VCL_QT_USE_WELDED_WIDGETS") != nullptr);
+    return bUseWeldedWidgets;
+}
+
 QWidget* QtInstance::GetNativeParentFromWeldParent(weld::Widget* pParent)
 {
     if (!pParent)
@@ -939,10 +949,7 @@ QWidget* QtInstance::GetNativeParentFromWeldParent(weld::Widget* pParent)
 std::unique_ptr<weld::Builder>
 QtInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
-    // for now, require explicitly enabling use of QtInstanceBuilder via SAL_VCL_QT_USE_WELDED_WIDGETS
-    static const bool bUseWeldedWidgets = (getenv("SAL_VCL_QT_USE_WELDED_WIDGETS") != nullptr);
-    if (bUseWeldedWidgets && !QtInstance::noWeldedWidgets()
-        && QtInstanceBuilder::IsUIFileSupported(rUIFile, pParent))
+    if (isQtWeldingEnabled() && QtInstanceBuilder::IsUIFileSupported(rUIFile, pParent))
     {
         QWidget* pQtParent = GetNativeParentFromWeldParent(pParent);
         return std::make_unique<QtInstanceBuilder>(pQtParent, rUIRoot, rUIFile);

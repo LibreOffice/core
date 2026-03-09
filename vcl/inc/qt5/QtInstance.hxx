@@ -248,6 +248,7 @@ public:
 
     static bool noNativeControls();
     static bool noWeldedWidgets();
+    static bool isQtWeldingEnabled();
 };
 
 inline QtInstance& GetQtInstance()
