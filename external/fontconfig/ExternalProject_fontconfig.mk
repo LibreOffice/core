@@ -62,6 +62,12 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) -C src && $(MAKE) fonts.conf \
+		$(if $(filter MACOSX,$(OS)), \
+			&& install_name_tool -id @__________________________________________________OOO/libfontconfig.1.dylib \
+				$(gb_UnpackedTarball_workdir)/fontconfig/src/.libs/libfontconfig.1.dylib \
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
+				$(gb_UnpackedTarball_workdir)/fontconfig/src/.libs/libfontconfig.1.dylib \
+		) \
 	)
 	$(call gb_Trace_EndRange,fontconfig,EXTERNAL)
 
