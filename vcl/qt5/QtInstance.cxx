@@ -966,7 +966,7 @@ std::unique_ptr<weld::Builder> QtInstance::CreateInterimBuilder(vcl::Window* pPa
                                                                 bool bAllowCycleFocusOut,
                                                                 sal_uInt64 nLOKWindowId)
 {
-    if (!QtInstanceBuilder::IsInterimUIFileSupported(rUIFile))
+    if (!isQtWeldingEnabled() || !QtInstanceBuilder::IsInterimUIFileSupported(rUIFile))
         return SalInstance::CreateInterimBuilder(pParent, rUIRoot, rUIFile, bAllowCycleFocusOut,
                                                  nLOKWindowId);
 
