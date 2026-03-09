@@ -1081,11 +1081,13 @@ QVariant Bridge::cool(const QString& messageStr)
             ri.collabWs->close();
         }
 
-        // Navigate to the COOL server's cool.html with WOPI params.
-        // Use the original versioned path captured by the
-        // IntegratorFilePicker (e.g. /browser/<hash>/cool.html).
+        // Use the versioned cool.html path the IntegratorFilePicker
+        // captured (e.g. /browser/<hash>/cool.html), but drop the
+        // wasm/ segment that discovery.xml splices in for embed mode:
+        // switchToServerMode loads the regular cool.html.
         QString path = ri.coolPath.isEmpty()
             ? "/browser/dist/cool.html" : ri.coolPath;
+        path.replace("/wasm/cool.html", "/cool.html");
         QString coolUrl = ri.coolServer + path
             + "?WOPISrc=" + QUrl::toPercentEncoding(ri.wopiSrc)
             + "&access_token=" + QUrl::toPercentEncoding(ri.accessToken)

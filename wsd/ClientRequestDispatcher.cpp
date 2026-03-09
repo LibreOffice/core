@@ -2811,7 +2811,9 @@ std::string ClientRequestDispatcher::getDiscoveryXML()
 
     const std::string rootUriValue = "%SRV_URI%";
     const std::string uriBaseValue = rootUriValue + "/browser/" + Util::getCoolVersionHash() + '/';
-    const std::string uriValue = uriBaseValue + "cool.html?";
+    const std::string uriValue = uriBaseValue
+        + (COOLWSD::WASMEnabled ? "wasm/" : "")
+        + "cool.html?";
 
     LOG_DBG_S("Processing discovery.xml from " << discoveryPath);
     Poco::XML::InputSource inputSrc(discoveryPath);
