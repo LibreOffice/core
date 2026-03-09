@@ -2827,6 +2827,11 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL, bool bGrabFocus)
     SetActiveControl(nullptr, bGrabFocus);
     m_bValid = true;
 
+    // freeze the ctrl container so that dynamically-created token widgets
+    // are batched into a single update for the JSDialog/LOK layer - without
+    // this, the browser never learns about the new children
+    m_xCtrlParentWin->freeze();
+
     if (m_pForm)
     {
         //apply current level settings to the form
@@ -2891,6 +2896,11 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL, bool bGrabFocus)
         }
         SetActiveControl(pSetActiveControl, bGrabFocus);
     }
+
+    // thaw triggers sendUpdate() which serializes the ctrl container's
+    // subtree (now including all new token widgets) and sends it to the browser
+    m_xCtrlParentWin->thaw();
+
     AdjustScrolling();
 }
 
@@ -2987,6 +2997,8 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
 
     if(!m_pActiveCtrl)
         return;
+
+    m_xCtrlParentWin->freeze();
 
     SwFormToken aToInsertToken(rToken);
 
@@ -3177,6 +3189,8 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
     pButton->Show();
     SetActiveControl(pButton);
 
+    m_xCtrlParentWin->thaw();
+
     AdjustPositions();
 }
 
@@ -3201,6 +3215,8 @@ void SwTokenWindow::RemoveControl(const SwTOXButton* pDel, bool bInternalCall)
     if (it == m_aControlList.begin() || it == m_aControlList.end() - 1)
         return;
 
+    m_xCtrlParentWin->freeze();
+
     auto itLeft = it, itRight = it;
     --itLeft;
     ++itRight;
@@ -3218,6 +3234,9 @@ void SwTokenWindow::RemoveControl(const SwTOXButton* pDel, bool bInternalCall)
     m_aControlList.erase(it);
 
     SetActiveControl(pLeftEdit);
+
+    m_xCtrlParentWin->thaw();
+
     AdjustPositions();
     m_aModifyHdl.Call(nullptr);
 }
