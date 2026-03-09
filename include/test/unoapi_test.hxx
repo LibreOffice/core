@@ -22,6 +22,13 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 
+enum ValidationFormat
+{
+    OOXML,
+    ODF,
+    MSBINARY
+};
+
 enum class TestFilter
 {
     NONE,
@@ -170,6 +177,8 @@ protected:
 private:
     void setTestInteractionHandler(const char* pPassword,
                                    std::vector<css::beans::PropertyValue>& rFilterOptions);
+
+    void validate(const OUString& rURL, TestFilter eFilter) const;
 
     bool mbSkipValidation;
     OUString m_aBaseString;
