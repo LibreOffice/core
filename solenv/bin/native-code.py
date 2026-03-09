@@ -728,6 +728,7 @@ writer_constructor_list = [
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
 # sw/util/sw.component
     "Writer_SwTextDocument_get_implementation",
+    "com_sun_star_comp_Writer_WebDocument_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisImporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation",
