@@ -692,10 +692,11 @@ void SfxTabDialogController::AddTabPage(const OUString &rName /* Page ID */,
 void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
                                         const OUString& rRiderText,
                                         CreateTabPage pCreateFunc, /* Pointer to the Factory Method */
+                                        GetTabPageRanges pRangesFunc,
                                         const OUString* pIconName)
 {
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
-    AddTabPage(rName, pCreateFunc, nullptr);
+    AddTabPage(rName, pCreateFunc, pRangesFunc);
     m_xTabCtrl->append_page(rName, rRiderText, pIconName);
     // Save the label in Data_Impl
     auto it = Find(m_pImpl->aData, rName);
@@ -709,13 +710,7 @@ void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
                                         GetTabPageRanges pRangesFunc,
                                         const OUString& rIconName)
 {
-    assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
-    AddTabPage(rName, pCreateFunc, pRangesFunc);
-    m_xTabCtrl->append_page(rName, rRiderText, &rIconName);
-    // Save the label in Data_Impl
-    auto it = Find(m_pImpl->aData, rName);
-    if (it != m_pImpl->aData.end())
-        (*it)->sLabel = rRiderText;
+    AddTabPage(rName, rRiderText, pCreateFunc, pRangesFunc, &rIconName);
 }
 
 void SfxTabDialogController::AddTabPage(const OUString &rName,
@@ -723,7 +718,7 @@ void SfxTabDialogController::AddTabPage(const OUString &rName,
                                         CreateTabPage pCreateFunc,
                                         const OUString& rIconName)
 {
-    AddTabPage(rName, rRiderText, pCreateFunc, &rIconName);
+    AddTabPage(rName, rRiderText, pCreateFunc, nullptr, &rIconName);
 }
 
 void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& rRiderText,
