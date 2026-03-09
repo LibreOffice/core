@@ -51,6 +51,7 @@
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <editeng/outlobj.hxx>
@@ -596,23 +597,6 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     const double fStartInY(bVerticalWriting && !bTopToBottom ? aAdjustTranslate.getY() + aOutlinerScale.getY() : aAdjustTranslate.getY());
     basegfx::B2DHomMatrix aNewTransformA(basegfx::utils::createTranslateB2DHomMatrix(fStartInX, fStartInY));
 
-    // Apply the camera rotation. It have to be applied after adjustment of
-    // the text (top, bottom, center, left, right).
-    if(GetCameraZRotation() != 0)
-    {
-        // First find the text rect.
-        basegfx::B2DRange aTextRectangle(/*x1=*/aTranslate.getX() + aAdjustTranslate.getX(),
-                                         /*y1=*/aTranslate.getY() + aAdjustTranslate.getY(),
-                                         /*x2=*/aTranslate.getX() + aOutlinerScale.getX() - aAdjustTranslate.getX(),
-                                         /*y2=*/aTranslate.getY() + aOutlinerScale.getY() - aAdjustTranslate.getY());
-
-        // Rotate the text from the center point.
-        basegfx::B2DVector aTranslateToCenter(aTextRectangle.getWidth() / 2, aTextRectangle.getHeight() / 2);
-        aNewTransformA.translate(-aTranslateToCenter.getX(), -aTranslateToCenter.getY());
-        aNewTransformA.rotate(basegfx::deg2rad(360.0 - GetCameraZRotation() ));
-        aNewTransformA.translate(aTranslateToCenter.getX(), aTranslateToCenter.getY());
-    }
-
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
     const bool bMirrorX(aScale.getX() < 0.0);
@@ -638,6 +622,20 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         aClipRange);
     rOutliner.StripPortions(aBreakup);
     rTarget = aBreakup.getTextPortionPrimitives();
+
+    // Apply 3D camera Z rotation as a post-processing step
+    if (GetCameraZRotation() != 0 && !rTarget.empty())
+    {
+        // Rotate around the center of the unrotated text content
+        const drawinglayer::geometry::ViewInformation2D aViewInfoLocal;
+        const basegfx::B2DRange aOrigBounds = rTarget.getB2DRange(aViewInfoLocal);
+        const basegfx::B2DHomMatrix aRotationMat(basegfx::utils::createRotateAroundPoint(
+            aOrigBounds.getCenter(), basegfx::deg2rad(360.0 - GetCameraZRotation())));
+
+        rtl::Reference pRotation(
+            new drawinglayer::primitive2d::TransformPrimitive2D(aRotationMat, std::move(rTarget)));
+        rTarget = drawinglayer::primitive2d::Primitive2DContainer{ pRotation };
+    }
 
     // cleanup outliner
     rOutliner.SetBackgroundColor(aOriginalBackColor);
