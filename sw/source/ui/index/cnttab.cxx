@@ -1592,6 +1592,7 @@ public:
     virtual void set_grid_left_attach(int nPos) override
     {
         m_pParent->get_child_container()->set_child_left_attach(*m_xEntry, nPos);
+        m_pParent->get_child_container()->set_child_top_attach(*m_xEntry, 0);
     }
 
     virtual void get_extents_relative_to(weld::Widget& rRelative, int& x, int& y, int& width, int& height) override
@@ -1752,6 +1753,7 @@ public:
     virtual void set_grid_left_attach(int nPos) override
     {
         m_pParent->get_child_container()->set_child_left_attach(*m_xButton, nPos);
+        m_pParent->get_child_container()->set_child_top_attach(*m_xButton, 0);
     }
 
     void get_extents_relative_to(weld::Widget& rRelative, int& x, int& y, int& width, int& height) override
