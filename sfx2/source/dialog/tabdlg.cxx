@@ -91,13 +91,11 @@ SfxTabDialogItem* SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
     return new SfxTabDialogItem( *this, pToPool );
 }
 
-typedef std::vector<Data_Impl*> SfxTabDlgData_Impl;
-
 struct TabDlg_Impl
 {
     bool                bHideResetBtn : 1;
     bool                bStarted : 1;
-    SfxTabDlgData_Impl  aData;
+    std::vector<Data_Impl*> aData;
 
     explicit TabDlg_Impl(sal_uInt8 nCnt)
         : bHideResetBtn(false)
