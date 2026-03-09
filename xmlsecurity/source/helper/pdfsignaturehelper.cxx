@@ -157,25 +157,18 @@ bool GetEOFOfSignature(const Signature& rSignature, size_t& rEOF)
  * Get the value of the "modification detection and prevention" permission:
  * Valid values are 1, 2 and 3: only 3 allows annotations after signing.
  */
-int GetMDPPerm(const std::vector<Signature>& rSignatures)
+vcl::pdf::MDPPermission GetMDPPerm(const std::vector<Signature>& rSignatures)
 {
-    int nRet = 3;
-
-    if (rSignatures.empty())
+    for (const auto& s : rSignatures)
     {
-        return nRet;
+        if (!s.m_pSignature)
+            continue;
+        vcl::pdf::MDPPermission raw = s.m_pSignature->getDocMDPPermission();
+        if (raw != vcl::pdf::MDPPermission::Unspecified)
+            return raw;
     }
 
-    for (const auto& rSignature : rSignatures)
-    {
-        int nPerm = rSignature.m_pSignature->getDocMDPPermission();
-        if (nPerm != 0)
-        {
-            return nPerm;
-        }
-    }
-
-    return nRet;
+    return vcl::pdf::MDPPermission::AnnotationsAllowed; // default as before
 }
 
 /// Checks if there are unsigned incremental updates between the signatures or after the last one.
@@ -245,7 +238,7 @@ bool PageChecksum::operator==(const PageChecksum& rChecksum) const
 
 /// Collects the checksum of each page of one version of the PDF.
 void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<PageChecksum>& rPageChecksums,
-                             int nMDPPerm)
+                             vcl::pdf::MDPPermission nMDPPerm)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
@@ -295,7 +288,8 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<PageChecksum>&
  * Checks if incremental updates after singing performed valid modifications only.
  * nMDPPerm decides if annotations/commenting is OK, other changes are always not.
  */
-bool IsValidSignature(SvStream& rStream, const Signature& rSignature, int nMDPPerm)
+bool IsValidSignature(SvStream& rStream, const Signature& rSignature,
+                      vcl::pdf::MDPPermission nMDPPerm)
 {
     size_t nSignatureEOF = 0;
     if (!GetEOFOfSignature(rSignature, nSignatureEOF))
@@ -332,7 +326,7 @@ bool IsValidSignature(SvStream& rStream, const Signature& rSignature, int nMDPPe
  * @return If we can determinate a result.
  */
 bool ValidateSignature(SvStream& rStream, const Signature& rSignature,
-                       SignatureInformation& rInformation, int nMDPPerm,
+                       SignatureInformation& rInformation, vcl::pdf::MDPPermission nMDPPerm,
                        const std::set<unsigned int>& rSignatureEOFs,
                        const std::vector<unsigned int>& rTrailerEnds)
 {
@@ -464,7 +458,7 @@ bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
 
     m_aSignatureInfos.clear();
 
-    int nMDPPerm = GetMDPPerm(aSignatures);
+    vcl::pdf::MDPPermission nMDPPerm = GetMDPPerm(aSignatures);
 
     for (size_t i = 0; i < aSignatures.size(); ++i)
     {

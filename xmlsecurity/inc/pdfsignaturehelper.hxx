@@ -14,6 +14,8 @@
 
 #include <svl/sigstruct.hxx>
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 namespace com::sun::star
 {
 namespace frame

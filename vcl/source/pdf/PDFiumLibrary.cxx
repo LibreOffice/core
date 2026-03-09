@@ -592,7 +592,7 @@ public:
     PDFiumSignatureImpl(FPDF_SIGNATURE pSignature);
 
     std::vector<int> getByteRange() override;
-    int getDocMDPPermission() override;
+    MDPPermission getDocMDPPermission() override;
     std::vector<unsigned char> getContents() override;
     OString getSubFilter() override;
     OUString getReason() override;
@@ -634,7 +634,7 @@ public:
 
     std::unique_ptr<PDFiumStructureTree> getStructureTree() override;
 
-    BitmapChecksum getChecksum(int nMDPPerm) override;
+    BitmapChecksum getChecksum(MDPPermission nMDPPerm) override;
 
     double getWidth() override;
     double getHeight() override;
@@ -868,9 +868,9 @@ std::vector<int> PDFiumSignatureImpl::getByteRange()
     return aByteRange;
 }
 
-int PDFiumSignatureImpl::getDocMDPPermission()
+MDPPermission PDFiumSignatureImpl::getDocMDPPermission()
 {
-    return FPDFSignatureObj_GetDocMDPPermission(mpSignature);
+    return MDPPermissionFromInt(FPDFSignatureObj_GetDocMDPPermission(mpSignature));
 }
 
 std::vector<unsigned char> PDFiumSignatureImpl::getContents()
@@ -1455,7 +1455,7 @@ bool PDFiumPageObjectImpl::getDrawMode(PDFFillMode& rFillMode, bool& rStroke)
     return bRet;
 }
 
-BitmapChecksum PDFiumPageImpl::getChecksum(int nMDPPerm)
+BitmapChecksum PDFiumPageImpl::getChecksum(MDPPermission nMDPPerm)
 {
     int nPageWidth = getWidth();
     int nPageHeight = getHeight();
@@ -1467,7 +1467,7 @@ BitmapChecksum PDFiumPageImpl::getChecksum(int nMDPPerm)
     PDFiumBitmapImpl* pBitmapImpl = static_cast<PDFiumBitmapImpl*>(pPdfBitmap.get());
 
     int nFlags = 0;
-    if (nMDPPerm != 3)
+    if (nMDPPerm != MDPPermission::AnnotationsAllowed)
     {
         // Annotations/commenting should affect the checksum, signature verification wants this.
         nFlags = FPDF_ANNOT;
