@@ -1540,8 +1540,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154549)
 {
-// FIXME: On Windows, the number of chars is 4 instead of 3
-#ifndef _WIN32
     loadFromFile(u"tdf154549.odt");
     save(TestFilter::PDF_WRITER);
 
@@ -1568,7 +1566,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154549)
     // - Expected: ִبي
     // - Actual  : بִي
     CPPUNIT_ASSERT_EQUAL(u"\u05B4\u0628\u064A"_ustr, aActualText);
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150846)
