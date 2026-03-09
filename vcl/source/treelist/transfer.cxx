@@ -2068,6 +2068,34 @@ Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavo
     return aSeq;
 }
 
+OUString TransferableDataHelper::GetSimpleURL() const
+{
+    OUString sURL;
+    bool bHaveURL = false;
+    if (HasFormat(SotClipboardFormatId::UNIFORMRESOURCELOCATOR))
+        bHaveURL = GetString(SotClipboardFormatId::UNIFORMRESOURCELOCATOR, sURL)
+                   && !sURL.isEmpty();
+
+    if (!bHaveURL)
+    {
+        OUString sText;
+        if (!GetString(SotClipboardFormatId::STRING, sText))
+            return sURL;
+
+        sText = sText.trim();
+        if (sText.indexOf('\n') < 0 && sText.indexOf('\r') < 0)
+        {
+            INetURLObject aURLObj;
+            aURLObj.SetSmartURL(sText);
+            if (aURLObj.GetProtocol() == INetProtocol::Http ||
+                aURLObj.GetProtocol() == INetProtocol::Https ||
+                aURLObj.GetProtocol() == INetProtocol::Mailto)
+                sURL = sText;
+        }
+    }
+    return sURL;
+}
+
 std::unique_ptr<SvStream> TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat ) const
 {
     DataFlavor aFlavor;

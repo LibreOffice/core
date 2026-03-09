@@ -38,7 +38,8 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-
+#include <vcl/transfer.hxx>
+#include <svtools/stringtransfer.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -137,6 +138,9 @@ public:
     void testTdf162803StaleKashidaArray();
     void testEscapementNotPreservedOnParaBreak();
 
+    /// Test pasting a URL over selected text creates a hyperlink field
+    void testPasteURLOverSelection();
+
     DECL_STATIC_LINK(Test, CalcFieldValueHdl, EditFieldInfo*, void);
 
     CPPUNIT_TEST_SUITE(Test);
@@ -171,6 +175,7 @@ public:
     CPPUNIT_TEST(testTdf151748StaleKashidaArray);
     CPPUNIT_TEST(testTdf162803StaleKashidaArray);
     CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
+    CPPUNIT_TEST(testPasteURLOverSelection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2417,6 +2422,47 @@ void Test::testEscapementNotPreservedOnParaBreak()
 
     const EditCharAttrib* pEscAttr = pNode->GetCharAttribs().FindEmptyAttrib(EE_CHAR_ESCAPEMENT, 0);
     CPPUNIT_ASSERT_MESSAGE("Escapement attribute should NOT be included.", !pEscAttr);
+}
+
+void Test::testPasteURLOverSelection()
+{
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
+    aOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
+    EditEngine& aEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+
+    OUString aParaText = u"Click here for details"_ustr;
+    aEditEngine.SetText(aParaText);
+    CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(sal_Int32(0)));
+
+    OUString aURL = u"https://www.example.com"_ustr;
+    rtl::Reference<svt::OStringTransferable> xTransferable(new svt::OStringTransferable(aURL));
+    TransferableDataHelper aDataHelper(xTransferable);
+    OUString sURL = aDataHelper.GetSimpleURL();
+    CPPUNIT_ASSERT_EQUAL(aURL, sURL);
+
+    OUString aSelectedText = u"here"_ustr;
+    ContentNode* pNode = rDoc.GetObject(0);
+    EditSelection aSel(EditPaM(pNode, 6), EditPaM(pNode, 10));
+    CPPUNIT_ASSERT_EQUAL(aSelectedText, aEditEngine.GetSelected(aSel));
+
+    SvxURLField aURLField(sURL, aSelectedText, SvxURLFormat::Repr);
+    SvxFieldItem aFieldItem(aURLField, EE_FEATURE_FIELD);
+
+    aSel = aEditEngine.DeleteSelection(aSel);
+    aEditEngine.InsertField(aSel, aFieldItem);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aEditEngine.GetFieldInfo(0).size());
+    EFieldInfo aFieldInfo = aEditEngine.GetFieldInfo(sal_Int32(0))[0];
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aFieldInfo.aPosition.nIndex);
+
+    const SvxURLField* pURLField
+        = dynamic_cast<const SvxURLField*>(aFieldInfo.pFieldItem->GetField());
+    CPPUNIT_ASSERT(pURLField);
+    CPPUNIT_ASSERT_EQUAL(aURL, pURLField->GetURL());
+    CPPUNIT_ASSERT_EQUAL(aSelectedText, pURLField->GetRepresentation());
+    CPPUNIT_ASSERT_EQUAL(u"Click here for details"_ustr,
+                         rDoc.GetParaAsString(sal_Int32(0)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

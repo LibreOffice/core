@@ -1489,6 +1489,22 @@ bool SwTransferable::Paste(SwWrtShell& rSh, const TransferableDataHelper& rData,
 {
     SwPasteContext aPasteContext(rSh);
 
+    // Paste URL as hyperlink over selected text
+    if (!GetSwTransferable(rData) && rSh.HasSelection() && !rSh.IsTableMode())
+    {
+        SwPaM* pCursor = rSh.GetCursor();
+        if (!pCursor->IsMultiSelection()
+            && pCursor->Start()->GetNodeIndex() == pCursor->End()->GetNodeIndex())
+        {
+            OUString sURL = rData.GetSimpleURL();
+            if (!sURL.isEmpty())
+            {
+                rSh.InsertURL(SwFormatINetFormat(sURL, OUString()), OUString());
+                return true;
+            }
+        }
+    }
+
     sal_uInt8 nAction=0;
     SotExchangeDest nDestination = SwTransferable::GetSotDestination( rSh );
     SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;

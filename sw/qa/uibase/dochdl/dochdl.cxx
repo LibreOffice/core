@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <vcl/transfer.hxx>
+#include <svtools/stringtransfer.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -19,6 +20,9 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <fmtanchr.hxx>
+#include <fmtinfmt.hxx>
+#include <ndtxt.hxx>
+#include <txatbase.hxx>
 
 /// Covers sw/source/uibase/dochdl/ fixes.
 class SwUibaseDochdlTest : public SwModelTestBase
@@ -98,6 +102,31 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testComplexSelectionAtChar)
     // Without the accompanying fix in place, this test would have failed, a selection containing an
     // image was considered simple.
     CPPUNIT_ASSERT(bComplex);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testPasteURLOverSelection)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert2(u"Click here for details"_ustr);
+
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 16, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+
+    OUString aURL(u"https://www.example.com"_ustr);
+    rtl::Reference<svt::OStringTransferable> xTransferable(new svt::OStringTransferable(aURL));
+    TransferableDataHelper aHelper(xTransferable);
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+    CPPUNIT_ASSERT_EQUAL(u"Click here for details"_ustr, pTextNode->GetText());
+
+    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(6, RES_TXTATR_INETFMT);
+    CPPUNIT_ASSERT(pAttr);
+
+    auto* pINetFormat = static_cast<const SwFormatINetFormat*>(&pAttr->GetAttr());
+    CPPUNIT_ASSERT_EQUAL(aURL, pINetFormat->GetValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

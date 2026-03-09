@@ -364,6 +364,9 @@ public:
                              std::u16string_view topic, std::u16string_view item,
                              std::u16string_view extra = {});
     bool ReadDDELink(OUString& application, OUString& topic, OUString& item, OUString& rest) const;
+
+    /// Returns a simple web URL on the clipboard if present
+    OUString GetSimpleURL() const;
 };
 
 class VCL_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") DragSourceHelper

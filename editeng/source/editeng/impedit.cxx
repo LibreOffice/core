@@ -45,6 +45,7 @@
 #include <comphelper/string.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <tools/urlobj.hxx>
 #include <boost/property_tree/ptree.hpp>
 
 using namespace css;
@@ -1995,6 +1996,33 @@ void ImpEditView::Paste(uno::Reference<datatransfer::clipboard::XClipboard> cons
 
     if ( !xDataObj.is() || !EditEngine::HasValidData( xDataObj ) )
         return;
+
+    // Paste URL as hyperlink over selected text
+    {
+        EditSelection aSel(GetEditSelection());
+        if (aSel.HasRange()
+            && aSel.Min().GetNode() == aSel.Max().GetNode())
+        {
+            TransferableDataHelper aDataHelper(xDataObj);
+            OUString sURL = aDataHelper.GetSimpleURL();
+            if (!sURL.isEmpty())
+            {
+                OUString sSelectedText = getImpEditEngine().GetSelected(aSel);
+                SvxURLField aURLField(sURL, sSelectedText, SvxURLFormat::Repr);
+                SvxFieldItem aFieldItem(aURLField, EE_FEATURE_FIELD);
+
+                getImpEditEngine().UndoActionStart(EDITUNDO_PASTE);
+                aSel = getEditEngine().DeleteSelection(aSel);
+                EditPaM aPaM = getImpEditEngine().InsertField(aSel, aFieldItem);
+                getImpEditEngine().UndoActionEnd();
+                SetEditSelection(EditSelection(aPaM, aPaM));
+                getImpEditEngine().UpdateSelections();
+                getImpEditEngine().FormatAndLayout(GetEditViewPtr());
+                ShowCursor(DoAutoScroll(), true);
+                return;
+            }
+        }
+    }
 
     getImpEditEngine().UndoActionStart( EDITUNDO_PASTE );
 

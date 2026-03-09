@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uibase_dochdl, \
     sfx \
     subsequenttest \
     svl \
+    svt \
     svx \
     svxcore \
     sw \
