@@ -239,7 +239,6 @@ bool MailMergeCfgIsEmailSupported()
 
 }
 
-//typedef SfxTabPage* (*FNCreateTabPage)(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rAttrSet);
 static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
