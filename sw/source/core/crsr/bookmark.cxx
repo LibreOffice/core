@@ -172,6 +172,16 @@ namespace
         SwPosition const*const pSepPos)
     {
         io_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::UI_REPLACE, nullptr);
+
+        // Temporarily disable SetModified notifications during fieldmark setup.
+        // The InsertString calls below set up fieldmark characters (start, sep,
+        // end) in multiple steps.  Between these steps the fieldmark is in a
+        // partially-constructed state.  SetModified can cascade through
+        // embedded-object listeners and trigger layout creation, which calls
+        // FindFieldSep on the incomplete fieldmark and crashes (SIGSEGV).
+        const bool bOldEnableSetModified = io_rDoc.getIDocumentState().IsEnableSetModified();
+        io_rDoc.getIDocumentState().SetEnableSetModified(false);
+
         OUString startChar(aStartMark);
         if (aEndMark != CH_TXT_ATR_FORMELEMENT
             && rField.GetMarkStart() == rField.GetMarkEnd())
@@ -224,6 +234,10 @@ namespace
             }
         }
         lcl_AssertFieldMarksSet(rField, aStartMark, aEndMark);
+
+        io_rDoc.getIDocumentState().SetEnableSetModified(bOldEnableSetModified);
+        if (bOldEnableSetModified)
+            io_rDoc.getIDocumentState().SetModified();
 
         io_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
     }
