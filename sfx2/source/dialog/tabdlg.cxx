@@ -433,10 +433,7 @@ bool SfxTabDialogController::DeactivatePage(std::u16string_view aPage)
 
 bool SfxTabDialogController::PrepareLeaveCurrentPage()
 {
-    const OUString sId = m_xTabCtrl->get_current_page_ident();
-    auto it = Find(sId);
-    DBG_ASSERT(it != m_pImpl->aData.end(), "Id not known");
-    SfxTabPage* pPage = it != m_pImpl->aData.end() ? (*it)->xTabPage.get() : nullptr;
+    SfxTabPage* pPage = GetTabPage(m_xTabCtrl->get_current_page_ident());
 
     bool bEnd = !pPage;
 
@@ -1167,10 +1164,7 @@ Bitmap SfxTabDialogController::createScreenshot() const
 
 OUString SfxTabDialogController::GetScreenshotId() const
 {
-    const OUString sId = m_xTabCtrl->get_current_page_ident();
-    auto it = Find(sId);
-    SfxTabPage* pPage = it != m_pImpl->aData.end() ? (*it)->xTabPage.get() : nullptr;
-    if (pPage)
+    if (SfxTabPage* pPage = GetTabPage(m_xTabCtrl->get_current_page_ident()))
     {
         OUString sHelpId(pPage->GetHelpId());
         if (!sHelpId.isEmpty())
