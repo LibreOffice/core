@@ -82,8 +82,6 @@ protected:
 
     SfxOkDialogController* GetDialogController() const;
 public:
-    void                SetDialogController(SfxOkDialogController* pDialog);
-public:
     virtual             ~SfxTabPage() override;
 
     void set_visible(bool bVisible)

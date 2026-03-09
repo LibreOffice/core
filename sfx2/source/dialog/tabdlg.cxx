@@ -750,7 +750,7 @@ void SfxTabDialogController::CreatePages()
             pDataObject->xTabPage = (pDataObject->fnCreatePage)(pPage, this, m_pSet.get());
         else
             pDataObject->xTabPage = (pDataObject->fnCreatePage)(pPage, this, CreateInputItemSet(pDataObject->sId));
-        pDataObject->xTabPage->SetDialogController(this);
+        assert(pDataObject->xTabPage->GetDialogController() == this);
         SvtViewOptions aPageOpt(EViewType::TabPage, pDataObject->xTabPage->GetConfigId());
         OUString sUserData;
         Any aUserItem = aPageOpt.GetUserItem(USERITEM_NAME);

@@ -407,7 +407,6 @@ std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateFillStyleTabPage(FillType eFil
         return nullptr;
 
     std::unique_ptr<SfxTabPage> pTabPage = (*fnCreate)(m_xFillTab.get(), pController, &m_rXFSet);
-    pTabPage->SetDialogController(pController);
     return pTabPage;
 }
 

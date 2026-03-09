@@ -184,12 +184,6 @@ void SfxTabPage::ChangesApplied()
 {
 }
 
-void SfxTabPage::SetDialogController(SfxOkDialogController* pDialog)
-{
-    mpSfxDialogController = pDialog;
-    m_pDialogController = mpSfxDialogController;
-}
-
 SfxOkDialogController* SfxTabPage::GetDialogController() const
 {
     return mpSfxDialogController;
