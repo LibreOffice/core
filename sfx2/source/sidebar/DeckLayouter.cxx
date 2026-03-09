@@ -480,6 +480,7 @@ void DistributeHeights (
         {
             rItem.mnDistributedHeight += nAdditionalHeightPerPanel + nAdditionalHeightForFirstPanel;
             nRemainingHeightToDistribute -= nAdditionalHeightPerPanel + nAdditionalHeightForFirstPanel;
+            nAdditionalHeightForFirstPanel = 0;
         }
     }
 
