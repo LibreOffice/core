@@ -708,7 +708,7 @@ void SbRtl_Exp(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_FileLen(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
+    if (rPar.Count() != 2)
     {
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
