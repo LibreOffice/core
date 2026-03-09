@@ -48,9 +48,8 @@ SfxTabPage::SfxTabPage(weld::Container* pPage, weld::DialogController* pControll
     , mbHasExchangeSupport(false)
     , mbCancel(false)
     , mbStandard(false)
-    , mpSfxDialogController(nullptr)
+    , mpSfxDialogController(dynamic_cast<SfxOkDialogController*>(m_pDialogController))
 {
-    mpSfxDialogController = dynamic_cast<SfxOkDialogController*>(m_pDialogController);
 }
 
 SfxTabPage::~SfxTabPage()

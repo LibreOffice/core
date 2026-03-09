@@ -58,7 +58,7 @@ private:
     std::unordered_map<OUString, css::uno::Any> maAdditionalProperties;
 
     bool mbStandard;
-    SfxOkDialogController* mpSfxDialogController;
+    SfxOkDialogController* const mpSfxDialogController;
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
 protected:
