@@ -452,6 +452,9 @@ void SwMacrosTest::testFdo87530()
         xBasLibPwd->changeLibraryPassword(u"BarLibrary"_ustr, u""_ustr, u"foo"_ustr);
     }
 
+    // Password protected documents can't be validated
+    skipValidation();
+
     saveAndReload(TestFilter::ODT);
 
     {

@@ -265,7 +265,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, std::u16string_view
     }
     else if( eFormat == test::ODF && !aContentOUString.isEmpty() )
     {
-        if( aContentOUString.indexOf("Error") != -1 )
+        if( aContentOUString.indexOf("Error") != -1 || aContentOUString.indexOf("Fatal") != -1 )
         {
             SAL_WARN("test", aContentOUString);
             CPPUNIT_FAIL(aContentString.getStr());

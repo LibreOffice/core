@@ -300,6 +300,9 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)
     xLC->loadLibrary(sLibName);
     CPPUNIT_ASSERT(xLC->isLibraryLoaded(sLibName));
 
+    // Password protected documents can't be validated
+    skipValidation();
+
     // Now check that saving stores Unicode data correctly in image's string pool
     saveAndReload(TestFilter::ODS);
 
@@ -339,6 +342,9 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedArrayInUserType)
     CPPUNIT_ASSERT(xPasswd->verifyLibraryPassword(sLibName, u"password"_ustr));
     xLC->loadLibrary(sLibName);
     CPPUNIT_ASSERT(xLC->isLibraryLoaded(sLibName));
+
+    // Password protected documents can't be validated
+    skipValidation();
 
     // Now check that saving stores array bounds correctly
     saveAndReload(TestFilter::ODS);

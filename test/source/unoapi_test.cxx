@@ -172,10 +172,10 @@ void UnoApiTest::save(TestFilter eFilter, const char* pPassword)
                 { u"OOXPassword"_ustr, uno::Any(sPassword) }
             };
             aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
-
-            // validation fails with "zip END header not found"
-            skipValidation();
         }
+
+        // Password protected documents can't be validated
+        skipValidation();
     }
 
     saveWithParams(aMediaDescriptor.getAsConstPropertyValueList());
