@@ -156,6 +156,10 @@ void JSInstanceBuilder::initializeDialogSender()
 {
     m_sTypeOfJSON = "dialog";
 
+    // fragment builders (those that never call weld_dialog) must not send close
+    // for the parent dialog - weld_dialog will set m_bCanClose back to true
+    m_bCanClose = false;
+
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
 
     if (pRoot && pRoot->GetParent())
@@ -447,6 +451,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OUString& id)
         m_aOwnedToplevel.reset(pDialog);
         m_xBuilder->drop_ownership(pDialog);
         m_bHasTopLevelDialog = true;
+        m_bCanClose = true;
 
         pRet.reset(new JSDialog(this, pDialog, this, false));
 
@@ -475,6 +480,7 @@ std::unique_ptr<weld::Assistant> JSInstanceBuilder::weld_assistant(const OUStrin
         m_aOwnedToplevel.reset(pDialog);
         m_xBuilder->drop_ownership(pDialog);
         m_bHasTopLevelDialog = true;
+        m_bCanClose = true;
 
         pRet.reset(new JSAssistant(this, pDialog, this, false));
 
@@ -503,6 +509,7 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
         m_aOwnedToplevel.reset(pMessageDialog);
         m_xBuilder->drop_ownership(pMessageDialog);
         m_bHasTopLevelDialog = true;
+        m_bCanClose = true;
 
         initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
         m_bSentInitialUpdate = true;
