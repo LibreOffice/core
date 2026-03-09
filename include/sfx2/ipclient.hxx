@@ -72,10 +72,10 @@ public:
     bool                SetObjArea( const tools::Rectangle & );
     const tools::Rectangle&    GetObjArea() const;
     tools::Rectangle           GetScaledObjArea() const;
-    void                SetSizeScale( const Fraction & rScaleWidth, const Fraction & rScaleHeight );
-    void                SetObjAreaAndScale( const tools::Rectangle&, const Fraction&, const Fraction& );
-    const Fraction&     GetScaleWidth() const;
-    const Fraction&     GetScaleHeight() const;
+    void                SetSizeScale( const double fScaleWidth, const double fScaleHeight );
+    void                SetObjAreaAndScale( const tools::Rectangle&, const double, const double );
+    double              GetScaleWidth() const;
+    double              GetScaleHeight() const;
     void                Invalidate();
     static SfxInPlaceClient* GetClient( SfxObjectShell const * pDoc, const css::uno::Reference < css::embed::XEmbeddedObject >& xObject );
     sal_Int64           GetAspect() const;

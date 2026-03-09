@@ -970,11 +970,9 @@ void View::DoConnect(SdrOle2Obj* pObj)
         MapMode aMapMode( mrDoc.GetScaleUnit() );
         Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
 
-        Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
-        Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-        aScaleWidth.ReduceInaccurate(10);       // compatible to SdrOle2Obj
-        aScaleHeight.ReduceInaccurate(10);
-        pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
+        double fScaleWidth  = static_cast<double>(aDrawSize.Width()) / aObjAreaSize.Width();
+        double fScaleHeight = static_cast<double>(aDrawSize.Height()) / aObjAreaSize.Height();
+        pSdClient->SetSizeScale(fScaleWidth, fScaleHeight);
 
         // visible area is only changed in-place!
         // the object area must be set after the scaling, since it triggers resize

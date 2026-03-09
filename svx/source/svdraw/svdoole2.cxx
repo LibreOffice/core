@@ -1600,7 +1600,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 if ( pClient )
                 {
                     tools::Rectangle aScaleRect(getRectangle().TopLeft(), aObjAreaSize);
-                    pClient->SetObjAreaAndScale( aScaleRect, aScaleWidth, aScaleHeight);
+                    pClient->SetObjAreaAndScale( aScaleRect, double(aScaleWidth), double(aScaleHeight));
                 }
                 else
                 {

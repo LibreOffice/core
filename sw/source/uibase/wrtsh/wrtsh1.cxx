@@ -874,8 +874,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
     Size _aVisArea( aSize.Width, aSize.Height );
 
-    Fraction aScaleWidth( 1, 1 );
-    Fraction aScaleHeight( 1, 1 );
+    double fScaleWidth = 1.0;
+    double fScaleHeight = 1.0;
 
     bool bUseObjectSize = false;
 
@@ -908,8 +908,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
             }
             else
             {
-                aScaleWidth = Fraction( aObjArea.Width(),   _aVisArea.Width() );
-                aScaleHeight = Fraction( aObjArea.Height(), _aVisArea.Height());
+                fScaleWidth = static_cast<double>(aObjArea.Width()) / _aVisArea.Width();
+                fScaleHeight = static_cast<double>(aObjArea.Height()) / _aVisArea.Height();
             }
         }
     }
@@ -955,7 +955,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         }
     }
 
-    pCli->SetObjAreaAndScale( aArea.SVRect(), aScaleWidth, aScaleHeight );
+    pCli->SetObjAreaAndScale( aArea.SVRect(), fScaleWidth, fScaleHeight );
 }
 
 void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,

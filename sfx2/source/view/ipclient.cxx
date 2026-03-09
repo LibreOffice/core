@@ -116,8 +116,8 @@ class SfxInPlaceClient_Impl : public ::cppu::WeakImplHelper< embed::XEmbeddedCli
 public:
     Timer                           m_aTimer { "sfx::SfxInPlaceClient m_xImpl::m_aTimer" }; // activation timeout, starts after object connection
     tools::Rectangle                       m_aObjArea;             // area of object in coordinate system of the container (without scaling)
-    Fraction                        m_aScaleWidth;          // scaling that was applied to the object when it was not active
-    Fraction                        m_aScaleHeight;
+    double                          m_fScaleWidth;          // scaling that was applied to the object when it was not active
+    double                          m_fScaleHeight;
     SfxInPlaceClient*               m_pClient;
     sal_Int64                       m_nAspect;              // ViewAspect that is assigned from the container
     bool                            m_bStoreObject;
@@ -436,8 +436,8 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
 
     // apply scaling to object area and convert to pixels
     tools::Rectangle aRealObjArea( m_aObjArea );
-    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_aScaleWidth),
-                                tools::Long( aRealObjArea.GetHeight() * m_aScaleHeight) ) );
+    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_fScaleWidth),
+                                tools::Long( aRealObjArea.GetHeight() * m_fScaleHeight) ) );
 
     vcl::Window* pEditWin = m_pClient->GetEditWin();
     // In Writer and Impress the map mode is disabled. So when a chart is
@@ -471,8 +471,8 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
 
     // currently(?) same as placement
     tools::Rectangle aRealObjArea( m_aObjArea );
-    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_aScaleWidth),
-                                tools::Long( aRealObjArea.GetHeight() * m_aScaleHeight) ) );
+    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth() * m_fScaleWidth),
+                                tools::Long( aRealObjArea.GetHeight() * m_fScaleHeight) ) );
 
     vcl::Window* pEditWin = m_pClient->GetEditWin();
     // See comment for SfxInPlaceClient_Impl::getPlacement.
@@ -542,8 +542,8 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
         SfxBooleanFlagGuard aGuard( m_bResizeNoScale );
 
         // new size of the object area without scaling
-        Size aNewObjSize( tools::Long( aNewLogicRect.GetWidth()  / m_aScaleWidth ),
-                          tools::Long( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
+        Size aNewObjSize( tools::Long( aNewLogicRect.GetWidth()  / m_fScaleWidth ),
+                          tools::Long( aNewLogicRect.GetHeight() / m_fScaleHeight ) );
 
         // now remove scaling from new placement and keep this at the new object area
         aNewLogicRect.SetSize( aNewObjSize );
@@ -643,7 +643,7 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw
 {
     m_xImp->m_pClient = this;
     m_xImp->m_nAspect = nAspect;
-    m_xImp->m_aScaleWidth = m_xImp->m_aScaleHeight = Fraction(1,1);
+    m_xImp->m_fScaleWidth = m_xImp->m_fScaleHeight = 1.0;
     pViewShell->NewIPClient_Impl(this);
     m_xImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
     m_xImp->m_aTimer.SetInvokeHandler( LINK( m_xImp.get(), SfxInPlaceClient_Impl, TimerHdl ) );
@@ -779,18 +779,18 @@ const tools::Rectangle& SfxInPlaceClient::GetObjArea() const
 tools::Rectangle SfxInPlaceClient::GetScaledObjArea() const
 {
     tools::Rectangle aRealObjArea( m_xImp->m_aObjArea );
-    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth()  * m_xImp->m_aScaleWidth ),
-                                tools::Long( aRealObjArea.GetHeight() * m_xImp->m_aScaleHeight ) ) );
+    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth()  * m_xImp->m_fScaleWidth ),
+                                tools::Long( aRealObjArea.GetHeight() * m_xImp->m_fScaleHeight ) ) );
     return aRealObjArea;
 }
 
 
-void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fraction & rScaleHeight )
+void SfxInPlaceClient::SetSizeScale( const double fScaleWidth, const double fScaleHeight )
 {
-    if ( m_xImp->m_aScaleWidth != rScaleWidth || m_xImp->m_aScaleHeight != rScaleHeight )
+    if ( m_xImp->m_fScaleWidth != fScaleWidth || m_xImp->m_fScaleHeight != fScaleHeight )
     {
-        m_xImp->m_aScaleWidth = rScaleWidth;
-        m_xImp->m_aScaleHeight = rScaleHeight;
+        m_xImp->m_fScaleWidth = fScaleWidth;
+        m_xImp->m_fScaleHeight = fScaleHeight;
 
         m_xImp->SizeHasChanged();
 
@@ -801,13 +801,13 @@ void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fractio
 }
 
 
-void SfxInPlaceClient::SetObjAreaAndScale( const tools::Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
+void SfxInPlaceClient::SetObjAreaAndScale( const tools::Rectangle& rArea, const double fScaleWidth, const double fScaleHeight )
 {
-    if( rArea != m_xImp->m_aObjArea || m_xImp->m_aScaleWidth != rScaleWidth || m_xImp->m_aScaleHeight != rScaleHeight )
+    if( rArea != m_xImp->m_aObjArea || m_xImp->m_fScaleWidth != fScaleWidth || m_xImp->m_fScaleHeight != fScaleHeight )
     {
         m_xImp->m_aObjArea = rArea;
-        m_xImp->m_aScaleWidth = rScaleWidth;
-        m_xImp->m_aScaleHeight = rScaleHeight;
+        m_xImp->m_fScaleWidth = fScaleWidth;
+        m_xImp->m_fScaleHeight = fScaleHeight;
 
         m_xImp->SizeHasChanged();
 
@@ -816,15 +816,15 @@ void SfxInPlaceClient::SetObjAreaAndScale( const tools::Rectangle& rArea, const 
 }
 
 
-const Fraction& SfxInPlaceClient::GetScaleWidth() const
+double SfxInPlaceClient::GetScaleWidth() const
 {
-    return m_xImp->m_aScaleWidth;
+    return m_xImp->m_fScaleWidth;
 }
 
 
-const Fraction& SfxInPlaceClient::GetScaleHeight() const
+double SfxInPlaceClient::GetScaleHeight() const
 {
-    return m_xImp->m_aScaleHeight;
+    return m_xImp->m_fScaleHeight;
 }
 
 
@@ -834,8 +834,8 @@ void SfxInPlaceClient::Invalidate()
 
     // the object area is provided in logical coordinates of the window but without scaling applied
     tools::Rectangle aRealObjArea( m_xImp->m_aObjArea );
-    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth()  * m_xImp->m_aScaleWidth ),
-                                tools::Long( aRealObjArea.GetHeight() * m_xImp->m_aScaleHeight ) ) );
+    aRealObjArea.SetSize( Size( tools::Long( aRealObjArea.GetWidth()  * m_xImp->m_fScaleWidth ),
+                                tools::Long( aRealObjArea.GetHeight() * m_xImp->m_fScaleHeight ) ) );
 
     m_pEditWin->Invalidate( IsNegativeX() ? lcl_negateRectX(aRealObjArea) : aRealObjArea );
 
@@ -992,8 +992,8 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
 
                                 tools::Rectangle aScaledArea = GetScaledObjArea();
                                 m_xImp->m_aObjArea.SetSize( aNewSize );
-                                m_xImp->m_aScaleWidth = Fraction( aScaledArea.GetWidth(), aNewSize.Width() );
-                                m_xImp->m_aScaleHeight = Fraction( aScaledArea.GetHeight(), aNewSize.Height() );
+                                m_xImp->m_fScaleWidth = static_cast<double>(aScaledArea.GetWidth()) / aNewSize.Width();
+                                m_xImp->m_fScaleHeight = static_cast<double>(aScaledArea.GetHeight()) / aNewSize.Height();
                             }
                         }
                         catch (uno::Exception const&)

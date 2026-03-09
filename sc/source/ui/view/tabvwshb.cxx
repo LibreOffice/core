@@ -98,11 +98,9 @@ void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
 
     Size aOleSize = pObj->GetOrigObjSize();
 
-    Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
-    Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-    aScaleWidth.ReduceInaccurate(10);       // compatible with SdrOle2Obj
-    aScaleHeight.ReduceInaccurate(10);
-    pClient->SetSizeScale(aScaleWidth,aScaleHeight);
+    double fScaleWidth = static_cast<double>(aDrawSize.Width()) / aOleSize.Width();
+    double fScaleHeight = static_cast<double>(aDrawSize.Height()) / aOleSize.Height();
+    pClient->SetSizeScale(fScaleWidth,fScaleHeight);
 
     // visible section is only changed inplace!
     // the object area must be set after the scaling since it triggers the resizing
@@ -207,18 +205,15 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
                     awt::Size aSz( aOleSize.Width(), aOleSize.Height() );
                     xObj->setVisualAreaSize( pClient->GetAspect(), aSz );
                 }
-                Fraction aOne( 1, 1 );
-                pClient->SetSizeScale( aOne, aOne );
+                pClient->SetSizeScale( 1.0, 1.0 );
             }
             else
             {
                 //  calculate scale from client and VisArea size
 
-                Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
-                Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-                aScaleWidth.ReduceInaccurate(10);       // compatible with SdrOle2Obj
-                aScaleHeight.ReduceInaccurate(10);
-                pClient->SetSizeScale(aScaleWidth,aScaleHeight);
+                double fScaleWidth = static_cast<double>(aDrawSize.Width()) / aOleSize.Width();
+                double fScaleHeight = static_cast<double>(aDrawSize.Height()) / aOleSize.Height();
+                pClient->SetSizeScale(fScaleWidth,fScaleHeight);
             }
 
             // visible section is only changed inplace!
