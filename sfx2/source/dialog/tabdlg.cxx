@@ -56,7 +56,6 @@ namespace {
 struct Data_Impl
 {
     OUString sId;                 // The ID
-    OUString sLabel;              // The tab label
     CreateTabPage fnCreatePage;   // Pointer to Factory
     GetTabPageRanges fnGetRanges; // Pointer to Ranges-Function
     std::unique_ptr<SfxTabPage> xTabPage;         // The TabPage itself
@@ -696,10 +695,6 @@ void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
     AddTabPage(rName, pCreateFunc, pRangesFunc);
     m_xTabCtrl->append_page(rName, rRiderText, pIconName);
-    // Save the label in Data_Impl
-    auto it = Find(rName);
-    if (it != m_pImpl->aData.end())
-        (*it)->sLabel = rRiderText;
 }
 
 void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
@@ -726,10 +721,6 @@ void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& r
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
     AddTabPage(rName, nPageCreateId);
     m_xTabCtrl->append_page(rName, rRiderText, pIconName);
-    // Save the label in Data_Impl
-    auto it = Find(rName);
-    if (it != m_pImpl->aData.end())
-        (*it)->sLabel = rRiderText;
 }
 
 void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& rRiderText,
@@ -1040,12 +1031,6 @@ OUString SfxTabDialogController::GetTabPageNameForWhich(sal_uInt16 nWhich) const
 
 OUString SfxTabDialogController::GetTabPageLabel(const OUString& rPageId) const
 {
-    // First try to get the label from Data_Impl
-    auto it = Find(rPageId);
-    if (it != m_pImpl->aData.end() && !(*it)->sLabel.isEmpty())
-        return (*it)->sLabel;
-
-    // Then try from the notebook
     OUString sLabel = m_xTabCtrl->get_tab_label_text(rPageId);
     if (!sLabel.isEmpty())
         return sLabel;
