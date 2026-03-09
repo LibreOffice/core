@@ -752,7 +752,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                                 }
                             }
                             else
-                                aStack << aPool.Store(ocNoName, pExtName->GetName());
+                                aStack << aPool.Store(ocErrRef);
                         }
                         break;
                         default:
