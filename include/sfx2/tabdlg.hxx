@@ -206,6 +206,9 @@ public:
     bool selectPageByUIXMLDescription(const OUString& rUIXMLDescription);
     Bitmap createScreenshot() const;
     OUString GetScreenshotId() const;
+
+private:
+    auto Find(std::u16string_view rId) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

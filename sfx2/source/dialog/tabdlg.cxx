@@ -107,9 +107,9 @@ struct TabDlg_Impl
     }
 };
 
-static auto Find(const SfxTabDlgData_Impl& rArr, std::u16string_view rId)
+auto SfxTabDialogController::Find(std::u16string_view rId) const
 {
-    return std::find_if(rArr.begin(), rArr.end(),
+    return std::find_if(m_pImpl->aData.begin(), m_pImpl->aData.end(),
                         [rId](const auto& item) { return item->sId == rId; });
 }
 
@@ -216,7 +216,7 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
 */
 
 {
-    auto it = Find(m_pImpl->aData, m_xTabCtrl->get_current_page_ident());
+    auto it = Find(m_xTabCtrl->get_current_page_ident());
     assert(it != m_pImpl->aData.end() && "Id not known");
 
     (*it)->xTabPage->Reset(m_pSet.get());
@@ -271,7 +271,7 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
 {
     m_bStandardPushed = true;
 
-    auto it = Find(m_pImpl->aData, m_xTabCtrl->get_current_page_ident());
+    auto it = Find(m_xTabCtrl->get_current_page_ident());
     assert(it != m_pImpl->aData.end() && "Id not known");
 
     if (!(*it)->fnGetRanges)
@@ -329,7 +329,7 @@ void SfxTabDialogController::ActivatePage(const OUString& rPage)
 
 {
     assert(!m_pImpl->aData.empty() && "no Pages registered");
-    auto it = Find(m_pImpl->aData, rPage);
+    auto it = Find(rPage);
     if (it == m_pImpl->aData.end())
     {
         SAL_WARN("sfx.dialog", "Tab Page ID '" << rPage << "' not known, this is pretty serious and needs investigation");
@@ -370,7 +370,7 @@ bool SfxTabDialogController::DeactivatePage(std::u16string_view aPage)
 
 {
     assert(!m_pImpl->aData.empty() && "no Pages registered");
-    auto it = Find(m_pImpl->aData, aPage);
+    auto it = Find(aPage);
     if (it == m_pImpl->aData.end())
     {
         SAL_WARN("sfx.dialog", "Tab Page ID not known, this is pretty serious and needs investigation");
@@ -437,7 +437,7 @@ bool SfxTabDialogController::DeactivatePage(std::u16string_view aPage)
 bool SfxTabDialogController::PrepareLeaveCurrentPage()
 {
     const OUString sId = m_xTabCtrl->get_current_page_ident();
-    auto it = Find(m_pImpl->aData, sId);
+    auto it = Find(sId);
     DBG_ASSERT(it != m_pImpl->aData.end(), "Id not known");
     SfxTabPage* pPage = it != m_pImpl->aData.end() ? (*it)->xTabPage.get() : nullptr;
 
@@ -699,7 +699,7 @@ void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
     AddTabPage(rName, pCreateFunc, pRangesFunc);
     m_xTabCtrl->append_page(rName, rRiderText, pIconName);
     // Save the label in Data_Impl
-    auto it = Find(m_pImpl->aData, rName);
+    auto it = Find(rName);
     if (it != m_pImpl->aData.end())
         (*it)->sLabel = rRiderText;
 }
@@ -729,7 +729,7 @@ void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& r
     AddTabPage(rName, nPageCreateId);
     m_xTabCtrl->append_page(rName, rRiderText, pIconName);
     // Save the label in Data_Impl
-    auto it = Find(m_pImpl->aData, rName);
+    auto it = Find(rName);
     if (it != m_pImpl->aData.end())
         (*it)->sLabel = rRiderText;
 }
@@ -820,7 +820,7 @@ void SfxTabDialogController::RemoveTabPage(const OUString& rId)
 
 {
     m_xTabCtrl->remove_page(rId);
-    auto it = Find(m_pImpl->aData, rId);
+    auto it = Find(rId);
 
     if (it != m_pImpl->aData.end())
     {
@@ -1043,7 +1043,7 @@ OUString SfxTabDialogController::GetTabPageNameForWhich(sal_uInt16 nWhich) const
 OUString SfxTabDialogController::GetTabPageLabel(const OUString& rPageId) const
 {
     // First try to get the label from Data_Impl
-    auto it = Find(m_pImpl->aData, rPageId);
+    auto it = Find(rPageId);
     if (it != m_pImpl->aData.end() && !(*it)->sLabel.isEmpty())
         return (*it)->sLabel;
 
@@ -1128,7 +1128,7 @@ SfxTabPage* SfxTabDialogController::GetTabPage(std::u16string_view rPageId) cons
 */
 
 {
-    auto it = Find(m_pImpl->aData, rPageId);
+    auto it = Find(rPageId);
     if (it != m_pImpl->aData.end())
         return (*it)->xTabPage.get();
     return nullptr;
@@ -1190,7 +1190,7 @@ Bitmap SfxTabDialogController::createScreenshot() const
 OUString SfxTabDialogController::GetScreenshotId() const
 {
     const OUString sId = m_xTabCtrl->get_current_page_ident();
-    auto it = Find(m_pImpl->aData, sId);
+    auto it = Find(sId);
     SfxTabPage* pPage = it != m_pImpl->aData.end() ? (*it)->xTabPage.get() : nullptr;
     if (pPage)
     {
