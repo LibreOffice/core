@@ -1782,7 +1782,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateHandling)
     CPPUNIT_ASSERT_EQUAL(u"2031-06-01"_ustr, sCurrentDate);
 }
 
-#if !defined(_WIN32)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateInvalidation)
 {
     createSwDoc();
@@ -1839,7 +1838,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateInvalidation)
     }
     CPPUNIT_ASSERT_EQUAL(u""_ustr, sCurrentDate);
 }
-#endif
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testOleSaveWhileEdit)
 {
