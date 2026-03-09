@@ -6697,10 +6697,7 @@ else
     PathFormat "${absolute_path}"
     TARFILE_LOCATION="${formatted_path_unix}"
 fi
-PathFormat "$TARFILE_LOCATION"
-TARFILE_LOCATION_NATIVE="$formatted_path"
 AC_SUBST(TARFILE_LOCATION)
-AC_SUBST(TARFILE_LOCATION_NATIVE)
 
 AC_MSG_CHECKING([whether we want to fetch tarballs])
 if test "$enable_fetch_external" != "no"; then
@@ -16347,6 +16344,11 @@ if test -n "$WSL_ONLY_AS_HELPER"; then
     SRC_ROOT="$formatted_path"
     PathFormat "$BUILDDIR"
     BUILDDIR="$formatted_path"
+    # TARFILE_LOCATION and JAVAINTERPRETER are used in the validator scripts
+    PathFormat "$TARFILE_LOCATION"
+    TARFILE_LOCATION_="$formatted_path"
+    PathFormat "$JAVAINTERPRETER"
+    JAVAINTERPRETER="$formatted_path"
     # git-bash has (gnu) tar, curl and sha256sum
     CURL="curl.exe"
     WGET=
