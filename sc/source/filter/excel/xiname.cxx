@@ -135,9 +135,9 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     // add index for local names
     if( mnXclTab != EXC_NAME_GLOBAL )
     {
-        sal_uInt16 nUsedTab = (GetBiff() == EXC_BIFF8) ? mnXclTab : nExtSheet;
+        sal_uInt16 nUsedTab = (GetBiff() == EXC_BIFF8) ? (mnXclTab - 1) : nExtSheet;
         // TODO: may not work for BIFF5, handle skipped sheets (all BIFF)
-        mnScTab = static_cast< SCTAB >( nUsedTab - 1 );
+        mnScTab = static_cast< SCTAB >( nUsedTab );
     }
 
     // 3) *** convert the name definition formula *** -------------------------

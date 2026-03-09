@@ -529,7 +529,8 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
                     if (pName->IsMacro())
                         aStack << aPool.Store(ocMacro, pName->GetXclName());
                     else if (pName->GetScRangeData())
-                        aStack << aPool.StoreName(nUINT16, -1);
+                        aStack << aPool.StoreName(nUINT16,
+                                                  pName->IsGlobal() ? -1 : pName->GetScTab());
                     else
                         aStack << aPool.Store(ocExternal, pName->GetXclName());
                 }
