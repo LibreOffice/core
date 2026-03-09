@@ -55,6 +55,35 @@ class PDFiumBitmap;
 class PDFiumDocument;
 class PDFiumPageObject;
 
+// Description based on the table 8.104 Entries in the DocMDP transform parameters dictionary
+//
+// The enum type describes the access permissions
+// granted for this document.
+enum class MDPPermission : sal_uInt8
+{
+    Unspecified = 0,
+    NoChangesAllowed = 1, // No changes to the document are permitted, invalidates the signature.
+    FormFillAllowed = 2, // Permitted changes are filling in forms, instantiating page templates,
+    // and signing; other changes invalidate the signature.
+    AnnotationsAllowed = 3 // Permitted changes are the same as for 2,
+    // as well as annotation creation, deletion, and modification; other changes invalidate the signature.
+};
+
+inline MDPPermission MDPPermissionFromInt(int v) noexcept
+{
+    switch (v)
+    {
+        case 1:
+            return MDPPermission::NoChangesAllowed;
+        case 2:
+            return MDPPermission::FormFillAllowed;
+        case 3:
+            return MDPPermission::AnnotationsAllowed;
+        default:
+            return MDPPermission::Unspecified;
+    }
+}
+
 class PDFiumFont
 {
 public:
@@ -279,7 +308,7 @@ public:
     virtual std::unique_ptr<PDFiumStructureTree> getStructureTree() = 0;
 
     /// Get bitmap checksum of the page, without annotations/commenting.
-    virtual BitmapChecksum getChecksum(int nMDPPerm) = 0;
+    virtual BitmapChecksum getChecksum(MDPPermission nMDPPerm) = 0;
 
     virtual double getWidth() = 0;
     virtual double getHeight() = 0;
@@ -299,7 +328,7 @@ public:
     virtual ~PDFiumSignature() = default;
 
     virtual std::vector<int> getByteRange() = 0;
-    virtual int getDocMDPPermission() = 0;
+    virtual MDPPermission getDocMDPPermission() = 0;
     virtual std::vector<unsigned char> getContents() = 0;
     virtual OString getSubFilter() = 0;
     virtual OUString getReason() = 0;
