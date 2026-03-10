@@ -86,6 +86,7 @@ private:
     const std::unique_ptr<comphelper::SolarMutex> m_pYieldMutex;
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_clipboard;
     o3tl::sorted_vector<OUString> m_usedUI;
+    const OUString m_sToolkitName;
 
 protected:
     bool m_bSupportsOpenGL = false;
@@ -223,6 +224,7 @@ public:
 
     /// get information about underlying versions
     virtual OUString        getOSVersion() { return u"-"_ustr; }
+    const OUString& GetToolkitName() { return m_sToolkitName; };
 
     virtual const cairo_font_options_t* GetCairoFontOptions() { return nullptr; }
 

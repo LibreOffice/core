@@ -162,7 +162,6 @@ struct ImplSVAppData
     std::optional<OUString> mxAppName;            // Application name
     std::optional<OUString> mxAppFileName;        // Abs. Application FileName
     std::optional<OUString> mxDisplayName;        // Application Display Name
-    std::optional<OUString> mxToolkitName;        // Toolkit Name
     Help*                   mpHelp = nullptr;               // Application help
     VclPtr<PopupMenu>       mpActivePopupMenu;              // Actives Popup-Menu (in Execute)
     VclPtr<ImplWheelWindow> mpWheelWindow;                  // WheelWindow

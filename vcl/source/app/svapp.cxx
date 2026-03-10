@@ -1422,11 +1422,7 @@ Help* Application::GetHelp()
 
 const OUString & Application::GetToolkitName()
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maAppData.mxToolkitName )
-        return *(pSVData->maAppData.mxToolkitName);
-    else
-        return EMPTY_OUSTRING;
+    return GetSalInstance()->GetToolkitName();
 }
 
 vcl::Window* Dialog::GetDefDialogParent()

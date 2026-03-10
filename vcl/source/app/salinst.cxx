@@ -33,11 +33,9 @@
 SalInstance::SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex, SalData* pSalData,
                          const OUString& rToolkitName)
     : m_pYieldMutex(std::move(pMutex))
+    , m_sToolkitName(rToolkitName)
 {
     SetSalData(pSalData);
-
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mxToolkitName = rToolkitName;
 }
 
 SalInstance::~SalInstance() {}
