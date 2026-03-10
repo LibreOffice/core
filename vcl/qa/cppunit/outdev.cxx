@@ -96,39 +96,18 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testVirtualDevice)
 
     Bitmap aBmp = pVDev->GetBitmap(Point(), aSize);
 
-#if 0
-    OUString rFileName("/tmp/foo-unx.png");
-    try {
-        vcl::PNGWriter aWriter( aBmp );
-        SvFileStream sOutput( rFileName, StreamMode::WRITE );
-        aWriter.Write( sOutput );
-        sOutput.Close();
-    } catch (...) {
-        SAL_WARN("vcl", "Error writing png to " << rFileName);
-    }
-#endif
-
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0, 0)));
-#if !defined _WIN32 //TODO: various failures on Windows tinderboxes
     CPPUNIT_ASSERT_EQUAL(COL_BLUE, pVDev->GetPixel(Point(1, 2)));
     CPPUNIT_ASSERT_EQUAL(COL_RED, pVDev->GetPixel(Point(31, 30)));
-#endif
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(30, 31)));
 
     // Gotcha: y and x swap for BitmapReadAccess: deep joy.
     BitmapScopedReadAccess pAcc(aBmp);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, static_cast<Color>(pAcc->GetPixel(0, 0)));
-#if !defined _WIN32 //TODO: various failures on Windows tinderboxes
     CPPUNIT_ASSERT_EQUAL(COL_BLUE, static_cast<Color>(pAcc->GetPixel(2, 1)));
     CPPUNIT_ASSERT_EQUAL(COL_RED, static_cast<Color>(pAcc->GetPixel(30, 31)));
-#endif
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, static_cast<Color>(pAcc->GetPixel(31, 30)));
 
-#if 0
-    VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create( (vcl::Window *)nullptr );
-    CPPUNIT_ASSERT( pWin );
-    OutputDevice *pOutDev = pWin.get();
-#endif
 #endif
 }
 
