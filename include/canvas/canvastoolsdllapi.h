@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_CANVAS_CANVASTOOLSDLLAPI_H
-#define INCLUDED_CANVAS_CANVASTOOLSDLLAPI_H
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -29,7 +27,5 @@
 #define CANVASTOOLS_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 #define CANVASTOOLS_DLLPRIVATE SAL_DLLPRIVATE
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
