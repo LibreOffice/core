@@ -50,7 +50,6 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<double>
 
 class VclComplexTextTest : public test::BootstrapFixture
 {
-#if !defined _WIN32
     OUString maDataUrl = u"/vcl/qa/cppunit/data/"_ustr;
 
     OUString getFullUrl(std::u16string_view sFileName)
@@ -67,7 +66,6 @@ protected:
         OutputDevice::ImplRefreshAllFontData(true);
         return bAdded;
     }
-#endif
 
 public:
     VclComplexTextTest()
@@ -481,12 +479,10 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont(aFont);
 
-#if !defined _WIN32 // TODO: Fails on jenkins but passes locally
     // Add an emoji font so that we are sure a font will be found for the
     // emoji. The font is subset and supports only 🌿.
     bool bAdded = addFont(pOutDev, u"tdf153440.ttf", u"Noto Emoji");
     CPPUNIT_ASSERT_EQUAL(true, bAdded);
-#endif
 
     for (auto& aString : { u"ع 🌿 ع", u"a 🌿 a" })
     {
@@ -515,7 +511,6 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testMixedCJKLatinScript_glyph_advancements)
 {
 #if HAVE_MORE_FONTS
-#if !defined _WIN32
     OUString aTestScript(u"根据10.1(37BA) Eng"_ustr);
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
@@ -544,13 +539,11 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testMixedCJKLatinScript_glyph_advanceme
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, pOutDev->GetTextWidth(aTestScript));
     CPPUNIT_ASSERT_EQUAL(tools::Long(105), pOutDev->GetTextHeight());
 #endif
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
 {
 #if HAVE_MORE_FONTS
-#if !defined _WIN32 // TODO: Fails on jenkins but passes locally
     vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 72));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
@@ -594,7 +587,6 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
         // - Actual  : 5
         CPPUNIT_ASSERT_EQUAL(3, nStart);
     }
-#endif
 #endif
 }
 
