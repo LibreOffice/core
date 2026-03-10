@@ -6905,8 +6905,12 @@ void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rCont
     m_tableReference.m_nTableDepth = 0;
 
     rContext.m_bStartedParaSdt = m_aParagraphSdt.m_bStartedSdt;
+    rContext.m_oParaSdtPrToken = m_aParagraphSdt.m_oSdtPrToken;
+    rContext.m_vParaSdtBookmarkEnd = m_aParagraphSdt.m_vBookmarkEnd;
     m_aParagraphSdt.m_bStartedSdt = false;
+    m_aParagraphSdt.m_vBookmarkEnd.clear();
     rContext.m_bStartedRunSdt = m_aRunSdt.m_bStartedSdt;
+    // no need to save runSdt's SdtPrToken - it is never used once runSdt has started
     m_aRunSdt.m_bStartedSdt = false;
 
     rContext.m_nHyperLinkCount = m_nHyperLinkCount.back();
@@ -6919,6 +6923,8 @@ void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext const
     m_tableReference.m_bTableCellOpen = rContext.m_bTableCellOpen;
     m_tableReference.m_nTableDepth = rContext.m_nTableDepth;
     m_aParagraphSdt.m_bStartedSdt = rContext.m_bStartedParaSdt;
+    m_aParagraphSdt.m_oSdtPrToken = rContext.m_oParaSdtPrToken;
+    m_aParagraphSdt.m_vBookmarkEnd = rContext.m_vParaSdtBookmarkEnd;
     m_aRunSdt.m_bStartedSdt = rContext.m_bStartedRunSdt;
     m_nHyperLinkCount.back() = rContext.m_nHyperLinkCount;
 }

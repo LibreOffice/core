@@ -256,6 +256,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf170602_checkbox_bookmarkEnd)
     assertXPath(pXmlDoc, "//w:body/w:tbl/w:tr[2]/w:tc[1]/w:bookmarkEnd", 1); // Tempestades
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf170602_exportContext)
+{
+    // given a document where both the body text and the interrupting header stream contain an sdt
+    createSwDoc("tdf170602_exportContext.docx");
+
+    // without the fix, the document would crash on save, b/c m_oSdtPrToken wasn't preserved
+    save(TestFilter::DOCX);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInvalidDatetimeInProps)
 {
     createSwDoc("invalidDatetimeInProps.fodt");
