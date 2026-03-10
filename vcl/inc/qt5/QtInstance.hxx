@@ -72,7 +72,6 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
     Q_OBJECT
 
     osl::Condition m_aWaitingYieldCond;
-    const bool m_bUseCairo;
     QtTimer* m_pTimer;
     bool m_bSleeping;
     std::unordered_map<ClipboardSelectionType, rtl::Reference<QtClipboard>> m_aClipboards;
@@ -115,9 +114,9 @@ protected:
     virtual rtl::Reference<QtFilePicker>
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode);
-    bool useCairo() const { return m_bUseCairo; }
+    static bool useCairo();
     // encodes cairo usage and Qt platform name into the ToolkitName
-    OUString constructToolkitID(std::u16string_view sTKname);
+    static OUString constructToolkitID(std::u16string_view sTKname);
     void connectQScreenSignals(const QScreen*);
     void notifyDisplayChanged();
 

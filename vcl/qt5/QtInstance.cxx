@@ -257,10 +257,16 @@ void QtInstance::EmscriptenLightweightRunInMainThread_(std::function<void()> fun
     func();
 }
 
+bool QtInstance::useCairo()
+{
+    static bool bUseCairo = getenv("SAL_VCL_QT_USE_QFONT") == nullptr;
+    return bUseCairo;
+}
+
 OUString QtInstance::constructToolkitID(std::u16string_view sTKname)
 {
     OUString sID(sTKname + OUString::Concat(u" ("));
-    if (m_bUseCairo)
+    if (useCairo())
         sID += "cairo+";
     else
         sID += "qfont+";
@@ -270,7 +276,6 @@ OUString QtInstance::constructToolkitID(std::u16string_view sTKname)
 
 QtInstance::QtInstance()
     : SalGenericInstance(std::make_unique<QtYieldMutex>(), new GenericUnixSalData)
-    , m_bUseCairo(nullptr == getenv("SAL_VCL_QT_USE_QFONT"))
     , m_pTimer(nullptr)
     , m_bSleeping(false)
     , m_aUpdateStyleTimer("vcl::qt5 m_aUpdateStyleTimer")
@@ -377,7 +382,7 @@ SalFrame* QtInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameSt
 {
     SolarMutexGuard aGuard;
     SalFrame* pRet(nullptr);
-    RunInMainThread([&, this]() { pRet = new QtFrame(nullptr, nStyle, useCairo()); });
+    RunInMainThread([&]() { pRet = new QtFrame(nullptr, nStyle, useCairo()); });
     assert(pRet);
     return pRet;
 }
@@ -390,7 +395,7 @@ SalFrame* QtInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle)
 
     SalFrame* pRet(nullptr);
     RunInMainThread(
-        [&, this]() { pRet = new QtFrame(static_cast<QtFrame*>(pParent), nStyle, useCairo()); });
+        [&]() { pRet = new QtFrame(static_cast<QtFrame*>(pParent), nStyle, useCairo()); });
     assert(pRet);
     return pRet;
 }
@@ -430,7 +435,7 @@ std::unique_ptr<SalVirtualDevice> QtInstance::CreateVirtualDevice(SalGraphics& r
                                                                   DeviceFormat /*eFormat*/,
                                                                   bool bAlphaMaskTransparent)
 {
-    if (m_bUseCairo)
+    if (useCairo())
     {
         SvpSalGraphics* pSvpSalGraphics = dynamic_cast<QtSvpGraphics*>(&rGraphics);
         assert(pSvpSalGraphics);
@@ -452,7 +457,7 @@ std::unique_ptr<SalVirtualDevice>
 QtInstance::CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,
                                 DeviceFormat /*eFormat*/, const SystemGraphicsData& rGd)
 {
-    if (m_bUseCairo)
+    if (useCairo())
     {
         SvpSalGraphics* pSvpSalGraphics = dynamic_cast<QtSvpGraphics*>(&rGraphics);
         assert(pSvpSalGraphics);
@@ -499,7 +504,7 @@ SalSystem* QtInstance::CreateSalSystem() { return new QtSystem; }
 
 std::shared_ptr<SalBitmap> QtInstance::CreateSalBitmap()
 {
-    if (m_bUseCairo)
+    if (useCairo())
         return std::make_shared<SvpSalBitmap>();
     else
         return std::make_shared<QtBitmap>();
