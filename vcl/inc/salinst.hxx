@@ -214,9 +214,6 @@ public:
     virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 > createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& )
         { return css::uno::Reference< css::ui::dialogs::XFolderPicker2 >(); }
 
-    // callbacks for printer updates
-    virtual void            updatePrinterUpdate() {}
-
     /// Set the app's (somewhat) magic/main-thread to this one.
     virtual void            updateMainThread() {}
     /// Disconnect that - good for detaching from the JavaVM on Android.

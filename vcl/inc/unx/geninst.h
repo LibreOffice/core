@@ -67,7 +67,8 @@ public:
     virtual void                GetPrinterQueueState   ( SalPrinterQueueInfo* pInfo ) override;
     virtual OUString            GetDefaultPrinter() override;
     virtual void                PostPrintersChanged() = 0;
-    virtual void                updatePrinterUpdate() override;
+    // callbacks for printer updates
+    virtual void updatePrinterUpdate();
     bool isPrinterInit() const { return mbPrinterInit; }
     virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() = 0;
 

@@ -40,6 +40,7 @@
 
 #include <headless/BitmapHelper.hxx>
 #include <headless/svpbmp.hxx>
+#include <unx/geninst.h>
 #include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
@@ -3072,7 +3073,7 @@ bool X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
 
         if( FocusIn == pEvent->type )
         {
-            GetSalInstance()->updatePrinterUpdate();
+            GetGenericInstance()->updatePrinterUpdate();
             mbInputFocus = True;
             ImplSVData* pSVData = ImplGetSVData();
 
