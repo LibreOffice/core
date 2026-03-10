@@ -30,10 +30,14 @@
 #include <vcl/weld/MessageDialog.hxx>
 #include <vcl/weld/weld.hxx>
 
-SalInstance::SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex, SalData* pSalData)
+SalInstance::SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex, SalData* pSalData,
+                         const OUString& rToolkitName)
     : m_pYieldMutex(std::move(pMutex))
 {
     SetSalData(pSalData);
+
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maAppData.mxToolkitName = rToolkitName;
 }
 
 SalInstance::~SalInstance() {}

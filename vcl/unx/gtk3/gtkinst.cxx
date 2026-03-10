@@ -230,8 +230,12 @@ static VclInputFlags categorizeEvent(const GdkEvent *pEvent)
 }
 #endif
 
+#ifndef GTK_TOOLKIT_NAME
+#define GTK_TOOLKIT_NAME "gtk3"
+#endif
+
 GtkInstance::GtkInstance( std::unique_ptr<SalYieldMutex> pMutex )
-    : SvpSalInstance(std::move(pMutex), new GtkSalData)
+    : SvpSalInstance(std::move(pMutex), new GtkSalData, GTK_TOOLKIT_NAME)
     , m_pTimer(nullptr)
     , bNeedsInit(true)
     , m_pLastCairoFontOptions(nullptr)
@@ -256,15 +260,6 @@ void GtkInstance::EnsureInit()
     GtkSalData *pSalData = GetGtkSalData();
     pSalData->Init();
     GtkSalData::initNWF();
-
-    ImplSVData* pSVData = ImplGetSVData();
-#ifdef GTK_TOOLKIT_NAME
-    // [-loplugin:ostr] if we use a literal here, we get use-after-free on shutdown
-    pSVData->maAppData.mxToolkitName = OUString(GTK_TOOLKIT_NAME);
-#else
-    // [-loplugin:ostr] if we use a literal here, we get use-after-free on shutdown
-    pSVData->maAppData.mxToolkitName = OUString("gtk3");
-#endif
 
     bNeedsInit = false;
 }

@@ -95,7 +95,8 @@ protected:
 #endif
 
 public:
-    SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex, SalData* pSalData);
+    SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex, SalData* pSalData,
+                const OUString& rToolkitName);
     virtual ~SalInstance();
 
     bool supportsOpenGL() const { return m_bSupportsOpenGL; }

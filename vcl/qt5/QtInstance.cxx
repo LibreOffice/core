@@ -275,7 +275,8 @@ OUString QtInstance::constructToolkitID(std::u16string_view sTKname)
 }
 
 QtInstance::QtInstance(const OUString& rToolkitName)
-    : SalGenericInstance(std::make_unique<QtYieldMutex>(), new GenericUnixSalData)
+    : SalGenericInstance(std::make_unique<QtYieldMutex>(), new GenericUnixSalData,
+                         constructToolkitID(rToolkitName))
     , m_pTimer(nullptr)
     , m_bSleeping(false)
     , m_aUpdateStyleTimer("vcl::qt5 m_aUpdateStyleTimer")
@@ -289,8 +290,6 @@ QtInstance::QtInstance(const OUString& rToolkitName)
 #endif
 
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mxToolkitName = constructToolkitID(rToolkitName);
-
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
     pSVData->maNWFData.mbFlatMenu = true;
     pSVData->maNWFData.mbRolloverMenubar = true;

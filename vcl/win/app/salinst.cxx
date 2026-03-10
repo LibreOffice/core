@@ -360,12 +360,10 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
 }
 
 WinSalInstance::WinSalInstance(SalData* pSalData)
-    : SalInstance(std::make_unique<SalYieldMutex>(), pSalData)
+    : SalInstance(std::make_unique<SalYieldMutex>(), pSalData, u"win"_ustr)
     , mhInst( nullptr )
     , mhComWnd( nullptr )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mxToolkitName = OUString("win");
     m_bSupportsOpenGL = true;
     WinSkiaSalGraphicsImpl::prepareSkia();
 }
