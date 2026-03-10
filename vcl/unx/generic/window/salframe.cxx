@@ -49,7 +49,7 @@
 #include <unx/i18n_keysym.hxx>
 #include <opengl/zone.hxx>
 
-#include <unx/gensys.h>
+#include <unx/X11Helper.hxx>
 #include <window.h>
 
 #include <sal/macros.h>
@@ -1869,12 +1869,12 @@ void X11SalFrame::SetApplicationID( const OUString &rWMClass )
 void X11SalFrame::updateWMClass()
 {
     XClassHint* pClass = XAllocClassHint();
-    OString aResName = SalGenericSystem::getFrameResName();
+    OString aResName = X11Helper::getFrameResName();
     pClass->res_name  = const_cast<char*>(aResName.getStr());
 
     OString aResClass = OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
     const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
-                            SalGenericSystem::getFrameClassName();
+                            X11Helper::getFrameClassName();
 
     pClass->res_class = const_cast<char*>(pResClass);
     XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );

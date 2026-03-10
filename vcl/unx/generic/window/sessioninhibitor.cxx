@@ -11,7 +11,7 @@
 
 #include <functional>
 
-#include <unx/gensys.h>
+#include <unx/X11Helper.hxx>
 #include <unx/sessioninhibitor.hxx>
 
 #if USING_X11
@@ -47,7 +47,7 @@
 void SessionManagerInhibitor::inhibit(bool bInhibit, std::u16string_view sReason, ApplicationInhibitFlags eType,
                                       unsigned int window_system_id, const char* application_id)
 {
-    const char* appname = application_id ? application_id : SalGenericSystem::getFrameClassName();
+    const char* appname = application_id ? application_id : X11Helper::getFrameClassName();
     const OString aReason = OUStringToOString( sReason, RTL_TEXTENCODING_UTF8 );
 
     if (eType == APPLICATION_INHIBIT_IDLE)

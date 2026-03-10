@@ -14086,6 +14086,7 @@ vcl/inc/textlayout.hxx
 vcl/inc/textlineinfo.hxx
 vcl/inc/textrender.hxx
 vcl/inc/toolbox.h
+vcl/inc/unx/X11Helper.hxx
 vcl/inc/unx/cairotextrender.hxx
 vcl/inc/unx/cupsmgr.hxx
 vcl/inc/unx/fc_fontoptions.hxx
@@ -14096,7 +14097,6 @@ vcl/inc/unx/gendisp.hxx
 vcl/inc/unx/geninst.h
 vcl/inc/unx/genprn.h
 vcl/inc/unx/genpspgraphics.h
-vcl/inc/unx/gensys.h
 vcl/inc/unx/glyphcache.hxx
 vcl/inc/unx/gtk/gloactiongroup.h
 vcl/inc/unx/gtk/glomenu.h
@@ -14683,9 +14683,9 @@ vcl/source/window/window.cxx
 vcl/source/window/window2.cxx
 vcl/source/window/winproc.cxx
 vcl/source/window/wrkwin.cxx
+vcl/unx/generic/app/X11Helper.cxx
 vcl/unx/generic/app/gendisp.cxx
 vcl/unx/generic/app/geninst.cxx
-vcl/unx/generic/app/gensys.cxx
 vcl/unx/generic/app/i18n_cb.cxx
 vcl/unx/generic/app/i18n_ic.cxx
 vcl/unx/generic/app/i18n_im.cxx

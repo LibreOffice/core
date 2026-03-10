@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <unx/gensys.h>
+#include <salsys.hxx>
+
 #include <vector>
 
 class X11SalSystem final : public SalSystem

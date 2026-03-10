@@ -523,7 +523,7 @@ void GtkSalData::Init()
     // add executable
     nParams++;
 
-    g_set_application_name(SalGenericSystem::getFrameClassName());
+    g_set_application_name(X11Helper::getFrameClassName());
 
     // Set consistent name of the root accessible
     OUString aAppName = Application::GetAppName();

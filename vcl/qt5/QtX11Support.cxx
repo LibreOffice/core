@@ -8,6 +8,7 @@
  */
 
 #include <QtX11Support.hxx>
+#include <unx/X11Helper.hxx>
 
 #include <QtCore/QVersionNumber>
 
@@ -17,15 +18,13 @@
 #include <QtX11Extras/QX11Info>
 #endif
 
-#include <unx/gensys.h>
-
 void QtX11Support::setApplicationID(const xcb_window_t nWinId, std::u16string_view rWMClass)
 {
 #if CHECK_QT5_USING_X11
     OString aResClass = OUStringToOString(rWMClass, RTL_TEXTENCODING_ASCII_US);
     const char* pResClass
-        = !aResClass.isEmpty() ? aResClass.getStr() : SalGenericSystem::getFrameClassName();
-    OString aResName = SalGenericSystem::getFrameResName();
+        = !aResClass.isEmpty() ? aResClass.getStr() : X11Helper::getFrameClassName();
+    OString aResName = X11Helper::getFrameResName();
 
     // the WM_CLASS data consists of two concatenated cstrings, including the terminating '\0' chars
     const uint32_t data_len = aResName.getLength() + 1 + strlen(pResClass) + 1;

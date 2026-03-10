@@ -646,9 +646,9 @@ vcl_headless_code= \
     vcl/headless/svpdummies \
     vcl/headless/svpinst \
     vcl/headless/svpvd \
+    vcl/unx/generic/app/X11Helper \
     vcl/unx/generic/app/gendisp \
     vcl/unx/generic/app/geninst \
-    vcl/unx/generic/app/gensys \
 
 vcl_headless_freetype_code=\
     vcl/headless/svpprn \

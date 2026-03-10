@@ -2638,9 +2638,9 @@ void GtkSalFrame::updateWMClass()
 
     OString aResClass = OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
     const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
-                                                    SalGenericSystem::getFrameClassName();
+                                                    X11Helper::getFrameClassName();
     XClassHint* pClass = XAllocClassHint();
-    OString aResName = SalGenericSystem::getFrameResName();
+    OString aResName = X11Helper::getFrameResName();
     pClass->res_name  = const_cast<char*>(aResName.getStr());
     pClass->res_class = const_cast<char*>(pResClass);
     Display *display = gdk_x11_display_get_xdisplay(getGdkDisplay());

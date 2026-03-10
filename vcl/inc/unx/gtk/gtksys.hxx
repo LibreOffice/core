@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include <unx/gensys.h>
 #include <gtk/gtk.h>
+#include <unx/X11Helper.hxx>
 #include <unx/saltype.h>
 #include <deque>
 

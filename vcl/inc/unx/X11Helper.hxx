@@ -21,11 +21,10 @@
 
 #include <salsys.hxx>
 
-class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
+class VCL_DLLPUBLIC X11Helper final
 {
  public:
-    SalGenericSystem();
-    virtual ~SalGenericSystem() override;
+    X11Helper() = delete;
 
 #if !defined(ANDROID) && !defined(IOS)
     // Simple helpers for X11 WM_CLASS hints

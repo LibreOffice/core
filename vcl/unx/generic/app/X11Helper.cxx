@@ -19,7 +19,7 @@
 
 #include <config_folders.h>
 
-#include <unx/gensys.h>
+#include <unx/X11Helper.hxx>
 
 #include <svdata.hxx>
 
@@ -29,19 +29,11 @@
 #include <osl/thread.h>
 #include <unotools/configmgr.hxx>
 
-SalGenericSystem::SalGenericSystem()
-{
-}
-
-SalGenericSystem::~SalGenericSystem()
-{
-}
-
 #if !defined(ANDROID) && !defined(IOS)
 
 // X11-specific
 
-const char* SalGenericSystem::getFrameResName()
+const char* X11Helper::getFrameResName()
 {
     /*  according to ICCCM:
      *  first search command line for -name parameter
@@ -76,7 +68,7 @@ const char* SalGenericSystem::getFrameResName()
     return aResName.getStr();
 }
 
-const char* SalGenericSystem::getFrameClassName()
+const char* X11Helper::getFrameClassName()
 {
     static OStringBuffer aClassName;
     if( aClassName.isEmpty() )
