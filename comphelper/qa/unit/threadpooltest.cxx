@@ -8,11 +8,13 @@
  */
 
 #include <comphelper/threadpool.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <tools/time.hxx>
+#include <osl/process.h>
 #include <osl/thread.hxx>
 
 #include <stdlib.h>
@@ -41,24 +43,26 @@ public:
 
 void ThreadPoolTest::testPreferredConcurrency()
 {
-    // Check default.
     auto nThreads = comphelper::ThreadPool::getPreferredConcurrency();
+    static OUString constexpr var{ u"MAX_CONCURRENCY"_ustr };
     std::size_t nExpected = 4; // UTs are capped to 4.
+    comphelper::ScopeGuard g([&]() {
+        // Revert and check. Again, nothing should change.
+        osl_clearEnvironment(var.pData);
+        nThreads = comphelper::ThreadPool::getPreferredConcurrency();
+        CPPUNIT_ASSERT_MESSAGE("Expected no more than 4 threads", nExpected >= nThreads);
+    });
+
+    // Check default.
     CPPUNIT_ASSERT_MESSAGE("Expected no more than 4 threads", nExpected >= nThreads);
 
-#ifndef _WIN32
     // The result should be cached, so this should change anything.
     nThreads = std::thread::hardware_concurrency() * 2;
-    setenv("MAX_CONCURRENCY", std::to_string(nThreads).c_str(), true);
+    osl_setEnvironment(var.pData, OUString(OUString::number(nThreads)).pData);
+
     nThreads = comphelper::ThreadPool::getPreferredConcurrency();
     CPPUNIT_ASSERT_MESSAGE("Expected no more than hardware threads",
                            nThreads <= std::thread::hardware_concurrency());
-
-    // Revert and check. Again, nothing should change.
-    unsetenv("MAX_CONCURRENCY");
-    nThreads = comphelper::ThreadPool::getPreferredConcurrency();
-    CPPUNIT_ASSERT_MESSAGE("Expected no more than 4 threads", nExpected >= nThreads);
-#endif
 }
 
 namespace
