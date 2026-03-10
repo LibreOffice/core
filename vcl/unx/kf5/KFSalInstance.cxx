@@ -32,10 +32,8 @@
 
 using namespace com::sun::star;
 
-KFSalInstance::KFSalInstance(std::unique_ptr<QApplication>& pQApp,
-                             std::unique_ptr<char* []>& rFakeArgv, std::unique_ptr<int>& rFakeArgc,
-                             std::vector<FreeableCStr>& rFakeArgvFreeable)
-    : QtInstance(pQApp, rFakeArgv, rFakeArgc, rFakeArgvFreeable)
+KFSalInstance::KFSalInstance()
+    : QtInstance()
 {
     ImplSVData* pSVData = ImplGetSVData();
     const OUString sToolkit = u"kf" + OUString::number(QT_VERSION_MAJOR);
@@ -96,18 +94,7 @@ KFSalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> con
 }
 
 extern "C" {
-VCLPLUG_KF_PUBLIC SalInstance* create_SalInstance()
-{
-    std::unique_ptr<char* []> pFakeArgv;
-    std::unique_ptr<int> pFakeArgc;
-    std::vector<FreeableCStr> aFakeArgvFreeable;
-    QtInstance::AllocFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
-
-    std::unique_ptr<QApplication> pQApp
-        = QtInstance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
-
-    return new KFSalInstance(pQApp, pFakeArgv, pFakeArgc, aFakeArgvFreeable);
-}
+VCLPLUG_KF_PUBLIC SalInstance* create_SalInstance() { return new KFSalInstance; }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

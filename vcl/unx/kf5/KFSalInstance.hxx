@@ -33,9 +33,7 @@ class KFSalInstance final : public QtInstance
 #endif
 
 public:
-    explicit KFSalInstance(std::unique_ptr<QApplication>& pQApp,
-                           std::unique_ptr<char* []>& rFakeArgv, std::unique_ptr<int>& rFakeArgc,
-                           std::vector<FreeableCStr>& rFakeArgvFreeable);
+    explicit KFSalInstance();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -122,16 +122,8 @@ protected:
     void notifyDisplayChanged();
 
 public:
-    explicit QtInstance(std::unique_ptr<QApplication>& pQApp, std::unique_ptr<char* []>& rFakeArgv,
-                        std::unique_ptr<int>& rFakeArgc,
-                        std::vector<FreeableCStr>& rFakeArgvFreeable);
+    explicit QtInstance();
     virtual ~QtInstance() override;
-
-    // handle common SalInstance setup
-    static void AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
-                                     std::unique_ptr<int>& rFakeArgc,
-                                     std::vector<FreeableCStr>& rFakeArgvFreeable);
-    static std::unique_ptr<QApplication> CreateQApplication(int& nArgc, char** pArgv);
 
     void RunInMainThread(std::function<void()> func);
     template <typename F>
@@ -249,6 +241,12 @@ public:
     static bool noNativeControls();
     static bool noWeldedWidgets();
     static bool isQtWeldingEnabled();
+
+private:
+    static void AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
+                                     std::unique_ptr<int>& rFakeArgc,
+                                     std::vector<FreeableCStr>& rFakeArgvFreeable);
+    static std::unique_ptr<QApplication> CreateQApplication(int& nArgc, char** pArgv);
 };
 
 inline QtInstance& GetQtInstance()

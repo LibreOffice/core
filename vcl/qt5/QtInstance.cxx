@@ -267,21 +267,17 @@ OUString QtInstance::constructToolkitID(std::u16string_view sTKname)
     return sID;
 }
 
-QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp, std::unique_ptr<char* []>& rFakeArgv,
-                       std::unique_ptr<int>& rFakeArgc,
-                       std::vector<FreeableCStr>& rFakeArgvFreeable)
+QtInstance::QtInstance()
     : SalGenericInstance(std::make_unique<QtYieldMutex>(), new GenericUnixSalData)
     , m_bUseCairo(nullptr == getenv("SAL_VCL_QT_USE_QFONT"))
     , m_pTimer(nullptr)
     , m_bSleeping(false)
-    , m_pQApplication(std::move(pQApp))
-    , m_pFakeArgv(std::move(rFakeArgv))
-    , m_pFakeArgc(std::move(rFakeArgc))
     , m_aUpdateStyleTimer("vcl::qt5 m_aUpdateStyleTimer")
     , m_bUpdateFonts(false)
     , m_pActivePopup(nullptr)
 {
-    m_pFakeArgvFreeable.swap(rFakeArgvFreeable);
+    AllocFakeCmdlineArgs(m_pFakeArgv, m_pFakeArgc, m_pFakeArgvFreeable);
+    m_pQApplication = CreateQApplication(*m_pFakeArgc, m_pFakeArgv.get());
 
 #if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
     m_emscriptenThreadingData = &comphelper::emscriptenthreading::getData();
@@ -1052,15 +1048,7 @@ VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
 {
     initResources();
 
-    std::unique_ptr<char* []> pFakeArgv;
-    std::unique_ptr<int> pFakeArgc;
-    std::vector<FreeableCStr> aFakeArgvFreeable;
-    QtInstance::AllocFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
-
-    std::unique_ptr<QApplication> pQApp
-        = QtInstance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
-
-    return new QtInstance(pQApp, pFakeArgv, pFakeArgc, aFakeArgvFreeable);
+    return new QtInstance;
 }
 }
 
