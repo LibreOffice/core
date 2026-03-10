@@ -2310,6 +2310,11 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillAuto_DefaultAndSheetView)
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // Put data in column C (outside autofilter range) on the default view
+    rDocument.SetValue(ScAddress(2, 0, 0), 1.0);
+    rDocument.SetValue(ScAddress(2, 1, 0), 2.0);
 
     setupViews();
 
@@ -2326,9 +2331,9 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillAuto_DefaultAndSheetView)
         sortDescendingForCell(u"A1");
     }
 
-    // Switch to sheet view and fill auto
+    // FillAuto on the default view inside autofilter
     {
-        switchToSheetView();
+        switchToDefaultView();
 
         // Current state default view
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
@@ -2368,6 +2373,31 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillAuto_DefaultAndSheetView)
                              getValues(mpTabViewDefaultView, 0, 1, 4));
         CPPUNIT_ASSERT_EQUAL(expectedValues({ u"1", u"3", u"5", u"7" }),
                              getValues(mpTabViewSheetView, 0, 1, 4));
+    }
+
+    // FillAuto from sheet view outside autofilter (column C) should work
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+        ScRange aFillRange(2, 0, nSheetViewTab, 2, 1, nSheetViewTab);
+        bool bResult = pDocShell->GetDocFunc().FillAuto(
+            aFillRange, nullptr, FILL_TO_BOTTOM, FILL_AUTO, FILL_DAY, 2, 1.0, 100.0, true, true);
+        CPPUNIT_ASSERT(bResult);
+
+        // Verify the returned range is on the sheet view tab,
+        // because the caller uses it for MarkRange on the current view
+        CPPUNIT_ASSERT_EQUAL(nSheetViewTab, aFillRange.aStart.Tab());
+        CPPUNIT_ASSERT_EQUAL(nSheetViewTab, aFillRange.aEnd.Tab());
+
+        // Verify fill result on default view: C1=1, C2=2, C3=3, C4=4
+        CPPUNIT_ASSERT_EQUAL(3.0, rDocument.GetValue(ScAddress(2, 2, 0)));
+        CPPUNIT_ASSERT_EQUAL(4.0, rDocument.GetValue(ScAddress(2, 3, 0)));
+
+        // Verify synced to sheet view
+        CPPUNIT_ASSERT_EQUAL(3.0, rDocument.GetValue(ScAddress(2, 2, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(4.0, rDocument.GetValue(ScAddress(2, 3, nSheetViewTab)));
     }
 }
 
