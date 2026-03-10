@@ -807,18 +807,16 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
     osl_getSystemPathFromFileURL(aParam.pData, &aBin.pData);
     OString aExec = OUStringToOString(aBin, osl_getThreadTextEncoding());
 
-    std::vector<FreeableCStr> aFakeArgvFreeable;
-    aFakeArgvFreeable.reserve(4);
-    aFakeArgvFreeable.emplace_back(strdup(aExec.getStr()));
-    aFakeArgvFreeable.emplace_back(strdup("--nocrashhandler"));
+    m_pFakeArgvFreeable.reserve(4);
+    m_pFakeArgvFreeable.emplace_back(strdup(aExec.getStr()));
+    m_pFakeArgvFreeable.emplace_back(strdup("--nocrashhandler"));
     if (nDisplayValueIdx)
     {
-        aFakeArgvFreeable.emplace_back(strdup("-display"));
+        m_pFakeArgvFreeable.emplace_back(strdup("-display"));
         osl_getCommandArg(nDisplayValueIdx, &aParam.pData);
         OString aDisplay = OUStringToOString(aParam, osl_getThreadTextEncoding());
-        aFakeArgvFreeable.emplace_back(strdup(aDisplay.getStr()));
+        m_pFakeArgvFreeable.emplace_back(strdup(aDisplay.getStr()));
     }
-    m_pFakeArgvFreeable.swap(aFakeArgvFreeable);
 
     const int nFakeArgc = m_pFakeArgvFreeable.size();
     m_pFakeArgv.reset(new char*[nFakeArgc]);
