@@ -1041,6 +1041,15 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testFormulaDependency)
     // CPPUNIT_ASSERT_EQUAL(pDoc->GetString(0,4,0), rDoc.GetString(0,5,0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf63756_windows1250_encoded)
+{
+    createScDoc("xml/tdf63756.xml");
+
+    ScDocument* pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(u"ąęśćźżńół"_ustr, pDoc->GetString(0, 0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf153444)
 {
     createScDoc("xml/tdf153444.xml");
