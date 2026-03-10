@@ -111,19 +111,15 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
     // translation
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "mapunit", u"MapRelative");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        331.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x").toDouble(), 3.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        9420.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y").toDouble(), 10.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x", 331.0, 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y", 9420.0, 10.0);
     // no scaling
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scalex", u"(1/1)");
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scaley", u"(1/1)");
 
     // text position
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        4760.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x").toDouble(), 3.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        -2250.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y").toDouble(), 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x", 4760.0, 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y", -2250.0, 3.0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testColumnsLayout)
@@ -650,13 +646,11 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128206)
     // translation
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "mapunit", u"MapRelative");
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        14416.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x").toDouble(), 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x", 14416.0, 3.0);
     // Without the fix, this failed with
     // - Expected: 1658
     // - Actual  : 1415872
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        1658.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y").toDouble(), 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y", 1658.0, 3.0);
     // no scaling
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scalex", u"(1/1)");
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scaley", u"(1/1)");
@@ -665,13 +659,11 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128206)
     // Without the fix, this failed with
     // - Expected: -11031
     // - Actual  : -718138
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        -11031.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x").toDouble(), 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x", -11031.0, 3.0);
     // Without the fix, this failed with
     // - Expected: 3617
     // - Actual  : -703490
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        3617.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y").toDouble(), 3.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y", 3617.0, 3.0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
