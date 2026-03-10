@@ -170,7 +170,7 @@ public:
 
     // m_bStartedSdt tracks whether startElementNS(XML_w, XML_sdt) has been written
     bool m_bStartedSdt;
-    // In order to cache the SdtBlockHelper value, some mechanism is needed to check its validity.
+    // In order to cache the m_oSdtPrToken value, some mechanism is needed to check its validity.
     // Currently this is needed only for m_aParagraphSdt, so tracking the SwPosition is sufficient.
 
     // If the SDT has not been started (!m_bStartedSdt) and the text positions do not match,
@@ -181,6 +181,9 @@ public:
     // m_oSdtPrToken is a key GrabBag value, with a two-fold purpose:
     // - the absence of m_oSdtPrToken also means that (XML_w, XML_sdt) should not be written
     // - it describes the type of content control: richText(0), plainText, checkbox, dropdown...
+    // Note: m_oSdtPrToken is the ONLY cached/grabbag value that retains meaning
+    // (i.e. survives a context switch) once m_aParagraphSdt.m_bStartedSdt is set true.
+    // Note: only the m_oSdtPrToken from m_aParagraphSdt survives context switches.
     std::optional<sal_Int32> m_oSdtPrToken;
     // MS Word (silently) creates a random Id for an Sdt with a missing/zero/non-unique Id
     std::optional<sal_Int32> m_oId;
@@ -1218,6 +1221,8 @@ struct DocxTableExportContext
     ww8::WW8TableInfo::Pointer_t m_pTableInfo;
     bool m_bTableCellOpen;
     bool m_bStartedParaSdt;
+    std::optional<sal_Int32> m_oParaSdtPrToken;
+    std::vector<OUString> m_vParaSdtBookmarkEnd;
     bool m_bStartedRunSdt;
     sal_uInt32 m_nTableDepth;
     sal_Int32 m_nHyperLinkCount = 0;
