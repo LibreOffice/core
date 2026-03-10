@@ -40,6 +40,8 @@ SalInstance::SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex, SalData
 
 SalInstance::~SalInstance() {}
 
+void SalInstance::GetPrinterQueueState(SalPrinterQueueInfo*) {}
+
 comphelper::SolarMutex* SalInstance::GetYieldMutex() { return m_pYieldMutex.get(); }
 
 void SalInstance::DestroyInfoPrinter(SalInfoPrinter* pPrinter) { delete pPrinter; }

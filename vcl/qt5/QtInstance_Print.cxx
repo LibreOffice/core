@@ -79,8 +79,6 @@ void QtInstance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
     }
 }
 
-void QtInstance::GetPrinterQueueState(SalPrinterQueueInfo*) {}
-
 OUString QtInstance::GetDefaultPrinter()
 {
     PrinterInfoManager& rManager(PrinterInfoManager::get());

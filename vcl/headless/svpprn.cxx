@@ -188,10 +188,6 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     }
 }
 
-void SvpSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
-{
-}
-
 OUString SvpSalInstance::GetDefaultPrinter()
 {
     PrinterInfoManager& rManager( PrinterInfoManager::get() );

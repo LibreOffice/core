@@ -331,11 +331,6 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     }
 }
 
-void SalGenericInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
-{
-    mbPrinterInit = true;
-}
-
 OUString SalGenericInstance::GetDefaultPrinter()
 {
     mbPrinterInit = true;

@@ -48,10 +48,6 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* /* pList */ )
 {
 }
 
-void SvpSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* /* pInfo */ )
-{
-}
-
 std::unique_ptr<SalPrinter> SalGenericInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
 {
     return nullptr;
@@ -73,10 +69,6 @@ SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo* /* p
 }
 
 void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* /* pList */ )
-{
-}
-
-void SalGenericInstance::GetPrinterQueueState( SalPrinterQueueInfo* /* pInfo */ )
 {
 }
 

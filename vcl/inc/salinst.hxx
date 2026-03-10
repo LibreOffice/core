@@ -148,7 +148,7 @@ public:
     virtual std::unique_ptr<SalPrinter> CreatePrinter( SalInfoPrinter* pInfoPrinter ) = 0;
 
     virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) = 0;
-    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) = 0;
+    virtual void            GetPrinterQueueState(SalPrinterQueueInfo* pInfo);
     virtual OUString        GetDefaultPrinter() = 0;
 
     // SalTimer
