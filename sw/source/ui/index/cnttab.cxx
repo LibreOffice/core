@@ -66,6 +66,7 @@
 #include <chpfld.hxx>
 #include <names.hxx>
 #include <svtools/editbrowsebox.hxx>
+#include <comphelper/lok.hxx>
 
 #include <cmath>
 #include <memory>
@@ -3293,12 +3294,14 @@ void SwTokenWindow::AdjustScrolling()
         m_xLeftScrollWin->set_sensitive(nLeft > 0);
         m_xRightScrollWin->set_sensitive(nLeft + nSpace < nWidth);
     }
-    else
+    else if (!comphelper::LibreOfficeKit::isActive())
     {
         //if the control fits into the space then the first control must be at position 0
         m_xRightScrollWin->set_sensitive(false);
         m_xLeftScrollWin->set_sensitive(false);
     }
+    // In LOK mode, VCL layout dimensions may not match browser layout,
+    // so don't disable scroll buttons - the browser determines overflow.
 }
 
 IMPL_LINK(SwTokenWindow, ScrollBtnHdl, weld::Button&, rBtn, void)
