@@ -1457,24 +1457,29 @@ std::unique_ptr<weld::TreeIter> ScCheckListMenuControl::ShowCheckEntry(const OUS
                 {
                     xYearEntry = mpChecks->make_iterator();
                     mpChecks->insert(nullptr, -1, nullptr, nullptr, nullptr, nullptr, false, xYearEntry.get());
-                    mpChecks->set_toggle(*xYearEntry, TRISTATE_FALSE);
+                    /* todo: change it to take into account the lock checkbox state,
+                     * so that we only check and disable/enable when it's needed. */
+                    mpChecks->set_toggle(*xYearEntry, TRISTATE_TRUE);
                     mpChecks->set_text(*xYearEntry, rMember.maDateParts[0], 0);
+                    mpChecks->set_sensitive(*xYearEntry, !rMember.mbHiddenByOtherFilter);
                 }
                 std::unique_ptr<weld::TreeIter> xMonthEntry = FindEntry(xYearEntry.get(), rMember.maDateParts[1]);
                 if (!xMonthEntry)
                 {
                     xMonthEntry = mpChecks->make_iterator();
                     mpChecks->insert(xYearEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xMonthEntry.get());
-                    mpChecks->set_toggle(*xMonthEntry, TRISTATE_FALSE);
+                    mpChecks->set_toggle(*xMonthEntry, TRISTATE_TRUE);
                     mpChecks->set_text(*xMonthEntry, rMember.maDateParts[1], 0);
+                    mpChecks->set_sensitive(*xMonthEntry, !rMember.mbHiddenByOtherFilter);
                 }
                 std::unique_ptr<weld::TreeIter> xDayEntry = FindEntry(xMonthEntry.get(), rMember.maName);
                 if (!xDayEntry)
                 {
                     xDayEntry = mpChecks->make_iterator();
                     mpChecks->insert(xMonthEntry.get(), -1, nullptr, nullptr, nullptr, nullptr, false, xDayEntry.get());
-                    mpChecks->set_toggle(*xDayEntry, TRISTATE_FALSE);
+                    mpChecks->set_toggle(*xDayEntry, TRISTATE_TRUE);
                     mpChecks->set_text(*xDayEntry, rMember.maName, 0);
+                    mpChecks->set_sensitive(*xDayEntry, !rMember.mbHiddenByOtherFilter);
                 }
                 return xDayEntry; // Return leaf node
             }
