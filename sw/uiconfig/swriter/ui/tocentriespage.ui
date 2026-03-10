@@ -667,6 +667,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes" context="tocentriespage|tabstop|tooltip_text">Inserts a tab stop. To add leader dots, select a character in the Fill character box.</property>
                                 <property name="use-underline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="tabstop-atkobject">
@@ -686,7 +687,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes" context="tocentriespage|extended_tip|chapterinfo">Insert to include heading number or contents. Select inserted icon to choose what information to display.</property>
+                                <property name="tooltip-text" translatable="yes" context="tocentriespage|chapterinfo|tooltip_text">Insert to include heading number or contents. Select inserted icon to choose what information to display.</property>
                                 <property name="use-underline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="chapterinfo-atkobject">
@@ -706,6 +707,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes" context="tocentriespage|pageno|tooltip_text">Inserts the page number of the entry.</property>
                                 <property name="use-underline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="pageno-atkobject">
@@ -725,6 +727,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes" context="tocentriespage|hyperlink|tooltip_text">Creates a hyperlink for the part of the entry enclosed by the opening and closing hyperlink tags.</property>
                                 <property name="use-underline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="hyperlink-atkobject">
