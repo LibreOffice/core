@@ -115,13 +115,11 @@ protected:
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode);
     static bool useCairo();
-    // encodes cairo usage and Qt platform name into the ToolkitName
-    static OUString constructToolkitID(std::u16string_view sTKname);
     void connectQScreenSignals(const QScreen*);
     void notifyDisplayChanged();
 
 public:
-    explicit QtInstance();
+    explicit QtInstance(const OUString& rToolkitName);
     virtual ~QtInstance() override;
 
     void RunInMainThread(std::function<void()> func);
@@ -243,6 +241,9 @@ public:
 
 private:
     std::unique_ptr<QApplication> CreateQApplication();
+
+    // encodes cairo usage and Qt platform name into the ToolkitName
+    static OUString constructToolkitID(std::u16string_view sTKname);
 };
 
 inline QtInstance& GetQtInstance()

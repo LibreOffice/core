@@ -274,7 +274,7 @@ OUString QtInstance::constructToolkitID(std::u16string_view sTKname)
     return sID;
 }
 
-QtInstance::QtInstance()
+QtInstance::QtInstance(const OUString& rToolkitName)
     : SalGenericInstance(std::make_unique<QtYieldMutex>(), new GenericUnixSalData)
     , m_pTimer(nullptr)
     , m_bSleeping(false)
@@ -289,8 +289,7 @@ QtInstance::QtInstance()
 #endif
 
     ImplSVData* pSVData = ImplGetSVData();
-    const OUString sToolkit = "qt" + OUString::number(QT_VERSION_MAJOR);
-    pSVData->maAppData.mxToolkitName = constructToolkitID(sToolkit);
+    pSVData->maAppData.mxToolkitName = constructToolkitID(rToolkitName);
 
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
     pSVData->maNWFData.mbFlatMenu = true;
@@ -1044,7 +1043,8 @@ VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
 {
     initResources();
 
-    return new QtInstance;
+    const OUString sToolkit = "qt" + OUString::number(QT_VERSION_MAJOR);
+    return new QtInstance(sToolkit);
 }
 }
 

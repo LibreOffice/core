@@ -33,11 +33,8 @@
 using namespace com::sun::star;
 
 KFSalInstance::KFSalInstance()
-    : QtInstance()
+    : QtInstance(u"kf" + OUString::number(QT_VERSION_MAJOR))
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    const OUString sToolkit = u"kf" + OUString::number(QT_VERSION_MAJOR);
-    pSVData->maAppData.mxToolkitName = constructToolkitID(sToolkit);
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 12, 0)
