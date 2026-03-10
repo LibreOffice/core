@@ -26,6 +26,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/vclenum.hxx>
 
 class Image;
 namespace weld { class Widget; }
@@ -47,6 +48,7 @@ VCL_DLLPUBLIC OUString GetStandardErrorBoxText();
 VCL_DLLPUBLIC Image const & GetStandardQueryBoxImage();
 VCL_DLLPUBLIC OUString GetStandardQueryBoxText();
 
+VCL_DLLPUBLIC OUString GetStandardMessageDialogText(VclMessageType eType);
 
 #endif // INCLUDED_VCL_STDTEXT_HXX
 

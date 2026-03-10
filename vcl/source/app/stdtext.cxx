@@ -122,4 +122,24 @@ OUString GetStandardText(StandardButtonType eButton)
     return VclResId(aResIdAry[static_cast<sal_uInt16>(eButton)]);
 }
 
+VCL_DLLPUBLIC OUString GetStandardMessageDialogText(VclMessageType eType)
+{
+    switch (eType)
+    {
+        case VclMessageType::Info:
+            return GetStandardInfoBoxText();
+        case VclMessageType::Warning:
+            return GetStandardWarningBoxText();
+        case VclMessageType::Question:
+            return GetStandardQueryBoxText();
+        case VclMessageType::Error:
+            return GetStandardErrorBoxText();
+        case VclMessageType::Other:
+            return Application::GetDisplayName();
+        default:
+            assert(false && "Unhandled VclMessageType");
+            return OUString();
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

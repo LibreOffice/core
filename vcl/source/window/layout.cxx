@@ -2555,25 +2555,10 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
     create_owned_areas();
     create_message_area();
 
-    switch (m_eMessageType)
-    {
-        case VclMessageType::Info:
-            SetText(GetStandardInfoBoxText());
-            break;
-        case VclMessageType::Warning:
-            SetText(GetStandardWarningBoxText());
-            break;
-        case VclMessageType::Question:
-            SetText(GetStandardQueryBoxText());
-            break;
-        case VclMessageType::Error:
-            SetText(GetStandardErrorBoxText());
-            SetTaskBarState(VclTaskBarStates::Error);
-            break;
-        case VclMessageType::Other:
-            SetText(Application::GetDisplayName());
-            break;
-    }
+    SetText(GetStandardMessageDialogText(m_eMessageType));
+
+    if (m_eMessageType == VclMessageType::Error)
+        SetTaskBarState(VclTaskBarStates::Error);
 }
 
 void MessageDialog::dispose()

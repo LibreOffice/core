@@ -34,7 +34,6 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/qt/QtUtils.hxx>
-#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 
 #include <QtCore/QBuffer>
@@ -541,30 +540,6 @@ QMessageBox::Icon vclMessageTypeToQtIcon(VclMessageType eType)
             break;
     }
     return eRet;
-}
-
-QString vclMessageTypeToQtTitle(VclMessageType eType)
-{
-    QString title;
-    switch (eType)
-    {
-        case VclMessageType::Info:
-            title = toQString(GetStandardInfoBoxText());
-            break;
-        case VclMessageType::Warning:
-            title = toQString(GetStandardWarningBoxText());
-            break;
-        case VclMessageType::Question:
-            title = toQString(GetStandardQueryBoxText());
-            break;
-        case VclMessageType::Error:
-            title = toQString(GetStandardErrorBoxText());
-            break;
-        case VclMessageType::Other:
-            title = toQString(Application::GetDisplayName());
-            break;
-    }
-    return title;
 }
 
 QString vclToQtStringWithAccelerator(const OUString& rText)

@@ -61,6 +61,7 @@
 #include <config_vclplug.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/qt/QtUtils.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/sysdata.hxx>
 #include <sal/log.hxx>
 #include <o3tl/unreachable.hxx>
@@ -1000,7 +1001,7 @@ weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
         QMessageBox* pMessageBox = new QMessageBox(pQtParent);
         pMessageBox->setText(toQString(rPrimaryMessage));
         pMessageBox->setIcon(vclMessageTypeToQtIcon(eMessageType));
-        pMessageBox->setWindowTitle(vclMessageTypeToQtTitle(eMessageType));
+        pMessageBox->setWindowTitle(toQString(GetStandardMessageDialogText(eMessageType)));
         QtInstanceMessageDialog* pDialog = new QtInstanceMessageDialog(pMessageBox);
         pDialog->addStandardButtons(eButtonsType);
         return pDialog;
