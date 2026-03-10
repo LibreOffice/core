@@ -658,11 +658,8 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
 
                 // Get the real size, since polygon outline and scale
                 // from the object transformation may vary (e.g. ellipse segments)
-                basegfx::B2DHomMatrix aJustScaleTransform;
-                aJustScaleTransform.set(0, 0, aScale.getX());
-                aJustScaleTransform.set(1, 1, aScale.getY());
                 basegfx::B2DPolyPolygon aScaledUnitPolyPolygon(rUnitPolyPolygon);
-                aScaledUnitPolyPolygon.transform(aJustScaleTransform);
+                aScaledUnitPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(aScale));
                 const basegfx::B2DRange aTextAnchorRange
                     = getTextAnchorRange(rText, aScaledUnitPolyPolygon.getB2DRange());
 
