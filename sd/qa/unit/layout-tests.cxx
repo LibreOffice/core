@@ -634,6 +634,38 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128206)
+{
+    createSdImpressDoc("pptx/tdf128206.pptx");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    // translation
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "mapunit", u"MapRelative");
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        14416.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x").toDouble(), 3.0);
+    // Without the fix, this failed with
+    // - Expected: 1658
+    // - Actual  : 1415872
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        1658.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y").toDouble(), 3.0);
+    // no scaling
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scalex", u"(1/1)");
+    assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scaley", u"(1/1)");
+
+    // text position
+    // Without the fix, this failed with
+    // - Expected: -11031
+    // - Actual  : -718138
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        -11031.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "x").toDouble(), 3.0);
+    // Without the fix, this failed with
+    // - Expected: 3617
+    // - Actual  : -703490
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(
+        3617.0, getXPath(pXmlDoc, "//push[@flags='PushMapMode']/textarray", "y").toDouble(), 3.0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
