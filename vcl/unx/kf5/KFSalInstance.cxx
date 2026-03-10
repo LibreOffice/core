@@ -32,8 +32,10 @@
 
 using namespace com::sun::star;
 
-KFSalInstance::KFSalInstance(std::unique_ptr<QApplication>& pQApp)
-    : QtInstance(pQApp)
+KFSalInstance::KFSalInstance(std::unique_ptr<QApplication>& pQApp,
+                             std::unique_ptr<char* []>& rFakeArgv, std::unique_ptr<int>& rFakeArgc,
+                             std::vector<FreeableCStr>& rFakeArgvFreeable)
+    : QtInstance(pQApp, rFakeArgv, rFakeArgc, rFakeArgvFreeable)
 {
     ImplSVData* pSVData = ImplGetSVData();
     const OUString sToolkit = u"kf" + OUString::number(QT_VERSION_MAJOR);
@@ -104,10 +106,7 @@ VCLPLUG_KF_PUBLIC SalInstance* create_SalInstance()
     std::unique_ptr<QApplication> pQApp
         = QtInstance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
 
-    KFSalInstance* pInstance = new KFSalInstance(pQApp);
-    pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
-
-    return pInstance;
+    return new KFSalInstance(pQApp, pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 }
 }
 

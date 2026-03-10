@@ -267,16 +267,22 @@ OUString QtInstance::constructToolkitID(std::u16string_view sTKname)
     return sID;
 }
 
-QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp)
+QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp, std::unique_ptr<char* []>& rFakeArgv,
+                       std::unique_ptr<int>& rFakeArgc,
+                       std::vector<FreeableCStr>& rFakeArgvFreeable)
     : SalGenericInstance(std::make_unique<QtYieldMutex>(), new GenericUnixSalData)
     , m_bUseCairo(nullptr == getenv("SAL_VCL_QT_USE_QFONT"))
     , m_pTimer(nullptr)
     , m_bSleeping(false)
     , m_pQApplication(std::move(pQApp))
+    , m_pFakeArgv(std::move(rFakeArgv))
+    , m_pFakeArgc(std::move(rFakeArgc))
     , m_aUpdateStyleTimer("vcl::qt5 m_aUpdateStyleTimer")
     , m_bUpdateFonts(false)
     , m_pActivePopup(nullptr)
 {
+    m_pFakeArgvFreeable.swap(rFakeArgvFreeable);
+
 #if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
     m_emscriptenThreadingData = &comphelper::emscriptenthreading::getData();
 #endif
@@ -830,15 +836,6 @@ void QtInstance::AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
     *rFakeArgc = nFakeArgc;
 }
 
-void QtInstance::MoveFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
-                                     std::unique_ptr<int>& rFakeArgc,
-                                     std::vector<FreeableCStr>& rFakeArgvFreeable)
-{
-    m_pFakeArgv = std::move(rFakeArgv);
-    m_pFakeArgc = std::move(rFakeArgc);
-    m_pFakeArgvFreeable.swap(rFakeArgvFreeable);
-}
-
 std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** pArgv)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -1063,10 +1060,7 @@ VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
     std::unique_ptr<QApplication> pQApp
         = QtInstance::CreateQApplication(*pFakeArgc, pFakeArgv.get());
 
-    QtInstance* pInstance = new QtInstance(pQApp);
-    pInstance->MoveFakeCmdlineArgs(pFakeArgv, pFakeArgc, aFakeArgvFreeable);
-
-    return pInstance;
+    return new QtInstance(pQApp, pFakeArgv, pFakeArgc, aFakeArgvFreeable);
 }
 }
 

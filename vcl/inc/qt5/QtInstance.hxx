@@ -122,15 +122,15 @@ protected:
     void notifyDisplayChanged();
 
 public:
-    explicit QtInstance(std::unique_ptr<QApplication>& pQApp);
+    explicit QtInstance(std::unique_ptr<QApplication>& pQApp, std::unique_ptr<char* []>& rFakeArgv,
+                        std::unique_ptr<int>& rFakeArgc,
+                        std::vector<FreeableCStr>& rFakeArgvFreeable);
     virtual ~QtInstance() override;
 
     // handle common SalInstance setup
     static void AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
                                      std::unique_ptr<int>& rFakeArgc,
                                      std::vector<FreeableCStr>& rFakeArgvFreeable);
-    void MoveFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv, std::unique_ptr<int>& rFakeArgc,
-                             std::vector<FreeableCStr>& rFakeArgvFreeable);
     static std::unique_ptr<QApplication> CreateQApplication(int& nArgc, char** pArgv);
 
     void RunInMainThread(std::function<void()> func);
