@@ -22,7 +22,7 @@
 #include <unx/gensys.h>
 #include <vector>
 
-class X11SalSystem final : public SalGenericSystem
+class X11SalSystem final : public SalSystem
 {
 public:
     X11SalSystem() {}
