@@ -1222,11 +1222,11 @@ bool SwDocShell::MakeInlineHeading(SwWrtShell *pSh, SwTextFormatColl* pColl, con
         if ( pSh->IsFrameSelected() )
         {
             // use the associated borderless frame style "Inline Heading"
-            SwDocStyleSheet* pStyle2 = static_cast<SwDocStyleSheet*>(
-                            m_xBasePool->Find( "Inline Heading", SfxStyleFamily::Frame));
-            SAL_WARN_IF( !pStyle2, "sw.ui", "Style not found" );
-            if(pStyle2)
-                pSh->SetFrameFormat( pStyle2->GetFrameFormat() );
+            SwFrameFormat* pFrameFormat =
+                            pSh->GetFrameFormatFromPool( RES_POOLFRM_INLINE_HEADING );
+            SAL_WARN_IF( !pFrameFormat, "sw.ui", "Style not found" );
+            if(pFrameFormat)
+                pSh->SetFrameFormat( pFrameFormat );
 
             // select the text content of the frame, and apply the paragraph style
             pSh->UnSelectFrame();
