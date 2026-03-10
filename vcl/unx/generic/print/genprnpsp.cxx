@@ -1030,4 +1030,9 @@ void SalGenericInstance::updatePrinterUpdate()
         PostPrintersChanged();
 }
 
+std::unique_ptr<GenPspGraphics> SalGenericInstance::CreatePrintGraphics()
+{
+    return std::make_unique<GenPspGraphics>();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

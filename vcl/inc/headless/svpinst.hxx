@@ -177,8 +177,6 @@ public:
 
     SAL_DLLPRIVATE virtual void AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
-    SAL_DLLPRIVATE virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
-
     SAL_DLLPRIVATE virtual const cairo_font_options_t* GetCairoFontOptions() override;
 };
 

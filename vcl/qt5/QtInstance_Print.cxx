@@ -89,9 +89,4 @@ OUString QtInstance::GetDefaultPrinter()
 
 void QtInstance::PostPrintersChanged() {}
 
-std::unique_ptr<GenPspGraphics> QtInstance::CreatePrintGraphics()
-{
-    return std::make_unique<GenPspGraphics>();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

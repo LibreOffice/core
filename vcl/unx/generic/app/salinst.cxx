@@ -211,11 +211,6 @@ void X11SalInstance::PostPrintersChanged()
         pDisp->PostEvent( pSalFrame, nullptr, SalEvent::PrinterChanged );
 }
 
-std::unique_ptr<GenPspGraphics> X11SalInstance::CreatePrintGraphics()
-{
-    return std::make_unique<GenPspGraphics>();
-}
-
 std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
 {
 #if HAVE_FEATURE_SKIA

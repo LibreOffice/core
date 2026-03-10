@@ -195,8 +195,6 @@ public:
     virtual void AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType,
                                          const OUString& rDocumentService) override;
 
-    virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;
-
     virtual bool IsMainThread() const override;
 
     virtual void TriggerUserEventProcessing() override;

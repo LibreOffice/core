@@ -34,11 +34,6 @@ OUString SvpSalInstance::GetDefaultPrinter()
     return OUString();
 }
 
-std::unique_ptr<GenPspGraphics> SvpSalInstance::CreatePrintGraphics()
-{
-    return nullptr;
-}
-
 void SvpSalInstance::PostPrintersChanged()
 {
 }
@@ -83,6 +78,11 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* /* pList */ )
 
 void SalGenericInstance::GetPrinterQueueState( SalPrinterQueueInfo* /* pInfo */ )
 {
+}
+
+std::unique_ptr<GenPspGraphics> SalGenericInstance::CreatePrintGraphics()
+{
+    return nullptr;
 }
 
 void SalGenericInstance::updatePrinterUpdate()

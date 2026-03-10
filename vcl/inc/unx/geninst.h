@@ -70,7 +70,7 @@ public:
     // callbacks for printer updates
     virtual void updatePrinterUpdate();
     bool isPrinterInit() const { return mbPrinterInit; }
-    virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() = 0;
+    virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics();
 
     virtual OUString            getOSVersion() override;
 

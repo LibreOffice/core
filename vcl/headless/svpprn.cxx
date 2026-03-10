@@ -205,11 +205,6 @@ void SvpSalInstance::PostPrintersChanged()
         pInst->PostEvent( pSalFrame, nullptr, SalEvent::PrinterChanged );
 }
 
-std::unique_ptr<GenPspGraphics> SvpSalInstance::CreatePrintGraphics()
-{
-    return std::make_unique<GenPspGraphics>();
-}
-
 bool SvpSalInfoPrinter::Setup( weld::Window*, ImplJobSetup* )
 {
     return false;

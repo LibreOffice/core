@@ -542,7 +542,7 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
 std::unique_ptr<GenPspGraphics> GtkInstance::CreatePrintGraphics()
 {
     EnsureInit();
-    return std::make_unique<GenPspGraphics>();
+    return SvpSalInstance::CreatePrintGraphics();
 }
 
 const cairo_font_options_t* GtkInstance::GetCairoFontOptions()
