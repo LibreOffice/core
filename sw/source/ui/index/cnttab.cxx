@@ -2274,8 +2274,17 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
             m_xLevelFrame->set_label(m_sLevelStr);
 
         // tdf#135266 - remember last used entry level depending on the index type
-        m_xLevelLB->select(bToxIsIndex ? pTOXDlg->GetWrtShell().GetViewOptions()->GetIdxEntryLvl()
-                                       : pTOXDlg->GetWrtShell().GetViewOptions()->GetTocEntryLvl());
+        {
+            auto nEntryLvl = bToxIsIndex ? pTOXDlg->GetWrtShell().GetViewOptions()->GetIdxEntryLvl()
+                                         : pTOXDlg->GetWrtShell().GetViewOptions()->GetTocEntryLvl();
+            // clamp to valid range - the saved level may exceed the number of
+            // entries when switching between TOX types (e.g. TOC has 10 levels
+            // but Index of Tables has only 1)
+            const int nCount = m_xLevelLB->n_children();
+            if (nCount > 0 && nEntryLvl >= nCount)
+                nEntryLvl = 0;
+            m_xLevelLB->select(nEntryLvl);
+        }
 
 
         //show or hide controls
@@ -2899,7 +2908,6 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL, bool bGrabFocus)
         }
         SetActiveControl(pSetActiveControl, bGrabFocus);
     }
-
     // thaw triggers sendUpdate() which serializes the ctrl container's
     // subtree (now including all new token widgets) and sends it to the browser
     m_xCtrlParentWin->thaw();
