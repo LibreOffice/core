@@ -393,6 +393,10 @@ sal_uInt16 XclExpChRoot::ConvertFont( const ScfPropertySet& rPropSet, sal_Int16 
 {
     XclFontData aFontData;
     GetFontPropSetHelper().ReadFontProperties( aFontData, rPropSet, EXC_FONTPROPSET_CHART, nScript );
+
+    if (aFontData.maName.isEmpty())
+        aFontData.maName = GetFontBuffer().GetAppFontData().maName;
+
     return GetFontBuffer().Insert( aFontData, EXC_COLOR_CHARTTEXT );
 }
 
