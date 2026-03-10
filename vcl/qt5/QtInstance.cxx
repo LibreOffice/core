@@ -837,20 +837,20 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::Round);
 
-    FreeableCStr session_manager;
+    std::optional<OString> oSessionManager;
     if (getenv("SESSION_MANAGER") != nullptr)
     {
-        session_manager.reset(strdup(getenv("SESSION_MANAGER")));
+        oSessionManager = OString(getenv("SESSION_MANAGER"));
         unsetenv("SESSION_MANAGER");
     }
 
     std::unique_ptr<QApplication> pQApp
         = std::make_unique<QApplication>(m_nFakeArgc, m_pFakeArgv.get());
 
-    if (session_manager != nullptr)
+    if (oSessionManager.has_value())
     {
         // coverity[tainted_string] - trusted source for setenv
-        setenv("SESSION_MANAGER", session_manager.get(), 1);
+        setenv("SESSION_MANAGER", oSessionManager.value().getStr(), 1);
     }
 
     QApplication::setQuitOnLastWindowClosed(false);
