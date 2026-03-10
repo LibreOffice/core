@@ -459,9 +459,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf158051)
     // - Actual  : Π Τάκης ς’ ευχαριστώ
     emulateTyping(u"π Τάκης σ’ ευχαριστώ");
 
-#if !defined(_WIN32) // For some reason it fails on Window. the manual test works fine
     CPPUNIT_ASSERT_EQUAL(u"Π Τάκης σ’ ευχαριστώ"_ustr, getParagraph(1)->getString());
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf162911)
