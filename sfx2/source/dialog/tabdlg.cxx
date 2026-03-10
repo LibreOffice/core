@@ -962,7 +962,7 @@ void SfxTabDialogController::BuildWhichToTabMap()
 
     const SfxItemPool* pPool = m_pSet ? m_pSet->GetPool() : nullptr;
 
-    // Passata 1: tracker (copre le tab che accedono via Get/GetItemState)
+    // Pass 1: tracker (covers tab pages that access items via Get/GetItemState)
     for (auto const& elem : m_pImpl->aData)
     {
         if (!elem->xTabPage)
@@ -984,7 +984,7 @@ void SfxTabDialogController::BuildWhichToTabMap()
         }
     }
 
-    // Passata 2: GetRanges (copre le tab che accedono ItemSet interni)
+    // Pass 2: GetRanges (covers tab pages that access internal ItemSets)
     if (pPool)
     {
         for (auto const& elem : m_pImpl->aData)
@@ -998,7 +998,7 @@ void SfxTabDialogController::BuildWhichToTabMap()
                 for (sal_uInt16 nSlot = rPair.first; nSlot <= rPair.second; ++nSlot)
                 {
                     sal_uInt16 nWhich = pPool->GetWhichIDFromSlotID(nSlot);
-                    // Solo se non già classificato dal tracker
+                    // Only if not already classified by the tracker
                     if (m_aWhichToTabMap.find(nWhich) == m_aWhichToTabMap.end())
                         m_aWhichToTabMap[nWhich] = elem->sId;
                 }
@@ -1006,7 +1006,7 @@ void SfxTabDialogController::BuildWhichToTabMap()
         }
     }
 
-    // Restore delle tab page
+    // Restore tab pages
     for (auto const& elem : m_pImpl->aData)
     {
         if (!elem->xTabPage)
