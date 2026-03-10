@@ -29,44 +29,6 @@
 
 using namespace css;
 
-namespace
-{
-class EnvVarGuard
-{
-public:
-    EnvVarGuard(const char* var, const char* val)
-    {
-        if (getenv(var) == nullptr)
-        {
-            sVar = var;
-            SetEnv(sVar, val);
-        }
-    }
-    ~EnvVarGuard()
-    {
-        if (sVar)
-            SetEnv(sVar, nullptr);
-    }
-
-private:
-    static void SetEnv(const char* var, const char* val)
-    {
-#ifdef _WIN32
-        if (!val)
-            val = ""; // remove
-        _putenv_s(var, val);
-#else
-        if (val)
-            setenv(var, val, false);
-        else
-            unsetenv(var);
-#endif
-    }
-
-    const char* sVar = nullptr;
-};
-}
-
 class SdrPdfImportTest : public UnoApiTest
 {
 public:
@@ -88,7 +50,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     }
 
     // We need to enable PDFium import (and make sure to disable after the test)
-    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
+    UsePdfium aGuard;
 
     loadFromFile(u"SimplePDF.pdf");
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -165,9 +127,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
     }
 
     // We need to enable PDFium import (and make sure to disable after the test)
-    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
-
-    EnvVarGuard DisablePDFCompressionGuard("VCL_DEBUG_DISABLE_PDFCOMPRESSION", "1");
+    UsePdfium aGuard;
 
     auto pPdfiumLibrary = vcl::pdf::PDFiumLibrary::get();
 

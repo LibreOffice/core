@@ -20,7 +20,6 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
-#include <osl/process.h>
 #include <unotools/saveopt.hxx>
 
 #include <svx/svdotext.hxx>
@@ -59,25 +58,6 @@ public:
         : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
-
-    struct UsePdfium
-    {
-        // We need to enable PDFium import (and make sure to disable after the test)
-        bool bResetEnvVar = false;
-        UsePdfium()
-        {
-            if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-            {
-                bResetEnvVar = true;
-                osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
-            }
-        }
-        ~UsePdfium()
-        {
-            if (bResetEnvVar)
-                osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
-        };
-    };
 
     void testLinkedGraphicRT(TestFilter eFilter);
     void testImageWithSpecialID(TestFilter eFilter);

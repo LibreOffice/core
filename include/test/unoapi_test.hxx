@@ -14,6 +14,7 @@
 
 #include <string_view>
 
+#include <osl/process.h>
 #include <rtl/ref.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <test/testinteractionhandler.hxx>
@@ -126,6 +127,25 @@ const std::unordered_map<TestFilter, OUString> TestFilterNames{
     { TestFilter::XLST, u"Calc MS Excel 2007 XML Template"_ustr },
     { TestFilter::XLSX, u"Calc Office Open XML"_ustr },
     { TestFilter::XLSX_2007, u"Calc MS Excel 2007 XML"_ustr },
+};
+
+struct UsePdfium
+{
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    UsePdfium()
+    {
+        if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+        {
+            bResetEnvVar = true;
+            osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
+        }
+    }
+    ~UsePdfium()
+    {
+        if (bResetEnvVar)
+            osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
+    };
 };
 
 // basic uno api test class
