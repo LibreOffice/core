@@ -446,8 +446,8 @@ void SwGlossaries::ShowError()
     std::vector<OUString> others;
     for (auto const& it : m_aInvalidPaths)
     {
+#ifdef _WIN32
         OUString path;
-#if _WIN32
         if (it.second && *it.second == ucb::IOErrorCode_ACCESS_DENIED
             && osl::FileBase::getSystemPathFromFileURL(it.first, path) == osl::FileBase::E_None
             && PathIsNetworkPathW(o3tl::toW(path.getStr())) == TRUE)
