@@ -117,8 +117,8 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
     if (fWidthForText > 0 && fTextLeftDistance + fTextRightDistance >= fWidthForText)
     {
         const double diffFactor = (fTextLeftDistance + fTextRightDistance - fWidthForText) / 2.0;
-        fTextLeftDistance -= diffFactor;
-        fTextRightDistance -= diffFactor;
+        fTextLeftDistance = std::max(fTextLeftDistance - diffFactor, 0.0);
+        fTextRightDistance = std::max(fTextRightDistance - diffFactor, 0.0);
     }
     // If top + bottom margins exceed the available height, reduce each by half the excess.
     // Guard on fWidthForText > 0 for consistency with the horizontal check: skip for
@@ -128,8 +128,8 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
     if (fWidthForText > 0 && fHeightForText > 0 && fTextUpperDistance + fTextLowerDistance >= fHeightForText)
     {
         const double diffFactor = (fTextUpperDistance + fTextLowerDistance - fHeightForText) / 2.0;
-        fTextUpperDistance -= diffFactor;
-        fTextLowerDistance -= diffFactor;
+        fTextUpperDistance = std::max(fTextUpperDistance - diffFactor, 0.0);
+        fTextLowerDistance = std::max(fTextLowerDistance - diffFactor, 0.0);
     }
     double fDistanceForTextL, fDistanceForTextT, fDistanceForTextR, fDistanceForTextB;
     if (!bVerticalWriting)
