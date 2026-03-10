@@ -1510,9 +1510,12 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
                     if (&rOutDev != pWin->GetOutDev() && OUTDEV_WINDOW == rOutDev.GetOutDevType())
                     {
-                        OutlinerView* pOutlView
-                            = ImpMakeOutlinerView(rOutDev.GetOwnerWindow(), nullptr);
-                        mpTextEditOutliner->InsertView(pOutlView, static_cast<sal_uInt16>(i));
+                        vcl::Window* pOtherWin = rOutDev.GetOwnerWindow();
+                        if (pOtherWin && !pOtherWin->isDisposed())
+                        {
+                            OutlinerView* pOutlView = ImpMakeOutlinerView(pOtherWin, nullptr);
+                            mpTextEditOutliner->InsertView(pOutlView, static_cast<sal_uInt16>(i));
+                        }
                     }
                 }
 
@@ -1535,11 +1538,15 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                             if (&rOutDev != pWin->GetOutDev()
                                 && OUTDEV_WINDOW == rOutDev.GetOutDevType())
                             {
-                                OutlinerView* pOutlView
-                                    = ImpMakeOutlinerView(rOutDev.GetOwnerWindow(), nullptr);
-                                pOutlView->HideCursor();
-                                rOutDev.GetOwnerWindow()->SetCursor(nullptr);
-                                mpTextEditOutliner->InsertView(pOutlView);
+                                vcl::Window* pOtherWin = rOutDev.GetOwnerWindow();
+                                if (pOtherWin && !pOtherWin->isDisposed())
+                                {
+                                    OutlinerView* pOutlView
+                                        = ImpMakeOutlinerView(pOtherWin, nullptr);
+                                    pOutlView->HideCursor();
+                                    pOtherWin->SetCursor(nullptr);
+                                    mpTextEditOutliner->InsertView(pOutlView);
+                                }
                             }
                         }
                     });
