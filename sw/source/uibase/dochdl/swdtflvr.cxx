@@ -3424,15 +3424,17 @@ bool SwTransferable::PasteFileList( const TransferableDataHelper& rData,
                                     const Point* pPt, bool bMsg,
                                     bool *const pbCallAutoCaption)
 {
-    for( sal_uInt32 i = 0, nFormatCount = rData.GetFormatCount(); ( i < nFormatCount ) && !bLink; ++i )
-    {
-        if( SotClipboardFormatId::FILE_LIST == rData.GetFormat( i ) )
+    if ( comphelper::LibreOfficeKit::isActive() ) {
+        for( sal_uInt32 i = 0, nFormatCount = rData.GetFormatCount(); ( i < nFormatCount ) && !bLink; ++i )
         {
-            const DataFlavor aFlavor( rData.GetFormatDataFlavor( i ) );
-
-            if( aFlavor.MimeType.indexOf( "text/uri-list" ) > -1 )
+            if( SotClipboardFormatId::FILE_LIST == rData.GetFormat( i ) )
             {
-                bLink = true;
+                const DataFlavor aFlavor( rData.GetFormatDataFlavor( i ) );
+
+                if( aFlavor.MimeType.indexOf( "text/uri-list" ) > -1 )
+                {
+                    bLink = true;
+                }
             }
         }
     }
