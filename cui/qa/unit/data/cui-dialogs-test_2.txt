@@ -27,7 +27,6 @@ cui/ui/hangulhanjaconversiondialog.ui
 cui/ui/hangulhanjaeditdictdialog.ui
 cui/ui/hangulhanjaoptdialog.ui
 cui/ui/hatchpage.ui
-cui/ui/hyperlinkdialog.ui
 cui/ui/hyperlinkdocpage.ui
 cui/ui/hyperlinkinternetpage.ui
 cui/ui/hyperlinkmailpage.ui

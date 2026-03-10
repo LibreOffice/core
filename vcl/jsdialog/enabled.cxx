@@ -75,7 +75,6 @@ constexpr auto CuiDialogList
         { u"cui/ui/formatnumberdialog.ui" },
         { u"cui/ui/gradientpage.ui" },
         { u"cui/ui/hatchpage.ui" },
-        { u"cui/ui/hyperlinkdialog.ui" },
         { u"cui/ui/hyperlinkinternetpage.ui" },
         { u"cui/ui/hyperlinkmailpage.ui" },
         { u"cui/ui/hyperlinkmarkdialog.ui" },

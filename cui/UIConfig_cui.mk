@@ -94,7 +94,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/hangulhanjaconversiondialog \
 	cui/uiconfig/ui/hangulhanjaoptdialog \
 	cui/uiconfig/ui/hatchpage \
-	cui/uiconfig/ui/hyperlinkdialog \
 	cui/uiconfig/ui/hyperlinkdocpage \
 	cui/uiconfig/ui/hyperlinkmarkdialog \
 	cui/uiconfig/ui/hyperlinknewdocpage \

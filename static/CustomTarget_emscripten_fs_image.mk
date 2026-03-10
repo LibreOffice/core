@@ -112,7 +112,6 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/hangulhanjaeditdictdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/hangulhanjaoptdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/hatchpage.ui \
-    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/hyperlinkdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/hyperlinkdocpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/hyperlinkinternetpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/hyperlinkmailpage.ui \
