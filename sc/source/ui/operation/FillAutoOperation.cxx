@@ -55,6 +55,7 @@ bool FillAutoOperation::runImplementation()
 
     ScDocument& rDoc = mrDocShell.GetDocument();
 
+    SCTAB nOriginalTab = mrRange.aStart.Tab();
     ScRange aRange = convertRange(mrRange);
     SCCOL nStartCol = aRange.aStart.Col();
     SCROW nStartRow = aRange.aStart.Row();
@@ -186,6 +187,8 @@ bool FillAutoOperation::runImplementation()
     mrDocShell.PostPaintGridAll();
     aModificator.SetDocumentModified();
 
+    aDestArea.aStart.SetTab(nOriginalTab);
+    aDestArea.aEnd.SetTab(nOriginalTab);
     mrRange = aDestArea; // return destination range (for marking)
     return true;
 }
