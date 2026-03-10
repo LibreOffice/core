@@ -459,6 +459,9 @@
 #define STR_QUERY_REL_DELETE_WINDOW                 NC_("STR_QUERY_REL_DELETE_WINDOW", "When you delete this table all corresponding relations will be deleted as well. Continue?")
 #define STR_QUERY_REL_COULD_NOT_CREATE              NC_("STR_QUERY_REL_COULD_NOT_CREATE", "The database could not create the relation. Maybe foreign keys for this kind of table aren't supported.\nPlease check your documentation of the database.")
 
+#define STR_GENERATED_VALUES                        NC_("STR_GENERATED_VALUES", "Generated Values")
+#define STR_SPECIAL_SETTINGS                        NC_("STR_SPECIAL_SETTINGS", "Special Settings")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

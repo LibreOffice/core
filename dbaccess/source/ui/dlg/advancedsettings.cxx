@@ -23,7 +23,9 @@
 
 #include "advancedsettings.hxx"
 #include <advancedsettingsdlg.hxx>
+#include <core_resource.hxx>
 #include <dsitems.hxx>
+#include <strings.hrc>
 #include "DbAdminImpl.hxx"
 #include "DriverSettings.hxx"
 #include "optionalboolitem.hxx"
@@ -376,15 +378,11 @@ namespace dbaui
 
         // auto-generated values?
         if (rFeatures.supportsGeneratedValues())
-            AddTabPage(u"generated"_ustr, ODriversSettings::CreateGeneratedValuesPage, nullptr);
-        else
-            RemoveTabPage(u"generated"_ustr);
+            AddTabPage(u"generated"_ustr, DBA_RES(STR_GENERATED_VALUES), ODriversSettings::CreateGeneratedValuesPage, nullptr);
 
         // any "special settings"?
         if (rFeatures.supportsAnySpecialSetting())
-            AddTabPage(u"special"_ustr, ODriversSettings::CreateSpecialSettingsPage, nullptr);
-        else
-            RemoveTabPage(u"special"_ustr);
+            AddTabPage(u"special"_ustr, DBA_RES(STR_SPECIAL_SETTINGS), ODriversSettings::CreateSpecialSettingsPage, nullptr);
 
         // remove the reset button - it's meaning is much too ambiguous in this dialog
         RemoveResetButton();
