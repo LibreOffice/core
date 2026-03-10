@@ -329,11 +329,7 @@ SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
     ImplJobSetup* pSetupData )
 {
     EnsureInit();
-    mbPrinterInit = true;
-    // create and initialize SalInfoPrinter
-    PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter;
-    configurePspInfoPrinter(pPrinter, pQueueInfo, pSetupData);
-    return pPrinter;
+    return SalGenericInstance::CreateInfoPrinter(pQueueInfo, pSetupData);
 }
 
 std::unique_ptr<SalPrinter> GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
