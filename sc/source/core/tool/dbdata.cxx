@@ -882,7 +882,6 @@ void ScDBData::ImportTotalRowParam(ScSubTotalParam& rSubTotalParam,
                         pArr->AddOpCode(ocTableRefClose);
                         // Table refs structure end
                         pArr->AddOpCode(ocClose);
-                        pArr->AddOpCode(ocStop);
                         // Store
                         vColFuncs.push_back(std::make_pair(nCol, std::move(pArr)));
                     }

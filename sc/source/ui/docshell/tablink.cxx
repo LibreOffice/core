@@ -300,7 +300,6 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                         aTokenArr.AddOpCode( ocNotAvail );
                         aTokenArr.AddOpCode( ocOpen );
                         aTokenArr.AddOpCode( ocClose );
-                        aTokenArr.AddOpCode( ocStop );
 
                         for (size_t nPos=0; nPos < nRanges; nPos++)
                         {

@@ -621,7 +621,6 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
             bArgErr = true;                 // invalid type
     }
     aTokenArr.AddOpCode(ocClose);
-    aTokenArr.AddOpCode(ocStop);
 
     //  execute formula
 

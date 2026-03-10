@@ -2364,7 +2364,6 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             aArr.AddOpCode( ocSep );
             aArr.AddDoubleReference( aRef );
             aArr.AddOpCode( ocClose );
-            aArr.AddOpCode( ocStop );
             ScFormulaCell* pCell = new ScFormulaCell(
                 rDocument, ScAddress(group.col(nResult), rRowEntry.nDestRow, nTab), aArr);
             if ( rParam.bIncludePattern )
