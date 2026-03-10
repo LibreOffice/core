@@ -167,10 +167,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121734)
 CPPUNIT_TEST_FIXTURE(Test, testTdf125281)
 {
     createSwDoc("tdf125281.doc");
-#if !defined(_WIN32)
-    // Windows fails with actual == 26171 for some reason; also lazy load isn't lazy in Windows
-    // debug builds, reason is not known at the moment.
-
     // Load a .doc file which has an embedded .emf image.
     SwDoc* pDoc = getSwDoc();
     SwNode* pNode = pDoc->GetNodes()[SwNodeOffset(6)];
@@ -186,7 +182,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125281)
     // Without the accompanying fix in place, this test would have failed, as setting the pref size
     // swapped the image in.
     CPPUNIT_ASSERT(!rGraphic.isAvailable());
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf122425_1)
