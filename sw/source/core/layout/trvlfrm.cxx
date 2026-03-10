@@ -1944,7 +1944,6 @@ sal_uInt16 SwFrame::GetVirtPageCount() const
     }
     sal_uInt16 nStartPage = pFoundFrame ? pFoundFrame->GetPhyPageNum() : 1;
     return pEndPage->GetPhyPageNum() - nStartPage + 1;
-    return 1;
 }
 
 /** Determines and sets those cells which are enclosed by the selection. */
