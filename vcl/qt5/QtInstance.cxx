@@ -276,8 +276,7 @@ QtInstance::QtInstance()
     , m_bUpdateFonts(false)
     , m_pActivePopup(nullptr)
 {
-    AllocFakeCmdlineArgs(m_pFakeArgv, m_pFakeArgc, m_pFakeArgvFreeable);
-    m_pQApplication = CreateQApplication(*m_pFakeArgc, m_pFakeArgv.get());
+    m_pQApplication = CreateQApplication();
 
 #if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
     m_emscriptenThreadingData = &comphelper::emscriptenthreading::getData();
@@ -786,9 +785,7 @@ void QtInstance::colorSchemeChanged() { UpdateStyle(false); }
 
 void QtInstance::virtualGeometryChanged(const QRect&) { notifyDisplayChanged(); }
 
-void QtInstance::AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
-                                      std::unique_ptr<int>& rFakeArgc,
-                                      std::vector<FreeableCStr>& rFakeArgvFreeable)
+std::unique_ptr<QApplication> QtInstance::CreateQApplication()
 {
     OString aVersion(qVersion());
     SAL_INFO("vcl.qt", "qt version string is " << aVersion);
@@ -821,19 +818,16 @@ void QtInstance::AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
         OString aDisplay = OUStringToOString(aParam, osl_getThreadTextEncoding());
         aFakeArgvFreeable.emplace_back(strdup(aDisplay.getStr()));
     }
-    rFakeArgvFreeable.swap(aFakeArgvFreeable);
+    m_pFakeArgvFreeable.swap(aFakeArgvFreeable);
 
-    const int nFakeArgc = rFakeArgvFreeable.size();
-    rFakeArgv.reset(new char*[nFakeArgc]);
+    const int nFakeArgc = m_pFakeArgvFreeable.size();
+    m_pFakeArgv.reset(new char*[nFakeArgc]);
     for (int i = 0; i < nFakeArgc; i++)
-        rFakeArgv[i] = rFakeArgvFreeable[i].get();
+        m_pFakeArgv[i] = m_pFakeArgvFreeable[i].get();
 
-    rFakeArgc.reset(new int);
-    *rFakeArgc = nFakeArgc;
-}
+    m_pFakeArgc.reset(new int);
+    *m_pFakeArgc = nFakeArgc;
 
-std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** pArgv)
-{
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // for Qt 6, setting Qt::AA_EnableHighDpiScaling and Qt::AA_UseHighDpiPixmaps
     // is deprecated, they're always enabled
@@ -854,7 +848,8 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** 
         unsetenv("SESSION_MANAGER");
     }
 
-    std::unique_ptr<QApplication> pQApp = std::make_unique<QApplication>(nArgc, pArgv);
+    std::unique_ptr<QApplication> pQApp
+        = std::make_unique<QApplication>(*m_pFakeArgc, m_pFakeArgv.get());
 
     if (session_manager != nullptr)
     {

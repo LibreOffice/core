@@ -243,10 +243,7 @@ public:
     static bool isQtWeldingEnabled();
 
 private:
-    static void AllocFakeCmdlineArgs(std::unique_ptr<char* []>& rFakeArgv,
-                                     std::unique_ptr<int>& rFakeArgc,
-                                     std::vector<FreeableCStr>& rFakeArgvFreeable);
-    static std::unique_ptr<QApplication> CreateQApplication(int& nArgc, char** pArgv);
+    std::unique_ptr<QApplication> CreateQApplication();
 };
 
 inline QtInstance& GetQtInstance()
