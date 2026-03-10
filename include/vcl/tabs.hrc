@@ -13,6 +13,7 @@
 
 #include <rtl/ustring.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/bitmaps.hlst>
 
 struct TabData
 {
@@ -154,9 +155,9 @@ inline constexpr TabData RID_TAB_EVENTS{ NC_("RID_TAB_EVENTS", "Events"), u"choo
 // ui mode
 inline constexpr TabData RID_TAB_UIMODE{ NC_("RID_TAB_UIMODE", "UI Mode"), u"toggletabbarvisibility.png"_ustr };
 inline constexpr TabData RID_TAB_HLINTERNET{ NC_("RID_TAB_HLINTERNET", "~Internet"), u"res/hlinettp.png"_ustr };
-inline constexpr TabData RID_TAB_HLMAIL{ NC_("RID_TAB_HLMAIL", "~Mail"), u"res/hlmailtp.png"_ustr };
-inline constexpr TabData RID_TAB_HLDOC{ NC_("RID_TAB_HLDOC", "~Document"), u"res/hldoctp.png"_ustr };
-inline constexpr TabData RID_TAB_HLDOCN{ NC_("RID_TAB_HLDOCN", "~New Document"), u"res/hldocntp.png"_ustr };
+inline constexpr TabData RID_TAB_HLMAIL{ NC_("RID_TAB_HLMAIL", "~Mail"), RID_BITMAP_HLMAIL };
+inline constexpr TabData RID_TAB_HLDOC{ NC_("RID_TAB_HLDOC", "~Document"), RID_BITMAP_HLDOC };
+inline constexpr TabData RID_TAB_HLDOCN{ NC_("RID_TAB_HLDOCN", "~New Document"), RID_BITMAP_HLDOCN };
 // envelope
 inline constexpr TabData RID_TAB_ENVELOPE{ NC_("RID_TAB_ENVELOPE", "Envelope"), u"insertenvelope.png"_ustr };
 inline constexpr TabData RID_TAB_ENV_FORMAT{ NC_("RID_TAB_ENV_FORMAT", "Format"), u"distributeverttop.png"_ustr };

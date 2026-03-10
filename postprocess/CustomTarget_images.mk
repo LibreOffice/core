@@ -78,6 +78,7 @@ $(packimages_DIR)/sourceimagelist.ilst : \
 		$(SRCDIR)/formula/inc/bitmaps.hlst \
 		$(SRCDIR)/fpicker/inc/bitmaps.hlst \
 		$(SRCDIR)/framework/inc/bitmaps.hlst \
+		$(SRCDIR)/include/vcl/bitmaps.hlst \
 		$(SRCDIR)/reportdesign/inc/bitmaps.hlst \
 		$(SRCDIR)/sc/inc/bitmaps.hlst \
 		$(SRCDIR)/sd/inc/bitmaps.hlst \
