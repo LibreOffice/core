@@ -818,13 +818,10 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
         m_pFakeArgvFreeable.emplace_back(strdup(aDisplay.getStr()));
     }
 
-    const int nFakeArgc = m_pFakeArgvFreeable.size();
-    m_pFakeArgv.reset(new char*[nFakeArgc]);
-    for (int i = 0; i < nFakeArgc; i++)
+    m_nFakeArgc = m_pFakeArgvFreeable.size();
+    m_pFakeArgv.reset(new char*[m_nFakeArgc]);
+    for (int i = 0; i < m_nFakeArgc; i++)
         m_pFakeArgv[i] = m_pFakeArgvFreeable[i].get();
-
-    m_pFakeArgc.reset(new int);
-    *m_pFakeArgc = nFakeArgc;
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // for Qt 6, setting Qt::AA_EnableHighDpiScaling and Qt::AA_UseHighDpiPixmaps
@@ -847,7 +844,7 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
     }
 
     std::unique_ptr<QApplication> pQApp
-        = std::make_unique<QApplication>(*m_pFakeArgc, m_pFakeArgv.get());
+        = std::make_unique<QApplication>(m_nFakeArgc, m_pFakeArgv.get());
 
     if (session_manager != nullptr)
     {

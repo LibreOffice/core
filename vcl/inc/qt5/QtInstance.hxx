@@ -80,7 +80,7 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
     std::unique_ptr<QApplication> m_pQApplication;
     std::vector<FreeableCStr> m_pFakeArgvFreeable;
     std::unique_ptr<char* []> m_pFakeArgv;
-    std::unique_ptr<int> m_pFakeArgc;
+    int m_nFakeArgc;
 
     Timer m_aUpdateStyleTimer;
     bool m_bUpdateFonts;
