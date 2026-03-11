@@ -116,9 +116,6 @@ public:
     SAL_DLLPRIVATE void     StartTimer( sal_uInt64 nMS );
     SAL_DLLPRIVATE void     StopTimer();
 
-    inline void             registerFrame( SalFrame* pFrame );
-    inline void             deregisterFrame( SalFrame* pFrame );
-
     SAL_DLLPRIVATE bool     CheckTimeout( bool bExecuteTimers = true );
 
     // Frame
@@ -178,16 +175,6 @@ public:
 
     SAL_DLLPRIVATE virtual const cairo_font_options_t* GetCairoFontOptions() override;
 };
-
-inline void SvpSalInstance::registerFrame( SalFrame* pFrame )
-{
-    insertFrame( pFrame );
-}
-
-inline void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
-{
-    eraseFrame( pFrame );
-}
 
 VCL_DLLPUBLIC cairo_surface_t* get_underlying_cairo_surface(const VirtualDevice& rDevice);
 

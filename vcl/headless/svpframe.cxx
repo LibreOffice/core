@@ -63,7 +63,7 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
         m_pParent->m_aChildren.push_back( this );
 
     if( m_pInstance )
-        m_pInstance->registerFrame( this );
+        m_pInstance->insertFrame(this);
 
     SetPosSize( 0, 0, 800, 600, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 }
@@ -71,7 +71,7 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
 SvpSalFrame::~SvpSalFrame()
 {
     if( m_pInstance )
-        m_pInstance->deregisterFrame( this );
+        m_pInstance->eraseFrame(this);
 
     std::vector<SvpSalFrame*> Children = m_aChildren;
     for( auto& rChild : Children )
