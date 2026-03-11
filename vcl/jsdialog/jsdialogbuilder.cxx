@@ -205,10 +205,6 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
 
     if (nLevelsUp > 0)
     {
-        // embedded fragments cannot send close message for whole sidebar
-        if (rUIFile == u"modules/simpress/ui/customanimationfragment.ui")
-            m_bCanClose = false;
-
         m_aContentWindow = pRoot;
         for (unsigned i = 0; i < nLevelsUp && m_aContentWindow; i++)
         {
@@ -548,11 +544,11 @@ std::unique_ptr<weld::Container> JSInstanceBuilder::weld_container(const OUStrin
         if (pParent)
             jsdialog::SendFullUpdate(sId, pParent->get_id());
 
+        // nested builders should not close the parent dialog on destroy
+        m_bCanClose = false;
         // Navigator is currently just a panellayout but we treat it as its own dialog in online
-        // this is a hack to get it to close atm but probably need a better solution
-        if (id != u"NavigatorPanel")
-            // this is nested builder, don't close parent dialog on destroy (eg. single tab page is closed)
-            m_bCanClose = false;
+        if (id == u"NavigatorPanel")
+            m_bCanClose = true;
         m_bIsNestedBuilder = true;
     }
 
