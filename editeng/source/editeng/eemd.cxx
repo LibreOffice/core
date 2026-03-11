@@ -19,6 +19,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svl/intitem.hxx>
 
 EditMDParser::EditMDParser(EditEngine* pEditEngine, const EditPaM& rPaM)
@@ -505,6 +506,7 @@ void EditMDParser::InsertText(const OUString& rText)
     aSet.Put(SvxPostureItem(mbItalic ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC));
     aSet.Put(
         SvxCrossedOutItem(mbStrikethrough ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT));
+    aSet.Put(SvxColorItem(bNeedMonospace ? Color(225, 225, 225) : COL_AUTO, EE_CHAR_BKGCOLOR));
     if (bNeedMonospace)
     {
         SvxFontItem aFont(FAMILY_MODERN, u"Courier New"_ustr, u""_ustr, PITCH_FIXED,

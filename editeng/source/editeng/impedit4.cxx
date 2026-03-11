@@ -1190,12 +1190,56 @@ static OString lcl_EscapeMarkdown(const OUString& rText)
     return OUStringToOString(aBuf, RTL_TEXTENCODING_UTF8);
 }
 
+/// Check whether every text portion in a paragraph's range has monospace font.
+static bool lcl_IsAllCodeParagraph(const ImpEditEngine& rEngine,
+                                    sal_Int32 nNode,
+                                    const ParaPortion* pParaPortion,
+                                    sal_Int32 nParaStartPos, sal_Int32 nParaEndPos)
+{
+    if (nParaStartPos >= nParaEndPos)
+        return false;
+
+    bool bHasPortion = false;
+    sal_Int32 nIndex = 0;
+    sal_Int32 nPortionCount = pParaPortion->GetTextPortions().Count();
+
+    for (sal_Int32 nPortion = 0; nPortion < nPortionCount; nPortion++)
+    {
+        const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nPortion];
+        sal_Int32 nPortionStart = nIndex;
+        sal_Int32 nPortionEnd = nIndex + rTextPortion.GetLen();
+        nIndex = nPortionEnd;
+
+        if (nPortionEnd <= nParaStartPos)
+            continue;
+        if (nPortionStart >= nParaEndPos)
+            break;
+
+        sal_Int32 nEffStart = std::max(nPortionStart, nParaStartPos);
+        sal_Int32 nEffEnd = std::min(nPortionEnd, nParaEndPos);
+
+        if (nEffStart >= nEffEnd)
+            continue;
+
+        bHasPortion = true;
+
+        SfxItemSet aAttribs = rEngine.GetAttribs(nNode, nEffStart, nEffEnd,
+                                                  GetAttribsFlags::CHARATTRIBS);
+        const SvxFontItem& rFont = aAttribs.Get(EE_CHAR_FONTINFO);
+        if (rFont.GetFamily() != FAMILY_MODERN && rFont.GetPitch() != PITCH_FIXED)
+            return false;
+    }
+
+    return bHasPortion;
+}
+
 void ImpEditEngine::WriteMarkdownContent(
     const std::function<void(std::string_view)>& rOut,
     sal_Int32 nStartNode, sal_Int32 nEndNode,
     sal_Int32 nStartPos, sal_Int32 nEndPos)
 {
     bool bPrevWasListItem = false;
+    bool bPrevIsCode = false;
 
     for (sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++)
     {
@@ -1235,25 +1279,14 @@ void ImpEditEngine::WriteMarkdownContent(
                 }
             }
 
+            // Markdown allows ordered-list markers like "1." for every item.
+            // Most renderers auto-number by position, so constant "1." is valid
+            // and avoids computing/exporting explicit sequence numbers.
             if (bOrdered)
                 aListPrefix = aIndent.makeStringAndClear() + "1. ";
             else
                 aListPrefix = aIndent.makeStringAndClear() + "- ";
         }
-
-        // Paragraph separator
-        if (nNode > nStartNode)
-        {
-            if (bIsListItem || bPrevWasListItem)
-                rOut("\n");
-            else
-                rOut("\n\n");
-        }
-
-        if (bIsListItem)
-            rOut(std::string_view(aListPrefix));
-
-        bPrevWasListItem = bIsListItem;
 
         // Determine selection range within this paragraph
         sal_Int32 nParaStartPos = 0;
@@ -1262,6 +1295,45 @@ void ImpEditEngine::WriteMarkdownContent(
             nParaStartPos = nStartPos;
         if (nNode == nEndNode)
             nParaEndPos = nEndPos;
+
+        // Compute bIsCode inline (no pre-scan needed)
+        bool bIsCode = !bIsListItem
+            && lcl_IsAllCodeParagraph(*this, nNode, pParaPortion,
+                                      nParaStartPos, nParaEndPos);
+
+        // Close previous code block if transitioning out
+        if (bPrevIsCode && !bIsCode && nNode > nStartNode)
+            rOut("\n```");
+
+        // Paragraph separator
+        if (nNode > nStartNode)
+        {
+            if (bPrevIsCode && bIsCode)
+                rOut("\n");
+            else if (bIsListItem || bPrevWasListItem)
+                rOut("\n");
+            else
+                rOut("\n\n");
+        }
+
+        // Open code block if transitioning in
+        if (bIsCode && !bPrevIsCode)
+            rOut("```\n");
+
+        if (bIsListItem)
+            rOut(std::string_view(aListPrefix));
+
+        bPrevWasListItem = bIsListItem;
+
+        // Short-circuit code block paragraphs: emit raw text, no formatting
+        if (bIsCode)
+        {
+            OUString aText = EditDoc::GetParaAsString(pNode, nParaStartPos, nParaEndPos);
+            rOut(std::string_view(OUStringToOString(aText, RTL_TEXTENCODING_UTF8)));
+            bPrevIsCode = true;
+            continue;
+        }
+        bPrevIsCode = false;
 
         // Iterate text portions
         sal_Int32 nIndex = 0;
@@ -1386,6 +1458,10 @@ void ImpEditEngine::WriteMarkdownContent(
             rOut(std::string_view(aPortionBuf));
         }
     }
+
+    // Close any open code block
+    if (bPrevIsCode)
+        rOut("\n```");
 }
 
 ErrCode ImpEditEngine::WriteMarkdown(SvStream& rOutput, EditSelection aSel)

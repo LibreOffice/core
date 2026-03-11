@@ -20,6 +20,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
 #include <svl/intitem.hxx>
@@ -696,6 +697,10 @@ CPPUNIT_TEST_FIXTURE(Test, testMarkdownImportCodeBlock)
         = aEditEngine.GetAttribs(0, 0, aText.getLength(), GetAttribsFlags::CHARATTRIBS);
     auto& rFont = aAttribs.Get(EE_CHAR_FONTINFO);
     CPPUNIT_ASSERT(rFont.GetFamily() == FAMILY_MODERN || rFont.GetPitch() == PITCH_FIXED);
+
+    // And the code text should have a gray background:
+    auto& rBkgColor = aAttribs.Get(EE_CHAR_BKGCOLOR);
+    CPPUNIT_ASSERT_EQUAL(Color(225, 225, 225), rBkgColor.GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMarkdownImportCodeBlockMultiLine)
@@ -714,6 +719,10 @@ CPPUNIT_TEST_FIXTURE(Test, testMarkdownImportCodeBlockMultiLine)
     SfxItemSet aAttribs = aEditEngine.GetAttribs(0, 0, 5, GetAttribsFlags::CHARATTRIBS);
     auto& rFont = aAttribs.Get(EE_CHAR_FONTINFO);
     CPPUNIT_ASSERT(rFont.GetFamily() == FAMILY_MODERN || rFont.GetPitch() == PITCH_FIXED);
+
+    // And the code text should have a gray background:
+    auto& rBkgColor = aAttribs.Get(EE_CHAR_BKGCOLOR);
+    CPPUNIT_ASSERT_EQUAL(Color(225, 225, 225), rBkgColor.GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMarkdownImportBlockquote)
@@ -1410,6 +1419,101 @@ CPPUNIT_TEST_FIXTURE(Test, testMarkdownExportAllFormatting)
     std::string aMd(static_cast<const char*>(rStream.GetData()),
                     static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Hello ~~***all***~~ world"), aMd);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMarkdownExportCodeBlock)
+{
+    // Given a document with a fully monospace paragraph:
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetText(u"int x = 5;"_ustr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFontItem(FAMILY_MODERN, u"Courier New"_ustr, u""_ustr, PITCH_FIXED,
+                         RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 0, 0, 10));
+
+    // When exporting as markdown:
+    uno::Reference<datatransfer::XTransferable> xData
+        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 10));
+
+    // Then the text should be in a fenced code block:
+    auto pData = dynamic_cast<EditDataObject*>(xData.get());
+    SvMemoryStream& rStream = pData->GetMarkdownStream();
+    std::string aMd(static_cast<const char*>(rStream.GetData()),
+                    static_cast<size_t>(rStream.GetSize()));
+    CPPUNIT_ASSERT_EQUAL(std::string("```\nint x = 5;\n```"), aMd);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMarkdownExportCodeBlockMultiLine)
+{
+    // Given a document with three fully monospace paragraphs:
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetText(u"line1\nline2\nline3"_ustr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFontItem(FAMILY_MODERN, u"Courier New"_ustr, u""_ustr, PITCH_FIXED,
+                         RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 0, 2, 5));
+
+    // When exporting as markdown:
+    sal_Int32 nParas = aEditEngine.GetParagraphCount();
+    sal_Int32 nLastLen = aEditEngine.GetText(nParas - 1).getLength();
+    uno::Reference<datatransfer::XTransferable> xData
+        = aEditEngine.CreateTransferable(ESelection(0, 0, nParas - 1, nLastLen));
+
+    // Then the text should be in a single fenced code block:
+    auto pData = dynamic_cast<EditDataObject*>(xData.get());
+    SvMemoryStream& rStream = pData->GetMarkdownStream();
+    std::string aMd(static_cast<const char*>(rStream.GetData()),
+                    static_cast<size_t>(rStream.GetSize()));
+    CPPUNIT_ASSERT_EQUAL(std::string("```\nline1\nline2\nline3\n```"), aMd);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMarkdownRoundtripCodeBlock)
+{
+    // Given markdown with a fenced code block:
+    EditEngine aEditEngine(mpItemPool.get());
+    OString aMd("```\nline1\nline2\n```"_ostr);
+    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
+    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+
+    // When re-exporting as markdown (skip trailing empty paragraphs from import):
+    sal_Int32 nParas = aEditEngine.GetParagraphCount();
+    sal_Int32 nLastPara = nParas - 1;
+    while (nLastPara > 0 && aEditEngine.GetText(nLastPara).isEmpty())
+        nLastPara--;
+    sal_Int32 nLastLen = aEditEngine.GetText(nLastPara).getLength();
+    uno::Reference<datatransfer::XTransferable> xData
+        = aEditEngine.CreateTransferable(ESelection(0, 0, nLastPara, nLastLen));
+
+    // Then the export should be a proper fenced code block:
+    auto pData = dynamic_cast<EditDataObject*>(xData.get());
+    SvMemoryStream& rStream = pData->GetMarkdownStream();
+    std::string aMdOut(static_cast<const char*>(rStream.GetData()),
+                       static_cast<size_t>(rStream.GetSize()));
+    CPPUNIT_ASSERT_EQUAL(std::string("```\nline1\nline2\n```"), aMdOut);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMarkdownExportMixedCodeAndText)
+{
+    // Given a document with normal, code, and normal paragraphs:
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetText(u"Before\ncode line\nAfter"_ustr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFontItem(FAMILY_MODERN, u"Courier New"_ustr, u""_ustr, PITCH_FIXED,
+                         RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(1, 0, 1, 9));
+
+    // When exporting as markdown:
+    sal_Int32 nParas = aEditEngine.GetParagraphCount();
+    sal_Int32 nLastLen = aEditEngine.GetText(nParas - 1).getLength();
+    uno::Reference<datatransfer::XTransferable> xData
+        = aEditEngine.CreateTransferable(ESelection(0, 0, nParas - 1, nLastLen));
+
+    // Then the code paragraph should be fenced:
+    auto pData = dynamic_cast<EditDataObject*>(xData.get());
+    SvMemoryStream& rStream = pData->GetMarkdownStream();
+    std::string aMd(static_cast<const char*>(rStream.GetData()),
+                    static_cast<size_t>(rStream.GetSize()));
+    CPPUNIT_ASSERT_EQUAL(std::string("Before\n\n```\ncode line\n```\n\nAfter"), aMd);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMarkdownRoundtripMixedContent)
