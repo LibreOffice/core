@@ -19,11 +19,13 @@
 
 #include <jobset.h>
 #include <print.h>
+#include <skia/win/gdiimpl.hxx>
 #include <win/WindowsInstance.hxx>
 #include <win/salprn.h>
 
 #include <comphelper/solarmutex.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <winspool.h>
 #if defined GetDefaultPrinter
@@ -90,9 +92,10 @@ WindowsInstance::WindowsInstance(std::unique_ptr<comphelper::SolarMutex> pMutex,
                                  const OUString& rToolkitName)
     : SalInstance(std::move(pMutex), pSalData, rToolkitName)
 {
+    WinSkiaSalGraphicsImpl::prepareSkia();
 }
 
-WindowsInstance::~WindowsInstance() {}
+WindowsInstance::~WindowsInstance() { SkiaHelper::cleanup(); }
 
 SalInfoPrinter* WindowsInstance::CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,
                                                    ImplJobSetup* pSetupData)

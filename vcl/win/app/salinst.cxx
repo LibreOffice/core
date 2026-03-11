@@ -365,14 +365,12 @@ WinSalInstance::WinSalInstance(SalData* pSalData)
     , mhComWnd( nullptr )
 {
     m_bSupportsOpenGL = true;
-    WinSkiaSalGraphicsImpl::prepareSkia();
 }
 
 WinSalInstance::~WinSalInstance()
 {
     ImplFreeSalGDI();
     DestroyWindow( mhComWnd );
-    SkiaHelper::cleanup();
 }
 
 void WinSalInstance::AfterAppInit()
