@@ -4548,13 +4548,6 @@ StackVar ScInterpreter::Interpret()
                     default : PushError( FormulaError::UnknownOpCode);                 break;
                 }
 
-                // If the function pushed a subroutine as result, continue with
-                // execution of the subroutine.
-                if (sp > nStackBase && pStack[sp-1]->GetOpCode() == ocCall)
-                {
-                    Pop(); continue;
-                }
-
                 if (FormulaCompiler::IsOpCodeVolatile(eOp))
                     meVolatileType = VOLATILE;
 

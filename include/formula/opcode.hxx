@@ -28,7 +28,6 @@ enum OpCode : sal_uInt16
 {
     // Special commands
         ocPush              = SC_OPCODE_PUSH,
-        ocCall              = SC_OPCODE_CALL,
         ocStop              = SC_OPCODE_STOP,
         ocExternal          = SC_OPCODE_EXTERNAL,
         ocUDExternal        = SC_OPCODE_UD_EXTERNAL,
@@ -550,7 +549,6 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     switch (eCode)
     {
     case ocPush: return "Push";
-    case ocCall: return "Call";
     case ocStop: return "Stop";
     case ocExternal: return "External";
     case ocUDExternal: return "UDExternal";
