@@ -37,6 +37,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -807,7 +808,6 @@ void OOXMLDocument::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStrea
                     }
                 }
 
-                beans::PropertyValue embeddingsTemp;
                 // This will add all .xlsx and .bin to grabbag list.
                 if(bFound && mxEmbeddings.is())
                 {
@@ -818,9 +818,8 @@ void OOXMLDocument::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStrea
                                       { return rValue.Name == embeddingsTarget; });
                     if (!bAlreadyExists)
                     {
-                        embeddingsTemp.Name = embeddingsTarget;
-                        embeddingsTemp.Value <<= mxEmbeddings;
-                        m_aEmbeddings.push_back(embeddingsTemp);
+                        m_aEmbeddings.push_back(
+                            comphelper::makePropertyValue(embeddingsTarget, mxEmbeddings));
                     }
                     mxEmbeddings.clear();
                 }
