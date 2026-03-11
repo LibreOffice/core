@@ -27,6 +27,7 @@ static char const* GetCABundleFile()
         "/etc/ssl/certs/ca-certificates.crt",
         "/var/lib/ca-certificates/ca-bundle.pem",
         "/etc/ssl/cert.pem", // macOS has one at this location
+        "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem",
     };
     for (char const* const candidate : candidates)
     {
