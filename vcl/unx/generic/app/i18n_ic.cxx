@@ -570,7 +570,7 @@ SalI18N_InputContext::UnsetICFocus()
     if ( mbUseable && (maContext != nullptr) )
     {
         // cancel an eventual event posted to begin preedit again
-        vcl_sal::getSalDisplay()->CancelInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SalEvent::ExtTextInput );
+        vcl_sal::getSalDisplay()->RemoveEvent(maClientData.pFrame, &maClientData.aInputEv, SalEvent::ExtTextInput);
         maClientData.pFrame = nullptr;
         XUnsetICFocus( maContext );
     }

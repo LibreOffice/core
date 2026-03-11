@@ -5548,7 +5548,7 @@ GtkSalFrame::IMHandler::IMHandler( GtkSalFrame* pFrame )
 GtkSalFrame::IMHandler::~IMHandler()
 {
     // cancel an eventual event posted to begin preedit again
-    GtkSalFrame::getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput );
+    GtkSalFrame::getDisplay()->RemoveEvent(m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput);
     deleteIMContext();
 }
 
@@ -5676,7 +5676,7 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
         gtk_im_context_focus_out( m_pIMContext );
         GtkSalData::ErrorTrapPop();
         // cancel an eventual event posted to begin preedit again
-        GtkSalFrame::getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput );
+        GtkSalFrame::getDisplay()->RemoveEvent(m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput);
     }
 }
 
