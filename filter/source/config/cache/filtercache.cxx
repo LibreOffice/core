@@ -59,7 +59,7 @@ namespace filter::config{
 FilterCache::FilterCache()
     : m_eFillState(E_CONTAINS_NOTHING                      )
 {
-    int i = 0;
+    size_t i = 0;
     OUString sStandardProps[10];
 
     sStandardProps[i++] = PROPNAME_USERDATA;
