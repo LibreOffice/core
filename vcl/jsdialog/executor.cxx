@@ -246,6 +246,14 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                     LOKTrigger::trigger_toggled(dynamic_cast<weld::Toggleable&>(*pWidget));
                     return true;
                 }
+                else if (sAction == "keypress")
+                {
+                    sal_uInt32 nKeyNo = rData.at(u"data"_ustr).toUInt32();
+                    LOKTrigger::trigger_key_press(*pButton, KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    LOKTrigger::trigger_key_release(*pButton,
+                                                    KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    return true;
+                }
             }
         }
         else if (sControlType == "linkbutton")
