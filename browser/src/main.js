@@ -79,13 +79,14 @@ var map = window.L.map('map', {
 
 ////// Controls /////
 
+window.L.Map.THIS = map;
+app.map = map;
+
 map.uiManager = new UIManager();
 map.addControl(map.uiManager);
 if (!window.L.Browser.cypressTest)
 	map.tooltip = window.L.control.tooltip();
 
-window.L.Map.THIS = map;
-app.map = map;
 app.idleHandler.map = map;
 
 if (window.coolParams.get('starterMode')) {
