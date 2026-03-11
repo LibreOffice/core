@@ -21,6 +21,9 @@
 
 #include <salprn.hxx>
 
+#include <prewin.h>
+#include <windef.h>
+#include <postwin.h>
 
 // WNT3
 #define SAL_DRIVERDATA_SYSSIGN              ((sal_uIntPtr)0x574E5433)
@@ -116,5 +119,12 @@ public:
     void markInvalid();
     bool isValid() const { return mbValid && mhDC; }
 };
+
+HDC ImplCreateSalPrnIC(WinSalInfoPrinter const* pPrinter, const ImplJobSetup* pSetupData);
+bool ImplTestSalJobSetup(WinSalInfoPrinter const* pPrinter, ImplJobSetup* pSetupData, bool bDelete);
+bool ImplUpdateSalJobSetup(WinSalInfoPrinter const* pPrinter, ImplJobSetup* pSetupData, bool bIn,
+                           weld::Window* pVisibleDlgParent);
+void ImplDevModeToJobSetup(WinSalInfoPrinter const* pPrinter, ImplJobSetup* pSetupData,
+                           JobSetFlags nFlags);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

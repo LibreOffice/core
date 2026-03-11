@@ -360,7 +360,7 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
 }
 
 WinSalInstance::WinSalInstance(SalData* pSalData)
-    : SalInstance(std::make_unique<SalYieldMutex>(), pSalData, u"win"_ustr)
+    : WindowsInstance(std::make_unique<SalYieldMutex>(), pSalData, u"win"_ustr)
     , mhInst( nullptr )
     , mhComWnd( nullptr )
 {

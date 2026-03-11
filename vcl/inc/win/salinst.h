@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include "WindowsInstance.hxx"
+
 #include <osl/conditn.hxx>
 
 #include <salinst.hxx>
@@ -29,7 +31,7 @@
 
 class SalYieldMutex;
 
-class WinSalInstance : public SalInstance
+class WinSalInstance : public WindowsInstance
 {
 public:
     /// Instance Handle
@@ -58,12 +60,6 @@ public:
                             CreateVirtualDevice( SalGraphics& rGraphics,
                                                      tools::Long &nDX, tools::Long &nDY,
                                                      DeviceFormat eFormat, const SystemGraphicsData& rData ) override;
-    virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                               ImplJobSetup* pSetupData ) override;
-    virtual std::unique_ptr<SalPrinter> CreatePrinter( SalInfoPrinter* pInfoPrinter ) override;
-    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) override;
-    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) override;
-    virtual OUString            GetDefaultPrinter() override;
     virtual SalTimer*           CreateSalTimer() override;
     virtual SalSystem*          CreateSalSystem() override;
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
