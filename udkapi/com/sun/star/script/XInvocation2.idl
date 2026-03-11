@@ -45,7 +45,8 @@ published interface XInvocation2: com::sun::star::script::XInvocation
             specifies the name of the method or property
 
         @param bExact
-            specifies the name of the method or property
+            if `TRUE` then `aName` will first be converted to an exact name. See
+            com::sun::star::beans::XExactName for details.
 
         @throws IllegalArgumentException
             if aName is not the name of a supported method or property
