@@ -698,6 +698,24 @@ CPPUNIT_TEST_FIXTURE(Test, testMarkdownImportCodeBlock)
     CPPUNIT_ASSERT(rFont.GetFamily() == FAMILY_MODERN || rFont.GetPitch() == PITCH_FIXED);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testMarkdownImportCodeBlockMultiLine)
+{
+    // Given markdown with a multi-line fenced code block:
+    EditEngine aEditEngine(mpItemPool.get());
+    OString aMd("```\nline1\nline2\nline3\n```"_ostr);
+    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
+
+    // When importing as markdown (should not crash):
+    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+
+    // Then all code paragraphs should exist and have monospace font:
+    CPPUNIT_ASSERT_EQUAL(u"line1"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT(aEditEngine.GetParagraphCount() >= 3);
+    SfxItemSet aAttribs = aEditEngine.GetAttribs(0, 0, 5, GetAttribsFlags::CHARATTRIBS);
+    auto& rFont = aAttribs.Get(EE_CHAR_FONTINFO);
+    CPPUNIT_ASSERT(rFont.GetFamily() == FAMILY_MODERN || rFont.GetPitch() == PITCH_FIXED);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testMarkdownImportBlockquote)
 {
     // Given markdown with a blockquote:

@@ -496,7 +496,7 @@ void EditMDParser::InsertText(const OUString& rText)
     // Always apply explicit character formatting to prevent attribute bleeding
     // from adjacent formatted text via ContentNode::ExpandAttribs
     bool bNeedMonospace = mbCode || mbInCodeBlock;
-    EditPaM aAttrStart(maCurSel.Max().GetNode(), nStartIndex);
+    EditPaM aAttrStart(aStartPaM.GetNode(), nStartIndex);
     EditPaM aAttrEnd(maCurSel.Max());
     EditSelection aAttrSel(aAttrStart, aAttrEnd);
 
