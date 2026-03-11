@@ -18,6 +18,7 @@
  */
 
 #include <utility>
+#include <comphelper/lok.hxx>
 #include <vcl/commandevent.hxx>
 
 #include <ViewShell.hxx>
@@ -118,7 +119,8 @@ SmartTagSet::~SmartTagSet()
 void SmartTagSet::add( const SmartTagReference& xTag )
 {
     maSet.insert( xTag );
-    mrView.InvalidateAllWin();
+    if (!comphelper::LibreOfficeKit::isActive())
+        mrView.InvalidateAllWin();
 
     if( xTag == mxMouseOverTag )
         mxMouseOverTag.clear();
@@ -132,7 +134,8 @@ void SmartTagSet::remove( const SmartTagReference& xTag )
     std::set< SmartTagReference >::iterator aIter( maSet.find( xTag ) );
     if( aIter != maSet.end() )
         maSet.erase( aIter );
-    mrView.InvalidateAllWin();
+    if (!comphelper::LibreOfficeKit::isActive())
+        mrView.InvalidateAllWin();
 
     if( xTag == mxMouseOverTag )
         mxMouseOverTag.clear();
