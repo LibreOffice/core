@@ -1720,6 +1720,9 @@ public:
     {
         m_xButton->connect_key_press(LINK(this, SwTOXButton, KeyInputHdl));
         m_xButton->connect_focus_in(LINK(this, SwTOXButton, FocusInHdl));
+        // In LOK mode, clicking a toggle button sends a "toggled" action but
+        // does not trigger VCL focus_in, so also track selection via toggled.
+        m_xButton->connect_toggled(LINK(this, SwTOXButton, ToggledHdl));
         m_xButton->set_tooltip_text(m_pParent->CreateQuickHelp(rToken));
     }
 
@@ -1771,6 +1774,7 @@ public:
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(FocusInHdl, weld::Widget&, void);
+    DECL_LINK(ToggledHdl, weld::Toggleable&, void);
 
     bool IsNextControl() const          {return m_bNextControl;}
     void SetPrevNextLink(const Link<SwTOXButton&,void>& rLink) {m_aPrevNextControlLink = rLink;}
@@ -1884,6 +1888,11 @@ IMPL_LINK(SwTOXButton, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 }
 
 IMPL_LINK_NOARG(SwTOXButton, FocusInHdl, weld::Widget&, void)
+{
+    m_aGetFocusLink.Call(*this);
+}
+
+IMPL_LINK_NOARG(SwTOXButton, ToggledHdl, weld::Toggleable&, void)
 {
     m_aGetFocusLink.Call(*this);
 }
@@ -3208,6 +3217,9 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
     aThawGuard.dismiss();
     m_xCtrlParentWin->thaw();
 
+    if (comphelper::LibreOfficeKit::isActive())
+        jsdialog::SendFullUpdate(*m_xContainer);
+
     AdjustPositions();
 }
 
@@ -3253,6 +3265,9 @@ void SwTokenWindow::RemoveControl(const SwTOXButton* pDel, bool bInternalCall)
     SetActiveControl(pLeftEdit);
 
     m_xCtrlParentWin->thaw();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        jsdialog::SendFullUpdate(*m_xContainer);
 
     AdjustPositions();
     m_aModifyHdl.Call(nullptr);
