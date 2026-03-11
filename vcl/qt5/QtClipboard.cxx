@@ -13,6 +13,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
+#include <vcl/svapp.hxx>
 
 #include <QtWidgets/QApplication>
 
