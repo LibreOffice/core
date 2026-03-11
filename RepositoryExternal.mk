@@ -2914,7 +2914,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/curl/builds/libcurl-vc12-$(gb_MSBUILD_PLATFORM)-$(gb_MSBUILD_CONFIG)-dll-zlib-static-ipv6-sspi-schannel/lib/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),_debug).lib \
+	$(gb_UnpackedTarball_workdir)/curl/lib/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),-d)_imp.lib \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\

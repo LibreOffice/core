@@ -81,19 +81,35 @@ $(eval $(call gb_ExternalProject_use_nmake,curl,build))
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_Trace_StartRange,curl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		nmake -f Makefile.vc \
-			mode=dll \
-			VC=12 \
-			MACHINE=$(gb_MSBUILD_PLATFORM) \
-			GEN_PDB=$(if $(call gb_Module__symbols_enabled,curl),yes,no) \
-			$(if $(call gb_Module__symbols_enabled,curl),CFLAGS_PDB_VALUE="$(gb_DEBUGINFO_FLAGS)") \
-			DEBUG=$(if $(MSVC_USE_DEBUG_RUNTIME),yes,no) \
-			ENABLE_IPV6=yes \
-			ENABLE_SSPI=yes \
-			ENABLE_WINSSL=yes \
-			WINBUILD_ACKNOWLEDGE_DEPRECATED=yes \
-			WITH_ZLIB=static \
-	,winbuild)
+		cmake . \
+			$(if $(filter 17.%,$(VCVER)),-G "Visual Studio 17 2022") \
+			$(if $(filter 18.%,$(VCVER)),-G "Visual Studio 18 2026") \
+			-A $(gb_MSBUILD_PLATFORM) \
+			-DBUILD_SHARED_LIBS=ON \
+			-DENABLE_IPV6=ON \
+			-DCURL_WINDOWS_SSPI=ON \
+			-DCURL_USE_SCHANNEL=ON \
+			-DCURL_USE_LIBPSL=OFF \
+			-DCURL_ZLIB=ON \
+			-DZLIB_INCLUDE_DIR=$(gb_UnpackedTarball_workdir)/zlib/ \
+			-DZLIB_LIBRARY=$(gb_StaticLibrary_WORKDIR)/zlib.lib \
+			-DCURL_DISABLE_DICT=ON \
+			-DCURL_DISABLE_FILE=ON \
+			-DCURL_DISABLE_FTP=ON \
+			-DCURL_DISABLE_GOPHER=ON \
+			-DCURL_DISABLE_IMAP=ON \
+			-DCURL_DISABLE_IPFS=ON \
+			-DCURL_DISABLE_LDAP=ON \
+			-DCURL_DISABLE_LDAPS=ON \
+			-DCURL_DISABLE_MQTT=ON \
+			-DCURL_DISABLE_POP3=ON \
+			-DCURL_DISABLE_RTSP=ON \
+			-DCURL_DISABLE_SMB=ON \
+			-DCURL_DISABLE_SMTP=ON \
+			-DCURL_DISABLE_TELNET=ON \
+			-DCURL_DISABLE_TFTP=ON \
+		&& cmake --build . --config $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+	)
 	$(call gb_Trace_EndRange,curl,EXTERNAL)
 
 endif

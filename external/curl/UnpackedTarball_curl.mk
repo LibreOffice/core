@@ -13,20 +13,12 @@ $(eval $(call gb_UnpackedTarball_set_tarball,curl,$(CURL_TARBALL),,curl))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,curl))
 
-$(eval $(call gb_UnpackedTarball_fix_end_of_line,curl,\
-	winbuild/MakefileBuild.vc \
-))
-
 # 0001-const-up-readonly-H2_NON_FIELD.patch
 # upstream effort as:
 # https://github.com/curl/curl/pull/17996
 
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
-	external/curl/curl-msvc.patch.1 \
-	external/curl/curl-msvc-zlib.patch.1 \
-	external/curl/curl-msvc-disable-protocols.patch.1 \
 	external/curl/zlib.patch.0 \
-	external/curl/configurable-z-option.patch.0 \
 	external/curl/0001-const-up-readonly-H2_NON_FIELD.patch.1 \
 	external/curl/0001-cookie-don-t-treat-the-leading-slash-as-trailing.patch \
 	external/curl/0001-ws-get-a-new-mask-for-each-new-outgoing-frame.patch \
@@ -35,12 +27,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/0001-http-only-send-bearer-if-auth-is-allowed.patch \
 	external/curl/0001-proxy-auth-additional-tests.patch \
 ))
-
-ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
-$(eval $(call gb_UnpackedTarball_add_patches,curl, \
-    external/curl/clang-cl.patch.0 \
-))
-endif
 
 ifeq ($(ENABLE_EMSCRIPTEN_PROXY_POSIX_SOCKETS),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,curl, \
