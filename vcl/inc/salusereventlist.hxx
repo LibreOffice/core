@@ -57,14 +57,13 @@ public:
 
 private:
     SalFrameSet m_aFrames;
-
-protected:
     mutable std::mutex         m_aUserEventsMutex;
     std::list< SalUserEvent >  m_aUserEvents;
     std::list< SalUserEvent >  m_aProcessingUserEvents;
     bool                       m_bAllUserEventProcessedSignaled;
     oslThreadIdentifier        m_aProcessingThread;
 
+protected:
     virtual void ProcessEvent( SalUserEvent aEvent ) = 0;
     virtual void TriggerUserEventProcessing() = 0;
     virtual void TriggerAllUserEventsProcessed() {}
