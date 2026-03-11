@@ -73,8 +73,8 @@ public:
         OUString maCalculation;
         std::shared_ptr<ScTokenArray> mpArrayRef;
         sal_Int32 mnIndex;
-
-        CalculatedField(ScDocument& rDoc, const OUString& rFieldName, const std::shared_ptr<ScTokenArray>& pArray, sal_Int32 nIndex);
+        // nIndex can be recomputed by WriteToCache()
+        CalculatedField(ScDocument& rDoc, const OUString& rFieldName, const std::shared_ptr<ScTokenArray>& pArray, sal_Int32 nIndex = 0);
         CalculatedField(const CalculatedField&) = delete;
         const CalculatedField& operator=(const CalculatedField&) = delete;
     };

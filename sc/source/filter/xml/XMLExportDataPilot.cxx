@@ -18,6 +18,7 @@
  */
 
 #include "XMLExportDataPilot.hxx"
+#include <algorithm>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -38,6 +39,7 @@
 #include <dpsdbtab.hxx>
 #include <dpdimsave.hxx>
 #include <dputil.hxx>
+#include <compiler.hxx>
 #include <rangeutl.hxx>
 #include <queryentry.hxx>
 #include <com/sun/star/sheet/DataImportMode.hpp>
@@ -668,7 +670,9 @@ void ScXMLExportDataPilot::WriteGroupDimElements(const ScDPSaveDimension* pDim, 
     }
 }
 
-void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData)
+void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim,
+                                          const ScDPDimensionSaveData* pDimData,
+                                          const ScDPDimCalcSaveData* pCalcData)
 {
     OUString aSrcDimName = ScDPUtil::getSourceDimensionName(pDim->GetName());
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, aSrcDimName);
@@ -702,6 +706,39 @@ void ScXMLExportDataPilot::WriteDimension(const ScDPSaveDimension* pDim, const S
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SELECTED_PAGE, pDim->GetCurrentPage());
     }
 
+    // Export calculated field formula (calcext:formula)
+    if (pCalcData && (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
+    {
+        const auto& rCalcFields = pCalcData->GetCalculatedFields();
+        auto it = std::find_if(rCalcFields.begin(), rCalcFields.end(),
+            [&aSrcDimName](const auto& rCalcField) {
+                return rCalcField->maFieldName == aSrcDimName;
+            });
+        if (it != rCalcFields.end())
+        {
+            // Re-convert from token array using the storage grammar,
+            // same pattern as cell formula export in xmlexprt.cxx
+            ScDocument* pDoc = rExport.GetDocument();
+            if (pDoc && (*it)->mpArrayRef)
+            {
+                const formula::FormulaGrammar::Grammar eGrammar
+                    = pDoc->GetStorageGrammar();
+                ScAddress aAddr(ScAddress::INITIALIZE_INVALID);
+                ScCompiler aComp(*pDoc, aAddr, *(*it)->mpArrayRef, eGrammar);
+                OUStringBuffer aBuf;
+                aComp.CreateStringFromTokenArray(aBuf);
+                aBuf.insert(0, "=");
+                OUString sFormula = aBuf.makeStringAndClear();
+                sal_uInt16 nNamespacePrefix
+                    = (eGrammar == formula::FormulaGrammar::GRAM_ODFF)
+                        ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC;
+                rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, XML_FORMULA,
+                    rExport.GetNamespaceMap().GetQNameByKey(
+                        nNamespacePrefix, sFormula, false));
+            }
+        }
+    }
+
     SvXMLElementExport aElemDPF(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD, true, true);
     WriteLevels(pDim);
     WriteFieldReference(pDim);
@@ -715,7 +752,8 @@ void ScXMLExportDataPilot::WriteDimensions(const ScDPSaveData* pDPSave)
     for (auto const& iter : rDimensions)
     {
         WriteDimension(iter.get(),
-                pDPSave->GetExistingDimensionData());
+                pDPSave->GetExistingDimensionData(),
+                pDPSave->GetExistingDimCalcData());
     }
 }
 

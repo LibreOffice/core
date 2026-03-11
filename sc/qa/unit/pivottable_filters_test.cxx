@@ -17,6 +17,7 @@
 #include <document.hxx>
 #include <generalfunction.hxx>
 #include <dpcache.hxx>
+#include <dpdimsave.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
 #include <dputil.hxx>
@@ -2644,6 +2645,50 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testFirstHeaderRowZero)
     assertXPath(pDoc, "/x:pivotTableDefinition/x:location", "firstHeaderRow", u"0");
 }
 
+static void verifyCalcFields(ScDocument* pDoc)
+{
+    // Verify cell values
+    // "SUM - Field1"
+    CPPUNIT_ASSERT_EQUAL(u"480"_ustr, pDoc->GetString(ScAddress(3, 2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"640"_ustr, pDoc->GetString(ScAddress(3, 3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"1160"_ustr, pDoc->GetString(ScAddress(3, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"2280"_ustr, pDoc->GetString(ScAddress(3, 5, 1)));
+    // "SUM - Field2"
+    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDoc->GetString(ScAddress(4, 2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"42"_ustr, pDoc->GetString(ScAddress(4, 3, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"60"_ustr, pDoc->GetString(ScAddress(4, 4, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"132"_ustr, pDoc->GetString(ScAddress(4, 5, 1)));
+    // "SUM - Field3"
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(ScAddress(5, 2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(ScAddress(5, 5, 1)));
+    // "SUM - Field4"
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 2, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 5, 1)));
+
+    // Verify calculated field definitions survived the round-trip
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT(pDPs);
+    ScDPObject& rDPObj = (*pDPs)[0];
+    const ScDPSaveData* pSaveData = rDPObj.GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+    const ScDPDimCalcSaveData* pCalcData = pSaveData->GetExistingDimCalcData();
+    CPPUNIT_ASSERT(pCalcData);
+    const auto& rCalcFields = pCalcData->GetCalculatedFields();
+    CPPUNIT_ASSERT_EQUAL(size_t(4), rCalcFields.size());
+    // Field1 = 'Field A' * 20
+    CPPUNIT_ASSERT_EQUAL(u"Field1"_ustr, rCalcFields[0]->maFieldName);
+    CPPUNIT_ASSERT_EQUAL(u"='Field A'*20"_ustr, rCalcFields[0]->maCalculation);
+    // Field2 = SUM('Field A', 'Field B')
+    CPPUNIT_ASSERT_EQUAL(u"Field2"_ustr, rCalcFields[1]->maFieldName);
+    CPPUNIT_ASSERT_EQUAL(u"=SUM('Field A', 'Field B')"_ustr, rCalcFields[1]->maCalculation);
+    // Field3 = Name * 2
+    CPPUNIT_ASSERT_EQUAL(u"Field3"_ustr, rCalcFields[2]->maFieldName);
+    CPPUNIT_ASSERT_EQUAL(u"=Name*2"_ustr, rCalcFields[2]->maCalculation);
+    // Field4 = 2/0
+    CPPUNIT_ASSERT_EQUAL(u"Field4"_ustr, rCalcFields[3]->maFieldName);
+    CPPUNIT_ASSERT_EQUAL(u"=2/0"_ustr, rCalcFields[3]->maCalculation);
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSX)
 {
     createScDoc("xlsx/pivot-table/calcfields.xlsx");
@@ -2654,30 +2699,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSX)
     ScDocument* pDoc = getScDoc();
     pDoc->CalcAll();
 
-    // "SUM - Field1"
-    {
-        CPPUNIT_ASSERT_EQUAL(u"480"_ustr, pDoc->GetString(ScAddress(3, 2, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"640"_ustr, pDoc->GetString(ScAddress(3, 3, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"1160"_ustr, pDoc->GetString(ScAddress(3, 4, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"2280"_ustr, pDoc->GetString(ScAddress(3, 5, 1)));
-    }
-    // "SUM - Field2"
-    {
-        CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDoc->GetString(ScAddress(4, 2, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, pDoc->GetString(ScAddress(4, 3, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"60"_ustr, pDoc->GetString(ScAddress(4, 4, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"132"_ustr, pDoc->GetString(ScAddress(4, 5, 1)));
-    }
-    // "SUM - Field3"
-    {
-        CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(ScAddress(5, 2, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(ScAddress(5, 5, 1)));
-    }
-    // "SUM - Field4"
-    {
-        CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 2, 1)));
-        CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 5, 1)));
-    }
+    verifyCalcFields(pDoc);
 
     save(TestFilter::XLSX);
     xmlDocUniquePtr pDocXml = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
@@ -2725,6 +2747,40 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSX)
                 u"2/0");
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[7]", "databaseField",
                 u"0");
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1ODS)
+{
+    createScDoc("xlsx/pivot-table/calcfields.xlsx");
+    saveAndReload(TestFilter::ODS);
+
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->ReloadAllLinks();
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll();
+
+    verifyCalcFields(pDoc);
+
+    save(TestFilter::ODS);
+    xmlDocUniquePtr pDocXml = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+
+    OString aFieldPath = "/office:document-content/office:body/office:spreadsheet"
+                         "/table:data-pilot-tables/table:data-pilot-table"
+                         "/table:data-pilot-field"_ostr;
+
+    // 1st calculated field: Field1 = 'Field A' * 20
+    assertXPath(pDocXml, aFieldPath + "[5]", "source-field-name", u"Field1");
+    assertXPath(pDocXml, aFieldPath + "[5]", "formula", u"of:='Field A'*20");
+    // 2nd calculated field: Field2 = SUM('Field A'; 'Field B')
+    assertXPath(pDocXml, aFieldPath + "[6]", "source-field-name", u"Field2");
+    assertXPath(pDocXml, aFieldPath + "[6]", "formula", u"of:=SUM('Field A'; 'Field B')");
+    // 3rd calculated field: Field3 = Name * 2
+    assertXPath(pDocXml, aFieldPath + "[7]", "source-field-name", u"Field3");
+    assertXPath(pDocXml, aFieldPath + "[7]", "formula", u"of:=Name*2");
+    // 4th calculated field: Field4 = 2/0
+    assertXPath(pDocXml, aFieldPath + "[8]", "source-field-name", u"Field4");
+    assertXPath(pDocXml, aFieldPath + "[8]", "formula", u"of:=2/0");
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields2XLSX)

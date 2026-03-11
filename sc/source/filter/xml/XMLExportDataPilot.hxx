@@ -33,6 +33,7 @@ class ScDocument;
 class ScDPSaveDimension;
 class ScDPSaveData;
 class ScDPDimensionSaveData;
+class ScDPDimCalcSaveData;
 class ScDPSaveGroupDimension;
 class ScDPSaveNumGroupDimension;
 struct ScDPNumGroupInfo;
@@ -60,7 +61,8 @@ class ScXMLExportDataPilot
     void WriteGroupDimAttributes(const ScDPSaveGroupDimension& rGroupDim);
     void WriteGroupDimElements(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
     void WriteNumGroupDim(const ScDPSaveNumGroupDimension& rNumGroupDim);
-    void WriteDimension(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
+    void WriteDimension(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData,
+                        const ScDPDimCalcSaveData* pCalcData);
     void WriteDimensions(const ScDPSaveData* pDPSave);
 
     void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const std::optional<OUString> & pGrandTotal);

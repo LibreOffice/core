@@ -37,7 +37,7 @@ class ScDPSaveNumGroupDimension;
 class ScDPSaveGroupDimension;
 class ScDPObject;
 
-enum ScMySourceType
+enum class ScMySourceType
 {
     SQL,
     TABLE,
@@ -68,6 +68,13 @@ class ScXMLDataPilotTableContext : public ScXMLImportContext
         bool            mbVisible;
         GrandTotalItem();
     };
+
+    struct CalcFieldInfo
+    {
+        OUString maFieldName;
+        OUString maFormula; // raw attribute value with namespace prefix
+    };
+
     ScDocument*     pDoc;
     std::unique_ptr<ScDPSaveData> pDPSave;
     std::unique_ptr<ScDPDimensionSaveData> pDPDimSaveData;
@@ -106,6 +113,7 @@ class ScXMLDataPilotTableContext : public ScXMLImportContext
     bool            bHasCompactField:1; // True = One or more fields have compact layout.
 
     SelectedPagesType maSelectedPages;
+    std::vector<CalcFieldInfo> maCalculatedFields;
 
 public:
 
@@ -137,6 +145,7 @@ public:
     void SetButtons(ScDPObject* pDPObject);
     void SetSelectedPage( const OUString& rDimName, const OUString& rSelected );
     void SetHasCompactField() { bHasCompactField = true; }
+    void AddCalculatedField(const OUString& rFieldName, const OUString& rFormula);
 };
 
 class ScXMLDPSourceSQLContext : public ScXMLImportContext
@@ -248,6 +257,7 @@ class ScXMLDataPilotFieldContext : public ScXMLImportContext
     bool                        bAutoStart:1;
     bool                        bAutoEnd:1;
     bool                        mbHasHiddenMember:1; // TODO: import to document core
+    OUString                    maCalcFieldFormula;
 
 public:
 

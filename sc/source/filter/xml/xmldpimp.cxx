@@ -26,6 +26,8 @@
 #include <attrib.hxx>
 #include "XMLConverter.hxx"
 #include <dpdimsave.hxx>
+#include <compiler.hxx>
+#include <formula/errorcodes.hxx>
 #include <rangeutl.hxx>
 #include <dpoutputgeometry.hxx>
 #include <generalfunction.hxx>
@@ -87,7 +89,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport ),
     pDoc(GetScImport().GetDocument()),
     pDPSave(new ScDPSaveData()),
-    nSourceType(SQL),
+    nSourceType(ScMySourceType::SQL),
     mnRowFieldCount(0),
     mnColFieldCount(0),
     mnPageFieldCount(0),
@@ -207,25 +209,25 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotTableCont
         case XML_ELEMENT( TABLE, XML_DATABASE_SOURCE_SQL ):
         {
             pContext = new ScXMLDPSourceSQLContext(GetScImport(), pAttribList, this);
-            nSourceType = SQL;
+            nSourceType = ScMySourceType::SQL;
         }
         break;
         case XML_ELEMENT( TABLE, XML_DATABASE_SOURCE_TABLE ):
         {
             pContext = new ScXMLDPSourceTableContext(GetScImport(), pAttribList, this);
-            nSourceType = TABLE;
+            nSourceType = ScMySourceType::TABLE;
         }
         break;
         case XML_ELEMENT( TABLE, XML_DATABASE_SOURCE_QUERY ):
         {
             pContext = new ScXMLDPSourceQueryContext(GetScImport(), pAttribList, this);
-            nSourceType = QUERY;
+            nSourceType = ScMySourceType::QUERY;
         }
         break;
         case XML_ELEMENT( TABLE, XML_SOURCE_SERVICE ):
         {
             pContext = new ScXMLSourceServiceContext(GetScImport(), pAttribList, this);
-            nSourceType = SERVICE;
+            nSourceType = ScMySourceType::SERVICE;
         }
         break;
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_GRAND_TOTAL ):
@@ -237,7 +239,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDataPilotTableCont
         case XML_ELEMENT( TABLE, XML_SOURCE_CELL_RANGE ):
         {
             pContext = new ScXMLSourceCellRangeContext(GetScImport(), pAttribList, this);
-            nSourceType = CELLRANGE;
+            nSourceType = ScMySourceType::CELLRANGE;
         }
         break;
         case XML_ELEMENT( TABLE, XML_DATA_PILOT_FIELD ):
@@ -387,6 +389,11 @@ void ScXMLDataPilotTableContext::SetSelectedPage( const OUString& rDimName, cons
     maSelectedPages.emplace(rDimName, rSelected);
 }
 
+void ScXMLDataPilotTableContext::AddCalculatedField(const OUString& rFieldName, const OUString& rFormula)
+{
+    maCalculatedFields.push_back({rFieldName, rFormula});
+}
+
 void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
 {
     if (!pDPSave)
@@ -453,7 +460,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
 
     switch (nSourceType)
     {
-        case SQL :
+        case ScMySourceType::SQL :
         {
             ScImportSourceDesc aImportDesc(pDoc);
             aImportDesc.aDBName = sDatabaseName;
@@ -463,7 +470,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
             rPivotSources.appendDBSource(pDPObject.get(), aImportDesc);
         }
         break;
-        case TABLE :
+        case ScMySourceType::TABLE :
         {
             ScImportSourceDesc aImportDesc(pDoc);
             aImportDesc.aDBName = sDatabaseName;
@@ -472,7 +479,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
             rPivotSources.appendDBSource(pDPObject.get(), aImportDesc);
         }
         break;
-        case QUERY :
+        case ScMySourceType::QUERY :
         {
             ScImportSourceDesc aImportDesc(pDoc);
             aImportDesc.aDBName = sDatabaseName;
@@ -481,14 +488,14 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
             rPivotSources.appendDBSource(pDPObject.get(), aImportDesc);
         }
         break;
-        case SERVICE :
+        case ScMySourceType::SERVICE :
         {
             ScDPServiceDesc aServiceDesc(sServiceName, sServiceSourceName, sServiceSourceObject,
                                 sServiceUsername, sServicePassword);
             rPivotSources.appendServiceSource(pDPObject.get(), aServiceDesc);
         }
         break;
-        case CELLRANGE :
+        case ScMySourceType::CELLRANGE :
         {
             if (bSourceCellRange)
             {
@@ -522,6 +529,44 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
     pDPSave->SetExpandCollapse(bShowExpandCollapse);
     if (pDPDimSaveData)
         pDPSave->SetDimensionData(pDPDimSaveData.get());
+
+    // Compile calculated field formulas and store in ScDPDimCalcSaveData
+    if (!maCalculatedFields.empty() && pDoc)
+    {
+        ScDPDimCalcSaveData aDimCalcData;
+        for (const CalcFieldInfo& rCalcFieldInfo : maCalculatedFields)
+        {
+            // Parse the formula namespace and determine grammar
+            OUString aFormula;
+            OUString aFormulaNmsp;
+            formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED;
+            GetScImport().ExtractFormulaNamespaceGrammar(
+                aFormula, aFormulaNmsp, eGrammar, rCalcFieldInfo.maFormula);
+
+            // Compile the formula with pivot field names
+            ScAddress aAddr(ScAddress::INITIALIZE_INVALID);
+            ScCompiler aComp(*pDoc, aAddr, eGrammar, true, false);
+
+            // Register all dimension names as available pivot fields
+            const ScDPSaveData::DimsType& rDims = pDPSave->GetDimensions();
+            for (const auto& rDim : rDims)
+            {
+                if (!rDim->IsDataLayout())
+                    aComp.SetAvailablePivotFields(rDim->GetName());
+            }
+            std::shared_ptr<ScTokenArray> pArray(aComp.CompileString(aFormula));
+            if (pArray && pArray->GetLen() && pArray->GetCodeError() == FormulaError::NONE)
+            {
+                aComp.CompileTokenArray(); // Generate RPN tokens
+                std::shared_ptr<ScDPCache::CalculatedField> pCalcField
+                    = std::make_shared<ScDPCache::CalculatedField>(
+                        *pDoc, rCalcFieldInfo.maFieldName, pArray, 0/*nIndex*/);
+                aDimCalcData.SetCalculatedField(pCalcField);
+            }
+        }
+        pDPSave->SetDimCalcData(&aDimCalcData);
+    }
+
     pDPObject->SetSaveData(*pDPSave);
 
     ScDPCollection* pDPCollection = pDoc->GetDPCollection();
@@ -843,6 +888,9 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
                 case XML_ELEMENT( TABLE, XML_USED_HIERARCHY ):
                     nUsedHierarchy = aIter.toInt32();
                 break;
+                case XML_ELEMENT( CALC_EXT, XML_FORMULA ):
+                    maCalcFieldFormula = aIter.toString();
+                break;
             }
         }
     }
@@ -934,6 +982,8 @@ void SAL_CALL ScXMLDataPilotFieldContext::endFastElement( sal_Int32 /*nElement*/
         pDataPilotTable->SetSelectedPage(xDim->GetName(), sSelectedPage);
     }
     pDataPilotTable->AddDimension(xDim.release());
+    if (!maCalcFieldFormula.isEmpty())
+        pDataPilotTable->AddCalculatedField(sName, maCalcFieldFormula);
     if (!bIsGroupField)
         return;
 
