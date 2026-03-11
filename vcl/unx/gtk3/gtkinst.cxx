@@ -4895,10 +4895,7 @@ namespace
         }
         else
         {
-            const AllSettings& rSettings = Application::GetSettings();
-            pixbuf = load_icon_by_name_theme_lang(rIconName,
-                                       rSettings.GetStyleSettings().DetermineIconTheme(),
-                                       rSettings.GetUILanguageTag().getBcp47());
+            pixbuf = load_icon_by_name(rIconName);
         }
         return pixbuf;
     }
