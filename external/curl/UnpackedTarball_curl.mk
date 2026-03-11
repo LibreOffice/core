@@ -27,6 +27,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/2b0994c29a721c91c57.patch \
 	external/curl/0001-x509asn1-clean-up-GTime2str.patch \
 	external/curl/0001-x509asn1-unittests-and-fixes-for-gtime2str.patch \
+	external/curl/0001-http-only-send-bearer-if-auth-is-allowed.patch \
+	external/curl/0001-proxy-auth-additional-tests.patch \
+	external/curl/0001-url-fix-reuse-of-connections-using-HTTP-Negotiate.patch \
+	external/curl/0001-url-fix-copy-and-paste-url_match_auth_nego-mistake.patch \
 ))
 
 ifeq ($(SYSTEM_NSS),)
