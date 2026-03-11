@@ -518,7 +518,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             OpCode    eOp;
         } aMap[] = {
             { FormulaMapGroupSpecialOffset::PUSH              , ocPush }           ,
-            { FormulaMapGroupSpecialOffset::CALL              , ocCall }           ,
+            { FormulaMapGroupSpecialOffset::CALL              , ocNone }           , // unused/dead
             { FormulaMapGroupSpecialOffset::STOP              , ocStop }           ,
             { FormulaMapGroupSpecialOffset::EXTERNAL          , ocExternal }       ,
             { FormulaMapGroupSpecialOffset::NAME              , ocName }           ,

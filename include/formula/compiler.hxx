@@ -23,7 +23,7 @@
 
 /*** Special commands ***/
 #define SC_OPCODE_PUSH                0     /* internal commands */
-#define SC_OPCODE_CALL                1
+// used to be SC_OPCODE_CALL
 #define SC_OPCODE_STOP                2
 #define SC_OPCODE_EXTERNAL            3
 #define SC_OPCODE_NAME                4
