@@ -30,6 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/ubsan.patch.0 \
 	external/python3/python-3.5.tweak.strip.soabi.patch \
 	external/python3/init-sys-streams-cant-initialize-stdin.patch.0 \
+	external/python3/no-xopen-source.patch.0 \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)
