@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 #include <memory>
 #include <utility>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sheet;
@@ -321,6 +322,8 @@ void applyCellFormulaValues(
         const ScAddress& aCellPos = rValue.maAddress;
         ScFormulaCell* pCell = rDoc.getDoc().GetFormulaCell(aCellPos);
         const OUString& rValueStr = rValue.maValueStr;
+        bool bIsCellHasLineBreaks = false;
+
         if (!pCell)
             continue;
 
@@ -340,6 +343,10 @@ void applyCellFormulaValues(
             }
             break;
             case XML_str:
+                // check if source string has line breaks.
+                if (comphelper::string::indexOfAny(rValueStr, u"\n\r", 0) != -1)
+                    bIsCellHasLineBreaks = true;
+
                 // Excel uses t="str" for string results (per definition
                 // ECMA-376 18.18.11 ST_CellType (Cell Type) "Cell containing a
                 // formula string.", but that 't' Cell Data Type attribute, "an
@@ -352,6 +359,12 @@ void applyCellFormulaValues(
                 // generator. See tdf#98481
                 if (bGeneratorKnownGood)
                 {
+                    if (bIsCellHasLineBreaks)
+                    {
+                        // Recalc even if AutoCalc is disabled.
+                        pCell->AddRecalcMode(ScRecalcMode::ONLOAD_ONCE);
+                    }
+
                     svl::SharedString aSS = rStrPool.intern(rValueStr);
                     pCell->SetResultToken(new formula::FormulaStringToken(std::move(aSS)));
                     pCell->ResetDirty();
