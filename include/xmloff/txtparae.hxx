@@ -24,6 +24,7 @@
 #include <rtl/ref.hxx>
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <xmloff/maptype.hxx>
 #include <xmloff/styleexp.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>
@@ -43,7 +44,6 @@ class XMLRedlineExport;
 class MultiPropertySetHelper;
 enum class XMLShapeExportFlags;
 class SvXMLExportPropertyMapper;
-struct XMLPropertyState;
 
 namespace com::sun::star
 {
