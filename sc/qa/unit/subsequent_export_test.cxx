@@ -1836,6 +1836,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testFormulaRefSheetNameODS)
                                  pDoc->GetFormula(1, 1, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf169326_ignoreLineBreaksInReferencedCells)
+{
+    createScDoc("xlsx/tdf169326_ignore_line_breaks_in_referenced_cells.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // A1 contains "Hello\nWorld" (with a line break), and B1 contains the formula "=A1".
+    // The formula in B1 (which references A1) should evaluate to "HelloWorld", ignoring the line break in A1.
+    CPPUNIT_ASSERT_EQUAL(u"HelloWorld"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+
+    // Set formula in C3 to reference A1 as well.
+    pDoc->SetString(ScAddress(2, 2, 0), u"=A1"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"HelloWorld"_ustr, pDoc->GetString(ScAddress(2, 2, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest, testCellValuesExportODS)
 {
     // Start with an empty document
