@@ -342,8 +342,6 @@ public:
             { return getDataForScreen( nXScreen ).m_aRoot; }
     unsigned int GetXScreenCount() const { return m_aScreens.size(); }
 
-    const SalFrameSet& getFrames() const { return m_aFrames; }
-
     std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
 };
 
