@@ -25,6 +25,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/configurable-z-option.patch.0 \
 	external/curl/0001-cookie-don-t-treat-the-leading-slash-as-trailing.patch \
 	external/curl/0001-ws-get-a-new-mask-for-each-new-outgoing-frame.patch \
+	external/curl/0001-url-fix-reuse-of-connections-using-HTTP-Negotiate.patch \
+	external/curl/0001-url-fix-copy-and-paste-url_match_auth_nego-mistake.patch \
+	external/curl/0001-http-only-send-bearer-if-auth-is-allowed.patch \
+	external/curl/0001-proxy-auth-additional-tests.patch \
 ))
 
 ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
