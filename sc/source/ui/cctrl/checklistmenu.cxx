@@ -907,52 +907,12 @@ void ScCheckListMenuControl::MarkCheckedMembers()
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, LockCheckedHdl, weld::Toggleable&, void)
 {
-    bool bLockCheckedEntries = mxChkLockChecked->get_active();
     MarkCheckedMembers();
+    UpdateVisibleMembers(false);
 
-    if (mbHasDates)
-    {
-        // TODO: flesh this out
-    }
-    else
-    {
-        mpChecks->freeze();
-        mpChecks->clear();
-        mpChecks->thaw();
-
-        OUString aSearchText = mxEdSearch->get_text();
-        aSearchText = ScGlobal::getCharClass().lowercase(aSearchText);
-        if (aSearchText.isEmpty())
-        {
-            /*
-             * when we click on lock, all the checked entries are marked and
-             * this `true` tells `initMembers` to check only the currently
-             * checked entries.
-             *
-             * when lock is unchecked we want that the entries which were locked
-             * and checked now become unlocked and checked so that we can select
-             * or deselect more entries, still we want only the marked (selected)
-             * entries to remain selected, thus this `true` is valid even in the
-             * uncheck case.
-             */
-            initMembers(-1, true);
-        }
-        else
-        {
-            std::vector<int> aShownIndexes;
-            loadSearchedMembers(aShownIndexes, maMembers, aSearchText, true);
-            std::vector<int> aFixedWidths { mnCheckWidthReq };
-
-            // insert the members, remember whether checked or unchecked.
-            mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes, &bLockCheckedEntries](weld::TreeIter& rIter, int i) {
-                size_t nIndex = aShownIndexes[i];
-                insertMember(*mpChecks, rIter, maMembers[nIndex], maMembers[nIndex].mbMarked, bLockCheckedEntries);
-            }, nullptr, &aFixedWidths);
-        }
-    }
-
-    // unmarking should happen after the members are inserted
-    if (!bLockCheckedEntries)
+    // unmarking should happen after the members are inserted or updated
+    // (in case there's a hierarchy, in which case we don't clear everything)
+    if (!mxChkLockChecked->get_active())
         for (auto& aMember : maMembers)
             aMember.mbMarked = false;
 }
@@ -995,6 +955,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SearchEditTimeoutHdl, Timer*, void)
     // this one where we can take advantage of knowing we have no hierarchy
     if (mbHasDates)
     {
+        // todo: move this branch to `UpdateVisibleMembers`
         mpChecks->freeze();
 
         bool bSomeDateDeletes = false;
@@ -1059,42 +1020,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SearchEditTimeoutHdl, Timer*, void)
         mpChecks->thaw();
     }
     else
-    {
-        mpChecks->freeze();
-
-        // when there are a lot of rows, it is cheaper to simply clear the tree and either
-        // re-initialise or just insert the filtered lines
-        mpChecks->clear();
-
-        mpChecks->thaw();
-
-        /*
-         * here we pass the lock state to tell `initMembers` to preserve selection
-         * if lock is checked. this is for the case when the user has some entries
-         * locked and is now searching for more entries.
-         */
-        if (bSearchTextEmpty)
-            nSelCount = initMembers(-1, mxChkLockChecked->get_active());
-        else
-        {
-            std::vector<int> aShownIndexes;
-            loadSearchedMembers(aShownIndexes, maMembers, aSearchText, mxChkLockChecked->get_active());
-            std::vector<int> aFixedWidths { mnCheckWidthReq };
-            // tdf#122419 insert in the fastest order, this might be backwards.
-            mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes, &nSelCount](weld::TreeIter& rIter, int i) {
-                size_t nIndex = aShownIndexes[i];
-                /*
-                 * here we pass `true` for `bChecked` because we want the searched entries to be selected
-                 * by default and at the same time the last parameter tells it to keep the previously
-                 * selected members locked. since we mark/unmark entries only in the callback
-                 * `LockCheckedHdl`, consecutive searches don't change which entries are marked and which
-                 * aren't.
-                 */
-                insertMember(*mpChecks, rIter, maMembers[nIndex], true, mxChkLockChecked->get_active());
-                ++nSelCount;
-            }, nullptr, &aFixedWidths);
-        }
-    }
+        nSelCount = UpdateVisibleMembers(true);
 
     if ( nSelCount == nEnableMember )
         mxChkToggleAll->set_state( TRISTATE_TRUE );
@@ -1129,6 +1055,70 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdActivateHdl, weld::Entry&, bool)
 IMPL_LINK( ScCheckListMenuControl, CheckHdl, const weld::TreeView::iter_col&, rRowCol, void )
 {
     Check(&rRowCol.first);
+}
+
+size_t ScCheckListMenuControl::UpdateVisibleMembers(bool bSearchEditTimeout)
+{
+    bool bLockChecked = mxChkLockChecked->get_active();
+    /* here we pass the lock state to tell `initMembers` to preserve selection
+     * if lock is checked. this is for the case when the user has some entries
+     * locked and is now searching for more entries. */
+    bool bCheckMarkedEntries = !bSearchEditTimeout || bLockChecked;
+
+    OUString aSearchText = mxEdSearch->get_text();
+    aSearchText = ScGlobal::getCharClass().lowercase(aSearchText);
+    size_t nSelCount = 0;
+
+    if (mbHasDates)
+    {
+        // TODO: flesh it out later
+    }
+    else
+    {
+        mpChecks->freeze();
+        // when there are a lot of rows, it is cheaper to simply clear the
+        // tree and either re-initialise or just insert the filtered lines.
+        mpChecks->clear();
+        mpChecks->thaw();
+
+        if (aSearchText.isEmpty())
+        {
+            /*
+             * when we click on lock, all the checked entries are marked and
+             * this `true` tells `initMembers` to check only the currently
+             * checked entries.
+             *
+             * when lock is unchecked we want that the entries which were locked
+             * and checked now become unlocked and checked so that we can select
+             * or deselect more entries, still we want only the marked (selected)
+             * entries to remain selected, thus this `true` is valid even in the
+             * uncheck case.
+             */
+            nSelCount = initMembers(-1, bCheckMarkedEntries);
+        }
+        else
+        {
+            std::vector<int> aShownIndexes;
+            loadSearchedMembers(aShownIndexes, maMembers, aSearchText, bCheckMarkedEntries);
+            std::vector<int> aFixedWidths { mnCheckWidthReq };
+
+            // tdf#122419 insert in the fastest order, this might be backwards.
+            mpChecks->bulk_insert_for_each(aShownIndexes.size(), [this, &aShownIndexes, &nSelCount, bLockChecked, bSearchEditTimeout](weld::TreeIter& rIter, int i) {
+                size_t nIndex = aShownIndexes[i];
+                /*
+                 * here we pass `true` for `bChecked` because we want the searched entries to be selected
+                 * by default and at the same time the last parameter tells it to keep the previously
+                 * selected members locked. since we mark/unmark entries only in the callback
+                 * `LockCheckedHdl`, consecutive searches don't change which entries are marked and which
+                 * aren't.
+                 */
+                bool bCheck = bSearchEditTimeout || maMembers[nIndex].mbMarked;
+                insertMember(*mpChecks, rIter, maMembers[nIndex], bCheck, bLockChecked);
+                nSelCount++;
+            }, nullptr, &aFixedWidths);
+        }
+    }
+    return nSelCount;
 }
 
 void ScCheckListMenuControl::Check(const weld::TreeIter* pEntry)

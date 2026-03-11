@@ -251,6 +251,15 @@ private:
     void Check(const weld::TreeIter* pIter);
     void MarkCheckedMembers();
 
+    /* here by visible we mean members visible on the autofilter
+     * dropdown. it's different from the `maMembers[n].mbVisible`
+     * flag which is for the visible members on the sheet. */
+
+    /* both `SearchEditTimeoutHdl` and `LockCheckedHdl` call this
+     * function because they are doing similar things, we use
+     * `bSearchEditTimeout` to know which one called this function. */
+    size_t UpdateVisibleMembers(bool bSearchEditTimeout);
+
     DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
 
     DECL_LINK(PopupModeEndHdl, weld::Popover&, void);
