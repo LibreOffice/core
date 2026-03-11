@@ -35,7 +35,6 @@ public:
                  SalGenericDisplay();
     virtual      ~SalGenericDisplay() override;
 
-    virtual void deregisterFrame( SalFrame* pFrame );
     void emitDisplayChanged();
 
     void SendInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent = SalEvent::UserEvent );

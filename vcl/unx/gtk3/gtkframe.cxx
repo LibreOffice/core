@@ -713,7 +713,7 @@ GtkSalFrame::~GtkSalFrame()
         m_pParent->m_aChildren.remove( this );
     }
 
-    getDisplay()->deregisterFrame( this );
+    getDisplay()->eraseFrame(this);
 
     if( m_pRegion )
     {

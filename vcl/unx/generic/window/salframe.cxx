@@ -785,7 +785,7 @@ X11SalFrame::~X11SalFrame()
         mpParent->maChildren.remove( this );
 
     // deregister on SalX11Display
-    pDisplay_->deregisterFrame( this );
+    pDisplay_->eraseFrame(this);
 
     // unselect all events, some may be still in the queue anyway
     if( ! IsSysChildWindow() )

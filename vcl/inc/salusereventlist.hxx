@@ -76,7 +76,7 @@ public:
     inline const SalFrameSet& getFrames() const;
     inline SalFrame* anyFrame() const;
     void insertFrame( SalFrame* pFrame );
-    void eraseFrame( SalFrame* pFrame );
+    virtual void eraseFrame(SalFrame* pFrame);
     inline bool isFrameAlive( const SalFrame* pFrame ) const;
 
     void PostEvent( SalFrame* pFrame, void* pData, SalEvent nEvent );

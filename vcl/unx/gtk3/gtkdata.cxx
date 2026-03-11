@@ -875,14 +875,14 @@ GtkWidget* GtkSalDisplay::findGtkWidgetForNativeHandle(sal_uIntPtr hWindow) cons
     return nullptr;
 }
 
-void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
+void GtkSalDisplay::eraseFrame(SalFrame* pFrame)
 {
     if( m_pCapture == pFrame )
     {
         static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( false, false, false );
         m_pCapture = nullptr;
     }
-    SalGenericDisplay::deregisterFrame( pFrame );
+    SalGenericDisplay::eraseFrame(pFrame);
 }
 
 namespace {

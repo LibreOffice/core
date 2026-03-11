@@ -29,11 +29,6 @@ SalGenericDisplay::~SalGenericDisplay()
 {
 }
 
-void SalGenericDisplay::deregisterFrame( SalFrame* pFrame )
-{
-    eraseFrame( pFrame );
-}
-
 void SalGenericDisplay::emitDisplayChanged()
 {
     SalFrame *pAnyFrame = anyFrame();

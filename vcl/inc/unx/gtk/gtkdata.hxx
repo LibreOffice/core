@@ -270,7 +270,7 @@ public:
 
     GtkWidget* findGtkWidgetForNativeHandle(sal_uIntPtr hWindow) const;
 
-    virtual void deregisterFrame( SalFrame* pFrame ) override;
+    virtual void eraseFrame(SalFrame* pFrame) override;
     GdkCursor *getCursor( PointerStyle ePointerStyle );
     int CaptureMouse(GtkSalFrame* pFrame);
 
