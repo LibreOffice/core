@@ -42,16 +42,21 @@ inline OUString toOUString(const QString& s)
     return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
 }
 
+inline QPixmap loadQPixmap(SvMemoryStream& rMemoryStream)
+{
+    QPixmap aPixmap;
+    aPixmap.loadFromData(static_cast<const uchar*>(rMemoryStream.GetData()),
+                         rMemoryStream.TellEnd());
+    assert(!aPixmap.isNull() && "Failed to create icon pixmap");
+    return aPixmap;
+}
+
 inline QPixmap toQPixmap(const Bitmap& rBitmap)
 {
     SvMemoryStream aMemoryStream;
     vcl::PngImageWriter aWriter(aMemoryStream);
     aWriter.write(rBitmap);
-    QPixmap aPixmap;
-    aPixmap.loadFromData(static_cast<const uchar*>(aMemoryStream.GetData()),
-                         aMemoryStream.TellEnd());
-    assert(!aPixmap.isNull() && "Failed to create icon pixmap");
-    return aPixmap;
+    return loadQPixmap(aMemoryStream);
 }
 
 inline QPixmap toQPixmap(const Image& rImage) { return toQPixmap(rImage.GetBitmap()); }
