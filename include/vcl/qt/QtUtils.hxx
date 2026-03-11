@@ -18,12 +18,16 @@
  * VCL plugins are defined in `vcl/inc/qt5/QtTools.hxx`.
  **/
 
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/image.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <QtCore/QString>
 #include <QtGui/QIcon>
@@ -77,9 +81,12 @@ inline QPixmap toQPixmap(const OutputDevice& rDevice)
 
 inline QPixmap loadQPixmapIcon(const OUString& rIconName)
 {
-    const Bitmap aBitmap(rIconName);
-    if (!aBitmap.IsEmpty())
-        return toQPixmap(aBitmap);
+    const OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+    const OUString sLanguage = Application::GetSettings().GetUILanguageTag().getBcp47();
+    std::shared_ptr<SvMemoryStream> pImageStream
+        = ImageTree::get().getImageStream(rIconName, sIconTheme, sLanguage);
+    if (pImageStream)
+        return loadQPixmap(*pImageStream);
 
     const QIcon aIcon = QIcon::fromTheme(toQString(rIconName));
     assert(!aIcon.isNull() && "No icon found for that icon name");

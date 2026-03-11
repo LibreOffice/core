@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_libraries,avmediaqt6,\
 	comphelper \
 	cppu \
 	cppuhelper \
+	i18nlangtag \
 	sal \
 	salhelper \
 	tl \
