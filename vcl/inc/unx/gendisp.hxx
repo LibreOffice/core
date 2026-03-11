@@ -37,7 +37,6 @@ public:
 
     void emitDisplayChanged();
 
-    void SendInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent = SalEvent::UserEvent );
     void CancelInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent );
     bool DispatchInternalEvent( bool bHandleAllCurrentEvent = false );
 

@@ -2036,7 +2036,7 @@ X11SalFrame::HandleExtTextEvent (XClientMessageEvent const *pEvent)
 
 bool X11SalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    GetDisplay()->SendInternalEvent( this, pData.release() );
+    GetDisplay()->PostEvent(this, pData.release(), SalEvent::UserEvent);
     return true;
 }
 

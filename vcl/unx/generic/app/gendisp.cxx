@@ -41,11 +41,6 @@ bool SalGenericDisplay::DispatchInternalEvent( bool bHandleAllCurrentEvent )
     return DispatchUserEvents( bHandleAllCurrentEvent );
 }
 
-void SalGenericDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
-{
-    PostEvent( pFrame, pData, nEvent );
-}
-
 void SalGenericDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
 {
     RemoveEvent( pFrame, pData, nEvent );

@@ -557,7 +557,7 @@ SalI18N_InputContext::SetICFocus(X11SalFrame* pFocusFrame)
     {
         sendEmptyCommit(pFocusFrame);
         // begin preedit again
-        vcl_sal::getSalDisplay()->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SalEvent::ExtTextInput );
+        vcl_sal::getSalDisplay()->PostEvent(pFocusFrame, &maClientData.aInputEv, SalEvent::ExtTextInput);
     }
 
     XSetICFocus( maContext );
@@ -594,7 +594,7 @@ SalI18N_InputContext::EndExtTextInput()
         if( static_cast<X11SalFrame*>(maClientData.pFrame)->hasFocus() )
         {
             // begin preedit again
-            vcl_sal::getSalDisplay()->SendInternalEvent(maClientData.pFrame, &maClientData.aInputEv, SalEvent::ExtTextInput);
+            vcl_sal::getSalDisplay()->PostEvent(maClientData.pFrame, &maClientData.aInputEv, SalEvent::ExtTextInput);
         }
     }
 }
