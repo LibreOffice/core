@@ -48,6 +48,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <tools/fontenum.hxx>
 #include <sal/log.hxx>
+#include <rtl/character.hxx>
 
 #include <stylesbuffer.hxx>
 #include <orcus/exception.hpp>
@@ -261,14 +262,20 @@ void ScOrcusNamedExpression::set_named_expression(std::string_view name, std::st
         while ((nPos = maExpr.indexOf(aTable, nPos)) != -1)
         {
             bool bQuoted = (nPos > 0 && maExpr[nPos - 1] == '\'');
-            bool bIsCompleteTableName = false;
+            bool bIsCompleteTableName = true;
             sal_Int32 nLen = aTable.getLength();
             sal_Int32 nEndPos = nPos + nLen;
+
+            if (nPos > 0)
+            {
+                sal_Unicode cPrevChar = maExpr[nPos - 1];
+                bIsCompleteTableName &= !(rtl::isAsciiAlphanumeric(cPrevChar) || cPrevChar == '_' || cPrevChar == '.');
+            }
+
             if (nEndPos < maExpr.getLength())
             {
                 sal_Unicode cEndChar = maExpr[nEndPos];
-                if (cEndChar == '!' || cEndChar == ':')
-                    bIsCompleteTableName = true;
+                bIsCompleteTableName &= (cEndChar == '!' || cEndChar == ':');
             }
 
             if (!bQuoted && bIsCompleteTableName)
