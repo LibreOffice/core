@@ -43,17 +43,9 @@ MarkdownParser::MarkdownParser(EditEngine* pEditEngine, const EditPaM& rPaM)
 
 EditPaM MarkdownParser::Parse(const OString& rMarkdown)
 {
-    MD_PARSER parser;
-    memset(&parser, 0, sizeof(parser));
-    parser.abi_version = 0;
-    parser.flags = MD_DIALECT_GITHUB;
-    parser.enter_block = EnterBlockCb;
-    parser.leave_block = LeaveBlockCb;
-    parser.enter_span = EnterSpanCb;
-    parser.leave_span = LeaveSpanCb;
-    parser.text = TextCb;
-    parser.debug_log = nullptr;
-    parser.syntax = nullptr;
+    MD_PARSER parser
+        = { 0,      MD_DIALECT_GITHUB, EnterBlockCb, LeaveBlockCb, EnterSpanCb, LeaveSpanCb,
+            TextCb, nullptr,           nullptr };
 
     int nRet = md_parse(rMarkdown.getStr(), rMarkdown.getLength(), &parser, this);
     SAL_WARN_IF(nRet != 0, "editeng", "md_parse failed with error " << nRet);
