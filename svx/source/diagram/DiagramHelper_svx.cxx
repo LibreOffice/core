@@ -38,6 +38,8 @@
 #include <officecfg/Office/Common.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/svditer.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 
@@ -406,40 +408,52 @@ DiagramFrameHdl::DiagramFrameHdl(const basegfx::B2DHomMatrix& rTransformation)
 }
 
 DiagramHelper_svx::DiagramHelper_svx()
-: mbUseDiagramThemeData(false)
+: msSelectedModelID()
+, mbUseDiagramThemeData(false)
 , mbUseDiagramModelData(true)
 , mbForceThemePtrRecreation(false)
+, mbDiagramObjectsLocked(false)
 {
 }
 
 DiagramHelper_svx::DiagramHelper_svx(DiagramHelper_svx const& rSource)
-: mbUseDiagramThemeData(rSource.mbUseDiagramThemeData)
+: msSelectedModelID()
+, mbUseDiagramThemeData(rSource.mbUseDiagramThemeData)
 , mbUseDiagramModelData(rSource.mbUseDiagramModelData)
 , mbForceThemePtrRecreation(rSource.mbForceThemePtrRecreation)
+, mbDiagramObjectsLocked(false)
 {
 }
 
 DiagramHelper_svx::~DiagramHelper_svx() {}
 
-void DiagramHelper_svx::disconnectFromSdrObjGroup()
+SdrObjGroup* DiagramHelper_svx::getAssociatedRootShape()
 {
     uno::Reference< drawing::XShape >& rxRootShape(accessRootShape());
-    SdrObjGroup* pGroupObject(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape)));
-    if (nullptr != pGroupObject)
+    return dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
+}
+
+void DiagramHelper_svx::disconnectFromSdrObjGroup()
+{
+    SdrObjGroup* pRootObject(getAssociatedRootShape());
+
+    if (nullptr != pRootObject)
     {
-        rxRootShape.clear();
-        pGroupObject->mp_DiagramHelper.reset();
+        // remove locks. Do this before resetting RootShape below, it uses that
+        applyLocksToDiagramObjects(false);
+        accessRootShape().clear();
+        pRootObject->mp_DiagramHelper.reset();
     }
 }
 
 void DiagramHelper_svx::connectToSdrObjGroup(css::uno::Reference< css::drawing::XShape >& rTarget)
 {
-    SdrObjGroup* pGroupObject(nullptr);
+    SdrObjGroup* pRootObject(nullptr);
     uno::Reference< drawing::XShape >& rxRootShape(accessRootShape());
     if (rxRootShape && rTarget == rxRootShape)
     {
-        pGroupObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
-        if (pGroupObject != nullptr &&  pGroupObject->mp_DiagramHelper.get() == this)
+        pRootObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
+        if (pRootObject != nullptr &&  pRootObject->mp_DiagramHelper.get() == this)
         {
             // connection already established
             return;
@@ -451,20 +465,169 @@ void DiagramHelper_svx::connectToSdrObjGroup(css::uno::Reference< css::drawing::
 
     // connect to target
     rxRootShape = rTarget;
-    pGroupObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
-    if (nullptr != pGroupObject)
-        pGroupObject->mp_DiagramHelper.reset(this);
+    pRootObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
+    if (nullptr != pRootObject)
+        pRootObject->mp_DiagramHelper.reset(this);
+
+    applyLocksToDiagramObjects(true);
 }
 
-void DiagramHelper_svx::AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList)
+void DiagramHelper_svx::AddAdditionalVisualization(SdrHdlList& rHdlList)
 {
+    SdrObjGroup* pRootObject(getAssociatedRootShape());
+    if (nullptr == pRootObject)
+        return;
+
     // create an extra frame visualization here
     basegfx::B2DHomMatrix aTransformation;
     basegfx::B2DPolyPolygon aPolyPolygon;
-    rTarget.TRGetBaseGeometry(aTransformation, aPolyPolygon);
+    pRootObject->TRGetBaseGeometry(aTransformation, aPolyPolygon);
 
     std::unique_ptr<SdrHdl> pHdl(new DiagramFrameHdl(aTransformation));
     rHdlList.AddHdl(std::move(pHdl));
+
+    applyLocksToDiagramObjects(true);
+}
+
+void DiagramHelper_svx::applyLocksToDiagramObjects(bool bActivate)
+{
+    if (mbDiagramObjectsLocked == bActivate)
+        return;
+
+    SdrObjGroup* pRootObject(getAssociatedRootShape());
+    if (nullptr == pRootObject)
+        return;
+
+    mbDiagramObjectsLocked = bActivate;
+    SdrObjListIter aIterator(*pRootObject, SdrIterMode::DeepNoGroups);
+    while (aIterator.IsMore())
+    {
+        SdrObject* pCandidate(aIterator.Next());
+
+        if (nullptr != pCandidate)
+        {
+            if (pRootObject != pCandidate)
+            {
+                pCandidate->SetMoveProtect(bActivate);
+                pCandidate->SetResizeProtect(bActivate);
+                pCandidate->SetDeleteProtect(bActivate);
+            }
+
+            // reset name/DiagramDataModelID when deactivating which
+            // means that gets a regular SdrObjGroup
+            if (!bActivate)
+                pCandidate->setDiagramDataModelID(EMPTY_OUSTRING);
+        }
+    }
+}
+
+const OUString& DiagramHelper_svx::getSelectedModelID() const
+{
+    if (msSelectedModelID.isEmpty())
+        return getBackgroundShapeModelID();
+    return msSelectedModelID;
+}
+
+SdrObject* DiagramHelper_svx::getDiagramSubSelection()
+{
+    SdrObjGroup* pRootObject(getAssociatedRootShape());
+    if (nullptr == pRootObject || 0 == pRootObject->GetObjCount())
+        return nullptr;
+
+    // look for shape with that ID
+    const OUString& rID(getSelectedModelID());
+    SdrObjListIter aIter(pRootObject);
+
+    while(aIter.IsMore())
+    {
+        SdrObject* pObj(aIter.Next());
+        if (nullptr != pObj && pObj->getDiagramDataModelID() == rID)
+            return pObj;
+    }
+
+    OSL_FAIL("Diagram Sub-Shape with SelectedModelID not found (!)");
+    aIter.Reset();
+    return aIter.Next();
+}
+
+bool DiagramHelper_svx::markNextDiagramSubSelection(bool bPrev)
+{
+    SdrObjGroup* pRootObject(getAssociatedRootShape());
+    if (nullptr == pRootObject || 0 == pRootObject->GetObjCount())
+        return false;
+
+    SdrObject* pObj(nullptr);
+    const OUString& rID(getSelectedModelID());
+
+    // find selected shape
+    SdrObjListIter aIter(pRootObject, SdrIterMode::DeepNoGroups, !bPrev);
+
+    while(aIter.IsMore())
+    {
+        pObj = aIter.Next();
+
+        if (nullptr != pObj && pObj->getDiagramDataModelID() == rID)
+        {
+            // a is currently selected shape
+            if (!aIter.IsMore())
+                // last shape reached, return without usage
+                return false;
+
+            pObj = aIter.Next();
+            break;
+        }
+    }
+
+    if (nullptr == pObj)
+        return false;
+
+    setSelectedModelID(pObj->getDiagramDataModelID());
+    return true;
+}
+
+void DiagramHelper_svx::initSelectionByKeyboard(bool bPrev)
+{
+    SdrObjGroup* pRootObject(getAssociatedRootShape());
+    if (nullptr == pRootObject || 0 == pRootObject->GetObjCount())
+        return;
+
+    SdrObjListIter aIter(pRootObject, SdrIterMode::DeepNoGroups, !bPrev);
+    SdrObject* pObj(aIter.Next());
+
+    if (nullptr == pObj)
+        return;
+
+    setSelectedModelID(pObj->getDiagramDataModelID());
+}
+
+void DiagramHelper_svx::markDirectDiagramSubSelection(SdrObject& rCandidate)
+{
+    if (rCandidate.isDiagram() || rCandidate.getDiagramDataModelID().isEmpty())
+        // it's directly the root of a Diagram or not a SdrObject associated
+        // with Diagrams at all
+        return;
+
+    SdrObjGroup* pRootObject(getAssociatedRootShape());
+    if (nullptr == pRootObject || 0 == pRootObject->GetObjCount())
+        return;
+
+    // find selected shape
+    SdrObjListIter aIter(pRootObject);
+
+    while(aIter.IsMore())
+    {
+        SdrObject* pObj(aIter.Next());
+
+        if (pObj == &rCandidate)
+        {
+            // found object in Diagram based on pRootObject. Set
+            // selected object
+            setSelectedModelID(rCandidate.getDiagramDataModelID());
+            return;
+        }
+    }
+
+    setSelectedModelID(getBackgroundShapeModelID());
 }
 
 DiagramHelperFactory_svx::DiagramHelperFactory_svx()

@@ -454,7 +454,9 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         mpDoc->EnableUndo(false);
     }
 
+    mpDoc->incImportExport();
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
+    mpDoc->decImportExport();
 
     SfxItemSet& rSet = rMedium.GetItemSet();
     if (SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION))

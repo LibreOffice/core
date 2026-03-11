@@ -84,9 +84,10 @@ public:
     virtual std::vector<std::pair<OUString, OUString>> getDiagramChildren(const OUString& rParentId) const override;
 
     // add/remove new top-level node to data model, returns its id
-    virtual OUString addDiagramNode(const OUString& rText) override;
-    virtual bool removeDiagramNode(const OUString& rNodeId) override;
+    virtual OUString addDiagramNode(const OUString& rText, SdrModel& rDrawModel) override;
+    virtual bool removeDiagramNode(const OUString& rNodeId, SdrModel& rDrawModel) override;
     virtual void TextInformationChange() override;
+    virtual void ItemSetInformationChange(std::span< const SfxPoolItem* const > aChangedItems) override;
 
     // Undo/Redo helpers to extract/restore Diagram-defining data
     virtual std::shared_ptr< svx::diagram::DiagramDataState > extractDiagramDataState() const override;
@@ -112,6 +113,8 @@ public:
 
     // write data to boost::property_tree
     virtual void addDiagramModelData(boost::property_tree::ptree& rTarget) const override;
+    virtual const OUString& getBackgroundShapeModelID() const override;
+    virtual bool isTextNodeModelID(const OUString& rModelID) const override;
 };
 
 class DiagramHelperFactory_oox : public svx::diagram::DiagramHelperFactory_svx

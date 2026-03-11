@@ -2611,7 +2611,7 @@ void SdrObjCustomShape::EndTextEdit( SdrOutliner& rOutl )
 {
     if (!getDiagramDataModelID().isEmpty())
     {
-        std::shared_ptr< svx::diagram::DiagramHelper_svx > pIDiagramHelper(getDiagramHelperFromDiagramOrMember());
+        std::shared_ptr< svx::diagram::DiagramHelper_svx > pIDiagramHelper(getDiagramHelper());
 
         if (pIDiagramHelper)
         {

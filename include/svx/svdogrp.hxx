@@ -31,6 +31,7 @@ public:
     // Basic DiagramHelper support
     virtual bool isDiagram() const override;
     virtual const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelper() const override;
+    virtual SdrObject* getDiagramSubSelection() override;
 
 private:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;

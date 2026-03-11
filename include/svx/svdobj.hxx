@@ -228,9 +228,13 @@ public:
     // Basic DiagramHelper support
     virtual bool isDiagram() const;
     virtual const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelper() const;
-    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelperFromDiagramOrMember() const;
     void setDiagramDataModelID(const OUString& rID);
     const OUString& getDiagramDataModelID() const;
+
+    virtual SdrObject* getDiagramSubSelection();
+    bool isDiagramBackgroundShape() const;
+    bool isDiagramTextNode() const;
+    bool removeDiagramNode();
 
 private:
     // check if a ObjectName is set and it is in DiagramModelID syntax

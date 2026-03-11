@@ -2228,6 +2228,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testRegenerateDiagram)
     // as the group shape is a diagram. Do the same as before done by triggering UI
     // events directly in the model
     // Remove and free top-left entry (Box showing "A")
+    // NOTE: DiagramSubObjects are now DeleteProtected and
+    // inside RemoveObject IsDeleteProtect is checked, so
+    // this intentionally no longer removes that object.
+    // To remove it the diagram command to remove it including
+    // the correct DiagramModelID of that object is needed, as
+    // is done from the DiagramDialog
     pActualPage->GetObj(0)->GetSubList()->RemoveObject(1);
 
     // select diagram
@@ -2235,12 +2241,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testRegenerateDiagram)
     pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::TAB);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
+    // see note above: four is correct for now
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
 
     // regenerate diagram
     dispatchCommand(mxComponent, u".uno:RegenerateDiagram"_ustr, uno::Sequence<beans::PropertyValue>());
 
     // diagram content (child shape count) should be the same as in the beginning
+    // NOTE: This is due to regenerate-diagram.pptx *not* having a drawing.xml
+    // and regenerate had to be done already at load time
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
 }
 

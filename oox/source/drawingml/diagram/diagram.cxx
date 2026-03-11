@@ -123,7 +123,6 @@ static void removeUnneededGroupShapes(const ShapePtr& pShape)
     }
 }
 
-
 void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentShape, bool bCreate )
 {
     if (pParentShape->getSize().Width == 0 || pParentShape->getSize().Height == 0)
@@ -154,11 +153,6 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
     pBackground->setSize(pParentShape->getSize());
     if (mpData->getBackgroundShapeFillProperties())
         pBackground->getFillProperties() = *mpData->getBackgroundShapeFillProperties();
-    // MoveProtect/SizeProtect..? Keep for now, but mnay be removed
-    // when IA needs change - the Diagram will be a closed GroupObject.
-    // If it gets 'broken' (un-grouped) the BGShape will keep that attributes,
-    // despite main reason to break that Diagram is probably to edit it.
-    pBackground->setLocked(true);
 
     // create and set ModelID for BackgroundShape to allow later association
     getData()->setBackgroundShapeModelID(OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8));
@@ -168,10 +162,26 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
     aChildren.insert(aChildren.begin(), pBackground);
 }
 
+uno::Reference<xml::dom::XDocument> SmartArtDiagram::convertAndSet(std::u16string_view rDOM, svx::diagram::DomMapFlag aDomMapFlag)
+{
+    // construct MemoryStream and OStreamWrapper
+    const OString sUtf8(OUStringToOString(rDOM, RTL_TEXTENCODING_UTF8));
+    SvMemoryStream aStream(const_cast<char*>(sUtf8.getStr()), sUtf8.getLength(), StreamMode::READ);
+    rtl::Reference<utl::OStreamWrapper> pStreamWrapper = new utl::OStreamWrapper(aStream);
+
+    // create the dom parser & create DomTree
+    uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(comphelper::getProcessComponentContext()));
+    uno::Reference<xml::dom::XDocument> aDomTree(xDomBuilder->parse(pStreamWrapper->getInputStream()));
+
+    // set DomTree locally
+    setOOXDomValue(aDomMapFlag, uno::Any(aDomTree));
+    return aDomTree;
+}
+
 SmartArtDiagram::SmartArtDiagram()
 : maDiagramFontHeights()
-, mpData()
-, mpLayout()
+, mpData(std::make_shared<DiagramData_oox>())
+, mpLayout(std::make_shared<DiagramLayout>(*this))
 , maStyles()
 , maColors()
 , maDiagramPRDomMap()
@@ -211,67 +221,33 @@ SmartArtDiagram::SmartArtDiagram(const boost::property_tree::ptree& rDiagramMode
 
         if (!aOOXLayoutDOM.isEmpty())
         {
-            // construct MemoryStream and OStreamWrapper with SVG in OUString
-            const OString sUtf8(OUStringToOString(aOOXLayoutDOM, RTL_TEXTENCODING_UTF8));
-            SvMemoryStream aStream(const_cast<char*>(sUtf8.getStr()), sUtf8.getLength(), StreamMode::READ);
-            rtl::Reference<utl::OStreamWrapper> pStreamWrapper = new utl::OStreamWrapper(aStream);
-
-            // create the dom parser & create DomTree
-            uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(comphelper::getProcessComponentContext()));
-            uno::Reference<xml::dom::XDocument> aDomTree(xDomBuilder->parse(pStreamWrapper->getInputStream()));
-
-            // set DomTree locally
-            setOOXDomValue(svx::diagram::DomMapFlag::OOXLayout, uno::Any(aDomTree));
+            // create and set DomTree locally
+            uno::Reference<xml::dom::XDocument> xDom(convertAndSet(aOOXLayoutDOM, svx::diagram::DomMapFlag::OOXLayout));
 
             // import DomTree to mpLayout
-            uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(aDomTree, uno::UNO_QUERY_THROW);
+            uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(xDom, uno::UNO_QUERY_THROW);
             rtl::Reference< core::FragmentHandler > xRefLayout(new DiagramLayoutFragmentHandler(*this, *xPPTImport, "internal", mpLayout));
             xPPTImport->importFragment(xRefLayout, xSerializer);
-
-            // Data is loaded, so we already have Points and Connections. Also
-            // need to rebuild buffers for layouting (maPointsPresNameMap,
-            // maConnectionNameMap, maPresOfNameMap). Call with false due to
-            // we are in ODF import and have no oox::Shapes to delete and do
-            // *not* want these to be created (would not hurt, but not needed)
-            // getData()->buildDiagramDataModel(false);
         }
 
         if (!aOOXStyleDOM.isEmpty())
         {
-            // construct MemoryStream and OStreamWrapper with SVG in OUString
-            const OString sUtf8(OUStringToOString(aOOXStyleDOM, RTL_TEXTENCODING_UTF8));
-            SvMemoryStream aStream(const_cast<char*>(sUtf8.getStr()), sUtf8.getLength(), StreamMode::READ);
-            rtl::Reference<utl::OStreamWrapper> pStreamWrapper = new utl::OStreamWrapper(aStream);
-
-            // create the dom parser & create DomTree
-            uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(comphelper::getProcessComponentContext()));
-            uno::Reference<xml::dom::XDocument> aDomTree(xDomBuilder->parse(pStreamWrapper->getInputStream()));
-
-            // set DomTree locally
-            setOOXDomValue(svx::diagram::DomMapFlag::OOXStyle, uno::Any(aDomTree));
+            // create and set DomTree locally
+            uno::Reference<xml::dom::XDocument> xDom(convertAndSet(aOOXStyleDOM, svx::diagram::DomMapFlag::OOXStyle));
 
             // import DomTree to maStyles
-            uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(aDomTree, uno::UNO_QUERY_THROW);
+            uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(xDom, uno::UNO_QUERY_THROW);
             rtl::Reference< core::FragmentHandler > xRefLayout(new DiagramQStylesFragmentHandler(*xPPTImport, "internal", maStyles));
             xPPTImport->importFragment(xRefLayout, xSerializer);
         }
 
         if (!aOOXColorDOM.isEmpty())
         {
-            // construct MemoryStream and OStreamWrapper with SVG in OUString
-            const OString sUtf8(OUStringToOString(aOOXColorDOM, RTL_TEXTENCODING_UTF8));
-            SvMemoryStream aStream(const_cast<char*>(sUtf8.getStr()), sUtf8.getLength(), StreamMode::READ);
-            rtl::Reference<utl::OStreamWrapper> pStreamWrapper = new utl::OStreamWrapper(aStream);
-
-            // create the dom parser & create DomTree
-            uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(comphelper::getProcessComponentContext()));
-            uno::Reference<xml::dom::XDocument> aDomTree(xDomBuilder->parse(pStreamWrapper->getInputStream()));
-
-            // set DomTree locally
-            setOOXDomValue(svx::diagram::DomMapFlag::OOXColor, uno::Any(aDomTree));
+            // create and set DomTree locally
+            uno::Reference<xml::dom::XDocument> xDom(convertAndSet(aOOXColorDOM, svx::diagram::DomMapFlag::OOXColor));
 
             // import DomTree to maColors
-            uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(aDomTree, uno::UNO_QUERY_THROW);
+            uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(xDom, uno::UNO_QUERY_THROW);
             rtl::Reference< core::FragmentHandler > xRefLayout(new ColorFragmentHandler(*xPPTImport, "internal", maColors));
             xPPTImport->importFragment(xRefLayout, xSerializer);
         }
@@ -600,12 +576,6 @@ void loadDiagram( ShapePtr const & pShape,
 {
     DiagramPtr pDiagram = std::make_shared<SmartArtDiagram>();
 
-    OoxDiagramDataPtr pData = std::make_shared<DiagramData_oox>();
-    pDiagram->setData( pData );
-
-    DiagramLayoutPtr pLayout = std::make_shared<DiagramLayout>(*pDiagram);
-    pDiagram->setLayout( pLayout );
-
     try
     {
         // set DiagramFontHeights at filter
@@ -615,7 +585,7 @@ void loadDiagram( ShapePtr const & pShape,
         if( !rDataModelPath.isEmpty() )
         {
             rtl::Reference< core::FragmentHandler > xRefDataModel(
-                    new DiagramDataFragmentHandler( rFilter, rDataModelPath, pData ));
+                    new DiagramDataFragmentHandler( rFilter, rDataModelPath, pDiagram->getData() ));
 
             importFragment(rFilter,
                            loadFragment(rFilter,xRefDataModel),
@@ -636,7 +606,7 @@ void loadDiagram( ShapePtr const & pShape,
                                      uno::Any(aDataHlinkRelsMap));
 
             // Pass the info to pShape
-            for (auto const& extDrawing : pData->getExtDrawings())
+            for (auto const& extDrawing : pDiagram->getData()->getExtDrawings())
             {
                 OUString aFragmentPath = rRelations.getFragmentPathFromRelId(extDrawing);
                 // Ignore RelIds which don't resolve to a fragment path.
@@ -667,8 +637,7 @@ void loadDiagram( ShapePtr const & pShape,
         if (!rLayoutPath.isEmpty())
         {
             rtl::Reference< core::FragmentHandler > xRefLayout(
-                    new DiagramLayoutFragmentHandler( *pDiagram, rFilter, rLayoutPath,
-                                                      std::move(pLayout) ));
+                    new DiagramLayoutFragmentHandler( *pDiagram, rFilter, rLayoutPath, pDiagram->getLayout()));
 
             importFragment(rFilter,
                     loadFragment(rFilter,xRefLayout),
@@ -703,7 +672,7 @@ void loadDiagram( ShapePtr const & pShape,
                 xRefColorStyle);
         }
 
-        if( !pData->getExtDrawings().empty() )
+        if( !pDiagram->getData()->getExtDrawings().empty() )
         {
             const DiagramColorMap::const_iterator aColor = pDiagram->getColors().find(u"node0"_ustr);
             if( aColor != pDiagram->getColors().end() && !aColor->second.maTextFillColors.empty())
@@ -716,9 +685,9 @@ void loadDiagram( ShapePtr const & pShape,
 
         // collect data, init maps
         // for Diagram import, do - for now - NOT clear all oox::drawingml::Shape
-        pData->buildDiagramDataModel(false);
+        pDiagram->getData()->buildDiagramDataModel(false);
 #ifdef DBG_UTIL
-        pData->dump();
+        pDiagram->getData()->dump();
 #endif
 
         // diagram loaded. now lump together & attach to shape
@@ -737,9 +706,11 @@ void loadDiagram( ShapePtr const & pShape,
         // original ImportData directly to the Diagram ModelData
         std::shared_ptr<::oox::drawingml::Theme> aTheme(rFilter.getCurrentThemePtr());
         if(aTheme)
-            pData->setThemeDocument(aTheme->getFragment()); //getTempFile());
+            pDiagram->getData()->setThemeDocument(aTheme->getFragment());
 
         // Prepare support for the advanced DiagramHelper using Diagram & Theme data
+        // This is where pDiagram is moved to where it will stay, else it wil get
+        // cleaned up (what is intended)
         pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr());
     }
     catch (...)

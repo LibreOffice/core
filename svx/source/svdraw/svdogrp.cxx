@@ -47,6 +47,16 @@ const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObjGroup::getDiagra
     return mp_DiagramHelper;
 }
 
+SdrObject* SdrObjGroup::getDiagramSubSelection()
+{
+    if (!mp_DiagramHelper)
+        return this;
+
+    SdrObject* pRetval(mp_DiagramHelper->getDiagramSubSelection());
+
+    return nullptr == pRetval ? this : pRetval;
+}
+
 // BaseProperties section
 std::unique_ptr<sdr::properties::BaseProperties> SdrObjGroup::CreateObjectSpecificProperties()
 {
@@ -110,7 +120,7 @@ void SdrObjGroup::AddToHdlList(SdrHdlList& rHdlList) const
     if(!isDiagram())
         return;
 
-    svx::diagram::DiagramHelper_svx::AddAdditionalVisualization(*this, rHdlList);
+    getDiagramHelper()->AddAdditionalVisualization(rHdlList);
 }
 
 SdrObjGroup::~SdrObjGroup()

@@ -635,15 +635,13 @@ SdrUndoDiagramModelData::SdrUndoDiagramModelData(SdrObject& rNewObj, const svx::
 , m_aStartState(rStartState)
 , m_aEndState()
 {
-    if(rNewObj.isDiagram())
-        m_aEndState = rNewObj.getDiagramHelper()->extractDiagramDataState();
 }
 
 SdrUndoDiagramModelData::~SdrUndoDiagramModelData()
 {
 }
 
-void SdrUndoDiagramModelData::implUndoRedo(bool bUndo)
+void SdrUndoDiagramModelData::Undo()
 {
     if(!mxObj)
         return;
@@ -651,19 +649,26 @@ void SdrUndoDiagramModelData::implUndoRedo(bool bUndo)
     if(!mxObj->isDiagram())
         return;
 
-    mxObj->getDiagramHelper()->applyDiagramDataState(
-        bUndo ? m_aStartState : m_aEndState);
-    mxObj->getDiagramHelper()->reLayout();
-}
+    if (!m_aEndState)
+        m_aEndState = mxObj->getDiagramHelper()->extractDiagramDataState();
 
-void SdrUndoDiagramModelData::Undo()
-{
-    implUndoRedo(true);
+    mxObj->getDiagramHelper()->applyDiagramDataState(m_aStartState);
+    mxObj->getDiagramHelper()->reLayout();
 }
 
 void SdrUndoDiagramModelData::Redo()
 {
-    implUndoRedo(false);
+    if (!m_aEndState)
+        return;
+
+    if(!mxObj)
+        return;
+
+    if(!mxObj->isDiagram())
+        return;
+
+    mxObj->getDiagramHelper()->applyDiagramDataState(m_aEndState);
+    mxObj->getDiagramHelper()->reLayout();
 }
 
 OUString SdrUndoDiagramModelData::GetComment() const

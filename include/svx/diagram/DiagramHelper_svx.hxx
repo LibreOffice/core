@@ -55,6 +55,8 @@ class DiagramDataState;
 class SVXCORE_DLLPUBLIC DiagramHelper_svx
 {
 private:
+    OUString msSelectedModelID;
+
     // These values define behaviour to where take data from at re-creation time.
     // Different definitions will have different consequences for re-creation
     // of Diagram visualization (if needed/triggered).
@@ -80,7 +82,14 @@ private:
     // a newly created oox::drawingml::Theme object
     bool mbForceThemePtrRecreation; // false
 
+    // flag to remember if locking of scale/translate was
+    // already done
+    bool mbDiagramObjectsLocked : 1;
+
 protected:
+    // helpers
+    void applyLocksToDiagramObjects(bool bActivate);
+
     // access associated SdrObjGroup/XShape/RootShape
     virtual css::uno::Reference< css::drawing::XShape >& accessRootShape() = 0;
 
@@ -105,9 +114,10 @@ public:
     getDiagramChildren(const OUString& rParentId) const = 0;
 
     // add/remove new top-level node to data model, returns its id
-    virtual OUString addDiagramNode(const OUString& rText) = 0;
-    virtual bool removeDiagramNode(const OUString& rNodeId) = 0;
+    virtual OUString addDiagramNode(const OUString& rText, SdrModel& rDrawModel) = 0;
+    virtual bool removeDiagramNode(const OUString& rNodeId, SdrModel& rDrawModel) = 0;
     virtual void TextInformationChange() = 0;
+    virtual void ItemSetInformationChange(std::span< const SfxPoolItem* const > aChangedItems) = 0;
 
     // Undo/Redo helpers for extracting/restoring Diagram-defining data
     virtual std::shared_ptr<svx::diagram::DiagramDataState> extractDiagramDataState() const = 0;
@@ -121,7 +131,7 @@ public:
     void connectToSdrObjGroup(css::uno::Reference< css::drawing::XShape >& rTarget);
     void disconnectFromSdrObjGroup();
 
-    static void AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList);
+    void AddAdditionalVisualization(SdrHdlList& rHdlList);
 
     // access to PropertyValues
     virtual css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const = 0;
@@ -137,6 +147,18 @@ public:
 
     // write data to boost::property_tree
     virtual void addDiagramModelData(boost::property_tree::ptree& rTarget) const = 0;
+    virtual const OUString& getBackgroundShapeModelID() const = 0;
+    virtual bool isTextNodeModelID(const OUString& rModelID) const = 0;
+
+    const OUString& getSelectedModelID() const;
+    void setSelectedModelID(const OUString& rNew) { msSelectedModelID = rNew; }
+    SdrObject* getDiagramSubSelection();
+    void markDirectDiagramSubSelection(SdrObject& rCandidate);
+    bool markNextDiagramSubSelection(bool bPrev);
+    void initSelectionByKeyboard(bool bPrev);
+
+    // simple access to AssociatedRootShape
+    SdrObjGroup* getAssociatedRootShape();
 };
 
 class SVXCORE_DLLPUBLIC DiagramHelperFactory_svx

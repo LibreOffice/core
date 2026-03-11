@@ -36,6 +36,7 @@
 #include <svx/xfillit0.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/viewsh.hxx>
+#include <comphelper/dispatchcommand.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -559,7 +560,16 @@ void SdrEditView::CheckPossibilities()
 
         for (size_t nm=0; nm<nMarkCount; ++nm) {
             const SdrMark* pM=rMarkList.GetMark(nm);
-            const SdrObject* pObj=pM->GetMarkedSdrObj();
+            SdrObject* pObj=pM->GetMarkedSdrObj();
+
+            // try to get DiagramSubSelection
+            if(nullptr != pObj)
+            {
+                SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+                if(nullptr != pSubSelection && !pSubSelection->isDiagramBackgroundShape())
+                    pObj = pSubSelection;
+            }
+
             const SdrPageView* pPV=pM->GetPageView();
             if (pPV!=pPV0) {
                 if (pPV->IsReadOnly()) m_bReadOnly=true;
@@ -799,10 +809,29 @@ static void lcl_LazyDelete(std::vector<rtl::Reference<SdrObject>> & rLazyDelete)
 void SdrEditView::DeleteMarkedObj()
 {
     const SdrMarkList& rMarkList = GetMarkedObjectList();
+    const size_t nMarkCount(rMarkList.GetMarkCount());
+
     // #i110981# return when nothing is to be done at all
-    if(!rMarkList.GetMarkCount())
-    {
+    if(0 == nMarkCount)
         return;
+
+    if (1 == nMarkCount)
+    {
+        SdrObject* pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
+
+        if (nullptr != pObj)
+        {
+            SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+
+            if (nullptr != pSubSelection && pSubSelection->isDiagramTextNode())
+            {
+                if (pSubSelection->removeDiagramNode())
+                {
+                    comphelper::dispatchCommand(u".uno:RegenerateDiagram"_ustr, {});
+                    return;
+                }
+            }
+        }
     }
 
     // moved breaking action and undo start outside loop

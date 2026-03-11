@@ -408,7 +408,7 @@ rtl::Reference<SdrObject> SdrObjList::RemoveObject(size_t nObjNum)
 
     const size_t nCount = GetObjCount();
     rtl::Reference<SdrObject> pObj=maList[nObjNum];
-    if (pObj->IsDeleteProtect())
+    if (pObj->IsDeleteProtect() && !pObj->getSdrModelFromSdrObject().isInImportExport())
         return nullptr;
     RemoveObjectFromContainer(nObjNum);
 

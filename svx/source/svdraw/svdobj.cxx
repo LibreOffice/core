@@ -50,6 +50,7 @@
 #include <vector>
 
 #include <svx/svdotable.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
@@ -244,6 +245,45 @@ const OUString& SdrObject::getDiagramDataModelID() const
     return EMPTY_OUSTRING;
 }
 
+bool SdrObject::isDiagramBackgroundShape() const
+{
+    const OUString& rID(getDiagramDataModelID());
+    if (rID.isEmpty())
+        return false;
+
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(getDiagramHelper());
+    if (!rDiagramHelper)
+        return false;
+
+    return rID == rDiagramHelper->getBackgroundShapeModelID();
+}
+
+bool SdrObject::isDiagramTextNode() const
+{
+    const OUString& rID(getDiagramDataModelID());
+    if (rID.isEmpty())
+        return false;
+
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(getDiagramHelper());
+    if (!rDiagramHelper)
+        return false;
+
+    return rDiagramHelper->isTextNodeModelID(rID);
+}
+
+bool SdrObject::removeDiagramNode()
+{
+    const OUString& rID(getDiagramDataModelID());
+    if (rID.isEmpty())
+        return false;
+
+    const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(getDiagramHelper());
+    if (!rDiagramHelper)
+        return false;
+
+    return rDiagramHelper->removeDiagramNode(rID, getSdrModelFromSdrObject());
+}
+
 bool SdrObject::isDiagram() const
 {
     return false;
@@ -251,22 +291,21 @@ bool SdrObject::isDiagram() const
 
 const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObject::getDiagramHelper() const
 {
+    if (!getDiagramDataModelID().isEmpty())
+    {
+        SdrObject* pParent(getParentSdrObjectFromSdrObject());
+
+        if (nullptr != pParent)
+            return pParent->getDiagramHelper();
+    }
+
     static std::shared_ptr< svx::diagram::DiagramHelper_svx > aEmpty;
     return aEmpty;
 }
 
-const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObject::getDiagramHelperFromDiagramOrMember() const
+SdrObject* SdrObject::getDiagramSubSelection()
 {
-    SdrObject* pCurrent(const_cast<SdrObject*>(this));
-
-    while (pCurrent)
-    {
-        if (pCurrent->isDiagram())
-            return pCurrent->getDiagramHelper();
-        pCurrent = pCurrent->getParentSdrObjectFromSdrObject();
-    }
-
-    return getDiagramHelper();
+    return this;
 }
 
 // BaseProperties section

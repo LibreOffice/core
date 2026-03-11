@@ -24,6 +24,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdomedia.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -1491,6 +1493,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         {
             // otherwise nothing is found
             const size_t nSiz0(maHdlList.GetHdlCount());
+            SdrObject* pSubSelection(nullptr);
 
             if( bSingleTextObjMark )
             {
@@ -1498,6 +1501,21 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             }
             else
             {
+                // caution! mpMarkedObj and pSubSelection are and may only be set for
+                // single object selection
+                if (nullptr != mpMarkedObj)
+                    pSubSelection = mpMarkedObj->getDiagramSubSelection();
+
+                // use SubSelection not for BGShape, in that case use SdrObjGroup to
+                // allow group actions on it
+                if(nullptr != pSubSelection)
+                {
+                    if (pSubSelection->isDiagramBackgroundShape())
+                        pSubSelection = nullptr;
+                    else
+                        aRect = pSubSelection->GetSnapRect();
+                }
+
                 const bool bWdt0(aRect.Left() == aRect.Right());
                 const bool bHgt0(aRect.Top() == aRect.Bottom());
 
@@ -1566,7 +1584,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             for (size_t i=nSiz0; i<nSiz1; ++i)
             {
                 SdrHdl* pHdl=maHdlList.GetHdl(i);
-                pHdl->SetObj(mpMarkedObj);
+                pHdl->SetObj(nullptr != pSubSelection ? pSubSelection : mpMarkedObj);
                 pHdl->SetPageView(mpMarkedPV);
                 pHdl->SetObjHdlNum(sal_uInt16(i-nSiz0));
             }
@@ -2135,7 +2153,13 @@ bool SdrMarkView::IsMarkedObjHit(const Point& rPnt, short nTol) const
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     for (size_t nm=0; nm<rMarkList.GetMarkCount() && !bRet; ++nm) {
         SdrMark* pM=rMarkList.GetMark(nm);
-        bRet = nullptr != CheckSingleSdrObjectHit(rPnt,sal_uInt16(nTol),pM->GetMarkedSdrObj(),pM->GetPageView(),SdrSearchOptions::NONE,nullptr);
+        SdrObject* pObj(pM->GetMarkedSdrObj());
+
+        // access possible SubSelectio
+        if (nullptr != pObj)
+            pObj = pObj->getDiagramSubSelection();
+
+        bRet = nullptr != CheckSingleSdrObjectHit(rPnt,sal_uInt16(nTol),pObj,pM->GetPageView(),SdrSearchOptions::NONE,nullptr);
     }
     return bRet;
 }
@@ -2155,7 +2179,31 @@ bool SdrMarkView::MarkObj(const Point& rPnt, short nTol, bool bToggle, bool bDee
     SdrSearchOptions nOptions=SdrSearchOptions::PICKMARKABLE;
     if (bDeep) nOptions=nOptions|SdrSearchOptions::DEEP;
     SdrObject* pObj = PickObj(rPnt, static_cast<sal_uInt16>(nTol), pPV, nOptions);
-    if (pObj) {
+
+    if (pObj)
+    {
+        const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pObj->getDiagramHelper());
+        if (rDiagramHelper)
+        {
+            if (pObj->isDiagram() && !bDeep)
+            {
+                // Klick on Diagram, look again but deep to get possibly an object
+                // inside the SdrObjGroup associated with it
+                SdrObject* pCandidate = PickObj(rPnt, static_cast<sal_uInt16>(nTol), pPV, nOptions|SdrSearchOptions::DEEP);
+
+                if (pCandidate && !pCandidate->isDiagram())
+                    rDiagramHelper->markDirectDiagramSubSelection(*pCandidate);
+            }
+            else
+            {
+                rDiagramHelper->markDirectDiagramSubSelection(*pObj);
+                pObj = rDiagramHelper->getAssociatedRootShape();
+            }
+        }
+    }
+
+    if (pObj)
+    {
         bool bUnmark=bToggle && IsObjMarked(pObj);
         MarkObj(pObj,pPV,bUnmark);
     }
@@ -2173,35 +2221,67 @@ bool SdrMarkView::MarkNextObj(bool bPrev)
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     rMarkList.ForceSort();
-    const size_t nMarkCount=rMarkList.GetMarkCount();
-    size_t nChgMarkNum = SAL_MAX_SIZE; // number of the MarkEntry we want to replace
-    size_t nSearchObjNum = bPrev ? 0 : SAL_MAX_SIZE;
-    if (nMarkCount!=0) {
-        nChgMarkNum=bPrev ? 0 : nMarkCount-1;
-        SdrMark* pM=rMarkList.GetMark(nChgMarkNum);
-        assert(pM != nullptr);
-        if (pM->GetMarkedSdrObj() != nullptr)
-            nSearchObjNum = pM->GetMarkedSdrObj()->GetNavigationPosition();
-    }
+    const size_t nMarkCount(rMarkList.GetMarkCount());
+    size_t nChgMarkNum(SAL_MAX_SIZE); // number of the MarkEntry we want to replace
+    SdrObject* pMarkObj(nullptr);
 
-    SdrObject* pMarkObj=nullptr;
-    SdrObjList* pSearchObjList=pPageView->GetObjList();
-    const size_t nObjCount = pSearchObjList->GetObjCount();
-    if (nObjCount!=0) {
-        if (nSearchObjNum>nObjCount) nSearchObjNum=nObjCount;
-        while (pMarkObj==nullptr && ((!bPrev && nSearchObjNum>0) || (bPrev && nSearchObjNum<nObjCount)))
+    if (1 == nMarkCount)
+    {
+        SdrMark* pM(rMarkList.GetMark(0));
+        if (nullptr != pM)
         {
-            if (!bPrev)
-                nSearchObjNum--;
-            SdrObject* pSearchObj = pSearchObjList->GetObjectForNavigationPosition(nSearchObjNum);
-            if (IsObjMarkable(pSearchObj,pPageView))
+            SdrObject* pCandidate(pM->GetMarkedSdrObj());
+
+            if (nullptr != pCandidate)
             {
-                if (rMarkList.FindObject(pSearchObj)==SAL_MAX_SIZE)
+                const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pCandidate->getDiagramHelper());
+
+                if (rDiagramHelper)
                 {
-                    pMarkObj=pSearchObj;
+                    if (rDiagramHelper->markNextDiagramSubSelection(bPrev))
+                        pMarkObj=pCandidate;
                 }
             }
-            if (bPrev) nSearchObjNum++;
+        }
+    }
+
+    if (nullptr == pMarkObj)
+    {
+        size_t nSearchObjNum = bPrev ? 0 : SAL_MAX_SIZE;
+        if (nMarkCount!=0) {
+            nChgMarkNum=bPrev ? 0 : nMarkCount-1;
+            SdrMark* pM=rMarkList.GetMark(nChgMarkNum);
+            assert(pM != nullptr);
+            if (pM->GetMarkedSdrObj() != nullptr)
+                nSearchObjNum = pM->GetMarkedSdrObj()->GetNavigationPosition();
+        }
+
+        SdrObjList* pSearchObjList=pPageView->GetObjList();
+        const size_t nObjCount = pSearchObjList->GetObjCount();
+        if (nObjCount!=0) {
+            if (nSearchObjNum>nObjCount) nSearchObjNum=nObjCount;
+            while (pMarkObj==nullptr && ((!bPrev && nSearchObjNum>0) || (bPrev && nSearchObjNum<nObjCount)))
+            {
+                if (!bPrev)
+                    nSearchObjNum--;
+                SdrObject* pSearchObj = pSearchObjList->GetObjectForNavigationPosition(nSearchObjNum);
+                if (IsObjMarkable(pSearchObj,pPageView))
+                {
+                    if (rMarkList.FindObject(pSearchObj)==SAL_MAX_SIZE)
+                    {
+                        pMarkObj=pSearchObj;
+                    }
+                }
+                if (bPrev) nSearchObjNum++;
+            }
+
+            if (nullptr != pMarkObj && pMarkObj->IsGroupObject() && pMarkObj->isDiagram())
+            {
+                // newly selected by keyboard, reset old sub selection
+                const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pMarkObj->getDiagramHelper());
+                if (rDiagramHelper)
+                    rDiagramHelper->initSelectionByKeyboard(bPrev);
+            }
         }
     }
 
@@ -2843,6 +2923,9 @@ tools::Rectangle SdrMarkView::GetMarkedObjBoundRect() const
     for (size_t nm=0; nm<rMarkList.GetMarkCount(); ++nm) {
         SdrMark* pM=rMarkList.GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
+        if (!pO)
+            continue;
+
         tools::Rectangle aR1(pO->GetCurrentBoundRect());
         if (aRect.IsEmpty()) aRect=aR1;
         else aRect.Union(aR1);
@@ -2862,6 +2945,7 @@ const tools::Rectangle& SdrMarkView::GetMarkedObjRect() const
             SdrObject* pO = pM->GetMarkedSdrObj();
             if (!pO)
                 continue;
+
             tools::Rectangle aR1(pO->GetSnapRect());
             if (aRect.IsEmpty()) aRect=aR1;
             else aRect.Union(aR1);

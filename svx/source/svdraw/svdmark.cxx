@@ -26,6 +26,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 
 
 #include <svl/SfxBroadcaster.hxx>
@@ -591,9 +592,11 @@ bool SdrMarkList::TakeBoundRect(SdrPageView const * pPV, tools::Rectangle& rRect
 
         if(!pPV || pMark->GetPageView() == pPV)
         {
-            if(pMark->GetMarkedSdrObj())
+            SdrObject* pCandidate(pMark->GetMarkedSdrObj());
+
+            if(pCandidate)
             {
-                aR = pMark->GetMarkedSdrObj()->GetCurrentBoundRect();
+                aR = pCandidate->GetCurrentBoundRect();
 
                 if(bFnd)
                 {
@@ -621,9 +624,11 @@ bool SdrMarkList::TakeSnapRect(SdrPageView const * pPV, tools::Rectangle& rRect)
 
         if(!pPV || pMark->GetPageView() == pPV)
         {
-            if(pMark->GetMarkedSdrObj())
+            SdrObject* pCandidate(pMark->GetMarkedSdrObj());
+
+            if(pCandidate)
             {
-                tools::Rectangle aR(pMark->GetMarkedSdrObj()->GetSnapRect());
+                tools::Rectangle aR(pCandidate->GetSnapRect());
 
                 if(bFnd)
                 {

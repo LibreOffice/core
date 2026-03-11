@@ -28,6 +28,7 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/diagram/DomMapFlag.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -150,12 +151,16 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DiagramDataState
 {
     Connections maConnections;
     Points maPoints;
+    std::vector<css::uno::Reference<css::drawing::XShape>> mxShapes;
+    basegfx::B2DHomMatrix maTransformation;
 
 public:
-    DiagramDataState(Connections aConnections, Points aPoints);
+    DiagramDataState(const Connections& aConnections, const Points& aPoints, const css::uno::Reference< css::drawing::XShape >& rRootShape);
 
-    Connections& getConnections() { return maConnections; }
-    Points& getPoints() { return maPoints; }
+    const Connections& getConnections() const { return maConnections; }
+    const Points& getPoints() const { return maPoints; }
+    const std::vector<css::uno::Reference<css::drawing::XShape>>& getXShapes() const { return mxShapes;}
+    const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
 };
 
 typedef std::shared_ptr< DiagramDataState > DiagramDataStatePtr;

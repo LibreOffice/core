@@ -952,6 +952,8 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
             continue;
         }
 
+        pObj = pObj->getDiagramSubSelection();
+
         const SfxItemSet& rSet = pObj->GetMergedItemSet();
         SfxWhichIter aIter(rSet);
         sal_uInt16 nWhich(aIter.FirstWhich());
@@ -1196,6 +1198,8 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
     {
         SdrMark* pM=rMarkList.GetMark(nm);
         SdrObject* pObj = pM->GetMarkedSdrObj();
+
+        pObj = pObj->getDiagramSubSelection();
 
         if( bUndo )
         {

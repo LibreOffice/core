@@ -732,6 +732,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 **************************************************************/
                 SdrPageView* pPV;
                 SdrObject* pObj = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK);
+
                 if (pObj && pPV->IsObjMarkable(pObj))
                 {
                     mpView->UnmarkAllObj();
@@ -748,13 +749,12 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     pSingleObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 }
 
-                // Check for click on svx::diagram::DiagramFrameHdl
-                // - if we hit a SdrHdl
-                // - if it was not moved
-                // - if single object is selected
-                //   - and it is a Diagram
-                if(pHdl && !bWasDragged && nullptr != pSingleObj && pSingleObj->isDiagram())
+                if(!bWasDragged && nullptr != pSingleObj && pSingleObj->isDiagram() && pHdl)
                 {
+                    // Check for click on svx::diagram::DiagramFrameHdl
+                    // - if we hit a SdrHdl
+                    // - if it was not moved
+                    // - if single object is selected and it is a Diagram
                     svx::diagram::DiagramFrameHdl* pDiagramFrameHdl(dynamic_cast<svx::diagram::DiagramFrameHdl*>(pHdl));
                     if(nullptr != pDiagramFrameHdl)
                     {
@@ -906,6 +906,23 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     pDrawViewShell->getAnnotationManagerPtr()->SelectAnnotation(pAnnotationData->mxAnnotation, true);
             }
             return true;
+        }
+
+        if(!bWasDragged && nullptr != pSingleObj && pSingleObj->isDiagram())
+        {
+            const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pSingleObj->getDiagramHelper());
+            if (rDiagramHelper)
+            {
+                SdrPageView* pPV;
+                SdrObject* pCandidate = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::DEEP);
+                if (pCandidate && !pCandidate->isDiagram())
+                {
+                    rDiagramHelper->markDirectDiagramSubSelection(*pCandidate);
+                    mpView->UnmarkAllObj();
+                    mpView->MarkObj(pSingleObj,pPV);
+                    return true;
+                }
+            }
         }
 
         if ( (nSlotId != SID_OBJECT_SELECT && nMarkCount==0)                    ||

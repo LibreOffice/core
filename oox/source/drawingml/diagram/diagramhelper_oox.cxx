@@ -28,6 +28,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svditer.hxx>
 #include <svx/diagram/DomMapFlag.hxx>
+#include <svx/svdundo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
@@ -224,6 +225,11 @@ void DiagramHelper_oox::reLayout()
     // Re-apply remembered geometry
     pTarget->TRSetBaseGeometry(aTransformation, aPolyPolygon);
 
+    // new SdrObjects created, re-apply geometry change locks as needed
+    // and reset SubSelection
+    applyLocksToDiagramObjects(true);
+    setSelectedModelID(EMPTY_OUSTRING);
+
     // extract newly created DrawingLayerModelData
     std::vector<uno::Reference<drawing::XShape>> xNewXShapes;
     uno::Reference<drawing::XShape> xNewShape;
@@ -335,68 +341,135 @@ DiagramHelper_oox::getDiagramChildren(const OUString& rParentId) const
     return std::vector<std::pair<OUString, OUString>>();
 }
 
-OUString DiagramHelper_oox::addDiagramNode(const OUString& rText)
+OUString DiagramHelper_oox::addDiagramNode(const OUString& rText, SdrModel& rDrawModel)
 {
     OUString aRetval;
 
     if (hasDiagramData())
     {
+        const bool bUndo(rDrawModel.IsUndoEnabled());
+        svx::diagram::DiagramDataStatePtr aStartState;
+
+        if (bUndo)
+        {
+            // rescue all start state Diagram-defining data
+            aStartState = extractDiagramDataState();
+        }
+
         const std::pair<OUString, DomMapFlags> aResult = mpDiagramPtr->getData()->addDiagramNode();
         aRetval = aResult.first;
 
-        // reset Dom properties at DiagramData
-        mpDiagramPtr->resetOOXDomValues(aResult.second);
-
-        // reset temporary buffered ModelData association lists & rebuild them
-        // and the Diagram DataModel
-        mpDiagramPtr->getData()->buildDiagramDataModel(true);
-
-        // also reset temporary buffered layout data - that might
-        // still refer to changed oox::Shape data
-        mpDiagramPtr->getLayout()->getPresPointShapeMap().clear();
-
-        // we have the text node in aRetval, but we need the ModelID
-        // of the node referring that one, that is the one that will be used
-        // as ModelID in the XShape/SdrObject. Loop and look for it
-        for (const auto& rCandidate : mpDiagramPtr->getData()->getPoints())
+        if (!aRetval.isEmpty())
         {
-            if (!rCandidate.msPresentationAssociationId.isEmpty()
-                && rCandidate.msPresentationAssociationId == aRetval)
+            // reset Dom properties at DiagramData
+            mpDiagramPtr->resetOOXDomValues(aResult.second);
+
+            // reset temporary buffered ModelData association lists & rebuild them
+            // and the Diagram DataModel
+            mpDiagramPtr->getData()->buildDiagramDataModel(true);
+
+            // also reset temporary buffered layout data - that might
+            // still refer to changed oox::Shape data
+            mpDiagramPtr->getLayout()->getPresPointShapeMap().clear();
+
+            // we have the text node in aRetval, but we need the ModelID
+            // of the node referring that one, that is the one that will be used
+            // as ModelID in the XShape/SdrObject. Loop and look for it
+            for (const auto& rCandidate : mpDiagramPtr->getData()->getPoints())
             {
-                msNewNodeId = rCandidate.msModelId;
-                break;
+                if (!rCandidate.msPresentationAssociationId.isEmpty()
+                    && rCandidate.msPresentationAssociationId == aRetval)
+                {
+                    msNewNodeId = rCandidate.msModelId;
+                    break;
+                }
+            }
+
+            msNewNodeText = rText;
+
+            if (bUndo)
+            {
+                // create undo action. That will internally secure the
+                // current Diagram-defining data as end state
+                SdrObject* pRootShape(SdrObject::getSdrObjectFromXShape(accessRootShape()));
+                assert(nullptr != pRootShape && "Missing RootShape in DiagramHelper_oox (!)");
+                rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDiagramModelData(
+                    *pRootShape, aStartState));
             }
         }
-
-        // msNewNodeId = aRetval;
-        msNewNodeText = rText;
     }
 
     return aRetval;
 }
 
-bool DiagramHelper_oox::removeDiagramNode(const OUString& rNodeId)
+bool DiagramHelper_oox::removeDiagramNode(const OUString& rNodeId, SdrModel& rDrawModel)
 {
     bool bRetval(false);
 
     if (hasDiagramData())
     {
-        DomMapFlags aResult = mpDiagramPtr->getData()->removeDiagramNode(rNodeId);
-        bRetval = !aResult.empty();
+        const bool bUndo(rDrawModel.IsUndoEnabled());
+        svx::diagram::DiagramDataStatePtr aStartState;
 
-        // reset Dom properties at DiagramData
-        mpDiagramPtr->resetOOXDomValues(std::move(aResult));
+        if (bUndo)
+        {
+            // rescue all start state Diagram-defining data
+            aStartState = extractDiagramDataState();
+        }
 
-        // reset temporary buffered ModelData association lists & rebuild them
-        // and the Diagram DataModel
-        mpDiagramPtr->getData()->buildDiagramDataModel(true);
+        DomMapFlags aResult(mpDiagramPtr->getData()->removeDiagramNode(rNodeId));
 
-        // also reset temporary buffered layout data - that might
-        // still refer to changed oox::Shape data
-        mpDiagramPtr->getLayout()->getPresPointShapeMap().clear();
+        if (!aResult.empty())
+        {
+            bRetval = true;
+
+            // reset Dom properties at DiagramData
+            mpDiagramPtr->resetOOXDomValues(std::move(aResult));
+
+            // reset temporary buffered ModelData association lists & rebuild them
+            // and the Diagram DataModel
+            mpDiagramPtr->getData()->buildDiagramDataModel(true);
+
+            // also reset temporary buffered layout data - that might
+            // still refer to changed oox::Shape data
+            mpDiagramPtr->getLayout()->getPresPointShapeMap().clear();
+
+            if (bUndo)
+            {
+                // create undo action. That will internally secure the
+                // current Diagram-defining data as end state
+                SdrObject* pRootShape(SdrObject::getSdrObjectFromXShape(accessRootShape()));
+                assert(nullptr != pRootShape && "Missing RootShape in DiagramHelper_oox (!)");
+                rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDiagramModelData(
+                    *pRootShape, aStartState));
+            }
+        }
     }
 
     return bRetval;
+}
+
+void DiagramHelper_oox::ItemSetInformationChange(std::span<const SfxPoolItem* const> aChangedItems)
+{
+    bool bFillChanged(false);
+    bool bLineChanged(false);
+    bool bTextChanged(false);
+
+    for (const SfxPoolItem* pItem : aChangedItems)
+    {
+        bFillChanged |= (pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST);
+        bLineChanged |= (pItem->Which() >= XATTR_LINE_FIRST && pItem->Which() <= XATTR_LINE_LAST);
+        bTextChanged |= (pItem->Which() >= XATTR_TEXT_FIRST && pItem->Which() <= XATTR_TEXT_LAST);
+    }
+
+    if (bFillChanged || bLineChanged || bTextChanged)
+    {
+        // attributes of one of the contained shapes have
+        // changed. Maybe other actions are needed in the
+        // future, but for now do general reset like
+        // TextInformationChange() does
+        TextInformationChange();
+    }
 }
 
 void DiagramHelper_oox::TextInformationChange()
@@ -541,6 +614,29 @@ void DiagramHelper_oox::addDiagramModelData(boost::property_tree::ptree& rTarget
         return;
 
     mpDiagramPtr->addDiagramModelData(rTarget);
+}
+
+const OUString& DiagramHelper_oox::getBackgroundShapeModelID() const
+{
+    if (!mpDiagramPtr)
+        return EMPTY_OUSTRING;
+
+    return mpDiagramPtr->getData()->getBackgroundShapeModelID();
+}
+
+bool DiagramHelper_oox::isTextNodeModelID(const OUString& rModelID) const
+{
+    if (!mpDiagramPtr || rModelID.isEmpty())
+        return false;
+
+    for (const auto& rCandidate : mpDiagramPtr->getData()->getPoints())
+    {
+        if (rCandidate.msModelId == rModelID
+            && rCandidate.msPresentationLayoutName == u"textNode"_ustr)
+            return true;
+    }
+
+    return false;
 }
 
 DiagramHelperFactory_oox::DiagramHelperFactory_oox()

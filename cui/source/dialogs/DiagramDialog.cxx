@@ -66,30 +66,18 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
     if (pDiagramHelper && !sText.isEmpty())
     {
         SdrModel& rDrawModel(m_rDiagram.getSdrModelFromSdrObject());
-        const bool bUndo(rDrawModel.IsUndoEnabled());
-        svx::diagram::DiagramDataStatePtr aStartState;
+        OUString sNodeId = pDiagramHelper->addDiagramNode(sText, rDrawModel);
 
-        if (bUndo)
+        if (!sNodeId.isEmpty())
         {
-            // rescue all start state Diagram-defining data
-            aStartState = pDiagramHelper->extractDiagramDataState();
+            if (rDrawModel.IsUndoEnabled())
+                m_nUndos++;
+
+            std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
+            mpTreeDiagram->insert(nullptr, -1, &sText, &sNodeId, nullptr, nullptr, false, pEntry.get());
+            mpTreeDiagram->select(*pEntry);
+            comphelper::dispatchCommand(u".uno:RegenerateDiagram"_ustr, {});
         }
-
-        OUString sNodeId = pDiagramHelper->addDiagramNode(sText);
-
-        if (bUndo)
-        {
-            // create undo action. That will internally secure the
-            // current Diagram-defining data as end state
-            rDrawModel.AddUndo(
-                rDrawModel.GetSdrUndoFactory().CreateUndoDiagramModelData(m_rDiagram, aStartState));
-            m_nUndos++;
-        }
-
-        std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
-        mpTreeDiagram->insert(nullptr, -1, &sText, &sNodeId, nullptr, nullptr, false, pEntry.get());
-        mpTreeDiagram->select(*pEntry);
-        comphelper::dispatchCommand(u".uno:RegenerateDiagram"_ustr, {});
     }
 }
 
@@ -104,26 +92,10 @@ IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
     if (pDiagramHelper && mpTreeDiagram->get_selected(pEntry.get()))
     {
         SdrModel& rDrawModel(m_rDiagram.getSdrModelFromSdrObject());
-        const bool bUndo(rDrawModel.IsUndoEnabled());
-        svx::diagram::DiagramDataStatePtr aStartState;
-
-        if (bUndo)
+        if (pDiagramHelper->removeDiagramNode(mpTreeDiagram->get_id(*pEntry), rDrawModel))
         {
-            // rescue all start state Diagram-defining data
-            aStartState = pDiagramHelper->extractDiagramDataState();
-        }
-
-        if (pDiagramHelper->removeDiagramNode(mpTreeDiagram->get_id(*pEntry)))
-        {
-            if (bUndo)
-            {
-                // create undo action. That will internally secure the
-                // current Diagram-defining data as end state
-                rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDiagramModelData(
-                    m_rDiagram, aStartState));
+            if (rDrawModel.IsUndoEnabled())
                 m_nUndos++;
-            }
-
             mpTreeDiagram->remove(*pEntry);
             comphelper::dispatchCommand(u".uno:RegenerateDiagram"_ustr, {});
         }

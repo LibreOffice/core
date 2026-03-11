@@ -35,6 +35,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <osl/diagnose.h>
 
 namespace sdr::properties
@@ -270,7 +271,7 @@ namespace sdr::properties
             return *moItemSet;
         }
 
-        void AttributeProperties::ItemSetChanged(std::span< const SfxPoolItem* const > /*aChangedItems*/, sal_uInt16 /*nDeletedWhich*/, bool /*bAdjustTextFrameWidthAndHeight*/)
+        void AttributeProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 /*nDeletedWhich*/, bool /*bAdjustTextFrameWidthAndHeight*/)
         {
             // own modifications
             SdrObject& rObj = GetSdrObject();
@@ -278,6 +279,13 @@ namespace sdr::properties
             rObj.SetBoundRectDirty();
             rObj.SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
             rObj.SetChanged();
+
+            if (!rObj.getDiagramDataModelID().isEmpty() && !rObj.getSdrModelFromSdrObject().isInImportExport())
+            {
+                const std::shared_ptr< svx::diagram::DiagramHelper_svx >& pDiagramHelper(rObj.getDiagramHelper());
+                if (pDiagramHelper)
+                    pDiagramHelper->ItemSetInformationChange(aChangedItems);
+            }
         }
 
         void AttributeProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)

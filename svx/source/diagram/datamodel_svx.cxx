@@ -24,11 +24,13 @@
 #include <svx/diagram/datamodel_svx.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svditer.hxx>
+#include <svx/svdogrp.hxx>
 #include <comphelper/xmltools.hxx>
 #include <sal/log.hxx>
 #include <utility>
 #include <sax/fastattribs.hxx>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::oox;
@@ -510,17 +512,36 @@ DomMapFlags DiagramData_svx::removeDiagramNode(const OUString& rNodeId)
     return aRetval;
 }
 
-DiagramDataState::DiagramDataState(Connections aConnections, Points aPoints)
-: maConnections(std::move(aConnections))
-, maPoints(std::move(aPoints))
+DiagramDataState::DiagramDataState(const Connections& aConnections, const Points& aPoints, const uno::Reference< drawing::XShape >& rRootShape)
+: maConnections(aConnections)
+, maPoints(aPoints)
+, mxShapes()
+, maTransformation()
 {
+    SdrObjGroup* pSource(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rRootShape)));
+    if (nullptr != pSource)
+    {
+        basegfx::B2DPolyPolygon aPolyPolygon;
+        pSource->TRGetBaseGeometry(maTransformation, aPolyPolygon);
+
+        for(size_t a(0); a < pSource->GetObjCount(); a++)
+        {
+            SdrObject* pCandidate(pSource->GetObj(a));
+
+            if (nullptr != pCandidate)
+            {
+                uno::Reference<drawing::XShape> xCandidate(pCandidate->getUnoShape());
+                mxShapes.push_back(xCandidate);
+            }
+        }
+    }
 }
 
 DiagramDataStatePtr DiagramData_svx::extractDiagramDataState() const
 {
     // Just copy all Connections && Points. The shared_ptr data in
     // Point-entries is no problem, it just continues exiting shared
-    return std::make_shared< DiagramDataState >(maConnections, maPoints);
+    return std::make_shared< DiagramDataState >(maConnections, maPoints, accessRootShape());
 }
 
 void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
@@ -529,6 +550,25 @@ void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
     {
         maConnections = rState->getConnections();
         maPoints = rState->getPoints();
+
+        uno::Reference<drawing::XShapes> xRootShape(accessRootShape(), uno::UNO_QUERY);
+        if (xRootShape.is())
+        {
+            SdrObjGroup* pTarget(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(xRootShape)));
+
+            if (nullptr != pTarget)
+            {
+                // Delete all existing shapes in that group
+                pTarget->getChildrenOfSdrObject()->ClearSdrObjList();
+            }
+
+            const std::vector<uno::Reference<drawing::XShape>>& rXShapes(rState->getXShapes());
+            for (auto& rShape : rXShapes)
+                xRootShape->add(rShape);
+
+            basegfx::B2DPolyPolygon aPolyPolygon;
+            pTarget->TRSetBaseGeometry(rState->getTransformation(), aPolyPolygon);
+        }
 
         // Reset temporary buffered ModelData association lists & rebuild them
         // and the Diagram DataModel. Do that here *immediately* to prevent

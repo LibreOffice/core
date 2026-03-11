@@ -27,6 +27,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/ImageMapInfo.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <editeng/outlobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/ipclient.hxx>
@@ -359,6 +360,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     SdrPage* pPage = ( pPageView ? pPageView->GetPage() : nullptr );
     ::std::vector< OUString > aExcludedChartNames;
     ScRangeListVector aProtectedChartRangesVector;
+    bool bWasDragged = false;
 
     if (comphelper::COKit::isActive() && rDocument.IsNegativePage(rViewData.CurrentTabForData()))
         aPnt.setX(-aPnt.X());
@@ -406,7 +408,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     return true;
                 }
             }
-            pView->EndDragObj( rMEvt.IsMod1() );
+            bWasDragged = pView->EndDragObj( rMEvt.IsMod1() );
             pView->ForceMarkedToAnotherPage();
 
             bReturn = true;
@@ -527,6 +529,32 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else if ( TestDetective( pView->GetSdrPageView(), aPnt ) )
             bReturn = true;
+    }
+
+    if (!bWasDragged)
+    {
+        const SdrMarkList& rMarkList(pView->GetMarkedObjectList());
+        if (rMarkList.GetMarkCount() == 1)
+        {
+            SdrObject* pSingleObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+            if(nullptr != pSingleObj && pSingleObj->isDiagram())
+            {
+                const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pSingleObj->getDiagramHelper());
+                if (rDiagramHelper)
+                {
+                    SdrPageView* pPV;
+                    SdrObject* pCandidate = pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::DEEP);
+                    if (pCandidate && !pCandidate->isDiagram())
+                    {
+                        rDiagramHelper->markDirectDiagramSubSelection(*pCandidate);
+                        pView->UnmarkAllObj();
+                        pView->MarkObj(pSingleObj,pPV);
+                        return true;
+                    }
+                }
+            }
+        }
     }
 
     ForcePointer(&rMEvt);
