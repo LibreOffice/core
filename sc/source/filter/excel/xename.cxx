@@ -695,7 +695,18 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         if ( rRangeData.HasType( ScRangeData::Type::AbsPos ) || rRangeData.HasType( ScRangeData::Type::AbsArea ) )
         {
             // Don't modify the actual document; use a temporary copy to create the export formulas.
-            lcl_EnsureAbs3DToken(nTab, pScTokArrCopy->FirstToken());
+
+            // Ensure 3D reference for global as well as local ranges
+            const SCTAB nLocalTab = (nTab == SCTAB_GLOBAL) ? rRangeData.GetPos().Tab() : nTab;
+
+            // Ensure 3D reference for all the possible tokens
+            formula::FormulaToken** pFormulaArray = pScTokArrCopy->GetArray();
+            const sal_uInt16 nLen = pScTokArrCopy->GetLen();
+            for (sal_uInt16 i = 0; i < nLen; ++i)
+            {
+                formula::FormulaToken* pToken = pFormulaArray[i];
+                lcl_EnsureAbs3DToken(nLocalTab, pToken);
+            }
 
             xTokArr = GetFormulaCompiler().CreateFormula(EXC_FMLATYPE_NAME, *pScTokArrCopy);
             if ( GetOutput() != EXC_OUTPUT_BINARY )
