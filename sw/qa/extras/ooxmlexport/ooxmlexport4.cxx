@@ -1000,20 +1000,15 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtContent)
 //    assertXPath(pXmlDoc, "/w:hdr[1]/w:p[1]/w:sdt/w:sdtContent[1]/w:del[1]");
 }
 
-#if 0
-// Currently LibreOffice exports custom geometry for this up arrow, not preset shape.
-// When LibreOffice can export preset shape with correct modifiers, then this test can be re-enabled.
-
 CPPUNIT_TEST_FIXTURE(Test, testFdo76016)
 {
     createSwDoc("fdo76016.docx");
     save(TestFilter::DOCX);
     // check XML
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "//a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]", "name", "adj1");
-    assertXPath(pXmlDoc, "//a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]", "name", "adj2");
+    assertXPath(pXmlDoc, "//a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]", "name", u"adj1");
+    assertXPath(pXmlDoc, "//a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]", "name", u"adj2");
 }
-#endif
 
 CPPUNIT_TEST_FIXTURE(Test, testFileWithInvalidImageLink)
 {

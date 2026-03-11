@@ -585,19 +585,13 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedAlternateContent)
     assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[2]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]",0);
 }
 
-#if 0
-// Currently LibreOffice exports custom geometry for this hexagon, not preset shape.
-// When LibreOffice can export preset shapes with correct modifiers, then this test can be re-enabled.
-
 CPPUNIT_TEST_FIXTURE(Test, test76317)
 {
     createSwDoc("test76317.docx");
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]", "prst", "hexagon");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]", "prst", u"hexagon");
 }
-
-#endif
 
 CPPUNIT_TEST_FIXTURE(Test, fdo76591)
 {
