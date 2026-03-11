@@ -40,10 +40,10 @@ SvpSalFrame* SvpSalFrame::s_pFocusFrame = nullptr;
 #define SvpSalGraphics AquaSalGraphics
 #endif
 
-SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
+SvpSalFrame::SvpSalFrame( SvpSalInstance& rInstance,
                           SalFrame* pParent,
                           SalFrameStyleFlags nSalFrameStyle ) :
-    m_pInstance( pInstance ),
+    m_rInstance(rInstance),
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),
     m_nStyle( nSalFrameStyle ),
     m_bVisible( false ),
@@ -62,16 +62,14 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     if( m_pParent )
         m_pParent->m_aChildren.push_back( this );
 
-    if( m_pInstance )
-        m_pInstance->insertFrame(this);
+    m_rInstance.insertFrame(this);
 
     SetPosSize( 0, 0, 800, 600, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 }
 
 SvpSalFrame::~SvpSalFrame()
 {
-    if( m_pInstance )
-        m_pInstance->eraseFrame(this);
+    m_rInstance.eraseFrame(this);
 
     std::vector<SvpSalFrame*> Children = m_aChildren;
     for( auto& rChild : Children )
@@ -88,7 +86,7 @@ SvpSalFrame::~SvpSalFrame()
         // pass focus to another frame, preferably a document style window
         if( s_pFocusFrame == nullptr )
         {
-            for (auto pSalFrame : m_pInstance->getFrames() )
+            for (auto pSalFrame : m_rInstance.getFrames())
             {
                 SvpSalFrame* pFrame = static_cast<SvpSalFrame*>( pSalFrame );
                 if( pFrame->m_bVisible        &&
@@ -124,7 +122,7 @@ void SvpSalFrame::GetFocus()
         if( s_pFocusFrame )
             s_pFocusFrame->LoseFocus();
         s_pFocusFrame = this;
-        m_pInstance->PostEvent( this, nullptr, SalEvent::GetFocus );
+        m_rInstance.PostEvent(this, nullptr, SalEvent::GetFocus);
     }
 }
 
@@ -132,7 +130,7 @@ void SvpSalFrame::LoseFocus()
 {
     if( s_pFocusFrame == this )
     {
-        m_pInstance->PostEvent( this, nullptr, SalEvent::LoseFocus );
+        m_rInstance.PostEvent(this, nullptr, SalEvent::LoseFocus);
         s_pFocusFrame = nullptr;
     }
 }
@@ -169,7 +167,7 @@ void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool SvpSalFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    m_pInstance->PostEvent( this, pData.release(), SalEvent::UserEvent );
+    m_rInstance.PostEvent(this, pData.release(), SalEvent::UserEvent);
     return true;
 }
 
@@ -214,7 +212,7 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
     if (bVisible)
     {
         m_bVisible = true;
-        m_pInstance->PostEvent( this, nullptr, SalEvent::Resize );
+        m_rInstance.PostEvent(this, nullptr, SalEvent::Resize);
         if( ! bNoActivate )
             GetFocus();
     }
@@ -278,7 +276,7 @@ void SvpSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
         }
     }
     if( m_bVisible )
-        m_pInstance->PostEvent( this, nullptr, SalEvent::Resize );
+        m_rInstance.PostEvent(this, nullptr, SalEvent::Resize);
 #endif
 }
 

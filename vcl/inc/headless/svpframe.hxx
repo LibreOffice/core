@@ -36,7 +36,7 @@ class SvpSalGraphics;
 
 class SvpSalFrame : public SalFrame
 {
-    SvpSalInstance*                     m_pInstance;
+    SvpSalInstance& m_rInstance;
     SvpSalFrame*                        m_pParent;       // pointer to parent frame
     std::vector< SvpSalFrame* >         m_aChildren;     // Vector of child frames
     SalFrameStyleFlags                  m_nStyle;
@@ -57,7 +57,7 @@ class SvpSalFrame : public SalFrame
     OUString m_sTitle;
 
 public:
-    SvpSalFrame( SvpSalInstance* pInstance,
+    SvpSalFrame( SvpSalInstance& rInstance,
                  SalFrame* pParent,
                  SalFrameStyleFlags nSalFrameStyle );
     virtual ~SvpSalFrame() override;

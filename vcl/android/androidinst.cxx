@@ -98,10 +98,10 @@ SalSystem *AndroidSalInstance::CreateSalSystem()
 class AndroidSalFrame : public SvpSalFrame
 {
 public:
-    AndroidSalFrame( AndroidSalInstance *pInstance,
+    AndroidSalFrame( AndroidSalInstance& rInstance,
                      SalFrame           *pParent,
                      SalFrameStyleFlags  nSalFrameStyle )
-        : SvpSalFrame(pInstance, pParent, nSalFrameStyle)
+        : SvpSalFrame(rInstance, pParent, nSalFrameStyle)
     {
         if (pParent == NULL && viewWidth > 1 && viewHeight > 1)
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
@@ -146,12 +146,12 @@ public:
 
 SalFrame *AndroidSalInstance::CreateChildFrame( SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle )
 {
-    return new AndroidSalFrame( this, NULL, nStyle );
+    return new AndroidSalFrame(*this, NULL, nStyle);
 }
 
 SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
-    return new AndroidSalFrame( this, pParent, nStyle );
+    return new AndroidSalFrame(*this, pParent, nStyle);
 }
 
 // This is our main entry point:

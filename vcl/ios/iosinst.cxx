@@ -70,10 +70,10 @@ SalSystem *IosSalInstance::CreateSalSystem()
 class IosSalFrame : public SvpSalFrame
 {
 public:
-    IosSalFrame( IosSalInstance *pInstance,
+    IosSalFrame(IosSalInstance& rInstance,
                      SalFrame           *pParent,
                      SalFrameStyleFlags  nSalFrameStyle)
-        : SvpSalFrame( pInstance, pParent, nSalFrameStyle )
+        : SvpSalFrame(rInstance, pParent, nSalFrameStyle)
     {
         if (pParent == NULL && viewWidth > 1 && viewHeight > 1)
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
@@ -121,12 +121,12 @@ public:
 SalFrame *IosSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
     (void)pParent;
-    return new IosSalFrame( this, NULL, nStyle );
+    return new IosSalFrame(*this, NULL, nStyle);
 }
 
 SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
-    return new IosSalFrame( this, pParent, nStyle );
+    return new IosSalFrame(*this, pParent, nStyle);
 }
 
 SalData::SalData() :
