@@ -37,6 +37,10 @@
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 
+#include <unordered_map>
+
+#include <vcl/graph.hxx>
+
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/fmdmod.hxx>
 
@@ -90,12 +94,17 @@ class SAL_DLLPUBLIC_RTTI SdXImpressDocument final : public SfxBaseModel, // impl
     friend class SdMasterPagesAccess;
     friend class SdLayerManager;
 
+public:
+    /// Cache of graphics from vector rendering, keyed by checksum.
+    std::unordered_map<sal_Int64, Graphic>& getBitmapCache() { return maBitmapCache; }
+
 private:
     ::sd::DrawDocShell* mpDocShell;
     SdDrawDocument* mpDoc;
     bool mbDisposed;
 
     std::unique_ptr<sd::SlideshowLayerRenderer> mpSlideshowLayerRenderer;
+    std::unordered_map<sal_Int64, Graphic> maBitmapCache;
 
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);

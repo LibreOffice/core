@@ -171,6 +171,8 @@
 
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
+#include <vcl/graph.hxx>
+#include <unordered_map>
 
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/kit/ControlHandler.hxx>
@@ -2119,6 +2121,7 @@ private:
     {
         maProcessor.emplace(rWriter);
         maProcessor->setScaleFactor(constTwipConversionFactor);
+        maProcessor->setBitmapCache(mpModel->getBitmapCache());
 
         // Set up ViewInformation2D with visualized page
         drawinglayer::geometry::ViewInformation2D aViewInfo;
@@ -2224,7 +2227,7 @@ private:
 
 bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 {
-    if (rCommand == u".uno:VectorTile")
+    if (rCommand == u"VectorTile" || rCommand == u"VectorRenderingGraphics")
         return true;
     return false;
 }
@@ -2234,6 +2237,7 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
 {
     static constexpr OStringLiteral aExtractDocStructure(".uno:ExtractDocumentStructure");
     static constexpr OStringLiteral aVectorTile(".uno:VectorTile");
+    static constexpr OStringLiteral aVectorRenderingGraphics(".uno:VectorRenderingGraphics");
 
     std::map<OUString, OUString> aMap
         = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
@@ -2242,6 +2246,21 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
     {
         auto commentsNode = rJsonWriter.startNode("DocStructure");
         GetDocStructureSlides(rJsonWriter, this, aMap);
+    }
+    else if (o3tl::starts_with(rCommand, aVectorRenderingGraphics))
+    {
+        auto it = aMap.find(u"checksum"_ustr);
+        if (it != aMap.end())
+        {
+            sal_Int64 nChecksum = it->second.toInt64();
+            auto itGraphic = maBitmapCache.find(nChecksum);
+            if (itGraphic != maBitmapCache.end())
+            {
+                rJsonWriter.put("checksum", nChecksum);
+                drawinglayer::Primitive2dJsonProcessor::writeGraphicBase64(
+                    rJsonWriter, itGraphic->second);
+            }
+        }
     }
     else if (o3tl::starts_with(rCommand, aVectorTile))
     {

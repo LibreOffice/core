@@ -16,6 +16,8 @@
 #include <basegfx/range/b2drange.hxx>
 #include <rtl/string.hxx>
 
+#include <unordered_map>
+
 class Bitmap;
 class Graphic;
 
@@ -71,6 +73,13 @@ public:
     static OString
     dumpAsJson(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence);
 
+    /// Write a Graphic as base64 data URL to a JsonWriter.
+    static void writeGraphicBase64(tools::JsonWriter& rWriter, const Graphic& rGraphic);
+
+    /// Set an external bitmap cache. Graphics encountered during
+    /// processing are stored here keyed by their checksum.
+    void setBitmapCache(std::unordered_map<sal_Int64, Graphic>& rCache);
+
 private:
     void processPrimitive(const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive);
 
@@ -102,6 +111,7 @@ private:
                        std::string_view sNodeName = "gradient");
 
     tools::JsonWriter& mrWriter;
+    std::unordered_map<sal_Int64, Graphic>* mpBitmapCache = nullptr;
     double mfScaleFactor = 1.0;
     drawinglayer::geometry::ViewInformation2D maViewInformation2D;
 };

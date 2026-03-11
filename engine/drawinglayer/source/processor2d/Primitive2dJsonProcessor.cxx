@@ -62,6 +62,8 @@
 #include <comphelper/base64.hxx>
 #include <tools/stream.hxx>
 
+#include <unordered_map>
+
 using namespace drawinglayer::primitive2d;
 
 namespace
@@ -75,10 +77,15 @@ OString colorToHex(const basegfx::BColor& rColor)
 
 namespace drawinglayer
 {
-/// Write graphic data as base64 data URL, preferring native browser-supported formats.
-void Primitive2dJsonProcessor::writeGraphicData(const Graphic& rGraphic)
+void Primitive2dJsonProcessor::setBitmapCache(std::unordered_map<sal_Int64, Graphic>& rCache)
 {
-    // TODO: Probably better to send images separately
+    mpBitmapCache = &rCache;
+}
+
+/// Write graphic data as base64 data URL, preferring native browser-supported formats.
+void Primitive2dJsonProcessor::writeGraphicBase64(tools::JsonWriter& rWriter,
+                                                  const Graphic& rGraphic)
+{
     if (rGraphic.IsGfxLink())
     {
         GfxLink aLink = rGraphic.GetGfxLink();
@@ -112,7 +119,7 @@ void Primitive2dJsonProcessor::writeGraphicData(const Graphic& rGraphic)
                 reinterpret_cast<const sal_Int8*>(aLink.GetData()), aLink.GetDataSize());
             OStringBuffer aBase64(pMime);
             comphelper::Base64::encode(aBase64, aSequence);
-            mrWriter.put("data", aBase64);
+            rWriter.put("data", aBase64);
             return;
         }
     }
@@ -126,14 +133,39 @@ void Primitive2dJsonProcessor::writeGraphicData(const Graphic& rGraphic)
                                                aStream.Tell());
         OStringBuffer aBase64("data:image/png;base64,");
         comphelper::Base64::encode(aBase64, aSequence);
-        mrWriter.put("data", aBase64);
+        rWriter.put("data", aBase64);
     }
 }
 
-/// Write bitmap data as base64, preferring native format if the Bitmap has one.
+/// Write graphic: checksum + either cache or inline base64.
+void Primitive2dJsonProcessor::writeGraphicData(const Graphic& rGraphic)
+{
+    sal_Int64 nChecksum = static_cast<sal_Int64>(rGraphic.GetChecksum());
+    mrWriter.put("checksum", nChecksum);
+
+    if (mpBitmapCache)
+    {
+        mpBitmapCache->emplace(nChecksum, rGraphic);
+        return;
+    }
+
+    writeGraphicBase64(mrWriter, rGraphic);
+}
+
+/// Write bitmap data: uses the bitmap's own checksum, delegates to writeGraphicData.
 void Primitive2dJsonProcessor::writeBitmapData(const Bitmap& rBitmap)
 {
-    writeGraphicData(Graphic(rBitmap));
+    sal_Int64 nChecksum = static_cast<sal_Int64>(rBitmap.GetChecksum());
+    mrWriter.put("checksum", nChecksum);
+
+    Graphic aGraphic(rBitmap);
+    if (mpBitmapCache)
+    {
+        mpBitmapCache->emplace(nChecksum, aGraphic);
+        return;
+    }
+
+    writeGraphicBase64(mrWriter, aGraphic);
 }
 
 void Primitive2dJsonProcessor::writeGradient(
@@ -488,7 +520,6 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const Size aSizePixel(rBitmap.GetSizePixel());
             mrWriter.put("width", aSizePixel.getWidth());
             mrWriter.put("height", aSizePixel.getHeight());
-            mrWriter.put("checksum", static_cast<sal_Int64>(rBitmap.GetChecksum()));
             writeBitmapData(rBitmap);
         }
         break;
@@ -860,7 +891,6 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const Size aSizePixel(rBitmap.GetSizePixel());
             mrWriter.put("width", aSizePixel.getWidth());
             mrWriter.put("height", aSizePixel.getHeight());
-            mrWriter.put("checksum", sal_Int64(rBitmap.GetChecksum()));
             writeBitmapData(rBitmap);
         }
         break;
