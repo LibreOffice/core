@@ -62,7 +62,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/editeng/editview \
     editeng/source/editeng/edtspell \
     editeng/source/editeng/eehtml \
-    editeng/source/editeng/eemd \
+    editeng/source/editeng/markdownparser \
     editeng/source/editeng/eeobj \
     editeng/source/editeng/eerdll \
     editeng/source/editeng/eertfpar \

@@ -29,7 +29,7 @@
 #include "impedit.hxx"
 #include <editeng/editview.hxx>
 #include "eehtml.hxx"
-#include "eemd.hxx"
+#include "markdownparser.hxx"
 #include "editobj2.hxx"
 #include <i18nlangtag/lang.h>
 #include <sal/log.hxx>
@@ -207,7 +207,7 @@ EditPaM ImpEditEngine::ReadMarkdown(SvStream& rInput, EditSelection aSel)
     rInput.ReadBytes(aBuf.data(), nSize);
     OString aContent(aBuf.data(), nSize);
 
-    EditMDParser aParser(mpEditEngine, aSel.Max());
+    editeng::MarkdownParser aParser(mpEditEngine, aSel.Max());
     return aParser.Parse(aContent);
 }
 

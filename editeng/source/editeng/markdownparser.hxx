@@ -18,10 +18,19 @@
 
 class EditEngine;
 
-class EditMDParser
+namespace editeng
+{
+/** Parses Markdown text and inserts it into an EditEngine document.
+ *
+ * Uses the md4c library (GitHub Flavored Markdown dialect) to parse the
+ * input and drive insertions into the edit engine at the given position.
+ * Supports headings, bold/italic/strikethrough, inline code, fenced code
+ * blocks, ordered/unordered lists, block quotes, hyperlinks, and HTML entities.
+ */
+class MarkdownParser
 {
 public:
-    EditMDParser(EditEngine* pEditEngine, const EditPaM& rPaM);
+    MarkdownParser(EditEngine* pEditEngine, const EditPaM& rPaM);
 
     EditPaM Parse(const OString& rMarkdown);
 
@@ -67,5 +76,7 @@ private:
     OUString maLinkURL;
     sal_Int32 mnLinkStart;
 };
+
+} // namespace editeng
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

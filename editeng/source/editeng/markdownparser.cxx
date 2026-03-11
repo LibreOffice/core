@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "eemd.hxx"
+#include "markdownparser.hxx"
 
 #include <editeng/editeng.hxx>
 #include <editeng/flditem.hxx>
@@ -22,7 +22,9 @@
 #include <editeng/colritem.hxx>
 #include <svl/intitem.hxx>
 
-EditMDParser::EditMDParser(EditEngine* pEditEngine, const EditPaM& rPaM)
+namespace editeng
+{
+MarkdownParser::MarkdownParser(EditEngine* pEditEngine, const EditPaM& rPaM)
     : mpEditEngine(pEditEngine)
     , maCurSel(rPaM)
     , mbInParagraph(false)
@@ -39,7 +41,7 @@ EditMDParser::EditMDParser(EditEngine* pEditEngine, const EditPaM& rPaM)
 {
 }
 
-EditPaM EditMDParser::Parse(const OString& rMarkdown)
+EditPaM MarkdownParser::Parse(const OString& rMarkdown)
 {
     MD_PARSER parser;
     memset(&parser, 0, sizeof(parser));
@@ -59,37 +61,37 @@ EditPaM EditMDParser::Parse(const OString& rMarkdown)
     return maCurSel.Max();
 }
 
-int EditMDParser::EnterBlockCb(MD_BLOCKTYPE nType, void* pDetail, void* pUserData)
+int MarkdownParser::EnterBlockCb(MD_BLOCKTYPE nType, void* pDetail, void* pUserData)
 {
-    static_cast<EditMDParser*>(pUserData)->EnterBlock(nType, pDetail);
+    static_cast<MarkdownParser*>(pUserData)->EnterBlock(nType, pDetail);
     return 0;
 }
 
-int EditMDParser::LeaveBlockCb(MD_BLOCKTYPE nType, void* pDetail, void* pUserData)
+int MarkdownParser::LeaveBlockCb(MD_BLOCKTYPE nType, void* pDetail, void* pUserData)
 {
-    static_cast<EditMDParser*>(pUserData)->LeaveBlock(nType, pDetail);
+    static_cast<MarkdownParser*>(pUserData)->LeaveBlock(nType, pDetail);
     return 0;
 }
 
-int EditMDParser::EnterSpanCb(MD_SPANTYPE nType, void* pDetail, void* pUserData)
+int MarkdownParser::EnterSpanCb(MD_SPANTYPE nType, void* pDetail, void* pUserData)
 {
-    static_cast<EditMDParser*>(pUserData)->EnterSpan(nType, pDetail);
+    static_cast<MarkdownParser*>(pUserData)->EnterSpan(nType, pDetail);
     return 0;
 }
 
-int EditMDParser::LeaveSpanCb(MD_SPANTYPE nType, void* pDetail, void* pUserData)
+int MarkdownParser::LeaveSpanCb(MD_SPANTYPE nType, void* pDetail, void* pUserData)
 {
-    static_cast<EditMDParser*>(pUserData)->LeaveSpan(nType, pDetail);
+    static_cast<MarkdownParser*>(pUserData)->LeaveSpan(nType, pDetail);
     return 0;
 }
 
-int EditMDParser::TextCb(MD_TEXTTYPE nType, const MD_CHAR* pText, MD_SIZE nSize, void* pUserData)
+int MarkdownParser::TextCb(MD_TEXTTYPE nType, const MD_CHAR* pText, MD_SIZE nSize, void* pUserData)
 {
-    static_cast<EditMDParser*>(pUserData)->HandleText(nType, pText, nSize);
+    static_cast<MarkdownParser*>(pUserData)->HandleText(nType, pText, nSize);
     return 0;
 }
 
-void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* pDetail)
+void MarkdownParser::EnterBlock(MD_BLOCKTYPE nType, void* pDetail)
 {
     switch (nType)
     {
@@ -231,7 +233,7 @@ void EditMDParser::EnterBlock(MD_BLOCKTYPE nType, void* pDetail)
     }
 }
 
-void EditMDParser::LeaveBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
+void MarkdownParser::LeaveBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
 {
     switch (nType)
     {
@@ -331,7 +333,7 @@ void EditMDParser::LeaveBlock(MD_BLOCKTYPE nType, void* /*pDetail*/)
     }
 }
 
-void EditMDParser::EnterSpan(MD_SPANTYPE nType, void* pDetail)
+void MarkdownParser::EnterSpan(MD_SPANTYPE nType, void* pDetail)
 {
     switch (nType)
     {
@@ -368,7 +370,7 @@ void EditMDParser::EnterSpan(MD_SPANTYPE nType, void* pDetail)
     }
 }
 
-void EditMDParser::LeaveSpan(MD_SPANTYPE nType, void* /*pDetail*/)
+void MarkdownParser::LeaveSpan(MD_SPANTYPE nType, void* /*pDetail*/)
 {
     switch (nType)
     {
@@ -418,7 +420,7 @@ void EditMDParser::LeaveSpan(MD_SPANTYPE nType, void* /*pDetail*/)
     }
 }
 
-void EditMDParser::HandleText(MD_TEXTTYPE nType, const MD_CHAR* pText, MD_SIZE nSize)
+void MarkdownParser::HandleText(MD_TEXTTYPE nType, const MD_CHAR* pText, MD_SIZE nSize)
 {
     switch (nType)
     {
@@ -487,7 +489,7 @@ void EditMDParser::HandleText(MD_TEXTTYPE nType, const MD_CHAR* pText, MD_SIZE n
     }
 }
 
-void EditMDParser::InsertText(const OUString& rText)
+void MarkdownParser::InsertText(const OUString& rText)
 {
     EditPaM aStartPaM = maCurSel.Max();
     sal_Int32 nStartIndex = aStartPaM.GetIndex();
@@ -528,9 +530,11 @@ void EditMDParser::InsertText(const OUString& rText)
     }
 }
 
-void EditMDParser::InsertParaBreak()
+void MarkdownParser::InsertParaBreak()
 {
     maCurSel = EditSelection(mpEditEngine->InsertParaBreak(maCurSel));
 }
+
+} // namespace editeng
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
