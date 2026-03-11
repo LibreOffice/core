@@ -170,6 +170,11 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_
             }
             if( r.Left() > aRect.Left() && r.Top() > aRect.Top() )
             {
+                if (nRow <= 0 || nCol <= 0)
+                {
+                    SAL_WARN("sc.filter", "Clamping invalid row/column index to 0 while calculating from-to positions row=" << (nRow - 1) << " col=" << (nCol-1));
+                }
+
                 sal_Int32 nNewCol = (nCol > 0) ? nCol - 1 : 0;
                 sal_Int32 nNewRow = (nRow > 0) ? nRow - 1 : 0;
                 aFrom = tools::Rectangle( nNewCol, lcl_hmm2output( nColOff, bInEMU ),
@@ -195,6 +200,11 @@ void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_
             }
             if( r.Left() < aRect.Left() && r.Top() > aRect.Top() )
             {
+                if (nRow <= 0 || nCol <= 0)
+                {
+                    SAL_WARN("sc.filter", "Clamping invalid row/column index to 0 while calculating from-to positions row=" << (nRow - 1) << " col=" << (nCol-1));
+                }
+
                 sal_Int32 nNewCol = (nCol > 0) ? nCol - 1 : 0;
                 sal_Int32 nNewRow = (nRow > 0) ? nRow - 1 : 0;
                 aFrom = tools::Rectangle( nNewCol, lcl_hmm2output( nColOff, bInEMU ),
