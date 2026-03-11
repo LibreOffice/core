@@ -33,6 +33,10 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xtextit0.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdgcpitm.hxx>   // SdrGrafCropItem
+#include <svx/sdmetitm.hxx>
 #include "svdfmtf.hxx"
 #include <svdpdf.hxx>
 #include <svx/svdetc.hxx>
@@ -49,6 +53,7 @@
 #include <memory>
 #include <vector>
 #include <vcl/graph.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <svx/svxids.hrc>
 #include <dstribut_enum.hxx>
@@ -1012,6 +1017,88 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
 
     if( bUndo )
         BegUndo();
+
+    if (eMode == SdrMergeMode::Intersect)
+    {
+        tools::Rectangle aShapeBoundRect;
+        bool bHasShape = false;
+        bool bHasGraf = false;
+
+        for (size_t a = 0; a < rMarkList.GetMarkCount(); ++a)
+        {
+            SdrObject* pObj = rMarkList.GetMark(a)->GetMarkedSdrObj();
+            if (dynamic_cast<SdrGrafObj*>(pObj))
+            {
+                bHasGraf = true;
+            }
+            else
+            {
+                tools::Rectangle aBound = pObj->GetCurrentBoundRect();
+                if (!bHasShape)
+                    aShapeBoundRect = aBound;
+                else
+                    aShapeBoundRect.Union(aBound);
+                bHasShape = true;
+            }
+        }
+
+        // Only pre-crop if combining image with shape
+        if (bHasGraf && bHasShape)
+        {
+            for (size_t a = 0; a < rMarkList.GetMarkCount(); ++a)
+            {
+                SdrMark* pMark = rMarkList.GetMark(a);
+                SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>(pMark->GetMarkedSdrObj());
+                if (!pGrafObj)
+                    continue;
+
+                tools::Rectangle aGrafRect = pGrafObj->GetLogicRect();
+                tools::Rectangle aCropTarget = aGrafRect.GetIntersection(aShapeBoundRect);
+                if (aCropTarget.IsEmpty() || aCropTarget == aGrafRect)
+                    continue;
+
+                tools::Long nLeft   = std::max(aCropTarget.Left()  - aGrafRect.Left(),  tools::Long(0));
+                tools::Long nTop    = std::max(aCropTarget.Top()   - aGrafRect.Top(),   tools::Long(0));
+                tools::Long nRight  = std::max(aGrafRect.Right()   - aCropTarget.Right(),  tools::Long(0));
+                tools::Long nBottom = std::max(aGrafRect.Bottom()  - aCropTarget.Bottom(), tools::Long(0));
+
+                const SdrGrafCropItem& rExistingCrop =
+                    pGrafObj->GetMergedItem(SDRATTR_GRAFCROP).StaticWhichCast(SDRATTR_GRAFCROP);
+
+                const MapMode aMapMode100thmm(MapUnit::Map100thMM);
+                const GraphicObject* pGraphicObject = &pGrafObj->GetGraphicObject();
+                Size aGraphicSize(pGraphicObject->GetPrefSize());
+                if (MapUnit::MapPixel == pGraphicObject->GetPrefMapMode().GetMapUnit())
+                    aGraphicSize = Application::GetDefaultDevice()->PixelToLogic(aGraphicSize, aMapMode100thmm);
+                else
+                    aGraphicSize = OutputDevice::LogicToLogic(aGraphicSize, pGraphicObject->GetPrefMapMode(), aMapMode100thmm);
+
+                if (aGraphicSize.IsEmpty())
+                    continue;
+
+                double fScaleX = (aGraphicSize.Width()  - rExistingCrop.GetLeft() - rExistingCrop.GetRight())
+                                 / static_cast<double>(aGrafRect.GetWidth());
+                double fScaleY = (aGraphicSize.Height() - rExistingCrop.GetTop()  - rExistingCrop.GetBottom())
+                                 / static_cast<double>(aGrafRect.GetHeight());
+
+                SdrGrafCropItem aNewCrop(
+                    rExistingCrop.GetLeft()   + static_cast<sal_Int32>(nLeft   * fScaleX),
+                    rExistingCrop.GetTop()    + static_cast<sal_Int32>(nTop    * fScaleY),
+                    rExistingCrop.GetRight()  + static_cast<sal_Int32>(nRight  * fScaleX),
+                    rExistingCrop.GetBottom() + static_cast<sal_Int32>(nBottom * fScaleY));
+
+                if (bUndo)
+                {
+                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pGrafObj));
+                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pGrafObj));
+                }
+
+                pGrafObj->SetMergedItem(aNewCrop);
+                pGrafObj->SetLogicRect(aCropTarget);
+            }
+        }
+    }
+
 
     size_t nInsPos = SAL_MAX_SIZE;
     const SdrObject* pAttrObj = nullptr;
