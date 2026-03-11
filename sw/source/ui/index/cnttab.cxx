@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/scopeguard.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/untaint.hxx>
 #include <sal/log.hxx>
@@ -3010,6 +3011,7 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
         return;
 
     m_xCtrlParentWin->freeze();
+    comphelper::ScopeGuard aThawGuard([this] { m_xCtrlParentWin->thaw(); });
 
     SwFormToken aToInsertToken(rToken);
 
@@ -3200,6 +3202,7 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
     pButton->Show();
     SetActiveControl(pButton);
 
+    aThawGuard.dismiss();
     m_xCtrlParentWin->thaw();
 
     AdjustPositions();
