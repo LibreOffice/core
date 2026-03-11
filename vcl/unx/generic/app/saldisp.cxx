@@ -1866,7 +1866,7 @@ void SalX11Display::Dispatch(XEvent* pEvent)
         if( pEvent->type == KeyPress || pEvent->type == KeyRelease )
         {
             const ::Window aWindow = pEvent->xkey.window;
-            for( auto pSalFrame : m_aFrames )
+            for (auto pSalFrame : getFrames())
             {
                 const X11SalFrame* pFrame = static_cast< const X11SalFrame* >( pSalFrame );
                 const ::Window aCurFrameWindow = pFrame->GetWindow();
@@ -1900,7 +1900,7 @@ void SalX11Display::Dispatch(XEvent* pEvent)
                 {
                     if( pEvent->xproperty.window == rScreen.m_aRefWindow )
                     {
-                        for (auto pSalFrame : m_aFrames )
+                        for (auto pSalFrame : getFrames())
                              pSalFrame->CallCallback( SalEvent::SettingsChanged, nullptr );
                         return;
                     }
@@ -1933,7 +1933,7 @@ void SalX11Display::Dispatch(XEvent* pEvent)
             break;
     }
 
-    for (auto pSalFrame : m_aFrames )
+    for (auto pSalFrame : getFrames())
     {
         X11SalFrame* pFrame = static_cast<X11SalFrame*>( pSalFrame );
 

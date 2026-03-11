@@ -866,7 +866,7 @@ void GtkSalDisplay::TriggerAllUserEventsProcessed()
 
 GtkWidget* GtkSalDisplay::findGtkWidgetForNativeHandle(sal_uIntPtr hWindow) const
 {
-    for (auto pSalFrame : m_aFrames )
+    for (auto pSalFrame : getFrames())
     {
         const SystemEnvData& rEnvData = pSalFrame->GetSystemData();
         if (rEnvData.GetWindowHandle(pSalFrame) == hWindow)
