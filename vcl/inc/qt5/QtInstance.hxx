@@ -157,8 +157,6 @@ public:
     CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,
                         DeviceFormat eFormat, const SystemGraphicsData& rData) override;
 
-    virtual void PostPrintersChanged() override;
-
     virtual std::unique_ptr<SalMenu> CreateMenu(bool, Menu*) override;
     virtual std::unique_ptr<SalMenuItem> CreateMenuItem(const SalItemParams&) override;
 

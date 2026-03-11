@@ -65,7 +65,7 @@ public:
     virtual std::unique_ptr<SalPrinter> CreatePrinter  ( SalInfoPrinter* pInfoPrinter ) override;
     virtual void                GetPrinterQueueInfo    ( ImplPrnQueueList* pList ) override;
     virtual OUString            GetDefaultPrinter() override;
-    virtual void                PostPrintersChanged() = 0;
+    virtual void                PostPrintersChanged() {};
     // callbacks for printer updates
     virtual void updatePrinterUpdate();
     bool isPrinterInit() const { return mbPrinterInit; }
