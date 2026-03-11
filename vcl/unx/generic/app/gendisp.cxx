@@ -29,11 +29,6 @@ SalGenericDisplay::~SalGenericDisplay()
 {
 }
 
-void SalGenericDisplay::registerFrame( SalFrame* pFrame )
-{
-    insertFrame( pFrame );
-}
-
 void SalGenericDisplay::deregisterFrame( SalFrame* pFrame )
 {
     eraseFrame( pFrame );

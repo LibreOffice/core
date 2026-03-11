@@ -35,7 +35,6 @@ public:
                  SalGenericDisplay();
     virtual      ~SalGenericDisplay() override;
 
-    void registerFrame( SalFrame* pFrame );
     virtual void deregisterFrame( SalFrame* pFrame );
     void emitDisplayChanged();
 

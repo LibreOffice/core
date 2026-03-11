@@ -716,7 +716,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
 
     pDisplay_ = vcl_sal::getSalDisplay();
     // insert frame in framelist
-    pDisplay_->registerFrame( this );
+    pDisplay_->insertFrame(this);
 
     mhWindow                    = None;
     mpSurface                   = nullptr;

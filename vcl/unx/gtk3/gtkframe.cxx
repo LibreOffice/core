@@ -514,7 +514,7 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     , m_aSmoothScrollIdle("GtkSalFrame m_aSmoothScrollIdle")
 #endif
 {
-    getDisplay()->registerFrame( this );
+    getDisplay()->insertFrame(this);
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SalFrameStyleFlags::SIZEABLE) && ! pParent );
     Init( pParent, nStyle );
@@ -529,7 +529,7 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     , m_aSmoothScrollIdle("GtkSalFrame m_aSmoothScrollIdle")
 #endif
 {
-    getDisplay()->registerFrame( this );
+    getDisplay()->insertFrame(this);
     // permanently ignore errors from our unruly children ...
     GtkSalData::ErrorTrapPush();
     m_bDefaultPos       = true;
