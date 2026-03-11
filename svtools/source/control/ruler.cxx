@@ -37,6 +37,7 @@
 
 #include <memory>
 #include <vector>
+#include <svx/ruler.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1469,7 +1470,8 @@ bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
 
     // tdf#84949 - check if the mouse is moved over the extra field
     // to show a tooltip for left, center, right, and decimal tab
-    if (maExtraRect.Contains(Point(nX, nY)))
+    // tdf#171236 - only show tooltip for tab stop control
+    if (meExtraType == RulerExtra::Tab && maExtraRect.Contains(Point(nX, nY)))
     {
         pHitTest->nPos = nX;
         pHitTest->eType = RulerType::TabAlign;
