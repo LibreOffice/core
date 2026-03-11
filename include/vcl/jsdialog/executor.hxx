@@ -175,6 +175,8 @@ VCL_DLLPUBLIC bool ExecuteAction(const OUString& nWindowId, const OUString& rWid
                                  const StringMap& rData);
 /// send full update message to the client
 VCL_DLLPUBLIC void SendFullUpdate(const OUString& nWindowId, const OUString& rWidget);
+/// send full update for the dialog that contains the given widget
+VCL_DLLPUBLIC void SendFullUpdate(weld::Widget& rWidget);
 /// send action message to the client
 VCL_DLLPUBLIC void SendAction(const OUString& nWindowId, const OUString& rWidget,
                               std::unique_ptr<ActionDataMap> pData);

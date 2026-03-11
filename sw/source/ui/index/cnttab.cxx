@@ -68,6 +68,7 @@
 #include <names.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <comphelper/lok.hxx>
+#include <vcl/jsdialog/executor.hxx>
 
 #include <cmath>
 #include <memory>
@@ -2840,9 +2841,6 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL, bool bGrabFocus)
     SetActiveControl(nullptr, bGrabFocus);
     m_bValid = true;
 
-    // freeze the ctrl container so that dynamically-created token widgets
-    // are batched into a single update for the JSDialog/LOK layer - without
-    // this, the browser never learns about the new children
     m_xCtrlParentWin->freeze();
 
     if (m_pForm)
@@ -2909,9 +2907,14 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL, bool bGrabFocus)
         }
         SetActiveControl(pSetActiveControl, bGrabFocus);
     }
-    // thaw triggers sendUpdate() which serializes the ctrl container's
-    // subtree (now including all new token widgets) and sends it to the browser
     m_xCtrlParentWin->thaw();
+
+    // The token widgets were created dynamically above, but the initial
+    // JSDialog full update (sent by the fragment builder's weld_container)
+    // fired before they existed.  Force a new full update so the browser
+    // receives the complete widget tree including all token children.
+    if (comphelper::LibreOfficeKit::isActive())
+        jsdialog::SendFullUpdate(*m_xContainer);
 
     AdjustScrolling();
 }
