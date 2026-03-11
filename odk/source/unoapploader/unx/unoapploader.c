@@ -260,7 +260,7 @@ char* createCommandName( char* argv0 )
     const char* prgname = NULL;
 
     char* cmdname = NULL;
-    char* sep = NULL;
+    const char* sep = NULL;
     Dl_info dl_info;
 
     /* get the executable file name from argv0 */

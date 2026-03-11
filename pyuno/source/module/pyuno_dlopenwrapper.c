@@ -40,7 +40,7 @@
 
 static void * load(void const * address, char const * symbol) {
     Dl_info dl_info;
-    char * slash;
+    char const * slash;
     size_t len;
     char * libname;
     void * h;
