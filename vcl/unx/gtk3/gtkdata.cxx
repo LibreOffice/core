@@ -822,7 +822,7 @@ extern "C" {
         {
             GtkSalDisplay *pThisDisplay = static_cast<GtkSalData *>(data)->GetGtkDisplay();
             assert(static_cast<const SalGenericDisplay *>(pThisDisplay) == pDisplay);
-            pThisDisplay->DispatchInternalEvent();
+            pThisDisplay->DispatchUserEvents(false);
         }
         return true;
     }

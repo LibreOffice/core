@@ -1834,7 +1834,7 @@ bool SalX11Display::IsEvent()
 
 void SalX11Display::Yield()
 {
-    if( DispatchInternalEvent() )
+    if (DispatchUserEvents(false))
         return;
 
     XEvent aEvent;

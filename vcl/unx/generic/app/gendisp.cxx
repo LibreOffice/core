@@ -36,11 +36,6 @@ void SalGenericDisplay::emitDisplayChanged()
         pAnyFrame->CallCallback( SalEvent::DisplayChanged, nullptr );
 }
 
-bool SalGenericDisplay::DispatchInternalEvent( bool bHandleAllCurrentEvent )
-{
-    return DispatchUserEvents( bHandleAllCurrentEvent );
-}
-
 void SalGenericDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
 {
     RemoveEvent( pFrame, pData, nEvent );

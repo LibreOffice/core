@@ -38,7 +38,6 @@ public:
     void emitDisplayChanged();
 
     void CancelInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent );
-    bool DispatchInternalEvent( bool bHandleAllCurrentEvent = false );
 
     bool     MouseCaptured( const SalFrame *pFrameData ) const
                         { return m_pCapture == pFrameData; }
