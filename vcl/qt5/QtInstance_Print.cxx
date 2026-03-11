@@ -19,71 +19,9 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <QtInstance.hxx>
 
-#include <printerinfomanager.hxx>
-
-#include <print.h>
-
-#include <unx/genpspgraphics.h>
-
 using namespace psp;
-
-SalInfoPrinter* QtInstance::CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,
-                                              ImplJobSetup* pJobSetup)
-{
-    // create and initialize SalInfoPrinter
-    PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter;
-    configurePspInfoPrinter(pPrinter, pQueueInfo, pJobSetup);
-
-    return pPrinter;
-}
-
-std::unique_ptr<SalPrinter> QtInstance::CreatePrinter(SalInfoPrinter* pInfoPrinter)
-{
-    // create and initialize SalPrinter
-    PspSalPrinter* pPrinter = new PspSalPrinter(pInfoPrinter);
-    pPrinter->m_aJobData = static_cast<PspSalInfoPrinter*>(pInfoPrinter)->m_aJobData;
-
-    return std::unique_ptr<SalPrinter>(pPrinter);
-}
-
-void QtInstance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
-{
-    PrinterInfoManager& rManager(PrinterInfoManager::get());
-    static const char* pNoSyncDetection = getenv("SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION");
-    if (!pNoSyncDetection || !*pNoSyncDetection)
-    {
-        // #i62663# synchronize possible asynchronouse printer detection now
-        rManager.checkPrintersChanged(true);
-    }
-
-    std::vector<OUString> aPrinters = rManager.listPrinters();
-    for (const auto& rPrinter : aPrinters)
-    {
-        const PrinterInfo& rInfo(rManager.getPrinterInfo(rPrinter));
-        // create new entry
-        std::unique_ptr<SalPrinterQueueInfo> pInfo(new SalPrinterQueueInfo);
-        pInfo->maPrinterName = rPrinter;
-        pInfo->maDriver = rInfo.m_aDriverName;
-        pInfo->maLocation = rInfo.m_aLocation;
-        pInfo->maComment = rInfo.m_aComment;
-
-        OUString sPdfDir;
-        if (getPdfDir(rInfo, sPdfDir))
-            pInfo->maLocation = sPdfDir;
-
-        pList->Add(std::move(pInfo));
-    }
-}
-
-OUString QtInstance::GetDefaultPrinter()
-{
-    PrinterInfoManager& rManager(PrinterInfoManager::get());
-    return rManager.getDefaultPrinter();
-}
 
 void QtInstance::PostPrintersChanged() {}
 
