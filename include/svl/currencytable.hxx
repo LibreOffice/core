@@ -6,9 +6,7 @@
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
-
-#ifndef INCLUDED_SVL_CURRENCYTABLE_HXX
-#define INCLUDED_SVL_CURRENCYTABLE_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 #include <svl/zforlist.hxx>
@@ -37,7 +35,5 @@ public:
 
     void insert(const iterator& it, NfCurrencyEntry p);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_FLAGITEM_HXX
-#define INCLUDED_SVL_FLAGITEM_HXX
+#pragma once
 
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
@@ -44,7 +43,5 @@ public:
     void SetValue( sal_uInt16 nNewVal ) { ASSERT_CHANGE_REFCOUNTED_ITEM; nVal = nNewVal; }
     bool GetFlag( sal_uInt8 nFlag ) const { return (nVal & ( 1<<nFlag)); }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

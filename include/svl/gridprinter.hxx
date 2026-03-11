@@ -6,9 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-#ifndef INCLUDED_SVL_GRIDPRINTER_HXX
-#define INCLUDED_SVL_GRIDPRINTER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <svl/svldllapi.h>
@@ -32,7 +30,5 @@ public:
     void print(const char* pHeader) const;
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
