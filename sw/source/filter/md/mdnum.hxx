@@ -22,8 +22,8 @@
 #include <swtypes.hxx>
 #include <string.h>
 
-constexpr tools::Long MD_NUMBER_BULLET_MARGINLEFT = o3tl::toTwips(125, o3tl::Length::mm10);
-constexpr tools::Long MD_NUMBER_BULLET_INDENT = -o3tl::toTwips(5, o3tl::Length::mm);
+constexpr sal_Int32 MD_NUMBER_BULLET_MARGINLEFT = o3tl::toTwips(125, o3tl::Length::mm10);
+constexpr sal_Int32 MD_NUMBER_BULLET_INDENT = -o3tl::toTwips(5, o3tl::Length::mm);
 
 class SwTextNode;
 class SwNumRule;

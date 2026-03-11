@@ -674,8 +674,8 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
         aGrfSz = o3tl::convert(aGraphic.GetSizePixel(), o3tl::Length::px, o3tl::Length::twip);
     }
 
-    tools::Long nWidth = 0;
-    tools::Long nHeight = 0;
+    sal_Int64 nWidth = 0;
+    sal_Int64 nHeight = 0;
     if (!aGrfSz.IsEmpty())
     {
         nWidth = aGrfSz.getWidth();
@@ -685,8 +685,8 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
             double fScaleX = static_cast<double>(MD_MAX_IMAGE_WIDTH_IN_TWIPS) / nWidth;
             double fScaleY = static_cast<double>(MD_MAX_IMAGE_HEIGHT_IN_TWIPS) / nHeight;
             double fScale = std::min(fScaleX, fScaleY);
-            nWidth = static_cast<tools::Long>(nWidth * fScale);
-            nHeight = static_cast<tools::Long>(nHeight * fScale);
+            nWidth = static_cast<sal_Int64>(nWidth * fScale);
+            nHeight = static_cast<sal_Int64>(nHeight * fScale);
         }
         if (nWidth < MD_MIN_IMAGE_WIDTH_IN_TWIPS && nWidth < MD_MIN_IMAGE_HEIGHT_IN_TWIPS)
         {

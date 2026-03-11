@@ -49,11 +49,11 @@ struct MDImage
     }
 };
 
-constexpr tools::Long MD_PARSPACE = o3tl::toTwips(5, o3tl::Length::mm);
-constexpr tools::Long MD_MAX_IMAGE_WIDTH_IN_TWIPS = 5000;
-constexpr tools::Long MD_MAX_IMAGE_HEIGHT_IN_TWIPS = 5000;
-constexpr tools::Long MD_MIN_IMAGE_WIDTH_IN_TWIPS = 500;
-constexpr tools::Long MD_MIN_IMAGE_HEIGHT_IN_TWIPS = 500;
+constexpr sal_uInt16 MD_PARSPACE = o3tl::toTwips(5, o3tl::Length::mm);
+constexpr sal_Int64 MD_MAX_IMAGE_WIDTH_IN_TWIPS = 5000;
+constexpr sal_Int64 MD_MAX_IMAGE_HEIGHT_IN_TWIPS = 5000;
+constexpr sal_Int64 MD_MIN_IMAGE_WIDTH_IN_TWIPS = 500;
+constexpr sal_Int64 MD_MIN_IMAGE_HEIGHT_IN_TWIPS = 500;
 
 constexpr frozen::unordered_map<MD_ALIGN, SvxAdjust, 4> adjustMap
     = { { MD_ALIGN_DEFAULT, SvxAdjust::Left },
@@ -90,7 +90,7 @@ class SwMarkdownParser
     OUString m_sBaseURL;
 
     sal_Int32 m_nBlockQuoteDepth = -1;
-    tools::Long m_nProgress = 0;
+    sal_uInt64 m_nProgress = 0;
 
     bool m_bNewDoc;
     bool m_bNoParSpace = true;
