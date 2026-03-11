@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <IconHelper.hxx>
 #include <QtCustomStyle.hxx>
 #include <QtFrame.hxx>
 #include <QtFrame.moc>
@@ -343,24 +344,8 @@ void QtFrame::SetIcon(sal_uInt16 nIcon)
         || !isWindow())
         return;
 
-    QString appicon;
-
-    if (nIcon == SV_ICON_ID_TEXT)
-        appicon = "libreoffice-writer";
-    else if (nIcon == SV_ICON_ID_SPREADSHEET)
-        appicon = "libreoffice-calc";
-    else if (nIcon == SV_ICON_ID_DRAWING)
-        appicon = "libreoffice-draw";
-    else if (nIcon == SV_ICON_ID_PRESENTATION)
-        appicon = "libreoffice-impress";
-    else if (nIcon == SV_ICON_ID_DATABASE)
-        appicon = "libreoffice-base";
-    else if (nIcon == SV_ICON_ID_FORMULA)
-        appicon = "libreoffice-math";
-    else
-        appicon = "libreoffice-startcenter";
-
-    QIcon aIcon = QIcon::fromTheme(appicon);
+    const QString sAppIcon = toQString(IconHelper::GetAppIconName(nIcon));
+    QIcon aIcon = QIcon::fromTheme(sAppIcon);
     m_pQWidget->window()->setWindowIcon(aIcon);
 
     if (QGuiApplication::platformName() == "wayland" && m_pQWidget->window()->isVisible())
@@ -371,7 +356,7 @@ void QtFrame::SetIcon(sal_uInt16 nIcon)
         // An alternative would be to use private Qt API and low-level wayland API to set the
         // app_id directly, s. discussion in QTBUG-77182.
         const QString sOrigDesktopFileName = QGuiApplication::desktopFileName();
-        QGuiApplication::setDesktopFileName(appicon);
+        QGuiApplication::setDesktopFileName(sAppIcon);
         m_pQWidget->window()->hide();
         m_pQWidget->window()->show();
         QGuiApplication::setDesktopFileName(sOrigDesktopFileName);

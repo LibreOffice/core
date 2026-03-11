@@ -19,6 +19,7 @@
 
 #include <config_version.h>
 
+#include <IconHelper.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
@@ -1930,26 +1931,7 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
         || ! m_pWindow )
         return;
 
-    gchar* appicon;
-
-    if (nIcon == SV_ICON_ID_TEXT)
-        appicon = g_strdup ("libreoffice-writer");
-    else if (nIcon == SV_ICON_ID_SPREADSHEET)
-        appicon = g_strdup ("libreoffice-calc");
-    else if (nIcon == SV_ICON_ID_DRAWING)
-        appicon = g_strdup ("libreoffice-draw");
-    else if (nIcon == SV_ICON_ID_PRESENTATION)
-        appicon = g_strdup ("libreoffice-impress");
-    else if (nIcon == SV_ICON_ID_DATABASE)
-        appicon = g_strdup ("libreoffice-base");
-    else if (nIcon == SV_ICON_ID_FORMULA)
-        appicon = g_strdup ("libreoffice-math");
-    else
-        appicon = g_strdup ("libreoffice-startcenter");
-
-    SetIcon(appicon);
-
-    g_free (appicon);
+    SetIcon(IconHelper::GetAppIconName(nIcon).toUtf8().getStr());
 }
 
 void GtkSalFrame::SetMenu( SalMenu* pSalMenu )

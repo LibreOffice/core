@@ -469,6 +469,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/session \
     vcl/source/app/settings \
     vcl/source/app/themecolors \
+    vcl/source/app/IconHelper \
     vcl/source/app/IconThemeInfo \
     vcl/source/app/IconThemeScanner \
     vcl/source/app/IconThemeSelector \
