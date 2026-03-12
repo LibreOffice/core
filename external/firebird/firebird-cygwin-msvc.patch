@@ -220,7 +220,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  #
  
 -ROOT=$(shell cd ..; pwd)
-+ROOT=$(shell cygpath -m -a '$(shell cd ..; pwd)')
++ROOT:=$(shell cygpath -m -a ..)
  
  include     make.defaults
  ifeq ($(CROSS_OUT), Y)
@@ -650,7 +650,7 @@ diff -ur src/misc/makeHeader.cpp src/misc/makeHeader.cpp
  #
  
 -ROOT=$(shell cd ..; pwd)
-+ROOT=$(shell cygpath -m -a '$(shell cd ..; pwd)')
++ROOT:=$(shell cygpath -m -a ..)
  
  ifeq ($(IsDeveloper), Y)
    DefaultTarget := Debug
@@ -661,7 +661,7 @@ diff -ur src/misc/makeHeader.cpp src/misc/makeHeader.cpp
  #
  #
 -ROOT=../..
-+ROOT=$(shell cygpath -m -a ../..)
++ROOT:=$(shell cygpath -m -a ../..)
  
  # Add the install include directory to the search path since the
  # examples need to build using those headers values.
