@@ -165,7 +165,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsWithMetafile)
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "maxy", u"20306");
     assertXPath(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy11", u"1");
     assertXPath(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy12", u"0");
-    assertXPath(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy13", u"-3279");
+    assertXPath(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy13", u"-3284");
     assertXPath(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy21", u"0");
     assertXPath(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy22", u"1");
     assertXPath(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy23", u"-176");
@@ -196,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsWithMetafile)
                 u"1");
     assertXPath(pDocument,
                 aXPathPrefix + "mask/mask/metafile/transform/mask/mask/metafile/transform", "xy23",
-                u"-140");
+                u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFillRectsWithTextureBrush)

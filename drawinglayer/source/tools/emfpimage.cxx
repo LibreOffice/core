@@ -65,34 +65,63 @@ namespace emfplushelper
             if (mfType == 3 || mfType == 4 || mfType == 5)
             {
                 sal_uInt32 dwRecordType, dwRecordSize, dSignature, nVersion;
-                sal_Int32 rclBoundsLeft, rclBoundsTop, rclBoundsRight, rclBoundsBottom;
+                sal_Int32 rclFrameLeft, rclFrameTop, rclFrameRight, rclFrameBottom;
 
                 mfStream.ReadUInt32(dwRecordType);
                 mfStream.ReadUInt32(dwRecordSize);
-                mfStream.ReadInt32(rclBoundsLeft);
-                mfStream.ReadInt32(rclBoundsTop);
-                mfStream.ReadInt32(rclBoundsRight);
-                mfStream.ReadInt32(rclBoundsBottom);
-
                 mfStream.SeekRel(16);
+
+                mfStream.ReadInt32(rclFrameLeft);
+                mfStream.ReadInt32(rclFrameTop);
+                mfStream.ReadInt32(rclFrameRight);
+                mfStream.ReadInt32(rclFrameBottom);
 
                 mfStream.ReadUInt32(dSignature);
                 mfStream.ReadUInt32(nVersion);
 
                 if (dwRecordType == 1 && dSignature == 0x464D4520)
                 {
-                    x = rclBoundsLeft;
-                    y = rclBoundsTop;
-                    width = rclBoundsRight - rclBoundsLeft;
-                    height = rclBoundsBottom - rclBoundsTop;
+                    mfStream.SeekRel(24);
+
+                    sal_Int32 szlDeviceWidth, szlDeviceHeight;
+                    sal_Int32 szlMillimetersWidth, szlMillimetersHeight;
+
+                    mfStream.ReadInt32(szlDeviceWidth);
+                    mfStream.ReadInt32(szlDeviceHeight);
+                    mfStream.ReadInt32(szlMillimetersWidth);
+                    mfStream.ReadInt32(szlMillimetersHeight);
+
+                    const double fPxPerMmX
+                        = (szlMillimetersWidth > 0)
+                            ? static_cast<double>(szlDeviceWidth) / szlMillimetersWidth
+                            : 3.7795;
+                    const double fPxPerMmY
+                        = (szlMillimetersHeight > 0)
+                            ? static_cast<double>(szlDeviceHeight) / szlMillimetersHeight
+                            : 3.7795;
+
+                    x = std::round(fPxPerMmX * rclFrameLeft / 100.0);
+                    y = std::round(fPxPerMmY * rclFrameTop / 100.0);
+                    width = std::round(fPxPerMmX * (rclFrameRight - rclFrameLeft) / 100.0);
+                    height = std::round(fPxPerMmY * (rclFrameBottom - rclFrameTop) / 100.0);
+
                     SAL_INFO("drawinglayer.emf", "EMF+\tNested EMF Header detected.");
                     SAL_INFO("drawinglayer.emf",
-                            "EMF+\tBounds: [" << rclBoundsLeft << "," << rclBoundsTop << ", "
-                                              << rclBoundsRight << ", " << rclBoundsBottom << "]");
+                             "EMF+\tDevicePx: " << szlDeviceWidth << "x" << szlDeviceHeight
+                                                << ", DeviceMm: " << szlMillimetersWidth << "x"
+                                                << szlMillimetersHeight);
+                    SAL_INFO("drawinglayer.emf", "EMF+\tfPxPerMmX: " << fPxPerMmX << "x" << fPxPerMmY);
+                    SAL_INFO("drawinglayer.emf", "EMF+\tFrame [0.01mm]: ["
+                                                 << rclFrameLeft << ", " << rclFrameTop << ", "
+                                                 << rclFrameRight << ", " << rclFrameBottom << "]");
                     SAL_INFO("drawinglayer.emf",
-                            "EMF+\tVersion: 0x" << std::hex << nVersion << std::dec);
+                             "EMF+\tVersion: 0x" << std::hex << nVersion << std::dec);
+                    SAL_INFO("drawinglayer.emf", "EMF+\tCalculated Image Canvas (Pixels): Pos("
+                                                 << x << ", " << y << "), Size(" << width << "x"
+                                                 << height << ")");
                 }
             }
+
 
             // debug code - write the stream to debug file /tmp/emf-stream.emf
 #if OSL_DEBUG_LEVEL > 1
