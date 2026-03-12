@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <utility>
 #include <vcl/canvastools.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/window.hxx>
@@ -459,9 +460,8 @@ namespace slideshow::internal
                         if( mxPlayer.is() )
                         {
                             sal_IntPtr nParentWindowHandle(0);
-                            const SystemEnvData* pEnvData = mpMediaWindow->GetSystemData();
                             // tdf#139609 gtk doesn't need the handle, and fetching it is undesirable
-                            if (!pEnvData || pEnvData->toolkit != SystemEnvData::Toolkit::Gtk)
+                            if (Application::GetToolkit() != Toolkit::Gtk)
                                 nParentWindowHandle = mpMediaWindow->GetParentWindowHandle();
 
                             aAWTRect.X = aAWTRect.Y = 0;

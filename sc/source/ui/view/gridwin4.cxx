@@ -30,6 +30,7 @@
 #include <sfx2/printer.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <tools/UnitConversion.hxx>
@@ -1823,7 +1824,7 @@ void ScGridWindow::DrawHiddenIndicator( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW n
         aLineInfo.SetDistance(15);
         // round caps except when running VCL_PLUGIN=gen due to a performance issue
         // https://bugs.documentfoundation.org/show_bug.cgi?id=128258#c14
-        if (mrViewData.GetActiveWin()->GetSystemData()->toolkit != SystemEnvData::Toolkit::Gen)
+        if (Application::GetToolkit() != Toolkit::Gen)
             aLineInfo.SetLineCap(css::drawing::LineCap_ROUND);
         aLineInfo.SetDotLen(1);
         for (int i=nX1; i<nX2; i++) {

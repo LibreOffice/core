@@ -545,6 +545,8 @@ std::unique_ptr<GenPspGraphics> GtkInstance::CreatePrintGraphics()
     return SvpSalInstance::CreatePrintGraphics();
 }
 
+Toolkit GtkInstance::GetToolkit() const { return Toolkit::Gtk; }
+
 const cairo_font_options_t* GtkInstance::GetCairoFontOptions()
 {
 #if !GTK_CHECK_VERSION(4, 0, 0)

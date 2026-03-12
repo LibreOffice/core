@@ -51,8 +51,6 @@ typedef struct CGContext *CGContextRef;
 
 struct VCL_DLLPUBLIC SystemEnvData
 {
-    enum class Toolkit { Invalid, Gen, Gtk, Qt };
-    Toolkit             toolkit;        // the toolkit in use
 #if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
@@ -87,16 +85,15 @@ public:
 #endif
 
     SystemEnvData()
-        : toolkit(Toolkit::Invalid)
 #if defined(_WIN32)
-        , hWnd(nullptr)
+        : hWnd(nullptr)
 #elif defined( MACOSX )
-        , mpNSView(nullptr)
+        : mpNSView(nullptr)
         , mbOpenGL(false)
 #elif defined( ANDROID )
 #elif defined( IOS )
 #elif defined( UNX )
-        , pDisplay(nullptr)
+        : pDisplay(nullptr)
         , pSalFrame(nullptr)
         , pWidget(nullptr)
         , pVisual(nullptr)

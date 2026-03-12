@@ -220,6 +220,8 @@ std::shared_ptr<SalBitmap> X11SalInstance::CreateSalBitmap()
     return std::make_shared<SvpSalBitmap>();
 }
 
+Toolkit X11SalInstance::GetToolkit() const { return Toolkit::Gen; }
+
 rtl::Reference<X11DisplayConnectionDispatch> X11SalInstance::GetDisplayConnection()
 {
     ImplSVData* pSVData = ImplGetSVData();

@@ -229,7 +229,6 @@ X11SalObject::X11SalObject()
     maSystemChildData.pSalFrame = nullptr;
     maSystemChildData.pWidget       = nullptr;
     maSystemChildData.pVisual       = nullptr;
-    maSystemChildData.toolkit = SystemEnvData::Toolkit::Gen;
     maSystemChildData.platform = SystemEnvData::Platform::Xcb;
 
     std::list<SalObject*>& rObjects = vcl_sal::getSalDisplay()->getSalObjects();

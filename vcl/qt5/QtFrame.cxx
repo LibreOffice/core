@@ -161,7 +161,6 @@ void QtFrame::screenChanged(QScreen*) { m_pQWidget->fakeResize(); }
 void QtFrame::FillSystemEnvData(SystemEnvData& rData, QWidget* pWidget, QtFrame* pFrame)
 {
     assert(rData.platform == SystemEnvData::Platform::Invalid);
-    assert(rData.toolkit == SystemEnvData::Toolkit::Invalid);
     if (QGuiApplication::platformName() == "wayland")
         rData.platform = SystemEnvData::Platform::Wayland;
     else if (QGuiApplication::platformName() == "xcb")
@@ -176,7 +175,6 @@ void QtFrame::FillSystemEnvData(SystemEnvData& rData, QWidget* pWidget, QtFrame*
         std::abort();
     }
 
-    rData.toolkit = SystemEnvData::Toolkit::Qt;
     rData.pSalFrame = pFrame;
     rData.pWidget = pWidget;
 }

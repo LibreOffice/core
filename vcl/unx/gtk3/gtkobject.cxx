@@ -63,7 +63,6 @@ void GtkSalObjectBase::Init()
     m_aSystemData.pSalFrame     = nullptr;
     m_aSystemData.pWidget       = m_pSocket;
     m_aSystemData.nScreen       = m_pParent->getXScreenNumber().getXScreen();
-    m_aSystemData.toolkit       = SystemEnvData::Toolkit::Gtk;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen* pScreen = gtk_widget_get_screen(m_pParent->getWindow());
     GdkVisual* pVisual = gdk_screen_get_system_visual(pScreen);

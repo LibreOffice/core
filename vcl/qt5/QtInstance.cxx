@@ -693,6 +693,8 @@ QtInstance::ImplCreateDropTarget(const SystemEnvData& rSysEnv)
     return pDropTarget;
 }
 
+Toolkit QtInstance::GetToolkit() const { return Toolkit::Qt; }
+
 const cairo_font_options_t* QtInstance::GetCairoFontOptions()
 {
     static cairo_font_options_t* gOptions = cairo_font_options_create();

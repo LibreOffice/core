@@ -369,7 +369,7 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
     }
 
     // adjust for scrollbar when not using gtk
-    if (m_pWrtShell->GetWin()->GetSystemData()->toolkit != SystemEnvData::Toolkit::Gtk)
+    if (Application::GetToolkit() != Toolkit::Gtk)
     {
         tools::Long nScrollBarThickness
             = Application::GetSettings().GetStyleSettings().GetScrollBarSize();

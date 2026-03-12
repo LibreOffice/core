@@ -443,9 +443,8 @@ void MediaWindowImpl::onURLChanged()
         const Size aSize(mpChildWindow->GetSizePixel());
 
         sal_IntPtr nParentWindowHandle(0);
-        const SystemEnvData* pEnvData = mpChildWindow->GetSystemData();
         // tdf#139609 gtk doesn't need the handle, and fetching it is undesirable
-        if (!pEnvData || pEnvData->toolkit != SystemEnvData::Toolkit::Gtk)
+        if (Application::GetToolkit() != Toolkit::Gtk)
             nParentWindowHandle = mpChildWindow->GetParentWindowHandle();
         uno::Sequence<uno::Any> aArgs{
             uno::Any(nParentWindowHandle),

@@ -89,6 +89,8 @@ public:
     ImplCreateDropTarget(const SystemEnvData& rSysEnv) override;
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
+    virtual Toolkit GetToolkit() const override;
+
     /** Get the DisplayConnection. It allows to send display events to the application. */
     static rtl::Reference<X11DisplayConnectionDispatch> GetDisplayConnection();
 

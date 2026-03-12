@@ -35,6 +35,7 @@
 #include <tools/long.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/Toolkit.hxx>
 #include <vcl/inputtypes.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -959,6 +960,9 @@ public:
      @returns The display name of the application.
     */
     static OUString             GetDisplayName();
+
+    /** Get the toolkit. */
+    static Toolkit GetToolkit();
 
     /** Get the toolkit's name. e.g. gtk3
 

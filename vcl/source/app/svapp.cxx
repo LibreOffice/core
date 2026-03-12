@@ -1420,6 +1420,8 @@ Help* Application::GetHelp()
     return ImplGetSVData()->maAppData.mpHelp;
 }
 
+Toolkit Application::GetToolkit() { return GetSalInstance()->GetToolkit(); }
+
 const OUString & Application::GetToolkitName()
 {
     return GetSalInstance()->GetToolkitName();
