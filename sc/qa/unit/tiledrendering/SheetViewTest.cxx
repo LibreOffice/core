@@ -1915,6 +1915,75 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MultipleOps_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplaceNote_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    // Create new sheet view and sort autofilter ascending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Sort autofilter descending in default view
+    {
+        switchToDefaultView();
+        sortDescendingForCell(u"A1");
+    }
+
+    // Replace note from default view on C1
+    {
+        switchToDefaultView();
+
+        OUString aAuthor(u"Test Author"_ustr);
+        OUString aDate(u"2026-03-08"_ustr);
+        pDocShell->GetDocFunc().ReplaceNote(ScAddress(2, 0, 0), u"Default Note"_ustr, &aAuthor,
+                                            &aDate, true);
+
+        // Verify note on default view
+        ScPostIt* pNoteDefault = pDocument->GetNote(ScAddress(2, 0, 0));
+        CPPUNIT_ASSERT(pNoteDefault);
+        CPPUNIT_ASSERT_EQUAL(u"Default Note"_ustr, pNoteDefault->GetText());
+
+        // Verify note synced to sheet view
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+        ScPostIt* pNoteSheet = pDocument->GetNote(ScAddress(2, 0, nSheetViewTab));
+        CPPUNIT_ASSERT(pNoteSheet);
+        CPPUNIT_ASSERT_EQUAL(u"Default Note"_ustr, pNoteSheet->GetText());
+    }
+
+    // Replace note from sheet view on A2
+    // Sheet view ascending: A2=3, A3=4, A4=5, A5=7
+    // Default view descending: A2=7, A3=5, A4=4, A5=3
+    // A2 on sheet view (value 3) maps to A5 on default view (value 3)
+    {
+        switchToSheetView();
+
+        SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+        OUString aAuthor(u"Sheet Author"_ustr);
+        OUString aDate(u"2026-03-08"_ustr);
+        pDocShell->GetDocFunc().ReplaceNote(ScAddress(0, 1, nSheetViewTab), u"Sheet Note"_ustr,
+                                            &aAuthor, &aDate, true);
+
+        // Verify note on default view at A5 (value 3)
+        ScPostIt* pNoteDefault = pDocument->GetNote(ScAddress(0, 4, 0));
+        CPPUNIT_ASSERT(pNoteDefault);
+        CPPUNIT_ASSERT_EQUAL(u"Sheet Note"_ustr, pNoteDefault->GetText());
+
+        // Verify note on sheet view at A2 (value 3)
+        ScPostIt* pNoteSheet = pDocument->GetNote(ScAddress(0, 1, nSheetViewTab));
+        CPPUNIT_ASSERT(pNoteSheet);
+        CPPUNIT_ASSERT_EQUAL(u"Sheet Note"_ustr, pNoteSheet->GetText());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MoveBlock_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");

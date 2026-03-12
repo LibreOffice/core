@@ -37,11 +37,10 @@ bool ReplaceNoteTextOperation::runImplementation()
     ScDocShellModificator aModificator(mrDocShell);
     ScDocument& rDoc = mrDocShell.GetDocument();
 
-    if (!checkSheetViewProtection())
-        return false;
+    ScAddress aPos = convertAddress(maPos);
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
-        rDoc, maPos.Tab(), maPos.Col(), maPos.Row(), maPos.Col(), maPos.Row());
+        rDoc, aPos.Tab(), aPos.Col(), aPos.Row(), aPos.Col(), aPos.Row());
     if (aTester.IsEditable())
     {
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
@@ -49,13 +48,13 @@ bool ReplaceNoteTextOperation::runImplementation()
             = (pDrawLayer && rDoc.IsUndoEnabled()) ? mrDocShell.GetUndoManager() : nullptr;
 
         ScNoteData aOldData;
-        std::unique_ptr<ScPostIt> pOldNote = rDoc.ReleaseNote(maPos);
+        std::unique_ptr<ScPostIt> pOldNote = rDoc.ReleaseNote(aPos);
         sal_uInt32 nNoteId = 0;
         if (pOldNote)
         {
             nNoteId = pOldNote->GetId();
             // ensure existing caption object before draw undo tracking starts
-            pOldNote->GetOrCreateCaption(maPos);
+            pOldNote->GetOrCreateCaption(aPos);
             // rescue note data for undo
             aOldData = pOldNote->GetNoteData();
         }
@@ -71,8 +70,7 @@ bool ReplaceNoteTextOperation::runImplementation()
         // create new note (creates drawing undo action for the new caption object)
         ScNoteData aNewData;
         ScPostIt* pNewNote = nullptr;
-        if ((pNewNote
-             = ScNoteUtil::CreateNoteFromString(rDoc, maPos, maText, false, true, nNoteId)))
+        if ((pNewNote = ScNoteUtil::CreateNoteFromString(rDoc, aPos, maText, false, true, nNoteId)))
         {
             if (moAuthor)
                 pNewNote->SetAuthor(*moAuthor);
@@ -86,12 +84,14 @@ bool ReplaceNoteTextOperation::runImplementation()
         // create the undo action
         if (pUndoMgr && (aOldData.mxCaption || aNewData.mxCaption))
             pUndoMgr->AddUndoAction(std::make_unique<ScUndoReplaceNote>(
-                mrDocShell, maPos, aOldData, aNewData, pDrawLayer->GetCalcUndo()));
+                mrDocShell, aPos, aOldData, aNewData, pDrawLayer->GetCalcUndo()));
 
         // repaint cell (to make note marker visible)
-        mrDocShell.PostPaintCell(maPos);
+        mrDocShell.PostPaintCell(aPos);
 
-        rDoc.SetStreamValid(maPos.Tab(), false);
+        rDoc.SetStreamValid(aPos.Tab(), false);
+
+        syncSheetViews();
 
         aModificator.SetDocumentModified();
 
@@ -100,7 +100,7 @@ bool ReplaceNoteTextOperation::runImplementation()
         {
             ScDocShell::LOKCommentNotify(hadOldNote ? LOKCommentNotificationType::Modify
                                                     : LOKCommentNotificationType::Add,
-                                         rDoc, maPos, pNewNote);
+                                         rDoc, aPos, pNewNote);
         }
 
         return true;
