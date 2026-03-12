@@ -255,11 +255,12 @@ void VirtualDevice::dispose()
     OutputDevice::dispose();
 }
 
-bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase, bool bAlphaMaskTransparent)
+bool VirtualDevice::SetOutputSizePixel(const Size& rNewSize, bool bErase,
+                                       bool bAlphaMaskTransparent)
 {
-    SAL_INFO( "vcl.virdev",
-              "VirtualDevice::InnerImplSetOutputSizePixel( " << rNewSize.Width() << ", "
-              << rNewSize.Height() << ", " << int(bErase) << " )" );
+    SAL_INFO("vcl.virdev", "VirtualDevice::SetOutputSizePixel( " << rNewSize.Width() << ", "
+                                                                 << rNewSize.Height() << ", "
+                                                                 << int(bErase) << " )");
 
     if ( !mpVirDev )
         return false;
@@ -342,11 +343,6 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     }
 
     return bRet;
-}
-
-bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase, bool bAlphaMaskTransparent )
-{
-    return InnerImplSetOutputSizePixel(rNewSize, bErase, bAlphaMaskTransparent);
 }
 
 void VirtualDevice::EnableRTL( bool bEnable )
