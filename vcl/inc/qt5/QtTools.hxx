@@ -134,10 +134,9 @@ inline QImage::Format getBitFormat(vcl::PixelFormat ePixelFormat)
         case vcl::PixelFormat::N32_BPP:
             return Qt_DefaultFormat32;
         default:
-            std::abort();
-            break;
+            assert(false && "Unhandled vcl::PixelFormat value");
+            return QImage::Format_Invalid;
     }
-    return QImage::Format_Invalid;
 }
 
 inline sal_uInt16 getFormatBits(QImage::Format eFormat)
@@ -154,7 +153,7 @@ inline sal_uInt16 getFormatBits(QImage::Format eFormat)
         case QImage::Format_ARGB32_Premultiplied:
             return 32;
         default:
-            std::abort();
+            assert(false && "Unhandled QImage::Format value");
             return 0;
     }
 }
