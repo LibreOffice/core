@@ -25,6 +25,7 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/historyoptions.hxx>
+#include <vcl/bitmaps.hlst>
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -85,12 +86,12 @@ Bitmap Url2Icon(std::u16string_view rURL, const Ext2IconMap& rExtToIcon, const O
 Bitmap getDefaultThumbnail(const OUString& rURL)
 {
     static const Ext2IconMap BitmapForExtension
-        = { { sfx2::ApplicationType::TYPE_WRITER, SFX_FILE_THUMBNAIL_TEXT },
-            { sfx2::ApplicationType::TYPE_CALC, SFX_FILE_THUMBNAIL_SHEET },
-            { sfx2::ApplicationType::TYPE_IMPRESS, SFX_FILE_THUMBNAIL_PRESENTATION },
-            { sfx2::ApplicationType::TYPE_DRAW, SFX_FILE_THUMBNAIL_DRAWING },
-            { sfx2::ApplicationType::TYPE_DATABASE, SFX_FILE_THUMBNAIL_DATABASE },
-            { sfx2::ApplicationType::TYPE_MATH, SFX_FILE_THUMBNAIL_MATH } };
+        = { { sfx2::ApplicationType::TYPE_WRITER, RID_FILE_THUMBNAIL_TEXT },
+            { sfx2::ApplicationType::TYPE_CALC, RID_FILE_THUMBNAIL_SHEET },
+            { sfx2::ApplicationType::TYPE_IMPRESS, RID_FILE_THUMBNAIL_PRESENTATION },
+            { sfx2::ApplicationType::TYPE_DRAW, RID_FILE_THUMBNAIL_DRAWING },
+            { sfx2::ApplicationType::TYPE_DATABASE, RID_FILE_THUMBNAIL_DATABASE },
+            { sfx2::ApplicationType::TYPE_MATH, RID_FILE_THUMBNAIL_MATH } };
 
     static const Ext2IconMap EncryptedBitmapForExtension
         = { { sfx2::ApplicationType::TYPE_WRITER, BMP_128X128_WRITER_DOC },
@@ -103,7 +104,7 @@ Bitmap getDefaultThumbnail(const OUString& rURL)
     const std::map<sfx2::ApplicationType, OUString>& rWhichMap
         = IsDocEncrypted(rURL) ? EncryptedBitmapForExtension : BitmapForExtension;
 
-    return Url2Icon(rURL, rWhichMap, SFX_FILE_THUMBNAIL_DEFAULT);
+    return Url2Icon(rURL, rWhichMap, RID_FILE_THUMBNAIL_DEFAULT);
 }
 
 Bitmap getModuleOverlay(std::u16string_view rURL)

@@ -14,4 +14,12 @@ inline constexpr OUString RID_BITMAP_HLDOC = u"res/hldoctp.png"_ustr;
 inline constexpr OUString RID_BITMAP_HLDOCN = u"res/hldocntp.png"_ustr;
 inline constexpr OUString RID_BITMAP_HLMAIL = u"res/hlmailtp.png"_ustr;
 
+inline constexpr OUString RID_FILE_THUMBNAIL_TEXT = u"res/writer128.png"_ustr;
+inline constexpr OUString RID_FILE_THUMBNAIL_SHEET = u"res/calc128.png"_ustr;
+inline constexpr OUString RID_FILE_THUMBNAIL_PRESENTATION = u"res/impress128.png"_ustr;
+inline constexpr OUString RID_FILE_THUMBNAIL_DRAWING = u"res/draw128.png"_ustr;
+inline constexpr OUString RID_FILE_THUMBNAIL_DATABASE = u"res/base128.png"_ustr;
+inline constexpr OUString RID_FILE_THUMBNAIL_MATH = u"res/math128.png"_ustr;
+inline constexpr OUString RID_FILE_THUMBNAIL_DEFAULT = u"res/main128.png"_ustr;
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
