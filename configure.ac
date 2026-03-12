@@ -16291,7 +16291,7 @@ if test -n "$WSL_ONLY_AS_HELPER"; then
     BUILDDIR="$formatted_path"
     # TARFILE_LOCATION and JAVAINTERPRETER are used in the validator scripts
     PathFormat "$TARFILE_LOCATION"
-    TARFILE_LOCATION_="$formatted_path"
+    TARFILE_LOCATION="$formatted_path"
     PathFormat "$JAVAINTERPRETER"
     JAVAINTERPRETER="$formatted_path"
     # git-bash has (gnu) tar, curl and sha256sum
