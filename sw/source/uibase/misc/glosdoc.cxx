@@ -52,6 +52,7 @@
 
 #ifdef _WIN32
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <osl/file.hxx>
 #include <shlwapi.h>
 #endif
 
