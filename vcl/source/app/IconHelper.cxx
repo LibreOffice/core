@@ -10,6 +10,8 @@
 #include <IconHelper.hxx>
 #include <svdata.hxx>
 
+#include <vcl/bitmaps.hlst>
+
 OUString IconHelper::GetAppIconName(sal_uInt16 nIcon)
 {
     switch (nIcon)
@@ -28,6 +30,27 @@ OUString IconHelper::GetAppIconName(sal_uInt16 nIcon)
             return u"libreoffice-math"_ustr;
         default:
             return u"libreoffice-startcenter"_ustr;
+    }
+}
+
+OUString IconHelper::GetInternalAppIconName(sal_uInt16 nIcon)
+{
+    switch (nIcon)
+    {
+        case SV_ICON_ID_TEXT:
+            return RID_FILE_THUMBNAIL_TEXT;
+        case SV_ICON_ID_SPREADSHEET:
+            return RID_FILE_THUMBNAIL_SHEET;
+        case SV_ICON_ID_DRAWING:
+            return RID_FILE_THUMBNAIL_DRAWING;
+        case SV_ICON_ID_PRESENTATION:
+            return RID_FILE_THUMBNAIL_PRESENTATION;
+        case SV_ICON_ID_DATABASE:
+            return RID_FILE_THUMBNAIL_DATABASE;
+        case SV_ICON_ID_FORMULA:
+            return RID_FILE_THUMBNAIL_MATH;
+        default:
+            return RID_FILE_THUMBNAIL_DEFAULT;
     }
 }
 

@@ -346,6 +346,8 @@ void QtFrame::SetIcon(sal_uInt16 nIcon)
 
     const QString sAppIcon = toQString(IconHelper::GetAppIconName(nIcon));
     QIcon aIcon = QIcon::fromTheme(sAppIcon);
+    if (aIcon.isNull())
+        aIcon = loadQPixmapIcon(IconHelper::GetInternalAppIconName(nIcon));
     m_pQWidget->window()->setWindowIcon(aIcon);
 
     if (QGuiApplication::platformName() == "wayland" && m_pQWidget->window()->isVisible())
