@@ -51,6 +51,8 @@ typedef struct CGContext *CGContextRef;
 
 struct VCL_DLLPUBLIC SystemEnvData
 {
+    SalFrame*           pSalFrame;      // contains a salframe, if object has one
+    void*               pWidget;        // the corresponding widget
 #if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
 #elif defined( MACOSX )
@@ -62,8 +64,6 @@ struct VCL_DLLPUBLIC SystemEnvData
     // Nothing
 #elif defined( UNX )
     void*               pDisplay;       // the relevant display connection
-    SalFrame*           pSalFrame;      // contains a salframe, if object has one
-    void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
     int                 nScreen;        // the current screen of the window
 private:
@@ -82,17 +82,17 @@ public:
 #endif
 
     SystemEnvData()
+        : pSalFrame(nullptr)
+        , pWidget(nullptr)
 #if defined(_WIN32)
-        : hWnd(nullptr)
+        , hWnd(nullptr)
 #elif defined( MACOSX )
-        : mpNSView(nullptr)
+        , mpNSView(nullptr)
         , mbOpenGL(false)
 #elif defined( ANDROID )
 #elif defined( IOS )
 #elif defined( UNX )
-        : pDisplay(nullptr)
-        , pSalFrame(nullptr)
-        , pWidget(nullptr)
+        , pDisplay(nullptr)
         , pVisual(nullptr)
         , nScreen(0)
         , aWindow(0)

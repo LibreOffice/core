@@ -5770,6 +5770,7 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
             // when messages are being sent by CreateWindow()
             pFrame->mhWnd = hWnd;
             pFrame->maSysData.hWnd = hWnd;
+            pFrame->maSysData.pSalFrame = pFrame;
 
             DWORD dwPanWant = GC_PAN | GC_PAN_WITH_SINGLE_FINGER_VERTICALLY
                               | GC_PAN_WITH_SINGLE_FINGER_HORIZONTALLY;

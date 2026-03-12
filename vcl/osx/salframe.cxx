@@ -243,6 +243,7 @@ void AquaSalFrame::initWindowAndView()
 
     [mpNSWindow setRestorable:NO];
 
+    maSysData.pSalFrame = this;
     maSysData.mpNSView = mpNSView;
 
     UpdateFrameGeometry();
