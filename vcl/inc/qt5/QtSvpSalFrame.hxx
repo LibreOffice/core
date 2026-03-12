@@ -23,7 +23,16 @@
 
 #include <headless/CairoCommon.hxx>
 
+#include <vcl/cairo.hxx>
+
 class QtSvpGraphics;
+
+struct CairoDeleter
+{
+    void operator()(cairo_surface_t* pSurface) const;
+};
+
+using UniqueCairoSurface = std::unique_ptr<cairo_surface_t, CairoDeleter>;
 
 class VCLPLUG_QT_PUBLIC QtSvpSalFrame final : public QtFrame
 {

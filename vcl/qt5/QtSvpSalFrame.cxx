@@ -21,6 +21,8 @@
 #include <QtSvpSalFrame.hxx>
 #include <QtSvpSalFrame.moc>
 
+void CairoDeleter::operator()(cairo_surface_t* pSurface) const { cairo_surface_destroy(pSurface); }
+
 static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                              sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight)
 {

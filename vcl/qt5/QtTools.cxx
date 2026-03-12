@@ -25,8 +25,6 @@
 #include <QtTransferable.hxx>
 #include <unx/fontmanager.hxx>
 
-#include <cairo.h>
-
 #include <o3tl/enumarray.hxx>
 #include <tools/stream.hxx>
 #include <vcl/event.hxx>
@@ -38,8 +36,6 @@
 
 #include <QtCore/QBuffer>
 #include <QtGui/QImage>
-
-void CairoDeleter::operator()(cairo_surface_t* pSurface) const { cairo_surface_destroy(pSurface); }
 
 Qt::Alignment toQtAlignment(TxtAlign eAlign)
 {
