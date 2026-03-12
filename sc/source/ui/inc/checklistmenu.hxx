@@ -215,14 +215,14 @@ private:
     void selectCurrentMemberOnly(bool bSet);
     void updateMemberParents(const weld::TreeIter* pLeaf, size_t nIdx);
 
-    std::unique_ptr<weld::TreeIter> ShowCheckEntry(const OUString& sName, ScCheckListMember& rMember, bool bShow = true, bool bCheck = true);
+    std::unique_ptr<weld::TreeIter> ShowCheckEntry(const OUString& sName, ScCheckListMember& rMember, bool bShow = true, bool bCheck = true, bool bLockMarked = false);
     void CheckEntry(std::u16string_view sName, const weld::TreeIter* pParent, bool bCheck);
-    void CheckEntry(const weld::TreeIter& rEntry, bool bCheck);
+    void CheckEntry(const weld::TreeIter& rEntry, bool bCheck, bool bLock = false);
     void GetRecursiveChecked(const weld::TreeIter* pEntry, std::unordered_set<OUString>& vOut, OUString& rLabel);
     std::unordered_set<OUString> GetAllChecked();
     bool IsChecked(std::u16string_view sName, const weld::TreeIter* pParent);
     int GetCheckedEntryCount() const;
-    void CheckAllChildren(const weld::TreeIter& rEntry, bool bCheck);
+    void CheckAllChildren(const weld::TreeIter& rEntry, bool bCheck, bool bLock);
 
     void setSelectedMenuItem(size_t nPos);
 
