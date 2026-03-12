@@ -378,24 +378,13 @@ void QtInstance::deleteObjectLater(QObject* pObject) { pObject->deleteLater(); }
 
 SalFrame* QtInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
 {
-    SolarMutexGuard aGuard;
-    SalFrame* pRet(nullptr);
-    RunInMainThread([&]() { pRet = new QtFrame(nullptr, nStyle, useCairo()); });
-    assert(pRet);
-    return pRet;
+    return CreateFrame(nStyle, nullptr);
 }
 
 SalFrame* QtInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle)
 {
-    SolarMutexGuard aGuard;
-
     assert(!pParent || dynamic_cast<QtFrame*>(pParent));
-
-    SalFrame* pRet(nullptr);
-    RunInMainThread(
-        [&]() { pRet = new QtFrame(static_cast<QtFrame*>(pParent), nStyle, useCairo()); });
-    assert(pRet);
-    return pRet;
+    return CreateFrame(nStyle, static_cast<QtFrame*>(pParent));
 }
 
 void QtInstance::DestroyFrame(SalFrame* pFrame)
@@ -806,6 +795,16 @@ void QtInstance::screenRemoved(QScreen*) { notifyDisplayChanged(); }
 void QtInstance::colorSchemeChanged() { UpdateStyle(false); }
 
 void QtInstance::virtualGeometryChanged(const QRect&) { notifyDisplayChanged(); }
+
+QtFrame* QtInstance::CreateFrame(SalFrameStyleFlags nStyle, QtFrame* pParent)
+{
+    SolarMutexGuard aGuard;
+
+    QtFrame* pFrame = nullptr;
+    RunInMainThread([&]() { pFrame = new QtFrame(pParent, nStyle, useCairo()); });
+
+    return pFrame;
+}
 
 std::unique_ptr<QApplication> QtInstance::CreateQApplication()
 {

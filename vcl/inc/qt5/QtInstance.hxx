@@ -233,6 +233,7 @@ public:
     static bool isQtWeldingEnabled();
 
 private:
+    QtFrame* CreateFrame(SalFrameStyleFlags nStyle, QtFrame* pParent);
     std::unique_ptr<QApplication> CreateQApplication();
 
     // encodes cairo usage and Qt platform name into the ToolkitName
