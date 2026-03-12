@@ -51,6 +51,9 @@
 #include <addressconverter.hxx>
 #include <biffhelper.hxx>
 #include <dapiuno.hxx>
+#include <formulaparser.hxx>
+#include <tokenarray.hxx>
+#include <tokenuno.hxx>
 
 namespace oox::xls {
 
@@ -371,6 +374,8 @@ PCFieldModel::PCFieldModel() :
 {
 }
 
+PCFieldModel::~PCFieldModel() = default;
+
 PCSharedItemsModel::PCSharedItemsModel() :
     mbHasSemiMixed( true ),
     mbHasNonDate( true ),
@@ -494,7 +499,22 @@ void PivotCacheField::importPCDField( SequenceInputStream& rStrm )
     if( getFlag( nFlags, BIFF12_PCDFIELD_HASCAPTION ) )
         rStrm >> maFieldModel.maCaption;
     if( getFlag( nFlags, BIFF12_PCDFIELD_HASFORMULA ) )
-        rStrm.skip( ::std::max< sal_Int32 >( rStrm.readInt32(), 0 ) );
+    {
+        // PivotParsedFormula: cce(4) + rgce(cce) + cb(4) + rgcb(cb)
+        // Save entire formula blob for deferred resolution in resolveCalculatedFieldFormulas()
+        sal_Int32 nCce = ::std::max< sal_Int32 >( rStrm.readInt32(), 0 );
+        std::vector< sal_Int8 >& rBuf = maFieldModel.maRawFormula;
+        rBuf.resize( 4 + nCce );
+        memcpy( rBuf.data(), &nCce, 4 );
+        if( nCce > 0 )
+            rStrm.readMemory( rBuf.data() + 4, nCce );
+        // cb(4) + rgcb(cb)
+        sal_Int32 nCb = ::std::max<sal_Int32>(rStrm.readInt32(), 0);
+        rBuf.resize( 4 + nCce + 4 + nCb );
+        memcpy( rBuf.data() + 4 + nCce, &nCb, 4 );
+        if( nCb > 0 )
+            rStrm.readMemory( rBuf.data() + 4 + nCce + 4, nCb );
+    }
     if( maFieldModel.mnMappingCount > 0 )
         rStrm.skip( ::std::max< sal_Int32 >( rStrm.readInt32(), 0 ) );
     if( getFlag( nFlags, BIFF12_PCDFIELD_HASPROPERTYNAME ) )
@@ -524,6 +544,14 @@ void PivotCacheField::importPCDFSharedItems( SequenceInputStream& rStrm )
 void PivotCacheField::importPCDFSharedItem( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     maSharedItems.importItem( nRecId, rStrm );
+}
+
+void PivotCacheField::importPCDPName( SequenceInputStream& rStrm )
+{
+    // BrtBeginPName: ifdb(4) + ifn(1) + fErrName(1 bit)+reserved(7 bits) = 6 bytes
+    sal_uInt32 nIfdb = rStrm.readuInt32();
+    rStrm.skip( 2 ); // ifn (1 byte) + fErrName+reserved (1 byte)
+    maFieldModel.maPNameFieldIndices.push_back( nIfdb );
 }
 
 void PivotCacheField::importPCDFieldGroup( SequenceInputStream& rStrm )
@@ -995,6 +1023,51 @@ PivotCacheField& PivotCache::createCacheField()
     PivotCacheFieldVector::value_type xCacheField = std::make_shared<PivotCacheField>( *this, true/*bIsDatabaseField*/ );
     maFields.push_back( xCacheField );
     return *xCacheField;
+}
+
+void PivotCache::resolveCalculatedFieldFormulas()
+{
+    // All cache field names
+    std::vector<OUString> aFieldNames;
+
+    for (const auto& rxField : maFields)
+    {
+        PCFieldModel& rModel = rxField->getFieldModel();
+        if (rModel.maRawFormula.empty())
+            continue;
+
+        // Build field names once (needed for PtgSxName resolution)
+        if (aFieldNames.empty())
+        {
+            aFieldNames.reserve(maFields.size());
+            for (const auto& rxF : maFields)
+                aFieldNames.push_back(rxF->getName());
+        }
+
+        // Set per-field pivot context: each calculated field has its own PNAMES collection
+        getFormulaParser().setPivotFieldContext(rModel.maPNameFieldIndices, aFieldNames);
+
+        // Wrap the saved PivotParsedFormula blob in a SequenceInputStream
+        StreamDataSequence aSeq(rModel.maRawFormula.data(),
+                                static_cast<sal_Int32>(rModel.maRawFormula.size()));
+        SequenceInputStream aStrm(aSeq);
+
+        // Parse using the existing BIFF12 formula parser (produces ocDPFieldName tokens)
+        ApiTokenSequence aTokens = getFormulaParser().importFormula(
+            ScAddress(ScAddress::INITIALIZE_INVALID), FormulaType::Cell, aStrm);
+
+        getFormulaParser().clearPivotFieldContext();
+
+        // Convert ApiTokenSequence to ScTokenArray with proper ocDPFieldName tokens
+        ScDocument& rDoc = getScDocument();
+        auto pTokenArray = std::make_unique<ScTokenArray>(rDoc);
+        ScTokenConversion::ConvertToTokenArray(rDoc, *pTokenArray, aTokens);
+
+        if (pTokenArray->GetLen())
+            rModel.mpFormulaTokens = std::move(pTokenArray);
+
+        rModel.maRawFormula.clear();
+    }
 }
 
 void PivotCache::finalizeImport()

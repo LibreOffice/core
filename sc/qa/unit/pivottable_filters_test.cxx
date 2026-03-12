@@ -2645,7 +2645,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testFirstHeaderRowZero)
     assertXPath(pDoc, "/x:pivotTableDefinition/x:location", "firstHeaderRow", u"0");
 }
 
-static void verifyCalcFields(ScDocument* pDoc)
+static void verifyCalcFields(ScDocument* pDoc, bool bBIFF12 = false)
 {
     // Verify cell values
     // "SUM - Field1"
@@ -2665,7 +2665,7 @@ static void verifyCalcFields(ScDocument* pDoc)
     CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 2, 1)));
     CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, pDoc->GetString(ScAddress(6, 5, 1)));
 
-    // Verify calculated field definitions survived the round-trip
+    // Verify calculated field definitions
     ScDPCollection* pDPs = pDoc->GetDPCollection();
     CPPUNIT_ASSERT(pDPs);
     ScDPObject& rDPObj = (*pDPs)[0];
@@ -2679,14 +2679,18 @@ static void verifyCalcFields(ScDocument* pDoc)
     CPPUNIT_ASSERT_EQUAL(u"Field1"_ustr, rCalcFields[0]->maFieldName);
     CPPUNIT_ASSERT_EQUAL(u"='Field A'*20"_ustr, rCalcFields[0]->maCalculation);
     // Field2 = SUM('Field A', 'Field B')
+    // BIFF12 formula decompilation omits space after comma
     CPPUNIT_ASSERT_EQUAL(u"Field2"_ustr, rCalcFields[1]->maFieldName);
-    CPPUNIT_ASSERT_EQUAL(u"=SUM('Field A', 'Field B')"_ustr, rCalcFields[1]->maCalculation);
+    CPPUNIT_ASSERT_EQUAL(bBIFF12 ? u"=SUM('Field A','Field B')"_ustr
+                                 : u"=SUM('Field A', 'Field B')"_ustr,
+                         rCalcFields[1]->maCalculation);
     // Field3 = Name * 2
     CPPUNIT_ASSERT_EQUAL(u"Field3"_ustr, rCalcFields[2]->maFieldName);
     CPPUNIT_ASSERT_EQUAL(u"=Name*2"_ustr, rCalcFields[2]->maCalculation);
     // Field4 = 2/0
+    // BIFF12 formula decompilation adds space before number literal
     CPPUNIT_ASSERT_EQUAL(u"Field4"_ustr, rCalcFields[3]->maFieldName);
-    CPPUNIT_ASSERT_EQUAL(u"=2/0"_ustr, rCalcFields[3]->maCalculation);
+    CPPUNIT_ASSERT_EQUAL(bBIFF12 ? u"= 2/0"_ustr : u"=2/0"_ustr, rCalcFields[3]->maCalculation);
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSX)
@@ -2913,6 +2917,18 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testGroupAndCalcFieldXLSX)
                 u"b* c");
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "databaseField",
                 u"0");
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSB)
+{
+    createScDoc("xlsb/pivot-table/calcfields.xlsb");
+
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->ReloadAllLinks();
+    ScDocument* pDoc = getScDoc();
+    pDoc->CalcAll();
+
+    verifyCalcFields(pDoc, /*bBIFF12=*/true);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

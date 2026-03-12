@@ -76,7 +76,12 @@ ContextHandlerRef PivotCacheFieldContext::onCreateRecordContext( sal_Int32 nRecI
             {
                 case BIFF12_ID_PCDFSHAREDITEMS: mrCacheField.importPCDFSharedItems( rStrm );  return this;
                 case BIFF12_ID_PCDFIELDGROUP:   mrCacheField.importPCDFieldGroup( rStrm );    return this;
+                case BIFF12_ID_PCDPNAMES:       return this;
             }
+        break;
+
+        case BIFF12_ID_PCDPNAMES:
+            if( nRecId == BIFF12_ID_PCDPNAME ) mrCacheField.importPCDPName( rStrm );
         break;
 
         case BIFF12_ID_PCDFIELDGROUP:
@@ -175,6 +180,8 @@ const RecordInfo* PivotCacheDefinitionFragment::getRecordInfos() const
         { BIFF12_ID_PCDFRANGEPR,        BIFF12_ID_PCDFRANGEPR + 1       },
         { BIFF12_ID_PCDFSHAREDITEMS,    BIFF12_ID_PCDFSHAREDITEMS + 1   },
         { BIFF12_ID_PCITEM_ARRAY,       BIFF12_ID_PCITEM_ARRAY + 1      },
+        { BIFF12_ID_PCDPNAME,           BIFF12_ID_PCDPNAME + 1          },
+        { BIFF12_ID_PCDPNAMES,          BIFF12_ID_PCDPNAMES + 1         },
         { BIFF12_ID_PCDSHEETSOURCE,     BIFF12_ID_PCDSHEETSOURCE + 1    },
         { BIFF12_ID_PCDSOURCE,          BIFF12_ID_PCDSOURCE + 1         },
         { -1,                           -1                              }
@@ -184,6 +191,9 @@ const RecordInfo* PivotCacheDefinitionFragment::getRecordInfos() const
 
 void PivotCacheDefinitionFragment::finalizeImport()
 {
+    // Resolve deferred BIFF12 calculated field formulas (no-op for OOXML)
+    mrPivotCache.resolveCalculatedFieldFormulas();
+
     // finalize the cache (check source range etc.)
     mrPivotCache.finalizeImport();
 

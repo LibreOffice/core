@@ -34,6 +34,7 @@
 #include <defnamesbuffer.hxx>
 #include <externallinkbuffer.hxx>
 #include <tablebuffer.hxx>
+#include <formula/compiler.hxx>
 #include <o3tl/string_view.hxx>
 
 namespace oox::xls {
@@ -434,6 +435,13 @@ public:
     /** Tries to resolve the passed ref-id to an OLE target URL. */
     OUString            resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const;
 
+    /** Sets pivot field context for PtgSxName resolution. */
+    void                setPivotFieldContext(
+                            const std::vector<sal_uInt32>& rPNameFieldIndices,
+                            const std::vector<OUString>& rFieldNames );
+    /** Clears pivot field context. */
+    void                clearPivotFieldContext();
+
 protected:
     typedef ::std::pair< sal_Int32, bool >  WhiteSpace;
     typedef ::std::vector< WhiteSpace >     WhiteSpaceVec;
@@ -536,6 +544,10 @@ protected:
     bool                mb2dRefsAs3dRefs;           /// True = convert all 2D references to 3D references in sheet specified by base address.
     bool                mbSpecialTokens;            /// True = special handling for tExp and tTbl tokens, false = exit with error.
 
+    // Pivot field context for resolving PtgSxName during BIFF12 import
+    std::vector<sal_uInt32> maPivotPNameIndices;    /// PNAMES field indices.
+    std::vector<OUString>  maPivotFieldNames;       /// Cache field names.
+
 private:
     ApiTokenVector      maTokenStorage;             /// Raw unordered token storage.
     std::vector<size_t> maTokenIndexes;             /// Indexes into maTokenStorage.
@@ -584,6 +596,20 @@ OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId, bool bUseRefShee
     if( pExtLink && (pExtLink->getLinkType() == ExternalLinkType::OLE) )
          return getBaseFilter().getAbsoluteUrl( pExtLink->getTargetUrl() );
     return OUString();
+}
+
+void FormulaParserImpl::setPivotFieldContext(
+    const std::vector<sal_uInt32>& rPNameFieldIndices,
+    const std::vector<OUString>& rFieldNames )
+{
+    maPivotPNameIndices = rPNameFieldIndices;
+    maPivotFieldNames = rFieldNames;
+}
+
+void FormulaParserImpl::clearPivotFieldContext()
+{
+    maPivotPNameIndices.clear();
+    maPivotFieldNames.clear();
 }
 
 void FormulaParserImpl::initializeImport( const ScAddress& rBaseAddr, FormulaType eType )
@@ -1188,6 +1214,7 @@ private:
     bool                importAttrToken( SequenceInputStream& rStrm );
     bool                importSpaceToken( SequenceInputStream& rStrm );
     bool                importTableToken( SequenceInputStream& rStrm );
+    bool                importPivotToken( SequenceInputStream& rStrm );
     bool                importArrayToken( SequenceInputStream& rStrm );
     bool                importRefToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
     bool                importAreaToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
@@ -1290,7 +1317,15 @@ ApiTokenSequence OoxFormulaParserImpl::importBiff12Formula( const ScAddress& rBa
                 case BIFF_TOKID_PAREN:      bOk = pushParenthesesOperator();                                    break;
                 case BIFF_TOKID_MISSARG:    bOk = pushOperand( OPCODE_MISSING );                                break;
                 case BIFF_TOKID_STR:        bOk = pushValueOperand( BiffHelper::readString( rStrm, false ) );   break;
-                case BIFF_TOKID_NLR:        bOk = importTableToken( rStrm );                                    break;
+                case BIFF_TOKID_NLR:
+                {
+                    sal_uInt8 nNlrType = rStrm.readuChar();
+                    if( nNlrType == BIFF_TOK_NLR_SXNAME )
+                        bOk = importPivotToken( rStrm );
+                    else
+                        bOk = importTableToken( rStrm );
+                    break;
+                }
                 case BIFF_TOKID_ATTR:       bOk = importAttrToken( rStrm );                                     break;
                 case BIFF_TOKID_ERR:        bOk = pushBiffErrorOperand( rStrm.readuInt8() );                    break;
                 case BIFF_TOKID_BOOL:       bOk = pushBiffBoolOperand( rStrm.readuInt8() );                     break;
@@ -1408,10 +1443,28 @@ bool OoxFormulaParserImpl::importSpaceToken( SequenceInputStream& rStrm )
     return true;
 }
 
+bool OoxFormulaParserImpl::importPivotToken( SequenceInputStream& rStrm )
+{
+    // PtgSxName: pivot table field name reference.
+    // Payload after eptg: sxIndex(4 bytes) only.
+    // Resolve via PNAMES to cache field name, push as ocDPFieldName operand
+    sal_uInt32 nIdx = rStrm.readuInt32();
+    OUString aFieldName;
+    if( nIdx < maPivotPNameIndices.size() )
+    {
+        sal_uInt32 nFld = maPivotPNameIndices[nIdx];
+        if( nFld < maPivotFieldNames.size() )
+            aFieldName = maPivotFieldNames[nFld];
+    }
+    if( aFieldName.isEmpty() )
+        return pushBiffErrorOperand( BIFF_ERR_REF );
+    return pushValueOperand( aFieldName, SC_OPCODE_DP_FIELD );
+}
+
 bool OoxFormulaParserImpl::importTableToken( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags, nTableId, nCol1, nCol2;
-    rStrm.skip( 3 );
+    rStrm.skip( 2 );
     nFlags = rStrm.readuInt16();
     nTableId = rStrm.readuInt16();
     rStrm.skip( 2 );
@@ -1766,6 +1819,18 @@ ApiTokenSequence FormulaParser::importFormula( const ScAddress& rBaseAddress, co
 ApiTokenSequence FormulaParser::importFormula( const ScAddress& rBaseAddress, FormulaType eType, SequenceInputStream& rStrm ) const
 {
     return mxImpl->importBiff12Formula( rBaseAddress, eType, rStrm );
+}
+
+void FormulaParser::setPivotFieldContext(
+    const std::vector<sal_uInt32>& rPNameFieldIndices,
+    const std::vector<OUString>& rFieldNames )
+{
+    mxImpl->setPivotFieldContext( rPNameFieldIndices, rFieldNames );
+}
+
+void FormulaParser::clearPivotFieldContext()
+{
+    mxImpl->clearPivotFieldContext();
 }
 
 OUString FormulaParser::importOleTargetLink( std::u16string_view aFormulaString )

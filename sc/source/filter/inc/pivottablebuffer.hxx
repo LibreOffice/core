@@ -189,6 +189,7 @@ private:
     OUString            maDPFieldName;      /// Name of the field in DataPilot field collection.
     sal_Int32           mnFieldIndex;       /// Zero-based index of this field.
     std::optional<OUString> maDPFieldFormula;/// Formula of the field in DataPilot field collection.
+    const ScTokenArray* mpCalcFieldTokens;  /// Pre-compiled formula tokens (BIFF12), not owned.
 };
 
 struct PTFilterModel

@@ -32,6 +32,7 @@ class ScDPSaveDimension;
 class ScDPObject;
 class Date;
 class ScDataPilotFieldObj;
+class ScTokenArray;
 
 namespace oox::xls {
 
@@ -128,7 +129,10 @@ struct PCFieldModel
     OUString     maName;             /// Fixed name of the cache field.
     OUString     maCaption;          /// Caption of the cache field.
     OUString     maPropertyName;     /// OLAP property name.
-    OUString     maFormula;          /// Formula of a calculated field.
+    OUString     maFormula;          /// Formula of a calculated field (OOXML XML).
+    std::unique_ptr<ScTokenArray> mpFormulaTokens; /// Pre-compiled calculated field formula (BIFF12).
+    std::vector< sal_Int8 > maRawFormula; /// Raw BIFF12 PivotParsedFormula (cce+rgce+cb+rgcb) for deferred resolution.
+    std::vector< sal_uInt32 > maPNameFieldIndices; /// BIFF12 PNAMES: per-field cache field indices for formula refs.
     sal_Int32           mnNumFmtId;         /// Number format for all items.
     sal_Int32           mnSqlType;          /// Data type from ODBC data source.
     sal_Int32           mnHierarchy;        /// Hierarchy this field is part of.
@@ -140,6 +144,7 @@ struct PCFieldModel
     bool                mbMemberPropField;  /// True = contains OLAP member properties.
 
     explicit            PCFieldModel();
+                        ~PCFieldModel();
 };
 
 struct PCSharedItemsModel
@@ -214,6 +219,8 @@ public:
 
     /** Imports pivot cache field settings from the PCDFIELD record. */
     void                importPCDField( SequenceInputStream& rStrm );
+    /** Reads a PNAME record (cache field reference used in calculated field formulas). */
+    void                importPCDPName( SequenceInputStream& rStrm );
     /** Imports shared items settings from the PCDFSHAREDITEMS record. */
     void                importPCDFSharedItems( SequenceInputStream& rStrm );
     /** Imports one or more shared items from the passed record. */
@@ -256,6 +263,10 @@ public:
     void            setFinalGroupName(const OUString& rFinalGroupName) { maFieldGroupModel.msFinalGroupName = rFinalGroupName; }
     /** Returns the formula of the cache calculated field. */
     const OUString& getFormula() const { return maFieldModel.maFormula; }
+    /** Returns the pre-compiled calculated field token array (BIFF12 only), or nullptr. */
+    const ScTokenArray* getFormulaTokenArray() const { return maFieldModel.mpFormulaTokens.get(); }
+    /** Returns the field model data (used by PivotCache for deferred BIFF12 formula resolution). */
+    PCFieldModel&       getFieldModel() { return maFieldModel; }
 
     /** Returns the shared or group item with the specified index. */
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
@@ -398,8 +409,10 @@ public:
     void                importPCRecord( SequenceInputStream& rStrm,
                             const WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const;
 
-private:
+    /** Resolves deferred BIFF12 calculated field formulas using PNAMES data. */
+    void                resolveCalculatedFieldFormulas();
 
+private:
     /** Finalizes the pivot cache if it is based on internal sheet data. */
     void                finalizeInternalSheetSource();
     /** Finalizes the pivot cache if it is based on sheet data of an external spreadsheet document. */

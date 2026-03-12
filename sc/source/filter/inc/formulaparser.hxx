@@ -113,6 +113,13 @@ public:
                             FormulaType eType,
                             SequenceInputStream& rStrm ) const;
 
+    /** Sets pivot field context for resolving PtgSxName tokens in BIFF12 formulas. */
+    void                setPivotFieldContext(
+                            const std::vector<sal_uInt32>& rPNameFieldIndices,
+                            const std::vector<OUString>& rFieldNames );
+    /** Clears pivot field context. */
+    void                clearPivotFieldContext();
+
     /** Converts the passed XML formula to an OLE link target. */
     OUString     importOleTargetLink( std::u16string_view aFormulaString );
 

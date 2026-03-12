@@ -260,7 +260,8 @@ void PTDataFieldModel::setBiffShowDataAs( sal_Int32 nShowDataAs )
 PivotTableField::PivotTableField( PivotTable& rPivotTable, sal_Int32 nFieldIndex ) :
     WorkbookHelper( rPivotTable ),
     mrPivotTable( rPivotTable ),
-    mnFieldIndex( nFieldIndex )
+    mnFieldIndex( nFieldIndex ),
+    mpCalcFieldTokens( nullptr )
 {
 }
 
@@ -394,18 +395,35 @@ std::pair<OUString, bool> PivotTableField::resolveCalculatedField( sal_Int32 nDa
         if (const PivotCacheField* pCacheField = mrPivotTable.getCacheField(mnFieldIndex))
         {
             aFieldName = pCacheField->getName();
+            // Prefer pre-built token array from BIFF12 import
+            mpCalcFieldTokens = pCacheField->getFormulaTokenArray();
             const OUString& rCalc = pCacheField->getFormula();
             if (!rCalc.isEmpty())
                 maDPFieldFormula = rCalc;
         }
     }
 
-    const bool bCalculatedField = (nDatabaseIdx == -1 && !aFieldName.isEmpty() && maDPFieldFormula);
+    const bool bCalculatedField = (nDatabaseIdx == -1 && !aFieldName.isEmpty()
+                                   && (maDPFieldFormula || mpCalcFieldTokens));
     return { aFieldName, bCalculatedField };
 }
 
 std::shared_ptr<ScTokenArray> PivotTableField::compileCalculatedFieldFormula()
 {
+    // Use pre-built token array from BIFF12 import if available
+    if (mpCalcFieldTokens)
+    {
+        // Clone the token array (deep copy with proper FormulaToken ref counting)
+        std::shared_ptr<ScTokenArray> pClone(mpCalcFieldTokens->Clone().release());
+        ScDocument& rDoc = getDocImport().getDoc();
+        ScAddress aAddr(ScAddress::INITIALIZE_INVALID);
+        ScCompiler aComp(rDoc, aAddr, *pClone,
+                         formula::FormulaGrammar::GRAM_OOXML);
+        aComp.CompileTokenArray(); // Generate RPN tokens.
+        return pClone;
+    }
+
+    // Fall back to string compilation for OOXML (XML) import
     if (!maDPFieldFormula)
         return nullptr;
 
