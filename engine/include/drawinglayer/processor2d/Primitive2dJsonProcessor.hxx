@@ -34,6 +34,7 @@ namespace drawinglayer::primitive2d
 class BasePrimitive2D;
 class TextSimplePortionPrimitive2D;
 class Primitive2DContainer;
+class SvgGradientHelper;
 }
 
 namespace drawinglayer::attribute
@@ -105,6 +106,7 @@ private:
     void
     writeTextPortionScaled(const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rPrim);
 
+    void writeSvgGradientCommon(const drawinglayer::primitive2d::SvgGradientHelper& rGradient);
     void writeGraphicData(const Graphic& rGraphic);
     void writeBitmapData(const Bitmap& rBitmap);
     void writeGradient(const drawinglayer::attribute::FillGradientAttribute& rGradient,

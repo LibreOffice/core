@@ -51,6 +51,7 @@
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/glowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
+#include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 
 #include <basegfx/utils/bgradient.hxx>
@@ -167,6 +168,37 @@ void Primitive2dJsonProcessor::writeBitmapData(const Bitmap& rBitmap)
     }
 
     writeGraphicBase64(mrWriter, aGraphic);
+}
+
+void Primitive2dJsonProcessor::writeSvgGradientCommon(
+    const drawinglayer::primitive2d::SvgGradientHelper& rGradient)
+{
+    writePathScaled(rGradient.getPolyPolygon());
+
+    switch (rGradient.getSpreadMethod())
+    {
+        case SpreadMethod::Pad:
+            mrWriter.put("spreadMethod", "pad");
+            break;
+        case SpreadMethod::Reflect:
+            mrWriter.put("spreadMethod", "reflect");
+            break;
+        case SpreadMethod::Repeat:
+            mrWriter.put("spreadMethod", "repeat");
+            break;
+    }
+
+    {
+        auto aStopsArray = mrWriter.startArray("colorStops");
+        for (const auto& rEntry : rGradient.getGradientEntries())
+        {
+            auto aStopNode = mrWriter.startStruct();
+            mrWriter.put("offset", rEntry.getOffset());
+            mrWriter.put("color", colorToHex(rEntry.getColor()));
+            if (rEntry.getOpacity() < 1.0)
+                mrWriter.put("opacity", rEntry.getOpacity());
+        }
+    }
 }
 
 void Primitive2dJsonProcessor::writeGradient(
@@ -1005,6 +1037,68 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         }
         break;
 
+        case PRIMITIVE2D_ID_SVGLINEARGRADIENTPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const SvgLinearGradientPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "svgLinearGradient");
+            mrWriter.put("startX", rPrimitive.getStart().getX() * mfScaleFactor);
+            mrWriter.put("startY", rPrimitive.getStart().getY() * mfScaleFactor);
+            mrWriter.put("endX", rPrimitive.getEnd().getX() * mfScaleFactor);
+            mrWriter.put("endY", rPrimitive.getEnd().getY() * mfScaleFactor);
+            writeSvgGradientCommon(rPrimitive);
+        }
+        break;
+
+        case PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D:
+        {
+            const auto& rPrimitive
+                = static_cast<const SvgRadialGradientPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "svgRadialGradient");
+            mrWriter.put("centerX", rPrimitive.getStart().getX() * mfScaleFactor);
+            mrWriter.put("centerY", rPrimitive.getStart().getY() * mfScaleFactor);
+            mrWriter.put("radius", rPrimitive.getRadius() * mfScaleFactor);
+
+            if (rPrimitive.isFocalSet())
+            {
+                mrWriter.put("focalX", rPrimitive.getFocal().getX() * mfScaleFactor);
+                mrWriter.put("focalY", rPrimitive.getFocal().getY() * mfScaleFactor);
+            }
+
+            writeSvgGradientCommon(rPrimitive);
+        }
+        break;
+
+        case PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const SvgLinearAtomPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "svgLinearAtom");
+            mrWriter.put("colorA", colorToHex(rPrimitive.getColorA()));
+            mrWriter.put("colorB", colorToHex(rPrimitive.getColorB()));
+            mrWriter.put("offsetA", rPrimitive.getOffsetA());
+            mrWriter.put("offsetB", rPrimitive.getOffsetB());
+        }
+        break;
+
+        case PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const SvgRadialAtomPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "svgRadialAtom");
+            mrWriter.put("colorA", colorToHex(rPrimitive.getColorA()));
+            mrWriter.put("colorB", colorToHex(rPrimitive.getColorB()));
+            mrWriter.put("scaleA", rPrimitive.getScaleA());
+            mrWriter.put("scaleB", rPrimitive.getScaleB());
+
+            if (rPrimitive.isTranslateSet())
+            {
+                mrWriter.put("translateAX", rPrimitive.getTranslateA().getX());
+                mrWriter.put("translateAY", rPrimitive.getTranslateA().getY());
+                mrWriter.put("translateBX", rPrimitive.getTranslateB().getX());
+                mrWriter.put("translateBY", rPrimitive.getTranslateB().getY());
+            }
+        }
+        break;
+
         case PRIMITIVE2D_ID_BACKGROUNDCOLORPRIMITIVE2D:
         {
             const auto& rPrimitive = static_cast<const BackgroundColorPrimitive2D&>(rBasePrimitive);
@@ -1060,19 +1154,6 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             const char* pTypeName = nullptr;
             switch (nId)
             {
-                // SVG gradient decomposition
-                case PRIMITIVE2D_ID_SVGLINEARGRADIENTPRIMITIVE2D:
-                    pTypeName = "svgLinearGradient";
-                    break;
-                case PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D:
-                    pTypeName = "svgRadialGradient";
-                    break;
-                case PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D:
-                    pTypeName = "svgLinearAtom";
-                    break;
-                case PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D:
-                    pTypeName = "svgRadialAtom";
-                    break;
                 // Text hierarchy (structural text grouping)
                 case PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D:
                     pTypeName = "textHierarchyField";
