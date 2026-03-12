@@ -260,6 +260,7 @@ QWindow* QtFrame::windowHandle() const
             break;
 #endif
         case Platform::Wayland:
+        case Platform::Windows:
         case Platform::Xcb:
             pChild->setAttribute(Qt::WA_NativeWindow);
             break;

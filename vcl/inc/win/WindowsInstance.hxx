@@ -36,6 +36,8 @@ public:
     virtual void GetPrinterQueueInfo(ImplPrnQueueList* pList) override;
     virtual void GetPrinterQueueState(SalPrinterQueueInfo* pInfo) override;
     virtual OUString GetDefaultPrinter() override;
+
+    virtual Platform GetPlatform() const override { return Platform::Windows; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

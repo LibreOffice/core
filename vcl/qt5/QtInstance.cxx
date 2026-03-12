@@ -702,6 +702,8 @@ Platform QtInstance::GetPlatform() const
         return Platform::Xcb;
     if (sPlatformName == u"wasm")
         return Platform::WASM;
+    if (sPlatformName == u"windows")
+        return Platform::Windows;
 
     assert(false && "Unsupported qt VCL platform");
     return Platform::Other;

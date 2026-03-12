@@ -14,6 +14,7 @@ enum class Platform
     Wayland,
     Xcb,
     WASM,
+    Windows,
     Other
 };
 
