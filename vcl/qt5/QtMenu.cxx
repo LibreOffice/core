@@ -71,7 +71,7 @@ QtMenu::QtMenu(bool bMenuBar)
 
 bool QtMenu::VisibleMenuBar() { return true; }
 
-void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
+void QtMenu::InsertQtMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
@@ -392,7 +392,7 @@ void QtMenu::InsertItem(SalMenuItem* pSalMenuItem, unsigned nPos)
 
     pItem->mpParentMenu = this;
 
-    InsertMenuItem(pItem, nPos);
+    InsertQtMenuItem(pItem, nPos);
 }
 
 void QtMenu::RemoveItem(unsigned nPos)
@@ -445,7 +445,7 @@ void QtMenu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned n
         return;
     }
 
-    InsertMenuItem(pItem, nPos);
+    InsertQtMenuItem(pItem, nPos);
 }
 
 void QtMenu::SetFrame(const SalFrame* pFrame)
@@ -509,7 +509,7 @@ void QtMenu::DoFullMenuUpdate(Menu* pMenuBar)
     for (sal_Int32 nItem = 0; nItem < static_cast<sal_Int32>(GetItemCount()); nItem++)
     {
         QtMenuItem* pSalMenuItem = GetItemAtPos(nItem);
-        InsertMenuItem(pSalMenuItem, nItem);
+        InsertQtMenuItem(pSalMenuItem, nItem);
         SetItemImage(nItem, pSalMenuItem, pSalMenuItem->maImage);
         const bool bShowDisabled
             = bool(pMenuBar->GetMenuFlags() & MenuFlags::AlwaysShowDisabledEntries)

@@ -59,7 +59,7 @@ private:
 
     void DoFullMenuUpdate(Menu* pMenuBar);
 
-    void InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos);
+    void InsertQtMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos);
 
     void ReinitializeActionGroup(unsigned nPos);
     void ResetAllActionGroups();
