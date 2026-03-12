@@ -865,8 +865,9 @@ ErrCode SwMarkdownParser::CallParser()
 
         if (eSrcEnc == RTL_TEXTENCODING_UTF8)
         {
-            m_pArr.reset(new char[m_nFilesize]);
+            m_pArr.reset(new char[m_nFilesize + 1]);
             m_rInput.ReadBytes(m_pArr.get(), m_nFilesize);
+            m_pArr[m_nFilesize] = '\0';
         }
         else
         {
@@ -889,8 +890,9 @@ ErrCode SwMarkdownParser::CallParser()
             if (sUtf8Data.getLength())
             {
                 m_nFilesize = sUtf8Data.getLength();
-                m_pArr.reset(new char[m_nFilesize]);
+                m_pArr.reset(new char[m_nFilesize + 1]);
                 memcpy(m_pArr.get(), sUtf8Data.getStr(), m_nFilesize);
+                m_pArr[m_nFilesize] = '\0';
             }
             else
             {
