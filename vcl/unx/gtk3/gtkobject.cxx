@@ -73,15 +73,11 @@ void GtkSalObjectBase::Init()
     {
         m_aSystemData.pDisplay = gdk_x11_display_get_xdisplay(pDisplay);
         m_aSystemData.pVisual = gdk_x11_visual_get_xvisual(pVisual);
-        m_aSystemData.platform = SystemEnvData::Platform::Xcb;
     }
 #endif
 #if defined(GDK_WINDOWING_WAYLAND)
     if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
-    {
         m_aSystemData.pDisplay = gdk_wayland_display_get_wl_display(pDisplay);
-        m_aSystemData.platform = SystemEnvData::Platform::Wayland;
-    }
 #endif
 
     g_signal_connect( G_OBJECT(m_pSocket), "button-press-event", G_CALLBACK(signalButton), this );

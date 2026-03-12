@@ -545,6 +545,22 @@ std::unique_ptr<GenPspGraphics> GtkInstance::CreatePrintGraphics()
     return SvpSalInstance::CreatePrintGraphics();
 }
 
+Platform GtkInstance::GetPlatform() const
+{
+    GdkDisplay* pDisplay = GetGtkSalData()->GetGdkDisplay();
+#if defined(GDK_WINDOWING_X11)
+    if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
+        return Platform::Xcb;
+#endif
+#if defined(GDK_WINDOWING_WAYLAND)
+    if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
+        return Platform::Wayland;
+#endif
+
+    assert(false && "Unknown platform");
+    return Platform::Other;
+}
+
 Toolkit GtkInstance::GetToolkit() const { return Toolkit::Gtk; }
 
 const cairo_font_options_t* GtkInstance::GetCairoFontOptions()

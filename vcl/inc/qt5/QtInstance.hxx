@@ -205,6 +205,7 @@ public:
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
     ImplCreateDropTarget(const SystemEnvData& rSysEnv) override;
 
+    virtual Platform GetPlatform() const override;
     virtual Toolkit GetToolkit() const override;
 
     // for qt font options

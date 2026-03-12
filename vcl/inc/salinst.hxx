@@ -23,6 +23,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/ColorDialog.hxx>
+#include <vcl/Platform.hxx>
 #include <vcl/Toolkit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
@@ -222,6 +223,7 @@ public:
 
     /// get information about underlying versions
     virtual OUString        getOSVersion() { return u"-"_ustr; }
+    virtual Platform GetPlatform() const { return Platform::Other; }
     virtual Toolkit GetToolkit() const { return Toolkit::Invalid; }
     const OUString& GetToolkitName() { return m_sToolkitName; };
 

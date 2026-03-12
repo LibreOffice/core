@@ -61,14 +61,11 @@ struct VCL_DLLPUBLIC SystemEnvData
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
-    enum class Platform { Invalid, Wayland, Xcb, WASM };
-
     void*               pDisplay;       // the relevant display connection
     SalFrame*           pSalFrame;      // contains a salframe, if object has one
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
     int                 nScreen;        // the current screen of the window
-    Platform            platform;       // the windowing system in use
 private:
     sal_uIntPtr         aWindow;        // the window of the object
 public:
@@ -98,7 +95,6 @@ public:
         , pWidget(nullptr)
         , pVisual(nullptr)
         , nScreen(0)
-        , platform(Platform::Invalid)
         , aWindow(0)
 #endif
     {

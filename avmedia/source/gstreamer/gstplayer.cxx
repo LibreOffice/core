@@ -897,7 +897,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     }
     else
     {
-        if (pEnvData->platform == SystemEnvData::Platform::Wayland)
+        if (Application::GetPlatform() == Platform::Wayland)
             pVideosink = gst_element_factory_make("waylandsink", "video-output");
         else
             pVideosink = gst_element_factory_make("autovideosink", "video-output");

@@ -160,21 +160,6 @@ void QtFrame::screenChanged(QScreen*) { m_pQWidget->fakeResize(); }
 
 void QtFrame::FillSystemEnvData(SystemEnvData& rData, QWidget* pWidget, QtFrame* pFrame)
 {
-    assert(rData.platform == SystemEnvData::Platform::Invalid);
-    if (QGuiApplication::platformName() == "wayland")
-        rData.platform = SystemEnvData::Platform::Wayland;
-    else if (QGuiApplication::platformName() == "xcb")
-        rData.platform = SystemEnvData::Platform::Xcb;
-    else if (QGuiApplication::platformName() == "wasm")
-        rData.platform = SystemEnvData::Platform::WASM;
-    else
-    {
-        // maybe add a SystemEnvData::Platform::Unsupported to avoid special cases and not abort?
-        SAL_WARN("vcl.qt",
-                 "Unsupported qt VCL platform: " << toOUString(QGuiApplication::platformName()));
-        std::abort();
-    }
-
     rData.pSalFrame = pFrame;
     rData.pWidget = pWidget;
 }
@@ -267,18 +252,18 @@ QWindow* QtFrame::windowHandle() const
     // set attribute 'Qt::WA_NativeWindow' first to make sure a window handle actually exists
     QWidget* pChild = asChild();
     assert(pChild->window() == pChild);
-    switch (m_aSystemData.platform)
+    switch (GetQtInstance().GetPlatform())
     {
-        case SystemEnvData::Platform::WASM:
+        case Platform::WASM:
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             // no idea, why Qt::WA_NativeWindow breaks the menubar for EMSCRIPTEN
             break;
 #endif
-        case SystemEnvData::Platform::Wayland:
-        case SystemEnvData::Platform::Xcb:
+        case Platform::Wayland:
+        case Platform::Xcb:
             pChild->setAttribute(Qt::WA_NativeWindow);
             break;
-        case SystemEnvData::Platform::Invalid:
+        case Platform::Other:
             std::abort();
             break;
     }
@@ -724,8 +709,6 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
 void QtFrame::StartPresentation(bool bStart)
 {
 #if !defined EMSCRIPTEN
-    assert(m_aSystemData.platform != SystemEnvData::Platform::Invalid);
-
 #if CHECK_QT5_USING_X11
     unsigned int nRootWindow(0);
     std::optional<Display*> aDisplay;
@@ -1247,8 +1230,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
 void QtFrame::SetApplicationID(const OUString& rWMClass)
 {
 #if CHECK_QT5_USING_X11
-    assert(m_aSystemData.platform != SystemEnvData::Platform::Invalid);
-    if (m_aSystemData.platform != SystemEnvData::Platform::Xcb || !m_pTopLevel)
+    if (GetQtInstance().GetPlatform() != Platform::Xcb || !m_pTopLevel)
         return;
 
     QtX11Support::setApplicationID(m_pTopLevel->winId(), rWMClass);
@@ -1261,14 +1243,14 @@ void QtFrame::ResolveWindowHandle(SystemEnvData& rData) const
 {
     if (!rData.pWidget)
         return;
-    assert(rData.platform != SystemEnvData::Platform::Invalid);
+
     // Calling QWidget::winId() implicitly enables native windows to be used instead
     // of "alien widgets" that don't have a native widget associated with them,
     // s. https://doc.qt.io/qt-6/qwidget.html#native-widgets-vs-alien-widgets
     // Avoid native widgets with Qt 5 on Wayland and with Qt 6 altogether as they
     // cause unresponsive UI, s. tdf#122293/QTBUG-75766 and tdf#160565
     // (for qt5 xcb, they're needed for video playback)
-    if (rData.platform != SystemEnvData::Platform::Wayland
+    if (GetQtInstance().GetPlatform() != Platform::Wayland
         && QLibraryInfo::version().majorVersion() < 6)
     {
         rData.SetWindowHandle(static_cast<QWidget*>(rData.pWidget)->winId());

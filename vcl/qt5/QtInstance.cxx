@@ -693,6 +693,20 @@ QtInstance::ImplCreateDropTarget(const SystemEnvData& rSysEnv)
     return pDropTarget;
 }
 
+Platform QtInstance::GetPlatform() const
+{
+    const QString sPlatformName = QGuiApplication::platformName();
+    if (sPlatformName == u"wayland")
+        return Platform::Wayland;
+    if (sPlatformName == u"xcb")
+        return Platform::Xcb;
+    if (sPlatformName == u"wasm")
+        return Platform::WASM;
+
+    assert(false && "Unsupported qt VCL platform");
+    return Platform::Other;
+}
+
 Toolkit QtInstance::GetToolkit() const { return Toolkit::Qt; }
 
 const cairo_font_options_t* QtInstance::GetCairoFontOptions()
@@ -736,7 +750,7 @@ void* QtInstance::CreateGStreamerSink(const SystemChildWindow* pWindow)
     if (!pEnvData)
         return nullptr;
 
-    if (pEnvData->platform != SystemEnvData::Platform::Wayland)
+    if (GetQtInstance().GetPlatform() != Platform::Wayland)
         return nullptr;
 
     GstElement* pVideosink = pSymbol("qwidget5videosink", "qwidget5videosink");

@@ -285,6 +285,7 @@ public:
     CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode) override;
     virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow) override;
 
+    virtual Platform GetPlatform() const override;
     virtual Toolkit GetToolkit() const override;
 
     virtual const cairo_font_options_t* GetCairoFontOptions() override;
