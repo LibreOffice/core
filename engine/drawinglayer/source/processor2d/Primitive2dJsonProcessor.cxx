@@ -50,6 +50,7 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/glowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/softedgeprimitive2d.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 
 #include <basegfx/utils/bgradient.hxx>
@@ -992,6 +993,18 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         }
         break;
 
+        case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
+        {
+            const auto& rPrimitive = static_cast<const SoftEdgePrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "softEdge");
+            mrWriter.put("radius", rPrimitive.getRadius() * mfScaleFactor);
+            {
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rPrimitive.getChildren());
+            }
+        }
+        break;
+
         case PRIMITIVE2D_ID_BACKGROUNDCOLORPRIMITIVE2D:
         {
             const auto& rPrimitive = static_cast<const BackgroundColorPrimitive2D&>(rBasePrimitive);
@@ -1080,9 +1093,6 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                     pTypeName = "textHierarchyEmphasisMark";
                     break;
                 // Other drawinglayer primitives
-                case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
-                    pTypeName = "softEdge";
-                    break;
                 case PRIMITIVE2D_ID_EXCLUSIVEEDITVIEWPRIMITIVE2D:
                     pTypeName = "exclusiveEditView";
                     break;
