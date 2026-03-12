@@ -139,6 +139,11 @@ class VCLPLUG_QT_PUBLIC QtFrame final : public QObject, public SalFrame
 
     static int toQtKeyCode(sal_uInt16 nVclCode);
 
+    SalGraphics* GetGraphics();
+    QImage GetImage();
+    SalGraphics* DoAcquireGraphics(const QSize& rSize);
+    void DoHandleResizeEvent(int nWidth, int nHeight);
+
 private Q_SLOTS:
     void screenChanged(QScreen*);
 

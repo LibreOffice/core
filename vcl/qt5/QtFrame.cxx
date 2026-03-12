@@ -180,23 +180,17 @@ void QtFrame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtent
     ] { m_pQWidget->update(r); });
 }
 
-SalGraphics* QtFrame::AcquireGraphics()
+SalGraphics* QtFrame::DoAcquireGraphics(const QSize& rSize)
 {
-    if (m_bGraphicsInUse)
-        return nullptr;
-
-    m_bGraphicsInUse = true;
-
     if (m_bUseCairo)
     {
         if (!m_pSvpGraphics)
         {
-            QSize aSize = m_pQWidget->size() * devicePixelRatioF();
             m_pSvpGraphics.reset(new QtSvpGraphics(this));
             m_pSurface.reset(
-                cairo_image_surface_create(CAIRO_FORMAT_ARGB32, aSize.width(), aSize.height()));
+                cairo_image_surface_create(CAIRO_FORMAT_ARGB32, rSize.width(), rSize.height()));
             m_pSvpGraphics->setSurface(m_pSurface.get(),
-                                       basegfx::B2IVector(aSize.width(), aSize.height()));
+                                       basegfx::B2IVector(rSize.width(), rSize.height()));
             cairo_surface_set_user_data(m_pSurface.get(), QtSvpGraphics::getDamageKey(),
                                         &m_aDamageHandler, nullptr);
         }
@@ -207,8 +201,7 @@ SalGraphics* QtFrame::AcquireGraphics()
         if (!m_pQtGraphics)
         {
             m_pQtGraphics.reset(new QtGraphics(this));
-            m_pQImage.reset(
-                new QImage(m_pQWidget->size() * devicePixelRatioF(), Qt_DefaultFormat32));
+            m_pQImage.reset(new QImage(rSize, Qt_DefaultFormat32));
             m_pQImage->fill(Qt::transparent);
             m_pQtGraphics->ChangeQImage(m_pQImage.get());
         }
@@ -216,13 +209,29 @@ SalGraphics* QtFrame::AcquireGraphics()
     }
 }
 
+SalGraphics* QtFrame::AcquireGraphics()
+{
+    if (m_bGraphicsInUse)
+        return nullptr;
+
+    m_bGraphicsInUse = true;
+
+    return DoAcquireGraphics(m_pQWidget->size() * devicePixelRatioF());
+}
+
+SalGraphics* QtFrame::GetGraphics()
+{
+    if (m_bUseCairo)
+        return m_pSvpGraphics.get();
+    else
+        return m_pQtGraphics.get();
+}
+
 void QtFrame::ReleaseGraphics(SalGraphics* pSalGraph)
 {
     (void)pSalGraph;
-    if (m_bUseCairo)
-        assert(pSalGraph == m_pSvpGraphics.get());
-    else
-        assert(pSalGraph == m_pQtGraphics.get());
+    assert(pSalGraph == GetGraphics());
+
     m_bGraphicsInUse = false;
 }
 
@@ -1329,24 +1338,28 @@ void QtFrame::handleDragLeave() { m_pDropTarget->dragExit(); }
 
 void QtFrame::handleMoveEvent(QMoveEvent*) { CallCallback(SalEvent::Move, nullptr); }
 
+QImage QtFrame::GetImage()
+{
+    if (m_bUseCairo)
+    {
+        cairo_surface_t* pSurface = m_pSurface.get();
+        cairo_surface_flush(pSurface);
+
+        return QImage(cairo_image_surface_get_data(pSurface),
+                      cairo_image_surface_get_width(pSurface),
+                      cairo_image_surface_get_height(pSurface), Qt_DefaultFormat32);
+    }
+    else
+        return *m_pQImage;
+}
+
 void QtFrame::handlePaintEvent(const QPaintEvent* pEvent, QWidget* pWidget)
 {
     QPainter p(pWidget);
     if (!m_bNullRegion)
         p.setClipRegion(m_aRegion);
 
-    QImage aImage;
-    if (m_bUseCairo)
-    {
-        cairo_surface_t* pSurface = m_pSurface.get();
-        cairo_surface_flush(pSurface);
-
-        aImage = QImage(cairo_image_surface_get_data(pSurface),
-                        cairo_image_surface_get_width(pSurface),
-                        cairo_image_surface_get_height(pSurface), Qt_DefaultFormat32);
-    }
-    else
-        aImage = *m_pQImage;
+    QImage aImage = GetImage();
 
     const qreal fRatio = devicePixelRatioF();
     aImage.setDevicePixelRatio(fRatio);
@@ -1354,12 +1367,8 @@ void QtFrame::handlePaintEvent(const QPaintEvent* pEvent, QWidget* pWidget)
     p.drawImage(pEvent->rect(), aImage, source);
 }
 
-void QtFrame::handleResizeEvent(const QResizeEvent* pEvent)
+void QtFrame::DoHandleResizeEvent(int nWidth, int nHeight)
 {
-    const qreal fRatio = devicePixelRatioF();
-    const int nWidth = ceil(pEvent->size().width() * fRatio);
-    const int nHeight = ceil(pEvent->size().height() * fRatio);
-
     if (m_bUseCairo)
     {
         if (m_pSurface)
@@ -1392,6 +1401,15 @@ void QtFrame::handleResizeEvent(const QResizeEvent* pEvent)
             m_pQImage.reset(pImage);
         }
     }
+}
+
+void QtFrame::handleResizeEvent(const QResizeEvent* pEvent)
+{
+    const qreal fRatio = devicePixelRatioF();
+    const int nWidth = ceil(pEvent->size().width() * fRatio);
+    const int nHeight = ceil(pEvent->size().height() * fRatio);
+
+    DoHandleResizeEvent(nWidth, nHeight);
 
     CallCallback(SalEvent::Resize, nullptr);
 }
