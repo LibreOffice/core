@@ -847,6 +847,41 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168251)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf171161)
+{
+    createSwDoc("tdf171161.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 2 characters in the first portion on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(2), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // second character of the first word with narrow scale width.
+            // This was 17490, now 8745, according to the 50% letter scaling
+            CPPUNIT_ASSERT_LESS(sal_Int32(8800), sal_Int32(pDXArray[1]));
+
+            break;
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf169168_scaling)
 {
     createSwDoc("tdf169168_scaling.fodt");
