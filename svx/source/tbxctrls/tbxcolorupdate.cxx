@@ -269,8 +269,9 @@ void ToolboxButtonColorUpdaterBase::Update(const Color& rColor, bool bForceUpdat
         aUpdateRect = tools::Rectangle(Point(0, aItemSize.Height() - aItemSize.Height() / 4),
                                        Size(aItemSize.Width(), aItemSize.Height() / 4));
     else
-        aUpdateRect = tools::Rectangle(Point(aItemSize.Height() + 2, 2),
-                                       Point(aItemSize.Width() - 3, aItemSize.Height() - 3));
+        // tdf#91327 - adjust color preview in wide dropdown color control
+        aUpdateRect = tools::Rectangle(Point(aItemSize.Height() + 4, 0),
+                                       Point(aItemSize.Width() - 1, aItemSize.Height() - 1));
 
     pVirDev->Push(vcl::PushFlags::CLIPREGION);
 
