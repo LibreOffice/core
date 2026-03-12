@@ -59,8 +59,7 @@ public:
     SvpSalGraphics();
     virtual ~SvpSalGraphics() override;
 
-    virtual SalGraphicsImpl* GetImpl() const override { return m_pBackend.get(); }
-    std::unique_ptr<SvpGraphicsBackend> const& getSvpBackend() { return m_pBackend; }
+    virtual SvpGraphicsBackend* GetImpl() const override { return m_pBackend.get(); }
 
     SAL_DLLPRIVATE virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
 
