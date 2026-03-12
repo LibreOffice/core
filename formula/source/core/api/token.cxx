@@ -88,7 +88,7 @@ bool FormulaToken::IsFunction() const
 
 sal_uInt8 FormulaToken::GetParamCount() const
 {
-    if ( eOp < ocStopDiv && eOp != ocExternal && eOp != ocMacro &&
+    if ( eOp < SC_OPCODE_STOP_DIV && eOp != ocExternal && eOp != ocMacro &&
          !FormulaCompiler::IsOpCodeJumpCommand( eOp ) &&
          eOp != ocPercentSign )
         return 0;       // parameters and specials
@@ -96,9 +96,9 @@ sal_uInt8 FormulaToken::GetParamCount() const
 //2do: bool parameter whether FAP or not?
     else if (GetByte())
         return GetByte();   // all functions, also ocExternal and ocMacro
-    else if (ocStartBinOp <= eOp && eOp < ocStopBinOp && eOp != ocAnd && eOp != ocOr)
+    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP && eOp != ocAnd && eOp != ocOr)
         return 2;           // binary operators, compiler checked; OR and AND legacy but are functions
-    else if ((ocStartUnaryOp <= eOp && eOp < ocStopUnaryOp) || eOp == ocPercentSign)
+    else if ((SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP) || eOp == ocPercentSign)
         return 1;           // unary operators, compiler checked
     else if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
         return 0;           // no parameter
@@ -1624,9 +1624,9 @@ bool FormulaTokenArray::MayReferenceFollow()
     if (i > 0 || !isWhitespace( pCode[i]->GetOpCode()))
     {
         OpCode eOp = pCode[i]->GetOpCode();
-        if ( (ocStartBinOp <= eOp && eOp < ocStopBinOp ) ||
-             (ocStartUnaryOp <= eOp && eOp < ocStopUnaryOp ) ||
-             eOp == ocOpen || eOp == ocSep )
+        if ( (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP ) ||
+             (SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP ) ||
+             eOp == SC_OPCODE_OPEN || eOp == SC_OPCODE_SEP )
         {
             return true;
         }

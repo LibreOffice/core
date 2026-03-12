@@ -3212,7 +3212,7 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
     {
         bool bShouldBeNegSub =
             (eLastOp == ocOpen || eLastOp == ocSep || eLastOp == ocNegSub ||
-             (ocStartBinOp <= eLastOp && eLastOp < ocStopBinOp) ||
+             (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_BIN_OP) ||
              eLastOp == ocArrayOpen ||
              eLastOp == ocArrayColSep || eLastOp == ocArrayRowSep);
         if (bShouldBeNegSub && eOp == ocSub)
@@ -5757,8 +5757,8 @@ bool ScCompiler::GetRefColRowNames(const FormulaToken* pToken, ScComplexRefData&
             if (eOp1 != ocColRowName && eOp1 != ocIntersect && eOp2 != ocColRowName
                 && eOp2 != ocIntersect)
             {
-                if ((ocStartBinOp <= eOp1 && eOp1 < ocStopBinOp)
-                    || (ocStartBinOp <= eOp2 && eOp2 < ocStopBinOp))
+                if ((SC_OPCODE_START_BIN_OP <= eOp1 && eOp1 < SC_OPCODE_STOP_BIN_OP)
+                    || (SC_OPCODE_START_BIN_OP <= eOp2 && eOp2 < SC_OPCODE_STOP_BIN_OP))
                     bSingle = true;
             }
             if (bSingle)
@@ -6524,7 +6524,7 @@ bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** ppp
         mPendingImplicitIntersectionOptimizations.emplace_back( pppToken[0], token );
         return true;
     }
-    else if ((nOpCode >= ocStartBinOp && nOpCode < ocStopBinOp
+    else if ((nOpCode >= SC_OPCODE_START_BIN_OP && nOpCode < SC_OPCODE_STOP_BIN_OP
                 && nOpCode != ocAnd && nOpCode != ocOr)
               || nOpCode == ocRound || nOpCode == ocRoundUp || nOpCode == ocRoundDown)
     {
@@ -6543,7 +6543,7 @@ bool ScCompiler::HandleIIOpCodeInternal(FormulaToken* token, FormulaToken*** ppp
             mPendingImplicitIntersectionOptimizations.emplace_back( pppToken[1], token );
         return true;
     }
-    else if ((nOpCode >= ocStartUnaryOp && nOpCode < ocStopUnaryOp)
+    else if ((nOpCode >= SC_OPCODE_START_UN_OP && nOpCode < SC_OPCODE_STOP_UN_OP)
               || nOpCode == ocPercentSign)
     {
         if (nNumParams != 1)
