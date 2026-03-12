@@ -1854,7 +1854,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             // to call AdjustMarkHdl() always.
             AdjustMarkHdl();
         }
-        if (pTEWin != nullptr)
+        if (pTEWin != nullptr && !pTEWin->isDisposed())
         {
             pTEWin->SetCursor(pTECursorBuffer);
         }

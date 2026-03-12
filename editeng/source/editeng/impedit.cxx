@@ -1185,7 +1185,8 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
     if (getImpEditEngine().IsInUndo())
         return;
 
-    if (mpOutputWindow && mpOutputWindow->GetCursor() != GetCursor())
+    if (mpOutputWindow && !mpOutputWindow->isDisposed()
+        && mpOutputWindow->GetCursor() != GetCursor())
         mpOutputWindow->SetCursor(GetCursor());
 
     EditPaM aPaM(maEditSelection.Max());
