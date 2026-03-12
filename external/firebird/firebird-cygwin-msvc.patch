@@ -127,7 +127,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
    FIREBIRD=$(FB_BUILD)
  endif
 -FIREBIRD_LOCK=$(FIREBIRD)
-+FIREBIRD_LOCK=$(shell cygpath -w $(FIREBIRD))
++FIREBIRD_LOCK=$(subst /,\,$(FIREBIRD))
  
  export FIREBIRD
  export FIREBIRD_LOCK
@@ -220,7 +220,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  #
  
 -ROOT=$(shell cd ..; pwd)
-+ROOT=$(shell cygpath -m '$(shell cd ..; pwd)')
++ROOT=$(shell cygpath -m -a '$(shell cd ..; pwd)')
  
  include     make.defaults
  ifeq ($(CROSS_OUT), Y)
@@ -650,10 +650,21 @@ diff -ur src/misc/makeHeader.cpp src/misc/makeHeader.cpp
  #
  
 -ROOT=$(shell cd ..; pwd)
-+ROOT=$(shell cygpath -m '$(shell cd ..; pwd)')
++ROOT=$(shell cygpath -m -a '$(shell cd ..; pwd)')
  
  ifeq ($(IsDeveloper), Y)
    DefaultTarget := Debug
+--- builds/posix/Makefile.in.examples.orig
++++ builds/posix/Makefile.in.examples
+@@ -28,7 +28,7 @@
+ # 
+ #
+ #
+-ROOT=../..
++ROOT=$(shell cygpath -m -a ../..)
+ 
+ # Add the install include directory to the search path since the
+ # examples need to build using those headers values.
 --- examples/dbcrypt/CryptApplication.cpp.orig	2020-11-13 20:57:11.222938900 +0100
 +++ examples/dbcrypt/CryptApplication.cpp	2020-11-13 21:01:19.332316100 +0100
 @@ -27,6 +27,13 @@
