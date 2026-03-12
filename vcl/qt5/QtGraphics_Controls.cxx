@@ -937,7 +937,7 @@ bool QtGraphics_Controls::getNativeControlRegion(
         }
         case ControlType::MenuPopup:
         {
-            int h, w;
+            int h = 0, w = 0;
             switch (part)
             {
                 case ControlPart::MenuItemCheckMark:
