@@ -69,7 +69,6 @@ sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='tablegrouplabel'] orp
 sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='insertgrouplabel'] orphan-label
 sc/uiconfig/scalc/ui/notebookbar_groups.ui://GtkLabel[@id='imagegrouplabel'] orphan-label
 sc/uiconfig/scalc/ui/managenamesdialog.ui://GtkLabel[@id='info'] orphan-label
-sc/uiconfig/scalc/ui/managenamesdialog.ui://GtkLabel[@id='label2'] orphan-label
 sc/uiconfig/scalc/ui/mergecellsdialog.ui://GtkLabel[@id='label'] orphan-label
 sc/uiconfig/scalc/ui/mergecellsdialog.ui://GtkImage[@id='imMergeFirstCell'] no-labelled-by
 sc/uiconfig/scalc/ui/mergecellsdialog.ui://GtkImage[@id='imMergeKeepHidden'] no-labelled-by

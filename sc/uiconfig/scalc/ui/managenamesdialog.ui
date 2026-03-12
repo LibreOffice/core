@@ -214,6 +214,7 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes" context="managenamesdialog|label2">Name:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic-widget">name</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
