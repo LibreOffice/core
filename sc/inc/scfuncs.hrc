@@ -898,27 +898,27 @@ const TranslateId SC_OPCODE_IF_NA_ARY[] =
 };
 
 // -=*# Resource for function OR #*=-
-const TranslateId SC_OPCODE_OR_ARY[] =
+const TranslateId ocOr_ARY[] =
 {
-    NC_("SC_OPCODE_OR", "Returns TRUE if an argument is TRUE."),
-    NC_("SC_OPCODE_OR", "Logical value "),
-    NC_("SC_OPCODE_OR", "Logical value 1, logical value 2,... are conditions to be tested and which return either TRUE or FALSE.")
+    NC_("ocOr", "Returns TRUE if an argument is TRUE."),
+    NC_("ocOr", "Logical value "),
+    NC_("ocOr", "Logical value 1, logical value 2,... are conditions to be tested and which return either TRUE or FALSE.")
 };
 
 // -=*# Resource for function XOR #*=-
-const TranslateId SC_OPCODE_XOR_ARY[] =
+const TranslateId ocXor_ARY[] =
 {
-    NC_("SC_OPCODE_XOR", "Returns TRUE if an odd number of arguments evaluates to TRUE."),
-    NC_("SC_OPCODE_XOR", "Logical value "),
-    NC_("SC_OPCODE_XOR", "Logical value 1, logical value 2, ... are conditions to be tested and which return either TRUE or FALSE.")
+    NC_("ocXor", "Returns TRUE if an odd number of arguments evaluates to TRUE."),
+    NC_("ocXor", "Logical value "),
+    NC_("ocXor", "Logical value 1, logical value 2, ... are conditions to be tested and which return either TRUE or FALSE.")
 };
 
 // -=*# Resource for function AND #*=-
-const TranslateId SC_OPCODE_AND_ARY[] =
+const TranslateId ocAnd_ARY[] =
 {
-    NC_("SC_OPCODE_AND", "Returns TRUE if all arguments are TRUE."),
-    NC_("SC_OPCODE_AND", "Logical value "),
-    NC_("SC_OPCODE_AND", "Logical value 1, logical value 2;...are conditions to be tested and each returns either TRUE or FALSE.")
+    NC_("ocAnd", "Returns TRUE if all arguments are TRUE."),
+    NC_("ocAnd", "Logical value "),
+    NC_("ocAnd", "Logical value 1, logical value 2;...are conditions to be tested and each returns either TRUE or FALSE.")
 };
 
 // -=*# Resource for function ABS #*=-
@@ -930,13 +930,13 @@ const TranslateId SC_OPCODE_ABS_ARY[] =
 };
 
 // -=*# Resource for function POWER #*=-
-const TranslateId SC_OPCODE_POWER_ARY[] =
+const TranslateId ocPowER_ARY[] =
 {
-    NC_("SC_OPCODE_POWER", "Returns a^b, base a raised to the power of exponent b."),
-    NC_("SC_OPCODE_POWER", "Base"),
-    NC_("SC_OPCODE_POWER", "The base a of the power a^b."),
-    NC_("SC_OPCODE_POWER", "Exponent"),
-    NC_("SC_OPCODE_POWER", "The exponent b of the power a^b.")
+    NC_("ocPowER", "Returns a^b, base a raised to the power of exponent b."),
+    NC_("ocPowER", "Base"),
+    NC_("ocPowER", "The base a of the power a^b."),
+    NC_("ocPowER", "Exponent"),
+    NC_("ocPowER", "The exponent b of the power a^b.")
 };
 
 // -=*# Resource for function COUNTBLANK #*=-
@@ -1341,13 +1341,13 @@ const TranslateId SC_OPCODE_PLUS_MINUS_ARY[] =
 };
 
 // -=*# Resource for function SUBTOTAL #*=-
-const TranslateId SC_OPCODE_SUB_TOTAL_ARY[] =
+const TranslateId ocSub_TOTAL_ARY[] =
 {
-    NC_("SC_OPCODE_SUB_TOTAL", "Calculates subtotals in a spreadsheet."),
-    NC_("SC_OPCODE_SUB_TOTAL", "Function"),
-    NC_("SC_OPCODE_SUB_TOTAL", "Function index. Is an index of the possible functions Total, Max, ..."),
-    NC_("SC_OPCODE_SUB_TOTAL", "Range"),
-    NC_("SC_OPCODE_SUB_TOTAL", "The cells of the range which are to be taken into account.")
+    NC_("ocSub_TOTAL", "Calculates subtotals in a spreadsheet."),
+    NC_("ocSub_TOTAL", "Function"),
+    NC_("ocSub_TOTAL", "Function index. Is an index of the possible functions Total, Max, ..."),
+    NC_("ocSub_TOTAL", "Range"),
+    NC_("ocSub_TOTAL", "The cells of the range which are to be taken into account.")
 };
 
 // -=*# Resource for function AGGREGATE #*=-
@@ -3268,19 +3268,19 @@ const TranslateId SC_OPCODE_FORECAST_LIN_ARY[] =
 };
 
 // -=*# Resource for function ADDRESS #*=-
-const TranslateId SC_OPCODE_ADDRESS_ARY[] =
+const TranslateId ocAddRESS_ARY[] =
 {
-    NC_("SC_OPCODE_ADDRESS", "Returns the reference to a cell as text."),
-    NC_("SC_OPCODE_ADDRESS", "Row"),
-    NC_("SC_OPCODE_ADDRESS", "The row number of the cell."),
-    NC_("SC_OPCODE_ADDRESS", "Column"),
-    NC_("SC_OPCODE_ADDRESS", "The column number of the cell."),
-    NC_("SC_OPCODE_ADDRESS", "ABS"),
-    NC_("SC_OPCODE_ADDRESS", "Specifies whether absolute or relative referencing is to be used."),
-    NC_("SC_OPCODE_ADDRESS", "A1"),
-    NC_("SC_OPCODE_ADDRESS", "The reference style: 0 or FALSE means R1C1 style, any other value or omitted means A1 style."),
-    NC_("SC_OPCODE_ADDRESS", "Sheet"),
-    NC_("SC_OPCODE_ADDRESS", "The spreadsheet name of the cell reference.")
+    NC_("ocAddRESS", "Returns the reference to a cell as text."),
+    NC_("ocAddRESS", "Row"),
+    NC_("ocAddRESS", "The row number of the cell."),
+    NC_("ocAddRESS", "Column"),
+    NC_("ocAddRESS", "The column number of the cell."),
+    NC_("ocAddRESS", "ABS"),
+    NC_("ocAddRESS", "Specifies whether absolute or relative referencing is to be used."),
+    NC_("ocAddRESS", "A1"),
+    NC_("ocAddRESS", "The reference style: 0 or FALSE means R1C1 style, any other value or omitted means A1 style."),
+    NC_("ocAddRESS", "Sheet"),
+    NC_("ocAddRESS", "The spreadsheet name of the cell reference.")
 };
 
 // -=*# Resource for function AREAS #*=-
@@ -3836,17 +3836,17 @@ const TranslateId SC_OPCODE_REPT_ARY[] =
 };
 
 // -=*# Resource for function SUBSTITUTE #*=-
-const TranslateId SC_OPCODE_SUBSTITUTE_ARY[] =
+const TranslateId ocSubSTITUTE_ARY[] =
 {
-    NC_("SC_OPCODE_SUBSTITUTE", "Substitutes new text for old text in a string."),
-    NC_("SC_OPCODE_SUBSTITUTE", "Text"),
-    NC_("SC_OPCODE_SUBSTITUTE", "The text in which partial words are to be replaced."),
-    NC_("SC_OPCODE_SUBSTITUTE", "Search text"),
-    NC_("SC_OPCODE_SUBSTITUTE", "The partial string to be (repeatedly) replaced."),
-    NC_("SC_OPCODE_SUBSTITUTE", "New text"),
-    NC_("SC_OPCODE_SUBSTITUTE", "The text which is to replace the text string."),
-    NC_("SC_OPCODE_SUBSTITUTE", "Occurrence"),
-    NC_("SC_OPCODE_SUBSTITUTE", "Which occurrence of the old text is to be replaced.")
+    NC_("ocSubSTITUTE", "Substitutes new text for old text in a string."),
+    NC_("ocSubSTITUTE", "Text"),
+    NC_("ocSubSTITUTE", "The text in which partial words are to be replaced."),
+    NC_("ocSubSTITUTE", "Search text"),
+    NC_("ocSubSTITUTE", "The partial string to be (repeatedly) replaced."),
+    NC_("ocSubSTITUTE", "New text"),
+    NC_("ocSubSTITUTE", "The text which is to replace the text string."),
+    NC_("ocSubSTITUTE", "Occurrence"),
+    NC_("ocSubSTITUTE", "Which occurrence of the old text is to be replaced.")
 };
 
 // -=*# Resource for function REGEX #*=-

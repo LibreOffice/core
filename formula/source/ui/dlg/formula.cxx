@@ -630,8 +630,8 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, cons
                 {
                     _pTree->InsertEntry(aResult, pParent, StructType::Error, 0, _pToken, *xEntry);
                 }
-                else if (!((SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP) ||
-                            (SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)))
+                else if (!((ocStartBinOp <= eOp && eOp < ocStopBinOp) ||
+                            (ocStartUnaryOp <= eOp && eOp < ocStopUnaryOp)))
                 {
                     // Not a binary or unary operator.
                     bCalcSubformula = true;

@@ -604,7 +604,7 @@ void ScParameterClassification::GenerateDocumentation()
                 bAddParentheses = false;
                 aToken.SetByte(0);
             }
-            else if ( eOp < SC_OPCODE_STOP_BIN_OP )
+            else if ( eOp < ocStopBinOp )
             {
                 switch ( eOp )
                 {
@@ -616,7 +616,7 @@ void ScParameterClassification::GenerateDocumentation()
                         aToken.SetByte(2);
                 }
             }
-            else if ( eOp < SC_OPCODE_STOP_UN_OP )
+            else if ( eOp < ocStopUnaryOp )
                 aToken.SetByte(1);
             else if ( eOp < SC_OPCODE_STOP_NO_PAR )
                 aToken.SetByte(0);

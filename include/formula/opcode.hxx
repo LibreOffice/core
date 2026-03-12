@@ -24,80 +24,90 @@
 #include <formula/compiler.hxx>
 #include <sal/types.h>
 
+/* Central definition of OpCodes for spreadsheet functions */
+
 enum OpCode : sal_uInt16
 {
     // Special commands
-        ocPush              = SC_OPCODE_PUSH,
-        ocStop              = SC_OPCODE_STOP,
-        ocExternal          = SC_OPCODE_EXTERNAL,
-        ocName              = SC_OPCODE_NAME,
+        ocPush              = 0,
+        // 1 used to be ocCall
+        ocStop              = 2,
+        ocExternal          = 3,
+        ocName              = 4,
+        // 5 is externalRef
     // Jump commands
-        ocIf                = SC_OPCODE_IF,
-        ocIfError           = SC_OPCODE_IF_ERROR,
-        ocIfNA              = SC_OPCODE_IF_NA,
-        ocChoose            = SC_OPCODE_CHOOSE,
-        ocLet               = SC_OPCODE_LET,
+        ocIf                = 6,
+        ocIfError           = 7,
+        ocIfNA              = 8,
+        ocChoose            = 9,
+        ocLet               = 39,
     // Parentheses and separators
-        ocOpen              = SC_OPCODE_OPEN,
-        ocClose             = SC_OPCODE_CLOSE,
-        ocTableRefOpen      = SC_OPCODE_TABLE_REF_OPEN,
-        ocTableRefClose     = SC_OPCODE_TABLE_REF_CLOSE,
-        ocSep               = SC_OPCODE_SEP,
-        ocArrayOpen         = SC_OPCODE_ARRAY_OPEN,
-        ocArrayClose        = SC_OPCODE_ARRAY_CLOSE,
-        ocArrayRowSep       = SC_OPCODE_ARRAY_ROW_SEP,
-        ocArrayColSep       = SC_OPCODE_ARRAY_COL_SEP,
+        ocOpen              = 10,
+        ocClose             = 11,
+        ocTableRefOpen      = 29,
+        ocTableRefClose     = 30,
+        ocSep               = 12,
+        ocArrayOpen         = 25,
+        ocArrayClose        = 26,
+        ocArrayRowSep       = 27,
+        ocArrayColSep       = 28, /* some convs use sep != col_sep */
     // Special OpCodes
-        ocMissing           = SC_OPCODE_MISSING,
-        ocBad               = SC_OPCODE_BAD,
-        ocStringXML         = SC_OPCODE_STRINGXML,
-        ocSpaces            = SC_OPCODE_SPACES,
-        ocWhitespace        = SC_OPCODE_WHITESPACE,
-        ocMatRef            = SC_OPCODE_MAT_REF,
-        ocTableRefItemAll     = SC_OPCODE_TABLE_REF_ITEM_ALL,
-        ocTableRefItemHeaders = SC_OPCODE_TABLE_REF_ITEM_HEADERS,
-        ocTableRefItemData    = SC_OPCODE_TABLE_REF_ITEM_DATA,
-        ocTableRefItemTotals  = SC_OPCODE_TABLE_REF_ITEM_TOTALS,
-        ocTableRefItemThisRow = SC_OPCODE_TABLE_REF_ITEM_THIS_ROW,
-        ocSkip              = SC_OPCODE_SKIP,
-        ocStringName        = SC_OPCODE_STRINGNAME,
+        ocMissing           = 13,
+        ocBad               = 14,
+        ocStringXML         = 15,
+        ocSpaces            = 16,
+        ocWhitespace        = 17,
+        ocMatRef            = 18,
+        ocTableRefItemAll     = 31,
+        ocTableRefItemHeaders = 32,
+        ocTableRefItemData    = 33,
+        ocTableRefItemTotals  = 34,
+        ocTableRefItemThisRow = 35,
+        ocStopDiv             = 36,
+        ocSkip              = 37, /* used to skip raw tokens during string compilation */
+        ocStringName        = 38,     /* special OpCode for lambda function names */
     // Access commands
-        ocDBArea            = SC_OPCODE_DB_AREA,
-        ocTableRef          = SC_OPCODE_TABLE_REF,
-        ocMacro             = SC_OPCODE_MACRO,
-        ocColRowName        = SC_OPCODE_COL_ROW_NAME,
-        ocColRowNameAuto    = SC_OPCODE_COL_ROW_NAME_AUTO,
+        ocDBArea            = 19,
+        ocTableRef          = 20,
+        ocMacro             = 21,
+        ocColRowName        = 22,
+        ocColRowNameAuto    = 23,
     // Percent operator _follows_ value
-        ocPercentSign       = SC_OPCODE_PERCENT_SIGN,
+        ocPercentSign       = 24,
     // Error constants
-        ocErrNull           = SC_OPCODE_ERROR_NULL,
-        ocErrDivZero        = SC_OPCODE_ERROR_DIVZERO,
-        ocErrValue          = SC_OPCODE_ERROR_VALUE,
-        ocErrRef            = SC_OPCODE_ERROR_REF,
-        ocErrName           = SC_OPCODE_ERROR_NAME,
-        ocErrNum            = SC_OPCODE_ERROR_NUM,
-        ocErrNA             = SC_OPCODE_ERROR_NA,
+        ocErrNull           = 40,
+        ocErrDivZero        = 41,
+        ocErrValue          = 42,
+        ocErrRef            = 43,
+        ocErrName           = 44,
+        ocErrNum            = 45,
+        ocErrNA             = 46,
+    /* NOTE: binary and unary operators must be in sequence for compiler! */
     // Binary operators
-        ocAdd               = SC_OPCODE_ADD,
-        ocSub               = SC_OPCODE_SUB,
-        ocMul               = SC_OPCODE_MUL,
-        ocDiv               = SC_OPCODE_DIV,
-        ocAmpersand         = SC_OPCODE_AMPERSAND,
-        ocPow               = SC_OPCODE_POW,
-        ocEqual             = SC_OPCODE_EQUAL,
-        ocNotEqual          = SC_OPCODE_NOT_EQUAL,
-        ocLess              = SC_OPCODE_LESS,
-        ocGreater           = SC_OPCODE_GREATER,
-        ocLessEqual         = SC_OPCODE_LESS_EQUAL,
-        ocGreaterEqual      = SC_OPCODE_GREATER_EQUAL,
-        ocAnd               = SC_OPCODE_AND,
-        ocOr                = SC_OPCODE_OR,
-        ocXor               = SC_OPCODE_XOR,
-        ocIntersect         = SC_OPCODE_INTERSECT,
-        ocUnion             = SC_OPCODE_UNION,
-        ocRange             = SC_OPCODE_RANGE,
+        ocStartBinOp        = 50,
+        ocAdd               = 50,
+        ocSub               = 51,
+        ocMul               = 52,
+        ocDiv               = 53,
+        ocAmpersand         = 54,
+        ocPow               = 55,
+        ocEqual             = 56,
+        ocNotEqual          = 57,
+        ocLess              = 58,
+        ocGreater           = 59,
+        ocLessEqual         = 60,
+        ocGreaterEqual      = 61,
+        ocAnd               = 62,
+        ocOr                = 63,
+        ocXor               = 401,
+        ocIntersect         = 64,
+        ocUnion             = 65,
+        ocRange             = 66,
+        ocStopBinOp         = 67,
     // Unary operators
-        ocNegSub            = SC_OPCODE_NEG_SUB,
+        ocStartUnaryOp      = 70,
+        ocNegSub            = 70,
+        ocStopUnaryOp       = 71,
     // Functions with no parameters
         ocPi                = SC_OPCODE_PI,
         ocRandom            = SC_OPCODE_RANDOM,
@@ -214,7 +224,7 @@ enum OpCode : sal_uInt16
         ocRoundDown         = SC_OPCODE_ROUND_DOWN,
         ocTrunc             = SC_OPCODE_TRUNC,
         ocLog               = SC_OPCODE_LOG,
-        ocPower             = SC_OPCODE_POWER,
+        ocPower             = ocPowER,
         ocGCD               = SC_OPCODE_GCD,
         ocLCM               = SC_OPCODE_LCM,
         ocMod               = SC_OPCODE_MOD,
@@ -283,7 +293,7 @@ enum OpCode : sal_uInt16
         ocCumPrinc          = SC_OPCODE_CUM_PRINC,
         ocEffect            = SC_OPCODE_EFFECT,
         ocNominal           = SC_OPCODE_NOMINAL,
-        ocSubTotal          = SC_OPCODE_SUB_TOTAL,
+        ocSubTotal          = ocSub_TOTAL,
         ocRawSubtract       = SC_OPCODE_RAWSUBTRACT,
         ocIfs_MS            = SC_OPCODE_IFS_MS,
         ocSwitch_MS         = SC_OPCODE_SWITCH_MS,
@@ -305,7 +315,7 @@ enum OpCode : sal_uInt16
         ocDBVarP            = SC_OPCODE_DB_VAR_P,
     // Management functions
         ocIndirect          = SC_OPCODE_INDIRECT,
-        ocAddress           = SC_OPCODE_ADDRESS,
+        ocAddress           = ocAddRESS,
         ocMatch             = SC_OPCODE_MATCH,
         ocXMatch            = SC_OPCODE_X_MATCH,
         ocCountEmptyCells   = SC_OPCODE_COUNT_EMPTY_CELLS,
@@ -319,7 +329,7 @@ enum OpCode : sal_uInt16
         ocVLookup           = SC_OPCODE_V_LOOKUP,
         ocXLookup           = SC_OPCODE_X_LOOKUP,
         ocHLookup           = SC_OPCODE_H_LOOKUP,
-        ocMultiArea         = SC_OPCODE_MULTI_AREA,
+        ocMultiArea         = ocMulTI_AREA,
         ocOffset            = SC_OPCODE_OFFSET,
         ocIndex             = SC_OPCODE_INDEX,
         ocAreas             = SC_OPCODE_AREAS,
@@ -334,7 +344,7 @@ enum OpCode : sal_uInt16
         ocSearch            = SC_OPCODE_SEARCH,
         ocMid               = SC_OPCODE_MID,
         ocText              = SC_OPCODE_TEXT,
-        ocSubstitute        = SC_OPCODE_SUBSTITUTE,
+        ocSubstitute        = ocSubSTITUTE,
         ocRept              = SC_OPCODE_REPT,
         ocConcat            = SC_OPCODE_CONCAT,
         ocConcat_MS         = SC_OPCODE_CONCAT_MS,
@@ -575,6 +585,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocTableRefItemData: return "TableRefItemData";
     case ocTableRefItemTotals: return "TableRefItemTotals";
     case ocTableRefItemThisRow: return "TableRefItemThisRow";
+    case ocStopDiv: return "StopDiv";
     case ocSkip: return "Skip";
     case ocDBArea: return "DBArea";
     case ocTableRef: return "TableRef";
@@ -1029,6 +1040,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";
     case ocNone: return "None";
+    default: break;
     }
     std::ostringstream os;
     os << static_cast<int>(eCode);

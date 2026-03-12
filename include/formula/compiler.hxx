@@ -19,89 +19,6 @@
 
 #pragma once
 
-/* Central definition of OpCodes for spreadsheet functions */
-
-/*** Special commands ***/
-#define SC_OPCODE_PUSH                0     /* internal commands */
-// used to be SC_OPCODE_CALL
-#define SC_OPCODE_STOP                2
-#define SC_OPCODE_EXTERNAL            3
-#define SC_OPCODE_NAME                4
-#define SC_OPCODE_EXTERNAL_REF        5
-#define SC_OPCODE_IF                  6     /* jump commands */
-#define SC_OPCODE_IF_ERROR            7
-#define SC_OPCODE_IF_NA               8
-#define SC_OPCODE_CHOOSE              9
-#define SC_OPCODE_OPEN               10     /* parentheses and separators */
-#define SC_OPCODE_CLOSE              11
-#define SC_OPCODE_SEP                12
-#define SC_OPCODE_MISSING            13     /* special OpCodes */
-#define SC_OPCODE_BAD                14
-#define SC_OPCODE_STRINGXML          15
-#define SC_OPCODE_SPACES             16
-#define SC_OPCODE_WHITESPACE         17
-#define SC_OPCODE_MAT_REF            18
-#define SC_OPCODE_DB_AREA            19     /* additional access operators */
-#define SC_OPCODE_TABLE_REF          20
-#define SC_OPCODE_MACRO              21
-#define SC_OPCODE_COL_ROW_NAME       22
-#define SC_OPCODE_COL_ROW_NAME_AUTO  23
-#define SC_OPCODE_PERCENT_SIGN       24     /* operator _follows_ value */
-#define SC_OPCODE_ARRAY_OPEN         25
-#define SC_OPCODE_ARRAY_CLOSE        26
-#define SC_OPCODE_ARRAY_ROW_SEP      27
-#define SC_OPCODE_ARRAY_COL_SEP      28     /* some convs use sep != col_sep */
-#define SC_OPCODE_TABLE_REF_OPEN     29
-#define SC_OPCODE_TABLE_REF_CLOSE    30
-#define SC_OPCODE_TABLE_REF_ITEM_ALL      31
-#define SC_OPCODE_TABLE_REF_ITEM_HEADERS  32
-#define SC_OPCODE_TABLE_REF_ITEM_DATA     33
-#define SC_OPCODE_TABLE_REF_ITEM_TOTALS   34
-#define SC_OPCODE_TABLE_REF_ITEM_THIS_ROW 35
-#define SC_OPCODE_STOP_DIV           36
-#define SC_OPCODE_SKIP               37     /* used to skip raw tokens during string compilation */
-#define SC_OPCODE_STRINGNAME         38     /* special OpCode for lambda function names */
-#define SC_OPCODE_LET                39
-
-/*** error constants #... ***/
-#define SC_OPCODE_START_ERRORS       40
-#define SC_OPCODE_ERROR_NULL         40
-#define SC_OPCODE_ERROR_DIVZERO      41
-#define SC_OPCODE_ERROR_VALUE        42
-#define SC_OPCODE_ERROR_REF          43
-#define SC_OPCODE_ERROR_NAME         44
-#define SC_OPCODE_ERROR_NUM          45
-#define SC_OPCODE_ERROR_NA           46
-#define SC_OPCODE_STOP_ERRORS        47
-
-/*** Binary operators ***/
-#define SC_OPCODE_START_BIN_OP       50
-#define SC_OPCODE_ADD                50
-#define SC_OPCODE_SUB                51
-#define SC_OPCODE_MUL                52
-#define SC_OPCODE_DIV                53
-#define SC_OPCODE_AMPERSAND          54
-#define SC_OPCODE_POW                55
-#define SC_OPCODE_EQUAL              56
-#define SC_OPCODE_NOT_EQUAL          57
-#define SC_OPCODE_LESS               58
-#define SC_OPCODE_GREATER            59
-#define SC_OPCODE_LESS_EQUAL         60
-#define SC_OPCODE_GREATER_EQUAL      61
-#define SC_OPCODE_AND                62
-#define SC_OPCODE_OR                 63
-#define SC_OPCODE_INTERSECT          64
-#define SC_OPCODE_UNION              65
-#define SC_OPCODE_RANGE              66
-#define SC_OPCODE_STOP_BIN_OP        67
-
-/* NOTE: binary and unary operators must be in sequence for compiler! */
-
-/*** Unary operators ***/
-#define SC_OPCODE_START_UN_OP        70
-#define SC_OPCODE_NEG_SUB            70
-#define SC_OPCODE_STOP_UN_OP         71
-
 #define SC_OPCODE_START_FUNCTION     75
 
 /*** Functions without parameters ***/
@@ -220,7 +137,7 @@
 #define SC_OPCODE_ROUND_DOWN        206
 #define SC_OPCODE_TRUNC             207
 #define SC_OPCODE_LOG               208
-#define SC_OPCODE_POWER             209
+#define ocPowER             209
 #define SC_OPCODE_GCD               210
 #define SC_OPCODE_LCM               211
 #define SC_OPCODE_MOD               212
@@ -277,7 +194,7 @@
 #define SC_OPCODE_CUM_PRINC         263
 #define SC_OPCODE_EFFECT            264
 #define SC_OPCODE_NOMINAL           265
-#define SC_OPCODE_SUB_TOTAL         266
+#define ocSub_TOTAL         266
 #define SC_OPCODE_DB_SUM            267     /* database functions */
 #define SC_OPCODE_DB_COUNT          268
 #define SC_OPCODE_DB_COUNT_2        269
@@ -291,7 +208,7 @@
 #define SC_OPCODE_DB_VAR            277
 #define SC_OPCODE_DB_VAR_P          278
 #define SC_OPCODE_INDIRECT          279     /* management functions */
-#define SC_OPCODE_ADDRESS           280
+#define ocAddRESS           280
 #define SC_OPCODE_MATCH             281
 #define SC_OPCODE_COUNT_EMPTY_CELLS 282
 #define SC_OPCODE_COUNT_IF          283
@@ -299,7 +216,7 @@
 #define SC_OPCODE_LOOKUP            285
 #define SC_OPCODE_V_LOOKUP          286
 #define SC_OPCODE_H_LOOKUP          287
-#define SC_OPCODE_MULTI_AREA        288
+#define ocMulTI_AREA        288
 #define SC_OPCODE_OFFSET            289
 #define SC_OPCODE_INDEX             290
 #define SC_OPCODE_AREAS             291
@@ -313,7 +230,7 @@
 #define SC_OPCODE_SEARCH            299
 #define SC_OPCODE_MID               300
 #define SC_OPCODE_TEXT              301
-#define SC_OPCODE_SUBSTITUTE        302
+#define ocSubSTITUTE        302
 #define SC_OPCODE_REPT              303
 #define SC_OPCODE_CONCAT            304
 #define SC_OPCODE_MAT_VALUE         305     /* matrix functions */
@@ -412,7 +329,6 @@
 #define SC_OPCODE_BITRSHIFT         398
 #define SC_OPCODE_BITLSHIFT         399
 #define SC_OPCODE_GET_DATEDIF       400
-#define SC_OPCODE_XOR               401
 #define SC_OPCODE_AVERAGE_IF        402
 #define SC_OPCODE_SUM_IFS           403
 #define SC_OPCODE_AVERAGE_IFS       404

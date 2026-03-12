@@ -1655,7 +1655,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
                 ;
         }
     }
-    else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)
+    else if (ocStartBinOp <= eOp && eOp < ocStopUnaryOp)
     {
         if (ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly &&
             ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->find(eOp) == ScInterpreter::GetGlobalConfig().mpOpenCLSubsetOpCodes->end())

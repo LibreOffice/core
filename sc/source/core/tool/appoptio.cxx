@@ -23,6 +23,7 @@
 #include <global.hxx>
 #include <userlist.hxx>
 #include <formula/compiler.hxx>
+#include <formula/opcode.hxx>
 #include <miscuno.hxx>
 #include <vector>
 #include <osl/diagnose.h>
@@ -66,7 +67,7 @@ void ScAppOptions::SetDefaults()
     pLRUList[1] = SC_OPCODE_AVERAGE;
     pLRUList[2] = SC_OPCODE_MIN;
     pLRUList[3] = SC_OPCODE_MAX;
-    pLRUList[4] = SC_OPCODE_IF;
+    pLRUList[4] = ocIf;
     nLRUFuncCount = 5;
 
     nTrackContentColor = COL_TRANSPARENT;
