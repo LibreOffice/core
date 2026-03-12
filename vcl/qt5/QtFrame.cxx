@@ -23,10 +23,8 @@
 #include <QtFrame.moc>
 
 #include <QtDragAndDrop.hxx>
-#include <QtGraphics.hxx>
 #include <QtInstance.hxx>
 #include <QtMainWindow.hxx>
-#include <QtSvpGraphics.hxx>
 #include <QtTools.hxx>
 #include <QtTransferable.hxx>
 #if CHECK_ANY_QT_USING_X11
@@ -63,19 +61,8 @@
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
-#include <cairo.h>
-#include <headless/svpgdi.hxx>
-
-static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExtentsY,
-                             sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight)
-{
-    QtFrame* pThis = static_cast<QtFrame*>(handle);
-    pThis->Damage(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight);
-}
-
-QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
+QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle)
     : m_pTopLevel(nullptr)
-    , m_bUseCairo(bUseCairo)
     , m_bNullRegion(true)
     , m_bGraphicsInUse(false)
     , m_ePointerStyle(PointerStyle::Arrow)
@@ -91,9 +78,6 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_nInputLanguage(LANGUAGE_DONTKNOW)
 {
     GetQtInstance().insertFrame(this);
-
-    m_aDamageHandler.handle = this;
-    m_aDamageHandler.damaged = ::SvpDamageHandler;
 
     if (nStyle & SalFrameStyleFlags::DEFAULT) // ensure default style
     {
@@ -180,35 +164,6 @@ void QtFrame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtent
     ] { m_pQWidget->update(r); });
 }
 
-SalGraphics* QtFrame::DoAcquireGraphics(const QSize& rSize)
-{
-    if (m_bUseCairo)
-    {
-        if (!m_pSvpGraphics)
-        {
-            m_pSvpGraphics.reset(new QtSvpGraphics(this));
-            m_pSurface.reset(
-                cairo_image_surface_create(CAIRO_FORMAT_ARGB32, rSize.width(), rSize.height()));
-            m_pSvpGraphics->setSurface(m_pSurface.get(),
-                                       basegfx::B2IVector(rSize.width(), rSize.height()));
-            cairo_surface_set_user_data(m_pSurface.get(), QtSvpGraphics::getDamageKey(),
-                                        &m_aDamageHandler, nullptr);
-        }
-        return m_pSvpGraphics.get();
-    }
-    else
-    {
-        if (!m_pQtGraphics)
-        {
-            m_pQtGraphics.reset(new QtGraphics(this));
-            m_pQImage.reset(new QImage(rSize, Qt_DefaultFormat32));
-            m_pQImage->fill(Qt::transparent);
-            m_pQtGraphics->ChangeQImage(m_pQImage.get());
-        }
-        return m_pQtGraphics.get();
-    }
-}
-
 SalGraphics* QtFrame::AcquireGraphics()
 {
     if (m_bGraphicsInUse)
@@ -217,14 +172,6 @@ SalGraphics* QtFrame::AcquireGraphics()
     m_bGraphicsInUse = true;
 
     return DoAcquireGraphics(m_pQWidget->size() * devicePixelRatioF());
-}
-
-SalGraphics* QtFrame::GetGraphics()
-{
-    if (m_bUseCairo)
-        return m_pSvpGraphics.get();
-    else
-        return m_pQtGraphics.get();
 }
 
 void QtFrame::ReleaseGraphics(SalGraphics* pSalGraph)
@@ -1338,21 +1285,6 @@ void QtFrame::handleDragLeave() { m_pDropTarget->dragExit(); }
 
 void QtFrame::handleMoveEvent(QMoveEvent*) { CallCallback(SalEvent::Move, nullptr); }
 
-QImage QtFrame::GetImage()
-{
-    if (m_bUseCairo)
-    {
-        cairo_surface_t* pSurface = m_pSurface.get();
-        cairo_surface_flush(pSurface);
-
-        return QImage(cairo_image_surface_get_data(pSurface),
-                      cairo_image_surface_get_width(pSurface),
-                      cairo_image_surface_get_height(pSurface), Qt_DefaultFormat32);
-    }
-    else
-        return *m_pQImage;
-}
-
 void QtFrame::handlePaintEvent(const QPaintEvent* pEvent, QWidget* pWidget)
 {
     QPainter p(pWidget);
@@ -1365,42 +1297,6 @@ void QtFrame::handlePaintEvent(const QPaintEvent* pEvent, QWidget* pWidget)
     aImage.setDevicePixelRatio(fRatio);
     QRectF source(pEvent->rect().topLeft() * fRatio, pEvent->rect().size() * fRatio);
     p.drawImage(pEvent->rect(), aImage, source);
-}
-
-void QtFrame::DoHandleResizeEvent(int nWidth, int nHeight)
-{
-    if (m_bUseCairo)
-    {
-        if (m_pSurface)
-        {
-            const int nOldWidth = cairo_image_surface_get_width(m_pSurface.get());
-            const int nOldHeight = cairo_image_surface_get_height(m_pSurface.get());
-            if (nOldWidth != nWidth || nOldHeight != nHeight)
-            {
-                cairo_surface_t* pSurface
-                    = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
-                cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
-                                            &m_aDamageHandler, nullptr);
-                m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(nWidth, nHeight));
-                UniqueCairoSurface old_surface(m_pSurface.release());
-                m_pSurface.reset(pSurface);
-
-                const int nMinWidth = qMin(nOldWidth, nWidth);
-                const int nMinHeight = qMin(nOldHeight, nHeight);
-                SalTwoRect rect(0, 0, nMinWidth, nMinHeight, 0, 0, nMinWidth, nMinHeight);
-                m_pSvpGraphics->copySource(rect, old_surface.get());
-            }
-        }
-    }
-    else
-    {
-        if (m_pQImage && m_pQImage->size() != QSize(nWidth, nHeight))
-        {
-            QImage* pImage = new QImage(m_pQImage->copy(0, 0, nWidth, nHeight));
-            m_pQtGraphics->ChangeQImage(pImage);
-            m_pQImage.reset(pImage);
-        }
-    }
 }
 
 void QtFrame::handleResizeEvent(const QResizeEvent* pEvent)

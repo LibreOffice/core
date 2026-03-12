@@ -34,6 +34,8 @@
 #include <QtMenu.hxx>
 #include <QtObject.hxx>
 #include <QtOpenGLContext.hxx>
+#include <QtSalFrame.hxx>
+#include <QtSvpSalFrame.hxx>
 #include "QtSvpVirtualDevice.hxx"
 #include <QtSystem.hxx>
 #include <QtTimer.hxx>
@@ -801,7 +803,12 @@ QtFrame* QtInstance::CreateFrame(SalFrameStyleFlags nStyle, QtFrame* pParent)
     SolarMutexGuard aGuard;
 
     QtFrame* pFrame = nullptr;
-    RunInMainThread([&]() { pFrame = new QtFrame(pParent, nStyle, useCairo()); });
+    RunInMainThread([&]() {
+        if (useCairo())
+            pFrame = new QtSvpSalFrame(pParent, nStyle);
+        else
+            pFrame = new QtSalFrame(pParent, nStyle);
+    });
 
     return pFrame;
 }

@@ -27,7 +27,6 @@
 #include "QtTools.hxx"
 #include "QtWidget.hxx"
 
-#include <headless/svpgdi.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 
@@ -54,11 +53,9 @@
 
 class QtDragSource;
 class QtDropTarget;
-class QtGraphics;
 class QtInstance;
 class QtMainWindow;
 class QtMenu;
-class QtSvpGraphics;
 
 class QDragMoveEvent;
 class QDropEvent;
@@ -68,7 +65,11 @@ class QPaintDevice;
 class QScreen;
 class QWidget;
 
-class VCLPLUG_QT_PUBLIC QtFrame final : public QObject, public SalFrame
+/** Abstract base class for Qt based SalFrame implementations.
+ *  Subclasses need to implement the purely virtual graphics-related
+ *  methods using a specific graphics backend.
+ */
+class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
 {
     Q_OBJECT
 
@@ -77,12 +78,6 @@ class VCLPLUG_QT_PUBLIC QtFrame final : public QObject, public SalFrame
     QtWidget* m_pQWidget;
     QtMainWindow* m_pTopLevel;
 
-    const bool m_bUseCairo;
-    std::unique_ptr<QImage> m_pQImage;
-    std::unique_ptr<QtGraphics> m_pQtGraphics;
-    UniqueCairoSurface m_pSurface;
-    std::unique_ptr<QtSvpGraphics> m_pSvpGraphics;
-    DamageHandler m_aDamageHandler;
     QRegion m_aRegion;
     bool m_bNullRegion;
 
@@ -139,16 +134,18 @@ class VCLPLUG_QT_PUBLIC QtFrame final : public QObject, public SalFrame
 
     static int toQtKeyCode(sal_uInt16 nVclCode);
 
-    SalGraphics* GetGraphics();
-    QImage GetImage();
-    SalGraphics* DoAcquireGraphics(const QSize& rSize);
-    void DoHandleResizeEvent(int nWidth, int nHeight);
-
 private Q_SLOTS:
     void screenChanged(QScreen*);
 
+protected:
+    virtual SalGraphics* GetGraphics() = 0;
+    virtual QImage GetImage() = 0;
+    virtual SalGraphics* DoAcquireGraphics(const QSize& rSize) = 0;
+    virtual void DoHandleResizeEvent(int nWidth, int nHeight) = 0;
+
+    QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle);
+
 public:
-    QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
     virtual ~QtFrame() override;
 
     QWidget& GetQWidget() const { return *m_pQWidget; }
