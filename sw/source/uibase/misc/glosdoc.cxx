@@ -33,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld/MessageDialog.hxx>
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
 #include <rtl/character.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/fstathelper.hxx>
