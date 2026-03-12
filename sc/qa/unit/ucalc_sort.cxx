@@ -2378,13 +2378,13 @@ CPPUNIT_TEST_FIXTURE(TestSort, testShuffle)
 
     m_pDoc->InsertTab(0, u"Test"_ustr);
 
-    const std::vector<std::vector<OUString>> aData = {
-        { u"A"_ustr, u"B"_ustr },
-        { u"0"_ustr, u"1"_ustr },
-        { u"4"_ustr, u"3"_ustr },
-        { u"2"_ustr, u"4"_ustr },
-        { u"9"_ustr, u"8"_ustr },
-        { u"6"_ustr, u"9"_ustr },
+    const std::vector<std::vector<const char*>> aData = {
+        { "A", "B" },
+        { "0", "1" },
+        { "4", "3" },
+        { "2", "4" },
+        { "9", "8" },
+        { "6", "9" },
     };
 
     // Insert data
@@ -2397,8 +2397,8 @@ CPPUNIT_TEST_FIXTURE(TestSort, testShuffle)
         size_t i = 0;
         for (auto const& rRow : aData)
         {
-            CPPUNIT_ASSERT_EQUAL(rRow[0], m_pDoc->GetString(ScAddress(0, i, 0)));
-            CPPUNIT_ASSERT_EQUAL(rRow[1], m_pDoc->GetString(ScAddress(1, i, 0)));
+            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(rRow[0]), m_pDoc->GetString(ScAddress(0, i, 0)));
+            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(rRow[1]), m_pDoc->GetString(ScAddress(1, i, 0)));
             i++;
         }
     }
@@ -2438,7 +2438,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testShuffle)
         size_t i = 0;
         for (auto const& rRow : aData)
         {
-            if (rRow[0] == sValueA && rRow[1] == sValueB)
+            if (OUString::createFromAscii(rRow[0]) == sValueA && OUString::createFromAscii(rRow[1]) == sValueB)
             {
                 oIndex = i;
                 aIndices.push_back(i);
@@ -2468,8 +2468,8 @@ CPPUNIT_TEST_FIXTURE(TestSort, testShuffle)
         size_t i = 0;
         for (auto const& rRow : aData)
         {
-            CPPUNIT_ASSERT_EQUAL(rRow[0], m_pDoc->GetString(ScAddress(0, i, 0)));
-            CPPUNIT_ASSERT_EQUAL(rRow[1], m_pDoc->GetString(ScAddress(1, i, 0)));
+            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(rRow[0]), m_pDoc->GetString(ScAddress(0, i, 0)));
+            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(rRow[1]), m_pDoc->GetString(ScAddress(1, i, 0)));
             i++;
         }
     }
@@ -2493,13 +2493,13 @@ CPPUNIT_TEST_FIXTURE(TestSort, testShuffleAndThenSort)
 
     ScDBDocFunc aFunc(*m_xDocShell);
 
-    const std::vector<std::vector<OUString>> aData = {
-        { u"A"_ustr, u"B"_ustr },
-        { u"0"_ustr, u"1"_ustr },
-        { u"4"_ustr, u"3"_ustr },
-        { u"2"_ustr, u"4"_ustr },
-        { u"9"_ustr, u"8"_ustr },
-        { u"6"_ustr, u"9"_ustr },
+    const std::vector<std::vector<const char*>> aData = {
+        { "A", "B" },
+        { "0", "1" },
+        { "4", "3" },
+        { "2", "4" },
+        { "9", "8" },
+        { "6", "9" },
     };
 
     // Insert data
@@ -2554,8 +2554,8 @@ CPPUNIT_TEST_FIXTURE(TestSort, testShuffleAndThenSort)
         size_t i = 0;
         for (auto const& rRow : aData)
         {
-            CPPUNIT_ASSERT_EQUAL(rRow[0], m_pDoc->GetString(ScAddress(0, i, 0)));
-            CPPUNIT_ASSERT_EQUAL(rRow[1], m_pDoc->GetString(ScAddress(1, i, 0)));
+            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(rRow[0]), m_pDoc->GetString(ScAddress(0, i, 0)));
+            CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(rRow[1]), m_pDoc->GetString(ScAddress(1, i, 0)));
             i++;
         }
     }
