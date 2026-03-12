@@ -1039,12 +1039,17 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append('.');
         }
 
-        if (!rRef.IsColRel())
-            rBuffer.append('$');
-        MakeColStr( rLimits, rBuffer, aAbsRef.Col());
-        if (!rRef.IsRowRel())
-            rBuffer.append('$');
-        MakeRowStr( rLimits, rBuffer, aAbsRef.Row());
+        if (!rRef.IsColRel() && !rRef.IsRowRel() && rRef.IsColDeleted() && rRef.IsRowDeleted())
+            rBuffer.append("#REF!");
+        else
+        {
+            if (!rRef.IsColRel())
+                rBuffer.append('$');
+            MakeColStr(rLimits, rBuffer, aAbsRef.Col());
+            if (!rRef.IsRowRel())
+                rBuffer.append('$');
+            MakeRowStr(rLimits, rBuffer, aAbsRef.Row());
+        }
 
         return true;
     }
@@ -1368,12 +1373,17 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
     static void makeSingleCellStr( const ScSheetLimits& rLimits, OUStringBuffer& rBuf, const ScSingleRefData& rRef, const ScAddress& rAbs )
     {
-        if (!rRef.IsColRel())
-            rBuf.append('$');
-        MakeColStr(rLimits, rBuf, rAbs.Col());
-        if (!rRef.IsRowRel())
-            rBuf.append('$');
-        MakeRowStr(rLimits, rBuf, rAbs.Row());
+        if (!rRef.IsColRel() && !rRef.IsRowRel() && rRef.IsColDeleted() && rRef.IsRowDeleted())
+            rBuf.append("#REF!");
+        else
+        {
+            if (!rRef.IsColRel())
+                rBuf.append('$');
+            MakeColStr(rLimits, rBuf, rAbs.Col());
+            if (!rRef.IsRowRel())
+                rBuf.append('$');
+            MakeRowStr(rLimits, rBuf, rAbs.Row());
+        }
     }
 
     virtual void makeRefStr(
@@ -3513,8 +3523,10 @@ bool ScCompiler::ParseSingleReference( const OUString& rName, const OUString* pE
     {
         // Valid given tab and invalid col or row may indicate a sheet-local
         // named expression, bail out early and don't create a reference token.
-        if (!(nFlags & ScRefFlags::VALID) && mnCurrentSheetEndPos > 0 &&
-                (nFlags & ScRefFlags::TAB_VALID) && (nFlags & ScRefFlags::TAB_3D))
+        bool bErrRef = (rName.subView(mnCurrentSheetEndPos) == mxSymbols->getSymbol(ocErrRef));
+
+        if (!(nFlags & ScRefFlags::VALID) && mnCurrentSheetEndPos > 0
+            && (nFlags & ScRefFlags::TAB_VALID) && (nFlags & ScRefFlags::TAB_3D) && !bErrRef)
         {
             if (aExtInfo.mbExternal)
             {
@@ -3543,8 +3555,8 @@ bool ScCompiler::ParseSingleReference( const OUString& rName, const OUString* pE
 
         ScSingleRefData aRef;
         aRef.InitAddress( aAddr );
-        aRef.SetColRel( (nFlags & ScRefFlags::COL_ABS) == ScRefFlags::ZERO );
-        aRef.SetRowRel( (nFlags & ScRefFlags::ROW_ABS) == ScRefFlags::ZERO );
+        aRef.SetColRel(((nFlags & ScRefFlags::COL_ABS) == ScRefFlags::ZERO) && !bErrRef);
+        aRef.SetRowRel(((nFlags & ScRefFlags::ROW_ABS) == ScRefFlags::ZERO) && !bErrRef);
         aRef.SetTabRel( (nFlags & ScRefFlags::TAB_ABS) == ScRefFlags::ZERO );
         aRef.SetFlag3D( ( nFlags & ScRefFlags::TAB_3D ) != ScRefFlags::ZERO );
         // the reference is really invalid
