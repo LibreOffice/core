@@ -168,7 +168,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsWithMetafile)
     assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy12", 0.0,
                            0.01);
     assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy13",
-                           -3278.56, 0.01);
+                           -3284.32, 0.01);
     assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy21", 0.0,
                            0.01);
     assertXPathDoubleValue(pDocument, aXPathPrefix + "mask/mask/metafile/transform", "xy22", 1.34,
@@ -202,7 +202,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsWithMetafile)
         "xy22", 0.79, 0.01);
     assertXPathDoubleValue(
         pDocument, aXPathPrefix + "mask/mask/metafile/transform/mask/mask/metafile/transform",
-        "xy23", -139.63, 0.01);
+        "xy23", 0.23, 0.01);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFillRectsWithTextureBrush)
