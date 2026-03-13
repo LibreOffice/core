@@ -150,6 +150,7 @@
                     <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="edfilterarea-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="advancedfilterdialog|edfilterarea-atkobject">Read Filter Criteria From</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="advancedfilterdialog|extended_tip|edfilterarea">Select the named range, or enter the cell range that contains the filter criteria that you want to use.</property>
                       </object>
                     </child>
