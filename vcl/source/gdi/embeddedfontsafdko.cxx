@@ -106,10 +106,10 @@ bool EmbeddedFontsManager::tx_dump(const OUString& srcFontUrl, const OUString& d
 
     OString srcFontPathA(srcFontPath.toUtf8());
     OString destFilePathA(destFilePath.toUtf8());
+#if USE_AFDKO_PROGRAMS
     OString txCommand = TX " -dump " + srcFontPathA + " " + destFilePathA;
     SAL_INFO("vcl.fonts", txCommand);
 
-#if USE_AFDKO_PROGRAMS
     return system(txCommand.getStr()) == 0;
 #else
     txCtx h = txNew(nullptr);
@@ -155,9 +155,9 @@ bool EmbeddedFontsManager::tx_t1(const OUString& srcFontUrl, const OUString& des
 
     OString srcFontPathA(srcFontPath.toUtf8());
     OString destFilePathA(destFilePath.toUtf8());
+#if USE_AFDKO_PROGRAMS
     OString txCommand = TX " -t1 " + srcFontPathA + " " + destFilePathA;
     SAL_INFO("vcl.fonts", txCommand);
-#if USE_AFDKO_PROGRAMS
     return system(txCommand.getStr()) == 0;
 #else
     txCtx h = txNew(nullptr);
@@ -233,6 +233,7 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     OString cidFontInfoPathA(cidFontInfoPath.toUtf8());
     OString destFilePathA(destFilePath.toUtf8());
 
+#if USE_AFDKO_PROGRAMS
     OStringBuffer aBuffer;
     for (const auto& path : paths)
         aBuffer.append(" "_ostr + path);
@@ -240,7 +241,6 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
         = MERGEFONTS " -cid  " + cidFontInfoPathA + " " + destFilePathA + aBuffer;
     SAL_INFO("vcl.fonts", mergeFontsCommand);
 
-#if USE_AFDKO_PROGRAMS
     if (system(mergeFontsCommand.getStr()) != 0)
         return false;
 #else
@@ -282,9 +282,9 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     bool result = false;
     OString tmpdestfile = destFilePathA + ".temp";
 
+#if USE_AFDKO_PROGRAMS
     OString txCommand = TX " -t1 " + destFilePathA + " " + tmpdestfile;
     SAL_INFO("vcl.fonts", txCommand);
-#if USE_AFDKO_PROGRAMS
     result = system(txCommand.getStr()) == 0;
 #else
     try
@@ -371,6 +371,7 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
     OString charMapPathA(charMapPath.toUtf8());
     OString featuresPathA(featuresPath.toUtf8());
 
+#if USE_AFDKO_PROGRAMS
     OString makeotfCommand
         = MAKEOTF " -mf " + fontMenuNameDBPathA + " -f " + srcFontPathA + " -o " + destFilePathA;
     if (!charMapPathA.isEmpty())
@@ -379,7 +380,6 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
         makeotfCommand += " -ff "_ostr + featuresPathA;
     SAL_INFO("vcl.fonts", makeotfCommand);
 
-#if USE_AFDKO_PROGRAMS
     return system(makeotfCommand.getStr()) == 0;
 #else
     ctlMemoryCallbacks cb_dna_memcb{ nullptr, cb_memory };
