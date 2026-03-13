@@ -4732,13 +4732,9 @@ void SwWW8ImplReader::Read_LineBreakClear(sal_uInt16 /*nId*/, const sal_uInt8* p
 
         // Replace the linebreak char with a clearing break.
         --nPos;
-        m_pPaM->SetMark();
-        m_pPaM->GetMark()->AdjustContent(-1);
-        m_rDoc.getIDocumentContentOperations().DeleteRange(*m_pPaM);
-        m_pPaM->DeleteMark();
         SwFormatLineBreak aLineBreak(*m_oLineBreakClear);
         m_oLineBreakClear.reset();
-        pText->InsertItem(aLineBreak, nPos, nPos);
+        ReplaceCharWithItem(*pText, nPos, aLineBreak);
     }
 
     if (nLen < 1)

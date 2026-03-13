@@ -118,6 +118,15 @@ namespace com::sun::star{
     namespace lang{class XMultiServiceFactory;}
 }
 
+// Replace a character with a text attribute item. Use EraseText rather than
+// DeleteRange to avoid DelFlyInRange deleting fly frames that happen to be
+// anchored at this character position.
+inline SwTextAttr* ReplaceCharWithItem(SwTextNode& rText, sal_Int32 nPos, SfxPoolItem& rItem)
+{
+    rText.EraseText(SwPosition(rText, nPos), 1);
+    return rText.InsertItem(rItem, nPos, nPos);
+}
+
 // defines only for the WW8-variable of the INI file
 #define WW8FL_NO_STYLES      2
 #define WW8FL_NO_GRAF     0x80

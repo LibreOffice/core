@@ -222,16 +222,8 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
     if (pText && nPos)
     {
         sChar += OUStringChar(pText->GetText()[--nPos]);
-        m_pPaM->SetMark();
-        m_pPaM->GetMark()->AdjustContent(-1);
-        std::shared_ptr<SwUnoCursor> xLastAnchorCursor(m_oLastAnchorPos ? m_rDoc.CreateUnoCursor(*m_oLastAnchorPos) : nullptr);
-        m_oLastAnchorPos.reset();
-        m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
-        m_pPaM->DeleteMark();
-        if (xLastAnchorCursor)
-            m_oLastAnchorPos.emplace(*xLastAnchorCursor->GetPoint());
         SwFormatFootnote aFootnote(rDesc.meType == MAN_EDN);
-        pFN = static_cast<SwTextFootnote*>(pText->InsertItem(aFootnote, nPos, nPos));
+        pFN = static_cast<SwTextFootnote*>(ReplaceCharWithItem(*pText, nPos, aFootnote));
     }
     OSL_ENSURE(pFN, "Problems creating the footnote text");
     if (pFN)
