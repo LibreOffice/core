@@ -1147,6 +1147,19 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testClearingBreakWithFly)
+{
+    // Given a .docx with clearing breaks and fly frames anchored at the same
+    // character positions, export to .doc and reimport:
+    // Without the fix, the .doc import would crash because Read_LineBreakClear
+    // used DeleteRange to replace the linebreak char, which triggered
+    // DelFlyInRange and destroyed fly frames whose content nodes still had
+    // content indices registered.
+    createSwDoc("clearing-break-with-fly.docx");
+    saveAndReload(TestFilter::DOC);
+    CPPUNIT_ASSERT_EQUAL(3, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf142840)
 {
     createSwDoc("tdf142840.odt");
