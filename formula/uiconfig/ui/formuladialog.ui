@@ -500,6 +500,11 @@
                     <property name="hexpand">True</property>
                     <property name="width-chars">60</property>
                     <property name="truncate-multiline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ED_REF-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="formuladialog|ED_REF-atkobject">Reference</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
