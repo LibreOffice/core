@@ -79,6 +79,9 @@
 #include <unx/gendata.hxx>
 #endif
 
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+
 namespace {
 
 #if ENABLE_HEADLESS
@@ -419,14 +422,20 @@ const OUString& SalGetDesktopEnvironment()
 #elif defined(iOS)
     static OUString aDesktopEnvironment("iOS");
 #elif UNIX_DESKTOP_DETECT
-    // Order to match desktops.hxx' DesktopType
-    static constexpr OUString desktop_strings[] = {
-        u"none"_ustr, u"unknown"_ustr, u"GNOME"_ustr, u"UNITY"_ustr,
-        u"XFCE"_ustr, u"MATE"_ustr, u"PLASMA5"_ustr, u"PLASMA6"_ustr, u"LXQT"_ustr };
+    static constexpr auto aDesktopMap
+        = frozen::make_unordered_map<DesktopType, OUString>({ { DESKTOP_NONE, u"none"_ustr },
+                                                              { DESKTOP_UNKNOWN, u"unknown"_ustr },
+                                                              { DESKTOP_GNOME, u"GNOME"_ustr },
+                                                              { DESKTOP_UNITY, u"UNITY"_ustr },
+                                                              { DESKTOP_XFCE, u"XFCE"_ustr },
+                                                              { DESKTOP_MATE, u"MATE"_ustr },
+                                                              { DESKTOP_PLASMA5, u"PLASMA5"_ustr },
+                                                              { DESKTOP_PLASMA6, u"PLASMA6"_ustr },
+                                                              { DESKTOP_LXQT, u"LXQT"_ustr } });
     static OUString aDesktopEnvironment;
     if( aDesktopEnvironment.isEmpty())
     {
-        aDesktopEnvironment = desktop_strings[get_desktop_environment()];
+        aDesktopEnvironment = aDesktopMap.at(get_desktop_environment());
     }
 #else
     static OUString aDesktopEnvironment("unknown");

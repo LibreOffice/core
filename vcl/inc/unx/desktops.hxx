@@ -34,7 +34,7 @@ enum SAL_DLLPUBLIC_RTTI DesktopType
     DESKTOP_PLASMA5,
     DESKTOP_PLASMA6,
     DESKTOP_LXQT
-}; // keep in sync with desktop_strings[] in salplug.cxx
+};
 
 DesktopType get_desktop_environment();
 
