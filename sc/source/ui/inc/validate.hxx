@@ -121,7 +121,7 @@ private:
     std::unique_ptr<weld::Label> m_xFtValue;
     std::unique_ptr<weld::ComboBox> m_xLbValue;
     std::unique_ptr<weld::Label> m_xFtMin;
-    std::unique_ptr<weld::Widget> m_xMinGrid;
+    std::unique_ptr<weld::Label> m_xFtMinList;
     std::unique_ptr<formula::RefEdit> m_xEdMin;
     std::unique_ptr<weld::TextView> m_xEdList;       /// Entries for explicit list
     std::unique_ptr<weld::Label> m_xFtMax;

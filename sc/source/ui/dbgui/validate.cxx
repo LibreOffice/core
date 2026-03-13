@@ -370,7 +370,7 @@ ScTPValidationValue::ScTPValidationValue(weld::Container* pPage, weld::DialogCon
     , m_xFtValue(m_xBuilder->weld_label(u"valueft"_ustr))
     , m_xLbValue(m_xBuilder->weld_combo_box(u"data"_ustr))
     , m_xFtMin(m_xBuilder->weld_label(u"minft"_ustr))
-    , m_xMinGrid(m_xBuilder->weld_widget(u"mingrid"_ustr))
+    , m_xFtMinList(m_xBuilder->weld_label(u"minlistft"_ustr))
     , m_xEdMin(new formula::RefEdit(m_xBuilder->weld_entry(u"min"_ustr)))
     , m_xEdList(m_xBuilder->weld_text_view(u"minlist"_ustr))
     , m_xFtMax(m_xBuilder->weld_label(u"maxft"_ustr))
@@ -665,8 +665,6 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, weld::ComboBox&, void)
 
     if( bRange )
         m_xFtMin->set_label( maStrRange );
-    else if( bList )
-        m_xFtMin->set_label( maStrList );
     else if( bCustom )
         m_xFtMin->set_label( maStrFormula );
     else
@@ -697,7 +695,10 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, weld::ComboBox&, void)
     m_xLbValue->set_visible( !bRange && !bList && !bCustom );
     m_xEdMin->GetWidget()->set_visible( !bList );
     m_xEdList->set_visible( bList );
-    m_xMinGrid->set_vexpand( bList );
+    m_xEdList->set_vexpand( bList );
+    m_xRefGrid->set_visible( !bList );
+    m_xFtMin->set_visible( !bList );
+    m_xFtMinList->set_visible( bList );
     m_xFtMax->set_visible( bShowMax );
     m_xEdMax->GetWidget()->set_visible( bShowMax );
     m_xFtHint->set_visible( bRange );
