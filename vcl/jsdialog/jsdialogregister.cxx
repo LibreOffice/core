@@ -66,4 +66,27 @@ void JSInstanceBuilder::RememberWidget(const OUString& nWindowId, const OUString
     }
 }
 
+void JSInstanceBuilder::renameWidget(const OUString& rOldName, const OUString& rNewName)
+{
+    auto aWindowMap = JSInstanceBuilder::Widgets().Find(getMapIdFromWindowId());
+    if (aWindowMap)
+    {
+        weld::Widget* pWidget = aWindowMap->Find(rOldName);
+        if (pWidget)
+        {
+            aWindowMap->Forget(rOldName);
+            aWindowMap->Remember(rNewName, pWidget);
+        }
+    }
+
+    for (auto& sId : m_aRememberedWidgets)
+    {
+        if (sId == rOldName)
+        {
+            sId = rNewName;
+            break;
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

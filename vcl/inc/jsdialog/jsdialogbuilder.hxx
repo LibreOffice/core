@@ -135,6 +135,7 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     void RememberWidget(OUString id, weld::Widget* pWidget);
     static void RememberWidget(const OUString& nWindowId, const OUString& id,
                                weld::Widget* pWidget);
+    void renameWidget(const OUString& rOldName, const OUString& rNewName) override;
 
     OUString getMapIdFromWindowId() const;
 
@@ -430,9 +431,18 @@ public:
 
     virtual void set_buildable_name(const OUString& rName) override
     {
+        OUString sOldName = BaseInstanceClass::get_buildable_name();
+        if (m_pSender)
+        {
+            std::unique_ptr<jsdialog::ActionDataMap> pMap
+                = std::make_unique<jsdialog::ActionDataMap>();
+            (*pMap)[ACTION_TYPE ""_ostr] = "rename";
+            (*pMap)[NEW_ID ""_ostr] = rName;
+            sendAction(std::move(pMap));
+        }
         SalInstanceWidget::set_buildable_name(rName);
-        assert(false); // we remember old name in GetKitWeldWidgetsMap()
-        // TODO: implement renaming or avoid it for LOK
+        if (m_pSender)
+            m_pSender->renameWidget(sOldName, rName);
     }
 };
 

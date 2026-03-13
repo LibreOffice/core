@@ -305,6 +305,11 @@ void JSDialogSender::ImplDestroy()
 
 JSDialogSender::~JSDialogSender() { suppress_fun_call_w_exception(ImplDestroy()); }
 
+void JSDialogSender::renameWidget(const OUString& /*rOldName*/, const OUString& /*rNewName*/)
+{
+    assert(false && "renameWidget not implemented for this sender");
+}
+
 void JSDialogSender::sendFullUpdate(bool bForce)
 {
     if (!mpIdleNotify)
