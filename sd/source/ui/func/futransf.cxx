@@ -114,17 +114,22 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     auto xRequest = std::make_shared<SfxRequest>(rReq);
     rReq.Ignore(); // the 'old' request is not relevant any more
 
-    pDlg->StartExecuteAsync([bWelded, pDlg, xRequest=std::move(xRequest), this](sal_Int32 nResult){
+    rtl::Reference<FuTransform> xThis(this); // prevent premature release during async processing
+    pDlg->StartExecuteAsync([bWelded, pDlg, xRequest=std::move(xRequest), xThis=std::move(xThis)](sal_Int32 nResult){
         if (nResult == RET_OK)
         {
-            xRequest->Done(*(pDlg->GetOutputItemSet()));
-            // Page margin is already calculated at this point.
-            setUndo(mpView, xRequest->GetArgs(), false);
+            const SdrMarkList& rMarkList = xThis->mpView->GetMarkedObjectList();
+            if (rMarkList.GetMarkCount() != 0)
+            {
+                xRequest->Done(*(pDlg->GetOutputItemSet()));
+                // Page margin is already calculated at this point.
+                setUndo(xThis->mpView, xRequest->GetArgs(), false);
+            }
         }
 
         // deferred until the dialog ends
-        mpViewShell->Invalidate(SID_RULER_OBJECT);
-        mpViewShell->Cancel();
+        xThis->mpViewShell->Invalidate(SID_RULER_OBJECT);
+        xThis->mpViewShell->Cancel();
         if (bWelded)
             pDlg->disposeOnce();
     });
