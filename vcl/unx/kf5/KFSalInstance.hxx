@@ -23,7 +23,6 @@
 
 class KFSalInstance final : public QtInstance
 {
-    bool hasNativeFileSelection() const override;
     rtl::Reference<QtFilePicker>
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode) override;

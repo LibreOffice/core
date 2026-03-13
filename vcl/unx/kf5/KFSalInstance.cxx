@@ -60,14 +60,6 @@ bool KFSalInstance::GetUseReducedAnimation()
 }
 #endif
 
-bool KFSalInstance::hasNativeFileSelection() const
-{
-    const OUString sDesktop = Application::GetDesktopEnvironment();
-    if (sDesktop == "PLASMA5" || sDesktop == "PLASMA6")
-        return true;
-    return QtInstance::hasNativeFileSelection();
-}
-
 rtl::Reference<QtFilePicker>
 KFSalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                             QFileDialog::FileMode eMode)
