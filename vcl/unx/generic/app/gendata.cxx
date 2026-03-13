@@ -44,7 +44,7 @@ GenericUnixSalData::GenericUnixSalData()
 GenericUnixSalData::~GenericUnixSalData()
 {
 #ifndef IOS
-    // at least for InitPrintFontManager the sequence is important
+    // at least for GetPrintFontManager the sequence is important
     m_pPrintFontManager.reset();
     m_pFreetypeManager.reset();
     m_pPrinterInfoManager.reset();
@@ -62,20 +62,15 @@ FreetypeManager* GenericUnixSalData::GetFreetypeManager()
 psp::PrintFontManager* GenericUnixSalData::GetPrintFontManager()
 {
     if (!m_pPrintFontManager)
-        InitPrintFontManager();
+    {
+        GetFreetypeManager();
+        m_pPrintFontManager.reset(new psp::PrintFontManager);
+        m_pPrintFontManager->initialize();
+    }
     // PrintFontManager needs the FreetypeManager
     assert(m_pFreetypeManager);
     return m_pPrintFontManager.get();
 }
 #endif
-
-void GenericUnixSalData::InitPrintFontManager()
-{
-#ifndef IOS
-    GetFreetypeManager();
-    m_pPrintFontManager.reset(new psp::PrintFontManager);
-    m_pPrintFontManager->initialize();
-#endif
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
