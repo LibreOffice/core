@@ -33,9 +33,8 @@ bool URLFieldHelper::IsCursorAtURLField(const EditView& pEditView, bool bAlsoChe
     if (aSel.start.nPara != aSel.end.nPara || std::abs(aSel.end.nIndex - aSel.start.nIndex) > 1)
         return false;
 
-    const SvxFieldData* pField
-        = pEditView.GetFieldUnderMouseOrInSelectionOrAtCursor(bAlsoCheckBeforeCursor);
-    if (dynamic_cast<const SvxURLField*>(pField))
+    const SvxFieldItem* pFieldItem = pEditView.GetFieldAtSelection(bAlsoCheckBeforeCursor);
+    if (dynamic_cast<const SvxURLField*>(pFieldItem ? pFieldItem->GetField() : nullptr))
         return true;
 
     return false;

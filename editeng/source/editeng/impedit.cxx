@@ -1418,8 +1418,10 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 boost::property_tree::ptree aHyperlinkTree;
                 if (pActiveView && URLFieldHelper::IsCursorAtURLField(*pActiveView))
                 {
-                    const SvxFieldData* pField  = pActiveView->GetFieldUnderMouseOrInSelectionOrAtCursor();
-                    if (auto pUrlField = dynamic_cast<const SvxURLField*>(pField))
+                    const SvxFieldItem* pFieldItem = pActiveView->GetFieldAtSelection();
+                    if (pFieldItem)
+                        if (auto pUrlField
+                            = dynamic_cast<const SvxURLField*>(pFieldItem->GetField()))
                             aHyperlinkTree = getHyperlinkPropTree(pUrlField->GetRepresentation(), pUrlField->GetURL());
                 }
                 else if (GetEditSelection().HasRange())
