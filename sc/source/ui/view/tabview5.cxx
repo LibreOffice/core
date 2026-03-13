@@ -296,8 +296,11 @@ void ScTabView::ImplTabChanged(bool bSameTabButMoved)
         DrawDeselectAll();      // end also text edit mode
 
         SCTAB nTab = aViewData.CurrentTabForData();
+        // For sheet view tabs, show the default view's draw page so that
+        // all draw operations target the default view's page.
+        SCTAB nDrawTab = aViewData.GetDocument().GetDefaultViewTableNumber(nTab);
         pDrawView->HideSdrPage();
-        pDrawView->ShowSdrPage(pDrawView->GetModel().GetPage(nTab));
+        pDrawView->ShowSdrPage(pDrawView->GetModel().GetPage(nDrawTab));
 
         UpdateLayerLocks();
 
