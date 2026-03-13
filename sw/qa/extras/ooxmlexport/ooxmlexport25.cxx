@@ -68,6 +68,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166544_noTopMargin_fields, "tdf166544_noTopMargi
     CPPUNIT_ASSERT_EQUAL(sal_Int32(269), nHeight);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf171299_tableInField, "tdf171299_tableInField.docx")
+{
+    // given a document where the field contains a table
+
+    // there is some text prior to the table
+    getParagraph(1, "Zusammenfassung:");
+    CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf166510_sectPr_bottomSpacing, "tdf166510_sectPr_bottomSpacing.docx")
 {
     // given with a sectPr with different bottom spacing (undefined in this case - i.e. zero)
