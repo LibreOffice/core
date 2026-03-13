@@ -37,8 +37,14 @@
 #include <Sparkline.hxx>
 #include <SparklineAttributes.hxx>
 #include <SparklineGroup.hxx>
+#include <dpobject.hxx>
+#include <dpshttab.hxx>
+#include <dpsave.hxx>
+#include <generalfunction.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdpage.hxx>
+
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 using namespace css;
 
@@ -3708,6 +3714,100 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteSparklineGroup_DefaultAndSheetView
 
         // Verify synced to sheet view
         CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(1, 2, nSheetViewTab)));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_CreatePivotTable_DefaultAndSheetView)
+{
+    // test sync to sheet view when creating a new pivot table
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // Set up source data: A1:B4 with headers and values
+    rDocument.SetString(ScAddress(0, 0, 0), u"Category"_ustr);
+    rDocument.SetString(ScAddress(1, 0, 0), u"Value"_ustr);
+    rDocument.SetString(ScAddress(0, 1, 0), u"A"_ustr);
+    rDocument.SetString(ScAddress(0, 2, 0), u"A"_ustr);
+    rDocument.SetString(ScAddress(0, 3, 0), u"B"_ustr);
+    rDocument.SetValue(ScAddress(1, 1, 0), 10.0);
+    rDocument.SetValue(ScAddress(1, 2, 0), 20.0);
+    rDocument.SetValue(ScAddress(1, 3, 0), 30.0);
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+
+    // Create pivot table from default view
+    {
+        switchToDefaultView();
+
+        ScDPObject aDPObject(&rDocument);
+        ScSheetSourceDesc aSheetDesc(&rDocument);
+        aSheetDesc.SetSourceRange(ScRange(0, 0, nDefaultViewTab, 1, 3, nDefaultViewTab));
+        aDPObject.SetSheetDesc(aSheetDesc);
+        aDPObject.SetOutRange(ScRange(ScAddress(4, 0, nDefaultViewTab)));
+
+        ScDPSaveData aSaveData;
+        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_ROW);
+        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
+        pDim->SetFunction(ScGeneralFunction::SUM);
+        aDPObject.SetSaveData(aSaveData);
+
+        ScDBDocFunc aDBDocFunc(*pDocShell);
+        bool bResult = aDBDocFunc.CreatePivotTable(aDPObject, true, true);
+        CPPUNIT_ASSERT(bResult);
+
+        // Verify pivot table output on default view - cell E1 should have content
+        CPPUNIT_ASSERT(!rDocument.GetString(ScAddress(4, 0, nDefaultViewTab)).isEmpty());
+
+        // Verify the pivot table output is synced to sheet view
+        CPPUNIT_ASSERT_EQUAL(rDocument.GetString(ScAddress(4, 0, nDefaultViewTab)),
+                             rDocument.GetString(ScAddress(4, 0, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(rDocument.GetString(ScAddress(4, 1, nDefaultViewTab)),
+                             rDocument.GetString(ScAddress(4, 1, nSheetViewTab)));
+    }
+
+    // Create pivot table from sheet view
+    {
+        switchToSheetView();
+
+        ScDPObject aDPObject(&rDocument);
+        ScSheetSourceDesc aSheetDesc(&rDocument);
+        aSheetDesc.SetSourceRange(ScRange(0, 0, nSheetViewTab, 1, 3, nSheetViewTab));
+        aDPObject.SetSheetDesc(aSheetDesc);
+        aDPObject.SetOutRange(ScRange(ScAddress(7, 0, nSheetViewTab)));
+
+        ScDPSaveData aSaveData;
+        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_ROW);
+        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
+        pDim->SetFunction(ScGeneralFunction::SUM);
+        aDPObject.SetSaveData(aSaveData);
+
+        ScDBDocFunc aDBDocFunc(*pDocShell);
+        bool bResult = aDBDocFunc.CreatePivotTable(aDPObject, true, true);
+        CPPUNIT_ASSERT(bResult);
+
+        // Verify pivot table created on default view - cell H1 should have content
+        CPPUNIT_ASSERT(!rDocument.GetString(ScAddress(7, 0, nDefaultViewTab)).isEmpty());
+
+        // Verify the pivot table output is synced to sheet view
+        CPPUNIT_ASSERT_EQUAL(rDocument.GetString(ScAddress(7, 0, nDefaultViewTab)),
+                             rDocument.GetString(ScAddress(7, 0, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(rDocument.GetString(ScAddress(7, 1, nDefaultViewTab)),
+                             rDocument.GetString(ScAddress(7, 1, nSheetViewTab)));
     }
 }
 

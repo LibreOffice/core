@@ -14,6 +14,7 @@
 #include <vcl/weld.hxx>
 
 #include <dpsave.hxx>
+#include <dpshttab.hxx>
 #include <undodat.hxx>
 #include <scresid.hxx>
 #include <hints.hxx>
@@ -21,11 +22,11 @@
 namespace sc
 {
 CreatePivotTableOperation::CreatePivotTableOperation(ScDocShell& rDocShell,
-                                                     ScDPObject const& rDPObj, bool bRecord,
+                                                     ScDPObject const& rDPObject, bool bRecord,
                                                      bool bApi)
     : Operation(OperationType::PivotTableCreate, bRecord, bApi)
     , mrDocShell(rDocShell)
-    , mrDPObj(rDPObj)
+    , mrDPObject(rDPObject)
 {
 }
 
@@ -34,55 +35,65 @@ bool CreatePivotTableOperation::runImplementation()
     ScDocShellModificator aModificator(mrDocShell);
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
 
-    if (!checkSheetViewProtection())
-        return false;
-
     // At least one cell in the output range should be editable. Check in advance.
     ScDocument& rDoc = mrDocShell.GetDocument();
-    if (!rDoc.IsImportingXML()
-        && !sc::pivot::isEditable(mrDocShell, ScRange(mrDPObj.GetOutRange().aStart), mbApi))
+    auto aOutputStartRange = convertRange(ScRange(mrDPObject.GetOutRange().aStart));
+    if (!rDoc.IsImportingXML() && !sc::pivot::isEditable(mrDocShell, aOutputStartRange, mbApi))
+    {
         return false;
+    }
 
     ScDocumentUniquePtr pNewUndoDoc;
 
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
-    //  output range must be set at pNewObj
-    std::unique_ptr<ScDPObject> pDestObj(new ScDPObject(mrDPObj));
+    //  output range must be set at pNewObject
+    std::unique_ptr<ScDPObject> pDestObject(new ScDPObject(mrDPObject));
 
-    ScDPObject& rDestObj = *pDestObj;
+    ScDPObject& rDestObject = *pDestObject;
+
+    // Convert ranges from sheet view to default view
+    rDestObject.SetOutRange(convertRange(rDestObject.GetOutRange()));
+
+    const ScSheetSourceDesc* pSheetDesc = rDestObject.GetSheetDesc();
+    if (pSheetDesc && !pSheetDesc->HasRangeName())
+    {
+        ScSheetSourceDesc aDesc(*pSheetDesc);
+        aDesc.SetSourceRange(convertRange(aDesc.GetSourceRange()));
+        rDestObject.SetSheetDesc(aDesc);
+    }
 
     // #i94570# When changing the output position in the dialog, a new table is created
     // with the settings from the old table, including the name.
     // So we have to check for duplicate names here (before inserting).
-    if (rDoc.GetDPCollection()->GetByName(rDestObj.GetName()))
-        rDestObj.SetName(OUString()); // ignore the invalid name, create a new name below
+    if (rDoc.GetDPCollection()->GetByName(rDestObject.GetName()))
+        rDestObject.SetName(OUString()); // ignore the invalid name, create a new name below
 
     // Synchronize groups between linked tables
     {
         const ScDPDimensionSaveData* pGroups = nullptr;
-        bool bRefFound = rDoc.GetDPCollection()->GetReferenceGroups(rDestObj, &pGroups);
+        bool bRefFound = rDoc.GetDPCollection()->GetReferenceGroups(rDestObject, &pGroups);
         if (bRefFound)
         {
-            ScDPSaveData* pSaveData = rDestObj.GetSaveData();
+            ScDPSaveData* pSaveData = rDestObject.GetSaveData();
             if (pSaveData)
                 pSaveData->SetDimensionData(pGroups);
         }
     }
 
-    rDoc.GetDPCollection()->InsertNewTable(std::move(pDestObj));
+    rDoc.GetDPCollection()->InsertNewTable(std::move(pDestObject));
 
-    rDestObj.ReloadGroupTableData();
-    rDestObj.SyncAllDimensionMembers();
-    rDestObj.InvalidateData(); // before getting the new output area
+    rDestObject.ReloadGroupTableData();
+    rDestObject.SyncAllDimensionMembers();
+    rDestObject.InvalidateData(); // before getting the new output area
 
     //  make sure the table has a name (not set by dialog)
-    if (rDestObj.GetName().isEmpty())
-        rDestObj.SetName(rDoc.GetDPCollection()->CreateNewName());
+    if (rDestObject.GetName().isEmpty())
+        rDestObject.SetName(rDoc.GetDPCollection()->CreateNewName());
 
     bool bOverflow = false;
-    ScRange aNewOut = rDestObj.GetNewOutputRange(bOverflow);
+    ScRange aNewOut = rDestObject.GetNewOutputRange(bOverflow);
 
     if (bOverflow)
     {
@@ -130,17 +141,19 @@ bool CreatePivotTableOperation::runImplementation()
     if (mbRecord)
         sc::pivot::createUndoDoc(pNewUndoDoc, rDoc, aNewOut);
 
-    rDestObj.Output(aNewOut.aStart);
+    rDestObject.Output(aNewOut.aStart);
     mrDocShell.PostPaintGridAll(); //! only necessary parts
 
     if (mbRecord)
     {
         mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoDataPilot>(
-            &mrDocShell, nullptr, std::move(pNewUndoDoc), nullptr, &rDestObj, false));
+            &mrDocShell, nullptr, std::move(pNewUndoDoc), nullptr, &rDestObject, false));
     }
 
+    syncSheetViews();
+
     // notify API objects
-    rDoc.BroadcastUno(ScDataPilotModifiedHint(rDestObj.GetName()));
+    rDoc.BroadcastUno(ScDataPilotModifiedHint(rDestObject.GetName()));
     aModificator.SetDocumentModified();
 
     return true;
