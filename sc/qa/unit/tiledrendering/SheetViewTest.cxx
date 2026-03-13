@@ -3505,6 +3505,111 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteSparkline_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_GroupUngroupSparklines_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // Create two sparklines in different groups at B1 and B2
+    auto pGroup1 = std::make_shared<sc::SparklineGroup>();
+    auto pGroup2 = std::make_shared<sc::SparklineGroup>();
+    rDocument.CreateSparkline(ScAddress(1, 0, 0), pGroup1);
+    rDocument.CreateSparkline(ScAddress(1, 1, 0), pGroup2);
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+    // Verify sparklines are in different groups initially
+    {
+        auto pSparkline1 = rDocument.GetSparkline(ScAddress(1, 0, 0));
+        auto pSparkline2 = rDocument.GetSparkline(ScAddress(1, 1, 0));
+        CPPUNIT_ASSERT(pSparkline1->getSparklineGroup() != pSparkline2->getSparklineGroup());
+    }
+
+    // Group sparklines from default view: B1:B2 into pGroup1
+    {
+        switchToDefaultView();
+
+        pDocShell->GetDocFunc().GroupSparklines(ScRange(1, 0, 0, 1, 1, 0), pGroup1);
+
+        // Verify both sparklines are in the same group on default view
+        auto pSparkline1 = rDocument.GetSparkline(ScAddress(1, 0, 0));
+        auto pSparkline2 = rDocument.GetSparkline(ScAddress(1, 1, 0));
+        CPPUNIT_ASSERT_EQUAL(pSparkline1->getSparklineGroup(), pSparkline2->getSparklineGroup());
+
+        // Verify synced to sheet view
+        auto pSheetViewSparkline1 = rDocument.GetSparkline(ScAddress(1, 0, nSheetViewTab));
+        auto pSheetViewSparkline2 = rDocument.GetSparkline(ScAddress(1, 1, nSheetViewTab));
+        CPPUNIT_ASSERT_EQUAL(pSheetViewSparkline1->getSparklineGroup(),
+                             pSheetViewSparkline2->getSparklineGroup());
+    }
+
+    // Ungroup sparklines from default view: B1:B2
+    {
+        switchToDefaultView();
+
+        pDocShell->GetDocFunc().UngroupSparklines(ScRange(1, 0, 0, 1, 1, 0));
+
+        // Verify sparklines are in different groups on default view
+        auto pSparkline1 = rDocument.GetSparkline(ScAddress(1, 0, 0));
+        auto pSparkline2 = rDocument.GetSparkline(ScAddress(1, 1, 0));
+        CPPUNIT_ASSERT(pSparkline1->getSparklineGroup() != pSparkline2->getSparklineGroup());
+
+        // Verify synced to sheet view
+        auto pSheetViewSparkline1 = rDocument.GetSparkline(ScAddress(1, 0, nSheetViewTab));
+        auto pSheetViewSparkline2 = rDocument.GetSparkline(ScAddress(1, 1, nSheetViewTab));
+        CPPUNIT_ASSERT(pSheetViewSparkline1->getSparklineGroup()
+                       != pSheetViewSparkline2->getSparklineGroup());
+    }
+
+    // Group sparklines from sheet view: B1:B2 into pGroup1
+    {
+        switchToSheetView();
+
+        pDocShell->GetDocFunc().GroupSparklines(ScRange(1, 0, nSheetViewTab, 1, 1, nSheetViewTab),
+                                                pGroup1);
+
+        // Verify both sparklines are in the same group on default view
+        auto pSparkline1 = rDocument.GetSparkline(ScAddress(1, 0, 0));
+        auto pSparkline2 = rDocument.GetSparkline(ScAddress(1, 1, 0));
+        CPPUNIT_ASSERT_EQUAL(pSparkline1->getSparklineGroup(), pSparkline2->getSparklineGroup());
+
+        // Verify synced to sheet view
+        auto pSheetViewSparkline1 = rDocument.GetSparkline(ScAddress(1, 0, nSheetViewTab));
+        auto pSheetViewSparkline2 = rDocument.GetSparkline(ScAddress(1, 1, nSheetViewTab));
+        CPPUNIT_ASSERT_EQUAL(pSheetViewSparkline1->getSparklineGroup(),
+                             pSheetViewSparkline2->getSparklineGroup());
+    }
+
+    // Ungroup sparklines from sheet view: B1:B2
+    {
+        switchToSheetView();
+
+        pDocShell->GetDocFunc().UngroupSparklines(
+            ScRange(1, 0, nSheetViewTab, 1, 1, nSheetViewTab));
+
+        // Verify sparklines are in different groups on default view
+        auto pSparkline1 = rDocument.GetSparkline(ScAddress(1, 0, 0));
+        auto pSparkline2 = rDocument.GetSparkline(ScAddress(1, 1, 0));
+        CPPUNIT_ASSERT(pSparkline1->getSparklineGroup() != pSparkline2->getSparklineGroup());
+
+        // Verify synced to sheet view
+        auto pSheetViewSparkline1 = rDocument.GetSparkline(ScAddress(1, 0, nSheetViewTab));
+        auto pSheetViewSparkline2 = rDocument.GetSparkline(ScAddress(1, 1, nSheetViewTab));
+        CPPUNIT_ASSERT(pSheetViewSparkline1->getSparklineGroup()
+                       != pSheetViewSparkline2->getSparklineGroup());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
