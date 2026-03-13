@@ -322,7 +322,7 @@ void SalX11Display::doDestruct()
             pXLib_->Remove( ConnectionNumber( pDisp_ ) );
     }
 
-    if( pData->GetDisplay() == static_cast<const SalGenericDisplay *>( this ) )
+    if (pData->GetDisplay() == this)
         pData->SetDisplay( nullptr );
 }
 

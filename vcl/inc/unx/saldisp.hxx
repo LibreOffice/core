@@ -359,7 +359,7 @@ namespace vcl_sal {
     {
         const X11SalData* pData = GetX11SalData();
         assert(pData != nullptr);
-        return static_cast<SalX11Display*>(pData->GetDisplay());
+        return pData->GetDisplay();
     }
 }
 
