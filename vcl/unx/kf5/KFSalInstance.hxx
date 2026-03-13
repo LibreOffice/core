@@ -19,20 +19,68 @@
 
 #pragma once
 
+#include "KFFilePicker.hxx"
+
 #include <QtInstance.hxx>
 
-class KFSalInstance final : public QtInstance
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+#include <QtWidgets/QApplication>
+
+template <std::derived_from<QtInstance> QtInstanceBaseClass>
+class KFSalInstance final : public QtInstanceBaseClass
 {
     rtl::Reference<QtFilePicker>
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
-                 QFileDialog::FileMode) override;
+                 QFileDialog::FileMode eMode) override
+    {
+        if (!QtInstanceBaseClass::IsMainThread())
+        {
+            SolarMutexGuard g;
+            rtl::Reference<QtFilePicker> pPicker;
+            QtInstanceBaseClass::RunInMainThread(
+                [&, this]() { pPicker = createPicker(context, eMode); });
+            assert(pPicker);
+            return pPicker;
+        }
+
+        // In order to insert custom controls, KFFilePicker currently relies on KFileWidget
+        // being used in the native file picker, which is only the case for KDE Plasma.
+        // Therefore, return the plain qt5/qt6 one in order to not lose custom controls otherwise.
+        const OUString sDesktop = Application::GetDesktopEnvironment();
+        if (sDesktop == "PLASMA5" || sDesktop == "PLASMA6")
+            return new KFFilePicker(context, eMode);
+        return QtInstance::createPicker(context, eMode);
+    }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 12, 0)
-    virtual bool GetUseReducedAnimation() override;
+    virtual bool GetUseReducedAnimation() override
+    {
+        // since Qt < 6.12 doesn not have a standard way to detect whether animations should be reduced,
+        // use the animation speed setting when on KDE Plasma, in accordance with how kde-gtk-config
+        // sets the Gtk setting based on that:
+        // https://invent.kde.org/plasma/kde-gtk-config/-/blob/881ae01ad361a03396f7f327365f225ef87688e8/kded/configvalueprovider.cpp#L239
+        // (ideally, this should probably be done in the desktop backend rather than directly
+        // in the VCL plugin)
+        const OUString sDesktop = Application::GetDesktopEnvironment();
+        if (sDesktop == "PLASMA5" || sDesktop == "PLASMA6")
+        {
+            KSharedConfigPtr pSharedConfig = KSharedConfig::openConfig();
+            KConfigGroup aGeneralConfig = pSharedConfig->group(QStringLiteral("KDE"));
+            const qreal fAnimationSpeedModifier
+                = qMax(0.0, aGeneralConfig.readEntry("AnimationDurationFactor", 1.0));
+            return qFuzzyIsNull(fAnimationSpeedModifier);
+        }
+
+        return QtInstance::GetUseReducedAnimation();
+    }
 #endif
 
 public:
-    explicit KFSalInstance();
+    explicit KFSalInstance()
+        : QtInstanceBaseClass(u"kf" + OUString::number(QT_VERSION_MAJOR))
+    {
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
