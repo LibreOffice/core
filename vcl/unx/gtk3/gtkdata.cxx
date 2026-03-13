@@ -817,11 +817,11 @@ extern "C" {
     static gboolean call_userEventFn( void *data )
     {
         SolarMutexGuard aGuard;
-        const SalGenericDisplay *pDisplay = GetGenericUnixSalData()->GetDisplay();
+        const GtkSalDisplay* pDisplay = GetGtkSalData()->GetGtkDisplay();
         if ( pDisplay )
         {
             GtkSalDisplay *pThisDisplay = static_cast<GtkSalData *>(data)->GetGtkDisplay();
-            assert(static_cast<const SalGenericDisplay *>(pThisDisplay) == pDisplay);
+            assert(pThisDisplay == pDisplay);
             pThisDisplay->DispatchUserEvents(false);
         }
         return true;
