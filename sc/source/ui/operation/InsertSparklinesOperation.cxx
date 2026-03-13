@@ -29,35 +29,35 @@ InsertSparklinesOperation::InsertSparklinesOperation(
 
 bool InsertSparklinesOperation::runImplementation()
 {
-    if (!checkSheetViewProtection())
-        return false;
+    ScRange aDataRange = convertRange(maDataRange);
+    ScRange aSparklineRange = convertRange(maSparklineRange);
 
     std::vector<SparklineData> aSparklineDataVector;
 
-    if (maSparklineRange.aStart.Col() == maSparklineRange.aEnd.Col())
+    if (aSparklineRange.aStart.Col() == aSparklineRange.aEnd.Col())
     {
-        sal_Int32 nOutputRowSize = maSparklineRange.aEnd.Row() - maSparklineRange.aStart.Row();
+        sal_Int32 nOutputRowSize = aSparklineRange.aEnd.Row() - aSparklineRange.aStart.Row();
 
-        auto eInputOrientation = calculateOrientation(nOutputRowSize, maDataRange);
+        auto eInputOrientation = calculateOrientation(nOutputRowSize, aDataRange);
 
         if (eInputOrientation == RangeOrientation::Unknown)
             return false;
 
         sal_Int32 nIndex = 0;
 
-        for (ScAddress aAddress = maSparklineRange.aStart;
-             aAddress.Row() <= maSparklineRange.aEnd.Row(); aAddress.IncRow())
+        for (ScAddress aAddress = aSparklineRange.aStart;
+             aAddress.Row() <= aSparklineRange.aEnd.Row(); aAddress.IncRow())
         {
-            ScRange aInputRangeSlice = maDataRange;
+            ScRange aInputRangeSlice = aDataRange;
             if (eInputOrientation == RangeOrientation::Row)
             {
-                aInputRangeSlice.aStart.SetRow(maDataRange.aStart.Row() + nIndex);
-                aInputRangeSlice.aEnd.SetRow(maDataRange.aStart.Row() + nIndex);
+                aInputRangeSlice.aStart.SetRow(aDataRange.aStart.Row() + nIndex);
+                aInputRangeSlice.aEnd.SetRow(aDataRange.aStart.Row() + nIndex);
             }
             else
             {
-                aInputRangeSlice.aStart.SetCol(maDataRange.aStart.Col() + nIndex);
-                aInputRangeSlice.aEnd.SetCol(maDataRange.aStart.Col() + nIndex);
+                aInputRangeSlice.aStart.SetCol(aDataRange.aStart.Col() + nIndex);
+                aInputRangeSlice.aEnd.SetCol(aDataRange.aStart.Col() + nIndex);
             }
 
             aSparklineDataVector.emplace_back(aAddress, aInputRangeSlice);
@@ -65,30 +65,30 @@ bool InsertSparklinesOperation::runImplementation()
             nIndex++;
         }
     }
-    else if (maSparklineRange.aStart.Row() == maSparklineRange.aEnd.Row())
+    else if (aSparklineRange.aStart.Row() == aSparklineRange.aEnd.Row())
     {
-        sal_Int32 nOutputColSize = maSparklineRange.aEnd.Col() - maSparklineRange.aStart.Col();
+        sal_Int32 nOutputColSize = aSparklineRange.aEnd.Col() - aSparklineRange.aStart.Col();
 
-        auto eInputOrientation = calculateOrientation(nOutputColSize, maDataRange);
+        auto eInputOrientation = calculateOrientation(nOutputColSize, aDataRange);
 
         if (eInputOrientation == RangeOrientation::Unknown)
             return false;
 
         sal_Int32 nIndex = 0;
 
-        for (ScAddress aAddress = maSparklineRange.aStart;
-             aAddress.Col() <= maSparklineRange.aEnd.Col(); aAddress.IncCol())
+        for (ScAddress aAddress = aSparklineRange.aStart;
+             aAddress.Col() <= aSparklineRange.aEnd.Col(); aAddress.IncCol())
         {
-            ScRange aInputRangeSlice = maDataRange;
+            ScRange aInputRangeSlice = aDataRange;
             if (eInputOrientation == RangeOrientation::Row)
             {
-                aInputRangeSlice.aStart.SetRow(maDataRange.aStart.Row() + nIndex);
-                aInputRangeSlice.aEnd.SetRow(maDataRange.aStart.Row() + nIndex);
+                aInputRangeSlice.aStart.SetRow(aDataRange.aStart.Row() + nIndex);
+                aInputRangeSlice.aEnd.SetRow(aDataRange.aStart.Row() + nIndex);
             }
             else
             {
-                aInputRangeSlice.aStart.SetCol(maDataRange.aStart.Col() + nIndex);
-                aInputRangeSlice.aEnd.SetCol(maDataRange.aStart.Col() + nIndex);
+                aInputRangeSlice.aStart.SetCol(aDataRange.aStart.Col() + nIndex);
+                aInputRangeSlice.aEnd.SetCol(aDataRange.aStart.Col() + nIndex);
             }
 
             aSparklineDataVector.emplace_back(aAddress, aInputRangeSlice);
@@ -105,6 +105,8 @@ bool InsertSparklinesOperation::runImplementation()
     // insert the sparkline by "redoing"
     pUndoInsertSparkline->Redo();
     mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoInsertSparkline));
+
+    syncSheetViews();
 
     return true;
 }

@@ -34,6 +34,9 @@
 #include <subtotalparam.hxx>
 #include <drawview.hxx>
 #include <drwlayer.hxx>
+#include <Sparkline.hxx>
+#include <SparklineAttributes.hxx>
+#include <SparklineGroup.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdpage.hxx>
 
@@ -3328,6 +3331,60 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DrawObject_DefaultAndSheetView)
         CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewPage->GetObjCount());
         CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pSheetViewPage->GetObj(0)->GetLogicRect());
         CPPUNIT_ASSERT_EQUAL(aRectangle2Moved, pSheetViewPage->GetObj(1)->GetLogicRect());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertSparklines_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // Set up data for sparklines in A1:A3
+    rDocument.SetValue(ScAddress(0, 0, 0), 1.0);
+    rDocument.SetValue(ScAddress(0, 1, 0), 5.0);
+    rDocument.SetValue(ScAddress(0, 2, 0), 3.0);
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+    // Insert sparkline from default view: data A1:A3, sparkline at B1
+    {
+        switchToDefaultView();
+
+        auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+        pDocShell->GetDocFunc().InsertSparklines(ScRange(0, 0, 0, 0, 2, 0),
+                                                 ScRange(1, 0, 0, 1, 0, 0), pSparklineGroup);
+
+        // Verify on default view
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 0, 0)));
+
+        // Verify synced to sheet view
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 0, nSheetViewTab)));
+    }
+
+    // Insert sparkline from sheet view: data A1:A3, sparkline at B2
+    {
+        switchToSheetView();
+
+        auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+        pDocShell->GetDocFunc().InsertSparklines(ScRange(0, 0, nSheetViewTab, 0, 2, nSheetViewTab),
+                                                 ScRange(1, 1, nSheetViewTab, 1, 1, nSheetViewTab),
+                                                 pSparklineGroup);
+
+        // Verify on default view
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 1, 0)));
+
+        // Verify synced to sheet view
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 1, nSheetViewTab)));
     }
 }
 
