@@ -53,10 +53,10 @@ const OUString& CollatorResource::GetTranslation(const OUString& r_Algorithm)
         aLocaleFreeAlgorithm = r_Algorithm.copy(nIndex);
     }
 
-    for (size_t i = 0; i < m_aData.size(); ++i)
+    for (const auto& rVal : m_aData)
     {
-        if (aLocaleFreeAlgorithm == m_aData[i].GetAlgorithm())
-            return m_aData[i].GetTranslation();
+        if (aLocaleFreeAlgorithm == rVal.GetAlgorithm())
+            return rVal.GetTranslation();
     }
 
     return r_Algorithm;
