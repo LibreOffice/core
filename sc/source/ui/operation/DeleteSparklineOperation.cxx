@@ -23,18 +23,19 @@ DeleteSparklineOperation::DeleteSparklineOperation(ScDocShell& rDocShell, ScAddr
 
 bool DeleteSparklineOperation::runImplementation()
 {
+    ScAddress aAddress = convertAddress(maAddress);
+
     auto& rDocument = mrDocShell.GetDocument();
 
-    if (!rDocument.HasSparkline(maAddress))
+    if (!rDocument.HasSparkline(aAddress))
         return false;
 
-    if (!checkSheetViewProtection())
-        return false;
-
-    auto pUndoDeleteSparkline = std::make_unique<UndoDeleteSparkline>(mrDocShell, maAddress);
+    auto pUndoDeleteSparkline = std::make_unique<UndoDeleteSparkline>(mrDocShell, aAddress);
     // delete sparkline by "redoing"
     pUndoDeleteSparkline->Redo();
     mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoDeleteSparkline));
+
+    syncSheetViews();
 
     return true;
 }
