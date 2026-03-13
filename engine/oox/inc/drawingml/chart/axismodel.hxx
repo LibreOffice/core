@@ -61,6 +61,7 @@ struct AxisModel
     std::optional< double >  mofMajorUnit;       /// Unit for major tick marks on date/value axis.
     std::optional< double >  mofMinorUnit;       /// Unit for minor tick marks on date/value axis.
     std::optional< double >  mofLogBase;         /// Logarithmic base for logarithmic axes.
+    std::optional< double >  mofGapWidth;        /// Gap width ratio (chartex catScaling).
     std::optional< double >  mofMax;             /// Maximum axis value.
     std::optional< double >  mofMin;             /// Minimum axis value.
     std::optional< sal_Int32 > monBaseTimeUnit;  /// Base time unit shown on a date axis.

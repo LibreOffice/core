@@ -309,23 +309,13 @@ ContextHandlerRef CxAxisContext::onCreateContext( sal_Int32 nElement, const Attr
     if( isRootElement() ) switch( nElement )
     {
         case CX_TOKEN(catScaling) :
-            // TODO: figure out how to get gapWidth attribute to the right place
+            mrModel.mofGapWidth = rAttribs.getDouble(XML_gapWidth);
             return nullptr;
         case CX_TOKEN(valScaling) :
-            if (rAttribs.hasAttribute(XML_max)) {
-                mrModel.mofMax = rAttribs.getDouble(XML_max);
-            }
-            if (rAttribs.hasAttribute(XML_min)) {
-                mrModel.mofMin = rAttribs.getDouble(XML_min);
-            }
-            /* TODO: need to implement AttributeList method
-            if (rAttribs.hasAttribute(XML_majorUnit)) {
-                mrModel.mofMajorUnit = rAttribs.getValAxisUnit(XML_majorUnit);
-            }
-            if (rAttribs.hasAttribute(XML_minorUnit)) {
-                mrModel.mofMinorUnit = rAttribs.getValAxisUnit(XML_minorUnit);
-            }
-            */
+            mrModel.mofMax = rAttribs.getDouble(XML_max);
+            mrModel.mofMin = rAttribs.getDouble(XML_min);
+            mrModel.mofMajorUnit = rAttribs.getDouble(XML_majorUnit);
+            mrModel.mofMinorUnit = rAttribs.getDouble(XML_minorUnit);
             return nullptr;
         case CX_TOKEN(title):
         {

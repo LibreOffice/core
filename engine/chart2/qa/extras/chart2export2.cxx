@@ -210,6 +210,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_clusteredColumn)
         "val", u"c55a11");
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"Funnel chart!");
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis/cx:catScaling", "gapWidth",
+                u"0.06");
 
     // ====
     loadFromFile(u"xlsx/paretoLine.xlsx");
@@ -284,6 +286,31 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexPPTX)
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 3, 0,
                 "layoutId", u"funnel");
+    // There should be only one axis, where currently there are multiple.
+    // However, that's a separate problem from the gapWidth output. So just
+    // reference the first for now.
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis[1]/cx:catScaling", "gapWidth",
+                u"2.19");
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexGapWidth)
+{
+    loadFromFile(u"xlsx/box-whisker-gapwidth.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis[1]/cx:catScaling", "gapWidth",
+                u"2.47");
+
+    // ====
+    loadFromFile(u"xlsx/pareto-gapwidth.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis[1]/cx:catScaling", "gapWidth",
+                u"2.55");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexAxes)

@@ -5025,12 +5025,51 @@ void ChartExport::exportOneAxis_chartex(
     // ==== catScaling/valScaling
     switch (nAxisType) {
         case XML_catAx:
-            pFS->singleElement(FSNS(XML_cx, XML_catScaling) /* TODO: handle gapWidth */);
+            {
+                // Get gapWidth from the chart type's GapwidthSequence property
+                std::optional<double> oGapWidth;
+                try
+                {
+                    Reference<chart2::XCoordinateSystemContainer> xCooSysCnt(mxNewDiagram, uno::UNO_QUERY);
+                    if (xCooSysCnt.is())
+                    {
+                        auto aCooSysSeq = xCooSysCnt->getCoordinateSystems();
+                        if (aCooSysSeq.hasElements())
+                        {
+                            Reference<chart2::XChartTypeContainer> xCTCnt(aCooSysSeq[0], uno::UNO_QUERY);
+                            if (xCTCnt.is())
+                            {
+                                auto aChartTypes = xCTCnt->getChartTypes();
+                                if (aChartTypes.hasElements())
+                                {
+                                    Reference<beans::XPropertySet> xTypeProp(aChartTypes[0], uno::UNO_QUERY);
+                                    if (xTypeProp.is() && GetProperty(xTypeProp, u"GapwidthSequence"_ustr))
+                                    {
+                                        uno::Sequence<sal_Int32> aGapSeq;
+                                        mAny >>= aGapSeq;
+                                        if (aGapSeq.hasElements())
+                                            oGapWidth = aGapSeq[0] / 100.0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (uno::Exception&)
+                {
+                }
+
+                if (oGapWidth.has_value())
+                    pFS->singleElement(FSNS(XML_cx, XML_catScaling),
+                            XML_gapWidth, OString::number(*oGapWidth));
+                else
+                    pFS->singleElement(FSNS(XML_cx, XML_catScaling));
+            }
             break;
         case XML_valAx:
             {
                 bool bAutoMax = false;
-                double dMax = 0; // Make VS happy
+                double dMax = 0;
                 bool bMaxSpecified = false;
                 if(GetProperty( xAxisProp, u"AutoMax"_ustr ) )
                     mAny >>= bAutoMax;
@@ -5042,7 +5081,7 @@ void ChartExport::exportOneAxis_chartex(
                 }
 
                 bool bAutoMin = false;
-                double dMin = 0; // Make VS happy
+                double dMin = 0;
                 bool bMinSpecified = false;
                 if(GetProperty( xAxisProp, u"AutoMin"_ustr ) )
                     mAny >>= bAutoMin;
@@ -5053,21 +5092,33 @@ void ChartExport::exportOneAxis_chartex(
                     bMinSpecified = true;
                 }
 
-                // TODO: handle majorUnit/minorUnit in the following
-                if (bMaxSpecified && bMinSpecified) {
-                    pFS->singleElement(FSNS(XML_cx, XML_valScaling),
-                            XML_max, OString::number(dMax),
-                            XML_min, OString::number(dMin));
-                } else if (!bMaxSpecified && bMinSpecified) {
-                    pFS->singleElement(FSNS(XML_cx, XML_valScaling),
-                            XML_min, OString::number(dMin));
-                } else if (bMaxSpecified && !bMinSpecified) {
-                    pFS->singleElement(FSNS(XML_cx, XML_valScaling),
-                            XML_max, OString::number(dMax));
-                } else {
-                    pFS->singleElement(FSNS(XML_cx, XML_valScaling));
+                bool bAutoMajor = false;
+                double dMajorUnit = 0;
+                bool bMajorSpecified = false;
+                if(GetProperty( xAxisProp, u"AutoStepMain"_ustr ) )
+                    mAny >>= bAutoMajor;
+                if( !bAutoMajor && (GetProperty( xAxisProp, u"StepMain"_ustr ) ) )
+                {
+                    mAny >>= dMajorUnit;
+                    bMajorSpecified = true;
                 }
 
+                bool bAutoMinor = false;
+                double dMinorUnit = 0;
+                bool bMinorSpecified = false;
+                if(GetProperty( xAxisProp, u"AutoStepHelp"_ustr ) )
+                    mAny >>= bAutoMinor;
+                if( !bAutoMinor && (GetProperty( xAxisProp, u"StepHelp"_ustr ) ) )
+                {
+                    mAny >>= dMinorUnit;
+                    bMinorSpecified = true;
+                }
+
+                pFS->singleElement(FSNS(XML_cx, XML_valScaling),
+                        XML_max, bMaxSpecified ? OString::number(dMax) : std::optional<OString>(),
+                        XML_min, bMinSpecified ? OString::number(dMin) : std::optional<OString>(),
+                        XML_majorUnit, bMajorSpecified ? OString::number(dMajorUnit) : std::optional<OString>(),
+                        XML_minorUnit, bMinorSpecified ? OString::number(dMinorUnit) : std::optional<OString>());
             }
             break;
         default:

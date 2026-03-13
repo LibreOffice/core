@@ -172,6 +172,11 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             to the data provider attached to the chart document. */
         if( xCoordSystem.is() )
         {
+            // convert all chart type groups, this converts all series data and formatting
+            for (auto const& typeGroup : aTypeGroups)
+                typeGroup->convertFromModel( rxDiagram, xCoordSystem,
+                        nAxesSetIdx,bSupportsVaryColorsByPoint );
+
             // Transfer any (chartex) data, specified at the chartSpace level,
             // into the appropriate series. This needs to happen before the
             // calls to AxisConverter::convertFromModel() below.
@@ -198,11 +203,6 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
                 aZAxisConv.convertFromModel(xCoordSystem, aTypeGroups, nullptr, nAxesSetIdx,
                                             API_Z_AXIS, bUseFixedInnerSize);
             }
-
-            // convert all chart type groups, this converts all series data and formatting
-            for (auto const& typeGroup : aTypeGroups)
-                typeGroup->convertFromModel( rxDiagram, xCoordSystem,
-                        nAxesSetIdx,bSupportsVaryColorsByPoint );
         }
     }
     catch( Exception& )

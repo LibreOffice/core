@@ -556,7 +556,12 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
         {"com.sun.star.chart2.FilledNetChartType", "com.sun.star.chart.FilledNetDiagram"},
         {"com.sun.star.chart2.NetChartType", "com.sun.star.chart.NetDiagram"},
         {"com.sun.star.chart2.CandleStickChartType", "com.sun.star.chart.StockDiagram"},
-        {"com.sun.star.chart2.BubbleChartType", "com.sun.star.chart.BubbleDiagram"}
+        {"com.sun.star.chart2.BubbleChartType", "com.sun.star.chart.BubbleDiagram"},
+        {"com.sun.star.chart2.FunnelChartType", "com.sun.star.chart.FunnelDiagram"},
+        {"com.sun.star.chart2.BoxWhiskerChartType", "com.sun.star.chart.BoxWhiskerDiagram"},
+        {"com.sun.star.chart2.ClusteredColumnChartType", "com.sun.star.chart.ClusteredColumnDiagram"},
+        {"com.sun.star.chart2.SunburstChartType", "com.sun.star.chart.SunburstDiagram"},
+        {"com.sun.star.chart2.TreemapChartType", "com.sun.star.chart.TreemapDiagram"}
     };
     return g_aChartTypeNameMap;
 }

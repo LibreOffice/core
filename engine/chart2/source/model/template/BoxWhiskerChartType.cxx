@@ -9,6 +9,8 @@
 
 #include "BoxWhiskerChartType.hxx"
 #include <servicenames_charttypes.hxx>
+#include <PropertyHelper.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 namespace com::sun::star::uno
@@ -17,6 +19,46 @@ class XComponentContext;
 }
 
 using namespace ::com::sun::star;
+
+using namespace ::com::sun::star;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::beans::Property;
+
+namespace
+{
+enum
+{
+    PROP_BOXWHISKERCHARTTYPE_OVERLAP_SEQUENCE,
+    PROP_BOXWHISKERCHARTTYPE_GAPWIDTH_SEQUENCE
+};
+
+void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
+{
+    rOutProperties.emplace_back("OverlapSequence", PROP_BOXWHISKERCHARTTYPE_OVERLAP_SEQUENCE,
+                                cppu::UnoType<Sequence<sal_Int32>>::get(),
+                                beans::PropertyAttribute::BOUND
+                                    | beans::PropertyAttribute::MAYBEDEFAULT);
+
+    rOutProperties.emplace_back("GapwidthSequence", PROP_BOXWHISKERCHARTTYPE_GAPWIDTH_SEQUENCE,
+                                cppu::UnoType<Sequence<sal_Int32>>::get(),
+                                beans::PropertyAttribute::BOUND
+                                    | beans::PropertyAttribute::MAYBEDEFAULT);
+}
+
+::cppu::OPropertyArrayHelper& StaticBoxWhiskerChartTypeInfoHelper()
+{
+    static ::cppu::OPropertyArrayHelper aPropHelper = []() {
+        std::vector<css::beans::Property> aProperties;
+        lcl_AddPropertiesToVector(aProperties);
+
+        std::sort(aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess());
+
+        return comphelper::containerToSequence(aProperties);
+    }();
+    return aPropHelper;
+};
+
+} // anonymous namespace
 
 namespace chart
 {
@@ -49,6 +91,39 @@ OUString SAL_CALL BoxWhiskerChartType::getChartType()
 uno::Sequence<OUString> BoxWhiskerChartType::getSupportedPropertyRoles()
 {
     return { "FillColor", "BorderColor" };
+}
+
+// ____ OPropertySet ____
+void BoxWhiskerChartType::GetDefaultValue(sal_Int32 nHandle, uno::Any& rAny) const
+{
+    static const ::chart::tPropertyValueMap aStaticDefaults = []() {
+        ::chart::tPropertyValueMap aTmp;
+        Sequence<sal_Int32> aSeq{ 0, 0 };
+        ::chart::PropertyHelper::setPropertyValueDefault(
+            aTmp, PROP_BOXWHISKERCHARTTYPE_OVERLAP_SEQUENCE, aSeq);
+        aSeq = { 100, 100 };
+        ::chart::PropertyHelper::setPropertyValueDefault(
+            aTmp, PROP_BOXWHISKERCHARTTYPE_GAPWIDTH_SEQUENCE, aSeq);
+        return aTmp;
+    }();
+    tPropertyValueMap::const_iterator aFound(aStaticDefaults.find(nHandle));
+    if (aFound == aStaticDefaults.end())
+        rAny.clear();
+    else
+        rAny = (*aFound).second;
+}
+
+::cppu::IPropertyArrayHelper& SAL_CALL BoxWhiskerChartType::getInfoHelper()
+{
+    return StaticBoxWhiskerChartTypeInfoHelper();
+}
+
+// ____ XPropertySet ____
+uno::Reference<beans::XPropertySetInfo> SAL_CALL BoxWhiskerChartType::getPropertySetInfo()
+{
+    static uno::Reference<beans::XPropertySetInfo> xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticBoxWhiskerChartTypeInfoHelper()));
+    return xPropertySetInfo;
 }
 
 OUString SAL_CALL BoxWhiskerChartType::getImplementationName()

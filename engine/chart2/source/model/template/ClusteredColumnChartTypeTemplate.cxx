@@ -32,7 +32,8 @@ namespace
 enum
 {
     PROP_CLUSTEREDCOLUMN_TEMPLATE_DIMENSION,
-    PROP_CLUSTEREDCOLUMN_TEMPLATE_GEOMETRY3D
+    PROP_CLUSTEREDCOLUMN_TEMPLATE_GEOMETRY3D,
+    PROP_CLUSTEREDCOLUMN_TEMPLATE_GAPWIDTH_SEQUENCE
 };
 
 void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
@@ -43,6 +44,10 @@ void lcl_AddPropertiesToVector(std::vector<Property>& rOutProperties)
     rOutProperties.emplace_back(
         "Geometry3D", PROP_CLUSTEREDCOLUMN_TEMPLATE_GEOMETRY3D, cppu::UnoType<sal_Int32>::get(),
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
+    rOutProperties.emplace_back("GapwidthSequence", PROP_CLUSTEREDCOLUMN_TEMPLATE_GAPWIDTH_SEQUENCE,
+                                cppu::UnoType<Sequence<sal_Int32>>::get(),
+                                beans::PropertyAttribute::BOUND
+                                    | beans::PropertyAttribute::MAYBEDEFAULT);
 }
 
 ::cppu::OPropertyArrayHelper& StaticClusteredColumnChartTypeTemplateInfoHelper()
