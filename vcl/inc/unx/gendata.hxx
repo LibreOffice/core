@@ -61,7 +61,6 @@ class VCL_PLUGIN_PUBLIC GenericUnixSalData : public SalData
     std::unique_ptr<psp::PrinterInfoManager> m_pPrinterInfoManager;
 #endif
 
-    void InitFreetypeManager();
     void InitPrintFontManager();
 
 public:

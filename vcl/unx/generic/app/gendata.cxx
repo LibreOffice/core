@@ -55,11 +55,9 @@ GenericUnixSalData::~GenericUnixSalData()
 FreetypeManager* GenericUnixSalData::GetFreetypeManager()
 {
     if (!m_pFreetypeManager)
-        InitFreetypeManager();
+        m_pFreetypeManager.reset(new FreetypeManager);
     return m_pFreetypeManager.get();
 }
-
-void GenericUnixSalData::InitFreetypeManager() { m_pFreetypeManager.reset(new FreetypeManager); }
 
 psp::PrintFontManager* GenericUnixSalData::GetPrintFontManager()
 {

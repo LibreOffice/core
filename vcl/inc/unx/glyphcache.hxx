@@ -92,7 +92,7 @@ public:
     SAL_DLLPRIVATE FreetypeFont* CreateFont(FreetypeFontInstance* pLogicalFont);
 
 private:
-    // to access the constructor (can't use InitFreetypeManager function, because it's private?!)
+    // to access the constructor
     friend class GenericUnixSalData;
     SAL_DLLPRIVATE explicit FreetypeManager();
 
