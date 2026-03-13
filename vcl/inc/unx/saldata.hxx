@@ -21,7 +21,6 @@
 
 #include <X11/Xlib.h>
 
-#include <unx/saldisp.hxx>
 #include <unx/gendata.hxx>
 
 class SalXLib;
