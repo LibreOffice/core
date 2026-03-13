@@ -43,7 +43,6 @@
 #include <QtInstanceWidget.hxx>
 #include <QtInstanceMessageDialog.hxx>
 
-#include <headless/svpvd.hxx>
 #include <salvtables.hxx>
 #include <unx/gendata.hxx>
 
