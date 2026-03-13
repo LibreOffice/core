@@ -1469,7 +1469,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
         constexpr sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names
-        static constexpr OUString aAddAllowed(u"?!"_ustr);
+        static constexpr OUString aAddAllowed(u"?!#"_ustr);
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed,
                 (bGroupSeparator ? nContFlags | KParseTokens::GROUP_SEPARATOR_IN_NUMBER_3 : nContFlags),
