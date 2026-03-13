@@ -32,6 +32,10 @@
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>
 #include <subtotalparam.hxx>
+#include <drawview.hxx>
+#include <drwlayer.hxx>
+#include <svx/svdorect.hxx>
+#include <svx/svdpage.hxx>
 
 using namespace css;
 
@@ -268,6 +272,41 @@ protected:
     {
         SfxLokHelper::setView(moDefaultView->getViewID());
         Scheduler::ProcessEventsToIdle();
+    }
+
+    ScDrawView* getDrawView()
+    {
+        ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell();
+        CPPUNIT_ASSERT(pTabViewShell);
+        ScDrawView* pDrawView = pTabViewShell->GetScDrawView();
+        CPPUNIT_ASSERT(pDrawView);
+        return pDrawView;
+    }
+
+    void insertDrawObject(ScDrawLayer* pDrawLayer, const tools::Rectangle& rRectangle)
+    {
+        ScDrawView* pDrawView = getDrawView();
+        rtl::Reference<SdrRectObj> pObject = new SdrRectObj(*pDrawLayer, rRectangle);
+        pDrawView->InsertObjectSafe(pObject.get(), *pDrawView->GetSdrPageView());
+    }
+
+    void moveDrawObject(SdrObject* pObject, const tools::Rectangle& rNewPosition)
+    {
+        tools::Rectangle aOldPosition = pObject->GetLogicRect();
+        Size aOffset(rNewPosition.Left() - aOldPosition.Left(),
+                     rNewPosition.Top() - aOldPosition.Top());
+        ScDrawView* pDrawView = getDrawView();
+        pDrawView->UnmarkAllObj();
+        pDrawView->MarkObj(pObject, pDrawView->GetSdrPageView());
+        pDrawView->MoveMarkedObj(aOffset);
+    }
+
+    void deleteDrawObject(SdrObject* pObject)
+    {
+        ScDrawView* pDrawView = getDrawView();
+        pDrawView->UnmarkAllObj();
+        pDrawView->MarkObj(pObject, pDrawView->GetSdrPageView());
+        pDrawView->DeleteMarkedObj();
     }
 };
 
@@ -3107,6 +3146,188 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SubTotals_DefaultAndSheetView)
         CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(1, 3, nSheetView2Tab)));
         CPPUNIT_ASSERT_EQUAL(30.0, pDocument->GetValue(ScAddress(1, 5, nSheetView2Tab)));
         CPPUNIT_ASSERT_EQUAL(60.0, pDocument->GetValue(ScAddress(1, 6, nSheetView2Tab)));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DrawObject_DefaultAndSheetView)
+{
+    // Checks that draw objects are synchronized between the default view and sheet views.
+    // This checks inserting, moving and deleting draw objects.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    switchToDefaultView();
+
+    ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+
+    SCTAB nDefaultViewTable = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    SCTAB nSheetViewTable = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+    SdrPage* pDefaultViewPage = pDrawLayer->GetPage(sal_uInt16(nDefaultViewTable));
+    SdrPage* pSheetViewPage = pDrawLayer->GetPage(sal_uInt16(nSheetViewTable));
+    CPPUNIT_ASSERT(pDefaultViewPage);
+    CPPUNIT_ASSERT(pSheetViewPage);
+
+    const tools::Rectangle aRectangle1(1000, 1000, 3000, 2000);
+    const tools::Rectangle aRectangle2(5000, 5000, 7000, 6000);
+
+    // Initially no objects on either page
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDefaultViewPage->GetObjCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pSheetViewPage->GetObjCount());
+
+    // Insert shape on default view
+    {
+        switchToDefaultView();
+        insertDrawObject(pDrawLayer, aRectangle1);
+
+        // Default view page has 1 object at correct position
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pDefaultViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1, pDefaultViewPage->GetObj(0)->GetLogicRect());
+
+        // Sheet view page should also have 1 object at same position after sync
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1, pSheetViewPage->GetObj(0)->GetLogicRect());
+    }
+
+    // Insert shape on sheet view
+    {
+        switchToSheetView();
+        insertDrawObject(pDrawLayer, aRectangle2);
+
+        // Default view page has 2 objects at correct positions
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pDefaultViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1, pDefaultViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2, pDefaultViewPage->GetObj(1)->GetLogicRect());
+
+        // Sheet view page should also have 2 objects at same positions
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1, pSheetViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2, pSheetViewPage->GetObj(1)->GetLogicRect());
+    }
+
+    // Undo the shape insertion from sheet view
+    {
+        switchToSheetView();
+        undo();
+
+        // Back to 1 object on both pages, position preserved
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pDefaultViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1, pDefaultViewPage->GetObj(0)->GetLogicRect());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1, pSheetViewPage->GetObj(0)->GetLogicRect());
+    }
+
+    // Redo the shape insertion
+    {
+        redo();
+
+        // Back to 2 objects on both pages, positions preserved
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pDefaultViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1, pDefaultViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2, pDefaultViewPage->GetObj(1)->GetLogicRect());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1, pSheetViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2, pSheetViewPage->GetObj(1)->GetLogicRect());
+    }
+
+    // Move the first object from the default view
+    const tools::Rectangle aRectangle1Moved(1500, 1300, 3500, 2300);
+    {
+        switchToDefaultView();
+        moveDrawObject(pDefaultViewPage->GetObj(0), aRectangle1Moved);
+
+        // Default view page: first object moved, second unchanged
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pDefaultViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pDefaultViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2, pDefaultViewPage->GetObj(1)->GetLogicRect());
+
+        // Sheet view page: same positions after sync
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pSheetViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2, pSheetViewPage->GetObj(1)->GetLogicRect());
+    }
+
+    // Move the second object from the sheet view
+    const tools::Rectangle aRectangle2Moved(5500, 5300, 7500, 6300);
+    {
+        switchToSheetView();
+        moveDrawObject(pDefaultViewPage->GetObj(1), aRectangle2Moved);
+
+        // Default view page: both objects at moved positions
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pDefaultViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pDefaultViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2Moved, pDefaultViewPage->GetObj(1)->GetLogicRect());
+
+        // Sheet view page: same position as in default view page
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pSheetViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2Moved, pSheetViewPage->GetObj(1)->GetLogicRect());
+    }
+
+    // Delete the second object from the default view
+    {
+        switchToDefaultView();
+        deleteDrawObject(pDefaultViewPage->GetObj(1));
+
+        // 1 object remaining on both pages
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pDefaultViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pDefaultViewPage->GetObj(0)->GetLogicRect());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pSheetViewPage->GetObj(0)->GetLogicRect());
+    }
+
+    // Undo the delete
+    {
+        undo();
+
+        // Both objects restored on both pages
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pDefaultViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pDefaultViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2Moved, pDefaultViewPage->GetObj(1)->GetLogicRect());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pSheetViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2Moved, pSheetViewPage->GetObj(1)->GetLogicRect());
+    }
+
+    // Delete the first object from the sheet view
+    {
+        switchToSheetView();
+        deleteDrawObject(pDefaultViewPage->GetObj(0));
+
+        // 1 object remaining on both pages
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pDefaultViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2Moved, pDefaultViewPage->GetObj(0)->GetLogicRect());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2Moved, pSheetViewPage->GetObj(0)->GetLogicRect());
+    }
+
+    // Undo the delete from sheet view
+    {
+        undo();
+
+        // Both objects restored on both pages
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pDefaultViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pDefaultViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2Moved, pDefaultViewPage->GetObj(1)->GetLogicRect());
+
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewPage->GetObjCount());
+        CPPUNIT_ASSERT_EQUAL(aRectangle1Moved, pSheetViewPage->GetObj(0)->GetLogicRect());
+        CPPUNIT_ASSERT_EQUAL(aRectangle2Moved, pSheetViewPage->GetObj(1)->GetLogicRect());
     }
 }
 

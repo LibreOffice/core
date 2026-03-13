@@ -159,6 +159,21 @@ void ScDocFunc::NotifyDrawUndo( std::unique_ptr<SdrUndoAction> pUndoAction)
         rDocShell.GetUndoManager()->AddUndoAction( std::make_unique<ScUndoDraw>( std::move(pUndoAction), &rDocShell ) );
     rDocShell.SetDrawModified();
 
+    // Sync sheet views for standalone drawing modifications.
+    // Draw operations always target the default view's page, so
+    // just sync the default view to the sheet views.
+    if (!pDrawLayer || !pDrawLayer->IsRecording())
+    {
+        ScViewData* pViewData = ScDocShell::GetViewData();
+        if (pViewData)
+        {
+            ScDocument& rDoc = rDocShell.GetDocument();
+            SCTAB nCurrentTab = pViewData->GetTabNumber();
+            SCTAB nDefaultTab = rDoc.GetDefaultViewTableNumber(nCurrentTab);
+            rDoc.SyncSheetViews(nDefaultTab);
+        }
+    }
+
     // the affected sheet isn't known, so all stream positions are invalidated
     ScDocument& rDoc = rDocShell.GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();

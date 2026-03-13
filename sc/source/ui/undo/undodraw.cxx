@@ -19,7 +19,9 @@
 
 #include <undodraw.hxx>
 #include <docsh.hxx>
+#include <document.hxx>
 #include <tabvwsh.hxx>
+#include <viewdata.hxx>
 
 
 ScUndoDraw::ScUndoDraw( std::unique_ptr<SfxUndoAction> pUndo, ScDocShell* pDocSh ) :
@@ -70,12 +72,26 @@ void ScUndoDraw::UpdateSubShell()
         pViewShell->UpdateDrawShell();
 }
 
+void ScUndoDraw::SyncSheetViews()
+{
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return;
+
+    // Draw undo/redo always operates on the default view's page, so just sync.
+    ScDocument& rDocument = pDocShell->GetDocument();
+    SCTAB nCurrentTab = pViewData->GetTabNumber();
+    SCTAB nDefaultTab = rDocument.GetDefaultViewTableNumber(nCurrentTab);
+    rDocument.SyncSheetViews(nDefaultTab);
+}
+
 void ScUndoDraw::Undo()
 {
     if (pDrawUndo)
     {
         pDrawUndo->Undo();
         pDocShell->SetDrawModified();
+        SyncSheetViews();
         UpdateSubShell();
     }
 }
@@ -86,6 +102,7 @@ void ScUndoDraw::Redo()
     {
         pDrawUndo->Redo();
         pDocShell->SetDrawModified();
+        SyncSheetViews();
         UpdateSubShell();
     }
 }

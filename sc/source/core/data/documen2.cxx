@@ -23,6 +23,7 @@
 
 #include <o3tl/test_info.hxx>
 #include <osl/thread.h>
+#include <svx/svdpage.hxx>
 #include <svx/xtable.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
@@ -830,8 +831,18 @@ bool ScDocument::OverwriteContent(SCTAB nSourceTabNo, SCTAB nTargetTabNo)
     {
         sc::AutoCalcSwitch aACSwitch(*this, false);
         SetNoListening(true);
+
+        // Clear content of the target sheet
         pTargetTable->DeleteArea(0, 0, MaxCol(), MaxRow(), InsertDeleteFlags::ALL);
 
+        // Clear drawing objects on the target sheet
+        if (mpDrawLayer)
+        {
+            if (SdrPage* pTargetPage = mpDrawLayer->GetPage(static_cast<sal_uInt16>(nTargetTabNo)))
+                pTargetPage->ClearSdrObjList();
+        }
+
+        // Copy all content from source sheet to target sheet
         {
             sc::TableContentCopier aHandler(*this, nSourceTabNo, nTargetTabNo);
             aHandler.performCopy(nullptr, ScCloneFlags::NamesToLocal | ScCloneFlags::AdjustCrossSheetRefs);

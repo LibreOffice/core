@@ -31,6 +31,7 @@ class ScUndoDraw: public SfxUndoAction
     ViewShellId     mnViewShellId;
 
     void            UpdateSubShell();
+    void SyncSheetViews();
 
 public:
                             ScUndoDraw( std::unique_ptr<SfxUndoAction> pUndo, ScDocShell* pDocSh );
