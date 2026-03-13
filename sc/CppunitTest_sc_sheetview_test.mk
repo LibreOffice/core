@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_sheetview_test, \
 $(eval $(call gb_CppunitTest_use_externals,sc_sheetview_test,\
     boost_headers \
     libxml2 \
+    mdds_headers \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_sheetview_test,\

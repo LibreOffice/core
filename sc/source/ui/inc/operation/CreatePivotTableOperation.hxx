@@ -21,12 +21,12 @@ class CreatePivotTableOperation : public Operation
 {
 private:
     ScDocShell& mrDocShell;
-    ScDPObject const& mrDPObj;
+    ScDPObject const& mrDPObject;
 
     bool runImplementation() override;
 
 public:
-    CreatePivotTableOperation(ScDocShell& rDocShell, ScDPObject const& rDPObj, bool bRecord,
+    CreatePivotTableOperation(ScDocShell& rDocShell, ScDPObject const& rDPObject, bool bRecord,
                               bool bApi);
 };
 } // end sc namespace
