@@ -56,7 +56,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_qt6,\
 
 $(eval $(call gb_Library_use_externals,vclplug_qt6,\
     boost_headers \
-    cairo \
+    $(if $(filter TRUE,$(ENABLE_CAIRO_CANVAS) $(USE_HEADLESS_CODE)),cairo) \
     epoxy \
     frozen \
     graphite \
