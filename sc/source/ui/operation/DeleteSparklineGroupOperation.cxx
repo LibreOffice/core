@@ -29,18 +29,20 @@ bool DeleteSparklineGroupOperation::runImplementation()
     if (!mpSparklineGroup)
         return false;
 
+    SCTAB nTab = convertTab(mnTab);
+
     auto& rDocument = mrDocShell.GetDocument();
 
-    if (!rDocument.HasTable(mnTab))
+    if (!rDocument.HasTable(nTab))
         return false;
 
-    if (!checkSheetViewProtection())
-        return false;
-
-    auto pUndo = std::make_unique<UndoDeleteSparklineGroup>(mrDocShell, mpSparklineGroup, mnTab);
+    auto pUndo = std::make_unique<UndoDeleteSparklineGroup>(mrDocShell, mpSparklineGroup, nTab);
     // delete sparkline group by "redoing"
     pUndo->Redo();
     mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
+
+    syncSheetViews();
+
     return true;
 }
 }
