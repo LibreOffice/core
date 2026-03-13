@@ -285,7 +285,7 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     OString txCommand = TX " -t1 " + destFilePathA + " " + tmpdestfile;
     SAL_INFO("vcl.fonts", txCommand);
 #if USE_AFDKO_PROGRAMS
-    result = system(mergeFontsCommand.getStr()) == 0;
+    result = system(txCommand.getStr()) == 0;
 #else
     try
     {
