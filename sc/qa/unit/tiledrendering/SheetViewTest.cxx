@@ -3388,6 +3388,66 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertSparklines_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeSparkline_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // Set up data for sparklines
+    rDocument.SetValue(ScAddress(0, 0, 0), 1.0);
+    rDocument.SetValue(ScAddress(0, 1, 0), 5.0);
+    rDocument.SetValue(ScAddress(0, 2, 0), 3.0);
+    rDocument.SetValue(ScAddress(2, 0, 0), 10.0);
+    rDocument.SetValue(ScAddress(2, 1, 0), 20.0);
+    rDocument.SetValue(ScAddress(2, 2, 0), 30.0);
+
+    // Create a sparkline at B1 with data A1:A3
+    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+    rDocument.CreateSparkline(ScAddress(1, 0, 0), pSparklineGroup);
+    {
+        ScRangeList aDataRange;
+        aDataRange.push_back(ScRange(0, 0, 0, 0, 2, 0));
+        auto pSparkline = rDocument.GetSparkline(ScAddress(1, 0, 0));
+        pSparkline->setInputRange(aDataRange);
+    }
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+    // Change sparkline data range from default view: A1:A3 -> C1:C3
+    {
+        switchToDefaultView();
+
+        auto pSparkline = rDocument.GetSparkline(ScAddress(1, 0, 0));
+        CPPUNIT_ASSERT(pSparkline);
+
+        ScRangeList aNewDataRange;
+        aNewDataRange.push_back(ScRange(2, 0, 0, 2, 2, 0));
+        pDocShell->GetDocFunc().ChangeSparkline(pSparkline, 0, aNewDataRange);
+
+        // Verify input range changed on default view
+        ScRangeList aInputRange = pSparkline->getInputRange();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aInputRange.size());
+        CPPUNIT_ASSERT_EQUAL(SCCOL(2), aInputRange[0].aStart.Col());
+
+        // Verify synced to sheet view
+        auto pSheetViewSparkline = rDocument.GetSparkline(ScAddress(1, 0, nSheetViewTab));
+        CPPUNIT_ASSERT(pSheetViewSparkline);
+        ScRangeList aSheetViewInputRange = pSheetViewSparkline->getInputRange();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aSheetViewInputRange.size());
+        CPPUNIT_ASSERT_EQUAL(SCCOL(2), aSheetViewInputRange[0].aStart.Col());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

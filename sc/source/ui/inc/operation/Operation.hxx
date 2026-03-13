@@ -15,6 +15,7 @@
 class ScMarkData;
 class ScAddress;
 class ScRange;
+class ScRangeList;
 class ScViewData;
 
 namespace sc
@@ -52,6 +53,9 @@ protected:
 
     /** Convert a range from a sheet view to the range in default view, take sorting into account. */
     ScRange convertRange(ScRange const& rRange);
+
+    /** Convert a range list from a sheet view to the range list in default view, take sorting into account. */
+    ScRangeList convertRangeList(ScRangeList const& rRangeList);
 
     /** Convert a mark from a sheet view to the mark in default view, take sorting into account. */
     ScMarkData convertMark(ScMarkData const& rMarkData);

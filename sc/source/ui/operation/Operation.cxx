@@ -14,6 +14,7 @@
 #include <dbdata.hxx>
 #include <docsh.hxx>
 #include <markdata.hxx>
+#include <rangelst.hxx>
 #include <viewdata.hxx>
 #include <SheetViewManager.hxx>
 #include <SheetView.hxx>
@@ -89,6 +90,14 @@ ScAddress Operation::convertAddress(ScAddress const& rAddress)
 ScRange Operation::convertRange(ScRange const& rRange)
 {
     return ScRange(convertAddress(rRange.aStart), convertAddress(rRange.aEnd));
+}
+
+ScRangeList Operation::convertRangeList(ScRangeList const& rRangeList)
+{
+    ScRangeList aConverted;
+    for (size_t i = 0; i < rRangeList.size(); ++i)
+        aConverted.push_back(convertRange(rRangeList[i]));
+    return aConverted;
 }
 
 ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
