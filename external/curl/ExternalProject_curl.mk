@@ -76,8 +76,6 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 
 else ifeq ($(COM),MSC)
 
-$(eval $(call gb_ExternalProject_use_nmake,curl,build))
-
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_Trace_StartRange,curl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
