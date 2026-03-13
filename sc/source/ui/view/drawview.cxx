@@ -80,7 +80,10 @@ void ScDrawView::Construct()
     SetHitTolerancePixel( 2 );
 
     SCTAB nViewTab = rViewData.CurrentTabForData();
-    ShowSdrPage(GetModel().GetPage(nViewTab));
+    // For sheet view tabs, use the default view's draw page so that
+    // all draw operations and undo actions reference the default view's page.
+    SCTAB nDrawTab = rDoc.GetDefaultViewTableNumber(nViewTab);
+    ShowSdrPage(GetModel().GetPage(nDrawTab));
 
     bool bEx = rViewData.GetViewShell()->IsDrawSelMode();
     bool bProt = rDoc.IsTabProtected( nViewTab ) ||
