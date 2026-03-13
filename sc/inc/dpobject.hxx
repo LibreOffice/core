@@ -437,7 +437,7 @@ public:
     SC_DLLPUBLIC ScDPObject& operator[](size_t nIndex);
     SC_DLLPUBLIC const ScDPObject& operator[](size_t nIndex) const;
 
-    ScDPObject* GetByName(std::u16string_view rName) const;
+    SC_DLLPUBLIC ScDPObject* GetByName(std::u16string_view rName) const;
 
     void DeleteOnTab( SCTAB nTab );
     void UpdateReference( UpdateRefMode eUpdateRefMode,
