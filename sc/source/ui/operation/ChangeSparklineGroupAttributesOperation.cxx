@@ -27,14 +27,14 @@ ChangeSparklineGroupAttributesOperation::ChangeSparklineGroupAttributesOperation
 
 bool ChangeSparklineGroupAttributesOperation::runImplementation()
 {
-    if (!checkSheetViewProtection())
-        return false;
-
     auto pUndo = std::make_unique<UndoEditSparklneGroup>(mrDocShell, mpExistingSparklineGroup,
                                                          maNewAttributes);
     // change sparkline group attributes by "redoing"
     pUndo->Redo();
     mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
+
+    syncSheetViews();
+
     return true;
 }
 }
