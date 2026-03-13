@@ -3610,6 +3610,49 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_GroupUngroupSparklines_DefaultAndSheetVi
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeSparklineGroupAttributes_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // Create a sparkline group with Column type and a sparkline at B1
+    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+    pSparklineGroup->getAttributes().setType(sc::SparklineType::Column);
+    rDocument.CreateSparkline(ScAddress(1, 0, 0), pSparklineGroup);
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+    // Change sparkline group attributes from default view: Column -> Stacked
+    {
+        switchToDefaultView();
+
+        sc::SparklineAttributes aNewAttributes;
+        aNewAttributes.setType(sc::SparklineType::Stacked);
+
+        pDocShell->GetDocFunc().ChangeSparklineGroupAttributes(pSparklineGroup, aNewAttributes);
+
+        // Verify on default view
+        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Stacked,
+                             pSparklineGroup->getAttributes().getType());
+
+        // Verify synced to sheet view
+        auto pSheetViewSparkline = rDocument.GetSparkline(ScAddress(1, 0, nSheetViewTab));
+        CPPUNIT_ASSERT(pSheetViewSparkline);
+        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Stacked,
+                             pSheetViewSparkline->getSparklineGroup()->getAttributes().getType());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
