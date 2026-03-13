@@ -72,23 +72,8 @@ public:
     void SetDisplay(SalGenericDisplay* pDisp) { m_pDisplay = pDisp; }
 
 #ifndef IOS
-
-    FreetypeManager* GetFreetypeManager()
-    {
-        if (!m_pFreetypeManager)
-            InitFreetypeManager();
-        return m_pFreetypeManager.get();
-    }
-
-    psp::PrintFontManager* GetPrintFontManager()
-    {
-        if (!m_pPrintFontManager)
-            InitPrintFontManager();
-        // PrintFontManager needs the FreetypeManager
-        assert(m_pFreetypeManager);
-        return m_pPrintFontManager.get();
-    }
-
+    FreetypeManager* GetFreetypeManager();
+    psp::PrintFontManager* GetPrintFontManager();
 #endif
 };
 

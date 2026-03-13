@@ -52,7 +52,23 @@ GenericUnixSalData::~GenericUnixSalData()
 }
 
 #ifndef IOS
+FreetypeManager* GenericUnixSalData::GetFreetypeManager()
+{
+    if (!m_pFreetypeManager)
+        InitFreetypeManager();
+    return m_pFreetypeManager.get();
+}
+
 void GenericUnixSalData::InitFreetypeManager() { m_pFreetypeManager.reset(new FreetypeManager); }
+
+psp::PrintFontManager* GenericUnixSalData::GetPrintFontManager()
+{
+    if (!m_pPrintFontManager)
+        InitPrintFontManager();
+    // PrintFontManager needs the FreetypeManager
+    assert(m_pFreetypeManager);
+    return m_pPrintFontManager.get();
+}
 #endif
 
 void GenericUnixSalData::InitPrintFontManager()
