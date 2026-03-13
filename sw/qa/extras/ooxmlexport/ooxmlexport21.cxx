@@ -936,6 +936,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf164176, "tdf164176.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), sPresentation.indexOf("_x000a_"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf171299_tableInField, "tdf171299_tableInField.docx")
+{
+    // given a document where the field contains a table
+
+    // there is some text prior to the table
+    getParagraph(1, "Zusammenfassung:");
+    CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

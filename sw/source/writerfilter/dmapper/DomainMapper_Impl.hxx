@@ -293,6 +293,10 @@ class FieldContext : public virtual SvRefBase
     bool m_bFieldLocked;
     // Current command line type: normal or deleted
     bool m_bCommandType;
+
+    // allows identifying if a table is inside the field, and/or the field is inside of a table
+    sal_Int32 m_nNestedTableLevel = 0;
+
 public:
     bool m_bSetUserFieldContent = false;
     bool m_bSetCitation = false;
@@ -319,7 +323,7 @@ private:
     std::vector<FieldParagraph> m_aParagraphsToFinish;
 
 public:
-    explicit FieldContext(css::uno::Reference<css::text::XTextRange> xStart);
+    explicit FieldContext(css::uno::Reference<css::text::XTextRange> xStart, sal_Int32 nTableDepth);
     ~FieldContext() override;
 
     const css::uno::Reference<css::text::XTextRange>& GetStartRange() const { return m_xStartRange; }
@@ -376,6 +380,7 @@ public:
     ::std::vector<OUString> GetCommandParts() const;
 
     std::vector<FieldParagraph>& GetParagraphsToFinish() { return m_aParagraphsToFinish; }
+    sal_Int32 GetTableDepth() const { return m_nNestedTableLevel; }
 };
 
 struct AnchoredContext

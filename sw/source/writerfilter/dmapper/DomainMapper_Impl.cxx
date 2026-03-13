@@ -2183,7 +2183,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             }
         }
 
-        if (pFieldContext && pFieldContext->IsCommandCompleted())
+        if (pFieldContext && pFieldContext->IsCommandCompleted()
+            && pFieldContext->GetTableDepth() == m_StreamStateStack.top().nTableDepth)
         {
             if (pFieldContext->GetFieldId() == FIELD_IF)
             {
@@ -6052,7 +6053,7 @@ void DomainMapper_Impl::PushFieldContext()
     uno::Reference< text::XTextRange > xStart;
     if (xCrsr.is())
         xStart = xCrsr->getStart();
-    m_aFieldStack.push_back(new FieldContext(xStart));
+    m_aFieldStack.push_back(new FieldContext(xStart, m_StreamStateStack.top().nTableDepth));
 }
 /*-------------------------------------------------------------------------
 //the current field context waits for the completion of the command
@@ -6077,11 +6078,12 @@ void DomainMapper_Impl::SetFieldLocked()
 }
 
 
-FieldContext::FieldContext(uno::Reference< text::XTextRange > xStart)
+FieldContext::FieldContext(uno::Reference<text::XTextRange> xStart, sal_Int32 nTableDepth)
     : m_bFieldCommandCompleted(false)
     , m_xStartRange(std::move( xStart ))
     , m_bFieldLocked( false )
     , m_bCommandType(false)
+    , m_nNestedTableLevel(nTableDepth)
 {
     m_pProperties = new PropertyMap();
 }
