@@ -28,13 +28,16 @@ ChangeSparklineOperation::ChangeSparklineOperation(ScDocShell& rDocShell,
 
 bool ChangeSparklineOperation::runImplementation()
 {
-    if (!checkSheetViewProtection())
-        return false;
+    SCTAB nTab = convertTab(mnTab);
+    ScRangeList aDataRange = convertRangeList(maDataRange);
 
-    auto pUndo = std::make_unique<UndoEditSparkline>(mrDocShell, mpSparkline, mnTab, maDataRange);
+    auto pUndo = std::make_unique<UndoEditSparkline>(mrDocShell, mpSparkline, nTab, aDataRange);
     // change sparkline by "redoing"
     pUndo->Redo();
     mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
+
+    syncSheetViews();
+
     return true;
 }
 }
