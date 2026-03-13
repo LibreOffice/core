@@ -23,13 +23,15 @@ UngroupSparklinesOperation::UngroupSparklinesOperation(ScDocShell& rDocShell, Sc
 
 bool UngroupSparklinesOperation::runImplementation()
 {
-    if (!checkSheetViewProtection())
-        return false;
+    ScRange aRange = convertRange(maRange);
 
-    auto pUndo = std::make_unique<UndoUngroupSparklines>(mrDocShell, maRange);
+    auto pUndo = std::make_unique<UndoUngroupSparklines>(mrDocShell, aRange);
     // ungroup sparklines by "redoing"
     pUndo->Redo();
     mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
+
+    syncSheetViews();
+
     return true;
 }
 }
