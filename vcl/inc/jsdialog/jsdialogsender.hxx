@@ -30,6 +30,7 @@
 #define WINDOW_ID "id"
 #define CLOSE_ID "close_id"
 #define MENU_PTR "menu_ptr"
+#define NEW_ID "new_id"
 
 class JSDialogSender
 {
@@ -64,6 +65,7 @@ public:
     void sendMenu(const VclPtr<PopupMenu>& pMenu, const OUString& sParentId,
                   const OUString& sCloseId);
     void sendClosePopup(vcl::LOKWindowId nWindowId);
+    virtual void renameWidget(const OUString& rOldName, const OUString& rNewName);
     void flush() { mpIdleNotify->Invoke(); }
 
 protected:
