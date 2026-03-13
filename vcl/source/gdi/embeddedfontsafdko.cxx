@@ -280,17 +280,18 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
 
     // convert that merged cid result to Type 1
     bool result = false;
-    OString tmpdestfile = destFilePathA + ".temp";
+    OUString tmpdestfile = destFilePath + ".temp";
+    OString tmpdestfileA = tmpdestfile.toUtf8();
 
 #if USE_AFDKO_PROGRAMS
-    OString txCommand = TX " -t1 " + destFilePathA + " " + tmpdestfile;
+    OString txCommand = TX " -t1 " + destFilePathA + " " + tmpdestfileA;
     SAL_INFO("vcl.fonts", txCommand);
     result = system(txCommand.getStr()) == 0;
 #else
     try
     {
         h->src.stm.filename = const_cast<char*>(destFilePathA.getStr());
-        h->dst.stm.filename = const_cast<char*>(tmpdestfile.getStr());
+        h->dst.stm.filename = const_cast<char*>(tmpdestfileA.getStr());
         setMode(h, mode_t1);
         result = convertTx(h);
         mergeFontsFree(h);
@@ -301,8 +302,9 @@ bool EmbeddedFontsManager::mergefonts(const OUString& cidFontInfoUrl, const OUSt
     }
 #endif
 
-    remove(destFilePathA.getStr());
-    rename(tmpdestfile.getStr(), destFilePathA.getStr());
+    osl::File::remove(destFileUrl);
+    osl::FileBase::getFileURLFromSystemPath(tmpdestfile, tmpdestfile);
+    osl::File::move(tmpdestfile, destFileUrl);
 
     return result;
 #else
