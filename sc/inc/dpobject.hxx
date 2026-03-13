@@ -455,6 +455,9 @@ public:
     OUString CreateNewName() const;
 
     void FreeTable(const ScDPObject* pDPObj);
+
+    /** Deletes all pivot tables on the input tab. */
+    void DeleteByTab(SCTAB nTab);
     SC_DLLPUBLIC ScDPObject* InsertNewTable(std::unique_ptr<ScDPObject> pDPObj);
     SC_DLLPUBLIC bool HasTable(const ScDPObject* pDPObj) const;
 

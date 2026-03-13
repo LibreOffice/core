@@ -9,24 +9,23 @@
 
 #pragma once
 
-#include "Operation.hxx"
+#include "PivotTableOperation.hxx"
 
-class ScDocShell;
 class ScDPObject;
 
 namespace sc
 {
 /** Updates the pivot table identified by the input object. */
-class UpdatePivotTableOperation : public Operation
+class UpdatePivotTableOperation : public PivotTableOperation
 {
 private:
-    ScDocShell& mrDocShell;
-    ScDPObject& mrDPObj;
+    ScDPObject& mrDPObject;
 
     bool runImplementation() override;
 
 public:
-    UpdatePivotTableOperation(ScDocShell& rDocShell, ScDPObject& rDPObj, bool bRecord, bool bApi);
+    UpdatePivotTableOperation(ScDocShell& rDocShell, ScDPObject& rDPObject, bool bRecord,
+                              bool bApi);
 };
 } // end sc namespace
 
