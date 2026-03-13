@@ -231,6 +231,7 @@ const char* const XRequest[] = {
 
 X11SalData::X11SalData()
     : GenericUnixSalData()
+    , m_pDisplay(nullptr)
 {
     m_aOrigXIOErrorHandler = XSetIOErrorHandler ( XIOErrorHdl );
     PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );

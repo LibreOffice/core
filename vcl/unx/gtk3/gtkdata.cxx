@@ -330,6 +330,7 @@ int GtkSalDisplay::CaptureMouse(GtkSalFrame* pFrame)
 
 GtkSalData::GtkSalData()
     : GenericUnixSalData()
+    , m_pDisplay(nullptr)
 {
     m_pUserEvent = nullptr;
 }
@@ -575,13 +576,12 @@ void GtkSalData::Init()
         aOrigXIOErrorHandler = XSetIOErrorHandler(XIOErrorHdl);
 #endif
 
-    GtkSalDisplay *pDisplay = new GtkSalDisplay( pGdkDisp );
-    SetDisplay( pDisplay );
+    m_pDisplay = new GtkSalDisplay(pGdkDisp);
 
 #if GTK_CHECK_VERSION(4, 0, 0)
-    pDisplay->emitDisplayChanged();
+    m_pDisplay->emitDisplayChanged();
     GListModel *pMonitors = gdk_display_get_monitors(pGdkDisp);
-    g_signal_connect(pMonitors, "items-changed", G_CALLBACK(signalMonitorsChanged), pDisplay);
+    g_signal_connect(pMonitors, "items-changed", G_CALLBACK(signalMonitorsChanged), m_pDisplay);
 
     gtk_style_context_add_provider_for_display(pGdkDisp, CreateStyleProvider(),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -593,13 +593,13 @@ void GtkSalData::Init()
         if (!pScreen)
             continue;
 
-        pDisplay->screenSizeChanged( pScreen );
-        pDisplay->monitorsChanged( pScreen );
+        m_pDisplay->screenSizeChanged( pScreen );
+        m_pDisplay->monitorsChanged( pScreen );
         // add signal handler to notify screen size changes
         g_signal_connect( G_OBJECT(pScreen), "size-changed",
-                          G_CALLBACK(signalScreenSizeChanged), pDisplay );
+                          G_CALLBACK(signalScreenSizeChanged), m_pDisplay );
         g_signal_connect( G_OBJECT(pScreen), "monitors-changed",
-                          G_CALLBACK(signalMonitorsChanged), pDisplay );
+                          G_CALLBACK(signalMonitorsChanged), m_pDisplay );
 
         gtk_style_context_add_provider_for_screen(pScreen, CreateStyleProvider(),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);

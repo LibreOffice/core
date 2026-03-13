@@ -225,6 +225,7 @@ class GtkSalData final : public GenericUnixSalData
     osl::Mutex      m_aDispatchMutex;
     osl::Condition  m_aDispatchCondition;
     std::exception_ptr m_aException;
+    GtkSalDisplay* m_pDisplay;
 
 public:
     GtkSalData();
@@ -299,7 +300,7 @@ inline GdkDisplay *GtkSalData::GetGdkDisplay()
 
 GtkSalDisplay *GtkSalData::GetGtkDisplay() const
 {
-    return static_cast<GtkSalDisplay *>(GetDisplay());
+    return m_pDisplay;
 }
 
 

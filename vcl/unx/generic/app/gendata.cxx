@@ -36,10 +36,7 @@ SalData::~SalData() {}
 
 #endif
 
-GenericUnixSalData::GenericUnixSalData()
-    : m_pDisplay(nullptr)
-{
-}
+GenericUnixSalData::GenericUnixSalData() {}
 
 GenericUnixSalData::~GenericUnixSalData()
 {

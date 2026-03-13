@@ -245,7 +245,7 @@ SalX11Display::SalX11Display(Display* display) :
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("vcl.app", "SalX11Display::SalX11Display().");
 #endif
-    GenericUnixSalData *pData = GetGenericUnixSalData();
+    X11SalData* pData = GetX11SalData();
 
     SAL_WARN_IF(  pData->GetDisplay(), "vcl", "Second SalX11Display created !!!" );
     pData->SetDisplay( this );
@@ -281,7 +281,7 @@ SalX11Display::~SalX11Display()
 
 void SalX11Display::doDestruct()
 {
-    GenericUnixSalData *pData = GetGenericUnixSalData();
+    X11SalData* pData = GetX11SalData();
 
     m_pWMAdaptor.reset();
 

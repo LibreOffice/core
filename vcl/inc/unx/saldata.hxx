@@ -34,6 +34,8 @@ class X11SalData final : public GenericUnixSalData
         XErrorHandler   m_aHandler;
     };
 
+    SalGenericDisplay* m_pDisplay;
+
     // cached hostname to avoid slow lookup
     OUString m_aHostname;
 
@@ -60,6 +62,8 @@ public:
 
     void Dispose();
 
+    SalGenericDisplay* GetDisplay() const { return m_pDisplay; }
+    void SetDisplay(SalGenericDisplay* pDisp) { m_pDisplay = pDisp; }
     void                    DeleteDisplay(); // for shutdown
 
     SalXLib*                GetLib() const { return pXLib_.get(); }

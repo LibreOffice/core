@@ -24,6 +24,7 @@
 #include <epoxy/glx.h>
 
 #include <rtl/string.hxx>
+#include <unx/saldata.hxx>
 #include <unx/saltype.h>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -356,7 +357,7 @@ namespace vcl_sal {
 
     inline SalX11Display* getSalDisplay()
     {
-        const GenericUnixSalData* pData = GetGenericUnixSalData();
+        const X11SalData* pData = GetX11SalData();
         assert(pData != nullptr);
         return static_cast<SalX11Display*>(pData->GetDisplay());
     }
