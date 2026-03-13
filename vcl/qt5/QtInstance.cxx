@@ -34,7 +34,9 @@
 #include <QtObject.hxx>
 #include <QtOpenGLContext.hxx>
 #include <QtSalInstance.hxx>
+#if USE_HEADLESS_CODE
 #include <QtSvpSalInstance.hxx>
+#endif
 #include <QtSystem.hxx>
 #include <QtTimer.hxx>
 #include <QtInstanceWidget.hxx>
@@ -997,9 +999,10 @@ VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
     initResources();
 
     const OUString sToolkit = "qt" + OUString::number(QT_VERSION_MAJOR);
+#if USE_HEADLESS_CODE
     if (QtInstance::useCairo())
         return new QtSvpSalInstance(sToolkit);
-
+#endif
     return new QtSalInstance(sToolkit);
 }
 }
