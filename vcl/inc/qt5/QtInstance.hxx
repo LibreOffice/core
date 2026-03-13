@@ -65,6 +65,10 @@ struct StdFreeCStr
 };
 using FreeableCStr = std::unique_ptr<char[], StdFreeCStr>;
 
+/** Abstract base class for Qt based SalInstance implementations.
+ *  Subclasses need to implement the purely virtual graphics-related
+ *  methods using a specific graphics backend.
+ */
 class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
                                      public SalGenericInstance,
                                      public SalUserEventList
@@ -114,9 +118,10 @@ protected:
     virtual rtl::Reference<QtFilePicker>
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode);
-    static bool useCairo();
     void connectQScreenSignals(const QScreen*);
     void notifyDisplayChanged();
+
+    virtual QtFrame* DoCreateFrame(SalFrameStyleFlags nStyle, QtFrame* pParent) = 0;
 
 public:
     explicit QtInstance(const OUString& rToolkitName);
@@ -149,20 +154,11 @@ public:
                                     bool bShow) override;
     virtual void DestroyObject(SalObject* pObject) override;
 
-    virtual std::unique_ptr<SalVirtualDevice>
-    CreateVirtualDevice(SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
-                        DeviceFormat eFormat, bool bAlphaMaskTransparent = false) override;
-
-    virtual std::unique_ptr<SalVirtualDevice>
-    CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,
-                        DeviceFormat eFormat, const SystemGraphicsData& rData) override;
-
     virtual std::unique_ptr<SalMenu> CreateMenu(bool, Menu*) override;
     virtual std::unique_ptr<SalMenuItem> CreateMenuItem(const SalItemParams&) override;
 
     virtual SalTimer* CreateSalTimer() override;
     virtual SalSystem* CreateSalSystem() override;
-    virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;
 
     virtual bool DoYield(bool bWait, bool bHandleAllCurrentEvents) override;
     virtual bool AnyInput(VclInputFlags nType) override;
@@ -228,6 +224,7 @@ public:
     QtFrame* activePopup() const { return m_pActivePopup; }
     void setActivePopup(QtFrame*);
 
+    static bool useCairo();
     static bool noNativeControls();
     static bool noWeldedWidgets();
     static bool isQtWeldingEnabled();

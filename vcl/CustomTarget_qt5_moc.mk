@@ -62,7 +62,9 @@ $(call gb_CustomTarget_get_target,vcl/qt5) : \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtMainWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtMenu.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtSalFrame.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtSalInstance.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtSvpSalFrame.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtSvpSalInstance.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtTransferable.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtTreeViewItemDelegate.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtTreeViewModel.moc \

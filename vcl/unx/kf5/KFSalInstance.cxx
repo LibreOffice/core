@@ -19,8 +19,17 @@
 
 #include "KFSalInstance.hxx"
 
+#include <QtSalInstance.hxx>
+#include <QtSvpSalInstance.hxx>
+
 extern "C" {
-VCLPLUG_KF_PUBLIC SalInstance* create_SalInstance() { return new KFSalInstance<QtInstance>(); }
+VCLPLUG_KF_PUBLIC SalInstance* create_SalInstance()
+{
+    if (QtInstance::useCairo())
+        return new KFSalInstance<QtSvpSalInstance>();
+
+    return new KFSalInstance<QtSalInstance>();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
