@@ -40,11 +40,11 @@ OUString XmlElement::attribute(const char* pAttribute)
     return sString;
 }
 
-sal_Int32 XmlElement::countChildren() { return sal_Int32(xmlChildElementCount(mpXmlNode)); }
+int XmlElement::countChildren() { return xmlChildElementCount(mpXmlNode); }
 
-std::unique_ptr<XmlElement> XmlElement::at(sal_Int32 nIndex)
+std::unique_ptr<XmlElement> XmlElement::at(int nIndex)
 {
-    sal_Int32 nCurrent = 0;
+    int nCurrent = 0;
     xmlNodePtr pCurrent = xmlFirstElementChild(mpXmlNode);
 
     while (pCurrent != nullptr && nCurrent < nIndex)
@@ -108,7 +108,7 @@ XPathObject::~XPathObject()
         xmlXPathFreeObject(mpXPathObject);
 }
 
-sal_Int32 XPathObject::count()
+int XPathObject::count()
 {
     if (!mpXPathObject)
         return 0;
@@ -129,7 +129,7 @@ OUString XPathObject::attribute(const char* pAttribute)
     return pXmlElement->attribute(pAttribute);
 }
 
-std::unique_ptr<XmlElement> XPathObject::at(sal_Int32 nIndex)
+std::unique_ptr<XmlElement> XPathObject::at(int nIndex)
 {
     if (!mpXPathObject)
         return {};

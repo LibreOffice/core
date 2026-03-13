@@ -36,8 +36,8 @@ public:
 
     std::string_view name();
     OUString attribute(const char* pAttribute);
-    sal_Int32 countChildren();
-    std::unique_ptr<XmlElement> at(sal_Int32 nIndex);
+    int countChildren();
+    std::unique_ptr<XmlElement> at(int nIndex);
 };
 
 /** XPath object is a result of XPath evaluation.
@@ -55,10 +55,10 @@ public:
     XPathObject(xmlXPathObjectPtr pXPathObject, std::string_view aString);
     ~XPathObject();
     std::string_view getPathString() { return maPath; }
-    sal_Int32 count();
+    int count();
     OUString attribute(const char* pAttribute);
     OUString content();
-    std::unique_ptr<XmlElement> at(sal_Int32 nIndex);
+    std::unique_ptr<XmlElement> at(int nIndex);
 };
 
 /** Object that allows to evaluate XPath strings on a XML document. */
