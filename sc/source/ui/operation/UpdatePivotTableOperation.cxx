@@ -19,11 +19,10 @@
 
 namespace sc
 {
-UpdatePivotTableOperation::UpdatePivotTableOperation(ScDocShell& rDocShell, ScDPObject& rDPObj,
+UpdatePivotTableOperation::UpdatePivotTableOperation(ScDocShell& rDocShell, ScDPObject& rDPObject,
                                                      bool bRecord, bool bApi)
-    : Operation(OperationType::PivotTableUpdate, bRecord, bApi)
-    , mrDocShell(rDocShell)
-    , mrDPObj(rDPObj)
+    : PivotTableOperation(OperationType::PivotTableUpdate, rDocShell, bRecord, bApi)
+    , mrDPObject(rDPObject)
 {
 }
 
@@ -32,48 +31,55 @@ bool UpdatePivotTableOperation::runImplementation()
     ScDocShellModificator aModificator(mrDocShell);
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
 
-    if (!checkSheetViewProtection())
-        return false;
+    ScDocument& rDoc = mrDocShell.GetDocument();
 
-    if (!sc::pivot::isEditable(mrDocShell, mrDPObj.GetOutRange(), mbApi,
+    // Use default view's DPObject when called from a sheet view
+    ScDPObject* pDPObject = findDefaultViewDPObject(mrDPObject);
+    if (!pDPObject)
+        pDPObject = &mrDPObject;
+
+    // Apply the SaveData from the input DPObject (which may have layout changes)
+    if (pDPObject != &mrDPObject && mrDPObject.GetSaveData())
+        pDPObject->SetSaveData(*mrDPObject.GetSaveData());
+
+    if (!sc::pivot::isEditable(mrDocShell, pDPObject->GetOutRange(), mbApi,
                                sc::EditAction::UpdatePivotTable))
         return false;
 
     ScDocumentUniquePtr pOldUndoDoc;
     ScDocumentUniquePtr pNewUndoDoc;
 
-    ScDPObject aUndoDPObj(mrDPObj); // For undo or revert on failure.
+    ScDPObject aUndoDPObject(*pDPObject); // For undo or revert on failure.
 
-    ScDocument& rDoc = mrDocShell.GetDocument();
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
     if (mbRecord)
-        sc::pivot::createUndoDoc(pOldUndoDoc, rDoc, mrDPObj.GetOutRange());
+        sc::pivot::createUndoDoc(pOldUndoDoc, rDoc, pDPObject->GetOutRange());
 
-    mrDPObj.SetAllowMove(false);
-    mrDPObj.ReloadGroupTableData();
-    if (!mrDPObj.SyncAllDimensionMembers())
+    pDPObject->SetAllowMove(false);
+    pDPObject->ReloadGroupTableData();
+    if (!pDPObject->SyncAllDimensionMembers())
         return false;
 
-    mrDPObj.InvalidateData(); // before getting the new output area
+    pDPObject->InvalidateData(); // before getting the new output area
 
     //  make sure the table has a name (not set by dialog)
-    if (mrDPObj.GetName().isEmpty())
-        mrDPObj.SetName(rDoc.GetDPCollection()->CreateNewName());
+    if (pDPObject->GetName().isEmpty())
+        pDPObject->SetName(rDoc.GetDPCollection()->CreateNewName());
 
     ScRange aNewOut;
-    if (!sc::pivot::checkNewOutputRange(mrDPObj, mrDocShell, aNewOut, mbApi,
+    if (!sc::pivot::checkNewOutputRange(*pDPObject, mrDocShell, aNewOut, mbApi,
                                         sc::EditAction::UpdatePivotTable))
     {
-        mrDPObj = aUndoDPObj;
+        *pDPObject = aUndoDPObject;
         return false;
     }
 
     //  test if new output area is empty except for old area
     if (!mbApi)
     {
-        if (!sc::pivot::lcl_EmptyExcept(rDoc, aNewOut, mrDPObj.GetOutRange()))
+        if (!sc::pivot::lcl_EmptyExcept(rDoc, aNewOut, pDPObject->GetOutRange()))
         {
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(
                 ScDocShell::GetActiveDialogParent(), VclMessageType::Question,
@@ -81,7 +87,7 @@ bool UpdatePivotTableOperation::runImplementation()
             xQueryBox->set_default_response(RET_YES);
             if (xQueryBox->run() == RET_NO)
             {
-                mrDPObj = aUndoDPObj;
+                *pDPObject = aUndoDPObject;
                 return false;
             }
         }
@@ -90,18 +96,20 @@ bool UpdatePivotTableOperation::runImplementation()
     if (mbRecord)
         sc::pivot::createUndoDoc(pNewUndoDoc, rDoc, aNewOut);
 
-    mrDPObj.Output(aNewOut.aStart);
+    pDPObject->Output(aNewOut.aStart);
     mrDocShell.PostPaintGridAll(); //! only necessary parts
 
     if (mbRecord)
     {
         mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoDataPilot>(
-            mrDocShell, std::move(pOldUndoDoc), std::move(pNewUndoDoc), &aUndoDPObj, &mrDPObj,
+            mrDocShell, std::move(pOldUndoDoc), std::move(pNewUndoDoc), &aUndoDPObject, pDPObject,
             false));
     }
 
+    syncSheetViews();
+
     // notify API objects
-    rDoc.BroadcastUno(ScDataPilotModifiedHint(mrDPObj.GetName()));
+    rDoc.BroadcastUno(ScDataPilotModifiedHint(pDPObject->GetName()));
     aModificator.SetDocumentModified();
     return true;
 }

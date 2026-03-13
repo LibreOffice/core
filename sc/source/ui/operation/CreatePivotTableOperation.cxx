@@ -14,7 +14,6 @@
 #include <vcl/weld.hxx>
 
 #include <dpsave.hxx>
-#include <dpshttab.hxx>
 #include <undodat.hxx>
 #include <scresid.hxx>
 #include <hints.hxx>
@@ -24,8 +23,7 @@ namespace sc
 CreatePivotTableOperation::CreatePivotTableOperation(ScDocShell& rDocShell,
                                                      ScDPObject const& rDPObject, bool bRecord,
                                                      bool bApi)
-    : Operation(OperationType::PivotTableCreate, bRecord, bApi)
-    , mrDocShell(rDocShell)
+    : PivotTableOperation(OperationType::PivotTableCreate, rDocShell, bRecord, bApi)
     , mrDPObject(rDPObject)
 {
 }
@@ -54,15 +52,7 @@ bool CreatePivotTableOperation::runImplementation()
     ScDPObject& rDestObject = *pDestObject;
 
     // Convert ranges from sheet view to default view
-    rDestObject.SetOutRange(convertRange(rDestObject.GetOutRange()));
-
-    const ScSheetSourceDesc* pSheetDesc = rDestObject.GetSheetDesc();
-    if (pSheetDesc && !pSheetDesc->HasRangeName())
-    {
-        ScSheetSourceDesc aDesc(*pSheetDesc);
-        aDesc.SetSourceRange(convertRange(aDesc.GetSourceRange()));
-        rDestObject.SetSheetDesc(aDesc);
-    }
+    convertDPObjectRanges(rDestObject);
 
     // #i94570# When changing the output position in the dialog, a new table is created
     // with the settings from the old table, including the name.

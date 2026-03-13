@@ -9,18 +9,16 @@
 
 #pragma once
 
-#include "Operation.hxx"
+#include "PivotTableOperation.hxx"
 
-class ScDocShell;
 class ScDPObject;
 
 namespace sc
 {
 /** Creates a pivot table from the input object. */
-class CreatePivotTableOperation : public Operation
+class CreatePivotTableOperation : public PivotTableOperation
 {
 private:
-    ScDocShell& mrDocShell;
     ScDPObject const& mrDPObject;
 
     bool runImplementation() override;
