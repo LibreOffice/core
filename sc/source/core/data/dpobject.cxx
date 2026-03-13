@@ -3765,6 +3765,13 @@ OUString ScDPCollection::CreateNewName() const
     return OUString();                    // should not happen
 }
 
+void ScDPCollection::DeleteByTab(SCTAB nTab)
+{
+    std::erase_if(maTables, [nTab](const std::unique_ptr<ScDPObject>& rxTable) {
+        return rxTable->GetOutRange().aStart.Tab() == nTab;
+    });
+}
+
 void ScDPCollection::FreeTable(const ScDPObject* pDPObject)
 {
     const ScRange& rOutRange = pDPObject->GetOutRange();

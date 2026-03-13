@@ -842,6 +842,12 @@ bool ScDocument::OverwriteContent(SCTAB nSourceTabNo, SCTAB nTargetTabNo)
                 pTargetPage->ClearSdrObjList();
         }
 
+        // Clear pivot tables on the target sheet
+        if (pDPCollection)
+        {
+            pDPCollection->DeleteByTab(nTargetTabNo);
+        }
+
         // Copy all content from source sheet to target sheet
         {
             sc::TableContentCopier aHandler(*this, nSourceTabNo, nTargetTabNo);

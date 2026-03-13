@@ -557,6 +557,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/MultipleOpsOperation \
     sc/source/ui/operation/Operation \
     sc/source/ui/operation/OperationType \
+    sc/source/ui/operation/PivotTableOperation \
     sc/source/ui/operation/QueryOperation \
     sc/source/ui/operation/RemovePivotTableOperation \
     sc/source/ui/operation/ReplaceNoteTextOperation \

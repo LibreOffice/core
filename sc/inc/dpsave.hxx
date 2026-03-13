@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <ostream>
 #include <vector>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -265,7 +266,7 @@ public:
 
     ScDPSaveData& operator= ( const ScDPSaveData& r );
 
-    bool operator== ( const ScDPSaveData& r ) const;
+    SC_DLLPUBLIC bool operator==(const ScDPSaveData& r) const;
 
     SC_DLLPUBLIC bool hasFormats();
     SC_DLLPUBLIC sc::PivotTableFormats const& getFormats();
@@ -388,5 +389,11 @@ private:
 
     void DimensionsChanged();
 };
+
+inline std::ostream& operator<<(std::ostream& rStrm, const ScDPSaveData& rData)
+{
+    rStrm << "SaveData[dimensions = " << rData.GetDimensions().size() << "]";
+    return rStrm;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
