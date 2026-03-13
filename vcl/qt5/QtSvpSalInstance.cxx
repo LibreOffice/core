@@ -68,4 +68,10 @@ std::shared_ptr<SalBitmap> QtSvpSalInstance::CreateSalBitmap()
     return std::make_shared<SvpSalBitmap>();
 }
 
+const cairo_font_options_t* QtSvpSalInstance::GetCairoFontOptions()
+{
+    static cairo_font_options_t* gOptions = cairo_font_options_create();
+    return gOptions;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

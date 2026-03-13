@@ -69,8 +69,6 @@
 #include <unx/gstsink.hxx>
 #endif
 
-#include <cairo.h>
-
 #include <mutex>
 #include <condition_variable>
 
@@ -644,12 +642,6 @@ Platform QtInstance::GetPlatform() const
 }
 
 Toolkit QtInstance::GetToolkit() const { return Toolkit::Qt; }
-
-const cairo_font_options_t* QtInstance::GetCairoFontOptions()
-{
-    static cairo_font_options_t* gOptions = cairo_font_options_create();
-    return gOptions;
-}
 
 IMPL_LINK_NOARG(QtInstance, updateStyleHdl, Timer*, void)
 {

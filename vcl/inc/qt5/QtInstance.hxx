@@ -204,9 +204,6 @@ public:
     virtual Platform GetPlatform() const override;
     virtual Toolkit GetToolkit() const override;
 
-    // for qt font options
-    virtual const cairo_font_options_t* GetCairoFontOptions() override;
-
 #if QT_VERSION < QT_VERSION_CHECK(6, 12, 0)
     // Helper to implement QtFrame::GetUseReducedAnimation for Qt < 6.12
     // KFSalInstance overrides this to read Plasma settings
