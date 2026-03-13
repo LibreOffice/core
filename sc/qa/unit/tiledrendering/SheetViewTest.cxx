@@ -3448,6 +3448,63 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeSparkline_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteSparkline_DefaultAndSheetView)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // Create sparklines at B1 and B2
+    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+    rDocument.CreateSparkline(ScAddress(1, 0, 0), pSparklineGroup);
+    rDocument.CreateSparkline(ScAddress(1, 1, 0), pSparklineGroup);
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+
+    // Verify sparklines exist on both views
+    CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 0, nSheetViewTab)));
+    CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 1, nSheetViewTab)));
+
+    // Delete sparkline at B1 from default view
+    {
+        switchToDefaultView();
+
+        bool bResult = pDocShell->GetDocFunc().DeleteSparkline(ScAddress(1, 0, 0));
+        CPPUNIT_ASSERT(bResult);
+
+        // Verify deleted on default view
+        CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(1, 0, 0)));
+
+        // Verify synced to sheet view
+        CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(1, 0, nSheetViewTab)));
+    }
+
+    // Delete sparkline at B2 from sheet view
+    {
+        switchToSheetView();
+
+        bool bResult = pDocShell->GetDocFunc().DeleteSparkline(ScAddress(1, 1, nSheetViewTab));
+        CPPUNIT_ASSERT(bResult);
+
+        // Verify deleted on default view
+        CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(1, 1, 0)));
+
+        // Verify synced to sheet view
+        CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(1, 1, nSheetViewTab)));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
