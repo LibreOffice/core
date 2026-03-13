@@ -1608,6 +1608,18 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testFdo30900)
                        u"OFFSET(Feuille1!$A$1,1,0,COUNTA(Feuille1!$A$2:$A$100))");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTrueFalseAsDefinedName)
+{
+    createScDoc("xls/forum-mso-en4-102737.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pWorkbook);
+
+    // earlier the name was TRUE
+    assertXPath(pWorkbook, "/x:workbook/x:definedNames/x:definedName[2]", "name", u"_TRUE");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

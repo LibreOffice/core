@@ -5579,6 +5579,9 @@ OUString ScCompiler::SanitizeDefinedName(const OUString& rStr, const ScDocument&
             != ScRefFlags::ZERO))
         bValidName = false;
 
+    if (sName.equalsIgnoreAsciiCase("true") || sName.equalsIgnoreAsciiCase("false"))
+        bValidName = false;
+
     if (!bValidName || sName != rStr)
     {
         sName = bValidName ? sName : "_" + sName;
