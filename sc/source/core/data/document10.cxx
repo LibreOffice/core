@@ -1236,7 +1236,7 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
     {
         SCTAB nSheetViewTab = rSheetView.getTableNumber();
 
-        // Syncronize sheet view's anonymous DB data range with default view
+        // Sync the sheet view's anonymous DB data from the default view
         if (pDefaultViewDBData)
         {
             ScDBData* pSheetViewDBData = GetAnonymousDBData(nSheetViewTab);
@@ -1246,6 +1246,11 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
                 pDefaultViewDBData->GetArea(aDefaultRange);
                 aDefaultRange.SetTab(nSheetViewTab);
                 pSheetViewDBData->SetArea(aDefaultRange);
+                pSheetViewDBData->SetAutoFilter(pDefaultViewDBData->HasAutoFilter());
+
+                // If auto-filter was removed, reset sheet view sort data
+                if (!pDefaultViewDBData->HasAutoFilter())
+                    rSheetView.resetSortData();
             }
         }
 
