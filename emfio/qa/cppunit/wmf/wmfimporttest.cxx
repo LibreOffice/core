@@ -406,7 +406,7 @@ void WmfTest::testWorldTransformFontSize()
 
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/metafile/font", 9);
+    assertXPath(pDoc, "/metafile/font", 37);
 
     assertXPath(pDoc, "/metafile/font[1]", "color", u"#595959");
     assertXPath(pDoc, "/metafile/font[1]", "width", u"0");
@@ -422,11 +422,11 @@ void WmfTest::testWorldTransformFontSize()
 
     // World transform should not affect font size. Rotating text for 90 degrees
     // should not exchange font width and height.
-    assertXPath(pDoc, "/metafile/font[4]", "color", u"#000000");
-    assertXPath(pDoc, "/metafile/font[4]", "width", u"0");
-    assertXPath(pDoc, "/metafile/font[4]", "height", u"530");
-    assertXPath(pDoc, "/metafile/font[4]", "orientation", u"900");
-    assertXPath(pDoc, "/metafile/font[4]", "weight", u"normal");
+    assertXPath(pDoc, "/metafile/font[14]", "color", u"#000000");
+    assertXPath(pDoc, "/metafile/font[14]", "width", u"0");
+    assertXPath(pDoc, "/metafile/font[14]", "height", u"530");
+    assertXPath(pDoc, "/metafile/font[14]", "orientation", u"900");
+    assertXPath(pDoc, "/metafile/font[14]", "weight", u"normal");
 }
 
 void WmfTest::testBigPPI()

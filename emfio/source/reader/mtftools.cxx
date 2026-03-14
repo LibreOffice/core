@@ -1202,6 +1202,20 @@ namespace emfio
         }
     }
 
+    void MtfTools::ResetInternalState()
+    {
+        maLatestBkColor = Color(0x12, 0x34, 0x56);
+        mnLatestBkMode = BackgroundMode::NONE;
+
+        maLatestFillStyle.aFillColor = Color(0x12, 0x34, 0x56);
+        maLatestLineStyle.aLineColor = Color(0x12, 0x34, 0x56);
+
+        meLatestRasterOp = RasterOp::Invert;
+
+        mnLatestTextAlign = 90;
+        mnLatestTextLayoutMode = vcl::text::ComplexTextLayoutFlags::Default;
+    }
+
     void MtfTools::UpdateLineStyle()
     {
         if (!( maLatestLineStyle == maLineStyle ) )

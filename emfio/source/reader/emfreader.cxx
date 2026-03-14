@@ -603,6 +603,7 @@ namespace emfio
             // TODO We should use  EmfPlusRecordType::GetDC instead
             if( type == 0x4004 )
             {
+                ResetInternalState();
                 bHaveDC = true;
                 SAL_INFO("emfio", "\t\tEMF+ lock DC (device context)");
             }

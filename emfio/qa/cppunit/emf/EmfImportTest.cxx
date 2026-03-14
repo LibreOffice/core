@@ -1188,6 +1188,32 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPlusGetDC)
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[6]", "color", u"#fcf2e3");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testEmfPlusGetDC2)
+{
+    // tdf#160063 GetDC must reset state before drawing EMF records. EMF+ records: GetDC, FillPolygon
+    Primitive2DSequence aSequence = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusGetDC2.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygonrgba", 2);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonrgba[1]", "color", u"#404040");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonrgba[1]", "transparence", u"75");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonrgba[1]/polypolygon", "width", u"21000");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonrgba[2]", "color", u"#404040");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonrgba[2]", "transparence", u"75");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonrgba[2]/polypolygon", "width", u"21000");
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 2);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color", u"#aaffff");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]/polypolygon", "path",
+                u"m0 0h20992v2619h-20992z");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color", u"#aaffff");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]/polypolygon", "path",
+                u"m0 27237h20992v2451h-20992z");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusSetPageTransform)
 {
     // tdf#147818 EMF+ records: GetDC, SetPageTransform, FillRects
