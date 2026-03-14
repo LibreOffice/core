@@ -701,6 +701,7 @@ namespace emfio
         bool                mbIsMapWinSet : 1;
         bool                mbIsMapDevSet : 1;
 
+        void                ResetInternalState();
         void                UpdateLineStyle();
         void                UpdateFillStyle();
 
