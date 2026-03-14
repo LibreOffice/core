@@ -44,6 +44,11 @@ void expandOrderIndices(std::vector<SCCOLROW>& rOrder, SCROW nStartRow, SCROW nF
         rOrder.push_back(nOffset + i);
 }
 
+// Empty instances for getters that return const& to optional
+const std::optional<SortOrderReverser> sEmptySortOrder;
+const std::optional<ReorderParam> sEmptyReorderParams;
+const std::optional<ScSortParam> sEmptySortParam;
+
 /** Remove order entries at 1-based nOffset for nCount positions, adjusting remaining values. */
 void removeOrderEntries(std::vector<SCCOLROW>& rOrder, SCCOLROW nOffset, SCROW nCount)
 {
@@ -217,24 +222,54 @@ SCTAB SheetView::getTableNumber() const
     return mpTable->GetTab();
 }
 
+SheetViewSortData& SheetView::ensureSortData()
+{
+    if (!mpSortData)
+        mpSortData = std::make_shared<SheetViewSortData>();
+    return *mpSortData;
+}
+
+std::optional<SortOrderReverser> const& SheetView::getSortOrder() const
+{
+    return mpSortData ? mpSortData->moSortOrder : sEmptySortOrder;
+}
+
+void SheetView::resetSortOrder()
+{
+    if (mpSortData)
+        mpSortData->moSortOrder.reset();
+}
+
 void SheetView::addOrderIndices(SortOrderInfo const& rSortInfo)
 {
-    if (!moSortOrder)
-        moSortOrder.emplace();
-    moSortOrder->addOrderIndices(rSortInfo);
+    auto& rSortOrder = ensureSortData().moSortOrder;
+    if (!rSortOrder)
+        rSortOrder.emplace();
+    rSortOrder->addOrderIndices(rSortInfo);
 }
 
 void SheetView::mergeReorderParameters(ReorderParam const& rReorderParameters)
 {
-    if (moOriginalReorderParams)
+    auto& oParameters = ensureSortData().moOriginalReorderParams;
+    if (oParameters)
     {
-        moOriginalReorderParams->maOrderIndices = mergeOrder(
-            moOriginalReorderParams->maOrderIndices, rReorderParameters.maOrderIndices);
+        oParameters->maOrderIndices
+            = mergeOrder(oParameters->maOrderIndices, rReorderParameters.maOrderIndices);
     }
     else
     {
-        moOriginalReorderParams = rReorderParameters;
+        oParameters = rReorderParameters;
     }
+}
+
+std::optional<ReorderParam> const& SheetView::getReorderParameters() const
+{
+    return mpSortData ? mpSortData->moOriginalReorderParams : sEmptyReorderParams;
+}
+
+void SheetView::restoreReorderParameters(std::optional<ReorderParam> const& rParams)
+{
+    ensureSortData().moOriginalReorderParams = rParams;
 }
 
 SCROW SheetView::reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const
@@ -243,23 +278,23 @@ SCROW SheetView::reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const
 
     // Unsort the sheet view's sort and bring it to the default view's order
     // when the sheet view was created.
-    if (moSortOrder)
+    if (mpSortData && mpSortData->moSortOrder)
     {
-        nUnsortedRow = moSortOrder->unsort(nRow, nColumn);
+        nUnsortedRow = mpSortData->moSortOrder->unsort(nRow, nColumn);
     }
 
     // Resort the default view's sort done since the sheet view creation.
     SCROW nResortedRow = nUnsortedRow;
-    if (moOriginalReorderParams)
+    if (mpSortData && mpSortData->moOriginalReorderParams)
     {
-        ScRange const& rRange = moOriginalReorderParams->maSortRange;
+        ScRange const& rRange = mpSortData->moOriginalReorderParams->maSortRange;
 
         SortOrderReverser aReverser;
         aReverser.addOrderIndices({ rRange.aStart.Col(),
                                     rRange.aEnd.Col(),
                                     rRange.aStart.Row(),
                                     rRange.aEnd.Row(),
-                                    moOriginalReorderParams->maOrderIndices,
+                                    mpSortData->moOriginalReorderParams->maOrderIndices,
                                     {} });
 
         nResortedRow = aReverser.resort(nUnsortedRow, nColumn);
@@ -269,10 +304,10 @@ SCROW SheetView::reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const
 
 void SheetView::adjustReorderParamsForInsert(SCROW nStartRow, SCROW nRowCount)
 {
-    if (!moOriginalReorderParams)
+    if (!mpSortData || !mpSortData->moOriginalReorderParams)
         return;
 
-    ScRange& rRange = moOriginalReorderParams->maSortRange;
+    ScRange& rRange = mpSortData->moOriginalReorderParams->maSortRange;
     if (nStartRow < rRange.aStart.Row())
     {
         rRange.aStart.IncRow(nRowCount);
@@ -280,33 +315,32 @@ void SheetView::adjustReorderParamsForInsert(SCROW nStartRow, SCROW nRowCount)
     }
     else if (nStartRow <= rRange.aEnd.Row())
     {
-        expandOrderIndices(moOriginalReorderParams->maOrderIndices, nStartRow, rRange.aStart.Row(),
-                           nRowCount);
+        expandOrderIndices(mpSortData->moOriginalReorderParams->maOrderIndices, nStartRow,
+                           rRange.aStart.Row(), nRowCount);
         rRange.aEnd.IncRow(nRowCount);
     }
 }
 
 void SheetView::adjustSortParamForInsert(SCROW nStartRow, SCROW nRowCount)
 {
-    if (!moSortParam)
+    if (!mpSortData || !mpSortData->moSortParam)
         return;
 
-    if (nStartRow < moSortParam->nRow1)
+    if (nStartRow < mpSortData->moSortParam->nRow1)
     {
-        moSortParam->nRow1 += nRowCount;
-        moSortParam->nRow2 += nRowCount;
+        mpSortData->moSortParam->nRow1 += nRowCount;
+        mpSortData->moSortParam->nRow2 += nRowCount;
     }
-    else if (nStartRow <= moSortParam->nRow2)
+    else if (nStartRow <= mpSortData->moSortParam->nRow2)
     {
-        moSortParam->nRow2 += nRowCount;
+        mpSortData->moSortParam->nRow2 += nRowCount;
     }
 }
 
 void SheetView::insertedRows(SCROW nStartRow, SCROW nRowCount)
 {
-    // Update the sheet view's own sort order (row reordering within the sheet view)
-    if (moSortOrder)
-        moSortOrder->insertedRows(nStartRow, nRowCount);
+    if (mpSortData && mpSortData->moSortOrder)
+        mpSortData->moSortOrder->insertedRows(nStartRow, nRowCount);
 
     // Update the reorder params that track the default view's sort since sheet view creation
     adjustReorderParamsForInsert(nStartRow, nRowCount);
@@ -317,17 +351,18 @@ void SheetView::insertedRows(SCROW nStartRow, SCROW nRowCount)
 
 void SheetView::adjustReorderParamsForDelete(SCROW nStartRow, SCROW nRowCount)
 {
-    if (!moOriginalReorderParams)
+    if (!mpSortData || !mpSortData->moOriginalReorderParams)
         return;
 
-    ScRange& rRange = moOriginalReorderParams->maSortRange;
+    ScRange& rRange = mpSortData->moOriginalReorderParams->maSortRange;
     SCROW nRangeStart = rRange.aStart.Row();
     SCROW nRangeEnd = rRange.aEnd.Row();
-    deleteRowsFromOrderedRange(nRangeStart, nRangeEnd, moOriginalReorderParams->maOrderIndices,
-                               nStartRow, nRowCount);
-    if (moOriginalReorderParams->maOrderIndices.empty())
+    deleteRowsFromOrderedRange(nRangeStart, nRangeEnd,
+                               mpSortData->moOriginalReorderParams->maOrderIndices, nStartRow,
+                               nRowCount);
+    if (mpSortData->moOriginalReorderParams->maOrderIndices.empty())
     {
-        moOriginalReorderParams.reset();
+        mpSortData->moOriginalReorderParams.reset();
     }
     else
     {
@@ -338,19 +373,19 @@ void SheetView::adjustReorderParamsForDelete(SCROW nStartRow, SCROW nRowCount)
 
 void SheetView::adjustSortParamForDelete(SCROW nStartRow, SCROW nRowCount)
 {
-    if (!moSortParam)
+    if (!mpSortData || !mpSortData->moSortParam)
         return;
 
     std::vector<SCCOLROW> aUnused;
-    deleteRowsFromOrderedRange(moSortParam->nRow1, moSortParam->nRow2, aUnused, nStartRow,
-                               nRowCount);
+    deleteRowsFromOrderedRange(mpSortData->moSortParam->nRow1, mpSortData->moSortParam->nRow2,
+                               aUnused, nStartRow, nRowCount);
 }
 
 void SheetView::deletedRows(SCROW nStartRow, SCROW nRowCount)
 {
     // Update the sheet view's own sort order
-    if (moSortOrder)
-        moSortOrder->deletedRows(nStartRow, nRowCount);
+    if (mpSortData && mpSortData->moSortOrder)
+        mpSortData->moSortOrder->deletedRows(nStartRow, nRowCount);
 
     // Update the reorder params that track the default view's sort since sheet view creation
     adjustReorderParamsForDelete(nStartRow, nRowCount);
@@ -359,11 +394,37 @@ void SheetView::deletedRows(SCROW nStartRow, SCROW nRowCount)
     adjustSortParamForDelete(nStartRow, nRowCount);
 }
 
-void SheetView::resetSortData()
+std::optional<ScSortParam> const& SheetView::getSortParam() const
 {
-    moSortOrder.reset();
-    moOriginalReorderParams.reset();
-    moSortParam.reset();
+    return mpSortData ? mpSortData->moSortParam : sEmptySortParam;
+}
+
+void SheetView::setSortParam(ScSortParam const& rSortParam)
+{
+    ensureSortData().moSortParam = rSortParam;
+}
+
+void SheetView::resetSortParam()
+{
+    if (mpSortData)
+        mpSortData->moSortParam.reset();
+}
+
+void SheetView::resetSortData() { mpSortData.reset(); }
+
+std::shared_ptr<SheetViewSortData> SheetView::captureSortData() const
+{
+    if (!mpSortData)
+        return nullptr;
+    return std::make_shared<SheetViewSortData>(*mpSortData);
+}
+
+void SheetView::restoreSortData(std::shared_ptr<SheetViewSortData> const& pData)
+{
+    if (pData)
+        mpSortData = std::make_shared<SheetViewSortData>(*pData);
+    else
+        mpSortData.reset();
 }
 
 } // end sc namespace

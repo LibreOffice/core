@@ -1187,6 +1187,23 @@ std::shared_ptr<sc::SheetViewManager> ScDocument::GetSheetViewManager(SCTAB nTab
     return {};
 }
 
+std::shared_ptr<sc::SheetView> ScDocument::GetSheetView(SCTAB nTab)
+{
+    ScTable* pTable = FetchTable(nTab);
+    if (!pTable || !pTable->IsSheetViewHolder())
+        return {};
+
+    ScTable* pDefaultViewTable = pTable->GetDefaultViewTable();
+    if (!pDefaultViewTable)
+        return {};
+
+    auto pManager = pDefaultViewTable->GetSheetViewManager();
+    if (!pManager)
+        return {};
+
+    return pManager->get(pTable->GetSheetViewID());
+}
+
 SCTAB ScDocument::GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID)
 {
     if (ScTable* pMainSheet = FetchTable(nTab))

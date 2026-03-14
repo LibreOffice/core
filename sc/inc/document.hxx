@@ -120,6 +120,7 @@ class ExternalDataMapper;
 class Sparkline;
 class SparklineGroup;
 class SparklineList;
+class SheetView;
 class SheetViewManager;
 class AutoCalcSwitch;
 struct RefUpdateInsertTabContext;
@@ -2442,6 +2443,9 @@ public:
 
     /** Returns the sheet view ID for a given tab. */
     SC_DLLPUBLIC sc::SheetViewID GetTableSheetViewID(SCTAB nTab) const;
+
+    /** Returns the sheet view for a sheet view tab, or nullptr. */
+    SC_DLLPUBLIC std::shared_ptr<sc::SheetView> GetSheetView(SCTAB nTab);
 
     /** Synchronizes all sheet views for the given default view table.
      *

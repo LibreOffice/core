@@ -201,6 +201,12 @@ bool SortOperation::runImplementation()
 
     sc::ReorderParam aUndoParam;
 
+    // Capture sheet view sort data before the sort (for undo)
+    std::shared_ptr<sc::SheetViewSortData> pSortDataBefore;
+    std::shared_ptr<sc::SheetView> pSheetView = rDoc.GetSheetView(mnTab);
+    if (pSheetView)
+        pSortDataBefore = pSheetView->captureSortData();
+
     // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
     if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
     {
@@ -212,9 +218,18 @@ bool SortOperation::runImplementation()
 
     if (mbRecord)
     {
-        // Set up an undo object.
-        mrDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<sc::UndoSort>(&mrDocShell, aUndoParam));
+        auto pUndoSort = std::make_unique<sc::UndoSort>(&mrDocShell, aUndoParam);
+
+        // Capture sheet view sort data after the sort and attach to undo
+        if (pSheetView)
+        {
+            auto pSortDataAfter = pSheetView->captureSortData();
+            pUndoSort->setSheetViewContext(rDoc.GetDefaultViewTableNumber(mnTab),
+                                           pSheetView->getID(), std::move(pSortDataBefore),
+                                           std::move(pSortDataAfter));
+        }
+
+        mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoSort));
     }
 
     pDBData->SetSortParam(mrSortParam);
