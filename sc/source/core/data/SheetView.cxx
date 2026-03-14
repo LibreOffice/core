@@ -359,6 +359,13 @@ void SheetView::deletedRows(SCROW nStartRow, SCROW nRowCount)
     adjustSortParamForDelete(nStartRow, nRowCount);
 }
 
+void SheetView::resetSortData()
+{
+    moSortOrder.reset();
+    moOriginalReorderParams.reset();
+    moSortParam.reset();
+}
+
 } // end sc namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

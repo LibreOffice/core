@@ -121,12 +121,15 @@ public:
     /** Update stored sort ranges when rows are deleted. */
     void deletedRows(SCROW nStartRow, SCROW nRowCount);
 
-    // Last used sort parameters
-
+    /** Last used sort parameters */
     std::optional<ScSortParam> const& getSortParam() const { return moSortParam; }
 
-    /// Remember last used sort parameters when sheet view was sorted.
+    /** Remember last used sort parameters when sheet view was sorted. */
     void setSortParam(ScSortParam const& rSortParam) { moSortParam = rSortParam; }
+    void resetSortParam() { moSortParam.reset(); }
+
+    /** Reset all sort data */
+    void resetSortData();
 };
 }
 

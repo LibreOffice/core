@@ -330,6 +330,9 @@ void ScDBFunc::ToggleAutoFilter()
 
         pDocSh->GetUndoManager()->LeaveListAction();
 
+        // Sync sheet views — auto-filter removal needs to propagate
+        rDoc.SyncSheetViews(nTab);
+
         ScDBFunc::ModifiedAutoFilter(pDocSh);
     }
     else                                    // show filter buttons
