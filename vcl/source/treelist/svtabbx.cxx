@@ -238,6 +238,25 @@ void SvTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("checkboxtype", checkboxtype);
     if (GetCustomEntryRenderer())
         rJsonWriter.put("customEntryRenderer", true);
+
+    if (!m_aColumnTitles.empty())
+    {
+        auto aHeaders = rJsonWriter.startArray("headers");
+        for (size_t i = 0; i < m_aColumnTitles.size(); ++i)
+        {
+            auto aNode = rJsonWriter.startStruct();
+            rJsonWriter.put("text", m_aColumnTitles[i]);
+            if (i < m_aColumnHeaderNames.size() && !m_aColumnHeaderNames[i].isEmpty())
+            {
+                rJsonWriter.put("headerName", m_aColumnHeaderNames[i]);
+            }
+            if (i < m_aColumnColors.size() && m_aColumnColors[i] != COL_AUTO)
+            {
+                rJsonWriter.put("color", m_aColumnColors[i].AsRGBHexString());
+            }
+        }
+    }
+
     auto entriesNode = rJsonWriter.startArray("entries");
     lcl_DumpEntryAndSiblings(rJsonWriter, First(), this, bCheckButtons);
 }
@@ -544,6 +563,58 @@ void SvTabListBox::SetTabEditable(sal_uInt16 nTab, bool bEditable)
         rTab.nFlags &= ~SvLBoxTabFlags::EDITABLE;
 }
 
+void SvTabListBox::SetColumnTitle(sal_uInt16 nCol, const OUString& rTitle)
+{
+    if (nCol >= m_aColumnTitles.size())
+        m_aColumnTitles.resize(nCol + 1);
+    m_aColumnTitles[nCol] = rTitle;
+}
+
+void SvTabListBox::SetColumnHeaderName(sal_uInt16 nCol, const OUString& rName)
+{
+    if (nCol >= m_aColumnHeaderNames.size())
+        m_aColumnHeaderNames.resize(nCol + 1);
+    m_aColumnHeaderNames[nCol] = rName;
+}
+
+OUString SvTabListBox::GetColumnHeaderName(sal_uInt16 nCol) const
+{
+    if (nCol < m_aColumnHeaderNames.size())
+        return m_aColumnHeaderNames[nCol];
+    return OUString();
+}
+
+void SvTabListBox::SetColumnCount(sal_uInt16 nCount)
+{
+    if (m_aColumnTitles.size() > nCount)
+        m_aColumnTitles.resize(nCount);
+    if (m_aColumnColors.size() > nCount)
+        m_aColumnColors.resize(nCount);
+    if (m_aColumnHeaderNames.size() > nCount)
+        m_aColumnHeaderNames.resize(nCount);
+}
+
+void SvTabListBox::SetColumnColor(sal_uInt16 nCol, const Color& rColor)
+{
+    if (nCol >= m_aColumnColors.size())
+        m_aColumnColors.resize(nCol + 1, COL_AUTO);
+    m_aColumnColors[nCol] = rColor;
+}
+
+Color SvTabListBox::GetColumnColor(sal_uInt16 nCol) const
+{
+    if (nCol < m_aColumnColors.size())
+        return m_aColumnColors[nCol];
+    return COL_AUTO;
+}
+
+OUString SvTabListBox::GetColumnTitle(sal_uInt16 nCol) const
+{
+    if (nCol < m_aColumnTitles.size())
+        return m_aColumnTitles[nCol];
+    return OUString();
+}
+
 tools::Long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
 {
     if( SvTreeListBox::nTreeFlags & SvTreeFlags::RECALCTABS )
@@ -634,6 +705,11 @@ sal_uInt32 SvHeaderTabListBox::Insert( SvTreeListEntry* pEntry, sal_uInt32 nRoot
 void SvHeaderTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     SvTabListBox::DumpAsPropertyTree(rJsonWriter);
+
+    // If the base class already emitted "headers" from m_aColumnTitles, skip
+    // the HeaderBar-based emission to avoid duplicate JSON keys.
+    if (HasColumnTitles())
+        return;
 
     auto aHeaders = rJsonWriter.startArray("headers");
 

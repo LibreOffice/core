@@ -1035,11 +1035,14 @@ public:
 
 private:
     OUString m_sSavedValue;
+    int m_nEditingColumn = -1;
+    int m_nCursorColumn = -1;
 
 protected:
     Link<TreeView&, void> m_aSelectionChangedHdl;
     Link<TreeView&, bool> m_aRowActivatedHdl;
     Link<int, void> m_aColumnClickedHdl;
+    Link<const std::pair<int, OUString>&, void> m_aHeaderNameChangedHdl;
     Link<const iter_col&, void> m_aRadioToggleHdl;
     Link<const TreeIter&, bool> m_aEditingStartedHdl;
     Link<const iter_string&, bool> m_aEditingDoneHdl;
@@ -1072,6 +1075,11 @@ protected:
     }
 
     void signal_column_clicked(int nColumn) { m_aColumnClickedHdl.Call(nColumn); }
+    void signal_header_name_changed(int nColumn, const OUString& rName)
+    {
+        std::pair<int, OUString> aData(nColumn, rName);
+        m_aHeaderNameChangedHdl.Call(aData);
+    }
     bool signal_expanding(const TreeIter& rIter)
     {
         return !m_aExpandingHdl.IsSet() || m_aExpandingHdl.Call(rIter);
@@ -1222,6 +1230,10 @@ public:
     void connect_toggled(const Link<const iter_col&, void>& rLink) { m_aRadioToggleHdl = rLink; }
 
     void connect_column_clicked(const Link<int, void>& rLink) { m_aColumnClickedHdl = rLink; }
+    void connect_header_name_changed(const Link<const std::pair<int, OUString>&, void>& rLink)
+    {
+        m_aHeaderNameChangedHdl = rLink;
+    }
     void connect_model_changed(const Link<TreeView&, void>& rLink) { m_aModelChangedHdl = rLink; }
 
     virtual OUString get_selected_text() const = 0;
@@ -1593,6 +1605,14 @@ public:
     virtual void set_centered_column(int nCol) = 0;
     virtual OUString get_column_title(int nColumn) const = 0;
     virtual void set_column_title(int nColumn, const OUString& rTitle) = 0;
+    virtual void set_column_header_color(int /*nColumn*/, const Color& /*rColor*/) {}
+    virtual void set_column_header_name(int /*nColumn*/, const OUString& /*rName*/) {}
+
+    void set_editing_column(int nCol) { m_nEditingColumn = nCol; }
+    int get_editing_column() const { return m_nEditingColumn; }
+
+    void set_cursor_column(int nCol) { m_nCursorColumn = nCol; }
+    int get_cursor_column() const { return m_nCursorColumn; }
 
     int get_checkbox_column_width() const { return get_approximate_digit_width() * 3 + 6; }
 

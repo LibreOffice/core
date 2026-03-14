@@ -569,7 +569,26 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 }
                 else if (sAction == "select")
                 {
-                    sal_Int32 nAbsPos = o3tl::toInt32(rData.at(u"data"_ustr));
+                    OUString sData = rData.at(u"data"_ustr);
+                    sal_Int32 nAbsPos = -1;
+                    sal_Int32 nCol = -1;
+
+                    // Data may be JSON {row:N,col:M} or a plain row number
+                    if (sData.startsWith("%7B") || sData.startsWith("{"))
+                    {
+                        OUString sDataJSON = rtl::Uri::decode(
+                            sData, rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
+                            RTL_TEXTENCODING_UTF8);
+                        StringMap aMap(jsonToStringMap(
+                            OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+                        nAbsPos = o3tl::toInt32(aMap[u"row"_ustr]);
+                        if (aMap.find(u"col"_ustr) != aMap.end())
+                            nCol = o3tl::toInt32(aMap[u"col"_ustr]);
+                    }
+                    else
+                    {
+                        nAbsPos = o3tl::toInt32(sData);
+                    }
 
                     pTreeView->unselect_all();
 
@@ -582,6 +601,10 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                     else
                         SAL_WARN("vcl",
                                  "No absolute position found for " << nAbsPos << " in treeview");
+
+                    if (nCol >= 0)
+                        pTreeView->set_cursor_column(nCol);
+
                     pTreeView->grab_focus();
                     LOKTrigger::trigger_changed(*pTreeView);
                     return true;
@@ -686,9 +709,26 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
 
                     pTreeView->set_text(nRow, sValue, nColumn);
 
+                    pTreeView->set_editing_column(nColumn);
                     SalInstanceTreeIter pEntry = pTreeView->getTreeView().GetEntry(nRow);
                     LOKTrigger::trigger_editing_done(*pTreeView,
                                                      weld::TreeView::iter_string(pEntry, sValue));
+
+                    return true;
+                }
+                else if (sAction == "headernamechanged")
+                {
+                    OUString sDataJSON = rtl::Uri::decode(
+                        rData.at(u"data"_ustr), rtl_UriDecodeMechanism::rtl_UriDecodeWithCharset,
+                        RTL_TEXTENCODING_UTF8);
+                    StringMap aMap(jsonToStringMap(
+                        OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
+
+                    sal_Int32 nColumn = o3tl::toInt32(aMap[u"column"_ustr]);
+                    OUString sValue = aMap[u"value"_ustr];
+
+                    pTreeView->set_column_header_name(nColumn, sValue);
+                    LOKTrigger::trigger_header_name_changed(*pTreeView, nColumn, sValue);
 
                     return true;
                 }

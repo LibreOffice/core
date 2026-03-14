@@ -21,7 +21,6 @@
 #include "DataBrowser.hxx"
 #include <ChartModel.hxx>
 
-#include <com/sun/star/awt/XWindow.hpp>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -39,18 +38,16 @@ DataEditor::DataEditor(weld::Window* pParent,
     , m_xContext(xContext)
     , m_xTbxData(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
     , m_xCloseBtn(m_xBuilder->weld_button(u"close"_ustr))
-    , m_xTable(m_xBuilder->weld_container(u"datawindow"_ustr))
+    , m_xDataGrid(m_xBuilder->weld_tree_view(u"datagrid"_ustr))
     , m_xColumns(m_xBuilder->weld_box(u"columns"_ustr))
     , m_xColors(m_xBuilder->weld_box(u"colorcolumns"_ustr))
-    , m_xTableCtrlParent(m_xTable->CreateChildFrame())
-    , m_xBrwData(VclPtr<DataBrowser>::Create(m_xTableCtrlParent, m_xColumns.get(), m_xColors.get()))
+    , m_xBrwData(new DataBrowser(*m_xDataGrid, m_xColumns.get(), m_xColors.get()))
 {
     m_xCloseBtn->connect_clicked(LINK(this, DataEditor, CloseHdl));
 
-    Size aSize(m_xTable->get_approximate_digit_width() * 75, m_xTable->get_text_height() * 15);
-    m_xTable->set_size_request(aSize.Width(), aSize.Height());
-
-    m_xBrwData->Show();
+    m_xDataGrid->set_size_request(
+        m_xDataGrid->get_approximate_digit_width() * 75,
+        m_xDataGrid->get_text_height() * 15);
 
     m_xTbxData->connect_clicked(LINK(this, DataEditor, ToolboxHdl));
 
@@ -67,9 +64,7 @@ DataEditor::DataEditor(weld::Window* pParent,
 
 DataEditor::~DataEditor()
 {
-    m_xBrwData.disposeAndClear();
-    m_xTableCtrlParent->dispose();
-    m_xTableCtrlParent.clear();
+    m_xBrwData.reset();
 }
 
 // react on click (or keypress) on toolbar icon

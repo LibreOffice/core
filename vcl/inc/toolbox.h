@@ -43,6 +43,7 @@ struct ImplToolItem
     OUString            maHelpText;
     OUString            maAccessibleName;
     OUString            maCommandStr;
+    OUString            maIconName;
     OUString            maHelpId;
     tools::Rectangle           maRect;
     tools::Rectangle           maCalcRect;

@@ -3845,6 +3845,9 @@ void SalInstanceTreeView::set_column_fixed_widths(const std::vector<int>& rWidth
     for (size_t i = 0; i < rWidths.size(); ++i)
         aTabPositions.push_back(aTabPositions[i] + rWidths[i]);
     m_xTreeView->SetTabs(aTabPositions, MapUnit::MapPixel);
+    // Truncate stale column metadata (titles, colors, header names)
+    // that may remain from a previous column configuration
+    m_xTreeView->SetColumnCount(rWidths.size());
     set_header_item_width(rWidths);
     // call Resize to recalculate based on the new tabs
     m_xTreeView->Resize();
@@ -3855,6 +3858,14 @@ void SalInstanceTreeView::set_column_editables(const std::vector<bool>& rEditabl
     size_t nTabCount = rEditables.size();
     for (size_t i = 0; i < nTabCount; ++i)
         m_xTreeView->SetTabEditable(i, rEditables[i]);
+    // Force SetTabs() to propagate editable flags from mvTabList to aTabs.
+    // Without this, the RECALCTABS flag is only processed during Paint(),
+    // which never happens in the JSDialog path, so aTabs never gets the
+    // editable flags and DumpAsPropertyTree won't serialize them.
+    // GetLogicTab() is public and calls SetTabs() when RECALCTABS is set
+    // (which SetTabEditable already sets above).
+    if (nTabCount > 0)
+        m_xTreeView->GetLogicTab(0);
 }
 
 void SalInstanceTreeView::set_centered_column(int nCol) { m_xTreeView->SetTabAlignCenter(nCol); }
@@ -3876,19 +3887,27 @@ OUString SalInstanceTreeView::get_column_title(int nColumn) const
 {
     SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
     if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
-    {
         return pHeaderBar->GetItemText(pHeaderBar->GetItemId(nColumn));
-    }
-    return OUString();
+    return m_xTreeView->GetColumnTitle(nColumn);
 }
 
 void SalInstanceTreeView::set_column_title(int nColumn, const OUString& rTitle)
 {
     SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
     if (HeaderBar* pHeaderBar = pHeaderBox ? pHeaderBox->GetHeaderBar() : nullptr)
-    {
-        return pHeaderBar->SetItemText(pHeaderBar->GetItemId(nColumn), rTitle);
-    }
+        pHeaderBar->SetItemText(pHeaderBar->GetItemId(nColumn), rTitle);
+    // Always store for JSON serialization (SvTabListBox::DumpAsPropertyTree)
+    m_xTreeView->SetColumnTitle(nColumn, rTitle);
+}
+
+void SalInstanceTreeView::set_column_header_color(int nColumn, const Color& rColor)
+{
+    m_xTreeView->SetColumnColor(nColumn, rColor);
+}
+
+void SalInstanceTreeView::set_column_header_name(int nColumn, const OUString& rName)
+{
+    m_xTreeView->SetColumnHeaderName(nColumn, rName);
 }
 
 void SalInstanceTreeView::set_column_custom_renderer(int nColumn, bool bEnable)

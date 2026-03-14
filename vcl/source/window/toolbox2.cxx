@@ -1316,6 +1316,24 @@ OUString ToolBox::GetItemCommand( ToolBoxItemId nItemId ) const
     return OUString();
 }
 
+void ToolBox::SetItemIconName(ToolBoxItemId nItemId, const OUString& rIconName)
+{
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+
+    if (pItem)
+        pItem->maIconName = rIconName;
+}
+
+OUString ToolBox::GetItemIconName(ToolBoxItemId nItemId) const
+{
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+
+    if (pItem)
+        return pItem->maIconName;
+
+    return OUString();
+}
+
 void ToolBox::SetQuickHelpText( ToolBoxItemId nItemId, const OUString& rText )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
@@ -1771,6 +1789,24 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
             if (!sCommand.startsWith(".uno:") || sCommand == u".uno:ChartColorPalette"_ustr)
             {
+                // Emit icon name so COOL can resolve it as a local SVG
+                // (crisp at any DPI). COOL checks "icon" first; if the SVG
+                // is not available it falls back to the base64 "image" below.
+                OUString sIconName = GetItemIconName(nId);
+                if (!sIconName.isEmpty())
+                {
+                    // e.g. "chart2/res/dataeditor_icon05.png" -> "lc_dataeditor_icon05.svg"
+                    sal_Int32 nSlash = sIconName.lastIndexOf('/');
+                    OUString sFileName = (nSlash >= 0) ? sIconName.copy(nSlash + 1) : sIconName;
+                    if (sFileName.endsWith(".png"))
+                        sFileName = OUString::Concat(sFileName.subView(0, sFileName.getLength() - 4)) + ".svg";
+                    if (!sFileName.startsWith("lc_"))
+                        sFileName = "lc_" + sFileName;
+                    rJsonWriter.put("icon", sFileName);
+                }
+
+                // Always emit base64 PNG as fallback for COOL instances
+                // that don't have the corresponding SVG in browser/images/
                 Image aImage = GetItemImage(nId);
                 if (!!aImage)
                 {

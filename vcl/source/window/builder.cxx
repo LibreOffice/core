@@ -1835,7 +1835,8 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         }
         else
         {
-            nWinStyle |= WB_HASBUTTONS | WB_HASBUTTONSATROOT;
+            if (extractShowExpanders(rMap))
+                nWinStyle |= WB_HASBUTTONS | WB_HASBUTTONSATROOT;
         }
         //ListBox/SvHeaderTabListBox manages its own scrolling,
         vcl::Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
@@ -2086,7 +2087,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
 
             OUString sIconName(extractIconName(rMap));
             if (!sIconName.isEmpty())
+            {
                 pToolBox->SetItemImage(nItemId, loadThemeImage(sIconName));
+                pToolBox->SetItemIconName(nItemId, sIconName);
+            }
 
             if (!extractVisible(rMap))
                 pToolBox->HideItem(nItemId);

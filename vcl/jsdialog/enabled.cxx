@@ -331,6 +331,7 @@ constexpr auto SchartDialogList
         // schart
         { u"modules/schart/ui/3dviewdialog.ui" },
         { u"modules/schart/ui/attributedialog.ui" },
+        { u"modules/schart/ui/chartdatadialog.ui" },
         { u"modules/schart/ui/charttypedialog.ui" },
         { u"modules/schart/ui/datarangedialog.ui" },
         { u"modules/schart/ui/dlg_Theme.ui" },

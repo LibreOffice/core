@@ -19,17 +19,10 @@
 
 #pragma once
 
-#include <svtools/editbrowsebox.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>
 #include <vector>
-
-namespace com::sun::star {
-    namespace awt {
-        class XWindow;
-    }
-}
 
 namespace chart
 {
@@ -44,58 +37,21 @@ class SeriesHeader;
 class SeriesHeaderEdit;
 }
 
-class DataBrowser : public ::svt::EditBrowseBox
+typedef std::pair<int, OUString> ColumnNamePair;
+
+class DataBrowser
 {
-protected:
-    // EditBrowseBox overridables
-    virtual void PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId ) const override;
-    virtual bool SeekRow( sal_Int32 nRow ) override;
-    virtual bool IsTabAllowed( bool bForward ) const override;
-    virtual ::svt::CellController* GetController( sal_Int32 nRow, sal_uInt16 nCol ) override;
-    virtual void InitController( ::svt::CellControllerRef& rController, sal_Int32 nRow, sal_uInt16 nCol ) override;
-    virtual bool SaveModified() override;
-    virtual void CursorMoved() override;
-    // called whenever the control of the current cell has been modified
-    virtual void CellModified() override;
-    virtual void ColumnResized( sal_uInt16 nColId ) override;
-    virtual void EndScroll() override;
-    virtual void MouseButtonDown( const BrowserMouseEvent& rEvt ) override;
-
 public:
-    DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
-                weld::Box* pColumns, weld::Box* pColors);
-
-    virtual ~DataBrowser() override;
-    virtual void dispose() override;
-
-    /** GetCellText returns the text at the given position
-        @param  nRow
-            the number of the row
-        @param  nColId
-            the ID of the column
-        @return
-            the text out of the cell
-    */
-    virtual OUString  GetCellText(sal_Int32 nRow, sal_uInt16 nColId) const override;
-
-    /** returns the number in the given cell. If a cell is empty or contains a
-        string, the result will be Nan
-    */
-    double GetCellNumber( sal_Int32 nRow, sal_uInt16 nColumnId ) const;
-
-    bool isDateTimeString( const OUString& aInputString, double& fOutDateTimeValue );
-
-    // Window
-    virtual void Resize() override;
+    DataBrowser(weld::TreeView& rTreeView, weld::Box* pColumns, weld::Box* pColors);
+    ~DataBrowser();
 
     void SetReadOnly( bool bNewState );
-    bool IsReadOnly() const { return m_bIsReadOnly;}
+    bool IsReadOnly() const { return m_bIsReadOnly; }
 
     void SetDataFromModel( const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
     // predicates to determine what actions are possible at the current cursor
-    // position.  This depends on the implementation of the according mutators
-    // below.  (They are used for enabling toolbar icons)
+    // position
     bool MayInsertRow() const;
     bool MayInsertColumn() const;
     bool MayDeleteRow() const;
@@ -113,9 +69,6 @@ public:
     void RemoveRow();
     void RemoveColumn();
 
-    using BrowseBox::RemoveColumn;
-    using BrowseBox::MouseButtonDown;
-
     void MoveUpRow();
     void MoveDownRow();
     void MoveLeftColumn();
@@ -126,14 +79,9 @@ public:
     /// confirms all pending changes to be ready to be closed
     bool EndEditing();
 
-    bool CellContainsNumbers( sal_uInt16 nCol ) const;
+    bool IsEnableItem() const { return m_bDataValid; }
 
-    sal_uInt32 GetNumberFormatKey( sal_uInt16 nCol ) const;
-
-    bool IsEnableItem() const { return m_bDataValid;}
-    bool IsDataValid() const;
-    void ShowWarningBox();
-    bool ShowQueryBox();
+    void GrabFocus();
 
     void RenewSeriesHeaders();
 
@@ -146,31 +94,34 @@ private:
 
     std::shared_ptr< NumberFormatterWrapper >  m_spNumberFormatterWrapper;
 
-    /// the row that is currently painted
-    sal_Int32           m_nSeekRow;
-    bool                m_bIsReadOnly;
-    bool                m_bDataValid;
-
-    VclPtr<svt::FormattedControl> m_aNumberEditField;
-    VclPtr<svt::EditControl>    m_aTextEditField;
+    weld::TreeView& m_rTreeView;
     weld::Box* m_pColumnsWin;
     weld::Box* m_pColorsWin;
 
-    /// note: m_aNumberEditField must precede this member!
-    ::svt::CellControllerRef    m_rNumberEditController;
-    /// note: m_aTextEditField must precede this member!
-    ::svt::CellControllerRef    m_rTextEditController;
+    sal_Int32 m_nCurRow;
+    sal_Int32 m_nCurCol;
+    bool m_bIsReadOnly;
+    bool m_bDataValid;
 
-    Link<DataBrowser*,void>     m_aCursorMovedHdlLink;
+    Link<DataBrowser*,void> m_aCursorMovedHdlLink;
 
     void clearHeaders();
     void RenewTable();
     void ImplAdjustHeaderControls();
 
-    const OUString & GetColString( sal_Int32 nColumnId ) const;
+    OUString GetCellText( sal_Int32 nRow, sal_Int32 nCol ) const;
+    bool SaveCellEdit( sal_Int32 nRow, sal_Int32 nCol, const OUString& rText );
+    bool isDateTimeString( const OUString& aInputString, double& fOutDateTimeValue );
+
+    sal_Int32 GetColumnCount() const;
+    sal_Int32 GetRowCount() const;
 
     DECL_LINK( SeriesHeaderGotFocus, impl::SeriesHeaderEdit&, void );
     DECL_LINK( SeriesHeaderChanged,  impl::SeriesHeaderEdit&, void );
+    DECL_LINK( HeaderNameChangedHdl, const ColumnNamePair&, void );
+    DECL_LINK( EditingStartedHdl, const weld::TreeIter&, bool );
+    DECL_LINK( EditingDoneHdl, const weld::TreeView::iter_string&, bool );
+    DECL_LINK( SelectionChangedHdl, weld::TreeView&, void );
 
     DataBrowser( const DataBrowser & ) = delete;
 };

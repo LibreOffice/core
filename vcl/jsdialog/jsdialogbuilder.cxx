@@ -1872,7 +1872,10 @@ void JSTreeView::do_clear()
     sendUpdate();
 }
 
-void JSTreeView::set_cursor_without_notify(const weld::TreeIter& rIter) { set_cursor(rIter); }
+void JSTreeView::set_cursor_without_notify(const weld::TreeIter& rIter)
+{
+    SalInstanceTreeView::do_set_cursor(rIter);
+}
 
 void JSTreeView::do_set_cursor(const weld::TreeIter& rIter)
 {
@@ -1927,6 +1930,18 @@ void JSTreeView::set_sort_indicator(TriState eState, int col)
 void JSTreeView::set_sort_column(int col)
 {
     SalInstanceTreeView::set_sort_column(col);
+    sendUpdate();
+}
+
+void JSTreeView::set_column_header_color(int nColumn, const Color& rColor)
+{
+    SalInstanceTreeView::set_column_header_color(nColumn, rColor);
+    sendUpdate();
+}
+
+void JSTreeView::set_column_header_name(int nColumn, const OUString& rName)
+{
+    SalInstanceTreeView::set_column_header_name(nColumn, rName);
     sendUpdate();
 }
 

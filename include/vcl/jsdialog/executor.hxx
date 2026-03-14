@@ -62,6 +62,12 @@ public:
         rTreeView.signal_column_clicked(nColumn);
     }
 
+    static void trigger_header_name_changed(weld::TreeView& rTreeView, int nColumn,
+                                            const OUString& rName)
+    {
+        rTreeView.signal_header_name_changed(nColumn, rName);
+    }
+
     static void trigger_activated(weld::Menu& rMenu, const OUString& rIdent)
     {
         rMenu.signal_activate(rIdent);

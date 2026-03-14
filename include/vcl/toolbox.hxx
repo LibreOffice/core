@@ -407,6 +407,9 @@ public:
     void                SetItemCommand( ToolBoxItemId nItemId, const OUString& rCommand );
     OUString            GetItemCommand( ToolBoxItemId nItemId ) const;
 
+    void                SetItemIconName( ToolBoxItemId nItemId, const OUString& rIconName );
+    OUString            GetItemIconName( ToolBoxItemId nItemId ) const;
+
     using Window::SetQuickHelpText;
     void                SetQuickHelpText( ToolBoxItemId nItemId, const OUString& rText );
     using Window::GetQuickHelpText;

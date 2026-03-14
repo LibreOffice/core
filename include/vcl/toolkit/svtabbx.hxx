@@ -29,6 +29,7 @@
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/accessibletableprovider.hxx>
 
+#include <tools/color.hxx>
 #include <tools/debug.hxx>
 
 #include <memory>
@@ -50,6 +51,9 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTabListBox : public SvTreeListBox
 {
 private:
     std::vector<SvLBoxTab>      mvTabList;
+    std::vector<OUString>       m_aColumnTitles;
+    std::vector<OUString>       m_aColumnHeaderNames;
+    std::vector<Color>          m_aColumnColors;
     OUString                    aCurEntry;
     SvTabListBoxRole            m_eRole;
 
@@ -87,6 +91,18 @@ public:
 
     void             SetTabAlignCenter(sal_uInt16 nTab);
     void             SetTabEditable( sal_uInt16 nTab, bool bEditable );
+
+    void             SetColumnTitle( sal_uInt16 nCol, const OUString& rTitle );
+    OUString         GetColumnTitle( sal_uInt16 nCol ) const;
+    bool             HasColumnTitles() const { return !m_aColumnTitles.empty(); }
+
+    void             SetColumnHeaderName( sal_uInt16 nCol, const OUString& rName );
+    OUString         GetColumnHeaderName( sal_uInt16 nCol ) const;
+
+    void             SetColumnColor( sal_uInt16 nCol, const Color& rColor );
+    Color            GetColumnColor( sal_uInt16 nCol ) const;
+
+    void             SetColumnCount( sal_uInt16 nCount );
 
     void             SetRole(SvTabListBoxRole e) { m_eRole = e; }
     SvTabListBoxRole GetRole() const { return m_eRole; }

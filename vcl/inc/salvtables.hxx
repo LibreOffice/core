@@ -1578,6 +1578,10 @@ public:
 
     virtual void set_column_title(int nColumn, const OUString& rTitle) override;
 
+    virtual void set_column_header_color(int nColumn, const Color& rColor) override;
+
+    virtual void set_column_header_name(int nColumn, const OUString& rName) override;
+
     virtual void set_column_custom_renderer(int nColumn, bool bEnable) override;
 
     virtual void queue_draw() override;

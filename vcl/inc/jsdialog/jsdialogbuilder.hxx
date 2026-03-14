@@ -775,6 +775,9 @@ public:
     void drag_start();
     void drag_end();
 
+    virtual void set_column_header_color(int nColumn, const Color& rColor) override;
+    virtual void set_column_header_name(int nColumn, const OUString& rName) override;
+
     // OnDemandRenderingHandler
     virtual void render_entry(int pos, int dpiscale) override;
 };

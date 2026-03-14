@@ -49,11 +49,10 @@ private:
 
     std::unique_ptr<weld::Toolbar> m_xTbxData;
     std::unique_ptr<weld::Button> m_xCloseBtn;
-    std::unique_ptr<weld::Container> m_xTable;
+    std::unique_ptr<weld::TreeView> m_xDataGrid;
     std::unique_ptr<weld::Box> m_xColumns;
     std::unique_ptr<weld::Box> m_xColors;
-    css::uno::Reference<css::awt::XWindow> m_xTableCtrlParent;
-    VclPtr<DataBrowser> m_xBrwData;
+    std::unique_ptr<DataBrowser> m_xBrwData;
 
     /// handles actions of the toolbox
     DECL_LINK( ToolboxHdl, const OUString&, void );

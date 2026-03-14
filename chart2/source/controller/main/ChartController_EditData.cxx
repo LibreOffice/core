@@ -34,13 +34,17 @@ void ChartController::executeDispatch_EditData()
 {
     if (rtl::Reference<::chart::ChartModel> xChartDoc = getChartModel())
     {
-        SolarMutexGuard aSolarGuard;
-        UndoLiveUpdateGuardWithData aUndoGuard(
+        auto xUndoGuard = std::make_shared<UndoLiveUpdateGuardWithData>(
             SchResId( STR_ACTION_EDIT_CHART_DATA ),
             m_xUndoManager );
-        DataEditor aDataEditorDialog(GetChartFrame(), xChartDoc, m_xCC);
-        aDataEditorDialog.run();
-        aUndoGuard.commit();
+
+        SolarMutexGuard aSolarGuard;
+        auto xDlg = std::make_shared<DataEditor>(GetChartFrame(), xChartDoc, m_xCC);
+        weld::DialogController::runAsync(xDlg, [xDlg, xUndoGuard=std::move(xUndoGuard)](int) {
+            // Edits are applied live to the model, so always commit the
+            // undo guard regardless of how the dialog was closed.
+            xUndoGuard->commit();
+        });
     }
 }
 
