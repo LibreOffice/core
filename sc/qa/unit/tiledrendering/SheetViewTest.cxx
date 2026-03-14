@@ -318,6 +318,39 @@ protected:
         return nCount;
     }
 
+    static void setupPivotTableSourceData(ScDocument& rDocument)
+    {
+        rDocument.SetString(ScAddress(0, 0, 0), u"Category"_ustr);
+        rDocument.SetString(ScAddress(1, 0, 0), u"Value"_ustr);
+        rDocument.SetString(ScAddress(0, 1, 0), u"A"_ustr);
+        rDocument.SetString(ScAddress(0, 2, 0), u"A"_ustr);
+        rDocument.SetString(ScAddress(0, 3, 0), u"B"_ustr);
+        rDocument.SetValue(ScAddress(1, 1, 0), 10.0);
+        rDocument.SetValue(ScAddress(1, 2, 0), 20.0);
+        rDocument.SetValue(ScAddress(1, 3, 0), 30.0);
+    }
+
+    static ScDPObject
+    createCategoryValueDPObject(ScDocument& rDocument, SCTAB nTab, ScRange aOutRange,
+                                css::sheet::DataPilotFieldOrientation eCategoryOrientation)
+    {
+        ScDPObject aDPObject(&rDocument);
+        ScSheetSourceDesc aSheetDesc(&rDocument);
+        aSheetDesc.SetSourceRange(ScRange(0, 0, nTab, 1, 3, nTab));
+        aDPObject.SetSheetDesc(aSheetDesc);
+        aDPObject.SetOutRange(aOutRange);
+
+        ScDPSaveData aSaveData;
+        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
+        pDim->SetOrientation(eCategoryOrientation);
+        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
+        pDim->SetFunction(ScGeneralFunction::SUM);
+        aDPObject.SetSaveData(aSaveData);
+
+        return aDPObject;
+    }
+
     void insertDrawObject(ScDrawLayer* pDrawLayer, const tools::Rectangle& rRectangle)
     {
         ScDrawView* pDrawView = getDrawView();
@@ -3751,16 +3784,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_PivotTable_DefaultAndSheetView)
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
-
-    // Set up source data: A1:B4 with headers and values
-    rDocument.SetString(ScAddress(0, 0, 0), u"Category"_ustr);
-    rDocument.SetString(ScAddress(1, 0, 0), u"Value"_ustr);
-    rDocument.SetString(ScAddress(0, 1, 0), u"A"_ustr);
-    rDocument.SetString(ScAddress(0, 2, 0), u"A"_ustr);
-    rDocument.SetString(ScAddress(0, 3, 0), u"B"_ustr);
-    rDocument.SetValue(ScAddress(1, 1, 0), 10.0);
-    rDocument.SetValue(ScAddress(1, 2, 0), 20.0);
-    rDocument.SetValue(ScAddress(1, 3, 0), 30.0);
+    setupPivotTableSourceData(rDocument);
 
     setupViews();
 
@@ -3777,19 +3801,9 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_PivotTable_DefaultAndSheetView)
     {
         switchToDefaultView();
 
-        ScDPObject aDPObject(&rDocument);
-        ScSheetSourceDesc aSheetDesc(&rDocument);
-        aSheetDesc.SetSourceRange(ScRange(0, 0, nDefaultViewTab, 1, 3, nDefaultViewTab));
-        aDPObject.SetSheetDesc(aSheetDesc);
-        aDPObject.SetOutRange(ScRange(ScAddress(4, 0, nDefaultViewTab)));
-
-        ScDPSaveData aSaveData;
-        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
-        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_ROW);
-        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
-        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
-        pDim->SetFunction(ScGeneralFunction::SUM);
-        aDPObject.SetSaveData(aSaveData);
+        ScDPObject aDPObject = createCategoryValueDPObject(
+            rDocument, nDefaultViewTab, ScRange(ScAddress(4, 0, nDefaultViewTab)),
+            css::sheet::DataPilotFieldOrientation_ROW);
 
         ScDBDocFunc aDBDocFunc(*pDocShell);
         bool bResult = aDBDocFunc.CreatePivotTable(aDPObject, true, true);
@@ -3869,19 +3883,9 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_PivotTable_DefaultAndSheetView)
     {
         switchToSheetView();
 
-        ScDPObject aDPObject(&rDocument);
-        ScSheetSourceDesc aSheetDesc(&rDocument);
-        aSheetDesc.SetSourceRange(ScRange(0, 0, nSheetViewTab, 1, 3, nSheetViewTab));
-        aDPObject.SetSheetDesc(aSheetDesc);
-        aDPObject.SetOutRange(ScRange(ScAddress(7, 0, nSheetViewTab)));
-
-        ScDPSaveData aSaveData;
-        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
-        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_ROW);
-        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
-        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
-        pDim->SetFunction(ScGeneralFunction::SUM);
-        aDPObject.SetSaveData(aSaveData);
+        ScDPObject aDPObject = createCategoryValueDPObject(
+            rDocument, nSheetViewTab, ScRange(ScAddress(7, 0, nSheetViewTab)),
+            css::sheet::DataPilotFieldOrientation_ROW);
 
         ScDBDocFunc aDBDocFunc(*pDocShell);
         bool bResult = aDBDocFunc.CreatePivotTable(aDPObject, true, true);
@@ -3936,16 +3940,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplacePivotTable_DefaultAndSheetView)
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
-
-    // Set up source data: A1:B4 with headers and values
-    rDocument.SetString(ScAddress(0, 0, 0), u"Category"_ustr);
-    rDocument.SetString(ScAddress(1, 0, 0), u"Value"_ustr);
-    rDocument.SetString(ScAddress(0, 1, 0), u"A"_ustr);
-    rDocument.SetString(ScAddress(0, 2, 0), u"A"_ustr);
-    rDocument.SetString(ScAddress(0, 3, 0), u"B"_ustr);
-    rDocument.SetValue(ScAddress(1, 1, 0), 10.0);
-    rDocument.SetValue(ScAddress(1, 2, 0), 20.0);
-    rDocument.SetValue(ScAddress(1, 3, 0), 30.0);
+    setupPivotTableSourceData(rDocument);
 
     setupViews();
 
@@ -3962,19 +3957,9 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplacePivotTable_DefaultAndSheetView)
     {
         switchToDefaultView();
 
-        ScDPObject aDPObject(&rDocument);
-        ScSheetSourceDesc aSheetDesc(&rDocument);
-        aSheetDesc.SetSourceRange(ScRange(0, 0, nDefaultViewTab, 1, 3, nDefaultViewTab));
-        aDPObject.SetSheetDesc(aSheetDesc);
-        aDPObject.SetOutRange(ScRange(ScAddress(4, 0, nDefaultViewTab)));
-
-        ScDPSaveData aSaveData;
-        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
-        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_ROW);
-        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
-        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
-        pDim->SetFunction(ScGeneralFunction::SUM);
-        aDPObject.SetSaveData(aSaveData);
+        ScDPObject aDPObject = createCategoryValueDPObject(
+            rDocument, nDefaultViewTab, ScRange(ScAddress(4, 0, nDefaultViewTab)),
+            css::sheet::DataPilotFieldOrientation_ROW);
 
         ScDBDocFunc aDBDocFunc(*pDocShell);
         bool bResult = aDBDocFunc.CreatePivotTable(aDPObject, true, true);
@@ -3989,19 +3974,9 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplacePivotTable_DefaultAndSheetView)
         CPPUNIT_ASSERT(pDPObject);
 
         // Build a new DPObject with modified layout
-        ScDPObject aNewDPObject(&rDocument);
-        ScSheetSourceDesc aSheetDesc(&rDocument);
-        aSheetDesc.SetSourceRange(ScRange(0, 0, nDefaultViewTab, 1, 3, nDefaultViewTab));
-        aNewDPObject.SetSheetDesc(aSheetDesc);
-        aNewDPObject.SetOutRange(pDPObject->GetOutRange());
-
-        ScDPSaveData aSaveData;
-        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
-        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_COLUMN);
-        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
-        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
-        pDim->SetFunction(ScGeneralFunction::SUM);
-        aNewDPObject.SetSaveData(aSaveData);
+        ScDPObject aNewDPObject
+            = createCategoryValueDPObject(rDocument, nDefaultViewTab, pDPObject->GetOutRange(),
+                                          css::sheet::DataPilotFieldOrientation_COLUMN);
 
         sc::ReplacePivotTableOperation aOperation(*pDocShell, pDPObject, &aNewDPObject, true, true,
                                                   false);
@@ -4027,19 +4002,9 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplacePivotTable_DefaultAndSheetView)
         CPPUNIT_ASSERT(pSheetViewDPObject);
 
         // Build a new DPObject with modified layout
-        ScDPObject aNewDPObject(&rDocument);
-        ScSheetSourceDesc aSheetDesc(&rDocument);
-        aSheetDesc.SetSourceRange(ScRange(0, 0, nSheetViewTab, 1, 3, nSheetViewTab));
-        aNewDPObject.SetSheetDesc(aSheetDesc);
-        aNewDPObject.SetOutRange(pSheetViewDPObject->GetOutRange());
-
-        ScDPSaveData aSaveData;
-        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
-        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_ROW);
-        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
-        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
-        pDim->SetFunction(ScGeneralFunction::SUM);
-        aNewDPObject.SetSaveData(aSaveData);
+        ScDPObject aNewDPObject = createCategoryValueDPObject(
+            rDocument, nSheetViewTab, pSheetViewDPObject->GetOutRange(),
+            css::sheet::DataPilotFieldOrientation_ROW);
 
         sc::ReplacePivotTableOperation aOperation(*pDocShell, pSheetViewDPObject, &aNewDPObject,
                                                   true, true, false);
