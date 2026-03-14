@@ -81,6 +81,17 @@ void SheetViewManager::mergeReorderParameters(ReorderParam const& rReorderParame
         rSheetView.mergeReorderParameters(rReorderParameters);
     }
 }
+
+void SheetViewManager::insertedRows(SCROW nStartRow, SCROW nRowCount)
+{
+    if (moSortOrder)
+        moSortOrder->insertedRows(nStartRow, nRowCount);
+
+    for (auto& rSheetView : iterateValidSheetViews())
+    {
+        rSheetView.insertedRows(nStartRow, nRowCount);
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

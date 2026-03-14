@@ -52,6 +52,9 @@ public:
      * were already added previously.
      **/
     void addOrderIndices(SortOrderInfo const& rSortInfo);
+
+    /** Update data when rows are inserted. */
+    void insertedRows(SCROW nStartRow, SCROW nRowCount);
 };
 
 /** Stores information of a sheet view.
@@ -70,6 +73,9 @@ private:
 
     std::optional<ReorderParam> moOriginalReorderParams;
     std::optional<ScSortParam> moSortParam;
+
+    void adjustReorderParamsForInsert(SCROW nStartRow, SCROW nRowCount);
+    void adjustSortParamForInsert(SCROW nStartRow, SCROW nRowCount);
 
 public:
     SheetView(ScTable* pTable, OUString const& rName, SheetViewID nID);
@@ -104,6 +110,9 @@ public:
 
     /** Reverses the complete (sheet view and default view) sorting order for the input row */
     SCROW reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const;
+
+    /** Update stored sort ranges when rows are inserted. */
+    void insertedRows(SCROW nStartRow, SCROW nRowCount);
 
     // Last used sort parameters
 
