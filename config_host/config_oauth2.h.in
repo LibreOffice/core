@@ -45,10 +45,6 @@
 #define ONEDRIVE_REDIRECT_URI "http://localhost/LibreOffice"
 #define ONEDRIVE_SCOPE "Files.ReadWrite offline_access"
 
-#if defined _WIN32
-#define OAUTH2REQUEST_SUPPORTED
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

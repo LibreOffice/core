@@ -11,10 +11,6 @@
 
 #include <sal/config.h>
 
-#include <config_oauth2.h>
-
-#if defined OAUTH2REQUEST_SUPPORTED
-
 #include <rtl/ustring.hxx>
 
 #include <memory>
@@ -50,7 +46,5 @@ private:
     struct Impl;
     std::unique_ptr<Impl> impl;
 };
-
-#endif // OAUTH2REQUEST_SUPPORTED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

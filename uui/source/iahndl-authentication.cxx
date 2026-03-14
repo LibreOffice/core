@@ -770,7 +770,6 @@ UUIInteractionHelper::handleAuthFallbackRequest( const OUString & instructions,
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
 {
     OUString code;
-#if defined OAUTH2REQUEST_SUPPORTED
     if (url.indexOf(OAUTH2_REDIRECT_URI_PREFIX) >= 0)
     {
         OAuth2Request request(url);
@@ -778,7 +777,6 @@ UUIInteractionHelper::handleAuthFallbackRequest( const OUString & instructions,
         code = request.getRetCode();
     }
     else
-#endif
     {
         uno::Reference<awt::XWindow> xParent = getParentXWindow();
         AuthFallbackDlg dlg(Application::GetFrameWeld(xParent), instructions, url);

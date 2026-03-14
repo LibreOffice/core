@@ -13,22 +13,27 @@
 
 #include "iahndl-oauth2.hxx"
 
-// Has to be before vcl/svapp.hxx
+#ifdef _WIN32
+// On Windows, Boost.Asio pulls in windows.h
 #include <prewin.h>
-#include <http.h>
-#include <postwin.h>
+#endif
 
-#pragma comment(lib, "httpapi.lib")
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/beast/core.hpp>
+#include <boost/beast/http.hpp>
+
+#ifdef _WIN32
+#include <postwin.h>
+#endif
 
 #include <comphelper/anytostring.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <o3tl/char16_t2wchar_t.hxx>
-#include <o3tl/temporary.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/thread.h>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
-#include <systools/curlinit.hxx>
 #include <tools/link.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
@@ -39,6 +44,11 @@
 
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+
+namespace beast = boost::beast;
+namespace http = beast::http;
+namespace net = boost::asio;
+using tcp = net::ip::tcp;
 
 static OUString getQueryComponent(std::u16string_view query, std::u16string_view name)
 {
@@ -62,11 +72,11 @@ struct OAuth2Request::Impl
     std::unique_ptr<weld::MessageDialog> cancelBox;
     OUString authUrl;
     OUString redirectUrl;
+    OString redirectPath; // path portion of redirectUrl, for matching incoming requests
     OUString retCode;
-    int initStage = 0;
 
-    HTTP_URL_GROUP_ID groupId{};
-    HTTP_BINDING_INFO bindingInfo{ .Flags = { .Present = 1 }, .RequestQueueHandle = nullptr };
+    net::io_context ioc{ 1 };
+    tcp::acceptor acceptor{ ioc };
 
     Impl(const OUString& auth_url)
         : cancelBox(Application::CreateMessageDialog(
@@ -79,11 +89,10 @@ struct OAuth2Request::Impl
 
     DECL_LINK(CloseDialog, void*, void);
     bool initHTTP();
-    void deinitHTTP();
     static void SAL_CALL listenHTTP(void* pThis);
     bool openBrowser() const;
-    void sendResponse(HTTP_REQUEST_ID id, std::string_view body = {}) const;
-    void sendCloseResponse(HTTP_REQUEST_ID id, std::u16string_view error) const;
+    static void sendResponse(tcp::socket& socket, std::string_view body = {});
+    void sendCloseResponse(tcp::socket& socket, std::u16string_view error) const;
 };
 
 OAuth2Request::OAuth2Request(const OUString& auth_url)
@@ -108,7 +117,7 @@ void OAuth2Request::run()
             if (impl->openBrowser())
                 impl->cancelBox->run();
 
-            // Send DELETE request
+            // Send DELETE request to stop the server thread
             CURL* curl = curl_easy_init();
             curl_easy_setopt(curl, CURLOPT_URL,
                              OUStringToOString(impl->redirectUrl, RTL_TEXTENCODING_UTF8).getStr());
@@ -119,7 +128,6 @@ void OAuth2Request::run()
             osl_joinWithThread(thread);
         }
     }
-    impl->deinitHTTP(); // Cleans up everything possibly initialized, even on initHTTP failure
 }
 
 const OUString& OAuth2Request::getRetCode() const { return impl->retCode; }
@@ -130,76 +138,46 @@ bool OAuth2Request::Impl::initHTTP()
     if (!redirectUrl.startsWith(OAUTH2_REDIRECT_URI_PREFIX))
         return false;
 
-    ULONG result = HttpInitialize(HTTPAPI_VERSION_2, HTTP_INITIALIZE_SERVER, 0);
-    if (result != NO_ERROR)
-    {
-        SAL_WARN("ucb.ucp.cmis", "HttpInitialize failed with code " << result);
+    // Parse port from redirect URL: "http://localhost:PORT/..."
+    static constexpr std::u16string_view sPrefix(u"http://localhost:");
+    auto nPortEnd = redirectUrl.indexOf('/', sPrefix.size());
+    if (nPortEnd < 0)
         return false;
-    }
-    initStage = 1;
+    sal_uInt16 nPort = o3tl::toUInt32(redirectUrl.subView(sPrefix.size(), nPortEnd));
+    if (nPort == 0)
+        return false;
 
-    HTTP_SERVER_SESSION_ID serverSessionId;
-    result = HttpCreateServerSession(HTTPAPI_VERSION_2, &serverSessionId, 0);
-    if (result != NO_ERROR)
+    // Store path for request matching
+    redirectPath = OUStringToOString(redirectUrl.subView(nPortEnd), RTL_TEXTENCODING_UTF8);
+
+    beast::error_code ec;
+    auto endpoint = tcp::endpoint(net::ip::make_address("127.0.0.1"), nPort);
+
+    acceptor.open(endpoint.protocol(), ec);
+    if (ec)
     {
-        SAL_WARN("ucb.ucp.cmis", "HttpCreateServerSession failed with code " << result);
+        SAL_WARN("ucb.ucp.cmis", "Failed to open acceptor: " << ec.message());
         return false;
     }
 
-    result = HttpCreateUrlGroup(serverSessionId, &groupId, 0);
-    if (result != NO_ERROR)
+    // SO_REUSEADDR: allow rebind if the port is still in TIME_WAIT from a previous run
+    acceptor.set_option(net::socket_base::reuse_address(true), ec);
+
+    acceptor.bind(endpoint, ec);
+    if (ec)
     {
-        SAL_WARN("ucb.ucp.cmis", "HttpCreateUrlGroup failed with code " << result);
+        SAL_WARN("ucb.ucp.cmis", "Failed to bind to port " << nPort << ": " << ec.message());
         return false;
     }
 
-    result = HttpCreateRequestQueue(HTTPAPI_VERSION_2, nullptr, nullptr, 0,
-                                    &bindingInfo.RequestQueueHandle);
-    if (result != NO_ERROR)
+    acceptor.listen(net::socket_base::max_listen_connections, ec);
+    if (ec)
     {
-        SAL_WARN("ucb.ucp.cmis", "HttpCreateRequestQueue failed with code " << result);
+        SAL_WARN("ucb.ucp.cmis", "Failed to listen: " << ec.message());
         return false;
     }
-    initStage = 2;
 
-    result = HttpSetUrlGroupProperty(groupId, HttpServerBindingProperty, &bindingInfo,
-                                     sizeof(bindingInfo));
-    if (result != NO_ERROR)
-    {
-        SAL_WARN("ucb.ucp.cmis", "HttpSetUrlGroupProperty failed with code " << result);
-        return false;
-    }
-    initStage = 3;
-
-    result = HttpAddUrlToUrlGroup(groupId, o3tl::toW(redirectUrl.getStr()), 0, 0);
-    if (result != NO_ERROR)
-    {
-        SAL_WARN("ucb.ucp.cmis", "HttpAddUrlToUrlGroup failed with code " << result);
-        return false;
-    }
-    initStage = 4;
     return true;
-}
-
-void OAuth2Request::Impl::deinitHTTP()
-{
-    switch (initStage)
-    {
-        case 4:
-            HttpRemoveUrlFromUrlGroup(groupId, o3tl::toW(redirectUrl.getStr()), 0);
-            [[fallthrough]];
-        case 3:
-            HttpSetUrlGroupProperty(groupId, HttpServerBindingProperty,
-                                    &o3tl::temporary(HTTP_BINDING_INFO{
-                                        .Flags = { .Present = 0 }, .RequestQueueHandle = nullptr }),
-                                    sizeof(HTTP_BINDING_INFO));
-            [[fallthrough]];
-        case 2:
-            HttpShutdownRequestQueue(bindingInfo.RequestQueueHandle);
-            [[fallthrough]];
-        case 1:
-            HttpTerminate(HTTP_INITIALIZE_SERVER, nullptr);
-    }
 }
 
 // The server must handle the redirect data -> send HTML with a prompt to close the current page;
@@ -213,42 +191,59 @@ void SAL_CALL OAuth2Request::Impl::listenHTTP(void* pThis)
 
     for (;;)
     {
-        char buf[sizeof(HTTP_REQUEST) + 0x10000]{}; // 64K for the data
-        PHTTP_REQUEST request = reinterpret_cast<PHTTP_REQUEST>(buf);
-        ULONG result = HttpReceiveHttpRequest(impl->bindingInfo.RequestQueueHandle, HTTP_NULL_ID,
-                                              HTTP_RECEIVE_REQUEST_FLAG_COPY_BODY, request,
-                                              std::size(buf), &o3tl::temporary(ULONG()), nullptr);
-        if (result != NO_ERROR)
+        beast::error_code ec;
+        tcp::socket socket(impl->ioc);
+        impl->acceptor.accept(socket, ec);
+        if (ec)
         {
-            SAL_WARN("ucb.ucp.cmis", "HttpReceiveHttpRequest failed with code " << result);
+            SAL_WARN("ucb.ucp.cmis", "accept failed: " << ec.message());
             return;
         }
 
-        if (request->Verb == HttpVerbDELETE)
+        beast::flat_buffer buffer;
+        http::request<http::string_body> req;
+        http::read(socket, buffer, req, ec);
+        if (ec)
+        {
+            SAL_WARN("ucb.ucp.cmis", "HTTP read failed: " << ec.message());
+            continue;
+        }
+
+        if (req.method() == http::verb::delete_)
         {
             SAL_INFO("ucb.ucp.cmis", "DELETE request received");
-            impl->sendResponse(request->RequestId); // send 200 "OK"
+            sendResponse(socket); // send 200 "OK"
             // No need to send anything to the dialog
             return;
         }
 
-        if (request->Verb = HttpVerbGET)
+        if (req.method() == http::verb::get)
         {
-            std::u16string_view query(o3tl::toU(request->CookedUrl.pQueryString));
-            if (auto code = getQueryComponent(query, u"code"); !code.isEmpty())
+            auto target = req.target();
+            if (!target.starts_with(boost::core::string_view(impl->redirectPath)))
             {
-                impl->retCode = code;
-                impl->sendCloseResponse(request->RequestId, {});
+                sendResponse(socket);
                 continue;
             }
-            else if (auto error = getQueryComponent(query, u"error"); !error.isEmpty())
+            auto qpos = target.find('?', impl->redirectPath.getLength());
+            if (qpos != boost::core::string_view::npos)
             {
-                impl->sendCloseResponse(request->RequestId, error);
-                continue;
+                OUString query = OStringToOUString(target.substr(qpos), RTL_TEXTENCODING_UTF8);
+                if (auto code = getQueryComponent(query, u"code"); !code.isEmpty())
+                {
+                    impl->retCode = code;
+                    impl->sendCloseResponse(socket, {});
+                    continue;
+                }
+                else if (auto error = getQueryComponent(query, u"error"); !error.isEmpty())
+                {
+                    impl->sendCloseResponse(socket, error);
+                    continue;
+                }
             }
         }
 
-        impl->sendResponse(request->RequestId); // just send 200 OK
+        sendResponse(socket); // just send 200 OK
     }
 }
 
@@ -276,33 +271,20 @@ bool OAuth2Request::Impl::openBrowser() const
     }
 }
 
-void OAuth2Request::Impl::sendResponse(HTTP_REQUEST_ID id, std::string_view body) const
+void OAuth2Request::Impl::sendResponse(tcp::socket& socket, std::string_view body)
 {
-    HTTP_RESPONSE response{};
-    response.StatusCode = 200;
-
-    static constexpr std::string_view ok("OK");
-    response.pReason = ok.data();
-    response.ReasonLength = ok.size();
-
-    static constexpr std::string_view text_html("text/html");
-    response.Headers.KnownHeaders[HttpHeaderContentType].pRawValue = text_html.data();
-    response.Headers.KnownHeaders[HttpHeaderContentType].RawValueLength = text_html.size();
-
+    http::response<http::string_body> res(http::status::ok, 11);
+    res.set(http::field::content_type, "text/html");
+    res.keep_alive(false);
     if (!body.empty())
-    {
-        HTTP_DATA_CHUNK chunk{ .DataChunkType = HttpDataChunkFromMemory,
-                               .FromMemory = { .pBuffer = const_cast<char*>(body.data()),
-                                               .BufferLength = static_cast<ULONG>(body.size()) } };
-        response.EntityChunkCount = 1;
-        response.pEntityChunks = &chunk;
-    }
+        res.body() = std::string(body);
+    res.prepare_payload();
 
-    HttpSendHttpResponse(bindingInfo.RequestQueueHandle, id, 0, &response, nullptr, nullptr,
-                         nullptr, 0, nullptr, nullptr);
+    beast::error_code ec;
+    http::write(socket, res, ec);
 }
 
-void OAuth2Request::Impl::sendCloseResponse(HTTP_REQUEST_ID id, std::u16string_view error) const
+void OAuth2Request::Impl::sendCloseResponse(tcp::socket& socket, std::u16string_view error) const
 {
     static constexpr OUString html_tmpl(u"<!DOCTYPE html>"
                                         "<html>"
@@ -320,7 +302,7 @@ void OAuth2Request::Impl::sendCloseResponse(HTTP_REQUEST_ID id, std::u16string_v
     OUString u16 = html_tmpl // replace the placeholders
                        .replaceFirst("$RESULT", result)
                        .replaceFirst("$PRODUCTNAME", utl::ConfigManager::getProductName());
-    sendResponse(id, OUStringToOString(u16, RTL_TEXTENCODING_UTF8));
+    sendResponse(socket, OUStringToOString(u16, RTL_TEXTENCODING_UTF8));
 
     // Executed in the VCL thread, inside the dialog's run()
     Application::PostUserEvent(LINK(const_cast<Impl*>(this), Impl, CloseDialog));

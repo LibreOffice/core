@@ -52,7 +52,7 @@ $(eval $(call gb_Library_add_exception_objects,uui,\
 	uui/source/iahndl-filter \
 	uui/source/iahndl-ioexceptions \
 	uui/source/iahndl-locking \
-	$(if $(filter MSC,$(COM)),uui/source/iahndl-oauth2-win) \
+	uui/source/iahndl-oauth2 \
 	uui/source/iahndl-ssl \
 	uui/source/interactionhandler \
 	uui/source/lockfailed \
