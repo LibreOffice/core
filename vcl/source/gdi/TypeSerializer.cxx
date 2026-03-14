@@ -459,13 +459,24 @@ static bool UselessScaleForMapMode(const Fraction& rScale)
 {
     if (!rScale.IsValid())
         return true;
-    // ofz#62439 negative numbers are multiplied by -1, MIN_INT32 * -1
-    // cannot be expressed as an int
-    if (rScale.GetNumerator() == std::numeric_limits<sal_Int32>::min())
-        return true;
     if (static_cast<double>(rScale) <= 0.0)
         return true;
     return false;
+}
+
+// ofz#492619731 Canonicalize so the sign is in the numerator, ImplCalcMapResolution
+// assumes a positive denominator.
+// ofz#62439 Returns false if the values cannot be canonicalized (INT32_MIN).
+static bool CanonicalizeScaleForMapMode(Fraction& rScale)
+{
+    if (rScale.GetDenominator() < 0)
+    {
+        if (rScale.GetNumerator() == std::numeric_limits<sal_Int32>::min()
+            || rScale.GetDenominator() == std::numeric_limits<sal_Int32>::min())
+            return false;
+        rScale = Fraction(-rScale.GetNumerator(), -rScale.GetDenominator());
+    }
+    return true;
 }
 
 bool TypeSerializer::readMapMode(MapMode& rMapMode)
@@ -498,7 +509,9 @@ bool TypeSerializer::readMapMode(MapMode& rMapMode)
         rMapMode = MapMode(eUnit);
     else
     {
-        const bool bBogus = UselessScaleForMapMode(aScaleX) || UselessScaleForMapMode(aScaleY);
+        const bool bBogus = !CanonicalizeScaleForMapMode(aScaleX)
+                            || !CanonicalizeScaleForMapMode(aScaleY)
+                            || UselessScaleForMapMode(aScaleX) || UselessScaleForMapMode(aScaleY);
         if (bBogus)
         {
             SAL_WARN("vcl", "invalid scale");
