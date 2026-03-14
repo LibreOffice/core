@@ -38,6 +38,7 @@
 #include <SparklineAttributes.hxx>
 #include <SparklineGroup.hxx>
 #include <dpobject.hxx>
+#include <operation/ReplacePivotTableOperation.hxx>
 #include <dpshttab.hxx>
 #include <dpsave.hxx>
 #include <generalfunction.hxx>
@@ -3924,6 +3925,136 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_PivotTable_DefaultAndSheetView)
 
         CPPUNIT_ASSERT_EQUAL(size_t(0), countPivotTablesOnTab(rDocument, nDefaultViewTab));
         CPPUNIT_ASSERT_EQUAL(size_t(0), countPivotTablesOnTab(rDocument, nSheetViewTab));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplacePivotTable_DefaultAndSheetView)
+{
+    // Test sync to sheet view when replacing a pivot table via DataPilotUpdate
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // Set up source data: A1:B4 with headers and values
+    rDocument.SetString(ScAddress(0, 0, 0), u"Category"_ustr);
+    rDocument.SetString(ScAddress(1, 0, 0), u"Value"_ustr);
+    rDocument.SetString(ScAddress(0, 1, 0), u"A"_ustr);
+    rDocument.SetString(ScAddress(0, 2, 0), u"A"_ustr);
+    rDocument.SetString(ScAddress(0, 3, 0), u"B"_ustr);
+    rDocument.SetValue(ScAddress(1, 1, 0), 10.0);
+    rDocument.SetValue(ScAddress(1, 2, 0), 20.0);
+    rDocument.SetValue(ScAddress(1, 3, 0), 30.0);
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+
+    // Create pivot table from default view
+    {
+        switchToDefaultView();
+
+        ScDPObject aDPObject(&rDocument);
+        ScSheetSourceDesc aSheetDesc(&rDocument);
+        aSheetDesc.SetSourceRange(ScRange(0, 0, nDefaultViewTab, 1, 3, nDefaultViewTab));
+        aDPObject.SetSheetDesc(aSheetDesc);
+        aDPObject.SetOutRange(ScRange(ScAddress(4, 0, nDefaultViewTab)));
+
+        ScDPSaveData aSaveData;
+        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_ROW);
+        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
+        pDim->SetFunction(ScGeneralFunction::SUM);
+        aDPObject.SetSaveData(aSaveData);
+
+        ScDBDocFunc aDBDocFunc(*pDocShell);
+        bool bResult = aDBDocFunc.CreatePivotTable(aDPObject, true, true);
+        CPPUNIT_ASSERT(bResult);
+    }
+
+    // Replace pivot table from default view: change Category from ROW to COLUMN
+    {
+        switchToDefaultView();
+
+        ScDPObject* pDPObject = findPivotTableOnTab(rDocument, nDefaultViewTab);
+        CPPUNIT_ASSERT(pDPObject);
+
+        // Build a new DPObject with modified layout
+        ScDPObject aNewDPObject(&rDocument);
+        ScSheetSourceDesc aSheetDesc(&rDocument);
+        aSheetDesc.SetSourceRange(ScRange(0, 0, nDefaultViewTab, 1, 3, nDefaultViewTab));
+        aNewDPObject.SetSheetDesc(aSheetDesc);
+        aNewDPObject.SetOutRange(pDPObject->GetOutRange());
+
+        ScDPSaveData aSaveData;
+        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_COLUMN);
+        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
+        pDim->SetFunction(ScGeneralFunction::SUM);
+        aNewDPObject.SetSaveData(aSaveData);
+
+        sc::ReplacePivotTableOperation aOperation(*pDocShell, pDPObject, &aNewDPObject, true, true,
+                                                  false);
+        CPPUNIT_ASSERT(aOperation.run());
+
+        // Verify the sheet view pivot table has the updated COLUMN layout
+        ScDPObject* pSheetViewDPObject = findPivotTableOnTab(rDocument, nSheetViewTab);
+        CPPUNIT_ASSERT(pSheetViewDPObject);
+        ScDPSaveDimension* pSheetViewDim
+            = pSheetViewDPObject->GetSaveData()->GetDimensionByName(u"Category"_ustr);
+        CPPUNIT_ASSERT_EQUAL(css::sheet::DataPilotFieldOrientation_COLUMN,
+                             pSheetViewDim->GetOrientation());
+
+        // Verify both pivot tables have the same layout
+        CPPUNIT_ASSERT_EQUAL(*pDPObject->GetSaveData(), *pSheetViewDPObject->GetSaveData());
+    }
+
+    // Replace pivot table from sheet view: change Category from COLUMN back to ROW
+    {
+        switchToSheetView();
+
+        ScDPObject* pSheetViewDPObject = findPivotTableOnTab(rDocument, nSheetViewTab);
+        CPPUNIT_ASSERT(pSheetViewDPObject);
+
+        // Build a new DPObject with modified layout
+        ScDPObject aNewDPObject(&rDocument);
+        ScSheetSourceDesc aSheetDesc(&rDocument);
+        aSheetDesc.SetSourceRange(ScRange(0, 0, nSheetViewTab, 1, 3, nSheetViewTab));
+        aNewDPObject.SetSheetDesc(aSheetDesc);
+        aNewDPObject.SetOutRange(pSheetViewDPObject->GetOutRange());
+
+        ScDPSaveData aSaveData;
+        ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(u"Category"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_ROW);
+        pDim = aSaveData.GetNewDimensionByName(u"Value"_ustr);
+        pDim->SetOrientation(css::sheet::DataPilotFieldOrientation_DATA);
+        pDim->SetFunction(ScGeneralFunction::SUM);
+        aNewDPObject.SetSaveData(aSaveData);
+
+        sc::ReplacePivotTableOperation aOperation(*pDocShell, pSheetViewDPObject, &aNewDPObject,
+                                                  true, true, false);
+        CPPUNIT_ASSERT(aOperation.run());
+
+        // Verify the default view pivot table has the updated ROW layout
+        ScDPObject* pDefaultDPObject = findPivotTableOnTab(rDocument, nDefaultViewTab);
+        CPPUNIT_ASSERT(pDefaultDPObject);
+        ScDPSaveDimension* pDefaultDim
+            = pDefaultDPObject->GetSaveData()->GetDimensionByName(u"Category"_ustr);
+        CPPUNIT_ASSERT_EQUAL(css::sheet::DataPilotFieldOrientation_ROW,
+                             pDefaultDim->GetOrientation());
+
+        // Verify both pivot tables have the same layout
+        CPPUNIT_ASSERT_EQUAL(*pDefaultDPObject->GetSaveData(), *pSheetViewDPObject->GetSaveData());
     }
 }
 
