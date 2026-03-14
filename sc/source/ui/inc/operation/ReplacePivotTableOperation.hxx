@@ -16,7 +16,7 @@ class ScDPObject;
 namespace sc
 {
 /** Replaces a pivot table's layout with settings from a different DPObject. */
-class ReplacePivotTableOperation : public PivotTableOperation
+class SC_DLLPUBLIC ReplacePivotTableOperation : public PivotTableOperation
 {
 private:
     ScDPObject* mpDPObject;
