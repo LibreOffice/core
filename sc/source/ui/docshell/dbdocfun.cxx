@@ -59,9 +59,9 @@
 #include <ChartTools.hxx>
 #include <SheetViewOperationsTester.hxx>
 #include <operation/CreatePivotTableOperation.hxx>
-#include <operation/DataPilotUpdateOperation.hxx>
 #include <operation/QueryOperation.hxx>
 #include <operation/RemovePivotTableOperation.hxx>
+#include <operation/ReplacePivotTableOperation.hxx>
 #include <operation/SortOperation.hxx>
 #include <operation/SubTotalsOperation.hxx>
 #include <operation/UpdatePivotTableOperation.hxx>
@@ -740,7 +740,29 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
 bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
                                    bool bRecord, bool bApi, bool bAllowMove )
 {
-    sc::DataPilotUpdateOperation aOperation(rDocShell, pOldObj, pNewObj, bRecord, bApi, bAllowMove);
+    if (!pOldObj)
+    {
+        if (!pNewObj)
+            return false;
+
+        sc::CreatePivotTableOperation aOperation(rDocShell, *pNewObj, bRecord, bApi);
+        return aOperation.run();
+    }
+
+    if (!pNewObj)
+    {
+        sc::RemovePivotTableOperation aOperation(rDocShell, *pOldObj, bRecord, bApi);
+        return aOperation.run();
+    }
+
+    if (pOldObj == pNewObj)
+    {
+        sc::UpdatePivotTableOperation aOperation(rDocShell, *pOldObj, bRecord, bApi);
+        return aOperation.run();
+    }
+
+    sc::ReplacePivotTableOperation aOperation(rDocShell, pOldObj, pNewObj, bRecord, bApi,
+                                              bAllowMove);
     return aOperation.run();
 }
 
