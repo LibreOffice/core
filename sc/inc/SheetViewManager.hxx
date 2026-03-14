@@ -130,6 +130,9 @@ public:
 
     /** Update when rows are inserted. */
     void insertedRows(SCROW nStartRow, SCROW nRowCount);
+
+    /** Update when rows are deleted. */
+    void deletedRows(SCROW nStartRow, SCROW nRowCount);
 };
 }
 

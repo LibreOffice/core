@@ -43,7 +43,71 @@ void expandOrderIndices(std::vector<SCCOLROW>& rOrder, SCROW nStartRow, SCROW nF
     for (SCROW i = 0; i < nCount; ++i)
         rOrder.push_back(nOffset + i);
 }
+
+/** Remove order entries at 1-based nOffset for nCount positions, adjusting remaining values. */
+void removeOrderEntries(std::vector<SCCOLROW>& rOrder, SCCOLROW nOffset, SCROW nCount)
+{
+    std::vector<SCCOLROW> aNewOrder;
+    for (auto& rValue : rOrder)
+    {
+        if (rValue >= nOffset && rValue < nOffset + nCount)
+            continue; // deleted
+        if (rValue >= nOffset + nCount)
+            aNewOrder.push_back(rValue - nCount);
+        else
+            aNewOrder.push_back(rValue);
+    }
+    rOrder = std::move(aNewOrder);
 }
+
+/** Adjust a row range and order indices for deleted rows.
+ *
+ * On entire range deletion the order is cleared.
+ */
+void deleteRowsFromOrderedRange(SCROW& nStart, SCROW& nEnd, std::vector<SCCOLROW>& rOrder,
+                                SCROW nDeleteStart, SCROW nDeleteCount)
+{
+    SCROW nDeleteEnd = nDeleteStart + nDeleteCount - 1;
+
+    // After the range - nothing to do
+    if (nDeleteStart > nEnd)
+        return;
+
+    // Before the range - shift
+    if (nDeleteEnd < nStart)
+    {
+        nStart -= nDeleteCount;
+        nEnd -= nDeleteCount;
+        return;
+    }
+
+    // Entire range deleted
+    if (nDeleteStart <= nStart && nDeleteEnd >= nEnd)
+    {
+        rOrder.clear();
+        return;
+    }
+
+    // Partial overlap - compute overlap and update order
+    SCROW nOverlapStart = std::max(nDeleteStart, nStart);
+    SCROW nOverlapEnd = std::min(nDeleteEnd, nEnd);
+    SCROW nDeletedWithin = nOverlapEnd - nOverlapStart + 1;
+    SCCOLROW nOffset = nOverlapStart - nStart + 1; // + 1 because offset is 1-based
+
+    removeOrderEntries(rOrder, nOffset, nDeletedWithin);
+
+    if (nDeleteStart <= nStart)
+    {
+        SCROW nDeletedBefore = nStart - nDeleteStart;
+        nStart -= nDeletedBefore;
+        nEnd -= nDeleteCount;
+    }
+    else
+    {
+        nEnd -= nDeletedWithin;
+    }
+}
+} // end anonymous namespace
 
 void SortOrderReverser::addOrderIndices(SortOrderInfo const& rSortInfo)
 {
@@ -124,6 +188,19 @@ void SortOrderReverser::insertedRows(SCROW nStartRow, SCROW nRowCount)
         // At start of or within the sort range - expand and update order.
         expandOrderIndices(maSortInfo.maOrder, nStartRow, maSortInfo.mnFirstRow, nRowCount);
         maSortInfo.mnLastRow += nRowCount;
+    }
+}
+
+void SortOrderReverser::deletedRows(SCROW nStartRow, SCROW nRowCount)
+{
+    deleteRowsFromOrderedRange(maSortInfo.mnFirstRow, maSortInfo.mnLastRow, maSortInfo.maOrder,
+                               nStartRow, nRowCount);
+
+    // no order indices - range is empty now
+    if (maSortInfo.maOrder.empty())
+    {
+        maSortInfo.mnFirstRow = 0;
+        maSortInfo.mnLastRow = 0;
     }
 }
 
@@ -238,6 +315,50 @@ void SheetView::insertedRows(SCROW nStartRow, SCROW nRowCount)
 
     // Update the stored sort parameters (the range the sheet view was sorted on)
     adjustSortParamForInsert(nStartRow, nRowCount);
+}
+
+void SheetView::adjustReorderParamsForDelete(SCROW nStartRow, SCROW nRowCount)
+{
+    if (!moOriginalReorderParams)
+        return;
+
+    ScRange& rRange = moOriginalReorderParams->maSortRange;
+    SCROW nRangeStart = rRange.aStart.Row();
+    SCROW nRangeEnd = rRange.aEnd.Row();
+    deleteRowsFromOrderedRange(nRangeStart, nRangeEnd, moOriginalReorderParams->maOrderIndices,
+                               nStartRow, nRowCount);
+    if (moOriginalReorderParams->maOrderIndices.empty())
+    {
+        moOriginalReorderParams.reset();
+    }
+    else
+    {
+        rRange.aStart.SetRow(nRangeStart);
+        rRange.aEnd.SetRow(nRangeEnd);
+    }
+}
+
+void SheetView::adjustSortParamForDelete(SCROW nStartRow, SCROW nRowCount)
+{
+    if (!moSortParam)
+        return;
+
+    std::vector<SCCOLROW> aUnused;
+    deleteRowsFromOrderedRange(moSortParam->nRow1, moSortParam->nRow2, aUnused, nStartRow,
+                               nRowCount);
+}
+
+void SheetView::deletedRows(SCROW nStartRow, SCROW nRowCount)
+{
+    // Update the sheet view's own sort order
+    if (moSortOrder)
+        moSortOrder->deletedRows(nStartRow, nRowCount);
+
+    // Update the reorder params that track the default view's sort since sheet view creation
+    adjustReorderParamsForDelete(nStartRow, nRowCount);
+
+    // Update the stored sort parameters (the range the sheet view was sorted on)
+    adjustSortParamForDelete(nStartRow, nRowCount);
 }
 
 } // end sc namespace

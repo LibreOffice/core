@@ -54,6 +54,9 @@ public:
 
     /** Update data when rows are inserted. */
     void insertedRows(SCROW nStartRow, SCROW nRowCount);
+
+    /** Update data when rows are deleted. */
+    void deletedRows(SCROW nStartRow, SCROW nRowCount);
 };
 
 /** Stores information of a sheet view.
@@ -75,6 +78,8 @@ private:
 
     void adjustReorderParamsForInsert(SCROW nStartRow, SCROW nRowCount);
     void adjustSortParamForInsert(SCROW nStartRow, SCROW nRowCount);
+    void adjustReorderParamsForDelete(SCROW nStartRow, SCROW nRowCount);
+    void adjustSortParamForDelete(SCROW nStartRow, SCROW nRowCount);
 
 public:
     SheetView(ScTable* pTable, OUString const& rName, SheetViewID nID);
@@ -112,6 +117,9 @@ public:
 
     /** Update stored sort ranges when rows are inserted. */
     void insertedRows(SCROW nStartRow, SCROW nRowCount);
+
+    /** Update stored sort ranges when rows are deleted. */
+    void deletedRows(SCROW nStartRow, SCROW nRowCount);
 
     // Last used sort parameters
 
