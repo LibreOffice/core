@@ -24,11 +24,10 @@
 namespace sc
 {
 RemovePivotTableOperation::RemovePivotTableOperation(ScDocShell& rDocShell,
-                                                     ScDPObject const& rDPObj, bool bRecord,
+                                                     ScDPObject const& rDPObject, bool bRecord,
                                                      bool bApi)
-    : Operation(OperationType::PivotTableRemove, bRecord, bApi)
-    , mrDocShell(rDocShell)
-    , mrDPObj(rDPObj)
+    : PivotTableOperation(OperationType::PivotTableRemove, rDocShell, bRecord, bApi)
+    , mrDPObject(rDPObject)
 {
 }
 
@@ -37,10 +36,11 @@ bool RemovePivotTableOperation::runImplementation()
     ScDocShellModificator aModificator(mrDocShell);
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
 
-    if (!checkSheetViewProtection())
+    ScDPObject* pDPObject = findDefaultViewDPObject(mrDPObject);
+    if (!pDPObject)
         return false;
 
-    if (!sc::pivot::isEditable(mrDocShell, mrDPObj.GetOutRange(), mbApi))
+    if (!sc::pivot::isEditable(mrDocShell, pDPObject->GetOutRange(), mbApi))
         return false;
 
     ScDocument& rDoc = mrDocShell.GetDocument();
@@ -49,7 +49,7 @@ bool RemovePivotTableOperation::runImplementation()
     {
         // If we come from GUI - ask to delete the associated pivot charts too...
         std::vector<SdrOle2Obj*> aListOfObjects
-            = sctools::getAllPivotChartsConnectedTo(mrDPObj.GetName(), mrDocShell);
+            = sctools::getAllPivotChartsConnectedTo(pDPObject->GetName(), mrDocShell);
 
         ScDrawLayer* pModel = rDoc.GetDrawLayer();
 
@@ -77,17 +77,17 @@ bool RemovePivotTableOperation::runImplementation()
     }
 
     ScDocumentUniquePtr pOldUndoDoc;
-    std::unique_ptr<ScDPObject> pUndoDPObj;
+    std::unique_ptr<ScDPObject> pUndoDPObject;
 
     if (mbRecord)
-        pUndoDPObj.reset(new ScDPObject(mrDPObj)); // copy old settings for undo
+        pUndoDPObject.reset(new ScDPObject(*pDPObject)); // copy old settings for undo
 
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
     //  delete table
 
-    ScRange aRange = mrDPObj.GetOutRange();
+    ScRange aRange = pDPObject->GetOutRange();
     SCTAB nTab = aRange.aStart.Tab();
 
     if (mbRecord)
@@ -98,7 +98,7 @@ bool RemovePivotTableOperation::runImplementation()
     rDoc.RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(),
                         aRange.aEnd.Row(), nTab, ScMF::Auto);
 
-    rDoc.GetDPCollection()->FreeTable(&mrDPObj); // object is deleted here
+    rDoc.GetDPCollection()->FreeTable(pDPObject); // object is deleted here
 
     mrDocShell.PostPaintGridAll(); //! only necessary parts
     mrDocShell.PostPaint(aRange, PaintPartFlags::Grid);
@@ -106,10 +106,12 @@ bool RemovePivotTableOperation::runImplementation()
     if (mbRecord)
     {
         mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoDataPilot>(
-            mrDocShell, std::move(pOldUndoDoc), nullptr, pUndoDPObj.get(), nullptr, false));
+            mrDocShell, std::move(pOldUndoDoc), nullptr, pUndoDPObject.get(), nullptr, false));
 
-        // pUndoDPObj is copied
+        // pUndoDPObject is copied
     }
+
+    syncSheetViews();
 
     aModificator.SetDocumentModified();
     return true;

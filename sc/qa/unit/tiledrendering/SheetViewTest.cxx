@@ -305,6 +305,18 @@ protected:
         return nullptr;
     }
 
+    static size_t countPivotTablesOnTab(ScDocument& rDocument, SCTAB nTab)
+    {
+        size_t nCount = 0;
+        ScDPCollection* pDPCollection = rDocument.GetDPCollection();
+        for (size_t i = 0; i < pDPCollection->GetCount(); ++i)
+        {
+            if ((*pDPCollection)[i].GetOutRange().aStart.Tab() == nTab)
+                ++nCount;
+        }
+        return nCount;
+    }
+
     void insertDrawObject(ScDrawLayer* pDrawLayer, const tools::Rectangle& rRectangle)
     {
         ScDrawView* pDrawView = getDrawView();
@@ -3882,6 +3894,36 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_PivotTable_DefaultAndSheetView)
                              rDocument.GetString(ScAddress(7, 0, nSheetViewTab)));
         CPPUNIT_ASSERT_EQUAL(rDocument.GetString(ScAddress(7, 1, nDefaultViewTab)),
                              rDocument.GetString(ScAddress(7, 1, nSheetViewTab)));
+    }
+
+    // Remove first pivot table from default view
+    {
+        switchToDefaultView();
+
+        ScDPObject* pDefaultDPObject = findPivotTableOnTab(rDocument, nDefaultViewTab);
+        CPPUNIT_ASSERT(pDefaultDPObject);
+
+        ScDBDocFunc aDBDocFunc(*pDocShell);
+        bool bResult = aDBDocFunc.RemovePivotTable(*pDefaultDPObject, true, true);
+        CPPUNIT_ASSERT(bResult);
+
+        CPPUNIT_ASSERT_EQUAL(size_t(1), countPivotTablesOnTab(rDocument, nDefaultViewTab));
+        CPPUNIT_ASSERT_EQUAL(size_t(1), countPivotTablesOnTab(rDocument, nSheetViewTab));
+    }
+
+    // Remove second pivot table from sheet view
+    {
+        switchToSheetView();
+
+        ScDPObject* pSheetViewDPObject = findPivotTableOnTab(rDocument, nSheetViewTab);
+        CPPUNIT_ASSERT(pSheetViewDPObject);
+
+        ScDBDocFunc aDBDocFunc(*pDocShell);
+        bool bResult = aDBDocFunc.RemovePivotTable(*pSheetViewDPObject, true, true);
+        CPPUNIT_ASSERT(bResult);
+
+        CPPUNIT_ASSERT_EQUAL(size_t(0), countPivotTablesOnTab(rDocument, nDefaultViewTab));
+        CPPUNIT_ASSERT_EQUAL(size_t(0), countPivotTablesOnTab(rDocument, nSheetViewTab));
     }
 }
 
