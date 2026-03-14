@@ -30,6 +30,16 @@ void UndoSort::setSheetViewContext(SCTAB nDefaultViewTab, SheetViewID nSheetView
     mpSortDataAfter = std::move(pSortDataAfter);
 }
 
+void UndoSort::setDefaultViewContext(SCTAB nDefaultViewTab,
+                                     std::shared_ptr<DefaultViewSortData> pDefaultViewSortDataBefore,
+                                     std::shared_ptr<DefaultViewSortData> pDefaultViewSortDataAfter)
+{
+    mnDefaultViewTab = nDefaultViewTab;
+    mbDefaultViewSort = true;
+    mpDefaultViewSortDataBefore = std::move(pDefaultViewSortDataBefore);
+    mpDefaultViewSortDataAfter = std::move(pDefaultViewSortDataAfter);
+}
+
 OUString UndoSort::GetComment() const
 {
     return ScResId(STR_UNDO_SORT);
@@ -57,7 +67,7 @@ void UndoSort::Execute( bool bUndo )
         aParam.reverse();
     rDoc.Reorder(aParam);
 
-    // Restore sheet view sort data if this sort was on a sheet view tab
+    // Restore sheet view sort data for sorts on a sheet view tab
     if (mnSheetViewID >= 0 && mnDefaultViewTab >= 0)
     {
         std::shared_ptr<SheetViewManager> pManager = rDoc.GetSheetViewManager(mnDefaultViewTab);
@@ -67,6 +77,14 @@ void UndoSort::Execute( bool bUndo )
             if (pSheetView)
                 pSheetView->restoreSortData(bUndo ? mpSortDataBefore : mpSortDataAfter);
         }
+    }
+
+    // Restore manager sort data for sorts on a default view tab
+    if (mbDefaultViewSort && mnDefaultViewTab >= 0)
+    {
+        std::shared_ptr<SheetViewManager> pManager = rDoc.GetSheetViewManager(mnDefaultViewTab);
+        if (pManager)
+            pManager->restoreSortData(bUndo ? mpDefaultViewSortDataBefore : mpDefaultViewSortDataAfter);
     }
 
     ScRange aOverallRange( maParam.maSortRange);

@@ -202,10 +202,32 @@ bool SortOperation::runImplementation()
     sc::ReorderParam aUndoParam;
 
     // Capture sheet view sort data before the sort (for undo)
+    std::shared_ptr<sc::SheetView> pSheetView;
     std::shared_ptr<sc::SheetViewSortData> pSortDataBefore;
-    std::shared_ptr<sc::SheetView> pSheetView = rDoc.GetSheetView(mnTab);
-    if (pSheetView)
-        pSortDataBefore = pSheetView->captureSortData();
+    std::shared_ptr<sc::DefaultViewSortData> pDefaultViewSortDataBefore;
+    bool bDefaultViewSort = false;
+    SCTAB nDefaultViewTab = -1;
+
+    if (mbRecord)
+    {
+        pSheetView = rDoc.GetSheetView(mnTab);
+        if (pSheetView)
+        {
+            // Sorting on a sheet view tab
+            pSortDataBefore = pSheetView->captureSortData();
+        }
+        else
+        {
+            // Sorting on a default view tab - capture manager sort data
+            std::shared_ptr<sc::SheetViewManager> pManager = rDoc.GetSheetViewManager(mnTab);
+            if (pManager && !pManager->isEmpty())
+            {
+                nDefaultViewTab = mnTab;
+                bDefaultViewSort = true;
+                pDefaultViewSortDataBefore = pManager->captureSortData();
+            }
+        }
+    }
 
     // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
     if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
@@ -227,6 +249,16 @@ bool SortOperation::runImplementation()
             pUndoSort->setSheetViewContext(rDoc.GetDefaultViewTableNumber(mnTab),
                                            pSheetView->getID(), std::move(pSortDataBefore),
                                            std::move(pSortDataAfter));
+        }
+        else if (bDefaultViewSort)
+        {
+            std::shared_ptr<sc::DefaultViewSortData> pDefaultViewSortDataAfter;
+            std::shared_ptr<sc::SheetViewManager> pManager
+                = rDoc.GetSheetViewManager(nDefaultViewTab);
+            if (pManager)
+                pDefaultViewSortDataAfter = pManager->captureSortData();
+            pUndoSort->setDefaultViewContext(nDefaultViewTab, std::move(pDefaultViewSortDataBefore),
+                                             std::move(pDefaultViewSortDataAfter));
         }
 
         mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoSort));

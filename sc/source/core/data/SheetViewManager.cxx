@@ -14,6 +14,11 @@
 
 namespace sc
 {
+namespace
+{
+const std::optional<SortOrderReverser> sEmptySortOrder;
+}
+
 SheetViewManager::SheetViewManager() {}
 
 SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
@@ -67,11 +72,24 @@ OUString SheetViewManager::generateName()
 
 OUString SheetViewManager::defaultViewName() { return ScResId(STR_SHEET_VIEW_DEFAULT_VIEW_NAME); }
 
+DefaultViewSortData& SheetViewManager::ensureSortData()
+{
+    if (!mpSortData)
+        mpSortData = std::make_shared<DefaultViewSortData>();
+    return *mpSortData;
+}
+
+std::optional<SortOrderReverser> const& SheetViewManager::getSortOrder() const
+{
+    return mpSortData ? mpSortData->moSortOrder : sEmptySortOrder;
+}
+
 void SheetViewManager::addOrderIndices(SortOrderInfo const& rSortInfo)
 {
-    if (!moSortOrder)
-        moSortOrder.emplace();
-    moSortOrder->addOrderIndices(rSortInfo);
+    auto& rSortOrder = ensureSortData().moSortOrder;
+    if (!rSortOrder)
+        rSortOrder.emplace();
+    rSortOrder->addOrderIndices(rSortInfo);
 }
 
 void SheetViewManager::mergeReorderParameters(ReorderParam const& rReorderParameters)
@@ -84,8 +102,8 @@ void SheetViewManager::mergeReorderParameters(ReorderParam const& rReorderParame
 
 void SheetViewManager::insertedRows(SCROW nStartRow, SCROW nRowCount)
 {
-    if (moSortOrder)
-        moSortOrder->insertedRows(nStartRow, nRowCount);
+    if (mpSortData && mpSortData->moSortOrder)
+        mpSortData->moSortOrder->insertedRows(nStartRow, nRowCount);
 
     for (auto& rSheetView : iterateValidSheetViews())
     {
@@ -95,14 +113,60 @@ void SheetViewManager::insertedRows(SCROW nStartRow, SCROW nRowCount)
 
 void SheetViewManager::deletedRows(SCROW nStartRow, SCROW nRowCount)
 {
-    if (moSortOrder)
-        moSortOrder->deletedRows(nStartRow, nRowCount);
+    if (mpSortData && mpSortData->moSortOrder)
+        mpSortData->moSortOrder->deletedRows(nStartRow, nRowCount);
 
     for (auto& rSheetView : iterateValidSheetViews())
     {
         rSheetView.deletedRows(nStartRow, nRowCount);
     }
 }
+
+std::shared_ptr<DefaultViewSortData> SheetViewManager::captureSortData() const
+{
+    if (!mpSortData)
+        return nullptr;
+
+    // Deep copy the manager sort order + snapshot each SheetView's reorder params
+    auto pSortDataCopy = std::make_shared<DefaultViewSortData>(*mpSortData);
+
+    // Also capture the per sheet view reorder params
+    pSortDataCopy->maSheetViewReorderParams.clear();
+    for (auto const& rSheetView : iterateValidSheetViews())
+    {
+        pSortDataCopy->maSheetViewReorderParams.emplace_back(rSheetView.getID(),
+                                                             rSheetView.getReorderParameters());
+    }
+    return pSortDataCopy;
 }
+
+void SheetViewManager::restoreSortData(std::shared_ptr<DefaultViewSortData> const& pData)
+{
+    if (!pData)
+    {
+        mpSortData.reset();
+    }
+    else
+    {
+        mpSortData = std::make_shared<DefaultViewSortData>();
+        mpSortData->moSortOrder = pData->moSortOrder;
+    }
+
+    // Restore per sheet view reorder params
+    if (!pData)
+        return;
+
+    for (auto const & [ nID, oReorderParams ] : pData->maSheetViewReorderParams)
+    {
+        if (isValidSheetViewID(nID))
+        {
+            auto pSheetView = get(nID);
+            if (pSheetView)
+                pSheetView->restoreReorderParameters(oReorderParams);
+        }
+    }
+}
+
+} // end sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
