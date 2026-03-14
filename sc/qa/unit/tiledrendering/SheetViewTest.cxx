@@ -38,6 +38,7 @@
 #include <SparklineAttributes.hxx>
 #include <SparklineGroup.hxx>
 #include <dpobject.hxx>
+#include <operation/InsertCellsOperation.hxx>
 #include <operation/ReplacePivotTableOperation.hxx>
 #include <dpshttab.hxx>
 #include <dpsave.hxx>
@@ -52,6 +53,16 @@ using namespace css;
 class SheetViewTest : public ScTiledRenderingTest
 {
 protected:
+    static ScRange getAutoFilterArea(ScDocument& rDocument, SCTAB nTab)
+    {
+        ScDBData* pDBData = rDocument.GetAnonymousDBData(nTab);
+        CPPUNIT_ASSERT(pDBData);
+        CPPUNIT_ASSERT(pDBData->HasAutoFilter());
+        ScRange aRange;
+        pDBData->GetArea(aRange);
+        return aRange;
+    }
+
     static OUString expectedValues(std::vector<std::u16string_view> const& rValues)
     {
         OUString aString;
@@ -3773,6 +3784,104 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteSparklineGroup_DefaultAndSheetView
 
         // Verify synced to sheet view
         CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(1, 2, nSheetViewTab)));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertCells_DefaultAndSheetView)
+{
+    // Test sync to sheet view when inserting rows
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // Put data below autofilter range so we can verify the row insert syncs
+    rDocument.SetString(ScAddress(0, 6, 0), u"ABC"_ustr);
+
+    setupViews();
+
+    // Create sheet view and sort descending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+
+    // Verify initial state: range A2:A5
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Insert row before row 7 in default view (outside autofilter range)
+    {
+        switchToDefaultView();
+
+        sc::InsertCellsOperation aOperation(
+            *pDocShell, ScRange(0, 6, nDefaultViewTab, rDocument.MaxCol(), 6, nDefaultViewTab),
+            nullptr, INS_INSROWS_BEFORE, true, true, false, 0);
+        CPPUNIT_ASSERT(aOperation.run());
+
+        // Autofilter data unchanged in both views
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // "ABC" shifted from A7 to A8, A7 is now empty - synced to both views
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, rDocument.GetString(ScAddress(0, 6, nDefaultViewTab)));
+        CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(0, 7, nDefaultViewTab)));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, rDocument.GetString(ScAddress(0, 6, nSheetViewTab)));
+        CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, rDocument.GetString(ScAddress(0, 7, nSheetViewTab)));
+    }
+
+    // Insert row in autofilter range from default view
+    {
+        switchToDefaultView();
+
+        sc::InsertCellsOperation aOperation(
+            *pDocShell, ScRange(0, 2, nDefaultViewTab, rDocument.MaxCol(), 2, nDefaultViewTab),
+            nullptr, INS_INSROWS_BEFORE, true, true, false, 0);
+        CPPUNIT_ASSERT(aOperation.run());
+
+        // Default view: inserted empty row into A3
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"", u"5", u"3", u"7" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 5));
+        // Sheet view re-sorted descending
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3", u"" }),
+                             getValues(mpTabViewSheetView, 0, 1, 5));
+
+        // Auto-filter range should have expanded to A1:A6 on both views
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 5, nDefaultViewTab),
+                             getAutoFilterArea(rDocument, nDefaultViewTab));
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 0, 5, nSheetViewTab),
+                             getAutoFilterArea(rDocument, nSheetViewTab));
+    }
+
+    // Insert row on sheet view in autofilter range — should be blocked
+    {
+        switchToSheetView();
+
+        sc::InsertCellsOperation aOperation(
+            *pDocShell, ScRange(0, 2, nSheetViewTab, rDocument.MaxCol(), 2, nSheetViewTab), nullptr,
+            INS_INSROWS_BEFORE, true, true, false, 0);
+        CPPUNIT_ASSERT(!aOperation.run());
+
+        // Values should remain unchanged
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"", u"5", u"3", u"7" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 5));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3", u"" }),
+                             getValues(mpTabViewSheetView, 0, 1, 5));
+
+        // Auto-filter ranges should remain unchanged
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 5, nDefaultViewTab),
+                             getAutoFilterArea(rDocument, nDefaultViewTab));
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 0, 5, nSheetViewTab),
+                             getAutoFilterArea(rDocument, nSheetViewTab));
     }
 }
 

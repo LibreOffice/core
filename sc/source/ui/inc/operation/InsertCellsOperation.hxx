@@ -19,7 +19,7 @@ class ScMarkData;
 namespace sc
 {
 /** Operation which inserts cells, rows, or columns. */
-class InsertCellsOperation : public Operation
+class SC_DLLPUBLIC InsertCellsOperation : public Operation
 {
 private:
     ScDocShell& mrDocShell;
@@ -29,6 +29,7 @@ private:
     bool mbPartOfPaste;
     size_t mnInsertCount;
 
+    bool canRunTheOperation() const override;
     bool runImplementation() override;
 
     static OperationType toOperationType(InsCellCmd eCmd);

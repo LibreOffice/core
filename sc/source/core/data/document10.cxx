@@ -1226,10 +1226,27 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
     if (!pManager || pManager->isEmpty())
         return;
 
+    // Get the anonymous DB data for the default view table
+    ScDBData* pDefaultViewDBData = GetAnonymousDBData(nDefaultViewTable);
+
     // Iterate all valid sheet views
     for (auto& rSheetView : pManager->iterateValidSheetViews())
     {
         SCTAB nSheetViewTab = rSheetView.getTableNumber();
+
+        // Syncronize sheet view's anonymous DB data range with default view
+        if (pDefaultViewDBData)
+        {
+            ScDBData* pSheetViewDBData = GetAnonymousDBData(nSheetViewTab);
+            if (pSheetViewDBData)
+            {
+                ScRange aDefaultRange;
+                pDefaultViewDBData->GetArea(aDefaultRange);
+                aDefaultRange.SetTab(nSheetViewTab);
+                pSheetViewDBData->SetArea(aDefaultRange);
+            }
+        }
+
         // Get the current query (filter) state of the auto-filter
         std::optional<ScQueryParam> oQueryParam;
         ScDBData* pNoNameData = GetAnonymousDBData(nSheetViewTab);
