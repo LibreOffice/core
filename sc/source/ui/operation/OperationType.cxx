@@ -96,6 +96,8 @@ std::string_view operationTypeString(OperationType eOperation)
             return "SubTotals";
         case OperationType::PivotTableUpdate:
             return "PivotTableUpdate";
+        case OperationType::PivotTableReplace:
+            return "PivotTableReplace";
         case OperationType::PivotTableRemove:
             return "PivotTableRemove";
         case OperationType::PivotTableCreate:
