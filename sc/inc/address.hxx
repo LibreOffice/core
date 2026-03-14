@@ -541,6 +541,11 @@ public:
         aStart.SetInvalid();
         aEnd.SetInvalid();
     }
+    void SetTab( SCTAB nTab )
+    {
+        aStart.SetTab( nTab );
+        aEnd.SetTab( nTab );
+    }
     bool IsValid() const
     {
         return aStart.IsValid() && aEnd.IsValid();
@@ -974,5 +979,13 @@ inline OUString ScColToAlpha( SCCOL nCol )
 
 /// get column number of A..IV... string
 bool AlphaToCol(const ScDocument& rDoc, SCCOL& rCol, std::u16string_view rStr);
+
+inline std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange)
+{
+    rStrm << "ScRange(" << rRange.aStart.Col() << "," << rRange.aStart.Row() << ","
+          << rRange.aStart.Tab() << "," << rRange.aEnd.Col() << "," << rRange.aEnd.Row() << ","
+          << rRange.aEnd.Tab() << ")";
+    return rStrm;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

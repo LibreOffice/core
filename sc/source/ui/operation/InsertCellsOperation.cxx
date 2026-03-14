@@ -25,6 +25,7 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 
+#include <SheetViewManager.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/weld.hxx>
@@ -169,6 +170,11 @@ OperationType InsertCellsOperation::toOperationType(InsCellCmd eCmd)
         default:
             return OperationType::Unknown;
     }
+}
+
+bool InsertCellsOperation::canRunTheOperation() const
+{
+    return !isInputOnSheetViewAutoFilter(maRange);
 }
 
 bool InsertCellsOperation::runImplementation()
@@ -742,6 +748,19 @@ bool InsertCellsOperation::runImplementation()
             pViewSh->OnLOKInsertDeleteRow(
                 maRange.aStart.Row() - (meCmd == INS_INSROWS_BEFORE ? 1 : 0), 1);
         }
+
+        // Make sheet view manager aware of inserted rows
+        if (bInsertRows)
+        {
+            SCROW nInsertedRowCount = nEndRow - nStartRow + 1;
+            SCTAB nDefaultViewTab = rDoc.GetDefaultViewTableNumber(nStartTab);
+            std::shared_ptr<sc::SheetViewManager> pManager
+                = rDoc.GetSheetViewManager(nDefaultViewTab);
+            if (pManager)
+                pManager->insertedRows(nStartRow, nInsertedRowCount);
+        }
+
+        syncSheetViews();
     }
 
     aModificator.SetDocumentModified();

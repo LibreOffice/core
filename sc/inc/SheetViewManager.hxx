@@ -127,6 +127,9 @@ public:
     void addOrderIndices(SortOrderInfo const& rSortInfo);
 
     void mergeReorderParameters(ReorderParam const& rReorderParameters);
+
+    /** Update when rows are inserted. */
+    void insertedRows(SCROW nStartRow, SCROW nRowCount);
 };
 }
 

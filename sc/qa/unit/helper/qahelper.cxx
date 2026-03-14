@@ -75,12 +75,6 @@ std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
     return rStrm;
 }
 
-std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange)
-{
-    rStrm << "ScRange: " << rRange.aStart << rRange.aEnd << "\n";
-    return rStrm;
-}
-
 std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList)
 {
     rStrm << "ScRangeList: \n";

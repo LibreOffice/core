@@ -29,6 +29,20 @@ std::vector<SCCOLROW> mergeOrder(std::vector<SCCOLROW> const& rExistingOrder,
     }
     return aNewOrder;
 }
+
+/** Adjust order indices when rows are inserted within a sorted range. */
+void expandOrderIndices(std::vector<SCCOLROW>& rOrder, SCROW nStartRow, SCROW nFirstRow,
+                        SCROW nCount)
+{
+    SCCOLROW nOffset = nStartRow - nFirstRow + 1; // 1-based
+    for (auto& rValue : rOrder)
+    {
+        if (rValue >= nOffset)
+            rValue += nCount;
+    }
+    for (SCROW i = 0; i < nCount; ++i)
+        rOrder.push_back(nOffset + i);
+}
 }
 
 void SortOrderReverser::addOrderIndices(SortOrderInfo const& rSortInfo)
@@ -89,6 +103,26 @@ SCROW SortOrderReverser::resort(SCROW nRow, SCCOL nColumn) const
             return maSortInfo.mnFirstRow + nIndex;
     }
     return nRow;
+}
+
+void SortOrderReverser::insertedRows(SCROW nStartRow, SCROW nRowCount)
+{
+    if (nStartRow > maSortInfo.mnLastRow)
+    {
+        // After the sort range - nothing to do.
+    }
+    else if (nStartRow < maSortInfo.mnFirstRow)
+    {
+        // Before the sort range - shift the whole range.
+        maSortInfo.mnFirstRow += nRowCount;
+        maSortInfo.mnLastRow += nRowCount;
+    }
+    else
+    {
+        // At start of or within the sort range - expand and update order.
+        expandOrderIndices(maSortInfo.maOrder, nStartRow, maSortInfo.mnFirstRow, nRowCount);
+        maSortInfo.mnLastRow += nRowCount;
+    }
 }
 
 SheetView::SheetView(ScTable* pTable, OUString const& rName, SheetViewID nID)
@@ -154,6 +188,54 @@ SCROW SheetView::reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const
         nResortedRow = aReverser.resort(nUnsortedRow, nColumn);
     }
     return nResortedRow;
+}
+
+void SheetView::adjustReorderParamsForInsert(SCROW nStartRow, SCROW nRowCount)
+{
+    if (!moOriginalReorderParams)
+        return;
+
+    ScRange& rRange = moOriginalReorderParams->maSortRange;
+    if (nStartRow < rRange.aStart.Row())
+    {
+        rRange.aStart.IncRow(nRowCount);
+        rRange.aEnd.IncRow(nRowCount);
+    }
+    else if (nStartRow <= rRange.aEnd.Row())
+    {
+        expandOrderIndices(moOriginalReorderParams->maOrderIndices, nStartRow, rRange.aStart.Row(),
+                           nRowCount);
+        rRange.aEnd.IncRow(nRowCount);
+    }
+}
+
+void SheetView::adjustSortParamForInsert(SCROW nStartRow, SCROW nRowCount)
+{
+    if (!moSortParam)
+        return;
+
+    if (nStartRow < moSortParam->nRow1)
+    {
+        moSortParam->nRow1 += nRowCount;
+        moSortParam->nRow2 += nRowCount;
+    }
+    else if (nStartRow <= moSortParam->nRow2)
+    {
+        moSortParam->nRow2 += nRowCount;
+    }
+}
+
+void SheetView::insertedRows(SCROW nStartRow, SCROW nRowCount)
+{
+    // Update the sheet view's own sort order (row reordering within the sheet view)
+    if (moSortOrder)
+        moSortOrder->insertedRows(nStartRow, nRowCount);
+
+    // Update the reorder params that track the default view's sort since sheet view creation
+    adjustReorderParamsForInsert(nStartRow, nRowCount);
+
+    // Update the stored sort parameters (the range the sheet view was sorted on)
+    adjustSortParamForInsert(nStartRow, nRowCount);
 }
 
 } // end sc namespace

@@ -202,6 +202,96 @@ CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testResort)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testInsertedRows)
+{
+    // Insert after sort range - no change
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.insertedRows(10, 2);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aReverser.maSortInfo.maOrder.size());
+        // Order values unchanged
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(3), aReverser.maSortInfo.maOrder[0]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[1]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(4), aReverser.maSortInfo.maOrder[2]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[3]);
+    }
+
+    // Insert before sort range - shift the whole range
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.insertedRows(2, 3);
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(11), aReverser.maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aReverser.maSortInfo.maOrder.size());
+        // Order values unchanged
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(3), aReverser.maSortInfo.maOrder[0]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[1]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(4), aReverser.maSortInfo.maOrder[2]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[3]);
+    }
+
+    // Insert at start of sort range - expand the range
+    {
+        sc::SortOrderReverser aReverser;
+        // Order {3, 1, 4, 2}
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        // Insert 1 row at row 5
+        aReverser.insertedRows(5, 1);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.maSortInfo.mnFirstRow); // unchanged
+        CPPUNIT_ASSERT_EQUAL(SCROW(9), aReverser.maSortInfo.mnLastRow); // expanded by 1
+        CPPUNIT_ASSERT_EQUAL(size_t(5), aReverser.maSortInfo.maOrder.size()); // 4 + 1 new
+        // Shift all >=1 by 1, append 1
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(4), aReverser.maSortInfo.maOrder[0]); // 3 -> 4
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[1]); // 1 -> 2
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(5), aReverser.maSortInfo.maOrder[2]); // 4 -> 5
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(3), aReverser.maSortInfo.maOrder[3]); // 2 -> 3
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[4]); // new, 1
+    }
+
+    // Insert at end of sort range - expand the range
+    {
+        sc::SortOrderReverser aReverser;
+        // Order {3, 1, 4, 2}
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        // Insert 1 row at row 8
+        aReverser.insertedRows(8, 1);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(9), aReverser.maSortInfo.mnLastRow); // expanded by 1
+        CPPUNIT_ASSERT_EQUAL(size_t(5), aReverser.maSortInfo.maOrder.size()); // 4 + 1 new
+        // Shift all >=4 by 1, append 4
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(3), aReverser.maSortInfo.maOrder[0]); // no change
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[1]); // no change
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(5), aReverser.maSortInfo.maOrder[2]); // 4 -> 5
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[3]); // no change
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(4), aReverser.maSortInfo.maOrder[4]); // new, 4
+    }
+
+    // Insert within sort range - expand and update order
+    {
+        sc::SortOrderReverser aReverser;
+        // Order {3, 1, 4, 2}
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        // Insert 2 rows at row 7 (offset 3 in 1-based = within range)
+        aReverser.insertedRows(7, 2);
+
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(10), aReverser.maSortInfo.mnLastRow); // expanded by 2
+        CPPUNIT_ASSERT_EQUAL(size_t(6), aReverser.maSortInfo.maOrder.size()); // 4 + 2 new
+
+        // Shift all >=3 by 2, append 3 and 4
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(5), aReverser.maSortInfo.maOrder[0]); // 3 -> 5
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[1]); // no change
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(6), aReverser.maSortInfo.maOrder[2]); // 4 -> 6
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[3]); // no change
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(3), aReverser.maSortInfo.maOrder[4]); // new, 3
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(4), aReverser.maSortInfo.maOrder[5]); // new, 4
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
