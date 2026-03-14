@@ -4084,6 +4084,86 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnSheetView)
     CPPUNIT_ASSERT(!rSheetView.getSortParam().has_value());
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnDefaultView)
+{
+    // Test:
+    // - create sheet view with sort
+    // - sort default view
+    // - undo default view sort
+    // - edit on default view
+    // - verify sheet view sync
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // Create sheet view and sort descending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+
+    // Initial state: default unsorted, sheet view descending
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Sort ascending on default view
+    {
+        switchToDefaultView();
+        sortAscendingForCell(u"A1");
+    }
+
+    // Default view now ascending, sheet view still descending
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // SheetViewManager should have sort data from the default view sort
+    std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
+    CPPUNIT_ASSERT(pManager);
+    CPPUNIT_ASSERT(pManager->getSortOrder().has_value());
+
+    // Undo the default view sort
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // Default view should be back to original order
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+
+    // Default view sort data should be restored (no sort)
+    CPPUNIT_ASSERT(!pManager->getSortOrder().has_value());
+
+    // Sheet view should still be descending
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Edit a cell on the default view to trigger sync - change A2
+    {
+        switchToDefaultView();
+        typeCharsInCell(std::string("44"), 0, 1, mpTabViewDefaultView, pModelObj);
+    }
+
+    // Default view: A2=44 replaces 4
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"44", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+
+    // Sheet view should be synced and still sorted descending with the new value
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"44", u"7", u"5", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+}
+
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_RemoveAutoFilter_DefaultAndSheetView)
 {
     // Test that removing auto-filter from default view removes it from sheet view
