@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <scdllapi.h>
 #include <operation/OperationType.hxx>
 #include <types.hxx>
 
@@ -79,7 +80,7 @@ public:
     Operation(OperationType eType, bool bRecord, bool bApi);
 
     /** Run the operation */
-    bool run();
+    SC_DLLPUBLIC bool run();
 };
 
 } // end sc namespace
