@@ -9,24 +9,22 @@
 
 #pragma once
 
-#include "Operation.hxx"
+#include "PivotTableOperation.hxx"
 
-class ScDocShell;
 class ScDPObject;
 
 namespace sc
 {
 /** Removes the pivot table identified by the input object. */
-class RemovePivotTableOperation : public Operation
+class RemovePivotTableOperation : public PivotTableOperation
 {
 private:
-    ScDocShell& mrDocShell;
-    ScDPObject const& mrDPObj;
+    ScDPObject const& mrDPObject;
 
     bool runImplementation() override;
 
 public:
-    RemovePivotTableOperation(ScDocShell& rDocShell, ScDPObject const& rDPObj, bool bRecord,
+    RemovePivotTableOperation(ScDocShell& rDocShell, ScDPObject const& rDPObject, bool bRecord,
                               bool bApi);
 };
 } // end sc namespace
