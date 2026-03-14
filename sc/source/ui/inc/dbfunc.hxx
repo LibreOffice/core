@@ -61,7 +61,7 @@ public:
 
     void            DeleteCalcTable();
 
-    void            ToggleAutoFilter();
+    SC_DLLPUBLIC void ToggleAutoFilter();
     void            HideAutoFilter();
     void            ClearAutoFilter();
 

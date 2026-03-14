@@ -3992,6 +3992,127 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteCells_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_RemoveAutoFilter_DefaultAndSheetView)
+{
+    // Test that removing auto-filter from default view removes it from sheet view
+    // and resets the sort data in SheetView and SheetViewManager
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // Create sheet view and sort descending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+
+    // Verify initial state
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Verify auto-filter exists on both views
+    ScDBData* pDefaultDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+    CPPUNIT_ASSERT(pDefaultDBData);
+    CPPUNIT_ASSERT(pDefaultDBData->HasAutoFilter());
+
+    ScDBData* pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+    CPPUNIT_ASSERT(pSheetViewDBData);
+    CPPUNIT_ASSERT(pSheetViewDBData->HasAutoFilter());
+
+    // Verify SheetView has sort data
+    std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
+    CPPUNIT_ASSERT(pManager);
+    CPPUNIT_ASSERT(!pManager->isEmpty());
+
+    auto& rSheetView = *pManager->iterateValidSheetViews().begin();
+    CPPUNIT_ASSERT(rSheetView.getSortOrder().has_value());
+    CPPUNIT_ASSERT(rSheetView.getSortParam().has_value());
+
+    // Remove auto-filter from default view
+    {
+        switchToDefaultView();
+        gotoCell(u"A1");
+        mpTabViewDefaultView->ToggleAutoFilter();
+    }
+
+    // Verify auto-filter is removed from default view
+    pDefaultDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+    CPPUNIT_ASSERT(!pDefaultDBData || !pDefaultDBData->HasAutoFilter());
+
+    // Verify auto-filter is removed from sheet view
+    pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+    CPPUNIT_ASSERT(!pSheetViewDBData || !pSheetViewDBData->HasAutoFilter());
+
+    // Verify data is same in both views (unsorted, since auto-filter is gone)
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Verify SheetView sort data is reset
+    CPPUNIT_ASSERT(!rSheetView.getSortOrder().has_value());
+    CPPUNIT_ASSERT(!rSheetView.getSortParam().has_value());
+
+    // Undo removing auto-filter from default view
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // Verify auto-filter is back on both views
+    pDefaultDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+    CPPUNIT_ASSERT(pDefaultDBData);
+    CPPUNIT_ASSERT(pDefaultDBData->HasAutoFilter());
+
+    pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+    CPPUNIT_ASSERT(pSheetViewDBData);
+    CPPUNIT_ASSERT(pSheetViewDBData->HasAutoFilter());
+
+    // Verify data is restored - both views show same data
+    // (sort data was reset, so sheet view is no longer sorted)
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // TODO: Sort data is not restored by undo - we expect it should be.
+    CPPUNIT_ASSERT(!rSheetView.getSortOrder().has_value());
+    CPPUNIT_ASSERT(!rSheetView.getSortParam().has_value());
+
+    // Redo removing auto-filter
+    {
+        switchToDefaultView();
+        redo();
+    }
+
+    // Verify auto-filter is removed again from both views
+    pDefaultDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+    CPPUNIT_ASSERT(!pDefaultDBData || !pDefaultDBData->HasAutoFilter());
+
+    pSheetViewDBData = rDocument.GetAnonymousDBData(nSheetViewTab);
+    CPPUNIT_ASSERT(!pSheetViewDBData || !pSheetViewDBData->HasAutoFilter());
+
+    // Verify data is unsorted on both views
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Verify SheetView sort data is reset again
+    CPPUNIT_ASSERT(!rSheetView.getSortOrder().has_value());
+    CPPUNIT_ASSERT(!rSheetView.getSortParam().has_value());
+}
+
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_PivotTable_DefaultAndSheetView)
 {
     // Test sync to sheet view when creating and updating the pivot table
