@@ -92,6 +92,17 @@ void SheetViewManager::insertedRows(SCROW nStartRow, SCROW nRowCount)
         rSheetView.insertedRows(nStartRow, nRowCount);
     }
 }
+
+void SheetViewManager::deletedRows(SCROW nStartRow, SCROW nRowCount)
+{
+    if (moSortOrder)
+        moSortOrder->deletedRows(nStartRow, nRowCount);
+
+    for (auto& rSheetView : iterateValidSheetViews())
+    {
+        rSheetView.deletedRows(nStartRow, nRowCount);
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

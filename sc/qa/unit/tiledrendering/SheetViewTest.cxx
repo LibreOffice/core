@@ -38,6 +38,7 @@
 #include <SparklineAttributes.hxx>
 #include <SparklineGroup.hxx>
 #include <dpobject.hxx>
+#include <operation/DeleteCellsOperation.hxx>
 #include <operation/InsertCellsOperation.hxx>
 #include <operation/ReplacePivotTableOperation.hxx>
 #include <dpshttab.hxx>
@@ -3881,6 +3882,112 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertCells_DefaultAndSheetView)
         CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 5, nDefaultViewTab),
                              getAutoFilterArea(rDocument, nDefaultViewTab));
         CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 0, 5, nSheetViewTab),
+                             getAutoFilterArea(rDocument, nSheetViewTab));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteCells_DefaultAndSheetView)
+{
+    // Test sync to sheet view when deleting rows
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    // Put data below autofilter range so we can verify the row delete syncs
+    rDocument.SetString(ScAddress(0, 6, 0), u"ABC"_ustr);
+
+    setupViews();
+
+    // Create sheet view and sort descending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+
+    // Verify initial state - autofilter range A1:A5, data A2:A5
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 4, nDefaultViewTab),
+                         getAutoFilterArea(rDocument, nDefaultViewTab));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 0, 4, nSheetViewTab),
+                         getAutoFilterArea(rDocument, nSheetViewTab));
+
+    // Delete row 7 from default view (outside autofilter range)
+    {
+        switchToDefaultView();
+
+        sc::DeleteCellsOperation aOperation(
+            *pDocShell, ScRange(0, 6, nDefaultViewTab, rDocument.MaxCol(), 6, nDefaultViewTab),
+            nullptr, DelCellCmd::Rows, true);
+        CPPUNIT_ASSERT(aOperation.run());
+
+        // Autofilter data unchanged in both views
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 4));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                             getValues(mpTabViewSheetView, 0, 1, 4));
+
+        // "ABC" was in A7 - now deleted on both views
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, rDocument.GetString(ScAddress(0, 6, nDefaultViewTab)));
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, rDocument.GetString(ScAddress(0, 6, nSheetViewTab)));
+
+        // Autofilter range unchanged on both views (delete was outside)
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 4, nDefaultViewTab),
+                             getAutoFilterArea(rDocument, nDefaultViewTab));
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 0, 4, nSheetViewTab),
+                             getAutoFilterArea(rDocument, nSheetViewTab));
+    }
+
+    // Delete row in autofilter range from default view (delete row 3)
+    {
+        switchToDefaultView();
+
+        sc::DeleteCellsOperation aOperation(
+            *pDocShell, ScRange(0, 2, nDefaultViewTab, rDocument.MaxCol(), 2, nDefaultViewTab),
+            nullptr, DelCellCmd::Rows, true);
+        CPPUNIT_ASSERT(aOperation.run());
+
+        // Default view: row 3 deleted, range is now A2:A4
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"3", u"7" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 3));
+        // Sheet view re-sorted
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"4", u"3" }),
+                             getValues(mpTabViewSheetView, 0, 1, 3));
+
+        // Autofilter range should have shrunk from A1:A5 to A1:A4 on both views
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 3, nDefaultViewTab),
+                             getAutoFilterArea(rDocument, nDefaultViewTab));
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 0, 3, nSheetViewTab),
+                             getAutoFilterArea(rDocument, nSheetViewTab));
+    }
+
+    // Delete row on sheet view in autofilter range - should be blocked
+    {
+        switchToSheetView();
+
+        sc::DeleteCellsOperation aOperation(
+            *pDocShell, ScRange(0, 2, nSheetViewTab, rDocument.MaxCol(), 2, nSheetViewTab), nullptr,
+            DelCellCmd::Rows, true);
+        CPPUNIT_ASSERT(!aOperation.run());
+
+        // Values should remain unchanged
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"3", u"7" }),
+                             getValues(mpTabViewDefaultView, 0, 1, 3));
+        CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"4", u"3" }),
+                             getValues(mpTabViewSheetView, 0, 1, 3));
+
+        // Autofilter ranges should remain unchanged
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 0, 3, nDefaultViewTab),
+                             getAutoFilterArea(rDocument, nDefaultViewTab));
+        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 0, 3, nSheetViewTab),
                              getAutoFilterArea(rDocument, nSheetViewTab));
     }
 }

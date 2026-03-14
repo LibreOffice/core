@@ -19,7 +19,7 @@ class ScMarkData;
 namespace sc
 {
 /** Operation which deletes cells, rows, or columns. */
-class DeleteCellsOperation : public Operation
+class SC_DLLPUBLIC DeleteCellsOperation : public Operation
 {
 private:
     ScDocShell& mrDocShell;
@@ -27,6 +27,7 @@ private:
     ScMarkData const* mpTabMark;
     DelCellCmd meCmd;
 
+    bool canRunTheOperation() const override;
     bool runImplementation() override;
 
     static OperationType toOperationType(DelCellCmd eCmd);

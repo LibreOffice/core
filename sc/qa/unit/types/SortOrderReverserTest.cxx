@@ -292,6 +292,107 @@ CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testInsertedRows)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testDeletedRows)
+{
+    // Delete after sort range - no change
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.deletedRows(10, 2);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aReverser.maSortInfo.maOrder.size());
+        // Order values unchanged
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(3), aReverser.maSortInfo.maOrder[0]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[1]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(4), aReverser.maSortInfo.maOrder[2]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[3]);
+    }
+
+    // Delete before sort range - shift the whole range
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.deletedRows(2, 2);
+        CPPUNIT_ASSERT_EQUAL(SCROW(3), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aReverser.maSortInfo.maOrder.size());
+        // Order values unchanged
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(3), aReverser.maSortInfo.maOrder[0]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[1]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(4), aReverser.maSortInfo.maOrder[2]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[3]);
+    }
+
+    // Delete overlaps start - truncate from top
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        // Delete rows 4-5: row 4 is before range, row 5 is first row in range
+        aReverser.deletedRows(4, 2);
+        CPPUNIT_ASSERT_EQUAL(SCROW(4), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), aReverser.maSortInfo.maOrder.size());
+        // Remove value 1, shift remaining by -1
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[0]); // 3 -> 2
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(3), aReverser.maSortInfo.maOrder[1]); // 4 -> 3
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[2]); // 2 -> 1
+    }
+
+    // Delete entire sort range - clear everything
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.deletedRows(3, 8);
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), aReverser.maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT(aReverser.maSortInfo.maOrder.empty());
+    }
+
+    // Delete within sort range - shrink and update order
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        // Delete row 6 (offset 2 within range 5-8)
+        aReverser.deletedRows(6, 1);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), aReverser.maSortInfo.maOrder.size());
+        // Remove value 2 (offset 2), shift values >= 3 by -1
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[0]); // 3 -> 2
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[1]); // unchanged
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(3), aReverser.maSortInfo.maOrder[2]); // 4 -> 3
+    }
+
+    // Delete overlaps end - truncate from bottom
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        // Delete rows 7-10: rows 7-8 are within range, 9-10 are after
+        aReverser.deletedRows(7, 4);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aReverser.maSortInfo.maOrder.size());
+        // Remove values 3 and 4 (offset 3, count 2)
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[0]); // unchanged
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[1]); // unchanged
+    }
+
+    // Delete multiple rows within sort range - shrink and update order
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 0, 0, 5, 8, { 3, 1, 4, 2 }, {} });
+        // Delete rows 6-7 (offsets 2-3 within range 5-8)
+        aReverser.deletedRows(6, 2);
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.maSortInfo.mnFirstRow);
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.maSortInfo.mnLastRow);
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aReverser.maSortInfo.maOrder.size());
+        // Remove values 2 and 3 (offset 2, count 2)
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[0]); // unchanged
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[1]); // 4 -> 2
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,6 +25,8 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 
+#include <SheetViewManager.hxx>
+
 #include <sfx2/app.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
@@ -139,6 +141,11 @@ OperationType DeleteCellsOperation::toOperationType(DelCellCmd eCmd)
         default:
             return OperationType::Unknown;
     }
+}
+
+bool DeleteCellsOperation::canRunTheOperation() const
+{
+    return !isInputOnSheetViewAutoFilter(maRange);
 }
 
 bool DeleteCellsOperation::runImplementation()
@@ -743,16 +750,32 @@ bool DeleteCellsOperation::runImplementation()
     ScTabViewShell* pViewSh = mrDocShell.GetBestViewShell();
     if (pViewSh)
     {
-        if (meCmd == DelCellCmd::Cols)
+        bool bDeleteCols = (meCmd == DelCellCmd::Cols);
+        bool bDeleteRows = (meCmd == DelCellCmd::Rows);
+
+        if (bDeleteCols)
         {
             pViewSh->OnLOKInsertDeleteColumn(maRange.aStart.Col(),
                                              -1 * (maRange.aEnd.Col() - maRange.aStart.Col() + 1));
         }
-        if (meCmd == DelCellCmd::Rows)
+        if (bDeleteRows)
         {
             pViewSh->OnLOKInsertDeleteRow(maRange.aStart.Row(),
                                           -1 * (maRange.aEnd.Row() - maRange.aStart.Row() + 1));
         }
+
+        // Update sheet view sort ranges to account for deleted rows
+        if (bDeleteRows)
+        {
+            SCROW nDeletedRowCount = nEndRow - nStartRow + 1;
+            SCTAB nDefaultViewTab = rDoc.GetDefaultViewTableNumber(nStartTab);
+            std::shared_ptr<sc::SheetViewManager> pManager
+                = rDoc.GetSheetViewManager(nDefaultViewTab);
+            if (pManager)
+                pManager->deletedRows(nStartRow, nDeletedRowCount);
+        }
+
+        syncSheetViews();
     }
 
     aModificator.SetDocumentModified();
