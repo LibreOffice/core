@@ -15,6 +15,7 @@
 #include "SheetViewTypes.hxx"
 #include "sortparam.hxx"
 #include <optional>
+#include <memory>
 
 class ScTable;
 
@@ -59,6 +60,14 @@ public:
     void deletedRows(SCROW nStartRow, SCROW nRowCount);
 };
 
+/** Sort data holder. */
+struct SC_DLLPUBLIC SheetViewSortData
+{
+    std::optional<SortOrderReverser> moSortOrder;
+    std::optional<ReorderParam> moOriginalReorderParams;
+    std::optional<ScSortParam> moSortParam;
+};
+
 /** Stores information of a sheet view.
  *
  * A sheet view is a special view of a sheet that can be filtered and sorted
@@ -69,12 +78,13 @@ class SC_DLLPUBLIC SheetView
 private:
     ScTable* mpTable = nullptr;
     OUString maName;
-
-    std::optional<SortOrderReverser> moSortOrder;
     SheetViewID mnID;
 
-    std::optional<ReorderParam> moOriginalReorderParams;
-    std::optional<ScSortParam> moSortParam;
+    /** Sort data - nullptr when no sort has been performed. */
+    std::shared_ptr<SheetViewSortData> mpSortData;
+
+    /** Ensure sort data is allocated. */
+    SheetViewSortData& ensureSortData();
 
     void adjustReorderParamsForInsert(SCROW nStartRow, SCROW nRowCount);
     void adjustSortParamForInsert(SCROW nStartRow, SCROW nRowCount);
@@ -95,8 +105,8 @@ public:
     /** A sheet view is valid if the pointer to the table is set */
     bool isValid() const;
 
-    std::optional<SortOrderReverser> const& getSortOrder() const { return moSortOrder; }
-    void resetSortOrder() { moSortOrder.reset(); }
+    std::optional<SortOrderReverser> const& getSortOrder() const;
+    void resetSortOrder();
 
     /** Adds or combines the order indices.
      *
@@ -107,10 +117,8 @@ public:
 
     /** Merges the reorder parameters */
     void mergeReorderParameters(ReorderParam const& rReorderParameters);
-    std::optional<ReorderParam> const& getReorderParameters() const
-    {
-        return moOriginalReorderParams;
-    }
+    std::optional<ReorderParam> const& getReorderParameters() const;
+    void restoreReorderParameters(std::optional<ReorderParam> const& rParams);
 
     /** Reverses the complete (sheet view and default view) sorting order for the input row */
     SCROW reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const;
@@ -122,14 +130,20 @@ public:
     void deletedRows(SCROW nStartRow, SCROW nRowCount);
 
     /** Last used sort parameters */
-    std::optional<ScSortParam> const& getSortParam() const { return moSortParam; }
+    std::optional<ScSortParam> const& getSortParam() const;
 
     /** Remember last used sort parameters when sheet view was sorted. */
-    void setSortParam(ScSortParam const& rSortParam) { moSortParam = rSortParam; }
-    void resetSortParam() { moSortParam.reset(); }
+    void setSortParam(ScSortParam const& rSortParam);
+    void resetSortParam();
 
-    /** Reset all sort data */
+    /** Reset all sort data. */
     void resetSortData();
+
+    /** Capture current sort state (and deep copy). */
+    std::shared_ptr<SheetViewSortData> captureSortData() const;
+
+    /** Restore sort state from a previous capture. */
+    void restoreSortData(std::shared_ptr<SheetViewSortData> const& pData);
 };
 }
 

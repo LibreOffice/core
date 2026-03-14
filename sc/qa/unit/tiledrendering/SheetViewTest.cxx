@@ -3992,6 +3992,98 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteCells_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnSheetView)
+{
+    // Test case:
+    // - Create sheet view
+    // - Sort descending
+    // - Sort ascending
+    // - Undo
+    // - Undo
+    // Verify SheetView has correct sort data on each undo step
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+
+    // Verify initial unsorted state on both views
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Sort descending on sheet view
+    {
+        switchToSheetView();
+        sortDescendingForCell(u"A1");
+    }
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+
+    std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
+    CPPUNIT_ASSERT(pManager);
+    auto& rSheetView = *pManager->iterateValidSheetViews().begin();
+    CPPUNIT_ASSERT(rSheetView.getSortOrder().has_value());
+    CPPUNIT_ASSERT(rSheetView.getSortParam().has_value());
+
+    // Sort ascending on sheet view (second sort)
+    {
+        switchToSheetView();
+        sortAscendingForCell(u"A1");
+    }
+
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"3", u"4", u"5", u"7" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+
+    // Undo ascending sort - should revert to descending
+    {
+        switchToSheetView();
+        undo();
+    }
+
+    // After first undo, sheet view should show descending sort
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+
+    // SheetView sort data should reflect descending sort
+    CPPUNIT_ASSERT(rSheetView.getSortOrder().has_value());
+    CPPUNIT_ASSERT(rSheetView.getSortParam().has_value());
+
+    // Undo descending sort - should revert to original unsorted
+    {
+        switchToSheetView();
+        undo();
+    }
+
+    // After second undo, sheet view data should be unsorted
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+
+    // SheetView sort data should be fully reset
+    CPPUNIT_ASSERT(!rSheetView.getSortOrder().has_value());
+    CPPUNIT_ASSERT(!rSheetView.getSortParam().has_value());
+}
+
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_RemoveAutoFilter_DefaultAndSheetView)
 {
     // Test that removing auto-filter from default view removes it from sheet view
