@@ -56,6 +56,7 @@ enum class OperationType
     Query,
     SubTotals,
     PivotTableUpdate,
+    PivotTableReplace,
     PivotTableRemove,
     PivotTableCreate,
     SparklineInsert,

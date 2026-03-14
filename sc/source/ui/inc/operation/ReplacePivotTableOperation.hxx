@@ -9,27 +9,26 @@
 
 #pragma once
 
-#include "Operation.hxx"
+#include "PivotTableOperation.hxx"
 
-class ScDocShell;
 class ScDPObject;
 
 namespace sc
 {
-/** Data pilot update is used for various pivot table manipulation. */
-class DataPilotUpdateOperation : public Operation
+/** Replaces a pivot table's layout with settings from a different DPObject. */
+class ReplacePivotTableOperation : public PivotTableOperation
 {
 private:
-    ScDocShell& mrDocShell;
-    ScDPObject* mpOldObj;
-    ScDPObject const* mpNewObj;
+    ScDPObject* mpDPObject;
+    ScDPObject const* mpNewDPObject;
     bool mbAllowMove;
 
     bool runImplementation() override;
 
 public:
-    DataPilotUpdateOperation(ScDocShell& rDocShell, ScDPObject* pOldObj, ScDPObject const* pNewObj,
-                             bool bRecord, bool bApi, bool bAllowMove);
+    ReplacePivotTableOperation(ScDocShell& rDocShell, ScDPObject* pDPObject,
+                               ScDPObject const* pNewDPObject, bool bRecord, bool bApi,
+                               bool bAllowMove);
 };
 } // end sc namespace
 
