@@ -282,6 +282,13 @@ void OAuth2Request::Impl::sendResponse(tcp::socket& socket, std::string_view bod
 
     beast::error_code ec;
     http::write(socket, res, ec);
+    // tdf#171253: graceful half-close: send FIN so the peer reads the complete response;
+    // without this, the destructor's close() could send RST instead
+    socket.shutdown(tcp::socket::shutdown_send, ec);
+    // Wait for peer's FIN to avoid RST on close; timeout guards against a hung peer
+    socket.set_option(net::detail::socket_option::integer<SOL_SOCKET, SO_RCVTIMEO>(5000), ec);
+    char buf[1];
+    socket.read_some(net::buffer(buf), ec);
 }
 
 void OAuth2Request::Impl::sendCloseResponse(tcp::socket& socket, std::u16string_view error) const
