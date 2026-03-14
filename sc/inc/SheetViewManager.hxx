@@ -22,6 +22,14 @@ class ScTable;
 
 namespace sc
 {
+/** Captured sort data for a default view.*/
+struct SC_DLLPUBLIC DefaultViewSortData
+{
+    std::optional<SortOrderReverser> moSortOrder;
+    /// Per sheet view reorder params - only populated in captured snapshots.
+    std::vector<std::pair<SheetViewID, std::optional<ReorderParam>>> maSheetViewReorderParams;
+};
+
 /** Manager and the holder of the sheet views for a sheet. */
 class SC_DLLPUBLIC SheetViewManager
 {
@@ -30,7 +38,11 @@ private:
     size_t mnSheetViewCount = 0;
     sal_Int32 maNameCounter = 0;
 
-    std::optional<SortOrderReverser> moSortOrder;
+    /** Sort data for a default view. Null when no sort. */
+    std::shared_ptr<DefaultViewSortData> mpSortData;
+
+    /** Ensure sort data is allocated. */
+    DefaultViewSortData& ensureSortData();
 
     bool isValidSheetViewID(SheetViewID nID) const
     {
@@ -123,7 +135,7 @@ public:
 
     static OUString defaultViewName();
 
-    std::optional<SortOrderReverser> const& getSortOrder() const { return moSortOrder; }
+    std::optional<SortOrderReverser> const& getSortOrder() const;
     void addOrderIndices(SortOrderInfo const& rSortInfo);
 
     void mergeReorderParameters(ReorderParam const& rReorderParameters);
@@ -133,6 +145,12 @@ public:
 
     /** Update when rows are deleted. */
     void deletedRows(SCROW nStartRow, SCROW nRowCount);
+
+    /** Capture sort data (deep copy).*/
+    std::shared_ptr<DefaultViewSortData> captureSortData() const;
+
+    /** Restore sort data from a previous capture. */
+    void restoreSortData(std::shared_ptr<DefaultViewSortData> const& pData);
 };
 }
 
