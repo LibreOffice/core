@@ -913,7 +913,7 @@ void SdrModel::ImpSetUIUnit()
     }
 
     // end preparations, set member values
-    m_aUIUnitFact = Fraction(sal_Int32(nMul), sal_Int32(nDiv));
+    m_aUIUnitFact = double(nMul) / nDiv;
     m_aUIUnitStr = GetUnitString(m_eUIUnit);
 }
 
@@ -999,7 +999,7 @@ OUString SdrModel::GetMetricString(tools::Long nVal, bool bNoUnitChars, sal_Int3
     const bool bNegative(nVal < 0);
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc(aSysLoc.GetLocaleData());
-    double fLocalValue(double(nVal) * double(m_aUIUnitFact));
+    double fLocalValue(double(nVal) * m_aUIUnitFact);
 
     if(bNegative)
     {

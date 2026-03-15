@@ -160,7 +160,7 @@ protected:
     FieldUnit      m_eUIUnit;      // unit, scale (e.g. 1/1000) for the UI (status bar) is set by ImpSetUIUnit()
     double         m_aUIScale;     // see above
     OUString       m_aUIUnitStr;   // see above
-    Fraction       m_aUIUnitFact;  // see above
+    double         m_aUIUnitFact;  // see above
     int            m_nUIUnitDecimalMark; // see above
 
     std::unique_ptr<SdrLayerAdmin> m_pLayerAdmin;
