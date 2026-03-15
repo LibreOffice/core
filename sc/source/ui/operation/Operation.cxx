@@ -136,9 +136,9 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
     // Take sorting into account when we convert to default view
     if (aNewMark.GetTableSelect(nDefaultViewTab))
     {
-        std::optional<SortOrderReverser> const& oSortOrder = pSheetView->getSortOrder();
-        std::optional<ReorderParam> const& oReorderParams = pSheetView->getReorderParameters();
-        if (oSortOrder || oReorderParams)
+        SortOrderReverser const* pSortOrder = pSheetView->getSortOrder();
+        ReorderParam const* pReorderParams = pSheetView->getReorderParameters();
+        if (pSortOrder || pReorderParams)
         {
             std::vector<std::pair<SCCOL, SCROW>> aMarkedCells;
 
@@ -147,9 +147,9 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
             SCCOL nColumnStart = -1;
             SCCOL nColumnEnd = -1;
 
-            if (oSortOrder)
+            if (pSortOrder)
             {
-                SortOrderInfo const& rSortInfo = oSortOrder->maSortInfo;
+                SortOrderInfo const& rSortInfo = pSortOrder->maSortInfo;
                 nRowStart = rSortInfo.mnFirstRow;
                 nRowEnd = rSortInfo.mnLastRow;
                 nColumnStart = rSortInfo.mnFirstColumn;
@@ -157,7 +157,7 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
             }
             else
             {
-                ScRange const& rSortRange = oReorderParams->maSortRange;
+                ScRange const& rSortRange = pReorderParams->maSortRange;
                 nRowStart = rSortRange.aStart.Row();
                 nRowEnd = rSortRange.aEnd.Row();
                 nColumnStart = rSortRange.aStart.Col();

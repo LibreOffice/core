@@ -14,11 +14,6 @@
 
 namespace sc
 {
-namespace
-{
-const std::optional<SortOrderReverser> sEmptySortOrder;
-}
-
 SheetViewManager::SheetViewManager() {}
 
 SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
@@ -79,17 +74,16 @@ DefaultViewSortData& SheetViewManager::ensureSortData()
     return *mpSortData;
 }
 
-std::optional<SortOrderReverser> const& SheetViewManager::getSortOrder() const
+SortOrderReverser const* SheetViewManager::getSortOrder() const
 {
-    return mpSortData ? mpSortData->moSortOrder : sEmptySortOrder;
+    if (!mpSortData || mpSortData->maSortOrder.maSortInfo.maOrder.empty())
+        return nullptr;
+    return &mpSortData->maSortOrder;
 }
 
 void SheetViewManager::addOrderIndices(SortOrderInfo const& rSortInfo)
 {
-    auto& rSortOrder = ensureSortData().moSortOrder;
-    if (!rSortOrder)
-        rSortOrder.emplace();
-    rSortOrder->addOrderIndices(rSortInfo);
+    ensureSortData().maSortOrder.addOrderIndices(rSortInfo);
 }
 
 void SheetViewManager::mergeReorderParameters(ReorderParam const& rReorderParameters)
@@ -102,8 +96,8 @@ void SheetViewManager::mergeReorderParameters(ReorderParam const& rReorderParame
 
 void SheetViewManager::insertedRows(SCROW nStartRow, SCROW nRowCount)
 {
-    if (mpSortData && mpSortData->moSortOrder)
-        mpSortData->moSortOrder->insertedRows(nStartRow, nRowCount);
+    if (mpSortData)
+        mpSortData->maSortOrder.insertedRows(nStartRow, nRowCount);
 
     for (auto& rSheetView : iterateValidSheetViews())
     {
@@ -113,8 +107,8 @@ void SheetViewManager::insertedRows(SCROW nStartRow, SCROW nRowCount)
 
 void SheetViewManager::deletedRows(SCROW nStartRow, SCROW nRowCount)
 {
-    if (mpSortData && mpSortData->moSortOrder)
-        mpSortData->moSortOrder->deletedRows(nStartRow, nRowCount);
+    if (mpSortData)
+        mpSortData->maSortOrder.deletedRows(nStartRow, nRowCount);
 
     for (auto& rSheetView : iterateValidSheetViews())
     {
@@ -134,8 +128,9 @@ std::shared_ptr<DefaultViewSortData> SheetViewManager::captureSortData() const
     pSortDataCopy->maSheetViewReorderParams.clear();
     for (auto const& rSheetView : iterateValidSheetViews())
     {
-        pSortDataCopy->maSheetViewReorderParams.emplace_back(rSheetView.getID(),
-                                                             rSheetView.getReorderParameters());
+        auto const* pReorderParams = rSheetView.getReorderParameters();
+        pSortDataCopy->maSheetViewReorderParams.emplace_back(
+            rSheetView.getID(), pReorderParams ? *pReorderParams : ReorderParam());
     }
     return pSortDataCopy;
 }
@@ -149,20 +144,20 @@ void SheetViewManager::restoreSortData(std::shared_ptr<DefaultViewSortData> cons
     else
     {
         mpSortData = std::make_shared<DefaultViewSortData>();
-        mpSortData->moSortOrder = pData->moSortOrder;
+        mpSortData->maSortOrder = pData->maSortOrder;
     }
 
     // Restore per sheet view reorder params
     if (!pData)
         return;
 
-    for (auto const & [ nID, oReorderParams ] : pData->maSheetViewReorderParams)
+    for (auto const & [ nID, rReorderParams ] : pData->maSheetViewReorderParams)
     {
         if (isValidSheetViewID(nID))
         {
             auto pSheetView = get(nID);
             if (pSheetView)
-                pSheetView->restoreReorderParameters(oReorderParams);
+                pSheetView->restoreReorderParameters(rReorderParams);
         }
     }
 }

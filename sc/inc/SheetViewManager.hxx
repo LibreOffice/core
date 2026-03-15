@@ -25,9 +25,9 @@ namespace sc
 /** Captured sort data for a default view.*/
 struct SC_DLLPUBLIC DefaultViewSortData
 {
-    std::optional<SortOrderReverser> moSortOrder;
+    SortOrderReverser maSortOrder;
     /// Per sheet view reorder params - only populated in captured snapshots.
-    std::vector<std::pair<SheetViewID, std::optional<ReorderParam>>> maSheetViewReorderParams;
+    std::vector<std::pair<SheetViewID, ReorderParam>> maSheetViewReorderParams;
 };
 
 /** Manager and the holder of the sheet views for a sheet. */
@@ -135,7 +135,7 @@ public:
 
     static OUString defaultViewName();
 
-    std::optional<SortOrderReverser> const& getSortOrder() const;
+    SortOrderReverser const* getSortOrder() const;
     void addOrderIndices(SortOrderInfo const& rSortInfo);
 
     void mergeReorderParameters(ReorderParam const& rReorderParameters);

@@ -64,9 +64,9 @@ public:
 /** Sort data holder. */
 struct SC_DLLPUBLIC SheetViewSortData
 {
-    std::optional<SortOrderReverser> moSortOrder;
-    std::optional<ReorderParam> moOriginalReorderParams;
-    std::optional<ScSortParam> moSortParam;
+    SortOrderReverser maSortOrder;
+    ReorderParam maOriginalReorderParams;
+    ScSortParam maSortParam;
 };
 
 /** Stores information of a sheet view.
@@ -106,7 +106,7 @@ public:
     /** A sheet view is valid if the pointer to the table is set */
     bool isValid() const;
 
-    std::optional<SortOrderReverser> const& getSortOrder() const;
+    SortOrderReverser const* getSortOrder() const;
     void resetSortOrder();
 
     /** Adds or combines the order indices.
@@ -118,8 +118,8 @@ public:
 
     /** Merges the reorder parameters */
     void mergeReorderParameters(ReorderParam const& rReorderParameters);
-    std::optional<ReorderParam> const& getReorderParameters() const;
-    void restoreReorderParameters(std::optional<ReorderParam> const& rParams);
+    ReorderParam const* getReorderParameters() const;
+    void restoreReorderParameters(ReorderParam const& rParams);
 
     /** Reverses the complete (sheet view and default view) sorting order for the input row */
     SCROW reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const;
@@ -131,11 +131,10 @@ public:
     void deletedRows(SCROW nStartRow, SCROW nRowCount);
 
     /** Last used sort parameters */
-    std::optional<ScSortParam> const& getSortParam() const;
+    ScSortParam const* getSortParam() const;
 
     /** Remember last used sort parameters when sheet view was sorted. */
     void setSortParam(ScSortParam const& rSortParam);
-    void resetSortParam();
 
     /** Reset all sort data. */
     void resetSortData();
