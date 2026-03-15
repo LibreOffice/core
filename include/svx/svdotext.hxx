@@ -270,7 +270,7 @@ private:
                                        tools::Rectangle&       rTextRect,
                                        tools::Rectangle&       rAnchorRect,
                                        tools::Rectangle&       rPaintRect,
-                                       Fraction&        aFitXCorrection ) const;
+                                       double&        aFitXCorrection ) const;
 
     void setupAutoFitText( SdrOutliner& rOutliner ) const;
     void setupAutoFitText(SdrOutliner& rOutliner, const Size& rShapeSize) const;
@@ -291,7 +291,7 @@ protected:
     rtl::Reference<SdrPathObj> ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const;
     rtl::Reference<SdrObject> ImpConvertAddText(const rtl::Reference<SdrObject> & pObj, bool bBezier) const;
     void ImpSetTextStyleSheetListeners();
-    static void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXCorrection);
+    static void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, double& rFitXCorrection);
     static void ImpJustifyRect(tools::Rectangle& rRect);
     void ImpCheckShear();
     tools::Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;

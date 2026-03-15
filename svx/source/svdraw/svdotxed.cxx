@@ -105,7 +105,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         tools::Rectangle aTextRect;
         TakeTextRect(rOutl, aTextRect, false,
             &aAnchorRect);
-        Fraction aFitXCorrection(1,1);
+        double aFitXCorrection(1.0);
         ImpSetCharStretching(rOutl,aTextRect.GetSize(),aAnchorRect.GetSize(),aFitXCorrection);
     }
     else if (IsAutoFit())

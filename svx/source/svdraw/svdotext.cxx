@@ -830,7 +830,7 @@ std::optional<OutlinerParaObject> SdrTextObj::CreateEditOutlinerParaObject() con
     return pPara;
 }
 
-void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXCorrection)
+void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, double& rFitXCorrection)
 {
     OutputDevice* pOut = rOutliner.GetRefDevice();
     bool bNoStretching(false);
@@ -953,7 +953,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         nLoopCount++;
         Size aSiz(rOutliner.CalcTextSize());
         tools::Long nXDiff = aSiz.Width() - nWantWdt;
-        rFitXCorrection=Fraction(nWantWdt,aSiz.Width());
+        rFitXCorrection = double(nWantWdt) / aSiz.Width();
         if (((nXDiff>=nXTolMi || !bChkX) && nXDiff<=nXTolPl) || nXDiff==nXDiff0) {
             bNoMoreLoop = true;
         } else {
@@ -1167,7 +1167,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
                                                tools::Rectangle&       rTextRect,
                                                tools::Rectangle&       rAnchorRect,
                                                tools::Rectangle&       rPaintRect,
-                                               Fraction&        rFitXCorrection ) const
+                                               double&        rFitXCorrection ) const
 {
     if (!bContourFrame)
     {
@@ -1257,7 +1257,7 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, tools::Rectangle&
 {
     tools::Rectangle aTextRect;
     tools::Rectangle aAnchorRect;
-    Fraction aFitXCorrection(1,1);
+    double aFitXCorrection(1.0);
 
     const bool bContourFrame(IsContourTextFrame());
     const MapMode aMapMode(getSdrModelFromSdrObject().GetScaleUnit());
@@ -1752,7 +1752,7 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
     tools::Rectangle aTextRect;
     tools::Rectangle aAnchorRect;
     tools::Rectangle aPaintRect;
-    Fraction aFitXCorrection(1,1);
+    double aFitXCorrection(1.0);
     bool bContourFrame(IsContourTextFrame());
 
     // get outliner set up. To avoid getting a somehow rotated MetaFile,
