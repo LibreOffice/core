@@ -2028,7 +2028,7 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
 
     if (IsDraggingPoints())
     {
-        getSdrDragView().ResizeMarkedPoints(DragStat().GetRef1(),Fraction(m_aXFact),Fraction(m_aYFact));
+        getSdrDragView().ResizeMarkedPoints(DragStat().GetRef1(),m_aXFact,m_aYFact);
     }
     else if (IsDraggingGluePoints())
     {

@@ -623,12 +623,12 @@ void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz)
 
 static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* /*p4*/)
 {
-    ResizePoint(rPt,*static_cast<const Point*>(p1),*static_cast<const Fraction*>(p2),*static_cast<const Fraction*>(p3));
-    if (pC1!=nullptr) ResizePoint(*pC1,*static_cast<const Point*>(p1),*static_cast<const Fraction*>(p2),*static_cast<const Fraction*>(p3));
-    if (pC2!=nullptr) ResizePoint(*pC2,*static_cast<const Point*>(p1),*static_cast<const Fraction*>(p2),*static_cast<const Fraction*>(p3));
+    ResizePoint(rPt,*static_cast<const Point*>(p1),*static_cast<const double*>(p2),*static_cast<const double*>(p3));
+    if (pC1!=nullptr) ResizePoint(*pC1,*static_cast<const Point*>(p1),*static_cast<const double*>(p2),*static_cast<const double*>(p3));
+    if (pC2!=nullptr) ResizePoint(*pC2,*static_cast<const Point*>(p1),*static_cast<const double*>(p2),*static_cast<const double*>(p3));
 }
 
-void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, double xFact, double yFact)
 {
     ForceUndirtyMrkPnt();
     OUString aStr(SvxResId(STR_EditResize));

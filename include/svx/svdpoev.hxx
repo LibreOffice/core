@@ -64,7 +64,7 @@ public:
     bool IsDeleteMarkedPointsPossible() const override;
 
     void MoveMarkedPoints(const Size& rSiz);
-    void ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    void ResizeMarkedPoints(const Point& rRef, double xFact, const double yFact);
     void RotateMarkedPoints(const Point& rRef, Degree100 nAngle);
 
     // This probably creates an arbitrary amount of new objects
