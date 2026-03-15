@@ -1198,7 +1198,8 @@ SwXText::finishOrAppendParagraph(
 
         // tdf#127616 keep direct character formatting of empty paragraphs,
         // if character style of the paragraph sets also the same attributes
-        if (aPam.Start()->GetNode().GetTextNode()->Len() == 0)
+        const SwTextNode* pTextNode = aPam.Start()->GetNode().GetTextNode();
+        if (pTextNode && pTextNode->Len() == 0)
         {
             auto itCharStyle = std::find_if(rProperties.begin(), rProperties.end(), [](const beans::PropertyValue& rValue)
             {
