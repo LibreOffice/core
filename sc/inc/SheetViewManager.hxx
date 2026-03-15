@@ -26,8 +26,8 @@ namespace sc
 struct SC_DLLPUBLIC DefaultViewSortData
 {
     SortOrderReverser maSortOrder;
-    /// Per sheet view reorder params - only populated in captured snapshots.
-    std::vector<std::pair<SheetViewID, ReorderParam>> maSheetViewReorderParams;
+    /// Per sheet view sort data - only populated in captured snapshots.
+    std::vector<std::pair<SheetViewID, std::shared_ptr<SheetViewSortData>>> maSheetViewSortData;
 };
 
 /** Manager and the holder of the sheet views for a sheet. */

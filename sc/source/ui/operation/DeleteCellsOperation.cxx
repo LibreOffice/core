@@ -458,6 +458,7 @@ bool DeleteCellsOperation::runImplementation()
         ScDocShell::
             GetActiveDialogParent()); // important because of TrackFormulas in UpdateReference
 
+    ScUndoDeleteCells* pUndoDeleteCells = nullptr;
     ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScDocument> pRefUndoDoc;
     std::unique_ptr<ScRefUndoData> pUndoData;
@@ -599,10 +600,12 @@ bool DeleteCellsOperation::runImplementation()
             mrDocShell.GetUndoManager()->LeaveListAction();
         }
 
-        mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoDeleteCells>(
+        auto pUndoAction = std::make_unique<ScUndoDeleteCells>(
             mrDocShell, ScRange(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab),
             nUndoPos, std::move(pTabs), std::move(pScenarios), meCmd, std::move(pUndoDoc),
-            std::move(pUndoData)));
+            std::move(pUndoData));
+        pUndoDeleteCells = pUndoAction.get();
+        mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoAction));
     }
 
     // #i8302 want to be able to insert into the middle of merged cells
@@ -770,7 +773,17 @@ bool DeleteCellsOperation::runImplementation()
             std::shared_ptr<sc::SheetViewManager> pManager
                 = rDoc.GetSheetViewManager(nDefaultViewTab);
             if (pManager)
+            {
+                auto pSortDataBefore = pManager->captureSortData();
                 pManager->deletedRows(nStartRow, nDeletedRowCount);
+                auto pSortDataAfter = pManager->captureSortData();
+
+                if (mbRecord && pUndoDeleteCells && (pSortDataBefore || pSortDataAfter))
+                {
+                    pUndoDeleteCells->setSheetViewSortData(
+                        nDefaultViewTab, std::move(pSortDataBefore), std::move(pSortDataAfter));
+                }
+            }
         }
 
         syncSheetViews();
