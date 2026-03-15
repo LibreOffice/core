@@ -1287,9 +1287,9 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
         // Revert the sorting of the default view table.
         // It can happen that the default view was sorted after the sheet view
         // was created.
-        if (auto const& rReorderParameters = rSheetView.getReorderParameters())
+        if (auto const* pReorderParameters = rSheetView.getReorderParameters())
         {
-            sc::ReorderParam aReorderParameters(*rReorderParameters);
+            sc::ReorderParam aReorderParameters(*pReorderParameters);
             aReorderParameters.maSortRange.aStart.SetTab(nSheetViewTab);
             aReorderParameters.maSortRange.aEnd.SetTab(nSheetViewTab);
             aReorderParameters.reverse();
@@ -1297,11 +1297,10 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
         }
 
         // Sort the sheet view if it was sorted before
-        auto const& oSortParam = rSheetView.getSortParam();
-        if (oSortParam)
+        if (auto const* pSortParam = rSheetView.getSortParam())
         {
             rSheetView.resetSortOrder();
-            Sort(nSheetViewTab, *oSortParam, false, false, nullptr, nullptr);
+            Sort(nSheetViewTab, *pSortParam, false, false, nullptr, nullptr);
         }
         // Apply the stored query state (if available)
         if (oQueryParam)

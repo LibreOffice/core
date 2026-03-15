@@ -26,7 +26,7 @@ class UndoSort : public ScSimpleUndo
     std::shared_ptr<SheetViewSortData> mpSortDataBefore;
     std::shared_ptr<SheetViewSortData> mpSortDataAfter;
 
-    // For sorting on a default view tab:
+    // For sorting on a default view tab.
     bool mbDefaultViewSort = false;
     std::shared_ptr<DefaultViewSortData> mpDefaultViewSortDataBefore;
     std::shared_ptr<DefaultViewSortData> mpDefaultViewSortDataAfter;

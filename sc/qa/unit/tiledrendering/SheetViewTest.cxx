@@ -4037,8 +4037,8 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnSheetView)
     std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
     CPPUNIT_ASSERT(pManager);
     auto& rSheetView = *pManager->iterateValidSheetViews().begin();
-    CPPUNIT_ASSERT(rSheetView.getSortOrder().has_value());
-    CPPUNIT_ASSERT(rSheetView.getSortParam().has_value());
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() != nullptr);
+    CPPUNIT_ASSERT(rSheetView.getSortParam() != nullptr);
 
     // Sort ascending on sheet view (second sort)
     {
@@ -4064,8 +4064,8 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnSheetView)
                          getValues(mpTabViewDefaultView, 0, 1, 4));
 
     // SheetView sort data should reflect descending sort
-    CPPUNIT_ASSERT(rSheetView.getSortOrder().has_value());
-    CPPUNIT_ASSERT(rSheetView.getSortParam().has_value());
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() != nullptr);
+    CPPUNIT_ASSERT(rSheetView.getSortParam() != nullptr);
 
     // Undo descending sort - should revert to original unsorted
     {
@@ -4080,8 +4080,8 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnSheetView)
                          getValues(mpTabViewDefaultView, 0, 1, 4));
 
     // SheetView sort data should be fully reset
-    CPPUNIT_ASSERT(!rSheetView.getSortOrder().has_value());
-    CPPUNIT_ASSERT(!rSheetView.getSortParam().has_value());
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() == nullptr);
+    CPPUNIT_ASSERT(rSheetView.getSortParam() == nullptr);
 }
 
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnDefaultView)
@@ -4130,7 +4130,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnDefaultView)
     // SheetViewManager should have sort data from the default view sort
     std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
     CPPUNIT_ASSERT(pManager);
-    CPPUNIT_ASSERT(pManager->getSortOrder().has_value());
+    CPPUNIT_ASSERT(pManager->getSortOrder() != nullptr);
 
     // Undo the default view sort
     {
@@ -4143,7 +4143,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnDefaultView)
                          getValues(mpTabViewDefaultView, 0, 1, 4));
 
     // Default view sort data should be restored (no sort)
-    CPPUNIT_ASSERT(!pManager->getSortOrder().has_value());
+    CPPUNIT_ASSERT(pManager->getSortOrder() == nullptr);
 
     // Sheet view should still be descending
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
@@ -4207,8 +4207,8 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_RemoveAutoFilter_DefaultAndSheetView)
     CPPUNIT_ASSERT(!pManager->isEmpty());
 
     auto& rSheetView = *pManager->iterateValidSheetViews().begin();
-    CPPUNIT_ASSERT(rSheetView.getSortOrder().has_value());
-    CPPUNIT_ASSERT(rSheetView.getSortParam().has_value());
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() != nullptr);
+    CPPUNIT_ASSERT(rSheetView.getSortParam() != nullptr);
 
     // Remove auto-filter from default view
     {
@@ -4232,8 +4232,8 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_RemoveAutoFilter_DefaultAndSheetView)
                          getValues(mpTabViewSheetView, 0, 1, 4));
 
     // Verify SheetView sort data is reset
-    CPPUNIT_ASSERT(!rSheetView.getSortOrder().has_value());
-    CPPUNIT_ASSERT(!rSheetView.getSortParam().has_value());
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() == nullptr);
+    CPPUNIT_ASSERT(rSheetView.getSortParam() == nullptr);
 
     // Undo removing auto-filter from default view
     {
@@ -4258,8 +4258,8 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_RemoveAutoFilter_DefaultAndSheetView)
                          getValues(mpTabViewSheetView, 0, 1, 4));
 
     // TODO: Sort data is not restored by undo - we expect it should be.
-    CPPUNIT_ASSERT(!rSheetView.getSortOrder().has_value());
-    CPPUNIT_ASSERT(!rSheetView.getSortParam().has_value());
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() == nullptr);
+    CPPUNIT_ASSERT(rSheetView.getSortParam() == nullptr);
 
     // Redo removing auto-filter
     {
@@ -4281,8 +4281,8 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_RemoveAutoFilter_DefaultAndSheetView)
                          getValues(mpTabViewSheetView, 0, 1, 4));
 
     // Verify SheetView sort data is reset again
-    CPPUNIT_ASSERT(!rSheetView.getSortOrder().has_value());
-    CPPUNIT_ASSERT(!rSheetView.getSortParam().has_value());
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() == nullptr);
+    CPPUNIT_ASSERT(rSheetView.getSortParam() == nullptr);
 }
 
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_PivotTable_DefaultAndSheetView)
