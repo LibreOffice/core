@@ -94,22 +94,22 @@ bool SdrDragStat::CheckMinMoved(const Point& rPnt)
     return m_bMinMoved;
 }
 
-Fraction SdrDragStat::GetXFact() const
+double SdrDragStat::GetXFact() const
 {
     tools::Long nMul=mvPnts.back().X()-m_aRef1.X();
     tools::Long nDiv=GetPrev().X()-m_aRef1.X();
     if (nDiv==0) nDiv=1;
     if (m_bHorFixed) { nMul=1; nDiv=1; }
-    return Fraction(nMul,nDiv);
+    return double(nMul) / nDiv;
 }
 
-Fraction SdrDragStat::GetYFact() const
+double SdrDragStat::GetYFact() const
 {
     tools::Long nMul=mvPnts.back().Y()-m_aRef1.Y();
     tools::Long nDiv=GetPrev().Y()-m_aRef1.Y();
     if (nDiv==0) nDiv=1;
     if (m_bVerFixed) { nMul=1; nDiv=1; }
-    return Fraction(nMul,nDiv);
+    return double(nMul) / nDiv;
 }
 
 void SdrDragStat::TakeCreateRect(tools::Rectangle& rRect) const
