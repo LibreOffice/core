@@ -1246,6 +1246,25 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
     // Get the anonymous DB data for the default view table
     ScDBData* pDefaultViewDBData = GetAnonymousDBData(nDefaultViewTable);
 
+    // Adjust the auto-filter DB range to match the actual data extent.
+    // This handles both expansion and contraction of the data area.
+    if (pDefaultViewDBData && pDefaultViewDBData->HasAutoFilter())
+    {
+        ScRange aDBRange;
+        pDefaultViewDBData->GetArea(aDBRange);
+        SCCOL nColumn1 = aDBRange.aStart.Col();
+        SCROW nRow1 = aDBRange.aStart.Row();
+        SCCOL nColumn2 = aDBRange.aEnd.Col();
+        SCROW nRow2 = aDBRange.aEnd.Row();
+        GetDataArea(nDefaultViewTable, nColumn1, nRow1, nColumn2, nRow2, false, true);
+        if (nRow2 != aDBRange.aEnd.Row() || nColumn2 != aDBRange.aEnd.Col())
+        {
+            pDefaultViewDBData->SetArea(nDefaultViewTable,
+                                        aDBRange.aStart.Col(), aDBRange.aStart.Row(),
+                                        nColumn2, nRow2);
+        }
+    }
+
     // Iterate all valid sheet views
     for (auto& rSheetView : pManager->iterateValidSheetViews())
     {
@@ -1299,8 +1318,24 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
         // Sort the sheet view if it was sorted before
         if (auto const* pSortParam = rSheetView.getSortParam())
         {
+            ScSortParam aSortParam(*pSortParam);
+
+            // Adjust the sort range to the actual data extent on the default view.
+            if (pDefaultViewDBData && pDefaultViewDBData->HasAutoFilter())
+            {
+                ScRange aDBRange;
+                pDefaultViewDBData->GetArea(aDBRange);
+                SCCOL nColumn1 = aDBRange.aStart.Col();
+                SCROW nRow1 = aDBRange.aStart.Row();
+                SCCOL nColumn2 = aDBRange.aEnd.Col();
+                SCROW nRow2 = aDBRange.aEnd.Row();
+                GetDataArea(nDefaultViewTable, nColumn1, nRow1, nColumn2, nRow2, false, true);
+                aSortParam.nRow2 = nRow2;
+                aSortParam.nCol2 = nColumn2;
+            }
+
             rSheetView.resetSortOrder();
-            Sort(nSheetViewTab, *pSortParam, false, false, nullptr, nullptr);
+            Sort(nSheetViewTab, aSortParam, false, false, nullptr, nullptr);
         }
         // Apply the stored query state (if available)
         if (oQueryParam)
