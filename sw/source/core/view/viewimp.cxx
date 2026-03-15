@@ -68,8 +68,8 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
             ( rSz.Width() ? rSz.Width() / (pNewOpt->GetDivisionX() + 1):0,
               rSz.Height()? rSz.Height()/ (pNewOpt->GetDivisionY() + 1):0);
     m_pDrawView->SetGridFine( aFSize );
-    Fraction aSnGrWdtX(rSz.Width(), pNewOpt->GetDivisionX() + 1);
-    Fraction aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);
+    double aSnGrWdtX = double(rSz.Width()) / (pNewOpt->GetDivisionX() + 1);
+    double aSnGrWdtY = double(rSz.Height()) / (pNewOpt->GetDivisionY() + 1);
     m_pDrawView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
     if ( pRoot->getFrameArea().HasArea() )

@@ -205,7 +205,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
         rLayerAdmin.getPrintableLayersODF(maPrintableLayers);
         rLayerAdmin.getLockedLayersODF(maLockedLayers);
         SetGridCoarse( Size( 1000, 1000 ) );
-        SetSnapGridWidth(Fraction(1000, 1), Fraction(1000, 1));
+        SetSnapGridWidth(1000, 1000);
         SetActiveLayer(sUNO_LayerName_layout);
         mbNoColors = true;
         mbNoAttribs = false;
@@ -332,8 +332,8 @@ void FrameView::Update(SdOptions const * pOptions)
 
     SetGridCoarse( Size( pOptions->GetFieldDrawX(), pOptions->GetFieldDrawY() ) );
     SetGridFine( Size( pOptions->GetFieldDivisionX(), pOptions->GetFieldDivisionY() ) );
-    Fraction aFractX(pOptions->GetFieldDrawX(), pOptions->GetFieldDrawX() / ( pOptions->GetFieldDivisionX() ? pOptions->GetFieldDivisionX() : 1 ));
-    Fraction aFractY(pOptions->GetFieldDrawY(), pOptions->GetFieldDrawY() / ( pOptions->GetFieldDivisionY() ? pOptions->GetFieldDivisionY() : 1 ));
+    double aFractX = double(pOptions->GetFieldDrawX()) / (pOptions->GetFieldDrawX() / ( pOptions->GetFieldDivisionX() ? pOptions->GetFieldDivisionX() : 1 ));
+    double aFractY = double(pOptions->GetFieldDrawY()) / (pOptions->GetFieldDrawY() / ( pOptions->GetFieldDivisionY() ? pOptions->GetFieldDivisionY() : 1 ));
     SetSnapGridWidth(aFractX, aFractY);
     SetQuickEdit(pOptions->IsQuickEdit());
 
@@ -474,10 +474,12 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     aUserData.emplace_back( sUNO_View_GridCoarseHeight, Any( static_cast<sal_Int32>(GetGridCoarse().Height()) ) );
     aUserData.emplace_back( sUNO_View_GridFineWidth, Any( static_cast<sal_Int32>(GetGridFine().Width()) ) );
     aUserData.emplace_back( sUNO_View_GridFineHeight, Any( static_cast<sal_Int32>(GetGridFine().Height()) ) );
-    aUserData.emplace_back( sUNO_View_GridSnapWidthXNumerator, Any( GetSnapGridWidthX().GetNumerator() ) );
-    aUserData.emplace_back( sUNO_View_GridSnapWidthXDenominator, Any( GetSnapGridWidthX().GetDenominator() ) );
-    aUserData.emplace_back( sUNO_View_GridSnapWidthYNumerator, Any( GetSnapGridWidthY().GetNumerator() ) );
-    aUserData.emplace_back( sUNO_View_GridSnapWidthYDenominator, Any( GetSnapGridWidthY().GetDenominator() ) );
+    Fraction aSnapGridWidthX(GetSnapGridWidthX());
+    aUserData.emplace_back( sUNO_View_GridSnapWidthXNumerator, Any( aSnapGridWidthX.GetNumerator() ) );
+    aUserData.emplace_back( sUNO_View_GridSnapWidthXDenominator, Any( aSnapGridWidthX.GetDenominator() ) );
+    Fraction aSnapGridWidthY(GetSnapGridWidthY());
+    aUserData.emplace_back( sUNO_View_GridSnapWidthYNumerator, Any( aSnapGridWidthY.GetNumerator() ) );
+    aUserData.emplace_back( sUNO_View_GridSnapWidthYDenominator, Any( aSnapGridWidthY.GetDenominator() ) );
     aUserData.emplace_back( sUNO_View_IsAngleSnapEnabled, Any( IsAngleSnapEnabled() ) );
     aUserData.emplace_back( sUNO_View_SnapAngle, Any( static_cast<sal_Int32>(GetSnapAngle()) ) );
     aUserData.emplace_back( sUNO_View_HasCanvasPage, Any( pDrawDocument && pDrawDocument->HasCanvasPage() ) );
@@ -574,11 +576,13 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
     sal_Int16 nInt16 = 0;
     OUString aString;
 
-    sal_Int32 aSnapGridWidthXNum = GetSnapGridWidthX().GetNumerator();
-    sal_Int32 aSnapGridWidthXDom = GetSnapGridWidthX().GetDenominator();
+    Fraction aSnapGridWidthX(GetSnapGridWidthX());
+    sal_Int32 aSnapGridWidthXNum = aSnapGridWidthX.GetNumerator();
+    sal_Int32 aSnapGridWidthXDom = aSnapGridWidthX.GetDenominator();
 
-    sal_Int32 aSnapGridWidthYNum = GetSnapGridWidthY().GetNumerator();
-    sal_Int32 aSnapGridWidthYDom = GetSnapGridWidthY().GetDenominator();
+    Fraction aSnapGridWidthY(GetSnapGridWidthY());
+    sal_Int32 aSnapGridWidthYNum = aSnapGridWidthY.GetNumerator();
+    sal_Int32 aSnapGridWidthYDom = aSnapGridWidthY.GetDenominator();
 
     for (const css::beans::PropertyValue& rValue : rSequence)
     {
@@ -921,10 +925,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
 
     SetViewShEditModeOnLoad(EditMode::Page);
 
-    const Fraction aSnapGridWidthX( aSnapGridWidthXNum, aSnapGridWidthXDom );
-    const Fraction aSnapGridWidthY( aSnapGridWidthYNum, aSnapGridWidthYDom );
-
-    SetSnapGridWidth( aSnapGridWidthX, aSnapGridWidthY );
+    SetSnapGridWidth( double(aSnapGridWidthXNum) / aSnapGridWidthXDom, double(aSnapGridWidthYNum) / aSnapGridWidthYDom );
 }
 
 void FrameView::SetPreviousViewShellType (ViewShell::ShellType eType)

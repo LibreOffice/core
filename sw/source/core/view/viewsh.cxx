@@ -2541,8 +2541,8 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
             ( rSz.Width() ? rSz.Width() / (rOpt.GetDivisionX()+1) : 0,
               rSz.Height()? rSz.Height()/ (rOpt.GetDivisionY()+1) : 0);
         pDView->SetGridFine( aFSize );
-        Fraction aSnGrWdtX(rSz.Width(), rOpt.GetDivisionX() + 1);
-        Fraction aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
+        double aSnGrWdtX = double(rSz.Width()) / (rOpt.GetDivisionX() + 1);
+        double aSnGrWdtY = double(rSz.Height()) / (rOpt.GetDivisionY() + 1);
         pDView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
         // set handle size to 9 pixels, always
