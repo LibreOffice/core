@@ -157,8 +157,8 @@ public:
     bool         CheckMinMoved(const Point& rPnt);
     tools::Long         GetDX() const                     { return GetNow().X()-GetPrev().X(); }
     tools::Long         GetDY() const                     { return GetNow().Y()-GetPrev().Y(); }
-    Fraction     GetXFact() const;
-    Fraction     GetYFact() const;
+    double       GetXFact() const;
+    double       GetYFact() const;
 
     SdrDragMethod* GetDragMethod() const             { return m_pDragMethod; }
     void         SetDragMethod(SdrDragMethod* pMth)  { m_pDragMethod=pMth; }
