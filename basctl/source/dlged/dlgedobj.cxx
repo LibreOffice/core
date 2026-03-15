@@ -930,7 +930,7 @@ void DlgEdObj::NbcMove( const Size& rSize )
     GetDlgEdForm()->GetDlgEditor().SetDialogModelChanged();
 }
 
-void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
+void DlgEdObj::NbcResize(const Point& rRef, double xFract, double yFract)
 {
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
 
@@ -1576,7 +1576,7 @@ void DlgEdForm::NbcMove( const Size& rSize )
     GetDlgEditor().SetDialogModelChanged();
 }
 
-void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
+void DlgEdForm::NbcResize(const Point& rRef, double xFract, double yFract)
 {
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
 

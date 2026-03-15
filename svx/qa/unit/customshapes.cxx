@@ -535,7 +535,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
     {
         SdrObjCustomShape& rSdrShape(
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
-        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(1.0), Fraction(-0.5));
+        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), 1.0, -0.5);
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
         CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRect, aBoundRect, 3);
@@ -545,7 +545,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
     {
         SdrObjCustomShape& rSdrShape(
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
-        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(1.0), Fraction(2.0));
+        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), 1.0, 2.0);
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
         CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRect, aBoundRect, 3);
@@ -555,7 +555,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
     {
         SdrObjCustomShape& rSdrShape(
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
-        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(2.0), Fraction(1.0));
+        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), 2.0, 1.0);
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
         CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRect, aBoundRect, 3);
@@ -565,7 +565,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
     {
         SdrObjCustomShape& rSdrShape(
             static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
-        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), Fraction(-0.5), Fraction(1.0));
+        rSdrShape.NbcResize(rSdrShape.GetRelativePos(), -0.5, 1.0);
         tools::Rectangle aSnapRect(rSdrShape.GetSnapRect());
         tools::Rectangle aBoundRect(rSdrShape.GetCurrentBoundRect());
         CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aSnapRect, aBoundRect, 3);

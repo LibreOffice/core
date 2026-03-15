@@ -112,8 +112,7 @@ public:
 
     virtual void    NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void    NbcMove(const Size& rSize) override;
-    virtual void    NbcResize(const Point& rRef, const Fraction& rXFact,
-                                                 const Fraction& rYFact) override;
+    virtual void    NbcResize(const Point& rRef, double fXFact, double fYFact) override;
     virtual void    RecalcSnapRect() override;
 
     virtual E3dScene* getRootE3dSceneFromE3dObject() const override;

@@ -745,8 +745,8 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             rDoc.getIDocumentState().SetEnableSetModified(false);
             auto pObject = const_cast<SdrObject*>(GetDrawObj());
             pObject->Resize( aCurrObjRect.TopLeft(),
-                    Fraction( nTargetWidth, aCurrObjRect.GetWidth() ),
-                    Fraction( nTargetHeight, aCurrObjRect.GetHeight() ), false );
+                    double( nTargetWidth ) / aCurrObjRect.GetWidth(),
+                    double( nTargetHeight ) / aCurrObjRect.GetHeight(), false );
 
             if (SwFrameFormat* pFrameFormat = FindFrameFormat(pObject))
             {

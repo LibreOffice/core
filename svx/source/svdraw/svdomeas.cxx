@@ -1001,7 +1001,7 @@ void SdrMeasureObj::NbcMove(const Size& rSiz)
     m_aPt2.Move(rSiz);
 }
 
-void SdrMeasureObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrMeasureObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     ResizePoint(m_aPt1,rRef,xFact,yFact);

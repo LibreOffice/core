@@ -125,7 +125,7 @@ public:
     SAL_DLLPRIVATE virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const override;
     SAL_DLLPRIVATE virtual PointerStyle GetCreatePointer() const override;
     SAL_DLLPRIVATE virtual void NbcMove(const Size& aSiz) override;
-    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     SAL_DLLPRIVATE virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
     SAL_DLLPRIVATE virtual void NbcShear (const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;
     SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;

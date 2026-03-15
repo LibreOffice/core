@@ -495,8 +495,8 @@ void ScDrawView::SetMarkedOriginalSize()
             tools::Rectangle aDrawRect = pObj->GetLogicRect();
 
             pUndoGroup->AddAction( std::make_unique<SdrUndoGeoObj>( *pObj ) );
-            pObj->Resize( aDrawRect.TopLeft(), Fraction( aOriginalSize.Width(), aDrawRect.GetWidth() ),
-                                                 Fraction( aOriginalSize.Height(), aDrawRect.GetHeight() ) );
+            pObj->Resize( aDrawRect.TopLeft(), double( aOriginalSize.Width() ) / aDrawRect.GetWidth(),
+                                                 double( aOriginalSize.Height() ) / aDrawRect.GetHeight() );
             ++nDone;
         }
     }

@@ -97,7 +97,7 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void        TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual void        NbcMove(const Size& rSize) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
 
     E3dScene* getParentE3dSceneFromE3dObject() const;
     virtual E3dScene* getRootE3dSceneFromE3dObject() const;

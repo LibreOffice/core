@@ -117,7 +117,7 @@ public:
     SAL_DLLPRIVATE virtual PointerStyle GetCreatePointer() const override;
 
     SAL_DLLPRIVATE virtual void NbcMove(const Size& rSiz) override;
-    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
 
     SAL_DLLPRIVATE virtual void NbcSetRelativePos(const Point& rPnt) override;
     SAL_DLLPRIVATE virtual Point GetRelativePos() const override;

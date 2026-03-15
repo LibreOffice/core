@@ -63,7 +63,6 @@ class SdrObjPlusData;
 class SdrGluePoint;
 class SdrGluePointList;
 class SdrLayerIDSet;
-class Fraction;
 enum class PointerStyle;
 class Graphic;
 class SvxShape;
@@ -523,7 +522,7 @@ public:
     /// Derived classes should usually only override the Nbc methods.
     /// Nbc means "no broadcast".
     virtual void NbcMove  (const Size& rSiz);
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact);
     virtual bool IsSizeValid(Size aTargetSize);
     virtual void NbcCrop  (const basegfx::B2DPoint& rRef, double fxFact, double fyFact);
     virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs) = 0;
@@ -533,7 +532,7 @@ public:
     virtual void NbcShear (const Point& rRef, Degree100 nAngle, double tn, bool bVShear);
 
     virtual void Move  (const Size& rSiz);
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true);
+    virtual void Resize(const Point& rRef, double xFact, double yFact, bool bUnsetRelative = true);
     virtual void Crop  (const basegfx::B2DPoint& rRef, double fxFact, double fyFact);
     virtual void Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);

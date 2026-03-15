@@ -142,7 +142,7 @@ public:
     virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual void NbcMove(const Size& rSize) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
     virtual void SetGeoData(const SdrObjGeoData& rGeo) override;

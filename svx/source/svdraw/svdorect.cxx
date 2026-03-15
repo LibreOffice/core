@@ -418,7 +418,7 @@ void SdrRectObj::NbcMove(const Size& rSiz)
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrRectObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     SetXPolyDirty();

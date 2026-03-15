@@ -148,7 +148,7 @@ private:
         SdrModel& rSdrModel);
 
     virtual void NbcMove( const Size& rSize ) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
@@ -199,7 +199,7 @@ private:
     OOle2Obj(SdrModel& rSdrModel, const OOle2Obj& rSource);
 
     virtual void NbcMove( const Size& rSize ) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
@@ -240,7 +240,7 @@ class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) OUnoObject final : public Sd
     virtual ~OUnoObject() override;
 
     virtual void NbcMove( const Size& rSize ) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 

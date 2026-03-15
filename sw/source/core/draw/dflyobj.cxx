@@ -1009,7 +1009,7 @@ bool SwVirtFlyDrawObj::IsSizeValid(Size aTargetSize)
     return GetFlyFrame()->IsResizeValid(&rAttrs, aTargetSize);
 }
 
-void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SwVirtFlyDrawObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     const SwFrame* pTmpFrame = GetFlyFrame()->GetAnchorFrame();
 
@@ -1185,7 +1185,7 @@ void SwVirtFlyDrawObj::Move(const Size& rSiz)
 }
 
 void SwVirtFlyDrawObj::Resize(const Point& rRef,
-                    const Fraction& xFact, const Fraction& yFact, bool /*bUnsetRelative*/)
+                    double xFact, double yFact, bool /*bUnsetRelative*/)
 {
     NbcResize( rRef, xFact, yFact );
     SetChanged();

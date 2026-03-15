@@ -155,14 +155,12 @@ void ImpressSdrObject::execute(const OUString& rAction, const StringMap& rParame
         if (itrFracX == rParameters.end())
             throw css::uno::RuntimeException(u"missing parameter FRAC_X"_ustr);
         double nFracX = itrFracX->second.toDouble();
-        Fraction aFracX(nFracX);
 
         auto itrFracY = rParameters.find(u"FRAC_Y"_ustr);
         if (itrFracY == rParameters.end())
             throw css::uno::RuntimeException(u"missing parameter FRAC_Y"_ustr);
         double nFracY = itrFracY->second.toDouble();
-        Fraction aFracY(nFracY);
-        pObj->Resize(aPos, aFracX, aFracY, true /*bRelative*/);
+        pObj->Resize(aPos, nFracX, nFracY, true /*bRelative*/);
     }
     else if (rAction == "CROP")
     {

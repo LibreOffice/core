@@ -1486,7 +1486,7 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
     }
 }
 
-void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, const Fraction& ryFact )
+void SdrObjCustomShape::NbcResize( const Point& rRef, double rxFact, double ryFact )
 {
     // taking care of handles that should not been changed
     tools::Rectangle aOld(getRectangle());
@@ -1494,16 +1494,13 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
 
     SdrTextObj::NbcResize( rRef, rxFact, ryFact );
 
-    if ( ( rxFact.GetNumerator() != rxFact.GetDenominator() )
-        || ( ryFact.GetNumerator()!= ryFact.GetDenominator() ) )
+    if ( ( rxFact != 1.0 ) || ( ryFact != 1.0 ) )
     {
-        if ( ( ( rxFact.GetNumerator() < 0 ) && ( rxFact.GetDenominator() > 0 ) ) ||
-            ( ( rxFact.GetNumerator() > 0 ) && ( rxFact.GetDenominator() < 0 ) ) )
+        if ( rxFact < 0 )
         {
             SetMirroredX( !IsMirroredX() );
         }
-        if ( ( ( ryFact.GetNumerator() < 0 ) && ( ryFact.GetDenominator() > 0 ) ) ||
-            ( ( ryFact.GetNumerator() > 0 ) && ( ryFact.GetDenominator() < 0 ) ) )
+        if ( ryFact < 0 )
         {
             SetMirroredY( !IsMirroredY() );
         }

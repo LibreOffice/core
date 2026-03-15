@@ -2268,7 +2268,7 @@ void SdrPathObj::NbcMove(const Size& rSiz)
     SdrTextObj::NbcMove(rSiz);
 }
 
-void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrPathObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     const double fResizeX(xFact);
     const double fResizeY(yFact);
@@ -2375,8 +2375,8 @@ void SdrPathObj::NbcSetSnapRect(const tools::Rectangle& rRect)
     tools::Rectangle aOld(GetSnapRect());
     if (aOld.IsEmpty())
     {
-        Fraction aX(1,1);
-        Fraction aY(1,1);
+        double aX(1);
+        double aY(1);
         NbcResize(aOld.TopLeft(), aX, aY);
         NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
         return;
@@ -2395,8 +2395,8 @@ void SdrPathObj::NbcSetSnapRect(const tools::Rectangle& rRect)
     if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
     if ( nDivX == nMulX ) { nMulX = 1; nDivX = 1; }
     if ( nDivY == nMulY ) { nMulY = 1; nDivY = 1; }
-    Fraction aX(nMulX,nDivX);
-    Fraction aY(nMulY,nDivY);
+    double aX = double(nMulX) / nDivX;
+    double aY = double(nMulY) / nDivY;
     NbcResize(aOld.TopLeft(), aX, aY);
     NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
 }

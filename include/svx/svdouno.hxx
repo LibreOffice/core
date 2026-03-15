@@ -72,7 +72,7 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
 
     virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
 
     // SpecialDrag support

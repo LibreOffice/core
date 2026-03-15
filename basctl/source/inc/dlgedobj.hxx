@@ -69,7 +69,7 @@ protected:
     virtual ~DlgEdObj() override;
 
     virtual void NbcMove( const Size& rSize ) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
     using SfxListener::StartListening;
@@ -161,7 +161,7 @@ private:
 
 protected:
     virtual void NbcMove( const Size& rSize ) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
     // protected destructor

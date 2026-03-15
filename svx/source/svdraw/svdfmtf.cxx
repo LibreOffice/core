@@ -450,7 +450,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj1, bool bScale)
     {
         if(mbSize)
         {
-            pObj->NbcResize(Point(), maScaleX, maScaleY);
+            pObj->NbcResize(Point(), double(maScaleX), double(maScaleY));
         }
 
         if(mbMov)

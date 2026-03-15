@@ -228,7 +228,7 @@ public:
     virtual PointerStyle GetCreatePointer() const override;
 
     virtual void NbcMove(const Size& rSiz) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
 
     virtual bool BegTextEdit(SdrOutliner& rOutl) override;
     virtual void EndTextEdit(SdrOutliner& rOutl) override;

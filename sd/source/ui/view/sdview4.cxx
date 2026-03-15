@@ -257,8 +257,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             ::tools::Rectangle aObjRect(pNewGrafObj->GetCurrentBoundRect());
             Size aObjSize(aObjRect.GetSize());
 
-            Fraction aScaleWidth(aPickObjSize.Width(), aObjSize.Width());
-            Fraction aScaleHeight(aPickObjSize.Height(), aObjSize.Height());
+            double aScaleWidth = double(aPickObjSize.Width()) / aObjSize.Width();
+            double aScaleHeight = double(aPickObjSize.Height()) / aObjSize.Height();
             pNewGrafObj->NbcResize(aObjRect.TopLeft(), aScaleWidth, aScaleHeight);
 
             Point aVec = aPickObjRect.TopLeft() - aObjRect.TopLeft();

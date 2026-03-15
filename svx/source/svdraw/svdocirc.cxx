@@ -819,15 +819,15 @@ void SdrCircObj::NbcMove(const Size& aSize)
     SetBoundAndSnapRectsDirty(true);
 }
 
-void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrCircObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     Degree100 nAngle0 = maGeo.m_nRotationAngle;
     bool bNoShearRota = (maGeo.m_nRotationAngle == 0_deg100 && maGeo.m_nShearAngle == 0_deg100);
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     bNoShearRota |= (maGeo.m_nRotationAngle == 0_deg100 && maGeo.m_nShearAngle == 0_deg100);
     if (meCircleKind!=SdrCircKind::Full) {
-        bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-        bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+        bool bXMirr = xFact < 0;
+        bool bYMirr = yFact < 0;
         if (bXMirr || bYMirr) {
             // At bXMirr!=bYMirr we should actually swap both line ends.
             // That, however, is pretty bad (because of forced "hard" formatting).
@@ -1048,7 +1048,7 @@ void SdrCircObj::NbcSetSnapRect(const tools::Rectangle& rRect)
         tools::Long nHgt0=aSR0.Bottom()-aSR0.Top();
         tools::Long nWdt1=rRect.Right()-rRect.Left();
         tools::Long nHgt1=rRect.Bottom()-rRect.Top();
-        NbcResize(maSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
+        NbcResize(maSnapRect.TopLeft(), double(nWdt1) / nWdt0, double(nHgt1) / nHgt0);
         NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     } else {
         setRectangle(rRect);

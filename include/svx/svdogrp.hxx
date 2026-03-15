@@ -88,7 +88,7 @@ public:
     virtual Degree100 GetShearAngle(bool bVertical = false) const override;
 
     virtual void Move(const Size& rSiz) override;
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact,
+    virtual void Resize(const Point& rRef, double xFact, double yFact,
                         bool bUnsetRelative = true) override;
     virtual void Rotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
     virtual void Mirror(const Point& rRef1, const Point& rRef2) override;
@@ -99,8 +99,7 @@ public:
     virtual void SetLogicRect(const tools::Rectangle& rRect) override;
 
     virtual void NbcMove(const Size& rSiz) override;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact,
-                           const Fraction& yFact) override;
+    virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
     virtual void NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;

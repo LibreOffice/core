@@ -113,7 +113,7 @@ public:
     SAL_DLLPRIVATE virtual PointerStyle GetCreatePointer() const override;
 
     SAL_DLLPRIVATE virtual void NbcMove(const Size& rSiz) override;
-    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     SAL_DLLPRIVATE virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;
     SAL_DLLPRIVATE virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
     SAL_DLLPRIVATE virtual void NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear) override;

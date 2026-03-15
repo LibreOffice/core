@@ -2542,7 +2542,7 @@ void SwDrawVirtObj::NbcMove(const Size& rSiz)
     SdrObject::NbcMove( rSiz );
 }
 
-void SwDrawVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SwDrawVirtObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     mxRefObj->NbcResize(rRef - GetOffset(), xFact, yFact);
     SetBoundAndSnapRectsDirty();
@@ -2571,9 +2571,9 @@ void SwDrawVirtObj::Move(const Size& rSiz)
     SdrObject::Move( rSiz );
 }
 
-void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
+void SwDrawVirtObj::Resize(const Point& rRef, double xFact, double yFact, bool bUnsetRelative)
 {
-    if(xFact.GetNumerator() != xFact.GetDenominator() || yFact.GetNumerator() != yFact.GetDenominator())
+    if(xFact != 1.0 || yFact != 1.0)
     {
         tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
         mxRefObj->Resize(rRef - GetOffset(), xFact, yFact, bUnsetRelative);

@@ -1295,7 +1295,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
 
                     double fXFrac = static_cast<double>(aNew.GetWidth()) / static_cast<double>(nOldWidth);
                     double fYFrac = static_cast<double>(aNew.GetHeight()) / static_cast<double>(nOldHeight);
-                    pObj->NbcResize(aNew.TopLeft(), Fraction(fXFrac), Fraction(fYFrac));
+                    pObj->NbcResize(aNew.TopLeft(), fXFrac, fYFrac);
                 }
 
                 rData.setShapeRect(GetDocument(), lcl_makeSafeRectangle(rData.getShapeRect()), pObj->IsVisible());

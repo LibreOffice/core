@@ -874,12 +874,12 @@ void SdrGrafObj::AddToHdlList(SdrHdlList& rHdlList) const
     tempList.MoveTo(rHdlList);
 }
 
-void SdrGrafObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrGrafObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     SdrRectObj::NbcResize( rRef, xFact, yFact );
 
-    bool bMirrX = xFact.GetNumerator() < 0;
-    bool bMirrY = yFact.GetNumerator() < 0;
+    bool bMirrX = xFact < 0;
+    bool bMirrY = yFact < 0;
 
     if( bMirrX != bMirrY )
         m_bMirrored = !m_bMirrored;

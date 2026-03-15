@@ -279,7 +279,7 @@ rtl::Reference<SdrObject> SdrUnoObj::CloneSdrObject(SdrModel& rTargetModel) cons
     return new SdrUnoObj(rTargetModel, *this);
 }
 
-void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrUnoObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     SdrRectObj::NbcResize(rRef,xFact,yFact);
 
