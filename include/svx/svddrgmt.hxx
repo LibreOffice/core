@@ -256,8 +256,8 @@ public:
 class SVXCORE_DLLPUBLIC SdrDragResize : public SdrDragMethod
 {
 protected:
-    Fraction                    m_aXFact;
-    Fraction                    m_aYFact;
+    double                    m_aXFact;
+    double                    m_aYFact;
 
 public:
     SdrDragResize(SdrDragView& rNewView);

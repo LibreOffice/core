@@ -1169,6 +1169,11 @@ OUString SdrModel::GetPercentString(const Fraction& rVal)
     return OUString::number(nPct) + "%";
 }
 
+OUString SdrModel::GetPercentString(double rVal)
+{
+    return OUString::number(std::round(rVal * 100)) + "%";
+}
+
 void SdrModel::SetChanged(bool bFlg)
 {
     mbChanged = bFlg;
