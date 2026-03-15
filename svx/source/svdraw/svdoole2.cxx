@@ -113,22 +113,22 @@ class SdrLightEmbeddedClient_Impl : public ::cppu::WeakImplHelper
     uno::Reference< awt::XWindow > m_xWindow;
     SdrOle2Obj* mpObj;
 
-    Fraction m_aScaleWidth;
-    Fraction m_aScaleHeight;
+    double m_aScaleWidth { 0.0 };
+    double m_aScaleHeight { 0.0 };
 
 
 public:
     explicit SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj );
     virtual ~SdrLightEmbeddedClient_Impl() override;
 
-    void SetSizeScale( const Fraction& aScaleWidth, const Fraction& aScaleHeight )
+    void SetSizeScale( double aScaleWidth, double aScaleHeight )
     {
         m_aScaleWidth = aScaleWidth;
         m_aScaleHeight = aScaleHeight;
     }
 
-    const Fraction& GetScaleWidth() const { return m_aScaleWidth; }
-    const Fraction& GetScaleHeight() const { return m_aScaleHeight; }
+    double GetScaleWidth() const { return m_aScaleWidth; }
+    double GetScaleHeight() const { return m_aScaleHeight; }
 
     void setWindow(const uno::Reference< awt::XWindow >& _xWindow);
 
@@ -1592,8 +1592,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
         {
             // The object isn't active and does not want to resize itself so the changed object area size
             // will be reflected in a changed object scaling
-            Fraction aScaleWidth;
-            Fraction aScaleHeight;
+            double aScaleWidth;
+            double aScaleHeight;
             Size aObjAreaSize;
             if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
             {
@@ -1921,7 +1921,7 @@ const uno::Reference< frame::XModel > & SdrOle2Obj::GetParentXModel() const
     return getSdrModelFromSdrObject().getUnoModel();
 }
 
-bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize )
+bool SdrOle2Obj::CalculateNewScaling( double& aScaleWidth, double& aScaleHeight, Size& aObjAreaSize )
 {
     // TODO/LEAN: to avoid rounding errors scaling always uses the VisArea.
     // If we don't cache it for own objects also we must load the object here
@@ -1935,16 +1935,13 @@ bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHei
     if (!aObjAreaSize.Width() || !aObjAreaSize.Height())
     {
         // avoid invalid fractions
-        aScaleWidth = Fraction(1,1);
-        aScaleHeight = Fraction(1,1);
+        aScaleWidth = 1.0;
+        aScaleHeight = 1.0;
     }
     else
     {
-        aScaleWidth = Fraction(aSize.Width(),  aObjAreaSize.Width() );
-        aScaleHeight = Fraction(aSize.Height(), aObjAreaSize.Height() );
-        // reduce to 10 binary digits
-        aScaleHeight.ReduceInaccurate(10);
-        aScaleWidth.ReduceInaccurate(10);
+        aScaleWidth = double(aSize.Width()) / aObjAreaSize.Width();
+        aScaleHeight = double(aSize.Height()) / aObjAreaSize.Height();
     }
 
     return true;
@@ -1962,8 +1959,8 @@ bool SdrOle2Obj::AddOwnLightClient()
 
         if (!mpImpl->mbIgnoreOLEObjectScale && mpImpl->mxObjRef.is() && mpImpl->mxLightClient.is())
         {
-            Fraction aScaleWidth;
-            Fraction aScaleHeight;
+            double aScaleWidth;
+            double aScaleHeight;
             Size aObjAreaSize;
             if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
             {

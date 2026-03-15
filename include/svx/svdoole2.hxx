@@ -171,7 +171,7 @@ public:
                           const OUString& aMediaType );
 
     const css::uno::Reference< css::frame::XModel > & GetParentXModel()  const;
-    bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
+    bool CalculateNewScaling( double& aScaleWidth, double& aScaleHeight, Size& aObjAreaSize );
     bool AddOwnLightClient();
 
     // handy to get the empty replacement graphic without accessing all the old stuff
