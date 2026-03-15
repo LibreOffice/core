@@ -76,7 +76,7 @@ public:
     SAL_DLLPRIVATE void DeleteMarkedGluePoints();
 
     SAL_DLLPRIVATE void MoveMarkedGluePoints  (const Size& rSiz, bool bCopy);
-    SAL_DLLPRIVATE void ResizeMarkedGluePoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy);
+    SAL_DLLPRIVATE void ResizeMarkedGluePoints(const Point& rRef, double xFact, double yFact, bool bCopy);
     SAL_DLLPRIVATE void RotateMarkedGluePoints(const Point& rRef, Degree100 nAngle, bool bCopy);
 };
 

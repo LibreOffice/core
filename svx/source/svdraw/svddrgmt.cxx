@@ -2032,7 +2032,7 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
     }
     else if (IsDraggingGluePoints())
     {
-        getSdrDragView().ResizeMarkedGluePoints(DragStat().GetRef1(),Fraction(m_aXFact),Fraction(m_aYFact),bCopy);
+        getSdrDragView().ResizeMarkedGluePoints(DragStat().GetRef1(),m_aXFact,m_aYFact,bCopy);
     }
     else
     {
