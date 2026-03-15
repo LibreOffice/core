@@ -2128,10 +2128,9 @@ void SwBasicEscherEx::Init()
     }
 
     // MS-DFF-Properties mostly are in EMU (English Metric Units)
-    Fraction aFact = conversionFract(o3tl::Length::mm100, o3tl::Length::emu);
+    double aFact(conversionFract(o3tl::Length::mm100, o3tl::Length::emu));
     aFact /= GetMapFactor(MapUnit::Map100thMM, eMap).X();
-    mnEmuMul = aFact.GetNumerator();
-    mnEmuDiv = aFact.GetDenominator();
+    mfEmu = aFact;
 
     SetHellLayerId(mrWrt.m_rDoc.getIDocumentDrawModelAccess().GetHellId());
     SetHeaderFooterHellLayerId(mrWrt.m_rDoc.getIDocumentDrawModelAccess().GetHeaderFooterHellId());

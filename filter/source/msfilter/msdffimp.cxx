@@ -3165,7 +3165,7 @@ void SvxMSDffManager::Scale( sal_Int32& rVal ) const
             return;
         }
 
-        rVal = BigMulDiv( rVal, nMapMul, nMapDiv );
+        rVal = rVal * mfMap;
     }
 }
 
@@ -3175,8 +3175,8 @@ void SvxMSDffManager::Scale( Point& rPos ) const
     rPos.AdjustY(nMapYOfs );
     if ( bNeedMap )
     {
-        rPos.setX( BigMulDiv( rPos.X(), nMapMul, nMapDiv ) );
-        rPos.setY( BigMulDiv( rPos.Y(), nMapMul, nMapDiv ) );
+        rPos.setX( rPos.X() * mfMap );
+        rPos.setY( rPos.Y() * mfMap );
     }
 }
 
@@ -3184,14 +3184,14 @@ void SvxMSDffManager::Scale( Size& rSiz ) const
 {
     if ( bNeedMap )
     {
-        rSiz.setWidth( BigMulDiv( rSiz.Width(), nMapMul, nMapDiv ) );
-        rSiz.setHeight( BigMulDiv( rSiz.Height(), nMapMul, nMapDiv ) );
+        rSiz.setWidth( rSiz.Width() * mfMap );
+        rSiz.setHeight( rSiz.Height() * mfMap );
     }
 }
 
 void SvxMSDffManager::ScaleEmu( sal_Int32& rVal ) const
 {
-    rVal = BigMulDiv( rVal, nEmuMul, nEmuDiv );
+    rVal = rVal * mfEmu;
 }
 
 sal_uInt32 SvxMSDffManager::ScalePt( sal_uInt32 nVal ) const
@@ -3206,7 +3206,7 @@ sal_uInt32 SvxMSDffManager::ScalePt( sal_uInt32 nVal ) const
 
 sal_Int32 SvxMSDffManager::ScalePoint( sal_Int32 nVal ) const
 {
-    return BigMulDiv( nVal, nPntMul, nPntDiv );
+    return nVal * mfPnt;
 };
 
 void SvxMSDffManager::SetModel(SdrModel* pModel, tools::Long nApplicationScale)
@@ -3217,52 +3217,35 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, tools::Long nApplicationScale)
         // PPT works in units of 576DPI
         // WW on the other side uses twips, i.e. 1440DPI.
         MapUnit eMap = pSdrModel->GetScaleUnit();
-        Fraction aFact( GetMapFactor(MapUnit::MapInch, eMap).X() );
-        tools::Long nMul=aFact.GetNumerator();
-        tools::Long nDiv=aFact.GetDenominator()*nApplicationScale;
-        aFact=Fraction(nMul,nDiv); // try again to shorten it
         // For 100TH_MM -> 2540/576=635/144
         // For Twip     -> 1440/576=5/2
-        nMapMul  = aFact.GetNumerator();
-        nMapDiv  = aFact.GetDenominator();
-        bNeedMap = nMapMul!=nMapDiv;
+        mfMap = GetMapFactor(MapUnit::MapInch, eMap).X() / nApplicationScale;
+        bNeedMap = mfMap != 1.0;
 
         // MS-DFF-Properties are mostly given in EMU (English Metric Units)
         // 1mm=36000emu, 1twip=635emu
-        aFact=GetMapFactor(MapUnit::Map100thMM,eMap).X();
-        nMul=aFact.GetNumerator();
-        nDiv=aFact.GetDenominator()*360;
-        aFact=Fraction(nMul,nDiv); // try again to shorten it
         // For 100TH_MM ->                            1/360
         // For Twip     -> 14,40/(25,4*360)=144/91440=1/635
-        nEmuMul=aFact.GetNumerator();
-        nEmuDiv=aFact.GetDenominator();
+        mfEmu = GetMapFactor(MapUnit::Map100thMM,eMap).X() / 360;
 
         // And something for typographic Points
-        aFact=GetMapFactor(MapUnit::MapPoint,eMap).X();
-        nPntMul=aFact.GetNumerator();
-        nPntDiv=aFact.GetDenominator();
+        mfPnt = GetMapFactor(MapUnit::MapPoint,eMap).X();
     }
     else
     {
         pModel = nullptr;
-        nMapMul = nMapDiv = nMapXOfs = nMapYOfs = nEmuMul = nEmuDiv = nPntMul = nPntDiv = 0;
+        mfMap = 0;
+        mfEmu = 0;
+        mfPnt = 0;
+        nMapXOfs = nMapYOfs = 0;
         bNeedMap = false;
     }
 
     if (bNeedMap)
     {
-        assert(nMapMul > nMapDiv);
-
-        BigInt aMinVal(SAL_MIN_INT32);
-        aMinVal /= nMapMul;
-        aMinVal *= nMapDiv;
-        nMinAllowedVal = aMinVal;
-
-        BigInt aMaxVal(SAL_MAX_INT32);
-        aMaxVal /= nMapMul;
-        aMaxVal *= nMapDiv;
-        nMaxAllowedVal = aMaxVal;
+        assert(mfMap > 1.0);
+        nMinAllowedVal = SAL_MIN_INT32 / mfMap;
+        nMaxAllowedVal = SAL_MAX_INT32 / mfMap;
     }
     else
     {

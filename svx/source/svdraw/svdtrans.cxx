@@ -558,7 +558,7 @@ tools::Long BigMulDiv(tools::Long nVal, tools::Long nMul, tools::Long nDiv)
 static FrPair toPair(o3tl::Length eFrom, o3tl::Length eTo)
 {
     const auto [nNum, nDen] = o3tl::getConversionMulDiv(eFrom, eTo);
-    return FrPair(nNum, nDen);
+    return FrPair(nNum, nDen, nNum, nDen);
 }
 
 // How many eU units fit into a mm, respectively an inch?
@@ -593,7 +593,7 @@ static FrPair GetInchOrMM(MapUnit eU)
         }
         default: break;
     }
-    return Fraction(1,1);
+    return 1.0;
 }
 
 // Calculate the factor that we need to convert units from eS to eD.
@@ -611,8 +611,8 @@ FrPair GetMapFactor(MapUnit eS, MapUnit eD)
     bool bSInch=IsInch(eS);
     bool bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
-    if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
-    if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
+    if (bSInch && !bDInch) { aRet.X() *= 127.0/5; aRet.Y() *= 127.0/5; }
+    if (!bSInch && bDInch) { aRet.X() *= 5.0/127; aRet.Y() *= 5.0/127; }
     return aRet;
 };
 

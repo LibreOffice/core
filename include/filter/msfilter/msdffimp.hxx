@@ -447,14 +447,11 @@ protected:
     SvStream*       pStData2;
     SdrModel*       pSdrModel;
 
-    tools::Long            nMapMul;
-    tools::Long            nMapDiv;
+    double          mfMap;
     tools::Long            nMapXOfs;
     tools::Long            nMapYOfs;
-    tools::Long            nEmuMul;
-    tools::Long            nEmuDiv;
-    tools::Long            nPntMul;
-    tools::Long            nPntDiv;
+    double          mfEmu;
+    double          mfPnt;
     bool            bNeedMap;
     sal_Int32       nMinAllowedVal;
     sal_Int32       nMaxAllowedVal;

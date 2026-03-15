@@ -97,7 +97,7 @@ private:
 protected:
     WW8Export& mrWrt;
     SvStream* mpEscherStrm;
-    tools::Long mnEmuMul, mnEmuDiv;
+    double mfEmu;
 
     virtual sal_Int32 WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eShapeType,
         EscherPropertyContainer& rPropOpt);
@@ -109,7 +109,7 @@ protected:
     static void WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat& rFormat, EscherPropertyContainer& rPropOpt);
 
     sal_Int32 DrawModelToEmu(sal_Int32 nVal) const
-        { return BigMulDiv(nVal, mnEmuMul, mnEmuDiv); }
+        { return nVal * mfEmu; }
 
     static sal_Int32 ToFract16(sal_Int32 nVal, sal_uInt32 nMax);
 
