@@ -116,6 +116,28 @@ void SheetViewManager::deletedRows(SCROW nStartRow, SCROW nRowCount)
     }
 }
 
+void SheetViewManager::insertedColumns(SCCOL nStartCol, SCCOL nColCount)
+{
+    if (mpSortData)
+        mpSortData->maSortOrder.insertedColumns(nStartCol, nColCount);
+
+    for (auto& rSheetView : iterateValidSheetViews())
+    {
+        rSheetView.insertedColumns(nStartCol, nColCount);
+    }
+}
+
+void SheetViewManager::deletedColumns(SCCOL nStartCol, SCCOL nColCount)
+{
+    if (mpSortData)
+        mpSortData->maSortOrder.deletedColumns(nStartCol, nColCount);
+
+    for (auto& rSheetView : iterateValidSheetViews())
+    {
+        rSheetView.deletedColumns(nStartCol, nColCount);
+    }
+}
+
 std::shared_ptr<DefaultViewSortData> SheetViewManager::captureSortData() const
 {
     auto pSortDataCopy = std::make_shared<DefaultViewSortData>();

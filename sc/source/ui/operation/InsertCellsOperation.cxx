@@ -752,21 +752,24 @@ bool InsertCellsOperation::runImplementation()
                 maRange.aStart.Row() - (meCmd == INS_INSROWS_BEFORE ? 1 : 0), 1);
         }
 
-        // Make sheet view manager aware of inserted rows
-        if (bInsertRows)
+        // Update sheet view sort ranges to account for inserted rows/columns
+        if (bInsertRows || bInsertCols)
         {
-            SCROW nInsertedRowCount = nEndRow - nStartRow + 1;
             SCTAB nDefaultViewTab = rDoc.GetDefaultViewTableNumber(nStartTab);
             std::shared_ptr<sc::SheetViewManager> pManager
                 = rDoc.GetSheetViewManager(nDefaultViewTab);
             if (pManager)
             {
-                // Capture sort data before/after update for undo
                 auto pSortDataBefore = pManager->captureSortData();
-                pManager->insertedRows(nStartRow, nInsertedRowCount);
+
+                if (bInsertRows)
+                    pManager->insertedRows(nStartRow, nEndRow - nStartRow + 1);
+                if (bInsertCols)
+                    pManager->insertedColumns(nStartCol, nEndCol - nStartCol + 1);
+
                 auto pSortDataAfter = pManager->captureSortData();
 
-                if (mbRecord && pUndoInsertCells && (pSortDataBefore || pSortDataAfter))
+                if (mbRecord && pUndoInsertCells)
                 {
                     pUndoInsertCells->setSheetViewSortData(
                         nDefaultViewTab, std::move(pSortDataBefore), std::move(pSortDataAfter));

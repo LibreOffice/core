@@ -58,6 +58,12 @@ public:
 
     /** Update data when rows are deleted. */
     void deletedRows(SCROW nStartRow, SCROW nRowCount);
+
+    /** Update data when columns are inserted. */
+    void insertedColumns(SCCOL nStartCol, SCCOL nColCount);
+
+    /** Update data when columns are deleted. */
+    void deletedColumns(SCCOL nStartCol, SCCOL nColCount);
 };
 
 /** Sort data holder. */
@@ -86,10 +92,15 @@ private:
     /** Ensure sort data is allocated. */
     SheetViewSortData& ensureSortData();
 
-    void adjustReorderParamsForInsert(SCROW nStartRow, SCROW nRowCount);
-    void adjustSortParamForInsert(SCROW nStartRow, SCROW nRowCount);
-    void adjustReorderParamsForDelete(SCROW nStartRow, SCROW nRowCount);
-    void adjustSortParamForDelete(SCROW nStartRow, SCROW nRowCount);
+    void adjustReorderParamsForInsertRows(SCROW nStartRow, SCROW nRowCount);
+    void adjustReorderParamsForInsertColumns(SCCOL nStartCol, SCCOL nColCount);
+    void adjustReorderParamsForDeleteRows(SCROW nStartRow, SCROW nRowCount);
+    void adjustReorderParamsForDeleteColumns(SCCOL nStartCol, SCCOL nColCount);
+
+    void adjustSortParamForInsertRows(SCROW nStartRow, SCROW nRowCount);
+    void adjustSortParamForInsertColumns(SCCOL nStartCol, SCCOL nColCount);
+    void adjustSortParamForDeleteRows(SCROW nStartRow, SCROW nRowCount);
+    void adjustSortParamForDeleteColumns(SCCOL nStartCol, SCCOL nColCount);
 
 public:
     SheetView(ScTable* pTable, OUString const& rName, SheetViewID nID);
@@ -128,6 +139,12 @@ public:
 
     /** Update stored sort ranges when rows are deleted. */
     void deletedRows(SCROW nStartRow, SCROW nRowCount);
+
+    /** Update stored sort ranges when columns are inserted. */
+    void insertedColumns(SCCOL nStartCol, SCCOL nColCount);
+
+    /** Update stored sort ranges when columns are deleted. */
+    void deletedColumns(SCCOL nStartCol, SCCOL nColCount);
 
     /** Last used sort parameters */
     ScSortParam const* getSortParam() const;

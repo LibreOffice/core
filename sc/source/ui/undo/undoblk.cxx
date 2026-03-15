@@ -308,7 +308,6 @@ void ScUndoInsertCells::Undo()
     weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginUndo();
     DoChange( true );
-    EndUndo();
 
     // Restore sheet view sort data to the state before the insert
     if (mnDefaultViewTab >= 0 && mpSortDataBefore)
@@ -318,6 +317,9 @@ void ScUndoInsertCells::Undo()
         if (pManager)
             pManager->restoreSortData(mpSortDataBefore);
     }
+
+    // triggers sync
+    EndUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
     for (SCTAB i = 0; i < nCount; ++i)
@@ -329,7 +331,6 @@ void ScUndoInsertCells::Redo()
     weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );     // important due to TrackFormulas in UpdateReference
     BeginRedo();
     DoChange( false );
-    EndRedo();
 
     // Restore sheet view sort data to the state after the insert
     if (mnDefaultViewTab >= 0 && mpSortDataAfter)
@@ -339,6 +340,9 @@ void ScUndoInsertCells::Redo()
         if (pManager)
             pManager->restoreSortData(mpSortDataAfter);
     }
+
+    // triggers sync
+    EndRedo();
 
     if ( pPasteUndo )
         pPasteUndo->Redo();     // redo paste last
@@ -605,7 +609,6 @@ void ScUndoDeleteCells::Undo()
     weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
     BeginUndo();
     DoChange( true );
-    EndUndo();
 
     // Restore sheet view sort data to the state before the delete
     if (mnDefaultViewTab >= 0 && mpSortDataBefore)
@@ -615,6 +618,8 @@ void ScUndoDeleteCells::Undo()
         if (pManager)
             pManager->restoreSortData(mpSortDataBefore);
     }
+
+    EndUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
 
@@ -650,7 +655,6 @@ void ScUndoDeleteCells::Redo()
     weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );     // important because of TrackFormulas in UpdateReference
     BeginRedo();
     DoChange( false);
-    EndRedo();
 
     // Restore sheet view sort data to the state after the delete
     if (mnDefaultViewTab >= 0 && mpSortDataAfter)
@@ -660,6 +664,8 @@ void ScUndoDeleteCells::Redo()
         if (pManager)
             pManager->restoreSortData(mpSortDataAfter);
     }
+
+    EndRedo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
 
