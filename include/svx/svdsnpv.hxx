@@ -99,8 +99,8 @@ protected:
     class ImplHelpLineOverlay*              mpHelpLineOverlay;
 
     Size maMagnSiz;
-    Fraction maSnapWdtX;
-    Fraction maSnapWdtY;
+    double maSnapWdtX { 0.0 };
+    double maSnapWdtY { 0.0 };
 
     sal_uInt16 mnMagnSizPix;
     Degree100 mnSnapAngle;
@@ -140,9 +140,9 @@ public:
     virtual void BrkAction() override; // break actions for derived classes e.g. interrupt dragging.
     virtual void TakeActionRect(tools::Rectangle& rRect) const override;
 
-    void SetSnapGridWidth(const Fraction& rX, const Fraction& rY) { maSnapWdtX=rX; maSnapWdtY=rY; }
-    const Fraction& GetSnapGridWidthX() const { return maSnapWdtX; }
-    const Fraction& GetSnapGridWidthY() const { return maSnapWdtY; }
+    void SetSnapGridWidth(double fX, double fY) { maSnapWdtX=fX; maSnapWdtY=fY; }
+    double GetSnapGridWidthX() const { return maSnapWdtX; }
+    double GetSnapGridWidthY() const { return maSnapWdtY; }
 
     void SetSnapMagnetic(const Size& rSiz) { if (rSiz!=maMagnSiz) { maMagnSiz=rSiz; } }
     void SetSnapMagneticPixel(sal_uInt16 nPix) { mnMagnSizPix=nPix; }

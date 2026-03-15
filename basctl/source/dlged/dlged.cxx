@@ -231,7 +231,7 @@ DlgEditor::DlgEditor (
 
     Size aGridSize( 100, 100 );  // 100TH_MM
     pDlgEdView->SetGridCoarse( aGridSize );
-    pDlgEdView->SetSnapGridWidth(Fraction(aGridSize.Width(), 1), Fraction(aGridSize.Height(), 1));
+    pDlgEdView->SetSnapGridWidth(aGridSize.Width(), aGridSize.Height());
     pDlgEdView->SetGridSnap( true );
     pDlgEdView->SetGridVisible( false );
     pDlgEdView->SetDragStripes(false);
