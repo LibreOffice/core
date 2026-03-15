@@ -2540,7 +2540,7 @@ Size SdrPowerPointImport::GetPageSize() const
     Scale( aRet );
     // PPT works with units of 576 dpi in any case. To avoid inaccuracies
     // I do round the last decimal digit away.
-    if ( nMapMul > 2 * nMapDiv )
+    if ( mfMap > 2.0 )
     {
         MapUnit eMap = pSdrModel->GetScaleUnit();
         bool bInch = IsInch( eMap );

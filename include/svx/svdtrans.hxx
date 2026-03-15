@@ -224,17 +224,17 @@ void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho);
 SVXCORE_DLLPUBLIC tools::Long BigMulDiv(tools::Long nVal, tools::Long nMul, tools::Long nDiv);
 
 class FrPair {
-    Fraction m_aX;
-    Fraction m_aY;
+    double m_aX;
+    double m_aY;
 public:
-    FrPair(const Fraction& rBoth)                     : m_aX(rBoth),m_aY(rBoth)         {}
-    FrPair(const Fraction& rX, const Fraction& rY)    : m_aX(rX),m_aY(rY)               {}
-    FrPair(tools::Long nMul, tools::Long nDiv)                      : m_aX(nMul,nDiv),m_aY(nMul,nDiv) {}
-    FrPair(tools::Long xMul, tools::Long xDiv, tools::Long yMul, tools::Long yDiv): m_aX(xMul,xDiv),m_aY(yMul,yDiv) {}
-    const Fraction& X() const { return m_aX; }
-    const Fraction& Y() const { return m_aY; }
-    Fraction& X()             { return m_aX; }
-    Fraction& Y()             { return m_aY; }
+    FrPair(const double& rBoth)                     : m_aX(rBoth),m_aY(rBoth)         {}
+    FrPair(const double& rX, const double& rY)    : m_aX(rX),m_aY(rY)               {}
+    FrPair(tools::Long nMul, tools::Long nDiv) = delete;
+    FrPair(tools::Long xMul, tools::Long xDiv, tools::Long yMul, tools::Long yDiv): m_aX(double(xMul)/xDiv),m_aY(double(yMul)/yDiv) {}
+    double X() const { return m_aX; }
+    double Y() const { return m_aY; }
+    double& X()             { return m_aX; }
+    double& Y()             { return m_aY; }
 };
 
 // To convert units of measurement
