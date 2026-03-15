@@ -232,7 +232,7 @@ public:
     void MoveMarkedObj(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedObj(const Point& rRef, double xFact, double yFact, bool bCopy=false);
     bool IsMarkedObjSizeValid(const Size& aTargetSize);
-    SAL_DLLPRIVATE void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bWdh, const bool bHgt);
+    SAL_DLLPRIVATE void ResizeMultMarkedObj(const Point& rRef, double xFact, double yFact, const bool bWdh, const bool bHgt);
     SAL_DLLPRIVATE Degree100 GetMarkedObjRotate() const;
     void RotateMarkedObj(const Point& rRef, Degree100 nAngle, bool bCopy=false);
     SAL_DLLPRIVATE void MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy=false);

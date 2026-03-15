@@ -271,8 +271,8 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, double xFact, double yFact,
         EndUndo();
 }
 void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
-    const Fraction& xFact,
-    const Fraction& yFact,
+    double xFact,
+    double yFact,
     const bool bWdh,
     const bool bHgt)
 {
@@ -295,13 +295,12 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
             AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         }
 
-        Fraction aFrac(1,1);
-        if (bWdh && xFact.IsValid() && bHgt && yFact.IsValid())
-            pO->Resize(rRef, double(xFact), double(yFact));
-        else if (bWdh && xFact.IsValid())
-            pO->Resize(rRef, double(xFact), double(aFrac));
-        else if (bHgt && yFact.IsValid())
-            pO->Resize(rRef, double(aFrac), double(yFact));
+        if (bWdh && xFact != 0.0 && bHgt && yFact != 0.0)
+            pO->Resize(rRef, xFact, yFact);
+        else if (bWdh && xFact != 0.0)
+            pO->Resize(rRef, xFact, 1.0);
+        else if (bHgt && yFact != 0.0)
+            pO->Resize(rRef, 1.0, yFact);
     }
     if( bUndo )
         EndUndo();
@@ -1781,8 +1780,10 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
 
     // change size and height
     if (bChgSiz && (m_bResizeFreeAllowed || m_bResizePropAllowed)) {
-        Fraction aWdt(nSizX,aRect.Right()-aRect.Left());
-        Fraction aHgt(nSizY,aRect.Bottom()-aRect.Top());
+        auto nWidth = aRect.Right()-aRect.Left();
+        double aWdt = nWidth == 0 ? 0 : (double(nSizX) / nWidth);
+        auto nHeight = aRect.Bottom()-aRect.Top();
+        double aHgt = nHeight == 0 ? 0 : (double(nSizY) / nHeight);
         Point aRef(ImpGetPoint(aRect,eSizePoint));
 
         if(GetSdrPageView())
