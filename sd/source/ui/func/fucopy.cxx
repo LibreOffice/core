@@ -227,8 +227,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             }
         }
 
-        Fraction aWidth( aRect.Right() - aRect.Left() + lWidth, aRect.Right() - aRect.Left() );
-        Fraction aHeight( aRect.Bottom() - aRect.Top() + lHeight, aRect.Bottom() - aRect.Top() );
+        double aWidth = double( aRect.Right() - aRect.Left() + lWidth ) / ( aRect.Right() - aRect.Left() );
+        double aHeight = double( aRect.Bottom() - aRect.Top() + lHeight ) / ( aRect.Bottom() - aRect.Top() );
 
         if( mpView->IsResizeAllowed() )
             mpView->ResizeAllMarked( aRect.TopLeft(), aWidth, aHeight );

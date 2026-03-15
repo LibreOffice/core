@@ -230,7 +230,7 @@ public:
     // line has always a height of 0
     void SetMarkedObjRect(const tools::Rectangle& rRect);
     void MoveMarkedObj(const Size& rSiz, bool bCopy=false);
-    void ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
+    void ResizeMarkedObj(const Point& rRef, double xFact, double yFact, bool bCopy=false);
     bool IsMarkedObjSizeValid(const Size& aTargetSize);
     SAL_DLLPRIVATE void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bWdh, const bool bHgt);
     SAL_DLLPRIVATE Degree100 GetMarkedObjRotate() const;
@@ -247,7 +247,7 @@ public:
     void CopyMarkedObj();
     void SetAllMarkedRect(const tools::Rectangle& rRect) { SetMarkedObjRect(rRect); }
     void MoveAllMarked(const Size& rSiz, bool bCopy=false) { MoveMarkedObj(rSiz,bCopy); }
-    void ResizeAllMarked(const Point& rRef, const Fraction& xFact, const Fraction& yFact) { ResizeMarkedObj(rRef,xFact,yFact); }
+    void ResizeAllMarked(const Point& rRef, double xFact, double yFact) { ResizeMarkedObj(rRef,xFact,yFact); }
     void RotateAllMarked(const Point& rRef, Degree100 nAngle) { RotateMarkedObj(rRef,nAngle); }
     void MirrorAllMarkedHorizontal() { MirrorMarkedObjHorizontal(); }
     void MirrorAllMarkedVertical() { MirrorMarkedObjVertical(); }
