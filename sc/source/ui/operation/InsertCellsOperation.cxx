@@ -374,6 +374,7 @@ bool InsertCellsOperation::runImplementation()
     weld::WaitObject aWait(
         ScDocShell::GetActiveDialogParent()); // important due to TrackFormulas at UpdateReference
 
+    ScUndoInsertCells* pUndoInsertCells = nullptr;
     ScDocumentUniquePtr pRefUndoDoc;
     std::unique_ptr<ScRefUndoData> pUndoData;
     if (mbRecord)
@@ -615,10 +616,12 @@ bool InsertCellsOperation::runImplementation()
                 mrDocShell.GetUndoManager()->LeaveListAction();
             }
 
-            mrDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoInsertCells>(
+            auto pUndoAction = std::make_unique<ScUndoInsertCells>(
                 mrDocShell, ScRange(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab),
                 nUndoPos, std::move(pTabs), std::move(pScenarios), meCmd, std::move(pRefUndoDoc),
-                std::move(pUndoData), mbPartOfPaste));
+                std::move(pUndoData), mbPartOfPaste);
+            pUndoInsertCells = pUndoAction.get();
+            mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoAction));
         }
 
         // #i8302 : we remerge growing ranges, with the new part inserted
@@ -757,7 +760,18 @@ bool InsertCellsOperation::runImplementation()
             std::shared_ptr<sc::SheetViewManager> pManager
                 = rDoc.GetSheetViewManager(nDefaultViewTab);
             if (pManager)
+            {
+                // Capture sort data before/after update for undo
+                auto pSortDataBefore = pManager->captureSortData();
                 pManager->insertedRows(nStartRow, nInsertedRowCount);
+                auto pSortDataAfter = pManager->captureSortData();
+
+                if (mbRecord && pUndoInsertCells && (pSortDataBefore || pSortDataAfter))
+                {
+                    pUndoInsertCells->setSheetViewSortData(
+                        nDefaultViewTab, std::move(pSortDataBefore), std::move(pSortDataAfter));
+                }
+            }
         }
 
         syncSheetViews();
