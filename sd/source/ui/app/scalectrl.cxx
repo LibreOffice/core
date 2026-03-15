@@ -105,7 +105,7 @@ void SdScaleControl::Command(const CommandEvent& rCEvt)
         nY = aTable[i % TABLE_COUNT];
     else
         nY = 1;
-    pDoc->SetUIScale(Fraction(nX, nY));
+    pDoc->SetUIScale(double(nX) / nY);
 
     SfxBindings& pBindings = pViewFrame->GetBindings();
     pBindings.Invalidate(SID_SCALE); //update statusbar

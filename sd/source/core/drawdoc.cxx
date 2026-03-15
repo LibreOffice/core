@@ -167,7 +167,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SvtSysLocale aSysLocale;
     // Set measuring unit (of the application) and scale (of SdMod)
     if (comphelper::IsFuzzing())
-        SetUIUnit(FieldUnit::CM, Fraction(1, 1));
+        SetUIUnit(FieldUnit::CM, 1.0);
     else
     {
         sal_Int32 nX = officecfg::Office::Draw::Zoom::ScaleX::get();
@@ -176,14 +176,14 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         // Allow UI scale only for draw documents.
         if( eType == DocumentType::Draw )
             if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
-                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::get()), Fraction( nX, nY ) );  // user-defined
+                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::get()), double(nX) / nY );  // user-defined
             else
-                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::get()), Fraction( nX, nY ) );  // user-defined
+                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::get()), double(nX) / nY );  // user-defined
         else
             if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
-                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get()), Fraction( 1, 1 ) );    // default
+                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get()), 1.0 );    // default
             else
-                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get()), Fraction( 1, 1 ) );    // default
+                SetUIUnit( static_cast<FieldUnit>(officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get()), 1.0 );    // default
     }
 
     SetScaleUnit(MapUnit::Map100thMM);

@@ -158,7 +158,7 @@ protected:
     Size           m_aMaxObjSize; // e.g. for auto-growing text
     MapUnit        m_eObjUnit;   // see above
     FieldUnit      m_eUIUnit;      // unit, scale (e.g. 1/1000) for the UI (status bar) is set by ImpSetUIUnit()
-    Fraction       m_aUIScale;     // see above
+    double         m_aUIScale;     // see above
     OUString       m_aUIUnitStr;   // see above
     Fraction       m_aUIUnitFact;  // see above
     int            m_nUIUnitDecimalMark; // see above
@@ -380,10 +380,10 @@ public:
     void             SetUIUnit(FieldUnit eUnit);
     FieldUnit        GetUIUnit() const                          { return m_eUIUnit; }
     // The scale of the drawing. Default 1/1.
-    void             SetUIScale(const Fraction& rScale);
-    const Fraction&  GetUIScale() const                         { return m_aUIScale; }
+    void             SetUIScale(double rScale);
+    double           GetUIScale() const                         { return m_aUIScale; }
     // Setting both simultaneously performs a little better
-    void             SetUIUnit(FieldUnit eUnit, const Fraction& rScale);
+    void             SetUIUnit(FieldUnit eUnit, double rScale);
 
     static OUString  GetUnitString(FieldUnit eUnit);
     OUString         GetMetricString(tools::Long nVal, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;

@@ -540,9 +540,9 @@ std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
 
     if(pFrameView)
     {
-        const Fraction& rFraction =  pDoc->GetUIScale();
-        nX=rFraction.GetNumerator();
-        nY=rFraction.GetDenominator();
+        Fraction aFraction(pDoc->GetUIScale());
+        nX=aFraction.GetNumerator();
+        nY=aFraction.GetDenominator();
     }
     else
     {
@@ -669,7 +669,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
             // Apply to document only if doc type match
             if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
             {
-                pDoc->SetUIScale( Fraction( nX, nY ) );
+                pDoc->SetUIScale( double(nX) / nY );
                 if( pViewShell )
                     pViewShell->SetRuler( pViewShell->HasRuler() );
             }

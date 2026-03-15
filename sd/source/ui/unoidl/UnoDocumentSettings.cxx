@@ -696,7 +696,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                     sal_Int32 nValue = 0;
                     if( *pValues >>= nValue )
                     {
-                        Fraction aFract( nValue, pDoc->GetUIScale().GetDenominator() );
+                        double aFract = double( nValue ) / Fraction(pDoc->GetUIScale()).GetDenominator();
                         pDoc->SetUIScale( aFract );
                         bOk = true;
                         bChanged = true;
@@ -708,10 +708,10 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                     sal_Int32 nValue = 0;
                     if( *pValues >>= nValue )
                     {
-                        auto nNumerator = pDoc->GetUIScale().GetNumerator();
+                        auto nNumerator = Fraction(pDoc->GetUIScale()).GetNumerator();
                         assert(nNumerator != 0);
                         Fraction aFract(nNumerator, nValue);
-                        pDoc->SetUIScale( aFract );
+                        pDoc->SetUIScale( double(aFract) );
                         bOk = true;
                         bChanged = true;
                     }
@@ -1195,10 +1195,10 @@ DocumentSettings::_getPropertyValues(
                 }
                 break;
             case HANDLE_SCALE_NUM:
-                *pValue <<= pDoc->GetUIScale().GetNumerator();
+                *pValue <<= Fraction(pDoc->GetUIScale()).GetNumerator();
                 break;
             case HANDLE_SCALE_DOM:
-                *pValue <<= pDoc->GetUIScale().GetDenominator();
+                *pValue <<= Fraction(pDoc->GetUIScale()).GetDenominator();
                 break;
             case HANDLE_TABSTOP:
                 *pValue <<= static_cast<sal_Int32>(pDoc->GetDefaultTabulator());

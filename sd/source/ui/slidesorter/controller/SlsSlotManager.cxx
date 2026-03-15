@@ -879,7 +879,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
         rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
     }
     //Scale value
-    const Fraction& aUIScale = mrSlideSorter.GetModel().GetDocument()->GetUIScale();
+    const Fraction aUIScale( mrSlideSorter.GetModel().GetDocument()->GetUIScale() );
     OUString aString = OUString::number(aUIScale.GetNumerator()) +
         ":" + OUString::number(aUIScale.GetDenominator());
     rSet.Put( SfxStringItem( SID_SCALE, aString ) );
