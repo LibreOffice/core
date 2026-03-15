@@ -331,6 +331,10 @@ public:
         return SizeT(o3tl::convert(Width(), nMulX, nDivX),
                     o3tl::convert(Height(), nMulY, nDivY));
     }
+    constexpr SizeT scale(double nX, double nY) const
+    {
+        return SizeT(std::round(Width() * nX), std::round(Height() * nY));
+    }
 };
 
 class SAL_WARN_UNUSED Size : public SizeTemplate<::Size>
