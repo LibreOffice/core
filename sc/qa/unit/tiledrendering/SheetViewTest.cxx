@@ -3886,6 +3886,157 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertCells_DefaultAndSheetView)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoInsertCells_SheetViewSortData)
+{
+    // Test that undoing insert rows restores sheet view sort data
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // Create sheet view and sort descending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+
+    // Verify initial state
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Verify sheet view has sort data
+    std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
+    CPPUNIT_ASSERT(pManager);
+    auto& rSheetView = *pManager->iterateValidSheetViews().begin();
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() != nullptr);
+
+    // Insert row in auto-filter range from default view
+    {
+        switchToDefaultView();
+        sc::InsertCellsOperation aOperation(
+            *pDocShell, ScRange(0, 2, nDefaultViewTab, rDocument.MaxCol(), 2, nDefaultViewTab),
+            nullptr, INS_INSROWS_BEFORE, true, true, false, 0);
+        CPPUNIT_ASSERT(aOperation.run());
+    }
+
+    // Verify expanded sort range
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 5));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3", u"" }),
+                         getValues(mpTabViewSheetView, 0, 1, 5));
+
+    // Undo the insert
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // Verify data is back to original
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+
+    // Sheet view sort data should be restored - sort range should be original 4 rows
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() != nullptr);
+    CPPUNIT_ASSERT(rSheetView.getSortParam() != nullptr);
+
+    // Trigger sync by editing on default view
+    {
+        switchToDefaultView();
+        typeCharsInCell(std::string("44"), 0, 1, mpTabViewDefaultView, pModelObj);
+    }
+
+    // Default view: A2=44
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"44", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+
+    // Sheet view should sync correctly with original sort range (descending)
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"44", u"7", u"5", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+}
+
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoDeleteCells_SheetViewSortData)
+{
+    // Test that undoing delete rows restores sheet view sort data
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // Create sheet view and sort descending
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+
+    // Verify initial state
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    std::shared_ptr<sc::SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
+    CPPUNIT_ASSERT(pManager);
+    auto& rSheetView = *pManager->iterateValidSheetViews().begin();
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() != nullptr);
+
+    // Delete row in auto-filter range from default view (row 3)
+    {
+        switchToDefaultView();
+        sc::DeleteCellsOperation aOperation(
+            *pDocShell, ScRange(0, 2, nDefaultViewTab, rDocument.MaxCol(), 2, nDefaultViewTab),
+            nullptr, DelCellCmd::Rows, true);
+        CPPUNIT_ASSERT(aOperation.run());
+    }
+
+    // Verify shrunk sort range
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 3));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 3));
+
+    // Undo the delete
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // Verify data is back to original
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+
+    // Sheet view sort data should be restored
+    CPPUNIT_ASSERT(rSheetView.getSortOrder() != nullptr);
+    CPPUNIT_ASSERT(rSheetView.getSortParam() != nullptr);
+
+    // Trigger sync by editing on default view
+    {
+        switchToDefaultView();
+        typeCharsInCell(std::string("55"), 0, 2, mpTabViewDefaultView, pModelObj);
+    }
+
+    // Default view: A3=55
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"55", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+
+    // Sheet view should sync correctly with original sort range (descending)
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"55", u"7", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+}
+
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteCells_DefaultAndSheetView)
 {
     // Test sync to sheet view when deleting rows

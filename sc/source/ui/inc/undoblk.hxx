@@ -25,6 +25,7 @@
 #include <paramisc.hxx>
 #include <editeng/boxitem.hxx>
 
+#include <SheetViewManager.hxx>
 #include <memory>
 
 class ScDocShell;
@@ -43,6 +44,11 @@ public:
                                        InsCellCmd eNewCmd, ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData,
                                        bool bNewPartOfPaste );
     virtual         ~ScUndoInsertCells() override;
+
+    void setSheetViewSortData(
+                        SCTAB nDefaultViewTab,
+                        std::shared_ptr<sc::DefaultViewSortData> pSortDataBefore,
+                        std::shared_ptr<sc::DefaultViewSortData> pSortDataAfter);
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -66,6 +72,10 @@ private:
     std::unique_ptr<SfxUndoAction>
                     pPasteUndo;
 
+    SCTAB mnDefaultViewTab = -1;
+    std::shared_ptr<sc::DefaultViewSortData> mpSortDataBefore;
+    std::shared_ptr<sc::DefaultViewSortData> mpSortDataAfter;
+
     void            DoChange ( const bool bUndo );
     void            SetChangeTrack();
 };
@@ -78,6 +88,11 @@ public:
                                        SCTAB nNewCount, std::unique_ptr<SCTAB[]> pNewTabs, std::unique_ptr<SCTAB[]> pNewScenarios,
                                        DelCellCmd eNewCmd, ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData );
     virtual         ~ScUndoDeleteCells() override;
+
+    void setSheetViewSortData(
+                        SCTAB nDefaultViewTab,
+                        std::shared_ptr<sc::DefaultViewSortData> pSortDataBefore,
+                        std::shared_ptr<sc::DefaultViewSortData> pSortDataAfter);
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -96,6 +111,10 @@ private:
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
     DelCellCmd      eCmd;
+
+    SCTAB mnDefaultViewTab = -1;
+    std::shared_ptr<sc::DefaultViewSortData> mpSortDataBefore;
+    std::shared_ptr<sc::DefaultViewSortData> mpSortDataAfter;
 
     void            DoChange ( const bool bUndo );
     void            SetChangeTrack();

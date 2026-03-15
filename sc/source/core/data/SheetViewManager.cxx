@@ -118,19 +118,15 @@ void SheetViewManager::deletedRows(SCROW nStartRow, SCROW nRowCount)
 
 std::shared_ptr<DefaultViewSortData> SheetViewManager::captureSortData() const
 {
-    if (!mpSortData)
-        return nullptr;
+    auto pSortDataCopy = std::make_shared<DefaultViewSortData>();
+    if (mpSortData)
+        pSortDataCopy->maSortOrder = mpSortData->maSortOrder;
 
-    // Deep copy the manager sort order + snapshot each SheetView's reorder params
-    auto pSortDataCopy = std::make_shared<DefaultViewSortData>(*mpSortData);
-
-    // Also capture the per sheet view reorder params
-    pSortDataCopy->maSheetViewReorderParams.clear();
+    // Capture each SheetView's full sort data
     for (auto const& rSheetView : iterateValidSheetViews())
     {
-        auto const* pReorderParams = rSheetView.getReorderParameters();
-        pSortDataCopy->maSheetViewReorderParams.emplace_back(
-            rSheetView.getID(), pReorderParams ? *pReorderParams : ReorderParam());
+        pSortDataCopy->maSheetViewSortData.emplace_back(rSheetView.getID(),
+                                                        rSheetView.captureSortData());
     }
     return pSortDataCopy;
 }
@@ -147,17 +143,17 @@ void SheetViewManager::restoreSortData(std::shared_ptr<DefaultViewSortData> cons
         mpSortData->maSortOrder = pData->maSortOrder;
     }
 
-    // Restore per sheet view reorder params
+    // Restore each SheetView's full sort data
     if (!pData)
         return;
 
-    for (auto const & [ nID, rReorderParams ] : pData->maSheetViewReorderParams)
+    for (auto const & [ nID, pSortData ] : pData->maSheetViewSortData)
     {
         if (isValidSheetViewID(nID))
         {
             auto pSheetView = get(nID);
             if (pSheetView)
-                pSheetView->restoreReorderParameters(rReorderParams);
+                pSheetView->restoreSortData(pSortData);
         }
     }
 }
