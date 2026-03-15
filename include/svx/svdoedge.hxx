@@ -246,7 +246,7 @@ public:
 
     SAL_DLLPRIVATE virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     SAL_DLLPRIVATE virtual void NbcMove(const Size& aSize) override;
-    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact) override;
+    SAL_DLLPRIVATE virtual void NbcResize(const Point& rRefPnt, double aXFact, double aYFact) override;
 
     // #i54102# added rotate, mirror and shear support
     SAL_DLLPRIVATE virtual void NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs) override;

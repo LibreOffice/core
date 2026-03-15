@@ -1088,8 +1088,8 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
 
         if(GetSdrObject()->GetObjInventor() == SdrInventor::Default && GetSdrObject()->GetObjIdentifier() == SdrObjKind::Measure )
         {
-            Fraction aWdt(aLocalSize.Width(),aRect.Right()-aRect.Left());
-            Fraction aHgt(aLocalSize.Height(),aRect.Bottom()-aRect.Top());
+            double aWdt = double(aLocalSize.Width()) / (aRect.Right()-aRect.Left());
+            double aHgt = double(aLocalSize.Height()) / (aRect.Bottom()-aRect.Top());
             Point aPt = GetSdrObject()->GetSnapRect().TopLeft();
             GetSdrObject()->Resize(aPt,aWdt,aHgt);
         }

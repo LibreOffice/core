@@ -50,7 +50,7 @@ void SdrTextObj::NbcSetSnapRect(const tools::Rectangle& rRect)
         tools::Long nHgt0=aSR0.Bottom()-aSR0.Top();
         tools::Long nWdt1=rRect.Right()-rRect.Left();
         tools::Long nHgt1=rRect.Bottom()-rRect.Top();
-        SdrTextObj::NbcResize(maSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
+        SdrTextObj::NbcResize(maSnapRect.TopLeft(), double(nWdt1) / nWdt0, double(nHgt1) / nHgt0);
         SdrTextObj::NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     }
     else
@@ -101,12 +101,12 @@ void SdrTextObj::NbcMove(const Size& rSize)
     SetBoundAndSnapRectsDirty(true);
 }
 
-void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrTextObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     bool bNotSheared=maGeo.m_nShearAngle==0_deg100;
     bool bRotate90=bNotSheared && maGeo.m_nRotationAngle.get() % 9000 ==0;
-    bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-    bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+    bool bXMirr = (xFact<0);
+    bool bYMirr = (yFact<0);
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {

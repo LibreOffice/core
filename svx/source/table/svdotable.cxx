@@ -1926,7 +1926,7 @@ void SdrTableObj::NbcMove(const Size& rSiz)
 }
 
 
-void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrTableObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     tools::Rectangle aOldRect( maLogicRect );
     ResizeRect(maLogicRect,rRef,xFact,yFact);

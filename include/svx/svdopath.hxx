@@ -110,7 +110,7 @@ public:
     basegfx::B2DPolyPolygon getDragPolyPolygon(const SdrDragStat& rDrag) const;
 
     virtual void NbcMove(const Size& aSize) override;
-    virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact) override;
+    virtual void NbcResize(const Point& rRefPnt, double aXFact, double aYFact) override;
     virtual void NbcRotate(const Point& rRefPnt, Degree100 nAngle, double fSin, double fCos) override;
     virtual void NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2) override;
     virtual void NbcShear(const Point& rRefPnt, Degree100 nAngle, double fTan, bool bVShear) override;

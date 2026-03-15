@@ -139,7 +139,7 @@ void E3dObject::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 }
 
 // resize object, used from old 2d interfaces, e.g. in Move/Scale dialog (F4)
-void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void E3dObject::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     // Movement in X, Y in the eye coordinate system
     E3dScene* pScene(getRootE3dSceneFromE3dObject());

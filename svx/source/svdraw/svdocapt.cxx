@@ -571,7 +571,7 @@ void SdrCaptionObj::NbcMove(const Size& rSiz)
         SetTailPos(GetFixedTailPos());
 }
 
-void SdrCaptionObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrCaptionObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     SdrRectObj::NbcResize(rRef,xFact,yFact);
     ResizePoly(maTailPoly,rRef,xFact,yFact);

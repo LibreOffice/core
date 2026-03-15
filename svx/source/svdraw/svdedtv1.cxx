@@ -264,7 +264,7 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, cons
             AddUndoActions( CreateConnectorUndo( *pO ) );
             AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         }
-        pO->Resize(rRef,xFact,yFact);
+        pO->Resize(rRef,double(xFact),double(yFact));
     }
 
     if( bUndo )
@@ -297,11 +297,11 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
 
         Fraction aFrac(1,1);
         if (bWdh && xFact.IsValid() && bHgt && yFact.IsValid())
-            pO->Resize(rRef, xFact, yFact);
+            pO->Resize(rRef, double(xFact), double(yFact));
         else if (bWdh && xFact.IsValid())
-            pO->Resize(rRef, xFact, aFrac);
+            pO->Resize(rRef, double(xFact), double(aFrac));
         else if (bHgt && yFact.IsValid())
-            pO->Resize(rRef, aFrac, yFact);
+            pO->Resize(rRef, double(aFrac), double(yFact));
     }
     if( bUndo )
         EndUndo();

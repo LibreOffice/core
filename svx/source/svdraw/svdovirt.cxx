@@ -356,7 +356,7 @@ void SdrVirtObj::NbcMove(const Size& rSiz)
     SetBoundAndSnapRectsDirty();
 }
 
-void SdrVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrVirtObj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     mxRefObj->NbcResize(rRef-m_aAnchor,xFact,yFact);
     SetBoundAndSnapRectsDirty();
@@ -392,9 +392,9 @@ void SdrVirtObj::Move(const Size& rSiz)
     }
 }
 
-void SdrVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
+void SdrVirtObj::Resize(const Point& rRef, double xFact, double yFact, bool bUnsetRelative)
 {
-    if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
+    if (xFact != 1.0 || yFact != 1.0) {
         tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         mxRefObj->Resize(rRef-m_aAnchor,xFact,yFact, bUnsetRelative);
         SetBoundAndSnapRectsDirty();

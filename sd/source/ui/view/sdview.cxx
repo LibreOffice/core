@@ -919,8 +919,8 @@ void View::SetMarkedOriginalSize()
                         ::tools::Rectangle   aDrawRect( pObj->GetLogicRect() );
 
                         pUndoGroup->AddAction( mrDoc.GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
-                        pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
-                                                           Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
+                        pObj->Resize( aDrawRect.TopLeft(), double( aOleSize.Width() ) / aDrawRect.GetWidth(),
+                                                           double( aOleSize.Height() ) / aDrawRect.GetHeight() );
                     }
                 }
             }

@@ -1645,7 +1645,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
     }
 }
 
-void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrOle2Obj::NbcResize(const Point& rRef, double xFact, double yFact)
 {
     if(!getSdrModelFromSdrObject().isLocked())
     {

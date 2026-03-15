@@ -303,7 +303,7 @@ bool SdrExchangeView::Paste(
                 if(bResize)
                 {
                     pNewObj->getSdrModelFromSdrObject().SetPasteResize(true);
-                    pNewObj->NbcResize(aPt0,aXResize,aYResize);
+                    pNewObj->NbcResize(aPt0,double(aXResize),double(aYResize));
                     pNewObj->getSdrModelFromSdrObject().SetPasteResize(false);
                 }
 

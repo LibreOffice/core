@@ -3607,7 +3607,7 @@ void ScXMLExport::WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell)
                     = Fraction(aFullSnapRect.getOpenHeight(), aActualSnapRect.getOpenHeight());
                 if (!aScaleHeight.IsValid())
                     aScaleHeight = Fraction(1, 1);
-                pObj->NbcResize(aFullTopPoint, aScaleWidth, aScaleHeight);
+                pObj->NbcResize(aFullTopPoint, double(aScaleWidth), double(aScaleHeight));
             }
         }
 
@@ -3660,7 +3660,7 @@ void ScXMLExport::WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell)
             Fraction aScaleHeightInvers(aScaleHeight.GetDenominator(), aScaleHeight.GetNumerator());
             if (!aScaleHeightInvers.IsValid())
                 aScaleHeightInvers = Fraction(1, 1);
-            pObj->NbcResize(aFullTopPoint, aScaleWidthInvers, aScaleHeightInvers);
+            pObj->NbcResize(aFullTopPoint, double(aScaleWidthInvers), double(aScaleHeightInvers));
         }
         if (bNeedsRestorePosition)
         {

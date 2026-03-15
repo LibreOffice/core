@@ -1456,8 +1456,8 @@ SwPasteSdr SwFEShell::PasteStream(SvStream & rStrm, SwPasteSdr nAction, const Po
                 tools::Rectangle aNewRect( pNewObj->GetCurrentBoundRect() );
                 Size aNewSize( aNewRect.GetSize() );
 
-                Fraction aScaleWidth( aOldObjSize.Width(), aNewSize.Width() );
-                Fraction aScaleHeight( aOldObjSize.Height(), aNewSize.Height());
+                double aScaleWidth = double( aOldObjSize.Width() ) / aNewSize.Width();
+                double aScaleHeight = double( aOldObjSize.Height() ) / aNewSize.Height();
                 pNewObj->NbcResize( aNewRect.TopLeft(), aScaleWidth, aScaleHeight);
 
                 Point aVec = aOldObjRect.TopLeft() - aNewRect.TopLeft();

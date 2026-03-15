@@ -325,8 +325,7 @@ void E3dScene::NbcMove(const Size& rSize)
     NbcSetSnapRect(aNewSnapRect);
 }
 
-void E3dScene::NbcResize(const Point& rRef, const Fraction& rXFact,
-                                            const Fraction& rYFact)
+void E3dScene::NbcResize(const Point& rRef, double rXFact, double rYFact)
 {
     tools::Rectangle aNewSnapRect = GetSnapRect();
     ResizeRect(aNewSnapRect, rRef, rXFact, rYFact);

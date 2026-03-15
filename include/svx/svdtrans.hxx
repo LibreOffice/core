@@ -39,9 +39,12 @@ inline void MovePoly(tools::Polygon& rPoly, const Size& S)      { rPoly.Move(S.W
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 
 SVXCORE_DLLPUBLIC void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+SVXCORE_DLLPUBLIC void ResizeRect(tools::Rectangle& rRect, const Point& rRef, double xFact, double yFact);
 inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, const Fraction& yFract);
 void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+void ResizePoly(tools::Polygon& rPoly, const Point& rRef, double xFact, double yFact);
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+void ResizeXPoly(XPolygon& rPoly, const Point& rRef, double xFact, double yFact);
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs);
 SVXCORE_DLLPUBLIC void RotatePoly(tools::Polygon& rPoly, const Point& rRef, double sn, double cs);
@@ -94,6 +97,12 @@ inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, 
 {
     double nxFract = xFract.IsValid() ? static_cast<double>(xFract) : 1.0;
     double nyFract = yFract.IsValid() ? static_cast<double>(yFract) : 1.0;
+    rPnt.setX(rRef.X() + basegfx::fround<tools::Long>((rPnt.X() - rRef.X()) * nxFract));
+    rPnt.setY(rRef.Y() + basegfx::fround<tools::Long>((rPnt.Y() - rRef.Y()) * nyFract));
+}
+
+inline void ResizePoint(Point& rPnt, const Point& rRef, double nxFract, double nyFract)
+{
     rPnt.setX(rRef.X() + basegfx::fround<tools::Long>((rPnt.X() - rRef.X()) * nxFract));
     rPnt.setY(rRef.Y() + basegfx::fround<tools::Long>((rPnt.Y() - rRef.Y()) * nyFract));
 }

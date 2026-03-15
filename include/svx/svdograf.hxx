@@ -172,7 +172,7 @@ public:
     SAL_DLLPRIVATE virtual sal_uInt32 GetHdlCount() const override;
     SAL_DLLPRIVATE virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
-    virtual void            NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
+    virtual void            NbcResize(const Point& rRef, double xFact, double yFact) override;
     SAL_DLLPRIVATE virtual void            NbcMirror(const Point& rRef1, const Point& rRef2) override;
     SAL_DLLPRIVATE virtual std::unique_ptr<SdrObjGeoData>  NewGeoData() const override;
     SAL_DLLPRIVATE virtual void            SaveGeoData(SdrObjGeoData& rGeo) const override;
