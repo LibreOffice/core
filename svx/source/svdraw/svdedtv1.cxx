@@ -238,7 +238,7 @@ bool SdrEditView::IsMarkedObjSizeValid(const Size& aTargetSize)
     return false;
 }
 
-void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
+void SdrEditView::ResizeMarkedObj(const Point& rRef, double xFact, double yFact, bool bCopy)
 {
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
@@ -776,12 +776,12 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr)
     if (const SdrResizeXAllItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_RESIZEXALL))
     {
         Fraction aXFact = pPoolItem->GetValue();
-        ResizeMarkedObj(aAllSnapRect.TopLeft(),aXFact,Fraction(1,1));
+        ResizeMarkedObj(aAllSnapRect.TopLeft(),double(aXFact),1.0);
     }
     if (const SdrResizeYAllItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_RESIZEYALL))
     {
         Fraction aYFact = pPoolItem->GetValue();
-        ResizeMarkedObj(aAllSnapRect.TopLeft(),Fraction(1,1),aYFact);
+        ResizeMarkedObj(aAllSnapRect.TopLeft(),1.0,double(aYFact));
     }
     if (const SdrRotateAllItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_ROTATEALL))
     {
