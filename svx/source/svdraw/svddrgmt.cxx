@@ -1723,15 +1723,15 @@ PointerStyle SdrDragMove::GetSdrDragPointer() const
 
 SdrDragResize::SdrDragResize(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
-    m_aXFact(1,1),
-    m_aYFact(1,1)
+    m_aXFact(1),
+    m_aYFact(1)
 {
 }
 
 OUString SdrDragResize::GetSdrDragComment() const
 {
     OUString aStr = ImpGetDescriptionStr(STR_DragMethResize);
-    Fraction aFact1(1,1);
+    double aFact1(1);
     Point aStart(DragStat().GetStart());
     Point aRef(DragStat().GetRef1());
     sal_Int32 nXDiv(aStart.X() - aRef.X());
@@ -1836,7 +1836,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
     Point aPnt(GetSnapPos(rNoSnapPnt));
     Point aStart(DragStat().GetStart());
     Point aRef(DragStat().GetRef1());
-    Fraction aMaxFact(0x7FFFFFFF,1);
+    double aMaxFact(0x7FFFFFFF);
     tools::Rectangle aLR(getSdrDragView().GetWorkArea());
     bool bWorkArea=!aLR.IsEmpty();
     bool bDragLimit=IsDragLimit();
@@ -1867,7 +1867,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
         if (aRef.X()>aSR.Left())
         {
-            Fraction aMax(aRef.X()-aLR.Left(),aRef.X()-aSR.Left());
+            double aMax = double(aRef.X()-aLR.Left()) / (aRef.X()-aSR.Left());
 
             if (aMax<aMaxFact)
                 aMaxFact=aMax;
@@ -1875,7 +1875,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
         if (aRef.X()<aSR.Right())
         {
-            Fraction aMax(aLR.Right()-aRef.X(),aSR.Right()-aRef.X());
+            double aMax = double(aLR.Right()-aRef.X()) / (aSR.Right()-aRef.X());
 
             if (aMax<aMaxFact)
                 aMaxFact=aMax;
@@ -1883,7 +1883,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
         if (aRef.Y()>aSR.Top())
         {
-            Fraction aMax(aRef.Y()-aLR.Top(),aRef.Y()-aSR.Top());
+            double aMax = double(aRef.Y()-aLR.Top()) / (aRef.Y()-aSR.Top());
 
             if (aMax<aMaxFact)
                 aMaxFact=aMax;
@@ -1891,7 +1891,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
         if (aRef.Y()<aSR.Bottom())
         {
-            Fraction aMax(aLR.Bottom()-aRef.Y(),aSR.Bottom()-aRef.Y());
+            double aMax = double(aLR.Bottom()-aRef.Y()) / (aSR.Bottom()-aRef.Y());
 
             if (aMax<aMaxFact)
                 aMaxFact=aMax;
@@ -1974,8 +1974,8 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
         }
     }
 
-    Fraction aNewXFact(nXMul,nXDiv);
-    Fraction aNewYFact(nYMul,nYDiv);
+    double aNewXFact(double(nXMul)/nXDiv);
+    double aNewYFact(double(nYMul)/nYDiv);
 
     if (bOrtho)
     {
@@ -1993,10 +1993,10 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
     }
 
     if (bXNeg)
-        aNewXFact=Fraction(-aNewXFact.GetNumerator(),aNewXFact.GetDenominator());
+        aNewXFact = -aNewXFact;
 
     if (bYNeg)
-        aNewYFact=Fraction(-aNewYFact.GetNumerator(),aNewYFact.GetDenominator());
+        aNewYFact = -aNewYFact;
 
     if (DragStat().CheckMinMoved(aPnt))
     {
@@ -2008,11 +2008,10 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
             m_aXFact=aNewXFact;
             m_aYFact=aNewYFact;
 
-            aNewXFact = double(aNewXFact) > 0 ? aNewXFact : Fraction(1, 1);
-            aNewYFact = double(aNewYFact) > 0 ? aNewYFact : Fraction(1, 1);
+            aNewXFact = aNewXFact > 0 ? aNewXFact : 1.0;
+            aNewYFact = aNewYFact > 0 ? aNewYFact : 1.0;
             Size aTargetSize(
-                    GetMarkedRect().GetSize().scale(aNewXFact.GetNumerator(), aNewXFact.GetDenominator(),
-                                                    aNewYFact.GetNumerator(), aNewYFact.GetDenominator()));
+                    GetMarkedRect().GetSize().scale(aNewXFact, aNewYFact));
             Show(getSdrDragView().IsMarkedObjSizeValid(aTargetSize));
         }
     }
@@ -2020,7 +2019,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
 void SdrDragResize::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    rTarget.Resize(DragStat().GetRef1(),m_aXFact,m_aYFact);
+    rTarget.Resize(DragStat().GetRef1(),Fraction(m_aXFact),Fraction(m_aYFact));
 }
 
 bool SdrDragResize::EndSdrDrag(bool bCopy)
@@ -2029,15 +2028,15 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
 
     if (IsDraggingPoints())
     {
-        getSdrDragView().ResizeMarkedPoints(DragStat().GetRef1(),m_aXFact,m_aYFact);
+        getSdrDragView().ResizeMarkedPoints(DragStat().GetRef1(),Fraction(m_aXFact),Fraction(m_aYFact));
     }
     else if (IsDraggingGluePoints())
     {
-        getSdrDragView().ResizeMarkedGluePoints(DragStat().GetRef1(),m_aXFact,m_aYFact,bCopy);
+        getSdrDragView().ResizeMarkedGluePoints(DragStat().GetRef1(),Fraction(m_aXFact),Fraction(m_aYFact),bCopy);
     }
     else
     {
-        getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),m_aXFact,m_aYFact,bCopy);
+        getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),Fraction(m_aXFact),Fraction(m_aYFact),bCopy);
     }
 
     return true;
