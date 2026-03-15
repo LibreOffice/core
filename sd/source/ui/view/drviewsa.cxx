@@ -759,7 +759,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     // Scale
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_SCALE ) )
     {
-        const Fraction& aUIScale = GetDoc()->GetUIScale();
+        const Fraction aUIScale(GetDoc()->GetUIScale());
         OUString aString = OUString::number(aUIScale.GetNumerator()) +
             ":" + OUString::number(aUIScale.GetDenominator());
         rSet.Put( SfxStringItem( SID_SCALE, aString ) );

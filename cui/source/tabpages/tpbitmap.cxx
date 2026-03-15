@@ -311,7 +311,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     double fUIScale  = 1.0;
     if (mpView)
     {
-        double fModelUIScale  = double(mpView->GetModel().GetUIScale());
+        double fModelUIScale = mpView->GetModel().GetUIScale();
         if (fModelUIScale == 0)
             SAL_WARN("cui.tabpages", "zero UIScale");
         else
@@ -536,7 +536,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, weld::IconView&, void)
     {
         Bitmap aBmp(pGraphicObject->GetGraphic().GetBitmap());
         Size aTempBitmapSize = aBmp.GetSizePixel();
-        const double fUIScale = mpView ? double(mpView->GetModel().GetUIScale()) : 1.0;
+        const double fUIScale = mpView ? mpView->GetModel().GetUIScale() : 1.0;
         Size aBitmapSize100mm = o3tl::convert(aTempBitmapSize, o3tl::Length::pt, o3tl::Length::mm100);
 
         rBitmapSize.setWidth(aBitmapSize100mm.Width() / fUIScale);

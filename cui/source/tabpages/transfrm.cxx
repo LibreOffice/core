@@ -235,7 +235,7 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
 
     if (m_xCtlAngle->IsValueModified() || m_xMtrPosX->get_value_changed_from_saved() || m_xMtrPosY->get_value_changed_from_saved())
     {
-        const double fUIScale(double(pView->GetModel().GetUIScale()));
+        const double fUIScale(pView->GetModel().GetUIScale());
         const double fTmpX((GetCoreValue(*m_xMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
         const double fTmpY((GetCoreValue(*m_xMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
@@ -252,7 +252,7 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
 
 void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
 {
-    const double fUIScale(double(pView->GetModel().GetUIScale()));
+    const double fUIScale(pView->GetModel().GetUIScale());
 
     const SfxPoolItem* pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_ROT_X );
     if(pItem)
@@ -439,7 +439,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 
     if (m_xMtrRadius->get_value_changed_from_saved())
     {
-        Fraction aUIScale = pView->GetModel().GetUIScale();
+        double aUIScale = pView->GetModel().GetUIScale();
         tools::Long nTmp = tools::Long(GetCoreValue(*m_xMtrRadius, ePoolUnit) * aUIScale);
 
         rAttrs->Put( makeSdrEckenradiusItem( nTmp ) );
@@ -913,7 +913,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     {
         if (m_xMtrPosX->get_value_changed_from_saved() || m_xMtrPosY->get_value_changed_from_saved() || m_aCtlPos.IsValueModified())
         {
-            const double fUIScale(double(mpView->GetModel().GetUIScale()));
+            const double fUIScale(mpView->GetModel().GetUIScale());
             double fX((GetCoreValue( *m_xMtrPosX, mePoolUnit ) + maAnchor.getX()) * fUIScale);
             double fY((GetCoreValue( *m_xMtrPosY, mePoolUnit ) + maAnchor.getY()) * fUIScale);
 
@@ -951,17 +951,17 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
     if (m_xMtrWidth->get_value_changed_from_saved() || m_xMtrHeight->get_value_changed_from_saved())
     {
-        Fraction aUIScale = mpView->GetModel().GetUIScale();
+        double aUIScale = mpView->GetModel().GetUIScale();
 
         // get Width
         double nWidth = static_cast<double>(m_xMtrWidth->get_value(FieldUnit::MM_100TH));
-        tools::Long lWidth = tools::Long(nWidth * static_cast<double>(aUIScale));
+        tools::Long lWidth = tools::Long(nWidth * aUIScale);
         lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
         lWidth = static_cast<tools::Long>(m_xMtrWidth->denormalize( lWidth ));
 
         // get Height
         double nHeight = static_cast<double>(m_xMtrHeight->get_value(FieldUnit::MM_100TH));
-        tools::Long lHeight = tools::Long(nHeight * static_cast<double>(aUIScale));
+        tools::Long lHeight = tools::Long(nHeight * aUIScale);
         lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
         lHeight = static_cast<tools::Long>(m_xMtrHeight->denormalize( lHeight ));
 
@@ -1021,7 +1021,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 {
     const SfxPoolItem* pItem;
-    const double fUIScale(double(mpView->GetModel().GetUIScale()));
+    const double fUIScale(mpView->GetModel().GetUIScale());
 
     if ( !mbPageDisabled )
     {

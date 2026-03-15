@@ -425,7 +425,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, weld::MetricSpinButton&, v
     {
         tools::Long lX = GetCoreValue( *mxMtrPosX, mePoolUnit );
 
-        Fraction aUIScale = mpView->GetModel().GetUIScale();
+        double aUIScale = mpView->GetModel().GetUIScale();
         lX = tools::Long( lX * aUIScale );
 
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
@@ -441,7 +441,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, weld::MetricSpinButton&, v
     {
         tools::Long lY = GetCoreValue( *mxMtrPosY, mePoolUnit );
 
-        Fraction aUIScale = mpView->GetModel().GetUIScale();
+        double aUIScale = mpView->GetModel().GetUIScale();
         lY = tools::Long( lY * aUIScale );
 
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));
@@ -470,7 +470,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl&, void )
     Degree100 nTmp = mxCtrlDial->GetRotation();
 
     // #i123993# Need to take UIScale into account when executing rotations
-    const double fUIScale(mpView ? double(mpView->GetModel().GetUIScale()) : 1.0);
+    const double fUIScale(mpView ? mpView->GetModel().GetUIScale() : 1.0);
     SdrAngleItem aAngleItem( SID_ATTR_TRANSFORM_ANGLE, nTmp);
     SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
@@ -855,17 +855,17 @@ void PosSizePropertyPanel::executeSize()
     if ( !mxMtrWidth->get_value_changed_from_saved() && !mxMtrHeight->get_value_changed_from_saved())
         return;
 
-    Fraction aUIScale = mpView->GetModel().GetUIScale();
+    double aUIScale = mpView->GetModel().GetUIScale();
 
     // get Width
     double nWidth = static_cast<double>(mxMtrWidth->get_value(FieldUnit::MM_100TH));
-    tools::Long lWidth = tools::Long(nWidth * static_cast<double>(aUIScale));
+    tools::Long lWidth = tools::Long(nWidth * aUIScale);
     lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
     lWidth = static_cast<tools::Long>(mxMtrWidth->denormalize( lWidth ));
 
     // get Height
     double nHeight = static_cast<double>(mxMtrHeight->get_value(FieldUnit::MM_100TH));
-    tools::Long lHeight = tools::Long(nHeight * static_cast<double>(aUIScale));
+    tools::Long lHeight = tools::Long(nHeight * aUIScale);
     lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
     lHeight = static_cast<tools::Long>(mxMtrHeight->denormalize( lHeight ));
 
