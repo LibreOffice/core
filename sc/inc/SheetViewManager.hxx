@@ -146,6 +146,12 @@ public:
     /** Update when rows are deleted. */
     void deletedRows(SCROW nStartRow, SCROW nRowCount);
 
+    /** Update when columns are inserted. */
+    void insertedColumns(SCCOL nStartCol, SCCOL nColCount);
+
+    /** Update when columns are deleted. */
+    void deletedColumns(SCCOL nStartCol, SCCOL nColCount);
+
     /** Capture sort data (deep copy).*/
     std::shared_ptr<DefaultViewSortData> captureSortData() const;
 

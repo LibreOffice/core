@@ -107,6 +107,56 @@ void deleteRowsFromOrderedRange(SCROW& nStart, SCROW& nEnd, std::vector<SCCOLROW
         nEnd -= nDeletedWithin;
     }
 }
+/** Adjust a column range for inserted columns. */
+void adjustColumnRangeForInsert(SCCOL& nStart, SCCOL& nEnd, SCCOL nInsertStart, SCCOL nInsertCount)
+{
+    if (nInsertStart <= nStart)
+    {
+        nStart += nInsertCount;
+        nEnd += nInsertCount;
+    }
+    else if (nInsertStart <= nEnd)
+    {
+        nEnd += nInsertCount;
+    }
+}
+
+/** Adjust a column range for deleted columns.
+ *
+ * On entire range deletion the order is cleared.
+ */
+void deleteColumnsFromOrderedRange(SCCOL& nStart, SCCOL& nEnd, std::vector<SCCOLROW>& rOrder,
+                                   SCCOL nDeleteStart, SCCOL nDeleteCount)
+{
+    SCCOL nDeleteEnd = nDeleteStart + nDeleteCount - 1;
+
+    // After the range - nothing to do
+    if (nDeleteStart > nEnd)
+        return;
+
+    // Before the range - shift
+    if (nDeleteEnd < nStart)
+    {
+        nStart -= nDeleteCount;
+        nEnd -= nDeleteCount;
+        return;
+    }
+
+    // Entire range deleted
+    if (nDeleteStart <= nStart && nDeleteEnd >= nEnd)
+    {
+        rOrder.clear();
+        return;
+    }
+
+    // Partial overlap
+    SCCOL nOverlapStart = std::max(nDeleteStart, nStart);
+    SCCOL nOverlapEnd = std::min(nDeleteEnd, nEnd);
+    SCCOL nDeletedWithin = nOverlapEnd - nOverlapStart + 1;
+    if (nDeleteStart <= nStart)
+        nStart = nDeleteStart;
+    nEnd -= nDeletedWithin;
+}
 } // end anonymous namespace
 
 void SortOrderReverser::addOrderIndices(SortOrderInfo const& rSortInfo)
@@ -201,6 +251,23 @@ void SortOrderReverser::deletedRows(SCROW nStartRow, SCROW nRowCount)
     {
         maSortInfo.mnFirstRow = 0;
         maSortInfo.mnLastRow = 0;
+    }
+}
+
+void SortOrderReverser::insertedColumns(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    adjustColumnRangeForInsert(maSortInfo.mnFirstColumn, maSortInfo.mnLastColumn, nStartColumn,
+                               nColumnCount);
+}
+
+void SortOrderReverser::deletedColumns(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    deleteColumnsFromOrderedRange(maSortInfo.mnFirstColumn, maSortInfo.mnLastColumn,
+                                  maSortInfo.maOrder, nStartColumn, nColumnCount);
+    if (maSortInfo.maOrder.empty())
+    {
+        maSortInfo.mnFirstColumn = 0;
+        maSortInfo.mnLastColumn = 0;
     }
 }
 
@@ -300,7 +367,7 @@ SCROW SheetView::reverseSortingToDefaultView(SCROW nRow, SCCOL nColumn) const
     return nResortedRow;
 }
 
-void SheetView::adjustReorderParamsForInsert(SCROW nStartRow, SCROW nRowCount)
+void SheetView::adjustReorderParamsForInsertRows(SCROW nStartRow, SCROW nRowCount)
 {
     if (!mpSortData || mpSortData->maOriginalReorderParams.maOrderIndices.empty())
         return;
@@ -319,7 +386,7 @@ void SheetView::adjustReorderParamsForInsert(SCROW nStartRow, SCROW nRowCount)
     }
 }
 
-void SheetView::adjustSortParamForInsert(SCROW nStartRow, SCROW nRowCount)
+void SheetView::adjustSortParamForInsertRows(SCROW nStartRow, SCROW nRowCount)
 {
     if (!mpSortData)
         return;
@@ -341,13 +408,13 @@ void SheetView::insertedRows(SCROW nStartRow, SCROW nRowCount)
         mpSortData->maSortOrder.insertedRows(nStartRow, nRowCount);
 
     // Update the reorder params that track the default view's sort since sheet view creation
-    adjustReorderParamsForInsert(nStartRow, nRowCount);
+    adjustReorderParamsForInsertRows(nStartRow, nRowCount);
 
     // Update the stored sort parameters (the range the sheet view was sorted on)
-    adjustSortParamForInsert(nStartRow, nRowCount);
+    adjustSortParamForInsertRows(nStartRow, nRowCount);
 }
 
-void SheetView::adjustReorderParamsForDelete(SCROW nStartRow, SCROW nRowCount)
+void SheetView::adjustReorderParamsForDeleteRows(SCROW nStartRow, SCROW nRowCount)
 {
     if (!mpSortData || mpSortData->maOriginalReorderParams.maOrderIndices.empty())
         return;
@@ -369,7 +436,7 @@ void SheetView::adjustReorderParamsForDelete(SCROW nStartRow, SCROW nRowCount)
     }
 }
 
-void SheetView::adjustSortParamForDelete(SCROW nStartRow, SCROW nRowCount)
+void SheetView::adjustSortParamForDeleteRows(SCROW nStartRow, SCROW nRowCount)
 {
     if (!mpSortData)
         return;
@@ -386,10 +453,10 @@ void SheetView::deletedRows(SCROW nStartRow, SCROW nRowCount)
         mpSortData->maSortOrder.deletedRows(nStartRow, nRowCount);
 
     // Update the reorder params that track the default view's sort since sheet view creation
-    adjustReorderParamsForDelete(nStartRow, nRowCount);
+    adjustReorderParamsForDeleteRows(nStartRow, nRowCount);
 
     // Update the stored sort parameters (the range the sheet view was sorted on)
-    adjustSortParamForDelete(nStartRow, nRowCount);
+    adjustSortParamForDeleteRows(nStartRow, nRowCount);
 }
 
 ScSortParam const* SheetView::getSortParam() const
@@ -403,6 +470,106 @@ ScSortParam const* SheetView::getSortParam() const
 void SheetView::setSortParam(ScSortParam const& rSortParam)
 {
     ensureSortData().maSortParam = rSortParam;
+}
+
+void SheetView::adjustReorderParamsForInsertColumns(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    if (!mpSortData || mpSortData->maOriginalReorderParams.maOrderIndices.empty())
+        return;
+
+    ScRange& rRange = mpSortData->maOriginalReorderParams.maSortRange;
+    SCCOL nColumnStart = rRange.aStart.Col();
+    SCCOL nColumnEnd = rRange.aEnd.Col();
+    adjustColumnRangeForInsert(nColumnStart, nColumnEnd, nStartColumn, nColumnCount);
+    rRange.aStart.SetCol(nColumnStart);
+    rRange.aEnd.SetCol(nColumnEnd);
+}
+
+void SheetView::adjustSortParamForInsertColumns(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    if (!mpSortData)
+        return;
+
+    adjustColumnRangeForInsert(mpSortData->maSortParam.nCol1, mpSortData->maSortParam.nCol2,
+                               nStartColumn, nColumnCount);
+
+    // We need to adjust key state - columns shift by one
+    for (auto& rKey : mpSortData->maSortParam.maKeyState)
+    {
+        if (rKey.bDoSort && rKey.nField >= nStartColumn)
+            rKey.nField += nColumnCount;
+    }
+}
+
+void SheetView::insertedColumns(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    // Update the sheet view's own sort order
+    if (mpSortData)
+        mpSortData->maSortOrder.insertedColumns(nStartColumn, nColumnCount);
+
+    // Update the reorder params that track the default view's sort since sheet view creation
+    adjustReorderParamsForInsertColumns(nStartColumn, nColumnCount);
+
+    // Update the stored sort parameters (the range the sheet view was sorted on)
+    adjustSortParamForInsertColumns(nStartColumn, nColumnCount);
+}
+
+void SheetView::adjustReorderParamsForDeleteColumns(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    if (!mpSortData || mpSortData->maOriginalReorderParams.maOrderIndices.empty())
+        return;
+
+    ScRange& rRange = mpSortData->maOriginalReorderParams.maSortRange;
+    SCCOL nStart = rRange.aStart.Col();
+    SCCOL nEnd = rRange.aEnd.Col();
+    deleteColumnsFromOrderedRange(nStart, nEnd, mpSortData->maOriginalReorderParams.maOrderIndices,
+                                  nStartColumn, nColumnCount);
+    if (mpSortData->maOriginalReorderParams.maOrderIndices.empty())
+    {
+        mpSortData->maOriginalReorderParams = ReorderParam();
+    }
+    else
+    {
+        rRange.aStart.SetCol(nStart);
+        rRange.aEnd.SetCol(nEnd);
+    }
+}
+
+void SheetView::adjustSortParamForDeleteColumns(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    if (!mpSortData)
+        return;
+
+    SCCOL nDeleteEnd = nStartColumn + nColumnCount - 1;
+
+    std::vector<SCCOLROW> aUnused;
+    deleteColumnsFromOrderedRange(mpSortData->maSortParam.nCol1, mpSortData->maSortParam.nCol2,
+                                  aUnused, nStartColumn, nColumnCount);
+
+    // We need to adjust key state - columns shift by one
+    for (auto& rKey : mpSortData->maSortParam.maKeyState)
+    {
+        if (rKey.bDoSort && rKey.nField >= nStartColumn)
+        {
+            if (rKey.nField <= nDeleteEnd)
+                rKey.bDoSort = false; // sort key column was deleted
+            else
+                rKey.nField -= nColumnCount;
+        }
+    }
+}
+
+void SheetView::deletedColumns(SCCOL nStartColumn, SCCOL nColumnCount)
+{
+    // Update the sheet view's own sort order
+    if (mpSortData)
+        mpSortData->maSortOrder.deletedColumns(nStartColumn, nColumnCount);
+
+    // Update the reorder params that track the default view's sort since sheet view creation
+    adjustReorderParamsForDeleteColumns(nStartColumn, nColumnCount);
+
+    // Update the stored sort parameters (the range the sheet view was sorted on)
+    adjustSortParamForDeleteColumns(nStartColumn, nColumnCount);
 }
 
 void SheetView::resetSortData() { mpSortData.reset(); }

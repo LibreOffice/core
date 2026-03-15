@@ -393,4 +393,110 @@ CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testDeletedRows)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testInsertedColumns)
+{
+    // Insert after column range - no change
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 2, 5, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.insertedColumns(7, 2);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(2), aReverser.maSortInfo.mnFirstColumn);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(5), aReverser.maSortInfo.mnLastColumn);
+    }
+
+    // Insert before column range - shift the whole range
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 2, 5, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.insertedColumns(1, 3);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(5), aReverser.maSortInfo.mnFirstColumn);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(8), aReverser.maSortInfo.mnLastColumn);
+    }
+
+    // Insert within column range - expand end
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 2, 5, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.insertedColumns(4, 2);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(2), aReverser.maSortInfo.mnFirstColumn);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(7), aReverser.maSortInfo.mnLastColumn);
+    }
+
+    // Order values unchanged in all cases (columns don't affect row order)
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 2, 5, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.insertedColumns(1, 1);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aReverser.maSortInfo.maOrder.size());
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(3), aReverser.maSortInfo.maOrder[0]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aReverser.maSortInfo.maOrder[1]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(4), aReverser.maSortInfo.maOrder[2]);
+        CPPUNIT_ASSERT_EQUAL(SCCOLROW(2), aReverser.maSortInfo.maOrder[3]);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testDeletedColumns)
+{
+    // Delete after column range - no change
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 2, 5, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.deletedColumns(7, 2);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(2), aReverser.maSortInfo.mnFirstColumn);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(5), aReverser.maSortInfo.mnLastColumn);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aReverser.maSortInfo.maOrder.size());
+    }
+
+    // Delete before column range - shift the whole range
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 2, 5, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.deletedColumns(0, 2);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(0), aReverser.maSortInfo.mnFirstColumn);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(3), aReverser.maSortInfo.mnLastColumn);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aReverser.maSortInfo.maOrder.size());
+    }
+
+    // Delete entire column range - clear everything
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 2, 5, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.deletedColumns(1, 6);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(0), aReverser.maSortInfo.mnFirstColumn);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(0), aReverser.maSortInfo.mnLastColumn);
+        CPPUNIT_ASSERT(aReverser.maSortInfo.maOrder.empty());
+    }
+
+    // Delete overlaps start - shrink from left
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 2, 5, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.deletedColumns(1, 2);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(1), aReverser.maSortInfo.mnFirstColumn);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(4), aReverser.maSortInfo.mnLastColumn);
+        // Order unchanged (columns don't affect row order)
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aReverser.maSortInfo.maOrder.size());
+    }
+
+    // Delete within column range - shrink
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 2, 5, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.deletedColumns(3, 2);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(2), aReverser.maSortInfo.mnFirstColumn);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(3), aReverser.maSortInfo.mnLastColumn);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aReverser.maSortInfo.maOrder.size());
+    }
+
+    // Delete overlaps end - shrink from right
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 2, 5, 5, 8, { 3, 1, 4, 2 }, {} });
+        aReverser.deletedColumns(4, 3);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(2), aReverser.maSortInfo.mnFirstColumn);
+        CPPUNIT_ASSERT_EQUAL(SCCOL(3), aReverser.maSortInfo.mnLastColumn);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), aReverser.maSortInfo.maOrder.size());
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

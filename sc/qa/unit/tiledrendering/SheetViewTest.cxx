@@ -4037,6 +4037,179 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoDeleteCells_SheetViewSortData)
                          getValues(mpTabViewSheetView, 0, 1, 4));
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertDeleteColumns_SheetViewSortData)
+{
+    // Test that inserting/deleting columns in the middle of the auto-filter
+    // adjusts sheet view sort ranges and that undo/redo restores them.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter_Extended.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // Create sheet view and sort descending on column A
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+        sortDescendingForCell(u"A1");
+    }
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+
+    // Verify initial state
+    // Column A: default unsorted, sheet view descending
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+    // Column B: follows the sort
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"ccc", u"rrr", u"sss", u"aaa" }),
+                         getValues(mpTabViewDefaultView, 1, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"aaa", u"rrr", u"ccc", u"sss" }),
+                         getValues(mpTabViewSheetView, 1, 1, 4));
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    std::shared_ptr<sc::SheetView> pSheetView = rDocument.GetSheetView(nSheetViewTab);
+    CPPUNIT_ASSERT(pSheetView);
+
+    // Verify initial sort ranges
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortOrder()->maSortInfo.mnFirstColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(2), pSheetView->getSortOrder()->maSortInfo.mnLastColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortParam()->nCol1);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(2), pSheetView->getSortParam()->nCol2);
+
+    // Insert a column before column B (in the middle of the auto-filter)
+    {
+        switchToDefaultView();
+        sc::InsertCellsOperation aOperation(
+            *pDocShell, ScRange(1, 0, nDefaultViewTab, 1, rDocument.MaxRow(), nDefaultViewTab),
+            nullptr, INS_INSCOLS_BEFORE, true, true, false, 0);
+        CPPUNIT_ASSERT(aOperation.run());
+    }
+
+    // Column A unchanged, original B shifted to C
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"ccc", u"rrr", u"sss", u"aaa" }),
+                         getValues(mpTabViewDefaultView, 2, 1, 4));
+    // Sheet view sorted - column C has the sorted B values
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"aaa", u"rrr", u"ccc", u"sss" }),
+                         getValues(mpTabViewSheetView, 2, 1, 4));
+
+    // Sort ranges should have expanded from A-C to A-D
+    CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
+    CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortOrder()->maSortInfo.mnFirstColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), pSheetView->getSortOrder()->maSortInfo.mnLastColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortParam()->nCol1);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), pSheetView->getSortParam()->nCol2);
+
+    // Undo the column insert
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // Data back in original columns
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"ccc", u"rrr", u"sss", u"aaa" }),
+                         getValues(mpTabViewDefaultView, 1, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"aaa", u"rrr", u"ccc", u"sss" }),
+                         getValues(mpTabViewSheetView, 1, 1, 4));
+
+    // Sort ranges should be restored to A-C
+    CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
+    CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortOrder()->maSortInfo.mnFirstColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(2), pSheetView->getSortOrder()->maSortInfo.mnLastColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortParam()->nCol1);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(2), pSheetView->getSortParam()->nCol2);
+
+    // Redo the column insert
+    {
+        switchToDefaultView();
+        redo();
+    }
+
+    // Data shifted again - original B now in C
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"ccc", u"rrr", u"sss", u"aaa" }),
+                         getValues(mpTabViewDefaultView, 2, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"aaa", u"rrr", u"ccc", u"sss" }),
+                         getValues(mpTabViewSheetView, 2, 1, 4));
+
+    // Sort ranges should be A-D again
+    CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
+    CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortOrder()->maSortInfo.mnFirstColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), pSheetView->getSortOrder()->maSortInfo.mnLastColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortParam()->nCol1);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), pSheetView->getSortParam()->nCol2);
+
+    // Undo again to get back to original state for the delete test
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // Delete column B from default view
+    {
+        switchToDefaultView();
+        sc::DeleteCellsOperation aOperation(
+            *pDocShell, ScRange(1, 0, nDefaultViewTab, 1, rDocument.MaxRow(), nDefaultViewTab),
+            nullptr, DelCellCmd::Cols, true);
+        CPPUNIT_ASSERT(aOperation.run());
+    }
+
+    // Column B deleted - original C now in B
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+
+    // Sort ranges should have shrunk from A-C to A-B
+    CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
+    CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortOrder()->maSortInfo.mnFirstColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), pSheetView->getSortOrder()->maSortInfo.mnLastColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortParam()->nCol1);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), pSheetView->getSortParam()->nCol2);
+
+    // Undo the column delete
+    {
+        switchToDefaultView();
+        undo();
+    }
+
+    // Data restored
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }),
+                         getValues(mpTabViewDefaultView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"ccc", u"rrr", u"sss", u"aaa" }),
+                         getValues(mpTabViewDefaultView, 1, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"7", u"5", u"4", u"3" }),
+                         getValues(mpTabViewSheetView, 0, 1, 4));
+    CPPUNIT_ASSERT_EQUAL(expectedValues({ u"aaa", u"rrr", u"ccc", u"sss" }),
+                         getValues(mpTabViewSheetView, 1, 1, 4));
+
+    // Sort ranges should be restored to A-C
+    CPPUNIT_ASSERT(pSheetView->getSortOrder() != nullptr);
+    CPPUNIT_ASSERT(pSheetView->getSortParam() != nullptr);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortOrder()->maSortInfo.mnFirstColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(2), pSheetView->getSortOrder()->maSortInfo.mnLastColumn);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSheetView->getSortParam()->nCol1);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(2), pSheetView->getSortParam()->nCol2);
+}
+
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteCells_DefaultAndSheetView)
 {
     // Test sync to sheet view when deleting rows

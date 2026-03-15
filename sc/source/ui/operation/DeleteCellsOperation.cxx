@@ -767,20 +767,24 @@ bool DeleteCellsOperation::runImplementation()
                                           -1 * (maRange.aEnd.Row() - maRange.aStart.Row() + 1));
         }
 
-        // Update sheet view sort ranges to account for deleted rows
-        if (bDeleteRows)
+        // Update sheet view sort ranges to account for deleted rows/columns
+        if (bDeleteRows || bDeleteCols)
         {
-            SCROW nDeletedRowCount = nEndRow - nStartRow + 1;
             SCTAB nDefaultViewTab = rDoc.GetDefaultViewTableNumber(nStartTab);
             std::shared_ptr<sc::SheetViewManager> pManager
                 = rDoc.GetSheetViewManager(nDefaultViewTab);
             if (pManager)
             {
                 auto pSortDataBefore = pManager->captureSortData();
-                pManager->deletedRows(nStartRow, nDeletedRowCount);
+
+                if (bDeleteRows)
+                    pManager->deletedRows(nStartRow, nEndRow - nStartRow + 1);
+                if (bDeleteCols)
+                    pManager->deletedColumns(nStartCol, nEndCol - nStartCol + 1);
+
                 auto pSortDataAfter = pManager->captureSortData();
 
-                if (mbRecord && pUndoDeleteCells && (pSortDataBefore || pSortDataAfter))
+                if (mbRecord && pUndoDeleteCells)
                 {
                     pUndoDeleteCells->setSheetViewSortData(
                         nDefaultViewTab, std::move(pSortDataBefore), std::move(pSortDataAfter));
