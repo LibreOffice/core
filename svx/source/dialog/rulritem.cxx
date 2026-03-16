@@ -281,9 +281,9 @@ void SvxLongULSpaceItem::SetLower(tools::Long lArgRight)
 bool SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-        aPos == static_cast<const SvxPagePosSizeItem &>(rCmp).aPos &&
-            lWidth == static_cast<const SvxPagePosSizeItem &>(rCmp).lWidth  &&
-            lHeight == static_cast<const SvxPagePosSizeItem &>(rCmp).lHeight;
+        m_aPos == static_cast<const SvxPagePosSizeItem &>(rCmp).m_aPos &&
+            m_lWidth == static_cast<const SvxPagePosSizeItem &>(rCmp).m_lWidth  &&
+            m_lHeight == static_cast<const SvxPagePosSizeItem &>(rCmp).m_lHeight;
 }
 
 bool SvxPagePosSizeItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -296,18 +296,18 @@ bool SvxPagePosSizeItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) 
         case 0 :
         {
             css::awt::Rectangle aPagePosSize;
-            aPagePosSize.X = aPos.X();
-            aPagePosSize.Y = aPos.Y();
-            aPagePosSize.Width = lWidth;
-            aPagePosSize.Height = lHeight;
+            aPagePosSize.X = m_aPos.X();
+            aPagePosSize.Y = m_aPos.Y();
+            aPagePosSize.Width = m_lWidth;
+            aPagePosSize.Height = m_lHeight;
             rVal <<= aPagePosSize;
             return true;
         }
 
-        case MID_X: nVal = aPos.X(); break;
-        case MID_Y: nVal = aPos.Y(); break;
-        case MID_WIDTH: nVal = lWidth; break;
-        case MID_HEIGHT: nVal = lHeight; break;
+        case MID_X: nVal = m_aPos.X(); break;
+        case MID_Y: nVal = m_aPos.Y(); break;
+        case MID_WIDTH: nVal = m_lWidth; break;
+        case MID_HEIGHT: nVal = m_lHeight; break;
 
         default: OSL_FAIL("Wrong MemberId!"); return false;
     }
@@ -326,10 +326,10 @@ bool SvxPagePosSizeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberI
         css::awt::Rectangle aPagePosSize;
         if ( rVal >>= aPagePosSize )
         {
-            aPos.setX( aPagePosSize.X );
-            aPos.setY( aPagePosSize.Y );
-            lWidth   = aPagePosSize.Width;
-            lHeight  = aPagePosSize.Height;
+            m_aPos.setX( aPagePosSize.X );
+            m_aPos.setY( aPagePosSize.Y );
+            m_lWidth   = aPagePosSize.Width;
+            m_lHeight  = aPagePosSize.Height;
             return true;
         }
         else
@@ -339,10 +339,10 @@ bool SvxPagePosSizeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberI
     {
         switch ( nMemberId )
         {
-            case MID_X: aPos.setX( nVal ); break;
-            case MID_Y: aPos.setY( nVal ); break;
-            case MID_WIDTH: lWidth = nVal; break;
-            case MID_HEIGHT: lHeight = nVal; break;
+            case MID_X: m_aPos.setX( nVal ); break;
+            case MID_Y: m_aPos.setY( nVal ); break;
+            case MID_WIDTH: m_lWidth = nVal; break;
+            case MID_HEIGHT: m_lHeight = nVal; break;
 
             default: OSL_FAIL("Wrong MemberId!"); return false;
         }
@@ -370,16 +370,16 @@ SvxPagePosSizeItem* SvxPagePosSizeItem::Clone(SfxItemPool *) const
 
 SvxPagePosSizeItem::SvxPagePosSizeItem(const Point &rP, tools::Long lW, tools::Long lH) :
     SfxPoolItem (SID_RULER_PAGE_POS),
-    aPos        (rP),
-    lWidth      (lW),
-    lHeight     (lH)
+    m_aPos        (rP),
+    m_lWidth      (lW),
+    m_lHeight     (lH)
 {}
 
 SvxPagePosSizeItem::SvxPagePosSizeItem() :
     SfxPoolItem (0),
-    aPos        (0, 0),
-    lWidth      (0),
-    lHeight     (0)
+    m_aPos        (0, 0),
+    m_lWidth      (0),
+    m_lHeight     (0)
 {}
 
 /* SvxColumnItem */
