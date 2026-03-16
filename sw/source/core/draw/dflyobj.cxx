@@ -902,8 +902,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     ResizeRect(
         aNewRect,
         aRef,
-        Fraction(fxFact),
-        Fraction(fyFact));
+        fxFact,
+        fyFact);
 
     // Get old values for crop in 10th of mm
     SfxItemSetFixed<RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF> aSet( pSh->GetAttrPool() );

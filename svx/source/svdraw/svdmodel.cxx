@@ -1143,32 +1143,6 @@ OUString SdrModel::GetAngleString(Degree100 nAngle)
     return aBuf.makeStringAndClear();
 }
 
-OUString SdrModel::GetPercentString(const Fraction& rVal)
-{
-    sal_Int32 nMul(rVal.GetNumerator());
-    sal_Int32 nDiv(rVal.GetDenominator());
-    bool bNeg {false};
-
-    if (nDiv < 0)
-    {
-        bNeg = !bNeg;
-        nDiv = -nDiv;
-    }
-
-    if (nMul < 0)
-    {
-        bNeg = !bNeg;
-        nMul = -nMul;
-    }
-
-    sal_Int32 nPct = ((nMul*100) + nDiv/2)/nDiv;
-
-    if (bNeg)
-        nPct = -nPct;
-
-    return OUString::number(nPct) + "%";
-}
-
 OUString SdrModel::GetPercentString(double rVal)
 {
     return OUString::number(std::round(rVal * 100)) + "%";

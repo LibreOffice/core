@@ -388,7 +388,6 @@ public:
     static OUString  GetUnitString(FieldUnit eUnit);
     OUString         GetMetricString(tools::Long nVal, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
     static OUString  GetAngleString(Degree100 nAngle);
-    static OUString  GetPercentString(const Fraction& rVal);
     static OUString  GetPercentString(double rVal);
 
     // RecalcPageNums is ordinarily only called by the Page.

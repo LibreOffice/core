@@ -35,32 +35,6 @@ void MoveXPoly(XPolygon& rPoly, const Size& S)
     rPoly.Move(S.Width(),S.Height());
 }
 
-void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact)
-{
-    Fraction aXFact(rxFact);
-    Fraction aYFact(ryFact);
-
-    if (!aXFact.IsValid()) {
-        SAL_WARN( "svx.svdraw", "invalid fraction xFract, using Fraction(1,1)" );
-        aXFact = Fraction(1,1);
-        tools::Long nWdt = rRect.Right() - rRect.Left();
-        if (nWdt == 0) rRect.AdjustRight( 1 );
-    }
-    rRect.SetLeft( rRef.X() + basegfx::fround<tools::Long>( (rRect.Left()  - rRef.X()) * double(aXFact) ) );
-    rRect.SetRight( rRef.X() + basegfx::fround<tools::Long>( (rRect.Right() - rRef.X()) * double(aXFact) ) );
-
-    if (!aYFact.IsValid()) {
-        SAL_WARN( "svx.svdraw", "invalid fraction yFract, using Fraction(1,1)" );
-        aYFact = Fraction(1,1);
-        tools::Long nHgt = rRect.Bottom() - rRect.Top();
-        if (nHgt == 0) rRect.AdjustBottom( 1 );
-    }
-    rRect.SetTop( rRef.Y() + basegfx::fround<tools::Long>( (rRect.Top()    - rRef.Y()) * double(aYFact) ) );
-    rRect.SetBottom( rRef.Y() + basegfx::fround<tools::Long>( (rRect.Bottom() - rRef.Y()) * double(aYFact) ) );
-
-    rRect.Normalize();
-}
-
 void ResizeRect(tools::Rectangle& rRect, const Point& rRef, double aXFact, double aYFact)
 {
     rRect.SetLeft( rRef.X() + basegfx::fround<tools::Long>( (rRect.Left()  - rRef.X()) * aXFact ) );
@@ -72,25 +46,9 @@ void ResizeRect(tools::Rectangle& rRect, const Point& rRef, double aXFact, doubl
     rRect.Normalize();
 }
 
-void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
-{
-    sal_uInt16 nCount=rPoly.GetSize();
-    for (sal_uInt16 i=0; i<nCount; i++) {
-        ResizePoint(rPoly[i],rRef,xFact,yFact);
-    }
-}
-
 void ResizePoly(tools::Polygon& rPoly, const Point& rRef, double xFact, double yFact)
 {
     sal_uInt16 nCount=rPoly.GetSize();
-    for (sal_uInt16 i=0; i<nCount; i++) {
-        ResizePoint(rPoly[i],rRef,xFact,yFact);
-    }
-}
-
-void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
-{
-    sal_uInt16 nCount=rPoly.GetPointCount();
     for (sal_uInt16 i=0; i<nCount; i++) {
         ResizePoint(rPoly[i],rRef,xFact,yFact);
     }

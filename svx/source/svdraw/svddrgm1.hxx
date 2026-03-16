@@ -69,7 +69,7 @@ public:
 class SdrDragShear : public SdrDragMethod
 {
 private:
-    Fraction                    aFact;
+    double                      aFact;
     Degree100                   nAngle0;
     Degree100                   nAngle;
     double                      nTan;
@@ -143,7 +143,7 @@ private:
     Point                       aMarkCenter;
     Point                       aCenter;
     Point                       aStart;
-    Fraction                    aFact;
+    double                      aFact;
     Point                       aRad;
     bool                        bContortionAllowed;
     bool                        bNoContortionAllowed;
