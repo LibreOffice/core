@@ -2083,11 +2083,23 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
 
                                                             sal_uInt32 nToCopy, nBufSize;
                                                             nToCopy = pHd->nRecLen;
+                                                            if (rStCtrl.remainingSize() < nToCopy)
+                                                            {
+                                                                SAL_WARN("filter.ms", "VBA macro OLE copy: nRecLen " << nToCopy
+                                                                         << " exceeds remaining stream size " << rStCtrl.remainingSize());
+                                                                nToCopy = 0;
+                                                            }
                                                             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
                                                             while ( nToCopy )
                                                             {
                                                                 nBufSize = ( nToCopy >= 0x40000 ) ? 0x40000 : nToCopy;
-                                                                rStCtrl.ReadBytes(pBuf.get(), nBufSize);
+                                                                std::size_t nActualRead = rStCtrl.ReadBytes(pBuf.get(), nBufSize);
+                                                                if (nActualRead != nBufSize)
+                                                                {
+                                                                    SAL_WARN("filter.ms", "VBA macro OLE copy: short read, expected "
+                                                                             << nBufSize << " bytes but got " << nActualRead);
+                                                                    break;
+                                                                }
                                                                 xOriginal->WriteBytes(pBuf.get(), nBufSize);
                                                                 nToCopy -= nBufSize;
                                                             }

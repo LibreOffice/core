@@ -4099,7 +4099,13 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
             while ( nBlipSize )
             {
                 sal_uInt32 nBytes = std::min( nBlipSize, nBuf );
-                pMergePicStreamBSE->ReadBytes(pBuf.get(), nBytes);
+                std::size_t nActualRead = pMergePicStreamBSE->ReadBytes(pBuf.get(), nBytes);
+                if (nActualRead != nBytes)
+                {
+                    SAL_WARN("filter.ms", "WriteBlibStoreContainer: short read, expected "
+                             << nBytes << " bytes but got " << nActualRead);
+                    break;
+                }
                 rSt.WriteBytes(pBuf.get(), nBytes);
                 nBlipSize -= nBytes;
             }
