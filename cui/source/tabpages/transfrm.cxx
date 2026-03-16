@@ -215,8 +215,8 @@ void SvxAngleTabPage::Construct()
     }
 
     // take scale into account
-    const Fraction aUIScale(pView->GetModel().GetUIScale());
-    TransfrmHelper::ScaleRect(maRange, aUIScale);
+    const double fUIScale(pView->GetModel().GetUIScale());
+    TransfrmHelper::ScaleRect(maRange, fUIScale);
 
     // take UI units into account
     sal_uInt16 nDigits(m_xMtrPosX->get_digits());
@@ -882,9 +882,9 @@ void SvxPositionSizeTabPage::Construct()
     }
 
     // take scale into account
-    const Fraction aUIScale(mpView->GetModel().GetUIScale());
-    TransfrmHelper::ScaleRect( maWorkRange, aUIScale );
-    TransfrmHelper::ScaleRect( maRange, aUIScale );
+    const double fUIScale(mpView->GetModel().GetUIScale());
+    TransfrmHelper::ScaleRect( maWorkRange, fUIScale );
+    TransfrmHelper::ScaleRect( maRange, fUIScale );
 
     // take UI units into account
     const sal_uInt16 nDigits(m_xMtrPosX->get_digits());

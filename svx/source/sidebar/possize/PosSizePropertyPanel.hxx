@@ -132,7 +132,7 @@ private:
     sal_uInt32                              mlOldHeight;
     tools::Long                                    mlRotX;
     tools::Long                                    mlRotY;
-    Fraction                                maUIScale;
+    double                                  maUIScale { 0.0 };
     MapUnit                                 mePoolUnit;
     FieldUnit                               meDlgUnit;
     bool                                    mbFieldMetricOutDated;
@@ -180,10 +180,10 @@ private:
     void Initialize();
     void executeSize();
 
-    void MetricState(SfxItemState eState, const SfxPoolItem* pState, const Fraction& rUIScale);
+    void MetricState(SfxItemState eState, const SfxPoolItem* pState, double fUIScale);
     static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
     void DisableControls();
-    void SetPosSizeMinMax(const Fraction& rUIScale);
+    void SetPosSizeMinMax(double fUIScale);
 
     /** Check if the UI scale has changed and handle such a change.
         UI scale is an SD only feature.  The UI scale is represented by items
@@ -195,7 +195,7 @@ private:
         b) check if the UI scale has changed (strangely, the UI scale value is available at the SdrModel.
         c) invalidate the items for position and size to trigger notifications of their current values.
     */
-    void UpdateUIScale(const Fraction& rUIScale);
+    void UpdateUIScale(double fUIScale);
 };
 
 

@@ -734,9 +734,9 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
         case SID_ATTR_METRIC:
         {
-            const Fraction aUIScale(mpView->GetModel().GetUIScale());
-            MetricState(eState, pState, aUIScale);
-            UpdateUIScale(aUIScale);
+            const double fUIScale(mpView->GetModel().GetUIScale());
+            MetricState(eState, pState, fUIScale);
+            UpdateUIScale(fUIScale);
             mbFieldMetricOutDated = false;
             break;
         }
@@ -906,7 +906,7 @@ void PosSizePropertyPanel::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     PanelLayout::DumpAsPropertyTree(rJsonWriter);
 }
 
-void PosSizePropertyPanel::MetricState(SfxItemState eState, const SfxPoolItem* pState, const Fraction& rUIScale)
+void PosSizePropertyPanel::MetricState(SfxItemState eState, const SfxPoolItem* pState, double fUIScale)
 {
     bool bPosXBlank = false;
     bool bPosYBlank = false;
@@ -916,7 +916,7 @@ void PosSizePropertyPanel::MetricState(SfxItemState eState, const SfxPoolItem* p
     // #i124409# use the given Item to get the correct UI unit and initialize it
     // and the Fields using it
     FieldUnit eDlgUnit = GetCurrentUnit(eState, pState);
-    mbFieldMetricOutDated |= (eDlgUnit != meDlgUnit || maUIScale != rUIScale);
+    mbFieldMetricOutDated |= (eDlgUnit != meDlgUnit || maUIScale != fUIScale);
     if (!mbFieldMetricOutDated)
         return;
     meDlgUnit = eDlgUnit;
@@ -937,7 +937,7 @@ void PosSizePropertyPanel::MetricState(SfxItemState eState, const SfxPoolItem* p
         mbMtrPosYBlanked = true;
     }
 
-    SetPosSizeMinMax(rUIScale);
+    SetPosSizeMinMax(fUIScale);
 
     if (mxMtrWidth->get_text().isEmpty())
         bWidthBlank = true;
@@ -1073,7 +1073,7 @@ void PosSizePropertyPanel::DisableControls()
         mxCbxScale->set_sensitive(false);
 }
 
-void PosSizePropertyPanel::SetPosSizeMinMax(const Fraction& rUIScale)
+void PosSizePropertyPanel::SetPosSizeMinMax(double fUIScale)
 {
     SdrPageView* pPV = mpView->GetSdrPageView();
     if (!pPV)
@@ -1086,8 +1086,8 @@ void PosSizePropertyPanel::SetPosSizeMinMax(const Fraction& rUIScale)
     pPV->LogicToPagePos(aTmpRect2);
     maWorkArea = vcl::unotools::b2DRectangleFromRectangle(aTmpRect2);
 
-    TransfrmHelper::ScaleRect(maWorkArea, rUIScale);
-    TransfrmHelper::ScaleRect(maRect, rUIScale);
+    TransfrmHelper::ScaleRect(maWorkArea, fUIScale);
+    TransfrmHelper::ScaleRect(maRect, fUIScale);
 
     const sal_uInt16 nDigits(mxMtrPosX->get_digits());
     TransfrmHelper::ConvertRect( maWorkArea, nDigits, mePoolUnit, meDlgUnit );
@@ -1122,15 +1122,15 @@ void PosSizePropertyPanel::SetPosSizeMinMax(const Fraction& rUIScale)
     limitWidth(*mxMtrHeight);
 }
 
-void PosSizePropertyPanel::UpdateUIScale(const Fraction& rUIScale)
+void PosSizePropertyPanel::UpdateUIScale(double fUIScale)
 {
-    if (maUIScale == rUIScale)
+    if (maUIScale == fUIScale)
         return;
 
     // UI scale has changed.
 
     // Remember the new UI scale.
-    maUIScale = rUIScale;
+    maUIScale = fUIScale;
 
     // The content of the position and size boxes is only updated when item changes are notified.
     // Request such notifications without changing the actual item values.
