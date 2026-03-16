@@ -334,7 +334,7 @@ NavigationBar::NavigationBar(DbGridControl* pParent)
     m_xRecordCount->set_label(OUString('?'));
 
     vcl::Font aApplFont(Application::GetSettings().GetStyleSettings().GetToolFont());
-    SetPointFontAndZoom(aApplFont, Fraction(1, 1));
+    SetPointFontAndZoom(aApplFont, 1.0);
 
     m_xContainer->connect_size_allocate(LINK(this, NavigationBar, SizeAllocHdl));
 }
@@ -579,23 +579,23 @@ void NavigationBar::SetState(DbGridControlNavigationBarState nWhich)
     }
 }
 
-static void ScaleButton(weld::Button& rBtn, const Fraction& rZoom)
+static void ScaleButton(weld::Button& rBtn, double fZoom)
 {
     rBtn.set_size_request(-1, -1);
     Size aPrefSize = rBtn.get_preferred_size();
-    aPrefSize.setWidth(std::round(double(aPrefSize.Width() * rZoom)));
-    aPrefSize.setHeight(std::round(double(aPrefSize.Height() * rZoom)));
+    aPrefSize.setWidth(std::round(aPrefSize.Width() * fZoom));
+    aPrefSize.setHeight(std::round(aPrefSize.Height() * fZoom));
     rBtn.set_size_request(aPrefSize.Width(), aPrefSize.Height());
 }
 
-void NavigationBar::SetPointFontAndZoom(const vcl::Font& rFont, const Fraction& rZoom)
+void NavigationBar::SetPointFontAndZoom(const vcl::Font& rFont, double fZoom)
 {
     vcl::Font aFont(rFont);
-    if (rZoom.GetNumerator() != rZoom.GetDenominator())
+    if (fZoom != 1.0)
     {
         Size aSize = aFont.GetFontSize();
-        aSize.setWidth(std::round(double(aSize.Width() * rZoom)));
-        aSize.setHeight(std::round(double(aSize.Height() * rZoom)));
+        aSize.setWidth(std::round(aSize.Width() * fZoom));
+        aSize.setHeight(std::round(aSize.Height() * fZoom));
         aFont.SetFontSize(aSize);
     }
 
@@ -608,13 +608,13 @@ void NavigationBar::SetPointFontAndZoom(const vcl::Font& rFont, const Fraction& 
     m_xAbsolute->GetWidget()->set_size_request(nReserveWidth, -1);
     m_xRecordCount->set_size_request(nReserveWidth, -1);
 
-    ScaleButton(*m_xFirstBtn, rZoom);
-    ScaleButton(*m_xPrevBtn, rZoom);
-    ScaleButton(*m_xNextBtn, rZoom);
-    ScaleButton(*m_xLastBtn, rZoom);
-    ScaleButton(*m_xNewBtn, rZoom);
+    ScaleButton(*m_xFirstBtn, fZoom);
+    ScaleButton(*m_xPrevBtn, fZoom);
+    ScaleButton(*m_xNextBtn, fZoom);
+    ScaleButton(*m_xLastBtn, fZoom);
+    ScaleButton(*m_xNewBtn, fZoom);
 
-    SetZoom(rZoom);
+    SetZoom(Fraction(fZoom));
 
     InvalidateChildSizeCache();
 }
@@ -905,7 +905,7 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
             if (IsControlFont())
                 aFont.Merge(GetControlFont());
 
-            m_aBar->SetPointFontAndZoom(aFont, GetZoom());
+            m_aBar->SetPointFontAndZoom(aFont, double(GetZoom()));
         }
     }
 

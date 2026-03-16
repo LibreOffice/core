@@ -213,7 +213,7 @@ public:
     void InvalidateState(DbGridControlNavigationBarState nWhich) {SetState(nWhich);}
     void SetState(DbGridControlNavigationBarState nWhich);
     bool GetState(DbGridControlNavigationBarState nWhich) const;
-    void SetPointFontAndZoom(const vcl::Font& rFont, const Fraction& rZoom);
+    void SetPointFontAndZoom(const vcl::Font& rFont, double fZoom);
     sal_uInt16 GetPreferredWidth() const;
 
 private:
