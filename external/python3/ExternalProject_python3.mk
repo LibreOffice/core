@@ -122,6 +122,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 				-I$(gb_UnpackedTarball_workdir)/expat/lib \
 				-I$(gb_UnpackedTarball_workdir)/expat) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
+			$(if $(filter LINUX,$(OS)),-I/usr/include/ncursesw) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
 		$(if $(filter -fsanitize=%,$(CC)),LINKCC="$(CXX) -pthread") \
