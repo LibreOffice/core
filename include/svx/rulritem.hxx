@@ -88,9 +88,9 @@ public:
 
 class SVX_DLLPUBLIC SvxPagePosSizeItem final : public SfxPoolItem
 {
-    Point aPos;
-    tools::Long lWidth;
-    tools::Long lHeight;
+    Point m_aPos;
+    tools::Long m_lWidth;
+    tools::Long m_lHeight;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -112,9 +112,9 @@ public:
     SvxPagePosSizeItem();
     SvxPagePosSizeItem(SvxPagePosSizeItem const &) = default;
 
-    const Point &GetPos() const { return aPos; }
-    tools::Long    GetWidth() const { return lWidth; }
-    tools::Long    GetHeight() const { return lHeight; }
+    const Point &GetPos() const { return m_aPos; }
+    tools::Long    GetWidth() const { return m_lWidth; }
+    tools::Long    GetHeight() const { return m_lHeight; }
 };
 
 struct SVX_DLLPUBLIC SvxColumnDescription
