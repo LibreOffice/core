@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Purple">
+    <theme-colors name="Purple">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#2B1036" />
+        <color name="light2" color="#EFE6F2" />
+        <color name="accent1" color="#A03FD1" />
+        <color name="accent2" color="#5F3F9E" />
+        <color name="accent3" color="#6D24B5" />
+        <color name="accent4" color="#9853A6" />
+        <color name="accent5" color="#BA49C4" />
+        <color name="accent6" color="#943B94" />
+        <color name="hyperlink" color="#4747B3" />
+        <color name="followed-hyperlink" color="#6B3D99" />
+    </theme-colors>
+</theme>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Chalk">
+    <theme-colors name="Chalk">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#333436" />
+        <color name="light2" color="#E6EAF2" />
+        <color name="accent1" color="#7283A3" />
+        <color name="accent2" color="#779E6F" />
+        <color name="accent3" color="#996F6B" />
+        <color name="accent4" color="#74A6A6" />
+        <color name="accent5" color="#A69D74" />
+        <color name="accent6" color="#836691" />
+        <color name="hyperlink" color="#8D9DA6" />
+        <color name="followed-hyperlink" color="#9F91AB" />
+    </theme-colors>
+</theme>

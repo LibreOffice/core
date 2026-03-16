@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Grey">
+    <theme-colors name="Grey">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#262626" />
+        <color name="light2" color="#F2F2F2" />
+        <color name="accent1" color="#333333" />
+        <color name="accent2" color="#4D4D4D" />
+        <color name="accent3" color="#666666" />
+        <color name="accent4" color="#808080" />
+        <color name="accent5" color="#999999" />
+        <color name="accent6" color="#B3B3B3" />
+        <color name="hyperlink" color="#A6A6A6" />
+        <color name="followed-hyperlink" color="#8C8C8C" />
+    </theme-colors>
+</theme>

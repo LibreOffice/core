@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Red">
+    <theme-colors name="Red">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#361410" />
+        <color name="light2" color="#F2E7E6" />
+        <color name="accent1" color="#D42A2A" />
+        <color name="accent2" color="#9E3F5F" />
+        <color name="accent3" color="#B5243C" />
+        <color name="accent4" color="#A66153" />
+        <color name="accent5" color="#C46849" />
+        <color name="accent6" color="#94593B" />
+        <color name="hyperlink" color="#4747B3" />
+        <color name="followed-hyperlink" color="#6B3D99" />
+    </theme-colors>
+</theme>

@@ -9,13 +9,24 @@
 
 $(eval $(call gb_Package_Package,svx_document_themes,$(SRCDIR)/svx/uiconfig/themes))
 
-$(eval $(call gb_Package_add_files_with_dir,svx_document_themes,$(LIBO_SHARE_FOLDER)/themes,\
+$(eval $(call gb_Package_add_files,svx_document_themes,$(LIBO_SHARE_FOLDER)/themes,\
     Beach.theme \
+    Blue.theme \
     Breeze.theme \
+    Chalk.theme \
+    ChartClassic.theme \
+    Classic.theme \
     Forest.theme \
+    Green.theme \
+    Grey.theme \
     Libreoffice.theme \
     Ocean.theme \
+    Office.theme \
+    Orange.theme \
+    Purple.theme \
     Rainbow.theme \
+    Red.theme \
+    Retro.theme \
     Sunset.theme \
 ))
 
