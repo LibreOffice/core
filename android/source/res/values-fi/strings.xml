@@ -64,4 +64,23 @@
     <string name="action_cancel">Peruuta</string>
     <string name="calc_delete">Poista</string>
     <string name="calc_hide">Piilota</string>
+    <string name="action_exportToPDF">Vie PDF-muodossa</string>
+    <string name="tabhost_paragraph">Kappale</string>
+    <string name="pref_experimental_editing">Kokeellinen tila</string>
+    <string name="pref_experimental_editing_summary">Ota kokeellinen muokkaustila käyttöön. Käytä omalla vastuulla.</string>
+    <string name="action_about">Tietoa</string>
+    <string name="action_parts">Osat</string>
+    <string name="calc_show">Näytä</string>
+    <string name="calc_adjust_width">Säädä leveyttä</string>
+    <string name="calc_adjust_height">Säädä korkeutta</string>
+    <string name="tabhost_insert">Lisää</string>
+    <string name="action_pwd_dialog_cancel">Peruuta</string>
+    <string name="action_rename_worksheet">Nimeä laskentataulukko uudelleen</string>
+    <string name="alert_cancel">Peruuta</string>
+    <string name="slide">Dia</string>
+    <string name="highlight_color">Korostusväri</string>
+    <string name="font_color">Fontin väri</string>
+    <string name="action_rename_slide">Nimeä dia uudelleen</string>
+    <string name="no_save_document">EI</string>
+    <string name="about_notice">Näytä tiedonanto</string>
 </resources>
