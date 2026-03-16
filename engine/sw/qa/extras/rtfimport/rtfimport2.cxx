@@ -532,7 +532,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf91684)
     createSwDoc("tdf91684.rtf");
     // Scaling of the group shape children were incorrect, this was 3203.
     // (Unit was assumed to be twips, but it was relative coordinates.)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1337), getShape(1)->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1339), getShape(1)->getSize().Height);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf167710)

@@ -1396,10 +1396,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         break;
         case RTFKeyword::SHPLEFT:
-            m_aStates.top().getShape().setLeft(convertTwipToMm100(nParam));
+            m_aStates.top().getShape().setLeftTwip(nParam);
             break;
         case RTFKeyword::SHPTOP:
-            m_aStates.top().getShape().setTop(convertTwipToMm100(nParam));
+            m_aStates.top().getShape().setTopTwip(nParam);
             break;
         case RTFKeyword::SHPRIGHT:
             m_aStates.top().getShape().setRight(convertTwipToMm100(nParam));
@@ -1543,10 +1543,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                NS_ooxml::LN_CT_Spacing_after, pIntValue);
             break;
         case RTFKeyword::DPX:
-            m_aStates.top().getDrawingObject().setLeft(convertTwipToMm100(nParam));
+            m_aStates.top().getDrawingObject().setLeftTwip(nParam);
             break;
         case RTFKeyword::DPY:
-            m_aStates.top().getDrawingObject().setTop(convertTwipToMm100(nParam));
+            m_aStates.top().getDrawingObject().setTopTwip(nParam);
             break;
         case RTFKeyword::DPXSIZE:
             m_aStates.top().getDrawingObject().setRight(convertTwipToMm100(nParam));

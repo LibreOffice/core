@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <basegfx/units/Length.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <tools/ref.hxx>
@@ -471,9 +472,9 @@ private:
     css::text::WrapTextMode                      m_nWrap;          // from ST_Wrap around, auto, none, notBeside, through, tight
     sal_Int32                                    m_hAnchor;        // page, from ST_HAnchor  margin, page, text
     sal_Int32                                    m_vAnchor;        // around from ST_VAnchor margin, page, text
-    sal_Int32                                    m_x;              // x-position
+    gfx::Length m_x = 0_emu; // x-position
     bool                                         m_bxValid;
-    sal_Int32                                    m_y;              // y-position
+    gfx::Length m_y = 0_emu; // y-position
     bool                                         m_byValid;
     sal_Int32                                    m_hSpace;         // frame padding h
     sal_Int32                                    m_vSpace;         // frame padding v
@@ -523,13 +524,13 @@ public:
     sal_Int32 GetvAnchor() const           { return m_vAnchor; }
     void      SetvAnchor( sal_Int32 nSet ) { m_vAnchor = nSet; }
 
-    sal_Int32 Getx() const           { return m_x; }
-    void      Setx( sal_Int32 nSet ) { m_x = nSet; m_bxValid = true; }
-    bool      IsxValid() const       { return m_bxValid; }
+    gfx::Length Getx() const { return m_x; }
+    void Setx(gfx::Length nSet) { m_x = nSet; m_bxValid = true; }
+    bool IsxValid() const { return m_bxValid; }
 
-    sal_Int32 Gety() const           { return m_y; }
-    void      Sety( sal_Int32 nSet ) { m_y = nSet; m_byValid = true; }
-    bool      IsyValid() const       { return m_byValid; }
+    gfx::Length Gety() const { return m_y; }
+    void Sety(gfx::Length nSet) { m_y = nSet; m_byValid = true; }
+    bool IsyValid() const { return m_byValid; }
 
     void      SethSpace( sal_Int32 nSet ) { m_hSpace = nSet; }
     sal_Int32 GethSpace() const           { return m_hSpace; }

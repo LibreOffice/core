@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basegfx/units/Length.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -1890,7 +1891,6 @@ static void lcl_AddRange(
 //define some default frame width - 0cm ATM: this allow the frame to be wrapped around the text
 constexpr sal_Int32 DEFAULT_FRAME_MIN_WIDTH = 0;
 constexpr sal_Int32 DEFAULT_FRAME_MIN_HEIGHT = 0;
-constexpr sal_Int32 DEFAULT_VALUE = 0;
 
 std::vector<css::beans::PropertyValue>
 DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
@@ -1969,17 +1969,21 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
             comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), nhRule));
 
         bool bValidX = false;
-        sal_Int32 nX = DEFAULT_VALUE;
+        gfx::Length nX;
         for (const auto pProp : vProps)
         {
             bValidX = pProp->IsxValid();
             if (!bValidX)
                 continue;
             nX = pProp->Getx();
+            // MSO handles large twip values specially (legacy 16bit handling)
+            if (nX >= 0x8000_twip)
+                nX = 0_emu;
             break;
         }
         aFrameProperties.push_back(
-            comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION), nX));
+            comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION_EMU),
+                                         sal_Int64(nX.as_emu())));
 
         sal_Int16 nHoriOrient = text::HoriOrientation::NONE;
         for (const auto pProp : vProps)
@@ -2005,17 +2009,20 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
             comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_RELATION), nHAnchor));
 
         bool bValidY = false;
-        sal_Int32 nY = DEFAULT_VALUE;
+        gfx::Length nY;
         for (const auto pProp : vProps)
         {
             bValidY = pProp->IsyValid();
             if (!bValidY)
                 continue;
             nY = pProp->Gety();
+            if (nY >= 0x8000_twip)
+                nY = 0_emu;
             break;
         }
         aFrameProperties.push_back(
-            comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION), nY));
+            comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION_EMU),
+                                         sal_Int64(nY.as_emu())));
 
         sal_Int16 nVertOrient = text::VertOrientation::NONE;
         // Testing indicates that yAlign should be ignored if there is any specified w:y
@@ -2035,7 +2042,7 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
         // but errata documentation MS-OE376 2.1.48 Section 2.3.1.11 says "text"
         // while actual testing usually indicates "margin" tdf#157572 tdf#112287
         sal_Int16 nVAnchor = text::RelOrientation::PAGE_PRINT_AREA; // 'margin'
-        if (!nY && (bValidY || nVertOrient == text::VertOrientation::NONE))
+        if (nY == 0_emu && (bValidY || nVertOrient == text::VertOrientation::NONE))
         {
             // special cases? "auto" position defaults to "paragraph" based on testing when w:y=0
             nVAnchor = text::RelOrientation::FRAME; // 'text'
@@ -2596,8 +2603,8 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                         // Preventing overlap is emulation - so deny overlap as little as possible.
                         sal_Int16 nVertOrient = text::VertOrientation::NONE;
                         sal_Int16 nVertOrientRelation = text::RelOrientation::FRAME;
-                        sal_Int32 nCurrVertPos = 0;
-                        sal_Int32 nPrevVertPos = 0;
+                        gfx::Length nCurrVertPos;
+                        gfx::Length nPrevVertPos;
                         for (size_t i = 0; bPreventOverlap && i < aCurrFrameProperties.size(); ++i)
                         {
                             if (aCurrFrameProperties[i].Name == "VertOrientRelation")
@@ -2612,11 +2619,13 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                                 if (nVertOrient != text::VertOrientation::NONE)
                                     bPreventOverlap = false;
                             }
-                            else if (aCurrFrameProperties[i].Name == "VertOrientPosition")
+                            else if (aCurrFrameProperties[i].Name == "VertOrientPositionEMU")
                             {
-                                aCurrFrameProperties[i].Value >>= nCurrVertPos;
+                                sal_Int64 nEMU = 0;
+                                aCurrFrameProperties[i].Value >>= nEMU;
+                                nCurrVertPos = gfx::Length::emu(nEMU);
                                 // arbitrary value. Assume it must be less than 1st line height
-                                if (nCurrVertPos > 20 || nCurrVertPos < -20)
+                                if (nCurrVertPos > 20_twip || nCurrVertPos < -20_twip)
                                     bPreventOverlap = false;
                             }
                         }
@@ -2634,9 +2643,11 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                                 if (nVertOrient != text::VertOrientation::NONE)
                                     bPreventOverlap = false;
                             }
-                            else if (aPrevFrameProperties[i].Name == "VertOrientPosition")
+                            else if (aPrevFrameProperties[i].Name == "VertOrientPositionEMU")
                             {
-                                aPrevFrameProperties[i].Value >>= nPrevVertPos;
+                                sal_Int64 nEMU = 0;
+                                aPrevFrameProperties[i].Value >>= nEMU;
+                                nPrevVertPos = gfx::Length::emu(nEMU);
                                 if (nPrevVertPos != nCurrVertPos)
                                     bPreventOverlap = false;
                             }
@@ -3746,9 +3757,9 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
                 u"Surround"_ustr,
                 u"SurroundContour"_ustr,
                 u"HoriOrient"_ustr,
-                u"HoriOrientPosition"_ustr,
+                u"HoriOrientPositionEMU"_ustr,
                 u"VertOrient"_ustr,
-                u"VertOrientPosition"_ustr,
+                u"VertOrientPositionEMU"_ustr,
                 u"VertOrientRelation"_ustr,
                 u"HoriOrientRelation"_ustr,
                 u"LeftMargin"_ustr,
@@ -9741,10 +9752,10 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
             xEmbedded->setPropertyValue(u"IsFollowingTextFlow"_ustr, cpo::uno::Any(m_pGraphicImport->GetLayoutInCell()));
             uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
             xEmbedded->setPropertyValue(u"HoriOrient"_ustr, xShapeProps->getPropertyValue(u"HoriOrient"_ustr));
-            xEmbedded->setPropertyValue(u"HoriOrientPosition"_ustr, xShapeProps->getPropertyValue(u"HoriOrientPosition"_ustr));
+            xEmbedded->setPropertyValue(u"HoriOrientPositionEMU"_ustr, xShapeProps->getPropertyValue(u"HoriOrientPositionEMU"_ustr));
             xEmbedded->setPropertyValue(u"HoriOrientRelation"_ustr, xShapeProps->getPropertyValue(u"HoriOrientRelation"_ustr));
             xEmbedded->setPropertyValue(u"VertOrient"_ustr, xShapeProps->getPropertyValue(u"VertOrient"_ustr));
-            xEmbedded->setPropertyValue(u"VertOrientPosition"_ustr, xShapeProps->getPropertyValue(u"VertOrientPosition"_ustr));
+            xEmbedded->setPropertyValue(u"VertOrientPositionEMU"_ustr, xShapeProps->getPropertyValue(u"VertOrientPositionEMU"_ustr));
             xEmbedded->setPropertyValue(u"VertOrientRelation"_ustr, xShapeProps->getPropertyValue(u"VertOrientRelation"_ustr));
             //tdf123873 fix missing textwrap import
             xEmbedded->setPropertyValue(u"TextWrap"_ustr, xShapeProps->getPropertyValue(u"TextWrap"_ustr));

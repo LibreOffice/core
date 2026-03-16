@@ -1480,6 +1480,9 @@ bool SwFormatVertOrient::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) 
         case MID_VERTORIENT_POSITION:
                 rVal <<= sal_Int32(std::round(m_nYPos.as_hmm()));
                 break;
+        case MID_VERTORIENT_POSITION_EMU:
+                rVal <<= sal_Int64(m_nYPos.as_emu());
+                break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
@@ -1510,10 +1513,17 @@ bool SwFormatVertOrient::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberI
         {
             sal_Int32 nVal = 0;
             rVal >>= nVal;
-            if(bConvert)
+            if (bConvert)
                 m_nYPos = gfx::Length::hmm(nVal);
             else
                 m_nYPos = gfx::Length::twip(nVal);
+        }
+        break;
+        case MID_VERTORIENT_POSITION_EMU:
+        {
+            sal_Int64 nValueEMU = 0;
+            rVal >>= nValueEMU;
+            m_nYPos = gfx::Length::emu(nValueEMU);
         }
         break;
         default:
@@ -1591,6 +1601,9 @@ bool SwFormatHoriOrient::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) 
         case MID_HORIORIENT_POSITION:
                 rVal <<= sal_Int32(std::round(m_nXPos.as_hmm()));
                 break;
+        case MID_HORIORIENT_POSITION_EMU:
+                rVal <<= sal_Int64(m_nXPos.as_emu());
+                break;
         case MID_HORIORIENT_PAGETOGGLE:
             rVal <<= IsPosToggle();
             break;
@@ -1629,6 +1642,13 @@ bool SwFormatHoriOrient::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberI
                 m_nXPos = gfx::Length::hmm(nVal);
             else
                 m_nXPos = gfx::Length::twip(nVal);
+        }
+        break;
+        case MID_HORIORIENT_POSITION_EMU:
+        {
+            sal_Int64 nValueEMU = 0;
+            rVal >>= nValueEMU;
+            m_nXPos = gfx::Length::emu(nValueEMU);
         }
         break;
         case MID_HORIORIENT_PAGETOGGLE:

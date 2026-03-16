@@ -44,10 +44,10 @@ void TablePositionHandler::lcl_attribute(Id nId, const Value& rVal)
             m_aXSpec = rVal.getString();
             break;
         case NS_ooxml::LN_CT_TblPPr_tblpY:
-            m_nY = rVal.getInt();
+            m_nY = gfx::Length::twip(rVal.getInt());
             break;
         case NS_ooxml::LN_CT_TblPPr_tblpX:
-            m_nX = rVal.getInt();
+            m_nX = gfx::Length::twip(rVal.getInt());
             break;
         case NS_ooxml::LN_CT_TblPPr_leftFromText:
             m_nLeftFromText = rVal.getInt();
@@ -118,8 +118,7 @@ cpo::uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition(
 
     aFrameProperties[u"HoriOrient"_ustr] <<= nHoriOrient;
     aFrameProperties[u"HoriOrientRelation"_ustr] <<= nHoriOrientRelation;
-    aFrameProperties[u"HoriOrientPosition"_ustr]
-        <<= ConversionHelper::convertTwipToMm100_Limited(m_nX);
+    aFrameProperties[u"HoriOrientPositionEMU"_ustr] <<= sal_Int64(m_nX.as_emu());
 
     // Vertical positioning
     sal_Int16 nVertOrient = text::VertOrientation::NONE;
@@ -141,8 +140,7 @@ cpo::uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition(
 
     aFrameProperties[u"VertOrient"_ustr] <<= nVertOrient;
     aFrameProperties[u"VertOrientRelation"_ustr] <<= nVertOrientRelation;
-    aFrameProperties[u"VertOrientPosition"_ustr]
-        <<= ConversionHelper::convertTwipToMm100_Limited(m_nY);
+    aFrameProperties[u"VertOrientPositionEMU"_ustr] <<= sal_Int64(m_nY.as_emu());
     aFrameProperties[u"FillTransparence"_ustr] <<= sal_Int32(100);
 
     if (m_nTableOverlap == NS_ooxml::LN_Value_ST_TblOverlap_never)

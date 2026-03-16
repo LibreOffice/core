@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include <basegfx/units/Length.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
@@ -223,15 +224,15 @@ void GraphicImport::applyPosition(const uno::Reference< beans::XPropertySet >& x
 void GraphicImport::applyRelativePosition(const uno::Reference< beans::XPropertySet >& xGraphicObjectProperties, bool bRelativeOnly) const
 {
     if (!bRelativeOnly)
-        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT_POSITION),
-                                                   cpo::uno::Any(m_nLeftPosition));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION_EMU),
+                                                   cpo::uno::Any(sal_Int64(m_nLeftPosition.as_emu())));
     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT_RELATION ),
             cpo::uno::Any(m_nHoriRelation));
     xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_PAGE_TOGGLE),
                                                cpo::uno::Any(m_bPageToggle));
     if (!bRelativeOnly)
-        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_ORIENT_POSITION),
-                                                   cpo::uno::Any(m_nTopPosition));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION_EMU),
+                                                   cpo::uno::Any(sal_Int64(m_nTopPosition.as_emu())));
     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_ORIENT_RELATION ),
             cpo::uno::Any(m_nVertRelation));
 }
@@ -329,8 +330,6 @@ GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> xComponentCo
 , m_bYSizeValid(false)
 , m_rGraphicImportType(rImportType)
 , m_rDomainMapper( rDMapper )
-, m_nLeftPosition(0)
-, m_nTopPosition(0)
 , m_bUseSimplePos(false)
 , m_nHoriOrient(   text::HoriOrientation::NONE )
 , m_nHoriRelation( text::RelOrientation::FRAME )
@@ -374,7 +373,8 @@ GraphicImport::~GraphicImport()
 
 css::awt::Point GraphicImport::GetGraphicObjectPosition() const
 {
-    return (css::awt::Point(m_nLeftPosition, m_nTopPosition));
+    return css::awt::Point(std::round(m_nLeftPosition.as_hmm()),
+                           std::round(m_nTopPosition.as_hmm()));
 }
 
 bool GraphicImport::GetLayoutInCell() const
@@ -724,12 +724,12 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
         }
         break;
         case NS_ooxml::LN_CT_Point2D_x:
-            m_nLeftPosition = oox::drawingml::convertEmuToHmm(nIntValue);
+            m_nLeftPosition = gfx::Length::emu(nIntValue);
             m_nHoriRelation = text::RelOrientation::PAGE_FRAME;
             m_nHoriOrient = text::HoriOrientation::NONE;
         break;
         case NS_ooxml::LN_CT_Point2D_y:
-            m_nTopPosition = oox::drawingml::convertEmuToHmm(nIntValue);
+            m_nTopPosition = gfx::Length::emu(nIntValue);
             m_nVertRelation = text::RelOrientation::PAGE_FRAME;
             m_nVertOrient = text::VertOrientation::NONE;
         break;
@@ -1005,15 +1005,15 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                             if(pShape && pShape->IsGroupObject())
                             {
                                 tools::Rectangle aSnapRect = pShape->GetSnapRect(); // Twips
-                                m_nLeftPosition = ConversionHelper::convertTwipToMm100_Limited(aSnapRect.Left());
-                                m_nTopPosition = ConversionHelper::convertTwipToMm100_Limited(aSnapRect.Top());
+                                m_nLeftPosition = gfx::Length::twip(aSnapRect.Left());
+                                m_nTopPosition = gfx::Length::twip(aSnapRect.Top());
                                 aLOSize.Width = ConversionHelper::convertTwipToMm100_Limited(aSnapRect.getOpenWidth());
                                 aLOSize.Height = ConversionHelper::convertTwipToMm100_Limited(aSnapRect.getOpenHeight());
                             }
                             else
                             {
-                                m_nLeftPosition = fCentrumX - aLOSize.Width / 2.0;
-                                m_nTopPosition = fCentrumY - aLOSize.Height / 2.0;
+                                m_nLeftPosition = gfx::Length::hmm(fCentrumX - aLOSize.Width / 2.0);
+                                m_nTopPosition = gfx::Length::hmm(fCentrumY - aLOSize.Height / 2.0);
                             }
                             m_xShape->setPosition(GetGraphicObjectPosition());
                         }
@@ -1066,8 +1066,8 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                                 // Get LO SnapRect from SdrObject if possible
                                 awt::Rectangle aLOSnapRect;
                                 // For case we have no SdrObject, initialize with values from m_pImpl
-                                aLOSnapRect.X = m_nLeftPosition;
-                                aLOSnapRect.Y = m_nTopPosition;
+                                aLOSnapRect.X = std::round(m_nLeftPosition.as_hmm());
+                                aLOSnapRect.Y = std::round(m_nTopPosition.as_hmm());
                                 aLOSnapRect.Width = aLOSize.Width;
                                 aLOSnapRect.Height = aLOSize.Height;
                                 if (pShape)
@@ -1108,8 +1108,8 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                             // Get LO bound rectangle from SdrObject if possible
                             awt::Rectangle aLOBoundRect;
                             // For case we have no SdrObject, initialize with values from m_pImpl
-                            aLOBoundRect.X = m_nLeftPosition;
-                            aLOBoundRect.Y = m_nTopPosition;
+                            aLOBoundRect.X = std::round(m_nLeftPosition.as_hmm());
+                            aLOBoundRect.Y = std::round(m_nTopPosition.as_hmm());
                             aLOBoundRect.Width = aLOSize.Width;
                             aLOBoundRect.Height = aLOSize.Height;
                             if (pShape)
@@ -1345,8 +1345,7 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                             if (!isTopGroupObj(m_xShape)
                                 || m_nHoriRelation != text::RelOrientation::PAGE_FRAME
                                 || m_nVertRelation != text::RelOrientation::PAGE_FRAME)
-                                m_xShape->setPosition(
-                                    awt::Point(m_nLeftPosition, m_nTopPosition));
+                                m_xShape->setPosition(GetGraphicObjectPosition());
 
                             if (nRotation)
                                 xShapeProps->setPropertyValue(u"RotateAngle"_ustr, cpo::uno::Any(nRotation));

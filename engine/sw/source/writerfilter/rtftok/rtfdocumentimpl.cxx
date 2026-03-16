@@ -3098,10 +3098,12 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
 
                 if (bTextFrame)
                 {
-                    xPropertySet->setPropertyValue(u"HoriOrientPosition"_ustr,
-                                                   cpo::uno::Any(rDrawing.getLeft()));
-                    xPropertySet->setPropertyValue(u"VertOrientPosition"_ustr,
-                                                   cpo::uno::Any(rDrawing.getTop()));
+                    xPropertySet->setPropertyValue(
+                        u"HoriOrientPositionEMU"_ustr,
+                        cpo::uno::Any(sal_Int64(rDrawing.getLeftLength().as_emu())));
+                    xPropertySet->setPropertyValue(
+                        u"VertOrientPositionEMU"_ustr,
+                        cpo::uno::Any(sal_Int64(rDrawing.getTopLength().as_emu())));
                 }
                 else
                 {

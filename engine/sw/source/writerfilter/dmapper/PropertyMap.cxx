@@ -2287,9 +2287,7 @@ ParagraphProperties::ParagraphProperties()
     , m_nWrap( text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE )
     , m_hAnchor( -1 )
     , m_vAnchor( -1 )
-    , m_x( -1 )
     , m_bxValid( false )
-    , m_y( -1 )
     , m_byValid( false )
     , m_hSpace( -1 )
     , m_vSpace( -1 )
@@ -2310,9 +2308,9 @@ void ParagraphProperties::ResetFrameProperties()
     m_nWrap          = text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE;
     m_hAnchor        = -1;
     m_vAnchor        = -1;
-    m_x              = -1;
+    m_x              = 0_emu;
     m_bxValid        = false;
-    m_y              = -1;
+    m_y              = 0_emu;
     m_byValid        = false;
     m_hSpace         = -1;
     m_vSpace         = -1;

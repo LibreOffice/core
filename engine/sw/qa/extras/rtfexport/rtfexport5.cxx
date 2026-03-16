@@ -381,9 +381,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo66040)
 
         // Make sure the second shape has the correct position and size.
         uno::Reference<drawing::XShape> xShape(getShape(2), uno::UNO_QUERY);
-        sal_Int32 nHoriPos = getProperty<sal_Int32>(xShape, u"HoriOrientPosition"_ustr);
-        // Rounding tolerance of 1 hmm because of rounding errors
-        CPPUNIT_ASSERT(nHoriPos >= 14419 && nHoriPos <= 14420);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(14420),
+                             getProperty<sal_Int32>(xShape, u"HoriOrientPosition"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1032),
                              getProperty<sal_Int32>(xShape, u"VertOrientPosition"_ustr));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(14000), xShape->getSize().Width);

@@ -34,11 +34,13 @@
 #define MID_VERTORIENT_ORIENT                   0
 #define MID_VERTORIENT_RELATION                 1
 #define MID_VERTORIENT_POSITION                 2
+#define MID_VERTORIENT_POSITION_EMU             3
 
 #define MID_HORIORIENT_ORIENT                   0
 #define MID_HORIORIENT_RELATION                 1
 #define MID_HORIORIENT_POSITION                 2
 #define MID_HORIORIENT_PAGETOGGLE               3
+#define MID_HORIORIENT_POSITION_EMU             4
 
 #define MID_ANCHOR_ANCHORTYPE                   0
 #define MID_ANCHOR_PAGENUM                      1

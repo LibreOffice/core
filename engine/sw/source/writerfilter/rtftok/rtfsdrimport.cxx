@@ -1019,8 +1019,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     // Set position and size
     if (xShape.is())
     {
-        sal_Int32 nLeft = rShape.getLeft();
-        sal_Int32 nTop = rShape.getTop();
+        gfx::Length nLeft = rShape.getLeftLength();
+        gfx::Length nTop = rShape.getTopLength();
 
         bool bInShapeGroup = oGroupLeft && oGroupTop && oGroupRight && oGroupBottom && oRelLeft
                              && oRelTop && oRelRight && oRelBottom;
@@ -1034,9 +1034,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             sal_Int32 nCoordSysHeight = *oGroupBottom - *oGroupTop;
             double fWidthRatio = static_cast<double>(nShapeWidth) / nCoordSysWidth;
             double fHeightRatio = static_cast<double>(nShapeHeight) / nCoordSysHeight;
-            nLeft = static_cast<sal_Int32>(rShape.getLeft()
-                                           + fWidthRatio * (*oRelLeft - *oGroupLeft));
-            nTop = static_cast<sal_Int32>(rShape.getTop() + fHeightRatio * (*oRelTop - *oGroupTop));
+            nLeft = gfx::Length::hmm(rShape.getLeft() + fWidthRatio * (*oRelLeft - *oGroupLeft));
+            nTop = gfx::Length::hmm(rShape.getTop() + fHeightRatio * (*oRelTop - *oGroupTop));
 
             // See lclGetAbsRect() in the VML import.
             aSize.Width = std::lround(fWidthRatio * (*oRelRight - *oRelLeft));
@@ -1045,11 +1044,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
         if (m_bTextFrame)
         {
-            xPropertySet->setPropertyValue(u"HoriOrientPosition"_ustr, cpo::uno::Any(nLeft));
-            xPropertySet->setPropertyValue(u"VertOrientPosition"_ustr, cpo::uno::Any(nTop));
+            xPropertySet->setPropertyValue(u"HoriOrientPositionEMU"_ustr,
+                                           cpo::uno::Any(sal_Int64(nLeft.as_emu())));
+            xPropertySet->setPropertyValue(u"VertOrientPositionEMU"_ustr,
+                                           cpo::uno::Any(sal_Int64(nTop.as_emu())));
         }
         else
-            xShape->setPosition(awt::Point(nLeft, nTop));
+            xShape->setPosition(awt::Point(std::round(nLeft.as_hmm()), std::round(nTop.as_hmm())));
 
         if (bInShapeGroup)
             xShape->setSize(aSize);

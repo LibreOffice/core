@@ -324,6 +324,7 @@
     { UNO_NAME_HEIGHT, RES_FRM_SIZE,          cppu::UnoType<sal_Int32>::get()  ,         PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS},\
     { UNO_NAME_HORI_ORIENT, RES_HORI_ORIENT,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },             \
     { UNO_NAME_HORI_ORIENT_POSITION, RES_HORI_ORIENT,     cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_HORIORIENT_POSITION|CONVERT_TWIPS    }, \
+    { UNO_NAME_HORI_ORIENT_POSITION_EMU, RES_HORI_ORIENT, cppu::UnoType<sal_Int64>::get(),           PROPERTY_NONE ,MID_HORIORIENT_POSITION_EMU             }, \
     { UNO_NAME_HORI_ORIENT_RELATION, RES_HORI_ORIENT,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE ,MID_HORIORIENT_RELATION  },               \
     { UNO_NAME_HYPER_LINK_U_R_L, RES_URL,                 cppu::UnoType<OUString>::get(),        PROPERTY_NONE ,MID_URL_URL},                         \
     { UNO_NAME_HYPER_LINK_TARGET, RES_URL,                cppu::UnoType<OUString>::get(),        PROPERTY_NONE ,MID_URL_TARGET},                      \
@@ -352,6 +353,7 @@
     { UNO_NAME_BACK_TRANSPARENT, RES_BACKGROUND,      cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },                    \
     { UNO_NAME_VERT_ORIENT, RES_VERT_ORIENT,      cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },             \
     { UNO_NAME_VERT_ORIENT_POSITION, RES_VERT_ORIENT,     cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_VERTORIENT_POSITION|CONVERT_TWIPS    }, \
+    { UNO_NAME_VERT_ORIENT_POSITION_EMU, RES_VERT_ORIENT, cppu::UnoType<sal_Int64>::get(),           PROPERTY_NONE ,MID_VERTORIENT_POSITION_EMU             }, \
     { UNO_NAME_VERT_ORIENT_RELATION, RES_VERT_ORIENT,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE ,MID_VERTORIENT_RELATION  },               \
     { UNO_NAME_LEFT_BORDER, RES_BOX,              cppu::UnoType<css::table::BorderLine>::get(),  0, LEFT_BORDER  |CONVERT_TWIPS },             \
     { UNO_NAME_RIGHT_BORDER, RES_BOX,             cppu::UnoType<css::table::BorderLine>::get(),  0, RIGHT_BORDER |CONVERT_TWIPS },                 \

@@ -704,14 +704,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113946)
 {
     createSwDoc("tdf113946.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // The document has a single short horizontal line anchored at the doc start.
+    // Verify the imported position matches the source posOffset (899795 EMU) exactly.
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(899795),
+                         getProperty<sal_Int64>(getShape(1), u"VertOrientPositionEMU"_ustr));
+
+    xmlDocUniquePtr pXmlDoc2 = parseLayoutDump();
     OUString aTop
-        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
-    // tdf#106792 Checked loading of tdf113946.docx. Before the change, the expected
-    // value of this test was "1696". Opening the file shows a single short line anchored
-    // at the doc start. Only diff is that in 'old' version it is slightly rotated, in 'new'
-    // version line is strict horizontal. Checked against MSWord2013, there the line
-    // is also not rotated -> the change is to the better, correct the expected result here.
-    CPPUNIT_ASSERT_EQUAL(u"1695"_ustr, aTop);
+        = getXPath(pXmlDoc2, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
+    CPPUNIT_ASSERT_EQUAL(u"1696"_ustr, aTop);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121804)

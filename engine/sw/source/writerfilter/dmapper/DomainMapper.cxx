@@ -1074,8 +1074,7 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                         pParaProperties->props().SetvAnchor( nIntValue );
                     break;
                     case NS_ooxml::LN_CT_FramePr_x:
-                        pParaProperties->props().Setx(
-                            ConversionHelper::convertTwipToMm100_Limited(nIntValue));
+                        pParaProperties->props().Setx(gfx::Length::twip(nIntValue));
                         pParaProperties->props().SetxAlign( text::HoriOrientation::NONE );
                     break;
                     case NS_ooxml::LN_CT_FramePr_xAlign:
@@ -1091,8 +1090,7 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                         pParaProperties->props().SetxAlign( nIntValue );
                     break;
                     case NS_ooxml::LN_CT_FramePr_y:
-                        pParaProperties->props().Sety(
-                            ConversionHelper::convertTwipToMm100_Limited(nIntValue));
+                        pParaProperties->props().Sety(gfx::Length::twip(nIntValue));
                         pParaProperties->props().SetyAlign( text::VertOrientation::NONE );
                     break;
                     case NS_ooxml::LN_CT_FramePr_yAlign:
