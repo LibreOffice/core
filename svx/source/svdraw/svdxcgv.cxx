@@ -263,13 +263,14 @@ bool SdrExchangeView::Paste(
     MapUnit eSrcUnit = pSrcMod->GetScaleUnit();
     MapUnit eDstUnit = GetModel().GetScaleUnit();
     bool bResize=eSrcUnit!=eDstUnit;
-    Fraction aXResize,aYResize;
+    double aXResize = 0.0;
+    double aYResize = 0.0;
     Point aPt0;
     if (bResize)
     {
         FrPair aResize(GetMapFactor(eSrcUnit,eDstUnit));
-        aXResize=aResize.X();
-        aYResize=aResize.Y();
+        aXResize=double(aResize.X());
+        aYResize=double(aResize.Y());
     }
     SdrObjList*  pDstLst=pLst;
     sal_uInt16 nPg,nPgCount=pSrcMod->GetPageCount();
@@ -303,7 +304,7 @@ bool SdrExchangeView::Paste(
                 if(bResize)
                 {
                     pNewObj->getSdrModelFromSdrObject().SetPasteResize(true);
-                    pNewObj->NbcResize(aPt0,double(aXResize),double(aYResize));
+                    pNewObj->NbcResize(aPt0,aXResize,aYResize);
                     pNewObj->getSdrModelFromSdrObject().SetPasteResize(false);
                 }
 

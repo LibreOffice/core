@@ -94,6 +94,7 @@
 #include <frozen/unordered_map.h>
 
 #include <sax/fastattribs.hxx>
+#include <tools/fract.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;

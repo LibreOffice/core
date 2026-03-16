@@ -2200,7 +2200,7 @@ PointerStyle SdrDragRotate::GetSdrDragPointer() const
 
 SdrDragShear::SdrDragShear(SdrDragView& rNewView, bool bSlant1)
 :   SdrDragMethod(rNewView),
-    aFact(1,1),
+    aFact(1.0),
     nAngle0(0),
     nAngle(0),
     nTan(0.0),
@@ -2299,7 +2299,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
 
     Point aP0(DragStat().GetStart());
     Point aPnt(rPnt);
-    Fraction aNewFract(1,1);
+    double aNewFract(1.0);
 
     // if angle snapping not activated, snap to raster (except when using slant)
     if (nSA==0_deg100 && !bSlant)
@@ -2344,11 +2344,11 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
 
             if (bVertical)
             {
-                aNewFract=Fraction(aPt2.X()-aRef.X(),aP0.X()-aRef.X());
+                aNewFract = double(aPt2.X()-aRef.X()) / (aP0.X()-aRef.X());
             }
             else
             {
-                aNewFract=Fraction(aPt2.Y()-aRef.Y(),aP0.Y()-aRef.Y());
+                aNewFract = double(aPt2.Y()-aRef.Y()) / (aP0.Y()-aRef.Y());
             }
         }
     }
@@ -2376,7 +2376,6 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         if (bNeg) nTmpAngle=-nTmpAngle;
         bResize=true;
         aNewFract = cos(toRadians(nTmpAngle));
-        aFact.ReduceInaccurate(10); // three decimals should be enough
     }
 
     if (nNewAngle > 8900_deg100)
@@ -2422,7 +2421,7 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (bResize && aFact==Fraction(1,1))
+    if (bResize && aFact==1.0)
         bResize=false;
 
     if (nAngle || bResize)
@@ -2767,7 +2766,7 @@ PointerStyle SdrDragGradient::GetSdrDragPointer() const
 
 SdrDragCrook::SdrDragCrook(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
-    aFact(1,1),
+    aFact(1.0),
     bContortionAllowed(false),
     bNoContortionAllowed(false),
     bContortion(false),
@@ -2964,7 +2963,7 @@ void SdrDragCrook::MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 
                 if (bResize)
                 {
-                    Fraction aFact1(1,1);
+                    double aFact1(1.0);
 
                     if (bVertical)
                     {
@@ -3055,7 +3054,7 @@ void SdrDragCrook::MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2)
 
     if (bResize)
     {
-        Fraction aFact1(1,1);
+        double aFact1(1.0);
 
         if (bVert)
         {
@@ -3132,7 +3131,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
     else
         bAtCenter=true;
 
-    Fraction aNewFract(1,1);
+    double aNewFract(1.0);
     tools::Long dx1=aPnt.X()-aNewCenter.X();
     tools::Long dy1=aPnt.Y()-aNewCenter.Y();
     bValid=bVertical ? dx1!=0 : dy1!=0;
@@ -3202,7 +3201,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             if (bAtCenter)
                 nMul*=2;
 
-            aNewFract=Fraction(nMul,nMarkSize);
+            aNewFract = double(nMul) / nMarkSize;
             nAngle=nPntAngle;
         }
         else
@@ -3235,7 +3234,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             nMul = std::abs(nMul);
         }
 
-        aNewFract=Fraction(nMul,nDiv);
+        aNewFract = double(nMul) / nDiv;
     }
 
     if (aNewCenter==aCenter && bNewContortion==bContortion && aNewFract==aFact &&
@@ -3250,14 +3249,14 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
     aCenter=aNewCenter;
     aFact=aNewFract;
     aRad=Point(nNewRad,nNewRad);
-    bResize=aFact!=Fraction(1,1) && aFact.GetDenominator()!=0 && aFact.IsValid();
+    bResize=aFact!=1.0 && aFact != 0.0;
     DragStat().NextMove(aPnt);
     Show();
 }
 
 void SdrDragCrook::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    const bool bDoResize(aFact!=Fraction(1,1));
+    const bool bDoResize(aFact!=1.0);
     const bool bDoCrook(aCenter!=aMarkCenter && aRad.X()!=0 && aRad.Y()!=0);
 
     if (!(bDoCrook || bDoResize))
@@ -3317,7 +3316,7 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (bResize && aFact==Fraction(1,1))
+    if (bResize && aFact==1.0)
         bResize=false;
 
     const bool bUndo = getSdrDragView().IsUndoEnabled();
