@@ -6982,8 +6982,20 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
         {
             if( xOle10Stm.is() )
             {
+                if (rStm.remainingSize() < nDataLen)
+                {
+                    SAL_WARN("filter.ms", "ConvertToOle2: nDataLen " << nDataLen
+                             << " exceeds remaining stream size " << rStm.remainingSize());
+                    break;
+                }
                 std::unique_ptr<sal_uInt8[]> pData(new sal_uInt8[ nDataLen ]);
-                rStm.ReadBytes(pData.get(), nDataLen);
+                std::size_t nActualRead = rStm.ReadBytes(pData.get(), nDataLen);
+                if (nActualRead != nDataLen)
+                {
+                    SAL_WARN("filter.ms", "ConvertToOle2: short read, expected " << nDataLen
+                             << " bytes but got " << nActualRead);
+                    break;
+                }
 
                 // write to ole10 stream
                 xOle10Stm->WriteUInt32( nDataLen );
