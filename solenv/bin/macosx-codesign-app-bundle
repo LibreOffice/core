@@ -143,6 +143,10 @@ while read file; do
 	    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
 	    codesign --force --timestamp --options=runtime --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements_helper "$file" || exit 1
 	    ;;
+	*/uri-encode)
+	    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
+	    codesign --force --timestamp --options=runtime --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements_helper "$file" || exit 1
+	    ;;
 	*)
 	    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
 	    codesign --force --timestamp --options=runtime --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements_helper $launch_constraint "$file" || exit 1
