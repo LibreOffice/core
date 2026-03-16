@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <sal/log.hxx>
 #include "pptexsoundcollection.hxx"
 #include "epptdef.hxx"
 #include <tools/stream.hxx>
@@ -135,7 +136,13 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
             while ( nBytesLeft )
             {
                 sal_uInt32 nToDo = std::min<sal_uInt32>( nBytesLeft, 0x10000 );
-                pSourceFile->ReadBytes(pBuf.get(), nToDo);
+                std::size_t nActualRead = pSourceFile->ReadBytes(pBuf.get(), nToDo);
+                if (nActualRead != nToDo)
+                {
+                    SAL_WARN("sd.eppt", "ExSoundEntry::Write: short read, expected "
+                             << nToDo << " bytes but got " << nActualRead);
+                    break;
+                }
                 rSt.WriteBytes(pBuf.get(), nToDo);
                 nBytesLeft -= nToDo;
             }
