@@ -2658,11 +2658,13 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     {
         // Don't export "#name!" in OOXML
     }
-    else if( static_cast<sal_uInt16>(eOp) < mxSymbols->getSymbolCount())        // Keyword:
+    else if (eOp == ocUDExternal)
     {
-        if (eOp != ocUDExternal || maArrIterator.PeekNext()->GetOpCode() == ocOpen)
+        if (maArrIterator.PeekNext() && maArrIterator.PeekNext()->GetOpCode() == ocOpen)
             rBuffer.append(mxSymbols->getSymbol(eOp));
     }
+    else if( static_cast<sal_uInt16>(eOp) < mxSymbols->getSymbolCount())        // Keyword:
+        rBuffer.append(mxSymbols->getSymbol(eOp));
     else
     {
         SAL_WARN( "formula.core","unknown OpCode");
