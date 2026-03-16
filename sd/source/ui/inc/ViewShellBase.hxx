@@ -148,9 +148,7 @@ public:
     virtual void UIDeactivated( SfxInPlaceClient* ) override;
     virtual void Activate (bool IsMDIActivate) override;
     using SfxViewShell::Deactivate;
-    virtual void SetZoomFactor (
-        const Fraction &rZoomX,
-        const Fraction &rZoomY) override;
+    virtual void SetZoomFactor (double fZoomX, double fZoomY) override;
     virtual bool PrepareClose (bool bUI = true) override;
     virtual void WriteUserData (OUString&, bool bBrowse = false) override;
     virtual void ReadUserData (const OUString&, bool bBrowse = false) override;

@@ -30,7 +30,7 @@ class ScDrawUtil
 public:
     static void CalcScale( const ScDocument& rDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                        const OutputDevice* pDev, const Fraction& rZoomX, const Fraction& rZoomY,
+                        const OutputDevice* pDev, double fZoomX, double fZoomY,
                         double nPPTX, double nPPTY,
                         Fraction& rScaleX, Fraction& rScaleY );
 };

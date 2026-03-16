@@ -28,8 +28,8 @@ class SC_DLLPUBLIC RowHeightContext
 
     double mfPPTX;
     double mfPPTY;
-    Fraction maZoomX;
-    Fraction maZoomY;
+    double mfZoomX;
+    double mfZoomY;
     VclPtr<OutputDevice> mpOutDev;
 
     sal_uInt16 mnExtraHeight;
@@ -37,15 +37,15 @@ class SC_DLLPUBLIC RowHeightContext
 
 public:
     RowHeightContext(
-        SCROW nMaxRow, double fPPTX, double fPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
+        SCROW nMaxRow, double fPPTX, double fPPTY, double fZoomX, double fZoomY,
         OutputDevice* pOutDev );
 
     ~RowHeightContext();
 
     double getPPTX() const { return mfPPTX;}
     double getPPTY() const { return mfPPTY;}
-    const Fraction& getZoomX() const { return maZoomX;}
-    const Fraction& getZoomY() const { return maZoomY;}
+    double getZoomX() const { return mfZoomX;}
+    double getZoomY() const { return mfZoomY;}
 
     OutputDevice* getOutputDevice() { return mpOutDev;}
 

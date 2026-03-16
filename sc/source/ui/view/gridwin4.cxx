@@ -94,7 +94,7 @@ static void lcl_LimitRect( tools::Rectangle& rRect, const tools::Rectangle& rVis
 
 static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& rInnerPixel,
                         const OUString& rTitle, const Color& rColor, bool bTextBelow,
-                        double nPPTX, double nPPTY, const Fraction& rZoomY,
+                        double nPPTX, double nPPTY, double fZoomY,
                         const ScDocument& rDoc, ScViewData& rButtonViewData, bool bLayoutRTL )
 {
     // rButtonViewData is only used to set the button size,
@@ -119,7 +119,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
 
     //  use ScPatternAttr::GetFont only for font size
     vcl::Font aAttrFont;
-    rDoc.getCellAttributeHelper().getDefaultCellAttribute().fillFontOnly(aAttrFont, pDev, &rZoomY);
+    rDoc.getCellAttributeHelper().getDefaultCellAttribute().fillFontOnly(aAttrFont, pDev, &fZoomY);
 
     //  everything else from application font
     vcl::Font aAppFont = pDev->GetSettings().GetStyleSettings().GetAppFont();
@@ -147,7 +147,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
 
     ScDDComboBoxButton aComboButton(pDev);
     aComboButton.SetOptSizePixel();
-    tools::Long nBWidth  = tools::Long(aComboButton.GetSizePixel().Width() * rZoomY);
+    tools::Long nBWidth  = tools::Long(aComboButton.GetSizePixel().Width() * fZoomY);
     tools::Long nBHeight = nVer + aTextSize.Height() + 1;
     Size aButSize( nBWidth, nBHeight );
     tools::Long nButtonPos = bLayoutRTL ? aOuter.Left() : aOuter.Right()-nBWidth+1;
@@ -349,9 +349,9 @@ void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
             if (pOtherViewShell)
             {
                 ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
-                Fraction aZoomX = rOtherViewData.GetZoomX();
-                Fraction aZoomY = rOtherViewData.GetZoomY();
-                if (aZoomX == aScaleX && aZoomY == aScaleY)
+                double fZoomX = rOtherViewData.GetZoomX();
+                double fZoomY = rOtherViewData.GetZoomY();
+                if (Fraction(fZoomX) == aScaleX && Fraction(fZoomY) == aScaleY)
                 {
                     KitHelper::notifyOtherView(*pThisViewShell, pOtherViewShell,
                             KIT_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", rCursorRect.toString());
@@ -540,11 +540,11 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
                    nPPTX, nPPTY, false, rOpts.GetOption(sc::ViewOption::FORMULAS),
                    &mrViewData.GetMarkData() );
 
-    Fraction aZoomX = mrViewData.GetZoomX();
-    Fraction aZoomY = mrViewData.GetZoomY();
+    double fZoomX = mrViewData.GetZoomX();
+    double fZoomY = mrViewData.GetZoomY();
     ScOutputData aOutputData( GetOutDev(), OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                                nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
-                               &aZoomX, &aZoomY );
+                               &fZoomX, &fZoomY );
 
     aOutputData.SetMirrorWidth( nMirrorWidth ); // needed for RTL
     aOutputData.SetSpellCheckContext(mpSpellCheckCxt.get());
@@ -560,7 +560,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         pFmtDev->SetMapMode( mrViewData.GetLogicMode(eWhich) );
         aOutputData.SetFmtDevice( pFmtDev );
     }
-    else if ( aZoomX != aZoomY && mrViewData.IsOle() )
+    else if ( fZoomX != fZoomY && mrViewData.IsOle() )
     {
         //  #i45033# For OLE inplace editing with different zoom factors,
         //  use a virtual device with 1/100th mm as text formatting reference
@@ -656,7 +656,7 @@ tools::Long GetSide(const tools::Rectangle& rRect, int i)
     return (rRect.*GetSides[i])();
 }
 
-Fraction GetZoom(const ScViewData& rViewData, int i)
+double GetZoom(const ScViewData& rViewData, int i)
 {
     static const decltype(&ScViewData::GetZoomX) GetZooms[4] = {
         &ScViewData::GetZoomX, &ScViewData::GetZoomY,
@@ -1218,16 +1218,14 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 tools::Long sides[4];
                 for (auto i: {0, 1, 2, 3})
                 {
-                    const Fraction zoomThis = ::GetZoom(mrViewData, i);
-                    const Fraction zoomOther = ::GetZoom(rOtherViewData, i);
+                    const double zoomThis = ::GetZoom(mrViewData, i);
+                    const double zoomOther = ::GetZoom(rOtherViewData, i);
 
                     const auto unscaledOtherEditRectSide
-                        = o3tl::convert(GetSide(aOtherEditRect, i),
-                                        zoomOther.GetDenominator(), zoomOther.GetNumerator());
+                        = GetSide(aOtherEditRect, i) * zoomOther;
 
                     const auto scaledAdd
-                        = o3tl::convert(GetSide(aOrigOutputArea, i) - unscaledOtherEditRectSide,
-                                        zoomThis.GetNumerator(), zoomThis.GetDenominator());
+                        = (GetSide(aOrigOutputArea, i) - unscaledOtherEditRectSide) * zoomThis;
 
                     sides[i] = GetSide(aEditRectPx, i)
                                + o3tl::convert(scaledAdd, aOrigOutputAreaUnit, o3tl::Length::px);
@@ -1476,8 +1474,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               tools::Long nTileWidth, tools::Long nTileHeight,
                               SCCOL nTiledRenderingAreaEndCol, SCROW nTiledRenderingAreaEndRow )
 {
-    Fraction origZoomX = mrViewData.GetZoomX();
-    Fraction origZoomY = mrViewData.GetZoomY();
+    double origZoomX = mrViewData.GetZoomX();
+    double origZoomY = mrViewData.GetZoomY();
 
     // Output size is in pixels while tile position and size are in logical units (twips).
 
@@ -1494,14 +1492,14 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // Similarly to Writer, we should set the mapmode once on the rDevice, and
     // not care about any zoom settings.
 
-    Fraction aFracX(o3tl::convert(nOutputWidth, o3tl::Length::px, o3tl::Length::twip), nTileWidth);
-    Fraction aFracY(o3tl::convert(nOutputHeight, o3tl::Length::px, o3tl::Length::twip), nTileHeight);
+    double fFracX = double(o3tl::convert(nOutputWidth, o3tl::Length::px, o3tl::Length::twip)) / nTileWidth;
+    double fFracY = double(o3tl::convert(nOutputHeight, o3tl::Length::px, o3tl::Length::twip)) / nTileHeight;
 
-    const bool bChangeZoom = (aFracX !=  origZoomX || aFracY != origZoomY);
+    const bool bChangeZoom = (fFracX != origZoomX || fFracY != origZoomY);
 
     // page break zoom, and aLogicMode in ScViewData
     // FIXME: there are issues when SetZoom is called conditionally.
-    mrViewData.SetZoom(aFracX, aFracY, true);
+    mrViewData.SetZoom(fFracX, fFracY, true);
     if (bChangeZoom)
     {
         if (ScDrawView* pDrawView = mrViewData.GetScDrawView())

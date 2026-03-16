@@ -771,8 +771,8 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
                 Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
-                Fraction aZoom(1,1);
-                rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
+                double fZoom(1.0);
+                rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, fZoom, fZoom );
                 pDocShell->PostPaint( 0,0,0, rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
                 pDocShell->SetDocumentModified();
 
@@ -1088,8 +1088,8 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
         Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MapMode(MapUnit::MapTwip));
         double nPPTX = aLogic.X() / 1000.0;
         double nPPTY = aLogic.Y() / 1000.0;
-        Fraction aZoom(1,1);
-        rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
+        double fZoom(1.0);
+        rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, fZoom, fZoom );
 
         if (!rDoc.IsImportingXML())
         {
@@ -1473,8 +1473,8 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
         Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
         double nPPTX = aLogic.X() / 1000.0;
         double nPPTY = aLogic.Y() / 1000.0;
-        Fraction aZoom(1,1);
-        rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
+        double fZoom(1.0);
+        rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, fZoom, fZoom );
 
         if (!rDoc.IsImportingXML())
         {
@@ -1851,9 +1851,9 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
             Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
-            Fraction aZoom(1,1);
+            double fZoom(1.0);
             ScDocument& rDoc = pDocShell->GetDocument();
-            rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
+            rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, fZoom, fZoom );
 
             if (!rDoc.IsImportingXML())
             {

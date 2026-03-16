@@ -434,21 +434,21 @@ void ScTable::SetLink( ScLinkMode nMode,
 
 sal_uInt16 ScTable::GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY,
+                                    double fZoomX, double fZoomY,
                                     bool bFormula, const ScMarkData* pMarkData,
                                     const ScColWidthParam* pParam )
 {
     if ( nCol >= aCol.size() )
         return ( STD_COL_WIDTH - STD_EXTRA_WIDTH );
 
-    return aCol[nCol].GetOptimalColWidth( pDev, nPPTX, nPPTY, rZoomX, rZoomY,
+    return aCol[nCol].GetOptimalColWidth( pDev, nPPTX, nPPTY, fZoomX, fZoomY,
         bFormula, STD_COL_WIDTH - STD_EXTRA_WIDTH, pMarkData, pParam );
 }
 
 tools::Long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
                                 OutputDevice* pDev,
                                 double nPPTX, double nPPTY,
-                                const Fraction& rZoomX, const Fraction& rZoomY,
+                                double fZoomX, double fZoomY,
                                 bool bWidth, bool bTotalSize, bool bInPrintTwips )
 {
     if ( nCol >= aCol.size() )
@@ -459,7 +459,7 @@ tools::Long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
     aOptions.bTotalSize  = bTotalSize;
 
     return aCol[nCol].GetNeededSize
-        ( nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, aOptions, nullptr, bInPrintTwips );
+        ( nRow, pDev, nPPTX, nPPTY, fZoomX, fZoomY, bWidth, aOptions, nullptr, bInPrintTwips );
 }
 
 bool ScTable::SetOptimalHeight(
@@ -2237,9 +2237,9 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
         aOptions.bFormula    = false; //TODO: pass as parameter
         aOptions.bSkipMerged = false;
 
-        Fraction aZoom(1,1);
+        double fZoom(1.0);
         nPixel = rColumn.GetNeededSize(
-            nRow, pDev, nPPTX, nPPTY, aZoom, aZoom, true, aOptions, nullptr );
+            nRow, pDev, nPPTX, nPPTY, fZoom, fZoom, true, aOptions, nullptr );
 
         rColumn.SetTextWidth(nRow, static_cast<sal_uInt16>(nPixel));
     }

@@ -519,8 +519,8 @@ ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScD
     double nPPTX = rViewData.GetPPTX();
     double nPPTY = rViewData.GetPPTY();
 
-    Fraction aZoomX = rViewData.GetZoomX();
-    Fraction aZoomY = rViewData.GetZoomY();
+    double fZoomX = rViewData.GetZoomX();
+    double fZoomY = rViewData.GetZoomY();
 
     ScTableInfo aTabInfo(nY1, nY2, true);
     rDocSh.GetDocument().FillInfo( aTabInfo, nX1, nY1, nX2, nY2,
@@ -531,7 +531,7 @@ ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScD
                               nScrX, nScrY,
                               nX1, nY1, nX2, nY2,
                               nPPTX, nPPTY,
-                              &aZoomX, &aZoomY );
+                              &fZoomX, &fZoomY );
 
     return aOutputData.FillReferenceMark( nX1, nY1, nX2, nY2,
                                           rColor );
@@ -851,8 +851,8 @@ ScInputHandler::ScInputHandler()
         mbEditingExistingContent(false),
         nValidation( 0 ),
         eAttrAdjust( SvxCellHorJustify::Standard ),
-        aScaleX( 1,1 ),
-        aScaleY( 1,1 ),
+        fScaleX( 1.0 ),
+        fScaleY( 1.0 ),
         pRefViewSh( nullptr ),
         pLastPattern( nullptr )
 {
@@ -881,15 +881,15 @@ ScInputHandler::~ScInputHandler()
         pInputWin->SetInputHandler( nullptr );
 }
 
-void ScInputHandler::SetRefScale( const Fraction& rX, const Fraction& rY )
+void ScInputHandler::SetRefScale( double fX, double fY )
 {
-    if ( rX != aScaleX || rY != aScaleY )
+    if ( fX != fScaleX || fY != fScaleY )
     {
-        aScaleX = rX;
-        aScaleY = rY;
+        fScaleX = fX;
+        fScaleY = fY;
         if (mpEditEngine)
         {
-            MapMode aMode( MapUnit::Map100thMM, Point(), aScaleX, aScaleY );
+            MapMode aMode( MapUnit::Map100thMM, Point(), Fraction(fScaleX), Fraction(fScaleY) );
             mpEditEngine->SetRefMapMode( aMode );
         }
     }
@@ -906,7 +906,7 @@ void ScInputHandler::UpdateRefDevice()
     else
         mpEditEngine->SetRefDevice( nullptr );
 
-    MapMode aMode( MapUnit::Map100thMM, Point(), aScaleX, aScaleY );
+    MapMode aMode( MapUnit::Map100thMM, Point(), Fraction(fScaleX), Fraction(fScaleY) );
     mpEditEngine->SetRefMapMode( aMode );
 
     //  SetRefDevice(NULL) uses VirtualDevice, SetRefMapMode forces creation of a local VDev,

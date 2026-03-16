@@ -571,7 +571,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
     }
 
     sal_uInt16 nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
-    Fraction aZoomFract(nZoom, 100);
+    double fZoomFract = double(nZoom) / 100;
 
     aScope.setCol(pTab->ClampToAllocatedColumns(aScope.Col()));
     // Start at specified cell position (nCol, nRow, nTab).
@@ -611,7 +611,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
 
                 sal_uInt16 nNewWidth = static_cast<sal_uInt16>(GetNeededSize(
                     aScope.Col(), aScope.Row(), aScope.Tab(),
-                    pDev, nPPTX, nPPTY, aZoomFract,aZoomFract, true, true));   // bTotalSize
+                    pDev, nPPTX, nPPTY, fZoomFract, fZoomFract, true, true));   // bTotalSize
 
                 pColIter->setValue(nNewWidth);
                 aScope.setNeedMore(true);
@@ -660,7 +660,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                         if (getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES) == 0)
                         {
                             nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
-                            aZoomFract = Fraction(nZoom, 100);
+                            fZoomFract = double(nZoom) / 100;
                         }
                         else
                             nZoom = 0;

@@ -834,8 +834,8 @@ void ScUndoAutoFormat::Redo()
     if (bSize)
     {
         ScopedVclPtrInstance< VirtualDevice > pVirtDev;
-        Fraction aZoomX(1,1);
-        Fraction aZoomY = aZoomX;
+        double fZoomX(1.0);
+        double fZoomY = fZoomX;
         double nPPTX,nPPTY;
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         if (pViewShell)
@@ -843,8 +843,8 @@ void ScUndoAutoFormat::Redo()
             ScViewData& rData = pViewShell->GetViewData();
             nPPTX = rData.GetPPTX();
             nPPTY = rData.GetPPTY();
-            aZoomX = rData.GetZoomX();
-            aZoomY = rData.GetZoomY();
+            fZoomX = rData.GetZoomX();
+            fZoomY = rData.GetZoomY();
         }
         else
         {
@@ -853,7 +853,7 @@ void ScUndoAutoFormat::Redo()
             nPPTY = ScGlobal::nScreenPPTY;
         }
 
-        sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, pVirtDev);
+        sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, fZoomX, fZoomY, pVirtDev);
         for (SCTAB nTab=nStartZ; nTab<=nEndZ; nTab++)
         {
             ScMarkData aDestMark(rDoc.GetSheetLimits());
@@ -876,7 +876,7 @@ void ScUndoAutoFormat::Redo()
                 if (!rDoc.ColHidden(nCol, nTab))
                 {
                     sal_uInt16 nThisSize = STD_EXTRA_WIDTH + rDoc.GetOptimalColWidth( nCol, nTab,
-                                                pVirtDev, nPPTX, nPPTY, aZoomX, aZoomY, false/*bFormula*/,
+                                                pVirtDev, nPPTX, nPPTY, fZoomX, fZoomY, false/*bFormula*/,
                                                 &aDestMark );
                     rDoc.SetColWidth( nCol, nTab, nThisSize );
                     rDoc.ShowCol( nCol, nTab, true );

@@ -343,8 +343,8 @@ void ScTabViewShell::UpdateOleZoom()
         {
             vcl::Window* pWin = GetActiveWin();
             Size aWinHMM = pWin->PixelToLogic(pWin->GetOutputSizePixel(), MapMode(MapUnit::Map100thMM));
-            SetZoomFactor( Fraction( aWinHMM.Width(),aObjSize.Width() ),
-                            Fraction( aWinHMM.Height(),aObjSize.Height() ) );
+            SetZoomFactor( double(aWinHMM.Width()) / aObjSize.Width(),
+                           double(aWinHMM.Height()) / aObjSize.Height() );
         }
     }
 }
@@ -401,8 +401,8 @@ void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize, boo
         if ( !aObjSize.IsEmpty() )
         {
             Size aLogicSize = GetWindow()->PixelToLogic(aSize, MapMode(MapUnit::Map100thMM));
-            SfxViewShell::SetZoomFactor( Fraction( aLogicSize.Width(),aObjSize.Width() ),
-                            Fraction( aLogicSize.Height(),aObjSize.Height() ) );
+            SfxViewShell::SetZoomFactor( double(aLogicSize.Width()) / aObjSize.Width(),
+                                         double(aLogicSize.Height()) / aObjSize.Height() );
         }
 
         Point aPos( rOfs );
@@ -443,32 +443,32 @@ void ScTabViewShell::OuterResizePixel( const Point &rOfs, const Size &rSize )
     ForceMove();
 }
 
-void ScTabViewShell::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
+void ScTabViewShell::SetZoomFactor( double fZoomX, double fZoomY )
 {
     // for OLE...
 
-    Fraction aFrac20( 1,5 );
-    Fraction aFrac400( 4,1 );
+    double fFrac20( 1.0 / 5 );
+    double fFrac400( 4.0 );
 
-    Fraction aNewX( rZoomX );
-    if ( aNewX < aFrac20 )
-        aNewX = aFrac20;
-    if ( aNewX > aFrac400 )
-        aNewX = aFrac400;
-    Fraction aNewY( rZoomY );
-    if ( aNewY < aFrac20 )
-        aNewY = aFrac20;
-    if ( aNewY > aFrac400 )
-        aNewY = aFrac400;
+    double fNewX( fZoomX );
+    if ( fNewX < fFrac20 )
+        fNewX = fFrac20;
+    if ( fNewX > fFrac400 )
+        fNewX = fFrac400;
+    double fNewY( fZoomY );
+    if ( fNewY < fFrac20 )
+        fNewY = fFrac20;
+    if ( fNewY > fFrac400 )
+        fNewY = fFrac400;
 
-    GetViewData().UpdateScreenZoom( aNewX, aNewY );
-    SetZoom( aNewX, aNewY, true );
+    GetViewData().UpdateScreenZoom( fNewX, fNewY );
+    SetZoom( fNewX, fNewY, true );
 
     PaintGrid();
     PaintTop();
     PaintLeft();
 
-    SfxViewShell::SetZoomFactor( rZoomX, rZoomY );
+    SfxViewShell::SetZoomFactor( fZoomX, fZoomY );
 }
 
 void ScTabViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
@@ -2187,8 +2187,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
     }
     else
     {
-        Fraction aFract( rAppOpt.GetZoom(), 100 );
-        SetZoom( aFract, aFract, true );
+        double fFract = double(rAppOpt.GetZoom()) / 100;
+        SetZoom( fFract, fFract, true );
         SetZoomType( rAppOpt.GetZoomType(), true );
     }
 

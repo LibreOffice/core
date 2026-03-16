@@ -4323,13 +4323,13 @@ tools::Long ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero
 
 sal_uInt16 ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDev,
                                        double nPPTX, double nPPTY,
-                                       const Fraction& rZoomX, const Fraction& rZoomY,
+                                       double fZoomX, double fZoomY,
                                        bool bFormula, const ScMarkData* pMarkData,
                                        const ScColWidthParam* pParam )
 {
     if (ScTable* pTable = FetchTable(nTab))
-        return pTable->GetOptimalColWidth(nCol, pDev, nPPTX, nPPTY, rZoomX,
-                                          rZoomY, bFormula, pMarkData, pParam);
+        return pTable->GetOptimalColWidth(nCol, pDev, nPPTX, nPPTY, fZoomX,
+                                          fZoomY, bFormula, pMarkData, pParam);
     OSL_FAIL("wrong table number");
     return 0;
 }
@@ -4337,12 +4337,12 @@ sal_uInt16 ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice*
 tools::Long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY,
+                                    double fZoomX, double fZoomY,
                                     bool bWidth, bool bTotalSize, bool bInPrintTwips )
 {
     if (ScTable* pTable = FetchTable(nTab))
         return pTable->GetNeededSize(nCol, nRow, pDev, nPPTX, nPPTY,
-                                     rZoomX, rZoomY, bWidth, bTotalSize,
+                                     fZoomX, fZoomY, bWidth, bTotalSize,
                                      bInPrintTwips);
     OSL_FAIL("wrong table number");
     return 0;
@@ -5001,13 +5001,13 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
 void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY )
+                                    double fZoomX, double fZoomY )
 {
     for (const auto& rTab : maTabs)
     {
         if (rTab)
         {
-            rTab->StyleSheetChanged(pStyleSheet, bRemoved, pDev, nPPTX, nPPTY, rZoomX, rZoomY);
+            rTab->StyleSheetChanged(pStyleSheet, bRemoved, pDev, nPPTX, nPPTY, fZoomX, fZoomY);
         }
     }
 }

@@ -629,9 +629,9 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 /**
  * Set zoom factor for InPlace
  */
-void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
+void ViewShell::SetZoomFactor(double fZoomX, double)
 {
-    ::tools::Long nZoom = static_cast<::tools::Long>(static_cast<double>(rZoomX) * 100);
+    ::tools::Long nZoom = static_cast<::tools::Long>(fZoomX * 100);
     SetZoom(nZoom);
 }
 

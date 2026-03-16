@@ -59,10 +59,10 @@ using namespace com::sun::star;
 ScEditUtil::ScEditUtil( ScDocument& rDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rCellPos,
                             OutputDevice* pDevice, double nScaleX, double nScaleY,
-                            const Fraction& rX, const Fraction& rY, bool bPrintTwips ) :
+                            double fX, double fY, bool bPrintTwips ) :
                     rDoc(rDocument),nCol(nX),nRow(nY),nTab(nZ),
                     aCellPos(rCellPos),pDev(pDevice),
-                    nPPTX(nScaleX),nPPTY(nScaleY),aZoomX(rX),aZoomY(rY),
+                    nPPTX(nScaleX),nPPTY(nScaleY),fZoomX(fX),fZoomY(fY),
                     bInPrintTwips(bPrintTwips) {}
 
 OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
@@ -418,13 +418,13 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         pDev->SetMapMode(MapMode(bInPrintTwips ? MapUnit::MapTwip : MapUnit::MapPixel));
 
         tools::Long nTextHeight = rDoc.GetNeededSize( nCol, nRow, nTab,
-                                                pDev, nPPTX, nPPTY, aZoomX, aZoomY, false /* bWidth */,
+                                                pDev, nPPTX, nPPTY, fZoomX, fZoomY, false /* bWidth */,
                                                 false /* bTotalSize */, bInPrintTwips );
         if (!nTextHeight)
         {                                   // empty cell
             vcl::Font aFont;
             // font color doesn't matter here
-            pPattern->fillFontOnly(aFont, pDev, &aZoomY );
+            pPattern->fillFontOnly(aFont, pDev, &fZoomY );
             pDev->SetFont(aFont);
             nTextHeight = pDev->GetTextHeight() + nTopMargin + nBottomMargin;
         }

@@ -35,7 +35,7 @@ class ScDocument;
 class ScDPFieldButton
 {
 public:
-    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings& rStyle, const Fraction& rZoomY, ScDocument& rDoc);
+    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings& rStyle, double fZoomY, ScDocument& rDoc);
     ~ScDPFieldButton();
 
     void setText(const OUString& rText);
@@ -60,7 +60,7 @@ private:
     Point                   maPos;
     Size                    maSize;
     OUString         maText;
-    Fraction                maZoomY;
+    double                  mfZoomY;
     ScDocument&             mrDoc;
     VclPtr<OutputDevice>    mpOutDev;
     const StyleSettings&    mrStyle;

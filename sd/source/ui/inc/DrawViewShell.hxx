@@ -409,7 +409,7 @@ protected:
     virtual VclPtr<SvxRuler> CreateVRuler(::sd::Window* pWin) override;
     virtual void    UpdateHRuler() override;
     virtual void    UpdateVRuler() override;
-    virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY) override;
+    virtual void    SetZoomFactor(double fZoomX, double fZoomY) override;
 
     void            SetupPage( Size const &rSize, ::tools::Long nLeft, ::tools::Long nRight, ::tools::Long nUpper, ::tools::Long nLower,
                                bool bSize, bool bMargin, bool bScaleAll );

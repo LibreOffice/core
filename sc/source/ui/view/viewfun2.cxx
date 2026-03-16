@@ -134,18 +134,18 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData, bool bRa
 
     double nPPTX = GetViewData().GetPPTX();
     double nPPTY = GetViewData().GetPPTY();
-    Fraction aZoomX = GetViewData().GetZoomX();
-    Fraction aZoomY = GetViewData().GetZoomY();
+    double fZoomX = GetViewData().GetZoomX();
+    double fZoomY = GetViewData().GetZoomY();
 
     ScSizeDeviceProvider aProv(*pDocSh);
     if (aProv.IsPrinter())
     {
         nPPTX = aProv.GetPPTX();
         nPPTY = aProv.GetPPTY();
-        aZoomX = aZoomY = Fraction( 1, 1 );
+        fZoomX = fZoomY = 1.0;
     }
 
-    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
+    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, fZoomX, fZoomY, aProv.GetDevice());
     bool bAnyChanged = false;
     for (const SCTAB& nTab : *pMarkData)
     {
@@ -200,8 +200,8 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi )
     SCTAB nTab = GetViewData().CurrentTabForData();
     double nPPTX = GetViewData().GetPPTX();
     double nPPTY = GetViewData().GetPPTY();
-    Fraction aZoomX = GetViewData().GetZoomX();
-    Fraction aZoomY = GetViewData().GetZoomY();
+    double fZoomX = GetViewData().GetZoomX();
+    double fZoomY = GetViewData().GetZoomY();
     sal_uInt16 nOldPixel = 0;
     if (nStartRow == nEndRow)
         nOldPixel = static_cast<sal_uInt16>(rDoc.GetRowHeight(nStartRow,nTab) * nPPTY);
@@ -211,9 +211,9 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi )
     {
         nPPTX = aProv.GetPPTX();
         nPPTY = aProv.GetPPTY();
-        aZoomX = aZoomY = Fraction( 1, 1 );
+        fZoomX = fZoomY = 1.0;
     }
-    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
+    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, fZoomX, fZoomY, aProv.GetDevice());
     bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab, bApi);
 
     // tdf#76183: recalculate objects' positions

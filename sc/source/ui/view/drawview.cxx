@@ -300,14 +300,14 @@ void ScDrawView::RecalcScale()
 {
     double nPPTX;
     double nPPTY;
-    Fraction aZoomX(1,1);
-    Fraction aZoomY(1,1);
+    double fZoomX(1.0);
+    double fZoomY(1.0);
 
     nTab = rViewData.CurrentTabForData();
     nPPTX = rViewData.GetPPTX();
     nPPTY = rViewData.GetPPTY();
-    aZoomX = rViewData.GetZoomX();
-    aZoomY = rViewData.GetZoomY();
+    fZoomX = rViewData.GetZoomX();
+    fZoomY = rViewData.GetZoomY();
 
     SCCOL nEndCol = 0;
     SCROW nEndRow = 0;
@@ -318,7 +318,7 @@ void ScDrawView::RecalcScale()
         nEndRow = 20;
 
     ScDrawUtil::CalcScale(
-        rDoc, nTab, 0, 0, nEndCol, nEndRow, pDev, aZoomX, aZoomY, nPPTX, nPPTY,
+        rDoc, nTab, 0, 0, nEndCol, nEndRow, pDev, fZoomX, fZoomY, nPPTX, nPPTY,
         aScaleX, aScaleY);
 
     // clear all evtl existing GridOffset vectors

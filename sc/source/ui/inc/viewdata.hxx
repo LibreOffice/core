@@ -209,10 +209,10 @@ class ScViewDataTable                           // per-sheet data
 friend class ScViewData;
 private:
     SvxZoomType     eZoomType;                  // selected zoom type (normal view)
-    Fraction        aZoomX;                     // selected zoom X
-    Fraction        aZoomY;                     // selected zoom Y (displayed)
-    Fraction        aPageZoomX;                 // zoom in page break preview mode
-    Fraction        aPageZoomY;
+    double          fZoomX;                     // selected zoom X
+    double          fZoomY;                     // selected zoom Y (displayed)
+    double          fPageZoomX;                 // zoom in page break preview mode
+    double          fPageZoomY;
 
     tools::Long            nTPosX[2];                  // MapMode - Offset (Twips)
     tools::Long            nTPosY[2];
@@ -291,10 +291,10 @@ private:
     MapMode             aLogicMode;                 // skalierter 1/100mm-MapMode
 
     SvxZoomType         eDefZoomType;               // default zoom and type for missing TabData
-    Fraction            aDefZoomX;
-    Fraction            aDefZoomY;
-    Fraction            aDefPageZoomX;              // zoom in page break preview mode
-    Fraction            aDefPageZoomY;
+    double              fDefZoomX;
+    double              fDefZoomY;
+    double              fDefPageZoomX;              // zoom in page break preview mode
+    double              fDefPageZoomY;
     // If the actual zoom values are for implementation-only purposes, then provide a value for export
     std::optional<sal_uInt16> oExportZoom; // used for all sheets
 
@@ -485,15 +485,15 @@ public:
 
     void            SetZoomType( SvxZoomType eNew, bool bAll );
     void            SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs );
-    SC_DLLPUBLIC void SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs );
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll );
+    SC_DLLPUBLIC void SetZoom( double fNewX, double fNewY, std::vector< SCTAB >& tabs );
+    void            SetZoom( double fNewX, double fNewY, bool bAll );
     void            RefreshZoom();
 
     void            SetSelCtrlMouseClick( bool bTmp ) { bSelCtrlMouseClick = bTmp; }
 
     SvxZoomType     GetZoomType() const     { return pThisTab->eZoomType; }
-    const Fraction& GetZoomX() const        { return bPagebreak ? pThisTab->aPageZoomX : pThisTab->aZoomX; }
-    const Fraction& GetZoomY() const        { return bPagebreak ? pThisTab->aPageZoomY : pThisTab->aZoomY; }
+    double GetZoomX() const        { return bPagebreak ? pThisTab->fPageZoomX : pThisTab->fZoomX; }
+    double GetZoomY() const        { return bPagebreak ? pThisTab->fPageZoomY : pThisTab->fZoomY; }
 
     void SetExportZoom(sal_uInt16 nExportZoom) { oExportZoom = nExportZoom; }
     const std::optional<sal_uInt16>& GetExportZoom() const { return oExportZoom; }
@@ -687,7 +687,7 @@ public:
     void            SetScreen( const tools::Rectangle& rVisArea );
     void            SetScreenPos( const Point& rVisAreaStart );
 
-    void            UpdateScreenZoom( const Fraction& rNewX, const Fraction& rNewY );
+    void            UpdateScreenZoom( double fNewX, double fNewY );
 
     const Size&     GetScrSize() const              { return aScrSize; }
 
@@ -744,7 +744,7 @@ public:
                                     SCROW & rPosY, SCROW nStartRow, double nPPTY,
                                     const ScDocument * pDoc, SCTAB nTabNo );
 
-    void setupSizeDeviceProviderForColWidth(const ScSizeDeviceProvider& rProv, Fraction& rZoomX, Fraction& rZoomY, double& rPPTX, double &rPPTY);
+    void setupSizeDeviceProviderForColWidth(const ScSizeDeviceProvider& rProv, double& rZoomX, double& rZoomY, double& rPPTX, double &rPPTY);
 };
 
 inline tools::Long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )

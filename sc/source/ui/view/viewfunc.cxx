@@ -316,13 +316,13 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
 //      additional routines
 
-void ScViewData::setupSizeDeviceProviderForColWidth(const ScSizeDeviceProvider& rProv, Fraction& rZoomX, Fraction& rZoomY, double& rPPTX, double &rPPTY)
+void ScViewData::setupSizeDeviceProviderForColWidth(const ScSizeDeviceProvider& rProv, double& rZoomX, double& rZoomY, double& rPPTX, double &rPPTY)
 {
     if (rProv.IsPrinter())
     {
         rPPTX = rProv.GetPPTX();
         rPPTY = rProv.GetPPTY();
-        rZoomX = rZoomY = Fraction(1, 1);
+        rZoomX = rZoomY = 1.0;
     }
     else
     {
@@ -340,12 +340,12 @@ sal_uInt16 ScViewFunc::GetOptimalColWidth(SCCOL nCol, SCTAB nTab, bool bFormula,
 
     ScSizeDeviceProvider aProv(*pDocSh);
 
-    Fraction aZoomX, aZoomY;
+    double fZoomX, fZoomY;
     double nPPTX, nPPTY;
-    GetViewData().setupSizeDeviceProviderForColWidth(aProv, aZoomX, aZoomY, nPPTX, nPPTY);
+    GetViewData().setupSizeDeviceProviderForColWidth(aProv, fZoomX, fZoomY, nPPTX, nPPTY);
 
     sal_uInt16 nTwips = rDoc.GetOptimalColWidth( nCol, nTab, aProv.GetDevice(),
-                                nPPTX, nPPTY, aZoomX, aZoomY, bFormula, &rMark );
+                                nPPTX, nPPTY, fZoomX, fZoomY, bFormula, &rMark );
     return nTwips;
 }
 
@@ -2422,18 +2422,18 @@ void ScViewFunc::SetWidthOrHeight(
 
                     double nPPTX = GetViewData().GetPPTX();
                     double nPPTY = GetViewData().GetPPTY();
-                    Fraction aZoomX = GetViewData().GetZoomX();
-                    Fraction aZoomY = GetViewData().GetZoomY();
+                    double fZoomX = GetViewData().GetZoomX();
+                    double fZoomY = GetViewData().GetZoomY();
 
                     ScSizeDeviceProvider aProv(*pDocSh);
                     if (aProv.IsPrinter())
                     {
                         nPPTX = aProv.GetPPTX();
                         nPPTY = aProv.GetPPTY();
-                        aZoomX = aZoomY = Fraction( 1, 1 );
+                        fZoomX = fZoomY = 1.0;
                     }
 
-                    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
+                    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, fZoomX, fZoomY, aProv.GetDevice());
                     aCxt.setForceAutoSize(bAll);
                     aCxt.setExtraHeight(nSizeTwips);
                     rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, true);
@@ -2683,19 +2683,19 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
             {
                 double nPPTX = GetViewData().GetPPTX();
                 double nPPTY = GetViewData().GetPPTY();
-                Fraction aZoomX = GetViewData().GetZoomX();
-                Fraction aZoomY = GetViewData().GetZoomY();
+                double fZoomX = GetViewData().GetZoomX();
+                double fZoomY = GetViewData().GetZoomY();
 
                 ScSizeDeviceProvider aProv(*pDocSh);
                 if (aProv.IsPrinter())
                 {
                     nPPTX = aProv.GetPPTX();
                     nPPTY = aProv.GetPPTY();
-                    aZoomX = aZoomY = Fraction( 1, 1 );
+                    fZoomX = fZoomY = 1.0;
                 }
 
                 tools::Long nPixel = rDoc.GetNeededSize( nCol, nRow, nTab, aProv.GetDevice(),
-                                            nPPTX, nPPTY, aZoomX, aZoomY, true );
+                                            nPPTX, nPPTY, fZoomX, fZoomY, true );
                 sal_uInt16 nTwips = static_cast<sal_uInt16>( nPixel / nPPTX );
                 if (nTwips != 0)
                     nWidth = nTwips + STD_EXTRA_WIDTH;

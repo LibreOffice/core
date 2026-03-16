@@ -308,8 +308,8 @@ bool ScBlockUndo::AdjustHeight()
     ScDocument& rDoc = rDocShell.GetDocument();
 
     ScSizeDeviceProvider aProv(rDocShell);
-    Fraction aZoomX( 1, 1 );
-    Fraction aZoomY = aZoomX;
+    double fZoomX( 1.0 );
+    double fZoomY = fZoomX;
     double nPPTX, nPPTY;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -324,8 +324,8 @@ bool ScBlockUndo::AdjustHeight()
             ScViewData& rData = pViewShell->GetViewData();
             nPPTX = rData.GetPPTX();
             nPPTY = rData.GetPPTY();
-            aZoomX = rData.GetZoomX();
-            aZoomY = rData.GetZoomY();
+            fZoomX = rData.GetZoomX();
+            fZoomY = rData.GetZoomY();
         }
     }
     else
@@ -335,7 +335,7 @@ bool ScBlockUndo::AdjustHeight()
         nPPTY = ScGlobal::nScreenPPTY;
     }
 
-    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
+    sc::RowHeightContext aCxt(rDoc.MaxRow(), nPPTX, nPPTY, fZoomX, fZoomY, aProv.GetDevice());
     bool bRet = rDoc.SetOptimalHeight(
         aCxt, aBlockRange.aStart.Row(), aBlockRange.aEnd.Row(), aBlockRange.aStart.Tab(), true);
 

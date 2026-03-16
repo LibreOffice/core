@@ -3226,13 +3226,13 @@ bool ScTable::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
                                 OutputDevice* pDev,
                                 double nPPTX, double nPPTY,
-                                const Fraction& rZoomX, const Fraction& rZoomY )
+                                double fZoomX, double fZoomY )
 {
     ScFlatBoolRowSegments aUsedRows(rDocument.MaxRow());
     for (SCCOL i = 0; i < aCol.size(); ++i)
         aCol[i].FindStyleSheet(pStyleSheet, aUsedRows, bRemoved);
 
-    sc::RowHeightContext aCxt(rDocument.MaxRow(), nPPTX, nPPTY, rZoomX, rZoomY, pDev);
+    sc::RowHeightContext aCxt(rDocument.MaxRow(), nPPTX, nPPTY, fZoomX, fZoomY, pDev);
     SCROW nRow = 0;
     while (nRow <= rDocument.MaxRow())
     {

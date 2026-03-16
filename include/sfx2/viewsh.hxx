@@ -39,7 +39,6 @@
 
 class SfxTabPage;
 class SfxBaseController;
-class Fraction;
 namespace weld {
     class Container;
     class DialogController;
@@ -194,7 +193,7 @@ protected:
 
     virtual void                InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange );
     virtual void                OuterResizePixel( const Point &rOfs, const Size &rSize );
-    virtual void                SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
+    virtual void                SetZoomFactor( double fZoomX, double fZoomY );
 
     virtual void                Move();
 

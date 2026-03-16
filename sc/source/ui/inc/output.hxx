@@ -215,8 +215,8 @@ private:
     ScOutputType meType;         // Screen/Printer ...
     double mnPPTX;              // Pixel per Twips
     double mnPPTY;
-    Fraction maZoomX;
-    Fraction maZoomY;
+    double mfZoomX;
+    double mfZoomY;
 
     ScTabViewShell* mpViewShell; // for connect from visible plug-ins
 
@@ -343,8 +343,8 @@ public:
                                     SCTAB nNewTab, tools::Long nNewScrX, tools::Long nNewScrY,
                                     SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                                     double nPixelPerTwipsX, double nPixelPerTwipsY,
-                                    const Fraction* pZoomX = nullptr,
-                                    const Fraction* pZoomY = nullptr );
+                                    const double* pZoomX = nullptr,
+                                    const double* pZoomY = nullptr );
 
                     ~ScOutputData();
 

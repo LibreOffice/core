@@ -29,7 +29,7 @@
 void ScDrawUtil::CalcScale( const ScDocument& rDoc, SCTAB nTab,
                             SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             const OutputDevice* pDev,
-                            const Fraction& rZoomX, const Fraction& rZoomY,
+                            double fZoomX, double fZoomY,
                             double nPPTX, double nPPTY,
                             Fraction& rScaleX, Fraction& rScaleY )
 {
@@ -58,25 +58,21 @@ void ScDrawUtil::CalcScale( const ScDocument& rDoc, SCTAB nTab,
         nPixelY += ScViewData::ToPixel(nHeight, nPPTY);
     }
 
-    MapMode aHMMMode( MapUnit::Map100thMM, Point(), rZoomX, rZoomY );
+    MapMode aHMMMode( MapUnit::Map100thMM, Point(), Fraction(fZoomX), Fraction(fZoomY) );
     Point aPixelLog = pDev->PixelToLogic( Point( nPixelX,nPixelY ), aHMMMode );
 
     //  Fraction(double) ctor can be used here (and avoid overflows of PixelLog * Zoom)
     //  because ReduceInaccurate is called later anyway.
 
     if ( aPixelLog.X() && nTwipsX )
-        rScaleX = Fraction( static_cast<double>(aPixelLog.X()) *
-                            static_cast<double>(rZoomX.GetNumerator()) /
-                            o3tl::convert<double>(nTwipsX, o3tl::Length::twip, o3tl::Length::mm100) /
-                            static_cast<double>(rZoomX.GetDenominator()) );
+        rScaleX = Fraction( static_cast<double>(aPixelLog.X()) * fZoomX /
+                            o3tl::convert<double>(nTwipsX, o3tl::Length::twip, o3tl::Length::mm100) );
     else
         rScaleX = Fraction( 1, 1 );
 
     if ( aPixelLog.Y() && nTwipsY )
-        rScaleY = Fraction( static_cast<double>(aPixelLog.Y()) *
-                            static_cast<double>(rZoomY.GetNumerator()) /
-                            o3tl::convert<double>(nTwipsY, o3tl::Length::twip, o3tl::Length::mm100) /
-                            static_cast<double>(rZoomY.GetDenominator()) );
+        rScaleY = Fraction( static_cast<double>(aPixelLog.Y()) * fZoomY /
+                            o3tl::convert<double>(nTwipsY, o3tl::Length::twip, o3tl::Length::mm100) );
     else
         rScaleY = Fraction( 1, 1 );
 

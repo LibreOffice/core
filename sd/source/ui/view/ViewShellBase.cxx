@@ -477,8 +477,8 @@ void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize, b
         aSize.AdjustHeight( -(aBorder.Top() + aBorder.Bottom()) );
         Size aObjSizePixel = mpImpl->mpViewWindow->LogicToPixel(aObjSize, MapMode(MapUnit::Map100thMM));
         SfxViewShell::SetZoomFactor(
-            Fraction( aSize.Width(), std::max( aObjSizePixel.Width(), static_cast<::tools::Long>(1) ) ),
-            Fraction( aSize.Height(), std::max( aObjSizePixel.Height(), static_cast<::tools::Long>(1)) ) );
+            double(aSize.Width()) / std::max( aObjSizePixel.Width(), static_cast<::tools::Long>(1) ),
+            double(aSize.Height()) / std::max( aObjSizePixel.Height(), static_cast<::tools::Long>(1) ) );
     }
 
     mpImpl->ResizePixel(rOrigin, rSize, false);
@@ -779,15 +779,13 @@ void ViewShellBase::Activate (bool bIsMDIActivate)
     GetToolBarManager()->RequestUpdate();
 }
 
-void ViewShellBase::SetZoomFactor (
-    const Fraction &rZoomX,
-    const Fraction &rZoomY)
+void ViewShellBase::SetZoomFactor (double fZoomX, double fZoomY)
 {
-    SfxViewShell::SetZoomFactor (rZoomX, rZoomY);
+    SfxViewShell::SetZoomFactor (fZoomX, fZoomY);
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
     if (pShell != nullptr)
-        pShell->SetZoomFactor (rZoomX, rZoomY);
+        pShell->SetZoomFactor (fZoomX, fZoomY);
 }
 
 bool ViewShellBase::PrepareClose (bool bUI)

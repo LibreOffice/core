@@ -2018,7 +2018,7 @@ public:
     void                StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
                                            OutputDevice* pDev,
                                            double nPPTX, double nPPTY,
-                                           const Fraction& rZoomX, const Fraction& rZoomY );
+                                           double fZoomX, double fZoomY );
 
     bool                 IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
 
@@ -2106,7 +2106,7 @@ public:
 
     sal_uInt16                  GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDev,
                                                     double nPPTX, double nPPTY,
-                                                    const Fraction& rZoomX, const Fraction& rZoomY,
+                                                    double fZoomX, double fZoomY,
                                                     bool bFormula,
                                                     const ScMarkData* pMarkData = nullptr,
                                                     const ScColWidthParam* pParam = nullptr );
@@ -2119,7 +2119,7 @@ public:
     tools::Long                        GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                                OutputDevice* pDev,
                                                double nPPTX, double nPPTY,
-                                               const Fraction& rZoomX, const Fraction& rZoomY,
+                                               double fZoomX, double fZoomY,
                                                bool bWidth, bool bTotalSize = false,
                                                bool bInPrintTwips = false );
 
