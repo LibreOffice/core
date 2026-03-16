@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 #include <config_oox.h>
+#include <config_poppler.h>
 
 #include <test/unoapi_test.hxx>
 
@@ -75,7 +76,9 @@ public:
     void testTdf84012();
     void testTdf78897();
     void testForcepoint97();
+#if ENABLE_PDFIMPORT
     void testTdf156893();
+#endif
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
     CPPUNIT_TEST(testPopupRectangleSize_Tdf162955);
@@ -94,7 +97,9 @@ public:
     CPPUNIT_TEST(testTdf84012);
     CPPUNIT_TEST(testTdf78897);
     CPPUNIT_TEST(testForcepoint97);
+#if ENABLE_PDFIMPORT
     CPPUNIT_TEST(testTdf156893);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -922,6 +927,7 @@ void ScPDFExportTest::testForcepoint97()
     exportToPDF(xModel, range1);
 }
 
+#if ENABLE_PDFIMPORT
 void ScPDFExportTest::testTdf156893()
 {
     // Given a spreadsheet with a large number of rows, the whole-sheet export to PDF should export
@@ -948,6 +954,7 @@ void ScPDFExportTest::testTdf156893()
     CPPUNIT_ASSERT_EQUAL(u"Last row"_ustr,
                          pPdfPage->getObject(22999)->getText(pPdfPage->getTextPage()));
 }
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPDFExportTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
