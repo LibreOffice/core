@@ -3423,6 +3423,7 @@ find_msvc()
 SOLARINC=
 MSBUILD_PATH=
 DEVENV=
+CMAKE=
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([Visual C++])
     find_msvc "$with_visual_studio"
@@ -3472,6 +3473,15 @@ if test "$_os" = "WINNT"; then
 
     AC_SUBST(UCRTSDKDIR)
     AC_SUBST(UCRTVERSION)
+
+    # Find the cmake.exe
+    if test "$build_os" = "cygwin"; then
+        PathFormat "$VC_PRODUCT_DIR/../Common7/IDE//CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe"
+        CMAKE="$formatted_path"
+    else
+        # in WSL cmake is picked up from strawberry-perl-portable
+        CMAKE=cmake
+    fi
 
     AC_MSG_CHECKING([for MSBuild.exe location for: $vcnumwithdot])
     # Find the proper version of MSBuild.exe to use based on the VS version
@@ -3692,6 +3702,7 @@ if test "$_os" = "WINNT"; then
     AC_SUBST(CXX_X86_BINARY)
 fi
 AC_SUBST(VCVER)
+AC_SUBST(CMAKE)
 AC_SUBST(DEVENV)
 AC_SUBST(MSVC_CXX)
 
