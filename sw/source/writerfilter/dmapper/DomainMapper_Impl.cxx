@@ -8534,6 +8534,10 @@ bool DomainMapper_Impl::IsFieldResultAsString()
     OSL_ENSURE( pContext, "no field context available");
     if( pContext )
     {
+        // This is not a field result if it is not in the same cell as the field
+        if (pContext->GetTableDepth() != m_StreamStateStack.top().nTableDepth)
+            return false;
+
         bRet = pContext->GetTextField().is()
             || pContext->GetFieldId() == FIELD_FORMDROPDOWN
             || pContext->GetFieldId() == FIELD_FILLIN;

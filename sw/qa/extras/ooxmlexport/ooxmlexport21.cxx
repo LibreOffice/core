@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -943,6 +944,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf171299_tableInField, "tdf171299_tableInField.doc
     // there is some text prior to the table
     getParagraph(1, "Zusammenfassung:");
     CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
+
+
+    // The table cells also all have text content
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("ID"), xCell->getString());
 }
 
 } // end of anonymous namespace
