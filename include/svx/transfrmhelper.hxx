@@ -40,9 +40,9 @@ namespace TransfrmHelper
         rRange = basegfx::B2DRange(aTopLeft, aBottomRight);
     }
 
-    inline void ScaleRect(basegfx::B2DRange& rRange, const Fraction& rUIScale)
+    inline void ScaleRect(basegfx::B2DRange& rRange, double fUIScale)
     {
-        const double fFactor(1.0 / double(rUIScale));
+        const double fFactor(1.0 / fUIScale);
         rRange = basegfx::B2DRange(rRange.getMinimum() * fFactor, rRange.getMaximum() * fFactor);
     }
 }
