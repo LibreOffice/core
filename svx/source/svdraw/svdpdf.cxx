@@ -80,6 +80,12 @@
 
 using namespace com::sun::star;
 
+static OUString getPrefix(void* p)
+{
+    static sal_Int64 snCounter = 0;
+    return OUString::number(reinterpret_cast<sal_IntPtr>(p)) + "_" + OUString::number(snCounter++);
+}
+
 ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools::Rectangle& rRect,
                                  Graphic const& rGraphic)
     : maScaleRect(rRect)
@@ -126,7 +132,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     if (!mxImportedFonts)
     {
         mxImportedFonts
-            = std::make_shared<ImportedFontMap>(CollectFonts(getPrefix(), *mpPdfDocument));
+            = std::make_shared<ImportedFontMap>(CollectFonts(getPrefix(this), *mpPdfDocument));
         if (xGrfLink)
             xGrfLink->setImportedFonts(mxImportedFonts);
     }
@@ -222,17 +228,17 @@ OUString stripPostScriptStyle(const OUString& postScriptName, FontWeight& eWeigh
     return sFontName;
 }
 
-OUString getFileUrlForTemporaryFont(sal_Int64 prefix, std::u16string_view name,
+OUString getFileUrlForTemporaryFont(std::u16string_view prefix, std::u16string_view name,
                                     std::u16string_view suffix)
 {
     return EmbeddedFontsManager::getFileUrlForTemporaryFont(
-        Concat2View(OUString::number(prefix) + name), suffix);
+        Concat2View(OUString::Concat(prefix) + name), suffix);
 }
 }
 
 // Possibly there is some alternative route to query pdfium for all fonts without
 // iterating through every object to see what font each uses
-ImportedFontMap ImpSdrPdfImport::CollectFonts(sal_Int64 nPrefix,
+ImportedFontMap ImpSdrPdfImport::CollectFonts(std::u16string_view sPrefix,
                                               vcl::pdf::PDFiumDocument& rPdfDocument)
 {
     ImportedFontMap aImportedFonts;
@@ -329,7 +335,7 @@ ImportedFontMap ImpSdrPdfImport::CollectFonts(sal_Int64 nPrefix,
                                                              eFontWeight);
                 SAL_INFO_IF(!bTTF, "sd.filter", "not ttf/otf, converting");
                 OUString fileUrl
-                    = getFileUrlForTemporaryFont(nPrefix, sFontFileName, bTTF ? u".ttf" : u".t1");
+                    = getFileUrlForTemporaryFont(sPrefix, sFontFileName, bTTF ? u".ttf" : u".t1");
                 if (!writeFontFile(fileUrl, aFontData))
                     SAL_WARN("sd.filter", "ttf not written");
                 else
@@ -340,7 +346,7 @@ ImportedFontMap ImpSdrPdfImport::CollectFonts(sal_Int64 nPrefix,
                 if (!bTTF || !aToUnicodeData.empty())
                 {
                     EmbeddedFontInfo fontInfo
-                        = convertToOTF(nPrefix, *pSubSetInfo, fileUrl, sFontName, sPostScriptName,
+                        = convertToOTF(sPrefix, *pSubSetInfo, fileUrl, sFontName, sPostScriptName,
                                        sFontFileName, aToUnicodeData, *font);
                     fileUrl = fontInfo.sFontFile;
                     sFontName = fontInfo.sFontName;
@@ -1475,7 +1481,7 @@ static OUString buildFontMenuName(const OUString& FontMenuNameDBUrl,
 }
 
 // https://adobe-type-tools.github.io/font-tech-notes/pdfs/5900.RFMFAH_Tutorial.pdf
-static EmbeddedFontInfo mergeFontSubsets(sal_Int64 prefix, const OUString& mergedFontUrl,
+static EmbeddedFontInfo mergeFontSubsets(std::u16string_view prefix, const OUString& mergedFontUrl,
                                          const OUString& FontMenuNameDBUrl,
                                          const OUString& postScriptName,
                                          const OUString& longFontName, std::string_view Weight,
@@ -1631,7 +1637,7 @@ static EmbeddedFontInfo mergeFontSubsets(sal_Int64 prefix, const OUString& merge
 }
 
 //static
-EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(sal_Int64 prefix, SubSetInfo& rSubSetInfo,
+EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(std::u16string_view prefix, SubSetInfo& rSubSetInfo,
                                                const OUString& fileUrl, const OUString& fontName,
                                                const OUString& postScriptName,
                                                std::u16string_view fontFileName,

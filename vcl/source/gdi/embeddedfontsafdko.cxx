@@ -338,6 +338,9 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
 {
     bool ret = false;
 #if HAVE_FEATURE_AFDKO
+    // cbConvert may abort when dest file already exists
+    assert(osl::File(destFileUrl).open(osl_File_OpenFlag_Read) == osl::FileBase::E_NOENT);
+
     OUString srcFontPath, destFilePath, charMapPath, fontMenuNameDBPath, featuresPath;
     if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(srcFontUrl, srcFontPath)
         || osl::FileBase::E_None

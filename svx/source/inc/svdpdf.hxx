@@ -171,11 +171,10 @@ class ImpSdrPdfImport final
 
     void DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport, int nPageIndex);
 
-    static ImportedFontMap CollectFonts(sal_Int64 nPrefix, vcl::pdf::PDFiumDocument& rPdfDocument);
+    static ImportedFontMap CollectFonts(std::u16string_view sPrefix,
+                                        vcl::pdf::PDFiumDocument& rPdfDocument);
 
-    sal_Int64 getPrefix() const { return reinterpret_cast<sal_Int64>(this); }
-
-    static EmbeddedFontInfo convertToOTF(sal_Int64 nPrefix, SubSetInfo& rSubSetInfo,
+    static EmbeddedFontInfo convertToOTF(std::u16string_view sPrefix, SubSetInfo& rSubSetInfo,
                                          const OUString& fileUrl, const OUString& fontName,
                                          const OUString& baseFontName,
                                          std::u16string_view fontFileName,
