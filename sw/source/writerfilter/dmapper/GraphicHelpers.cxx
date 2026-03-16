@@ -44,7 +44,6 @@ PositionHandler::PositionHandler( std::pair<OUString, OUString>& rPositionOffset
 LoggedProperties("PositionHandler"),
 m_nOrient(text::VertOrientation::NONE),
 m_nRelation(text::RelOrientation::FRAME),
-m_nPosition(0),
 m_rPositionOffsets(rPositionOffsets),
 m_rAligns(rAligns)
 {
@@ -148,11 +147,11 @@ void PositionHandler::lcl_sprm(Sprm& rSprm)
     switch (nSprmId)
     {
         case NS_ooxml::LN_CT_PosH_posOffset:
-            m_nPosition = oox::drawingml::convertEmuToHmm(m_rPositionOffsets.first.toInt32());
+            m_nPosition = gfx::Length::emu(m_rPositionOffsets.first.toInt64());
             m_rPositionOffsets.first.clear();
             break;
         case NS_ooxml::LN_CT_PosV_posOffset:
-            m_nPosition = oox::drawingml::convertEmuToHmm(m_rPositionOffsets.second.toInt32());
+            m_nPosition = gfx::Length::emu(m_rPositionOffsets.second.toInt64());
             m_rPositionOffsets.second.clear();
             break;
         case NS_ooxml::LN_CT_PosH_align:

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <basegfx/units/Length.hxx>
 #include "LoggedResources.hxx"
 #include <com/sun/star/text/WrapTextMode.hpp>
 
@@ -34,7 +35,7 @@ public:
     virtual ~PositionHandler() override;
     sal_Int16 orientation() const;
     sal_Int16 relation() const { return m_nRelation; }
-    sal_Int32 position() const { return m_nPosition; }
+    gfx::Length position() const { return m_nPosition; }
     bool GetPageToggle() const { return m_bPageToggle; }
 
 private:
@@ -42,7 +43,7 @@ private:
     virtual void lcl_sprm(Sprm& rSprm) override;
     sal_Int16 m_nOrient;
     sal_Int16 m_nRelation;
-    sal_Int32 m_nPosition;
+    gfx::Length m_nPosition;
     std::pair<OUString, OUString>& m_rPositionOffsets;
     std::pair<OUString, OUString>& m_rAligns;
     bool m_bPageToggle = false;

@@ -9,6 +9,7 @@
 #pragma once
 
 #include "LoggedResources.hxx"
+#include <basegfx/units/Length.hxx>
 
 namespace com::sun::star::beans
 {
@@ -24,8 +25,8 @@ class TablePositionHandler : public LoggedProperties
     OUString m_aYSpec;
     OUString m_aHorzAnchor{ u"text"_ustr };
     OUString m_aXSpec;
-    sal_Int32 m_nY = 0;
-    sal_Int32 m_nX = 0;
+    gfx::Length m_nY;
+    gfx::Length m_nX;
     sal_Int32 m_nLeftFromText = 0;
     sal_Int32 m_nRightFromText = 0;
     sal_Int32 m_nTopFromText = 0;

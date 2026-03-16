@@ -22,6 +22,7 @@
 #include <memory>
 #include <optional>
 
+#include <basegfx/units/Length.hxx>
 #include "LoggedResources.hxx"
 #include "WrapPolygonHandler.hxx"
 
@@ -98,8 +99,8 @@ class GraphicImport : public LoggedProperties, public LoggedTable
     GraphicImportType & m_rGraphicImportType;
     DomainMapper&   m_rDomainMapper;
 
-    sal_Int32 m_nLeftPosition;
-    sal_Int32 m_nTopPosition;
+    gfx::Length m_nLeftPosition;
+    gfx::Length m_nTopPosition;
 
     bool      m_bUseSimplePos;
     std::optional<sal_Int64> m_oZOrder;
