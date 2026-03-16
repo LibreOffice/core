@@ -1858,9 +1858,9 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     CalcOutputFactor();
     if ( bRet && (bSetColWidths || bSetRowHeights) )
     {   // Adjust column width/row height; base 100% zoom
-        Fraction aZoom( 1, 1 );
-        double nPPTX = ScGlobal::nScreenPPTX * static_cast<double>(aZoom) / GetOutputFactor(); // Factor is printer display ratio
-        double nPPTY = ScGlobal::nScreenPPTY * static_cast<double>(aZoom);
+        double fZoom( 1.0 );
+        double nPPTX = ScGlobal::nScreenPPTX * fZoom / GetOutputFactor(); // Factor is printer display ratio
+        double nPPTY = ScGlobal::nScreenPPTY * fZoom;
         ScopedVclPtrInstance< VirtualDevice > pVirtDev;
         //  all sheets (for Excel import)
         SCTAB nTabCount = m_pDocument->GetTableCount();
@@ -1884,7 +1884,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                         aColWidthParam[nCol].mbSimpleText = false;
 
                     sal_uInt16 nWidth = m_pDocument->GetOptimalColWidth(
-                        nCol, nTab, pVirtDev, nPPTX, nPPTY, aZoom, aZoom, false, &aMark,
+                        nCol, nTab, pVirtDev, nPPTX, nPPTY, fZoom, fZoom, false, &aMark,
                         &aColWidthParam[nCol] );
                     m_pDocument->SetColWidth( nCol, nTab,
                         nWidth + static_cast<sal_uInt16>(ScGlobal::nLastColWidthExtra) );

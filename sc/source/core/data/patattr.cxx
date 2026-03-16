@@ -554,7 +554,7 @@ void getFontIDsByScriptType(SvtScriptType nScript,
 
 void ScPatternAttr::fillFont(
         vcl::Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
-        const OutputDevice* pOutDev, const Fraction* pScale,
+        const OutputDevice* pOutDev, const double* pScale,
         const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, SvtScriptType nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor)
 {
@@ -603,7 +603,7 @@ static const T* lcl_populateresult( TypedWhichId<T> nWhich, const SfxItemSet& rS
 
 void ScPatternAttr::fillFontOnly(
         vcl::Font& rFont, const SfxItemSet& rItemSet,
-        const OutputDevice* pOutDev, const Fraction* pScale,
+        const OutputDevice* pOutDev, const double* pScale,
         const SfxItemSet* pCondSet, const SfxItemSet* pTableSet, SvtScriptType nScript)
 {
     // Read items

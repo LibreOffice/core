@@ -12,11 +12,11 @@
 namespace sc {
 
 RowHeightContext::RowHeightContext(SCROW nMaxRow,
-    double fPPTX, double fPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
+    double fPPTX, double fPPTY, double fZoomX, double fZoomY,
     OutputDevice* pOutDev ) :
     maHeights(nMaxRow, 0),
     mfPPTX(fPPTX), mfPPTY(fPPTY),
-    maZoomX(rZoomX), maZoomY(rZoomY),
+    mfZoomX(fZoomX), mfZoomY(fZoomY),
     mpOutDev(pOutDev),
     mnExtraHeight(0),
     mbForceAutoSize(false) {}

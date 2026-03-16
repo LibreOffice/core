@@ -529,8 +529,8 @@ static OString getTabViewRenderState(const ScTabViewShell& rTabViewShell)
     return aState.makeStringAndClear();
 }
 
-static ScViewData* lcl_getViewMatchingDocZoomTab(const Fraction& rZoomX,
-                                              const Fraction& rZoomY,
+static ScViewData* lcl_getViewMatchingDocZoomTab(double fZoomX,
+                                              double fZoomY,
                                               const SCTAB nTab,
                                               const ViewShellDocId& rDocId,
                                               std::string_view rViewRenderState)
@@ -549,7 +549,7 @@ static ScViewData* lcl_getViewMatchingDocZoomTab(const Fraction& rZoomX,
             continue;
 
         ScViewData& rData = pTabViewShell->GetViewData();
-        if (rData.GetTabNumber() == nTab && rData.GetZoomX() == rZoomX && rData.GetZoomY() == rZoomY &&
+        if (rData.GetTabNumber() == nTab && rData.GetZoomX() == fZoomX && rData.GetZoomY() == fZoomY &&
             getTabViewRenderState(*pTabViewShell) == rViewRenderState)
         {
             return &rData;
@@ -571,13 +571,13 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
         return;
 
     ScViewData* pActiveViewData = &pViewShell->GetViewData();
-    Fraction aFracX(o3tl::toTwips(nOutputWidth, o3tl::Length::px), nTileWidth);
-    Fraction aFracY(o3tl::toTwips(nOutputHeight, o3tl::Length::px), nTileHeight);
+    double fFracX(double(o3tl::toTwips(nOutputWidth, o3tl::Length::px)) / nTileWidth);
+    double fFracY(double(o3tl::toTwips(nOutputHeight, o3tl::Length::px)) / nTileHeight);
 
     // Try to find a view that matches the tile-zoom requested by iterating over
     // first few shells. This is to avoid switching of zooms in ScGridWindow::PaintTile
     // and hence avoid grid-offset recomputation on all shapes which is not cheap.
-    ScViewData* pViewData = lcl_getViewMatchingDocZoomTab(aFracX, aFracY,
+    ScViewData* pViewData = lcl_getViewMatchingDocZoomTab(fFracX, fFracY,
             pActiveViewData->GetTabNumber(), pViewShell->GetDocId(),
             getTabViewRenderState(*pViewShell));
     if (!pViewData)
@@ -1117,11 +1117,11 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     // Doing this in ScTabViewShell init code does not work because callbacks do not work at that point for the first view.
     lcl_sendLOKDocumentBackground(pViewData);
 
-    const Fraction newZoomX(o3tl::toTwips(nTilePixelWidth_, o3tl::Length::px), nTileTwipWidth_);
-    const Fraction newZoomY(o3tl::toTwips(nTilePixelHeight_, o3tl::Length::px), nTileTwipHeight_);
+    const double newZoomX(double(o3tl::toTwips(nTilePixelWidth_, o3tl::Length::px)) / nTileTwipWidth_);
+    const double newZoomY(double(o3tl::toTwips(nTilePixelHeight_, o3tl::Length::px)) / nTileTwipHeight_);
 
-    double fDeltaPPTX = std::abs(ScGlobal::nScreenPPTX * static_cast<double>(newZoomX) - pViewData->GetPPTX());
-    double fDeltaPPTY = std::abs(ScGlobal::nScreenPPTY * static_cast<double>(newZoomY) - pViewData->GetPPTY());
+    double fDeltaPPTX = std::abs(ScGlobal::nScreenPPTX * newZoomX - pViewData->GetPPTX());
+    double fDeltaPPTY = std::abs(ScGlobal::nScreenPPTY * newZoomY - pViewData->GetPPTY());
     constexpr double fEps = 1E-08;
 
     if (pViewData->GetZoomX() == newZoomX && pViewData->GetZoomY() == newZoomY && fDeltaPPTX < fEps && fDeltaPPTY < fEps)

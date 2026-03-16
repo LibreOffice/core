@@ -965,8 +965,8 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
         aSize.AdjustWidth( -(aBorder.Left() + aBorder.Right()) );
         aSize.AdjustHeight( -(aBorder.Top() + aBorder.Bottom()) );
         Size aObjSizePixel = GetWindow()->LogicToPixel(aObjSize, MapMode(MapUnit::MapTwip));
-        SfxViewShell::SetZoomFactor( Fraction( aSize.Width(), aObjSizePixel.Width() ),
-                        Fraction( aSize.Height(), aObjSizePixel.Height() ) );
+        SfxViewShell::SetZoomFactor( double(aSize.Width()) / aObjSizePixel.Width(),
+                        double(aSize.Height()) / aObjSizePixel.Height() );
     }
 
     m_bInInnerResizePixel = true;
@@ -1153,14 +1153,14 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     }
 }
 
-void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
+void SwView::SetZoomFactor( double fX, double fY )
 {
-    const Fraction &rFrac = rX < rY ? rX : rY;
-    SetZoom( SvxZoomType::PERCENT, static_cast<short>(tools::Long(rFrac * Fraction( 100, 1 ))) );
+    double fFrac = fX < fY ? fX : fY;
+    SetZoom( SvxZoomType::PERCENT, static_cast<short>(tools::Long(fFrac * 100)) );
 
     // To minimize rounding errors we also adjust the odd values
     // of the base class if necessary.
-    SfxViewShell::SetZoomFactor( rX, rY );
+    SfxViewShell::SetZoomFactor( fX, fY );
 }
 
 bool SwView::UpdateScrollbars()

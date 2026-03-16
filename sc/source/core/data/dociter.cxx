@@ -1650,7 +1650,7 @@ void ScDocRowHeightUpdater::update(const bool bOnlyUsedRows)
 
     ScProgress aProgress(mrDoc.GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nCellCount, true);
 
-    Fraction aZoom(1, 1);
+    double fZoom(1.0);
     sal_uInt64 nProgressStart = 0;
     for (const auto& rTabRanges : *mpTabRangesArray)
     {
@@ -1658,7 +1658,7 @@ void ScDocRowHeightUpdater::update(const bool bOnlyUsedRows)
         if (!ValidTab(nTab) || nTab >= mrDoc.GetTableCount() || !mrDoc.maTabs[nTab])
             continue;
 
-        sc::RowHeightContext aCxt(mrDoc.MaxRow(), mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
+        sc::RowHeightContext aCxt(mrDoc.MaxRow(), mfPPTX, mfPPTY, fZoom, fZoom, mpOutDev);
         ScFlatBoolRowSegments::RangeData aData;
         ScFlatBoolRowSegments::RangeIterator aRangeItr(rTabRanges.maRanges);
         for (bool bFound = aRangeItr.getFirst(aData); bFound; bFound = aRangeItr.getNext(aData))
@@ -1687,14 +1687,14 @@ void ScDocRowHeightUpdater::updateAll(const bool bOnlyUsedRows)
 
     ScProgress aProgress(mrDoc.GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nCellCount, true);
 
-    Fraction aZoom(1, 1);
+    double fZoom(1.0);
     sal_uInt64 nProgressStart = 0;
     for (SCTAB nTab = 0; nTab < mrDoc.GetTableCount(); ++nTab)
     {
         if (!ValidTab(nTab) || !mrDoc.maTabs[nTab])
             continue;
 
-        sc::RowHeightContext aCxt(mrDoc.MaxRow(), mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
+        sc::RowHeightContext aCxt(mrDoc.MaxRow(), mfPPTX, mfPPTY, fZoom, fZoom, mpOutDev);
         SCCOL nEndCol = 0;
         SCROW nEndRow = mrDoc.MaxRow();
         if (!bOnlyUsedRows || mrDoc.GetPrintArea(nTab, nEndCol, nEndRow))

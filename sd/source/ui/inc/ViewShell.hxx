@@ -532,8 +532,7 @@ protected:
     virtual void Deactivate(bool IsMDIActivate) override;
     virtual void BroadcastContextForActivation (const bool bIsActivated) override;
 
-    virtual void SetZoomFactor( const Fraction &rZoomX,
-                                const Fraction &rZoomY );
+    virtual void SetZoomFactor( double fZoomX, double fZoomY );
 
     /**
         This must be called after the ctor, but before anything else.

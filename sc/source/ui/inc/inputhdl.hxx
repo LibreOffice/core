@@ -112,8 +112,8 @@ private:
     sal_uLong                   nValidation;
     SvxCellHorJustify       eAttrAdjust;
 
-    Fraction                aScaleX;                    // for ref MapMode
-    Fraction                aScaleY;
+    double                  fScaleX;                    // for ref MapMode
+    double                  fScaleY;
 
     ScTabViewShell*         pRefViewSh;
     ScTabViewShell*         pActiveViewSh;
@@ -238,7 +238,7 @@ public:
     void            ShowTipBelow( const OUString& rText );
     void            ShowFuncList( const ::std::vector< OUString > & rFuncStrVec );
 
-    void            SetRefScale( const Fraction& rX, const Fraction& rY );
+    void            SetRefScale( double fX, double fY );
     void            UpdateRefDevice();
 
     EditView*       GetActiveView();

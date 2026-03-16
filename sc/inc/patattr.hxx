@@ -185,7 +185,7 @@ public:
     /** Static helper function to fill a font object from the passed item set. */
     SC_DLLPUBLIC static void fillFontOnly(vcl::Font& rFont, const SfxItemSet& rItemSet,
                                         const OutputDevice* pOutDev = nullptr,
-                                        const Fraction* pScale = nullptr,
+                                        const double* pScale = nullptr,
                                         const SfxItemSet* pCondSet = nullptr,
                                         const SfxItemSet* pTableSet = nullptr,
                                         SvtScriptType nScript = SvtScriptType::NONE);
@@ -193,7 +193,7 @@ public:
     static void fillFont( vcl::Font& rFont, const SfxItemSet& rItemSet,
                                         ScAutoFontColorMode eAutoMode,
                                         const OutputDevice* pOutDev = nullptr,
-                                        const Fraction* pScale = nullptr,
+                                        const double* pScale = nullptr,
                                         const SfxItemSet* pCondSet = nullptr,
                                         const SfxItemSet* pTableSet = nullptr,
                                         SvtScriptType nScript = SvtScriptType::NONE, const Color* pBackConfigColor = nullptr,
@@ -222,7 +222,7 @@ public:
 
     void fillFontOnly(vcl::Font& rFont,
                     const OutputDevice* pOutDev = nullptr,
-                    const Fraction* pScale = nullptr,
+                    const double* pScale = nullptr,
                     const SfxItemSet* pCondSet = nullptr,
                     const SfxItemSet* pTableSet = nullptr,
                     SvtScriptType nScript = SvtScriptType::NONE) const
@@ -233,7 +233,7 @@ public:
     /** Fills a font object from the own item set. */
     void fillFont(vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
                     const OutputDevice* pOutDev = nullptr,
-                    const Fraction* pScale = nullptr,
+                    const double* pScale = nullptr,
                     const SfxItemSet* pCondSet = nullptr,
                     const SfxItemSet* pTableSet = nullptr,
                     SvtScriptType nScript = SvtScriptType::NONE,

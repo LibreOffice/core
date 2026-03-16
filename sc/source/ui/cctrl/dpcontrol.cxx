@@ -28,8 +28,8 @@
 #include <patattr.hxx>
 #include <svtools/colorcfg.hxx>
 
-ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings& rStyle, const Fraction& rZoomY, ScDocument& rDoc):
-    maZoomY(rZoomY),
+ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings& rStyle, double fZoomY, ScDocument& rDoc):
+    mfZoomY(fZoomY),
     mrDoc(rDoc),
     mpOutDev(pOutDev),
     mrStyle(rStyle),
@@ -133,7 +133,7 @@ void ScDPFieldButton::draw()
         vcl::Font aTextFont( mrStyle.GetAppFont() );
         //  use ScPatternAttr::GetFont only for font size
         vcl::Font aAttrFont;
-        mrDoc.getCellAttributeHelper().getDefaultCellAttribute().fillFontOnly(aAttrFont, mpOutDev, &maZoomY);
+        mrDoc.getCellAttributeHelper().getDefaultCellAttribute().fillFontOnly(aAttrFont, mpOutDev, &mfZoomY);
         aTextFont.SetFontSize(aAttrFont.GetFontSize());
         mpOutDev->SetFont(aTextFont);
         mpOutDev->SetTextColor(mrStyle.GetButtonTextColor());
@@ -166,7 +166,7 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
     tools::Long nW = std::min(maSize.getWidth() / 2, nMaxSize);
     tools::Long nH = std::min(maSize.getHeight(),    nMaxSize);
 
-    double fZoom = static_cast<double>(maZoomY) > 1.0 ? static_cast<double>(maZoomY) : 1.0;
+    double fZoom = mfZoomY > 1.0 ? mfZoomY : 1.0;
     if (fZoom > 1.0)
     {
         nW = fZoom * (nW - 1);
@@ -197,7 +197,7 @@ void ScDPFieldButton::getToggleBoundingBox(Point& rPos, Size& rSize) const
     tools::Long nH = std::min(maSize.getHeight(),    nMaxSize);
     nIndent = std::min(nIndent, maSize.getWidth());
 
-    double fZoom = static_cast<double>(maZoomY) > 1.0 ? static_cast<double>(maZoomY) : 1.0;
+    double fZoom = mfZoomY > 1.0 ? mfZoomY : 1.0;
     if (fZoom > 1.0)
     {
         nW = fZoom * (nW - 1);

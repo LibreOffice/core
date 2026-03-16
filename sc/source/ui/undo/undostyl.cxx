@@ -106,8 +106,8 @@ static void lcl_DocStyleChanged( ScDocument* pDoc, const SfxStyleSheetBase* pSty
     Point aLogic = pVDev->LogicToPixel(Point(1000,1000), MapMode(MapUnit::MapTwip));
     double nPPTX = aLogic.X() / 1000.0;
     double nPPTY = aLogic.Y() / 1000.0;
-    Fraction aZoom(1,1);
-    pDoc->StyleSheetChanged( pStyle, bRemoved, pVDev, nPPTX, nPPTY, aZoom, aZoom );
+    double fZoom(1.0);
+    pDoc->StyleSheetChanged( pStyle, bRemoved, pVDev, nPPTX, nPPTY, fZoom, fZoom );
 
     ScInputHandler* pHdl = ScModule::get()->GetInputHdl();
     if (pHdl)

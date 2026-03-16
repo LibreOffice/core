@@ -809,7 +809,7 @@ public:
     void        StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY );
+                                    double fZoomX, double fZoomY );
 
     bool        IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
 
@@ -848,7 +848,7 @@ public:
 
     sal_uInt16      GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY,
+                                    double fZoomX, double fZoomY,
                                     bool bFormula, const ScMarkData* pMarkData,
                                     const ScColWidthParam* pParam );
     bool SetOptimalHeight(
@@ -862,7 +862,7 @@ public:
     tools::Long        GetNeededSize( SCCOL nCol, SCROW nRow,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY,
+                                    double fZoomX, double fZoomY,
                                     bool bWidth, bool bTotalSize,
                                     bool bInPrintTwips = false);
     void        SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth );

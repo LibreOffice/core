@@ -365,7 +365,7 @@ public:
      * @param bSameTabButMoved true if the same sheet as before is activated.
      */
     void            TabChanged( bool bSameTabButMoved = false );
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll );
+    void            SetZoom( double fNewX, double fNewY, bool bAll );
     SC_DLLPUBLIC void RefreshZoom(bool bRecalcScale = true);
     void            SetPagebreakMode( bool bSet );
 

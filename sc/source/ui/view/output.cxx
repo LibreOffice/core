@@ -143,7 +143,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
                             SCTAB nNewTab, tools::Long nNewScrX, tools::Long nNewScrY,
                             SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                             double nPixelPerTwipsX, double nPixelPerTwipsY,
-                            const Fraction* pZoomX, const Fraction* pZoomY ) :
+                            const double* pZoomX, const double* pZoomY ) :
     mpOriginalTargetDevice( pNewDev ),
     mpDev( pNewDev ),
     mpRefDevice( pNewDev ),      // default is output device
@@ -185,13 +185,13 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     mpSpellCheckCxt(nullptr)
 {
     if (pZoomX)
-        maZoomX = *pZoomX;
+        mfZoomX = *pZoomX;
     else
-        maZoomX = Fraction(1,1);
+        mfZoomX = 1.0;
     if (pZoomY)
-        maZoomY = *pZoomY;
+        mfZoomY = *pZoomY;
     else
-        maZoomY = Fraction(1,1);
+        mfZoomY = 1.0;
 
     mnVisX1 = mnX1;
     mnVisY1 = mnY1;
@@ -2474,7 +2474,7 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
                     Size aSize(nWidth, nHeight);
 
                     sc::SparklineRenderer renderer(*mpDoc);
-                    renderer.render(pSparkline, rRenderContext, tools::Rectangle(aPoint, aSize), 1, 1, double(maZoomX), double(maZoomY));
+                    renderer.render(pSparkline, rRenderContext, tools::Rectangle(aPoint, aSize), 1, 1, double(mfZoomX), double(mfZoomY));
                 }
 
                 nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
@@ -2547,7 +2547,7 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                     sal_Int16 nSize = officecfg::Office::Calc::Content::Display::NoteIndicator::get();
                     if (nSize < 1)
                     {
-                       const double fSize(rRenderContext.GetDPIScaleFactor() * maZoomX * 3 + 3);
+                       const double fSize(rRenderContext.GetDPIScaleFactor() * mfZoomX * 3 + 3);
                        nSize = static_cast<sal_Int16>(fSize);
                     }
                     Point aPoints[3];
@@ -2621,7 +2621,7 @@ void ScOutputData::DrawFormulaMarks(vcl::RenderContext& rRenderContext)
                     }
                     // DPI/ZOOM 100/100 => 10, 100/50 => 7, 100/150 => 13
                     // DPI/ZOOM 150/100 => 13, 150/50 => 8.5, 150/150 => 17.5
-                    const double nSize( rRenderContext.GetDPIScaleFactor() * maZoomX * 6 + 4);
+                    const double nSize( rRenderContext.GetDPIScaleFactor() * mfZoomX * 6 + 4);
                     Point aPoints[3];
                     aPoints[0] = Point(nMarkX, nMarkY);
                     aPoints[0].setX( mbLayoutRTL ? aPoints[0].X() - nSize : aPoints[0].X() + nSize );

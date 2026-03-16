@@ -1407,8 +1407,8 @@ sal_Int16 ScTabViewObj::GetZoom() const
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        const Fraction& rZoomY = pViewSh->GetViewData().GetZoomY();    // Y will be shown
-        return static_cast<sal_Int16>(tools::Long( rZoomY * 100 ));
+        double fZoomY = pViewSh->GetViewData().GetZoomY();    // Y will be shown
+        return static_cast<sal_Int16>(tools::Long( fZoomY * 100 ));
     }
     return 0;
 }
@@ -1430,8 +1430,8 @@ void ScTabViewObj::SetZoom(sal_Int16 nZoom)
             pScMod->SetAppOptions( aNewOpt );
         }
     }
-    Fraction aFract( nZoom, 100 );
-    pViewSh->SetZoom( aFract, aFract, true );
+    double fFract = double(nZoom) / 100 ;
+    pViewSh->SetZoom( fFract, fFract, true );
     pViewSh->PaintGrid();
     pViewSh->PaintTop();
     pViewSh->PaintLeft();

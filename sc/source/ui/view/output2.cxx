@@ -243,11 +243,11 @@ void ScDrawStringsVars::SetShrinkScale( tools::Long nScale, SvtScriptType nScrip
 
     // call GetFont with a modified fraction, use only the height
 
-    Fraction aFraction( nScale, 100 );
+    double fFraction = double(nScale) / 100;
     if ( !bPixelToLogic )
-        aFraction *= pOutput->maZoomY;
+        fFraction *= pOutput->mfZoomY;
     vcl::Font aTmpFont;
-    pPattern->fillFontOnly(aTmpFont, pFmtDevice, &aFraction, pCondSet, pTableSet, nScript);
+    pPattern->fillFontOnly(aTmpFont, pFmtDevice, &fFraction, pCondSet, pTableSet, nScript);
     // only need font height
     tools::Long nNewHeight = aTmpFont.GetFontHeight();
     if ( nNewHeight > 0 )
@@ -332,7 +332,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     if (bPixelToLogic)
         pPattern->fillFont(aFont, eColorMode, pFmtDevice, nullptr, pCondSet, pTableSet, nScript, &aBackConfigColor, &aTextConfigColor);
     else
-        pPattern->fillFont(aFont, eColorMode, pFmtDevice, &pOutput->maZoomY, pCondSet, pTableSet, nScript, &aBackConfigColor, &aTextConfigColor );
+        pPattern->fillFont(aFont, eColorMode, pFmtDevice, &pOutput->mfZoomY, pCondSet, pTableSet, nScript, &aBackConfigColor, &aTextConfigColor );
 
     aFont.SetAlignment(ALIGN_BASELINE);
 
@@ -862,12 +862,12 @@ double ScOutputData::GetStretch() const
     if ( mpRefDevice == pFmtDevice )
     {
         MapMode aOld = mpRefDevice->GetMapMode();
-        return static_cast<double>(aOld.GetScaleY()) / static_cast<double>(aOld.GetScaleX()) * static_cast<double>(maZoomY) / static_cast<double>(maZoomX);
+        return static_cast<double>(aOld.GetScaleY()) / static_cast<double>(aOld.GetScaleX()) * mfZoomY / mfZoomX;
     }
     else
     {
         // when formatting for printer, device map mode has already been taken care of
-        return static_cast<double>(maZoomY) / static_cast<double>(maZoomX);
+        return mfZoomY / mfZoomX;
     }
 }
 
@@ -2237,7 +2237,7 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
                     }
                 }
 
-                if (mbMetaFile || pFmtDevice != mpDev || maZoomX != maZoomY)
+                if (mbMetaFile || pFmtDevice != mpDev || mfZoomX != mfZoomY)
                 {
                     size_t nLen = aShort.getLength();
                     if (aDX.size() < nLen)
@@ -3086,9 +3086,9 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             // #i85342# screen display and formatting for printer,
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
-            Fraction aFract(1,1);
+            double fFract(1.0);
             tools::Rectangle aUtilRect = ScEditUtil( *mpDoc, rParam.mnCellX, rParam.mnCellY, mnTab, Point(0,0), pFmtDevice,
-                HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
+                HMM_PER_TWIPS, HMM_PER_TWIPS, fFract, fFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.setWidth( aUtilRect.GetWidth() );
         }
         rParam.mpEngine->SetPaperSize(aLogicSize);
@@ -4007,9 +4007,9 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             // #i85342# screen display and formatting for printer,
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
-            Fraction aFract(1,1);
+            double fFract(1.0);
             tools::Rectangle aUtilRect = ScEditUtil( *mpDoc, rParam.mnCellX, rParam.mnCellY, mnTab, Point(0,0), pFmtDevice,
-                HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
+                HMM_PER_TWIPS, HMM_PER_TWIPS, fFract, fFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.setWidth( aUtilRect.GetWidth() );
         }
         rParam.mpEngine->SetPaperSize(aLogicSize);
@@ -4303,9 +4303,9 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             // #i85342# screen display and formatting for printer,
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
-            Fraction aFract(1,1);
+            double fFract(1.0);
             tools::Rectangle aUtilRect = ScEditUtil( *mpDoc, rParam.mnCellX, rParam.mnCellY, mnTab, Point(0,0), pFmtDevice,
-                HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
+                HMM_PER_TWIPS, HMM_PER_TWIPS, fFract, fFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.setWidth( aUtilRect.GetWidth() );
         }
         rParam.mpEngine->SetPaperSize(aLogicSize);

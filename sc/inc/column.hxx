@@ -577,13 +577,13 @@ public:
 
     tools::Long GetNeededSize(
         SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
-        const Fraction& rZoomX, const Fraction& rZoomY,
+        double fZoomX, double fZoomY,
         bool bWidth, const ScNeededSizeOptions& rOptions, const ScPatternAttr** pPatternChange,
         bool bInPrintTwips = false ) const;
 
     sal_uInt16 GetOptimalColWidth(
         OutputDevice* pDev, double nPPTX, double nPPTY,
-        const Fraction& rZoomX, const Fraction& rZoomY,
+        double fZoomX, double fZoomY,
         bool bFormula, sal_uInt16 nOldWidth, const ScMarkData* pMarkData, const ScColWidthParam* pParam) const;
 
     void GetOptimalHeight(

@@ -236,7 +236,7 @@ protected:
 
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange ) override; // new
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
-    virtual void    SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY ) override;
+    virtual void    SetZoomFactor( double fZoomX, double fZoomY ) override;
 
     virtual void    QueryObjAreaPixel( tools::Rectangle& rRect ) const override;
 

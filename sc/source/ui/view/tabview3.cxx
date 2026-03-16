@@ -3303,9 +3303,9 @@ void ScTabView::RecalcPPT()
     //  call view SetZoom (including draw scale, split update etc)
     //  and paint only if values changed
 
-    Fraction aZoomX = aViewData.GetZoomX();
-    Fraction aZoomY = aViewData.GetZoomY();
-    SetZoom( aZoomX, aZoomY, false );
+    double fZoomX = aViewData.GetZoomX();
+    double fZoomY = aViewData.GetZoomY();
+    SetZoom( fZoomX, fZoomY, false );
 
     PaintGrid();
     if (bChangedX)

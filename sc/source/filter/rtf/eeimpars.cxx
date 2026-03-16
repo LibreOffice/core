@@ -453,12 +453,12 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         }
         pProgress.reset(); // SetOptimalHeight has its own ProgressBar
         // Adjust line height, base is 100% zoom
-        Fraction aZoom( 1, 1 );
+        double fZoom( 1.0 );
         // Factor is printer to display ratio
-        double nPPTX = ScGlobal::nScreenPPTX * static_cast<double>(aZoom) / nOutputFactor;
-        double nPPTY = ScGlobal::nScreenPPTY * static_cast<double>(aZoom);
+        double nPPTX = ScGlobal::nScreenPPTX * fZoom / nOutputFactor;
+        double nPPTY = ScGlobal::nScreenPPTY * fZoom;
         ScopedVclPtrInstance< VirtualDevice > pVirtDev;
-        sc::RowHeightContext aCxt(mrDoc.MaxRow(), nPPTX, nPPTY, aZoom, aZoom, pVirtDev);
+        sc::RowHeightContext aCxt(mrDoc.MaxRow(), nPPTX, nPPTY, fZoom, fZoom, pVirtDev);
         aCxt.setExtraHeight(ScGlobal::nLastRowHeightExtra);
         mrDoc.SetOptimalHeight(aCxt, 0, nEndRow, 0, true);
 

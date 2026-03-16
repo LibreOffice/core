@@ -1206,14 +1206,14 @@ void SmViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
     rRect.SetSize(mxGraphicWindow->GetSizePixel());
 }
 
-void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
+void SmViewShell::SetZoomFactor( double fX, double fY )
 {
-    const Fraction &rFrac = std::min(rX, rY);
-    mxGraphicWindow->SetZoom(sal::static_int_cast<sal_uInt16>(tools::Long(rFrac * Fraction( 100, 1 ))));
+    double fFrac = std::min(fX, fY);
+    mxGraphicWindow->SetZoom(sal::static_int_cast<sal_uInt16>(tools::Long(fFrac * 100)));
 
     //To avoid rounding errors base class regulates crooked values too
     //if necessary
-    SfxViewShell::SetZoomFactor( rX, rY );
+    SfxViewShell::SetZoomFactor( fX, fY );
 }
 
 SfxPrinter* SmViewShell::GetPrinter(bool bCreate)

@@ -214,9 +214,9 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi )
     SCROW nEndRow   = rRange.aEnd.Row();
 
     ScSizeDeviceProvider aProv( rDocShell );
-    Fraction aOne(1,1);
+    double fOne(1.0);
 
-    sc::RowHeightContext aCxt(rDoc.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
+    sc::RowHeightContext aCxt(rDoc.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), fOne, fOne, aProv.GetDevice());
     bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab, bApi);
     // tdf#76183: recalculate objects' positions
     if (bChanged)
@@ -639,13 +639,13 @@ tools::Long ScDocShell::GetTwipWidthHint(const ScAddress& rPos)
         return -1;
 
     ScSizeDeviceProvider aProv(*this);
-    Fraction aZoomX, aZoomY;
+    double fZoomX, fZoomY;
     double nPPTX, nPPTY;
-    pViewData->setupSizeDeviceProviderForColWidth(aProv, aZoomX, aZoomY, nPPTX, nPPTY);
+    pViewData->setupSizeDeviceProviderForColWidth(aProv, fZoomX, fZoomY, nPPTX, nPPTY);
 
     ScDocument& rDoc = GetDocument();
     tools::Long nWidth = rDoc.GetNeededSize(rPos.Col(), rPos.Row(), rPos.Tab(), aProv.GetDevice(),
-                                            nPPTX, nPPTY, aZoomX, aZoomY, true /*bWidth*/);
+                                            nPPTX, nPPTY, fZoomX, fZoomY, true /*bWidth*/);
 
     return (nWidth + 2) / nPPTX; // same as ScColumn::GetOptimalColWidth
 }
@@ -1596,8 +1596,8 @@ static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCT
     double nPPTY = aProv.GetPPTY();
 
     ScDocument& rDoc = rDocShell.GetDocument();
-    Fraction aOne(1,1);
-    sal_uInt16 nTwips = rDoc.GetOptimalColWidth( nCol, nTab, pDev, nPPTX, nPPTY, aOne, aOne,
+    double fOne(1.0);
+    sal_uInt16 nTwips = rDoc.GetOptimalColWidth( nCol, nTab, pDev, nPPTX, nPPTY, fOne, fOne,
                                                 false/*bFormula*/ );
 
     return nTwips;
@@ -1687,8 +1687,8 @@ bool ScDocFunc::SetWidthOrHeight(
                 }
 
                 ScSizeDeviceProvider aProv( rDocShell );
-                Fraction aOne(1,1);
-                sc::RowHeightContext aCxt(rDoc.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
+                double fOne(1.0);
+                sc::RowHeightContext aCxt(rDoc.MaxRow(), aProv.GetPPTX(), aProv.GetPPTY(), fOne, fOne, aProv.GetDevice());
                 aCxt.setForceAutoSize(bAll);
                 rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, bApi);
 

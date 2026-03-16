@@ -436,9 +436,9 @@ void ScTabView::SetZoomType( SvxZoomType eNew, bool bAll )
     aViewData.SetZoomType( eNew, bAll );
 }
 
-void ScTabView::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll )
+void ScTabView::SetZoom( double fNewX, double fNewY, bool bAll )
 {
-    aViewData.SetZoom( rNewX, rNewY, bAll );
+    aViewData.SetZoom( fNewX, fNewY, bAll );
     if (pDrawView)
         pDrawView->RecalcScale();
     ZoomChanged();

@@ -5333,11 +5333,11 @@ void ScGridWindow::UpdateFormulaRange(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2
     ScTableInfo aTabInfo(nY1, nY2, true);
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab, nPPTX, nPPTY, false, false );
 
-    Fraction aZoomX = mrViewData.GetZoomX();
-    Fraction aZoomY = mrViewData.GetZoomY();
+    double fZoomX = mrViewData.GetZoomX();
+    double fZoomY = mrViewData.GetZoomY();
     ScOutputData aOutputData( GetOutDev(), OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
-                                &aZoomX, &aZoomY );
+                                &fZoomX, &fZoomY );
     aOutputData.SetMirrorWidth( nMirrorWidth );
 
     aOutputData.FindChanged();

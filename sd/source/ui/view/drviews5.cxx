@@ -431,9 +431,9 @@ void DrawViewShell::Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin)
 /**
  * adjust zoom factor for InPlace
  */
-void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
+void DrawViewShell::SetZoomFactor(double fZoomX, double fZoomY)
 {
-    ViewShell::SetZoomFactor(rZoomX, rZoomY);
+    ViewShell::SetZoomFactor(fZoomX, fZoomY);
     mbZoomOnPage = false;
     Point aOrigin = GetActiveWindow()->GetViewOrigin();
     GetActiveWindow()->SetWinViewPos(aOrigin);

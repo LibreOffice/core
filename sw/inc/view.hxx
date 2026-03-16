@@ -494,7 +494,7 @@ public:
     void            InsFrameMode(sal_uInt16 nCols);
 
     void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, bool bViewOnly = false);
-    virtual void    SetZoomFactor( const Fraction &rX, const Fraction & ) override;
+    virtual void    SetZoomFactor( double fX, double ) override;
 
     void            SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly = false );
 

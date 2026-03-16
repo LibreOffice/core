@@ -3183,10 +3183,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInputHandlerSyncedZoom)
     CPPUNIT_ASSERT(pEditView1);
     EditEngine& rEditEngine1 = pEditView1->getEditEngine();
     // These must match, if they don't then text will have a different width in edit and view modes
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("EditEngine Ref Dev Zoom and ViewData Zoom should match",
-                                 pViewData1->GetZoomX(), rEditEngine1.GetRefMapMode().GetScaleX());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("EditEngine Ref Dev Zoom and ViewData Zoom should match",
-                                 pViewData1->GetZoomY(), rEditEngine1.GetRefMapMode().GetScaleY());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("EditEngine Ref Dev Zoom and ViewData Zoom should match",
+                                 pViewData1->GetZoomX(), double(rEditEngine1.GetRefMapMode().GetScaleX()), 0.000001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("EditEngine Ref Dev Zoom and ViewData Zoom should match",
+                                 pViewData1->GetZoomY(), double(rEditEngine1.GetRefMapMode().GetScaleY()), 0.000001);
 
     // Create a View #2
     SfxLokHelper::createView();

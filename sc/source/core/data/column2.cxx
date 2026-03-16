@@ -84,7 +84,7 @@ static bool IsAmbiguousScript( SvtScriptType nScript )
 
 tools::Long ScColumn::GetNeededSize(
     SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
-    const Fraction& rZoomX, const Fraction& rZoomY,
+    double fZoomX, double fZoomY,
     bool bWidth, const ScNeededSizeOptions& rOptions,
     const ScPatternAttr** ppPatternChange, bool bInPrintTwips ) const
 {
@@ -281,12 +281,12 @@ tools::Long ScColumn::GetNeededSize(
     //  bGetFont is set also if script type changes
     if (rOptions.bGetFont)
     {
-        Fraction aFontZoom = ( eOrient == SvxCellOrientation::Standard ) ? rZoomX : rZoomY;
+        double fFontZoom = ( eOrient == SvxCellOrientation::Standard ) ? fZoomX : fZoomY;
         vcl::Font aFont;
         aFont.SetKerning(FontKerning::NONE); // like ScDrawStringsVars::SetPattern
         // font color doesn't matter here
         const SfxItemSet* pTableSet = rDocument.GetTableFormatSet( nCol, nRow, nTab );
-        pPattern->fillFontOnly(aFont, pDev, &aFontZoom, pCondSet, pTableSet, nScript);
+        pPattern->fillFontOnly(aFont, pDev, &fFontZoom, pCondSet, pTableSet, nScript);
         pDev->SetFont(aFont);
     }
 
@@ -411,7 +411,7 @@ tools::Long ScColumn::GetNeededSize(
         //  the font is not reset each time with !bEditEngine
         vcl::Font aOldFont = pDev->GetFont();
 
-        MapMode aHMMMode( MapUnit::Map100thMM, Point(), rZoomX, rZoomY );
+        MapMode aHMMMode( MapUnit::Map100thMM, Point(), Fraction(fZoomX), Fraction(fZoomY) );
 
         // save in document ?
         std::unique_ptr<ScFieldEditEngine> pEngine = rDocument.CreateFieldEditEngine();
@@ -475,7 +475,7 @@ tools::Long ScColumn::GetNeededSize(
             if ( pFlag->HasAutoFilter() && !bTextWysiwyg )
                 nDocWidth -= bInPrintTwips ? o3tl::convert(nFilterButtonWidthPix, o3tl::Length::px,
                                                            o3tl::Length::twip)
-                                           : tools::Long(rZoomX * nFilterButtonWidthPix);
+                                           : tools::Long(fZoomX * nFilterButtonWidthPix);
 
             aPaper.setWidth( nDocWidth );
 
@@ -619,7 +619,7 @@ tools::Long ScColumn::GetNeededSize(
         if (nFlags & ScMF::Auto)
             nValue += bInPrintTwips ? o3tl::convert(nFilterButtonWidthPix, o3tl::Length::px,
                                                     o3tl::Length::twip)
-                                    : tools::Long(rZoomX * nFilterButtonWidthPix);
+                                    : tools::Long(fZoomX * nFilterButtonWidthPix);
     }
 
     return nValue;
@@ -733,7 +733,7 @@ public:
 }
 
 sal_uInt16 ScColumn::GetOptimalColWidth(
-    OutputDevice* pDev, double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
+    OutputDevice* pDev, double nPPTX, double nPPTY, double fZoomX, double fZoomY,
     bool bFormula, sal_uInt16 nOldWidth, const ScMarkData* pMarkData, const ScColWidthParam* pParam) const
 {
     if (maCells.block_size() == 1 && maCells.begin()->type == sc::element_type_empty)
@@ -762,7 +762,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         vcl::Font aFont;
         aFont.SetKerning(FontKerning::NONE); // like ScDrawStringsVars::SetPattern
         // font color doesn't matter here
-        pPattern->fillFontOnly(aFont, pDev, &rZoomX);
+        pPattern->fillFontOnly(aFont, pDev, &fZoomX);
         pDev->SetFont(aFont);
         const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
         tools::Long nMargin = static_cast<tools::Long>( pMargin->GetLeftMargin() * nPPTX ) +
@@ -840,7 +840,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
                     aOptions.aPattern.setScPatternAttr(pPattern);
                     pOldPattern = aOptions.aPattern.getScPatternAttr();
                     sal_uInt16 nThis = static_cast<sal_uInt16>(GetNeededSize(
-                        nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, true, aOptions, &pOldPattern));
+                        nRow, pDev, nPPTX, nPPTY, fZoomX, fZoomY, true, aOptions, &pOldPattern));
                     if (nThis && (nThis > nWidth || !bFound))
                     {
                         nWidth = nThis;

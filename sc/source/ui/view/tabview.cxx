@@ -748,15 +748,15 @@ void ScTabView::UpdateVarZoom()
         return;
 
     bInZoomUpdate = true;
-    const Fraction& rOldX = GetViewData().GetZoomX();
-    const Fraction& rOldY = GetViewData().GetZoomY();
-    tools::Long nOldPercent = tools::Long(rOldY * 100);
+    double fOldX = GetViewData().GetZoomX();
+    double fOldY = GetViewData().GetZoomY();
+    tools::Long nOldPercent = tools::Long(fOldY * 100);
     sal_uInt16 nNewZoom = CalcZoom( eZoomType, static_cast<sal_uInt16>(nOldPercent) );
-    Fraction aNew( nNewZoom, 100 );
+    double fNew = double(nNewZoom) / 100;
 
-    if ( aNew != rOldX || aNew != rOldY )
+    if ( fNew != fOldX || fNew != fOldY )
     {
-        SetZoom( aNew, aNew, false );   // always separately per sheet
+        SetZoom( fNew, fNew, false );   // always separately per sheet
         PaintGrid();
         PaintTop();
         PaintLeft();
@@ -963,8 +963,8 @@ void ScTabView::SetZoomPercentFromCommand(sal_uInt16 nZoomPercent)
 
     bool bSyncZoom = ScModule::get()->GetAppOptions().GetSynchronizeZoom();
     SetZoomType(SvxZoomType::PERCENT, bSyncZoom);
-    Fraction aFract(nZoomPercent, 100);
-    SetZoom(aFract, aFract, bSyncZoom);
+    double fFract = double(nZoomPercent) / 100;
+    SetZoom(fFract, fFract, bSyncZoom);
     PaintGrid();
     PaintTop();
     PaintLeft();
@@ -987,8 +987,8 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             //  for ole inplace editing, the scale is defined by the visarea and client size
             //  and can't be changed directly
 
-            const Fraction& rOldY = aViewData.GetZoomY();
-            sal_uInt16 nOld = static_cast<tools::Long>( rOldY * 100 );
+            double fOldY = aViewData.GetZoomY();
+            sal_uInt16 nOld = static_cast<tools::Long>( fOldY * 100 );
             sal_uInt16 nNew;
             if ( pData->GetDelta() < 0 )
                 nNew = std::max( MINZOOM, basegfx::zoomtools::zoomOut( nOld ));
@@ -1064,8 +1064,8 @@ bool ScTabView::GestureZoomCommand(const CommandEvent& rCEvt)
         int nZoomChangePercent = mfAccumulatedZoom * 100;
         mfAccumulatedZoom -= nZoomChangePercent / 100.0;
 
-        const Fraction& rOldY = aViewData.GetZoomY();
-        sal_uInt16 nOld = static_cast<tools::Long>(rOldY * 100);
+        double fOldY = aViewData.GetZoomY();
+        sal_uInt16 nOld = static_cast<tools::Long>(fOldY * 100);
         sal_uInt16 nNew = nOld + nZoomChangePercent;
         nNew = std::clamp<sal_uInt16>(nNew, MINZOOM, MAXZOOM);
 
