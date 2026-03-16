@@ -9,6 +9,8 @@
  */
 
 #include <algorithm>
+#include <o3tl/safeint.hxx>
+#include <sal/log.hxx>
 #include <oox/crypto/AgileEngine.hxx>
 
 #include <oox/helper/binaryinputstream.hxx>
@@ -551,8 +553,21 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
     if (0 > mInfo.spinCount || mInfo.spinCount > 10000000)
         return false;
 
-    if (1 > mInfo.saltSize|| mInfo.saltSize > 65536) // Check
+    // [MS-OFFCRYPTO] 2.3.4.10: saltSize "MUST be at least 1 and no greater than 65,536"
+    if (1 > mInfo.saltSize || mInfo.saltSize > 65536)
+    {
+        SAL_WARN("oox", "AgileEngine::readEncryptionInfo(): saltSize out of range: " << mInfo.saltSize);
         return false;
+    }
+
+    // [MS-OFFCRYPTO] 2.3.4.10: "The number of bytes required to decode the saltValue
+    // attribute MUST be equal to the value of the saltSize attribute"
+    if (mInfo.keyDataSalt.size() != o3tl::make_unsigned(mInfo.saltSize))
+    {
+        SAL_WARN("oox", "AgileEngine::readEncryptionInfo(): keyDataSalt size " << mInfo.keyDataSalt.size()
+                 << " does not match saltSize " << mInfo.saltSize);
+        return false;
+    }
 
     // AES 128 CBC with SHA1
     if (mInfo.keyBits         == 128 &&
