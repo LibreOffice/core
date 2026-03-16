@@ -29,7 +29,7 @@
 #include <utility>
 
 
-typedef std::unordered_map<SvTreeListEntry*, std::unique_ptr<SvViewDataEntry>> SvDataTable;
+typedef std::unordered_map<SvTreeListEntry*, SvViewDataEntry> SvDataTable;
 
 struct SvListView::Impl
 {
@@ -1069,16 +1069,16 @@ void SvListView::Impl::InitTable()
 
     // insert root entry
     pEntry = m_rThis.pModel->pRootItem.get();
-    std::unique_ptr<SvViewDataEntry> pViewData(new SvViewDataEntry);
-    pViewData->SetExpanded(true);
-    m_DataTable.insert(std::make_pair(pEntry, std::move(pViewData)));
+    SvViewDataEntry aViewData;
+    aViewData.SetExpanded(true);
+    m_DataTable.insert(std::make_pair(pEntry, aViewData));
     // now all the other entries
     pEntry = m_rThis.pModel->First();
     while( pEntry )
     {
-        pViewData = std::make_unique<SvViewDataEntry>();
-        m_rThis.InitViewData( pViewData.get(), pEntry );
-        m_DataTable.insert(std::make_pair(pEntry, std::move(pViewData)));
+        SvViewDataEntry aViewData2;
+        m_rThis.InitViewData( &aViewData2, pEntry );
+        m_DataTable.insert(std::make_pair(pEntry, std::move(aViewData2)));
         pEntry = m_rThis.pModel->Next( pEntry );
     }
 }
@@ -1093,9 +1093,9 @@ void SvListView::Clear()
     {
         // insert root entry
         SvTreeListEntry* pEntry = pModel->pRootItem.get();
-        std::unique_ptr<SvViewDataEntry> pViewData(new SvViewDataEntry);
-        pViewData->SetExpanded(true);
-        m_pImpl->m_DataTable.insert(std::make_pair(pEntry, std::move(pViewData)));
+        SvViewDataEntry aViewData;
+        aViewData.SetExpanded(true);
+        m_pImpl->m_DataTable.insert(std::make_pair(pEntry, std::move(aViewData)));
     }
 }
 
@@ -1143,7 +1143,7 @@ void SvListView::Impl::ActionMoving( SvTreeListEntry* pEntry )
     {
         const auto iter = m_DataTable.find(pParent);
         assert(iter != m_DataTable.end());
-        SvViewDataEntry* pViewData = iter->second.get();
+        SvViewDataEntry* pViewData = &iter->second;
         pViewData->SetExpanded(false);
     }
     // preliminary
@@ -1160,10 +1160,10 @@ void SvListView::Impl::ActionMoved()
 void SvListView::Impl::ActionInserted( SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"Insert:No Entry");
-    std::unique_ptr<SvViewDataEntry> pData(new SvViewDataEntry());
-    m_rThis.InitViewData( pData.get(), pEntry );
+    SvViewDataEntry aData;
+    m_rThis.InitViewData( &aData, pEntry );
     std::pair<SvDataTable::iterator, bool> aSuccess =
-        m_DataTable.insert(std::make_pair(pEntry, std::move(pData)));
+        m_DataTable.insert(std::make_pair(pEntry, std::move(aData)));
     DBG_ASSERT(aSuccess.second,"Entry already in View");
     if (m_nVisibleCount && m_rThis.pModel->IsEntryVisible(&m_rThis, pEntry))
     {
@@ -1185,9 +1185,9 @@ void SvListView::Impl::ActionInsertedTree( SvTreeListEntry* pEntry )
     while( pCurEntry )
     {
         DBG_ASSERT(m_DataTable.find(pCurEntry) != m_DataTable.end(),"Entry already in Table");
-        std::unique_ptr<SvViewDataEntry> pViewData(new SvViewDataEntry());
-        m_rThis.InitViewData( pViewData.get(), pEntry );
-        m_DataTable.insert(std::make_pair(pCurEntry, std::move(pViewData)));
+        SvViewDataEntry aViewData;
+        m_rThis.InitViewData( &aViewData, pEntry );
+        m_DataTable.insert(std::make_pair(pCurEntry, std::move(aViewData)));
         pCurEntry = m_rThis.pModel->Next( pCurEntry );
         if ( pCurEntry && m_rThis.pModel->GetDepth(pCurEntry) <= nRefDepth)
             pCurEntry = nullptr;
@@ -1211,7 +1211,7 @@ void SvListView::Impl::ActionRemoving( SvTreeListEntry* pEntry )
     assert(pEntry && "Remove:No Entry");
     const auto iter = m_DataTable.find(pEntry);
     assert(iter != m_DataTable.end());
-    SvViewDataEntry* pViewData = iter->second.get();
+    SvViewDataEntry* pViewData = &iter->second;
     sal_uInt32 nSelRemoved = 0;
     if ( pViewData->IsSelected() )
         nSelRemoved = 1 + m_rThis.pModel->GetChildSelectionCount(&m_rThis, pEntry);
@@ -1239,7 +1239,7 @@ void SvListView::Impl::ActionRemoving( SvTreeListEntry* pEntry )
     {
         SvDataTable::iterator itr = m_DataTable.find(pCurEntry);
         assert(itr != m_DataTable.end() && "Entry not in Table");
-        pViewData = itr->second.get();
+        pViewData = &itr->second;
         pViewData->SetExpanded(false);
     }
 }
@@ -1303,7 +1303,7 @@ bool SvListView::IsExpanded( SvTreeListEntry* pEntry ) const
     SvDataTable::const_iterator itr = m_pImpl->m_DataTable.find(pEntry);
     if (itr == m_pImpl->m_DataTable.end())
         return false;
-    return itr->second->IsExpanded();
+    return itr->second.IsExpanded();
 }
 
 bool SvListView::IsAllExpanded( SvTreeListEntry* pEntry ) const
@@ -1329,7 +1329,7 @@ bool SvListView::IsSelected(const SvTreeListEntry* pEntry) const
     SvDataTable::const_iterator itr = m_pImpl->m_DataTable.find(const_cast<SvTreeListEntry*>(pEntry));
     if (itr == m_pImpl->m_DataTable.end())
         return false;
-    return itr->second->IsSelected();
+    return itr->second.IsSelected();
 }
 
 void SvListView::SetEntryFocus( SvTreeListEntry* pEntry, bool bFocus )
@@ -1337,7 +1337,7 @@ void SvListView::SetEntryFocus( SvTreeListEntry* pEntry, bool bFocus )
     DBG_ASSERT(pEntry,"SetEntryFocus:No Entry");
     SvDataTable::iterator itr = m_pImpl->m_DataTable.find(pEntry);
     assert(itr != m_pImpl->m_DataTable.end() && "Entry not in Table");
-    itr->second->SetFocus(bFocus);
+    itr->second.SetFocus(bFocus);
 }
 
 const SvViewDataEntry* SvListView::GetViewData( const SvTreeListEntry* pEntry ) const
@@ -1347,7 +1347,7 @@ const SvViewDataEntry* SvListView::GetViewData( const SvTreeListEntry* pEntry ) 
     assert(itr != m_pImpl->m_DataTable.end() && "Entry not in model or wrong view");
     if (itr == m_pImpl->m_DataTable.end())
         return nullptr;
-    return itr->second.get();
+    return &itr->second;
 }
 
 SvViewDataEntry* SvListView::GetViewData( SvTreeListEntry* pEntry )

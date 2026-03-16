@@ -58,8 +58,12 @@ class SvViewDataEntry
 
 public:
     SvViewDataEntry();
-    SvViewDataEntry( const SvViewDataEntry& );
+    SvViewDataEntry( const SvViewDataEntry& ) = default;
+    SvViewDataEntry( SvViewDataEntry&& ) = default;
     ~SvViewDataEntry();
+
+    SvViewDataEntry& operator=( const SvViewDataEntry& ) = default;
+    SvViewDataEntry& operator=( SvViewDataEntry&& ) = default;
 
     bool IsSelected() const { return mbSelected;}
     bool IsHighlighted() const { return mbHighlighted;}

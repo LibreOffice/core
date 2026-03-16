@@ -30,17 +30,6 @@ SvViewDataEntry::SvViewDataEntry() :
 {
 }
 
-SvViewDataEntry::SvViewDataEntry( const SvViewDataEntry& rData ) :
-    nVisPos(rData.nVisPos),
-    mbSelected(false),
-    mbHighlighted(false),
-    mbExpanded(rData.mbExpanded),
-    mbFocused(false),
-    mbSelectable(rData.mbSelectable),
-    mbDragTarget(false)
-{
-}
-
 SvViewDataEntry::~SvViewDataEntry()
 {
 #ifdef DBG_UTIL
