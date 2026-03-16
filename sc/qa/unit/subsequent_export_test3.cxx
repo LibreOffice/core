@@ -2110,6 +2110,22 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testEmptyTwoCellAnchor)
     assertXPathContent(pDrawing, "/xdr:wsDr", u"");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testForumMsoEn4145327)
+{
+    // regressed due to commit 7de38a6f32a0d77c33978195ee9dd22db154ad65
+    createScDoc("xlsx/forum-mso-en4-145327.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pWorkbook);
+
+    // regressed export -> REPLACE(CELL("filename",!$'1'.A1),1,FIND("]",CELL("filename",!$'1'.A1)),"")-1
+    // having invalid string "!$'1'.A1"
+    assertXPathContent(
+        pWorkbook, "/x:workbook/x:definedNames/x:definedName[1]",
+        u"REPLACE(CELL(\"filename\",!A1),1,FIND(\"]\",CELL(\"filename\",!A1)),\"\")-1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

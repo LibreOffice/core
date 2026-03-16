@@ -705,6 +705,17 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
             for (sal_uInt16 i = 0; i < nLen; ++i)
             {
                 formula::FormulaToken* pToken = pFormulaArray[i];
+                // Skip references preceded by '!' (ocBad) - these are
+                // current-sheet references (e.g. !D3 in CELL("filename",!D3))
+                // that will be wrongly converted.
+                if (pToken && pToken->GetOpCode() == ocBad
+                    && pToken->GetString().getString() == "!")
+                {
+                    // Skip the following reference token
+                    if (i + 1 < nLen)
+                        ++i;
+                    continue;
+                }
                 lcl_EnsureAbs3DToken(nLocalTab, pToken);
             }
 
