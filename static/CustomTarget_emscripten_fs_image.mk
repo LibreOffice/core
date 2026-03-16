@@ -1136,11 +1136,22 @@ gb_emscripten_fs_image_files += \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/simpress/transitions-ogl.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/simpress/transitions.xml \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Beach.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Blue.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Breeze.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Chalk.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/ChartClassic.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Classic.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Green.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Grey.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Forest.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Libreoffice.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Ocean.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Office.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Orange.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Purple.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Rainbow.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Red.theme \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Retro.theme \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/themes/Sunset.theme \
 
 endif # !ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS

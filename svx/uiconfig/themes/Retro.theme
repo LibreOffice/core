@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Retro">
+    <theme-colors name="Retro">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#33270F" />
+        <color name="light2" color="#F2EEE6" />
+        <color name="accent1" color="#996F54" />
+        <color name="accent2" color="#BF734D" />
+        <color name="accent3" color="#BF994D" />
+        <color name="accent4" color="#CCC28F" />
+        <color name="accent5" color="#6BB39B" />
+        <color name="accent6" color="#6B9BB3" />
+        <color name="hyperlink" color="#005A62" />
+        <color name="followed-hyperlink" color="#6C5478" />
+    </theme-colors>
+</theme>

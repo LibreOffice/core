@@ -6,12 +6,12 @@
         <color name="light1" color="#FFFFFF" />
         <color name="dark2" color="#1C1C1C" />
         <color name="light2" color="#DDDDDD" />
-        <color name="accent1" color="#FF0000" />
-        <color name="accent2" color="#FF8000" />
-        <color name="accent3" color="#FFFF00" />
-        <color name="accent4" color="#00A933" />
-        <color name="accent5" color="#2A6099" />
-        <color name="accent6" color="#800080" />
+        <color name="accent1" color="#E61919" />
+        <color name="accent2" color="#E5801A" />
+        <color name="accent3" color="#E4D52E" />
+        <color name="accent4" color="#11973A" />
+        <color name="accent5" color="#1A56E5" />
+        <color name="accent6" color="#730D73" />
         <color name="hyperlink" color="#0000EE" />
         <color name="followed-hyperlink" color="#551A8B" />
     </theme-colors>

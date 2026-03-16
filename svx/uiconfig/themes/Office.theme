@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Office">
+    <theme-colors name="Office">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#405060" />
+        <color name="light2" color="#E8E7E6" />
+        <color name="accent1" color="#5075C5" />
+        <color name="accent2" color="#F08035" />
+        <color name="accent3" color="#A0A5AA" />
+        <color name="accent4" color="#FFCF0F" />
+        <color name="accent5" color="#60A0D0" />
+        <color name="accent6" color="#75B045" />
+        <color name="hyperlink" color="#1060C0" />
+        <color name="followed-hyperlink" color="#905080" />
+    </theme-colors>
+</theme>
