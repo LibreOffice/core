@@ -16,6 +16,8 @@
 #include "handleundefinedunicodetotextchar.hxx"
 #include "tenchelp.hxx"
 
+#include <iterator>
+
 #define IMPL_MAX_REPLACECHAR 5
 
 namespace {
@@ -326,7 +328,7 @@ sal_uInt16 ImplGetReplaceChar( sal_Unicode c )
     const ImplReplaceCharData*  pCharData;
 
     nLow = 0;
-    nHigh = SAL_N_ELEMENTS( aImplRepCharTab ) - 1;
+    nHigh = std::size( aImplRepCharTab ) - 1;
     do
     {
         nMid = (nLow+nHigh)/2;
@@ -418,7 +420,7 @@ const sal_uInt16* ImplGetReplaceString( sal_Unicode c )
     const ImplReplaceCharStrData*   pCharData;
 
     nLow = 0;
-    nHigh = SAL_N_ELEMENTS( aImplRepCharStrTab ) - 1;
+    nHigh = std::size( aImplRepCharStrTab ) - 1;
     do
     {
         nMid = (nLow+nHigh)/2;
