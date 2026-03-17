@@ -28,5 +28,6 @@
 #pragma GCC diagnostic ignored "-Wunused-macros"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #include_next <boost/asio/ip/tcp.hpp>
 #pragma GCC diagnostic pop
