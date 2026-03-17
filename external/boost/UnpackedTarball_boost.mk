@@ -32,6 +32,8 @@ boost_patches += boost-ios.patch.0
 
 boost_patches += boost.file_iterator.sharing_win.patch
 
+# Work around <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53431> "C++ preprocessor ignores #pragma
+# GCC diagnostic" for now; fixed in GCC 13:
 boost_patches += Wundef.patch.0
 
 boost_patches += boost.spirit.noreturn.patch
