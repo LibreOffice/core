@@ -4822,6 +4822,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     {
         pViewShell->setLibreOfficeKitViewCallback(nullptr);
         pDocument->mpCallbackFlushHandlers[nView]->setViewId(-1);
+        pDocument->mpCallbackFlushHandlers.erase(nView);
     }
 }
 
