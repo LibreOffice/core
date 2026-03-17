@@ -89,6 +89,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::formula;
 using namespace ::oox;
 
+constexpr int MAX_TAB_NAME_LENGTH = 31;
+
 XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uInt16 nMaxRecSize ) :
     mrStrm( rOutStrm ),
     mrRoot( rRoot ),
@@ -1195,10 +1197,38 @@ OUString XclExpXmlStream::getImplementationName()
     return u"TODO"_ustr;
 }
 
+OUString XclExpXmlStream::GenerateUniqueTableName(const std::u16string_view& rOriginalName, const std::vector<OUString>& aNewTabNames, const std::vector<OUString>& aOriginalTabNames)
+{
+    std::unordered_set<OUString> aUsedNames;
+    aUsedNames.reserve(aNewTabNames.size() + aOriginalTabNames.size());
+    aUsedNames.insert(aNewTabNames.begin(), aNewTabNames.end());
+    aUsedNames.insert(aOriginalTabNames.begin(), aOriginalTabNames.end());
+
+    // let's try just truncate "<first 31 chars>"
+    OUString aNewName(rOriginalName.substr(0, MAX_TAB_NAME_LENGTH));
+    if (aUsedNames.contains(aNewName))
+        aNewName.clear();
+
+    // let's try "<first N chars>-XXX" template
+    int rangeStart = 1;
+    for (int digits = 1; digits < 10 && aNewName.isEmpty(); digits++)
+    {
+        const int rangeEnd = rangeStart * 10;
+        OUString aBaseName(rOriginalName.substr(0, MAX_TAB_NAME_LENGTH - 1 - digits));
+        for (int i = rangeStart; i < rangeEnd && aNewName.isEmpty(); i++)
+        {
+            aNewName = aBaseName + u"-"_ustr + OUString::number(i);
+            if (aUsedNames.contains(aNewName))
+                aNewName.clear();
+        }
+        rangeStart = rangeEnd;
+    }
+
+    return aNewName;
+}
+
 void XclExpXmlStream::validateTabNames(std::vector<OUString>& aOriginalTabNames)
 {
-    const int MAX_TAB_NAME_LENGTH = 31;
-
     ScDocShell* pShell = getDocShell();
     ScDocument& rDoc = pShell->GetDocument();
 
@@ -1219,38 +1249,7 @@ void XclExpXmlStream::validateTabNames(std::vector<OUString>& aOriginalTabNames)
         const OUString& rOriginalName = aOriginalTabNames[nTab];
         if (rOriginalName.getLength() > MAX_TAB_NAME_LENGTH)
         {
-            OUString aNewName;
-
-            // let's try just truncate "<first 31 chars>"
-            if (aNewName.isEmpty())
-            {
-                aNewName = rOriginalName.copy(0, MAX_TAB_NAME_LENGTH);
-                if (aNewTabNames.end() != std::find(aNewTabNames.begin(), aNewTabNames.end(), aNewName) ||
-                    aOriginalTabNames.end() != std::find(aOriginalTabNames.begin(), aOriginalTabNames.end(), aNewName))
-                {
-                    // was found => let's use another tab name
-                    aNewName.clear();
-                }
-            }
-
-            // let's try "<first N chars>-XXX" template
-            for (int digits=1; digits<10 && aNewName.isEmpty(); digits++)
-            {
-                const int rangeStart = pow(10, digits - 1);
-                const int rangeEnd = pow(10, digits);
-
-                for (int i=rangeStart; i<rangeEnd && aNewName.isEmpty(); i++)
-                {
-                    aNewName = OUString::Concat(rOriginalName.subView(0, MAX_TAB_NAME_LENGTH - 1 - digits)) + "-" + OUString::number(i);
-                    if (aNewTabNames.end() != std::find(aNewTabNames.begin(), aNewTabNames.end(), aNewName) ||
-                        aOriginalTabNames.end() != std::find(aOriginalTabNames.begin(), aOriginalTabNames.end(), aNewName))
-                    {
-                        // was found => let's use another tab name
-                        aNewName.clear();
-                    }
-                }
-            }
-
+            OUString aNewName = GenerateUniqueTableName(rOriginalName, aNewTabNames, aOriginalTabNames);
             if (!aNewName.isEmpty())
             {
                 // new name was created => rename
