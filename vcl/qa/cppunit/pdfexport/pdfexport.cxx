@@ -29,7 +29,10 @@
 
 #if defined MACOSX || defined _WIN32
 #include <set>
+namespace rtl
+{
 static std::ostream& operator<<(std::ostream& rStream, const std::set<rtl::OString>& rSet);
+}
 #endif
 
 #include <test/unoapi_test.hxx>
@@ -37,6 +40,8 @@ static std::ostream& operator<<(std::ostream& rStream, const std::set<rtl::OStri
 using namespace ::com::sun::star;
 
 #if defined MACOSX || defined _WIN32
+namespace rtl
+{
 static std::ostream& operator<<(std::ostream& rStream, const std::set<OString>& rSet)
 {
     rStream << "{ ";
@@ -48,6 +53,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::set<OString>& 
     }
     rStream << " }";
     return rStream;
+}
 }
 #endif
 
