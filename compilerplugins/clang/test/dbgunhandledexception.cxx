@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#if defined SAL_LOG_WARN
+
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 
@@ -34,5 +36,11 @@ int main()
         DBG_UNHANDLED_EXCEPTION("xmloff", "message");
     }
 }
+
+#else
+
+// expected-no-diagnostics
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
