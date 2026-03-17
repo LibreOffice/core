@@ -219,6 +219,8 @@ public:
     /** Writes the entire Link table to OOXML. */
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
+    const std::unordered_map<OUString, OUString>& GetTruncatedSheetMap(sal_uInt16 nFileId) const;
+
 private:
     typedef std::shared_ptr< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;
     XclExpLinkMgrImplPtr mxImpl;

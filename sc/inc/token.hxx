@@ -126,7 +126,7 @@ public:
     virtual FormulaToken* Clone() const override;
 };
 
-class ScExternalSingleRefToken final : public formula::FormulaToken
+class SC_DLLPUBLIC ScExternalSingleRefToken final : public formula::FormulaToken
 {
     sal_uInt16                  mnFileId;
     svl::SharedString           maTabName;
@@ -150,7 +150,7 @@ public:
     virtual FormulaToken*       Clone() const override { return new ScExternalSingleRefToken(*this); }
 };
 
-class ScExternalDoubleRefToken final : public formula::FormulaToken
+class SC_DLLPUBLIC ScExternalDoubleRefToken final : public formula::FormulaToken
 {
     sal_uInt16                  mnFileId;
     svl::SharedString           maTabName;  // name of the first sheet
