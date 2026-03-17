@@ -821,9 +821,6 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
                 // Note: set 100 percent, too (to reset the automatic scaling of the previous line)
                 aDrawInf.SetScaleWidth( GetScaleWidth() );
             }
-            else
-               // tdf#171161 otherwise use the user-defined scale width value
-               aDrawInf.SetScaleWidth( rAttrSet.GetCharScaleW().GetValue()  );
 
             m_pFnt->DrawText_( aDrawInf );
         }
