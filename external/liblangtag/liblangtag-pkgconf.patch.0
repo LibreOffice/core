@@ -1,0 +1,32 @@
+--- configure.ac
++++ configure.ac
+@@ -379,6 +379,9 @@
+ dnl ======================================================================
+ dnl check pkg-config stuff
+ dnl ======================================================================
++if test "x$PKG_CONFIG" = "x"; then
++    AC_PATH_PROGS([PKG_CONFIG], [pkg-config pkgconf])
++fi
+ PKG_CHECK_MODULES(LIBXML2, libxml-2.0 >= $LIBXML2_REQUIRED)
+ PKG_CHECK_MODULES(GOBJECT, gobject-2.0 >= $GOBJECT_REQUIRED, has_gobject=yes, has_gobject=no)
+
+--- configure
++++ configure
+@@ -19196,6 +19196,17 @@
+ fi
+
+ fi
++# Also try pkgconf as a fallback if pkg-config was not found
++if test -z "$PKG_CONFIG"; then
++  for ac_prog in pkgconf
++  do
++    if command -v "$ac_prog" >/dev/null 2>&1; then
++      PKG_CONFIG="$ac_prog"
++      break
++    fi
++  done
++fi
++
+ if test -n "$PKG_CONFIG"; then
+ 	_pkg_min_version=0.9.0
+ 	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5

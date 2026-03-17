@@ -30,6 +30,7 @@ endif
 $(eval $(call gb_UnpackedTarball_add_patches,liblangtag, \
 	$(if $(SYSTEM_LIBXML),,external/liblangtag/langtag-libtool-rpath.patch.0) \
     external/liblangtag/clang-cl.patch.0 \
+    external/liblangtag/liblangtag-pkgconf.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
