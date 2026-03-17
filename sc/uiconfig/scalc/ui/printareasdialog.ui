@@ -135,6 +135,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edprintarea-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="printareasdialog|edprintarea-atkobject">Print Range</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|edprintarea">Allows you to modify a defined print range.</property>
                           </object>
                         </child>
@@ -156,6 +157,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lbprintarea-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="printareasdialog|lbprintarea-atkobject">Print Range</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|lbprintarea">Allows you to modify a defined print range.</property>
                           </object>
                         </child>
@@ -211,6 +213,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edrepeatrow-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="printareasdialog|edrepeatrow-atkobject">Rows to Repeat</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|edrepeatrow">Choose one or more rows to print on every page. In the right text box enter the row reference, for example, "1" or "$1" or "$2:$3".</property>
                           </object>
                         </child>
@@ -249,6 +252,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lbrepeatrow-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="printareasdialog|lbrepeatrow-atkobject">Rows to Repeat</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|lbrepeatrow">Choose one or more rows to print on every page. In the right text box enter the row reference, for example, "1" or "$1" or "$2:$3".</property>
                           </object>
                         </child>
@@ -304,6 +308,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edrepeatcol-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="printareasdialog|edrepeatcol-atkobject">Columns to Repeat</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|edrepeatcol">Choose one or more columns to print on every page. In the right text box enter the column reference, for example, "A" or "AB" or "$C:$E".</property>
                           </object>
                         </child>
@@ -342,6 +347,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lbrepeatcol-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="printareasdialog|lbrepeatcol-atkobject">Columns to Repeat</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="printareasdialog|extended_tip|lbrepeatcol">Choose one or more columns to print on every page. In the right text box enter the column reference, for example, "A" or "AB" or "$C:$E".</property>
                           </object>
                         </child>
