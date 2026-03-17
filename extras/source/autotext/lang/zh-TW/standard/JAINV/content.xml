@@ -15,8 +15,8 @@
       <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
       <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
     </text:sequence-decls>
-    <text:p text:style-name="Standard">感謝您的&lt;placeholder:"11.11.99":"按這裡開始覆寫"&gt;寄給我們的求職信。</text:p>
-    <text:p text:style-name="Standard">在閱讀了您的求職信之後。我們決定邀請您來我們公司面談。請在接到邀請信後和&lt;placeholder:"程小花秘書":"按這裡開始覆寫"&gt;電話聯絡，約定面談日期。電話號碼是&lt;placeholder:":"08 15 / 12 34 56":"按這裡，開始覆寫"&gt;。和您面談的負責人是&lt;placeholder:"人事部經理李光明先生和財務科科長王洋女士":"按這裡，開始覆寫"&gt;。</text:p>
-    <text:p text:style-name="Standard">附上公司地點草圖﹐以供參考。</text:p>
+    <text:p text:style-name="Standard">感謝您在&lt;placeholder:"2026.4.30":"按這裡開始覆寫"&gt;寄給我們的求職信。</text:p>
+    <text:p text:style-name="Standard">在閱讀了您的求職信之後，我們決定邀請您來我們公司面談。請在接到邀請信後，以電話聯繫&lt;placeholder:"程小花秘書":"按這裡開始覆寫"&gt;，以便約定面談日期。電話號碼是&lt;placeholder:":"0999-123456":"按這裡，開始覆寫"&gt;。和您面談的負責人是&lt;placeholder:"人事部經理李光明先生和財務科科長王洋女士":"按這裡，開始覆寫"&gt;。</text:p>
+    <text:p text:style-name="Standard">附上公司地址與地點簡要地圖﹐以供參考。</text:p>
   </office:body>
 </office:document-content>

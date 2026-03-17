@@ -15,7 +15,7 @@
       <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
       <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
     </text:sequence-decls>
-    <text:p text:style-name="Standard">此書受版權法保護。未經出版社書面，同意不得全部或部分复製，傳播本書。禁止任何人在未經書面許可的情況下翻譯和借助電腦系統的編輯軟體。保留全部權利。</text:p>
+    <text:p text:style-name="Standard">此書受版權法保護。未經出版社書面同意，不得全部或部分複製、傳播本書。禁止任何人在未經書面許可的情況下翻譯和借助電腦系統的編輯軟體。保留全部權利。</text:p>
     <text:p text:style-name="Standard"/>
   </office:body>
 </office:document-content>

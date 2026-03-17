@@ -4,7 +4,7 @@
   <block-list:block block-list:abbreviated-name="BT" block-list:package-name="BT" block-list:name="bt" block-list:unformatted-text="true"/>
   <block-list:block block-list:abbreviated-name="CAN" block-list:package-name="CAN" block-list:name="解約通知書" block-list:unformatted-text="false"/>
   <block-list:block block-list:abbreviated-name="CP" block-list:package-name="CP" block-list:name="版權說明" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="DMS" block-list:package-name="DMS" block-list:name="尊敬的女士們和先生們，" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="DMS" block-list:package-name="DMS" block-list:name="親愛的女士、先生們" block-list:unformatted-text="false"/>
   <block-list:block block-list:abbreviated-name="E" block-list:package-name="E" block-list:name="附件" block-list:unformatted-text="true"/>
   <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="公式編號" block-list:unformatted-text="false"/>
   <block-list:block block-list:abbreviated-name="I" block-list:package-name="I" block-list:name="詢問" block-list:unformatted-text="true"/>

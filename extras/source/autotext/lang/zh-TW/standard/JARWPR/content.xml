@@ -15,8 +15,8 @@
       <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
       <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
     </text:sequence-decls>
-    <text:p text:style-name="Standard">我們感謝您和&lt;欄位：公司&gt;的合作。</text:p>
-    <text:p text:style-name="Standard">很遺憾﹐目前我們公司無法提供合適您的職位。但是將來的情況可能會有所好轉。</text:p>
-    <text:p text:style-name="Standard">若同意﹐我們想暫時保留您的求職書面資料。以後我們在需要時會和您聯絡。</text:p>
+    <text:p text:style-name="Standard">感謝您對&lt;欄位：公司&gt;的的職位有興趣。</text:p>
+    <text:p text:style-name="Standard">很遺憾﹐目前我們公司無法提供合適您的職位。但是將來仍然有機會。</text:p>
+    <text:p text:style-name="Standard">若您同意﹐我們想暫時保留您的求職書面資料。以後我們在需要時會和您聯絡。</text:p>
   </office:body>
 </office:document-content>

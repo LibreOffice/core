@@ -15,7 +15,7 @@
       <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
       <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
     </text:sequence-decls>
-    <text:p text:style-name="稱呼">尊敬的女士們和先生們，</text:p>
+    <text:p text:style-name="稱呼">親愛的女士、先生們，</text:p>
     <text:p text:style-name="Standard"/>
   </office:body>
 </office:document-content>

@@ -15,7 +15,7 @@
       <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
       <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
     </text:sequence-decls>
-    <text:p text:style-name="Text body">&lt;placeholder:"11.11.99":"按這裡覆寫"&gt;我們發出摧款信之後至今尚未收到貴方所欠款項。我方不得不向您寄出最後一封摧款信。請您務必在&lt;placeholder:"11.11.99":"按這裡覆寫"&gt;之前付清所欠款項。否則我們將委托律師和您交涉。</text:p>
-    <text:p text:style-name="Text body">若您已經付出上述匯款，請不必介意我們的信函。</text:p>
+    <text:p text:style-name="Text body">&lt;placeholder:"11.11.99":"按這裡覆寫"&gt;我們發出催款信之後，至今尚未收到貴方所欠款項。我方不得不向您寄出最後一封催款信。請您務必在&lt;placeholder:"11.11.99":"按這裡覆寫"&gt;之前付清所欠款項。否則我們將委託律師和您交涉。</text:p>
+    <text:p text:style-name="Text body">若您已經支付上述匯款，請忽略這一封信件。</text:p>
   </office:body>
 </office:document-content>
