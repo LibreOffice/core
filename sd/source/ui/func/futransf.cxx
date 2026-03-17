@@ -118,8 +118,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     pDlg->StartExecuteAsync([bWelded, pDlg, xRequest=std::move(xRequest), xThis=std::move(xThis)](sal_Int32 nResult){
         if (nResult == RET_OK)
         {
-            const SdrMarkList& rMarkList = xThis->mpView->GetMarkedObjectList();
-            if (rMarkList.GetMarkCount() != 0)
+            if (xThis->mpView->GetMarkedObjectList().GetMarkCount() != 0)
             {
                 xRequest->Done(*(pDlg->GetOutputItemSet()));
                 // Page margin is already calculated at this point.
