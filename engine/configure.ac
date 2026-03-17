@@ -4318,14 +4318,9 @@ if test "$_os" = "WINNT"; then
         AC_MSG_ERROR([MSBuild.exe location not found])
     fi
 
-    # Find the cmake.exe
-    if test "$build_os" = "cygwin"; then
-        PathFormat "$VC_PRODUCT_DIR/../Common7/IDE//CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe"
-        CMAKE="$formatted_path"
-    else
-        # in WSL cmake is picked up from strawberry-perl-portable
-        CMAKE=cmake
-    fi
+    # Find the cmake.exe in Visual Studio Extensions
+    PathFormat "$VC_PRODUCT_DIR/../Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe"
+    CMAKE="$formatted_path"
 
     # Find the version of devenv.exe
     PathFormat "$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
