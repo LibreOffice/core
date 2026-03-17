@@ -65,6 +65,8 @@ int main()
     // expected-error@+1 {{implicit conversion of constant &"msg"[0] of type 'const char *' to 'bool'; use 'true' instead [loplugin:consttobool]}}
     assert("msg");
 #endif
+
+    (void)b;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
