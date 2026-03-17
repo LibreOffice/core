@@ -37,6 +37,7 @@
 #include <xehelper.hxx>
 #include <xllink.hxx>
 #include <xltools.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 #include <vector>
 #include <memory>
@@ -45,6 +46,8 @@
 using ::std::unique_ptr;
 using ::std::vector;
 using ::com::sun::star::uno::Any;
+
+constexpr int MAX_TAB_NAME_LENGTH = 31;
 
 using namespace oox;
 
@@ -516,8 +519,13 @@ public:
     /** Derived classes write the entire link table to the passed OOXML stream. */
     virtual void        SaveXml( XclExpXmlStream& rStrm ) = 0;
 
+    const std::unordered_map<OUString, OUString>& GetTruncatedSheetMap(sal_uInt16 nFileId);
+
 protected:
     explicit            XclExpLinkManagerImpl( const XclExpRoot& rRoot );
+
+private:
+    std::unordered_map<sal_uInt16, std::unordered_map<OUString, OUString>> maTruncatedSheetMaps;
 };
 
 namespace {
@@ -1690,11 +1698,22 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
         pExternalLink->startElement(XML_sheetNames);
         for (size_t nPos = 0, nSize = maXctList.GetSize(); nPos < nSize; ++nPos)
         {
-            OString sSheetName = XclXmlUtils::ToOString(maXctList.GetRecord(nPos)->GetTabName());
+            OUString sSheetName = XclXmlUtils::ToOUString(maXctList.GetRecord(nPos)->GetTabName());
             // Sometimes `ReadUniString` could result in a garbage string
             // Guess whether the SheetName is valid by checking if it contains '?'
-            if (sSheetName.indexOf("?") != -1)
-                sSheetName = "Invalid_Sheet_Name_" + OString::number(sSheetName.getLength());
+            if (sSheetName.indexOf(u'?') != -1)
+            {
+                sSheetName = u"Invalid_Sheet_Name_"_ustr + OUString::number(sSheetName.getLength());
+            }
+            else
+            {
+                // mnFileId is 1-based; the link manager uses 0-based file IDs.
+                const auto& aTruncatedMap = GetGlobalLinkManager().GetTruncatedSheetMap(mnFileId - 1);
+                if (auto it = aTruncatedMap.find(sSheetName); it != aTruncatedMap.end())
+                {
+                    sSheetName = it->second;
+                }
+            }
             pExternalLink->singleElement(XML_sheetName, XML_val, sSheetName);
         }
         pExternalLink->endElement( XML_sheetNames);
@@ -2191,6 +2210,52 @@ sal_uInt16 XclExpSupbookBuffer::Append( XclExpSupbookRef const & xSupbook )
 
 // Export link manager ========================================================
 
+static std::unordered_map<OUString, OUString> lcl_generate_truncated_sheet_map(const std::vector<OUString>& rOriginalNames)
+{
+    std::unordered_map<OUString, OUString> aTruncatedMap;
+    std::vector<OUString> aNewTabNames;
+    aNewTabNames.reserve(rOriginalNames.size());
+
+    for (const auto& rOriginalName : rOriginalNames)
+    {
+        if (rOriginalName.getLength() > MAX_TAB_NAME_LENGTH)
+        {
+            OUString aNewName = XclExpXmlStream::GenerateUniqueTableName(rOriginalName, aNewTabNames, rOriginalNames);
+            if (!aNewName.isEmpty())
+            {
+                aTruncatedMap[rOriginalName] = aNewName;
+                aNewTabNames.push_back(aNewName);
+            }
+            else
+            {
+                aNewTabNames.push_back(rOriginalName);
+            }
+        }
+        else
+            aNewTabNames.push_back(rOriginalName);
+    }
+
+    return aTruncatedMap;
+}
+
+const std::unordered_map<OUString, OUString>&
+XclExpLinkManagerImpl::GetTruncatedSheetMap(sal_uInt16 nFileId)
+{
+    auto [it, inserted] = maTruncatedSheetMaps.try_emplace(nFileId);
+    const bool bValidateTabNames = officecfg::Office::Calc::Filter::Export::MS_Excel::TruncateLongSheetNames::get();
+
+    if (inserted && bValidateTabNames) // don't populate the map if disable in config
+    {
+        std::vector<OUString> aNames;
+        if (ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager())
+            pRefMgr->getAllCachedTableNames(nFileId, aNames);
+
+        it->second = lcl_generate_truncated_sheet_map(aNames);
+    }
+
+    return it->second;
+}
+
 XclExpLinkManagerImpl::XclExpLinkManagerImpl( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
@@ -2639,6 +2704,12 @@ void XclExpLinkManager::Save( XclExpStream& rStrm )
 void XclExpLinkManager::SaveXml( XclExpXmlStream& rStrm )
 {
     mxImpl->SaveXml( rStrm );
+}
+
+const std::unordered_map<OUString, OUString>&
+XclExpLinkManager::GetTruncatedSheetMap(sal_uInt16 nFileId) const
+{
+    return mxImpl->GetTruncatedSheetMap(nFileId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
