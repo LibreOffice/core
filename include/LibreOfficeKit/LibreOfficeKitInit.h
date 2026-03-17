@@ -10,8 +10,6 @@
 #ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
 #define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
 
-#include "LibreOfficeKit.h"
-
 #if defined __GNUC__ || defined __clang__
 #  define LOK_TOLERATE_UNUSED __attribute__((used))
 #else
@@ -26,6 +24,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+
+struct LibreOfficeKitStruct;
+typedef struct LibreOfficeKitStruct LibreOfficeKit;
 
 #ifndef _WIN32
 
