@@ -1095,6 +1095,9 @@ void GalleryBrowser::UpdateRows(bool bVisibleOnly)
         if (sId.isEmpty())
             return false;
 
+        if (!mpCurTheme)
+            return false;
+
         // get the icon for the listview
         Bitmap aBitmap;
         Size aPreparedSize;
