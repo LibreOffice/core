@@ -21,6 +21,7 @@
 
 #include <cstdio>
 #include <string_view>
+#include <unordered_set>
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -931,9 +932,13 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
             FSNS(XML_xmlns, XML_vt), rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)));
 
     size_t nIndex = 0;
+    std::unordered_set<OUString> aUniqueProps;
     for (const auto& rProp : aprop)
     {
-        if ( !rProp.Name.isEmpty() )
+        // Property names must be unique, and are case insensitive unlike in some formats (eg. ODF, DOC)
+        // When coming from those formats, this can cause data loss, but having props only differ in case is unlikely
+        if ( !rProp.Name.isEmpty()
+             && aUniqueProps.insert(rProp.Name.toAsciiUpperCase()).second == true )
         {
             // Skip storing these values in Custom Properties as it will be stored in Core/Extended Properties
             if (( rProp.Name == "OOXMLCorePropertyCategory" ) || // stored in cp:category

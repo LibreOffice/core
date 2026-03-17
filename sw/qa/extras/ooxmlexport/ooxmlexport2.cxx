@@ -125,6 +125,23 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomProperties)
     assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:identifier", u"zzzzidentifier");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf171360_unique_props)
+{
+    createSwDoc("tdf171360_unique_props.odt");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pCustomXml = parseExport(u"docProps/custom.xml"_ustr);
+    CPPUNIT_ASSERT(pCustomXml);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Only a single custom property must be exported to OOXML if they only differ in case",
+        1, countXPathNodes(pCustomXml,
+                           "/custom-properties:Properties/custom-properties:property[@name='ABC']")
+               + countXPathNodes(
+                   pCustomXml,
+                   "/custom-properties:Properties/custom-properties:property[@name='abc']"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testUTF8CustomProperties, "tdf127864.docx")
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
