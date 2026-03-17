@@ -13,10 +13,12 @@ import os
 import xml.etree.ElementTree as ET
 import json
 from datetime import datetime, timezone
+import uuid
 
 sbom_data = {}
+timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 productname = os.environ.get("PRODUCTNAME_WITHOUT_SPACES").lower()
-version = (
+root_version = (
     os.environ.get("LIBO_VERSION_MAJOR") + "." +
     os.environ.get("LIBO_VERSION_MINOR") + "." +
     os.environ.get("LIBO_VERSION_MICRO") + "." +
@@ -51,6 +53,59 @@ def extract_version_for_dictionary(dict):
     return None
 
 
+package_cache = {}
+
+def package_id(package):
+    if package not in package_cache:
+        package_cache[package] = f"urn:uuid:{uuid.uuid4()}"
+    return package_cache[package]
+
+
+spdx_id_cache = {}
+
+def make_spdx_id(package, fragment):
+    """Create a URN UUID for an SPDX element"""
+    key = (package, fragment)
+    if key not in spdx_id_cache:
+        spdx_id_cache[key] = f"urn:uuid:{uuid.uuid4()}"
+    return spdx_id_cache[key]
+
+
+def next_rel_id(package):
+    """Generate a unique relationship URN UUID."""
+    return f"urn:uuid:{uuid.uuid4()}"
+
+
+license_cache = {}
+
+def add_license_relationship(package, from_id, license_expr):
+    """Add a license expression element and hasDeclaredLicense relationship."""
+
+    graph = sbom_data[package]["@graph"]
+
+    key = (package, license_expr)
+    if key not in license_cache:
+        license_id = make_spdx_id(package, f"License-{license_expr}")
+        graph.append({
+            "type": "simplelicensing_LicenseExpression",
+            "spdxId": license_id,
+            "creationInfo": "_:creationinfo",
+            "simplelicensing_licenseExpression": license_expr
+        })
+        license_cache[key] = license_id
+    else:
+        license_id = license_cache[key]
+
+    graph.append({
+        "type": "Relationship",
+        "spdxId": next_rel_id(package),
+        "creationInfo": "_:creationinfo",
+        "from": from_id,
+        "relationshipType": "hasDeclaredLicense",
+        "to": [license_id]
+    })
+
+
 def extract_spdx_info(line):
     """
     Extract relevant SPDX information from a line.
@@ -74,12 +129,10 @@ def extract_spdx_info(line):
 
         spdx_info = {
             "package": package,
-            "SPDXID": f"SPDXRef-{name}",
+            "fragment": f"SPDXRef-{name}",
             "name": name,
-            "versionInfo": version,
-            "filesAnalyzed": False,
-            "downloadLocation": "NONE",
-            "licenseConcluded": license
+            "version": version,
+            "license": license
         }
         return spdx_info
     return None
@@ -94,48 +147,98 @@ def process_file(file_path):
             spdx_info = extract_spdx_info(line)
             if spdx_info:
                 package = spdx_info["package"]
-                spdx_info.pop("package", None)
+                root_spdx_id = make_spdx_id(package, f"SPDXRef-{productname}-{package}")
                 if not sbom_data.get(package):
-                    sbom_skeleton(package)
-                sbom_data[package]["packages"].append(spdx_info)
-                relationships_data = {
-                    "spdxElementId": f"SPDXRef-{productname}-{package}",
-                    "relationshipType": "CONTAINS",
-                    "relatedSpdxElement": spdx_info["SPDXID"]
+                    sbom_skeleton(package, root_spdx_id)
+
+                graph = sbom_data[package]["@graph"]
+                pkg_spdx_id = make_spdx_id(package, spdx_info["fragment"])
+
+                # Add the package element
+                pkg_element = {
+                    "type": "software_Package",
+                    "spdxId": pkg_spdx_id,
+                    "originatedBy": ["https://collaboraoffice.com"],
+                    "creationInfo": "_:creationinfo",
+                    "name": spdx_info["name"],
                 }
-                sbom_data[package]["relationships"].append(relationships_data)
+                if spdx_info["version"]:
+                    pkg_element["software_packageVersion"] = spdx_info["version"]
+                graph.append(pkg_element)
+
+                # Add CONTAINS relationship
+                graph.append({
+                    "type": "Relationship",
+                    "spdxId": next_rel_id(package),
+                    "creationInfo": "_:creationinfo",
+                    "from": root_spdx_id,
+                    "relationshipType": "contains",
+                    "to": [pkg_spdx_id]
+                })
+
+                add_license_relationship(
+                    package, pkg_spdx_id, spdx_info["license"])
 
 
-def sbom_skeleton(package):
-    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+def sbom_skeleton(package, root_spdx_id):
+    package_spdx_id = package_id(package)
+    tool_spdx_id = make_spdx_id(package, "SPDXRef-Tool-CustomScript")
+
     sbom_data[package] = {
-        "SPDXID": "SPDXRef-DOCUMENT",
-        "spdxVersion": "SPDX-2.3",
-        "dataLicense": "CC0-1.0",
-        "name": f"{productname}-{package}",
-        "documentNamespace": f"http://spdx.org/spdxdocs/{productname}-{package}-{version}",
-        "creationInfo": {
-            "creators": ["Tool: Custom Script"],
-            "created": timestamp
-        },
-        "packages": [
+        "@context": "https://spdx.org/rdf/3.0.1/spdx-context.jsonld",
+        "@graph": [
             {
-                "SPDXID": f"SPDXRef-{productname}-{package}",
+                "type": "Organization",
+                "spdxId": "https://collaboraoffice.com",
+                "creationInfo": "_:creationinfo",
+                "externalIdentifers": [{
+                    "type": "ExternalIdentifier",
+                    "externalIdentifierType": "email",
+                    "identifier": "hello@collaboraoffice.com"
+                }]
+            },
+            {
+                "type": "CreationInfo",
+                "@id": "_:creationinfo",
+                "specVersion": "3.0.1",
+                "created": timestamp,
+                "createdBy": ["https://collaboraoffice.com"],
+                "createdUsing": [tool_spdx_id]
+            },
+            {
+                "type": "Tool",
+                "spdxId": tool_spdx_id,
+                "creationInfo": "_:creationinfo",
+                "name": "Custom Script"
+            },
+            {
+                "type": "SpdxDocument",
+                "spdxId": package_spdx_id,
+                "creationInfo": "_:creationinfo",
                 "name": f"{productname}-{package}",
-                "versionInfo": version,
-                "filesAnalyzed": False,
-                "downloadLocation": "NONE",
-                "licenseConcluded": "MPL-2.0"
-            }
-        ],
-        "relationships": [
+                "rootElement": [root_spdx_id],
+                "profileConformance": ["core", "software", "simpleLicensing"]
+            },
             {
-                "spdxElementId": "SPDXRef-DOCUMENT",
-                "relationshipType": "DESCRIBES",
-                "relatedSpdxElement": f"SPDXRef-{productname}-{package}"
+                "type": "software_Package",
+                "spdxId": root_spdx_id,
+                "creationInfo": "_:creationinfo",
+                "name": f"{productname}-{package}",
+                "software_packageVersion": root_version
+            },
+            {
+                "type": "Relationship",
+                "spdxId": next_rel_id(package),
+                "creationInfo": "_:creationinfo",
+                "from": package_spdx_id,
+                "relationshipType": "describes",
+                "to": [root_spdx_id]
             }
         ]
     }
+
+    # Add license for root package
+    add_license_relationship(package, root_spdx_id, "MPL-2.0")
 
 
 if __name__ == "__main__":
