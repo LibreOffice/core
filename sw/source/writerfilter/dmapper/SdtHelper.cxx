@@ -12,6 +12,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <editeng/unoprnms.hxx>
+#include <rtl/character.hxx>
 #include <sal/log.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -37,6 +38,8 @@
 #include <unoport.hxx>
 #include <unofield.hxx>
 #include <unofieldcoll.hxx>
+
+#include <algorithm>
 
 namespace writerfilter::dmapper
 {
@@ -275,6 +278,26 @@ std::optional<OUString> SdtHelper::getValueFromDataBinding()
     return {};
 }
 
+OUString SdtHelper::AdjustDateString(std::u16string_view sDate, std::u16string_view sDateFormat)
+{
+    OUString sResult(sDate);
+
+    sal_Int32 nTimeSep = sResult.indexOf("T");
+    // Trim time part of datetime
+    if (nTimeSep != -1)
+    {
+        sResult = sResult.copy(0, nTimeSep);
+    }
+    // Special case: only year in yyyy form, extend to yyyy-mm-dd
+    else if (sResult.getLength() == 4 && sDateFormat == u"yyyy"
+             && std::all_of(sResult.getStr(), sResult.getStr() + sResult.getLength(),
+                            [](sal_Unicode c) { return rtl::isAsciiDigit(c); }))
+    {
+        sResult += "-01-01";
+    }
+    return sResult;
+}
+
 void SdtHelper::createDropDownControl()
 {
     assert(getControlType() == SdtControlType::dropDown
@@ -476,9 +499,10 @@ void SdtHelper::createDateContentControl()
     xFieldmark->attach(uno::Reference<text::XTextRange>(xCrsr, uno::UNO_QUERY_THROW));
     xFieldmark->setFieldType(ODF_FORMDATE);
     uno::Reference<container::XNameContainer> xNameCont = xFieldmark->getParameters();
+    OUString sDateFormat;
     if (xNameCont.is())
     {
-        OUString sDateFormat = m_sDateFormat.makeStringAndClear();
+        sDateFormat = m_sDateFormat.makeStringAndClear();
 
         // Replace quotation mark used for marking static strings in date format
         sDateFormat = sDateFormat.replaceAll("'", "\"");
@@ -490,15 +514,10 @@ void SdtHelper::createDateContentControl()
 
     std::optional<OUString> oData = getValueFromDataBinding();
     if (oData.has_value())
-        sFullDate = *oData;
+        sFullDate = AdjustDateString(*oData, sDateFormat);
 
     if (!sFullDate.isEmpty())
-    {
-        sal_Int32 nTimeSep = sFullDate.indexOf("T");
-        if (nTimeSep != -1)
-            sFullDate = sFullDate.copy(0, nTimeSep);
         xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::Any(sFullDate));
-    }
 
     rtl::Reference<SwXTextFieldTypes> xRefreshable(m_rDM_Impl.GetTextDocument()->getSwTextFields());
     xRefreshable->refresh();

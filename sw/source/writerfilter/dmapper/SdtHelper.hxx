@@ -248,6 +248,8 @@ public:
     const OUString& GetLock() const;
 
     std::optional<OUString> getValueFromDataBinding();
+
+    static OUString AdjustDateString(std::u16string_view sDate, std::u16string_view sDateFormat);
 };
 
 } // namespace writerfilter::dmapper
