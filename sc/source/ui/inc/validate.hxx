@@ -103,7 +103,6 @@ private:
     OUString                    maStrValue;
     OUString                    maStrFormula;
     OUString                    maStrRange;
-    OUString                    maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
     DECL_LINK( EditSetFocusHdl, formula::RefEdit&, void );

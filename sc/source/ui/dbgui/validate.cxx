@@ -370,7 +370,6 @@ ScTPValidationValue::ScTPValidationValue(weld::Container* pPage, weld::DialogCon
     , maStrValue(ScResId(SCSTR_VALID_VALUE))
     , maStrFormula(ScResId(SCSTR_VALID_FORMULA))
     , maStrRange(ScResId(SCSTR_VALID_RANGE))
-    , maStrList(ScResId(SCSTR_VALID_LIST))
     , m_pRefEdit(nullptr)
     , m_xLbAllow(m_xBuilder->weld_combo_box(u"allow"_ustr))
     , m_xCbAllow(m_xBuilder->weld_check_button(u"allowempty"_ustr))
