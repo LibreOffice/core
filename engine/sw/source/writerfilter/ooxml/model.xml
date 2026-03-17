@@ -12154,6 +12154,35 @@
           <data type="string"/>
         </attribute>
       </define>
+      <define name="CT_StylePaneFilter">
+        <attribute name="val">
+          <ref name="ST_ShortHexNumber"/>
+        </attribute>
+        <attribute name="allStyles">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="customStyles">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="latentStyles">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="stylesInUse">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="headingStyles">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="numberingStyles">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="tableStyles">
+          <ref name="ST_OnOff"/>
+        </attribute>
+        <attribute name="visibleStyles">
+          <ref name="ST_OnOff"/>
+        </attribute>
+      </define>
       <define name="CT_TrackChangesView">
         <attribute name="markup">
           <ref name="ST_OnOff"/>
@@ -15639,7 +15668,7 @@
           <ref name="CT_OnOff"/>
         </element>
         <element name="stylePaneFormatFilter">
-          <ref name="CT_ShortHexNumber"/>
+          <ref name="CT_StylePaneFilter"/>
         </element>
         <element name="stylePaneSortMethod">
           <ref name="CT_ShortHexNumber"/>
@@ -17526,6 +17555,17 @@
     <resource name="CT_MailMergeOdsoFMDFieldType" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_MailMergeOdsoFMDFieldType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
+    </resource>
+    <resource name="CT_StylePaneFilter" resource="Properties">
+      <attribute name="val" tokenid="ooxml:CT_StylePaneFilter_val"/>
+      <attribute name="allStyles" tokenid="ooxml:CT_StylePaneFilter_allStyles"/>
+      <attribute name="customStyles" tokenid="ooxml:CT_StylePaneFilter_customStyles"/>
+      <attribute name="latentStyles" tokenid="ooxml:CT_StylePaneFilter_latentStyles"/>
+      <attribute name="stylesInUse" tokenid="ooxml:CT_StylePaneFilter_stylesInUse"/>
+      <attribute name="headingStyles" tokenid="ooxml:CT_StylePaneFilter_headingStyles"/>
+      <attribute name="numberingStyles" tokenid="ooxml:CT_StylePaneFilter_numberingStyles"/>
+      <attribute name="tableStyles" tokenid="ooxml:CT_StylePaneFilter_tableStyles"/>
+      <attribute name="visibleStyles" tokenid="ooxml:CT_StylePaneFilter_visibleStyles"/>
     </resource>
     <resource name="CT_TrackChangesView" resource="Properties">
       <attribute name="markup" tokenid="ooxml:CT_TrackChangesView_markup"/>

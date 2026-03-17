@@ -718,6 +718,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168964)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), sStyle.indexOf("position:absolute"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testStylePaneFormatFilterRoundTrip)
+{
+    createSwDoc("style-pane-format-filter.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
+    assertXPath(pXmlSettings, "/w:settings/w:stylePaneFormatFilter", "val", u"3F01");
+    assertXPath(pXmlSettings, "/w:settings/w:stylePaneFormatFilter", "allStyles", u"1");
+    assertXPath(pXmlSettings, "/w:settings/w:stylePaneFormatFilter", "customStyles", u"0");
+    assertXPath(pXmlSettings, "/w:settings/w:stylePaneFormatFilter", "latentStyles", u"0");
+    assertXPath(pXmlSettings, "/w:settings/w:stylePaneFormatFilter", "stylesInUse", u"0");
+    assertXPath(pXmlSettings, "/w:settings/w:stylePaneFormatFilter", "headingStyles", u"1");
+    assertXPath(pXmlSettings, "/w:settings/w:stylePaneFormatFilter", "numberingStyles", u"0");
+    assertXPath(pXmlSettings, "/w:settings/w:stylePaneFormatFilter", "tableStyles", u"0");
+    assertXPath(pXmlSettings, "/w:settings/w:stylePaneFormatFilter", "visibleStyles", u"0");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

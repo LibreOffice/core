@@ -530,6 +530,7 @@ allDrilled
 allLines
 allPages
 allPts
+allStyles
 allUniqueName
 allowBlank
 allowOverlap
@@ -1593,6 +1594,7 @@ customRollUp
 customSheetView
 customSheetViews
 customStyle
+customStyles
 customView
 customWidth
 customWorkbookView
@@ -2693,6 +2695,7 @@ headerSource
 headers
 headersInLastRefresh
 heading
+headingStyles
 headings
 heart
 heartBalloon
@@ -3734,6 +3737,7 @@ numberOfShades
 numberStoredAsText
 numbering
 numberingChange
+numberingStyles
 nvCxnSpPr
 nvGraphicFramePr
 nvGrpSpPr
@@ -5138,6 +5142,7 @@ stylePaneSortMethod
 styleSet
 styleSheet
 styles
+stylesInUse
 stylisticSets
 sub
 subDoc
@@ -5810,6 +5815,7 @@ vine
 violet
 visibility
 visible
+visibleStyles
 visualTotals
 vm
 vml

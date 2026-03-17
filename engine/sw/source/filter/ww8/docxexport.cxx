@@ -1329,6 +1329,68 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS(XML_w, XML_gutterAtTop);
     }
 
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = m_xTextDoc->getPropertySetInfo();
+
+    comphelper::SequenceAsHashMap aGrabBagPropMap;
+    {
+        const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+        if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
+        {
+            uno::Sequence< beans::PropertyValue > propList;
+            m_xTextDoc->getPropertyValue( aGrabBagName ) >>= propList;
+            aGrabBagPropMap = comphelper::SequenceAsHashMap(propList);
+        }
+    }
+
+    // write w:stylePaneFormatFilter
+    if (uno::Sequence< beans::PropertyValue > stylePaneFormatFilterProps;
+        aGrabBagPropMap.getValue("StylePaneFormatFilterProps") >>= stylePaneFormatFilterProps)
+    {
+        OUString aVal;
+        std::map<OUString, OUString> aAttrs;
+        for (const auto& rProp : stylePaneFormatFilterProps)
+        {
+            if (rProp.Name.isEmpty())
+                continue;
+            if (rProp.Name == "val")
+                rProp.Value >>= aVal;
+            else
+            {
+                bool bVal = false;
+                rProp.Value >>= bVal;
+                aAttrs[rProp.Name] = bVal ? u"1"_ustr : u"0"_ustr;
+            }
+        }
+
+        if (!aVal.isEmpty())
+        {
+            rtl::Reference<sax_fastparser::FastAttributeList> pAttrList(
+                sax_fastparser::FastSerializerHelper::createAttrList());
+
+            pAttrList->add(FSNS(XML_w, XML_val), aVal);
+
+            static const std::pair<sal_Int32, const char*> aTokenMap[] = {
+                { XML_allStyles, "allStyles" },
+                { XML_customStyles, "customStyles" },
+                { XML_latentStyles, "latentStyles" },
+                { XML_stylesInUse, "stylesInUse" },
+                { XML_headingStyles, "headingStyles" },
+                { XML_numberingStyles, "numberingStyles" },
+                { XML_tableStyles, "tableStyles" },
+                { XML_visibleStyles, "visibleStyles" },
+            };
+
+            for (const auto& [nToken, sName] : aTokenMap)
+            {
+                auto i = aAttrs.find(OUString::createFromAscii(sName));
+                if (i != aAttrs.end())
+                    pAttrList->add(FSNS(XML_w, nToken), i->second);
+            }
+
+            pFS->singleElementNS(XML_w, XML_stylePaneFormatFilter, pAttrList);
+        }
+    }
+
     // export current mail merge database and table names
     SwDBData aData = m_rDoc.GetDBData();
     if ( !aData.sDataSource.isEmpty() && aData.nCommandType == css::sdb::CommandType::TABLE && !aData.sCommand.isEmpty() )
@@ -1358,7 +1420,6 @@ void DocxExport::WriteSettings()
     if ( m_aSettings.trackRevisions )
         pFS->singleElementNS(XML_w, XML_trackRevisions);
 
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = m_xTextDoc->getPropertySetInfo();
     bool bReadOnlyStatusUnchanged = true;
     bool bUseGrabBagProtection = false;
     bool bWriterWantsToProtect = false;
@@ -1378,15 +1439,6 @@ void DocxExport::WriteSettings()
         bHasDummyRedlineProtectionKey = aKey.getLength() == 1 && aKey[0] == 1;
         if ( bHasRedlineProtectionKey && !bHasDummyRedlineProtectionKey )
             bWriterWantsToProtect = bWriterWantsToProtectRedline = true;
-    }
-
-    comphelper::SequenceAsHashMap aGrabBagPropMap;
-    const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
-    {
-        uno::Sequence< beans::PropertyValue > propList;
-        m_xTextDoc->getPropertyValue( aGrabBagName ) >>= propList;
-        aGrabBagPropMap = comphelper::SequenceAsHashMap(propList);
     }
 
     // write w:documentProtection

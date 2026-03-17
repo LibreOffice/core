@@ -91,6 +91,8 @@ public:
 
     css::uno::Sequence<css::beans::PropertyValue> const& GetThemeFontLangProperties() const;
 
+    css::uno::Sequence<css::beans::PropertyValue> const& GetStylePaneFormatFilterProperties() const;
+
     css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings();
 
     css::uno::Sequence<css::beans::PropertyValue> GetDocumentProtectionSettings() const;
@@ -158,6 +160,7 @@ private:
     std::vector<std::pair<OUString, OUString>> m_aDocVars;
 
     css::uno::Sequence<css::beans::PropertyValue> m_pThemeFontLangProps;
+    css::uno::Sequence<css::beans::PropertyValue> m_pStylePaneFormatFilterProps;
 
     std::vector<css::beans::PropertyValue> m_aCompatSettings;
     css::uno::Sequence<css::beans::PropertyValue> m_pCurrentCompatSetting;

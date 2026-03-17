@@ -264,6 +264,13 @@ DomainMapper::~DomainMapper()
         // Add the saved w:themeFontLang setting
         aProperties[u"ThemeFontLangProps"_ustr] <<= m_pImpl->GetSettingsTable()->GetThemeFontLangProperties();
 
+        // Add the saved w:stylePaneFormatFilter setting (only if present in the input)
+        {
+            const auto& rFilterProps = m_pImpl->GetSettingsTable()->GetStylePaneFormatFilterProperties();
+            if (rFilterProps.hasElements() && !rFilterProps[0].Name.isEmpty())
+                aProperties[u"StylePaneFormatFilterProps"_ustr] <<= rFilterProps;
+        }
+
         // Add the saved compat settings
         aProperties[u"CompatSettings"_ustr] <<= m_pImpl->GetSettingsTable()->GetCompatSettings();
 

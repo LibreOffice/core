@@ -54,6 +54,13 @@ using namespace com::sun::star;
 namespace writerfilter {
 namespace
 {
+/// Formats an integer as a 4-digit uppercase hex string (ST_ShortHexNumber).
+OUString lcl_ShortHex(int nValue)
+{
+    OUString sHex = OUString::number(nValue + 0x10000, 16).toAsciiUpperCase();
+    return sHex.copy(1);
+}
+
 /// Maps OOXML <w:zoom w:val="..."> to SvxZoomType.
 sal_Int16 lcl_GetZoomType(Id nType)
 {
@@ -106,6 +113,7 @@ SettingsTable::SettingsTable(const DomainMapper& rDomainMapper)
 , m_sDecimalSymbol(u"."_ustr)
 , m_sListSeparator(u","_ustr)
 , m_pThemeFontLangProps(3)
+, m_pStylePaneFormatFilterProps(9)
 , m_pCurrentCompatSetting(3)
 {
     if (rDomainMapper.IsRTFImport())
@@ -148,6 +156,42 @@ void SettingsTable::lcl_attribute(Id nName, const Value & val)
     case NS_ooxml::LN_CT_Language_bidi:
         m_pThemeFontLangProps.getArray()[2]
             = comphelper::makePropertyValue(u"bidi"_ustr, sStringValue);
+        break;
+    case NS_ooxml::LN_CT_StylePaneFilter_val:
+        m_pStylePaneFormatFilterProps.getArray()[0]
+            = comphelper::makePropertyValue(u"val"_ustr, lcl_ShortHex(nIntValue));
+        break;
+    case NS_ooxml::LN_CT_StylePaneFilter_allStyles:
+        m_pStylePaneFormatFilterProps.getArray()[1]
+            = comphelper::makePropertyValue(u"allStyles"_ustr, bool(nIntValue));
+        break;
+    case NS_ooxml::LN_CT_StylePaneFilter_customStyles:
+        m_pStylePaneFormatFilterProps.getArray()[2]
+            = comphelper::makePropertyValue(u"customStyles"_ustr, bool(nIntValue));
+        break;
+    case NS_ooxml::LN_CT_StylePaneFilter_latentStyles:
+        m_pStylePaneFormatFilterProps.getArray()[3]
+            = comphelper::makePropertyValue(u"latentStyles"_ustr, bool(nIntValue));
+        break;
+    case NS_ooxml::LN_CT_StylePaneFilter_stylesInUse:
+        m_pStylePaneFormatFilterProps.getArray()[4]
+            = comphelper::makePropertyValue(u"stylesInUse"_ustr, bool(nIntValue));
+        break;
+    case NS_ooxml::LN_CT_StylePaneFilter_headingStyles:
+        m_pStylePaneFormatFilterProps.getArray()[5]
+            = comphelper::makePropertyValue(u"headingStyles"_ustr, bool(nIntValue));
+        break;
+    case NS_ooxml::LN_CT_StylePaneFilter_numberingStyles:
+        m_pStylePaneFormatFilterProps.getArray()[6]
+            = comphelper::makePropertyValue(u"numberingStyles"_ustr, bool(nIntValue));
+        break;
+    case NS_ooxml::LN_CT_StylePaneFilter_tableStyles:
+        m_pStylePaneFormatFilterProps.getArray()[7]
+            = comphelper::makePropertyValue(u"tableStyles"_ustr, bool(nIntValue));
+        break;
+    case NS_ooxml::LN_CT_StylePaneFilter_visibleStyles:
+        m_pStylePaneFormatFilterProps.getArray()[8]
+            = comphelper::makePropertyValue(u"visibleStyles"_ustr, bool(nIntValue));
         break;
     case NS_ooxml::LN_CT_View_val:
         m_nView = nIntValue;
@@ -223,7 +267,8 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
             m_oLinkStyles = false;
     }
     break;
-    case NS_ooxml::LN_CT_Settings_stylePaneFormatFilter: // 92493;
+    case NS_ooxml::LN_CT_Settings_stylePaneFormatFilter: // 92493
+        resolveSprmProps(*this, rSprm);
     break;
     case NS_ooxml::LN_CT_Settings_defaultTabStop: //  92505;
     m_nDefaultTabStop = nIntValue;
@@ -574,6 +619,11 @@ const OUString & SettingsTable::GetListSeparator() const
 uno::Sequence<beans::PropertyValue> const & SettingsTable::GetThemeFontLangProperties() const
 {
     return m_pThemeFontLangProps;
+}
+
+uno::Sequence<beans::PropertyValue> const & SettingsTable::GetStylePaneFormatFilterProperties() const
+{
+    return m_pStylePaneFormatFilterProps;
 }
 
 uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings()
