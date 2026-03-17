@@ -1257,7 +1257,7 @@ void DomainMapper_Impl::PopSdt()
         OUString aCurrentDate = m_pSdtHelper->getDate().makeStringAndClear();
         if (oData.has_value())
         {
-            aCurrentDate = *oData;
+            aCurrentDate = SdtHelper::AdjustDateString(*oData, aDateFormat);
             bDateFromDataBinding = true;
         }
         xContentControl->setPropertyValue(u"CurrentDate"_ustr,

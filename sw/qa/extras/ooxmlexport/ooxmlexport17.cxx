@@ -461,6 +461,35 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:lock", "val", u"sdtLocked");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf164694_yyyy_import)
+{
+    createSwDoc("tdf164694_yyyy_import.docx");
+    saveAndReload(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlHeader = parseExport(u"word/header2.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlHeader);
+    // Without the fix in place this would be 1905-07-03T00:00:00Z (= 2011 days from start of epoch)
+    CPPUNIT_ASSERT_EQUAL(
+        u"2011-01-01T00:00:00Z"_ustr,
+        getXPath(pXmlHeader, "/w:hdr/w:tbl/w:tr/w:tc[2]/w:p/w:sdt/w:sdtPr/w:date", "fullDate"));
+    // This would still be OK without the fix
+    CPPUNIT_ASSERT_EQUAL(
+        u"2011"_ustr,
+        getXPathContent(pXmlHeader, "/w:hdr/w:tbl/w:tr/w:tc[2]/w:p/w:sdt/w:sdtContent/w:r[2]/w:t"));
+    saveAndReload(TestFilter::DOCX);
+
+    pXmlHeader = parseExport(u"word/header2.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlHeader);
+    // Same as previous
+    CPPUNIT_ASSERT_EQUAL(
+        u"2011-01-01T00:00:00Z"_ustr,
+        getXPath(pXmlHeader, "/w:hdr/w:tbl/w:tr/w:tc[2]/w:p/w:sdt/w:sdtPr/w:date", "fullDate"));
+    // Without the fix in place this would be 1905
+    CPPUNIT_ASSERT_EQUAL(
+        u"2011"_ustr,
+        getXPathContent(pXmlHeader, "/w:hdr/w:tbl/w:tr/w:tc[2]/w:p/w:sdt/w:sdtContent/w:r[2]/w:t"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 {
     // Given a document with a negative border distance:
