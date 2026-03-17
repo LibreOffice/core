@@ -72,7 +72,8 @@ template <typename I> constexpr bool isBetween(I n, sal_Int64 min, sal_Int64 max
 template <std::integral I> constexpr sal_Int64 MulDiv(I n, sal_Int64 m, sal_Int64 d)
 {
     assert(m > 0 && d > 0);
-    assert(isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m));
+    assert(isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m)
+           && "maybe use convertSaturate in the caller");
     // coverity[dead_error_line] - suppress warning for template
     return (n >= 0 ? (n * m + d / 2) : (n * m - d / 2)) / d;
 }
