@@ -524,6 +524,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169274)
     assertXPath(pXmlDoc, sPath + "w:sdtContent/w:sdt", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf168964)
+{
+    createSwDoc("tdf168964.odt");
+    saveAndReload(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    OUString sStyle
+        = getXPath(pXmlDoc, "//wps:txbx/w:txbxContent/w:p[2]/w:r/w:object/v:shape", "style");
+
+    // Test that OLEs inside a textbox are anchored as-char
+    // Before the fix the 'style' attribute contained "position:absolute", making it to-char
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), sStyle.indexOf("position:absolute"));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
