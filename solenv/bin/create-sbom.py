@@ -53,6 +53,98 @@ def extract_version_for_dictionary(dict):
     return None
 
 
+SCP2TYPES = {"Directory", "File", "Profile", "Module", "WindowsCustomAction", "MergeModule"}
+
+def parse_install_script(filename):
+    """Parse the install script that is produced in scp2."""
+    with open(filename) as f:
+        lines = f.read().splitlines()
+
+    result = {t: {} for t in SCP2TYPES}
+    gids = set()
+    i = 0
+    n = len(lines)
+
+    while i < n:
+        line = lines[i]
+        m = re.match(r'^\s*(\S+)\s+(\S+)\s*$', line)
+        if not m:
+            i += 1
+            continue
+
+        item_type = m.group(1)
+        gid = m.group(2)
+        if gid in gids:
+            raise Exception(f"line {i} duplicate gid {gid}")
+        gids.add(gid)
+
+        if item_type not in SCP2TYPES:
+            # Skip to End
+            i += 1
+            while i < n and not re.match(r'^\s*End\s*$', lines[i]):
+                i += 1
+            if i == n:
+                raise Exception("expected End before EOF")
+            i += 1
+            continue
+
+        item = {}
+        ismultilang = False
+        i += 1
+
+        while i < n and not re.match(r'^\s*End\s*$', lines[i]):
+            line = lines[i]
+
+            # Single-line key = value;
+            m2 = re.match(r'^\s*(.+?)=\s*(.+?);\s*$', line)
+            if m2:
+                key = m2.group(1).rstrip()
+                value = m2.group(2).rstrip()
+                # Remove surrounding quotes
+                qm = re.match(r'^"(.*)"$', value)
+                if qm:
+                    value = qm.group(1)
+                item[key] = value
+                if re.match(r'^\S+\s+\(\S+\)$', key):
+                    ismultilang = True
+                i += 1
+                continue
+
+            # Multi-line value (Module only): key = (... spread across lines ...);
+            if item_type == 'Module':
+                m3 = re.match(r'^\s*(.+?)\s*=\s*\((.+?)\s*$', line)
+                if m3 and not line.rstrip().endswith(');'):
+                    key = m3.group(1).strip()
+                    value = '(' + m3.group(2)
+                    i += 1
+                    while i < n and not lines[i].rstrip().endswith(');'):
+                        value += lines[i].strip()
+                        i += 1
+                    if i == n:
+                        raise Exception("expected ) before EOF")
+                    value += lines[i].strip()
+                    i += 1
+                    if i == n:
+                        raise Exception("expected End before EOF")
+                    value = re.sub(r';\s*$', '', value)
+                    item[key] = value
+                    if re.match(r'^\S+\s+\(\S+\)$', key):
+                        ismultilang = True
+                    continue
+            else:
+                raise Exception(f"unexpected line {i}: {line}")
+
+            i += 1
+
+        if i == n:
+            raise Exception("expected End before EOF")
+
+        i += 1  # skip End line
+        item['ismultilingual'] = 1 if ismultilang else 0
+        result[item_type][gid] = item
+
+    return result
+
 package_cache = {}
 
 def package_id(package):
@@ -242,11 +334,12 @@ def sbom_skeleton(package, root_spdx_id):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print("Usage: python create-sbom.py <path of LICENSE.html> <path of output SPDX JSON files>")
+    if len(sys.argv) < 4:
+        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of install script>")
     else:
-        license_path = sys.argv[1]
-        sbom_path = sys.argv[2]
+        sbom_path = sys.argv[1]
+        license_path = sys.argv[2]
+        install_script = parse_install_script(sys.argv[3])
         process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"
