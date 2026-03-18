@@ -505,12 +505,21 @@ SfxPoolItemHolder SfxShell::GetSlotState
     SfxItemSet aSet( rPool, nSlotId, nSlotId ); // else pItem dies too soon
     if ( nullptr != pSlot )
     {
-        // Call Status method
-        SfxStateFunc pFunc = pSlot->GetStateFnc();
-        if ( pFunc )
-            (*pFunc)( this, aSet );
-        eState = aSet.GetItemState( nSlotId, true, &pItem );
-        bItemStateSet = true;
+        if (SfxViewShell* pViewShell = GetViewShell())
+        {
+            if (pViewShell->isBlockedCommand(pSlot->GetCommand()))
+                eState = SfxItemState::DISABLED;
+        }
+
+        if (eState == SfxItemState::DEFAULT)
+        {
+            // Call Status method
+            SfxStateFunc pFunc = pSlot->GetStateFnc();
+            if (pFunc)
+                (*pFunc)(this, aSet);
+            eState = aSet.GetItemState(nSlotId, true, &pItem);
+            bItemStateSet = true;
+        }
 
         // get default Item if possible
         if ( eState == SfxItemState::DEFAULT )
