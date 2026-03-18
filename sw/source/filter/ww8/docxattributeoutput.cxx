@@ -6540,9 +6540,13 @@ OString DocxAttributeOutput::GetOLEStyle(const SwFlyFrameFormat& rFormat, const 
         aAnch = aHAlign + aVAlign;
 
         //Query the positions to aPos from frameformat
-        aPos =
-            "position:absolute;margin-left:" + OString::number(double(rFormat.GetHoriOrient().GetPos()) / 20) +
-            "pt;margin-top:" + OString::number(double(rFormat.GetVertOrient().GetPos()) / 20) + "pt;";
+        bool bInsideFrame = false;
+        if (const SwNode* pAnchorNode = rFormat.GetAnchor().GetAnchorNode())
+            bInsideFrame = pAnchorNode->FindFlyStartNode() != nullptr;
+
+        aPos = (bInsideFrame ? OString() : "position:absolute;"_ostr) + "margin-left:"
+               + OString::number(double(rFormat.GetHoriOrient().GetPos()) / 20) + "pt;margin-top:"
+               + OString::number(double(rFormat.GetVertOrient().GetPos()) / 20) + "pt;";
     }
 
     OString sShapeStyle = "width:" + OString::number( double( rSize.Width() ) / 20 ) +
