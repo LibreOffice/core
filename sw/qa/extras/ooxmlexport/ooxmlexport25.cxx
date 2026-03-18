@@ -78,6 +78,26 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166544_noTopMargin_fields, "tdf166544_noTopMargi
     CPPUNIT_ASSERT_EQUAL(sal_Int32(269), nHeight);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf171383_refFieldInCell, "tdf171383_refFieldInCell.docx")
+{
+    // given a document where the table contains a multi-paragraph reference field
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Xyz"), xCell->getString());
+    uno::Reference<beans::XPropertySet> xPara(getParagraphOfText(1, xCell->getText()),
+                                              uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+
+    xCell.set(xTextTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell->getString().startsWith("Issue 1"));
+    xPara.set(getParagraphOfText(1, xCell->getText()), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf171299_tableInField, "tdf171299_tableInField.docx")
 {
     // given a document where the field contains a table
