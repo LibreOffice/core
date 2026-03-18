@@ -171,6 +171,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTableWafterRowHeight)
     // 1 point for the border).
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(240), nRow2Height);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableMultiNested)
+{
+    // Given a document with 3 nested floating tables (outer, middle, inner):
+    // When laying out that document:
+    createSwDoc("floattable-multi-nested.docx");
+
+    // Then no layout loop should happen:
+    // Without the accompanying fix in place, this test would have failed with a layout loop.
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Page 1 has the 3 fly masters, the innermost as inline is OK:
+    int nPage1Flys = countXPathNodes(pXmlDoc, "//page[1]/sorted_objs/fly");
+    CPPUNIT_ASSERT_GREATEREQUAL(2, nPage1Flys);
+    // Page 2 has the 3 fly follows, the innermost as inline is OK:
+    int nPage2Flys = countXPathNodes(pXmlDoc, "//page[2]/sorted_objs/fly");
+    CPPUNIT_ASSERT_GREATEREQUAL(2, nPage2Flys);
+    // 6 table frames: 3 masters and 3 follows, all listed on the page of the master's anchor:
+    int nTables = countXPathNodes(pXmlDoc, "//page[1]//tab");
+    CPPUNIT_ASSERT_EQUAL(6, nTables);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

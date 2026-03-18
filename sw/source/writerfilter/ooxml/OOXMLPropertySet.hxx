@@ -146,6 +146,8 @@ public:
     void resolve(Properties& rHandler) override;
     void add(Id id, const OOXMLValue& pValue, OOXMLProperty::Type_t eType);
     void add(const OOXMLPropertySet::Pointer_t& pPropertySet);
+    /// Remove all properties with the given id.
+    void erase(Id nId);
     OOXMLPropertySet* clone() const;
 
     OOXMLProperties_t::iterator begin();

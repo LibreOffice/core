@@ -356,6 +356,12 @@ void OOXMLPropertySet::resolve(Properties & rHandler)
     }
 }
 
+void OOXMLPropertySet::erase(Id nId)
+{
+    std::erase_if(mProperties, [nId](const OOXMLProperty::Pointer_t& pProp)
+                  { return pProp && pProp->getId() == nId; });
+}
+
 OOXMLPropertySet::OOXMLProperties_t::iterator OOXMLPropertySet::begin()
 {
     return mProperties.begin();
