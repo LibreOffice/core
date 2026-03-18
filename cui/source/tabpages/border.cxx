@@ -311,7 +311,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
                 [this]{ return GetDialogController()->getDialog(); }))
     , m_xLineWidthLB(m_xBuilder->weld_combo_box(u"linewidthlb"_ustr))
     , m_xLineWidthMF(m_xBuilder->weld_metric_spin_button(u"linewidthmf"_ustr, FieldUnit::POINT))
-    , m_xSpacingFrame(m_xBuilder->weld_container(u"spacing"_ustr))
+    , m_xSpacingFrame(m_xBuilder->weld_container(u"padding"_ustr))
     , m_xLeftFT(m_xBuilder->weld_label(u"leftft"_ustr))
     , m_xLeftMF(m_xBuilder->weld_metric_spin_button(u"leftmf"_ustr, FieldUnit::MM))
     , m_xRightFT(m_xBuilder->weld_label(u"rightft"_ustr))
