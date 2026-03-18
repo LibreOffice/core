@@ -19,6 +19,7 @@
 
 #include "OOXMLParserState.hxx"
 #include "Handler.hxx"
+#include <ooxml/resourceids.hxx>
 
 #include <sal/log.hxx>
 
@@ -188,7 +189,20 @@ void OOXMLParserState::resolveTableProperties(Stream & rStream)
 
         if (rTableProps)
         {
-            rStream.props(rTableProps.get());
+            bool bMultiNesting = m_nFloatingTableLevels >= 3;
+            if (bMultiNesting && !m_aIsFloatingTable.empty() && m_aIsFloatingTable.top())
+            {
+                // This would be a floating table, inside a floating table, which itself is inside a
+                // floating table: such multi-level nesting of this feature is not supported in
+                // Writer layout, so handle the inner table as inline.
+                OOXMLPropertySet::Pointer_t pFiltered(new OOXMLPropertySet(*rTableProps));
+                pFiltered->erase(NS_ooxml::LN_CT_TblPrBase_tblpPr);
+                rStream.props(pFiltered.get());
+            }
+            else
+            {
+                rStream.props(rTableProps.get());
+            }
             // Don't clean the table props to send them again for each row
             // This mimics the behaviour from RTF tokenizer.
         }
@@ -204,6 +218,18 @@ void OOXMLParserState::setTableProperties(const OOXMLPropertySet::Pointer_t& pPr
             rTableProps = pProps;
         else
             rTableProps->add(pProps);
+
+        if (pProps)
+        {
+            for (const auto& pProp : *pProps)
+            {
+                if (pProp->getId() == NS_ooxml::LN_CT_TblPrBase_tblpPr)
+                {
+                    setCurrentTableFloating();
+                    break;
+                }
+            }
+        }
     }
 }
 
@@ -242,6 +268,7 @@ void OOXMLParserState::startTable()
     mCellProps.push(pCellProps);
     mRowProps.push(pRowProps);
     mTableProps.push(pTableProps);
+    m_aIsFloatingTable.push(false);
 }
 
 void OOXMLParserState::endTable()
@@ -249,6 +276,22 @@ void OOXMLParserState::endTable()
     mCellProps.pop();
     mRowProps.pop();
     mTableProps.pop();
+
+    if (!m_aIsFloatingTable.empty())
+    {
+        if (m_aIsFloatingTable.top())
+            --m_nFloatingTableLevels;
+        m_aIsFloatingTable.pop();
+    }
+}
+
+void OOXMLParserState::setCurrentTableFloating()
+{
+    if (!m_aIsFloatingTable.empty() && !m_aIsFloatingTable.top())
+    {
+        m_aIsFloatingTable.top() = true;
+        ++m_nFloatingTableLevels;
+    }
 }
 
 void OOXMLParserState::incContextCount()
