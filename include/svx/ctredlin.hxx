@@ -273,9 +273,6 @@ private:
     bool m_bEnableRejectAll;
     bool m_bEnableUndo;
 
-    bool m_bEnableClearFormat;
-    bool m_bEnableClearFormatAll;
-
     std::unique_ptr<weld::Button> m_xAccept;
     std::unique_ptr<weld::Button> m_xReject;
     std::unique_ptr<weld::Button> m_xAcceptAll;
@@ -299,8 +296,6 @@ public:
     void            EnableAcceptAll(bool bFlag);
     void            EnableReject(bool bFlag);
     void            EnableRejectAll(bool bFlag);
-    void            EnableClearFormat(bool bFlag);
-    void            EnableClearFormatAll(bool bFlag);
     void            EnableUndo(bool bFlag=true);
     void            DisableUndo()       {EnableUndo(false);}
     void            ShowUndo();

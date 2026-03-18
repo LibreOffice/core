@@ -187,7 +187,6 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, we
     , m_sTableChgd(SwResId(STR_REDLINE_TABLECHG))
     , m_sFormatCollSet(SwResId(STR_REDLINE_FMTCOLLSET))
     , m_sAutoFormat(SwResId(STR_REDLINE_AUTOFMT))
-    , m_bOnlyFormatedRedlines(false)
     , m_bRedlnAutoFormat(bAutoFormat)
     , m_bInhibitActivate(false)
     , m_bHasTrackedColumn(false)
@@ -213,10 +212,8 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, we
     //tdf#89227 default to disabled, and only enable if possible to accept/reject
     m_pTPView->EnableAccept(false);
     m_pTPView->EnableReject(false);
-    m_pTPView->EnableClearFormat(false);
     m_pTPView->EnableAcceptAll(false);
     m_pTPView->EnableRejectAll(false);
-    m_pTPView->EnableClearFormatAll(false);
 
     m_xTabPagesCTRL->GetFilterPage()->SetReadyHdl(LINK(this, SwRedlineAcceptDlg, FilterChangedHdl));
 
@@ -340,16 +337,10 @@ void SwRedlineAcceptDlg::InitAuthors()
 
     SwRedlineTable::size_type nCount = pSh ? pSh->GetRedlineCount() : 0;
 
-    m_bOnlyFormatedRedlines = true;
-
     // determine authors
     for ( SwRedlineTable::size_type i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
-
-        if( m_bOnlyFormatedRedlines && RedlineType::Format != rRedln.GetType() )
-            m_bOnlyFormatedRedlines = false;
-
         aStrings.push_back(rRedln.GetAuthorString());
 
         for (sal_uInt16 nStack = 1; nStack < rRedln.GetStackCount(); nStack++)
@@ -382,21 +373,10 @@ void SwRedlineAcceptDlg::EnableControls(const SwView* pView)
         && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
 
     bool bAcceptReject = false;
-    bool bIsNotFormated = false;
-    rTreeView.selected_foreach([this, pSh, &bIsNotFormated, &bAcceptReject](weld::TreeIter& rEntry){
+    rTreeView.selected_foreach([this, &bAcceptReject](weld::TreeIter& rEntry){
         // Only enable these controls for top-level redlines
         if (m_pTable->GetWidget().get_iter_depth(rEntry) == 0)
             bAcceptReject = true;
-
-        // find the selected redline
-        // (fdo#57874: ignore, if the redline is already gone)
-        SwRedlineTable::size_type nPos = GetRedlinePos(rEntry);
-        if( nPos != SwRedlineTable::npos )
-        {
-            const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
-
-            bIsNotFormated |= RedlineType::Format != rRedln.GetType();
-        }
         return false;
     });
 
@@ -404,13 +384,10 @@ void SwRedlineAcceptDlg::EnableControls(const SwView* pView)
                             && !pView->isBlockedCommand(u".uno:AcceptTrackedChange"_ustr));
     m_pTPView->EnableReject(bEnable && bAcceptReject
                             && !pView->isBlockedCommand(u".uno:RejectTrackedChange"_ustr));
-    m_pTPView->EnableClearFormat( bEnable && !bIsNotFormated && bAcceptReject );
     m_pTPView->EnableAcceptAll(bEnable
                                && !pView->isBlockedCommand(u".uno:AcceptAllTrackedChanges"_ustr));
     m_pTPView->EnableRejectAll(bEnable
                                && !pView->isBlockedCommand(u".uno:RejectAllTrackedChanges"_ustr));
-    m_pTPView->EnableClearFormatAll( bEnable &&
-                                m_bOnlyFormatedRedlines );
 }
 
 const OUString & SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack,
@@ -474,10 +451,8 @@ void SwRedlineAcceptDlg::Activate()
     {
         m_pTPView->EnableAccept(false);
         m_pTPView->EnableReject(false);
-        m_pTPView->EnableClearFormat(false);
         m_pTPView->EnableAcceptAll(false);
         m_pTPView->EnableRejectAll(false);
-        m_pTPView->EnableClearFormatAll(false);
         return; // had the focus previously
     }
 
@@ -487,10 +462,8 @@ void SwRedlineAcceptDlg::Activate()
     {
         m_pTPView->EnableAccept(false);
         m_pTPView->EnableReject(false);
-        m_pTPView->EnableClearFormat(false);
         m_pTPView->EnableAcceptAll(false);
         m_pTPView->EnableRejectAll(false);
-        m_pTPView->EnableClearFormatAll(false);
         // note: enabling is done in EnableControls below
     }
 

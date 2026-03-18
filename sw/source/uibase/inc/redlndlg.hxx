@@ -70,7 +70,6 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final : public SfxListener
     OUString                m_sFormatCollSet;
     OUString                m_sFilterAction;
     OUString                m_sAutoFormat;
-    bool                    m_bOnlyFormatedRedlines;
     bool                    m_bRedlnAutoFormat;
 
     // prevent update dialog data during longer operations (cf #102657#)

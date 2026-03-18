@@ -304,8 +304,6 @@ SvxTPView::SvxTPView(weld::Container* pParent)
     , m_bEnableReject(true)
     , m_bEnableRejectAll(true)
     , m_bEnableUndo(true)
-    , m_bEnableClearFormat(false)
-    , m_bEnableClearFormatAll(false)
     , m_xAccept(m_xBuilder->weld_button(u"accept"_ustr))
     , m_xReject(m_xBuilder->weld_button(u"reject"_ustr))
     , m_xAcceptAll(m_xBuilder->weld_button(u"acceptall"_ustr))
@@ -412,20 +410,6 @@ void SvxTPView::EnableRejectAll(bool bFlag)
 {
     m_bEnableRejectAll = bFlag;
     m_xRejectAll->set_sensitive(bFlag);
-}
-
-void SvxTPView::EnableClearFormat(bool bFlag)
-{
-    if (m_bEnableClearFormat == bFlag)
-        return;
-    m_bEnableClearFormat = bFlag;
-}
-
-void SvxTPView::EnableClearFormatAll(bool bFlag)
-{
-    if (m_bEnableClearFormatAll == bFlag)
-        return;
-    m_bEnableClearFormatAll = bFlag;
 }
 
 void SvxTPView::ShowUndo()

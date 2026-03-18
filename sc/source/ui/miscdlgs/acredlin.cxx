@@ -108,10 +108,6 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     pTPFilter = m_xAcceptChgCtr->GetFilterPage();
     pTPView = m_xAcceptChgCtr->GetViewPage();
 
-    // tdf#136062 Don't use "Reject/Clear formatting" instead of "Reject" buttons in Calc
-    pTPView->EnableClearFormat(false);
-    pTPView->EnableClearFormatAll(false);
-
     pTheView = pTPView->GetTableControl();
     pTheView->SetCalcView();
     aSelectionIdle.SetInvokeHandler(LINK( this, ScAcceptChgDlg, UpdateSelectionHdl ));
