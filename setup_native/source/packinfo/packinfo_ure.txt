@@ -17,22 +17,6 @@
 #
 
 Start
-module = "gid_Module_Root"
-solarispackagename = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure"
-solarisrequires = "SUNWzlibr"
-solarisprovides = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-stdlibs"
-linuxreplaces = "%UREPACKAGEPREFIX%BRANDPACKAGEVERSION-stdlibs"
-linuxincompat = "%UREPACKAGEPREFIX%BRANDPACKAGEVERSION-stdlibs"
-packagename = "%UREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure"
-copyright = "2025 The Document Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "UNO Runtime Environment"
-destpath = "/opt"
-packageversion = "%UREPACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Root_Ure_Hidden"
 solarispackagename = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure"
 solarisrequires = "SUNWzlibr"
