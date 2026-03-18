@@ -2672,7 +2672,9 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     }
     else if (eOp == ocUDExternal)
     {
-        if (maArrIterator.PeekNext() && maArrIterator.PeekNext()->GetOpCode() == ocOpen)
+        if (t->GetType() == svByte)
+            rBuffer.append(mxSymbols->getSymbol(ocErrRef));
+        else if (maArrIterator.PeekNext() && maArrIterator.PeekNext()->GetOpCode() == ocOpen)
             rBuffer.append(mxSymbols->getSymbol(eOp));
     }
     else if( static_cast<sal_uInt16>(eOp) < mxSymbols->getSymbolCount())        // Keyword:
