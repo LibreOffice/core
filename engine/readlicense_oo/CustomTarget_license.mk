@@ -81,6 +81,8 @@ $(readlicense_oo_DIR)/license.txt : \
 endif
 
 SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
+		$(call gb_InstallScript_get_target,setup_osl) \
+		$(call gb_Helper_optional,ODK,$(call gb_InstallScript_get_target,sdkoo)) \
 		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PY ,1)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PY )
@@ -88,7 +90,10 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 		$(filter PRODUCTNAME_WITHOUT_SPACES LIBO_VERSION% %TARBALL, $(.VARIABLES)), \
 		$(eval export $(v)=$($v)) \
 	)
-	$(call gb_ExternalExecutable_get_command,python) $(create_SBOM) $< $(readlicense_oo_DIR)
+	$(call gb_ExternalExecutable_get_command,python) $(create_SBOM) \
+		$(readlicense_oo_DIR) \
+		$< \
+		$(call gb_InstallScript_get_target,setup_osl)
 	mkdir -p $(SBOM_DIR)
 	cp $(readlicense_oo_DIR)/*sbom.spdx.json $(SBOM_DIR)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PY )
