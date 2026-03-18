@@ -50,6 +50,10 @@ class OOXMLParserState final : public virtual SvRefBase
     std::stack<OOXMLPropertySet::Pointer_t> mCellProps;
     std::stack<OOXMLPropertySet::Pointer_t> mRowProps;
     std::stack<OOXMLPropertySet::Pointer_t> mTableProps;
+    /// Number of parent table levels that have tblpPr (are floating).
+    sal_Int32 m_nFloatingTableLevels = 0;
+    /// Whether the current table level already counted as floating.
+    std::stack<bool> m_aIsFloatingTable;
     bool m_inTxbxContent;
     // these 4 save when inTxbxContent
     bool m_savedInParagraphGroup;
@@ -110,6 +114,8 @@ public:
 
     void startTable();
     void endTable();
+    /// Mark the current table level as floating (has tblpPr).
+    void setCurrentTableFloating();
 
     void incContextCount();
 
