@@ -17,22 +17,6 @@
 #
 
 Start
-module = "gid_Module_Root"
-solarispackagename = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure"
-solarisrequires = "SUNWzlibr"
-solarisprovides = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-stdlibs"
-linuxreplaces = "%UREPACKAGEPREFIX-stdlibs"
-linuxincompat = "%UREPACKAGEPREFIX-stdlibs"
-packagename = "%UREPACKAGEPREFIX-ure"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "UNO Runtime Environment"
-destpath = "/opt"
-packageversion = "%UREPACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Root_Ure_Hidden"
 solarispackagename = "%SOLSUREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure"
 solarisrequires = "SUNWzlibr"
