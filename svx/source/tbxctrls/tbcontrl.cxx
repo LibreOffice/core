@@ -1662,6 +1662,10 @@ IMPL_LINK(SvxStyleBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWrit
     }
 
     rJsonWriter.put("command", ".uno:StyleApply");
+
+    OUString sModule = vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame);
+    Sequence<PropertyValue> aProperties = vcl::CommandInfoProvider::GetCommandProperties(m_aCommand, sModule);
+    rJsonWriter.put("label", vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
 }
 
 static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base& rBox)
@@ -2059,6 +2063,10 @@ IMPL_LINK(SvxFontNameBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonW
     }
 
     rJsonWriter.put("command", ".uno:CharFontName");
+
+    OUString sModule = vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame);
+    Sequence<PropertyValue> aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:CharFontName"_ustr, sModule);
+    rJsonWriter.put("label", vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
 }
 
 ColorWindow::ColorWindow(OUString  rCommand,
