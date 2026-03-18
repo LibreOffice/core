@@ -181,18 +181,14 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
     SfxItemSet aSet(pDrawViewWrapper->GetModel().GetItemPool());
     pDrawViewWrapper->GetAttributes( aSet );
 
-    tools::Long nWidth = 300; // (1/100th mm)
-    if ( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::INVALID )
-    {
-        tools::Long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
-        if ( nValue > 0 )
-        {
-            nWidth = nValue * 3;
-        }
-    }
+    // tdf#126823 - retrieve default arrow size for end width
+    // generated in SdDrawDocument::CreateLayoutTemplates()
+    ::tools::Long nLineEndWidth = 200;
+    if (aSet.GetItemState(XATTR_LINEENDWIDTH) != SfxItemState::INVALID)
+        nLineEndWidth = aSet.Get(XATTR_LINEENDWIDTH).GetValue();
 
     rAttr.Put( XLineEndItem( SvxResId( RID_SVXSTR_ARROW ), std::move(aArrow) ) );
-    rAttr.Put( XLineEndWidthItem( nWidth ) );
+    rAttr.Put(XLineEndWidthItem(nLineEndWidth));
 }
 
 // WeakComponentImplHelperBase

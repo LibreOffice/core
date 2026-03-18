@@ -122,16 +122,6 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
         aSquare.append(aNewSquare);
     }
 
-    SfxItemSet aSet(rModel.GetItemPool());
-
-    // determine line width and calculate with it the line end width
-    if (aSet.GetItemState(XATTR_LINEWIDTH) != SfxItemState::INVALID)
-    {
-        tools::Long nValue = aSet.Get(XATTR_LINEWIDTH).GetValue();
-        if (nValue > 0)
-            nWidth = nValue * 3;
-    }
-
     switch (nSlotId)
     {
         case SID_CONNECTOR_ARROWS:

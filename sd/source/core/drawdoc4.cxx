@@ -167,6 +167,8 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XLineDashItem(aNullDash));
     rISet.Put(XLineStartItem(basegfx::B2DPolyPolygon()));
     rISet.Put(XLineEndItem(basegfx::B2DPolyPolygon()));
+    // tdf#126823 - default arrow sizes for start/end widths
+    // these should be aligned with values in FuConstructRectangle::SetLineEnds
     rISet.Put(XLineStartWidthItem(200));
     rISet.Put(XLineEndWidthItem(200));
     rISet.Put(XLineStartCenterItem());

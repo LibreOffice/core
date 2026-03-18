@@ -1740,6 +1740,37 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf151417)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126823_default_start_end_arrow_sizes)
+{
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    // Insert a line with end arrow via Ctrl key
+    dispatchCommand(mxComponent, u".uno:LineArrowEnd"_ustr,
+                    comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+
+    // Retrieve the first draw page and check presence of the newly inserted line
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
+
+    // Retrieve start/end line widths
+    uno::Reference<beans::XPropertySet> xPropSet(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+
+    sal_uInt32 nStartWidth = 0;
+    xPropSet->getPropertyValue(u"LineStartWidth"_ustr) >>= nStartWidth;
+    sal_uInt32 nEndWidth = 0;
+    xPropSet->getPropertyValue(u"LineEndWidth"_ustr) >>= nEndWidth;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 200
+    // - Actual  : 300
+    // i.e. the start/end arrow widths are not equal
+    CPPUNIT_ASSERT_EQUAL(nStartWidth, nEndWidth);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
 {
     // To check if selecting unfilled rectangle produces unfilled rectangle

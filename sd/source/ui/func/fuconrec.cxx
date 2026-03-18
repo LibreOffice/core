@@ -71,6 +71,8 @@
 #include <drawdoc.hxx>
 #include <unokywds.hxx>
 
+#include <DrawDocShell.hxx>
+
 #include <strings.hrc>
 
 using namespace com::sun::star;
@@ -727,18 +729,15 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
     SfxItemSet aSet( mrDoc.GetPool() );
     mpView->GetAttributes( aSet );
 
-    // #i3908# Here, the default Line Start/End width for arrow construction is
-    // set. To have the same value in all situations (construction) in i3908
-    // it was decided to change the default to 0.03 cm for all situations.
-    ::tools::Long nWidth = 300; // (1/100th mm)
+    // tdf#126823 - retrieve default arrow sizes for start/end widths
+    // generated in SdDrawDocument::CreateLayoutTemplates()
+    ::tools::Long nLineStartWidth = 200;
+    if (aSet.GetItemState(XATTR_LINESTARTWIDTH) != SfxItemState::INVALID)
+        nLineStartWidth = aSet.Get(XATTR_LINESTARTWIDTH).GetValue();
 
-    // determine line width and calculate with it the line end width
-    if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::INVALID )
-    {
-        ::tools::Long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
-        if( nValue > 0 )
-            nWidth = nValue * 3;
-    }
+    ::tools::Long nLineEndWidth = 200;
+    if (aSet.GetItemState(XATTR_LINEENDWIDTH) != SfxItemState::INVALID)
+        nLineEndWidth = aSet.Get(XATTR_LINEENDWIDTH).GetValue();
 
     switch (nSlotId)
     {
@@ -750,9 +749,9 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         {
             // connector with arrow ends
             rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-            rAttr.Put(XLineStartWidthItem(nWidth));
+            rAttr.Put(XLineStartWidthItem(nLineStartWidth));
             rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-            rAttr.Put(XLineEndWidthItem(nWidth));
+            rAttr.Put(XLineEndWidthItem(nLineEndWidth));
         }
         break;
 
@@ -766,7 +765,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         {
             // connector with arrow start
             rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
-            rAttr.Put(XLineStartWidthItem(nWidth));
+            rAttr.Put(XLineStartWidthItem(nLineStartWidth));
         }
         break;
 
@@ -780,7 +779,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         {
             // connector with arrow end
             rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), std::move(aArrow)));
-            rAttr.Put(XLineEndWidthItem(nWidth));
+            rAttr.Put(XLineEndWidthItem(nLineEndWidth));
         }
         break;
 
@@ -791,9 +790,9 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         {
             // connector with circle ends
             rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-            rAttr.Put(XLineStartWidthItem(nWidth));
+            rAttr.Put(XLineStartWidthItem(nLineStartWidth));
             rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-            rAttr.Put(XLineEndWidthItem(nWidth));
+            rAttr.Put(XLineEndWidthItem(nLineEndWidth));
         }
         break;
 
@@ -804,7 +803,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         {
             // connector with circle start
             rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-            rAttr.Put(XLineStartWidthItem(nWidth));
+            rAttr.Put(XLineStartWidthItem(nLineStartWidth));
         }
         break;
 
@@ -815,7 +814,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         {
             // connector with circle ends
             rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-            rAttr.Put(XLineEndWidthItem(nWidth));
+            rAttr.Put(XLineEndWidthItem(nLineEndWidth));
         }
         break;
     }
@@ -827,7 +826,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         {
             // circle end
             rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
-            rAttr.Put(XLineEndWidthItem(nWidth));
+            rAttr.Put(XLineEndWidthItem(nLineEndWidth));
         }
         break;
 
@@ -835,7 +834,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         {
             // circle start
             rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), std::move(aCircle)));
-            rAttr.Put(XLineStartWidthItem(nWidth));
+            rAttr.Put(XLineStartWidthItem(nLineStartWidth));
         }
         break;
 
@@ -843,7 +842,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         {
             // square end
             rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
-            rAttr.Put(XLineEndWidthItem(nWidth));
+            rAttr.Put(XLineEndWidthItem(nLineEndWidth));
         }
         break;
 
@@ -851,7 +850,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
         {
             // square start
             rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_SQUARE), std::move(aSquare)));
-            rAttr.Put(XLineStartWidthItem(nWidth));
+            rAttr.Put(XLineStartWidthItem(nLineStartWidth));
         }
         break;
     }
