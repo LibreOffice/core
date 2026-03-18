@@ -2251,6 +2251,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         {
             if (pFieldContext->GetFieldId() == FIELD_IF || pFieldContext->GetFieldId() == FIELD_REF)
             {
+                // in case a cell needs to start: make sure it knows the current text position
+                if (hasTableManager())
+                    getTableManager().handle(m_rDMapper.GetCurrentTextRange()->getEnd());
+
                 // Conditional text fields can't contain newlines, finish the paragraph later.
                 FieldParagraph aFinish{pPropertyMap, bRemove};
                 pFieldContext->GetParagraphsToFinish().push_back(aFinish);
