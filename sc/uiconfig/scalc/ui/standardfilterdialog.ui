@@ -263,9 +263,13 @@
                                   <item translatable="yes" context="standardfilterdialog|connect3">AND</item>
                                   <item translatable="yes" context="standardfilterdialog|connect3">OR</item>
                                 </items>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label2"/>
+                                </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="connect3-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect3-atkobject">Operator 3</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|connect3">For the following arguments, you can choose between the logical operators AND / OR.</property>
                                   </object>
                                 </child>
                               </object>
@@ -282,9 +286,13 @@
                                   <item translatable="yes" context="standardfilterdialog|connect4">AND</item>
                                   <item translatable="yes" context="standardfilterdialog|connect4">OR</item>
                                 </items>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label2"/>
+                                </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="connect4-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|connect4-atkobject">Operator 4</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|connect4">For the following arguments, you can choose between the logical operators AND / OR.</property>
                                   </object>
                                 </child>
                               </object>
@@ -398,9 +406,13 @@
                               <object class="GtkComboBoxText" id="field4">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label3"/>
+                                </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="field4-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|field4-atkobject">Field Name 4</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|field4">Specifies the field names from the current table to set them in the argument.</property>
                                   </object>
                                 </child>
                               </object>
@@ -550,9 +562,13 @@
                                   <item translatable="yes" context="standardfilterdialog|cond">Font color</item>
                                   <item translatable="yes" context="standardfilterdialog|cond">Background color</item>
                                 </items>
+                                <accessibility>
+                                  <relation type="labelled-by" target="label4"/>
+                                </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="cond4-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|cond4-atkobject">Condition 4</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|cond4">Specifies the comparative operators through which the entries in the Field name and Value fields can be linked.</property>
                                   </object>
                                 </child>
                               </object>
@@ -632,6 +648,9 @@
                                     <property name="can-focus">False</property>
                                     <property name="hexpand">True</property>
                                     <property name="has-entry">True</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label5"/>
+                                    </accessibility>
                                     <child internal-child="entry">
                                       <object class="GtkEntry">
                                         <property name="can-focus">True</property>
@@ -639,9 +658,6 @@
                                         <property name="truncate-multiline">True</property>
                                       </object>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val2-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
@@ -662,6 +678,15 @@
                                     <property name="model">liststore2</property>
                                     <property name="entry_text_column">0</property>
                                     <property name="id_column">1</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label5"/>
+                                    </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="color2-atkobject">
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color2-atkobject">Color</property>
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color2">Specifies a color to filter the field.</property>
+                                      </object>
+                                    </child>
                                     <child>
                                       <object class="GtkCellRendererText"/>
                                       <attributes>
@@ -673,15 +698,6 @@
                                       <attributes>
                                         <attribute name="pixbuf">3</attribute>
                                       </attributes>
-                                    </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="color2-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color2-atkobject">Color</property>
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color2">Specifies a color to filter the field.</property>
-                                      </object>
                                     </child>
                                   </object>
                                   <packing>
@@ -706,6 +722,9 @@
                                     <property name="can-focus">False</property>
                                     <property name="hexpand">True</property>
                                     <property name="has-entry">True</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label5"/>
+                                    </accessibility>
                                     <child internal-child="entry">
                                       <object class="GtkEntry">
                                         <property name="can-focus">True</property>
@@ -713,9 +732,6 @@
                                         <property name="truncate-multiline">True</property>
                                       </object>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val1-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
@@ -736,6 +752,15 @@
                                     <property name="model">liststore1</property>
                                     <property name="entry_text_column">0</property>
                                     <property name="id_column">1</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label5"/>
+                                    </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="color1-atkobject">
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color1-atkobject">Color</property>
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color1">Specifies a color to filter the field.</property>
+                                      </object>
+                                    </child>
                                     <child>
                                       <object class="GtkCellRendererText"/>
                                       <attributes>
@@ -747,15 +772,6 @@
                                       <attributes>
                                         <attribute name="pixbuf">3</attribute>
                                       </attributes>
-                                    </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="color1-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color1-atkobject">Color</property>
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color1">Specifies a color to filter the field.</property>
-                                      </object>
                                     </child>
                                   </object>
                                   <packing>
@@ -780,6 +796,9 @@
                                     <property name="can-focus">False</property>
                                     <property name="hexpand">True</property>
                                     <property name="has-entry">True</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label5"/>
+                                    </accessibility>
                                     <child internal-child="entry">
                                       <object class="GtkEntry">
                                         <property name="can-focus">True</property>
@@ -787,9 +806,6 @@
                                         <property name="truncate-multiline">True</property>
                                       </object>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val3-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
@@ -810,6 +826,15 @@
                                     <property name="model">liststore3</property>
                                     <property name="entry_text_column">0</property>
                                     <property name="id_column">1</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label5"/>
+                                    </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="color3-atkobject">
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color3-atkobject">Color</property>
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color3">Specifies a color to filter the field.</property>
+                                      </object>
+                                    </child>
                                     <child>
                                       <object class="GtkCellRendererText"/>
                                       <attributes>
@@ -821,15 +846,6 @@
                                       <attributes>
                                         <attribute name="pixbuf">3</attribute>
                                       </attributes>
-                                    </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="color3-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color3-atkobject">Color</property>
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color3">Specifies a color to filter the field.</property>
-                                      </object>
                                     </child>
                                   </object>
                                   <packing>
@@ -854,6 +870,9 @@
                                     <property name="can-focus">False</property>
                                     <property name="hexpand">True</property>
                                     <property name="has-entry">True</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label5"/>
+                                    </accessibility>
                                     <child internal-child="entry">
                                       <object class="GtkEntry">
                                         <property name="can-focus">True</property>
@@ -861,9 +880,6 @@
                                         <property name="truncate-multiline">True</property>
                                       </object>
                                     </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="val4-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|val1-atkobject">Value 1</property>
@@ -884,6 +900,15 @@
                                     <property name="model">liststore4</property>
                                     <property name="entry_text_column">0</property>
                                     <property name="id_column">1</property>
+                                    <accessibility>
+                                      <relation type="labelled-by" target="label5"/>
+                                    </accessibility>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="color4-atkobject">
+                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color4-atkobject">Color</property>
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color4">Specifies a color to filter the field.</property>
+                                      </object>
+                                    </child>
                                     <child>
                                       <object class="GtkCellRendererText"/>
                                       <attributes>
@@ -895,15 +920,6 @@
                                       <attributes>
                                         <attribute name="pixbuf">3</attribute>
                                       </attributes>
-                                    </child>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="label5"/>
-                                    </accessibility>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="color4-atkobject">
-                                        <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|color4-atkobject">Color</property>
-                                        <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|color4">Specifies a color to filter the field.</property>
-                                      </object>
                                     </child>
                                   </object>
                                   <packing>
