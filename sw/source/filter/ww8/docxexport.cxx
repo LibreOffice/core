@@ -492,6 +492,12 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
 
 OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
 {
+    // Check if the OLE is already exported
+    const OUString& sPersistName = rObject.GetCurrentPersistName();
+    auto it = m_aOLECache.find(sPersistName);
+    if (it != m_aOLECache.end())
+        return OUStringToOString(it->second, RTL_TEXTENCODING_UTF8);
+
     uno::Reference <embed::XEmbeddedObject> xObj( rObject.GetOleRef() );
     uno::Reference<uno::XComponentContext> const xContext(
         GetFilter().getComponentContext());
@@ -535,6 +541,7 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
         io_rProgID = OUString::createFromAscii(pProgID);
     }
 
+    m_aOLECache[sPersistName] = sId;
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 

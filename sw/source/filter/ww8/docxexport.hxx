@@ -26,6 +26,7 @@
 #include <sax/fshelper.hxx>
 #include <rtl/ustring.hxx>
 
+#include <map>
 #include <memory>
 #include <ndole.hxx>
 #include <unotools/securityoptions.hxx>
@@ -93,6 +94,9 @@ class DocxExport : public MSWordExportBase
 
     /// OLE objects counter.
     sal_Int32 m_nOLEObjects;
+
+    /// Cache of already exported OLEs
+    std::map<OUString, OUString> m_aOLECache;
 
     /// ActiveX controls counter
     sal_Int32 m_nActiveXControls;
