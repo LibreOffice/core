@@ -1,4 +1,5 @@
 import os
+import sys
 import unittest
 
 class ImportsTest(unittest.TestCase):
@@ -62,6 +63,9 @@ class ImportsTest(unittest.TestCase):
             print(str(_hashlib), file=devnull)
 
     def test_lzma_import(self):
+        if sys.platform == 'darwin':
+            return
+
         import lzma
 
         # use imported lzma module for pyflakes
