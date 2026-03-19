@@ -54,11 +54,13 @@ struct C4 : public C3
 struct C5 : public C4
 {
     sal_Int64 n5;
+    // [-loplugin:fakebool] false positive:
     sal_Bool b5;
 };
 struct C6 : public C1
 {
     C5 c6 CPPU_GCC3_ALIGN( C1 );
+    // [-loplugin:fakebool] false positive:
     sal_Bool b6;
 };
 
