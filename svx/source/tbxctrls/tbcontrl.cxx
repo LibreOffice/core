@@ -1792,6 +1792,7 @@ void SvxFontNameBox_Base::CheckAndMarkUnknownFont()
         {
             font.SetItalic( ITALIC_NONE );
             m_xWidget->set_entry_font(font);
+            m_xWidget->set_entry_message_type(weld::EntryMessageType::Normal);
             m_xWidget->set_tooltip_text(SvxResId(RID_SVXSTR_CHARFONTNAME));
         }
     }
@@ -1801,6 +1802,7 @@ void SvxFontNameBox_Base::CheckAndMarkUnknownFont()
         {
             font.SetItalic( ITALIC_NORMAL );
             m_xWidget->set_entry_font(font);
+            m_xWidget->set_entry_message_type(weld::EntryMessageType::Warning);
             m_xWidget->set_tooltip_text(SvxResId(RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE));
         }
     }

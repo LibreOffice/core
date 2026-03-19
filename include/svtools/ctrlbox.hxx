@@ -379,6 +379,7 @@ public:
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont
     void set_entry_font(const vcl::Font& rFont) { m_xComboBox->set_entry_font(rFont); }
+    void set_entry_message_type(weld::EntryMessageType eType) { m_xComboBox->set_entry_message_type(eType); }
     vcl::Font get_entry_font() { return m_xComboBox->get_entry_font(); }
 
     void set_tooltip_text(const OUString& rTip) { m_xComboBox->set_tooltip_text(rTip); }
