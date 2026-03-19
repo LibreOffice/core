@@ -71,6 +71,7 @@ public:
     void testTdf151846();
     void testTdf155780_filename_display_format();
     void testTdf162431();
+    void testTableCursorMergeMacro();
     void testFdo55289();
     void testFdo68983();
     void testFdo87530();
@@ -85,6 +86,7 @@ public:
     CPPUNIT_TEST(testTdf151846);
     CPPUNIT_TEST(testTdf155780_filename_display_format);
     CPPUNIT_TEST(testTdf162431);
+    CPPUNIT_TEST(testTableCursorMergeMacro);
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
     CPPUNIT_TEST(testFdo87530);
@@ -383,6 +385,19 @@ void SwMacrosTest::testTdf162431()
     OUString aStringRes;
     CPPUNIT_ASSERT(aRet >>= aStringRes);
     CPPUNIT_ASSERT_EQUAL(u"OK"_ustr, aStringRes);
+}
+
+void SwMacrosTest::testTableCursorMergeMacro()
+{
+    // Given a document with a Basic macro that creates a table, merges cells,
+    // then accesses RangeName on the cursor after merge:
+    loadFromFile(u"odt/tablecursor-merge-macro.odt");
+
+    // When running the macro — must not crash in BigPtrEntry::GetPos():
+    // Without the accompanying fix in place, this would have crashed because
+    // getRangeName() dereferences a stale node after mergeRange().
+    executeMacro(
+        u"vnd.sun.Star.script:Standard.Module1.Main?language=Basic&location=document"_ustr);
 }
 
 void SwMacrosTest::testFdo55289()
