@@ -1806,13 +1806,42 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf169326_ignoreLineBreaksInReferencedCel
     createScDoc("xlsx/tdf169326_ignore_line_breaks_in_referenced_cells.xlsx");
     ScDocument* pDoc = getScDoc();
 
-    // A1 contains "Hello\nWorld" (with a line break), and B1 contains the formula "=A1".
-    // The formula in B1 (which references A1) should evaluate to "HelloWorld", ignoring the line break in A1.
+    // A1 contains "Hello\nWorld" (with a line break), and B2 contains the formula "=A1".
+    // The formula in B2 (which references A1) should evaluate to "HelloWorld", ignoring the line break in A1.
     CPPUNIT_ASSERT_EQUAL(u"HelloWorld"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
 
     // Set formula in C3 to reference A1 as well.
     pDoc->SetString(ScAddress(2, 2, 0), u"=A1"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"HelloWorld"_ustr, pDoc->GetString(ScAddress(2, 2, 0)));
+
+    // save as ODS and reload.
+    saveAndReload(TestFilter::ODS);
+    ScDocument* pOdsDoc = getScDoc();
+
+    // ODS documents saved from XLSX, should also ignore line breaks in referenced cells.
+    CPPUNIT_ASSERT_EQUAL(u"HelloWorld"_ustr, pOdsDoc->GetString(ScAddress(1, 1, 0))); // B2
+    CPPUNIT_ASSERT_EQUAL(u"HelloWorld"_ustr, pOdsDoc->GetString(ScAddress(2, 2, 0))); // C3
+
+    // Set formula in D4 to reference A1.
+    pOdsDoc->SetString(ScAddress(3, 3, 0), u"=A1"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"HelloWorld"_ustr, pOdsDoc->GetString(ScAddress(3, 3, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf169326_testLineBreaksInODS)
+{
+    // create an empty ODS document.
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Set a string with line break in A1.
+    pDoc->SetString(ScAddress(0, 0, 0), u"Hello\nWorld"_ustr);
+
+    // set a formula in B2 to reference A1.
+    pDoc->SetString(ScAddress(1, 1, 0), u"=A1"_ustr);
+
+    // The formula in B2 should evaluate to "Hello\nWorld", preserving the line break in A1.
+    // Because, newly created ODS documents should not ignore line breaks.
+    CPPUNIT_ASSERT_EQUAL(u"Hello\nWorld"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testCellValuesExportODS)

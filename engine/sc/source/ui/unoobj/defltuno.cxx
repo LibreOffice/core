@@ -63,6 +63,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetDocDefaultsMap()
         { SC_UNO_CTL_CHEIGHT,  ATTR_CTL_FONT_HEIGHT, cppu::UnoType<float>::get(), 0, MID_FONTHEIGHT | CONVERT_TWIPS },
         { SC_UNO_STANDARDDEC,              0,      cppu::UnoType<sal_Int16>::get(),        0, 0 },
         { SC_UNO_TABSTOPDIS,               0,      cppu::UnoType<sal_Int32>::get(),        0, 0 },
+        { SC_UNONAME_WRAP,                 0,      cppu::UnoType<sal_Int16>::get(),        0, 0 },
     };
     return aDocDefaultsMap_Impl;
 }
@@ -135,6 +136,22 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             if (aValue >>= nValue)
             {
                 aDocOpt.SetStdPrecision(static_cast<sal_uInt16> (nValue));
+                rDoc.SetDocOptions(aDocOpt);
+            }
+        }
+        else if(aPropertyName == SC_UNONAME_WRAP)
+        {
+            ScDocument& rDoc = pDocShell->GetDocument();
+            ScDocOptions aDocOpt(rDoc.GetDocOptions());
+            bool bValue = false;
+
+            aValue >>= bValue;
+            if (bValue)
+            {
+                // ODS documents converted from XLSX:
+                // if wrap option is enabled, it means the original XLSX document had some cells with line breaks.
+                // we need to keep the same behavior in ODS documents too.
+                aDocOpt.SetIgnoreLineBreaks(true);
                 rDoc.SetDocOptions(aDocOpt);
             }
         }
@@ -220,6 +237,14 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
             // SvNumberFormatter::UNLIMITED_PRECISION.
             if (nPrec <= ::std::numeric_limits<sal_Int16>::max())
                 aRet <<= static_cast<sal_Int16> (nPrec);
+        }
+        else if(aPropertyName == SC_UNONAME_WRAP)
+        {
+            ScDocument& rDoc = pDocShell->GetDocument();
+            const ScDocOptions& aDocOpt = rDoc.GetDocOptions();
+
+            bool bWrap = aDocOpt.IsIgnoreLineBreaks();
+            aRet <<=  bWrap;
         }
         else if (aPropertyName == SC_UNO_TABSTOPDIS)
         {
