@@ -6058,7 +6058,8 @@ static bool getFromTransferable(
     // Take care of UTF-8 text here.
     bool bConvert = false;
     sal_Int32 nIndex = 0;
-    if (o3tl::getToken(aMimeType, 0, ';', nIndex) == "text/plain")
+    OString aBaseType(o3tl::getToken(aMimeType, 0, ';', nIndex));
+    if (aBaseType == "text/plain")
     {
         if (o3tl::getToken(aMimeType, 0, ';', nIndex) == "charset=utf-8")
         {
@@ -6066,10 +6067,15 @@ static bool getFromTransferable(
             bConvert = true;
         }
     }
+    else if (aBaseType == "text/markdown")
+    {
+        aMimeType = "text/markdown"_ostr;
+        bConvert = true;
+    }
 
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = OUString::fromUtf8(aMimeType);
-    if (aMimeType == "text/plain;charset=utf-16")
+    if (aMimeType == "text/plain;charset=utf-16" || aMimeType == "text/markdown")
         aFlavor.DataType = cppu::UnoType<OUString>::get();
     else
         aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
