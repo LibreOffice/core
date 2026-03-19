@@ -1566,6 +1566,7 @@ void SwDoc::SetAllUniqueFlyNames()
     }
 }
 
+// [-loplugin:staticmethods]: assert(mbInReading);
 bool SwDoc::IsInHeaderFooter( const SwNode& rIdx ) const
 {
     // That can also be a Fly in a Fly in the Header.

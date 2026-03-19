@@ -233,13 +233,17 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
 
+    FunctionDecl const * def = pCXXMethodDecl->getDefinition();
+    if (def != nullptr && suppressWarningAt(def->getLocation())) {
+        return true;
+    }
+
     report(
         DiagnosticsEngine::Warning,
         "this member function can be declared static",
         pCXXMethodDecl->getCanonicalDecl()->getLocation())
       << pCXXMethodDecl->getCanonicalDecl()->getSourceRange();
-    FunctionDecl const * def;
-    if (pCXXMethodDecl->isDefined(def)
+    if (def != nullptr
         && def != pCXXMethodDecl->getCanonicalDecl())
     {
         report(DiagnosticsEngine::Note, "defined here:", def->getLocation())

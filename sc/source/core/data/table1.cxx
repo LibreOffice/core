@@ -2787,6 +2787,7 @@ ScColumnsRange ScTable::GetAllocatedColumnsRange(SCCOL nColBegin, SCCOL nColEnd)
     return GetColumnsRange(nColBegin, nColEnd);
 }
 
+// [-loplugin:staticmethods]: assert( ... GetDoc() ... );
 ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
 {
     // because the range is inclusive, some code will pass nColEnd<nColBegin to indicate an empty range
