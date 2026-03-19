@@ -45,7 +45,7 @@ enum class OperationType
     ChangeIndent,
     AutoFormat,
     EnterMatrix,
-    TabOperation,
+    MultipleOps,
     FillSimple,
     FillSeries,
     FillAuto,

@@ -74,8 +74,8 @@ std::string_view operationTypeString(OperationType eOperation)
             return "AutoFormat";
         case OperationType::EnterMatrix:
             return "EnterMatrix";
-        case OperationType::TabOperation:
-            return "TabOperation";
+        case OperationType::MultipleOps:
+            return "MultipleOps";
         case OperationType::FillSimple:
             return "FillSimple";
         case OperationType::FillSeries:
