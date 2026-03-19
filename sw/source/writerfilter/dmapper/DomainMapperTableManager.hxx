@@ -45,8 +45,18 @@ class DomainMapperTableManager : public TableManager
     std::vector< OUString > m_aTableStyleNames;
     /// Moved table (in moveRangeFromStart...moveRangeFromEnd or moveRangeToStart...moveRangeToEnd)
     std::vector< OUString > m_aMoved;
-    /// Grab-bag of table look attributes for preserving.
-    comphelper::SequenceAsHashMap m_aTableLook;
+
+    struct TableLook
+    {
+        std::optional<sal_Int32> nVal;
+        std::optional<bool> bFirstRow;
+        std::optional<bool> bLastRow;
+        std::optional<bool> bFirstColumn;
+        std::optional<bool> bLastColumn;
+        std::optional<bool> bNoHBand;
+        std::optional<bool> bNoVBand;
+    } m_TableLook;
+
     std::vector< TablePositionHandlerPtr > m_aTablePositions;
     std::vector< TablePositionHandlerPtr > m_aTmpPosition; ///< Temporarily stores the position to compare it later
     std::vector< TablePropertyMapPtr > m_aTmpTableProperties; ///< Temporarily stores the table properties until end of row

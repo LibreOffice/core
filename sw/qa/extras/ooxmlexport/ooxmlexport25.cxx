@@ -91,6 +91,39 @@ DECLARE_OOXMLEXPORT_TEST(testTdf171299_tableInField, "tdf171299_tableInField.doc
     CPPUNIT_ASSERT_EQUAL(OUString("ID"), xCell->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf167843_tblLook_firstRow_tblHeader,
+                         "tdf167843_tblLook_firstRow_tblHeader.docx")
+{
+    // Given a table with a colorful table style defined
+    // but a hand-mangled tblLook where the legacy w:val does not match the explicit elements.
+    //     <w:tblLook w:val="04A0" w:firstRow="0"/>
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // w:firstRow=0, so firstRow style should not be applied - i.e. no formatting.
+    // w:val disagrees, but it is ignored since a w:firstRow has been explicitly provided
+    uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, u"BackColor"_ustr));
+
+    // since firstRow style is not applied, do not inherit the style's tblHeader
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextTable, u"HeaderRowCount"_ustr));
+
+    // w:firstColumn not provided, so it is on by default (regardless of w:val, although it agrees)
+    xCell.set(xTextTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xd9d9d9), getProperty<Color>(xCell, u"BackColor"_ustr)); // gray 1
+
+    // w:lastColumn not provided, so it is on by default (regardless of w:val, which disagrees)
+    xCell.set(xTextTable->getCellByName(u"G1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xbfbfbf), getProperty<Color>(xCell, u"BackColor"_ustr)); // gray 2
+
+    // w:lastRow not provided, so it is on by default (regardless of w:val, which disagrees)
+    xCell.set(xTextTable->getCellByName(u"A8"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xc1e4f5), getProperty<Color>(xCell, u"BackColor"_ustr)); // blue
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf166141_linkedStyles, "tdf166141_linkedStyles.docx")
 {
     // Given a document with settings.xml containing both linkStyles and attachedTemplate
