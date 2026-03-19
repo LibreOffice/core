@@ -17,14 +17,14 @@
 
 namespace sc
 {
-UndoInsertSheetView::UndoInsertSheetView(ScDocShell& rDocShell, SCTAB nTab, SCTAB nSheetViewTab,
+UndoInsertSheetView::UndoInsertSheetView(ScDocShell& rNewDocShell, SCTAB nTab, SCTAB nSheetViewTab,
                                          SheetViewID nSheetViewID)
-    : ScSimpleUndo(rDocShell)
+    : ScSimpleUndo(rNewDocShell)
     , mnTab(nTab)
     , mnSheetViewTab(nSheetViewTab)
     , mnSheetViewID(nSheetViewID)
 {
-    mpDrawUndo = GetSdrUndoAction(&rDocShell.GetDocument());
+    mpDrawUndo = GetSdrUndoAction(&rNewDocShell.GetDocument());
 }
 
 UndoInsertSheetView::~UndoInsertSheetView() = default;
