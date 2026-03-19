@@ -178,7 +178,7 @@ void EMFWriter::WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSiz
         nDPIY /= nDivY; // DPI Y
 
     m_rStm.WriteInt16( sal_Int16(EmfPlusRecordType::Header) );
-    m_rStm.WriteInt16( 0x01 )  // Flags - Dual Mode // TODO: Check this
+    m_rStm.WriteInt16( 0x01 )  // Flags - Dual Mode
           .WriteInt32( 0x1C )  // Size
           .WriteInt32( 0x10 )  // Data Size
           .WriteInt32( 0xdbc01002 ) // (lower 12bits) 1-> v1 2-> v1.1 // TODO: Check this
@@ -219,7 +219,7 @@ void EMFWriter::ImplWritePlusPoint( const Point& rPoint )
 {
     // Convert to pixels
     const Point aPoint(maVDev->LogicToPixel( rPoint, maDestMapMode ));
-    m_rStm.WriteUInt16( aPoint.X() ).WriteUInt16( aPoint.Y() );
+    m_rStm.WriteInt16(aPoint.X()).WriteInt16(aPoint.Y());
 }
 
 void EMFWriter::ImplWritePlusFillPolygonRecord( const tools::Polygon& rPoly, sal_uInt32 nTrans )
