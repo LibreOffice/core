@@ -1685,11 +1685,19 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             ;
         else
         {
+            // Each autocorrect function below (FnCorrectCapsLock,
+            // FnCapitalStartSentence, FnCapitalStartWord) can modify the
+            // document via rDoc.Replace. With track changes enabled, this can
+            // cause the text frame's text to be freed and reallocated, making
+            // rTxt a dangling reference. Use a local copy to avoid
+            // use-after-free when subsequent functions read the text.
+            OUString aTxt(rTxt);
+
             bool bLockKeyOn = pFrameWin && (pFrameWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK);
-            bool bUnsupported = lcl_IsUnsupportedUnicodeChar( rCC, rTxt, nCapLttrPos, nInsPos );
+            bool bUnsupported = lcl_IsUnsupportedUnicodeChar( rCC, aTxt, nCapLttrPos, nInsPos );
 
             if ( bLockKeyOn && IsAutoCorrFlag( ACFlags::CorrectCapsLock ) &&
-                 FnCorrectCapsLock( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
+                 FnCorrectCapsLock( rDoc, aTxt, nCapLttrPos, nInsPos, eLang ) )
             {
                 // Correct accidental use of cAPS LOCK key (do this only when
                 // the caps or shift lock key is pressed). Turn off the caps
@@ -1701,19 +1709,19 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             if( !bUnsupported &&
                 IsAutoCorrFlag( ACFlags::CapitalStartSentence ) )
             {
-                FnCapitalStartSentence( rDoc, rTxt, true, nCapLttrPos, nInsPos, eLang );
+                FnCapitalStartSentence( rDoc, aTxt, true, nCapLttrPos, nInsPos, eLang );
             }
 
             // Two capital letters at beginning of word ??
             if( !bUnsupported &&
                 IsAutoCorrFlag( ACFlags::CapitalStartWord ) )
             {
-                FnCapitalStartWord( rDoc, rTxt, nCapLttrPos, nInsPos, eLang );
+                FnCapitalStartWord( rDoc, aTxt, nCapLttrPos, nInsPos, eLang );
             }
 
             if( IsAutoCorrFlag( ACFlags::ChgToEnEmDash ) )
             {
-                FnChgToEnEmDash( rDoc, rTxt, nCapLttrPos, nInsPos, eLang );
+                FnChgToEnEmDash( rDoc, aTxt, nCapLttrPos, nInsPos, eLang );
             }
         }
 
