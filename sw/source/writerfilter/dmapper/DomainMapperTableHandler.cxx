@@ -369,6 +369,24 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             aGrabBag[u"TablePosition"_ustr] = uno::Any();
         }
 
+        // This one is simply preserving all the table look attributes for a round-trip.
+        const std::optional<PropertyMap::Property> oTableLook
+            = m_aTableProperties->getProperty(META_PROP_TABLE_LOOK);
+        if (oTableLook)
+        {
+            aGrabBag[u"TableStyleLook"_ustr] = oTableLook->second;
+            m_aTableProperties->Erase(oTableLook->first);
+        }
+
+        // The "val" attribute's numeric value: a bit flag indicating applied style elements.
+        const std::optional<PropertyMap::Property> aTblLook
+            = m_aTableProperties->getProperty(PROP_TBL_LOOK);
+        if(aTblLook)
+        {
+            aTblLook->second >>= rInfo.nTblLook;
+            m_aTableProperties->Erase( aTblLook->first );
+        }
+
         std::optional<PropertyMap::Property> aTableStyleVal = m_aTableProperties->getProperty(META_PROP_TABLE_STYLE_NAME);
         if(aTableStyleVal)
         {
@@ -425,30 +443,14 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 m_aTableProperties->dumpXml();
                 TagLogger::getInstance().endElement();
 #endif
-                if (pTableStyle)
+                if (pTableStyle && (rInfo.nTblLook & 0x020))  // first row style used
                 {
-                    // apply tblHeader setting of the table style
+                    // apply (without overwriting) tblHeader setting of the table style
                     PropertyMapPtr pHeaderStyleProps = pTableStyle->GetProperties(CNF_FIRST_ROW);
                     if ( pHeaderStyleProps->getProperty(PROP_HEADER_ROW_COUNT) )
                         m_aTableProperties->Insert(PROP_HEADER_ROW_COUNT, uno::Any( sal_Int32(1)), false);
                 }
             }
-        }
-
-        // This is the one preserving just all the table look attributes.
-        std::optional<PropertyMap::Property> oTableLook = m_aTableProperties->getProperty(META_PROP_TABLE_LOOK);
-        if (oTableLook)
-        {
-            aGrabBag[u"TableStyleLook"_ustr] = oTableLook->second;
-            m_aTableProperties->Erase(oTableLook->first);
-        }
-
-        // This is just the "val" attribute's numeric value.
-        const std::optional<PropertyMap::Property> aTblLook = m_aTableProperties->getProperty(PROP_TBL_LOOK);
-        if(aTblLook)
-        {
-            aTblLook->second >>= rInfo.nTblLook;
-            m_aTableProperties->Erase( aTblLook->first );
         }
 
         // apply cell margin settings of the table style
