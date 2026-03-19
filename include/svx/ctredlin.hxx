@@ -37,6 +37,7 @@ namespace utl {
 
 namespace comphelper::string { class NaturalStringSorter; }
 
+class SfxViewShell;
 class SvtCalendarBox;
 
 enum class SvxRedlinDateMode
@@ -292,10 +293,10 @@ public:
 
     weld::ComboBox* GetSortByComboBoxControl() { return m_xSortByComboBox.get(); }
 
-    void            EnableAccept(bool bFlag);
-    void            EnableAcceptAll(bool bFlag);
-    void            EnableReject(bool bFlag);
-    void            EnableRejectAll(bool bFlag);
+    void            EnableAccept(bool bFlag, const SfxViewShell* pShell = nullptr);
+    void            EnableAcceptAll(bool bFlag, const SfxViewShell* pShell = nullptr);
+    void            EnableReject(bool bFlag, const SfxViewShell* pShell = nullptr);
+    void            EnableRejectAll(bool bFlag, const SfxViewShell* pShell = nullptr);
     void            EnableUndo(bool bFlag=true);
     void            DisableUndo()       {EnableUndo(false);}
     void            ShowUndo();

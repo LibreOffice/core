@@ -380,14 +380,10 @@ void SwRedlineAcceptDlg::EnableControls(const SwView* pView)
         return false;
     });
 
-    m_pTPView->EnableAccept(bEnable && bAcceptReject
-                            && !pView->isBlockedCommand(u".uno:AcceptTrackedChange"_ustr));
-    m_pTPView->EnableReject(bEnable && bAcceptReject
-                            && !pView->isBlockedCommand(u".uno:RejectTrackedChange"_ustr));
-    m_pTPView->EnableAcceptAll(bEnable
-                               && !pView->isBlockedCommand(u".uno:AcceptAllTrackedChanges"_ustr));
-    m_pTPView->EnableRejectAll(bEnable
-                               && !pView->isBlockedCommand(u".uno:RejectAllTrackedChanges"_ustr));
+    m_pTPView->EnableAccept(bEnable && bAcceptReject, pView);
+    m_pTPView->EnableReject(bEnable && bAcceptReject, pView);
+    m_pTPView->EnableAcceptAll(bEnable, pView);
+    m_pTPView->EnableRejectAll(bEnable, pView);
 }
 
 const OUString & SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack,

@@ -21,6 +21,7 @@
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/safeint.hxx>
+#include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weldutils.hxx>
@@ -388,28 +389,32 @@ void SvxRedlinTable::SetCalcView()
     m_pTreeView->set_column_fixed_widths(aWidths);
 }
 
-void SvxTPView::EnableAccept(bool bFlag)
+void SvxTPView::EnableAccept(bool bFlag, const SfxViewShell* pShell)
 {
-    m_bEnableAccept = bFlag;
-    m_xAccept->set_sensitive(bFlag);
+    m_bEnableAccept
+        = bFlag && (!pShell || !pShell->isBlockedCommand(u".uno:AcceptTrackedChange"_ustr));
+    m_xAccept->set_sensitive(m_bEnableAccept);
 }
 
-void SvxTPView::EnableAcceptAll(bool bFlag)
+void SvxTPView::EnableAcceptAll(bool bFlag, const SfxViewShell* pShell)
 {
-    m_bEnableAcceptAll = bFlag;
-    m_xAcceptAll->set_sensitive(bFlag);
+    m_bEnableAcceptAll
+        = bFlag && (!pShell || !pShell->isBlockedCommand(u".uno:AcceptAllTrackedChanges"_ustr));
+    m_xAcceptAll->set_sensitive(m_bEnableAcceptAll);
 }
 
-void SvxTPView::EnableReject(bool bFlag)
+void SvxTPView::EnableReject(bool bFlag, const SfxViewShell* pShell)
 {
-    m_bEnableReject = bFlag;
-    m_xReject->set_sensitive(bFlag);
+    m_bEnableReject
+        = bFlag && (!pShell || !pShell->isBlockedCommand(u".uno:RejectTrackedChange"_ustr));
+    m_xReject->set_sensitive(m_bEnableReject);
 }
 
-void SvxTPView::EnableRejectAll(bool bFlag)
+void SvxTPView::EnableRejectAll(bool bFlag, const SfxViewShell* pShell)
 {
-    m_bEnableRejectAll = bFlag;
-    m_xRejectAll->set_sensitive(bFlag);
+    m_bEnableRejectAll
+        = bFlag && (!pShell || !pShell->isBlockedCommand(u".uno:RejectAllTrackedChanges"_ustr));
+    m_xRejectAll->set_sensitive(m_bEnableRejectAll);
 }
 
 void SvxTPView::ShowUndo()

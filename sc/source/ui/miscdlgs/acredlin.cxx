@@ -770,10 +770,10 @@ void ScAcceptChgDlg::UpdateView()
     if( bTheFlag && (!pDoc->IsDocEditable() || pChanges->IsProtected()) )
         bTheFlag=false;
 
-    pTPView->EnableAccept(bTheFlag);
-    pTPView->EnableAcceptAll(bTheFlag);
-    pTPView->EnableReject(bTheFlag);
-    pTPView->EnableRejectAll(bTheFlag);
+    pTPView->EnableAccept(bTheFlag, pViewData->GetViewShell());
+    pTPView->EnableAcceptAll(bTheFlag, pViewData->GetViewShell());
+    pTPView->EnableReject(bTheFlag, pViewData->GetViewShell());
+    pTPView->EnableRejectAll(bTheFlag, pViewData->GetViewShell());
 
     if (nAcceptCount>0)
         rTreeView.insert(nullptr, -1, &aStrAllAccepted, nullptr, nullptr, nullptr, true, nullptr);
@@ -1357,10 +1357,10 @@ void ScAcceptChgDlg::AppendChanges(const ScChangeTrack* pChanges,sal_uLong nStar
     if( bTheFlag && (!pDoc->IsDocEditable() || pChanges->IsProtected()) )
         bTheFlag=false;
 
-    pTPView->EnableAccept(bTheFlag);
-    pTPView->EnableAcceptAll(bTheFlag);
-    pTPView->EnableReject(bTheFlag);
-    pTPView->EnableRejectAll(bTheFlag);
+    pTPView->EnableAccept(bTheFlag, pViewData->GetViewShell());
+    pTPView->EnableAcceptAll(bTheFlag, pViewData->GetViewShell());
+    pTPView->EnableReject(bTheFlag, pViewData->GetViewShell());
+    pTPView->EnableRejectAll(bTheFlag, pViewData->GetViewShell());
 
     rTreeView.thaw();
     m_xDialog->set_busy_cursor(false);
@@ -1566,8 +1566,8 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl, Timer *, void)
 
     ScChangeTrack* pChanges = pDoc->GetChangeTrack();
     bool bEnable = pDoc->IsDocEditable() && pChanges && !pChanges->IsProtected();
-    pTPView->EnableAccept( bAcceptFlag && bEnable );
-    pTPView->EnableReject( bRejectFlag && bEnable );
+    pTPView->EnableAccept(bAcceptFlag && bEnable, pViewData->GetViewShell());
+    pTPView->EnableReject(bRejectFlag && bEnable, pViewData->GetViewShell());
 }
 
 IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
