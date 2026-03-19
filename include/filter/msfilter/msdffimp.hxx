@@ -30,6 +30,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <comphelper/stl_types.hxx>
 #include <filter/msfilter/dffpropset.hxx>
 #include <filter/msfilter/dffrecordheader.hxx>
@@ -751,6 +752,9 @@ public:
     void insertShapeId( sal_Int32 nShapeId, SdrObject* pShape );
     void removeShapeId( SdrObject const * pShape );
     SdrObject* getShapeForId( sal_Int32 nShapeId );
+
+    // Read drs/shapexml.xml from metroBlob and return the document element
+    css::uno::Reference<css::xml::dom::XDocument> ParseMetroBlobShapeXML(SvStream& rStream);
 };
 
 struct SvxMSDffShapeInfo

@@ -24,6 +24,9 @@
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/seqstream.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/UnitConversion.hxx>
 #include <editeng/eeitem.hxx>
@@ -32,6 +35,7 @@
 #include <sot/storinfo.hxx>
 #include <sot/stg.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
@@ -119,6 +123,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <svtools/embedhlp.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
@@ -2269,6 +2274,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 rOutliner.SetStyleSheet( 0, pSheet );
         }
         rOutliner.SetVertical( pTextObj->GetVertical() );
+        sal_Int32 nMetroParaIndex = 0;
         for ( PPTParagraphObj* pPara = pTextObj->First(); pPara; pPara = pTextObj->Next() )
         {
             sal_uInt32 nTextSize = pPara->GetTextSize();
@@ -2352,7 +2358,10 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 }
                 std::optional< sal_Int16 > oStartNumbering;
                 SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
-                pPara->ApplyTo( aParagraphAttribs, oStartNumbering, *this, nDestinationInstance );
+                const MetroParagraphIndent* pMetroIndent = nullptr;
+                if (o3tl::make_unsigned(nMetroParaIndex) < pTextObj->GetMetroParagraphIndents().size())
+                    pMetroIndent = &pTextObj->GetMetroParagraphIndents()[nMetroParaIndex];
+                pPara->ApplyTo( aParagraphAttribs, oStartNumbering, *this, nDestinationInstance, pMetroIndent, nMetroParaIndex );
 
                 sal_uInt32  nIsBullet2 = 0; //, nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : pTextObj->GetInstance();
                 pPara->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
@@ -2367,6 +2376,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 }
                 aSelection.start.nIndex = 0;
                 rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
+                nMetroParaIndex++;
             }
         }
         std::optional<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
@@ -3776,17 +3786,20 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport const & rM
     rNumberFormat.SetBulletRelSize( static_cast<sal_uInt16>(nBulletHeight) );
     rNumberFormat.SetBulletColor( aCol );
 
-    // tdf#166030 When bullet is enabled but both offsets are 0 (which is the case for TextInShape)
-    // add some default indentation to match PowerPoint's behavior.
-    if ( nIsBullet && nTextOfs == 0 && nBulletOfs == 0 )
-    {
-        nTextOfs = 216;   // 3/8 inch text indent (~0.95 cm, default PowerPoint bullet indent)
-        nBulletOfs = 0;   // bullet at left edge
-    }
     sal_uInt32 nAbsLSpace = convertMasterUnitToMm100(nTextOfs);
-    sal_uInt32 nFirstLineOffset = nAbsLSpace - convertMasterUnitToMm100(nBulletOfs);
-    rNumberFormat.SetAbsLSpace( nAbsLSpace );
-    rNumberFormat.SetFirstLineOffset( -static_cast<sal_Int32>(nFirstLineOffset) );
+    sal_uInt32 nBulletMm100 = convertMasterUnitToMm100(nBulletOfs);
+    if (nTextOfs >= nBulletOfs)
+    {
+        // Default hanging indent: bullet is left of text
+        rNumberFormat.SetAbsLSpace( nAbsLSpace );
+        rNumberFormat.SetFirstLineOffset( -static_cast<sal_Int32>(nAbsLSpace - nBulletMm100) );
+    }
+    else
+    {
+        // First-line indent: text starts at nBulletOfs, bullet at nTextOfs
+        rNumberFormat.SetAbsLSpace( nBulletMm100 );
+        rNumberFormat.SetFirstLineOffset( -static_cast<sal_Int32>(nBulletMm100 - nAbsLSpace) );
+    }
 }
 
 PPTCharSheet::PPTCharSheet( TSS_Type nInstance )
@@ -6136,51 +6149,65 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
     return bIsHardAttribute;
 }
 
-void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport const & rManager, TSS_Type nDestinationInstance )
+void PPTParagraphObj::ApplyTo(SfxItemSet& rSet, std::optional<sal_Int16>& rStartNumbering,
+                              SdrPowerPointImport const& rManager, TSS_Type nDestinationInstance,
+                              const MetroParagraphIndent* pMetroIndent, sal_Int32 nParaIndex)
 {
     sal_Int16   nVal2;
     sal_uInt32  nVal, nUpperDist, nLowerDist;
     TSS_Type    nInstance = nDestinationInstance != TSS_Type::Unknown ? nDestinationInstance : mnInstance;
-
-    if ( ( nDestinationInstance != TSS_Type::Unknown ) || ( mxParaSet->mnDepth <= 1 ) )
+    SvxNumBulletItem* pNumBulletItem = mrStyleSheet.mpNumBulletItem[ nInstance ].get();
+    if ( pNumBulletItem )
     {
-        SvxNumBulletItem* pNumBulletItem = mrStyleSheet.mpNumBulletItem[ nInstance ].get();
-        if ( pNumBulletItem )
+        SvxNumberFormat aNumberFormat( SVX_NUM_NUMBER_NONE );
+        if ( GetNumberFormat( rManager, aNumberFormat, this, nDestinationInstance, rStartNumbering ) )
         {
-            SvxNumberFormat aNumberFormat( SVX_NUM_NUMBER_NONE );
-            if ( GetNumberFormat( rManager, aNumberFormat, this, nDestinationInstance, rStartNumbering ) )
+            if (pMetroIndent && (pMetroIndent->nMarginLeft.has_value() || pMetroIndent->nIndent.has_value()))
             {
-                if ( aNumberFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE )
-                {
-                    aNumberFormat.SetAbsLSpace( 0 );
-                    aNumberFormat.SetFirstLineOffset( 0 );
-                    aNumberFormat.SetCharTextDistance( 0 );
-                    aNumberFormat.SetFirstLineIndent( 0 );
-                    aNumberFormat.SetIndentAt( 0 );
-                }
-                SvxNumBulletItem aNewNumBulletItem( *pNumBulletItem );
-                SvxNumRule& rRule = aNewNumBulletItem.GetNumRule();
-                rRule.SetLevel( mxParaSet->mnDepth, aNumberFormat );
-                for (sal_uInt16 i = 0; i < rRule.GetLevelCount(); ++i)
-                {
-                    if ( i != mxParaSet->mnDepth )
-                    {
-                        sal_uInt16 n = sanitizeForMaxPPTLevels(i);
-
-                        SvxNumberFormat aNumberFormat2( rRule.GetLevel( i ) );
-                        const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ nInstance ]->maParaLevel[ n ];
-                        const PPTCharLevel& rCharLevel = mrStyleSheet.mpCharSheet[ nInstance ]->maCharLevel[ n ];
-                        sal_uInt32 nColor;
-                        if ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardColor ) )
-                            nColor = rParaLevel.mnBulletColor;
-                        else
-                            nColor = rCharLevel.mnFontColor;
-                        aNumberFormat2.SetBulletColor( rManager.MSO_TEXT_CLR_ToColor( nColor ) );
-                        rRule.SetLevel( i, aNumberFormat2 );
-                    }
-                }
-                rSet.Put( aNewNumBulletItem );
+                sal_Int32 nMarginEmu = pMetroIndent->nMarginLeft.value_or(0);
+                sal_Int32 nIndentEmu = pMetroIndent->nIndent.value_or(0);
+                if (nIndentEmu < 0 && -nIndentEmu > nMarginEmu)
+                    nMarginEmu = -nIndentEmu;
+                // AbsLSpace is where wrapped text starts. With positive
+                // indent (first-line indent) the text starts at margin +
+                // indent; with negative (hanging indent) at margin.
+                sal_Int32 nAbsLSpaceMm100 = (nMarginEmu + std::max(nIndentEmu, sal_Int32(0))) / 360;
+                // FirstLineOffset is always negative or zero: the bullet
+                // hangs to the left of AbsLSpace by indent.
+                sal_Int32 nFirstLineOffsetMm100 = -std::abs(nIndentEmu) / 360;
+                aNumberFormat.SetAbsLSpace(nAbsLSpaceMm100);
+                aNumberFormat.SetFirstLineOffset(nFirstLineOffsetMm100);
             }
+            if ( aNumberFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE )
+            {
+                aNumberFormat.SetAbsLSpace( 0 );
+                aNumberFormat.SetFirstLineOffset( 0 );
+                aNumberFormat.SetCharTextDistance( 0 );
+                aNumberFormat.SetFirstLineIndent( 0 );
+                aNumberFormat.SetIndentAt( 0 );
+            }
+            SvxNumBulletItem aNewNumBulletItem( *pNumBulletItem );
+            SvxNumRule& rRule = aNewNumBulletItem.GetNumRule();
+            rRule.SetLevel( mxParaSet->mnDepth, aNumberFormat );
+            for (sal_uInt16 i = 0; i < rRule.GetLevelCount(); ++i)
+            {
+                if ( i != mxParaSet->mnDepth )
+                {
+                    sal_uInt16 n = sanitizeForMaxPPTLevels(i);
+
+                    SvxNumberFormat aNumberFormat2( rRule.GetLevel( i ) );
+                    const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ nInstance ]->maParaLevel[ n ];
+                    const PPTCharLevel& rCharLevel = mrStyleSheet.mpCharSheet[ nInstance ]->maCharLevel[ n ];
+                    sal_uInt32 nColor;
+                    if ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardColor ) )
+                        nColor = rParaLevel.mnBulletColor;
+                    else
+                        nColor = rCharLevel.mnFontColor;
+                    aNumberFormat2.SetBulletColor( rManager.MSO_TEXT_CLR_ToColor( nColor ) );
+                    rRule.SetLevel( i, aNumberFormat2 );
+                }
+            }
+            rSet.Put( aNewNumBulletItem );
         }
     }
 
@@ -6189,7 +6216,37 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
     GetAttrib(PPT_ParaAttr_TextOfs, _nTextOfs, nDestinationInstance);
     GetAttrib(PPT_ParaAttr_BulletOfs, _nBulletOfs, nDestinationInstance);
     SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
-    if ( !nIsBullet2 )
+    // Check if matching metro blob override exists
+    bool bHasMetroIndent = false;
+    if (nParaIndex != -1 && pMetroIndent)
+    {
+        sal_Int32 nMarginLeftTwips = 0;
+        sal_Int32 nIndentTwips = 0;
+        // Need to convert those from EMU to twips (divide by 635)
+        if (pMetroIndent->nMarginLeft.has_value())
+        {
+            nMarginLeftTwips = pMetroIndent->nMarginLeft.value() / 635;
+            bHasMetroIndent = true;
+        }
+        // indent in ooxml is relative to margin, so calculate offset accordingly
+        if (pMetroIndent->nIndent.has_value())
+        {
+            bHasMetroIndent = true;
+            nIndentTwips
+                = pMetroIndent->nIndent.value() / 635;
+        }
+        if (bHasMetroIndent && !nIsBullet2)
+        {
+            if (nIndentTwips < 0 && -nIndentTwips > nMarginLeftTwips)
+            {
+                // When hanging indent exceeds margin, adjust margin to avoid negative text left value, which is not supported in PPT
+                nMarginLeftTwips = -nIndentTwips;
+            }
+            aLRSpaceItem.SetTextLeft(SvxIndentValue::twips(nMarginLeftTwips));
+            aLRSpaceItem.SetTextFirstLineOffset(SvxIndentValue::twips(nIndentTwips));
+        }
+    }
+    if ( !bHasMetroIndent && !nIsBullet2 )
     {
         // The margin value can't be greater than 51206400 Emu, which is 142240 MM100 ([ISO/IEC 29500-1] 20.1.10.72)
         sal_uInt32 nMaxMarginVal = 142240;
@@ -6418,6 +6475,39 @@ void PPTFieldEntry::SetDateTime( sal_uInt32 nVal )
     }
 }
 
+namespace
+{
+std::vector<MetroParagraphIndent> lcl_readMetroParaIndents(SvxMSDffManager& rManager,
+                                                           SvStream& rStream)
+{
+    std::vector<MetroParagraphIndent> aIndents;
+    auto xDoc = rManager.ParseMetroBlobShapeXML(rStream);
+    if (!xDoc)
+        return aIndents;
+
+    auto xContext(::comphelper::getProcessComponentContext());
+    auto xXPath(css::xml::xpath::XPathAPI::create(xContext));
+    xXPath->registerNS("p", "http://schemas.openxmlformats.org/presentationml/2006/main");
+    xXPath->registerNS("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
+
+    auto xNodeList = xXPath->selectNodeList(xDoc, "//p:txBody/a:p");
+    sal_Int32 nCount = xNodeList->getLength();
+    for (sal_Int32 i = 0; i < nCount; i++)
+    {
+        auto xPara = xNodeList->item(i);
+        MetroParagraphIndent indent;
+        auto xMarginLeft = xXPath->selectSingleNode(xPara, "a:pPr/@marL");
+        if (xMarginLeft.is())
+            indent.nMarginLeft = xMarginLeft->getNodeValue().toInt32();
+        auto xIndent = xXPath->selectSingleNode(xPara, "a:pPr/@indent");
+        if (xIndent.is())
+            indent.nIndent = xIndent->getNodeValue().toInt32();
+        aIndents.emplace_back(indent);
+    }
+    return aIndents;
+}
+}
+
 PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport, PptSlidePersistEntry& rPersistEntry, DffObjData const * pObjData ) :
     mxImplTextObj   ( new ImplPPTTextObj( rPersistEntry ) )
 {
@@ -6446,6 +6536,14 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
         if ( pObjData->nSpFlags & ShapeFlag::HaveMaster )
             mxImplTextObj->mnShapeMaster = rSdrPowerPointImport.GetPropertyValue( DFF_Prop_hspMaster, 0 );
     }
+
+    // tdf#171265 paragraph indent is stored in a special record (metroBlob) which contains some sort of ooxml.
+    // Need to read it from there.
+    if (pObjData && pObjData->bOpt2 && rSdrPowerPointImport.pSecPropSet)
+    {
+        mxImplTextObj->aMetroParagraphIndentList = lcl_readMetroParaIndents(rSdrPowerPointImport, rIn);
+    }
+
     // ClientData
     if ( rSdrPowerPointImport.maShapeRecords.SeekToContent( rIn, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
     {

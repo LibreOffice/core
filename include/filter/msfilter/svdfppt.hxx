@@ -1128,6 +1128,12 @@ public:
     sal_uInt32      Count() const { return mpFieldItem ? 1 : maString.getLength(); };
 };
 
+struct MetroParagraphIndent
+{
+    std::optional<sal_Int32> nMarginLeft;
+    std::optional<sal_Int32> nIndent;
+};
+
 class MSFILTER_DLLPUBLIC PPTParagraphObj
     :   public PPTParaPropSet,
         public PPTNumberFormatCreator,
@@ -1144,6 +1150,8 @@ class MSFILTER_DLLPUBLIC PPTParagraphObj
 
     sal_uInt32              mnCurrentObject;
     ::std::vector<std::unique_ptr<PPTPortionObj>> m_PortionList;
+    std::optional<sal_Int32> mnMetroMarginLevel;
+    std::optional<sal_Int32> mnMetroIndent;
 
 public:
     void                    UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const;
@@ -1173,7 +1181,9 @@ public:
                                 SfxItemSet& rSet,
                                 std::optional< sal_Int16 >& rStartNumbering,
                                 SdrPowerPointImport const & rManager,
-                                TSS_Type nInstanceInSheet
+                                TSS_Type nInstanceInSheet,
+                                const MetroParagraphIndent* pMetroParaIndent = nullptr,
+                                sal_Int32 nParaIndex = -1
                             );
 };
 
@@ -1196,6 +1206,7 @@ struct ImplPPTTextObj final : public salhelper::SimpleReferenceObject
     sal_uInt32                  mnParagraphCount;
     std::vector<std::unique_ptr<PPTParagraphObj>>
                                 maParagraphList;
+    std::vector<MetroParagraphIndent> aMetroParagraphIndentList;
     PptSlidePersistEntry&       mrPersistEntry;
 
     sal_uInt32                  mnTextFlags;
@@ -1254,6 +1265,8 @@ public:
                             { return ( mxImplTextObj->mnTextFlags & PPT_TEXTOBJ_FLAGS_VERTICAL ) != 0; }
 
     const SfxItemSet*       GetBackground() const;
+
+    const std::vector<MetroParagraphIndent>& GetMetroParagraphIndents() const { return mxImplTextObj->aMetroParagraphIndentList; }
 
     PPTTextObj&             operator=( const PPTTextObj& rTextObj );
 };

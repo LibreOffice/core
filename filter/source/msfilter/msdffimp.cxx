@@ -34,6 +34,7 @@
 #include <rtl/math.hxx>
 
 #include <comphelper/classids.hxx>
+#include <comphelper/diagnose_ex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/configuration.hxx>
 #include <unotools/streamwrap.hxx>
@@ -157,6 +158,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <rtl/ustring.hxx>
 #include <svtools/embedhlp.hxx>
@@ -2748,6 +2750,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
     if ( rObjData.bOpt2 )        // sj: #158494# is the second property set available ? if then we have to check the xml data of
     {                            // the shape, because the textrotation of Excel 2003 and greater versions is stored there
                                 // (upright property of the textbox)
+        // TODO: Refactor this to also use GetNodeValueFromMetroBlobShapeXML method
         if ( rManager.pSecPropSet->SeekToContent( DFF_Prop_metroBlob, rIn ) )
         {
             sal_uInt32 nLen = rManager.pSecPropSet->GetPropertyValue( DFF_Prop_metroBlob, 0 );
@@ -7638,6 +7641,45 @@ SdrObject* SvxMSDffManager::getShapeForId( sal_Int32 nShapeId )
 {
     SvxMSDffShapeIdContainer::iterator aIter( maShapeIdContainer.find(nShapeId) );
     return aIter != maShapeIdContainer.end() ? (*aIter).second : nullptr;
+}
+
+css::uno::Reference<css::xml::dom::XDocument> SvxMSDffManager::ParseMetroBlobShapeXML(SvStream& rStream)
+{
+    if (!pSecPropSet || !pSecPropSet->SeekToContent(DFF_Prop_metroBlob, rStream))
+        return {};
+    sal_uInt32 nLen = pSecPropSet->GetPropertyValue(DFF_Prop_metroBlob, 0);
+    if (!nLen)
+        return {};
+    css::uno::Sequence<sal_Int8> aXMLDataSeq(nLen);
+    rStream.ReadBytes(aXMLDataSeq.getArray(), nLen);
+    css::uno::Reference<css::io::XInputStream> xInputStream(
+        new ::comphelper::SequenceInputStream(aXMLDataSeq));
+    try
+    {
+        auto xContext(::comphelper::getProcessComponentContext());
+        auto xStorage(::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+            OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, true));
+        if (!xStorage.is())
+            return {};
+        auto xDRS(xStorage->openStorageElement(
+            u"drs"_ustr, css::embed::ElementModes::SEEKABLEREAD));
+        if (!xDRS.is())
+            return {};
+        auto xStream(xDRS->openStreamElement(
+            u"shapexml.xml"_ustr, css::embed::ElementModes::SEEKABLEREAD));
+        if (!xStream.is())
+            return {};
+        auto xInStr(xStream->getInputStream());
+        if (!xInStr.is())
+            return {};
+        auto xDocBuilder(css::xml::dom::DocumentBuilder::create(xContext));
+        return xDocBuilder->parse(xInStr);
+    }
+    catch (css::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("filter.ms", "Opening/Parsing of metroBlob failed");
+    }
+    return {};
 }
 
 SvxMSDffImportData::SvxMSDffImportData(const tools::Rectangle& rParentRect)

@@ -15,6 +15,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/numitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <editeng/unoprnms.hxx>
 
 #include <svx/svdotable.hxx>
@@ -1232,6 +1233,54 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114913)
                          pItem->GetNumRule().GetLevel(0).GetGraphicSize().getHeight());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testPptIndentsMetroBlob)
+{
+    createSdImpressDoc("ppt/indent_multiple_spacings.ppt");
+    const SdrPage* pPage = GetPage(1);
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pNumFmt->GetNumRule().GetLevel(0).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(952), pNumFmt->GetNumRule().GetLevel(1).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), pNumFmt->GetNumRule().GetLevel(2).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3810), pNumFmt->GetNumRule().GetLevel(3).GetAbsLSpace());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testPptHangingIndentMetroBlob)
+{
+    // Verify hanging indent from metroBlob is applied correctly.
+    createSdImpressDoc("ppt/hanging-indent.ppt");
+    const SdrPage* pPage = GetPage(1);
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage->GetObj(0));
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+
+    const SvxNumBulletItem* pNum1 = aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1500), pNum1->GetNumRule().GetLevel(1).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1500), pNum1->GetNumRule().GetLevel(1).GetFirstLineOffset());
+
+    const SvxNumBulletItem* pNum2 = aEdit.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(952), pNum2->GetNumRule().GetLevel(1).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-952), pNum2->GetNumRule().GetLevel(1).GetFirstLineOffset());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testPptIndentationBullets)
+{
+    createSdImpressDoc("ppt/ppt-indentation-bullets.ppt");
+    const SdrPage* pPage = GetPage(1);
+    SdrTextObj* pObj = DynCastSdrTextObj(pPage->GetObj(0));
+    const EditTextObject& aE = pObj->GetOutlinerParaObject()->GetTextObject();
+
+    const SvxNumBulletItem* pNum = aE.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT_EQUAL(2500, pNum->GetNumRule().GetLevel(0).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(-1500, pNum->GetNumRule().GetLevel(0).GetFirstLineOffset());
+    const SvxNumBulletItem* pNum1 = aE.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT_EQUAL(3000, pNum1->GetNumRule().GetLevel(0).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(-1500, pNum1->GetNumRule().GetLevel(0).GetFirstLineOffset());
+    const SvxNumBulletItem* pNum2 = aE.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
+    CPPUNIT_ASSERT_EQUAL(3000, pNum2->GetNumRule().GetLevel(0).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(-1000, pNum2->GetNumRule().GetLevel(0).GetFirstLineOffset());
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114821)
 {
     css::uno::Any aAny;
@@ -1507,7 +1556,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf166030)
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET);
     const SvxNumberFormat& rFmt = pNumFmt->GetNumRule().GetLevel(1);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(953), rFmt.GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(952), rFmt.GetAbsLSpace());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf150770)

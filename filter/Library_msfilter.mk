@@ -24,6 +24,7 @@ $(eval $(call gb_Library_set_componentfile,msfilter,filter/source/msfilter/msfil
 $(eval $(call gb_Library_use_externals,msfilter,\
     boost_headers \
     frozen \
+    libxml2 \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,msfilter))
