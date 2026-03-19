@@ -3557,18 +3557,13 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
         if (bSpellError)
         {
-            // On OS/2 when clicking next to the Popup menu, the MouseButtonDown
-            // comes before the end of menu execute, thus the SetModified has to
-            // be done prior to this (Bug #40968#)
             ScInputHandler* pHdl = pScMod->GetInputHdl();
-            if (pHdl)
-                pHdl->SetModified();
 
             const OUString sOldText = pHdl ? pHdl->GetEditString() : u""_ustr;
 
             // Only done/shown if a misspelled word is actually under the mouse pointer.
             Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
-            bDone = pEditView->ExecuteSpellPopup(aMenuPos, aLink);
+            bDone = pEditView->ExecuteSpellPopup(aMenuPos, aLink, true);
 
             // If the spelling is corrected, stop editing to flush any cached spelling info.
             // Or, if no misspelled word at this position, and it wasn't initially in edit mode,
