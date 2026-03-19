@@ -322,6 +322,7 @@
 #define RID_EDITUNDO_TRANSLITERATE              NC_("RID_EDITUNDO_TRANSLITERATE", "Change Case")
 #define RID_STR_WORD                            NC_("RID_STR_WORD", "Word is %x")
 #define RID_STR_PARAGRAPH                       NC_("RID_STR_PARAGRAPH", "Paragraph is %x")
+#define RID_STR_OTHER                           NC_("RID_STR_OTHER", "Other actions...")
 #define RID_SVXSTR_AUTOMATIC                    NC_("RID_SVXSTR_AUTOMATIC", "Automatic")
 
 #define RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION NC_("RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION", "Image bullet in paragraph")

@@ -1067,7 +1067,9 @@ static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, OString(aStream.str()));
 }
 
-bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void> &rCallBack)
+bool EditView::ExecuteSpellPopup(const Point& rPosPixel,
+                                 const Link<SpellCallbackInfo&, void>& rCallBack,
+                                 bool bAddOtherOption)
 {
     if (IsSelectionAtPoint(rPosPixel))
         return false;
@@ -1263,12 +1265,22 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         return true;
     }
 
+    if (bAddOtherOption)
+    {
+        xPopupMenu->append_separator(u"separator3"_ustr);
+        xPopupMenu->append(u"other"_ustr, EditResId(RID_STR_OTHER));
+    }
+
     OUString sId = xPopupMenu->popup_at_rect(pPopupParent, aTempRect);
 
     aPaM2 = getImpEditEngine().CreateEditPaM(aP2);
     aPaM = getImpEditEngine().CreateEditPaM(aP);
 
-    if (sId == "ignore")
+    if (sId == "other")
+    {
+        return false;
+    }
+    else if (sId == "ignore")
     {
         OUString aWord = getImpl().SpellIgnoreWord();
         SpellCallbackInfo aInf( SpellCallbackCommand::IGNOREWORD, aWord );
