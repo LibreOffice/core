@@ -10,7 +10,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', functio
 		if (Cypress.env('INTEGRATION') === 'nextcloud') {
 			desktopHelper.showStatusBarIfHidden ();
 		}
-		desktopHelper.shouldHaveZoomLevel('70');
+		cy.viewport(1920, 1080);
 	});
 
 	it('Selected slide.', function() {
@@ -22,7 +22,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', functio
 	});
 
 	it('Change zoom level.', function() {
-		desktopHelper.resetZoomLevel();
+		desktopHelper.fitWidthZoom();
 		desktopHelper.shouldHaveZoomLevel('100');
 		desktopHelper.zoomIn();
 		desktopHelper.shouldHaveZoomLevel('120');
@@ -31,9 +31,23 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', functio
 	});
 
 	it('Select zoom level.', function() {
-		desktopHelper.resetZoomLevel();
+		desktopHelper.fitWidthZoom();
 		desktopHelper.shouldHaveZoomLevel('100');
 		desktopHelper.selectZoomLevel('280', false);
 		desktopHelper.shouldHaveZoomLevel('280');
+	});
+
+	it('Dynamic Zoom', function () {
+		desktopHelper.fitWidthZoom();
+		desktopHelper.shouldHaveZoomLevel('100');
+
+		cy.viewport(1420, 1080);
+		desktopHelper.fitWidthZoom();
+		desktopHelper.shouldHaveZoomLevel('70');
+
+		desktopHelper.zoomIn();
+		desktopHelper.zoomIn();
+		desktopHelper.fitWidthZoom();
+		desktopHelper.shouldHaveZoomLevel('70');
 	});
 });
