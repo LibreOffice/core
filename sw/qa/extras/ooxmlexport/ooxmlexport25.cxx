@@ -126,7 +126,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138020_all_rows_tblHeader, "tdf138020_all_rows_t
 
     // w:firstRow=0, but has tblHeader, so that automatically forces firstRow style
     uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
-    // CPPUNIT_ASSERT_EQUAL(Color(0xffc000), getProperty<Color>(xCell, u"BackColor"_ustr)); // gold
+    CPPUNIT_ASSERT_EQUAL(Color(0xffc000), getProperty<Color>(xCell, u"BackColor"_ustr)); // gold
 
     // Since all rows were marked as tblHeader, in emulation we turned off the header
     // since MS Word doesn't repeat the header in this situation
@@ -138,7 +138,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138020_all_rows_tblHeader, "tdf138020_all_rows_t
 
     // w:lastRow not provided, so it would be on by default, but it too is tblHeader, so firstRow
     xCell.set(xTextTable->getCellByName(u"A8"_ustr), uno::UNO_QUERY);
-    // CPPUNIT_ASSERT_EQUAL(Color(0xffc000), getProperty<Color>(xCell, u"BackColor"_ustr)); // gold
+    CPPUNIT_ASSERT_EQUAL(Color(0xffc000), getProperty<Color>(xCell, u"BackColor"_ustr)); // gold
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf167843_tblLook_firstRow_tblHeader,
