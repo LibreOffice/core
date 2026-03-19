@@ -318,12 +318,37 @@ bool DialControl::MouseButtonUp(const MouseEvent&)
 
 bool DialControl::KeyInput( const KeyEvent& rKEvt )
 {
+    sal_Int32 nStep = 0;
     const vcl::KeyCode& rKCode = rKEvt.GetKeyCode();
-    if( !rKCode.GetModifier() && (rKCode.GetCode() == KEY_ESCAPE) )
+
+    if (!rKCode.GetModifier())
     {
-        HandleEscapeEvent();
+        switch (rKCode.GetCode())
+        {
+        case KEY_ESCAPE:
+            HandleEscapeEvent();
+            return true;
+
+        case KEY_LEFT:
+        case KEY_DOWN:
+            nStep = -1500;   // -15°
+            break;
+
+        case KEY_RIGHT:
+        case KEY_UP:
+            nStep = +1500;   // +15°
+            break;
+        }
+    }
+
+    if (nStep != 0)
+    {
+        sal_Int32 nNewAngle = GetRotation().get() + nStep;
+        nNewAngle = (nNewAngle + 36000) % 36000;
+        SetRotation( Degree100(nNewAngle), true );
         return true;
     }
+
     return CustomWidgetController::KeyInput(rKEvt);
 }
 
