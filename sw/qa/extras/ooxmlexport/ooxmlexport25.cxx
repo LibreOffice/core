@@ -109,7 +109,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167843_tblLook_firstRow_tblHeader,
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, u"BackColor"_ustr));
 
     // since firstRow style is not applied, do not inherit the style's tblHeader
-    // CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextTable, u"HeaderRowCount"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextTable, u"HeaderRowCount"_ustr));
 
     // w:firstColumn not provided, so it is on by default (regardless of w:val, although it agrees)
     xCell.set(xTextTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
