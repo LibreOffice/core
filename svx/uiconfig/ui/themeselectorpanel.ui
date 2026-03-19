@@ -34,6 +34,8 @@
             <property name="can-focus">True</property>
             <property name="margin">6</property>
             <property name="model">liststore1</property>
+            <property name="pixbuf-column">0</property>
+            <property name="text-column">1</property>
             <property name="columns">3</property>
             <property name="item-width">70</property>
           </object>
