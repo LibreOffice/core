@@ -930,7 +930,7 @@ void BGradient::tryToRecreateBorder(basegfx::BColorStops* pAssociatedTransparenc
             pAssociatedTransparencyStops->removeSpaceAtStart(fOffset);
 
         // ...and create border value
-        SetBorder(static_cast<sal_uInt16>(std::lround(fOffset * 100.0)));
+        SetBorder(static_cast<sal_uInt16>(std::round(fOffset * 100.0)));
     }
 
     if (bIsAxial)

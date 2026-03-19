@@ -259,9 +259,9 @@ void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
     aBColor.setBlue(fResult);
     aBColor = basegfx::utils::hsl2rgb(aBColor);
 
-    R = sal_uInt8(std::lround(aBColor.getRed()   * 255.0));
-    G = sal_uInt8(std::lround(aBColor.getGreen() * 255.0));
-    B = sal_uInt8(std::lround(aBColor.getBlue()  * 255.0));
+    R = sal_uInt8(std::round(aBColor.getRed()   * 255.0));
+    G = sal_uInt8(std::round(aBColor.getGreen() * 255.0));
+    B = sal_uInt8(std::round(aBColor.getBlue()  * 255.0));
 }
 
 void Color::ApplyLumModOff(sal_Int16 nMod, sal_Int16 nOff)
@@ -291,9 +291,9 @@ void Color::ApplyLumModOff(sal_Int16 nMod, sal_Int16 nOff)
 
     // Switch back to RGB.
     aBColor = basegfx::utils::hsl2rgb(aBColor);
-    R = sal_uInt8(std::lround(aBColor.getRed()   * 255.0));
-    G = sal_uInt8(std::lround(aBColor.getGreen() * 255.0));
-    B = sal_uInt8(std::lround(aBColor.getBlue()  * 255.0));
+    R = sal_uInt8(std::round(aBColor.getRed()   * 255.0));
+    G = sal_uInt8(std::round(aBColor.getGreen() * 255.0));
+    B = sal_uInt8(std::round(aBColor.getBlue()  * 255.0));
 }
 
 namespace color

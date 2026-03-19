@@ -71,9 +71,9 @@ namespace
 
         explicit ColorToBColorConverter(const basegfx::BColor& rBColor)
         : ColorToBColorConverter(
-            sal_uInt8(std::lround(rBColor.getRed() * 255.0)),
-            sal_uInt8(std::lround(rBColor.getGreen() * 255.0)),
-            sal_uInt8(std::lround(rBColor.getBlue() * 255.0)))
+            sal_uInt8(std::round(rBColor.getRed() * 255.0)),
+            sal_uInt8(std::round(rBColor.getGreen() * 255.0)),
+            sal_uInt8(std::round(rBColor.getBlue() * 255.0)))
         {}
 
         basegfx::BColor getBColor() const
