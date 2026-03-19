@@ -1486,15 +1486,24 @@ OUString SwXTextTableCursor::getRangeName()
     //!! see also SwChartDataSequence::getSourceRangeRepresentation
     if(!pTableCursor)
         return OUString();
+    // Check cursor is still in a table box before MakeBoxSels(),
+    // which crashes if the table structure was modified (merge/delete)
+    // and the cursor points to nodes no longer in a table cell.
+    if(!pTableCursor->GetPoint()->GetNode().FindTableBoxStartNode())
+        return OUString();
     pTableCursor->MakeBoxSels();
     const SwStartNode* pNode = pTableCursor->GetPoint()->GetNode().FindTableBoxStartNode();
+    if(!pNode)
+        return OUString();
     const SwTable* pTable = SwTable::FindTable(GetFrameFormat());
     const SwTableBox* pEndBox = pTable->GetTableBox(pNode->GetIndex());
+    if(!pEndBox)
+        return OUString();
     if(pTableCursor->HasMark())
     {
         pNode = pTableCursor->GetMark()->GetNode().FindTableBoxStartNode();
-        const SwTableBox* pStartBox = pTable->GetTableBox(pNode->GetIndex());
-        if(pEndBox != pStartBox)
+        const SwTableBox* pStartBox = pNode ? pTable->GetTableBox(pNode->GetIndex()) : nullptr;
+        if(pStartBox && pEndBox != pStartBox)
         {
             // need to switch start and end?
             if(*pTableCursor->GetPoint() < *pTableCursor->GetMark())
