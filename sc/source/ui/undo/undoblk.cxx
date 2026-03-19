@@ -63,6 +63,22 @@
 /*C*/   // ScArea
 //?     // check later
 
+namespace
+{
+/** Refresh the header row to update ScMF::Auto flags. */
+void refreshAutoFilterForColumnChange(ScDocument& rDocument, SCTAB nTab)
+{
+    ScDBData* pDBData = rDocument.GetAnonymousDBData(nTab);
+    if (!pDBData || !pDBData->HasAutoFilter())
+        return;
+
+    ScRange aRange;
+    pDBData->GetArea(aRange);
+    // Scan the full header row as stale flags may be outside the range.
+    rDocument.RefreshAutoFilter(0, aRange.aStart.Row(),  rDocument.MaxCol(), aRange.aStart.Row(), nTab);
+}
+} // end anonymous namespace
+
 ScUndoInsertCells::ScUndoInsertCells( ScDocShell& rNewDocShell,
                                 const ScRange& rRange,
                                 SCTAB nNewCount, std::unique_ptr<SCTAB[]> pNewTabs, std::unique_ptr<SCTAB[]> pNewScenarios,
@@ -197,6 +213,8 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
                 else
                     rDoc.InsertCol( aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
                     aEffRange.aStart.Col(), static_cast<SCSIZE>(aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
+
+                refreshAutoFilterForColumnChange(rDoc, pTabs[i]);
 
                 if (pViewShell)
                 {
@@ -495,6 +513,13 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     {
         pRefUndoDoc->CopyToDocument(aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
             InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, rDoc);
+    }
+
+    // Refresh after all cell operations are done.
+    if (eCmd == DelCellCmd::Cols || eCmd == DelCellCmd::CellsLeft)
+    {
+        for (i = 0; i < nCount; i++)
+            refreshAutoFilterForColumnChange(rDoc, pTabs[i]);
     }
 
     ScRange aWorkRange( aEffRange );

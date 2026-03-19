@@ -7420,6 +7420,182 @@ CPPUNIT_TEST_FIXTURE(Test, testOverwriteContent)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAutoFilterFlagsAfterColumnInsertUndoRedo)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Set up data - A1:C3
+    m_pDoc->SetString(0, 0, 0, u"Col1"_ustr);
+    m_pDoc->SetString(1, 0, 0, u"Col2"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"Col3"_ustr);
+    m_pDoc->SetString(0, 1, 0, u"1"_ustr);
+    m_pDoc->SetString(1, 1, 0, u"A"_ustr);
+    m_pDoc->SetString(2, 1, 0, u"X"_ustr);
+    m_pDoc->SetString(0, 2, 0, u"2"_ustr);
+    m_pDoc->SetString(1, 2, 0, u"B"_ustr);
+    m_pDoc->SetString(2, 2, 0, u"Y"_ustr);
+
+    // Set up auto-filter on A1:C3
+    ScDBData* pDBData = new ScDBData(u"NONAME"_ustr, 0, 0, 0, 2, 2);
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
+    pDBData->SetAutoFilter(true);
+    m_pDoc->ApplyFlagsTab(0, 0, 2, 0, 0, ScMF::Auto);
+
+    // Verify initial auto-filter flags on A1:C1
+    CPPUNIT_ASSERT(m_pDoc->HasAutoFilter(0, 0, 0));
+    CPPUNIT_ASSERT(m_pDoc->HasAutoFilter(1, 0, 0));
+    CPPUNIT_ASSERT(m_pDoc->HasAutoFilter(2, 0, 0));
+
+    // Insert a column before B
+    ScRange aColumnRange(1, 0, 0, 1, m_pDoc->MaxRow(), 0);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aColumnRange);
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    rFunc.InsertCells(aColumnRange, &aMark, INS_INSCOLS_BEFORE, true, true);
+
+    // After insert: auto-filter range is expanded
+    // The DB data range should have expanded via reference tracking
+    pDBData = m_pDoc->GetAnonymousDBData(0);
+    CPPUNIT_ASSERT(pDBData);
+
+    ScRange aArea;
+    pDBData->GetArea(aArea);
+    // Auto-filter range should now be A1:D3 (column B was inserted)
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), aArea.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), aArea.aEnd.Col());
+
+    // Check ScMF::Auto flags (A1:D1)
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(0, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(1, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(2, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(3, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(4, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(5, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+
+    // Undo the column insert
+    m_pDoc->GetUndoManager()->Undo();
+
+    // Back to A:C
+    pDBData = m_pDoc->GetAnonymousDBData(0);
+    CPPUNIT_ASSERT(pDBData);
+    pDBData->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), aArea.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(SCCOL(2), aArea.aEnd.Col());
+
+    // Check ScMF::Auto flags (A1:C1)
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(0, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(1, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(2, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(3, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(4, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+
+    // Redo the column insert
+    m_pDoc->GetUndoManager()->Redo();
+
+    // Back to A:D
+    pDBData = m_pDoc->GetAnonymousDBData(0);
+    CPPUNIT_ASSERT(pDBData);
+    pDBData->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), aArea.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), aArea.aEnd.Col());
+
+    // Check ScMF::Auto flags (A1:D1)
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(0, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(1, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(2, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(3, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(4, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(5, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAutoFilterFlagsAfterColumnDeleteUndoRedo)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // Set up data: header in row 0, data in rows 1-2, columns A-C
+    m_pDoc->SetString(0, 0, 0, u"Col1"_ustr);
+    m_pDoc->SetString(1, 0, 0, u"Col2"_ustr);
+    m_pDoc->SetString(2, 0, 0, u"Col3"_ustr);
+    m_pDoc->SetString(0, 1, 0, u"1"_ustr);
+    m_pDoc->SetString(1, 1, 0, u"A"_ustr);
+    m_pDoc->SetString(2, 1, 0, u"X"_ustr);
+    m_pDoc->SetString(0, 2, 0, u"2"_ustr);
+    m_pDoc->SetString(1, 2, 0, u"B"_ustr);
+    m_pDoc->SetString(2, 2, 0, u"Y"_ustr);
+
+    // Set up auto-filter on A1:C3
+    ScDBData* pDBData = new ScDBData(u"NONAME"_ustr, 0, 0, 0, 2, 2);
+    m_pDoc->SetAnonymousDBData(0, std::unique_ptr<ScDBData>(pDBData));
+    pDBData->SetAutoFilter(true);
+    m_pDoc->ApplyFlagsTab(0, 0, 2, 0, 0, ScMF::Auto);
+
+    // Verify initial auto-filter flags on A1:C1
+    CPPUNIT_ASSERT(m_pDoc->HasAutoFilter(0, 0, 0));
+    CPPUNIT_ASSERT(m_pDoc->HasAutoFilter(1, 0, 0));
+    CPPUNIT_ASSERT(m_pDoc->HasAutoFilter(2, 0, 0));
+
+    // Delete column B
+    ScRange aColRange(1, 0, 0, 1, m_pDoc->MaxRow(), 0);
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    aMark.SetMarkArea(aColRange);
+    ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
+    rFunc.DeleteCells(aColRange, &aMark, DelCellCmd::Cols, true);
+
+    // Auto-filter range shrunk to A:B
+    pDBData = m_pDoc->GetAnonymousDBData(0);
+    CPPUNIT_ASSERT(pDBData);
+    ScRange aArea;
+    pDBData->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), aArea.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), aArea.aEnd.Col());
+
+    // Check ScMF::Auto flags (A1:B1)
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(0, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(1, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(2, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(3, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+
+    // Undo the column delete - column B re-inserted
+    m_pDoc->GetUndoManager()->Undo();
+
+    // Back to A:C
+    pDBData = m_pDoc->GetAnonymousDBData(0);
+    CPPUNIT_ASSERT(pDBData);
+    pDBData->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), aArea.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(SCCOL(2), aArea.aEnd.Col());
+
+    // Check ScMF::Auto flags (A1:C1)
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(0, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(1, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(2, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(3, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(4, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+
+    // Redo the column delete
+    m_pDoc->GetUndoManager()->Redo();
+
+    // Back to A:B
+    pDBData = m_pDoc->GetAnonymousDBData(0);
+    CPPUNIT_ASSERT(pDBData);
+    pDBData->GetArea(aArea);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), aArea.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), aArea.aEnd.Col());
+
+    // Check ScMF::Auto flags (A1:B1)
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(0, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(bool(m_pDoc->GetAttr(1, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(2, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(3, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT(!bool(m_pDoc->GetAttr(4, 0, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCopyTabContent)
 {
     m_pDoc->InsertTab(0, u"Tab0"_ustr);

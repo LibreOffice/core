@@ -1284,16 +1284,6 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
         // Overwrite the content from the default view table
         OverwriteContent(nDefaultViewTable, nSheetViewTab);
 
-        // Refresh auto-filter flags on the sheet view tab.
-        // OverwriteContent may have invalidated them.
-        if (pNoNameData && pNoNameData->HasAutoFilter())
-        {
-            ScRange aArea;
-            pNoNameData->GetArea(aArea);
-            RefreshAutoFilter(aArea.aStart.Col(), aArea.aStart.Row(),
-                              aArea.aEnd.Col(), aArea.aEnd.Row(), nSheetViewTab);
-        }
-
         // Revert the sorting of the default view table.
         // It can happen that the default view was sorted after the sheet view
         // was created.
