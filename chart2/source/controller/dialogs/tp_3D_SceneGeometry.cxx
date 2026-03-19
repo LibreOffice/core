@@ -151,8 +151,8 @@ void ThreeD_SceneGeometry_TabPage::applyAnglesToModel()
         m_nZRotation = m_xMFZRotation->get_value(FieldUnit::DEGREE);
 
     fXAngle = double(m_nXRotation)/pow(10.0,m_xMFXRotation->get_digits());
-    fYAngle = double(-1.0*m_nYRotation)/pow(10.0,m_xMFYRotation->get_digits());
-    fZAngle = double(-1.0*m_nZRotation)/pow(10.0,m_xMFZRotation->get_digits());
+    fYAngle = (-1.0*m_nYRotation)/pow(10.0,m_xMFYRotation->get_digits());
+    fZAngle = (-1.0*m_nZRotation)/pow(10.0,m_xMFZRotation->get_digits());
 
     fXAngle = basegfx::deg2rad(fXAngle);
     fYAngle = basegfx::deg2rad(fYAngle);

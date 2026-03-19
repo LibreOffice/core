@@ -2286,7 +2286,7 @@ void SdrPathObj::NbcResize(const Point& rRef, double xFact, double yFact)
 
     basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-rRef.X(), -rRef.Y()));
     aTrans = basegfx::utils::createScaleTranslateB2DHomMatrix(
-        double(xFact), double(yFact), rRef.X(), rRef.Y()) * aTrans;
+        xFact, yFact, rRef.X(), rRef.Y()) * aTrans;
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)

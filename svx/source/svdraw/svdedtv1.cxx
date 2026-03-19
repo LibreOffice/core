@@ -264,7 +264,7 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, double xFact, double yFact,
             AddUndoActions( CreateConnectorUndo( *pO ) );
             AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         }
-        pO->Resize(rRef,double(xFact),double(yFact));
+        pO->Resize(rRef,xFact,yFact);
     }
 
     if( bUndo )

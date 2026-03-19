@@ -236,4 +236,15 @@ void f()
 }
 }
 
+namespace test10
+{
+void f(double x);
+void g()
+{
+    double oogah = 0;
+    // expected-error@+1 {{redundant functional cast from 'double' to 'double' [loplugin:redundantfcast]}}
+    f(double(oogah));
+}
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

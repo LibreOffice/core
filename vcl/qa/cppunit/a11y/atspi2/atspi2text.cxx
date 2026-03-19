@@ -495,7 +495,7 @@ private:
                 float atspiPosition;
                 int nConsumed;
                 CPPUNIT_ASSERT_EQUAL(1, sscanf(p, "%gmm%n", &atspiPosition, &nConsumed));
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(float(rTabStop.Position * 0.01f), atspiPosition, 1e-4);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(rTabStop.Position * 0.01f, atspiPosition, 1e-4);
                 p += nConsumed;
 
                 if (*p)

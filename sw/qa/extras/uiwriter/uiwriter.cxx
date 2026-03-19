@@ -2079,7 +2079,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testXFlatParagraph)
     CPPUNIT_ASSERT_EQUAL(xFlatPara2->getText(), xFlatPara4->getText());
     //changing the attributes of last para
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-         { "CharWeight", uno::Any(float(css::awt::FontWeight::BOLD)) }
+         { "CharWeight", uno::Any(css::awt::FontWeight::BOLD) }
     }));
     xFlatPara3->changeAttributes(sal_Int32(0), sal_Int32(5), aDescriptor);
     //checking Language Portions

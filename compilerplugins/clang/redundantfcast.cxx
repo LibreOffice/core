@@ -310,15 +310,13 @@ public:
         if (const auto* BT = dyn_cast<BuiltinType>(t1->getUnqualifiedDesugaredType()))
         {
             auto k = BT->getKind();
-            if (k == BuiltinType::Double || k == BuiltinType::Float
-                || (k >= BuiltinType::Bool && k <= BuiltinType::Int128))
+            if (k >= BuiltinType::Bool && k <= BuiltinType::Int128)
                 return true;
         }
         if (const auto* BT = dyn_cast<BuiltinType>(t2->getUnqualifiedDesugaredType()))
         {
             auto k = BT->getKind();
-            if (k == BuiltinType::Double || k == BuiltinType::Float
-                || (k >= BuiltinType::Bool && k <= BuiltinType::Int128))
+            if (k >= BuiltinType::Bool && k <= BuiltinType::Int128)
                 return true;
         }
         auto tc = loplugin::TypeCheck(t1);

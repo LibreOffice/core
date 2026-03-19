@@ -246,8 +246,8 @@ private:
                       Color const& rColor)
     {
         auto& rMarker = rMarkers.emplace_back();
-        const double nHalfSizeX = double(mnOneX * 2 * mfScaleX);
-        const double nHalfSizeY = double(mnOneY * 2 * mfScaleY);
+        const double nHalfSizeX = mnOneX * 2 * mfScaleX;
+        const double nHalfSizeY = mnOneY * 2 * mfScaleY;
         basegfx::B2DRectangle aRectangle(std::round(x - nHalfSizeX), std::round(y - nHalfSizeY),
                                          std::round(x + nHalfSizeX), std::round(y + nHalfSizeY));
         rMarker.maPolygon = basegfx::utils::createPolygonFromRect(aRectangle);

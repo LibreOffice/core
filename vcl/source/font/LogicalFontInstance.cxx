@@ -260,7 +260,7 @@ double LogicalFontInstance::GetGlyphWidth(sal_GlyphId nGlyph, bool bVertical, bo
 
     double nScale = 0;
     GetScale(&nScale, nullptr);
-    return double(nWidth * nScale);
+    return nWidth * nScale;
 }
 
 bool LogicalFontInstance::IsGraphiteFont()

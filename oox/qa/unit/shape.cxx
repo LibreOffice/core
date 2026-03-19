@@ -572,7 +572,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
     CPPUNIT_ASSERT_EQUAL(uno::Any(u"Courier New"_ustr),
                          xShapeProps->getPropertyValue(u"CharFontName"_ustr));
 
-    CPPUNIT_ASSERT_EQUAL(uno::Any(float(awt::FontWeight::BOLD)),
+    CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::BOLD),
                          xShapeProps->getPropertyValue(u"CharWeight"_ustr));
 
     lang::Locale aCharLocale;

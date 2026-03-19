@@ -574,7 +574,7 @@ void ViewSettings::finalizeImport()
         aPropMap.setProperty( PROP_HasHorizontalScrollBar, rModel.mbShowHorScroll);
         aPropMap.setProperty( PROP_HasVerticalScrollBar, rModel.mbShowVerScroll);
         aPropMap.setProperty( PROP_HasSheetTabs, rModel.mbShowTabBar);
-        aPropMap.setProperty( PROP_RelativeHorizontalTabbarWidth, double( rModel.mnTabBarWidth / 1000.0 ));
+        aPropMap.setProperty( PROP_RelativeHorizontalTabbarWidth, rModel.mnTabBarWidth / 1000.0);
         aPropMap.setProperty( PROP_ShowObjects, nShowMode);
         aPropMap.setProperty( PROP_ShowCharts, nShowMode);
         aPropMap.setProperty( PROP_ShowDrawing, nShowMode);

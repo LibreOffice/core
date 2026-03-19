@@ -399,7 +399,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             x = static_cast<tools::Long>(static_cast<double>(x) * fSnapWidth + static_cast<double>(aGridOrigin.X()));
             dx = 0;
         }
-        fSnapWidth = double(maSnapWdtY);
+        fSnapWidth = maSnapWdtY;
         if(dy == NOT_SNAPPED && fSnapWidth)
         {
             double fy = static_cast<double>(y);

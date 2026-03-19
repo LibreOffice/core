@@ -255,13 +255,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
     uno::Reference<util::XPropertyReplace> xProp(xSearchDes, uno::UNO_QUERY);
     //setting some properties
     uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
-        { { "CharWeight", uno::Any(float(css::awt::FontWeight::BOLD)) } }));
+        { { "CharWeight", uno::Any(css::awt::FontWeight::BOLD) } }));
     xProp->setSearchAttributes(aDescriptor);
     //receiving the defined properties and asserting them with expected values, covering UNO
     uno::Sequence<beans::PropertyValue> aPropVal2(xProp->getSearchAttributes());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aPropVal2.getLength());
     CPPUNIT_ASSERT_EQUAL(u"CharWeight"_ustr, aPropVal2[0].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(float(css::awt::FontWeight::BOLD)), aPropVal2[0].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(css::awt::FontWeight::BOLD), aPropVal2[0].Value);
     //specifying the search attributes
     uno::Reference<beans::XPropertySet> xPropSet(xSearchDes, uno::UNO_QUERY_THROW);
     xPropSet->setPropertyValue(u"SearchWords"_ustr, uno::Any(true));
@@ -278,7 +278,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
     uno::Sequence<beans::PropertyValue> aRepProp(xProp2->getReplaceAttributes());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRepProp.getLength());
     CPPUNIT_ASSERT_EQUAL(u"CharWeight"_ustr, aRepProp[0].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(float(css::awt::FontWeight::BOLD)), aRepProp[0].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(css::awt::FontWeight::BOLD), aRepProp[0].Value);
     //setting strings for replacement
     xReplaceDes->setSearchString(u"test"_ustr);
     xReplaceDes->setReplaceString(u"task"_ustr);
@@ -1750,8 +1750,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testPropertyDefaults)
     //testing CharWeight from style::CharacterProperties
     uno::Any aCharWeight = xPropSet->getPropertyValue(u"CharWeight"_ustr);
     //changing the default value
-    xPropSet->setPropertyValue(u"CharWeight"_ustr, uno::Any(float(awt::FontWeight::BOLD)));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(float(awt::FontWeight::BOLD)),
+    xPropSet->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(awt::FontWeight::BOLD),
                          xPropSet->getPropertyValue(u"CharWeight"_ustr));
     //resetting the value to default
     xPropState->setPropertyToDefault(u"CharWeight"_ustr);

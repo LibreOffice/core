@@ -1039,7 +1039,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, double xFact, double yFact)
 
         // apply state to already valid transformation
         aNewMat.translate(-aRef.getX(), -aRef.getY());
-        aNewMat.scale(double(xFact), double(yFact));
+        aNewMat.scale(xFact, yFact);
         aNewMat.translate(aRef.getX(), aRef.getY());
 
         // get center of transformed state

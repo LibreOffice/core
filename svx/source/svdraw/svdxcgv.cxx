@@ -269,8 +269,8 @@ bool SdrExchangeView::Paste(
     if (bResize)
     {
         FrPair aResize(GetMapFactor(eSrcUnit,eDstUnit));
-        aXResize=double(aResize.X());
-        aYResize=double(aResize.Y());
+        aXResize=aResize.X();
+        aYResize=aResize.Y();
     }
     SdrObjList*  pDstLst=pLst;
     sal_uInt16 nPg,nPgCount=pSrcMod->GetPageCount();
