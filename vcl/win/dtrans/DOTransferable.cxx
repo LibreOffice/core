@@ -150,12 +150,7 @@ Any byteStreamToAny(Sequence<sal_Int8>& aByteStream, const Type& aRequestedDataT
     Any aAny;
 
     if ( aRequestedDataType == CPPUTYPE_OUSTRING )
-    {
-        OUString str = byteStreamToOUString( aByteStream );
-        if (str.isEmpty())
-            throw RuntimeException();
-        aAny <<= str;
-    }
+        aAny <<= byteStreamToOUString( aByteStream );
     else
         aAny <<= aByteStream;
 
