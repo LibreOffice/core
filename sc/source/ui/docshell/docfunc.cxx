@@ -4360,8 +4360,12 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         if (bUndo)
         {
             //! take selected sheets into account also when undoing
+            std::unique_ptr<ScTokenArray> pUndoArray;
+            if (pTokenArray)
+                pUndoArray = pTokenArray->Clone();
             rDocShell.GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoEnterMatrix>( &rDocShell, rRange, std::move(pUndoDoc), rString ) );
+                std::make_unique<ScUndoEnterMatrix>( &rDocShell, rRange, std::move(pUndoDoc),
+                                                     rString, std::move(pUndoArray) ) );
         }
 
         //  Err522 painting of DDE-Formulas will be intercepted during interpreting

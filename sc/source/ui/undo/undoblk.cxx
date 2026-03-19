@@ -46,6 +46,7 @@
 #include <refundo.hxx>
 #include <undoolk.hxx>
 #include <clipparam.hxx>
+#include <tokenarray.hxx>
 #include <brdcst.hxx>
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>
@@ -1862,10 +1863,12 @@ bool ScUndoSelectionStyle::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoEnterMatrix::ScUndoEnterMatrix( ScDocShell* pNewDocShell, const ScRange& rArea,
-                                      ScDocumentUniquePtr pNewUndoDoc, const OUString& rForm ) :
+                                      ScDocumentUniquePtr pNewUndoDoc, const OUString& rForm,
+                                      std::unique_ptr<ScTokenArray> pArray ) :
     ScBlockUndo( pNewDocShell, rArea, SC_UNDO_SIMPLE ),
     pUndoDoc( std::move(pNewUndoDoc) ),
-    aFormula( rForm )
+    aFormula( rForm ),
+    pTokenArray( std::move(pArray) )
 {
     SetChangeTrack();
 }
@@ -1923,7 +1926,7 @@ void ScUndoEnterMatrix::Redo()
 
     rDoc.InsertMatrixFormula( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                                aBlockRange.aEnd.Col(),   aBlockRange.aEnd.Row(),
-                               aDestMark, aFormula );
+                               aDestMark, aFormula, pTokenArray.get() );
 
     SetChangeTrack();
 

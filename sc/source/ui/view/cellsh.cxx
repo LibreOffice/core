@@ -268,12 +268,10 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 break;
 
             case SID_COPY:              // copy
-                // not editable because of matrix only? Do not damage matrix
-                //! is not called, when protected AND matrix, we will have
-                //! to live with this... is caught in Copy-Routine, otherwise
-                //! work is to be done once more
-                if ( !(!bEditable && bOnlyNotBecauseOfMatrix) )
-                    bNeedEdit = false;          // allowed when protected/ReadOnly
+                // Copy is a read-only operation — it never requires an
+                // editable selection.  The only reason to grey it out is
+                // content-extraction lock (DRM).
+                bNeedEdit = false;
                 bDisable = GetViewData()->GetViewShell()->isContentExtractionLocked();
                 break;
 

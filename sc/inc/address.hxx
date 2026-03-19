@@ -43,6 +43,7 @@ namespace com { namespace sun { namespace star {
 namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 class ScDocument;
+class ScRangeList;
 
 /** size_t typedef to be able to find places where code was changed from USHORT
     to size_t and is used to read/write from/to streams. */
@@ -636,6 +637,13 @@ public:
     SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
 
     ScRange Intersection( const ScRange& rOther ) const;
+
+    /** Subtract rOther from this range and return the non-overlapping
+     *  remainder as a list of up to 4 rectangular strips.
+     *  Returns an empty list when rOther fully contains this range.
+     *  The strips partition this range minus the intersection with no
+     *  gaps and no overlaps. */
+    ScRangeList Subtract( const ScRange& rOther ) const;
 
     /// If maximum end column should not be adapted during reference update.
     inline bool IsEndColSticky() const;
