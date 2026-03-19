@@ -107,6 +107,40 @@ DECLARE_OOXMLEXPORT_TEST(testTdf171299_tableInField, "tdf171299_tableInField.doc
     CPPUNIT_ASSERT_EQUAL(OUString("ID"), xCell->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf138020_all_rows_tblHeader, "tdf138020_all_rows_tblHeader.docx")
+{
+    // Given a multi-page table where all rows are marked as tblHeader
+
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+    // table starts on page 2 and ends on page 3, with no repeated header (MS Word ignores it)
+    assertXPath(pDump, "/root/page[1]/body/tab", 0);
+    assertXPath(pDump, "/root/page[2]/body/tab", 1);
+    assertXPath(pDump, "/root/page[3]/body/tab", 1);
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // w:firstRow=0, but has tblHeader, so that automatically forces firstRow style
+    uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+    // CPPUNIT_ASSERT_EQUAL(Color(0xffc000), getProperty<Color>(xCell, u"BackColor"_ustr)); // gold
+
+    // Since all rows were marked as tblHeader, in emulation we turned off the header
+    // since MS Word doesn't repeat the header in this situation
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextTable, u"HeaderRowCount"_ustr));
+
+    // second last row is still tblHeader, so firstRow
+    xCell.set(xTextTable->getCellByName(u"C7"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xffc000), getProperty<Color>(xCell, u"BackColor"_ustr)); // gold
+
+    // w:lastRow not provided, so it would be on by default, but it too is tblHeader, so firstRow
+    xCell.set(xTextTable->getCellByName(u"A8"_ustr), uno::UNO_QUERY);
+    // CPPUNIT_ASSERT_EQUAL(Color(0xffc000), getProperty<Color>(xCell, u"BackColor"_ustr)); // gold
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf167843_tblLook_firstRow_tblHeader,
                          "tdf167843_tblLook_firstRow_tblHeader.docx")
 {

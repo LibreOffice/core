@@ -666,8 +666,28 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if ( !m_aTableProperties->getValue( TablePropertyMap::HORI_ORIENT, nHoriOrient ) )
             lcl_extractHoriOrient( rFrameProperties, nHoriOrient );
         m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::Any( sal_Int16(nHoriOrient) ) );
+
+        // tdf#88496/tdf#138020: If all rows are considered as to-be-repeated headers, then emulate
+        // by just disabling the header, since MS Word doesn't repeat any rows in that case.
+        bool bForceNoHeader = false;
+        const std::optional<PropertyMap::Property> oHeaderRowCount
+            = m_aTableProperties->getProperty(PROP_HEADER_ROW_COUNT);
+        if (oHeaderRowCount && m_aRowProperties.size() > 1) // only for tables with more than 1 row
+        {
+            sal_Int32 nHeaderRowCount = 0;
+            oHeaderRowCount->second >>= nHeaderRowCount;
+            // force no PROP_HEADER_ROW_COUNT instead of just suggesting zero as a default
+            bForceNoHeader = std::cmp_equal(nHeaderRowCount, m_aRowProperties.size());
+
+            if (bForceNoHeader)
+            {
+                // side effect in MS Word: table moves to empty page if all rows are header rows,
+                // and since we are turning off header rows, emulate by preventing a table split.
+                m_aTableProperties->Insert(PROP_SPLIT, uno::Any(false));
+            }
+        }
         //fill default value - if not available
-        m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::Any( sal_Int32(0)), false);
+        m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::Any( sal_Int32(0)), bForceNoHeader);
         m_aTableProperties->Insert(PROP_WRITING_MODE,
                                    uno::Any(sal_Int16(text::WritingMode2::CONTEXT)),
                                    /*bOverWrite=*/false);
