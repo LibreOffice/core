@@ -54,8 +54,8 @@ using namespace ::com::sun::star;
 
 namespace {
 
-constexpr auto NUMBERING_TAB = u"numbering"_ustr;
-constexpr auto POSITION_TAB = u"position"_ustr;
+constexpr auto NUMBERING_TAB = u"numberingTab"_ustr;
+constexpr auto POSITION_TAB = u"positionTab"_ustr;
 
 class SwNumNamesDlg : public weld::GenericDialogController
 {
