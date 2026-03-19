@@ -400,11 +400,15 @@ void SwRedlineAcceptDlg::EnableControls(const SwView* pView)
         return false;
     });
 
-    m_pTPView->EnableAccept( bEnable && bAcceptReject );
-    m_pTPView->EnableReject( bEnable && bAcceptReject );
+    m_pTPView->EnableAccept(bEnable && bAcceptReject
+                            && !pView->isBlockedCommand(u".uno:AcceptTrackedChange"_ustr));
+    m_pTPView->EnableReject(bEnable && bAcceptReject
+                            && !pView->isBlockedCommand(u".uno:RejectTrackedChange"_ustr));
     m_pTPView->EnableClearFormat( bEnable && !bIsNotFormated && bAcceptReject );
-    m_pTPView->EnableAcceptAll( bEnable );
-    m_pTPView->EnableRejectAll( bEnable );
+    m_pTPView->EnableAcceptAll(bEnable
+                               && !pView->isBlockedCommand(u".uno:AcceptAllTrackedChanges"_ustr));
+    m_pTPView->EnableRejectAll(bEnable
+                               && !pView->isBlockedCommand(u".uno:RejectAllTrackedChanges"_ustr));
     m_pTPView->EnableClearFormatAll( bEnable &&
                                 m_bOnlyFormatedRedlines );
 }
