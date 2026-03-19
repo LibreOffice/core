@@ -528,6 +528,36 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAutocorrectRedline)
+{
+    // Given a document where an author changed "1000 MWh/an." to "7 GWh/an."
+    // with track changes, and change display is hidden:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert("1000 MWh/an.");
+
+    // Author enables track changes and replaces "1000 M" with "7 G":
+    RedlineFlags nMode = pWrtShell->GetRedlineFlags();
+    pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    pWrtShell->DelRight();
+    pWrtShell->Insert("7 G");
+
+    // Hide change display — visible text is now "7 GWh/an."
+    // This creates MergedPara, so GetText() returns MergedPara::mergedText.
+    pWrtShell->SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert);
+
+    // When typing after "an.", FnCapitalStartWord tries to change "GWh" to
+    // "Gwh" via Replace. With hidden redlines, Replace recreates the
+    // MergedPara, freeing the old mergedText that rTxt references. Then
+    // FnChgToEnEmDash reads the dangling rTxt.
+    // Without the accompanying fix in place, this test would have crashed with
+    // heap-use-after-free in an ASAN build:
+    pWrtShell->EndPara(/*bSelect=*/false);
+    emulateTyping(u" x");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
