@@ -1040,6 +1040,11 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
 {
     bool bFmla2 = false;
     ScConditionMode eOperation = mrFormatEntry.GetOperation();
+    bool bIsAboveAverageRule = eOperation == ScConditionMode::AboveAverage
+                                || eOperation == ScConditionMode::AboveEqualAverage
+                                || eOperation == ScConditionMode::BelowAverage
+                                || eOperation == ScConditionMode::BelowEqualAverage;
+
     bool bAboveAverage = eOperation == ScConditionMode::AboveAverage ||
                                 eOperation == ScConditionMode::AboveEqualAverage;
     bool bEqualAverage = eOperation == ScConditionMode::AboveEqualAverage ||
@@ -1048,7 +1053,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         || eOperation == ScConditionMode::BottomPercent;
     bool bPercent = eOperation == ScConditionMode::TopPercent ||
         eOperation == ScConditionMode::BottomPercent;
-    OUString aRank(u"0"_ustr);
+    OUString aRank;
     if(IsTopBottomRule(eOperation))
     {
         // position and formula grammar are not important
@@ -1082,17 +1087,18 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
     }
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    const sal_Int32 nDxfId = GetDxfs().GetDxfId(mrFormatEntry.GetStyle());
     rWorksheet->startElement( XML_cfRule,
-            XML_type, GetTypeString( mrFormatEntry.GetOperation() ),
-            XML_priority, OString::number(mnPriority + 1),
-            XML_operator, GetOperatorString( mrFormatEntry.GetOperation(), bFmla2 ),
-            XML_aboveAverage, ToPsz10(bAboveAverage),
-            XML_equalAverage, ToPsz10(bEqualAverage),
-            XML_bottom, ToPsz10(bBottom),
-            XML_percent, ToPsz10(bPercent),
-            XML_rank, aRank,
-            XML_text, aText,
-            XML_dxfId, OString::number(GetDxfs().GetDxfId(mrFormatEntry.GetStyle())) );
+        XML_type, GetTypeString(mrFormatEntry.GetOperation()),
+        XML_priority, OString::number(mnPriority + 1),
+        XML_operator, GetOperatorString(mrFormatEntry.GetOperation(), bFmla2),
+        XML_aboveAverage, sax_fastparser::UseIf(ToPsz10(bAboveAverage), bIsAboveAverageRule && !bAboveAverage),
+        XML_equalAverage, sax_fastparser::UseIf(ToPsz10(bEqualAverage), bIsAboveAverageRule && bEqualAverage),
+        XML_bottom, sax_fastparser::UseIf(ToPsz10(bBottom), IsTopBottomRule(eOperation) && bBottom),
+        XML_percent, sax_fastparser::UseIf(ToPsz10(bPercent), IsTopBottomRule(eOperation) && bPercent),
+        XML_rank, sax_fastparser::UseIf(aRank, IsTopBottomRule(eOperation)),
+        XML_text, sax_fastparser::UseIf(aText, IsTextRule(eOperation)),
+        XML_dxfId, sax_fastparser::UseIf(OString::number(nDxfId), nDxfId >= 0) );
 
     if (RequiresFixedFormula(eOperation))
     {

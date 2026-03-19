@@ -3149,7 +3149,10 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                     {
                         SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para);
                         if(!pStyle)
+                        {
+                            maStyleNameToDxfId.erase(aStyleName);
                             continue;
+                        }
 
                         SfxItemSet& rSet = pStyle->GetItemSet();
                         fillDxfFrom(rSet);

@@ -1620,6 +1620,50 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTrueFalseAsDefinedName)
     assertXPath(pWorkbook, "/x:workbook/x:definedNames/x:definedName[2]", "name", u"_TRUE");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testConditionalFormattingAttributes)
+{
+    createScDoc("ods/fdo54464-4.ods");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // earlier
+    /*
+         <conditionalFormatting sqref="A1">
+            <cfRule type="cellIs" priority="2" operator="greaterThanOrEqual" aboveAverage="0"
+                equalAverage="0" bottom="0" percent="0" rank="0" text="" dxfId="0">
+                <formula>5</formula>
+            </cfRule>
+        </conditionalFormatting>
+    */
+
+    // now
+    /*
+        <conditionalFormatting sqref="A1">
+            <cfRule type="cellIs" priority="2" operator="greaterThanOrEqual">
+                <formula>5</formula>
+            </cfRule>
+        </conditionalFormatting>
+    */
+
+    const OString sPath = "/x:worksheet/x:conditionalFormatting/x:cfRule"_ostr;
+    assertXPath(pSheet, sPath.getStr(), "type", u"cellIs");
+    assertXPath(pSheet, sPath.getStr(), "priority", u"2");
+    assertXPath(pSheet, sPath.getStr(), "operator", u"greaterThanOrEqual");
+
+    assertXPathNoAttribute(pSheet, sPath.getStr(), "aboveAverage");
+    assertXPathNoAttribute(pSheet, sPath.getStr(), "equalAverage");
+    assertXPathNoAttribute(pSheet, sPath.getStr(), "bottom");
+    assertXPathNoAttribute(pSheet, sPath.getStr(), "percent");
+    assertXPathNoAttribute(pSheet, sPath.getStr(), "rank");
+    assertXPathNoAttribute(pSheet, sPath.getStr(), "text");
+
+    // this does not exist because we make sure to remove the style name when the style
+    // is not found in the pool
+    assertXPathNoAttribute(pSheet, sPath.getStr(), "dxfId");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
