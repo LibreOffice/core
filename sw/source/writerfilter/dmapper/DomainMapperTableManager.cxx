@@ -64,30 +64,25 @@ bool DomainMapperTableManager::attribute(Id nName, Value const & rValue)
     switch (nName)
     {
     case NS_ooxml::LN_CT_TblLook_val:
-    {
-        TablePropertyMapPtr pPropMap(new TablePropertyMap());
-        pPropMap->Insert(PROP_TBL_LOOK, uno::Any(sal_Int32(rValue.getInt())));
-        insertTableProps(pPropMap);
-        m_aTableLook[u"val"_ustr] <<= static_cast<sal_Int32>(rValue.getInt());
-    }
+        m_TableLook.nVal = rValue.getInt();
     break;
     case NS_ooxml::LN_CT_TblLook_noVBand:
-        m_aTableLook[u"noVBand"_ustr] <<= static_cast<sal_Int32>(rValue.getInt());
+        m_TableLook.bNoVBand = rValue.getInt();
     break;
     case NS_ooxml::LN_CT_TblLook_noHBand:
-        m_aTableLook[u"noHBand"_ustr] <<= static_cast<sal_Int32>(rValue.getInt());
+        m_TableLook.bNoHBand = rValue.getInt();
     break;
     case NS_ooxml::LN_CT_TblLook_lastColumn:
-        m_aTableLook[u"lastColumn"_ustr] <<= static_cast<sal_Int32>(rValue.getInt());
+        m_TableLook.bLastColumn = rValue.getInt();
     break;
     case NS_ooxml::LN_CT_TblLook_lastRow:
-        m_aTableLook[u"lastRow"_ustr] <<= static_cast<sal_Int32>(rValue.getInt());
+        m_TableLook.bLastRow = rValue.getInt();
     break;
     case NS_ooxml::LN_CT_TblLook_firstColumn:
-        m_aTableLook[u"firstColumn"_ustr] <<= static_cast<sal_Int32>(rValue.getInt());
+        m_TableLook.bFirstColumn = rValue.getInt();
     break;
     case NS_ooxml::LN_CT_TblLook_firstRow:
-        m_aTableLook[u"firstRow"_ustr] <<= static_cast<sal_Int32>(rValue.getInt());
+        m_TableLook.bFirstRow = rValue.getInt();
     break;
     default:
         bRet = false;
@@ -98,9 +93,49 @@ bool DomainMapperTableManager::attribute(Id nName, Value const & rValue)
 
 void DomainMapperTableManager::finishTableLook()
 {
+    sal_Int32 nTblLookVal = 0x4A0; // MS errata documented default value;
+    // if ANY explicit tblLook element is provided, then ignore w:val. All default to 'true'.
+    if (m_TableLook.bFirstRow.has_value() || m_TableLook.bLastRow.has_value()
+        || m_TableLook.bFirstColumn.has_value() || m_TableLook.bLastColumn.has_value()
+        || m_TableLook.bNoHBand.has_value() || m_TableLook.bNoVBand.has_value())
+    {
+        nTblLookVal = 0;
+        if (!m_TableLook.bFirstRow.has_value() || *m_TableLook.bFirstRow)
+            nTblLookVal |= 0x020;
+        if (!m_TableLook.bLastRow.has_value() || *m_TableLook.bLastRow)
+            nTblLookVal |= 0x040;
+        if (!m_TableLook.bFirstColumn.has_value() || *m_TableLook.bFirstColumn)
+            nTblLookVal |= 0x080;
+        if (!m_TableLook.bLastColumn.has_value() || *m_TableLook.bLastColumn)
+            nTblLookVal |= 0x100;
+        if (!m_TableLook.bNoHBand.has_value() || *m_TableLook.bNoHBand)
+            nTblLookVal |= 0x200;
+        if (!m_TableLook.bNoVBand.has_value() || *m_TableLook.bNoVBand)
+            nTblLookVal |= 0x400;
+    }
+    else if (m_TableLook.nVal.has_value())
+        nTblLookVal = *m_TableLook.nVal;
+
     TablePropertyMapPtr pPropMap(new TablePropertyMap());
-    pPropMap->Insert(META_PROP_TABLE_LOOK, uno::Any(m_aTableLook.getAsConstPropertyValueList()));
-    m_aTableLook.clear();
+    pPropMap->Insert(PROP_TBL_LOOK, uno::Any(nTblLookVal));
+
+    /// Grab-bag of table look attributes for preserving.
+    comphelper::SequenceAsHashMap aTableLook;
+    aTableLook[u"val"_ustr] <<= nTblLookVal; // ensure a valid legacy value for DOCX 2007
+    if (m_TableLook.bFirstRow.has_value())
+        aTableLook[u"firstRow"_ustr] <<= static_cast<sal_Int32>(*m_TableLook.bFirstRow);
+    if (m_TableLook.bLastRow.has_value())
+        aTableLook[u"lastRow"_ustr] <<= static_cast<sal_Int32>(*m_TableLook.bLastRow);
+    if (m_TableLook.bFirstColumn.has_value())
+        aTableLook[u"firstColumn"_ustr] <<= static_cast<sal_Int32>(*m_TableLook.bFirstColumn);
+    if (m_TableLook.bLastColumn.has_value())
+        aTableLook[u"lastColumn"_ustr] <<= static_cast<sal_Int32>(*m_TableLook.bLastColumn);
+    if (m_TableLook.bNoHBand.has_value())
+        aTableLook[u"noHBand"_ustr] <<= static_cast<sal_Int32>(*m_TableLook.bNoHBand);
+    if (m_TableLook.bNoVBand.has_value())
+        aTableLook[u"noVBand"_ustr] <<= static_cast<sal_Int32>(*m_TableLook.bNoVBand);
+    pPropMap->Insert(META_PROP_TABLE_LOOK, uno::Any(aTableLook.getAsConstPropertyValueList()));
+
     insertTableProps(pPropMap);
 }
 
@@ -855,6 +890,7 @@ void DomainMapperTableManager::endOfRowAction()
 void DomainMapperTableManager::clearData()
 {
     m_nRow = m_nHeaderRepeat = m_nTableWidth = m_nLayoutType = 0;
+    m_TableLook = TableLook{};
 }
 
 }
