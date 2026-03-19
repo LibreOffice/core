@@ -561,6 +561,7 @@ wsd_headers = \
               wsd/ClientSession.hpp \
               wsd/ContentSecurityPolicy.hpp \
               wsd/ContentType.hpp \
+              wsd/DocumentToolDescriptions.hpp \
               wsd/DocumentBroker.hpp \
               wsd/Exceptions.hpp \
               wsd/FileServer.hpp \

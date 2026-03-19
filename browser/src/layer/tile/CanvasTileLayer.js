@@ -1004,6 +1004,22 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				window.app.console.error('Failed to parse aichatresult: ' + e);
 			}
 		}
+		else if (textMsg.startsWith('aichatprogress:')) {
+			try {
+				var json = JSON.parse(textMsg.substring('aichatprogress:'.length));
+				this._map.fire('aichatprogress', json);
+			} catch (e) {
+				window.app.console.error('Failed to parse aichatprogress: ' + e);
+			}
+		}
+		else if (textMsg.startsWith('aichatapproval:')) {
+			try {
+				var json = JSON.parse(textMsg.substring('aichatapproval:'.length));
+				this._map.fire('aichatapproval', json);
+			} catch (e) {
+				window.app.console.error('Failed to parse aichatapproval: ' + e);
+			}
+		}
 		else if (textMsg.startsWith('hrulerupdate:')) {
 			this._onRulerUpdate(textMsg);
 		}

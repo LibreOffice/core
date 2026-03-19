@@ -31,6 +31,7 @@ namespace cool {
 		timestamp: number;
 		isError?: boolean;
 		imageData?: string;
+		isApproval?: boolean;
 	}
 
 	export class AIChatSidebar {
@@ -108,6 +109,8 @@ namespace cool {
 
 		private registerChatHandlers(): void {
 			app.map.on('aichatresult', this.onAIChatResult, this);
+			app.map.on('aichatprogress', this.onAIChatProgress, this);
+			app.map.on('aichatapproval', this.onAIChatApproval, this);
 			app.map.on('docloaded', this.onDocLoaded, this);
 			app.map.on('textselectionchange', this.onTextSelectionChange, this);
 		}
@@ -198,6 +201,7 @@ namespace cool {
 		private updateChatState(includeHeader: boolean = false): void {
 			this.updateMessagesArea();
 			this.updateInputArea();
+			this.updateHint();
 			if (includeHeader) {
 				this.updateHeader();
 			}
@@ -464,8 +468,8 @@ namespace cool {
 					});
 				}
 
-				// Action buttons for text assistant messages
-				if (!isUser && !msg.isError) {
+				// Action buttons for text assistant messages (skip approval messages)
+				if (!isUser && !msg.isError && !msg.isApproval) {
 					children.push(this.getActionsJSON(index, true));
 				}
 
@@ -865,7 +869,7 @@ namespace cool {
 		private buildApiMessages(): { role: string; content: string }[] {
 			const apiMessages: { role: string; content: string }[] = [];
 			const textMessages = this.messages.filter(
-				(m) => !m.imageData && !m.isError,
+				(m) => !m.imageData && !m.isError && !m.isApproval,
 			);
 			const recent = textMessages.slice(-this.MAX_API_MESSAGES);
 			for (const msg of recent) {
@@ -903,12 +907,12 @@ namespace cool {
 			}
 
 			this.hintText = '';
+			this.inputText = '';
 
 			const userMsg = await this.buildUserMessage(text);
 			if (!userMsg) return;
 
 			this.messages.push(userMsg);
-			this.inputText = '';
 			this.isProcessing = true;
 
 			this.updateChatState(true);
@@ -961,6 +965,112 @@ namespace cool {
 				},
 				_('AI request failed'),
 			);
+		}
+
+		private onAIChatProgress(data: any): void {
+			if (data.requestId !== this.currentRequestId) return;
+			this.hintText = data.status || _('Working...');
+			this.updateHint();
+			// Reset the request timeout so multi-round loops do not time out
+			this.startRequestTimeout(
+				this.currentRequestId,
+				this.REQUEST_TIMEOUT_MS,
+				(d) => this.onAIChatResult(d),
+			);
+		}
+
+		private onAIChatApproval(data: any): void {
+			if (data.requestId !== this.currentRequestId) return;
+			this.hintText = '';
+			this.updateHint();
+
+			let content: string;
+			if (data.toolName === 'extract_document_structure') {
+				const plan = data.summary;
+				if (plan) {
+					content = plan + '\n\n' + _('Do you want to proceed?');
+				} else {
+					content = _(
+						'The AI wants to inspect your document. Do you want to proceed?',
+					);
+				}
+			} else if (data.toolName === 'transform_document_structure') {
+				const summary = data.summary || _('Modify document structure');
+				content =
+					_('The AI wants to modify your document:') +
+					'\n\n' +
+					summary +
+					'\n\n' +
+					_('Do you want to apply this change?');
+			} else {
+				content = _(
+					'The AI wants to perform an action. Do you want to proceed?',
+				);
+			}
+
+			// Show the approval UI as an assistant message
+			const approvalMsg: ChatMessage = {
+				role: 'assistant',
+				content: content,
+				timestamp: Date.now(),
+				isApproval: true,
+			};
+			this.messages.push(approvalMsg);
+			this.updateMessagesArea();
+
+			// Insert approval buttons after the messages area
+			app.layoutingService.onDrain(() => {
+				const msgEl = document.getElementById(
+					'aichat-msg-' + (this.messages.length - 1),
+				);
+				if (!msgEl) return;
+				msgEl.classList.add('aichat-msg-assistant');
+
+				const btnContainer = document.createElement('div');
+				btnContainer.className = 'aichat-approval-buttons';
+				btnContainer.style.display = 'flex';
+				btnContainer.style.gap = '8px';
+				btnContainer.style.marginTop = '8px';
+
+				const approveBtn = document.createElement('button');
+				approveBtn.textContent = _('Approve');
+				approveBtn.className = 'aichat-approve-btn';
+				approveBtn.onclick = () => {
+					this.sendApprovalAction('approve');
+					btnContainer.remove();
+				};
+
+				const rejectBtn = document.createElement('button');
+				rejectBtn.textContent = _('Reject');
+				rejectBtn.className = 'aichat-reject-btn';
+				rejectBtn.onclick = () => {
+					this.sendApprovalAction('reject');
+					btnContainer.remove();
+				};
+
+				btnContainer.appendChild(approveBtn);
+				btnContainer.appendChild(rejectBtn);
+				msgEl.appendChild(btnContainer);
+			});
+		}
+
+		private sendApprovalAction(action: string): void {
+			const payload = JSON.stringify({
+				requestId: this.currentRequestId,
+				action: action,
+			});
+			app.socket.sendMessage('aichatapprove: ' + payload);
+			this.hintText =
+				action === 'approve' ? _('Applying changes...') : _('Change rejected');
+			this.updateHint();
+			if (action === 'approve') {
+				// Reset timeout for the remaining loop
+				this.startRequestTimeout(
+					this.currentRequestId,
+					this.REQUEST_TIMEOUT_MS,
+					(d) => this.onAIChatResult(d),
+				);
+			}
 		}
 
 		clearConversation(): void {

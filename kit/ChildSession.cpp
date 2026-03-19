@@ -424,7 +424,22 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                 "\"value\":\"" + encodedTransformQueryJSON + "\""
             "}}";
 
-        getLOKitDocument()->postUnoCommand(command.c_str(), arguments.c_str(), false);
+        try
+        {
+            // For interactive sessions, request a notification so we get
+            // the real success/failure via LOK_CALLBACK_UNO_COMMAND_RESULT.
+            // For MCP/convert-to, the saveas flow returns the modified
+            // document, so no notification is needed.
+            std::string url;
+            getTokenString(tokens[1], "url", url);
+            bool interactive = (url == "interactive");
+            getLOKitDocument()->postUnoCommand(command.c_str(), arguments.c_str(), interactive);
+        }
+        catch (const std::exception& exc)
+        {
+            LOG_ERR("transformdocumentstructure: postUnoCommand failed: " << exc.what());
+            sendTextFrameAndLogError("error: cmd=transformdocumentstructure kind=parseerror");
+        }
 
         LOG_TRC("Transformation JSON application was requested.");
 
@@ -3713,6 +3728,31 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
 #endif
                 }
             }
+        }
+
+        if (!commandName.isEmpty() &&
+            commandName.toString() == ".uno:TransformDocumentStructure")
+        {
+            // Core may return a detailed JSON result via SetReturnValue.
+            // Extract the result string value if present; otherwise fall back
+            // to the simple success boolean from the dispatch result.
+            std::string resultJson;
+            auto resultObj = object->getObject("result");
+            if (resultObj)
+            {
+                std::string resultType;
+                JsonUtil::findJSONValue(resultObj, "type", resultType);
+                if (resultType == "string")
+                    JsonUtil::findJSONValue(resultObj, "value", resultJson);
+            }
+
+            if (resultJson.empty())
+            {
+                bool bSuccess = !success.isEmpty() && success.toString() == "true";
+                resultJson = "{\"success\":" + std::string(bSuccess ? "true" : "false") + "}";
+            }
+            sendTextFrame("transformeddocumentstructure: " + resultJson);
+            break;
         }
 
         const std::string saveMessage = "unocommandresult: " + payload;

@@ -36,6 +36,9 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/FileServer.hpp>
+#if !MOBILEAPP
+#include <wsd/DocumentToolDescriptions.hpp>
+#endif
 #include <wsd/TileDesc.hpp>
 
 #include <Poco/JSON/Array.h>
@@ -619,6 +622,101 @@ static const std::string AI_SYSTEM_PROMPT =
     "without wrapping it in code fences (do NOT use ```markdown or ``` blocks). "
     "Just return the raw markdown content. Be concise and helpful.";
 
+namespace
+{
+
+/// Helper to create an OpenAI function-calling tool object.
+Poco::JSON::Object::Ptr makeAITool(const std::string& name,
+                                    const std::string& description,
+                                    Poco::JSON::Object::Ptr parameters)
+{
+    Poco::JSON::Object::Ptr fn = new Poco::JSON::Object();
+    fn->set("name", name);
+    fn->set("description", description);
+    fn->set("parameters", parameters);
+
+    Poco::JSON::Object::Ptr tool = new Poco::JSON::Object();
+    tool->set("type", "function");
+    tool->set("function", fn);
+    return tool;
+}
+
+/// Helper to create an OpenAI function parameter schema object.
+Poco::JSON::Object::Ptr makeParamSchema(
+    std::initializer_list<std::pair<std::string, std::pair<std::string, std::string>>> props,
+    std::initializer_list<std::string> required)
+{
+    Poco::JSON::Object::Ptr properties = new Poco::JSON::Object();
+    for (const auto& p : props)
+    {
+        Poco::JSON::Object::Ptr prop = new Poco::JSON::Object();
+        prop->set("type", p.second.first);
+        prop->set("description", p.second.second);
+        properties->set(p.first, prop);
+    }
+
+    Poco::JSON::Array::Ptr reqArr = new Poco::JSON::Array();
+    for (const auto& r : required)
+        reqArr->add(r);
+
+    Poco::JSON::Object::Ptr schema = new Poco::JSON::Object();
+    schema->set("type", "object");
+    schema->set("properties", properties);
+    schema->set("required", reqArr);
+    return schema;
+}
+
+} // anonymous namespace
+
+Poco::JSON::Array::Ptr ClientSession::buildAIToolDefinitions() const
+{
+    Poco::JSON::Array::Ptr tools = new Poco::JSON::Array();
+
+    // generate_image - existing tool
+    tools->add(makeAITool(
+        "generate_image",
+        "Generate an image based on the user's description. Call this when the "
+        "user asks to create, draw, generate, sketch, or make an image or picture.",
+        makeParamSchema(
+            {{"prompt", {"string", "A detailed description of the image to generate"}}},
+            {"prompt"})));
+
+    // extract_document_structure - inspect the open document
+    tools->add(makeAITool(
+        "extract_document_structure",
+        DocumentToolDescriptions::EXTRACT_DOC_STRUCTURE_DESCRIPTION,
+        makeParamSchema(
+            {{"filter", {"string",
+                "Filter results to a specific structure type. "
+                "For Impress: 'slides'. For Writer: 'contentcontrol'. "
+                "Omit to get the full structure."}}},
+            {})));
+
+    // transform_document_structure - modify the open document
+    tools->add(makeAITool(
+        "transform_document_structure",
+        std::string(
+            "Transform the currently-open document's structure using a JSON command "
+            "sequence. Supports Impress slide operations, Writer/Calc content control "
+            "updates, and arbitrary UNO commands.\n\n")
+            + DocumentToolDescriptions::TRANSFORM_PARAM_DESCRIPTION,
+        makeParamSchema(
+            {{"transform", {"string", "JSON transformation commands"}},
+             {"summary", {"string",
+                "Markdown summary of the changes for the user to review before "
+                "approving. List each slide with its title and "
+                "key content points."}}},
+            {"transform"})));
+
+    // extract_link_targets - get link targets from the open document
+    tools->add(makeAITool(
+        "extract_link_targets",
+        DocumentToolDescriptions::EXTRACT_LINK_TARGETS_DESCRIPTION,
+        makeParamSchema({}, {})));
+
+    return tools;
+}
+
 bool ClientSession::handleAIChatAction(const std::string& firstLine)
 {
     static constexpr size_t MAX_AI_PAYLOAD_SIZE = 5 * 1024 * 1024; // 5MB
@@ -668,11 +766,23 @@ bool ClientSession::handleAIChatAction(const std::string& firstLine)
             "format them as clickable links using this pattern: [B2](cell://B2), "
             "where the column letters come from the header row and the row number from the Row column.";
 
+    if (docType == "presentation")
+        systemPrompt +=
+            " When creating or modifying slides, you MUST format every slide:"
+            " bold every title using EditTextObject with .uno:Bold,"
+            " apply .uno:DefaultBullet to content placeholders that list multiple items,"
+            " and choose the most appropriate layout for each slide's content from the"
+            " Available layouts list in the tool description."
+            " Do not use the same layout for every slide."
+            " Do not prefix lines with '- ' when using DefaultBullet (the bullet marker"
+            " is added automatically)."
+            " In content placeholders, put only the items to be bulleted. Do not add"
+            " sub-headings or blank lines before the bullet items."
+            " When calling transform_document_structure, include a 'summary' parameter"
+            " with a markdown preview of ONLY the slides being created or modified in"
+            " this transform call, not pre-existing slides.";
+
     Poco::JSON::Array::Ptr sanitizedMessages = new Poco::JSON::Array();
-    Poco::JSON::Object::Ptr systemMsg = new Poco::JSON::Object();
-    systemMsg->set("role", "system");
-    systemMsg->set("content", systemPrompt);
-    sanitizedMessages->add(systemMsg);
 
     for (unsigned i = 0; i < messages->size(); ++i)
     {
@@ -698,6 +808,52 @@ bool ClientSession::handleAIChatAction(const std::string& firstLine)
         sanitizedMessages->add(msg);
     }
 
+    // Check whether the last user message includes selected text from the document.
+    bool hasSelectedText = false;
+    for (int i = static_cast<int>(messages->size()) - 1; i >= 0; --i)
+    {
+        auto msg = messages->getObject(i);
+        if (!msg)
+            continue;
+        std::string role;
+        JsonUtil::findJSONValue(msg, "role", role);
+        if (role == "user")
+        {
+            std::string content;
+            JsonUtil::findJSONValue(msg, "content", content);
+            if (content.find("[Selected text from document:") != std::string::npos)
+                hasSelectedText = true;
+            break;
+        }
+    }
+
+    systemPrompt +=
+        " You have tools to inspect and modify the document."
+        " Use transform_document_structure to make changes.";
+
+    if (hasSelectedText)
+        systemPrompt +=
+            " The user has shared selected text from the document as context."
+            " Use that context directly to answer their question or make changes."
+            " Only call extract_document_structure if you need information about"
+            " parts of the document beyond the selection.";
+    else
+        systemPrompt +=
+            " Use extract_document_structure when you need to understand the"
+            " existing document layout before making changes."
+            " When the user asks you to create new content from scratch (like a table"
+            " or text), just generate it directly without extracting first.";
+
+    // Prepend system message: build a new array with system first, then the rest.
+    Poco::JSON::Array::Ptr finalMessages = new Poco::JSON::Array();
+    Poco::JSON::Object::Ptr systemMsg = new Poco::JSON::Object();
+    systemMsg->set("role", "system");
+    systemMsg->set("content", systemPrompt);
+    finalMessages->add(systemMsg);
+    for (unsigned i = 0; i < sanitizedMessages->size(); ++i)
+        finalMessages->add(sanitizedMessages->get(i));
+    sanitizedMessages = finalMessages;
+
     // Trim to most recent messages if over limit (keep system prompt at index 0)
     while (sanitizedMessages->size() > MAX_AI_MESSAGES + 1)
         sanitizedMessages->remove(1);
@@ -722,205 +878,563 @@ bool ClientSession::handleAIChatAction(const std::string& firstLine)
     std::string requestUrl = std::move(baseUrl);
     requestUrl.append("/v1/chat/completions");
 
-    // Build HTTP payload with model and messages
+    // Initialize the tool loop state
+    _aiToolLoop = std::make_unique<AIToolLoopState>();
+    _aiToolLoop->requestId = requestId;
+    _aiToolLoop->messages = sanitizedMessages;
+    _aiToolLoop->model = model;
+    _aiToolLoop->requestUrl = requestUrl;
+    _aiToolLoop->apiKey = apiKey;
+
+    callLLMAPI();
+    return true;
+}
+
+void ClientSession::callLLMAPI()
+{
+    if (!_aiToolLoop)
+        return;
+
     Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
-    payload->set("model", model);
-    payload->set("messages", sanitizedMessages);
-
-    Poco::JSON::Object::Ptr promptProp = new Poco::JSON::Object();
-    promptProp->set("type", "string");
-    promptProp->set("description", "A detailed description of the image to generate");
-
-    Poco::JSON::Object::Ptr properties = new Poco::JSON::Object();
-    properties->set("prompt", promptProp);
-
-    Poco::JSON::Array::Ptr required = new Poco::JSON::Array();
-    required->add("prompt");
-
-    Poco::JSON::Object::Ptr parameters = new Poco::JSON::Object();
-    parameters->set("type", "object");
-    parameters->set("properties", properties);
-    parameters->set("required", required);
-
-    Poco::JSON::Object::Ptr function = new Poco::JSON::Object();
-    function->set("name", "generate_image");
-    function->set("description",
-                    "Generate an image based on the user's description. Call this when the "
-                    "user asks to create, draw, generate, sketch, or make an image or picture.");
-    function->set("parameters", parameters);
-
-    Poco::JSON::Object::Ptr tool = new Poco::JSON::Object();
-    tool->set("type", "function");
-    tool->set("function", function);
-
-    Poco::JSON::Array::Ptr tools = new Poco::JSON::Array();
-    tools->add(tool);
-
-    payload->set("tools", tools);
+    payload->set("model", _aiToolLoop->model);
+    payload->set("messages", _aiToolLoop->messages);
+    payload->set("tools", buildAIToolDefinitions());
 
     std::ostringstream payloadStream;
     payload->stringify(payloadStream);
     std::string payloadStr = payloadStream.str();
 
-    std::shared_ptr<http::Session> httpSession = http::Session::create(requestUrl);
+    std::shared_ptr<http::Session> httpSession =
+        http::Session::create(_aiToolLoop->requestUrl);
     if (!httpSession)
     {
-        LOG_WRN("AIChatAction: failed to create HTTP session");
-        sendAIChatResult(false, "Failed to create HTTP session", requestId);
-        return true;
+        LOG_WRN("AIToolLoop: failed to create HTTP session");
+        sendAIChatResult(false, "Failed to create HTTP session", _aiToolLoop->requestId);
+        _aiToolLoop.reset();
+        return;
     }
 
     httpSession->setTimeout(std::chrono::seconds(60));
 
     auto clientSessionPtr = client_from_this();
 
-    auto sendResult = [clientSessionPtr, requestId](bool success, const std::string& resultText)
-    { clientSessionPtr->sendAIChatResult(success, resultText, requestId); };
-
     http::Session::FinishedCallback finishedCallback =
-        [clientSessionPtr, requestId, sendResult](const std::shared_ptr<http::Session>& session)
+        [clientSessionPtr](const std::shared_ptr<http::Session>& session)
     {
         clientSessionPtr->_activeAIChatSession.reset();
 
+        if (!clientSessionPtr->_aiToolLoop)
+            return;
+
+        const std::string& requestId = clientSessionPtr->_aiToolLoop->requestId;
         const std::shared_ptr<const http::Response> httpResponse = session->response();
         const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
 
         if (statusCode == http::StatusCode::None)
         {
-            sendResult(false, "Request timeout");
+            clientSessionPtr->sendAIChatResult(false, "Request timeout", requestId);
+            clientSessionPtr->_aiToolLoop.reset();
             return;
         }
 
         if (statusCode != http::StatusCode::OK)
         {
+            const std::string& body = httpResponse->getBody();
+            std::cerr << "AIToolLoop: API returned "
+                << static_cast<int>(statusCode) << ' '
+                << httpResponse->statusLine().reasonPhrase()
+                << " body: " << body.substr(0, 500) << std::endl;
             const std::string errorMessage = mapAIHttpStatusToError(
                 statusCode, httpResponse->statusLine().reasonPhrase());
-            sendResult(false, errorMessage);
+            clientSessionPtr->sendAIChatResult(false, errorMessage, requestId);
+            clientSessionPtr->_aiToolLoop.reset();
             return;
         }
 
-        const std::string& responseBody = httpResponse->getBody();
-        Poco::JSON::Object::Ptr responseObject = new Poco::JSON::Object();
-        if (!JsonUtil::parseJSON(responseBody, responseObject))
-        {
-            sendResult(false, "No response from AI");
-            return;
-        }
-
-        Poco::JSON::Array::Ptr choices = responseObject->getArray("choices");
-        if (!choices || choices->size() == 0)
-        {
-            sendResult(false, "No response from AI");
-            return;
-        }
-
-        Poco::JSON::Object::Ptr choice = choices->getObject(0);
-        if (!choice)
-        {
-            sendResult(false, "No response from AI");
-            return;
-        }
-
-        std::string finishReason;
-        JsonUtil::findJSONValue(choice, "finish_reason", finishReason);
-
-        Poco::JSON::Object::Ptr message = choice->getObject("message");
-        if (!message)
-        {
-            sendResult(false, "No response from AI");
-            return;
-        }
-
-        // Check for tool calls (LLM decided to generate an image)
-        Poco::JSON::Array::Ptr toolCalls = message->getArray("tool_calls");
-        if (toolCalls && toolCalls->size() > 0)
-        {
-            Poco::JSON::Object::Ptr call = toolCalls->getObject(0);
-            if (call)
-            {
-                Poco::JSON::Object::Ptr fn = call->getObject("function");
-                if (fn)
-                {
-                    std::string fnName;
-                    JsonUtil::findJSONValue(fn, "name", fnName);
-                    if (fnName == "generate_image")
-                    {
-                        std::string argsStr;
-                        JsonUtil::findJSONValue(fn, "arguments", argsStr);
-
-                        std::string imagePrompt;
-                        Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
-                        if (JsonUtil::parseJSON(argsStr, argsObj))
-                        {
-                            JsonUtil::findJSONValue(argsObj, "prompt", imagePrompt);
-                        }
-
-                        if (imagePrompt.empty())
-                        {
-                            sendResult(false, "Image generation failed: no prompt from model");
-                            return;
-                        }
-
-                        clientSessionPtr->handleAIImageGeneration(imagePrompt, requestId);
-                        return;
-                    }
-                }
-            }
-        }
-
-        std::string result;
-        std::string reasoning;
-        JsonUtil::findJSONValue(message, "content", result);
-        JsonUtil::findJSONValue(message, "reasoning", reasoning);
-
-        if (result.empty())
-        {
-            if (!reasoning.empty())
-            {
-                sendResult(false,
-                           "This model returned only internal reasoning and no output. Try a "
-                           "different model or shorter input.");
-                return;
-            }
-            if (finishReason == "length")
-            {
-                sendResult(false, "The model ran out of tokens before producing output. Try a "
-                                  "shorter input or a model with a larger output budget.");
-                return;
-            }
-
-            sendResult(false, "No response from AI");
-            return;
-        }
-
-        sendResult(true, result);
+        clientSessionPtr->handleLLMResponse(httpResponse->getBody());
     };
 
     httpSession->setFinishedHandler(std::move(finishedCallback));
 
     http::Session::ConnectFailCallback connectFailCallback =
-        [clientSessionPtr = std::move(clientSessionPtr),
-         sendResult = std::move(sendResult)](
-            const std::shared_ptr<http::Session>& /*session*/)
+        [clientSessionPtr](const std::shared_ptr<http::Session>& /*session*/)
     {
         clientSessionPtr->_activeAIChatSession.reset();
-        sendResult(false, "Network error - please check your connection");
+        if (clientSessionPtr->_aiToolLoop)
+        {
+            clientSessionPtr->sendAIChatResult(
+                false, "Network error - please check your connection",
+                clientSessionPtr->_aiToolLoop->requestId);
+            clientSessionPtr->_aiToolLoop.reset();
+        }
     };
     httpSession->setConnectFailHandler(std::move(connectFailCallback));
 
-    http::Request httpRequest(Poco::URI(requestUrl).getPathAndQuery());
+    http::Request httpRequest(Poco::URI(_aiToolLoop->requestUrl).getPathAndQuery());
     httpRequest.setVerb(http::Request::VERB_POST);
     httpRequest.set("Content-Type", "application/json");
     std::string authHeader = "Bearer ";
-    authHeader.append(apiKey);
+    authHeader.append(_aiToolLoop->apiKey);
     httpRequest.set("Authorization", std::move(authHeader));
     httpRequest.setBody(std::move(payloadStr), "application/json");
 
-    LOG_DBG("AIChatAction: sending request [" << requestId << "] to " << requestUrl);
+    LOG_DBG("AIToolLoop: sending request [" << _aiToolLoop->requestId
+            << "] round " << (6 - _aiToolLoop->toolRoundsRemaining)
+            << " to " << _aiToolLoop->requestUrl);
 
     _activeAIChatSession = httpSession;
     std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
     httpSession->asyncRequest(httpRequest, docBroker->getPoll());
+}
+
+void ClientSession::handleLLMResponse(const std::string& responseBody)
+{
+    if (!_aiToolLoop)
+        return;
+
+    const std::string& requestId = _aiToolLoop->requestId;
+
+    Poco::JSON::Object::Ptr responseObject = new Poco::JSON::Object();
+    if (!JsonUtil::parseJSON(responseBody, responseObject))
+    {
+        sendAIChatResult(false, "No response from AI", requestId);
+        _aiToolLoop.reset();
+        return;
+    }
+
+    Poco::JSON::Array::Ptr choices = responseObject->getArray("choices");
+    if (!choices || choices->size() == 0)
+    {
+        sendAIChatResult(false, "No response from AI", requestId);
+        _aiToolLoop.reset();
+        return;
+    }
+
+    Poco::JSON::Object::Ptr choice = choices->getObject(0);
+    if (!choice)
+    {
+        sendAIChatResult(false, "No response from AI", requestId);
+        _aiToolLoop.reset();
+        return;
+    }
+
+    std::string finishReason;
+    JsonUtil::findJSONValue(choice, "finish_reason", finishReason);
+
+    Poco::JSON::Object::Ptr message = choice->getObject("message");
+    if (!message)
+    {
+        sendAIChatResult(false, "No response from AI", requestId);
+        _aiToolLoop.reset();
+        return;
+    }
+
+    // Check for tool calls
+    Poco::JSON::Array::Ptr toolCalls = message->getArray("tool_calls");
+    if (toolCalls && toolCalls->size() > 0)
+    {
+        if (_aiToolLoop->toolRoundsRemaining <= 0)
+        {
+            sendAIChatResult(false, "AI used too many tool steps", requestId);
+            _aiToolLoop.reset();
+            return;
+        }
+        --_aiToolLoop->toolRoundsRemaining;
+
+        // Append the assistant message (with tool_calls) to the conversation
+        _aiToolLoop->messages->add(message);
+
+        // Capture the AI's text content so it can be shown in approval dialogs.
+        std::string assistantContent;
+        JsonUtil::findJSONValue(message, "content", assistantContent);
+        if (!assistantContent.empty())
+            _aiToolLoop->pendingSummary = assistantContent;
+
+        // Queue all tool calls for sequential processing
+        _aiToolLoop->pendingToolCalls.clear();
+        for (unsigned i = 0; i < toolCalls->size(); ++i)
+        {
+            Poco::JSON::Object::Ptr call = toolCalls->getObject(i);
+            if (!call)
+                continue;
+
+            PendingToolCall pending;
+            JsonUtil::findJSONValue(call, "id", pending.toolCallId);
+
+            Poco::JSON::Object::Ptr fn = call->getObject("function");
+            if (!fn)
+                continue;
+
+            JsonUtil::findJSONValue(fn, "name", pending.functionName);
+            JsonUtil::findJSONValue(fn, "arguments", pending.arguments);
+            _aiToolLoop->pendingToolCalls.push_back(std::move(pending));
+        }
+
+        // Start processing the first queued tool call
+        processNextPendingToolCall();
+        return;
+    }
+
+    // No tool calls - this is the final text response
+    std::string result;
+    std::string reasoning;
+    JsonUtil::findJSONValue(message, "content", result);
+    JsonUtil::findJSONValue(message, "reasoning", reasoning);
+
+    if (result.empty())
+    {
+        if (!reasoning.empty())
+        {
+            sendAIChatResult(false,
+                "This model returned only internal reasoning and no output. Try a "
+                "different model or shorter input.", requestId);
+        }
+        else if (finishReason == "length")
+        {
+            sendAIChatResult(false,
+                "The model ran out of tokens before producing output. Try a "
+                "shorter input or a model with a larger output budget.", requestId);
+        }
+        else
+        {
+            sendAIChatResult(false, "No response from AI", requestId);
+        }
+        _aiToolLoop.reset();
+        return;
+    }
+
+    sendAIChatResult(true, result, requestId);
+    _aiToolLoop.reset();
+}
+
+bool ClientSession::executeAIToolCall(const std::string& toolCallId,
+                                       const std::string& fnName,
+                                       const std::string& argsJson)
+{
+    if (!_aiToolLoop)
+        return false;
+
+    const std::string requestId = _aiToolLoop->requestId;
+
+    // generate_image - delegate to existing handler (terminates tool loop)
+    if (fnName == "generate_image")
+    {
+        Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
+        std::string imagePrompt;
+        if (JsonUtil::parseJSON(argsJson, argsObj))
+            JsonUtil::findJSONValue(argsObj, "prompt", imagePrompt);
+
+        if (imagePrompt.empty())
+        {
+            sendAIChatResult(false, "Image generation failed: no prompt from model", requestId);
+            _aiToolLoop.reset();
+            return true;
+        }
+
+        _aiToolLoop.reset(); // image generation is terminal
+        handleAIImageGeneration(imagePrompt, requestId);
+        return true;
+    }
+
+    std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
+    if (!docBroker)
+    {
+        sendAIChatResult(false, "Document not available", requestId);
+        _aiToolLoop.reset();
+        return true;
+    }
+
+    // extract_document_structure - requires user approval
+    if (fnName == "extract_document_structure")
+    {
+        std::string filter;
+        Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
+        if (JsonUtil::parseJSON(argsJson, argsObj))
+            JsonUtil::findJSONValue(argsObj, "filter", filter);
+
+        std::string command = "extractdocumentstructure url=interactive";
+        if (!filter.empty())
+            command += " filter=" + filter;
+
+        _aiToolLoop->awaitingApproval = true;
+        _aiToolLoop->pendingToolCallId = toolCallId;
+        _aiToolLoop->pendingToolName = fnName;
+        _aiToolLoop->pendingForwardCommand = command;
+
+        sendAIToolApproval(fnName, "");
+        return true;
+    }
+
+    // extract_link_targets - read-only, send to kit
+    if (fnName == "extract_link_targets")
+    {
+        _aiToolLoop->awaitingKitResponse = true;
+        _aiToolLoop->pendingToolCallId = toolCallId;
+        _aiToolLoop->pendingToolName = fnName;
+
+        sendAIToolProgress(fnName, "Extracting link targets...");
+        forwardToChild("extractlinktargets url=interactive", docBroker);
+        return true;
+    }
+
+    // transform_document_structure - requires user approval
+    if (fnName == "transform_document_structure")
+    {
+        std::string transform;
+        std::string summary;
+        Poco::JSON::Object::Ptr argsObj = new Poco::JSON::Object();
+        if (JsonUtil::parseJSON(argsJson, argsObj))
+        {
+            JsonUtil::findJSONValue(argsObj, "transform", transform);
+            JsonUtil::findJSONValue(argsObj, "summary", summary);
+        }
+
+        if (transform.empty())
+        {
+            continueAIToolLoop(toolCallId,
+                "{\"error\":\"No transform parameter provided\"}");
+            return true;
+        }
+
+        // findJSONValue resolves JSON escapes, so literal control characters
+        // (newlines, tabs) may appear inside string values. Escape them so
+        // the inner JSON is valid, then re-serialize through Poco for a
+        // clean string that core can parse.
+        {
+            std::string sanitized;
+            sanitized.reserve(transform.size());
+            bool inStr = false;
+            for (std::size_t i = 0; i < transform.size(); ++i)
+            {
+                char c = transform[i];
+                if (c == '"' && (i == 0 || transform[i - 1] != '\\'))
+                    inStr = !inStr;
+                if (inStr)
+                {
+                    if (c == '\n') { sanitized += "\\n"; continue; }
+                    if (c == '\r') { sanitized += "\\r"; continue; }
+                    if (c == '\t') { sanitized += "\\t"; continue; }
+                }
+                sanitized += c;
+            }
+            transform = sanitized;
+        }
+
+        Poco::JSON::Object::Ptr transformObj = new Poco::JSON::Object();
+        if (JsonUtil::parseJSON(transform, transformObj))
+        {
+            std::ostringstream oss;
+            transformObj->stringify(oss);
+            transform = oss.str();
+        }
+        else
+        {
+            continueAIToolLoop(toolCallId,
+                "{\"error\":\"Invalid JSON in transform parameter. "
+                "All slides must be in a single SlideCommands array within one "
+                "Transforms object. Use InsertMasterSlide to add slides within "
+                "the same array.\"}");
+            return true;
+        }
+
+        // Navigation-only transforms (JumpToSlide) do not modify the document
+        // and can be executed without user approval.
+        bool navigationOnly = false;
+        {
+            Poco::JSON::Object::Ptr transforms = transformObj->getObject("Transforms");
+            Poco::JSON::Array::Ptr cmds =
+                transforms ? transforms->getArray("SlideCommands") : nullptr;
+            if (cmds && cmds->size() > 0)
+            {
+                navigationOnly = true;
+                for (unsigned i = 0; i < cmds->size(); ++i)
+                {
+                    Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
+                    if (!cmd ||
+                        !(cmd->has("JumpToSlide") || cmd->has("JumpToSlideByName")))
+                    {
+                        navigationOnly = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (navigationOnly)
+        {
+            _aiToolLoop->pendingToolCallId = toolCallId;
+            _aiToolLoop->pendingToolName = fnName;
+            _aiToolLoop->awaitingKitResponse = true;
+
+            std::string encodedTransform;
+            Poco::URI::encode(transform, "", encodedTransform);
+            forwardToChild(
+                "transformdocumentstructure url=interactive transform=" + encodedTransform,
+                docBroker);
+            return true;
+        }
+
+        _aiToolLoop->awaitingApproval = true;
+        _aiToolLoop->pendingToolCallId = toolCallId;
+        _aiToolLoop->pendingToolName = fnName;
+        _aiToolLoop->pendingTransformArgs = transform;
+        _aiToolLoop->pendingSummary = summary;
+
+        sendAIToolApproval(fnName, transform);
+        return true;
+    }
+
+    // Unknown tool - feed error back to LLM
+    continueAIToolLoop(toolCallId, "{\"error\":\"Unknown tool: " + fnName + "\"}");
+    return true;
+}
+
+void ClientSession::processNextPendingToolCall()
+{
+    if (!_aiToolLoop)
+        return;
+
+    if (_aiToolLoop->pendingToolCalls.empty())
+    {
+        // All tool calls processed, call LLM with all results
+        sendAIToolProgress(_aiToolLoop->pendingToolName, "Thinking...");
+        callLLMAPI();
+        return;
+    }
+
+    PendingToolCall next = std::move(_aiToolLoop->pendingToolCalls.front());
+    _aiToolLoop->pendingToolCalls.erase(_aiToolLoop->pendingToolCalls.begin());
+
+    LOG_DBG("AIToolLoop: tool call [" << next.functionName << "] id=" << next.toolCallId
+            << " for request [" << _aiToolLoop->requestId << ']');
+
+    executeAIToolCall(next.toolCallId, next.functionName, next.arguments);
+}
+
+void ClientSession::continueAIToolLoop(const std::string& toolCallId,
+                                        const std::string& result)
+{
+    if (!_aiToolLoop)
+        return;
+
+    // Append tool result message to the conversation
+    Poco::JSON::Object::Ptr toolResult = new Poco::JSON::Object();
+    toolResult->set("role", "tool");
+    toolResult->set("tool_call_id", toolCallId);
+    toolResult->set("content", result);
+    _aiToolLoop->messages->add(toolResult);
+
+    _aiToolLoop->awaitingKitResponse = false;
+    _aiToolLoop->awaitingApproval = false;
+
+    // Process the next queued tool call, or call LLM if all done
+    processNextPendingToolCall();
+}
+
+void ClientSession::sendAIToolProgress(const std::string& toolName,
+                                        const std::string& status)
+{
+    if (!_aiToolLoop)
+        return;
+
+    Poco::JSON::Object::Ptr progress = new Poco::JSON::Object();
+    progress->set("requestId", _aiToolLoop->requestId);
+    progress->set("toolName", toolName);
+    progress->set("status", status);
+
+    std::ostringstream oss;
+    progress->stringify(oss);
+    sendTextFrame("aichatprogress: " + oss.str());
+}
+
+void ClientSession::sendAIToolApproval(const std::string& toolName,
+                                        const std::string& transformJson)
+{
+    if (!_aiToolLoop)
+        return;
+
+    Poco::JSON::Object::Ptr approval = new Poco::JSON::Object();
+    approval->set("requestId", _aiToolLoop->requestId);
+    approval->set("toolName", toolName);
+    approval->set("transformJson", transformJson);
+    if (!_aiToolLoop->pendingSummary.empty())
+        approval->set("summary", _aiToolLoop->pendingSummary);
+
+    std::ostringstream oss;
+    approval->stringify(oss);
+    sendTextFrame("aichatapproval: " + oss.str());
+}
+
+bool ClientSession::handleAIChatApprove(const std::string& firstLine)
+{
+    const std::string jsonPayload = firstLine.substr(strlen("aichatapprove: "));
+
+    Poco::JSON::Object::Ptr obj = new Poco::JSON::Object();
+    if (!JsonUtil::parseJSON(jsonPayload, obj))
+    {
+        LOG_WRN("AIChatApprove: invalid JSON");
+        return true;
+    }
+
+    std::string action;
+    JsonUtil::findJSONValue(obj, "action", action);
+
+    if (!_aiToolLoop || !_aiToolLoop->awaitingApproval)
+    {
+        LOG_WRN("AIChatApprove: no pending approval");
+        return true;
+    }
+
+    const std::string toolCallId = _aiToolLoop->pendingToolCallId;
+
+    if (action == "approve")
+    {
+        std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
+        if (!docBroker)
+        {
+            sendAIChatResult(false, "Document not available", _aiToolLoop->requestId);
+            _aiToolLoop.reset();
+            return true;
+        }
+
+        std::string command;
+        if (!_aiToolLoop->pendingForwardCommand.empty())
+        {
+            // Generic forwarding (extract_document_structure, etc.)
+            command = _aiToolLoop->pendingForwardCommand;
+            _aiToolLoop->pendingForwardCommand.clear();
+        }
+        else
+        {
+            // transform_document_structure - URI-encode the transform JSON
+            std::string encodedTransform;
+            Poco::URI::encode(_aiToolLoop->pendingTransformArgs, "", encodedTransform);
+            command = "transformdocumentstructure url=interactive transform=" + encodedTransform;
+        }
+
+        _aiToolLoop->awaitingApproval = false;
+        _aiToolLoop->awaitingKitResponse = true;
+
+        sendAIToolProgress(_aiToolLoop->pendingToolName, "Working...");
+        forwardToChild(command, docBroker);
+    }
+    else
+    {
+        // User rejected - feed rejection back to LLM with tool-specific message
+        _aiToolLoop->awaitingApproval = false;
+        std::string rejectionMsg;
+        if (_aiToolLoop->pendingToolName == "extract_document_structure")
+            rejectionMsg =
+                "{\"error\":\"User declined document inspection. "
+                "Answer their request directly without inspecting the document. "
+                "If the request is to create new content, just generate it.\"}";
+        else
+            rejectionMsg =
+                "{\"error\":\"User rejected the document modification. "
+                "Explain what you wanted to do and ask if they would like a different approach.\"}";
+        continueAIToolLoop(toolCallId, rejectionMsg);
+    }
+
     return true;
 }
 
@@ -934,6 +1448,9 @@ bool ClientSession::handleAIChatCancel(const std::string& firstLine)
         _activeAIChatSession->asyncShutdown();
         _activeAIChatSession.reset();
     }
+
+    _aiToolLoop.reset();
+
     return true;
 }
 
@@ -1861,6 +2378,10 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     else if (tokens.equals(0, "aichatcancel:"))
     {
         return handleAIChatCancel(firstLine);
+    }
+    else if (tokens.equals(0, "aichatapprove:"))
+    {
+        return handleAIChatApprove(firstLine);
     }
 #endif
     else if (tokens.equals(0, "resetaccesstoken"))
@@ -3038,7 +3559,20 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
                 abortConversion(docBroker, saveAsSocket, std::move(errorKind));
                 return false;
             }
+#if !MOBILEAPP
+            else if (_aiToolLoop && _aiToolLoop->awaitingKitResponse &&
+                     (errorCommand == "extractdocumentstructure" ||
+                      errorCommand == "extractlinktargets" ||
+                      errorCommand == "transformdocumentstructure"))
+            {
+                LOG_WRN("AIToolLoop: kit error for " << errorCommand << ": " << errorKind);
+                _aiToolLoop->awaitingKitResponse = false;
+                continueAIToolLoop(_aiToolLoop->pendingToolCallId,
+                    "{\"error\":\"" + errorCommand + " failed: " + errorKind + "\"}");
+                return true;
+            }
             else
+#endif
             {
                 LOG_ERR(errorCommand << " error failure: " << errorKind);
             }
@@ -3584,6 +4118,15 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
 #endif
     else if (tokens.equals(0, "extractedlinktargets:"))
     {
+#if !MOBILEAPP
+        if (_aiToolLoop && _aiToolLoop->awaitingKitResponse)
+        {
+            _aiToolLoop->awaitingKitResponse = false;
+            continueAIToolLoop(_aiToolLoop->pendingToolCallId, payload->jsonString());
+            return true;
+        }
+#endif
+
         LOG_TRC("Sending extracted link targets response.");
         if (!saveAsSocket)
             LOG_ERR("Error in extractedlinktargets: not in isConvertTo mode");
@@ -3603,6 +4146,15 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     }
     else if (tokens.equals(0, "extracteddocumentstructure:"))
     {
+#if !MOBILEAPP
+        if (_aiToolLoop && _aiToolLoop->awaitingKitResponse)
+        {
+            _aiToolLoop->awaitingKitResponse = false;
+            continueAIToolLoop(_aiToolLoop->pendingToolCallId, payload->jsonString());
+            return true;
+        }
+#endif
+
         LOG_TRC("Sending extracted document structure response.");
         if (!saveAsSocket)
             LOG_ERR("Error in extracteddocumentstructure: not in isConvertTo mode");
@@ -3622,6 +4174,20 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
     }
     else if (tokens.equals(0, "transformeddocumentstructure:"))
     {
+#if !MOBILEAPP
+        if (_aiToolLoop && _aiToolLoop->awaitingKitResponse)
+        {
+            _aiToolLoop->awaitingKitResponse = false;
+            continueAIToolLoop(_aiToolLoop->pendingToolCallId, payload->jsonString());
+            return true;
+        }
+#endif
+
+        // TODO: This branch is unreachable. Kit never sends
+        // transformeddocumentstructure: in the MCP/convert-to path -
+        // the transform modifies the document in-place via
+        // postUnoCommand(..., false), and ConvertToBroker::setLoaded()
+        // triggers saveas which returns the modified document.
         LOG_TRC("Sending transformed document structure response.");
         if (!saveAsSocket)
             LOG_ERR("Error in transformeddocumentstructure: not in isConvertTo mode");
