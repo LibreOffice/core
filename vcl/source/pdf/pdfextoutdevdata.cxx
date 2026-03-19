@@ -364,7 +364,7 @@ bool PageSyncData::PlaySyncPageAct( pdf::PDFWriter& rWriter, sal_uInt32& rCurGDI
             const vcl::EnsureStructureElement& rEnsureStructureElement = std::get<EnsureStructureElement>(aDataSync.eAct);
             sal_Int32 const id =
 #endif
-                rWriter.EnsureStructureElement();
+            rWriter.EnsureStructureElement();
             assert(id == -1 || id == rEnsureStructureElement.mnId); // identity mapping
         }
         else if (std::holds_alternative<InitStructureElement>(aDataSync.eAct)) {
