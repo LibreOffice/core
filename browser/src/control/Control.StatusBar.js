@@ -241,6 +241,10 @@ class StatusBar extends JSDialog.Toolbar {
 	}
 
 	getToolItems() {
+		let fitWidthZoomLabel = this.map.getDocType() === 'presentation'
+			? _('Zoom to Fit Slide')
+			: _('Zoom to Fit Page Width');
+
 		return [
 			this._generateHtmlItem('statusdocpos'), 					// spreadsheet
 			this._generateHtmlItem('rowcolselcount', 1), 					// spreadsheet
@@ -271,7 +275,7 @@ class StatusBar extends JSDialog.Toolbar {
 				configLabel: _('Overview'), configPeers: ['overviewbreak']},
 			{type: 'separator', id: 'overviewbreak', orientation: 'vertical', dataPriority: 9, visible: !app.isReadOnly()},
 		].concat(window.mode.isTablet() ? [] : [
-			{type: 'customtoolitem',  id: 'fitwidthzoom', command: 'fitwidthzoom', text: _('Zoom to Fit Page Width'), icon: 'pagewidth.svg', dataPriority: 8, visible: false},
+			{type: 'customtoolitem',  id: 'fitwidthzoom', command: 'fitwidthzoom', text: fitWidthZoomLabel, icon: 'pagewidth.svg', dataPriority: 8, visible: false},
 			{type: 'customtoolitem',  id: 'zoomreset', command: 'zoomreset', text: _('Reset zoom'), icon: 'zoomreset.svg', dataPriority: 8},
 			{type: 'customtoolitem',  id: 'zoomout', command: 'zoomout', text: _UNO('.uno:ZoomMinus'), icon: 'minus.svg'},
 			{type: 'menubutton', id: 'zoom', text: '100', selected: 'zoom100', menu: this._generateZoomItems(), image: false},
@@ -477,6 +481,8 @@ class StatusBar extends JSDialog.Toolbar {
 				this.showItem('languagestatusbreak', !app.map.isReadOnlyMode());
 				this.showItem('permissionmode-container', true);
 				this.showItem('documentstatus-container', true);
+				this.showItem('fitwidthzoom', true);
+				this.showItem('zoomreset', false);
 			}
 			break;
 		case 'drawing':
