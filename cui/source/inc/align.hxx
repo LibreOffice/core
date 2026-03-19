@@ -39,7 +39,6 @@ enum VerticalAlign {
 };
 
 #include <sfx2/tabdlg.hxx>
-#include <svtools/valueset.hxx>
 #include <svx/dialcontrol.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <vcl/weld.hxx>
@@ -65,8 +64,9 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
-    void                InitVsRefEgde();
+    void                InitRefEdgeIV();
     void                UpdateEnableControls();
+    static ScopedVclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
 
     bool                HasAlignmentChanged( const SfxItemSet& rNew, TypedWhichId<SfxEnumItemInterface> nWhich ) const;
 
@@ -76,6 +76,7 @@ private:
     DECL_LINK(WrapClickHdl, weld::Toggleable&, void);
     DECL_LINK(HyphenClickHdl, weld::Toggleable&, void);
     DECL_LINK(ShrinkClickHdl, weld::Toggleable&, void);
+    DECL_LINK(QueryTooltipRefEdgeHdl, const weld::TreeIter&, OUString);
 
 private:
     weld::TriStateEnabled m_aStackedState;
@@ -84,7 +85,7 @@ private:
     weld::TriStateEnabled m_aHyphenState;
     weld::TriStateEnabled m_aShrinkState;
 
-    ValueSet m_aVsRefEdge;
+    OUString m_sSavedRefEdgeId;
 
     std::unique_ptr<weld::ComboBox> m_xLbHorAlign;
     std::unique_ptr<weld::Label> m_xFtIndent;
@@ -113,7 +114,7 @@ private:
     std::unique_ptr<weld::Widget> m_xOrientFrame;
     std::unique_ptr<weld::Widget> m_xPropertiesFrame;
 
-    std::unique_ptr<weld::CustomWeld> m_xVsRefEdge;
+    std::unique_ptr<weld::IconView> m_xIVRefEdge;
     std::unique_ptr<DialControl> m_xCtrlDial;
     std::unique_ptr<weld::CustomWeld> m_xCtrlDialWin;
 };

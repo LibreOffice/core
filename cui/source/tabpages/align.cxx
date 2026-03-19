@@ -32,6 +32,7 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/image.hxx>
+#include <vcl/virdev.hxx>
 
 #define IID_BOTTOMLOCK 1
 #define IID_TOPLOCK    2
@@ -108,7 +109,6 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, const SfxItemSet& rOldSet, 
 
 AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/cellalignment.ui"_ustr, u"CellAlignPage"_ustr, &rCoreAttrs)
-    , m_aVsRefEdge(nullptr)
     // text alignment
     , m_xLbHorAlign(m_xBuilder->weld_combo_box(u"comboboxHorzAlign"_ustr))
     , m_xFtIndent(m_xBuilder->weld_label(u"labelIndent"_ustr))
@@ -127,7 +127,7 @@ AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xBtnHyphen(m_xBuilder->weld_check_button(u"checkHyphActive"_ustr))
     , m_xBtnShrink(m_xBuilder->weld_check_button(u"checkShrinkFitCellSize"_ustr))
     , m_xLbFrameDir(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box(u"comboTextDirBox"_ustr)))
-    //ValueSet hover strings
+    //IconView hover strings
     , m_xFtBotLock(m_xBuilder->weld_label(u"labelSTR_BOTTOMLOCK"_ustr))
     , m_xFtTopLock(m_xBuilder->weld_label(u"labelSTR_TOPLOCK"_ustr))
     , m_xFtCelLock(m_xBuilder->weld_label(u"labelSTR_CELLLOCK"_ustr))
@@ -135,14 +135,14 @@ AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xAlignmentFrame(m_xBuilder->weld_widget(u"alignment"_ustr))
     , m_xOrientFrame(m_xBuilder->weld_widget(u"orientation"_ustr))
     , m_xPropertiesFrame(m_xBuilder->weld_widget(u"properties"_ustr))
-    , m_xVsRefEdge(new weld::CustomWeld(*m_xBuilder, u"references"_ustr, m_aVsRefEdge))
+    , m_xIVRefEdge(m_xBuilder->weld_icon_view(u"references"_ustr))
     , m_xCtrlDial(new DialControl)
     , m_xCtrlDialWin(new weld::CustomWeld(*m_xBuilder, u"dialcontrol"_ustr, *m_xCtrlDial))
 {
     m_xCtrlDial->SetLinkedField(m_xNfRotate.get());
     m_xCtrlDial->SetText(m_xFtABCD->get_label());
 
-    InitVsRefEgde();
+    InitRefEdgeIV();
 
     m_xLbHorAlign->connect_changed(LINK(this, AlignmentTabPage, UpdateEnableHdl));
 
@@ -167,7 +167,7 @@ AlignmentTabPage::~AlignmentTabPage()
 {
     m_xCtrlDialWin.reset();
     m_xCtrlDial.reset();
-    m_xVsRefEdge.reset();
+    m_xIVRefEdge.reset();
     m_xLbFrameDir.reset();
 }
 
@@ -272,9 +272,11 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->InvalidateItem(nWhich);
 
     TypedWhichId<SvxRotateModeItem> nWhichLockPos(GetWhich(SID_ATTR_ALIGN_LOCKPOS));
-    if (m_aVsRefEdge.IsValueChangedFromSaved())
+    if (m_xIVRefEdge->get_selected_id() != m_sSavedRefEdgeId)
     {
-        switch (m_aVsRefEdge.GetSelectedItemId())
+        OUString sSelectedId = m_xIVRefEdge->get_selected_id();
+        sal_Int32 nSelectedId = !sSelectedId.isEmpty() ? sSelectedId.toInt32() : -1;
+        switch (nSelectedId)
         {
             case IID_CELLLOCK:
                 rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_STANDARD, nWhichLockPos));
@@ -286,7 +288,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
                 rSet->Put(SvxRotateModeItem(SvxRotateMode::SVX_ROTATE_MODE_BOTTOM, nWhichLockPos));
                 break;
             default:
-                m_aVsRefEdge.SetNoSelection();
+                m_xIVRefEdge->unselect_all();
                 break;
         }
         bChanged = true;
@@ -563,13 +565,13 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     switch (eState)
     {
         case SfxItemState::UNKNOWN:
-            m_xVsRefEdge->hide();
+            m_xIVRefEdge->hide();
             break;
         case SfxItemState::DISABLED:
-            m_xVsRefEdge->set_sensitive(false);
+            m_xIVRefEdge->set_sensitive(false);
             break;
         case SfxItemState::INVALID:
-            m_aVsRefEdge.SetNoSelection();
+            m_xIVRefEdge->unselect_all();
             break;
         case SfxItemState::DEFAULT:
         case SfxItemState::SET:
@@ -578,22 +580,22 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
             switch (rRotateModeItem.GetValue())
             {
                 case SvxRotateMode::SVX_ROTATE_MODE_STANDARD:
-                    m_aVsRefEdge.SelectItem(IID_CELLLOCK);
+                    m_xIVRefEdge->select(IID_CELLLOCK - 1);
                     break;
                 case SvxRotateMode::SVX_ROTATE_MODE_TOP:
-                    m_aVsRefEdge.SelectItem(IID_TOPLOCK);
+                    m_xIVRefEdge->select(IID_TOPLOCK - 1);
                     break;
                 case SvxRotateMode::SVX_ROTATE_MODE_BOTTOM:
-                    m_aVsRefEdge.SelectItem(IID_BOTTOMLOCK);
+                    m_xIVRefEdge->select(IID_BOTTOMLOCK - 1);
                     break;
                 default:
-                    m_aVsRefEdge.SetNoSelection();
+                    m_xIVRefEdge->unselect_all();
                     break;
             }
             break;
         }
     }
-    m_aVsRefEdge.SaveValue();
+    m_sSavedRefEdgeId = m_xIVRefEdge->get_selected_id();
 
     //text direction
     nWhich = GetWhich(SID_ATTR_FRAMEDIRECTION);
@@ -672,25 +674,44 @@ DeactivateRC AlignmentTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-void AlignmentTabPage::InitVsRefEgde()
+ScopedVclPtr<VirtualDevice> AlignmentTabPage::GetVirtualDevice(Image pImage)
 {
-    // remember selection - is deleted in call to ValueSet::Clear()
-    sal_uInt16 nSel = m_aVsRefEdge.GetSelectedItemId();
+    BitmapEx aPreviewBitmap = pImage.GetBitmapEx();
+    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    const Point aNull(0, 0);
+    if (pVDev->GetDPIScaleFactor() > 1)
+        aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
+    const Size aSize(aPreviewBitmap.GetSizePixel());
+    pVDev->SetOutputSizePixel(aSize);
+    pVDev->DrawBitmapEx(aNull, aPreviewBitmap);
+
+    return pVDev;
+}
+
+void AlignmentTabPage::InitRefEdgeIV()
+{
+    m_xIVRefEdge->clear();
 
     Image aBottomLock(StockImage::Yes, RID_SVXBMP_BOTTOMLOCK);
     Image aTopLock(StockImage::Yes, RID_SVXBMP_TOPLOCK);
     Image aCellLock(StockImage::Yes, RID_SVXBMP_CELLLOCK);
 
-    m_aVsRefEdge.Clear();
-    m_aVsRefEdge.SetStyle(m_aVsRefEdge.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER);
+    auto fnInsert = [&](sal_uInt16 nId, const Image& rImage)
+    {
+        auto pVDev = GetVirtualDevice(rImage);
+        OUString sId = OUString::number(nId);
+        m_xIVRefEdge->insert(-1, nullptr, &sId, pVDev, nullptr);
+    };
 
-    m_aVsRefEdge.SetColCount(3);
-    m_aVsRefEdge.InsertItem(IID_BOTTOMLOCK, aBottomLock,  m_xFtBotLock->get_label());
-    m_aVsRefEdge.InsertItem(IID_TOPLOCK,    aTopLock,     m_xFtTopLock->get_label());
-    m_aVsRefEdge.InsertItem(IID_CELLLOCK,   aCellLock,    m_xFtCelLock->get_label());
-    m_aVsRefEdge.SetOptimalSize();
+    m_xIVRefEdge->freeze();
+    fnInsert(IID_BOTTOMLOCK, aBottomLock);
+    fnInsert(IID_TOPLOCK, aTopLock);
+    fnInsert(IID_CELLLOCK, aCellLock);
+    m_xIVRefEdge->thaw();
 
-    m_aVsRefEdge.SelectItem( nSel );
+    m_xIVRefEdge->connect_query_tooltip(LINK(this, AlignmentTabPage, QueryTooltipRefEdgeHdl));
+
+    m_xIVRefEdge->unselect_all();
 }
 
 void AlignmentTabPage::UpdateEnableControls()
@@ -717,7 +738,7 @@ void AlignmentTabPage::UpdateEnableControls()
     // visibility of frames
     m_xAlignmentFrame->set_visible(m_xLbHorAlign->get_visible() || m_xEdIndent->get_visible() ||
         m_xLbVerAlign->get_visible());
-    m_xOrientFrame->set_visible(m_xCtrlDialWin->get_visible() || m_xVsRefEdge->get_visible() ||
+    m_xOrientFrame->set_visible(m_xCtrlDialWin->get_visible() || m_xIVRefEdge->get_visible() ||
         m_xCbStacked->get_visible() || m_xCbAsianMode->get_visible());
     m_xPropertiesFrame->set_visible(m_xBtnWrap->get_visible() || m_xBtnHyphen->get_visible() ||
         m_xBtnShrink->get_visible() || m_xLbFrameDir->get_visible());
@@ -726,7 +747,7 @@ void AlignmentTabPage::UpdateEnableControls()
     // windows to be disabled, if stacked text is turned ON
     m_xFtRotate->set_sensitive(!bStackedText);
     m_xFtRefEdge->set_sensitive(!bStackedText);
-    m_xVsRefEdge->set_sensitive(!bStackedText);
+    m_xIVRefEdge->set_sensitive(!bStackedText);
     // windows to be disabled, if stacked text is turned OFF
     m_xCbAsianMode->set_sensitive(bStackedText);
     // rotation/stacked disabled for fill alignment/stacked
@@ -782,6 +803,25 @@ IMPL_LINK(AlignmentTabPage, ShrinkClickHdl, weld::Toggleable&, rToggle, void)
 IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableHdl, weld::ComboBox&, void)
 {
     UpdateEnableControls();
+}
+
+IMPL_LINK(AlignmentTabPage, QueryTooltipRefEdgeHdl, const weld::TreeIter&, rIter, OUString)
+{
+    OUString sId = m_xIVRefEdge->get_id(rIter);
+    if (!sId.isEmpty())
+    {
+        sal_Int32 nId = sId.toInt32();
+        switch (nId)
+        {
+            case IID_BOTTOMLOCK:
+                return m_xFtBotLock->get_label();
+            case IID_TOPLOCK:
+                return m_xFtTopLock->get_label();
+            case IID_CELLLOCK:
+                return m_xFtCelLock->get_label();
+        }
+    }
+    return OUString();
 }
 
 }
