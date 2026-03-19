@@ -54,4 +54,13 @@ struct S5
     ~S5() {}
 };
 
+struct Preproc
+{
+    ~Preproc()
+    {
+#if defined MACRO
+#endif
+    }
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

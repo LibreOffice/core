@@ -60,6 +60,10 @@ bool TrivialDestructor::VisitCXXDestructorDecl(CXXDestructorDecl const* destruct
         return true;
     if (!HasTrivialDestructorBody(destructorDecl->getParent()))
         return true;
+    if (containsPreprocessingConditionalInclusion(destructorDecl->getBody()->getSourceRange()))
+    {
+        return true;
+    }
 
     report(DiagnosticsEngine::Warning, "no need for explicit destructor decl",
            destructorDecl->getLocation())
