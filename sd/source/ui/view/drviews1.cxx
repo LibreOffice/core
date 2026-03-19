@@ -777,17 +777,21 @@ bool DrawViewShell::SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect)
     sd::slidesorter::SlideSorterViewShell* pSlideSorterVS
         = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
 
+    const bool bUpdateCurrentPage = !comphelper::LibreOfficeKit::isActive();
+
     if (nSelect == 1 || (/*Toggle*/ nSelect > 1 && !pPage->IsSelected()))
     {
         GetDoc()->SetSelected(pPage, true); // Select.
         if (pSlideSorterVS)
-            pSlideSorterVS->GetSlideSorter().GetController().GetPageSelector().SelectPage(nPage);
+            pSlideSorterVS->GetSlideSorter().GetController().GetPageSelector().SelectPage(
+                nPage, bUpdateCurrentPage);
     }
     else
     {
         GetDoc()->SetSelected(pPage, false); // Deselect.
         if (pSlideSorterVS)
-            pSlideSorterVS->GetSlideSorter().GetController().GetPageSelector().DeselectPage(nPage);
+            pSlideSorterVS->GetSlideSorter().GetController().GetPageSelector().DeselectPage(
+                nPage, bUpdateCurrentPage);
     }
 
     return true;
