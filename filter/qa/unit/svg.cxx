@@ -408,6 +408,20 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testDashedLine)
     assertXPath(pXmlDoc, "/svg:svg/svg:g//svg:path", "stroke-dasharray", u"800,300,90,300,90,300");
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf168135)
+{
+    // Make sure that highlighting has the same height for superscript/subscript as for normal text.
+    loadFromFile(u"tdf168135.fodp");
+    save(TestFilter::SVG_IMPRESS);
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)']", 2);
+    assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)'])[1]",
+                "height", u"776");
+    assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:rect[@fill='rgb(255,255,0)'])[2]",
+                "height", u"776");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
