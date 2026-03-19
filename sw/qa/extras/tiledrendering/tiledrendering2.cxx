@@ -834,6 +834,29 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIdleLayoutPageDelete)
     // i.e. the priority was TaskPriority::HIGH_IDLE instead of TaskPriority::DEFAULT_IDLE.
     CPPUNIT_ASSERT_GREATER(TaskPriority::REPAINT, rBindingsTimer.GetPriority());
 }
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBlockedCommandSlotState)
+{
+    createDoc();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SfxDispatcher* pDispatcher = pViewShell->GetViewFrame().GetDispatcher();
+    CPPUNIT_ASSERT(pDispatcher);
+
+    // Query the state of .uno:Bold before blocking — should be enabled
+    SfxPoolItemHolder aResult;
+    SfxItemState eState = pDispatcher->QueryState(SID_ATTR_CHAR_WEIGHT, aResult);
+    CPPUNIT_ASSERT(eState != SfxItemState::DISABLED);
+
+    // Block .uno:Bold
+    int nViewId = SfxLokHelper::getView(*pViewShell);
+    SfxLokHelper::setBlockedCommandList(nViewId, ".uno:Bold");
+
+    // Query the state of .uno:Bold after blocking — should be disabled
+    eState = pDispatcher->QueryState(SID_ATTR_CHAR_WEIGHT, aResult);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, eState);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
