@@ -19,8 +19,7 @@
 
 #pragma once
 
-#include <set>
-#include <vector>
+#include <o3tl/sorted_vector.hxx>
 #include "SwNumberTreeTypes.hxx"
 
 class SwDoc;
@@ -113,7 +112,8 @@ struct compSwNumberTreeNodeLessThan
 class SAL_DLLPUBLIC_RTTI SwNumberTreeNode
 {
 protected:
-    typedef std::set<SwNumberTreeNode*, compSwNumberTreeNodeLessThan> tSwNumberTreeChildren;
+    typedef o3tl::sorted_vector<SwNumberTreeNode*, compSwNumberTreeNodeLessThan>
+        tSwNumberTreeChildren;
 
 public:
     SwNumberTreeNode();
@@ -402,7 +402,7 @@ protected:
        than or equal to the referenced child are valid. All children
        greater than the referenced child are invalid.
      */
-    mutable tSwNumberTreeChildren::const_iterator mItLastValid;
+    mutable SwNumberTreeNode* mpLastValid{ nullptr };
 
     SwNumberTreeNode(const SwNumberTreeNode&);
     SwNumberTreeNode& operator=(const SwNumberTreeNode&);
