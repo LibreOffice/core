@@ -108,9 +108,9 @@ public:
     // constructor to create a tools-Color from ::basegfx::BColor
     explicit Color(const basegfx::BColor& rBColor)
         : Color(ColorTransparency, 0,
-                sal_uInt8(std::lround(rBColor.getRed() * 255.0)),
-                sal_uInt8(std::lround(rBColor.getGreen() * 255.0)),
-                sal_uInt8(std::lround(rBColor.getBlue() * 255.0)))
+                sal_uInt8(std::round(rBColor.getRed() * 255.0)),
+                sal_uInt8(std::round(rBColor.getGreen() * 255.0)),
+                sal_uInt8(std::round(rBColor.getBlue() * 255.0)))
     {}
 
     /** Casts the color to corresponding uInt32.

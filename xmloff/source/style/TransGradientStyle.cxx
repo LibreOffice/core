@@ -239,12 +239,12 @@ void XMLTransGradientStyleExport::exportXML(
     }
 
     // Opacity start
-    ::sax::Converter::convertPercent(aOut, static_cast<sal_Int32>(std::lround(fOpacityStartPerc)));
+    ::sax::Converter::convertPercent(aOut, static_cast<sal_Int32>(std::round(fOpacityStartPerc)));
     aStrValue = aOut.makeStringAndClear();
     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
 
     // Opacity end
-    ::sax::Converter::convertPercent( aOut, static_cast<sal_Int32>(std::lround(fOpacityEndPerc)));
+    ::sax::Converter::convertPercent( aOut, static_cast<sal_Int32>(std::round(fOpacityEndPerc)));
     aStrValue = aOut.makeStringAndClear();
     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
 

@@ -938,7 +938,7 @@ void FontworkHelpers::createCharFillPropsFromShape(
         if (xPropSetInfo->hasPropertyByName(u"FillTransparence"_ustr)
             && (rXPropSet->getPropertyValue(u"FillTransparence"_ustr) >>= nTransPercent))
         {
-            sal_uInt8 nAlpha = 255 - sal_uInt8(std::lround(double(nTransPercent) * 2.55));
+            sal_uInt8 nAlpha = 255 - sal_uInt8(std::round(double(nTransPercent) * 2.55));
             aColor.SetAlpha(nAlpha);
         }
         rCharPropVec.push_back(comphelper::makePropertyValue(u"CharColor"_ustr, sal_Int32(aColor)));
