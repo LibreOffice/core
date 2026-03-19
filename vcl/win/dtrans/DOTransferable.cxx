@@ -147,12 +147,7 @@ Any byteStreamToAny( CDOTransferable::ByteSequence_t& aByteStream, const Type& a
     Any aAny;
 
     if ( aRequestedDataType == CPPUTYPE_OUSTRING )
-    {
-        OUString str = byteStreamToOUString( aByteStream );
-        if (str.isEmpty())
-            throw RuntimeException();
-        aAny <<= str;
-    }
+        aAny <<= byteStreamToOUString( aByteStream );
     else
         aAny <<= aByteStream;
 
