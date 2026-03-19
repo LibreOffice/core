@@ -1522,8 +1522,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 || mpImpl->mxObjRef->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE
                 )
         {
-            Fraction aScaleWidth;
-            Fraction aScaleHeight;
+            double aScaleWidth;
+            double aScaleHeight;
             if ( pClient )
             {
                 aScaleWidth = pClient->GetScaleWidth();
@@ -1543,8 +1543,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
             Size aVisSize;
             if (sal_Int32(aScaleWidth) != 0 && sal_Int32(aScaleHeight) != 0) // avoid div by zero
-                aVisSize = Size( static_cast<tools::Long>( Fraction( getRectangle().GetWidth() ) / aScaleWidth ),
-                                 static_cast<tools::Long>( Fraction( getRectangle().GetHeight() ) / aScaleHeight ) );
+                aVisSize = Size( static_cast<tools::Long>( getRectangle().GetWidth() / aScaleWidth ),
+                                 static_cast<tools::Long>( getRectangle().GetHeight() / aScaleHeight ) );
 
             aVisSize = OutputDevice::LogicToLogic(
                 aVisSize,
