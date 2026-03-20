@@ -24,32 +24,6 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
 
-namespace
-{
-    // combine ranges geometrically to a single, ORed polygon
-    basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
-    {
-        const sal_uInt32 nCount(rRanges.size());
-        basegfx::B2DPolyPolygon aRetval;
-
-        for(sal_uInt32 a(0); a < nCount; a++)
-        {
-            const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(rRanges[a]));
-
-            if(0 == a)
-            {
-                aRetval.append(aDiscretePolygon);
-            }
-            else
-            {
-                aRetval = basegfx::utils::solvePolygonOperationOr(aRetval, basegfx::B2DPolyPolygon(aDiscretePolygon));
-            }
-        }
-
-        return aRetval;
-    }
-}
-
 namespace sw::overlay
 {
         drawinglayer::primitive2d::Primitive2DContainer OverlayRangesOutline::createOverlayObjectPrimitive2DSequence()
@@ -60,7 +34,7 @@ namespace sw::overlay
             if( nCount )
             {
                 const basegfx::BColor aRGBColor(getBaseColor().getBColor());
-                basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
+                basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::combineRectanglesToPolyPolygon(getRanges()));
                 const drawinglayer::primitive2d::Primitive2DReference aOutline(
                     new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
                     std::move(aPolyPolygon),

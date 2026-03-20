@@ -139,6 +139,10 @@ namespace basegfx::utils
         */
         BASEGFX_DLLPUBLIC B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput);
 
+        /**
+          * version of solvePolygonOperationOr optimised for combining rectangles.
+          */
+        BASEGFX_DLLPUBLIC basegfx::B2DPolyPolygon combineRectanglesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRectangles);
 } // end of namespace basegfx::utils
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

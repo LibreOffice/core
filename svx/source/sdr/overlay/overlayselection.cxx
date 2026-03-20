@@ -37,54 +37,19 @@
 
 namespace sdr::overlay
 {
-
-        // combine ranges geometrically to a single, ORed polygon
-        static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges, bool bOffset, double fOffset)
+        static basegfx::B2DPolyPolygon impCombineRectanglesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRectangles, bool bOffset, double fOffset)
         {
-            const sal_uInt32 nCount(rRanges.size());
-            basegfx::B2DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0); a < nCount; a++)
+            if (!bOffset)
+                return basegfx::utils::combineRectanglesToPolyPolygon(rRectangles);
+            std::vector< basegfx::B2DRange > aGrownRectangles;
+            aGrownRectangles.reserve(rRectangles.size());
+            for (const auto & rInput : rRectangles)
             {
-                basegfx::B2DRange aRange(rRanges[a]);
-                if (bOffset)
-                    aRange.grow(fOffset);
-                const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(aRange));
-
-                if(0 == a)
-                {
-                    aRetval.append(aDiscretePolygon);
-                }
-                else
-                {
-                    aRetval = basegfx::utils::solvePolygonOperationOr(aRetval, basegfx::B2DPolyPolygon(aDiscretePolygon));
-                }
+                basegfx::B2DRange aRange(rInput);
+                aRange.grow(fOffset);
+                aGrownRectangles.push_back(aRange);
             }
-
-            return aRetval;
-        }
-
-        // tdf#161204 Creates a poly-polygon using white hairline to provide contrast
-        static basegfx::B2DPolyPolygon impCombineRangesToContrastPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
-        {
-            const sal_uInt32 nCount(rRanges.size());
-            basegfx::B2DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0); a < nCount; a++)
-            {
-                const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(rRanges[a]));
-
-                if(0 == a)
-                {
-                    aRetval.append(aDiscretePolygon);
-                }
-                else
-                {
-                    aRetval = basegfx::utils::solvePolygonOperationOr(aRetval, basegfx::B2DPolyPolygon(aDiscretePolygon));
-                }
-            }
-
-            return aRetval;
+            return basegfx::utils::combineRectanglesToPolyPolygon(aGrownRectangles);
         }
 
         // check if wanted type OverlayType::Transparent or OverlayType::Solid
@@ -169,7 +134,7 @@ namespace sdr::overlay
                         // tdf#161204 Outline with white color to provide contrast
                         if (mbContrastOutline)
                         {
-                            basegfx::B2DPolyPolygon aContrastPolyPolygon(impCombineRangesToContrastPolyPolygon(getRanges()));
+                            basegfx::B2DPolyPolygon aContrastPolyPolygon(basegfx::utils::combineRectanglesToPolyPolygon(getRanges()));
                             const drawinglayer::primitive2d::Primitive2DReference aContrastSelectionOutline(
                                 new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
                                     std::move(aContrastPolyPolygon),
@@ -183,7 +148,7 @@ namespace sdr::overlay
                             fOffset = getOverlayManager()->getOutputDevice().PixelToLogic(Size(1, 1)).getWidth();
 
                         // External outline using themed color
-                        basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges(), mbContrastOutline, fOffset));
+                        basegfx::B2DPolyPolygon aPolyPolygon(impCombineRectanglesToPolyPolygon(getRanges(), mbContrastOutline, fOffset));
                         const drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
                             new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
                                 std::move(aPolyPolygon),
