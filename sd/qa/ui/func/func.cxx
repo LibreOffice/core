@@ -15,6 +15,13 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <vcl/scheduler.hxx>
+#include <osl/process.h>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/viewsh.hxx>
+#include <svx/svdview.hxx>
+#include <o3tl/unit_conversion.hxx>
+#include <vcl/pdfread.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
@@ -25,6 +32,25 @@ using namespace com::sun::star;
 
 namespace
 {
+struct UsePdfium
+{
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    UsePdfium()
+    {
+        if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+        {
+            bResetEnvVar = true;
+            osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
+        }
+    }
+    ~UsePdfium()
+    {
+        if (bResetEnvVar)
+            osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
+    };
+};
+
 /// Covers sd/source/ui/func/ fixes.
 class Test : public SdModelTestBase
 {
@@ -127,6 +153,42 @@ CPPUNIT_TEST_FIXTURE(Test, testNoneToLibraryBullet)
     // - Actual  : ● (black circle)
     // i.e. the bullet char was the default, not the selected one.
     CPPUNIT_ASSERT_EQUAL(u"\u25CB"_ustr, aBulletChar);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPDFReadLOKOnlyTextEdit)
+{
+    comphelper::LibreOfficeKit::setActive();
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
+    // Given a PDF loaded in LOK read-only mode:
+    UsePdfium aGuard;
+    loadFromFile(u"pdf/sample.pdf");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SfxViewShell* pSfxViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pSfxViewShell);
+    pSfxViewShell->SetLokReadOnlyView(true);
+
+    // When double-clicking at the page center:
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+    Size aPageSize = pPage->GetSize();
+    auto nCenterX = o3tl::toTwips(aPageSize.Width() / 2, o3tl::Length::mm100);
+    auto nCenterY = o3tl::toTwips(aPageSize.Height() / 2, o3tl::Length::mm100);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, nCenterX, nCenterY, 2,
+                                      MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, nCenterX, nCenterY, 2,
+                                      MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then text edit should not be active in read-only mode:
+    // Without the accompanying fix in place, this test would have failed, per-doc read-only and
+    // per-view read-only worked differently.
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
 }
 }
 
