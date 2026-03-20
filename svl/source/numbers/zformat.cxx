@@ -5268,13 +5268,17 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
     rStr += "]";
 }
 
-static void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_Int32 nPosInsertLCID, bool bDBNumInserted )
+static void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_Int32 nPosInsertLCID, bool bDBNumInserted, sal_Int32 nPosCurrencyClose, bool bHaveLCID )
 {
     if ( nLCID == 0 )
         return;
     if (nPosInsertLCID == rFormatStr.getLength() && !bDBNumInserted)
         // No format code, no locale.
         return;
+
+    bool bMerge = false;
+    if (nPosCurrencyClose >= 0 && !bHaveLCID)
+        bMerge = true;
 
     auto aLCIDString = OUString::number( nLCID , 16 ).toAsciiUpperCase();
     // Search for only last DBNum which is the last element before insertion position
@@ -5284,8 +5288,13 @@ static void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_In
     {   // remove DBNumX code if long LCID
         nPosInsertLCID -= 8;
         rFormatStr.remove( nPosInsertLCID, 8 );
+        if (bMerge)
+            nPosCurrencyClose -= 8;
     }
-    rFormatStr.insert( nPosInsertLCID, "[$-" + aLCIDString + "]" );
+    if (bMerge)
+        rFormatStr.insert( nPosCurrencyClose, "-" + aLCIDString );
+    else
+        rFormatStr.insert( nPosInsertLCID, "[$-" + aLCIDString + "]" );
 }
 
 /** Increment nAlphabetID for CJK numerals
@@ -5430,6 +5439,8 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         }
         sal_Int32 nPosHaveLCID = -1;
         sal_Int32 nPosInsertLCID = aStr.getLength();
+        sal_Int32 nPosCurrencyClose = -1; // position of ']' closing a [$CUR] without LCID
+        bool bHaveCurrency = false; // NF_SYMBOLTYPE_CURRENCY present in this subformat
         sal_uInt32 nCalendarID = 0x0000000; // Excel ID of calendar used in sub-format see tdf#36038
         constexpr sal_uInt32 kCalGengou = 0x0030000;
         if ( nCnt )
@@ -5531,10 +5542,28 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         // as format code (if not as literal string).
                         j += 2;
                         break;
+                    case NF_SYMBOLTYPE_CURRENCY :
+                        bHaveCurrency = true;
+                        aStr.append( rStrArray[j] );
+                        break;
                     case NF_SYMBOLTYPE_CURREXT :
                         nPosHaveLCID = aStr.getLength();
                         aStr.append( rStrArray[j] );
                         break;
+                    case NF_SYMBOLTYPE_CURRDEL :
+                    {
+                        const OUString& rStr = rStrArray[j];
+                        if ( bHaveCurrency && !rStr.isEmpty() && rStr[0] == ']'
+                               && nPosHaveLCID < 0 && nPosCurrencyClose < 0 )
+                        {
+                            // Closing ']' of a [$CUR] bracket without LCID.
+                            // Record position so the LCID can be inserted
+                            // here instead of as a standalone [$-LCID] prefix.
+                            nPosCurrencyClose = aStr.getLength();
+                        }
+                        aStr.append( rStr );
+                        break;
+                    }
                     default:
                         aStr.append( rStrArray[j] );
                     }
@@ -5671,8 +5700,8 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             if ( nLanguageID == LANGUAGE_SYSTEM && nOriginalLang != LANGUAGE_DONTKNOW )
                 nLanguageID = nOriginalLang;
         }
-        lcl_insertLCID( aStr, nAlphabetID + nCalendarID + static_cast<sal_uInt16>(nLanguageID), nPosInsertLCID,
-                bDBNumInserted);
+        const sal_uInt32 nLCID = nAlphabetID + nCalendarID + static_cast<sal_uInt16>(nLanguageID);
+        lcl_insertLCID( aStr, nLCID, nPosInsertLCID, bDBNumInserted, nPosCurrencyClose, nPosHaveLCID >= 0);
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )
     {   // append empty subformats
