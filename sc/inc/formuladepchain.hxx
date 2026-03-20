@@ -18,7 +18,7 @@ class JsonWriter;
 }
 class ScDocument;
 
-namespace ScFormulaDepChain
+namespace sc
 {
 SC_DLLPUBLIC void getFormulaDependencyChain(ScDocument& rDoc, const ScAddress& rPos,
                                             tools::JsonWriter& rJsonWriter);

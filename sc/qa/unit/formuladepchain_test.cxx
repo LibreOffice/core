@@ -29,41 +29,6 @@
 class ScFormulaDepChainTest : public CppUnit::TestFixture
 {
 public:
-    void testNotFormula();
-    void testNoError();
-    void testSimpleError();
-    void testDependencyChain();
-    void testRangeDependency();
-    void testLargeRangeSummary();
-    void testCircularReference();
-    void testTruncatedOnDepthLimit();
-    void testEmptyDependency();
-    void testStringDependency();
-    void testNoDepErrorFormula();
-    void testMultipleDependencies();
-    void testCellCountLimit();
-    void testLargeRangeWithErrors();
-    void testRangeBoundary();
-
-    CPPUNIT_TEST_SUITE(ScFormulaDepChainTest);
-    CPPUNIT_TEST(testNotFormula);
-    CPPUNIT_TEST(testNoError);
-    CPPUNIT_TEST(testSimpleError);
-    CPPUNIT_TEST(testDependencyChain);
-    CPPUNIT_TEST(testRangeDependency);
-    CPPUNIT_TEST(testLargeRangeSummary);
-    CPPUNIT_TEST(testCircularReference);
-    CPPUNIT_TEST(testTruncatedOnDepthLimit);
-    CPPUNIT_TEST(testEmptyDependency);
-    CPPUNIT_TEST(testStringDependency);
-    CPPUNIT_TEST(testNoDepErrorFormula);
-    CPPUNIT_TEST(testMultipleDependencies);
-    CPPUNIT_TEST(testCellCountLimit);
-    CPPUNIT_TEST(testLargeRangeWithErrors);
-    CPPUNIT_TEST(testRangeBoundary);
-    CPPUNIT_TEST_SUITE_END();
-
-public:
     ScFormulaDepChainTest()
     {
         comphelper::EnableFuzzing();
@@ -73,11 +38,11 @@ public:
 
     ~ScFormulaDepChainTest() { ScGlobal::Clear(); }
 
-private:
+protected:
     boost::property_tree::ptree runDepChain(ScDocument& rDoc, const ScAddress& rPos)
     {
         tools::JsonWriter aJsonWriter;
-        ScFormulaDepChain::getFormulaDependencyChain(rDoc, rPos, aJsonWriter);
+        sc::getFormulaDependencyChain(rDoc, rPos, aJsonWriter);
         OString aResult = aJsonWriter.finishAndGetAsOString();
 
         boost::property_tree::ptree aTree;
@@ -88,7 +53,7 @@ private:
 };
 
 // Non-formula cell should return hasError=false, reason="not_formula"
-void ScFormulaDepChainTest::testNotFormula()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testNotFormula)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -101,7 +66,7 @@ void ScFormulaDepChainTest::testNotFormula()
 }
 
 // Formula with no error should return hasError=false, reason="no_error"
-void ScFormulaDepChainTest::testNoError()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testNoError)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -119,7 +84,7 @@ void ScFormulaDepChainTest::testNoError()
 }
 
 // Division by zero should produce hasError=true with cell info
-void ScFormulaDepChainTest::testSimpleError()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testSimpleError)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -142,7 +107,7 @@ void ScFormulaDepChainTest::testSimpleError()
 }
 
 // Formula referencing a value cell should show that dependency
-void ScFormulaDepChainTest::testDependencyChain()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testDependencyChain)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -168,7 +133,7 @@ void ScFormulaDepChainTest::testDependencyChain()
 }
 
 // Small range (<=20 cells) should enumerate individual cells
-void ScFormulaDepChainTest::testRangeDependency()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testRangeDependency)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -191,11 +156,11 @@ void ScFormulaDepChainTest::testRangeDependency()
 }
 
 // Large range (>20 cells) should be summarized
-void ScFormulaDepChainTest::testLargeRangeSummary()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testLargeRangeSummary)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
-    // A1 = =SUM(B1:Z100)/0  — range is 25 cols * 100 rows = 2500 cells
+    // A1 = =SUM(B1:Z100)/0  - range is 25 cols * 100 rows = 2500 cells
     aDoc.SetString(0, 0, 0, u"=SUM(B1:Z100)/0"_ustr);
 
     ScFormulaCell* pCell = aDoc.GetFormulaCell(ScAddress(0, 0, 0));
@@ -217,7 +182,7 @@ void ScFormulaDepChainTest::testLargeRangeSummary()
 }
 
 // Circular references should be detected
-void ScFormulaDepChainTest::testCircularReference()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testCircularReference)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -259,7 +224,7 @@ void ScFormulaDepChainTest::testCircularReference()
 }
 
 // Deep dependency chain should produce "truncated" entries
-void ScFormulaDepChainTest::testTruncatedOnDepthLimit()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testTruncatedOnDepthLimit)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -316,7 +281,7 @@ void ScFormulaDepChainTest::testTruncatedOnDepthLimit()
 }
 
 // Empty cell dependency
-void ScFormulaDepChainTest::testEmptyDependency()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testEmptyDependency)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -339,7 +304,7 @@ void ScFormulaDepChainTest::testEmptyDependency()
 }
 
 // String dependency
-void ScFormulaDepChainTest::testStringDependency()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testStringDependency)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -350,7 +315,7 @@ void ScFormulaDepChainTest::testStringDependency()
     CPPUNIT_ASSERT(pCell);
     pCell->Interpret();
 
-    // Check if this actually errors — in Calc, "hello"+1 may coerce to 0+1=1
+    // Check if this actually errors - in Calc, "hello"+1 may coerce to 0+1=1
     FormulaError nErr = pCell->GetRawError();
     if (nErr == FormulaError::NONE)
     {
@@ -373,7 +338,7 @@ void ScFormulaDepChainTest::testStringDependency()
 }
 
 // Error formula with no cell references should have no dependencies key
-void ScFormulaDepChainTest::testNoDepErrorFormula()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testNoDepErrorFormula)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -392,7 +357,7 @@ void ScFormulaDepChainTest::testNoDepErrorFormula()
 }
 
 // Formula with multiple dependencies of different types
-void ScFormulaDepChainTest::testMultipleDependencies()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testMultipleDependencies)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -430,7 +395,7 @@ void ScFormulaDepChainTest::testMultipleDependencies()
 }
 
 // Exceeding MAX_CELLS (50) should produce truncated entries
-void ScFormulaDepChainTest::testCellCountLimit()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testCellCountLimit)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -475,7 +440,7 @@ void ScFormulaDepChainTest::testCellCountLimit()
 }
 
 // Large range with error cells should report errorCells
-void ScFormulaDepChainTest::testLargeRangeWithErrors()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testLargeRangeWithErrors)
 {
     ScDocument aDoc;
     aDoc.InsertTab(0, u"test"_ustr);
@@ -516,7 +481,7 @@ void ScFormulaDepChainTest::testLargeRangeWithErrors()
 }
 
 // Range boundary: exactly 20 cells enumerated, 21 cells summarized
-void ScFormulaDepChainTest::testRangeBoundary()
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testRangeBoundary)
 {
     // Test 1: 4 cols x 5 rows = 20 cells (exactly MAX_RANGE_CELLS) -> enumerate
     {
@@ -566,8 +531,6 @@ void ScFormulaDepChainTest::testRangeBoundary()
         CPPUNIT_ASSERT_EQUAL(3, aFirst.get<int>("cols"));
     }
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ScFormulaDepChainTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

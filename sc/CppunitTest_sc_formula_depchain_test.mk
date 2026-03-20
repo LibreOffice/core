@@ -21,7 +21,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_formula_depchain_test, \
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_formula_depchain_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_formula_depchain_test, \
-    sc/qa/unit/formuladepchain \
+    sc/qa/unit/formuladepchain_test \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_formula_depchain_test, \

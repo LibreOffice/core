@@ -1399,7 +1399,7 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
 
         {
             auto aValues = rJsonWriter.startNode("commandValues");
-            ScFormulaDepChain::getFormulaDependencyChain(rDoc, aCurPos, rJsonWriter);
+            sc::getFormulaDependencyChain(rDoc, aCurPos, rJsonWriter);
         }
     }
 }

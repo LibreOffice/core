@@ -258,7 +258,7 @@ void DepChainWriter::writeCellInfo(const ScAddress& rPos, int nDepth)
 
 } // anonymous namespace
 
-namespace ScFormulaDepChain
+namespace sc
 {
 void getFormulaDependencyChain(ScDocument& rDoc, const ScAddress& rPos,
                                tools::JsonWriter& rJsonWriter)
@@ -302,6 +302,6 @@ void getFormulaDependencyChain(ScDocument& rDoc, const ScAddress& rPos,
     aWriter.writeDependencies(pCell->GetCode(), rPos, 0);
 }
 
-} // namespace ScFormulaDepChain
+} // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
