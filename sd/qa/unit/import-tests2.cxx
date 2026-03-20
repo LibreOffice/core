@@ -1271,14 +1271,14 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testPptIndentationBullets)
     const EditTextObject& aE = pObj->GetOutlinerParaObject()->GetTextObject();
 
     const SvxNumBulletItem* pNum = aE.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
-    CPPUNIT_ASSERT_EQUAL(2500, pNum->GetNumRule().GetLevel(0).GetAbsLSpace());
-    CPPUNIT_ASSERT_EQUAL(-1500, pNum->GetNumRule().GetLevel(0).GetFirstLineOffset());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2500), pNum->GetNumRule().GetLevel(0).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1500), pNum->GetNumRule().GetLevel(0).GetFirstLineOffset());
     const SvxNumBulletItem* pNum1 = aE.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET);
-    CPPUNIT_ASSERT_EQUAL(3000, pNum1->GetNumRule().GetLevel(0).GetAbsLSpace());
-    CPPUNIT_ASSERT_EQUAL(-1500, pNum1->GetNumRule().GetLevel(0).GetFirstLineOffset());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), pNum1->GetNumRule().GetLevel(0).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1500), pNum1->GetNumRule().GetLevel(0).GetFirstLineOffset());
     const SvxNumBulletItem* pNum2 = aE.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
-    CPPUNIT_ASSERT_EQUAL(3000, pNum2->GetNumRule().GetLevel(0).GetAbsLSpace());
-    CPPUNIT_ASSERT_EQUAL(-1000, pNum2->GetNumRule().GetLevel(0).GetFirstLineOffset());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3000), pNum2->GetNumRule().GetLevel(0).GetAbsLSpace());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1000), pNum2->GetNumRule().GetLevel(0).GetFirstLineOffset());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114821)
