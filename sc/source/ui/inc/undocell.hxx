@@ -25,6 +25,7 @@
 #include <cellvalue.hxx>
 #include <cellvalues.hxx>
 #include <editeng/editobj.hxx>
+#include "undo/UndoSheetViewSortData.hxx"
 
 #include <memory>
 
@@ -66,7 +67,7 @@ private:
     void            DoChange( const CellAttributeHolder& rWhichPattern, const std::unique_ptr<EditTextObject>& pEditData ) const;
 };
 
-class ScUndoEnterData: public ScSimpleUndo
+class ScUndoEnterData: public ScSimpleUndo, public sc::UndoSheetViewSortData
 {
 public:
 

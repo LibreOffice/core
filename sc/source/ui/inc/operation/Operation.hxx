@@ -21,6 +21,7 @@ class ScViewData;
 
 namespace sc
 {
+class UndoSheetViewSortData;
 /** Operation is one atomic coarse change to the document model that can be run from UI or API
  *
  * An operation is a minimal change that is undoable and redoable.
@@ -62,7 +63,7 @@ protected:
     ScMarkData convertMark(ScMarkData const& rMarkData);
 
     /** Synchronizes the sheet views and the default view */
-    void syncSheetViews();
+    void syncSheetViews(UndoSheetViewSortData* pUndoSortData = nullptr);
 
     /** Check if the input is on a sheet view tab */
     bool isInputOnSheetView() const;

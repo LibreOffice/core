@@ -8,6 +8,7 @@
  */
 
 #include <undo/UndoSheetViewSortData.hxx>
+#include <dbdata.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
 
@@ -30,6 +31,12 @@ void UndoSheetViewSortData::setDefaultViewContext(SCTAB nDefaultViewTab,
     mnDefaultViewTab = nDefaultViewTab;
     mpDefaultViewSortDataBefore = std::move(pBefore);
     mpDefaultViewSortDataAfter = std::move(pAfter);
+}
+
+void UndoSheetViewSortData::setAutoFilterRange(ScRange const& rBefore, ScRange const& rAfter)
+{
+    maAutoFilterRangeBefore = rBefore;
+    maAutoFilterRangeAfter = rAfter;
 }
 
 void UndoSheetViewSortData::restore(ScDocShell& rDocShell, bool bUndo) const
@@ -61,6 +68,17 @@ void UndoSheetViewSortData::restore(ScDocShell& rDocShell, bool bUndo) const
         if (pManager)
             pManager->restoreSortData(bUndo ? mpDefaultViewSortDataBefore
                                             : mpDefaultViewSortDataAfter);
+    }
+
+    // Restore auto-filter DB range
+    if (maAutoFilterRangeBefore || maAutoFilterRangeAfter)
+    {
+        ScDBData* pDBData = rDocument.GetAnonymousDBData(mnDefaultViewTab);
+        if (pDBData)
+        {
+            ScRange const& rRange = bUndo ? *maAutoFilterRangeBefore : *maAutoFilterRangeAfter;
+            pDBData->SetArea(rRange);
+        }
     }
 }
 }

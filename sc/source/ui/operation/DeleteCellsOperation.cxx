@@ -790,7 +790,7 @@ bool DeleteCellsOperation::runImplementation()
             }
         }
 
-        syncSheetViews();
+        syncSheetViews(pUndoDeleteCells);
     }
 
     aModificator.SetDocumentModified();

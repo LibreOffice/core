@@ -775,7 +775,7 @@ bool InsertCellsOperation::runImplementation()
             }
         }
 
-        syncSheetViews();
+        syncSheetViews(pUndoInsertCells);
     }
 
     aModificator.SetDocumentModified();

@@ -18,6 +18,7 @@
 #include <viewdata.hxx>
 #include <SheetViewManager.hxx>
 #include <SheetView.hxx>
+#include <undo/UndoSheetViewSortData.hxx>
 #include <sal/log.hxx>
 
 namespace sc
@@ -201,14 +202,77 @@ ScMarkData Operation::convertMark(ScMarkData const& rMarkData)
     return aNewMark;
 }
 
-void Operation::syncSheetViews()
+void Operation::syncSheetViews(UndoSheetViewSortData* pUndoSortData)
 {
     if (!mpViewData)
         return;
 
     auto& rDocument = mpViewData->GetDocument();
-    SCTAB nTab = mpViewData->GetDefaultViewTab();
-    rDocument.SyncSheetViews(nTab);
+    SCTAB nDefaultViewTab = mpViewData->GetDefaultViewTab();
+
+    std::shared_ptr<SheetViewManager> pManager = rDocument.GetSheetViewManager(nDefaultViewTab);
+
+    // Capture sort data before adjustments
+    std::shared_ptr<DefaultViewSortData> pSortDataBefore;
+    if (pManager)
+        pSortDataBefore = pManager->captureSortData();
+
+    // Adjust auto-filter DB range to match actual data extent
+    ScRange aAutoFilterRangeBefore;
+    bool bAutoFilterRangeChanged = false;
+    if (pManager && !pManager->isEmpty())
+    {
+        ScDBData* pDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+        if (pDBData && pDBData->HasAutoFilter())
+        {
+            pDBData->GetArea(aAutoFilterRangeBefore);
+            SCCOL nColumn1 = aAutoFilterRangeBefore.aStart.Col();
+            SCROW nRow1 = aAutoFilterRangeBefore.aStart.Row();
+            SCCOL nColumn2 = aAutoFilterRangeBefore.aEnd.Col();
+            SCROW nRow2 = aAutoFilterRangeBefore.aEnd.Row();
+            rDocument.GetDataArea(nDefaultViewTab, nColumn1, nRow1, nColumn2, nRow2, false, true);
+
+            if (nRow2 > aAutoFilterRangeBefore.aEnd.Row())
+            {
+                pManager->insertedRows(aAutoFilterRangeBefore.aEnd.Row() + 1,
+                                       nRow2 - aAutoFilterRangeBefore.aEnd.Row());
+            }
+            else if (nRow2 < aAutoFilterRangeBefore.aEnd.Row())
+            {
+                pManager->deletedRows(nRow2 + 1, aAutoFilterRangeBefore.aEnd.Row() - nRow2);
+            }
+
+            if (nRow2 != aAutoFilterRangeBefore.aEnd.Row()
+                || nColumn2 != aAutoFilterRangeBefore.aEnd.Col())
+            {
+                pDBData->SetArea(nDefaultViewTab, aAutoFilterRangeBefore.aStart.Col(),
+                                 aAutoFilterRangeBefore.aStart.Row(), nColumn2, nRow2);
+                bAutoFilterRangeChanged = true;
+            }
+        }
+    }
+
+    rDocument.SyncSheetViews(nDefaultViewTab);
+
+    // Attach sort data and auto-filter range to the undo action
+    if (pManager && pUndoSortData)
+    {
+        auto pSortDataAfter = pManager->captureSortData();
+        // Only set if not already set by the operation itself
+        if (!pUndoSortData->hasData())
+        {
+            pUndoSortData->setDefaultViewContext(nDefaultViewTab, std::move(pSortDataBefore),
+                                                 std::move(pSortDataAfter));
+        }
+        if (bAutoFilterRangeChanged)
+        {
+            ScRange aAutoFilterRangeAfter;
+            ScDBData* pDBData = rDocument.GetAnonymousDBData(nDefaultViewTab);
+            if (pDBData)
+                pDBData->GetArea(aAutoFilterRangeAfter);
+            pUndoSortData->setAutoFilterRange(aAutoFilterRangeBefore, aAutoFilterRangeAfter);
+        }
+    }
 }
 
 bool Operation::isInputOnSheetView() const { return getCurrentSheetView(mpViewData) != nullptr; }
