@@ -78,17 +78,20 @@ bool SetNormalStringOperation::runImplementation()
     mbIsNumberFormatSet = rDoc.SetString(aPosition.Col(), aPosition.Row(), aPosition.Tab(), mrText);
     tools::Long nAfter(mrDocShell.GetTwipWidthHint(aPosition));
 
+    ScUndoEnterData* pUndoEnterData = nullptr;
     if (bUndo)
     {
         //  because of ChangeTracking, UndoAction can be created only after SetString was called
-        mrDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoEnterData>(mrDocShell, aPosition, aOldValues, mrText, nullptr));
+        auto pUndoAction
+            = std::make_unique<ScUndoEnterData>(mrDocShell, aPosition, aOldValues, mrText, nullptr);
+        pUndoEnterData = pUndoAction.get();
+        mrDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoAction));
     }
 
     if (bEditDeleted || rDoc.HasAttrib(ScRange(aPosition), HasAttrFlags::NeedHeight))
         mrDocFunc.AdjustRowHeight(ScRange(aPosition), true, mbApi);
 
-    syncSheetViews();
+    syncSheetViews(pUndoEnterData);
 
     mrDocShell.PostPaintCell(aPosition, std::max(nBefore, nAfter));
     aModificator.SetDocumentModified();
