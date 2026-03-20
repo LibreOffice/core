@@ -537,7 +537,7 @@ VclPtr<SvxRuler> DrawViewShell::CreateHRuler (::sd::Window* pWin)
 
     Fraction aUIScale(pWin->GetMapMode().GetScaleX());
     aUIScale *= GetDoc()->GetUIScale();
-    pRuler->SetZoom(aUIScale);
+    pRuler->SetZoom(double(aUIScale));
 
     return pRuler;
 }
@@ -563,7 +563,7 @@ VclPtr<SvxRuler> DrawViewShell::CreateVRuler(::sd::Window* pWin)
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
-    Fraction aUIScale(pWin->GetMapMode().GetScaleY());
+    double aUIScale(pWin->GetMapMode().GetScaleY());
     aUIScale *= GetDoc()->GetUIScale();
     pRuler->SetZoom(aUIScale);
 

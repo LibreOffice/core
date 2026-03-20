@@ -1623,21 +1623,21 @@ void OViewsWindow::collapseSections(const uno::Sequence< beans::PropertyValue>& 
     }
 }
 
-void OViewsWindow::zoom(const Fraction& _aZoom)
+void OViewsWindow::zoom(double _fZoom)
 {
     const MapMode& aMapMode = GetMapMode();
 
     Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH));
-    if ( _aZoom < aMapMode.GetScaleX() )
+    if ( _fZoom < double(aMapMode.GetScaleX()) )
         aStartWidth *= aMapMode.GetScaleX();
     else
-        aStartWidth *= _aZoom;
+        aStartWidth *= _fZoom;
 
-    setZoomFactor(_aZoom,*this);
+    setZoomFactor(_fZoom,*this);
 
     for (const auto& rxSection : m_aSections)
     {
-        rxSection->zoom(_aZoom);
+        rxSection->zoom(_fZoom);
     }
 
     Resize();

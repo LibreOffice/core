@@ -992,7 +992,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     StartListening(rDocSh, DuplicateHandling::Prevent);
 
     // Set Zoom-factor from HRuler
-    Fraction aZoomFract( aUsrPref.GetZoom(), 100 );
+    double aZoomFract = double( aUsrPref.GetZoom() ) / 100;
     m_pHRuler->SetZoom( aZoomFract );
     m_pVRuler->SetZoom( aZoomFract );
     m_pHRuler->SetDoubleClickHdl(LINK( this, SwView, ExecRulerClick ));

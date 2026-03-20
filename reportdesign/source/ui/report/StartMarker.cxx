@@ -289,10 +289,10 @@ void OStartMarker::setCollapsed(bool _bCollapsed)
     changeImage();
 }
 
-void OStartMarker::zoom(const Fraction& _aZoom)
+void OStartMarker::zoom(double _fZoom)
 {
-    setZoomFactor(_aZoom, *this);
-    m_aVRuler->SetZoom(_aZoom);
+    setZoomFactor(_fZoom, *this);
+    m_aVRuler->SetZoom(_fZoom);
     Resize();
     Invalidate();
 }

@@ -975,11 +975,11 @@ void correctOverlapping(SdrObject* _pControl,OReportSection const & _aReportSect
         rSectionView.InsertObjectAtView(_pControl,*rSectionView.GetSdrPageView(), SdrInsertFlags::ADDMARK);
 }
 
-void setZoomFactor(const Fraction& _aZoom, vcl::Window& _rWindow)
+void setZoomFactor(double _fZoom, vcl::Window& _rWindow)
 {
     MapMode aMapMode( _rWindow.GetMapMode() );
-    aMapMode.SetScaleX(_aZoom);
-    aMapMode.SetScaleY(_aZoom);
+    aMapMode.SetScaleX(Fraction(_fZoom));
+    aMapMode.SetScaleY(Fraction(_fZoom));
     _rWindow.SetMapMode(aMapMode);
 }
 

@@ -116,7 +116,7 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void zoom(const Fraction& _aZoom);
+        void zoom(double _fZoom);
 
         void scrollChildren(tools::Long _nThumbPosX);
     };

@@ -370,9 +370,9 @@ sal_uInt32 OScrollWindowHelper::getMarkedObjectCount() const
     return m_aReportWindow->getMarkedObjectCount();
 }
 
-void OScrollWindowHelper::zoom(const Fraction& _aZoom)
+void OScrollWindowHelper::zoom(double _fZoom)
 {
-    m_aReportWindow->zoom(_aZoom);
+    m_aReportWindow->zoom(_fZoom);
     Resize();
     Invalidate(InvalidateFlags::NoChildren|InvalidateFlags::Transparent);
 }
