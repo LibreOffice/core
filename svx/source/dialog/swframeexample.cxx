@@ -101,9 +101,15 @@ void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
     aPage.SetSize(GetOutputSizePixel());
 
     sal_uInt32 nOutWPix = aPage.GetWidth();
+    if (!nOutWPix)
+    {
+        nOutWPix = 1;
+    }
     sal_uInt32 nOutHPix = aPage.GetHeight();
-
-    assert(nOutWPix > 0 && nOutHPix > 0);
+    if (!nOutHPix)
+    {
+        nOutHPix = 1;
+    }
 
     // PrintArea
     sal_uInt32 nLBorder;
