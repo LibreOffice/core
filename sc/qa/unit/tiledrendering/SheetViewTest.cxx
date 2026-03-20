@@ -3962,6 +3962,53 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoInsertCells_SheetViewSortData)
                          getValues(mpTabViewSheetView, 0, 1, 4));
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoOnSheetViewDoesNotSwitchTab)
+{
+    // Test that undoing a cell edit on a sheet view doesn't switch the
+    // view to the default view tab.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    setupViews();
+
+    // Create sheet view
+    {
+        switchToSheetView();
+        createNewSheetViewInCurrentView();
+    }
+
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT(nSheetViewTab != 0);
+
+    // Type a value on the sheet view
+    {
+        switchToSheetView();
+        typeCharsInCell(std::string("XyZ"), 0, 1, mpTabViewSheetView, pModelObj);
+    }
+
+    // Verify we're still on the sheet view tab
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, mpTabViewSheetView->GetViewData().GetTabNumber());
+
+    // Undo from the sheet view
+    {
+        switchToSheetView();
+        undo();
+    }
+
+    // The sheet view should still be on its original tab
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, mpTabViewSheetView->GetViewData().GetTabNumber());
+
+    // Redo from the sheet view
+    {
+        switchToSheetView();
+        redo();
+    }
+
+    // Still on the sheet view tab
+    CPPUNIT_ASSERT_EQUAL(nSheetViewTab, mpTabViewSheetView->GetViewData().GetTabNumber());
+}
+
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoDeleteCells_SheetViewSortData)
 {
     // Test that undoing delete rows restores sheet view sort data
