@@ -623,6 +623,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/undo/undoolk \
     sc/source/ui/undo/undorangename \
     sc/source/ui/undo/undosort \
+    sc/source/ui/undo/UndoSheetViewSortData \
     sc/source/ui/undo/undostyl \
     sc/source/ui/undo/undotab \
     sc/source/ui/undo/undoutil \

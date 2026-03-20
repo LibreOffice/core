@@ -152,16 +152,6 @@ void ScUndoInsertCells::SetChangeTrack()
         nEndChangeAction = 0;
 }
 
-void ScUndoInsertCells::setSheetViewSortData(
-    SCTAB nDefaultViewTab,
-    std::shared_ptr<sc::DefaultViewSortData> pSortDataBefore,
-    std::shared_ptr<sc::DefaultViewSortData> pSortDataAfter)
-{
-    mnDefaultViewTab = nDefaultViewTab;
-    mpSortDataBefore = std::move(pSortDataBefore);
-    mpSortDataAfter = std::move(pSortDataAfter);
-}
-
 void ScUndoInsertCells::DoChange( const bool bUndo )
 {
     ScDocument& rDoc = pDocShell->GetDocument();
@@ -327,16 +317,8 @@ void ScUndoInsertCells::Undo()
     BeginUndo();
     DoChange( true );
 
-    // Restore sheet view sort data to the state before the insert
-    if (mnDefaultViewTab >= 0 && mpSortDataBefore)
-    {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        std::shared_ptr<sc::SheetViewManager> pManager = rDoc.GetSheetViewManager(mnDefaultViewTab);
-        if (pManager)
-            pManager->restoreSortData(mpSortDataBefore);
-    }
+    sc::UndoSheetViewSortData::restore(*pDocShell, true);
 
-    // triggers sync
     EndUndo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
@@ -350,16 +332,8 @@ void ScUndoInsertCells::Redo()
     BeginRedo();
     DoChange( false );
 
-    // Restore sheet view sort data to the state after the insert
-    if (mnDefaultViewTab >= 0 && mpSortDataAfter)
-    {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        std::shared_ptr<sc::SheetViewManager> pManager = rDoc.GetSheetViewManager(mnDefaultViewTab);
-        if (pManager)
-            pManager->restoreSortData(mpSortDataAfter);
-    }
+    sc::UndoSheetViewSortData::restore(*pDocShell, false);
 
-    // triggers sync
     EndRedo();
 
     if ( pPasteUndo )
@@ -420,16 +394,6 @@ ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
 
 ScUndoDeleteCells::~ScUndoDeleteCells()
 {
-}
-
-void ScUndoDeleteCells::setSheetViewSortData(
-    SCTAB nDefaultViewTab,
-    std::shared_ptr<sc::DefaultViewSortData> pSortDataBefore,
-    std::shared_ptr<sc::DefaultViewSortData> pSortDataAfter)
-{
-    mnDefaultViewTab = nDefaultViewTab;
-    mpSortDataBefore = std::move(pSortDataBefore);
-    mpSortDataAfter = std::move(pSortDataAfter);
 }
 
 OUString ScUndoDeleteCells::GetComment() const
@@ -635,14 +599,7 @@ void ScUndoDeleteCells::Undo()
     BeginUndo();
     DoChange( true );
 
-    // Restore sheet view sort data to the state before the delete
-    if (mnDefaultViewTab >= 0 && mpSortDataBefore)
-    {
-        std::shared_ptr<sc::SheetViewManager> pManager
-            = pDocShell->GetDocument().GetSheetViewManager(mnDefaultViewTab);
-        if (pManager)
-            pManager->restoreSortData(mpSortDataBefore);
-    }
+    sc::UndoSheetViewSortData::restore(*pDocShell, true);
 
     EndUndo();
 
@@ -681,14 +638,7 @@ void ScUndoDeleteCells::Redo()
     BeginRedo();
     DoChange( false);
 
-    // Restore sheet view sort data to the state after the delete
-    if (mnDefaultViewTab >= 0 && mpSortDataAfter)
-    {
-        std::shared_ptr<sc::SheetViewManager> pManager
-            = pDocShell->GetDocument().GetSheetViewManager(mnDefaultViewTab);
-        if (pManager)
-            pManager->restoreSortData(mpSortDataAfter);
-    }
+    sc::UndoSheetViewSortData::restore(*pDocShell, false);
 
     EndRedo();
 
