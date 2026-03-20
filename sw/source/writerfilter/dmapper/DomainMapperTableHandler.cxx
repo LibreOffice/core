@@ -443,6 +443,19 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 m_aTableProperties->dumpXml();
                 TagLogger::getInstance().endElement();
 #endif
+                if (pTableStyle)
+                {
+                    // disable styles that have no definition
+                    if (rInfo.nTblLook & 0x020 && !pTableStyle->Has(CNF_FIRST_ROW))
+                        rInfo.nTblLook &= ~0x20;
+                    if (rInfo.nTblLook & 0x040 && !pTableStyle->Has(CNF_LAST_ROW))
+                        rInfo.nTblLook &= ~0x040;
+                    if (rInfo.nTblLook & 0x080 && !pTableStyle->Has(CNF_FIRST_COLUMN))
+                        rInfo.nTblLook &= ~0x080;
+                    if (rInfo.nTblLook & 0x100 && !pTableStyle->Has(CNF_LAST_COLUMN))
+                        rInfo.nTblLook &= ~0x100;
+                }
+
                 if (pTableStyle && (rInfo.nTblLook & 0x020))  // first row style used
                 {
                     // apply (without overwriting) tblHeader setting of the table style

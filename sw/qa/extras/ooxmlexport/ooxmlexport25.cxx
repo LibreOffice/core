@@ -95,6 +95,26 @@ DECLARE_OOXMLEXPORT_TEST(testTdf171299_tableInField, "tdf171299_tableInField.doc
     CPPUNIT_ASSERT_EQUAL(OUString("ID"), xCell->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf138020_undefined_firstCol, "tdf138020_undefined_firstCol.docx")
+{
+    // Given a table where the vertical band and first column are both defined
+    // but there is no firstColumn style definition provided
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // w:firstColumn=1 but no style defined, so it is treated as if it was turned off.
+    // Odd-VBand's green color applies
+    uno::Reference<text::XTextRange> xCell(xTextTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xd9f2d0), getProperty<Color>(xCell, u"BackColor"_ustr)); // green
+
+    // second column applies Even-VBand's automatic color
+    xCell.set(xTextTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xCell, u"BackColor"_ustr));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf138020_all_rows_tblHeader, "tdf138020_all_rows_tblHeader.docx")
 {
     // Given a multi-page table where all rows are marked as tblHeader

@@ -152,6 +152,11 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask )
     return pProps;
 }
 
+bool TableStyleSheetEntry::Has(sal_Int32 nMask)
+{
+    return GetProperties(nMask)->GetPropertyIds().size();
+}
+
 beans::PropertyValues StyleSheetEntry::GetInteropGrabBagSeq() const
 {
     return comphelper::containerToSequence(m_aInteropGrabBag);

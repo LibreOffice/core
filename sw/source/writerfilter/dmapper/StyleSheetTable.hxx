@@ -180,6 +180,8 @@ public:
 
     // @param mask      mask describing which properties to return
     PropertyMapPtr GetProperties( sal_Int32 nMask);
+    // return true if there are any properties defined for this mask
+    bool Has(sal_Int32 nMask);
 
     TableStyleSheetEntry( StyleSheetEntry const & aEntry );
     virtual ~TableStyleSheetEntry( ) override;
