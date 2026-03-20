@@ -31,12 +31,15 @@ struct DocxTableStyleExport::Impl
 private:
     SwDoc& m_rDoc;
     sax_fastparser::FSHelperPtr m_pSerializer;
+    OUString m_sCurrentStyle;
 
 public:
     Impl(SwDoc& rDoc)
         : m_rDoc(rDoc)
     {
     }
+
+    std::vector<OUString> m_vStylesWithTblHeaderInFirstRow;
 
     void TableStyle(const uno::Sequence<beans::PropertyValue>& rStyle);
 
@@ -558,7 +561,11 @@ void DocxTableStyleExport::Impl::tableStyleTrPr(const uno::Sequence<beans::Prope
     for (const auto& rProp : rTrPr)
     {
         if (rProp.Name == "tblHeader")
+        {
             m_pSerializer->singleElementNS(XML_w, XML_tblHeader);
+            if (!m_sCurrentStyle.isEmpty())
+                m_vStylesWithTblHeaderInFirstRow.push_back(m_sCurrentStyle);
+        }
     }
 
     m_pSerializer->endElementNS(XML_w, XML_trPr);
@@ -647,7 +654,6 @@ void DocxTableStyleExport::Impl::TableStyle(const uno::Sequence<beans::PropertyV
     bool bQFormat = false;
     bool bSemiHidden = false;
     bool bUnhideWhenUsed = false;
-    OUString aStyleId;
     OUString aName;
     OUString aBasedOn;
     OUString aRsid;
@@ -657,6 +663,7 @@ void DocxTableStyleExport::Impl::TableStyle(const uno::Sequence<beans::PropertyV
     uno::Sequence<beans::PropertyValue> aTablePr;
     uno::Sequence<beans::PropertyValue> aTcPr;
     std::vector<uno::Sequence<beans::PropertyValue>> aTableStylePrs;
+    m_sCurrentStyle.clear();
     for (const auto& rProp : rStyle)
     {
         if (rProp.Name == "default")
@@ -664,7 +671,7 @@ void DocxTableStyleExport::Impl::TableStyle(const uno::Sequence<beans::PropertyV
         else if (rProp.Name == "customStyle")
             bCustomStyle = rProp.Value.get<bool>();
         else if (rProp.Name == "styleId")
-            aStyleId = rProp.Value.get<OUString>();
+            m_sCurrentStyle = rProp.Value.get<OUString>();
         else if (rProp.Name == "name")
             aName = rProp.Value.get<OUString>();
         else if (rProp.Name == "basedOn")
@@ -698,8 +705,8 @@ void DocxTableStyleExport::Impl::TableStyle(const uno::Sequence<beans::PropertyV
         pAttributeList->add(FSNS(XML_w, XML_default), "1");
     if (bCustomStyle)
         pAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
-    if (!aStyleId.isEmpty())
-        pAttributeList->add(FSNS(XML_w, XML_styleId), aStyleId);
+    if (!m_sCurrentStyle.isEmpty())
+        pAttributeList->add(FSNS(XML_w, XML_styleId), m_sCurrentStyle);
     m_pSerializer->startElementNS(XML_w, XML_style, pAttributeList);
 
     m_pSerializer->singleElementNS(XML_w, XML_name, FSNS(XML_w, XML_val), aName);
@@ -724,6 +731,14 @@ void DocxTableStyleExport::Impl::TableStyle(const uno::Sequence<beans::PropertyV
         tableStyleTableStylePr(i);
 
     m_pSerializer->endElementNS(XML_w, XML_style);
+}
+
+bool DocxTableStyleExport::FirstRowHasTblHeader(const OUString& rStyleId) const
+{
+    auto pIter = std::find_if(std::cbegin(m_pImpl->m_vStylesWithTblHeaderInFirstRow),
+                              std::cend(m_pImpl->m_vStylesWithTblHeaderInFirstRow),
+                              [rStyleId](const OUString& rName) { return rName == rStyleId; });
+    return (pIter != std::cend(m_pImpl->m_vStylesWithTblHeaderInFirstRow));
 }
 
 void DocxTableStyleExport::SetSerializer(const sax_fastparser::FSHelperPtr& pSerializer)

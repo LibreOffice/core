@@ -438,6 +438,36 @@ bool lclHasSolidFillTransformations(const model::ComplexColor& aComplexColor)
     return idx != transformations.end();
 }
 
+bool lcl_HasTblHeaderFromStyle(const SwFrameFormat* pTableFormat,
+                               const DocxTableStyleExport& rTableStyleExport)
+{
+    // does the table actually apply a table style, and does it use the firstRow style?
+    const std::map<OUString, css::uno::Any>& rGrabBag
+        = pTableFormat->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG)->GetGrabBag();
+    bool bIsUsingFirstRow = false;
+    OUString sStyleId;
+    for (const auto& rElement : rGrabBag)
+    {
+        if (rElement.first == "TableStyleName")
+            sStyleId = rElement.second.get<OUString>();
+        else if (rElement.first == "TableStyleLook")
+        {
+            for (const auto& rTblLook : rElement.second.get<uno::Sequence<beans::PropertyValue>>())
+            {
+                if (rTblLook.Name == "val")
+                {
+                    bIsUsingFirstRow = rTblLook.Value.get<sal_Int32>() & 0x020;
+                    break;
+                }
+            }
+        }
+    }
+    if (!bIsUsingFirstRow || sStyleId.isEmpty())
+        return false;
+
+    return rTableStyleExport.FirstRowHasTblHeader(sStyleId);
+}
+
 } // end anonymous namespace
 
 void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
@@ -4970,7 +5000,17 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t c
     // Header row: tblHeader
     const SwTable *pTable = pTableTextNodeInfoInner->getTable( );
     if ( pTable->GetRowsToRepeat( ) > pTableTextNodeInfoInner->getRow( ) )
-        m_pSerializer->singleElementNS(XML_w, XML_tblHeader, FSNS(XML_w, XML_val), "true"); // TODO to overwrite table style may need explicit false
+        m_pSerializer->singleElementNS(XML_w, XML_tblHeader, FSNS(XML_w, XML_val), "true");
+    else if (!pTableTextNodeInfoInner->getRow()) // first row
+    {
+        // Perhaps there is a table style attached to this table,
+        // and perhaps that table style has a firstRow tblStylePr defined
+        // and perhaps our tblLook uses that firstRow style
+        // and perhaps the firstRow style defines a tblHeader
+        // then in that case we need to write an explicit false to dis-inherit.
+        if (lcl_HasTblHeaderFromStyle(pTable->GetFrameFormat(), *m_pTableStyleExport))
+            m_pSerializer->singleElementNS(XML_w, XML_tblHeader, FSNS(XML_w, XML_val), "false");
+    }
 
     TableRowRedline( pTableTextNodeInfoInner );
     TableHeight( pTableTextNodeInfoInner );

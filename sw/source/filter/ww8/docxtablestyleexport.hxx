@@ -35,6 +35,9 @@ public:
     void SetSerializer(const sax_fastparser::FSHelperPtr& pSerializer);
     DocxTableStyleExport(SwDoc& rDoc, const sax_fastparser::FSHelperPtr& pSerializer);
     ~DocxTableStyleExport();
+
+    // This function only returns useful/cached results after EndStyles - i.e. in WriteMainText
+    bool FirstRowHasTblHeader(const OUString& rStyleId) const;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXTABLESTYLEEXPORT_HXX
