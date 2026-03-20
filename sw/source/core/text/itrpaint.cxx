@@ -149,7 +149,7 @@ SwTextPaintOmitter::SwTextPaintOmitter(SwTextPainter& rPainter, const SwRedlineT
     }
 
     SwRedlineTable::size_type nRedline = rPainter.GetRedln()->GetAct();
-    if (nRedline == SwRedlineTable::npos)
+    if (nRedline == SwRedlineTable::npos || nRedline >= rRedlineTable.size())
     {
         return;
     }
