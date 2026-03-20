@@ -222,6 +222,7 @@ void ScTransferObj::AddSupportedFormats()
     AddFormat( SotClipboardFormatId::RTF );
     AddFormat( SotClipboardFormatId::RICHTEXT );
     AddFormat( SotClipboardFormatId::MARKDOWN );
+    AddFormat( SotClipboardFormatId::MARKDOWN_ANNOTATED );
     if ( m_aBlock.aStart == m_aBlock.aEnd )
     {
         AddFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT );
@@ -291,6 +292,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             || nFormat == SotClipboardFormatId::RTF
             || nFormat == SotClipboardFormatId::RICHTEXT
             || nFormat == SotClipboardFormatId::MARKDOWN
+            || nFormat == SotClipboardFormatId::MARKDOWN_ANNOTATED
             || nFormat == SotClipboardFormatId::BITMAP
             || nFormat == SotClipboardFormatId::PNG;
 
@@ -304,7 +306,9 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
         {
             bOK = SetTransferableObjectDescriptor( m_aObjDesc );
         }
-        else if ( nFormat == SotClipboardFormatId::MARKDOWN && m_aBlock.aStart == m_aBlock.aEnd )
+        else if ( ( nFormat == SotClipboardFormatId::MARKDOWN
+                    || nFormat == SotClipboardFormatId::MARKDOWN_ANNOTATED )
+                  && m_aBlock.aStart == m_aBlock.aEnd )
         {
             // Markdown from a single cell - use EditEngine
             SCCOL nCol = m_aBlock.aStart.Col();
@@ -350,7 +354,9 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 }
             }
         }
-        else if ( nFormat == SotClipboardFormatId::MARKDOWN && m_aBlock.aStart != m_aBlock.aEnd )
+        else if ( ( nFormat == SotClipboardFormatId::MARKDOWN
+                    || nFormat == SotClipboardFormatId::MARKDOWN_ANNOTATED )
+                  && m_aBlock.aStart != m_aBlock.aEnd )
         {
             // Markdown table from multi-cell range
             ScRange aRange = lcl_reduceBlock(*m_pDoc, m_aBlock);
@@ -370,66 +376,53 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             };
 
             OStringBuffer aBuf;
+            bool bAnnotated = (nFormat == SotClipboardFormatId::MARKDOWN_ANNOTATED);
 
-            // For single-row selections, output all data as a single row
-            // table using column letters as headers
-            bool bSingleRow = (nStartRow == nEndRow);
-            if (bSingleRow)
+            // Header row
+            if (bAnnotated)
             {
-                // Header row: "Row" corner cell + column letters
                 aBuf.append("| Row |");
                 for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
                 {
                     aBuf.append(OString::Concat(" ") + OUStringToOString(ScColToAlpha(nCol), RTL_TEXTENCODING_UTF8) + " |");
                 }
-                aBuf.append("\n");
-
-                // Separator (one extra for row-number column)
-                aBuf.append("| --- |");
-                for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
-                {
-                    aBuf.append(" --- |");
-                }
-                aBuf.append("\n");
-
-                // Single data row with row number
-                aBuf.append(OString::Concat("| ") + OString::number(static_cast<int>(nStartRow + 1)) + " |");
+            }
+            else
+            {
+                aBuf.append("|");
                 for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
                 {
                     OUString aCellStr = m_pDoc->GetString(nCol, nStartRow, nTab);
                     aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
                 }
-                aBuf.append("\n");
             }
-            else
-            {
-                // Header row: "Row" corner cell + column letters
-                aBuf.append("| Row |");
-                for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
-                {
-                    aBuf.append(OString::Concat(" ") + OUStringToOString(ScColToAlpha(nCol), RTL_TEXTENCODING_UTF8) + " |");
-                }
-                aBuf.append("\n");
+            aBuf.append("\n");
 
-                // Separator (one extra for row-number column)
+            // Separator
+            if (bAnnotated)
                 aBuf.append("| --- |");
+            else
+                aBuf.append("|");
+            for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
+            {
+                aBuf.append(" --- |");
+            }
+            aBuf.append("\n");
+
+            // Data rows
+            SCROW nDataStart = bAnnotated ? nStartRow : nStartRow + 1;
+            for (SCROW nRow = nDataStart; nRow <= nEndRow; nRow++)
+            {
+                if (bAnnotated)
+                    aBuf.append(OString::Concat("| ") + OString::number(static_cast<int>(nRow + 1)) + " |");
+                else
+                    aBuf.append("|");
                 for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
                 {
-                    aBuf.append(" --- |");
+                    OUString aCellStr = m_pDoc->GetString(nCol, nRow, nTab);
+                    aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
                 }
                 aBuf.append("\n");
-
-                // Data rows (all rows, with row numbers)
-                for (SCROW nRow = nStartRow; nRow <= nEndRow; nRow++)
-                {
-                    aBuf.append(OString::Concat("| ") + OString::number(static_cast<int>(nRow + 1)) + " |");
-                    for (SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++)
-                    {
-                        OUString aCellStr = m_pDoc->GetString(nCol, nRow, nTab);
-                        aBuf.append(" " + fnEscapeCell(aCellStr) + " |");
-                    }
-                    aBuf.append("\n");
-                }
             }
 
             OString aResult = aBuf.makeStringAndClear();

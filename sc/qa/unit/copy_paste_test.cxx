@@ -67,6 +67,8 @@ public:
     void testMarkdownExportSingleRow();
     void testMarkdownExportEscaping();
     void testMarkdownExportSingleCell();
+    void testMarkdownRoundtripFormattedText();
+    void testMarkdownRoundtripTable();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -99,6 +101,8 @@ public:
     CPPUNIT_TEST(testMarkdownExportSingleRow);
     CPPUNIT_TEST(testMarkdownExportEscaping);
     CPPUNIT_TEST(testMarkdownExportSingleCell);
+    CPPUNIT_TEST(testMarkdownRoundtripFormattedText);
+    CPPUNIT_TEST(testMarkdownRoundtripTable);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -171,6 +175,16 @@ OString lcl_getMarkdownExport(ScModelObj* pModelObj)
     auto xTransferable = pModelObj->getSelection();
     auto aAny = xTransferable->getTransferData(
         { u"text/markdown"_ustr, {}, cppu::UnoType<OUString>::get() });
+    OUString aMarkdown;
+    CPPUNIT_ASSERT(aAny >>= aMarkdown);
+    return OUStringToOString(aMarkdown, RTL_TEXTENCODING_UTF8);
+}
+
+OString lcl_getAnnotatedMarkdownExport(ScModelObj* pModelObj)
+{
+    auto xTransferable = pModelObj->getSelection();
+    auto aAny = xTransferable->getTransferData(
+        { u"application/x-libreoffice-markdown-annotated"_ustr, {}, cppu::UnoType<OUString>::get() });
     OUString aMarkdown;
     CPPUNIT_ASSERT(aAny >>= aMarkdown);
     return OUStringToOString(aMarkdown, RTL_TEXTENCODING_UTF8);
@@ -1135,15 +1149,24 @@ void ScCopyPasteTest::testMarkdownExportMultiRow()
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
 
-    // When exporting as markdown:
+    // When exporting as clean markdown:
     OString aResult = lcl_getMarkdownExport(pModelObj);
+
+    // Then first data row becomes the header, remaining rows become data:
+    CPPUNIT_ASSERT_EQUAL("| Name | Age |\n"
+        "| --- | --- |\n"
+        "| Alice | 30 |\n"
+        "| Bob | 25 |\n"_ostr, aResult);
+
+    // When exporting as annotated markdown:
+    OString aAnnotated = lcl_getAnnotatedMarkdownExport(pModelObj);
 
     // Then column letters become headers and row numbers appear in the first column:
     CPPUNIT_ASSERT_EQUAL("| Row | A | B |\n"
         "| --- | --- | --- |\n"
         "| 1 | Name | Age |\n"
         "| 2 | Alice | 30 |\n"
-        "| 3 | Bob | 25 |\n"_ostr, aResult);
+        "| 3 | Bob | 25 |\n"_ostr, aAnnotated);
 }
 
 void ScCopyPasteTest::testMarkdownExportSingleRow()
@@ -1167,10 +1190,9 @@ void ScCopyPasteTest::testMarkdownExportSingleRow()
     // When exporting as markdown:
     OString aResult = lcl_getMarkdownExport(pModelObj);
 
-    // Then column letters become headers and the row number appears in the first column:
-    CPPUNIT_ASSERT_EQUAL("| Row | A | B | C |\n"
-        "| --- | --- | --- | --- |\n"
-        "| 1 | X | Y | Z |\n"_ostr, aResult);
+    // Then the cell values become the header row:
+    CPPUNIT_ASSERT_EQUAL("| X | Y | Z |\n"
+        "| --- | --- | --- |\n"_ostr, aResult);
 }
 
 void ScCopyPasteTest::testMarkdownExportEscaping()
@@ -1194,12 +1216,11 @@ void ScCopyPasteTest::testMarkdownExportEscaping()
     // When exporting as markdown:
     OString aResult = lcl_getMarkdownExport(pModelObj);
 
-    // Then pipes and backslashes should be escaped, with column letters and row numbers:
-    CPPUNIT_ASSERT_EQUAL("| Row | A |\n"
-        "| --- | --- |\n"
-        "| 1 | Header |\n"
-        "| 2 | a\\|b |\n"
-        "| 3 | c\\\\d |\n"_ostr, aResult);
+    // Then pipes and backslashes should be escaped:
+    CPPUNIT_ASSERT_EQUAL("| Header |\n"
+        "| --- |\n"
+        "| a\\|b |\n"
+        "| c\\\\d |\n"_ostr, aResult);
 }
 
 void ScCopyPasteTest::testMarkdownExportSingleCell()
@@ -1220,6 +1241,105 @@ void ScCopyPasteTest::testMarkdownExportSingleCell()
     // Then output should contain the text without table markup:
     CPPUNIT_ASSERT(aResult.indexOf("Hello world") >= 0);
     CPPUNIT_ASSERT(aResult.indexOf("|") < 0);
+}
+
+void ScCopyPasteTest::testMarkdownRoundtripFormattedText()
+{
+    // Given a cell with formatted text:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Import "**bold** and *italic*" as markdown into A1:
+    OString aInput("**bold** and *italic*"_ostr);
+    SvMemoryStream aStream;
+    aStream.WriteBytes(aInput.getStr(), aInput.getLength());
+    aStream.Seek(0);
+    ScImportExport aImporter(*pDoc, ScAddress(0, 0, 0));
+    aImporter.SetImportBroadcast(true);
+    CPPUNIT_ASSERT(aImporter.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Export via single-cell EditEngine path:
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    OString aExported = lcl_getMarkdownExport(pModelObj);
+
+    // The exported markdown should preserve formatting markers:
+    CPPUNIT_ASSERT(aExported.indexOf("**bold**") >= 0);
+    CPPUNIT_ASSERT(aExported.indexOf("*italic*") >= 0);
+
+    // Reimport into a new document and verify character attributes:
+    createScDoc();
+    pDoc = getScDoc();
+    SvMemoryStream aStream2;
+    aStream2.WriteBytes(aExported.getStr(), aExported.getLength());
+    aStream2.Seek(0);
+    ScImportExport aImporter2(*pDoc, ScAddress(0, 0, 0));
+    aImporter2.SetImportBroadcast(true);
+    CPPUNIT_ASSERT(aImporter2.ImportStream(aStream2, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Check for bold attribute:
+    const EditTextObject* pObj = pDoc->GetEditText(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pObj);
+    std::vector<EECharAttrib> aAttribs;
+    pObj->GetCharAttribs(0, aAttribs);
+    bool bFoundBold = false;
+    bool bFoundItalic = false;
+    for (const auto& rAttrib : aAttribs)
+    {
+        if (rAttrib.pAttr->Which() == EE_CHAR_WEIGHT)
+        {
+            const SvxWeightItem& rWeight = static_cast<const SvxWeightItem&>(*rAttrib.pAttr);
+            if (rWeight.GetWeight() == WEIGHT_BOLD)
+                bFoundBold = true;
+        }
+        if (rAttrib.pAttr->Which() == EE_CHAR_ITALIC)
+        {
+            const SvxPostureItem& rPosture = static_cast<const SvxPostureItem&>(*rAttrib.pAttr);
+            if (rPosture.GetPosture() == ITALIC_NORMAL)
+                bFoundItalic = true;
+        }
+    }
+    CPPUNIT_ASSERT(bFoundBold);
+    CPPUNIT_ASSERT(bFoundItalic);
+}
+
+void ScCopyPasteTest::testMarkdownRoundtripTable()
+{
+    // Given a 2-column, 2-row table:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScTabViewShell* pViewShell = getViewShell();
+
+    pDoc->SetString(ScAddress(0, 0, 0), u"Name"_ustr);
+    pDoc->SetString(ScAddress(1, 0, 0), u"Age"_ustr);
+    pDoc->SetString(ScAddress(0, 1, 0), u"Alice"_ustr);
+    pDoc->SetString(ScAddress(1, 1, 0), u"30"_ustr);
+
+    // Select A1:B2:
+    ScRange aRange(0, 0, 0, 1, 1, 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aRange);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // Export as clean markdown:
+    OString aExported = lcl_getMarkdownExport(pModelObj);
+
+    // Reimport into a new document:
+    createScDoc();
+    pDoc = getScDoc();
+    SvMemoryStream aStream;
+    aStream.WriteBytes(aExported.getStr(), aExported.getLength());
+    aStream.Seek(0);
+    ScImportExport aImporter(*pDoc, ScAddress(0, 0, 0));
+    aImporter.SetImportBroadcast(true);
+    CPPUNIT_ASSERT(aImporter.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
+
+    // Verify cells match the original data:
+    CPPUNIT_ASSERT_EQUAL(u"Name"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Age"_ustr, pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Alice"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
 }
 
 ScCopyPasteTest::ScCopyPasteTest()

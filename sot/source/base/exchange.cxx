@@ -199,6 +199,7 @@ const DataFlavor* FormatArray_Impl()
         /*148 SVG*/                       { u"image/svg+xml;windows_formatname=\"image/svg+xml\""_ustr, u"SVG"_ustr, cppu::UnoType<Sequence<sal_Int8>>::get() },
         /*149 MARKDOWN*/                  { u"text/markdown"_ustr, u"Markdown"_ustr, cppu::UnoType<OUString>::get() },
         /*150 BIFF_12*/                   { u"application/x-openoffice-biff-12;windows_formatname=\"Biff12\""_ustr, u"Biff12"_ustr, cppu::UnoType<Sequence<sal_Int8>>::get() },
+        /*151 MARKDOWN_ANNOTATED*/        { u"application/x-libreoffice-markdown-annotated"_ustr, u"Annotated Markdown"_ustr, cppu::UnoType<OUString>::get() },
     };
     static_assert(std::size(aInstance) == size_t(SotClipboardFormatId::USER_END) + 1);
     return &aInstance[0];

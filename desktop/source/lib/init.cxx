@@ -6072,10 +6072,15 @@ static bool getFromTransferable(
         aMimeType = "text/markdown"_ostr;
         bConvert = true;
     }
+    else if (aBaseType == "application/x-libreoffice-markdown-annotated")
+    {
+        bConvert = true;
+    }
 
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = OUString::fromUtf8(aMimeType);
-    if (aMimeType == "text/plain;charset=utf-16" || aMimeType == "text/markdown")
+    if (aMimeType == "text/plain;charset=utf-16" || aMimeType == "text/markdown"
+        || aMimeType == "application/x-libreoffice-markdown-annotated")
         aFlavor.DataType = cppu::UnoType<OUString>::get();
     else
         aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
