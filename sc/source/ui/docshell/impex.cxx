@@ -62,6 +62,7 @@
 #include <comphelper/configuration.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/numformat.hxx>
 #include <rtl/character.hxx>
@@ -385,6 +386,26 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, So
     return false;
 }
 
+static bool lcl_MarkdownHasTable(const OString& rMdContent)
+{
+    bool bHasTable = false;
+    auto noop3 = [](MD_BLOCKTYPE, void*, void*) -> int { return 0; };
+    auto noop3s = [](MD_SPANTYPE, void*, void*) -> int { return 0; };
+    auto noopText = [](MD_TEXTTYPE, const MD_CHAR*, MD_SIZE, void*) -> int { return 0; };
+    MD_PARSER tableDetector = {
+        0, MD_DIALECT_GITHUB,
+        [](MD_BLOCKTYPE nType, void*, void* pUser) -> int {
+            if (nType == MD_BLOCK_TABLE)
+                *static_cast<bool*>(pUser) = true;
+            return 0;
+        },
+        +noop3, +noop3s, +noop3s, +noopText, nullptr, nullptr
+    };
+    md_parse(rMdContent.getStr(), rMdContent.getLength(),
+             &tableDetector, &bHasTable);
+    return bHasTable;
+}
+
 bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, SotClipboardFormatId nFmt )
 {
     if( nFmt == SotClipboardFormatId::STRING || nFmt == SotClipboardFormatId::STRING_TSVC )
@@ -423,7 +444,6 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, So
     }
     if ( nFmt == SotClipboardFormatId::MARKDOWN )
     {
-        // Convert markdown to HTML using md4c-html, then use HTML import
         sal_uInt64 nSize = rStrm.TellEnd() - rStrm.Tell();
         if (nSize == 0)
             return false;
@@ -432,6 +452,35 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, So
         rStrm.ReadBytes(aBuf.data(), nSize);
         OString aMdContent(aBuf.data(), nSize);
 
+        if (!lcl_MarkdownHasTable(aMdContent))
+        {
+            // Non-table markdown: parse directly with EditEngine's
+            // MarkdownParser to preserve inline formatting
+            const ScPatternAttr* pPattern = rDoc.GetPattern(
+                aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab());
+            ScTabEditEngine aEngine(*pPattern, rDoc.GetEditEnginePool(), rDoc);
+            aEngine.SetUpdateLayout(false);
+            aEngine.EnableUndo(false);
+
+            SvMemoryStream aMdStream(
+                const_cast<char*>(aMdContent.getStr()), aMdContent.getLength(),
+                StreamMode::READ);
+            aEngine.Read(aMdStream, OUString(), EETextFormat::Markdown);
+
+            auto pTextObj = aEngine.CreateTextObject();
+            if (pTextObj)
+            {
+                bool bOk = StartPaste();
+                if (bOk)
+                {
+                    rDoc.SetEditText(aRange.aStart, std::move(pTextObj));
+                    EndPaste();
+                }
+                return bOk;
+            }
+        }
+
+        // Table markdown: convert to HTML for multi-cell distribution
         auto outputCallback = [](const MD_CHAR* pText, MD_SIZE nLen, void* pUserData) {
             static_cast<OStringBuffer*>(pUserData)->append(std::string_view(pText, nLen));
         };

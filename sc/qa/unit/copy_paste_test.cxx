@@ -23,6 +23,12 @@
 #include <userlist.hxx>
 #include <undomanager.hxx>
 
+#include <editeng/editobj.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -909,6 +915,27 @@ void ScCopyPasteTest::testMarkdownImportFormattedText()
 
     // Then the cell should contain the text (formatting is applied via HTML):
     CPPUNIT_ASSERT_EQUAL(u"bold and italic"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // Then bold and italic formatting should be preserved:
+    const EditTextObject* pEditObj = pDoc->GetEditText(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("Expected EditTextObject for formatted cell.", pEditObj);
+
+    std::vector<EECharAttrib> aAttribs;
+    pEditObj->GetCharAttribs(0, aAttribs);
+
+    bool bHasBold = std::any_of(aAttribs.begin(), aAttribs.end(),
+        [](const EECharAttrib& rAttrib) {
+            return rAttrib.pAttr->Which() == EE_CHAR_WEIGHT
+                   && static_cast<const SvxWeightItem&>(*rAttrib.pAttr).GetWeight() == WEIGHT_BOLD;
+        });
+    CPPUNIT_ASSERT_MESSAGE("Expected bold formatting.", bHasBold);
+
+    bool bHasItalic = std::any_of(aAttribs.begin(), aAttribs.end(),
+        [](const EECharAttrib& rAttrib) {
+            return rAttrib.pAttr->Which() == EE_CHAR_ITALIC
+                   && static_cast<const SvxPostureItem&>(*rAttrib.pAttr).GetPosture() == ITALIC_NORMAL;
+        });
+    CPPUNIT_ASSERT_MESSAGE("Expected italic formatting.", bHasItalic);
 }
 
 void ScCopyPasteTest::testMarkdownImportMultiParagraph()
@@ -927,10 +954,13 @@ void ScCopyPasteTest::testMarkdownImportMultiParagraph()
     // When importing as markdown:
     CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
 
-    // Then paragraphs should populate consecutive rows:
-    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Third"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    // Then paragraphs should be in a single cell:
+    const EditTextObject* pEditObj = pDoc->GetEditText(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pEditObj);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pEditObj->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(u"First"_ustr, pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, pEditObj->GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Third"_ustr, pEditObj->GetText(2));
 }
 
 void ScCopyPasteTest::testMarkdownImportIsSupported()
@@ -955,10 +985,32 @@ void ScCopyPasteTest::testMarkdownImportHeading()
     // When importing as markdown:
     CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
 
-    // Then headings and text should populate consecutive rows:
-    CPPUNIT_ASSERT_EQUAL(u"Title"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Subtitle"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Some text"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    // Then headings and text should be in a single cell with formatting:
+    const EditTextObject* pEditObj = pDoc->GetEditText(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pEditObj);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pEditObj->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(u"Title"_ustr, pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Subtitle"_ustr, pEditObj->GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Some text"_ustr, pEditObj->GetText(2));
+
+    // H1 paragraph should be bold:
+    std::vector<EECharAttrib> aAttribs;
+    pEditObj->GetCharAttribs(0, aAttribs);
+    bool bH1Bold = std::any_of(aAttribs.begin(), aAttribs.end(),
+        [](const EECharAttrib& rAttrib) {
+            return rAttrib.pAttr->Which() == EE_CHAR_WEIGHT
+                   && static_cast<const SvxWeightItem&>(*rAttrib.pAttr).GetWeight() == WEIGHT_BOLD;
+        });
+    CPPUNIT_ASSERT_MESSAGE("H1 should be bold.", bH1Bold);
+
+    // H2 paragraph should be bold:
+    pEditObj->GetCharAttribs(1, aAttribs);
+    bool bH2Bold = std::any_of(aAttribs.begin(), aAttribs.end(),
+        [](const EECharAttrib& rAttrib) {
+            return rAttrib.pAttr->Which() == EE_CHAR_WEIGHT
+                   && static_cast<const SvxWeightItem&>(*rAttrib.pAttr).GetWeight() == WEIGHT_BOLD;
+        });
+    CPPUNIT_ASSERT_MESSAGE("H2 should be bold.", bH2Bold);
 }
 
 void ScCopyPasteTest::testMarkdownImportList()
@@ -977,10 +1029,13 @@ void ScCopyPasteTest::testMarkdownImportList()
     // When importing as markdown:
     CPPUNIT_ASSERT(aObj.ImportStream(aStream, OUString(), SotClipboardFormatId::MARKDOWN));
 
-    // Then list items should populate consecutive rows:
-    CPPUNIT_ASSERT_EQUAL(u"Apple"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Banana"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
-    CPPUNIT_ASSERT_EQUAL(u"Cherry"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    // Then list items should be in a single cell:
+    const EditTextObject* pEditObj = pDoc->GetEditText(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pEditObj);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pEditObj->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(u"Apple"_ustr, pEditObj->GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u"Banana"_ustr, pEditObj->GetText(1));
+    CPPUNIT_ASSERT_EQUAL(u"Cherry"_ustr, pEditObj->GetText(2));
 }
 
 void ScCopyPasteTest::testMarkdownImportTableWithEmptyCells()
