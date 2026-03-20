@@ -11,7 +11,6 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/editview.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/crossedoutitem.hxx>
@@ -54,6 +53,24 @@ public:
 
 protected:
     rtl::Reference<EditEngineItemPool> mpItemPool;
+
+    std::string exportAsMarkdown(EditEngine& rEngine)
+    {
+        sal_Int32 nParas = rEngine.GetParagraphCount();
+        sal_Int32 nLastLen = rEngine.GetText(nParas - 1).getLength();
+        uno::Reference<datatransfer::XTransferable> xData
+            = rEngine.CreateTransferable(ESelection(0, 0, nParas - 1, nLastLen));
+        auto pData = dynamic_cast<EditDataObject*>(xData.get());
+        SvMemoryStream& rStream = pData->GetMarkdownStream();
+        return std::string(static_cast<const char*>(rStream.GetData()),
+                           static_cast<size_t>(rStream.GetSize()));
+    }
+
+    void importMarkdown(EditEngine& rEngine, std::string_view aMd)
+    {
+        SvMemoryStream aStream(const_cast<char*>(aMd.data()), aMd.size(), StreamMode::READ);
+        rEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportPlainText)
@@ -63,14 +80,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportPlainText)
     aEditEngine.SetText(u"Hello world"_ustr);
 
     // When exporting as markdown via CreateTransferable:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 11));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the markdown stream should contain the plain text:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Hello world"), aMd);
 }
 
@@ -85,14 +97,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportBold)
     aEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 10));
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 16));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the markdown should wrap "bold" in **:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Hello **bold** world"), aMd);
 }
 
@@ -107,14 +114,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportItalic)
     aEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 12));
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 18));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the markdown should wrap "italic" in *:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Hello *italic* world"), aMd);
 }
 
@@ -129,14 +131,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportStrikethrough)
     aEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 12));
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 18));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the markdown should wrap "struck" in ~~:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Hello ~~struck~~ world"), aMd);
 }
 
@@ -152,14 +149,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportBoldItalic)
     aEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 10));
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 16));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the markdown should wrap "both" in ***:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Hello ***both*** world"), aMd);
 }
 
@@ -170,16 +162,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportMultiParagraph)
     aEditEngine.SetText(u"First paragraph\nSecond paragraph"_ustr);
 
     // When exporting as markdown:
-    sal_Int32 nParas = aEditEngine.GetParagraphCount();
-    sal_Int32 nLastLen = aEditEngine.GetText(nParas - 1).getLength();
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, nParas - 1, nLastLen));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then paragraphs should be separated by double newlines:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("First paragraph\n\nSecond paragraph"), aMd);
 }
 
@@ -187,18 +172,12 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportSpecialChars)
 {
     // Given a document with markdown special characters:
     EditEngine aEditEngine(mpItemPool.get());
-    OUString aText = u"Use *asterisks* and [brackets]"_ustr;
-    aEditEngine.SetText(aText);
+    aEditEngine.SetText(u"Use *asterisks* and [brackets]"_ustr);
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, aText.getLength()));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then special chars should be escaped:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Use \\*asterisks\\* and \\[brackets\\]"), aMd);
 }
 
@@ -213,15 +192,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportLink)
     aEditEngine.QuickInsertField(aField, ESelection(0, 6, 0, 6));
 
     // When exporting as markdown:
-    sal_Int32 nLen = aEditEngine.GetText(0).getLength();
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, nLen));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the markdown should contain [text](url):
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT(aMd.find("[here](https://example.com)") != std::string::npos);
 }
 
@@ -229,11 +202,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportBold)
 {
     // Given markdown with bold text:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("Hello **bold** world"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "Hello **bold** world");
 
     // Then the text should have bold formatting on "bold":
     CPPUNIT_ASSERT_EQUAL(u"Hello bold world"_ustr, aEditEngine.GetText(0));
@@ -254,11 +223,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportBoldInListItem)
 {
     // Given markdown with bold text inside a list item:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("- **Bold**: Normal text"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "- **Bold**: Normal text");
 
     // Then "Bold" (indices 0-4) should be bold:
     CPPUNIT_ASSERT_EQUAL(u"Bold: Normal text"_ustr, aEditEngine.GetText(0));
@@ -275,11 +240,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportItalic)
 {
     // Given markdown with italic text:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("Hello *italic* world"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "Hello *italic* world");
 
     // Then the text should have italic formatting on "italic":
     CPPUNIT_ASSERT_EQUAL(u"Hello italic world"_ustr, aEditEngine.GetText(0));
@@ -293,11 +254,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportStrikethrough)
 {
     // Given markdown with strikethrough text:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("Hello ~~struck~~ world"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "Hello ~~struck~~ world");
 
     // Then the text should have strikethrough formatting on "struck":
     CPPUNIT_ASSERT_EQUAL(u"Hello struck world"_ustr, aEditEngine.GetText(0));
@@ -310,11 +267,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportMultiParagraph)
 {
     // Given markdown with multiple paragraphs:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("First paragraph\n\nSecond paragraph"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "First paragraph\n\nSecond paragraph");
 
     // Then there should be two paragraphs:
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetParagraphCount());
@@ -326,11 +279,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportLooseOrderedList)
 {
     // Given a loose ordered list (blank lines between items):
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("1. First\n\n2. Second\n\n3. Third"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "1. First\n\n2. Second\n\n3. Third");
 
     // Then there should be exactly three paragraphs (one per list item):
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aEditEngine.GetParagraphCount());
@@ -350,18 +299,12 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownRoundtrip)
     aEditEngine.QuickSetAttribs(aBoldSet, ESelection(0, 11, 0, 20));
 
     // Export as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 25));
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMdExport(static_cast<const char*>(rStream.GetData()),
-                          static_cast<size_t>(rStream.GetSize()));
+    std::string aMdExport = exportAsMarkdown(aEditEngine);
     CPPUNIT_ASSERT_EQUAL(std::string("Normal and **formatted** text"), aMdExport);
 
     // Import back into a fresh EditEngine:
     EditEngine aEditEngine2(mpItemPool.get());
-    rStream.Seek(0);
-    aEditEngine2.Read(rStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine2, aMdExport);
 
     // Then the text and formatting should be preserved:
     CPPUNIT_ASSERT_EQUAL(u"Normal and formatted text"_ustr, aEditEngine2.GetText(0));
@@ -396,11 +339,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportBoldItalic)
 {
     // Given markdown with bold+italic text:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("Hello ***both*** world"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "Hello ***both*** world");
 
     // Then "both" should have bold and italic formatting:
     CPPUNIT_ASSERT_EQUAL(u"Hello both world"_ustr, aEditEngine.GetText(0));
@@ -416,11 +355,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportHeadingH1)
 {
     // Given markdown with a level-1 heading:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("# Heading One"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "# Heading One");
 
     // Then the text should be bold with 180% scaled font height:
     CPPUNIT_ASSERT_EQUAL(u"Heading One"_ustr, aEditEngine.GetText(0));
@@ -436,11 +371,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportHeadingH2)
 {
     // Given markdown with a level-2 heading:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("## Heading Two"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "## Heading Two");
 
     // Then the text should be bold with 150% scaled font height:
     CPPUNIT_ASSERT_EQUAL(u"Heading Two"_ustr, aEditEngine.GetText(0));
@@ -456,11 +387,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportHeadingH3)
 {
     // Given markdown with a level-3 heading:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("### Heading Three"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "### Heading Three");
 
     // Then the text should be bold with 130% scaled font height:
     CPPUNIT_ASSERT_EQUAL(u"Heading Three"_ustr, aEditEngine.GetText(0));
@@ -476,11 +403,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportHeadingH5NoScale)
 {
     // Given markdown with a level-5 heading:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("##### Heading Five"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "##### Heading Five");
 
     // Then the text should be bold but font height should be default (no scaling for H5+):
     CPPUNIT_ASSERT_EQUAL(u"Heading Five"_ustr, aEditEngine.GetText(0));
@@ -496,11 +419,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportInlineCode)
 {
     // Given markdown with inline code:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("Use `printf()` to print"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "Use `printf()` to print");
 
     // Then "printf()" should have monospace font:
     CPPUNIT_ASSERT_EQUAL(u"Use printf() to print"_ustr, aEditEngine.GetText(0));
@@ -513,11 +432,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportCodeBlock)
 {
     // Given markdown with a fenced code block:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("```\nint x = 5;\n```"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "```\nint x = 5;\n```");
 
     // Then the code text should have monospace font:
     OUString aText = aEditEngine.GetText(0);
@@ -534,13 +449,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportCodeBlock)
 
 CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportCodeBlockMultiLine)
 {
-    // Given markdown with a multi-line fenced code block:
+    // Given markdown with a multi-line fenced code block (should not crash):
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("```\nline1\nline2\nline3\n```"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown (should not crash):
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "```\nline1\nline2\nline3\n```");
 
     // Then all code paragraphs should exist and have monospace font:
     CPPUNIT_ASSERT_EQUAL(u"line1"_ustr, aEditEngine.GetText(0));
@@ -558,11 +469,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportBlockquote)
 {
     // Given markdown with a blockquote:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("> Quoted text"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "> Quoted text");
 
     // Then the paragraph should have a left indent of 720 twips:
     CPPUNIT_ASSERT_EQUAL(u"Quoted text"_ustr, aEditEngine.GetText(0));
@@ -575,11 +482,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportNestedBlockquote)
 {
     // Given markdown with a nested blockquote:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd(">> Deeply quoted"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, ">> Deeply quoted");
 
     // Then the paragraph should have a left indent of 1440 twips (2 * 720):
     CPPUNIT_ASSERT_EQUAL(u"Deeply quoted"_ustr, aEditEngine.GetText(0));
@@ -592,11 +495,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportUnorderedList)
 {
     // Given markdown with an unordered list:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("- First\n- Second"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "- First\n- Second");
 
     // Then there should be two list item paragraphs with bullet numbering:
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetParagraphCount());
@@ -620,11 +519,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportOrderedList)
 {
     // Given markdown with an ordered list:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("1. Alpha\n2. Beta"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "1. Alpha\n2. Beta");
 
     // Then there should be two list item paragraphs with arabic numbering:
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetParagraphCount());
@@ -648,22 +543,12 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportLink)
 {
     // Given markdown with a link:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("Click [here](https://example.com) now"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "Click [here](https://example.com) now");
 
     // Then a URL field should be present with the correct URL and representation:
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
     // Export back to markdown to verify the link survives:
-    sal_Int32 nLen = aEditEngine.GetText(0).getLength();
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, nLen));
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rOutStream = pData->GetMarkdownStream();
-    std::string aMdOut(static_cast<const char*>(rOutStream.GetData()),
-                       static_cast<size_t>(rOutStream.GetSize()));
+    std::string aMdOut = exportAsMarkdown(aEditEngine);
     CPPUNIT_ASSERT(aMdOut.find("[here](https://example.com)") != std::string::npos);
 }
 
@@ -671,11 +556,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportHorizontalRule)
 {
     // Given markdown with a horizontal rule:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("Before\n\n---\n\nAfter"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "Before\n\n---\n\nAfter");
 
     // Then the middle paragraph should contain horizontal bar characters (U+2015):
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aEditEngine.GetParagraphCount());
@@ -689,11 +570,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportHtmlEntity)
 {
     // Given markdown with HTML entities:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("Tom &amp; Jerry"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "Tom &amp; Jerry");
 
     // Then entities should be decoded:
     CPPUNIT_ASSERT_EQUAL(u"Tom & Jerry"_ustr, aEditEngine.GetText(0));
@@ -703,11 +580,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportSoftBreak)
 {
     // Given markdown with a soft break (single newline within paragraph):
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("Line one\nLine two"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "Line one\nLine two");
 
     // Then the soft break should become a space in a single paragraph:
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
@@ -718,11 +591,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportNestedFormatting)
 {
     // Given markdown with nested bold and italic:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("**bold *bolditalic* bold**"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "**bold *bolditalic* bold**");
 
     // Then "bold " should be bold-only:
     CPPUNIT_ASSERT_EQUAL(u"bold bolditalic bold"_ustr, aEditEngine.GetText(0));
@@ -746,11 +615,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportMultipleHeadings)
 {
     // Given markdown with multiple heading levels:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("# Title\n\n## Subtitle\n\nBody"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "# Title\n\n## Subtitle\n\nBody");
 
     // Then there should be three paragraphs with appropriate formatting:
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aEditEngine.GetParagraphCount());
@@ -789,14 +654,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportInlineCode)
     aEditEngine.QuickSetAttribs(aSet, ESelection(0, 4, 0, 12));
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 21));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the monospace text should be wrapped in backticks:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Use `printf()` to print"), aMd);
 }
 
@@ -812,14 +672,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportInlineCodeNoEscaping)
     aEditEngine.QuickSetAttribs(aSet, ESelection(0, 4, 0, 13));
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 19));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then special chars inside backticks should NOT be escaped:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Use `*special*` chars"), aMd);
 }
 
@@ -830,14 +685,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportOrderedListEscaping)
     aEditEngine.SetText(u"1. Not a list"_ustr);
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 13));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the period after the digit should be escaped:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("1\\. Not a list"), aMd);
 }
 
@@ -848,14 +698,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportStartOfLineEscaping)
     aEditEngine.SetText(u"# Not a heading"_ustr);
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 15));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the # at start of line should be escaped:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("\\# Not a heading"), aMd);
 }
 
@@ -866,14 +711,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportBackslashEscaping)
     aEditEngine.SetText(u"path\\to\\file"_ustr);
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 12));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then backslashes should be escaped:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("path\\\\to\\\\file"), aMd);
 }
 
@@ -887,17 +727,11 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownRoundtripItalic)
     aEditEngine.QuickSetAttribs(aItalicSet, ESelection(0, 11, 0, 17));
 
     // When exporting and reimporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 22));
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMdExport(static_cast<const char*>(rStream.GetData()),
-                          static_cast<size_t>(rStream.GetSize()));
+    std::string aMdExport = exportAsMarkdown(aEditEngine);
     CPPUNIT_ASSERT_EQUAL(std::string("Normal and *styled* text"), aMdExport);
 
     EditEngine aEditEngine2(mpItemPool.get());
-    rStream.Seek(0);
-    aEditEngine2.Read(rStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine2, aMdExport);
 
     // Then the text and italic formatting should be preserved:
     CPPUNIT_ASSERT_EQUAL(u"Normal and styled text"_ustr, aEditEngine2.GetText(0));
@@ -917,17 +751,11 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownRoundtripStrikethrough)
     aEditEngine.QuickSetAttribs(aStrikeSet, ESelection(0, 11, 0, 17));
 
     // When exporting and reimporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 22));
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMdExport(static_cast<const char*>(rStream.GetData()),
-                          static_cast<size_t>(rStream.GetSize()));
+    std::string aMdExport = exportAsMarkdown(aEditEngine);
     CPPUNIT_ASSERT_EQUAL(std::string("Normal and ~~struck~~ text"), aMdExport);
 
     EditEngine aEditEngine2(mpItemPool.get());
-    rStream.Seek(0);
-    aEditEngine2.Read(rStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine2, aMdExport);
 
     // Then the text and strikethrough formatting should be preserved:
     CPPUNIT_ASSERT_EQUAL(u"Normal and struck text"_ustr, aEditEngine2.GetText(0));
@@ -943,16 +771,10 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownRoundtripMultiParagraph)
     aEditEngine.SetText(u"First paragraph\nSecond paragraph"_ustr);
 
     // When exporting and reimporting as markdown:
-    sal_Int32 nParas = aEditEngine.GetParagraphCount();
-    sal_Int32 nLastLen = aEditEngine.GetText(nParas - 1).getLength();
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, nParas - 1, nLastLen));
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
+    std::string aMdExport = exportAsMarkdown(aEditEngine);
 
     EditEngine aEditEngine2(mpItemPool.get());
-    rStream.Seek(0);
-    aEditEngine2.Read(rStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine2, aMdExport);
 
     // Then both paragraphs should be preserved:
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine2.GetParagraphCount());
@@ -971,17 +793,11 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownRoundtripBoldItalic)
     aEditEngine.QuickSetAttribs(aBothSet, ESelection(0, 11, 0, 17));
 
     // When exporting and reimporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 22));
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMdExport(static_cast<const char*>(rStream.GetData()),
-                          static_cast<size_t>(rStream.GetSize()));
+    std::string aMdExport = exportAsMarkdown(aEditEngine);
     CPPUNIT_ASSERT_EQUAL(std::string("Normal and ***styled*** text"), aMdExport);
 
     EditEngine aEditEngine2(mpItemPool.get());
-    rStream.Seek(0);
-    aEditEngine2.Read(rStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine2, aMdExport);
 
     // Then both bold and italic should be preserved:
     CPPUNIT_ASSERT_EQUAL(u"Normal and styled text"_ustr, aEditEngine2.GetText(0));
@@ -1001,27 +817,14 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownRoundtripLink)
     aEditEngine.QuickInsertField(aField, ESelection(0, 6, 0, 6));
 
     // When exporting and reimporting as markdown:
-    sal_Int32 nLen = aEditEngine.GetText(0).getLength();
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, nLen));
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMdExport(static_cast<const char*>(rStream.GetData()),
-                          static_cast<size_t>(rStream.GetSize()));
+    std::string aMdExport = exportAsMarkdown(aEditEngine);
     CPPUNIT_ASSERT(aMdExport.find("[here](https://example.com)") != std::string::npos);
 
     EditEngine aEditEngine2(mpItemPool.get());
-    rStream.Seek(0);
-    aEditEngine2.Read(rStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine2, aMdExport);
 
     // Then re-export should still contain the link:
-    sal_Int32 nLen2 = aEditEngine2.GetText(0).getLength();
-    uno::Reference<datatransfer::XTransferable> xData2
-        = aEditEngine2.CreateTransferable(ESelection(0, 0, 0, nLen2));
-    auto pData2 = dynamic_cast<EditDataObject*>(xData2.get());
-    SvMemoryStream& rStream2 = pData2->GetMarkdownStream();
-    std::string aMdRoundtrip(static_cast<const char*>(rStream2.GetData()),
-                             static_cast<size_t>(rStream2.GetSize()));
+    std::string aMdRoundtrip = exportAsMarkdown(aEditEngine2);
     CPPUNIT_ASSERT(aMdRoundtrip.find("[here](https://example.com)") != std::string::npos);
 }
 
@@ -1029,11 +832,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportEmptyDocument)
 {
     // Given an empty markdown string:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd(""_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "");
 
     // Then there should be one empty paragraph (no crash):
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
@@ -1044,11 +843,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportOnlyWhitespace)
 {
     // Given markdown with only whitespace:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("   \n\n   "_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "   \n\n   ");
 
     // Then the import should complete without crashing:
     CPPUNIT_ASSERT(aEditEngine.GetParagraphCount() >= 1);
@@ -1076,15 +871,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportUnorderedList)
     }
 
     // When exporting as markdown:
-    sal_Int32 nLastLen = aEditEngine.GetText(1).getLength();
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 1, nLastLen));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then unordered list markers should be present:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("- First\n- Second"), aMd);
 }
 
@@ -1111,15 +900,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportOrderedList)
     }
 
     // When exporting as markdown:
-    sal_Int32 nLastLen = aEditEngine.GetText(1).getLength();
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 1, nLastLen));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then ordered list markers should be present:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("1. Alpha\n1. Beta"), aMd);
 }
 
@@ -1127,11 +910,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportNestedList)
 {
     // Given markdown with a nested unordered list:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("- Outer\n  - Inner"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "- Outer\n  - Inner");
 
     // Then there should be two paragraphs at different nesting levels:
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetParagraphCount());
@@ -1161,11 +940,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportHardBreak)
 {
     // Given markdown with a hard break (two trailing spaces + newline):
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("Line one  \nLine two"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "Line one  \nLine two");
 
     // Then the hard break should create a paragraph break (unlike soft break):
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetParagraphCount());
@@ -1177,11 +952,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportHeadingWithFormatting)
 {
     // Given a markdown heading with italic text inside:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("# Hello *world*"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "# Hello *world*");
 
     // Then there should be one paragraph with heading formatting:
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
@@ -1216,14 +987,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportBoldStrikethrough)
     aEditEngine.QuickSetAttribs(aFmtSet, ESelection(0, 6, 0, 10));
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 16));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then bold+strikethrough should nest as ~~**text**~~:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Hello ~~**both**~~ world"), aMd);
 }
 
@@ -1239,14 +1005,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportAllFormatting)
     aEditEngine.QuickSetAttribs(aFmtSet, ESelection(0, 6, 0, 9));
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 15));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then all three formats should nest as ~~***text***~~:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Hello ~~***all***~~ world"), aMd);
 }
 
@@ -1261,14 +1022,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportCodeBlock)
     aEditEngine.QuickSetAttribs(aSet, ESelection(0, 0, 0, 10));
 
     // When exporting as markdown:
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, 10));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the text should be in a fenced code block:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("```\nint x = 5;\n```"), aMd);
 }
 
@@ -1283,16 +1039,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportCodeBlockMultiLine)
     aEditEngine.QuickSetAttribs(aSet, ESelection(0, 0, 2, 5));
 
     // When exporting as markdown:
-    sal_Int32 nParas = aEditEngine.GetParagraphCount();
-    sal_Int32 nLastLen = aEditEngine.GetText(nParas - 1).getLength();
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, nParas - 1, nLastLen));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the text should be in a single fenced code block:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("```\nline1\nline2\nline3\n```"), aMd);
 }
 
@@ -1300,9 +1049,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownRoundtripCodeBlock)
 {
     // Given markdown with a fenced code block:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("```\nline1\nline2\n```"_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "```\nline1\nline2\n```");
 
     // When re-exporting as markdown (skip trailing empty paragraphs from import):
     sal_Int32 nParas = aEditEngine.GetParagraphCount();
@@ -1332,16 +1079,9 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportMixedCodeAndText)
     aEditEngine.QuickSetAttribs(aSet, ESelection(1, 0, 1, 9));
 
     // When exporting as markdown:
-    sal_Int32 nParas = aEditEngine.GetParagraphCount();
-    sal_Int32 nLastLen = aEditEngine.GetText(nParas - 1).getLength();
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, nParas - 1, nLastLen));
+    std::string aMd = exportAsMarkdown(aEditEngine);
 
     // Then the code paragraph should be fenced:
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMd(static_cast<const char*>(rStream.GetData()),
-                    static_cast<size_t>(rStream.GetSize()));
     CPPUNIT_ASSERT_EQUAL(std::string("Before\n\n```\ncode line\n```\n\nAfter"), aMd);
 }
 
@@ -1349,11 +1089,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownRoundtripMixedContent)
 {
     // Given markdown with heading, list, and paragraph:
     EditEngine aEditEngine(mpItemPool.get());
-    OString aMd("# Title\n\n- **Bold item**\n- Normal item\n\nA paragraph."_ostr);
-    SvMemoryStream aStream(const_cast<char*>(aMd.getStr()), aMd.getLength(), StreamMode::READ);
-
-    // When importing as markdown:
-    aEditEngine.Read(aStream, u""_ustr, EETextFormat::Markdown);
+    importMarkdown(aEditEngine, "# Title\n\n- **Bold item**\n- Normal item\n\nA paragraph.");
 
     // Then structure should be: heading, 2 list items, paragraph
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aEditEngine.GetParagraphCount());
@@ -1376,14 +1112,7 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownRoundtripMixedContent)
     CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, aBoldAttribs.Get(EE_CHAR_WEIGHT).GetWeight());
 
     // When re-exporting as markdown:
-    sal_Int32 nParas = aEditEngine.GetParagraphCount();
-    sal_Int32 nLastLen = aEditEngine.GetText(nParas - 1).getLength();
-    uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, nParas - 1, nLastLen));
-    auto pData = dynamic_cast<EditDataObject*>(xData.get());
-    SvMemoryStream& rStream = pData->GetMarkdownStream();
-    std::string aMdOut(static_cast<const char*>(rStream.GetData()),
-                       static_cast<size_t>(rStream.GetSize()));
+    std::string aMdOut = exportAsMarkdown(aEditEngine);
 
     // Then the exported markdown should contain the key elements.
     // Note: headings are stored as bold+size attributes, so they export as
