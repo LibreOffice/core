@@ -2165,6 +2165,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testForumMsoEn4145327)
         u"REPLACE(CELL(\"filename\",!A1),1,FIND(\"]\",CELL(\"filename\",!A1)),\"\")-1");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest3, testRefAfterNoName)
+{
+    createScDoc("ods/ooo88173-1.ods");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // earlier #NAME?$C7
+    assertXPathContent(pSheet, "/x:worksheet/x:conditionalFormatting[5]/x:cfRule/x:formula",
+                       u"#NAME?");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

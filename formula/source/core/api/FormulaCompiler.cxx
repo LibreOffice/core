@@ -2532,6 +2532,18 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             rBuffer.append(GetNativeSymbol(ocErrRef));
             break;
         }
+        // #NAME? followed by a ref produces invalid OOXML like "#NAME?$C7"
+        if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocPush
+            && t->GetError() == FormulaError::NoName)
+        {
+            FormulaToken* pNextToken = maArrIterator.PeekNext();
+            if (pNextToken && pNextToken->IsRef())
+            {
+                rBuffer.setLength(0);
+                rBuffer.append(GetNativeSymbol(ocErrName));
+                break;
+            }
+        }
         if (t->GetOpCode() == ocExternal && t->GetType() == svByte)
         {
             rBuffer.append(GetNativeSymbol(ocErrRef));
