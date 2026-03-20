@@ -520,7 +520,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     else // SID_DIAGRAM_TO_GROUP
                     {
                         mpDrawView->UnmarkAll();
-                        pObj->getDiagramHelper()->disconnectFromSdrObjGroup();
+                        pObj->getDiagramHelper()->disconnectFromSdrObjGroup(true);
                         mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                     }
                 }

@@ -696,6 +696,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
     sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
     sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(mpView->GetDragThresholdPixels(),0)).Width() );
+    svx::diagram::DiagramFrameHdl* pDiagramFrameHdl(dynamic_cast<svx::diagram::DiagramFrameHdl*>(pHdl));
 
     bool bWasDragged = false;
     if (mpView->IsFrameDragSingles() || !mpView->HasMarkablePoints())
@@ -747,20 +748,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 if (rMarkList.GetMarkCount()==1)
                 {
                     pSingleObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                }
-
-                if(!bWasDragged && nullptr != pSingleObj && pSingleObj->isDiagram() && pHdl)
-                {
-                    // Check for click on svx::diagram::DiagramFrameHdl
-                    // - if we hit a SdrHdl
-                    // - if it was not moved
-                    // - if single object is selected and it is a Diagram
-                    svx::diagram::DiagramFrameHdl* pDiagramFrameHdl(dynamic_cast<svx::diagram::DiagramFrameHdl*>(pHdl));
-                    if(nullptr != pDiagramFrameHdl)
-                    {
-                        // let the DiagramFrameHdl decide what to do
-                        svx::diagram::DiagramFrameHdl::clicked(aPnt);
-                    }
                 }
 
                 /**************************************************************
@@ -910,17 +897,30 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
         if(!bWasDragged && nullptr != pSingleObj && pSingleObj->isDiagram())
         {
-            const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pSingleObj->getDiagramHelper());
-            if (rDiagramHelper)
+            if(nullptr != pDiagramFrameHdl)
             {
-                SdrPageView* pPV;
-                SdrObject* pCandidate = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::DEEP);
-                if (pCandidate && !pCandidate->isDiagram())
+                // Check for click on svx::diagram::DiagramFrameHdl
+                // - if we hit a SdrHdl
+                // - if it was not moved
+                // - if single object is selected and it is a Diagram
+                // let the DiagramFrameHdl decide what to do
+                svx::diagram::DiagramFrameHdl::clicked(aPnt);
+                return true;
+            }
+            else
+            {
+                const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pSingleObj->getDiagramHelper());
+                if (rDiagramHelper)
                 {
-                    rDiagramHelper->markDirectDiagramSubSelection(*pCandidate);
-                    mpView->UnmarkAllObj();
-                    mpView->MarkObj(pSingleObj,pPV);
-                    return true;
+                    SdrPageView* pPV;
+                    SdrObject* pCandidate = mpView->PickObj(aMDPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::DEEP);
+                    if (pCandidate && !pCandidate->isDiagram())
+                    {
+                        rDiagramHelper->markDirectDiagramSubSelection(*pCandidate);
+                        mpView->UnmarkAllObj();
+                        mpView->MarkObj(pSingleObj,pPV);
+                        return true;
+                    }
                 }
             }
         }

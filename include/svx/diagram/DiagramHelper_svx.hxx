@@ -128,8 +128,10 @@ public:
     bool ForceThemePtrRecreation() const { return mbForceThemePtrRecreation; };
 
     // connect/disconnect to/from Group
-    void connectToSdrObjGroup(css::uno::Reference< css::drawing::XShape >& rTarget);
-    void disconnectFromSdrObjGroup();
+    void connectToSdrObjGroup(
+        const css::uno::Reference< css::drawing::XShape >& rTarget,
+        std::shared_ptr< svx::diagram::DiagramHelper_svx >* mpDiagramHelperFromUndo);
+    void disconnectFromSdrObjGroup(bool bEnableUndo);
 
     void AddAdditionalVisualization(SdrHdlList& rHdlList);
 

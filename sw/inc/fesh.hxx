@@ -168,6 +168,9 @@ enum class SwPasteSdr
 #define SW_LEAVE_FRAME  4
 /// Allow SwFEShell::SelectObj() to select the TextBox of a shape.
 #define SW_ALLOW_TEXTBOX  8
+/// SmartArt/Diagram SubSelection needs to know in SwFEShell::SelectObj
+/// if that action came from keyboard or mouse
+#define SW_FROM_KLICK  16
 
 enum class SwMove
 {

@@ -39,6 +39,9 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/svditer.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdundo.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -433,12 +436,20 @@ SdrObjGroup* DiagramHelper_svx::getAssociatedRootShape()
     return dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
 }
 
-void DiagramHelper_svx::disconnectFromSdrObjGroup()
+void DiagramHelper_svx::disconnectFromSdrObjGroup(bool bEnableUndo)
 {
     SdrObjGroup* pRootObject(getAssociatedRootShape());
 
     if (nullptr != pRootObject)
     {
+        SdrModel& rDrawModel(pRootObject->getSdrModelFromSdrObject());
+        const bool bUndo(bEnableUndo && rDrawModel.IsUndoEnabled());
+        if (bUndo)
+        {
+            // create undo action
+            rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDiagramDissolveModel(*pRootObject));
+        }
+
         // remove locks. Do this before resetting RootShape below, it uses that
         applyLocksToDiagramObjects(false);
         accessRootShape().clear();
@@ -446,7 +457,9 @@ void DiagramHelper_svx::disconnectFromSdrObjGroup()
     }
 }
 
-void DiagramHelper_svx::connectToSdrObjGroup(css::uno::Reference< css::drawing::XShape >& rTarget)
+void DiagramHelper_svx::connectToSdrObjGroup(
+    const css::uno::Reference< css::drawing::XShape >& rTarget,
+    std::shared_ptr< svx::diagram::DiagramHelper_svx >* mpDiagramHelperFromUndo)
 {
     SdrObjGroup* pRootObject(nullptr);
     uno::Reference< drawing::XShape >& rxRootShape(accessRootShape());
@@ -461,13 +474,18 @@ void DiagramHelper_svx::connectToSdrObjGroup(css::uno::Reference< css::drawing::
     }
 
     // ensure unconnect if already connected
-    disconnectFromSdrObjGroup();
+    disconnectFromSdrObjGroup(false);
 
     // connect to target
     rxRootShape = rTarget;
     pRootObject = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rxRootShape));
     if (nullptr != pRootObject)
-        pRootObject->mp_DiagramHelper.reset(this);
+    {
+        if (nullptr != mpDiagramHelperFromUndo)
+            pRootObject->mp_DiagramHelper = *mpDiagramHelperFromUndo;
+        else
+            pRootObject->mp_DiagramHelper.reset(this);
+    }
 
     applyLocksToDiagramObjects(true);
 }
@@ -636,6 +654,24 @@ DiagramHelperFactory_svx::DiagramHelperFactory_svx()
 
 DiagramHelperFactory_svx& DiagramHelperFactory_svx::getDiagramHelperFactory_svx()
 {
+    if (nullptr == pSingleGlobalDiagramHelperFactory_svx)
+    {
+        // This means that library oox is not yet loaded/initialized.
+        // This is a hack, but I do not know a better way to force
+        // library oox to load as by instantiating a service that lives
+        // there.
+        // NOTE: I also tried to use
+        //      osl::Module aModule;
+        //      aModule.load(u"oox" SAL_DLLEXTENSION ""_ustr);
+        // but that does not create pSingleGlobalDiagramHelperFactory_svx,
+        // so using UNO seems safer (?)
+        try
+        {
+            comphelper::getProcessServiceFactory()->createInstance(u"com.sun.star.comp.oox.FormatDetector"_ustr);
+        }
+        catch (const uno::Exception&) {}
+    }
+
     assert(nullptr != pSingleGlobalDiagramHelperFactory_svx && "DiagramHelperFactory not yet initialized (!)");
     return *pSingleGlobalDiagramHelperFactory_svx;
 }

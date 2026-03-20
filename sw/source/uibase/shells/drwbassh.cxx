@@ -494,7 +494,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
                         else // SID_DIAGRAM_TO_GROUP
                         {
                             pSdrView->UnmarkAll();
-                            pObj->getDiagramHelper()->disconnectFromSdrObjGroup();
+                            pObj->getDiagramHelper()->disconnectFromSdrObjGroup(true);
                             pSdrView->MarkObj(pObj, pSdrView->GetSdrPageView());
                         }
                     }

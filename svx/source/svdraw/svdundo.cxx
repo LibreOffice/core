@@ -46,8 +46,9 @@
 #include <osl/diagnose.h>
 #include <svx/diagram/datamodel_svx.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
+#include <svx/svditer.hxx>
 #include <tools/debug.hxx>
-
+#include <comphelper/dispatchcommand.hxx>
 
 // iterates over all views and unmarks this SdrObject if it is marked
 static void ImplUnmarkObject( SdrObject* pObj )
@@ -674,6 +675,89 @@ void SdrUndoDiagramModelData::Redo()
 OUString SdrUndoDiagramModelData::GetComment() const
 {
     return ImpGetDescriptionStr(STR_DiagramModelDataChange);
+}
+
+SdrUndoDiagramDissolveModel::SdrUndoDiagramDissolveModel(SdrObject& rNewObj)
+: SdrUndoObj(rNewObj)
+, mrDiagramHelper(rNewObj.getDiagramHelper())
+, maPreservedModelIDs()
+{
+    if(!mrDiagramHelper)
+        return;
+
+    SdrObjGroup* pRootObject(mrDiagramHelper->getAssociatedRootShape());
+    if (nullptr == pRootObject)
+        return;
+
+    // also need to preserve DiagramModelIDs, these get deleted
+    // when the Diagram gets dissolved to a group
+    SdrObjListIter aIterator(*pRootObject, SdrIterMode::DeepNoGroups);
+    while (aIterator.IsMore())
+    {
+        SdrObject* pCandidate(aIterator.Next());
+        if (nullptr != pCandidate)
+            maPreservedModelIDs[pCandidate] = pCandidate->getDiagramDataModelID();
+    }
+}
+
+SdrUndoDiagramDissolveModel::~SdrUndoDiagramDissolveModel()
+{
+}
+
+void SdrUndoDiagramDissolveModel::Undo()
+{
+    if(!mxObj)
+        return;
+
+    if(mxObj->isDiagram())
+        return;
+
+    if(!mrDiagramHelper)
+        return;
+
+    mrDiagramHelper->connectToSdrObjGroup(mxObj->getUnoShape(), &mrDiagramHelper);
+
+    SdrObjGroup* pRootObject(mrDiagramHelper->getAssociatedRootShape());
+    if (nullptr == pRootObject)
+        return;
+
+    // ensure that if user did enter groups that is cleared, you
+    // cannot enter a Diagram
+    comphelper::dispatchCommand(u".uno:LeaveAllGroups"_ustr, {});
+
+    // also need to restore DiagramModelIDs, these got deleted
+    // when the Diagram was dissolved to a group
+    SdrObjListIter aIterator(*pRootObject, SdrIterMode::DeepNoGroups);
+    while (aIterator.IsMore())
+    {
+        SdrObject* pCandidate(aIterator.Next());
+        if (nullptr != pCandidate)
+        {
+            auto it = maPreservedModelIDs.find(pCandidate);
+            if (it != maPreservedModelIDs.end())
+                pCandidate->setDiagramDataModelID(it->second);
+        }
+    }
+}
+
+void SdrUndoDiagramDissolveModel::Redo()
+{
+    if(!mxObj)
+        return;
+
+    if(!mxObj->isDiagram())
+        return;
+
+    mrDiagramHelper = mxObj->getDiagramHelper();
+    if (!mrDiagramHelper)
+        return;
+
+    mrDiagramHelper->disconnectFromSdrObjGroup(false);
+}
+
+OUString SdrUndoDiagramDissolveModel::GetComment() const
+{
+    return ImpGetDescriptionStr(STR_DiagramModelDissolveData);
 }
 
 SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
@@ -1681,6 +1765,11 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoGeoObject( SdrObject& r
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoDiagramModelData( SdrObject& rObject, std::shared_ptr< svx::diagram::DiagramDataState >& rStartState )
 {
     return std::make_unique<SdrUndoDiagramModelData>( rObject, rStartState );
+}
+
+std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoDiagramDissolveModel( SdrObject& rObject )
+{
+    return std::make_unique<SdrUndoDiagramDissolveModel>( rObject );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )

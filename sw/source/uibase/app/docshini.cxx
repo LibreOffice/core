@@ -482,15 +482,17 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
 
         // Define some settings for legacy ODF files that have different default values now
         // (if required, they will be overridden later when settings will be read)
+        SwDrawModel* pDrawModel(nullptr);
         if (IsOwnStorageFormat(rMedium))
         {
-            SwDrawModel* pDrawModel = m_xDoc->getIDocumentDrawModelAccess().GetDrawModel();
+            pDrawModel = m_xDoc->getIDocumentDrawModelAccess().GetDrawModel();
             if (pDrawModel)
             {
                 pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy,
                                                  true); // legacy processing for tdf#99729
                 pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork,
                                                  true); // legacy processing for tdf#148000
+                pDrawModel->incImportExport();
             }
         }
 
@@ -577,6 +579,9 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
 
         // suppress SfxProgress, when we are Embedded
         mod->SetEmbeddedLoadSave( false );
+
+        if (pDrawModel)
+            pDrawModel->decImportExport();
     }
 
     return bRet;

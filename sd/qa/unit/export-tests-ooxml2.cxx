@@ -1612,7 +1612,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSmartartRotation2)
     uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     SdrObjGroup* pSdrObjGroup
         = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(xShape));
-    pSdrObjGroup->getDiagramHelper()->disconnectFromSdrObjGroup();
+    pSdrObjGroup->getDiagramHelper()->disconnectFromSdrObjGroup(false);
 
     save(TestFilter::PPTX);
 

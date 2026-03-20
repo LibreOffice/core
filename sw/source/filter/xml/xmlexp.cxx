@@ -498,6 +498,10 @@ void SwXMLExport::SetBodyAttributes()
 void SwXMLExport::ExportContent_()
 {
     // export forms
+    SwDoc* pDoc(getDoc());
+    SwDrawModel* pModel = (nullptr != pDoc ? pDoc->getIDocumentDrawModelAccess().GetDrawModel() : nullptr);
+    if( pModel )
+        pModel->incImportExport();
     Reference<XDrawPageSupplier> xDrawPageSupplier(GetModel(), UNO_QUERY);
     if (xDrawPageSupplier.is())
     {
@@ -547,6 +551,9 @@ void SwXMLExport::ExportContent_()
         Reference < XText > xText = xTextDoc->getText();
         GetTextParagraphExport()->exportText( xText, m_bShowProgress );
     }
+
+    if( pModel )
+        pModel->decImportExport();
 }
 
 SwDoc* SwXMLExport::getDoc()

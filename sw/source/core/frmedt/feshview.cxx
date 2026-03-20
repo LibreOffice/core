@@ -44,6 +44,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <tools/globname.hxx>
 #include <sot/exchange.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -280,6 +281,12 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
             }
         }
     }
+
+    // for Diagrams force to the svx MarkObj version below that will handle
+    // SubSelection correctly. CAUTION: Keyboard travel calls the same method
+    // so make sure to only do that on mouseklick and if we got a position
+    if (pObj && 0 != rPt.getX() && 0 != rPt.getY() && (SW_FROM_KLICK & nFlag) && pObj->isDiagram())
+        pObj = nullptr;
 
     if ( pObj )
     {
@@ -1580,6 +1587,27 @@ const SdrObject* SwFEShell::GetBestObject(bool bNext, GotoObjFlags eType, bool b
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     SdrPageView* pPV = Imp()->GetDrawView()->GetSdrPageView();
 
+    if (rMrkList.GetMarkCount() == 1)
+    {
+        SdrMark* pM(rMrkList.GetMark(0));
+        if (nullptr != pM)
+        {
+            SdrObject* pCandidate(pM->GetMarkedSdrObj());
+
+            if (nullptr != pCandidate)
+            {
+                const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pCandidate->getDiagramHelper());
+
+                if (rDiagramHelper)
+                {
+                    // move SubSelection in given direction
+                    if (rDiagramHelper->markNextDiagramSubSelection(bNext))
+                        return pCandidate;
+                }
+            }
+        }
+    }
+
     MarkableObjectsOnly aDefaultFilter( pPV );
     if ( !pFilter )
         pFilter = &aDefaultFilter;
@@ -1733,6 +1761,17 @@ const SdrObject* SwFEShell::GetBestObject(bool bNext, GotoObjFlags eType, bool b
             if (pbWrapped && pBest)
                 *pbWrapped = true;
         }
+    }
+
+    if (nullptr != pBest)
+    {
+        const std::shared_ptr< svx::diagram::DiagramHelper_svx >& rDiagramHelper(pBest->getDiagramHelper());
+
+        if (rDiagramHelper)
+            // if it's a diagram, do the correct SubSelection in the
+            // given selection -> last SubObject may be selected when
+            // travelling backwards
+            rDiagramHelper->initSelectionByKeyboard(bNext);
     }
 
     return pBest;

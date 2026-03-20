@@ -5411,6 +5411,9 @@ void ScXMLExport::IncrementProgressBar(bool bFlush, sal_Int32 nInc)
 ErrCode ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
 {
     ScDocument* pDoc = GetDocument();
+    SdrModel* pModel = (nullptr != pDoc) ? pDoc->GetDrawLayer() : nullptr;
+    if (pModel)
+        pModel->incImportExport();
     if( getExportFlags() & (SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::STYLES|
                              SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
@@ -5459,7 +5462,11 @@ ErrCode ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
     {
         pDoc->CreateAllNoteCaptions();
     }
-    return SvXMLExport::exportDoc( eClass );
+
+    ErrCode aRetval(SvXMLExport::exportDoc( eClass ));
+    if (pModel)
+        pModel->decImportExport();
+    return aRetval;
 }
 
 // XExporter

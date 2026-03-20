@@ -311,7 +311,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         else // SID_DIAGRAM_TO_GROUP
                         {
                             pView->UnmarkAll();
-                            pObj->getDiagramHelper()->disconnectFromSdrObjGroup();
+                            pObj->getDiagramHelper()->disconnectFromSdrObjGroup(true);
                             pView->MarkObj(pObj, pView->GetSdrPageView());
                         }
                     }

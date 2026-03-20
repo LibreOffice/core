@@ -525,7 +525,7 @@ void DiagramHelper_oox::doAnchor(uno::Reference<drawing::XShape>& rTarget)
     mpDiagramPtr->syncDiagramFontHeights();
 
     // initialize connection to GroupObject
-    connectToSdrObjGroup(rTarget);
+    connectToSdrObjGroup(rTarget, nullptr);
 }
 
 const std::shared_ptr<::oox::drawingml::Theme>& DiagramHelper_oox::getOrCreateThemePtr(

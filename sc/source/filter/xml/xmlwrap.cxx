@@ -480,6 +480,10 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
     ErrCodeMsg nDocRetval(ERRCODE_NONE);
     if (nMode & ImportFlags::Content)
     {
+        SdrModel* pModel = rDoc.GetDrawLayer();
+        if (pModel)
+            pModel->incImportExport();
+
         if (mrDocShell.GetCreateMode() == SfxObjectCreateMode::INTERNAL)
             // We only need to import content for external link cache document.
             xInfoSet->setPropertyValue(SC_UNO_ODS_IMPORT_STYLES, uno::Any(false));
@@ -501,6 +505,8 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
             aDocArgs,
             true);
 
+        if (pModel)
+            pModel->decImportExport();
         SAL_INFO( "sc.filter", "content import end" );
     }
     if( xGraphicHelper.is() )
