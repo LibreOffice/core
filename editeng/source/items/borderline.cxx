@@ -57,6 +57,7 @@ namespace {
         hsl.setZ( L / 255.0 );
         color = basegfx::utils::hsl2rgb( hsl );
 
+        color.clamp();
         return Color( color );
     }
 } // Anonymous namespace
