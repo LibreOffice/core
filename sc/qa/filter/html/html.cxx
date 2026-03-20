@@ -17,11 +17,19 @@
 #include <editeng/udlnitem.hxx>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/compbase.hxx>
+#include <comphelper/processfactory.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdpage.hxx>
+#include <sot/exchange.hxx>
 
 #include <helper/qahelper.hxx>
 #include <impex.hxx>
+
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 using namespace com::sun::star;
 
@@ -363,6 +371,83 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyFormula)
     // - XPath '(//td)[3]' no attribute 'data-sheets-formula' exist
     // i.e. only the formula result was exported, not the formula.
     assertXPath(pHtmlDoc, "(//td)[3]", "data-sheets-formula", u"=SUM(R[-2]C:R[-1]C)");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testHTMLEmbeddedImagePaste)
+{
+    class HTMLTransferable : public comphelper::WeakImplHelper<datatransfer::XTransferable>
+    {
+    public:
+        HTMLTransferable(const OUString& url)
+            : m_aFileURL(url)
+        {
+        }
+
+        // XTransferable
+        uno::Any SAL_CALL getTransferData(const datatransfer::DataFlavor& aFlavor) override
+        {
+            if (!isDataFlavorSupported(aFlavor))
+                return {};
+            SvFileStream aStream(m_aFileURL, StreamMode::READ);
+            uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
+            aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
+            return uno::Any(bytes);
+        }
+        uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+        {
+            return { getHTMLFlavor() };
+        }
+        sal_Bool SAL_CALL isDataFlavorSupported(const datatransfer::DataFlavor& aFlavor) override
+        {
+            return aFlavor.MimeType.equalsIgnoreAsciiCase(getHTMLFlavor().MimeType);
+        }
+
+    private:
+        OUString m_aFileURL;
+
+        static datatransfer::DataFlavor getHTMLFlavor()
+        {
+            datatransfer::DataFlavor ret;
+            CPPUNIT_ASSERT(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML, ret));
+            return ret;
+        }
+    };
+
+    createScDoc();
+    ScDocument& rDoc = *getScDoc();
+    // Put HTML with embedded image data into system clipboard:
+    auto xContext(comphelper::getProcessComponentContext());
+    auto xClipboard = xContext->getServiceManager()
+                          ->createInstanceWithContext(
+                              u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr, xContext)
+                          .queryThrow<datatransfer::clipboard::XClipboard>();
+    xClipboard->setContents(new HTMLTransferable(createFileURL(u"html.clipboard.html")), {});
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pObject);
+    CPPUNIT_ASSERT(!pObject->IsLinkedGraphic());
+
+    const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
+    const Graphic& rGraphic = rGraphicObj.GetGraphic();
+    CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphic.GetType()));
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(16848), rGraphic.GetSizeBytes());
+
+    const Bitmap& rBitmap = rGraphic.GetBitmapRef();
+    const Color aBorderColor = rBitmap.GetPixelColor(4, 4);
+    Color aExpectedBorderColor(0x00, 0x00, 0x00);
+    CPPUNIT_ASSERT_EQUAL(aExpectedBorderColor, aBorderColor);
+
+    const Color aFillColor = rBitmap.GetPixelColor(20, 20);
+    Color aExpectedFillColor(0xff, 0x00, 0x00);
+    CPPUNIT_ASSERT_EQUAL(aExpectedFillColor, aFillColor);
 }
 }
 

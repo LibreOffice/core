@@ -327,7 +327,8 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
         bFirstRow( true ),
         bTabInTabCell( false ),
         bInCell( false ),
-        bInTitle( false )
+        bInTitle( false ),
+        bInImg( false )
 {
     MakeColNoRef( xLocalColOffset.get(), 0, 0, 0, 0 );
     MakeColNoRef( &maColOffset, 0, 0, 0, 0 );
@@ -1003,6 +1004,11 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, HtmlImportInfo&, rInfo, void )
             }
             while ( nTableLevel > 0 )
                 TableOff( &rInfo );      // close tables, if </TABLE> missing
+            if (bInImg)
+            {
+                CloseEntry( &rInfo );
+                bInImg = false;
+            }
             break;
         case HtmlImportState::SetAttr:
             break;
@@ -1436,6 +1442,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
 
 void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
 {
+    bInImg = true;
     mxActEntry->maImageList.push_back(std::make_unique<ScHTMLImage>());
     ScHTMLImage* pImage = mxActEntry->maImageList.back().get();
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
@@ -1498,8 +1505,19 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
     sal_uInt16 nFormat;
     std::optional<Graphic> oGraphic(std::in_place);
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-    if ( ERRCODE_NONE != GraphicFilter::LoadGraphic( pImage->aURL, pImage->aFilterName,
+    INetURLObject aGraphicURL(pImage->aURL);
+    if (aGraphicURL.GetProtocol() == INetProtocol::Data)
+    {
+        std::unique_ptr<SvMemoryStream> const pStream(aGraphicURL.getData());
+        *oGraphic = rFilter.ImportUnloadedGraphic(*pStream);
+        pImage->aURL.clear();
+    }
+    else if ( ERRCODE_NONE == GraphicFilter::LoadGraphic( pImage->aURL, pImage->aFilterName,
             *oGraphic, &rFilter, &nFormat ) )
+    {
+        pImage->aFilterName = rFilter.GetImportFormatName( nFormat );
+    }
+    else
     {
         return ; // Bad luck
     }
@@ -1508,7 +1526,6 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
         mxActEntry->bHasGraphic = true;
         mxActEntry->aAltText.clear();
     }
-    pImage->aFilterName = rFilter.GetImportFormatName( nFormat );
     pImage->oGraphic = std::move( oGraphic );
     if ( !(pImage->aSize.Width() && pImage->aSize.Height()) )
     {

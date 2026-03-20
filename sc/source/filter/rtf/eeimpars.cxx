@@ -619,10 +619,13 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             pPage->InsertObject( pObj.get() );
 
-            // SetGraphicLink has to be used after inserting the object,
-            // otherwise an empty graphic is swapped in and the contact stuff crashes.
-            // See #i37444#.
-            pObj->SetGraphicLink( pI->aURL );
+            if (!pI->aURL.isEmpty())
+            {
+                // SetGraphicLink has to be used after inserting the object,
+                // otherwise an empty graphic is swapped in and the contact stuff crashes.
+                // See #i37444#.
+                pObj->SetGraphicLink( pI->aURL );
+            }
 
             pObj->SetLogicRect( aRect ); // Only after InsertObject!
         }

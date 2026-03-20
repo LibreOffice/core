@@ -176,6 +176,7 @@ private:
     bool                bTabInTabCell:1;
     bool                bInCell:1;
     bool                bInTitle:1;
+    bool                bInImg:1;
 
     DECL_LINK( HTMLImportHdl, HtmlImportInfo&, void );
     void                NewActEntry( const ScEEParseEntry* );
