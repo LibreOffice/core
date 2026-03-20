@@ -382,23 +382,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
 {
-    auto verify = [this](bool bIsExport = false) {
+    auto verify = [this]() {
         xmlDocUniquePtr pDump = parseLayoutDump();
         CPPUNIT_ASSERT_EQUAL(3, getPages());
 
         // table starts on page 1 and finished on page 2
-        // and it has got only a single repeating header line
+        // with no repeating header line (explicit tblHeader="0")
         assertXPath(pDump, "/root/page[2]/body/tab[1]", 1);
         assertXPath(pDump, "/root/page[2]/body/tab[1]/row", 2);
         assertXPath(pDump, "/root/page[3]/body/tab", 1);
-        if (!bIsExport) // TODO export tblHeader=false
-            assertXPath(pDump, "/root/page[3]/body/tab/row", 1);
+        assertXPath(pDump, "/root/page[3]/body/tab/row", 1);
     };
     createSwDoc("tdf81100.docx");
     verify();
 
     saveAndReload(TestFilter::DOCX);
-    verify(/*bIsExport*/ true);
+    verify();
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
