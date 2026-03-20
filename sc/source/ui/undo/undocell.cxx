@@ -262,6 +262,9 @@ void ScUndoEnterData::Undo()
     if ( pChangeTrack && mnEndChangeAction >= sal::static_int_cast<sal_uLong>(nCount) )
         pChangeTrack->Undo( mnEndChangeAction - nCount + 1, mnEndChangeAction );
 
+    sc::UndoSheetViewSortData::restore(*pDocShell, true);
+    rDoc.SyncSheetViews(maPos.Tab());
+
     DoChange();
     EndUndo();
 
@@ -290,6 +293,9 @@ void ScUndoEnterData::Redo()
     }
 
     SetChangeTrack();
+
+    sc::UndoSheetViewSortData::restore(*pDocShell, false);
+    rDoc.SyncSheetViews(maPos.Tab());
 
     DoChange();
     EndRedo();

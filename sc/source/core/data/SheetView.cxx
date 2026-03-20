@@ -221,7 +221,7 @@ SCROW SortOrderReverser::resort(SCROW nRow, SCCOL nColumn) const
 
 void SortOrderReverser::insertedRows(SCROW nStartRow, SCROW nRowCount)
 {
-    if (nStartRow > maSortInfo.mnLastRow)
+    if (nStartRow > maSortInfo.mnLastRow + 1)
     {
         // After the sort range - nothing to do.
     }
@@ -376,7 +376,7 @@ void SheetView::adjustReorderParamsForInsertRows(SCROW nStartRow, SCROW nRowCoun
         rRange.aStart.IncRow(nRowCount);
         rRange.aEnd.IncRow(nRowCount);
     }
-    else if (nStartRow <= rRange.aEnd.Row())
+    else if (nStartRow <= rRange.aEnd.Row() + 1)
     {
         expandOrderIndices(mpSortData->maOriginalReorderParams.maOrderIndices, nStartRow,
                            rRange.aStart.Row(), nRowCount);
@@ -394,7 +394,7 @@ void SheetView::adjustSortParamForInsertRows(SCROW nStartRow, SCROW nRowCount)
         mpSortData->maSortParam.nRow1 += nRowCount;
         mpSortData->maSortParam.nRow2 += nRowCount;
     }
-    else if (nStartRow <= mpSortData->maSortParam.nRow2)
+    else if (nStartRow <= mpSortData->maSortParam.nRow2 + 1)
     {
         mpSortData->maSortParam.nRow2 += nRowCount;
     }

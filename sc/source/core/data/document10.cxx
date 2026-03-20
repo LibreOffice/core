@@ -1230,25 +1230,6 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
     // Get the anonymous DB data for the default view table
     ScDBData* pDefaultViewDBData = GetAnonymousDBData(nDefaultViewTable);
 
-    // Adjust the auto-filter DB range to match the actual data extent.
-    // This handles both expansion and contraction of the data area.
-    if (pDefaultViewDBData && pDefaultViewDBData->HasAutoFilter())
-    {
-        ScRange aDBRange;
-        pDefaultViewDBData->GetArea(aDBRange);
-        SCCOL nColumn1 = aDBRange.aStart.Col();
-        SCROW nRow1 = aDBRange.aStart.Row();
-        SCCOL nColumn2 = aDBRange.aEnd.Col();
-        SCROW nRow2 = aDBRange.aEnd.Row();
-        GetDataArea(nDefaultViewTable, nColumn1, nRow1, nColumn2, nRow2, false, true);
-        if (nRow2 != aDBRange.aEnd.Row() || nColumn2 != aDBRange.aEnd.Col())
-        {
-            pDefaultViewDBData->SetArea(nDefaultViewTable,
-                                        aDBRange.aStart.Col(), aDBRange.aStart.Row(),
-                                        nColumn2, nRow2);
-        }
-    }
-
     // Iterate all valid sheet views
     for (auto& rSheetView : pManager->iterateValidSheetViews())
     {

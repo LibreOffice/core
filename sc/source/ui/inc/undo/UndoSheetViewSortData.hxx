@@ -11,6 +11,7 @@
 
 #include <SheetView.hxx>
 #include <SheetViewManager.hxx>
+#include <rangelst.hxx>
 
 class ScDocShell;
 
@@ -35,6 +36,10 @@ class UndoSheetViewSortData
     std::shared_ptr<DefaultViewSortData> mpDefaultViewSortDataBefore;
     std::shared_ptr<DefaultViewSortData> mpDefaultViewSortDataAfter;
 
+    // Auto-filter DB range before/after
+    std::optional<ScRange> maAutoFilterRangeBefore;
+    std::optional<ScRange> maAutoFilterRangeAfter;
+
 public:
     /** Set context for operations on a sheet view tab. */
     void setSheetViewContext(SCTAB nDefaultViewTab, SheetViewID nSheetViewID,
@@ -44,6 +49,9 @@ public:
     /** Set context for operations on a default view tab. */
     void setDefaultViewContext(SCTAB nDefaultViewTab, std::shared_ptr<DefaultViewSortData> pBefore,
                                std::shared_ptr<DefaultViewSortData> pAfter);
+
+    /** Set auto-filter DB range before/after for undo/redo. */
+    void setAutoFilterRange(ScRange const& rBefore, ScRange const& rAfter);
 
     /** Restore sort data for undo (before state) or redo (after state). */
     void restore(ScDocShell& rDocShell, bool bUndo) const;
