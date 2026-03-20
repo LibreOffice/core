@@ -16,8 +16,11 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <docsh.hxx>
+#include <edtwin.hxx>
+#include <view.hxx>
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <swmodule.hxx>
@@ -373,6 +376,23 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineImageRedlineRenderModeOmitInsertDelete)
     // Frame around the inserted image.
     CPPUNIT_ASSERT(!aPolygons.empty());
     CPPUNIT_ASSERT(RectangleContainsPolygons(aImages[2].m_aRectangle, aPolygons));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeIME)
+{
+    // Given an empty document with track changes enabled:
+    createSwDoc();
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+
+    // When typing via IME:
+    // Then we should not crash on rendering:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, u"a"_ustr);
+    rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
+    // Without the accompanying fix in place, this test would have crashed.
+    rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, u"a"_ustr);
+    rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
 }
 }
 
