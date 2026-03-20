@@ -90,6 +90,14 @@ public:
     void callbackImpl(int nType, const char* pPayload);
 };
 
+struct SDQAHELPER_DLLPUBLIC SdUsePdfium final
+{
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    SdUsePdfium();
+    ~SdUsePdfium();
+};
+
 #endif // INCLUDED_SD_QA_INC_SDTILEDRENDERINGTEST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

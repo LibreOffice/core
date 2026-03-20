@@ -43,6 +43,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_ui_func, \
     sax \
     sb \
     sd \
+    sdqahelper \
     sfx \
     sot \
     subsequenttest \
@@ -65,6 +66,7 @@ $(eval $(call gb_CppunitTest_set_include,sd_ui_func,\
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/source/ui/slidesorter/inc \
     -I$(SRCDIR)/sd/qa/unit \
+    -I$(SRCDIR)/sd/qa/inc \
     $$(INCLUDE) \
 ))
 

@@ -27,30 +27,12 @@
 #include <ViewShell.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
+#include <sdtiledrenderingtest.hxx>
 
 using namespace com::sun::star;
 
 namespace
 {
-struct UsePdfium
-{
-    // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    UsePdfium()
-    {
-        if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-        {
-            bResetEnvVar = true;
-            osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
-        }
-    }
-    ~UsePdfium()
-    {
-        if (bResetEnvVar)
-            osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
-    };
-};
-
 /// Covers sd/source/ui/func/ fixes.
 class Test : public SdModelTestBase
 {
@@ -165,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPDFReadLOKOnlyTextEdit)
     }
 
     // Given a PDF loaded in LOK read-only mode:
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
     loadFromFile(u"pdf/sample.pdf");
     auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     SfxViewShell* pSfxViewShell = SfxViewShell::Current();

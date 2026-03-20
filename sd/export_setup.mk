@@ -43,6 +43,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_export_tests$(1), \
     salhelper \
     sax \
     sd \
+    sdqahelper \
     sfx \
     sot \
     subsequenttest \
@@ -63,6 +64,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_export_tests$(1), \
 $(eval $(call gb_CppunitTest_set_include,sd_export_tests$(1),\
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/inc \
+    -I$(SRCDIR)/sd/qa/inc \
     $$(INCLUDE) \
 ))
 

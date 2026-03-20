@@ -11,6 +11,7 @@
 
 #include "sdmodeltestbase.hxx"
 #include <sdpage.hxx>
+#include <sdtiledrenderingtest.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
@@ -56,25 +57,6 @@ public:
         : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
-
-    struct UsePdfium
-    {
-        // We need to enable PDFium import (and make sure to disable after the test)
-        bool bResetEnvVar = false;
-        UsePdfium()
-        {
-            if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-            {
-                bResetEnvVar = true;
-                osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
-            }
-        }
-        ~UsePdfium()
-        {
-            if (bResetEnvVar)
-                osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
-        };
-    };
 
 protected:
     uno::Reference<awt::XBitmap> getBitmapFromTable(OUString const& rName);
@@ -1014,7 +996,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdf)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/sample.pdf");
 
@@ -1037,7 +1019,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/textheight1.pdf");
 
@@ -1068,7 +1050,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/differentfonts.pdf");
 
@@ -1107,7 +1089,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/BasicHindi.pdf");
 
@@ -1134,7 +1116,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfGrayscaleImageUnderInvisibleTe
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/GrayscaleImageUnderInvisibleTest.pdf");
 
@@ -1181,7 +1163,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfClippedImages)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/ClippedImages.pdf");
 
@@ -1211,7 +1193,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfMissingFontVersion)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/ErrareHumanumEst.pdf");
 
@@ -1236,7 +1218,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfEmbeddedFonts)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/sciencejournalsource.pdf");
 
@@ -1257,7 +1239,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternStroke)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/pattern-stroke.pdf");
 
@@ -1277,7 +1259,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfPatternFill)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/pattern-fill.pdf");
 
@@ -1299,7 +1281,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testPdfPageMasterOrientation)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/SampleSlideDeck.pdf");
 
@@ -1321,7 +1303,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextShear)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
         return;
-    UsePdfium aGuard;
+    SdUsePdfium aGuard;
 
     loadFromFile(u"pdf/textshear.pdf");
 

@@ -336,4 +336,19 @@ void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
     }
 }
 
+SdUsePdfium::SdUsePdfium()
+{
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
+    }
+}
+
+SdUsePdfium::~SdUsePdfium()
+{
+    if (bResetEnvVar)
+        osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
