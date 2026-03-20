@@ -28,6 +28,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <fmtclds.hxx>
 #include <frmfmt.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
 #include <cmdid.h>
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -543,6 +545,33 @@ void SwDrawBase::CreateDefaultObjectAtPosWithSize(Point aPos, Size aSize)
     m_pSh->CreateDefaultShape(m_pWin->GetSdrDrawMode(), aNewObjectRectangle, m_nSlotId);
 }
 
+// Find the first visible page whose top edge is within aVisArea.
+static const SwPageFrame* lcl_FindBestVisiblePage(SwRootFrame* pLayout, const SwRect& aVisArea)
+{
+    const SwFrame* pFrame = pLayout->Lower();
+    while (pFrame)
+    {
+        if (pFrame->IsPageFrame())
+        {
+            const SwPageFrame* pPage = static_cast<const SwPageFrame*>(pFrame);
+            const SwRect& rPageArea = pPage->getFrameArea();
+
+            if (rPageArea.Top() >= aVisArea.Top()
+                && rPageArea.Top() <= aVisArea.Bottom())
+            {
+                // This page's top edge is visible — use it.
+                return pPage;
+            }
+
+            if (rPageArea.Top() > aVisArea.Bottom())
+                break;
+        }
+        pFrame = pFrame->GetNext();
+    }
+
+    return nullptr;
+}
+
 Point  SwDrawBase::GetDefaultCenterPos() const
 {
     Size aDocSz(m_pSh->GetDocSize());
@@ -552,6 +581,45 @@ Point  SwDrawBase::GetDefaultCenterPos() const
     {
         aVisArea = SwRect(m_pSh->getLOKVisibleArea());
         aVisArea.Intersection(SwRect(Point(), aDocSz));
+
+        // In LOK multi-page view the visible area may span multiple pages,
+        // so the naive center may fall between pages. Constrain to a single
+        // page to guarantee the shape lands on an actual page.
+        SwRootFrame* pLayout = m_pSh->GetLayout();
+        if (pLayout)
+        {
+            const SwRect& aCursorRect = m_pSh->GetCharRect();
+            const SwPageFrame* pTargetPage = nullptr;
+
+            if (!aCursorRect.IsEmpty())
+            {
+                // Text cursor exists — find its page.
+                pTargetPage = pLayout->GetPageAtPos(
+                    aCursorRect.TopLeft(), nullptr, true);
+
+                if (pTargetPage
+                    && !pTargetPage->getFrameArea().Overlaps(aVisArea))
+                {
+                    // Cursor page is not visible — ignore it.
+                    pTargetPage = nullptr;
+                }
+            }
+
+            if (!pTargetPage)
+            {
+                // No visible cursor — pick the page with the largest
+                // visible area so the shape goes somewhere sensible.
+                pTargetPage = lcl_FindBestVisiblePage(pLayout, aVisArea);
+            }
+
+            if (pTargetPage)
+            {
+                SwRect aPageArea(pTargetPage->getFrameArea());
+                aPageArea.Intersection(aVisArea);
+                if (!aPageArea.IsEmpty())
+                    return aPageArea.Center();
+            }
+        }
     }
 
     Point aCenter = aVisArea.Center();

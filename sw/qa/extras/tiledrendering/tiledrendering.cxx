@@ -338,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInsertShape)
     SdrPage* pPage = rDrawModelAccess.GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
 
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3299, 299), Size(3403, 3403)), pObject->GetSnapRect());
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3441, 441), Size(3403, 3403)), pObject->GetSnapRect());
 
     // check that it is in the foreground layer
     CPPUNIT_ASSERT_EQUAL(rDrawModelAccess.GetHeavenId().get(), pObject->GetLayer().get());
