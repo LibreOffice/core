@@ -74,7 +74,7 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void zoom(const Fraction& _aZoom);
+        void zoom(double _fZoom);
     };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_STARTMARKER_HXX

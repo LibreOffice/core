@@ -4113,9 +4113,9 @@ void OReportController::impl_fillState_nothrow(const OUString& _sProperty,dbaui:
 
 void OReportController::impl_zoom_nothrow()
 {
-    Fraction aZoom(m_nZoomValue,100);
-    setZoomFactor( aZoom, *getDesignView() );
-    getDesignView()->zoom(aZoom);
+    double fZoom = double(m_nZoomValue) / 100;
+    setZoomFactor( fZoom, *getDesignView() );
+    getDesignView()->zoom(fZoom);
     InvalidateFeature(SID_ATTR_ZOOM,Reference< XStatusListener >(), true);
     InvalidateFeature(SID_ATTR_ZOOMSLIDER,Reference< XStatusListener >(), true);
 }

@@ -1008,7 +1008,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
             if (rFrac.IsValid())
                 nZoom = tools::Long(rFrac * 100);
 
-            const Fraction aFrac( nZoom, 100 );
+            const double aFrac = double(nZoom) / 100;
             m_pVRuler->SetZoom( aFrac );
             m_pHRuler->SetZoom( aFrac );
             InvalidateRulerPos();   // Invalidate content.

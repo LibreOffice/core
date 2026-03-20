@@ -217,7 +217,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     // Initialize Units
     mnUnitIndex     = RULER_UNIT_CM;
     meUnit          = FieldUnit::CM;
-    maZoom          = Fraction( 1, 1 );
+    maZoom          = 1.0;
 
     // Recalculate border widths
     if ( nWinBits & WB_BORDER )
@@ -2442,15 +2442,15 @@ void Ruler::SetUnit( FieldUnit eNewUnit )
     ImplUpdate();
 }
 
-void Ruler::SetZoom( const Fraction& rNewZoom )
+void Ruler::SetZoom( double fNewZoom )
 {
-    DBG_ASSERT( rNewZoom.GetNumerator(), "Ruler::SetZoom() with scale 0 is not allowed" );
+    DBG_ASSERT( fNewZoom != 0.0, "Ruler::SetZoom() with scale 0 is not allowed" );
 
-    if ( maZoom != rNewZoom )
+    if ( maZoom != fNewZoom )
     {
-        maZoom = rNewZoom;
-        maMapMode.SetScaleX( maZoom );
-        maMapMode.SetScaleY( maZoom );
+        maZoom = fNewZoom;
+        maMapMode.SetScaleX( Fraction(maZoom) );
+        maMapMode.SetScaleY( Fraction(maZoom) );
         ImplUpdate();
     }
 }

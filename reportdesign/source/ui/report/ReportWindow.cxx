@@ -362,12 +362,12 @@ sal_uInt32 OReportWindow::getMarkedObjectCount() const
     return m_aViewsWindow->getMarkedObjectCount();
 }
 
-void OReportWindow::zoom(const Fraction& _aZoom)
+void OReportWindow::zoom(double _fZoom)
 {
-    m_aHRuler->SetZoom(_aZoom);
+    m_aHRuler->SetZoom(_fZoom);
     m_aHRuler->Invalidate();
 
-    m_aViewsWindow->zoom(_aZoom);
+    m_aViewsWindow->zoom(_fZoom);
 
     notifySizeChanged();
     const Point aNewThumbPos( m_pParent->getThumbPos() );

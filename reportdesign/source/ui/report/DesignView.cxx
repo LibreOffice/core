@@ -670,9 +670,9 @@ sal_uInt32 ODesignView::getMarkedObjectCount() const
     return m_aScrollWindow->getMarkedObjectCount();
 }
 
-void ODesignView::zoom(const Fraction& _aZoom)
+void ODesignView::zoom(double _fZoom)
 {
-    m_aScrollWindow->zoom(_aZoom);
+    m_aScrollWindow->zoom(_fZoom);
 }
 
 sal_uInt16 ODesignView::getZoomFactor(SvxZoomType _eType) const

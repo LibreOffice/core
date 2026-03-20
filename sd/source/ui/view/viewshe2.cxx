@@ -374,7 +374,7 @@ void ViewShell::Scroll(::tools::Long nScrollX, ::tools::Long nScrollY)
  */
 void ViewShell::SetZoom(::tools::Long nZoom)
 {
-    Fraction aUIScale(nZoom, 100);
+    double aUIScale = double(nZoom) / 100;
     aUIScale *= GetDoc()->GetUIScale();
 
     if (mpHorizontalRuler)
@@ -425,7 +425,7 @@ void ViewShell::SetZoom(::tools::Long nZoom)
 void ViewShell::SetZoomRect(const ::tools::Rectangle& rZoomRect)
 {
     ::tools::Long nZoom = GetActiveWindow()->SetZoomRect(rZoomRect);
-    Fraction aUIScale(nZoom, 100);
+    double aUIScale = double(nZoom) / 100;
     aUIScale *= GetDoc()->GetUIScale();
 
     Point aPos = GetActiveWindow()->GetWinViewPos();

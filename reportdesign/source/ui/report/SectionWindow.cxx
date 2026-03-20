@@ -62,10 +62,10 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 
     m_aStartMarker->setCollapsedHdl(LINK(this,OSectionWindow,Collapsed));
 
-    m_aStartMarker->zoom(rMapMode.GetScaleX());
-    setZoomFactor(rMapMode.GetScaleX(), *m_aReportSection);
-    setZoomFactor(rMapMode.GetScaleX(), *m_aSplitter);
-    setZoomFactor(rMapMode.GetScaleX(), *m_aEndMarker);
+    m_aStartMarker->zoom(double(rMapMode.GetScaleX()));
+    setZoomFactor(double(rMapMode.GetScaleX()), *m_aReportSection);
+    setZoomFactor(double(rMapMode.GetScaleX()), *m_aSplitter);
+    setZoomFactor(double(rMapMode.GetScaleX()), *m_aEndMarker);
 
     m_aSplitter->Show();
     m_aStartMarker->Show();
@@ -300,14 +300,14 @@ IMPL_LINK( OSectionWindow, Collapsed, OColorListener&, _rMarker, void )
     m_pParent->resize(*this);
 }
 
-void OSectionWindow::zoom(const Fraction& _aZoom)
+void OSectionWindow::zoom(double _fZoom)
 {
-    setZoomFactor(_aZoom,*this);
-    m_aStartMarker->zoom(_aZoom);
+    setZoomFactor(_fZoom,*this);
+    m_aStartMarker->zoom(_fZoom);
 
-    setZoomFactor(_aZoom, *m_aReportSection);
-    setZoomFactor(_aZoom, *m_aSplitter);
-    setZoomFactor(_aZoom, *m_aEndMarker);
+    setZoomFactor(_fZoom, *m_aReportSection);
+    setZoomFactor(_fZoom, *m_aSplitter);
+    setZoomFactor(_fZoom, *m_aEndMarker);
     Invalidate();
 }
 
