@@ -2962,7 +2962,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCalculatedField)
     ScCompiler aComp(*m_pDoc, aAddr, m_pDoc->GetGrammar(), true, false);
     aComp.SetAvailablePivotFields(u"Sales"_ustr);
     aComp.SetAvailablePivotFields(u"Bonus"_ustr);
-    std::shared_ptr<ScTokenArray> pArray(aComp.CompileString(u"SUM(Sales; Bonus)"_ustr));
+    std::shared_ptr<ScTokenArray> pArray(aComp.CompileString(u"SUM('Sales'; 'Bonus')"_ustr));
     CPPUNIT_ASSERT_MESSAGE("Failed to compile calculated field formula.", pArray != nullptr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula compilation should have no errors.",
                            FormulaError::NONE, pArray->GetCodeError());
@@ -3011,7 +3011,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableCalculatedField)
         aComp2.SetAvailablePivotFields(u"Sales"_ustr);
         aComp2.SetAvailablePivotFields(u"Bonus"_ustr);
         aComp2.SetAvailablePivotFields(u"CalcField1"_ustr);
-        std::shared_ptr<ScTokenArray> pArray2(aComp2.CompileString(u"CalcField1 * 0.5"_ustr));
+        std::shared_ptr<ScTokenArray> pArray2(aComp2.CompileString(u"'CalcField1' * 0.5"_ustr));
         CPPUNIT_ASSERT_MESSAGE("Failed to compile CalcField2 formula.", pArray2 != nullptr);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("CalcField2 formula should have no errors.",
                                FormulaError::NONE, pArray2->GetCodeError());

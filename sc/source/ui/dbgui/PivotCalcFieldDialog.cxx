@@ -193,8 +193,9 @@ void ScPivotCalcFieldDlg::InsertSelectedField()
     if (nEntry == -1)
         return;
     OUString aFieldName = mxFieldList->get_text(nEntry);
-    if (aFieldName.indexOf(' ') >= 0)
-        aFieldName = "'" + aFieldName + "'";
+    if (aFieldName.indexOf('\'') >= 0)
+        aFieldName = aFieldName.replaceAll(u"'", u"''");
+    aFieldName = "'" + aFieldName + "'";
 
     // If the formula is just a placeholder like "= 0", "=0", "0", replace it
     OUString aCurrent = mxCalculation->get_text().trim();

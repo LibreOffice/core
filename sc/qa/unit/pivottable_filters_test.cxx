@@ -2700,7 +2700,7 @@ static void verifyCalcFields(ScDocument* pDoc, bool bBIFF12 = false)
                          rCalcFields[1]->maCalculation);
     // Field3 = Name * 2
     CPPUNIT_ASSERT_EQUAL(u"Field3"_ustr, rCalcFields[2]->maFieldName);
-    CPPUNIT_ASSERT_EQUAL(u"=Name*2"_ustr, rCalcFields[2]->maCalculation);
+    CPPUNIT_ASSERT_EQUAL(u"='Name'*2"_ustr, rCalcFields[2]->maCalculation);
     // Field4 = 2/0
     // BIFF12 formula decompilation adds space before number literal
     CPPUNIT_ASSERT_EQUAL(u"Field4"_ustr, rCalcFields[3]->maFieldName);
@@ -2755,7 +2755,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSX)
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "name",
                 u"Field3");
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "formula",
-                u"Name*2");
+                u"'Name'*2");
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[6]", "databaseField",
                 u"0");
     // cacheField - 4th calculated field
@@ -2795,7 +2795,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1ODS)
     assertXPath(pDocXml, aFieldPath + "[6]", "formula", u"of:=SUM('Field A'; 'Field B')");
     // 3rd calculated field: Field3 = Name * 2
     assertXPath(pDocXml, aFieldPath + "[7]", "source-field-name", u"Field3");
-    assertXPath(pDocXml, aFieldPath + "[7]", "formula", u"of:=Name*2");
+    assertXPath(pDocXml, aFieldPath + "[7]", "formula", u"of:='Name'*2");
     // 4th calculated field: Field4 = 2/0
     assertXPath(pDocXml, aFieldPath + "[8]", "source-field-name", u"Field4");
     assertXPath(pDocXml, aFieldPath + "[8]", "formula", u"of:=2/0");
@@ -2928,7 +2928,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testGroupAndCalcFieldXLSX)
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "name",
                 u"Field1");
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "formula",
-                u"b* c");
+                u"'b'* 'c'");
     assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[5]", "databaseField",
                 u"0");
 }
