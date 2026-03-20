@@ -640,8 +640,18 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             SdrInventor nInv = pObj->GetObjInventor();
             SdrObjKind  nSdrObjKind = pObj->GetObjIdentifier();
 
+            bool bReadOnly = mpDocSh->IsReadOnly();
+            if (!bReadOnly)
+            {
+                SfxViewShell* pViewShell = mpViewShell->GetViewShell();
+                if (pViewShell)
+                {
+                    bReadOnly = pViewShell->IsLokReadOnlyView();
+                }
+            }
+
             if (nInv == SdrInventor::Default && nSdrObjKind == SdrObjKind::OLE2
-                && !mpDocSh->IsReadOnly())
+                && !bReadOnly)
             {
                 // activate OLE-object
                 SfxInt16Item aItem(SID_OBJECT, 0);
@@ -651,7 +661,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                                                  { &aItem });
             }
             else if (nInv == SdrInventor::Default && nSdrObjKind == SdrObjKind::Graphic
-                     && pObj->IsEmptyPresObj() && !mpDocSh->IsReadOnly())
+                     && pObj->IsEmptyPresObj() && !bReadOnly)
             {
                 mpViewShell->GetViewFrame()->
                     GetDispatcher()->Execute( SID_INSERT_GRAPHIC,
@@ -660,7 +670,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             else if ( ( DynCastSdrTextObj( pObj ) != nullptr || dynamic_cast< const SdrObjGroup *>( pObj ) !=  nullptr ) &&
                       !SdModule::get()->GetWaterCan() &&
                       mpViewShell->GetFrameView()->IsDoubleClickTextEdit() &&
-                      !mpDocSh->IsReadOnly())
+                      !bReadOnly)
             {
                 SfxUInt16Item aItem(SID_TEXTEDIT, 2);
                 mpViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
