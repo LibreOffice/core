@@ -917,7 +917,9 @@ bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId,
         aStm.Seek( STREAM_SEEK_TO_BEGIN );
         aStm.ReadBytes(aSeq.getArray(), nLen);
 
-        if( nLen && ( SotExchange::GetFormat( rFlavor ) == SotClipboardFormatId::STRING ) )
+        SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
+        if( nLen && (nFormat == SotClipboardFormatId::STRING ||
+                     nFormat == SotClipboardFormatId::MARKDOWN) )
         {
             //JP 24.7.2001: as I know was this only for the writer application and this
             //              writes now UTF16 format into the stream
