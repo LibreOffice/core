@@ -335,71 +335,71 @@ static NSString* getCurrentSelection()
     }
 
     css::uno::Reference<css::frame::XDesktop> xDesktop = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
-    if (xDesktop.is())
+    if (!xDesktop.is())
+        return nil;
+
+    css::uno::Reference<css::frame::XModel> xModel(xDesktop->getCurrentComponent(), css::uno::UNO_QUERY);
+    if (!xModel)
+        return nil;
+
+    css::uno::Reference<css::uno::XInterface> xSelection(xModel->getCurrentSelection(), css::uno::UNO_QUERY);
+    if (!xSelection)
+        return nil;
+
+    css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xSelection, css::uno::UNO_QUERY);
+    if (xIndexAccess.is())
     {
-        css::uno::Reference<css::frame::XModel> xModel(xDesktop->getCurrentComponent(), css::uno::UNO_QUERY);
-        if (xModel)
+        if (xIndexAccess->getCount() > 0)
         {
-            css::uno::Reference<css::uno::XInterface> xSelection(xModel->getCurrentSelection(), css::uno::UNO_QUERY);
-            if (xSelection)
+            css::uno::Reference<css::text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), css::uno::UNO_QUERY);
+            if (xTextRange.is())
             {
-                css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xSelection, css::uno::UNO_QUERY);
-                if (xIndexAccess.is())
+                // tdf#168609 catch exceptions from SwXText::getString()
+                // Apparently, implementations of XTextRange::getString()
+                // such as SwXText::getString() can throw an exception.
+                OUString aStr;
+                try
                 {
-                    if (xIndexAccess->getCount() > 0)
-                    {
-                        css::uno::Reference<css::text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), css::uno::UNO_QUERY);
-                        if (xTextRange.is())
-                        {
-                            // tdf#168609 catch exceptions from SwXText::getString()
-                            // Apparently, implementations of XTextRange::getString()
-                            // such as SwXText::getString() can throw an exception.
-                            OUString aStr;
-                            try
-                            {
-                                aStr = xTextRange->getString();
-                            }
-                            catch (css::uno::RuntimeException &)
-                            {
-                                TOOLS_WARN_EXCEPTION("vcl.osx", "getCurrentSelection: XTextRange::getString() threw RuntimeException");
-                            }
-                            return [CreateNSString(aStr) autorelease];
-                        }
-                    }
+                    aStr = xTextRange->getString();
                 }
-
-                // The Basic IDE returns a XEnumeration with a single item
-                // Note: the following code was adapted from
-                // svx/source/tbxctrls/tbunosearchcontrollers.cxx
-                css::uno::Reference<css::container::XEnumeration> xEnum(xSelection, css::uno::UNO_QUERY);
-                if (xEnum.is() && xEnum->hasMoreElements())
+                catch (css::uno::RuntimeException &)
                 {
-                    OUString aString;
-                    xEnum->nextElement() >>= aString;
-                    return [CreateNSString(aString) autorelease];
+                    TOOLS_WARN_EXCEPTION("vcl.osx", "getCurrentSelection: XTextRange::getString() threw RuntimeException");
                 }
-
-                // The following is needed for cells and text fields in Calc
-                // and Impress
-                css::uno::Reference<css::text::XTextRange> xTextRange(xSelection, css::uno::UNO_QUERY);
-                if (xTextRange.is())
-                {
-                    // tdf#168609 catch exceptions from SwXText::getString()
-                    // Apparently, implementations of XTextRange::getString()
-                    // such as SwXText::getString() can throw an exception.
-                    OUString aStr;
-                    try
-                    {
-                        aStr = xTextRange->getString();
-                    }
-                    catch (css::uno::RuntimeException &)
-                    {
-                        TOOLS_WARN_EXCEPTION("vcl.osx", "getCurrentSelection: XTextRange::getString() threw RuntimeException");
-                    }
-                    return [CreateNSString(aStr) autorelease];
-                }
+                return [CreateNSString(aStr) autorelease];
             }
         }
+    }
+
+    // The Basic IDE returns a XEnumeration with a single item
+    // Note: the following code was adapted from
+    // svx/source/tbxctrls/tbunosearchcontrollers.cxx
+    css::uno::Reference<css::container::XEnumeration> xEnum(xSelection, css::uno::UNO_QUERY);
+    if (xEnum.is() && xEnum->hasMoreElements())
+    {
+        OUString aString;
+        xEnum->nextElement() >>= aString;
+        return [CreateNSString(aString) autorelease];
+    }
+
+    // The following is needed for cells and text fields in Calc
+    // and Impress
+    css::uno::Reference<css::text::XTextRange> xTextRange(xSelection, css::uno::UNO_QUERY);
+    if (xTextRange.is())
+    {
+        // tdf#168609 catch exceptions from SwXText::getString()
+        // Apparently, implementations of XTextRange::getString()
+        // such as SwXText::getString() can throw an exception.
+        OUString aStr;
+        try
+        {
+            aStr = xTextRange->getString();
+        }
+        catch (css::uno::RuntimeException &)
+        {
+            TOOLS_WARN_EXCEPTION("vcl.osx", "getCurrentSelection: XTextRange::getString() threw RuntimeException");
+        }
+        return [CreateNSString(aStr) autorelease];
     }
 
     return nil;
