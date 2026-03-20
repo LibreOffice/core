@@ -786,7 +786,7 @@ bool DeleteCellsOperation::runImplementation()
 
                 if (mbRecord && pUndoDeleteCells)
                 {
-                    pUndoDeleteCells->setSheetViewSortData(
+                    pUndoDeleteCells->setDefaultViewContext(
                         nDefaultViewTab, std::move(pSortDataBefore), std::move(pSortDataAfter));
                 }
             }

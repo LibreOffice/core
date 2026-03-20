@@ -771,7 +771,7 @@ bool InsertCellsOperation::runImplementation()
 
                 if (mbRecord && pUndoInsertCells)
                 {
-                    pUndoInsertCells->setSheetViewSortData(
+                    pUndoInsertCells->setDefaultViewContext(
                         nDefaultViewTab, std::move(pSortDataBefore), std::move(pSortDataAfter));
                 }
             }
