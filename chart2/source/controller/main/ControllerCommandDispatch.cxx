@@ -194,6 +194,9 @@ void ControllerState::update(
     const Reference< frame::XController > & xController,
     const rtl::Reference<::chart::ChartModel> & xModel )
 {
+    if (!xModel)
+        return;
+
     Reference< view::XSelectionSupplier > xSelectionSupplier(
         xController, uno::UNO_QUERY );
 
