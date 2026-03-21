@@ -103,6 +103,8 @@ public:
 
 private:
     DECL_LINK(MarkTimeout, Timer *, void);
+    DECL_LINK(DeferredResetDialog, Timer*, void);
+    DECL_LINK(DeferredRepaint, Timer*, void);
 
     static void Print( Printer* pPrinter, const OUString& rTitle );
 
@@ -129,6 +131,8 @@ private:
     tools::Rectangle           aPaintRect;
     bool                bDialogModelChanged;
     Idle                aMarkIdle;
+    Idle                m_aResetDialogIdle;
+    Idle                m_aRepaintIdle;
     tools::Long                mnPaintGuard;
     css::uno::Reference< css::frame::XModel > m_xDocument;
 
@@ -157,7 +161,8 @@ public:
     void            UpdateScrollBars();
 
     void            SetDialog (const css::uno::Reference<css::container::XNameContainer>& xUnoControlDialogModel);
-    void            ResetDialog ();
+    void            ResetDialogDeferred();
+    void            RepaintDeferred();
     const css::uno::Reference< css::container::XNameContainer >& GetDialog() const
                         {return m_xUnoControlDialogModel;}
 
