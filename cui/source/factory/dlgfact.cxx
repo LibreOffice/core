@@ -1077,7 +1077,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxSearchAttributeDi
                                             SearchAttrItemList& rLst,
                                             const WhichRangesContainer& pWhRanges )
 {
-    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<SvxSearchAttributeDialog>(pParent, rLst, pWhRanges));
+    return VclPtr<CuiAbstractControllerAsync_Impl>::Create(std::make_shared<SvxSearchAttributeDialog>(pParent, rLst, pWhRanges));
 }
 
 VclPtr<AbstractSvxSearchSimilarityDialog> AbstractDialogFactory_Impl::CreateSvxSearchSimilarityDialog(weld::Window* pParent,
