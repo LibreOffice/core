@@ -646,7 +646,7 @@ OUString SmOoxmlImport::handleSetString(const OUString& setOUstring)
             result += OUString::Concat(" set" ) + OUStringChar(setOUstring[i]) + OUString::Concat(" ");
         }
         else
-            result += OUStringChar(setOUstring[i]);
+            result += encloseOrEscapeLiteral(setOUstring.copy(i, 1), /*bForce=*/false);
     }
     return result;
 }
