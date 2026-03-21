@@ -394,21 +394,23 @@ void SvxColorTabPage::AddColorFromNameDialog(const OUString& aName)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, weld::Button&, void)
 {
-    ColorDialog aColorDlg(GetFrameWeld(), vcl::ColorPickerMode::Modify);
-    aColorDlg.SetColor (m_aCurrentColor.m_aColor);
+    std::shared_ptr<ColorDialog> xColorDlg = std::make_shared<ColorDialog>(GetFrameWeld(), vcl::ColorPickerMode::Modify);
+    xColorDlg->SetColor(m_aCurrentColor.m_aColor);
 
-    if (aColorDlg.Execute() == RET_OK)
-    {
-        Color aPreviewColor = aColorDlg.GetColor();
-        m_aCurrentColor.m_aColor = aPreviewColor;
-        UpdateColorValues( false );
-        // fill ItemSet and pass it on to XOut
-        m_rXFSet.Put(XFillColorItem(OUString(), aPreviewColor));
-        //m_aCtlPreviewOld.SetAttributes(m_aXFillAttr);
-        m_aCtlPreviewNew.SetAttributes(m_aXFillAttr.GetItemSet());
+    xColorDlg->ExecuteAsync([this, xColorDlg](sal_Int32 nResult) {
+        if (nResult == RET_OK)
+        {
+            Color aPreviewColor = xColorDlg->GetColor();
+            m_aCurrentColor.m_aColor = aPreviewColor;
+            UpdateColorValues( false );
+            // fill ItemSet and pass it on to XOut
+            m_rXFSet.Put(XFillColorItem(OUString(), aPreviewColor));
+            //m_aCtlPreviewOld.SetAttributes(m_aXFillAttr);
+            m_aCtlPreviewNew.SetAttributes(m_aXFillAttr.GetItemSet());
 
-        m_aCtlPreviewNew.Invalidate();
-    }
+            m_aCtlPreviewNew.Invalidate();
+        }
+    });
 }
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
