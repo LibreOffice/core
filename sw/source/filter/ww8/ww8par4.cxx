@@ -165,8 +165,8 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     // Scale MetaFile to new size and save new size to MetaFile
     Size        aOldSiz( rWMF.GetPrefSize() );
     Size        aNewSiz( pMfp->xExt, pMfp->yExt );
-    Fraction    aFracX( aNewSiz.Width(), aOldSiz.Width() );
-    Fraction    aFracY( aNewSiz.Height(), aOldSiz.Height() );
+    double    aFracX = double(aNewSiz.Width()) / aOldSiz.Width();
+    double    aFracY = double(aNewSiz.Height()) / aOldSiz.Height();
 
     rWMF.Scale( aFracX, aFracY );
     rWMF.SetPrefSize( aNewSiz );
@@ -315,8 +315,8 @@ bool SwWW8ImplReader::ImportOleWMF(const rtl::Reference<SotStorage>& xSrc1, GDIM
         aFinalSize = OutputDevice::LogicToLogic(
             aFinalSize, MapMode(MapUnit::MapTwip), rWMF.GetPrefMapMode() );
         aOrigSize = rWMF.GetPrefSize();
-        Fraction aScaleX(aFinalSize.Width(),aOrigSize.Width());
-        Fraction aScaleY(aFinalSize.Height(),aOrigSize.Height());
+        double aScaleX = double(aFinalSize.Width()) / aOrigSize.Width();
+        double aScaleY = double(aFinalSize.Height()) / aOrigSize.Height();
         rWMF.Scale( aScaleX, aScaleY );
         bOk = true;
     }

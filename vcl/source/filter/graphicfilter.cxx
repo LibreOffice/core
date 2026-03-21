@@ -261,8 +261,8 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             if( aNewSize.Width() && aNewSize.Height() )
             {
                 const Size aPreferredSize( aMtf.GetPrefSize() );
-                aMtf.Scale( Fraction( aNewSize.Width(), aPreferredSize.Width() ),
-                            Fraction( aNewSize.Height(), aPreferredSize.Height() ) );
+                aMtf.Scale( double(aNewSize.Width()) / aPreferredSize.Width(),
+                            double(aNewSize.Height()) / aPreferredSize.Height() );
             }
             aGraphic = Graphic( aMtf );
         }
