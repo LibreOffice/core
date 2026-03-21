@@ -117,6 +117,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/queryduplicatedialog.ui" },
         { u"cui/ui/querysetinsmodedialog.ui" },
         { u"cui/ui/searchattrdialog.ui" },
+        { u"cui/ui/searchformatdialog.ui" },
         { u"cui/ui/similaritysearchdialog.ui" },
         { u"cui/ui/specialcharacters.ui" },
         { u"cui/ui/spellingdialog.ui" },
