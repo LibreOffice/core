@@ -2033,34 +2033,36 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
 
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(m_xDialog.get(), aSet));
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(m_xDialog.get(), aSet));
     pDlg->SetText( aTxt );
 
-    if ( executeSubDialog(pDlg.get()) != RET_OK )
-        return;
+    executeSubDialog(pDlg, [pDlg, this](sal_Int32 nResult) {
+        if (nResult != RET_OK)
+            return;
 
-    DBG_ASSERT( pDlg->GetOutputItemSet(), "invalid Output-Set" );
-    SfxItemSet aOutSet( *pDlg->GetOutputItemSet() );
+        DBG_ASSERT( pDlg->GetOutputItemSet(), "invalid Output-Set" );
+        SfxItemSet aOutSet( *pDlg->GetOutputItemSet() );
 
-    SearchAttrItemList* pList = bSearch ? pSearchList.get() : pReplaceList.get();
+        SearchAttrItemList* pList = bSearch ? pSearchList.get() : pReplaceList.get();
 
-    const SfxPoolItem* pItem;
-    for( sal_uInt16 n = 0; n < pList->Count(); ++n )
-    {
-        SearchAttrInfo* pAItem = &pList->GetObject(n);
-        if( !IsInvalidItem( pAItem->aItemPtr.getItem() ) &&
-            SfxItemState::SET == aOutSet.GetItemState(
-                pAItem->aItemPtr.Which(), false, &pItem ) )
+        const SfxPoolItem* pItem;
+        for( sal_uInt16 n = 0; n < pList->Count(); ++n )
         {
-            pAItem->aItemPtr = SfxPoolItemHolder(*aOutSet.GetPool(), pItem);
-            aOutSet.ClearItem( pAItem->aItemPtr.Which() );
+            SearchAttrInfo* pAItem = &pList->GetObject(n);
+            if( !IsInvalidItem( pAItem->aItemPtr.getItem() ) &&
+                SfxItemState::SET == aOutSet.GetItemState(
+                    pAItem->aItemPtr.Which(), false, &pItem ) )
+            {
+                pAItem->aItemPtr = SfxPoolItemHolder(*aOutSet.GetPool(), pItem);
+                aOutSet.ClearItem( pAItem->aItemPtr.Which() );
+            }
         }
-    }
 
-    if( aOutSet.Count() )
-        pList->Put( aOutSet );
+        if( aOutSet.Count() )
+            pList->Put( aOutSet );
 
-    PaintAttrText_Impl(); // Set AttributeText in GroupBox
+        PaintAttrText_Impl(); // Set AttributeText in GroupBox
+    });
 }
 
 IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl, weld::Button&, void)
