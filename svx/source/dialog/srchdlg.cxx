@@ -2116,10 +2116,11 @@ IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl, weld::Button&, void)
         return;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<VclAbstractDialog> pDlg(
+    VclPtr<VclAbstractDialog> pDlg(
         pFact->CreateSvxSearchAttributeDialog(m_xDialog.get(), *m_pSearchList, m_pImpl->pRanges));
-    executeSubDialog(pDlg.get());
-    PaintAttrText_Impl();
+    executeSubDialog(pDlg, [this](sal_Int32 /*nResult*/) {
+        PaintAttrText_Impl();
+    });
 }
 
 IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer, void )

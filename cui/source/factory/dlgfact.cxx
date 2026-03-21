@@ -599,7 +599,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxSearchAttributeDi
                                             SearchAttrItemList& rLst,
                                             const WhichRangesContainer& pWhRanges )
 {
-    return VclPtr<CuiAbstractController_Impl<SvxSearchAttributeDialog>>::Create(pParent, rLst, pWhRanges);
+    return VclPtr<CuiAbstractControllerAsync_Impl<SvxSearchAttributeDialog>>::Create(pParent, rLst, pWhRanges);
 }
 
 namespace
