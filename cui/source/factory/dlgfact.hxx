@@ -239,7 +239,7 @@ DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxSearchSimilarityDialog,SvxSearchSimilarityDi
 };
 
 // AbstractSvxJSearchOptionsDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractSvxJSearchOptionsDialog,SvxJSearchOptionsDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractSvxJSearchOptionsDialog,SvxJSearchOptionsDialog)
     virtual TransliterationFlags    GetTransliterationFlags() const override;
 };
 

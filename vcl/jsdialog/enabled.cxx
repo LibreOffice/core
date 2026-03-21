@@ -95,6 +95,8 @@ constexpr auto CuiDialogList
         { u"cui/ui/numberingpositionpage.ui" },
         { u"cui/ui/objectnamedialog.ui" },
         { u"cui/ui/objecttitledescdialog.ui" },
+        { u"cui/ui/jsearchoptionsdialog.ui" },
+        { u"cui/ui/optjsearchpage.ui" },
         { u"cui/ui/optlingupage.ui" },
         { u"cui/ui/pageformatpage.ui" },
         { u"cui/ui/paragalignpage.ui" },

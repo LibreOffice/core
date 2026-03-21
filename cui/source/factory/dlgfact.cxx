@@ -120,7 +120,7 @@ IMPL_ABSTDLG_CLASS_ASYNC(AbstractSignSignatureLineDialog, SignSignatureLineDialo
 IMPL_ABSTDLG_CLASS(AbstractSvxCharacterMapDialog)
 IMPL_ABSTDLG_CLASS(AbstractSecurityOptionsDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxHpLinkDlg)
-IMPL_ABSTDLG_CLASS(AbstractSvxJSearchOptionsDialog)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxJSearchOptionsDialog, SvxJSearchOptionsDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxMultiPathDialog)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxNameDialog, SvxNameDialog)
 IMPL_ABSTDLG_CLASS(AbstractSvxNewDictionaryDialog)
@@ -1125,7 +1125,7 @@ VclPtr<AbstractSvxJSearchOptionsDialog> AbstractDialogFactory_Impl::CreateSvxJSe
                                                             const SfxItemSet& rOptionsSet,
                                                             TransliterationFlags nInitialFlags)
 {
-    return VclPtr<AbstractSvxJSearchOptionsDialog_Impl>::Create(std::make_unique<SvxJSearchOptionsDialog>(pParent, rOptionsSet, nInitialFlags));
+    return VclPtr<AbstractSvxJSearchOptionsDialog_Impl>::Create(std::make_shared<SvxJSearchOptionsDialog>(pParent, rOptionsSet, nInitialFlags));
 }
 
 VclPtr<AbstractFmInputRecordNoDialog> AbstractDialogFactory_Impl::CreateFmInputRecordNoDialog(weld::Window* pParent)
