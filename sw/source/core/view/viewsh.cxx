@@ -2166,7 +2166,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
     // Scaling. Must convert from pixels to twips. We know
     // that VirtualDevices use a DPI of 96.
-    const Fraction scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
+    const double scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
     Fraction scaleX = Fraction(contextWidth, tileWidth) * scale;
     Fraction scaleY = Fraction(contextHeight, tileHeight) * scale;
     aMapMode.SetScaleX(scaleX);

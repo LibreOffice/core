@@ -236,7 +236,7 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
 
     // Scaling. Must convert from pixels to twips. We know
     // that VirtualDevices use a DPI of 96.
-    const Fraction scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
+    const double scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
     Fraction scaleX = Fraction(nOutputWidth, nTileWidth) * scale;
     Fraction scaleY = Fraction(nOutputHeight, nTileHeight) * scale;
     aMapMode.SetScaleX(scaleX);

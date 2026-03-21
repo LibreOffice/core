@@ -14,10 +14,10 @@
 #include <sal/types.h>
 #include <tools/fract.hxx>
 
-inline Fraction conversionFract(o3tl::Length from, o3tl::Length to)
+inline double conversionFract(o3tl::Length from, o3tl::Length to)
 {
     const auto[mul, div] = o3tl::getConversionMulDiv(from, to);
-    return { mul, div };
+    return double(mul) / div;
 }
 
 template <typename N> constexpr auto convertTwipToMm100(N n)

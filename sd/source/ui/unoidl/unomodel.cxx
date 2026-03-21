@@ -4059,7 +4059,7 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     // that VirtualDevices use a DPI of 96.
     // We specifically calculate these scales first as we're still
     // in TWIPs, and might as well minimize the number of conversions.
-    const Fraction scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
+    const double scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
     Fraction scaleX = Fraction(nOutputWidth, nTileWidth) * scale;
     Fraction scaleY = Fraction(nOutputHeight, nTileHeight) * scale;
 
