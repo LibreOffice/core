@@ -88,17 +88,13 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 }
 
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId,
-                              OUString aTitle, tools::Long nWidthPixel, const Fraction& rCurrentZoom )
+                              OUString aTitle, tools::Long nWidthPixel, double fCurrentZoom )
 :   _nId( nItemId ),
     _nWidth( nWidthPixel ),
     _aTitle(std::move( aTitle )),
     _bFrozen( false )
 {
-    double n = static_cast<double>(_nWidth);
-    n *= static_cast<double>(rCurrentZoom.GetDenominator());
-    if (!rCurrentZoom.GetNumerator())
-        throw o3tl::divide_by_zero();
-    n /= static_cast<double>(rCurrentZoom.GetNumerator());
+    double n = static_cast<double>(_nWidth) * fCurrentZoom;
     _nOriginalWidth = n>0 ? static_cast<tools::Long>(n+0.5) : -static_cast<tools::Long>(-n+0.5);
 }
 
@@ -106,7 +102,7 @@ BrowserColumn::~BrowserColumn()
 {
 }
 
-void BrowserColumn::SetWidth(tools::Long nNewWidthPixel, const Fraction& rCurrentZoom)
+void BrowserColumn::SetWidth(tools::Long nNewWidthPixel, double fCurrentZoom)
 {
     _nWidth = nNewWidthPixel;
     // Avoid overflow when called with LONG_MAX from
@@ -117,11 +113,7 @@ void BrowserColumn::SetWidth(tools::Long nNewWidthPixel, const Fraction& rCurren
     }
     else
     {
-        double n = static_cast<double>(_nWidth);
-        n *= static_cast<double>(rCurrentZoom.GetDenominator());
-        if (!rCurrentZoom.GetNumerator())
-            throw o3tl::divide_by_zero();
-        n /= static_cast<double>(rCurrentZoom.GetNumerator());
+        double n = static_cast<double>(_nWidth) * fCurrentZoom;
         _nOriginalWidth = n>0 ? static_cast<tools::Long>(n+0.5) : -static_cast<tools::Long>(-n+0.5);
     }
 }
@@ -165,9 +157,9 @@ void BrowserColumn::Draw( BrowseBox const & rBox, OutputDevice& rDev, const Poin
 }
 
 
-void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
+void BrowserColumn::ZoomChanged(double fNewZoom)
 {
-    double n(_nOriginalWidth * rNewZoom);
+    double n(_nOriginalWidth * fNewZoom);
     _nWidth = n>0 ? static_cast<tools::Long>(n+0.5) : -static_cast<tools::Long>(-n+0.5);
 }
 

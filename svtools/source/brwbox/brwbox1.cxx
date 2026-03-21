@@ -2341,12 +2341,8 @@ tools::Long BrowseBox::CalcReverseZoom(tools::Long nVal) const
 {
     if (IsZoom())
     {
-        const Fraction& rZoom = GetZoom();
-        double n = static_cast<double>(nVal);
-        n *= static_cast<double>(rZoom.GetDenominator());
-        if (!rZoom.GetNumerator())
-            throw o3tl::divide_by_zero();
-        n /= static_cast<double>(rZoom.GetNumerator());
+        double fZoom = GetZoom();
+        double n = static_cast<double>(nVal) * fZoom;
         nVal = n>0 ? static_cast<tools::Long>(n + 0.5) : -static_cast<tools::Long>(-n + 0.5);
     }
 

@@ -710,7 +710,7 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
     if (_eInitWhat & InitWindowFacet::Font)
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        const Fraction& rZoom = rParent.GetZoom();
+        double fZoom = rParent.GetZoom();
 
         for (svt::ControlBase* pWindow : pWindows)
         {
@@ -723,11 +723,11 @@ void DbCellControl::ImplInitWindow( vcl::Window const & rParent, const InitWindo
             if (rParent.IsControlFont())
                 aFont.Merge(rParent.GetControlFont());
 
-            if (rZoom.GetNumerator() != rZoom.GetDenominator())
+            if (fZoom != 1.0)
             {
                 Size aSize = aFont.GetFontSize();
-                aSize.setWidth(std::round(double(aSize.Width() * rZoom)));
-                aSize.setHeight(std::round(double(aSize.Height() * rZoom)));
+                aSize.setWidth(std::round(aSize.Width() * fZoom));
+                aSize.setHeight(std::round(aSize.Height() * fZoom));
                 aFont.SetFontSize(aSize);
             }
 

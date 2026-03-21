@@ -405,24 +405,24 @@ void Window::EndSaveFocus(const VclPtr<vcl::Window>& xFocusWin)
     }
 }
 
-void Window::SetZoom( const Fraction& rZoom )
+void Window::SetZoom( double fZoom )
 {
-    if ( mpWindowImpl && mpWindowImpl->maZoom != rZoom )
+    if ( mpWindowImpl && mpWindowImpl->mfZoom != fZoom )
     {
-        mpWindowImpl->maZoom = rZoom;
+        mpWindowImpl->mfZoom = fZoom;
         CompatStateChanged( StateChangedType::Zoom );
     }
 }
 
 void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
 {
-    const Fraction& rZoom = GetZoom();
-    if (rZoom.GetNumerator() != rZoom.GetDenominator())
+    double fZoom = GetZoom();
+    if (fZoom != 1.0)
     {
         vcl::Font aFont(rFont);
         Size aSize = aFont.GetFontSize();
-        aSize.setWidth(basegfx::fround<tools::Long>(double(aSize.Width() * rZoom)));
-        aSize.setHeight(basegfx::fround<tools::Long>(double(aSize.Height() * rZoom)));
+        aSize.setWidth(basegfx::fround<tools::Long>(aSize.Width() * fZoom));
+        aSize.setHeight(basegfx::fround<tools::Long>(aSize.Height() * fZoom));
         aFont.SetFontSize(aSize);
         SetPointFont(rRenderContext, aFont);
     }
@@ -434,11 +434,10 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
 
 tools::Long Window::CalcZoom( tools::Long nCalc ) const
 {
-
-    const Fraction& rZoom = GetZoom();
-    if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
+    double fZoom = GetZoom();
+    if ( fZoom != 1.0)
     {
-        double n = double(nCalc * rZoom);
+        double n = nCalc * fZoom;
         nCalc = basegfx::fround<tools::Long>(n);
     }
     return nCalc;
@@ -1292,14 +1291,14 @@ vcl::Cursor* Window::GetCursor() const
     return mpWindowImpl->mpCursor;
 }
 
-const Fraction& Window::GetZoom() const
+double Window::GetZoom() const
 {
-    return mpWindowImpl->maZoom;
+    return mpWindowImpl->mfZoom;
 }
 
 bool Window::IsZoom() const
 {
-    return mpWindowImpl->maZoom.GetNumerator() != mpWindowImpl->maZoom.GetDenominator();
+    return mpWindowImpl->mfZoom != 1.0;
 }
 
 void Window::SetHelpText( const OUString& rHelpText )

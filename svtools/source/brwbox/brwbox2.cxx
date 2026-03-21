@@ -482,8 +482,8 @@ void BrowseBox::Resize()
     tools::Long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
     {
-        nSBHeight = static_cast<tools::Long>(nSBHeight * static_cast<double>(GetZoom()));
-        nSBWidth = static_cast<tools::Long>(nSBWidth * static_cast<double>(GetZoom()));
+        nSBHeight = static_cast<tools::Long>(nSBHeight * GetZoom());
+        nSBWidth = static_cast<tools::Long>(nSBWidth * GetZoom());
     }
 
     DoHideCursor();
@@ -1059,8 +1059,8 @@ void BrowseBox::UpdateScrollbars()
     m_nCornerWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
     {
-        m_nCornerHeight = static_cast<tools::Long>(m_nCornerHeight * static_cast<double>(GetZoom()));
-        m_nCornerWidth = static_cast<tools::Long>(m_nCornerWidth * static_cast<double>(GetZoom()));
+        m_nCornerHeight = static_cast<tools::Long>(m_nCornerHeight * GetZoom());
+        m_nCornerWidth = static_cast<tools::Long>(m_nCornerWidth * GetZoom());
     }
 
     bool bNeedsVScroll = false;
