@@ -145,7 +145,7 @@ namespace sdr::overlay
 
             // read access to baseRange. This may trigger createBaseRange() if
             // object is changed.
-            const basegfx::B2DRange& getBaseRange() const;
+            virtual const basegfx::B2DRange& getBaseRange() const;
 
             // access to baseColor
             const Color& getBaseColor() const { return maBaseColor; }

@@ -256,6 +256,29 @@ namespace sdr::overlay
             return OverlayObject::getOverlayObjectPrimitive2DSequence();
         }
 
+        // Compute base range directly from the input rectangles.
+        const basegfx::B2DRange& OverlaySelection::getBaseRange() const
+        {
+            if (mbContrastOutline)
+            {
+                // Some rare contrast outline mode, (Calc only?), fall back to
+                // the base class.
+                return OverlayObject::getBaseRange();
+            }
+
+            if (maBaseRange.isEmpty() && !maRanges.empty())
+            {
+                basegfx::B2DRange aRange;
+
+                for (const auto& rRange : maRanges)
+                    aRange.expand(rRange);
+
+                const_cast<OverlaySelection*>(this)->maBaseRange = aRange;
+            }
+
+            return maBaseRange;
+        }
+
         void OverlaySelection::setRanges(std::vector< basegfx::B2DRange >&& rNew)
         {
             if(rNew != maRanges)

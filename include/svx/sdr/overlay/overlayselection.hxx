@@ -69,6 +69,9 @@ namespace sdr::overlay
             /// override to check conditions for last createOverlayObjectPrimitive2DSequence
             virtual drawinglayer::primitive2d::Primitive2DContainer getOverlayObjectPrimitive2DSequence() const override;
 
+            // compute base range directly from maRanges without building primitives
+            const basegfx::B2DRange& getBaseRange() const override;
+
             // data write access
             void setRanges(std::vector< basegfx::B2DRange >&& rNew);
         };

@@ -133,6 +133,7 @@ public:
     const VclPtr<SwContentControlButton>& GetContentControlButton() const;
 
     const SwCursorShell* GetShell() const { return m_pCursorShell; }
+    const sdr::overlay::OverlaySelection* GetCursorOverlay() const { return m_pCursorOverlay.get(); }
     // check current MapMode of the shell and set possibly the static members.
     // Optional set the parameters pX, pY
     static void Get1PixelInLogic( const SwViewShell& rSh,

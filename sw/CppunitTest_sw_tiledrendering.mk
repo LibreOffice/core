@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_tiledrendering, \
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayercore \
     editeng \
     docmodel \
     sal \

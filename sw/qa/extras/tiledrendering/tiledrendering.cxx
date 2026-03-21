@@ -58,6 +58,9 @@
 #include <comphelper/string.hxx>
 #include <unotools/searchopt.hxx>
 
+#include <svx/sdr/overlay/overlayselection.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <view.hxx>
@@ -4060,6 +4063,67 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFindAndReplaceInComments)
     // - Expected greater than: 2000 (2108)
     // - Actual  : 1418
     CPPUNIT_ASSERT_GREATER(static_cast<tools::Long>(2000), m_aCursorRectangle.getY());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testOverlaySelectionViewSwitch)
+{
+    // Load a document with 3 lines and create 2 views.
+    createDoc("3lines.fodt");
+    SwTestViewCallback aView1;
+    int nView1 = SfxLokHelper::getCurrentView();
+    SfxLokHelper::createView();
+    SwTestViewCallback aView2;
+    int nView2 = SfxLokHelper::getCurrentView();
+
+    // In view 1: make a multi-line selection (middle of line 1 through line 2
+    // to middle of line 3), producing 3 selection rectangles.
+    SfxLokHelper::setView(nView1);
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    // Move into the first line.
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    // Select down through line 2 into line 3.
+    pWrtShell->Down(/*bSelect=*/true, 2, /*bBasicCall=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Verify the selection is visible.
+    CPPUNIT_ASSERT(!aView1.m_aOwnCursor.IsEmpty());
+
+    // Switch to view 2 and back to view 1. This triggers the
+    // ShellLoseFocus/ShellGetFocus cycle that destroys and recreates the
+    // OverlaySelection.
+    SfxLokHelper::setView(nView2);
+    SfxLokHelper::setView(nView1);
+    Scheduler::ProcessEventsToIdle();
+
+    // The selection must still be present after the round-trip.
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT(pShellCursor->HasMark());
+
+    // Verify that the OverlaySelection::getBaseRange() override produces the
+    // same result as computing from the full primitive sequence. The override
+    // computes the bounding box directly from the input ranges; the base
+    // class would build the full primitive sequence (including the expensive
+    // solvePolygonOperationOr) and derive the range from that.
+    const sdr::overlay::OverlaySelection* pOverlay = pShellCursor->GetCursorOverlay();
+    CPPUNIT_ASSERT(pOverlay);
+    CPPUNIT_ASSERT(!pOverlay->getRanges().empty());
+    // Our fast override: computes range from the input rectangles.
+    const basegfx::B2DRange aFastRange = pOverlay->getBaseRange();
+    CPPUNIT_ASSERT(!aFastRange.isEmpty());
+    // Build the full primitive sequence and derive range from that.
+    const drawinglayer::primitive2d::Primitive2DContainer aSequence
+        = pOverlay->getOverlayObjectPrimitive2DSequence();
+    CPPUNIT_ASSERT(!aSequence.empty());
+    SdrView* pSdrView = pWrtShell->GetDrawView();
+    CPPUNIT_ASSERT(pSdrView);
+    CPPUNIT_ASSERT(pSdrView->PaintWindowCount());
+    SdrPaintWindow* pPaintWindow = pSdrView->GetPaintWindow(0);
+    const rtl::Reference<sdr::overlay::OverlayManager>& xMgr
+        = pPaintWindow->GetOverlayManager();
+    CPPUNIT_ASSERT(xMgr.is());
+    const basegfx::B2DRange aPrimitiveRange
+        = aSequence.getB2DRange(xMgr->getCurrentViewInformation2D());
+    CPPUNIT_ASSERT_EQUAL(aPrimitiveRange, aFastRange);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
