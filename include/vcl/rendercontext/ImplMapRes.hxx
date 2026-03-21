@@ -27,10 +27,8 @@ struct ImplMapRes
 
     tools::Long mnMapOfsX = 0; ///< Offset in X direction
     tools::Long mnMapOfsY = 0; ///< Offset in Y direction
-    tools::Long mnMapScNumX = 1; ///< Scaling factor - numerator in X direction
-    tools::Long mnMapScNumY = 1; ///< Scaling factor - numerator in Y direction
-    tools::Long mnMapScDenomX = 1; ///< Scaling factor - denominator in X direction
-    tools::Long mnMapScDenomY = 1; ///< Scaling factor - denominator in Y direction
+    double mfMapScX = 1; ///< Scaling factor in X direction
+    double mfMapScY = 1; ///< Scaling factor in Y direction
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
