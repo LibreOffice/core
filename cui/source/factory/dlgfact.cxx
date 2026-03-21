@@ -685,7 +685,7 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSchTransformTabDi
 namespace
 {
 class AbstractSvxJSearchOptionsDialog_Impl final
-    : public vcl::AbstractDialogImpl_Sync<AbstractSvxJSearchOptionsDialog, SvxJSearchOptionsDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractSvxJSearchOptionsDialog, SvxJSearchOptionsDialog>
 {
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;

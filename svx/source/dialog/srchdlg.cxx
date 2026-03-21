@@ -1440,18 +1440,19 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
     }
     else if (&rBtn == m_xJapOptionsBtn.get())
     {
-        SfxItemSet aSet( SfxGetpApp()->GetPool() );
+        std::shared_ptr<SfxItemSet> pSet = std::make_shared<SfxItemSet>( SfxGetpApp()->GetPool() );
         m_pSearchItem->SetTransliterationFlags(GetTransliterationFlags());
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog(
-            m_xDialog.get(), aSet, m_pSearchItem->GetTransliterationFlags()));
-        int nRet = executeSubDialog(aDlg.get());
-        if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
-        {
-            TransliterationFlags nFlags = aDlg->GetTransliterationFlags();
-            m_pSearchItem->SetTransliterationFlags(nFlags);
-            ApplyTransliterationFlags_Impl( nFlags );
-        }
+        VclPtr<AbstractSvxJSearchOptionsDialog> pDlg(pFact->CreateSvxJSearchOptionsDialog(
+            m_xDialog.get(), *pSet, m_pSearchItem->GetTransliterationFlags()));
+        executeSubDialog(pDlg, [pDlg, pSet, this](sal_Int32 nResult) {
+            if (RET_OK == nResult) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
+            {
+                TransliterationFlags nFlags = pDlg->GetTransliterationFlags();
+                m_pSearchItem->SetTransliterationFlags(nFlags);
+                ApplyTransliterationFlags_Impl( nFlags );
+            }
+        });
     }
     else if (&rBtn == m_xSearchComponent1PB.get() || &rBtn == m_xSearchComponent2PB.get())
     {

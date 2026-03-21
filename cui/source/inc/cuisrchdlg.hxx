@@ -19,13 +19,15 @@
 #pragma once
 
 #include <i18nutil/transliteration.hxx>
-#include <sfx2/basedlgs.hxx>
+#include <vcl/weld.hxx>
 
+class SfxItemSet;
 class SvxJSearchOptionsPage;
 
-class SvxJSearchOptionsDialog : public SfxSingleTabDialogController
+class SvxJSearchOptionsDialog : public weld::GenericDialogController
 {
-    SvxJSearchOptionsPage* m_pPage;
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<SvxJSearchOptionsPage> m_xPage;
 
     SvxJSearchOptionsDialog( const SvxJSearchOptionsDialog & ) = delete;
     SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & ) = delete;
