@@ -637,8 +637,8 @@ void SwGrfNode::ScaleImageMap()
         return;
 
     bool bScale = false;
-    Fraction aScaleX( 1, 1 );
-    Fraction aScaleY( 1, 1 );
+    double fScaleX( 1.0 );
+    double fScaleY( 1.0 );
 
     const SwFormatFrameSize& rFrameSize = pFormat->GetFrameSize();
     const SvxBoxItem& rBox = pFormat->GetBox();
@@ -654,7 +654,7 @@ void SwGrfNode::ScaleImageMap()
 
         if( mnGrfSize.Width() != nWidth )
         {
-            aScaleX = Fraction( mnGrfSize.Width(), nWidth );
+            fScaleX = double(mnGrfSize.Width()) / nWidth;
             bScale = true;
         }
     }
@@ -669,14 +669,14 @@ void SwGrfNode::ScaleImageMap()
 
         if( mnGrfSize.Height() != nHeight )
         {
-            aScaleY = Fraction( mnGrfSize.Height(), nHeight );
+            fScaleY = double(mnGrfSize.Height()) / nHeight;
             bScale = true;
         }
     }
 
     if( bScale )
     {
-        aURL.GetMap()->Scale( aScaleX, aScaleY );
+        aURL.GetMap()->Scale( fScaleX, fScaleY );
         pFormat->SetFormatAttr( aURL );
     }
 }

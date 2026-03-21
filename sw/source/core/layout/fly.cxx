@@ -1024,9 +1024,9 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 if ( rOld.GetWidth() && rOld.GetHeight() )
                 {
 
-                    Fraction aScaleX( rOld.GetWidth(), rNew.GetWidth() );
-                    Fraction aScaleY( rOld.GetHeight(), rOld.GetHeight() );
-                    aURL.GetMap()->Scale( aScaleX, aScaleY );
+                    double fScaleX = double(rOld.GetWidth()) / rNew.GetWidth();
+                    double fScaleY = double(rOld.GetHeight()) / rOld.GetHeight();
+                    aURL.GetMap()->Scale( fScaleX, fScaleY );
                     SwFrameFormat *pFormat = GetFormat();
                     pFormat->LockModify();
                     pFormat->SetFormatAttr( aURL );
@@ -1167,9 +1167,9 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                      rSz.GetWidth()  != getFrameArea().Width() )
                 {
                     SwFormatURL aURL( GetFormat()->GetURL() );
-                    Fraction aScaleX( getFrameArea().Width(),  rSz.GetWidth() );
-                    Fraction aScaleY( getFrameArea().Height(), rSz.GetHeight() );
-                    aURL.GetMap()->Scale( aScaleX, aScaleY );
+                    double fScaleX = double(getFrameArea().Width()) /  rSz.GetWidth();
+                    double fScaleY = double(getFrameArea().Height()) / rSz.GetHeight();
+                    aURL.GetMap()->Scale( fScaleX, fScaleY );
                     SwFrameFormat *pFormat = GetFormat();
                     pFormat->LockModify();
                     pFormat->SetFormatAttr( aURL );
@@ -1291,9 +1291,9 @@ void SwFlyFrame::UpdateAttrForFormatChange( SwFormat *pOldFormat, SwFormat *pNew
             if ( rOld.GetWidth() && rOld.GetHeight() )
             {
 
-                Fraction aScaleX( rOld.GetWidth(), rNew.GetWidth() );
-                Fraction aScaleY( rOld.GetHeight(), rOld.GetHeight() );
-                aURL.GetMap()->Scale( aScaleX, aScaleY );
+                double fScaleX = double(rOld.GetWidth()) / rNew.GetWidth();
+                double fScaleY = double(rOld.GetHeight()) / rOld.GetHeight();
+                aURL.GetMap()->Scale( fScaleX, fScaleY );
                 SwFrameFormat *pFormat = GetFormat();
                 pFormat->LockModify();
                 pFormat->SetFormatAttr( aURL );

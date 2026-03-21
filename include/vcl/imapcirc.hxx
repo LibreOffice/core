@@ -23,8 +23,6 @@
 #include <tools/gen.hxx>
 #include <vcl/imapobj.hxx>
 
-class Fraction;
-
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) IMapCircleObject final : public IMapObject
 {
     Point               aCenter;
@@ -54,7 +52,7 @@ public:
     Point               GetCenter( bool bPixelCoords = true ) const;
     sal_Int32           GetRadius( bool bPixelCoords = true ) const;
 
-    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void                Scale( double fFractX, double fFracY );
 
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapCircleObject& rEqObj ) const;
