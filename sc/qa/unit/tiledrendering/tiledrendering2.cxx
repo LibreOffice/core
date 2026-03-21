@@ -265,8 +265,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testBreakPageView)
     std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
     ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
     xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    xDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize),
-                                                       Fraction(1.0), Point(), aPixmap.data());
+    xDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize), 1.0, Point(),
+                                                       aPixmap.data());
     pModelObj->paintTile(*xDevice, nCanvasSize, nCanvasSize, 3840, 3840, 3840, 3840);
     xDevice->EnableMapMode(false);
     Bitmap aBitmap = xDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));

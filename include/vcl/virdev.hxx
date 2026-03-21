@@ -119,7 +119,7 @@ public:
 
     bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true, bool bAlphaMaskTransparent = false );
     bool                SetOutputSizePixelScaleOffsetAndLOKBuffer( const Size& rNewSize,
-                                                                   const Fraction& rScale,
+                                                                   double fScale,
                                                                    const Point& rNewOffset,
                                                                    sal_uInt8* pBuffer);
 

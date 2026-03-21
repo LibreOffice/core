@@ -92,7 +92,7 @@ public:
     ScopedVclPtrInstance<VirtualDevice> maVirtualDevice;
 
     RenderContext(unsigned char* pBuffer, SdrModel& rModel, const SdrPage& rPage,
-                  Size const& rSlideSize, const Fraction& rScale)
+                  Size const& rSlideSize, double fScale)
         : mrModel(rModel)
 #if defined(IOS)
         , maVirtualDevice(
@@ -114,7 +114,7 @@ public:
 
         maVirtualDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-        maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, rScale, Point(),
+        maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, fScale, Point(),
                                                                    pBuffer);
         Size aPageSize(rPage.GetSize());
 
@@ -1038,7 +1038,7 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer
 {
     // We want to render one pass (one iteration through objects)
 
-    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize, Fraction(rScale));
+    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize, rScale);
 
     // Render Background and analyze other passes
     if (maRenderState.meStage == RenderStage::Background)

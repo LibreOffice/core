@@ -972,7 +972,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertGraphicInvalidations)
     int nCanvasHeight = 256;
     std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
-    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer.data());
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0, Point(), aBuffer.data());
     pModelObj->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     Scheduler::ProcessEventsToIdle();
 
@@ -1006,7 +1006,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeWithTwoViews)
     int nCanvasHeight = 256;
     std::vector<unsigned char> aBuffer1(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice1(DeviceFormat::WITHOUT_ALPHA);
-    pDevice1->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer1.data());
+    pDevice1->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0, Point(), aBuffer1.data());
     pModelObj->paintTile(*pDevice1, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     Scheduler::ProcessEventsToIdle();
 
@@ -1016,7 +1016,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeWithTwoViews)
 
     std::vector<unsigned char> aBuffer2(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice2(DeviceFormat::WITHOUT_ALPHA);
-    pDevice2->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer2.data());
+    pDevice2->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight), 1.0, Point(), aBuffer2.data());
     pModelObj->paintTile(*pDevice2, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     Scheduler::ProcessEventsToIdle();
 
@@ -1438,7 +1438,7 @@ static Bitmap getTile(ScModelObj* pModelObj, int nTilePosX, int nTilePosY, tools
     ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
     xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     xDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasSize, nCanvasSize),
-            Fraction(1.0), Point(), aPixmap.data());
+            1.0, Point(), aPixmap.data());
     pModelObj->paintTile(*xDevice, nCanvasSize, nCanvasSize, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
     xDevice->EnableMapMode(false);
     return xDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
