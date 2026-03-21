@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/basedlgs.hxx>
-
 #include <cuisrchdlg.hxx>
 
 #include "optjsearch.hxx"
@@ -28,14 +26,14 @@
 
 SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(weld::Window *pParent,
     const SfxItemSet& rOptionsSet, TransliterationFlags nInitialFlags)
-    : SfxSingleTabDialogController(pParent, &rOptionsSet)
+    : weld::GenericDialogController(pParent,
+        u"cui/ui/jsearchoptionsdialog.ui"_ustr, u"JSearchOptionsDialog"_ustr)
+    , m_xContainer(m_xBuilder->weld_container(u"container"_ustr))
 {
-    // m_xPage will be implicitly destroyed by the
-    // SfxSingleTabDialog destructor
-    SetTabPage(SvxJSearchOptionsPage::Create(get_content_area(), this, &rOptionsSet)); //! implicitly calls m_xPage->Reset(...)!
-    m_pPage = static_cast<SvxJSearchOptionsPage*>(GetTabPage());
-    m_pPage->EnableSaveOptions(false);
-    m_pPage->SetTransliterationFlags(nInitialFlags);
+    std::unique_ptr<SfxTabPage> xPage = SvxJSearchOptionsPage::Create(m_xContainer.get(), this, &rOptionsSet);
+    m_xPage.reset(static_cast<SvxJSearchOptionsPage*>(xPage.release()));
+    m_xPage->EnableSaveOptions(false);
+    m_xPage->SetTransliterationFlags(nInitialFlags);
 }
 
 SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
@@ -44,7 +42,9 @@ SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
 
 TransliterationFlags SvxJSearchOptionsDialog::GetTransliterationFlags() const
 {
-    return m_pPage->GetTransliterationFlags();
+    // Update transliteration flags from the current checkbox state
+    m_xPage->FillItemSet(nullptr);
+    return m_xPage->GetTransliterationFlags();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
