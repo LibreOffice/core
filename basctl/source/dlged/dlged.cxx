@@ -203,6 +203,8 @@ DlgEditor::DlgEditor (
     ,bCreateOK(true)
     ,bDialogModelChanged(false)
     ,aMarkIdle("basctl DlgEditor Mark")
+    ,m_aResetDialogIdle("basctl DlgEditor ResetDialog")
+    ,m_aRepaintIdle("basctl DlgEditor Repaint")
     ,mnPaintGuard(0)
     ,m_xDocument( xModel )
 {
@@ -216,6 +218,8 @@ DlgEditor::DlgEditor (
     pDlgEdModel->InsertPage(pDlgEdPage);
 
     aMarkIdle.SetInvokeHandler( LINK( this, DlgEditor, MarkTimeout ) );
+    m_aResetDialogIdle.SetInvokeHandler(LINK(this, DlgEditor, DeferredResetDialog));
+    m_aRepaintIdle.SetInvokeHandler(LINK(this, DlgEditor, DeferredRepaint));
 
     rWindow.SetMapMode( MapMode( MapUnit::Map100thMM ) );
     pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
@@ -242,6 +246,8 @@ DlgEditor::DlgEditor (
 DlgEditor::~DlgEditor()
 {
     aMarkIdle.Stop();
+    m_aResetDialogIdle.Stop();
+    m_aRepaintIdle.Stop();
 
     ::comphelper::disposeComponent( m_xControlContainer );
 }
@@ -394,7 +400,12 @@ void DlgEditor::SetDialog( const uno::Reference< container::XNameContainer >& xU
     pDlgEdModel->SetChanged(false);
 }
 
-void DlgEditor::ResetDialog ()
+void DlgEditor::ResetDialogDeferred()
+{
+    m_aResetDialogIdle.Start();
+}
+
+IMPL_LINK_NOARG(DlgEditor, DeferredResetDialog, Timer*, void)
 {
     DlgEdForm* pOldDlgEdForm = pDlgEdForm.get();
     DlgEdPage* pPage = static_cast<DlgEdPage*>(pDlgEdModel->GetPage(0));
@@ -411,6 +422,15 @@ void DlgEditor::ResetDialog ()
         pDlgEdView->MarkObj( pDlgEdForm.get(), pPgView );
 }
 
+void DlgEditor::RepaintDeferred()
+{
+    m_aRepaintIdle.Start();
+}
+
+IMPL_LINK_NOARG(DlgEditor, DeferredRepaint, Timer*, void)
+{
+    rWindow.Invalidate();
+}
 
 Reference< util::XNumberFormatsSupplier > const & DlgEditor::GetNumberFormatsSupplier()
 {

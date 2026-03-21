@@ -1144,7 +1144,11 @@ void DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent& evt )
         PositionAndSizeChange( evt );
 
         if ( evt.PropertyName == DLGED_PROP_DECORATION )
-            GetDialogEditor().ResetDialog();
+        {
+            // tdf#170961: schedule a deferred ResetDialog, to avoid calling it synchronously from
+            // the property change listener
+            rDlgEditor.ResetDialogDeferred();
+        }
     }
     // change name of control in dialog model
     else if ( evt.PropertyName == DLGED_PROP_NAME )
@@ -1174,6 +1178,9 @@ void DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent& evt )
         if (!dynamic_cast<DlgEdForm*>(this))
             TabIndexChange(evt);
     }
+
+    // tdf#170961: schedule a deferred repaint
+    rDlgEditor.RepaintDeferred();
 }
 
 void DlgEdObj::_elementInserted()
