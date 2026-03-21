@@ -22,6 +22,7 @@
 #include <comphelper/lok.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/fract.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/virdev.hxx>
@@ -363,7 +364,7 @@ void VirtualDevice::EnableRTL( bool bEnable )
 }
 
 bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(
-    const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset,
+    const Size& rNewSize, double fScale, const Point& rNewOffset,
     sal_uInt8 *const pBuffer)
 {
     // If this is ever needed for something else than LOK, changes will
@@ -372,8 +373,8 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(
     assert(pBuffer);
     MapMode mm = GetMapMode();
     mm.SetOrigin( rNewOffset );
-    mm.SetScaleX( rScale );
-    mm.SetScaleY( rScale );
+    mm.SetScaleX( Fraction(fScale) );
+    mm.SetScaleY( Fraction(fScale) );
     SetMapMode( mm );
 
     assert(meFormatAndAlpha == DeviceFormat::WITHOUT_ALPHA);

@@ -4363,7 +4363,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
     pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(
-                Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
+                Size(nCanvasWidth, nCanvasHeight), 1.0, Point(),
                 pBuffer);
 
     pDoc->paintTile(*pDevice, nCanvasWidth, nCanvasHeight,
@@ -7363,7 +7363,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
     memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
     aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     aDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(
-                Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
+                Size(nFontWidth, nFontHeight), 1.0, Point(),
                 pBuffer);
 
     if (*pFontWidth > 0 && *pFontHeight > 0)
@@ -7463,7 +7463,7 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nWidth, nHeight), 1.0, Point(), pBuffer);
 
     MapMode aMapMode(pDevice->GetMapMode());
     aMapMode.SetOrigin(Point(-(nX / fDPIScale), -(nY / fDPIScale)));
