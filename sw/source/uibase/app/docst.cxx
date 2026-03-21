@@ -986,6 +986,10 @@ void SwDocShell::Edit(
 
     if (!bBasic)
     {
+        // tdf#101648: no template dialog for table styles yet
+        if (nFamily == SfxStyleFamily::Table)
+            return;
+
         // prior to the dialog the HtmlMode at the DocShell is being sunk
         sal_uInt16 nHtmlMode = ::GetHtmlMode(this);
 

@@ -2390,6 +2390,10 @@ void Menu::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) const
             auto aEntry = rJsonWriter.startStruct();
             sal_uInt16 nId = GetItemId(i);
             rJsonWriter.put("row", GetItemIdent(nId));
+            if (!IsItemEnabled(nId))
+            {
+                rJsonWriter.put("enabled", false);
+            }
             {
                 auto aColumns = rJsonWriter.startArray("columns");
                 auto aColumn = rJsonWriter.startStruct();
