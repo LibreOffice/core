@@ -5698,8 +5698,8 @@ void PDFWriterImpl::drawVerticalGlyphs(
             fDeltaAngle = M_PI/2.0;
             fYScale = fXScale;
             fTempXScale = 1.0;
-            fSkewA = -fSkewB;
-            fSkewB = 0.0;
+            fSkewA = 0.0;
+            fSkewB = fSkew;
         }
         aDeltaPos += SubPixelToLogic(basegfx::B2DPoint(nXOffset / fXScale, 0)) - SubPixelToLogic(basegfx::B2DPoint());
         if( i < rGlyphs.size()-1 )
