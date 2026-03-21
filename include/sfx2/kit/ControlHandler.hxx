@@ -157,7 +157,7 @@ public:
         auto popIt = rDevice.ScopedPush(vcl::PushFlags::MAPMODE);
         MapMode aDeviceMapMode(rDevice.GetMapMode());
 
-        const Fraction scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
+        const double scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
         Fraction scaleX = Fraction(aOutputSize.Width(), rTileRect.GetWidth()) * scale;
         Fraction scaleY = Fraction(aOutputSize.Height(), rTileRect.GetHeight()) * scale;
         aDeviceMapMode.SetScaleX(scaleX);
