@@ -1934,7 +1934,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf114443_PPSX)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testConnectorShapeAnimationTarget)
 {
     createSdImpressDoc("pptx/connector-shape-animations.pptx");
-    save(u"Impress Office Open XML"_ustr);
+    save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
