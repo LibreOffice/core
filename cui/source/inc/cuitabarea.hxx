@@ -761,6 +761,8 @@ private:
     void FillPaletteLB();
 
     DECL_LINK(ClickAddHdl_Impl, weld::Button&, void);
+    void NameDialogHdl_Impl(const OUString& rName);
+    void AddColorFromNameDialog(const OUString& aName);
     DECL_LINK(ClickWorkOnHdl_Impl, weld::Button&, void);
     DECL_LINK(ClickDeleteHdl_Impl, weld::Button&, void);
     DECL_STATIC_LINK(SvxColorTabPage, OnMoreColorsClick, weld::Button&, void);

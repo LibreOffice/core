@@ -320,7 +320,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl, weld::Entry&, void)
 IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
 {
     OUString aNewName( SvxResId( RID_SVXSTR_COLOR ) );
-    OUString aDesc( CuiResId( RID_CUISTR_DESC_COLOR ) );
     OUString aName;
 
     tools::Long j = 1;
@@ -332,57 +331,72 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
         bValidColorName = (FindInCustomColors(aName) == -1);
     }
 
+    NameDialogHdl_Impl(aName);
+}
+
+void SvxColorTabPage::NameDialogHdl_Impl(const OUString& rName)
+{
+    OUString aDesc( CuiResId( RID_CUISTR_DESC_COLOR ) );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-    sal_uInt16 nError = 1;
+    VclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), rName, aDesc));
 
-    while (pDlg->Execute() == RET_OK)
-    {
-        aName = pDlg->GetName();
-
-        bValidColorName = (FindInCustomColors(aName) == -1);
-        if (bValidColorName)
+    pDlg->StartExecuteAsync([this, pDlg](sal_Int32 nResult) {
+        if (nResult == RET_OK)
         {
-            nError = 0;
-            break;
+            OUString aName = pDlg->GetName();
+            pDlg->disposeOnce();
+
+            if (FindInCustomColors(aName) == -1)
+            {
+                // Valid name — add the color
+                AddColorFromNameDialog(aName);
+                return;
+            }
+
+            // Duplicate name — warn user, then re-show with a new dialog
+            std::shared_ptr<weld::Builder> xBuilder(
+                Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
+            std::shared_ptr<weld::MessageDialog> xWarnBox(
+                xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
+            xWarnBox->runAsync(xWarnBox, [this, aName, xBuilder](sal_Int32 /*nWarnResult*/) {
+                // The original dialog only has an OK button, so always re-show
+                NameDialogHdl_Impl(aName);
+            });
+            return;
         }
 
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/queryduplicatedialog.ui"_ustr));
-        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog(u"DuplicateNameDialog"_ustr));
-        if (xWarnBox->run() != RET_OK)
-            break;
-    }
+        pDlg->disposeOnce();
+        UpdateModified();
+    });
+}
 
-    pDlg.disposeAndClear();
+void SvxColorTabPage::AddColorFromNameDialog(const OUString& aName)
+{
+    m_xSelectPalette->set_active(0);
+    SelectPaletteLBHdl(*m_xSelectPalette);
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
+    css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
+    sal_Int32 nSize = aCustomColorList.getLength();
+    aCustomColorList.realloc( nSize + 1 );
+    aCustomColorNameList.realloc( nSize + 1 );
+    aCustomColorList.getArray()[nSize] = sal_Int32(m_aCurrentColor.m_aColor);
+    aCustomColorNameList.getArray()[nSize] = aName;
+    officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
+    officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);
+    batch->commit();
+    OUString sLastColorItemId = nSize > 0 ? m_xIconViewColorList->get_id(nSize - 1) : OUString();
+    sal_Int32 nId = !sLastColorItemId.isEmpty() ? sLastColorItemId.toInt32() : -1;
+    ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorVirtualDevice(m_aCurrentColor.m_aColor);
+    OUString sId = OUString::number(nId + 1);
+    m_xIconViewColorList->insert( nId + 1, &aName, &sId, pVDev, nullptr);
+    m_xIconViewColorList->select( nId + 1 );
+    if (m_xIconViewRecentList)
+        m_xIconViewRecentList->unselect_all(); // needed if color is added from recent colors
+    vColors = maPaletteManager.GetColors();
 
-    if (!nError)
-    {
-        m_xSelectPalette->set_active(0);
-        SelectPaletteLBHdl(*m_xSelectPalette);
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
-        css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
-        sal_Int32 nSize = aCustomColorList.getLength();
-        aCustomColorList.realloc( nSize + 1 );
-        aCustomColorNameList.realloc( nSize + 1 );
-        aCustomColorList.getArray()[nSize] = sal_Int32(m_aCurrentColor.m_aColor);
-        aCustomColorNameList.getArray()[nSize] = aName;
-        officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
-        officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);
-        batch->commit();
-        OUString sLastColorItemId = nSize > 0 ? m_xIconViewColorList->get_id(nSize - 1) : OUString();
-        sal_Int32 nId = !sLastColorItemId.isEmpty() ? sLastColorItemId.toInt32() : -1;
-        auto pVDev = SvxColorIconView::createColorVirtualDevice(m_aCurrentColor.m_aColor);
-        OUString sId = OUString::number(nId + 1);
-        m_xIconViewColorList->insert( nId + 1, &aName, &sId, pVDev, nullptr);
-        m_xIconViewColorList->select( nId + 1 );
-        if (m_xIconViewRecentList)
-            m_xIconViewRecentList->unselect_all(); // needed if color is added from recent colors
-        vColors = maPaletteManager.GetColors();
-
-        m_xBtnDelete->set_sensitive(true);
-        m_xBtnDelete->set_tooltip_text(u""_ustr);
-    }
+    m_xBtnDelete->set_sensitive(true);
+    m_xBtnDelete->set_tooltip_text(u""_ustr);
 
     UpdateModified();
 }
