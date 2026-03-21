@@ -316,14 +316,21 @@ namespace pcr
             return;
         }
 
-        ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) ); // check if property is known by the handler
+        PropertyId nPropId;
+        // tdf#170961: don't hold mutex longer than necessary; specifically, do not hold it while
+        // calling component's setPropertyValue, which may call into main thread
+        Reference<XPropertySet> xComponent;
+        {
+            osl::MutexGuard aGuard(m_aMutex);
+            nPropId = impl_getPropertyId_throwUnknownProperty(_rPropertyName);
+            xComponent = m_xComponent;
+        }
 
         Reference< graphic::XGraphicObject > xGrfObj;
         if ( PROPERTY_ID_IMAGE_URL == nPropId && ( _rValue >>= xGrfObj ) )
         {
             DBG_ASSERT( xGrfObj.is(), "FormComponentPropertyHandler::setPropertyValue() xGrfObj is invalid");
-            m_xComponent->setPropertyValue(PROPERTY_GRAPHIC, uno::Any(xGrfObj->getGraphic()));
+            xComponent->setPropertyValue(PROPERTY_GRAPHIC, uno::Any(xGrfObj->getGraphic()));
         }
         else if ( PROPERTY_ID_FONT == nPropId )
         {
@@ -333,21 +340,21 @@ namespace pcr
                 SAL_WARN("extensions.propctrlr", "setPropertyValue: unable to get property " << PROPERTY_ID_FONT);
 
             for (const NamedValue& fontPropertyValue : aFontPropertyValues)
-                m_xComponent->setPropertyValue( fontPropertyValue.Name, fontPropertyValue.Value );
+                xComponent->setPropertyValue( fontPropertyValue.Name, fontPropertyValue.Value );
         }
         else
         {
             Any aValue = _rValue;
 
             Reference< resource::XStringResourceResolver > xStringResourceResolver
-                = lcl_getStringResourceResolverForProperty( m_xComponent, _rPropertyName, _rValue );
+                = lcl_getStringResourceResolverForProperty( xComponent, _rPropertyName, _rValue );
             if( xStringResourceResolver.is() )
             {
                 Reference< resource::XStringResourceManager >
                     xStringResourceManager( xStringResourceResolver, UNO_QUERY );
                 if( xStringResourceManager.is() )
                 {
-                    Any aPropertyValue( m_xComponent->getPropertyValue( _rPropertyName ) );
+                    Any aPropertyValue( xComponent->getPropertyValue( _rPropertyName ) );
                     TypeClass eType = aPropertyValue.getValueTypeClass();
                     if( eType == TypeClass_STRING )
                     {
@@ -375,7 +382,7 @@ namespace pcr
 
                         // Create new Ids
                         std::unique_ptr<OUString[]> pNewPureIds(new OUString[nNewCount]);
-                        Any aNameAny = m_xComponent->getPropertyValue(PROPERTY_NAME);
+                        Any aNameAny = xComponent->getPropertyValue(PROPERTY_NAME);
                         OUString sControlName;
                         aNameAny >>= sControlName;
                         OUString aIdStrBase = aDot
@@ -462,7 +469,7 @@ namespace pcr
                 }
             }
 
-            m_xComponent->setPropertyValue( _rPropertyName, aValue );
+            xComponent->setPropertyValue( _rPropertyName, aValue );
         }
     }
 
