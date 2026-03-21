@@ -737,11 +737,6 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
     m_aPrefSize.setHeight(basegfx::fround<tools::Long>(m_aPrefSize.Height() * fScaleY));
 }
 
-void GDIMetaFile::Scale( const Fraction& rScaleX, const Fraction& rScaleY )
-{
-    Scale( static_cast<double>(rScaleX), static_cast<double>(rScaleY) );
-}
-
 void GDIMetaFile::Clip( const tools::Rectangle& i_rClipRect )
 {
     tools::Rectangle aCurRect( i_rClipRect );

@@ -686,7 +686,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         }
         else
         {
-            aMtf.Scale( Fraction( rDestSize.Width(), aSrcSize.Width() ), Fraction( rDestSize.Height(), aSrcSize.Height() ) );
+            aMtf.Scale( double(rDestSize.Width()) / aSrcSize.Width(), double(rDestSize.Height()) / aSrcSize.Height() );
             aMtf.SetPrefMapMode( rDestMap );
         }
 

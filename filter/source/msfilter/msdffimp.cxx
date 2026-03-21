@@ -221,8 +221,8 @@ void Impl_OlePres::Write( SvStream & rStm )
             Size aPrefS( pMtf->GetPrefSize() );
             Size aS = OutputDevice::LogicToLogic(aPrefS, MapMode(nMU), MapMode(MapUnit::Map100thMM));
 
-            pMtf->Scale( Fraction( aS.Width(), aPrefS.Width() ),
-                         Fraction( aS.Height(), aPrefS.Height() ) );
+            pMtf->Scale( double(aS.Width()) / aPrefS.Width(),
+                         double(aS.Height()) / aPrefS.Height() );
             pMtf->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
             pMtf->SetPrefSize( aS );
         }
