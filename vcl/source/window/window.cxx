@@ -3411,6 +3411,26 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                 sal_Int32 nHeight = pChild->get_grid_height();
                 if (nHeight > 1)
                     rJsonWriter.put("height", nHeight);
+
+                VclAlign eHalign = pChild->get_halign();
+                if (eHalign != VclAlign::Fill)
+                {
+                    if (eHalign == VclAlign::Start)
+                        rJsonWriter.put("halign", "start");
+                    else if (eHalign == VclAlign::Center)
+                        rJsonWriter.put("halign", "center");
+                    else if (eHalign == VclAlign::End)
+                        rJsonWriter.put("halign", "end");
+                }
+
+                if (pChild->get_hexpand())
+                    rJsonWriter.put("hexpand", true);
+
+                if (pChild->get_expand())
+                    rJsonWriter.put("expand", true);
+
+                if (!pChild->get_fill())
+                    rJsonWriter.put("fill", false);
             }
             pChild = pChild->mpWindowImpl->mpNext;
         }
