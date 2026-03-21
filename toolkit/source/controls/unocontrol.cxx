@@ -1056,7 +1056,7 @@ void UnoControl::peerCreated()
 
 void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Reference< XWindowPeer >& rParentPeer )
 {
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    osl::ResettableMutexGuard aGuard(GetMutex());
     if ( !mxModel.is() )
     {
         throw RuntimeException(u"createPeer: no model!"_ustr, getXWeak());
@@ -1259,7 +1259,13 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     PrepareWindowDescriptor(aDescr);
 
     // create the peer
-    Reference<XWindowPeer> xTemp = xToolkit->createWindow( aDescr );
+    // tdf#170961: release mutex during createWindow, which may call into the main thread, while
+    // the main thread may need this mutex
+    Reference<XWindowPeer> xTemp;
+    {
+        osl::ResettableMutexGuardScopedReleaser aRelease(aGuard);
+        xTemp = xToolkit->createWindow(aDescr);
+    }
     mxVclWindowPeer.set(xTemp, UNO_QUERY);
     assert(mxVclWindowPeer);
 

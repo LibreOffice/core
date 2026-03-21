@@ -714,7 +714,7 @@ void UnoControlContainer::removeTabController( const uno::Reference< awt::XTabCo
 // awt::XControl
 void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxToolkit, const uno::Reference< awt::XWindowPeer >& rParent )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    osl::ResettableMutexGuard aGuard(GetMutex());
 
     if( getPeer().is() )
         return;
@@ -724,7 +724,12 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
         UnoControl::setVisible( false );
 
     // Create a new peer
-    UnoControl::createPeer( rxToolkit, rParent );
+    // tdf#170961: release mutex around inherited createPeer, which may call to the main thread,
+    // while the main thread may need this mutex
+    {
+        osl::ResettableMutexGuardScopedReleaser aRelease(aGuard);
+        UnoControl::createPeer(rxToolkit, rParent);
+    }
 
     // Create all children's peers
     if ( !mbCreatingCompatiblePeer )
