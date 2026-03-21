@@ -145,17 +145,17 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
     aSize = pDev->LogicToLogic( aSize, &aWilliMode, &aMod );
     if( aSize.Width() && aSize.Height() )
     {
-        Fraction aXF( rSize.Width(), aSize.Width() );
-        Fraction aYF( rSize.Height(), aSize.Height() );
+        double fXF = double(rSize.Width()) / aSize.Width();
+        double fYF = double(rSize.Height()) / aSize.Height();
 
-        DoDraw_Impl(pDev, rObjPos, aXF, aYF, rSetup, nAspect, bOutputForScreen);
+        DoDraw_Impl(pDev, rObjPos, fXF, fYF, rSetup, nAspect, bOutputForScreen);
     }
 }
 
 void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
                                const Point & rViewPos,
-                               const Fraction & rScaleX,
-                               const Fraction & rScaleY,
+                               double fScaleX,
+                               double fScaleY,
                                const JobSetup & rSetup,
                                sal_uInt16 nAspect,
                                bool bOutputForScreen )
@@ -163,8 +163,8 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     tools::Rectangle aVisArea  = GetVisArea( nAspect );
     // MapUnit of the target
     MapMode aMapMode( GetMapUnit() );
-    aMapMode.SetScaleX( rScaleX );
-    aMapMode.SetScaleY( rScaleY );
+    aMapMode.SetScaleX( Fraction(fScaleX) );
+    aMapMode.SetScaleY( Fraction(fScaleY) );
 
     // Target in Pixels
     Point aOrg   = pDev->LogicToLogic( rViewPos, nullptr, &aMapMode );
