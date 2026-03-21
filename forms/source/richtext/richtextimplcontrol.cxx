@@ -30,6 +30,7 @@
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <tools/fract.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -489,14 +490,14 @@ namespace frm
 
     void RichTextControlImpl::notifyZoomChanged()
     {
-        const Fraction& rZoom = m_pAntiImpl->GetZoom();
+        double fZoom = m_pAntiImpl->GetZoom();
 
         MapMode aMapMode( m_pAntiImpl->GetMapMode() );
-        aMapMode.SetScaleX( rZoom );
-        aMapMode.SetScaleY( rZoom );
+        aMapMode.SetScaleX( Fraction(fZoom) );
+        aMapMode.SetScaleY( Fraction(fZoom) );
         m_pAntiImpl->SetMapMode( aMapMode );
 
-        m_pViewport->SetZoom( rZoom );
+        m_pViewport->SetZoom( fZoom );
         m_pViewport->SetMapMode( aMapMode );
 
         layoutWindow();

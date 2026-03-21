@@ -1028,8 +1028,8 @@ public:
     void                                SetCursor( vcl::Cursor* pCursor );
     vcl::Cursor*                        GetCursor() const;
 
-    void                                SetZoom( const Fraction& rZoom );
-    const Fraction&                     GetZoom() const;
+    void                                SetZoom( const double fZoom );
+    double                              GetZoom() const;
     bool                                IsZoom() const;
     tools::Long                                CalcZoom( tools::Long n ) const;
 

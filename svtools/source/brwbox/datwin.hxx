@@ -60,7 +60,7 @@ class BrowserColumn final
 
 public:
                         BrowserColumn( sal_uInt16 nItemId,
-                                        OUString aTitle, tools::Long nWidthPixel, const Fraction& rCurrentZoom );
+                                        OUString aTitle, tools::Long nWidthPixel, double fCurrentZoom );
                         ~BrowserColumn();
 
     sal_uInt16          GetId() const { return _nId; }
@@ -74,8 +74,8 @@ public:
     void                Draw( BrowseBox const & rBox, OutputDevice& rDev,
                               const Point& rPos  );
 
-    void                SetWidth(tools::Long nNewWidthPixel, const Fraction& rCurrentZoom);
-    void                ZoomChanged(const Fraction& rNewZoom);
+    void                SetWidth(tools::Long nNewWidthPixel, double fCurrentZoom);
+    void                ZoomChanged(double fNewZoom);
 };
 
 void InitSettings_Impl( vcl::Window *pWin );

@@ -2345,16 +2345,8 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ )
 {
     SolarMutexGuard aGuard;
 
-    if ( GetWindow() )
-    {
-        // Fraction::Fraction takes a double, but we have a float only.
-        // The implicit conversion from float to double can result in a precision loss, i.e. 1.2 is converted to
-        // 1.200000000047something. To prevent this, we convert explicitly to double, and round it.
-        double nZoom( fZoomX );
-        Fraction aZoom(::rtl::math::round(nZoom, 4));
-        aZoom.ReduceInaccurate(10); // to avoid runovers and BigInt mapping
-        GetWindow()->SetZoom(aZoom);
-    }
+    if ( auto pWin = GetWindow() )
+        pWin->SetZoom(fZoomX);
 }
 
 // css::awt::XDockable

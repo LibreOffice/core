@@ -266,9 +266,9 @@ namespace sdr::contact {
         ::basegfx::B2DVector aZoom( 1, 1 );
         if ( pWindow )
         {
-            const Fraction& rZoom( pWindow->GetZoom() );
-            aZoom.setX( static_cast<double>(rZoom) );
-            aZoom.setY( static_cast<double>(rZoom) );
+            double fZoom( pWindow->GetZoom() );
+            aZoom.setX( fZoom );
+            aZoom.setY( fZoom );
         }
         return aZoom;
     }

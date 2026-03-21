@@ -22,6 +22,8 @@
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <tools/fract.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vcl/ctrl.hxx>
 #include <vcl/svapp.hxx>
@@ -536,7 +538,7 @@ namespace vcl
         ,m_bRTLEnabled( _rControl.IsRTLEnabled() )
     {
         Font const aUnzoomedPointFont( _rControl.GetUnzoomedControlPointFont() );
-        const Fraction& aZoom( _rControl.GetZoom() );
+        double fZoom( _rControl.GetZoom() );
         m_rTargetDevice.Push( PushFlags::MAPMODE | PushFlags::FONT | PushFlags::TEXTLAYOUTMODE );
 
         MapMode aTargetMapMode( m_rTargetDevice.GetMapMode() );
@@ -546,8 +548,8 @@ namespace vcl
         // between text in Writer and text in controls in Writer, though both have the same font.
         // So, if we have a zoom set at the control, then we do not scale the font, but instead modify the map mode
         // to accommodate for the zoom.
-        aTargetMapMode.SetScaleX( aZoom );    // TODO: shouldn't this be "current_scale * zoom"?
-        aTargetMapMode.SetScaleY( aZoom );
+        aTargetMapMode.SetScaleX( Fraction(fZoom) );    // TODO: shouldn't this be "current_scale * zoom"?
+        aTargetMapMode.SetScaleY( Fraction(fZoom) );
 
         // also, use a higher-resolution map unit than "pixels", which should save us some rounding errors when
         // translating coordinates between the reference device and the target device.
