@@ -819,11 +819,9 @@ bool OutputDevice::ImplNewFont() const
 
 bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight) const
 {
-    const float fDenominator = static_cast<float>(maMapRes.mnMapScNumY) * maMapRes.mnMapScDenomX;
-    if (fDenominator == 0.0)
+    if (maMapRes.mfMapScY == 0.0)
         return false;
-    const float fNumerator = static_cast<float>(maMapRes.mnMapScNumX) * maMapRes.mnMapScDenomY;
-    const float fStretch = fNumerator / fDenominator;
+    const double fStretch = maMapRes.mfMapScX / maMapRes.mfMapScY;
     const int nOrigWidth = mpFontInstance->mxFontMetric->GetWidth();
     const int nNewWidth = static_cast<int>(nOrigWidth * fStretch + 0.5);
 

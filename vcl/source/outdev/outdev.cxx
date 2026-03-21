@@ -122,10 +122,8 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     // struct ImplMapRes
     maMapRes.mnMapOfsX              = 0;
     maMapRes.mnMapOfsY              = 0;
-    maMapRes.mnMapScNumX            = 1;
-    maMapRes.mnMapScNumY            = 1;
-    maMapRes.mnMapScDenomX          = 1;
-    maMapRes.mnMapScDenomY          = 1;
+    maMapRes.mfMapScX               = 1;
+    maMapRes.mfMapScY               = 1;
 
     // struct ImplOutDevData- see #i82615#
     mpOutDevData.reset(new ImplOutDevData);
