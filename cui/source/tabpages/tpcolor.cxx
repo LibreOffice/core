@@ -241,8 +241,11 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 
 void SvxColorTabPage::UpdateModified()
 {
-    bool bEnable = pColorList.is() && pColorList->Count();
-    m_xBtnWorkOn->set_sensitive(bEnable);
+    // The Pick button opens a color picker and does not need pColorList,
+    // so it should always be enabled. In jsdialog, the notebook page switch
+    // signal can fire during construction before PageCreated sets the color
+    // list, which would incorrectly disable the button.
+    m_xBtnWorkOn->set_sensitive(true);
 }
 
 void SvxColorTabPage::Reset( const SfxItemSet* rSet )
