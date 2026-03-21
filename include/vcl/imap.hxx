@@ -29,7 +29,6 @@
 
 class Point;
 class Size;
-class Fraction;
 
 class VCL_DLLPUBLIC ImageMap final
 {
@@ -106,7 +105,7 @@ public:
     void                SetName( const OUString& rName ) { aName = rName; }
 
     // scales all objects of the ImageMap according to the given factor
-    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void                Scale( double fFractX, double fFracY );
 
     // Import/Export
     SAL_DLLPRIVATE void Write ( SvStream& rOStm ) const;

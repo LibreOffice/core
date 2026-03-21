@@ -22,8 +22,6 @@
 #include <vcl/imapobj.hxx>
 #include <tools/gen.hxx>
 
-class Fraction;
-
 class VCL_DLLPUBLIC IMapRectangleObject final : public IMapObject
 {
     tools::Rectangle           aRect;
@@ -51,7 +49,7 @@ public:
 
     tools::Rectangle           GetRectangle( bool bPixelCoords = true ) const;
 
-    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void                Scale( double fFractX, double fFracY );
 
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapRectangleObject& rEqObj ) const;

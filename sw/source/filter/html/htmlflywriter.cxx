@@ -1144,8 +1144,8 @@ OUString lclWriteOutImap(SwHTMLWriter& rWrt, const SfxItemSet& rItemSet, const S
         } while (bFound);
 
         bool bScale = false;
-        Fraction aScaleX(1, 1);
-        Fraction aScaleY(1, 1);
+        double fScaleX(1.0);
+        double fScaleY(1.0);
 
         const SwFormatFrameSize& rFrameSize = rFrameFormat.GetFrameSize();
         const SvxBoxItem& rBox = rFrameFormat.GetBox();
@@ -1161,7 +1161,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rWrt, const SfxItemSet& rItemSet, const S
 
             if (rRealSize.Width() != nWidth)
             {
-                aScaleX = Fraction(nWidth, rRealSize.Width());
+                fScaleX = double(nWidth) / rRealSize.Width();
                 bScale = true;
             }
         }
@@ -1178,7 +1178,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rWrt, const SfxItemSet& rItemSet, const S
 
             if (rRealSize.Height() != nHeight)
             {
-                aScaleY = Fraction(nHeight, rRealSize.Height());
+                fScaleY = double(nHeight) / rRealSize.Height();
                 bScale = true;
             }
         }
@@ -1200,7 +1200,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rWrt, const SfxItemSet& rItemSet, const S
         if (bScale)
         {
             ImageMap aScaledIMap(*pIMap);
-            aScaledIMap.Scale(aScaleX, aScaleY);
+            aScaledIMap.Scale(fScaleX, fScaleY);
             HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), rWrt.GetBaseURL(), aScaledIMap, aIMapName,
                                         aIMapEventTable,
                                         rWrt.m_bCfgStarBasic,

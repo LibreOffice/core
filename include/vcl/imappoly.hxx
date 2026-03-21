@@ -23,8 +23,6 @@
 #include <vcl/imapobj.hxx>
 #include <tools/poly.hxx>
 
-class Fraction;
-
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) IMapPolygonObject final : public IMapObject
 {
     tools::Polygon aPoly;
@@ -57,7 +55,7 @@ public:
     const tools::Rectangle&    GetExtraEllipse() const { return aEllipse; }
     void                SetExtraEllipse( const tools::Rectangle& rEllipse );
 
-    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void                Scale( double fFractX, double fFracY );
 
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapPolygonObject& rEqObj );
