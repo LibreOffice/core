@@ -103,6 +103,8 @@ PHLayout const pPHLayout[] =
     { EppLayout::TWOCOLUMNSANDTITLE,    { 0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x12, true, true, false }
 };
 
+const Fraction gPPTFraction(1,576);
+
 PPTWriterBase::PPTWriterBase()
     : mbStatusIndicator(false)
     , mbPresObj(false)
@@ -113,9 +115,8 @@ PPTWriterBase::PPTWriterBase()
     , mnPages(0)
     , mnMasterPages(0)
     , mnCanvasMasterIndex(SAL_MAX_UINT32)
-    , maFraction(1, 576)
     , maMapModeSrc(MapUnit::Map100thMM)
-    , maMapModeDest(MapUnit::MapInch, Point(), maFraction, maFraction)
+    , maMapModeDest(MapUnit::MapInch, Point(), gPPTFraction, gPPTFraction)
     , meLatestPageType(NORMAL)
     , mpStyleSheet(nullptr)
 {
@@ -135,9 +136,8 @@ PPTWriterBase::PPTWriterBase( const rtl::Reference< SdXImpressDocument > & rXMod
     , mnPages(0)
     , mnMasterPages(0)
     , mnCanvasMasterIndex(SAL_MAX_UINT32)
-    , maFraction(1, 576)
     , maMapModeSrc(MapUnit::Map100thMM)
-    , maMapModeDest(MapUnit::MapInch, Point(), maFraction, maFraction)
+    , maMapModeDest(MapUnit::MapInch, Point(), gPPTFraction, gPPTFraction)
     , meLatestPageType (NORMAL)
     , mpStyleSheet(nullptr)
 {
