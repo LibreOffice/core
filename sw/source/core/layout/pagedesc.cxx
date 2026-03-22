@@ -701,7 +701,7 @@ SwPageFootnoteInfo::SwPageFootnoteInfo()
     : m_nMaxHeight( 0 )
     , m_nLineWidth(10)
     , m_eLineStyle( SvxBorderLineStyle::SOLID )
-    , m_Width( 25, 100 )
+    , m_Width( 25.0 / 100 )
     , m_nTopDist( 57 )         //1mm
     , m_nBottomDist( 57 )
 {

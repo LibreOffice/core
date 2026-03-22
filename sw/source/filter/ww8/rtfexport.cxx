@@ -468,7 +468,7 @@ void RtfExport::WriteFootnoteSettings()
 {
     const SwPageFootnoteInfo& rFootnoteInfo = m_rDoc.GetPageDesc(0).GetFootnoteInfo();
     // Request a separator only in case the width is larger than zero.
-    bool bSeparator = double(rFootnoteInfo.GetWidth()) > 0;
+    bool bSeparator = rFootnoteInfo.GetWidth() > 0;
 
     Strm()
         .WriteChar('{')

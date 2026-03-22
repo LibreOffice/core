@@ -85,9 +85,8 @@ bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         case MID_LINE_COLOR        :     rVal <<= m_aFootnoteInfo.GetLineColor();break;
         case MID_LINE_RELWIDTH     :
         {
-            Fraction aTmp( 100, 1 );
-            aTmp *= m_aFootnoteInfo.GetWidth();
-            rVal <<= static_cast<sal_Int8>(static_cast<tools::Long>(aTmp));
+            auto nTmp = std::round(m_aFootnoteInfo.GetWidth() * 100);
+            rVal <<= static_cast<sal_Int8>(nTmp);
         }
         break;
         case MID_LINE_ADJUST       :     rVal <<= static_cast<sal_Int16>(m_aFootnoteInfo.GetAdj());break;//text::HorizontalAdjust
@@ -156,7 +155,7 @@ bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             if(nSet < 0)
                 bRet = false;
             else
-                m_aFootnoteInfo.SetWidth(Fraction(nSet, 100));
+                m_aFootnoteInfo.SetWidth(double(nSet) / 100);
         }
         break;
         case MID_LINE_ADJUST       :
