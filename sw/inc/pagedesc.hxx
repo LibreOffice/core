@@ -51,7 +51,7 @@ private:
     sal_uLong   m_nLineWidth;   ///< width of separator line
     SvxBorderLineStyle m_eLineStyle;  ///< Style of the separator line
     Color       m_LineColor;    ///< color of the separator line
-    Fraction    m_Width;        ///< percentage width of the separator line.
+    double      m_Width;        ///< percentage width of the separator line.
     css::text::HorizontalAdjust m_eAdjust;      ///< line adjustment.
     SwTwips     m_nTopDist;     ///< distance between body and separator.
     SwTwips     m_nBottomDist;  ///< distance between separator and first footnote
@@ -61,7 +61,7 @@ public:
     sal_uLong   GetLineWidth() const    { return m_nLineWidth; }
     const Color& GetLineColor() const   { return m_LineColor;}
     SvxBorderLineStyle  GetLineStyle() const { return m_eLineStyle; }
-    const Fraction& GetWidth() const    { return m_Width; }
+    double GetWidth() const    { return m_Width; }
     css::text::HorizontalAdjust GetAdj() const { return m_eAdjust; }
     SwTwips     GetTopDist() const      { return m_nTopDist; }
     SwTwips     GetBottomDist() const   { return m_nBottomDist; }
@@ -70,7 +70,7 @@ public:
     void SetLineWidth(sal_uLong const nSet) { m_nLineWidth = nSet; }
     void SetLineStyle(SvxBorderLineStyle const eSet) {m_eLineStyle = eSet;}
     void SetLineColor(const Color& rCol)    { m_LineColor = rCol;}
-    void SetWidth(const Fraction & rNew)    { m_Width = rNew; }
+    void SetWidth(double rNew)    { m_Width = rNew; }
     void SetAdj(css::text::HorizontalAdjust const eNew)   { m_eAdjust = eNew; }
     void SetTopDist   (SwTwips const nNew)  { m_nTopDist = nNew; }
     void SetBottomDist(SwTwips const nNew)  { m_nBottomDist = nNew; }

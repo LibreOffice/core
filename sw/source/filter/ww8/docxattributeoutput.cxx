@@ -9182,7 +9182,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
         // Request separator only if both width and thickness are non-zero.
         bSeparator = rFootnoteInfo.GetLineStyle() != SvxBorderLineStyle::NONE
                   && rFootnoteInfo.GetLineWidth() > 0
-                  && double(rFootnoteInfo.GetWidth()) > 0;
+                  && rFootnoteInfo.GetWidth() > 0;
         nHeight = sw::FootnoteSeparatorHeight(m_rExport.m_rDoc, rFootnoteInfo);
 
         const IDocumentSettingAccess& rIDSA = m_rExport.m_rDoc.getIDocumentSettingAccess();

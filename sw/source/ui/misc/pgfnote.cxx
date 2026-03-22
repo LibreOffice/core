@@ -276,7 +276,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
     rFootnoteInfo.SetAdj(static_cast<css::text::HorizontalAdjust>(m_xLinePosBox->get_active()));
 
     // Width
-    rFootnoteInfo.SetWidth(Fraction(m_xLineLengthEdit->get_value(FieldUnit::PERCENT), 100));
+    rFootnoteInfo.SetWidth(double(m_xLineLengthEdit->get_value(FieldUnit::PERCENT)) / 100);
 
     const SfxPoolItem* pOldItem;
     if(nullptr == (pOldItem = GetOldItem( *rSet, FN_PARAM_FTN_INFO )) ||
