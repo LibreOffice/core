@@ -186,6 +186,53 @@ bool lcl_ExecuteFilterDialog(const uno::Sequence<beans::PropertyValue>& rPropsFo
 }
 } // anonymous ns
 
+OUString GraphicHelper::ExportGraphicToTempFile(const Graphic& rGraphic, std::u16string_view rGraphicName)
+{
+    OUString aExtension;
+    GetPreferredExtension(aExtension, rGraphic);
+
+    // Determine a filename
+    INetURLObject aURL;
+    aURL.SetSmartURL(rGraphicName);
+    OUString aBaseName = aURL.GetLastName();
+    if (aBaseName.isEmpty())
+        aBaseName = "image";
+
+    // Strip existing extension from basename
+    sal_Int32 nDotPos = aBaseName.lastIndexOf('.');
+    if (nDotPos > 0)
+        aBaseName = aBaseName.copy(0, nDotPos);
+
+    // Write to /tmp/ — the COOL download handler constructs the URL as
+    // "../../" + filename relative to /tmp/user/docs/, which resolves to /tmp/.
+    OUString aTempFileURL = "file:///tmp/" + aBaseName + "." + aExtension;
+
+    // Try to write the native graphic data first
+    GfxLink aGfxLink = rGraphic.GetGfxLink();
+    if (aGfxLink.GetType() != GfxLinkType::NONE)
+    {
+        SfxMedium aOut(aTempFileURL, StreamMode::WRITE | StreamMode::SHARE_DENYNONE);
+        SvStream* pStream = aOut.GetOutStream();
+        if (pStream)
+        {
+            pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+            aOut.Close();
+            aOut.Commit();
+            if (aOut.GetErrorIgnoreWarning() == ERRCODE_NONE)
+                return aTempFileURL;
+        }
+    }
+
+    // Fallback: use GraphicFilter to export
+    if (XOutBitmap::WriteGraphic(rGraphic, aTempFileURL, aExtension,
+                                  XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension
+                                      | XOutFlags::UseNativeIfPossible)
+        != ERRCODE_NONE)
+        return OUString();
+
+    return aTempFileURL;
+}
+
 OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGraphic, const OUString& rGraphicName)
 {
     sfx2::FileDialogHelper aDialogHelper(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);

@@ -2016,29 +2016,45 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if (const SdrGrafObj* pObj = dynamic_cast<const SdrGrafObj*>(rMarkList.GetMark(0)->GetMarkedSdrObj()))
                     if (pObj->GetGraphicType() == GraphicType::Bitmap || pObj->GetGraphicType() == GraphicType::GdiMetafile)
                     {
-                        weld::Window* pFrame = GetFrameWeld();
-                        GraphicAttr aGraphicAttr = pObj->GetGraphicAttr();
-                        short nState = RET_CANCEL;
-                        if (aGraphicAttr != GraphicAttr()) // the image has been modified
+                        if (comphelper::LibreOfficeKit::isActive())
                         {
-                            if (pFrame)
+                            const GraphicObject& aGraphicObject(pObj->GetGraphicObject());
+                            OUString sTempFileURL = GraphicHelper::ExportGraphicToTempFile(
+                                aGraphicObject.GetGraphic(), u"");
+                            if (!sTempFileURL.isEmpty())
                             {
-                                nState = GraphicHelper::HasToSaveTransformedImage(pFrame);
+                                SfxViewShell* pViewShell = SfxViewShell::Current();
+                                if (pViewShell)
+                                    pViewShell->libreOfficeKitViewCallback(
+                                        LOK_CALLBACK_EXPORT_FILE, sTempFileURL.toUtf8());
                             }
                         }
                         else
                         {
-                            nState = RET_NO;
-                        }
+                            weld::Window* pFrame = GetFrameWeld();
+                            GraphicAttr aGraphicAttr = pObj->GetGraphicAttr();
+                            short nState = RET_CANCEL;
+                            if (aGraphicAttr != GraphicAttr()) // the image has been modified
+                            {
+                                if (pFrame)
+                                {
+                                    nState = GraphicHelper::HasToSaveTransformedImage(pFrame);
+                                }
+                            }
+                            else
+                            {
+                                nState = RET_NO;
+                            }
 
-                        if (nState == RET_YES)
-                        {
-                            GraphicHelper::ExportGraphic(pFrame, pObj->GetTransformedGraphic(), u""_ustr);
-                        }
-                        else if (nState == RET_NO)
-                        {
-                            const GraphicObject& aGraphicObject(pObj->GetGraphicObject());
-                            GraphicHelper::ExportGraphic(pFrame, aGraphicObject.GetGraphic(), u""_ustr);
+                            if (nState == RET_YES)
+                            {
+                                GraphicHelper::ExportGraphic(pFrame, pObj->GetTransformedGraphic(), u""_ustr);
+                            }
+                            else if (nState == RET_NO)
+                            {
+                                const GraphicObject& aGraphicObject(pObj->GetGraphicObject());
+                                GraphicHelper::ExportGraphic(pFrame, aGraphicObject.GetGraphic(), u""_ustr);
+                            }
                         }
                     }
             }

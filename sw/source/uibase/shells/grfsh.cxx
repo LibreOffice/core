@@ -56,6 +56,9 @@
 #include <swwait.hxx>
 #include <svx/extedit.hxx>
 #include <svx/graphichelper.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/viewsh.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/drawitem.hxx>
@@ -142,6 +145,26 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
         case SID_SAVE_GRAPHIC:
         {
+            const Graphic *pGraphic = rSh.GetGraphic();
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                if (pGraphic)
+                {
+                    OUString sGrfNm;
+                    OUString sFilterNm;
+                    rSh.GetGrfNms(&sGrfNm, &sFilterNm);
+                    OUString sTempFileURL = GraphicHelper::ExportGraphicToTempFile(*pGraphic, sGrfNm);
+                    if (!sTempFileURL.isEmpty())
+                    {
+                        SfxViewShell* pViewShell = SfxViewShell::Current();
+                        if (pViewShell)
+                            pViewShell->libreOfficeKitViewCallback(
+                                LOK_CALLBACK_EXPORT_FILE, sTempFileURL.toUtf8());
+                    }
+                }
+                break;
+            }
+
             GraphicAttr aGraphicAttr;
             rSh.GetGraphicAttr(aGraphicAttr);
 
@@ -173,7 +196,6 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
             else if (nState == RET_NO)
             {
-                const Graphic *pGraphic = rSh.GetGraphic();
                 if(nullptr != pGraphic)
                 {
                     OUString sGrfNm;
