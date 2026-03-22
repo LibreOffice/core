@@ -55,7 +55,7 @@ namespace sd {
  *  SdDisplay - Control
  */
 SdDisplay::SdDisplay()
-    : aScale(1, 1)
+    : mfScale(1.0)
 {
 }
 
@@ -90,8 +90,8 @@ void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
     Size aSize = GetOutputSizePixel();
 
     Size aBmpSize = aBitmap.GetSizePixel();
-    aBmpSize.setWidth( static_cast<::tools::Long>( static_cast<double>(aBmpSize.Width()) * static_cast<double>(aScale) ) );
-    aBmpSize.setHeight( static_cast<::tools::Long>( static_cast<double>(aBmpSize.Height()) * static_cast<double>(aScale) ) );
+    aBmpSize.setWidth( static_cast<::tools::Long>( static_cast<double>(aBmpSize.Width()) * mfScale ) );
+    aBmpSize.setHeight( static_cast<::tools::Long>( static_cast<double>(aBmpSize.Height()) * mfScale ) );
 
     if( aBmpSize.Width() < aSize.Width() )
         aPt.setX( ( aSize.Width() - aBmpSize.Width() ) / 2 );
@@ -101,9 +101,9 @@ void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
     aBitmap.Draw(&rRenderContext, aPt, aBmpSize);
 }
 
-void SdDisplay::SetScale( const Fraction& rFrac )
+void SdDisplay::SetScale( double rFrac )
 {
-    aScale = rFrac;
+    mfScale = rFrac;
 }
 
 void SdDisplay::SetDrawingArea(weld::DrawingArea* pDrawingArea)
@@ -464,8 +464,8 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, weld::Button&, rBtn, void )
     }
 
     // calculate and set zoom for DisplayWin
-    Fraction aFrac(GetScale());
-    m_xCtlDisplay->SetScale(aFrac);
+    double fFrac(GetScale());
+    m_xCtlDisplay->SetScale(fFrac);
 
     UpdateControl();
 }
@@ -661,8 +661,8 @@ Fraction AnimationWindow::GetScale()
 void AnimationWindow::Resize()
 {
     SfxDockingWindow::Resize();
-    Fraction aFrac(GetScale());
-    m_xCtlDisplay->SetScale(aFrac);
+    double fFrac(GetScale());
+    m_xCtlDisplay->SetScale(fFrac);
 }
 
 bool AnimationWindow::Close()
@@ -857,8 +857,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
     }
 
     // calculate and set zoom for DisplayWin
-    Fraction aFrac( GetScale() );
-    m_xCtlDisplay->SetScale(aFrac);
+    double fFrac( GetScale() );
+    m_xCtlDisplay->SetScale(fFrac);
 
     UpdateControl();
 }
