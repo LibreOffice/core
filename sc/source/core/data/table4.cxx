@@ -60,12 +60,21 @@
 
 namespace {
 
-short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMinDigits = nullptr )
+enum HeadNoneTail
+{
+    // The code relies on "head" less than zero ("none"), and "tail" greater then zero
+    NumHead = -1,
+    NumNone = 0,
+    NumTail = 1,
+    NumTailWithSign = 2, // put back the '+'
+};
+
+HeadNoneTail lcl_DecompValueString(OUString& rValue, sal_Int32& nVal, sal_uInt16* pMinDigits = nullptr)
 {
     if ( rValue.isEmpty() )
     {
         nVal = 0;
-        return 0;
+        return NumNone;
     }
     const sal_Unicode* p = rValue.getStr();
     sal_Int32 nSign = 0;
@@ -88,7 +97,7 @@ short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMin
         if ( p[nSign] == '0' && pMinDigits && ( nNum - nSign > *pMinDigits ) )
             *pMinDigits = nNum - nSign;
         rValue = rValue.copy(nNum);
-        return -1;
+        return NumHead;
     }
     else
     {
@@ -108,14 +117,14 @@ short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMin
             if ( p[nNum+1+nSign] == '0' && pMinDigits && ( nEnd - nNum - nSign > *pMinDigits ) )
                 *pMinDigits = nEnd - nNum - nSign;
             rValue = rValue.copy(0, nNum + 1);
-            if (nSign) // use the return value = 2 to put back the '+'
-                return 2;
+            if (nSign)
+                return NumTailWithSign;
             else
-                return 1;
+                return NumTail;
         }
     }
     nVal = 0;
-    return 0;
+    return NumNone;
 }
 
 OUString lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
@@ -478,9 +487,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         return;
                     }
                 }
-                short nFlag1, nFlag2;
                 sal_Int32 nVal1, nVal2;
-                nFlag1 = lcl_DecompValueString(aStr, nVal1, &rMinDigits);
+                HeadNoneTail nFlag1 = lcl_DecompValueString(aStr, nVal1, &rMinDigits);
                 if (nFlag1)
                 {
                     bool bVal = true;
@@ -494,7 +502,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)
                         {
                             aStr2 = aCell.getString(rDocument);
-                            nFlag2 = lcl_DecompValueString(aStr2, nVal2, &rMinDigits);
+                            HeadNoneTail nFlag2 = lcl_DecompValueString(aStr2, nVal2, &rMinDigits);
                             if (nFlag1 == nFlag2 && aStr == aStr2)
                             {
                                 double nDiff = approxDiff(nVal2, nVal1);
@@ -719,12 +727,12 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             //  -> longest number defines rMinDigits
 
             sal_Int32 nVal1;
-            short nFlag1 = lcl_DecompValueString( aStr, nVal1, &rMinDigits );
+            HeadNoneTail nFlag1 = lcl_DecompValueString(aStr, nVal1, &rMinDigits);
             if ( nFlag1 )
             {
                 sal_Int32 nVal2;
                 aStr = GetString( nCol+nAddX, nRow+nAddY );
-                short nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
+                HeadNoneTail nFlag2 = lcl_DecompValueString(aStr, nVal2, &rMinDigits);
                 if ( nFlag1 == nFlag2 )
                 {
                     rInc = approxDiff( nVal2, nVal1);
@@ -1469,21 +1477,21 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                         {
                             sal_Int32 nVal;
                             sal_uInt16 nCellDigits = 0; // look at each source cell individually
-                            short nFlag = lcl_DecompValueString( aValue, nVal, &nCellDigits );
-                            if ( nFlag < 0 )
+                            HeadNoneTail nFlag = lcl_DecompValueString(aValue, nVal, &nCellDigits);
+                            if (nFlag < NumNone)
                             {
                                 if (aValue == ScGlobal::GetOrdinalSuffix( nVal))
                                     aValue = ScGlobal::GetOrdinalSuffix( nVal + nDelta);
                                 aValue = lcl_ValueString( nVal + nDelta, nCellDigits ) + aValue;
                             }
-                            else if ( nFlag > 0 )
+                            else if (nFlag > NumNone)
                             {
                                 sal_Int32 nNextValue;
                                 if ( nVal < 0 )
                                     nNextValue = nVal - nDelta;
                                 else
                                     nNextValue = nVal + nDelta;
-                                if ( nFlag == 2 && nNextValue >= 0 ) // Put back the '+'
+                                if (nFlag == NumTailWithSign && nNextValue >= 0) // Put back the '+'
                                     aValue += "+";
                                 aValue += lcl_ValueString( nNextValue, nCellDigits );
                             }
@@ -1533,7 +1541,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
             bool bValueOk;
             double nStart;
             sal_Int32 nVal = 0;
-            short nHeadNoneTail = 0;
+            HeadNoneTail nHeadNoneTail = NumNone;
             ScRefCellValue aCell = GetCellValue(nCol1, nRow1);
             if (!aCell.isEmpty())
             {
@@ -1595,7 +1603,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
             {
                 if ( nHeadNoneTail )
                 {
-                    if ( nHeadNoneTail < 0 )
+                    if (nHeadNoneTail < NumNone)
                     {
                         if (aValue == ScGlobal::GetOrdinalSuffix( nVal))
                             aValue = ScGlobal::GetOrdinalSuffix( static_cast<sal_Int32>(nStart) );
@@ -1604,7 +1612,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     }
                     else
                     {
-                        if ( nHeadNoneTail == 2 && nStart >= 0 ) // Put back the '+'
+                        if (nHeadNoneTail == NumTailWithSign && nStart >= 0) // Put back the '+'
                             aValue += "+";
                         aValue += lcl_ValueString( static_cast<sal_Int32>(nStart), nMinDigits );
                     }
@@ -1920,7 +1928,7 @@ void ScTable::FillAutoSimple(
     bool bBooleanCell = false;
     bool bPercentCell = false;
     sal_uInt16 nCellDigits = 0;
-    short nHeadNoneTail = 0;
+    HeadNoneTail nHeadNoneTail = NumNone;
     sal_Int32 nStringValue = 0;
     OUString aValue;
     ScCellValue aSrcCell;
@@ -2029,7 +2037,7 @@ void ScTable::FillAutoSimple(
                         else
                             nNextValue = nStringValue + static_cast<sal_Int32>(nDelta);
 
-                        if ( nHeadNoneTail < 0 )
+                        if (nHeadNoneTail < NumNone)
                         {
                             setSuffixCell(
                                 aCol[rCol], rRow,
@@ -2039,7 +2047,7 @@ void ScTable::FillAutoSimple(
                         else
                         {
                             OUString aStr;
-                            if (nHeadNoneTail == 2 && nNextValue >= 0) // Put back the '+'
+                            if (nHeadNoneTail == NumTailWithSign && nNextValue >= 0) // Put back the '+'
                                 aStr = aValue + "+" + lcl_ValueString(nNextValue, nCellDigits);
                             else
                                 aStr = aValue + lcl_ValueString(nNextValue, nCellDigits);
@@ -2549,7 +2557,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     aValue = ScEditUtil::GetString(*aSrcCell.getEditText(), rDocument);
                 sal_Int32 nStringValue;
                 sal_uInt16 nMinDigits = nArgMinDigits;
-                short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );
+                HeadNoneTail nHeadNoneTail = lcl_DecompValueString(aValue, nStringValue, &nMinDigits);
                 if ( nHeadNoneTail )
                 {
                     const double nStartVal = static_cast<double>(nStringValue);
@@ -2621,7 +2629,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             else if (!bOverflow && bNonEmpty)
                             {
                                 nStringValue = static_cast<sal_Int32>(nVal);
-                                if ( nHeadNoneTail < 0 )
+                                if (nHeadNoneTail < NumNone)
                                 {
                                     setSuffixCell(
                                         aCol[nCol], static_cast<SCROW>(nRow),
@@ -2631,7 +2639,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 else
                                 {
                                     OUString aStr;
-                                    if (nHeadNoneTail == 2 && nStringValue >= 0) // Put back the '+'
+                                    if (nHeadNoneTail == NumTailWithSign && nStringValue >= 0) // Put back the '+'
                                         aStr = aValue + "+";
                                     else
                                         aStr = aValue;
