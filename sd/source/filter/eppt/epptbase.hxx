@@ -347,7 +347,6 @@ protected:
     sal_uInt32          mnMasterPages;
     sal_uInt32          mnCanvasMasterIndex;
 
-    Fraction           maFraction;
     MapMode            maMapModeSrc;
     MapMode            maMapModeDest;
     css::awt::Size     maDestPageSize;
