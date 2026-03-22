@@ -915,6 +915,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143384_tableInFoot_negativeMargins,
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf145542_imageSize)
+{
+    // Given an ODT with an image in a frame: svg:width="2cm" but style:rel-width="100%",
+    // so the displayed size is full page width, not 2cm.
+    createSwDoc("tdf145542_image_size.fodt");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // tdf#145542: the exported wp:extent must reflect the rendered size (full page width 17cm),
+    // not the unstretched svg:width="2cm" (= 720000 EMU). Without the fix, this was 720000.
+    const sal_Int64 nCx = getXPath(pXmlDoc, "//wp:inline/wp:extent", "cx").toInt64();
+    CPPUNIT_ASSERT_GREATER(sal_Int64(6000000), nCx); // 170 mm = 6120000 EMU
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
