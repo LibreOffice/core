@@ -57,7 +57,7 @@ struct FormatOutputEntry
     std::optional<SCTAB> onTab = std::nullopt;
     std::shared_ptr<ScPatternAttr> pPattern;
     bool bGrandRow = false;
-    bool bGrandCol = false;
+    bool bGrandColumn = false;
 
     std::vector<FormatOutputField> aRowOutputFields;
     std::vector<FormatOutputField> aColumnOutputFields;
@@ -94,6 +94,8 @@ class FormatOutput
 private:
     ScDPObject& mrObject;
 
+    bool tryHandleGrandTotals(ScDocument& rDocument, sc::FormatOutputEntry const& rEntry);
+
 public:
     FormatOutput(ScDPObject& rObject)
         : mrObject(rObject)
@@ -106,6 +108,13 @@ public:
     std::vector<LineData> maRowLines;
     std::vector<LineData> maColumnLines;
 
+    SCROW mnGrandTotalRow = -1;
+    SCCOL mnGrandTotalColumn = -1;
+    SCCOL mnDataStartColumn = -1;
+    SCROW mnDataStartRow = -1;
+    SCCOL mnTabEndColumn = -1;
+    SCROW mnTabEndRow = -1;
+
     void setFormats(sc::PivotTableFormats const& rPivotTableFormats)
     {
         mpFormats.reset(new sc::PivotTableFormats(rPivotTableFormats));
@@ -116,6 +125,21 @@ public:
                            SCCOL nColPos, SCROW nRowPos, FormatResultDirection eResultDirection);
 
     void insertEmptyDataColumn(SCCOL nColPos, SCROW nRowPos);
+
+    void setGrandTotalPositions(SCROW nGrandTotalRow, SCCOL nGrandTotalColumn)
+    {
+        mnGrandTotalRow = nGrandTotalRow;
+        mnGrandTotalColumn = nGrandTotalColumn;
+    }
+
+    void setDataArea(SCCOL nDataStartColumn, SCROW nDataStartRow, SCCOL nTabEndColumn,
+                     SCROW nTabEndRow)
+    {
+        mnDataStartColumn = nDataStartColumn;
+        mnDataStartRow = nDataStartRow;
+        mnTabEndColumn = nTabEndColumn;
+        mnTabEndRow = nTabEndRow;
+    }
 
     void apply(ScDocument& rDocument);
     void prepare(SCTAB nTab, std::vector<ScDPOutLevelData> const& rColumnFields,
