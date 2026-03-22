@@ -12,6 +12,7 @@
 #include <memory>
 #include <vector>
 #include <rtl/ustring.hxx>
+#include <address.hxx>
 #include <patattr.hxx>
 
 namespace sc
@@ -46,6 +47,7 @@ struct PivotTableFormat
     bool bGrandRow = false;
     bool bGrandColumn = false;
     std::optional<sal_uInt32> oFieldPosition = std::nullopt;
+    std::optional<ScRange> oOffset = std::nullopt;
 
     std::vector<Selection> aSelections;
     std::shared_ptr<ScPatternAttr> pPattern;

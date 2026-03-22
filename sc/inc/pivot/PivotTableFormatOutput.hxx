@@ -58,6 +58,7 @@ struct FormatOutputEntry
     std::shared_ptr<ScPatternAttr> pPattern;
     bool bGrandRow = false;
     bool bGrandColumn = false;
+    std::optional<ScRange> oOffset = std::nullopt;
 
     std::vector<FormatOutputField> aRowOutputFields;
     std::vector<FormatOutputField> aColumnOutputFields;
@@ -110,6 +111,8 @@ public:
 
     SCROW mnGrandTotalRow = -1;
     SCCOL mnGrandTotalColumn = -1;
+    SCCOL mnTabStartColumn = -1;
+    SCROW mnTabStartRow = -1;
     SCCOL mnDataStartColumn = -1;
     SCROW mnDataStartRow = -1;
     SCCOL mnTabEndColumn = -1;
@@ -132,9 +135,11 @@ public:
         mnGrandTotalColumn = nGrandTotalColumn;
     }
 
-    void setDataArea(SCCOL nDataStartColumn, SCROW nDataStartRow, SCCOL nTabEndColumn,
-                     SCROW nTabEndRow)
+    void setDataArea(SCCOL nTabStartColumn, SCROW nTabStartRow, SCCOL nDataStartColumn,
+                     SCROW nDataStartRow, SCCOL nTabEndColumn, SCROW nTabEndRow)
     {
+        mnTabStartColumn = nTabStartColumn;
+        mnTabStartRow = nTabStartRow;
         mnDataStartColumn = nDataStartColumn;
         mnDataStartRow = nDataStartRow;
         mnTabEndColumn = nTabEndColumn;

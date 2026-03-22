@@ -1217,7 +1217,7 @@ void ScDPOutput::Output()
         SCROW nGrandTotalRow = bRowGrand ? mnTabEndRow : -1;
         SCCOL nGrandTotalColumn = bColumnGrand ? mnTabEndCol : -1;
         maFormatOutput.setGrandTotalPositions(nGrandTotalRow, nGrandTotalColumn);
-        maFormatOutput.setDataArea(mnDataStartCol, mnDataStartRow, mnTabEndCol, mnTabEndRow);
+        maFormatOutput.setDataArea(maStartPos.Col(), maStartPos.Row(), mnDataStartCol, mnDataStartRow, mnTabEndCol, mnTabEndRow);
     }
 
     //  clear whole (new) output area

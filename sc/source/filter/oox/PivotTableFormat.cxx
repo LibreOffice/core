@@ -103,6 +103,15 @@ void PivotTableFormat::finalizeImport()
     aFormat.bGrandRow = mbGrandRow;
     aFormat.bGrandColumn = mbGrandCol;
     aFormat.oFieldPosition = moFieldPosition;
+    if (moOffset)
+    {
+        // Resolve offset
+        ScAddress aAddress;
+        const auto eGrammar = formula::FormulaGrammar::CONV_XL_A1;
+        ScRefFlags nFlags = aAddress.Parse(*moOffset, getScDocument(), eGrammar);
+        if (nFlags & ScRefFlags::COL_VALID)
+            aFormat.oOffset = ScRange(aAddress);
+    }
 
     aFormat.pPattern = std::move(pPattern);
     for (auto& rReference : maReferences)
