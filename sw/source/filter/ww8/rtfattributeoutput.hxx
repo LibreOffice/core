@@ -717,6 +717,11 @@ private:
 
     OString m_aParagraphMarkerProperties;
 
+    /// When a field must be closed after \par, this contains the deferred "close field" markup
+    OString m_aFieldEndAfterPar;
+    /// Field nesting depth while inside TOX, so we only buffer the outermost field close
+    sal_Int32 m_nTOXFieldDepth = 0;
+
 public:
     explicit RtfAttributeOutput(RtfExport& rExport);
 

@@ -1324,6 +1324,56 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168533)
                          getShape(2).queryThrow<text::XText>()->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf134614_TOC_indent)
+{
+    // Given an RTF document with a TOC field containing indented entries:
+    createSwDoc("tdf134614_toc_indent.rtf");
+    save(TestFilter::RTF);
+
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    OString aRtfContent(read_uInt8s_ToOString(*pStream, pStream->TellEnd()));
+
+    // Check that a position is inside a given RTF group scope. Returns true if nPos is reached
+    // before the scope closes.
+    auto isInsideScope = [&aRtfContent](sal_Int32 nScopeStart, sal_Int32 nPos) {
+        int nDepth = 1; // the opening { is before nScopeStart
+        for (sal_Int32 i = nScopeStart; i < aRtfContent.getLength(); ++i)
+        {
+            if (i == nPos)
+                return true;
+
+            if (char ch = aRtfContent[i]; ch == '{')
+                ++nDepth;
+            else if (ch == '}' && --nDepth == 0)
+                return false;
+        }
+        return false;
+    };
+
+    // Find the TOC field result and the last TOC entry
+    sal_Int32 nFldrslt = aRtfContent.indexOf("\\fldrslt");
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), nFldrslt);
+    sal_Int32 nLastEntry = aRtfContent.indexOf("Sub Heading", nFldrslt);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), nLastEntry);
+    sal_Int32 nParAfterLastEntry = aRtfContent.indexOf("\\par", nLastEntry);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(0), nParAfterLastEntry);
+
+    // \par for the last TOC entry must be inside the {\fldrslt ...} scope. Without the fix, the
+    // field-close braces were appended during the last paragraph's run, before \par, placing \par
+    // outside the field result. Word then ignored paragraph properties (like \li indent) for that
+    // last entry.
+    CPPUNIT_ASSERT(isInsideScope(nFldrslt, nParAfterLastEntry));
+
+    // The TOC entries may contain inner HYPERLINK fields. Their field-close must NOT be deferred -
+    // only the outermost TOC field close should be. Verify that the inner HYPERLINK field around
+    // "Sub Heading" is fully closed before \par.
+    sal_Int32 nInnerFldrslt = aRtfContent.lastIndexOf("\\fldrslt", nLastEntry);
+    CPPUNIT_ASSERT_GREATER(nFldrslt, nInnerFldrslt); // must be a different, inner \fldrslt
+    CPPUNIT_ASSERT_MESSAGE("inner HYPERLINK field must close before \\par",
+                           !isInsideScope(nInnerFldrslt, nParAfterLastEntry));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
