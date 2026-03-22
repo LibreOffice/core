@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_set_include,sc_basic_types_test,\
 $(eval $(call gb_CppunitTest_use_libraries,sc_basic_types_test,\
     sc \
     scui \
+    tl \
 ))
 
 # Needed for include/test/cppunitasserthelper.hxx
