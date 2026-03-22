@@ -159,24 +159,13 @@ void SwViewShell::PrintProspect(
     // set the MapMode
     aMapMode.SetOrigin( Point() );
     {
-        Fraction aScX( aPrtSize.Width(), nMaxColSz );
-        Fraction aScY( aPrtSize.Height(), nMaxRowSz );
-        if( aScX < aScY )
-            aScY = aScX;
+        double fScX = double(aPrtSize.Width()) / nMaxColSz;
+        double fScY = double(aPrtSize.Height()) / nMaxRowSz;
+        if( fScX < fScY )
+            fScY = fScX;
 
-        {
-            // Round percentages for Drawings so that these can paint their objects properly
-            aScY *= Fraction( 1000, 1 );
-            tools::Long nTmp = static_cast<tools::Long>(aScY);
-            if( 1 < nTmp )
-                --nTmp;
-            else
-                nTmp = 1;
-            aScY = Fraction( nTmp, 1000 );
-        }
-
-        aMapMode.SetScaleY( aScY );
-        aMapMode.SetScaleX( aScY );
+        aMapMode.SetScaleY( fScY );
+        aMapMode.SetScaleX( fScY );
     }
 
     Size aTmpPrtSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), aMapMode ) );

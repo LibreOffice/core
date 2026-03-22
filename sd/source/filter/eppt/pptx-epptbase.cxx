@@ -103,7 +103,7 @@ PHLayout const pPHLayout[] =
     { EppLayout::TWOCOLUMNSANDTITLE,    { 0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x16, 0x0d, 0x12, true, true, false }
 };
 
-const Fraction gPPTFraction(1,576);
+const double gPPTFraction = 1.0 / 576;
 
 PPTWriterBase::PPTWriterBase()
     : mbStatusIndicator(false)

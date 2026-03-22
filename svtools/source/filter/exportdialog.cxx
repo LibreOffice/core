@@ -1068,11 +1068,11 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, weld::SpinButton&, void)
     }
     else
     {
-        Fraction aFract( 1, 100 );
+        double fFract = 1.0 / 100;
         sal_Int32 nWidth = mxMfSizeX->get_value();
         sal_Int32 nHeight= static_cast< sal_Int32 >( nWidth * fRatio );
         const Size aSource( nWidth, nHeight );
-        MapMode aSourceMapMode( GetMapUnit( mxLbSizeX->get_active() ),Point(), aFract, aFract );
+        MapMode aSourceMapMode( GetMapUnit( mxLbSizeX->get_active() ),Point(), fFract, fFract );
         Size aDest(OutputDevice::LogicToLogic(aSource, aSourceMapMode, MapMode(MapUnit::Map100thMM)));
 
         maSize.Width = aDest.Width();
@@ -1104,11 +1104,11 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, weld::SpinButton&, void)
     }
     else
     {
-        Fraction aFract( 1, 100 );
+        double fFract = 1.0 / 100;
         sal_Int32 nHeight= mxMfSizeY->get_value();
         sal_Int32 nWidth = static_cast< sal_Int32 >( nHeight * fRatio );
         const Size aSource( nWidth, nHeight );
-        MapMode aSourceMapMode( GetMapUnit( mxLbSizeX->get_active() ),Point(), aFract, aFract );
+        MapMode aSourceMapMode( GetMapUnit( mxLbSizeX->get_active() ),Point(), fFract, fFract );
         Size aDest( OutputDevice::LogicToLogic(aSource, aSourceMapMode, MapMode(MapUnit::Map100thMM)) );
 
         maSize.Height = aDest.Height();

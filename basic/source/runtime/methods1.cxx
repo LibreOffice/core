@@ -1140,9 +1140,9 @@ static double GetDialogZoomFactor( bool bX, tools::Long nValue )
     if( pDevice )
     {
         Size aRefSize( nValue, nValue );
-        Fraction aFracX( 1, 26 );
-        Fraction aFracY( 1, 24 );
-        MapMode aMap( MapUnit::MapAppFont, Point(), aFracX, aFracY );
+        double fFracX = 1.0 / 26;
+        double fFracY = 1.0 / 24;
+        MapMode aMap( MapUnit::MapAppFont, Point(), fFracX, fFracY );
         Size aScaledSize = pDevice->LogicToPixel( aRefSize, aMap );
         aRefSize = pDevice->LogicToPixel( aRefSize, MapMode(MapUnit::MapTwip) );
 

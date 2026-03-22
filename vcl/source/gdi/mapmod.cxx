@@ -35,8 +35,8 @@ struct MapMode::ImplMapMode
     // because ReadFraction / WriteFraction do only 32 bits, so more than
     // that cannot be stored in MetaFiles!
     // => call ReduceInaccurate whenever setting these
-    Fraction        maScaleX;
-    Fraction        maScaleY;
+    double          mfScaleX;
+    double          mfScaleY;
 
     ImplMapMode();
     ImplMapMode(MapUnit eMapUnit);
@@ -47,8 +47,8 @@ struct MapMode::ImplMapMode
 
 MapMode::ImplMapMode::ImplMapMode() :
     maOrigin( 0, 0 ),
-    maScaleX( 1, 1 ),
-    maScaleY( 1, 1 )
+    mfScaleX( 1.0 ),
+    mfScaleY( 1.0 )
 {
     meUnit   = MapUnit::MapPixel;
     mbSimple = true;
@@ -56,8 +56,8 @@ MapMode::ImplMapMode::ImplMapMode() :
 
 MapMode::ImplMapMode::ImplMapMode(MapUnit eMapUnit) :
     maOrigin( 0, 0 ),
-    maScaleX( 1, 1 ),
-    maScaleY( 1, 1 )
+    mfScaleX( 1.0 ),
+    mfScaleY( 1.0 )
 {
     meUnit   = eMapUnit;
     mbSimple = true;
@@ -69,8 +69,8 @@ bool MapMode::ImplMapMode::operator==( const ImplMapMode& rImpMapMode ) const
 {
     return meUnit == rImpMapMode.meUnit
         && maOrigin == rImpMapMode.maOrigin
-        && maScaleX == rImpMapMode.maScaleX
-        && maScaleY == rImpMapMode.maScaleY;
+        && mfScaleX == rImpMapMode.mfScaleX
+        && mfScaleY == rImpMapMode.mfScaleY;
 }
 
 namespace
@@ -119,22 +119,12 @@ MapMode::MapMode( MapUnit eUnit ) : mpImplMapMode(GetUnitDefault(eUnit))
 }
 
 MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
-                  const Fraction& rScaleX, const Fraction& rScaleY )
+                  double fScaleX, double fScaleY )
 {
     mpImplMapMode->meUnit   = eUnit;
     mpImplMapMode->maOrigin = rLogicOrg;
-    mpImplMapMode->maScaleX = rScaleX;
-    mpImplMapMode->maScaleY = rScaleY;
-    mpImplMapMode->mbSimple = false;
-}
-
-MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
-                  double rScaleX, double rScaleY )
-{
-    mpImplMapMode->meUnit   = eUnit;
-    mpImplMapMode->maOrigin = rLogicOrg;
-    mpImplMapMode->maScaleX = rScaleX;
-    mpImplMapMode->maScaleY = rScaleY;
+    mpImplMapMode->mfScaleX = fScaleX;
+    mpImplMapMode->mfScaleY = fScaleY;
     mpImplMapMode->mbSimple = false;
 }
 
@@ -151,27 +141,15 @@ void MapMode::SetOrigin( const Point& rLogicOrg )
     mpImplMapMode->mbSimple = false;
 }
 
-void MapMode::SetScaleX( const Fraction& rScaleX )
+void MapMode::SetScaleX( double fScaleX )
 {
-    mpImplMapMode->maScaleX = rScaleX;
+    mpImplMapMode->mfScaleX = fScaleX;
     mpImplMapMode->mbSimple = false;
 }
 
-void MapMode::SetScaleX( double rScaleX )
+void MapMode::SetScaleY( double fScaleY )
 {
-    mpImplMapMode->maScaleX = rScaleX;
-    mpImplMapMode->mbSimple = false;
-}
-
-void MapMode::SetScaleY( const Fraction& rScaleY )
-{
-    mpImplMapMode->maScaleY = rScaleY;
-    mpImplMapMode->mbSimple = false;
-}
-
-void MapMode::SetScaleY( double rScaleY )
-{
-    mpImplMapMode->maScaleY = rScaleY;
+    mpImplMapMode->mfScaleY = fScaleY;
     mpImplMapMode->mbSimple = false;
 }
 
@@ -194,8 +172,8 @@ size_t MapMode::GetHashValue() const
     size_t hash = 0;
     o3tl::hash_combine( hash, mpImplMapMode->meUnit );
     o3tl::hash_combine( hash, mpImplMapMode->maOrigin.GetHashValue());
-    o3tl::hash_combine( hash, mpImplMapMode->maScaleX.GetHashValue());
-    o3tl::hash_combine( hash, mpImplMapMode->maScaleY.GetHashValue());
+    o3tl::hash_combine( hash, mpImplMapMode->mfScaleX);
+    o3tl::hash_combine( hash, mpImplMapMode->mfScaleY);
     o3tl::hash_combine( hash, mpImplMapMode->mbSimple );
     return hash;
 }
@@ -204,9 +182,9 @@ MapUnit MapMode::GetMapUnit() const { return mpImplMapMode->meUnit; }
 
 const Point& MapMode::GetOrigin() const { return mpImplMapMode->maOrigin; }
 
-const Fraction& MapMode::GetScaleX() const { return mpImplMapMode->maScaleX; }
+double MapMode::GetScaleX() const { return mpImplMapMode->mfScaleX; }
 
-const Fraction& MapMode::GetScaleY() const { return mpImplMapMode->maScaleY; }
+double MapMode::GetScaleY() const { return mpImplMapMode->mfScaleY; }
 
 bool MapMode::IsSimple() const { return mpImplMapMode->mbSimple; }
 

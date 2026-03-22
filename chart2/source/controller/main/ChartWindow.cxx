@@ -285,20 +285,17 @@ void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
         {
             MapMode aCWMapMode = GetMapMode();
             constexpr auto p = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
-            const auto& scaleX = aCWMapMode.GetScaleX();
-            const auto& scaleY = aCWMapMode.GetScaleY();
-            const auto nXNum = p.first * scaleX.GetDenominator();
-            const auto nXDen = p.second * scaleX.GetNumerator();
-            const auto nYNum = p.first * scaleY.GetDenominator();
-            const auto nYDen = p.second * scaleY.GetNumerator();
+            const double scaleX = aCWMapMode.GetScaleX();
+            const double scaleY = aCWMapMode.GetScaleY();
+            const double nX = p.first * scaleX / p.second;
+            const double nY = p.first * scaleY / p.second;
 
             if (!IsMapModeEnabled())
             {
-                aRectangle = aRectangle.scale(scaleX.GetDenominator(), scaleX.GetNumerator(),
-                                              scaleY.GetDenominator(), scaleY.GetNumerator());
+                aRectangle = aRectangle.scale(1.0 / scaleX, 1.0 / scaleY);
             }
 
-            Point aOffset = this->GetOffsetPixelFrom(*pEditWin).scale(nXNum, nXDen, nYNum, nYDen);
+            Point aOffset = this->GetOffsetPixelFrom(*pEditWin).scale(nX, nY);
 
             aRectangle = tools::Rectangle(aRectangle.TopLeft() + aOffset, aRectangle.GetSize());
         }
@@ -353,19 +350,17 @@ tools::Rectangle ChartWindow::GetBoundingBox()
         // returns the chart bounding box in twips.
         MapMode aCWMapMode = GetMapMode();
         constexpr auto p = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
-        const auto& scaleX = aCWMapMode.GetScaleX();
-        const auto& scaleY = aCWMapMode.GetScaleY();
-        const auto nXNum = p.first * scaleX.GetDenominator();
-        const auto nXDen = p.second * scaleX.GetNumerator();
-        const auto nYNum = p.first * scaleY.GetDenominator();
-        const auto nYDen = p.second * scaleY.GetNumerator();
+        const double scaleX = aCWMapMode.GetScaleX();
+        const double scaleY = aCWMapMode.GetScaleY();
+        const double nX = p.first * scaleX / p.second;
+        const double nY = p.first * scaleY / p.second;
 
         Point aOffset = GetOffsetPixelFrom(*pRootWin);
-        aOffset.setX( o3tl::convert(aOffset.X(), nXNum, nXDen) );
-        aOffset.setY( o3tl::convert(aOffset.Y(), nYNum, nYDen) );
+        aOffset.setX( aOffset.X() * nX );
+        aOffset.setY( aOffset.Y() * nY );
         Size aSize = GetSizePixel();
-        aSize.setWidth( o3tl::convert(aSize.Width(), nXNum, nXDen) );
-        aSize.setHeight( o3tl::convert(aSize.Height(), nYNum, nYDen) );
+        aSize.setWidth( aSize.Width() * nX );
+        aSize.setHeight( aSize.Height() * nY );
         aBBox = tools::Rectangle(aOffset, aSize);
     }
     return aBBox;

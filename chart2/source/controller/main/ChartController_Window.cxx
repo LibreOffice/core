@@ -249,26 +249,26 @@ void SAL_CALL ChartController::setPosSize(
     //todo: for standalone chart: detect whether we are standalone
     //change map mode to fit new size
     awt::Size aModelPageSize = getChartModel()->getPageSize();
-    sal_Int32 nScaleXNumerator = aLogicSize.Width();
-    sal_Int32 nScaleXDenominator = aModelPageSize.Width;
-    sal_Int32 nScaleYNumerator = aLogicSize.Height();
-    sal_Int32 nScaleYDenominator = aModelPageSize.Height;
+    double fScaleX = double(aLogicSize.Width()) / aModelPageSize.Width;
+    double fScaleY = double(aLogicSize.Height()) / aModelPageSize.Height;
     MapMode aNewMapMode(
                 MapUnit::Map100thMM,
                 Point(0,0),
-                Fraction(nScaleXNumerator, nScaleXDenominator),
-                Fraction(nScaleYNumerator, nScaleYDenominator) );
+                fScaleX,
+                fScaleY );
     pChartWindow->SetMapMode(aNewMapMode);
     pChartWindow->setPosSizePixel( X, Y, Width, Height, static_cast<PosSizeFlags>(Flags) );
 
     //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
     if( m_xChartView.is() )
     {
+        Fraction aScaleXFrac(fScaleX);
+        Fraction aScaleYFrac(fScaleY);
         auto aZoomFactors(::comphelper::InitPropertySequence({
-            { "ScaleXNumerator", uno::Any( nScaleXNumerator ) },
-            { "ScaleXDenominator", uno::Any( nScaleXDenominator ) },
-            { "ScaleYNumerator", uno::Any( nScaleYNumerator ) },
-            { "ScaleYDenominator", uno::Any( nScaleYDenominator ) }
+            { "ScaleXNumerator", uno::Any( aScaleXFrac.GetNumerator() ) },
+            { "ScaleXDenominator", uno::Any( aScaleXFrac.GetDenominator() ) },
+            { "ScaleYNumerator", uno::Any( aScaleYFrac.GetNumerator() ) },
+            { "ScaleYDenominator", uno::Any( aScaleYFrac.GetDenominator() ) }
         }));
         m_xChartView->setPropertyValue( u"ZoomFactors"_ustr, uno::Any( aZoomFactors ));
     }

@@ -1003,14 +1003,12 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
 
         if( m_pHRuler->IsVisible() || m_pVRuler->IsVisible() )
         {
-            const Fraction& rFrac = GetEditWin().GetMapMode().GetScaleX();
-            tools::Long nZoom = 100;
-            if (rFrac.IsValid())
-                nZoom = tools::Long(rFrac * 100);
+            double fFrac = GetEditWin().GetMapMode().GetScaleX();
+            tools::Long nZoom = tools::Long(fFrac * 100);
 
-            const double aFrac = double(nZoom) / 100;
-            m_pVRuler->SetZoom( aFrac );
-            m_pHRuler->SetZoom( aFrac );
+            fFrac = double(nZoom) / 100;
+            m_pVRuler->SetZoom( fFrac );
+            m_pHRuler->SetZoom( fFrac );
             InvalidateRulerPos();   // Invalidate content.
         }
         // Reset the cursor stack because the cursor positions for PageUp/Down

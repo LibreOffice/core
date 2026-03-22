@@ -209,9 +209,9 @@ void Impl_OlePres::Write( SvStream & rStm )
     {
         // Always to 1/100 mm, until Mtf-Solution found
         // Assumption (no scaling, no origin translation)
-        DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleX() == Fraction( 1, 1 ),
+        DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleX() == 1.0,
                     "x-scale in the Mtf is wrong" );
-        DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleY() == Fraction( 1, 1 ),
+        DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleY() == 1.0,
                     "y-scale in the Mtf is wrong" );
         DBG_ASSERT( pMtf->GetPrefMapMode().GetOrigin() == Point(),
                     "origin-shift in the Mtf is wrong" );

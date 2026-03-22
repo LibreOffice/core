@@ -1395,44 +1395,20 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     if( pA->GetMapMode().GetMapUnit() == MapUnit::MapRelative )
                     {
                         const MapMode& aMM = pA->GetMapMode();
-                        Fraction aScaleX = aMM.GetScaleX();
-                        Fraction aScaleY = aMM.GetScaleY();
+                        double fScaleX = aMM.GetScaleX();
+                        double fScaleY = aMM.GetScaleY();
 
                         Point aOrigin = aSrcMapMode.GetOrigin();
-                        BigInt aX( aOrigin.X() );
-                        aX *= BigInt( aScaleX.GetDenominator() );
-                        if( aOrigin.X() >= 0 )
-                            if( aScaleX.GetNumerator() >= 0 )
-                                aX += BigInt( aScaleX.GetNumerator()/2 );
-                            else
-                                aX -= BigInt( (aScaleX.GetNumerator()+1)/2 );
-                        else
-                            if( aScaleX.GetNumerator() >= 0 )
-                                aX -= BigInt( (aScaleX.GetNumerator()-1)/2 );
-                            else
-                                aX += BigInt( aScaleX.GetNumerator()/2 );
-                        aX /= BigInt( aScaleX.GetNumerator() );
-                        aOrigin.setX( static_cast<tools::Long>(aX) + aMM.GetOrigin().X() );
-                        BigInt aY( aOrigin.Y() );
-                        aY *= BigInt( aScaleY.GetDenominator() );
-                        if( aOrigin.Y() >= 0 )
-                            if( aScaleY.GetNumerator() >= 0 )
-                                aY += BigInt( aScaleY.GetNumerator()/2 );
-                            else
-                                aY -= BigInt( (aScaleY.GetNumerator()+1)/2 );
-                        else
-                            if( aScaleY.GetNumerator() >= 0 )
-                                aY -= BigInt( (aScaleY.GetNumerator()-1)/2 );
-                            else
-                                aY += BigInt( aScaleY.GetNumerator()/2 );
-                        aY /= BigInt( aScaleY.GetNumerator() );
-                        aOrigin.setY( static_cast<tools::Long>(aY) + aMM.GetOrigin().Y() );
+                        tools::Long aX = std::llround(double( aOrigin.X() ) / fScaleX);
+                        aOrigin.setX( aX + aMM.GetOrigin().X() );
+                        tools::Long aY = std::llround(double( aOrigin.Y() ) / fScaleY);
+                        aOrigin.setY( aY + aMM.GetOrigin().Y() );
                         aSrcMapMode.SetOrigin( aOrigin );
 
-                        aScaleX *= aSrcMapMode.GetScaleX();
-                        aScaleY *= aSrcMapMode.GetScaleY();
-                        aSrcMapMode.SetScaleX( aScaleX );
-                        aSrcMapMode.SetScaleY( aScaleY );
+                        fScaleX *= aSrcMapMode.GetScaleX();
+                        fScaleY *= aSrcMapMode.GetScaleY();
+                        aSrcMapMode.SetScaleX( fScaleX );
+                        aSrcMapMode.SetScaleY( fScaleY );
                     }
                     else
                         aSrcMapMode=pA->GetMapMode();
@@ -1721,10 +1697,10 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
         aTargetMapMode = MapMode( MapUnit::MapInch );
 
         const tools::Long      nUnit = pVirDev->LogicToPixel( Size( 1, 1 ), aTargetMapMode ).Width();
-        const Fraction  aFrac( 1, nUnit );
+        const double  fFrac = 1.0 / nUnit;
 
-        aTargetMapMode.SetScaleX( aFrac );
-        aTargetMapMode.SetScaleY( aFrac );
+        aTargetMapMode.SetScaleX( fFrac );
+        aTargetMapMode.SetScaleY( fFrac );
         aTargetSize = OutputDevice::LogicToLogic( rMTF.GetPrefSize(), aSrcMapMode, aTargetMapMode );
     }
 
@@ -1804,20 +1780,20 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 sal_uInt16 WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
                                         const Size& rPrefSize)
 {
-    Fraction    aDivFrac(2, 1);
+    double          fDivFrac = 2.0;
     sal_uInt16      nDivisor = 1;
 
     Size aSize = OutputDevice::LogicToLogic( rPrefSize, aSrcMapMode, rMapMode );
 
     while( nDivisor <= 64 && (aSize.Width() > 32767 || aSize.Height() > 32767) )
     {
-        Fraction aFrac = rMapMode.GetScaleX();
+        double fFrac = rMapMode.GetScaleX();
 
-        aFrac *= aDivFrac;
-        rMapMode.SetScaleX(aFrac);
-        aFrac = rMapMode.GetScaleY();
-        aFrac *= aDivFrac;
-        rMapMode.SetScaleY(aFrac);
+        fFrac *= fDivFrac;
+        rMapMode.SetScaleX(fFrac);
+        fFrac = rMapMode.GetScaleY();
+        fFrac *= fDivFrac;
+        rMapMode.SetScaleY(fFrac);
         nDivisor <<= 1;
         aSize = OutputDevice::LogicToLogic( rPrefSize, aSrcMapMode, rMapMode );
     }

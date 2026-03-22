@@ -343,7 +343,7 @@ void TypeSerializerTest::testMapMode()
         CPPUNIT_ASSERT_EQUAL(true, aReadMapMode.IsSimple());
     }
     { // "complex" case - map unit, origin and scale are set, IsSimple = false
-        MapMode aMapMode(MapUnit::MapTwip, Point(5, 10), Fraction(1, 2), Fraction(2, 3));
+        MapMode aMapMode(MapUnit::MapTwip, Point(5, 10), 1.0 / 2, 2.0 / 3);
 
         SvMemoryStream aStream;
         TypeSerializer aSerializer(aStream);
@@ -355,10 +355,8 @@ void TypeSerializerTest::testMapMode()
         CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aReadMapMode.GetMapUnit());
         CPPUNIT_ASSERT_EQUAL(tools::Long(5), aReadMapMode.GetOrigin().X());
         CPPUNIT_ASSERT_EQUAL(tools::Long(10), aReadMapMode.GetOrigin().Y());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aReadMapMode.GetScaleX().GetNumerator());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aReadMapMode.GetScaleX().GetDenominator());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aReadMapMode.GetScaleY().GetNumerator());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aReadMapMode.GetScaleY().GetDenominator());
+        CPPUNIT_ASSERT_EQUAL(0.5, aReadMapMode.GetScaleX());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0 / 3, aReadMapMode.GetScaleY(), 1E-9);
         CPPUNIT_ASSERT_EQUAL(false, aReadMapMode.IsSimple());
     }
 }

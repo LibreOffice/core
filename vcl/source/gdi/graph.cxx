@@ -393,7 +393,7 @@ basegfx::B2DSize Graphic::GetPPI() const { return GetPPUnit(MapMode(MapUnit::Map
 
 basegfx::B2DSize Graphic::GetPPM() const
 {
-    return GetPPUnit(MapMode(MapUnit::MapMM, {}, { 1000, 1 }, { 1000, 1 }));
+    return GetPPUnit(MapMode(MapUnit::MapMM, {}, 1000.0, 1000.0));
 }
 
 Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const

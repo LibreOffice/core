@@ -862,7 +862,7 @@ double ScOutputData::GetStretch() const
     if ( mpRefDevice == pFmtDevice )
     {
         MapMode aOld = mpRefDevice->GetMapMode();
-        return static_cast<double>(aOld.GetScaleY()) / static_cast<double>(aOld.GetScaleX()) * mfZoomY / mfZoomX;
+        return aOld.GetScaleY() / aOld.GetScaleX() * mfZoomY / mfZoomX;
     }
     else
     {
@@ -1390,7 +1390,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
              ( !bBreak || mpRefDevice == pFmtDevice ) )
         {
             // filter drop-down width depends on row height
-            double fZoom = mpRefDevice ? static_cast<double>(mpRefDevice->GetMapMode().GetScaleY()) : 1.0;
+            double fZoom = mpRefDevice ? mpRefDevice->GetMapMode().GetScaleY() : 1.0;
             fZoom = fZoom > 1.0 ? fZoom : 1.0;
             const tools::Long nFilter = fZoom * DROPDOWN_BITMAP_SIZE;
             bool bFit = ( nNeeded + nFilter <= nMergeSizeX );
@@ -5216,7 +5216,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                             pInfo->bAutoFilter)
                                     {
                                         // filter drop-down width depends on row height
-                                        double fZoom = mpRefDevice ? static_cast<double>(mpRefDevice->GetMapMode().GetScaleY()) : 1.0;
+                                        double fZoom = mpRefDevice ? mpRefDevice->GetMapMode().GetScaleY() : 1.0;
                                         fZoom = fZoom > 1.0 ? fZoom : 1.0;
                                         if (bPixelToLogic)
                                             nAvailWidth -= mpRefDevice->PixelToLogic(Size(0,fZoom * DROPDOWN_BITMAP_SIZE)).Height();

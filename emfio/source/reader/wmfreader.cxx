@@ -1543,8 +1543,8 @@ namespace emfio
         Size aDevExt( 10000, 10000 );
         if( ( std::abs( aWMFSize.Width() ) > 1 ) && ( std::abs( aWMFSize.Height() ) > 1 ) )
         {
-            const Fraction  aFrac( 1, mnUnitsPerInch);
-            MapMode         aWMFMap( MapUnit::MapInch, Point(), aFrac, aFrac );
+            const double    fFrac = 1.0 / mnUnitsPerInch;
+            MapMode         aWMFMap( MapUnit::MapInch, Point(), fFrac, fFrac );
             Size            aSize100(OutputDevice::LogicToLogic(aWMFSize, aWMFMap, MapMode(MapUnit::Map100thMM)));
             aDevExt = Size( std::abs( aSize100.Width() ), std::abs( aSize100.Height() ) );
         }

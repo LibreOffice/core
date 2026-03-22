@@ -201,7 +201,7 @@ void OViewsWindow::impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Poin
     {
         aSectionSize.setHeight( nMinHeight );
     }
-    aSectionSize.AdjustHeight(static_cast<tools::Long>(StyleSettings::GetSplitSize() * static_cast<double>(_rSectionWindow.GetMapMode().GetScaleY())) );
+    aSectionSize.AdjustHeight(static_cast<tools::Long>(StyleSettings::GetSplitSize() * _rSectionWindow.GetMapMode().GetScaleY()) );
 
     if ( _bSet )
         _rSectionWindow.SetPosSizePixel(_rStartPoint,aSectionSize);
@@ -1628,7 +1628,7 @@ void OViewsWindow::zoom(double _fZoom)
     const MapMode& aMapMode = GetMapMode();
 
     Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH));
-    if ( _fZoom < double(aMapMode.GetScaleX()) )
+    if ( _fZoom < aMapMode.GetScaleX() )
         aStartWidth *= aMapMode.GetScaleX();
     else
         aStartWidth *= _fZoom;

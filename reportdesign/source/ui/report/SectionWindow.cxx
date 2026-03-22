@@ -62,10 +62,10 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 
     m_aStartMarker->setCollapsedHdl(LINK(this,OSectionWindow,Collapsed));
 
-    m_aStartMarker->zoom(double(rMapMode.GetScaleX()));
-    setZoomFactor(double(rMapMode.GetScaleX()), *m_aReportSection);
-    setZoomFactor(double(rMapMode.GetScaleX()), *m_aSplitter);
-    setZoomFactor(double(rMapMode.GetScaleX()), *m_aEndMarker);
+    m_aStartMarker->zoom(rMapMode.GetScaleX());
+    setZoomFactor(rMapMode.GetScaleX(), *m_aReportSection);
+    setZoomFactor(rMapMode.GetScaleX(), *m_aSplitter);
+    setZoomFactor(rMapMode.GetScaleX(), *m_aEndMarker);
 
     m_aSplitter->Show();
     m_aStartMarker->Show();
@@ -260,7 +260,7 @@ void OSectionWindow::Resize()
         // set splitter
         aReportPos.AdjustY(aSectionSize.Height() );
         m_aSplitter->SetPosSizePixel(aReportPos,Size(aSectionSize.Width(),m_aSplitter->GetSizePixel().Height()));
-        aSectionSize.setHeight( static_cast<tools::Long>(1000 * static_cast<double>(GetMapMode().GetScaleY())) );
+        aSectionSize.setHeight( static_cast<tools::Long>(1000 * GetMapMode().GetScaleY()) );
         m_aSplitter->SetDragRectPixel( tools::Rectangle(Point(nStartWidth,0),aSectionSize));
 
         // set end marker

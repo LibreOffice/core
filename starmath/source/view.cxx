@@ -334,8 +334,7 @@ void SmGraphicWidget::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     }
     else
     {
-        const Fraction aFraction(1, 1);
-        rDevice.SetMapMode(MapMode(SmMapUnit(), Point(), aFraction, aFraction));
+        rDevice.SetMapMode(MapMode(SmMapUnit(), Point(), 1.0, 1.0));
     }
 
     SetTotalSize();
@@ -881,8 +880,8 @@ void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
     if (comphelper::LibreOfficeKit::isActive())
         return;
     nZoom = std::clamp(Factor, MINZOOM, MAXZOOM);
-    Fraction aFraction(nZoom, 100);
-    SetGraphicMapMode(MapMode(SmMapUnit(), Point(), aFraction, aFraction));
+    double fFraction = nZoom / 100.0;
+    SetGraphicMapMode(MapMode(SmMapUnit(), Point(), fFraction, fFraction));
     mxGraphic->SetTotalSize();
     SmViewShell& rViewSh = mxGraphic->GetView();
     rViewSh.GetViewFrame().GetBindings().Invalidate(SID_ATTR_ZOOM);
@@ -1181,11 +1180,11 @@ void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize, bool)
     if ( !aObjSize.IsEmpty() )
     {
         Size aProvidedSize = GetWindow()->PixelToLogic(rSize, MapMode(SmMapUnit()));
-        Fraction aZoomX(aProvidedSize.Width(), aObjSize.Width());
-        Fraction aZoomY(aProvidedSize.Height(), aObjSize.Height());
+        double fZoomX = double(aProvidedSize.Width()) / aObjSize.Width();
+        double fZoomY = double(aProvidedSize.Height()) / aObjSize.Height();
         MapMode aMap(mxGraphicWindow->GetGraphicMapMode());
-        aMap.SetScaleX(aZoomX);
-        aMap.SetScaleY(aZoomY);
+        aMap.SetScaleX(fZoomX);
+        aMap.SetScaleY(fZoomY);
         mxGraphicWindow->SetGraphicMapMode(aMap);
     }
 

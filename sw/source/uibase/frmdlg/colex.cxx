@@ -316,10 +316,10 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
     auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
     rRenderContext.Erase();
 
-    Fraction aScale(m_aWinSize.Height(), m_aFrameSize.Height());
+    double fScale = double(m_aWinSize.Height()) / m_aFrameSize.Height();
     MapMode aMapMode(MapUnit::MapTwip);
-    aMapMode.SetScaleX(aScale);
-    aMapMode.SetScaleY(aScale);
+    aMapMode.SetScaleX(fScale);
+    aMapMode.SetScaleY(fScale);
     rRenderContext.SetMapMode(aMapMode);
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();

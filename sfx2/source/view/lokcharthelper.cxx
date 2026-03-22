@@ -104,12 +104,10 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
                     // returns the chart bounding box in twips.
                     const MapMode& aCWMapMode = pWindow->GetMapMode();
                     constexpr auto p = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
-                    const auto& scaleX = aCWMapMode.GetScaleX();
-                    const auto& scaleY = aCWMapMode.GetScaleY();
-                    const auto nXNum = p.first * scaleX.GetDenominator();
-                    const auto nXDen = p.second * scaleX.GetNumerator();
-                    const auto nYNum = p.first * scaleY.GetDenominator();
-                    const auto nYDen = p.second * scaleY.GetNumerator();
+                    const double scaleX = aCWMapMode.GetScaleX();
+                    const double scaleY = aCWMapMode.GetScaleY();
+                    const double nX = p.first * scaleX / p.second;
+                    const double nY = p.first * scaleY / p.second;
 
                     Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin);
                     if (mbNegativeX && AllSettings::GetLayoutRTL())
@@ -121,8 +119,8 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
 
                     }
 
-                    aOffset = aOffset.scale(nXNum, nXDen, nYNum, nYDen);
-                    Size aSize = pWindow->GetSizePixel().scale(nXNum, nXDen, nYNum, nYDen);
+                    aOffset = aOffset.scale(nX, nY);
+                    Size aSize = pWindow->GetSizePixel().scale(nX, nY);
                     aBBox = tools::Rectangle(aOffset, aSize);
                 }
             }
@@ -237,8 +235,8 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
     // Scaling. Must convert from pixels to twips. We know
     // that VirtualDevices use a DPI of 96.
     const double scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
-    Fraction scaleX = Fraction(nOutputWidth, nTileWidth) * scale;
-    Fraction scaleY = Fraction(nOutputHeight, nTileHeight) * scale;
+    double scaleX = double(nOutputWidth) / nTileWidth * scale;
+    double scaleY = double(nOutputHeight) / nTileHeight * scale;
     aMapMode.SetScaleX(scaleX);
     aMapMode.SetScaleY(scaleY);
     rDevice.SetMapMode(aMapMode);

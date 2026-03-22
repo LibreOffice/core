@@ -204,22 +204,16 @@ void SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
     // calculate scaling
     MapMode aMapMode( MapUnit::MapTwip );
     Size aWinSize = mrParentViewShell.GetOut()->PixelToLogic( _rPxWinSize, aMapMode );
-    Fraction aXScale( aWinSize.Width(), mnPreviewLayoutWidth );
-    Fraction aYScale( aWinSize.Height(), mnPreviewLayoutHeight );
-    if( aXScale < aYScale )
-        aYScale = aXScale;
+    double fXScale = double(aWinSize.Width()) / mnPreviewLayoutWidth;
+    double fYScale = double(aWinSize.Height()) / mnPreviewLayoutHeight;
+    if( fXScale < fYScale )
+        fYScale = fXScale;
     {
-        // adjust scaling for Drawing layer.
-        aYScale *= Fraction( 1000, 1 );
-        tools::Long nNewNuminator = aYScale.operator long();
-        if( nNewNuminator < 1 )
-            nNewNuminator = 1;
-        aYScale = Fraction( nNewNuminator, 1000 );
         // propagate scaling as zoom percentage to view options for font cache
-        ApplyNewZoomAtViewShell( static_cast<sal_uInt8>(nNewNuminator/10) );
+        ApplyNewZoomAtViewShell( std::round(fYScale * 100) );
 
-        aMapMode.SetScaleY( aYScale );
-        aMapMode.SetScaleX( aYScale );
+        aMapMode.SetScaleY( fYScale );
+        aMapMode.SetScaleX( fYScale );
         // set created mapping mode with calculated scaling at output device.
         mrParentViewShell.GetOut()->SetMapMode( aMapMode );
         // update statics for paint.
@@ -1141,7 +1135,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
         // update at accessibility interface
         mrParentViewShell.Imp()->UpdateAccessiblePreview(
                         maPreviewPages,
-                        double(aMapMode.GetScaleX()),
+                        aMapMode.GetScaleX(),
                         mrLayoutRootFrame.GetPageByPageNum( mnSelectedPageNum ),
                         maWinSize );
     }

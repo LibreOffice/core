@@ -189,17 +189,17 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
 
     const Size  aPixSize( pVDev->LogicToPixel( aSize ) );
     const sal_uLong nMaxEdgePix = std::max( aPixSize.Width(), aPixSize.Height() );
-    Fraction    aFrac( nMaxEdgePixel, nMaxEdgePix );
+    double fFrac = double(nMaxEdgePixel) / nMaxEdgePix;
 
-    aMapMode.SetScaleX( aFrac );
-    aMapMode.SetScaleY( aFrac );
+    aMapMode.SetScaleX( fFrac );
+    aMapMode.SetScaleY( fFrac );
     pVDev->SetMapMode( aMapMode );
     pVDev->SetOutputSize( aSize );
 
     // that we also get the dark lines at the right and bottom page margin
-    aFrac = Fraction( nMaxEdgePixel - 1, nMaxEdgePix );
-    aMapMode.SetScaleX( aFrac );
-    aMapMode.SetScaleY( aFrac );
+    fFrac = double(nMaxEdgePixel - 1) / nMaxEdgePix;
+    aMapMode.SetScaleX( fFrac );
+    aMapMode.SetScaleY( fFrac );
     pVDev->SetMapMode( aMapMode );
 
     std::optional<ClientView> pView( std::in_place, this, pVDev );

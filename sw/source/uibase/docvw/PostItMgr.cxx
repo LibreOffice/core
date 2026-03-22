@@ -2475,7 +2475,7 @@ tools::ULong SwPostItMgr::GetSidebarWidth(bool bPx) const
     if (comphelper::LibreOfficeKit::isActive() && !bEnableMapMode)
     {
         // The output device is the tile and contains the real wanted scale factor.
-        double fScaleX = double(mpWrtShell->GetOut()->GetMapMode().GetScaleX());
+        double fScaleX = mpWrtShell->GetOut()->GetMapMode().GetScaleX();
         nZoom = fScaleX * 100;
     }
     double fDisplayWidthFactor;
@@ -2609,31 +2609,31 @@ void SwPostItMgr::Rescale()
 
 sal_Int32 SwPostItMgr::GetInitialAnchorDistance() const
 {
-    const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
+    double f( mpEditWin->GetMapMode().GetScaleY() );
     return sal_Int32(POSTIT_INITIAL_ANCHOR_DISTANCE * f);
 }
 
 sal_Int32 SwPostItMgr::GetSpaceBetween() const
 {
-    const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
+    double f( mpEditWin->GetMapMode().GetScaleY() );
     return sal_Int32(POSTIT_SPACE_BETWEEN * f);
 }
 
 sal_Int32 SwPostItMgr::GetScrollSize() const
 {
-    const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
+    double f( mpEditWin->GetMapMode().GetScaleY() );
     return sal_Int32((POSTIT_SPACE_BETWEEN + POSTIT_MINIMUMSIZE_WITH_META) * f);
 }
 
 sal_Int32 SwPostItMgr::GetMinimumSizeWithMeta() const
 {
-    const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
+    double f( mpEditWin->GetMapMode().GetScaleY() );
     return sal_Int32(POSTIT_MINIMUMSIZE_WITH_META * f);
 }
 
 sal_Int32 SwPostItMgr::GetSidebarScrollerHeight() const
 {
-    const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
+    double f( mpEditWin->GetMapMode().GetScaleY() );
     return sal_Int32(POSTIT_SCROLL_SIDEBAR_HEIGHT * f);
 }
 

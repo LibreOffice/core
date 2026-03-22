@@ -158,8 +158,8 @@ public:
         MapMode aDeviceMapMode(rDevice.GetMapMode());
 
         const double scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
-        Fraction scaleX = Fraction(aOutputSize.Width(), rTileRect.GetWidth()) * scale;
-        Fraction scaleY = Fraction(aOutputSize.Height(), rTileRect.GetHeight()) * scale;
+        double scaleX = double(aOutputSize.Width()) / rTileRect.GetWidth() * scale;
+        double scaleY = double(aOutputSize.Height()) / rTileRect.GetHeight() * scale;
         aDeviceMapMode.SetScaleX(scaleX);
         aDeviceMapMode.SetScaleY(scaleY);
         aDeviceMapMode.SetMapUnit(MapUnit::MapPixel);
@@ -182,8 +182,8 @@ public:
                 // need to draw the control.
                 if (aObjectRectHMM.Overlaps(aTileRectHMM))
                 {
-                    drawUnoControl(pDrawView, pUnoObect, rMainWindow, rDevice, aTileRectHMM,
-                                   double(scaleX), double(scaleY));
+                    drawUnoControl(pDrawView, pUnoObect, rMainWindow, rDevice, aTileRectHMM, scaleX,
+                                   scaleY);
                 }
             }
         }

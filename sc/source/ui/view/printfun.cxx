@@ -1659,9 +1659,9 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     if ( !pPrinter )
     {
         OutputDevice* pRefDev = rDoc.GetPrinter();      // use the printer also for Preview
-        Fraction aPrintFrac( nZoom, 100 );              // without nManualZoom
+        double fPrintFrac = double(nZoom) / 100.0;              // without nManualZoom
         //  MapMode, as it would arrive at the printer:
-        pRefDev->SetMapMode( MapMode( MapUnit::Map100thMM, Point(), aPrintFrac, aPrintFrac ) );
+        pRefDev->SetMapMode( MapMode( MapUnit::Map100thMM, Point(), fPrintFrac, fPrintFrac ) );
 
         //  when rendering (PDF), don't use printer as ref device, but printer's MapMode
         //  has to be set anyway, as charts still use it (#106409#)
@@ -2621,22 +2621,22 @@ void ScPrintFunc::InitModes()               // set MapModes from  nZoom etc.
     constexpr auto HMM_PER_TWIPS = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100);
     nScaleX = nScaleY = HMM_PER_TWIPS;  // output in 1/100 mm
 
-    Fraction aZoomFract( nEffZoom,10000 );
-    Fraction aHorFract = aZoomFract;
+    double fZoomFract = double(nEffZoom) / 10000;
+    double fHorFract = fZoomFract;
 
     if ( !pPrinter && !bIsRender )                          // adjust scale for preview
     {
         double nFact = rDocShell.GetOutputFactor();
-        aHorFract = Fraction( static_cast<tools::Long>( nEffZoom / nFact ), 10000 );
+        fHorFract = double(nEffZoom) / nFact  / 10000;
     }
 
-    aLogicMode = MapMode( MapUnit::Map100thMM, Point(), aHorFract, aZoomFract );
+    aLogicMode = MapMode( MapUnit::Map100thMM, Point(), fHorFract, fZoomFract );
 
     Point aLogicOfs( -aOffset.X(), -aOffset.Y() );
-    aOffsetMode = MapMode( MapUnit::Map100thMM, aLogicOfs, aHorFract, aZoomFract );
+    aOffsetMode = MapMode( MapUnit::Map100thMM, aLogicOfs, fHorFract, fZoomFract );
 
     Point aTwipsOfs( static_cast<tools::Long>( -aOffset.X() / nScaleX + 0.5 ), static_cast<tools::Long>( -aOffset.Y() / nScaleY + 0.5 ) );
-    aTwipMode = MapMode( MapUnit::MapTwip, aTwipsOfs, aHorFract, aZoomFract );
+    aTwipMode = MapMode( MapUnit::MapTwip, aTwipsOfs, fHorFract, fZoomFract );
 }
 
 void ScPrintFunc::ApplyPrintSettings()

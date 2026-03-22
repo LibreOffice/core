@@ -733,19 +733,19 @@ void ScPatternAttr::fillFontOnly(
     if ( pOutDev != nullptr )
     {
         Size aEffSize;
-        Fraction aFraction( 1,1 );
+        double fFraction( 1.0 );
         if (pScale)
-            aFraction = *pScale;
+            fFraction = *pScale;
         Size aSize( 0, static_cast<tools::Long>(nFontHeight) );
         MapMode aDestMode = pOutDev->GetMapMode();
-        MapMode aSrcMode( MapUnit::MapTwip, Point(), aFraction, aFraction );
+        MapMode aSrcMode( MapUnit::MapTwip, Point(), fFraction, fFraction );
         if (aDestMode.GetMapUnit() == MapUnit::MapPixel && pOutDev->GetDPIX() > 0)
             aEffSize = pOutDev->LogicToPixel( aSize, aSrcMode );
         else
         {
-            Fraction aFractOne(1,1);
-            aDestMode.SetScaleX( aFractOne );
-            aDestMode.SetScaleY( aFractOne );
+            double fFractOne(1.0);
+            aDestMode.SetScaleX( fFractOne );
+            aDestMode.SetScaleY( fFractOne );
             aEffSize = OutputDevice::LogicToLogic( aSize, aSrcMode, aDestMode );
         }
         rFont.SetFontSize( aEffSize );

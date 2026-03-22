@@ -28,6 +28,7 @@
 
 class Point;
 class Fraction;
+enum class MapUnit : sal_uInt8;
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC MapMode
 {
@@ -39,9 +40,7 @@ public:
     MapMode();
     MapMode( const MapMode& rMapMode );
     explicit MapMode( MapUnit eUnit );
-    MapMode( MapUnit eUnit, const Point& rLogicOrg,
-        const Fraction& rScaleX, const Fraction& rScaleY );
-    MapMode( MapUnit eUnit, const Point& rLogicOrg, double rScaleX, double rScaleY );
+    MapMode( MapUnit eUnit, const Point& rLogicOrg, double fScaleX, double fScaleY );
     ~MapMode();
 
     void            SetMapUnit( MapUnit eUnit );
@@ -50,13 +49,10 @@ public:
     void            SetOrigin( const Point& rOrigin );
     const Point&    GetOrigin() const;
 
-    void            SetScaleX( const Fraction& rScaleX );
-    const Fraction& GetScaleX() const;
-    void            SetScaleY( const Fraction& rScaleY );
-    const Fraction& GetScaleY() const;
-
-    void            SetScaleX( double rScaleX );
-    void            SetScaleY( double rScaleY );
+    void            SetScaleX( double fScaleX );
+    double          GetScaleX() const;
+    void            SetScaleY( double fScaleY );
+    double          GetScaleY() const;
 
     MapMode&        operator=( const MapMode& rMapMode );
     MapMode&        operator=( MapMode&& rMapMode );
@@ -88,8 +84,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
     rStream << "MapMode(" << static_cast<unsigned>(rMode.GetMapUnit()) << ",(" << rMode.GetScaleX() << "," << rMode.GetScaleY() << ")@(" << rMode.GetOrigin() << "))";
     return rStream;
 }
-
-bool TooLargeScaleForMapMode(const Fraction& rScale, int nDPI);
 
 #endif // INCLUDED_VCL_MAPMOD_HXX
 
