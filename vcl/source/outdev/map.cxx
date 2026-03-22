@@ -107,8 +107,8 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             break;
     }
 
-    const Fraction& aScaleX = rMapMode.GetScaleX();
-    const Fraction& aScaleY = rMapMode.GetScaleY();
+    double fScaleX = rMapMode.GetScaleX();
+    double fScaleY = rMapMode.GetScaleY();
 
     // set offset according to MapMode
     Point aOrigin = rMapMode.GetOrigin();
@@ -119,39 +119,20 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     }
     else
     {
-        auto funcCalcOffset = [](const Fraction& rScale, tools::Long& rnMapOffset, tools::Long nOrigin)
+        auto funcCalcOffset = [](double fScale, tools::Long& rnMapOffset, tools::Long nOrigin)
         {
-            auto nNumerator = rScale.GetNumerator();
-            assert(nNumerator != 0);
-
-            BigInt aX( rnMapOffset );
-            aX *= BigInt( rScale.GetDenominator() );
-            if ( rnMapOffset >= 0 )
-            {
-                if (nNumerator >= 0)
-                    aX += BigInt(nNumerator / 2);
-                else
-                    aX -= BigInt((nNumerator + 1) / 2);
-            }
-            else
-            {
-                if (nNumerator >= 0 )
-                    aX -= BigInt((nNumerator - 1) / 2);
-                else
-                    aX += BigInt(nNumerator / 2);
-            }
-            aX /= BigInt(nNumerator);
-            rnMapOffset = static_cast<tools::Long>(aX) + nOrigin;
+            assert(fScale != 0);
+            rnMapOffset = std::llround(double( rnMapOffset ) / fScale) + nOrigin;
         };
 
-        funcCalcOffset(aScaleX, rMapRes.mnMapOfsX, aOrigin.X());
-        funcCalcOffset(aScaleY, rMapRes.mnMapOfsY, aOrigin.Y());
+        funcCalcOffset(fScaleX, rMapRes.mnMapOfsX, aOrigin.X());
+        funcCalcOffset(fScaleY, rMapRes.mnMapOfsY, aOrigin.Y());
     }
 
     // calculate scaling factor according to MapMode
     // aTemp? = rMapRes.mnMapSc? * aScale?
-    rMapRes.mfMapScX = double(aScaleX) * rMapRes.mfMapScX;
-    rMapRes.mfMapScY = double(aScaleY) * rMapRes.mfMapScY;
+    rMapRes.mfMapScX = fScaleX * rMapRes.mfMapScX;
+    rMapRes.mfMapScY = fScaleY * rMapRes.mfMapScY;
 }
 
 // #i75163#
@@ -638,13 +619,9 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     // set new MapMode
     if (bRelMap)
     {
-        maMapMode.SetScaleX(Fraction::MakeFraction(
-            maMapMode.GetScaleX().GetNumerator(), rNewMapMode.GetScaleX().GetNumerator(),
-            maMapMode.GetScaleX().GetDenominator(), rNewMapMode.GetScaleX().GetDenominator()));
+        maMapMode.SetScaleX(maMapMode.GetScaleX() * rNewMapMode.GetScaleX());
 
-        maMapMode.SetScaleY(Fraction::MakeFraction(
-            maMapMode.GetScaleY().GetNumerator(), rNewMapMode.GetScaleY().GetNumerator(),
-            maMapMode.GetScaleY().GetDenominator(), rNewMapMode.GetScaleY().GetDenominator()));
+        maMapMode.SetScaleY(maMapMode.GetScaleY() * rNewMapMode.GetScaleY());
 
         maMapMode.SetOrigin(Point(maMapRes.mnMapOfsX, maMapRes.mnMapOfsY));
     }
@@ -688,14 +665,8 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
     MapUnit eNew = rNewMapMode.GetMapUnit();
 
     // a?F = rNewMapMode.GetScale?() / maMapMode.GetScale?()
-    Fraction aXF = Fraction::MakeFraction( rNewMapMode.GetScaleX().GetNumerator(),
-                                     maMapMode.GetScaleX().GetDenominator(),
-                                     rNewMapMode.GetScaleX().GetDenominator(),
-                                     maMapMode.GetScaleX().GetNumerator() );
-    Fraction aYF = Fraction::MakeFraction( rNewMapMode.GetScaleY().GetNumerator(),
-                                     maMapMode.GetScaleY().GetDenominator(),
-                                     rNewMapMode.GetScaleY().GetDenominator(),
-                                     maMapMode.GetScaleY().GetNumerator() );
+    double fXF = rNewMapMode.GetScaleX() / maMapMode.GetScaleX();
+    double fYF = rNewMapMode.GetScaleY() / maMapMode.GetScaleY();
 
     Point aPt( LogicToLogic( Point(), nullptr, &rNewMapMode ) );
     if ( eNew != eOld )
@@ -713,27 +684,25 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
             const auto eFrom = MapToO3tlLength(eOld, o3tl::Length::in);
             const auto eTo = MapToO3tlLength(eNew, o3tl::Length::in);
             const auto [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
-            Fraction aF(div, mul);
+            double aF = double(div) / mul;
 
             // a?F =  a?F * aF
-            aXF = Fraction::MakeFraction( aXF.GetNumerator(),   aF.GetNumerator(),
-                                    aXF.GetDenominator(), aF.GetDenominator() );
-            aYF = Fraction::MakeFraction( aYF.GetNumerator(),   aF.GetNumerator(),
-                                    aYF.GetDenominator(), aF.GetDenominator() );
+            fXF = fXF * aF;
+            fYF = fYF * aF;
             if ( eOld == MapUnit::MapPixel )
             {
-                aXF *= Fraction( mnDPIX, 1 );
-                aYF *= Fraction( mnDPIY, 1 );
+                fXF *= mnDPIX;
+                fYF *= mnDPIY;
             }
             else if ( eNew == MapUnit::MapPixel )
             {
-                aXF *= Fraction( 1, mnDPIX );
-                aYF *= Fraction( 1, mnDPIY );
+                fXF /= mnDPIX;
+                fYF /= mnDPIY;
             }
         }
     }
 
-    MapMode aNewMapMode( MapUnit::MapRelative, Point( -aPt.X(), -aPt.Y() ), aXF, aYF );
+    MapMode aNewMapMode( MapUnit::MapRelative, Point( -aPt.X(), -aPt.Y() ), fXF, fYF );
     SetMapMode( aNewMapMode );
 
     if ( eNew != eOld )

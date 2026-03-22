@@ -159,9 +159,9 @@ Image PreviewRenderer::RenderSubstitution (
         // visible.
         MapMode aMapMode (mpPreviewDevice->GetMapMode());
         aMapMode.SetMapUnit(MapUnit::Map100thMM);
-        Fraction aFinalScale(25 * rPreviewPixelSize.Width(), 28000);
-        aMapMode.SetScaleX(aFinalScale);
-        aMapMode.SetScaleY(aFinalScale);
+        double fFinalScale = double(25 * rPreviewPixelSize.Width()) / 28000;
+        aMapMode.SetScaleX(fFinalScale);
+        aMapMode.SetScaleY(fFinalScale);
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
         aMapMode.SetOrigin(mpPreviewDevice->PixelToLogic(
             Point(nFrameWidth,nFrameWidth),aMapMode));
@@ -363,9 +363,9 @@ void PreviewRenderer::SetupOutputSize (
     {
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
         aMapMode.SetScaleX(
-            Fraction(rFramePixelSize.Width()-2*nFrameWidth-1, aPageModelSize.Width()));
+            double(rFramePixelSize.Width()-2*nFrameWidth-1) / aPageModelSize.Width());
         aMapMode.SetScaleY(
-            Fraction(rFramePixelSize.Height()-2*nFrameWidth-1, aPageModelSize.Height()));
+            double(rFramePixelSize.Height()-2*nFrameWidth-1) / aPageModelSize.Height());
         aMapMode.SetOrigin(mpPreviewDevice->PixelToLogic(Point(nFrameWidth,nFrameWidth),aMapMode));
     }
     else

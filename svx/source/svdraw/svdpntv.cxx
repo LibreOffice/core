@@ -1057,13 +1057,12 @@ void SdrPaintView::MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin)
     {
         bNewScale=true;
         // set new MapMode (Size+Org) and invalidate everything
-        Fraction aXFact(aNewSize.Width(),aActualSize.Width());
-        Fraction aYFact(aNewSize.Height(),aActualSize.Height());
-        if (aYFact>aXFact) aXFact=aYFact;
-        aXFact*=aMap.GetScaleX();
-        aXFact.ReduceInaccurate(10); // to avoid runovers and BigInt mapping
-        aMap.SetScaleX(aXFact);
-        aMap.SetScaleY(aYFact);
+        double fXFact = double(aNewSize.Width()) / aActualSize.Width();
+        double fYFact = double(aNewSize.Height()) / aActualSize.Height();
+        if (fYFact>fXFact) fXFact=fYFact;
+        fXFact*=aMap.GetScaleX();
+        aMap.SetScaleX(fXFact);
+        aMap.SetScaleY(fYFact);
         rWin.SetMapMode(aMap);
         aActualSize=rWin.GetOutDev()->GetOutputSize();
     }

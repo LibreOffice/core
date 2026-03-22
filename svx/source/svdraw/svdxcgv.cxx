@@ -396,8 +396,8 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     MapUnit eSrcMU=rMap.GetMapUnit();
     MapUnit eDstMU = GetModel().GetScaleUnit();
     FrPair aMapFact(GetMapFactor(eSrcMU,eDstMU));
-    nSizX *= double(aMapFact.X() * rMap.GetScaleX());
-    nSizY *= double(aMapFact.Y() * rMap.GetScaleY());
+    nSizX *= aMapFact.X() * rMap.GetScaleX();
+    nSizY *= aMapFact.Y() * rMap.GetScaleY();
     tools::Long xs=nSizX;
     tools::Long ys=nSizY;
     // set the pos to 0, 0 for online case

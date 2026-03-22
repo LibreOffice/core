@@ -1089,9 +1089,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             aOrigin.AdjustY(o3tl::toTwips(aOutputData.mnScrY, o3tl::Length::px));
             aOrigin = o3tl::convert(aOrigin, o3tl::Length::twip, o3tl::Length::mm100);
             // keep into account the zoom factor
-            aOrigin = aOrigin.scale(
-                aDrawMode.GetScaleX().GetDenominator(), aDrawMode.GetScaleX().GetNumerator(),
-                aDrawMode.GetScaleY().GetDenominator(), aDrawMode.GetScaleY().GetNumerator());
+            aOrigin = aOrigin.scale(1.0 / aDrawMode.GetScaleX(), 1.0 / aDrawMode.GetScaleY());
 
             MapMode aNew = rDevice.GetMapMode();
             aNew.SetOrigin(aOrigin);
@@ -1186,9 +1184,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
             // keep into account the zoom factor
             Point aNewOrigin(o3tl::convert(aOriginAbsTw, o3tl::Length::twip, o3tl::Length::mm100));
-            aNewOrigin = aNewOrigin.scale(
-                aDrawMode.GetScaleX().GetDenominator(), aDrawMode.GetScaleX().GetNumerator(),
-                aDrawMode.GetScaleY().GetDenominator(), aDrawMode.GetScaleY().GetNumerator());
+            aNewOrigin = aNewOrigin.scale(1.0 / aDrawMode.GetScaleX(), 1.0 / aDrawMode.GetScaleY());
 
             MapMode aNewMM = rDevice.GetMapMode();
             aNewMM.SetOrigin(aNewOrigin);
@@ -1297,7 +1293,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                     aCursorRect.setWidth(0);
                     aCursorRect.Move(aCursPos.getX(), 0);
                     // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
-                    InvalidateLOKViewCursor(aCursorRect, double(aMM.GetScaleX()), double(aMM.GetScaleY()));
+                    InvalidateLOKViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
                 }
 
                 // Rollback the mapmode and 'output area'.

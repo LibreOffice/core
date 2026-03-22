@@ -70,8 +70,8 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
-    Fraction aXScale(aWinSize.Width(), std::max(aSize.Width() * 2 + aSize.Width() / 8, tools::Long(1)));
-    Fraction aYScale(aWinSize.Height(), std::max(aSize.Height(), tools::Long(1)));
+    double aXScale = double(aWinSize.Width()) / std::max(aSize.Width() * 2 + aSize.Width() / 8, tools::Long(1));
+    double aYScale = double(aWinSize.Height()) / std::max(aSize.Height(), tools::Long(1));
     MapMode aMapMode(rRenderContext.GetMapMode());
 
     if(aYScale < aXScale)
@@ -94,9 +94,9 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         if (aSize.Width() > aSize.Height())
         {
             // Draw Landscape page of the same size
-            Fraction aX = aMapMode.GetScaleX();
-            Fraction aY = aMapMode.GetScaleY();
-            Fraction a2(1.5);
+            double aX = aMapMode.GetScaleX();
+            double aY = aMapMode.GetScaleY();
+            double a2(1.5);
             aX *= a2;
             aY *= a2;
             aMapMode.SetScaleX(aX);

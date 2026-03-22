@@ -435,17 +435,6 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
     }
 }
 
-bool TooLargeScaleForMapMode(const Fraction& rScale, int nDPI)
-{
-    // ImplLogicToPixel will multiply its values by this numerator * dpi and then double that
-    // result before dividing
-    if (rScale.GetNumerator() > std::numeric_limits<sal_Int32>::max() / nDPI / 2)
-        return true;
-    if (rScale.GetNumerator() < std::numeric_limits<sal_Int32>::min() / nDPI / 2)
-        return true;
-    return false;
-}
-
 static bool UselessScaleForMapMode(const Fraction& rScale)
 {
     if (!rScale.IsValid())
@@ -508,7 +497,7 @@ bool TypeSerializer::readMapMode(MapMode& rMapMode)
             SAL_WARN("vcl", "invalid scale");
             return false;
         }
-        rMapMode = MapMode(eUnit, aOrigin, aScaleX, aScaleY);
+        rMapMode = MapMode(eUnit, aOrigin, double(aScaleX), double(aScaleY));
     }
     return true;
 }
@@ -519,8 +508,8 @@ void TypeSerializer::writeMapMode(MapMode const& rMapMode)
 
     mrStream.WriteUInt16(sal_uInt16(rMapMode.GetMapUnit()));
     writePoint(rMapMode.GetOrigin());
-    writeFraction(rMapMode.GetScaleX());
-    writeFraction(rMapMode.GetScaleY());
+    writeFraction(Fraction(rMapMode.GetScaleX()));
+    writeFraction(Fraction(rMapMode.GetScaleY()));
     mrStream.WriteBool(rMapMode.IsSimple());
 }
 

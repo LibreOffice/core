@@ -4060,8 +4060,8 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     // We specifically calculate these scales first as we're still
     // in TWIPs, and might as well minimize the number of conversions.
     const double scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
-    Fraction scaleX = Fraction(nOutputWidth, nTileWidth) * scale;
-    Fraction scaleY = Fraction(nOutputHeight, nTileHeight) * scale;
+    double scaleX = double(nOutputWidth) / nTileWidth * scale;
+    double scaleY = double(nOutputHeight) / nTileHeight * scale;
 
     // svx seems to be the only component that works natively in
     // 100th mm rather than TWIP. It makes most sense just to

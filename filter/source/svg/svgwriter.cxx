@@ -4189,16 +4189,16 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
 {
     MapMode     aMapMode( rMtf.GetPrefMapMode() );
     Size        aPrefSize( rMtf.GetPrefSize() );
-    Fraction    aFractionX( aMapMode.GetScaleX() );
-    Fraction    aFractionY( aMapMode.GetScaleY() );
+    double      fFractionX( aMapMode.GetScaleX() );
+    double      fFractionY( aMapMode.GetScaleY() );
 
     auto popIt = mpVDev->ScopedPush();
 
     Size aSize( OutputDevice::LogicToLogic(rSize100thmm, MapMode(MapUnit::Map100thMM), aMapMode) );
-    aFractionX *= Fraction( aSize.Width(), aPrefSize.Width() );
-    aMapMode.SetScaleX( aFractionX );
-    aFractionY *= Fraction( aSize.Height(), aPrefSize.Height() );
-    aMapMode.SetScaleY( aFractionY );
+    fFractionX *= double( aSize.Width() ) / aPrefSize.Width();
+    aMapMode.SetScaleX( fFractionX );
+    fFractionY *= double( aSize.Height() ) / aPrefSize.Height();
+    aMapMode.SetScaleY( fFractionY );
 
     Point aOffset( OutputDevice::LogicToLogic(rPos100thmm, MapMode(MapUnit::Map100thMM), aMapMode ) );
     aOffset += aMapMode.GetOrigin();

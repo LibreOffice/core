@@ -156,6 +156,12 @@ public:
                     o3tl::convert(getY(), nMulY, nDivY));
     }
 
+    // Scales relative to 0,0
+    constexpr PointT scale(double fX, double fY) const
+    {
+        return PointT(std::llround(getX() * fX), std::llround(getY() * fY));
+    }
+
     using Pair::toString;
     using Pair::GetHashValue;
 };
@@ -861,6 +867,20 @@ public:
             aRect.SetRight(o3tl::convert(Right(), nMulX, nDivX));
         if (!IsHeightEmpty())
             aRect.SetBottom(o3tl::convert(Bottom(), nMulY, nDivY));
+        return aRect;
+    }
+
+    // Scales relative to 0,0
+    constexpr RectangleT scale(double fX, double fY) const
+    {
+        // 1. Create an empty rectangle with correct left and top
+        RectangleT aRect(std::llround(Left() * fX),
+                         std::llround(Top() * fY));
+        // 2. If source has width/height, set respective right and bottom
+        if (!IsWidthEmpty())
+            aRect.SetRight(std::llround(Right() * fX));
+        if (!IsHeightEmpty())
+            aRect.SetBottom(std::llround(Bottom() * fY));
         return aRect;
     }
 };

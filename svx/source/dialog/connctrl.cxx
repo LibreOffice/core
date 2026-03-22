@@ -98,13 +98,13 @@ void SvxXConnectionPreview::AdaptSize()
         aNewSize.setHeight( static_cast<tools::Long>( static_cast<double>(nWidth) / fRectWH ) );
     }
 
-    Fraction aFrac1( aWinSize.Width(), aRect.GetWidth() );
-    Fraction aFrac2( aWinSize.Height(), aRect.GetHeight() );
-    Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
+    double fFrac1 = double( aWinSize.Width() ) / aRect.GetWidth();
+    double fFrac2 = double( aWinSize.Height() ) / aRect.GetHeight();
+    double fMinFrac( fFrac1 <= fFrac2 ? fFrac1 : fFrac2 );
 
     // Implement MapMode
-    aDisplayMap.SetScaleX( aMinFrac );
-    aDisplayMap.SetScaleY( aMinFrac );
+    aDisplayMap.SetScaleX( fMinFrac );
+    aDisplayMap.SetScaleY( fMinFrac );
 
     // Centering
     aNewPos.setX( ( nWidth - aNewSize.Width() )  >> 1 );
@@ -252,40 +252,40 @@ bool SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
     if( bZoomIn || bZoomOut )
     {
         MapMode aMapMode = GetMapMode();
-        Fraction aXFrac = aMapMode.GetScaleX();
-        Fraction aYFrac = aMapMode.GetScaleY();
-        std::optional<double> oMultFrac;
+        double fXFrac = aMapMode.GetScaleX();
+        double fYFrac = aMapMode.GetScaleY();
+        double fMultFrac;
 
         if( bZoomIn )
         {
             if( bCtrl )
-                oMultFrac = 3.0 / 2;
+                fMultFrac = 3.0 / 2;
             else
-                oMultFrac = 11.0 / 10;
+                fMultFrac = 11.0 / 10;
         }
         else
         {
             if( bCtrl )
-                oMultFrac = 2.0 / 3;
+                fMultFrac = 2.0 / 3;
             else
-                oMultFrac = 10.0 / 11;
+                fMultFrac = 10.0 / 11;
         }
 
-        aXFrac *= *oMultFrac;
-        aYFrac *= *oMultFrac;
-        if( static_cast<double>(aXFrac) > 0.001 && static_cast<double>(aXFrac) < 1000.0 &&
-            static_cast<double>(aYFrac) > 0.001 && static_cast<double>(aYFrac) < 1000.0 )
+        fXFrac *= fMultFrac;
+        fYFrac *= fMultFrac;
+        if( fXFrac > 0.001 && fXFrac < 1000.0 &&
+            fYFrac > 0.001 && fYFrac < 1000.0 )
         {
-            aMapMode.SetScaleX( aXFrac );
-            aMapMode.SetScaleY( aYFrac );
+            aMapMode.SetScaleX( fXFrac );
+            aMapMode.SetScaleY( fYFrac );
             SetMapMode( aMapMode );
 
             Size aOutSize(GetOutputSizePixel());
             aOutSize = GetDrawingArea()->get_ref_device().PixelToLogic(aOutSize);
 
             Point aPt( aMapMode.GetOrigin() );
-            tools::Long nX = static_cast<tools::Long>( ( static_cast<double>(aOutSize.Width()) - ( static_cast<double>(aOutSize.Width()) * *oMultFrac ) ) / 2.0 + 0.5 );
-            tools::Long nY = static_cast<tools::Long>( ( static_cast<double>(aOutSize.Height()) - ( static_cast<double>(aOutSize.Height()) * *oMultFrac ) ) / 2.0 + 0.5 );
+            tools::Long nX = static_cast<tools::Long>( ( static_cast<double>(aOutSize.Width()) - ( static_cast<double>(aOutSize.Width()) * fMultFrac ) ) / 2.0 + 0.5 );
+            tools::Long nY = static_cast<tools::Long>( ( static_cast<double>(aOutSize.Height()) - ( static_cast<double>(aOutSize.Height()) * fMultFrac ) ) / 2.0 + 0.5 );
             aPt.AdjustX(nX );
             aPt.AdjustY(nY );
 

@@ -469,26 +469,14 @@ void GDIMetaFile::Play(OutputDevice& rOut, const Point& rPos,
     if( !aTmpPrefSize.Height() )
         aTmpPrefSize.setHeight( aDestSize.Height() );
 
-    Fraction aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
-    Fraction aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
+    double fScaleX = double( aDestSize.Width() ) / aTmpPrefSize.Width();
+    double fScaleY = double( aDestSize.Height() ) / aTmpPrefSize.Height();
 
-    aScaleX *= aDrawMap.GetScaleX();
-    aScaleY *= aDrawMap.GetScaleY();
-    // try reducing inaccurary first and abandon if the scaling
-    // still cannot be achieved
-    if (TooLargeScaleForMapMode(aScaleX, rOut.GetDPIX()))
-        aScaleX.ReduceInaccurate(10);
-    if (TooLargeScaleForMapMode(aScaleY, rOut.GetDPIY()))
-        aScaleY.ReduceInaccurate(10);
-    if (TooLargeScaleForMapMode(aScaleX, rOut.GetDPIX()) ||
-        TooLargeScaleForMapMode(aScaleY, rOut.GetDPIY()))
-    {
-        SAL_WARN("vcl", "GDIMetaFile Scaling is too high");
-        return;
-    }
+    fScaleX *= aDrawMap.GetScaleX();
+    fScaleY *= aDrawMap.GetScaleY();
 
-    aDrawMap.SetScaleX(aScaleX);
-    aDrawMap.SetScaleY(aScaleY);
+    aDrawMap.SetScaleX(fScaleX);
+    aDrawMap.SetScaleY(fScaleY);
 
     // #i47260# Convert logical output position to offset within
     // the metafile's mapmode. Therefore, disable pixel offset on
@@ -700,8 +688,8 @@ void GDIMetaFile::Move( tools::Long nX, tools::Long nY, tools::Long nDPIX, tools
             {
                 aOffset = aMapVDev->LogicToPixel( aBaseOffset, GetPrefMapMode() );
                 MapMode aMap( aMapVDev->GetMapMode() );
-                aOffset.setWidth( static_cast<tools::Long>(aOffset.Width() * static_cast<double>(aMap.GetScaleX())) );
-                aOffset.setHeight( static_cast<tools::Long>(aOffset.Height() * static_cast<double>(aMap.GetScaleY())) );
+                aOffset.setWidth( static_cast<tools::Long>(aOffset.Width() * aMap.GetScaleX()) );
+                aOffset.setHeight( static_cast<tools::Long>(aOffset.Height() * aMap.GetScaleY()) );
             }
             else
                 aOffset = OutputDevice::LogicToLogic( aBaseOffset, GetPrefMapMode(), aMapVDev->GetMapMode() );

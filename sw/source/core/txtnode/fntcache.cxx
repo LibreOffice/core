@@ -1145,9 +1145,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     if ( bDirectPrint )
     {
-        const Fraction aTmp( 1, 1 );
+        const double fTmp = 1.0;
         bool bStretch = rInf.GetWidth() && (rInf.GetLen() > TextFrameIndex(1)) && bPrt
-                        && ( aTmp != rInf.GetOut().GetMapMode().GetScaleX() );
+                        && ( fTmp != rInf.GetOut().GetMapMode().GetScaleX() );
 
         if ( bSwitchL2R )
             rInf.GetFrame()->SwitchLTRtoRTL( aTextOriginPos );

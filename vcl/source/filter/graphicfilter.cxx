@@ -222,10 +222,10 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             MapMode     aMap( MapUnit::Map100thInch );
 
             sal_Int32   nDPI = rConfigItem.ReadInt32( u"Resolution"_ustr, 75 );
-            Fraction    aFrac( 1, std::clamp( nDPI, sal_Int32(75), sal_Int32(600) ) );
+            double      fFrac = 1.0 / std::clamp( nDPI, sal_Int32(75), sal_Int32(600) );
 
-            aMap.SetScaleX( aFrac );
-            aMap.SetScaleY( aFrac );
+            aMap.SetScaleX( fFrac );
+            aMap.SetScaleY( fFrac );
 
             Size aOldSize = aBitmap.GetSizePixel();
             aGraphic = rGraphic;

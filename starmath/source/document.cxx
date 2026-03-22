@@ -1534,9 +1534,9 @@ void SmDocShell::Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrin
                                o3tl::convert(aOutRect.GetHeight(), 100, aSize.Height()));
                 if (bIsPrintFrame && nZ > MINZOOM)
                     nZ -= 10;
-                Fraction aFraction(std::clamp(nZ, MINZOOM, MAXZOOM), 100);
+                double fFraction(std::clamp(nZ, MINZOOM, MAXZOOM) / 100.0);
 
-                OutputMapMode = MapMode(SmMapUnit(), Point(), aFraction, aFraction);
+                OutputMapMode = MapMode(SmMapUnit(), Point(), fFraction, fFraction);
             }
             else
                 OutputMapMode = MapMode(SmMapUnit());
@@ -1544,9 +1544,9 @@ void SmDocShell::Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrin
 
         case PRINT_SIZE_ZOOMED:
         {
-            Fraction aFraction(nZoomFactor, 100);
+            double fFraction = nZoomFactor / 100.0;
 
-            OutputMapMode = MapMode(SmMapUnit(), Point(), aFraction, aFraction);
+            OutputMapMode = MapMode(SmMapUnit(), Point(), fFraction, fFraction);
             break;
         }
     }

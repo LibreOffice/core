@@ -1010,8 +1010,8 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uI
         MapMode aMapMode(
             MapUnit::MapMM,
             Point(),
-            Fraction(1000, aHeader.nXPelsPerMeter),
-            Fraction(1000, aHeader.nYPelsPerMeter));
+            1000.0 / aHeader.nXPelsPerMeter,
+            1000.0 / aHeader.nYPelsPerMeter);
 
         aNewBmp.SetPrefMapMode(aMapMode);
         aNewBmp.SetPrefSize(Size(aHeader.nWidth, aHeader.nHeight));

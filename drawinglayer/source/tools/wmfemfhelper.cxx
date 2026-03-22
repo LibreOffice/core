@@ -402,7 +402,7 @@ namespace
     basegfx::B2DHomMatrix getTransformFromMapMode(const MapMode& rMapMode)
     {
         basegfx::B2DHomMatrix aMapping;
-        const Fraction aNoScale(1, 1);
+        const double fNoScale = 1.0;
         const Point& rOrigin(rMapMode.GetOrigin());
 
         if(0 != rOrigin.X() || 0 != rOrigin.Y())
@@ -410,11 +410,9 @@ namespace
             aMapping.translate(rOrigin.X(), rOrigin.Y());
         }
 
-        if(rMapMode.GetScaleX() != aNoScale || rMapMode.GetScaleY() != aNoScale)
+        if(rMapMode.GetScaleX() != fNoScale || rMapMode.GetScaleY() != fNoScale)
         {
-            aMapping.scale(
-                double(rMapMode.GetScaleX()),
-                double(rMapMode.GetScaleY()));
+            aMapping.scale(rMapMode.GetScaleX(), rMapMode.GetScaleY());
         }
 
         return aMapping;

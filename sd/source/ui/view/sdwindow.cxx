@@ -182,7 +182,7 @@ void Window::SetMaxZoom (::tools::Long nMax)
 
 ::tools::Long Window::GetZoom() const
 {
-    if( GetMapMode().GetScaleX().GetDenominator() )
+    if( GetMapMode().GetScaleX() != 0 )
     {
         return ::tools::Long(GetMapMode().GetScaleX() * 100);
     }

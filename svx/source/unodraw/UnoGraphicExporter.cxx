@@ -312,22 +312,22 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, tools::Lo
     // use scaling?
     if( nWidthPixel != 0 )
     {
-        const Fraction aFrac( nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
+        const double fFrac = double( nWidthPixel ) / pVDev->LogicToPixel( aPageSize, aMM ).Width();
 
-        aMM.SetScaleX( aFrac );
+        aMM.SetScaleX( fFrac );
 
         if( nHeightPixel == 0 )
-            aMM.SetScaleY( aFrac );
+            aMM.SetScaleY( fFrac );
     }
 
     if( nHeightPixel != 0 )
     {
-        const Fraction aFrac( nHeightPixel, pVDev->LogicToPixel( aPageSize, aMM ).Height() );
+        const double fFrac = double( nHeightPixel ) / pVDev->LogicToPixel( aPageSize, aMM ).Height();
 
         if( nWidthPixel == 0 )
-            aMM.SetScaleX( aFrac );
+            aMM.SetScaleX( fFrac );
 
-        aMM.SetScaleY( aFrac );
+        aMM.SetScaleY( fFrac );
     }
 
     pVDev->SetMapMode( aMM );
@@ -569,7 +569,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
         return false;
 
     ScopedVclPtrInstance< VirtualDevice > aVDev;
-    const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), rSettings.maScaleX, rSettings.maScaleY );
+    const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), double(rSettings.maScaleX), double(rSettings.maScaleY) );
 
     SdrOutliner& rOutl=mpDoc->GetDrawOutliner();
     maOldCalcFieldValueHdl = rOutl.GetCalcFieldValueHdl();

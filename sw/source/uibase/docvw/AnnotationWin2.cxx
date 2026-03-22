@@ -493,11 +493,11 @@ void SwAnnotationWin::SetMenuButtonColors()
     SwWrtShell* pWrtShell = mrView.GetWrtShellPtr();
     if (!pWrtShell)
         return;
-    const Fraction& rFraction = pWrtShell->GetOut()->GetMapMode().GetScaleY();
+    double fFraction = pWrtShell->GetOut()->GetMapMode().GetScaleY();
 
     ScopedVclPtrInstance<VirtualDevice> xVirDev;
-    Size aSize(tools::Long(METABUTTON_WIDTH * rFraction),
-               tools::Long(METABUTTON_HEIGHT * rFraction));
+    Size aSize(tools::Long(METABUTTON_WIDTH * fFraction),
+               tools::Long(METABUTTON_HEIGHT * fFraction));
     tools::Rectangle aRect(Point(0, 0), aSize);
     xVirDev->SetOutputSizePixel(aSize);
 
@@ -551,10 +551,10 @@ void SwAnnotationWin::Rescale()
     SwWrtShell* pWrtShell = mrView.GetWrtShellPtr();
     if (!pWrtShell)
         return;
-    const Fraction& rFraction = pWrtShell->GetOut()->GetMapMode().GetScaleY();
+    double fFraction = pWrtShell->GetOut()->GetMapMode().GetScaleY();
 
     vcl::Font aFont = maLabelFont;
-    sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
+    sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * fFraction);
     aFont.SetFontHeight( nHeight );
 
     if (mxMetadataAuthor)
@@ -1305,7 +1305,7 @@ int SwAnnotationWin::GetPrefScrollbarWidth() const
 {
     if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
     {
-        const Fraction& f(pWrtShell->GetOut()->GetMapMode().GetScaleY());
+        double f(pWrtShell->GetOut()->GetMapMode().GetScaleY());
         return tools::Long(Application::GetSettings().GetStyleSettings().GetScrollBarSize() * f);
     }
     else
@@ -1338,7 +1338,7 @@ sal_Int32 SwAnnotationWin::GetMinimumSizeWithoutMeta() const
 {
     if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
     {
-        const Fraction& f(pWrtShell->GetOut()->GetMapMode().GetScaleY());
+        double f(pWrtShell->GetOut()->GetMapMode().GetScaleY());
         return tools::Long(POSTIT_MINIMUMSIZE_WITHOUT_META * f);
     }
     else

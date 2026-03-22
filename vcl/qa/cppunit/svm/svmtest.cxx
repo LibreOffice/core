@@ -1954,14 +1954,14 @@ void SvmTest::checkMapMode(const GDIMetaFile& rMetafile)
         {"x", u"0"},
         {"y", u"1"},
         {"scalex", u"(1/2)"},
-        {"scaley", u"(2/3)"}
+        {"scaley", u"(333333333/500000000)"} // approximation of 2/3
     });
 
     assertXPathAttrs(pDoc, "/metafile/mapmode[3]", {
         {"mapunit", u"MapRelative"},
         {"x", u"0"},
         {"y", u"-1"},
-        {"scalex", u"(25/12)"},
+        {"scalex", u"(2083333333/1000000000)"}, // approximation of 25/12
         {"scaley", u"(25/16)"}
     });
 }
@@ -1980,8 +1980,8 @@ void SvmTest::testMapMode()
 
     MapMode aMapMode1(MapUnit::Map100thInch);
     aMapMode1.SetOrigin(Point(0, 1));
-    aMapMode1.SetScaleX(Fraction(1, 2));
-    aMapMode1.SetScaleY(Fraction(2, 3));
+    aMapMode1.SetScaleX(1.0 / 2);
+    aMapMode1.SetScaleY(2.0 / 3);
 
     pVirtualDev->SetMetafileMapMode(aMapMode1, false);
 
@@ -2217,7 +2217,7 @@ void SvmTest::checkEPS(const GDIMetaFile& rMetaFile)
         {"x", u"0"},
         {"y", u"1"},
         {"scalex", u"(1/2)"},
-        {"scaley", u"(2/3)"}
+        {"scaley", u"(333333333/500000000)"} // approximation of 2/3
     });
 
     assertXPathAttrs(pDoc, "/metafile/eps[1]/metafile[1]/point[1]", {
@@ -2243,8 +2243,8 @@ void SvmTest::testEPS()
 
     MapMode aMapMode1(MapUnit::Map100thInch);
     aMapMode1.SetOrigin(Point(0, 1));
-    aMapMode1.SetScaleX(Fraction(1, 2));
-    aMapMode1.SetScaleY(Fraction(2, 3));
+    aMapMode1.SetScaleX(1.0 / 2);
+    aMapMode1.SetScaleY(2.0 / 3);
 
     GDIMetaFile aGDIMetaFile1;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev1;

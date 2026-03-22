@@ -861,8 +861,8 @@ namespace sdr::contact {
 
         ::basegfx::B2DHomMatrix aScaleNormalization;
         const MapMode& aCurrentDeviceMapMode( rPageViewDevice.GetMapMode() );
-        aScaleNormalization.set( 0, 0, static_cast<double>(aCurrentDeviceMapMode.GetScaleX()) );
-        aScaleNormalization.set( 1, 1, static_cast<double>(aCurrentDeviceMapMode.GetScaleY()) );
+        aScaleNormalization.set( 0, 0, aCurrentDeviceMapMode.GetScaleX() );
+        aScaleNormalization.set( 1, 1, aCurrentDeviceMapMode.GetScaleY() );
         m_aZoomLevelNormalization *= aScaleNormalization;
 
     #if OSL_DEBUG_LEVEL > 0

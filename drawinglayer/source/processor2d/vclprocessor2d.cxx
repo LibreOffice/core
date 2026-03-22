@@ -96,7 +96,7 @@ namespace
 basegfx::B2DHomMatrix getTransformFromMapMode(const MapMode& rMapMode)
 {
     basegfx::B2DHomMatrix aMapping;
-    const Fraction aNoScale(1, 1);
+    const double fNoScale = 1.0;
     const Point& rOrigin(rMapMode.GetOrigin());
 
     if (0 != rOrigin.X() || 0 != rOrigin.Y())
@@ -104,9 +104,9 @@ basegfx::B2DHomMatrix getTransformFromMapMode(const MapMode& rMapMode)
         aMapping.translate(rOrigin.X(), rOrigin.Y());
     }
 
-    if (rMapMode.GetScaleX() != aNoScale || rMapMode.GetScaleY() != aNoScale)
+    if (rMapMode.GetScaleX() != fNoScale || rMapMode.GetScaleY() != fNoScale)
     {
-        aMapping.scale(double(rMapMode.GetScaleX()), double(rMapMode.GetScaleY()));
+        aMapping.scale(rMapMode.GetScaleX(), rMapMode.GetScaleY());
     }
 
     return aMapping;
@@ -359,22 +359,11 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                     basegfx::fround<tools::Long>(aCurrentTranslate.getY()
                                                  / aCurrentScaling.getY()));
 
-                Fraction aScaleX(aCurrentScaling.getX());
-                if (!aScaleX.IsValid())
-                {
-                    SAL_WARN("drawinglayer", "invalid X Scale");
-                    return;
-                }
+                double fScaleX(aCurrentScaling.getX());
+                double fScaleY(aCurrentScaling.getY());
 
-                Fraction aScaleY(aCurrentScaling.getY());
-                if (!aScaleY.IsValid())
-                {
-                    SAL_WARN("drawinglayer", "invalid Y Scale");
-                    return;
-                }
-
-                MapMode aMapMode(mpOutputDevice->GetMapMode().GetMapUnit(), aOrigin, aScaleX,
-                                 aScaleY);
+                MapMode aMapMode(mpOutputDevice->GetMapMode().GetMapUnit(), aOrigin, fScaleX,
+                                 fScaleY);
                 bChangeMapMode = aMapMode != mpOutputDevice->GetMapMode();
                 if (bChangeMapMode)
                 {
@@ -432,24 +421,17 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                         aMapMode.SetScaleX(aMapMode.GetScaleX() * nFontScalingFixX);
                         aMapMode.SetScaleY(aMapMode.GetScaleY() * nFontScalingFixY);
 
-                        const bool bValidScaling
-                            = aMapMode.GetScaleX().IsValid() && aMapMode.GetScaleY().IsValid();
-                        if (!bValidScaling)
-                            SAL_WARN("drawinglayer", "skipping invalid scaling");
-                        else
-                        {
-                            assert(nFontScalingFixX != 0 && nFontScalingFixY != 0
-                                   && "or bValidScaling would be false");
+                        assert(nFontScalingFixX != 0 && nFontScalingFixY != 0
+                               && "or bValidScaling would be false");
 
-                            Point origin = aMapMode.GetOrigin();
+                        Point origin = aMapMode.GetOrigin();
 
-                            mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
-                            mpOutputDevice->SetRelativeMapMode(aMapMode);
-                            bChangeMapMode = true;
+                        mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
+                        mpOutputDevice->SetRelativeMapMode(aMapMode);
+                        bChangeMapMode = true;
 
-                            aPointX = (aPointX + origin.X()) / nFontScalingFixX - origin.X();
-                            aPointY = (aPointY + origin.Y()) / nFontScalingFixY - origin.Y();
-                        }
+                        aPointX = (aPointX + origin.X()) / nFontScalingFixX - origin.X();
+                        aPointY = (aPointY + origin.Y()) / nFontScalingFixY - origin.Y();
                     }
                 }
 

@@ -334,9 +334,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         UpdateDrawView();       // Spreadsheet eventually changes
     }
 
-    Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( static_cast<tools::Long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
-    MapMode aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
+    double fPreviewZoom = double(nZoom) / 100;
+    double fHorPrevZoom = 100.0 * nZoom / pDocShell->GetOutputFactor() / 10000;
+    MapMode aMMMode( MapUnit::Map100thMM, Point(), fHorPrevZoom, fPreviewZoom );
 
     bool bDoPrint = ( pFillLocation == nullptr );
     bool bValidPage = ( nPageNo < nTotalPages );
@@ -722,9 +722,9 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
 
     //  apply new MapMode and call UpdateScrollBars to update aOffset
 
-    Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( static_cast<tools::Long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
-    MapMode aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
+    double fPreviewZoom = double(nZoom) / 100;
+    double fHorPrevZoom = 100.0 * nZoom / pDocShell->GetOutputFactor() / 10000;
+    MapMode aMMMode( MapUnit::Map100thMM, Point(), fHorPrevZoom, fPreviewZoom );
     SetMapMode( aMMMode );
 
     bInSetZoom = true;              // don't scroll during SetYOffset in UpdateScrollBars
@@ -949,9 +949,9 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
 
 void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    Fraction  aPreviewZoom( nZoom, 100 );
-    Fraction  aHorPrevZoom( static_cast<tools::Long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
-    MapMode   aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
+    double    fPreviewZoom = double(nZoom) / 100;
+    double    fHorPrevZoom = 100.0 * nZoom / pDocShell->GetOutputFactor() / 10000;
+    MapMode   aMMMode( MapUnit::Map100thMM, Point(), fHorPrevZoom, fPreviewZoom );
 
     aButtonDownChangePoint = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
     aButtonDownPt = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
@@ -1032,9 +1032,9 @@ void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 {
-        Fraction  aPreviewZoom( nZoom, 100 );
-        Fraction  aHorPrevZoom( static_cast<tools::Long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
-        MapMode   aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
+        double    fPreviewZoom = double(nZoom) / 100;
+        double    fHorPrevZoom = 100.0 * nZoom / pDocShell->GetOutputFactor() / 10000;
+        MapMode   aMMMode( MapUnit::Map100thMM, Point(), fHorPrevZoom, fPreviewZoom );
 
         aButtonUpPt = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
 
@@ -1296,9 +1296,9 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ScPreview::MouseMove( const MouseEvent& rMEvt )
 {
-    Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( static_cast<tools::Long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
-    MapMode  aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
+    double   fPreviewZoom = double(nZoom) / 100;
+    double   fHorPrevZoom = 100.0 * nZoom / pDocShell->GetOutputFactor() / 10000;
+    MapMode  aMMMode( MapUnit::Map100thMM, Point(), fHorPrevZoom, fPreviewZoom );
     Point    aMouseMovePoint = PixelToLogic( rMEvt.GetPosPixel(), aMMMode );
 
     tools::Long    nLeftMargin = 0;
@@ -1526,9 +1526,9 @@ rtl::Reference<comphelper::OAccessible> ScPreview::CreateAccessible()
 
 void ScPreview::DragMove( tools::Long nDragMovePos, PointerStyle nFlags )
 {
-    Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( static_cast<tools::Long>( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
-    MapMode  aMMMode( MapUnit::Map100thMM, Point(), aHorPrevZoom, aPreviewZoom );
+    double   fPreviewZoom = double(nZoom) / 100;
+    double   fHorPrevZoom = 100.0 * nZoom / pDocShell->GetOutputFactor() / 10000;
+    MapMode  aMMMode( MapUnit::Map100thMM, Point(), fHorPrevZoom, fPreviewZoom );
     SetMapMode( aMMMode );
     tools::Long  nPos = nDragMovePos;
     if( nFlags == PointerStyle::HSizeBar || nFlags == PointerStyle::HSplit )

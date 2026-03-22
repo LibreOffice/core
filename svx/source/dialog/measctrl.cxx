@@ -99,33 +99,32 @@ bool SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (bZoomIn || bZoomOut)
     {
-        Fraction aXFrac = m_aMapMode.GetScaleX();
-        Fraction aYFrac = m_aMapMode.GetScaleY();
-        std::unique_ptr<Fraction> pMultFrac;
+        double fXFrac = m_aMapMode.GetScaleX();
+        double fYFrac = m_aMapMode.GetScaleY();
+        double fMultFrac;
 
         if (bZoomIn)
         {
             if (bCtrl)
-                pMultFrac.reset(new Fraction(3, 2));
+                fMultFrac = 3.0 / 2;
             else
-                pMultFrac.reset(new Fraction(11, 10));
+                fMultFrac = 11.0 / 10;
         }
         else
         {
             if (bCtrl)
-                pMultFrac.reset(new Fraction(2, 3));
+                fMultFrac = 2.0 / 3;
             else
-                pMultFrac.reset(new Fraction(10, 11));
+                fMultFrac = 10.0 / 11;
         }
 
-        aXFrac *= *pMultFrac;
-        aYFrac *= *pMultFrac;
+        fXFrac *= fMultFrac;
+        fYFrac *= fMultFrac;
 
-        if (double(aXFrac) > 0.001 && double(aXFrac) < 1000.0 && double(aYFrac) > 0.001
-            && double(aYFrac) < 1000.0)
+        if (fXFrac > 0.001 && fXFrac < 1000.0 && fYFrac > 0.001 && fYFrac < 1000.0)
         {
-            m_aMapMode.SetScaleX(aXFrac);
-            m_aMapMode.SetScaleY(aYFrac);
+            m_aMapMode.SetScaleX(fXFrac);
+            m_aMapMode.SetScaleY(fYFrac);
 
             OutputDevice& rRefDevice = GetDrawingArea()->get_ref_device();
             rRefDevice.Push(vcl::PushFlags::MAPMODE);
@@ -135,11 +134,9 @@ bool SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
 
             Point aPt(m_aMapMode.GetOrigin());
             tools::Long nX = tools::Long(
-                (double(aOutSize.Width()) - (double(aOutSize.Width()) * double(*pMultFrac))) / 2.0
-                + 0.5);
+                (double(aOutSize.Width()) - (double(aOutSize.Width()) * fMultFrac)) / 2.0 + 0.5);
             tools::Long nY = tools::Long(
-                (double(aOutSize.Height()) - (double(aOutSize.Height()) * double(*pMultFrac))) / 2.0
-                + 0.5);
+                (double(aOutSize.Height()) - (double(aOutSize.Height()) * fMultFrac)) / 2.0 + 0.5);
             aPt.AdjustX(nX);
             aPt.AdjustY(nY);
 

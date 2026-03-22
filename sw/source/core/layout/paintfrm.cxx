@@ -398,8 +398,8 @@ void SwCalcPixStatics( vcl::RenderContext const *pOut )
     gProp.nSMinDistPixelH = gProp.nSPixelSzH * 2 + 1;
 
     const MapMode &rMap = pOut->GetMapMode();
-    gProp.aSScaleX = double(rMap.GetScaleX());
-    gProp.aSScaleY = double(rMap.GetScaleY());
+    gProp.aSScaleX = rMap.GetScaleX();
+    gProp.aSScaleY = rMap.GetScaleY();
 }
 
 namespace {

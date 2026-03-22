@@ -550,13 +550,13 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             // that Skia can handle may need to be raised or lowered for
             // platforms other than macOS.
             static constexpr tools::Long nCopyToImageMaxPixels = 8192 * 8192;
-            Fraction aScale(1.0);
+            double fScale(1.0);
             Size aPixelSize = pVirtDev->LogicToPixel(aMMRect.GetSize(), MapMode(MapUnit::Map100thMM));
             tools::Long nPixels(aPixelSize.Width() * aPixelSize.Height());
             if (nPixels < 0 || nPixels > nCopyToImageMaxPixels)
             {
-                aScale = Fraction(nCopyToImageMaxPixels, nPixels);
-                aPixelSize = pVirtDev->LogicToPixel(aMMRect.GetSize(), MapMode(MapUnit::Map100thMM, Point(), aScale, aScale));
+                fScale = double(nCopyToImageMaxPixels) / nPixels;
+                aPixelSize = pVirtDev->LogicToPixel(aMMRect.GetSize(), MapMode(MapUnit::Map100thMM, Point(), fScale, fScale));
                 nPixels = aPixelSize.Width() * aPixelSize.Height();
             }
 
@@ -564,7 +564,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             PaintToDev( pVirtDev, *m_pDoc, 1.0, aReducedBlock );
 
-            pVirtDev->SetMapMode( MapMode( MapUnit::MapPixel, Point(), aScale, aScale ) );
+            pVirtDev->SetMapMode( MapMode( MapUnit::MapPixel, Point(), fScale, fScale ) );
             Bitmap aBmp( pVirtDev->GetBitmap( Point(), pVirtDev->GetOutputSize() ) );
             bOK = SetBitmap(aBmp, rFlavor);
         }

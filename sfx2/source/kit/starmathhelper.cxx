@@ -227,8 +227,8 @@ void KitStarMathHelper::PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutpu
 
     // Scaling. Must convert from pixels to twips. We know that VirtualDevices use a DPI of 96.
     const double scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
-    const Fraction scaleX = Fraction(nOutputWidth, nTileWidth) * scale;
-    const Fraction scaleY = Fraction(nOutputHeight, nTileHeight) * scale;
+    const double scaleX = double(nOutputWidth) / nTileWidth * scale;
+    const double scaleY = double(nOutputHeight) / nTileHeight * scale;
     aMapMode.SetScaleX(scaleX);
     aMapMode.SetScaleY(scaleY);
     aMapMode.SetMapUnit(MapUnit::MapTwip);

@@ -81,9 +81,9 @@ void SwViewShell::Init( const SwViewOption *pNewOpt, tools::Long const nFlags)
             if( GetWin() && 100 != mpOpt->GetZoom() )
             {
                 MapMode aMode( mpWin->GetMapMode() );
-                const Fraction aNewFactor( mpOpt->GetZoom(), 100 );
-                aMode.SetScaleX( aNewFactor );
-                aMode.SetScaleY( aNewFactor );
+                double fNewFactor = double(mpOpt->GetZoom()) / 100;
+                aMode.SetScaleX( fNewFactor );
+                aMode.SetScaleY( fNewFactor );
                 mpWin->SetMapMode( aMode );
             }
         }

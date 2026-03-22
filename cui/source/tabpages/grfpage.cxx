@@ -820,14 +820,14 @@ void SvxCropExample::SetFrameSize( const Size& rSz )
     if (!m_aFrameSize.Height())
         m_aFrameSize.setHeight( 1 );
     Size aWinSize( GetOutputSizePixel() );
-    Fraction aXScale( aWinSize.Width() * 4, m_aFrameSize.Width() * 5 );
-    Fraction aYScale( aWinSize.Height() * 4, m_aFrameSize.Height() * 5 );
+    double fXScale = double( aWinSize.Width() * 4 ) / (m_aFrameSize.Width() * 5 );
+    double fYScale = double( aWinSize.Height() * 4) / (m_aFrameSize.Height() * 5 );
 
-    if( aYScale < aXScale )
-        aXScale = aYScale;
+    if( fYScale < fXScale )
+        fXScale = fYScale;
 
-    m_aMapMode.SetScaleX(aXScale);
-    m_aMapMode.SetScaleY(aXScale);
+    m_aMapMode.SetScaleX(fXScale);
+    m_aMapMode.SetScaleY(fXScale);
 
     Invalidate();
 }

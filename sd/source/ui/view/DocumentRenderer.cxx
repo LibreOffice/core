@@ -2115,14 +2115,14 @@ private:
             const double fHorz = static_cast<double>(aPrintSize.Width())    / aPageSize.Width();
             const double fVert = static_cast<double>(aPrintSize.Height()) / aPageSize.Height();
 
-            Fraction    aFract;
+            double    fFract;
             if ( fHorz < fVert )
-                aFract = Fraction(aPrintSize.Width(), aPageSize.Width());
+                fFract = double(aPrintSize.Width()) / aPageSize.Width();
             else
-                aFract = Fraction(aPrintSize.Height(), aPageSize.Height());
+                fFract = double(aPrintSize.Height()) / aPageSize.Height();
 
-            aMap.SetScaleX(aFract);
-            aMap.SetScaleY(aFract);
+            aMap.SetScaleX(fFract);
+            aMap.SetScaleY(fFract);
             aMap.SetOrigin(Point());
         }
 
@@ -2246,14 +2246,14 @@ private:
                 const double fHorz(static_cast<double>(aPrintSize.Width()) / aPageSize.Width());
                 const double fVert(static_cast<double>(aPrintSize.Height()) / aPageSize.Height());
 
-                Fraction aFract;
+                double fFract;
                 if (fHorz < fVert)
-                    aFract = Fraction(aPrintSize.Width(), aPageSize.Width());
+                    fFract = double(aPrintSize.Width()) / aPageSize.Width();
                 else
-                    aFract = Fraction(aPrintSize.Height(), aPageSize.Height());
+                    fFract = double(aPrintSize.Height()) / aPageSize.Height();
 
-                aMap.SetScaleX(aFract);
-                aMap.SetScaleY(aFract);
+                aMap.SetScaleX(fFract);
+                aMap.SetScaleY(fFract);
                 aMap.SetOrigin(Point());
             }
 

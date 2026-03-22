@@ -598,7 +598,7 @@ void PDFWriterImpl::newPage( double nPageWidth, double nPageHeight, PDFWriter::O
     m_nCurrentPage = m_aPages.size();
     m_aPages.emplace_back(this, nPageWidth, nPageHeight, eOrientation );
 
-    const Fraction frac(m_aPages.back().m_nUserUnit, pointToPixel(1));
+    const double frac = double(m_aPages.back().m_nUserUnit) / pointToPixel(1);
     m_aMapMode = MapMode(MapUnit::MapPoint, Point(), frac, frac);
 
     m_aPages.back().beginStream();
@@ -5889,7 +5889,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     // if the mapmode is distorted we need to adjust for that also
     if( m_aCurrentPDFState.m_aMapMode.GetScaleX() != m_aCurrentPDFState.m_aMapMode.GetScaleY() )
     {
-        fXScale *= double(m_aCurrentPDFState.m_aMapMode.GetScaleX()) / double(m_aCurrentPDFState.m_aMapMode.GetScaleY());
+        fXScale *= m_aCurrentPDFState.m_aMapMode.GetScaleX() / m_aCurrentPDFState.m_aMapMode.GetScaleY();
     }
 
     Degree10 nAngle = m_aCurrentPDFState.m_aFont.GetOrientation();
