@@ -420,6 +420,10 @@ public:
     // means no change of the rotation point (only centered) and no shear allowed
     virtual bool HasLimitedRotation() const;
 
+    // Returns the preferred file extension for graphic objects (e.g. "png", "svg").
+    // Returns empty string for non-graphic objects.
+    virtual OUString getGraphicExtension() const;
+
     // Returns a copy of the object. Every inherited class must reimplement this.
     virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const = 0;
     // helper, since Clone always return the type of the current subclass

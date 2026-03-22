@@ -1044,7 +1044,15 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             {
                 aExtraInfo.append(", \"isWriterGraphic\": true");
             }
-            else if (bIsChart)
+
+            // Add graphic format extension for image objects
+            OUString aGraphicExtension = pO->getGraphicExtension();
+            if (!aGraphicExtension.isEmpty())
+            {
+                aExtraInfo.append(", \"graphicExtension\": \"" + aGraphicExtension.toUtf8() + "\"");
+            }
+
+            if (bIsChart)
             {
                 LokChartHelper aChartHelper(pViewShell);
                 css::uno::Reference<css::frame::XController>& xChartController = aChartHelper.GetXController();

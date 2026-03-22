@@ -130,6 +130,7 @@ public:
     SAL_DLLPRIVATE void                    NbcSetGraphic(const Graphic& rGrf);
     void                    SetGraphic(const Graphic& rGrf);
     const Graphic&          GetGraphic() const;
+    virtual OUString        getGraphicExtension() const override;
 
     Graphic                 GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformFlags = SdrGrafObjTransformsAttrs::ALL ) const;
 

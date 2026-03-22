@@ -39,6 +39,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/graphichelper.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflbmtit.hxx>
@@ -459,6 +460,13 @@ void SdrGrafObj::SetGraphic( const Graphic& rGraphic )
 const Graphic& SdrGrafObj::GetGraphic() const
 {
     return mpGraphicObject->GetGraphic();
+}
+
+OUString SdrGrafObj::getGraphicExtension() const
+{
+    OUString aExtension;
+    GraphicHelper::GetPreferredExtension(aExtension, GetGraphic());
+    return aExtension;
 }
 
 Graphic SdrGrafObj::GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformFlags ) const

@@ -1086,6 +1086,11 @@ bool SdrObject::HasLimitedRotation() const
     return false;
 }
 
+OUString SdrObject::getGraphicExtension() const
+{
+    return OUString();
+}
+
 OUString SdrObject::TakeObjNameSingul() const
 {
     OUString sName(SvxResId(STR_ObjNameSingulNONE));

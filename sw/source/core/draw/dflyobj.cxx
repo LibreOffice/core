@@ -52,6 +52,7 @@
 #include <textboxhelper.hxx>
 #include <wrtsh.hxx>
 #include <ndgrf.hxx>
+#include <svx/graphichelper.hxx>
 #include <frmmgr.hxx>
 
 #include <svx/sdr/properties/defaultproperties.hxx>
@@ -389,6 +390,25 @@ bool SwVirtFlyDrawObj::HasLimitedRotation() const
     // RotGrfFlyFrame: If true, this SdrObject supports only limited rotation.
     // This is the case for SwGrfNode instances
     return ContainsSwGrfNode();
+}
+
+OUString SwVirtFlyDrawObj::getGraphicExtension() const
+{
+    const SwFlyFrame* pFlyFrame(GetFlyFrame());
+    const SwFrame* pLower = pFlyFrame ? pFlyFrame->Lower() : nullptr;
+
+    if (pLower && pLower->IsNoTextFrame())
+    {
+        const SwNoTextFrame* pNTF(static_cast<const SwNoTextFrame*>(pLower));
+        const SwGrfNode* pGrfNd(pNTF->GetNode()->GetGrfNode());
+        if (pGrfNd)
+        {
+            OUString aExtension;
+            GraphicHelper::GetPreferredExtension(aExtension, pGrfNd->GetGrf());
+            return aExtension;
+        }
+    }
+    return OUString();
 }
 
 void SwVirtFlyDrawObj::Rotate(const Point& rRef, Degree100 nAngle100, double sn, double cs)
