@@ -35,8 +35,8 @@ class ScDrawView final : public FmFormView
     VclPtr<OutputDevice>    pDev;                   //! needed ?
     ScDocument&             rDoc;
     SCTAB                   nTab;
-    Fraction                aScaleX;                // Factor for Drawing-MapMode
-    Fraction                aScaleY;
+    double                  mfScaleX;                // Factor for Drawing-MapMode
+    double                  mfScaleY;
     std::unique_ptr<SdrDropMarkerOverlay> pDropMarker;
     SdrObject*              pDropMarkObj;
     bool                    bInConstruct;
@@ -93,12 +93,12 @@ public:
     void            DoCut();
     void            DoCopy();
 
-    void            GetScale( Fraction& rFractX, Fraction& rFractY ) const;
+    void            GetScale( double& rFractX, double& rFractY ) const;
     void            RecalcScale();
     void            UpdateWorkArea();
     SCTAB           GetTab() const      { return nTab; }
 
-    void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
+    void            CalcNormScale( double& rFractX, double& rFractY ) const;
 
     void            SetPageAnchored();
     void            SetCellAnchored(bool bResizeWithCell);

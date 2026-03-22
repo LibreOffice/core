@@ -319,10 +319,10 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
     ScDrawView* pDrView = mrViewData.GetView()->GetScDrawView();
     if ( pDrView || bForce )
     {
-        Fraction aScaleX;
-        Fraction aScaleY;
+        double fScaleX;
+        double fScaleY;
         if (pDrView)
-            pDrView->GetScale( aScaleX, aScaleY );
+            pDrView->GetScale( fScaleX, fScaleY );
         else
         {
             SCCOL nEndCol = 0;
@@ -333,10 +333,10 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
             ScDrawUtil::CalcScale( rDoc, nTab, 0,0, nEndCol,nEndRow, GetOutDev(),
                                    mrViewData.GetZoomX(),mrViewData.GetZoomY(),
                                    mrViewData.GetPPTX(),mrViewData.GetPPTY(),
-                                   aScaleX,aScaleY );
+                                   fScaleX,fScaleY );
         }
-        aDrawMode.SetScaleX(aScaleX);
-        aDrawMode.SetScaleY(aScaleY);
+        aDrawMode.SetScaleX(Fraction(fScaleX));
+        aDrawMode.SetScaleY(Fraction(fScaleY));
     }
     aDrawMode.SetOrigin(Point());
     Point aStartPos = mrViewData.GetPixPos(eWhich);

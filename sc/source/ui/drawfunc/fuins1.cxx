@@ -166,10 +166,10 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     MapMode aDestMap( MapUnit::Map100thMM );
     if ( aSourceMap.GetMapUnit() == MapUnit::MapPixel && pDrawView )
     {
-        Fraction aScaleX, aScaleY;
-        pDrawView->CalcNormScale( aScaleX, aScaleY );
-        aDestMap.SetScaleX(aScaleX);
-        aDestMap.SetScaleY(aScaleY);
+        double fScaleX, fScaleY;
+        pDrawView->CalcNormScale( fScaleX, fScaleY );
+        aDestMap.SetScaleX(Fraction(fScaleX));
+        aDestMap.SetScaleY(Fraction(fScaleY));
     }
     Size aLogicSize = pWindow->LogicToLogic(
                             rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );

@@ -31,7 +31,7 @@ void ScDrawUtil::CalcScale( const ScDocument& rDoc, SCTAB nTab,
                             const OutputDevice* pDev,
                             double fZoomX, double fZoomY,
                             double nPPTX, double nPPTY,
-                            Fraction& rScaleX, Fraction& rScaleY )
+                            double& rScaleX, double& rScaleY )
 {
     tools::Long nPixelX = 0;
     tools::Long nTwipsX = 0;
@@ -65,21 +65,16 @@ void ScDrawUtil::CalcScale( const ScDocument& rDoc, SCTAB nTab,
     //  because ReduceInaccurate is called later anyway.
 
     if ( aPixelLog.X() && nTwipsX )
-        rScaleX = Fraction( static_cast<double>(aPixelLog.X()) * fZoomX /
-                            o3tl::convert<double>(nTwipsX, o3tl::Length::twip, o3tl::Length::mm100) );
+        rScaleX = static_cast<double>(aPixelLog.X()) * fZoomX /
+                            o3tl::convert<double>(nTwipsX, o3tl::Length::twip, o3tl::Length::mm100);
     else
-        rScaleX = Fraction( 1, 1 );
+        rScaleX = 1.0;
 
     if ( aPixelLog.Y() && nTwipsY )
-        rScaleY = Fraction( static_cast<double>(aPixelLog.Y()) * fZoomY /
-                            o3tl::convert<double>(nTwipsY, o3tl::Length::twip, o3tl::Length::mm100) );
+        rScaleY = static_cast<double>(aPixelLog.Y()) * fZoomY /
+                            o3tl::convert<double>(nTwipsY, o3tl::Length::twip, o3tl::Length::mm100);
     else
-        rScaleY = Fraction( 1, 1 );
-
-    //  25 bits of accuracy are needed to always hit the right part of
-    //  cells in the last rows (was 17 before 1M rows).
-    rScaleX.ReduceInaccurate( 25 );
-    rScaleY.ReduceInaccurate( 25 );
+        rScaleY = 1.0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
