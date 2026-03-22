@@ -151,8 +151,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
 
     struct LOKCursorEntry
     {
-        Fraction aScaleX;
-        Fraction aScaleY;
+        double mfScaleX;
+        double mfScaleY;
         tools::Rectangle aRect;
     };
 
@@ -326,9 +326,9 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     void            UpdateKitSelection(const std::vector<tools::Rectangle>& rRectangles,
                                        std::vector<tools::Rectangle>* pLogicRects = nullptr);
     bool            NeedLOKCursorInvalidation(const tools::Rectangle& rCursorRect,
-                                              const Fraction aScaleX, const Fraction aScaleY);
+                                              double fScaleX, double fScaleY);
     void            InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
-                                            const Fraction aScaleX, const Fraction aScaleY);
+                                            double fScaleX, double fScaleY);
 
     void            SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab);
     DECL_DLLPRIVATE_LINK(InitiatePageBreaksTimer, Timer*, void);

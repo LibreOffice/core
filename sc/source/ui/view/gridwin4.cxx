@@ -311,13 +311,13 @@ void ScGridWindow::PrePaint(vcl::RenderContext& /*rRenderContext*/)
 }
 
 bool ScGridWindow::NeedLOKCursorInvalidation(const tools::Rectangle& rCursorRect,
-        const Fraction aScaleX, const Fraction aScaleY)
+        double fScaleX, double fScaleY)
 {
     // Don't see the need for a map as there will be only a few zoom levels
     // and as of now X and Y zooms in online are the same.
     for (auto& rEntry : maLOKLastCursor)
     {
-        if (aScaleX == rEntry.aScaleX && aScaleY == rEntry.aScaleY)
+        if (fScaleX == rEntry.mfScaleX && fScaleY == rEntry.mfScaleY)
         {
             if (rCursorRect == rEntry.aRect)
                 return false; // No change
@@ -328,14 +328,14 @@ bool ScGridWindow::NeedLOKCursorInvalidation(const tools::Rectangle& rCursorRect
         }
     }
 
-    maLOKLastCursor.push_back(LOKCursorEntry{aScaleX, aScaleY, rCursorRect});
+    maLOKLastCursor.push_back(LOKCursorEntry{fScaleX, fScaleY, rCursorRect});
     return true;
 }
 
 void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
-        const Fraction aScaleX, const Fraction aScaleY)
+        double fScaleX, double fScaleY)
 {
-    if (!NeedLOKCursorInvalidation(rCursorRect, aScaleX, aScaleY))
+    if (!NeedLOKCursorInvalidation(rCursorRect, fScaleX, fScaleY))
         return;
 
     ScTabViewShell* pThisViewShell = mrViewData.GetViewShell();
@@ -351,7 +351,7 @@ void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
                 ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
                 double fZoomX = rOtherViewData.GetZoomX();
                 double fZoomY = rOtherViewData.GetZoomY();
-                if (Fraction(fZoomX) == aScaleX && Fraction(fZoomY) == aScaleY)
+                if (fZoomX == fScaleX && fZoomY == fScaleY)
                 {
                     KitHelper::notifyOtherView(*pThisViewShell, pOtherViewShell,
                             KIT_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", rCursorRect.toString());
@@ -1297,7 +1297,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                     aCursorRect.setWidth(0);
                     aCursorRect.Move(aCursPos.getX(), 0);
                     // Sends view cursor position to views of all matching zooms if needed (avoids duplicates).
-                    InvalidateLOKViewCursor(aCursorRect, aMM.GetScaleX(), aMM.GetScaleY());
+                    InvalidateLOKViewCursor(aCursorRect, double(aMM.GetScaleX()), double(aMM.GetScaleY()));
                 }
 
                 // Rollback the mapmode and 'output area'.
