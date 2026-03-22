@@ -127,6 +127,8 @@ void fillOutputFieldFromSelection(FormatOutputField& rOutputField, Selection con
             rOutputField.aName
                 = rNameResolver.getNameForIndex(rOutputField.nIndex, rOutputField.nDimension);
     }
+    rOutputField.bSelected = rSelection.bSelected;
+    rOutputField.bHasSubtotal = rSelection.bHasSubtotal;
     rOutputField.bSet = true;
 }
 
@@ -199,6 +201,8 @@ void FormatOutput::prepare(SCTAB nTab, std::vector<ScDPOutLevelData> const& rCol
             aEntry.pPattern = rFormat.pPattern;
             aEntry.onTab = nTab;
             aEntry.eType = rFormat.eType;
+            aEntry.bGrandRow = rFormat.bGrandRow;
+            aEntry.bGrandCol = rFormat.bGrandColumn;
 
             initFormatOutputField(nSelectionIndex, aEntry.aRowOutputFields, rRowFields, rFormat,
                                   aNameResolver);
