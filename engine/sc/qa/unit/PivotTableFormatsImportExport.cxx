@@ -454,6 +454,22 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, Pivot_Table_with_No_Source
     saveAndReload(TestFilter::XLSX);
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, PivotTableFormatsGrandTotal)
+{
+    // Check that we can support pivot table cell formats on grand total output.
+
+    // In the file: pivot table is at B3:G14, reference output is at B17:G28.
+    createScDoc("xlsx/pivot-table/PivotTableFormatsGrandTotal.xlsx");
+
+    ScDocument& rDoc = *getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(Color(0x00B050), getBackgroundColor(rDoc, u"G4"_ustr));
+
+    CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDoc, u"G3"_ustr));
+    CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDoc, u"G5"_ustr));
+    CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDoc, u"F4"_ustr));
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

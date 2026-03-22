@@ -1204,6 +1204,22 @@ void ScDPOutput::Output()
     bool bColumnFieldIsDataOnly = mnColCount == 1 && mnRowCount > 0 && mpColFields.empty();
     maFormatOutput.prepare(nTab, mpColFields, mpRowFields, bColumnFieldIsDataOnly);
 
+    // Set grand total positions and data area for format output matching
+    {
+        bool bColumnGrand = false;
+        bool bRowGrand = false;
+        uno::Reference<beans::XPropertySet> xSourcePropertySet(mxSource, uno::UNO_QUERY);
+        if (xSourcePropertySet.is())
+        {
+            bColumnGrand = ScUnoHelpFunctions::GetBoolProperty(xSourcePropertySet, SC_UNO_DP_COLGRAND);
+            bRowGrand = ScUnoHelpFunctions::GetBoolProperty(xSourcePropertySet, SC_UNO_DP_ROWGRAND);
+        }
+        SCROW nGrandTotalRow = bRowGrand ? mnTabEndRow : -1;
+        SCCOL nGrandTotalColumn = bColumnGrand ? mnTabEndCol : -1;
+        maFormatOutput.setGrandTotalPositions(nGrandTotalRow, nGrandTotalColumn);
+        maFormatOutput.setDataArea(mnDataStartCol, mnDataStartRow, mnTabEndCol, mnTabEndRow);
+    }
+
     //  clear whole (new) output area
     // when modifying table, clear old area !
     //TODO: include InsertDeleteFlags::OBJECTS ???
