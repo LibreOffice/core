@@ -468,6 +468,12 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, PivotTableFormatsGrandTota
     CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDoc, u"G3"_ustr));
     CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDoc, u"G5"_ustr));
     CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDoc, u"F4"_ustr));
+
+    // grandRow="1" labelOnly="1" offset="A256"
+    CPPUNIT_ASSERT_EQUAL(Color(0xC00000), getBackgroundColor(rDoc, u"B14"_ustr));
+
+    // grandRow="1" labelOnly="1" offset="IV256"
+    CPPUNIT_ASSERT_EQUAL(Color(0xFFFF00), getBackgroundColor(rDoc, u"C14"_ustr));
 }
 
 } // end anonymous namespace

@@ -204,6 +204,7 @@ void FormatOutput::prepare(SCTAB nTab, std::vector<ScDPOutLevelData> const& rCol
             aEntry.eType = rFormat.eType;
             aEntry.bGrandRow = rFormat.bGrandRow;
             aEntry.bGrandColumn = rFormat.bGrandColumn;
+            aEntry.oOffset = rFormat.oOffset;
 
             initFormatOutputField(nSelectionIndex, aEntry.aRowOutputFields, rRowFields, rFormat,
                                   aNameResolver);
@@ -441,17 +442,24 @@ bool FormatOutput::tryHandleGrandTotals(ScDocument& rDocument, sc::FormatOutputE
         }
         else if (rEntry.eType == FormatType::Label)
         {
-            // Apply to the row header columns at the grand total row.
-            // Use the row line positions to find header column positions.
-            std::set<SCCOL> aHeaderColumns;
-            for (LineData const& rRowLine : maRowLines)
+            if (rEntry.oOffset && mnTabStartColumn >= 0 && mnDataStartColumn > mnTabStartColumn)
             {
-                if (rRowLine.oPosition)
-                    aHeaderColumns.insert(*rRowLine.oPosition);
+                // Offset column is relative to the label area
+                SCCOL nOffsetColumn = rEntry.oOffset->aStart.Col();
+                SCCOL nLabelCount = mnDataStartColumn - mnTabStartColumn;
+                SCCOL nTargetColumn
+                    = mnTabStartColumn + std::min(nOffsetColumn, SCCOL(nLabelCount - 1));
+                rDocument.ApplyPattern(nTargetColumn, mnGrandTotalRow, *rEntry.onTab,
+                                       *rEntry.pPattern);
             }
-            for (SCCOL nColumn : aHeaderColumns)
+            else if (mnTabStartColumn >= 0 && mnDataStartColumn > mnTabStartColumn)
             {
-                rDocument.ApplyPattern(nColumn, mnGrandTotalRow, *rEntry.onTab, *rEntry.pPattern);
+                // No offset: apply to all label columns
+                for (SCCOL nColumn = mnTabStartColumn; nColumn < mnDataStartColumn; ++nColumn)
+                {
+                    rDocument.ApplyPattern(nColumn, mnGrandTotalRow, *rEntry.onTab,
+                                           *rEntry.pPattern);
+                }
             }
         }
         return true;
