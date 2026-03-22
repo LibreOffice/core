@@ -21,7 +21,6 @@
 
 #include <types.hxx>
 
-class Fraction;
 class OutputDevice;
 class ScDocument;
 
@@ -32,7 +31,7 @@ public:
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const OutputDevice* pDev, double fZoomX, double fZoomY,
                         double nPPTX, double nPPTY,
-                        Fraction& rScaleX, Fraction& rScaleY );
+                        double& rScaleX, double& rScaleY );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

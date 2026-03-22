@@ -422,10 +422,10 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     if (aSourceMap.GetMapUnit() == MapUnit::MapPixel)
     {
         // consider pixel correction, so bitmap fits to screen
-        Fraction aScaleX, aScaleY;
-        pScDrawView->CalcNormScale( aScaleX, aScaleY );
-        aDestMap.SetScaleX(aScaleX);
-        aDestMap.SetScaleY(aScaleY);
+        double fScaleX, fScaleY;
+        pScDrawView->CalcNormScale( fScaleX, fScaleY );
+        aDestMap.SetScaleX(Fraction(fScaleX));
+        aDestMap.SetScaleY(Fraction(fScaleY));
     }
 
     Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );

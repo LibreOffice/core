@@ -290,10 +290,10 @@ void ScDrawView::DoCut()
     EndUndo();
 }
 
-void ScDrawView::GetScale( Fraction& rFractX, Fraction& rFractY ) const
+void ScDrawView::GetScale( double& rFractX, double& rFractY ) const
 {
-    rFractX = aScaleX;
-    rFractY = aScaleY;
+    rFractX = mfScaleX;
+    rFractY = mfScaleY;
 }
 
 void ScDrawView::RecalcScale()
@@ -319,7 +319,7 @@ void ScDrawView::RecalcScale()
 
     ScDrawUtil::CalcScale(
         rDoc, nTab, 0, 0, nEndCol, nEndRow, pDev, fZoomX, fZoomY, nPPTX, nPPTY,
-        aScaleX, aScaleY);
+        mfScaleX, mfScaleY);
 
     // clear all evtl existing GridOffset vectors
     resetGridOffsetsForAllSdrPageViews();

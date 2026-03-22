@@ -407,7 +407,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 
 // Calculate correction for 100%, regardless of current settings
 
-void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
+void ScDrawView::CalcNormScale( double& rFractX, double& rFractY ) const
 {
     double nPPTX = ScGlobal::nScreenPPTX;
     double nPPTY = ScGlobal::nScreenPPTY;
@@ -481,10 +481,10 @@ void ScDrawView::SetMarkedOriginalSize()
             if (aSourceMap.GetMapUnit() == MapUnit::MapPixel)
             {
                 // consider pixel correction, so that the bitmap is correct on the screen
-                Fraction aNormScaleX, aNormScaleY;
-                CalcNormScale( aNormScaleX, aNormScaleY );
-                aDestMap.SetScaleX(aNormScaleX);
-                aDestMap.SetScaleY(aNormScaleY);
+                double fNormScaleX, fNormScaleY;
+                CalcNormScale( fNormScaleX, fNormScaleY );
+                aDestMap.SetScaleX(Fraction(fNormScaleX));
+                aDestMap.SetScaleY(Fraction(fNormScaleY));
             }
             aOriginalSize = pSdrGrafObj->getOriginalSize();
             bDo = true;
