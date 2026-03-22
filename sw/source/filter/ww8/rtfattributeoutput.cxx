@@ -319,6 +319,12 @@ void RtfAttributeOutput::EndParagraph(
         }
     }
     m_aParagraphMarkerProperties.clear();
+    // tdf#134614: emit the field-close markup that was deferred past \par
+    if (!m_aFieldEndAfterPar.isEmpty())
+    {
+        aParagraph->append(m_aFieldEndAfterPar);
+        m_aFieldEndAfterPar.clear();
+    }
     if (m_nColBreakNeeded)
     {
         aParagraph->append(OOO_STRING_SVTOOLS_RTF_COLUMN);
@@ -2183,6 +2189,8 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* const pField, ww::eField
     {
         if (nMode & FieldFlags::CmdStart)
         {
+            if (m_rExport.m_bInWriteTOX)
+                ++m_nTOXFieldDepth;
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST
                                // paragraph break closes group so open another one "inside" to
@@ -2203,7 +2211,23 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* const pField, ww::eField
         }
         if (nMode & FieldFlags::Close)
         {
-            m_aRunText->append("}}}");
+            assert(m_rExport.m_bInWriteTOX ? m_nTOXFieldDepth > 0 : m_nTOXFieldDepth == 0);
+            if (m_rExport.m_bInWriteTOX && --m_nTOXFieldDepth == 0)
+            {
+                // tdf#134614: EndTOX() closes the TOC field during the last paragraph's run
+                // processing. If we append }}} to m_aRunText now, it ends up before \par in
+                // the output -- putting \par outside the field result. Word then ignores
+                // paragraph properties (e.g. \li indent) for that last paragraph. Buffer it
+                // to emit after \par in EndParagraph(). The depth check is defensive: currently
+                // inner fields (e.g. HYPERLINK) use FieldFlags::All and don't reach this path,
+                // but if they ever use split-mode Close, only the outermost close should be
+                // deferred.
+                m_aFieldEndAfterPar = "}}}"_ostr;
+            }
+            else
+            {
+                m_aRunText->append("}}}");
+            }
         }
     }
 }
