@@ -45,6 +45,8 @@ struct FormatOutputField
     OUString aName;
     sal_Int32 nIndex = -1;
     bool bMatchesAll = false;
+    bool bSelected = true;
+    bool bHasSubtotal = false;
     bool bSet = false;
 };
 
@@ -54,6 +56,8 @@ struct FormatOutputEntry
     FormatType eType = FormatType::None;
     std::optional<SCTAB> onTab = std::nullopt;
     std::shared_ptr<ScPatternAttr> pPattern;
+    bool bGrandRow = false;
+    bool bGrandCol = false;
 
     std::vector<FormatOutputField> aRowOutputFields;
     std::vector<FormatOutputField> aColumnOutputFields;

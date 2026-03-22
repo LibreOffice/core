@@ -27,9 +27,10 @@ enum class FormatType
 /** Information to make a selection in the pivot table. */
 struct Selection
 {
-    bool bSelected = false;
+    bool bSelected = true;
     sal_Int32 nField = 0;
     std::vector<sal_uInt32> nIndices;
+    bool bHasSubtotal = false;
 };
 
 /** Holds cell pattern attributes and a selection information to which cells in the pivot table
@@ -41,8 +42,9 @@ struct PivotTableFormat
 
     bool bDataOnly = true;
     bool bLabelOnly = false;
-    bool bSelected = false;
     bool bOutline = false;
+    bool bGrandRow = false;
+    bool bGrandColumn = false;
     std::optional<sal_uInt32> oFieldPosition = std::nullopt;
 
     std::vector<Selection> aSelections;
