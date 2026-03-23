@@ -409,7 +409,7 @@ public:
     void FontAlternateName( const OUString& rName ) const;
 
     /// Font charset.
-    void FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEncoding ) const;
+    void FontCharset( sal_uInt8 nCharSet ) const;
 
     /// Font family.
     void FontFamilyType( FontFamily eFamily ) const;
