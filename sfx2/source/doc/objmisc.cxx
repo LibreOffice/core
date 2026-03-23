@@ -1300,6 +1300,10 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
         }
     }
 
+    // tdf#165348: release the lock on the original file before clearing the URL, otherwise
+    // UnlockFile (called later from Close) won't know which lock file to remove.
+    pTmpMedium->UnlockFile(false);
+
     // set medium to noname
     pTmpMedium->SetName( OUString(), true );
     pTmpMedium->Init_Impl();

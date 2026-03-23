@@ -18,14 +18,24 @@
 
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/task/XInteractionApprove.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <svl/documentlockfile.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <xmloff/odffields.hxx>
@@ -1413,6 +1423,54 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169173)
     uno::Reference<lang::XServiceInfo> xServiceInfo(xField, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo.is());
     CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf165348_lockFileOnRepair)
+{
+    // Enable locking - disabled by default in the test environment
+    auto setConfig = [](bool b) {
+        auto xChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::Misc::UseLocking::set(b, xChanges);
+        officecfg::Office::Common::Misc::UseDocumentOOoLockFile::set(b, xChanges);
+        xChanges->commit();
+    };
+    setConfig(true);
+    comphelper::ScopeGuard restoreConfig([&] { setConfig(false); });
+
+    // Copy the broken DOCX to a temp location so the lock file is in a writable temp directory
+    createTempCopy(u"tdf165348_broken_package.docx");
+    OUString aTempURL = maTempFile.GetURL();
+
+    // Interaction handler that auto-approves BrokenPackageRequest (repair dialog)
+    class ApproveRepairHandler : public cppu::WeakImplHelper<task::XInteractionHandler>
+    {
+    public:
+        void SAL_CALL handle(const uno::Reference<task::XInteractionRequest>& xRequest) override
+        {
+            for (auto& xCont : xRequest->getContinuations())
+            {
+                if (auto xApprove = xCont.query<task::XInteractionApprove>())
+                {
+                    xApprove->select();
+                    return;
+                }
+            }
+        }
+    };
+
+    // Load with an interaction handler that auto-approves the repair dialog
+    loadWithParams(aTempURL,
+                   { comphelper::makePropertyValue(
+                       u"InteractionHandler"_ustr,
+                       uno::Reference<task::XInteractionHandler>(new ApproveRepairHandler)) });
+
+    // The document should be in repair/template mode, with empty URL
+    CPPUNIT_ASSERT(mxComponent.queryThrow<frame::XModel>()->getURL().isEmpty());
+
+    // The lock file must not remain. Before the fix, the lock was never released; in that scenario,
+    // DocumentLockFile::GetLockData succeeded.
+    CPPUNIT_ASSERT_THROW(svt::DocumentLockFile(aTempURL).GetLockData(),
+                         ucb::InteractiveAugmentedIOException);
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
