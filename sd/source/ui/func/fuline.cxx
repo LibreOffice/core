@@ -68,10 +68,11 @@ void FuLine::DoExecute( SfxRequest& rReq )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSvxLineTabDialog(mrViewShell.GetFrameWeld(), &aNewAttr, &mrDoc, pObj, bHasMarked) );
 
-    pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult){
+    rtl::Reference<FuLine> xThis(this); // prevent premature release during async processing
+    pDlg->StartExecuteAsync([pDlg, xThis=std::move(xThis)](sal_Int32 nResult){
         if (nResult == RET_OK)
         {
-            mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
+            xThis->mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
 
             // some attributes are changed, we have to update the listboxes in the objectbars
             static const sal_uInt16 SidArray[] = {
@@ -86,11 +87,11 @@ void FuLine::DoExecute( SfxRequest& rReq )
                 SID_ATTR_LINE_CAP,                  // (SID_SVX_START+1111)
                 0 };
 
-            mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
+            xThis->mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
         }
 
         // deferred until the dialog ends
-        mrViewShell.Cancel();
+        xThis->mrViewShell.Cancel();
 
         pDlg->disposeOnce();
     });
