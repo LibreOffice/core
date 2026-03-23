@@ -85,7 +85,7 @@ struct SvxIndentValue
     sal_Int32 ResolveFixedPart() const;
     sal_Int32 ResolveVariablePart(const SvxFontUnitMetrics& rMetrics) const;
 
-    void ScaleMetrics(tools::Long nMult, tools::Long nDiv);
+    void ScaleMetrics(double fScale);
 
     size_t hashCode() const;
     bool operator==(SvxIndentValue const&) const = default;
@@ -125,7 +125,7 @@ public:
                                  OUString &rText, const IntlWrapper&) const override;
 
     virtual SvxLeftMarginItem* Clone(SfxItemPool *pPool = nullptr) const override;
-    virtual void ScaleMetrics(tools::Long nMult, tools::Long nDiv) override;
+    virtual void ScaleMetrics(double fScale) override;
     virtual bool HasMetrics() const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -173,7 +173,7 @@ public:
                                  OUString &rText, const IntlWrapper&) const override;
 
     virtual SvxTextLeftMarginItem* Clone(SfxItemPool *pPool = nullptr) const override;
-    virtual void ScaleMetrics(tools::Long nMult, tools::Long nDiv) override;
+    virtual void ScaleMetrics(double fScale) override;
     virtual bool HasMetrics() const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -220,7 +220,7 @@ public:
                                  OUString &rText, const IntlWrapper&) const override;
 
     virtual SvxFirstLineIndentItem* Clone(SfxItemPool *pPool = nullptr) const override;
-    virtual void ScaleMetrics(tools::Long nMult, tools::Long nDiv) override;
+    virtual void ScaleMetrics(double fScale) override;
     virtual bool HasMetrics() const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -265,7 +265,7 @@ public:
                                  OUString &rText, const IntlWrapper&) const override;
 
     virtual SvxRightMarginItem* Clone(SfxItemPool *pPool = nullptr) const override;
-    virtual void ScaleMetrics(tools::Long nMult, tools::Long nDiv) override;
+    virtual void ScaleMetrics(double fScale) override;
     virtual bool HasMetrics() const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -299,7 +299,7 @@ public:
                                  OUString &rText, const IntlWrapper&) const override;
 
     virtual SvxGutterLeftMarginItem* Clone(SfxItemPool *pPool = nullptr) const override;
-    virtual void ScaleMetrics(tools::Long nMult, tools::Long nDiv) override;
+    virtual void ScaleMetrics(double fScale) override;
     virtual bool HasMetrics() const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -332,7 +332,7 @@ public:
                                  OUString &rText, const IntlWrapper&) const override;
 
     virtual SvxGutterRightMarginItem* Clone(SfxItemPool *pPool = nullptr) const override;
-    virtual void ScaleMetrics(tools::Long nMult, tools::Long nDiv) override;
+    virtual void ScaleMetrics(double fScale) override;
     virtual bool HasMetrics() const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -378,7 +378,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SvxLRSpaceItem*      Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual void                 ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
+    virtual void                 ScaleMetrics(double fScale) override;
     virtual bool                 HasMetrics() const override;
 
     // The "layout interface":

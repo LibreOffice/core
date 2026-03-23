@@ -741,7 +741,7 @@ public:
                                     OUString &rText,
                                     const IntlWrapper& rIntlWrapper ) const;
 
-    virtual void             ScaleMetrics( tools::Long lMult, tools::Long lDiv );
+    virtual void             ScaleMetrics( double fScale );
     virtual bool             HasMetrics() const;
 
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;

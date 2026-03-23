@@ -70,9 +70,9 @@ namespace sdr::properties
 
                 if(bScaleUnitChanged)
                 {
-                    const Fraction aMetricFactor(GetMapFactor(aOldUnit, aNewUnit).X());
+                    const double fMetricFactor(GetMapFactor(aOldUnit, aNewUnit).X());
 
-                    ScaleItemSet(*moItemSet, aMetricFactor);
+                    ScaleItemSet(*moItemSet, fMetricFactor);
                 }
             }
 

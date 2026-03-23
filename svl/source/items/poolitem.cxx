@@ -217,7 +217,7 @@ std::unique_ptr<SfxPoolItem> SfxPoolItem::CloneSetWhich(sal_uInt16 nNewWhich) co
     return pItem;
 }
 
-void SfxPoolItem::ScaleMetrics(tools::Long /*lMult*/, tools::Long /*lDiv*/) {}
+void SfxPoolItem::ScaleMetrics(double /*fScale*/) {}
 
 bool SfxPoolItem::HasMetrics() const { return false; }
 

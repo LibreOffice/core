@@ -728,4 +728,9 @@ tools::Long BigInt::Scale( tools::Long nVal, tools::Long nMul, tools::Long nDiv 
     return tools::Long( aVal );
 }
 
+tools::Long BigInt::Scale( tools::Long nVal, double fScale )
+{
+    return std::llround(nVal * fScale);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

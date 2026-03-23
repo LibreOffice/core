@@ -55,7 +55,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SvxLineItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual void             ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
+    virtual void             ScaleMetrics(double fScale) override;
     virtual bool             HasMetrics() const override;
 
     const editeng::SvxBorderLine*

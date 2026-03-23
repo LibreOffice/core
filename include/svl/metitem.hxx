@@ -29,7 +29,7 @@ public:
 
     virtual SfxItemType ItemType() const override = 0;
 
-    virtual void             ScaleMetrics( tools::Long lMult, tools::Long lDiv ) override final;
+    virtual void             ScaleMetrics( double fScale ) override final;
     virtual bool             HasMetrics() const override;
 
 };

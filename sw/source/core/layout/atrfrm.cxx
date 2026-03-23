@@ -230,11 +230,11 @@ size_t SwFormatFrameSize::hashCode() const
     return seed;
 }
 
-void SwFormatFrameSize::ScaleMetrics(tools::Long lMult, tools::Long lDiv) {
+void SwFormatFrameSize::ScaleMetrics(double fScale) {
     // Don't inherit the SvxSizeItem override (might or might not be relevant; added "just in case"
     // when changing SwFormatFrameSize to derive from SvxSizeItem instead of directly from
     // SfxPoolItem):
-    return SfxPoolItem::ScaleMetrics(lMult, lDiv);
+    return SfxPoolItem::ScaleMetrics(fScale);
 }
 
 bool SwFormatFrameSize::HasMetrics() const {

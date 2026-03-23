@@ -118,8 +118,7 @@ SvxBorderLine::SvxBorderLine( const Color *pCol, tools::Long nWidth,
        SvxBorderLineStyle nStyle,
        Color (*pColorOutFn)( Color ), Color (*pColorInFn)( Color ) )
     : m_nWidth(nWidth)
-    , m_nMult(1)
-    , m_nDiv(1)
+    , m_fScale(1)
     , m_pColorOutFn(pColorOutFn)
     , m_pColorInFn(pColorInFn)
     , m_pColorGapFn(nullptr)
@@ -426,10 +425,9 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderLineStyle nStyle )
     return aImpl;
 }
 
-void SvxBorderLine::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
+void SvxBorderLine::ScaleMetrics(double fScale)
 {
-    m_nMult = nMult;
-    m_nDiv = nDiv;
+    m_fScale = fScale;
 }
 
 void SvxBorderLine::GuessLinesWidths( SvxBorderLineStyle nStyle, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist )
@@ -513,23 +511,23 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderLineStyle nStyle, sal_uInt16 nOut
 
 sal_uInt16 SvxBorderLine::GetOutWidth() const
 {
-    sal_uInt16 nOut = static_cast<sal_uInt16>(BigInt::Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv ));
+    sal_uInt16 nOut = static_cast<sal_uInt16>(BigInt::Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_fScale ));
     if ( m_bMirrorWidths )
-        nOut = static_cast<sal_uInt16>(BigInt::Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv ));
+        nOut = static_cast<sal_uInt16>(BigInt::Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_fScale ));
     return nOut;
 }
 
 sal_uInt16 SvxBorderLine::GetInWidth() const
 {
-    sal_uInt16 nIn = static_cast<sal_uInt16>(BigInt::Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_nMult, m_nDiv ));
+    sal_uInt16 nIn = static_cast<sal_uInt16>(BigInt::Scale( m_aWidthImpl.GetLine2( m_nWidth ), m_fScale ));
     if ( m_bMirrorWidths )
-        nIn = static_cast<sal_uInt16>(BigInt::Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_nMult, m_nDiv ));
+        nIn = static_cast<sal_uInt16>(BigInt::Scale( m_aWidthImpl.GetLine1( m_nWidth ), m_fScale ));
     return nIn;
 }
 
 sal_uInt16 SvxBorderLine::GetDistance() const
 {
-    return static_cast<sal_uInt16>(BigInt::Scale( m_aWidthImpl.GetGap( m_nWidth ), m_nMult, m_nDiv ));
+    return static_cast<sal_uInt16>(BigInt::Scale( m_aWidthImpl.GetGap( m_nWidth ), m_fScale ));
 }
 
 

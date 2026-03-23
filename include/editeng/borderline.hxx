@@ -147,8 +147,7 @@ double EDITENG_DLLPUBLIC ConvertBorderWidthFromWord(SvxBorderLineStyle,
 class EDITENG_DLLPUBLIC SvxBorderLine final
 {
     tools::Long m_nWidth;
-    tools::Long m_nMult;
-    tools::Long m_nDiv;
+    double m_fScale;
     Color (*m_pColorOutFn)(Color);
     Color (*m_pColorInFn)(Color);
     Color (*m_pColorGapFn)(Color);
@@ -227,7 +226,7 @@ public:
     SvxBorderLineStyle  GetBorderLineStyle() const { return m_nStyle; }
 
     void            SetBorderLineStyle( SvxBorderLineStyle nNew );
-    void            ScaleMetrics( tools::Long nMult, tools::Long nDiv );
+    void            ScaleMetrics( double fScale );
 
     bool            operator==( const SvxBorderLine &rCmp ) const;
 

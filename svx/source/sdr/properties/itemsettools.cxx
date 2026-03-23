@@ -20,7 +20,7 @@
 #include <sdr/properties/itemsettools.hxx>
 #include <tools/fract.hxx>
 #include <svl/itemset.hxx>
-#include <svl/whiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>
 #include <memory>
@@ -54,32 +54,17 @@ namespace sdr::properties
         }
 
 
-        void ScaleItemSet(SfxItemSet& rSet, const Fraction& rScale)
+        void ScaleItemSet(SfxItemSet& rSet, double fScale)
         {
-            sal_Int32 nMul(rScale.GetNumerator());
-            sal_Int32 nDiv(rScale.GetDenominator());
-
-            if(!rScale.IsValid() || !nDiv)
+            for (SfxItemIter aIter(rSet); !aIter.IsAtEnd(); aIter.NextItem())
             {
-                return;
-            }
-
-            SfxWhichIter aIter(rSet);
-            sal_uInt16 nWhich(aIter.FirstWhich());
-            const SfxPoolItem *pItem = nullptr;
-
-            while(nWhich)
-            {
-                if(SfxItemState::SET == aIter.GetItemState(false, &pItem))
+                const SfxPoolItem *pItem = aIter.GetCurItem();
+                if(!IsDisabledItem(pItem) && pItem->HasMetrics())
                 {
-                    if(pItem->HasMetrics())
-                    {
-                        std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
-                        pNewItem->ScaleMetrics(nMul, nDiv);
-                        rSet.Put(std::move(pNewItem));
-                    }
+                    std::unique_ptr<SfxPoolItem> pNewItem(pItem->Clone());
+                    pNewItem->ScaleMetrics(fScale);
+                    rSet.Put(std::move(pNewItem));
                 }
-                nWhich = aIter.NextWhich();
             }
         }
 } // end of namespace

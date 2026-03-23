@@ -1020,10 +1020,10 @@ bool SdrMetricItem::HasMetrics() const
     return true;
 }
 
-void SdrMetricItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
+void SdrMetricItem::ScaleMetrics(double fScale)
 {
     if (GetValue()!=0) {
-        SetValue(BigInt::Scale(GetValue(), nMul, nDiv));
+        SetValue(BigInt::Scale(GetValue(), fScale));
     }
 }
 
@@ -1430,13 +1430,11 @@ bool SdrTextAniAmountItem::HasMetrics() const
     return GetValue()>0;
 }
 
-void SdrTextAniAmountItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
+void SdrTextAniAmountItem::ScaleMetrics(double fScale)
 {
     if (GetValue()>0) {
         BigInt aVal(GetValue());
-        aVal*=nMul;
-        aVal+=nDiv/2; // to round accurately
-        aVal/=nDiv;
+        aVal*=fScale;
         SetValue(short(aVal));
     }
 }

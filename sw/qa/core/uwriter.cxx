@@ -1159,10 +1159,10 @@ void SwDocTest::testTableAutoFormats()
     SvxBrushItem aBackground( Color(0xFF11FF), RES_BACKGROUND );
     rBoxFP.SetBackground( aBackground );
     //Set m_aTLBR
-    SvxLineItem aTLBRLine(0); aTLBRLine.ScaleMetrics( 11,12 );
+    SvxLineItem aTLBRLine(0); aTLBRLine.ScaleMetrics( 11.0/12 );
     rBoxFP.SetTLBR(aTLBRLine);
     //Set m_aBLTR
-    SvxLineItem aBLTRLine(0); aBLTRLine.ScaleMetrics( 13,14 );
+    SvxLineItem aBLTRLine(0); aBLTRLine.ScaleMetrics( 13.0/14 );
     rBoxFP.SetBLTR(aBLTRLine);
     //Set m_aHorJustify
     SvxHorJustifyItem aHJustify( SvxCellHorJustify::Center, 0 );

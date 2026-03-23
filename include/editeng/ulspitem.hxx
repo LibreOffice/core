@@ -58,7 +58,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SvxULSpaceItem*      Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual void                 ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
+    virtual void                 ScaleMetrics(double fScale) override;
     virtual bool                 HasMetrics() const override;
 
     inline void SetUpper( const sal_uInt16 nU, const sal_uInt16 nProp = 100 );

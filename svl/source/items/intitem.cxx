@@ -166,12 +166,10 @@ SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_Int32 nValue):
 }
 
 // virtual
-void SfxMetricItem::ScaleMetrics(tools::Long nMult, tools::Long nDiv)
+void SfxMetricItem::ScaleMetrics(double fScale)
 {
     BigInt aTheValue(GetValue());
-    aTheValue *= nMult;
-    aTheValue += nDiv / 2;
-    aTheValue /= nDiv;
+    aTheValue *= fScale;
     SetValue(aTheValue);
 }
 
