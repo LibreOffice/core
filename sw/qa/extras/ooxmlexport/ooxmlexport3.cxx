@@ -992,7 +992,8 @@ CPPUNIT_TEST_FIXTURE(Test, testcantSplit)
     // writing <w:cantSplit w:val="false"/> during export was causing problem that all the cell data used to come on same page
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:cantSplit",0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:cantSplit","val",u"true");
+    // this is how true is represented, otherwise OOXML validator complains: <w:cantSplit/>
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:cantSplit", "val");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDontSplitTable)
