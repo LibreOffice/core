@@ -474,6 +474,10 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, PivotTableFormatsGrandTota
 
     // grandRow="1" labelOnly="1" offset="IV256"
     CPPUNIT_ASSERT_EQUAL(Color(0xFFFF00), getBackgroundColor(rDoc, u"C14"_ustr));
+
+    // grandRow="1" grandCol="1"
+    // Intersection of grand total row and column
+    CPPUNIT_ASSERT_EQUAL(Color(0x00B0F0), getBackgroundColor(rDoc, u"G14"_ustr));
 }
 
 } // end anonymous namespace
