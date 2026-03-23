@@ -48,7 +48,6 @@ class SwRect;
 class MapMode;
 class SwAccPreviewData;
 class SwFEShell;
-class Fraction;
 struct PreviewPage;
 namespace vcl { class Window; }
 namespace com::sun::star::accessibility { class XAccessible; }
@@ -150,7 +149,7 @@ public:
 
     rtl::Reference<comphelper::OAccessible>
     GetDocumentPreview(const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
-                       const Fraction& _rScale, const SwPageFrame* _pSelectedPageFrame,
+                       double _fScale, const SwPageFrame* _pSelectedPageFrame,
                        const Size& _rPreviewWinSize);
 
     ::rtl::Reference < SwAccessibleContext > GetContextImpl(
@@ -246,7 +245,7 @@ public:
 
     // update preview data (and fire events if necessary)
     void UpdatePreview( const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
-                        const Fraction&  _rScale,
+                        double _fScale,
                         const SwPageFrame* _pSelectedPageFrame,
                         const Size&      _rPreviewWinSize );
 
