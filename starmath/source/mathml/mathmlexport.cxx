@@ -1164,23 +1164,21 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
         case TSIZE:
         {
             const SmFontNode* pFontNode = static_cast<const SmFontNode*>(pNode);
-            const Fraction& aFrac = pFontNode->GetSizeParameter();
+            double fFrac = pFontNode->GetSizeParameter();
 
             OUStringBuffer sStrBuf;
             switch (pFontNode->GetSizeType())
             {
                 case FontSizeType::MULTIPLY:
-                    ::sax::Converter::convertDouble(sStrBuf,
-                                                    static_cast<double>(aFrac * Fraction(100, 1)));
+                    ::sax::Converter::convertDouble(sStrBuf, fFrac * 100);
                     sStrBuf.append('%');
                     break;
                 case FontSizeType::DIVIDE:
-                    ::sax::Converter::convertDouble(sStrBuf,
-                                                    static_cast<double>(Fraction(100, 1) / aFrac));
+                    ::sax::Converter::convertDouble(sStrBuf, 100 * fFrac);
                     sStrBuf.append('%');
                     break;
                 case FontSizeType::ABSOLUT:
-                    ::sax::Converter::convertDouble(sStrBuf, static_cast<double>(aFrac));
+                    ::sax::Converter::convertDouble(sStrBuf, fFrac);
                     sStrBuf.append(GetXMLToken(XML_UNIT_PT));
                     break;
                 default:
@@ -1196,9 +1194,9 @@ void SmXMLExport::ExportFont(const SmNode* pNode, int nLevel)
                                                 SmO3tlLengthUnit(), o3tl::Length::pt);
 
                     if (pFontNode->GetSizeType() == FontSizeType::MINUS)
-                        mytest -= static_cast<double>(aFrac);
+                        mytest -= fFrac;
                     else
-                        mytest += static_cast<double>(aFrac);
+                        mytest += fFrac;
 
                     mytest = ::rtl::math::round(mytest, 1);
                     ::sax::Converter::convertDouble(sStrBuf, mytest);

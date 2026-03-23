@@ -235,13 +235,13 @@ public:
     void SetFont(const SmFace &rFace);
 
     /**
-     * Sets the font size to rRelSize with type nType.
+     * Sets the font size to fRelSize with type nType.
      * Check FontSizeType for details.
-     * @param rRelSize
+     * @param fRelSize
      * @param nType
      * @return
      */
-    void SetFontSize(const Fraction &rRelSize, FontSizeType nType);
+    void SetFontSize(double fRelSize, FontSizeType nType);
 
     /**
      * Sets the font size to rRelSize with type FontSizeType::ABSOLUT.
@@ -1929,13 +1929,13 @@ public:
 class SmFontNode final : public SmStructureNode
 {
     FontSizeType meSizeType;
-    Fraction     maFontSize;
+    double       mfFontSize;
 
 public:
     explicit SmFontNode(const SmToken &rNodeToken)
         : SmStructureNode(SmNodeType::Font, rNodeToken)
         , meSizeType(FontSizeType::MULTIPLY)
-        , maFontSize(1) { }
+        , mfFontSize(1) { }
 
     /**
      * Sets font size to rValue in nType mode.
@@ -1944,14 +1944,14 @@ public:
      * @param nType
      * @return
      */
-    void SetSizeParameter(const Fraction &rValue, FontSizeType nType)
-                            { meSizeType = nType; maFontSize = rValue; }
+    void SetSizeParameter(double fValue, FontSizeType nType)
+                            { meSizeType = nType; mfFontSize = fValue; }
 
     /**
      * Returns the font size.
      * @return font size.
      */
-    const Fraction & GetSizeParameter() const {return maFontSize;}
+    double GetSizeParameter() const {return mfFontSize;}
 
     /**
      * Returns the font size type.
