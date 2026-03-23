@@ -787,7 +787,13 @@ void SfxBindings::Register( SfxControllerItem& rItem )
 void SfxBindings::Register_Impl( SfxControllerItem& rItem, bool bInternal )
 {
 //    DBG_ASSERT( nRegLevel > 0, "registration without EnterRegistrations" );
-    DBG_ASSERT( !pImpl->bInNextJob, "SfxBindings::Register while status-updating" );
+    // Re-entrant registration can happen when Update_Impl triggers
+    // FillState_ which queries slot state through the dispatch chain,
+    // causing SfxBindings::GetDispatch to construct new dispatch
+    // controllers that register themselves. The update loop in
+    // NextJob_Impl will restart when it detects bMsgDirty was set.
+    SAL_INFO_IF(pImpl->bInNextJob, "sfx.control",
+                "SfxBindings::Register while status-updating");
 
     // insert new cache if it does not already exist
     sal_uInt16 nId = rItem.GetId();
@@ -820,7 +826,11 @@ void SfxBindings::Register_Impl( SfxControllerItem& rItem, bool bInternal )
 
 void SfxBindings::Release( SfxControllerItem& rItem )
 {
-    DBG_ASSERT( !pImpl->bInNextJob, "SfxBindings::Release while status-updating" );
+    // Re-entrant release can happen when Update_Impl triggers
+    // FillState_ which queries slot state through the dispatch chain,
+    // causing controllers to unregister. Same situation as Register_Impl.
+    SAL_INFO_IF(pImpl->bInNextJob, "sfx.control",
+                "SfxBindings::Release while status-updating");
     ENTERREGISTRATIONS();
 
     // find the bound function
@@ -855,6 +865,10 @@ void SfxBindings::Release( SfxControllerItem& rItem )
         if ( pCache->GetItemLink() == nullptr && !pCache->GetInternalController() )
         {
             pImpl->bCtrlReleased = true;
+            // Signal NextJob_Impl to restart, same as Register_Impl.
+            // LeaveRegistrations will remove this empty cache, changing
+            // the pCaches vector while NextJob_Impl is iterating it.
+            pImpl->bMsgDirty = true;
         }
     }
 
@@ -1262,7 +1276,14 @@ bool SfxBindings::NextJob_Impl(Timer const * pTimer)
             if ( bWasDirty )
             {
                 Update_Impl(*pCache);
-                DBG_ASSERT(nCount == pImpl->pCaches.size(), "Reschedule in StateChanged => buff");
+                if ( pImpl->bMsgDirty )
+                {
+                    // Re-entrant registration/release happened during
+                    // the update. Restart so UpdateSlotServer_Impl
+                    // runs first.
+                    pImpl->bInNextJob = false;
+                    return false;
+                }
             }
 
             // skip to next function binding
