@@ -102,8 +102,10 @@ gb_MERGE_LIBRARY_LIST := \
 	updatefeed \
 	utl \
 	uui \
-	vbaevents \
-	vbahelper \
+	$(call gb_Helper_optional,SCRIPTING, \
+		vbaevents \
+		vbahelper \
+	) \
 	vcl \
 	vclcanvas \
 	xsec_xmlsec \
