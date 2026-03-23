@@ -2395,16 +2395,16 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( vcl::Window* _pParent, sal_uInt1
         bInitialFocusOnReplace = pItem->GetInitialFocusOnReplace();
     }
 
-    dialog = std::make_shared<SvxSearchDialog>(_pParent->GetFrameWeld(), this, *pBindings, bInitialFocusOnReplace);
+    m_dialog = std::make_shared<SvxSearchDialog>(_pParent->GetFrameWeld(), this, *pBindings, bInitialFocusOnReplace);
 
-    SetController(dialog);
-    dialog->Initialize( pInfo );
+    SetController(m_dialog);
+    m_dialog->Initialize( pInfo );
 
     pBindings->Update( SID_SEARCH_ITEM );
     pBindings->Update( SID_SEARCH_OPTIONS );
     pBindings->Update( SID_SEARCH_SEARCHSET );
     pBindings->Update( SID_SEARCH_REPLACESET );
-    dialog->m_bConstruct = false;
+    m_dialog->m_bConstruct = false;
 }
 
 SvxSearchDialogWrapper::~SvxSearchDialogWrapper ()
