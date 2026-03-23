@@ -13,6 +13,7 @@
 
 #include <dpoutput.hxx>
 #include <dpobject.hxx>
+#include <pivot.hxx>
 #include <dptabdat.hxx>
 #include <dpcache.hxx>
 #include <document.hxx>
@@ -26,6 +27,7 @@ namespace
 class NameResolver
 {
 private:
+    ScDPObject& mrObject;
     ScDPCache const& mrCache;
 
     std::unordered_map<sal_Int32, std::vector<OUString>> maNameCache;
@@ -46,6 +48,17 @@ private:
 
     void fillNamesForDimension(std::vector<OUString>& rNames, sal_Int32 nDimension)
     {
+        // Try to get member names in pivot field order first.
+        // This matches the order used by the pivot table output.
+        std::vector<ScDPLabelData::Member> aMembers;
+        if (mrObject.GetMembers(nDimension, 0, aMembers) && !aMembers.empty())
+        {
+            for (const auto& rMember : aMembers)
+                rNames.push_back(rMember.maName);
+            return;
+        }
+
+        // Fallback to cache order
         if (mrCache.IsValidDimensionIndex(nDimension))
         {
             fillNamesForItems(rNames, mrCache.GetDimMemberValues(nDimension), nDimension);
@@ -61,8 +74,9 @@ private:
     }
 
 public:
-    NameResolver(ScDPCache const& rCache)
-        : mrCache(rCache)
+    NameResolver(ScDPObject& rObject, ScDPCache const& rCache)
+        : mrObject(rObject)
+        , mrCache(rCache)
     {
     }
 
@@ -182,7 +196,7 @@ void FormatOutput::prepare(SCTAB nTab, std::vector<ScDPOutLevelData> const& rCol
     ScDPFilteredCache const& rFilteredCache = pTableData->GetCacheTable();
     ScDPCache const& rCache = rFilteredCache.getCache();
 
-    NameResolver aNameResolver(rCache);
+    NameResolver aNameResolver(mrObject, rCache);
 
     // Initialize format output entries (FormatOutputEntry) and set the data already available from output fields
     // (rColumnFields and rRowFields) and the pivot table format list (PivotTableFormat).
@@ -328,7 +342,9 @@ void checkForMatchingLines(std::vector<LineData> const& rLines,
             {
                 if (rFormatEntry.bSet)
                 {
-                    if (rFormatEntry.bMatchesAll && !rFieldData.bSubtotal)
+                    if (rFormatEntry.bHasSubtotal && rFieldData.aName == rFormatEntry.aName)
+                        bFieldMatch = true;
+                    else if (rFormatEntry.bMatchesAll && !rFieldData.bSubtotal)
                         bFieldMatch = true;
                     else if (nDimension == constDataDimension
                              && rFieldData.nIndex == rFormatEntry.nIndex)
@@ -454,8 +470,8 @@ void applyGrandTotalDataFormat(std::vector<LineData> const& rLines,
         std::vector<std::reference_wrapper<const LineData>> aMatches;
         std::vector<std::reference_wrapper<const LineData>> aMaybeMatches;
         checkForMatchingLines(rLines, rOutputFields, eType, aMatches, aMaybeMatches);
-        applyToMatchedLines(aMatches.empty() ? aMaybeMatches : aMatches, nGrandTotalPositionToSkip,
-                            rApplicator);
+        applyToMatchedLines(aMatches, nGrandTotalPositionToSkip, rApplicator);
+        applyToMatchedLines(aMaybeMatches, nGrandTotalPositionToSkip, rApplicator);
     }
     else
     {

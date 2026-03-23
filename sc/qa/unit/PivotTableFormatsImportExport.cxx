@@ -484,6 +484,15 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, PivotTableFormatsGrandTota
     // Check cells around to not include the formatting
     CPPUNIT_ASSERT(Color(0x92D050) != getBackgroundColor(rDoc, u"D14"_ustr));
     CPPUNIT_ASSERT(Color(0x92D050) != getBackgroundColor(rDoc, u"F14"_ustr));
+
+    // grandCol="1" data with subtotal reference
+    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"G5"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"G6"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"G7"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"G8"_ustr));
+
+    // G9 and beyond should NOT have the format set
+    CPPUNIT_ASSERT(Color(0x0070C0) != getBackgroundColor(rDoc, u"G9"_ustr));
 }
 
 } // end anonymous namespace
