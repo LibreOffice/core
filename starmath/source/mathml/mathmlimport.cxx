@@ -1452,7 +1452,7 @@ bool lcl_CountBlanks(const MathMLAttributeLengthValue& rLV, sal_Int32* pWide, sa
 {
     assert(pWide);
     assert(pNarrow);
-    if (rLV.aNumber.GetNumerator() == 0)
+    if (rLV.fNumber == 0)
     {
         *pWide = *pNarrow = 0;
         return true;
@@ -1460,15 +1460,14 @@ bool lcl_CountBlanks(const MathMLAttributeLengthValue& rLV, sal_Int32* pWide, sa
     // TODO: honor other units than em
     if (rLV.eUnit != MathMLLengthUnit::Em)
         return false;
-    if (rLV.aNumber.GetNumerator() < 0)
+    if (rLV.fNumber < 0)
         return false;
-    const Fraction aTwo(2, 1);
-    auto aWide = rLV.aNumber / aTwo;
+    auto aWide = rLV.fNumber / 2;
     auto nWide = static_cast<sal_Int32>(static_cast<tools::Long>(aWide));
     if (nWide < 0)
         return false;
     const Fraction aPointFive(1, 2);
-    auto aNarrow = (rLV.aNumber - Fraction(nWide, 1) * aTwo) / aPointFive;
+    auto aNarrow = (rLV.fNumber - nWide * 2) / aPointFive;
     auto nNarrow = static_cast<sal_Int32>(static_cast<tools::Long>(aNarrow));
     if (nNarrow < 0)
         return false;
