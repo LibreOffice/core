@@ -873,7 +873,7 @@ void wwFont::WriteDocx( DocxAttributeOutput* rAttrOutput ) const
 
     if ( mbAlt )
         rAttrOutput->FontAlternateName( msAltNm );
-    rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ), meChrSet );
+    rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ) );
     rAttrOutput->FontFamilyType( meFamily );
     rAttrOutput->FontPitchType( mePitch );
     rAttrOutput->EmbedFont( msFamilyNm, meFamily, mePitch );
