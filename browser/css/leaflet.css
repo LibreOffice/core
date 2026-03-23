@@ -666,7 +666,7 @@ div.leaflet-cursor-container:hover > .leaflet-cursor-header {
 }
 
 .clipboard-container {
-	position: absolute;
+	position: fixed;
 	left: 0px;
 	top: 0px;
 	width: 0px;

@@ -17,7 +17,7 @@
  * text area itself.
  */
 
-/* global app _ CursorHandler */
+/* global app _ CursorHandler cool */
 
 window.L.TextInput = window.L.Layer.extend({
 	initialize: function() {
@@ -122,7 +122,9 @@ window.L.TextInput = window.L.Layer.extend({
 
 	onAdd: function() {
 		if (this._container) {
-			this.getPane().appendChild(this._container);
+			var docContainer = document.getElementById('document-container');
+			if (docContainer)
+				docContainer.appendChild(this._container);
 			this.update();
 		}
 
@@ -163,8 +165,8 @@ window.L.TextInput = window.L.Layer.extend({
 		window.MagicKeyDownHandler = null;
 		window.MagicKeyUpHandler = null;
 
-		if (this._container) {
-			this.getPane().removeChild(this._container);
+		if (this._container && this._container.parentNode) {
+			this._container.parentNode.removeChild(this._container);
 		}
 
 		if (!this.hasAccessibilitySupport()) {
@@ -400,9 +402,13 @@ window.L.TextInput = window.L.Layer.extend({
 	},
 
 	update: function() {
-		if (this._container && this._map && this._latlng) {
-			var position = this._map.latLngToLayerPoint(this._latlng).round();
-			this._setPos(position);
+		if (this._container && this._map && app.file.textCursor.rectangle && app.activeDocument) {
+			var rect = app.file.textCursor.rectangle;
+			var pos = new cool.Point(
+				Math.round(rect.v1X / app.dpiScale),
+				Math.round(rect.v1Y / app.dpiScale)
+			);
+			this._setPos(pos);
 		}
 	},
 
@@ -526,10 +532,7 @@ window.L.TextInput = window.L.Layer.extend({
 			this._cursorHandler.setShowSection(false);
 		}
 
-		// Fetch top and bottom coords of caret
-		var top = this._map._docLayer._twipsToLatLng({ x: app.file.textCursor.rectangle.x1, y: app.file.textCursor.rectangle.y1 });
 		// Move the hidden text area with the cursor
-		this._latlng = window.L.latLng(top);
 		this.update();
 		// shape handlers hidden (if selected)
 		this._map.fire('handlerstatus', {hidden: true});
@@ -567,7 +570,7 @@ window.L.TextInput = window.L.Layer.extend({
 		else {
 			pos.y += this._isDebugOn ? 50 : 200;
 		}
-		window.L.DomUtil.setPosition(this._container, pos);
+		this._container.style.transform = 'translate(' + pos.x + 'px, ' + pos.y + 'px)';
 	},
 
 	// Generic handle attached to most text area events, just for debugging purposes.

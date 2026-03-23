@@ -3107,6 +3107,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				this._map.focus(false);
 		}
 
+		if (app.map._textInput && app.activeDocument)
+			app.map._textInput.update();
+
 		// when first time we updated the cursor - document is loaded
 		// let's move cursor to the target
 		if (this._map.options.docTarget !== '') {

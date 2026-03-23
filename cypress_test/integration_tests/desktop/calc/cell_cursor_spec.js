@@ -169,7 +169,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', fun
 		calcHelper.clickOnACell(1, 1, 2, 3);
 
 		// Press CTRL and hold.
-		cy.cGet('div.clipboard').type('{ctrl}', { release: false });
+		cy.cGet('div.clipboard').type('{ctrl}', { force: true, release: false });
 
 		cy.wait(500);
 		calcHelper.clickOnACell(2, 3, 4, 3);
@@ -178,7 +178,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test Cell Selections', fun
 		calcHelper.clickOnACell(4, 3, 2, 6);
 
 		// Press SHIFT and hold.
-		cy.cGet('div.clipboard').type('{shift}', { release: false });
+		cy.cGet('div.clipboard').type('{shift}', { force: true, release: false });
 
 		cy.wait(500);
 		calcHelper.clickOnACell(2, 6, 2, 10);
