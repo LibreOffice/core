@@ -45,6 +45,15 @@ struct PendingToolCall
     std::string arguments;
 };
 
+/// A single pending image generation within a transform.
+struct PendingImageGen
+{
+    int slideIndex;        // target slide index
+    int objId;             // placeholder object index (N from GenerateImage.N)
+    std::string prompt;    // image generation prompt
+    std::string filePath;  // filled after generation with file:// URL for kit
+};
+
 /// State for the AI chat multi-round tool loop.
 /// The server drives the loop: LLM response -> tool execution -> LLM response -> ...
 struct AIToolLoopState
@@ -63,6 +72,14 @@ struct AIToolLoopState
     std::string pendingSummary;        // markdown summary for approval UI
     std::string pendingForwardCommand; // command to forward to kit after approval
     std::vector<PendingToolCall> pendingToolCalls; // queued tool calls
+
+    // Image generation state for transform_document_structure
+    std::vector<PendingImageGen> pendingImageGens;
+    std::size_t nextImageGenIndex = 0;
+    bool generatingImages = false;       // main transform forwarded, generating images
+    int outstandingImageTransforms = 0;  // mini-transform responses still expected
+    std::string mainTransformResult;     // kit response from the initial transform
+    std::vector<std::string> failedImagePrompts; // prompts of images that failed to generate
 };
 
 /// Represents a session to a COOL client, in the WSD process.
@@ -388,6 +405,12 @@ private:
 
     bool handleAIImageGeneration(const std::string& prompt,
                                   const std::string& requestId);
+
+    /// Start generating images for GenerateImage.N commands in a transform,
+    /// then forward the modified transform to the kit.
+    void processTransformImageGenerations(const std::shared_ptr<DocumentBroker>& docBroker);
+    void generateNextTransformImage(std::shared_ptr<DocumentBroker> docBroker);
+    std::string appendImageGenFailures(const std::string& result) const;
 
     Poco::JSON::Array::Ptr buildAIToolDefinitions() const;
     void callLLMAPI();

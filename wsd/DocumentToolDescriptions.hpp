@@ -82,6 +82,9 @@ Available layouts (use ChangeLayoutByName with these names):
 Text content:
 - {"SetText.N": "text"} - set text of placeholder N on current slide (0=title, 1=first content, 2=second content, etc.). Use \n for paragraph breaks.
 
+Image generation (inserts AI-generated image into a placeholder):
+- {"GenerateImage.N": "prompt"} - generate an image from the text prompt using the AI image provider and insert it into placeholder N on the current slide, replacing the placeholder content. N is the 0-based object index (same as SetText.N). A loading placeholder is inserted immediately when the transform is applied, then the real image progressively replaces it after generation completes. Use descriptive prompts for best results. Example: {"GenerateImage.1": "A modern office building with glass facade at sunset, professional photography"}
+
 Object selection:
 - {"MarkObject": N} - select object at index on current slide
 - {"UnMarkObject": N} - deselect object at index

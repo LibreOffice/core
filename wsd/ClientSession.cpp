@@ -41,6 +41,8 @@
 #endif
 #include <wsd/TileDesc.hpp>
 
+#include <common/base64.hpp>
+
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Parser.h>
 #include <Poco/MemoryStream.h>
@@ -61,6 +63,7 @@ using namespace COOLProtocol;
 
 static constexpr float TILES_ON_FLY_MIN_UPPER_LIMIT = 10.0;
 static constexpr int SYNTHETIC_COOL_PID_OFFSET = 10000000;
+static constexpr std::size_t MAX_AI_IMAGE_GENERATIONS = 20;
 
 using Poco::Path;
 
@@ -1403,20 +1406,19 @@ bool ClientSession::handleAIChatApprove(const std::string& firstLine)
             // Generic forwarding (extract_document_structure, etc.)
             command = _aiToolLoop->pendingForwardCommand;
             _aiToolLoop->pendingForwardCommand.clear();
+
+            _aiToolLoop->awaitingApproval = false;
+            _aiToolLoop->awaitingKitResponse = true;
+
+            sendAIToolProgress(_aiToolLoop->pendingToolName, "Working...");
+            forwardToChild(command, docBroker);
         }
         else
         {
-            // transform_document_structure - URI-encode the transform JSON
-            std::string encodedTransform;
-            Poco::URI::encode(_aiToolLoop->pendingTransformArgs, "", encodedTransform);
-            command = "transformdocumentstructure url=interactive transform=" + encodedTransform;
+            // transform_document_structure - check for GenerateImage commands
+            _aiToolLoop->awaitingApproval = false;
+            processTransformImageGenerations(docBroker);
         }
-
-        _aiToolLoop->awaitingApproval = false;
-        _aiToolLoop->awaitingKitResponse = true;
-
-        sendAIToolProgress(_aiToolLoop->pendingToolName, "Working...");
-        forwardToChild(command, docBroker);
     }
     else
     {
@@ -1611,6 +1613,413 @@ bool ClientSession::handleAIImageGeneration(const std::string& prompt,
     std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
     httpSession->asyncRequest(httpRequest, docBroker->getPoll());
     return true;
+}
+
+void ClientSession::processTransformImageGenerations(
+    const std::shared_ptr<DocumentBroker>& docBroker)
+{
+    if (!_aiToolLoop)
+        return;
+
+    const std::string& transform = _aiToolLoop->pendingTransformArgs;
+
+    // Parse transform to find GenerateImage.N commands in SlideCommands
+    Poco::JSON::Object::Ptr transformObj = new Poco::JSON::Object();
+    if (!JsonUtil::parseJSON(transform, transformObj))
+    {
+        // Should not happen - already validated earlier
+        _aiToolLoop->awaitingKitResponse = true;
+        std::string encodedTransform;
+        Poco::URI::encode(transform, "", encodedTransform);
+        sendAIToolProgress(_aiToolLoop->pendingToolName, "Working...");
+        forwardToChild(
+            "transformdocumentstructure url=interactive transform=" + encodedTransform,
+            docBroker);
+        return;
+    }
+
+    Poco::JSON::Object::Ptr transforms = transformObj->getObject("Transforms");
+    Poco::JSON::Array::Ptr cmds =
+        transforms ? transforms->getArray("SlideCommands") : nullptr;
+
+    _aiToolLoop->pendingImageGens.clear();
+    _aiToolLoop->nextImageGenIndex = 0;
+    _aiToolLoop->generatingImages = false;
+    _aiToolLoop->outstandingImageTransforms = 0;
+    _aiToolLoop->mainTransformResult.clear();
+    _aiToolLoop->failedImagePrompts.clear();
+
+    // Track current slide index as we scan commands
+    int currentSlide = 0;
+    int pageCount = 1;
+
+    if (cmds)
+    {
+        for (unsigned i = 0; i < cmds->size(); ++i)
+        {
+            Poco::JSON::Object::Ptr cmd = cmds->getObject(i);
+            if (!cmd)
+                continue;
+
+            // Track slide navigation to determine which slide each
+            // GenerateImage targets
+            if (cmd->has("JumpToSlide"))
+            {
+                std::string val = cmd->getValue<std::string>("JumpToSlide");
+                if (val == "last")
+                    currentSlide = pageCount - 1;
+                else
+                {
+                    try
+                    {
+                        currentSlide = std::stoi(val);
+                    }
+                    catch (const std::exception&)
+                    {
+                        LOG_WRN("TransformImageGen: invalid JumpToSlide value: " << val);
+                    }
+                }
+            }
+            else if (cmd->has("InsertMasterSlide")
+                     || cmd->has("InsertMasterSlideByName"))
+            {
+                currentSlide++;
+                pageCount++;
+            }
+            else if (cmd->has("DeleteSlide"))
+            {
+                if (pageCount > 1)
+                    pageCount--;
+            }
+
+            static const std::string kGenerateImagePrefix = "GenerateImage.";
+            for (const auto& key : cmd->getNames())
+            {
+                if (key.substr(0, kGenerateImagePrefix.size()) == kGenerateImagePrefix)
+                {
+                    int objId;
+                    try
+                    {
+                        objId = std::stoi(key.substr(kGenerateImagePrefix.size()));
+                    }
+                    catch (const std::exception&)
+                    {
+                        LOG_WRN("TransformImageGen: invalid GenerateImage key: " << key);
+                        continue;
+                    }
+
+                    std::string prompt = cmd->getValue<std::string>(key);
+                    _aiToolLoop->pendingImageGens.push_back(
+                        {currentSlide, objId, prompt, std::string()});
+
+                    // Replace GenerateImage.N with InsertImage.N pointing
+                    // to the loading placeholder
+                    cmd->remove(key);
+                    cmd->set("InsertImage." + std::to_string(objId),
+                        "file://" + std::string(JAILED_DOCUMENT_ROOT)
+                        + "insertfile/ai-loading-placeholder.png");
+                }
+            }
+        }
+    }
+
+    if (_aiToolLoop->pendingImageGens.size() > MAX_AI_IMAGE_GENERATIONS)
+    {
+        LOG_WRN("TransformImageGen: capping image generations from "
+                << _aiToolLoop->pendingImageGens.size()
+                << " to " << MAX_AI_IMAGE_GENERATIONS);
+        _aiToolLoop->pendingImageGens.resize(MAX_AI_IMAGE_GENERATIONS);
+    }
+
+    // Copy the placeholder image to the jail insertfile directory
+    if (!_aiToolLoop->pendingImageGens.empty())
+    {
+        const std::string jailId = docBroker->getJailId();
+        const std::string dirPath = FileUtil::buildLocalPathToJail(
+            COOLWSD::EnableMountNamespaces, COOLWSD::ChildRoot + jailId,
+            std::string(JAILED_DOCUMENT_ROOT) + "insertfile");
+        Poco::File(dirPath).createDirectories();
+
+        const std::string srcPath = COOLWSD::FileServerRoot
+            + "/browser/dist/images/ai-loading-placeholder.png";
+        const std::string dstPath = dirPath + "/ai-loading-placeholder.png";
+
+        try
+        {
+            Poco::File src(srcPath);
+            if (src.exists())
+                src.copyTo(dstPath);
+            else
+                LOG_WRN("TransformImageGen: placeholder not found at " << srcPath);
+        }
+        catch (const std::exception& ex)
+        {
+            LOG_WRN("TransformImageGen: failed to copy placeholder: " << ex.what());
+        }
+    }
+
+    // Serialize the modified transform (with placeholders or unchanged)
+    std::ostringstream oss;
+    transformObj->stringify(oss);
+    std::string modifiedTransform = oss.str();
+
+    // Forward the transform immediately (with loading placeholders if any)
+    _aiToolLoop->awaitingKitResponse = true;
+    std::string encodedTransform;
+    Poco::URI::encode(modifiedTransform, "", encodedTransform);
+    sendAIToolProgress(_aiToolLoop->pendingToolName, "Working...");
+    forwardToChild(
+        "transformdocumentstructure url=interactive transform=" + encodedTransform,
+        docBroker);
+
+    // Mark that we need to generate images after the kit responds
+    if (!_aiToolLoop->pendingImageGens.empty())
+        _aiToolLoop->generatingImages = true;
+}
+
+std::string ClientSession::appendImageGenFailures(const std::string& result) const
+{
+    if (!_aiToolLoop || _aiToolLoop->failedImagePrompts.empty())
+        return result;
+
+    std::string augmented = result;
+    augmented += "\n\nNote: ";
+    augmented += std::to_string(_aiToolLoop->failedImagePrompts.size());
+    augmented += " image(s) failed to generate and still show a loading placeholder."
+                 " Failed prompts: ";
+    for (std::size_t i = 0; i < _aiToolLoop->failedImagePrompts.size(); ++i)
+    {
+        if (i > 0)
+            augmented += ", ";
+        augmented += "\"";
+        augmented += _aiToolLoop->failedImagePrompts[i];
+        augmented += "\"";
+    }
+    return augmented;
+}
+
+void ClientSession::generateNextTransformImage(std::shared_ptr<DocumentBroker> docBroker)
+{
+    if (!_aiToolLoop)
+        return;
+
+    for (std::size_t& idx = _aiToolLoop->nextImageGenIndex;
+         idx < _aiToolLoop->pendingImageGens.size(); ++idx)
+    {
+        const PendingImageGen& gen = _aiToolLoop->pendingImageGens[idx];
+        const std::size_t total = _aiToolLoop->pendingImageGens.size();
+
+        sendAIToolProgress(_aiToolLoop->pendingToolName, "Generating image " +
+                                                             std::to_string(idx + 1) + " of " +
+                                                             std::to_string(total) + "...");
+
+        // Get AI image provider settings
+        std::string apiKey = getAIImageProviderAPIKey();
+        if (apiKey.empty())
+            apiKey = getAIProviderAPIKey();
+        std::string baseUrl = getAIImageProviderURL();
+        if (baseUrl.empty())
+            baseUrl = getAIProviderURL();
+
+        if (apiKey.empty() || baseUrl.empty())
+        {
+            LOG_WRN("TransformImageGen: AI image settings not configured");
+            _aiToolLoop->failedImagePrompts.push_back(gen.prompt);
+            continue;
+        }
+
+        if (!baseUrl.empty() && baseUrl.back() == '/')
+            baseUrl.pop_back();
+
+        std::string requestUrl = baseUrl + "/v1/images/generations";
+
+        const std::string imageModel = getAIImageModel();
+        if (imageModel.empty())
+        {
+            LOG_WRN("TransformImageGen: image model not configured");
+            _aiToolLoop->failedImagePrompts.push_back(gen.prompt);
+            continue;
+        }
+
+        // Build HTTP payload
+        Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
+        payload->set("prompt", gen.prompt);
+        payload->set("size", "1024x1024");
+        payload->set("n", 1);
+        payload->set("response_format", "b64_json");
+        payload->set("model", imageModel);
+
+        std::ostringstream payloadStream;
+        payload->stringify(payloadStream);
+        std::string payloadStr = payloadStream.str();
+
+        std::shared_ptr<http::Session> httpSession = http::Session::create(requestUrl);
+        if (!httpSession)
+        {
+            LOG_WRN("TransformImageGen: failed to create HTTP session");
+            _aiToolLoop->failedImagePrompts.push_back(gen.prompt);
+            continue;
+        }
+
+        httpSession->setTimeout(std::chrono::seconds(60));
+
+        auto clientSessionPtr = client_from_this();
+
+        http::Session::FinishedCallback finishedCallback =
+            [clientSessionPtr, docBroker, idx](const std::shared_ptr<http::Session>& session)
+        {
+            clientSessionPtr->_activeAIChatSession.reset();
+
+            if (!clientSessionPtr->_aiToolLoop)
+                return;
+
+            const std::shared_ptr<const http::Response> httpResponse = session->response();
+            const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
+
+            if (statusCode != http::StatusCode::OK)
+            {
+                LOG_WRN_S("TransformImageGen: HTTP " << static_cast<int>(statusCode));
+                clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
+                    clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
+                clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
+                clientSessionPtr->generateNextTransformImage(docBroker);
+                return;
+            }
+
+            const std::string& responseBody = httpResponse->getBody();
+            Poco::JSON::Object::Ptr responseObject = new Poco::JSON::Object();
+            if (!JsonUtil::parseJSON(responseBody, responseObject))
+            {
+                LOG_WRN_S("TransformImageGen: failed to parse response");
+                clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
+                    clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
+                clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
+                clientSessionPtr->generateNextTransformImage(docBroker);
+                return;
+            }
+
+            Poco::JSON::Array::Ptr dataArray = responseObject->getArray("data");
+            if (!dataArray || dataArray->size() == 0)
+            {
+                LOG_WRN_S("TransformImageGen: no image in response");
+                clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
+                    clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
+                clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
+                clientSessionPtr->generateNextTransformImage(docBroker);
+                return;
+            }
+
+            std::string b64Json;
+            Poco::JSON::Object::Ptr firstItem = dataArray->getObject(0);
+            if (firstItem)
+                JsonUtil::findJSONValue(firstItem, "b64_json", b64Json);
+
+            if (b64Json.empty())
+            {
+                LOG_WRN_S("TransformImageGen: no image data in response");
+                clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
+                    clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
+                clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
+                clientSessionPtr->generateNextTransformImage(docBroker);
+                return;
+            }
+
+            // Decode base64 and write to jail insertfile directory
+            std::string binaryData;
+            macaron::Base64::Decode(b64Json, binaryData);
+
+            const std::string jailId = docBroker->getJailId();
+            const std::string dirPath = FileUtil::buildLocalPathToJail(
+                COOLWSD::EnableMountNamespaces, COOLWSD::ChildRoot + jailId,
+                std::string(JAILED_DOCUMENT_ROOT) + "insertfile");
+
+            Poco::File(dirPath).createDirectories();
+
+            const std::string fileName =
+                "ai_" + Util::rng::getHexString(8) + "_" + std::to_string(idx) + ".png";
+            std::string filePath = dirPath;
+            filePath += '/';
+            filePath += fileName;
+
+            std::ofstream fileStream(filePath, std::ios::out | std::ios::binary);
+            fileStream.write(binaryData.data(), binaryData.size());
+            fileStream.close();
+
+            if (!fileStream.good())
+            {
+                LOG_WRN_S("TransformImageGen: failed to write image to " << filePath);
+                FileUtil::removeFile(filePath);
+                clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
+                    clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
+                clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
+                clientSessionPtr->generateNextTransformImage(docBroker);
+                return;
+            }
+
+            // Build jail-internal file:// URL for core to load
+            const std::string jailFileUrl =
+                "file://" + std::string(JAILED_DOCUMENT_ROOT) + "insertfile/" + fileName;
+            clientSessionPtr->_aiToolLoop->pendingImageGens[idx].filePath = jailFileUrl;
+
+            LOG_DBG_S("TransformImageGen: wrote image " << (idx + 1) << " to " << filePath);
+
+            // Send a transform to replace the loading placeholder with the real
+            // image on the correct slide.
+            const auto& imgGen = clientSessionPtr->_aiToolLoop->pendingImageGens[idx];
+            std::string miniTransform = "{\"Transforms\":{\"SlideCommands\":["
+                                        "{\"InsertImageAt." +
+                                        std::to_string(imgGen.slideIndex) + "." +
+                                        std::to_string(imgGen.objId) + "\":\"" + jailFileUrl +
+                                        "\"}]}}";
+
+            std::string encodedMini;
+            Poco::URI::encode(miniTransform, "", encodedMini);
+            clientSessionPtr->_aiToolLoop->outstandingImageTransforms++;
+            clientSessionPtr->forwardToChild(
+                "transformdocumentstructure url=interactive transform=" + encodedMini, docBroker);
+
+            clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
+            clientSessionPtr->generateNextTransformImage(docBroker);
+        };
+
+        httpSession->setFinishedHandler(std::move(finishedCallback));
+
+        http::Session::ConnectFailCallback connectFailCallback =
+            [clientSessionPtr, docBroker, idx](const std::shared_ptr<http::Session>& /*session*/)
+        {
+            clientSessionPtr->_activeAIChatSession.reset();
+
+            if (!clientSessionPtr->_aiToolLoop)
+                return;
+
+            LOG_WRN_S("TransformImageGen: connection failed");
+            clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
+                clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
+            clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
+            clientSessionPtr->generateNextTransformImage(docBroker);
+        };
+        httpSession->setConnectFailHandler(std::move(connectFailCallback));
+
+        http::Request httpRequest(Poco::URI(requestUrl).getPathAndQuery());
+        httpRequest.setVerb(http::Request::VERB_POST);
+        httpRequest.set("Content-Type", "application/json");
+        httpRequest.set("Authorization", "Bearer " + apiKey);
+        httpRequest.setBody(payloadStr, "application/json");
+
+        LOG_DBG("TransformImageGen: generating image " << (idx + 1) << " of " << total
+                                                       << ", prompt: " << gen.prompt);
+
+        _activeAIChatSession = httpSession;
+        httpSession->asyncRequest(httpRequest, docBroker->getPoll());
+        return; // async request launched, callbacks will call back into this function
+    }
+
+    // All entries processed or skipped - check completion
+    if (_aiToolLoop->outstandingImageTransforms > 0)
+        return; // responses still pending, they will finish up
+    _aiToolLoop->generatingImages = false;
+    continueAIToolLoop(_aiToolLoop->pendingToolCallId,
+        appendImageGenFailures(_aiToolLoop->mainTransformResult));
 }
 
 bool ClientSession::handleSignatureAction(const StringVector& tokens)
@@ -4178,16 +4587,64 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
         if (_aiToolLoop && _aiToolLoop->awaitingKitResponse)
         {
             _aiToolLoop->awaitingKitResponse = false;
+
+            // If we have pending image generations, start generating them
+            // instead of continuing the AI tool loop. The main transform
+            // (with loading placeholders) has been applied - now we
+            // progressively replace placeholders with real images.
+            if (_aiToolLoop->generatingImages)
+            {
+                _aiToolLoop->mainTransformResult = payload->jsonString();
+                std::shared_ptr<DocumentBroker> broker = getDocumentBroker();
+                if (broker)
+                    generateNextTransformImage(broker);
+                else
+                {
+                    _aiToolLoop->generatingImages = false;
+                    continueAIToolLoop(_aiToolLoop->pendingToolCallId,
+                        payload->jsonString());
+                }
+                return true;
+            }
+
             continueAIToolLoop(_aiToolLoop->pendingToolCallId, payload->jsonString());
             return true;
         }
 #endif
 
-        // TODO: This branch is unreachable. Kit never sends
-        // transformeddocumentstructure: in the MCP/convert-to path -
-        // the transform modifies the document in-place via
-        // postUnoCommand(..., false), and ConvertToBroker::setLoaded()
-        // triggers saveas which returns the modified document.
+#if !MOBILEAPP
+        // During progressive image generation, image insertion transforms
+        // produce responses that reach here. Track their success and, when
+        // all responses are in, continue the AI tool loop.
+        if (_aiToolLoop && _aiToolLoop->generatingImages)
+        {
+            if (_aiToolLoop->outstandingImageTransforms > 0)
+            {
+                _aiToolLoop->outstandingImageTransforms--;
+
+                const std::string jsonResult = payload->jsonString();
+                Poco::JSON::Object::Ptr resultObj;
+                if (JsonUtil::parseJSON(jsonResult, resultObj))
+                {
+                    bool success = false;
+                    JsonUtil::findJSONValue(resultObj, "success", success);
+                    if (!success)
+                        LOG_WRN("Image insertion transform failed: " << jsonResult);
+                }
+            }
+
+            if (_aiToolLoop->outstandingImageTransforms <= 0
+                && _aiToolLoop->nextImageGenIndex
+                       >= _aiToolLoop->pendingImageGens.size())
+            {
+                _aiToolLoop->generatingImages = false;
+                continueAIToolLoop(_aiToolLoop->pendingToolCallId,
+                    appendImageGenFailures(_aiToolLoop->mainTransformResult));
+            }
+            return true;
+        }
+#endif
+
         LOG_TRC("Sending transformed document structure response.");
         if (!saveAsSocket)
             LOG_ERR("Error in transformeddocumentstructure: not in isConvertTo mode");
