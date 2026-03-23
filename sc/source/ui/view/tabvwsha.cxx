@@ -1897,7 +1897,7 @@ void ScTabViewShell::GetStyleState( SfxItemSet& rSet )
                 GetViewFrame().GetBindings().QueryState(SID_STYLE_FAMILY, pFamilyItem);
                 bool bPage = pFamilyItem && SfxStyleFamily::Page == static_cast<SfxStyleFamily>(pFamilyItem->GetValue());
 
-                if ( bProtected && !bPage )
+                if ( bProtected && !bPage && nSlotId != SID_STYLE_HIDE && nSlotId != SID_STYLE_SHOW )
                     rSet.DisableItem( nSlotId );
             }
             break;
