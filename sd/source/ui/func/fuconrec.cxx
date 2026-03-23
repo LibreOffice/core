@@ -731,11 +731,11 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
 
     // tdf#126823 - retrieve default arrow sizes for start/end widths
     // generated in SdDrawDocument::CreateLayoutTemplates()
-    ::tools::Long nLineStartWidth = 200;
+    ::tools::Long nLineStartWidth = LINE_START_WIDTH_DEFAULT;
     if (aSet.GetItemState(XATTR_LINESTARTWIDTH) != SfxItemState::INVALID)
         nLineStartWidth = aSet.Get(XATTR_LINESTARTWIDTH).GetValue();
 
-    ::tools::Long nLineEndWidth = 200;
+    ::tools::Long nLineEndWidth = LINE_END_WIDTH_DEFAULT;
     if (aSet.GetItemState(XATTR_LINEENDWIDTH) != SfxItemState::INVALID)
         nLineEndWidth = aSet.Get(XATTR_LINEENDWIDTH).GetValue();
 

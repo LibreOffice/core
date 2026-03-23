@@ -169,8 +169,8 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XLineEndItem(basegfx::B2DPolyPolygon()));
     // tdf#126823 - default arrow sizes for start/end widths
     // these should be aligned with values in FuConstructRectangle::SetLineEnds
-    rISet.Put(XLineStartWidthItem(200));
-    rISet.Put(XLineEndWidthItem(200));
+    rISet.Put(XLineStartWidthItem());
+    rISet.Put(XLineEndWidthItem());
     rISet.Put(XLineStartCenterItem());
     rISet.Put(XLineEndCenterItem());
     rISet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
@@ -606,9 +606,9 @@ void SdDrawDocument::CreateLayoutTemplates()
         aArrow.setClosed(true);
 
         pISet->Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
-        pISet->Put(XLineStartWidthItem(200));
+        pISet->Put(XLineStartWidthItem());
         pISet->Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
-        pISet->Put(XLineEndWidthItem(200));
+        pISet->Put(XLineEndWidthItem());
         pISet->Put(SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, true));
     }
     // Graphic > Lines > Dashed

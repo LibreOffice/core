@@ -117,9 +117,9 @@ namespace sdr::properties
             aNewPolygon.setClosed(true);
 
             moItemSet->Put(XLineStartItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
-            moItemSet->Put(XLineStartWidthItem(200));
+            moItemSet->Put(XLineStartWidthItem());
             moItemSet->Put(XLineEndItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
-            moItemSet->Put(XLineEndWidthItem(200));
+            moItemSet->Put(XLineEndWidthItem());
             moItemSet->Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
         }
 } // end of namespace
