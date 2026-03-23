@@ -2544,6 +2544,31 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
                 break;
             }
         }
+        if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocOffset
+            && t->GetType() == svByte)
+        {
+            FormulaTokenArrayPlainIterator aTempIter(*pArr);
+            aTempIter.Jump(maArrIterator.GetIndex());
+            FormulaToken* pNext = aTempIter.Next();
+            if (pNext && pNext->GetOpCode() == ocOpen
+                && pNext->GetType() == svSep)
+            {
+                FormulaToken* pNext2 = aTempIter.Next();
+                if (pNext2 && pNext2->GetOpCode() == ocPush)
+                {
+                    StackVar eType = pNext2->GetType();
+                    if (eType == svString || eType == svDouble)
+                    {
+                        rBuffer.append(GetNativeSymbol(t->GetOpCode()));
+                        rBuffer.append(GetNativeSymbol(pNext->GetOpCode()));
+                        rBuffer.append(GetNativeSymbol(ocErrRef));
+                        maArrIterator.Jump(aTempIter.GetIndex());
+                        t = maArrIterator.Next();
+                        continue;
+                    }
+                }
+            }
+        }
         if (t->GetOpCode() == ocExternal && t->GetType() == svByte)
         {
             rBuffer.append(GetNativeSymbol(ocErrRef));

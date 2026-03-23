@@ -1651,6 +1651,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testPivotTableDate)
                 u"-0.762013888888889");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testOffsetIllegalParam)
+{
+    createScDoc("ods/offsetIllegalParam.ods");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pWorkbook);
+
+    assertXPathContent(pWorkbook, "/x:workbook/x:definedNames/x:definedName[2]",
+                       u"OFFSET(#REF!,0,2)");
+    assertXPathContent(pWorkbook, "/x:workbook/x:definedNames/x:definedName[3]",
+                       u"OFFSET(#REF!,0,1)");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
