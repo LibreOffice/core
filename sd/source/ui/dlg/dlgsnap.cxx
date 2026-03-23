@@ -36,7 +36,7 @@
  */
 SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View const * pView)
     : GenericDialogController(pWindow, u"modules/sdraw/ui/dlgsnap.ui"_ustr, u"SnapObjectDialog"_ustr)
-    , aUIScale(pView->GetDoc().GetUIScale())
+    , mfUIScale(pView->GetDoc().GetUIScale())
     , m_xFtX(m_xBuilder->weld_label(u"xlabel"_ustr))
     , m_xMtrFldX(m_xBuilder->weld_metric_spin_button(u"x"_ustr, FieldUnit::CM))
     , m_xFtY(m_xBuilder->weld_label(u"ylabel"_ustr))
@@ -81,18 +81,18 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
             auto const n4 = msb->convert_value_to(n3, FieldUnit::NONE);
             return n4;
         };
-    m_xMtrFldX->set_range(map(m_xMtrFldX, sal_Int32(aLeftTop.X() / aUIScale)),
-                          map(m_xMtrFldX, sal_Int32(aRightBottom.X() / aUIScale)),
+    m_xMtrFldX->set_range(map(m_xMtrFldX, sal_Int32(aLeftTop.X() / mfUIScale)),
+                          map(m_xMtrFldX, sal_Int32(aRightBottom.X() / mfUIScale)),
                           FieldUnit::NONE);
-    m_xMtrFldY->set_range(map(m_xMtrFldY, sal_Int32(aLeftTop.Y() / aUIScale)),
-                          map(m_xMtrFldY, sal_Int32(aRightBottom.Y() / aUIScale)),
+    m_xMtrFldY->set_range(map(m_xMtrFldY, sal_Int32(aLeftTop.Y() / mfUIScale)),
+                          map(m_xMtrFldY, sal_Int32(aRightBottom.Y() / mfUIScale)),
                           FieldUnit::NONE);
 
     // set values
     nXValue = rInAttrs.Get(ATTR_SNAPLINE_X).GetValue();
     nYValue = rInAttrs.Get(ATTR_SNAPLINE_Y).GetValue();
-    nXValue = sal_Int32(nXValue / aUIScale);
-    nYValue = sal_Int32(nYValue / aUIScale);
+    nXValue = sal_Int32(nXValue / mfUIScale);
+    nYValue = sal_Int32(nYValue / mfUIScale);
     SetMetricValue(*m_xMtrFldX, nXValue, MapUnit::Map100thMM);
     SetMetricValue(*m_xMtrFldY, nYValue, MapUnit::Map100thMM);
 
@@ -135,8 +135,8 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
     else if (m_xRbVert->get_active()) eKind = SnapKind::Vertical;
     else                              eKind = SnapKind::Point;
 
-    nXValue = sal_Int32(GetCoreValue(*m_xMtrFldX, MapUnit::Map100thMM) * aUIScale);
-    nYValue = sal_Int32(GetCoreValue(*m_xMtrFldY, MapUnit::Map100thMM) * aUIScale);
+    nXValue = sal_Int32(GetCoreValue(*m_xMtrFldX, MapUnit::Map100thMM) * mfUIScale);
+    nYValue = sal_Int32(GetCoreValue(*m_xMtrFldY, MapUnit::Map100thMM) * mfUIScale);
 
     rOutAttrs.Put(SfxUInt16Item(ATTR_SNAPLINE_KIND, static_cast<sal_uInt16>(eKind)));
     rOutAttrs.Put(SfxInt32Item(ATTR_SNAPLINE_X, nXValue));
