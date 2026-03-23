@@ -204,8 +204,8 @@ void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const tools::R
     else
     {
         MapMode aMM(rRenderContext.GetMapMode());
-        aMM.SetScaleX(maScale);
-        aMM.SetScaleY(maScale);
+        aMM.SetScaleX(Fraction(mfScale));
+        aMM.SetScaleY(Fraction(mfScale));
         rRenderContext.SetMapMode(aMM);
         mpPgPreviewLayout->GetParentViewShell().setOutputToWindow(true);
         mpPgPreviewLayout->Paint(rRenderContext, rRect);
@@ -232,7 +232,7 @@ void SwPagePreviewWin::CalcWish( sal_Int16 nNewRow, sal_Int16 nNewCol )
                               mnSttPage, maPaintedPreviewDocRect );
     SetSelectedPage( mnSttPage );
     SetPagePreview(mnRow, mnCol);
-    maScale = GetMapMode().GetScaleX();
+    mfScale = double(GetMapMode().GetScaleX());
 
     // If changes have taken place at the columns, the special case "single column"
     // must be considered and corrected if necessary.
@@ -375,7 +375,7 @@ void SwPagePreviewWin::SetWinSize( const Size& rNewSize )
     if ( mbCalcScaleForPreviewLayout )
     {
         mpPgPreviewLayout->Init( mnCol, mnRow, maPxWinSize );
-        maScale = GetMapMode().GetScaleX();
+        mfScale = double(GetMapMode().GetScaleX());
     }
     mpPgPreviewLayout->Prepare( mnSttPage, Point(0,0), maPxWinSize,
                               mnSttPage, maPaintedPreviewDocRect );
@@ -385,7 +385,7 @@ void SwPagePreviewWin::SetWinSize( const Size& rNewSize )
         mbCalcScaleForPreviewLayout = false;
     }
     SetPagePreview(mnRow, mnCol);
-    maScale = GetMapMode().GetScaleX();
+    mfScale = double(GetMapMode().GetScaleX());
 }
 
 OUString SwPagePreviewWin::GetStatusStr( sal_uInt16 nPageCnt ) const
@@ -1746,26 +1746,26 @@ void SwPagePreviewWin::AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
                                   mnSttPage, maPaintedPreviewDocRect );
         SetSelectedPage( mnSttPage );
         SetPagePreview(mnRow, mnCol);
-        maScale = GetMapMode().GetScaleX();
+        mfScale = double(GetMapMode().GetScaleX());
     }
     else if ( _nZoomFactor != 0 )
     {
         // calculate new scaling and set mapping mode appropriately.
-        Fraction aNewScale( _nZoomFactor, 100 );
+        double fNewScale = double(_nZoomFactor) / 100;
         MapMode aNewMapMode = GetMapMode();
-        aNewMapMode.SetScaleX( aNewScale );
-        aNewMapMode.SetScaleY( aNewScale );
+        aNewMapMode.SetScaleX( Fraction(fNewScale) );
+        aNewMapMode.SetScaleY( Fraction(fNewScale) );
         SetMapMode( aNewMapMode );
 
         // calculate new start position for preview paint
         Size aNewWinSize = PixelToLogic( maPxWinSize );
         Point aNewPaintStartPos =
-                mpPgPreviewLayout->GetPreviewStartPosForNewScale( double(aNewScale), double(maScale), aNewWinSize );
+                mpPgPreviewLayout->GetPreviewStartPosForNewScale( fNewScale, mfScale, aNewWinSize );
 
         // remember new scaling and prepare preview paint
         // Note: paint of preview will be performed by a corresponding invalidate
         //          due to property changes.
-        maScale = aNewScale;
+        mfScale = fNewScale;
         mpPgPreviewLayout->Prepare( 0, aNewPaintStartPos, maPxWinSize,
                                   mnSttPage, maPaintedPreviewDocRect );
     }

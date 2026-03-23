@@ -44,7 +44,7 @@ class SAL_DLLPUBLIC_RTTI SwPagePreviewWin final : public vcl::Window
     sal_Int16 mnRow;
     sal_Int16 mnCol;
     Size maPxWinSize;
-    Fraction maScale;
+    double mfScale;
     SwPagePreview& mrView;
     bool mbCalcScaleForPreviewLayout;
     tools::Rectangle maPaintedPreviewDocRect;
