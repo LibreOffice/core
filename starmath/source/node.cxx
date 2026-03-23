@@ -182,11 +182,11 @@ void SmNode::SetFontSize(double fSize, FontSizeType nType)
 }
 
 
-void SmNode::SetSize(const Fraction &rSize)
+void SmNode::SetSize(double fSize)
 {
-    GetFont() *= rSize;
+    GetFont() *= fSize;
 
-    ForEachNonNull(this, [&rSize](SmNode *pNode){pNode->SetSize(rSize);});
+    ForEachNonNull(this, [&fSize](SmNode *pNode){pNode->SetSize(fSize);});
 }
 
 
@@ -684,7 +684,7 @@ void SmUnHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     assert(pOper);
     assert(pBody);
 
-    pOper->SetSize(Fraction (rFormat.GetRelSize(SIZ_OPERATOR), 100));
+    pOper->SetSize(double(rFormat.GetRelSize(SIZ_OPERATOR)) / 100);
     pOper->Arrange(rDev, rFormat);
     pBody->Arrange(rDev, rFormat);
 
@@ -784,7 +784,7 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pRootSym->MoveTo(aPos);
 
     if (pExtra)
-    {   pExtra->SetSize(Fraction(rFormat.GetRelSize(SIZ_INDEX), 100));
+    {   pExtra->SetSize(double(rFormat.GetRelSize(SIZ_INDEX)) / 100);
         pExtra->Arrange(rDev, rFormat);
 
         aPos = lcl_GetExtraPos(*pRootSym, *pExtra);
@@ -809,7 +809,7 @@ void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     assert(pOper);
     assert(pRight);
 
-    pOper->SetSize(Fraction (rFormat.GetRelSize(SIZ_OPERATOR), 100));
+    pOper->SetSize(double(rFormat.GetRelSize(SIZ_OPERATOR)) / 100);
 
     pLeft ->Arrange(rDev, rFormat);
     pOper ->Arrange(rDev, rFormat);
@@ -857,10 +857,10 @@ void SmBinVerNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     bool  bIsTextmode = rFormat.IsTextmode();
     if (bIsTextmode)
     {
-        Fraction  aFraction(rFormat.GetRelSize(SIZ_INDEX), 100);
-        pNum  ->SetSize(aFraction);
-        pLine ->SetSize(aFraction);
-        pDenom->SetSize(aFraction);
+        double fFraction = double(rFormat.GetRelSize(SIZ_INDEX)) / 100;
+        pNum  ->SetSize(fFraction);
+        pLine ->SetSize(fFraction);
+        pDenom->SetSize(fFraction);
     }
 
     pNum  ->Arrange(rDev, rFormat);
@@ -1203,8 +1203,8 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         {
             sal_uInt16 nIndex = (eSubSup == CSUB  ||  eSubSup == CSUP) ?
                                     SIZ_LIMITS : SIZ_INDEX;
-            Fraction  aFraction ( rFormat.GetRelSize(nIndex), 100 );
-            pSubSup->SetSize(aFraction);
+            double fFraction = double(rFormat.GetRelSize(nIndex)) / 100;
+            pSubSup->SetSize(fFraction);
         }
 
         pSubSup->Arrange(rDev, rFormat);
@@ -1442,9 +1442,9 @@ void SmVerticalBraceNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     pBody->Arrange(aTmpDev, rFormat);
 
     // size is the same as for limits for this part
-    pScript->SetSize( Fraction( rFormat.GetRelSize(SIZ_LIMITS), 100 ) );
+    pScript->SetSize( double(rFormat.GetRelSize(SIZ_LIMITS)) / 100 );
     // braces are a bit taller than usually
-    pBrace ->SetSize( Fraction(3, 2) );
+    pBrace ->SetSize( 1.5 );
 
     tools::Long  nItalicWidth = pBody->GetItalicWidth();
     if (nItalicWidth > 0)
@@ -1538,8 +1538,8 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     assert(pBody);
 
     SmNode *pSymbol = GetSymbol();
-    pSymbol->SetSize(Fraction(CalcSymbolHeight(*pSymbol, rFormat),
-                              pSymbol->GetFont().GetFontSize().Height()));
+    pSymbol->SetSize(double(CalcSymbolHeight(*pSymbol, rFormat)) /
+                              pSymbol->GetFont().GetFontSize().Height());
 
     pBody->Arrange(rDev, rFormat);
     bool bDynamicallySized = false;
@@ -1549,7 +1549,7 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         tools::Long nFontHeight = pSymbol->GetFont().GetFontSize().Height();
         if (nFontHeight < nBodyHeight)
         {
-            pSymbol->SetSize(Fraction(nBodyHeight, nFontHeight));
+            pSymbol->SetSize(double(nBodyHeight) / nFontHeight);
             bDynamicallySized = true;
         }
     }
@@ -1895,7 +1895,7 @@ void SmTextNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     sal_uInt16  nSizeDesc = GetFontDesc() == FNT_FUNCTION ?
                             SIZ_FUNCTION : SIZ_TEXT;
-    GetFont() *= Fraction (rFormat.GetRelSize(nSizeDesc), 100);
+    GetFont() *= double(rFormat.GetRelSize(nSizeDesc)) / 100;
 
     SmTmpDevice aTmpDev (rDev, true);
     aTmpDev.SetFont(GetFont());
@@ -2155,7 +2155,7 @@ void SmMathSymbolNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     PrepareAttributes();
 
-    GetFont() *= Fraction (rFormat.GetRelSize(SIZ_TEXT), 100);
+    GetFont() *= double(rFormat.GetRelSize(SIZ_TEXT)) / 100;
 
     SmTmpDevice aTmpDev (rDev, true);
     aTmpDev.SetFont(GetFont());

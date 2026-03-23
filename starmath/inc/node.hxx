@@ -244,11 +244,11 @@ public:
     void SetFontSize(double fRelSize, FontSizeType nType);
 
     /**
-     * Sets the font size to rRelSize with type FontSizeType::ABSOLUT.
-     * @param rScale
+     * Sets the font size to fScale with type FontSizeType::ABSOLUT.
+     * @param fScale
      * @return
      */
-    void SetSize(const Fraction &rScale);
+    void SetSize(double fScale);
 
     /**
      * Prepare preliminary settings about font and text

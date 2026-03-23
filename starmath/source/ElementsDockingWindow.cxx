@@ -582,7 +582,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     pDevice->SetTextColor(GetTextColor());
 
     pNode->Prepare(maFormat, *mpDocShell, 0);
-    pNode->SetSize(Fraction(10,8));
+    pNode->SetSize(10.0 / 8);
     pNode->Arrange(*pDevice, maFormat);
 
     AutoColorVisitor(pNode.get(), GetTextColor());
