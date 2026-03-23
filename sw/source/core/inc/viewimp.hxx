@@ -281,7 +281,7 @@ public:
     /// update data for accessible preview
     /// change method signature due to new page preview functionality
     void UpdateAccessiblePreview( const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
-                                  const Fraction&  _rScale,
+                                  double _fScale,
                                   const SwPageFrame* _pSelectedPageFrame,
                                   const Size&      _rPreviewWinSize );
 

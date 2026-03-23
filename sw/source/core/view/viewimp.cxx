@@ -497,12 +497,12 @@ void SwViewShellImp::InvalidateAccessibleParaAttrs_( const SwTextFrame& rTextFra
 }
 
 void SwViewShellImp::UpdateAccessiblePreview( const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
-                                         const Fraction&  _rScale,
+                                         double _fScale,
                                          const SwPageFrame* _pSelectedPageFrame,
                                          const Size&      _rPreviewWinSize )
 {
     if( IsAccessible() )
-        GetAccessibleMap().UpdatePreview( _rPreviewPages, _rScale,
+        GetAccessibleMap().UpdatePreview( _rPreviewPages, _fScale,
                                           _pSelectedPageFrame, _rPreviewWinSize );
 }
 

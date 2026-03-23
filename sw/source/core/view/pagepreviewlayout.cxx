@@ -1141,7 +1141,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
         // update at accessibility interface
         mrParentViewShell.Imp()->UpdateAccessiblePreview(
                         maPreviewPages,
-                        aMapMode.GetScaleX(),
+                        double(aMapMode.GetScaleX()),
                         mrLayoutRootFrame.GetPageByPageNum( mnSelectedPageNum ),
                         maWinSize );
     }

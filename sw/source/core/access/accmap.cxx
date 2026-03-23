@@ -668,7 +668,7 @@ public:
 
     void Update( const SwAccessibleMap& rAccMap,
                  const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
-                 const Fraction&  _rScale,
+                 double _fScale,
                  const SwPageFrame* _pSelectedPageFrame,
                  const Size&      _rPreviewWinSize );
 
@@ -695,7 +695,7 @@ SwAccPreviewData::SwAccPreviewData() :
 
 void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
                                const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
-                               const Fraction&  _rScale,
+                               double  _rScale,
                                const SwPageFrame* _pSelectedPageFrame,
                                const Size&      _rPreviewWinSize )
 {
@@ -1648,7 +1648,7 @@ rtl::Reference<comphelper::OAccessible> SwAccessibleMap::GetDocumentView()
 
 rtl::Reference<comphelper::OAccessible>
 SwAccessibleMap::GetDocumentPreview(const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
-                                    const Fraction& _rScale, const SwPageFrame* _pSelectedPageFrame,
+                                    double _rScale, const SwPageFrame* _pSelectedPageFrame,
                                     const Size& _rPreviewWinSize)
 {
     // create & update preview data object
@@ -2634,7 +2634,7 @@ sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrame& rParentFrame,
 }
 
 void SwAccessibleMap::UpdatePreview( const std::vector<std::unique_ptr<PreviewPage>>& _rPreviewPages,
-                                     const Fraction&  _rScale,
+                                     double  _rScale,
                                      const SwPageFrame* _pSelectedPageFrame,
                                      const Size&      _rPreviewWinSize )
 {
