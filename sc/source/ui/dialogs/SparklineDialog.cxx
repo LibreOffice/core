@@ -157,14 +157,30 @@ void SparklineDialog::setupValues()
             maAttributes = mpSparklineGroup->getAttributes();
             mxFrameData->set_visible(false);
             mbEditMode = true;
+            setInputSelection();
         }
     }
     else
     {
-        maInputRange = aSelectionRange;
+        // When selection empty - pre-fill output range (user selected target for sparkline)
+        // When selection non-empty - pre-fill input range (user selected source for sparkline)
+        bool bSelectionEmpty = mrDocument.IsEmptyData(
+            aSelectionRange.aStart.Col(), aSelectionRange.aStart.Row(), aSelectionRange.aEnd.Col(),
+            aSelectionRange.aEnd.Row(), aSelectionRange.aStart.Tab());
+        if (bSelectionEmpty)
+        {
+            maOutputRange = aSelectionRange;
+            OUString aString
+                = maOutputRange.Format(mrDocument, ScRefFlags::VALID | ScRefFlags::TAB_3D,
+                                       mrDocument.GetAddressConvention());
+            mxOutputRangeEdit->SetRefString(aString);
+        }
+        else
+        {
+            maInputRange = aSelectionRange;
+            setInputSelection();
+        }
     }
-
-    setInputSelection();
 
     switch (maAttributes.getType())
     {
