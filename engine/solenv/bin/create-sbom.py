@@ -145,6 +145,36 @@ def parse_install_script(filename):
 
     return result
 
+def parse_packinfo(filename):
+    """Parse a packinfo file from setup_native."""
+    with open(filename) as f:
+        lines = f.read().splitlines()
+    result = []
+    i = 0
+    n = len(lines)
+    while i < n:
+        line = lines[i].strip()
+        if not line or line.startswith("#"):
+            i += 1
+            continue
+        if line == "Start":
+            i += 1
+            item = {}
+            while i < n and not re.match(r'^\s*End\s*$', lines[i]):
+                line = lines[i].strip()
+                m = re.match(r'^(\w+)\s*=\s*"?(.*?)"?\s*$', line)
+                if not m:
+                    raise Exception(f"unexpected line {i}: {line}")
+                item[m.group(1)] = m.group(2)
+                i += 1
+            if i == n:
+                raise Exception("expected End before EOF")
+            result.append(item)
+            i += 1
+            continue
+        raise Exception(f"unexpected line {i}: {line}")
+    return result
+
 package_cache = {}
 
 def package_id(package):
@@ -334,12 +364,17 @@ def sbom_skeleton(package, root_spdx_id):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 4:
-        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <path of install script>")
+    if len(sys.argv) < 8:
+        print("Usage: python create-sbom.py <path of output SPDX JSON files> <path of LICENSE.html> <4 packinfo> <path of install script>")
     else:
         sbom_path = sys.argv[1]
         license_path = sys.argv[2]
-        install_script = parse_install_script(sys.argv[3])
+        packinfos = []
+        packinfos += parse_packinfo(sys.argv[3])
+        packinfos += parse_packinfo(sys.argv[4])
+        packinfos += parse_packinfo(sys.argv[5])
+        packinfos += parse_packinfo(sys.argv[6])
+        install_script = parse_install_script(sys.argv[7])
         process_file(license_path)
         for package, data in sbom_data.items():
             filename = f"{package}-sbom.spdx.json"

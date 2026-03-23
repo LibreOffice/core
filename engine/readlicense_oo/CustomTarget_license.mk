@@ -81,6 +81,10 @@ $(readlicense_oo_DIR)/license.txt : \
 endif
 
 SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_office.txt \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_ure.txt \
 		$(call gb_InstallScript_get_target,setup_osl) \
 		$(call gb_Helper_optional,ODK,$(call gb_InstallScript_get_target,sdkoo)) \
 		$(call gb_ExternalExecutable_get_dependencies,python)
@@ -92,7 +96,11 @@ SBOM : $(readlicense_oo_DIR)/LICENSE.html $(create_SBOM) \
 	)
 	$(call gb_ExternalExecutable_get_command,python) $(create_SBOM) \
 		$(readlicense_oo_DIR) \
-		$< \
+		$(readlicense_oo_DIR)/LICENSE.html \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_ure.txt \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_office.txt \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_brand.txt \
+		$(SRCDIR)/setup_native/source/packinfo/packinfo_extensions.txt \
 		$(call gb_InstallScript_get_target,setup_osl)
 	mkdir -p $(SBOM_DIR)
 	cp $(readlicense_oo_DIR)/*sbom.spdx.json $(SBOM_DIR)
