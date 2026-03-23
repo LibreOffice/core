@@ -641,7 +641,7 @@ class SwAccPreviewData
     Rectangles maLogicRects;
 
     SwRect maVisArea;
-    Fraction maScale;
+    double mfScale;
 
     const SwPageFrame *mpSelPage;
 
@@ -700,7 +700,7 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
                                const Size&      _rPreviewWinSize )
 {
     // store preview scaling, maximal preview page size and selected page
-    maScale = _rScale;
+    mfScale = _rScale;
     mpSelPage = _pSelectedPageFrame;
 
     // prepare loop on preview pages
@@ -764,8 +764,8 @@ void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
                                       const Point& rPoint ) const
 {
     // adjust scale
-    rMapMode.SetScaleX( maScale );
-    rMapMode.SetScaleY( maScale );
+    rMapMode.SetScaleX( Fraction(mfScale) );
+    rMapMode.SetScaleY( Fraction(mfScale) );
 
     // find proper rectangle
     Rectangles::const_iterator aBegin = maLogicRects.begin();
