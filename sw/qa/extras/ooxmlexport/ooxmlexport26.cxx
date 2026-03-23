@@ -928,6 +928,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf145542_imageSize)
     CPPUNIT_ASSERT_GREATER(sal_Int64(6000000), nCx); // 170 mm = 6120000 EMU
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf145542_imageSizeRotatedAndStretched)
+{
+    // Given an ODT with an image that is both rotated (30 degrees) and stretched
+    // (svg:width="3cm" but style:rel-width="100%"). The DOCX export must write the
+    // stretched-but-unrotated size, not the unstretched 3cm.
+    createSwDoc("tdf145542_image_size_rotated_and_stretched.fodt");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // The stretched-but-unrotated width for a 3:2 rectangle scaled to fill 17cm text area
+    // and rotated 30 degrees is ~14.2cm (≈ 5100000 EMU). Without the fix, this was ~1080000
+    // (the unstretched 3cm).
+    const sal_Int64 nCx = getXPath(pXmlDoc, "//wp:inline/wp:extent", "cx").toInt64();
+    CPPUNIT_ASSERT_GREATER(sal_Int64(5000000), nCx);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

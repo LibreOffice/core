@@ -103,6 +103,7 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
+#include <tools/degree.hxx>
 #include <svl/whiter.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
@@ -5666,19 +5667,33 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         assert(xShapePropSet);
     }
 
+    // aSize is used for both wp:extent and a:xfrm/a:ext (unrotated content size).
+    // tdf#138953: for rotated images, aSize must be the unrotated size, not LayoutSize (rSize)
+    // which is the rotation bounding box. tdf#145542: for non-rotated images, Size property may
+    // differ from LayoutSize when scaled (e.g., relative width or older ODT), so use rSize.
+    // For the rotated+scaled case, derive the stretched-but-unrotated size from the bounding
+    // box (rSize), the unscaled size (Size property), and the rotation angle.
     Size aSize = rSize;
-    // tdf#138953: for rotated images, we need the unrotated size from the object's Size property,
-    // because rSize (layout size) includes the rotation bounding box. tdf#145542: for non-rotated
-    // images, size may differ from layout size when the image was scaled (e.g., HTML import with
-    // relative width, or older ODT files). In that case, rSize (layout size) is the correct size.
-    // TODO/FIXME: if an image is both rotated AND scaled, Size gives the unstretched unrotated
-    // dimensions, which is still wrong. The correct value would be the stretched-but-unrotated
-    // size, e.g. by deriving the scale factor from Size, LayoutSize, and the rotation angle.
-    if (xShapePropSet && pGrfNode
-        && pGrfNode->GetSwAttrSet().Get(RES_GRFATR_ROTATION).GetValue() != 0_deg10)
+    auto nShapeRotation = xShapePropSet && pGrfNode
+                              ? pGrfNode->GetSwAttrSet().Get(RES_GRFATR_ROTATION).GetValue()
+                              : 0_deg10;
+    if (nShapeRotation)
     {
-        if (css::awt::Size val; xShapePropSet->getPropertyValue(u"Size"_ustr) >>= val)
-            aSize = Size(o3tl::toTwips(val.Width, o3tl::Length::mm100), o3tl::toTwips(val.Height, o3tl::Length::mm100));
+        if (css::awt::Size aObjSize; xShapePropSet->getPropertyValue(u"Size"_ustr) >>= aObjSize)
+        {
+            double nW0 = o3tl::toTwips<double>(aObjSize.Width, o3tl::Length::mm100);
+            double nH0 = o3tl::toTwips<double>(aObjSize.Height, o3tl::Length::mm100);
+            const double fAngle = toRadians(nShapeRotation);
+            // Bounding box width of the unstretched rotated rectangle
+            const double fUnscaledBBoxW = nW0 * abs(cos(fAngle)) + nH0 * abs(sin(fAngle));
+            if (fUnscaledBBoxW > 0 && rSize.Width() > 0)
+            {
+                double fScale = rSize.Width() / fUnscaledBBoxW;
+                nW0 *= fScale;
+                nH0 *= fScale;
+            }
+            aSize = Size(basegfx::fround<tools::Long>(nW0), basegfx::fround<tools::Long>(nH0));
+        }
     }
 
     m_rExport.SdrExporter().startDMLAnchorInline(pFrameFormat, aSize);
