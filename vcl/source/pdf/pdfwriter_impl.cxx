@@ -5694,22 +5694,12 @@ void PDFWriterImpl::drawVerticalGlyphs(
         double fYScale = 1.0;
         double fTempXScale = fXScale;
 
-        // perform artificial italics if necessary
-        double fSkew = 0.0;
-        if (rGlyphs[i].m_pFont->NeedsArtificialItalic())
-            fSkew = ARTIFICIAL_ITALIC_SKEW;
-
-        double fSkewB = fSkew;
-        double fSkewA = 0.0;
-
         Point aDeltaPos;
         if (rGlyphs[i].m_pGlyph->IsVertical())
         {
             fDeltaAngle = M_PI/2.0;
             fYScale = fXScale;
             fTempXScale = 1.0;
-            fSkewA = 0.0;
-            fSkewB = fSkew;
         }
         aDeltaPos += SubPixelToLogic(basegfx::B2DPoint(nXOffset / fXScale, 0)) - SubPixelToLogic(basegfx::B2DPoint());
         if( i < rGlyphs.size()-1 )
@@ -5725,8 +5715,9 @@ void PDFWriterImpl::drawVerticalGlyphs(
         aDeltaPos = rRotScale.transform( aDeltaPos );
 
         Matrix3 aMat;
-        if( fSkewB != 0.0 || fSkewA != 0.0 )
-            aMat.skew( fSkewA, fSkewB );
+        // perform artificial italics if necessary
+        if (rGlyphs[i].m_pFont->NeedsArtificialItalic())
+            aMat.skew(0.0, ARTIFICIAL_ITALIC_SKEW);
         aMat.scale( fTempXScale, fYScale );
         aMat.rotate( fAngle+fDeltaAngle );
         aMat.translate( aCurPos.X()+aDeltaPos.X(), aCurPos.Y()+aDeltaPos.Y() );
