@@ -104,6 +104,7 @@
 
 #include <vcl/abstdlg.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/weld.hxx>
@@ -330,6 +331,34 @@ void lcl_UnoCommand(const std::string& rText)
             lcl_LogWarning("FillApi SlideCmd: uno command not recognized'" + rText + "'");
         }
     }
+}
+
+bool lcl_ReplaceWithImage(SdDrawDocument* pDoc, SdPage* pPage, int nObjId,
+                                 const std::string& rImageUrl,
+                                 SfxViewShell* pViewShell, int nPartId)
+{
+    OUString aURL = OStringToOUString(rImageUrl, RTL_TEXTENCODING_UTF8);
+
+    Graphic aGraphic;
+    ErrCode nError = GraphicFilter::LoadGraphic(
+        aURL, OUString(), aGraphic, &GraphicFilter::GetGraphicFilter());
+    if (nError != ERRCODE_NONE)
+    {
+        lcl_LogWarning("FillApi SlideCmd: Failed to load graphic from '" + rImageUrl + "'");
+        return false;
+    }
+
+    SdrObject* pPickObj = pPage->GetObj(nObjId);
+    rtl::Reference<SdrGrafObj> pNewGrafObj
+        = new SdrGrafObj(*pDoc, aGraphic, pPickObj->GetLogicRect());
+    pNewGrafObj->AdjustToMaxRect(pPickObj->GetLogicRect());
+    pNewGrafObj->SetOutlinerParaObject(std::nullopt);
+    pNewGrafObj->SetEmptyPresObj(false);
+
+    pPage->ReplaceObject(pNewGrafObj.get(), pPickObj->GetOrdNum());
+
+    KitHelper::notifyInvalidation(pViewShell, nPartId, nullptr);
+    return true;
 }
 
 class ClassificationCommon
@@ -745,7 +774,13 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                         sal_uInt16 nMasterPageCount
                             = GetDoc()->GetMasterSdPageCount(PageKind::Standard);
 
-                        if (nActPageId != nNextPageId)
+                        // InsertImageAt targets a specific page directly,
+                        // so skip view navigation to avoid jumping away
+                        // from the user's current slide.
+                        bool bDirectPageTarget
+                            = aItem3.first.starts_with("InsertImageAt.");
+
+                        if (!bDirectPageTarget && nActPageId != nNextPageId)
                         {
                             // Make it sure it always point to a real page
                             if (nNextPageId < 0)
@@ -1086,7 +1121,121 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                                 lcl_LogWarning(
                                     "FillApi SlideCmd SetText: Object idx >= Object Count. '"
                                     + aItem3.first
-                                    + "' (Object Count = " + std::to_string(nPageCount));
+                                    + "' (Object Count = " + std::to_string(nObjCount) + ")");
+                            }
+                        }
+                        else if (aItem3.first.starts_with("InsertImage."))
+                        {
+                            int nObjId;
+                            try
+                            {
+                                nObjId = stoi(aItem3.first.substr(12));
+                            }
+                            catch (const std::exception&)
+                            {
+                                lcl_LogWarning(
+                                    "FillApi SlideCmd InsertImage: invalid object index in '"
+                                    + aItem3.first + "'");
+                                continue;
+                            }
+
+                            SdPage* pPageStandard
+                                = GetDoc()->GetSdPage(nActPageId, PageKind::Standard);
+                            int nObjCount = pPageStandard->GetObjCount();
+                            if (nObjId < 0)
+                            {
+                                lcl_LogWarning(
+                                    "FillApi SlideCmd InsertImage: Object idx < 0. '"
+                                    + aItem3.first + "'");
+                            }
+                            else if (nObjId >= nObjCount)
+                            {
+                                lcl_LogWarning(
+                                    "FillApi SlideCmd InsertImage: Object idx >= "
+                                    "Object Count. '"
+                                    + aItem3.first
+                                    + "' (Object Count = " + std::to_string(nObjCount)
+                                    + ")");
+                            }
+                            else
+                            {
+                                std::string aImageUrl
+                                    = aItem3.second.get_value<std::string>();
+                                lcl_ReplaceWithImage(GetDoc(), pPageStandard,
+                                                     nObjId, aImageUrl,
+                                                     &GetViewShellBase(),
+                                                     nActPageId);
+                            }
+                        }
+                        else if (aItem3.first.starts_with("InsertImageAt."))
+                        {
+                            // Format: InsertImageAt.SLIDE.OBJ
+                            // Inserts image on a specific slide without
+                            // changing the active page view.
+                            std::string suffix = aItem3.first.substr(14);
+                            auto dotPos = suffix.find('.');
+                            if (dotPos == std::string::npos)
+                            {
+                                lcl_LogWarning(
+                                    "FillApi SlideCmd InsertImageAt: missing "
+                                    "dot separator in '"
+                                    + aItem3.first + "'");
+                            }
+                            else
+                            {
+                                int nSlideId;
+                                int nObjId;
+                                try
+                                {
+                                    nSlideId = stoi(suffix.substr(0, dotPos));
+                                    nObjId = stoi(suffix.substr(dotPos + 1));
+                                }
+                                catch (const std::exception&)
+                                {
+                                    lcl_LogWarning(
+                                        "FillApi SlideCmd InsertImageAt: "
+                                        "invalid index in '"
+                                        + aItem3.first + "'");
+                                    continue;
+                                }
+                                int nPageCnt = GetDoc()->GetSdPageCount(
+                                    PageKind::Standard);
+
+                                if (nSlideId < 0 || nSlideId >= nPageCnt)
+                                {
+                                    lcl_LogWarning(
+                                        "FillApi SlideCmd InsertImageAt: "
+                                        "slide idx out of range. '"
+                                        + aItem3.first + "' (PageCount = "
+                                        + std::to_string(nPageCnt) + ")");
+                                }
+                                else
+                                {
+                                    SdPage* pPage = GetDoc()->GetSdPage(
+                                        nSlideId, PageKind::Standard);
+                                    int nObjCount = pPage->GetObjCount();
+
+                                    if (nObjId < 0 || nObjId >= nObjCount)
+                                    {
+                                        lcl_LogWarning(
+                                            "FillApi SlideCmd InsertImageAt:"
+                                            " obj idx out of range. '"
+                                            + aItem3.first
+                                            + "' (ObjCount = "
+                                            + std::to_string(nObjCount)
+                                            + ")");
+                                    }
+                                    else
+                                    {
+                                        std::string aImageUrl
+                                            = aItem3.second
+                                                  .get_value<std::string>();
+                                        lcl_ReplaceWithImage(
+                                            GetDoc(), pPage, nObjId,
+                                            aImageUrl, &GetViewShellBase(),
+                                            nSlideId);
+                                    }
+                                }
                             }
                         }
                         else if (aItem3.first == "MarkObject"
@@ -1139,7 +1288,7 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                                     "FillApi SlideCmd EditTextObject: Object idx >= "
                                     "Object Count. '"
                                     + aItem3.first
-                                    + "' (Object Count = " + std::to_string(nPageCount));
+                                    + "' (Object Count = " + std::to_string(nObjCount) + ")");
                             }
                             else
                             {
