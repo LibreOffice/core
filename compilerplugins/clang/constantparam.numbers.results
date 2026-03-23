@@ -2674,38 +2674,6 @@ slideshow/source/engine/eventmultiplexer.cxx:106
     void slideshow::internal::ListenerOperations::pruneListeners(type-parameter-?-? &,unsigned long)
     unsigned long nSizeThreshold
     16
-slideshow/source/engine/opengl/Operation.hxx:262
-    class std::shared_ptr<class RotateAndScaleDepthByHeight> makeRotateAndScaleDepthByHeight(const struct glm::vec<3, float> &,const struct glm::vec<3, float> &,double,_Bool,_Bool,double,double)
-    double Angle
-    -120
-slideshow/source/engine/opengl/TransitionImpl.cxx:1829
-    class std::shared_ptr<class OGLTransitionImpl> makeVortexTransition(class std::vector<class Primitive> &&,class std::vector<class Primitive> &&,const struct TransitionSettings &,int,int)
-    int NX
-    96
-slideshow/source/engine/opengl/TransitionImpl.cxx:1829
-    class std::shared_ptr<class OGLTransitionImpl> makeVortexTransition(class std::vector<class Primitive> &&,class std::vector<class Primitive> &&,const struct TransitionSettings &,int,int)
-    int NY
-    96
-slideshow/source/engine/opengl/TransitionImpl.cxx:1943
-    void createHexagon(class Primitive &,const int,const int,const int,const int)
-    const int NX
-    80
-slideshow/source/engine/opengl/TransitionImpl.cxx:1943
-    void createHexagon(class Primitive &,const int,const int,const int,const int)
-    const int NY
-    106
-slideshow/source/engine/opengl/TransitionImpl.hxx:250
-    class std::shared_ptr<class OGLTransitionImpl> makeRevolvingCircles(unsigned short,unsigned short)
-    unsigned short nCircles
-    8
-slideshow/source/engine/opengl/TransitionImpl.hxx:250
-    class std::shared_ptr<class OGLTransitionImpl> makeRevolvingCircles(unsigned short,unsigned short)
-    unsigned short nPointsOnCircles
-    128
-slideshow/source/engine/opengl/TransitionImpl.hxx:251
-    class std::shared_ptr<class OGLTransitionImpl> makeHelix(unsigned short)
-    unsigned short nRows
-    20
 slideshow/source/inc/box2dtools.hxx:254
     double box2d::utils::box2DWorld::stepAmount(const double,const float,const int,const int)
     const int nVelocityIterations

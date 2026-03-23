@@ -16,7 +16,6 @@ $(eval $(call gb_Module_add_targets,sd,\
     Library_sd \
     Library_sdd \
     Library_sdui \
-    Package_opengl \
     Package_xml \
     UIConfig_sdraw \
     UIConfig_simpress \

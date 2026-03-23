@@ -104,8 +104,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Reportbuilder     $FILELISTSDIR/base_list.txt
         merge_flists gid_Module_Pdfimport         $FILELISTSDIR/draw_list.txt
 
-        # FIXME: small; low dependencies; why optional module?
-        merge_flists gid_Module_Optional_OGLTrans $FILELISTSDIR/impress_list.txt
     else
         merge_flists gid_Module_Prg_Base_Bin      $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Prg_Calc_Bin      $FILELISTSDIR/common_list.txt
@@ -121,8 +119,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Brand_Prg_Wrt     $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Reportbuilder     $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Pdfimport         $FILELISTSDIR/common_list.txt
-        # FIXME: small; low dependencies; why optional module?
-        merge_flists gid_Module_Optional_OGLTrans $FILELISTSDIR/common_list.txt
     fi
 
     if test "$SPLIT_APP_MODULES" = "TRUE" -a "$OOO_VENDOR" = "SUSE" ; then
@@ -398,8 +394,6 @@ else
         mv pkg/libreoffice-common/$INSTALLDIR/program/mailmerge.py \
             pkg/libreoffice-emailmerge/$INSTALLDIR/program/mailmerge.py
     fi
-    create_package_directory gid_Module_Optional_OGLTrans           pkg/libreoffice-ogltrans
-
     create_package_directory gid_Module_Root_SDK                    pkg/libreoffice-dev
 
     for l in `echo $WITH_LANG_LIST`; do

@@ -1246,21 +1246,6 @@ End
 
 
 Start
-module = "gid_Module_Optional_OGLTrans"
-solarispackagename = "%BASISPACKAGEPREFIX-ogltrans"
-solarisrequires = "%BASISPACKAGEPREFIX-impress"
-packagename = "%BASISPACKAGEPREFIX-ogltrans"
-freebsdrequires = "%BASISPACKAGEPREFIX-impress"
-requires = "%BASISPACKAGEPREFIX-impress %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2026 Collabora Productivity Ltd."
-solariscopyright = "solariscopyrightfile"
-vendor = "Collabora Productivity Ltd."
-description = "OpenGL slide transitions module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Optional_PostgresqlSdbc"
 solarispackagename = "%BASISPACKAGEPREFIX-postgresql-sdbc"
 solarisrequires = "%BASISPACKAGEPREFIX-base"

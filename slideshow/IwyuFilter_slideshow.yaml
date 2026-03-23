@@ -1,24 +1,6 @@
 ---
 assumeFilename: slideshow/source/engine/slideshowimpl.cxx
 excludelist:
-    slideshow/source/engine/opengl/Operation.hxx:
-    # Needed for licensing
-    - config_lgpl.h
-    # Wrapper for external lib
-    - glm/gtc/type_ptr.hpp
-    slideshow/source/engine/opengl/TransitionImpl.hxx:
-    # Needed for licensing
-    - config_lgpl.h
-    # Wrapper for external lib
-    - glm/gtc/type_ptr.hpp
-    slideshow/source/engine/opengl/Operation.cxx:
-    # Wrapper for external lib
-    - glm/gtc/matrix_transform.hpp
-    - glm/gtc/type_ptr.hpp
-    slideshow/source/engine/opengl/TransitionImpl.cxx:
-    # Wrapper for external lib
-    - glm/gtc/matrix_transform.hpp
-    - glm/gtc/type_ptr.hpp
     slideshow/source/engine/rehearsetimingsactivity.cxx:
     # Needed for template
     - com/sun/star/rendering/XCanvas.hpp

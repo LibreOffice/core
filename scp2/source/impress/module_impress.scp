@@ -80,13 +80,4 @@ Module gid_Module_Prg_Impress_Other_Reg
     Default = YES;
 End
 
-#if defined LINUX && !defined USING_X11
-File gid_File_Share_Registry_Ogltrans_Xcd
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Share_Registry;
-    Name = "ogltrans.xcd";
-End
-#endif
-
 #include "alllangmodules_impress.inc"

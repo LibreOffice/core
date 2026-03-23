@@ -1838,8 +1838,6 @@ slideshow/source/engine/animationfactory.cxx:716
     _Bool slideshow::internal::(anonymous namespace)::GenericAnimation::operator()(type-parameter-?-?::ValueType)
 slideshow/source/engine/animationfactory.cxx:737
     type-parameter-?-?::ValueType slideshow::internal::(anonymous namespace)::GenericAnimation::getUnderlyingValue() const
-slideshow/source/engine/opengl/TransitionImpl.hxx:180
-    void OGLTransitionImpl::cleanup()
 slideshow/source/engine/slideoverlaybutton.hxx:60
     void slideshow::internal::SlideOverlayButton::show()
 slideshow/source/engine/slideoverlaybutton.hxx:64

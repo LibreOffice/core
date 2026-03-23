@@ -12942,29 +12942,24 @@ dnl =================================================
 dnl Check whether to build with OpenGL support.
 dnl =================================================
 
-ENABLE_OPENGL_TRANSITIONS=
 ENABLE_OPENGL_CANVAS=
 if test $_os = iOS -o $_os = Android -o "$ENABLE_FUZZERS" = "TRUE" -o "$enable_opengl" != "yes"; then
    : # disable
 elif test "$_os" = "Darwin"; then
     # We use frameworks on macOS, no need for detail checks
-    ENABLE_OPENGL_TRANSITIONS=TRUE
     AC_DEFINE(HAVE_FEATURE_OPENGL,1)
     ENABLE_OPENGL_CANVAS=TRUE
 elif test $_os = WINNT; then
-    ENABLE_OPENGL_TRANSITIONS=TRUE
     AC_DEFINE(HAVE_FEATURE_OPENGL,1)
     ENABLE_OPENGL_CANVAS=TRUE
 else
     if test "$USING_X11" = TRUE; then
         AC_CHECK_LIB(GL, glBegin, [:], AC_MSG_ERROR([libGL required.]))
-        ENABLE_OPENGL_TRANSITIONS=TRUE
         AC_DEFINE(HAVE_FEATURE_OPENGL,1)
         ENABLE_OPENGL_CANVAS=TRUE
     fi
 fi
 
-AC_SUBST(ENABLE_OPENGL_TRANSITIONS)
 AC_SUBST(ENABLE_OPENGL_CANVAS)
 
 dnl =================================================
@@ -15995,8 +15990,6 @@ if test "$enable_mpl_subset" = "yes"; then
         fi
         mpl_error_string="$mpl_error_string$newline Need to disable icon themes: $denied_themes, use --with-theme=$filtered_themes."
     fi
-
-    ENABLE_OPENGL_TRANSITIONS=
 
     if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" = "xTRUE"; then
         mpl_error_string="$mpl_error_string$newline Need to --disable-lpsolve - calc linear programming solver."

@@ -632,8 +632,6 @@ slideshow/source/engine/animationfactory.cxx:443
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
 slideshow/source/engine/animationfactory.cxx:447
     void slideshow::internal::(anonymous namespace)::GenericAnimation::start(const class std::shared_ptr<class slideshow::internal::AnimatableShape> &,const class std::shared_ptr<class slideshow::internal::ShapeAttributeLayer> &,)
-slideshow/source/engine/opengl/TransitionImpl.hxx:180
-    void OGLTransitionImpl::finish(double,double,double,double,double,)
 sw/inc/redline.hxx:50
     _Bool SwRedlineExtraData::operator==(const class SwRedlineExtraData &,)const
 vcl/inc/unx/saldata.hxx:68

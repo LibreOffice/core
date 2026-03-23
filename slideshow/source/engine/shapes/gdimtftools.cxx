@@ -160,7 +160,7 @@ GDIMetaFileSharedPtr getMetaFile( const uno::Reference< lang::XComponent >&     
 {
     if (!rxContext.is())
     {
-        SAL_WARN("slideshow.opengl", "getMetaFile(): Invalid context" );
+        SAL_WARN("slideshow", "getMetaFile(): Invalid context" );
         return GDIMetaFileSharedPtr();
     }
 

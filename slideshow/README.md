@@ -1,14 +1,5 @@
 # Impress Slideshow Engine
 
-## 3D Transitions
-
-The 3D transitions are slideshow transition engine using OpenGL and
-are located in `slideshow/source/engine/OGLTrans/`. They were initially
-written by GSOC student Shane.M.Mathews. Radek has later polished the
-code a bit, added few new 3D transitions, added infrastructure for
-vertex and fragment shaders. Wrote few transitions with fragment shader
-too.
-
 ## Physics Animation Effects
 
 Physics animation effects are simulated by external 2d physics engine

@@ -345,10 +345,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 	smd \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ogltrans, \
-	OGLTrans \
-))
-
 ifeq ($(OS),EMSCRIPTEN)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	lo-bootstrap \
@@ -1105,11 +1101,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 $(eval $(call gb_Helper_register_packages_for_install,ooo_images,\
 	postprocess_images \
 	$(call gb_Helper_optional,HELP,helpcontent2_helpimages) \
-))
-
-$(eval $(call gb_Helper_register_packages_for_install,ogltrans,\
-	sd_opengl \
-	slideshow_opengl_shader \
 ))
 
 ifneq ($(ENABLE_POPPLER),)

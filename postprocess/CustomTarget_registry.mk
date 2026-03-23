@@ -421,11 +421,6 @@ postprocess_FILES_onlineupdate := \
 	$(call gb_XcuModuleTarget_get_target,extensions/source/update/check)/org/openoffice/Office/Jobs-onlineupdate.xcu
 endif
 
-postprocess_XCDS += ogltrans.xcd
-postprocess_DEPS_ogltrans := main
-postprocess_FILES_ogltrans := \
-	$(postprocess_MOD)/org/openoffice/Office/Impress-ogltrans.xcu
-
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
 postprocess_XCDS += pdfimport.xcd
 postprocess_OPTDEPS_pdfimport := calc draw impress math writer

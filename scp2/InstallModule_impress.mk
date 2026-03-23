@@ -12,7 +12,6 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/impress))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/impress,\
 	impress \
 	impress_brand \
-	ogltrans \
 ))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/impress,\
@@ -26,12 +25,6 @@ $(eval $(call gb_InstallModule_add_templates,scp2/impress,\
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/impress,\
     scp2/source/impress/file_impress \
-))
-
-$(eval $(call gb_InstallModule_add_scpfiles,scp2/impress,\
-	$(if $(filter TRUE,$(ENABLE_OPENGL_TRANSITIONS)),\
-		scp2/source/impress/module_ogltrans \
-	) \
 ))
 
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/impress,\

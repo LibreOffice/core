@@ -104,8 +104,7 @@ class PluginSlideChange: public SlideChangeBase
 
 public:
     /** Create a new SlideChanger, for the given leaving and
-        entering slide bitmaps, which uses super secret OpenGL
-        stuff.
+        entering slide bitmaps, which uses a plugin transition.
     */
     PluginSlideChange( sal_Int16                                nTransitionType,
                        sal_Int16                                nTransitionSubType,
