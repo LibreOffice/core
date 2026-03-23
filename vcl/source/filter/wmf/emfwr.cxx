@@ -166,16 +166,10 @@ void EMFWriter::ImplPlusRecord( EmfPlusRecordType nType, sal_uInt16 nFlags )
 void EMFWriter::WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSizeLog )
 {
     ImplBeginCommentRecord( WIN_EMR_COMMENT_EMFPLUS );
-
-    sal_Int32 nDPIX = rMtfSizePix.Width()*25;
-    sal_Int32 nDivX = rMtfSizeLog.Width()/100;
-    if (nDivX)
-        nDPIX /= nDivX;    // DPI X
-
-    sal_Int32 nDPIY = rMtfSizePix.Height()*25;
-    sal_Int32 nDivY = rMtfSizeLog.Height()/100;
-    if (nDivY)
-        nDPIY /= nDivY; // DPI Y
+    const sal_Int32 nDivX = (rMtfSizeLog.Width() == 0) ? 1 : rMtfSizeLog.Width();
+    const sal_uInt32 nDPIX = basegfx::fround(static_cast<double>(rMtfSizePix.Width()) * 2540.0 / nDivX);
+    const sal_Int32 nDivY = (rMtfSizeLog.Height() == 0) ? 1 : rMtfSizeLog.Height();
+    const sal_uInt32 nDPIY = basegfx::fround(static_cast<double>(rMtfSizePix.Height()) * 2540.0 / nDivY);
 
     m_rStm.WriteInt16( sal_Int16(EmfPlusRecordType::Header) );
     m_rStm.WriteInt16( 0x01 )  // Flags - Dual Mode
@@ -183,8 +177,8 @@ void EMFWriter::WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSiz
           .WriteInt32( 0x10 )  // Data Size
           .WriteInt32( 0xdbc01002 ) // (lower 12bits) 1-> v1 2-> v1.1 // TODO: Check this
           .WriteInt32( 0x01 ) // Video display
-          .WriteInt32( nDPIX )
-          .WriteInt32( nDPIY );
+          .WriteUInt32(nDPIX)
+          .WriteUInt32(nDPIY);
     ImplEndCommentRecord();
 
     // Write more properties
