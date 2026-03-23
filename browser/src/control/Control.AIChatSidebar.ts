@@ -43,6 +43,7 @@ namespace cool {
 		private _isActive: boolean = false;
 		private lastSentSelectedText: string = '';
 		private hintText: string = '';
+		private progressText: string = '';
 
 		private builder: any;
 		private container: HTMLElement;
@@ -387,33 +388,42 @@ namespace cool {
 
 			// Loading dots inside messages area so they scroll with messages
 			if (this.isProcessing) {
+				const dotsChildren: any[] = [
+					{
+						id: 'aichat-dot-1',
+						type: 'fixedtext',
+						text: '\u25CF',
+						enabled: true,
+					},
+					{
+						id: 'aichat-dot-2',
+						type: 'fixedtext',
+						text: '\u25CF',
+						enabled: true,
+					},
+					{
+						id: 'aichat-dot-3',
+						type: 'fixedtext',
+						text: '\u25CF',
+						enabled: true,
+					},
+				];
+				if (this.progressText) {
+					dotsChildren.push({
+						id: 'aichat-progress-text',
+						type: 'fixedtext',
+						text: this.progressText,
+						enabled: true,
+					});
+				}
 				children.push({
 					id: 'aichat-loading-dots',
 					type: 'container',
 					horizontal: true,
 					allyRole: 'status',
 					ariaLive: 'polite' as const,
-					aria: { label: _('Loading') },
-					children: [
-						{
-							id: 'aichat-dot-1',
-							type: 'fixedtext',
-							text: '\u25CF',
-							enabled: true,
-						},
-						{
-							id: 'aichat-dot-2',
-							type: 'fixedtext',
-							text: '\u25CF',
-							enabled: true,
-						},
-						{
-							id: 'aichat-dot-3',
-							type: 'fixedtext',
-							text: '\u25CF',
-							enabled: true,
-						},
-					],
+					aria: { label: this.progressText || _('Loading') },
+					children: dotsChildren,
 				});
 			}
 
@@ -658,6 +668,7 @@ namespace cool {
 						this.isProcessing = false;
 						this.currentRequestId = '';
 						this.hintText = '';
+						this.progressText = '';
 						this.updateChatState();
 					} else {
 						this.sendMessage();
@@ -938,6 +949,7 @@ namespace cool {
 
 			this.isProcessing = false;
 			this.hintText = '';
+			this.progressText = '';
 
 			if (data.success) {
 				this.messages.push(buildSuccessMsg(data));
@@ -977,8 +989,8 @@ namespace cool {
 
 		private onAIChatProgress(data: any): void {
 			if (data.requestId !== this.currentRequestId) return;
-			this.hintText = data.status || _('Working...');
-			this.updateHint();
+			this.progressText = data.status || '';
+			this.updateMessagesArea();
 			// Reset the request timeout so multi-round loops do not time out
 			this.startRequestTimeout(
 				this.currentRequestId,
@@ -1071,9 +1083,13 @@ namespace cool {
 				action: action,
 			});
 			app.socket.sendMessage('aichatapprove: ' + payload);
-			this.hintText =
-				action === 'approve' ? _('Applying changes...') : _('Change rejected');
-			this.updateHint();
+			if (action === 'approve') {
+				this.progressText = _('Applying changes...');
+				this.updateMessagesArea();
+			} else {
+				this.hintText = _('Change rejected');
+				this.updateHint();
+			}
 			if (action === 'approve') {
 				// Reset timeout for the remaining loop
 				this.startRequestTimeout(
@@ -1091,6 +1107,7 @@ namespace cool {
 			this.inputText = '';
 			this.lastSentSelectedText = '';
 			this.hintText = '';
+			this.progressText = '';
 			this.showAllCards = false;
 			this._chipKeyNavAttached = false;
 			this.render();
@@ -1396,18 +1413,20 @@ namespace cool {
 		public async diagnoseFormulaError(): Promise<void> {
 			if (this.isProcessing) return;
 
-			this.hintText = _('Analyzing formula dependencies...');
-			this.updateHint();
+			this.progressText = _('Analyzing formula dependencies...');
+			this.updateMessagesArea();
 
 			let depChain: any;
 			try {
 				depChain = await this.fetchFormulaDependencyChain();
 			} catch {
+				this.progressText = '';
 				this.hintText = _('Failed to analyze formula.');
 				this.updateHint();
 				return;
 			}
 
+			this.progressText = '';
 			this.hintText = '';
 
 			if (!depChain || !depChain.hasError) {
@@ -1593,13 +1612,14 @@ namespace cool {
 				return;
 			}
 
-			this.hintText = _('Analyzing selected data...');
-			this.updateHint();
+			this.progressText = _('Analyzing selected data...');
+			this.updateMessagesArea();
 
 			let markdown: string;
 			try {
 				markdown = await this.fetchSelectedMarkdown();
 			} catch (e: any) {
+				this.progressText = '';
 				if (e?.message === 'complexselection') {
 					this.hintText = _(
 						'The selection contains images or other non-text content that cannot be sent as context.',
@@ -1610,6 +1630,8 @@ namespace cool {
 				this.updateHint();
 				return;
 			}
+
+			this.progressText = '';
 
 			if (!markdown || !markdown.trim()) {
 				this.hintText = _('No data found in selection.');

@@ -286,6 +286,17 @@
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04),
 		0 1px 2px rgba(0, 0, 0, 0.03);
 	animation: aichat-slide-up 0.25s ease-out;
+	max-width: 80%;
+}
+
+#aichat-progress-text {
+	font-size: 12px !important;
+	color: var(--color-text-lighter) !important;
+	margin-left: 6px;
+	line-height: normal !important;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 #aichat-dot-1,
@@ -359,6 +370,7 @@
 /* Hide spacer elements used to force JSDialog container creation */
 [id^='aichat-actions-spacer-'],
 [id^='aichat-msg-spacer-'],
+[id^='aichat-msg-'][id$='-spacer'],
 #aichat-messages-spacer {
 	display: none !important;
 }
@@ -646,7 +658,7 @@
 .aichat-approval-buttons {
 	display: flex;
 	gap: 8px;
-	margin-top: 10px;
+	margin-top: 2px;
 }
 
 .aichat-approve-btn,
