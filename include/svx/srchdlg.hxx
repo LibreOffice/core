@@ -95,13 +95,13 @@ enum class SearchLabel
 class SvxSearchDialog;
 class SVX_DLLPUBLIC SvxSearchDialogWrapper final : public SfxChildWindow
 {
-    std::shared_ptr<SvxSearchDialog> dialog;
+    std::shared_ptr<SvxSearchDialog> m_dialog;
 public:
     SvxSearchDialogWrapper( vcl::Window*pParent, sal_uInt16 nId,
                             SfxBindings* pBindings, SfxChildWinInfo const * pInfo );
 
     virtual ~SvxSearchDialogWrapper () override;
-    SvxSearchDialog *getDialog () { return dialog.get();}
+    SvxSearchDialog *getDialog () { return m_dialog.get();}
     static void SetSearchLabel(const SearchLabel& rSL);
     static void SetSearchLabel(const OUString& sStr);
     static OUString GetSearchLabel();
