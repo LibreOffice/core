@@ -65,7 +65,7 @@ public:
                                     OUString &rText, const IntlWrapper& ) const override;
 
     virtual SvxFontHeightItem*   Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual void                 ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
+    virtual void                 ScaleMetrics(double fScale) override;
     virtual bool                 HasMetrics() const override;
 
     void SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewProp = 100,

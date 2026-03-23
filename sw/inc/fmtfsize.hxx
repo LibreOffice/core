@@ -67,7 +67,7 @@ class SW_DLLPUBLIC SwFormatFrameSize final : public SvxSizeItem
     // the object is placed (PrtArea) and to the screen width
     // minus borders in BrowseView if the environment is the page.
 
-    void ScaleMetrics(tools::Long lMult, tools::Long lDiv) override;
+    void ScaleMetrics(double fScale) override;
     bool HasMetrics() const override;
 
 public:

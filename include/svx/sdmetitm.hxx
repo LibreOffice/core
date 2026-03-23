@@ -34,7 +34,7 @@ public:
         : SfxInt32Item(nId,nVal) {}
     virtual SdrMetricItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual bool HasMetrics() const override;
-    virtual void ScaleMetrics(tools::Long nMul, tools::Long nDiv) override;
+    virtual void ScaleMetrics(double fScale) override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres,
                                  MapUnit eCoreMetric,

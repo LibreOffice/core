@@ -712,11 +712,11 @@ bool XLineDashItem::HasMetrics() const
     return true;
 }
 
-void XLineDashItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
+void XLineDashItem::ScaleMetrics(double fScale)
 {
-    m_aDash.SetDotLen( BigInt::Scale( m_aDash.GetDotLen(), nMul, nDiv ) );
-    m_aDash.SetDashLen( BigInt::Scale( m_aDash.GetDashLen(), nMul, nDiv ) );
-    m_aDash.SetDistance( BigInt::Scale( m_aDash.GetDistance(), nMul, nDiv ) );
+    m_aDash.SetDotLen( BigInt::Scale( m_aDash.GetDotLen(), fScale ) );
+    m_aDash.SetDashLen( BigInt::Scale( m_aDash.GetDashLen(), fScale ) );
+    m_aDash.SetDistance( BigInt::Scale( m_aDash.GetDistance(), fScale ) );
 }
 
 bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2518,9 +2518,9 @@ bool XFillHatchItem::HasMetrics() const
     return true;
 }
 
-void XFillHatchItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
+void XFillHatchItem::ScaleMetrics(double fScale)
 {
-    m_aHatch.SetDistance( BigInt::Scale( m_aHatch.GetDistance(), nMul, nDiv ) );
+    m_aHatch.SetDistance( BigInt::Scale( m_aHatch.GetDistance(), fScale ) );
 }
 
 bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const

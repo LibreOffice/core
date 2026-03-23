@@ -29,7 +29,7 @@ public:
     SdrTextAniAmountItem(sal_Int16 nVal=0): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT, nVal) {}
     virtual SdrTextAniAmountItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual bool HasMetrics() const override;
-    virtual void ScaleMetrics(tools::Long nMul, tools::Long nDiv) override;
+    virtual void ScaleMetrics(double fScale) override;
 
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
 };

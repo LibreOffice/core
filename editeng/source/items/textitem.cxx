@@ -1026,10 +1026,10 @@ bool SvxFontHeightItem::GetPresentation
 }
 
 
-void SvxFontHeightItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
+void SvxFontHeightItem::ScaleMetrics(double fScale)
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    nHeight = static_cast<sal_uInt32>(BigInt::Scale( nHeight, nMult, nDiv ));
+    nHeight = static_cast<sal_uInt32>(BigInt::Scale( nHeight, fScale ));
 }
 
 
@@ -1822,9 +1822,9 @@ SvxKerningItem* SvxKerningItem::Clone( SfxItemPool * ) const
     return new SvxKerningItem( *this );
 }
 
-void SvxKerningItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
+void SvxKerningItem::ScaleMetrics(double fScale)
 {
-    SetValue( static_cast<sal_Int16>(BigInt::Scale( GetValue(), nMult, nDiv )) );
+    SetValue( static_cast<sal_Int16>(BigInt::Scale( GetValue(), fScale )) );
 }
 
 

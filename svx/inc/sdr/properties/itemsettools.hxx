@@ -26,7 +26,6 @@
 
 class SdrObject;
 class SfxItemSet;
-class Fraction;
 
 // class to remember broadcast start positions
 namespace sdr::properties
@@ -51,7 +50,7 @@ namespace sdr::properties
 
 namespace sdr::properties
     {
-        void ScaleItemSet(SfxItemSet& rSet, const Fraction& rScale);
+        void ScaleItemSet(SfxItemSet& rSet, double fScale);
 } // end of namespace sdr::properties
 
 #endif // INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX

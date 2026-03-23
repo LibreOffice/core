@@ -53,7 +53,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
     virtual bool            HasMetrics() const override;
-    virtual void            ScaleMetrics(tools::Long nMul, tools::Long nDiv) override;
+    virtual void            ScaleMetrics(double fScale) override;
 
     const XDash&            GetDashValue() const { return m_aDash;}
     void                    SetDashValue(const XDash& rNew)   { m_aDash = rNew; Detach(); } // SetValue -> SetDashValue
