@@ -151,13 +151,11 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	$(if $(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS),, \
 	    org/openoffice/Office/PresentationMinimizer.xcu \
 	    org/openoffice/Office/PresenterScreen.xcu) \
-	org/openoffice/Office/TableWizard.xcu \
 	org/openoffice/Office/UI.xcu \
 	org/openoffice/Office/Embedding.xcu \
 	$(call gb_Helper_optional,REPORTBUILDER, \
 		org/openoffice/Office/ExtendedColorScheme.xcu \
 	) \
-	org/openoffice/Office/FormWizard.xcu \
 	org/openoffice/Office/Writer.xcu \
 	org/openoffice/Office/UI/BasicIDECommands.xcu \
 	org/openoffice/Office/UI/BibliographyCommands.xcu \

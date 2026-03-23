@@ -44,7 +44,6 @@ $(packimages_DIR)/images_%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
 		$(packimages_DIR)/sourceimagelist.ilst \
-		$(SRCDIR)/wizards/source/imagelists/imagelists.ilst \
 		$(packimages_DIR)/%_links.txt \
 		$(call gb_Helper_get_imagelists) \
 		| $(call gb_ExternalExecutable_get_dependencies,python)

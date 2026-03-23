@@ -186,7 +186,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	uui \
 	vbahelper \
 	vcl \
-	wizards \
 	writerperfect \
     $(call gb_Helper_optional,XMLHELP,xmlhelp) \
 	xmloff \

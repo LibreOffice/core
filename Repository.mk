@@ -793,20 +793,14 @@ $(eval $(call gb_Helper_register_jars_for_install,URE,ure, \
 $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	ScriptFramework \
 	ScriptProviderForJava \
-	commonwizards \
-	form \
 	$(if $(filter-out MACOSX,$(OS)),officebean) \
-	query \
-	report \
 	sdbc_hsqldb \
 	smoketest \
-	table \
 	unoil \
 ))
 
 $(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder, \
 	reportbuilder \
-	reportbuilderwizard \
 ))
 
 ifneq ($(ENABLE_SCRIPTING_BEANSHELL),)
@@ -991,25 +985,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	) \
 	$(call gb_Helper_optional,SCRIPTING,scripting_scriptbindinglib) \
 	$(if $(filter $(OS),MACOSX),sysui_osxicons) \
-	wizards_basicshare \
-	wizards_basicsrvaccess2base \
-	wizards_basicsrvdepot \
-	wizards_basicsrvgimmicks \
-	wizards_basicsrvimport \
-	wizards_basicsrvform \
-	wizards_basicsrvscriptforge \
-	wizards_basicsrvsfdatabases \
-	wizards_basicsrvsfdialogs \
-	wizards_basicsrvsfdocuments \
-	wizards_basicsrvsfunittests \
-	wizards_basicsrvsfwidgets \
-	wizards_basicsrvstandard \
-	wizards_basicsrvtemplate \
-	wizards_basicsrvtools \
-	wizards_basicsrvtutorials \
-	wizards_basicusr \
-	wizards_properties \
-	wizards_wizardshare \
 	toolbarmode_images \
 	vcl_theme_definitions \
 	$(if $(filter WNT,$(OS)), \
@@ -1018,10 +993,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(if $(filter SKIA,$(BUILD_TYPE)), \
 		vcl_skia_denylist ) \
 	$(if $(DISABLE_PYTHON),, \
-		Pyuno/commonwizards \
-		Pyuno/fax \
-		Pyuno/letter \
-		Pyuno/agenda \
 		Pyuno/mailmerge \
 	) \
 	sfx2_classification \

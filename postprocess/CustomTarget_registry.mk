@@ -146,7 +146,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/ExtendedColorScheme.xcs \
 	$(postprocess_XCS)/Office/ExtensionDependencies.xcs \
 	$(postprocess_XCS)/Office/ExtensionManager.xcs \
-	$(postprocess_XCS)/Office/FormWizard.xcs \
 	$(postprocess_XCS)/Office/Histories.xcs \
 	$(postprocess_XCS)/Office/Impress.xcs \
 	$(postprocess_XCS)/Office/Java.xcs \
@@ -161,7 +160,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/Recovery.xcs \
 	$(postprocess_XCS)/Office/Scripting.xcs \
 	$(postprocess_XCS)/Office/Security.xcs \
-	$(postprocess_XCS)/Office/TableWizard.xcs \
 	$(postprocess_XCS)/Office/TypeDetection.xcs \
 	$(postprocess_XCS)/Office/UI/BaseWindowState.xcs \
 	$(postprocess_XCS)/Office/UI/BasicIDECommands.xcs \
@@ -220,7 +218,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/Embedding.xcu \
 	$(postprocess_XCU)/Office/ExtensionDependencies.xcu \
 	$(postprocess_XCU)/Office/ExtensionManager.xcu \
-	$(postprocess_XCU)/Office/FormWizard.xcu \
 	$(postprocess_XCU)/Office/Histories.xcu \
 	$(postprocess_XCU)/Office/Impress.xcu \
 	$(postprocess_XCU)/Office/Jobs.xcu \
@@ -229,7 +226,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/Paths.xcu \
 	$(postprocess_XCU)/Office/ProtocolHandler.xcu \
 	$(postprocess_XCU)/Office/Security.xcu \
-	$(postprocess_XCU)/Office/TableWizard.xcu \
 	$(postprocess_XCU)/Office/UI/BaseWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/BasicIDECommands.xcu \
 	$(postprocess_XCU)/Office/UI/BasicIDEWindowState.xcu \

@@ -43,7 +43,6 @@ $(eval $(call gb_CppunitTest_use_packages,services, \
    pyuno_pythonloader_ini \
 ))
 
-$(call gb_CppunitTest_get_target,services): $(call gb_Pyuno_get_target,commonwizards)
 endif
 
 $(eval $(call gb_CppunitTest_use_configuration,services))
