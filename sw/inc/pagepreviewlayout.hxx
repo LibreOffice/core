@@ -35,7 +35,6 @@
 class SwViewShell;
 class SwRootFrame;
 class SwPageFrame;
-class Fraction;
 
 /** page preview functionality in the writer */
 class SwPagePreviewLayout
@@ -336,8 +335,8 @@ public:
 
         @return Point, start position for new scale
     */
-    Point GetPreviewStartPosForNewScale( const Fraction& _aNewScale,
-                                         const Fraction& _aOldScale,
+    Point GetPreviewStartPosForNewScale( double _fNewScale,
+                                         double _fOldScale,
                                          const Size&     _aNewWinSize ) const;
 
     /** determines, if page with given page number is visible in preview
