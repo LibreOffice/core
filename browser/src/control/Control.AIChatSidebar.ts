@@ -32,6 +32,7 @@ namespace cool {
 		isError?: boolean;
 		imageData?: string;
 		isApproval?: boolean;
+		approvalType?: 'inspect' | 'modify';
 	}
 
 	export class AIChatSidebar {
@@ -219,12 +220,20 @@ namespace cool {
 					if (this.messages[i].isError) {
 						el.classList.add('aichat-msg-error');
 					}
+					if (this.messages[i].isApproval) {
+						el.classList.add('aichat-msg-approval');
+						if (this.messages[i].approvalType === 'modify') {
+							el.classList.add('aichat-msg-approval-modify');
+						}
+					}
 					const label =
 						this.messages[i].role === 'user'
 							? _('Your message')
-							: this.messages[i].isError
-								? _('Error message')
-								: _('AI response');
+							: this.messages[i].isApproval
+								? _('Action requiring approval')
+								: this.messages[i].isError
+									? _('Error message')
+									: _('AI response');
 					el.setAttribute('aria-label', label);
 				}
 			}
@@ -502,7 +511,6 @@ namespace cool {
 					id: `aichat-insert-text-${index}`,
 					type: 'pushbutton',
 					image: this.ICON_INSERT,
-					enabled: true,
 					aria: { label: _('Insert at cursor') },
 				});
 			}
@@ -1014,6 +1022,10 @@ namespace cool {
 				content: content,
 				timestamp: Date.now(),
 				isApproval: true,
+				approvalType:
+					data.toolName === 'transform_document_structure'
+						? 'modify'
+						: 'inspect',
 			};
 			this.messages.push(approvalMsg);
 			this.updateMessagesArea();
@@ -1028,13 +1040,11 @@ namespace cool {
 
 				const btnContainer = document.createElement('div');
 				btnContainer.className = 'aichat-approval-buttons';
-				btnContainer.style.display = 'flex';
-				btnContainer.style.gap = '8px';
-				btnContainer.style.marginTop = '8px';
 
 				const approveBtn = document.createElement('button');
 				approveBtn.textContent = _('Approve');
 				approveBtn.className = 'aichat-approve-btn';
+				approveBtn.setAttribute('aria-label', _('Approve action'));
 				approveBtn.onclick = () => {
 					this.sendApprovalAction('approve');
 					btnContainer.remove();
@@ -1043,6 +1053,7 @@ namespace cool {
 				const rejectBtn = document.createElement('button');
 				rejectBtn.textContent = _('Reject');
 				rejectBtn.className = 'aichat-reject-btn';
+				rejectBtn.setAttribute('aria-label', _('Reject action'));
 				rejectBtn.onclick = () => {
 					this.sendApprovalAction('reject');
 					btnContainer.remove();
