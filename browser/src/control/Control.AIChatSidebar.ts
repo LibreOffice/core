@@ -55,7 +55,7 @@ namespace cool {
 				prompt: 'Make it more concise',
 			},
 			{
-				label: _('Rewrite to sound more professional and formal'),
+				label: _('Make the tone more professional'),
 				prompt: 'Make it more formal',
 			},
 			{
