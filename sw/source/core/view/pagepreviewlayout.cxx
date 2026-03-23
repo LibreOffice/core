@@ -720,13 +720,13 @@ bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
 /** calculate start position for new scale
 
 */
-Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
-                          const Fraction& _aNewScale,
-                          const Fraction& _aOldScale,
+Point SwPagePreviewLayout:: GetPreviewStartPosForNewScale(
+                          double _fNewScale,
+                          double _fOldScale,
                           const Size&     _aNewWinSize ) const
 {
     Point aNewPaintStartPos = maPaintedPreviewDocRect.TopLeft();
-    if ( _aNewScale < _aOldScale )
+    if ( _fNewScale < _fOldScale )
     {
         // increase paint width by moving start point to left.
         if ( mnPreviewLayoutWidth < _aNewWinSize.Width() )

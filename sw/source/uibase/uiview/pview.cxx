@@ -1760,7 +1760,7 @@ void SwPagePreviewWin::AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
         // calculate new start position for preview paint
         Size aNewWinSize = PixelToLogic( maPxWinSize );
         Point aNewPaintStartPos =
-                mpPgPreviewLayout->GetPreviewStartPosForNewScale( aNewScale, maScale, aNewWinSize );
+                mpPgPreviewLayout->GetPreviewStartPosForNewScale( double(aNewScale), double(maScale), aNewWinSize );
 
         // remember new scaling and prepare preview paint
         // Note: paint of preview will be performed by a corresponding invalidate
