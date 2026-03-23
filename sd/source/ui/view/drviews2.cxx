@@ -97,6 +97,7 @@
 #include <svx/xfillit0.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
 
 #include <unotools/useroptions.hxx>
@@ -261,9 +262,25 @@ OUString getWeightString(SfxItemSet const & rItemSet)
     return sWeightString;
 }
 
+class TransformWarningCollector
+{
+    std::vector<std::string> maWarnings;
+    static inline TransformWarningCollector* gpCurrent = nullptr;
+public:
+    TransformWarningCollector() { gpCurrent = this; }
+    ~TransformWarningCollector() { gpCurrent = nullptr; }
+    static void add(const std::string& rWarning)
+    {
+        if (gpCurrent)
+            gpCurrent->maWarnings.push_back(rWarning);
+    }
+    const std::vector<std::string>& getWarnings() const { return maWarnings; }
+};
+
 void lcl_LogWarning(const std::string& rWarning)
 {
     LOK_WARN("sd.transform", rWarning);
+    TransformWarningCollector::add(rWarning);
 }
 
 void lcl_UnoCommand(const std::string& rText)
@@ -672,6 +689,9 @@ public:
 
 void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
 {
+    // Collect warnings from sub-commands so we can report them to the caller.
+    TransformWarningCollector aWarnings;
+
     // get the parameter, what to transform
     OUString aDataJson;
     const SfxStringItem* pDataJson = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
@@ -1225,6 +1245,17 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
             SfxLokHelper::dispatchUnoCommand(aItem.second);
         }
     }
+
+    // Build a JSON result so the caller knows what happened.
+    tools::JsonWriter aJson;
+    aJson.put("success", true);
+    if (!aWarnings.getWarnings().empty())
+    {
+        auto aNode = aJson.startArray("warnings");
+        for (const auto& rWarn : aWarnings.getWarnings())
+            aJson.putSimpleValue(OUString::fromUtf8(rWarn));
+    }
+    rReq.SetReturnValue(SfxStringItem(FN_PARAM_1, OUString::fromUtf8(aJson.finishAndGetAsOString())));
 }
 
 /**
