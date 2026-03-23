@@ -108,24 +108,32 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
     rOutSize = 0;
 
     sal_uInt8* pBuffer = nullptr;
-    sal_uInt32 nHeaderSize, nScanlineSize;
-    sal_uInt16 nBitCount;
+    sal_uInt32 nHeaderSize = 0;
+    sal_uInt32 nScanlineSize = 0;
+    sal_uInt16 nBitCount = 0;
     // determine header and scanline size
     switch( pImage->depth )
     {
         case 4:
+        {
             nHeaderSize = 72;
             nScanlineSize = (pImage->width+1)/2;
             nBitCount = 4;
-            break;
+        }
+        break;
         case 1:
+        {
             assert(false);
+        }
+        break;
         default:
         case 8:
+        {
             nHeaderSize = 1084;
             nScanlineSize = pImage->width;
             nBitCount = 8;
-            break;
+        }
+        break;
     }
     // adjust scan lines to begin on %4 boundaries
     if( nScanlineSize & 3 )
