@@ -207,6 +207,19 @@ void StyleList::CreateContextMenu()
     mxMenu->set_sensitive(u"hide"_ustr, m_bCanHide);
     mxMenu->set_sensitive(u"show"_ustr, m_bCanShow);
 
+    // Query the actual slot states so the menu reflects the current state (e.g. sheet protection)
+    std::unique_ptr<SfxPoolItem> pState;
+    if (m_pBindings->QueryState(SID_STYLE_EDIT, pState) == SfxItemState::DISABLED)
+    {
+        mxMenu->set_sensitive(u"edit"_ustr, false);
+        mxMenu->set_label(u"edit"_ustr, SfxResId(STR_STYLE_EDIT_PROTECTED));
+    }
+    if (m_pBindings->QueryState(SID_STYLE_DELETE, pState) == SfxItemState::DISABLED)
+    {
+        mxMenu->set_sensitive(u"delete"_ustr, false);
+        mxMenu->set_label(u"delete"_ustr, SfxResId(STR_STYLE_DELETE_PROTECTED));
+    }
+
     const SfxStyleFamilyItem* pItem = GetFamilyItem();
     if (pItem && pItem->GetFamily() == SfxStyleFamily::Table) //tdf#101648, no ui for this yet
     {

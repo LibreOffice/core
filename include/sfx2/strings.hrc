@@ -363,6 +363,8 @@
 #define STR_CLICKHYPERLINK                      NC_("STR_CLICKHYPERLINK", "Click to open hyperlink: %{link}")
 
 #define STR_STYLEUSEDBY                         NC_("STR_STYLEUSEDBY", "(used by: %STYLELIST)")
+#define STR_STYLE_EDIT_PROTECTED                NC_("STR_STYLE_EDIT_PROTECTED", "Edit Style... (sheet protected)")
+#define STR_STYLE_DELETE_PROTECTED              NC_("STR_STYLE_DELETE_PROTECTED", "Delete... (sheet protected)")
 
 #define STR_DOCUMENT                            NC_("STR_DOCUMENT", "Document")
 #define STR_SPREADSHEET                         NC_("STR_SPREADSHEET", "Spreadsheet")
