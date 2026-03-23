@@ -635,12 +635,12 @@ void SmXMLContext_Helper::ApplyAttrs()
             == rContext.GetSmImport().GetMM100UnitConverter().GetXMLMeasureUnit())
         {
             if (nFontSize < 100.00)
-                pFontNode->SetSizeParameter(Fraction(100.00 / nFontSize), FontSizeType::DIVIDE);
+                pFontNode->SetSizeParameter(100.00 / nFontSize, FontSizeType::DIVIDE);
             else
-                pFontNode->SetSizeParameter(Fraction(nFontSize / 100.00), FontSizeType::MULTIPLY);
+                pFontNode->SetSizeParameter(nFontSize / 100.00, FontSizeType::MULTIPLY);
         }
         else
-            pFontNode->SetSizeParameter(Fraction(nFontSize), FontSizeType::ABSOLUT);
+            pFontNode->SetSizeParameter(nFontSize, FontSizeType::ABSOLUT);
 
         pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
         rNodeStack.push_front(std::move(pFontNode));

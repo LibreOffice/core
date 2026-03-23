@@ -2329,27 +2329,15 @@ std::unique_ptr<SmStructureNode> SmParser5::DoFontSize()
     }
 
     // get number argument
-    Fraction aValue(1);
+    double fValue(1);
     if (lcl_IsNumber(m_aCurToken.aText))
     {
-        aValue = m_aCurToken.aText.toDouble();
-        //!! Reduce values in order to avoid numerical errors
-        if (aValue.GetDenominator() > 1000)
-        {
-            tools::Long nNum = aValue.GetNumerator();
-            tools::Long nDenom = aValue.GetDenominator();
-            while (nDenom > 1000) //remove big denominator
-            {
-                nNum /= 10;
-                nDenom /= 10;
-            }
-            aValue = Fraction(nNum, nDenom);
-        }
+        fValue = m_aCurToken.aText.toDouble();
     }
     else
         return DoError(SmParseError::SizeExpected);
 
-    pFontNode->SetSizeParameter(aValue, Type);
+    pFontNode->SetSizeParameter(fValue, Type);
     NextToken();
     return pFontNode;
 }

@@ -132,14 +132,14 @@ void SmNode::SetFont(const SmFace &rFace)
 }
 
 
-void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
-    //! 'rSize' is in units of pts
+void SmNode::SetFontSize(double fSize, FontSizeType nType)
+    //! 'fSize' is in units of pts
 {
     Size  aFntSize;
 
     if (!(Flags() & FontChangeMask::Size))
     {
-        Fraction aVal(conversionFract(o3tl::Length::pt, SmO3tlLengthUnit()) * rSize);
+        Fraction aVal(conversionFract(o3tl::Length::pt, SmO3tlLengthUnit()) * fSize);
         tools::Long      nHeight = static_cast<tools::Long>(aVal);
 
         aFntSize = GetFont().GetFontSize();
@@ -159,12 +159,12 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
                 break;
 
             case FontSizeType::MULTIPLY:
-                aFntSize.setHeight( static_cast<tools::Long>(Fraction(aFntSize.Height()) * rSize) );
+                aFntSize.setHeight( static_cast<tools::Long>(Fraction(aFntSize.Height()) * fSize) );
                 break;
 
             case FontSizeType::DIVIDE:
-                if (rSize != Fraction(0))
-                    aFntSize.setHeight( static_cast<tools::Long>(Fraction(aFntSize.Height()) / rSize) );
+                if (fSize != 0)
+                    aFntSize.setHeight( static_cast<tools::Long>(Fraction(aFntSize.Height()) / fSize) );
                 break;
             default:
                 break;
@@ -178,7 +178,7 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
         GetFont().SetSize(aFntSize);
     }
 
-    ForEachNonNull(this, [&rSize, &nType](SmNode *pNode){pNode->SetFontSize(rSize, nType);});
+    ForEachNonNull(this, [&fSize, &nType](SmNode *pNode){pNode->SetFontSize(fSize, nType);});
 }
 
 
@@ -1668,7 +1668,7 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     switch (GetToken().eType)
     {   case TSIZE :
-            pNode->SetFontSize(maFontSize, meSizeType);
+            pNode->SetFontSize(mfFontSize, meSizeType);
             break;
         case TSANS :
         case TSERIF :
