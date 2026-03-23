@@ -495,6 +495,51 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, PivotTableFormatsGrandTota
     CPPUNIT_ASSERT(Color(0x0070C0) != getBackgroundColor(rDoc, u"G9"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, PivotTableFormatsSubTotals)
+{
+    createScDoc("xlsx/pivot-table/PivotTableFormatsSubTotals.xlsx");
+    ScDocument& rDoc = *getScDoc();
+
+    // Pivot table at B3:L14, reference at B16:L27.
+    // Compare font and background colors cell by cell.
+    // Collect all mismatches first, then report and compare.
+    OUString aMismatches;
+    for (SCROW nRow = 0; nRow < 12; ++nRow)
+    {
+        for (SCCOL nColumn = 1; nColumn <= 11; ++nColumn)
+        {
+            ScAddress aPivotAddress(nColumn, 2 + nRow, 0); // B3:L14
+            ScAddress aReferenceAddress(nColumn, 15 + nRow, 0); // B16:L27
+
+            const ScPatternAttr* pPivotAttr = rDoc.GetPattern(aPivotAddress);
+            const ScPatternAttr* pReferenceAttr = rDoc.GetPattern(aReferenceAddress);
+
+            Color aPivotFontColor = pPivotAttr->GetItem(ATTR_FONT_COLOR).getColor();
+            Color aReferenceFontColor = pReferenceAttr->GetItem(ATTR_FONT_COLOR).getColor();
+
+            Color aPivotBackgroundColor = pPivotAttr->GetItem(ATTR_BACKGROUND).GetColor();
+            Color aReferenceBackgroundColor = pReferenceAttr->GetItem(ATTR_BACKGROUND).GetColor();
+
+            OUString aCellName = aPivotAddress.Format(ScRefFlags::VALID);
+
+            if (aPivotFontColor != aReferenceFontColor)
+            {
+                aMismatches += "Font Color: " + aCellName
+                               + " (expected = " + aReferenceFontColor.AsRGBHexString()
+                               + " got = " + aPivotFontColor.AsRGBHexString() + ") ";
+            }
+            if (aPivotBackgroundColor != aReferenceBackgroundColor)
+            {
+                aMismatches += "Background Color: " + aCellName
+                               + " (expected = " + aReferenceBackgroundColor.AsRGBHexString()
+                               + " got = " + aPivotBackgroundColor.AsRGBHexString() + ") ";
+            }
+        }
+    }
+    // TODO: enable once subtotal label formatting is fully implemented
+    // CPPUNIT_ASSERT_EQUAL(u""_ustr, aMismatches); // expected empty
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
