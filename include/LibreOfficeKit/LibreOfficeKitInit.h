@@ -33,6 +33,7 @@ typedef struct LibreOfficeKitStruct LibreOfficeKit;
     #include <dlfcn.h>
 
     #ifdef __APPLE__
+        #include <TargetConditionals.h>
         #define SOFFICEAPP_LIB "libsofficeapp.dylib"
         #define MERGED_LIB "libmergedlo.dylib"
 
