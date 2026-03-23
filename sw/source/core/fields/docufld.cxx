@@ -2643,10 +2643,23 @@ std::unique_ptr<SwFieldType> SwJumpEditFieldType::Copy() const
     return std::make_unique<SwJumpEditFieldType>( m_rDoc );
 }
 
+void SwJumpEditFieldType::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    if (rHint.GetId() == SfxHintId::SwModifyChanged)
+    {
+        // The char format we were listening to was destroyed; stop listening
+        // rather than staying reparented on its parent format.
+        m_aDep.EndListeningAll();
+        return;
+    }
+    SwFieldType::SwClientNotify(rModify, rHint);
+}
+
 SwCharFormat* SwJumpEditFieldType::GetCharFormat()
 {
     SwCharFormat* pFormat = m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_JUMPEDIT );
-    m_aDep.StartListening(pFormat);
+    if (!m_aDep.IsListeningTo(pFormat))
+        m_aDep.StartListening(pFormat);
     return pFormat;
 }
 

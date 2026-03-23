@@ -739,6 +739,7 @@ class SwJumpEditFieldType final : public SwFieldType
 public:
     SwJumpEditFieldType( SwDoc& rDoc );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
     virtual void UpdateFields() override {};
 
     SwCharFormat* GetCharFormat();
