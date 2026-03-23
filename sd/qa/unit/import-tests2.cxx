@@ -2405,6 +2405,15 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf163741)
     CPPUNIT_ASSERT_EQUAL(18.0, fCharHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf163343_brokenAnimation)
+{
+    // File has <anim:animate smil:values="" smil:keyTimes="0;1"/>: empty values with non-empty
+    // keyTimes must not prevent the file from opening.
+    createSdImpressDoc("odp/tdf163343.odp");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1),
+                         getSdDocShell()->GetDoc()->GetSdPageCount(PageKind::Standard));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

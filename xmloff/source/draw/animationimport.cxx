@@ -555,6 +555,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
         std::vector< NamedValue > aUserData;
         XMLTokenEnum meAttributeName = XML_TOKEN_INVALID;
         OUString aFrom, aBy, aTo, aValues;
+        std::string_view aKeyTimes;
         bool bHaveXmlId( false );
         OUString sXmlId;
 
@@ -841,7 +842,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(SMIL_SO52, XML_KEYTIMES):
             {
                 if( xAnimate.is() )
-                    xAnimate->setKeyTimes( AnimationsImportHelperImpl::convertKeyTimes( aIter.toView() ) );
+                    aKeyTimes = aIter.toView();
             }
             break;
 
@@ -1162,8 +1163,17 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             if( !aTo.isEmpty() )
                 xAnimate->setTo( mpHelper->convertValue( meAttributeName, aTo ) );
 
-            if( !aValues.isEmpty() )
+            // tdf#163343: only set keyTimes when values is also non-empty, and validate together.
+            // Files from older LO versions may have smil:values="" with non-empty smil:keyTimes;
+            // setting keyTimes without values would cause a length mismatch.
+            SAL_WARN_IF(aKeyTimes.empty() != aValues.isEmpty(), "xmloff",
+                        "animation: only one of smil:values and smil:keyTimes is set; ignoring both");
+            if (!aKeyTimes.empty() && !aValues.isEmpty())
+            {
                 xAnimate->setValues( mpHelper->convertValueSequence( meAttributeName, aValues ) );
+                xAnimate->setKeyTimes(
+                    AnimationsImportHelperImpl::convertKeyTimes(aKeyTimes));
+            }
 
             if (xAnimate->getValues().getLength() != xAnimate->getKeyTimes().getLength())
                 throw css::io::WrongFormatException();
