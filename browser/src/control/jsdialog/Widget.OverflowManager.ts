@@ -67,6 +67,9 @@ class OverflowManager {
 	}
 
 	onResize(event: Event) {
+		// Ignore resize when the window size has not actually changed.
+		if (this.lastMaxWidth === window.innerWidth) return;
+
 		app.console.debug(
 			'OverflowManager: onResize, scheduledRefresh = ' +
 				(this.scheduledRefresh !== '' ? 'true' : 'false'),
@@ -90,7 +93,7 @@ class OverflowManager {
 		);
 		this.scheduledRefresh = '';
 		if (!this.parentContainer) return;
-		if (this.lastMaxWidth === window.innerWidth) return;
+		if (!event?.force && this.lastMaxWidth === window.innerWidth) return;
 
 		// check our visibility
 		let parentNode = this.parentContainer;
