@@ -806,7 +806,7 @@ void DocxAttributeOutput::TableCanSplit(
     // if rSplittable is true then no need to write <w:cantSplit w:val="false"/>
     // as default row prop is allow row to break across page.
     if (!rSplittable.GetValue())
-        m_pSerializer->singleElementNS(XML_w, XML_cantSplit, FSNS(XML_w, XML_val), "true");
+        m_pSerializer->singleElementNS(XML_w, XML_cantSplit);
 }
 
 void DocxAttributeOutput::TableBidi(
