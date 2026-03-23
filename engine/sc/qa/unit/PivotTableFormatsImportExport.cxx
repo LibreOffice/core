@@ -478,6 +478,12 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, PivotTableFormatsGrandTota
     // grandRow="1" grandCol="1"
     // Intersection of grand total row and column
     CPPUNIT_ASSERT_EQUAL(Color(0x00B0F0), getBackgroundColor(rDoc, u"G14"_ustr));
+
+    // grandRow="1" data with reference field="2" selected="0"
+    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"E14"_ustr));
+    // Check cells around to not include the formatting
+    CPPUNIT_ASSERT(Color(0x92D050) != getBackgroundColor(rDoc, u"D14"_ustr));
+    CPPUNIT_ASSERT(Color(0x92D050) != getBackgroundColor(rDoc, u"F14"_ustr));
 }
 
 } // end anonymous namespace

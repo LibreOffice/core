@@ -416,6 +416,53 @@ void evaluateMatches(ScDocument& rDocument,
     }
 }
 
+/** Check if any output field in the vector has been set (has a reference). */
+bool hasSetFields(std::vector<FormatOutputField> const& rFields)
+{
+    if (rFields.empty())
+        return false;
+    return std::any_of(rFields.begin(), rFields.end(), [](auto const& f) { return f.bSet; });
+}
+
+/** Iterate matched lines and call the applicator for each line position, but
+  * skip the grand total position. */
+template <typename LinesT>
+void applyToMatchedLines(LinesT const& rMatchedLines, SCCOLROW nGrandTotalPositionToSkip,
+                         std::function<void(SCCOLROW nLinePosition)> const& rApplicator)
+{
+    for (LineData const& rLine : rMatchedLines)
+    {
+        if (!rLine.oLine)
+            continue;
+        if (nGrandTotalPositionToSkip >= 0 && *rLine.oLine == nGrandTotalPositionToSkip)
+            continue;
+        rApplicator(*rLine.oLine);
+    }
+}
+
+/** Apply a grand total data format along one axis.
+ *  If there are references, then find specific lines, otherwise apply to all
+ *  lines. Skips the grand total position to avoid setting the intersection
+ *  cell. */
+void applyGrandTotalDataFormat(std::vector<LineData> const& rLines,
+                               std::vector<FormatOutputField> const& rOutputFields,
+                               FormatType eType, SCCOLROW nGrandTotalPositionToSkip,
+                               std::function<void(SCCOLROW nLinePosition)> const& rApplicator)
+{
+    if (hasSetFields(rOutputFields))
+    {
+        std::vector<std::reference_wrapper<const LineData>> aMatches;
+        std::vector<std::reference_wrapper<const LineData>> aMaybeMatches;
+        checkForMatchingLines(rLines, rOutputFields, eType, aMatches, aMaybeMatches);
+        applyToMatchedLines(aMatches.empty() ? aMaybeMatches : aMatches, nGrandTotalPositionToSkip,
+                            rApplicator);
+    }
+    else
+    {
+        applyToMatchedLines(rLines, nGrandTotalPositionToSkip, rApplicator);
+    }
+}
+
 } // end anonymous namespace
 
 bool FormatOutput::tryHandleGrandTotals(ScDocument& rDocument, sc::FormatOutputEntry const& rEntry)
@@ -431,16 +478,11 @@ bool FormatOutput::tryHandleGrandTotals(ScDocument& rDocument, sc::FormatOutputE
     {
         if (rEntry.eType == FormatType::Data)
         {
-            for (LineData const& rColumnLine : maColumnLines)
-            {
-                if (!rColumnLine.oLine)
-                    continue;
-                // Skip grand total column intersection
-                if (mnGrandTotalColumn >= 0 && *rColumnLine.oLine == mnGrandTotalColumn)
-                    continue;
-                rDocument.ApplyPattern(*rColumnLine.oLine, mnGrandTotalRow, *rEntry.onTab,
-                                       *rEntry.pPattern);
-            }
+            applyGrandTotalDataFormat(maColumnLines, rEntry.aColumnOutputFields, rEntry.eType,
+                                      mnGrandTotalColumn, [&](SCCOLROW nColumnPosition) {
+                                          rDocument.ApplyPattern(nColumnPosition, mnGrandTotalRow,
+                                                                 *rEntry.onTab, *rEntry.pPattern);
+                                      });
         }
         else if (rEntry.eType == FormatType::Label)
         {
@@ -471,16 +513,11 @@ bool FormatOutput::tryHandleGrandTotals(ScDocument& rDocument, sc::FormatOutputE
     {
         if (rEntry.eType == FormatType::Data)
         {
-            for (LineData const& rRowLine : maRowLines)
-            {
-                if (!rRowLine.oLine)
-                    continue;
-                // Skip grand total row intersection
-                if (mnGrandTotalRow >= 0 && *rRowLine.oLine == mnGrandTotalRow)
-                    continue;
-                rDocument.ApplyPattern(mnGrandTotalColumn, *rRowLine.oLine, *rEntry.onTab,
-                                       *rEntry.pPattern);
-            }
+            applyGrandTotalDataFormat(maRowLines, rEntry.aRowOutputFields, rEntry.eType,
+                                      mnGrandTotalRow, [&](SCCOLROW nRowPosition) {
+                                          rDocument.ApplyPattern(mnGrandTotalColumn, nRowPosition,
+                                                                 *rEntry.onTab, *rEntry.pPattern);
+                                      });
         }
         else if (rEntry.eType == FormatType::Label)
         {
