@@ -433,11 +433,13 @@ bool FormatOutput::tryHandleGrandTotals(ScDocument& rDocument, sc::FormatOutputE
         {
             for (LineData const& rColumnLine : maColumnLines)
             {
-                if (rColumnLine.oLine)
-                {
-                    rDocument.ApplyPattern(*rColumnLine.oLine, mnGrandTotalRow, *rEntry.onTab,
-                                           *rEntry.pPattern);
-                }
+                if (!rColumnLine.oLine)
+                    continue;
+                // Skip grand total column intersection
+                if (mnGrandTotalColumn >= 0 && *rColumnLine.oLine == mnGrandTotalColumn)
+                    continue;
+                rDocument.ApplyPattern(*rColumnLine.oLine, mnGrandTotalRow, *rEntry.onTab,
+                                       *rEntry.pPattern);
             }
         }
         else if (rEntry.eType == FormatType::Label)
@@ -471,11 +473,13 @@ bool FormatOutput::tryHandleGrandTotals(ScDocument& rDocument, sc::FormatOutputE
         {
             for (LineData const& rRowLine : maRowLines)
             {
-                if (rRowLine.oLine)
-                {
-                    rDocument.ApplyPattern(mnGrandTotalColumn, *rRowLine.oLine, *rEntry.onTab,
-                                           *rEntry.pPattern);
-                }
+                if (!rRowLine.oLine)
+                    continue;
+                // Skip grand total row intersection
+                if (mnGrandTotalRow >= 0 && *rRowLine.oLine == mnGrandTotalRow)
+                    continue;
+                rDocument.ApplyPattern(mnGrandTotalColumn, *rRowLine.oLine, *rEntry.onTab,
+                                       *rEntry.pPattern);
             }
         }
         else if (rEntry.eType == FormatType::Label)
