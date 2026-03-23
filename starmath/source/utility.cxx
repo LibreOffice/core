@@ -231,14 +231,14 @@ SmFace & SmFace::operator = (const SmFace &rFace)
 }
 
 
-SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
+SmFace & operator *= (SmFace &rFace, double fFrac)
     // scales the width and height of 'rFace' by 'rFrac' and returns a
     // reference to 'rFace'.
     // It's main use is to make scaling fonts look easier.
 {   const Size &rFaceSize = rFace.GetFontSize();
 
-    rFace.SetSize(Size(tools::Long(rFaceSize.Width() * rFrac),
-                       tools::Long(rFaceSize.Height() * rFrac)));
+    rFace.SetSize(Size(tools::Long(rFaceSize.Width() * fFrac),
+                       tools::Long(rFaceSize.Height() * fFrac)));
     return rFace;
 }
 
