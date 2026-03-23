@@ -39,7 +39,7 @@ enum class MathMLLengthUnit
 
 struct MathMLAttributeLengthValue
 {
-    Fraction aNumber;
+    double fNumber;
     MathMLLengthUnit eUnit;
     MathMLAttributeLengthValue()
         : eUnit(MathMLLengthUnit::None)

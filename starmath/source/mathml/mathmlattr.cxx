@@ -17,7 +17,7 @@
 #include <string_view>
 #include <unordered_map>
 
-static std::size_t ParseMathMLUnsignedNumber(std::u16string_view rStr, Fraction& rUN)
+static std::size_t ParseMathMLUnsignedNumber(std::u16string_view rStr, double& rUN)
 {
     auto nLen = rStr.length();
     std::size_t nDecimalPoint = std::u16string_view::npos;
@@ -56,25 +56,24 @@ static std::size_t ParseMathMLUnsignedNumber(std::u16string_view rStr, Fraction&
     // of validNomDen); if not, use the less accurate approach of creating a Fraction from double:
     if (validNomDen)
     {
-        rUN = Fraction(nom, den);
+        rUN = double(nom) / den;
     }
     else
     {
-        rUN = Fraction(
-            rtl_math_uStringToDouble(rStr.data(), rStr.data() + nIdx, '.', 0, nullptr, nullptr));
+        rUN = rtl_math_uStringToDouble(rStr.data(), rStr.data() + nIdx, '.', 0, nullptr, nullptr);
     }
 
     return nIdx;
 }
 
-static std::size_t ParseMathMLNumber(std::u16string_view rStr, Fraction& rN)
+static std::size_t ParseMathMLNumber(std::u16string_view rStr, double& rN)
 {
     if (rStr.empty())
         return std::u16string_view::npos;
     bool bNegative = (rStr[0] == '-');
     std::size_t nOffset = bNegative ? 1 : 0;
     auto nIdx = ParseMathMLUnsignedNumber(rStr.substr(nOffset), rN);
-    if (nIdx == std::u16string_view::npos || !rN.IsValid())
+    if (nIdx == std::u16string_view::npos)
         return std::u16string_view::npos;
     if (bNegative)
         rN *= -1;
@@ -83,7 +82,7 @@ static std::size_t ParseMathMLNumber(std::u16string_view rStr, Fraction& rN)
 
 bool ParseMathMLAttributeLengthValue(std::u16string_view rStr, MathMLAttributeLengthValue& rV)
 {
-    auto nIdx = ParseMathMLNumber(rStr, rV.aNumber);
+    auto nIdx = ParseMathMLNumber(rStr, rV.fNumber);
     if (nIdx == std::u16string_view::npos)
         return false;
     std::u16string_view sRest = rStr.substr(nIdx);
