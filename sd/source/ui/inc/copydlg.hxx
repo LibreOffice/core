@@ -42,7 +42,7 @@ public:
 
 private:
     const SfxItemSet& mrOutAttrs;
-    Fraction maUIScale;
+    double mfUIScale;
     ::sd::View* mpView;
 
     std::unique_ptr<weld::SpinButton> m_xNumFldCopies;
