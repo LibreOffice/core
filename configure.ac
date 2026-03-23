@@ -11292,6 +11292,8 @@ if test "$with_system_dragonbox" = "yes"; then
     SYSTEM_DRAGONBOX=TRUE
     AC_LANG_PUSH([C++])
     save_CPPFLAGS=$CPPFLAGS
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
     # This is where upstream installs to, unfortunately no .pc or so...
     DRAGONBOX_CFLAGS=-I/usr/include/dragonbox-1.1.3
     CPPFLAGS="$CPPFLAGS $DRAGONBOX_CFLAGS"
@@ -11299,6 +11301,7 @@ if test "$with_system_dragonbox" = "yes"; then
        [AC_MSG_ERROR([dragonbox/dragonbox.h not found. install dragonbox])], [])
     AC_LANG_POP([C++])
     CPPFLAGS=$save_CPPFLAGS
+    CXXFLAGS=$save_CXXFLAGS
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE DRAGONBOX"
@@ -11339,10 +11342,13 @@ if test "$with_system_frozen" = "yes"; then
     SYSTEM_FROZEN=TRUE
     AC_LANG_PUSH([C++])
     save_CPPFLAGS=$CPPFLAGS
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
     AC_CHECK_HEADER([frozen/unordered_map.h], [],
        [AC_MSG_ERROR([frozen/unordered_map.h not found. install frozen headers])], [])
     AC_LANG_POP([C++])
     CPPFLAGS=$save_CPPFLAGS
+    CXXFLAGS=$save_CXXFLAGS
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE FROZEN"
