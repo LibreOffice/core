@@ -46,6 +46,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/compbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -86,8 +87,6 @@ using ::com::sun::star::util::XChangesListener;
 using ::com::sun::star::util::ElementChange;
 using ::com::sun::star::util::ChangesEvent;
 
-using ::cppu::OWeakObject;
-
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::animations::AnimationNodeType;
 
@@ -95,24 +94,20 @@ namespace animcore
 {
 
 namespace {
-class AnimationNodeBase :   public XAnimateMotion,
-                            public XAnimatePhysics,
-                            public XAnimateColor,
-                            public XTransitionFilter,
-                            public XAnimateSet,
-                            public XAnimateTransform,
-                            public XParallelTimeContainer,
-                            public XIterateContainer,
-                            public XServiceInfo,
-                            public XTypeProvider,
-                            public XAudio,
-                            public XCommand,
-                            public XCloneable,
-                            public XChangesNotifier,
-                            public OWeakObject
-{
-
-};
+using AnimationNodeBase = comphelper::WeakImplHelper<
+                             XAnimateMotion,
+                             XAnimatePhysics,
+                             XAnimateColor,
+                             XTransitionFilter,
+                             XAnimateSet,
+                             XAnimateTransform,
+                             XParallelTimeContainer,
+                             XIterateContainer,
+                             XServiceInfo,
+                             XAudio,
+                             XCommand,
+                             XCloneable,
+                             XChangesNotifier>;
 
 class AnimationNode final:  public AnimationNodeBase
 {
@@ -122,12 +117,9 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes() override;
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -284,7 +276,6 @@ public:
     void fireChangeListener(std::unique_lock<std::mutex>&);
 
 private:
-    std::mutex m_aMutex;
     OInterfaceContainerHelper4<XChangesListener>   maChangeListener;
 
     static void initTypeProvider( sal_Int16 nNodeType ) noexcept;
@@ -633,11 +624,11 @@ Any SAL_CALL AnimationNode::queryInterface( const Type& aType )
         aType,
         static_cast< XServiceInfo * >( this ),
         static_cast< XTypeProvider * >( this ),
-        static_cast< XChild * >( static_cast< XTimeContainer * >( static_cast< XIterateContainer * >(this) ) ),
+        static_cast< XChild * >( static_cast< XIterateContainer * >(this) ),
         static_cast< XCloneable* >( this ),
-        static_cast< XAnimationNode* >( static_cast< XTimeContainer * >( static_cast< XIterateContainer * >(this) ) ),
-        static_cast< XInterface* >(static_cast< OWeakObject * >(this)),
-        static_cast< XWeak* >(static_cast< OWeakObject * >(this)),
+        static_cast< XAnimationNode* >( static_cast< XIterateContainer * >(this) ),
+        static_cast< XInterface* >( getXWeak() ),
+        static_cast< XWeak* >( this ),
         static_cast< XChangesNotifier* >( this ) ) );
 
     if(!aRet.hasValue())
@@ -808,26 +799,6 @@ Sequence< Type > AnimationNode::getTypes()
     if (! mpTypes[mnNodeType])
         initTypeProvider(mnNodeType);
     return *mpTypes[mnNodeType];
-}
-
-
-Sequence< sal_Int8 > AnimationNode::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-// XInterface
-void SAL_CALL AnimationNode::acquire(  ) noexcept
-{
-    OWeakObject::acquire();
-}
-
-
-// XInterface
-void SAL_CALL AnimationNode::release(  ) noexcept
-{
-    OWeakObject::release();
 }
 
 
@@ -1190,7 +1161,7 @@ void SAL_CALL AnimationNode::setUserData( const Sequence< NamedValue >& _userdat
 Reference< XInterface > SAL_CALL AnimationNode::getParent()
 {
     std::unique_lock aGuard( m_aMutex );
-    return static_cast<cppu::OWeakObject*>(mxParent.get().get());
+    return cppu::getXWeak(mxParent.get().get());
 }
 
 
@@ -1198,7 +1169,7 @@ Reference< XInterface > SAL_CALL AnimationNode::getParent()
 void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent )
 {
     std::unique_lock l( m_aMutex );
-    if( Parent.get() != static_cast<cppu::OWeakObject*>(mxParent.get().get()) )
+    if (Parent.get() != cppu::getXWeak(mxParent.get().get()))
     {
         rtl::Reference<AnimationNode> xParent = dynamic_cast<AnimationNode*>(Parent.get());
         mxParent = xParent.get();
@@ -1889,7 +1860,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Referenc
     std::unique_lock l( m_aMutex );
 
     if( !newChild.is() || !refChild.is() )
-        throw IllegalArgumentException(u"no child"_ustr, static_cast<cppu::OWeakObject*>(this), -1);
+        throw IllegalArgumentException(u"no child"_ustr, getXWeak(), -1);
 
     if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
@@ -1900,7 +1871,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Referenc
 
     maChildren.insert( before, newChild );
 
-    Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
+    Reference<XInterface> xThis(getXWeak());
     l.unlock();
     newChild->setParent( xThis );
 
@@ -1914,7 +1885,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference
     std::unique_lock l( m_aMutex );
 
     if( !newChild.is() || !refChild.is() )
-        throw IllegalArgumentException(u"no child"_ustr, static_cast<cppu::OWeakObject*>(this), -1);
+        throw IllegalArgumentException(u"no child"_ustr, getXWeak(), -1);
 
     if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
@@ -1929,7 +1900,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference
     else
         maChildren.push_back( newChild );
 
-    Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
+    Reference<XInterface> xThis(getXWeak());
     l.unlock();
     newChild->setParent( xThis );
 
@@ -1943,7 +1914,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
     std::unique_lock l( m_aMutex );
 
     if( !newChild.is() || !oldChild.is() )
-        throw IllegalArgumentException(u"no child"_ustr, static_cast<cppu::OWeakObject*>(this), -1);
+        throw IllegalArgumentException(u"no child"_ustr, getXWeak(), -1);
 
     if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
@@ -1954,7 +1925,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
 
     (*replace) = newChild;
 
-    Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
+    Reference<XInterface> xThis(getXWeak());
     l.unlock();
     oldChild->setParent( Reference< XInterface >() );
     newChild->setParent( xThis );
@@ -1969,7 +1940,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
     std::unique_lock l( m_aMutex );
 
     if( !oldChild.is() )
-        throw IllegalArgumentException(u"no child"_ustr, static_cast<cppu::OWeakObject*>(this), 1);
+        throw IllegalArgumentException(u"no child"_ustr, getXWeak(), 1);
 
     auto old = std::find(maChildren.begin(), maChildren.end(), oldChild);
     if( old == maChildren.end() )
@@ -1987,7 +1958,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
 // XTimeContainer
 Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference< XAnimationNode >& newChild )
 {
-    Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
+    Reference<XInterface> xThis(getXWeak());
     {
         std::unique_lock aGuard( m_aMutex );
 
@@ -2068,9 +2039,9 @@ void AnimationNode::fireChangeListener(std::unique_lock<std::mutex>& l)
 {
     if( maChangeListener.getLength(l) != 0 )
     {
-        Reference< XInterface > xSource( static_cast<OWeakObject*>(this), UNO_QUERY );
+        Reference<XInterface> xSource(getXWeak(), UNO_QUERY);
         Sequence< ElementChange > aChanges;
-        const ChangesEvent aEvent( xSource, Any( css::uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(mxParent.get().get())) ), aChanges );
+        const ChangesEvent aEvent( xSource, Any( css::uno::Reference<XInterface>(cppu::getXWeak(mxParent.get().get())) ), aChanges );
         OInterfaceIteratorHelper4 aIterator( l, maChangeListener );
         l.unlock();
         while( aIterator.hasMoreElements() )
