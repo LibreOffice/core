@@ -19,6 +19,7 @@
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <fmtanchr.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -521,6 +522,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78420)
 CPPUNIT_TEST_FIXTURE(Test, testPageBreakInFirstPara)
 {
     createSwDoc("fdo77727.docx");
+    sw::SpzFrameFormats* pFormats = getSwDoc()->GetSpzFrameFormats();
+    const SwFormatAnchor& rAnchor = (*pFormats)[0]->GetAnchor();
+    CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AS_CHAR, rAnchor.GetAnchorId());
+
     saveAndReload(TestFilter::DOCX);
     /* Break to next page was not exported if it is in first paragraph of the section.
      * Now after fix , LO writes Next Page Break and also preserves <w:br> tag.
@@ -528,6 +533,11 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreakInFirstPara)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:br","type",u"page");
+
+    // tdf#170427: Inline stuff should be round-tripped as Inline.
+    pFormats = getSwDoc()->GetSpzFrameFormats();
+    const SwFormatAnchor& rRTAnchor = (*pFormats)[0]->GetAnchor();
+    CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AS_CHAR, rRTAnchor.GetAnchorId());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO78284)

@@ -1366,9 +1366,20 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
 
     m_pImpl->getExport().VMLExporter().SetSkipwzName(true);
     rtl::Reference<sax_fastparser::FastAttributeList> pAttrList(docx::SurroundToVMLWrap(rSurround));
-    m_pImpl->getExport().VMLExporter().AddSdrObject(
-        *sdrObj, rFlow.GetValue(), rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
-        rHoriOri.GetRelationOrient(), rVertOri.GetRelationOrient(), pAttrList.get(), true);
+
+    if (m_pImpl->getFlyFrameGraphic()
+        || rFrameFormat.GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+    {
+        // Is inline or inside a floating frame, so the graphic itself must be inline.
+        m_pImpl->getExport().VMLExporter().AddInlineSdrObject(*sdrObj, /*OOxmlExport=*/true);
+    }
+    else
+    {
+        m_pImpl->getExport().VMLExporter().AddSdrObject(
+            *sdrObj, rFlow.GetValue(), rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
+            rHoriOri.GetRelationOrient(), rVertOri.GetRelationOrient(), pAttrList.get(), true);
+    }
+
     m_pImpl->getSerializer()->endElementNS(XML_w, XML_pict);
     m_pImpl->getExport().VMLExporter().SetSkipwzName(false); // restore
 }
