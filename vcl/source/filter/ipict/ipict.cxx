@@ -173,8 +173,8 @@ private:
     Size          aActOvalSize;
     vcl::Font     aActFont;
 
-    Fraction        aHRes;
-    Fraction        aVRes;
+    double        mfHRes;
+    double        mfVRes;
 
     Point ReadPoint();
 
@@ -1257,8 +1257,8 @@ void PictReader::ReadHeader()
             fHRes /= 65536;
             double fVRes = nVResFixed;
             fVRes /= 65536;
-            aHRes /= fHRes;
-            aVRes /= fVRes;
+            fHRes /= fHRes;
+            fVRes /= fVRes;
             aBoundingRect=tools::Rectangle( x1,y1, x2, y2 );
             pPict->SeekRel( 4 ); // 4 bytes reserved
             return;
@@ -1945,7 +1945,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     aActFont.SetFontSize(Size(0,12));
     aActFont.SetAlignment(ALIGN_BASELINE);
 
-    aHRes = aVRes = Fraction( 1, 1 );
+    mfHRes = mfVRes = 1.0;
 
     pVirDev = VclPtr<VirtualDevice>::Create();
     pVirDev->EnableOutput(false);
@@ -2005,7 +2005,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     rGDIMetaFile.Stop();
     pVirDev.disposeAndClear();
 
-    rGDIMetaFile.SetPrefMapMode( MapMode( MapUnit::MapInch, Point(), aHRes, aVRes ) );
+    rGDIMetaFile.SetPrefMapMode( MapMode( MapUnit::MapInch, Point(), Fraction(mfHRes), Fraction(mfVRes) ) );
     rGDIMetaFile.SetPrefSize( aBoundingRect.GetSize() );
 
     pPict->SetEndian(nOrigNumberFormat);
