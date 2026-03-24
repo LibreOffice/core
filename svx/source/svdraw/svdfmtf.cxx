@@ -235,18 +235,18 @@ size_t ImpSdrGDIMetaFileImport::DoImport(
 
     mbMov = maOfs.X()!=0 || maOfs.Y()!=0;
     mbSize = false;
-    maScaleX = Fraction( 1, 1 );
-    maScaleY = Fraction( 1, 1 );
+    maScaleX = 1.0;
+    maScaleY = 1.0;
 
     if(aMtfSize.Width() != (maScaleRect.GetWidth() - 1))
     {
-        maScaleX = Fraction(maScaleRect.GetWidth() - 1, aMtfSize.Width());
+        maScaleX = double(maScaleRect.GetWidth() - 1) / aMtfSize.Width();
         mbSize = true;
     }
 
     if(aMtfSize.Height() != (maScaleRect.GetHeight() - 1))
     {
-        maScaleY = Fraction(maScaleRect.GetHeight() - 1, aMtfSize.Height());
+        maScaleY = double(maScaleRect.GetHeight() - 1) / aMtfSize.Height();
         mbSize = true;
     }
 
@@ -450,7 +450,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj1, bool bScale)
     {
         if(mbSize)
         {
-            pObj->NbcResize(Point(), double(maScaleX), double(maScaleY));
+            pObj->NbcResize(Point(), maScaleX, maScaleY);
         }
 
         if(mbMov)
