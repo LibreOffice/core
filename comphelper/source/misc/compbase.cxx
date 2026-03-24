@@ -244,14 +244,6 @@ css::uno::Any WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::c
 
 WeakImplHelperBase::~WeakImplHelperBase() {}
 
-css::uno::Any SAL_CALL WeakImplHelperBase::queryInterface(css::uno::Type const& rType)
-{
-    css::uno::Any aReturn = ::cppu::queryInterface(rType, static_cast<css::uno::XWeak*>(this));
-    if (aReturn.hasValue())
-        return aReturn;
-    return OWeakObject::queryInterface(rType);
-}
-
 css::uno::Any WeakImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
                                    WeakImplHelperBase* pBase)
 {

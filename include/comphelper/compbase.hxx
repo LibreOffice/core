@@ -131,8 +131,6 @@ class COMPHELPER_DLLPUBLIC WeakImplHelperBase : public virtual comphelper::UnoIm
 {
 public:
     virtual ~WeakImplHelperBase() override;
-
-    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const& rType) override;
 };
 
 template <typename... Ifc>
