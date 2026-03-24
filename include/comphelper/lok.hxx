@@ -12,6 +12,7 @@
 
 #include <functional>
 
+#include <config_features.h>
 #include <comphelper/comphelperdllapi.h>
 #include <o3tl/strong_int.hxx>
 #include <rtl/ustring.hxx>
@@ -42,7 +43,11 @@ public:
 // Functions to be called only from the LibreOfficeKit implementation in desktop, not from other
 // places in LibreOffice code.
 
+#if LOK_ALWAYS_ACTIVE
+inline void setActive(bool bActive = true) { (void)bActive; }
+#else
 COMPHELPER_DLLPUBLIC void setActive(bool bActive = true);
+#endif
 
 COMPHELPER_DLLPUBLIC void setForkedChild(bool bIsChild = true);
 
@@ -60,7 +65,11 @@ COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(
 // Functions that can be called from arbitrary places in LibreOffice.
 
 // Check whether the code is running as invoked through LibreOfficeKit.
+#if LOK_ALWAYS_ACTIVE
+constexpr bool isActive() { return true; }
+#else
 COMPHELPER_DLLPUBLIC bool isActive();
+#endif
 
 /// Is this a transient forked child process, that shares many
 /// eg. file-system resources with its parent process?

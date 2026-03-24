@@ -930,6 +930,15 @@ if test -n "$ANDROID_NDK_DIR" ; then
 fi
 AC_SUBST([ENABLE_ANDROID_LOK])
 
+AC_ARG_ENABLE([lok-always-active],
+    AS_HELP_STRING([--enable-lok-always-active],
+        [Make comphelper::LibreOfficeKit::isActive() a compile-time constant
+         returning true.])
+)
+if test "$enable_lok_always_active" = yes; then
+    AC_DEFINE(LOK_ALWAYS_ACTIVE)
+fi
+
 libo_FUZZ_ARG_ENABLE([android-editing],
     AS_HELP_STRING([--enable-android-editing],
         [Enable the experimental editing feature on Android.])
