@@ -781,27 +781,14 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
 bool SdrFractionItem::operator==(const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-           static_cast<const SdrFractionItem&>(rCmp).GetValue()==nValue;
+           static_cast<const SdrFractionItem&>(rCmp).GetValue()==mfValue;
 }
 
 bool SdrFractionItem::GetPresentation(
     SfxItemPresentation ePresentation, MapUnit /*eCoreMetric*/,
     MapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper&) const
 {
-    if(nValue.IsValid())
-    {
-        sal_Int32 nDiv = nValue.GetDenominator();
-        rText = OUString::number(nValue.GetNumerator());
-
-        if(nDiv != 1)
-        {
-            rText += "/" + OUString::number(nDiv);
-        }
-    }
-    else
-    {
-        rText = "?";
-    }
+    rText = OUString::number(mfValue);
 
     if(ePresentation == SfxItemPresentation::Complete)
     {
@@ -827,16 +814,7 @@ bool SdrScaleItem::GetPresentation(
     SfxItemPresentation ePresentation, MapUnit /*eCoreMetric*/,
     MapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper&) const
 {
-    if(GetValue().IsValid())
-    {
-        sal_Int32 nDiv = GetValue().GetDenominator();
-
-        rText = OUString::number(GetValue().GetNumerator()) + ":" + OUString::number(nDiv);
-    }
-    else
-    {
-        rText = "?";
-    }
+    rText = OUString::number(GetValue());
 
     if(ePresentation == SfxItemPresentation::Complete)
     {

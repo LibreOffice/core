@@ -26,15 +26,15 @@
 /*************************************************************************/
 
 class SdrFractionItem: public SfxPoolItem {
-    Fraction nValue;
+    double mfValue;
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SdrFractionItem)
-    SdrFractionItem(sal_uInt16 nId, const Fraction& rVal)
-        : SfxPoolItem(nId), nValue(rVal) {}
+    SdrFractionItem(sal_uInt16 nId, double fVal)
+        : SfxPoolItem(nId), mfValue(fVal) {}
     virtual bool             operator==(const SfxPoolItem&) const override;
     virtual bool GetPresentation(SfxItemPresentation ePresentation, MapUnit eCoreMetric, MapUnit ePresentationMetric, OUString &rText, const IntlWrapper&) const override;
     virtual SdrFractionItem* Clone(SfxItemPool *pPool=nullptr) const override;
-            const Fraction&  GetValue() const { return nValue; }
+    double GetValue() const { return mfValue; }
 };
 
 
