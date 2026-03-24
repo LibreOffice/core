@@ -26,7 +26,9 @@ using namespace com::sun::star;
 namespace comphelper::LibreOfficeKit
 {
 
+#if !LOK_ALWAYS_ACTIVE
 static bool g_bActive(false);
+#endif
 
 static bool g_bForkedChild(false);
 
@@ -118,6 +120,7 @@ static LanguageAndLocale g_aLanguageAndLocale;
 /// Scaling of the cairo canvas painting for hi-dpi
 static double g_fDPIScale(1.0);
 
+#if !LOK_ALWAYS_ACTIVE
 void setActive(bool bActive)
 {
     g_bActive = bActive;
@@ -127,6 +130,7 @@ bool isActive()
 {
     return g_bActive;
 }
+#endif
 
 void setForkedChild(bool bIsChild)
 {
