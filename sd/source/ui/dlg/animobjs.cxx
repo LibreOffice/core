@@ -632,9 +632,9 @@ void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
     }
 }
 
-Fraction AnimationWindow::GetScale()
+double AnimationWindow::GetScale()
 {
-    Fraction aFrac;
+    double fFrac = 0.0;
     size_t const nCount = m_FrameList.size();
     if (nCount > 0)
     {
@@ -652,10 +652,10 @@ Fraction AnimationWindow::GetScale()
 
         Size aDisplaySize(m_xCtlDisplay->GetOutputSizePixel());
 
-        aFrac = Fraction( std::min( static_cast<double>(aDisplaySize.Width()) / static_cast<double>(aBmpSize.Width()),
-                             static_cast<double>(aDisplaySize.Height()) / static_cast<double>(aBmpSize.Height()) ) );
+        fFrac = std::min( static_cast<double>(aDisplaySize.Width()) / static_cast<double>(aBmpSize.Width()),
+                          static_cast<double>(aDisplaySize.Height()) / static_cast<double>(aBmpSize.Height()) );
     }
-    return aFrac;
+    return fFrac;
 }
 
 void AnimationWindow::Resize()
