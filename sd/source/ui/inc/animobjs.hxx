@@ -139,7 +139,7 @@ private:
     void            ResetAttrs();
     void            WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                         SfxProgress* pStbMgr ) const;
-    Fraction        GetScale();
+    double          GetScale();
 };
 
 /**
