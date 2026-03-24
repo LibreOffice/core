@@ -455,18 +455,18 @@ void ImpSdrPdfImport::SetupPageScale(const double dPageWidth, const double dPage
 
     mbMov = maOfs.X() != 0 || maOfs.Y() != 0;
     mbSize = false;
-    maScaleX = Fraction(1, 1);
-    maScaleY = Fraction(1, 1);
+    maScaleX = 1.0;
+    maScaleY = 1.0;
 
     if (aPageSize.Width() != aScaleRectSize.Width())
     {
-        maScaleX = Fraction(aScaleRectSize.Width(), aPageSize.Width());
+        maScaleX = double(aScaleRectSize.Width()) / aPageSize.Width();
         mbSize = true;
     }
 
     if (aPageSize.Height() != aScaleRectSize.Height())
     {
-        maScaleY = Fraction(aScaleRectSize.Height(), aPageSize.Height());
+        maScaleY = double(aScaleRectSize.Height()) / aPageSize.Height();
         mbSize = true;
     }
 }
@@ -682,7 +682,7 @@ void ImpSdrPdfImport::InsertObj(SdrObject* pObj1, bool bScale)
     {
         if (mbSize)
         {
-            pObj->NbcResize(Point(), double(maScaleX), double(maScaleY));
+            pObj->NbcResize(Point(), maScaleX, maScaleY);
         }
 
         if (mbMov)

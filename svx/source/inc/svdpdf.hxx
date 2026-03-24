@@ -103,8 +103,8 @@ class ImpSdrPdfImport final
     Point maOfs;
     double mfScaleX;
     double mfScaleY;
-    Fraction maScaleX;
-    Fraction maScaleY;
+    double maScaleX;
+    double maScaleY;
 
     bool mbFntDirty;
 
