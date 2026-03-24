@@ -89,4 +89,5 @@
     <string name="pref_developer_mode">Kehittäjätila</string>
     <string name="message_saved">Tallennus onnistui</string>
     <string name="enter_part_name">Anna osan nimi</string>
+    <string name="part">Osa</string>
 </resources>

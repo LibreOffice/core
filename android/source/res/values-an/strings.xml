@@ -20,6 +20,26 @@
     <string name="calc_insert_before">Ficar</string>
     <string name="no_save_document">NO</string>
     <string name="action_redo">Refer</string>
-    <string name="title_recents">Ficheros recients</string>
+    <string name="title_recents">Fichers recients</string>
     <string name="compress_photo_max_quality">Calidat maxima</string>
+    <string name="calc_optimal_height">Altaria optima</string>
+    <string name="action_presentation">Diaporama</string>
+    <string name="pref_developer_mode_summary">Activar lo modo de desembolique pa ninviar órdens UNO per medio de l\'aplicación. Use-lo baixo la suya responsabilidat.</string>
+    <string name="pref_experimental_editing">Modo experimental</string>
+    <string name="pref_developer_mode">Modo de desenrollo</string>
+    <string name="action_settings">Achustes</string>
+    <string name="action_keyboard">Amostrar teclau</string>
+    <string name="password">Clau</string>
+    <string name="action_add_slide">Adhibir diapositiva</string>
+    <string name="calc_show">Amostrar</string>
+    <string name="calc_optimal_length">Longaria optima</string>
+    <string name="calc_optimal_width">Amplaria optima</string>
+    <string name="compress_photo_smallest_size">Grandaria menor</string>
+    <string name="compress_photo_medium_size">Grandaria meya</string>
+    <string name="action_add_worksheet">Adhibir fuella</string>
+    <string name="action_parts">Parz</string>
+    <string name="calc_adjust_length">Achustar longaria</string>
+    <string name="calc_adjust_height">Achustar altaria</string>
+    <string name="calc_adjust_width">Achustar amplaria</string>
+    <string name="calc_delete">Eliminar</string>
 </resources>
