@@ -1034,6 +1034,7 @@ cGpRule
 cMediaNode
 cNvCnPr
 cNvCxnSpPr
+cNvFrPr
 cNvGraphicFramePr
 cNvGrpSpPr
 cNvPicPr

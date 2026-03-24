@@ -28,6 +28,22 @@ public:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf124398_groupshapeChart)
+{
+    // given a document with grouped chart and textbox
+    // TODO: seeing the chart is broken since 24.8.4
+
+    createSwDoc("tdf124398_groupshapeChart.docx");
+
+    // MS Word considered this document to be corrupt for several reasons.
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // DOCX/wps: doesn't use nvGraphicFramePr - only PPTX/p: and XLSX/xdr: do.
+    assertXPath(pXmlDoc, "//wpg:graphicFrame/wpg:cNvPr", 1);
+    assertXPath(pXmlDoc, "//wpg:graphicFrame/wpg:xfrm", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf171433_equation)
 {
     // given a document with formula

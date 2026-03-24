@@ -774,11 +774,16 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
 {
     FSHelperPtr pFS = GetFS();
 
+    const bool bIsInGroupShape = GetDocumentType() == DOCUMENT_DOCX && mnXmlNamespace == XML_wps
+                                 && IsGroupShape(m_xParent);
+    if (bIsInGroupShape)
+        mnXmlNamespace = XML_wpg;
+
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
 
     pFS->startElementNS(mnXmlNamespace, XML_graphicFrame);
-
-    pFS->startElementNS(mnXmlNamespace, XML_nvGraphicFramePr);
+    if (GetDocumentType() != DOCUMENT_DOCX)
+        pFS->startElementNS(mnXmlNamespace, XML_nvGraphicFramePr);
 
     // TODO: get the correct chart name chart id
     OUString sName = u"Object 1"_ustr;
@@ -804,11 +809,21 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     }
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
-    pFS->singleElementNS(mnXmlNamespace, XML_cNvGraphicFramePr);
+    if (GetDocumentType() == DOCUMENT_DOCX)
+    {
+        if (bIsInGroupShape)
+            pFS->singleElementNS(mnXmlNamespace, XML_cNvFrPr);
+        else
+            pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
+    }
+    else
+        pFS->singleElementNS(mnXmlNamespace, XML_cNvGraphicFramePr);
 
     if( GetDocumentType() == DOCUMENT_PPTX )
         pFS->singleElementNS(mnXmlNamespace, XML_nvPr);
-    pFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
+
+    if (GetDocumentType() != DOCUMENT_DOCX)
+        pFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
 
     // visual chart properties
     WriteShapeTransformation( xShape, mnXmlNamespace );

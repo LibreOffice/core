@@ -2888,6 +2888,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         // TODO: With Chart extracted this cannot really happen since
         // no Chart could've been added at all
         ChartExport aChartExport( mnXmlNamespace, GetFS(), xChartDoc, GetFB(), GetDocumentType() );
+        aChartExport.SetParent(m_xParent);
         aChartExport.WriteChartObj(xShape, GetNewShapeID(xShape), mpFB->getNewChartUniqueId());
 #endif
         return *this;
