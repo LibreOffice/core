@@ -2420,8 +2420,8 @@ void SfxViewShell::SetZoomFactor( double fZoomX, double fZoomY )
 {
     DBG_ASSERT( GetWindow(), "no window" );
     MapMode aMap( GetWindow()->GetMapMode() );
-    aMap.SetScaleX( Fraction(fZoomX) );
-    aMap.SetScaleY( Fraction(fZoomY) );
+    aMap.SetScaleX( fZoomX );
+    aMap.SetScaleY( fZoomY );
     GetWindow()->SetMapMode( aMap );
 }
 

@@ -493,8 +493,8 @@ namespace frm
         double fZoom = m_pAntiImpl->GetZoom();
 
         MapMode aMapMode( m_pAntiImpl->GetMapMode() );
-        aMapMode.SetScaleX( Fraction(fZoom) );
-        aMapMode.SetScaleY( Fraction(fZoom) );
+        aMapMode.SetScaleX( fZoom );
+        aMapMode.SetScaleY( fZoom );
         m_pAntiImpl->SetMapMode( aMapMode );
 
         m_pViewport->SetZoom( fZoom );

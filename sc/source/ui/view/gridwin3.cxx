@@ -335,8 +335,8 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
                                    mrViewData.GetPPTX(),mrViewData.GetPPTY(),
                                    fScaleX,fScaleY );
         }
-        aDrawMode.SetScaleX(Fraction(fScaleX));
-        aDrawMode.SetScaleY(Fraction(fScaleY));
+        aDrawMode.SetScaleX(fScaleX);
+        aDrawMode.SetScaleY(fScaleY);
     }
     aDrawMode.SetOrigin(Point());
     Point aStartPos = mrViewData.GetPixPos(eWhich);

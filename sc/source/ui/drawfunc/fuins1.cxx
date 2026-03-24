@@ -168,8 +168,8 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     {
         double fScaleX, fScaleY;
         pDrawView->CalcNormScale( fScaleX, fScaleY );
-        aDestMap.SetScaleX(Fraction(fScaleX));
-        aDestMap.SetScaleY(Fraction(fScaleY));
+        aDestMap.SetScaleX(fScaleX);
+        aDestMap.SetScaleY(fScaleY);
     }
     Size aLogicSize = pWindow->LogicToLogic(
                             rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );

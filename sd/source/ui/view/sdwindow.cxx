@@ -341,8 +341,8 @@ void Window::SetCenterAllowed (bool bIsAllowed)
     if (!comphelper::LibreOfficeKit::isActive())
     {
         MapMode aMap(GetMapMode());
-        aMap.SetScaleX(Fraction(nZoom, 100));
-        aMap.SetScaleY(Fraction(nZoom, 100));
+        aMap.SetScaleX(double(nZoom) / 100);
+        aMap.SetScaleY(double(nZoom) / 100);
         SetMapMode(aMap);
     }
 

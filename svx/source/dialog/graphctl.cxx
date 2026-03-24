@@ -217,8 +217,8 @@ void GraphCtrl::Resize()
         aNewPos.setY( ( nHeight - aNewSize.Height() ) >> 1 );
 
         // Implementing MapMode for Engine
-        aDisplayMap.SetScaleX( Fraction( aNewSize.Width(), maGraphSize.Width() ) );
-        aDisplayMap.SetScaleY( Fraction( aNewSize.Height(), maGraphSize.Height() ) );
+        aDisplayMap.SetScaleX( double(aNewSize.Width()) / maGraphSize.Width() );
+        aDisplayMap.SetScaleY( double(aNewSize.Height()) / maGraphSize.Height() );
 
         aDisplayMap.SetOrigin( OutputDevice::LogicToLogic( aNewPos, maMap100, aDisplayMap ) );
         rDevice.SetMapMode( aDisplayMap );

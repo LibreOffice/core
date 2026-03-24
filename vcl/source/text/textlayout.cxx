@@ -548,8 +548,8 @@ namespace vcl
         // between text in Writer and text in controls in Writer, though both have the same font.
         // So, if we have a zoom set at the control, then we do not scale the font, but instead modify the map mode
         // to accommodate for the zoom.
-        aTargetMapMode.SetScaleX( Fraction(fZoom) );    // TODO: shouldn't this be "current_scale * zoom"?
-        aTargetMapMode.SetScaleY( Fraction(fZoom) );
+        aTargetMapMode.SetScaleX( fZoom );    // TODO: shouldn't this be "current_scale * zoom"?
+        aTargetMapMode.SetScaleY( fZoom );
 
         // also, use a higher-resolution map unit than "pixels", which should save us some rounding errors when
         // translating coordinates between the reference device and the target device.

@@ -128,6 +128,16 @@ MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
     mpImplMapMode->mbSimple = false;
 }
 
+MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
+                  double rScaleX, double rScaleY )
+{
+    mpImplMapMode->meUnit   = eUnit;
+    mpImplMapMode->maOrigin = rLogicOrg;
+    mpImplMapMode->maScaleX = rScaleX;
+    mpImplMapMode->maScaleY = rScaleY;
+    mpImplMapMode->mbSimple = false;
+}
+
 MapMode::~MapMode() = default;
 
 void MapMode::SetMapUnit( MapUnit eUnit )
@@ -147,7 +157,19 @@ void MapMode::SetScaleX( const Fraction& rScaleX )
     mpImplMapMode->mbSimple = false;
 }
 
+void MapMode::SetScaleX( double rScaleX )
+{
+    mpImplMapMode->maScaleX = rScaleX;
+    mpImplMapMode->mbSimple = false;
+}
+
 void MapMode::SetScaleY( const Fraction& rScaleY )
+{
+    mpImplMapMode->maScaleY = rScaleY;
+    mpImplMapMode->mbSimple = false;
+}
+
+void MapMode::SetScaleY( double rScaleY )
 {
     mpImplMapMode->maScaleY = rScaleY;
     mpImplMapMode->mbSimple = false;

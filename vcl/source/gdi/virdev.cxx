@@ -373,8 +373,8 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(
     assert(pBuffer);
     MapMode mm = GetMapMode();
     mm.SetOrigin( rNewOffset );
-    mm.SetScaleX( Fraction(fScale) );
-    mm.SetScaleY( Fraction(fScale) );
+    mm.SetScaleX( fScale );
+    mm.SetScaleY( fScale );
     SetMapMode( mm );
 
     assert(meFormatAndAlpha == DeviceFormat::WITHOUT_ALPHA);

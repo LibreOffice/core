@@ -294,7 +294,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
                                const css::uno::Reference< css::beans::XMaterialHolder >& xEncryptionMaterialHolder,
                                PDFWriter& i_rOuterFace)
         : VirtualDevice(Application::GetDefaultDevice(), DeviceFormat::WITHOUT_ALPHA, OUTDEV_PDF),
-        m_aMapMode( MapUnit::MapPoint, Point(), Fraction( 1, pointToPixel(1) ), Fraction( 1, pointToPixel(1) ) ),
+        m_aMapMode( MapUnit::MapPoint, Point(), 1.0 / pointToPixel(1), 1.0 / pointToPixel(1) ),
         m_aWidgetStyleSettings(Application::GetSettings().GetStyleSettings()),
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),

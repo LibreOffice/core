@@ -411,7 +411,7 @@ tools::Long ScColumn::GetNeededSize(
         //  the font is not reset each time with !bEditEngine
         vcl::Font aOldFont = pDev->GetFont();
 
-        MapMode aHMMMode( MapUnit::Map100thMM, Point(), Fraction(fZoomX), Fraction(fZoomY) );
+        MapMode aHMMMode( MapUnit::Map100thMM, Point(), fZoomX, fZoomY );
 
         // save in document ?
         std::unique_ptr<ScFieldEditEngine> pEngine = rDocument.CreateFieldEditEngine();

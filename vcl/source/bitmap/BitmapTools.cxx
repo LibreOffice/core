@@ -565,8 +565,8 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const Bitmap& rBitm
     const Size aSizePixel( rBitmap.GetSizePixel() );
     if ( aOutputSizePixel.Width() && aOutputSizePixel.Height() )
     {
-        aMapMode.SetScaleX( Fraction( aSizePixel.Width(), aOutputSizePixel.Width() ) );
-        aMapMode.SetScaleY( Fraction( aSizePixel.Height(), aOutputSizePixel.Height() ) );
+        aMapMode.SetScaleX( double(aSizePixel.Width()) / aOutputSizePixel.Width() );
+        aMapMode.SetScaleY( double(aSizePixel.Height()) / aOutputSizePixel.Height() );
     }
     pVDev->SetMapMode( aMapMode );
     pVDev->SetOutputSizePixel( aSizePixel );
