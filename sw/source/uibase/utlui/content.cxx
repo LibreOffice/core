@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <editeng/frmdiritem.hxx>
 #include <svl/urlbmk.hxx>
 #include <osl/thread.h>
@@ -6800,7 +6802,24 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         }
         break;
         case ContentTypeId::POSTIT:
-            m_pActiveShell->GotoFormatField(*static_cast<const SwPostItContent*>(pCnt)->GetPostIt());
+        {
+            const SwFormatField* pField = static_cast<const SwPostItContent*>(pCnt)->GetPostIt();
+            m_pActiveShell->GotoFormatField(*pField);
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                const SwPostItField* pPostItField
+                    = static_cast<const SwPostItField*>(pField->GetField());
+                boost::property_tree::ptree aAnnotation;
+                aAnnotation.put("action", "Focus");
+                aAnnotation.put("id", pPostItField->GetPostItId());
+                boost::property_tree::ptree aTree;
+                aTree.add_child("comment", aAnnotation);
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, aTree);
+                m_pActiveShell->GetView().libreOfficeKitViewCallback(
+                    LOK_CALLBACK_COMMENT, OString(aStream.str()));
+            }
+        }
         break;
         case ContentTypeId::DRAWOBJECT:
         {
