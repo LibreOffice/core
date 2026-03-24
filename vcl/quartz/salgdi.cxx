@@ -401,8 +401,8 @@ void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
             CFRelease(pValue);
         }
         CFDictionaryRef pAttrDict = CFDictionaryCreate(kCFAllocatorDefault,
-                                                       (const void**)&kCTFontVariationAttribute,
-                                                       (const void**)&pVarDict, 1,
+                                                       const_cast<const void **>(reinterpret_cast<const void * const *>(&kCTFontVariationAttribute)),
+                                                       const_cast<const void **>(reinterpret_cast<void **>(&pVarDict)), 1,
                                                        &kCFTypeDictionaryKeyCallBacks,
                                                        &kCFTypeDictionaryValueCallBacks);
         CTFontDescriptorRef pVarDesc = CTFontDescriptorCreateWithAttributes(pAttrDict);
