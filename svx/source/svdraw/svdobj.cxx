@@ -291,13 +291,15 @@ bool SdrObject::isDiagram() const
 
 const std::shared_ptr< svx::diagram::DiagramHelper_svx >& SdrObject::getDiagramHelper() const
 {
-    if (!getDiagramDataModelID().isEmpty())
-    {
-        SdrObject* pParent(getParentSdrObjectFromSdrObject());
+    const SdrObject* pCurrent(this);
 
-        if (nullptr != pParent)
-            return pParent->getDiagramHelper();
+    do
+    {
+        if (pCurrent->isDiagram())
+            return pCurrent->getDiagramHelper();
+        pCurrent = pCurrent->getParentSdrObjectFromSdrObject();
     }
+    while(nullptr != pCurrent);
 
     static std::shared_ptr< svx::diagram::DiagramHelper_svx > aEmpty;
     return aEmpty;

@@ -815,6 +815,11 @@ void SdrEditView::DeleteMarkedObj()
     if(0 == nMarkCount)
         return;
 
+    // moved breaking action and undo start outside loop
+    BrkAction();
+    BegUndo(SvxResId(STR_EditDelete),rMarkList.GetMarkDescription(),SdrRepeatFunc::Delete);
+    bool bDone(false);
+
     if (1 == nMarkCount)
     {
         SdrObject* pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
@@ -828,20 +833,17 @@ void SdrEditView::DeleteMarkedObj()
                 if (pSubSelection->removeDiagramNode())
                 {
                     comphelper::dispatchCommand(u".uno:RegenerateDiagram"_ustr, {});
-                    return;
+                    bDone = true;
                 }
             }
         }
     }
 
-    // moved breaking action and undo start outside loop
-    BrkAction();
-    BegUndo(SvxResId(STR_EditDelete),rMarkList.GetMarkDescription(),SdrRepeatFunc::Delete);
-
-    std::vector<rtl::Reference<SdrObject>> lazyDeleteObjects;
     // remove as long as something is selected. This allows to schedule objects for
     // removal for a next run as needed
-    while(rMarkList.GetMarkCount())
+    std::vector<rtl::Reference<SdrObject>> lazyDeleteObjects;
+
+    while(!bDone && rMarkList.GetMarkCount())
     {
         // vector to remember the parents which may be empty after object removal
         std::vector< SdrObject* > aParents;

@@ -989,47 +989,68 @@ void SwDrawView::DeleteMarked()
     SwRootFrame *pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if ( pTmpRoot )
         pTmpRoot->StartAllAction();
-    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
-    // replace marked <SwDrawVirtObj>-objects by its reference objects.
-    if (SdrPageView* pDrawPageView = m_rImp.GetPageView())
-    {
-        ReplaceMarkedDrawVirtObjs(pDrawPageView->GetView());
-    }
 
-    // Check what textboxes have to be deleted afterwards.
     const SdrMarkList& rMarkList = GetMarkedObjectList();
-    std::vector<SwFrameFormat*> aTextBoxesToDelete;
-    for (size_t i = 0; i < rMarkList.GetMarkCount(); ++i)
+    const size_t nMarkCount(rMarkList.GetMarkCount());
+    bool bIsSubSelection(false);
+    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
+
+    if (1 == nMarkCount)
     {
-        SdrObject *pObject = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        SwContact* pContact = GetUserCall(pObject);
-        if (pContact)
+        SdrObject* pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
+        if (nullptr != pObj)
         {
-            SwFrameFormat* pFormat = pContact->GetFormat();
-            if (pObject->getChildrenOfSdrObject())
-            {
-                auto pChildTextBoxes = SwTextBoxHelper::CollectTextBoxes(pObject, pFormat);
-                for (auto& rChildTextBox : pChildTextBoxes)
-                    aTextBoxesToDelete.push_back(rChildTextBox);
-            }
-            else if (SwFrameFormat* pTextBox
-                     = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
-                aTextBoxesToDelete.push_back(pTextBox);
+            SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+            bIsSubSelection = nullptr != pSubSelection && pSubSelection->isDiagramTextNode();
         }
     }
 
-    if ( pDoc->DeleteSelection( *this ) )
+    if (bIsSubSelection)
     {
         FmFormView::DeleteMarked();
-        ::FrameNotify( &Imp().GetShell(), FLY_DRAG_END );
     }
-
-    // Only delete these now: earlier deletion would clear the mark list as well.
-    // Delete in reverse order, assuming that the container is sorted by anchor positions.
-    for (int i = aTextBoxesToDelete.size() - 1; i >= 0; --i)
+    else
     {
-        SwFrameFormat*& rpTextBox = aTextBoxesToDelete[i];
-        pDoc->getIDocumentLayoutAccess().DelLayoutFormat(rpTextBox);
+        // replace marked <SwDrawVirtObj>-objects by its reference objects.
+        if (SdrPageView* pDrawPageView = m_rImp.GetPageView())
+        {
+            ReplaceMarkedDrawVirtObjs(pDrawPageView->GetView());
+        }
+
+        // Check what textboxes have to be deleted afterwards.
+        std::vector<SwFrameFormat*> aTextBoxesToDelete;
+        for (size_t i = 0; !bIsSubSelection && i < nMarkCount; ++i)
+        {
+            SdrObject *pObject = rMarkList.GetMark(i)->GetMarkedSdrObj();
+            SwContact* pContact = GetUserCall(pObject);
+            if (pContact)
+            {
+                SwFrameFormat* pFormat = pContact->GetFormat();
+                if (pObject->getChildrenOfSdrObject())
+                {
+                    auto pChildTextBoxes = SwTextBoxHelper::CollectTextBoxes(pObject, pFormat);
+                    aTextBoxesToDelete.insert(aTextBoxesToDelete.end(), pChildTextBoxes.begin(),
+                                            pChildTextBoxes.end());
+                }
+                else if (SwFrameFormat* pTextBox
+                        = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
+                    aTextBoxesToDelete.push_back(pTextBox);
+            }
+        }
+
+        if ( bIsSubSelection || pDoc->DeleteSelection( *this ) )
+        {
+            FmFormView::DeleteMarked();
+            ::FrameNotify( &Imp().GetShell(), FLY_DRAG_END );
+        }
+
+        // Only delete these now: earlier deletion would clear the mark list as well.
+        // Delete in reverse order, assuming that the container is sorted by anchor positions.
+        for (int i = aTextBoxesToDelete.size() - 1; i >= 0; --i)
+        {
+            SwFrameFormat*& rpTextBox = aTextBoxesToDelete[i];
+            pDoc->getIDocumentLayoutAccess().DelLayoutFormat(rpTextBox);
+        }
     }
 
     pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);

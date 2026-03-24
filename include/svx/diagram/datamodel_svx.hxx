@@ -153,14 +153,16 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DiagramDataState
     Points maPoints;
     std::vector<css::uno::Reference<css::drawing::XShape>> mxShapes;
     basegfx::B2DHomMatrix maTransformation;
+    OUString msBackgroundShapeModelID;
 
 public:
-    DiagramDataState(const Connections& aConnections, const Points& aPoints, const css::uno::Reference< css::drawing::XShape >& rRootShape);
+    DiagramDataState(const Connections& aConnections, const Points& aPoints, const css::uno::Reference< css::drawing::XShape >& rRootShape, const OUString& rBackgroundShapeModelID);
 
     const Connections& getConnections() const { return maConnections; }
     const Points& getPoints() const { return maPoints; }
     const std::vector<css::uno::Reference<css::drawing::XShape>>& getXShapes() const { return mxShapes;}
     const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
+    const OUString& getBackgroundShapeModelID() const { return msBackgroundShapeModelID; }
 };
 
 typedef std::shared_ptr< DiagramDataState > DiagramDataStatePtr;

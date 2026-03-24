@@ -414,21 +414,15 @@ DiagramData_svx::DiagramData_svx(const boost::property_tree::ptree& rDiagramMode
 , maPresOfNameMap()
 , msBackgroundShapeModelID(OUString::fromUtf8(rDiagramModel.get("BGShapeModelID", "")))
 {
-    const int nPtCnt(rDiagramModel.get_child("PtCnt").get_value<int>());
-    for (int a(0); a < nPtCnt; a++)
-    {
-        const OUString aName(OUString::Concat("Pt") + OUString::number(a));
-        boost::property_tree::ptree aPointData = rDiagramModel.get_child(aName.toUtf8().getStr());
-        maPoints.emplace_back(aPointData);
-    }
+    // read all Point entries
+    auto aRangePt(rDiagramModel.equal_range("Pt"));
+    for (auto itPt = aRangePt.first; itPt != aRangePt.second; itPt++)
+        maPoints.emplace_back(itPt->second);
 
-    const int nConnCnt(rDiagramModel.get_child("ConnCnt").get_value<int>());
-    for (int a(0); a < nConnCnt; a++)
-    {
-        const OUString aName(OUString::Concat("Cn") + OUString::number(a));
-        boost::property_tree::ptree aConnectionData = rDiagramModel.get_child(aName.toUtf8().getStr());
-        maConnections.emplace_back(aConnectionData);
-    }
+    // read all Connection entries
+    auto aRangeCn(rDiagramModel.equal_range("Cn"));
+    for (auto itCn = aRangeCn.first; itCn != aRangeCn.second; itCn++)
+        maConnections.emplace_back(itCn->second);
 }
 
 DiagramData_svx::~DiagramData_svx()
@@ -512,11 +506,12 @@ DomMapFlags DiagramData_svx::removeDiagramNode(const OUString& rNodeId)
     return aRetval;
 }
 
-DiagramDataState::DiagramDataState(const Connections& aConnections, const Points& aPoints, const uno::Reference< drawing::XShape >& rRootShape)
+DiagramDataState::DiagramDataState(const Connections& aConnections, const Points& aPoints, const uno::Reference< drawing::XShape >& rRootShape, const OUString& rBackgroundShapeModelID)
 : maConnections(aConnections)
 , maPoints(aPoints)
 , mxShapes()
 , maTransformation()
+, msBackgroundShapeModelID(rBackgroundShapeModelID)
 {
     SdrObjGroup* pSource(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(rRootShape)));
     if (nullptr != pSource)
@@ -541,7 +536,7 @@ DiagramDataStatePtr DiagramData_svx::extractDiagramDataState() const
 {
     // Just copy all Connections && Points. The shared_ptr data in
     // Point-entries is no problem, it just continues exiting shared
-    return std::make_shared< DiagramDataState >(maConnections, maPoints, accessRootShape());
+    return std::make_shared< DiagramDataState >(maConnections, maPoints, accessRootShape(), getBackgroundShapeModelID());
 }
 
 void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
@@ -569,6 +564,10 @@ void DiagramData_svx::applyDiagramDataState(const DiagramDataStatePtr& rState)
             basegfx::B2DPolyPolygon aPolyPolygon;
             pTarget->TRSetBaseGeometry(rState->getTransformation(), aPolyPolygon);
         }
+
+        // BackgroundShapeModelID is needed to identify the correct data
+        // carrier in the following ::reLayout
+        setBackgroundShapeModelID(rState->getBackgroundShapeModelID());
 
         // Reset temporary buffered ModelData association lists & rebuild them
         // and the Diagram DataModel. Do that here *immediately* to prevent
@@ -646,36 +645,24 @@ void DiagramData_svx::addDiagramModelData(boost::property_tree::ptree& rTarget) 
     // write BGShapeModelID to boost::property_tree
     rTarget.put("BGShapeModelID", getBackgroundShapeModelID());
 
-    // write points to boost::property_tree
+    // write all points to boost::property_tree
     const svx::diagram::Points& rPoints = getPoints();
-    if (!rPoints.empty())
+    for (auto & point : rPoints)
     {
-        rTarget.put("PtCnt", rPoints.size());
-        size_t count(0);
-
-        for (auto & point : rPoints)
-        {
-            boost::property_tree::ptree aPoints;
-            point.addDiagramModelData(aPoints);
-            const OUString aName(OUString::Concat("Pt") + OUString::number(count++));
-            rTarget.push_back(std::make_pair(aName.toUtf8().getStr(), aPoints));
-        }
+        boost::property_tree::ptree aPoints;
+        point.addDiagramModelData(aPoints);
+        // const OUString aName(OUString::Concat("Pt") + OUString::number(count++));
+        rTarget.push_back(std::make_pair("Pt", aPoints));
     }
 
-    // write connections to boost::property_tree
+    // write all connections to boost::property_tree
     const svx::diagram::Connections& rConnections = getConnections();
-    if (!rConnections.empty())
+    for (auto & connection : rConnections)
     {
-        rTarget.put("ConnCnt", rConnections.size());
-        size_t count(0);
-
-        for (auto & connection : rConnections)
-        {
-            boost::property_tree::ptree aConnections;
-            connection.addDiagramModelData(aConnections);
-            const OUString aName(OUString::Concat("Cn") + OUString::number(count++));
-            rTarget.push_back(std::make_pair(aName.toUtf8().getStr(), aConnections));
-        }
+        boost::property_tree::ptree aConnections;
+        connection.addDiagramModelData(aConnections);
+        // const OUString aName(OUString::Concat("Cn") + OUString::number(count++));
+        rTarget.push_back(std::make_pair("Cn", aConnections));
     }
 }
 
