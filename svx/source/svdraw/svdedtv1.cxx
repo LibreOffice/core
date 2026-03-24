@@ -774,13 +774,13 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr)
     }
     if (const SdrResizeXAllItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_RESIZEXALL))
     {
-        Fraction aXFact = pPoolItem->GetValue();
-        ResizeMarkedObj(aAllSnapRect.TopLeft(),double(aXFact),1.0);
+        double fXFact = pPoolItem->GetValue();
+        ResizeMarkedObj(aAllSnapRect.TopLeft(), fXFact, 1.0);
     }
     if (const SdrResizeYAllItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_RESIZEYALL))
     {
-        Fraction aYFact = pPoolItem->GetValue();
-        ResizeMarkedObj(aAllSnapRect.TopLeft(),1.0,double(aYFact));
+        double fYFact = pPoolItem->GetValue();
+        ResizeMarkedObj(aAllSnapRect.TopLeft(), 1.0, fYFact);
     }
     if (const SdrRotateAllItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_ROTATEALL))
     {

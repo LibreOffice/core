@@ -27,7 +27,7 @@ class SdrResizeXAllItem final : public SdrFractionItem {
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SdrResizeXAllItem)
     SdrResizeXAllItem()
-        : SdrFractionItem(SDRATTR_RESIZEXALL,Fraction(1,1)) {}
+        : SdrFractionItem(SDRATTR_RESIZEXALL, 1.0) {}
     virtual SdrResizeXAllItem* Clone(SfxItemPool*) const override
     {
         return new SdrResizeXAllItem(*this);
@@ -38,7 +38,7 @@ class SdrResizeYAllItem final : public SdrFractionItem {
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SdrResizeYAllItem)
     SdrResizeYAllItem()
-        : SdrFractionItem(SDRATTR_RESIZEYALL,Fraction(1,1)) {}
+        : SdrFractionItem(SDRATTR_RESIZEYALL, 1.0) {}
     virtual SdrResizeYAllItem* Clone(SfxItemPool*) const override
     {
         return new SdrResizeYAllItem(*this);
