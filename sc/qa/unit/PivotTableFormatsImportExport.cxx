@@ -50,475 +50,35 @@ Color getBackgroundColor(const ScDocument& rDoc, OUString const& rAddressString)
     return rItem.GetColor();
 }
 
-Color getFontColor(const ScDocument& rDoc, OUString const& rAddressString)
+/** Compare pivot table output against Excel reference output below.
+ *  The reference area starts 1 row after the pivot table ends.
+ *  Returns empty string if all cells match, otherwise lists mismatches. */
+OUString comparePivotWithReference(ScDocument& rDocument, ScRange const& rPivotRange,
+                                   ScRange const& rReferenceRange)
 {
-    const ScPatternAttr* pPattern = rDoc.GetPattern(parseAddress(rDoc, rAddressString));
-    const SvxColorItem& rItem = pPattern->GetItem(ATTR_FONT_COLOR);
-    return rItem.getColor();
-}
-
-bool getCellProtection(const ScDocument& rDoc, OUString const& rAddressString)
-{
-    const ScPatternAttr* pPattern = rDoc.GetPattern(parseAddress(rDoc, rAddressString));
-    const ScProtectionAttr& rItem = pPattern->GetItem(ATTR_PROTECTION);
-    return rItem.GetProtection();
-}
-
-template <typename T> OUString checkNonEmptyAddresses(ScDocument& rDoc, T const& rArrayOfAddresses)
-{
-    OUString aString;
-    for (auto const& rAddressString : rArrayOfAddresses)
-    {
-        ScAddress aAddress;
-        aAddress.Parse(rAddressString, rDoc);
-        const ScPatternAttr* pPattern = rDoc.GetPattern(aAddress);
-        if (pPattern->GetItem(ATTR_FONT_COLOR).getColor() != COL_BLACK
-            || pPattern->GetItem(ATTR_BACKGROUND).GetColor() != COL_TRANSPARENT
-            || !pPattern->GetItem(ATTR_PROTECTION).GetProtection())
-        {
-            aString += rAddressString + " ";
-        }
-    }
-    return aString;
-}
-
-void assertDataFieldInRow_RowLabelColor(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G6"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"G7"_ustr));
-
-    // Make sure the other cells have the font color or background set to default
-    std::vector<OUString> aEmptyAddresses{
-        u"G5"_ustr, u"H5"_ustr, u"I5"_ustr, u"J5"_ustr, u"K5"_ustr, u"H6"_ustr, u"I6"_ustr,
-        u"J6"_ustr, u"K6"_ustr, u"H7"_ustr, u"I7"_ustr, u"J7"_ustr, u"K7"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     testPivotTableCellFormat_1_DataFieldInRow_RowLabelColor)
-{
-    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_1_DataFieldInRow_RowLabelColor.xlsx");
-    assertDataFieldInRow_RowLabelColor(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertDataFieldInRow_RowLabelColor(*getScDoc());
-}
-
-void assertDataFieldInRow_ColumnLabelColor(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(Color(0x00B050), getBackgroundColor(rDoc, u"H5"_ustr));
-
-    // Make sure the other cells have the font color or background set to default
-    std::vector<OUString> aEmptyAddresses{
-        u"G5"_ustr, u"I5"_ustr, u"J5"_ustr, u"K5"_ustr, u"G6"_ustr, u"H6"_ustr, u"I6"_ustr,
-        u"J6"_ustr, u"K6"_ustr, u"G7"_ustr, u"H7"_ustr, u"I7"_ustr, u"J7"_ustr, u"K7"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_2_DataFieldInRow_ColumnLabelColor)
-{
-    createScDoc(
-        "xlsx/pivot-table/PivotTableCellFormatsTest_2_DataFieldInRow_ColumnLabelColor.xlsx");
-    assertDataFieldInRow_ColumnLabelColor(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertDataFieldInRow_ColumnLabelColor(*getScDoc());
-}
-
-void assertDataFieldInColumn_ColumnLabelColor(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H4"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I4"_ustr));
-
-    // Make sure the other cells have the font color or background set to default
-    std::vector<OUString> aEmptyAddresses{
-        u"G4"_ustr, u"G5"_ustr, u"H5"_ustr, u"I5"_ustr, u"G6"_ustr, u"H6"_ustr, u"I6"_ustr,
-        u"G7"_ustr, u"H7"_ustr, u"I7"_ustr, u"G8"_ustr, u"H8"_ustr, u"I8"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_3_DataFieldInColumn_ColumnLabelColor)
-{
-    createScDoc(
-        "xlsx/pivot-table/PivotTableCellFormatsTest_3_DataFieldInColumn_ColumnLabelColor.xlsx");
-    assertDataFieldInColumn_ColumnLabelColor(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertDataFieldInColumn_ColumnLabelColor(*getScDoc());
-}
-
-void assertDataFieldInColumn_DataColor(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getFontColor(rDoc, u"H6"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"I8"_ustr));
-
-    std::vector<OUString> aEmptyAddresses{
-        u"G4"_ustr, u"H4"_ustr, u"I4"_ustr, u"G5"_ustr, u"H5"_ustr, u"I5"_ustr, u"G6"_ustr,
-        u"I6"_ustr, u"G7"_ustr, u"H7"_ustr, u"I7"_ustr, u"G8"_ustr, u"H8"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_4_DataFieldInColumn_DataColor)
-{
-    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_4_DataFieldInColumn_DataColor.xlsx");
-    assertDataFieldInColumn_DataColor(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertDataFieldInColumn_DataColor(*getScDoc());
-}
-
-void assertDataFieldInColumnAndTwoRowFields_DataColor(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I7"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"I10"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"J12"_ustr));
-
-    std::vector<OUString> aEmptyAddresses{
-        u"G4"_ustr,  u"H4"_ustr,  u"I4"_ustr,  u"J4"_ustr,  u"G5"_ustr,  u"H5"_ustr,  u"I5"_ustr,
-        u"J5"_ustr,  u"G6"_ustr,  u"H6"_ustr,  u"I6"_ustr,  u"J6"_ustr,  u"G7"_ustr,  u"H7"_ustr,
-        u"J7"_ustr,  u"G8"_ustr,  u"H8"_ustr,  u"I8"_ustr,  u"J8"_ustr,  u"G9"_ustr,  u"H9"_ustr,
-        u"I9"_ustr,  u"J9"_ustr,  u"G10"_ustr, u"H10"_ustr, u"J10"_ustr, u"G11"_ustr, u"H11"_ustr,
-        u"I11"_ustr, u"J11"_ustr, u"G12"_ustr, u"H12"_ustr, u"I12"_ustr, u"G13"_ustr, u"H13"_ustr,
-        u"I13"_ustr, u"J13"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_5_DataFieldInColumnAndTwoRowFields_DataColor)
-{
-    createScDoc("xlsx/pivot-table//"
-                "PivotTableCellFormatsTest_5_DataFieldInColumnAndTwoRowFields_DataColor.xlsx");
-    assertDataFieldInColumnAndTwoRowFields_DataColor(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertDataFieldInColumnAndTwoRowFields_DataColor(*getScDoc());
-}
-
-void assertSingleDataFieldInColumn_DataColor(const ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"J8"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"J12"_ustr));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_6_SingleDataFieldInColumn_DataColor)
-{
-    createScDoc(
-        "xlsx/pivot-table//PivotTableCellFormatsTest_6_SingleDataFieldInColumn_DataColor.xlsx");
-    assertSingleDataFieldInColumn_DataColor(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertSingleDataFieldInColumn_DataColor(*getScDoc());
-}
-
-void assertTwoRowTwoColumnFields_DataColor(const ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I7"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFC000), getBackgroundColor(rDoc, u"J8"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"J9"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x00B0F0), getBackgroundColor(rDoc, u"J13"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"K12"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"L14"_ustr));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_7_TwoRowTwoColumnFields_DataColor)
-{
-    createScDoc(
-        "xlsx/pivot-table//PivotTableCellFormatsTest_7_TwoRowTwoColumnFields_DataColor.xlsx");
-    assertTwoRowTwoColumnFields_DataColor(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertTwoRowTwoColumnFields_DataColor(*getScDoc());
-}
-
-void assertDataFieldInRow_DataColor(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(Color(0x00B0F0), getBackgroundColor(rDoc, u"I6"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"K7"_ustr));
-
-    // Make sure the other cells have the font color or background set to default
-    std::vector<OUString> aEmptyAddresses{
-        u"G5"_ustr, u"H5"_ustr, u"I5"_ustr, u"J5"_ustr, u"K5"_ustr, u"G6"_ustr, u"H6"_ustr,
-        u"J6"_ustr, u"K6"_ustr, u"G7"_ustr, u"H7"_ustr, u"I7"_ustr, u"J7"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-};
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_8_DataFieldInRow_DataColor)
-{
-    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_8_DataFieldInRow_DataColor.xlsx");
-    assertDataFieldInRow_DataColor(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertDataFieldInRow_DataColor(*getScDoc());
-}
-
-void assertMultipleSelections(const ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I5"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I6"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I7"_ustr));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_9_MultipleSelections)
-{
-    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_9_MultipleSelections.xlsx");
-    assertMultipleSelections(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertMultipleSelections(*getScDoc());
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_10_FormatDefinitionNotMatchingPivotTable)
-{
-    // The pivot table format data in this document doesn't match the pivot table data, which can produce
-    // a crash during loading and resolving of formats. Specifically
-
-    // Load the document, which shouldn't result in a crash
-    createScDoc("xlsx/pivot-table/"
-                "PivotTableCellFormatsTest_10_FormatDefinitionNotMatchingPivotTable.xlsx");
-    ScDocument& rDoc = *getScDoc();
-
-    // Let's check the pivot table exists
-    ScDPCollection* pCollection = rDoc.GetDPCollection();
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pCollection->GetCount());
-
-    auto aAddress = parseAddress(rDoc, u"G2"_ustr);
-    const ScDPObject* pDPObject = rDoc.GetDPAtCursor(aAddress);
-    CPPUNIT_ASSERT(pDPObject);
-
-    CPPUNIT_ASSERT_EQUAL(u"60"_ustr, rDoc.GetString(aAddress));
-}
-
-void assertWholeDataColumnSelected(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G2"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G3"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G4"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G5"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G6"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"G7"_ustr));
-
-    // Make sure the other cells have the font color or background set to default
-    std::vector<OUString> aEmptyAddresses{
-        u"F1"_ustr, u"G1"_ustr, u"F2"_ustr, u"F3"_ustr, u"F4"_ustr,
-        u"F5"_ustr, u"F6"_ustr, u"F7"_ustr, u"F8"_ustr, u"G8"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_11_WholeDataColumnSelected)
-{
-    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_11_WholeDataColumnSelected.xlsx");
-    assertWholeDataColumnSelected(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertWholeDataColumnSelected(*getScDoc());
-}
-
-void assertWholeLabelColumnSelected(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F2"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F3"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F4"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F5"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F6"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F7"_ustr));
-
-    // Make sure the other cells have the font color or background set to default
-    std::vector<OUString> aEmptyAddresses{
-        u"F1"_ustr, u"G1"_ustr, u"G2"_ustr, u"G3"_ustr, u"G4"_ustr,
-        u"G5"_ustr, u"G6"_ustr, u"G7"_ustr, u"F8"_ustr, u"G8"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_12_WholeLabelColumnSelected)
-{
-    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_12_WholeLabelColumnSelected.xlsx");
-    assertWholeLabelColumnSelected(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertWholeLabelColumnSelected(*getScDoc());
-}
-
-void assertSelectionInLabelAndData(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"F5"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"G5"_ustr));
-
-    // Make sure the other cells have the font color or background set to default
-    std::vector<OUString> aEmptyAddresses{
-        u"F1"_ustr, u"G1"_ustr, u"F2"_ustr, u"G2"_ustr, u"F3"_ustr, u"G3"_ustr, u"F4"_ustr,
-        u"G4"_ustr, u"F6"_ustr, u"G6"_ustr, u"F7"_ustr, u"G7"_ustr, u"F8"_ustr, u"G8"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_13_SelectionInLabelAndData)
-{
-    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_13_SelectionInLabelAndData.xlsx");
-    assertSelectionInLabelAndData(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertSelectionInLabelAndData(*getScDoc());
-}
-
-void assertTwoRowsDataFieldInColumn_LabelColor(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"I4"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getBackgroundColor(rDoc, u"J4"_ustr));
-
-    // Make sure the other cells have the font color or background set to default
-    std::vector<OUString> aEmptyAddresses{
-        u"G4"_ustr,  u"H4"_ustr,  u"G5"_ustr,  u"H5"_ustr,  u"i5"_ustr,  u"j5"_ustr,  u"G6"_ustr,
-        u"H6"_ustr,  u"i6"_ustr,  u"j6"_ustr,  u"G7"_ustr,  u"H7"_ustr,  u"i7"_ustr,  u"j7"_ustr,
-        u"G8"_ustr,  u"H8"_ustr,  u"i8"_ustr,  u"j8"_ustr,  u"G9"_ustr,  u"H9"_ustr,  u"i9"_ustr,
-        u"j9"_ustr,  u"G10"_ustr, u"H10"_ustr, u"i10"_ustr, u"j10"_ustr, u"G11"_ustr, u"H11"_ustr,
-        u"i11"_ustr, u"j11"_ustr, u"G12"_ustr, u"H12"_ustr, u"i12"_ustr, u"j12"_ustr, u"G13"_ustr,
-        u"H13"_ustr, u"i13"_ustr, u"j13"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_14_TwoRowsDataFieldInColumn_LabelColor)
-{
-    createScDoc("xlsx/pivot-table/"
-                "PivotTableCellFormatsTest_14_TwoRowsDataFieldInColumn_LabelColor.xlsx");
-    assertTwoRowsDataFieldInColumn_LabelColor(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertTwoRowsDataFieldInColumn_LabelColor(*getScDoc());
-}
-
-void assertTwoDataFieldColumns_WholeDataColumnSelected(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H2"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H3"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H4"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H5"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H6"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, getBackgroundColor(rDoc, u"H7"_ustr));
-
-    // Make sure the other cells have the font color or background set to default
-    std::vector<OUString> aEmptyAddresses{
-        u"F1"_ustr, u"G1"_ustr, u"H1"_ustr, u"F2"_ustr, u"G2"_ustr,
-        u"F3"_ustr, u"G3"_ustr, u"F4"_ustr, u"G4"_ustr, u"F5"_ustr,
-        u"G5"_ustr, u"F6"_ustr, u"G6"_ustr, u"F7"_ustr, u"G7"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
-                     PivotTableCellFormatsTest_15_TwoDataFieldColumns_WholeDataColumnSelected)
-{
-    createScDoc("xlsx/pivot-table/"
-                "PivotTableCellFormatsTest_15_TwoDataFieldColumns_WholeDataColumnSelected.xlsx");
-    assertTwoDataFieldColumns_WholeDataColumnSelected(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertTwoDataFieldColumns_WholeDataColumnSelected(*getScDoc());
-}
-
-void assertFields_WithCellProtection(ScDocument& rDoc)
-{
-    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"F18"_ustr));
-    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"F19"_ustr));
-    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"F20"_ustr));
-    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"G18"_ustr));
-    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"G19"_ustr));
-    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"G20"_ustr));
-
-    // Make sure the other cells have the font color or background set to default
-    std::vector<OUString> aEmptyAddresses{
-        u"F15"_ustr, u"G15"_ustr, u"F16"_ustr, u"G16"_ustr,
-        u"F17"_ustr, u"G17"_ustr, u"G21"_ustr, u"F21"_ustr,
-    };
-    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, Pivot_Table_with_Cell_Protection)
-{
-    createScDoc("xlsx/pivot-table/Pivot_Table_with_Cell_Protection.xlsx");
-    assertFields_WithCellProtection(*getScDoc());
-    saveAndReload(TestFilter::XLSX);
-    assertFields_WithCellProtection(*getScDoc());
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, Pivot_Table_with_No_Source_Data)
-{
-    // We need to round-trip this document without crashing
-    createScDoc("xlsx/pivot-table/PivotTableWithNoSourceData.xlsx");
-    saveAndReload(TestFilter::XLSX);
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, PivotTableFormatsGrandTotal)
-{
-    // Check that we can support pivot table cell formats on grand total output.
-
-    // In the file: pivot table is at B3:G14, reference output is at B17:G28.
-    createScDoc("xlsx/pivot-table/PivotTableFormatsGrandTotal.xlsx");
-
-    ScDocument& rDoc = *getScDoc();
-
-    CPPUNIT_ASSERT_EQUAL(Color(0x00B050), getBackgroundColor(rDoc, u"G4"_ustr));
-
-    CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDoc, u"G3"_ustr));
-    CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDoc, u"G5"_ustr));
-    CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDoc, u"F4"_ustr));
-
-    // grandRow="1" labelOnly="1" offset="A256"
-    CPPUNIT_ASSERT_EQUAL(Color(0xC00000), getBackgroundColor(rDoc, u"B14"_ustr));
-
-    // grandRow="1" labelOnly="1" offset="IV256"
-    CPPUNIT_ASSERT_EQUAL(Color(0xFFFF00), getBackgroundColor(rDoc, u"C14"_ustr));
-
-    // grandRow="1" grandCol="1"
-    // Intersection of grand total row and column
-    CPPUNIT_ASSERT_EQUAL(Color(0x00B0F0), getBackgroundColor(rDoc, u"G14"_ustr));
-
-    // grandRow="1" data with reference field="2" selected="0"
-    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDoc, u"E14"_ustr));
-    // Check cells around to not include the formatting
-    CPPUNIT_ASSERT(Color(0x92D050) != getBackgroundColor(rDoc, u"D14"_ustr));
-    CPPUNIT_ASSERT(Color(0x92D050) != getBackgroundColor(rDoc, u"F14"_ustr));
-
-    // grandCol="1" data with subtotal reference
-    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"G5"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"G6"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"G7"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDoc, u"G8"_ustr));
-
-    // G9 and beyond should NOT have the format set
-    CPPUNIT_ASSERT(Color(0x0070C0) != getBackgroundColor(rDoc, u"G9"_ustr));
-}
-
-CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, PivotTableFormatsSubTotals)
-{
-    createScDoc("xlsx/pivot-table/PivotTableFormatsSubTotals.xlsx");
-    ScDocument& rDoc = *getScDoc();
-
-    // Pivot table at B3:L14, reference at B16:L27.
-    // Compare font and background colors cell by cell.
-    // Collect all mismatches first, then report and compare.
     OUString aMismatches;
-    for (SCROW nRow = 0; nRow < 12; ++nRow)
+    SCROW nRows = rPivotRange.aEnd.Row() - rPivotRange.aStart.Row() + 1;
+    SCCOL nColumns = rPivotRange.aEnd.Col() - rPivotRange.aStart.Col() + 1;
+
+    for (SCROW nRow = 0; nRow < nRows; ++nRow)
     {
-        for (SCCOL nColumn = 1; nColumn <= 11; ++nColumn)
+        for (SCCOL nColumn = 0; nColumn < nColumns; ++nColumn)
         {
-            ScAddress aPivotAddress(nColumn, 2 + nRow, 0); // B3:L14
-            ScAddress aReferenceAddress(nColumn, 15 + nRow, 0); // B16:L27
+            ScAddress aPivotAddress(rPivotRange.aStart.Col() + nColumn,
+                                    rPivotRange.aStart.Row() + nRow, rPivotRange.aStart.Tab());
+            ScAddress aReferenceAddress(rReferenceRange.aStart.Col() + nColumn,
+                                        rReferenceRange.aStart.Row() + nRow,
+                                        rReferenceRange.aStart.Tab());
 
-            const ScPatternAttr* pPivotAttr = rDoc.GetPattern(aPivotAddress);
-            const ScPatternAttr* pReferenceAttr = rDoc.GetPattern(aReferenceAddress);
+            const ScPatternAttr* pPivotPattern = rDocument.GetPattern(aPivotAddress);
+            const ScPatternAttr* pReferencePattern = rDocument.GetPattern(aReferenceAddress);
 
-            Color aPivotFontColor = pPivotAttr->GetItem(ATTR_FONT_COLOR).getColor();
-            Color aReferenceFontColor = pReferenceAttr->GetItem(ATTR_FONT_COLOR).getColor();
+            Color aPivotFontColor = pPivotPattern->GetItem(ATTR_FONT_COLOR).getColor();
+            Color aReferenceFontColor = pReferencePattern->GetItem(ATTR_FONT_COLOR).getColor();
 
-            Color aPivotBackgroundColor = pPivotAttr->GetItem(ATTR_BACKGROUND).GetColor();
-            Color aReferenceBackgroundColor = pReferenceAttr->GetItem(ATTR_BACKGROUND).GetColor();
+            Color aPivotBackgroundColor = pPivotPattern->GetItem(ATTR_BACKGROUND).GetColor();
+            Color aReferenceBackgroundColor
+                = pReferencePattern->GetItem(ATTR_BACKGROUND).GetColor();
 
             OUString aCellName = aPivotAddress.Format(ScRefFlags::VALID);
 
@@ -536,8 +96,351 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, PivotTableFormatsSubTotals
             }
         }
     }
+    return aMismatches;
+}
+
+/** Get the pivot table output range and the reference range from DPObject */
+std::pair<ScRange, ScRange> getPivotAndReferenceRanges(ScDocument& rDocument)
+{
+    ScDPCollection* pDPs = rDocument.GetDPCollection();
+    CPPUNIT_ASSERT(pDPs);
+    CPPUNIT_ASSERT(pDPs->GetCount() > 0);
+    ScDPObject& rDPObject = (*pDPs)[0];
+    ScRange aPivotRange = rDPObject.GetOutRange();
+    // Reference is the same size, starting 2 rows below the pivot table
+    SCROW nGap = 2;
+    SCROW nHeight = aPivotRange.aEnd.Row() - aPivotRange.aStart.Row() + 1;
+    ScRange aReferenceRange(aPivotRange.aStart.Col(), aPivotRange.aEnd.Row() + nGap,
+                            aPivotRange.aStart.Tab(), aPivotRange.aEnd.Col(),
+                            aPivotRange.aEnd.Row() + nGap + nHeight - 1, aPivotRange.aStart.Tab());
+    return { aPivotRange, aReferenceRange };
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormat_1_DataFieldInRow_RowLabelColor)
+{
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_1_DataFieldInRow_RowLabelColor.xlsx");
+
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_2_DataFieldInRow_ColumnLabelColor)
+{
+    createScDoc(
+        "xlsx/pivot-table/PivotTableCellFormatsTest_2_DataFieldInRow_ColumnLabelColor.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_3_DataFieldInColumn_ColumnLabelColor)
+{
+    createScDoc(
+        "xlsx/pivot-table/PivotTableCellFormatsTest_3_DataFieldInColumn_ColumnLabelColor.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_4_DataFieldInColumn_DataColor)
+{
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_4_DataFieldInColumn_DataColor.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_5_DataFieldInColumnAndTwoRowFields_DataColor)
+{
+    createScDoc("xlsx/pivot-table/"
+                "PivotTableCellFormatsTest_5_DataFieldInColumnAndTwoRowFields_DataColor.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_6_SingleDataFieldInColumn_DataColor)
+{
+    createScDoc(
+        "xlsx/pivot-table/PivotTableCellFormatsTest_6_SingleDataFieldInColumn_DataColor.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    // TODO
+    //checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_7_TwoRowTwoColumnFields_DataColor)
+{
+    createScDoc(
+        "xlsx/pivot-table/PivotTableCellFormatsTest_7_TwoRowTwoColumnFields_DataColor.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    // TODO
+    //checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_8_DataFieldInRow_DataColor)
+{
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_8_DataFieldInRow_DataColor.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_9_MultipleSelections)
+{
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_9_MultipleSelections.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_10_FormatDefinitionNotMatchingPivotTable)
+{
+    // Load the document, which shouldn't result in a crash
+    createScDoc("xlsx/pivot-table/"
+                "PivotTableCellFormatsTest_10_FormatDefinitionNotMatchingPivotTable.xlsx");
+    ScDocument& rDocument = *getScDoc();
+    ScDPCollection* pCollection = rDocument.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pCollection->GetCount());
+    auto aAddress = parseAddress(rDocument, u"G2"_ustr);
+    const ScDPObject* pDPObject = rDocument.GetDPAtCursor(aAddress);
+    CPPUNIT_ASSERT(pDPObject);
+    CPPUNIT_ASSERT_EQUAL(u"60"_ustr, rDocument.GetString(aAddress));
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_11_WholeDataColumnSelected)
+{
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_11_WholeDataColumnSelected.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_12_WholeLabelColumnSelected)
+{
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_12_WholeLabelColumnSelected.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_13_SelectionInLabelAndData)
+{
+    createScDoc("xlsx/pivot-table/PivotTableCellFormatsTest_13_SelectionInLabelAndData.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    // TODO
+    //checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_14_TwoRowsDataFieldInColumn_LabelColor)
+{
+    createScDoc("xlsx/pivot-table/"
+                "PivotTableCellFormatsTest_14_TwoRowsDataFieldInColumn_LabelColor.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
+                     testPivotTableCellFormatsTest_15_TwoDataFieldColumns_WholeDataColumnSelected)
+{
+    createScDoc("xlsx/pivot-table/"
+                "PivotTableCellFormatsTest_15_TwoDataFieldColumns_WholeDataColumnSelected.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    // TODO
+    // checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testPivotTableWithCellProtection)
+{
+    createScDoc("xlsx/pivot-table/Pivot_Table_with_Cell_Protection.xlsx");
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testPivotTableWithNoSourceData)
+{
+    // We need to round-trip this document without crashing
+    createScDoc("xlsx/pivot-table/PivotTableWithNoSourceData.xlsx");
+    saveAndReload(TestFilter::XLSX);
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testPivotTableFormatsGrandTotal)
+{
+    // Check that we can support pivot table cell formats on grand total output.
+
+    // In the file: pivot table is at B3:G14, reference output is at B17:G28.
+    createScDoc("xlsx/pivot-table/PivotTableFormatsGrandTotal.xlsx");
+
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+
+        CPPUNIT_ASSERT_EQUAL(Color(0x00B050), getBackgroundColor(rDocument, u"G4"_ustr));
+        CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDocument, u"G3"_ustr));
+        CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDocument, u"G5"_ustr));
+        CPPUNIT_ASSERT(Color(0x00B050) != getBackgroundColor(rDocument, u"F4"_ustr));
+
+        // grandRow="1" labelOnly="1" offset="A256"
+        CPPUNIT_ASSERT_EQUAL(Color(0xC00000), getBackgroundColor(rDocument, u"B14"_ustr));
+
+        // grandRow="1" labelOnly="1" offset="IV256"
+        CPPUNIT_ASSERT_EQUAL(Color(0xFFFF00), getBackgroundColor(rDocument, u"C14"_ustr));
+
+        // grandRow="1" grandCol="1" - intersection
+        CPPUNIT_ASSERT_EQUAL(Color(0x00B0F0), getBackgroundColor(rDocument, u"G14"_ustr));
+
+        // grandRow="1" data with reference field="2" selected="0"
+        CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getBackgroundColor(rDocument, u"E14"_ustr));
+        CPPUNIT_ASSERT(Color(0x92D050) != getBackgroundColor(rDocument, u"D14"_ustr));
+        CPPUNIT_ASSERT(Color(0x92D050) != getBackgroundColor(rDocument, u"F14"_ustr));
+
+        // grandCol="1" data with subtotal reference
+        CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDocument, u"G5"_ustr));
+        CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDocument, u"G6"_ustr));
+        CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDocument, u"G7"_ustr));
+        CPPUNIT_ASSERT_EQUAL(Color(0x0070C0), getBackgroundColor(rDocument, u"G8"_ustr));
+        CPPUNIT_ASSERT(Color(0x0070C0) != getBackgroundColor(rDocument, u"G9"_ustr));
+    };
+
+    checkFormats();
+    // TODO: Round-trip
+    //saveAndReload(TestFilter::XLSX);
+    //checkFormats();
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testPivotTableFormatsSubTotals)
+{
     // TODO: enable once subtotal label formatting is fully implemented
-    // CPPUNIT_ASSERT_EQUAL(u""_ustr, aMismatches); // expected empty
+    createScDoc("xlsx/pivot-table/PivotTableFormatsSubTotals.xlsx");
+    // ScDocument& rDocument = *getScDoc();
+    // ScRange aPivotRange(1, 2, 0, 11, 13, 0); // B3:L14
+    // ScRange aReferenceRange(1, 15, 0, 11, 26, 0); // B16:L27
+    // OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+    // CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
 }
 
 } // end anonymous namespace
