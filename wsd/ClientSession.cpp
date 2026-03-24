@@ -1456,60 +1456,101 @@ bool ClientSession::handleAIChatCancel(const std::string& firstLine)
     return true;
 }
 
+ImageGenRequest ClientSession::createImageGenRequest(const std::string& prompt)
+{
+    ImageGenRequest req;
+
+    req.apiKey = getAIImageProviderAPIKey();
+    if (req.apiKey.empty())
+        req.apiKey = getAIProviderAPIKey();
+    std::string baseUrl = getAIImageProviderURL();
+    if (baseUrl.empty())
+        baseUrl = getAIProviderURL();
+
+    if (req.apiKey.empty() || baseUrl.empty())
+    {
+        req.error = "AI image settings not configured";
+        return req;
+    }
+
+    if (!baseUrl.empty() && baseUrl.back() == '/')
+        baseUrl.pop_back();
+
+    req.requestUrl = baseUrl + "/v1/images/generations";
+
+    const std::string imageModel = getAIImageModel();
+    if (imageModel.empty())
+    {
+        req.error = "Image model not configured";
+        return req;
+    }
+
+    Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
+    payload->set("prompt", prompt);
+    payload->set("size", "1024x1024");
+    payload->set("n", 1);
+    payload->set("response_format", "b64_json");
+    payload->set("model", imageModel);
+
+    std::ostringstream payloadStream;
+    payload->stringify(payloadStream);
+    req.payloadStr = payloadStream.str();
+
+    req.httpSession = http::Session::create(req.requestUrl);
+    if (!req.httpSession)
+    {
+        req.error = "Failed to create HTTP session";
+        return req;
+    }
+
+    req.httpSession->setTimeout(std::chrono::seconds(60));
+    return req;
+}
+
+std::pair<std::string, std::string> ClientSession::parseImageGenResponse(
+    const std::shared_ptr<const http::Response>& httpResponse)
+{
+    const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
+
+    if (statusCode == http::StatusCode::None)
+        return {"", "Request timeout"};
+
+    if (statusCode != http::StatusCode::OK)
+        return {"", "HTTP " + std::to_string(static_cast<int>(statusCode))};
+
+    const std::string& responseBody = httpResponse->getBody();
+    Poco::JSON::Object::Ptr responseObject = new Poco::JSON::Object();
+    if (!JsonUtil::parseJSON(responseBody, responseObject))
+        return {"", "Failed to parse response"};
+
+    Poco::JSON::Array::Ptr dataArray = responseObject->getArray("data");
+    if (!dataArray || dataArray->size() == 0)
+        return {"", "No image generated"};
+
+    Poco::JSON::Object::Ptr firstItem = dataArray->getObject(0);
+    if (!firstItem)
+        return {"", "No image generated"};
+
+    std::string b64Json;
+    JsonUtil::findJSONValue(firstItem, "b64_json", b64Json);
+    if (b64Json.empty())
+        return {"", "No image data in response"};
+
+    return {std::move(b64Json), ""};
+}
+
 bool ClientSession::handleAIImageGeneration(const std::string& prompt,
                                              const std::string& requestId)
 {
     LOG_DBG("AIImageGeneration: request [" << requestId
             << "], prompt: " << prompt);
 
-    // Get AI image provider settings (fall back to chat provider)
-    std::string apiKey = getAIImageProviderAPIKey();
-    if (apiKey.empty())
-        apiKey = getAIProviderAPIKey();
-    std::string baseUrl = getAIImageProviderURL();
-    if (baseUrl.empty())
-        baseUrl = getAIProviderURL();
-
-    if (apiKey.empty() || baseUrl.empty())
+    ImageGenRequest req = createImageGenRequest(prompt);
+    if (!req.error.empty())
     {
-        sendAIChatResult(false, "AI settings not configured", requestId);
+        sendAIChatResult(false, req.error, requestId);
         return true;
     }
-
-    if (!baseUrl.empty() && baseUrl.back() == '/')
-        baseUrl.pop_back();
-
-    std::string requestUrl = std::move(baseUrl);
-    requestUrl.append("/v1/images/generations");
-
-    // Build HTTP payload
-    Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
-    payload->set("prompt", prompt);
-    payload->set("size", "1024x1024");
-    payload->set("n", 1);
-    payload->set("response_format", "b64_json");
-
-    const std::string imageModel = getAIImageModel();
-    if (imageModel.empty())
-    {
-        sendAIChatResult(false, "Image model not configured", requestId);
-        return true;
-    }
-    payload->set("model", imageModel);
-
-    std::ostringstream payloadStream;
-    payload->stringify(payloadStream);
-    std::string payloadStr = payloadStream.str();
-
-    std::shared_ptr<http::Session> httpSession = http::Session::create(requestUrl);
-    if (!httpSession)
-    {
-        LOG_WRN("AIImageGeneration: failed to create HTTP session");
-        sendAIChatResult(false, "Failed to create HTTP session", requestId);
-        return true;
-    }
-
-    httpSession->setTimeout(std::chrono::seconds(60));
 
     // Send image result via aichatresult with imageData field
     auto clientSessionPtr = client_from_this();
@@ -1535,58 +1576,17 @@ bool ClientSession::handleAIImageGeneration(const std::string& prompt,
     {
         clientSessionPtr->_activeAIChatSession.reset();
 
-        const std::shared_ptr<const http::Response> httpResponse = session->response();
-        const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
-
-        if (statusCode == http::StatusCode::None)
+        auto [b64Json, error] = parseImageGenResponse(session->response());
+        if (!error.empty())
         {
-            sendImageResult(false, "", "Request timeout");
-            return;
-        }
-
-        if (statusCode != http::StatusCode::OK)
-        {
-            const std::string errorMessage = mapAIHttpStatusToError(
-                statusCode, httpResponse->statusLine().reasonPhrase(), "image");
-            sendImageResult(false, "", errorMessage);
-            return;
-        }
-
-        const std::string& responseBody = httpResponse->getBody();
-        Poco::JSON::Object::Ptr responseObject = new Poco::JSON::Object();
-        if (!JsonUtil::parseJSON(responseBody, responseObject))
-        {
-            sendImageResult(false, "", "Failed to parse image generation response");
-            return;
-        }
-
-        Poco::JSON::Array::Ptr dataArray = responseObject->getArray("data");
-        if (!dataArray || dataArray->size() == 0)
-        {
-            sendImageResult(false, "", "No image generated");
-            return;
-        }
-
-        Poco::JSON::Object::Ptr firstItem = dataArray->getObject(0);
-        if (!firstItem)
-        {
-            sendImageResult(false, "", "No image generated");
-            return;
-        }
-
-        std::string b64Json;
-        JsonUtil::findJSONValue(firstItem, "b64_json", b64Json);
-
-        if (b64Json.empty())
-        {
-            sendImageResult(false, "", "No image data in response");
+            sendImageResult(false, "", error);
             return;
         }
 
         sendImageResult(true, b64Json, "");
     };
 
-    httpSession->setFinishedHandler(std::move(finishedCallback));
+    req.httpSession->setFinishedHandler(std::move(finishedCallback));
 
     http::Session::ConnectFailCallback connectFailCallback =
         [clientSessionPtr = std::move(clientSessionPtr),
@@ -1596,22 +1596,20 @@ bool ClientSession::handleAIImageGeneration(const std::string& prompt,
         clientSessionPtr->_activeAIChatSession.reset();
         sendImageResult(false, "", "Network error - please check your connection");
     };
-    httpSession->setConnectFailHandler(std::move(connectFailCallback));
+    req.httpSession->setConnectFailHandler(std::move(connectFailCallback));
 
-    http::Request httpRequest(Poco::URI(requestUrl).getPathAndQuery());
+    http::Request httpRequest(Poco::URI(req.requestUrl).getPathAndQuery());
     httpRequest.setVerb(http::Request::VERB_POST);
     httpRequest.set("Content-Type", "application/json");
-    std::string authHeader = "Bearer ";
-    authHeader.append(apiKey);
-    httpRequest.set("Authorization", std::move(authHeader));
-    httpRequest.setBody(std::move(payloadStr), "application/json");
+    httpRequest.set("Authorization", "Bearer " + req.apiKey);
+    httpRequest.setBody(req.payloadStr, "application/json");
 
     LOG_DBG("AIImageGeneration: sending request [" << requestId << "] to "
-            << requestUrl << ", model: " << imageModel);
+            << req.requestUrl);
 
-    _activeAIChatSession = httpSession;
+    _activeAIChatSession = req.httpSession;
     std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
-    httpSession->asyncRequest(httpRequest, docBroker->getPoll());
+    req.httpSession->asyncRequest(httpRequest, docBroker->getPoll());
     return true;
 }
 
@@ -1813,114 +1811,38 @@ void ClientSession::generateNextTransformImage(std::shared_ptr<DocumentBroker> d
                                                              std::to_string(idx + 1) + " of " +
                                                              std::to_string(total) + "...");
 
-        // Get AI image provider settings
-        std::string apiKey = getAIImageProviderAPIKey();
-        if (apiKey.empty())
-            apiKey = getAIProviderAPIKey();
-        std::string baseUrl = getAIImageProviderURL();
-        if (baseUrl.empty())
-            baseUrl = getAIProviderURL();
-
-        if (apiKey.empty() || baseUrl.empty())
+        ImageGenRequest req = createImageGenRequest(gen.prompt);
+        if (!req.error.empty())
         {
-            LOG_WRN("TransformImageGen: AI image settings not configured");
+            LOG_WRN("TransformImageGen: " << req.error);
             _aiToolLoop->failedImagePrompts.push_back(gen.prompt);
             continue;
         }
-
-        if (!baseUrl.empty() && baseUrl.back() == '/')
-            baseUrl.pop_back();
-
-        std::string requestUrl = baseUrl + "/v1/images/generations";
-
-        const std::string imageModel = getAIImageModel();
-        if (imageModel.empty())
-        {
-            LOG_WRN("TransformImageGen: image model not configured");
-            _aiToolLoop->failedImagePrompts.push_back(gen.prompt);
-            continue;
-        }
-
-        // Build HTTP payload
-        Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
-        payload->set("prompt", gen.prompt);
-        payload->set("size", "1024x1024");
-        payload->set("n", 1);
-        payload->set("response_format", "b64_json");
-        payload->set("model", imageModel);
-
-        std::ostringstream payloadStream;
-        payload->stringify(payloadStream);
-        std::string payloadStr = payloadStream.str();
-
-        std::shared_ptr<http::Session> httpSession = http::Session::create(requestUrl);
-        if (!httpSession)
-        {
-            LOG_WRN("TransformImageGen: failed to create HTTP session");
-            _aiToolLoop->failedImagePrompts.push_back(gen.prompt);
-            continue;
-        }
-
-        httpSession->setTimeout(std::chrono::seconds(60));
 
         auto clientSessionPtr = client_from_this();
 
+        auto onImageFail = [clientSessionPtr, docBroker, idx]()
+        {
+            clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
+                clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
+            clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
+            clientSessionPtr->generateNextTransformImage(docBroker);
+        };
+
         http::Session::FinishedCallback finishedCallback =
-            [clientSessionPtr, docBroker, idx](const std::shared_ptr<http::Session>& session)
+            [clientSessionPtr, docBroker, idx, onImageFail](
+                const std::shared_ptr<http::Session>& session)
         {
             clientSessionPtr->_activeAIChatSession.reset();
 
             if (!clientSessionPtr->_aiToolLoop)
                 return;
 
-            const std::shared_ptr<const http::Response> httpResponse = session->response();
-            const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
-
-            if (statusCode != http::StatusCode::OK)
+            auto [b64Json, error] = parseImageGenResponse(session->response());
+            if (!error.empty())
             {
-                LOG_WRN_S("TransformImageGen: HTTP " << static_cast<int>(statusCode));
-                clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
-                    clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
-                clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
-                clientSessionPtr->generateNextTransformImage(docBroker);
-                return;
-            }
-
-            const std::string& responseBody = httpResponse->getBody();
-            Poco::JSON::Object::Ptr responseObject = new Poco::JSON::Object();
-            if (!JsonUtil::parseJSON(responseBody, responseObject))
-            {
-                LOG_WRN_S("TransformImageGen: failed to parse response");
-                clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
-                    clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
-                clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
-                clientSessionPtr->generateNextTransformImage(docBroker);
-                return;
-            }
-
-            Poco::JSON::Array::Ptr dataArray = responseObject->getArray("data");
-            if (!dataArray || dataArray->size() == 0)
-            {
-                LOG_WRN_S("TransformImageGen: no image in response");
-                clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
-                    clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
-                clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
-                clientSessionPtr->generateNextTransformImage(docBroker);
-                return;
-            }
-
-            std::string b64Json;
-            Poco::JSON::Object::Ptr firstItem = dataArray->getObject(0);
-            if (firstItem)
-                JsonUtil::findJSONValue(firstItem, "b64_json", b64Json);
-
-            if (b64Json.empty())
-            {
-                LOG_WRN_S("TransformImageGen: no image data in response");
-                clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
-                    clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
-                clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
-                clientSessionPtr->generateNextTransformImage(docBroker);
+                LOG_WRN_S("TransformImageGen: " << error);
+                onImageFail();
                 return;
             }
 
@@ -1949,10 +1871,7 @@ void ClientSession::generateNextTransformImage(std::shared_ptr<DocumentBroker> d
             {
                 LOG_WRN_S("TransformImageGen: failed to write image to " << filePath);
                 FileUtil::removeFile(filePath);
-                clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
-                    clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
-                clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
-                clientSessionPtr->generateNextTransformImage(docBroker);
+                onImageFail();
                 return;
             }
 
@@ -1982,10 +1901,10 @@ void ClientSession::generateNextTransformImage(std::shared_ptr<DocumentBroker> d
             clientSessionPtr->generateNextTransformImage(docBroker);
         };
 
-        httpSession->setFinishedHandler(std::move(finishedCallback));
+        req.httpSession->setFinishedHandler(std::move(finishedCallback));
 
         http::Session::ConnectFailCallback connectFailCallback =
-            [clientSessionPtr, docBroker, idx](const std::shared_ptr<http::Session>& /*session*/)
+            [clientSessionPtr, onImageFail](const std::shared_ptr<http::Session>& /*session*/)
         {
             clientSessionPtr->_activeAIChatSession.reset();
 
@@ -1993,24 +1912,21 @@ void ClientSession::generateNextTransformImage(std::shared_ptr<DocumentBroker> d
                 return;
 
             LOG_WRN_S("TransformImageGen: connection failed");
-            clientSessionPtr->_aiToolLoop->failedImagePrompts.push_back(
-                clientSessionPtr->_aiToolLoop->pendingImageGens[idx].prompt);
-            clientSessionPtr->_aiToolLoop->nextImageGenIndex++;
-            clientSessionPtr->generateNextTransformImage(docBroker);
+            onImageFail();
         };
-        httpSession->setConnectFailHandler(std::move(connectFailCallback));
+        req.httpSession->setConnectFailHandler(std::move(connectFailCallback));
 
-        http::Request httpRequest(Poco::URI(requestUrl).getPathAndQuery());
+        http::Request httpRequest(Poco::URI(req.requestUrl).getPathAndQuery());
         httpRequest.setVerb(http::Request::VERB_POST);
         httpRequest.set("Content-Type", "application/json");
-        httpRequest.set("Authorization", "Bearer " + apiKey);
-        httpRequest.setBody(payloadStr, "application/json");
+        httpRequest.set("Authorization", "Bearer " + req.apiKey);
+        httpRequest.setBody(req.payloadStr, "application/json");
 
         LOG_DBG("TransformImageGen: generating image " << (idx + 1) << " of " << total
                                                        << ", prompt: " << gen.prompt);
 
-        _activeAIChatSession = httpSession;
-        httpSession->asyncRequest(httpRequest, docBroker->getPoll());
+        _activeAIChatSession = req.httpSession;
+        req.httpSession->asyncRequest(httpRequest, docBroker->getPoll());
         return; // async request launched, callbacks will call back into this function
     }
 

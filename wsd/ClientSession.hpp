@@ -37,6 +37,16 @@
 class DocumentBroker;
 namespace http { class Session; }
 
+/// Result of preparing an AI image generation HTTP request.
+struct ImageGenRequest
+{
+    std::shared_ptr<http::Session> httpSession; // null on error
+    std::string requestUrl;
+    std::string apiKey;
+    std::string payloadStr;
+    std::string error; // non-empty if setup failed
+};
+
 /// A single tool call from the LLM that is queued for execution.
 struct PendingToolCall
 {
@@ -405,6 +415,13 @@ private:
 
     bool handleAIImageGeneration(const std::string& prompt,
                                   const std::string& requestId);
+
+    /// Prepare an image generation HTTP session and payload.
+    ImageGenRequest createImageGenRequest(const std::string& prompt);
+
+    /// Parse an image generation HTTP response, extracting b64 data.
+    static std::pair<std::string, std::string> parseImageGenResponse(
+        const std::shared_ptr<const http::Response>& httpResponse);
 
     /// Start generating images for GenerateImage.N commands in a transform,
     /// then forward the modified transform to the kit.
