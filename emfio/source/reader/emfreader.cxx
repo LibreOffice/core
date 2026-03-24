@@ -431,14 +431,7 @@ namespace emfio
             case EMR_COMMENT_BEGINGROUP:
             {
                 SAL_INFO("emfio", "\t\t\tEMR_COMMENT_BEGINGROUP");
-                sal_uInt32 left, top, right, bottom;
-                mpInputStream->ReadUInt32(left).ReadUInt32(top).ReadUInt32(right).ReadUInt32(bottom);
-
-                SAL_INFO("emfio", "\t\t\t\tBounding rect");
-                SAL_INFO("emfio", "\t\t\t\t\tLeft: " << left);
-                SAL_INFO("emfio", "\t\t\t\t\tTop: " << top);
-                SAL_INFO("emfio", "\t\t\t\t\tRight: " << right);
-                SAL_INFO("emfio", "\t\t\t\t\tBottom: " << bottom);
+                mpInputStream->SeekRel(0x10); // RectL bounds
 
                 sal_uInt32 nDescChars(0);
                 mpInputStream->ReadUInt32(nDescChars);
@@ -731,8 +724,8 @@ namespace emfio
 
         // taking the amount of points of each polygon, retrieving the total number of points
         if ( !(mpInputStream->good() &&
-             ( nNumberOfPolylines < SAL_MAX_UINT32 / sizeof( sal_uInt16 ) ) &&
-             ( nNumberOfPolylines * sizeof( sal_uInt16 ) ) <= ( nEndPos - mpInputStream->Tell() ))
+             ( nNumberOfPolylines < SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) &&
+             ( nNumberOfPolylines * sizeof( sal_uInt32 ) ) <= ( nEndPos - mpInputStream->Tell() ))
            )
             return;
 
@@ -777,55 +770,55 @@ namespace emfio
         //check against numeric overflowing
         if (nGesPoints >= SAL_MAX_UINT32 / sizeof(Point))
             return;
-        if (nPoly >= SAL_MAX_UINT32 / sizeof(sal_uInt16))
+        if (nPoly >= SAL_MAX_UINT32 / sizeof(sal_uInt32))
             return;
-        if (nPoly * sizeof(sal_uInt16) > nEndPos - mpInputStream->Tell())
+        if (nPoly * sizeof(sal_uInt32) > nEndPos - mpInputStream->Tell())
             return;
 
         // Get number of points in each polygon
-        std::vector<sal_uInt16> aPoints(nPoly);
+        std::vector<sal_uInt32> aPoints(nPoly);
         for (sal_uInt32 i = 0; i < nPoly && mpInputStream->good(); ++i)
         {
             sal_uInt32 nPoints(0);
-            mpInputStream->ReadUInt32( nPoints );
+            mpInputStream->ReadUInt32(nPoints);
 
             SAL_INFO("emfio", "\t\t\t\tPolygon " << i << " points: " << nPoints);
 
-            aPoints[i] = static_cast<sal_uInt16>(nPoints);
+            aPoints[i] = nPoints;
         }
 
-        if ( mpInputStream->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - mpInputStream->Tell() ) )
+        if (!mpInputStream->good() || (nGesPoints * (sizeof(T) * 2)) > (nEndPos - mpInputStream->Tell()))
+            return;
+
+        // Get polygon points
+        tools::PolyPolygon aPolyPoly(nPoly);
+        for (sal_uInt32 i = 0; i < nPoly && mpInputStream->good(); ++i)
         {
-            // Get polygon points
-            tools::PolyPolygon aPolyPoly(nPoly);
-            for (sal_uInt32 i = 0; i < nPoly && mpInputStream->good(); ++i)
+            const sal_uInt32 nPointCount(aPoints[i]);
+            std::vector<Point> aPtAry(nPointCount);
+            for (sal_uInt32 j = 0; j < nPointCount && mpInputStream->good(); ++j)
             {
-                const sal_uInt16 nPointCount(aPoints[i]);
-                std::vector<Point> aPtAry(nPointCount);
-                for (sal_uInt16 j = 0; j < nPointCount && mpInputStream->good(); ++j)
-                {
-                    T nX(0), nY(0);
-                    *mpInputStream >> nX >> nY;
-                    aPtAry[j] = Point( nX, nY );
-                    ++nReadPoints;
-                }
-
-                aPolyPoly.Insert(tools::Polygon(aPtAry.size(), aPtAry.data()));
+                T nX(0), nY(0);
+                *mpInputStream >> nX >> nY;
+                aPtAry[j] = Point(nX, nY);
+                ++nReadPoints;
             }
-
-            DrawPolyPolygon(aPolyPoly, mbRecordPath);
+            aPolyPoly.Insert(tools::Polygon(aPtAry.size(), aPtAry.data()));
         }
+
+        DrawPolyPolygon(aPolyPoly, mbRecordPath);
 
         OSL_ENSURE(nReadPoints == nGesPoints, "The number Points processed from EMR_POLYPOLYGON is unequal imported number (!)");
     }
 
     bool EmfReader::ReadEnhWMF()
     {
-        sal_uInt32  nStretchBltMode = 0;
-        sal_uInt32  nNextPos(0),
-                    nW(0), nH(0), nColor(0), nIndex(0),
-                    nDat32(0), nNom1(0), nDen1(0), nNom2(0), nDen2(0);
-        sal_Int32   nX32(0), nY32(0), nx32(0), ny32(0);
+        sal_uInt32 nStretchBltMode = 0;
+        sal_uInt32 nNextPos(0),
+                   nW(0), nH(0), nColor(0), nIndex(0),
+                   nDat32(0);
+        sal_Int32  nX32(0), nY32(0), nx32(0), ny32(0),
+                   nNom1(0), nDen1(0), nNom2(0), nDen2(0);
 
         bool    bStatus = ReadHeader();
         bool    bHaveDC = false;
@@ -1062,14 +1055,14 @@ namespace emfio
                     }
                     break;
 
-                    case EMR_SCALEWINDOWEXTEX :
+                    case EMR_SCALEWINDOWEXTEX:
                     {
-                        mpInputStream->ReadUInt32( nNom1 ).ReadUInt32( nDen1 ).ReadUInt32( nNom2 ).ReadUInt32( nDen2 );
+                        mpInputStream->ReadInt32(nNom1).ReadInt32(nDen1).ReadInt32(nNom2).ReadInt32(nDen2);
                         SAL_INFO("emfio", "\t\tHorizontal scale: " << nNom1 << " / " << nDen1);
                         SAL_INFO("emfio", "\t\tVertical scale: " << nNom2 << " / " << nDen2);
 
                         if (nDen1 != 0 && nDen2 != 0)
-                            ScaleWinExt( static_cast<double>(nNom1) / nDen1, static_cast<double>(nNom2) / nDen2 );
+                            ScaleWinExt(static_cast<double>(nNom1) / nDen1, static_cast<double>(nNom2) / nDen2);
                         else
                             SAL_WARN("vcl.emf", "ignoring bogus divide by zero");
                     }
@@ -1083,14 +1076,14 @@ namespace emfio
                     }
                     break;
 
-                    case EMR_SCALEVIEWPORTEXTEX :
+                    case EMR_SCALEVIEWPORTEXTEX:
                     {
-                        mpInputStream->ReadUInt32( nNom1 ).ReadUInt32( nDen1 ).ReadUInt32( nNom2 ).ReadUInt32( nDen2 );
+                        mpInputStream->ReadInt32(nNom1).ReadInt32(nDen1).ReadInt32(nNom2).ReadInt32(nDen2);
                         SAL_INFO("emfio", "\t\tHorizontal scale: " << nNom1 << " / " << nDen1);
                         SAL_INFO("emfio", "\t\tVertical scale: " << nNom2 << " / " << nDen2);
 
                         if (nDen1 != 0 && nDen2 != 0)
-                            ScaleDevExt( static_cast<double>(nNom1) / nDen1, static_cast<double>(nNom2) / nDen2 );
+                            ScaleDevExt(static_cast<double>(nNom1) / nDen1, static_cast<double>(nNom2) / nDen2);
                         else
                             SAL_WARN("vcl.emf", "ignoring bogus divide by zero");
                     }
@@ -1147,10 +1140,10 @@ namespace emfio
                     }
                     break;
 
-                    case EMR_SETSTRETCHBLTMODE :
+                    case EMR_SETSTRETCHBLTMODE:
                     {
-                        mpInputStream->ReadUInt32( nStretchBltMode );
-                        SAL_INFO("emfio", "\t\tStretchBltMode: 0x" << std::hex << nDat32 << std::dec);
+                        mpInputStream->ReadUInt32(nStretchBltMode);
+                        SAL_INFO("emfio", "\t\tStretchBltMode: 0x" << std::hex << nStretchBltMode << std::dec);
                     }
                     break;
 
@@ -1466,8 +1459,8 @@ namespace emfio
 
                     case EMR_SELECTCLIPPATH :
                     {
-                        sal_Int32 nClippingMode(0);
-                        mpInputStream->ReadInt32(nClippingMode);
+                        sal_uInt32 nClippingMode(0);
+                        mpInputStream->ReadUInt32(nClippingMode);
                         SetClipPath(GetPathObj(), static_cast<RegionMode>(nClippingMode), true);
                     }
                     break;
@@ -1479,9 +1472,9 @@ namespace emfio
                             bStatus = false;
                         else
                         {
-                            sal_Int32 nClippingMode(0), cbRgnData(0);
-                            mpInputStream->ReadInt32(cbRgnData);
-                            mpInputStream->ReadInt32(nClippingMode);
+                            sal_uInt32 nClippingMode(0), cbRgnDataSize(0);
+                            mpInputStream->ReadUInt32(cbRgnDataSize);
+                            mpInputStream->ReadUInt32(nClippingMode);
                             nRemainingRecSize -= 8;
 
                             // This record's region data should be ignored if mode
@@ -1493,7 +1486,7 @@ namespace emfio
                             else
                             {
                                 basegfx::B2DPolyPolygon aPolyPoly;
-                                if (cbRgnData)
+                                if (cbRgnDataSize)
                                     ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize, GetWinOrg());
                                 const tools::PolyPolygon aPolyPolygon(aPolyPoly);
                                 SetClipPath(aPolyPolygon, static_cast<RegionMode>(nClippingMode), false);
@@ -2256,11 +2249,11 @@ namespace emfio
                         else
                         {
                             // index of the logical color space object in the EMF object table
-                            sal_Int32 ihCS(0);
-                            mpInputStream->ReadInt32(ihCS);
-                            sal_Int32 nDescChars = nRemainingRecSize - 4;
+                            sal_uInt32 ihCS(0);
+                            mpInputStream->ReadUInt32(ihCS); // TODO
+                            sal_uInt32 nDescChars = nRemainingRecSize - 4;
                             OUStringBuffer aDesc;
-                            for (sal_Int32 i=0; i < nDescChars; i++)
+                            for (sal_uInt32 i = 0; i < nDescChars; i++)
                             {
                                 unsigned char cChar(0);
                                 mpInputStream->ReadUChar(cChar);
