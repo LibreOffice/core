@@ -466,7 +466,7 @@ namespace emfio
             , bTransparent(bTrans)
         {}
 
-        WinMtfLineStyle(const Color& rColor, const sal_uInt32 nStyle, const sal_Int32 nPenWidth)
+        WinMtfLineStyle(const Color& rColor, const sal_uInt32 nStyle, const sal_uInt32 nPenWidth)
             : aLineColor(rColor)
         {
             // According to documentation: nStyle = PS_COSMETIC = 0x0 - line with a width of one logical unit and a style that is a solid color
