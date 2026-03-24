@@ -254,25 +254,25 @@ bool SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
         MapMode aMapMode = GetMapMode();
         Fraction aXFrac = aMapMode.GetScaleX();
         Fraction aYFrac = aMapMode.GetScaleY();
-        std::unique_ptr<Fraction> pMultFrac;
+        std::optional<double> oMultFrac;
 
         if( bZoomIn )
         {
             if( bCtrl )
-                pMultFrac.reset(new Fraction( 3, 2 ));
+                oMultFrac = 3.0 / 2;
             else
-                pMultFrac.reset(new Fraction( 11, 10 ));
+                oMultFrac = 11.0 / 10;
         }
         else
         {
             if( bCtrl )
-                pMultFrac.reset(new Fraction( 2, 3 ));
+                oMultFrac = 2.0 / 3;
             else
-                pMultFrac.reset(new Fraction( 10, 11 ));
+                oMultFrac = 10.0 / 11;
         }
 
-        aXFrac *= *pMultFrac;
-        aYFrac *= *pMultFrac;
+        aXFrac *= *oMultFrac;
+        aYFrac *= *oMultFrac;
         if( static_cast<double>(aXFrac) > 0.001 && static_cast<double>(aXFrac) < 1000.0 &&
             static_cast<double>(aYFrac) > 0.001 && static_cast<double>(aYFrac) < 1000.0 )
         {
@@ -284,8 +284,8 @@ bool SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
             aOutSize = GetDrawingArea()->get_ref_device().PixelToLogic(aOutSize);
 
             Point aPt( aMapMode.GetOrigin() );
-            tools::Long nX = static_cast<tools::Long>( ( static_cast<double>(aOutSize.Width()) - ( static_cast<double>(aOutSize.Width()) * static_cast<double>(*pMultFrac)  ) ) / 2.0 + 0.5 );
-            tools::Long nY = static_cast<tools::Long>( ( static_cast<double>(aOutSize.Height()) - ( static_cast<double>(aOutSize.Height()) * static_cast<double>(*pMultFrac)  ) ) / 2.0 + 0.5 );
+            tools::Long nX = static_cast<tools::Long>( ( static_cast<double>(aOutSize.Width()) - ( static_cast<double>(aOutSize.Width()) * *oMultFrac ) ) / 2.0 + 0.5 );
+            tools::Long nY = static_cast<tools::Long>( ( static_cast<double>(aOutSize.Height()) - ( static_cast<double>(aOutSize.Height()) * *oMultFrac ) ) / 2.0 + 0.5 );
             aPt.AdjustX(nX );
             aPt.AdjustY(nY );
 
