@@ -23,6 +23,7 @@
 #include "spellparam.hxx"
 #include "cellmergeoption.hxx"
 #include <paramisc.hxx>
+#include <tokenarray.hxx>
 #include <editeng/boxitem.hxx>
 
 #include "undo/UndoSheetViewSortData.hxx"
@@ -728,8 +729,6 @@ private:
     ScDocumentUniquePtr xUndoDoc;
     ScDocumentUniquePtr xRedoDoc;
 };
-
-class ScTokenArray;
 
 class ScUndoEnterMatrix: public ScBlockUndo
 {
