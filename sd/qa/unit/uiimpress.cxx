@@ -41,6 +41,8 @@
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xlndsit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstwit.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorter.hxx>
 #include <controller/SlsClipboard.hxx>
@@ -1738,6 +1740,54 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf151417)
     dispatchCommand(mxComponent, u".uno:Edit"_ustr, aArgs);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96454_formatted_start_end_arrow_sizes)
+{
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    // Retrieve default style sheet
+    auto pSSPool = pImpressDocument->GetDocShell()->GetStyleSheetPool();
+    CPPUNIT_ASSERT(pSSPool);
+    auto pSheet = pSSPool->Find(SdResId(STR_STANDARD_STYLESHEET_NAME), SfxStyleFamily::Para);
+    CPPUNIT_ASSERT(pSheet);
+
+    // Override the default line start/end arrow widths in the style sheet
+    SfxItemSet& rISet = pSheet->GetItemSet();
+    rISet.Put(XLineStartWidthItem(300));
+    rISet.Put(XLineEndWidthItem(400));
+
+    // Insert a line with end arrow via Ctrl key
+    dispatchCommand(mxComponent, u".uno:LineArrowEnd"_ustr,
+                    comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+
+    // Retrieve the first draw page and check presence of the newly inserted line
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xDrawPage->getCount());
+
+    // Retrieve start/end line widths
+    uno::Reference<beans::XPropertySet> xPropSet(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+
+    sal_uInt32 nStartWidth = 0;
+    xPropSet->getPropertyValue(u"LineStartWidth"_ustr) >>= nStartWidth;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 300
+    // - Actual  : 200
+    // i.e. the start arrow width was not retrieved from the style sheet
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(300), nStartWidth);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 400
+    // - Actual  : 200
+    // i.e. the end arrow width was not retrieved from the style sheet
+    sal_uInt32 nEndWidth = 0;
+    xPropSet->getPropertyValue(u"LineEndWidth"_ustr) >>= nEndWidth;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(400), nEndWidth);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf126823_default_start_end_arrow_sizes)
