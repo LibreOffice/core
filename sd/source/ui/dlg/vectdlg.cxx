@@ -107,7 +107,7 @@ void SdVectorizeDlg::InitPreviewBmp()
     m_aBmpWin.SetGraphic(aPreviewBmp);
 }
 
-Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale )
+Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, double& rScale )
 {
     Bitmap      aNew( rBmp );
     const Size  aSizePix( aNew.GetSizePixel() );
@@ -115,11 +115,11 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale 
     if( aSizePix.Width() > VECTORIZE_MAX_EXTENT || aSizePix.Height() > VECTORIZE_MAX_EXTENT )
     {
         const ::tools::Rectangle aRect( GetRect( Size( VECTORIZE_MAX_EXTENT, VECTORIZE_MAX_EXTENT ), aSizePix ) );
-        rScale = Fraction( aSizePix.Width(), aRect.GetWidth() );
+        rScale = double(aSizePix.Width()) / aRect.GetWidth();
         aNew.Scale( aRect.GetSize() );
     }
     else
-        rScale = Fraction( 1, 1 );
+        rScale = 1.0;
 
     BitmapFilter::Filter(aNew, BitmapSimpleColorQuantizationFilter(m_xNmLayers->get_value()));
 
@@ -131,8 +131,8 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
     m_pDocSh->SetWaitCursor( true );
     m_xPrgs->set_percentage(0);
 
-    Fraction aScale;
-    Bitmap aBitmap(GetPreparedBitmap(rBmp, aScale));
+    double fScale;
+    Bitmap aBitmap(GetPreparedBitmap(rBmp, fScale));
 
     if (!aBitmap.IsEmpty())
     {
@@ -191,8 +191,8 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
                 for( size_t n = 0, nCount = rMtf.GetActionSize(); n < nCount; n++ )
                     aNewMtf.AddAction( rMtf.GetAction( n )->Clone() );
 
-                aMap.SetScaleX( aMap.GetScaleX() * aScale );
-                aMap.SetScaleY( aMap.GetScaleY() * aScale );
+                aMap.SetScaleX( aMap.GetScaleX() * fScale );
+                aMap.SetScaleY( aMap.GetScaleY() * fScale );
                 aNewMtf.SetPrefMapMode( aMap );
                 rMtf = aNewMtf;
             }

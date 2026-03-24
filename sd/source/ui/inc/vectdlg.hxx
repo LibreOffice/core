@@ -58,7 +58,7 @@ class SdVectorizeDlg final : public weld::GenericDialogController
     void                InitPreviewBmp();
 
     static ::tools::Rectangle    GetRect( const Size& rDispSize, const Size& rBmpSize );
-    Bitmap              GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale );
+    Bitmap              GetPreparedBitmap( Bitmap const & rBmp, double& rScale );
     void                Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf );
     static void         AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
                                  tools::Long nPosX, tools::Long nPosY, tools::Long nWidth, tools::Long nHeight );
