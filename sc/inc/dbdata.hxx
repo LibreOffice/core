@@ -194,7 +194,7 @@ public:
     SC_DLLPUBLIC ScDBData(const OUString& rName,
              SCTAB nTab,
              SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bByR = true, bool bHasH = true, bool bTotals = false,
-                          const OUString& rTableType = u"worksheet"_ustr,
+                          const OUString& rTableType = u""_ustr,
                           const OUString& rTableStyleID = u""_ustr);
     ScDBData(const ScDBData& rData);
     ScDBData(const OUString& rName, const ScDBData& rData);
