@@ -22,6 +22,7 @@
 #include <drawingml/shapepropertiescontext.hxx>
 #include <drawingml/textbodycontext.hxx>
 #include <drawingml/chart/datasourcecontext.hxx>
+#include <drawingml/chart/geographycontext.hxx>
 #include <drawingml/chart/seriesmodel.hxx>
 #include <drawingml/chart/titlecontext.hxx>
 #include <oox/core/xmlfilterbase.hxx>
@@ -860,8 +861,15 @@ ContextHandlerRef LayoutPropsContext::onCreateContext( sal_Int32 nElement, const
                     return new BinningContext( *this, rB );
                 }
                 case CX_TOKEN( geography ):
-                    // TODO
-                    return nullptr;
+                {
+                    auto& rGeo = mrModel.mxGeography.emplace();
+                    rGeo.mosProjectionType = rAttribs.getString( XML_projectionType );
+                    rGeo.mosViewedRegionType = rAttribs.getString( XML_viewedRegionType );
+                    rGeo.mosCultureLanguage = rAttribs.getString( XML_cultureLanguage );
+                    rGeo.mosCultureRegion = rAttribs.getString( XML_cultureRegion );
+                    rGeo.mosAttribution = rAttribs.getString( XML_attribution );
+                    return new GeographyContext( *this, *mrModel.mxGeography );
+                }
                 case CX_TOKEN( statistics ):
                     mrModel.mosQuartileMethod = rAttribs.getString( XML_quartileMethod );
                     return nullptr;

@@ -24,6 +24,7 @@
 
 #include <oox/drawingml/chart/datasourcemodel.hxx>
 #include <drawingml/chart/titlemodel.hxx>
+#include <drawingml/chart/geographymodel.hxx>
 
 namespace oox::drawingml::chart {
 
@@ -209,6 +210,7 @@ struct LayoutPropsModel
     std::optional<OUString> mosQuartileMethod;
     std::vector<sal_Int32>  maSubtotalIndices;
 
+    std::optional<GeographyModel> mxGeography;
 };
 
 enum class DataSourceType: sal_Int32

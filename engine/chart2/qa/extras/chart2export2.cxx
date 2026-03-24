@@ -1892,6 +1892,33 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf166249)
                 "val", u"128");
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexGeography)
+{
+    loadFromFile(u"xlsx/regionMap.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    static constexpr OString sSeriesBase
+        = "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series"_ostr;
+    OString sLayoutPr = sSeriesBase + "/cx:layoutPr"_ostr;
+    OString sGeo = sLayoutPr + "/cx:geography"_ostr;
+
+    // geography element with correct attributes
+    assertXPath(pXmlDoc, sGeo, "cultureLanguage", u"en-US");
+    assertXPath(pXmlDoc, sGeo, "cultureRegion", u"GB");
+
+    // geoCache with provider
+    OString sCache = sGeo + "/cx:geoCache"_ostr;
+    assertXPath(pXmlDoc, sCache, "provider", u"{E9337A44-BEBE-4D9F-B70C-5C5E7DAFC167}");
+
+    // binary element exists and starts with the expected base64 prefix
+    OString sBinary = sCache + "/cx:binary"_ostr;
+    assertXPath(pXmlDoc, sBinary, 1);
+    OUString sBinaryContent = getXPathContent(pXmlDoc, sBinary);
+    CPPUNIT_ASSERT(sBinaryContent.startsWith(u"7HvJkt24kuWvpOWm"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

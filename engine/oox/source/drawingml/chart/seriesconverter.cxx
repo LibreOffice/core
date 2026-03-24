@@ -40,6 +40,7 @@
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <drawingml/chart/datasourceconverter.hxx>
+#include <drawingml/chart/geographyconverter.hxx>
 #include <drawingml/chart/seriesmodel.hxx>
 #include <drawingml/chart/titleconverter.hxx>
 #include <drawingml/chart/typegroupconverter.hxx>
@@ -997,6 +998,12 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         if (!rLPR->maSubtotalIndices.empty())
             aSeriesProp.setProperty(PROP_SubtotalIndices,
                 comphelper::containerToSequence(rLPR->maSubtotalIndices));
+
+        if (rLPR->mxGeography.has_value())
+        {
+            aSeriesProp.setProperty(PROP_HasGeography, true);
+            convertGeography(*rLPR->mxGeography, aSeriesProp);
+        }
     }
     return xDataSeries;
 }

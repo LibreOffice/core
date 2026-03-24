@@ -92,6 +92,7 @@ $(eval $(call gb_Library_set_componentfile,oox,oox/util/oox,services))
 ifeq (,$(ENABLE_WASM_STRIP_CHART))
 $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/export/chartexport \
+    oox/source/export/chartgeographyexport \
     oox/source/drawingml/chart/axiscontext \
     oox/source/drawingml/chart/axisconverter \
     oox/source/drawingml/chart/axismodel \
@@ -106,6 +107,8 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/chart/datasourceconverter \
     oox/source/drawingml/chart/datasourcemodel \
     oox/source/drawingml/chart/datatablecontext \
+    oox/source/drawingml/chart/geographycontext \
+    oox/source/drawingml/chart/geographyconverter \
     oox/source/drawingml/chart/datatableconverter \
     oox/source/drawingml/chart/modelbase \
     oox/source/drawingml/chart/objectformatter \

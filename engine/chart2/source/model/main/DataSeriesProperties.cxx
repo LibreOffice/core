@@ -20,6 +20,7 @@
 #include <DataSeriesProperties.hxx>
 #include "DataPointProperties.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 
 using namespace ::com::sun::star;
@@ -138,6 +139,60 @@ void DataSeriesProperties::AddPropertiesToVector(
     rOutProperties.emplace_back( "SubtotalIndices",
                   PROP_DATASERIES_SUBTOTAL_INDICES,
                   cppu::UnoType<uno::Sequence<sal_Int32>>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "HasGeography",
+                  PROP_DATASERIES_HAS_GEOGRAPHY,
+                  cppu::UnoType<sal_Bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "GeographyProjectionType",
+                  PROP_DATASERIES_GEOGRAPHY_PROJECTION_TYPE,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "GeographyViewedRegionType",
+                  PROP_DATASERIES_GEOGRAPHY_VIEWED_REGION_TYPE,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "GeographyCultureLanguage",
+                  PROP_DATASERIES_GEOGRAPHY_CULTURE_LANGUAGE,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "GeographyCultureRegion",
+                  PROP_DATASERIES_GEOGRAPHY_CULTURE_REGION,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "GeographyAttribution",
+                  PROP_DATASERIES_GEOGRAPHY_ATTRIBUTION,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "GeoCacheProvider",
+                  PROP_DATASERIES_GEOCACHE_PROVIDER,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "GeoCacheBinary",
+                  PROP_DATASERIES_GEOCACHE_BINARY,
+                  cppu::UnoType<OUString>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "GeoCacheClearData",
+                  PROP_DATASERIES_GEOCACHE_CLEAR_DATA,
+                  cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 

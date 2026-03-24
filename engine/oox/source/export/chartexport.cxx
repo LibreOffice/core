@@ -22,6 +22,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/export/chartexport.hxx>
+#include <oox/export/chartgeographyexport.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/token/relationship.hxx>
 #include <oox/export/utils.hxx>
@@ -4037,8 +4038,11 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                 uno::Any aIntervalClosed = xSeriesProp->getPropertyValue( u"IntervalClosed"_ustr);
                 const bool bHasIC = aIntervalClosed.hasValue();
 
+                bool bHasGeography = false;
+                xSeriesProp->getPropertyValue(u"HasGeography"_ustr) >>= bHasGeography;
+
                 bool bHasAny = bHasParentLL || bHasRegionLL || bHasVisibility
-                            || bHasQM || bHasSubtotals || bHasIC;
+                            || bHasQM || bHasSubtotals || bHasIC || bHasGeography;
                 if (bHasAny)
                 {
                     pFS->startElement(FSNS(XML_cx, XML_layoutPr));
@@ -4068,7 +4072,11 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                             XML_meanMarker, bHasMeanMarker ? ToPsz10(bMeanMarker) : nullptr,
                             XML_nonoutliers, bHasNonoutliers ? ToPsz10(bNonoutliers) : nullptr,
                             XML_outliers, bHasOutliers ? ToPsz10(bOutliers) : nullptr);
+
                     }
+
+                    if (bHasGeography)
+                        oox::drawingml::chart::exportGeography(xSeriesProp, pFS);
 
                     if (bHasIC)
                     {

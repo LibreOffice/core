@@ -235,6 +235,14 @@ FromWordArt
 Function
 GapwidthSequence
 GenerateVbaEvents
+GeoCacheBinary
+GeoCacheClearData
+GeoCacheProvider
+GeographyAttribution
+GeographyCultureLanguage
+GeographyCultureRegion
+GeographyProjectionType
+GeographyViewedRegionType
 Geometry3D
 GlowEffect
 GlowEffectRadius
@@ -253,6 +261,7 @@ HScroll
 Handles
 HasAutoShowInfo
 HasColumnRowHeaders
+HasGeography
 HasHorizontalScrollBar
 HasLayoutInfo
 HasMainTitle
