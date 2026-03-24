@@ -214,8 +214,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
     checkFormats();
     saveAndReload(TestFilter::XLSX);
-    // TODO
-    //checkFormats();
+    checkFormats();
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
@@ -232,8 +231,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
     checkFormats();
     saveAndReload(TestFilter::XLSX);
-    // TODO
-    //checkFormats();
+    checkFormats();
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
@@ -328,8 +326,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
     checkFormats();
     saveAndReload(TestFilter::XLSX);
-    // TODO
-    //checkFormats();
+    checkFormats();
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
@@ -363,8 +360,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
 
     checkFormats();
     saveAndReload(TestFilter::XLSX);
-    // TODO
-    // checkFormats();
+    checkFormats();
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testPivotTableWithCellProtection)
@@ -427,9 +423,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testPivotTableFormatsGrand
     };
 
     checkFormats();
-    // TODO: Round-trip
-    //saveAndReload(TestFilter::XLSX);
-    //checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
 }
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testPivotTableFormatsSubTotals)
