@@ -19,6 +19,7 @@
 
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <fmtanchr.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -479,6 +480,11 @@ CPPUNIT_TEST_FIXTURE(Test, testPageBreakInFirstPara)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br","type",u"page");
+
+    // tdf#170427: Inline stuff should be round-tripped as Inline.
+    sw::SpzFrameFormats* pFormats = getSwDoc()->GetSpzFrameFormats();
+    const SwFormatAnchor& rRTAnchor = (*pFormats)[0]->GetAnchor();
+    CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AS_CHAR, rRTAnchor.GetAnchorId());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO78284)
