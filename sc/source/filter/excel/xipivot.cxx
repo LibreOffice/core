@@ -224,7 +224,8 @@ const XclImpPCItem* XclImpPCField::GetLimitItem( sal_uInt16 nItemIdx ) const
 
 void XclImpPCField::WriteFieldNameToSource( SCCOL nScCol, SCTAB nScTab )
 {
-    OSL_ENSURE( HasOrigItems(), "XclImpPCField::WriteFieldNameToSource - only for standard fields" );
+    OSL_ENSURE(HasOrigItems() || IsStandardField(),
+               "XclImpPCField::WriteFieldNameToSource - only for standard fields");
     GetDocImport().setStringCell(ScAddress(nScCol, 0, nScTab), maFieldInfo.maName);
     mnSourceScCol = nScCol;
 }
@@ -339,11 +340,17 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
             meFieldType = EXC_PCFIELD_STANDARD;
         OSL_ENSURE( meFieldType == EXC_PCFIELD_STANDARD, "XclImpPCField::ReadSxfield - invalid postponed field" );
     }
+    else
+    {
+        if (!bCalced && !bChild && !bNum && (nGroupC == 0) && (nBaseC == 0) && (nOrigC == 0))
+            meFieldType = EXC_PCFIELD_STANDARD;
+    }
 }
 
 void XclImpPCField::ReadItem( XclImpStream& rStrm )
 {
-    OSL_ENSURE( HasInlineItems() || HasPostponedItems(), "XclImpPCField::ReadItem - field does not expect items" );
+    OSL_ENSURE(HasInlineItems() || HasPostponedItems() || IsStandardField(),
+               "XclImpPCField::ReadItem - field does not expect items");
 
     // read the item
     XclImpPCItemRef xItem = std::make_shared<XclImpPCItem>( rStrm );
@@ -357,7 +364,7 @@ void XclImpPCField::ReadItem( XclImpStream& rStrm )
         else
             maOrigItems.push_back( xItem );
     }
-    else if( HasInlineItems() || HasPostponedItems() )
+    else if (HasInlineItems() || HasPostponedItems() || IsStandardField())
     {
         maItems.push_back( xItem );
         // visible item is original item in standard fields
@@ -759,6 +766,12 @@ void XclImpPivotCache::ReadPivotCacheStream( const XclImpStream& rStrm )
                         // insert field name into generated source data, field remembers its column index
                         if( bGenerateSource && (nFieldScCol <= rDoc.MaxCol()) )
                             xCurrField->WriteFieldNameToSource( nFieldScCol++, nScTab );
+                    }
+                    else if (xCurrField->IsStandardField())
+                    {
+                        aOrigFields.push_back(xCurrField);
+                        if (bGenerateSource && (nFieldScCol <= rDoc.MaxCol()))
+                            xCurrField->WriteFieldNameToSource(nFieldScCol++, nScTab);
                     }
                     // do not read items into invalid/postponed fields
                     if( !xCurrField->HasInlineItems() )

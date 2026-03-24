@@ -2672,6 +2672,18 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testFirstHeaderRowZero)
     assertXPath(pDoc, "/x:pivotTableDefinition/x:location", "firstHeaderRow", u"0");
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testExtSourceFieldsXLS)
+{
+    createScDoc("xls/pivottable_ext_source_fields.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pDocXml = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+
+    // Without the fix, this would only have 7 fields
+    assertXPath(pDocXml, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField", 13);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
