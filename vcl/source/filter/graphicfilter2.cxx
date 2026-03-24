@@ -228,8 +228,8 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                             if ( nUnits && nHorizontalResolution && nVerticalResolution )
                                             {
                                                 aMap.SetMapUnit( nUnits == 1 ? MapUnit::MapInch : MapUnit::MapCM );
-                                                aMap.SetScaleX( Fraction( 1, nHorizontalResolution ) );
-                                                aMap.SetScaleY( Fraction( 1, nVerticalResolution ) );
+                                                aMap.SetScaleX( 1.0 / nHorizontalResolution );
+                                                aMap.SetScaleY( 1.0 / nVerticalResolution );
                                                 aMetadata.maLogSize = OutputDevice::LogicToLogic( aMetadata.maPixSize, aMap, MapMode( MapUnit::Map100thMM ) );
                                             }
                                         }

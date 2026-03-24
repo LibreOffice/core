@@ -552,9 +552,8 @@ bool GraphicFormatDetector::checkBMP()
 
                 if (bRet && nXPelsPerMeter && nYPelsPerMeter)
                 {
-                    maMetadata.maPreferredMapMode
-                        = MapMode(MapUnit::MapMM, Point(), Fraction(1000, nXPelsPerMeter),
-                                  Fraction(1000, nYPelsPerMeter));
+                    maMetadata.maPreferredMapMode = MapMode(
+                        MapUnit::MapMM, Point(), 1000.0 / nXPelsPerMeter, 1000.0 / nYPelsPerMeter);
 
                     maMetadata.maPreferredLogSize
                         = Size(maMetadata.maPixSize.getWidth(), maMetadata.maPixSize.getHeight());
@@ -671,7 +670,7 @@ bool GraphicFormatDetector::checkPCX()
             mrStream.ReadUInt16(nDPIy);
 
             // set logical size
-            MapMode aMap(MapUnit::MapInch, Point(), Fraction(1, nDPIx), Fraction(1, nDPIy));
+            MapMode aMap(MapUnit::MapInch, Point(), 1.0 / nDPIx, 1.0 / nDPIy);
             maMetadata.maLogSize = OutputDevice::LogicToLogic(maMetadata.maPixSize, aMap,
                                                               MapMode(MapUnit::Map100thMM));
 

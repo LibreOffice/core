@@ -41,6 +41,7 @@ public:
     explicit MapMode( MapUnit eUnit );
     MapMode( MapUnit eUnit, const Point& rLogicOrg,
         const Fraction& rScaleX, const Fraction& rScaleY );
+    MapMode( MapUnit eUnit, const Point& rLogicOrg, double rScaleX, double rScaleY );
     ~MapMode();
 
     void            SetMapUnit( MapUnit eUnit );
@@ -53,6 +54,9 @@ public:
     const Fraction& GetScaleX() const;
     void            SetScaleY( const Fraction& rScaleY );
     const Fraction& GetScaleY() const;
+
+    void            SetScaleX( double rScaleX );
+    void            SetScaleY( double rScaleY );
 
     MapMode&        operator=( const MapMode& rMapMode );
     MapMode&        operator=( MapMode&& rMapMode );

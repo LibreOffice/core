@@ -163,8 +163,8 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     tools::Rectangle aVisArea  = GetVisArea( nAspect );
     // MapUnit of the target
     MapMode aMapMode( GetMapUnit() );
-    aMapMode.SetScaleX( Fraction(fScaleX) );
-    aMapMode.SetScaleY( Fraction(fScaleY) );
+    aMapMode.SetScaleX( fScaleX );
+    aMapMode.SetScaleY( fScaleY );
 
     // Target in Pixels
     Point aOrg   = pDev->LogicToLogic( rViewPos, nullptr, &aMapMode );

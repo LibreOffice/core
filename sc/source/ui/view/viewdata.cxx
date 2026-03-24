@@ -1179,8 +1179,8 @@ void ScViewData::RefreshZoom()
     CalcPPT();
     RecalcPixPos();
     aScenButSize = Size(0,0);
-    aLogicMode.SetScaleX( Fraction(GetZoomX()) );
-    aLogicMode.SetScaleY( Fraction(GetZoomY()) );
+    aLogicMode.SetScaleX( GetZoomX() );
+    aLogicMode.SetScaleY( GetZoomY() );
 }
 
 void ScViewData::SetPagebreakMode( bool bSet )

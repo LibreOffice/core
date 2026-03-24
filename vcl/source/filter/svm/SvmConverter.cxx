@@ -131,7 +131,7 @@ static bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
         return false;
     }
 
-    rMapMode = MapMode(static_cast<MapUnit>(nUnit), aOrg, Fraction(nXNum, nXDenom), Fraction(nYNum, nYDenom));
+    rMapMode = MapMode(static_cast<MapUnit>(nUnit), aOrg, double(nXNum) / nXDenom, double(nYNum) / nYDenom);
 
     return true;
 }

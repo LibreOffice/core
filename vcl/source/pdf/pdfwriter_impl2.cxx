@@ -538,8 +538,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                     MapMode aMapMode( aSubstitute.GetPrefMapMode() );
                     Size aOutSize( OutputDevice::LogicToLogic( pA->GetSize(), pDummyVDev->GetMapMode(), aMapMode ) );
-                    aMapMode.SetScaleX( Fraction( aOutSize.Width(), aSubstitute.GetPrefSize().Width() ) );
-                    aMapMode.SetScaleY( Fraction( aOutSize.Height(), aSubstitute.GetPrefSize().Height() ) );
+                    aMapMode.SetScaleX( double(aOutSize.Width()) / aSubstitute.GetPrefSize().Width() );
+                    aMapMode.SetScaleY( double(aOutSize.Height()) / aSubstitute.GetPrefSize().Height() );
                     aMapMode.SetOrigin( OutputDevice::LogicToLogic( pA->GetPoint(), pDummyVDev->GetMapMode(), aMapMode ) );
 
                     m_rOuterFace.SetMapMode( aMapMode );

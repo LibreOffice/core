@@ -31,8 +31,8 @@ SvxXMeasurePreview::SvxXMeasurePreview()
     : m_aMapMode(MapUnit::Map100thMM)
 {
     // Scale: 1:2
-    m_aMapMode.SetScaleX(Fraction(1, 2));
-    m_aMapMode.SetScaleY(Fraction(1, 2));
+    m_aMapMode.SetScaleX(1.0 / 2);
+    m_aMapMode.SetScaleY(1.0 / 2);
 }
 
 void SvxXMeasurePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)

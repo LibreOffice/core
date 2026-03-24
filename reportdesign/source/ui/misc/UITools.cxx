@@ -978,8 +978,8 @@ void correctOverlapping(SdrObject* _pControl,OReportSection const & _aReportSect
 void setZoomFactor(double _fZoom, vcl::Window& _rWindow)
 {
     MapMode aMapMode( _rWindow.GetMapMode() );
-    aMapMode.SetScaleX(Fraction(_fZoom));
-    aMapMode.SetScaleY(Fraction(_fZoom));
+    aMapMode.SetScaleX(_fZoom);
+    aMapMode.SetScaleY(_fZoom);
     _rWindow.SetMapMode(aMapMode);
 }
 

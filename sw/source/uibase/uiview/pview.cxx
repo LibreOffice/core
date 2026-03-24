@@ -204,8 +204,8 @@ void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const tools::R
     else
     {
         MapMode aMM(rRenderContext.GetMapMode());
-        aMM.SetScaleX(Fraction(mfScale));
-        aMM.SetScaleY(Fraction(mfScale));
+        aMM.SetScaleX(mfScale);
+        aMM.SetScaleY(mfScale);
         rRenderContext.SetMapMode(aMM);
         mpPgPreviewLayout->GetParentViewShell().setOutputToWindow(true);
         mpPgPreviewLayout->Paint(rRenderContext, rRect);
@@ -1753,8 +1753,8 @@ void SwPagePreviewWin::AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
         // calculate new scaling and set mapping mode appropriately.
         double fNewScale = double(_nZoomFactor) / 100;
         MapMode aNewMapMode = GetMapMode();
-        aNewMapMode.SetScaleX( Fraction(fNewScale) );
-        aNewMapMode.SetScaleY( Fraction(fNewScale) );
+        aNewMapMode.SetScaleX( fNewScale );
+        aNewMapMode.SetScaleY( fNewScale );
         SetMapMode( aNewMapMode );
 
         // calculate new start position for preview paint

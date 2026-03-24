@@ -483,8 +483,8 @@ void ScDrawView::SetMarkedOriginalSize()
                 // consider pixel correction, so that the bitmap is correct on the screen
                 double fNormScaleX, fNormScaleY;
                 CalcNormScale( fNormScaleX, fNormScaleY );
-                aDestMap.SetScaleX(Fraction(fNormScaleX));
-                aDestMap.SetScaleY(Fraction(fNormScaleY));
+                aDestMap.SetScaleX(fNormScaleX);
+                aDestMap.SetScaleY(fNormScaleY);
             }
             aOriginalSize = pSdrGrafObj->getOriginalSize();
             bDo = true;

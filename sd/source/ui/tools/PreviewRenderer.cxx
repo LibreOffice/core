@@ -372,8 +372,8 @@ void PreviewRenderer::SetupOutputSize (
     {
         // We should never get here.
         OSL_ASSERT(false);
-        aMapMode.SetScaleX(Fraction(1.0));
-        aMapMode.SetScaleY(Fraction(1.0));
+        aMapMode.SetScaleX(1.0);
+        aMapMode.SetScaleY(1.0);
     }
     mpPreviewDevice->SetMapMode (aMapMode);
     mpPreviewDevice->SetOutputSizePixel(rFramePixelSize);
@@ -433,8 +433,8 @@ Image PreviewRenderer::ScaleBitmap (
         MapMode aMapMode (mpPreviewDevice->GetMapMode());
         aMapMode.SetMapUnit(MapUnit::MapPixel);
         aMapMode.SetOrigin (Point());
-        aMapMode.SetScaleX (Fraction(1.0));
-        aMapMode.SetScaleY (Fraction(1.0));
+        aMapMode.SetScaleX (1.0);
+        aMapMode.SetScaleY (1.0);
         mpPreviewDevice->SetMapMode (aMapMode);
         mpPreviewDevice->SetOutputSize (aFrameSize);
 

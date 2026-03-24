@@ -320,9 +320,9 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                     xres != 0 && yres != 0)
                 {
                     if (ResolutionUnit == RESUNIT_INCH)
-                        aMapMode =  MapMode(MapUnit::MapInch, Point(0,0), Fraction(1/xres), Fraction(1/yres));
+                        aMapMode = MapMode(MapUnit::MapInch, Point(0,0), 1.0/xres, 1.0/yres);
                     else if (ResolutionUnit == RESUNIT_CENTIMETER)
-                        aMapMode =  MapMode(MapUnit::MapCM, Point(0,0), Fraction(1/xres), Fraction(1/yres));
+                        aMapMode = MapMode(MapUnit::MapCM, Point(0,0), 1.0/xres, 1.0/yres);
                 }
             }
             bitmap.SetPrefMapMode(aMapMode);

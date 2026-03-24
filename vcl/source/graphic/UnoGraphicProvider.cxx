@@ -587,8 +587,8 @@ void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::Prope
         if ( aMtfSize.Width() && aMtfSize.Height() )
         {
             MapMode aNewMapMode( MapUnit::Map100thMM );
-            aNewMapMode.SetScaleX( Fraction( aLogicalSize.Width, aMtfSize.Width() ) );
-            aNewMapMode.SetScaleY( Fraction( aLogicalSize.Height, aMtfSize.Height() ) );
+            aNewMapMode.SetScaleX( double(aLogicalSize.Width) / aMtfSize.Width() );
+            aNewMapMode.SetScaleY( double(aLogicalSize.Height) / aMtfSize.Height() );
             aDummyVDev->EnableOutput( false );
             aDummyVDev->SetMapMode( aNewMapMode );
 

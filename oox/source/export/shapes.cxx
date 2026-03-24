@@ -331,7 +331,7 @@ ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap
     , mbUserShapes( bUserShapes )
     , mnXmlNamespace( nXmlNamespace )
     , maMapModeSrc( MapUnit::Map100thMM )
-    , maMapModeDest( MapUnit::MapInch, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) )
+    , maMapModeDest( MapUnit::MapInch, Point(), 1.0 / 576, 1.0 / 576 )
     , mpShapeMap( pShapeMap ? pShapeMap : &maShapeMap )
 {
     mpURLTransformer = std::make_shared<URLTransformer>();

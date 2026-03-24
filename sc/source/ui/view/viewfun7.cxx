@@ -424,8 +424,8 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
         // consider pixel correction, so bitmap fits to screen
         double fScaleX, fScaleY;
         pScDrawView->CalcNormScale( fScaleX, fScaleY );
-        aDestMap.SetScaleX(Fraction(fScaleX));
-        aDestMap.SetScaleY(Fraction(fScaleY));
+        aDestMap.SetScaleX(fScaleX);
+        aDestMap.SetScaleY(fScaleY);
     }
 
     Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );

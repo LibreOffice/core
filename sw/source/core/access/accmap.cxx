@@ -764,8 +764,8 @@ void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
                                       const Point& rPoint ) const
 {
     // adjust scale
-    rMapMode.SetScaleX( Fraction(mfScale) );
-    rMapMode.SetScaleY( Fraction(mfScale) );
+    rMapMode.SetScaleX( mfScale );
+    rMapMode.SetScaleY( mfScale );
 
     // find proper rectangle
     Rectangles::const_iterator aBegin = maLogicRects.begin();
