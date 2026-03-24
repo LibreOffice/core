@@ -1250,7 +1250,9 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_outline, ToPsz10(!bTabularMode),
         XML_outlineData, ToPsz10(!bTabularMode),
         XML_compact, ToPsz10(bCompactMode),
-        XML_compactData, ToPsz10(bCompactMode));
+        XML_compactData, ToPsz10(bCompactMode),
+        XML_rowGrandTotals, sax_fastparser::UseIf(ToPsz10(false), !rSaveData.GetRowGrand()),
+        XML_colGrandTotals, sax_fastparser::UseIf(ToPsz10(false), !rSaveData.GetColumnGrand()));
 
     // NB: Excel's range does not include page field area (if any).
     ScRange aOutRange = rDPObj.GetOutputRangeByType(sheet::DataPilotOutputRangeType::TABLE);
@@ -1743,8 +1745,29 @@ void XclExpXmlPivotTables::savePivotTableFormats(XclExpXmlStream& rStream,
                         pAttributeList->add(XML_dataOnly, "0");
                     if (rFormat.bLabelOnly) // default is false
                         pAttributeList->add(XML_labelOnly, "1");
+                    if (rFormat.bGrandRow) // default is false
+                        pAttributeList->add(XML_grandRow, "1");
+                    if (rFormat.bGrandColumn) // default is false
+                        pAttributeList->add(XML_grandCol, "1");
                     if (!rFormat.bOutline) // default is true
                         pAttributeList->add(XML_outline, "0");
+                    if (rFormat.oOffset)
+                    {
+                        ScRange const& rOffset = *rFormat.oOffset;
+                        ScRefFlags nFlags = ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID;
+                        OUString aStart = rOffset.aStart.Format(
+                            nFlags, nullptr, formula::FormulaGrammar::CONV_XL_A1);
+                        if (rOffset.aStart == rOffset.aEnd)
+                        {
+                            pAttributeList->add(XML_offset, aStart);
+                        }
+                        else
+                        {
+                            OUString aEnd = rOffset.aEnd.Format(
+                                nFlags, nullptr, formula::FormulaGrammar::CONV_XL_A1);
+                            pAttributeList->add(XML_offset, aStart + ":" + aEnd);
+                        }
+                    }
                     if (rFormat.oFieldPosition)
                         pAttributeList->add(XML_fieldPosition, OString::number(*rFormat.oFieldPosition));
                     pPivotStream->startElement(XML_pivotArea, pAttributeList);
@@ -1757,9 +1780,11 @@ void XclExpXmlPivotTables::savePivotTableFormats(XclExpXmlStream& rStream,
                         {
                             auto pRefAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
                             pRefAttributeList->add(XML_field, OString::number(sal_uInt32(rSelection.nField)));
-                            pRefAttributeList->add(XML_count, "1");
+                            pRefAttributeList->add(XML_count, OString::number(rSelection.nIndices.size()));
                             if (!rSelection.bSelected) // default is true
                                 pRefAttributeList->add(XML_selected, "0");
+                            if (rSelection.bHasSubtotal)
+                                pRefAttributeList->add(XML_defaultSubtotal, "1");
                             pPivotStream->startElement(XML_reference, pRefAttributeList);
                         }
 
