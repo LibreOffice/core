@@ -138,7 +138,7 @@ public:
     SC_DLLPUBLIC ScDBData(const OUString& rName,
              SCTAB nTab,
              SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-             bool bByR = true, bool bHasH = true, bool bTotals = false, const OUString& rTableType = "worksheet");
+             bool bByR = true, bool bHasH = true, bool bTotals = false, const OUString& rTableType = "");
     ScDBData(const ScDBData& rData);
     ScDBData(const OUString& rName, const ScDBData& rData);
     SC_DLLPUBLIC virtual ~ScDBData() override;
