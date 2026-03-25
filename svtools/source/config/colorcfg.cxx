@@ -641,7 +641,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
                 }
             }
 
-            if (ThemeColors::UseOnlyWhiteDocBackground())
+            if (ThemeColors::UseOnlyWhiteDocBackground() && !comphelper::LibreOfficeKit::isActive())
                 nAppMod = clLight;
 
             aRet = cAutoColors[eEntry][nAppMod];
