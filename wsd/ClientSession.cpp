@@ -65,6 +65,29 @@ static constexpr float TILES_ON_FLY_MIN_UPPER_LIMIT = 10.0;
 static constexpr int SYNTHETIC_COOL_PID_OFFSET = 10000000;
 static constexpr std::size_t MAX_AI_IMAGE_GENERATIONS = 20;
 
+#if !MOBILEAPP
+static bool isValidImageSize(const std::string& size)
+{
+    const auto pos = size.find('x');
+    if (pos == std::string::npos || pos == 0 || pos == size.size() - 1)
+        return false;
+    const std::string widthStr = size.substr(0, pos);
+    const std::string heightStr = size.substr(pos + 1);
+    try
+    {
+        const int width = std::stoi(widthStr);
+        const int height = std::stoi(heightStr);
+        return width > 0 && height > 0
+            && widthStr == std::to_string(width)
+            && heightStr == std::to_string(height);
+    }
+    catch (const std::exception&)
+    {
+        return false;
+    }
+}
+#endif
+
 using Poco::Path;
 
 // rotates regularly
@@ -1487,10 +1510,15 @@ ImageGenRequest ClientSession::createImageGenRequest(const std::string& prompt)
 
     Poco::JSON::Object::Ptr payload = new Poco::JSON::Object();
     payload->set("prompt", prompt);
-    payload->set("size", "1024x1024");
+    std::string imageSize = getAIImageSize();
+    if (imageSize.empty() || !isValidImageSize(imageSize))
+        imageSize = "1024x1024";
+    payload->set("size", imageSize);
     payload->set("n", 1);
     payload->set("response_format", "b64_json");
     payload->set("model", imageModel);
+
+    LOG_DBG("AIImageGeneration: model=" << imageModel << ", size=" << imageSize);
 
     std::ostringstream payloadStream;
     payload->stringify(payloadStream);
@@ -1516,7 +1544,25 @@ std::pair<std::string, std::string> ClientSession::parseImageGenResponse(
         return {"", "Request timeout"};
 
     if (statusCode != http::StatusCode::OK)
-        return {"", "HTTP " + std::to_string(static_cast<int>(statusCode))};
+    {
+        const std::string& body = httpResponse->getBody();
+        LOG_WRN_S("AIImageGeneration: HTTP " << static_cast<int>(statusCode) << ": " << body);
+
+        std::string errorMsg = "HTTP " + std::to_string(static_cast<int>(statusCode));
+        Poco::JSON::Object::Ptr errObj;
+        if (JsonUtil::parseJSON(body, errObj))
+        {
+            Poco::JSON::Object::Ptr errorDetail = errObj->getObject("error");
+            if (errorDetail)
+            {
+                std::string message;
+                JsonUtil::findJSONValue(errorDetail, "message", message);
+                if (!message.empty())
+                    errorMsg = message;
+            }
+        }
+        return {"", errorMsg};
+    }
 
     const std::string& responseBody = httpResponse->getBody();
     Poco::JSON::Object::Ptr responseObject = new Poco::JSON::Object();
@@ -2987,7 +3033,7 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     }
 
     std::string aiProviderAPIKey, aiProviderModel, aiProviderURL;
-    std::string aiImageProviderAPIKey, aiImageProviderURL, aiImageModel;
+    std::string aiImageProviderAPIKey, aiImageProviderURL, aiImageModel, aiImageSize;
 
     JsonUtil::findJSONValue(viewSettings, "aiProviderAPIKey", aiProviderAPIKey);
     JsonUtil::findJSONValue(viewSettings, "aiProviderModel", aiProviderModel);
@@ -2995,6 +3041,7 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     JsonUtil::findJSONValue(viewSettings, "aiImageProviderAPIKey", aiImageProviderAPIKey);
     JsonUtil::findJSONValue(viewSettings, "aiImageProviderURL", aiImageProviderURL);
     JsonUtil::findJSONValue(viewSettings, "aiImageModel", aiImageModel);
+    JsonUtil::findJSONValue(viewSettings, "aiImageSize", aiImageSize);
 
     setAIProviderAPIKey(aiProviderAPIKey);
     setAIProviderModel(aiProviderModel);
@@ -3002,6 +3049,7 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     setAIImageProviderAPIKey(aiImageProviderAPIKey);
     setAIImageProviderURL(aiImageProviderURL);
     setAIImageModel(aiImageModel);
+    setAIImageSize(aiImageSize);
 
     std::string zoteroAPIKey, signatureCert, signatureKey, signatureCa;
     JsonUtil::findJSONValue(viewSettings, "zoteroAPIKey", zoteroAPIKey);

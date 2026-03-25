@@ -1763,7 +1763,8 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
         }
 
         std::string zoteroAPIKey, signatureCertificate, signatureKey, signatureCa, aiProviderAPIKey,
-            aiProviderModel, aiProviderURL, aiImageProviderAPIKey, aiImageProviderURL, aiImageModel;
+            aiProviderModel, aiProviderURL, aiImageProviderAPIKey, aiImageProviderURL, aiImageModel,
+            aiImageSize;
 
         bool viewSettingsNeedUpdate = false;
 
@@ -1807,6 +1808,7 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
         JsonUtil::findJSONValue(viewSettings, "aiImageProviderAPIKey", aiImageProviderAPIKey);
         JsonUtil::findJSONValue(viewSettings, "aiImageProviderURL", aiImageProviderURL);
         JsonUtil::findJSONValue(viewSettings, "aiImageModel", aiImageModel);
+        JsonUtil::findJSONValue(viewSettings, "aiImageSize", aiImageSize);
 
         session->setAIProviderAPIKey(aiProviderAPIKey);
         session->setAIProviderModel(aiProviderModel);
@@ -1814,6 +1816,7 @@ static std::string extractViewSettings(const std::string& viewSettingsPath,
         session->setAIImageProviderAPIKey(aiImageProviderAPIKey);
         session->setAIImageProviderURL(aiImageProviderURL);
         session->setAIImageModel(aiImageModel);
+        session->setAIImageSize(aiImageSize);
 
         if (viewSettingsNeedUpdate)
         {

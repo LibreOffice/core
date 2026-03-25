@@ -56,6 +56,7 @@ interface ViewSettings {
 	aiImageProviderAPIKey: string;
 	aiImageProviderURL: string;
 	aiImageModel: string;
+	aiImageSize: string;
 }
 
 interface AIProvider {
@@ -420,6 +421,7 @@ class SettingIframe {
 		aiImageProviderAPIKey: _('API Key'),
 		aiImageProviderURL: _('Base URL'),
 		aiImageModel: _('Model'),
+		aiImageSize: _('Image Size'),
 	};
 	private readonly settingLabels: Record<string, string> = {
 		lockAccessibilityOn: _('In-document Screen Reader'),
@@ -1763,6 +1765,7 @@ class SettingIframe {
 						aiImageProviderURL: defaultSettings.aiImageProviderURL,
 						aiImageProviderAPIKey: defaultSettings.aiImageProviderAPIKey,
 						aiImageModel: defaultSettings.aiImageModel,
+						aiImageSize: defaultSettings.aiImageSize,
 					};
 				},
 				() => this._viewSetting,
@@ -2023,6 +2026,30 @@ class SettingIframe {
 		status.className = 'view-setting-description';
 		status.style.display = 'none';
 		group.appendChild(status);
+
+		group.appendChild(
+			this.createViewSettingsTextBox('aiImageSize', data, false, true),
+		);
+		const imageSizeInput = group.querySelector(
+			'#aiImageSize',
+		) as HTMLInputElement | null;
+		if (imageSizeInput) {
+			imageSizeInput.placeholder = '1024x1024';
+			imageSizeInput.addEventListener('input', () => {
+				const val = imageSizeInput.value.trim();
+				if (val === '' || /^\d+x\d+$/.test(val)) {
+					const parts = val ? val.split('x') : [];
+					const valid =
+						val === '' || (Number(parts[0]) > 0 && Number(parts[1]) > 0);
+					imageSizeInput.style.borderColor = valid ? '' : 'red';
+					if (valid) {
+						data.aiImageSize = val;
+					}
+				} else {
+					imageSizeInput.style.borderColor = 'red';
+				}
+			});
+		}
 
 		if (
 			data.aiImageProviderURL &&
@@ -2841,6 +2868,7 @@ class SettingIframe {
 			aiImageProviderAPIKey: '',
 			aiImageProviderURL: '',
 			aiImageModel: '',
+			aiImageSize: '',
 		};
 	}
 

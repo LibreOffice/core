@@ -308,6 +308,9 @@ public:
     std::string getAIImageProviderURL() const { return _aiImageProviderURL; }
     void setAIImageProviderURL(const std::string& val) { _aiImageProviderURL = val; }
 
+    std::string getAIImageSize() const { return _aiImageSize; }
+    void setAIImageSize(const std::string& val) { _aiImageSize = val; }
+
     const std::string& getSignatureCertificate() const { return _signatureCertificate; }
     void setSignatureCertificate(const std::string& cert) { _signatureCertificate = cert; }
 
@@ -494,6 +497,9 @@ private:
 
     // AI image generation base URL (optional, falls back to _aiProviderURL)
     std::string _aiImageProviderURL;
+
+    // AI image generation size (e.g. "1024x1024")
+    std::string _aiImageSize;
 
     /// Digital signature certificate, key, and CA
     std::string _signatureCertificate;
