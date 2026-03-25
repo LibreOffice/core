@@ -597,6 +597,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
     }
 
     bool bDisable = !bPastePossible;
+    bool bOnlyNotBecauseOfMatrix = false;
 
     //  cell protection / multiple selection
 
@@ -606,7 +607,8 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         SCROW nRow = GetViewData()->GetCurY();
         SCTAB nTab = GetViewData()->GetTabNo();
         ScDocument& rDoc = GetViewData()->GetDocShell()->GetDocument();
-        if (!rDoc.IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
+        if (!rDoc.IsBlockEditable( nTab, nCol,nRow, nCol,nRow,
+                                   &bOnlyNotBecauseOfMatrix ))
             bDisable = true;
 
         if (!bDisable && !checkDestRanges(*GetViewData()))
@@ -621,9 +623,18 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         rSet.DisableItem( SID_PASTE_ONLY_VALUE );
         rSet.DisableItem( SID_PASTE_ONLY_TEXT );
         rSet.DisableItem( SID_PASTE_ONLY_FORMULA );
-        rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
+        // tdf#164461: don't disable clipboard format items when the
+        // cursor is on a matrix cell — the clipboard content is still
+        // valid and must stay populated so the paste-special toolbar
+        // dropdown works after the cursor moves to an editable cell.
+        if (!bOnlyNotBecauseOfMatrix)
+            rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
     }
-    else if ( rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) != SfxItemState::UNKNOWN )
+
+    // tdf#164461: populate format items even when paste is disabled
+    // due to a matrix cell, so the dropdown keeps its format list.
+    bool bHasFormatItems = rSet.GetItemState(SID_CLIPBOARD_FORMAT_ITEMS) != SfxItemState::UNKNOWN;
+    if ( bHasFormatItems && ( !bDisable || bOnlyNotBecauseOfMatrix ) )
     {
         SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
         GetPossibleClipboardFormats( aFormats );
