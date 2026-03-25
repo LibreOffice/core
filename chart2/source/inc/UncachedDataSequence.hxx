@@ -19,10 +19,7 @@
 #pragma once
 
 // helper classes
-#include <comphelper/compbase.hxx>
-#include <comphelper/uno3.hxx>
-#include <comphelper/propertycontainer2.hxx>
-#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propcontainerimplhelper.hxx>
 #include <rtl/ref.hxx>
 
 // interfaces and types
@@ -40,20 +37,6 @@ namespace chart
 class InternalDataProvider;
 class ModifyEventForwarder;
 
-namespace impl
-{
-typedef ::comphelper::WeakComponentImplHelper<
-    css::chart2::data::XDataSequence,
-    css::chart2::data::XNumericalDataSequence,
-    css::chart2::data::XTextualDataSequence,
-    css::util::XCloneable,
-    css::util::XModifiable, // contains util::XModifyBroadcaster
-    css::container::XIndexReplace,
-    css::container::XNamed, // for setting a new range representation
-    css::lang::XServiceInfo >
-    UncachedDataSequence_Base;
-}
-
 /**
  * This sequence object does NOT store actual sequence data.  Instead, it
  * references a column inside the internal data table (represented by class
@@ -64,10 +47,18 @@ typedef ::comphelper::WeakComponentImplHelper<
  * <p>A range representation can be either '0', '1', '2', ..., or 'label 1',
  * 'label 2', ...</p>
  */
-class UncachedDataSequence final :
-        public ::comphelper::OPropertyContainer2,
-        public ::comphelper::OPropertyArrayUsageHelper< UncachedDataSequence >,
-        public impl::UncachedDataSequence_Base
+class UncachedDataSequence final
+    : public comphelper::OPropertyContainerImplHelper<
+          comphelper::WeakComponentImplHelper<
+              css::chart2::data::XDataSequence,
+              css::chart2::data::XNumericalDataSequence,
+              css::chart2::data::XTextualDataSequence,
+              css::util::XCloneable,
+              css::util::XModifiable,
+              css::container::XIndexReplace,
+              css::container::XNamed,
+              css::lang::XServiceInfo>,
+          UncachedDataSequence>
 {
 public:
     /** The referring data provider is held as uno reference to ensure its
@@ -88,17 +79,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    /// merge XInterface implementations
-    DECLARE_XINTERFACE()
-    /// merge XTypeProvider implementations
-    DECLARE_XTYPEPROVIDER()
-
 private:
-    // ____ XPropertySet ____
-    /// @see css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    /// @see ::comphelper::OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     /// @see ::comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
