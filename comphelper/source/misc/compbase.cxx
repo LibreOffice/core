@@ -82,9 +82,9 @@ static void checkInterface(css::uno::Type const& rType)
     }
 }
 
-static bool isXInterface(rtl_uString* pStr)
+static bool isXInterface(typelib_TypeDescriptionReference const* pTypeLibType)
 {
-    return OUString::unacquired(&pStr) == "com.sun.star.uno.XInterface";
+    return OUString::unacquired(&pTypeLibType->pTypeName) == "com.sun.star.uno.XInterface";
 }
 
 static bool td_equals(typelib_TypeDescriptionReference const* pTDR1,
@@ -111,7 +111,7 @@ static cppu::type_entry* getTypeEntries(cppu::class_data* cd)
                 OSL_ENSURE(rType.getTypeClass() == css::uno::TypeClass_INTERFACE,
                            "### wrong helper init: expected interface!");
                 OSL_ENSURE(
-                    !isXInterface(rType.getTypeLibType()->pTypeName),
+                    !isXInterface(rType.getTypeLibType()),
                     "### want to implement XInterface: template argument is XInterface?!?!?!");
                 if (rType.getTypeClass() != css::uno::TypeClass_INTERFACE)
                 {
@@ -181,6 +181,9 @@ next:
 static void* queryDeepNoXInterface(typelib_TypeDescriptionReference const* pDemandedTDR,
                                    cppu::class_data* cd, void* that)
 {
+    if (isXInterface(pDemandedTDR))
+        return nullptr;
+
     cppu::type_entry* pEntries = getTypeEntries(cd);
     sal_Int32 nTypes = cd->m_nTypes;
     sal_Int32 n;
@@ -231,14 +234,8 @@ css::uno::Any WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::c
     typelib_TypeDescriptionReference* pTDR = rType.getTypeLibType();
 
     // shortcut XInterface to WeakComponentImplHelperBase
-    if (!isXInterface(pTDR->pTypeName))
-    {
-        void* p = queryDeepNoXInterface(pTDR, cd, pBase);
-        if (p)
-        {
-            return css::uno::Any(&p, pTDR);
-        }
-    }
+    if (void* p = queryDeepNoXInterface(pTDR, cd, pBase))
+        return css::uno::Any(&p, pTDR);
     return pBase->comphelper::WeakComponentImplHelperBase::queryInterface(rType);
 }
 
@@ -250,15 +247,9 @@ css::uno::Any WeakImplHelper_query(css::uno::Type const& rType, cppu::class_data
     checkInterface(rType);
     typelib_TypeDescriptionReference* pTDR = rType.getTypeLibType();
 
-    // shortcut XInterface to WeakComponentImplHelperBase
-    if (!isXInterface(pTDR->pTypeName))
-    {
-        void* p = queryDeepNoXInterface(pTDR, cd, pBase);
-        if (p)
-        {
-            return css::uno::Any(&p, pTDR);
-        }
-    }
+    // shortcut XInterface to WeakImplHelperBase
+    if (void* p = queryDeepNoXInterface(pTDR, cd, pBase))
+        return css::uno::Any(&p, pTDR);
     return pBase->comphelper::WeakImplHelperBase::queryInterface(rType);
 }
 
