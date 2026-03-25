@@ -41,6 +41,14 @@
 	min-width: 400px;
 }
 
+@media (max-width: 480px) {
+
+	.jsdialog-window:not(.modalpopup) .jsdialog-container:not(.snackbar) {
+		min-width: unset;
+		width: 460px;
+	}
+}
+
 .jsdialog-container:not(.snackbar) td[role='gridcell'] {
 	padding-left: 5px;
 	padding-right: 5px;
@@ -205,6 +213,14 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 	overflow: hidden; /* don't inherit scrollbar from parent */
 }
 
+@media (max-width: 480px) {
+
+	.jsdialog-container .ui-dialog-content > div:not(.ui-scrollwindow) {
+		overflow: unset;
+	}
+}
+
+
 .jsdialog-container .lokdialog.ui-dialog-content.ui-widget-content {
 	overflow: hidden;
 }
@@ -216,6 +232,15 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 	line-height: var(--default-height);
 	padding-left: inherit;
 }
+
+@media (max-width: 480px) {
+
+	.jsdialog-container .lokdialog.ui-dialog-content.ui-widget-content {
+		overflow-x: unset;
+	}
+}
+
+
 #glowframe > div.ui-frame.jsdialog.sidebar > label,
 #softedgeframe > div.ui-frame.jsdialog.sidebar > label {
 	color: var(--color-main-text);
