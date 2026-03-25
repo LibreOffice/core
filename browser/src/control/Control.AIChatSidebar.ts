@@ -209,34 +209,55 @@ namespace cool {
 			}
 		}
 
+		private appendMessage(msg: ChatMessage, index: number): void {
+			const messagesList = document.getElementById('aichat-messages-list');
+			if (!messagesList) {
+				this.updateMessagesArea();
+				return;
+			}
+			this.builder.build(messagesList, [this.getMessageJSON(msg, index)], true);
+			this.applyStyleForMessage(index);
+			this.scrollToBottom();
+		}
+
+		private updateLoadingDots(): void {
+			this.builder.updateWidget(this.container, this.getLoadingDotsJSON());
+			app.layoutingService.onDrain(() => {
+				this.scrollToBottom();
+			});
+		}
+
+		private applyStyleForMessage(index: number): void {
+			const msg = this.messages[index];
+			const el = document.getElementById('aichat-msg-' + index);
+			if (!el || !msg) return;
+
+			const cls =
+				msg.role === 'user' ? 'aichat-msg-user' : 'aichat-msg-assistant';
+			el.classList.add(cls);
+			if (msg.isError) {
+				el.classList.add('aichat-msg-error');
+			}
+			if (msg.isApproval) {
+				el.classList.add('aichat-msg-approval');
+				if (msg.approvalType === 'modify') {
+					el.classList.add('aichat-msg-approval-modify');
+				}
+			}
+			const label =
+				msg.role === 'user'
+					? _('Your message')
+					: msg.isApproval
+						? _('Action requiring approval')
+						: msg.isError
+							? _('Error message')
+							: _('AI response');
+			el.setAttribute('aria-label', label);
+		}
+
 		private applyMessageStyles(): void {
 			for (let i = 0; i < this.messages.length; i++) {
-				const el = document.getElementById('aichat-msg-' + i);
-				if (el) {
-					const cls =
-						this.messages[i].role === 'user'
-							? 'aichat-msg-user'
-							: 'aichat-msg-assistant';
-					el.classList.add(cls);
-					if (this.messages[i].isError) {
-						el.classList.add('aichat-msg-error');
-					}
-					if (this.messages[i].isApproval) {
-						el.classList.add('aichat-msg-approval');
-						if (this.messages[i].approvalType === 'modify') {
-							el.classList.add('aichat-msg-approval-modify');
-						}
-					}
-					const label =
-						this.messages[i].role === 'user'
-							? _('Your message')
-							: this.messages[i].isApproval
-								? _('Action requiring approval')
-								: this.messages[i].isError
-									? _('Error message')
-									: _('AI response');
-					el.setAttribute('aria-label', label);
-				}
+				this.applyStyleForMessage(i);
 			}
 			this.applyCardStyles();
 		}
@@ -269,10 +290,10 @@ namespace cool {
 		private scrollToBottom(): void {
 			requestAnimationFrame(() => {
 				const messagesArea = document.getElementById('aichat-messages-area');
-				if (messagesArea && messagesArea.lastElementChild) {
-					messagesArea.lastElementChild.scrollIntoView({
+				if (messagesArea) {
+					messagesArea.scrollTo({
+						top: messagesArea.scrollHeight,
 						behavior: 'smooth',
-						block: 'end',
 					});
 				}
 			});
@@ -369,7 +390,7 @@ namespace cool {
 			};
 		}
 
-		private getMessagesAreaJSON(): any {
+		private getMessagesListJSON(): any {
 			const children: any[] = [];
 
 			if (this.messages.length === 0) {
@@ -386,54 +407,63 @@ namespace cool {
 				}
 			}
 
-			// Loading dots inside messages area so they scroll with messages
-			if (this.isProcessing) {
-				const dotsChildren: any[] = [
-					{
-						id: 'aichat-dot-1',
-						type: 'fixedtext',
-						text: '\u25CF',
-						enabled: true,
-					},
-					{
-						id: 'aichat-dot-2',
-						type: 'fixedtext',
-						text: '\u25CF',
-						enabled: true,
-					},
-					{
-						id: 'aichat-dot-3',
-						type: 'fixedtext',
-						text: '\u25CF',
-						enabled: true,
-					},
-				];
-				if (this.progressText) {
-					dotsChildren.push({
-						id: 'aichat-progress-text',
-						type: 'fixedtext',
-						text: this.progressText,
-						enabled: true,
-					});
-				}
-				children.push({
-					id: 'aichat-loading-dots',
-					type: 'container',
-					horizontal: true,
-					allyRole: 'status',
-					ariaLive: 'polite' as const,
-					aria: { label: this.progressText || _('Loading') },
-					children: dotsChildren,
-				});
-			}
-
 			this.ensureContainerChildren(children, 'aichat-messages');
 
+			return {
+				id: 'aichat-messages-list',
+				type: 'container',
+				vertical: true,
+				children: children,
+			};
+		}
+
+		private getLoadingDotsJSON(): any {
+			const dotsChildren: any[] = [
+				{
+					id: 'aichat-dot-1',
+					type: 'fixedtext',
+					text: '\u25CF',
+					enabled: true,
+				},
+				{
+					id: 'aichat-dot-2',
+					type: 'fixedtext',
+					text: '\u25CF',
+					enabled: true,
+				},
+				{
+					id: 'aichat-dot-3',
+					type: 'fixedtext',
+					text: '\u25CF',
+					enabled: true,
+				},
+			];
+			if (this.progressText) {
+				dotsChildren.push({
+					id: 'aichat-progress-text',
+					type: 'fixedtext',
+					text: this.progressText,
+					enabled: true,
+				});
+			}
+			return {
+				id: 'aichat-loading-dots',
+				type: 'container',
+				horizontal: true,
+				visible: this.isProcessing,
+				allyRole: 'status',
+				ariaLive: 'polite' as const,
+				aria: { label: this.progressText || _('Loading') },
+				children: dotsChildren,
+			};
+		}
+
+		private getMessagesAreaJSON(): any {
 			return {
 				id: 'aichat-messages-area',
 				type: 'container',
 				vertical: true,
-				children: children,
+				children: [this.getMessagesListJSON(), this.getLoadingDotsJSON()],
 				allyRole: 'log',
 				ariaLive: 'polite' as const,
 				aria: { label: _('Chat messages') },
@@ -669,7 +699,8 @@ namespace cool {
 						this.currentRequestId = '';
 						this.hintText = '';
 						this.progressText = '';
-						this.updateChatState();
+						this.updateLoadingDots();
+						this.updateInputArea();
 					} else {
 						this.sendMessage();
 					}
@@ -680,7 +711,10 @@ namespace cool {
 				'aichat-chip-sanity-check': () => this.sanityCheckData(),
 				'aichat-see-more': () => {
 					this.showAllCards = !this.showAllCards;
-					this.updateMessagesArea();
+					this.builder.updateWidget(this.container, this.getMessagesListJSON());
+					app.layoutingService.onDrain(() => {
+						this.applyCardStyles();
+					});
 				},
 			};
 
@@ -934,7 +968,15 @@ namespace cool {
 			this.messages.push(userMsg);
 			this.isProcessing = true;
 
-			this.updateChatState(true);
+			if (this.messages.length === 1) {
+				// First message - full rebuild to transition from prompt cards
+				this.updateChatState(true);
+			} else {
+				this.appendMessage(userMsg, this.messages.length - 1);
+				this.updateLoadingDots();
+				this.updateInputArea();
+				this.updateHeader();
+			}
 			this.updateHint();
 
 			this.dispatchRequest();
@@ -962,7 +1004,13 @@ namespace cool {
 				});
 			}
 
-			this.updateChatState(true);
+			this.updateLoadingDots();
+			this.appendMessage(
+				this.messages[this.messages.length - 1],
+				this.messages.length - 1,
+			);
+			this.updateInputArea();
+			this.updateHeader();
 		}
 
 		private onAIChatResult(data: any): void {
@@ -990,7 +1038,7 @@ namespace cool {
 		private onAIChatProgress(data: any): void {
 			if (data.requestId !== this.currentRequestId) return;
 			this.progressText = data.status || '';
-			this.updateMessagesArea();
+			this.updateLoadingDots();
 			// Reset the request timeout so multi-round loops do not time out
 			this.startRequestTimeout(
 				this.currentRequestId,
@@ -1040,9 +1088,9 @@ namespace cool {
 						: 'inspect',
 			};
 			this.messages.push(approvalMsg);
-			this.updateMessagesArea();
+			this.appendMessage(approvalMsg, this.messages.length - 1);
 
-			// Insert approval buttons after the messages area
+			// Insert approval buttons after the message is built
 			app.layoutingService.onDrain(() => {
 				const msgEl = document.getElementById(
 					'aichat-msg-' + (this.messages.length - 1),
@@ -1085,7 +1133,7 @@ namespace cool {
 			app.socket.sendMessage('aichatapprove: ' + payload);
 			if (action === 'approve') {
 				this.progressText = _('Applying changes...');
-				this.updateMessagesArea();
+				this.updateLoadingDots();
 			} else {
 				this.hintText = _('Change rejected');
 				this.updateHint();

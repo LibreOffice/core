@@ -9,10 +9,10 @@
  */
 
 /*
- * AI Chat Sidebar — polished styling for JSDialog widgets in #sidebar-panel
+ * AI Chat Sidebar - polished styling for JSDialog widgets in #sidebar-panel
  */
 
-/* ── Animations ── */
+/* -- Animations -- */
 
 @keyframes aichat-bounce {
 	0%,
@@ -47,13 +47,13 @@
 	}
 }
 
-/* ── AI sidebar container ── */
+/* -- AI sidebar container -- */
 
 #aichat-panel {
 	height: 100%;
 }
 
-/* ── Main container ── */
+/* -- Main container -- */
 
 #aichat-main {
 	--aichat-accent: var(--doc-type, 11, 135, 231);
@@ -65,7 +65,7 @@
 	background: var(--color-main-background);
 }
 
-/* ── Header ── */
+/* -- Header -- */
 
 #aichat-header {
 	display: flex !important;
@@ -90,7 +90,7 @@
 	color: var(--color-main-text);
 }
 
-/* Header buttons — icon style */
+/* Header buttons - icon style */
 #aichat-header .ui-pushbutton-wrapper {
 	margin: 0;
 }
@@ -124,7 +124,7 @@
 	opacity: 1;
 }
 
-/* ── Messages area ── */
+/* -- Messages area -- */
 
 #aichat-messages-area {
 	flex: 1;
@@ -153,7 +153,18 @@
 	);
 }
 
-/* ── Empty state ── */
+#aichat-messages-list {
+	display: flex !important;
+	grid-auto-flow: unset !important;
+	flex-direction: column;
+	gap: 12px;
+}
+
+#aichat-messages-list:has(#aichat-empty-state) {
+	flex: 1;
+}
+
+/* -- Empty state -- */
 
 #aichat-empty-state {
 	color: var(--color-text-lighter);
@@ -174,7 +185,7 @@
 	animation: aichat-pulse 3s ease-in-out infinite;
 }
 
-/* ── Hint (transient inline warning) ── */
+/* -- Hint (transient inline warning) -- */
 
 #aichat-hint {
 	padding: 8px 14px;
@@ -186,7 +197,7 @@
 	flex-shrink: 0;
 }
 
-/* ── Message bubbles (shared) ── */
+/* -- Message bubbles (shared) -- */
 
 [id^='aichat-msg-'] {
 	max-width: 88%;
@@ -202,7 +213,7 @@
 	font-size: 13px;
 }
 
-/* ── User messages ── */
+/* -- User messages -- */
 
 [id^='aichat-msg-'].aichat-msg-user {
 	align-self: flex-end;
@@ -228,7 +239,7 @@
 	padding: 6px 10px;
 }
 
-/* ── Assistant messages ── */
+/* -- Assistant messages -- */
 
 [id^='aichat-msg-'].aichat-msg-assistant {
 	align-self: flex-start;
@@ -240,7 +251,7 @@
 		0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-/* ── Context badge (selected text preview) ── */
+/* -- Context badge (selected text preview) -- */
 
 [id^='aichat-context-'] {
 	font-size: 11px;
@@ -272,7 +283,7 @@
 	display: inline;
 }
 
-/* ── Loading indicator (three bouncing dots) ── */
+/* -- Loading indicator (three bouncing dots) -- */
 
 #aichat-loading-dots {
 	display: flex;
@@ -317,7 +328,7 @@
 	animation-delay: 0.32s;
 }
 
-/* ── Action buttons ── */
+/* -- Action buttons -- */
 
 [id^='aichat-actions-'] {
 	display: flex !important;
@@ -375,7 +386,7 @@
 	display: none !important;
 }
 
-/* ── Input area ── */
+/* -- Input area -- */
 
 #aichat-input-area {
 	display: flex !important;
@@ -417,7 +428,7 @@
 	opacity: 0.7;
 }
 
-/* ── Send button (circular icon) ── */
+/* -- Send button (circular icon) -- */
 
 #aichat-send-btn button.ui-pushbutton {
 	padding: 0;
@@ -457,7 +468,7 @@
 	transform: none;
 }
 
-/* ── Stop mode (send button restyled during processing) ── */
+/* -- Stop mode (send button restyled during processing) -- */
 
 #aichat-send-btn button.ui-pushbutton.aichat-stop-mode {
 	background: var(--color-error);
@@ -481,7 +492,7 @@
 	bottom: 13px;
 }
 
-/* ── Markdown rendering in assistant messages ── */
+/* -- Markdown rendering in assistant messages -- */
 
 [id^='aichat-msg-'].aichat-msg-assistant > [id^='aichat-msg-text-'] {
 	white-space: normal;
@@ -610,7 +621,7 @@
 	text-decoration: line-through;
 }
 
-/* ── Generated images ── */
+/* -- Generated images -- */
 
 .aichat-generated-image {
 	max-width: 100%;
@@ -619,7 +630,7 @@
 	cursor: pointer;
 }
 
-/* ── Error messages ── */
+/* -- Error messages -- */
 
 [id^='aichat-msg-'].aichat-msg-error {
 	border-color: rgba(220, 38, 38, 0.3);
@@ -631,7 +642,7 @@
 	font-size: 12px;
 }
 
-/* ── Retry button on error messages ── */
+/* -- Retry button on error messages -- */
 
 [id^='aichat-retry-'] {
 	margin-top: 6px;
@@ -653,7 +664,7 @@
 	border-color: var(--color-error);
 }
 
-/* ── Approval buttons ── */
+/* -- Approval buttons -- */
 
 .aichat-approval-buttons {
 	display: flex;
@@ -716,7 +727,7 @@
 	outline-offset: 2px;
 }
 
-/* ── Approval card (tool call requiring user action) ── */
+/* -- Approval card (tool call requiring user action) -- */
 
 [id^='aichat-msg-'].aichat-msg-approval {
 	border-color: rgba(var(--aichat-accent), 0.35);
@@ -731,7 +742,7 @@
 	background: rgba(236, 167, 0, 0.04);
 }
 
-/* ── Selection context indicator (above prompt chips) ── */
+/* -- Selection context indicator (above prompt chips) -- */
 
 #aichat-selection-context {
 	font-size: 11px;
@@ -745,7 +756,7 @@
 	animation: aichat-slide-up 0.15s ease-out;
 }
 
-/* ── Prompt suggestion cards ── */
+/* -- Prompt suggestion cards -- */
 
 #aichat-chips {
 	display: flex !important;
@@ -755,7 +766,7 @@
 	padding: 0 4px;
 }
 
-/* Individual suggestion card — pushbutton wrapper */
+/* Individual suggestion card - pushbutton wrapper */
 #aichat-chips > [id^='aichat-chip-'] {
 	margin: 0 0 8px;
 	animation: aichat-slide-up 0.2s ease-out both;
@@ -812,7 +823,7 @@
 }
 
 
-/* ── "See more" / "See less" button ── */
+/* -- "See more" / "See less" button -- */
 
 #aichat-chips > #aichat-see-more {
 	margin: 2px 0 0;
@@ -838,7 +849,7 @@
 	background: rgba(var(--aichat-accent), 0.06);
 }
 
-/* ── Clickable cell references ── */
+/* -- Clickable cell references -- */
 
 .aichat-cell-ref {
 	font-family: 'Courier New', Courier, monospace;
@@ -868,7 +879,7 @@
 	background: rgba(var(--aichat-accent), 0.22);
 }
 
-/* ── Accessibility: reduced motion ── */
+/* -- Accessibility: reduced motion -- */
 
 @media (prefers-reduced-motion: reduce) {
 	[id^='aichat-msg-'],
