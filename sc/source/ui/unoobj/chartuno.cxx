@@ -510,13 +510,6 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, b
     }
 }
 
-// ::comphelper::OPropertySetHelper
-
-::cppu::IPropertyArrayHelper& ScChartObj::getInfoHelper()
-{
-    return *ScChartObj_PABase::getArrayHelper();
-}
-
 void ScChartObj::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 nHandle, const uno::Any& rValue )
 {
     switch ( nHandle )
@@ -597,14 +590,6 @@ void ScChartObj::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/,
     describeProperties( aProps );
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
-
-// XInterface
-
-IMPLEMENT_FORWARD_XINTERFACE2( ScChartObj, ScChartObj_Base, ScChartObj_PBase )
-
-// XTypeProvider
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScChartObj, ScChartObj_Base, ScChartObj_PBase )
 
 // XTableChart
 
@@ -725,13 +710,6 @@ OUString SAL_CALL ScChartObj::getName()
 void SAL_CALL ScChartObj::setName( const OUString& /* aName */ )
 {
     throw uno::RuntimeException();      // name cannot be changed
-}
-
-// XPropertySet
-
-uno::Reference< beans::XPropertySetInfo > ScChartObj::getPropertySetInfo()
-{
-    return createPropertySetInfo( getInfoHelper() ) ;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
