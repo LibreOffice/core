@@ -145,7 +145,7 @@ gb_MERGE_LIBRARY_LIST += \
 		dbaxml) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
-	dlgprov \
+	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
 	$(if $(ENABLE_EVOAB2),evoab) \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
 		flat \
@@ -165,7 +165,7 @@ gb_MERGE_LIBRARY_LIST += \
 		macab1 \
 	) \
 	mozbootstrap \
-	msforms \
+	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysql_jdbc) \
 	$(call gb_Helper_optional,MARIADBC,$(call gb_Helper_optional,DBCONNECTIVITY,mysqlc)) \
 	$(if $(ENABLE_OPENGL_TRANSITIONS),OGLTrans) \
