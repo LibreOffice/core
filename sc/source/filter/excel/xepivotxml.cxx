@@ -312,12 +312,14 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
     SvNumberFormatter& rFormatter = GetFormatter();
 
-    // In Excel, DATE can't be later than 9999-12-31.
+    // In Excel, DATE can't be earlier than 1899-12-30 (serial 0)
+    // or later than 9999-12-31.
     // Number of days from 1900-01-01 to 9999-12-31 is 2958465.
+    constexpr double MIN_DATE = 0;
     constexpr double MAX_DATE = 2.958465e6;
     auto GetClampedDate = [&](double fVal, double fSub)
     {
-        if (fVal > MAX_DATE)
+        if (fVal < MIN_DATE ||  fVal > MAX_DATE)
             return GetExcelFormattedDate(fSub, rFormatter);
         else
             return GetExcelFormattedDate(fVal, rFormatter);
@@ -391,7 +393,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         auto pGroupAttList = sax_fastparser::FastSerializerHelper::createAttrList();
         pGroupAttList->add(XML_groupBy, sGroupBy);
         // Possible TODO: find out when to write autoStart attribute for years grouping
-        pGroupAttList->add(XML_startDate, GetClampedDate(pGI->mfStart, 0).toUtf8());
+        pGroupAttList->add(XML_startDate, GetClampedDate(pGI->mfStart, MIN_DATE).toUtf8());
         pGroupAttList->add(XML_endDate, GetClampedDate(pGI->mfEnd, MAX_DATE).toUtf8());
         if (pGI->mfStep)
             pGroupAttList->add(XML_groupInterval, OString::number(pGI->mfStep));
@@ -518,7 +520,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
 
         if (isContainsDate)
         {
-            pAttList->add(XML_minDate, GetClampedDate(fMin, 0).toUtf8());
+            pAttList->add(XML_minDate, GetClampedDate(fMin, MIN_DATE).toUtf8());
             pAttList->add(XML_maxDate, GetClampedDate(fMax, MAX_DATE).toUtf8());
         }
 
@@ -547,7 +549,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                         if (isContainsDate)
                         {
                             double fDate = rItem.GetValue();
-                            if (fDate > MAX_DATE)
+                            if (fDate < MIN_DATE || fDate > MAX_DATE)
                                 pDefStrm->singleElement(XML_n, XML_v, OString::number(fDate));
                             else
                                 pDefStrm->singleElement(
