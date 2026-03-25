@@ -87,7 +87,7 @@ gb_LinkTarget_LDFLAGS += -Wl,-Bsymbolic-functions
 endif
 
 gb_LINKEROPTFLAGS := -Wl,-O1
-gb_LINKERSTRIPDEBUGFLAGS := -Wl,-S
+gb_LINKERSTRIPDEBUGFLAGS := -Wl,-s
 
 # LinkTarget class
 
