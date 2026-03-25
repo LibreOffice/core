@@ -44,7 +44,7 @@
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
-#include <comphelper/propshlp.hxx>
+#include <comphelper/propimplhelper.hxx>
 #include <comphelper/compbase.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -87,15 +87,14 @@ sal_Int32 impl_getPropGroup(sal_Int32 nID)
    disable it in case only the new schema must be used.
  */
 
-typedef ::comphelper::WeakComponentImplHelper<
-            css::lang::XServiceInfo,
-            css::lang::XInitialization,
-            css::util::XChangesListener,    // => XEventListener
-            css::util::XPathSettings>       // => XPropertySet
-                PathSettings_BASE;
+using PathSettings_BASE = comphelper::OPropertyImplHelper<
+                              comphelper::WeakComponentImplHelper<
+                                  css::lang::XServiceInfo,
+                                  css::lang::XInitialization,
+                                  css::util::XChangesListener,    // => XEventListener
+                                  css::util::XPathSettings>>;     // => XPropertySet
 
 class PathSettings : public PathSettings_BASE
-                   , public comphelper::OPropertySetHelper
 {
     struct PathInfo
     {
@@ -163,10 +162,6 @@ private:
 
 public:
 
-    /** initialize a new instance of this class.
-        Attention: It's necessary for right function of this class, that the order of base
-        classes is the right one. Because we transfer information from one base to another
-        during this ctor runs! */
     explicit PathSettings(css::uno::Reference< css::uno::XComponentContext >  xContext);
 
     /** free all used resources ... if it was not already done. */
@@ -186,16 +181,6 @@ public:
     {
         return {u"com.sun.star.util.PathSettings"_ustr};
     }
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
-    virtual void SAL_CALL acquire() noexcept override
-        { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override
-        { OWeakObject::release(); }
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // css::util::XChangesListener
     virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent) override;
@@ -311,22 +296,6 @@ public:
     virtual void SAL_CALL setBasePathUserLayer(const OUString& p1) override
         { setStringProperty(u"UserConfig"_ustr, p1); }
 
-    /**
-     * overrides to resolve inheritance ambiguity
-     */
-    virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) override
-        { ::comphelper::OPropertySetHelper::setPropertyValue(p1, p2); }
-    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) override
-        { return ::comphelper::OPropertySetHelper::getPropertyValue(p1); }
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
-        { ::comphelper::OPropertySetHelper::addPropertyChangeListener(p1, p2); }
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
-        { ::comphelper::OPropertySetHelper::removePropertyChangeListener(p1, p2); }
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
-        { ::comphelper::OPropertySetHelper::addVetoableChangeListener(p1, p2); }
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
-        { ::comphelper::OPropertySetHelper::removeVetoableChangeListener(p1, p2); }
-
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
@@ -416,7 +385,7 @@ private:
                                   const PathSettings::PathInfo* pPathOld,
                                   const PathSettings::PathInfo* pPathNew);
 
-    //  OPropertySetHelper
+    //  OPropertyImplHelper
     virtual bool convertFastPropertyValue( std::unique_lock<std::mutex>& g, css::uno::Any&  aConvertedValue,
             css::uno::Any& aOldValue,
             sal_Int32 nHandle,
@@ -425,12 +394,8 @@ private:
             const css::uno::Any&  aValue ) override;
     virtual void getFastPropertyValue( std::unique_lock<std::mutex>& g, css::uno::Any&  aValue,
             sal_Int32 nHandle ) const override;
-    // Avoid:
-    // warning: 'virtual css::uno::Any cppu::OPropertySetHelper::getFastPropertyValue(sal_Int32)' was hidden [-Woverloaded-virtual]
-    // warning:   by ‘virtual void {anonymous}::PathSettings::getFastPropertyValue(css::uno::Any&, sal_Int32) const’ [-Woverloaded-virtual]
-    using comphelper::OPropertySetHelper::getFastPropertyValue;
+    using PathSettings_BASE::getFastPropertyValue;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
     /** factory methods to guarantee right (but on demand) initialized members ... */
     css::uno::Reference< css::util::XStringSubstitution > fa_getSubstitution(std::unique_lock<std::mutex>& g);
@@ -439,9 +404,7 @@ private:
 };
 
 PathSettings::PathSettings( css::uno::Reference< css::uno::XComponentContext >  xContext )
-    : PathSettings_BASE()
-    , comphelper::OPropertySetHelper()
-    ,   m_xContext (std::move(xContext))
+    : m_xContext(std::move(xContext))
 {
 }
 
@@ -451,8 +414,10 @@ PathSettings::~PathSettings()
     disposing(g);
 }
 
-void PathSettings::disposing(std::unique_lock<std::mutex>& /*g*/)
+void PathSettings::disposing(std::unique_lock<std::mutex>& g)
 {
+    disposePropertySetListeners(g);
+
     css::uno::Reference< css::util::XChangesNotifier >
         xBroadcaster(m_xCfgNew, css::uno::UNO_QUERY);
     if (xBroadcaster.is())
@@ -464,22 +429,6 @@ void PathSettings::disposing(std::unique_lock<std::mutex>& /*g*/)
     m_xCfgNewListener.clear();
 
     m_pPropHelp.reset();
-}
-
-css::uno::Any SAL_CALL PathSettings::queryInterface( const css::uno::Type& _rType )
-{
-    css::uno::Any aRet = PathSettings_BASE::queryInterface( _rType );
-    if ( !aRet.hasValue() )
-        aRet = ::comphelper::OPropertySetHelper::queryInterface( _rType );
-    return aRet;
-}
-
-css::uno::Sequence< css::uno::Type > SAL_CALL PathSettings::getTypes(  )
-{
-    return comphelper::concatSequences(
-        PathSettings_BASE::getTypes(),
-        ::comphelper::OPropertySetHelper::getTypes()
-    );
 }
 
 void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEvent)
@@ -523,7 +472,7 @@ void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
 
 OUString PathSettings::getStringProperty(const OUString& p1)
 {
-    css::uno::Any a = ::comphelper::OPropertySetHelper::getPropertyValue(p1);
+    css::uno::Any a = getPropertyValue(p1);
     OUString s;
     a >>= s;
     return s;
@@ -531,7 +480,7 @@ OUString PathSettings::getStringProperty(const OUString& p1)
 
 void PathSettings::setStringProperty(const OUString& p1, const OUString& p2)
 {
-    ::comphelper::OPropertySetHelper::setPropertyValue(p1, css::uno::Any(p2));
+    setPropertyValue(p1, css::uno::Any(p2));
 }
 
 void PathSettings::readAll()
@@ -1342,11 +1291,6 @@ void PathSettings::getFastPropertyValue(std::unique_lock<std::mutex>& g,
 ::cppu::IPropertyArrayHelper& PathSettings::getInfoHelper()
 {
     return *m_pPropHelp;
-}
-
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL PathSettings::getPropertySetInfo()
-{
-    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
 css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubstitution(std::unique_lock<std::mutex>& g)
