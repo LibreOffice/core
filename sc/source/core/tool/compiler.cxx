@@ -1444,14 +1444,22 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             }
         }
 
-        makeSingleCellStr(rLimits, rBuf, aRef.Ref1, aAbs1);
+        OUStringBuffer aBuf;
+
+        makeSingleCellStr(rLimits, aBuf, aRef.Ref1, aAbs1);
         if (!bSingleRef &&
                 (aAbs1.Row() != aAbs2.Row() || aRef.Ref1.IsRowRel() != aRef.Ref2.IsRowRel() ||
                  aAbs1.Col() != aAbs2.Col() || aRef.Ref1.IsColRel() != aRef.Ref2.IsColRel()))
         {
-            rBuf.append( ':' );
-            makeSingleCellStr(rLimits, rBuf, aRef.Ref2, aAbs2);
+            aBuf.append( ':' );
+            makeSingleCellStr(rLimits, aBuf, aRef.Ref2, aAbs2);
         }
+
+        OUString sErrRef = "#REF!";
+        if (aBuf.indexOf(sErrRef) == -1)
+            rBuf.append(aBuf);
+        else
+            rBuf.append(sErrRef);
     }
 
     virtual ParseResult parseAnyToken( const OUString& rFormula,
@@ -1524,12 +1532,20 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, rTabNames, aAbsRef);
         rBuffer.append('!');
 
-        makeSingleCellStr(rLimits, rBuffer, rRef.Ref1, aAbsRef.aStart);
+        OUStringBuffer aBuf;
+
+        makeSingleCellStr(rLimits, aBuf, rRef.Ref1, aAbsRef.aStart);
         if (aAbsRef.aStart != aAbsRef.aEnd)
         {
-            rBuffer.append(':');
-            makeSingleCellStr(rLimits, rBuffer, rRef.Ref2, aAbsRef.aEnd);
+            aBuf.append(':');
+            makeSingleCellStr(rLimits, aBuf, rRef.Ref2, aAbsRef.aEnd);
         }
+
+        OUString sErrRef = "#REF!";
+        if (aBuf.indexOf(sErrRef) == -1)
+            rBuffer.append(aBuf);
+        else
+            rBuffer.append(sErrRef);
     }
 };
 
@@ -1693,13 +1709,20 @@ struct ConventionXL_OOX : public ConventionXL_A1
             rBuffer.append( aBuf);
         }
         rBuffer.append('!');
+        aBuf.setLength(0);
 
-        makeSingleCellStr(rLimits, rBuffer, rRef.Ref1, aAbsRef.aStart);
+        makeSingleCellStr(rLimits, aBuf, rRef.Ref1, aAbsRef.aStart);
         if (aAbsRef.aStart != aAbsRef.aEnd)
         {
-            rBuffer.append(':');
-            makeSingleCellStr(rLimits, rBuffer, rRef.Ref2, aAbsRef.aEnd);
+            aBuf.append(':');
+            makeSingleCellStr(rLimits, aBuf, rRef.Ref2, aAbsRef.aEnd);
         }
+
+        OUString sErrRef = "#REF!";
+        if (aBuf.indexOf(sErrRef) == -1)
+            rBuffer.append(aBuf);
+        else
+            rBuffer.append(sErrRef);
     }
 
     static void makeExternalDocStr( OUStringBuffer& rBuffer, sal_uInt16 nFileId )
