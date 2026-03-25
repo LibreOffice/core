@@ -24,10 +24,8 @@
 #include <com/sun/star/sheet/SensitivityReport.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase.hxx>
-#include <comphelper/compbase.hxx>
-#include <comphelper/propertycontainer2.hxx>
-#include <comphelper/proparrhlp.hxx>
+
+#include <comphelper/propcontainerimplhelper.hxx>
 #include <unotools/resmgr.hxx>
 
 #include <unordered_map>
@@ -54,15 +52,13 @@ struct ScSolverCellEqual
 
 typedef std::unordered_map< css::table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
 
-typedef comphelper::WeakImplHelper<
-                css::sheet::XSolver,
-                css::sheet::XSolverDescription,
-                css::lang::XServiceInfo >
-        SolverComponent_Base;
-
-class SolverComponent : public comphelper::OPropertyContainer2,
-                        public comphelper::OPropertyArrayUsageHelper< SolverComponent >,
-                        public SolverComponent_Base
+class SolverComponent
+    : public comphelper::OPropertyContainerImplHelper<
+          comphelper::WeakImplHelper<
+              css::sheet::XSolver,
+              css::sheet::XSolverDescription,
+              css::lang::XServiceInfo>,
+          SolverComponent>
 {
 protected:
     // settings
@@ -111,11 +107,6 @@ public:
                             SolverComponent();
     virtual                 ~SolverComponent() override;
 
-    DECLARE_XINTERFACE()
-    DECLARE_XTYPEPROVIDER()
-
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;     // from OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;    // from OPropertyArrayUsageHelper
 
                             // XSolver
