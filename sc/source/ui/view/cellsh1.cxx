@@ -1519,7 +1519,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     bool bOle = ( nFormat == SotClipboardFormatId::EMBED_SOURCE );
 
                     if ( bCells && bOle )
-                        pTabViewShell->PasteFromSystem();
+                        ScClipUtil::PasteFromClipboard( GetViewData(), pTabViewShell, true );
                     else if ( bDraw && bOle )
                         pTabViewShell->PasteDraw();
                     else
