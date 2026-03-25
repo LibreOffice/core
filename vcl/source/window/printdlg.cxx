@@ -578,6 +578,7 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
     , mbShowLayoutFrame( true )
+    , mbHasCustomPaperEntry( false )
     , maUpdatePreviewIdle("Print Dialog Update Preview Idle")
 {
     // save printbutton text, gets exchanged occasionally with print to file
@@ -697,6 +698,9 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     // tdf#129180 Delay setting the default value in the Paper Size list
     // set paper sizes listbox
     setPaperSizes();
+    // Sync selected paper size with the controller for preview.
+    if (mxPaperSizeBox->get_sensitive() && mxPaperSizeBox->get_active() != -1)
+        SelectPaperSizeHdl(*mxPaperSizeBox);
 
     mxRangeExpander->set_expanded(
         officecfg::Office::Common::Print::Dialog::RangeSectionExpanded::get());
@@ -800,6 +804,7 @@ void PrintDialog::setPaperSizes()
 {
     mxPaperSizeBox->clear();
     mxPaperSizeBox->set_active(-1);
+    mbHasCustomPaperEntry = false;
 
     VclPtr<Printer> aPrt( maPController->getPrinter() );
     mePaper = aPrt->GetPaper();
@@ -835,13 +840,24 @@ void PrintDialog::setPaperSizes()
             eUnit = o3tl::Length::in100;
             nDigits = 2;
         }
+
+        // Also match by document page dimensions, not just Paper enum
+        // (e.g. a card printer whose paper has no matching enum).
+        Size aDocSize = getJobPageSize();
+        PaperInfo aDocPaperInfo(aDocSize.getWidth(), aDocSize.getHeight());
+        PaperInfo aDocRotatedInfo(aDocSize.getHeight(), aDocSize.getWidth());
+        int nDocDimMatch = -1;
+        int nDocDimRotatedMatch = -1;
+
         for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++)
         {
             PaperInfo aInfo = aPrt->GetPaperInfo( nPaper );
             aInfo.doSloppyFit(true);
             Paper ePaper = aInfo.getPaper();
 
-            Size aSize = aPrt->GetPaperSize( nPaper );
+            // Use PaperInfo directly (1/100th mm); GetPaperSize() uses
+            // PixelToLogic which can return wrong values.
+            Size aSize(aInfo.getWidth(), aInfo.getHeight());
             Size aLogicPaperSize( o3tl::convert(aSize, o3tl::Length::mm100, eUnit) );
 
             OUString aWidth( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
@@ -873,8 +889,18 @@ void PrintDialog::setPaperSizes()
 
             if (ePaper == PAPER_USER && aInfo.sloppyEqual(aRotatedPaperInfo))
                 nRotatedSizeMatch = nPaper;
+
+            // Match by document page dimensions
+            if (!aDocSize.IsEmpty())
+            {
+                if (nDocDimMatch == -1 && aInfo.sloppyEqual(aDocPaperInfo))
+                    nDocDimMatch = nPaper;
+                if (nDocDimRotatedMatch == -1 && aInfo.sloppyEqual(aDocRotatedInfo))
+                    nDocDimRotatedMatch = nPaper;
+            }
         }
 
+        // Select the best match: exact enum > exact rotated > size > rotated size
         if (nExactMatch != -1)
             mxPaperSizeBox->set_active(nExactMatch);
         else if (nExactRotatedMatch != -1)
@@ -883,6 +909,71 @@ void PrintDialog::setPaperSizes()
             mxPaperSizeBox->set_active(nSizeMatch);
         else if (nRotatedSizeMatch != -1)
             mxPaperSizeBox->set_active(nRotatedSizeMatch);
+
+        // Override with document dimension match if enum matching failed.
+        if (nDocDimMatch != -1)
+        {
+            mxPaperSizeBox->set_active(nDocDimMatch);
+        }
+        else if (nDocDimRotatedMatch != -1)
+        {
+            mxPaperSizeBox->set_active(nDocDimRotatedMatch);
+        }
+
+        // No printer paper matches — probe the driver for custom size.
+        // If rejected (e.g. size below driver minimum), fall back to
+        // the driver's chosen paper.
+        if (!aDocSize.IsEmpty() && nDocDimMatch == -1 && nDocDimRotatedMatch == -1)
+        {
+            // Save orientation: SetPaperSizeUser forces Portrait.
+            Orientation eOrientBeforeProbe = aPrt->GetOrientation();
+            {
+                auto popIt = aPrt->ScopedPush();
+                aPrt->SetMapMode(MapMode(MapUnit::Map100thMM));
+                aPrt->SetPaperSizeUser(aDocSize);
+            }
+            // MapMode restored by ScopedPush; paper size persists.
+            Size aDriverSize = aPrt->GetSizeOfPaper();
+            PaperInfo aDriverInfo(aDriverSize.getWidth(), aDriverSize.getHeight());
+            aDriverInfo.doSloppyFit(true);
+            bool bDriverAccepted = aDriverInfo.sloppyEqual(aDocPaperInfo)
+                                || aDriverInfo.sloppyEqual(aDocRotatedInfo);
+
+            if (bDriverAccepted)
+            {
+                Size aLogicDocSize(o3tl::convert(aDocSize, o3tl::Length::mm100, eUnit));
+                OUString aWidth(rLocWrap.getNum(aLogicDocSize.Width(), nDigits));
+                OUString aHeight(rLocWrap.getNum(aLogicDocSize.Height(), nDigits));
+                OUString aUnitStr = eUnit == o3tl::Length::mm ? u"mm"_ustr : u"in"_ustr;
+
+                OUString aPaperName = Printer::GetPaperName(PAPER_USER) + " "
+                                    + aWidth + aUnitStr + " x " + aHeight + aUnitStr;
+
+                mxPaperSizeBox->append_text(aPaperName);
+                mxPaperSizeBox->set_active(aPrt->GetPaperInfoCount());
+                maCustomPaperSize = aDocSize;
+                mbHasCustomPaperEntry = true;
+            }
+            else
+            {
+                // Driver rejected/clamped — fall back to driver's paper
+                // and restore orientation clobbered by SetPaperSizeUser.
+                aPrt->SetOrientation(eOrientBeforeProbe);
+                mePaper = aPrt->GetPaper();
+                PaperInfo aFallbackInfo(aDriverSize.getWidth(), aDriverSize.getHeight());
+                PaperInfo aFallbackRotated(aDriverSize.getHeight(), aDriverSize.getWidth());
+                for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++)
+                {
+                    PaperInfo aInfo = aPrt->GetPaperInfo(nPaper);
+                    aInfo.doSloppyFit(true);
+                    if (aInfo.sloppyEqual(aFallbackInfo) || aInfo.sloppyEqual(aFallbackRotated))
+                    {
+                        mxPaperSizeBox->set_active(nPaper);
+                        break;
+                    }
+                }
+            }
+        }
 
         mxPaperSizeBox->set_sensitive( true );
     }
@@ -928,10 +1019,45 @@ IMPL_LINK_NOARG(PrintDialog, updatePreviewIdle, Timer*, void)
 void PrintDialog::preparePreview( bool i_bMayUseCache )
 {
     VclPtr<Printer> aPrt( maPController->getPrinter() );
-    Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) );
+    // Prefer maSelectedPaperSize (stable 1/100th mm) over PixelToLogic
+    // which can return wrong values during MapMode transitions.
+    Size aCurPageSize = !maSelectedPaperSize.IsEmpty()
+        ? maSelectedPaperSize
+        : aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) );
+    // maSelectedPaperSize is always portrait-order; swap to landscape
+    // based on the orientation dropdown (not GetOrientation() which
+    // can be clobbered by SetPaper/SetPaperSizeUser).
+    if (!maSelectedPaperSize.IsEmpty()
+        && aCurPageSize.Width() < aCurPageSize.Height())
+    {
+        int nOrient = mxOrientationBox->get_active();
+        bool bSwapToLandscape = false;
+        if (nOrient == ORIENTATION_AUTOMATIC)
+        {
+            Size aDocPageSize = getJobPageSize();
+            bSwapToLandscape = !aDocPageSize.IsEmpty()
+                             && aDocPageSize.getWidth() > aDocPageSize.getHeight();
+        }
+        else if (nOrient == ORIENTATION_LANDSCAPE)
+        {
+            bSwapToLandscape = true;
+        }
+        if (bSwapToLandscape)
+            aCurPageSize = Size(aCurPageSize.Height(), aCurPageSize.Width());
+    }
     // tdf#123076 Get paper size for the preview top label
     mePaper = aPrt->GetPaper();
     GDIMetaFile aMtf;
+
+    // Use custom paper size for preview even if the driver rejected it
+    // (e.g. "Print to PDF" reverts DMPAPER_USER to A4).
+    const bool bUseCustomPreviewSize = mbHasCustomPaperEntry
+        && mxPaperSizeBox->get_active() == aPrt->GetPaperInfoCount();
+    if (bUseCustomPreviewSize)
+    {
+        aCurPageSize = maCustomPaperSize;
+        mePaper = PAPER_USER;
+    }
 
     // page range may have changed depending on options
     sal_Int32 nPages = maPController->getFilteredPageCount();
@@ -972,10 +1098,21 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
         PrinterController::PageSize aPageSize =
             maPController->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
 
-        if (mxOrientationBox->get_active() == ORIENTATION_AUTOMATIC)
+        if (!bUseCustomPreviewSize
+            && mxOrientationBox->get_active() == ORIENTATION_AUTOMATIC)
         {
-            aCurPageSize
-                = aPrt->PixelToLogic(aPrt->GetPaperSizePixel(), MapMode(MapUnit::Map100thMM));
+            aCurPageSize = !maSelectedPaperSize.IsEmpty()
+                ? maSelectedPaperSize
+                : aPrt->PixelToLogic(aPrt->GetPaperSizePixel(), MapMode(MapUnit::Map100thMM));
+            // Swap to landscape if document requires it.
+            if (!maSelectedPaperSize.IsEmpty())
+            {
+                Size aDocPageSize = getJobPageSize();
+                bool bDocLandscape = !aDocPageSize.IsEmpty()
+                                   && aDocPageSize.getWidth() > aDocPageSize.getHeight();
+                if (bDocLandscape && aCurPageSize.Width() < aCurPageSize.Height())
+                    aCurPageSize = Size(aCurPageSize.Height(), aCurPageSize.Width());
+            }
         }
 
         if( ! aPageSize.bFullPaper )
@@ -985,7 +1122,8 @@ void PrintDialog::preparePreview( bool i_bMayUseCache )
             aMtf.Move( aOff.X(), aOff.Y() );
         }
         // tdf#150561: page size may have changed so sync mePaper with it
-        mePaper = aPrt->GetPaper();
+        if (!bUseCustomPreviewSize)
+            mePaper = aPrt->GetPaper();
     }
 
     mxPreview->setPreview( aMtf, aCurPageSize,
@@ -1025,8 +1163,17 @@ void PrintDialog::updatePageSize(int nOrientation)
     Size aSize;
     if (mxNupPagesBox->get_active_id() == "1")
     {
-        PaperInfo aInfo = aPrt->GetPaperInfo(mxPaperSizeBox->get_active());
-        aSize = Size(aInfo.getWidth(), aInfo.getHeight());
+        int nActive = mxPaperSizeBox->get_active();
+        // Custom entry is beyond GetPaperInfoCount(); use stored size.
+        if (mbHasCustomPaperEntry && nActive == aPrt->GetPaperInfoCount())
+        {
+            aSize = maCustomPaperSize;
+        }
+        else if (nActive >= 0 && nActive < aPrt->GetPaperInfoCount())
+        {
+            PaperInfo aInfo = aPrt->GetPaperInfo(nActive);
+            aSize = Size(aInfo.getWidth(), aInfo.getHeight());
+        }
         if (aSize.IsEmpty())
             aSize = aPrt->GetSizeOfPaper();
 
@@ -1936,28 +2083,40 @@ IMPL_LINK_NOARG(PrintDialog, ClickLastHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(PrintDialog, ClickSetupHdl, weld::Button&, void)
 {
+    const Size aSavedCustomSize = maCustomPaperSize;
+    const bool bHadCustomEntry = mbHasCustomPaperEntry;
+    // Save orientation dropdown — Properties dialog can clobber it.
+    const int nSavedOrient = mxOrientationBox->get_active();
+
     maPController->setupPrinter(m_xDialog.get());
 
+    VclPtr<Printer> aPrt(maPController->getPrinter());
     if (!isPrintToFile())
     {
-        VclPtr<Printer> aPrt( maPController->getPrinter() );
-        mePaper = aPrt->GetPaper();
+        // Rebuild paper size list to restore custom entry if needed.
+        setPaperSizes();
 
-        for (int nPaper = 0; nPaper < aPrt->GetPaperInfoCount(); nPaper++)
+        // Restore lost custom entry from saved document page size.
+        if (bHadCustomEntry && !mbHasCustomPaperEntry
+            && !aSavedCustomSize.IsEmpty())
         {
-            PaperInfo aInfo = aPrt->GetPaperInfo(nPaper);
-            aInfo.doSloppyFit(true);
-            Paper ePaper = aInfo.getPaper();
-
-            if (mePaper == ePaper)
-            {
-                mxPaperSizeBox->set_active(nPaper);
-                break;
-            }
+            maFirstPageSize = aSavedCustomSize;
+            setPaperSizes();
         }
     }
 
+    // Sync maSelectedPaperSize with current combobox selection.
+    if (mxPaperSizeBox->get_sensitive() && mxPaperSizeBox->get_active() >= 0)
+        SelectPaperSizeHdl(*mxPaperSizeBox);
+
     updateOrientationBox(false);
+
+    // Restore orientation dropdown — Properties dialog may have
+    // clobbered the printer's orientation as a side effect.
+    if (mxOrientationBox->get_active() != nSavedOrient)
+    {
+        mxOrientationBox->set_active(nSavedOrient);
+    }
 
     updatePageSize(mxOrientationBox->get_active());
 
@@ -1970,6 +2129,10 @@ IMPL_LINK_NOARG(PrintDialog, ClickSetupHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG( PrintDialog, SelectPrinterHdl, weld::ComboBox&, void )
 {
+    // Save custom size — setPrinter() resets mbPapersizeFromUser.
+    const Size aSavedCustomSize = maCustomPaperSize;
+    const bool bHadCustomEntry = mbHasCustomPaperEntry;
+
     if (!isPrintToFile())
     {
         OUString aNewPrinter(mxPrinters->get_active_text());
@@ -1987,6 +2150,16 @@ IMPL_LINK_NOARG( PrintDialog, SelectPrinterHdl, weld::ComboBox&, void )
         updatePrinterText();
         updateNup(false);
         setPaperSizes();
+
+        // Restore lost custom entry from saved document page size.
+        if (bHadCustomEntry && !mbHasCustomPaperEntry
+            && !aSavedCustomSize.IsEmpty())
+        {
+            maCustomPaperSize = aSavedCustomSize;
+            maFirstPageSize = aSavedCustomSize;
+            setPaperSizes();
+        }
+
         schedulePreviewUpdate(true);
     }
     else // print to file
@@ -1997,6 +2170,15 @@ IMPL_LINK_NOARG( PrintDialog, SelectPrinterHdl, weld::ComboBox&, void )
         maPController->resetPrinterOptions(true);
 
         setPaperSizes();
+
+        if (bHadCustomEntry && !mbHasCustomPaperEntry
+            && !aSavedCustomSize.IsEmpty())
+        {
+            maCustomPaperSize = aSavedCustomSize;
+            maFirstPageSize = aSavedCustomSize;
+            setPaperSizes();
+        }
+
         updateOrientationBox();
         schedulePreviewUpdate(true);
     }
@@ -2045,16 +2227,46 @@ IMPL_LINK_NOARG(PrintDialog, SelectNupPagesHdl, weld::ComboBox&, void)
 IMPL_LINK_NOARG(PrintDialog, SelectPaperSizeHdl, weld::ComboBox&, void)
 {
     VclPtr<Printer> aPrt(maPController->getPrinter());
-    PaperInfo aInfo = aPrt->GetPaperInfo(mxPaperSizeBox->get_active());
-    aInfo.doSloppyFit(true);
-    mePaper = aInfo.getPaper();
+    int nActive = mxPaperSizeBox->get_active();
 
-    if (mePaper == PAPER_USER)
-        aPrt->SetPaperSizeUser(Size(aInfo.getWidth(), aInfo.getHeight()));
+    // Save orientation — SetPaper/SetPaperSizeUser can clobber it.
+    Orientation eOrientBefore = aPrt->GetOrientation();
+
+    // Custom entry is beyond GetPaperInfoCount(); handle separately.
+    if (mbHasCustomPaperEntry && nActive == aPrt->GetPaperInfoCount())
+    {
+        mePaper = PAPER_USER;
+        // SetPaperSizeUser needs logical units; set Map100thMM.
+        {
+            auto popIt = aPrt->ScopedPush();
+            aPrt->SetMapMode(MapMode(MapUnit::Map100thMM));
+            aPrt->SetPaperSizeUser(maCustomPaperSize);
+        }
+        maPController->setPaperSizeFromUser(maCustomPaperSize);
+        maSelectedPaperSize = maCustomPaperSize;
+    }
     else
-        aPrt->SetPaper(mePaper);
+    {
+        PaperInfo aInfo = aPrt->GetPaperInfo(nActive);
+        aInfo.doSloppyFit(true);
+        mePaper = aInfo.getPaper();
+        Size aSelectedSize(aInfo.getWidth(), aInfo.getHeight());
+        if (mePaper == PAPER_USER)
+            aPrt->SetPaperSizeUser(aSelectedSize);
+        else
+            aPrt->SetPaper(mePaper);
 
-    maPController->setPaperSizeFromUser(Size(aInfo.getWidth(), aInfo.getHeight()));
+        maPController->setPaperSizeFromUser(aSelectedSize);
+        maSelectedPaperSize = aSelectedSize;
+    }
+
+    // In Automatic mode, restore orientation that SetPaper/SetPaperSizeUser
+    // may have changed — orientation should follow the document.
+    if (mxOrientationBox->get_active() == ORIENTATION_AUTOMATIC
+        && aPrt->GetOrientation() != eOrientBefore)
+    {
+        aPrt->SetOrientation(eOrientBefore);
+    }
 
     updatePageSize(mxOrientationBox->get_active());
 
