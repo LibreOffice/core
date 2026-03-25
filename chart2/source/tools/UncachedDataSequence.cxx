@@ -33,9 +33,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-// necessary for MS compiler
-using ::chart::impl::UncachedDataSequence_Base;
-
 namespace
 {
 constexpr OUString lcl_aServiceName = u"com.sun.star.comp.chart.UncachedDataSequence"_ustr;
@@ -110,22 +107,6 @@ void UncachedDataSequence::registerProperties()
                       cppu::UnoType<decltype(m_aXMLRange)>::get() );
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( UncachedDataSequence, UncachedDataSequence_Base, comphelper::OPropertyContainer2 )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( UncachedDataSequence, UncachedDataSequence_Base, comphelper::OPropertyContainer2 )
-
-// ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertySetInfo()
-{
-    return createPropertySetInfo( getInfoHelper() );
-}
-
-// ____ ::comphelper::OPropertySetHelper ____
-::cppu::IPropertyArrayHelper& UncachedDataSequence::getInfoHelper()
-{
-    return *getArrayHelper();
-}
-
-// ____ ::comphelper::OPropertyArrayHelper ____
 ::cppu::IPropertyArrayHelper* UncachedDataSequence::createArrayHelper() const
 {
     Sequence< beans::Property > aProps;
