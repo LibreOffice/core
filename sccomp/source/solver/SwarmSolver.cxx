@@ -25,9 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <comphelper/compbase.hxx>
-#include <comphelper/propertycontainer2.hxx>
-#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propcontainerimplhelper.hxx>
 
 #include <cmath>
 #include <vector>
@@ -96,14 +94,12 @@ enum
 
 } // end anonymous namespace
 
-typedef comphelper::WeakImplHelper<sheet::XSolver, sheet::XSolverDescription, lang::XServiceInfo>
-    SwarmSolver_Base;
-
 namespace
 {
-class SwarmSolver : public comphelper::OPropertyContainer2,
-                    public comphelper::OPropertyArrayUsageHelper<SwarmSolver>,
-                    public SwarmSolver_Base
+class SwarmSolver
+    : public comphelper::OPropertyContainerImplHelper<
+          comphelper::WeakImplHelper<sheet::XSolver, sheet::XSolverDescription, lang::XServiceInfo>,
+          SwarmSolver>
 {
 private:
     uno::Reference<sheet::XSpreadsheetDocument> mxDocument;
@@ -155,15 +151,6 @@ public:
                          cppu::UnoType<decltype(mnAlgorithm)>::get());
     }
 
-    DECLARE_XINTERFACE()
-    DECLARE_XTYPEPROVIDER()
-
-    virtual uno::Reference<beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override
-    {
-        return createPropertySetInfo(getInfoHelper());
-    }
-    // OPropertySetHelper
-    virtual cppu::IPropertyArrayHelper& getInfoHelper() override { return *getArrayHelper(); }
     // OPropertyArrayUsageHelper
     virtual cppu::IPropertyArrayHelper* createArrayHelper() const override
     {
@@ -303,9 +290,6 @@ double SwarmSolver::getValue(const table::CellAddress& rPosition)
 {
     return getCell(rPosition)->getValue();
 }
-
-IMPLEMENT_FORWARD_XINTERFACE2(SwarmSolver, SwarmSolver_Base, comphelper::OPropertyContainer2)
-IMPLEMENT_FORWARD_XTYPEPROVIDER2(SwarmSolver, SwarmSolver_Base, comphelper::OPropertyContainer2)
 
 void SwarmSolver::applyVariables(std::vector<double> const& rVariables)
 {
