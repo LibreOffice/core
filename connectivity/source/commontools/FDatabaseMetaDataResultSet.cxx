@@ -22,8 +22,6 @@
 #include <FDatabaseMetaDataResultSetMetaData.hxx>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
 #include <o3tl/safeint.hxx>
@@ -102,37 +100,12 @@ void ODatabaseMetaDataResultSet::setType(MetaDataResultSetType _eType)
 
 void ODatabaseMetaDataResultSet::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    OPropertySetHelper::disposing(rGuard);
+    disposePropertySetListeners(rGuard);
 
     m_xMetaData.clear();
     m_aRowsIter = m_aRows.end();
     m_aRows.clear();
     m_aRowsIter = m_aRows.end();
-}
-
-void SAL_CALL ODatabaseMetaDataResultSet::acquire() noexcept
-{
-    ODatabaseMetaDataResultSet_BASE::acquire();
-}
-
-void SAL_CALL ODatabaseMetaDataResultSet::release() noexcept
-{
-    ODatabaseMetaDataResultSet_BASE::release();
-}
-
-Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType )
-{
-    Any aRet = OPropertySetHelper::queryInterface(rType);
-    return aRet.hasValue() ? aRet : ODatabaseMetaDataResultSet_BASE::queryInterface(rType);
-}
-
-Sequence< Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  )
-{
-    ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
-                                    cppu::UnoType<css::beans::XFastPropertySet>::get(),
-                                    cppu::UnoType<css::beans::XPropertySet>::get());
-
-    return ::comphelper::concatSequences(aTypes.getTypes(),ODatabaseMetaDataResultSet_BASE::getTypes());
 }
 
 void ODatabaseMetaDataResultSet::setRows(ORows&& _rRows)
@@ -466,11 +439,6 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  )
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-::cppu::IPropertyArrayHelper & ODatabaseMetaDataResultSet::getInfoHelper()
-{
-    return *getArrayHelper();
-}
-
 void ODatabaseMetaDataResultSet::setProceduresMap()
 {
     m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
@@ -577,11 +545,6 @@ void ODatabaseMetaDataResultSet::setImportedKeysMap()
 {
     m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
     m_xMetaData->setImportedKeysMap();
-}
-
-Reference< css::beans::XPropertySetInfo > SAL_CALL ODatabaseMetaDataResultSet::getPropertySetInfo(  )
-{
-    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
 ORowSetValueDecorator& ORowSetValueDecorator::operator=(const ORowSetValue& _aValue)
