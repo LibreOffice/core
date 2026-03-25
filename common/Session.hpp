@@ -311,6 +311,21 @@ public:
     std::string getAIImageSize() const { return _aiImageSize; }
     void setAIImageSize(const std::string& val) { _aiImageSize = val; }
 
+    std::string getAIRequestTimeout() const { return _aiRequestTimeout; }
+    void setAIRequestTimeout(const std::string& val) { _aiRequestTimeout = val; }
+    int getAIRequestTimeoutSeconds() const
+    {
+        if (_aiRequestTimeout.empty())
+            return 120;
+        try {
+            int val = std::stoi(_aiRequestTimeout);
+            if (val < 10) val = 10;
+            return val;
+        } catch (...) {
+            return 120;
+        }
+    }
+
     const std::string& getSignatureCertificate() const { return _signatureCertificate; }
     void setSignatureCertificate(const std::string& cert) { _signatureCertificate = cert; }
 
@@ -500,6 +515,9 @@ private:
 
     // AI image generation size (e.g. "1024x1024")
     std::string _aiImageSize;
+
+    // AI request timeout in seconds (default 120, range 10-300)
+    std::string _aiRequestTimeout;
 
     /// Digital signature certificate, key, and CA
     std::string _signatureCertificate;

@@ -57,6 +57,7 @@ interface ViewSettings {
 	aiImageProviderURL: string;
 	aiImageModel: string;
 	aiImageSize: string;
+	aiRequestTimeout: string;
 }
 
 interface AIProvider {
@@ -422,6 +423,7 @@ class SettingIframe {
 		aiImageProviderURL: _('Base URL'),
 		aiImageModel: _('Model'),
 		aiImageSize: _('Image Size'),
+		aiRequestTimeout: _('Request Timeout (seconds)'),
 	};
 	private readonly settingLabels: Record<string, string> = {
 		lockAccessibilityOn: _('In-document Screen Reader'),
@@ -1766,6 +1768,7 @@ class SettingIframe {
 						aiImageProviderAPIKey: defaultSettings.aiImageProviderAPIKey,
 						aiImageModel: defaultSettings.aiImageModel,
 						aiImageSize: defaultSettings.aiImageSize,
+						aiRequestTimeout: defaultSettings.aiRequestTimeout,
 					};
 				},
 				() => this._viewSetting,
@@ -1808,6 +1811,22 @@ class SettingIframe {
 
 		container.appendChild(this.createTextAIGroup(data));
 		container.appendChild(this.createImageAIGroup(data));
+
+		const timeoutBox = this.createViewSettingsTextBox(
+			'aiRequestTimeout',
+			data,
+			false,
+			true,
+		);
+		container.appendChild(timeoutBox);
+		const timeoutInput = timeoutBox.querySelector(
+			'#aiRequestTimeout',
+		) as HTMLInputElement | null;
+		if (timeoutInput) {
+			timeoutInput.placeholder = '120';
+			timeoutInput.type = 'number';
+			timeoutInput.min = '10';
+		}
 
 		this.attachAISettingsAutoFetch(data, container);
 		this.attachAIImageSettingsAutoFetch(data, container);
@@ -2869,6 +2888,7 @@ class SettingIframe {
 			aiImageProviderURL: '',
 			aiImageModel: '',
 			aiImageSize: '',
+			aiRequestTimeout: '',
 		};
 	}
 

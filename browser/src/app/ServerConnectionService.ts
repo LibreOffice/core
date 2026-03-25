@@ -20,6 +20,7 @@ interface ViewSetting {
 	accessibilityState: boolean;
 	signatureCertificate?: string;
 	aiConfigured?: boolean;
+	aiRequestTimeout?: string;
 }
 
 class ServerConnectionService {
@@ -44,6 +45,9 @@ class ServerConnectionService {
 		}
 
 		app.map.isAIConfigured = !!viewSetting.aiConfigured;
+		app.map.aiRequestTimeout = viewSetting.aiRequestTimeout
+			? Math.max(10, Number(viewSetting.aiRequestTimeout))
+			: 120;
 
 		let zoteroPlugin = app.map.zotero;
 		const zoteroAPIKey = viewSetting.zoteroAPIKey;

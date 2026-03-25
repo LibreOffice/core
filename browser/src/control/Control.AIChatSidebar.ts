@@ -80,7 +80,6 @@ namespace cool {
 		private showAllCards: boolean = false;
 
 		private readonly SELECTION_FETCH_TIMEOUT_MS = 5000;
-		private readonly REQUEST_TIMEOUT_MS = 60000;
 		private readonly COPY_FEEDBACK_DURATION_MS = 1500;
 		private readonly TEXTAREA_MAX_HEIGHT_PX = 120;
 		private readonly FORMULA_FETCH_TIMEOUT_MS = 5000;
@@ -859,6 +858,10 @@ namespace cool {
 			return 0;
 		}
 
+		private get requestTimeoutMs(): number {
+			return (app.map.aiRequestTimeout ?? 120) * 1000;
+		}
+
 		private startRequestTimeout(
 			requestId: string,
 			ms: number,
@@ -942,7 +945,7 @@ namespace cool {
 			app.socket.sendMessage('aichat: ' + payload);
 			this.startRequestTimeout(
 				this.currentRequestId,
-				this.REQUEST_TIMEOUT_MS,
+				this.requestTimeoutMs,
 				(d) => this.onAIChatResult(d),
 			);
 		}
@@ -1042,7 +1045,7 @@ namespace cool {
 			// Reset the request timeout so multi-round loops do not time out
 			this.startRequestTimeout(
 				this.currentRequestId,
-				this.REQUEST_TIMEOUT_MS,
+				this.requestTimeoutMs,
 				(d) => this.onAIChatResult(d),
 			);
 		}
@@ -1142,7 +1145,7 @@ namespace cool {
 				// Reset timeout for the remaining loop
 				this.startRequestTimeout(
 					this.currentRequestId,
-					this.REQUEST_TIMEOUT_MS,
+					this.requestTimeoutMs,
 					(d) => this.onAIChatResult(d),
 				);
 			}

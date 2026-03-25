@@ -345,6 +345,7 @@ ul {
 
 .view-input-container input[type='text'],
 .view-input-container input[type='password'],
+.view-input-container input[type='number'],
 .view-input-container select {
 	width: 100%;
 	max-width: 400px;
@@ -359,6 +360,7 @@ ul {
 
 .view-input-container input[type='text']:focus,
 .view-input-container input[type='password']:focus,
+.view-input-container input[type='number']:focus,
 .view-input-container select:focus {
 	outline: none;
 	border-color: var(--settings-btn-primary);
