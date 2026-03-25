@@ -98,11 +98,6 @@ namespace xforms
     }
 
 
-    IMPLEMENT_FORWARD_XINTERFACE2( OXSDDataType, OXSDDataType_Base, ::comphelper::OPropertyContainer2 )
-
-
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OXSDDataType, OXSDDataType_Base, ::comphelper::OPropertyContainer2 )
-
     OUString SAL_CALL OXSDDataType::getName(  )
     {
         return m_sName;
@@ -232,10 +227,10 @@ namespace xforms
     }
 
 
-    bool OXSDDataType::convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
+    bool OXSDDataType::convertFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/, Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
     {
         // let the base class do the conversion
-        if ( !::comphelper::OPropertyContainer2::convertFastPropertyValue( rGuard, _rConvertedValue, _rOldValue, _nHandle, _rValue ) )
+        if ( !OPropertyContainerHelper::convertFastPropertyValue( _rConvertedValue, _rOldValue, _nHandle, _rValue ) )
             return false;
 
         // sanity checks
@@ -249,9 +244,9 @@ namespace xforms
     }
 
 
-    void OXSDDataType::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 _nHandle, const Any& _rValue )
+    void OXSDDataType::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& /*rGuard*/, sal_Int32 _nHandle, const Any& _rValue )
     {
-        ::comphelper::OPropertyContainer2::setFastPropertyValue_NoBroadcast( rGuard, _nHandle, _rValue );
+        OPropertyContainerHelper::setFastPropertyValue( _nHandle, _rValue );
         if ( _nHandle == PROPERTY_ID_XSD_PATTERN )
             m_bPatternMatcherDirty = true;
     }
@@ -276,41 +271,6 @@ namespace xforms
         return true;
     }
 
-
-    void SAL_CALL OXSDDataType::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
-    {
-        ::comphelper::OPropertyContainer2::setPropertyValue( aPropertyName, aValue );
-    }
-
-
-    Any SAL_CALL OXSDDataType::getPropertyValue( const OUString& PropertyName )
-    {
-        return ::comphelper::OPropertyContainer2::getPropertyValue( PropertyName );
-    }
-
-
-    void SAL_CALL OXSDDataType::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
-    {
-        ::comphelper::OPropertyContainer2::addPropertyChangeListener( aPropertyName, xListener );
-    }
-
-
-    void SAL_CALL OXSDDataType::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
-    {
-        ::comphelper::OPropertyContainer2::removePropertyChangeListener( aPropertyName, aListener );
-    }
-
-
-    void SAL_CALL OXSDDataType::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
-    {
-        ::comphelper::OPropertyContainer2::addVetoableChangeListener( PropertyName, aListener );
-    }
-
-
-    void SAL_CALL OXSDDataType::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
-    {
-        ::comphelper::OPropertyContainer2::removeVetoableChangeListener( PropertyName, aListener );
-    }
 
     OValueLimitedType_Base::OValueLimitedType_Base( const OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType( _rName, _nTypeClass )
@@ -1162,13 +1122,6 @@ template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
     css::uno::Sequence< css::beans::Property > aProps;
     ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::describeProperties( aProps );
     return new ::cppu::OPropertyArrayHelper( aProps );
-}
-
-
-template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::getPropertySetInfo()
-{
-        return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
 }
 
 
