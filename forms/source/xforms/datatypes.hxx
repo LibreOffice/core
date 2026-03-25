@@ -24,10 +24,10 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xsd/XDataType.hpp>
-#include <comphelper/compbase.hxx>
-#include <comphelper/uno3.hxx>
-#include <comphelper/propertycontainer2.hxx>
+
 #include <comphelper/proparrhlp.hxx>
+#include <comphelper/propertycontainerhelper.hxx>
+#include <comphelper/propimplhelper.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/resmgr.hxx>
 
@@ -44,11 +44,9 @@ namespace xforms
 
     //= OXSDDataType
 
-    typedef ::comphelper::WeakImplHelper        <   css::xsd::XDataType
-                                                >   OXSDDataType_Base;
-
-    class OXSDDataType  :public OXSDDataType_Base
-                        ,public ::comphelper::OPropertyContainer2
+    class OXSDDataType
+    : public comphelper::OPropertyImplHelper<comphelper::WeakImplHelper<css::xsd::XDataType>>,
+      public comphelper::OPropertyContainerHelper
     {
     private:
         // <properties>
@@ -76,9 +74,6 @@ namespace xforms
         virtual ~OXSDDataType() override;
 
     public:
-        DECLARE_XINTERFACE()
-        DECLARE_XTYPEPROVIDER()
-
         virtual OUString SAL_CALL getName(  ) override;
         virtual void SAL_CALL setName( const OUString& aName ) override;
         virtual OUString SAL_CALL getPattern() override;
@@ -91,14 +86,6 @@ namespace xforms
         virtual sal_Bool SAL_CALL validate( const OUString& value ) override;
         virtual OUString SAL_CALL explainInvalid( const OUString& value ) override;
 
-        // XPropertySet - is a base of XDataType and needs to be disambiguated
-        virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
-        virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-        virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-        virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-
     public:
         rtl::Reference<OXSDDataType> clone( const OUString& _rNewName ) const;
 
@@ -110,6 +97,12 @@ namespace xforms
                                         sal_Int32 nHandle,
                                         const css::uno::Any& rValue
                                     ) override;
+        using OPropertyImplHelper::setFastPropertyValue;
+        using OPropertyImplHelper::getFastPropertyValue;
+        virtual void getFastPropertyValue( std::unique_lock<std::mutex>&, css::uno::Any& rValue, sal_Int32 nHandle ) const override
+        {
+            OPropertyContainerHelper::getFastPropertyValue( rValue, nHandle );
+        }
 
         // --- own overridables ---
         // helper for implementing cloning of data types
@@ -213,9 +206,6 @@ namespace xforms
     protected:
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
-
-        // XPropertySet
-        virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     };
 

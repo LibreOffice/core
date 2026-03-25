@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
- * Copyright the Collabora Office contributors.
+ * Copyright the LibreOffice contributors.
  *
  * SPDX-License-Identifier: MPL-2.0
  *
