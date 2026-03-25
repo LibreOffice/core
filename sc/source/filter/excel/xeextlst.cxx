@@ -13,7 +13,9 @@
 
 #include <utility>
 #include <xeextlst.hxx>
+#include <xeformula.hxx>
 #include <xeroot.hxx>
+#include <xlformula.hxx>
 #include <xestyle.hxx>
 #include <stlpool.hxx>
 #include <scitems.hxx>
@@ -149,6 +151,10 @@ XclExpExtCF::XclExpExtCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFor
     XclExpRoot(rRoot),
     mrFormat(rFormat)
 {
+    // Explicitly register external references if the formula contains any
+    XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
+    std::unique_ptr<ScTokenArray> pTokenArray(mrFormat.CreateFlatCopiedTokenArray(0));
+    rFmlaComp.CreateFormula(EXC_FMLATYPE_CONDFMT, *pTokenArray);
 }
 
 namespace {
