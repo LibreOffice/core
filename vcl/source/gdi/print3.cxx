@@ -874,7 +874,8 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
     // #tdf 126744 Transfer paper size and orientation settings to newly selected printer
     if ( xPrinter )
     {
-        aPaperSize = xPrinter->GetPaperSize();
+        // GetSizeOfPaper() — stable 1/100th mm, avoids PixelToLogic issues.
+        aPaperSize = xPrinter->GetSizeOfPaper();
         eOrientation = xPrinter->GetOrientation();
         bSavedSizeOrientation = true;
     }
@@ -883,19 +884,20 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
     setValue( u"Name"_ustr,
               css::uno::Any( i_rPrinter->GetName() ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mxPrinter->GetPaperBin();
-    mpImplData->mxPrinter->Push();
-    mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
-    mpImplData->maDefaultPageSize = mpImplData->mxPrinter->GetPaperSize();
+    mpImplData->maDefaultPageSize = mpImplData->mxPrinter->GetSizeOfPaper();
 
     if ( bSavedSizeOrientation )
     {
-          mpImplData->mxPrinter->SetPaperSizeUser(aPaperSize);
-          mpImplData->mxPrinter->SetOrientation(eOrientation);
+        // SetPaperSizeUser needs logical units; aPaperSize is in 1/100th mm.
+        mpImplData->mxPrinter->Push();
+        mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
+        mpImplData->mxPrinter->SetPaperSizeUser(aPaperSize);
+        mpImplData->mxPrinter->SetOrientation(eOrientation);
+        mpImplData->mxPrinter->Pop();
     }
 
     mpImplData->mbPapersizeFromUser = false;
     mpImplData->mbOrientationFromUser = false;
-    mpImplData->mxPrinter->Pop();
     mpImplData->mnFixedPaperBin = -1;
 }
 
@@ -921,11 +923,8 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
     if( !xPrinter )
         return;
 
-    xPrinter->Push();
-    xPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
-
-    // get current data
-    Size aPaperSize(xPrinter->GetPaperSize());
+    // GetSizeOfPaper() — stable 1/100th mm, avoids PixelToLogic issues.
+    Size aPaperSize(xPrinter->GetSizeOfPaper());
     Orientation eOrientation = xPrinter->GetOrientation();
     sal_uInt16 nPaperBin = xPrinter->GetPaperBin();
 
@@ -944,7 +943,7 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
                 "Printer changed underneath us during setup");
     xPrinter = mpImplData->mxPrinter;
 
-    Size aNewPaperSize(xPrinter->GetPaperSize());
+    Size aNewPaperSize(xPrinter->GetSizeOfPaper());
     if (bRet)
     {
         bool bInvalidateCache = false;
@@ -972,11 +971,17 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
     else
     {
         //restore to whatever it was before we entered this method
-        xPrinter->SetOrientation( eOrientation );
         if (aPaperSize != aNewPaperSize)
+        {
+            // SetPaperSizeUser needs logical units; aPaperSize is in 1/100th mm.
+            xPrinter->Push();
+            xPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
             xPrinter->SetPaperSizeUser(aPaperSize);
+            xPrinter->Pop();
+        }
+        // Restore after SetPaperSizeUser which forces Portrait.
+        xPrinter->SetOrientation( eOrientation );
     }
-    xPrinter->Pop();
 }
 
 PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps )
@@ -1057,12 +1062,14 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 //print dialog
 void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
 {
-    mxPrinter->Push();
-    mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
-    Size aCurSize(mxPrinter->GetPaperSize());
+    Size aCurSize(mxPrinter->GetSizeOfPaper());
     if (aCurSize != maDefaultPageSize)
+    {
+        mxPrinter->Push();
+        mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
         mxPrinter->SetPaperSizeUser(maDefaultPageSize);
-    mxPrinter->Pop();
+        mxPrinter->Pop();
+    }
 }
 
 int PrinterController::getPageCountProtected() const
