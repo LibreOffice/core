@@ -1630,6 +1630,27 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testConditionalFormattingAttributes)
     assertXPathNoAttribute(pSheet, sPath.getStr(), "dxfId");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testPivotTableDate)
+{
+    createScDoc("xls/forum-mso-en4-243595.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pCache = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
+    CPPUNIT_ASSERT(pCache);
+
+    // earlier "1899-12-29T03:58:14"
+    assertXPath(pCache, "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems",
+                "minDate", u"1899-12-30T00:00:00");
+    // earlier <d v="1899-12-29T03:58:14"/>
+    assertXPath(pCache,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems/x:n[1]", "v",
+                u"-0.834560185185181");
+    // earlier <d v="1899-12-29T05:42:42"/>
+    assertXPath(pCache,
+                "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[3]/x:sharedItems/x:n[2]", "v",
+                u"-0.762013888888889");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
