@@ -124,7 +124,7 @@ WeakComponentImplHelper_query(css::uno::Type const& rType, cppu::class_data* cd,
     Serves two purposes
     (1) extracts code that doesn't need to be templated
     (2) helps to handle the custom where we have conflicting interfaces
-        e.g. multiple UNO interfaces that extend css::lang::XComponent
+        e.g. multiple UNO interfaces that extend css::uno::XInterface
 */
 class COMPHELPER_DLLPUBLIC WeakImplHelperBase : public virtual comphelper::UnoImplBase,
                                                 public cppu::OWeakObject
@@ -152,8 +152,8 @@ public:
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
     {
         static const css::uno::Sequence<css::uno::Type> aTypeList{
-            cppu::UnoType<css::uno::XWeak>::get(), cppu::UnoType<css::lang::XComponent>::get(),
-            cppu::UnoType<css::lang::XTypeProvider>::get(), cppu::UnoType<Ifc>::get()...
+            cppu::UnoType<css::uno::XWeak>::get(), cppu::UnoType<css::lang::XTypeProvider>::get(),
+            cppu::UnoType<Ifc>::get()...
         };
         return aTypeList;
     }
