@@ -607,8 +607,7 @@ Point  SwDrawBase::GetDefaultCenterPos() const
 
             if (!pTargetPage)
             {
-                // No visible cursor — pick the page with the largest
-                // visible area so the shape goes somewhere sensible.
+                // No visible cursor — pick the first visible page.
                 pTargetPage = lcl_FindBestVisiblePage(pLayout, aVisArea);
             }
 
