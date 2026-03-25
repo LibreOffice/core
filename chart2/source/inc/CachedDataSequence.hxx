@@ -19,10 +19,7 @@
 #pragma once
 
 // helper classes
-#include <comphelper/compbase.hxx>
-#include <comphelper/uno3.hxx>
-#include <comphelper/propertycontainer2.hxx>
-#include <comphelper/proparrhlp.hxx>
+#include <comphelper/propcontainerimplhelper.hxx>
 
 // interfaces and types
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -38,26 +35,20 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace chart
 {
 
-namespace impl
-{
-typedef ::comphelper::WeakComponentImplHelper<
-    css::chart2::data::XDataSequence,
-    css::chart2::data::XNumericalDataSequence,
-    css::chart2::data::XTextualDataSequence,
-    css::util::XCloneable,
-    css::util::XModifyBroadcaster,
-    css::lang::XInitialization,
-    css::lang::XServiceInfo >
-    CachedDataSequence_Base;
-}
-
 /**
  * This sequence object does store actual values within, hence "cached".
  */
-class CachedDataSequence final :
-        public ::comphelper::OPropertyContainer2,
-        public ::comphelper::OPropertyArrayUsageHelper< CachedDataSequence >,
-        public impl::CachedDataSequence_Base
+class CachedDataSequence final
+    : public comphelper::OPropertyContainerImplHelper<
+          comphelper::WeakComponentImplHelper<
+              css::chart2::data::XDataSequence,
+              css::chart2::data::XNumericalDataSequence,
+              css::chart2::data::XTextualDataSequence,
+              css::util::XCloneable,
+              css::util::XModifyBroadcaster,
+              css::lang::XInitialization,
+              css::lang::XServiceInfo>,
+          CachedDataSequence>
 {
 public:
     /** constructs an empty sequence
@@ -81,17 +72,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    /// merge XInterface implementations
-    DECLARE_XINTERFACE()
-    /// merge XTypeProvider implementations
-    DECLARE_XTYPEPROVIDER()
-
 private:
-    // ____ XPropertySet ____
-    /// @see css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
-    /// @see ::comphelper::OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     /// @see ::comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 

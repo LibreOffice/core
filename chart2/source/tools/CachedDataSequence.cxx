@@ -30,9 +30,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-// necessary for MS compiler
-using ::chart::impl::CachedDataSequence_Base;
-
 namespace
 {
 constexpr OUString lcl_aServiceName = u"com.sun.star.comp.chart.CachedDataSequence"_ustr;
@@ -145,22 +142,6 @@ Sequence< Any > CachedDataSequence::Impl_getMixedData() const
     return CommonFunctors::convertToSequence(m_aTextualSequence, CommonFunctors::makeAny());
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( CachedDataSequence, CachedDataSequence_Base, comphelper::OPropertyContainer2 )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( CachedDataSequence, CachedDataSequence_Base, comphelper::OPropertyContainer2 )
-
-// ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL CachedDataSequence::getPropertySetInfo()
-{
-    return createPropertySetInfo( getInfoHelper() );
-}
-
-// ____ ::comphelper::OPropertySetHelper ____
-::cppu::IPropertyArrayHelper& CachedDataSequence::getInfoHelper()
-{
-    return *getArrayHelper();
-}
-
-// ____ ::comphelper::OPropertyArrayHelper ____
 ::cppu::IPropertyArrayHelper* CachedDataSequence::createArrayHelper() const
 {
     Sequence< beans::Property > aProps;
