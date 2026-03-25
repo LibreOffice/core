@@ -668,6 +668,16 @@ public:
                                                                      const std::string& logContext);
 #endif // !MOBILEAPP
 
+    /// Update the stored last-modified timestamp to match a collab
+    /// PutFile that was done outside this DocumentBroker.
+    void updateLastModifiedTime(const std::string& lastModifiedTime)
+    {
+        LOG_INF("DocumentBroker [" << _docKey
+                << "]: updating last modified time to " << lastModifiedTime
+                << " (was " << _storageManager.getLastModifiedServerTimeString() << ')');
+        _storageManager.setLastModifiedServerTimeString(lastModifiedTime);
+    }
+
 private:
     /// Checks if we really need to request tile rendering or it's in progress
     /// returns true if all tiles are of the same part and size so can be grouped

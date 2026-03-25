@@ -15,6 +15,7 @@
 #include "CollabBroker.hpp"
 
 #include <COOLWSD.hpp>
+#include <Storage.hpp>
 #include <common/Anonymizer.hpp>
 #include <common/JsonUtil.hpp>
 #include <Protocol.hpp>
@@ -157,6 +158,11 @@ void CollabSocketHandler::onCheckFileInfoFinished(CheckFileInfo& cfi)
                 }
             }
 
+            // Validate the WOPI host so that subsequent connections
+            // (e.g., switching from WASM to server mode) are authorized.
+            StorageBase::validate(
+                RequestDetails::sanitizeURI(_wopiSrc), false);
+
             _isAuthenticated = true;
             LOG_INF("Collab session authenticated for WOPISrc: "
                     << Anonymizer::anonymizeUrl(_wopiSrc)
@@ -262,6 +268,34 @@ void CollabSocketHandler::handleAuthenticatedMessage(const std::string& msg)
     {
         const std::string stream = json->optValue<std::string>("stream", "contents");
         handleUpload(stream, requestId);
+    }
+    else if (type == "editing_started")
+    {
+        handleEditingStarted();
+    }
+    else if (type == "switch_to_collab" || type == "saved_and_switching")
+    {
+        // Broadcast to other handlers as-is, adding the sender's identity.
+        auto broker = _broker.lock();
+        if (broker)
+        {
+            auto self = std::dynamic_pointer_cast<CollabSocketHandler>(shared_from_this());
+            if (self)
+            {
+                std::ostringstream oss;
+                oss << "{\"type\":\"" << JsonUtil::escapeJSONValue(type)
+                    << "\",\"user\":{"
+                    << "\"id\":\"" << JsonUtil::escapeJSONValue(_userId) << "\""
+                    << ",\"name\":\"" << JsonUtil::escapeJSONValue(_username) << "\""
+                    << "}}";
+                const std::string message = oss.str();
+
+                LOG_INF("Collab: broadcasting " << type << " from "
+                        << Anonymizer::anonymize(_username));
+
+                broker->broadcastExcluding(message, self);
+            }
+        }
     }
     else
     {
@@ -453,6 +487,23 @@ void CollabSocketHandler::onFetchComplete(const std::string& /* requestId */,
                                            const std::shared_ptr<http::Session>& /* session */)
 {
     // No longer used - fetch is now via HTTP download URL
+}
+
+void CollabSocketHandler::handleEditingStarted()
+{
+    LOG_INF("Collab: user [" << Anonymizer::anonymize(_username)
+            << "] started editing, notifying other users");
+
+    auto broker = _broker.lock();
+    if (!broker)
+    {
+        LOG_ERR("Collab: broker no longer available for editing_started");
+        return;
+    }
+
+    auto self = std::dynamic_pointer_cast<CollabSocketHandler>(shared_from_this());
+    if (self)
+        broker->notifyEditingStarted(self);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2324,6 +2324,15 @@ function showWelcomeSVG() {
 						clearTimeout(timeoutId);
 						if (msg.url) {
 							global.app.console.log('Collab fetch URL: ' + msg.url);
+							// Switch to notification handler for ongoing messages
+							global.collabWs.onmessage = global._collabNotificationHandler;
+							global.collabWs.onerror = function() {
+								global.app.console.log('Collab notification WebSocket error');
+							};
+							global.collabWs.onclose = function() {
+								global.app.console.log('Collab notification WebSocket closed');
+								global.collabWs = null;
+							};
 							resolve({url: msg.url, filename: msg.filename});
 						} else {
 							global.collabWs.close();
@@ -2337,6 +2346,12 @@ function showWelcomeSVG() {
 						clearTimeout(timeoutId);
 						global.collabWs.close();
 						reject(new Error('Collab error: ' + (msg.message || msg.error || 'Unknown error')));
+					} else {
+						// Dispatch other messages (user_list, user_joined,
+						// user_left, editing_started) through the
+						// notification handler even during the initial
+						// fetch phase, so they are not lost.
+						global._collabNotificationHandler(event);
 					}
 				} catch (e) {
 					// Not JSON, might be a text message
@@ -2462,6 +2477,100 @@ function showWelcomeSVG() {
 				}
 			};
 		});
+	};
+
+	// Track other collab users known via the collab WebSocket.
+	// Each entry: {id: string, name: string, canWrite: bool}
+	global.collabUsers = [];
+
+	// Handler for ongoing collab WebSocket notifications.
+	// Dispatches to registered callbacks.
+	global._collabNotificationCallbacks = [];
+	global._collabNotificationHandler = function(event) {
+		var data = event.data;
+		try {
+			var msg = JSON.parse(data);
+		} catch (e) {
+			return;
+		}
+
+		if (msg.type === 'user_list' && Array.isArray(msg.users)) {
+			global.collabUsers = msg.users;
+			global.collabEditingActive = !!msg.editingActive;
+		} else if (msg.type === 'user_joined' && msg.user) {
+			global.collabUsers.push(msg.user);
+		} else if (msg.type === 'user_left' && msg.user) {
+			global.collabUsers = global.collabUsers.filter(function(u) {
+				return u.id !== msg.user.id;
+			});
+		}
+
+		for (var i = 0; i < global._collabNotificationCallbacks.length; i++) {
+			global._collabNotificationCallbacks[i](msg);
+		}
+	};
+
+	// Register a callback for collab notifications.
+	global.addCollabNotificationListener = function(callback) {
+		global._collabNotificationCallbacks.push(callback);
+	};
+
+	// Send a message on the collab WebSocket (if open).
+	global.collabSendMessage = function(msg) {
+		if (global.collabWs && global.collabWs.readyState === WebSocket.OPEN) {
+			global.collabWs.send(typeof msg === 'string' ? msg : JSON.stringify(msg));
+		}
+	};
+
+	// Switch from WASM to traditional server-based collaborative editing.
+	// Submits a form POST to the server-served cool.html, replicating
+	// the original WOPI loading mechanism used by wasm.html.
+	global.switchToServerMode = function() {
+		// Mute the emscripten message bridge so the WASM
+		// module stops interfering with the new connection.
+		window.postMobileMessage = function() {};
+		window.postMobileCall = function() {};
+
+		// No longer a mobile/WASM app from the browser's
+		// perspective - we're switching to server mode.
+		window.ThisIsAMobileApp = false;
+		window.ThisIsTheEmscriptenApp = false;
+
+		// Close the collab WebSocket if open.
+		if (global.collabWs) {
+			global.collabWs.close();
+			global.collabWs = null;
+		}
+
+		// Ensure access token is available for the server
+		// session.
+		if (window.accessToken) {
+			global.app.map.options.docParams['access_token'] =
+				window.accessToken;
+			global.app.map.options.docParams['access_token_ttl'] =
+				window.accessTokenTTL || '0';
+		}
+		global.app.map.options.docParams['permission'] = 'edit';
+
+		// Create a real WebSocket to coolwsd.  Cannot use
+		// createWebSocket() since it checks ThisIsAMobileApp
+		// (which we just cleared) but we want a plain WS.
+		var loc = window.location;
+		var wsScheme = loc.protocol === 'https:' ? 'wss://' : 'ws://';
+		var docUrl = global.app.map.options.doc;
+		var sep = docUrl.includes('?') ? '&' : '?';
+		var params = global.app.map.options.docParams;
+		var paramStr = Object.keys(params).map(function(k) {
+			return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+		}).join('&');
+		var docUrlWithToken = docUrl + sep + paramStr;
+		var wsURI = wsScheme + loc.host + '/cool/ws?WOPISrc='
+			+ encodeURIComponent(docUrlWithToken) + '&compat=/ws';
+		global.app.console.log('Switching to server mode in-place: '
+			+ wsURI);
+
+		var ws = new WebSocket(wsURI);
+		global.app.socket.connect(ws);
 	};
 
 	function handleViewportChange(event) {

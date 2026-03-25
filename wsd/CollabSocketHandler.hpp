@@ -107,6 +107,9 @@ private:
     /// Handle upload request - returns a one-time upload URL for HTTP PUT
     void handleUpload(const std::string& stream, const std::string& requestId);
 
+    /// Handle editing_started notification - broadcast to other users
+    void handleEditingStarted();
+
     /// Callback when fetch completes
     void onFetchComplete(const std::string& requestId, const std::string& stream,
                          const std::shared_ptr<http::Session>& session);

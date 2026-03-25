@@ -113,6 +113,12 @@ bool CollabBroker::isEmpty() const
     return getHandlerCount() == 0;
 }
 
+bool CollabBroker::isIdle() const
+{
+    std::lock_guard<std::mutex> lock(_mutex);
+    return _handlers.empty() && !_editingStarted;
+}
+
 void CollabBroker::setWopiInfo(Poco::JSON::Object::Ptr wopiInfo)
 {
     std::lock_guard<std::mutex> lock(_mutex);
@@ -145,6 +151,21 @@ void CollabBroker::broadcastMessage(const std::string& message)
     }
 }
 
+void CollabBroker::broadcastExcluding(const std::string& message,
+                                       const std::shared_ptr<CollabSocketHandler>& exclude)
+{
+    std::lock_guard<std::mutex> lock(_mutex);
+
+    for (auto& weakHandler : _handlers)
+    {
+        auto h = weakHandler.lock();
+        if (h && h.get() != exclude.get())
+        {
+            h->sendTextMessage(message);
+        }
+    }
+}
+
 std::string CollabBroker::getUserListJson(const std::shared_ptr<CollabSocketHandler>& exclude) const
 {
     std::lock_guard<std::mutex> lock(_mutex);
@@ -169,7 +190,8 @@ std::string CollabBroker::getUserListJson(const std::shared_ptr<CollabSocketHand
         }
     }
 
-    oss << "]}";
+    oss << "],\"editingActive\":" << (_editingStarted ? "true" : "false")
+        << '}';
     return oss.str();
 }
 
@@ -212,6 +234,31 @@ void CollabBroker::notifyUserLeft(const std::shared_ptr<CollabSocketHandler>& ha
 
     // Send to all remaining handlers
     std::lock_guard<std::mutex> lock(_mutex);
+    for (auto& weakHandler : _handlers)
+    {
+        auto h = weakHandler.lock();
+        if (h && h.get() != handler.get())
+        {
+            h->sendTextMessage(message);
+        }
+    }
+}
+
+void CollabBroker::notifyEditingStarted(const std::shared_ptr<CollabSocketHandler>& handler)
+{
+    std::ostringstream oss;
+    oss << "{\"type\":\"editing_started\",\"user\":{"
+        << "\"id\":\"" << JsonUtil::escapeJSONValue(handler->getUserId()) << "\""
+        << ",\"name\":\"" << JsonUtil::escapeJSONValue(handler->getUsername()) << "\""
+        << "}}";
+    const std::string message = oss.str();
+
+    LOG_INF("CollabBroker [" << _docKey << "]: notifying editing started by: "
+            << Anonymizer::anonymize(handler->getUsername()));
+
+    // Send to all handlers except the one that started editing
+    std::lock_guard<std::mutex> lock(_mutex);
+    _editingStarted = true;
     for (auto& weakHandler : _handlers)
     {
         auto h = weakHandler.lock();
@@ -308,9 +355,9 @@ void cleanupCollabBrokers()
 
     for (auto it = CollabBrokers.begin(); it != CollabBrokers.end(); )
     {
-        if (it->second && it->second->isEmpty())
+        if (it->second && it->second->isIdle())
         {
-            LOG_INF("Removing empty CollabBroker for docKey [" << it->first << ']');
+            LOG_INF("Removing idle CollabBroker for docKey [" << it->first << ']');
             it = CollabBrokers.erase(it);
         }
         else

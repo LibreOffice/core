@@ -138,6 +138,14 @@ var initUI = function() {
 };
 
 if (window.ThisIsTheEmscriptenApp) {
+	// Ensure the access token is available on the global object
+	// for switchToServerMode (MobileAppInitializer does not set
+	// window.accessToken, unlike BrowserAppInitializer).
+	if (typeof accessToken !== 'undefined') {
+		global.accessToken = accessToken;
+		global.accessTokenTTL = accessTokenTTL;
+	}
+
 	if (isWopi) {
 		// Use collab WebSocket endpoint to get a download URL
 		var docParamsString = $.param(docParams);
@@ -153,9 +161,19 @@ if (window.ThisIsTheEmscriptenApp) {
 			global.collabUploadFile(fullDocUrl, accessToken, fileBytes).then(function() {
 				window.app.console.log('WASM: save completed successfully');
 				map.fire('hidebusy');
+				if (window._switchToServerAfterSave) {
+					window._switchToServerAfterSave = false;
+					window.app.console.log('WASM: switching to server mode after save');
+					window.collabSendMessage({type: 'saved_and_switching'});
+					window.switchToServerMode();
+				}
 			}).catch(function(err) {
 				window.app.console.error('WASM: save failed: ' + err.message);
 				map.fire('hidebusy');
+				if (window._switchToServerAfterSave) {
+					window._switchToServerAfterSave = false;
+					window.switchToServerMode();
+				}
 			});
 		};
 
@@ -168,6 +186,39 @@ if (window.ThisIsTheEmscriptenApp) {
 			}
 			initUI();
 			initEmscriptenModule('collab', result.url);
+
+			// If a collaborative editing session is already active,
+			// ask the new user whether they want to join.  Defer
+			// to the next tick after updatepermission, because
+			// _enterReadOnlyMode fires closealldialogs right after
+			// updatepermission.
+			if (global.collabEditingActive) {
+				var showCollabDialog = function () {
+					app.events.off('updatepermission', showCollabDialog);
+					setTimeout(function () {
+						map._onCollabEditingActive();
+					}, 0);
+				};
+				app.events.on('updatepermission', showCollabDialog);
+			}
+
+			// Listen for collab notifications from other users
+			global.addCollabNotificationListener(function(msg) {
+				if (msg.type === 'editing_started' && msg.user) {
+					map._onOtherUserEditingStarted(msg.user.name || msg.user.id);
+				} else if (msg.type === 'switch_to_collab') {
+					// Another user wants collaborative editing.
+					// Save local changes and switch to server mode.
+					map._onSwitchToCollabRequest();
+				} else if (msg.type === 'saved_and_switching') {
+					// The editor has saved and is switching.
+					map._onEditorSavedAndSwitching();
+				} else if (msg.type === 'user_left') {
+					// If we were waiting and all users left,
+					// stop waiting.
+					map._onCollabUserLeft();
+				}
+			});
 		}).catch(function(err) {
 			window.app.console.error('WASM: Collab fetch failed: ' + err.message + ', falling back to direct fetch');
 			initUI();

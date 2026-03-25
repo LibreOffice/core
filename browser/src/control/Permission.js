@@ -177,19 +177,172 @@ window.L.Map.include({
 		}.bind(this));
 	},
 
+	// Show dialog when in WASM mode asking user to choose between
+	// editing locally (WASM) or joining collaborative editing (server).
+	_showWasmEditChoice: function () {
+		var that = this;
+		this.uiManager.showYesNoButton(
+			'wasm-edit-choice-modal',
+			undefined,
+			_('Other users are viewing this document. How would you like to edit?'),
+			_('Collaborative editing'),
+			_('Edit locally'),
+			function () {
+				// Save local changes and switch to the
+				// server-served page for collaborative editing.
+				that._saveAndSwitchToServerMode();
+			},
+			function () {
+				// Edit locally in WASM.
+				that._proceedEditMode();
+			},
+			false
+		);
+	},
+
+	// Show a dialog asking whether to keep viewing locally or join
+	// collaborative editing.  Uses a fixed modal ID so that a
+	// second call replaces the previous dialog rather than stacking.
+	_showCollabJoinDialog: function (message) {
+		var that = this;
+		this.uiManager.showModalWithCustomButtons(
+			'collab-join-modal',
+			undefined,
+			message,
+			false,
+			[
+				{id: 'collab-keep-viewing', text: _('Keep viewing local copy')},
+				{id: 'collab-join', text: _('Join collaborative editing')}
+			],
+			[
+				{id: 'collab-keep-viewing', func_: function () {
+					// Stay in current WASM read-only mode
+				}},
+				{id: 'collab-join', func_: function () {
+					if (!window.collabUsers
+						|| window.collabUsers.length === 0) {
+						// No other collab WS users (they already
+						// switched to server mode or left).
+						window.switchToServerMode();
+					} else {
+						// Ask local editors to save and switch,
+						// then wait for the save to complete.
+						that._waitForCollabSave();
+						window.collabSendMessage({type: 'switch_to_collab'});
+					}
+				}}
+			]
+		);
+	},
+
+	// Start waiting for the local editor to save and switch.
+	// Shows a busy indicator and sets a timeout so we switch
+	// even if the editor does not respond (e.g., they have a
+	// dialog open or have already left).
+	_waitForCollabSave: function () {
+		this._waitingForCollabSwitch = true;
+		this.fire('showbusy', {
+			label: _('Waiting for changes to be saved...')
+		});
+		var that = this;
+		this._collabSaveTimeout = setTimeout(function () {
+			that._finishCollabSwitch();
+		}, 10000);
+	},
+
+	// Called when the wait is over (editor saved, timed out, or
+	// all other users left).  Cleans up and switches.
+	_finishCollabSwitch: function () {
+		if (!this._waitingForCollabSwitch)
+			return;
+		this._waitingForCollabSwitch = false;
+		if (this._collabSaveTimeout) {
+			clearTimeout(this._collabSaveTimeout);
+			this._collabSaveTimeout = null;
+		}
+		this.fire('hidebusy');
+		window.switchToServerMode();
+	},
+
+	// The local editor has saved and is switching to server mode.
+	_onEditorSavedAndSwitching: function () {
+		this._finishCollabSwitch();
+	},
+
+	// A collab user left while we were waiting for their save.
+	// If no other collab users remain, switch now.
+	_onCollabUserLeft: function () {
+		if (this._waitingForCollabSwitch
+			&& window.collabUsers && window.collabUsers.length === 0) {
+			this._finishCollabSwitch();
+		}
+	},
+
+	// Save any local WASM changes and then switch to server mode.
+	// If the document has been modified, .uno:Save triggers
+	// saveToServer -> collabSaveToServer -> collabUploadFile, and
+	// the _switchToServerAfterSave flag causes switchToServerMode
+	// to be called after the upload completes.  If there are no
+	// modifications, .uno:Save is a no-op and we switch immediately.
+	_saveAndSwitchToServerMode: function () {
+		if (this._permission === 'edit' && this._everModified) {
+			window._switchToServerAfterSave = true;
+			this.save(true /* dontTerminateEdit */,
+				false /* dontSaveIfUnmodified */);
+		} else {
+			window.collabSendMessage({type: 'saved_and_switching'});
+			window.switchToServerMode();
+		}
+	},
+
+	// Another user wants to start collaborative editing.  Save
+	// local changes and switch to server mode.  If a dialog is
+	// already open (e.g., the edit choice dialog), do nothing -
+	// the user will make their own choice via the dialog buttons.
+	_onSwitchToCollabRequest: function () {
+		if (this.uiManager.isAnyDialogOpen())
+			return;
+		this._saveAndSwitchToServerMode();
+	},
+
+	// Handle joining when a collaborative editing session is already active.
+	_onCollabEditingActive: function () {
+		this._showCollabJoinDialog(
+			_('A collaborative editing session is active for this document.'));
+	},
+
+	// Handle notification that another user started editing.
+	_onOtherUserEditingStarted: function (userName) {
+		this._showCollabJoinDialog(
+			_('User %0 has started editing this document.').replace('%0', userName));
+	},
+
 	// from read-only to edit mode
 	_switchToEditMode: function () {
+		// In WASM mode, notify the collab broker that editing is
+		// starting so that users who join later are informed.
+		if (window.ThisIsTheEmscriptenApp) {
+			window.collabSendMessage({type: 'editing_started'});
+		}
+
+		// In WASM mode with other collab users, offer the choice
+		if (window.ThisIsTheEmscriptenApp && window.collabUsers
+			&& window.collabUsers.length > 0) {
+			this._showWasmEditChoice();
+			return;
+		}
+
 		// This will be handled by the native mobile app instead
 		if (this._shouldStartReadOnly() && !window.ThisIsAMobileApp) {
 			var fileName = this['wopi'].BaseFileName;
 			var extension = this._getFileExtension(fileName);
-			
+
 			// For defined formats (from server config), just proceed to edit mode without dialog
 			if (app.isViewModeExtension(extension)) {
 				this._proceedEditMode();
 				return;
 			}
-			
+
 			var extensionInfo = this.readonlyStartingFormats[extension];
 
 			var yesButtonText = !this['wopi'].UserCanNotWriteRelative ? _('Save as ODF format'): null;

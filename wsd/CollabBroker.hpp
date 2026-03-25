@@ -78,6 +78,9 @@ class CollabBroker : public std::enable_shared_from_this<CollabBroker>
     /// Connected handlers
     std::vector<std::weak_ptr<CollabSocketHandler>> _handlers;
 
+    /// Set when a user sends editing_started via the collab WebSocket.
+    bool _editingStarted = false;
+
     /// WOPI info from the first authenticated handler (shared by all)
     Poco::JSON::Object::Ptr _wopiInfo;
 
@@ -103,6 +106,11 @@ public:
     /// Returns true if there are no active handlers
     bool isEmpty() const;
 
+    /// Returns true if there are no handlers and no editing was started.
+    /// Idle brokers can be cleaned up; brokers with _editingStarted set
+    /// are kept so late joiners see editingActive in the user_list.
+    bool isIdle() const;
+
     /// Set WOPI info (from first authenticated handler)
     void setWopiInfo(Poco::JSON::Object::Ptr wopiInfo);
 
@@ -111,6 +119,10 @@ public:
 
     /// Broadcast a message to all handlers
     void broadcastMessage(const std::string& message);
+
+    /// Broadcast a message to all handlers except the specified one.
+    void broadcastExcluding(const std::string& message,
+                            const std::shared_ptr<CollabSocketHandler>& exclude);
 
     /// Get JSON array of current users (excluding the specified handler)
     /// Returns JSON like: {"users": [{"id": "...", "name": "...", "canWrite": true}, ...]}
@@ -123,6 +135,10 @@ public:
     /// Notify all handlers that a user left
     /// Sends: {"type": "user_left", "user": {"id": "...", "name": "..."}}
     void notifyUserLeft(const std::shared_ptr<CollabSocketHandler>& handler);
+
+    /// Notify all handlers that a user started editing
+    /// Sends: {"type": "editing_started", "user": {"id": "...", "name": "..."}}
+    void notifyEditingStarted(const std::shared_ptr<CollabSocketHandler>& handler);
 
     /// Get the current access token for secure download URLs
     std::string getCurrentAccessToken() const;

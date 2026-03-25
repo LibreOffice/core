@@ -16,6 +16,7 @@
 #include <Anonymizer.hpp>
 #include <COOLWSD.hpp>
 #include <Common.hpp>
+#include <DocumentBroker.hpp>
 #include <HttpHelper.hpp>
 #include <Log.hpp>
 #include <Protocol.hpp>
@@ -23,7 +24,11 @@
 #include <SigUtil.hpp>
 #include <wopi/StorageConnectionManager.hpp>
 
+#include <Poco/JSON/Parser.h>
 #include <Poco/URI.h>
+
+extern std::map<std::string, std::shared_ptr<DocumentBroker>> DocBrokers;
+extern std::mutex DocBrokersMutex;
 
 CollabFileProxy::CollabFileProxy(std::string id, const RequestDetails& requestDetails,
                                  const std::shared_ptr<StreamSocket>& socket,
@@ -239,6 +244,40 @@ void CollabFileProxy::doUpload(const std::shared_ptr<TerminatingPoll>& poll,
 
         if (statusCode == http::StatusCode::OK)
         {
+            // Update any existing DocumentBroker's stored timestamp
+            // so it matches the new version we just uploaded.  Without
+            // this, a subsequent CheckFileInfo (when another user joins)
+            // would see a timestamp mismatch and trigger a spurious
+            // "Document has been changed" conflict dialog.
+            const std::string& wopiResponse = httpResponse->getBody();
+            try
+            {
+                Poco::JSON::Parser parser;
+                auto json = parser.parse(wopiResponse).extract<Poco::JSON::Object::Ptr>();
+                const std::string lastModifiedTime =
+                    json->optValue<std::string>("LastModifiedTime", std::string());
+                if (!lastModifiedTime.empty())
+                {
+                    const std::string docKey = RequestDetails::getDocKey(_wopiSrc);
+                    std::unique_lock<std::mutex> lock(DocBrokersMutex);
+                    auto it = DocBrokers.find(docKey);
+                    if (it != DocBrokers.end() && it->second)
+                    {
+                        auto broker = it->second;
+                        broker->addCallback(
+                            [broker, lastModifiedTime]()
+                            {
+                                broker->updateLastModifiedTime(lastModifiedTime);
+                            });
+                    }
+                }
+            }
+            catch (const std::exception& ex)
+            {
+                LOG_DBG("CollabFileProxy: failed to parse PutFile response for "
+                        "timestamp update: " << ex.what());
+            }
+
             // Return the WOPI response (contains LastModifiedTime etc.)
             http::Response response(http::StatusCode::OK);
             response.setBody(httpResponse->getBody(), "application/json; charset=utf-8");
