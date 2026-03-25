@@ -119,24 +119,11 @@ SolverComponent::~SolverComponent()
 {
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( SolverComponent, SolverComponent_Base, comphelper::OPropertyContainer2 )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SolverComponent, SolverComponent_Base, comphelper::OPropertyContainer2 )
-
 cppu::IPropertyArrayHelper* SolverComponent::createArrayHelper() const
 {
     uno::Sequence<beans::Property> aProps;
     describeProperties( aProps );
     return new cppu::OPropertyArrayHelper( aProps );
-}
-
-cppu::IPropertyArrayHelper& SolverComponent::getInfoHelper()
-{
-    return *getArrayHelper();
-}
-
-uno::Reference<beans::XPropertySetInfo> SAL_CALL SolverComponent::getPropertySetInfo()
-{
-    return createPropertySetInfo( getInfoHelper() );
 }
 
 // XSolverDescription
