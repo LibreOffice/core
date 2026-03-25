@@ -1420,8 +1420,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
 {
     Color aDarkColor(0x1c, 0x1c, 0x1c);
-    if (ThemeColors::UseOnlyWhiteDocBackground())
-        aDarkColor = COL_WHITE;
     addDarkLightThemes(aDarkColor, COL_WHITE);
     SwXTextDocument* pXTextDocument = createDoc();
     int nFirstViewId = SfxLokHelper::getCurrentView();
