@@ -1177,10 +1177,10 @@ namespace basegfx::utils
             std::map<basegfx::B2DPoint, basegfx::B2DPoint, B2DPointCompare> edges_v;
 
             size_t i = 0;
-            while (i < sort_x.size())
+            while (i < sort_y.size())
             {
                 auto curr_y = sort_y[i].getY();
-                while (i < sort_x.size() && sort_y[i].getY() == curr_y)
+                while (i < sort_y.size() && sort_y[i].getY() == curr_y)
                 {
                     edges_h[sort_y[i]] = sort_y[i + 1];
                     edges_h[sort_y[i + 1]] = sort_y[i];
