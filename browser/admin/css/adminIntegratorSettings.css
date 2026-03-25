@@ -347,6 +347,7 @@ ul {
 .view-input-container input[type='password'],
 .view-input-container input[type='number'],
 .view-input-container select {
+	box-sizing: border-box;
 	width: 100%;
 	max-width: 400px;
 	padding: 8px 12px;
@@ -550,10 +551,12 @@ ul {
 
 /* AI Settings sub-sections */
 .ai-settings-group {
+  box-sizing: border-box;
   border: 1px solid var(--settings-border);
   border-radius: 6px;
   padding: 16px 20px 8px;
   margin: 16px 0;
+  min-width: 0;
 }
 
 .ai-settings-group legend {
