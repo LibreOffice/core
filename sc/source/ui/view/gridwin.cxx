@@ -3568,6 +3568,8 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             // Only done/shown if a misspelled word is actually under the mouse pointer.
             Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
             bDone = pEditView->ExecuteSpellPopup(aMenuPos, aLink, true);
+            if (pHdl && bDone)
+                pHdl->SetModified();
 
             // If the spelling is corrected, stop editing to flush any cached spelling info.
             // Or, if no misspelled word at this position, and it wasn't initially in edit mode,
