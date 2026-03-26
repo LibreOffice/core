@@ -490,33 +490,41 @@ algned to the bottom */
 	line-height: normal !important;
 	color: dimgray !important;
 	color: var(--color-text-dark) !important;
-	height: 24px !important;
+	height: var(--header-height) !important;
 	display: flex !important;
 	align-items: center !important;
 	justify-content: center;
 	padding: 0px 1em !important;
 	border: solid 1px transparent !important;
 	border-radius: var(--border-radius) !important;
-	background-color: var(--color-main-background) !important;
 	margin-inline-end: 12px !important;
-	margin-bottom: 6px;
+	background-color: transparent !important;
+	margin-block: 0 4px;
 }
 
 .ui-tab.hidden.jsdialog {
 	visibility: hidden !important;
 }
 
+[data-theme='dark'] .ui-tab.selected.jsdialog {
+	color: var(--color-main-text) !important;
+}
+
 .ui-toggle.checked button,
 .ui-tab.selected.jsdialog {
 	background-color: var(--color-background-lighter) !important;
-	color: var(--color-text-darker) !important;
-	box-shadow: 0 0 2px 1px var(--color-box-shadow-dark) !important;
+	color: rgba(var(--doc-type), 1) !important;
+	text-decoration: underline 2px solid rgba(var(--doc-type), 1);
+	text-underline-offset: 6px;
+}
+
+body button:not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-field-button):not(.notebookbar.ui-tab):not(.ui-expander-btn):not(.arrowbackground):not(.ui-combobox-button):not(.inserttable-grid .col):not(.spinfieldbutton-up):not(.spinfieldbutton-down):hover {
+	color: rgba(var(--doc-type), 1) !important;
+	background-color: var(--color-background-darker) !important;
 }
 
 .ui-tab.jsdialog:not(.selected):hover {
 	cursor: pointer !important;
-	background-color: var(--color-background-darker) !important;
-	color: var(--color-text-darker) !important;
 }
 
 /* Sub Tabs: example Format Cells: Font */
