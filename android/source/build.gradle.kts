@@ -3,7 +3,7 @@ plugins {
 }
 
 // buildhost settings - paths and the like
-apply(from = "liboSettings.gradle.kts")
+apply(from = file("liboSettings.gradle.kts"))
 
 val liboInstdir: String by extra
 val liboUREJavaFolder: String by extra
