@@ -1436,6 +1436,7 @@ void VclGrid::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     VclContainer::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("type", "grid");
+    rJsonWriter.put("columnSpacing", get_column_spacing());
 }
 
 bool VclGrid::set_property(const OUString &rKey, const OUString &rValue)
