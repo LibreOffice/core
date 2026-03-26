@@ -231,10 +231,18 @@ void changePolyPolys(
             if (!bRenderObject)
                 rPrimitivesToUnhide.push_back(pBasePrimitive);
         }
+        else if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_SDRCUSTOMSHAPEPRIMITIVE2D
+                 || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_SDRRECTANGLEPRIMITIVE2D)
+        {
+            drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+            pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                               drawinglayer::geometry::ViewInformation2D());
+            changePolyPolys(aPrimitiveContainer, bRenderObject, rPrimitivesToUnhide);
+        }
     }
 }
 
-/// Searches for rectangle primitive and changes if the background should be rendered
+/// Searches for shape primitives and changes if the background should be rendered
 void changeBackground(
     drawinglayer::primitive2d::Primitive2DContainer const& rContainer, bool bRenderObject,
     std::vector<drawinglayer::primitive2d::Primitive2DReference>& rPrimitivesToUnhide)
@@ -242,13 +250,10 @@ void changeBackground(
     for (size_t i = 0; i < rContainer.size(); i++)
     {
         drawinglayer::primitive2d::BasePrimitive2D* pBasePrimitive = rContainer[i].get();
-        if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_SDRRECTANGLEPRIMITIVE2D)
-        {
-            drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
-            pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
-                                               drawinglayer::geometry::ViewInformation2D());
-            changePolyPolys(aPrimitiveContainer, bRenderObject, rPrimitivesToUnhide);
-        }
+        drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+        pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                           drawinglayer::geometry::ViewInformation2D());
+        changePolyPolys(aPrimitiveContainer, bRenderObject, rPrimitivesToUnhide);
     }
 }
 
