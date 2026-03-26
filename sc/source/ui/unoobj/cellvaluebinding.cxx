@@ -80,10 +80,6 @@ namespace calc
         }
     }
 
-    IMPLEMENT_FORWARD_XINTERFACE2( OCellValueBinding, OCellValueBinding_Base, OCellValueBinding_PBase )
-
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OCellValueBinding, OCellValueBinding_Base, OCellValueBinding_PBase )
-
     void OCellValueBinding::disposing( std::unique_lock<std::mutex>& rGuard )
     {
         Reference<XModifyBroadcaster> xBroadcaster( m_xCell, UNO_QUERY );
@@ -92,20 +88,10 @@ namespace calc
             xBroadcaster->removeModifyListener( this );
         }
 
-        WeakComponentImplHelperBase::disposing(rGuard);
+        disposePropertySetListeners(rGuard);
 
         // TODO: clean up here whatever you need to clean up (e.g. deregister as XEventListener
         // for the cell)
-    }
-
-    Reference< XPropertySetInfo > SAL_CALL OCellValueBinding::getPropertySetInfo(  )
-    {
-        return createPropertySetInfo( getInfoHelper() ) ;
-    }
-
-    ::cppu::IPropertyArrayHelper& OCellValueBinding::getInfoHelper()
-    {
-        return *OCellValueBinding_PABase::getArrayHelper();
     }
 
     ::cppu::IPropertyArrayHelper* OCellValueBinding::createArrayHelper( ) const
