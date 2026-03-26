@@ -334,7 +334,9 @@ void findMatchingLines(std::vector<LineData> const& rLines,
         size_t nNoOfFields = rLineData.maFields.size();
         bool bAllMatch = true;
         bool bHasWildcardMember = false;
-
+        bool bHasSubtotalMatch = false;
+        // Check dimension alignment and referenced fields.
+        // Track whether any referenced field matched as a subtotal.
         for (size_t nIndex = 0; nIndex < nNoOfFields && bAllMatch; nIndex++)
         {
             FieldData const& rFieldData = rLineData.maFields[nIndex];
@@ -347,30 +349,60 @@ void findMatchingLines(std::vector<LineData> const& rLines,
             }
 
             if (!rFormatEntry.bSet)
-            {
-                if (eType == FormatType::Label && !rFieldData.bIsMember && !rFieldData.bContinue)
-                    bAllMatch = false;
-                else if (eType == FormatType::Data
-                         && (rFieldData.bIsMember || rFieldData.bContinue))
-                    bHasWildcardMember = true;
                 continue;
-            }
 
             bool bFieldMatch = false;
 
-            if (rFormatEntry.bHasSubtotal && rFieldData.aName == rFormatEntry.aName)
-                bFieldMatch = true;
+            if (rFormatEntry.bHasSubtotal)
+            {
+                if (rFieldData.bSubtotal && rFieldData.aName == rFormatEntry.aName)
+                {
+                    // Exact subtotal match
+                    bFieldMatch = true;
+                    bHasSubtotalMatch = true;
+                }
+                else if (!rFormatEntry.bSelected && !rFieldData.bSubtotal
+                         && rFieldData.aName == rFormatEntry.aName)
+                {
+                    // selected=0 + subtotal: also match data rows in scope.
+                    // Two pass matching will handle the broad/exact distinction.
+                    bFieldMatch = true;
+                }
+            }
             else if (rFormatEntry.bMatchesAll && !rFieldData.bSubtotal)
                 bFieldMatch = true;
             else if (rFormatEntry.nDimension == constDataDimension
                      && rFieldData.nIndex == rFormatEntry.nIndex)
                 bFieldMatch = true;
-            else if (rFormatEntry.nDimension != constDataDimension
+            else if (rFormatEntry.nDimension != constDataDimension && !rFieldData.bSubtotal
                      && rFieldData.aName == rFormatEntry.aName)
                 bFieldMatch = true;
 
             if (!bFieldMatch)
                 bAllMatch = false;
+        }
+
+        // Check unreferenced fields.
+        // On subtotal lines, unreferenced fields are empty. Allow them
+        // when a referenced field matched as a subtotal.
+        for (size_t nIndex = 0; nIndex < nNoOfFields && bAllMatch; nIndex++)
+        {
+            FormatOutputField const& rFormatEntry = rFormatOutputField[nIndex];
+            if (rFormatEntry.bSet)
+                continue;
+
+            FieldData const& rFieldData = rLineData.maFields[nIndex];
+
+            if (eType == FormatType::Label)
+            {
+                if (!bHasSubtotalMatch && !rFieldData.bIsMember && !rFieldData.bContinue)
+                    bAllMatch = false;
+            }
+            else if (eType == FormatType::Data)
+            {
+                if (!bHasSubtotalMatch && (rFieldData.bIsMember || rFieldData.bContinue))
+                    bHasWildcardMember = true;
+            }
         }
 
         if (bAllMatch)
@@ -387,17 +419,43 @@ void findMatchingLines(std::vector<LineData> const& rLines,
         rMatches = std::move(aBroadMatches);
 }
 
+/** Find the index of the first referenced (set) field in the format output fields */
+size_t findMatchedFieldIndex(std::vector<FormatOutputField> const& rOutputFields)
+{
+    for (size_t i = 0; i < rOutputFields.size(); i++)
+    {
+        if (rOutputFields[i].bSet)
+            return i;
+    }
+    return 0;
+}
+
 /** Apply matched lines — labels go directly to cells, data collects rows/columns */
 void applyMatchedLines(ScDocument& rDocument,
                        std::vector<std::reference_wrapper<const LineData>> const& rMatches,
                        std::vector<SCCOLROW>& aRows, std::vector<SCCOLROW>& aColumns,
-                       FormatOutputEntry const& rEntry, FormatResultDirection eResultDirection,
-                       SCCOL nTabStartColumn, SCROW nTabStartRow, SCCOL nDataStartColumn,
-                       SCROW nDataStartRow)
+                       FormatOutputEntry const& rEntry,
+                       std::vector<FormatOutputField> const& rOutputFields,
+                       FormatResultDirection eResultDirection, SCCOL nTabStartColumn,
+                       SCROW nColumnHeaderStartRow, SCCOL nDataStartColumn, SCROW nDataStartRow)
 {
     assert(rEntry.onTab);
     assert(rEntry.pPattern);
 
+    // For range offsets (e.g. "IV2:IV3"), track position within the matched
+    // group to filter which lines get formatted.
+    bool bHasRowRange = false;
+    SCROW nOffsetRowStart = 0;
+    SCROW nOffsetRowEnd = 0;
+    if (rEntry.oOffset && eResultDirection == FormatResultDirection::ROW)
+    {
+        nOffsetRowStart = rEntry.oOffset->aStart.Row();
+        nOffsetRowEnd = rEntry.oOffset->aEnd.Row();
+        if (nOffsetRowStart != nOffsetRowEnd)
+            bHasRowRange = true;
+    }
+
+    size_t nMatchIndex = 0;
     for (LineData const& rLineData : rMatches)
     {
         if (!rLineData.oLine || !rLineData.oPosition)
@@ -405,30 +463,56 @@ void applyMatchedLines(ScDocument& rDocument,
 
         if (rEntry.eType == FormatType::Label)
         {
+            // Range offset: only format lines within the row/col range
+            if (bHasRowRange)
+            {
+                SCROW nIdx = static_cast<SCROW>(nMatchIndex);
+                if (nIdx < nOffsetRowStart || nIdx > nOffsetRowEnd)
+                {
+                    nMatchIndex++;
+                    continue;
+                }
+            }
+
             SCCOLROW nColumn = *rLineData.oLine;
             SCCOLROW nRow = *rLineData.oPosition;
 
             if (eResultDirection == FormatResultDirection::ROW)
                 std::swap(nRow, nColumn);
 
-            // Apply offset if present — redirects the label to a specific cell
-            if (rEntry.oOffset)
+            // Determine the target column/row for the label.
+            size_t nFieldIndex = findMatchedFieldIndex(rOutputFields);
+
+            if (eResultDirection == FormatResultDirection::ROW)
             {
-                if (eResultDirection == FormatResultDirection::ROW
-                    && nDataStartColumn > nTabStartColumn)
+                SCCOL nLabelColumns = nDataStartColumn - nTabStartColumn;
+                if (rEntry.oOffset && !bHasRowRange)
                 {
                     SCCOL nOffsetColumn = rEntry.oOffset->aStart.Col();
-                    nColumn = nTabStartColumn
-                              + std::min(SCCOLROW(nOffsetColumn),
-                                         SCCOLROW(nDataStartColumn - nTabStartColumn - 1));
+                    if (nOffsetColumn < nLabelColumns)
+                        nColumn = nTabStartColumn + nOffsetColumn;
+                    else
+                        nColumn = nTabStartColumn + nFieldIndex;
                 }
-                else if (eResultDirection == FormatResultDirection::COLUMN
-                         && nDataStartRow > nTabStartRow)
+                else
+                {
+                    nColumn = nTabStartColumn + nFieldIndex;
+                }
+            }
+            else if (eResultDirection == FormatResultDirection::COLUMN)
+            {
+                SCROW nHeaderRows = nDataStartRow - nColumnHeaderStartRow;
+                if (rEntry.oOffset)
                 {
                     SCROW nOffsetRow = rEntry.oOffset->aStart.Row();
-                    nRow = nTabStartRow
-                           + std::min(SCCOLROW(nOffsetRow),
-                                      SCCOLROW(nDataStartRow - nTabStartRow - 1));
+                    if (nOffsetRow < nHeaderRows)
+                        nRow = nColumnHeaderStartRow + nOffsetRow;
+                    else
+                        nRow = nColumnHeaderStartRow + nFieldIndex;
+                }
+                else
+                {
+                    nRow = nColumnHeaderStartRow + nFieldIndex;
                 }
             }
 
@@ -441,6 +525,7 @@ void applyMatchedLines(ScDocument& rDocument,
             else if (eResultDirection == FormatResultDirection::COLUMN)
                 aColumns.push_back(*rLineData.oLine);
         }
+        nMatchIndex++;
     }
 }
 
@@ -594,13 +679,61 @@ void FormatOutput::apply(ScDocument& rDocument)
         bool bMatchRows = (rEntry.eType != FormatType::Label) || bHasRowReferences;
         bool bMatchColumns = (rEntry.eType != FormatType::Label) || bHasColumnReferences;
 
+        // Column headers start after any field name rows at the top.
+        // With N column fields, headers occupy the N rows before the data start.
+        SCROW nColumnHeaderStartRow = mnDataStartRow;
+        if (!maColumnLines.empty() && !maColumnLines[0].maFields.empty())
+            nColumnHeaderStartRow -= SCROW(maColumnLines[0].maFields.size());
+
         if (bMatchRows)
         {
             std::vector<std::reference_wrapper<const LineData>> aRowMatches;
             findMatchingLines(maRowLines, rEntry.aRowOutputFields, rEntry.eType, aRowMatches);
+
+            // For data formats targeting subtotal intersections (all set fields
+            // on both axes have bHasSubtotal), single data row groups get the
+            // format applied to the data row too, not just the subtotal row.
+            if (rEntry.eType == FormatType::Data && !aRowMatches.empty())
+            {
+                bool bAllRowSubtotal = std::all_of(
+                    rEntry.aRowOutputFields.begin(), rEntry.aRowOutputFields.end(),
+                    [](auto const& rField) { return !rField.bSet || rField.bHasSubtotal; });
+
+                bool bAllColumnSubtotal = std::all_of(
+                    rEntry.aColumnOutputFields.begin(), rEntry.aColumnOutputFields.end(),
+                    [](auto const& rField) { return !rField.bSet || rField.bHasSubtotal; });
+
+                if (bAllRowSubtotal && bAllColumnSubtotal)
+                {
+                    // Find the index of each matched subtotal in the lines vector,
+                    // then check if the preceding line is a single item group member.
+                    std::vector<std::reference_wrapper<const LineData>> aExtraMatches;
+                    for (LineData const& rMatch : aRowMatches)
+                    {
+                        for (size_t i = 1; i < maRowLines.size(); i++)
+                        {
+                            if (&maRowLines[i] != &rMatch)
+                                continue;
+
+                            LineData const& rPrev = maRowLines[i - 1];
+                            size_t nFieldIndex = findMatchedFieldIndex(rEntry.aRowOutputFields);
+                            if (nFieldIndex < rPrev.maFields.size()
+                                && rPrev.maFields[nFieldIndex].bIsMember
+                                && !rPrev.maFields[nFieldIndex].bSubtotal)
+                            {
+                                aExtraMatches.push_back(std::cref(rPrev));
+                            }
+                            break;
+                        }
+                    }
+                    for (auto const& rExtra : aExtraMatches)
+                        aRowMatches.push_back(rExtra);
+                }
+            }
+
             applyMatchedLines(rDocument, aRowMatches, aRows, aColumns, rEntry,
-                              FormatResultDirection::ROW, mnTabStartColumn, mnTabStartRow,
-                              mnDataStartColumn, mnDataStartRow);
+                              rEntry.aRowOutputFields, FormatResultDirection::ROW, mnTabStartColumn,
+                              nColumnHeaderStartRow, mnDataStartColumn, mnDataStartRow);
         }
 
         if (bMatchColumns)
@@ -609,8 +742,9 @@ void FormatOutput::apply(ScDocument& rDocument)
             findMatchingLines(maColumnLines, rEntry.aColumnOutputFields, rEntry.eType,
                               aColumnMatches);
             applyMatchedLines(rDocument, aColumnMatches, aRows, aColumns, rEntry,
-                              FormatResultDirection::COLUMN, mnTabStartColumn, mnTabStartRow,
-                              mnDataStartColumn, mnDataStartRow);
+                              rEntry.aColumnOutputFields, FormatResultDirection::COLUMN,
+                              mnTabStartColumn, nColumnHeaderStartRow, mnDataStartColumn,
+                              mnDataStartRow);
         }
 
         if (!aColumns.empty() && !aRows.empty() && rEntry.eType == FormatType::Data)
