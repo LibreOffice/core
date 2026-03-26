@@ -47,6 +47,7 @@
 #include <i18nlangtag/lang.h>
 
 #include <array>
+#include <stdint.h>
 #include <vector>
 #include "fontsubset.hxx"
 
