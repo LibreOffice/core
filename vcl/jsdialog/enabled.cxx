@@ -264,6 +264,7 @@ constexpr auto SwriterDialogList
         { u"modules/swriter/ui/insertbookmark.ui" },
         { u"modules/swriter/ui/insertbreak.ui" },
         { u"modules/swriter/ui/insertcaption.ui" },
+        { u"modules/swriter/ui/inserttable.ui" },
         { u"modules/swriter/ui/insertsectiondialog.ui" },
         { u"modules/swriter/ui/linenumbering.ui" },
         { u"modules/swriter/ui/newuserindexdialog.ui" },
