@@ -115,27 +115,6 @@ constexpr OUString BASSCRIPT_PROPERTY_CALLER = u"Caller"_ustr;
     }
 
 
-    // XInterface
-
-
-    IMPLEMENT_FORWARD_XINTERFACE2( BasicScriptImpl, BasicScriptImpl_BASE, comphelper::OPropertyContainer2 )
-
-
-    // XTypeProvider
-
-
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( BasicScriptImpl, BasicScriptImpl_BASE, comphelper::OPropertyContainer2 )
-
-
-    // OPropertySetHelper
-
-
-    ::cppu::IPropertyArrayHelper& BasicScriptImpl::getInfoHelper(  )
-    {
-        return *getArrayHelper();
-    }
-
-
     // OPropertyArrayUsageHelper
 
 
@@ -144,16 +123,6 @@ constexpr OUString BASSCRIPT_PROPERTY_CALLER = u"Caller"_ustr;
         Sequence< Property > aProps;
         describeProperties( aProps );
         return new ::cppu::OPropertyArrayHelper( aProps );
-    }
-
-
-    // XPropertySet
-
-
-    Reference< XPropertySetInfo > BasicScriptImpl::getPropertySetInfo(  )
-    {
-        Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
-        return xInfo;
     }
 
 

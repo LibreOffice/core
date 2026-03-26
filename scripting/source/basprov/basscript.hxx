@@ -21,11 +21,9 @@
 
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <cppuhelper/implbase.hxx>
-#include <comphelper/compbase.hxx>
-#include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer2.hxx>
+
 #include <basic/sbmeth.hxx>
+#include <comphelper/propcontainerimplhelper.hxx>
 #include <svl/lstner.hxx>
 
 class BasicManager;
@@ -34,16 +32,11 @@ class BasicManager;
 namespace basprov
 {
 
-
-
-
-    typedef ::comphelper::WeakImplHelper<
-        css::script::provider::XScript > BasicScriptImpl_BASE;
-
-
-    class BasicScriptImpl : public BasicScriptImpl_BASE, public SfxListener,
-                                public ::comphelper::OPropertyContainer2,
-                                public ::comphelper::OPropertyArrayUsageHelper< BasicScriptImpl >
+    class BasicScriptImpl final
+        : public comphelper::OPropertyContainerImplHelper<
+              comphelper::WeakImplHelper<css::script::provider::XScript>,
+              BasicScriptImpl>,
+          public SfxListener
     {
     private:
         SbMethodRef         m_xMethod;
@@ -56,9 +49,6 @@ namespace basprov
     // as it's not unusual to do that in corba )
         css::uno::Sequence< css::uno::Any > m_caller;
     protected:
-        // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& getInfoHelper(  ) override;
-
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const override;
 
@@ -75,20 +65,11 @@ namespace basprov
         );
         virtual ~BasicScriptImpl() override;
 
-        // XInterface
-        DECLARE_XINTERFACE()
-
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER()
-
         // XScript
         virtual css::uno::Any SAL_CALL invoke(
             const css::uno::Sequence< css::uno::Any >& aParams,
             css::uno::Sequence< sal_Int16 >& aOutParamIndex,
             css::uno::Sequence< css::uno::Any >& aOutParam ) override;
-        // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-
         // SfxListener
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     };
