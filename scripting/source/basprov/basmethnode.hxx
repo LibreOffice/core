@@ -19,16 +19,11 @@
 
 #pragma once
 
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/compbase.hxx>
-#include <comphelper/proparrhlp.hxx>
-#include <comphelper/propertycontainer2.hxx>
-#include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase.hxx>
 
+#include <comphelper/propcontainerimplhelper.hxx>
 
 class SbMethod;
 
@@ -36,16 +31,12 @@ class SbMethod;
 namespace basprov
 {
 
-
-
-
-    typedef ::comphelper::WeakImplHelper<
-        css::script::browse::XBrowseNode,
-        css::script::XInvocation > BasicMethodNodeImpl_BASE;
-
-    class BasicMethodNodeImpl : public BasicMethodNodeImpl_BASE,
-                                public ::comphelper::OPropertyContainer2,
-                                public ::comphelper::OPropertyArrayUsageHelper< BasicMethodNodeImpl >
+    class BasicMethodNodeImpl final
+        : public comphelper::OPropertyContainerImplHelper<
+              comphelper::WeakImplHelper<
+                  css::script::browse::XBrowseNode,
+                  css::script::XInvocation>,
+              BasicMethodNodeImpl>
     {
     private:
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
@@ -58,9 +49,6 @@ namespace basprov
         bool m_bEditable;
 
     protected:
-        // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& getInfoHelper(  ) override;
-
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const override;
 
@@ -70,20 +58,11 @@ namespace basprov
             SbMethod* pMethod, bool isAppScript );
         virtual ~BasicMethodNodeImpl() override;
 
-        // XInterface
-        DECLARE_XINTERFACE()
-
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER()
-
         // XBrowseNode
         virtual OUString SAL_CALL getName(  ) override;
         virtual css::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  ) override;
         virtual sal_Bool SAL_CALL hasChildNodes(  ) override;
         virtual sal_Int16 SAL_CALL getType(  ) override;
-
-        // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
         // XInvocation
         virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;

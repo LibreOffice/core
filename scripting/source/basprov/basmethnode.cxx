@@ -99,18 +99,6 @@ namespace basprov
     }
 
 
-    // XInterface
-
-
-    IMPLEMENT_FORWARD_XINTERFACE2( BasicMethodNodeImpl, BasicMethodNodeImpl_BASE, comphelper::OPropertyContainer2 )
-
-
-    // XTypeProvider
-
-
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( BasicMethodNodeImpl, BasicMethodNodeImpl_BASE, comphelper::OPropertyContainer2 )
-
-
     // XBrowseNode
 
 
@@ -144,15 +132,6 @@ namespace basprov
     }
 
 
-    // OPropertySetHelper
-
-
-    ::cppu::IPropertyArrayHelper& BasicMethodNodeImpl::getInfoHelper(  )
-    {
-        return *getArrayHelper();
-    }
-
-
     // OPropertyArrayUsageHelper
 
 
@@ -161,16 +140,6 @@ namespace basprov
         Sequence< Property > aProps;
         describeProperties( aProps );
         return new ::cppu::OPropertyArrayHelper( aProps );
-    }
-
-
-    // XPropertySet
-
-
-    Reference< XPropertySetInfo > BasicMethodNodeImpl::getPropertySetInfo(  )
-    {
-        Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
-        return xInfo;
     }
 
 
