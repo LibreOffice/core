@@ -73,10 +73,6 @@ namespace calc
         }
     }
 
-    IMPLEMENT_FORWARD_XINTERFACE2( OCellListSource, OCellListSource_Base, OCellListSource_PBase )
-
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OCellListSource, OCellListSource_Base, OCellListSource_PBase )
-
     void OCellListSource::disposing(std::unique_lock<std::mutex>& rGuard)
     {
         Reference<XModifyBroadcaster> xBroadcaster( m_xRange, UNO_QUERY );
@@ -88,19 +84,9 @@ namespace calc
         EventObject aDisposeEvent( *this );
         m_aListEntryListeners.disposeAndClear( rGuard, aDisposeEvent );
 
-        WeakComponentImplHelperBase::disposing(rGuard);
+        disposePropertySetListeners(rGuard);
 
         // TODO: clean up here whatever you need to clean up (e.g. revoking listeners etc.)
-    }
-
-    Reference< XPropertySetInfo > SAL_CALL OCellListSource::getPropertySetInfo(  )
-    {
-        return createPropertySetInfo( getInfoHelper() ) ;
-    }
-
-    ::cppu::IPropertyArrayHelper& OCellListSource::getInfoHelper()
-    {
-        return *OCellListSource_PABase::getArrayHelper();
     }
 
     ::cppu::IPropertyArrayHelper* OCellListSource::createArrayHelper( ) const

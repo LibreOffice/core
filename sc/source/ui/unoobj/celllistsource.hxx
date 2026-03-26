@@ -20,15 +20,13 @@
 #pragma once
 
 #include <com/sun/star/form/binding/XListEntryTypedSource.hpp>
-#include <comphelper/compbase.hxx>
-#include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/propertycontainer2.hxx>
-#include <comphelper/uno3.hxx>
-#include <comphelper/proparrhlp.hxx>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+
+#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/propcontainerimplhelper.hxx>
 
 namespace com::sun::star::sheet { class XSpreadsheetDocument; }
 namespace com::sun::star::table { class XCellRange; }
@@ -36,24 +34,14 @@ namespace com::sun::star::table { class XCellRange; }
 namespace calc
 {
 
-    //= OCellListSource
-
-    class OCellListSource;
-    // the base for our interfaces
-    typedef ::comphelper::WeakComponentImplHelper <   css::form::binding::XListEntryTypedSource
-                                            ,   css::util::XModifyListener
-                                            ,   css::lang::XServiceInfo
-                                            ,   css::lang::XInitialization
-                                            >   OCellListSource_Base;
-    // the base for the property handling
-    typedef ::comphelper::OPropertyContainer2        OCellListSource_PBase;
-    // the second base for property handling
-    typedef ::comphelper::OPropertyArrayUsageHelper< OCellListSource >
-                                                    OCellListSource_PABase;
-
-    class OCellListSource :public OCellListSource_Base      // order matters! before OCellListSource_PBase, so rBHelper gets initialized
-                            ,public OCellListSource_PBase
-                            ,public OCellListSource_PABase
+    class OCellListSource final
+        : public comphelper::OPropertyContainerImplHelper<
+              comphelper::WeakComponentImplHelper<
+                  css::form::binding::XListEntryTypedSource,
+                  css::util::XModifyListener,
+                  css::lang::XServiceInfo,
+                  css::lang::XInitialization>,
+              OCellListSource>
     {
     private:
         css::uno::Reference< css::sheet::XSpreadsheetDocument >
@@ -69,17 +57,8 @@ namespace calc
             const css::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument
         );
 
-        using OCellListSource_PBase::getFastPropertyValue;
-
     protected:
         virtual ~OCellListSource( ) override;
-
-    protected:
-        // XInterface
-        DECLARE_XINTERFACE()
-
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER()
 
         // XListEntrySource
         virtual sal_Int32 SAL_CALL getListEntryCount(  ) override;
@@ -99,14 +78,10 @@ namespace calc
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-        // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-
-        // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
+        // OPropertyImplHelper
         virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
-        // ::comphelper::OPropertyArrayUsageHelper
+        // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // XModifyListener
