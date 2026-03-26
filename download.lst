@@ -589,8 +589,8 @@ PIXMAN_TARBALL := pixman-0.46.4.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBPNG_SHA256SUM := d925722864837ad5ae2a82070d4b2e0603dc72af44bd457c3962298258b8e82d
-LIBPNG_TARBALL := libpng-1.6.55.tar.xz
+LIBPNG_SHA256SUM := f7d8bf1601b7804f583a254ab343a6549ca6cf27d255c302c47af2d9d36a6f18
+LIBPNG_TARBALL := libpng-1.6.56.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
