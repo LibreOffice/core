@@ -19,6 +19,10 @@
 #include "dbdata.hxx"
 
 class ScPatternAttr;
+namespace model
+{
+class ColorSet;
+}
 
 enum class ScTableStyleElement
 {
@@ -107,6 +111,9 @@ public:
     void SetOOXMLDefault(bool bDefault);
     bool IsOOXMLDefault() const;
 
+    /// Re-resolve themed colors in custom style patterns against a new ColorSet
+    void UpdateThemedColors(const model::ColorSet& rColorSet);
+
     const OUString& GetName() const;
     const OUString& GetUIName() const;
 };
@@ -129,7 +136,13 @@ public:
     void AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle);
     void DeleteTableStyle(const OUString& rName);
     const ScTableStyle* GetTableStyle(const OUString& rName) const;
-    bool HasTableStyle() const { return maTableStyles.size() > 0; }
+    bool HasTableStyle() const { return !maTableStyles.empty(); }
+
+    /// Remove all styles marked as OOXML defaults (for regeneration after theme change)
+    void ClearOOXMLDefaultStyles();
+
+    /// Update themed colors in custom (non-default) styles after a theme change
+    void UpdateCustomStyleThemedColors(const model::ColorSet& rColorSet);
 
     void generateJSON(tools::JsonWriter& rWriter) const;
 };

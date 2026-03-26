@@ -9,8 +9,11 @@
 
 #include <undo/UndoThemeChange.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <docmodel/theme/ColorSet.hxx>
 #include <scresid.hxx>
 #include <globstr.hrc>
+#include <TableStyleGenerator.hxx>
+#include <tablestyle.hxx>
 
 namespace sc
 {
@@ -47,6 +50,9 @@ void UndoThemeChange::Undo()
 
     auto pTheme = getTheme(rDocShell);
     pTheme->setColorSet(mpOldColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(rDocShell.GetDocument(), *mpOldColorSet);
+    if (ScTableStyles* pStyles = rDocShell.GetDocument().GetTableStyles())
+        pStyles->UpdateCustomStyleThemedColors(*mpOldColorSet);
 
     EndUndo();
 }
@@ -57,6 +63,9 @@ void UndoThemeChange::Redo()
 
     auto pTheme = getTheme(rDocShell);
     pTheme->setColorSet(mpNewColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(rDocShell.GetDocument(), *mpNewColorSet);
+    if (ScTableStyles* pStyles = rDocShell.GetDocument().GetTableStyles())
+        pStyles->UpdateCustomStyleThemedColors(*mpNewColorSet);
 
     EndRedo();
 }
