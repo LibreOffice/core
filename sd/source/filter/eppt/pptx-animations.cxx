@@ -716,6 +716,8 @@ void PPTXAnimationExport::WriteAnimationNodeAnimate(sal_Int32 nXmlNodeType)
         }
 
         mpFS->startElementNS(XML_p, nXmlNodeType, XML_by, pBy, XML_from, pFrom, XML_to, pTo);
+        // p:to is unexpected child element for p:animRot
+        bTo = false;
     }
     else if (nXmlNodeType == XML_animClr)
     {
