@@ -3662,8 +3662,8 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
 
             // view mode and zoom
             rTabSett.mbPageMode = bPagebreak;
-            rTabSett.mnNormalZoom = static_cast< tools::Long >( pViewTab->fZoomY * Fraction( 100.0 ) );
-            rTabSett.mnPageZoom = static_cast< tools::Long >( pViewTab->fPageZoomY * Fraction( 100.0 ) );
+            rTabSett.mnNormalZoom = static_cast< tools::Long >( pViewTab->fZoomY * 100.0 );
+            rTabSett.mnPageZoom = static_cast< tools::Long >( pViewTab->fPageZoomY * 100.0 );
             rTabSett.moExportZoom = GetExportZoom();
         }
     }

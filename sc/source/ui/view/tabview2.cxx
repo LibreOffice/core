@@ -1344,7 +1344,7 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         SCCOL nFixPosX, SCROW nFixPosY )
 {
-    double fZoomFactor = static_cast<double>(Fraction(nZoom,100));
+    double fZoomFactor = nZoom / 100.0;
     fScaleX *= fZoomFactor;
     fScaleY *= fZoomFactor;
 

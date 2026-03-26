@@ -36,7 +36,6 @@ namespace vcl { class Font; }
 namespace model { class ComplexColor; }
 struct ScInterpreterContext;
 class OutputDevice;
-class Fraction;
 class ScStyleSheet;
 class SvNumberFormatter;
 class ScDocument;
