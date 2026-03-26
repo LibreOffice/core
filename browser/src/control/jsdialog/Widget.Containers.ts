@@ -86,13 +86,22 @@ JSDialog.grid = function (
 	if (data.tabIndex !== undefined)
 		table.setAttribute('tabindex', data.tabIndex);
 
+	const expandCols = new Set<number>();
+	for (const child of data.children || []) {
+		if (child.hexpand && child.left !== undefined)
+			expandCols.add(parseInt(child.left));
+	}
+
+	let colTemplate = '';
+	for (let c = 0; c < cols; c++)
+		colTemplate += (c > 0 ? ' ' : '') + (expandCols.has(c) ? '1fr' : 'auto');
+
 	const gridRowColStyle =
 		'grid-template-rows: repeat(' +
 		rows +
-		', auto); \
-		grid-template-columns: repeat(' +
-		cols +
-		', 1fr);' +
+		', auto); grid-template-columns: ' +
+		colTemplate +
+		';' +
 		(data.columnSpacing > 0 ? ' column-gap:' + data.columnSpacing + 'px;' : '');
 
 	table.style = gridRowColStyle;

@@ -28,6 +28,7 @@ interface WidgetJSON {
 	top?: string; // placement in the grid - row
 	left?: string; // placement in the grid - column
 	width?: string; // inside grid - width in number of columns
+	hexpand?: boolean; // horizontal expand in grid column
 	labelledBy?: string | string[];
 	allyRole?: string;
 	accessibility?: NotebookbarAccessibilityDescriptor;

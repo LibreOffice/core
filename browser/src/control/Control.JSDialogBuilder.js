@@ -2130,6 +2130,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		this._expanderDepth = savedExpanderDepth;
 		var backupGridColSpan = control.style.gridColumn;
 		var backupGridRowSpan = control.style.gridRow;
+		var backupWidth = control.style.width;
 
 		control.replaceWith(temporaryParent.firstChild)
 
@@ -2138,6 +2139,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			newControl.scrollTop = scrollTop;
 			newControl.style.gridColumn = backupGridColSpan;
 			newControl.style.gridRow = backupGridRowSpan;
+			newControl.style.width = backupWidth;
 			if (userHidden)
 				window.L.DomUtil.addClass(newControl, 'user-hidden');
 
@@ -2190,6 +2192,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		let gridRow = this._composeGridStyle(data.top, data.height);
 		if (gridRow) {
 			control.style.gridRow = gridRow;
+		}
+
+		if (data.hexpand) {
+			control.style.width = '100%';
 		}
 	},
 
