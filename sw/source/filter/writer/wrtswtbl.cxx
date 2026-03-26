@@ -337,8 +337,8 @@ sal_uInt16 SwWriteTable::GetRelWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) con
 {
     tools::Long nWidth = GetRawWidth( nCol, nColSpan );
 
-    return o3tl::narrowing<sal_uInt16>(static_cast<tools::Long>(Fraction( nWidth*256 + GetBaseWidth()/2,
-                                   GetBaseWidth() )));
+    return o3tl::narrowing<sal_uInt16>(static_cast<tools::Long>(double(nWidth*256 + GetBaseWidth()/2) /
+                                   GetBaseWidth() ));
 }
 
 sal_uInt16 SwWriteTable::GetPercentWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const
@@ -347,8 +347,8 @@ sal_uInt16 SwWriteTable::GetPercentWidth( sal_uInt16 nCol, sal_uInt16 nColSpan )
 
     // Looks funny, but is nothing more than
     // [(100 * nWidth) + .5] without rounding errors
-    return o3tl::narrowing<sal_uInt16>(static_cast<tools::Long>(Fraction( nWidth*100 + GetBaseWidth()/2,
-                                   GetBaseWidth() )));
+    return o3tl::narrowing<sal_uInt16>(static_cast<tools::Long>(double(nWidth*100 + GetBaseWidth()/2) /
+                                   GetBaseWidth() ));
 }
 
 tools::Long SwWriteTable::GetAbsHeight(tools::Long nRawHeight, size_t const nRow,

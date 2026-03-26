@@ -653,15 +653,15 @@ namespace sw
                     sal_Int32 nCropBottom = convertTwipToMm100(rCrop.GetBottom());
                     aPoly.Move(-nCropLeft, -nCropTop);
 
-                    Fraction aScaleX(aOrigSize.getWidth(), aOrigSize.getWidth() - nCropLeft - nCropRight);
-                    Fraction aScaleY(aOrigSize.getHeight(), aOrigSize.getHeight() - nCropTop - nCropBottom);
-                    aPoly.Scale(double(aScaleX), double(aScaleY));
+                    double fScaleX = double(aOrigSize.getWidth()) / (aOrigSize.getWidth() - nCropLeft - nCropRight);
+                    double fScaleY = double(aOrigSize.getHeight()) / (aOrigSize.getHeight() - nCropTop - nCropBottom);
+                    aPoly.Scale(fScaleX, fScaleY);
                 }
             }
 
-            Fraction aMapPolyX(ww::nWrap100Percent, aOrigSize.Width());
-            Fraction aMapPolyY(ww::nWrap100Percent, aOrigSize.Height());
-            aPoly.Scale(double(aMapPolyX), double(aMapPolyY));
+            double fMapPolyX = double(ww::nWrap100Percent) / aOrigSize.Width();
+            double fMapPolyY = double(ww::nWrap100Percent) / aOrigSize.Height();
+            aPoly.Scale(fMapPolyX, fMapPolyY);
 
             /*
              a) stretch right bound by 15twips
@@ -671,15 +671,13 @@ namespace sw
              See the import for details
             */
             const Size aSize = pNd->GetTwipSize();
-            Fraction aMoveHack(ww::nWrap100Percent, aSize.Width());
-            aMoveHack *= Fraction(15, 1);
-            tools::Long nMove(aMoveHack);
+            double fMoveHack = double(ww::nWrap100Percent) / aSize.Width();
+            fMoveHack *= 15;
+            tools::Long nMove(fMoveHack);
 
-            Fraction aHackX(ww::nWrap100Percent + nMove,
-                    ww::nWrap100Percent);
-            Fraction aHackY(ww::nWrap100Percent - nMove,
-                    ww::nWrap100Percent);
-            aPoly.Scale(double(aHackX), double(aHackY));
+            double fHackX = double(ww::nWrap100Percent + nMove) / ww::nWrap100Percent;
+            double fHackY = double(ww::nWrap100Percent - nMove) / ww::nWrap100Percent;
+            aPoly.Scale(fHackX, fHackY);
 
             aPoly.Move(-nMove, 0);
             return aPoly;
