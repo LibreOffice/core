@@ -1217,6 +1217,9 @@ void ToolBox::ApplyBackgroundSettings(vcl::RenderContext& rRenderContext, const 
 
 void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
 {
+    if (isDisposed())
+        return;
+
     mpData->mbNativeButtons = rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button);
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -3395,7 +3398,7 @@ void ToolBox::InvalidateSpin(bool bUpperIn, bool bLowerIn)
 
 void ToolBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rPaintRect)
 {
-    if( mpData->mbIsPaintLocked )
+    if( isDisposed() || mpData->mbIsPaintLocked )
         return;
 
     if (rPaintRect == tools::Rectangle(0, 0, mnDX-1, mnDY-1))
