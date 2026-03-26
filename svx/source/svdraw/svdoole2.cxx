@@ -262,8 +262,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
 
         aVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
         aVisArea = OutputDevice::LogicToLogic(aVisArea, MapMode(aObjMapUnit), MapMode(aContainerMapUnit));
-        Size aScaledSize( static_cast< tools::Long >( m_aScaleWidth * Fraction( aVisArea.GetWidth() ) ),
-                            static_cast< tools::Long >( m_aScaleHeight * Fraction( aVisArea.GetHeight() ) ) );
+        Size aScaledSize( static_cast< tools::Long >( m_aScaleWidth * aVisArea.GetWidth() ),
+                            static_cast< tools::Long >( m_aScaleHeight * aVisArea.GetHeight() ) );
         tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
 
         // react to the change if the difference is bigger than one pixel
@@ -1522,17 +1522,17 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 || mpImpl->mxObjRef->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE
                 )
         {
-            double aScaleWidth;
-            double aScaleHeight;
+            double fScaleWidth;
+            double fScaleHeight;
             if ( pClient )
             {
-                aScaleWidth = pClient->GetScaleWidth();
-                aScaleHeight = pClient->GetScaleHeight();
+                fScaleWidth = pClient->GetScaleWidth();
+                fScaleHeight = pClient->GetScaleHeight();
             }
             else
             {
-                aScaleWidth = mpImpl->mxLightClient->GetScaleWidth();
-                aScaleHeight = mpImpl->mxLightClient->GetScaleHeight();
+                fScaleWidth = mpImpl->mxLightClient->GetScaleWidth();
+                fScaleHeight = mpImpl->mxLightClient->GetScaleHeight();
             }
 
             // The object wants to resize itself (f.e. Chart wants to recalculate the layout)
@@ -1542,9 +1542,9 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             // be used in calculations
             MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
             Size aVisSize;
-            if (sal_Int32(aScaleWidth) != 0 && sal_Int32(aScaleHeight) != 0) // avoid div by zero
-                aVisSize = Size( static_cast<tools::Long>( getRectangle().GetWidth() / aScaleWidth ),
-                                 static_cast<tools::Long>( getRectangle().GetHeight() / aScaleHeight ) );
+            if (sal_Int32(fScaleWidth) != 0 && sal_Int32(fScaleHeight) != 0) // avoid div by zero
+                aVisSize = Size( static_cast<tools::Long>( getRectangle().GetWidth() / fScaleWidth ),
+                                 static_cast<tools::Long>( getRectangle().GetHeight() / fScaleHeight ) );
 
             aVisSize = OutputDevice::LogicToLogic(
                 aVisSize,
@@ -1563,8 +1563,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             {}
 
             tools::Rectangle aAcceptedVisArea;
-            aAcceptedVisArea.SetSize( Size( static_cast<tools::Long>( Fraction( tools::Long( aSz.Width ) ) * aScaleWidth ),
-                                            static_cast<tools::Long>( Fraction( tools::Long( aSz.Height ) ) * aScaleHeight ) ) );
+            aAcceptedVisArea.SetSize( Size( static_cast<tools::Long>( aSz.Width * fScaleWidth ),
+                                            static_cast<tools::Long>( aSz.Height * fScaleHeight ) ) );
             if (aVisSize != aAcceptedVisArea.GetSize())
             {
                 // server changed VisArea to its liking and the VisArea is different than the suggested one

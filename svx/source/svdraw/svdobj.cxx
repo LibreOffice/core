@@ -1289,30 +1289,14 @@ void SdrObject::ImpCommonDragCalcRect(const SdrDragStat& rDrag, tools::Rectangle
     {
         tools::Long nWdt0 = aRect.Right() - aRect.Left();
         tools::Long nHgt0 = aRect.Bottom()- aRect.Top();
-        tools::Long nXMul = rTmpRect.Right() - rTmpRect.Left();
-        tools::Long nYMul = rTmpRect.Bottom()- rTmpRect.Top();
-        tools::Long nXDiv = nWdt0;
-        tools::Long nYDiv = nHgt0;
-        bool bXNeg = ((nXMul<0) != (nXDiv<0));
-        bool bYNeg = ((nYMul<0) != (nYDiv<0));
-        nXMul = std::abs(nXMul);
-        nYMul = std::abs(nYMul);
-        nXDiv = std::abs(nXDiv);
-        nYDiv = std::abs(nYDiv);
-        Fraction aXFact(nXMul, nXDiv); // fractions for canceling
-        Fraction aYFact(nYMul, nYDiv); // and for comparing
-        nXMul = aXFact.GetNumerator();
-        nYMul = aYFact.GetNumerator();
-        nXDiv = aXFact.GetDenominator();
-        nYDiv = aYFact.GetDenominator();
+        double nX = double(rTmpRect.Right() - rTmpRect.Left()) / nWdt0;
+        double nY = double(rTmpRect.Bottom()- rTmpRect.Top()) / nHgt0;
         if (bCorner) // corner point handles
         {
-            bool bUseX = ((aXFact<aYFact) != bBigOrtho);
+            bool bUseX = ((std::abs(nX)<std::abs(nY)) != bBigOrtho);
             if (bUseX)
             {
-                tools::Long nNeed = tools::Long( BigInt(nHgt0) * BigInt(nXMul) / BigInt(nXDiv) );
-                if (bYNeg)
-                    nNeed = -nNeed;
+                tools::Long nNeed = tools::Long( nHgt0 * nX );
                 if (bTop)
                     rTmpRect.SetTop( rTmpRect.Bottom() - nNeed );
                 else if (bBtm)
@@ -1320,9 +1304,7 @@ void SdrObject::ImpCommonDragCalcRect(const SdrDragStat& rDrag, tools::Rectangle
             }
             else
             {
-                tools::Long nNeed = tools::Long( BigInt(nWdt0) * BigInt(nYMul) / BigInt(nYDiv) );
-                if (bXNeg)
-                    nNeed = -nNeed;
+                tools::Long nNeed = tools::Long( nWdt0 * nY );
                 if (bLft)
                     rTmpRect.SetLeft(rTmpRect.Right()-nNeed );
                 else if (bRgt)
@@ -1331,17 +1313,17 @@ void SdrObject::ImpCommonDragCalcRect(const SdrDragStat& rDrag, tools::Rectangle
         }
         else // apex handles
         {
-            if ((bLft || bRgt) && nXDiv!=0)
+            if (bLft || bRgt)
             {
                 tools::Long nHgt0b = aRect.Bottom() - aRect.Top();
-                tools::Long nNeed = tools::Long( BigInt(nHgt0b) * BigInt(nXMul) / BigInt(nXDiv) ) ;
+                tools::Long nNeed = tools::Long( nHgt0b * nX ) ;
                 rTmpRect.AdjustTop( -((nNeed-nHgt0b)/2) );
                 rTmpRect.SetBottom( rTmpRect.Top() + nNeed );
             }
-            else if ((bTop || bBtm) && nYDiv!=0)
+            else if (bTop || bBtm)
             {
                 tools::Long nWdt0b = aRect.Right() - aRect.Left();
-                tools::Long nNeed = tools::Long( BigInt(nWdt0b) * BigInt(nYMul) / BigInt(nYDiv) );
+                tools::Long nNeed = tools::Long( nWdt0b * nY );
                 rTmpRect.AdjustLeft( -((nNeed-nWdt0b)/2) );
                 rTmpRect.SetRight( rTmpRect.Left() + nNeed );
             }
@@ -2258,18 +2240,18 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     if (aNewLogic!=rLogic) {
         NbcSetLogicRect(aNewLogic);
     }
-    Fraction aResizeX(1,1);
-    Fraction aResizeY(1,1);
+    double fResizeX = 1.0;
+    double fResizeY = 1.0;
     if (const SdrResizeXOneItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_RESIZEXONE))
     {
-        aResizeX *= pPoolItem->GetValue();
+        fResizeX *= pPoolItem->GetValue();
     }
     if (const SdrResizeYOneItem *pPoolItem = rAttr.GetItemIfSet(SDRATTR_RESIZEYONE))
     {
-        aResizeY *= pPoolItem->GetValue();
+        fResizeY *= pPoolItem->GetValue();
     }
-    if (aResizeX!=Fraction(1,1) || aResizeY!=Fraction(1,1)) {
-        NbcResize(aRef1,double(aResizeX),double(aResizeY));
+    if (fResizeX!=1.0 || fResizeY!=1.0) {
+        NbcResize(aRef1, fResizeX, fResizeY);
     }
 }
 
