@@ -2933,6 +2933,27 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testGroupAndCalcFieldXLSX)
                 u"0");
 }
 
+CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testExtGroupingXLS)
+{
+    createScDoc("xls/pivottable_ext_grouping.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pCacheDef = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
+    CPPUNIT_ASSERT(pCacheDef);
+    OUString sGroupItems
+        = getXPath(pCacheDef,
+                   "/x:pivotCacheDefinition/x:cacheFields/x:cacheField[@databaseField='0']"
+                   "/x:fieldGroup/x:groupItems",
+                   "count");
+
+    xmlDocUniquePtr pTable = parseExport(u"xl/pivotTables/pivotTable1.xml"_ustr);
+    CPPUNIT_ASSERT(pTable);
+    OUString sPivotFieldItems = getXPath(
+        pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[last()]/x:items", "count");
+
+    CPPUNIT_ASSERT_EQUAL(sGroupItems, sPivotFieldItems);
+}
+
 CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testCalcFields1XLSB)
 {
     createScDoc("xlsb/pivot-table/calcfields.xlsb");
