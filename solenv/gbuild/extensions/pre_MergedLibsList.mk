@@ -71,7 +71,7 @@ gb_MERGE_LIBRARY_LIST := \
 	package2 \
 	passwordcontainer \
 	sax \
-	sb \
+	$(call gb_Helper_optional,SCRIPTING,sb) \
 	simplecanvas \
 	sfx \
 	sofficeapp \
