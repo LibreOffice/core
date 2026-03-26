@@ -124,10 +124,6 @@
                       <attribute name="weight" value="bold"/>
                     </attributes>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="back"/>
-                      <relation type="label-for" target="next"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -360,11 +356,9 @@
                     <property name="receives-default">True</property>
                     <property name="image">image7</property>
                     <property name="always-show-image">True</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="columnft"/>
-                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="back-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="columnpage|back-atkobject">Previous Column</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|back">Moves the column display one column to the left.</property>
                       </object>
                     </child>
@@ -381,11 +375,9 @@
                     <property name="receives-default">True</property>
                     <property name="image">image8</property>
                     <property name="always-show-image">True</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="columnft"/>
-                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="next-atkobject">
+                      <property name="AtkObject::accessible-name" translatable="yes" context="columnpage|next-atkobject">Next Column</property>
                         <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|next">Moves the column display one column to the right.</property>
                       </object>
                     </child>
