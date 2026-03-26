@@ -492,7 +492,8 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                         SdrViewEvent aVEvt;
                         SdrHitKind eHit = pSdrView->PickAnything(rLPt, aVEvt);
 
-                        if (eHit == SdrHitKind::UrlField && bExecHyperlinks)
+                        if (eHit == SdrHitKind::UrlField
+                            && (bExecHyperlinks || comphelper::LibreOfficeKit::isActive()))
                         {
                             m_aActHitType = SdrHitKind::Object;
                             bPrefSdrPointer = true;
@@ -589,7 +590,8 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                         const bool bClickToFollow = IsAttrAtPos::InetAttr == aSwContentAtPos.eContentAtPos ||
                                                     IsAttrAtPos::SmartTag == aSwContentAtPos.eContentAtPos;
                         if( !bClickToFollow ||
-                            (IsAttrAtPos::InetAttr == aSwContentAtPos.eContentAtPos && bExecHyperlinks) ||
+                            (IsAttrAtPos::InetAttr == aSwContentAtPos.eContentAtPos
+                             && (bExecHyperlinks || comphelper::LibreOfficeKit::isActive())) ||
                             (IsAttrAtPos::SmartTag == aSwContentAtPos.eContentAtPos && bExecSmarttags) )
                             eStyle = PointerStyle::RefHand;
                     }
