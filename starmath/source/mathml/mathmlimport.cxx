@@ -1466,8 +1466,8 @@ bool lcl_CountBlanks(const MathMLAttributeLengthValue& rLV, sal_Int32* pWide, sa
     auto nWide = static_cast<sal_Int32>(static_cast<tools::Long>(aWide));
     if (nWide < 0)
         return false;
-    const Fraction aPointFive(1, 2);
-    auto aNarrow = (rLV.fNumber - nWide * 2) / aPointFive;
+    const double fPointFive = 0.5;
+    auto aNarrow = (rLV.fNumber - nWide * 2) / fPointFive;
     auto nNarrow = static_cast<sal_Int32>(static_cast<tools::Long>(aNarrow));
     if (nNarrow < 0)
         return false;

@@ -139,8 +139,8 @@ void SmNode::SetFontSize(double fSize, FontSizeType nType)
 
     if (!(Flags() & FontChangeMask::Size))
     {
-        Fraction aVal(conversionFract(o3tl::Length::pt, SmO3tlLengthUnit()) * fSize);
-        tools::Long      nHeight = static_cast<tools::Long>(aVal);
+        double fVal(conversionFract(o3tl::Length::pt, SmO3tlLengthUnit()) * fSize);
+        tools::Long      nHeight = static_cast<tools::Long>(fVal);
 
         aFntSize = GetFont().GetFontSize();
         aFntSize.setWidth( 0 );
@@ -159,12 +159,12 @@ void SmNode::SetFontSize(double fSize, FontSizeType nType)
                 break;
 
             case FontSizeType::MULTIPLY:
-                aFntSize.setHeight( static_cast<tools::Long>(Fraction(aFntSize.Height()) * fSize) );
+                aFntSize.setHeight( static_cast<tools::Long>(aFntSize.Height() * fSize) );
                 break;
 
             case FontSizeType::DIVIDE:
                 if (fSize != 0)
-                    aFntSize.setHeight( static_cast<tools::Long>(Fraction(aFntSize.Height()) / fSize) );
+                    aFntSize.setHeight( static_cast<tools::Long>(aFntSize.Height() / fSize) );
                 break;
             default:
                 break;
