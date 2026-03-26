@@ -351,8 +351,6 @@ endef
 
 ifneq ($(OS),MACOSX)
 define gb_Top_InstallFinished
-echo && echo "If you want to edit the .ui files with glade first execute:" && \
-echo && echo "export GLADE_CATALOG_SEARCH_PATH=$(2)/share/glade" && \
 echo && echo "$(1) finished, you can now execute:" && \
 echo "$(2)/program/soffice"
 
