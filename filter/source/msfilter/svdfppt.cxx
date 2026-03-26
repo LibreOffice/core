@@ -2544,21 +2544,19 @@ Size SdrPowerPointImport::GetPageSize() const
     {
         MapUnit eMap = pSdrModel->GetScaleUnit();
         bool bInch = IsInch( eMap );
-        tools::Long nInchMul = 1, nInchDiv = 1;
+        double fInch = 1;
         if ( bInch )
         {   // temporarily convert size (for rounding it) from inch to metric units
-            Fraction aFact(GetMapFactor(eMap,MapUnit::Map100thMM).X());
-            nInchMul = aFact.GetNumerator();
-            nInchDiv = aFact.GetDenominator();
-            aRet.setWidth( BigMulDiv( aRet.Width(), nInchMul, nInchDiv ) );
-            aRet.setHeight( BigMulDiv( aRet.Height(), nInchMul, nInchDiv ) );
+            fInch = GetMapFactor(eMap,MapUnit::Map100thMM).X();
+            aRet.setWidth( aRet.Width() * fInch );
+            aRet.setHeight( aRet.Height() * fInch );
         }
         aRet.AdjustWidth(5 ); aRet.setWidth( aRet.Width() / 10 ); aRet.setWidth( aRet.Width() * 10 );
         aRet.AdjustHeight(5 ); aRet.setHeight( aRet.Height() / 10 ); aRet.setHeight( aRet.Height() * 10 );
         if ( bInch )
         {
-            aRet.setWidth( BigMulDiv( aRet.Width(), nInchDiv, nInchMul ) );
-            aRet.setHeight( BigMulDiv( aRet.Height(), nInchDiv, nInchMul ) );
+            aRet.setWidth( aRet.Width() * fInch );
+            aRet.setHeight( aRet.Height() * fInch );
         }
     }
     return aRet;
