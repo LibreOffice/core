@@ -1548,8 +1548,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     aRealSize.setHeight( aDefSize.Height() );
 
     // adjust to scaling of the target device (#53523#)
-    aRealSize.setWidth( tools::Long(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX()) );
-    aRealSize.setHeight( tools::Long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY()) );
+    aRealSize.setWidth( tools::Long(aRealSize.Width() * eTargetMode.GetScaleX()) );
+    aRealSize.setHeight( tools::Long(aRealSize.Height() * eTargetMode.GetScaleY()) );
 
     // for boolean fields, we do not create a label, but just a checkbox
     bool bNeedLabel = ( _nControlObjectID != SdrObjKind::FormCheckbox );
@@ -1626,8 +1626,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     if ( SdrObjKind::FormImageControl == _nControlObjectID )
         aControlSize = aDefImageSize;
 
-    aControlSize.setWidth( tools::Long(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX()) );
-    aControlSize.setHeight( tools::Long(Fraction(aControlSize.Height(), 1) * eTargetMode.GetScaleY()) );
+    aControlSize.setWidth( tools::Long(aControlSize.Width() * eTargetMode.GetScaleX()) );
+    aControlSize.setHeight( tools::Long(aControlSize.Height() * eTargetMode.GetScaleY()) );
 
     pControl->SetLogicRect( ::tools::Rectangle(
         OutputDevice::LogicToLogic( ::Point( aRealSize.Width() + _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),

@@ -73,7 +73,7 @@ SdrMeasureObjGeoData::~SdrMeasureObjGeoData() {}
 OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind) const
 {
     OUString aStr;
-    Fraction aMeasureScale(1, 1);
+    double fMeasureScale = 1.0;
     bool bTextRota90(false);
     bool bShowUnit(false);
     FieldUnit eMeasureUnit(FieldUnit::NONE);
@@ -82,7 +82,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
     const SfxItemSet& rSet = GetMergedItemSet();
     bTextRota90 = rSet.Get(SDRATTR_MEASURETEXTROTA90).GetValue();
     eMeasureUnit = rSet.Get(SDRATTR_MEASUREUNIT).GetValue();
-    aMeasureScale = rSet.Get(SDRATTR_MEASURESCALE).GetValue();
+    fMeasureScale = rSet.Get(SDRATTR_MEASURESCALE).GetValue();
     bShowUnit = rSet.Get(SDRATTR_MEASURESHOWUNIT).GetValue();
     sal_Int16 nNumDigits = rSet.Get(SDRATTR_MEASUREDECIMALPLACES).GetValue();
 
@@ -96,33 +96,25 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
                 eMeasureUnit = eModUIUnit;
 
             sal_Int32 nLen(GetLen(m_aPt2 - m_aPt1));
-            Fraction aFact(1,1);
+            double fFact = 1.0;
 
             if(eMeasureUnit != eModUIUnit)
             {
                 // for the unit conversion
-                aFact *= GetMapFactor(eModUIUnit, eMeasureUnit).X();
+                fFact *= GetMapFactor(eModUIUnit, eMeasureUnit).X();
             }
 
-            if(aMeasureScale.GetNumerator() != aMeasureScale.GetDenominator())
+            if(fMeasureScale != 1.0)
             {
-                aFact *= aMeasureScale;
+                fFact *= fMeasureScale;
             }
 
-            if(aFact.GetNumerator() != aFact.GetDenominator())
+            if(fFact != 1.0)
             {
-                // scale via BigInt, to avoid overruns
-                nLen = BigMulDiv(nLen, aFact.GetNumerator(), aFact.GetDenominator());
+                nLen = nLen * fFact;
             }
 
-            if(!aFact.IsValid())
-            {
-                aStr = "?";
-            }
-            else
-            {
-                aStr = getSdrModelFromSdrObject().GetMetricString(nLen, true, nNumDigits);
-            }
+            aStr = getSdrModelFromSdrObject().GetMetricString(nLen, true, nNumDigits);
 
             SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLocaleDataWrapper = aSysLocale.GetLocaleData();
