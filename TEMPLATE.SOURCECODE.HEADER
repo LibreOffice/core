@@ -24,7 +24,7 @@ existing module, then:
 ------------------------------------------------------------------------
 
              For all entirely new, original source files created by
-                        LibreOffice hackers:
+                        Collabora Office hackers:
 
 ------------------------------------------------------------------------
 
@@ -32,7 +32,9 @@ For C/C++/Java/IDL etc.
 
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
- * This file is part of the Collabora Office project.
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -41,11 +43,13 @@ For C/C++/Java/IDL etc.
 ...
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
 
-For makefiles:
+For makefiles / shell etc.
 
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t; fill-column: 100 -*-
 #
-# This file is part of the Collabora Office project.
+# Copyright the Collabora Office contributors.
+#
+# SPDX-License-Identifier: MPL-2.0
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -58,7 +62,9 @@ For Python files:
 
 # -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
-# This file is part of the Collabora Office project.
+# Copyright the Collabora Office contributors.
+#
+# SPDX-License-Identifier: MPL-2.0
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -71,7 +77,9 @@ For XML / .component:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * This file is part of the Collabora Office project.
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -91,7 +99,7 @@ For C/C++/Java/IDL etc.
 
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
- * This file is part of the Collabora Office project.
+ * Copyright the Collabora Office contributors.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -114,7 +122,7 @@ For makefiles, perl, scripts etc.
 
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t; fill-column: 100 -*-
 #
-# This file is part of the Collabora Office project.
+# Copyright the Collabora Office contributors.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -137,7 +145,7 @@ For XML / .component:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * This file is part of the Collabora Office project.
+ * Copyright the Collabora Office contributors.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -153,18 +161,3 @@ For XML / .component:
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-
-
-------------------------------------------------------------------------
-
-             For source headers which are part of
-               LibreOffice published API:
-
-------------------------------------------------------------------------
-
-In published API header files, the following notice should be appended after the license header:
-
-/*
- * This file is part of LibreOffice project published API
- */
-...

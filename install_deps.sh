@@ -6,7 +6,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# This script attempts to install the necessary dependencies to do LibreOffice development.
+# This script attempts to install the necessary dependencies to
+# do Collabora Office development.
 #
 # It should be kept in sync with the instructions at
 #    https://wiki.documentfoundation.org/Development/BuildingOnLinux

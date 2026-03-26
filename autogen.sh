@@ -215,7 +215,7 @@ die "Failed to generate the configure script" if (! -f "configure");
 # Handle help arguments first, so we don't clobber autogen.lastrun
 for my $arg (@ARGV) {
     if ($arg =~ /^(--help|-h|-\?)$/) {
-        print STDOUT "autogen.sh - libreoffice configuration helper\n";
+        print STDOUT "autogen.sh - Collabora Office configuration helper\n";
         print STDOUT "When called without arguments, arguments from autogen.input are used.\n";
         print STDOUT "\nArguments processed in the helper:\n";
         print STDOUT "   --with-distro  use a config from distro-configs/\n";

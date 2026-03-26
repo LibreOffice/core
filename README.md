@@ -1,21 +1,20 @@
-# LibreOffice
+# Collabora Office
+
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/211/badge.svg)](https://scan.coverity.com/projects/211) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/307/badge)](https://bestpractices.coreinfrastructure.org/projects/307) [![Translation status](https://weblate.documentfoundation.org/widgets/libo_ui-master/-/svg-badge.svg)](https://weblate.documentfoundation.org/engage/libo_ui-master/?utm_source=widget)
 
 <img align="right" width="150" src="https://opensource.org/wp-content/uploads/2009/06/OSIApproved.svg">
 
-LibreOffice is an integrated office suite based on copyleft licenses
-and compatible with most document formats and standards. Libreoffice
-is backed by The Document Foundation, which represents a large
-independent community of enterprises, developers and other volunteers
-moved by the common goal of bringing to the market the best software
-for personal productivity. LibreOffice is open source, and free to
-download, use and distribute.
+Collabora Office is an integrated office suite based on copyleft
+licenses and compatible with most document formats and
+standards. Collabora Office is backed by a large community of
+enterprises, developers and other volunteers dedicated to creating a
+fun place to develop a great FLOSS Office Productivity suite.
 
-A quick overview of the LibreOffice code structure.
+A quick overview of the Collabora Office code structure.
 
 ## Overview
 
-You can develop for LibreOffice in one of two ways, one
+You can develop for Collabora Office in one of two ways, one
 recommended and one much less so. First the somewhat less recommended
 way: it is possible to use the SDK to develop an extension,
 for which you can read the [API docs](https://api.libreoffice.org/)
@@ -23,7 +22,7 @@ and [Developers Guide](https://wiki.documentfoundation.org/Documentation/DevGuid
 This re-uses the (extremely generic) UNO APIs that are also used by
 macro scripting in StarBasic.
 
-The best way to add a generally useful feature to LibreOffice
+The best way to add a generally useful feature to Collabora Office
 is to work on the code base however. Overall this way makes it easier
 to compile and build your code, it avoids any arbitrary limitations of
 our scripting APIs, and in general is far more simple and intuitive -
@@ -32,7 +31,7 @@ if you are a reasonably able C++ programmer.
 ## The Build Chain and Runtime Baselines
 
 These are the current minimal operating system and compiler versions to
-run and compile LibreOffice, also used by the TDF builds:
+run and compile Collabora Office, also used by the TDF builds:
 
 * Windows:
     * Runtime: Windows 10
@@ -43,7 +42,7 @@ run and compile LibreOffice, also used by the TDF builds:
 * Linux:
     * Runtime: RHEL 9 or CentOS 9 and comparable
     * Build: either GCC 12; or Clang 18 with libstdc++ 11
-* iOS (only for LibreOfficeKit):
+* iOS (only for Collabora OfficeKit):
     * Runtime: 14.5 (only support for newer i devices == 64 bit)
     * Build: Xcode 12.5 and iPhone SDK 14.5
 * Android:
@@ -53,7 +52,7 @@ run and compile LibreOffice, also used by the TDF builds:
     * Build: Qt 5.15 with Qt supported Emscripten 1.39.8
     * See [README.wasm](static/README.wasm.md)
 
-Java is required for building many parts of LibreOffice. In TDF Wiki article
+Java is required for building many parts of Collabora Office. In TDF Wiki article
 [Development/Java](https://wiki.documentfoundation.org/Development/Java), the
 exact modules that depend on Java are listed.
 
@@ -63,14 +62,14 @@ The baseline for Python is version 3.11. It follows the version available
 in SUSE Linux Enterprise Desktop and the Maintenance Support version of
 Red Hat Enterprise Linux.
 
-If you want to use Clang with the LibreOffice compiler plugins, the minimal
+If you want to use Clang with the Collabora Office compiler plugins, the minimal
 version of Clang is 18. Since Xcode doesn't provide the compiler plugin
 headers, you have to compile your own Clang to use them on macOS.
 
 You can find the TDF configure switches in the `distro-configs/` directory.
 
 To setup your initial build environment on Windows and macOS, we provide
-the LibreOffice Development Environment
+the Collabora Office Development Environment
 ([LODE](https://wiki.documentfoundation.org/Development/lode)) scripts.
 
 For more information see the build instructions for your platform in the
@@ -131,11 +130,11 @@ benefit of external users of this API.
 
 ## Finding Out More
 
-Beyond this, you can read the `README.md` files, send us patches, ask
-on the mailing list libreoffice@lists.freedesktop.org (no subscription
-required) or poke people on IRC `#libreoffice-dev` on irc.libera.chat -
-we're a friendly and generally helpful mob. We know the code can be
-hard to get into at first, and so there are no silly questions.
+Beyond this, you can read the `README.md` files, send us patches, talk
+to us https://collaboraonline.github.io/post/communicate/ and/or grab
+people on Matrix #cool-dev:matrix.org we're a friendly and generally
+helpful mob. We know the code can be hard to get into at first, and so
+there are no silly questions.
 
 ## SAST Tools
 

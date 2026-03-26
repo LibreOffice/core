@@ -1,5 +1,5 @@
-Cross-compiling LibreOffice
-***************************
+Cross-compiling Collabora Office
+********************************
 
 Cross-compilation works, to various degree, to the following
 platforms: iOS, Android, and Raspbian.
@@ -16,7 +16,7 @@ running a build of some software and "host" is the platform on which
 the software you are building will run. Only in the specific case of
 building compilers and other programming tools is the term "target"
 used to indicate the platform for which the tools your are building
-will produce code. As LibreOffice is not a compiler, the "target" term
+will produce code. As Collabora Office is not a compiler, the "target" term
 should not be used in the context of cross-compilation.
 
 (For a case where all three of "build", "host" and "target" are
@@ -25,14 +25,14 @@ code for Android, where the cross-compiler itself was built on
 Linux. (This is a real case.) An interesting tidbit is that such
 configurations are called "Canadian Cross".)
 
-Even though the LibreOffice build mechanism is highly unorthodox, the
+Even though the Collabora Office build mechanism is highly unorthodox, the
 configure script takes the normal --build and --host options like any
 GNU Autoconf -based configure script. To cross-compile, you basically
 need just to specify a suitable --host option and things should work
 out nicely. In practice, many details need to be handled. See examples
 below.
 
-Note that in the case of LibreOffice, it is uncommon to run the
+Note that in the case of Collabora Office, it is uncommon to run the
 configure script directly. Normally one uses the autogen.sh script.
 The autogen.sh script reads command-line options from file called
 autogen.input if it exists. The typical way of working is to keep
@@ -47,7 +47,7 @@ Despite the fact that the configure script takes normal --build and
 separate tests for "host" and "build" platforms in the configure
 script. See the git log for details. And the reasonably "standard"
 configure.in is just the top level; when we get down to the actual
-makefilery used to build the bits of LibreOffice, it gets much worse.
+makefilery used to build the bits of Collabora Office, it gets much worse.
 
 
 iOS
@@ -55,31 +55,31 @@ iOS
 
 iOS is the operating system on Apple's mobile devices. Clearly for a
 device like the iPad it would not be acceptable to run a normal
-LibreOffice application with overlapping windows and mouse-oriented
+Collabora Office application with overlapping windows and mouse-oriented
 GUI widgets.
 
-It makes sense to use only a part of LibreOffice's code for iOS. Lots
+It makes sense to use only a part of Collabora Office's code for iOS. Lots
 of the GUI-oriented code should be left out. iOS apps that want to use
-the applicable LibreOffice code will handle all their GUI in a
+the applicable Collabora Office code will handle all their GUI in a
 platform-dependent manner. How well it will be possible to do such a
 split remains to be seen.
 
 Obviously we want it to be possible to eventually distribute apps
-using LibreOffice code through the App Store. Technically, one
+using Collabora Office code through the App Store. Technically, one
 important special aspect of iOS is that apps in the App Store are not
 allowed to load own dynamic libraries. (System libraries are used in
 the form of dynamic libraries, just like on macOS, of which iOS is
 a variant.)
 
-Thus all the libraries in LibreOffice that normally are shared
+Thus all the libraries in Collabora Office that normally are shared
 libraries (DLLs on Windows, shared objects (.so) on Linux, dynamic
 libraries on macOS (.dylib)) must be built as static archives
 instead. This has some interesting consequences for how UNO is
 implemented and used.
 
 An iOS app is a "bundle" that contains a single executable. In an app
-using LibreOffice code, that executable then contains the necessary
-LibreOffice libraries and UNO components statically linked.
+using Collabora Office code, that executable then contains the necessary
+Collabora Office libraries and UNO components statically linked.
 
 The Apple tool-chain for iOS cross-building is available only for OS
 X. In order to be able to run and debug an app on an actual device
@@ -124,7 +124,7 @@ Android dynamic linker on the number of libraries you can dlopen. This
 is a limitation in user-level (but system-provided and not really
 replaceable) code, not the kernel.
 
-Thus, just like for iOS, also for Android the LibreOffice libraries
+Thus, just like for iOS, also for Android the Collabora Office libraries
 and UNO components are built as static archives. For Android, those
 static archives, and any app-specific native code, are linked into one
 single app-specific shared library, called liblo-native-code.so.
@@ -136,7 +136,7 @@ Android cross-compilation work has been done mainly on Linux (openSUSE
 in particular). Earlier also cross-compiling from macOS was tried. The
 Android cross-compilation tool-chain (the "Native Development Kit", or
 NDK) is available for Linux, macOS and Windows, but trying to
-cross-compile LibreOffice from Windows will probably drive you insane.
+cross-compile Collabora Office from Windows will probably drive you insane.
 
 You will also need the Android SDK as full "make" also builds a couple
 of Android apps where the upper layer is written in Java.
@@ -151,31 +151,24 @@ from Linux:
 
 --enable-dbgutil
 --enable-werror
---with-distro=LibreOfficeAndroid
+--with-distro=CPAndroid
 --with-android-sdk=/path/to/android/sdk
 --with-android-ndk=/path/to/android/sdk/ndk/version
 
 And here is an (quite old) autogen.input for Android on X86:
 
---with-android-ndk=/opt/libreoffice/android-ndk-r8b
+--with-android-ndk=/path/to/android-ndk-r8b
 --with-android-ndk-toolchain-version=4.6
---with-android-sdk=/opt/libreoffice/android-sdk-linux
+--with-android-sdk=/path/to/android-sdk-linux
 --build=i586-suse-linux
 --enable-ccache
---with-distro=LibreOfficeAndroidX86
-
-A LibreOffice app for Android is being developed progress in the
-android/source directory.
-
-To run the app, do "make install" followed by either "make run" or
-starting it from Android itself. You most likely want to have an "adb logcat"
-running in another window. To debug, run "make debugrun".
+--with-distro=CPAndroidX86
 
 NB: If you happen to upgrade to Android SDK Tools 23, and the build (using
 'make verbose=t android') fails for you with:
 
        [dx] UNEXPECTED TOP-LEVEL EXCEPTION:
-       [dx] java.io.FileNotFoundException: /local/libreoffice/android-sdk-linux/tools/support/annotations.jar (no such file or directory)
+       [dx] java.io.FileNotFoundException: /local/path/to/android-sdk-linux/tools/support/annotations.jar (no such file or directory)
 
 you need to copy the annotations.jar from an older sdk; like
 
@@ -245,6 +238,4 @@ JAVAINC=-I<path-to-raspbian_rootfs>/usr/lib/jvm/java-6-openjdk-armhf/include
 
 Finally, when you are ready to run the binaries in Raspbian,
 you may need to get more system libraries, who knows.
-$ sudo apt-get install libreoffice # or similar
-That installs libreoffice too, which you don't need because you have
-just built one, but I don't know how to avoid it easily.
+$ sudo apt-get build-dep libreoffice # or similar
