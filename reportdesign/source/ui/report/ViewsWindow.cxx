@@ -1627,11 +1627,11 @@ void OViewsWindow::zoom(double _fZoom)
 {
     const MapMode& aMapMode = GetMapMode();
 
-    Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH));
+    double fStartWidth(REPORT_STARTMARKER_WIDTH);
     if ( _fZoom < aMapMode.GetScaleX() )
-        aStartWidth *= aMapMode.GetScaleX();
+        fStartWidth *= aMapMode.GetScaleX();
     else
-        aStartWidth *= _fZoom;
+        fStartWidth *= _fZoom;
 
     setZoomFactor(_fZoom,*this);
 
@@ -1643,7 +1643,7 @@ void OViewsWindow::zoom(double _fZoom)
     Resize();
 
     Size aOut = GetOutputSizePixel();
-    aOut.setWidth( tools::Long(aStartWidth) );
+    aOut.setWidth( tools::Long(fStartWidth) );
     aOut = PixelToLogic(aOut);
 
     tools::Rectangle aRect(PixelToLogic(Point(0,0)),aOut);

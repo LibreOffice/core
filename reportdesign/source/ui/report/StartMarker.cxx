@@ -89,9 +89,9 @@ void OStartMarker::dispose()
 
 sal_Int32 OStartMarker::getMinHeight() const
 {
-    Fraction aExtraWidth(tools::Long(2 * REPORT_EXTRA_SPACE));
-    aExtraWidth *= GetMapMode().GetScaleX();
-    return LogicToPixel(Size(0, GetTextHeight())).Height() + tools::Long(aExtraWidth);
+    double fExtraWidth(tools::Long(2 * REPORT_EXTRA_SPACE));
+    fExtraWidth *= GetMapMode().GetScaleX();
+    return LogicToPixel(Size(0, GetTextHeight())).Height() + tools::Long(fExtraWidth);
 }
 
 void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
