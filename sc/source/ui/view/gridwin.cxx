@@ -2992,7 +2992,8 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             }
             //  Field can only be URL field
             bool bAlt = rMEvt.IsMod2();
-            if ( !bAlt && !nButtonDown && ScGlobal::ShouldOpenURL() && pFld )
+            if ( !bAlt && !nButtonDown
+                 && (ScGlobal::ShouldOpenURL() || comphelper::LibreOfficeKit::isActive()) && pFld )
                 SetPointer( PointerStyle::RefHand );
             else if (pEditView->getEditEngine().IsEffectivelyVertical())
                 SetPointer( PointerStyle::TextVertical );
@@ -3075,8 +3076,9 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 
             if (bEditMode)                                  // First has to be in edit mode!
                 SetPointer( mrViewData.IsThemedCursor() ? PointerStyle::FatCross : PointerStyle::Arrow );
-            else if ( !bAlt && !nButtonDown && ScGlobal::ShouldOpenURL() &&
-                        GetEditUrl(rMEvt.GetPosPixel()) )
+            else if ( !bAlt && !nButtonDown
+                      && (ScGlobal::ShouldOpenURL() || comphelper::LibreOfficeKit::isActive())
+                      && GetEditUrl(rMEvt.GetPosPixel()) )
                 SetPointer( PointerStyle::RefHand );
             else if ( DrawMouseMove(rMEvt) )                // Reset pointer
                 return;
