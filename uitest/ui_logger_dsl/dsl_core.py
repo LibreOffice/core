@@ -79,7 +79,7 @@ class ul_Compiler:
         line = (
             "# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-\n"
             + "#\n"
-            + "# This file is part of the LibreOffice project.\n"
+            + "# This file is part of the Collabora Office project.\n"
             + "#\n"
             + "# This Source Code Form is subject to the terms of the Mozilla Public\n"
             + "# License, v. 2.0. If a copy of the MPL was not distributed with this\n"

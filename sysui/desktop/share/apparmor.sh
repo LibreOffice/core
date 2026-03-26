@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# This file is part of the LibreOffice project.
+# This file is part of the Collabora Office project.
 # ------------------------------------------------------------------
 #
 #    Copyright (C) 2016 Canonical Ltd.

@@ -32,7 +32,7 @@ For C/C++/Java/IDL etc.
 
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
- * This file is part of the LibreOffice project.
+ * This file is part of the Collabora Office project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -45,7 +45,7 @@ For makefiles:
 
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t; fill-column: 100 -*-
 #
-# This file is part of the LibreOffice project.
+# This file is part of the Collabora Office project.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -58,7 +58,7 @@ For Python files:
 
 # -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
 #
-# This file is part of the LibreOffice project.
+# This file is part of the Collabora Office project.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -71,7 +71,7 @@ For XML / .component:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * This file is part of the LibreOffice project.
+ * This file is part of the Collabora Office project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -91,7 +91,7 @@ For C/C++/Java/IDL etc.
 
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
- * This file is part of the LibreOffice project.
+ * This file is part of the Collabora Office project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -114,7 +114,7 @@ For makefiles, perl, scripts etc.
 
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t; fill-column: 100 -*-
 #
-# This file is part of the LibreOffice project.
+# This file is part of the Collabora Office project.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -137,7 +137,7 @@ For XML / .component:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * This file is part of the LibreOffice project.
+ * This file is part of the Collabora Office project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this

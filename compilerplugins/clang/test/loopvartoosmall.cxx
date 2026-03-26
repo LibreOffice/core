@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
- * This file is part of the LibreOffice project.
+ * This file is part of the Collabora Office project.
  *
  * Based on LLVM/Clang.
  *
