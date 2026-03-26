@@ -31,7 +31,9 @@ $(eval $(call gb_Library_use_externals,sb,\
     icui18n \
 ))
 
+ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 $(eval $(call gb_Library_set_precompiled_header,sb,basic/inc/pch/precompiled_sb))
+endif
 
 $(eval $(call gb_Library_use_custom_headers,sb,\
 	officecfg/registry \

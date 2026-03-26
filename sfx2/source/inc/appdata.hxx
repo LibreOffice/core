@@ -52,7 +52,9 @@ class SfxViewFrame;
 class SfxInterface;
 class BasicManager;
 class SfxBasicManagerHolder;
+#if HAVE_FEATURE_SCRIPTING
 class SfxBasicManagerCreationListener;
+#endif
 namespace sfx2::sidebar { class Theme; }
 
 
@@ -104,8 +106,10 @@ public:
                                 maObjShells;
     std::unique_ptr<SfxBasicManagerHolder>
                                 pBasicManager;
+#if HAVE_FEATURE_SCRIPTING
     std::unique_ptr<SfxBasicManagerCreationListener>
                                 pBasMgrListener;
+#endif
     SfxViewFrame*               pViewFrame;
     std::optional<SfxSlotPool>  pSlotPool;
     std::optional<SfxDispatcher>

@@ -36,7 +36,7 @@ namespace basic
     /** specifies a callback for instances which are interested in BasicManagers
         created by the BasicManagerRepository.
     */
-    class BASIC_DLLPUBLIC SAL_NO_VTABLE BasicManagerCreationListener
+    class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) SAL_NO_VTABLE BasicManagerCreationListener
     {
     public:
         /** is called when a BasicManager has been created

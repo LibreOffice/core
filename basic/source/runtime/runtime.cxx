@@ -373,6 +373,13 @@ SbiDllMgr* SbiInstance::GetDllMgr()
     return pDllMgr.get();
 }
 
+#else
+
+bool SbiRuntime::isVBAEnabled()
+{
+    return false;
+}
+
 #endif
 
 // #39629 create NumberFormatter with the help of a static method now
