@@ -2947,12 +2947,12 @@ void SVGActionWriter::ImplWriteBmp( const Bitmap& rBmp,
 
         MapMode aSourceMode( MapUnit::MapPixel );
         Size aPrefSize = OutputDevice::LogicToLogic( rSrcSz, aSourceMode, maTargetMapMode );
-        Fraction aFractionX( aSize.Width(), aPrefSize.Width() );
-        Fraction aFractionY( aSize.Height(), aPrefSize.Height() );
-        double scaleX = rtl_math_round( double(aFractionX), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
-        double scaleY = rtl_math_round( double(aFractionY), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+        double fFractionX = double(aSize.Width()) / aPrefSize.Width();
+        double fFractionY = double(aSize.Height()) / aPrefSize.Height();
+        double scaleX = rtl_math_round( fFractionX, 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+        double scaleY = rtl_math_round( fFractionY, 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
         if( !rtl_math_approxEqual( scaleX, 1.0 ) || !rtl_math_approxEqual( scaleY, 1.0 ) )
-            sTransform += " scale(" + OUString::number( double(aFractionX) ) + ", " + OUString::number( double(aFractionY) ) + ")";
+            sTransform += " scale(" + OUString::number( fFractionX ) + ", " + OUString::number( fFractionY ) + ")";
 
         if( !sTransform.isEmpty() )
             mrExport.AddAttribute(aXMLAttrTransform, sTransform);
@@ -2982,12 +2982,12 @@ void SVGActionWriter::ImplWriteBmp( const Bitmap& rBmp,
         Size  aSize;
         ImplMap( rSz, aSize );
 
-        Fraction aFractionX( aSize.Width(), rSourceRect.GetWidth() );
-        Fraction aFractionY( aSize.Height(), rSourceRect.GetHeight() );
-        double scaleX = rtl_math_round( double(aFractionX), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
-        double scaleY = rtl_math_round( double(aFractionY), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+        double fFractionX = double(aSize.Width()) / rSourceRect.GetWidth();
+        double fFractionY = double(aSize.Height()) / rSourceRect.GetHeight();
+        double scaleX = rtl_math_round( fFractionX, 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+        double scaleY = rtl_math_round( fFractionY, 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
         if( !rtl_math_approxEqual( scaleX, 1.0 ) || !rtl_math_approxEqual( scaleY, 1.0 ) )
-            sTransform += " scale(" + OUString::number( double(aFractionX) ) + ", " + OUString::number( double(aFractionY) ) + ")";
+            sTransform += " scale(" + OUString::number( fFractionX ) + ", " + OUString::number( fFractionY ) + ")";
 
         if( !sTransform.isEmpty() )
             mrExport.AddAttribute(aXMLAttrTransform, sTransform);

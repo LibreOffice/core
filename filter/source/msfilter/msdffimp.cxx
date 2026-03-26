@@ -3197,11 +3197,8 @@ void SvxMSDffManager::ScaleEmu( sal_Int32& rVal ) const
 sal_uInt32 SvxMSDffManager::ScalePt( sal_uInt32 nVal ) const
 {
     MapUnit eMap = pSdrModel->GetScaleUnit();
-    Fraction aFact( GetMapFactor( MapUnit::MapPoint, eMap ).X() );
-    tools::Long aMul = aFact.GetNumerator();
-    tools::Long aDiv = aFact.GetDenominator() * 65536;
-    aFact = Fraction( aMul, aDiv ); // try again to shorten it
-    return BigMulDiv( nVal, aFact.GetNumerator(), aFact.GetDenominator() );
+    double fFact = GetMapFactor( MapUnit::MapPoint, eMap ).X() / 65536;
+    return nVal * fFact;
 }
 
 sal_Int32 SvxMSDffManager::ScalePoint( sal_Int32 nVal ) const

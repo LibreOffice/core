@@ -1637,12 +1637,12 @@ void SVGFilter::implExportTiledBackground()
                 // use element attributes
                 const Size& aOrigSize = aBitmapActionIt->second->GetPrefSize();
                 OUString sTransform;
-                Fraction aFractionX( rData.aSize.Width(), aOrigSize.Width() );
-                Fraction aFractionY( rData.aSize.Height(), aOrigSize.Height() );
-                double scaleX = rtl_math_round( double(aFractionX), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
-                double scaleY = rtl_math_round( double(aFractionY), 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+                double fFractionX = double(rData.aSize.Width()) / aOrigSize.Width();
+                double fFractionY = double(rData.aSize.Height()) / aOrigSize.Height();
+                double scaleX = rtl_math_round( fFractionX, 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
+                double scaleY = rtl_math_round( fFractionY, 3, rtl_math_RoundingMode::rtl_math_RoundingMode_Corrected );
                 if( !rtl_math_approxEqual( scaleX, 1.0 ) || !rtl_math_approxEqual( scaleY, 1.0 ) )
-                    sTransform += " scale(" + OUString::number( double(aFractionX) ) + ", " + OUString::number( double(aFractionY) ) + ")";
+                    sTransform += " scale(" + OUString::number( fFractionX ) + ", " + OUString::number( fFractionY ) + ")";
 
                 if( !sTransform.isEmpty() )
                     mpSVGExport->AddAttribute(u"transform"_ustr, sTransform);
