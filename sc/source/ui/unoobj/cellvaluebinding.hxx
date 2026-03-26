@@ -20,14 +20,12 @@
 #pragma once
 
 #include <com/sun/star/form/binding/XValueBinding.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <comphelper/compbase.hxx>
-#include <comphelper/interfacecontainer4.hxx>
-#include <comphelper/propertycontainer2.hxx>
-#include <comphelper/uno3.hxx>
-#include <comphelper/proparrhlp.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+
+#include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/propcontainerimplhelper.hxx>
 
 namespace com::sun::star::table { class XCell; }
 namespace com::sun::star::sheet { class XSpreadsheetDocument; }
@@ -36,26 +34,15 @@ namespace com::sun::star::text { class XTextRange; }
 namespace calc
 {
 
-    //= OCellValueBinding
-
-    class OCellValueBinding;
-    // the base for our interfaces
-    typedef ::comphelper::WeakComponentImplHelper <   css::form::binding::XValueBinding
-                                            ,   css::lang::XServiceInfo
-                                            ,   css::util::XModifyBroadcaster
-                                            ,   css::util::XModifyListener
-                                            ,   css::lang::XInitialization
-                                            >   OCellValueBinding_Base;
-    // the base for the property handling
-    typedef ::comphelper::OPropertyContainer2        OCellValueBinding_PBase;
-    // the second base for property handling
-    typedef ::comphelper::OPropertyArrayUsageHelper< OCellValueBinding >
-                                                    OCellValueBinding_PABase;
-
-    class OCellValueBinding :
-                             public OCellValueBinding_Base      // order matters! before OCellValueBinding_PBase, so rBHelper gets initialized
-                            ,public OCellValueBinding_PBase
-                            ,public OCellValueBinding_PABase
+    class OCellValueBinding final
+        : public comphelper::OPropertyContainerImplHelper<
+              comphelper::WeakComponentImplHelper<
+                  css::form::binding::XValueBinding,
+                  css::lang::XServiceInfo,
+                  css::util::XModifyBroadcaster,
+                  css::util::XModifyListener,
+                  css::lang::XInitialization>,
+              OCellValueBinding>
     {
     private:
         css::uno::Reference< css::sheet::XSpreadsheetDocument >
@@ -75,17 +62,8 @@ namespace calc
             bool _bListPos
         );
 
-        using OCellValueBinding_PBase::getFastPropertyValue;
-
     protected:
         virtual ~OCellValueBinding( ) override;
-
-    protected:
-        // XInterface
-        DECLARE_XINTERFACE()
-
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER()
 
         // XValueBinding
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getSupportedValueTypes(  ) override;
@@ -101,11 +79,7 @@ namespace calc
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-        // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-
-        // OPropertySetHelper
-        virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
+        // OPropertyImplHelper
         virtual void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
         // ::comphelper::OPropertyArrayUsageHelper
@@ -136,9 +110,6 @@ namespace calc
 
         void    setBooleanFormat();
 
-    private:
-        OCellValueBinding( const OCellValueBinding& ) = delete;
-        OCellValueBinding& operator=( const OCellValueBinding& ) = delete;
     };
 
 }   // namespace calc
