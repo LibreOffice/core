@@ -120,8 +120,6 @@ class AutoCalcSwitch;
 struct RefUpdateInsertTabContext;
 }
 
-class Fraction;
-
 class OutputDevice;
 class SdrObject;
 class SfxBroadcaster;

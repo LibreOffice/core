@@ -67,7 +67,6 @@ class Sparkline;
 
 }
 
-class Fraction;
 class OutputDevice;
 class ScItemPoolCache;
 class SvtListener;

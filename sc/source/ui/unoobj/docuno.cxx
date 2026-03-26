@@ -2411,25 +2411,25 @@ static void lcl_PDFExportBookmarkHelper(OutputDevice* pDev, ScDocument& rDoc,
                         // to get the target rectangle in pixels.
                         assert(aLocationPixel.GetWidth() != 0 && aLocationPixel.GetHeight() != 0);
 
-                        Fraction aScaleX(aLocationPixel.GetWidth(), aLocationMM.GetWidth());
-                        Fraction aScaleY(aLocationPixel.GetHeight(), aLocationMM.GetHeight());
+                        double fScaleX = double(aLocationPixel.GetWidth()) / aLocationMM.GetWidth();
+                        double fScaleY = double(aLocationPixel.GetHeight()) / aLocationMM.GetHeight();
 
                         tools::Long nX1
                             = aLocationPixel.Left()
                             + static_cast<tools::Long>(
-                                Fraction(aTargetRect.Left() - aLocationMM.Left(), 1) * aScaleX);
+                                (aTargetRect.Left() - aLocationMM.Left()) * fScaleX);
                         tools::Long nX2
                             = aLocationPixel.Left()
                             + static_cast<tools::Long>(
-                                Fraction(aTargetRect.Right() - aLocationMM.Left(), 1) * aScaleX);
+                                (aTargetRect.Right() - aLocationMM.Left()) * fScaleX);
                         tools::Long nY1
                             = aLocationPixel.Top()
                             + static_cast<tools::Long>(
-                                Fraction(aTargetRect.Top() - aLocationMM.Top(), 1) * aScaleY);
+                                (aTargetRect.Top() - aLocationMM.Top()) * fScaleY);
                         tools::Long nY2
                             = aLocationPixel.Top()
                             + static_cast<tools::Long>(
-                                Fraction(aTargetRect.Bottom() - aLocationMM.Top(), 1) * aScaleY);
+                                (aTargetRect.Bottom() - aLocationMM.Top()) * fScaleY);
 
                         if (nX1 > aLocationPixel.Right())
                             nX1 = aLocationPixel.Right();

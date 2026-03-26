@@ -3545,8 +3545,8 @@ void ScXMLExport::WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell)
         // ObjData. We remember the transformations and restore them later.
         Point aMoveBy(0, 0);
         bool bNeedsRestorePosition = false;
-        Fraction aScaleWidth(1, 1);
-        Fraction aScaleHeight(1, 1);
+        double fScaleWidth = 1.0;
+        double fScaleHeight = 1.0;
         bool bNeedsRestoreSize = false;
 
         // Determine top point of fictive snap rectangle ('Full' rectangle).
@@ -3599,15 +3599,17 @@ void ScXMLExport::WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell)
             if (aFullSnapRect != aActualSnapRect)
             {
                 bNeedsRestoreSize = true;
-                aScaleWidth
-                    = Fraction(aFullSnapRect.getOpenWidth(), aActualSnapRect.getOpenWidth());
-                if (!aScaleWidth.IsValid())
-                    aScaleWidth = Fraction(1, 1);
-                aScaleHeight
-                    = Fraction(aFullSnapRect.getOpenHeight(), aActualSnapRect.getOpenHeight());
-                if (!aScaleHeight.IsValid())
-                    aScaleHeight = Fraction(1, 1);
-                pObj->NbcResize(aFullTopPoint, double(aScaleWidth), double(aScaleHeight));
+                if (aActualSnapRect.getOpenWidth() == 0)
+                    fScaleWidth = 1;
+                else
+                    fScaleWidth
+                        = double(aFullSnapRect.getOpenWidth()) / aActualSnapRect.getOpenWidth();
+                if (aActualSnapRect.getOpenHeight() == 0)
+                    fScaleHeight = 1;
+                else
+                    fScaleHeight
+                        = double(aFullSnapRect.getOpenHeight()) / aActualSnapRect.getOpenHeight();
+                pObj->NbcResize(aFullTopPoint, fScaleWidth, fScaleHeight);
             }
         }
 
@@ -3654,13 +3656,9 @@ void ScXMLExport::WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell)
 
         if (bNeedsRestoreSize)
         {
-            Fraction aScaleWidthInvers(aScaleWidth.GetDenominator(), aScaleWidth.GetNumerator());
-            if (!aScaleWidthInvers.IsValid())
-                aScaleWidthInvers = Fraction(1, 1);
-            Fraction aScaleHeightInvers(aScaleHeight.GetDenominator(), aScaleHeight.GetNumerator());
-            if (!aScaleHeightInvers.IsValid())
-                aScaleHeightInvers = Fraction(1, 1);
-            pObj->NbcResize(aFullTopPoint, double(aScaleWidthInvers), double(aScaleHeightInvers));
+            double fScaleWidthInvers = 1.0 / fScaleWidth;
+            double fScaleHeightInvers = 1.0 / fScaleHeight;
+            pObj->NbcResize(aFullTopPoint, fScaleWidthInvers, fScaleHeightInvers);
         }
         if (bNeedsRestorePosition)
         {
