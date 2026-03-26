@@ -105,12 +105,24 @@ void PivotTableFormat::finalizeImport()
     aFormat.oFieldPosition = moFieldPosition;
     if (moOffset)
     {
-        // Resolve offset
-        ScAddress aAddress;
-        const auto eGrammar = formula::FormulaGrammar::CONV_XL_A1;
-        ScRefFlags nFlags = aAddress.Parse(*moOffset, getScDocument(), eGrammar);
+        // Resolve offset. Either it is a range or a single cell.
+        // Try as a range first
+        ScRange aRange;
+        ScRefFlags nFlags
+            = aRange.Parse(*moOffset, getScDocument(), formula::FormulaGrammar::CONV_XL_A1);
         if (nFlags & ScRefFlags::COL_VALID)
-            aFormat.oOffset = ScRange(aAddress);
+        {
+            aFormat.oOffset = aRange;
+        }
+        else
+        {
+            // Try as a single cell address
+            ScAddress aAddress;
+            nFlags
+                = aAddress.Parse(*moOffset, getScDocument(), formula::FormulaGrammar::CONV_XL_A1);
+            if (nFlags & ScRefFlags::COL_VALID)
+                aFormat.oOffset = ScRange(aAddress);
+        }
     }
 
     aFormat.pPattern = std::move(pPattern);

@@ -429,13 +429,17 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testPivotTableFormatsGrand
 
 CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, testPivotTableFormatsSubTotals)
 {
-    // TODO: enable once subtotal label formatting is fully implemented
     createScDoc("xlsx/pivot-table/PivotTableFormatsSubTotals.xlsx");
-    // ScDocument& rDocument = *getScDoc();
-    // ScRange aPivotRange(1, 2, 0, 11, 13, 0); // B3:L14
-    // ScRange aReferenceRange(1, 15, 0, 11, 26, 0); // B16:L27
-    // OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
-    // CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    auto checkFormats = [this]() {
+        ScDocument& rDocument = *getScDoc();
+        auto[aPivotRange, aReferenceRange] = getPivotAndReferenceRanges(rDocument);
+        OUString aMismatches = comparePivotWithReference(rDocument, aPivotRange, aReferenceRange);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell format mismatches found", OUString(), aMismatches);
+    };
+
+    checkFormats();
+    saveAndReload(TestFilter::XLSX);
+    checkFormats();
 }
 
 } // end anonymous namespace
