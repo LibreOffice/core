@@ -197,6 +197,7 @@ weld::ScreenShotCollection QtInstanceWindow::collect_screenshot_data()
     return weld::ScreenShotCollection();
 }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> QtInstanceWindow::screenshot()
 {
     SolarMutexGuard g;

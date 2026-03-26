@@ -72,6 +72,7 @@ void QtSvpSurface::flush() const
         m_pGraphics->updateQWidget();
 }
 
+// [-loplugin:scopedvclptr]
 VclPtr<VirtualDevice> QtSvpSurface::createVirtualDevice() const
 {
     SystemGraphicsData aSystemGraphicsData;
