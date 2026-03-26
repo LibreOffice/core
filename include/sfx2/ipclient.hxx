@@ -36,8 +36,6 @@ namespace vcl { class Window; }
 class SfxInPlaceClient_Impl;
 class SfxViewShell;
 class SfxObjectShell;
-class Fraction;
-
 
 class SFX2_DLLPUBLIC SfxInPlaceClient
 {
