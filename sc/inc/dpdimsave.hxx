@@ -79,7 +79,8 @@ public:
      (rDimension must be a different dimension from the one which contains this)*/
     void    RemoveElementsFromGroups( ScDPSaveGroupDimension& rDimension ) const;
 
-    void ConvertElementsToItems(SvNumberFormatter* pFormatter) const;
+    void ConvertElementsToItems(SvNumberFormatter* pFormatter,
+                                const ScDPCache::ScDPItemDataVec& rSourceItems) const;
     bool HasInGroup(const ScDPItemData& rItem) const;
 };
 

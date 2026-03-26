@@ -94,18 +94,39 @@ void ScDPSaveGroupItem::RemoveElementsFromGroups( ScDPSaveGroupDimension& rDimen
         rDimension.RemoveFromGroups( rElement );
 }
 
-void ScDPSaveGroupItem::ConvertElementsToItems(SvNumberFormatter* pFormatter) const
+void ScDPSaveGroupItem::ConvertElementsToItems(SvNumberFormatter* pFormatter,
+                                               const ScDPCache::ScDPItemDataVec& rSourceItems) const
 {
     maItems.reserve(aElements.size());
     for (const auto& rElement : aElements)
     {
-        sal_uInt32 nFormat = 0;
-        double fValue;
         ScDPItemData aData;
-        if (pFormatter->IsNumberFormat(rElement, nFormat, fValue))
-            aData.SetValue(fValue);
-        else
-            aData.SetString(rElement);
+        bool bFound = false;
+
+        // This avoids mismatches where e.g. string "02" in the source
+        // would be converted to numeric 2 by IsNumberFormat.
+        for (const ScDPItemData& rSrcItem : rSourceItems)
+        {
+            if (rSrcItem.GetType() == ScDPItemData::String)
+            {
+                if (rSrcItem.GetString().equalsIgnoreAsciiCase(rElement))
+                {
+                    aData = rSrcItem;
+                    bFound = true;
+                    break;
+                }
+            }
+        }
+
+        if (!bFound)
+        {
+            sal_uInt32 nFormat = 0;
+            double fValue;
+            if (pFormatter->IsNumberFormat(rElement, nFormat, fValue))
+                aData.SetValue(fValue);
+            else
+                aData.SetString(rElement);
+        }
 
         maItems.push_back(aData);
     }
@@ -377,13 +398,13 @@ void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const
     }
 
     rCache.ResetGroupItems(nDim, aDateInfo, 0);
+    const ScDPCache::ScDPItemDataVec& rItems = rCache.GetDimMemberValues(nSourceDim);
     for (const ScDPSaveGroupItem& rGI : aGroups)
     {
-        rGI.ConvertElementsToItems(pFormatter);
+        rGI.ConvertElementsToItems(pFormatter, rItems);
         rCache.SetGroupItem(nDim, ScDPItemData(rGI.GetGroupName()));
     }
 
-    const ScDPCache::ScDPItemDataVec& rItems = rCache.GetDimMemberValues(nSourceDim);
     for (const ScDPItemData& rItem : rItems)
     {
         if (!IsInGroup(rItem))
