@@ -31,18 +31,23 @@
 #include <unoctitm.hxx>
 #include <svl/svdde.hxx>
 
+#if HAVE_FEATURE_SCRIPTING
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
+#endif
 #include <basic/basrdll.hxx>
 
+#if HAVE_FEATURE_SCRIPTING
 using ::basic::BasicManagerRepository;
 using ::basic::BasicManagerCreationListener;
+#endif
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::uno::XInterface;
 
 static BasicDLL* pBasic = nullptr;
 
+#if HAVE_FEATURE_SCRIPTING
 class SfxBasicManagerCreationListener : public ::basic::BasicManagerCreationListener
 {
 private:
@@ -68,6 +73,7 @@ void SfxBasicManagerCreationListener::onBasicManagerCreated( const Reference< XM
     if ( _rxForDocument == nullptr )
         m_rAppData.OnApplicationBasicManagerCreated( _rBasicManager );
 }
+#endif
 
 SfxAppData_Impl::SfxAppData_Impl()
     : pPool(nullptr)
@@ -75,7 +81,6 @@ SfxAppData_Impl::SfxAppData_Impl()
     , nDocModalMode(0)
     , nRescheduleLocks(0)
     , pBasicManager( new SfxBasicManagerHolder )
-    , pBasMgrListener( new SfxBasicManagerCreationListener( *this ) )
     , pViewFrame( nullptr )
     , bDowning( true )
     , bInQuit( false )
@@ -85,6 +90,7 @@ SfxAppData_Impl::SfxAppData_Impl()
     pBasic = new BasicDLL;
 
 #if HAVE_FEATURE_SCRIPTING
+    pBasMgrListener.reset( new SfxBasicManagerCreationListener( *this ) );
     BasicManagerRepository::registerCreationListener( *pBasMgrListener );
 #endif
 }
