@@ -40,7 +40,6 @@ class SdrPageView;
 class SwPageFrame;
 class SwAccessibleMap;
 class SdrObject;
-class Fraction;
 class SwPrintData;
 class SwPagePreviewLayout;
 struct PreviewPage;

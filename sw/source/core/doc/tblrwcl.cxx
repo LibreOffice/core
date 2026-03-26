@@ -2946,10 +2946,9 @@ static void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewH
     else
     {
         // Calculate as exactly as possible
-        Fraction aTmp( nMyOldH );
-        aTmp *= Fraction( nNewHeight, nOldHeight );
-        aTmp += Fraction( 1, 2 );       // round up if needed
-        nMyNewH = tools::Long(aTmp);
+        double fTmp = double(nMyOldH) * double(nNewHeight) / nOldHeight;
+        fTmp += 0.5;       // round up if needed
+        nMyNewH = tools::Long(fTmp);
     }
 
     SwFrameSize eSize = SwFrameSize::Minimum;
