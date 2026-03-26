@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,extras))
 $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_autocorr \
 	CustomTarget_autotextuser \
-	CustomTarget_glade \
 	CustomTarget_gallsystem \
 	CustomTarget_templates \
 	Package_autocorr \
@@ -29,7 +28,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_gallroot \
 	Package_gallsystem \
 	Package_gallsystemstr \
-	Package_glade \
 	Package_labels \
 	$(if $(filter WNT,$(OS)),Package_newfiles) \
 	Package_palettes \
