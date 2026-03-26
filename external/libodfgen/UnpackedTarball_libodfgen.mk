@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libodfgen))
 #   division by zero for empty elliptical arc":
 $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
     external/libodfgen/ellipticalarc.patch \
+    external/libodfgen/include.patch \
 ))
 
 ifeq ($(SYSTEM_REVENGE),)

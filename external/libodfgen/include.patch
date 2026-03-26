@@ -1,0 +1,10 @@
+--- src/OdfGenerator.cxx
++++ src/OdfGenerator.cxx
+@@ -31,6 +31,7 @@
+ #include "OdfGenerator.hxx"
+ 
+ #include <math.h>
++#include <stdint.h>
+ 
+ #include <cctype>
+ #include <limits>
