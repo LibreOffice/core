@@ -12,6 +12,11 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
+#include <editeng/colritem.hxx>
+#include <editeng/borderline.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/theme/ColorSet.hxx>
+#include <patattr.hxx>
 
 ScTableStyle::ScTableStyle(const OUString& rName, const std::optional<OUString>& rUIName)
     : mnFirstRowStripeSize(1)
@@ -891,6 +896,10 @@ ScTableStyles::ScTableStyles(SfxBindings* pBindings)
 
 void ScTableStyles::AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle)
 {
+    // TODO: insert() won't overwrite an existing entry with the same name.
+    // When we add UI support for creating custom table styles, we should
+    // either reject duplicates (with UI validation) or use insert_or_assign
+    // to replace the existing style.
     maTableStyles.insert({ pTableStyle->GetName(), std::move(pTableStyle) });
     if (mpBindings)
         mpBindings->Invalidate(SID_TABLE_STYLES);
@@ -901,6 +910,134 @@ void ScTableStyles::DeleteTableStyle(const OUString& rName)
     maTableStyles.erase(rName);
     if (mpBindings)
         mpBindings->Invalidate(SID_TABLE_STYLES);
+}
+
+void ScTableStyles::ClearOOXMLDefaultStyles()
+{
+    std::erase_if(maTableStyles,
+                  [](const auto& rEntry) { return rEntry.second->IsOOXMLDefault(); });
+    if (mpBindings)
+        mpBindings->Invalidate(SID_TABLE_STYLES);
+}
+
+namespace
+{
+/// Update themed colors in a single pattern's items against a new ColorSet
+void updatePatternThemedColors(ScPatternAttr& rPattern, const model::ColorSet& rColorSet)
+{
+    SfxItemSet& rItemSet = rPattern.GetItemSetWritable();
+
+    // Update background fill color
+    if (const SvxBrushItem* pBrush = rItemSet.GetItemIfSet(ATTR_BACKGROUND))
+    {
+        const model::ComplexColor& rCC = pBrush->getComplexColor();
+        if (rCC.getThemeColorType() != model::ThemeColorType::Unknown)
+        {
+            Color aNewColor = rColorSet.resolveColor(rCC);
+            SvxBrushItem aNewBrush(aNewColor, ATTR_BACKGROUND);
+            aNewBrush.setComplexColor(rCC);
+            rItemSet.Put(aNewBrush);
+        }
+    }
+
+    // Update font color
+    if (const SvxColorItem* pColorItem = rItemSet.GetItemIfSet(ATTR_FONT_COLOR))
+    {
+        const model::ComplexColor& rCC = pColorItem->getComplexColor();
+        if (rCC.getThemeColorType() != model::ThemeColorType::Unknown)
+        {
+            Color aNewColor = rColorSet.resolveColor(rCC);
+            SvxColorItem aNewColorItem(aNewColor, rCC, ATTR_FONT_COLOR);
+            rItemSet.Put(aNewColorItem);
+        }
+    }
+
+    // Update border line colors (outer borders)
+    if (const SvxBoxItem* pBox = rItemSet.GetItemIfSet(ATTR_BORDER))
+    {
+        SvxBoxItem aNewBox(*pBox);
+        bool bChanged = false;
+        for (auto eLine : { SvxBoxItemLine::TOP, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::LEFT,
+                            SvxBoxItemLine::RIGHT })
+        {
+            if (const editeng::SvxBorderLine* pLine = aNewBox.GetLine(eLine))
+            {
+                const model::ComplexColor& rCC = pLine->getComplexColor();
+                if (rCC.getThemeColorType() != model::ThemeColorType::Unknown)
+                {
+                    Color aNewColor = rColorSet.resolveColor(rCC);
+                    editeng::SvxBorderLine aNewLine(*pLine);
+                    aNewLine.SetColor(aNewColor);
+                    aNewBox.SetLine(&aNewLine, eLine);
+                    bChanged = true;
+                }
+            }
+        }
+        if (bChanged)
+            rItemSet.Put(aNewBox);
+    }
+
+    // Update inner border line colors (vertical/horizontal)
+    if (const SvxBoxInfoItem* pBoxInfo = rItemSet.GetItemIfSet(ATTR_BORDER_INNER))
+    {
+        SvxBoxInfoItem aNewBoxInfo(*pBoxInfo);
+        bool bChanged = false;
+        if (const editeng::SvxBorderLine* pLine = aNewBoxInfo.GetVert())
+        {
+            const model::ComplexColor& rCC = pLine->getComplexColor();
+            if (rCC.getThemeColorType() != model::ThemeColorType::Unknown)
+            {
+                Color aNewColor = rColorSet.resolveColor(rCC);
+                editeng::SvxBorderLine aNewLine(*pLine);
+                aNewLine.SetColor(aNewColor);
+                aNewBoxInfo.SetLine(&aNewLine, SvxBoxInfoItemLine::VERT);
+                bChanged = true;
+            }
+        }
+        if (const editeng::SvxBorderLine* pLine = aNewBoxInfo.GetHori())
+        {
+            const model::ComplexColor& rCC = pLine->getComplexColor();
+            if (rCC.getThemeColorType() != model::ThemeColorType::Unknown)
+            {
+                Color aNewColor = rColorSet.resolveColor(rCC);
+                editeng::SvxBorderLine aNewLine(*pLine);
+                aNewLine.SetColor(aNewColor);
+                aNewBoxInfo.SetLine(&aNewLine, SvxBoxInfoItemLine::HORI);
+                bChanged = true;
+            }
+        }
+        if (bChanged)
+            rItemSet.Put(aNewBoxInfo);
+    }
+}
+
+} // anonymous namespace
+
+void ScTableStyle::UpdateThemedColors(const model::ColorSet& rColorSet)
+{
+    if (mbIsOOXMLDefault)
+        return; // defaults are fully regenerated, not updated in-place
+
+    std::unique_ptr<ScPatternAttr>* aPatterns[]
+        = { &mpTablePattern,           &mpFirstColumnStripePattern, &mpSecondColumnStripePattern,
+            &mpFirstRowStripePattern,  &mpSecondRowStripePattern,   &mpLastColumnPattern,
+            &mpFirstColumnPattern,     &mpHeaderRowPattern,         &mpTotalRowPattern,
+            &mpFirstHeaderCellPattern, &mpLastHeaderCellPattern };
+
+    for (auto* pPatternPtr : aPatterns)
+    {
+        if (*pPatternPtr)
+            updatePatternThemedColors(**pPatternPtr, rColorSet);
+    }
+}
+
+void ScTableStyles::UpdateCustomStyleThemedColors(const model::ColorSet& rColorSet)
+{
+    for (auto & [ rName, pStyle ] : maTableStyles)
+    {
+        if (pStyle && !pStyle->IsOOXMLDefault())
+            pStyle->UpdateThemedColors(rColorSet);
+    }
 }
 
 const ScTableStyle* ScTableStyles::GetTableStyle(const OUString& rName) const

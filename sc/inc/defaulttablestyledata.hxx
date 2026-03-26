@@ -7,10 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <tablestyle.hxx>
-#include "stylesbuffer.hxx"
+#pragma once
 
-// structs used by the script generated code from the original OOXML spec
+#include "tablestyle.hxx"
+
+// POD structs used by the script-generated constexpr data in defaulttablestyles.inc
+// (generated from the ECMA-376 presetTableStyles.xml by generate_ooxml_tablestyle_info.py)
 
 struct ThemeColor
 {
@@ -27,7 +29,6 @@ struct Font
 struct Fill
 {
     int nFgColorId;
-    int nBgColorId;
 };
 
 enum class BorderElementStyle
@@ -72,32 +73,6 @@ struct TableStyle
     const char* pName;
     size_t nElements;
     int pTableStyleElementIds[9];
-};
-
-// the actual import class
-
-class DefaultOOXMLTableStyles : public oox::xls::WorkbookHelper
-{
-private:
-    std::vector<oox::xls::XlsColor> maColors;
-    oox::xls::FillVector maFills;
-    oox::xls::BorderVector maBorders;
-    oox::xls::FontVector maFonts;
-
-    oox::xls::DxfVector maDxfs;
-
-    void importColors();
-    void importFills();
-    void importBorderElement(oox::xls::BorderRef xBorder, sal_Int32 nBorderElement,
-                             sal_Int32 nBorderElementId);
-    void importBorders();
-    void importFonts();
-    void importDxfs();
-    void importTableStyle(const TableStyle& rTableStyleInfo);
-
-public:
-    DefaultOOXMLTableStyles(const oox::xls::WorkbookHelper& rHelper);
-    void importTableStyles();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

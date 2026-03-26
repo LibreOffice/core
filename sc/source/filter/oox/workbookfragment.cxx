@@ -58,7 +58,8 @@
 #include <scresid.hxx>
 #include <scmod.hxx>
 #include <formulaopt.hxx>
-#include <defaulttablestyles.hxx>
+#include <TableStyleGenerator.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -376,8 +377,10 @@ void WorkbookFragment::finalizeImport()
         importOoxFragment(new ThemeFragmentHandler(getFilter(), aThemeFragmentPath, rOoxTheme, *pTheme));
     xGlobalSegment->setPosition( 0.25 );
 
-    DefaultOOXMLTableStyles aTableStyles(*this);
-    aTableStyles.importTableStyles();
+    // Generate default table styles from the ECMA-376 spec data,
+    // resolving theme-relative colors against the document's theme.
+    if (pTheme && pTheme->getColorSet())
+        ScTableStyleGenerator::generateDefaultStyles(getScDocument(), *pTheme->getColorSet());
 
     // read the styles substream (requires finalized theme buffer)
     OUString aStylesFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"styles" );

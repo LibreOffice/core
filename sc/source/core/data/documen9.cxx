@@ -51,6 +51,9 @@
 #include <conditio.hxx>
 #include <documentlinkmgr.hxx>
 #include <userdat.hxx>
+#include <tablestyle.hxx>
+#include <TableStyleGenerator.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using namespace ::com::sun::star;
 
@@ -186,6 +189,18 @@ void ScDocument::InitDrawLayer( ScDocShell* pDocShell )
     mpDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
     mpDrawLayer->SetCharCompressType( GetAsianCompression() );
     mpDrawLayer->SetKernAsianPunctuation( GetAsianKerning() );
+
+    // Generate default table styles from the document's theme colors.
+    // The SdrModel constructor provides a default Theme("Office") with a ColorSet,
+    // so theme colors are always available at this point.
+    if (!mpTableStyles->HasTableStyle())
+    {
+        if (auto pTheme = mpDrawLayer->getTheme())
+        {
+            if (auto pColorSet = pTheme->getColorSet())
+                ScTableStyleGenerator::generateDefaultStyles(*this, *pColorSet);
+        }
+    }
 }
 
 void ScDocument::UpdateDrawLanguages()

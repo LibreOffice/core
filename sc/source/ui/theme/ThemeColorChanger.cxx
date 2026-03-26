@@ -12,6 +12,8 @@
 
 #include <sal/config.h>
 
+#include <TableStyleGenerator.hxx>
+#include <tablestyle.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
@@ -343,6 +345,9 @@ void ThemeColorChanger::doApply(std::shared_ptr<model::ColorSet> const& pColorSe
     changeSparklines(m_rDocShell, *pColorSet);
 
     changeThemeColorInTheDocModel(m_rDocShell, pColorSet);
+    ScTableStyleGenerator::generateDefaultStyles(rDocument, *pColorSet);
+    if (ScTableStyles* pStyles = rDocument.GetTableStyles())
+        pStyles->UpdateCustomStyleThemedColors(*pColorSet);
     m_rDocShell.Broadcast(SfxHint(SfxHintId::ThemeColorsChanged));
 
     if (bUndo)
