@@ -165,7 +165,7 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
     return false;
 }
 
-void SwViewShellImp::AddPendingLOKInvalidation( const SwRect& rRect )
+void SwViewShellImp::AddPendingKitInvalidation( const SwRect& rRect )
 {
     std::vector<SwRect>& l = m_pendingLOKInvalidations;
     if(l.empty() && m_rShell.GetSfxViewShell()) // Announce that these invalidations will need flushing.

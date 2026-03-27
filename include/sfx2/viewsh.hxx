@@ -403,7 +403,7 @@ public:
     virtual void viewUpdatedCallback(int nType) const override;
     virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const override;
     // Performs any pending calls to viewInvalidateTilesCallback() as necessary.
-    virtual void flushPendingLOKInvalidateTiles();
+    virtual void flushPendingKitInvalidateTiles();
     virtual void viewAddPendingInvalidateTiles() override;
     // Returns current payload for nType, after viewUpdatedCallback() or
     // viewUpdatedCallbackPerViewId() were called. If no payload should

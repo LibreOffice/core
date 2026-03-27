@@ -1810,7 +1810,7 @@ void CallbackFlushHandler::dumpState(rtl::OStringBuffer &rState)
 
 void CallbackFlushHandler::viewAddPendingInvalidateTiles()
 {
-    // Invoke() will call flushPendingLOKInvalidateTiles(), so just make sure the timer is active.
+    // Invoke() will call flushPendingKitInvalidateTiles(), so just make sure the timer is active.
     scheduleFlush();
 }
 
@@ -2525,7 +2525,7 @@ void CallbackFlushHandler::invoke()
     if(SfxViewShell* viewShell = SfxViewShell::GetFirst( false,
         [this](const SfxViewShell& shell) { return shell.GetViewShellId().get() == m_viewId; } ))
     {
-        viewShell->flushPendingLOKInvalidateTiles();
+        viewShell->flushPendingKitInvalidateTiles();
     }
 
     std::unique_lock<std::recursive_mutex> lock(m_mutex);

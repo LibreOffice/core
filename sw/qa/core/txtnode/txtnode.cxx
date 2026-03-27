@@ -189,7 +189,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
 
     // When typing to the document:
     pWrtShell->Insert(u"x"_ustr);
-    pWrtShell->GetSfxViewShell()->flushPendingLOKInvalidateTiles();
+    pWrtShell->GetSfxViewShell()->flushPendingKitInvalidateTiles();
 
     // Then make sure that only the text frame at the cursor is invalidated:
     pDoc->getIDocumentStatistics().GetUpdatedDocStat(/*bCompleteAsync=*/true, /*bFields=*/false);

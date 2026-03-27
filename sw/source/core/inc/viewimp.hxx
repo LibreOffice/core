@@ -173,7 +173,7 @@ public:
     const std::optional<SwRegionRects>& GetPaintRegion() { return m_oPaintRegion; }
     void DeletePaintRegion() { m_oPaintRegion.reset(); }
 
-    void AddPendingLOKInvalidation( const SwRect& rRect );
+    void AddPendingKitInvalidation( const SwRect& rRect );
     std::vector<SwRect> TakePendingLOKInvalidations();
 
     /// New Interface for StarView Drawing

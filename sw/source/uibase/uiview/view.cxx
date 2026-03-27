@@ -2041,7 +2041,7 @@ tools::Rectangle SwView::getLOKVisibleArea() const
         return tools::Rectangle();
 }
 
-void SwView::flushPendingLOKInvalidateTiles()
+void SwView::flushPendingKitInvalidateTiles()
 {
     if (SwWrtShell* pSh = GetWrtShellPtr())
         pSh->FlushPendingLOKInvalidateTiles();

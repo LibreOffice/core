@@ -636,7 +636,7 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
         // will collect all rectangles from all related views, compress them
         // and only with those relatively few rectangle it'd call Invalidate()
         // for all views.
-        Imp()->AddPendingLOKInvalidation(rRect);
+        Imp()->AddPendingKitInvalidation(rRect);
         return;
     }
 

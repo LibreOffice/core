@@ -111,7 +111,7 @@ void TestLokCallbackWrapper::viewUpdatedCallbackPerViewId(int nType, int nViewId
 
 void TestLokCallbackWrapper::viewAddPendingInvalidateTiles()
 {
-    // Invoke() will call flushPendingLOKInvalidateTiles().
+    // Invoke() will call flushPendingKitInvalidateTiles().
     startTimer();
 }
 
@@ -182,7 +182,7 @@ void TestLokCallbackWrapper::Invoke()
     for (SfxViewShell* viewShell = SfxViewShell::GetFirst(false); viewShell != nullptr;
          viewShell = SfxViewShell::GetNext(*viewShell, false))
     {
-        viewShell->flushPendingLOKInvalidateTiles();
+        viewShell->flushPendingKitInvalidateTiles();
     }
     flushLOKData();
 }

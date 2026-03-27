@@ -3418,7 +3418,7 @@ void SfxViewShell::afterCallbackRegistered()
     }
 }
 
-void SfxViewShell::flushPendingLOKInvalidateTiles()
+void SfxViewShell::flushPendingKitInvalidateTiles()
 {
     // SfxViewShell itself does not delay any tile invalidations.
 }

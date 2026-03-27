@@ -49,7 +49,7 @@ public:
     // SfxViewShell:getLOKPayload() will be called on nSourceViewId view.
     virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) = 0;
     // There are pending invalidate tiles calls that need to be processed.
-    // A call to SfxViewShell::flushPendingLOKInvalidateTiles() should be scheduled.
+    // A call to SfxViewShell::flushPendingKitInvalidateTiles() should be scheduled.
     virtual void viewAddPendingInvalidateTiles() = 0;
     virtual void dumpState(rtl::OStringBuffer& rState) = 0;
 };

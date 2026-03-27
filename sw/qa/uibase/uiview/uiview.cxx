@@ -531,7 +531,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
 
     // When typing a key:
     pWrtShell->Insert(u"x"_ustr);
-    pWrtShell->GetSfxViewShell()->flushPendingLOKInvalidateTiles();
+    pWrtShell->GetSfxViewShell()->flushPendingKitInvalidateTiles();
 
     // Then make sure that both the "omit inserts" and the "omit deletes" modes are invalidated:
     // Without the accompanying fix in place, this test would have failed, only the "omit deletes"
