@@ -1140,6 +1140,9 @@ bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
 
 int SwXTextDocument::getEditMode()
 {
+    if (!m_pDocShell)
+        return 0;
+
     SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
     if (!pViewShell)
     {
@@ -1152,6 +1155,9 @@ int SwXTextDocument::getEditMode()
 
 void SwXTextDocument::setEditMode(int nEditMode)
 {
+    if (!m_pDocShell)
+        return;
+
     auto eMode = static_cast<SwRedlineRenderMode>(nEditMode);
     SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
     if (!pViewShell)
