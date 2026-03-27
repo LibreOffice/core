@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define LOK_USE_UNSTABLE_API
+#define KIT_USE_UNSTABLE_API
 #include <COKit/COKit.h>
 #include <COKit/COKitInit.h>
 

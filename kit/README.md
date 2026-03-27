@@ -25,7 +25,7 @@ An example program can be seen on:
 
 To use LOK Tiled Rendering you will need the following before the LOK includes:
 
-    #define LOK_USE_UNSTABLE_API
+    #define KIT_USE_UNSTABLE_API
 
 (This must be define before ANY LOK header, i.e. including the Init header.)
 

@@ -14,7 +14,7 @@
 
 // the unstable API needs C99's bool
 // TODO remove the C99 types from the API before making stable
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+#if defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 # ifndef _WIN32
 #  include <stdbool.h>
 # endif
@@ -208,7 +208,7 @@ struct COKitDocumentClassStruct
      */
     int (*getDocumentType) (COKitDocument* pThis);
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+#if defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
     /// @see lok::Document::getParts().
     int (*getParts) (COKitDocument* pThis);
 
@@ -586,7 +586,7 @@ struct COKitDocumentClassStruct
     /// @see lok::Document::setAllowManageRedlines().
     void (*setAllowManageRedlines)(COKitDocument* pThis, int nId, bool allow);
 
-#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+#endif // defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
 #ifdef __cplusplus

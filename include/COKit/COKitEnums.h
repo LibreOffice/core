@@ -17,7 +17,7 @@ extern "C"
 {
 #endif
 
-#if defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+#if defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 typedef enum
 {
   LOK_DOCTYPE_TEXT,
@@ -1298,7 +1298,7 @@ typedef enum
 }
 COKitSetGraphicSelectionType;
 
-#endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
+#endif // defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 
 #ifdef __cplusplus
 }
