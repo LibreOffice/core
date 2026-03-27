@@ -2108,11 +2108,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     int nFirstViewId = SfxLokHelper::getCurrentView();
     SdTestViewCallback aView1;
-    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("SD;Default"_ostr, pXImpressDocument->getViewRenderState());
     // Create a second view
     SfxLokHelper::createView();
     SdTestViewCallback aView2;
-    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("SD;Default"_ostr, pXImpressDocument->getViewRenderState());
     // Set to dark scheme
     {
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -2122,10 +2122,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
         );
         dispatchCommand(mxComponent, u".uno:ChangeTheme"_ustr, aPropertyValues);
     }
-    CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("SD;Dark"_ostr, pXImpressDocument->getViewRenderState());
     // Switch back to the first view, and check that the options string is the same
     SfxLokHelper::setView(nFirstViewId);
-    CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pXImpressDocument->getViewRenderState());
+    CPPUNIT_ASSERT_EQUAL("SD;Default"_ostr, pXImpressDocument->getViewRenderState());
 }
 
 // Helper function to get a tile to a bitmap and check the pixel color
