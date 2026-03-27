@@ -469,6 +469,10 @@ public:
             || (pObject->IsEmptyPresObj() && !(pObject->HasFillStyle() || pObject->HasLineStyle())))
             return;
 
+        // Don't render annotation markers in the slideshow
+        if (pObject->GetObjIdentifier() == SdrObjKind::Annotation)
+            return;
+
         SdrPage* pPage = pObject->getSdrPageFromSdrObject();
 
         // Does the object have a page
