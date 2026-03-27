@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-module org { module libreoffice { module embindtest {
+module com { module sun { module star { module testuno {
 
 interface XTest {
     boolean getBoolean();
@@ -131,12 +131,12 @@ interface XTest {
     void passJob([in] com::sun::star::task::XJob object);
     void passJobExecutor([in] com::sun::star::task::XJobExecutor object, [in] boolean newThread);
     void passInterface([in] com::sun::star::uno::XInterface object);
-    boolean checkAttributes([in] org::libreoffice::embindtest::XAttributes object);
+    boolean checkAttributes([in] com::sun::star::testuno::XAttributes object);
     [attribute] string StringAttribute;
     boolean testSolarMutex();
     void executeTest([in] XTest test);
 };
 
-}; }; };
+}; }; }; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -7,12 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-module org { module libreoffice { module embindtest {
+module com { module sun { module star { module testuno {
 
-// This should make an implicit default constructor that only takes
-// the component context as an argument.
-service ImplicitConstructor: org::libreoffice::embindtest::XArgumentStore;
+interface XAttributes {
+    [attribute] long LongAttribute;
+    [attribute] string StringAttribute;
+    [attribute, readonly] boolean ReadOnlyAttribute;
+};
 
-}; }; };
+}; }; }; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

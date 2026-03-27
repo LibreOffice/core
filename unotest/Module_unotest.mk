@@ -31,11 +31,9 @@ $(eval $(call gb_Module_add_targets,unotest,\
 endif
 endif
 
-ifeq ($(ENABLE_EMBINDTEST_UNO),TRUE)
 $(eval $(call gb_Module_add_targets,unotest, \
-    Library_embindtest \
+    Library_testuno \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:

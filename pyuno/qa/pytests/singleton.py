@@ -9,7 +9,7 @@
 
 import unittest
 import org.libreoffice.unotest
-from org.libreoffice.embindtest import theSingleton
+from com.sun.star.testuno import theSingleton
 
 class SingletonTest(unittest.TestCase):
     def test_singleton(self):

@@ -11,15 +11,15 @@ import org.libreoffice.unotest
 import unittest
 import uno
 import unohelper
+from com.sun.star.testuno import Exception
+from com.sun.star.testuno import Struct
+from com.sun.star.testuno import StructLong
+from com.sun.star.testuno import StructString
+from com.sun.star.testuno import XTest
+from com.sun.star.testuno.Enum import E3
+from com.sun.star.testuno.Enum import E_10
+from com.sun.star.testuno.Enum import E_2
 from com.sun.star.uno import RuntimeException
-from org.libreoffice.embindtest import Exception
-from org.libreoffice.embindtest import Struct
-from org.libreoffice.embindtest import StructLong
-from org.libreoffice.embindtest import StructString
-from org.libreoffice.embindtest import XTest
-from org.libreoffice.embindtest.Enum import E3
-from org.libreoffice.embindtest.Enum import E_10
-from org.libreoffice.embindtest.Enum import E_2
 
 class Test(unohelper.Base, XTest):
     def getBoolean(self):
@@ -202,7 +202,7 @@ class Test(unohelper.Base, XTest):
             'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'), E_2,
             StructLong(-123456),
             uno.createUnoStruct(
-                'org.libreoffice.embindtest.Template<any,org.libreoffice.embindtest.StructString>',
+                'com.sun.star.testuno.Template<any,com.sun.star.testuno.StructString>',
                 StructString('foo'), -123456, -123456, StructString('barr')),
             self)
 
@@ -212,7 +212,7 @@ class Test(unohelper.Base, XTest):
             'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'), E_2,
             StructLong(-123456),
             uno.createUnoStruct(
-                'org.libreoffice.embindtest.Template<any,org.libreoffice.embindtest.StructString>',
+                'com.sun.star.testuno.Template<any,com.sun.star.testuno.StructString>',
                 StructString('foo'), -123456, -123456, StructString('barr')),
             self)
 
@@ -223,7 +223,7 @@ class Test(unohelper.Base, XTest):
         return value == Exception('error', None, -123456, 100.5, 'hä')
 
     def getAnyInterface(self):
-        return uno.Any('org.libreoffice.embindtest.XTest', self)
+        return uno.Any('com.sun.star.testuno.XTest', self)
 
     def isAnyInterface(self, value):
         return value == self
@@ -240,7 +240,7 @@ class Test(unohelper.Base, XTest):
             'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'), E_2,
             StructLong(-123456),
             uno.createUnoStruct(
-                'org.libreoffice.embindtest.Template<any,org.libreoffice.embindtest.StructString>',
+                'com.sun.star.testuno.Template<any,com.sun.star.testuno.StructString>',
                 StructString('foo'), -123456, -123456, StructString('barr')),
             self)
 
@@ -250,7 +250,7 @@ class Test(unohelper.Base, XTest):
             'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'), E_2,
             StructLong(-123456),
             uno.createUnoStruct(
-                'org.libreoffice.embindtest.Template<any,org.libreoffice.embindtest.StructString>',
+                'com.sun.star.testuno.Template<any,com.sun.star.testuno.StructString>',
                 StructString('foo'), -123456, -123456, StructString('barr')),
             self)
 
@@ -341,15 +341,15 @@ class Test(unohelper.Base, XTest):
     def getSequenceType(self):
         return (
             uno.getTypeByName('long'), uno.getTypeByName('void'),
-            uno.getTypeByName('[]org.libreoffice.embindtest.Enum'))
+            uno.getTypeByName('[]com.sun.star.testuno.Enum'))
 
     def isSequenceType(self, value):
         return value == (
             uno.getTypeByName('long'), uno.getTypeByName('void'),
-            uno.getTypeByName('[]org.libreoffice.embindtest.Enum'))
+            uno.getTypeByName('[]com.sun.star.testuno.Enum'))
 
     def getSequenceAny(self):
-        return (-123456, None, uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)))
+        return (-123456, None, uno.Any('[]com.sun.star.testuno.Enum', (E_2, E3, E_10)))
 
     def isSequenceAny(self, value):
         return value == (-123456, None, (E_2, E3, E_10))
@@ -372,28 +372,28 @@ class Test(unohelper.Base, XTest):
                 True, -12, -1234, 1, -123456, 1, -123456789, 1, -10.25, -100.5, 'a', 'hä',
                 uno.getTypeByName('long'), -123456, (), E_2, StructLong(-123456),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('foo'), -123456, -123456, StructString('barr')),
                 self),
             Struct(
                 True, 1, 1, 10, 1, 10, 1, 10, 1.5, 1.25, 'B', 'barr', uno.getTypeByName('void'),
                 None, ('foo', 'barr'), E3, StructLong(1),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('baz'), 1, None, StructString('foo')),
                 None),
             Struct(
                 False, 12, 1234, 54321, 123456, 3456789012, 123456789, 9876543210, 10.75, 100.75,
-                'Ö', 'bazzz', uno.getTypeByName('[]org.libreoffice.embindtest.Enum'),
-                uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)), ('baz',), E_10,
+                'Ö', 'bazzz', uno.getTypeByName('[]com.sun.star.testuno.Enum'),
+                uno.Any('[]com.sun.star.testuno.Enum', (E_2, E3, E_10)), ('baz',), E_10,
                 StructLong(123456),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('barr'), 123456,
-                    uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)),
+                    uno.Any('[]com.sun.star.testuno.Enum', (E_2, E3, E_10)),
                     StructString('bazz')),
                 self))
 
@@ -403,28 +403,28 @@ class Test(unohelper.Base, XTest):
                 True, -12, -1234, 1, -123456, 1, -123456789, 1, -10.25, -100.5, 'a', 'hä',
                 uno.getTypeByName('long'), -123456, (), E_2, StructLong(-123456),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('foo'), -123456, -123456, StructString('barr')),
                 self),
             Struct(
                 True, 1, 1, 10, 1, 10, 1, 10, 1.5, 1.25, 'B', 'barr', uno.getTypeByName('void'),
                 None, ('foo', 'barr'), E3, StructLong(1),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('baz'), 1, None, StructString('foo')),
                 None),
             Struct(
                 False, 12, 1234, 54321, 123456, 3456789012, 123456789, 9876543210, 10.75, 100.75,
-                'Ö', 'bazzz', uno.getTypeByName('[]org.libreoffice.embindtest.Enum'),
-                uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)), ('baz',), E_10,
+                'Ö', 'bazzz', uno.getTypeByName('[]com.sun.star.testuno.Enum'),
+                uno.Any('[]com.sun.star.testuno.Enum', (E_2, E3, E_10)), ('baz',), E_10,
                 StructLong(123456),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('barr'), 123456,
-                    uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)),
+                    uno.Any('[]com.sun.star.testuno.Enum', (E_2, E3, E_10)),
                     StructString('bazz')),
                 self))
 
@@ -445,8 +445,8 @@ class Test(unohelper.Base, XTest):
                 'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'), E_2,
                 StructLong(-123456),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('foo'), -123456, -123456, StructString('barr')),
                 self),
             self)
@@ -454,11 +454,11 @@ class Test(unohelper.Base, XTest):
     def throwRuntimeException(self):
         raise RuntimeException('test', None)
 
-class EmbindTest(unittest.TestCase):
+class TestUno(unittest.TestCase):
     def test(self):
         ctx = org.libreoffice.unotest.pyuno.getComponentContext()
         test = ctx.getServiceManager().createInstanceWithContext(
-            'org.libreoffice.embindtest.Test', ctx)
+            'com.sun.star.testuno.Test', ctx)
         self.assertIsNotNone(test)
 
         v = test.getBoolean()
@@ -539,8 +539,8 @@ class EmbindTest(unittest.TestCase):
                 'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'), E_2,
                 StructLong(-123456),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('foo'), -123456, -123456, StructString('barr')),
                 test))
         self.assertTrue(test.isStruct(v))
@@ -551,8 +551,8 @@ class EmbindTest(unittest.TestCase):
                     100.5, 'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'),
                     E_2, StructLong(-123456),
                     uno.createUnoStruct(
-                        'org.libreoffice.embindtest.Template<'
-                            'any,org.libreoffice.embindtest.StructString>',
+                        'com.sun.star.testuno.Template<'
+                            'any,com.sun.star.testuno.StructString>',
                         StructString('foo'), -123456, -123456, StructString('barr')),
                     test)))
 
@@ -570,14 +570,14 @@ class EmbindTest(unittest.TestCase):
         self.assertEqual(
             v,
             uno.createUnoStruct(
-                'org.libreoffice.embindtest.Template<any,org.libreoffice.embindtest.StructString>',
+                'com.sun.star.testuno.Template<any,com.sun.star.testuno.StructString>',
                 StructString('foo'), -123456, -123456, StructString('barr')))
         self.assertTrue(test.isTemplate(v))
         self.assertTrue(
             test.isTemplate(
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('foo'), -123456, -123456, StructString('barr'))))
 
         v = test.getAnyVoid()
@@ -668,8 +668,8 @@ class EmbindTest(unittest.TestCase):
                 'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'), E_2,
                 StructLong(-123456),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('foo'), -123456, -123456, StructString('barr')),
                 test))
         self.assertTrue(test.isAnyStruct(v))
@@ -680,8 +680,8 @@ class EmbindTest(unittest.TestCase):
                     100.5, 'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'),
                     E_2, StructLong(-123456),
                     uno.createUnoStruct(
-                        'org.libreoffice.embindtest.Template<'
-                            'any,org.libreoffice.embindtest.StructString>',
+                        'com.sun.star.testuno.Template<'
+                            'any,com.sun.star.testuno.StructString>',
                         StructString('foo'), -123456, -123456, StructString('barr')),
                     test)))
 
@@ -697,7 +697,7 @@ class EmbindTest(unittest.TestCase):
         v = test.getAnyInterface()
         self.assertEqual(v, test)
         self.assertTrue(test.isAnyInterface(v))
-        self.assertTrue(test.isAnyInterface(uno.Any('org.libreoffice.embindtest.XTest', test)))
+        self.assertTrue(test.isAnyInterface(uno.Any('com.sun.star.testuno.XTest', test)))
 
         v = test.getSequenceBoolean()
         self.assertEqual(v, (True, True, False))
@@ -763,19 +763,19 @@ class EmbindTest(unittest.TestCase):
         self.assertEqual(
             v,
             (uno.getTypeByName('long'), uno.getTypeByName('void'),
-             uno.getTypeByName('[]org.libreoffice.embindtest.Enum')))
+             uno.getTypeByName('[]com.sun.star.testuno.Enum')))
         self.assertTrue(test.isSequenceType(v))
         self.assertTrue(
             test.isSequenceType(
                 (uno.getTypeByName('long'), uno.getTypeByName('void'),
-                 uno.getTypeByName('[]org.libreoffice.embindtest.Enum'))))
+                 uno.getTypeByName('[]com.sun.star.testuno.Enum'))))
 
         v = test.getSequenceAny()
         self.assertEqual(v, (-123456, None, (E_2, E3, E_10)))
         self.assertFalse(test.isSequenceAny(v)) # (long, void, []any)
         self.assertTrue(
             test.isSequenceAny(
-                (-123456, None, uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)))))
+                (-123456, None, uno.Any('[]com.sun.star.testuno.Enum', (E_2, E3, E_10)))))
 
         v = test.getSequenceSequenceString()
         self.assertEqual(v, ((), ('foo', 'barr'), ('baz',)))
@@ -794,28 +794,28 @@ class EmbindTest(unittest.TestCase):
                 True, -12, -1234, 1, -123456, 1, -123456789, 1, -10.25, -100.5, 'a', 'hä',
                 uno.getTypeByName('long'), -123456, (), E_2, StructLong(-123456),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('foo'), -123456, -123456, StructString('barr')),
                 test),
              Struct(
                  True, 1, 1, 10, 1, 10, 1, 10, 1.5, 1.25, 'B', 'barr', uno.getTypeByName('void'),
                  None, ('foo', 'barr'), E3, StructLong(1),
                  uno.createUnoStruct(
-                     'org.libreoffice.embindtest.Template<'
-                         'any,org.libreoffice.embindtest.StructString>',
+                     'com.sun.star.testuno.Template<'
+                         'any,com.sun.star.testuno.StructString>',
                      StructString('baz'), 1, None, StructString('foo')),
                  None),
              Struct(
                  False, 12, 1234, 54321, 123456, 3456789012, 123456789, 9876543210, 10.75, 100.75,
-                 'Ö', 'bazzz', uno.getTypeByName('[]org.libreoffice.embindtest.Enum'),
-                 uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)), ('baz',), E_10,
+                 'Ö', 'bazzz', uno.getTypeByName('[]com.sun.star.testuno.Enum'),
+                 uno.Any('[]com.sun.star.testuno.Enum', (E_2, E3, E_10)), ('baz',), E_10,
                  StructLong(123456),
                  uno.createUnoStruct(
-                     'org.libreoffice.embindtest.Template<'
-                         'any,org.libreoffice.embindtest.StructString>',
+                     'com.sun.star.testuno.Template<'
+                         'any,com.sun.star.testuno.StructString>',
                      StructString('barr'), 123456,
-                     uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)),
+                     uno.Any('[]com.sun.star.testuno.Enum', (E_2, E3, E_10)),
                      StructString('bazz')),
                  test)))
         self.assertTrue(test.isSequenceStruct(v))
@@ -825,28 +825,28 @@ class EmbindTest(unittest.TestCase):
                     True, -12, -1234, 1, -123456, 1, -123456789, 1, -10.25, -100.5, 'a', 'hä',
                     uno.getTypeByName('long'), -123456, (), E_2, StructLong(-123456),
                     uno.createUnoStruct(
-                        'org.libreoffice.embindtest.Template<'
-                            'any,org.libreoffice.embindtest.StructString>',
+                        'com.sun.star.testuno.Template<'
+                            'any,com.sun.star.testuno.StructString>',
                         StructString('foo'), -123456, -123456, StructString('barr')),
                     test),
                  Struct(
                      True, 1, 1, 10, 1, 10, 1, 10, 1.5, 1.25, 'B', 'barr',
                      uno.getTypeByName('void'), None, ('foo', 'barr'), E3, StructLong(1),
                      uno.createUnoStruct(
-                         'org.libreoffice.embindtest.Template<'
-                             'any,org.libreoffice.embindtest.StructString>',
+                         'com.sun.star.testuno.Template<'
+                             'any,com.sun.star.testuno.StructString>',
                          StructString('baz'), 1, None, StructString('foo')),
                      None),
                  Struct(
                      False, 12, 1234, 54321, 123456, 3456789012, 123456789, 9876543210, 10.75,
-                     100.75, 'Ö', 'bazzz', uno.getTypeByName('[]org.libreoffice.embindtest.Enum'),
-                     uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)), ('baz',), E_10,
+                     100.75, 'Ö', 'bazzz', uno.getTypeByName('[]com.sun.star.testuno.Enum'),
+                     uno.Any('[]com.sun.star.testuno.Enum', (E_2, E3, E_10)), ('baz',), E_10,
                      StructLong(123456),
                      uno.createUnoStruct(
-                         'org.libreoffice.embindtest.Template<'
-                             'any,org.libreoffice.embindtest.StructString>',
+                         'com.sun.star.testuno.Template<'
+                             'any,com.sun.star.testuno.StructString>',
                          StructString('barr'), 123456,
-                         uno.Any('[]org.libreoffice.embindtest.Enum', (E_2, E3, E_10)),
+                         uno.Any('[]com.sun.star.testuno.Enum', (E_2, E3, E_10)),
                          StructString('bazz')),
                      test))))
 
@@ -883,8 +883,8 @@ class EmbindTest(unittest.TestCase):
                 'Ö', 'hä', uno.getTypeByName('long'), -123456, ('foo', 'barr', 'bazzz'), E_2,
                 StructLong(-123456),
                 uno.createUnoStruct(
-                    'org.libreoffice.embindtest.Template<'
-                        'any,org.libreoffice.embindtest.StructString>',
+                    'com.sun.star.testuno.Template<'
+                        'any,com.sun.star.testuno.StructString>',
                     StructString('foo'), -123456, -123456, StructString('barr')),
                 test))
         self.assertEqual(v18, test)

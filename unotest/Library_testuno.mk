@@ -7,17 +7,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,embindtest))
+$(eval $(call gb_Library_Library,testuno))
 
-$(eval $(call gb_Library_add_exception_objects,embindtest, \
-    unotest/source/embindtest/embindtest \
-    unotest/source/embindtest/serviceconstructors \
-    unotest/source/embindtest/singleton \
+$(eval $(call gb_Library_add_exception_objects,testuno, \
+    unotest/source/testuno/testuno \
+    unotest/source/testuno/serviceconstructors \
+    unotest/source/testuno/singleton \
 ))
 
-$(eval $(call gb_Library_set_componentfile,embindtest,unotest/source/embindtest/embindtest,services))
+$(eval $(call gb_Library_set_componentfile,testuno,unotest/source/testuno/testuno,services))
 
-$(eval $(call gb_Library_use_libraries,embindtest, \
+$(eval $(call gb_Library_use_libraries,testuno, \
     cppu \
     cppuhelper \
     sal \
@@ -27,6 +27,6 @@ $(eval $(call gb_Library_use_libraries,embindtest, \
     $(if $(filter -fsanitize=vptr,$(gb_CXX)),comphelper) \
 ))
 
-$(eval $(call gb_Library_use_sdk_api,embindtest))
+$(eval $(call gb_Library_use_sdk_api,testuno))
 
 # vim: set noet sw=4 ts=4:

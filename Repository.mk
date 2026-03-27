@@ -415,7 +415,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	drawinglayercore \
 	drawinglayer \
 	editeng \
-	$(if $(ENABLE_EMBINDTEST_UNO),embindtest) \
 	$(if $(filter WNT,$(OS)),emser) \
 	evtatt \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
@@ -479,6 +478,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	svxcore \
 	sw \
 	syssh \
+	testuno \
 	textconversiondlgs \
 	textfd \
 	tk \

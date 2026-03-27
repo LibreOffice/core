@@ -9,9 +9,9 @@
 
 #include <sal/config.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/testuno/XStringFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <org/libreoffice/embindtest/XStringFactory.hpp>
 
 namespace com::sun::star::uno
 {
@@ -20,13 +20,13 @@ class XComponentContext;
 
 namespace
 {
-class SingletonTest : public cppu::WeakImplHelper<org::libreoffice::embindtest::XStringFactory,
-                                                  css::lang::XServiceInfo>
+class SingletonTest
+    : public cppu::WeakImplHelper<css::testuno::XStringFactory, css::lang::XServiceInfo>
 {
 public:
     OUString SAL_CALL getImplementationName() override
     {
-        return u"org.libreoffice.comp.embindtest.Singleton"_ustr;
+        return u"com.sun.star.comp.testuno.Singleton"_ustr;
     }
 
     sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override
@@ -36,7 +36,7 @@ public:
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return { u"org.libreoffice.embindtest.Singleton"_ustr };
+        return { u"com.sun.star.testuno.Singleton"_ustr };
     }
 
     OUString SAL_CALL getString() override { return "this is a string from XStringFactory"; }
@@ -44,8 +44,8 @@ public:
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-org_libreoffice_comp_embindtest_Singleton_get_implementation(
-    css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const&)
+com_sun_star_comp_testuno_Singleton_get_implementation(css::uno::XComponentContext*,
+                                                       css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new SingletonTest);
 }

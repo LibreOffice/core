@@ -389,6 +389,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/task,\
 	StatusIndicatorFactory \
 	theJobExecutor \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/testuno, \
+    BridgeTest \
+    Test \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/text,\
 	AutoTextContainer \
 	DefaultNumberingProvider \
@@ -3690,6 +3694,22 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/task,\
 	XStatusIndicatorSupplier \
 	XUrlContainer \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/testuno, \
+    Constants \
+    Enum \
+    Exception \
+    ExplicitConstructors \
+    ImplicitConstructor \
+    Struct \
+    StructLong \
+    StructString \
+    Template \
+    XArgumentStore \
+    XAttributes \
+    XStringFactory \
+    XTest \
+    theSingleton \
+))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/text,\
 	AuthorDisplayFormat \
 	BibliographyDataField \
@@ -4390,29 +4410,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,org/freedesktop/PackageKit,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,org/freedesktop/PackageKit,\
     SyncDbusSessionHelper \
 ))
-
-ifeq ($(ENABLE_EMBINDTEST_UNO),TRUE)
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,org/libreoffice/embindtest, \
-    Constants \
-    Enum \
-    Exception \
-    ExplicitConstructors \
-    ImplicitConstructor \
-    Struct \
-    StructLong \
-    StructString \
-    Template \
-    XArgumentStore \
-    XAttributes \
-    XStringFactory \
-    XTest \
-    theSingleton \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,org/libreoffice/embindtest, \
-    BridgeTest \
-    Test \
-))
-endif
 
 $(eval $(call gb_UnoApi_set_reference_rdbfile,offapi,$(call gb_UnoApiTarget_get_target,udkapi) $(SRCDIR)/offapi/type_reference/offapi.idl))
 

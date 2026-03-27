@@ -10,7 +10,7 @@
 Module.uno_init.then(function() {
     console.log('Running embindtest');
     let css = Module.uno.com.sun.star;
-    let test = Module.uno.org.libreoffice.embindtest.Test.create(Module.getUnoComponentContext());
+    let test = Module.uno.com.sun.star.testuno.Test.create(Module.getUnoComponentContext());
     console.assert(typeof test === 'object');
     {
         let v = test.getBoolean();
@@ -94,7 +94,7 @@ Module.uno_init.then(function() {
     {
         let v = test.getEnum();
         console.log(v);
-        console.assert(v === Module.uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v === Module.uno.com.sun.star.testuno.Enum.E_2);
         console.assert(test.isEnum(v));
     }
     {
@@ -118,7 +118,7 @@ Module.uno_init.then(function() {
         console.assert(v.m15.get(0) === 'foo');
         console.assert(v.m15.get(1) === 'barr');
         console.assert(v.m15.get(2) === 'bazzz');
-        console.assert(v.m16 === Module.uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v.m16 === Module.uno.com.sun.star.testuno.Enum.E_2);
         console.assert(v.m17.m === -123456);
         console.assert(v.m18.m1.m === 'foo');
         console.assert(v.m18.m2 === -123456);
@@ -300,12 +300,12 @@ Module.uno_init.then(function() {
     {
         let v = test.getAnyEnum();
         console.log(v);
-        console.assert(v.get() === Module.uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v.get() === Module.uno.com.sun.star.testuno.Enum.E_2);
         console.assert(test.isAnyEnum(v));
         v.delete();
         let a = new Module.uno_Any(
-            Module.uno_Type.Enum('org.libreoffice.embindtest.Enum'),
-            Module.uno.org.libreoffice.embindtest.Enum.E_2);
+            Module.uno_Type.Enum('com.sun.star.testuno.Enum'),
+            Module.uno.com.sun.star.testuno.Enum.E_2);
         console.assert(test.isAnyEnum(a));
         a.delete();
     }
@@ -330,7 +330,7 @@ Module.uno_init.then(function() {
         console.assert(v.get().m15.get(0) === 'foo');
         console.assert(v.get().m15.get(1) === 'barr');
         console.assert(v.get().m15.get(2) === 'bazzz');
-        console.assert(v.get().m16 === Module.uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v.get().m16 === Module.uno.com.sun.star.testuno.Enum.E_2);
         console.assert(v.get().m17.m === -123456);
         console.assert(v.get().m18.m1.m === 'foo');
         console.assert(v.get().m18.m2 === -123456);
@@ -346,11 +346,11 @@ Module.uno_init.then(function() {
         let m15 = new Module.uno_Sequence_string(["foo", "barr", "bazzz"]);
         let m18m3 = new Module.uno_Any(Module.uno_Type.Long(), -123456);
         let a = new Module.uno_Any(
-            Module.uno_Type.Struct('org.libreoffice.embindtest.Struct'),
+            Module.uno_Type.Struct('com.sun.star.testuno.Struct'),
             {m1: true, m2: -12, m3: -1234, m4: 54321, m5: -123456, m6: 3456789012, m7: -123456789n,
              m8: 9876543210n, m9: -10.25, m10: 100.5, m11: 'Ö', m12: 'hä',
              m13: Module.uno_Type.Long(), m14, m15,
-             m16: Module.uno.org.libreoffice.embindtest.Enum.E_2, m17: {m: -123456},
+             m16: Module.uno.com.sun.star.testuno.Enum.E_2, m17: {m: -123456},
              m18: {m1: {m: 'foo'}, m2: -123456, m3: m18m3, m4: {m: 'barr'}}, m19: test});
         console.assert(test.isAnyStruct(a));
         m14.delete();
@@ -369,7 +369,7 @@ Module.uno_init.then(function() {
         console.assert(test.isAnyException(v));
         v.delete();
         let a = new Module.uno_Any(
-            Module.uno_Type.Exception('org.libreoffice.embindtest.Exception'),
+            Module.uno_Type.Exception('com.sun.star.testuno.Exception'),
             {Message: 'error', Context: null, m1: -123456, m2: 100.5, m3: 'hä'});
         console.assert(test.isAnyException(a));
         a.delete();
@@ -381,7 +381,7 @@ Module.uno_init.then(function() {
         console.assert(test.isAnyInterface(v));
         v.delete();
         let a = new Module.uno_Any(
-            Module.uno_Type.Interface('org.libreoffice.embindtest.XTest'), test);
+            Module.uno_Type.Interface('com.sun.star.testuno.XTest'), test);
         console.assert(test.isAnyInterface(a));
         a.delete();
     }
@@ -511,12 +511,12 @@ Module.uno_init.then(function() {
         console.assert(v.size() === 3);
         console.assert(v.get(0).toString() === 'long');
         console.assert(v.get(1).toString() === 'void');
-        console.assert(v.get(2).toString() === '[]org.libreoffice.embindtest.Enum');
+        console.assert(v.get(2).toString() === '[]com.sun.star.testuno.Enum');
         console.assert(test.isSequenceType(v));
         v.delete();
         let s = new Module.uno_Sequence_type([
             Module.uno_Type.Long(), Module.uno_Type.Void(),
-            Module.uno_Type.Sequence(Module.uno_Type.Enum('org.libreoffice.embindtest.Enum'))]);
+            Module.uno_Type.Sequence(Module.uno_Type.Enum('com.sun.star.testuno.Enum'))]);
         console.assert(test.isSequenceType(s));
         s.delete();
     }
@@ -533,9 +533,9 @@ Module.uno_init.then(function() {
         let e2 = v.get(2);
         let s = e2.get();
         console.assert(s.size() === 3);
-        console.assert(s.get(0) === Module.uno.org.libreoffice.embindtest.Enum.E_2);
-        console.assert(s.get(1) === Module.uno.org.libreoffice.embindtest.Enum.E3);
-        console.assert(s.get(2) === Module.uno.org.libreoffice.embindtest.Enum.E_10);
+        console.assert(s.get(0) === Module.uno.com.sun.star.testuno.Enum.E_2);
+        console.assert(s.get(1) === Module.uno.com.sun.star.testuno.Enum.E3);
+        console.assert(s.get(2) === Module.uno.com.sun.star.testuno.Enum.E_10);
         s.delete();
         e2.delete();
         console.assert(test.isSequenceAny(v));
@@ -564,9 +564,9 @@ Module.uno_init.then(function() {
         let v = test.getSequenceEnum();
         console.log(v);
         console.assert(v.size() === 3);
-        console.assert(v.get(0) === Module.uno.org.libreoffice.embindtest.Enum.E_2);
-        console.assert(v.get(1) === Module.uno.org.libreoffice.embindtest.Enum.E3);
-        console.assert(v.get(2) === Module.uno.org.libreoffice.embindtest.Enum.E_10);
+        console.assert(v.get(0) === Module.uno.com.sun.star.testuno.Enum.E_2);
+        console.assert(v.get(1) === Module.uno.com.sun.star.testuno.Enum.E3);
+        console.assert(v.get(2) === Module.uno.com.sun.star.testuno.Enum.E_10);
         console.assert(test.isSequenceEnum(v));
         v.delete();
     }
@@ -589,7 +589,7 @@ Module.uno_init.then(function() {
         console.assert(v.get(0).m13.toString() === 'long');
         console.assert(v.get(0).m14.get() === -123456);
         console.assert(v.get(0).m15.size() === 0);
-        console.assert(v.get(0).m16 === Module.uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v.get(0).m16 === Module.uno.com.sun.star.testuno.Enum.E_2);
         console.assert(v.get(0).m17.m === -123456);
         console.assert(v.get(0).m18.m1.m === 'foo');
         console.assert(v.get(0).m18.m2 === -123456);
@@ -613,7 +613,7 @@ Module.uno_init.then(function() {
         console.assert(v.get(1).m15.size() === 2);
         console.assert(v.get(1).m15.get(0) === 'foo');
         console.assert(v.get(1).m15.get(1) === 'barr');
-        console.assert(v.get(1).m16 === Module.uno.org.libreoffice.embindtest.Enum.E3);
+        console.assert(v.get(1).m16 === Module.uno.com.sun.star.testuno.Enum.E3);
         console.assert(v.get(1).m17.m === 1);
         console.assert(v.get(1).m18.m1.m === 'baz');
         console.assert(v.get(1).m18.m2 === 1);
@@ -632,26 +632,26 @@ Module.uno_init.then(function() {
         console.assert(v.get(2).m10 === 100.75);
         console.assert(v.get(2).m11 === 'Ö');
         console.assert(v.get(2).m12 === 'bazzz');
-        console.assert(v.get(2).m13.toString() === '[]org.libreoffice.embindtest.Enum');
+        console.assert(v.get(2).m13.toString() === '[]com.sun.star.testuno.Enum');
         console.assert(v.get(2).m14.get().size() === 3);
         console.assert(
-            v.get(2).m14.get().get(0) === Module.uno.org.libreoffice.embindtest.Enum.E_2);
-        console.assert(v.get(2).m14.get().get(1) === Module.uno.org.libreoffice.embindtest.Enum.E3);
+            v.get(2).m14.get().get(0) === Module.uno.com.sun.star.testuno.Enum.E_2);
+        console.assert(v.get(2).m14.get().get(1) === Module.uno.com.sun.star.testuno.Enum.E3);
         console.assert(
-            v.get(2).m14.get().get(2) === Module.uno.org.libreoffice.embindtest.Enum.E_10);
+            v.get(2).m14.get().get(2) === Module.uno.com.sun.star.testuno.Enum.E_10);
         console.assert(v.get(2).m15.size() === 1);
         console.assert(v.get(2).m15.get(0) === 'baz');
-        console.assert(v.get(2).m16 === Module.uno.org.libreoffice.embindtest.Enum.E_10);
+        console.assert(v.get(2).m16 === Module.uno.com.sun.star.testuno.Enum.E_10);
         console.assert(v.get(2).m17.m === 123456);
         console.assert(v.get(2).m18.m1.m === 'barr');
         console.assert(v.get(2).m18.m2 === 123456);
         console.assert(v.get(2).m18.m3.get().size() === 3);
         console.assert(
-            v.get(2).m18.m3.get().get(0) === Module.uno.org.libreoffice.embindtest.Enum.E_2);
+            v.get(2).m18.m3.get().get(0) === Module.uno.com.sun.star.testuno.Enum.E_2);
         console.assert(
-            v.get(2).m18.m3.get().get(1) === Module.uno.org.libreoffice.embindtest.Enum.E3);
+            v.get(2).m18.m3.get().get(1) === Module.uno.com.sun.star.testuno.Enum.E3);
         console.assert(
-            v.get(2).m18.m3.get().get(2) === Module.uno.org.libreoffice.embindtest.Enum.E_10);
+            v.get(2).m18.m3.get().get(2) === Module.uno.com.sun.star.testuno.Enum.E_10);
         console.assert(v.get(2).m18.m4.m === 'bazz');
         console.assert(Module.sameUnoObject(v.get(2).m19, test));
         console.assert(test.isSequenceStruct(v));
@@ -694,9 +694,9 @@ Module.uno_init.then(function() {
         const v13 = new Module.uno_InOutParam_type;
         const v14 = new Module.uno_InOutParam_any;
         const v15 = new Module.uno_InOutParam_sequence_string;
-        const v16 = new Module.uno_InOutParam_org$libreoffice$embindtest$Enum;
-        const v17 = new Module.uno_InOutParam_org$libreoffice$embindtest$Struct;
-        const v18 = new Module.uno_InOutParam_org$libreoffice$embindtest$XTest;
+        const v16 = new Module.uno_InOutParam_com$sun$star$testuno$Enum;
+        const v17 = new Module.uno_InOutParam_com$sun$star$testuno$Struct;
+        const v18 = new Module.uno_InOutParam_com$sun$star$testuno$XTest;
         test.getOut(
             v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18);
         console.log(v1.val);
@@ -735,7 +735,7 @@ Module.uno_init.then(function() {
         console.assert(v15.val.get(0) === 'foo');
         console.assert(v15.val.get(1) === 'barr');
         console.assert(v15.val.get(2) === 'bazzz');
-        console.assert(v16.val === Module.uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v16.val === Module.uno.com.sun.star.testuno.Enum.E_2);
         console.assert(v17.val.m1 === 1); //TODO: true
         console.assert(v17.val.m2 === -12);
         console.assert(v17.val.m3 === -1234);
@@ -754,7 +754,7 @@ Module.uno_init.then(function() {
         console.assert(v17.val.m15.get(0) === 'foo');
         console.assert(v17.val.m15.get(1) === 'barr');
         console.assert(v17.val.m15.get(2) === 'bazzz');
-        console.assert(v17.val.m16 === Module.uno.org.libreoffice.embindtest.Enum.E_2);
+        console.assert(v17.val.m16 === Module.uno.com.sun.star.testuno.Enum.E_2);
         console.assert(v17.val.m17.m === -123456);
         console.assert(v17.val.m18.m1.m === 'foo');
         console.assert(v17.val.m18.m2 === -123456);
@@ -786,29 +786,29 @@ Module.uno_init.then(function() {
         v17.delete();
         v18.delete();
     }
-    console.assert(Module.uno.org.libreoffice.embindtest.Constants.Boolean === true);
-    console.assert(test.isBoolean(Module.uno.org.libreoffice.embindtest.Constants.Boolean));
-    console.assert(Module.uno.org.libreoffice.embindtest.Constants.Byte === -12);
-    console.assert(test.isByte(Module.uno.org.libreoffice.embindtest.Constants.Byte));
-    console.assert(Module.uno.org.libreoffice.embindtest.Constants.Short === -1234);
-    console.assert(test.isShort(Module.uno.org.libreoffice.embindtest.Constants.Short));
-    console.assert(Module.uno.org.libreoffice.embindtest.Constants.UnsignedShort === 54321);
+    console.assert(Module.uno.com.sun.star.testuno.Constants.Boolean === true);
+    console.assert(test.isBoolean(Module.uno.com.sun.star.testuno.Constants.Boolean));
+    console.assert(Module.uno.com.sun.star.testuno.Constants.Byte === -12);
+    console.assert(test.isByte(Module.uno.com.sun.star.testuno.Constants.Byte));
+    console.assert(Module.uno.com.sun.star.testuno.Constants.Short === -1234);
+    console.assert(test.isShort(Module.uno.com.sun.star.testuno.Constants.Short));
+    console.assert(Module.uno.com.sun.star.testuno.Constants.UnsignedShort === 54321);
     console.assert(
-        test.isUnsignedShort(Module.uno.org.libreoffice.embindtest.Constants.UnsignedShort));
-    console.assert(Module.uno.org.libreoffice.embindtest.Constants.Long === -123456);
-    console.assert(test.isLong(Module.uno.org.libreoffice.embindtest.Constants.Long));
-    console.assert(Module.uno.org.libreoffice.embindtest.Constants.UnsignedLong === 3456789012);
+        test.isUnsignedShort(Module.uno.com.sun.star.testuno.Constants.UnsignedShort));
+    console.assert(Module.uno.com.sun.star.testuno.Constants.Long === -123456);
+    console.assert(test.isLong(Module.uno.com.sun.star.testuno.Constants.Long));
+    console.assert(Module.uno.com.sun.star.testuno.Constants.UnsignedLong === 3456789012);
     console.assert(
-        test.isUnsignedLong(Module.uno.org.libreoffice.embindtest.Constants.UnsignedLong));
-    console.assert(Module.uno.org.libreoffice.embindtest.Constants.Hyper === -123456789n);
-    console.assert(test.isHyper(Module.uno.org.libreoffice.embindtest.Constants.Hyper));
-    console.assert(Module.uno.org.libreoffice.embindtest.Constants.UnsignedHyper === 9876543210n);
+        test.isUnsignedLong(Module.uno.com.sun.star.testuno.Constants.UnsignedLong));
+    console.assert(Module.uno.com.sun.star.testuno.Constants.Hyper === -123456789n);
+    console.assert(test.isHyper(Module.uno.com.sun.star.testuno.Constants.Hyper));
+    console.assert(Module.uno.com.sun.star.testuno.Constants.UnsignedHyper === 9876543210n);
     console.assert(
-        test.isUnsignedHyper(Module.uno.org.libreoffice.embindtest.Constants.UnsignedHyper));
-    console.assert(Module.uno.org.libreoffice.embindtest.Constants.Float === -10.25);
-    console.assert(test.isFloat(Module.uno.org.libreoffice.embindtest.Constants.Float));
-    console.assert(Module.uno.org.libreoffice.embindtest.Constants.Double === 100.5);
-    console.assert(test.isDouble(Module.uno.org.libreoffice.embindtest.Constants.Double));
+        test.isUnsignedHyper(Module.uno.com.sun.star.testuno.Constants.UnsignedHyper));
+    console.assert(Module.uno.com.sun.star.testuno.Constants.Float === -10.25);
+    console.assert(test.isFloat(Module.uno.com.sun.star.testuno.Constants.Float));
+    console.assert(Module.uno.com.sun.star.testuno.Constants.Double === 100.5);
+    console.assert(test.isDouble(Module.uno.com.sun.star.testuno.Constants.Double));
     try {
         test.throwRuntimeException();
         console.assert(false);
@@ -843,7 +843,7 @@ Module.uno_init.then(function() {
     }
     const obj = Module.unoObject(
         ['com.sun.star.task.XJob', 'com.sun.star.task.XJobExecutor',
-         'org.libreoffice.embindtest.XAttributes'],
+         'com.sun.star.testuno.XAttributes'],
         {
             execute(args) {
                 if (args.size() !== 1 || args.get(0).Name !== 'name') {
@@ -869,7 +869,7 @@ Module.uno_init.then(function() {
         console.assert(s.get(0).toString() === 'com.sun.star.lang.XTypeProvider');
         console.assert(s.get(1).toString() === 'com.sun.star.task.XJob');
         console.assert(s.get(2).toString() === 'com.sun.star.task.XJobExecutor');
-        console.assert(s.get(3).toString() === 'org.libreoffice.embindtest.XAttributes');
+        console.assert(s.get(3).toString() === 'com.sun.star.testuno.XAttributes');
         s.delete();
     }
     {
@@ -883,7 +883,7 @@ Module.uno_init.then(function() {
     test.passInterface(obj);
     css.task.XJobExecutor.query(obj).trigger('from JS');
     {
-        const attrs = Module.uno.org.libreoffice.embindtest.XAttributes.query(obj);
+        const attrs = Module.uno.com.sun.star.testuno.XAttributes.query(obj);
         console.assert(attrs.LongAttribute === -123456);
         attrs.LongAttribute = 789;
         console.assert(attrs.LongAttribute === 789);
@@ -1337,7 +1337,7 @@ Module.uno_init.then(function() {
         const args = new Module.uno_Sequence_com$sun$star$beans$NamedValue(
             0, Module.uno_Sequence.FromSize);
         const ret =
-              Module.uno.org.libreoffice.embindtest.BridgeTest(Module.getUnoComponentContext()).
+              Module.uno.com.sun.star.testuno.BridgeTest(Module.getUnoComponentContext()).
               execute(args);
         args.delete();
         console.assert(ret.get() === true);

@@ -7,15 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-module org { module libreoffice { module embindtest {
+module com { module sun { module star { module testuno {
 
-service ExplicitConstructors: org::libreoffice::embindtest::XArgumentStore
+service ExplicitConstructors: com::sun::star::testuno::XArgumentStore
 {
     multipleArguments([in] long a, [in] string b, [in] float c);
     interfaceArgument([in] com::sun::star::uno::XInterface a);
     restArgument([in] any... rest);
 };
 
-}; }; };
+}; }; }; };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the Collabora Office project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<component
+        environment="@CPPU_ENV@"
+        loader="com.sun.star.loader.SharedLibrary"
+        xmlns="http://openoffice.org/2010/uno-components">
+    <implementation
+            constructor="com_sun_star_comp_testuno_BridgeTest_get_implementation"
+            name="com.sun.star.comp.testuno.BridgeTest">
+        <singleton name="com.sun.star.testuno.BridgeTest"/>
+    </implementation>
+    <implementation
+            constructor="com_sun_star_comp_testuno_Test_get_implementation"
+            name="com.sun.star.comp.testuno.Test">
+        <service name="com.sun.star.testuno.Test"/>
+    </implementation>
+    <implementation
+            constructor="com_sun_star_comp_testuno_Constructors_get_implementation"
+            name="com.sun.star.comp.testuno.Constructors">
+        <service name="com.sun.star.testuno.ImplicitConstructor"/>
+        <service name="com.sun.star.testuno.ExplicitConstructors"/>
+    </implementation>
+    <implementation
+            constructor="com_sun_star_comp_testuno_Singleton_get_implementation"
+            name="com.sun.star.comp.testuno.theSingleton"
+            single-instance="true">
+        <singleton name="com.sun.star.testuno.theSingleton"/>
+    </implementation>
+</component>

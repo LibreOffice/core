@@ -9,9 +9,9 @@
 
 import unittest
 import org.libreoffice.unotest
-from org.libreoffice.embindtest import ImplicitConstructor
-from org.libreoffice.embindtest import ExplicitConstructors
 from com.sun.star.script import CannotConvertException
+from com.sun.star.testuno import ImplicitConstructor
+from com.sun.star.testuno import ExplicitConstructors
 
 class ServiceConstructorsTest(unittest.TestCase):
     def test_implicit_constructor(self):
@@ -49,25 +49,25 @@ class ServiceConstructorsTest(unittest.TestCase):
         with self.assertRaises(AttributeError) as cm:
             ImplicitConstructor.create()
         self.assertEqual(str(cm.exception),
-                         "org.libreoffice.embindtest.ImplicitConstructor::create "
+                         "com.sun.star.testuno.ImplicitConstructor::create "
                          "requires 1 argument")
 
         with self.assertRaises(AttributeError) as cm:
             ExplicitConstructors.interfaceArgument()
         self.assertEqual(str(cm.exception),
-                         "org.libreoffice.embindtest.ExplicitConstructors::interfaceArgument "
+                         "com.sun.star.testuno.ExplicitConstructors::interfaceArgument "
                          "requires 2 arguments")
 
         with self.assertRaises(AttributeError) as cm:
             ExplicitConstructors.interfaceArgument(1, 2, 3)
         self.assertEqual(str(cm.exception),
-                         "org.libreoffice.embindtest.ExplicitConstructors::interfaceArgument "
+                         "com.sun.star.testuno.ExplicitConstructors::interfaceArgument "
                          "requires 2 arguments")
 
         with self.assertRaises(AttributeError) as cm:
             ExplicitConstructors.restArgument()
         self.assertEqual(str(cm.exception),
-                         "org.libreoffice.embindtest.ExplicitConstructors::restArgument "
+                         "com.sun.star.testuno.ExplicitConstructors::restArgument "
                          "requires at least 1 argument")
 
         with self.assertRaises(AttributeError) as cm:

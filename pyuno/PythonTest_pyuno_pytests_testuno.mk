@@ -7,12 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_PythonTest_PythonTest,pyuno_pytests_embindtest))
+$(eval $(call gb_PythonTest_PythonTest,pyuno_pytests_testuno))
 
-$(eval $(call gb_PythonTest_add_modules,pyuno_pytests_embindtest,$(SRCDIR)/pyuno/qa/pytests, \
-    embindtest \
+$(eval $(call gb_PythonTest_add_modules,pyuno_pytests_testuno,$(SRCDIR)/pyuno/qa/pytests, \
     serviceconstructors \
     singleton \
+    testuno \
 ))
 
 # vim: set noet sw=4 ts=4:
