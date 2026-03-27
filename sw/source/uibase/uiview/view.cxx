@@ -111,7 +111,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <framework/windowstatehelper.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <svtools/embedhlp.hxx>
 #include <tools/UnitConversion.hxx>
 

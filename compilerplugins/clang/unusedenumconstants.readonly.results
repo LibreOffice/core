@@ -698,15 +698,15 @@ include/i18nutil/casefolding.hxx:41
     enum MappingType CasedLetterMask
 include/i18nutil/casefolding.hxx:42
     enum MappingType NotValue
-include/LibreOfficeKit/LibreOfficeKitEnums.h:33
+include/LibreOfficeKit/COKitEnums.h:33
     LibreOfficeKitPartMode LOK_PARTMODE_SLIDES
-include/LibreOfficeKit/LibreOfficeKitEnums.h:34
+include/LibreOfficeKit/COKitEnums.h:34
     LibreOfficeKitPartMode LOK_PARTMODE_NOTES
-include/LibreOfficeKit/LibreOfficeKitEnums.h:40
+include/LibreOfficeKit/COKitEnums.h:40
     LibreOfficeKitTileMode LOK_TILEMODE_RGBA
-include/LibreOfficeKit/LibreOfficeKitEnums.h:99
+include/LibreOfficeKit/COKitEnums.h:99
     LibreOfficeKitOptionalFeatures LOK_FEATURE_RANGE_HEADERS
-include/LibreOfficeKit/LibreOfficeKitEnums.h:900
+include/LibreOfficeKit/COKitEnums.h:900
     LibreOfficeKitCallbackType LOK_CALLBACK_MEDIA_SHAPE
 include/o3tl/unit_conversion.hxx:46
     enum o3tl::Length count

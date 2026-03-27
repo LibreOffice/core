@@ -11,7 +11,7 @@
 
 #include <comphelper/compbase.hxx>
 #include <editeng/brushitem.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <sot/exchange.hxx>
 #include <svx/svdpage.hxx>
 #include <tools/stream.hxx>

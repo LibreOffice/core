@@ -39,7 +39,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <svl/numuno.hxx>

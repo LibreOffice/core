@@ -38,7 +38,7 @@
 #include <sfx2/printer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/ipclient.hxx>
 #include <editeng/svxacorr.hxx>

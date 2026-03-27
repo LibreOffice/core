@@ -367,7 +367,7 @@ def filter_ignore(line, module):
        return ''
 
     ignore_list = [
-            'LibreOfficeKit/LibreOfficeKitEnums.h', # Needs special directives
+            'LibreOfficeKit/COKitEnums.h', # Needs special directives
             'LibreOfficeKit/LibreOfficeKitTypes.h', # Needs special directives
             'jerror.h',     # c++ unfriendly
             'jpeglib.h',    # c++ unfriendly

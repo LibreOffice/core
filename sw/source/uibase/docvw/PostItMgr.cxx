@@ -83,7 +83,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Writer.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <annotsh.hxx>
 #include <swabstdlg.hxx>

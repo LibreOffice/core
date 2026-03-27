@@ -30,7 +30,7 @@
 #include <editeng/autodiritem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <tools/json_writer.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <sax/tools/converter.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtinfmt.hxx>

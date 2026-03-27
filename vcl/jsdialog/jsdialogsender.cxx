@@ -8,7 +8,7 @@
  */
 
 #include <jsdialog/jsdialogsender.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <tools/json_writer.hxx>
 #include <vcl/dockwin.hxx>
 

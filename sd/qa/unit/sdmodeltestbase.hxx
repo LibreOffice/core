@@ -34,7 +34,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <drawinglayer/XShapeDumper.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/text/XTextField.hpp>
 

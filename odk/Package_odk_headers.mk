@@ -186,7 +186,7 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	uno/threadpool.h \
 	$(if $(ENABLE_GTK3),LibreOfficeKit/LibreOfficeKitGtk.h) \
 	LibreOfficeKit/LibreOfficeKit.hxx \
-	LibreOfficeKit/LibreOfficeKitEnums.h \
+	LibreOfficeKit/COKitEnums.h \
 	LibreOfficeKit/LibreOfficeKit.h \
 	LibreOfficeKit/LibreOfficeKitInit.h \
 	LibreOfficeKit/LibreOfficeKitTypes.h \

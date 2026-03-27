@@ -47,7 +47,7 @@
 #include <scabstdlg.hxx>
 #include <columnspanset.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <inputwin.hxx>
 #include <officecfg/Office/Calc.hxx>
 

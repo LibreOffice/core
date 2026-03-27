@@ -139,7 +139,7 @@
 #include <vcl/threadex.hxx>
 #include <unotools/mediadescriptor.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 //  namespaces
 

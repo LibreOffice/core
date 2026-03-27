@@ -50,7 +50,7 @@
 #include <drwlayer.hxx>
 #include <scresid.hxx>
 #include <sheetevents.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <tools/json_writer.hxx>
 

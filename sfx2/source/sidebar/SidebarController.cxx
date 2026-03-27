@@ -52,7 +52,7 @@
 #include <comphelper/lok.hxx>
 #include <sal/log.hxx>
 #include <officecfg/Office/UI/Sidebar.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <o3tl/string_view.hxx>
 
 #include <com/sun/star/awt/XWindowPeer.hpp>

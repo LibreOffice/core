@@ -61,7 +61,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include <LibreOfficeKit/LibreOfficeKit.h>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <sal/log.hxx>
 #include <utility>

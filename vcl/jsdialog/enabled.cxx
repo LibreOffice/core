@@ -13,7 +13,7 @@
 #include <frozen/unordered_set.h>
 #include <jsdialog/enabled.hxx>
 #include <o3tl/string_view.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <vector>
 
 namespace

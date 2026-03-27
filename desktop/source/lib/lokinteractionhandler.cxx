@@ -46,7 +46,7 @@
 
 #include "../../inc/lib/init.hxx"
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewsh.hxx>
 #include <utility>

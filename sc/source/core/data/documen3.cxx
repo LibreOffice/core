@@ -74,7 +74,7 @@
 #include <queryparam.hxx>
 #include <progress.hxx>
 #include <globalnames.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/flagguard.hxx>
 #include <config_fuzzers.h>

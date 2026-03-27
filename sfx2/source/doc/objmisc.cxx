@@ -52,7 +52,7 @@
 #include <com/sun/star/task/ErrorCodeRequest2.hpp>
 
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 

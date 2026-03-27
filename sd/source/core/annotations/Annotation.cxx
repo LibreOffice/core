@@ -32,7 +32,7 @@
 #include <sfx2/viewsh.hxx>
 #include <svx/svdundo.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <notifydocumentevent.hxx>
 

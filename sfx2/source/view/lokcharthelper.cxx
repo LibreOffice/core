@@ -12,7 +12,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

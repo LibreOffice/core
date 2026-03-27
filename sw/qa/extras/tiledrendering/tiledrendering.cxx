@@ -52,7 +52,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>

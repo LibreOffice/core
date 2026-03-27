@@ -33,7 +33,7 @@
 
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <drawdoc.hxx>
 #include <sdmod.hxx>

@@ -9,7 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <comphelper/propertyvalue.hxx>

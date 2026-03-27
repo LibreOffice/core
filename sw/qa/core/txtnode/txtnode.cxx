@@ -9,7 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/text/XTextTable.hpp>

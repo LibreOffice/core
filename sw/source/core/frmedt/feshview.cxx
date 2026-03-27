@@ -90,7 +90,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <calbck.hxx>
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>

@@ -127,7 +127,7 @@
 #include <PostItMgr.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <svx/svxdlg.hxx>
 #include <swabstdlg.hxx>

@@ -57,7 +57,7 @@
 #include <svx/extedit.hxx>
 #include <svx/graphichelper.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <sfx2/viewsh.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>

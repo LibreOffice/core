@@ -25,7 +25,7 @@
 
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 namespace chart::sidebar {
 

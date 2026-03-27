@@ -43,7 +43,7 @@
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <svl/visitem.hxx>
 #include <redline.hxx>
 #include <rootfrm.hxx>

@@ -76,7 +76,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <editeng/editview.hxx>
 #include <tools/svborder.hxx>
 #include <o3tl/unreachable.hxx>

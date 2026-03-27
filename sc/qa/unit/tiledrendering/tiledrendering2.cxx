@@ -16,7 +16,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/scheduler.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <sctestviewcallback.hxx>
 #include <docuno.hxx>

@@ -10,7 +10,7 @@
 #include <config_feature_opencl.h>
 
 #include "qahelper.hxx"
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/propertysequence.hxx>
 #include "csv_handler.hxx"
 #include "debughelper.hxx"

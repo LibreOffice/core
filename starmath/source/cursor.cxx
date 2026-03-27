@@ -13,7 +13,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
 #include <editeng/editeng.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <osl/diagnose.h>
 #include <sfx2/lokhelper.hxx>
 #include <vcl/transfer.hxx>

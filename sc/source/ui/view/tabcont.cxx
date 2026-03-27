@@ -36,7 +36,7 @@
 #include <dragdata.hxx>
 #include <markdata.hxx>
 #include <gridwin.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 
 ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData& rData )

@@ -25,7 +25,7 @@
 #include <vcl/weld.hxx>
 #include <openuriexternally.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/strings.hrc>

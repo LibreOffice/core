@@ -58,7 +58,7 @@
 #include <SpellDialogChildWindow.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <svx/svxids.hrc>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>

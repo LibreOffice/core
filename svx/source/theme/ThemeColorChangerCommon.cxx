@@ -16,7 +16,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/section.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <sal/config.h>
 

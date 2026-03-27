@@ -41,7 +41,7 @@
 #include <osl/file.hxx>
 #include <openuriexternally.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <tools/json_writer.hxx>
 
 #include <memory>

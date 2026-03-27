@@ -272,9 +272,9 @@ include/i18nutil/transliteration.hxx:117
     enum TransliterationFlags smallToLarge_ja_JP
 include/i18nutil/transliteration.hxx:119
     enum TransliterationFlags largeToSmall_ja_JP
-include/LibreOfficeKit/LibreOfficeKitEnums.h:56
+include/LibreOfficeKit/COKitEnums.h:56
     LibreOfficeKitSelectionType LOK_SELTYPE_LARGE_TEXT
-include/LibreOfficeKit/LibreOfficeKitEnums.h:1089
+include/LibreOfficeKit/COKitEnums.h:1089
     LibreOfficeKitExtTextInputType LOK_EXT_TEXTINPUT_POS
 include/oox/ole/axfontdata.hxx:39
     enum AxFontFlags Disabled

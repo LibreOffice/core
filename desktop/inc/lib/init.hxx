@@ -24,7 +24,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <LibreOfficeKit/LibreOfficeKit.h>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <tools/gen.hxx>

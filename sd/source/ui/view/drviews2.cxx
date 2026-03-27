@@ -200,7 +200,7 @@
 #include <svx/dialog/ThemeDialog.hxx>
 #include <svx/dialog/ThemeColorEditDialog.hxx>
 #include <svx/ColorSets.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <ViewShellBase.hxx>
 #include <memory>

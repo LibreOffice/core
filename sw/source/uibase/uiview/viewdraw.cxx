@@ -64,7 +64,7 @@
 #include <svx/extrusionbar.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 using namespace ::com::sun::star;
 

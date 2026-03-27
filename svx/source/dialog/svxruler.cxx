@@ -45,7 +45,7 @@
 #include <rtl/math.hxx>
 #include <o3tl/string_view.hxx>
 #include <svl/itemset.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
 #include <comphelper/lok.hxx>

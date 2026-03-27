@@ -29,7 +29,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 using namespace ::com::sun::star;
 

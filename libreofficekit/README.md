@@ -57,7 +57,7 @@ The other way around (LibreOffice -> LOK client) is implemented using a
 callback. A LOK client can register a callback using the registerCallback()
 method. Whenever editing requires some action on the client side, a callback
 event is emitted. The callback types are described using the
-`LibreOfficeKitCallbackType` enumeration in `LibreOfficeKitEnums.h`, the callback
+`LibreOfficeKitCallbackType` enumeration in `COKitEnums.h`, the callback
 function signature itself is provided by the LibreOfficeKitCallback typedef in
 `LibreOfficeKitTypes.h`. The most important callback types:
 

@@ -29,7 +29,7 @@
 
 #include <IDocumentLayoutAccess.hxx>
 #include <docsh.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
 #include <view.hxx>

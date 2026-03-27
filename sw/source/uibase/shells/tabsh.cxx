@@ -46,7 +46,7 @@
 #include <vcl/EnumContext.hxx>
 #include <o3tl/enumrange.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <editeng/itemtype.hxx>
 #include <osl/diagnose.h>
 

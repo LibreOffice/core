@@ -73,7 +73,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/xmlsechelper.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

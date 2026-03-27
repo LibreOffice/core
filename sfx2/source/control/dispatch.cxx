@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/ContextMenuExecuteEvent.hpp>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>

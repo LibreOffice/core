@@ -49,7 +49,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <editeng/swafopt.hxx>
 #include <editeng/unolingu.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <config_fonts.h>
 #include <test/htmltesttools.hxx>

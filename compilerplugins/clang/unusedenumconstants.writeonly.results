@@ -2018,7 +2018,7 @@ include/jvmfwk/framework.hxx:181
     enum javaFrameworkError JFW_E_ERROR
 include/jvmfwk/framework.hxx:191
     enum javaFrameworkError JFW_E_CONFIGURATION
-include/LibreOfficeKit/LibreOfficeKitEnums.h:57
+include/LibreOfficeKit/COKitEnums.h:57
     LibreOfficeKitSelectionType LOK_SELTYPE_COMPLEX
 include/linguistic/misc.hxx:62
     enum linguistic::DictionaryError NOT_EXISTS

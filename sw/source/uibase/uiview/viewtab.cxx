@@ -57,7 +57,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <osl/diagnose.h>
 

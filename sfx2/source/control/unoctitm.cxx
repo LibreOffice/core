@@ -70,7 +70,7 @@
 #include <string_view>
 
 #include <sal/log.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/servicehelper.hxx>
 

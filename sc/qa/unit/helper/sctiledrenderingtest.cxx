@@ -9,7 +9,7 @@
 
 #include "sctiledrenderingtest.hxx"
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/lokhelper.hxx>

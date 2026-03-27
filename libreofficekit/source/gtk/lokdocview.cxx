@@ -21,7 +21,7 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <vcl/event.hxx>
 

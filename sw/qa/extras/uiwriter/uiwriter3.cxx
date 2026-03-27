@@ -8,7 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>

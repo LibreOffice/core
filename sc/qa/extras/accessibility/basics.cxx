@@ -14,7 +14,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>

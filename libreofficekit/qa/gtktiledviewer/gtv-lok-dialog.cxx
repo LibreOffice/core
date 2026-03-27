@@ -13,7 +13,7 @@
 #include <iostream>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include "gtv-application-window.hxx"
 #include "gtv-lok-dialog.hxx"

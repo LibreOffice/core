@@ -13,7 +13,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <vcl/scheduler.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <sctestviewcallback.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>

@@ -30,7 +30,7 @@
 #include <comphelper/lok.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/IDialogRenderable.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;

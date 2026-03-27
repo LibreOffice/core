@@ -4557,7 +4557,7 @@ idl/source/prj/parser.cxx
 idl/source/prj/svidl.cxx
 include/LibreOfficeKit/LibreOfficeKit.h
 include/LibreOfficeKit/LibreOfficeKit.hxx
-include/LibreOfficeKit/LibreOfficeKitEnums.h
+include/LibreOfficeKit/COKitEnums.h
 include/LibreOfficeKit/LibreOfficeKitGtk.h
 include/LibreOfficeKit/LibreOfficeKitInit.h
 include/animations/animationnodehelper.hxx

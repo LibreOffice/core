@@ -26,7 +26,7 @@
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/graphichelper.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <sfx2/viewsh.hxx>
 #include <svx/svxids.hrc>
 

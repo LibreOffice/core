@@ -23,7 +23,7 @@
 
 #include <tools/time.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/dndlistenercontainer.hxx>

@@ -37,7 +37,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <osl/conditn.hxx>
 #include <svl/srchitem.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <unotools/tempfile.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>

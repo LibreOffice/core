@@ -18,7 +18,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/configuration.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
 #include <ndtxt.hxx>

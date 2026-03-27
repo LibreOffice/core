@@ -31,7 +31,7 @@
 #include <sfx2/dispatch.hxx>
 #include <comphelper/lok.hxx>
 #include <tools/json_writer.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <swmodule.hxx>
 #include <wrtsh.hxx>

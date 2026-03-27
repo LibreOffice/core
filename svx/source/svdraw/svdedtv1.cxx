@@ -66,7 +66,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/sdprcitm.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <rtl/ustring.hxx>
 #include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>

@@ -84,7 +84,7 @@
 #include <wizdlg.hxx>
 #include <tools/svlibrary.h>
 #include <jsdialog/jsdialogbuilder.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #if defined(DISABLE_DYNLOADING) || defined(LINUX)
 #include <dlfcn.h>

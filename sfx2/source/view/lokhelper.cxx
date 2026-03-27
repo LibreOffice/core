@@ -42,7 +42,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/msgpool.hxx>
 #include <comphelper/scopeguard.hxx>

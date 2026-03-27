@@ -10,7 +10,7 @@
 #pragma once
 
 #include "LibreOfficeKit.h"
-#include "LibreOfficeKitEnums.h"
+#include "COKitEnums.h"
 #include "LibreOfficeKitInit.h"
 
 /*

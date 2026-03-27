@@ -28,7 +28,7 @@
 #include <utility>
 #include <sfx2/viewsh.hxx>
 #include <tools/json_writer.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>

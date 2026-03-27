@@ -52,7 +52,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <formatsh.hxx>
 #include <sc.hrc>

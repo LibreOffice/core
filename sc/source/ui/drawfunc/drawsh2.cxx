@@ -51,7 +51,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/xflgrit.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 
 #include <svx/xflclit.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>

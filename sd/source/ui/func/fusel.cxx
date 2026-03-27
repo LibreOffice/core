@@ -60,7 +60,7 @@
 #include <svx/diagram/IDiagramHelper.hxx>
 #include <svx/annotation/ObjectAnnotationData.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <svl/cryptosign.hxx>
 

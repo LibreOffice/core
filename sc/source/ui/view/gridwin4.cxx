@@ -35,7 +35,7 @@
 #include <tools/UnitConversion.hxx>
 #include <tools/weakbase.hxx>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokcomponenthelpers.hxx>
