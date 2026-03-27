@@ -58,7 +58,7 @@ $(eval $(call gb_Executable_add_exception_objects,gtktiledviewer,\
     kit/qa/gtktiledviewer/gtv-main-toolbar \
     kit/qa/gtktiledviewer/gtv-signal-handlers \
     kit/qa/gtktiledviewer/gtv-helpers \
-    kit/qa/gtktiledviewer/gtv-lokdocview-signal-handlers \
+    kit/qa/gtktiledviewer/gtv-kitdocview-signal-handlers \
     kit/qa/gtktiledviewer/gtv-calc-header-bar \
     kit/qa/gtktiledviewer/gtv-comments-sidebar \
     kit/qa/gtktiledviewer/gtv-lok-dialog \

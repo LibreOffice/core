@@ -105,7 +105,7 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
             //
             //  SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
             //
-            // in kit/source/gtk/lokdocview.cxx):
+            // in kit/source/gtk/kitdocview.cxx):
             if (decl->getAttr<VisibilityAttr>() != nullptr
                 && prev->getAttr<VisibilityAttr>() == nullptr)
             {

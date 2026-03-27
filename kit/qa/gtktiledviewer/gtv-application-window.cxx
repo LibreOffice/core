@@ -19,7 +19,7 @@
 #include "gtv-main-toolbar.hxx"
 #include "gtv-helpers.hxx"
 #include "gtv-signal-handlers.hxx"
-#include "gtv-lokdocview-signal-handlers.hxx"
+#include "gtv-kitdocview-signal-handlers.hxx"
 #include "gtv-calc-header-bar.hxx"
 #include "gtv-comments-sidebar.hxx"
 #include "gtv-lok-dialog.hxx"
@@ -40,7 +40,7 @@ struct GtvApplicationWindowPrivate
 
     GList* m_pChildWindows;
 
-    // Rendering args; options with which lokdocview was rendered in this window
+    // Rendering args; options with which kitdocview was rendered in this window
     GtvRenderingArgs* m_pRenderingArgs;
 };
 
@@ -160,7 +160,7 @@ static void initWindow(GtvApplicationWindow* window)
 #pragma warning(disable:4996)
 #endif
     GList *focusChain = nullptr;
-    focusChain = g_list_append( focusChain, window->lokdocview );
+    focusChain = g_list_append( focusChain, window->kitdocview );
 
     gtk_container_set_focus_chain ( GTK_CONTAINER (priv->container), focusChain );
 #if defined __GNUC__
@@ -170,7 +170,7 @@ static void initWindow(GtvApplicationWindow* window)
 #endif
 
     // TODO: Implement progressbar in statusbar
-    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
     if (pDocument)
     {
         COKitDocumentType eDocType = static_cast<COKitDocumentType>(pDocument->pClass->getDocumentType(pDocument));
@@ -179,19 +179,19 @@ static void initWindow(GtvApplicationWindow* window)
             // Align to top left corner, so the tiles are in sync with the
             // row/column bar, even when zooming out enough that not all space is
             // used.
-            gtk_widget_set_halign(GTK_WIDGET(window->lokdocview), GTK_ALIGN_START);
-            gtk_widget_set_valign(GTK_WIDGET(window->lokdocview), GTK_ALIGN_START);
+            gtk_widget_set_halign(GTK_WIDGET(window->kitdocview), GTK_ALIGN_START);
+            gtk_widget_set_valign(GTK_WIDGET(window->kitdocview), GTK_ALIGN_START);
         }
 
         // By default make the document editable in a new window
-        lok_doc_view_set_edit(LOK_DOC_VIEW(window->lokdocview), true);
+        lok_doc_view_set_edit(LOK_DOC_VIEW(window->kitdocview), true);
         // Let toolbar adjust its button accordingly
         gtv_main_toolbar_doc_loaded(GTV_MAIN_TOOLBAR(priv->toolbarcontainer), eDocType, true /* Edit button state */);
     }
 
     // Fill our comments sidebar
     gboolean bTiledAnnotations;
-    g_object_get(G_OBJECT(window->lokdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
+    g_object_get(G_OBJECT(window->kitdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
     if (!bTiledAnnotations && pDocument)
     {
         window->commentssidebar = gtv_comments_sidebar_new();
@@ -233,13 +233,13 @@ void gtv_application_window_get_visible_area(GtvApplicationWindow* pWindow, GdkR
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pWindow->scrolledwindow));
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pWindow->scrolledwindow));
 
-    pArea->x      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->lokdocview),
+    pArea->x      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->kitdocview),
                                                gtk_adjustment_get_value(pHAdjustment));
-    pArea->y      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->lokdocview),
+    pArea->y      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->kitdocview),
                                                gtk_adjustment_get_value(pVAdjustment));
-    pArea->width  = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->lokdocview),
+    pArea->width  = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->kitdocview),
                                                gtk_adjustment_get_page_size(pHAdjustment));
-    pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->lokdocview),
+    pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->kitdocview),
                                                gtk_adjustment_get_page_size(pVAdjustment));
 }
 
@@ -324,32 +324,32 @@ createRenderingArgsJSON(const GtvRenderingArgs* pRenderingArgs)
 static void setupDocView(GtvApplicationWindow* window)
 {
     GtvApplicationWindowPrivate* priv = getPrivate(window);
-    g_object_set(G_OBJECT(window->lokdocview),
+    g_object_set(G_OBJECT(window->kitdocview),
                  "doc-password", true,
                  "doc-password-to-modify", true,
                  "tiled-annotations", priv->m_pRenderingArgs->m_bEnableTiledAnnotations,
                  nullptr);
 
 #if GLIB_CHECK_VERSION(2,40,0)
-    g_assert_nonnull(window->lokdocview);
+    g_assert_nonnull(window->kitdocview);
 #endif
-    g_signal_connect(window->lokdocview, "edit-changed", G_CALLBACK(KitDocumentViewSigHandlers::editChanged), nullptr);
-    g_signal_connect(window->lokdocview, "command-changed", G_CALLBACK(KitDocumentViewSigHandlers::commandChanged), nullptr);
-    g_signal_connect(window->lokdocview, "command-result", G_CALLBACK(KitDocumentViewSigHandlers::commandResult), nullptr);
-    g_signal_connect(window->lokdocview, "search-not-found", G_CALLBACK(KitDocumentViewSigHandlers::searchNotFound), nullptr);
-    g_signal_connect(window->lokdocview, "search-result-count", G_CALLBACK(KitDocumentViewSigHandlers::searchResultCount), nullptr);
-    g_signal_connect(window->lokdocview, "part-changed", G_CALLBACK(KitDocumentViewSigHandlers::partChanged), nullptr);
-    g_signal_connect(window->lokdocview, "hyperlink-clicked", G_CALLBACK(KitDocumentViewSigHandlers::hyperlinkClicked), nullptr);
-    g_signal_connect(window->lokdocview, "content-control",
+    g_signal_connect(window->kitdocview, "edit-changed", G_CALLBACK(KitDocumentViewSigHandlers::editChanged), nullptr);
+    g_signal_connect(window->kitdocview, "command-changed", G_CALLBACK(KitDocumentViewSigHandlers::commandChanged), nullptr);
+    g_signal_connect(window->kitdocview, "command-result", G_CALLBACK(KitDocumentViewSigHandlers::commandResult), nullptr);
+    g_signal_connect(window->kitdocview, "search-not-found", G_CALLBACK(KitDocumentViewSigHandlers::searchNotFound), nullptr);
+    g_signal_connect(window->kitdocview, "search-result-count", G_CALLBACK(KitDocumentViewSigHandlers::searchResultCount), nullptr);
+    g_signal_connect(window->kitdocview, "part-changed", G_CALLBACK(KitDocumentViewSigHandlers::partChanged), nullptr);
+    g_signal_connect(window->kitdocview, "hyperlink-clicked", G_CALLBACK(KitDocumentViewSigHandlers::hyperlinkClicked), nullptr);
+    g_signal_connect(window->kitdocview, "content-control",
                      G_CALLBACK(KitDocumentViewSigHandlers::contentControl), nullptr);
-    g_signal_connect(window->lokdocview, "cursor-changed", G_CALLBACK(KitDocumentViewSigHandlers::cursorChanged), nullptr);
-    g_signal_connect(window->lokdocview, "address-changed", G_CALLBACK(KitDocumentViewSigHandlers::addressChanged), nullptr);
-    g_signal_connect(window->lokdocview, "formula-changed", G_CALLBACK(KitDocumentViewSigHandlers::formulaChanged), nullptr);
-    g_signal_connect(window->lokdocview, "password-required", G_CALLBACK(KitDocumentViewSigHandlers::passwordRequired), nullptr);
-    g_signal_connect(window->lokdocview, "comment", G_CALLBACK(KitDocumentViewSigHandlers::comment), nullptr);
-    g_signal_connect(window->lokdocview, "window", G_CALLBACK(KitDocumentViewSigHandlers::window), window);
+    g_signal_connect(window->kitdocview, "cursor-changed", G_CALLBACK(KitDocumentViewSigHandlers::cursorChanged), nullptr);
+    g_signal_connect(window->kitdocview, "address-changed", G_CALLBACK(KitDocumentViewSigHandlers::addressChanged), nullptr);
+    g_signal_connect(window->kitdocview, "formula-changed", G_CALLBACK(KitDocumentViewSigHandlers::formulaChanged), nullptr);
+    g_signal_connect(window->kitdocview, "password-required", G_CALLBACK(KitDocumentViewSigHandlers::passwordRequired), nullptr);
+    g_signal_connect(window->kitdocview, "comment", G_CALLBACK(KitDocumentViewSigHandlers::comment), nullptr);
+    g_signal_connect(window->kitdocview, "window", G_CALLBACK(KitDocumentViewSigHandlers::window), window);
 
-    g_signal_connect(window->lokdocview, "configure-event", G_CALLBACK(KitDocumentViewSigHandlers::configureEvent), nullptr);
+    g_signal_connect(window->kitdocview, "configure-event", G_CALLBACK(KitDocumentViewSigHandlers::configureEvent), nullptr);
 }
 
 void
@@ -360,10 +360,10 @@ gtv_application_window_create_view_from_window(GtvApplicationWindow* window)
 
     GtvApplicationWindow* newWindow = GTV_APPLICATION_WINDOW(gtv_application_window_new(GTK_APPLICATION(app)));
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
-    newWindow->lokdocview = lok_doc_view_new_from_widget(LOK_DOC_VIEW(window->lokdocview), aArguments.c_str());
+    newWindow->kitdocview = lok_doc_view_new_from_widget(LOK_DOC_VIEW(window->kitdocview), aArguments.c_str());
     setupDocView(newWindow);
 
-    gtk_container_add(GTK_CONTAINER(newWindow->scrolledwindow), newWindow->lokdocview);
+    gtk_container_add(GTK_CONTAINER(newWindow->scrolledwindow), newWindow->kitdocview);
     gtk_widget_show_all(newWindow->scrolledwindow);
     gtk_window_present(GTK_WINDOW(newWindow));
 
@@ -379,11 +379,11 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
     // keep a copy of it; we need to use these for creating new views later
     *(priv->m_pRenderingArgs) = *aArgs;
 
-    // setup lokdocview
+    // setup kitdocview
     const char *pUserProfile = priv->m_pRenderingArgs->m_aUserProfile.empty() ?
         nullptr : priv->m_pRenderingArgs->m_aUserProfile.c_str();
 
-    window->lokdocview = GTK_WIDGET(
+    window->kitdocview = GTK_WIDGET(
         g_initable_new(LOK_TYPE_DOC_VIEW, nullptr, nullptr,
                        "lopath", priv->m_pRenderingArgs->m_aLoPath.c_str(),
                        "unipoll", priv->m_pRenderingArgs->m_bUnipoll,
@@ -392,15 +392,15 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
                        "valign", GTK_ALIGN_CENTER,
                        nullptr));
 
-    gtk_container_add(GTK_CONTAINER(window->scrolledwindow), window->lokdocview);
+    gtk_container_add(GTK_CONTAINER(window->scrolledwindow), window->kitdocview);
 
     setupDocView(window);
 
     // Create argument JSON
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
-    lok_doc_view_open_document(LOK_DOC_VIEW(window->lokdocview), aDocPath.c_str(),
+    lok_doc_view_open_document(LOK_DOC_VIEW(window->kitdocview), aDocPath.c_str(),
                                aArguments.c_str(), nullptr,
-                               gtv_application_open_document_callback, window->lokdocview);
+                               gtv_application_open_document_callback, window->kitdocview);
 
     gtk_widget_show_all(GTK_WIDGET(window->scrolledwindow));
 }
@@ -461,7 +461,7 @@ gtv_application_window_unregister_child_window(GtvApplicationWindow* window, Gtk
     if (pChildWin)
     {
         priv->m_pChildWindows = g_list_remove(priv->m_pChildWindows, pChildWin);
-        COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+        COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
         guint dialogId = 0;
         g_object_get(G_OBJECT(pChildWin), "dialogid", &dialogId, nullptr);
         pDocument->pClass->postWindow(pDocument, dialogId, LOK_WINDOW_CLOSE, nullptr);

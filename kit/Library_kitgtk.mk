@@ -12,7 +12,7 @@ $(eval $(call gb_Library_Library,kitgtk))
 $(eval $(call gb_Library_use_sdk_api,kitgtk))
 
 $(eval $(call gb_Library_add_exception_objects,kitgtk,\
-    kit/source/gtk/lokdocview \
+    kit/source/gtk/kitdocview \
     kit/source/gtk/tilebuffer \
 ))
 

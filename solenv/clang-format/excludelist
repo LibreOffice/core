@@ -6418,14 +6418,14 @@ kit/qa/gtktiledviewer/gtv-helpers.cxx
 kit/qa/gtktiledviewer/gtv-helpers.hxx
 kit/qa/gtktiledviewer/gtv-lok-dialog.cxx
 kit/qa/gtktiledviewer/gtv-lok-dialog.hxx
-kit/qa/gtktiledviewer/gtv-lokdocview-signal-handlers.cxx
-kit/qa/gtktiledviewer/gtv-lokdocview-signal-handlers.hxx
+kit/qa/gtktiledviewer/gtv-kitdocview-signal-handlers.cxx
+kit/qa/gtktiledviewer/gtv-kitdocview-signal-handlers.hxx
 kit/qa/gtktiledviewer/gtv-main-toolbar.cxx
 kit/qa/gtktiledviewer/gtv-main-toolbar.hxx
 kit/qa/gtktiledviewer/gtv-signal-handlers.cxx
 kit/qa/tilebench/tilebench.cxx
 kit/qa/unit/tiledrendering.cxx
-kit/source/gtk/lokdocview.cxx
+kit/source/gtk/kitdocview.cxx
 kit/source/gtk/tilebuffer.cxx
 lingucomponent/source/hyphenator/hyphen/hyphenimp.cxx
 lingucomponent/source/hyphenator/hyphen/hyphenimp.hxx

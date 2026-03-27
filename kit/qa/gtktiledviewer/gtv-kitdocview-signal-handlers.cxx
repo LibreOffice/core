@@ -13,7 +13,7 @@
 #include "gtv-helpers.hxx"
 #include "gtv-calc-header-bar.hxx"
 #include "gtv-comments-sidebar.hxx"
-#include "gtv-lokdocview-signal-handlers.hxx"
+#include "gtv-kitdocview-signal-handlers.hxx"
 #include "gtv-lok-dialog.hxx"
 
 #include <boost/property_tree/json_parser.hpp>
@@ -39,7 +39,7 @@ static gboolean destroyLokDialog(GtkWidget* pWidget, gpointer userdata)
 void KitDocumentViewSigHandlers::editChanged(KitDocumentView* pDocView, gboolean bWasEdit, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-    bool bEdit = lok_doc_view_get_edit(LOK_DOC_VIEW(window->lokdocview));
+    bool bEdit = lok_doc_view_get_edit(LOK_DOC_VIEW(window->kitdocview));
     g_info("signalEdit: %d -> %d", bWasEdit, bEdit);
 
     // Let the main toolbar know, so that it can enable disable the button
@@ -210,7 +210,7 @@ void KitDocumentViewSigHandlers::contentControl(KitDocumentView* pDocView, gchar
     gtv_application_window_set_part_broadcast(window, false);
     gtk_list_store_clear(
         GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(toolbar->m_pContentControlSelector))));
-    if (!window->lokdocview)
+    if (!window->kitdocview)
     {
         return;
     }
@@ -262,12 +262,12 @@ void KitDocumentViewSigHandlers::passwordRequired(KitDocumentView* pDocView, cha
     switch (res)
     {
     case GTK_RESPONSE_OK:
-        lok_doc_view_set_document_password (LOK_DOC_VIEW(window->lokdocview), pUrl, gtk_entry_get_text(GTK_ENTRY(pPasswordEntry)));
+        lok_doc_view_set_document_password (LOK_DOC_VIEW(window->kitdocview), pUrl, gtk_entry_get_text(GTK_ENTRY(pPasswordEntry)));
         break;
     case GTK_RESPONSE_ACCEPT:
         // User accepts to open this document as read-only
     case GTK_RESPONSE_DELETE_EVENT:
-        lok_doc_view_set_document_password (LOK_DOC_VIEW(window->lokdocview), pUrl, nullptr);
+        lok_doc_view_set_document_password (LOK_DOC_VIEW(window->kitdocview), pUrl, nullptr);
         break;
     }
 
@@ -439,14 +439,14 @@ gboolean KitDocumentViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEvent
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pWidget)));
 
     gboolean isInit = false;
-    g_object_get(G_OBJECT(window->lokdocview), "is-initialized", &isInit, nullptr);
+    g_object_get(G_OBJECT(window->kitdocview), "is-initialized", &isInit, nullptr);
     if (!isInit)
     {
         g_info("Ignoring configure event; document not yet ready");
         return false;
     }
 
-    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->kitdocview));
     if (!pDocument || pDocument->pClass->getDocumentType(pDocument) != LOK_DOCTYPE_SPREADSHEET)
         return true;
 
@@ -459,10 +459,10 @@ gboolean KitDocumentViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEvent
 
     std::stringstream aCommand;
     aCommand << ".uno:ViewRowColumnHeaders";
-    aCommand << "?x=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), colPosPixel));
-    aCommand << "&width=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), colSizePixel));
-    aCommand << "&y=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), rowPosPixel));
-    aCommand << "&height=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->lokdocview), rowSizePixel));
+    aCommand << "?x=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->kitdocview), colPosPixel));
+    aCommand << "&width=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->kitdocview), colSizePixel));
+    aCommand << "&y=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->kitdocview), rowPosPixel));
+    aCommand << "&height=" << int(lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(window->kitdocview), rowSizePixel));
     std::stringstream ss;
     ss << "lok::Document::getCommandValues(" << aCommand.str() << ")";
     g_info("%s", ss.str().c_str());

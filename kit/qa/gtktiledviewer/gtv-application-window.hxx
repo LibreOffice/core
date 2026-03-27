@@ -51,7 +51,7 @@ struct GtvApplicationWindow
     GtkApplicationWindow parent_instance;
 
     GtkWidget* scrolledwindow;
-    GtkWidget* lokdocview;
+    GtkWidget* kitdocview;
     COKitDocumentType doctype;
 
     GtkWidget* rowbar;

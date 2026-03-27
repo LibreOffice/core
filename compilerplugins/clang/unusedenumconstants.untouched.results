@@ -334,8 +334,8 @@ include/vcl/windowstate.hxx:41
     enum vcl::WindowState FullScreen
 kit/qa/gtktiledviewer/gtv-lok-dialog.cxx:71
     enum (unnamed at /home/noel/libo-plugin/kit/qa/gtktiledviewer/gtv-lok-dialog.cxx:69:1) PROP_0
-kit/source/gtk/lokdocview.cxx:310
-    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/lokdocview.cxx:308:1) PROP_0
+kit/source/gtk/kitdocview.cxx:310
+    enum (unnamed at /home/noel/libo-plugin/kit/source/gtk/kitdocview.cxx:308:1) PROP_0
 lingucomponent/source/spellcheck/languagetool/languagetoolimp.cxx:123
     enum (anonymous namespace)::HTTP_METHOD HTTP_GET
 reportdesign/source/filter/xml/xmlEnums.hxx:42

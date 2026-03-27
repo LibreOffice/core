@@ -166,7 +166,7 @@ $(share_WORKDIR)/%/KitDocumentView-0.1.gir: \
 		$(call gb_Library_get_target,kitgtk)
 	mkdir -p $(dir $@)
 	PYTHONWARNINGS=default g-ir-scanner "${SRCDIR}/include/COKit/COKitGtk.h" \
-				 "${SRCDIR}/kit/source/gtk/lokdocview.cxx" \
+				 "${SRCDIR}/kit/source/gtk/kitdocview.cxx" \
                  `${PKG_CONFIG} --cflags-only-I gobject-introspection-1.0 gtk+-3.0` \
 				 -I"${SRCDIR}/include/" \
                  --include=GLib-2.0 --include=GObject-2.0 --include=Gio-2.0 \

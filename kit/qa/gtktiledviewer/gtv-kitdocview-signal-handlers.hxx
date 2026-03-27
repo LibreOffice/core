@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GTV_LOKDOCVIEW_SIGNAL_HANDLERS_H
-#define GTV_LOKDOCVIEW_SIGNAL_HANDLERS_H
+#ifndef GTV_KITDOCVIEW_SIGNAL_HANDLERS_H
+#define GTV_KITDOCVIEW_SIGNAL_HANDLERS_H
 
 #include <gtk/gtk.h>
 #include <COKit/COKitGtk.h>
