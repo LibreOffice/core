@@ -284,7 +284,7 @@ for d in definitionSet:
     if location.startswith("include/vcl/vclptr.hxx"):
         continue
     # external API
-    if location.startswith("include/LibreOfficeKit/LibreOfficeKit.hxx"):
+    if location.startswith("include/LibreOfficeKit/COKit.hxx"):
         continue
     tmp2set.add((method, location))
 

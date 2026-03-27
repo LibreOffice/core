@@ -31,7 +31,7 @@
 #endif
 
 #include <LibreOfficeKit/COKitInit.h>
-#include <LibreOfficeKit/LibreOfficeKit.hxx>
+#include <LibreOfficeKit/COKit.hxx>
 #include <LibreOfficeKit/COKitEnums.h>
 
 using namespace ::boost;

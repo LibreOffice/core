@@ -1,5 +1,5 @@
 #include <iostream>
-#include "LibreOfficeKit/LibreOfficeKit.hxx"
+#include "LibreOfficeKit/COKit.hxx"
 
 int main(int argc, char* argv[])
 {

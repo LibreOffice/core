@@ -4556,7 +4556,7 @@ idl/source/prj/globals.cxx
 idl/source/prj/parser.cxx
 idl/source/prj/svidl.cxx
 include/LibreOfficeKit/COKit.h
-include/LibreOfficeKit/LibreOfficeKit.hxx
+include/LibreOfficeKit/COKit.hxx
 include/LibreOfficeKit/COKitEnums.h
 include/LibreOfficeKit/COKitGtk.h
 include/LibreOfficeKit/COKitInit.h

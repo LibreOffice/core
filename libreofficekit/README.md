@@ -12,10 +12,10 @@ LOK functionality can be accessed by including `COKit.h[xx]` in your
 program.
 
 LOK initialisation (`lok_init`) requires the inclusion of `COKitInit.h` in
-your program. If you use the C++ `LibreOfficeKit.hxx` header, it already includes
+your program. If you use the C++ `COKit.hxx` header, it already includes
 `COKitInit.h` for you.
 
-(`LibreOfficeKit.hxx` is a simple and fully inlined C++ wrapper for the same
+(`COKit.hxx` is a simple and fully inlined C++ wrapper for the same
 functionality as in `COKit.h`.)
 
 An example program can be seen on:
@@ -50,7 +50,7 @@ client -> LibreOffice communication are:
   mouse event.
 
 In general, all coordinates are always in absolute twips (20th of a point, or:
-1" = 1440 twips). See `lok::Document` in `LibreOfficeKit.hxx` for a full list of
+1" = 1440 twips). See `lok::Document` in `COKit.hxx` for a full list of
 methods and their documentation.
 
 The other way around (LibreOffice -> LOK client) is implemented using a

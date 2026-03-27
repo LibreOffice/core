@@ -18,7 +18,7 @@
 
 #include <LibreOfficeKit/COKitEnums.h>
 #include <LibreOfficeKit/COKitInit.h>
-#include <LibreOfficeKit/LibreOfficeKit.hxx>
+#include <LibreOfficeKit/COKit.hxx>
 
 #ifdef IOS
 #include <vcl/svapp.hxx>
