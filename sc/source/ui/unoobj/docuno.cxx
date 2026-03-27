@@ -101,8 +101,12 @@
 #include <docuno.hxx>
 #include <drwlayer.hxx>
 #include <forbiuno.hxx>
+#include <formula/formulahelper.hxx>
 #include <formuladepchain.hxx>
+#include <funcdesc.hxx>
 #include <formulagroup.hxx>
+#include <simpleformulacalc.hxx>
+#include <tools/urlobj.hxx>
 #include <gridwin.hxx>
 #include <hints.hxx>
 #include <inputhdl.hxx>
@@ -1365,7 +1369,8 @@ OString ScModelObj::getViewRenderState(SfxViewShell* pViewShell)
 
 bool ScModelObj::supportsCommand(std::u16string_view rCommand)
 {
-    return rCommand == u"FormulaDepChain";
+    return rCommand == u"FormulaDepChain" || rCommand == u"CalcFunctionList"
+        || rCommand == u"EvaluateFormula";
 }
 
 void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
@@ -1399,6 +1404,134 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
         {
             auto aValues = rJsonWriter.startNode("commandValues");
             sc::getFormulaDependencyChain(rDoc, aCurPos, rJsonWriter);
+        }
+    }
+    else if (aCommand.startsWith(".uno:CalcFunctionList"))
+    {
+        rJsonWriter.put("commandName", ".uno:CalcFunctionList");
+
+        const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
+        ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
+        if (!pFuncList || !pFuncMgr)
+            return;
+
+        auto aValues = rJsonWriter.startNode("commandValues");
+
+        // Categories
+        {
+            auto aCats = rJsonWriter.startArray("categories");
+            for (sal_uInt32 i = 0; i < pFuncMgr->getCount(); ++i)
+            {
+                auto aCat = rJsonWriter.startStruct();
+                rJsonWriter.put("name", ScFunctionMgr::GetCategoryName(i));
+            }
+        }
+
+        // Functions: name, signature, category index.
+        // Descriptions are omitted to keep the response compact.
+        formula::FormulaHelper aHelper(pFuncMgr);
+        {
+            auto aFuncs = rJsonWriter.startArray("functions");
+            sal_uInt32 nCount = pFuncList->GetCount();
+            for (sal_uInt32 i = 0; i < nCount; ++i)
+            {
+                const ScFuncDesc* pDesc = pFuncList->GetFunction(i);
+                if (!pDesc || !pDesc->mxFuncName || pDesc->isHidden())
+                    continue;
+
+                const formula::IFunctionDescription* pIDesc = nullptr;
+                OUString eqName = "=" + *pDesc->mxFuncName + "()";
+                sal_Int32 nStart = 0;
+                ::std::vector<OUString> aArgs;
+                aHelper.GetNextFunc(eqName, false, nStart, nullptr, &pIDesc, &aArgs);
+
+                auto aFunc = rJsonWriter.startStruct();
+                rJsonWriter.put("name", *pDesc->mxFuncName);
+                if (pIDesc)
+                {
+                    rJsonWriter.put("signature", pIDesc->getSignature());
+                    if (pIDesc->getCategory())
+                        rJsonWriter.put("category",
+                            static_cast<sal_Int64>(pIDesc->getCategory()->getNumber()));
+                }
+            }
+        }
+    }
+    else if (aCommand.startsWith(".uno:EvaluateFormula"))
+    {
+        rJsonWriter.put("commandName", ".uno:EvaluateFormula");
+
+        if (!pDocShell)
+            return;
+
+        ScDocument& rDoc = pDocShell->GetDocument();
+
+        // Parse cell and formula from query: ?cell=G1&formula==SUM(A1:A5)
+        OString params;
+        sal_Int32 qPos = aCommand.indexOf('?');
+        if (qPos >= 0)
+            params = aCommand.copy(qPos + 1);
+
+        OUString cellStr;
+        OUString formulaStr;
+        for (sal_Int32 nIdx = 0; nIdx >= 0;)
+        {
+            OString param = params.getToken(0, '&', nIdx);
+            if (param.startsWith("cell="))
+                cellStr = OStringToOUString(param.subView(5), RTL_TEXTENCODING_UTF8);
+            else if (param.startsWith("formula="))
+            {
+                OUString decoded = OStringToOUString(param.subView(8), RTL_TEXTENCODING_UTF8);
+                formulaStr = INetURLObject::decode(decoded,
+                    INetURLObject::DecodeMechanism::WithCharset);
+            }
+        }
+
+        auto aValues = rJsonWriter.startNode("commandValues");
+
+        if (cellStr.isEmpty() || formulaStr.isEmpty())
+        {
+            rJsonWriter.put("error", "Missing cell or formula parameter");
+            return;
+        }
+
+        rJsonWriter.put("cell", cellStr);
+        rJsonWriter.put("formula", formulaStr);
+
+        ScAddress aAddr;
+        ScRefFlags nRes = aAddr.Parse(cellStr, rDoc);
+        if (!(nRes & ScRefFlags::VALID))
+        {
+            rJsonWriter.put("resultType", "error");
+            rJsonWriter.put("result", "Invalid cell address");
+            return;
+        }
+
+        ScSimpleFormulaCalculator aCalc(rDoc, aAddr, formulaStr, false,
+            formula::FormulaGrammar::GRAM_ENGLISH);
+        aCalc.SetLimitString(true);
+
+        FormulaError nErr = aCalc.GetErrCode();
+        if (nErr != FormulaError::NONE)
+        {
+            rJsonWriter.put("resultType", "error");
+            rJsonWriter.put("result", ScGlobal::GetErrorString(nErr));
+        }
+        else if (aCalc.IsValue())
+        {
+            rJsonWriter.put("resultType", "value");
+            rJsonWriter.put("result", aCalc.GetValue());
+        }
+        else
+        {
+            OUString sResult = aCalc.GetString().getString();
+            if (sResult.isEmpty())
+                rJsonWriter.put("resultType", "empty");
+            else
+            {
+                rJsonWriter.put("resultType", "string");
+                rJsonWriter.put("result", sResult);
+            }
         }
     }
 }
