@@ -45,7 +45,7 @@
 #define MIN_ZOOM 0.25f
 
 /// This is expected to be locked during setView(), doSomethingElse() LOK calls.
-static std::mutex g_aLOKMutex;
+static std::mutex g_aKitMutex;
 
 namespace {
 
@@ -258,7 +258,7 @@ struct KitDocumentViewPrivateImpl
     }
 };
 
-// Must be run with g_aLOKMutex locked
+// Must be run with g_aKitMutex locked
 void setDocumentView(COKitDocument* pDoc, int viewId)
 {
     assert(pDoc);
@@ -603,7 +603,7 @@ postKeyEventInThread(gpointer data)
     gint nScaleFactor = gtk_widget_get_scale_factor(GTK_WIDGET(pDocView));
     gint nTileSizePixelsScaled = nTileSizePixels * nScaleFactor;
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
 
@@ -898,7 +898,7 @@ static gboolean postDocumentLoad(gpointer pData)
     KitDocumentView* pKitDocumentView = static_cast<KitDocumentView*>(pData);
     KitDocumentViewPrivate& priv = getPrivate(pKitDocumentView);
 
-    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::unique_lock<std::mutex> aGuard(g_aKitMutex);
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
     // This returns the view id of the most recently used view of the document
     priv->m_nViewId = priv->m_pDocument->pClass->getView(priv->m_pDocument);
@@ -2193,7 +2193,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     GdkPoint aPoint;
     GError* error = nullptr;
 
-    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::unique_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     if (priv->m_bInDragMiddleHandle)
     {
@@ -2291,7 +2291,7 @@ setGraphicSelectionInThread(gpointer data)
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
     ss << "lok::Document::setGraphicSelection(" << pLOEvent->m_nSetGraphicSelectionType;
@@ -2312,7 +2312,7 @@ setClientZoomInThread(gpointer data)
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->setClientZoom(priv->m_pDocument,
                                              pLOEvent->m_nTilePixelWidth,
@@ -2329,7 +2329,7 @@ postMouseEventInThread(gpointer data)
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
     ss << "lok::Document::postMouseEvent(" << pLOEvent->m_nPostMouseEventType;
@@ -2355,7 +2355,7 @@ openDocumentInThread (gpointer data)
     KitDocumentView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     if ( priv->m_pDocument )
     {
         priv->m_pDocument->pClass->destroy( priv->m_pDocument );
@@ -2392,7 +2392,7 @@ setPartInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPart = pLOEvent->m_nPart;
 
-    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::unique_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->setPart( priv->m_pDocument, nPart );
     aGuard.unlock();
@@ -2409,7 +2409,7 @@ setPartmodeInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPartMode = pLOEvent->m_nPartMode;
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->setPartMode( priv->m_pDocument, nPartMode );
 }
@@ -2429,7 +2429,7 @@ setEditInThread(gpointer data)
     else if (priv->m_bEdit && !bEdit)
     {
         g_info("lok_doc_view_set_edit: leaving edit mode");
-        std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+        std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
         setDocumentView(priv->m_pDocument, priv->m_nViewId);
         priv->m_pDocument->pClass->resetSelection(priv->m_pDocument);
     }
@@ -2446,7 +2446,7 @@ postCommandInThread (gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
     ss << "lok::Document::postUnoCommand(" << pLOEvent->m_pCommand << ", " << pLOEvent->m_pArguments << ")";
@@ -2462,7 +2462,7 @@ paintTile(KitDocumentViewPrivate& priv,
     LOEvent* pLOEvent,
     gint nScaleFactor)
 {
-    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::unique_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
 
     priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
@@ -2780,7 +2780,7 @@ static void lok_doc_view_destroy (GtkWidget* widget)
     KitDocumentViewPrivate& priv = getPrivate(pDocView);
 
     // Ignore notifications sent to this view on shutdown.
-    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::unique_lock<std::mutex> aGuard(g_aKitMutex);
     if (priv->m_pDocument)
     {
         setDocumentView(priv->m_pDocument, priv->m_nViewId);
@@ -3744,7 +3744,7 @@ lok_doc_view_get_parts (KitDocumentView* pDocView)
     if (!priv->m_pDocument)
         return -1;
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getParts( priv->m_pDocument );
 }
@@ -3756,7 +3756,7 @@ lok_doc_view_get_part (KitDocumentView* pDocView)
     if (!priv->m_pDocument)
         return -1;
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getPart( priv->m_pDocument );
 }
@@ -3800,7 +3800,7 @@ SAL_DLLPUBLIC_EXPORT void lok_doc_view_send_content_control_event(KitDocumentVie
         return;
     }
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->sendContentControlEvent(priv->m_pDocument, pArguments);
 }
@@ -3812,7 +3812,7 @@ lok_doc_view_get_part_name (KitDocumentView* pDocView, int nPart)
     if (!priv->m_pDocument)
         return nullptr;
 
-    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::scoped_lock<std::mutex> aGuard(g_aKitMutex);
     setDocumentView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getPartName( priv->m_pDocument, nPart );
 }
