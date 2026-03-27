@@ -170,7 +170,7 @@
      else
        ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
      /* Entropy decoding: either Huffman or arithmetic coding. */
-@@ -704,7 +704,7 @@
+@@ -706,7 +706,7 @@
      use_c_buffer = cinfo->inputctl->has_multiple_scans ||
                     cinfo->buffered_image;
      if (cinfo->data_precision == 12)
@@ -178,7 +178,7 @@
 +      jinit_d_coef_controller(cinfo, use_c_buffer);
      else
        jinit_d_coef_controller(cinfo, use_c_buffer);
-   }
+ #else
 @@ -713,11 +713,11 @@
      if (cinfo->data_precision <= 8)
        jinit_d_main_controller(cinfo, FALSE /* never need full buffer here */);

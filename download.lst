@@ -390,8 +390,8 @@ JFREEREPORT_SAC_TARBALL := 39bb3fcea1514f1369fcfc87542390fd-sacjava-1.3.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBJPEG_TURBO_SHA256SUM := 3a13a5ba767dc8264bc40b185e41368a80d5d5f945944d1dbaa4b2fb0099f4e5
-LIBJPEG_TURBO_TARBALL := libjpeg-turbo-3.1.3.tar.gz
+LIBJPEG_TURBO_SHA256SUM := e23d3ebb2c6ee4d0e2a5823dbb55b614845df5ea3435c956fed5cf04041a87ad
+LIBJPEG_TURBO_TARBALL := libjpeg-turbo-3.1.4.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
