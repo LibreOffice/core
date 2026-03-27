@@ -10220,7 +10220,7 @@ sfx2/source/view/frmload.cxx
 sfx2/source/view/impframe.hxx
 sfx2/source/view/impviewframe.hxx
 sfx2/source/view/ipclient.cxx
-sfx2/source/view/lokcharthelper.cxx
+sfx2/source/kit/charthelper.cxx
 sfx2/source/view/lokhelper.cxx
 sfx2/source/view/printer.cxx
 sfx2/source/view/prnmon.hxx
