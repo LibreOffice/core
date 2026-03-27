@@ -1137,7 +1137,7 @@ public:
 
     /**
      * Runs the main-loop in the current thread. To trigger this
-     * mode you need to putenv a SAL_LOK_OPTIONS containing 'unipoll'.
+     * mode you need to putenv a SAL_KIT_OPTIONS containing 'unipoll'.
      * The @pPollCallback is called to poll for events from the Kit client
      * and the @pWakeCallback can be called by internal COKit threads
      * to wake the caller of 'runLoop' ie. the main thread.

@@ -8478,7 +8478,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
         std::vector<OUString> aOpts;
 
         // ':' delimited options - avoiding ABI change for new parameters
-        const char *pOptions = getenv("SAL_LOK_OPTIONS");
+        const char *pOptions = getenv("SAL_KIT_OPTIONS");
         if (pOptions)
             aOpts = comphelper::string::split(OUString(pOptions, strlen(pOptions), RTL_TEXTENCODING_UTF8), ':');
         for (const auto &it : aOpts)

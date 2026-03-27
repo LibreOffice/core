@@ -63,7 +63,7 @@ class LOKitTileProvider implements TileProvider {
         mMessageCallback = messageCallback;
 
         COKit.putenv("SAL_LOG=+WARN+INFO");
-        COKit.putenv("SAL_LOK_OPTIONS=compact_fonts");
+        COKit.putenv("SAL_KIT_OPTIONS=compact_fonts");
         COKit.init(mContext);
 
         mOffice = new Office(COKit.getCOKitHandle());

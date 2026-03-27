@@ -11,9 +11,9 @@
 #define INCLUDED_COKIT_COKIT_INIT_H
 
 #if defined __GNUC__ || defined __clang__
-#  define LOK_TOLERATE_UNUSED __attribute__((used))
+#  define KIT_TOLERATE_UNUSED __attribute__((used))
 #else
-#  define LOK_TOLERATE_UNUSED
+#  define KIT_TOLERATE_UNUSED
 #endif
 
 #if defined(__linux__) || defined (__FreeBSD__) ||\
@@ -71,7 +71,7 @@ extern "C"
         static void *cok_loadlib(const char *pFN)
     {
         return dlopen(pFN, RTLD_LAZY
-#if defined LOK_LOADLIB_GLOBAL
+#if defined KIT_LOADLIB_GLOBAL
                       | RTLD_GLOBAL
 #endif
                       );
@@ -383,14 +383,14 @@ static COKit *cok_init_2( const char *install_path,  const char *user_profile_ur
 #endif
 }
 
-static LOK_TOLERATE_UNUSED
+static KIT_TOLERATE_UNUSED
 COKit *cok_init( const char *install_path )
 {
     return cok_init_2( install_path, NULL );
 }
 
 #if !defined(IOS)
-static LOK_TOLERATE_UNUSED
+static KIT_TOLERATE_UNUSED
 int cok_preinit( const char *install_path,  const char *user_profile_url )
 {
     void *dlhandle;

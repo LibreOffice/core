@@ -26,7 +26,7 @@
 #include <cxxabi.h>
 #include <config_options.h>
 #if defined _LIBCPPABI_VERSION || !ENABLE_RUNTIME_OPTIMIZATIONS
-#define LOK_LOADLIB_GLOBAL
+#define KIT_LOADLIB_GLOBAL
 #endif
 #endif
 
