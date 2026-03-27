@@ -1116,7 +1116,7 @@ void ViewShellBase::afterCallbackRegistered()
         aTree.put("state", "true");
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree);
-        libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, OString(aStream.str()));
+        viewCallback(LOK_CALLBACK_STATE_CHANGED, OString(aStream.str()));
     }
 }
 

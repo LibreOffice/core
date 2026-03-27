@@ -282,7 +282,7 @@ void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq
                 {
                     SfxViewShell* pViewShell = SfxViewShell::Current();
                     if (pViewShell)
-                        pViewShell->libreOfficeKitViewCallback(
+                        pViewShell->viewCallback(
                             LOK_CALLBACK_EXPORT_FILE, sTempFileURL.toUtf8());
                 }
             }

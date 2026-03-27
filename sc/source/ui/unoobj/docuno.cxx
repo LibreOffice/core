@@ -1066,7 +1066,7 @@ void ScModelObj::resetSelection()
         pViewShell->Unmark();
 
     // and hide the cell and text selection
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
+    pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
     SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
 }
 
@@ -1103,7 +1103,7 @@ static void lcl_sendLOKDocumentBackground(const ScViewData* pViewData)
     const Color& rColor = rBackground.GetColor();
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR, rColor.AsRGBHexString().toUtf8());
+    pViewShell->viewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR, rColor.AsRGBHexString().toUtf8());
 }
 
 void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_)

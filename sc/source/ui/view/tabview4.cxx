@@ -352,7 +352,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             writer.put("text", sTipString);
             writer.put("celladdress", sCellAddress);
             OString sPayloadString = writer.finishAndGetAsOString();
-            pLOKViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, sPayloadString);
+            pLOKViewShell->viewCallback(LOK_CALLBACK_TOOLTIP, sPayloadString);
         }
     }
 }

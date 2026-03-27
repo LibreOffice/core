@@ -48,7 +48,7 @@ void DrawViewShell::ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, Co
         SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(pCurrentShell->GetCurrentDocument());
         SfxLokHelper::notifyViewRenderState(pCurrentShell, pDoc);
         Color aFillColor(pColorConfig->GetColorValue(svtools::APPBACKGROUND).nColor);
-        pCurrentShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
+        pCurrentShell->viewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
                     aFillColor.AsRGBHexString().toUtf8());
     }
 }

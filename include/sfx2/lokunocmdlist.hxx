@@ -39,7 +39,7 @@ enum class PayloadType
 
 struct KitUnoCommand
 {
-    // (if != None) --> function used by libreOfficeKitViewCallback in
+    // (if != None) --> function used by viewCallback in
     // unoctitm.cxx.
     PayloadType payloadType;
     // (if == true) --> command is listened to for status updates. This is used

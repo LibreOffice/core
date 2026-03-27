@@ -923,7 +923,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
 
                     SfxViewShell *pViewShell = SfxViewShell::Current();
                     if (pViewShell)
-                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_PASSWORD_RESET, payloadJson.finishAndGetAsOString());
+                        pViewShell->viewCallback(LOK_CALLBACK_DOCUMENT_PASSWORD_RESET, payloadJson.finishAndGetAsOString());
 
                     pShell->SetModified();
                 }

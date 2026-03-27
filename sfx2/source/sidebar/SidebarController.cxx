@@ -237,7 +237,7 @@ void SidebarController::disposeDecks()
                 aTree.put("state", "false");
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aTree);
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED,
                                                        OString(aStream.str()));
             }
         }
@@ -866,7 +866,7 @@ void SidebarController::SwitchToDeck (
                 aTree.put("state", rStateChange.second);
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aTree);
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED,
                                                        OString(aStream.str()));
             }
         }
@@ -1238,7 +1238,7 @@ void SidebarController::RequestCloseDeck()
             aJsonWriter.put("type", "dockingwindow");
             aJsonWriter.put("text", mpParentWindow->GetText());
             aJsonWriter.put("enabled", false);
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.finishAndGetAsOString());
+            pViewShell->viewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.finishAndGetAsOString());
         }
         else if (pViewShell)
         {
@@ -1246,7 +1246,7 @@ void SidebarController::RequestCloseDeck()
             aJsonWriter.put("id", mpParentWindow->get_id());
             aJsonWriter.put("action", "close");
             aJsonWriter.put("jsontype", "sidebar");
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.finishAndGetAsOString());
+            pViewShell->viewCallback(LOK_CALLBACK_JSDIALOG, aJsonWriter.finishAndGetAsOString());
         }
     }
 
@@ -1324,7 +1324,7 @@ void SidebarController::UpdateDeckOpenState()
                 {
                     const std::string uno = UnoNameFromDeckId(msCurrentDeckId, GetCurrentContext());
                     if (!uno.empty())
-                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                        pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED,
                                                                 OString(uno + "=true"));
                 }
             }
@@ -1362,7 +1362,7 @@ void SidebarController::UpdateDeckOpenState()
                 {
                     const std::string uno = UnoNameFromDeckId(msCurrentDeckId, GetCurrentContext());
                     if (!uno.empty())
-                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                        pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED,
                                                                 OString(uno + "=false"));
                 }
             }

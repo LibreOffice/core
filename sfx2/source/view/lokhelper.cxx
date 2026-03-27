@@ -584,7 +584,7 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell c
 
     const OString aPayload = lcl_generateJSON(rThisView, rKey, rPayload);
     const int viewId = SfxLokHelper::getView(rThisView);
-    pOtherView->libreOfficeKitViewCallbackWithViewId(nType, aPayload, viewId);
+    pOtherView->viewCallbackWithViewId(nType, aPayload, viewId);
 }
 
 void SfxLokHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
@@ -594,7 +594,7 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell c
         return;
 
     const int viewId = SfxLokHelper::getView(rThisView);
-    pOtherView->libreOfficeKitViewCallbackWithViewId(nType, lcl_generateJSON(rThisView, rTree), viewId);
+    pOtherView->viewCallbackWithViewId(nType, lcl_generateJSON(rThisView, rTree), viewId);
 }
 
 void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
@@ -621,7 +621,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, st
                 viewId = SfxLokHelper::getView(*pThisView);
             }
 
-            pViewShell->libreOfficeKitViewCallbackWithViewId(nType, aPayload, viewId);
+            pViewShell->viewCallbackWithViewId(nType, aPayload, viewId);
         }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -652,7 +652,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
                 viewId = SfxLokHelper::getView(*pThisView);
             }
 
-            pViewShell->libreOfficeKitViewCallbackWithViewId(nType, aPayload, viewId);
+            pViewShell->viewCallbackWithViewId(nType, aPayload, viewId);
         }
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
@@ -698,13 +698,13 @@ void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* 
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aItem);
-        pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, OString(aStream.str()));
+        pShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, OString(aStream.str()));
     }
 }
 
 void SfxLokHelper::notifyViewRenderState(const SfxViewShell* pShell, vcl::ITiledRenderable* pDoc)
 {
-    pShell->libreOfficeKitViewCallback(LOK_CALLBACK_VIEW_RENDER_STATE, pDoc->getViewRenderState());
+    pShell->viewCallback(LOK_CALLBACK_VIEW_RENDER_STATE, pDoc->getViewRenderState());
 }
 
 void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
@@ -733,7 +733,7 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     aPayload.append('}');
 
     const OString s = aPayload.makeStringAndClear();
-    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, s);
+    pThisView->viewCallback(LOK_CALLBACK_WINDOW, s);
 }
 
 void SfxLokHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect, bool bControlEvent, int windowID)
@@ -745,7 +745,7 @@ void SfxLokHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools
         sPayload += "\", \"controlEvent\": true, \"windowId\": \"" + OString::number(windowID) + "\"";
     }
     sPayload += " }";
-    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload);
+    pThisView->viewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload);
 }
 
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect)
@@ -763,7 +763,7 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const int n
     // -1 means all parts
     const int nPart = comphelper::COKit::isPartInInvalidation() ? nInPart : INT_MIN;
     const int nMode = pThisView->getEditMode();
-    pThisView->libreOfficeKitViewInvalidateTilesCallback(pRect, nPart, nMode);
+    pThisView->viewInvalidateTilesCallback(pRect, nPart, nMode);
 }
 
 void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
@@ -777,10 +777,10 @@ void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, cons
         {
             tools::Rectangle aRectangle(0, 0, 1000000000, 1000000000);
             const int nMode = pThisView->getEditMode();
-            pThisView->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, i, nMode);
+            pThisView->viewInvalidateTilesCallback(&aRectangle, i, nMode);
         }
     }
-    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload);
+    pThisView->viewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload);
 }
 
 void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
@@ -817,7 +817,7 @@ void SfxLokHelper::notifyCurrentPageSizeChangedAllViews(vcl::ITiledRenderable *p
         if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell->GetDocId())
         {
             OString aPayload = ".uno:CurrentPageResize"_ostr;
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+            pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -868,7 +868,7 @@ void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
     while (pViewShell)
     {
         if (pViewShell->GetDocId() == pCurrentViewShell->GetDocId())
-            pViewShell->libreOfficeKitViewCallback(nType, payload);
+            pViewShell->viewCallback(nType, payload);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
@@ -893,7 +893,7 @@ void SfxLokHelper::notifyContextChange(const css::ui::ContextChangeEventObject& 
         rEvent.ApplicationName.replace(' ', '_') +
         " " +
         rEvent.ContextName.replace(' ', '_');
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_CHANGED, aBuffer.toUtf8());
+    pViewShell->viewCallback(LOK_CALLBACK_CONTEXT_CHANGED, aBuffer.toUtf8());
 }
 
 void SfxLokHelper::notifyLog(const std::ostringstream& stream)
@@ -910,11 +910,11 @@ void SfxLokHelper::notifyLog(const std::ostringstream& stream)
         {
             for (const auto& msg : g_logNotifierCache)
             {
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CORE_LOG, msg.c_str());
+                pViewShell->viewCallback(LOK_CALLBACK_CORE_LOG, msg.c_str());
             }
             g_logNotifierCache.clear();
         }
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CORE_LOG, stream.str().c_str());
+        pViewShell->viewCallback(LOK_CALLBACK_CORE_LOG, stream.str().c_str());
     }
     else
     {
@@ -1163,7 +1163,7 @@ void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)
     if (DisableCallbacks::disabled() || !pThisView)
         return;
 
-    pThisView->libreOfficeKitViewUpdatedCallback(nType);
+    pThisView->viewUpdatedCallback(nType);
 }
 
 void SfxLokHelper::notifyUpdatePerViewId(SfxViewShell const& rThisView, int nType)
@@ -1181,7 +1181,7 @@ void SfxLokHelper::notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxVi
     SAL_WARN_IF(!pViewShell, "lok", "no explicit viewshell set");
     int viewId = pViewShell ? SfxLokHelper::getView(*pViewShell) : SfxLokHelper::getCurrentView();
     int sourceViewId = SfxLokHelper::getView(rSourceShell);
-    rTargetShell.libreOfficeKitViewUpdatedCallbackPerViewId(nType, viewId, sourceViewId);
+    rTargetShell.viewUpdatedCallbackPerViewId(nType, viewId, sourceViewId);
 }
 
 void SfxLokHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView, int nType)
@@ -1195,7 +1195,7 @@ void SfxLokHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView
     while (pViewShell)
     {
         if (pViewShell != pThisView && nCurrentDocId == pViewShell->GetDocId())
-            pViewShell->libreOfficeKitViewUpdatedCallbackPerViewId(nType, viewId, viewId);
+            pViewShell->viewUpdatedCallbackPerViewId(nType, viewId, viewId);
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -1512,7 +1512,7 @@ void SfxLokHelper::sendNetworkAccessError(std::string_view rAction)
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (pViewShell)
     {
-        pViewShell->libreOfficeKitViewCallback(
+        pViewShell->viewCallback(
             LOK_CALLBACK_ERROR, aWriter.finishAndGetAsOString());
     }
 }

@@ -550,7 +550,7 @@ void ChartAreaPanel::selectionChanged(bool bCorrectType)
                                 if (SfxViewShell* pViewShell = SfxViewShell::Current())
                                 {
                                     const OString sCommand = ".uno:FillColor"_ostr;
-                                    pViewShell->libreOfficeKitViewCallback(
+                                    pViewShell->viewCallback(
                                         LOK_CALLBACK_STATE_CHANGED,
                                         sCommand + "=" + OString::number(nFillColor));
                                 }

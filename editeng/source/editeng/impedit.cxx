@@ -423,7 +423,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
             if (mpLOKSpecialPositioning)
                 aPayload += ":: " + sRefPoint;
 
-            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aPayload);
+            mpViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aPayload);
 
             tools::Rectangle& rEnd = aRectangles.back();
             tools::Rectangle aEnd(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
@@ -432,7 +432,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
             if (mpLOKSpecialPositioning)
                 aPayload += ":: " + sRefPoint;
 
-            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aPayload);
+            mpViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aPayload);
         }
 
         if (mpOtherShell)
@@ -443,7 +443,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
         }
         else
         {
-            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle);
+            mpViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle);
             mpViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection"_ostr, sRectangle);
         }
     }
@@ -1480,7 +1480,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                     SfxLokHelper::notifyOtherView(*pThisShell, pThisShell,
                             LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, aMessageParams);
                 else
-                    pThisShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+                    pThisShell->viewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
                             OString(aMessageParams.get<std::string>("rectangle")));
             }
         }

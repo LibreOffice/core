@@ -453,7 +453,7 @@ static void sendErrorToLOK(const ErrCodeMsg& error)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, OString(aStream.str()));
+    pNotifier->viewCallback(LOK_CALLBACK_ERROR, OString(aStream.str()));
 }
 
 namespace

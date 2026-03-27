@@ -33,29 +33,24 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI CoKitCallbackInterface
 public:
     virtual ~CoKitCallbackInterface() {}
     // COKitCallback equivalent.
-    virtual void libreOfficeKitViewCallback(int nType, const rtl::OString& pPayload) = 0;
+    virtual void viewCallback(int nType, const rtl::OString& pPayload) = 0;
     // Callback that explicitly provides view id (which is also included in the payload).
-    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const rtl::OString& pPayload,
-                                                      int nViewId)
-        = 0;
+    virtual void viewCallbackWithViewId(int nType, const rtl::OString& pPayload, int nViewId) = 0;
     // LOK_CALLBACK_INVALIDATE_TILES
     // nPart is either part, -1 for all-parts, or INT_MIN if
     // comphelper::COKit::isPartInInvalidation() is not set
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
-                                                           int nMode)
+    virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
         = 0;
     // A message of the given type should be sent, for performance purpose only a notification
     // is given here, details about the message should be queried from SfxViewShell when necessary.
     // This is used for messages that are generated often but only the last one is needed.
-    virtual void libreOfficeKitViewUpdatedCallback(int nType) = 0;
-    // Like libreOfficeKitViewUpdatedCallback(), but a last message is needed for each nViewId value.
+    virtual void viewUpdatedCallback(int nType) = 0;
+    // Like viewUpdatedCallback(), but a last message is needed for each nViewId value.
     // SfxViewShell:getLOKPayload() will be called on nSourceViewId view.
-    virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId,
-                                                            int nSourceViewId)
-        = 0;
+    virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) = 0;
     // There are pending invalidate tiles calls that need to be processed.
     // A call to SfxViewShell::flushPendingLOKInvalidateTiles() should be scheduled.
-    virtual void libreOfficeKitViewAddPendingInvalidateTiles() = 0;
+    virtual void viewAddPendingInvalidateTiles() = 0;
     virtual void dumpState(rtl::OStringBuffer& rState) = 0;
 };
 

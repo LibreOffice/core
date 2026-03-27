@@ -68,7 +68,7 @@ void lcl_OnTabsChanged(const ScTabViewShell& rViewShell, const ScDocument& rDoc,
         if (!rDoc.IsVisible(nTabIndex))
             continue;
         if (bInvalidateTiles)
-            rViewShell.libreOfficeKitViewInvalidateTilesCallback(nullptr, nTabIndex, 0);
+            rViewShell.viewInvalidateTilesCallback(nullptr, nTabIndex, 0);
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
             &rViewShell,
             true /* bColsAffected */, true /* bRowsAffected */,
@@ -114,7 +114,7 @@ void lcl_UndoCommandResult(const ScTabViewShell& rViewShell,
             lcl_MakeJsonArray(aJson, *pOldTabs, "oldTabs");
     }
 
-    rViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
+    rViewShell.viewCallback(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.finishAndGetAsOString());
 }
 }
 
@@ -1449,7 +1449,7 @@ void ScUndoPrintRange::DoChange(bool bUndo)
             pNewRanges->GetPrintRangesInfo(aJsonWriter);
 
         const OString message = aJsonWriter.finishAndGetAsOString();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_PRINT_RANGES, message);
+        pViewShell->viewCallback(LOK_CALLBACK_PRINT_RANGES, message);
     }
 
     rDocShell.PostPaint( ScRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab), PaintPartFlags::Grid );

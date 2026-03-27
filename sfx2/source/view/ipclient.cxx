@@ -359,7 +359,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
         }
 
         OString str = (m_bNegativeX ? lcl_negateRectX(aRect) : aRect).toString() + ", \"INPLACE\"";
-        pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, str );
+        pViewShell->viewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, str );
     }
 
 }
@@ -384,7 +384,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedInplace()
     if ( comphelper::COKit::isActive() )
     {
         if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() ) {
-            pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE EXIT"_ostr );
+            pViewShell->viewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE EXIT"_ostr );
         }
     }
 }

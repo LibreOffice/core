@@ -32,7 +32,7 @@ void DocWindow::SetPointer(PointerStyle nPointer)
         aPointerString = aIt->second;
     }
 
-    pWin->GetLOKNotifier()->libreOfficeKitViewCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString);
+    pWin->GetLOKNotifier()->viewCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString);
 }
 } // namespace vcl
 

@@ -2003,7 +2003,7 @@ void DesktopLOKTest::testBinaryCallback()
 
     const tools::Rectangle rect1(Point(10,15),Size(20,25));
     const std::string rect1String(rect1.toString());
-    // Verify that using queue() and libreOfficeKitViewInvalidateTilesCallback() has the same result.
+    // Verify that using queue() and viewInvalidateTilesCallback() has the same result.
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
@@ -2023,7 +2023,7 @@ void DesktopLOKTest::testBinaryCallback()
         handler->setViewId(SfxLokHelper::getCurrentView());
 
         handler->tilePainted(/*nPart=*/INT_MIN, /*nMode=*/0, rect1);
-        handler->libreOfficeKitViewInvalidateTilesCallback(&rect1, INT_MIN, 0);
+        handler->viewInvalidateTilesCallback(&rect1, INT_MIN, 0);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -2038,7 +2038,7 @@ void DesktopLOKTest::testBinaryCallback()
         handler->setViewId(SfxLokHelper::getCurrentView());
 
         handler->tilePainted(/*nPart=*/INT_MIN, /*nMode=*/0, rect1);
-        handler->libreOfficeKitViewInvalidateTilesCallback(nullptr, INT_MIN, 0);
+        handler->viewInvalidateTilesCallback(nullptr, INT_MIN, 0);
 
         Scheduler::ProcessEventsToIdle();
 
@@ -2060,7 +2060,7 @@ void DesktopLOKTest::testOmitInvalidate()
         pHandler->setViewId(0);
 
         // When emitting just an invalidation:
-        pHandler->libreOfficeKitViewInvalidateTilesCallback(&aRectangle, /*nPart=*/0, /*nMode=*/0);
+        pHandler->viewInvalidateTilesCallback(&aRectangle, /*nPart=*/0, /*nMode=*/0);
 
         // Then make sure that's filtered out:
         Scheduler::ProcessEventsToIdle();
@@ -2080,7 +2080,7 @@ void DesktopLOKTest::testOmitInvalidate()
         // When emitting an invalidation outside the painted area:
         pHandler->tilePainted(/*nPart=*/0, /*nMode=*/0, aRectangle);
         tools::Rectangle aElsewhere{Point(20, 20), Size(10, 10)};
-        pHandler->libreOfficeKitViewInvalidateTilesCallback(&aElsewhere, /*nPart=*/0, /*nMode=*/0);
+        pHandler->viewInvalidateTilesCallback(&aElsewhere, /*nPart=*/0, /*nMode=*/0);
 
         // Then make sure that's filtered out:
         Scheduler::ProcessEventsToIdle();
@@ -2096,7 +2096,7 @@ void DesktopLOKTest::testOmitInvalidate()
         // When emitting an invalidation partly outside the painted area:
         pHandler->tilePainted(/*nPart=*/0, /*nMode=*/0, aRectangle);
         tools::Rectangle aLarger{Point(0, 0), Size(20, 10)};
-        pHandler->libreOfficeKitViewInvalidateTilesCallback(&aLarger, /*nPart=*/0, /*nMode=*/0);
+        pHandler->viewInvalidateTilesCallback(&aLarger, /*nPart=*/0, /*nMode=*/0);
 
         // Then make sure that's cropped:
         Scheduler::ProcessEventsToIdle();
@@ -2125,9 +2125,9 @@ void DesktopLOKTest::test2ViewsOmitInvalidate()
     tools::Rectangle aPaint{Point(0, 0), Size(20, 10)};
     pDocument->updateViewsForPaintedTile(/*nOrigViewId=*/0, /*nPart=*/0, /*nMode=*/0, aPaint);
     tools::Rectangle aSmaller{Point(0, 0), Size(10, 10)};
-    pHandler1->libreOfficeKitViewInvalidateTilesCallback(&aSmaller, /*nPart=*/0, /*nMode=*/0);
+    pHandler1->viewInvalidateTilesCallback(&aSmaller, /*nPart=*/0, /*nMode=*/0);
     tools::Rectangle aLarger{Point(0, 0), Size(20, 10)};
-    pHandler2->libreOfficeKitViewInvalidateTilesCallback(&aLarger, /*nPart=*/0, /*nMode=*/0);
+    pHandler2->viewInvalidateTilesCallback(&aLarger, /*nPart=*/0, /*nMode=*/0);
 
     // Then make sure this larger invalidate for the 2nd view is not lost:
     Scheduler::ProcessEventsToIdle();

@@ -1588,7 +1588,7 @@ void notifyCellCursorAt(const ScTabViewShell* pViewShell, SCCOL nCol, SCROW nRow
     ss << rCursor.getX() << ", " << rCursor.getY() << ", " << rCursor.GetWidth() << ", "
        << rCursor.GetHeight() << ", " << nCol << ", " << nRow;
 
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, ss.str().c_str());
+    pViewShell->viewCallback(LOK_CALLBACK_CELL_CURSOR, ss.str().c_str());
     SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle",
                                    ss.str().c_str());
 }

@@ -1407,7 +1407,7 @@ bool ScDocument::SearchAndReplace(
                                 {
                                     OString aPayload = OString::number(nTab);
                                     if (SfxViewShell* pViewShell = SfxViewShell::Current())
-                                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
+                                        pViewShell->viewCallback(LOK_CALLBACK_SET_PART, aPayload);
                                 }
                             }
                         }
@@ -1438,7 +1438,7 @@ bool ScDocument::SearchAndReplace(
                                 {
                                     OString aPayload = OString::number(nTab);
                                     if(SfxViewShell* pViewShell = SfxViewShell::Current())
-                                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
+                                        pViewShell->viewCallback(LOK_CALLBACK_SET_PART, aPayload);
                                 }
                             }
                         }

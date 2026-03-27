@@ -988,7 +988,7 @@ tools::Long SwEditShell::CompareDoc( const SwDoc& rDoc )
             }
         }
         OString aPayload = aWriter.finishAndGetAsOString();
-        pSfxViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
+        pSfxViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload);
     }
 
     return nRet;

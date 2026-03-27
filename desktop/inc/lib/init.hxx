@@ -98,7 +98,7 @@ namespace desktop {
     public:
         DESKTOP_DLLPUBLIC explicit CallbackFlushHandler(COKitDocument* pDocument, COKitCallback pCallback, void* pData);
         DESKTOP_DLLPUBLIC virtual ~CallbackFlushHandler() override;
-        // TODO This should be dropped and the binary libreOfficeKitViewCallback() variants should be called?
+        // TODO This should be dropped and the binary viewCallback() variants should be called?
         DESKTOP_DLLPUBLIC void queue(const int type, const OString& data);
 
         /// Disables callbacks on this handler. Must match with identical count
@@ -127,12 +127,12 @@ namespace desktop {
         }
 
         // SfxLockCallbackInterface
-        virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) override;
-        virtual void libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) override;
-        DESKTOP_DLLPUBLIC virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) override;
-        virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
-        virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
-        virtual void libreOfficeKitViewAddPendingInvalidateTiles() override;
+        virtual void viewCallback(int nType, const OString& pPayload) override;
+        virtual void viewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) override;
+        DESKTOP_DLLPUBLIC virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) override;
+        virtual void viewUpdatedCallback(int nType) override;
+        virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
+        virtual void viewAddPendingInvalidateTiles() override;
         virtual void dumpState(rtl::OStringBuffer &rState) override;
 
     private:
@@ -227,8 +227,8 @@ namespace desktop {
         // For some types only the last message matters (see isUpdatedType()) or only the last message
         // per each viewId value matters (see isUpdatedTypePerViewId()), so instead of using push model
         // where we'd get flooded by repeated messages (which might be costly to generate and process),
-        // the preferred way is that libreOfficeKitViewUpdatedCallback()
-        // or libreOfficeKitViewUpdatedCallbackPerViewId() get called to notify about such a message being
+        // the preferred way is that viewUpdatedCallback()
+        // or viewUpdatedCallbackPerViewId() get called to notify about such a message being
         // needed, and we'll set a flag here to fetch the actual message before flushing.
         void setUpdatedType( int nType, bool value );
         void setUpdatedTypePerViewId( int nType, int nViewId, int nSourceViewId, bool value );

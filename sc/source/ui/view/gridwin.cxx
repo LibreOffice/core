@@ -952,7 +952,7 @@ void ScGridWindow::SendAutofilterPopupPosition(SCCOL nCol, SCROW nRow) {
             writer.put("row", nRow);
         }
         OString info = writer.finishAndGetAsOString();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+        pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, info);
     }
 }
 
@@ -964,7 +964,7 @@ void ScGridWindow::SendAutofilterChange() {
         writer.put("commandName", "AutoFilterChange");
         writer.put("state", true);
         OString info = writer.finishAndGetAsOString();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+        pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, info);
     }
 }
 
@@ -2456,7 +2456,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aRoot, true);
 
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU,
+                pViewShell->viewCallback(LOK_CALLBACK_CONTEXT_MENU,
                                                        OString(aStream.str()));
             }
         }
@@ -2725,7 +2725,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     int mouseY = aPos.Y() / fPPTX;
                     OString aMsg(aUrl.toUtf8() + " coordinates: " + aCursor + ", "
                                  + OString::number(mouseX) + ", " + OString::number(mouseY));
-                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg);
+                    pViewShell->viewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg);
                 } else
                     ScGlobal::OpenURL(aUrl, aTarget);
             }
@@ -2853,7 +2853,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                          + pViewShell->GetViewData().describeCellCursorAt(nPosX, nPosY) + ", "
                          + OString::number(aPos.X() / pViewShell->GetViewData().GetPPTX()) + ", "
                          + OString::number(aPos.Y() / pViewShell->GetViewData().GetPPTY()));
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg);
+            pViewShell->viewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg);
         }
     }
 
@@ -5375,7 +5375,7 @@ void ScGridWindow::updateLOKInputHelp(const OUString& title, const OUString& con
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_INPUT_HELP, OString(aStream.str()));
+    pViewShell->viewCallback(LOK_CALLBACK_VALIDITY_INPUT_HELP, OString(aStream.str()));
 }
 
 void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos ) const
@@ -5385,14 +5385,14 @@ void ScGridWindow::updateLOKValListButton( bool bVisible, const ScAddress& rPos 
     std::stringstream ss;
     ss << nX << ", " << nY << ", " << static_cast<unsigned int>(bVisible);
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_VALIDITY_LIST_BUTTON, OString(ss.str()));
+    pViewShell->viewCallback(LOK_CALLBACK_VALIDITY_LIST_BUTTON, OString(ss.str()));
 }
 
 void ScGridWindow::notifyKitCellFollowJump( ) const
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
 
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SC_FOLLOW_JUMP, getCellCursor());
+    pViewShell->viewCallback(LOK_CALLBACK_SC_FOLLOW_JUMP, getCellCursor());
 }
 
 void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
@@ -6254,14 +6254,14 @@ void ScGridWindow::notifyKitCellCursor() const
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
 
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, getCellCursor());
+    pViewShell->viewCallback(LOK_CALLBACK_CELL_CURSOR, getCellCursor());
     if (bListValButton && aListValPos == mrViewData.GetCurPos())
         updateLOKValListButton(true, aListValPos);
     std::vector<tools::Rectangle> aRects;
     GetSelectionRects(aRects);
     if (aRects.empty() || !mrViewData.IsActive())
     {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
+        pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
         SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
     }
 }
@@ -6405,7 +6405,7 @@ void ScGridWindow::DeleteCursorOverlay()
     if (comphelper::COKit::isActive() && mrViewData.HasEditView(eWhich))
         return;
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY"_ostr);
+    pViewShell->viewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY"_ostr);
     SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
     mpOOCursors.reset();
 }
@@ -6557,8 +6557,8 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     if (!aBoundingBox.IsEmpty())
         sBoundingBoxString = aBoundingBox.toString();
     OString aRectListString = rectanglesToString(rLogicRects);
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectListString);
+    pViewShell->viewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
+    pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectListString);
 
     if (bInPrintTwips)
     {
@@ -6627,8 +6627,8 @@ void ScGridWindow::updateOtherKitSelections() const
             if (!aBoundingBox.IsEmpty())
                 sBoundingBoxString = aBoundingBox.toString();
 
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
+            pViewShell->viewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
+            pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
         }
         else
             SfxLokHelper::notifyOtherView(*it, pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
@@ -6667,10 +6667,10 @@ void updateCOKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & r
             writer.put("rectangle", sRectangleString);
         }
         OString info = writer.finishAndGetAsOString();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+        pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, info);
     }
     else
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_AUTO_FILL_AREA, sRectangleString);
+        pViewShell->viewCallback(LOK_CALLBACK_CELL_AUTO_FILL_AREA, sRectangleString);
 }
 
 } //end anonymous namespace
@@ -6990,8 +6990,8 @@ void ScGridWindow::UpdateSelectionOverlay()
     else
     {
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY"_ostr);
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY"_ostr);
+        pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY"_ostr);
+        pViewShell->viewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY"_ostr);
         SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
 
         ScInputHandler* pViewHdl = ScModule::get()->GetInputHdl(pViewShell);
@@ -7409,8 +7409,8 @@ void ScGridWindow::UpdateDragRectOverlay()
             if (!aBoundingBox.IsEmpty())
                 sBoundingBoxString = aBoundingBox.toString();
 
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
+            pViewShell->viewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, sBoundingBoxString);
+            pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
         }
     }
 }

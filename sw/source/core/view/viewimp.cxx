@@ -169,7 +169,7 @@ void SwViewShellImp::AddPendingLOKInvalidation( const SwRect& rRect )
 {
     std::vector<SwRect>& l = m_pendingLOKInvalidations;
     if(l.empty() && m_rShell.GetSfxViewShell()) // Announce that these invalidations will need flushing.
-        m_rShell.GetSfxViewShell()->libreOfficeKitViewAddPendingInvalidateTiles();
+        m_rShell.GetSfxViewShell()->viewAddPendingInvalidateTiles();
     // These are often repeated, so check first for duplicates.
     if( std::find( l.begin(), l.end(), rRect ) == l.end())
         l.push_back( rRect );

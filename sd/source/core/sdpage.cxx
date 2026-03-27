@@ -1863,7 +1863,7 @@ void SdPage::NotifyPagePropertyChanges()
     OString out = jsonWriter.finishAndGetAsOString();
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
     {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, out);
+        pViewShell->viewCallback(LOK_CALLBACK_STATE_CHANGED, out);
         pViewShell->NotifyOtherViews(LOK_CALLBACK_STATE_CHANGED, ".uno:PageSetup"_ostr, out);
     }
 }

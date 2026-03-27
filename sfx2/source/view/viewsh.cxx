@@ -945,7 +945,7 @@ void LOKDocumentFocusListener::notifyEditingInSelectionState(bool bParagraph)
     if (m_pViewShell)
     {
         SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEditingInSelectionState: payload: \n" << aPayload);
-        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE, aPayload.c_str());
+        m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE, aPayload.c_str());
     }
 }
 
@@ -979,7 +979,7 @@ void LOKDocumentFocusListener::notifyFocusedParagraphChanged(bool force)
                        m_sFocusedParagraph, m_nCaretPosition,
                        m_nSelectionStart, m_nSelectionEnd, m_nListPrefixLength, force);
 
-        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_FOCUS_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_FOCUS_CHANGED, aPayload.c_str());
     }
 }
 
@@ -994,7 +994,7 @@ void LOKDocumentFocusListener::notifyCaretChanged()
     if (m_pViewShell)
     {
         SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyCaretChanged: " << m_nCaretPosition);
-        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_CARET_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_CARET_CHANGED, aPayload.c_str());
     }
 }
 
@@ -1012,7 +1012,7 @@ void LOKDocumentFocusListener::notifyTextSelectionChanged()
     {
         SAL_INFO("lok.a11y",  "LOKDocumentFocusListener::notifyTextSelectionChanged: "
                 "start: " << m_nSelectionStart << ", end: " << m_nSelectionEnd);
-        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, aPayload.c_str());
     }
 }
 
@@ -1066,7 +1066,7 @@ void LOKDocumentFocusListener::notifyFocusedCellChanged(
                        m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd,
                        m_nListPrefixLength, false);
 
-        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED, aPayload.c_str());
+        m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED, aPayload.c_str());
     }
 }
 
@@ -1152,7 +1152,7 @@ void LOKDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
         {
             SAL_INFO("lok.a11y",  "LOKDocumentFocusListener::notifySelectionChanged: "
                                      "action: " << sAction << ", name: " << sName);
-            m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_SELECTION_CHANGED, aPayload.c_str());
+            m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_SELECTION_CHANGED, aPayload.c_str());
         }
     }
 }
@@ -3334,78 +3334,78 @@ static bool ignoreCOKitViewCallback(int nType, const SfxViewShell_Impl* pImpl)
     return false;
 }
 
-void SfxViewShell::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const
+void SfxViewShell::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const
 {
     if (ignoreCOKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
-        pImpl->m_pCOKitViewCallback->libreOfficeKitViewInvalidateTilesCallback(pRect, nPart, nMode);
+        pImpl->m_pCOKitViewCallback->viewInvalidateTilesCallback(pRect, nPart, nMode);
     else
         SAL_INFO(
             "sfx.view",
-            "SfxViewShell::libreOfficeKitViewInvalidateTilesCallback no callback set!");
+            "SfxViewShell::viewInvalidateTilesCallback no callback set!");
 }
 
-void SfxViewShell::libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const
+void SfxViewShell::viewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const
 {
     if (ignoreCOKitViewCallback(nType, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
-        pImpl->m_pCOKitViewCallback->libreOfficeKitViewCallbackWithViewId(nType, pPayload, nViewId);
+        pImpl->m_pCOKitViewCallback->viewCallbackWithViewId(nType, pPayload, nViewId);
     else
         SAL_INFO(
             "sfx.view",
-            "SfxViewShell::libreOfficeKitViewCallbackWithViewId no callback set! Dropped payload of type "
+            "SfxViewShell::viewCallbackWithViewId no callback set! Dropped payload of type "
             << lokCallbackTypeToString(nType) << ": [" << pPayload << ']');
 }
 
-void SfxViewShell::libreOfficeKitViewCallback(int nType, const OString& pPayload) const
+void SfxViewShell::viewCallback(int nType, const OString& pPayload) const
 {
     if (ignoreCOKitViewCallback(nType, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
-        pImpl->m_pCOKitViewCallback->libreOfficeKitViewCallback(nType, pPayload);
+        pImpl->m_pCOKitViewCallback->viewCallback(nType, pPayload);
     else
         SAL_INFO(
             "sfx.view",
-            "SfxViewShell::libreOfficeKitViewCallback no callback set! Dropped payload of type "
+            "SfxViewShell::viewCallback no callback set! Dropped payload of type "
             << lokCallbackTypeToString(nType) << ": [" << pPayload << ']');
 }
 
-void SfxViewShell::libreOfficeKitViewUpdatedCallback(int nType) const
+void SfxViewShell::viewUpdatedCallback(int nType) const
 {
     if (ignoreCOKitViewCallback(nType, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
-        pImpl->m_pCOKitViewCallback->libreOfficeKitViewUpdatedCallback(nType);
+        pImpl->m_pCOKitViewCallback->viewUpdatedCallback(nType);
     else
         SAL_INFO(
             "sfx.view",
-            "SfxViewShell::libreOfficeKitViewUpdatedCallback no callback set! Dropped payload of type "
+            "SfxViewShell::viewUpdatedCallback no callback set! Dropped payload of type "
             << lokCallbackTypeToString(nType));
 }
 
-void SfxViewShell::libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const
+void SfxViewShell::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const
 {
     if (ignoreCOKitViewCallback(nType, pImpl.get()))
         return;
     if (pImpl->m_pCOKitViewCallback)
-        pImpl->m_pCOKitViewCallback->libreOfficeKitViewUpdatedCallbackPerViewId(nType, nViewId, nSourceViewId);
+        pImpl->m_pCOKitViewCallback->viewUpdatedCallbackPerViewId(nType, nViewId, nSourceViewId);
     else
         SAL_INFO(
             "sfx.view",
-            "SfxViewShell::libreOfficeKitViewUpdatedCallbackPerViewId no callback set! Dropped payload of type "
+            "SfxViewShell::viewUpdatedCallbackPerViewId no callback set! Dropped payload of type "
             << lokCallbackTypeToString(nType));
 }
 
-void SfxViewShell::libreOfficeKitViewAddPendingInvalidateTiles()
+void SfxViewShell::viewAddPendingInvalidateTiles()
 {
     if (pImpl->m_pCOKitViewCallback)
-        pImpl->m_pCOKitViewCallback->libreOfficeKitViewAddPendingInvalidateTiles();
+        pImpl->m_pCOKitViewCallback->viewAddPendingInvalidateTiles();
     else
         SAL_INFO(
             "sfx.view",
-            "SfxViewShell::libreOfficeKitViewAddPendingInvalidateTiles no callback set!");
+            "SfxViewShell::viewAddPendingInvalidateTiles no callback set!");
 }
 
 void SfxViewShell::afterCallbackRegistered()

@@ -1009,9 +1009,9 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
 
                     if (bKit)
                     {
-                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
+                        pViewShell->viewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,
                             aViewColors.m_aAppBackgroundColor.AsRGBHexString().toUtf8());
-                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR,
+                        pViewShell->viewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR,
                             aViewColors.m_aDocColor.AsRGBHexString().toUtf8());
                     }
 

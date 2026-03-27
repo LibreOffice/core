@@ -234,7 +234,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         {
             m_nPageLastTime = nPage;
             OString aPayload = OString::number(nPage - 1);
-            pNotifyViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
+            pNotifyViewShell->viewCallback(LOK_CALLBACK_SET_PART, aPayload);
         }
 
         // This may get called often, so instead of sending data on each update, just notify
@@ -729,7 +729,7 @@ void SwSelPaintRects::HighlightContentControl()
             }
 
             OString pJson(aJson.finishAndGetAsOString());
-            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson);
+            GetShell()->GetSfxViewShell()->viewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson);
         }
         if (m_pContentControlOverlay)
         {
@@ -813,7 +813,7 @@ void SwSelPaintRects::HighlightContentControl()
             tools::JsonWriter aJson;
             aJson.put("action", "hide");
             OString pJson(aJson.finishAndGetAsOString());
-            pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson);
+            pNotifySh->viewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson);
         }
         m_pContentControlOverlay.reset();
 
@@ -1007,7 +1007,7 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
             return;
         }
 
-        pSfxViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect);
+        pSfxViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect);
         SfxLokHelper::notifyOtherViews(pSfxViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
 }

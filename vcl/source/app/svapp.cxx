@@ -326,7 +326,7 @@ OString Application::dumpNotifyState() const
     return "notimpl"_ostr;
 }
 
-void Application::libreOfficeKitViewCallback(int nType, const OString& pPayload) const
+void Application::viewCallback(int nType, const OString& pPayload) const
 {
     if (!comphelper::COKit::isActive())
         return;

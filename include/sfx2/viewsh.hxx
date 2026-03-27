@@ -397,16 +397,16 @@ public:
     /// dump view state for diagnostics
     void dumpCOKitViewState(rtl::OStringBuffer &rState);
     /// Invokes the registered callback, if there are any.
-    virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) const override;
-    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const override;
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const override;
-    virtual void libreOfficeKitViewUpdatedCallback(int nType) const override;
-    virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const override;
-    // Performs any pending calls to libreOfficeKitViewInvalidateTilesCallback() as necessary.
+    virtual void viewCallback(int nType, const OString& pPayload) const override;
+    virtual void viewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const override;
+    virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const override;
+    virtual void viewUpdatedCallback(int nType) const override;
+    virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const override;
+    // Performs any pending calls to viewInvalidateTilesCallback() as necessary.
     virtual void flushPendingLOKInvalidateTiles();
-    virtual void libreOfficeKitViewAddPendingInvalidateTiles() override;
-    // Returns current payload for nType, after libreOfficeKitViewUpdatedCallback() or
-    // libreOfficeKitViewUpdatedCallbackPerViewId() were called. If no payload should
+    virtual void viewAddPendingInvalidateTiles() override;
+    // Returns current payload for nType, after viewUpdatedCallback() or
+    // viewUpdatedCallbackPerViewId() were called. If no payload should
     // be generated, the ignore flag should be set.
     virtual std::optional<OString> getLOKPayload(int nType, int nViewId) const;
 

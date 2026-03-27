@@ -63,7 +63,7 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
         return;
 
     OString aPayload = rAnnotation.ToJSON(nType);
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload);
+    pViewShell->viewCallback(LOK_CALLBACK_COMMENT, aPayload);
 }
 
 void LOKCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
@@ -77,7 +77,7 @@ void LOKCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
     const SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload);
+        pViewShell->viewCallback(LOK_CALLBACK_COMMENT, aPayload);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

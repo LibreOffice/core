@@ -163,7 +163,7 @@ void FormShellManager::RegisterAtCenterPane()
     {
         SfxViewShell* sfxViewShell = pShell->GetViewShell();
         if (sfxViewShell)
-            pShell->GetViewShell()->libreOfficeKitViewInvalidateTilesCallback(nullptr, sfxViewShell->getPart(), sfxViewShell->getEditMode());
+            pShell->GetViewShell()->viewInvalidateTilesCallback(nullptr, sfxViewShell->getPart(), sfxViewShell->getEditMode());
     }
 }
 

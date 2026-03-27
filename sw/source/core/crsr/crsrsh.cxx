@@ -2620,7 +2620,7 @@ void SwCursorShell::sendLOKCursorUpdates()
     }
 
     OString pChar = aJsonWriter.finishAndGetAsOString();
-    pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, pChar);
+    pNotifySh->viewCallback(LOK_CALLBACK_TABLE_SELECTED, pChar);
 }
 
 void SwCursorShell::RefreshBlockCursor()
@@ -2911,7 +2911,7 @@ void SwCursorShell::ShowCursor()
     if (SfxViewShell* pNotifySh = comphelper::COKit::isActive() ? GetSfxViewShell() : nullptr)
     {
         const OString aPayload = OString::boolean(m_bSVCursorVis);
-        pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
+        pNotifySh->viewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
         SfxLokHelper::notifyOtherViews(pNotifySh, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 
@@ -2933,7 +2933,7 @@ void SwCursorShell::HideCursor()
     if (SfxViewShell* pNotifySh = comphelper::COKit::isActive() ? GetSfxViewShell() : nullptr)
     {
         OString aPayload = OString::boolean(m_bSVCursorVis);
-        pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
+        pNotifySh->viewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
         SfxLokHelper::notifyOtherViews(pNotifySh, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
     }
 }

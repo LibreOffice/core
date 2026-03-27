@@ -1730,19 +1730,19 @@ void CallbackFlushHandler::resetUpdatedTypePerViewId( int nType, int nViewId )
     }
 }
 
-void CallbackFlushHandler::libreOfficeKitViewCallback(int nType, const OString& pPayload)
+void CallbackFlushHandler::viewCallback(int nType, const OString& pPayload)
 {
     CallbackData callbackData(pPayload);
     queue(nType, callbackData);
 }
 
-void CallbackFlushHandler::libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId)
+void CallbackFlushHandler::viewCallbackWithViewId(int nType, const OString& pPayload, int nViewId)
 {
     CallbackData callbackData(pPayload, nViewId);
     queue(nType, callbackData);
 }
 
-void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
+void CallbackFlushHandler::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
 {
     tools::Rectangle& rPaintedTiles = m_aPaintedTiles[nPart][nMode];
     if (rPaintedTiles.IsEmpty())
@@ -1775,7 +1775,7 @@ void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools
     queue(LOK_CALLBACK_INVALIDATE_TILES, callbackData);
 }
 
-void CallbackFlushHandler::libreOfficeKitViewUpdatedCallback(int nType)
+void CallbackFlushHandler::viewUpdatedCallback(int nType)
 {
     assert(isUpdatedType( nType ));
     std::unique_lock<std::recursive_mutex> lock(m_mutex);
@@ -1783,7 +1783,7 @@ void CallbackFlushHandler::libreOfficeKitViewUpdatedCallback(int nType)
     setUpdatedType(nType, true);
 }
 
-void CallbackFlushHandler::libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId)
+void CallbackFlushHandler::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId)
 {
     assert(isUpdatedTypePerViewId( nType ));
     std::unique_lock<std::recursive_mutex> lock(m_mutex);
@@ -1808,7 +1808,7 @@ void CallbackFlushHandler::dumpState(rtl::OStringBuffer &rState)
     }
 }
 
-void CallbackFlushHandler::libreOfficeKitViewAddPendingInvalidateTiles()
+void CallbackFlushHandler::viewAddPendingInvalidateTiles()
 {
     // Invoke() will call flushPendingLOKInvalidateTiles(), so just make sure the timer is active.
     scheduleFlush();

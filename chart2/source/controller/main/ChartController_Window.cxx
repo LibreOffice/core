@@ -1257,7 +1257,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aRoot, true);
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, OString(aStream.str()));
+                pViewShell->viewCallback(LOK_CALLBACK_CONTEXT_MENU, OString(aStream.str()));
             }
         }
         else

@@ -1568,7 +1568,7 @@ void SdDrawDocument::NotifyLOKHasOverviewPage(bool bHasOverviewPage)
     ::tools::JsonWriter aJsonWriter;
     aJsonWriter.put("commandName", ".uno:HasOverviewPage");
     aJsonWriter.put("state", bHasOverviewPage ? std::string_view("true") : std::string_view("false"));
-    pViewShell->libreOfficeKitViewCallback(
+    pViewShell->viewCallback(
         LOK_CALLBACK_STATE_CHANGED, aJsonWriter.finishAndGetAsOString());
 }
 

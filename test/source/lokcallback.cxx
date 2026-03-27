@@ -51,20 +51,19 @@ inline void TestLokCallbackWrapper::callCallback(int nType, const char* pPayload
     startTimer();
 }
 
-void TestLokCallbackWrapper::libreOfficeKitViewCallback(int nType, const rtl::OString& pPayload)
+void TestLokCallbackWrapper::viewCallback(int nType, const rtl::OString& pPayload)
 {
     callCallback(nType, pPayload.getStr(), NO_VIEWID);
 }
 
-void TestLokCallbackWrapper::libreOfficeKitViewCallbackWithViewId(int nType,
-                                                                  const rtl::OString& pPayload,
-                                                                  int nViewId)
+void TestLokCallbackWrapper::viewCallbackWithViewId(int nType, const rtl::OString& pPayload,
+                                                    int nViewId)
 {
     callCallback(nType, pPayload.getStr(), nViewId);
 }
 
-void TestLokCallbackWrapper::libreOfficeKitViewInvalidateTilesCallback(
-    const tools::Rectangle* pRect, int nPart, int nMode)
+void TestLokCallbackWrapper::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart,
+                                                         int nMode)
 {
     OStringBuffer buf(64);
     if (pRect)
@@ -86,7 +85,7 @@ void TestLokCallbackWrapper::libreOfficeKitViewInvalidateTilesCallback(
 // is presumably this class using CallbackFlushHandler internally by default,
 // but having an option to use this simpler code when needed.
 
-void TestLokCallbackWrapper::libreOfficeKitViewUpdatedCallback(int nType)
+void TestLokCallbackWrapper::viewUpdatedCallback(int nType)
 {
     if (std::find(m_updatedTypes.begin(), m_updatedTypes.end(), nType) == m_updatedTypes.end())
     {
@@ -95,8 +94,7 @@ void TestLokCallbackWrapper::libreOfficeKitViewUpdatedCallback(int nType)
     }
 }
 
-void TestLokCallbackWrapper::libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId,
-                                                                        int nSourceViewId)
+void TestLokCallbackWrapper::viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId)
 {
     const PerViewIdData data{ nType, nViewId, nSourceViewId };
     auto& l = m_updatedTypesPerViewId;
@@ -111,7 +109,7 @@ void TestLokCallbackWrapper::libreOfficeKitViewUpdatedCallbackPerViewId(int nTyp
     startTimer();
 }
 
-void TestLokCallbackWrapper::libreOfficeKitViewAddPendingInvalidateTiles()
+void TestLokCallbackWrapper::viewAddPendingInvalidateTiles()
 {
     // Invoke() will call flushPendingLOKInvalidateTiles().
     startTimer();
@@ -164,7 +162,7 @@ void TestLokCallbackWrapper::flushLOKData()
     {
         std::optional<OString> payload = viewShell->getLOKPayload(type, m_viewId);
         if (payload)
-            libreOfficeKitViewCallback(type, *payload);
+            viewCallback(type, *payload);
     }
     for (const PerViewIdData& data : updatedTypesPerViewId)
     {
@@ -174,7 +172,7 @@ void TestLokCallbackWrapper::flushLOKData()
         assert(viewShell != nullptr);
         std::optional<OString> payload = viewShell->getLOKPayload(data.type, data.viewId);
         if (payload)
-            libreOfficeKitViewCallbackWithViewId(data.type, *payload, data.viewId);
+            viewCallbackWithViewId(data.type, *payload, data.viewId);
     }
 }
 

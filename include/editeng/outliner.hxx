@@ -427,12 +427,12 @@ public:
 class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI OutlinerViewShell
 {
 public:
-    virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) const = 0;
-    virtual void libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const = 0;
-    virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const = 0;
-    virtual void libreOfficeKitViewUpdatedCallback(int nType) const = 0;
-    virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const = 0;
-    virtual void libreOfficeKitViewAddPendingInvalidateTiles() = 0;
+    virtual void viewCallback(int nType, const OString& pPayload) const = 0;
+    virtual void viewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const = 0;
+    virtual void viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode) const = 0;
+    virtual void viewUpdatedCallback(int nType) const = 0;
+    virtual void viewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const = 0;
+    virtual void viewAddPendingInvalidateTiles() = 0;
     virtual ViewShellId GetViewShellId() const = 0;
     virtual ViewShellDocId GetDocId() const = 0;
     /// Wrapper around SfxLokHelper::notifyOtherViews().

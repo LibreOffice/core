@@ -3315,7 +3315,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                                 m_pData->m_pObjectShell.get() ) );
 
         if (SfxViewShell* pNotifyView = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr)
-            pNotifyView->libreOfficeKitViewCallback(LOK_CALLBACK_EXPORT_FILE, "ERROR"_ostr);
+            pNotifyView->viewCallback(LOK_CALLBACK_EXPORT_FILE, "ERROR"_ostr);
 
         std::stringstream aErrCode;
         aErrCode << nErrCode;

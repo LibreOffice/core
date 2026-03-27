@@ -525,7 +525,7 @@ void SmGraphicWidget::SetIsCursorVisible(bool bVis)
     if (comphelper::COKit::isActive())
     {
         mrViewShell.SendCaretToLOK();
-        mrViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
+        mrViewShell.viewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
                                                OString::boolean(bVis));
     }
 }
@@ -2052,7 +2052,7 @@ public:
     {
         if (comphelper::COKit::isActive())
             if (auto pViewShell = GetViewShell_Impl())
-                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
+                pViewShell->viewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
                                                        OString::boolean(false));
 
         SfxBaseController::dispose();
@@ -2266,12 +2266,12 @@ void SmViewShell::SendCaretToLOK() const
     const int nViewId = sal_Int32(GetViewShellId());
     if (const auto payload = getLOKPayload(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, nViewId))
     {
-        libreOfficeKitViewCallbackWithViewId(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+        viewCallbackWithViewId(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
                                              *payload, nViewId);
     }
     if (const auto payload = getLOKPayload(LOK_CALLBACK_TEXT_SELECTION, nViewId))
     {
-        libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, *payload);
+        viewCallback(LOK_CALLBACK_TEXT_SELECTION, *payload);
     }
 }
 
