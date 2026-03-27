@@ -1742,7 +1742,6 @@ void DocxSdrExport::writeOnlyTextOfFrame(ww8::Frame const* pParentFrame)
     ExportDataSaveRestore aDataGuard(m_pImpl->getExport(), nStt, nEnd, pParentFrame);
 
     m_pImpl->setBodyPrAttrList(sax_fastparser::FastSerializerHelper::createAttrList().get());
-    ::comphelper::FlagRestorationGuard const g(m_pImpl->m_bFlyFrameGraphic, true);
     comphelper::ValueRestorationGuard vg(m_pImpl->getExport().m_nTextTyp, TXT_TXTBOX);
     m_pImpl->getExport().WriteText();
 }
