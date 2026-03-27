@@ -422,6 +422,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         double fMin = std::numeric_limits<double>::infinity(), fMax = -std::numeric_limits<double>::infinity();
         bool isValueInteger = true;
         bool isContainsDate = rCache.IsDateDimension(i);
+        bool hasInvalidDate = false;
         bool isLongText = false;
         for (const auto& rFieldItem : rFieldItems)
         {
@@ -436,6 +437,9 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
                 double fVal = rtl::math::approxValue(rFieldItem.GetValue());
                 fMin = std::min(fMin, fVal);
                 fMax = std::max(fMax, fVal);
+
+                if (isContainsDate && fVal > MAX_DATE)
+                    hasInvalidDate = true;
 
                 // Check if all values are integers
                 if (isValueInteger && (modf(fVal, &o3tl::temporary(double())) != 0.0))
@@ -461,7 +465,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         const bool isContainsBlank = aDPTypes.count(ScDPItemData::Empty) > 0;
         const bool isContainsNumber
             = !isContainsDate && aDPTypesWithoutBlank.count(ScDPItemData::Value) > 0;
-        bool isContainsNonDate = !(isContainsDate && aDPTypesWithoutBlank.size() <= 1);
+        bool isContainsNonDate = !(isContainsDate && aDPTypesWithoutBlank.size() <= 1 && !hasInvalidDate);
 
         // XML_containsSemiMixedTypes possible values:
         // 1 - (Default) at least one text value, or can also contain a mix of other data types and blank values,
@@ -486,7 +490,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         // XML_containsMixedType possible values:
         // 1 - field contains more than one data type
         // 0 - (Default) only one data type. The field can still contain blank values (that's why we are using aDPTypesWithoutBlank)
-        if (aDPTypesWithoutBlank.size() > 1)
+        if (aDPTypesWithoutBlank.size() > 1 || (isContainsDate && hasInvalidDate))
             pAttList->add(XML_containsMixedTypes, ToPsz10(true));
 
         // If field contain mixed types (Date and Numbers), MS Excel is saving only "minDate" and "maxDate" and not "minValue" and "maxValue"
