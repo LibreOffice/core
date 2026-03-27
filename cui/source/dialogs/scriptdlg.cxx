@@ -308,7 +308,8 @@ void SvxScriptOrgDialog::insertEntry(
     const OUString& rText, const OUString& rBitmap, const weld::TreeIter* pParent,
     bool bChildrenOnDemand, std::unique_ptr<SFEntry> && aUserData, bool bSelect)
 {
-    OUString sId(weld::toId(aUserData.release())); // XXX possible leak
+    SFEntry* pUserData = aUserData.release();
+    OUString sId(weld::toId(pUserData)); // XXX possible leak
     m_xScriptsBox->insert(pParent, -1, &rText, &sId, nullptr, nullptr,
                           bChildrenOnDemand, m_xScratchIter.get());
     m_xScriptsBox->set_image(*m_xScratchIter, rBitmap);
@@ -316,6 +317,8 @@ void SvxScriptOrgDialog::insertEntry(
     {
         m_xScriptsBox->set_cursor(*m_xScratchIter);
         m_xScriptsBox->select(*m_xScratchIter);
+        if (pUserData)
+            CheckButtons(pUserData->GetNode());
     }
 }
 
