@@ -55,7 +55,7 @@ class SfxPrinter;
 class NotifyEvent;
 class SfxInPlaceClient;
 class CoKitCallbackInterface;
-class LOKDocumentFocusListener;
+class KitDocumentFocusListener;
 class SfxStoringHelper;
 class VCLXPopupMenu;
 class CalendarWrapper;
@@ -176,7 +176,7 @@ friend class SfxPrinterController;
     std::unique_ptr<CalendarWrapper> mpCalendar;
     LOKDeviceFormFactor         maLOKDeviceFormFactor;
     bool                        mbLOKAccessibilityEnabled;
-    rtl::Reference<LOKDocumentFocusListener>   mpLOKDocumentFocusListener;
+    rtl::Reference<KitDocumentFocusListener>   mpKitDocumentFocusListener;
     std::unordered_set<OUString>    mvLOKBlockedCommandList;
     OUString maLOKTimezone;
     bool maLOKIsTimezoneSet;
@@ -218,8 +218,8 @@ private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
 
-    LOKDocumentFocusListener& GetLOKDocumentFocusListener();
-    const LOKDocumentFocusListener& GetLOKDocumentFocusListener() const;
+    KitDocumentFocusListener& GetKitDocumentFocusListener();
+    const KitDocumentFocusListener& GetKitDocumentFocusListener() const;
     bool lokReadOnlyView : 1 = false; // When true, this is a LOK readonly view
     bool allowChangeComments : 1 = false; // Allow editing comments in readonly view mode
     bool allowManageRedlines : 1 = false; // Allow accepting/rejecting changes in readonly view mode

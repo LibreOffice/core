@@ -1285,7 +1285,7 @@ sfx2/source/notebookbar/SfxNotebookBar.cxx:54
 sfx2/source/view/classificationcontroller.cxx:73
     sfx2::(anonymous namespace)::ClassificationCategoriesController m_aPropertyListener ClassificationPropertyListener
 sfx2/source/view/viewsh.cxx:748
-    LOKDocumentFocusListener m_aRefList std::unordered_set<uno::Reference<uno::XInterface> >
+    KitDocumentFocusListener m_aRefList std::unordered_set<uno::Reference<uno::XInterface> >
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:298

@@ -730,7 +730,7 @@ void aboutFocusedCellChanged(sal_Int32 nOutCount, const std::vector<TableSizeTyp
     }
     inListStream << "]";
 
-    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyFocusedCellChanged: "
+    SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyFocusedCellChanged: "
             "\n outCount: " << nOutCount
             << "\n inList: " << inListStream.str()
             << "\n row: " << nRow
@@ -741,7 +741,7 @@ void aboutFocusedCellChanged(sal_Int32 nOutCount, const std::vector<TableSizeTyp
 }
 } // anonymous namespace
 
-class LOKDocumentFocusListener :
+class KitDocumentFocusListener :
     public ::cppu::WeakImplHelper< accessibility::XAccessibleEventListener >
 {
     static constexpr sal_Int64 MAX_ATTACHABLE_CHILDREN = 100;
@@ -763,7 +763,7 @@ class LOKDocumentFocusListener :
     uno::Reference<accessibility::XAccessible> m_xSelectedObject;
 
 public:
-    explicit LOKDocumentFocusListener(const SfxViewShell* pViewShell);
+    explicit KitDocumentFocusListener(const SfxViewShell* pViewShell);
 
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
@@ -845,7 +845,7 @@ private:
                                  const OUString& sAction);
 };
 
-LOKDocumentFocusListener::LOKDocumentFocusListener(const SfxViewShell* pViewShell)
+KitDocumentFocusListener::KitDocumentFocusListener(const SfxViewShell* pViewShell)
     : m_pViewShell(pViewShell)
     , m_nDocumentType(0)
     , m_nCaretPosition(0)
@@ -857,7 +857,7 @@ LOKDocumentFocusListener::LOKDocumentFocusListener(const SfxViewShell* pViewShel
 {
 }
 
-void LOKDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::ptree& aPayloadTree, bool force) const
+void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::ptree& aPayloadTree, bool force) const
 {
     bool bLeftToRight = m_nCaretPosition == m_nSelectionEnd;
     aPayloadTree.put("content", m_sFocusedParagraph.toUtf8().getStr());
@@ -870,7 +870,7 @@ void LOKDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         aPayloadTree.put("force", 1);
 }
 
-void LOKDocumentFocusListener::paragraphPropertiesToJson(std::string& aPayload, bool force) const
+void KitDocumentFocusListener::paragraphPropertiesToJson(std::string& aPayload, bool force) const
 {
     boost::property_tree::ptree aPayloadTree;
     paragraphPropertiesToTree(aPayloadTree, force);
@@ -879,10 +879,10 @@ void LOKDocumentFocusListener::paragraphPropertiesToJson(std::string& aPayload, 
     aPayload = aStream.str();
 }
 
-OUString LOKDocumentFocusListener::getFocusedParagraph() const
+OUString KitDocumentFocusListener::getFocusedParagraph() const
 {
-    aboutView("LOKDocumentFocusListener::getFocusedParagraph", this, m_pViewShell);
-    aboutParagraph("LOKDocumentFocusListener::getFocusedParagraph",
+    aboutView("KitDocumentFocusListener::getFocusedParagraph", this, m_pViewShell);
+    aboutParagraph("KitDocumentFocusListener::getFocusedParagraph",
                    m_sFocusedParagraph, m_nCaretPosition,
                    m_nSelectionStart, m_nSelectionEnd, m_nListPrefixLength);
 
@@ -892,10 +892,10 @@ OUString LOKDocumentFocusListener::getFocusedParagraph() const
     return sRet;
 }
 
-int LOKDocumentFocusListener::getCaretPosition() const
+int KitDocumentFocusListener::getCaretPosition() const
 {
-    aboutView("LOKDocumentFocusListener::getCaretPosition", this, m_pViewShell);
-    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::getCaretPosition: " << m_nCaretPosition);
+    aboutView("KitDocumentFocusListener::getCaretPosition", this, m_pViewShell);
+    SAL_INFO("lok.a11y", "KitDocumentFocusListener::getCaretPosition: " << m_nCaretPosition);
     return m_nCaretPosition;
 }
 
@@ -905,9 +905,9 @@ int LOKDocumentFocusListener::getCaretPosition() const
 // The problem is that the initially focused paragraph could not be the one user has clicked on,
 // when there are more than a single paragraph.
 // So in some case sending the focused paragraph could be misleading.
-void LOKDocumentFocusListener::notifyEditingInSelectionState(bool bParagraph)
+void KitDocumentFocusListener::notifyEditingInSelectionState(bool bParagraph)
 {
-    aboutView("LOKDocumentFocusListener::notifyEditingInSelectionState", this, m_pViewShell);
+    aboutView("KitDocumentFocusListener::notifyEditingInSelectionState", this, m_pViewShell);
 
     boost::property_tree::ptree aPayloadTree;
     bool bIsCell = !m_sSelectedCellAddress.isEmpty();
@@ -944,7 +944,7 @@ void LOKDocumentFocusListener::notifyEditingInSelectionState(bool bParagraph)
     std::string aPayload = aStream.str();
     if (m_pViewShell)
     {
-        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEditingInSelectionState: payload: \n" << aPayload);
+        SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEditingInSelectionState: payload: \n" << aPayload);
         m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE, aPayload.c_str());
     }
 }
@@ -968,14 +968,14 @@ void LOKDocumentFocusListener::notifyEditingInSelectionState(bool bParagraph)
 //  On the contrary the composition would be aborted, making dictation not possible.
 //  Anyway when the text change has been performed by another view we are in due
 //  to update the clipboard content even if the user is in the middle of a composition.
-void LOKDocumentFocusListener::notifyFocusedParagraphChanged(bool force)
+void KitDocumentFocusListener::notifyFocusedParagraphChanged(bool force)
 {
-    aboutView("LOKDocumentFocusListener::notifyFocusedParagraphChanged", this, m_pViewShell);
+    aboutView("KitDocumentFocusListener::notifyFocusedParagraphChanged", this, m_pViewShell);
     std::string aPayload;
     paragraphPropertiesToJson(aPayload, force);
     if (m_pViewShell)
     {
-        aboutParagraph("LOKDocumentFocusListener::notifyFocusedParagraphChanged",
+        aboutParagraph("KitDocumentFocusListener::notifyFocusedParagraphChanged",
                        m_sFocusedParagraph, m_nCaretPosition,
                        m_nSelectionStart, m_nSelectionEnd, m_nListPrefixLength, force);
 
@@ -983,9 +983,9 @@ void LOKDocumentFocusListener::notifyFocusedParagraphChanged(bool force)
     }
 }
 
-void LOKDocumentFocusListener::notifyCaretChanged()
+void KitDocumentFocusListener::notifyCaretChanged()
 {
-    aboutView("LOKDocumentFocusListener::notifyCaretChanged", this, m_pViewShell);
+    aboutView("KitDocumentFocusListener::notifyCaretChanged", this, m_pViewShell);
     boost::property_tree::ptree aPayloadTree;
     aPayloadTree.put("position", m_nCaretPosition);
     std::stringstream aStream;
@@ -993,14 +993,14 @@ void LOKDocumentFocusListener::notifyCaretChanged()
     std::string aPayload = aStream.str();
     if (m_pViewShell)
     {
-        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyCaretChanged: " << m_nCaretPosition);
+        SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyCaretChanged: " << m_nCaretPosition);
         m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_CARET_CHANGED, aPayload.c_str());
     }
 }
 
-void LOKDocumentFocusListener::notifyTextSelectionChanged()
+void KitDocumentFocusListener::notifyTextSelectionChanged()
 {
-    aboutView("LOKDocumentFocusListener::notifyTextSelectionChanged", this, m_pViewShell);
+    aboutView("KitDocumentFocusListener::notifyTextSelectionChanged", this, m_pViewShell);
     bool bLeftToRight = m_nCaretPosition == m_nSelectionEnd;
     boost::property_tree::ptree aPayloadTree;
     aPayloadTree.put("start", bLeftToRight ? m_nSelectionStart : m_nSelectionEnd);
@@ -1010,17 +1010,17 @@ void LOKDocumentFocusListener::notifyTextSelectionChanged()
     std::string aPayload = aStream.str();
     if (m_pViewShell)
     {
-        SAL_INFO("lok.a11y",  "LOKDocumentFocusListener::notifyTextSelectionChanged: "
+        SAL_INFO("lok.a11y",  "KitDocumentFocusListener::notifyTextSelectionChanged: "
                 "start: " << m_nSelectionStart << ", end: " << m_nSelectionEnd);
         m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED, aPayload.c_str());
     }
 }
 
-void LOKDocumentFocusListener::notifyFocusedCellChanged(
+void KitDocumentFocusListener::notifyFocusedCellChanged(
         sal_Int32 nOutCount, const std::vector<TableSizeType>& aInList,
         sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nRowSpan, sal_Int32 nColSpan)
 {
-    aboutView("LOKDocumentFocusListener::notifyTablePositionChanged", this, m_pViewShell);
+    aboutView("KitDocumentFocusListener::notifyTablePositionChanged", this, m_pViewShell);
     boost::property_tree::ptree aPayloadTree;
     if (nOutCount > 0)
     {
@@ -1062,7 +1062,7 @@ void LOKDocumentFocusListener::notifyFocusedCellChanged(
     if (m_pViewShell)
     {
         aboutFocusedCellChanged(nOutCount, aInList, nRow, nCol, nRowSpan, nColSpan);
-        aboutParagraph("LOKDocumentFocusListener::notifyFocusedCellChanged: paragraph: ",
+        aboutParagraph("KitDocumentFocusListener::notifyFocusedCellChanged: paragraph: ",
                        m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd,
                        m_nListPrefixLength, false);
 
@@ -1070,14 +1070,14 @@ void LOKDocumentFocusListener::notifyFocusedCellChanged(
     }
 }
 
-void LOKDocumentFocusListener::notifySelectionChanged(const uno::Reference<accessibility::XAccessible>& xAccObj,
+void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<accessibility::XAccessible>& xAccObj,
                                                       const OUString& sAction)
 {
     using namespace accessibility;
     if (!xAccObj.is())
         return;
 
-    aboutView("LOKDocumentFocusListener::notifySelectionChanged", this, m_pViewShell);
+    aboutView("KitDocumentFocusListener::notifySelectionChanged", this, m_pViewShell);
     uno::Reference<XAccessibleContext> xContext = xAccObj->getAccessibleContext();
     if (xContext.is())
     {
@@ -1150,14 +1150,14 @@ void LOKDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
         std::string aPayload = aStream.str();
         if (m_pViewShell)
         {
-            SAL_INFO("lok.a11y",  "LOKDocumentFocusListener::notifySelectionChanged: "
+            SAL_INFO("lok.a11y",  "KitDocumentFocusListener::notifySelectionChanged: "
                                      "action: " << sAction << ", name: " << sName);
             m_pViewShell->viewCallback(LOK_CALLBACK_A11Y_SELECTION_CHANGED, aPayload.c_str());
         }
     }
 }
 
-void LOKDocumentFocusListener::disposing( const lang::EventObject& aEvent )
+void KitDocumentFocusListener::disposing( const lang::EventObject& aEvent )
 {
     // Unref the object here, but do not remove as listener since the object
     // might no longer be in a state that safely allows this.
@@ -1166,7 +1166,7 @@ void LOKDocumentFocusListener::disposing( const lang::EventObject& aEvent )
 
 }
 
-bool LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                                                    bool force, const std::string& msg)
 {
     if (!xAccText.is())
@@ -1209,10 +1209,10 @@ bool LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
     else
     {
         SAL_WARN("lok.a11y",
-                 "LOKDocumentFocusListener::updateParagraphInfo: skipped since no caret is present");
+                 "KitDocumentFocusListener::updateParagraphInfo: skipped since no caret is present");
     }
 
-    std::string header = "LOKDocumentFocusListener::updateParagraphInfo";
+    std::string header = "KitDocumentFocusListener::updateParagraphInfo";
     if (msg.size())
         header += ": " + msg;
     aboutParagraph(header, xAccText, force);
@@ -1220,7 +1220,7 @@ bool LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
 
 }
 
-void LOKDocumentFocusListener::updateAndNotifyParagraph(
+void KitDocumentFocusListener::updateAndNotifyParagraph(
         const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
         bool force, const std::string& msg)
 {
@@ -1228,7 +1228,7 @@ void LOKDocumentFocusListener::updateAndNotifyParagraph(
         notifyFocusedParagraphChanged(force);
 }
 
-void LOKDocumentFocusListener::resetParagraphInfo()
+void KitDocumentFocusListener::resetParagraphInfo()
 {
     m_sFocusedParagraph = "";
     m_nCaretPosition = 0;
@@ -1242,7 +1242,7 @@ void LOKDocumentFocusListener::resetParagraphInfo()
 // the selected object is put in Source.
 // The following function helps to retrieve the selected object independently on where it has been put.
 uno::Reference< accessibility::XAccessible >
-LOKDocumentFocusListener::getSelectedObject(const accessibility::AccessibleEventObject& aEvent) const
+KitDocumentFocusListener::getSelectedObject(const accessibility::AccessibleEventObject& aEvent) const
 {
     uno::Reference< accessibility::XAccessible > xSelectedObject;
     if (isText(m_nDocumentType))
@@ -1256,7 +1256,7 @@ LOKDocumentFocusListener::getSelectedObject(const accessibility::AccessibleEvent
     return xSelectedObject;
 }
 
-void LOKDocumentFocusListener::onShapeSelectionChanged(
+void KitDocumentFocusListener::onShapeSelectionChanged(
     const uno::Reference<accessibility::XAccessible>& xSelectedObject,
     const OUString& sAction)
 {
@@ -1271,7 +1271,7 @@ void LOKDocumentFocusListener::onShapeSelectionChanged(
     notifySelectionChanged(xSelectedObject, sAction);
 }
 
-void LOKDocumentFocusListener::onFocusedParagraphInWriterTable(
+void KitDocumentFocusListener::onFocusedParagraphInWriterTable(
     const uno::Reference<accessibility::XAccessibleTable>& xTable,
     sal_Int64 nChildIndex,
     const uno::Reference<accessibility::XAccessibleText>& xAccText
@@ -1337,14 +1337,14 @@ void LOKDocumentFocusListener::onFocusedParagraphInWriterTable(
     notifyFocusedCellChanged(nOutCount, aInList, nRow, nCol, nRowSpan, nColSpan);
 }
 
-void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventObject& aEvent)
+void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventObject& aEvent)
 {
     using namespace accessibility;
-    aboutView("LOKDocumentFocusListener::notifyEvent", this, m_pViewShell);
+    aboutView("KitDocumentFocusListener::notifyEvent", this, m_pViewShell);
 
     try
     {
-        aboutEvent("LOKDocumentFocusListener::notifyEvent", aEvent);
+        aboutEvent("KitDocumentFocusListener::notifyEvent", aEvent);
 
         switch (aEvent.EventId)
         {
@@ -1355,7 +1355,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                 aEvent.NewValue >>= nState;
                 sal_Int64 nOldState = accessibility::AccessibleStateType::INVALID;
                 aEvent.OldValue >>= nOldState;
-                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: STATE_CHANGED: "
+                SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: STATE_CHANGED: "
                                         " New State: " << stateSetToString(nState)
                                      << ", Old State: " << stateSetToString(nOldState));
 
@@ -1440,7 +1440,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                                     if (!hasState(aEvent, AccessibleStateType::ACTIVE))
                                     {
                                         SAL_WARN("lok.a11y",
-                                                 "LOKDocumentFocusListener::notifyEvent: FOCUSED: "
+                                                 "KitDocumentFocusListener::notifyEvent: FOCUSED: "
                                                  "cell not ACTIVE for editing yet");
                                         return;
                                     }
@@ -1460,7 +1460,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                             {
                                 updateAndNotifyParagraph(xAccText, false, "STATE_CHANGED: FOCUSED");
                             }
-                            aboutTextFormatting("LOKDocumentFocusListener::notifyEvent: STATE_CHANGED: FOCUSED", xAccText);
+                            aboutTextFormatting("KitDocumentFocusListener::notifyEvent: STATE_CHANGED: FOCUSED", xAccText);
 
                             break;
                         }
@@ -1479,7 +1479,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
 
                 if (nNewPos >= 0)
                 {
-                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: CARET_CHANGED: "
+                    SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: CARET_CHANGED: "
                                          "new pos: " << nNewPos << ", nOldPos: " << nOldPos);
 
                     uno::Reference<XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
@@ -1502,7 +1502,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                         {
                             notifyCaretChanged();
                         }
-                        aboutParagraph("LOKDocumentFocusListener::notifyEvent: CARET_CHANGED", xAccText);
+                        aboutParagraph("KitDocumentFocusListener::notifyEvent: CARET_CHANGED", xAccText);
                     }
                 }
                 break;
@@ -1514,12 +1514,12 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
 
                 if (aEvent.OldValue >>= aDeletedText)
                 {
-                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
+                    SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
                                              "deleted text: >" << aDeletedText.SegmentText << "<");
                 }
                 if (aEvent.NewValue >>= aInsertedText)
                 {
-                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
+                    SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
                                              "inserted text: >" << aInsertedText.SegmentText << "<");
                 }
                 uno::Reference<XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
@@ -1537,7 +1537,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                 if (!isFocused(aEvent))
                 {
                     SAL_WARN("lok.a11y",
-                             "LOKDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: "
+                             "KitDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: "
                              "skip non focused paragraph");
                     return;
                 }
@@ -1554,7 +1554,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
 
                     m_sSelectedText = xAccText->getSelectedText();
                     SAL_INFO("lok.a11y",
-                             "LOKDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: selected text: >"
+                             "KitDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: selected text: >"
                               << m_sSelectedText << "<");
 
                     // Calc: when editing a formula send the update content
@@ -1587,7 +1587,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                         return; // selecting the same object; note: on editing selected object is cleared
                 else
                     m_xSelectedObject = xSelectedObject;
-                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
+                SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
                                          "m_xSelectedObject.is(): " << m_xSelectedObject.is());
 
                 OUString sAction = selectionEventTypeToString(aEvent.EventId);
@@ -1615,7 +1615,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                                 // So selection can't be a cell range.
                                 sal_Int32 nDotIndex = m_sSelectedText.indexOf('.');
                                 OUString sCellAddress = m_sSelectedText.copy(nDotIndex + 1);
-                                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
+                                SAL_INFO("lok.a11y", "KitDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
                                                          "cell address: >" << sCellAddress << "<");
                                 if (m_sSelectedCellAddress == sCellAddress)
                                 {
@@ -1654,11 +1654,11 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
     catch( const lang::IndexOutOfBoundsException& )
     {
         LOK_WARN("lok.a11y",
-                 "LOKDocumentFocusListener::notifyEvent:Focused object has invalid index in parent");
+                 "KitDocumentFocusListener::notifyEvent:Focused object has invalid index in parent");
     }
 }
 
-uno::Reference< accessibility::XAccessible > LOKDocumentFocusListener::getAccessible(const lang::EventObject& aEvent )
+uno::Reference< accessibility::XAccessible > KitDocumentFocusListener::getAccessible(const lang::EventObject& aEvent )
 {
     uno::Reference< accessibility::XAccessible > xAccessible(aEvent.Source, uno::UNO_QUERY);
 
@@ -1666,7 +1666,7 @@ uno::Reference< accessibility::XAccessible > LOKDocumentFocusListener::getAccess
         return xAccessible;
 
     SAL_WARN("lok.a11y",
-             "LOKDocumentFocusListener::getAccessible: Event source doesn't implement XAccessible.");
+             "KitDocumentFocusListener::getAccessible: Event source doesn't implement XAccessible.");
 
     uno::Reference< accessibility::XAccessibleContext > xContext(aEvent.Source, uno::UNO_QUERY);
 
@@ -1684,16 +1684,16 @@ uno::Reference< accessibility::XAccessible > LOKDocumentFocusListener::getAccess
     }
 
     LOK_WARN("lok.a11y",
-             "LOKDocumentFocusListener::getAccessible: Can't get any accessible object from event source.");
+             "KitDocumentFocusListener::getAccessible: Can't get any accessible object from event source.");
 
     return uno::Reference< accessibility::XAccessible >();
 }
 
-void LOKDocumentFocusListener::attachRecursive(
+void KitDocumentFocusListener::attachRecursive(
     const uno::Reference< accessibility::XAccessible >& xAccessible
 )
 {
-    LOK_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(1): xAccessible: " << xAccessible.get());
+    LOK_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(1): xAccessible: " << xAccessible.get());
 
     uno::Reference< accessibility::XAccessibleContext > xContext =
         xAccessible->getAccessibleContext();
@@ -1702,14 +1702,14 @@ void LOKDocumentFocusListener::attachRecursive(
         attachRecursive(xAccessible, xContext);
 }
 
-void LOKDocumentFocusListener::attachRecursive(
+void KitDocumentFocusListener::attachRecursive(
     const uno::Reference< accessibility::XAccessible >& xAccessible,
     const uno::Reference< accessibility::XAccessibleContext >& xContext
 )
 {
     try
     {
-        LOK_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(2): xAccessible: "
+        LOK_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(2): xAccessible: "
                                  << xAccessible.get() << ", role: " << xContext->getAccessibleRole()
                                  << ", name: " << xContext->getAccessibleName()
                                  << ", parent: " << xContext->getAccessibleParent().get()
@@ -1727,18 +1727,18 @@ void LOKDocumentFocusListener::attachRecursive(
     }
     catch (const uno::Exception& e)
     {
-        LOK_WARN("lok.a11y", "LOKDocumentFocusListener::attachRecursive(2): raised exception: " << e.Message);
+        LOK_WARN("lok.a11y", "KitDocumentFocusListener::attachRecursive(2): raised exception: " << e.Message);
     }
 }
 
-void LOKDocumentFocusListener::attachRecursive(
+void KitDocumentFocusListener::attachRecursive(
     const uno::Reference< accessibility::XAccessible >& xAccessible,
     const uno::Reference< accessibility::XAccessibleContext >& xContext,
     const sal_Int64 nStateSet
 )
 {
-    aboutView("LOKDocumentFocusListener::attachRecursive (3)", this, m_pViewShell);
-    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #1: this: " << this
+    aboutView("KitDocumentFocusListener::attachRecursive (3)", this, m_pViewShell);
+    SAL_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(3) #1: this: " << this
             << ", xAccessible: " << xAccessible.get()
             << ", role: " << xContext->getAccessibleRole()
             << ", name: " << xContext->getAccessibleName()
@@ -1751,12 +1751,12 @@ void LOKDocumentFocusListener::attachRecursive(
 
     if (!xBroadcaster.is())
         return;
-    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #2: xBroadcaster.is()");
+    SAL_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(3) #2: xBroadcaster.is()");
     // If not already done, add the broadcaster to the list and attach as listener.
     const uno::Reference< uno::XInterface >& xInterface = xBroadcaster;
     if( m_aRefList.insert(xInterface).second )
     {
-        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
+        SAL_INFO("lok.a11y", "KitDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
         xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
         if (isDocument(xContext->getAccessibleRole()))
@@ -1810,7 +1810,7 @@ void LOKDocumentFocusListener::attachRecursive(
                             if (nPos >= 0)
                             {
                                 attachRecursive(xChild);
-                                updateParagraphInfo(xAccText, false, "LOKDocumentFocusListener::attachRecursive(3)");
+                                updateParagraphInfo(xAccText, false, "KitDocumentFocusListener::attachRecursive(3)");
                                 break;
                             }
                         }
@@ -1821,7 +1821,7 @@ void LOKDocumentFocusListener::attachRecursive(
     }
 }
 
-void LOKDocumentFocusListener::detachRecursive(
+void KitDocumentFocusListener::detachRecursive(
     const uno::Reference< accessibility::XAccessible >& xAccessible,
     bool bForce
 )
@@ -1833,15 +1833,15 @@ void LOKDocumentFocusListener::detachRecursive(
         detachRecursive(xContext, bForce);
 }
 
-void LOKDocumentFocusListener::detachRecursive(
+void KitDocumentFocusListener::detachRecursive(
     const uno::Reference< accessibility::XAccessibleContext >& xContext,
     bool bForce
 )
 {
-    aboutView("LOKDocumentFocusListener::detachRecursive (2)", this, m_pViewShell);
+    aboutView("KitDocumentFocusListener::detachRecursive (2)", this, m_pViewShell);
     sal_Int64 nStateSet = xContext->getAccessibleStateSet();
 
-    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::detachRecursive(2): this: " << this
+    SAL_INFO("lok.a11y", "KitDocumentFocusListener::detachRecursive(2): this: " << this
             << ", name: " << xContext->getAccessibleName()
             << ", parent: " << xContext->getAccessibleParent().get()
             << ", child count: " << xContext->getAccessibleChildCount());
@@ -1861,7 +1861,7 @@ void LOKDocumentFocusListener::detachRecursive(
     detachRecursive(xContext, nStateSet, bForce);
 }
 
-void LOKDocumentFocusListener::detachRecursive(
+void KitDocumentFocusListener::detachRecursive(
     const uno::Reference< accessibility::XAccessibleContext >& xContext,
     const sal_Int64 nStateSet,
     bool bForce
@@ -2809,13 +2809,13 @@ SfxViewShell::~SfxViewShell()
 
 OUString SfxViewShell::getA11yFocusedParagraph() const
 {
-    const LOKDocumentFocusListener& rDocFocusListener = GetLOKDocumentFocusListener();
+    const KitDocumentFocusListener& rDocFocusListener = GetKitDocumentFocusListener();
     return rDocFocusListener.getFocusedParagraph();
 }
 
 int SfxViewShell::getA11yCaretPosition() const
 {
-    const LOKDocumentFocusListener& rDocFocusListener = GetLOKDocumentFocusListener();
+    const KitDocumentFocusListener& rDocFocusListener = GetKitDocumentFocusListener();
     return rDocFocusListener.getCaretPosition();
 }
 
@@ -3413,7 +3413,7 @@ void SfxViewShell::afterCallbackRegistered()
     LOK_INFO("sfx.view", "SfxViewShell::afterCallbackRegistered invoked");
     if (GetLOKAccessibilityState())
     {
-        LOKDocumentFocusListener& rDocFocusListener = GetLOKDocumentFocusListener();
+        KitDocumentFocusListener& rDocFocusListener = GetKitDocumentFocusListener();
         rDocFocusListener.notifyFocusedParagraphChanged();
     }
 }
@@ -3463,18 +3463,18 @@ void SfxViewShell::SetLOKLanguageTag(const OUString& rBcp47LanguageTag)
         maLOKLanguageTag = std::move(aFallbackTag);
 }
 
-LOKDocumentFocusListener& SfxViewShell::GetLOKDocumentFocusListener()
+KitDocumentFocusListener& SfxViewShell::GetKitDocumentFocusListener()
 {
-    if (mpLOKDocumentFocusListener)
-        return *mpLOKDocumentFocusListener;
+    if (mpKitDocumentFocusListener)
+        return *mpKitDocumentFocusListener;
 
-    mpLOKDocumentFocusListener = new LOKDocumentFocusListener(this);
-    return *mpLOKDocumentFocusListener;
+    mpKitDocumentFocusListener = new KitDocumentFocusListener(this);
+    return *mpKitDocumentFocusListener;
 }
 
-const LOKDocumentFocusListener& SfxViewShell::GetLOKDocumentFocusListener() const
+const KitDocumentFocusListener& SfxViewShell::GetKitDocumentFocusListener() const
 {
-    return const_cast<SfxViewShell*>(this)->GetLOKDocumentFocusListener();
+    return const_cast<SfxViewShell*>(this)->GetKitDocumentFocusListener();
 }
 
 void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
@@ -3483,7 +3483,7 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
         return;
     mbLOKAccessibilityEnabled = bEnabled;
 
-    LOKDocumentFocusListener& rDocumentFocusListener = GetLOKDocumentFocusListener();
+    KitDocumentFocusListener& rDocumentFocusListener = GetKitDocumentFocusListener();
 
     if (!pWindow)
         return;
@@ -3502,7 +3502,7 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
         }
         catch (const uno::Exception&)
         {
-            LOK_WARN("SetLOKAccessibilityState", "Exception caught processing LOKDocumentFocusListener::attachRecursive");
+            LOK_WARN("SetLOKAccessibilityState", "Exception caught processing KitDocumentFocusListener::attachRecursive");
         }
     }
     else
@@ -3513,7 +3513,7 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
         }
         catch (const uno::Exception&)
         {
-            LOK_WARN("SetLOKAccessibilityState", "Exception caught processing LOKDocumentFocusListener::detachRecursive");
+            LOK_WARN("SetLOKAccessibilityState", "Exception caught processing KitDocumentFocusListener::detachRecursive");
         }
     }
 }

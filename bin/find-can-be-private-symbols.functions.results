@@ -4015,8 +4015,8 @@ SfxViewFrameItem::Clone(SfxItemPool*) const
 SfxViewFrameItem::operator==(SfxPoolItem const&) const
 SfxViewShell::GetActivePrinter() const
 SfxViewShell::GetClipboardNotifier() const
-SfxViewShell::GetLOKDocumentFocusListener()
-SfxViewShell::GetLOKDocumentFocusListener() const
+SfxViewShell::GetKitDocumentFocusListener()
+SfxViewShell::GetKitDocumentFocusListener() const
 SfxViewShell::GetPrinter(bool)
 SfxViewShell::InitInterface_Impl()
 SfxViewShell::JumpToMark(rtl::OUString const&)
