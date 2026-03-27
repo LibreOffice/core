@@ -23,6 +23,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <editsh.hxx>
+#include <fmtanchr.hxx>
 #include <frmatr.hxx>
 #include <frameformats.hxx>
 #include <unotxdoc.hxx>
@@ -35,19 +36,24 @@ public:
     Test() : SwModelTestBase(u"/sw/qa/extras/ooxmlexport/data/"_ustr) {}
 };
 
-// TODO: the re-import doesn't work just yet, but that isn't a regression...
 CPPUNIT_TEST_FIXTURE(Test, testFlyInFly)
 {
     createSwDoc("ooo39250-1-min.rtf");
-    save(TestFilter::DOCX);
+    saveAndReload(TestFilter::DOCX);
     // check that anchor of text frame is in other text frame
     uno::Reference<text::XTextContent> const xAnchored(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAnchored.is());
-    CPPUNIT_ASSERT_EQUAL(u"Frame1"_ustr/*generated name*/, uno::Reference<container::XNamed>(xAnchored, uno::UNO_QUERY_THROW)->getName());
+    // generated name
+    OUString sName = uno::Reference<container::XNamed>(xAnchored, uno::UNO_QUERY_THROW)->getName();
+    CPPUNIT_ASSERT(sName == u"Frame1" || sName == u"Frame 1");
     uno::Reference<text::XText> const xAnchorText(xAnchored->getAnchor()->getText());
     uno::Reference<text::XTextFrame> const xAnchorFrame(xAnchorText, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAnchorFrame.is());
     CPPUNIT_ASSERT_EQUAL(u"Frame3"_ustr, uno::Reference<container::XNamed>(xAnchorFrame, uno::UNO_QUERY_THROW)->getName());
+
+    // All frames are floating frames - not inline
+    for (auto& pSpz : *getSwDoc()->GetSpzFrameFormats())
+        CPPUNIT_ASSERT(RndStdIds::FLY_AS_CHAR != pSpz->GetAnchor().GetAnchorId());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf125778_lostPageBreakTOX, "tdf125778_lostPageBreakTOX.docx")
