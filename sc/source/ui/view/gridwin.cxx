@@ -146,7 +146,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <tools/json_writer.hxx>
 
 #include <vector>

@@ -9,7 +9,7 @@
 
 #include <sal/config.h>
 #include "helper/qahelper.hxx"
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <vcl/keycodes.hxx>
 #include <comphelper/servicehelper.hxx>

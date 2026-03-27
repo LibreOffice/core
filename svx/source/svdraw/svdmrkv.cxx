@@ -57,7 +57,7 @@
 #include <o3tl/string_view.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokcomponenthelpers.hxx>

@@ -9,7 +9,7 @@
 
 #include <test/lokcallback.hxx>
 
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <rtl/strbuf.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/lok.hxx>

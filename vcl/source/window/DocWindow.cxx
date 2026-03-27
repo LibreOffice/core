@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 
 #include <sal/log.hxx>
 #include <vcl/DocWindow.hxx>

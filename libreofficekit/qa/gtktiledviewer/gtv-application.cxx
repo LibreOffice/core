@@ -12,7 +12,7 @@
 #include "gtv-application.hxx"
 #include "gtv-application-window.hxx"
 
-#include <LibreOfficeKit/COKitGtk.h>
+#include <COKit/COKitGtk.h>
 
 #include <string>
 

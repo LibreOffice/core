@@ -73,7 +73,7 @@
 #include <formula/FormulaCompiler.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <output.hxx>
 
 #include <utility>

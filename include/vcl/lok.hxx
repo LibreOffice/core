@@ -13,7 +13,7 @@
 #include <sal/config.h>
 #include <vcl/dllapi.h>
 #include <rtl/strbuf.hxx>
-#include <LibreOfficeKit/COKitTypes.h>
+#include <COKit/COKitTypes.h>
 
 namespace vcl::lok
 {

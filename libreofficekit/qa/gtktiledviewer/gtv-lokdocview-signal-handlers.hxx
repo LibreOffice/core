@@ -11,7 +11,7 @@
 #define GTV_LOKDOCVIEW_SIGNAL_HANDLERS_H
 
 #include <gtk/gtk.h>
-#include <LibreOfficeKit/COKitGtk.h>
+#include <COKit/COKitGtk.h>
 
 namespace LOKDocViewSigHandlers {
     void editChanged(LOKDocView* pDocView, gboolean bWasEdit, gpointer);

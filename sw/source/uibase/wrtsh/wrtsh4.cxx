@@ -20,7 +20,7 @@
 #include <wrtsh.hxx>
 #include <viscrs.hxx>
 
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <comphelper/string.hxx>
 #include <sfx2/lokhelper.hxx>
 

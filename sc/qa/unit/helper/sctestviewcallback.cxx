@@ -11,7 +11,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <test/unoapixml_test.hxx>

@@ -84,7 +84,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>

@@ -28,7 +28,7 @@
 #include <editeng/prntitem.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <unotools/datetime.hxx>
 #include <sfx2/viewsh.hxx>
 #include <o3tl/string_view.hxx>

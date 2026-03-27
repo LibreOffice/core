@@ -95,7 +95,7 @@ public:
                 continue;
             StringRef aFileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(canonicalDecl->getBeginLoc()));
             // leave the kit API alone
-            if (loplugin::isSamePathname(aFileName, SRCDIR "/include/LibreOfficeKit/COKit.hxx"))
+            if (loplugin::isSamePathname(aFileName, SRCDIR "/include/COKit/COKit.hxx"))
                 continue;
             // don't feel like touching this right now
             if (loplugin::isSamePathname(aFileName, SRCDIR "/include/vcl/weld.hxx"))

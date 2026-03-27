@@ -102,9 +102,9 @@ include/editeng/unotext.hxx:628
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/filter/msfilter/svdfppt.hxx:541
     ProcessData aBackgroundColoredObjects ::std::vector<rtl::Reference<SdrObject> >
-include/LibreOfficeKit/COKitGtk.h:41
+include/COKit/COKitGtk.h:41
     _LOKDocView aDrawingArea GtkDrawingArea
-include/LibreOfficeKit/COKitGtk.h:46
+include/COKit/COKitGtk.h:46
     _LOKDocViewClass parent_class GtkDrawingAreaClass
 include/oox/vml/vmlshapecontext.hxx:117
     oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>

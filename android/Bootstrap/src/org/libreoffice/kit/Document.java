@@ -54,7 +54,7 @@ public class Document {
 
     /**
      * Callback message types
-     * Refer to https://opengrok.libreoffice.org/xref/core/include/LibreOfficeKit/COKitEnums.h
+     * Refer to https://opengrok.libreoffice.org/xref/core/include/COKit/COKitEnums.h
      * for more details about each callback.
      */
     public static final int CALLBACK_INVALIDATE_TILES = 0;

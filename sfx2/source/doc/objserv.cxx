@@ -64,7 +64,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <tools/link.hxx>
 #include <svl/cryptosign.hxx>
 

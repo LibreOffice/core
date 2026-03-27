@@ -61,7 +61,7 @@
 #include <tools/json_writer.hxx>
 #include <formula/formulahelper.hxx>
 #include <formula/funcvarargs.h>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <osl/diagnose.h>
 

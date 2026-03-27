@@ -30,9 +30,9 @@
 #endif
 #endif
 
-#include <LibreOfficeKit/COKitInit.h>
-#include <LibreOfficeKit/COKit.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitInit.h>
+#include <COKit/COKit.hxx>
+#include <COKit/COKitEnums.h>
 
 using namespace ::boost;
 using namespace ::lok;

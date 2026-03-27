@@ -94,7 +94,7 @@
 #include <scabstdlg.hxx>
 #include <formula/errorcodes.hxx>
 #include <documentlinkmgr.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <sfx2/lokhelper.hxx>
 
 #define SC_IDLE_MIN     150

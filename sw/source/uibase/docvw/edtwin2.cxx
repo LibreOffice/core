@@ -66,7 +66,7 @@
 #include <unomap.hxx>
 #include <names.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <viscrs.hxx>
 
 namespace {

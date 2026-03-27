@@ -14,7 +14,7 @@
 #include "gtv-signal-handlers.hxx"
 #include "gtv-helpers.hxx"
 
-#include <LibreOfficeKit/COKitGtk.h>
+#include <COKit/COKitGtk.h>
 
 #include <algorithm>
 #include <filesystem>

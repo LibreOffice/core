@@ -49,7 +49,7 @@
 #include <vector>
 
 #include <tools/json_writer.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 
 using namespace css;
 using namespace css::sheet;

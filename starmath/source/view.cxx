@@ -32,7 +32,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>

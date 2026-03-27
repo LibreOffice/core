@@ -76,7 +76,7 @@
 #include <svx/unoshape.hxx>
 #include <PropertyHelper.hxx>
 
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>

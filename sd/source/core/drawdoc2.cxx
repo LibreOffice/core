@@ -68,7 +68,7 @@
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>
 
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include "PageListWatcher.hxx"
 #include <strings.hxx>
 #include <unokywds.hxx>

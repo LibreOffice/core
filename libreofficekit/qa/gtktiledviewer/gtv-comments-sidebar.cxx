@@ -15,7 +15,7 @@
 #include "gtv-helpers.hxx"
 #include "gtv-comments-sidebar.hxx"
 
-#include <LibreOfficeKit/COKitGtk.h>
+#include <COKit/COKitGtk.h>
 
 #include <boost/property_tree/json_parser.hpp>
 

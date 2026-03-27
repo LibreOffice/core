@@ -103,7 +103,7 @@ void CheckConfigMacros::checkMacro( const Token& macroToken, SourceLocation loca
         {
         const char* filename = compiler.getSourceManager().getPresumedLoc( location ).getFilename();
         if( filename == NULL
-            || ( !hasPathnamePrefix(filename, SRCDIR "/include/LibreOfficeKit/")
+            || ( !hasPathnamePrefix(filename, SRCDIR "/include/COKit/")
                 && !hasPathnamePrefix(filename, WORKDIR "/UnpackedTarball/" )))
             {
             report( DiagnosticsEngine::Error, "checking whether a config macro %0 is defined",

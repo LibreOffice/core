@@ -12,8 +12,8 @@
 
 #include <iostream>
 
-#include <LibreOfficeKit/COKitGtk.h>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitGtk.h>
+#include <COKit/COKitEnums.h>
 
 #include "gtv-application-window.hxx"
 #include "gtv-lok-dialog.hxx"

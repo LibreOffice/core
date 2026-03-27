@@ -188,7 +188,7 @@ for d in definitionSet:
     if location.startswith("compilerplugins/clang/test"):
         continue
     # leave this alone for now
-    if location.startswith("include/LibreOfficeKit"):
+    if location.startswith("include/COKit"):
         continue
     # template stuff
     if location.startswith("include/vcl/vclptr.hxx"):
@@ -284,7 +284,7 @@ for d in definitionSet:
     if location.startswith("include/vcl/vclptr.hxx"):
         continue
     # external API
-    if location.startswith("include/LibreOfficeKit/COKit.hxx"):
+    if location.startswith("include/COKit/COKit.hxx"):
         continue
     tmp2set.add((method, location))
 

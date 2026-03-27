@@ -367,8 +367,8 @@ def filter_ignore(line, module):
        return ''
 
     ignore_list = [
-            'LibreOfficeKit/COKitEnums.h', # Needs special directives
-            'LibreOfficeKit/COKitTypes.h', # Needs special directives
+            'COKit/COKitEnums.h', # Needs special directives
+            'COKit/COKitTypes.h', # Needs special directives
             'jerror.h',     # c++ unfriendly
             'jpeglib.h',    # c++ unfriendly
             'boost/spirit/include/classic_core.hpp' # depends on BOOST_SPIRIT_DEBUG

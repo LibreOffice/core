@@ -13,7 +13,7 @@
 
 #include <com/sun/star/text/XTextDocument.hpp>
 
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <test/lokcallback.hxx>

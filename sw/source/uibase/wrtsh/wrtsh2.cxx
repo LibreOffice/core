@@ -56,7 +56,7 @@
 
 #include <memory>
 
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/event.hxx>
 #include <sal/log.hxx>

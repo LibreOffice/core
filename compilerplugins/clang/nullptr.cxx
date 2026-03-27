@@ -252,7 +252,7 @@ bool Nullptr::TraverseInitListExpr(InitListExpr * expr, DataRecursionQueue * que
 bool Nullptr::isInLokIncludeFile(SourceLocation spellingLocation) const {
     return loplugin::hasPathnamePrefix(
         getFilenameOfLocation(spellingLocation),
-        SRCDIR "/include/LibreOfficeKit/");
+        SRCDIR "/include/COKit/");
 }
 
 bool Nullptr::isFromCIncludeFile(SourceLocation spellingLocation) const {

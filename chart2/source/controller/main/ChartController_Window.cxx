@@ -87,7 +87,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 #include <sfx2/dispatch.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <officecfg/Office/Common.hxx>
 
 #define DRGPIX    2     // Drag MinMove in Pixel

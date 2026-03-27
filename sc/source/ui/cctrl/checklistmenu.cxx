@@ -32,7 +32,7 @@
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <tools/json_writer.hxx>
 #include <svl/numformat.hxx>
 

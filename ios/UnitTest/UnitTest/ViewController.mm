@@ -24,7 +24,7 @@
 #include <cppunit/TestRunner.h>
 #include <cppunit/TextTestProgressListener.h>
 
-#import <LibreOfficeKit/COKit.hxx>
+#import <COKit/COKit.hxx>
 
 extern "C" {
 #import <native-code.h>

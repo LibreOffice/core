@@ -45,7 +45,7 @@
 #include <uitool.hxx>
 #include <cmdid.h>
 #include <docsh.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 

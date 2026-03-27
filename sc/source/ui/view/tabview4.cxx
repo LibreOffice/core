@@ -28,7 +28,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <inputhdl.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <tools/json_writer.hxx>
 #include <output.hxx>
 

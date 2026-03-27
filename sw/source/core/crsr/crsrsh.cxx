@@ -63,7 +63,7 @@
 #if ENABLE_YRS
 #include <IDocumentState.hxx>
 #endif
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/lokhelper.hxx>

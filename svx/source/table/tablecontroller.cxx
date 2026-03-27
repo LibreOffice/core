@@ -64,7 +64,7 @@
 #include <svx/sdtditm.hxx>
 #include "tableundo.hxx"
 #include "tablelayouter.hxx"
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <memory>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>

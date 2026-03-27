@@ -80,7 +80,7 @@
 #include <svtools/langtab.hxx>
 
 #include <editeng/editerr.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 
 #include <memory>
 

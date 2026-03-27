@@ -584,9 +584,9 @@ include/framework/dispatchhelper.hxx:65
     framework::DispatchHelper m_xBroadcaster css::uno::Reference<css::uno::XInterface>
 include/framework/framelistanalyzer.hxx:121
     framework::FrameListAnalyzer m_xHelp css::uno::Reference<css::frame::XFrame>
-include/LibreOfficeKit/COKit.h:379
+include/COKit/COKit.h:379
     _LibreOfficeKitDocumentClass getPartInfo char *(*)(LibreOfficeKitDocument *, int)
-include/LibreOfficeKit/COKit.h:384
+include/COKit/COKit.h:384
     _LibreOfficeKitDocumentClass paintWindowDPI void (*)(LibreOfficeKitDocument *, unsigned int, unsigned char *, const int, const int, const int, const int, const double)
 include/oox/core/fragmenthandler.hxx:55
     oox::core::FragmentBaseData mxLocator css::uno::Reference<css::xml::sax::XLocator>

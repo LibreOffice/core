@@ -79,7 +79,7 @@
 #include <comphelper/lok.hxx>
 #include <o3tl/unreachable.hxx>
 #include <o3tl/make_shared.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {

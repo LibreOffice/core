@@ -19,10 +19,10 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
-#include <LibreOfficeKit/COKit.h>
-#include <LibreOfficeKit/COKitInit.h>
-#include <LibreOfficeKit/COKitEnums.h>
-#include <LibreOfficeKit/COKitGtk.h>
+#include <COKit/COKit.h>
+#include <COKit/COKitInit.h>
+#include <COKit/COKitEnums.h>
+#include <COKit/COKitGtk.h>
 #include <vcl/event.hxx>
 
 #include "tilebuffer.hxx"

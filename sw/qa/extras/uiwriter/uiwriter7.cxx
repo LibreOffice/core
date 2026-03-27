@@ -60,7 +60,7 @@
 #include <txttypes.hxx>
 #include <SwPortionHandler.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <sfx2/docfilt.hxx>
 #include <vcl/scheduler.hxx>
 #include <config_features.h>

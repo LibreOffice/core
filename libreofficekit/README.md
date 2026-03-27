@@ -83,7 +83,7 @@ object files into a single `.so`, etc).
 
 ### LOK API guidelines
 
-Introducing explicit new API under `include/LibreOfficeKit/` adds type safety but listing each &
+Introducing explicit new API under `include/COKit/` adds type safety but listing each &
 every micro-feature in those headers don't scale. Before extending those headers, consider using one
 of the following alternatives, which require no changes to these headers:
 

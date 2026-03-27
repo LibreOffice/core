@@ -12,7 +12,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <editeng/wghtitem.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <test/lokcallback.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/lokhelper.hxx>

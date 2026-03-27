@@ -16,7 +16,7 @@
 
 #include <osl/detail/android-bootstrap.h>
 
-#include <LibreOfficeKit/COKit.h>
+#include <COKit/COKit.h>
 
 /* LibreOfficeKit */
 

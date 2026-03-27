@@ -45,7 +45,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <comphelper/lok.hxx>
 #include <txtfrm.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <rtl/strbuf.hxx>
 #include <strings.hrc>
 #include <tools/json_writer.hxx>

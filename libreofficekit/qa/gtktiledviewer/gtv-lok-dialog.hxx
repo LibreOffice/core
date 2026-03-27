@@ -12,7 +12,7 @@
 
 #include <gtk/gtk.h>
 
-#include <LibreOfficeKit/COKitGtk.h>
+#include <COKit/COKitGtk.h>
 
 G_BEGIN_DECLS
 

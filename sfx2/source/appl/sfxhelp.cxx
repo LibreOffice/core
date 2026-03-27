@@ -68,7 +68,7 @@
 #include <openuriexternally.hxx>
 
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <sfx2/viewsh.hxx>
 
 #include "newhelp.hxx"

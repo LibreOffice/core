@@ -12,7 +12,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <o3tl/string_view.hxx>
 #include <osl/process.h>
 

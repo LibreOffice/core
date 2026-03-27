@@ -71,7 +71,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <sc.hrc>
 #include <sfx2/bindings.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 
 using namespace com::sun::star;
 

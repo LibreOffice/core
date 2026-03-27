@@ -17,7 +17,7 @@
 #include <vcl/scheduler.hxx>
 #include <osl/process.h>
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <sfx2/viewsh.hxx>
 #include <svx/svdview.hxx>
 #include <o3tl/unit_conversion.hxx>

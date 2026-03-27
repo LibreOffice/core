@@ -70,7 +70,7 @@
 #include <controller/SlsPageSelector.hxx>
 
 #include <comphelper/lok.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <titledockwin.hxx>

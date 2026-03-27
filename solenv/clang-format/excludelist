@@ -4555,11 +4555,11 @@ idl/source/prj/database.cxx
 idl/source/prj/globals.cxx
 idl/source/prj/parser.cxx
 idl/source/prj/svidl.cxx
-include/LibreOfficeKit/COKit.h
-include/LibreOfficeKit/COKit.hxx
-include/LibreOfficeKit/COKitEnums.h
-include/LibreOfficeKit/COKitGtk.h
-include/LibreOfficeKit/COKitInit.h
+include/COKit/COKit.h
+include/COKit/COKit.hxx
+include/COKit/COKitEnums.h
+include/COKit/COKitGtk.h
+include/COKit/COKitInit.h
 include/animations/animationnodehelper.hxx
 include/apple_remote/RemoteControl.h
 include/avmedia/MediaControlBase.hxx

@@ -8,7 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/TypeSerializer.hxx>

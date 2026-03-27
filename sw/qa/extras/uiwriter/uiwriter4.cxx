@@ -40,7 +40,7 @@
 #include <swdtflvr.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/classificationhelper.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/unolingu.hxx>

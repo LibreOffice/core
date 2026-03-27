@@ -2,7 +2,7 @@
 assumeFilename: desktop/source/app/app.cxx
 customAssumeFilenames:
     # Needs  -isystem /usr/include/gtk-3.0
-    include/LibreOfficeKit/COKitGtk.h: libreofficekit/source/gtk/lokdocview.cxx
+    include/COKit/COKitGtk.h: libreofficekit/source/gtk/lokdocview.cxx
     # Needs -I/.../workdir/UnpackedTarball/libxml2/include
     include/comphelper/dumpxmltostring.hxx: chart2/source/view/main/ChartView.cxx
     # Needs -I/.../core/external/unixODBC/inc
@@ -68,7 +68,7 @@ excludelist:
     include/android/compatibility.hxx:
     # TODO check whether actually needed, just silence this for now
     - math.h
-    include/LibreOfficeKit/COKit.h:
+    include/COKit/COKit.h:
     # the unstable API needs C99's bool
     - stdbool.h
     - stdint.h

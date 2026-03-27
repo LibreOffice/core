@@ -285,7 +285,7 @@ ReservedId::Kind ReservedId::determineKind(llvm::StringRef const & id) {
 bool ReservedId::isInLokIncludeFile(SourceLocation spellingLocation) const {
     return loplugin::hasPathnamePrefix(
         getFilenameOfLocation(spellingLocation),
-        SRCDIR "/include/LibreOfficeKit/");
+        SRCDIR "/include/COKit/");
 }
 
 bool ReservedId::isApi(NamedDecl const * decl) {

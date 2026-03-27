@@ -87,7 +87,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
 #include <Outliner.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>

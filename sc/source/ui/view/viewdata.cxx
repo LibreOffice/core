@@ -74,7 +74,7 @@
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 
 using namespace com::sun::star;
 

@@ -36,7 +36,7 @@
 #include <svx/xbtmpit.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
-#include <LibreOfficeKit/COKitEnums.h>
+#include <COKit/COKitEnums.h>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
