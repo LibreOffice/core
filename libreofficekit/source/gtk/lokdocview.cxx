@@ -20,7 +20,7 @@
 
 #include <com/sun/star/awt/Key.hpp>
 #include <LibreOfficeKit/LibreOfficeKit.h>
-#include <LibreOfficeKit/LibreOfficeKitInit.h>
+#include <LibreOfficeKit/COKitInit.h>
 #include <LibreOfficeKit/COKitEnums.h>
 #include <LibreOfficeKit/COKitGtk.h>
 #include <vcl/event.hxx>

@@ -11,7 +11,7 @@
 
 #include "LibreOfficeKit.h"
 #include "COKitEnums.h"
-#include "LibreOfficeKitInit.h"
+#include "COKitInit.h"
 
 /*
  * The reasons this C++ code is not as pretty as it could be are:
@@ -1351,7 +1351,7 @@ public:
 /// instances in the same process. Possibly not even a new one after
 /// destroying a previous one.
 ///
-/// For information on the parameters, see writeup for lok_init_2 in LibreOfficeKitInit.h.
+/// For information on the parameters, see writeup for lok_init_2 in COKitInit.h.
 inline Office* lok_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
 {
     LibreOfficeKit* pThis = lok_init_2(pInstallPath, pUserProfileUrl);

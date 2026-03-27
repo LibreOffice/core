@@ -188,7 +188,7 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	LibreOfficeKit/LibreOfficeKit.hxx \
 	LibreOfficeKit/COKitEnums.h \
 	LibreOfficeKit/LibreOfficeKit.h \
-	LibreOfficeKit/LibreOfficeKitInit.h \
+	LibreOfficeKit/COKitInit.h \
 	LibreOfficeKit/COKitTypes.h \
 ))
 

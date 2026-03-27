@@ -30,7 +30,7 @@
 #endif
 #endif
 
-#include <LibreOfficeKit/LibreOfficeKitInit.h>
+#include <LibreOfficeKit/COKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 #include <LibreOfficeKit/COKitEnums.h>
 

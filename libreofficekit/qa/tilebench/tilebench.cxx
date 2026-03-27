@@ -17,7 +17,7 @@
 #include <osl/time.h>
 
 #include <LibreOfficeKit/COKitEnums.h>
-#include <LibreOfficeKit/LibreOfficeKitInit.h>
+#include <LibreOfficeKit/COKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
 #ifdef IOS

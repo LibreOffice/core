@@ -11,9 +11,9 @@ tiled rendering API).
 LOK functionality can be accessed by including `LibreOfficeKit.h[xx]` in your
 program.
 
-LOK initialisation (`lok_init`) requires the inclusion of `LibreOfficeKitInit.h` in
+LOK initialisation (`lok_init`) requires the inclusion of `COKitInit.h` in
 your program. If you use the C++ `LibreOfficeKit.hxx` header, it already includes
-`LibreOfficeKitInit.h` for you.
+`COKitInit.h` for you.
 
 (`LibreOfficeKit.hxx` is a simple and fully inlined C++ wrapper for the same
 functionality as in `LibreOfficeKit.h`.)

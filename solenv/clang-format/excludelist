@@ -4559,7 +4559,7 @@ include/LibreOfficeKit/LibreOfficeKit.h
 include/LibreOfficeKit/LibreOfficeKit.hxx
 include/LibreOfficeKit/COKitEnums.h
 include/LibreOfficeKit/COKitGtk.h
-include/LibreOfficeKit/LibreOfficeKitInit.h
+include/LibreOfficeKit/COKitInit.h
 include/animations/animationnodehelper.hxx
 include/apple_remote/RemoteControl.h
 include/avmedia/MediaControlBase.hxx
