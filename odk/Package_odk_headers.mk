@@ -187,7 +187,7 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	$(if $(ENABLE_GTK3),LibreOfficeKit/COKitGtk.h) \
 	LibreOfficeKit/LibreOfficeKit.hxx \
 	LibreOfficeKit/COKitEnums.h \
-	LibreOfficeKit/LibreOfficeKit.h \
+	LibreOfficeKit/COKit.h \
 	LibreOfficeKit/COKitInit.h \
 	LibreOfficeKit/COKitTypes.h \
 ))

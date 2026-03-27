@@ -19,7 +19,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/Key.hpp>
-#include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/COKit.h>
 #include <LibreOfficeKit/COKitInit.h>
 #include <LibreOfficeKit/COKitEnums.h>
 #include <LibreOfficeKit/COKitGtk.h>

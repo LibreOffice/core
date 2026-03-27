@@ -8,7 +8,7 @@
  */
 
 #define LOK_USE_UNSTABLE_API
-#include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/COKit.h>
 #include <LibreOfficeKit/COKitInit.h>
 
 // fake usage for loplugin:unreffun plugin

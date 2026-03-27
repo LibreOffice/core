@@ -27,7 +27,7 @@
 
 #include <osl/detail/android-bootstrap.h>
 
-#include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/COKit.h>
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "LibreOfficeKit", __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "LibreOfficeKit", __VA_ARGS__))

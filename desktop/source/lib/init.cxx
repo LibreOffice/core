@@ -60,7 +60,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/COKit.h>
 #include <LibreOfficeKit/COKitEnums.h>
 
 #include <sal/log.hxx>

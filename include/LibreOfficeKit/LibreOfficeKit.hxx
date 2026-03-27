@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "LibreOfficeKit.h"
+#include "COKit.h"
 #include "COKitEnums.h"
 #include "COKitInit.h"
 

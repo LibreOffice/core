@@ -10,7 +10,7 @@
 #ifndef INCLUDED_LIBREOFFICEKIT_QA_TEST_H
 #define INCLUDED_LIBREOFFICEKIT_QA_TEST_H
 
-#include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/COKit.h>
 
 LibreOfficeKit* compile_test(void);
 
