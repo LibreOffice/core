@@ -19,7 +19,9 @@
 
 #include <sbintern.hxx>
 #include <sbunoobj.hxx>
+#if HAVE_FEATURE_SCRIPTING
 #include <basic/basmgr.hxx>
+#endif
 
 SbiGlobals* SbiGlobals::pGlobals = nullptr;
 

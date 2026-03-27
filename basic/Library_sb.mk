@@ -100,6 +100,8 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/stdobj \
 	basic/source/runtime/stdobj1 \
 	basic/source/classes/errobject \
+	basic/source/runtime/methods \
+	basic/source/runtime/methods1 \
 ))
 endif
 
@@ -108,8 +110,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/classes/sbintern \
 	basic/source/comp/basiccharclass \
 	basic/source/runtime/basrdll \
-	basic/source/runtime/methods \
-	basic/source/runtime/methods1 \
 	basic/source/runtime/runtime \
 	basic/source/sbx/sbxarray \
 	basic/source/sbx/sbxbool \

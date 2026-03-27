@@ -46,7 +46,7 @@ class ModuleInitDependencyMap;
 struct ClassModuleRunInitItem;
 struct SbClassData;
 
-class BASIC_DLLPUBLIC SbModule : public SbxObject
+class BASIC_DLLPUBLIC_SCRIPTING SbModule : public SbxObject
 {
     friend class    SbiCodeGen;
     friend class    SbMethod;

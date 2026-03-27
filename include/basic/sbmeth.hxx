@@ -26,7 +26,7 @@
 class ErrCode;
 class SbModule;
 
-class BASIC_DLLPUBLIC SbMethod : public SbxMethod
+class BASIC_DLLPUBLIC_SCRIPTING SbMethod : public SbxMethod
 {
     friend class SbiRuntime;
     friend class SbiFactory;
