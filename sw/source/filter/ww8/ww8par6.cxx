@@ -2721,6 +2721,13 @@ void SwWW8ImplReader::StopApo()
         SwTextNode* pJoinNext = nullptr;
         if (pNd && m_xSFlyPara->GetFlyFormat())
         {
+            // Help DOCX export by indicating that the frame was defined by framePr
+            std::map<OUString, css::uno::Any> aGrabBagMap
+                = m_xSFlyPara->GetFlyFormat()->GetFormatAttr(RES_FRMATR_GRABBAG).GetGrabBag();
+            aGrabBagMap["ParaFrameProperties"] <<= true;
+            m_xSFlyPara->GetFlyFormat()->SetFormatAttr(
+                SfxGrabBagItem(RES_FRMATR_GRABBAG, std::move(aGrabBagMap)));
+
             /*
             #i582#
             Take the last paragraph background colour and fill the frame with

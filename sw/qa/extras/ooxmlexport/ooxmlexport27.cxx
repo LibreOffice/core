@@ -43,6 +43,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124398_groupshapeChart)
     assertXPath(pXmlDoc, "//wpg:graphicFrame/wpg:cNvPr", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf171527_flyInFramePr)
+{
+    // given a with a framePr'd image anchoring a drawing shape
+    createSwDoc("tdf171527_flyInFramePr.doc");
+
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Without the fix, MS Word complained the file was corrupt.
+    // Round-trip the framePr'd image as a framePr instead of as a drawingML
+    assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:framePr", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf171433_equation)
 {
     // given a document with formula
