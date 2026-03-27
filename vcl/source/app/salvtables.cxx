@@ -1699,9 +1699,9 @@ weld::ScreenShotCollection SalInstanceWindow::collect_screenshot_data()
     return aRet;
 }
 
-const vcl::ICOKitNotifier* SalInstanceWindow::GetLOKNotifier()
+const vcl::ICOKitNotifier* SalInstanceWindow::GetKitNotifier()
 {
-    return m_xWindow ? m_xWindow->GetLOKNotifier() : nullptr;
+    return m_xWindow ? m_xWindow->GetKitNotifier() : nullptr;
 }
 
 SalInstanceWindow::~SalInstanceWindow()
@@ -1847,9 +1847,9 @@ void SalInstanceDialog::undo_collapse()
     m_xDialog->setOptimalLayoutSize(true);
 }
 
-void SalInstanceDialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink)
+void SalInstanceDialog::SetInstallKitNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink)
 {
-    m_xDialog->SetInstallLOKNotifierHdl(rLink);
+    m_xDialog->SetInstallKitNotifierHdl(rLink);
 }
 
 int SalInstanceDialog::run()

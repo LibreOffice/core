@@ -2777,8 +2777,8 @@ SfxViewShell::SfxViewShell
         maLOKDeviceFormFactor = KitHelper::getDeviceFormFactor();
 
         vcl::Window* pFrameWin = rViewFrame.GetWindow().GetFrameWindow();
-        if (pFrameWin && !pFrameWin->GetLOKNotifier())
-            pFrameWin->SetLOKNotifier(this, true);
+        if (pFrameWin && !pFrameWin->GetKitNotifier())
+            pFrameWin->SetKitNotifier(this, true);
     }
 }
 
@@ -2803,8 +2803,8 @@ SfxViewShell::~SfxViewShell()
     }
 
     vcl::Window* pFrameWin = GetViewFrame().GetWindow().GetFrameWindow();
-    if (pFrameWin && pFrameWin->GetLOKNotifier() == this)
-        pFrameWin->ReleaseLOKNotifier();
+    if (pFrameWin && pFrameWin->GetKitNotifier() == this)
+        pFrameWin->ReleaseKitNotifier();
 }
 
 OUString SfxViewShell::getA11yFocusedParagraph() const
@@ -2915,8 +2915,8 @@ bool SfxViewShell::PrepareClose
     bool bUI     // TRUE: Allow Dialog and so on, FALSE: silent-mode
 )
 {
-    if (GetViewFrame().GetWindow().GetLOKNotifier() == this)
-        GetViewFrame().GetWindow().ReleaseLOKNotifier();
+    if (GetViewFrame().GetWindow().GetKitNotifier() == this)
+        GetViewFrame().GetWindow().ReleaseKitNotifier();
 
     SfxPrinter *pPrinter = GetPrinter();
     if ( pPrinter && pPrinter->IsPrinting() )

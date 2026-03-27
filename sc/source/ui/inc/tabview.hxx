@@ -261,7 +261,7 @@ private:
 
     void            SetZoomPercentFromCommand(sal_uInt16 nZoomPercent);
 
-    DECL_STATIC_LINK(ScTabView, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
+    DECL_STATIC_LINK(ScTabView, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*);
 
     void            UpdateHighlightOverlay();
     void            ImplTabChanged(bool bSameTabButMoved);

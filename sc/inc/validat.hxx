@@ -83,7 +83,7 @@ private:
 
     using ScConditionEntry::operator==;
 
-    DECL_STATIC_LINK(ScValidationData, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
+    DECL_STATIC_LINK(ScValidationData, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*);
 
 public:
     SC_DLLPUBLIC ScValidationData( ScValidationMode eMode, ScConditionMode eOper,

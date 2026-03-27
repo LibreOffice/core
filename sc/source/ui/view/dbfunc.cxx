@@ -352,7 +352,7 @@ void ScDBFunc::ToggleAutoFilter()
                                                                                            ScResId(STR_MSSG_MAKEAUTOFILTER_0)));
                 xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
                 xBox->set_default_response(RET_YES);
-                xBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
+                xBox->SetInstallKitNotifierHdl(LINK(this, ScDBFunc, InstallKitNotifierHdl));
                 xBox->runAsync(xBox, [pDocSh, &rViewData, pDBData, nRow, nTab, aParam] (sal_Int32 nResult) {
                     if (nResult == RET_YES)
                     {
@@ -370,13 +370,13 @@ void ScDBFunc::ToggleAutoFilter()
             std::shared_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(rViewData.GetDialogParent(),
                                                            VclMessageType::Warning, VclButtonsType::Ok,
                                                            ScResId(STR_ERR_AUTOFILTER)));
-            xErrorBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
+            xErrorBox->SetInstallKitNotifierHdl(LINK(this, ScDBFunc, InstallKitNotifierHdl));
             xErrorBox->runAsync(xErrorBox, [] (sal_Int32) {});
         }
     }
 }
 
-IMPL_STATIC_LINK_NOARG(ScDBFunc, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
+IMPL_STATIC_LINK_NOARG(ScDBFunc, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }

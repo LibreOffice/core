@@ -242,7 +242,7 @@ MessBox::MessBox(vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits nWinB
     mnMessBoxStyle( nMessBoxStyle ),
     maMessText(std::move( aMessage ))
 {
-    ImplLOKNotifier(pParent);
+    ImplKitNotifier(pParent);
     ImplInitDialog(pParent, nWinBits | WB_MOVEABLE | WB_HORZ | WB_CENTER);
     ImplInitButtons();
 

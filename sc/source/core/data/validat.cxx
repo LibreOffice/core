@@ -366,7 +366,7 @@ void ScValidationData::DoCalcError( ScFormulaCell* pCell ) const
         DoMacro( pCell->aPos, OUString(), pCell, nullptr );
 }
 
-IMPL_STATIC_LINK_NOARG(ScValidationData, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
+IMPL_STATIC_LINK_NOARG(ScValidationData, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return SfxViewShell::Current();
 }
@@ -415,7 +415,7 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
     std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent, eType,
                                               eStyle, aMessage, SfxViewShell::Current()));
     xBox->set_title(aTitle);
-    xBox->SetInstallLOKNotifierHdl(LINK(nullptr, ScValidationData, InstallLOKNotifierHdl));
+    xBox->SetInstallKitNotifierHdl(LINK(nullptr, ScValidationData, InstallKitNotifierHdl));
 
     switch (eErrorStyle)
     {

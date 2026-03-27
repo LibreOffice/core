@@ -504,10 +504,10 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
 
     if (comphelper::COKit::isActive())
         m_xBuilder->weld_button(u"cancel"_ustr)->hide();
-    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, ScImportAsciiDlg, InstallLOKNotifierHdl));
+    m_xDialog->SetInstallKitNotifierHdl(LINK(this, ScImportAsciiDlg, InstallKitNotifierHdl));
 }
 
-IMPL_STATIC_LINK_NOARG(ScImportAsciiDlg, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
+IMPL_STATIC_LINK_NOARG(ScImportAsciiDlg, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }

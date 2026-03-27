@@ -277,7 +277,7 @@ void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
     if (!pWindow)
         return;
 
-    VclPtr<vcl::Window> pParent = pWindow->GetParentWithLOKNotifier();
+    VclPtr<vcl::Window> pParent = pWindow->GetParentWithKitNotifier();
     if (!pParent)
         return;
 
@@ -285,7 +285,7 @@ void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
     assert(mpData && "Require ImplCursorData");
     assert(comphelper::COKit::isActive());
 
-    const vcl::ICOKitNotifier* pNotifier = pParent->GetLOKNotifier();
+    const vcl::ICOKitNotifier* pNotifier = pParent->GetKitNotifier();
 
     if (pWindow->IsFormControl() || (pWindow->GetParent() && pWindow->GetParent()->IsFormControl()))
     {

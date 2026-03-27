@@ -20,7 +20,7 @@
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-IMPL_STATIC_LINK_NOARG(CrashReportDialog, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
+IMPL_STATIC_LINK_NOARG(CrashReportDialog, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }
@@ -59,7 +59,7 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
         + "?type=crashreport&LOvers=" + utl::ConfigManager::getProductVersion()
         + "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47());
 
-    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, CrashReportDialog, InstallLOKNotifierHdl));
+    m_xDialog->SetInstallKitNotifierHdl(LINK(this, CrashReportDialog, InstallKitNotifierHdl));
 }
 
 CrashReportDialog::~CrashReportDialog() {}

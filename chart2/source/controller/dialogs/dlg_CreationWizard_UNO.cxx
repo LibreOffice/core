@@ -183,7 +183,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
     }
 }
 
-IMPL_STATIC_LINK_NOARG(CreationWizardUnoDlg, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
+IMPL_STATIC_LINK_NOARG(CreationWizardUnoDlg, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return SfxViewShell::Current();
 }
@@ -196,8 +196,8 @@ void SAL_CALL CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference
     if( !m_xDialog )
         return;
 
-    m_xDialog->getDialog()->SetInstallLOKNotifierHdl(
-                                LINK(this, CreationWizardUnoDlg, InstallLOKNotifierHdl));
+    m_xDialog->getDialog()->SetInstallKitNotifierHdl(
+                                LINK(this, CreationWizardUnoDlg, InstallKitNotifierHdl));
 
     TimerTriggeredControllerLock aTimerTriggeredControllerLock( m_xChartModel );
     if( m_bUnlockControllersOnExecute && m_xChartModel.is() )

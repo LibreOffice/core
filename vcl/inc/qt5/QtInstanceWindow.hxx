@@ -46,7 +46,7 @@ public:
 
     virtual VclPtr<VirtualDevice> screenshot() override;
 
-    virtual const vcl::ICOKitNotifier* GetLOKNotifier() override;
+    virtual const vcl::ICOKitNotifier* GetKitNotifier() override;
 
     bool eventFilter(QObject* pObject, QEvent* pEvent) override;
 };

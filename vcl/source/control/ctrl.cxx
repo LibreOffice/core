@@ -479,7 +479,7 @@ Control::GetUnzoomedControlPointFont() const
 
 void Control::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
-    VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
+    VclPtr<vcl::Window> pParent = GetParentWithKitNotifier();
     if (!pParent || !dynamic_cast<vcl::DocWindow*>(GetParent()))
     {
         // if control doesn't belong to a DocWindow, the overridden base class
@@ -503,7 +503,7 @@ void Control::LogicInvalidate(const tools::Rectangle* pRectangle)
         aResultRectangle = OutputDevice::LogicToLogic(*pRectangle, GetMapMode(), MapMode(MapUnit::MapTwip));
     }
 
-    pParent->GetLOKNotifier()->notifyInvalidation(&aResultRectangle);
+    pParent->GetKitNotifier()->notifyInvalidation(&aResultRectangle);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

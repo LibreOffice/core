@@ -33,7 +33,7 @@ void JSDialogNotifyIdle::send(const OString& sMsg)
         return;
     }
 
-    const vcl::ICOKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier();
+    const vcl::ICOKitNotifier* pNotifier = m_aNotifierWindow->GetKitNotifier();
     if (pNotifier)
     {
         if (m_bForce || sMsg != m_LastNotificationMessage)
@@ -154,7 +154,7 @@ OString JSDialogNotifyIdle::generatePopupMessage(const VclPtr<vcl::Window>& pWin
     if (!pWindow || !m_aNotifierWindow)
         return OString();
 
-    if (!pWindow->GetParentWithLOKNotifier())
+    if (!pWindow->GetParentWithKitNotifier())
         return OString();
 
     tools::JsonWriter aJsonWriter;
@@ -192,7 +192,7 @@ OString JSDialogNotifyIdle::generatePopupMessage(const VclPtr<vcl::Window>& pWin
     aJsonWriter.put("cancellable", true);
     aJsonWriter.put("popupParent", sParentId);
     aJsonWriter.put("clickToClose", sCloseId);
-    aJsonWriter.put("id", pWindow->GetParentWithLOKNotifier()->GetLOKWindowId());
+    aJsonWriter.put("id", pWindow->GetParentWithKitNotifier()->GetLOKWindowId());
 
     return aJsonWriter.finishAndGetAsOString();
 }

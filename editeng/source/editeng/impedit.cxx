@@ -324,7 +324,7 @@ void ImpEditView::SelectionChanged()
 
 // This function is also called when a text's font || size is changed. Because its highlight rectangle must be updated.
 void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible) {
-    VclPtr<vcl::Window> pParent = mpOutputWindow->GetParentWithLOKNotifier();
+    VclPtr<vcl::Window> pParent = mpOutputWindow->GetParentWithKitNotifier();
     vcl::Region aRegion( *pPolyPoly );
 
     if (pParent && pParent->GetLOKWindowId() != 0)
@@ -344,7 +344,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
         }
         OString sRectangle = comphelper::string::join("; ", v);
 
-        const vcl::ICOKitNotifier* pNotifier = pParent->GetLOKNotifier();
+        const vcl::ICOKitNotifier* pNotifier = pParent->GetKitNotifier();
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back("rectangles", sRectangle);
         aItems.emplace_back("startHandleVisible", OString::boolean(bStartHandleVisible));
@@ -2152,10 +2152,10 @@ void ImpEditView::DeselectAll()
 
     if (comphelper::COKit::isActive() && mpViewShell && mpOutputWindow)
     {
-        VclPtr<vcl::Window> pParent = mpOutputWindow->GetParentWithLOKNotifier();
+        VclPtr<vcl::Window> pParent = mpOutputWindow->GetParentWithKitNotifier();
         if (pParent && pParent->GetLOKWindowId())
         {
-            const vcl::ICOKitNotifier* pNotifier = pParent->GetLOKNotifier();
+            const vcl::ICOKitNotifier* pNotifier = pParent->GetKitNotifier();
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("rectangles", "");
             pNotifier->notifyWindow(pParent->GetLOKWindowId(), u"text_selection"_ustr, aItems);

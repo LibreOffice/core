@@ -215,7 +215,7 @@ VclPtr<VirtualDevice> QtInstanceWindow::screenshot()
     return xOutput;
 }
 
-const vcl::ICOKitNotifier* QtInstanceWindow::GetLOKNotifier() { return nullptr; }
+const vcl::ICOKitNotifier* QtInstanceWindow::GetKitNotifier() { return nullptr; }
 
 bool QtInstanceWindow::eventFilter(QObject* pObject, QEvent* pEvent)
 {

@@ -1772,7 +1772,7 @@ void dumpState(rtl::OStringBuffer &rState)
 
         rState.append("\n\tWindow: ");
 
-        auto notifier = pWin->GetLOKNotifier();
+        auto notifier = pWin->GetKitNotifier();
         if (notifier)
         {
             rState.append(notifier->dumpNotifyState());

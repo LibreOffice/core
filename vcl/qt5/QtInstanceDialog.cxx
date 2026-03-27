@@ -137,7 +137,7 @@ void QtInstanceDialog::undo_collapse()
     });
 }
 
-void QtInstanceDialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>&) {}
+void QtInstanceDialog::SetInstallKitNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>&) {}
 
 int QtInstanceDialog::run()
 {

@@ -596,7 +596,7 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivat
     {
         if (!getImpl().mpOutputWindow)
             return;
-        VclPtr<vcl::Window> pParent = getImpl().mpOutputWindow->GetParentWithLOKNotifier();
+        VclPtr<vcl::Window> pParent = getImpl().mpOutputWindow->GetParentWithKitNotifier();
         if (pParent && pParent->GetLOKWindowId() != 0)
             return;
 
@@ -614,7 +614,7 @@ void EditView::HideCursor(bool bDeactivate)
     {
         if (!getImpl().mpOutputWindow)
             return;
-        VclPtr<vcl::Window> pParent = getImpl().mpOutputWindow->GetParentWithLOKNotifier();
+        VclPtr<vcl::Window> pParent = getImpl().mpOutputWindow->GetParentWithKitNotifier();
         if (pParent && pParent->GetLOKWindowId() != 0)
             return;
 

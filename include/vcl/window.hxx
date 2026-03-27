@@ -1098,18 +1098,18 @@ public:
     void                                SetUseFrameData(bool bUseFrameData);
 
     /// Interface to register for dialog / window tunneling.
-    void                                SetLOKNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent = false);
-    const vcl::ICOKitNotifier* GetLOKNotifier() const;
+    void                                SetKitNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent = false);
+    const vcl::ICOKitNotifier* GetKitNotifier() const;
     vcl::LOKWindowId                    GetLOKWindowId() const;
 
     /// This sets the lokWindowId without setting a notifier.
     void                                SetLOKWindowId();
 
     /// Find the nearest parent with LOK Notifier; can be itself if this Window has LOK notifier set.
-    VclPtr<vcl::Window>                 GetParentWithLOKNotifier();
+    VclPtr<vcl::Window>                 GetParentWithKitNotifier();
 
     /// Indicate that LOK is not going to use this dialog any more.
-    void                                ReleaseLOKNotifier();
+    void                                ReleaseKitNotifier();
 
     /// Find an existing Window based on the LOKWindowId.
     static VclPtr<vcl::Window>          FindLOKWindow(vcl::LOKWindowId nWindowId);

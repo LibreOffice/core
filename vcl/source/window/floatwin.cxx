@@ -199,7 +199,7 @@ FloatingWindow::~FloatingWindow()
 
 void FloatingWindow::dispose()
 {
-    ReleaseLOKNotifier();
+    ReleaseKitNotifier();
 
     if (mpImplData)
     {
@@ -653,14 +653,14 @@ bool FloatingWindow::EventNotify( NotifyEvent& rNEvt )
 
 void FloatingWindow::PixelInvalidate(const tools::Rectangle* /*pRectangle*/)
 {
-    if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+    if (VclPtr<vcl::Window> pParent = GetParentWithKitNotifier())
     {
         const tools::Rectangle aRect(Point(0,0), Size(GetSizePixel().Width()+1, GetSizePixel().Height()+1));
         std::vector<vcl::LOKPayloadItem> aPayload
         {
             std::make_pair("rectangle"_ostr, aRect.toString())
         };
-        const vcl::ICOKitNotifier* pNotifier = pParent->GetLOKNotifier();
+        const vcl::ICOKitNotifier* pNotifier = pParent->GetKitNotifier();
         pNotifier->notifyWindow(GetLOKWindowId(), u"invalidate"_ustr, aPayload);
     }
 }
@@ -674,7 +674,7 @@ void FloatingWindow::StateChanged( StateChangedType nType )
 
     SystemWindow::StateChanged( nType );
 
-    VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
+    VclPtr<vcl::Window> pParent = GetParentWithKitNotifier();
     if (pParent)
     {
         if (nType == StateChangedType::InitShow)
@@ -693,7 +693,7 @@ void FloatingWindow::StateChanged( StateChangedType nType )
             }
             else
             {
-                SetLOKNotifier(pParent->GetLOKNotifier());
+                SetKitNotifier(pParent->GetKitNotifier());
                 if (dynamic_cast<HelpTextWindow*>(this))
                     aItems.emplace_back("type", "tooltip");
                 else
@@ -707,14 +707,14 @@ void FloatingWindow::StateChanged( StateChangedType nType )
 
             }
             aItems.emplace_back("size", GetSizePixel().toString());
-            GetLOKNotifier()->notifyWindow(GetLOKWindowId(), u"created"_ustr, aItems);
+            GetKitNotifier()->notifyWindow(GetLOKWindowId(), u"created"_ustr, aItems);
         }
         else if (!IsVisible() && nType == StateChangedType::Visible)
         {
-            if (const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier())
+            if (const vcl::ICOKitNotifier* pNotifier = GetKitNotifier())
             {
                 pNotifier->notifyWindow(GetLOKWindowId(), u"close"_ustr);
-                ReleaseLOKNotifier();
+                ReleaseKitNotifier();
             }
         }
     }

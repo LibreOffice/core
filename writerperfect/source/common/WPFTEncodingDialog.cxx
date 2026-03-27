@@ -106,10 +106,10 @@ WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& ti
 
     m_xDialog->set_title(title);
 
-    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, WPFTEncodingDialog, InstallLOKNotifierHdl));
+    m_xDialog->SetInstallKitNotifierHdl(LINK(this, WPFTEncodingDialog, InstallKitNotifierHdl));
 }
 
-IMPL_STATIC_LINK_NOARG(WPFTEncodingDialog, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
+IMPL_STATIC_LINK_NOARG(WPFTEncodingDialog, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }

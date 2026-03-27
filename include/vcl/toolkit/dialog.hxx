@@ -82,7 +82,7 @@ protected:
     virtual void ImplDeferredInit(vcl::Window* pParent, WinBits nBits) override;
 
     /// Find and set the LOK notifier according to the pParent.
-    void ImplLOKNotifier(vcl::Window* pParent);
+    void ImplKitNotifier(vcl::Window* pParent);
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
@@ -155,7 +155,7 @@ public:
     void            Activate() override;
 
     void            SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink);
-    void            SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink);
+    void            SetInstallKitNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink);
     void            SetLOKTunnelingState(bool bEnabled);
 
     void            add_button(PushButton* pButton, int nResponse, bool bTransferOwnership);

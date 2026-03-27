@@ -32,7 +32,7 @@ private:
     OUString maLinkTemplate;
 
     DECL_LINK(BtnHdl, weld::Button&, void);
-    DECL_STATIC_LINK(CrashReportDialog, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
+    DECL_STATIC_LINK(CrashReportDialog, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

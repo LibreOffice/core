@@ -44,7 +44,7 @@ public:
 
     virtual void undo_collapse() override;
 
-    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>&) override;
+    virtual void SetInstallKitNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>&) override;
 
     virtual int run() override;
 

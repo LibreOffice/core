@@ -311,8 +311,8 @@ void ScInputWindow::dispose()
 
     if (comphelper::COKit::isActive())
     {
-        if (GetLOKNotifier())
-            ReleaseLOKNotifier();
+        if (GetKitNotifier())
+            ReleaseKitNotifier();
     }
 
     mxTextWindow.disposeAndClear();
@@ -459,7 +459,7 @@ void ScInputWindow::PixelInvalidate(const tools::Rectangle* pRectangle)
 
 void ScInputWindow::SetSizePixel( const Size& rNewSize )
 {
-    const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier();
+    const vcl::ICOKitNotifier* pNotifier = GetKitNotifier();
     if (pNotifier)
     {
         if (vcl::Window* pFrameWindowImpl = GetParent())
@@ -519,8 +519,8 @@ void ScInputWindow::Resize()
 
 void ScInputWindow::NotifyLOKClient()
 {
-    if (comphelper::COKit::isActive() && !GetLOKNotifier() && mpViewShell)
-        SetLOKNotifier(mpViewShell);
+    if (comphelper::COKit::isActive() && !GetKitNotifier() && mpViewShell)
+        SetKitNotifier(mpViewShell);
 }
 
 void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )

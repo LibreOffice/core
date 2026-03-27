@@ -212,7 +212,7 @@ SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& 
                                          const OUString& rDialogId)
     : GenericDialogController(pParent, rUIFile, rDialogId, isLOKMobilePhone())
 {
-    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, SfxDialogController, InstallLOKNotifierHdl));
+    m_xDialog->SetInstallKitNotifierHdl(LINK(this, SfxDialogController, InstallKitNotifierHdl));
     m_xDialog->connect_container_focus_changed(LINK(this, SfxDialogController, FocusChangeHdl));
 }
 
@@ -222,7 +222,7 @@ void SfxDialogController::Close()
     m_xDialog->connect_container_focus_changed(Link<weld::Container&, void>());
 }
 
-IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
+IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return SfxViewShell::Current();
 }

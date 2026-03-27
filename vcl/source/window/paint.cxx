@@ -1219,7 +1219,7 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
     if (aSize.IsEmpty())
         return;
 
-    if (const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier())
+    if (const vcl::ICOKitNotifier* pNotifier = GetKitNotifier())
     {
         // In case we are routing the window, notify the client
         std::vector<vcl::LOKPayloadItem> aPayload;
@@ -1236,12 +1236,12 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
     }
     else if (GetParent() && GetParent()->IsFormControl())
     {
-        const VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
+        const VclPtr<vcl::Window> pParent = GetParentWithKitNotifier();
         if (pParent)
-            pParent->GetLOKNotifier()->notifyInvalidation(pRectangle);
+            pParent->GetKitNotifier()->notifyInvalidation(pRectangle);
     }
     // Added for dialog items. Pass invalidation to the parent window.
-    else if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
+    else if (VclPtr<vcl::Window> pParent = GetParentWithKitNotifier())
     {
         const tools::Rectangle aRect(Point(GetOutOffXPixel(), GetOutOffYPixel()), GetSizePixel());
         pParent->PixelInvalidate(&aRect);

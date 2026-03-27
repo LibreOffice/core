@@ -19,7 +19,7 @@ void DocWindow::SetPointer(PointerStyle nPointer)
 {
     Window::SetPointer(nPointer);
 
-    VclPtr<vcl::Window> pWin = GetParentWithLOKNotifier();
+    VclPtr<vcl::Window> pWin = GetParentWithKitNotifier();
     if (!pWin)
         return;
 
@@ -32,7 +32,7 @@ void DocWindow::SetPointer(PointerStyle nPointer)
         aPointerString = aIt->second;
     }
 
-    pWin->GetLOKNotifier()->viewCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString);
+    pWin->GetKitNotifier()->viewCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString);
 }
 } // namespace vcl
 

@@ -577,7 +577,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
                 vcl::Window* pWindow = pChild->GetWindow();
                 if (pWindow)
                 {
-                    pWindow->ReleaseLOKNotifier();
+                    pWindow->ReleaseKitNotifier();
                 }
             }
             pChild->Hide();

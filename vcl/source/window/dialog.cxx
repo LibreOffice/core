@@ -354,7 +354,7 @@ struct DialogImpl
     bool    mbStartedModal;
     VclAbstractDialog::AsyncContext maEndCtx;
     Link<const CommandEvent&, bool> m_aPopupMenuHdl;
-    Link<void*, vcl::ICOKitNotifier*> m_aInstallLOKNotifierHdl;
+    Link<void*, vcl::ICOKitNotifier*> m_aInstallKitNotifierHdl;
     bool    m_bLOKTunneling;
 
     DialogImpl() : mnResult( -1 ), mbStartedModal( false ), m_bLOKTunneling( true ) {}
@@ -533,13 +533,13 @@ void Dialog::ImplInitSettings()
         SetBackground(GetSettings().GetStyleSettings().GetDialogColor());
 }
 
-void Dialog::ImplLOKNotifier(vcl::Window* pParent)
+void Dialog::ImplKitNotifier(vcl::Window* pParent)
 {
     if (comphelper::COKit::isActive() && pParent)
     {
-        if (VclPtr<vcl::Window> pWin = pParent->GetParentWithLOKNotifier())
+        if (VclPtr<vcl::Window> pWin = pParent->GetParentWithKitNotifier())
         {
-            SetLOKNotifier(pWin->GetLOKNotifier());
+            SetKitNotifier(pWin->GetKitNotifier());
         }
     }
 }
@@ -574,7 +574,7 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
     : SystemWindow(WindowType::DIALOG, "vcl::Dialog maLayoutIdle", true)
     , mnInitFlag(InitFlag::Default)
 {
-    ImplLOKNotifier(pParent);
+    ImplKitNotifier(pParent);
     ImplInitDialogData();
     loadUI(pParent, rID, rUIXMLDescription);
 }
@@ -583,7 +583,7 @@ Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
     : SystemWindow(WindowType::DIALOG, "vcl::Dialog maLayoutIdle", true)
     , mnInitFlag(eFlag)
 {
-    ImplLOKNotifier(pParent);
+    ImplKitNotifier(pParent);
     ImplInitDialogData();
     ImplInitDialog( pParent, nStyle, eFlag );
 }
@@ -637,11 +637,11 @@ void Dialog::dispose()
 
     if (comphelper::COKit::isActive())
     {
-        if(const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier())
+        if(const vcl::ICOKitNotifier* pNotifier = GetKitNotifier())
         {
             if (bTunnelingEnabled)
                 pNotifier->notifyWindow(GetLOKWindowId(), u"close"_ustr);
-            ReleaseLOKNotifier();
+            ReleaseKitNotifier();
         }
     }
 
@@ -742,9 +742,9 @@ void Dialog::SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink)
     mpDialogImpl->m_aPopupMenuHdl = rLink;
 }
 
-void Dialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink)
+void Dialog::SetInstallKitNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink)
 {
-    mpDialogImpl->m_aInstallLOKNotifierHdl = rLink;
+    mpDialogImpl->m_aInstallKitNotifierHdl = rLink;
 }
 
 void Dialog::SetLOKTunnelingState(bool bEnabled)
@@ -770,17 +770,17 @@ void Dialog::StateChanged( StateChangedType nType )
             if (!GetText().isEmpty())
                 aItems.emplace_back("title", GetText().toUtf8());
 
-            if (const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier())
+            if (const vcl::ICOKitNotifier* pNotifier = GetKitNotifier())
             {
                 pNotifier->notifyWindow(GetLOKWindowId(), u"created"_ustr, aItems);
                 pNotifier->notifyWindow(GetLOKWindowId(), u"created"_ustr, aItems);
             }
             else
             {
-                vcl::ICOKitNotifier* pViewShell = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr);
+                vcl::ICOKitNotifier* pViewShell = mpDialogImpl->m_aInstallKitNotifierHdl.Call(nullptr);
                 if (pViewShell)
                 {
-                    SetLOKNotifier(pViewShell);
+                    SetKitNotifier(pViewShell);
                     pViewShell->notifyWindow(GetLOKWindowId(), u"created"_ustr, aItems);
                 }
             }
@@ -801,7 +801,7 @@ void Dialog::StateChanged( StateChangedType nType )
     }
     else if (nType == StateChangedType::Text)
     {
-        const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier();
+        const vcl::ICOKitNotifier* pNotifier = GetKitNotifier();
         if (pNotifier && bTunnelingEnabled)
         {
             std::vector<vcl::LOKPayloadItem> aPayload;
@@ -820,7 +820,7 @@ void Dialog::StateChanged( StateChangedType nType )
 
     if (!mbModalMode && nType == StateChangedType::Visible)
     {
-        const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier();
+        const vcl::ICOKitNotifier* pNotifier = GetKitNotifier();
         if (pNotifier && bTunnelingEnabled)
         {
             std::vector<vcl::LOKPayloadItem> aPayload;
@@ -925,10 +925,10 @@ bool Dialog::ImplStartExecute(bool async)
 
     if (bModal)
     {
-        if (bKitActive && !GetLOKNotifier())
+        if (bKitActive && !GetKitNotifier())
         {
-            if (auto pNotifier = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr))
-                SetLOKNotifier(pNotifier);
+            if (auto pNotifier = mpDialogImpl->m_aInstallKitNotifierHdl.Call(nullptr))
+                SetKitNotifier(pNotifier);
             else
             {
                 // gh#5908 handle pasting disallowed clipboard contents on iOS
@@ -936,7 +936,7 @@ bool Dialog::ImplStartExecute(bool async)
                 // will display a "allow or disallow" dialog. If the disallow
                 // option is selected, the data from the UIPasteboard will be
                 // garbage and we will find ourselves here. Since calling
-                // SetLOKNotifier() with a nullptr aborts in an assert(), fix
+                // SetKitNotifier() with a nullptr aborts in an assert(), fix
                 // the crash by failing gracefully.
 
                 // Also pNotifier may be nullptr when a dialog (e.g., "update
@@ -962,7 +962,7 @@ bool Dialog::ImplStartExecute(bool async)
         case DialogCancelMode::Off:
             break;
         case DialogCancelMode::Silent:
-            if (bModal && GetLOKNotifier())
+            if (bModal && GetKitNotifier())
             {
                 // check if there's already some dialog being ::Execute()d
                 const bool bDialogExecuting = std::any_of(pSVData->mpWinData->mpExecuteDialogs.begin(),
@@ -1055,7 +1055,7 @@ bool Dialog::ImplStartExecute(bool async)
     bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
     if (comphelper::COKit::isActive() && bTunnelingEnabled)
     {
-        if (const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier())
+        if (const vcl::ICOKitNotifier* pNotifier = GetKitNotifier())
         {
             // Dialog boxes don't get the Resize call and they
             // can have invalid size at 'created' message above.
@@ -1153,11 +1153,11 @@ void Dialog::EndDialog( tools::Long nResult )
 
     if (comphelper::COKit::isActive())
     {
-        if(const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier())
+        if(const vcl::ICOKitNotifier* pNotifier = GetKitNotifier())
         {
             if (mpDialogImpl->m_bLOKTunneling)
                 pNotifier->notifyWindow(GetLOKWindowId(), u"close"_ustr);
-            ReleaseLOKNotifier();
+            ReleaseKitNotifier();
         }
     }
 
@@ -1436,7 +1436,7 @@ void Dialog::Resize()
         return;
 
     bool bTunnelingEnabled = mpDialogImpl->m_bLOKTunneling;
-    const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier();
+    const vcl::ICOKitNotifier* pNotifier = GetKitNotifier();
     if (pNotifier && bTunnelingEnabled)
     {
         std::vector<vcl::LOKPayloadItem> aItems;

@@ -59,10 +59,10 @@ MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
     mxEnableBtn->connect_clicked(LINK(this, MacroWarning, EnableBtnHdl));
     mxDisableBtn->connect_clicked(LINK(this, MacroWarning, DisableBtnHdl));
     mxDisableBtn->grab_focus(); // Default button, but focus is on view button
-    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, MacroWarning, InstallLOKNotifierHdl));
+    m_xDialog->SetInstallKitNotifierHdl(LINK(this, MacroWarning, InstallKitNotifierHdl));
 }
 
-IMPL_STATIC_LINK_NOARG(MacroWarning, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
+IMPL_STATIC_LINK_NOARG(MacroWarning, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }

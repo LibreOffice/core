@@ -6656,7 +6656,7 @@ public:
         return aRet;
     }
 
-    virtual const vcl::ICOKitNotifier* GetLOKNotifier() override
+    virtual const vcl::ICOKitNotifier* GetKitNotifier() override
     {
         // dummy implementation
         return nullptr;
@@ -7355,7 +7355,7 @@ public:
 
     void close(bool bCloseSignal);
 
-    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>&) override
+    virtual void SetInstallKitNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>&) override
     {
         //not implemented for the gtk variant
     }

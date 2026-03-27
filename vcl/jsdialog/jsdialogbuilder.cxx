@@ -164,7 +164,7 @@ void JSInstanceBuilder::initializeDialogSender()
 
     if (pRoot && pRoot->GetParent())
     {
-        m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
+        m_aParentDialog = pRoot->GetParent()->GetParentWithKitNotifier();
         if (m_aParentDialog)
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
         InsertWindowToMap(getMapIdFromWindowId());
@@ -188,7 +188,7 @@ void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
 
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
 
-    m_aParentDialog = pRoot->GetParentWithLOKNotifier();
+    m_aParentDialog = pRoot->GetParentWithKitNotifier();
 
     bool bIsDockingWindow = jsdialog::isBuilderEnabledForNavigator(rUIFile)
                             || jsdialog::isBuilderEnabledForQuickFind(rUIFile);
@@ -229,7 +229,7 @@ void JSInstanceBuilder::initializeNotebookbarSender(sal_uInt64 nLOKWindowId)
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
     if (pRoot && pRoot->GetParent())
     {
-        m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
+        m_aParentDialog = pRoot->GetParent()->GetParentWithKitNotifier();
         if (m_aParentDialog)
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
         if (!m_nWindowId && nLOKWindowId)
@@ -254,7 +254,7 @@ void JSInstanceBuilder::initializeFormulabarSender(sal_uInt64 nLOKWindowId,
     m_aContentWindow = pVclParent;
     if (pRoot && pRoot->GetParent())
     {
-        m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
+        m_aParentDialog = pRoot->GetParent()->GetParentWithKitNotifier();
         InsertWindowToMap(getMapIdFromWindowId());
     }
 
@@ -264,7 +264,7 @@ void JSInstanceBuilder::initializeFormulabarSender(sal_uInt64 nLOKWindowId,
 void JSInstanceBuilder::initializeMenuSender(weld::Widget* pParent)
 {
     m_sTypeOfJSON = "menu";
-    m_aParentDialog = extract_sal_widget(pParent)->GetParentWithLOKNotifier();
+    m_aParentDialog = extract_sal_widget(pParent)->GetParentWithKitNotifier();
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
@@ -391,7 +391,7 @@ JSInstanceBuilder::~JSInstanceBuilder()
 
     if (m_aWindowToRelease)
     {
-        m_aWindowToRelease->ReleaseLOKNotifier();
+        m_aWindowToRelease->ReleaseKitNotifier();
         m_aWindowToRelease.reset();
     }
 
@@ -435,8 +435,8 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OUString& id)
 
     if (pDialog)
     {
-        if (!pDialog->GetLOKNotifier())
-            pDialog->SetLOKNotifier(GetpApp());
+        if (!pDialog->GetKitNotifier())
+            pDialog->SetKitNotifier(GetpApp());
 
         m_nWindowId = pDialog->GetLOKWindowId();
         pDialog->SetLOKTunnelingState(false);
@@ -842,10 +842,10 @@ std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OUString& i
         m_aOwnedToplevel.reset(pDockingWindow);
         m_xBuilder->drop_ownership(pDockingWindow);
 
-        if (VclPtr<vcl::Window> pWin = pDockingWindow->GetParentWithLOKNotifier())
+        if (VclPtr<vcl::Window> pWin = pDockingWindow->GetParentWithKitNotifier())
         {
             vcl::Window* pPopupRoot = pDockingWindow->GetChild(0);
-            pPopupRoot->SetLOKNotifier(pWin->GetLOKNotifier());
+            pPopupRoot->SetKitNotifier(pWin->GetKitNotifier());
             m_aParentDialog = pPopupRoot;
             m_aWindowToRelease = pPopupRoot;
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
@@ -937,17 +937,17 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
     VclPtrInstance<::MessageDialog> xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType,
                                                    eButtonType);
 
-    // SetLOKNotifier() asserts that xMessageDialog has no LOKNotifier already.
-    auto* pExistingNotifier = xMessageDialog->GetLOKNotifier();
+    // SetKitNotifier() asserts that xMessageDialog has no KitNotifier already.
+    auto* pExistingNotifier = xMessageDialog->GetKitNotifier();
     if (pNotifier)
     {
         if (!pExistingNotifier)
-            xMessageDialog->SetLOKNotifier(pNotifier);
+            xMessageDialog->SetKitNotifier(pNotifier);
         else if (pExistingNotifier != pNotifier)
             SAL_WARN("vcl", "A different notifier already exists for the MessageDialog");
     }
 
-    pNotifier = xMessageDialog->GetLOKNotifier();
+    pNotifier = xMessageDialog->GetKitNotifier();
     if (pNotifier)
     {
         OUString sWindowId = OUString::number(xMessageDialog->GetLOKWindowId());
@@ -1058,7 +1058,7 @@ std::unique_ptr<weld::Button> JSDialog::weld_button_for_response(int nResponse)
     {
         xWeldWidget = std::make_unique<JSButton>(m_pSender, pButton, nullptr, false);
 
-        auto pParentDialog = m_xDialog->GetParentWithLOKNotifier();
+        auto pParentDialog = m_xDialog->GetParentWithKitNotifier();
         if (pParentDialog)
             JSInstanceBuilder::RememberWidget(OUString::number(pParentDialog->GetLOKWindowId()),
                                               pButton->get_id(), xWeldWidget.get());
@@ -1086,7 +1086,7 @@ std::unique_ptr<weld::Button> JSAssistant::weld_button_for_response(int nRespons
     {
         xWeldWidget = std::make_unique<JSButton>(m_pSender, pButton, nullptr, false);
 
-        auto pParentDialog = m_xWizard->GetParentWithLOKNotifier();
+        auto pParentDialog = m_xWizard->GetParentWithKitNotifier();
         if (pParentDialog)
             JSInstanceBuilder::RememberWidget(OUString::number(pParentDialog->GetLOKWindowId()),
                                               pButton->get_id(), xWeldWidget.get());
@@ -1526,7 +1526,7 @@ void JSMessageDialog::RememberMessageDialog()
 
 int JSMessageDialog::run()
 {
-    if (GetLOKNotifier())
+    if (GetKitNotifier())
     {
         RememberMessageDialog();
         sendFullUpdate();

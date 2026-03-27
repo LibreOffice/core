@@ -260,10 +260,10 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
     if (pStrTitle)
         m_xDialog->set_title(*pStrTitle);
 
-    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, ScImportOptionsDlg, InstallLOKNotifierHdl));
+    m_xDialog->SetInstallKitNotifierHdl(LINK(this, ScImportOptionsDlg, InstallKitNotifierHdl));
 }
 
-IMPL_STATIC_LINK_NOARG(ScImportOptionsDlg, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
+IMPL_STATIC_LINK_NOARG(ScImportOptionsDlg, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }

@@ -34,7 +34,7 @@ class WhichRangesContainer;
 class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
 {
 private:
-    DECL_DLLPRIVATE_STATIC_LINK(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
+    DECL_DLLPRIVATE_STATIC_LINK(SfxDialogController, InstallKitNotifierHdl, void*, vcl::ICOKitNotifier*);
 
     DECL_DLLPRIVATE_LINK(FocusChangeHdl, weld::Container&, void);
 

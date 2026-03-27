@@ -599,7 +599,7 @@ public:
     // render the widget to an output device
     virtual VclPtr<VirtualDevice> screenshot() = 0;
 
-    virtual const vcl::ICOKitNotifier* GetLOKNotifier() = 0;
+    virtual const vcl::ICOKitNotifier* GetKitNotifier() = 0;
 };
 
 class VCL_DLLPUBLIC WaitObject
@@ -670,7 +670,7 @@ public:
     // undo previous dialog collapse
     virtual void undo_collapse() = 0;
 
-    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink) = 0;
+    virtual void SetInstallKitNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink) = 0;
 };
 
 class VCL_DLLPUBLIC MessageDialog : virtual public Dialog
