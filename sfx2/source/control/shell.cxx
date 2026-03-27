@@ -741,7 +741,7 @@ void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
     // Avoids activation and de-activation (can be seen on switching view) from causing
     // the sidebar to re-build. Such switching can happen as we change view to render
     // using LOK for example, and is un-necessary for Online.
-    if (comphelper::LibreOfficeKit::isDialogPainting())
+    if (comphelper::COKit::isDialogPainting())
         return;
 
     SfxViewFrame* pViewFrame = GetFrame();

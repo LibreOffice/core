@@ -96,7 +96,7 @@ namespace desktop {
     class SAL_DLLPUBLIC_RTTI CallbackFlushHandler final : public SfxLokCallbackInterface
     {
     public:
-        DESKTOP_DLLPUBLIC explicit CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData);
+        DESKTOP_DLLPUBLIC explicit CallbackFlushHandler(COKitDocument* pDocument, COKitCallback pCallback, void* pData);
         DESKTOP_DLLPUBLIC virtual ~CallbackFlushHandler() override;
         // TODO This should be dropped and the binary libreOfficeKitViewCallback() variants should be called?
         DESKTOP_DLLPUBLIC void queue(const int type, const OString& data);
@@ -243,10 +243,10 @@ namespace desktop {
         // Flat_map is used in preference to unordered_map because the map is accessed very often.
         boost::container::flat_map<int, std::vector<PerViewIdData>> m_updatedTypesPerViewId; // key is view, index is type
 
-        LibreOfficeKitDocument* m_pDocument;
+        COKitDocument* m_pDocument;
         OString m_aViewRenderState;
         int m_viewId = -1; // view id of the associated SfxViewShell
-        LibreOfficeKitCallback m_pCallback;
+        COKitCallback m_pCallback;
         ImplSVEvent* m_pFlushEvent;
         void *m_pData;
         int m_nDisableCallbacks;
@@ -266,10 +266,10 @@ namespace desktop {
         DECL_LINK(IdleHdl, Timer*, void);
     };
 
-    struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public LibreOfficeKitDocument
+    struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public COKitDocument
     {
         css::uno::Reference<css::lang::XComponent> mxComponent;
-        std::shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
+        std::shared_ptr< COKitDocumentClass > m_pDocumentClass;
         std::map<size_t, std::shared_ptr<CallbackFlushHandler>> mpCallbackFlushHandlers;
         const int mnDocumentId;
         WaitUntilIdle maIdleHelper;
@@ -282,12 +282,12 @@ namespace desktop {
         void updateViewsForPaintedTile(int nOrigViewId, int nPart, int nMode, const tools::Rectangle& rRectangle);
     };
 
-    struct DESKTOP_DLLPUBLIC LibLibreOffice_Impl : public LibreOfficeKit
+    struct DESKTOP_DLLPUBLIC LibLibreOffice_Impl : public COKit
     {
         OUString maLastExceptionMsg;
-        std::shared_ptr< LibreOfficeKitClass > m_pOfficeClass;
+        std::shared_ptr< COKitClass > m_pOfficeClass;
         oslThread maThread;
-        LibreOfficeKitCallback mpCallback;
+        COKitCallback mpCallback;
         void *mpCallbackData;
         int64_t mOptionalFeatures;
         std::map<OString, rtl::Reference<LOKInteractionHandler>> mInteractionMap;
@@ -295,7 +295,7 @@ namespace desktop {
         LibLibreOffice_Impl();
         ~LibLibreOffice_Impl();
 
-        bool hasOptionalFeature(LibreOfficeKitOptionalFeatures const feature)
+        bool hasOptionalFeature(COKitOptionalFeatures const feature)
         {
             return (mOptionalFeatures & feature) != 0;
         }

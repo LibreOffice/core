@@ -501,8 +501,8 @@ IMPL_LINK(SvxPatternTabPage, MousePressHdl, const MouseEvent&, rMEvt, bool)
     if (!rMEvt.IsRight())
         return false;
 
-    // Disable context menu for LibreOfficeKit mode
-    if (comphelper::LibreOfficeKit::isActive())
+    // Disable context menu for COKit mode
+    if (comphelper::COKit::isActive())
         return false;
 
     const Point& pPos = rMEvt.GetPosPixel();

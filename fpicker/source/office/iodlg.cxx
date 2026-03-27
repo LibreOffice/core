@@ -1459,7 +1459,7 @@ void SvtFileDialog::EnableControl(weld::Widget* pControl, bool bEnable)
 
 bool SvtFileDialog::PrepareExecute()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return false;
 
     if ( ( m_xImpl->m_nStyle & PickerFlags::SaveAs ) && m_bHasFilename )

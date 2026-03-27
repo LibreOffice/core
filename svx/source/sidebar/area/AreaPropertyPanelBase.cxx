@@ -399,7 +399,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             break;
         }
     }
-    if (m_pPanel && !comphelper::LibreOfficeKit::isActive())
+    if (m_pPanel && !comphelper::COKit::isActive())
         m_pPanel->TriggerDeckLayouting();
 }
 
@@ -589,7 +589,7 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
             GraphicObject aBitmap;
             if (nPos == static_cast<sal_Int32>(BITMAP))
             {
-                if (!comphelper::LibreOfficeKit::isActive())
+                if (!comphelper::COKit::isActive())
                     bShowBmpImport = true;
                 const SvxBitmapListItem* pItem = pSh->GetItem(SID_BITMAP_LIST);
                 if (pItem)
@@ -675,7 +675,7 @@ void AreaPropertyPanelBase::FillStyleChanged(bool bUpdateModel)
 
     meLastXFS = static_cast<sal_uInt16>(nPos);
 
-    if (m_pPanel && !comphelper::LibreOfficeKit::isActive())
+    if (m_pPanel && !comphelper::COKit::isActive())
         m_pPanel->TriggerDeckLayouting();
 }
 

@@ -92,10 +92,10 @@ inline void SwLayAction::CheckIdleEnd()
     if (!IsInterrupt())
         m_bInterrupt = bool(GetInputType()) && Application::AnyInput(GetInputType());
 
-    if (comphelper::LibreOfficeKit::isActive() && !IsInterrupt() && bool(GetInputType()))
+    if (comphelper::COKit::isActive() && !IsInterrupt() && bool(GetInputType()))
     {
         // Also check if the LOK client has any pending input events.
-        m_bInterrupt = comphelper::LibreOfficeKit::anyInput();
+        m_bInterrupt = comphelper::COKit::anyInput();
     }
 }
 
@@ -757,7 +757,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         // visible area.
         const SwRect &rVisArea = m_pImp->GetShell().VisArea();
         SwRect aLokVisArea(m_pImp->GetShell().getLOKVisibleArea());
-        bool bUseLokVisArea = comphelper::LibreOfficeKit::isActive() && !aLokVisArea.IsEmpty();
+        bool bUseLokVisArea = comphelper::COKit::isActive() && !aLokVisArea.IsEmpty();
         const SwRect& rVis = bUseLokVisArea ? aLokVisArea : rVisArea;
 
         while( pPg && pPg->getFrameArea().Bottom() < rVis.Top() )
@@ -1095,7 +1095,7 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
     // LOK case: VisArea() is the entire document and getLOKVisibleArea() may contain the actual
     // visible area.
     SwRect aLokVisArea(m_pImp->GetShell().getLOKVisibleArea());
-    bool bUseLokVisArea = comphelper::LibreOfficeKit::isActive() && !aLokVisArea.IsEmpty();
+    bool bUseLokVisArea = comphelper::COKit::isActive() && !aLokVisArea.IsEmpty();
     const SwRect& rVis = bUseLokVisArea ? aLokVisArea : rVisArea;
 
     if ( (prPage->getFrameArea().Top() >= rVis.Bottom()) ||
@@ -2357,7 +2357,7 @@ bool SwLayIdle::DoIdleJob(IdleJobType eJob, IdleJobArea eJobArea)
         // visible area.
         const SwRect &rVisArea = m_pImp->GetShell().VisArea();
         SwRect aLokVisArea(m_pImp->GetShell().getLOKVisibleArea());
-        bool bUseLokVisArea = comphelper::LibreOfficeKit::isActive() && !aLokVisArea.IsEmpty();
+        bool bUseLokVisArea = comphelper::COKit::isActive() && !aLokVisArea.IsEmpty();
         const SwRect& rVis = bUseLokVisArea ? aLokVisArea : rVisArea;
         if (pPage && eJobArea == IdleJobArea::VISIBLE &&
             !pPage->getFrameArea().Overlaps(rVis))
@@ -2445,17 +2445,17 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                 bSdrModelIdle = pSdrModel->IsWriterIdle();
                 pSdrModel->SetWriterIdle(true);
             }
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 // Let the LOK anyInput() mechanism know that we're inside the idle layout.
-                comphelper::LibreOfficeKit::setIdleLayouting(true);
+                comphelper::COKit::setIdleLayouting(true);
             }
 
             aAction.Action(m_pImp->GetShell().GetOut());
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
-                comphelper::LibreOfficeKit::setIdleLayouting(false);
+                comphelper::COKit::setIdleLayouting(false);
             }
             if (pSdrModel)
             {

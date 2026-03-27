@@ -1811,7 +1811,7 @@ static OUString simplifyModule(std::u16string_view uri)
 }
 #endif
 
-/// Used only by LibreOfficeKit when used by Online to pre-initialize
+/// Used only by COKit when used by Online to pre-initialize
 void cppuhelper::ServiceManager::preloadImplementations() {
 #ifdef DISABLE_DYNLOADING
     abort();

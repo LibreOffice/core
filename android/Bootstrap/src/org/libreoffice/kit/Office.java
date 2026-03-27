@@ -49,7 +49,7 @@ public class Office {
 
     /**
      * Callback triggered through JNI to indicate that a new signal
-     * from LibreOfficeKit was retrieved.
+     * from COKit was retrieved.
      */
     private void messageRetrievedLOKit(int signalNumber, String payload) {
         if (messageCallback != null) {

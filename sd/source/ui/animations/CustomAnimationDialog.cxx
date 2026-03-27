@@ -1125,7 +1125,7 @@ void CustomAnimationEffectTabPage::updateControlStates()
         mxFTTextDelay->set_sensitive( nPos != 0 );
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         mxFTSound->hide();
         mxLBSound->hide();

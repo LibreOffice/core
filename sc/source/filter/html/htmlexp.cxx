@@ -684,7 +684,7 @@ void ScHTMLExport::WriteBody()
         {
             aMarker = pEnv;
         }
-        else if (comphelper::LibreOfficeKit::isActive())
+        else if (comphelper::COKit::isActive())
         {
             aMarker = "<google-sheets-html-origin/>"_ostr;
         }

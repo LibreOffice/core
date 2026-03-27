@@ -109,7 +109,7 @@ void ScCsvGrid::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     // the left edge will be lost. If this widget is smaller than the scrolling
     // window it is stretched to fit the parent and the problem doesn't arise.
     Size aInitialSize(10, 10);
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         aInitialSize = Size(-1, 150);
     ScCsvControl::SetDrawingArea(pDrawingArea);
     pDrawingArea->set_size_request(aInitialSize.Width(), aInitialSize.Height());

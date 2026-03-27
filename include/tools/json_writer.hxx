@@ -16,7 +16,7 @@
 
 #include <string_view>
 
-/** Simple JSON encoder designed specifically for LibreOfficeKit purposes.
+/** Simple JSON encoder designed specifically for COKit purposes.
  *
  * (1) Minimal allocations/re-allocations/copying
  * (2) Small/simple JSON documents

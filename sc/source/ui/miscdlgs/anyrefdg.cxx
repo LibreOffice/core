@@ -249,7 +249,7 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
             pTabViewShell->DoneRefMode();
         pTabViewShell->ClearHighlightRanges();
 
-        if( comphelper::LibreOfficeKit::isActive() )
+        if( comphelper::COKit::isActive() )
         {
             // Clear
             std::vector<ReferenceMark> aReferenceMarks;
@@ -454,7 +454,7 @@ void ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
 
 void ScFormulaReferenceHelper::SetDispatcherLock( bool bLock )
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         // lock / unlock only the dispatchers of Calc documents
         ScDocShell* pDocShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(checkSfxObjectShell<ScDocShell>));

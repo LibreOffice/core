@@ -719,7 +719,7 @@ void ChartController::impl_createDrawViewController()
         if( m_pDrawModelWrapper )
         {
             bool bLokCalcGlobalRTL = false;
-            if(comphelper::LibreOfficeKit::isActive() && AllSettings::GetLayoutRTL())
+            if(comphelper::COKit::isActive() && AllSettings::GetLayoutRTL())
             {
                 rtl::Reference< ChartModel > xChartModel = getChartModel();
                 if (xChartModel.is())

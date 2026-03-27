@@ -248,7 +248,7 @@ void TooltipCallback::callbackImpl(int nType, const char* pPayload)
 CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
 {
     // Set up LOK:
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::COKit::setActive(true);
 
     // Given a document with a redline:
     createSwDoc();
@@ -256,7 +256,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     TooltipCallback aCallback;
     TestLokCallbackWrapper aCallbackWrapper(&TooltipCallback::callback, &aCallback);
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallbackWrapper);
+    pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
     aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(*pWrtShell->GetSfxViewShell()));
     pWrtShell->SetRedlineFlagsAndCheckInsMode(RedlineFlags::On | RedlineFlags::ShowMask);
     pWrtShell->Insert(u"test"_ustr);
@@ -280,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
     CPPUNIT_ASSERT_EQUAL(std::string("Insert"), aCallback.redlineType);
 
     // Tear down LOK:
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
+    pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

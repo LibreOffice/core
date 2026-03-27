@@ -699,15 +699,15 @@ include/i18nutil/casefolding.hxx:41
 include/i18nutil/casefolding.hxx:42
     enum MappingType NotValue
 include/COKit/COKitEnums.h:33
-    LibreOfficeKitPartMode LOK_PARTMODE_SLIDES
+    COKitPartMode LOK_PARTMODE_SLIDES
 include/COKit/COKitEnums.h:34
-    LibreOfficeKitPartMode LOK_PARTMODE_NOTES
+    COKitPartMode LOK_PARTMODE_NOTES
 include/COKit/COKitEnums.h:40
-    LibreOfficeKitTileMode LOK_TILEMODE_RGBA
+    COKitTileMode LOK_TILEMODE_RGBA
 include/COKit/COKitEnums.h:99
-    LibreOfficeKitOptionalFeatures LOK_FEATURE_RANGE_HEADERS
+    COKitOptionalFeatures LOK_FEATURE_RANGE_HEADERS
 include/COKit/COKitEnums.h:900
-    LibreOfficeKitCallbackType LOK_CALLBACK_MEDIA_SHAPE
+    COKitCallbackType LOK_CALLBACK_MEDIA_SHAPE
 include/o3tl/unit_conversion.hxx:46
     enum o3tl::Length count
 include/oox/core/filterbase.hxx:81

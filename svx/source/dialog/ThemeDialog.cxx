@@ -36,7 +36,7 @@ ThemeDialog::~ThemeDialog()
 
 void ThemeDialog::onColorSetActivated()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         m_xDialog->response(RET_OK);
 }
 

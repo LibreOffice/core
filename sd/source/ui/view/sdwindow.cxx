@@ -338,7 +338,7 @@ void Window::SetCenterAllowed (bool bIsAllowed)
         nZoom = mnMinZoom;
 
     // Set the zoom factor at the window's map mode.
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         MapMode aMap(GetMapMode());
         aMap.SetScaleX(Fraction(nZoom, 100));
@@ -576,7 +576,7 @@ void Window::UpdateMapOrigin(bool bInvalidate)
     maPrevSize = aWinSize;
 
     // When tiled rendering, the above UpdateMapMode() call doesn't touch the map mode.
-    if (bChanged && bInvalidate && !comphelper::LibreOfficeKit::isActive())
+    if (bChanged && bInvalidate && !comphelper::COKit::isActive())
         Invalidate();
 }
 
@@ -616,7 +616,7 @@ void Window::UpdateMapMode()
     Point aNewOrigin (-maWinPos.X(), -maWinPos.Y());
     maWinPos += maViewOrigin;
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         MapMode aMap(GetMapMode());
         aMap.SetOrigin(aNewOrigin);
@@ -1019,7 +1019,7 @@ void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
     if (!pDrawViewShell || pDrawViewShell->IsInSwitchPage())
         return;
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
     ::tools::Rectangle aRectangle;
     ::tools::Rectangle* pResultRectangle;

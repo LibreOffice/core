@@ -614,7 +614,7 @@ NSSCMSMessage *CreateCMSMessage(const PRTime* time,
     // if it works, and fallback if it doesn't.
     if (SECKEYPrivateKey * pPrivateKey = PK11_FindKeyByAnyCert(cert, nullptr))
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             // pPrivateKey only exists in the memory in the LOK case, don't delete it.
             SECKEY_DestroyPrivateKey(pPrivateKey);

@@ -124,7 +124,7 @@ SwFrameDlg::SwFrameDlg(const SfxViewFrame& rViewFrame,
         }
     }
 
-    if(comphelper::LibreOfficeKit::isActive())
+    if(comphelper::COKit::isActive())
         RemoveTabPage(u"macro"_ustr);
 
     if (m_bNew)

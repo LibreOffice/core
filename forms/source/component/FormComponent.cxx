@@ -278,7 +278,7 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const 
         VclPtr<vcl::Window> pVclPeer = VCLUnoHelper::GetWindow(getPeer());
         pVclPeer->SetFormControl(true);
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
             pVclPeer->SetLOKWindowId();
     }
 }

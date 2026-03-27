@@ -1402,8 +1402,8 @@ bool ScDocument::SearchAndReplace(
                                 ScDocument::GetSearchAndReplaceStart(
                                     rSearchItem, nCol, nRow );
 
-                                // notify LibreOfficeKit about changed page
-                                if (comphelper::LibreOfficeKit::isActive())
+                                // notify COKit about changed page
+                                if (comphelper::COKit::isActive())
                                 {
                                     OString aPayload = OString::number(nTab);
                                     if (SfxViewShell* pViewShell = SfxViewShell::Current())
@@ -1433,8 +1433,8 @@ bool ScDocument::SearchAndReplace(
                                 ScDocument::GetSearchAndReplaceStart(
                                     rSearchItem, nCol, nRow );
 
-                                // notify LibreOfficeKit about changed page
-                                if (comphelper::LibreOfficeKit::isActive())
+                                // notify COKit about changed page
+                                if (comphelper::COKit::isActive())
                                 {
                                     OString aPayload = OString::number(nTab);
                                     if(SfxViewShell* pViewShell = SfxViewShell::Current())

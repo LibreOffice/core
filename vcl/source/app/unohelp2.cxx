@@ -45,7 +45,7 @@ namespace vcl::unohelper {
 
     void TextDataObject::CopyStringTo( const OUString& rContent,
         const uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard,
-        const vcl::ILibreOfficeKitNotifier* pNotifier)
+        const vcl::ICOKitNotifier* pNotifier)
     {
         SAL_WARN_IF( !rxClipboard.is(), "vcl", "TextDataObject::CopyStringTo: invalid clipboard!" );
         if ( !rxClipboard.is() )
@@ -62,7 +62,7 @@ namespace vcl::unohelper {
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();
 
-            if (pNotifier != nullptr && comphelper::LibreOfficeKit::isActive())
+            if (pNotifier != nullptr && comphelper::COKit::isActive())
             {
                 boost::property_tree::ptree aTree;
                 aTree.put("content", rContent);

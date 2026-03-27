@@ -1787,8 +1787,8 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         // Do nothing, if no configuration entry exists!
         OUString sWindowState;
 
-        // Don't look for persistent window attributes when used through LibreOfficeKit
-        if( !comphelper::LibreOfficeKit::isActive() )
+        // Don't look for persistent window attributes when used through COKit
+        if( !comphelper::COKit::isActive() )
             comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, u"ooSetupFactoryWindowAttributes"_ustr) >>= sWindowState;
 
         if (!sWindowState.isEmpty())

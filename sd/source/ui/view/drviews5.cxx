@@ -346,7 +346,7 @@ void DrawViewShell::WriteFrameViewData()
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
     ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(0,0), aVisSizePixel) );
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // aVisArea is nonsensical in the LOK case, use the slide size
         aVisArea = ::tools::Rectangle(Point(), getCurrentPage()->GetSize());

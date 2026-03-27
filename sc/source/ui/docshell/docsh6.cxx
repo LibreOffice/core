@@ -437,7 +437,7 @@ void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoadi
     // LOKit may need to juggle different symbols lists for different users so a
     // single load is not enough, otherwise the wrong separators may be expected
     // for the users locale
-    if (!bForLoading || bInitOnce || comphelper::LibreOfficeKit::isActive())
+    if (!bForLoading || bInitOnce || comphelper::COKit::isActive())
     {
         bool bForceInit = bInitOnce;
         bInitOnce = false;
@@ -500,7 +500,7 @@ void ScDocShell::CheckConfigOptions()
         pScMod->SetFormulaOptions(aNew);
 
         // Launch a nice warning dialog to let the users know of this change.
-        ScTabViewShell* pViewShell = comphelper::LibreOfficeKit::isActive() ? nullptr : GetBestViewShell();
+        ScTabViewShell* pViewShell = comphelper::COKit::isActive() ? nullptr : GetBestViewShell();
         if (pViewShell)
         {
             std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pViewShell->GetFrameWeld(),

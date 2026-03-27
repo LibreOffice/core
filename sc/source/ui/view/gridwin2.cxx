@@ -112,7 +112,7 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     Point aDiffPix = rMEvt.GetPosPixel();
 
     aDiffPix -= aScrPos;
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKActive = comphelper::COKit::isActive();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     if ( bLayoutRTL && !bLOKActive )
         aDiffPix.setX( -aDiffPix.X() );
@@ -398,7 +398,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(
     const MouseEvent& rMEvt, const ScAddress& rPos, const ScAddress& rDimPos, ScDPObject* pDPObj)
 {
     bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.CurrentTabForData() );
-    bool bLOK = comphelper::LibreOfficeKit::isActive();
+    bool bLOK = comphelper::COKit::isActive();
 
     // Get the geometry of the cell.
     Point aScrPos = mrViewData.GetScrPos(rPos.Col(), rPos.Row(), eWhich);
@@ -428,7 +428,7 @@ bool ScGridWindow::DPTestMultiFieldPopupArrow(
     const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj)
 {
     bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.CurrentTabForData() );
-    bool bLOK = comphelper::LibreOfficeKit::isActive();
+    bool bLOK = comphelper::COKit::isActive();
 
     // Get the geometry of the cell.
     Point aScrPos = mrViewData.GetScrPos(rPos.Col(), rPos.Row(), eWhich);
@@ -551,7 +551,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScreenPosition, const Si
     DataPilotFieldOrientation nOrient;
     tools::Long nDimIndex = pDPObject->GetHeaderDim(rAddress, nOrient);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // We send the cell position of the filter button to Online side. So the position of the popup can be adjusted near to the cell.
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
@@ -851,7 +851,7 @@ bool ScGridWindow::UpdateVisibleRange()
     SCCOL nXRight = rDoc.MaxCol();
     SCROW nYBottom = rDoc.MaxRow();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
         nPosX = lcl_getValidValue(pViewShell->GetLOKStartHeaderCol(), nPosX);

@@ -46,7 +46,7 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp(weld::Container* pParent, SvxHpLinkDlg* pDl
 
     InitStdControls();
 
-    if (comphelper::LibreOfficeKit::isActive()) {
+    if (comphelper::COKit::isActive()) {
         xBuilder->weld_label(u"label3"_ustr)->hide();
 
         m_xBtFileopen->hide();

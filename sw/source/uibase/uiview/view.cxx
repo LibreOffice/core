@@ -1144,7 +1144,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
                 LINK(this, SwView, BringToAttentionBlinkTimerHdl));
     m_aBringToAttentionBlinkTimer.SetTimeout(350);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetCurrentDocument());
         SfxLokHelper::notifyViewRenderState(this, pModel);
@@ -1235,7 +1235,7 @@ void SwView::SetDying()
 
 void SwView::afterCallbackRegistered()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     // common tasks

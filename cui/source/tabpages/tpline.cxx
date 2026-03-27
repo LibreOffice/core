@@ -229,7 +229,7 @@ void SvxLineTabPage::FillListboxes()
     m_xLbLineStyle->set_active( nOldSelect );
 
     // Line end style
-    OUString sNone( comphelper::LibreOfficeKit::isActive() ? SvxResId( RID_SVXSTR_INVISIBLE )
+    OUString sNone( comphelper::COKit::isActive() ? SvxResId( RID_SVXSTR_INVISIBLE )
         : SvxResId( RID_SVXSTR_NONE ) );
     nOldSelect = m_xLbStartStyle->get_active();
     m_xLbStartStyle->clear();
@@ -292,7 +292,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             *m_pnLineEndListState = ChangeType::NONE;
 
             nPos = m_xLbLineStyle->get_active();
-            OUString sNone( comphelper::LibreOfficeKit::isActive() ? SvxResId( RID_SVXSTR_INVISIBLE )
+            OUString sNone( comphelper::COKit::isActive() ? SvxResId( RID_SVXSTR_INVISIBLE )
                 : SvxResId( RID_SVXSTR_NONE ) );
 
             m_xLbStartStyle->clear();

@@ -297,7 +297,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
                 }
 
                 OUString aLanguage = SvtLanguageTable::GetLanguageString(eLanguage);
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                 {
                     if (eLanguage == LANGUAGE_DONTKNOW)
                     {

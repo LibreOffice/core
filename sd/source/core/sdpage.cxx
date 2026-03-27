@@ -1876,7 +1876,7 @@ void SdPage::SetSize(const Size& aSize)
     {
         FmFormPage::SetSize(aSize);
 
-        if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
+        if (comphelper::COKit::isActive() && SfxViewShell::Current())
             NotifyPagePropertyChanges();
     }
 }
@@ -1888,7 +1888,7 @@ void SdPage::SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32
     {
         FmFormPage::SetBorder(nLft, nUpp, nRgt, nLwr);
 
-        if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
+        if (comphelper::COKit::isActive() && SfxViewShell::Current())
             NotifyPagePropertyChanges();
     }
 }

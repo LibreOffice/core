@@ -131,7 +131,7 @@ void SdGRFFilter::HandleGraphicFilterError(ErrCode nFilterError, ErrCode nStream
 
     if (pId && pId == STR_IMPORT_GRFILTER_IOERROR)
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
-    else if (frameWeld || !comphelper::LibreOfficeKit::isActive())
+    else if (frameWeld || !comphelper::COKit::isActive())
     {
         std::shared_ptr<weld::MessageDialog> xErrorBox(
             Application::CreateMessageDialog(frameWeld, VclMessageType::Warning, VclButtonsType::Ok,

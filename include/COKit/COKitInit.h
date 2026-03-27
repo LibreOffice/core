@@ -25,8 +25,8 @@
 #include <string.h>
 #include <sys/stat.h>
 
-struct LibreOfficeKitStruct;
-typedef struct LibreOfficeKitStruct LibreOfficeKit;
+struct COKitStruct;
+typedef struct COKitStruct COKit;
 
 #ifndef _WIN32
 
@@ -38,7 +38,7 @@ typedef struct LibreOfficeKitStruct LibreOfficeKit;
         #define MERGED_LIB "libmergedlo.dylib"
 
         #if (!defined TARGET_OS_IPHONE || TARGET_OS_IPHONE == 0) && (!defined TARGET_OS_OSX || TARGET_OS_OSX == 0)
-            #error LibreOfficeKit is not supported on tvOS, visionOS or watchOS
+            #error COKit is not supported on tvOS, visionOS or watchOS
         #endif
     #else
         #define SOFFICEAPP_LIB "libsofficeapp.so"
@@ -298,17 +298,17 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
 }
 #endif
 
-typedef LibreOfficeKit *(LokHookFunction)( const char *install_path);
+typedef COKit *(LokHookFunction)( const char *install_path);
 
-typedef LibreOfficeKit *(LokHookFunction2)( const char *install_path, const char *user_profile_url );
+typedef COKit *(LokHookFunction2)( const char *install_path, const char *user_profile_url );
 
 typedef int             (LokHookPreInit)  ( const char *install_path, const char *user_profile_url );
 
 // For client code directly accessing the exported lok_preinit_2 via lok_dlsym:
-typedef int             (LokHookPreInit2) ( const char *install_path, const char *user_profile_url, LibreOfficeKit** kit);
+typedef int             (LokHookPreInit2) ( const char *install_path, const char *user_profile_url, COKit** kit);
 
 #if defined(IOS) || defined(ANDROID) || defined(__EMSCRIPTEN__)
-LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
+COKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
 #endif
 
 // install_path is the pathname to the LibreOffice installation
@@ -328,7 +328,7 @@ LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user
 //
 // user_profile_url is a file: URI for the user profile. Can be NULL.
 
-static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_profile_url )
+static COKit *lok_init_2( const char *install_path,  const char *user_profile_url )
 {
 #if !defined(IOS) && !defined(ANDROID) && !defined(__EMSCRIPTEN__)
     void *dlhandle;
@@ -384,7 +384,7 @@ static LibreOfficeKit *lok_init_2( const char *install_path,  const char *user_p
 }
 
 static LOK_TOLERATE_UNUSED
-LibreOfficeKit *lok_init( const char *install_path )
+COKit *lok_init( const char *install_path )
 {
     return lok_init_2( install_path, NULL );
 }

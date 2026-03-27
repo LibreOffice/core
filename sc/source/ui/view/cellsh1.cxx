@@ -1413,7 +1413,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     bool bColPoss, bRowPoss;
                     pTabViewShell->TestRemoveOutline( bColPoss, bRowPoss );
                     // TODO: handle this case in LOK too
-                    if ( bColPoss && bRowPoss && !comphelper::LibreOfficeKit::isActive() )
+                    if ( bColPoss && bRowPoss && !comphelper::COKit::isActive() )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
@@ -1461,7 +1461,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pTabViewShell->CopyToClip( nullptr, false, false, true );
                 rReq.Done();
 
-                if (!comphelper::LibreOfficeKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsLokReadOnlyView())
+                if (!comphelper::COKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsLokReadOnlyView())
                     GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
 
                 pTabViewShell->ShowCursor();
@@ -1475,7 +1475,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 pTabViewShell->CutToClip();
                 rReq.Done();
 
-                if (!comphelper::LibreOfficeKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsLokReadOnlyView())
+                if (!comphelper::COKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsLokReadOnlyView())
                     GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
 
                 pTabViewShell->ShowCursor();
@@ -2741,7 +2741,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                 pAuthorItem ? &pAuthorItem->GetValue() : nullptr,
                                                 pDateItem ? &pDateItem->GetValue() : nullptr );
                 }
-                else if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
+                else if (!comphelper::COKit::isActive() || comphelper::COKit::isTiledAnnotations())
                 {
                     pTabViewShell->EditNote();                  // note object to edit
                 }

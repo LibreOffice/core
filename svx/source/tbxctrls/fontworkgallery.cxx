@@ -226,7 +226,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
     Point aPagePos;
     Size aFontworkSize = aObjRect.GetSize();
 
-    SfxViewShell* pKitViewShell = comphelper::LibreOfficeKit::isActive() ?
+    SfxViewShell* pKitViewShell = comphelper::COKit::isActive() ?
         SfxViewShell::Current() : nullptr;
     if (pKitViewShell)
     {

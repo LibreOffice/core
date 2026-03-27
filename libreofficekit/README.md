@@ -1,6 +1,6 @@
-# LibreOfficeKit
+# COKit
 
-LibreOfficeKit can be used for accessing LibreOffice functionality
+COKit can be used for accessing LibreOffice functionality
 through C/C++, without any need to use UNO.
 
 For now it only offers document conversion (in addition to an experimental
@@ -57,8 +57,8 @@ The other way around (LibreOffice -> LOK client) is implemented using a
 callback. A LOK client can register a callback using the registerCallback()
 method. Whenever editing requires some action on the client side, a callback
 event is emitted. The callback types are described using the
-`LibreOfficeKitCallbackType` enumeration in `COKitEnums.h`, the callback
-function signature itself is provided by the LibreOfficeKitCallback typedef in
+`COKitCallbackType` enumeration in `COKitEnums.h`, the callback
+function signature itself is provided by the COKitCallback typedef in
 `COKitTypes.h`. The most important callback types:
 
 - `LOK_CALLBACK_INVALIDATE_TILES`: drop all tiles cached on client-side that
@@ -124,7 +124,7 @@ Running the compiled executable requires GTK's bin in PATH:
 
     PATH=${PATH}:/cygdrive/c/gtk-build/gtk/x64/release/bin bin/run gtktiledviewer --lo-path=$(cygpath -am $PWD/instdir/program) ../test.odt
 
-## LibreOfficeKitGtk
+## COKitGtk
 
 Currently consists of only a very basic GTK document viewer widget.
 

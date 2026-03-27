@@ -544,7 +544,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
             }
         }
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             // Writer and editeng selections are not supported in parallel.
             SvxSearchItem* pSearchItem = SwView::GetSearchItem();

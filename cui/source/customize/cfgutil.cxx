@@ -1197,7 +1197,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     LoadLastUsedMacro();
     UpdateUI();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         m_xDescriptionBox->hide();
 }
 

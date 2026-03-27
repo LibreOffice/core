@@ -22,7 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;
-import org.libreoffice.kit.LibreOfficeKit;
+import org.libreoffice.kit.COKit;
 import org.libreoffice.kit.Office;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
@@ -62,11 +62,11 @@ class LOKitTileProvider implements TileProvider {
         mContext = context;
         mMessageCallback = messageCallback;
 
-        LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO");
-        LibreOfficeKit.putenv("SAL_LOK_OPTIONS=compact_fonts");
-        LibreOfficeKit.init(mContext);
+        COKit.putenv("SAL_LOG=+WARN+INFO");
+        COKit.putenv("SAL_LOK_OPTIONS=compact_fonts");
+        COKit.init(mContext);
 
-        mOffice = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
+        mOffice = new Office(COKit.getCOKitHandle());
         mOffice.setMessageCallback(messageCallback);
         mOffice.setOptionalFeatures(Document.LOK_FEATURE_DOCUMENT_PASSWORD);
         mContext.setTileProvider(this);
@@ -85,8 +85,8 @@ class LOKitTileProvider implements TileProvider {
             Log.i(LOGTAG, "====> mOffice.documentLoad() returned null, trying to restart 'Office' and loading again");
             mOffice.destroy();
             Log.i(LOGTAG, "====> mOffice.destroy() done");
-            ByteBuffer handle = LibreOfficeKit.getLibreOfficeKitHandle();
-            Log.i(LOGTAG, "====> getLibreOfficeKitHandle() = " + handle);
+            ByteBuffer handle = COKit.getCOKitHandle();
+            Log.i(LOGTAG, "====> getCOKitHandle() = " + handle);
             mOffice = new Office(handle);
             Log.i(LOGTAG, "====> new Office created");
             mOffice.setMessageCallback(messageCallback);

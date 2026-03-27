@@ -139,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoneToLibraryBullet)
 
 CPPUNIT_TEST_FIXTURE(Test, testPDFReadLOKOnlyTextEdit)
 {
-    comphelper::LibreOfficeKit::setActive();
+    comphelper::COKit::setActive();
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
     {

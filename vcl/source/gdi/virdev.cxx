@@ -368,7 +368,7 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(
 {
     // If this is ever needed for something else than LOK, changes will
     // be needed in SvpSalVirtualDevice::CreateSurface() .
-    assert(comphelper::LibreOfficeKit::isActive());
+    assert(comphelper::COKit::isActive());
     assert(pBuffer);
     MapMode mm = GetMapMode();
     mm.SetOrigin( rNewOffset );

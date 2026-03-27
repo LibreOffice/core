@@ -75,7 +75,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     {
         // If this comes from LOK, that means the shape is moved by mouse
         // only then pArgs is pre-set.
-        setUndo(mpView, pArgs, comphelper::LibreOfficeKit::isActive());
+        setUndo(mpView, pArgs, comphelper::COKit::isActive());
         return;
     }
 

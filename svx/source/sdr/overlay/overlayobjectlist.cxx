@@ -66,7 +66,7 @@ namespace sdr::overlay
                             Size(DEFAULT_VALUE_FOR_HITTEST_PIXEL, DEFAULT_VALUE_FOR_HITTEST_PIXEL)));
 
                         // When tiled rendering, we always work in logic units, use the non-pixel default.
-                        if (comphelper::LibreOfficeKit::isActive())
+                        if (comphelper::COKit::isActive())
                         {
                             aSizeLogic = Size(DEFAULT_VALUE_FOR_HITTEST_TWIP, DEFAULT_VALUE_FOR_HITTEST_TWIP);
                             if (pManager->getOutputDevice().GetMapMode().GetMapUnit() == MapUnit::Map100thMM)

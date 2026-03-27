@@ -56,7 +56,7 @@ class LngSvcMgr :
         css::util::XModifyListener
     >,
     private utl::ConfigItem,
-    public comphelper::LibreOfficeKit::ThreadJoinable
+    public comphelper::COKit::ThreadJoinable
 {
     friend class LngSvcMgrListenerHelper;
 
@@ -154,7 +154,7 @@ public:
     // XModifyListener
     virtual void SAL_CALL modified( const css::lang::EventObject& rEvent ) override;
 
-    // comphelper::LibreOfficeKit::ThreadJoinable
+    // comphelper::COKit::ThreadJoinable
     virtual bool joinThreads() override;
 
     bool    AddLngSvcEvtBroadcaster(

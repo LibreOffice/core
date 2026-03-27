@@ -124,7 +124,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     std::optional<tools::Rectangle> mpDBExpandRect;
     ScRange maDBRange;
 
-    /// LibreOfficeKit needs a persistent FmFormView for tiled rendering,
+    /// COKit needs a persistent FmFormView for tiled rendering,
     /// otherwise the invalidations from drawinglayer do not work.
     std::unique_ptr<FmFormView> mpLOKDrawView;
 

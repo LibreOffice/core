@@ -107,7 +107,7 @@ static void InsertTableImpl(const DrawViewShell* pShell,
         // if zoomed in close, don't make the table bigger than the viewing window.
         Size aMaxSize = pShell->getCurrentPage()->GetSize();
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             // aWinRect is nonsensical in the LOK case
             aWinRect = ::tools::Rectangle(aPos, aMaxSize);

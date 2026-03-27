@@ -158,7 +158,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     {
                         for (auto const& locale : aLocaleNames)
                         {
-                            if (!comphelper::LibreOfficeKit::isAllowlistedLanguage(locale))
+                            if (!comphelper::COKit::isAllowlistedLanguage(locale))
                                 continue;
 
                             aLocaleNamesSet.insert(locale);

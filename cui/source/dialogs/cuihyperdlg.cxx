@@ -111,9 +111,9 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     m_xOKBtn->show();
     m_xCancelBtn->show();
 
-    m_xApplyBtn->set_visible(!comphelper::LibreOfficeKit::isActive());
-    m_xHelpBtn->set_visible(!comphelper::LibreOfficeKit::isActive());
-    m_xResetBtn->set_visible(!comphelper::LibreOfficeKit::isActive());
+    m_xApplyBtn->set_visible(!comphelper::COKit::isActive());
+    m_xHelpBtn->set_visible(!comphelper::COKit::isActive());
+    m_xResetBtn->set_visible(!comphelper::COKit::isActive());
 
     mbGrabFocus = true;
 
@@ -133,7 +133,7 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     AddTabPage(u"mail"_ustr, SvxHyperlinkMailTp::Create);
     AddTabPage(u"document"_ustr, SvxHyperlinkDocTp::Create);
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         AddTabPage(u"newdocument"_ustr, SvxHyperlinkNewDocTp::Create);
 
     GetBindings().Update(SID_HYPERLINK_GETLINK);
@@ -234,7 +234,7 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
 
     OUString sPageId(msRememberedPageId);
 
-    if (comphelper::LibreOfficeKit::isActive()) {
+    if (comphelper::COKit::isActive()) {
         sPageId = "internet";
     }
 
@@ -242,7 +242,7 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
         sPageId = "internet";
     } else if (eProtocolTyp == INetProtocol::Mailto) {
         sPageId = "mail";
-    } else if (!comphelper::LibreOfficeKit::isActive() &&
+    } else if (!comphelper::COKit::isActive() &&
         (eProtocolTyp == INetProtocol::File || aStrURL.startsWith("#"))) {
         sPageId = "document";
     }

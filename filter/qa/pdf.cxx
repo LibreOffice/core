@@ -146,7 +146,7 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
         return;
 
     loadFromFile(u"commentsInMargin.odt");
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         vcl::ITiledRenderable* pTiledDoc = dynamic_cast<vcl::ITiledRenderable*>(mxComponent.get());
         pTiledDoc->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -198,11 +198,11 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentsInMargin)
     // Test that setting/unsetting the "ExportNotesInMargin" property works correctly
     doTestCommentsInMargin(true);
     doTestCommentsInMargin(false);
-    comphelper::LibreOfficeKit::setActive(true);
-    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+    comphelper::COKit::setActive(true);
+    comphelper::COKit::setTiledAnnotations(true);
     doTestCommentsInMargin(true);
     doTestCommentsInMargin(false);
-    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+    comphelper::COKit::setTiledAnnotations(false);
     doTestCommentsInMargin(true);
     doTestCommentsInMargin(false);
 }

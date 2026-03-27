@@ -26,11 +26,11 @@ namespace lok
 class Document
 {
 private:
-    LibreOfficeKitDocument* mpDoc;
+    COKitDocument* mpDoc;
 
 public:
     /// A lok::Document is typically created by the lok::Office::documentLoad() method.
-    Document(LibreOfficeKitDocument* pDoc) :
+    Document(COKitDocument* pDoc) :
         mpDoc(pDoc)
     {}
 
@@ -58,13 +58,13 @@ public:
     }
 
     /// Gives access to the underlying C pointer.
-    LibreOfficeKitDocument *get() { return mpDoc; }
+    COKitDocument *get() { return mpDoc; }
 
     /**
      * Get document type.
      *
      * @since LibreOffice 6.0
-     * @return an element of the LibreOfficeKitDocumentType enum.
+     * @return an element of the COKitDocumentType enum.
      */
     int getDocumentType()
     {
@@ -201,7 +201,7 @@ public:
     /**
      * Gets the tile mode: the pixel format used for the pBuffer of paintTile().
      *
-     * @return an element of the LibreOfficeKitTileMode enum.
+     * @return an element of the COKitTileMode enum.
      */
     int getTileMode()
     {
@@ -252,7 +252,7 @@ public:
      * @param pCallback the callback to invoke
      * @param pData the user data, will be passed to the callback on invocation
      */
-    void registerCallback(LibreOfficeKitCallback pCallback, void* pData)
+    void registerCallback(COKitCallback pCallback, void* pData)
     {
         mpDoc->pClass->registerCallback(mpDoc, pCallback, pData);
     }
@@ -353,7 +353,7 @@ public:
     /**
      * Sets the start or end of a text selection.
      *
-     * @param nType @see LibreOfficeKitSetTextSelectionType
+     * @param nType @see COKitSetTextSelectionType
      * @param nX horizontal position in document coordinates
      * @param nY vertical position in document coordinates
      */
@@ -378,7 +378,7 @@ public:
      *
      * In most cases it is more efficient to use getSelectionTypeAndText().
      *
-     * @return an element of the LibreOfficeKitSelectionType enum.
+     * @return an element of the COKitSelectionType enum.
      */
     int getSelectionType()
     {
@@ -396,12 +396,12 @@ public:
      * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
      * @param pText the currently selected text
      * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
-     * @return an element of the LibreOfficeKitSelectionType enum.
+     * @return an element of the COKitSelectionType enum.
      * @since LibreOffice 7.4
      */
     int getSelectionTypeAndText(const char* pMimeType, char** pText, char** pUsedMimeType = NULL)
     {
-        if (LIBREOFFICEKIT_DOCUMENT_HAS(mpDoc, getSelectionTypeAndText))
+        if (COKIT_DOCUMENT_HAS(mpDoc, getSelectionTypeAndText))
             return mpDoc->pClass->getSelectionTypeAndText(mpDoc, pMimeType, pText, pUsedMimeType);
         int type = mpDoc->pClass->getSelectionType(mpDoc);
         if(type == LOK_SELTYPE_TEXT && pText)
@@ -464,7 +464,7 @@ public:
     /**
      * Adjusts the graphic selection.
      *
-     * @param nType @see LibreOfficeKitSetGraphicSelectionType
+     * @param nType @see COKitSetGraphicSelectionType
      * @param nX horizontal position in document coordinates
      * @param nY vertical position in document coordinates
      */
@@ -548,7 +548,7 @@ public:
      */
     int createView(const char* pOptions = nullptr)
     {
-        if (LIBREOFFICEKIT_DOCUMENT_HAS(mpDoc, createViewWithOptions))
+        if (COKIT_DOCUMENT_HAS(mpDoc, createViewWithOptions))
             return mpDoc->pClass->createViewWithOptions(mpDoc, pOptions);
         else
             return mpDoc->pClass->createView(mpDoc);
@@ -599,7 +599,7 @@ public:
                           int *pFontHeight,
                           int pOrientation=0)
     {
-        if (LIBREOFFICEKIT_DOCUMENT_HAS(mpDoc, renderFontOrientation))
+        if (COKIT_DOCUMENT_HAS(mpDoc, renderFontOrientation))
             return mpDoc->pClass->renderFontOrientation(mpDoc, pFontName, pChar, pFontWidth, pFontHeight, pOrientation);
         else
             return mpDoc->pClass->renderFont(mpDoc, pFontName, pChar, pFontWidth, pFontHeight);
@@ -659,7 +659,7 @@ public:
      *
      * @param nWindowId Specify the window id to post the input event to. If
      * nWindow is 0, the event is posted into the document
-     * @param nType see LibreOfficeKitExtTextInputType
+     * @param nType see COKitExtTextInputType
      * @param pText Text for LOK_EXT_TEXTINPUT
      */
     void postWindowExtTextInputEvent(unsigned nWindowId, int nType, const char* pText)
@@ -970,15 +970,15 @@ public:
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
-/// The lok::Office class represents one started LibreOfficeKit instance.
+/// The lok::Office class represents one started COKit instance.
 class Office
 {
 private:
-    LibreOfficeKit* mpThis;
+    COKit* mpThis;
 
 public:
     /// A lok::Office is typically created by the lok_cpp_init() function.
-    Office(LibreOfficeKit* pThis) :
+    Office(COKit* pThis) :
         mpThis(pThis)
     {}
 
@@ -993,15 +993,15 @@ public:
      * @param pUrl the URL of the document to load
      * @param pFilterOptions options for the import filter, e.g. SkipImages.
      *        Another useful FilterOption is "Language=...".  It is consumed
-     *        by the documentLoad() itself, and when provided, LibreOfficeKit
+     *        by the documentLoad() itself, and when provided, COKit
      *        switches the language accordingly first.
      * @since pFilterOptions argument added in LibreOffice 5.0
      */
     Document* documentLoad(const char* pUrl, const char* pFilterOptions = NULL)
     {
-        LibreOfficeKitDocument* pDoc = NULL;
+        COKitDocument* pDoc = NULL;
 
-        if (LIBREOFFICEKIT_HAS(mpThis, documentLoadWithOptions))
+        if (COKIT_HAS(mpThis, documentLoadWithOptions))
             pDoc = mpThis->pClass->documentLoadWithOptions(mpThis, pUrl, pFilterOptions);
         else
             pDoc = mpThis->pClass->documentLoad(mpThis, pUrl);
@@ -1022,7 +1022,7 @@ public:
     /**
      * Frees the memory pointed to by pFree.
      *
-     * Use on dynamically allocated data returned by LibreOfficeKit
+     * Use on dynamically allocated data returned by COKit
      * functions. In other cases than the value returned by
      * getError(), call freeMemory() instead for clarity.
      *
@@ -1041,7 +1041,7 @@ public:
      * @param pCallback the callback to invoke
      * @param pData the user data, will be passed to the callback on invocation
      */
-    void registerCallback(LibreOfficeKitCallback pCallback, void* pData)
+    void registerCallback(COKitCallback pCallback, void* pData)
     {
         mpThis->pClass->registerCallback(mpThis, pCallback, pData);
     }
@@ -1071,7 +1071,7 @@ public:
      * Set bitmask of optional features supported by the client.
      *
      * @since LibreOffice 6.0
-     * @see LibreOfficeKitOptionalFeatures
+     * @see COKitOptionalFeatures
      */
     void setOptionalFeatures(unsigned long long features)
     {
@@ -1150,15 +1150,15 @@ public:
      * Runs the main-loop in the current thread. To trigger this
      * mode you need to putenv a SAL_LOK_OPTIONS containing 'unipoll'.
      * The @pPollCallback is called to poll for events from the Kit client
-     * and the @pWakeCallback can be called by internal LibreOfficeKit threads
+     * and the @pWakeCallback can be called by internal COKit threads
      * to wake the caller of 'runLoop' ie. the main thread.
      *
      * it is expected that runLoop does not return until Kit exit.
      *
      * @pData is a context/closure passed to both methods.
      */
-    void runLoop(LibreOfficeKitPollCallback pPollCallback,
-                 LibreOfficeKitWakeCallback pWakeCallback,
+    void runLoop(COKitPollCallback pPollCallback,
+                 COKitWakeCallback pWakeCallback,
                  void* pData)
     {
         mpThis->pClass->runLoop(mpThis, pPollCallback, pWakeCallback, pData);
@@ -1215,7 +1215,7 @@ public:
     /**
      * Debugging tool for triggering a dump of internal state.
      *
-     * LibreOfficeKit can get into an unhelpful state at run-time when
+     * COKit can get into an unhelpful state at run-time when
      * in heavy use. This provides a critical tool for inspecting
      * relevant internal state.
      *
@@ -1235,7 +1235,7 @@ public:
     /**
      * Trim memory usage.
      *
-     * LibreOfficeKit caches lots of information from large pixmaps
+     * COKit caches lots of information from large pixmaps
      * to view and calculation results. When a view has not been
      * used for some time, depending on the load on memory it can
      * be useful to free up memory.
@@ -1312,13 +1312,13 @@ public:
     /**
      * Registers a callback that can determine if there are any pending input events.
      */
-    void registerAnyInputCallback(LibreOfficeKitAnyInputCallback pCallback, void* pData)
+    void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData)
     {
         return mpThis->pClass->registerAnyInputCallback(mpThis, pCallback, pData);
     }
 
     /**
-     * Get number of documents of this LibreOfficeKit.
+     * Get number of documents of this COKit.
      */
     int getDocsCount()
     {
@@ -1328,7 +1328,7 @@ public:
     /**
      * Registers a callback that can display an interactive file save dialog.
      */
-    void registerFileSaveDialogCallback(LibreOfficeKitFileSaveDialogCallback pCallback)
+    void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback)
     {
         return mpThis->pClass->registerFileSaveDialogCallback(mpThis, pCallback);
     }
@@ -1336,7 +1336,7 @@ public:
     /**
      * Frees the memory pointed to by pFree.
      *
-     * Use on dynamically allocated data returned by LibreOfficeKit
+     * Use on dynamically allocated data returned by COKit
      * functions. Just a wrapper for freeError() with a better name.
      */
     void freeMemory(char* pFree)
@@ -1354,7 +1354,7 @@ public:
 /// For information on the parameters, see writeup for lok_init_2 in COKitInit.h.
 inline Office* lok_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
 {
-    LibreOfficeKit* pThis = lok_init_2(pInstallPath, pUserProfileUrl);
+    COKit* pThis = lok_init_2(pInstallPath, pUserProfileUrl);
     if (pThis == NULL || pThis->pClass->nSize == 0)
         return NULL;
     return new ::lok::Office(pThis);

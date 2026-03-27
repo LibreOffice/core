@@ -19,20 +19,20 @@ extern "C" {
 /** @see lok::Office::registerCallback().
     @since LibreOffice 6.0
  */
-typedef void (*LibreOfficeKitCallback)(int nType, const char* pPayload, void* pData);
+typedef void (*COKitCallback)(int nType, const char* pPayload, void* pData);
 
 /** @see lok::Office::runLoop().
     @since LibreOffice 6.3
  */
-typedef int (*LibreOfficeKitPollCallback)(void* pData, int timeoutUs);
-typedef void (*LibreOfficeKitWakeCallback)(void* pData);
+typedef int (*COKitPollCallback)(void* pData, int timeoutUs);
+typedef void (*COKitWakeCallback)(void* pData);
 
 /// @see lok::Office::registerAnyInputCallback()
-typedef bool (*LibreOfficeKitAnyInputCallback)(void* pData, int nMostUrgentPriority);
+typedef bool (*COKitAnyInputCallback)(void* pData, int nMostUrgentPriority);
 
 /// @see lok::Office::registerFileSaveDialogCallback()
-typedef void (*LibreOfficeKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pResultUri,
-                                                     size_t nResultUri);
+typedef void (*COKitFileSaveDialogCallback)(const char* pSuggestedUri, char* pResultUri,
+                                            size_t nResultUri);
 
 #ifdef __cplusplus
 }

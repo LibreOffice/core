@@ -804,7 +804,7 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
             || eAutoMode == ScAutoFontColorMode::IgnoreBack
             || eAutoMode == ScAutoFontColorMode::IgnoreAll)
         {
-            if (!comphelper::LibreOfficeKit::isActive())
+            if (!comphelper::COKit::isActive())
             {
                 if ( eAutoMode == ScAutoFontColorMode::Print )
                     aBackColor = COL_WHITE;

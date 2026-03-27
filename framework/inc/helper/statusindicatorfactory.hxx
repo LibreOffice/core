@@ -122,7 +122,7 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
                                            , css::lang::XInitialization
                                            , css::task::XStatusIndicatorFactory
                                            , css::util::XUpdatable >,
-                                     public comphelper::LibreOfficeKit::ThreadJoinable
+                                     public comphelper::COKit::ThreadJoinable
 {
 
     // member
@@ -213,7 +213,7 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
         void setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                              sal_Int32                                           nValue);
 
-        // comphelper::LibreOfficeKit::ThreadJoinable
+        // comphelper::COKit::ThreadJoinable
         virtual bool joinThreads() override;
 
         virtual void startThreads() override;

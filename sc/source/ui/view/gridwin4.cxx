@@ -454,7 +454,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     // all the rendering should go through PaintTile() in that case.
     // TODO revisit if we can actually turn this into an assert(), and clean
     // up the callers
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     bool bTextWysiwyg = ScModule::get()->GetInputOptions().GetTextWysiwyg();
@@ -672,10 +672,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     ScModule* pScMod = ScModule::get();
     ScDocument& rDoc = mrViewData.GetDocument();
     const ScViewOptions& rOpts = mrViewData.GetOptions();
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bIsTiledRendering = comphelper::COKit::isActive();
     bool bNoBackgroundAndGrid = bIsTiledRendering
-                                && comphelper::LibreOfficeKit::isCompatFlagSet(
-                                       comphelper::LibreOfficeKit::Compat::scNoGridBackground);
+                                && comphelper::COKit::isCompatFlagSet(
+                                       comphelper::COKit::Compat::scNoGridBackground);
 
     SCTAB nViewTab = aOutputData.mnTab; // the actual view tab (may be sheet view tab)
     SCTAB nTab = rDoc.GetDefaultViewTableNumber(nViewTab); // default/logical tab for structural lookups
@@ -1022,7 +1022,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                                           : aOrigin.getX();
         Size aPixelOffset(nXOffset, aOrigin.getY());
         pContentDev->SetPixelOffset(aPixelOffset);
-        comphelper::LibreOfficeKit::setLocalRendering();
+        comphelper::COKit::setLocalRendering();
     }
 
     DrawRedraw( aOutputData, SC_LAYER_FRONT );
@@ -1279,8 +1279,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 // EditView will do the cursor notifications correctly if we're in
                 // print-twips messaging mode.
                 if (pTabViewShell == pThisViewShell
-                    && !comphelper::LibreOfficeKit::isCompatFlagSet(
-                        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+                    && !comphelper::COKit::isCompatFlagSet(
+                        comphelper::COKit::Compat::scPrintTwipsMsgs))
                 {
                     // Now we need to get relative cursor position within the editview.
                     // This is for sending the pixel-aligned twips position of the cursor to the specific views with
@@ -1609,8 +1609,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
     if (pModel)
     {
-        bool bPrintTwipsMsgs = comphelper::LibreOfficeKit::isCompatFlagSet(
-                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+        bool bPrintTwipsMsgs = comphelper::COKit::isCompatFlagSet(
+                comphelper::COKit::Compat::scPrintTwipsMsgs);
         if (!mpLOKDrawView)
         {
             mpLOKDrawView.reset(bPrintTwipsMsgs ?
@@ -2195,7 +2195,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
             }
         }
 
-        if ( !comphelper::LibreOfficeKit::isActive() && bListValButton && pRowInfo[nArrY].nRowNo == aListValPos.Row() && pRowInfo[nArrY].bChanged )
+        if ( !comphelper::COKit::isActive() && bListValButton && pRowInfo[nArrY].nRowNo == aListValPos.Row() && pRowInfo[nArrY].bChanged )
         {
             tools::Rectangle aRect = GetListValButtonRect( aListValPos );
             aComboButton.SetPosPixel( aRect.TopLeft() );
@@ -2326,7 +2326,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     double nPPTY = mrViewData.GetPPTY();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     // LOK clients needs exact document coordinates, so don't horizontally mirror them.
-    tools::Long nLayoutSign = (!comphelper::LibreOfficeKit::isActive() && bLayoutRTL) ? -1 : 1;
+    tools::Long nLayoutSign = (!comphelper::COKit::isActive() && bLayoutRTL) ? -1 : 1;
 
     ScMarkData aMultiMark( rMarkData );
     aMultiMark.SetMarking( false );
@@ -2407,7 +2407,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     if (nY1 < nPosY)
         nY1 = nPosY;
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         // limit the selection to only what is visible on the screen
         SCCOL nXRight = nPosX + mrViewData.VisibleCellsX(eHWhich);

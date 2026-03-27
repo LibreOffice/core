@@ -204,7 +204,7 @@ protected:
     static ShellResource*      spShellRes;      ///< Resources for the Shell.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
-    tools::Rectangle        maLOKVisibleArea;///< The visible area in the LibreOfficeKit client.
+    tools::Rectangle        maLOKVisibleArea;///< The visible area in the COKit client.
     rtl::Reference<SwDoc>   mxDoc;          ///< The document; never 0.
 
     sal_uInt16 mnStartAction; ///< != 0 if at least one Action is active.

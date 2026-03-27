@@ -458,7 +458,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         GetPageView().GetView().InvalidateOneWin(rWindow, aVCLDiscreteRectangle);
         rWindow.EnableMapMode(bWasMapModeEnabled);
     }
-    else if (comphelper::LibreOfficeKit::isActive())
+    else if (comphelper::COKit::isActive())
     {
         // we don't really have to have a paint window with LOK; OTOH we know
         // that the drawinglayer units are 100ths of mm, so they are easy to

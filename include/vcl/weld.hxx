@@ -65,7 +65,7 @@ class Bitmap;
 
 namespace vcl
 {
-class ILibreOfficeKitNotifier;
+class ICOKitNotifier;
 typedef OutputDevice RenderContext;
 }
 namespace tools
@@ -599,7 +599,7 @@ public:
     // render the widget to an output device
     virtual VclPtr<VirtualDevice> screenshot() = 0;
 
-    virtual const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() = 0;
+    virtual const vcl::ICOKitNotifier* GetLOKNotifier() = 0;
 };
 
 class VCL_DLLPUBLIC WaitObject
@@ -670,8 +670,7 @@ public:
     // undo previous dialog collapse
     virtual void undo_collapse() = 0;
 
-    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
-        = 0;
+    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink) = 0;
 };
 
 class VCL_DLLPUBLIC MessageDialog : virtual public Dialog

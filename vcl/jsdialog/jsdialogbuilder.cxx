@@ -926,10 +926,11 @@ std::unique_ptr<weld::Calendar> JSInstanceBuilder::weld_calendar(const OUString&
     return pWeldWidget;
 }
 
-weld::MessageDialog*
-JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
-                                       VclButtonsType eButtonType, const OUString& rPrimaryMessage,
-                                       const vcl::ILibreOfficeKitNotifier* pNotifier)
+weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParent,
+                                                            VclMessageType eMessageType,
+                                                            VclButtonsType eButtonType,
+                                                            const OUString& rPrimaryMessage,
+                                                            const vcl::ICOKitNotifier* pNotifier)
 {
     SalInstanceWidget* pParentInstance = dynamic_cast<SalInstanceWidget*>(pParent);
     SystemWindow* pParentWidget = pParentInstance ? pParentInstance->getSystemWindow() : nullptr;

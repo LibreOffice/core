@@ -242,7 +242,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             {
                 TransitionPresetPtr pPreset( new TransitionPreset( xChildNode ) );
 
-                if( comphelper::LibreOfficeKit::isActive() )
+                if( comphelper::COKit::isActive() )
                 {
                     sal_Int16 eTransitionType = pPreset->getTransition();
                     sal_Int16 eTransitionSubType = pPreset->getSubtype();
@@ -379,8 +379,8 @@ const TransitionPresetList& TransitionPreset::getTransitionPresetList()
 {
     // Support localization per-view. Currently not useful for Desktop
     // but very much critical for LOK. The cache now is per-language.
-    const OUString aLang = comphelper::LibreOfficeKit::isActive()
-                               ? comphelper::LibreOfficeKit::getLanguageTag().getBcp47()
+    const OUString aLang = comphelper::COKit::isActive()
+                               ? comphelper::COKit::getLanguageTag().getBcp47()
                                : SvtSysLocaleOptions().GetLanguageTag().getBcp47();
 
     SolarMutexGuard aGuard;

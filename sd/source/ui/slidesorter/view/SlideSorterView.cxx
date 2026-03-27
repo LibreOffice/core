@@ -565,7 +565,7 @@ void SlideSorterView::CompleteRedraw (
 {
     (void)pRedirector;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     if (pDevice == nullptr || pDevice!=mrSlideSorter.GetContentWindow()->GetOutDev())

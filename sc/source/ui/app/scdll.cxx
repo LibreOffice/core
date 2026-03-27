@@ -191,7 +191,7 @@ void ScDLL::Init()
     ScOptSolverDlgWrapper       ::RegisterChildWindow(false, pMod);
     ScXMLSourceDlgWrapper       ::RegisterChildWindow(false, pMod);
     ScNameDlgWrapper            ::RegisterChildWindow(false, pMod,
-                                           comphelper::LibreOfficeKit::isActive()
+                                           comphelper::COKit::isActive()
                                                ? SfxChildWindowFlags::NEVERCLONE
                                                : SfxChildWindowFlags::NONE);
     ScNameDefDlgWrapper         ::RegisterChildWindow(false, pMod);
@@ -224,7 +224,7 @@ void ScDLL::Init()
     sc::SparklineDataRangeDialogWrapper ::RegisterChildWindow(false, pMod);
     sc::ConditionalFormatEasyDialogWrapper ::RegisterChildWindow(
         false, pMod,
-        comphelper::LibreOfficeKit::isActive() ? SfxChildWindowFlags::NEVERCLONE
+        comphelper::COKit::isActive() ? SfxChildWindowFlags::NEVERCLONE
                                                : SfxChildWindowFlags::NONE);
 
     // Redlining Window

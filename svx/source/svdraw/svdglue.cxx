@@ -254,7 +254,7 @@ void SdrGluePoint::Shear(const Point& rRef, double tn, bool bVShear, const SdrOb
 
 void SdrGluePoint::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
     bool bMapMode=rWin.IsMapModeEnabled();
     Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
@@ -327,7 +327,7 @@ sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
 
 void SdrGluePointList::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
     for (auto& xGP : m_aList)
         xGP.Invalidate(rWin,pObj);

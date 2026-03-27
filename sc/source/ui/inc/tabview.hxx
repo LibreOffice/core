@@ -261,7 +261,7 @@ private:
 
     void            SetZoomPercentFromCommand(sal_uInt16 nZoomPercent);
 
-    DECL_STATIC_LINK(ScTabView, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+    DECL_STATIC_LINK(ScTabView, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
 
     void            UpdateHighlightOverlay();
     void            ImplTabChanged(bool bSameTabButMoved);
@@ -524,7 +524,7 @@ public:
 
     void            InvalidateAttribs();
 
-    void            OnLibreOfficeKitTabChanged();
+    void            OnCOKitTabChanged();
     void            AddWindowToForeignEditView(SfxViewShell* pViewShell, ScSplitPos eWhich);
     void            RemoveWindowFromForeignEditView(SfxViewShell* pViewShell, ScSplitPos eWhich);
     void            MakeEditView( ScEditEngineDefaulter& rEngine, SCCOL nCol, SCROW nRow );

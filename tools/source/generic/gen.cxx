@@ -30,7 +30,7 @@ OString Pair::toString() const
 {
     // Note that this is not just used for debugging output but the
     // format is parsed by external code (passed in callbacks to
-    // LibreOfficeKit clients). So don't change.
+    // COKit clients). So don't change.
     return OString::number(A()) + ", " + OString::number(B());
 }
 
@@ -172,7 +172,7 @@ OString RectangleTemplateBase::toString() const
 {
     // Note that this is not just used for debugging output but the
     // format is parsed by external code (passed in callbacks to
-    // LibreOfficeKit clients). So don't change.
+    // COKit clients). So don't change.
     return OString::number(Left()) + ", "
             + OString::number(Top()) + ", "
             + OString::number(getOpenWidth()) + ", "

@@ -330,7 +330,7 @@ void ViewShell::Activate(bool bIsMDIActivate)
         if (GetDispatcher() != nullptr)
         {
             SfxCallMode nCall = SfxCallMode::RECORD;
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 // Make sure the LOK case doesn't dispatch async events while switching views, that
                 // would lead to a loop, see SfxHintPoster::DoEvent_Impl().
@@ -1437,7 +1437,7 @@ void ViewShell::ImpSidUndo(SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
         if(nCount >= nNumber)
         {
-            if (comphelper::LibreOfficeKit::isActive() && !bRepair)
+            if (comphelper::COKit::isActive() && !bRepair)
             {
                 // If another view created the first undo action, prevent redoing it from this view.
                 const SfxUndoAction* pAction = pUndoManager->GetUndoAction();
@@ -1507,7 +1507,7 @@ void ViewShell::ImpSidRedo(SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
         if(nCount >= nNumber)
         {
-            if (comphelper::LibreOfficeKit::isActive() && !bRepair)
+            if (comphelper::COKit::isActive() && !bRepair)
             {
                 // If another view created the first undo action, prevent redoing it from this view.
                 const SfxUndoAction* pAction = pUndoManager->GetRedoAction();

@@ -284,7 +284,7 @@ void ScCheckListMenuControl::queueLaunchSubMenu(size_t nPos, ScListSubMenuContro
 
     maOpenTimer.mpSubMenu = pMenu;
     maOpenTimer.mnMenuPos = nPos;
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         maOpenTimer.maTimer.Invoke();
     else
         maOpenTimer.maTimer.Start();
@@ -310,7 +310,7 @@ void ScCheckListMenuControl::queueCloseSubMenu()
     maOpenTimer.mpSubMenu = nullptr;
     maOpenTimer.mnMenuPos = MENU_NOT_SELECTED;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         maCloseTimer.maTimer.Invoke();
     else
         maCloseTimer.maTimer.Start();
@@ -639,7 +639,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
         mxFieldsComboLabel->hide();
         mxFieldsCombo->hide();
     }
-    if (!comphelper::LibreOfficeKit::isActive()) {
+    if (!comphelper::COKit::isActive()) {
         // In LOK (read: under JSDialog), it is preferable to run this search on
         // the client side rather than in core for positioning/interference/etc. reasons
         mxEdSearch->show();
@@ -678,7 +678,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     maSearchEditTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
     maSearchEditTimer.SetInvokeHandler(LINK(this, ScCheckListMenuControl, SearchEditTimeoutHdl));
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         mxBtnSelectSingle->hide();
         mxBtnUnselectSingle->hide();
@@ -1744,7 +1744,7 @@ void ScCheckListMenuControl::launch(weld::Widget* pWidget, const tools::Rectangl
     if (maConfig.mbRTL)
     {
         // In RTL mode, the logical "left" is visual "right".
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             tools::Long nLeft = aRect.Left() - aRect.GetWidth();
             aRect.SetLeft( nLeft );

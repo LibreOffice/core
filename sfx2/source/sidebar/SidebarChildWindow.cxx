@@ -51,7 +51,7 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
         // HACK: unfortunately I haven't found a clean solution to do
         // this, so do it this way:
         //
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             pDockWin->SetSizePixel(
                 Size(TabBar::GetDefaultWidth(),
@@ -61,7 +61,7 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
 
     pDockWin->Initialize(pInfo);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // Undock sidebar in LOK to allow for resizing freely
         // (i.e. when the client window is resized) and collapse

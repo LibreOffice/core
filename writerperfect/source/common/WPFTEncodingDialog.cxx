@@ -109,8 +109,7 @@ WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& ti
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, WPFTEncodingDialog, InstallLOKNotifierHdl));
 }
 
-IMPL_STATIC_LINK_NOARG(WPFTEncodingDialog, InstallLOKNotifierHdl, void*,
-                       vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(WPFTEncodingDialog, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }

@@ -299,7 +299,7 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
             m_xDialog->set_title(mxAltTitle->get_label());
             break;
         case SC_IMPORTFILE:
-            if (!comphelper::LibreOfficeKit::isActive())
+            if (!comphelper::COKit::isActive())
             {
                 aName += OUString::Concat(" - [") + aDatName + "]";
                 m_xDialog->set_title(aName);
@@ -502,12 +502,12 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
         mxCkbSkipEmptyCells->hide();
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         m_xBuilder->weld_button(u"cancel"_ustr)->hide();
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, ScImportAsciiDlg, InstallLOKNotifierHdl));
 }
 
-IMPL_STATIC_LINK_NOARG(ScImportAsciiDlg, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(ScImportAsciiDlg, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }

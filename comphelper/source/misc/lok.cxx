@@ -26,7 +26,7 @@
 
 using namespace com::sun::star;
 
-namespace comphelper::LibreOfficeKit
+namespace comphelper::COKit
 {
 
 #if !LOK_ALWAYS_ACTIVE

@@ -87,7 +87,7 @@ void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
     ScViewData& rViewData = GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.CurrentTabForData());
+    bool bNegativeX = comphelper::COKit::isActive() && rDoc.IsNegativePage(rViewData.CurrentTabForData());
     if (bNegativeX)
         pClient->SetNegativeX(true);
 
@@ -167,7 +167,7 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
         ScViewData& rViewData = GetViewData();
         ScDocShell* pDocSh = rViewData.GetDocShell();
         ScDocument& rDoc = pDocSh->GetDocument();
-        bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.CurrentTabForData());
+        bool bNegativeX = comphelper::COKit::isActive() && rDoc.IsNegativePage(rViewData.CurrentTabForData());
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
             pClient = new ScClient( this, pWin, &GetScDrawView()->GetModel(), pObj );
@@ -403,7 +403,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_INSERT_DIAGRAM:
             FuInsertChart(*this, pWin, pView, rModel, rReq, LINK( this, ScTabViewShell, DialogClosedHdl ));
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 pDocSh->SetModified();
             break;
 
@@ -778,7 +778,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                     bRepair = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
                 sal_uInt16 nUndoOffset = 0;
-                if (comphelper::LibreOfficeKit::isActive() && !bRepair)
+                if (comphelper::COKit::isActive() && !bRepair)
                 {
                     SfxUndoAction* pAction = nullptr;
                     if (bIsUndo)

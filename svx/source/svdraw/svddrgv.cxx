@@ -213,7 +213,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
         // Coordinate maybe affected by GridOffset, so we may need to
         // adapt to Model-coordinates here
-        if((comphelper::LibreOfficeKit::isActive() && mpMarkedObj
+        if((comphelper::COKit::isActive() && mpMarkedObj
             && getPossibleGridOffsetForSdrObject(aGridOffset, rMarkList.GetMark(0)->GetMarkedSdrObj(), GetSdrPageView()))
             || (getPossibleGridOffsetForPosition(
             aGridOffset,
@@ -525,7 +525,7 @@ void SdrDragView::MovDragObj(const Point& rPnt)
     // Coordinate maybe affected by GridOffset, so we may need to
     // adapt to Model-coordinates here
     const SdrMarkList& rMarkList = GetMarkedObjectList();
-    if((comphelper::LibreOfficeKit::isActive() && mpMarkedObj
+    if((comphelper::COKit::isActive() && mpMarkedObj
         && getPossibleGridOffsetForSdrObject(aGridOffset, rMarkList.GetMark(0)->GetMarkedSdrObj(), GetSdrPageView()))
         || (getPossibleGridOffsetForPosition(
         aGridOffset,

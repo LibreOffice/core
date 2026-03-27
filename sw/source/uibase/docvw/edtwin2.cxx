@@ -716,7 +716,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             }
             if (!sText.isEmpty())
             {
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                 {
                     const SwRangeRedline* pRedline = nullptr;
                     if (aContentAtPos.eContentAtPos == IsAttrAtPos::Redline)
@@ -784,15 +784,15 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     {
         pWrtShell->setOutputToWindow(true);
         bool bTiledPainting = false;
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
-            bTiledPainting = comphelper::LibreOfficeKit::isTiledPainting();
-            comphelper::LibreOfficeKit::setTiledPainting(true);
+            bTiledPainting = comphelper::COKit::isTiledPainting();
+            comphelper::COKit::setTiledPainting(true);
         }
         pWrtShell->Paint(rRenderContext, rRect);
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
-            comphelper::LibreOfficeKit::setTiledPainting(bTiledPainting);
+            comphelper::COKit::setTiledPainting(bTiledPainting);
         }
         pWrtShell->setOutputToWindow(false);
     }

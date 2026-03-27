@@ -121,7 +121,7 @@ void ScTabViewShell::Activate(bool bMDI)
     {
         // for input row (ClearCache)
         ScModule* pScMod = ScModule::get();
-        pScMod->ViewShellChanged(/*bStopEditing=*/ !comphelper::LibreOfficeKit::isActive());
+        pScMod->ViewShellChanged(/*bStopEditing=*/ !comphelper::COKit::isActive());
 
         ActivateView( true, bFirstActivate );
 
@@ -149,10 +149,10 @@ void ScTabViewShell::Activate(bool bMDI)
                     while ( pSh!=nullptr && pOldHdl!=nullptr)
                     {
                         // Hmm, what if pSh is a shell for a different document? But as this code
-                        // does not seem to be LibreOfficeKit-specific, probably that doesn't
+                        // does not seem to be COKit-specific, probably that doesn't
                         // happen, because having multiple documents open simultaneously has of
                         // course not been a problem at all in traditional desktop LibreOffice.
-                        // (Unlike in a LibreOfficeKit-based process where it has been a problem.)
+                        // (Unlike in a COKit-based process where it has been a problem.)
                         if (static_cast<ScTabViewShell*>(pSh)->GetInputHandler() == pOldHdl)
                         {
                             pOldHdl->ResetDelayTimer();
@@ -166,7 +166,7 @@ void ScTabViewShell::Activate(bool bMDI)
             }
         }
 
-        bool isLOK = comphelper::LibreOfficeKit::isActive();
+        bool isLOK = comphelper::COKit::isActive();
         UpdateInputHandler( /*bForce=*/ !isLOK, /*bStopEditing=*/ !isLOK );
 
         if ( bFirstActivate )
@@ -253,7 +253,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
     bIsActive = false;
     ScInputHandler* pHdl = ScModule::get()->GetInputHdl(this);
 
-    if( bMDI && !comphelper::LibreOfficeKit::isActive())
+    if( bMDI && !comphelper::COKit::isActive())
     {
         //  during shell deactivation, shells must not be switched, or the loop
         //  through the shell stack (in SfxDispatcher::DoDeactivate_Impl) will not work
@@ -279,7 +279,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
 
         // in LOK case this could be triggered on every action from other view (doc_setView)
         // we don't want to hide tooltip only because other view did some action
-        if ( pHdl && !comphelper::LibreOfficeKit::isActive() )
+        if ( pHdl && !comphelper::COKit::isActive() )
             pHdl->HideTip();        // Hide formula auto input tip
     }
 }
@@ -2208,7 +2208,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
     // formula mode in online is not usable in collaborative mode,
     // this is a workaround for disabling formula mode in online
     // when there is more than a single view
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     {
@@ -2249,7 +2249,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
         }
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(GetCurrentDocument());
         SfxLokHelper::notifyViewRenderState(this, pModel);

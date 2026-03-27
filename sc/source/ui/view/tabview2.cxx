@@ -798,7 +798,7 @@ void ScTabView::GetPageMoveEndPosition(SCCOL nMovX, SCROW nMovY, SCCOL& rPageX, 
     ScVSplitPos eWhichY = WhichV( eWhich );
 
     auto nScrSizeY = SC_SIZE_NONE;
-    if (comphelper::LibreOfficeKit::isActive() && aViewData.GetPageUpDownOffset() > 0) {
+    if (comphelper::COKit::isActive() && aViewData.GetPageUpDownOffset() > 0) {
         nScrSizeY = ScViewData::ToPixel( aViewData.GetPageUpDownOffset(), aViewData.GetPPTX() );
     }
 
@@ -857,7 +857,7 @@ void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eM
         // instead jump a generous block of emptiness. Limit to direct interaction by user and the simple
         // case.
         bIncrementallyExpandToDocLimits = bInteractiveByUser && (nMovX == 1 || nMovY == 1) &&
-                                          !bLegacyCellSelection && comphelper::LibreOfficeKit::isActive();
+                                          !bLegacyCellSelection && comphelper::COKit::isActive();
     }
 
     ScDocument& rDoc = aViewData.GetDocument();
@@ -1633,7 +1633,7 @@ void ScTabView::MakeDrawLayer()
     }
 }
 
-IMPL_STATIC_LINK_NOARG(ScTabView, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(ScTabView, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }
@@ -1664,7 +1664,7 @@ void ScTabView::ErrorMessage(TranslateId pGlobStrId)
                                                          VclMessageType::Info, VclButtonsType::Ok,
                                                          ScResId(pGlobStrId)));
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         m_xMessageBox->SetInstallLOKNotifierHdl(LINK(this, ScTabView, InstallLOKNotifierHdl));
 
     weld::Window* pGrabOnClose = bFocus ? pParent : nullptr;

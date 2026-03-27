@@ -161,7 +161,7 @@ void ComboBox::ImplInit(vcl::Window* pParent, WinBits eStyle)
         // For Kit jsdialogs we don't need or want a buffer the size of
         // the ComboBox dropdown taking up memory which is unnecessary
         // in that case.
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
                 m_pFloatWin->RequestDoubleBuffering(true);
@@ -528,7 +528,7 @@ void ComboBox::AdaptDropDownLineCountToMaximum()
 {
     // Adapt to maximum allowed number.
     // Limit for LOK as we can't render outside of the dialog canvas.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         SetDropDownLineCount(11);
     else
         SetDropDownLineCount(GetSettings().GetStyleSettings().GetListBoxMaximumLineCount());

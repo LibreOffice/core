@@ -257,7 +257,7 @@ bool implts_isPreviewModel( const uno::Reference< frame::XModel >& xModel )
 {
     // the cost in calc of calling getArgs for this property
     // includes measuring the entire sheet - which is extremely slow.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return false;
 
     if ( xModel.is() )

@@ -29,7 +29,7 @@ void DrawViewShell::ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, Co
 {
     svtools::ColorConfig *pColorConfig = dynamic_cast<svtools::ColorConfig*>(pCb);
     ConfigureAppBackgroundColor(pColorConfig);
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         SdViewOptions aViewOptions = GetViewOptions();
         aViewOptions.mnDocBackgroundColor = pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor;
@@ -58,7 +58,7 @@ void DrawViewShell::ConfigureAppBackgroundColor( svtools::ColorConfig *pColorCon
     if (!pColorConfig)
         pColorConfig = &SdModule::get()->GetColorConfig();
     Color aFillColor( pColorConfig->GetColorValue( svtools::APPBACKGROUND ).nColor );
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         aFillColor = COL_TRANSPARENT;
     // tdf#87905 Use darker background color for master view
     if (meEditMode == EditMode::MasterPage)

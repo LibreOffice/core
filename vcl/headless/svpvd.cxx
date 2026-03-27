@@ -100,9 +100,9 @@ bool SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
     // when used to draw a tile for LOK. It cannot be used for something else, because otherwise
     // this would need a way to detect whether this is a tiled paint that needs LOK handling
     // or whether it's that something else that just might happen to be called with LOK active.
-    assert(comphelper::LibreOfficeKit::isActive());
+    assert(comphelper::COKit::isActive());
     // Force scaling of the painting
-    double fScale = comphelper::LibreOfficeKit::getDPIScale();
+    double fScale = comphelper::COKit::getDPIScale();
 
     m_pSurface = cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
                         nNewDX, nNewDY, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX));

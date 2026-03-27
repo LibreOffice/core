@@ -1908,7 +1908,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         ActivatePart( eUsedPart );
 
         //  get the visible rectangle in logic units
-        bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+        bool bLOKActive = comphelper::COKit::isActive();
         MapMode aDrawMode = pWin->GetDrawMapMode();
         tools::Rectangle aVisible(
             bLOKActive ?
@@ -2500,7 +2500,7 @@ void ScTabView::EnableAutoSpell( bool bEnable )
         pWin->SetAutoSpellContext(mpSpellCheckCxt);
     }
 
-    if (bWasEnabled != bEnable && comphelper::LibreOfficeKit::isActive())
+    if (bWasEnabled != bEnable && comphelper::COKit::isActive())
     {
         if (ScTabViewShell* pViewSh = aViewData.GetViewShell())
         {
@@ -2879,7 +2879,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     if (rRectangle.IsEmpty())
         return;
 
-    bool bRangeHeaderSupport = comphelper::LibreOfficeKit::isRangeHeaders();
+    bool bRangeHeaderSupport = comphelper::COKit::isRangeHeaders();
 
     rJsonWriter.put("commandName", ".uno:ViewRowColumnHeaders");
 

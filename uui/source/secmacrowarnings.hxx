@@ -52,7 +52,7 @@ private:
     DECL_LINK(EnableBtnHdl, weld::Button&, void);
     DECL_LINK(DisableBtnHdl, weld::Button&, void);
     DECL_LINK(AlwaysTrustCheckHdl, weld::Toggleable&, void);
-    DECL_STATIC_LINK(MacroWarning, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+    DECL_STATIC_LINK(MacroWarning, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
 
     void                InitControls();
     void EnableOkBtn(bool bEnable);

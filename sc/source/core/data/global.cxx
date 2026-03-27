@@ -499,7 +499,7 @@ void ScGlobal::InitPPT()
 {
     OutputDevice* pDev = Application::GetDefaultDevice();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // LOK: the below limited precision is not enough for RowColumnHeader.
         nScreenPPTX = o3tl::convert<double>(pDev->GetDPIX(), o3tl::Length::twip, o3tl::Length::in);
@@ -1120,7 +1120,7 @@ const CharClass& ScGlobal::getCharClass()
 CalendarWrapper& ScGlobal::GetCalendar()
 {
     assert(!bThreadedGroupCalcInProgress);
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         if (SfxViewShell* pCurr = SfxViewShell::Current())
         {
@@ -1174,9 +1174,9 @@ CollatorWrapper& ScGlobal::GetCollator(bool bCaseSensitive)
 }
 css::lang::Locale& ScGlobal::GetLocale()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
-        return const_cast<css::lang::Locale&>(comphelper::LibreOfficeKit::getLocale().getLocale());
+        return const_cast<css::lang::Locale&>(comphelper::COKit::getLocale().getLocale());
     }
     return *comphelper::doubleCheckedInit( pLocale,
         []() { return new css::lang::Locale( Application::GetSettings().GetLanguageTag().getLocale()); });

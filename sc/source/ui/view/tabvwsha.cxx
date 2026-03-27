@@ -477,7 +477,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_WINDOW_FIX:
-                if(!comphelper::LibreOfficeKit::isActive())
+                if(!comphelper::COKit::isActive())
                 {
                     rSet.Put(SfxBoolItem(nWhich,
                                 rViewData.GetHSplitMode() == SC_SPLIT_FIX ||
@@ -834,7 +834,7 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
     // Finish entering unless 'DontTerminateEdit' is specified, even if a formula is being processed
     if (bCommitChanges)
     {
-        bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+        bool bLOKActive = comphelper::COKit::isActive();
 
         // Disable error dialog box when about to save in lok mode as
         // this ultimately invokes SvpSalInstance::DoYield() when we want

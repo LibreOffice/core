@@ -446,7 +446,7 @@ gboolean LOKDocViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEventConfi
         return false;
     }
 
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     if (!pDocument || pDocument->pClass->getDocumentType(pDocument) != LOK_DOCTYPE_SPREADSHEET)
         return true;
 

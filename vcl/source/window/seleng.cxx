@@ -136,7 +136,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
         return false;
 
     sal_uInt16 nModifier = rMEvt.GetModifier() | nLockedMods;
-    bool nSwap = comphelper::LibreOfficeKit::isActive() && (nModifier & KEY_MOD1) && (nModifier & KEY_MOD2);
+    bool nSwap = comphelper::COKit::isActive() && (nModifier & KEY_MOD1) && (nModifier & KEY_MOD2);
 
     if ( !nSwap && (nModifier & KEY_MOD2) )
         return false;
@@ -345,7 +345,7 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
         return true;
 
     aWTimer.SetTimeout( nUpdateInterval );
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         // Generating fake mouse moves does not work with LOK.
         aWTimer.Start();
     if ( eSelMode != SelectionMode::Single )

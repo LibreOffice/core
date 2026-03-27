@@ -51,7 +51,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp(weld::Container* pParent, SvxHpLinkDlg* p
     m_xBtAdrBook->connect_clicked( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
     m_xCbbReceiver->connect_changed( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
 
-    if (!SvtModuleOptions().IsDataBaseInstalled() || comphelper::LibreOfficeKit::isActive())
+    if (!SvtModuleOptions().IsDataBaseInstalled() || comphelper::COKit::isActive())
         m_xBtAdrBook->hide();
 }
 

@@ -273,7 +273,7 @@ void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq
         const SdrGrafObj* pObj = dynamic_cast<const SdrGrafObj*>(rMarkList.GetMark( 0 )->GetMarkedSdrObj());
         if( pObj && pObj->GetGraphicType() == GraphicType::Bitmap )
         {
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 const GraphicObject& aGraphicObject(pObj->GetGraphicObject());
                 OUString sTempFileURL = GraphicHelper::ExportGraphicToTempFile(

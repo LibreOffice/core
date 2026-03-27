@@ -211,7 +211,7 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
             }
         }
 
-        const bool bKit = comphelper::LibreOfficeKit::isActive();
+        const bool bKit = comphelper::COKit::isActive();
 
         //invalidate only the current view in tiled rendering mode, or all views otherwise
         SfxViewShell* pViewShell = bKit ? SfxViewShell::Current() : SfxViewShell::GetFirst();
@@ -604,7 +604,7 @@ void ScModule::HideDisabledSlots( SfxItemSet& rSet )
 
 void ScModule::ResetDragObject()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         if (pViewShell)
@@ -625,7 +625,7 @@ void ScModule::ResetDragObject()
 
 const ScDragData* ScModule::GetDragData() const
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         return pViewShell ? &pViewShell->GetDragData() : nullptr;
@@ -636,7 +636,7 @@ const ScDragData* ScModule::GetDragData() const
 
 void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         if (pViewShell)
@@ -653,7 +653,7 @@ void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawO
 void ScModule::SetDragLink(
     const OUString& rDoc, const OUString& rTab, const OUString& rArea )
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         if (pViewShell)
@@ -671,7 +671,7 @@ void ScModule::SetDragLink(
 void ScModule::SetDragJump(
     ScDocument* pLocalDoc, const OUString& rTarget, const OUString& rText )
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         if (pViewShell)
@@ -914,7 +914,7 @@ svtools::ColorConfig& ScModule::GetColorConfig()
 
 bool ScModule::IsLOKViewInDarkMode()
 {
-    SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
+    SfxViewShell* pKitSh = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr;
     if( pKitSh )
     {
         Color aDocColor = pKitSh->GetColorConfigColor(svtools::DOCCOLOR);
@@ -935,7 +935,7 @@ SvtUserOptions&  ScModule::GetUserOptions()
 
 FieldUnit ScModule::GetMetric()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return SfxModule::GetFieldUnit();
     return GetAppOptions().GetAppMetric();
 }
@@ -1397,7 +1397,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
  */
 ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, bool bUseRef )
 {
-    if ( !comphelper::LibreOfficeKit::isActive() && m_pRefInputHandler && bUseRef )
+    if ( !comphelper::COKit::isActive() && m_pRefInputHandler && bUseRef )
         return m_pRefInputHandler;
 
     ScInputHandler* pHdl = nullptr;
@@ -1564,7 +1564,7 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
     //TODO: Move reference dialog handling to view
     //      Just keep function autopilot here for references to other documents
     if ( !(m_nCurRefDlgId == 0 || ( nId == m_nCurRefDlgId && !bVis )
-       || ( comphelper::LibreOfficeKit::isActive() )) )
+       || ( comphelper::COKit::isActive() )) )
         return;
 
     if ( !pViewFrm )
@@ -1576,7 +1576,7 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
     //  pViewFrm->GetBindings().Update();       // to avoid trouble in LockDispatcher
 
     // before SetChildWindow
-    if ( comphelper::LibreOfficeKit::isActive() )
+    if ( comphelper::COKit::isActive() )
     {
         if ( bVis )
             m_nCurRefDlgId = nId;
@@ -1656,7 +1656,7 @@ bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
                     !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
             }
         }
-        else if ( pDocSh && comphelper::LibreOfficeKit::isActive() )
+        else if ( pDocSh && comphelper::COKit::isActive() )
         {
             // m_nCurRefDlgId is not deglobalized so it can be set by other view
             // in LOK case when no ChildWindow for this view was detected -> fallback
@@ -1695,12 +1695,12 @@ bool ScModule::IsTableLocked()
                     bLocked = pRefDlg->IsTableLocked();
             }
         }
-        else if (!comphelper::LibreOfficeKit::isActive())
+        else if (!comphelper::COKit::isActive())
             bLocked = true;     // for other views, see IsModalMode
     }
 
     // We can't stop LOK clients from switching part, and getting out of sync.
-    assert(!bLocked || !comphelper::LibreOfficeKit::isActive());
+    assert(!bLocked || !comphelper::COKit::isActive());
 
     return bLocked;
 }
@@ -1731,7 +1731,7 @@ bool ScModule::IsFormulaMode()
     {
         SfxChildWindow* pChildWnd = nullptr;
 
-        if ( comphelper::LibreOfficeKit::isActive() )
+        if ( comphelper::COKit::isActive() )
             pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
         else
             pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
@@ -1745,7 +1745,7 @@ bool ScModule::IsFormulaMode()
                 bIsFormula = pChildWnd->IsVisible() && pRefDlg && pRefDlg->IsRefInputMode();
             }
         }
-        else if ( comphelper::LibreOfficeKit::isActive() )
+        else if ( comphelper::COKit::isActive() )
         {
             // m_nCurRefDlgId is not deglobalized so it can be set by other view
             // in LOK case when no ChildWindow for this view was detected -> fallback
@@ -1790,7 +1790,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument& rDoc,
     {
         SfxChildWindow* pChildWnd = nullptr;
 
-        if ( comphelper::LibreOfficeKit::isActive() )
+        if ( comphelper::COKit::isActive() )
             pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
         else
             pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );
@@ -1820,7 +1820,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument& rDoc,
                 }
             }
         }
-        else if ( comphelper::LibreOfficeKit::isActive() )
+        else if ( comphelper::COKit::isActive() )
         {
             // m_nCurRefDlgId is not deglobalized so it can be set by other view
             // in LOK case when no ChildWindow for this view was detected -> fallback
@@ -1886,7 +1886,7 @@ void ScModule::EndReference()
 
     SfxChildWindow* pChildWnd = nullptr;
 
-    if ( comphelper::LibreOfficeKit::isActive() )
+    if ( comphelper::COKit::isActive() )
         pChildWnd = lcl_GetChildWinFromCurrentView( m_nCurRefDlgId );
     else
         pChildWnd = lcl_GetChildWinFromAnyView( m_nCurRefDlgId );

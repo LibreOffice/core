@@ -146,7 +146,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         case SID_SAVE_GRAPHIC:
         {
             const Graphic *pGraphic = rSh.GetGraphic();
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 if (pGraphic)
                 {

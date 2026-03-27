@@ -32,14 +32,14 @@ void ScTiledRenderingTest::setUp()
 {
     UnoApiXmlTest::setUp();
 
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::COKit::setActive(true);
 }
 
 void ScTiledRenderingTest::tearDown()
 {
     m_callbackWrapper.clear();
 
-    comphelper::LibreOfficeKit::resetCompatFlag();
+    comphelper::COKit::resetCompatFlag();
 
     UnoApiXmlTest::tearDown();
 }
@@ -54,9 +54,9 @@ ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
     return pModelObj;
 }
 
-void ScTiledRenderingTest::setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell)
+void ScTiledRenderingTest::setupCOKitViewCallback(SfxViewShell* pViewShell)
 {
-    pViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    pViewShell->setCOKitViewCallback(&m_callbackWrapper);
     m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(*pViewShell));
 }
 

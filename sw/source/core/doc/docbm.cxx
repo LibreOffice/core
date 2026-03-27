@@ -1626,7 +1626,7 @@ namespace sw::mark
 
     void MarkManager::LOKUpdateActiveField(const SfxViewShell* pViewShell)
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
             return;
 
         if (m_pLastActiveFieldmark)

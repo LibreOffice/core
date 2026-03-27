@@ -826,7 +826,7 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     if (officecfg::Office::Security::Hyperlinks::Open::get() == SvtExtendedSecurityOptions::OPEN_NEVER)
         m_xMoreDictsBox->hide();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // hide User-defined Dictionaries part
         m_xBuilder->weld_frame(u"dictsframe"_ustr)->hide();
@@ -1530,7 +1530,7 @@ void SvxLinguTabPage::HideModulesGroup()
     m_xLinguModulesFrame->hide();
 
     if (officecfg::Office::Security::Hyperlinks::Open::get() != SvtExtendedSecurityOptions::OPEN_NEVER &&
-        !comphelper::LibreOfficeKit::isActive())
+        !comphelper::COKit::isActive())
     {
         m_xMoreDictsBox->show();
     }

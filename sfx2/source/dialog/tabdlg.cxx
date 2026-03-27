@@ -127,7 +127,7 @@ css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
 
 static bool isLOKMobilePhone()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return false;
     const SfxViewShell* pCurrentShell = SfxViewShell::Current();
     return pCurrentShell && pCurrentShell->isLOKMobilePhone();
@@ -362,7 +362,7 @@ SfxTabDialogController::SfxTabDialogController
     }
 
     // The reset functionality seems to be confusing to many; disable in LOK.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         RemoveResetButton();
 }
 

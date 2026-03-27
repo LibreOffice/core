@@ -746,7 +746,7 @@ static void lcl_Update(weld::TreeView& rTreeView, const weld::TreeIter& rIter,
     // regardless of the selection mode of the style panel, so multiple views
     // on a document all share the same id for a style.
     sal_Int32 nSpotlightId;
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         nSpotlightId = rEntry.getSpotlightId();
     else
     {
@@ -1803,7 +1803,7 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
     ::tools::Rectangle aRect(
         rRect.TopLeft(),
         Size(rRenderContext.GetOutputSize().Width() - rRect.Left(), rRect.GetHeight()));
-    bool bSelected = comphelper::LibreOfficeKit::isActive() ? false : std::get<2>(aPayload);
+    bool bSelected = comphelper::COKit::isActive() ? false : std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
     auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::TEXTCOLOR);
@@ -1999,8 +1999,7 @@ const SfxStyleFamilyItem& StyleList::GetFamilyItemByIndex(size_t i) const
 IMPL_STATIC_LINK(StyleList, CustomGetSizeHdl, weld::TreeView::get_size_args, aPayload, Size)
 {
     vcl::RenderContext& rRenderContext = aPayload.first;
-    return Size(comphelper::LibreOfficeKit::isActive() ? 200 : 42,
-                32 * rRenderContext.GetDPIScaleFactor());
+    return Size(comphelper::COKit::isActive() ? 200 : 42, 32 * rRenderContext.GetDPIScaleFactor());
 }
 
 IMPL_LINK(StyleList, PopupFlatMenuHdl, const CommandEvent&, rCEvt, bool)

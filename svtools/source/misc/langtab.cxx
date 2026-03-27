@@ -236,7 +236,7 @@ void SvtLanguageTableImpl::Build()
 
 void SvtLanguageTableImpl::RebuildIfNeeded()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     OUString aCurrLang = SvtSysLocale().GetUILanguageTag().getBcp47();

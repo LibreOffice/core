@@ -75,7 +75,7 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
     // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
     // serialization when popup widgets are destroyed/recreated during character formatting resets.
     // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         m_xIVWidth->connect_query_tooltip(LINK(this, LineWidthPopup, QueryTooltipHdl));
     }

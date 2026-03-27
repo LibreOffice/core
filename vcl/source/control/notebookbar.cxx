@@ -87,7 +87,7 @@ NotebookBar::NotebookBar(Window* pParent, const OUString& rID, const OUString& r
     if ( doesCustomizedUIExist )
         sUIDir = getCustomizedUIRootDir();
 
-    bool bIsWelded = comphelper::LibreOfficeKit::isActive();
+    bool bIsWelded = comphelper::COKit::isActive();
     if (bIsWelded)
     {
         m_bIsWelded = true;
@@ -244,7 +244,7 @@ void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(co
 
 void NotebookBarContextChangeEventListener::setupListener(bool bListen)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     auto xMultiplexer(css::ui::ContextChangeEventMultiplexer::get(::comphelper::getProcessComponentContext()));

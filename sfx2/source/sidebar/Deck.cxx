@@ -38,7 +38,7 @@ namespace sfx2::sidebar {
 
 void Deck::LOKSendSidebarFullUpdate()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
         jsdialog::SendSidebarForView(nShellId);
@@ -229,7 +229,7 @@ void Deck::RequestLayout()
 {
     RequestLayoutInternal();
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     bool bChangeNeeded = false;

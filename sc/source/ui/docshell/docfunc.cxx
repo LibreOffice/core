@@ -221,7 +221,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi )
     // tdf#76183: recalculate objects' positions
     if (bChanged)
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             SfxViewShell* pViewShell = SfxViewShell::GetFirst();
             while (pViewShell)
@@ -242,7 +242,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi )
         rDocShell.PostPaint(ScRange(0, nStartRow, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab),
                             PaintPartFlags::Grid | PaintPartFlags::Left);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScTabViewShell::notifyAllViewsHeaderInvalidation(pSomeViewForThisDoc, ROW_HEADER, nTab);
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
@@ -967,7 +967,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     ScDocument& rDoc = rDocShell.GetDocument();
     ScPostIt* pNote = rDoc.GetNote( rPos );
     if( !pNote || (bShow == pNote->IsCaptionShown()) ||
-        (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations()) )
+        (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations()) )
         return false;
 
     // move the caption to internal or hidden layer and create undo action

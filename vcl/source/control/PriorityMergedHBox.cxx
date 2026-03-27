@@ -45,7 +45,7 @@ PriorityMergedHBox::PriorityMergedHBox(vcl::Window* pParent)
 
 void PriorityMergedHBox::Resize()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return VclHBox::Resize();
 
     if (!m_bInitialized)

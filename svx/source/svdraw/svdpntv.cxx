@@ -345,7 +345,7 @@ sal_uInt16 SdrPaintView::ImpGetHitTolLogic(short nHitTol, const OutputDevice* pO
 void SdrPaintView::TheresNewMapMode()
 {
     if (mpActualOutDev) {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             mnHitTolLog=static_cast<sal_uInt16>(OutputDevice::LogicToLogic(Size(mnHitTolPix,0), MapMode(MapUnit::MapPixel), mpActualOutDev->GetMapMode()).Width());
             mnMinMovLog=static_cast<sal_uInt16>(OutputDevice::LogicToLogic(Size(mnMinMovPix,0), MapMode(MapUnit::MapPixel), mpActualOutDev->GetMapMode()).Width());
@@ -629,7 +629,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
         sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     std::unique_ptr<SdrPaintWindow> pPaintWindow;
-    if (comphelper::LibreOfficeKit::isActive() && rPaintWindow.getTemporaryTarget())
+    if (comphelper::COKit::isActive() && rPaintWindow.getTemporaryTarget())
     {
         // Tiled rendering, we must paint the TextEdit to the output device.
         pPaintWindow.reset(&rPaintWindow);
@@ -648,7 +648,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
         // In the LOK case control rendering is performed through LokControlHandler
         // except when the document is exported to PDF or printed,
         // so we use isTiledPainting() in place of the more generic isActive()
-        if(!comphelper::LibreOfficeKit::isTiledPainting() && bPaintFormLayer)
+        if(!comphelper::COKit::isTiledPainting() && bPaintFormLayer)
         {
             ImpFormLayerDrawing(rPaintWindow, pRedirector);
         }
@@ -659,11 +659,11 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFo
         SdrPageView* pPageView = GetSdrPageView();
         if(IsTextEdit() && pPageView)
         {
-            if (!comphelper::LibreOfficeKit::isActive() || mbPaintTextEdit)
+            if (!comphelper::COKit::isActive() || mbPaintTextEdit)
                 static_cast< SdrView* >(this)->TextEditDrawing(rPaintWindow);
         }
 
-        if (comphelper::LibreOfficeKit::isActive() && pPageView)
+        if (comphelper::COKit::isActive() && pPageView)
         {
             // Look for active text edits in other views showing the same page,
             // and show them as well. Show only if Page/MasterPage mode is matching.
@@ -811,7 +811,7 @@ void SdrPaintView::GlueInvalidate() const
 {
     // Do not invalidate GluePoints in Online
     // They are handled on front-end
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     const sal_uInt32 nWindowCount(PaintWindowCount());
@@ -871,7 +871,7 @@ void SdrPaintView::InvalidateAllWin(const tools::Rectangle& rRect)
             tools::Rectangle aOutRect(aOrg, rOutDev.GetOutputSize());
 
             // In case of tiled rendering we want to get all invalidations, so visual area is not interesting.
-            if (aRect.Overlaps(aOutRect) || comphelper::LibreOfficeKit::isActive())
+            if (aRect.Overlaps(aOutRect) || comphelper::COKit::isActive())
             {
                 InvalidateOneWin(rOutDev, aRect);
             }
@@ -1038,7 +1038,7 @@ void SdrPaintView::MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin)
 {
     // TODO: handle when the text cursor goes out of the chart area
     // However this hack avoids that the cursor gets misplaced wrt the text.
-    if (comphelper::LibreOfficeKit::isActive() && rWin.IsChart())
+    if (comphelper::COKit::isActive() && rWin.IsChart())
     {
         return;
     }

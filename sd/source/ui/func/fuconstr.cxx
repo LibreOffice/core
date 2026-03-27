@@ -194,7 +194,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 pSingleObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             }
 
-            const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+            const bool bTiledRendering = comphelper::COKit::isActive();
             if (!bTiledRendering && (mpView->GetDragMode() == SdrDragMode::Move && mpView->IsRotateAllowed() &&
                 (mrViewShell.GetFrameView()->IsClickChangeRotation() ||
                  (pSingleObj && pSingleObj->GetObjInventor()==SdrInventor::E3d))))

@@ -688,7 +688,7 @@ void BackendImpl::PackageImpl::processPackage_(
             //No need for live-deployment for bundled extension, because OOo
             //restarts after installation
             if ((that->m_eContext != Context::Bundled && !startup)
-                 || comphelper::LibreOfficeKit::isActive())
+                 || comphelper::COKit::isActive())
             {
                 bool bIsSchema = m_isSchema;
                 // tdf#159790 prevent lock-ordering deadlock, the code below might acquire the solar mutex

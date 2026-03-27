@@ -113,7 +113,7 @@ void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(
     const basegfx::BColor aPolygonColor(
         maBColorModifierStack.getModifiedColor(rSource.getBColor()));
 
-    if (comphelper::LibreOfficeKit::isActive() && aPolygonColor.isAutomatic())
+    if (comphelper::COKit::isActive() && aPolygonColor.isAutomatic())
         mpOutputDevice->SetFillColor(getViewInformation2D().getAutoColor());
     else
         mpOutputDevice->SetFillColor(Color(aPolygonColor));
@@ -637,7 +637,7 @@ void VclPixelProcessor2D::processControlPrimitive2D(
     // office does.
     // For now, fallback to just render these controls when Tiled Rendering is active to just
     // have them displayed on all clients.
-    if (bControlIsVisibleAsChildWindow && comphelper::LibreOfficeKit::isActive())
+    if (bControlIsVisibleAsChildWindow && comphelper::COKit::isActive())
     {
         // Do force paint when we are in Tiled Renderer and FormControl is 'visible'
         bControlIsVisibleAsChildWindow = false;

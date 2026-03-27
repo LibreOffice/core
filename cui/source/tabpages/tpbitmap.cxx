@@ -121,7 +121,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     m_xPositionOffY->connect_value_changed(aLink);
     m_xTileOffset->connect_value_changed( LINK( this, SvxBitmapTabPage, ModifyTileOffsetHdl ) );
     m_xBtnImport->connect_clicked( LINK(this, SvxBitmapTabPage, ClickImportHdl) );
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         m_xBtnImport->hide();
 
     // Calculate size of display boxes
@@ -587,8 +587,8 @@ IMPL_LINK(SvxBitmapTabPage, MousePressHdl, const MouseEvent&, rMEvt, bool)
     if (!rMEvt.IsRight())
         return false;
 
-    // Disable context menu for LibreOfficeKit mode
-    if (comphelper::LibreOfficeKit::isActive())
+    // Disable context menu for COKit mode
+    if (comphelper::COKit::isActive())
         return false;
 
     const Point& pPos = rMEvt.GetPosPixel();

@@ -179,7 +179,7 @@ TableEditPanel::TableEditPanel(weld::Widget* pParent,
     InitRowHeightToolitem();
     InitColumnWidthToolitem();
     InitAlignmentControls();
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         m_xMisc->set_item_visible(u".uno:InsertFormula"_ustr, false);
 }
 

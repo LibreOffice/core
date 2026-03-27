@@ -328,7 +328,7 @@ OString Application::dumpNotifyState() const
 
 void Application::libreOfficeKitViewCallback(int nType, const OString& pPayload) const
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     if (m_pCallback)
@@ -407,13 +407,13 @@ bool Application::Reschedule( bool i_bAllEvents )
     }
     int nOldView = -1;
     ViewShellDocId nOldDocId(-1);
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
-        nOldView = comphelper::LibreOfficeKit::getView();
-        nOldDocId = comphelper::LibreOfficeKit::getDocId();
+        nOldView = comphelper::COKit::getView();
+        nOldDocId = comphelper::COKit::getDocId();
     }
     bool bRet = InnerYield(false, i_bAllEvents);
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // Yield may have changed the current docId, restore the old value,
         // (which is cheap). If there is a view to restore this doesn't matter
@@ -421,13 +421,13 @@ bool Application::Reschedule( bool i_bAllEvents )
         // document, then this ensures that the next view to be created is
         // created with the expected document id.
         assert(nOldDocId.get() != -1 && "won't be unset");
-        comphelper::LibreOfficeKit::setDocId(nOldDocId);
+        comphelper::COKit::setDocId(nOldDocId);
 
-        int nNewView = comphelper::LibreOfficeKit::getView();
+        int nNewView = comphelper::COKit::getView();
         if (nOldView != -1 && nNewView != -1 && nOldView != nNewView)
         {
             // Yield changed the current view, restore the old value.
-            comphelper::LibreOfficeKit::setView(nOldView);
+            comphelper::COKit::setView(nOldView);
         }
     }
     return bRet;
@@ -950,7 +950,7 @@ ImplSVEvent* Application::PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, 
         Point aTransformedPos( pMouseEvent->GetPosPixel() );
 
         // LOK uses (0, 0) as the origin of all windows; don't offset.
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             aTransformedPos.AdjustX(pWin->GetOutOffXPixel());
             aTransformedPos.AdjustY(pWin->GetOutOffYPixel());
@@ -1606,7 +1606,7 @@ void Application::EnableHeadlessMode( bool dialogsAreFatal )
 
 bool Application::IsHeadlessModeEnabled()
 {
-    return IsDialogCancelEnabled() || comphelper::LibreOfficeKit::isActive();
+    return IsDialogCancelEnabled() || comphelper::COKit::isActive();
 }
 
 void Application::EnableBitmapRendering()
@@ -1702,8 +1702,8 @@ void Application::setDeInitHook(Link<LinkParamNone*,void> const & hook) {
 namespace vcl::lok {
 
 void registerPollCallbacks(
-    LibreOfficeKitPollCallback pPollCallback,
-    LibreOfficeKitWakeCallback pWakeCallback,
+    COKitPollCallback pPollCallback,
+    COKitWakeCallback pWakeCallback,
     void *pData) {
 
     ImplSVData * pSVData = ImplGetSVData();

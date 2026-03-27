@@ -112,7 +112,7 @@ SmViewShell* SmElementsPanel::GetView() const
 {
     SfxViewShell* pView = mrBindings.GetDispatcher()->GetFrame()->GetViewShell();
     SmViewShell* pSmViewShell = dynamic_cast<SmViewShell*>(pView);
-    if (!pSmViewShell && comphelper::LibreOfficeKit::isActive())
+    if (!pSmViewShell && comphelper::COKit::isActive())
     {
         auto* pWindow = static_cast<SmGraphicWindow*>(LokStarMathHelper(pView).GetGraphicWindow());
         if (pWindow)

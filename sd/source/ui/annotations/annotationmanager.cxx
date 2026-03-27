@@ -314,8 +314,8 @@ void AnnotationManagerImpl::ShowAnnotations( bool bShow )
 
 bool AnnotationManagerImpl::isVisibleAnnotations()
 {
-    return (!comphelper::LibreOfficeKit::isActive()
-            || comphelper::LibreOfficeKit::isTiledAnnotations());
+    return (!comphelper::COKit::isActive()
+            || comphelper::COKit::isTiledAnnotations());
 }
 
 void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest const & rReq )
@@ -535,7 +535,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     rtl::Reference<sdr::annotation::Annotation> xAnnotation = pPage->createAnnotation();
 
     OUString sAuthor;
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         sAuthor = mrBase.GetMainViewShell()->GetView()->GetAuthor();
     else
     {
@@ -654,7 +654,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     pTextApi->SetText(*pOPO);
 
     OUString sReplyAuthor;
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         sReplyAuthor = mrBase.GetMainViewShell()->GetView()->GetAuthor();
     else
     {
@@ -768,7 +768,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
 
     // Don't disable these slot in case of LOK, as postit doesn't need to
     // selected before doing an operation on it in LOK
-    if( (!xAnnotation.is() && !comphelper::LibreOfficeKit::isActive()) || bReadOnly )
+    if( (!xAnnotation.is() && !comphelper::COKit::isActive()) || bReadOnly )
     {
         rSet.DisableItem( SID_DELETE_POSTIT );
         rSet.DisableItem( SID_EDIT_POSTIT );

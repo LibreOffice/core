@@ -239,7 +239,7 @@ enum class DialogCancelMode {
 
  @see   Desktop, ImplSVData
  */
-class VCL_DLLPUBLIC Application : public vcl::ILibreOfficeKitNotifier
+class VCL_DLLPUBLIC Application : public vcl::ICOKitNotifier
 {
 public:
     /** @name Initialization
@@ -1243,7 +1243,7 @@ public:
 
     /** Report on what .ui files were used*/
     static void UICoverageReport(tools::JsonWriter& rJson,
-            /*LibreOfficeKitDocumentType*/ int eDocType,
+            /*COKitDocumentType*/ int eDocType,
             bool linguisticDataAvailable);
 
     ///@}
@@ -1328,13 +1328,13 @@ public:
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                     VclButtonsType eButtonType, const OUString& rPrimaryMessage,
-                                                    const ILibreOfficeKitNotifier* pNotifier = nullptr);
+                                                    const ICOKitNotifier* pNotifier = nullptr);
 
     static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
 
-    // ILibreOfficeKitNotifier
+    // ICOKitNotifier
     void* m_pCallbackData;
-    LibreOfficeKitCallback m_pCallback;
+    COKitCallback m_pCallback;
 
     virtual void notifyWindow(vcl::LOKWindowId nLOKWindowId,
                               const OUString& rAction,

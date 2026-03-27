@@ -2371,7 +2371,7 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
         }
 
         SwSectionNode* pSectionNode = pNode->GetSectionNode();
-        SfxViewShell* pKitClipSh = (comphelper::LibreOfficeKit::isActive() && pSectionNode && !GetDoc().IsClipBoard())
+        SfxViewShell* pKitClipSh = (comphelper::COKit::isActive() && pSectionNode && !GetDoc().IsClipBoard())
             ? SfxViewShell::Current() : nullptr;
         if (pKitClipSh)
         {

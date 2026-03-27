@@ -143,7 +143,7 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     vRecentColors = maPaletteManager.GetRecentColors();
 
     // it is not possible to install color palette extensions in Online or mobile apps
-    if(comphelper::LibreOfficeKit::isActive())
+    if(comphelper::COKit::isActive())
     {
         m_xMoreColors->hide();
     }

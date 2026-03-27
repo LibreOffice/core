@@ -37,8 +37,7 @@ private:
 
 private:
     DECL_DLLPRIVATE_LINK(CancelHdl, weld::Button&, void);
-    DECL_STATIC_LINK(WPFTEncodingDialog, InstallLOKNotifierHdl, void*,
-                     vcl::ILibreOfficeKitNotifier*);
+    DECL_STATIC_LINK(WPFTEncodingDialog, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
 
     WPFTEncodingDialog(WPFTEncodingDialog const&) = delete;
     WPFTEncodingDialog& operator=(WPFTEncodingDialog const&) = delete;

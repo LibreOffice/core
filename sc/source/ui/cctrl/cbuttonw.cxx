@@ -61,7 +61,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
 
     tools::Rectangle   aBtnRect( rAt, rSize );
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         pOut->EnableMapMode(false);
 
     DecorationView aDecoView( pOut);

@@ -440,11 +440,11 @@ OUString SwFileNameFieldType::Expand(SwFileNameFormat nFormat) const
     {
         const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
         // Note: The path is useless in jailed kit mode, so present a view that
-        // the document is in a Documents toplevel directory for LibreOfficeKit::isActive()
+        // the document is in a Documents toplevel directory for COKit::isActive()
         switch( nFormat & ~SwFileNameFormat::Fixed )
         {
             case SwFileNameFormat::Path:
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                     aRet = "/" + SfxResId(STR_GID_DOCUMENT);
                 else
                 {
@@ -478,7 +478,7 @@ OUString SwFileNameFieldType::Expand(SwFileNameFormat nFormat) const
                 break;
 
             default:
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                     aRet = "/" + SfxResId(STR_GID_DOCUMENT) + "/" + rURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
                 else
                 {

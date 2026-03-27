@@ -202,7 +202,7 @@ void SfxModelessDialogController::Close()
 
 static bool isLOKMobilePhone()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return false;
     const SfxViewShell* pCurrentShell = SfxViewShell::Current();
     return pCurrentShell && pCurrentShell->isLOKMobilePhone();
@@ -222,7 +222,7 @@ void SfxDialogController::Close()
     m_xDialog->connect_container_focus_changed(Link<weld::Container&, void>());
 }
 
-IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return SfxViewShell::Current();
 }

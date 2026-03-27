@@ -114,7 +114,7 @@ executeLoginDialog(
     if ( bCanUseSysCreds )
         aDialog.SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // Avoid the password dialog popup in the LOK case: it's not async and the "remember
         // password" checkbox would not work.

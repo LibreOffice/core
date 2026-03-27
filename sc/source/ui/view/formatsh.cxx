@@ -1848,7 +1848,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 
                         rSet.Put(SfxStringItem(nWhich, aFormat));
 
-                        if (comphelper::LibreOfficeKit::isActive())
+                        if (comphelper::COKit::isActive())
                         {
                             OUString sPayload = ".uno:NumberFormat=" + aFormat;
                             GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,

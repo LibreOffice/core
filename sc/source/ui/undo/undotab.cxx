@@ -178,7 +178,7 @@ void ScUndoInsertTab::Undo()
     if ( pChangeTrack )
         pChangeTrack->Undo( nEndChangeAction, nEndChangeAction );
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScDocument& rDoc = rDocShell.GetDocument();
         lcl_OnTabsChanged(*pViewShell, rDoc, nTab);
@@ -213,7 +213,7 @@ void ScUndoInsertTab::Redo()
 
     SetChangeTrack();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScDocument& rDoc = rDocShell.GetDocument();
         lcl_OnTabsChanged(*pViewShell, rDoc, nTab);
@@ -444,7 +444,7 @@ void ScUndoDeleteTab::Undo()
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (comphelper::LibreOfficeKit::isActive() && !theTabs.empty())
+    if (comphelper::COKit::isActive() && !theTabs.empty())
     {
         if (pViewShell)
         {
@@ -488,7 +488,7 @@ void ScUndoDeleteTab::Redo()
 
     SetChangeTrack();
 
-    if (comphelper::LibreOfficeKit::isActive() && !theTabs.empty())
+    if (comphelper::COKit::isActive() && !theTabs.empty())
     {
         ScDocument& rDoc = rDocShell.GetDocument();
         lcl_OnTabsChanged(*pViewShell, rDoc, theTabs[0]);
@@ -646,7 +646,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
         }
     }
 
-    if (comphelper::LibreOfficeKit::isActive() && !mpNewTabs->empty())
+    if (comphelper::COKit::isActive() && !mpNewTabs->empty())
     {
         const auto newTabsMinIt = std::min_element(mpNewTabs->begin(), mpNewTabs->end());
         const auto oldTabsMinIt = std::min_element(mpOldTabs->begin(), mpOldTabs->end());
@@ -1440,7 +1440,7 @@ void ScUndoPrintRange::DoChange(bool bUndo)
 
     ScPrintFunc( rDocShell, rDocShell.GetPrinter(), nTab ).UpdatePages();
 
-    if (pViewShell && comphelper::LibreOfficeKit::isActive())
+    if (pViewShell && comphelper::COKit::isActive())
     {
         tools::JsonWriter aJsonWriter;
         if (bUndo)

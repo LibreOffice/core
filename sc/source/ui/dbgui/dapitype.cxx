@@ -52,7 +52,7 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(weld::Window* pParent, bool b
     // Intentionally hide this button to see if anyone complains.
     m_xBtnExternal->hide();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         m_xBtnDatabase->hide();
 }
 

@@ -119,7 +119,7 @@ SmartTagSet::~SmartTagSet()
 void SmartTagSet::add( const SmartTagReference& xTag )
 {
     maSet.insert( xTag );
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         mrView.InvalidateAllWin();
 
     if( xTag == mxMouseOverTag )
@@ -134,7 +134,7 @@ void SmartTagSet::remove( const SmartTagReference& xTag )
     std::set< SmartTagReference >::iterator aIter( maSet.find( xTag ) );
     if( aIter != maSet.end() )
         maSet.erase( aIter );
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         mrView.InvalidateAllWin();
 
     if( xTag == mxMouseOverTag )

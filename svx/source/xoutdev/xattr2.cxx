@@ -112,7 +112,7 @@ bool XLineJointItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*e
     {
         case css::drawing::LineJoint::LineJoint_MAKE_FIXED_SIZE:
         case css::drawing::LineJoint_NONE:
-            pId = comphelper::LibreOfficeKit::isActive() ? RID_SVXSTR_INVISIBLE : RID_SVXSTR_NONE;
+            pId = comphelper::COKit::isActive() ? RID_SVXSTR_INVISIBLE : RID_SVXSTR_NONE;
         break;
 
         case css::drawing::LineJoint_MIDDLE:

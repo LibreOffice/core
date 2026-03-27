@@ -82,7 +82,7 @@ ErrorRecord::ErrorRecord( sal_Int32 nID, const Sequence<OUString>& rParams,
 {
 }
 
-XMLErrors::XMLErrors(vcl::ILibreOfficeKitNotifier* pNotifier)
+XMLErrors::XMLErrors(vcl::ICOKitNotifier* pNotifier)
     : mpNotifier(pNotifier)
 {
 }
@@ -103,7 +103,7 @@ void XMLErrors::AddRecord(
     m_aErrors.emplace_back( nId, rParams, rExceptionMessage,
                                     nRow, nColumn, rPublicId, rSystemId );
 
-    if (comphelper::LibreOfficeKit::isActive() && mpNotifier)
+    if (comphelper::COKit::isActive() && mpNotifier)
     {
         // The outer error is logged in sfx2, mentioning just the stream name. Also log here the
         // inner error, which potentially contains the location of an uncaught exception.

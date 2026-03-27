@@ -833,7 +833,7 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
     ImplCheckPasswordState();
     m_xChangePassBtn->connect_clicked( LINK( this, SfxDocumentPage, ChangePassHdl ) );
     m_xSignatureBtn->connect_clicked( LINK( this, SfxDocumentPage, SignatureHdl ) );
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         m_xSignatureBtn->hide();
     m_xDeleteBtn->connect_clicked( LINK( this, SfxDocumentPage, DeleteHdl ) );
     m_xImagePreferredDpiCheckButton->connect_toggled(LINK(this, SfxDocumentPage, ImagePreferredDPICheckBoxClicked));
@@ -903,7 +903,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
         std::shared_ptr<const SfxFilter> pFilter = pShell->GetMedium()->GetFilter();
         if (!pFilter)
             break;
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             // MS Types support max len of 15 characters while OOXML is "unlimited"
             const sal_uInt16 maxPwdLen = sfx2::IsMSType(pFilter) && !sfx2::IsOOXML(pFilter) ? 15 : 0;
@@ -993,7 +993,7 @@ void SfxDocumentPage::ImplCheckPasswordState()
         return;
     }
     while (false);
-    m_xChangePassBtn->set_sensitive(comphelper::LibreOfficeKit::isActive());
+    m_xChangePassBtn->set_sensitive(comphelper::COKit::isActive());
 }
 
 std::unique_ptr<SfxTabPage> SfxDocumentPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rItemSet)
@@ -1147,7 +1147,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     m_sFileURL.clear();
     // determine location
     // online we don't know file location so we just set it as the name
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         m_xFileValEd->set_label(aName);
         m_sFileURL = aName;
@@ -1355,7 +1355,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxIte
         AddTabPage(u"cmisprops"_ustr, TabResId(RID_TAB_CMIS.aLabel),
                    SfxCmisPropertiesPage::Create, RID_L + RID_TAB_CMIS.sIconName);
     // Disable security page for online as not fully asynced yet
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         AddTabPage(u"security"_ustr, TabResId(RID_TAB_SECURITY.aLabel), SfxSecurityPage::Create,
                    RID_L + RID_TAB_SECURITY.sIconName);
 }
@@ -1711,7 +1711,7 @@ void CustomPropertiesWindow::CreateNewLine()
     m_aCustomPropertiesLines.emplace_back( pNewLine );
 
     // this breaks online's jsdialogbuilder
-    if (!comphelper::LibreOfficeKit::isActive()){
+    if (!comphelper::COKit::isActive()){
         // for ui-testing. Distinguish the elements in the lines
         sal_uInt16 nSize = m_aCustomPropertiesLines.size();
         pNewLine->m_xNameBox->set_buildable_name(

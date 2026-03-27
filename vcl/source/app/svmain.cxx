@@ -402,7 +402,7 @@ void DeInitVCL()
     //tear everything down and recreate them on the next call, there's too many
     //(c++) singletons that point to stuff that gets deleted during shutdown
     //which won't be recreated on restart.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     {

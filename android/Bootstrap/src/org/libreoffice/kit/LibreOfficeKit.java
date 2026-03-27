@@ -20,13 +20,13 @@ import java.nio.ByteBuffer;
 // sal/android/lo-bootstrap.c as the lo-bootstrap library is loaded with
 // System.loadLibrary() and Android's JNI works only to such libraries, it
 // seems.
-public final class LibreOfficeKit
+public final class COKit
 {
-    private static String LOGTAG = LibreOfficeKit.class.getSimpleName();
+    private static String LOGTAG = COKit.class.getSimpleName();
     private static AssetManager mgr;
 
     // private constructor because instantiating would be meaningless
-    private LibreOfficeKit() {
+    private COKit() {
     }
 
     // Trigger library initialization - as this is done automatically by executing the "static" block, this method remains empty. However we need this to manually (at the right time) can force library initialization.
@@ -36,7 +36,7 @@ public final class LibreOfficeKit
     // Trigger initialization on the JNI - LOKit side.
     private static native boolean initializeNative(String dataDir, String cacheDir, String apkFile, AssetManager mgr);
 
-    public static native ByteBuffer getLibreOfficeKitHandle();
+    public static native ByteBuffer getCOKitHandle();
 
     // Wrapper for putenv()
     public static native void putenv(String string);
@@ -59,7 +59,7 @@ public final class LibreOfficeKit
 
         ApplicationInfo applicationInfo = activity.getApplicationInfo();
         String dataDir = applicationInfo.dataDir;
-        Log.i(LOGTAG, String.format("Initializing LibreOfficeKit, dataDir=%s\n", dataDir));
+        Log.i(LOGTAG, String.format("Initializing COKit, dataDir=%s\n", dataDir));
 
         redirectStdio(true);
 

@@ -555,7 +555,7 @@ void SdDrawDocument::ResizeCurrentPage(
     // }
 
     // Notify LOK clients of the current page size change.
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -701,7 +701,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
     }
 
     // Notify LOK clients of the document size change.
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();

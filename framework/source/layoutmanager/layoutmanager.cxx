@@ -116,7 +116,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
     m_aStatusBarElement.m_aType = "statusbar";
     m_aStatusBarElement.m_aName = STATUS_BAR_ALIAS;
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         m_xToolbarManager = new ToolbarLayoutManager( xContext, Reference<XUIElementFactory>(m_xUIElementFactoryManager, UNO_QUERY_THROW), this );
     }

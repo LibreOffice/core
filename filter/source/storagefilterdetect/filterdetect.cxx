@@ -105,7 +105,7 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
         OUString aMediaType;
         xStorageProperties->getPropertyValue( u"MediaType"_ustr ) >>= aMediaType;
         aTypeName = getInternalFromMediaType( aMediaType );
-        if (comphelper::LibreOfficeKit::isActive() && aTypeName == "draw8_template")
+        if (comphelper::COKit::isActive() && aTypeName == "draw8_template")
         {
             // save it as draw8 instead of template format
             aTypeName = "draw8";
@@ -151,7 +151,7 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
             {
                 aTypeName = aRequestedTypeName;
                 // lok: we want to overwrite file in jail, so don't use template flag
-                const bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+                const bool bIsLOK = comphelper::COKit::isActive();
                 aMediaDesc[MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
                 aMediaDesc[MediaDescriptor::PROP_ASTEMPLATE] <<= !bIsLOK;
                 aMediaDesc[u"RepairPackage"_ustr] <<= true;

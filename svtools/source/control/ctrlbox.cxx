@@ -369,7 +369,7 @@ namespace
         size_t nMaxDeviceHeight = SAL_MAX_INT16 / 16; // see limitXCreatePixmap and be generous wrt up to x16 hidpi
         assert(gUserItemSz.Height() != 0);
         gPreviewsPerDevice = gUserItemSz.Height() == 0 ? 16 : nMaxDeviceHeight / gUserItemSz.Height();
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
             gPreviewsPerDevice = 1;
     }
 }
@@ -379,7 +379,7 @@ IMPL_LINK(FontNameBox, SettingsChangedHdl, VclSimpleEvent&, rEvent, void)
     if (rEvent.GetId() != VclEventId::ApplicationDataChanged)
         return;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
@@ -553,7 +553,7 @@ void FontNameBox::EnableWYSIWYG(bool bEnable)
 
 IMPL_LINK(FontNameBox, CustomGetSizeHdl, OutputDevice&, rDevice, Size)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         calcCustomItemSize(*m_xComboBox);
         gUserItemSz.setWidth(1.0 * rDevice.GetDPIX() / 96.0 * gUserItemSz.getWidth());
@@ -592,7 +592,7 @@ namespace
 
 IMPL_LINK_NOARG(FontNameBox, UpdateHdl, Timer*, void)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     CachePreview(mnPreviewProgress++, nullptr);
@@ -789,7 +789,7 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
     const FontMetric& rFontMetric = (*mpFontList)[nIndex];
     const OUString& rFontName = rFontMetric.GetFamilyName();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // we want to cache only best quality previews
         if (gHighestDPI < nDPIX || gHighestDPI < nDPIY)
@@ -827,7 +827,7 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
     {
         if (nPage >= rVirtualDevs.size())
         {
-            bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+            bool bIsLOK = comphelper::COKit::isActive();
             rVirtualDevs.emplace_back(VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA));
 
             VirtualDevice& rDevice = *rVirtualDevs.back();
@@ -881,7 +881,7 @@ IMPL_LINK(FontNameBox, CustomRenderHdl, weld::ComboBox::render_args, aPayload, v
                                              rRenderContext.GetDPIX(),
                                              rRenderContext.GetDPIY());
 
-        Size aSourceSize = comphelper::LibreOfficeKit::isActive() ? rDevice.GetOutputSizePixel() : gUserItemSz;
+        Size aSourceSize = comphelper::COKit::isActive() ? rDevice.GetOutputSizePixel() : gUserItemSz;
         rRenderContext.DrawOutDev(aDestPoint, gUserItemSz,
                                   aTopLeft, aSourceSize,
                                   rDevice);
@@ -1507,7 +1507,7 @@ SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
     // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
     // serialization when popup widgets are destroyed/recreated during character formatting resets.
     // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         m_xLineIV->connect_query_tooltip(LINK(this, SvtLineListBox, QueryTooltipHdl));
     }

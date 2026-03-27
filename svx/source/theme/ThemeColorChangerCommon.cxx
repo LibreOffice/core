@@ -174,7 +174,7 @@ void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject, SdrVi
 void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet,
                const std::set<Color>& rDocumentColors)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         svx::ThemeColorPaletteManager aManager(pColorSet);
         tools::JsonWriter aTree;

@@ -35,7 +35,7 @@ namespace desktop {
 
 /** InteractionHandler is an interface that provides the user with various dialogs / error messages.
 
-We need an own implementation for the LibreOfficeKit so that we can route the
+We need an own implementation for the COKit so that we can route the
 information easily via callbacks.
 
 TODO: the callbacks are not implemented yet, we just approve any interaction

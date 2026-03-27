@@ -1685,7 +1685,7 @@ void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 
 void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
 {
-    if (!comphelper::LibreOfficeKit::isActive() || nOffset == 0)
+    if (!comphelper::COKit::isActive() || nOffset == 0)
         return;
 
     SCTAB nCurrentTabIndex = GetViewData().GetTabNumber();
@@ -1748,7 +1748,7 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
 
 void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset)
 {
-    if (!comphelper::LibreOfficeKit::isActive() || nOffset == 0)
+    if (!comphelper::COKit::isActive() || nOffset == 0)
         return;
 
     SCTAB nCurrentTabIndex = GetViewData().GetTabNumber();
@@ -1811,7 +1811,7 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset)
 
 void ScViewFunc::OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     SCTAB nCurTab = GetViewData().CurrentTabForData();
@@ -1865,7 +1865,7 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste, 
                 HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange, aOperation);
             }
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 if (bInsertCols)
                     ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), COLUMN_HEADER, GetViewData().GetTabNumber());
@@ -1953,7 +1953,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
             nCurY = aRange.aStart.Row();
         SetCursor( nCurX, nCurY );
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             bool bColsDeleted = (eCmd == DelCellCmd::Cols);
             bool bRowsDeleted = (eCmd == DelCellCmd::Rows);

@@ -654,7 +654,7 @@ bool SdOutliner::SearchAndReplaceAll()
         do
         {
             bFoundMatch = ! SearchAndReplaceOnce(&aSelections);
-            if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && comphelper::LibreOfficeKit::isActive() && bFoundMatch && aSelections.size() == 1)
+            if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && comphelper::COKit::isActive() && bFoundMatch && aSelections.size() == 1)
             {
                 // Without this, RememberStartPosition() will think it already has a remembered position.
                 mnStartPageIndex = sal_uInt16(-1);
@@ -667,7 +667,7 @@ bool SdOutliner::SearchAndReplaceAll()
         }
         while (bFoundMatch);
 
-        if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && comphelper::LibreOfficeKit::isActive() && !aSelections.empty())
+        if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && comphelper::COKit::isActive() && !aSelections.empty())
         {
             boost::property_tree::ptree aTree;
             aTree.put("searchString", mpSearchItem->GetSearchString().toUtf8().getStr());
@@ -692,7 +692,7 @@ bool SdOutliner::SearchAndReplaceAll()
 
     RestoreStartPosition ();
 
-    if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && comphelper::LibreOfficeKit::isActive() && !bRet)
+    if (mpSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL && comphelper::COKit::isActive() && !bRet)
     {
         // Find-all, tiled rendering and we have at least one match.
         OString aPayload = OString::number(mnStartPageIndex);
@@ -779,7 +779,7 @@ void SdOutliner::sendLOKSearchResultCallback(const std::shared_ptr<sd::ViewShell
     {
         pOutlinerView->GetSelectionRectangles(aLogicRects);
 
-        // convert to twips if in 100thmm (seems as if LibreOfficeKit is based on twips?). Do this
+        // convert to twips if in 100thmm (seems as if COKit is based on twips?). Do this
         // here where we have the only place needing this, *not* in ImpEditView::GetSelectionRectangles
         // which makes that method unusable for others
         if (pOutlinerView->GetWindow() && MapUnit::Map100thMM == pOutlinerView->GetWindow()->GetMapMode().GetMapUnit())
@@ -802,7 +802,7 @@ void SdOutliner::sendLOKSearchResultCallback(const std::shared_ptr<sd::ViewShell
 
     if (!pSelections)
     {
-        // notify LibreOfficeKit about changed page
+        // notify COKit about changed page
         OString aPayload = OString::number(maCurrentPosition.mnPageIndex);
         SfxViewShell& rSfxViewShell = pViewShell->GetViewShellBase();
         rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
@@ -997,7 +997,7 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
 
     mrDrawDocument.GetDocSh()->SetWaitCursor( false );
 
-    if (pViewShell && comphelper::LibreOfficeKit::isActive() && mbStringFound)
+    if (pViewShell && comphelper::COKit::isActive() && mbStringFound)
     {
         sendLOKSearchResultCallback(pViewShell, getOutlinerView(), pSelections);
     }
@@ -1287,7 +1287,7 @@ void SdOutliner::ProvideNextTextObject()
             maCurrentPosition = *maObjectIterator;
 
             // LOK: do not descent to notes or master pages when searching
-            bool bForbiddenPage = comphelper::LibreOfficeKit::isActive() && (maCurrentPosition.mePageKind != PageKind::Standard || maCurrentPosition.meEditMode != EditMode::Page);
+            bool bForbiddenPage = comphelper::COKit::isActive() && (maCurrentPosition.mePageKind != PageKind::Standard || maCurrentPosition.meEditMode != EditMode::Page);
 
             rVectorGraphicSearchContext.reset();
 

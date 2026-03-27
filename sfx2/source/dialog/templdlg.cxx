@@ -815,7 +815,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
     m_xActionTbR->set_item_help_id(u"update"_ustr, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
     // Features not working in LOK yet
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         m_xActionTbR->set_item_visible(u"watercan"_ustr, false);
         m_xActionTbR->set_item_visible(u"newmenu"_ustr, false);
@@ -873,7 +873,7 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId, const SfxStyleFami
 void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
 {
     // in LOK we don't support all options yet
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     m_xActionTbR->set_item_visible(u"update"_ustr, false);

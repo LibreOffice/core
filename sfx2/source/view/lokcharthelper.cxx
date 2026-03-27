@@ -225,7 +225,7 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
                                           tools::Long nTileWidth, tools::Long nTileHeight,
                                           bool bNegativeX)
 {
-    if (comphelper::LibreOfficeKit::isTiledAnnotations())
+    if (comphelper::COKit::isTiledAnnotations())
         return;
 
     // Resizes the virtual device so to contain the entries context

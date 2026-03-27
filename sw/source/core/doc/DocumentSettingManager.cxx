@@ -534,7 +534,7 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::BROWSE_MODE: //can be used temporary (load/save) when no SwViewShell is available
             // Can't render in webview successfully.
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 mbLastBrowseMode = false;
             else
                 mbLastBrowseMode = value;

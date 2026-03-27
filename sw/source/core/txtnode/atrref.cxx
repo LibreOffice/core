@@ -126,7 +126,7 @@ SwTextRefMark::SwTextRefMark(
 
 SwTextRefMark::~SwTextRefMark()
 {
-    if (!comphelper::LibreOfficeKit::isActive() || GetTextNode().GetDoc().IsClipBoard())
+    if (!comphelper::COKit::isActive() || GetTextNode().GetDoc().IsClipBoard())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();

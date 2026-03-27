@@ -263,7 +263,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, ScImportOptionsDlg, InstallLOKNotifierHdl));
 }
 
-IMPL_STATIC_LINK_NOARG(ScImportOptionsDlg, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(ScImportOptionsDlg, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }

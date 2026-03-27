@@ -209,7 +209,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     assert(nNewId != SID_DRAW_CHART); //#i71254# handled already above
 
-    // for LibreOfficeKit - choosing a shape should construct it directly
+    // for COKit - choosing a shape should construct it directly
     bool bCreateDirectly = false;
 
     switch (nNewId)
@@ -261,7 +261,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_CONNECTOR_LINES_CIRCLE_END:
         case SID_CONNECTOR_LINES_CIRCLES:
             pTabView->SetDrawFuncPtr(new FuConstRectangle(*this, pWin, pView, rModel, aNewReq));
-            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+            bCreateDirectly = comphelper::COKit::isActive();
             break;
 
         case SID_DRAW_CAPTION:
@@ -293,7 +293,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_NOTEEDIT:
             pTabView->SetDrawFuncPtr(new FuText(*this, pWin, pView, rModel, aNewReq));
-            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+            bCreateDirectly = comphelper::COKit::isActive();
             break;
 
         case SID_FM_CREATE_CONTROL:
@@ -312,7 +312,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         {
             pTabView->SetDrawFuncPtr(new FuConstCustomShape(*this, pWin, pView, rModel, aNewReq));
 
-            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+            bCreateDirectly = comphelper::COKit::isActive();
 
             if ( nNewId != SID_DRAW_CS_ID )
             {
@@ -353,7 +353,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
 
     // calc position and size
-    bool bLOKIsActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKIsActive = comphelper::COKit::isActive();
     Point aInsertPos;
     if(!bLOKIsActive)
     {
@@ -367,8 +367,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         ScViewData& rViewData = GetViewData();
         tools::Long nLayoutSign = rViewData.GetDocument().IsLayoutRTL(rViewData.CurrentTabForData()) ? -1 : 1;
         aInsertPos = rViewData.getLOKVisibleArea().Center();
-        if (comphelper::LibreOfficeKit::isCompatFlagSet(
-                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        if (comphelper::COKit::isCompatFlagSet(
+                comphelper::COKit::Compat::scPrintTwipsMsgs))
             aInsertPos = rViewData.GetPrintTwipsPosFromTileTwips(aInsertPos);
 
         aInsertPos.setX(nLayoutSign * convertTwipToMm100(aInsertPos.X()));

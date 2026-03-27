@@ -634,7 +634,7 @@ vcl::Window* Window::GetAccessibleRelationLabelFor() const
         return pWindow;
 
     // Avoid searching when using LOKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
-    if (!comphelper::LibreOfficeKit::isActive() && !isContainerWindow(this) && !isContainerWindow(GetParent()))
+    if (!comphelper::COKit::isActive() && !isContainerWindow(this) && !isContainerWindow(GetParent()))
         return getLegacyNonLayoutAccessibleRelationLabelFor();
 
     return nullptr;
@@ -665,7 +665,7 @@ vcl::Window* Window::GetAccessibleRelationLabeledBy() const
     }
 
     // Avoid searching when using LOKit (jsdialog) - it can slow down dumping to json when we have a huge hierarchy
-    if (!comphelper::LibreOfficeKit::isActive() && !isContainerWindow(this) && !isContainerWindow(GetParent()))
+    if (!comphelper::COKit::isActive() && !isContainerWindow(this) && !isContainerWindow(GetParent()))
         return getLegacyNonLayoutAccessibleRelationLabeledBy();
 
     return nullptr;

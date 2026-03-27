@@ -364,12 +364,12 @@ static void setupFillColorForChart(const SfxViewShell* pShell, SfxItemSet& rSet)
         XFillColorItem aFillColorItem(u""_ustr, Color(ColorTransparency, nFillColor));
         rSet.Put(aFillColorItem);
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
             pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
                     (".uno:FillColor=" + OString::number(nFillColor)));
     }
 
-    if (!(comphelper::LibreOfficeKit::isActive() && xInfo->hasPropertyByName(u"FillGradientName"_ustr)))
+    if (!(comphelper::COKit::isActive() && xInfo->hasPropertyByName(u"FillGradientName"_ustr)))
         return;
 
     OUString aGradientName;

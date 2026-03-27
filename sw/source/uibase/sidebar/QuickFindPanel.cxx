@@ -160,7 +160,7 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
 {
     m_xAcceleratorExecute->init(comphelper::getProcessComponentContext(), rxFrame);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
         jsdialog::SendQuickFindForView(nShellId);
@@ -186,7 +186,7 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     m_xFindAndReplaceToolbar->connect_clicked(
         LINK(this, QuickFindPanel, FindAndReplaceToolbarClickedHandler));
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         m_xSearchFindsList->connect_custom_get_size(
             LINK(this, QuickFindPanel, SearchFindsListCustomGetSizeHandler));
@@ -764,7 +764,7 @@ void QuickFindPanel::FillSearchFindsList()
 
 OUString QuickFindPanel::CreatePageEntry(sal_Int32 nPageNum)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         return LOKPageEntryPrefix + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPageNum)
                + LOKPageEntrySuffix;
@@ -779,7 +779,7 @@ bool QuickFindPanel::IsPageEntry(const weld::TreeIter& rEntry)
 
 bool QuickFindPanel::IsPageEntry(std::u16string_view sEntryId)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         return sEntryId.starts_with(LOKPageEntryPrefix) && sEntryId.ends_with(LOKPageEntrySuffix);
     }
@@ -788,7 +788,7 @@ bool QuickFindPanel::IsPageEntry(std::u16string_view sEntryId)
 
 OUString QuickFindPanel::ParsePageEntry(const OUString& sEntryId)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         return sEntryId.copy(LOKPageEntryPrefix.getLength(),
                              sEntryId.getLength()

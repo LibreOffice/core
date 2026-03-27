@@ -689,7 +689,7 @@ void SfxStoringHelper::CallFinishGUIStoreModel()
 
 IMPL_LINK( ModelData_Impl, OptionsDialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvt, void )
 {
-    SfxViewShell* pNotifier = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
+    SfxViewShell* pNotifier = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr;
 
     if (pEvt->DialogResult == RET_OK && m_xFilterProperties)
     {
@@ -1112,13 +1112,13 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     OUString aFilterName;
     // in LOK case we don't show File Picker so it will fail, but execute to do other preparations
     if (pFileDlg->Execute(pDialogParams, aFilterName, nScriptingSignatureState) != ERRCODE_NONE
-        && !comphelper::LibreOfficeKit::isActive() )
+        && !comphelper::COKit::isActive() )
     {
         throw task::ErrorCodeIOException(
             u"ModelData_Impl::OutputFileDialog: ERRCODE_IO_ABORT"_ustr,
             uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_ABORT));
     }
-    else if (comphelper::LibreOfficeKit::isActive())
+    else if (comphelper::COKit::isActive())
     {
         aFilterName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( u"Name"_ustr, OUString() );
     }
@@ -1140,7 +1140,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
 #ifdef IOS
         // The iOS app (and maybe the Android app) have fails to set the URL to
@@ -1518,7 +1518,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel2 >& xM
         }
     }
 
-    if (!comphelper::LibreOfficeKit::isActive() && !( m_nStoreMode & EXPORT_REQUESTED ) && SfxViewShell::Current() )
+    if (!comphelper::COKit::isActive() && !( m_nStoreMode & EXPORT_REQUESTED ) && SfxViewShell::Current() )
     {
         SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
 
@@ -1720,12 +1720,12 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     {
         OUString aFileName;
         aFileNameIter->second >>= aFileName;
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             // In the LOK case, we didn't actually display any dialog yet, so invoke a callback if
             // that's set.
             OUString aNewURI;
-            if (comphelper::LibreOfficeKit::fileSaveDialog(aFileName, aNewURI))
+            if (comphelper::COKit::fileSaveDialog(aFileName, aNewURI))
             {
                 if (aNewURI.isEmpty())
                     return false;
@@ -1779,7 +1779,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     // Restore when exporting (which is also done when LoKit is enable, see below).
     const bool bRestore
         = (nStoreMode & EXPORT_REQUESTED)
-          || ((nStoreMode & SAVEAS_REQUESTED) && comphelper::LibreOfficeKit::isActive());
+          || ((nStoreMode & SAVEAS_REQUESTED) && comphelper::COKit::isActive());
     DocumentSettingsGuard aSettingsGuard(aModelData.GetModel(), aModelData.IsRecommendReadOnly(),
                                          bRestore);
 
@@ -1880,7 +1880,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
             // SaveAs in LoKit is unhelpful. It saves the document to a new path, which
             // breaks the link with the storage, so new modifications can't be uploaded.
             if ((nStoreMode & EXPORT_REQUESTED)
-                || ((nStoreMode & SAVEAS_REQUESTED) && comphelper::LibreOfficeKit::isActive()))
+                || ((nStoreMode & SAVEAS_REQUESTED) && comphelper::COKit::isActive()))
                 aModelData.GetStorable()->storeToURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
             else
                 aModelData.GetStorable()->storeAsURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aArgsSequence );
@@ -1953,7 +1953,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     }
 
     // Launch PDF viewer
-    if ( nStoreMode & PDFEXPORT_REQUESTED && !comphelper::LibreOfficeKit::isActive() )
+    if ( nStoreMode & PDFEXPORT_REQUESTED && !comphelper::COKit::isActive() )
     {
         FilterConfigItem aItem(u"Office.Common/Filter/PDF/Export/");
         bool aViewPDF = aItem.ReadBool( u"ViewPDFAfterExport"_ustr, false );
@@ -1965,7 +1965,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         }
     }
 
-    if ( comphelper::LibreOfficeKit::isActive() )
+    if ( comphelper::COKit::isActive() )
     {
         if ( pViewShell )
         {

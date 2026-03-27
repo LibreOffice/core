@@ -746,7 +746,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
     if ( !bDone )
         Window::KeyInput( rKEvent );
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         LogicInvalidate(nullptr);
 }
 
@@ -858,7 +858,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         mpExtTextView->Command( rCEvt );
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         LogicInvalidate(nullptr);
 
     Window::Command( rCEvt );

@@ -2712,8 +2712,8 @@ const LanguageTag& AllSettings::GetLanguageTag() const
         return aRet;
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
-        return comphelper::LibreOfficeKit::getLanguageTag();
+    if (comphelper::COKit::isActive())
+        return comphelper::COKit::getLanguageTag();
 
     assert(!mxData->maLocale.isSystemLocale());
 
@@ -2728,8 +2728,8 @@ const LanguageTag& AllSettings::GetUILanguageTag() const
         return aRet;
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
-        return comphelper::LibreOfficeKit::getLanguageTag();
+    if (comphelper::COKit::isActive())
+        return comphelper::COKit::getLanguageTag();
 
     assert(!mxData->maUILocale.isSystemLocale());
 

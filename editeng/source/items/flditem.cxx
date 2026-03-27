@@ -740,11 +740,11 @@ OUString SvxExtFileField::GetFormatted() const
     else if( INetProtocol::File == aURLObj.GetProtocol() )
     {
         // Note: The path is useless in jailed kit mode, so present a view that
-        // the document is in a Documents toplevel directory for LibreOfficeKit::isActive()
+        // the document is in a Documents toplevel directory for COKit::isActive()
         switch( eFormat )
         {
             case SvxFileFormat::PathFull:
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                 {
                     aString = "/" + SfxResId(STR_GID_DOCUMENT) + "/" +
                         aURLObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::Unambiguous);
@@ -754,7 +754,7 @@ OUString SvxExtFileField::GetFormatted() const
             break;
 
             case SvxFileFormat::PathOnly:
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                     aString = "/" + SfxResId(STR_GID_DOCUMENT);
                 else
                 {

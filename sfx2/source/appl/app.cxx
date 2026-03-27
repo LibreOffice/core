@@ -365,7 +365,7 @@ IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBas
     return false;
 #else
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         OUString aError;
         ErrCodeMsg nErr = StarBASIC::GetErrorCode();

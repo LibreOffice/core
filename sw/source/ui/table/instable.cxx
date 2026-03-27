@@ -31,7 +31,7 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
                                 std::unique_ptr<SwTableAutoFormat>& prTAFormat )
 {
     SwInsertTableFlags nInsMode = SwInsertTableFlags::NONE;
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         nInsMode = SwInsertTableFlags::DefaultBorder;
     rName = m_xNameEdit->get_text();
     rRow = m_xRowSpinButton->get_value();
@@ -45,7 +45,7 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
         rInsTableOpts.mnRowsToRepeat = 0;
     if (!m_xDontSplitCB->get_active())
         nInsMode |= SwInsertTableFlags::SplitLayout;
-    if (m_xTAutoFormat && !comphelper::LibreOfficeKit::isActive())
+    if (m_xTAutoFormat && !comphelper::COKit::isActive())
     {
         prTAFormat.reset(new SwTableAutoFormat( *m_xTAutoFormat ));
         rAutoName = prTAFormat->GetName().toString();
@@ -79,7 +79,7 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, u"previewinstable"_ustr, m_aWndPreview))
     , m_xStyleFrame(m_xBuilder->weld_frame(u"stylesframe"_ustr))
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         m_xStyleFrame->hide();
 
     const int nWidth = m_xLbFormat->get_approximate_digit_width() * 32;

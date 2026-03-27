@@ -19,7 +19,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 
-TestLokCallbackWrapper::TestLokCallbackWrapper(LibreOfficeKitCallback callback, void* data)
+TestLokCallbackWrapper::TestLokCallbackWrapper(COKitCallback callback, void* data)
     : Idle("TestLokCallbackWrapper flush timer")
     , m_callback(callback)
     , m_data(data)
@@ -71,7 +71,7 @@ void TestLokCallbackWrapper::libreOfficeKitViewInvalidateTilesCallback(
         buf.append(pRect->toString());
     else
         buf.append("EMPTY");
-    if (comphelper::LibreOfficeKit::isPartInInvalidation())
+    if (comphelper::COKit::isPartInInvalidation())
     {
         buf.append(", " + OString::number(static_cast<sal_Int32>(nPart)) + ", "
                    + OString::number(static_cast<sal_Int32>(nMode)));
@@ -133,7 +133,7 @@ void TestLokCallbackWrapper::discardUpdatedTypes(int nType, int nViewId)
     if (nViewId < 0)
         allViewIds = true;
     if (nType == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR
-        && !comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+        && !comphelper::COKit::isViewIdForVisCursorInvalidation())
         allViewIds = true;
     for (auto it = m_updatedTypesPerViewId.begin(); it != m_updatedTypesPerViewId.end();)
     {

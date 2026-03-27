@@ -453,8 +453,8 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
             case WidgetDrawActionType::IMAGE:
             {
                 double nScaleFactor = 1.0;
-                if (comphelper::LibreOfficeKit::isActive())
-                    nScaleFactor = comphelper::LibreOfficeKit::getDPIScale();
+                if (comphelper::COKit::isActive())
+                    nScaleFactor = comphelper::COKit::getDPIScale();
 
                 auto const& rWidgetDraw = static_cast<WidgetDrawActionImage const&>(*pDrawAction);
                 auto& rCacheImages = ImplGetSVData()->maGDIData.maThemeImageCache;

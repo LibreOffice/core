@@ -30,7 +30,7 @@ struct RefUpdateContext;
 
 }
 
-namespace vcl { class ILibreOfficeKitNotifier; }
+namespace vcl { class ICOKitNotifier; }
 
 class ScPatternAttr;
 class ScTokenArray;
@@ -83,7 +83,7 @@ private:
 
     using ScConditionEntry::operator==;
 
-    DECL_STATIC_LINK(ScValidationData, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+    DECL_STATIC_LINK(ScValidationData, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
 
 public:
     SC_DLLPUBLIC ScValidationData( ScValidationMode eMode, ScConditionMode eOper,

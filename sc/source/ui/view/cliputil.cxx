@@ -383,7 +383,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
             }
         }
     }
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         bool entireColumnOrRowSelected = false;
         if (pOwnClip)

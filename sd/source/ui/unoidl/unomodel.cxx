@@ -4032,7 +4032,7 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
         return;
 
     // we need to skip tile invalidation for controls on rendering
-    comphelper::LibreOfficeKit::setTiledPainting(true);
+    comphelper::COKit::setTiledPainting(true);
 
     // Setup drawing layer to work properly. Since we use a custom VirtualDevice
     // for the drawing, SdrPaintView::BeginCompleteRedraw() will call FindPaintWindow()
@@ -4088,12 +4088,12 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     ::tools::Rectangle aRect(aPoint, aSize);
 
     SdrView* pView = pViewSh->GetDrawView();
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         pView->SetPaintTextEdit(mbPaintTextEdit);
 
     pViewSh->GetView()->CompleteRedraw(&rDevice, vcl::Region(aRect));
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         pView->SetPaintTextEdit(true);
 
     LokChartHelper::PaintAllChartsOnTile(rDevice, nOutputWidth, nOutputHeight,
@@ -4116,7 +4116,7 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
         LokControlHandler::paintControlTile(pPage, pDrawView, *pActiveWin, rDevice, aOutputSize, aTileRect);
     }
 
-    comphelper::LibreOfficeKit::setTiledPainting(false);
+    comphelper::COKit::setTiledPainting(false);
 }
 
 OString SdXImpressDocument::getViewRenderState(SfxViewShell* pViewShell)
@@ -4448,7 +4448,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
 
         // Disable comments if requested
         SdOptions* pOptions = SdModule::get()->GetSdOptions(mpDoc->GetDocumentType());
-        pOptions->SetShowComments(comphelper::LibreOfficeKit::isTiledAnnotations());
+        pOptions->SetShowComments(comphelper::COKit::isTiledAnnotations());
 
         pViewShell->SetRuler(false);
         pViewShell->SetScrollBarsVisible(false);
@@ -4482,7 +4482,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     auto xChanges = comphelper::ConfigurationChanges::create();
     officecfg::Office::Common::Save::Document::WarnAlienFormat::set(false, xChanges);
 
-    if (!o3tl::IsRunningUnitTest() || !comphelper::LibreOfficeKit::isActive())
+    if (!o3tl::IsRunningUnitTest() || !comphelper::COKit::isActive())
         officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::set(true,xChanges);
     xChanges->commit();
 

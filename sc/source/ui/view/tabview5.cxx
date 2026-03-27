@@ -161,7 +161,7 @@ ScTabView::~ScTabView()
     delete pDrawOld;
     pDrawOld = nullptr;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScTabViewShell* pThisViewShell = GetViewData().GetViewShell();
 
@@ -282,11 +282,11 @@ void ScTabView::ImplTabChanged(bool bSameTabButMoved)
 {
     // For kit ignore invalidations during tab change
     ScTabViewShell* pViewShell = aViewData.GetViewShell();
-    SfxLokCallbackInterface* pCallback = pViewShell->getLibreOfficeKitViewCallback();
-    pViewShell->setLibreOfficeKitViewCallback(nullptr);
+    SfxLokCallbackInterface* pCallback = pViewShell->getCOKitViewCallback();
+    pViewShell->setCOKitViewCallback(nullptr);
     comphelper::ScopeGuard aOutputGuard(
         [this, pViewShell, pCallback] {
-            pViewShell->setLibreOfficeKitViewCallback(pCallback);
+            pViewShell->setCOKitViewCallback(pCallback);
             // But possibly update any out of date formulas on the tab we switched to
             UpdateFormulas();
         });
@@ -345,7 +345,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
 {
     ImplTabChanged(bSameTabButMoved);
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
@@ -695,7 +695,7 @@ void ScTabView::ResetBrushDocument()
 
 void ScTabView::OnLOKNoteStateChanged(const ScPostIt* pNote)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     const SdrCaptionObj* pCaption = pNote->GetCaption();

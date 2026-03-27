@@ -104,7 +104,7 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
         {
             // Replace the placeholder image with a real one.
             GetView().StopShellTimer();
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 tools::JsonWriter aJson;
                 aJson.put("action", "change-picture");

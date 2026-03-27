@@ -586,7 +586,7 @@ SwSpellPopup::~SwSpellPopup() {}
 
 void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSuggestions)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     // None is added only for LOK, it means there is no need to execute anything

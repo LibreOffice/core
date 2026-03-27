@@ -59,7 +59,7 @@ public:
 
 void SfxPickListImpl::AddDocumentToPickList(const SfxObjectShell* pDocSh, bool bNoThumbnail)
 {
-    if (pDocSh->IsAvoidRecentDocs() || comphelper::LibreOfficeKit::isActive())
+    if (pDocSh->IsAvoidRecentDocs() || comphelper::COKit::isActive())
         return;
 
     SfxMedium *pMed = pDocSh->GetMedium();

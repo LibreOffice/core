@@ -804,7 +804,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 
 FieldUnit   GetDfltMetric(bool bWeb)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return SwModule::get()->GetFieldUnit();
     return SwModule::get()->GetUsrPref(bWeb)->GetMetric();
 }

@@ -594,7 +594,7 @@ uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
     uno::Reference< XSearchableDictionaryList >  xTmpDicList( GetDictionaryList() );
     if (xTmpDicList.is())
     {
-        const LanguageTag tag = comphelper::LibreOfficeKit::isActive()
+        const LanguageTag tag = comphelper::COKit::isActive()
                                     ? LanguageTag(u"en-US"_ustr)
                                     : SvtSysLocale().GetUILanguageTag();
         std::locale loc(Translate::Create("svt", tag));

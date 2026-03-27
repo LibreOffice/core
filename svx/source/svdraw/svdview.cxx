@@ -378,7 +378,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     // but this one safely keeps existing behaviour as-is.
                     // Except for the LOK. LOK doesn't have hoovering popup
                     // feature.
-                    eHit = comphelper::LibreOfficeKit::isActive() ? SdrHitKind::TextEditObj : SdrHitKind::UnmarkedObject;
+                    eHit = comphelper::COKit::isActive() ? SdrHitKind::TextEditObj : SdrHitKind::UnmarkedObject;
                     break;
                 default:
                     break;

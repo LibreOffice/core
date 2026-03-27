@@ -1651,7 +1651,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                     aRowHeight.SetValue(nHeight);
                     rSet.Put(aRowHeight);
 
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                     {
                         // TODO: set correct unit
                         MapUnit eTargetUnit = MapUnit::MapInch;
@@ -1675,7 +1675,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 aColumnWidth.SetValue(nWidth);
                 rSet.Put(aColumnWidth);
 
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                 {
                     // TODO: set correct unit
                     MapUnit eTargetUnit = MapUnit::MapInch;

@@ -344,7 +344,7 @@ void SfxObjectShell::ModifyChanged()
     SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::ModifyChanged, GlobalEventConfig::GetEventName(GlobalEventId::MODIFYCHANGED), this ) );
 
     // Don't wait to get this important state via binding notification timeout.
-    if ( comphelper::LibreOfficeKit::isActive() )
+    if ( comphelper::COKit::isActive() )
     {
         OString aStatus = ".uno:ModifiedStatus="_ostr;
         aStatus += IsModified() ? "true" : "false";
@@ -2011,7 +2011,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions()
         {
             mbContinueImportOnFilterExceptions = yes;
             // lok: we want to overwrite file in jail, so don't use template flag
-            bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+            bool bIsLOK = comphelper::COKit::isActive();
             // allow repair
             pMedium->GetItemSet().Put(SfxBoolItem(SID_REPAIRPACKAGE, true));
             pMedium->GetItemSet().Put(SfxBoolItem(SID_TEMPLATE, !bIsLOK));

@@ -25,10 +25,10 @@ namespace com::sun::star::awt
 struct Rectangle;
 }
 
-// Interface between the LibreOfficeKit implementation called by LibreOfficeKit clients and other
+// Interface between the COKit implementation called by COKit clients and other
 // LibreOffice code.
 
-namespace comphelper::LibreOfficeKit
+namespace comphelper::COKit
 {
 /// interface for allowing threads to be transiently shutdown.
 class COMPHELPER_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ThreadJoinable
@@ -40,7 +40,7 @@ public:
     virtual void startThreads() {}
 };
 
-// Functions to be called only from the LibreOfficeKit implementation in desktop, not from other
+// Functions to be called only from the COKit implementation in desktop, not from other
 // places in LibreOffice code.
 
 #if LOK_ALWAYS_ACTIVE
@@ -64,7 +64,7 @@ COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(
 
 // Functions that can be called from arbitrary places in LibreOffice.
 
-// Check whether the code is running as invoked through LibreOfficeKit.
+// Check whether the code is running as invoked through COKit.
 #if LOK_ALWAYS_ACTIVE
 constexpr bool isActive() { return true; }
 #else

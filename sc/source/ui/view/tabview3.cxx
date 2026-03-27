@@ -385,7 +385,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     // FIXME: this is to limit the number of rows handled in the Online
     // to 1000; this will be removed again when the performance
     // bottlenecks are sorted out
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         nPosY = std::min(nPosY, MAXTILEDROW);
 
     if ( !(nPosX != nOldX || nPosY != nOldY || bNew) )
@@ -415,7 +415,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     OUString aCurrAddress = ScAddress(nPosX,nPosY,0).GetColRowString();
     collectUIInformation({{"CELL", aCurrAddress}});
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     if (nPosX <= aViewData.GetMaxTiledCol() - 10 && nPosY <= aViewData.GetMaxTiledRow() - 25)
@@ -653,7 +653,7 @@ void ScTabView::SelectionChanged(bool bFromPaste)
     rBindings.Invalidate( SID_SORT_DESCENDING );
     rBindings.Invalidate( SID_SELECT_UNPROTECTED_CELLS );
     rBindings.Invalidate( SID_CLEAR_AUTO_FILTER );
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         rBindings.Invalidate( SID_LANGUAGE_STATUS );
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
@@ -1255,7 +1255,7 @@ void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
     // FIXME: this is to limit the number of rows handled in the Online
     // to 1000; this will be removed again when the performance
     // bottlenecks are sorted out
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         nCurY = std::min(nCurY, MAXTILEDROW);
 
     HideAllCursors();
@@ -2104,11 +2104,11 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
 
     // disable invalidations for kit during tab switching
     {
-        SfxLokCallbackInterface* pCallback = pViewShell->getLibreOfficeKitViewCallback();
-        pViewShell->setLibreOfficeKitViewCallback(nullptr);
+        SfxLokCallbackInterface* pCallback = pViewShell->getCOKitViewCallback();
+        pViewShell->setCOKitViewCallback(nullptr);
         comphelper::ScopeGuard aOutputGuard(
             [pViewShell, pCallback] {
-                pViewShell->setLibreOfficeKitViewCallback(pCallback);
+                pViewShell->setCOKitViewCallback(pCallback);
             });
         PaintGrid();
     }
@@ -2147,7 +2147,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         }
     }
 
-    OnLibreOfficeKitTabChanged();
+    OnCOKitTabChanged();
     pViewShell->SetTabChangeInProgress(false);
 }
 
@@ -2161,9 +2161,9 @@ void ScTabView::RemoveWindowFromForeignEditView(SfxViewShell* pViewShell, ScSpli
     aExtraEditViewManager.Remove(pViewShell, eWhich);
 }
 
-void ScTabView::OnLibreOfficeKitTabChanged()
+void ScTabView::OnCOKitTabChanged()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     ScTabViewShell* pThisViewShell = aViewData.GetViewShell();
@@ -2327,7 +2327,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::createO
 
 void ScTextEditOverlayObject::EditViewInvalidate(const tools::Rectangle& rRect)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // UT testPageDownInvalidation from CppunitTest_sc_tiledrendering
         // *needs* the direct invalidates formerly done in
@@ -2685,7 +2685,7 @@ void ScTabView::KillEditView( bool bNoPaint )
 
             const tools::Rectangle& rInvRect = aRectangle[i];
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 pGridWin[i]->LogicInvalidatePart(&rInvRect, nTab);
 
@@ -2786,7 +2786,7 @@ void ScTabView::UpdateFormulas(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
     if ( aViewData.IsPagebreakMode() )
         UpdatePageBreakData();              //! asynchronous
 
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bIsTiledRendering = comphelper::COKit::isActive();
     // UpdateHeaderWidth can fit the GridWindow widths to the frame, something
     // we don't want in kit-mode where we try and match the GridWindow width
     // to the tiled area separately
@@ -2807,7 +2807,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     SCROW nRow1;
     SCCOL nCol2;
     SCROW nRow2;
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bIsTiledRendering = comphelper::COKit::isActive();
     ScDocument& rDoc = aViewData.GetDocument();
 
     PutInOrder( nStartCol, nEndCol );
@@ -3092,7 +3092,7 @@ void ScTabView::DoChartSelection(
                     AddHighlightRange( aTargetRange, aSelColor );
                 }
 
-                if ( comphelper::LibreOfficeKit::isActive() && aViewData.GetViewShell() )
+                if ( comphelper::COKit::isActive() && aViewData.GetViewShell() )
                 {
                     aTargetRange.PutInOrder();
 
@@ -3110,7 +3110,7 @@ void ScTabView::DoChartSelection(
         }
     }
 
-    if ( comphelper::LibreOfficeKit::isActive() && aViewData.GetViewShell() )
+    if ( comphelper::COKit::isActive() && aViewData.GetViewShell() )
         ScInputHandler::SendReferenceMarks( aViewData.GetViewShell(), aReferenceMarks );
 }
 
@@ -3130,7 +3130,7 @@ void ScTabView::DoDPFieldPopup(std::u16string_view rPivotTableName, sal_Int32 nD
     pDPObject->BuildAllDimensionMembers();
 
     Point aPos = pWin->LogicToPixel(aPoint);
-    bool bLOK = comphelper::LibreOfficeKit::isActive();
+    bool bLOK = comphelper::COKit::isActive();
     Point aScreenPoint = bLOK ? aPos : pWin->OutputToScreenPixel(aPos);
     Size aScreenSize = pWin->LogicToPixel(aSize);
 
@@ -3506,7 +3506,7 @@ tools::Long ScTabView::GetGridWidth( ScHSplitPos eWhich )
     // the size of the visible area in Online;
     // as a workaround we use the same width for all panes independently
     // from the eWhich value
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScGridWindow* pGridWindow = aViewData.GetActiveWin();
         if (pGridWindow)
@@ -3528,7 +3528,7 @@ tools::Long ScTabView::GetGridHeight( ScVSplitPos eWhich )
     // the size of the visible area in Online;
     // as a workaround we use the same height for all panes independently
     // from the eWhich value
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScGridWindow* pGridWindow = aViewData.GetActiveWin();
         if (pGridWindow)

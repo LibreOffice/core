@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSelf)
 CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
 {
     // Set up LOK:
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::COKit::setActive(true);
 
     // Given a new document:
     createSwDoc("compare-new.odt");
@@ -495,7 +495,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     ViewCallback aCallback;
     TestLokCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallbackWrapper);
+    pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
     aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(*pWrtShell->GetSfxViewShell()));
 
     // When comparing with an old document:
@@ -525,7 +525,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
                          aTree.get<std::string>("state.metadata.thisDocument.modificationDate"));
 
     // Tear down LOK:
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
+    pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAutocorrectRedline)

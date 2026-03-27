@@ -86,7 +86,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
     if ( pItem )
         pItem->GetValue() >>= m_xCustomPropertySet;
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         // uitests
         m_pTypeView->set_buildable_name(u"type-docinf"_ustr);
@@ -113,7 +113,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     if (aCustomProperties.hasElements())
     {
         m_xTypeList->hide();
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
             m_xTypeList->set_buildable_name(u"type-list"_ustr);
         m_xTypeTree->show();
         m_pTypeView = m_xTypeTree.get();
@@ -121,13 +121,13 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     else
     {
         m_xTypeTree->hide();
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
             m_xTypeTree->set_buildable_name(u"type-tree"_ustr);
         m_xTypeList->show();
         m_pTypeView = m_xTypeList.get();
     }
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         m_pTypeView->set_buildable_name(u"type-docinf"_ustr);
 
     // initialise TypeListBox

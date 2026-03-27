@@ -85,7 +85,7 @@ using namespace comphelper;
 
 static bool IsMobile()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return false;
     SfxViewShell* pCurrent = SfxViewShell::Current();
     return pCurrent && pCurrent->isLOKMobilePhone();
@@ -308,7 +308,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , m_xAllSheetsCB(m_xBuilder->weld_check_button(u"allsheets"_ustr))
     , m_xCalcStrFT(m_xBuilder->weld_label(u"entirecells"_ustr))
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         m_xCloseBtn->hide();
         m_xHelpBtn->hide();
@@ -1002,7 +1002,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         bool bSetSearch = !(m_nModifyFlag & ModifyFlags::Search);
         bool bSetReplace = !(m_nModifyFlag & ModifyFlags::Replace);
 
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             if (!(m_pSearchItem->GetSearchString().isEmpty()) && bSetSearch)
                 m_xSearchLB->set_entry_text(m_pSearchItem->GetSearchString());

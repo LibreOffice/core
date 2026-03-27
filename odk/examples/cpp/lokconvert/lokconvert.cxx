@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
         llo = lok::lok_cpp_init(lo_bin_dir);
         if (!llo)
         {
-            std::cerr << "Error: could not initialise LibreOfficeKit\n";
+            std::cerr << "Error: could not initialise COKit\n";
             return 1;
         }
 
@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     }
     catch (const std::exception& e)
     {
-        std::cerr << "Error: LibreOfficeKit exception: " << e.what() << "\n";
+        std::cerr << "Error: COKit exception: " << e.what() << "\n";
         return 1;
     }
 

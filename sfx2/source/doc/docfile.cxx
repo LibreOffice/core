@@ -363,7 +363,7 @@ class MediumTempFile : public ::utl::TempFileNamed
 public:
     MediumTempFile(const OUString *pParent )
         : ::utl::TempFileNamed(pParent)
-        , m_bWasChild(comphelper::LibreOfficeKit::isForkedChild())
+        , m_bWasChild(comphelper::COKit::isForkedChild())
     {
     }
 
@@ -371,7 +371,7 @@ public:
 
     ~MediumTempFile()
     {
-        bool isForked = comphelper::LibreOfficeKit::isForkedChild();
+        bool isForked = comphelper::COKit::isForkedChild();
 
         // avoid deletion of files created by the parent
         if (isForked && ! m_bWasChild)
@@ -4517,7 +4517,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                 if (GetFilter() && GetFilter()->IsOwnFormat())
                 {
                     bool bImplicitScriptSign = officecfg::Office::Common::Security::Scripting::ImplicitScriptSign::get();
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                     {
                         bImplicitScriptSign = true;
                     }

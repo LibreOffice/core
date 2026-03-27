@@ -97,7 +97,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testRegisterCallback)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
 
     // Start text edit of the empty title shape.
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -326,7 +326,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePage)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("insert-delete.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
 
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -1362,7 +1362,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
 {
     // Load the document.
     // Set the tiled annotations off
-    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+    comphelper::COKit::setTiledAnnotations(false);
 
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
@@ -1460,7 +1460,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView2.m_aCommentCallbackResult.get<int>("id"));
 
-    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+    comphelper::COKit::setTiledAnnotations(true);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
@@ -1469,7 +1469,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
     // Load the document.
     // Set the tiled annotations off
-    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+    comphelper::COKit::setTiledAnnotations(false);
 
     createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
@@ -1506,7 +1506,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 478, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
-    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+    comphelper::COKit::setTiledAnnotations(true);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
@@ -1515,7 +1515,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 
     // Load the document.
     // Set the tiled annotations off
-    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+    comphelper::COKit::setTiledAnnotations(false);
 
     createDoc("dummy.odg", comphelper::InitPropertySequence(
     {
@@ -1552,7 +1552,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 478, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
-    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+    comphelper::COKit::setTiledAnnotations(true);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage)
@@ -2068,7 +2068,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCutSelectionChange)
     CPPUNIT_ASSERT(pXImpressDocument);
 
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
     Scheduler::ProcessEventsToIdle();
 
     // Select first text object

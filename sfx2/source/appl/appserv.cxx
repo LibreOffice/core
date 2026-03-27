@@ -380,7 +380,7 @@ weld::Window* SfxRequest::GetFrameWeld() const
 
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
-    const bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+    const bool bIsLOK = comphelper::COKit::isActive();
     static svtools::EditableColorConfig aEditableConfig;
     static bool aColorConfigInitialized = false;
     if (!aColorConfigInitialized && bIsLOK)
@@ -1026,7 +1026,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 aCurrentMode = comphelper::getString( aAppNode.getNodeValue( u"Active"_ustr ) );
 
-                if ( !comphelper::LibreOfficeKit::isActive() && aCurrentMode == aNewName )
+                if ( !comphelper::COKit::isActive() && aCurrentMode == aNewName )
                 {
                     bDone = true;
                     break;
@@ -1042,7 +1042,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             while( pViewFrame )
             {
                 // in LOK case we want to apply changes only to the current view
-                if (comphelper::LibreOfficeKit::isActive() &&
+                if (comphelper::COKit::isActive() &&
                     pViewFrame != &SfxViewShell::Current()->GetViewFrame())
                 {
                     pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
@@ -1171,7 +1171,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     // Sidebar
                     pViewFrame->ShowChildWindow( SID_SIDEBAR );
 
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                         aSidebarMode = "Opened";
 
                     sfx2::sidebar::SidebarController* pSidebar =
@@ -2093,7 +2093,7 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
         rSet.DisableItem( FN_BUSINESS_CARD );
         rSet.DisableItem( FN_XFORMS_INIT );
     }
-    if ( comphelper::LibreOfficeKit::isActive() )
+    if ( comphelper::COKit::isActive() )
         rSet.DisableItem( SID_AUTO_CORRECT_DLG );
 
     if (SvtSecurityOptions::IsMacroDisabled())

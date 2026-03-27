@@ -2383,7 +2383,7 @@ void ScInterpreter::ScCell()
                             eConv == FormulaGrammar::CONV_XL_OOX)
                         {
                             // file name and table name: FILEPATH/[FILENAME]TABLE
-                            if (!comphelper::LibreOfficeKit::isActive())
+                            if (!comphelper::COKit::isActive())
                                 aFuncResult = rURLObj.GetPartBeforeLastName();
                             aFuncResult += "[" + rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous) +
                                            "]" + aTabName;
@@ -2392,7 +2392,7 @@ void ScInterpreter::ScCell()
                         {
                             // file name and table name: 'FILEPATH/FILENAME'#$TABLE
                             aFuncResult = "'";
-                            if (!comphelper::LibreOfficeKit::isActive())
+                            if (!comphelper::COKit::isActive())
                                 aFuncResult += rURLObj.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
                             else
                                 aFuncResult += rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);

@@ -132,7 +132,7 @@ void ChartColorWrapper::updateData()
     mpControl->statusChanged(aEvent);
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell && (maPropertyName == aLineColor))
+    if (comphelper::COKit::isActive() && pViewShell && (maPropertyName == aLineColor))
     {
         OString sCommand = OUStringToOString(aUrl.Complete, RTL_TEXTENCODING_ASCII_US);
         sal_Int32 nColor = -1;

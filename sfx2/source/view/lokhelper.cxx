@@ -80,7 +80,7 @@ public:
 
     static inline bool disabled()
     {
-        return !comphelper::LibreOfficeKit::isActive() || m_nDisabled != 0;
+        return !comphelper::COKit::isActive() || m_nDisabled != 0;
     }
 
 private:
@@ -125,7 +125,7 @@ int SfxLokHelper::createView(SfxViewFrame& rViewFrame, ViewShellDocId docId)
     // something has likely cleared the original SID_INTERACTIONHANDLER
     assert(!isSfxMediumMissingInteractionHandled(rViewFrame) && "original XInteractionHandler missing");
 
-    comphelper::LibreOfficeKit::setDocId(docId);
+    comphelper::COKit::setDocId(docId);
     SfxRequest aRequest(rViewFrame, SID_NEWWINDOW);
     rViewFrame.ExecView_Impl(aRequest);
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -205,7 +205,7 @@ void SfxLokHelper::setView(int nId)
     DisableCallbacks dc;
 
     bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
-    if (bIsCurrShell && comphelper::LibreOfficeKit::getLanguageTag().getBcp47() == pViewShell->GetLOKLanguageTag().getBcp47())
+    if (bIsCurrShell && comphelper::COKit::getLanguageTag().getBcp47() == pViewShell->GetLOKLanguageTag().getBcp47())
         return;
 
     if (bIsCurrShell)
@@ -214,13 +214,13 @@ void SfxLokHelper::setView(int nId)
         // But it looks like that the language can go wrong, so we have to fix that.
         // This can happen, when someone sets the language or SfxViewShell::Current() separately.
         SAL_WARN("lok", "LANGUAGE mismatch at setView! ... old (wrong) lang:"
-                        << comphelper::LibreOfficeKit::getLanguageTag().getBcp47()
+                        << comphelper::COKit::getLanguageTag().getBcp47()
                         << " new lang:" << pViewShell->GetLOKLanguageTag().getBcp47());
     }
 
     // update the current LOK language and locale for the dialog tunneling
-    comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
-    comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
+    comphelper::COKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
+    comphelper::COKit::setLocale(pViewShell->GetLOKLocale());
 
     if (bIsCurrShell)
         return;
@@ -390,7 +390,7 @@ void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
         // sync also global getter if we are the current view
         bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
         if (bIsCurrShell)
-            comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
+            comphelper::COKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
     }
 }
 
@@ -407,8 +407,8 @@ void SfxLokHelper::setViewLanguageAndLocale(int nId, const OUString& rBcp47Langu
             bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
             if (bIsCurrShell)
             {
-                comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
-                comphelper::LibreOfficeKit::setLocale(LanguageTag(rBcp47LanguageTag));
+                comphelper::COKit::setLanguageTag(LanguageTag(rBcp47LanguageTag));
+                comphelper::COKit::setLocale(LanguageTag(rBcp47LanguageTag));
             }
             return;
         }
@@ -462,7 +462,7 @@ void SfxLokHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
             bool bIsCurrShell = (pViewShell == SfxViewShell::Current());
             if (bIsCurrShell)
             {
-                comphelper::LibreOfficeKit::setLocale(LanguageTag(rBcp47LanguageTag));
+                comphelper::COKit::setLocale(LanguageTag(rBcp47LanguageTag));
             }
             return;
         }
@@ -751,7 +751,7 @@ void SfxLokHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect)
 {
     // -1 means all parts
-    const int nPart = comphelper::LibreOfficeKit::isPartInInvalidation() ? pThisView->getPart() : INT_MIN;
+    const int nPart = comphelper::COKit::isPartInInvalidation() ? pThisView->getPart() : INT_MIN;
     SfxLokHelper::notifyInvalidation(pThisView, nPart, pRect);
 }
 
@@ -761,7 +761,7 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const int n
         return;
 
     // -1 means all parts
-    const int nPart = comphelper::LibreOfficeKit::isPartInInvalidation() ? nInPart : INT_MIN;
+    const int nPart = comphelper::COKit::isPartInInvalidation() ? nInPart : INT_MIN;
     const int nMode = pThisView->getEditMode();
     pThisView->libreOfficeKitViewInvalidateTilesCallback(pRect, nPart, nMode);
 }
@@ -841,7 +841,7 @@ void SfxLokHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, in
 OString SfxLokHelper::makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
     bool bMispelledWord, const OString& rHyperlink)
 {
-    if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+    if (comphelper::COKit::isViewIdForVisCursorInvalidation())
     {
         OString sHyperlink = rHyperlink.isEmpty() ? "{}"_ostr : rHyperlink;
         return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) +
@@ -904,7 +904,7 @@ void SfxLokHelper::notifyLog(const std::ostringstream& stream)
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!pViewShell)
        return;
-    if (pViewShell->getLibreOfficeKitViewCallback())
+    if (pViewShell->getCOKitViewCallback())
     {
         if (!g_logNotifierCache.empty())
         {
@@ -1203,10 +1203,10 @@ void SfxLokHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView
 
 void SfxLokHelper::registerViewCallbacks()
 {
-    comphelper::LibreOfficeKit::setViewSetter([](int nView) {
+    comphelper::COKit::setViewSetter([](int nView) {
         SfxLokHelper::setView(nView);
     });
-    comphelper::LibreOfficeKit::setViewGetter([]() -> int {
+    comphelper::COKit::setViewGetter([]() -> int {
         return SfxLokHelper::getCurrentView();
     });
 }
@@ -1456,7 +1456,7 @@ void SfxLokHelper::dumpState(rtl::OStringBuffer &rState)
     while (pViewShell)
     {
         if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell-> GetDocId())
-            pViewShell->dumpLibreOfficeKitViewState(rState);
+            pViewShell->dumpCOKitViewState(rState);
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -1522,15 +1522,15 @@ SfxLokLanguageGuard::SfxLokLanguageGuard(const SfxViewShell* pNewShell)
     , m_pOldShell(nullptr)
 {
     m_pOldShell = SfxViewShell::Current();
-    if (!comphelper::LibreOfficeKit::isActive() || !pNewShell || pNewShell == m_pOldShell)
+    if (!comphelper::COKit::isActive() || !pNewShell || pNewShell == m_pOldShell)
     {
         return;
     }
 
     // The current view ID is not the one that belongs to this frame, update
     // language/locale.
-    comphelper::LibreOfficeKit::setLanguageTag(pNewShell->GetLOKLanguageTag());
-    comphelper::LibreOfficeKit::setLocale(pNewShell->GetLOKLocale());
+    comphelper::COKit::setLanguageTag(pNewShell->GetLOKLanguageTag());
+    comphelper::COKit::setLocale(pNewShell->GetLOKLocale());
     m_bSetLanguage = true;
 }
 
@@ -1541,8 +1541,8 @@ SfxLokLanguageGuard::~SfxLokLanguageGuard()
         return;
     }
 
-    comphelper::LibreOfficeKit::setLanguageTag(m_pOldShell->GetLOKLanguageTag());
-    comphelper::LibreOfficeKit::setLocale(m_pOldShell->GetLOKLocale());
+    comphelper::COKit::setLanguageTag(m_pOldShell->GetLOKLanguageTag());
+    comphelper::COKit::setLocale(m_pOldShell->GetLOKLocale());
 }
 
 LOKEditViewHistory::EditViewHistoryMap LOKEditViewHistory::maEditViewHistory;
@@ -1550,7 +1550,7 @@ LOKEditViewHistory::EditViewHistoryMap LOKEditViewHistory::maEditViewHistory;
 
 void LOKEditViewHistory::Update(bool bRemove)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();

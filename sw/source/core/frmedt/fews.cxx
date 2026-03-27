@@ -322,7 +322,7 @@ void SwFEShell::ShellGetFocus()
 
     if ( HasDrawView() )
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
             Imp()->GetDrawView()->showMarkHandles();
         if ( Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0 )
             FrameNotify( this, FLY_DRAG_START );
@@ -335,7 +335,7 @@ void SwFEShell::ShellLoseFocus()
 
     if ( HasDrawView() && Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() != 0 )
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
             Imp()->GetDrawView()->hideMarkHandles();
         FrameNotify( this, FLY_DRAG_END );
     }

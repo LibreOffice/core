@@ -526,7 +526,7 @@ void ChartAreaPanel::selectionChanged(bool bCorrectType)
         return;
 
     // set the initial correct color for the color picker
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
         if (xPropSet.is())

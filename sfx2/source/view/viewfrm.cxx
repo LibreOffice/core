@@ -2990,7 +2990,7 @@ const OUString & SfxViewFrame::GetActualPresentationURL_Impl() const
 void SfxViewFrame::SetModalMode( bool bModal )
 {
     // no real modality for LOK
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     m_pImpl->bModal = bModal;
@@ -3542,7 +3542,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             const OUString aDeckId(pDeckIdItem->GetValue());
             // Compatibility with old LOK "toggle always"
             // TODO: check LOK with tdf#142978 Show a11y sidebar when finding issues on PDF export, hash: 53fc5fa
-            const bool isLOK = comphelper::LibreOfficeKit::isActive();
+            const bool isLOK = comphelper::COKit::isActive();
             const SfxBoolItem* pToggleItem = rReq.GetArg(SID_SIDEBAR_DECK_TOGGLE);
             bool bToggle = isLOK || (pToggleItem && pToggleItem->GetValue());
             ::sfx2::sidebar::Sidebar::ShowDeck(aDeckId, this, bToggle);

@@ -110,7 +110,7 @@ SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* p
 
     m_xTypeLB->clear();
 
-    if (comphelper::LibreOfficeKit::isActive()) {
+    if (comphelper::COKit::isActive()) {
         // In LOK (read: under JSDialog), it is preferable to run this search on
         // the client side rather than in core for positioning/interference/etc. reasons
         m_xFilterED->hide();
@@ -132,7 +132,7 @@ SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* p
     m_xSelectionToolTipLB->connect_row_activated( LINK(this, SwFieldRefPage, TreeViewInsertHdl) );
     m_xFilterED->grab_focus();
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         // uitests
         m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-ref");

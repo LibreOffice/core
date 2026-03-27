@@ -361,7 +361,7 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
                 aSet.Put(pItem->CloneSetWhich(SID_ATTR_TEXTCOLUMNS_SPACING));
             }
             rSet.Put(aSet, false);
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 lcl_unifyFillTransparencyItems(rSet);
         }
     }

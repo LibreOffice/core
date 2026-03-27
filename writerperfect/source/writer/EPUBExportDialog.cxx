@@ -157,7 +157,7 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
 
     m_xOKButton->connect_clicked(LINK(this, EPUBExportDialog, OKClickHdl));
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         m_xCustomizeFrame->hide();
 }
 

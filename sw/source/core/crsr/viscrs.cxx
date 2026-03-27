@@ -109,7 +109,7 @@ void SwVisibleCursor::Show()
         m_bIsVisible = true;
 
         // display at all?
-        if (m_pCursorShell->VisArea().Overlaps(m_rState.m_aCharRect) || comphelper::LibreOfficeKit::isActive())
+        if (m_pCursorShell->VisArea().Overlaps(m_rState.m_aCharRect) || comphelper::COKit::isActive())
             SetPosAndShow(nullptr);
     }
 }
@@ -207,7 +207,7 @@ SwRect SwVisibleCursor::SetPos()
 
         // Disable pixel alignment when tiled rendering, so that twip values of
         // the cursor don't depend on statics.
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
             ::SwAlignRect( aRect, static_cast<SwViewShell const *>(m_pCursorShell), m_pCursorShell->GetOut() );
     }
     if( !m_rState.IsOverwriteCursor() || m_bIsDragCursor ||
@@ -223,7 +223,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 {
     const SwRect aRect = SetPos();
 
-    if (SfxViewShell* pNotifyViewShell = comphelper::LibreOfficeKit::isActive() ? m_pCursorShell->GetSfxViewShell() : nullptr)
+    if (SfxViewShell* pNotifyViewShell = comphelper::COKit::isActive() ? m_pCursorShell->GetSfxViewShell() : nullptr)
     {
         // notify about page number change (if that happened)
         sal_uInt16 nPage, nVirtPage;
@@ -281,7 +281,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 std::optional<OString> SwVisibleCursor::getLOKPayload(int nType, int nViewId) const
 {
     assert(nType == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR || nType == LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         SwRect aRect = m_aLastLOKRect;
 
@@ -497,7 +497,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
     // talks about "the" cursor at the moment. As long as that's true,
     // don't say anything about the Writer cursor till a draw object is
     // being edited.
-    if (!comphelper::LibreOfficeKit::isActive() || pView->GetTextEditObject())
+    if (!comphelper::COKit::isActive() || pView->GetTextEditObject())
         return;
 
     // If pSelectionRectangles is set, we're just collecting the text selections -> don't emit start/end.
@@ -668,7 +668,7 @@ void SwSelPaintRects::HighlightContentControl()
 
                 aContentControlRanges.emplace_back(aRect.Left(), aRect.Top(), aRect.Right() + 1,
                                                    aRect.Bottom() + 1);
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                 {
                     aLOKRectangles.push_back(aRect.toString());
                 }
@@ -702,7 +702,7 @@ void SwSelPaintRects::HighlightContentControl()
     auto pWrtShell = dynamic_cast<const SwWrtShell*>(GetShell());
     if (!aContentControlRanges.empty())
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             OString aPayload = comphelper::string::join("; ", aLOKRectangles);
             tools::JsonWriter aJson;
@@ -808,7 +808,7 @@ void SwSelPaintRects::HighlightContentControl()
     }
     else
     {
-        if (SfxViewShell* pNotifySh = comphelper::LibreOfficeKit::isActive() && m_pContentControlOverlay ? GetShell()->GetSfxViewShell() : nullptr)
+        if (SfxViewShell* pNotifySh = comphelper::COKit::isActive() && m_pContentControlOverlay ? GetShell()->GetSfxViewShell() : nullptr)
         {
             tools::JsonWriter aJson;
             aJson.put("action", "hide");
@@ -976,7 +976,7 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
             pShCursor->SwSelPaintRects::Show(&aSelectionRectangles);
     }
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     std::vector<OString> aRect;
@@ -1148,7 +1148,7 @@ void SwShellTableCursor::FillRects()
         return;
 
     bool bStart = true;
-    SwRegionRects aReg( comphelper::LibreOfficeKit::isActive()
+    SwRegionRects aReg( comphelper::COKit::isActive()
         ? GetShell()->getIDocumentLayoutAccess().GetCurrentLayout()->getFrameArea()
         : GetShell()->VisArea() );
     SwFrame* pEndFrame = nullptr;

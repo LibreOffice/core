@@ -234,7 +234,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             case SfxHintId::ScKillEditView:
             case SfxHintId::ScKillEditViewNoPaint:
-                if (!comphelper::LibreOfficeKit::isActive()
+                if (!comphelper::COKit::isActive()
                     || this == SfxViewShell::Current()
                     || bInPrepareClose
                     || bInDispose)

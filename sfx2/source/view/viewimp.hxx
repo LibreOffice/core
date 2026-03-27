@@ -54,7 +54,7 @@ struct SfxViewShell_Impl
 
     mutable std::vector<SfxInPlaceClient*> maIPClients;
 
-    SfxLokCallbackInterface* m_pLibreOfficeKitViewCallback;
+    SfxLokCallbackInterface* m_pCOKitViewCallback;
     /// Set if we are in the middle of a tiled search.
     bool m_bTiledSearching;
     static sal_uInt32 m_nLastViewShellId;

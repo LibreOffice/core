@@ -410,7 +410,7 @@ void Desktop::SynchronizeExtensionRepositories(bool bCleanedExtensionCache, Desk
         deployment::ExtensionManager::get(context)->reinstallDeployedExtensions(
             true, u"user"_ustr, Reference<task::XAbortChannel>(), silent);
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
             task::OfficeRestartManager::get(context)->requestRestart(
                 silent->getInteractionHandler());
 #endif

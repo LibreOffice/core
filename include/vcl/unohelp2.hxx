@@ -57,7 +57,7 @@ namespace vcl::unohelper {
         static  void    CopyStringTo(
             const OUString& rContent,
             const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard,
-            const vcl::ILibreOfficeKitNotifier* pNotifier = nullptr
+            const vcl::ICOKitNotifier* pNotifier = nullptr
         );
     };
 

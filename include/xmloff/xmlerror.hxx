@@ -94,7 +94,7 @@ namespace com::sun::star {
 }
 
 class ErrorRecord;
-namespace vcl { class ILibreOfficeKitNotifier; }
+namespace vcl { class ICOKitNotifier; }
 
 /**
  * The XMLErrors is used to collect all errors and warnings that occur
@@ -106,11 +106,11 @@ class XMLErrors
     typedef ::std::vector<ErrorRecord> ErrorList;
 
     ErrorList m_aErrors;  /// list of error records
-    vcl::ILibreOfficeKitNotifier* mpNotifier;
+    vcl::ICOKitNotifier* mpNotifier;
 
 public:
 
-    XMLErrors(vcl::ILibreOfficeKitNotifier* pNotifier);
+    XMLErrors(vcl::ICOKitNotifier* pNotifier);
     ~XMLErrors();
 
     /// add a new entry to the list of error messages

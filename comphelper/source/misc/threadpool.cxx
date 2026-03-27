@@ -153,7 +153,7 @@ std::size_t ThreadPool::getPreferredConcurrency()
 }
 
 // Used to order shutdown, and to ensure there are no lingering
-// threads after LibreOfficeKit pre-init.
+// threads after COKit pre-init.
 void ThreadPool::shutdown()
 {
 //    if (mbTerminate)

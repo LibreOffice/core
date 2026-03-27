@@ -4331,7 +4331,7 @@ void CairoPixelProcessor2D::processControlPrimitive2D(
     bool bControlIsVisibleAsChildWindow(rControlPrimitive.isVisibleAsChildWindow());
 
     // tdf#131281 FormControl rendering for Tiled Rendering
-    if (bControlIsVisibleAsChildWindow && comphelper::LibreOfficeKit::isActive())
+    if (bControlIsVisibleAsChildWindow && comphelper::COKit::isActive())
     {
         // Do force paint when we are in Tiled Renderer and FormControl is 'visible'
         bControlIsVisibleAsChildWindow = false;

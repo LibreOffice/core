@@ -115,7 +115,7 @@ static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 
 static bool lcl_canUserModifyAnnotation(const SwView& rView, std::u16string_view sAuthor)
 {
-    return !comphelper::LibreOfficeKit::isActive() || !rView.IsLokReadOnlyView()
+    return !comphelper::COKit::isActive() || !rView.IsLokReadOnlyView()
            || sAuthor == rView.GetRedlineAuthor();
 }
 
@@ -635,7 +635,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             {
                 // In case of LOK and comment text is already provided, skip
                 // dialog creation and just change the redline comment directly
-                if (comphelper::LibreOfficeKit::isActive() && !sCommentText.isEmpty())
+                if (comphelper::COKit::isActive() && !sCommentText.isEmpty())
                 {
                     rSh.SetRedlineComment(sCommentText);
                     GetView().AttrChangedNotify(nullptr);
@@ -1741,12 +1741,12 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             break;
 
         case FN_REDLINE_COMMENT:
-            if (!comphelper::LibreOfficeKit::isActive() && !rSh.GetCurrRedline())
+            if (!comphelper::COKit::isActive() && !rSh.GetCurrRedline())
                 rSet.DisableItem(nWhich);
             break;
 
         case FN_REPLY:
-            if (!comphelper::LibreOfficeKit::isActive())
+            if (!comphelper::COKit::isActive())
                 rSet.DisableItem(nWhich);
             break;
 
@@ -1872,7 +1872,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
             }
             rSh.SttSelect();
             // inserting mention
-            if (comphelper::LibreOfficeKit::isActive() && !rReplacementText.isEmpty())
+            if (comphelper::COKit::isActive() && !rReplacementText.isEmpty())
             {
                 SwPaM* pCursorPos = rSh.GetCursor();
                 // move cursor backwards to select @mention

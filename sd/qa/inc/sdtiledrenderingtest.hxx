@@ -32,7 +32,7 @@ protected:
     SdXImpressDocument* createDoc(const char* pName,
                                   const css::uno::Sequence<css::beans::PropertyValue>& rArguments
                                   = css::uno::Sequence<css::beans::PropertyValue>());
-    void setupLibreOfficeKitViewCallback(SfxViewShell& pViewShell);
+    void setupCOKitViewCallback(SfxViewShell& pViewShell);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
     xmlDocUniquePtr parseXmlDump();

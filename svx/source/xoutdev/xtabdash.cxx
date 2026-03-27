@@ -215,7 +215,7 @@ OUString const & XDashList::GetStringForUiNoLine() const
     {
         // formerly was RID_SVXSTR_INVISIBLE, but to make equal
         // everywhere, use RID_SVXSTR_NONE
-        const_cast< XDashList* >(this)->maStringNoLine = comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE) :
+        const_cast< XDashList* >(this)->maStringNoLine = comphelper::COKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE) :
             SvxResId(RID_SVXSTR_NONE);
     }
 

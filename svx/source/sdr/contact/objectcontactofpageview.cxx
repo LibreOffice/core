@@ -232,7 +232,7 @@ namespace sdr::contact
             if (static_cast<SdrPaintView&>(mrPageWindow.GetPageView().GetView()).IsTextEdit())
                 aNewViewInformation2D.setTextEditActive(true);
 
-            if (!isOutputToRecordingMetaFile() && !comphelper::LibreOfficeKit::isSlideshowRendering())
+            if (!isOutputToRecordingMetaFile() && !comphelper::COKit::isSlideshowRendering())
             {
                 // this is the EditView repaint, provide that information,
                 // but only if we do not export to metafile and do not prepare a SlideShow
@@ -379,7 +379,7 @@ namespace sdr::contact
         // Get info about the need to visualize GluePoints
         bool ObjectContactOfPageView::AreGluePointsVisible() const
         {
-            bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+            bool bTiledRendering = comphelper::COKit::isActive();
             return !bTiledRendering && GetPageWindow().GetPageView().GetView().ImpIsGlueVisible();
         }
 

@@ -289,7 +289,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
 
     pViewShell->CellContentChanged();
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     SCTAB nTab = pViewShell->GetViewData().GetTabNumber();
@@ -573,7 +573,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     if (!pViewShell)
         return;
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     SCTAB nTab = pViewShell->GetViewData().GetTabNumber();
@@ -1393,7 +1393,7 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
 
     if (ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell())
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             pTabViewShell->OnLOKSetWidthOrHeight(aPaintRange.aStart.Col(), true);
             pTabViewShell->OnLOKSetWidthOrHeight(aPaintRange.aStart.Row(), false);
@@ -1554,7 +1554,7 @@ void ScUndoDragDrop::Redo()
     EndRedo();
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         SCCOL nStartCol = aDestRange.aStart.Col();
         SCROW nStartRow = aDestRange.aStart.Row();

@@ -972,7 +972,7 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
                 rAttr.MergeValue(rItem);
             }
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 OUString sPayload;
                 switch(nWhich)
@@ -1679,19 +1679,19 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     if (bChgSiz)
     {
         // tdf#164285 the item was accessed even when not being set if
-        // false == comphelper::LibreOfficeKit::isActive(). For SlotIDs
+        // false == comphelper::COKit::isActive(). For SlotIDs
         // like SID_ATTR_TRANSFORM_SIZE_POINT this will crash by asserting
         // due to SlotIDs having no defaults (see
         // SfxItemPool::GetUserOrPoolDefaultItem line 725)
         if (const SfxUInt16Item* pPoolItem = rAttr.GetItemIfSet(SID_ATTR_TRANSFORM_SIZE_POINT))
             eSizePoint = static_cast<RectPoint>(pPoolItem->GetValue());
-        else if (comphelper::LibreOfficeKit::isActive())
+        else if (comphelper::COKit::isActive())
             // for TiledRendering the default which is set at the start of
             // this method to RectPoint::MM seems purposely being changed to
             // RectPoint::LT here - from a change 6 years ago. Note that this
             // will make choosing another definition point in the UI for the
             // PosSizeDialog except TopLeft not working when
-            // comphelper::LibreOfficeKit *is* active.
+            // comphelper::COKit *is* active.
             eSizePoint = RectPoint::LT;
     }
 

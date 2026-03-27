@@ -921,7 +921,7 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
 IMPL_LINK(SvxStyleBox_Base, CustomGetSizeHdl, OutputDevice&, rArg, Size)
 {
     CalcOptimalExtraUserWidth(rArg);
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return Size(m_nMaxUserDrawFontWidth * rArg.GetDPIX() / 96, ITEM_HEIGHT * rArg.GetDPIY() / 96);
     return Size(m_nMaxUserDrawFontWidth, ITEM_HEIGHT);
 }
@@ -1836,7 +1836,7 @@ void SvxFontNameBox_Base::Update( const css::awt::FontDescriptor* pFontDesc )
     }
     OUString aCurName = aCurFont.GetFamilyName();
     OUString aText = m_xWidget->get_active_text();
-    if (aText != aCurName || comphelper::LibreOfficeKit::isActive())
+    if (aText != aCurName || comphelper::COKit::isActive())
         set_active_or_entry_text(aCurName);
 }
 
@@ -2168,7 +2168,7 @@ ColorWindow::ColorWindow(OUString  rCommand,
     // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
     // serialization when popup widgets are destroyed/recreated during character formatting resets.
     // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         mxColorIconView->connect_query_tooltip(LINK(this, ColorWindow, QueryColorIVTooltipHdl));
         mxRecentColorIconView->connect_query_tooltip(LINK(this, ColorWindow, QueryRecentIVTooltipHdl));
@@ -2263,7 +2263,7 @@ namespace
 
     NamedColor GetNoneColor()
     {
-        OUString aName = comphelper::LibreOfficeKit::isActive()
+        OUString aName = comphelper::COKit::isActive()
                             ? SvxResId(RID_SVXSTR_INVISIBLE)
                             : SvxResId(RID_SVXSTR_NONE);
         return { COL_NONE_COLOR, aName };
@@ -2608,7 +2608,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
     // serialization when popup widgets are destroyed/recreated
     // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         mxFrameIV->connect_query_tooltip(LINK(this, SvxFrameWindow_Impl, QueryTooltipHdl));
     }
@@ -3046,7 +3046,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
     }
 
     m_xLineStyleLb->SetSourceUnit( FieldUnit::TWIP );
-    m_xLineStyleLb->SetNone( comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
+    m_xLineStyleLb->SetNone( comphelper::COKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
         :SvxResId(RID_SVXSTR_NONE) );
 
     m_xLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( SvxBorderLineStyle::SOLID ), SvxBorderLineStyle::SOLID );
@@ -3083,7 +3083,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
     // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
     // serialization when popup widgets are destroyed/recreated during character formatting resets.
     // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         m_xLineStyleIV->connect_query_tooltip(LINK(this, SvxLineWindow_Impl, QueryTooltipHdl));
     }
@@ -3467,7 +3467,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
     }
 
     // Insert More button
-    if ((m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc) && !comphelper::LibreOfficeKit::isActive())
+    if ((m_pImpl->bSpecModeWriter || m_pImpl->bSpecModeCalc) && !comphelper::COKit::isActive())
         pBox->append_text(m_pImpl->aMore);
 
     pBox->thaw();
@@ -4488,7 +4488,7 @@ IMPL_LINK(ColorListBox, ToggleHdl, weld::Toggleable&, rButton, void)
     if (rButton.get_active())
     {
         ColorWindow* pColorWindow = getColorWindow();
-        if (pColorWindow && !comphelper::LibreOfficeKit::isActive())
+        if (pColorWindow && !comphelper::COKit::isActive())
             pColorWindow->GrabFocus();
     }
 }

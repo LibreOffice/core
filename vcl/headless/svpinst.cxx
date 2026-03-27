@@ -302,7 +302,7 @@ void SvpSalInstance::ProcessEvent( SalUserEvent aEvent )
 
 static void loop(void * arg) {
     SolarMutexGuard g;
-    static_cast<SvpSalInstance *>(arg)->ImplYield(comphelper::LibreOfficeKit::isActive(), false);
+    static_cast<SvpSalInstance *>(arg)->ImplYield(comphelper::COKit::isActive(), false);
 }
 
 bool SvpSalInstance::DoExecute(int &) {
@@ -451,7 +451,7 @@ bool SvpSalInstance::ImplYield(bool bWait, bool bHandleAllCurrentEvents)
     // We always want to drop the SolarMutex on yield; that is the whole point of yield.
     // If we know the LOK client has pending input events, then don't yet return, so those events
     // can be processed as well.
-    if (!bMustSleep && !comphelper::LibreOfficeKit::anyInput())
+    if (!bMustSleep && !comphelper::COKit::anyInput())
         return bWasEvent;
 
     sal_Int64 nTimeoutMicroS = 0;

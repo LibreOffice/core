@@ -180,7 +180,7 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
     if ( OpenFile() != ERRCODE_NONE )
         return ERR_SWG_READ_ERROR;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return ERR_SWG_READ_ERROR;
 
     try

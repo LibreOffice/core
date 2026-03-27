@@ -1235,7 +1235,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
         xPopupController->setPopupMenu( xPopupMenu );
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {

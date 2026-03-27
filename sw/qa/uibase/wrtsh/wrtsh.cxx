@@ -663,7 +663,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCutFontworkObject)
 CPPUNIT_TEST_FIXTURE(Test, testMultiSelectionTextSelectionCallback)
 {
     // Given a document with "ABC" and LOK active:
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::COKit::setActive(true);
     createSwDoc();
     SwXTextDocument* pTextDocument = getSwTextDoc();
     pTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -689,7 +689,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiSelectionTextSelectionCallback)
     // Tear down LOK:
     mxComponent->dispose();
     mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
+    comphelper::COKit::setActive(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

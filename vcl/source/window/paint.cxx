@@ -597,7 +597,7 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, ImplPaintFlags nPaintFlag
         mpWindowImpl->mnPaintFlags &= ~ImplPaintFlags::PaintAllChildren;
 
     // If tiled rendering is used, windows are only invalidated, never painted to.
-    if (mpWindowImpl->mbPaintDisabled || comphelper::LibreOfficeKit::isActive())
+    if (mpWindowImpl->mbPaintDisabled || comphelper::COKit::isActive())
     {
         if (mpWindowImpl->mnPaintFlags & ImplPaintFlags::PaintAll)
             Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase | InvalidateFlags::NoTransparent | InvalidateFlags::NoClipChildren);
@@ -666,7 +666,7 @@ IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Timer *, void)
     else if ( mpWindowImpl->mbReallyVisible )
     {
         ImplCallOverlapPaint();
-        if (comphelper::LibreOfficeKit::isActive() &&
+        if (comphelper::COKit::isActive() &&
             mpWindowImpl->mpFrameData->maPaintIdle.IsActive())
             mpWindowImpl->mpFrameData->maPaintIdle.Stop();
     }
@@ -1143,7 +1143,7 @@ vcl::Region Window::GetPaintRegion() const
 
 void Window::Invalidate( InvalidateFlags nFlags )
 {
-    if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
+    if ( !comphelper::COKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
         return;
 
     if (!mpWindowImpl)
@@ -1158,7 +1158,7 @@ void Window::Invalidate( InvalidateFlags nFlags )
 
 void Window::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
 {
-    if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
+    if ( !comphelper::COKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
         return;
 
     OutputDevice *pOutDev = GetOutDev();
@@ -1174,7 +1174,7 @@ void Window::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
 
 void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
 {
-    if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
+    if ( !comphelper::COKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
         return;
 
     if ( rRegion.IsNull() )
@@ -1212,14 +1212,14 @@ bool Window::InvalidateByForeignEditView(EditView* )
 
 void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
 {
-    if (comphelper::LibreOfficeKit::isDialogPainting() || !comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isDialogPainting() || !comphelper::COKit::isActive())
         return;
 
     Size aSize = GetSizePixel();
     if (aSize.IsEmpty())
         return;
 
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    if (const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier())
     {
         // In case we are routing the window, notify the client
         std::vector<vcl::LOKPayloadItem> aPayload;
@@ -1250,7 +1250,7 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
 
 void Window::Validate()
 {
-    if ( !comphelper::LibreOfficeKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
+    if ( !comphelper::COKit::isActive() && (!GetOutDev()->IsDeviceOutputNecessary() || !GetOutDev()->mnOutWidth || !GetOutDev()->mnOutHeight) )
         return;
 
     ImplValidate();
@@ -1354,7 +1354,7 @@ void Window::PaintImmediately()
 
         pUpdateWindow->ImplCallPaint(nullptr, pUpdateWindow->mpWindowImpl->mnPaintFlags);
 
-        if (comphelper::LibreOfficeKit::isActive() && pUpdateWindow->GetParentDialog())
+        if (comphelper::COKit::isActive() && pUpdateWindow->GetParentDialog())
             pUpdateWindow->LogicInvalidate(nullptr);
 
         if (xWindow->isDisposed())
@@ -1371,7 +1371,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
 {
     // Special drawing when called through LOKit
     // TODO: Move to its own method
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         VclPtrInstance<VirtualDevice> pDevice(*i_pTargetOutDev, DeviceFormat::WITH_ALPHA);
         pDevice->EnableRTL(IsRTLEnabled());

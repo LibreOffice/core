@@ -120,8 +120,8 @@ public class Document {
     public static final int KEYBOARD_MODIFIER_MOD2 = 0x4000;
     public static final int KEYBOARD_MODIFIER_MOD3 = 0x8000;
 
-    /** Optional features of LibreOfficeKit, in particular callbacks that block
-     *  LibreOfficeKit until the corresponding reply is received, which would
+    /** Optional features of COKit, in particular callbacks that block
+     *  COKit until the corresponding reply is received, which would
      *  deadlock if the client does not support the feature.
      */
     public static final long LOK_FEATURE_DOCUMENT_PASSWORD = 1;
@@ -143,7 +143,7 @@ public class Document {
 
     /**
      * Callback triggered through JNI to indicate that a new signal
-     * from LibreOfficeKit was retrieved.
+     * from COKit was retrieved.
      */
     private void messageRetrieved(int signalNumber, String payload) {
         if (messageCallback != null) {

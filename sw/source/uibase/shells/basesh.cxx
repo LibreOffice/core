@@ -670,7 +670,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
                     rShell.LockPaint(LockPaintReason::Undo);
 
                 sal_uInt16 nUndoOffset = 0;
-                if (comphelper::LibreOfficeKit::isActive() && !bRepair && nCnt == 1)
+                if (comphelper::COKit::isActive() && !bRepair && nCnt == 1)
                 {
                     sw::UndoManager& rManager = rWrtShell.GetDoc()->GetUndoManager();
                     const SfxUndoAction* pAction = rManager.GetUndoAction();
@@ -2027,7 +2027,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     else if(nWhich != SID_ANCHOR_MENU)
                         rSet.Put(SfxBoolItem(nWhich, bSet));
 
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                     {
                         if (nWhich == FN_TOOL_ANCHOR_PAGE || nWhich == FN_TOOL_ANCHOR_FRAME)
                         {

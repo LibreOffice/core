@@ -992,7 +992,7 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
         }
         else
         {
-            bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+            bool bIsLOK = comphelper::COKit::isActive();
             bool bSystemLanguage = false;
             LanguageType nLang = pEntry->GetLanguage();
             if (nLang == LANGUAGE_SYSTEM)

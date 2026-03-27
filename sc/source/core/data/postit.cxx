@@ -476,7 +476,7 @@ std::unique_ptr<ScPostIt> ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument&
     if (bIsSameDoc && !mrDoc.IsClipboard() && rOwnPos == rDestPos)
         bCloneCaption = false;
     CreateCaptionFromInitData( rOwnPos );
-    sal_uInt32 nPostItId = comphelper::LibreOfficeKit::isActive() ? 0 : mnPostItId;
+    sal_uInt32 nPostItId = comphelper::COKit::isActive() ? 0 : mnPostItId;
     return bCloneCaption ? std::make_unique<ScPostIt>( rDestDoc, rDestPos, *this, nPostItId ) : std::make_unique<ScPostIt>( rDestDoc, rDestPos, maNoteData, false, mnPostItId );
 }
 

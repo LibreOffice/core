@@ -266,7 +266,7 @@ IMPL_STATIC_LINK(LinkHelp, DispatchHelpLinksHdl, weld::Button&, rBtn, void)
 
 void ScDocShell::SetLanguage(LanguageType eLatin, LanguageType eCjk, LanguageType eCtl)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         if (ScTabViewShell* pViewShell = GetBestViewShell())
         {
@@ -2587,7 +2587,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                     LanguageType eLatin = LANGUAGE_DONTKNOW, eCjk = LANGUAGE_DONTKNOW,
                         eCtl = LANGUAGE_DONTKNOW;
 
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                     {
                         GetDocument().GetLanguage( eLatin, eCjk, eCtl );
                         sLanguage = SvtLanguageTable::GetLanguageString(eLatin);
@@ -3035,8 +3035,8 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
 void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote)
 {
     if ( !rDocument.IsDocVisible() || // don't want callbacks until document load
-         !comphelper::LibreOfficeKit::isActive() ||
-         comphelper::LibreOfficeKit::isTiledAnnotations() )
+         !comphelper::COKit::isActive() ||
+         comphelper::COKit::isTiledAnnotations() )
         return;
 
     tools::JsonWriter aAnnotation;

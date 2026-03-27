@@ -1879,7 +1879,7 @@ void HelpButton::Click()
     if ( !GetClickHdl() )
     {
         vcl::Window* pFocusWin = Application::GetFocusWindow();
-        if ( !pFocusWin || comphelper::LibreOfficeKit::isActive() )
+        if ( !pFocusWin || comphelper::COKit::isActive() )
             pFocusWin = this;
 
         HelpEvent aEvt( pFocusWin->GetPointerPosPixel(), HelpEventMode::CONTEXT );
@@ -1891,7 +1891,7 @@ void HelpButton::Click()
 void HelpButton::StateChanged( StateChangedType nStateChange )
 {
     // Hide when we have no help URL.
-    if (comphelper::LibreOfficeKit::isActive() &&
+    if (comphelper::COKit::isActive() &&
         officecfg::Office::Common::Help::HelpRootURL::get().isEmpty())
         Hide();
     else

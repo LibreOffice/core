@@ -334,7 +334,7 @@ void LinkManager::UpdateAllLinks(
 
         if( bAskUpdate )
         {
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 // only one document in jail, no update possible
                 disallowAllLinksUpdate(pLink);

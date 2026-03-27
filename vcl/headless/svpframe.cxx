@@ -473,7 +473,7 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetMenuColor( aBackgroundColor );
     aStyleSettings.SetMenuBarColor( aBackgroundColor );
 
-    if (comphelper::LibreOfficeKit::isActive()) // TODO: remove this.
+    if (comphelper::COKit::isActive()) // TODO: remove this.
     {
         vcl::Font aStdFont( FAMILY_SWISS, Size( 0, 14 ) );
         aStdFont.SetCharSet( osl_getThreadTextEncoding() );

@@ -671,7 +671,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
     m_xStylesView->clear();
     // for online we can skip inserting the preview into the IconView and rely
     // on DoJsonProperty to provide the image to clients
-    const bool bNeedInsertPreview = !comphelper::LibreOfficeKit::isActive();
+    const bool bNeedInsertPreview = !comphelper::COKit::isActive();
     for (const auto& rStyle : m_aAllStyles)
     {
         Bitmap aPreview = GetCachedPreview(rStyle);

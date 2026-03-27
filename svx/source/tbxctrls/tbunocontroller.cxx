@@ -234,7 +234,7 @@ void SvxFontSizeBox_Base::statusChanged_Impl( tools::Long nPoint, bool bErase )
         tools::Long nVal = nPoint;
 
         // changed => set new value
-        if (m_xWidget->get_value() != nVal || comphelper::LibreOfficeKit::isActive())
+        if (m_xWidget->get_value() != nVal || comphelper::COKit::isActive())
             m_xWidget->set_value(nVal);
     }
     else

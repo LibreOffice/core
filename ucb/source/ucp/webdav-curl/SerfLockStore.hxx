@@ -59,7 +59,7 @@ struct LockInfo
 
 typedef std::map< OUString, LockInfo > LockInfoMap;
 
-class SerfLockStore : public comphelper::LibreOfficeKit::ThreadJoinable
+class SerfLockStore : public comphelper::COKit::ThreadJoinable
 {
 public:
     std::mutex         m_aMutex;
@@ -84,7 +84,7 @@ public:
 
     void removeLock(const OUString& rURI);
 
-    // comphelper::LibreOfficeKit::ThreadJoinable
+    // comphelper::COKit::ThreadJoinable
     virtual bool joinThreads() override;
     virtual void startThreads() override;
 

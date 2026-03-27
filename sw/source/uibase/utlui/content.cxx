@@ -1353,7 +1353,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
         auto it = lcl_DocOutLineExpandStateMap.find(sDocTitle);
         if (it != lcl_DocOutLineExpandStateMap.end())
             mOutLineNodeMap = it->second;
-        if (comphelper::LibreOfficeKit::isActive()) {
+        if (comphelper::COKit::isActive()) {
             if (pView->m_nNaviExpandedStatus < 0)
                 m_nActiveBlock = 1;
             else
@@ -1373,7 +1373,7 @@ SwContentTree::~SwContentTree()
     {
         OUString sDocTitle = pView->GetDocShell()->GetTitle();
         lcl_DocOutLineExpandStateMap[sDocTitle] = mOutLineNodeMap;
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
             pView->m_nNaviExpandedStatus = m_nActiveBlock;
     }
     clear(); // If applicable erase content types previously.
@@ -1776,7 +1776,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return false;
 
     grab_focus();
@@ -3419,7 +3419,7 @@ void SwContentTree::Display( bool bActive )
                 bool bChOnDemand = 0 != rpContentT->GetMemberCount();
 
                 // In case of LOK, empty content types must be hidden in the contenttree
-                if (comphelper::LibreOfficeKit::isActive() && !bChOnDemand)
+                if (comphelper::COKit::isActive() && !bChOnDemand)
                 {
                     continue;
                 }
@@ -3894,7 +3894,7 @@ bool SwContentTree::HasContentChanged()
         // will clear and recreate the treeview from the content type member arrays if content has
         // changed.
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             // In case of LOK, empty contentTypes are hidden, even in all content view
             // so it is not enough to check only the m_xTreeView.

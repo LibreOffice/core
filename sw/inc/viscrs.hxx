@@ -47,7 +47,7 @@ class SW_DLLPUBLIC SwVisibleCursor
     const SwCursorShell* m_pCursorShell;
     vcl::Cursor m_aTextCursor;
 
-    /// For LibreOfficeKit only - remember what page we were at the last time.
+    /// For COKit only - remember what page we were at the last time.
     sal_uInt16 m_nPageLastTime;
     SwRect m_aLastLOKRect;
 

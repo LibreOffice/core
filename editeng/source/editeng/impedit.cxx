@@ -197,7 +197,7 @@ ImpEditView::ImpEditView(EditView* pView, EditEngine& rEditEngine, vcl::Window* 
     , meSelectionMode(EESelectionMode::Std)
     , meAnchorMode(EEAnchorMode::TopLeft)
     , mpEditViewCallbacks(nullptr)
-    , mbBroadcastLOKViewCursor(comphelper::LibreOfficeKit::isActive())
+    , mbBroadcastLOKViewCursor(comphelper::COKit::isActive())
     , mbSuppressLOKMessages(false)
     , mbNegativeX(false)
 {
@@ -247,7 +247,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 
     SelectionChanged();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // Tiled rendering: selections are only painted when we are in selection mode.
         getEditEngine().SetInSelectionMode(maEditSelection.HasRange());
@@ -344,7 +344,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
         }
         OString sRectangle = comphelper::string::join("; ", v);
 
-        const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+        const vcl::ICOKitNotifier* pNotifier = pParent->GetLOKNotifier();
         std::vector<vcl::LOKPayloadItem> aItems;
         aItems.emplace_back("rectangles", sRectangle);
         aItems.emplace_back("startHandleVisible", OString::boolean(bStartHandleVisible));
@@ -460,10 +460,10 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
 // the Region*, see GetSelectionRectangles below.
 void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion, OutputDevice* pTargetDevice )
 {
-    if (getEditViewCallbacks() && !pRegion && !comphelper::LibreOfficeKit::isActive())
+    if (getEditViewCallbacks() && !pRegion && !comphelper::COKit::isActive())
     {
         // we are done, do *not* visualize self
-        // CAUTION: do not use when comphelper::LibreOfficeKit::isActive()
+        // CAUTION: do not use when comphelper::COKit::isActive()
         // due to event stuff triggered below. That *should* probably be moved
         // to SelectionChanged() which exists now, but I do not know enough about
         // that stuff to do it
@@ -487,7 +487,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
     std::optional<tools::PolyPolygon> pPolyPoly;
 
-    if ( !pRegion && !comphelper::LibreOfficeKit::isActive())
+    if ( !pRegion && !comphelper::COKit::isActive())
     {
         if (!getImpEditEngine().IsUpdateLayout())
             return;
@@ -508,7 +508,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             mpOutputWindow->GetCursor()->Hide();
     }
 
-    if (comphelper::LibreOfficeKit::isActive() || pRegion)
+    if (comphelper::COKit::isActive() || pRegion)
         pPolyPoly = tools::PolyPolygon();
 
     DBG_ASSERT(!getEditEngine().IsIdleFormatterActive(), "DrawSelectionXOR: Not formatted!");
@@ -632,10 +632,10 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     };
     getImpEditEngine().IterateLineAreas(DrawHighlight, ImpEditEngine::IterFlag::none);
 
-    if (comphelper::LibreOfficeKit::isActive() && mpViewShell && mpOutputWindow)
+    if (comphelper::COKit::isActive() && mpViewShell && mpOutputWindow)
         lokSelectionCallback(pPolyPoly, bStartHandleVisible, bEndHandleVisible);
 
-    if (pRegion || comphelper::LibreOfficeKit::isActive())
+    if (pRegion || comphelper::COKit::isActive())
     {
         if (pRegion)
             *pRegion = vcl::Region( *pPolyPoly );
@@ -1363,7 +1363,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
         GetCursor()->SetSize( aCursorSz );
 
-        if (comphelper::LibreOfficeKit::isActive() && mpViewShell && !mbSuppressLOKMessages)
+        if (comphelper::COKit::isActive() && mpViewShell && !mbSuppressLOKMessages)
         {
             Point aPos = GetCursor()->GetPos();
             boost::property_tree::ptree aMessageParams;
@@ -1476,7 +1476,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 aMessageParams.put("mispelledWord", bIsWrong ? 1 : 0);
                 aMessageParams.add_child("hyperlink", aHyperlinkTree);
 
-                if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+                if (comphelper::COKit::isViewIdForVisCursorInvalidation())
                     SfxLokHelper::notifyOtherView(*pThisShell, pThisShell,
                             LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, aMessageParams);
                 else
@@ -1642,12 +1642,12 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
 
         bool bInvalidateToTriggerRedraw = !mpOutputWindow && getEditViewCallbacks();
 
-        if (comphelper::LibreOfficeKit::isActive() || bInvalidateToTriggerRedraw)
+        if (comphelper::COKit::isActive() || bInvalidateToTriggerRedraw)
         {
             // Need to invalidate the window, otherwise no tile will be re-painted.
             // NOTE:
             // No invalidate in the sense of repaint needed, so not needed for
-            // all cases. Keeping it here so that for LibreOfficeKit this is still
+            // all cases. Keeping it here so that for COKit this is still
             // done, that may need a repaint. Just doing it will work, but do an
             // extra-primitive extraction at the paint which is usually not needed
             GetEditViewPtr()->Invalidate();
@@ -1672,7 +1672,7 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
         if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
             pCallbacks->EditViewScrollStateChange();
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             DrawSelectionXOR();
         }
@@ -2150,12 +2150,12 @@ void ImpEditView::DeselectAll()
     SetEditSelection(aNewSelection);
     // const_cast<EditPaM&>(GetEditSelection().Min()) = GetEditSelection().Max();
 
-    if (comphelper::LibreOfficeKit::isActive() && mpViewShell && mpOutputWindow)
+    if (comphelper::COKit::isActive() && mpViewShell && mpOutputWindow)
     {
         VclPtr<vcl::Window> pParent = mpOutputWindow->GetParentWithLOKNotifier();
         if (pParent && pParent->GetLOKWindowId())
         {
-            const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+            const vcl::ICOKitNotifier* pNotifier = pParent->GetLOKNotifier();
             std::vector<vcl::LOKPayloadItem> aItems;
             aItems.emplace_back("rectangles", "");
             pNotifier->notifyWindow(pParent->GetLOKWindowId(), u"text_selection"_ustr, aItems);
@@ -2206,7 +2206,7 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     bool bGotoCursor = DoAutoScroll();
 
     // aTmpNewSel: Diff between old and new, not the new selection, unless for tiled rendering
-    EditSelection aTmpNewSel( comphelper::LibreOfficeKit::isActive() ? GetEditSelection().Min() : GetEditSelection().Max(), aPaM );
+    EditSelection aTmpNewSel( comphelper::COKit::isActive() ? GetEditSelection().Min() : GetEditSelection().Max(), aPaM );
 
     // #i27299#
     // work on copy of current selection and set new selection, if it has changed.

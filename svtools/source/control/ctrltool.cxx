@@ -256,7 +256,7 @@ void FontList::ImplInsertFonts(OutputDevice* pDevice, bool bInsertData)
 
     // inquire all fonts from the device
     int n = pDevice->GetFontFaceCollectionCount();
-    if (n == 0 && comphelper::LibreOfficeKit::isActive())
+    if (n == 0 && comphelper::COKit::isActive())
     {
         pDevice->RefreshFontData(true);
         n = pDevice->GetFontFaceCollectionCount();

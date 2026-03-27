@@ -106,7 +106,7 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, weld::Toggleable&, void)
         GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
                 SfxCallMode::RECORD, { &aItem });
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             mxShowShadow->set_state( TRISTATE_FALSE );
             UpdateControls();
@@ -121,7 +121,7 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, weld::Toggleable&, void)
         if (mxShadowDistance->get_value(FieldUnit::POINT) == 0)
             mxShadowDistance->set_value( 8, FieldUnit::POINT );
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             mxShowShadow->set_state( TRISTATE_TRUE );
             UpdateControls();

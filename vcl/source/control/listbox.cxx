@@ -114,7 +114,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         // For Kit jsdialogs we don't need or want a buffer the size of
         // the ListBox dropdown taking up memory which is unnecessary
         // in that case.
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
                 mpFloatWin->RequestDoubleBuffering(true);
@@ -536,7 +536,7 @@ void ListBox::AdaptDropDownLineCountToMaximum()
 {
     // Adapt to maximum allowed number.
     // Limit for LOK as we can't render outside of the dialog canvas.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         SetDropDownLineCount(11);
     else
         SetDropDownLineCount(GetSettings().GetStyleSettings().GetListBoxMaximumLineCount());

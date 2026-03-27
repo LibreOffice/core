@@ -326,7 +326,7 @@ void SmGraphicWidget::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     rDevice.SetBackground(
         SmModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // Disable map mode, so that it's possible to send mouse event coordinates
         // directly in twips.
@@ -387,7 +387,7 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
         GetCursor().MoveTo(&rDevice, aPos, !rMEvt.IsShift());
         GetView().InvalidateSlots();
         // 'on grab' window events are missing in lok, do it explicitly
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
             SetIsCursorVisible(true);
         return true;
     }
@@ -477,7 +477,7 @@ IMPL_LINK_NOARG(SmGraphicWidget, CaretBlinkTimerHdl, Timer *, void)
 
 void SmGraphicWidget::CaretBlinkInit()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return; // No blinking in lok case
     aCaretBlinkTimer.SetInvokeHandler(LINK(this, SmGraphicWidget, CaretBlinkTimerHdl));
     aCaretBlinkTimer.SetTimeout(Application::GetSettings().GetStyleSettings().GetCursorBlinkTime());
@@ -485,7 +485,7 @@ void SmGraphicWidget::CaretBlinkInit()
 
 void SmGraphicWidget::CaretBlinkStart()
 {
-    if (!SmViewShell::IsInlineEditEnabled() || comphelper::LibreOfficeKit::isActive())
+    if (!SmViewShell::IsInlineEditEnabled() || comphelper::COKit::isActive())
         return;
     if (aCaretBlinkTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME)
         aCaretBlinkTimer.Start();
@@ -493,7 +493,7 @@ void SmGraphicWidget::CaretBlinkStart()
 
 void SmGraphicWidget::CaretBlinkStop()
 {
-    if (!SmViewShell::IsInlineEditEnabled() || comphelper::LibreOfficeKit::isActive())
+    if (!SmViewShell::IsInlineEditEnabled() || comphelper::COKit::isActive())
         return;
     aCaretBlinkTimer.Stop();
 }
@@ -522,7 +522,7 @@ void SmGraphicWidget::ShowLine(bool bShow)
 void SmGraphicWidget::SetIsCursorVisible(bool bVis)
 {
     bIsCursorVisible = bVis;
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         mrViewShell.SendCaretToLOK();
         mrViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
@@ -878,7 +878,7 @@ bool SmGraphicWidget::Command(const CommandEvent& rCEvt)
 
 void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
     nZoom = std::clamp(Factor, MINZOOM, MAXZOOM);
     Fraction aFraction(nZoom, 100);
@@ -2029,7 +2029,7 @@ public:
     {
         SfxBaseController::attachFrame(xFrame);
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             CopyLokViewCallbackFromFrameCreator();
             // In lok mode, DocumentHolder::ShowUI is not called on OLE in-place activation,
@@ -2050,7 +2050,7 @@ public:
 
     virtual void SAL_CALL dispose() override
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
             if (auto pViewShell = GetViewShell_Impl())
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE,
                                                        OString::boolean(false));
@@ -2164,7 +2164,7 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 bool SmViewShell::IsInlineEditEnabled()
 {
-    return comphelper::LibreOfficeKit::isActive()
+    return comphelper::COKit::isActive()
            || SmModule::get()->GetConfig()->IsInlineEditEnable();
 }
 

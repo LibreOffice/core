@@ -39,7 +39,7 @@ private:
     static void ApplyAutoFilter(ScDocShell& rDocSh, ScViewData& rViewData, ScDBData* pDBData,
                                 SCROW nRow, SCTAB nTab, const ScQueryParam& aParam);
 
-    DECL_STATIC_LINK(ScDBFunc, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+    DECL_STATIC_LINK(ScDBFunc, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
 
 public:
                     ScDBFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );

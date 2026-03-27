@@ -494,7 +494,7 @@ bool ScDocument::InsertTab(
     SCTAB nPos, const OUString& rName, bool bExternalDocument, bool bUndoDeleteTab )
 {
     // auto-accept any in-process input to prevent move the cell into next sheet in online.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         if (ScModule* mod = ScModule::get(); !mod->IsFormulaMode())
             mod->InputEnterHandler();
 
@@ -573,7 +573,7 @@ bool ScDocument::InsertTab(
         aCxt.mnTabDeletedEnd = nPos;
         SetAllFormulasDirty(aCxt);
 
-        if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
+        if (comphelper::COKit::isActive() && GetDrawLayer())
         {
             ScModelObj* pModel = GetDocumentShell()->GetModel();
             SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
@@ -769,7 +769,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 SetAllFormulasDirty(aFormulaDirtyCxt);
             }
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 ScModelObj* pModel = GetDocumentShell()->GetModel();
                 SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
@@ -859,7 +859,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 SetAllFormulasDirty(aFormulaDirtyCxt);
             }
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 ScModelObj* pModel = GetDocumentShell()->GetModel();
                 SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
@@ -910,7 +910,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
                 }
             }
 
-            if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
+            if (comphelper::COKit::isActive() && GetDrawLayer())
             {
                 ScModelObj* pModel = GetDocumentShell()->GetModel();
                 SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);

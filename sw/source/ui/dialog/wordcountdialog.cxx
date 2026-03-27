@@ -35,7 +35,7 @@
 
 static bool isLOKMobilePhone()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return false;
     SfxViewShell* pCurrent = SfxViewShell::Current();
     return pCurrent && pCurrent->isLOKMobilePhone();

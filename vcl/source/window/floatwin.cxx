@@ -309,7 +309,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
     }
 
     sal_uInt16 nArrangeIndex = 0;
-    const bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    const bool bLOKActive = comphelper::COKit::isActive();
 
     for ( ; nArrangeIndex < nArrangeAttempts; nArrangeIndex++ )
     {
@@ -400,7 +400,7 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
             default: break;
         }
 
-        // no further adjustment for LibreOfficeKit
+        // no further adjustment for COKit
         if (bLOKActive)
             break;
 
@@ -482,7 +482,7 @@ AbsoluteScreenPixelPoint FloatingWindow::ImplConvertToAbsPos(vcl::Window* pRefer
     const OutputDevice *pWindowOutDev = pReference->GetOutDev();
 
     // compare coordinates in absolute screen coordinates
-    if ( pWindowOutDev->HasMirroredGraphics() && !comphelper::LibreOfficeKit::isActive() )
+    if ( pWindowOutDev->HasMirroredGraphics() && !comphelper::COKit::isActive() )
     {
         Point aTmp(rPos);
         if(!pReference->IsRTLEnabled() )
@@ -505,7 +505,7 @@ AbsoluteScreenPixelRectangle FloatingWindow::ImplConvertToAbsPos(vcl::Window* pR
 
     // compare coordinates in absolute screen coordinates
     // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
-    if( pParentWinOutDev->HasMirroredGraphics() && !comphelper::LibreOfficeKit::isActive() )
+    if( pParentWinOutDev->HasMirroredGraphics() && !comphelper::COKit::isActive() )
     {
         tools::Rectangle aScreenRect(rRect);
         if(!pReference->IsRTLEnabled() )
@@ -660,7 +660,7 @@ void FloatingWindow::PixelInvalidate(const tools::Rectangle* /*pRectangle*/)
         {
             std::make_pair("rectangle"_ostr, aRect.toString())
         };
-        const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+        const vcl::ICOKitNotifier* pNotifier = pParent->GetLOKNotifier();
         pNotifier->notifyWindow(GetLOKWindowId(), u"invalidate"_ustr, aPayload);
     }
 }
@@ -711,7 +711,7 @@ void FloatingWindow::StateChanged( StateChangedType nType )
         }
         else if (!IsVisible() && nType == StateChangedType::Visible)
         {
-            if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+            if (const vcl::ICOKitNotifier* pNotifier = GetLOKNotifier())
             {
                 pNotifier->notifyWindow(GetLOKWindowId(), u"close"_ustr);
                 ReleaseLOKNotifier();

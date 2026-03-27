@@ -208,7 +208,7 @@ void ScViewFunctionSet::BeginDrag()
     if ( pWindow->IsTracking() )
         pWindow->EndTracking( TrackingEventFlags::Cancel );    // abort selecting
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         pWindow->LocalStartDrag();
 
     pScMod->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D

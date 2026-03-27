@@ -120,7 +120,7 @@ sal_Int32 TabBar::GetDefaultWidth()
 void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDecks)
 {
     // invisible with LOK, so keep empty to avoid invalidations
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     // Remove the current buttons.
@@ -358,7 +358,7 @@ void TabBar::UpdateMenus()
         mxMainMenu->set_active(sIdent, bCurrentDeck);
         mxMainMenu->set_sensitive(sIdent, bEnabled && bActive);
 
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             if (bCurrentDeck)
             {
@@ -383,7 +383,7 @@ void TabBar::UpdateMenus()
     bool bHideLock = true;
     bool bHideUnLock = true;
     // LOK doesn't support docked/undocked; Sidebar is floating but rendered docked in browser.
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         // Add entry for docking or un-docking the tool panel.
         if (!mrParentSidebarController.IsDocked())
@@ -395,7 +395,7 @@ void TabBar::UpdateMenus()
     mxMainMenu->set_visible(u"unlocktaskpanel"_ustr, !bHideUnLock);
 
     // No Restore or Customize options for LoKit.
-    mxMainMenu->set_visible(u"customization"_ustr, !comphelper::LibreOfficeKit::isActive());
+    mxMainMenu->set_visible(u"customization"_ustr, !comphelper::COKit::isActive());
 }
 
 void TabBar::EnableMenuButton(const bool bEnable)

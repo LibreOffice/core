@@ -1465,7 +1465,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
                                 nWordType,
                                 bForward ));
 
-            if (comphelper::LibreOfficeKit::isActive() && aBndry.startPos == aBndry.endPos && w.m_nPtIndex > 0)
+            if (comphelper::COKit::isActive() && aBndry.startPos == aBndry.endPos && w.m_nPtIndex > 0)
             {
                 // nPtPos is the end of the paragraph, select the last word then.
                 --w.m_nPtIndex;

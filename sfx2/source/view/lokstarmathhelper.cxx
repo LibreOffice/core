@@ -210,7 +210,7 @@ void LokStarMathHelper::PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutpu
                                               int nOutputHeight, int nTilePosX, int nTilePosY,
                                               tools::Long nTileWidth, tools::Long nTileHeight)
 {
-    if (comphelper::LibreOfficeKit::isTiledAnnotations())
+    if (comphelper::COKit::isTiledAnnotations())
         return;
 
     SfxViewShell* pCurView = SfxViewShell::Current();

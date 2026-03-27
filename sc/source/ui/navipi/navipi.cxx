@@ -318,7 +318,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     , nCurTab(0)
 {
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
         jsdialog::SendNavigatorForView(nShellId);
@@ -390,7 +390,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
         eNavMode = NAV_LMODE_AREAS;
     SetListMode(eNavMode);
 
-    if(comphelper::LibreOfficeKit::isActive())
+    if(comphelper::COKit::isActive())
     {
         m_xBuilder->weld_container(u"gridbuttons"_ustr)->hide();
         m_xLbDocuments->hide();
@@ -459,7 +459,7 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
         // This is for when the document might change and the navigator
         // wants to update for the new document, which isn't a scenario
         // that happens in online.
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
             return;
         const SfxEventHint& rEventHint = static_cast<const SfxEventHint&>(rHint);
         if (rEventHint.GetEventId() == SfxEventHintId::ActivateDoc)

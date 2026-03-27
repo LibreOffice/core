@@ -45,7 +45,7 @@ void SwTiledRenderingTest::setUp()
     SwGlobals::ensure();
     SwModule::get()->ClearRedlineAuthors();
 
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::COKit::setActive(true);
 }
 
 void SwTiledRenderingTest::tearDown()
@@ -55,7 +55,7 @@ void SwTiledRenderingTest::tearDown()
         SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
         if (pWrtShell)
         {
-            pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
+            pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
         }
     }
     m_callbackWrapper.clear();
@@ -75,9 +75,9 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
     return pTextDocument;
 }
 
-void SwTiledRenderingTest::setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell)
+void SwTiledRenderingTest::setupCOKitViewCallback(SfxViewShell* pViewShell)
 {
-    pViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    pViewShell->setCOKitViewCallback(&m_callbackWrapper);
     m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(*pViewShell));
 }
 
@@ -179,7 +179,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         break;
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
-            if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+            if (comphelper::COKit::isViewIdForVisCursorInvalidation())
             {
                 boost::property_tree::ptree aTree;
                 std::stringstream aStream(pPayload);

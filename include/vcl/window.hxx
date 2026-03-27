@@ -1098,8 +1098,8 @@ public:
     void                                SetUseFrameData(bool bUseFrameData);
 
     /// Interface to register for dialog / window tunneling.
-    void                                SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool bParent = false);
-    const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() const;
+    void                                SetLOKNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent = false);
+    const vcl::ICOKitNotifier* GetLOKNotifier() const;
     vcl::LOKWindowId                    GetLOKWindowId() const;
 
     /// This sets the lokWindowId without setting a notifier.

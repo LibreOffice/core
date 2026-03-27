@@ -71,7 +71,7 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )
     , mpBindings ( pInBindings )
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
         jsdialog::SendNavigatorForView(nShellId);
@@ -105,7 +105,7 @@ SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, 
     mxToolbox->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
     mxTlbObjects->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
     mxLbDocs->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
-    if(comphelper::LibreOfficeKit::isActive())
+    if(comphelper::COKit::isActive())
     {
         mxToolbox->hide();
         mxLbDocs->hide();
@@ -256,7 +256,7 @@ IMPL_STATIC_LINK_NOARG(SdNavigatorWin, MouseReleaseHdl, const MouseEvent&, bool)
 
 IMPL_LINK(SdNavigatorWin, CommandHdl, const CommandEvent&, rCEvt, bool)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return false;
 
     if (NavDocInfo* pInfo = GetDocInfo(); !pInfo || !pInfo->IsActive())

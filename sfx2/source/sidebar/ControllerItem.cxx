@@ -52,11 +52,11 @@ static bool IsCloneable(const SfxPoolItem* pState)
 void ControllerItem::ReceiverNotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState)
 {
-    if (nSID == SID_ATTR_METRIC && IsCloneable(pState) && comphelper::LibreOfficeKit::isActive())
+    if (nSID == SID_ATTR_METRIC && IsCloneable(pState) && comphelper::COKit::isActive())
     {
         std::unique_ptr<SfxPoolItem> xClose(pState->Clone());
         MeasurementSystem eSystem
-            = LocaleDataWrapper(comphelper::LibreOfficeKit::getLocale()).getMeasurementSystemEnum();
+            = LocaleDataWrapper(comphelper::COKit::getLocale()).getMeasurementSystemEnum();
         FieldUnit eUnit = MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
         static_cast<SfxUInt16Item*>(xClose.get())->SetValue(static_cast<sal_uInt16>(eUnit));
         mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, xClose.get());

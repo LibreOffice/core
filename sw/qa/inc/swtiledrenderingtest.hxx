@@ -26,7 +26,7 @@ public:
 
 protected:
     SwXTextDocument* createDoc(const char* pName = nullptr);
-    void setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell);
+    void setupCOKitViewCallback(SfxViewShell* pViewShell);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
     // First invalidation.

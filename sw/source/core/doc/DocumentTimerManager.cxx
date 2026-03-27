@@ -56,7 +56,7 @@ DocumentTimerManager::DocumentTimerManager(SwDoc& i_rSwdoc)
 
 void DocumentTimerManager::StartIdling()
 {
-    if (m_bWaitForLokInit && comphelper::LibreOfficeKit::isActive())
+    if (m_bWaitForLokInit && comphelper::COKit::isActive())
     {
         // Start the idle jobs only after a certain delay.
         m_bWaitForLokInit = false;

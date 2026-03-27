@@ -273,7 +273,7 @@ bool SortOperation::runImplementation()
         pDBData->UpdateFromSortParam(mrSortParam);
 
     if (SfxViewShell* pKitSomeViewForThisDoc
-        = comphelper::LibreOfficeKit::isActive() ? mrDocShell.GetBestViewShell(false) : nullptr)
+        = comphelper::COKit::isActive() ? mrDocShell.GetBestViewShell(false) : nullptr)
     {
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while (pViewShell)

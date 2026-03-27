@@ -18,7 +18,7 @@
 
 #include <COKit/COKit.h>
 
-/* LibreOfficeKit */
+/* COKit */
 
 namespace
 {
@@ -50,22 +50,22 @@ const char* copyJavaString(JNIEnv* pEnv, jstring aJavaString)
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Office_getError
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
-    char* pError = pLibreOfficeKit->pClass->getError(pLibreOfficeKit);
+    COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
+    char* pError = pCOKit->pClass->getError(pCOKit);
     return pEnv->NewStringUTF(pError);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroy
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
-    pLibreOfficeKit->pClass->destroy(pLibreOfficeKit);
+    COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
+    pCOKit->pClass->destroy(pCOKit);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroyAndExit(JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
-    pLibreOfficeKit->pClass->destroy(pLibreOfficeKit);
+    COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
+    pCOKit->pClass->destroy(pCOKit);
     // Stopgap fix: _exit() to force the OS to restart the LO activity.
     // Better than to hang.
     _exit(0);
@@ -129,14 +129,14 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_docume
     (JNIEnv* pEnv, jobject aObject, jstring documentPath)
 {
     const char* aCloneDocumentPath = copyJavaString(pEnv, documentPath);
-    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+    COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
 
-    LibreOfficeKitDocument* pDocument = pLibreOfficeKit->pClass->documentLoad(pLibreOfficeKit, aCloneDocumentPath);
+    COKitDocument* pDocument = pCOKit->pClass->documentLoad(pCOKit, aCloneDocumentPath);
 
     if (pDocument == NULL)
         return NULL;
 
-    jobject aHandle = pEnv->NewDirectByteBuffer((void*) pDocument, sizeof(LibreOfficeKitDocument));
+    jobject aHandle = pEnv->NewDirectByteBuffer((void*) pDocument, sizeof(COKitDocument));
 
     return aHandle;
 }
@@ -144,32 +144,32 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_docume
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_setDocumentPassword
     (JNIEnv* pEnv, jobject aObject, jstring sUrl, jstring sPassword)
 {
-    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+    COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
 
     char const* pUrl = copyJavaString(pEnv, sUrl);
     if (sPassword == NULL) {
-        pLibreOfficeKit->pClass->setDocumentPassword(pLibreOfficeKit, pUrl, nullptr);
+        pCOKit->pClass->setDocumentPassword(pCOKit, pUrl, nullptr);
     } else {
         char const* pPassword = copyJavaString(pEnv, sPassword);
-        pLibreOfficeKit->pClass->setDocumentPassword(pLibreOfficeKit, pUrl, pPassword);
+        pCOKit->pClass->setDocumentPassword(pCOKit, pUrl, pPassword);
     }
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_setOptionalFeatures
     (JNIEnv* pEnv, jobject aObject, jlong options)
 {
-    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+    COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
 
     unsigned long long pOptions = (unsigned long long)options;
 
-    pLibreOfficeKit->pClass->setOptionalFeatures(pLibreOfficeKit, pOptions);
+    pCOKit->pClass->setOptionalFeatures(pCOKit, pOptions);
 }
 
 /** Implementation of org.libreoffice.kit.Office.bindMessageCallback method */
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_bindMessageCallback
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+    COKit* pCOKit = getHandle<COKit>(pEnv, aObject);
 
     gCallbackDataLOKit.aObject = (jobject) pEnv->NewGlobalRef(aObject);
     jclass aClass = pEnv->GetObjectClass(aObject);
@@ -177,7 +177,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_bindMessa
 
     gCallbackDataLOKit.aJavaCallbackMethod = pEnv->GetMethodID(aClass, "messageRetrievedLOKit", "(ILjava/lang/String;)V");
 
-    pLibreOfficeKit->pClass->registerCallback(pLibreOfficeKit, messageCallback, (void*) &gCallbackDataLOKit);
+    pCOKit->pClass->registerCallback(pCOKit, messageCallback, (void*) &gCallbackDataLOKit);
 }
 
 /* Document */
@@ -186,7 +186,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_bindMessa
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_bindMessageCallback
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
     gCallbackData.aObject = (jobject) pEnv->NewGlobalRef(aObject);
     jclass aClass = pEnv->GetObjectClass(aObject);
@@ -200,28 +200,28 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_bindMes
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_destroy
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     pDocument->pClass->destroy(pDocument);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPart
     (JNIEnv* pEnv, jobject aObject, jint aPart)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     pDocument->pClass->setPart(pDocument, aPart);
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getPart
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     return (jint) pDocument->pClass->getPart(pDocument);
 }
 
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getPartPageRectangles
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     char* pRectangles = pDocument->pClass->getPartPageRectangles(pDocument);
     return pEnv->NewStringUTF(pRectangles);
 }
@@ -229,14 +229,14 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getP
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getParts
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     return (jint) pDocument->pClass->getParts(pDocument);
 }
 
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getPartName
     (JNIEnv* pEnv, jobject aObject, jint nPartIndex)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     char* pPartName = pDocument->pClass->getPartName(pDocument, nPartIndex);
     return pEnv->NewStringUTF(pPartName);
 }
@@ -244,7 +244,7 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getP
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPartMode
     (JNIEnv* pEnv, jobject aObject, jint nPartMode)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
     pDocument->pClass->setPartMode(pDocument, nPartMode);
 }
@@ -252,7 +252,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPart
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getDocumentTypeNative
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     return (jint) pDocument->pClass->getDocumentType(pDocument);
 }
 
@@ -261,7 +261,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_paintTi
     jint nCanvasWidth, jint nCanvasHeight, jint nTilePosX, jint nTilePosY,
     jint nTileWidth, jint nTileHeight)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
     unsigned char* buffer = (unsigned char*) pEnv->GetDirectBufferAddress(aByteBuffer);
     pDocument->pClass->paintTile(pDocument, buffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
@@ -270,7 +270,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_paintTi
 extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDocumentHeight
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     long nWidth;
     long nHeight;
     pDocument->pClass->getDocumentSize(pDocument, &nWidth, &nHeight);
@@ -280,7 +280,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDoc
 extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDocumentWidth
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     long nWidth;
     long nHeight;
     pDocument->pClass->getDocumentSize(pDocument, &nWidth, &nHeight);
@@ -290,14 +290,14 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDoc
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_initializeForRendering
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     pDocument->pClass->initializeForRendering(pDocument, NULL);
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_saveAs
     (JNIEnv* pEnv, jobject aObject, jstring sUrl, jstring sFormat, jstring sOptions)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
     const char* pUrl = pEnv->GetStringUTFChars(sUrl, NULL);
     const char* pFormat = pEnv->GetStringUTFChars(sFormat, NULL);
@@ -315,21 +315,21 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_saveAs
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postKeyEvent
     (JNIEnv* pEnv, jobject aObject, jint nType, jint nCharCode, jint nKeyCode)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     pDocument->pClass->postKeyEvent(pDocument, nType, nCharCode, nKeyCode);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postMouseEvent
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y, jint count, jint button, jint modifier)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     pDocument->pClass->postMouseEvent(pDocument, type, x, y, count, button, modifier);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postUnoCommand
     (JNIEnv* pEnv, jobject aObject, jstring command, jstring arguments, jboolean bNotifyWhenFinished)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
     const char* pCommand = pEnv->GetStringUTFChars(command, NULL);
     const char* pArguments = nullptr;
@@ -346,19 +346,19 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postUno
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setTextSelection
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     pDocument->pClass->setTextSelection(pDocument, type, x, y);
 }
 
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getTextSelection
     (JNIEnv* pEnv, jobject aObject, jstring mimeType)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
     const char* pMimeType = pEnv->GetStringUTFChars(mimeType, NULL);
 
     char* pUsedMimeType = 0;
-    LibreOfficeKitDocumentClass* pcls = pDocument->pClass;
+    COKitDocumentClass* pcls = pDocument->pClass;
     char* pSelection = pcls->getTextSelection(pDocument, pMimeType, &pUsedMimeType);
     free(pUsedMimeType);
 
@@ -370,13 +370,13 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getT
 extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_org_libreoffice_kit_Document_paste
     (JNIEnv* pEnv, jobject aObject, jstring mimeType, jstring data)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
     const char* pMimeType = pEnv->GetStringUTFChars(mimeType, NULL);
     const char* pData = pEnv->GetStringUTFChars(data, NULL);
     const size_t nSize = pEnv->GetStringLength(data);
 
-    LibreOfficeKitDocumentClass* pcls = pDocument->pClass;
+    COKitDocumentClass* pcls = pDocument->pClass;
     bool result = pcls->paste(pDocument, pMimeType, pData, nSize);
     pEnv->ReleaseStringUTFChars(mimeType, pMimeType);
     pEnv->ReleaseStringUTFChars(data, pData);
@@ -387,21 +387,21 @@ extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_org_libreoffice_kit_Document_pas
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setGraphicSelection
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     pDocument->pClass->setGraphicSelection(pDocument, type, x, y);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_resetSelection
     (JNIEnv* pEnv, jobject aObject)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     pDocument->pClass->resetSelection(pDocument);
 }
 
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getCommandValues
     (JNIEnv* pEnv, jobject aObject, jstring command)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
 
     const char* pCommand = pEnv->GetStringUTFChars(command, NULL);
 
@@ -415,7 +415,7 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Document_getC
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setClientZoom
     (JNIEnv* pEnv, jobject aObject, jint nTilePixelWidth, jint nTilePixelHeight, jint nTileTwipWidth, jint nTileTwipHeight)
 {
-    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    COKitDocument* pDocument = getHandle<COKitDocument>(pEnv, aObject);
     pDocument->pClass->setClientZoom(pDocument, nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
 
 }

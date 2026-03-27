@@ -2720,12 +2720,12 @@ void Window::setPosSizePixel( tools::Long nX, tools::Long nY,
             {
                 tools::Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
                 const OutputDevice *pParentOutDev = pParent->GetOutDev();
-                if (!comphelper::LibreOfficeKit::isActive())
+                if (!comphelper::COKit::isActive())
                     pParentOutDev->ReMirror( aRect );
                 nX = aRect.Left();
             }
         }
-        if( !comphelper::LibreOfficeKit::isActive() &&
+        if( !comphelper::COKit::isActive() &&
             !(nFlags & PosSizeFlags::X) && bHasValidSize &&
             pWindow->mpWindowImpl->mpFrame->GetWidth())
         {
@@ -3179,13 +3179,13 @@ LOKWindowsMap& GetLOKWindowsMap()
 // Counter to be able to have unique id's for each window.
 static vcl::LOKWindowId sLastLOKWindowId = 1;
 
-void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool bParent)
+void Window::SetLOKNotifier(const vcl::ICOKitNotifier* pNotifier, bool bParent)
 {
     // don't allow setting this twice
     assert(mpWindowImpl->mpLOKNotifier == nullptr);
     assert(pNotifier);
     // never use this in the desktop case
-    assert(comphelper::LibreOfficeKit::isActive());
+    assert(comphelper::COKit::isActive());
 
     if (!bParent)
     {
@@ -3201,7 +3201,7 @@ void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool 
 void Window::SetLOKWindowId()
 {
     // never use this in the desktop case
-    assert(comphelper::LibreOfficeKit::isActive());
+    assert(comphelper::COKit::isActive());
 
     // assign the LOK window id
     assert(mpWindowImpl->mnLOKWindowId == 0);
@@ -3233,9 +3233,9 @@ void Window::ReleaseLOKNotifier()
     mpWindowImpl->mnLOKWindowId = 0;
 }
 
-ILibreOfficeKitNotifier::~ILibreOfficeKitNotifier()
+ICOKitNotifier::~ICOKitNotifier()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         return;
     }
@@ -3255,7 +3255,7 @@ ILibreOfficeKitNotifier::~ILibreOfficeKitNotifier()
     }
 }
 
-const vcl::ILibreOfficeKitNotifier* Window::GetLOKNotifier() const
+const vcl::ICOKitNotifier* Window::GetLOKNotifier() const
 {
     return mpWindowImpl ? mpWindowImpl->mpLOKNotifier : nullptr;
 }

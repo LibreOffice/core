@@ -258,7 +258,7 @@ void GenericDragSource::startDrag( const datatransfer::dnd::DragGestureEvent&,
                                    const Reference< datatransfer::dnd::XDragSourceListener >& listener
                                    )
 {
-    if (comphelper::LibreOfficeKit::isActive()) {
+    if (comphelper::COKit::isActive()) {
         m_xTrans = rTrans;
         return;
     }
@@ -361,7 +361,7 @@ SalInstance::CreateClipboard(const Sequence<Any>& arguments)
 #ifdef IOS
     return new vcl::GenericClipboard();
 #else
-    if (comphelper::LibreOfficeKit::isActive()) {
+    if (comphelper::COKit::isActive()) {
         // In LOK, each document view shall have its own clipboard instance (whereas
         // in non-LOK below we keep handing out one single instance; see also
         // <https://lists.freedesktop.org/archives/libreoffice/2020-April/084824.html> "Re: Linux

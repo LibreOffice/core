@@ -144,7 +144,7 @@ namespace {
     /// Emits LOK notification about one addition/removal/change of a comment
     void lcl_CommentNotification(const SwView* pView, const CommentNotificationType nType, const SwAnnotationItem* pItem, const sal_uInt32 nPostItId)
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
             return;
 
         boost::property_tree::ptree aAnnotation;
@@ -201,7 +201,7 @@ namespace {
                 aAnnotation.put("searchSelection", sSelStr);
             }
         }
-        if (nType == CommentNotificationType::Remove && comphelper::LibreOfficeKit::isActive())
+        if (nType == CommentNotificationType::Remove && comphelper::COKit::isActive())
         {
             // Redline author is basically the author which has made the modification rather than author of the comments
             // This is important to know who removed the comment
@@ -480,7 +480,7 @@ bool SwPostItMgr::CheckForRemovedPostIts()
                 SetActiveSidebarWin(nullptr);
             p->mpPostIt.disposeAndClear();
 
-            if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+            if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
             {
                 const SwPostItField* pPostItField = static_cast<const SwPostItField*>(p->GetFormatField().GetField());
                 lcl_CommentNotification(mpView, CommentNotificationType::Remove, nullptr, pPostItField->GetPostItId());
@@ -639,7 +639,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     RemoveItem(pField);
 
                     // If LOK has disabled tiled annotations, emit annotation callbacks
-                    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+                    if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
                     {
                         SwPostItField* pPostItField = static_cast<SwPostItField*>(pField->GetField());
                         auto type = pFormatHint->Which() == SwFormatFieldHintWhich::REMOVED ? CommentNotificationType::Remove: CommentNotificationType::RedlinedDeletion;
@@ -670,7 +670,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         }
 
                         // If LOK has disabled tiled annotations, emit annotation callbacks
-                        if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+                        if (comphelper::COKit::isActive() && !comphelper::COKit::isTiledAnnotations())
                         {
                             if(SwFormatFieldHintWhich::CHANGED == pFormatHint->Which())
                                 lcl_CommentNotification(mpView, CommentNotificationType::Modify, postItField.get(), 0);
@@ -963,8 +963,8 @@ VclPtr<SwAnnotationWin> SwPostItMgr::GetOrCreateAnnotationWindow(SwAnnotationIte
 
 void SwPostItMgr::LayoutPostIts()
 {
-    const bool bLoKitActive = comphelper::LibreOfficeKit::isActive();
-    const bool bTiledAnnotations = comphelper::LibreOfficeKit::isTiledAnnotations();
+    const bool bLoKitActive = comphelper::COKit::isActive();
+    const bool bTiledAnnotations = comphelper::COKit::isTiledAnnotations();
     const bool bShowNotes = ShowNotes();
 
     const bool bEnableMapMode = bLoKitActive && !mpEditWin->IsMapModeEnabled();
@@ -1049,7 +1049,7 @@ void SwPostItMgr::LayoutPostIts()
                                 nTextHeight = pPostIt->GuessTextHeightForWidth(nSidebarWidth);
 
                             tools::Long postItPixelTextHeight
-                                = (comphelper::LibreOfficeKit::isActive()
+                                = (comphelper::COKit::isActive()
                                        ? mpEditWin->LogicToPixel(Point(0, nTextHeight)).Y()
                                        : nTextHeight);
                             aPostItHeight
@@ -1126,13 +1126,13 @@ void SwPostItMgr::LayoutPostIts()
                             // view that has the comment focus emits callbacks,
                             // so the editing view jumps to the comment, but
                             // not the others.
-                            bool bTiledPainting = comphelper::LibreOfficeKit::isTiledPainting();
+                            bool bTiledPainting = comphelper::COKit::isTiledPainting();
                             if (!bTiledPainting)
                                 // No focus -> disable callbacks.
-                                comphelper::LibreOfficeKit::setTiledPainting(!visiblePostIt->HasChildPathFocus());
+                                comphelper::COKit::setTiledPainting(!visiblePostIt->HasChildPathFocus());
                             visiblePostIt->ShowNote();
                             if (!bTiledPainting)
-                                comphelper::LibreOfficeKit::setTiledPainting(bTiledPainting);
+                                comphelper::COKit::setTiledPainting(bTiledPainting);
                         }
                         else
                         {
@@ -1271,7 +1271,7 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
     if (nPage >= mPages.size())
         return;
     const bool bEnableMapMode
-        = comphelper::LibreOfficeKit::isActive() && !mpEditWin->IsMapModeEnabled();
+        = comphelper::COKit::isActive() && !mpEditWin->IsMapModeEnabled();
     if (bEnableMapMode)
         mpEditWin->EnableMapMode();
     for (auto const& pItem : mPages[nPage]->mvSidebarItems)
@@ -2472,7 +2472,7 @@ tools::ULong SwPostItMgr::GetSidebarWidth(bool bPx) const
 {
     bool bEnableMapMode = !mpWrtShell->GetOut()->IsMapModeEnabled();
     sal_uInt16 nZoom = mpWrtShell->GetViewOptions()->GetZoom();
-    if (comphelper::LibreOfficeKit::isActive() && !bEnableMapMode)
+    if (comphelper::COKit::isActive() && !bEnableMapMode)
     {
         // The output device is the tile and contains the real wanted scale factor.
         double fScaleX = double(mpWrtShell->GetOut()->GetMapMode().GetScaleX());

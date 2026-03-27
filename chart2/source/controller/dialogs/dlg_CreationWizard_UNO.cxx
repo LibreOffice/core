@@ -183,7 +183,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
     }
 }
 
-IMPL_STATIC_LINK_NOARG(CreationWizardUnoDlg, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(CreationWizardUnoDlg, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return SfxViewShell::Current();
 }

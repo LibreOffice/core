@@ -126,7 +126,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData, bool bRa
         aMarkedRows.emplace_back(nCurRow, nCurRow);
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         SCCOLROW nStart = aMarkedRows[0].mnStart;
         OnLOKSetWidthOrHeight(nStart, /*width: */ false);
@@ -175,7 +175,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData, bool bRa
     if ( bPaint && bAnyChanged )
         pDocSh->UpdateOle(GetViewData());
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 GetViewData().GetViewShell(),
@@ -190,7 +190,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData, bool bRa
 
 bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi )
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         OnLOKSetWidthOrHeight(nStartRow, /*width: */ false);
     }
@@ -231,7 +231,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi )
         pDocSh->PostPaint( 0, nStartRow, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab,
                                             PaintPartFlags::Grid | PaintPartFlags::Left );
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 GetViewData().GetViewShell(),
@@ -1127,7 +1127,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
     {
         SCTAB nCurTab = GetViewData().CurrentTabForData();
         std::unique_ptr<ScPrintRangeSaver> pNewRanges = rDoc.CreatePrintRangeSaver();
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             tools::JsonWriter aJsonWriter;
             pNewRanges->GetPrintRangesInfo(aJsonWriter);
@@ -2067,7 +2067,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                 bool bShow = GetViewData().GetViewShell()->GetViewData().GetOptions().GetOption(sc::ViewOption::SUMMARY);
 
-                if (bShow && pViewFrm && !comphelper::LibreOfficeKit::isActive())
+                if (bShow && pViewFrm && !comphelper::COKit::isActive())
                 {
                     pViewFrm->ShowChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
                     SfxChildWindow* pWnd = pViewFrm->GetChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
@@ -2178,7 +2178,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
         SetCursor( nCol, nRow, true );
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             Point aCurPos = GetViewData().GetScrPos(nCol, nRow, GetViewData().GetActivePart());
 
@@ -3203,7 +3203,7 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
 
         SCTAB nTab = GetViewData().CurrentTabForData();
 
-        if (comphelper::LibreOfficeKit::isActive() && !pSrcTabs->empty())
+        if (comphelper::COKit::isActive() && !pSrcTabs->empty())
         {
             ScModelObj* pModel = pDocShell->GetModel();
             SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);

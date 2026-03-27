@@ -87,7 +87,7 @@ namespace {
 
 void lcl_LOKRemoveWindow(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         auto lRemoveWindows =
                 [pTabViewShell, eWhich] (ScTabViewShell* pOtherViewShell)
@@ -545,7 +545,7 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     tools::Long nExHSplitPos = nHSplitPos;
     tools::Long nExVSplitPos = nVSplitPos;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         rViewData.OverrideWithLOKFreeze(eExHSplitMode, eExVSplitMode,
                                         nExFixPosX, nExFixPosY,
@@ -1462,7 +1462,7 @@ void ScViewData::ResetOldCursor()
 
 SCCOL ScViewData::GetPosX( ScHSplitPos eWhich, SCTAB nForTab ) const
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return 0;
 
     if (nForTab == -1)
@@ -1476,7 +1476,7 @@ SCCOL ScViewData::GetPosX( ScHSplitPos eWhich, SCTAB nForTab ) const
 
 SCROW ScViewData::GetPosY( ScVSplitPos eWhich, SCTAB nForTab ) const
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return 0;
 
     if (nForTab == -1)
@@ -1602,9 +1602,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bool bLayoutRTL = mrDoc.IsLayoutRTL(CurrentTabForData());
     ScHSplitPos eHWhich = WhichH(eWhich);
     ScVSplitPos eVWhich = WhichV(eWhich);
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
-    bool bLOKPrintTwips = bLOKActive && comphelper::LibreOfficeKit::isCompatFlagSet(
-            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    bool bLOKActive = comphelper::COKit::isActive();
+    bool bLOKPrintTwips = bLOKActive && comphelper::COKit::isCompatFlagSet(
+            comphelper::COKit::Compat::scPrintTwipsMsgs);
     bool bLOKLayoutRTL = bLOKActive && bLayoutRTL;
 
     bool bWasThere = false;
@@ -1910,7 +1910,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     }
     pEditView[eWhich]->SetBackgroundColor( aBackCol );
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // now only needed when not CEOO (CellEditOnOverlay)
         //  needed?
@@ -1948,9 +1948,9 @@ void ScViewData::EditGrowX()
 
     comphelper::FlagRestorationGuard aFlagGuard(bGrowing, true);
 
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
-    bool bLOKPrintTwips = bLOKActive && comphelper::LibreOfficeKit::isCompatFlagSet(
-            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    bool bLOKActive = comphelper::COKit::isActive();
+    bool bLOKPrintTwips = bLOKActive && comphelper::COKit::isCompatFlagSet(
+            comphelper::COKit::Compat::scPrintTwipsMsgs);
 
     ScDocument& rLocalDoc = GetDocument();
 
@@ -2243,9 +2243,9 @@ void ScViewData::EditGrowY( bool bInitial )
 
     comphelper::FlagRestorationGuard aFlagGuard(bGrowing, true);
 
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
-    bool bLOKPrintTwips = bLOKActive && comphelper::LibreOfficeKit::isCompatFlagSet(
-            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    bool bLOKActive = comphelper::COKit::isActive();
+    bool bLOKPrintTwips = bLOKActive && comphelper::COKit::isCompatFlagSet(
+            comphelper::COKit::Compat::scPrintTwipsMsgs);
 
     ScSplitPos eWhich = GetActivePart();
     ScVSplitPos eVWhich = WhichV(eWhich);
@@ -2537,7 +2537,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         const_cast<ScViewData*>(this)->aScrSize.setHeight( pView->GetGridHeight(eWhichY) );
     }
 
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bIsTiledRendering = comphelper::COKit::isActive();
 
     SCCOL nPosX = GetPosX(eWhichX, nForTab);
     tools::Long nScrPosX = 0;
@@ -2934,7 +2934,7 @@ void ScViewData::GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSp
 
     if (mrDoc.IsLayoutRTL(nForTab))
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             //  mirror horizontal position
             if (pView)
@@ -3045,7 +3045,7 @@ void ScViewData::GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
 void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
 {
     // in the tiled rendering case, nPosX [the leftmost visible column] must be 0
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bIsTiledRendering = comphelper::COKit::isActive();
     if (nNewPosX != 0 && !bIsTiledRendering)
     {
         SCCOL nOldPosX = pThisTab->nPosX[eWhich];
@@ -3084,7 +3084,7 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
 void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
 {
     // in the tiled rendering case, nPosY [the topmost visible row] must be 0
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bIsTiledRendering = comphelper::COKit::isActive();
     if (nNewPosY != 0 && !bIsTiledRendering)
     {
         SCROW nOldPosY = pThisTab->nPosY[eWhich];
@@ -3380,7 +3380,7 @@ void ScViewData::CalcPPT()
         }
     }
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     SCTAB nTabCount = maTabData.size();
@@ -3578,7 +3578,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
     if( rDocSett.mfTabBarWidth < 0.0 )
         rDocSett.mfTabBarWidth = ScTabView::GetRelTabBarWidth();
 
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKActive = comphelper::COKit::isActive();
 
     // sheet settings
     for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabData.size()); ++nTab )
@@ -3825,7 +3825,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
         }
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         DeriveLOKFreezeAllSheets();
 
     // RecalcPixPos or so - also nMPos - also for ReadUserData ??!?!
@@ -4087,7 +4087,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             if ( rSetting.Value >>= nTemp16 )
                 maOptions.SetObjMode(sc::ViewObjectType::DRAW, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW);
         }
-        else if ( sName == SC_UNO_VALUEHIGH && !comphelper::LibreOfficeKit::isActive() )
+        else if ( sName == SC_UNO_VALUEHIGH && !comphelper::COKit::isActive() )
             maOptions.SetOption(sc::ViewOption::SYNTAX, ScUnoHelpFunctions::GetBoolFromAny(rSetting.Value));
         else if (sName == SC_WINDOWSTATE)
         {
@@ -4134,7 +4134,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     // #i47426# write view options to document, needed e.g. for Excel export
     mrDoc.SetViewOptions(maOptions);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         DeriveLOKFreezeAllSheets();
 }
 

@@ -3295,7 +3295,7 @@ void SbRtl_Shell(StarBASIC *, SbxArray & rPar, bool)
     else
     {
         // Just go straight to error in this case
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             StarBASIC::Error(ERRCODE_BASIC_FILE_NOT_FOUND);
             return;

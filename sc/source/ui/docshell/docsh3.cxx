@@ -197,7 +197,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
 
     // LOK: we are supposed to update the row / columns headers (and actually
     // the document size too - cell size affects that, obviously)
-    if ((nPart & (PaintPartFlags::Top | PaintPartFlags::Left)) && comphelper::LibreOfficeKit::isActive())
+    if ((nPart & (PaintPartFlags::Top | PaintPartFlags::Left)) && comphelper::COKit::isActive())
     {
         ScModelObj* pModel = GetModel();
         for (auto nTab : aTabsInvalidated)

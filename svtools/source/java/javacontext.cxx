@@ -64,7 +64,7 @@ Any SAL_CALL JavaContext::getValueByName( const OUString& Name)
 
     if ( Name == JAVA_INTERACTION_HANDLER_NAME )
     {
-        if ( !comphelper::LibreOfficeKit::isActive() )
+        if ( !comphelper::COKit::isActive() )
         {
             osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
             if (!m_xHandler.is())

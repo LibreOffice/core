@@ -171,7 +171,7 @@ void ViewCallback::callbackImpl(int nType, const char* /*pPayload*/)
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
 {
     // Set up LOK to track invalidations.
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::COKit::setActive(true);
 
     // Given a document with a title field:
     createSwDoc("title-field-invalidate.fodt");
@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     pWrtShell->SttEndDoc(/*bStt=*/false);
     ViewCallback aCallback;
     TestLokCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallbackWrapper);
+    pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
     aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(*pWrtShell->GetSfxViewShell()));
     Scheduler::ProcessEventsToIdle();
     aCallback.m_nInvalidations = 0;
@@ -200,7 +200,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     CPPUNIT_ASSERT_EQUAL(1, aCallback.m_nInvalidations);
 
     // Tear down LOK.
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
+    pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlyAnchorUndo)

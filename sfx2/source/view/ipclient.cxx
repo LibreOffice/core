@@ -345,7 +345,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 
-    if ( !comphelper::LibreOfficeKit::isActive() )
+    if ( !comphelper::COKit::isActive() )
         return;
 
     if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() )
@@ -381,7 +381,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedInplace()
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 
-    if ( comphelper::LibreOfficeKit::isActive() )
+    if ( comphelper::COKit::isActive() )
     {
         if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() ) {
             pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE EXIT"_ostr );
@@ -444,7 +444,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
     // window map mode has a ~26.485 scale factor.
     // All that does not fit with current implementation for handling chart
     // editing in LOK.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         bool bMapModeEnabled = pEditWin->IsMapModeEnabled();
         if (!bMapModeEnabled)
@@ -474,7 +474,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
 
     vcl::Window* pEditWin = m_pClient->GetEditWin();
     // See comment for SfxInPlaceClient_Impl::getPlacement.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         bool bMapModeEnabled = pEditWin->IsMapModeEnabled();
         if (!bMapModeEnabled)
@@ -960,7 +960,7 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                 // See comment for SfxInPlaceClient_Impl::getPlacement.
                 vcl::Window* pEditWin = GetEditWin();
                 bool bMapModeEnabled = pEditWin->IsMapModeEnabled();
-                if (comphelper::LibreOfficeKit::isActive() && !bMapModeEnabled)
+                if (comphelper::COKit::isActive() && !bMapModeEnabled)
                 {
                     pEditWin->EnableMapMode();
                 }
@@ -1013,7 +1013,7 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                     //TODO/LATER: better error handling
 
                 }
-                if (comphelper::LibreOfficeKit::isActive() && !bMapModeEnabled
+                if (comphelper::COKit::isActive() && !bMapModeEnabled
                         && pEditWin->IsMapModeEnabled())
                 {
                     pEditWin->EnableMapMode(false);

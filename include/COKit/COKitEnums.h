@@ -26,28 +26,28 @@ typedef enum
   LOK_DOCTYPE_DRAWING,
   LOK_DOCTYPE_OTHER
 }
-LibreOfficeKitDocumentType;
+COKitDocumentType;
 
 typedef enum
 {
     LOK_PARTMODE_SLIDES,
     LOK_PARTMODE_NOTES
 }
-LibreOfficeKitPartMode;
+COKitPartMode;
 
 typedef enum
 {
     LOK_TILEMODE_RGBA,
     LOK_TILEMODE_BGRA
 }
-LibreOfficeKitTileMode;
+COKitTileMode;
 
 typedef enum
 {
     LOK_WINDOW_CLOSE,
     LOK_WINDOW_PASTE
 }
-LibreOfficeKitWindowAction;
+COKitWindowAction;
 
 typedef enum
 {
@@ -56,10 +56,10 @@ typedef enum
     LOK_SELTYPE_LARGE_TEXT, // unused (same as LOK_SELTYPE_COMPLEX)
     LOK_SELTYPE_COMPLEX
 }
-LibreOfficeKitSelectionType;
+COKitSelectionType;
 
-/** Optional features of LibreOfficeKit, in particular callbacks that block
- *  LibreOfficeKit until the corresponding reply is received, which would
+/** Optional features of COKit, in particular callbacks that block
+ *  COKit until the corresponding reply is received, which would
  *  deadlock if the client does not support the feature.
  *
  *  @see lok::Office::setOptionalFeatures().
@@ -104,10 +104,10 @@ typedef enum
      */
     LOK_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK = (1ULL << 5)
 }
-LibreOfficeKitOptionalFeatures;
+COKitOptionalFeatures;
 
-// This enumerates the types of callbacks emitted to a LibreOfficeKit
-// object's callback function or to a LibreOfficeKitDocument object's
+// This enumerates the types of callbacks emitted to a COKit
+// object's callback function or to a COKitDocument object's
 // callback function. No callback type will be emitted to both. It is a
 // bit unfortunate that the same enum contains both kinds of
 // callbacks.
@@ -237,9 +237,9 @@ typedef enum
      *
      * Note that for the case of the progress indication during loading of a
      * document, the status indicator callbacks will arrive to the callback
-     * registered for the LibreOfficeKit (singleton) object, not a
-     * LibreOfficeKitDocument one, because we are in the very progress of
-     * loading a document and then constructing a LibreOfficeKitDocument
+     * registered for the COKit (singleton) object, not a
+     * COKitDocument one, because we are in the very progress of
+     * loading a document and then constructing a COKitDocument
      * object.
      */
     LOK_CALLBACK_STATUS_INDICATOR_START = 9,
@@ -862,7 +862,7 @@ typedef enum
     LOK_CALLBACK_PRINT_RANGES = 56,
 
     /**
-     * Informs the LibreOfficeKit client that a font specified in the
+     * Informs the COKit client that a font specified in the
      * document is missing.
      *
      * This callback is emitted right after the document has been loaded.
@@ -918,7 +918,7 @@ typedef enum
     LOK_CALLBACK_VIEW_RENDER_STATE = 60,
 
     /**
-     * Informs the LibreOfficeKit client that the background color surrounding
+     * Informs the COKit client that the background color surrounding
      * the document has changed.
     */
    LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR = 61,
@@ -962,7 +962,7 @@ typedef enum
     LOK_CALLBACK_A11Y_TEXT_SELECTION_CHANGED = 64,
 
     /**
-     * Informs the LibreOfficeKit client that the color palettes have changed.
+     * Informs the COKit client that the color palettes have changed.
     */
     LOK_CALLBACK_COLOR_PALETTES = 65,
 
@@ -1070,7 +1070,7 @@ typedef enum
     LOK_CALLBACK_VERTICAL_RULER_UPDATE = 73
 
 }
-LibreOfficeKitCallbackType;
+COKitCallbackType;
 
 typedef enum
 {
@@ -1079,7 +1079,7 @@ typedef enum
     /// A key on the keyboard is released.
     LOK_KEYEVENT_KEYUP
 }
-LibreOfficeKitKeyEventType;
+COKitKeyEventType;
 
 typedef enum
 {
@@ -1090,12 +1090,12 @@ typedef enum
     /// cf. SalEvent::EndExtTextInput
     LOK_EXT_TEXTINPUT_END
 }
-LibreOfficeKitExtTextInputType;
+COKitExtTextInputType;
 
-/// Returns the string representation of a LibreOfficeKitCallbackType enumeration element.
+/// Returns the string representation of a COKitCallbackType enumeration element.
 static inline const char* lokCallbackTypeToString(int nType)
 {
-    switch (static_cast<LibreOfficeKitCallbackType>(nType))
+    switch (static_cast<COKitCallbackType>(nType))
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
         return "LOK_CALLBACK_INVALIDATE_TILES";
@@ -1247,7 +1247,7 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_SHAPE_INNER_TEXT";
     }
 
-    assert(!"Unknown LibreOfficeKitCallbackType type.");
+    assert(!"Unknown COKitCallbackType type.");
     return nullptr;
 }
 
@@ -1260,7 +1260,7 @@ typedef enum
     /// The mouse has moved while a button is pressed.
     LOK_MOUSEEVENT_MOUSEMOVE
 }
-LibreOfficeKitMouseEventType;
+COKitMouseEventType;
 
 typedef enum
 {
@@ -1271,7 +1271,7 @@ typedef enum
     /// Both the start and the end of selection is to be adjusted.
     LOK_SETTEXTSELECTION_RESET
 }
-LibreOfficeKitSetTextSelectionType;
+COKitSetTextSelectionType;
 
 typedef enum
 {
@@ -1296,7 +1296,7 @@ typedef enum
      */
     LOK_SETGRAPHICSELECTION_END
 }
-LibreOfficeKitSetGraphicSelectionType;
+COKitSetGraphicSelectionType;
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 

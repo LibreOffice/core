@@ -802,7 +802,7 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
     if (std::unique_ptr<SvStream> xStream = rDataHelper.GetSotStorageStream( nFormatId ) )
     {
         if (nFormatId == SotClipboardFormatId::HTML &&
-            !comphelper::LibreOfficeKit::isActive())
+            !comphelper::COKit::isActive())
         {
             if (useSavedPrefs)
             {

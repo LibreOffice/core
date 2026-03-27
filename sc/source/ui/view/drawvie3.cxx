@@ -50,7 +50,7 @@ ScDrawView::ScDrawView(
     pDropMarkObj( nullptr ),
     bInConstruct( true )
 {
-    SetNegativeX(comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(nTab));
+    SetNegativeX(comphelper::COKit::isActive() && rDoc.IsLayoutRTL(nTab));
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(!comphelper::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Calc::get());
 

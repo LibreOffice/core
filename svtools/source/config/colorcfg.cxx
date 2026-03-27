@@ -256,7 +256,7 @@ void ColorConfig_Impl::Notify(const uno::Sequence<OUString>& rProperties)
     // 'OnlyCurrentDocumentColorScheme' to allow them to go through, but
     // identify what that change is for, so the other color config listeners for
     // whom it doesn't matter, can ignore it as an optimization.
-    const bool bOnlyCurrentDocumentColorScheme = (bEmptyColorSchemeNotify || bEmptyCurrentSchemeNotify) && comphelper::LibreOfficeKit::isActive();
+    const bool bOnlyCurrentDocumentColorScheme = (bEmptyColorSchemeNotify || bEmptyCurrentSchemeNotify) && comphelper::COKit::isActive();
     NotifyListeners(bOnlyCurrentDocumentColorScheme ? ConfigurationHints::OnlyCurrentDocumentColorScheme : ConfigurationHints::NONE);
 }
 

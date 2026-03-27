@@ -261,14 +261,14 @@ void OutputDevice::DrawTransformedBitmapEx(
             basegfx::fround<tools::Long>(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
             basegfx::fround<tools::Long>(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
         const Point aOrigin = GetMapMode().GetOrigin();
-        if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
+        if (!bMetafile && comphelper::COKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             aDestPt.Move(aOrigin.getX(), aOrigin.getY());
             EnableMapMode(false);
         }
 
         DrawBitmap(aDestPt, aDestSize, bitmap);
-        if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
+        if (!bMetafile && comphelper::COKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             EnableMapMode();
             aDestPt.Move(-aOrigin.getX(), -aOrigin.getY());

@@ -2205,7 +2205,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     // sensitive area of connectors is twice as large as the one of the handles
     sal_uInt16 nMarkHdSiz=rPV.GetView().GetMarkHdlSizePixel();
     Size aHalfConSiz(nMarkHdSiz,nMarkHdSiz);
-    if (comphelper::LibreOfficeKit::isActive() && pOut->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+    if (comphelper::COKit::isActive() && pOut->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
         aHalfConSiz=pOut->PixelToLogic(aHalfConSiz, MapMode(MapUnit::Map100thMM));
     else
         aHalfConSiz=pOut->PixelToLogic(aHalfConSiz);
@@ -2218,7 +2218,7 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     size_t no=pOL->GetObjCount();
     bool bFnd = false;
     SdrObjConnection aTestCon;
-    bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bTiledRendering = comphelper::COKit::isActive();
     bool bHasRequestedOrdNum = false;
     sal_Int32 requestedOrdNum = -1;
 

@@ -242,7 +242,7 @@ void SvxCharacterMap::init()
     if(m_xSearchSetArea)
         m_xSearchSetArea->connect_vadjustment_value_changed(LINK(this, SvxCharacterMap, SearchSetScrollHdl));
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         m_xShowSet->connect_mouse_press(LINK(this, SvxCharacterMap, ShowCharMousePressHdl));
         m_xSearchSet->connect_mouse_press(LINK(this, SvxCharacterMap, SearchCharMousePressHdl));

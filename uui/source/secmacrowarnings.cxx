@@ -62,7 +62,7 @@ MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, MacroWarning, InstallLOKNotifierHdl));
 }
 
-IMPL_STATIC_LINK_NOARG(MacroWarning, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(MacroWarning, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }

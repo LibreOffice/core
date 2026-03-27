@@ -18,8 +18,8 @@
 namespace vcl::lok
 {
 bool VCL_DLLPUBLIC isUnipoll();
-void VCL_DLLPUBLIC registerPollCallbacks(LibreOfficeKitPollCallback pPollCallback,
-                                         LibreOfficeKitWakeCallback pWakeCallback, void* pData);
+void VCL_DLLPUBLIC registerPollCallbacks(COKitPollCallback pPollCallback,
+                                         COKitWakeCallback pWakeCallback, void* pData);
 void VCL_DLLPUBLIC unregisterPollCallbacks();
 
 // Called to tell VCL that the number of document views has changed, so that VCL

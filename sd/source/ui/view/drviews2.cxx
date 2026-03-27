@@ -2048,7 +2048,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if (const SdrGrafObj* pObj = dynamic_cast<const SdrGrafObj*>(rMarkList.GetMark(0)->GetMarkedSdrObj()))
                     if (pObj->GetGraphicType() == GraphicType::Bitmap || pObj->GetGraphicType() == GraphicType::GdiMetafile)
                     {
-                        if (comphelper::LibreOfficeKit::isActive())
+                        if (comphelper::COKit::isActive())
                         {
                             const GraphicObject& aGraphicObject(pObj->GetGraphicObject());
                             OUString sTempFileURL = GraphicHelper::ExportGraphicToTempFile(
@@ -3030,7 +3030,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
 
-                    if (pOlView || comphelper::LibreOfficeKit::isActive())
+                    if (pOlView || comphelper::COKit::isActive())
                     {
                         InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
                                        pHLItem->GetTargetFrame(), pHLItem->GetIntName());

@@ -264,7 +264,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     m_bForceChangesToolbar : 1;  // on load of documents with change tracking
     bool m_bInitOnceCompleted = false;
 
-    /// LibreOfficeKit has to force the page size for PgUp/PgDown
+    /// COKit has to force the page size for PgUp/PgDown
     /// functionality based on the user's view, instead of using the m_aVisArea.
     SwTwips         m_nLOKPageUpDownOffset;
 

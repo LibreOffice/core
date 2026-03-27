@@ -210,7 +210,7 @@ void XclRoot::SetTextEncoding( rtl_TextEncoding eTextEnc )
 void XclRoot::SetCharWidth( const XclFontData& rFontData )
 {
     mrData.mnCharWidth = 0;
-    bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+    bool bIsLOK = comphelper::COKit::isActive();
     if( OutputDevice* pPrinter = GetPrinter( bIsLOK ) )
     {
         vcl::Font aFont( rFontData.maName, Size( 0, rFontData.mnHeight ) );

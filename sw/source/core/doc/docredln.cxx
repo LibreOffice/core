@@ -337,7 +337,7 @@ void lcl_LOKInvalidateStartEndFrames(SwShellCursor& rCursor)
 bool lcl_LOKRedlineNotificationEnabled()
 {
     static bool bDisableRedlineComments = getenv("DISABLE_REDLINE") != nullptr;
-    if (comphelper::LibreOfficeKit::isActive() && !bDisableRedlineComments)
+    if (comphelper::COKit::isActive() && !bDisableRedlineComments)
         return true;
 
     return false;
@@ -1467,7 +1467,7 @@ namespace
 {
 void lcl_LOKBroadcastCommentOperation(RedlineType type, const SwPaM& rPam)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         auto eHintType = RedlineType::Delete == type ? SwFormatFieldHintWhich::REDLINED_DELETION: SwFormatFieldHintWhich::INSERTED;
         const SwTextNode *pTextNode = rPam.GetPointNode().GetTextNode();
@@ -1828,7 +1828,7 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
                     pNd->CallSwClientNotify(hint);
                 }
 
-                if (comphelper::LibreOfficeKit::isActive() && IsAnnotation())
+                if (comphelper::COKit::isActive() && IsAnnotation())
                 {
                     auto eHintType = eWhy == Invalidation::Add ? SwFormatFieldHintWhich::INSERTED: SwFormatFieldHintWhich::REMOVED;
                     const SwTextNode *pTextNode = this->GetPointNode().GetTextNode();

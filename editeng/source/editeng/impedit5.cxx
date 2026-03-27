@@ -1295,7 +1295,7 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
     }
 
     pEditView->getImpl().SetEditSelection( aCurSel );
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         pEditView->getImpl().DrawSelectionXOR();
     }

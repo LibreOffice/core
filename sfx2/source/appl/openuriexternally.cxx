@@ -54,7 +54,7 @@ public:
 
 void URITools::openURI(const OUString& sURI, bool bHandleSystemShellExecuteException)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
         {

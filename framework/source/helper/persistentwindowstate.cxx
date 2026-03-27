@@ -77,8 +77,8 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
 
 void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEvent)
 {
-    // We don't want to do this stuff when being used through LibreOfficeKit
-    if( comphelper::LibreOfficeKit::isActive() )
+    // We don't want to do this stuff when being used through COKit
+    if( comphelper::COKit::isActive() )
         return;
 
     css::uno::Reference< css::uno::XComponentContext >     xContext;
@@ -274,8 +274,8 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
 void PersistentWindowState::SaveWindowStateToConfig(const css::uno::Reference<css::uno::XComponentContext>& rContext,
                                                     const css::uno::Reference<css::frame::XFrame>& rFrame)
 {
-    // We don't want to do this stuff when being used through LibreOfficeKit
-    if (comphelper::LibreOfficeKit::isActive())
+    // We don't want to do this stuff when being used through COKit
+    if (comphelper::COKit::isActive())
         return;
 
     if (!rFrame.is())

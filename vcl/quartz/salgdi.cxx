@@ -153,7 +153,7 @@ AquaSalGraphics::AquaSalGraphics(bool bPrinter)
     for (int i = 0; i < MAX_FALLBACK; ++i)
         mpFont[i] = nullptr;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         initWidgetDrawBackends(true);
 }
 
@@ -355,7 +355,7 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
 bool AquaSalGraphics::ShouldDownscaleIconsAtSurface(double& rScaleOut) const
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return SalGraphics::ShouldDownscaleIconsAtSurface(rScaleOut);
     rScaleOut = sal::aqua::getWindowScaling();
     return true;

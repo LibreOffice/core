@@ -406,7 +406,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(weld::Window* pParent, SwWrtShell& rS,
 
     // Clicking the "edit text" button is not yet supported in JSDialog
     // to edit this we need to send back 'editend' events from editing via another trigger - presumably double-clicking
-    m_xEditTextBtn->set_visible(!comphelper::LibreOfficeKit::isActive());
+    m_xEditTextBtn->set_visible(!comphelper::COKit::isActive());
 
     // select 3rd column, otherwise it'll pick 1st one
     m_xBookmarksBox->set_column_editables({ false, false, true, false, false });

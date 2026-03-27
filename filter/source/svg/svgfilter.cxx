@@ -419,8 +419,8 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
         bool bSelectionOnly = false;
         bool bGotSelection = false;
 
-        // when using LibreOfficeKit, default to exporting everything (-1)
-        bool bPageProvided = comphelper::LibreOfficeKit::isActive();
+        // when using COKit, default to exporting everything (-1)
+        bool bPageProvided = comphelper::COKit::isActive();
         sal_Int32 nPageToExport = -1;
 
         comphelper::SequenceAsHashMap args(rDescriptor);

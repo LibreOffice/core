@@ -1108,7 +1108,7 @@ void ViewShellBase::afterCallbackRegistered()
         svx::theme::notifyLOK(pThemeColors, aDocumentColors);
     }
 
-    if (comphelper::LibreOfficeKit::isActive() && mpDocument && mpDocument->GetStartWithPresentation())
+    if (comphelper::COKit::isActive() && mpDocument && mpDocument->GetStartWithPresentation())
     {
         // Be consistent with SidebarController, emit JSON.
         boost::property_tree::ptree aTree;

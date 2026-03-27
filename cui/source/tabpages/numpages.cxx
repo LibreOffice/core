@@ -904,7 +904,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
     m_xExamplesIV->connect_query_tooltip(LINK(this, SvxBitmapPickTabPage, QueryTooltipHdl));
     m_xBtBrowseFile->connect_clicked(LINK(this, SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl));
 
-    if(comphelper::LibreOfficeKit::isActive())
+    if(comphelper::COKit::isActive())
         m_xBtBrowseFile->hide();
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE));
@@ -1309,7 +1309,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
         int nValue = SvxNumberingTypeTable::GetValue(i);
-        if (comphelper::LibreOfficeKit::isActive() && (nValue & SVX_NUM_BITMAP)) continue;
+        if (comphelper::COKit::isActive() && (nValue & SVX_NUM_BITMAP)) continue;
         m_xFmtLB->append(OUString::number(nValue), SvxNumberingTypeTable::GetString(i));
     }
 

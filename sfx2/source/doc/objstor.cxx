@@ -741,7 +741,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             constexpr bool bUsePdfium = true;
 #else
             const bool bUsePdfium
-                = comphelper::LibreOfficeKit::isActive() || getenv("LO_IMPORT_USE_PDFIUM");
+                = comphelper::COKit::isActive() || getenv("LO_IMPORT_USE_PDFIUM");
 #endif
             const bool bPdfiumImport
                 = bUsePdfium && pMedium->GetFilter()
@@ -1192,7 +1192,7 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
     SfxItemSet& rSet = pMedium->GetItemSet();
     const SfxStringItem* pOptions = rSet.GetItem(SID_FILE_FILTEROPTIONS, false);
     const SfxUnoAnyItem* pData = rSet.GetItem(SID_FILTER_DATA, false);
-    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+    const bool bTiledRendering = comphelper::COKit::isActive();
 
     // Process earlier as the input could contain express detection instructions.
     // This is relevant for "automatic" use case. For interactive use case the
@@ -1596,7 +1596,7 @@ bool SfxObjectShell::SaveTo_Impl
 
         // before we overwrite the original file, we will make a backup if there is a demand for that
         // if the backup is not created here it will be created internally and will be removed in case of successful saving
-        const bool bDoBackup = officecfg::Office::Common::Save::Document::CreateBackup::get() && !comphelper::LibreOfficeKit::isActive();
+        const bool bDoBackup = officecfg::Office::Common::Save::Document::CreateBackup::get() && !comphelper::COKit::isActive();
         if ( bDoBackup )
         {
             rMedium.DoBackup_Impl(/*bForceUsingBackupPath=*/false);
@@ -3428,7 +3428,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
         return false;
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // Before saving, commit in-flight changes.
         TerminateEditing();
@@ -3667,14 +3667,14 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
         }
 #endif
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             // Because XMLTextFieldExport::ExportFieldDeclarations (called from SwXMLExport)
             // calls SwXTextFieldMasters::getByName, which in turn maps property names by
             // calling SwStyleNameMapper::GetTextUINameArray, which uses
             // SvtSysLocale().GetUILanguageTag() to do the mapping, saving indirectly depends
             // on the UI language. This is an unfortunate dependency. Here we use the loader's language.
-            const LanguageTag& viewLanguage = comphelper::LibreOfficeKit::getLanguageTag();
+            const LanguageTag& viewLanguage = comphelper::COKit::getLanguageTag();
             const LanguageTag loadLanguage = SfxLokHelper::getLoadLanguage();
 
             // Use the default language for saving and restore later if necessary.
@@ -3682,7 +3682,7 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
             if (viewLanguage != loadLanguage)
             {
                 restoreLanguage = true;
-                comphelper::LibreOfficeKit::setLanguageTag(loadLanguage);
+                comphelper::COKit::setLanguageTag(loadLanguage);
             }
 
             // Restore the view's original language automatically and as necessary.
@@ -3690,8 +3690,8 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
                 [&viewLanguage, restoreLanguage]()
                 {
                     if (restoreLanguage
-                        && viewLanguage != comphelper::LibreOfficeKit::getLanguageTag())
-                        comphelper::LibreOfficeKit::setLanguageTag(viewLanguage);
+                        && viewLanguage != comphelper::COKit::getLanguageTag())
+                        comphelper::COKit::setLanguageTag(viewLanguage);
                 });
 
             return SaveAs(rMedium);

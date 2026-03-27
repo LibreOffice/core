@@ -3684,7 +3684,7 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
 
     const SwPageFrame *pPage = nullptr;
     bool bWin = gProp.pSGlobalShell->GetWin() != nullptr;
-    if (comphelper::LibreOfficeKit::isTiledPainting())
+    if (comphelper::COKit::isTiledPainting())
         // Tiled rendering is similar to printing in this case: painting transparently multiple
         // times will result in darker colors: avoid that.
         bWin = false;
@@ -3714,7 +3714,7 @@ void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
         if ( rRect.Overlaps( aPaintRect ) )
         {
             if ( bCnt && pFrame->IsCompletePaint() &&
-                 !(comphelper::LibreOfficeKit::isActive() && comphelper::LibreOfficeKit::isTiledPainting()) &&
+                 !(comphelper::COKit::isActive() && comphelper::COKit::isTiledPainting()) &&
                  !rRect.Contains( aPaintRect ) && Application::AnyInput( VclInputFlags::KEYBOARD ) )
             {
                 //fix(8104): It may happen, that the processing wasn't complete
@@ -4549,7 +4549,7 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
     int nStyleNumber(-1);
 
     bool bSpotlightStyle;
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // For simplicity in kit mode, we render in the document "all styles"
         bSpotlightStyle = true;
@@ -6317,7 +6317,7 @@ enum PaintArea {LEFT, RIGHT, TOP, BOTTOM};
 /// Wrapper around pOut->DrawBitmap.
 static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoint, const Size& aSize, const Bitmap& rBitmap, PaintArea eArea)
 {
-    if(!comphelper::LibreOfficeKit::isActive())
+    if(!comphelper::COKit::isActive())
     {
         // The problem is that if we get called multiple times and the color is
         // partly transparent, then the result will get darker and darker. To avoid
@@ -7240,7 +7240,7 @@ static std::vector<basegfx::B2DPolygon> lcl_CreatePageAreaDelimiterPolygons(cons
     std::vector<basegfx::B2DPolygon> aPolygons;
 
     // Hide text boundaries by default - cool#3491
-    if (!bHeaderFooter && comphelper::LibreOfficeKit::isActive())
+    if (!bHeaderFooter && comphelper::COKit::isActive())
         return aPolygons;
 
     double nLineLength = 200.0; // in Twips

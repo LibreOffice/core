@@ -359,7 +359,7 @@ namespace {
 #if defined(DBG_UTIL) && !defined(EMSCRIPTEN)
 void runGraphicsRenderTests()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 #if !ENABLE_WASM_STRIP_PINGUSER
     if (!utl::isProductVersionUpgraded())

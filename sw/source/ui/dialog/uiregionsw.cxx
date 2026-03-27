@@ -419,7 +419,7 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
     m_xTree->show();
     m_bDontCheckPasswd = false;
 
-    if(comphelper::LibreOfficeKit::isActive())
+    if(comphelper::COKit::isActive())
     {
         m_xLinkFrame->hide();
         m_xDDECB->hide();
@@ -1193,7 +1193,7 @@ IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::Toggleable&, rButton, void)
     {
         m_xDDECommandFT->hide();
         m_xFileNameFT->set_sensitive(bFile);
-        if(!comphelper::LibreOfficeKit::isActive())
+        if(!comphelper::COKit::isActive())
             m_xFileNameFT->show();
         m_xSubRegionED->show();
         m_xSubRegionFT->show();
@@ -1516,7 +1516,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(weld::Container* pPage, weld::Dia
 
     // Hide Link section. In general it makes no sense to insert a file from the jail,
     // because it does not contain any usable files (documents).
-    if(comphelper::LibreOfficeKit::isActive())
+    if(comphelper::COKit::isActive())
     {
         m_xBuilder->weld_label(u"label1"_ustr)->hide(); // Link
         m_xFileCB->hide();
@@ -1765,7 +1765,7 @@ IMPL_LINK( SwInsertSectionTabPage, DDEHdl, weld::Toggleable&, rButton, void )
     {
         m_xDDECommandFT->hide();
         m_xFileNameFT->set_sensitive(bFile);
-        if(!comphelper::LibreOfficeKit::isActive())
+        if(!comphelper::COKit::isActive())
             m_xFileNameFT->show();
         m_xSubRegionFT->show();
         m_xSubRegionED->show();

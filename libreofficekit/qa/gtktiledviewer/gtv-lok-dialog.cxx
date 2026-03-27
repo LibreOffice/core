@@ -104,7 +104,7 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
 
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(priv->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(priv->lokdocview));
     pDocument->pClass->paintWindow(pDocument, priv->dialogid, pBuffer, aRect.x, aRect.y, nWidth, nHeight);
 
     gtk_widget_set_size_request(GTK_WIDGET(pDialogDrawingArea), priv->m_nWidth, priv->m_nHeight);
@@ -129,7 +129,7 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
     GtvLokDialogPrivate* priv = getPrivate(pDialog);
 
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_window_get_transient_for(GTK_WINDOW(pDialog)));
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
     std::string aEventType = "unknown";
     if (pEvent->type == GDK_BUTTON_PRESS)
@@ -218,7 +218,7 @@ gtv_lok_dialog_signal_motion(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
     GtvLokDialogPrivate* priv = getPrivate(pDialog);
 
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_window_get_transient_for(GTK_WINDOW(pDialog)));
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
     g_info("lok_dialog_signal_motion: %d, %d (in twips: %d, %d)",
            static_cast<int>(pEvent->x), static_cast<int>(pEvent->y),
@@ -243,7 +243,7 @@ gtv_lok_dialog_signal_key(GtkWidget* pDialogDrawingArea, GdkEventKey* pEvent)
     GtvLokDialog* pDialog = GTV_LOK_DIALOG(gtk_widget_get_toplevel(pDialogDrawingArea));
     GtvLokDialogPrivate* priv = getPrivate(pDialog);
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_window_get_transient_for(GTK_WINDOW(pDialog)));
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
     g_info("lok_dialog_signal_key");
     int nCharCode = 0;
@@ -486,7 +486,7 @@ gtv_lok_dialog_floating_win_draw(GtkWidget* pDrawingArea, cairo_t* pCairo, gpoin
     g_info("gtv_lok_dialog_floating_win_draw triggered");
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, priv->m_nChildWidth, priv->m_nChildHeight);
     unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(priv->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(priv->lokdocview));
     pDocument->pClass->paintWindow(pDocument, priv->m_nChildId, pBuffer, 0, 0, priv->m_nChildWidth, priv->m_nChildHeight);
 
     gtk_widget_set_size_request(GTK_WIDGET(pDrawingArea), priv->m_nChildWidth, priv->m_nChildHeight);
@@ -507,7 +507,7 @@ gtv_lok_dialog_floating_win_signal_button(GtkWidget* /*pDialogChildDrawingArea*/
     GtvLokDialogPrivate* priv = getPrivate(pDialog);
 
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_window_get_transient_for(GTK_WINDOW(pDialog)));
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
     std::string aEventType = "unknown";
     if (pEvent->type == GDK_BUTTON_PRESS)
@@ -597,7 +597,7 @@ gtv_lok_dialog_floating_win_signal_motion(GtkWidget* /*pDialogDrawingArea*/, Gdk
     GtvLokDialogPrivate* priv = getPrivate(pDialog);
 
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_window_get_transient_for(GTK_WINDOW(pDialog)));
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
     g_info("lok_dialog_floating_win_signal_motion: %d, %d (in twips: %d, %d)",
            static_cast<int>(pEvent->x), static_cast<int>(pEvent->y),

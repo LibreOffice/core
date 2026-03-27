@@ -1495,7 +1495,7 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
         return ;
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         INetURLObject aURL(pImage->aURL);
         if (HostFilter::isForbidden(aURL.GetHost()))

@@ -372,7 +372,7 @@ namespace drawinglayer::primitive2d
             sal_Int32 nRasterWidth(basegfx::fround(fFullViewSizeX * aUnitVisibleRange.getWidth()) + 1);
             sal_Int32 nRasterHeight(basegfx::fround(fFullViewSizeY * aUnitVisibleRange.getHeight()) + 1);
 
-            if(!rViewInformation.getReducedDisplayQuality() && comphelper::LibreOfficeKit::isActive())
+            if(!rViewInformation.getReducedDisplayQuality() && comphelper::COKit::isActive())
             {
                 // for this purpose allow reduced 3D quality and make a compromise
                 // between quality and speed. This is balanced between those two

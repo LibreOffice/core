@@ -968,7 +968,7 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
     }
     else if ( pBrdCst == m_pColorConfig.get() )
     {
-        const bool bKit = comphelper::LibreOfficeKit::isActive();
+        const bool bKit = comphelper::COKit::isActive();
         const SwViewColors aViewColors(*m_pColorConfig);
         SwViewOption aViewOption = *GetViewOption(/*Web=*/false);
 

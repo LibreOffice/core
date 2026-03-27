@@ -1793,7 +1793,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testPDFImportShared)
         return;
     }
 
-    comphelper::LibreOfficeKit::setActive();
+    comphelper::COKit::setActive();
 
     createSdDrawDoc("pdf/multipage.pdf");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());

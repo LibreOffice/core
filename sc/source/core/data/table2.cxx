@@ -1983,7 +1983,7 @@ void ScTable::CommentNotifyAddressChange( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
     // Only in use in kit mode for now, but looks to me a good idea to revisit why (since OOo times)
     // on deleting/inserting a column that we generate all the captions, while on deleting/inserting
     // a row we do not. Presumably we should skip generating captions if we don't have to.
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     if (!ValidCol(nCol1) || !ValidCol(nCol2))

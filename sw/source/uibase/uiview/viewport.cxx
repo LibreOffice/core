@@ -198,7 +198,7 @@ void SwView::DocSzChgd(const Size &rSz)
 void SwView::SetVisArea( const tools::Rectangle &rRect, bool bUpdateScrollbar )
 {
     Size aOldSz( m_aVisArea.GetSize() );
-    if (comphelper::LibreOfficeKit::isActive() && m_pWrtShell)
+    if (comphelper::COKit::isActive() && m_pWrtShell)
         // If m_pWrtShell's visible area is the whole document, do the same here.
         aOldSz = m_pWrtShell->VisArea().SSize();
 
@@ -544,7 +544,7 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
 bool SwView::GetPageScrollUpOffset( SwTwips &rOff ) const
 {
     // in the LOK case, force the value set by the API
-    if (comphelper::LibreOfficeKit::isActive() && m_nLOKPageUpDownOffset > 0)
+    if (comphelper::COKit::isActive() && m_nLOKPageUpDownOffset > 0)
     {
         rOff = -m_nLOKPageUpDownOffset;
         return true;
@@ -566,7 +566,7 @@ bool SwView::GetPageScrollUpOffset( SwTwips &rOff ) const
 bool SwView::GetPageScrollDownOffset( SwTwips &rOff ) const
 {
     // in the LOK case, force the value set by the API
-    if (comphelper::LibreOfficeKit::isActive() && m_nLOKPageUpDownOffset > 0)
+    if (comphelper::COKit::isActive() && m_nLOKPageUpDownOffset > 0)
     {
         rOff = m_nLOKPageUpDownOffset;
         return true;

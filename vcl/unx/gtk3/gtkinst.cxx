@@ -6656,7 +6656,7 @@ public:
         return aRet;
     }
 
-    virtual const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() override
+    virtual const vcl::ICOKitNotifier* GetLOKNotifier() override
     {
         // dummy implementation
         return nullptr;
@@ -7355,7 +7355,7 @@ public:
 
     void close(bool bCloseSignal);
 
-    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&) override
+    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>&) override
     {
         //not implemented for the gtk variant
     }
@@ -23750,7 +23750,7 @@ private:
 
     void postprocess_widget(GtkWidget* pWidget)
     {
-        const bool bHideHelp = comphelper::LibreOfficeKit::isActive() &&
+        const bool bHideHelp = comphelper::COKit::isActive() &&
             officecfg::Office::Common::Help::HelpRootURL::get().isEmpty();
 
         //fixup icons

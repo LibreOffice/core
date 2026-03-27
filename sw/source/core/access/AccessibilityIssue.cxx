@@ -123,7 +123,7 @@ void AccessibilityIssue::gotoIssue() const
                     }
                 }
             }
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 pWrtShell->ShowCursor();
         }
         break;
@@ -143,7 +143,7 @@ void AccessibilityIssue::gotoIssue() const
                 }
             }
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 pWrtShell->ShowCursor();
         }
         break;
@@ -166,7 +166,7 @@ void AccessibilityIssue::gotoIssue() const
                     }
                 }
 
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                     pWrtShell->ShowCursor();
             }
         }
@@ -186,7 +186,7 @@ void AccessibilityIssue::gotoIssue() const
                 }
             }
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 pWrtShell->ShowCursor();
         }
         break;
@@ -206,7 +206,7 @@ void AccessibilityIssue::gotoIssue() const
             // bring issue to attention
             pWrtShell->GetView().BringToAttention(pContentNode);
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 pWrtShell->ShowCursor();
         }
         break;
@@ -232,7 +232,7 @@ void AccessibilityIssue::gotoIssue() const
                     pWrtShell->GetView().BringToAttention(aRect);
                 }
             }
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 pWrtShell->ShowCursor();
         }
         break;

@@ -34,7 +34,7 @@ SfxHintPoster::~SfxHintPoster() {}
 
 void SfxHintPoster::Post(std::unique_ptr<SfxRequest> pHintToPost)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // Store the LOK view at the time of posting, so we can restore it later.
         if (SfxLokHelper::isSettingView())
@@ -58,7 +58,7 @@ IMPL_LINK(SfxHintPoster, DoEvent_Impl, void*, pPostedHint, void)
     {
         bool bSetView = false;
         int nOldId = -1;
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             int nNewId = pRequest->GetLokViewId();
             nOldId = SfxLokHelper::getCurrentView();

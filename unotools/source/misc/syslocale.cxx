@@ -159,16 +159,16 @@ SvtSysLocaleOptions& SvtSysLocale::GetOptions() const
 
 const LanguageTag& SvtSysLocale::GetLanguageTag() const
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        return comphelper::LibreOfficeKit::getLocale();
+    if (comphelper::COKit::isActive())
+        return comphelper::COKit::getLocale();
 
     return pImpl->aSysLocaleOptions.GetRealLanguageTag();
 }
 
 const LanguageTag& SvtSysLocale::GetUILanguageTag() const
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        return comphelper::LibreOfficeKit::getLanguageTag();
+    if (comphelper::COKit::isActive())
+        return comphelper::COKit::getLanguageTag();
 
     return pImpl->aSysLocaleOptions.GetRealUILanguageTag();
 }

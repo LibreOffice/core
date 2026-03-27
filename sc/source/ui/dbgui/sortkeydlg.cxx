@@ -66,7 +66,7 @@ void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
     pSortKeyItem->m_xFrame->set_label(aLine);
 
     // for ui-testing. Distinguish the sort keys
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         if ( m_aSortKeyItems.size() > 0 )
         {

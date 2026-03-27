@@ -446,7 +446,7 @@ void ViewShell::SetZoomRect(const ::tools::Rectangle& rZoomRect)
         mpContentWindow->UpdateMapOrigin();
 
         // When tiled rendering, UpdateMapOrigin() doesn't touch the map mode.
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
             // #i74769# see above
             mpContentWindow->Invalidate(InvalidateFlags::Children);
     }

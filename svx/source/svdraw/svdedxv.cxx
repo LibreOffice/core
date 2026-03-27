@@ -208,7 +208,7 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
 {
     SdrPageView* pPageView = SdrGlueEditView::ShowSdrPage(pPage);
 
-    if (comphelper::LibreOfficeKit::isActive() && pPageView)
+    if (comphelper::COKit::isActive() && pPageView)
     {
         // Check if other views have an active text edit on the same page as
         // this one.
@@ -241,7 +241,7 @@ namespace
 void lcl_RemoveTextEditOutlinerViews(SdrObjEditView const* pThis, SdrPageView const* pPageView,
                                      OutputDevice const* pOutputDevice)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     if (!pPageView)
@@ -924,11 +924,11 @@ void SdrObjEditView::EditViewCursorRect(const tools::Rectangle& rRect, int nExtT
 
 void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         // adapt all TextEditOverlayObject(s), so call EditViewInvalidate()
         // to update accordingly (will update selection, too). Suppress new
-        // stuff when LibreOfficeKit is active
+        // stuff when COKit is active
         EditViewInvalidate(tools::Rectangle());
         return;
     }
@@ -970,7 +970,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
     // clipped; happens in case of editing text inside a shape in Calc.
     // FIXME would be better to complete the setup so that we don't get an
     // empty rRect here
-    if (!comphelper::LibreOfficeKit::isActive() || !rRect.IsEmpty())
+    if (!comphelper::COKit::isActive() || !rRect.IsEmpty())
         aBlankRect.Intersection(rRect);
 
     rOutlView.GetOutliner().SetUpdateLayout(true); // Bugfix #22596#
@@ -1445,10 +1445,10 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
 
             mpTextEditOutlinerView = ImpMakeOutlinerView(pWin, pGivenOutlinerView);
 
-            if (!comphelper::LibreOfficeKit::isActive() && mpTextEditOutlinerView)
+            if (!comphelper::COKit::isActive() && mpTextEditOutlinerView)
             {
                 // activate visualization of EditView on Overlay, suppress when
-                // LibreOfficeKit is active
+                // COKit is active
                 mpTextEditOutlinerView->GetEditView().setEditViewCallbacks(this);
 
                 const Color aHilightColor(SvtOptionsDrawinglayer::getHilightColor());
@@ -1519,7 +1519,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                     }
                 }
 
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                 {
                     // Register an outliner view for all other sdr views that
                     // show the same page, so that when the text edit changes,
@@ -1722,7 +1722,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     }
 
     // if new mechanism was used, clean it up. At cleanup no need to check
-    // for LibreOfficeKit
+    // for COKit
     if (mpTextEditOutlinerView)
     {
         mpTextEditOutlinerView->GetEditView().setEditViewCallbacks(nullptr);
@@ -2247,7 +2247,7 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
         else
         {
             mpTextEditOutlinerView->Command(rCEvt);
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 // It could execute CommandEventId::ExtTextInput, while SdrObjEditView::KeyInput
                 // isn't called

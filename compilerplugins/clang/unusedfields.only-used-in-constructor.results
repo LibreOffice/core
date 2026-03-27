@@ -339,7 +339,7 @@ include/xmloff/shapeimport.hxx:55
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
     GtvApplicationWindow parent_instance GtkApplicationWindow
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:55
-    GtvApplicationWindow doctype LibreOfficeKitDocumentType
+    GtvApplicationWindow doctype COKitDocumentType
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:74
     GtvApplicationWindowClass parentClass GtkApplicationWindowClass
 libreofficekit/qa/gtktiledviewer/gtv-application.hxx:26

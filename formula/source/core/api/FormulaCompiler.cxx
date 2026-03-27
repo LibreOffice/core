@@ -968,9 +968,9 @@ static bool lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, 
     static std::map<OUString, OpCodeMapData> aLocaleSymbolMap;
     std::unique_lock aGuard(aSymbolMap.maMtx);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
-        OUString language = comphelper::LibreOfficeKit::getLanguageTag().getLanguage();
+        OUString language = comphelper::COKit::getLanguageTag().getLanguage();
         if (eWhat == FormulaCompiler::InitSymbols::ASK)
         {
             return aLocaleSymbolMap.contains(language)

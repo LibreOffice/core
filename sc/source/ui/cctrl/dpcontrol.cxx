@@ -243,7 +243,7 @@ void ScDPFieldButton::drawPopupButton()
     // => one at the correct location with fill (possibly no outline)
     // => and the other at an x offset with outline and without fill
     // eg. Replacing this with a DrawRect() does not have any such problems.
-    comphelper::LibreOfficeKit::isActive() ? mpOutDev->SetLineColor() : mpOutDev->SetLineColor(aArrowColor);
+    comphelper::COKit::isActive() ? mpOutDev->SetLineColor() : mpOutDev->SetLineColor(aArrowColor);
     mpOutDev->SetFillColor(aArrowColor);
 
     Point aCenter(aPos.X() + (aSize.Width() / 2), aPos.Y() + (aSize.Height() / 2));

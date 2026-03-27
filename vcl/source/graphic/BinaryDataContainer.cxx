@@ -190,7 +190,7 @@ void BinaryDataContainer::ensureSwappedIn() const
 void BinaryDataContainer::swapOut() const
 {
     // Only bother reducing memory footprint in kit mode - for mobile/online etc.
-    if (!mpImpl || !comphelper::LibreOfficeKit::isActive())
+    if (!mpImpl || !comphelper::COKit::isActive())
         return;
 
     mpImpl->swapOut();

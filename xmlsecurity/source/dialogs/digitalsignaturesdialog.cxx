@@ -261,7 +261,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
             break;
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // If the view has a signing certificate, then allow adding a signature.
         if (!pViewShell || !pViewShell->GetSigningCertificate().m_xCertificate.is())

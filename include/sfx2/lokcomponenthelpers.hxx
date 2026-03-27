@@ -23,7 +23,7 @@ class SfxInPlaceClient;
 class SfxViewShell;
 class VirtualDevice;
 
-/// A class for chart editing support via LibreOfficeKit.
+/// A class for chart editing support via COKit.
 class SFX2_DLLPUBLIC LokChartHelper
 {
 private:
@@ -62,7 +62,7 @@ public:
                              double fScaleX = 1.0, double fScaleY = 1.0);
 };
 
-/// A class for math editing support via LibreOfficeKit.
+/// A class for math editing support via COKit.
 class SFX2_DLLPUBLIC LokStarMathHelper
 {
 public:

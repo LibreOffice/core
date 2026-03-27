@@ -179,7 +179,7 @@ void SdrPageView::Hide()
 {
     if(IsVisible())
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             InvalidateAllWin();
         }

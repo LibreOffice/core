@@ -283,9 +283,9 @@ void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
 
     assert(pWindow && "Cannot notify without a window");
     assert(mpData && "Require ImplCursorData");
-    assert(comphelper::LibreOfficeKit::isActive());
+    assert(comphelper::COKit::isActive());
 
-    const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
+    const vcl::ICOKitNotifier* pNotifier = pParent->GetLOKNotifier();
 
     if (pWindow->IsFormControl() || (pWindow->GetParent() && pWindow->GetParent()->IsFormControl()))
     {
@@ -308,7 +308,7 @@ void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
     }
     else
     {
-        if (comphelper::LibreOfficeKit::isDialogPainting())
+        if (comphelper::COKit::isDialogPainting())
             return;
 
         std::vector<vcl::LOKPayloadItem> aItems;

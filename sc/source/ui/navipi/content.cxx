@@ -188,7 +188,7 @@ void ScContentTree::InitRoot( ScContentId nType )
     auto const & aImage = aContentBmps[static_cast<int>(nType) - 1];
 
     OUString aName;
-    if(comphelper::LibreOfficeKit::isActive())
+    if(comphelper::COKit::isActive())
     {
         //In case of LOK we may have many different ScContentTrees in different languages.
         //At creation time, we store what language we use, and then use it later too.
@@ -387,7 +387,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
                 pParentWindow->SetCurrentTable( aPos.Tab() );
                 pParentWindow->SetCurrentCell( aPos.Col(), aPos.Row() );
                 // Check whether the comment is currently visible and toggle its visibility
-                if (!comphelper::LibreOfficeKit::isActive())
+                if (!comphelper::COKit::isActive())
                 {
                     ScDocument* pSrcDoc = GetSourceDocument();
                     if (ScPostIt* pNote = pSrcDoc ? pSrcDoc->GetNote(aPos.Col(), aPos.Row(), aPos.Tab()) : nullptr)
@@ -568,7 +568,7 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     {
         case CommandEventId::ContextMenu:
             {
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                     break;
 
                 //  drag-and-drop mode

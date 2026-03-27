@@ -445,7 +445,7 @@ void CustomAnimationPane::updateControls()
     mxFTDuration->set_sensitive(mxView.is());
     mxCBXDuration->set_sensitive(mxView.is());
     mxCustomAnimationList->set_sensitive(mxView.is());
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         mxPBPlay->hide();
         mxCBAutoPreview->set_active(false);
@@ -2426,7 +2426,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
         return;
 
     // No preview in LOK.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     if( maListSelection.empty() )

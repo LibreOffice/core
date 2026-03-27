@@ -160,7 +160,7 @@ typedef std::unordered_map<OUString, std::pair<Color, int>> StylesSpotlightColor
  * One SfxViewShell more or less represents one edit window for a document, there can be multiple
  * ones for a single opened document (SfxObjectShell).
  */
-class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell, public vcl::ILibreOfficeKitNotifier
+class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewShell, public vcl::ICOKitNotifier
 {
 friend class SfxViewFrame;
 friend class SfxBaseController;
@@ -273,7 +273,7 @@ public:
     virtual       SfxShell*     GetFormShell()       { return nullptr; };
     virtual const SfxShell*     GetFormShell() const { return nullptr; };
 
-    // ILibreOfficeKitNotifier
+    // ICOKitNotifier
     virtual void                notifyWindow(vcl::LOKWindowId nLOKWindowId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;
     virtual OString             dumpNotifyState() const override;
 
@@ -391,11 +391,11 @@ public:
     SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( false ); }
     SAL_DLLPRIVATE bool ExecKey_Impl(const KeyEvent& aKey);
 
-    /// Set up a more efficient internal callback instead of LibreOfficeKitCallback.
-    void setLibreOfficeKitViewCallback(SfxLokCallbackInterface* pCallback);
-    SfxLokCallbackInterface* getLibreOfficeKitViewCallback() const;
+    /// Set up a more efficient internal callback instead of COKitCallback.
+    void setCOKitViewCallback(SfxLokCallbackInterface* pCallback);
+    SfxLokCallbackInterface* getCOKitViewCallback() const;
     /// dump view state for diagnostics
-    void dumpLibreOfficeKitViewState(rtl::OStringBuffer &rState);
+    void dumpCOKitViewState(rtl::OStringBuffer &rState);
     /// Invokes the registered callback, if there are any.
     virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) const override;
     virtual void libreOfficeKitViewCallbackWithViewId(int nType, const OString& pPayload, int nViewId) const override;
@@ -423,9 +423,9 @@ public:
     /// Get the DocId used by Mobile LOKit to load multiple documents.
     ViewShellDocId GetDocId() const override;
 
-    /// ILibreOfficeKitNotifier. Emits a LOK_CALLBACK_INVALIDATE_TILES.
+    /// ICOKitNotifier. Emits a LOK_CALLBACK_INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const override;
-    /// ILibreOfficeKitNotifier.
+    /// ICOKitNotifier.
     virtual void notifyCursorInvalidation(tools::Rectangle const *, bool bControlEvent, int windowID) const override;
 
     /// See OutlinerViewShell::NotifyOtherViews().
@@ -441,26 +441,26 @@ public:
     /// Get a color config color from this view
     virtual ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const;
 
-    /// Set the LibreOfficeKit language of this view.
+    /// Set the COKit language of this view.
     void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
-    /// Get the LibreOfficeKit language of this view.
+    /// Get the COKit language of this view.
     const LanguageTag& GetLOKLanguageTag() const { return maLOKLanguageTag; }
-    /// Enable/Disable LibreOfficeKit AT support for this view.
+    /// Enable/Disable COKit AT support for this view.
     void SetLOKAccessibilityState(bool bEnabled);
-    /// Get LibreOfficeKit AT support state for this view.
+    /// Get COKit AT support state for this view.
     bool GetLOKAccessibilityState() const { return mbLOKAccessibilityEnabled; }
-    /// Set LibreOfficeKit color preview state for this view.
+    /// Set COKit color preview state for this view.
     void SetLOKColorPreviewState(bool bEnabled);
-    /// Return LibreOfficeKit color preview state for this view.
+    /// Return COKit color preview state for this view.
     bool IsLOKColorPreviewEnabled() const { return mbLOKColorPreviewEnabled; }
 
-    /// Get the LibreOfficeKit timezone of this view. See @SetLOKTimezone.
+    /// Get the COKit timezone of this view. See @SetLOKTimezone.
     std::pair<bool, OUString> GetLOKTimezone() const
     {
         return { maLOKIsTimezoneSet, maLOKTimezone };
     }
 
-    /// Set the LibreOfficeKit timezone of this view.
+    /// Set the COKit timezone of this view.
     /// @isSet true to use @rTimezone, even if it's empty. Otherwise, no timezone.
     /// @rTimezone the value to set (which could be empty).
     void SetLOKTimezone(bool isSet, const OUString& rTimezone)
@@ -469,13 +469,13 @@ public:
         maLOKTimezone = rTimezone;
     }
 
-    /// Set the LibreOfficeKit locale of this view.
+    /// Set the COKit locale of this view.
     void SetLOKLocale(const OUString& rBcp47LanguageTag);
-    /// Get the LibreOfficeKit locale of this view.
+    /// Get the COKit locale of this view.
     const LanguageTag& GetLOKLocale() const { return maLOKLocale; }
-    /// Set the LibreOfficeKit locale and language of this view.
+    /// Set the COKit locale and language of this view.
     void SetLOKLanguageAndLocale(const OUString& rBcp47LanguageTag);
-    /// Get the LibreOfficeKit calendar of this view.
+    /// Get the COKit calendar of this view.
     CalendarWrapper& GetLOKCalendar();
     /// Get the form factor of the device where the lok client is running.
     LOKDeviceFormFactor GetLOKDeviceFormFactor() const { return maLOKDeviceFormFactor; }

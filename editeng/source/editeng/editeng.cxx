@@ -1808,7 +1808,7 @@ bool EditEngine::HasValidData( const css::uno::Reference< css::datatransfer::XTr
 {
     bool bValidData = false;
 
-    if ( comphelper::LibreOfficeKit::isActive())
+    if ( comphelper::COKit::isActive())
         return true;
 
     if ( rTransferable.is() )

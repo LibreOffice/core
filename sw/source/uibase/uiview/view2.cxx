@@ -321,7 +321,7 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
         pFilter = &GraphicFilter::GetGraphicFilter();
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         INetURLObject aURL(rPath);
         if (INetProtocol::File != aURL.GetProtocol() && HostFilter::isForbidden(aURL.GetHost()))
@@ -397,7 +397,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     UIName sGraphicFormat( SwResId(STR_POOLFRM_GRAPHIC) );
 
     const SfxStringItem* pName = rReq.GetArg(SID_INSERT_GRAPHIC);
-    bool bShowError = !pName || comphelper::LibreOfficeKit::isActive();
+    bool bShowError = !pName || comphelper::COKit::isActive();
 
     // No file pickers in a non-desktop (mobile app) build.
 
@@ -1128,7 +1128,7 @@ void SwView::Execute(SfxRequest &rReq)
 
             if (pNext)
             {
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                 {
                     sal_uInt32 nRedlineId = pNext->GetId();
                     OString aPayload(".uno:CurrentTrackedChangeId=" + OString::number(nRedlineId));
@@ -1147,7 +1147,7 @@ void SwView::Execute(SfxRequest &rReq)
 
             if (pPrev)
             {
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                 {
                     sal_uInt32 nRedlineId = pPrev->GetId();
                     OString aPayload(".uno:CurrentTrackedChangeId=" + OString::number(nRedlineId));
@@ -1724,7 +1724,7 @@ bool SwView::IsConditionalFastCall( const SfxRequest &rReq )
 
     if (nId == FN_REDLINE_ACCEPT_DIRECT || nId == FN_REDLINE_REJECT_DIRECT)
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
             bRet = true;
     }
     return bRet || SfxShell::IsConditionalFastCall(rReq);

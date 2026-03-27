@@ -390,7 +390,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
     const SwTextNode *pTextNode = rPam.GetPointNode().GetTextNode();
     SwTextAttr* pTextAttr = pTextNode ? pTextNode->GetFieldTextAttrAt(rPam.GetPoint()->GetContentIndex() - 1, ::sw::GetTextAttrMode::Default) : nullptr;
     SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pTextAttr));
-    if (pTextField && comphelper::LibreOfficeKit::isActive() )
+    if (pTextField && comphelper::COKit::isActive() )
         rDoc.GetDocShell()->Broadcast(
             SwFormatFieldHint(&pTextField->GetFormatField(), SwFormatFieldHintWhich::INSERTED));
     else

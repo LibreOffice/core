@@ -482,7 +482,7 @@ public:
 
     virtual VclPtr<VirtualDevice> screenshot() override;
 
-    virtual const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() override;
+    virtual const vcl::ICOKitNotifier* GetLOKNotifier() override;
 
     virtual ~SalInstanceWindow() override;
 };
@@ -518,8 +518,7 @@ public:
 
     virtual void undo_collapse() override;
 
-    virtual void
-    SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink) override;
+    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink) override;
 
     virtual int run() override;
 

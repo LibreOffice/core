@@ -977,8 +977,8 @@ void SfxBaseController::CopyLokViewCallbackFromFrameCreator()
     if (m_pData->m_xFrame)
         if (auto xCreator = m_pData->m_xFrame->getCreator())
             if (auto parentVS = SfxViewShell::Get(xCreator->getController()))
-                pCallback = parentVS->getLibreOfficeKitViewCallback();
-    m_pData->m_pViewShell->setLibreOfficeKitViewCallback(pCallback);
+                pCallback = parentVS->getCOKitViewCallback();
+    m_pData->m_pViewShell->setCOKitViewCallback(pCallback);
 }
 
 SfxViewShell* SfxBaseController::GetViewShell_Impl() const

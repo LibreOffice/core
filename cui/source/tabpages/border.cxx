@@ -338,7 +338,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
 
     if (aBorderImageIds.empty())
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             aBorderImageIds.insert(aBorderImageIds.end(), {
                 RID_SVXBMP_CELL_NONE_32,
@@ -385,7 +385,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     static std::vector<OUString> aShadowImageIds;
     if (aShadowImageIds.empty())
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             aShadowImageIds.insert(aShadowImageIds.end(), {
                 RID_SVXBMP_SHADOWNONE_32,

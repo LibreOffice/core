@@ -171,7 +171,7 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
         m_xBackgroundBtn->set_help_id( u"SVX_HID_FOOTER_BUTTONMORE"_ustr );
 
         // uitest
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             m_xCntSharedBox->set_buildable_name(m_xCntSharedBox->get_buildable_name() + "-footer");
             m_xCntSharedFirstBox->set_buildable_name(m_xCntSharedFirstBox->get_buildable_name()
@@ -186,7 +186,7 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
         m_xTurnOnBox = m_xBuilder->weld_check_button(u"checkHeaderOn"_ustr);
 
         // uitest
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             m_xCntSharedBox->set_buildable_name(m_xCntSharedBox->get_buildable_name() + "-header");
             m_xCntSharedFirstBox->set_buildable_name(m_xCntSharedFirstBox->get_buildable_name()

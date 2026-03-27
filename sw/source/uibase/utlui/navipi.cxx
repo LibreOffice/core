@@ -451,7 +451,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_bGlobalMode(false)
 {
     InitContentFunctionsToolbar();
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         sal_uInt64 nShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
         jsdialog::SendNavigatorForView(nShellId);
@@ -465,7 +465,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
             dynamic_cast<NavElementToolBoxControl*>(xController.get());
 
     // In case of LOK, the xController may not a NavElementToolBoxControl
-    if (comphelper::LibreOfficeKit::isActive() && !pToolBoxControl)
+    if (comphelper::COKit::isActive() && !pToolBoxControl)
     {
         m_pNavigateByComboBox = nullptr;
     }
@@ -570,7 +570,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
 
     m_aExpandedSize = m_xContainer->get_preferred_size();
 
-    if(comphelper::LibreOfficeKit::isActive())
+    if(comphelper::COKit::isActive())
     {
         m_xBuilder->weld_container(u"gridcontent16"_ustr)->hide();
         m_xDocListBox->hide();
@@ -1177,7 +1177,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
 // toggle between showing the global tree or the content tree
 void SwNavigationPI::ToggleTree()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         m_xGlobalTree->HideTree();
         return;

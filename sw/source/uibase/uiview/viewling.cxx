@@ -594,7 +594,7 @@ bool SwView::ExecSpellPopup(const Point& rPt, bool bIsMouseEvent)
         {
             const bool bOldViewLock = m_pWrtShell->IsViewLocked();
             m_pWrtShell->LockView( true );
-            if (!comphelper::LibreOfficeKit::isActive())
+            if (!comphelper::COKit::isActive())
                 m_pWrtShell->Push();
             SwRect aToFill;
 
@@ -737,7 +737,7 @@ bool SwView::ExecSpellPopup(const Point& rPt, bool bIsMouseEvent)
                     }
                     else
                     {
-                        if (comphelper::LibreOfficeKit::isActive())
+                        if (comphelper::COKit::isActive())
                         {
                             if (SfxViewShell* pViewShell = SfxViewShell::Current())
                             {
@@ -758,7 +758,7 @@ bool SwView::ExecSpellPopup(const Point& rPt, bool bIsMouseEvent)
                 }
             }
 
-            if (!comphelper::LibreOfficeKit::isActive())
+            if (!comphelper::COKit::isActive())
                 m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
             m_pWrtShell->LockView( bOldViewLock );
         }

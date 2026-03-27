@@ -627,7 +627,7 @@ void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
         return;
 
     if (SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView())
-        pDrawView->SetNegativeX(comphelper::LibreOfficeKit::isActive() &&
+        pDrawView->SetNegativeX(comphelper::COKit::isActive() &&
             pViewData->GetDocument().IsLayoutRTL(nPart));
 
     pTabView->SelectTabPage(nPart + 1);
@@ -1238,8 +1238,8 @@ void ScModelObj::setClientVisibleArea(const tools::Rectangle& rRectangle)
     // Store the visible area so that we can use at places like shape insertion
     pViewData->setLOKVisibleArea(rRectangle);
 
-    if (comphelper::LibreOfficeKit::isCompatFlagSet(
-            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    if (comphelper::COKit::isCompatFlagSet(
+            comphelper::COKit::Compat::scPrintTwipsMsgs))
     {
         ScTabView* pTabView = pViewData->GetView();
         if (pTabView)
@@ -3798,7 +3798,7 @@ void lcl_dataAreaInvalidation(ScModelObj* pModel,
         bool bInvalidate = bAreaExtended || bInvalidateDataArea;
         if ( bInvalidate )
         {
-            if ( comphelper::LibreOfficeKit::isActive() )
+            if ( comphelper::COKit::isActive() )
                 SfxLokHelper::notifyPartSizeChangedAllViews( pModel, nTab );
         }
     }

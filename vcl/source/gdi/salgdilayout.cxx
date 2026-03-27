@@ -783,7 +783,7 @@ bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const
 
     bool bLayoutRTL = true && (m_nLayout & SalLayoutFlags::BiDiRtl);
     bool bDevRTL = rOutDev.IsRTLEnabled();
-    bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+    bool bIsLOK = comphelper::COKit::isActive();
     if( (bLayoutRTL || bDevRTL) && !bIsLOK )
     {
         mirror(aControlRegion, rOutDev);
@@ -887,8 +887,8 @@ OUString SalGraphics::getRenderBackendName() const
 
 bool SalGraphics::ShouldDownscaleIconsAtSurface(double& rScaleOut) const
 {
-    rScaleOut = comphelper::LibreOfficeKit::getDPIScale();
-    return comphelper::LibreOfficeKit::isActive();
+    rScaleOut = comphelper::COKit::getDPIScale();
+    return comphelper::COKit::isActive();
 }
 
 bool SalGraphics::DrawBitmapWallpaper(

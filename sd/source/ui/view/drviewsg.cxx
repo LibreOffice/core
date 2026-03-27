@@ -125,7 +125,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
             pOptions->SetGridVisible( !mpDrawView->IsGridVisible() );
 
             SfxViewShell* pViewShell = SfxViewShell::Current();
-            if (pViewShell && comphelper::LibreOfficeKit::isActive())
+            if (pViewShell && comphelper::COKit::isActive())
             {
                 OString state = !mpDrawView->IsGridVisible() ? ".uno:GridVisible=true"_ostr: ".uno:GridVisible=false"_ostr;
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, state);
@@ -138,7 +138,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
             pOptions->SetUseGridSnap( !mpDrawView->IsGridSnap() );
 
             SfxViewShell* pViewShell = SfxViewShell::Current();
-            if (pViewShell && comphelper::LibreOfficeKit::isActive())
+            if (pViewShell && comphelper::COKit::isActive())
             {
                 OString state = !mpDrawView->IsGridSnap() ? ".uno:GridUse=true"_ostr: ".uno:GridUse=false"_ostr;
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, state);

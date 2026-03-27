@@ -603,7 +603,7 @@ static bool LoadURL(const SfxViewShell& rView, const OUString& rURL, LoadUrlFlag
 
     // We are doing tiledRendering, let the client handles the URL loading,
     // unless we are jumping to a TOC mark.
-    if (comphelper::LibreOfficeKit::isActive() && !rURL.startsWith("#"))
+    if (comphelper::COKit::isActive() && !rURL.startsWith("#"))
     {
         rView.libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8());
         return true;
@@ -632,7 +632,7 @@ static bool LoadURL(const SfxViewShell& rView, const OUString& rURL, LoadUrlFlag
     //#39076# Silent can be removed accordingly to SFX.
     SfxBoolItem aBrowse( SID_BROWSE, true );
 
-    if ((nFilter & LoadUrlFlags::NewView) && !comphelper::LibreOfficeKit::isActive())
+    if ((nFilter & LoadUrlFlags::NewView) && !comphelper::COKit::isActive())
         aTargetFrameName.SetValue( u"_blank"_ustr );
 
     const SfxPoolItem* aArr[] = {

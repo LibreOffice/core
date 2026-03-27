@@ -69,7 +69,7 @@ OString escapeJSON(const OUString &aStr)
 void lcl_lokGetWholeFunctionList()
 {
     const SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (!(comphelper::LibreOfficeKit::isActive()
+    if (!(comphelper::COKit::isActive()
         && pViewShell && pViewShell->isLOKMobilePhone()))
         return;
 
@@ -271,7 +271,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     // Enter
                     // NOTE: This also means we want to set the modified state
                     // regardless of the DontCommit parameter's value.
-                    if (comphelper::LibreOfficeKit::isActive() && !GetViewData().GetDocShell()->IsModified())
+                    if (comphelper::COKit::isActive() && !GetViewData().GetDocShell()->IsModified())
                     {
                         GetViewData().GetDocShell()->SetModified();
                         rBindings.Invalidate(SID_SAVEDOC);
@@ -415,7 +415,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_OPENDLG_FUNCTION:
             {
                 const SfxViewShell* pViewShell = SfxViewShell::Current();
-                if (comphelper::LibreOfficeKit::isActive()
+                if (comphelper::COKit::isActive()
                     && pViewShell && pViewShell->isLOKMobilePhone())
                 {
                     // not set the dialog id in the mobile case or we would
@@ -428,7 +428,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     sal_uInt16 nId = SID_OPENDLG_FUNCTION;
                     SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
                     SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
-                    bool bVis = comphelper::LibreOfficeKit::isActive() || pWnd == nullptr;
+                    bool bVis = comphelper::COKit::isActive() || pWnd == nullptr;
                     pScMod->SetRefDialog( nId, bVis );
                 }
                 rReq.Ignore();
@@ -1147,7 +1147,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             aInputOptions.SetMoveKeepEdit(pEnabledArg->GetValue());
             pScMod->SetInputOptions(aInputOptions);
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 pTabViewShell->SetMoveKeepEdit(pEnabledArg->GetValue());
 
             break;

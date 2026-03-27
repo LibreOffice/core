@@ -3,7 +3,7 @@
 ## Bootstrap
 
 Contains common code for all projects on Android to bootstrap LibreOffice. In
-addition it is a home to `LibreOfficeKit` (LOK - see `libreofficekit/README.md`) JNI
+addition it is a home to `COKit` (LOK - see `libreofficekit/README.md`) JNI
 classes.
 
 ## Stuff in Source Directory
@@ -21,12 +21,12 @@ The application implements editing support using 4 threads:
    amount of time.
 2. An OpenGL thread which contains the OpenGL context and is responsible for drawing
    all layers (including tiles) to the screen.
-3. A thread (`LOKitThread`), that performs `LibreOfficeKit` calls, which may take more time
+3. A thread (`LOKitThread`), that performs `COKit` calls, which may take more time
    to complete. In addition it also receives events from the soffice thread (see below)
    when the callback emits an event. Events are stored in a blocking queue (thread
    processes events in FCFS order, goes to sleep when no more event is available and
    awakens when there are events in the queue again).
-4. A native thread created by LibreOfficeKit (we call it the soffice thread), where
+4. A native thread created by COKit (we call it the soffice thread), where
    LibreOffice itself runs. It receives calls from `LOKitThread`, and may emit callback
    events as necessary.
 

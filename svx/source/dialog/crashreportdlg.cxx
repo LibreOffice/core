@@ -20,8 +20,7 @@
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-IMPL_STATIC_LINK_NOARG(CrashReportDialog, InstallLOKNotifierHdl, void*,
-                       vcl::ILibreOfficeKitNotifier*)
+IMPL_STATIC_LINK_NOARG(CrashReportDialog, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*)
 {
     return GetpApp();
 }

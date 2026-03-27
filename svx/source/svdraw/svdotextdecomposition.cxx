@@ -362,7 +362,7 @@ const SfxItemSet* SdrObject::getBackgroundFillSet() const
                     // See unomodel.cxx: "It is guaranteed, that after a standard page the corresponding notes page follows."
                     bool notesPage = pOwnerPage->GetPageNum() % 2 == 0;
 
-                    if (!comphelper::LibreOfficeKit::isActive() || !notesPage || !pOwnerPage->getSdrModelFromSdrPage().IsImpress())
+                    if (!comphelper::COKit::isActive() || !notesPage || !pOwnerPage->getSdrModelFromSdrPage().IsImpress())
                         pBackgroundFillSet = &pOwnerPage->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
                     else {
                         // See sdrmasterpagedescriptor.cxx: e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).

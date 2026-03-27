@@ -135,7 +135,7 @@ DrawViewShell::DrawViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParen
     SdModule* mod = SdModule::get();
     mod->GetColorConfig().AddListener(this);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // get the full page size in pixels
         mpContentWindow->EnableMapMode();

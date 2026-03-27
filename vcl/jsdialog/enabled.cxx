@@ -746,7 +746,7 @@ std::vector<OUString> completeCalcSidebarList(const o3tl::sorted_vector<OUString
 }
 
 std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUString>& entries,
-                                                /*LibreOfficeKitDocumentType*/ int docType)
+                                                /*COKitDocumentType*/ int docType)
 {
     std::vector<OUString> missing;
     for (const auto& entry : SidebarList)
@@ -817,7 +817,7 @@ std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUStri
 }
 
 std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries,
-                                               /*LibreOfficeKitDocumentType*/ int docType,
+                                               /*COKitDocumentType*/ int docType,
                                                bool linguisticDataAvailable)
 {
     std::vector<OUString> missing;

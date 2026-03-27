@@ -832,7 +832,7 @@ void DockingWindow::setPosSizePixel( tools::Long nX, tools::Long nY,
     {
         if (!mpFloatWin)
             Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
-        else if (comphelper::LibreOfficeKit::isActive())
+        else if (comphelper::COKit::isActive())
         {
             if ((nFlags & PosSizeFlags::Size) == PosSizeFlags::Size)
                 mpFloatWin->SetOutputSizePixel({ nWidth, nHeight });
@@ -926,7 +926,7 @@ Point DockingWindow::GetFloatingPos() const
             pWrapper->mpFloatWin->GetWindowState( aData );
             AbsoluteScreenPixelPoint aPos(aData.x(), aData.y());
             // LOK needs logic coordinates not absolute screen position for autofilter menu
-            if (!comphelper::LibreOfficeKit::isActive())
+            if (!comphelper::COKit::isActive())
                 return pWrapper->mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
             return Point(aPos);
         }

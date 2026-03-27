@@ -76,7 +76,7 @@ SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* /*pCW*/, weld::Window
     AddTabPage(u"variables"_ustr, TabResId(RID_TAB_VARIABLES.aLabel), SwFieldVarPage::Create,
                RID_M + RID_TAB_VARIABLES.sIconName);
 
-    if (!bHtmlMode && !comphelper::LibreOfficeKit::isActive())
+    if (!bHtmlMode && !comphelper::COKit::isActive())
     {
         utl::OConfigurationTreeRoot aCfgRoot
             = utl::OConfigurationTreeRoot::createWithComponentContext(

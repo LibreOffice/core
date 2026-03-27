@@ -253,10 +253,10 @@ FieldUnit SfxModule::GetCurrentFieldUnit()
 
 FieldUnit SfxModule::GetFieldUnit() const
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         MeasurementSystem eSystem
-            = LocaleDataWrapper(comphelper::LibreOfficeKit::getLocale()).getMeasurementSystemEnum();
+            = LocaleDataWrapper(comphelper::COKit::getLocale()).getMeasurementSystemEnum();
         return MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
     }
     FieldUnit eUnit = FieldUnit::INCH;

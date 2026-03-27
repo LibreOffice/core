@@ -167,7 +167,7 @@ void LayoutPanels (
     }
 
     if (nTotalMinimumHeight > nAvailableHeight && !bShowVerticalScrollBar
-        && !comphelper::LibreOfficeKit::isActive())
+        && !comphelper::COKit::isActive())
     {
         // Not enough space, even when all panels are shrunk to their
         // minimum height.

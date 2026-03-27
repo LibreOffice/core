@@ -25,10 +25,10 @@ typedef std::pair<const OString, const OString> LOKPayloadItem;
 
 typedef sal_uInt32 LOKWindowId;
 
-class VCL_DLLPUBLIC ILibreOfficeKitNotifier
+class VCL_DLLPUBLIC ICOKitNotifier
 {
 public:
-    virtual ~ILibreOfficeKitNotifier();
+    virtual ~ICOKitNotifier();
 
     /// Callbacks
     virtual void notifyWindow(vcl::LOKWindowId nLOKWindowId,

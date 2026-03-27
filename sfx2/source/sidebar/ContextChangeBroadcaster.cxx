@@ -55,7 +55,7 @@ void ContextChangeBroadcaster::Activate (const css::uno::Reference<css::frame::X
 
 void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
-    if (msContextName.getLength() > 0 && !comphelper::LibreOfficeKit::isActive())
+    if (msContextName.getLength() > 0 && !comphelper::COKit::isActive())
     {
         BroadcastContextChange(rxFrame, GetModuleName(rxFrame),
                                vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Default));
@@ -93,7 +93,7 @@ void ContextChangeBroadcaster::BroadcastContextChange (
         rsContextName);
 
     // notify the LOK too
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         SfxLokHelper::notifyContextChange(aEvent);
     }

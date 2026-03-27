@@ -129,7 +129,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
 
     if ( nCurRefDlgId != nSlotId )
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             //  the dialog has been opened in a different view
             //  -> lock the dispatcher for this view (modal mode)
@@ -553,7 +553,7 @@ css::uno::Reference<css::datatransfer::XTransferable2> ScTabViewShell::GetClipDa
 
 void ScTabViewShell::notifyAllViewsHeaderInvalidation(const SfxViewShell* pForViewShell, HeaderType eHeaderType, SCTAB nCurrentTabIndex)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     OString aPayload;
@@ -586,7 +586,7 @@ void ScTabViewShell::notifyAllViewsHeaderInvalidation(const SfxViewShell* pForVi
 
 bool ScTabViewShell::isAnyEditViewInRange(const SfxViewShell* pForViewShell, bool bColumns, SCCOLROW nStart, SCCOLROW nEnd)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while (pViewShell)
@@ -613,9 +613,9 @@ void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pFo
                                                          bool bRows, bool bSizes, bool bHidden, bool bFiltered,
                                                          bool bGroups, SCTAB nCurrentTabIndex)
 {
-    if (!comphelper::LibreOfficeKit::isActive() ||
-            !comphelper::LibreOfficeKit::isCompatFlagSet(
-                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    if (!comphelper::COKit::isActive() ||
+            !comphelper::COKit::isCompatFlagSet(
+                comphelper::COKit::Compat::scPrintTwipsMsgs))
         return;
 
     if (!bColumns && !bRows)

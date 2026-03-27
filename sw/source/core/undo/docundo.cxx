@@ -104,7 +104,7 @@ void UndoManager::SetView(SwView* pView)
 size_t UndoManager::GetUndoActionCount(const bool bCurrentLevel) const
 {
     size_t nRet = SdrUndoManager::GetUndoActionCount(bCurrentLevel);
-    if (!comphelper::LibreOfficeKit::isActive() || !m_pView)
+    if (!comphelper::COKit::isActive() || !m_pView)
         return nRet;
 
     if (!nRet || !SdrUndoManager::GetUndoActionCount())
@@ -128,7 +128,7 @@ size_t UndoManager::GetUndoActionCount(const bool bCurrentLevel) const
 size_t UndoManager::GetRedoActionCount(const bool bCurrentLevel) const
 {
     size_t nRet = SdrUndoManager::GetRedoActionCount(bCurrentLevel);
-    if (!comphelper::LibreOfficeKit::isActive() || !m_pView)
+    if (!comphelper::COKit::isActive() || !m_pView)
         return nRet;
 
     if (!nRet || !SdrUndoManager::GetRedoActionCount())
@@ -456,7 +456,7 @@ UndoManager::GetLastUndoInfo(
 
     SfxUndoAction *const pAction( SdrUndoManager::GetUndoAction() );
 
-    if (comphelper::LibreOfficeKit::isActive() && !m_bRepair)
+    if (comphelper::COKit::isActive() && !m_bRepair)
     {
         // If another view created the undo action, prevent undoing it from this view.
         ViewShellId nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
@@ -521,7 +521,7 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
         return false;
     }
 
-    if (comphelper::LibreOfficeKit::isActive() && !m_bRepair)
+    if (comphelper::COKit::isActive() && !m_bRepair)
     {
         // If another view created the undo action, prevent redoing it from this view.
         ViewShellId nViewShellId = pView ? pView->GetViewShellId() : m_pDocShell->GetView()->GetViewShellId();
@@ -674,7 +674,7 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo, size_t nUndoOffset)
 
     SwView* pViewShell = dynamic_cast<SwView*>(SfxViewShell::Current());
     SwEditShell *const pEditShell(
-        comphelper::LibreOfficeKit::isActive() && pViewShell ? pViewShell->GetWrtShellPtr()
+        comphelper::COKit::isActive() && pViewShell ? pViewShell->GetWrtShellPtr()
         : rDoc.GetEditShell());
     OSL_ENSURE(pEditShell, "sw::UndoManager needs a SwEditShell!");
     if (!pEditShell)

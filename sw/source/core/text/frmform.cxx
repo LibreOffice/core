@@ -390,7 +390,7 @@ void SwTextFrame::MakePos()
     }
 
     // Inform LOK clients about change in position of redlines (if any)
-    if(!comphelper::LibreOfficeKit::isActive())
+    if(!comphelper::COKit::isActive())
         return;
 
     SwTextNode const* pTextNode = GetTextNodeFirst();

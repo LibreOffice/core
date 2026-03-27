@@ -489,7 +489,7 @@ void Control::LogicInvalidate(const tools::Rectangle* pRectangle)
     }
 
     // avoid endless paint/invalidate loop in Impress
-    if (comphelper::LibreOfficeKit::isTiledPainting())
+    if (comphelper::COKit::isTiledPainting())
         return;
 
     tools::Rectangle aResultRectangle;

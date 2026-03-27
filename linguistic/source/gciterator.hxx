@@ -82,7 +82,7 @@ class GrammarCheckingIterator:
         css::lang::XServiceInfo
     >,
     public LinguDispatcher,
-    public comphelper::LibreOfficeKit::ThreadJoinable
+    public comphelper::COKit::ThreadJoinable
 {
     //the queue is keeping track of all sentences to be checked
     //every element of this queue is a FlatParagraphEntry struct-object
@@ -188,7 +188,7 @@ public:
     virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) override;
     virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const override;
 
-    // comphelper::LibreOfficeKit::ThreadJoinable
+    // comphelper::COKit::ThreadJoinable
     virtual bool joinThreads() override;
 };
 

@@ -422,7 +422,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_INSERT_SMA:
         {
             // if sidebar is closed - open to show elements deck
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 sfx2::sidebar::Sidebar::Setup(u"");
 
             // #i34343# Inserting a math object into an autocompletion crashes

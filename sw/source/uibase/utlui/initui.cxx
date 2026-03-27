@@ -144,16 +144,16 @@ void ShellResource::Build()
 
     mxAutoFormatNameLst.reset();
 
-    if (comphelper::LibreOfficeKit::isActive())
-        m_aUILanguage = comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
+    if (comphelper::COKit::isActive())
+        m_aUILanguage = comphelper::COKit::getLanguageTag().getBcp47();
 }
 
 void ShellResource::RebuildIfNeeded()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
-    OUString aCurrLang = comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
+    OUString aCurrLang = comphelper::COKit::getLanguageTag().getBcp47();
     if (aCurrLang != m_aUILanguage)
         Build();
 }

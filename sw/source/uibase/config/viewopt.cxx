@@ -109,7 +109,7 @@ SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
     m_aFieldShadingsColor = aValue.nColor;
     // as in initializeForTiledRendering we don't want to enable
     // field shadings for the online case
-    if (aValue.bIsVisible && !comphelper::LibreOfficeKit::isActive())
+    if (aValue.bIsVisible && !comphelper::COKit::isActive())
         m_nAppearanceFlags |= ViewOptFlags::FieldShadings;
 
     m_aSectionBoundColor = rConfig.GetColorValue(svtools::WRITERSECTIONBOUNDARIES).nColor;
@@ -282,7 +282,7 @@ SwViewOption::SwViewOption() :
              m_bTest5 = m_bTest6 = m_bTest7 = m_bTest8 = m_bTest10 = false;
 #endif
     m_aColorConfig = s_aInitialColorConfig;
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         m_aColorConfig.m_aAppBackgroundColor = COL_TRANSPARENT;
 }
 

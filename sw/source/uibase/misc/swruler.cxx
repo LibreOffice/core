@@ -116,7 +116,7 @@ sw::sidebarwindows::SidebarPosition SwCommentRuler::GetSidebarPosition()
 
 void SwCommentRuler::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return; // no need to waste time on startup
 
     SvxRuler::Paint(rRenderContext, rRect);

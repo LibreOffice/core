@@ -3382,7 +3382,7 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
     // Draw Form controls
-    comphelper::LibreOfficeKit::setTiledPainting(true);
+    comphelper::COKit::setTiledPainting(true);
     SwDrawModel* pDrawLayer = GetDocOrThrow().getIDocumentDrawModelAccess().GetDrawModel();
     SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(0));
     SdrView* pDrawView = pViewShell->GetDrawView();
@@ -3390,7 +3390,7 @@ void SwXTextDocument::paintTile( VirtualDevice &rDevice,
     tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
     Size aOutputSize(nOutputWidth, nOutputHeight);
     LokControlHandler::paintControlTile(pPage, pDrawView, rEditWin, rDevice, aOutputSize, aTileRect);
-    comphelper::LibreOfficeKit::setTiledPainting(false);
+    comphelper::COKit::setTiledPainting(false);
 }
 
 Size SwXTextDocument::getDocumentSize()
@@ -3984,7 +3984,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // editing, see postMouseEvent and setGraphicSelection methods.
     aViewOption.SetZoom(1 * 100);
 
-    aViewOption.SetPostIts(comphelper::LibreOfficeKit::isTiledAnnotations());
+    aViewOption.SetPostIts(comphelper::COKit::isTiledAnnotations());
     pViewShell->ApplyViewOptions(aViewOption);
 
     // position the pages again after setting view options. Eg: if postit

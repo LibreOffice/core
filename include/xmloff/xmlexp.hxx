@@ -89,7 +89,7 @@ namespace com::sun::star {
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 
 namespace model { class Theme; }
-namespace vcl { class ILibreOfficeKitNotifier; }
+namespace vcl { class ICOKitNotifier; }
 
 enum class SvXMLExportFlags {
     NONE                     = 0,
@@ -154,7 +154,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     std::unique_ptr<XMLEventExport> mpEventExport;
     std::unique_ptr<XMLImageMapExport> mpImageMapExport;
     std::unique_ptr<XMLErrors>  mpXMLErrors;
-    vcl::ILibreOfficeKitNotifier* mpNotifier = nullptr;
+    vcl::ICOKitNotifier* mpNotifier = nullptr;
 
     const enum ::xmloff::token::XMLTokenEnum meClass;
     SAL_DLLPRIVATE void InitCtor_();
@@ -586,7 +586,7 @@ public:
     /// Get clamped mimetype for image export (empty if none)
     OUString const & GetImageFilterName() const;
 
-    void SetLibreOfficeKitNotifier(vcl::ILibreOfficeKitNotifier* pNotifier);
+    void SetCOKitNotifier(vcl::ICOKitNotifier* pNotifier);
 };
 
 inline rtl::Reference< XMLTextParagraphExport > const & SvXMLExport::GetTextParagraphExport()

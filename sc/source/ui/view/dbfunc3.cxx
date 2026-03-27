@@ -2396,7 +2396,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
 
 void ScDBFunc::OnLOKShowHideColRow(bool bColumns, SCCOLROW nStart)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     SCTAB nCurrentTabIndex = GetViewData().GetTabNumber();

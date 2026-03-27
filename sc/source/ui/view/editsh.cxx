@@ -604,7 +604,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     bool bCellLinksOnly
                         = (ScModule::get()->GetAppOptions().GetLinksInsertedLikeMSExcel()
                           && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())
-                          || comphelper::LibreOfficeKit::isActive();
+                          || comphelper::COKit::isActive();
 
                     bool bDone = false;
                     if ( (eMode == HLINK_DEFAULT || eMode == HLINK_FIELD) && !bCellLinksOnly )
@@ -817,7 +817,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     bool bCellLinksOnly
                         = (ScModule::get()->GetAppOptions().GetLinksInsertedLikeMSExcel()
                           && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())
-                          || comphelper::LibreOfficeKit::isActive();
+                          || comphelper::COKit::isActive();
                     std::unique_ptr<const SvxFieldData> aSvxFieldDataPtr(GetURLField());
                     const SvxURLField* pURLField(static_cast<const SvxURLField*>(aSvxFieldDataPtr.get()));
                     if (!bCellLinksOnly)

@@ -229,7 +229,7 @@ void EditView::InvalidateWindow(const tools::Rectangle& rClipRect)
 
 void EditView::InvalidateOtherViewWindows( const tools::Rectangle& rInvRect )
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         bool bNegativeX = IsNegativeX();
         for (auto& pWin : getImpl().maOutWindowSet)
@@ -997,7 +997,7 @@ bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWron
 static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLangWord,
                                   LanguageType nGuessLangPara, sal_uInt16 nSuggestions)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     // Generate the menu structure and send it to the client code.
@@ -1256,7 +1256,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel,
     EPaM aP = getImpEditEngine().CreateEPaM(aPaM);
     EPaM aP2 = getImpEditEngine().CreateEPaM(aPaM2);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         xPopupMenu->remove(u"autocorrect"_ustr);
         xPopupMenu->remove(u"autocorrectdlg"_ustr);

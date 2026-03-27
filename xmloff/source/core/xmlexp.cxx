@@ -1819,7 +1819,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
         return;
 
     std::optional<css::uno::ContextLayer> oLayer;
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         oLayer.emplace(comphelper::NewFlagContext(u"IsLOKExport"_ustr));
     }
@@ -2496,7 +2496,7 @@ OUString const & SvXMLExport::GetImageFilterName() const
     return msImgFilterName;
 }
 
-void SvXMLExport::SetLibreOfficeKitNotifier(vcl::ILibreOfficeKitNotifier* pNotifier)
+void SvXMLExport::SetCOKitNotifier(vcl::ICOKitNotifier* pNotifier)
 {
     mpNotifier = pNotifier;
 }

@@ -51,7 +51,7 @@ void gtv_main_toolbar_set_sensitive_internal(GtvMainToolbar* toolbar, GtkToolIte
 /// Use internal sensitivity map to set actual widget's sensitiveness
 void gtv_main_toolbar_set_edit(GtvMainToolbar* toolbar, gboolean bEdit);
 
-void gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType eDocType, bool bEditMode);
+void gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, COKitDocumentType eDocType, bool bEditMode);
 
 void gtv_main_toolbar_add_recent_uno(GtvMainToolbar* toolbar, const std::string& rUnoCmdStr);
 

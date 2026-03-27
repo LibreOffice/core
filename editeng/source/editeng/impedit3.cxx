@@ -4793,7 +4793,7 @@ Color ImpEditEngine::GetAutoColor(const SvxFont* pFont) const
     if (aBackgroundColor == COL_AUTO) // check for aother background (i.e: cell color)
         aBackgroundColor = GetBackgroundColor();
 
-    const SfxViewShell* pKitSh = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr;
+    const SfxViewShell* pKitSh = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr;
     if (pKitSh)
     {
         if (aBackgroundColor == COL_AUTO) // if everything is auto/transparent then use doc color

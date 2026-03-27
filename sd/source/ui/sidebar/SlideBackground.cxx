@@ -355,7 +355,7 @@ void SlideBackground::HandleContextChange(
     // to prompt the user to select a file. This is useless in LOOL.
     // Hide for now so the user will only be able to use the menu to insert
     // background image, which prompts the user for file selection in the browser.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         mxInsertImage->hide();
 }
 

@@ -155,7 +155,7 @@ public:
     void            Activate() override;
 
     void            SetPopupMenuHdl(const Link<const CommandEvent&, bool>& rLink);
-    void            SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink);
+    void            SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink);
     void            SetLOKTunnelingState(bool bEnabled);
 
     void            add_button(PushButton* pButton, int nResponse, bool bTransferOwnership);

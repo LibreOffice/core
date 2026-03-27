@@ -232,7 +232,7 @@ handleCertificateValidationRequest_(
     uno::Reference< task::XInteractionAbort > xAbort;
     getContinuations(rContinuations, &xApprove, &xAbort);
 
-    if ( comphelper::LibreOfficeKit::isActive() && xApprove.is() )
+    if ( comphelper::COKit::isActive() && xApprove.is() )
     {
         xApprove->select();
         return;

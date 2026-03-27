@@ -1618,7 +1618,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 aTabStops.SetWhich(nWhich);
                 rSet.Put(aTabStops);
 
-                if (comphelper::LibreOfficeKit::isActive() && nWhich == RES_PARATR_TABSTOP)
+                if (comphelper::COKit::isActive() && nWhich == RES_PARATR_TABSTOP)
                 {
                     boost::property_tree::ptree aRootTree;
                     boost::property_tree::ptree aEntries;

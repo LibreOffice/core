@@ -53,7 +53,7 @@ IconThemeSelector::IconThemeSelector()
 /*static*/ OUString
 IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment, bool bPreferDarkIconTheme)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         if (!bPreferDarkIconTheme)
             return u"colibre"_ustr;

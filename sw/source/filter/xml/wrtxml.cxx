@@ -578,7 +578,7 @@ bool SwXMLWriter::WriteThroughComponent(
     auto pFilter = dynamic_cast<SvXMLExport*>(xFilter.get());
     if (pFilter)
     {
-        pFilter->SetLibreOfficeKitNotifier(SfxViewShell::Current());
+        pFilter->SetCOKitNotifier(SfxViewShell::Current());
         pFilter->setEmbeddedFontFiles(maEmbeddedFontFiles);
     }
     bool result = xFilter->filter( rMediaDesc );

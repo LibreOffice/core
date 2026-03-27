@@ -45,7 +45,7 @@ void ScDefaultsOptions::SetInitTabPrefix(const OUString& aPrefix)
 
 OUString ScDefaultsOptions::GetInitTabPrefix() const
 {
-    if (comphelper::LibreOfficeKit::isActive() && !bInitTabPrefixChanged)
+    if (comphelper::COKit::isActive() && !bInitTabPrefixChanged)
     {
         // LOKit may have different users with different locales, so the proper
         // translation of the default TabPrefix has to be fetched each time

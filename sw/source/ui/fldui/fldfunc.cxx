@@ -79,7 +79,7 @@ SwFieldFuncPage::SwFieldFuncPage(weld::Container* pPage, weld::DialogController*
     m_xCond1ED->ShowBrackets(false);
     m_xCond2ED->ShowBrackets(false);
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         // uitests
         m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-func");

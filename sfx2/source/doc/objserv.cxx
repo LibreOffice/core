@@ -508,7 +508,7 @@ void SetDocProperties(const uno::Reference<document::XDocumentProperties>& xDP,
 
 void SfxObjectShell::AfterSignContent(bool bHaveWeSigned, weld::Window* pDialogParent)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // LOK signing certificates are per-view, don't store them in the model.
         return;
@@ -992,7 +992,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_SAVEDOC:
         {
             // so far only pdf and epub support Async interface
-            if (comphelper::LibreOfficeKit::isActive() && rReq.GetCallMode() == SfxCallMode::ASYNCHRON
+            if (comphelper::COKit::isActive() && rReq.GetCallMode() == SfxCallMode::ASYNCHRON
                 && (nId == SID_EXPORTDOCASEPUB || nId == SID_EXPORTDOCASPDF))
                 bIsAsync = true;
 
@@ -1123,7 +1123,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 bool bForceSaveAs = nId == SID_SAVEDOC && IsReadOnlyMedium();
 
-                if (comphelper::LibreOfficeKit::isActive() && bForceSaveAs)
+                if (comphelper::COKit::isActive() && bForceSaveAs)
                 {
                     // Don't force save as in LOK but report that file cannot be written
                     // to avoid confusion with exporting for file download purpose
@@ -1195,7 +1195,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // may be nErrorCode should be shown in future
             if ( lErr != ERRCODE_IO_ABORT )
             {
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                     sendErrorToLOK(lErr);
                 else
                 {
@@ -1372,7 +1372,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SetModified( false );
             ErrCodeMsg lErr = GetErrorCode();
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 sendErrorToLOK(lErr);
             else
             {

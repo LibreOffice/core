@@ -427,8 +427,8 @@ dbaccess/source/ui/inc/WTypeSelect.hxx:121
     _Bool bEnable
     0
 desktop/qa/desktop_lib/test_desktop_lib.cxx:140
-    struct desktop::LibLODocument_Impl * DesktopLOKTest::loadDocUrl(const class rtl::OUString &,LibreOfficeKitDocumentType)
-    LibreOfficeKitDocumentType eType
+    struct desktop::LibLODocument_Impl * DesktopLOKTest::loadDocUrl(const class rtl::OUString &,COKitDocumentType)
+    COKitDocumentType eType
     1
 desktop/qa/desktop_lib/test_desktop_lib.cxx:3575
     void lcl_repeatKeyStroke(struct desktop::LibLODocument_Impl *,int,int,unsigned long)
@@ -439,7 +439,7 @@ desktop/source/deployment/gui/dp_gui_updatedialog.hxx:100
     _Bool bEnableCheckBox
     0
 desktop/source/lib/init.cxx:8431
-    struct LibreOfficeKitStruct * libreofficekit_hook_2(const char *,const char *)
+    struct COKitStruct * libreofficekit_hook_2(const char *,const char *)
     const char * user_profile_url
     0
 drawinglayer/qa/unit/vclmetafileprocessor2d.cxx:62
@@ -2067,7 +2067,7 @@ l10ntools/inc/po.hxx:112
     enum PoOfstream::OpenMode aMode
     1
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:54
-    void gtv_main_toolbar_doc_loaded(struct GtvMainToolbar *,LibreOfficeKitDocumentType,_Bool)
+    void gtv_main_toolbar_doc_loaded(struct GtvMainToolbar *,COKitDocumentType,_Bool)
     _Bool bEditMode
     1
 libreofficekit/qa/tilebench/tilebench.cxx:72

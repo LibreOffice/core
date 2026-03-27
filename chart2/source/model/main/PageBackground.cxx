@@ -52,7 +52,7 @@ const ::chart::tPropertyValueMap& StaticPageBackgroundDefaults()
 
             // override other defaults
             Color aDocColor = COL_WHITE;
-            if (comphelper::LibreOfficeKit::isActive()) {
+            if (comphelper::COKit::isActive()) {
                 aDocColor = COL_AUTO;
             } else {
                 if (SfxViewShell* pCurrentSh = SfxViewShell::Current()) {

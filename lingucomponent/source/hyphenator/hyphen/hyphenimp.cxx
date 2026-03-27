@@ -151,7 +151,7 @@ void Hyphenator::ensureLocales()
             {
                 for (const auto& rLocaleName : dict.aLocaleNames)
                 {
-                    if (!comphelper::LibreOfficeKit::isAllowlistedLanguage(rLocaleName))
+                    if (!comphelper::COKit::isAllowlistedLanguage(rLocaleName))
                         continue;
                     aLocaleNamesSet.insert( rLocaleName );
                 }

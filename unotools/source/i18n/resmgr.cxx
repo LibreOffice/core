@@ -212,7 +212,7 @@ namespace Translate
         const std::string ret = boost::locale::pgettext(sContextAndId.mpContext, sContextAndId.getId(), loc);
         OUString result(ExpandVariables(OUString::fromUtf8(ret.data())));
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             // If it is de-CH, change sharp s to double s.
             if (std::use_facet<boost::locale::info>(loc).country() == "CH" &&
@@ -243,7 +243,7 @@ namespace Translate
         const std::string ret = boost::locale::npgettext(aContextSingularPlural.mpContext, aContextSingularPlural.mpSingular, aContextSingularPlural.mpPlural, n, loc);
         OUString result(ExpandVariables(OUString::fromUtf8(ret.data())));
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             if (std::use_facet<boost::locale::info>(loc).country() == "CH" &&
                 std::use_facet<boost::locale::info>(loc).language() == "de")

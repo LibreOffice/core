@@ -142,7 +142,7 @@ void ToolbarPopupContainer::setPopover(std::unique_ptr<WeldToolbarPopup> xPopup)
 
     // in online LoseFocus event is fired due to this line and popup is closed
     // when first time opened any popup from not focused sidebar
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         m_xPopup->GrabFocus();
 }
 

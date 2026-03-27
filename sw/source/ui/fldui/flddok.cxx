@@ -74,7 +74,7 @@ SwFieldDokPage::SwFieldDokPage(weld::Container* pPage, weld::DialogController* p
     //enable 'active' language selection
     m_xNumFormatLB->SetShowLanguageControl(true);
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         // uitests
         m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-doc");

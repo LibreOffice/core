@@ -97,7 +97,7 @@ protected:
 
 private:
     void createDialogOnDemand();
-    DECL_STATIC_LINK(CreationWizardUnoDlg, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+    DECL_STATIC_LINK(CreationWizardUnoDlg, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
 
 private:
     rtl::Reference< ::chart::ChartModel     >            m_xChartModel;

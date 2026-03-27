@@ -625,7 +625,7 @@ void SlideTransitionPane::updateControls()
         mxMF_REPEAT_AUTO_AFTER->set_value(rSettings.mnPauseTimeout * 100.0, FieldUnit::SECOND);
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         mxPB_PLAY->hide();
         mxCB_AUTO_PREVIEW->set_active(false);

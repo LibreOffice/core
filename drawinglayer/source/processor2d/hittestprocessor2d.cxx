@@ -155,7 +155,7 @@ namespace drawinglayer::processor2d
                     const Size aSizePixel(rBitmap.GetSizePixel());
 
                     // When tiled rendering, don't bother with the pixel size of the candidate.
-                    if(aSizePixel.Width() && aSizePixel.Height() && !comphelper::LibreOfficeKit::isActive())
+                    if(aSizePixel.Width() && aSizePixel.Height() && !comphelper::COKit::isActive())
                     {
                         basegfx::B2DHomMatrix aBackTransform(
                             getViewInformation2D().getObjectToViewTransformation() *

@@ -513,7 +513,7 @@ IMAGE_SETEVENT:
     }
     else if (m_sBaseURL.isEmpty() || !aGraphicData.isEmpty())
     {
-        if (comphelper::LibreOfficeKit::isActive() && HostFilter::isForbidden(aGraphicURL.GetHost()))
+        if (comphelper::COKit::isActive() && HostFilter::isForbidden(aGraphicURL.GetHost()))
             SfxLokHelper::sendNetworkAccessError("paste");
 
         // sBaseURL is empty if the source is clipboard

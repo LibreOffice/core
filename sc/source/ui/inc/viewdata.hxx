@@ -338,7 +338,7 @@ private:
     sal_Int16           nFormulaBarLines;           // Visible lines in the formula bar
 
     tools::Long                m_nLOKPageUpDownOffset;
-    tools::Rectangle    maLOKVisibleArea;///< The visible area in the LibreOfficeKit client.
+    tools::Rectangle    maLOKVisibleArea;///< The visible area in the COKit client.
 
     DECL_LINK( EditEngineHdl, EditStatus&, void );
 

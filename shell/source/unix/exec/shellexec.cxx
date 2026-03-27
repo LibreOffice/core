@@ -83,7 +83,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 #ifndef EMSCRIPTEN
     OStringBuffer aBuffer, aLaunchBuffer;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         SAL_WARN("shell", "Unusual - shell attempt to launch " << aCommand << " with params " << aParameter << " under lok");
         return;

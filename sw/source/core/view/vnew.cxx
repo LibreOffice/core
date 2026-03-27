@@ -143,7 +143,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt, tools::Long const nFlags)
     }
     SizeChgNotify();
 
-    awt::Rectangle aClientVisibleArea = comphelper::LibreOfficeKit::getInitialClientVisibleArea();
+    awt::Rectangle aClientVisibleArea = comphelper::COKit::getInitialClientVisibleArea();
     if (aClientVisibleArea.Width && aClientVisibleArea.Height)
     {
         maLOKVisibleArea

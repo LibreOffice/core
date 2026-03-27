@@ -868,7 +868,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
 
         /*  Try to reuse the drawing object already created (but only if the
             note is visible, and the object is a caption object). */
-        if( mxAnnotationData->mbShown && mxAnnotationData->mbUseShapePos && !comphelper::LibreOfficeKit::isActive())
+        if( mxAnnotationData->mbShown && mxAnnotationData->mbUseShapePos && !comphelper::COKit::isActive())
         {
             if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
             {
@@ -902,7 +902,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             if (pOutlinerObj)
             {
                 // create cell note with all data from drawing object
-                if(!comphelper::LibreOfficeKit::isActive())
+                if(!comphelper::COKit::isActive())
                 {
                     pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
                         std::move(aItemSet), aStyleName, *pOutlinerObj,
@@ -932,7 +932,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
         if (rXMLImport.GetMM100UnitConverter().convertDateTime(fDate, mxAnnotationData->maCreateDate))
         {
             OUString aDate;
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 //online handles the date format itself in browser
                 aDate = mxAnnotationData->maCreateDate;

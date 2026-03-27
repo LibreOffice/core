@@ -139,7 +139,7 @@ void getRulerState(GtkWidget* pButton, gpointer /*pItem*/)
 {
     const std::string type = ".uno:RulerState";
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     pDocument->pClass->getCommandValues(pDocument, type.c_str());
 }
 
@@ -343,10 +343,10 @@ void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
 
 void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
 {
-    // Just convert directly back to the LibreOfficeKitPartMode enum.
+    // Just convert directly back to the COKitPartMode enum.
     // I.e. the ordering above should match the enum member ordering.
-    LibreOfficeKitPartMode ePartMode =
-        LibreOfficeKitPartMode( gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) ) );
+    COKitPartMode ePartMode =
+        COKitPartMode( gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) ) );
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pSelector));
 
     if ( window->lokdocview )
@@ -453,7 +453,7 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     // Get the data.
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
     if (!pValues)
         return;
@@ -556,7 +556,7 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     // Get the data.
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     // Show it in linear time, so first redo in reverse order, then undo.
     std::vector<std::string> aTypes = {".uno:Redo", ".uno:Undo"};
     std::vector<boost::property_tree::ptree> aTrees;
@@ -769,7 +769,7 @@ void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
 
     // Different reply UNO command for impress
     std::string replyCommand = ".uno:ReplyComment";
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_PRESENTATION)
         replyCommand = ".uno:ReplyToAnnotation";
     lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), replyCommand.c_str(), aArguments.c_str(), false);
@@ -790,7 +790,7 @@ void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
 
     // Different reply UNO command for impress
     std::string deleteCommand = ".uno:DeleteComment";
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     if (pDocument)
     {
         if (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_PRESENTATION)

@@ -24,7 +24,7 @@ SvpSalGraphics::SvpSalGraphics()
     : m_aTextRenderImpl(m_aCairoCommon)
     , m_pBackend(new SvpGraphicsBackend(m_aCairoCommon))
 {
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKActive = comphelper::COKit::isActive();
     initWidgetDrawBackends(bLOKActive);
 }
 
@@ -48,7 +48,7 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 
 bool SvpSalGraphics::ShouldDownscaleIconsAtSurface(double& rScaleOut) const
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return SalGraphics::ShouldDownscaleIconsAtSurface(rScaleOut);
     rScaleOut = m_aCairoCommon.m_fScale;
     return true;

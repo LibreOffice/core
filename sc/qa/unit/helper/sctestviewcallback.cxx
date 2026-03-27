@@ -35,9 +35,8 @@ void ScTestEditCursorMessage::parseMessage(const char* pMessage)
 {
     clear();
     if (!pMessage
-        || !comphelper::LibreOfficeKit::isCompatFlagSet(
-               comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs)
-        || !comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+        || !comphelper::COKit::isCompatFlagSet(comphelper::COKit::Compat::scPrintTwipsMsgs)
+        || !comphelper::COKit::isViewIdForVisCursorInvalidation())
         return;
 
     std::stringstream aStream(pMessage);
@@ -152,7 +151,7 @@ ScTestViewCallback::ScTestViewCallback(bool bDeleteListenerOnDestruct)
     , m_callbackWrapper(&callback, this)
 {
     mpViewShell = SfxViewShell::Current();
-    mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    mpViewShell->setCOKitViewCallback(&m_callbackWrapper);
     mnView = SfxLokHelper::getCurrentView();
     m_callbackWrapper.setLOKViewId(mnView);
     if (!bDeleteListenerOnDestruct)
@@ -164,7 +163,7 @@ ScTestViewCallback::~ScTestViewCallback()
     if (mpViewShell)
     {
         SfxLokHelper::setView(mnView);
-        mpViewShell->setLibreOfficeKitViewCallback(nullptr);
+        mpViewShell->setCOKitViewCallback(nullptr);
     }
 }
 

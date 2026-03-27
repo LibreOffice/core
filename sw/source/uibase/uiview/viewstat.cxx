@@ -226,7 +226,7 @@ void SwView::GetState(SfxItemSet &rSet)
 
                 ::PageDescToItemSet( rDesc, rSet);
 
-                if (nWhich == SID_ATTR_PAGE_ORIENTATION && comphelper::LibreOfficeKit::isActive())
+                if (nWhich == SID_ATTR_PAGE_ORIENTATION && comphelper::COKit::isActive())
                 {
                     OString aPayload = ".uno:Orientation="_ostr;
                     if (rDesc.GetLandscape())
@@ -459,10 +459,10 @@ void SwView::GetState(SfxItemSet &rSet)
                     }
                 }
 
-                // LibreOfficeKit wants to handle changes by index, so always allow here.
+                // COKit wants to handle changes by index, so always allow here.
                 if (bDisable)
                     rSet.DisableItem(nWhich);
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                 {
                     OString aPayload(".uno:TrackedChangeIndex="_ostr);
                     SwRedlineTable::size_type nRedline = 0;

@@ -125,7 +125,7 @@ private:
                                 DECL_LINK( LbColTypeHdl, weld::ComboBox&, void );
                                 DECL_LINK( UpdateTextHdl, ScCsvTableBox&, void );
                                 DECL_LINK( ColTypeHdl, ScCsvTableBox&, void );
-                                DECL_STATIC_LINK(ScImportAsciiDlg, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+                                DECL_STATIC_LINK(ScImportAsciiDlg, InstallLOKNotifierHdl, void*, vcl::ICOKitNotifier*);
 
 };
 

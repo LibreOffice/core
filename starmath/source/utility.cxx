@@ -34,7 +34,7 @@ SmViewShell * SmGetActiveView()
 {
     SfxViewShell *pView = SfxViewShell::Current();
     SmViewShell* pSmView = dynamic_cast<SmViewShell*>(pView);
-    if (!pSmView && comphelper::LibreOfficeKit::isActive())
+    if (!pSmView && comphelper::COKit::isActive())
     {
         auto* pWindow = static_cast<SmGraphicWindow*>(LokStarMathHelper(pView).GetGraphicWindow());
         if (pWindow)

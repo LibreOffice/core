@@ -124,9 +124,9 @@ LOK_DOC_VIEW_DLLPUBLIC gboolean lok_doc_view_open_document_finish  (LOKDocView* 
  *
  * Gets the document the viewer displays.
  *
- * Returns: The #LibreOfficeKitDocument instance the widget is currently showing
+ * Returns: The #COKitDocument instance the widget is currently showing
  */
-LOK_DOC_VIEW_DLLPUBLIC LibreOfficeKitDocument* lok_doc_view_get_document (LOKDocView* pDocView);
+LOK_DOC_VIEW_DLLPUBLIC COKitDocument* lok_doc_view_get_document (LOKDocView* pDocView);
 
 /**
  * lok_doc_view_set_zoom:
@@ -236,7 +236,7 @@ LOK_DOC_VIEW_DLLPUBLIC gboolean lok_doc_view_get_edit              (LOKDocView* 
  * @pArguments: the arguments to the given command
  * @bNotifyWhenFinished: normally false, but it may be useful for eg. .uno:Save
  *
- * Posts the .uno: command to the LibreOfficeKit.
+ * Posts the .uno: command to the COKit.
  */
 LOK_DOC_VIEW_DLLPUBLIC void    lok_doc_view_post_command           (LOKDocView* pDocView,
                                                                     const gchar* pCommand,

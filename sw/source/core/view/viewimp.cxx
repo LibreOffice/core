@@ -122,13 +122,13 @@ SwViewShellImp::~SwViewShellImp()
 bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
 {
     // In case of tiled rendering the visual area is the last painted tile -> not interesting.
-    if ( rRect.Overlaps( m_rShell.VisArea() ) || comphelper::LibreOfficeKit::isActive() )
+    if ( rRect.Overlaps( m_rShell.VisArea() ) || comphelper::COKit::isActive() )
     {
         if ( !m_oPaintRegion )
         {
             // In case of normal rendering, this makes sure only visible rectangles are painted.
             // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
-            const SwRect& rArea = comphelper::LibreOfficeKit::isActive() ? m_rShell.GetLayout()->getFrameArea() : m_rShell.VisArea();
+            const SwRect& rArea = comphelper::COKit::isActive() ? m_rShell.GetLayout()->getFrameArea() : m_rShell.VisArea();
             m_oPaintRegion.emplace();
             m_oPaintRegion->ChangeOrigin(rArea);
         }

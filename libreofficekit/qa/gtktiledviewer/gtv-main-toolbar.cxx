@@ -234,7 +234,7 @@ static void populateRecentUnoSelector(GtvMainToolbar* toolbar)
 }
 
 void
-gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType eDocType, bool bEditMode)
+gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, COKitDocumentType eDocType, bool bEditMode)
 {
     GtvMainToolbarPrivate& priv = getPrivate(toolbar);
     gtk_widget_set_visible(toolbar->m_pAddressbar, false);

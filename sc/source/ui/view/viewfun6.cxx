@@ -286,11 +286,11 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
     const SvNumFormatType nCurNumFormatType = (pCurNumFormatEntry ?
             pCurNumFormatEntry->GetMaskedType() : SvNumFormatType::UNDEFINED);
 
-    const int nView(comphelper::LibreOfficeKit::isActive() ? SfxLokHelper::getCurrentView() : -1);
+    const int nView(comphelper::COKit::isActive() ? SfxLokHelper::getCurrentView() : -1);
     if (nView >= 0)
     {
         const auto [isTimezoneSet, aTimezone] = SfxLokHelper::getViewTimezone(nView);
-        comphelper::LibreOfficeKit::setTimezone(isTimezoneSet, aTimezone);
+        comphelper::COKit::setTimezone(isTimezoneSet, aTimezone);
     }
 
     comphelper::ScopeGuard aAutoUserTimezone(
@@ -299,7 +299,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
             if (nView >= 0)
             {
                 const auto [isTimezoneSet, aTimezone] = SfxLokHelper::getDefaultTimezone();
-                comphelper::LibreOfficeKit::setTimezone(isTimezoneSet, aTimezone);
+                comphelper::COKit::setTimezone(isTimezoneSet, aTimezone);
             }
         });
 

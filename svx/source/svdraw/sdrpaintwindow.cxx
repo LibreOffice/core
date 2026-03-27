@@ -222,7 +222,7 @@ rtl::Reference<sdr::overlay::OverlayManager> SdrPaintView::CreateOverlayManager(
         // Request a repaint so that the buffered overlay manager fills
         // its buffer properly.  This is a workaround for missing buffer
         // updates.
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             pWindow->Invalidate();
         }

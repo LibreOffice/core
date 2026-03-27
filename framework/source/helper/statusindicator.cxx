@@ -33,12 +33,12 @@ StatusIndicator::~StatusIndicator() {}
 
 void SAL_CALL StatusIndicator::start(const OUString& sText, sal_Int32 nRange)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         m_nRange = nRange;
         m_nLastCallbackPercent = -1;
 
-        comphelper::LibreOfficeKit::statusIndicatorStart(sText);
+        comphelper::COKit::statusIndicatorStart(sText);
     }
 #if !defined(IOS) && !defined(ANDROID)
     rtl::Reference<StatusIndicatorFactory> xFactory(m_xFactory);
@@ -51,9 +51,9 @@ void SAL_CALL StatusIndicator::start(const OUString& sText, sal_Int32 nRange)
 
 void SAL_CALL StatusIndicator::end()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
-        comphelper::LibreOfficeKit::statusIndicatorFinish();
+        comphelper::COKit::statusIndicatorFinish();
     }
 #if !defined(IOS) && !defined(ANDROID)
     rtl::Reference<StatusIndicatorFactory> xFactory(m_xFactory);
@@ -64,7 +64,7 @@ void SAL_CALL StatusIndicator::end()
 
 void SAL_CALL StatusIndicator::reset()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 #if !defined(IOS) && !defined(ANDROID)
     rtl::Reference<StatusIndicatorFactory> xFactory(m_xFactory);
@@ -75,7 +75,7 @@ void SAL_CALL StatusIndicator::reset()
 
 void SAL_CALL StatusIndicator::setText(const OUString& sText)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 #if !defined(IOS) && !defined(ANDROID)
     rtl::Reference<StatusIndicatorFactory> xFactory(m_xFactory);
@@ -88,14 +88,14 @@ void SAL_CALL StatusIndicator::setText(const OUString& sText)
 
 void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         if (m_nRange > 0)
         {
             int nPercent = (100 * nValue) / m_nRange;
             if (nPercent >= m_nLastCallbackPercent)
             {
-                comphelper::LibreOfficeKit::statusIndicatorSetValue(nPercent);
+                comphelper::COKit::statusIndicatorSetValue(nPercent);
                 m_nLastCallbackPercent = nPercent;
             }
         }

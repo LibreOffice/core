@@ -577,7 +577,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
 
     SolarMutexGuard aGuard;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         const SfxViewShell* pViewShell = SfxViewShell::Current();
         if (pViewShell && pViewShell->isBlockedCommand(aURL.Complete))
@@ -1055,7 +1055,7 @@ OString RowColSelCountPayload(sal_uInt16, SfxViewFrame*,
         aEvent.State >>= aString;
     tools::JsonWriter aTree;
     aTree.put("commandName", aEvent.FeatureURL.Complete);
-    aTree.put("locale", comphelper::LibreOfficeKit::getLocale().getBcp47());
+    aTree.put("locale", comphelper::COKit::getLocale().getBcp47());
     aTree.put("state", aString);
     return aTree.finishAndGetAsOString();
 }
@@ -1501,7 +1501,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
 static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState)
 {
     const SfxViewShell* pViewShell = pViewFrame->GetViewShell();
-    if (!comphelper::LibreOfficeKit::isActive() || !pViewShell)
+    if (!comphelper::COKit::isActive() || !pViewShell)
         return;
 
     const std::map<std::u16string_view, KitUnoCommand>& rUnoCommandList = GetKitUnoCommandList();

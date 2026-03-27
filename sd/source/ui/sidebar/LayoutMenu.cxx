@@ -573,7 +573,7 @@ void LayoutMenu::MenuSelect(const OUString& rIdent)
     if (sLastItemIdent.isEmpty())
         return;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         HandleMenuSelect(sLastItemIdent);
     else
         Application::PostUserEvent(LINK(this, LayoutMenu, MenuSelectAsyncHdl));

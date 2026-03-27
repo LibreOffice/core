@@ -73,7 +73,7 @@ SlideSorterModule::SlideSorterModule (
     UpdateViewTabBar(nullptr);
 
     if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::ImpressView::get().value_or(true)
-        && (!o3tl::IsRunningUnitTest() || !comphelper::LibreOfficeKit::isActive()))
+        && (!o3tl::IsRunningUnitTest() || !comphelper::COKit::isActive()))
         AddActiveMainView(FrameworkHelper::msImpressViewURL);
     if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::OutlineView::get().value_or(true))
         AddActiveMainView(FrameworkHelper::msOutlineViewURL);
@@ -82,7 +82,7 @@ SlideSorterModule::SlideSorterModule (
     if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::HandoutView::get().value_or(false))
         AddActiveMainView(FrameworkHelper::msHandoutViewURL);
     if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::SlideSorterView::get().value_or(false)
-        && !comphelper::LibreOfficeKit::isActive())
+        && !comphelper::COKit::isActive())
         AddActiveMainView(FrameworkHelper::msSlideSorterURL);
     if (officecfg::Office::Impress::MultiPaneGUI::SlideSorterBar::Visible::DrawView::get().value_or(true))
         AddActiveMainView(FrameworkHelper::msDrawViewURL);

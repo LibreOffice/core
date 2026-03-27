@@ -64,8 +64,8 @@ void UnoApiTest::tearDown()
         mxComponent.clear();
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
-        comphelper::LibreOfficeKit::setActive(false);
+    if (comphelper::COKit::isActive())
+        comphelper::COKit::setActive(false);
 
     test::BootstrapFixture::tearDown();
 }

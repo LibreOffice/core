@@ -626,7 +626,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !m_bIsSpotlightParaStyles;
         m_bIsSpotlightParaStyles = bFlag;
 
-        if (!comphelper::LibreOfficeKit::isActive() && m_bIsSpotlightParaStyles)
+        if (!comphelper::COKit::isActive() && m_bIsSpotlightParaStyles)
         {
             if (!pArgs || !pArgs->HasItem(FN_PARAM_1))
             {
@@ -656,7 +656,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !m_bIsSpotlightCharStyles;
         m_bIsSpotlightCharStyles = bFlag;
 
-        if (!comphelper::LibreOfficeKit::isActive() && m_bIsSpotlightCharStyles)
+        if (!comphelper::COKit::isActive() && m_bIsSpotlightCharStyles)
         {
             if (!pArgs || !pArgs->HasItem(FN_PARAM_1))
             {

@@ -217,7 +217,7 @@ void E3dDragMethod::CreateOverlayGeometry(
     const sdr::contact::ObjectContact& rObjectContact, bool /* bIsGeometrySizeValid */)
 {
     // We do client-side object manipulation with the Kit API
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     const sal_uInt32 nCnt(maGrp.size());

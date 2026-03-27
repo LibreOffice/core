@@ -36,7 +36,7 @@ public:
                                 bool bAddText, bool bFullRow);
 
     ScModelObj* createDoc(const char* pName);
-    void setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell);
+    void setupCOKitViewCallback(SfxViewShell* pViewShell);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
 

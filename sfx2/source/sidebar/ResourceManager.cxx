@@ -237,7 +237,7 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
 
 const OUString& ResourceManager::GetLastActiveDeck( const Context& rContext )
 {
-    assert(!comphelper::LibreOfficeKit::isActive());
+    assert(!comphelper::COKit::isActive());
     if( maLastActiveDecks.find( rContext.msApplication ) == maLastActiveDecks.end())
         return maLastActiveDecks[u"any"_ustr];
     else
@@ -246,7 +246,7 @@ const OUString& ResourceManager::GetLastActiveDeck( const Context& rContext )
 
 void ResourceManager::SetLastActiveDeck( const Context& rContext, const OUString &rsDeckId )
 {
-    assert(!comphelper::LibreOfficeKit::isActive());
+    assert(!comphelper::COKit::isActive());
     maLastActiveDecks[rContext.msApplication] = rsDeckId;
 }
 
@@ -263,7 +263,7 @@ void ResourceManager::ReadDeckList()
     maDecks.clear();
     for (const OUString& aDeckName : aDeckNodeNames)
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             // Hide these decks in LOK as they aren't fully functional.
             if (aDeckName == "GalleryDeck")
@@ -301,7 +301,7 @@ void ResourceManager::ReadDeckList()
 
 void ResourceManager::SaveDecksSettings(const Context& rContext)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     for (auto const& deck : maDecks)
@@ -408,7 +408,7 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
 void ResourceManager::SaveLastActiveDeck(const Context& rContext, const OUString& rActiveDeck)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     maLastActiveDecks[rContext.msApplication] = rActiveDeck;
@@ -441,7 +441,7 @@ void ResourceManager::ReadPanelList()
         if (!aPanelNode.isValid())
             continue;
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             // Hide these panels in LOK as they aren't fully functional.
             OUString aPanelId = getString(aPanelNode, u"Id"_ustr);
@@ -475,7 +475,7 @@ void ResourceManager::ReadPanelList()
 
 void ResourceManager::ReadLastActive()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     const Sequence <OUString> aLastActive (officecfg::Office::UI::Sidebar::Content::LastActiveDeck::get());

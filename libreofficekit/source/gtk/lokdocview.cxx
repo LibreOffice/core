@@ -88,8 +88,8 @@ struct LOKDocViewPrivateImpl
     bool m_bCanZoomIn;
     bool m_bCanZoomOut;
     bool m_bUnipoll;
-    LibreOfficeKit* m_pOffice;
-    LibreOfficeKitDocument* m_pDocument;
+    COKit* m_pOffice;
+    COKitDocument* m_pDocument;
 
     std::unique_ptr<TileBuffer> m_pTileBuffer;
     GThreadPool* lokThreadPool;
@@ -186,7 +186,7 @@ struct LOKDocViewPrivateImpl
     int m_nPartId;
 
     /// Cached document type, returned by getDocumentType().
-    LibreOfficeKitDocumentType m_eDocumentType;
+    COKitDocumentType m_eDocumentType;
 
     /// Contains a freshly set zoom level: logic size of a tile.
     /// It gets reset back to 0 when LOK was informed about this zoom change.
@@ -259,7 +259,7 @@ struct LOKDocViewPrivateImpl
 };
 
 // Must be run with g_aLOKMutex locked
-void setDocumentView(LibreOfficeKitDocument* pDoc, int viewId)
+void setDocumentView(COKitDocument* pDoc, int viewId)
 {
     assert(pDoc);
     std::stringstream ss;
@@ -1107,7 +1107,7 @@ callback (gpointer pData)
         return G_SOURCE_REMOVE;
     }
 
-    switch (static_cast<LibreOfficeKitCallbackType>(pCallback->m_nType))
+    switch (static_cast<COKitCallbackType>(pCallback->m_nType))
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
     {
@@ -2377,7 +2377,7 @@ openDocumentInThread (gpointer data)
     }
     else
     {
-        priv->m_eDocumentType = static_cast<LibreOfficeKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
+        priv->m_eDocumentType = static_cast<COKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
         gdk_threads_add_idle(postDocumentLoad, pDocView);
         g_task_return_boolean (task, true);
     }
@@ -2644,7 +2644,7 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
         priv->m_bUnipoll = g_value_get_boolean (value);
         break;
     case PROP_LO_POINTER:
-        priv->m_pOffice = static_cast<LibreOfficeKit*>(g_value_get_pointer(value));
+        priv->m_pOffice = static_cast<COKit*>(g_value_get_pointer(value));
         break;
     case PROP_USER_PROFILE_URL:
         if (const gchar* pUserProfile = g_value_get_string(value))
@@ -2654,8 +2654,8 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
         priv->m_aDocPath = g_value_get_string (value);
         break;
     case PROP_DOC_POINTER:
-        priv->m_pDocument = static_cast<LibreOfficeKitDocument*>(g_value_get_pointer(value));
-        priv->m_eDocumentType = static_cast<LibreOfficeKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
+        priv->m_pDocument = static_cast<COKitDocument*>(g_value_get_pointer(value));
+        priv->m_eDocumentType = static_cast<COKitDocumentType>(priv->m_pDocument->pClass->getDocumentType(priv->m_pDocument));
         break;
     case PROP_EDITABLE:
         lok_doc_view_set_edit (pDocView, g_value_get_boolean (value));
@@ -2911,7 +2911,7 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
     {
         g_set_error (error,
                      g_quark_from_static_string ("LOK initialization error"), 0,
-                     "Failed to get LibreOfficeKit context. Make sure path (%s) is correct",
+                     "Failed to get COKit context. Make sure path (%s) is correct",
                      priv->m_aLOPath.c_str());
         return FALSE;
     }
@@ -2977,13 +2977,13 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
     /**
      * LOKDocView:lopointer:
      *
-     * A LibreOfficeKit* in case lok_init() is already called
+     * A COKit* in case lok_init() is already called
      * previously.
      */
     properties[PROP_LO_POINTER] =
         g_param_spec_pointer("lopointer",
                              "LO Pointer",
-                             "A LibreOfficeKit* from lok_init()",
+                             "A COKit* from lok_init()",
                              static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                       G_PARAM_CONSTRUCT_ONLY |
                                                       G_PARAM_STATIC_STRINGS));
@@ -3018,13 +3018,13 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
     /**
      * LOKDocView:docpointer:
      *
-     * A LibreOfficeKitDocument* in case documentLoad() is already called
+     * A COKitDocument* in case documentLoad() is already called
      * previously.
      */
     properties[PROP_DOC_POINTER] =
         g_param_spec_pointer("docpointer",
                              "Document Pointer",
-                             "A LibreOfficeKitDocument* from documentLoad()",
+                             "A COKitDocument* from documentLoad()",
                              static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                       G_PARAM_STATIC_STRINGS));
 
@@ -3596,7 +3596,7 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOK
                                                        nullptr));
 
     // No documentLoad(), just a createView().
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pNewDocView));
+    COKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pNewDocView));
     LOKDocViewPrivate& pNewPriv = getPrivate(LOK_DOC_VIEW(pNewDocView));
     // Store the view id only later in postDocumentLoad(), as
     // initializeForRendering() changes the id in Impress.
@@ -3648,7 +3648,7 @@ lok_doc_view_open_document (LOKDocView* pDocView,
     g_object_unref(task);
 }
 
-SAL_DLLPUBLIC_EXPORT LibreOfficeKitDocument*
+SAL_DLLPUBLIC_EXPORT COKitDocument*
 lok_doc_view_get_document (LOKDocView* pDocView)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
@@ -3940,7 +3940,7 @@ lok_doc_view_get_command_values (LOKDocView* pDocView,
     g_return_val_if_fail (LOK_IS_DOC_VIEW (pDocView), nullptr);
     g_return_val_if_fail (pCommand != nullptr, nullptr);
 
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
+    COKitDocument* pDocument = lok_doc_view_get_document(pDocView);
     if (!pDocument)
         return nullptr;
 
@@ -3975,7 +3975,7 @@ lok_doc_view_copy_selection (LOKDocView* pDocView,
                              const gchar* pMimeType,
                              gchar** pUsedMimeType)
 {
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
+    COKitDocument* pDocument = lok_doc_view_get_document(pDocView);
     if (!pDocument)
         return nullptr;
 
@@ -3992,7 +3992,7 @@ lok_doc_view_paste (LOKDocView* pDocView,
                     gsize nSize)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
-    LibreOfficeKitDocument* pDocument = priv->m_pDocument;
+    COKitDocument* pDocument = priv->m_pDocument;
     bool ret = false;
 
     if (!pDocument)

@@ -86,7 +86,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     else
         aMDPos = pWindow->PixelToLogic(rMEvt.GetPosPixel());
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         ScViewData& rViewData = rViewShell.GetViewData();
         ScDocument& rDocument = rViewData.GetDocument();
@@ -360,7 +360,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     ::std::vector< OUString > aExcludedChartNames;
     ScRangeListVector aProtectedChartRangesVector;
 
-    if (comphelper::LibreOfficeKit::isActive() && rDocument.IsNegativePage(rViewData.CurrentTabForData()))
+    if (comphelper::COKit::isActive() && rDocument.IsNegativePage(rViewData.CurrentTabForData()))
         aPnt.setX(-aPnt.X());
 
     if (pView && rMEvt.IsLeft())

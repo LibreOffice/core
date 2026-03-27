@@ -82,7 +82,7 @@ const WhichRangesContainer ScTPValidationValue::pValueRanges(svl::Items<
 
 static bool isLOKMobilePhone()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return false;
     SfxViewShell* pViewShell = SfxViewShell::Current();
     return pViewShell && pViewShell->isLOKMobilePhone();

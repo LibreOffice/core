@@ -1834,7 +1834,7 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDi
             // See unomodel.cxx: "It is guaranteed, that after a standard page the corresponding notes page follows."
             bool notesPage = GetPageNum() % 2 == 0;
 
-            if (!comphelper::LibreOfficeKit::isActive() || !notesPage || !getSdrModelFromSdrPage().IsImpress())
+            if (!comphelper::COKit::isActive() || !notesPage || !getSdrModelFromSdrPage().IsImpress())
                 pBackgroundFill = &TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
             else
             {

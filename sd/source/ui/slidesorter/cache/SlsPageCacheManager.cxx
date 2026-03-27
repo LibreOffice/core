@@ -301,7 +301,7 @@ std::shared_ptr<BitmapCache> PageCacheManager::ChangeSize (
             pResult = rpCache;
         }
         // In multi user view this can happen - no issue (reset after switching MasterPage)
-        else if (!comphelper::LibreOfficeKit::isActive())
+        else if (!comphelper::COKit::isActive())
         {
             assert(iCacheToChange != mpPageCaches->end());
         }

@@ -235,7 +235,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         rBind.Update(nOldSId);
     }
 
-    // for LibreOfficeKit - choosing a shape should construct it directly
+    // for COKit - choosing a shape should construct it directly
     bool bCreateDirectly = false;
     bool bRectangle = false;
 
@@ -504,7 +504,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 }
             }
 
-            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+            bCreateDirectly = comphelper::COKit::isActive();
             bRectangle = true;
             SetCurrentFunction( FuConstructRectangle::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent ) );
             rReq.Done();
@@ -521,7 +521,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         {
             // Direct mode means no interactive drawing, just insert the shape with reasonable
             // defaults -- to be consistent with the line insert case above.
-            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+            bCreateDirectly = comphelper::COKit::isActive();
 
             SetCurrentFunction( FuConstructBezierPolygon::Create(*this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent) );
             rReq.Done();
@@ -584,7 +584,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             SetCurrentFunction( FuConstructCustomShape::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq, bPermanent ) );
             rReq.Done();
 
-            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+            bCreateDirectly = comphelper::COKit::isActive();
             const SfxItemSet* pArgs = rReq.GetArgs();
             if (pArgs && pArgs->HasItem(FN_PARAM_1))
             {
@@ -686,7 +686,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
     // calc position and size
     ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetOutputSizePixel()));
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // aVisArea is nonsensical in the LOK case, use the slide size
         aVisArea = ::tools::Rectangle(Point(), getCurrentPage()->GetSize());

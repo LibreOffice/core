@@ -40,7 +40,7 @@ SwTestViewCallback::SwTestViewCallback(
         rBeforeInstallFunc(*this);
 
     mpViewShell = pViewShell ? pViewShell : SfxViewShell::Current();
-    mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    mpViewShell->setCOKitViewCallback(&m_callbackWrapper);
     mnView = SfxLokHelper::getCurrentView();
     m_callbackWrapper.setLOKViewId(mnView);
 }
@@ -48,7 +48,7 @@ SwTestViewCallback::SwTestViewCallback(
 SwTestViewCallback::~SwTestViewCallback()
 {
     SfxLokHelper::setView(mnView);
-    mpViewShell->setLibreOfficeKitViewCallback(nullptr);
+    mpViewShell->setCOKitViewCallback(nullptr);
 }
 
 void SwTestViewCallback::callback(int nType, const char* pPayload, void* pData)
@@ -77,7 +77,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             m_bOwnCursorInvalidated = true;
 
             OString sRect;
-            if (comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+            if (comphelper::COKit::isViewIdForVisCursorInvalidation())
             {
                 std::stringstream aStream(pPayload);
                 boost::property_tree::ptree aTree;

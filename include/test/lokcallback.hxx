@@ -28,7 +28,7 @@ callback.
 class OOO_DLLPUBLIC_TEST TestLokCallbackWrapper final : public SfxLokCallbackInterface, public Idle
 {
 public:
-    TestLokCallbackWrapper(LibreOfficeKitCallback callback, void* data);
+    TestLokCallbackWrapper(COKitCallback callback, void* data);
     /// Discard all possibly still held events.
     void clear();
     /// Set the view id of the associated SfxViewShell.
@@ -53,7 +53,7 @@ private:
     void startTimer();
     void flushLOKData();
     void discardUpdatedTypes(int nType, int nViewId);
-    LibreOfficeKitCallback m_callback;
+    COKitCallback m_callback;
     void* m_data;
     int m_viewId = -1; // the associated SfxViewShell
     std::vector<int> m_updatedTypes; // value is type

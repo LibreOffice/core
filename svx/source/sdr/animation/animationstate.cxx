@@ -100,7 +100,7 @@ namespace sdr::animation
         :   mrVOContact(rVOContact),
             maAnimatedPrimitives(std::move(rAnimatedPrimitives))
         {
-            if (!comphelper::LibreOfficeKit::isActive())
+            if (!comphelper::COKit::isActive())
                 // setup initially
                 prepareNextEvent();
         }
@@ -117,7 +117,7 @@ namespace sdr::animation
             // schedule a repaint of associated object
             mrVOContact.ActionChanged();
 
-            if (!comphelper::LibreOfficeKit::isActive())
+            if (!comphelper::COKit::isActive())
                 // re-setup
                 prepareNextEvent();
         }

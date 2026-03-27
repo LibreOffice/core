@@ -1013,7 +1013,7 @@ void SfxDispatcher::SetMenu_Impl()
     if ( !xImp->pFrame )
         return;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     SfxViewFrame* pTop = xImp->pFrame->GetTopViewFrame();
@@ -1644,7 +1644,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
 
     const bool isViewerAppMode = officecfg::Office::Common::Misc::ViewerAppMode::get();
     const bool bReadOnlyGlobal = SfxSlotFilterState::ENABLED_READONLY != nSlotEnableMode && xImp->bReadOnly;
-    const bool bReadOnlyLokView = !bReadOnlyGlobal && comphelper::LibreOfficeKit::isActive()
+    const bool bReadOnlyLokView = !bReadOnlyGlobal && comphelper::COKit::isActive()
                                   && xImp->pFrame && xImp->pFrame->GetViewShell()
                                   && xImp->pFrame->GetViewShell()->IsLokReadOnlyView();
 
@@ -1975,7 +1975,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
     aEvent.ExecutePosition.Y = aPos.Y();
 
     xPopupController->setPopupMenu( xPopupMenu );
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         boost::property_tree::ptree aMenu = fillPopupMenu(xPopupMenu);
         boost::property_tree::ptree aRoot;

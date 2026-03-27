@@ -2922,7 +2922,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL, bool bGrabFocus)
     // JSDialog full update (sent by the fragment builder's weld_container)
     // fired before they existed.  Force a new full update so the browser
     // receives the complete widget tree including all token children.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         jsdialog::SendFullUpdate(*m_xContainer);
 
     AdjustScrolling();
@@ -3217,7 +3217,7 @@ void SwTokenWindow::InsertAtSelection(const SwFormToken& rToken)
     aThawGuard.dismiss();
     m_xCtrlParentWin->thaw();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         jsdialog::SendFullUpdate(*m_xContainer);
 
     AdjustPositions();
@@ -3266,7 +3266,7 @@ void SwTokenWindow::RemoveControl(const SwTOXButton* pDel, bool bInternalCall)
 
     m_xCtrlParentWin->thaw();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         jsdialog::SendFullUpdate(*m_xContainer);
 
     AdjustPositions();
@@ -3323,7 +3323,7 @@ void SwTokenWindow::AdjustScrolling()
         m_xLeftScrollWin->set_sensitive(nLeft > 0);
         m_xRightScrollWin->set_sensitive(nLeft + nSpace < nWidth);
     }
-    else if (!comphelper::LibreOfficeKit::isActive())
+    else if (!comphelper::COKit::isActive())
     {
         //if the control fits into the space then the first control must be at position 0
         m_xRightScrollWin->set_sensitive(false);

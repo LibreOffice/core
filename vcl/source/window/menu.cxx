@@ -2944,7 +2944,7 @@ sal_uInt16 PopupMenu::ImplExecute(const VclPtr<vcl::Window>& pParentWin, const t
     }
 
     VclPtr<MenuFloatingWindow> pWin = VclPtrInstance<MenuFloatingWindow>(this, pParentWin, WB_BORDER | WB_SYSTEMWINDOW);
-    if (comphelper::LibreOfficeKit::isActive() && get_id() == "editviewspellmenu")
+    if (comphelper::COKit::isActive() && get_id() == "editviewspellmenu")
     {
         VclPtr<vcl::Window> xNotifierParent = pParentWin->GetParentWithLOKNotifier();
         assert(xNotifierParent && xNotifierParent->GetLOKNotifier() && "editview menu without LOKNotifier");

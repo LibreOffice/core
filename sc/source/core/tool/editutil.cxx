@@ -237,7 +237,7 @@ OUString ScEditUtil::GetCellFieldValue(
             if (ppTextColor)
             {
                 *ppTextColor = ScModule::get()->GetColorConfig().GetColorValue(eEntry).nColor;
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                     ScModule::IsLOKViewInDarkMode() ? *ppTextColor = Color(0x1D99F3) : *ppTextColor = Color(0x000080);
             }
 
@@ -343,7 +343,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         pPattern = rDoc.GetPattern( nCol, nRow, nTab );
 
     Point aStartPos = aCellPos;
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bIsTiledRendering = comphelper::COKit::isActive();
 
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     tools::Long nLayoutSign = (bLayoutRTL && !bIsTiledRendering) ? -1 : 1;
@@ -889,8 +889,8 @@ void ScHeaderFieldData::SetDocNames(const INetURLObject& rURLObj)
     {
         aShortDocName = rURLObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
         // The path is useless in jailed kit mode, so present a view that the
-        // document is in a Documents toplevel directory for LibreOfficeKit::isActive()
-        if (comphelper::LibreOfficeKit::isActive())
+        // document is in a Documents toplevel directory for COKit::isActive()
+        if (comphelper::COKit::isActive())
             aLongDocName = "/" + SfxResId(STR_GID_DOCUMENT) + "/" + aShortDocName;
     }
     else

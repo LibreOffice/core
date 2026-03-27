@@ -51,7 +51,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
         xMultiplexer->broadcastContextChangeEvent(aEvent, rxController);
 
     // notify the LOK too after all the change have taken effect.
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         SfxLokHelper::notifyContextChange(aEvent);
     }

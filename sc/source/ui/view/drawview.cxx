@@ -550,7 +550,7 @@ bool ScDrawView::SdrBeginTextEdit(
 
     ScTabViewShell* pViewSh = rViewData.GetViewShell();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         if (OutlinerView* pView = GetTextEditOutlinerView())
         {
@@ -582,7 +582,7 @@ SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
 
     ScTabViewShell* pViewSh = rViewData.GetViewShell();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         SfxLokHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
 
     SfxFrame& rFrame = pViewSh->GetViewFrame().GetFrame();
@@ -948,7 +948,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
     Point aCurPosHmm = pGridWin->PixelToLogic(aCurPos, aDrawMode );
     Point aGridOff = aCurPosHmm - aOldPos;
     // fdo#63878 Fix the X position for RTL Sheet
-    if( rDoc.IsNegativePage( GetTab() ) && !comphelper::LibreOfficeKit::isActive() )
+    if( rDoc.IsNegativePage( GetTab() ) && !comphelper::COKit::isActive() )
         aGridOff.setX( aCurPosHmm.getX() + aOldPos.getX() );
 }
 
@@ -962,9 +962,9 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
     SdrObject& rSdrObject,
     basegfx::B2DVector& rTarget) const
 {
-    if (comphelper::LibreOfficeKit::isActive() &&
-            !comphelper::LibreOfficeKit::isCompatFlagSet(
-                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    if (comphelper::COKit::isActive() &&
+            !comphelper::COKit::isCompatFlagSet(
+                    comphelper::COKit::Compat::scPrintTwipsMsgs))
         return false;
 
     ScGridWindow* pGridWin(rViewData.GetActiveWin());
@@ -1008,7 +1008,7 @@ bool ScDrawView::calculateGridOffsetForSdrObject(
     Point aCurPosHmm(pGridWin->PixelToLogic(aCurPos, aDrawMode));
     Point aGridOff(aCurPosHmm - aOldPos);
 
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKActive = comphelper::COKit::isActive();
     bool bNegativePage = rDoc.IsNegativePage(GetTab());
 
     // fdo#63878 Fix the X position for RTL Sheet
@@ -1058,7 +1058,7 @@ bool ScDrawView::calculateGridOffsetForB2DRange(
     Point aCurPosHmm(pGridWin->PixelToLogic(aCurPos, aDrawMode));
     Point aGridOff(aCurPosHmm - aOldPos);
 
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKActive = comphelper::COKit::isActive();
     bool bNegativePage = rDoc.IsNegativePage(GetTab());
 
     // fdo#63878 Fix the X position for RTL Sheet
@@ -1159,9 +1159,9 @@ namespace sdr::contact
         {
             // Except when scPrintTwipsMsgs flag is active,
             // Calc in LOK mode directly sets pixel-aligned logical coordinates for draw-objects.
-            if (comphelper::LibreOfficeKit::isActive() &&
-                !comphelper::LibreOfficeKit::isCompatFlagSet(
-                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+            if (comphelper::COKit::isActive() &&
+                !comphelper::COKit::isCompatFlagSet(
+                    comphelper::COKit::Compat::scPrintTwipsMsgs))
                 return false;
 
             // no GridOffset support for printer

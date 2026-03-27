@@ -485,7 +485,7 @@ Reference<XClipboard> GetSystemClipboard()
         if (false)
             ;
 #else
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             xClipboard = css::datatransfer::clipboard::LokClipboard::create(
                     comphelper::getProcessComponentContext());

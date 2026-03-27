@@ -798,7 +798,7 @@ Task::~Task()
             mpSchedulerData->mpTask = nullptr;
     }
     else
-        assert(nullptr == mpSchedulerData || comphelper::IsFuzzing() || comphelper::LibreOfficeKit::isActive());
+        assert(nullptr == mpSchedulerData || comphelper::IsFuzzing() || comphelper::COKit::isActive());
 }
 
 bool Task::DecideTransferredExecution()

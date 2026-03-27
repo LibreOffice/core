@@ -295,7 +295,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
 /** rtl_alloc_preInit
  *
  * This function, is called at the beginning and again
- * at the end of LibreOfficeKit pre-initialization to enable
+ * at the end of COKit pre-initialization to enable
  * various optimizations.
  *
  * Its function is to annotate a section @mode = 1

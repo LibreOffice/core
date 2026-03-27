@@ -69,7 +69,7 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
     {
         MapMode aDrawMode = GetDrawMapMode();
         MapMode aOldMode = GetMapMode();
-        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+        if ( comphelper::COKit::isActive() && aOldMode != aDrawMode )
             SetMapMode( aDrawMode );
 
         pDraw->SetWindow( this );
@@ -99,7 +99,7 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
             }
         }
 
-        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+        if ( comphelper::COKit::isActive() && aOldMode != aDrawMode )
             SetMapMode( aOldMode );
     }
 
@@ -116,7 +116,7 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
 {
     ScViewFunc* pView = mrViewData.GetView();
     bool bRet = false;
-    bool bLOKitActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKitActive = comphelper::COKit::isActive();
     FuPoor* pDraw = pView->GetDrawFuncPtr();
     if (pDraw && !mrViewData.IsRefMode())
     {
@@ -166,7 +166,7 @@ bool ScGridWindow::DrawMouseMove(const MouseEvent& rMEvt)
     {
         MapMode aDrawMode = GetDrawMapMode();
         MapMode aOldMode = GetMapMode();
-        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+        if ( comphelper::COKit::isActive() && aOldMode != aDrawMode )
             SetMapMode( aDrawMode );
 
         pDraw->SetWindow( this );
@@ -174,7 +174,7 @@ bool ScGridWindow::DrawMouseMove(const MouseEvent& rMEvt)
         if ( bRet )
             UpdateStatusPosSize();
 
-        if ( comphelper::LibreOfficeKit::isActive() && aOldMode != aDrawMode )
+        if ( comphelper::COKit::isActive() && aOldMode != aDrawMode )
             SetMapMode( aOldMode );
 
         return bRet;
@@ -306,7 +306,7 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
     // work in the logic coordinates (ideally 100ths of mm - so that it is
     // the same as editeng and drawinglayer), and get rid of all the
     // SetMapMode's and other unnecessary fun we have with pixels
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         return mrViewData.GetLogicMode();
     }

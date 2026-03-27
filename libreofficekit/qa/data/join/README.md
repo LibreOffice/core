@@ -1,4 +1,4 @@
-# LibreOfficeKit tilebench joining tests
+# COKit tilebench joining tests
 
 This folder contain documents to run through `tilebench --join` to detect problems. To run the tests, simply invoke:
 

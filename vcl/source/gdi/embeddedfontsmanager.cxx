@@ -77,7 +77,7 @@ OUString GetEmbeddedFontsRootURL(bool bLOK)
 
 const OUString& GetEmbeddedFontsRoot()
 {
-    static const OUString path = GetEmbeddedFontsRootURL(comphelper::LibreOfficeKit::isActive());
+    static const OUString path = GetEmbeddedFontsRootURL(comphelper::COKit::isActive());
     return path;
 }
 
@@ -516,7 +516,7 @@ void EmbeddedFontsManager::activateFonts(std::vector<std::pair<OUString, OUStrin
 void EmbeddedFontsManager::releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts)
 {
     // Background save process: avoid deletion of files created by the parent
-    if (comphelper::LibreOfficeKit::isForkedChild())
+    if (comphelper::COKit::isForkedChild())
         return;
     std::vector<std::pair<OUString, OUString>> unregister;
     if (!fonts.empty())

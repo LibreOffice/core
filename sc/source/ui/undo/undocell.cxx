@@ -192,7 +192,7 @@ void ScUndoEnterData::DoChange() const
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        if (comphelper::LibreOfficeKit::isActive() && bHeightChanged)
+        if (comphelper::COKit::isActive() && bHeightChanged)
         {
             ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, ROW_HEADER, maPos.Tab());
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(

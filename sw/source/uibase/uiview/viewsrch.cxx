@@ -256,7 +256,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 if( bRet )
                 {
                     Scroll(m_pWrtShell->GetCharRect().SVRect());
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                         lcl_emitSearchResultCallbacks(s_pSrchItem, m_pWrtShell.get(), /* bHighlightAll = */ false);
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
@@ -290,7 +290,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 }
                 else
                 {
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                         lcl_emitSearchResultCallbacks(s_pSrchItem, m_pWrtShell.get(), /* bHighlightAll = */ true);
                     if (!bQuiet)
                     {

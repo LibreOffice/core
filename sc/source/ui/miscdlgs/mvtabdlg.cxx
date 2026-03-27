@@ -201,7 +201,7 @@ void ScMoveTableDlg::Init()
     m_xFtWarn->hide();
     InitDocListBox();
     SelHdl(*m_xLbDoc);
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         m_xFtDoc->hide();
         m_xLbDoc->hide();

@@ -432,7 +432,7 @@ namespace sw::mark
 
     void Bookmark::sendLOKDeleteCallback()
     {
-        if (!comphelper::LibreOfficeKit::isActive() || GetMarkPos().GetDoc().IsClipBoard())
+        if (!comphelper::COKit::isActive() || GetMarkPos().GetDoc().IsClipBoard())
             return;
 
         SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -596,7 +596,7 @@ namespace sw::mark
 
     TextFieldmark::~TextFieldmark()
     {
-        if (!comphelper::LibreOfficeKit::isActive() || GetMarkPos().GetDoc().IsClipBoard())
+        if (!comphelper::COKit::isActive() || GetMarkPos().GetDoc().IsClipBoard())
             return;
 
         SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -999,7 +999,7 @@ namespace sw::mark
 
     void DropDownFieldmark::SendLOKShowMessage(const SfxViewShell* pViewShell)
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
             return;
 
         if (!pViewShell || pViewShell->isLOKMobilePhone())

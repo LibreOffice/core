@@ -380,7 +380,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                 catch( const uno::Exception& )
                 {}
 
-                if (!comphelper::LibreOfficeKit::isActive())
+                if (!comphelper::COKit::isActive())
                 {
                     // if currently another object is UIactive it will be deactivated; usually this will activate the LM of
                     // the container. Locking the LM will prevent flicker.

@@ -187,7 +187,7 @@ const int nCloseResponseToJustHide = -42;
                 {   \
                     SfxChildWinFactory aFact( \
                         Class::CreateImpl, MyID, Pos );   \
-                    if (comphelper::LibreOfficeKit::isActive() && nFlags == SfxChildWindowFlags::NONE) \
+                    if (comphelper::COKit::isActive() && nFlags == SfxChildWindowFlags::NONE) \
                         nFlags |= SfxChildWindowFlags::NEVERCLONE; \
                     aFact.aInfo.nFlags |= nFlags;  \
                     aFact.aInfo.bVisible = bVis;         \

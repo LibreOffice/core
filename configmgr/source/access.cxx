@@ -1457,8 +1457,8 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
         // Since the locale given to us is the one used at initialization,
         // here we override it with the actual current-user's language to
         // support per-view localization in LOK.
-        if (comphelper::LibreOfficeKit::isActive())
-            locale = comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
+        if (comphelper::COKit::isActive())
+            locale = comphelper::COKit::getLanguageTag().getBcp47();
 
         if (!locale.isEmpty()) {
             // Try exact match first, avoiding all fallback overhead.

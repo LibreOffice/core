@@ -971,7 +971,7 @@ tools::Long SwEditShell::CompareDoc( const SwDoc& rDoc )
     EndAllAction();
 
     SfxViewShell* pSfxViewShell = GetSfxViewShell();
-    if (pSfxViewShell && pSfxViewShell->getLibreOfficeKitViewCallback())
+    if (pSfxViewShell && pSfxViewShell->getCOKitViewCallback())
     {
         tools::JsonWriter aWriter;
         aWriter.put("commandName", "CompareDocumentsProperties");

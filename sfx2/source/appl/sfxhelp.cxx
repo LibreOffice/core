@@ -162,7 +162,7 @@ bool impl_checkHelpLocalePath(OUString const & rpPath)
 /// Check if help/<lang>/err.html file exist
 bool impl_hasHelpInstalled()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return false;
 
         // detect installed locale
@@ -183,7 +183,7 @@ bool impl_hasHelpInstalled()
 /// Check if help/lang/text folder exist. Only html has it.
 bool impl_hasHTMLHelpInstalled()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return false;
 
     // detect installed locale
@@ -200,8 +200,8 @@ bool impl_hasHTMLHelpInstalled()
 /// Return the locale we prefer for displaying help
 static OUString const & HelpLocaleString()
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        return comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
+    if (comphelper::COKit::isActive())
+        return comphelper::COKit::getLanguageTag().getBcp47();
 
     static OUString aLocaleStr;
     if (!aLocaleStr.isEmpty())
@@ -598,7 +598,7 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL)
 OUString SfxHelp::GetURLHelpText(std::u16string_view aURL)
 {
     // hyperlinks are handled differently in Online
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return OUString();
 
     bool bCtrlClickHlink = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
@@ -654,7 +654,7 @@ static bool impl_showOnlineHelp(const OUString& rURL, weld::Widget* pDialogParen
     aTarget = aTarget.replaceAll("%2F", "/").replaceAll("?", "&");
     aHelpLink += aTarget;
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         if(SfxViewShell* pViewShell = SfxViewShell::Current())
         {
@@ -1049,7 +1049,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
     pWindow = GetBestParent(pWindow);
     weld::Window* pWeldWindow = pWindow ? pWindow->GetFrameWeld() : nullptr;
 
-    if ( comphelper::LibreOfficeKit::isActive() )
+    if ( comphelper::COKit::isActive() )
     {
         impl_showOnlineHelp(aHelpURL, pWeldWindow);
         return true;
@@ -1235,7 +1235,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
         }
     }
 
-    if ( comphelper::LibreOfficeKit::isActive() )
+    if ( comphelper::COKit::isActive() )
     {
         impl_showOnlineHelp(aHelpURL, pWidget);
         return true;

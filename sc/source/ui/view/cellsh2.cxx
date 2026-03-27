@@ -172,8 +172,8 @@ static bool lcl_GetSortParam( const ScViewData& rData, const ScSortParam& rSortP
     aExternalRange.aEnd.SetRow( nEndRow );
     aExternalRange.aEnd.SetCol( nEndCol );
 
-    // with LibreOfficeKit, don't try to interact with the user
-    if (!comphelper::LibreOfficeKit::isActive() &&
+    // with COKit, don't try to interact with the user
+    if (!comphelper::COKit::isActive() &&
         ((rSortParam.nCol1 == rSortParam.nCol2 && aExternalRange.aStart.Col() != aExternalRange.aEnd.Col()) ||
          (rSortParam.nRow1 == rSortParam.nRow2 && aExternalRange.aStart.Row() != aExternalRange.aEnd.Row())))
     {

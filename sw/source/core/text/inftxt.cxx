@@ -1439,7 +1439,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
     {
         UIName sCharStyleDisplayName = SwStyleNameMapper::GetUIName(ProgName(sCurrentCharStyle),
                                                              SwGetPoolIdFromName::ChrFmt);
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             // For simplicity in kit mode, we render in the document "all styles" that exist
             if (const SwCharFormat* pCharFormat = pFrame->GetDoc().FindCharFormatByName(sCharStyleDisplayName))

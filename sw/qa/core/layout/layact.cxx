@@ -146,21 +146,20 @@ public:
 
     PriorityAwareAnyInputCallback()
     {
-        comphelper::LibreOfficeKit::setAnyInputCallback(&callback, this,
-                                                        Scheduler::GetMostUrgentTaskPriority);
+        comphelper::COKit::setAnyInputCallback(&callback, this,
+                                               Scheduler::GetMostUrgentTaskPriority);
     }
 
     ~PriorityAwareAnyInputCallback()
     {
-        comphelper::LibreOfficeKit::setAnyInputCallback(nullptr, nullptr,
-                                                        []() -> int { return -1; });
+        comphelper::COKit::setAnyInputCallback(nullptr, nullptr, []() -> int { return -1; });
     }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testIdleLayoutingAnyInput)
 {
     // Set up LOK:
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::COKit::setActive(true);
 
     // Given a document with 3 pages, the first page is visible:
     createSwDoc();

@@ -431,7 +431,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos 
             OSL_FAIL("GridWindow: wrong position");
     }
 
-    SetUseFrameData(comphelper::LibreOfficeKit::isActive());
+    SetUseFrameData(comphelper::COKit::isActive());
     SetBackground();
 
     SetMapMode(mrViewData.GetLogicMode(eWhich));
@@ -972,7 +972,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 {
     SCTAB nTab = mrViewData.CurrentTabForData();
     ScDocument& rDoc = mrViewData.GetDocument();
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKActive = comphelper::COKit::isActive();
 
     mpAutoFilterPopup.reset();
 
@@ -1375,7 +1375,7 @@ void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
     Point aScrPos;
     Size aScrSize;
     getCellGeometry(aScrPos, aScrSize, mrViewData, nCol, nRow, eWhich);
-    bool bLOK = comphelper::LibreOfficeKit::isActive();
+    bool bLOK = comphelper::COKit::isActive();
     DPLaunchFieldPopupMenu(bLOK ? aScrPos : OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol-1, nRow, nTab), pDPObj);
 }
 
@@ -1389,7 +1389,7 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
     Point aScrPos;
     Size aScrSize;
     getCellGeometry(aScrPos, aScrSize, mrViewData, nCol, nRow, eWhich);
-    bool bLOK = comphelper::LibreOfficeKit::isActive();
+    bool bLOK = comphelper::COKit::isActive();
     DPLaunchFieldPopupMenu(bLOK ? aScrPos : OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol, nRow, nTab), pDPObj);
 }
 
@@ -1398,7 +1398,7 @@ void ScGridWindow::ShowFilterMenu(weld::Window* pParent, const tools::Rectangle&
     auto nSizeX = rCellRect.GetWidth();
 
     // minimum width in pixel
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         const tools::Long nMinLOKWinWidth = o3tl::convert(STD_COL_WIDTH * 13 / 10, o3tl::Length::twip, o3tl::Length::px);
         if (nSizeX < nMinLOKWinWidth)
@@ -1535,7 +1535,7 @@ void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
     tools::Long nSizeY  = 0;
     mrViewData.GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     Point aPos = mrViewData.GetScrPos( nCol, nRow, eWhich );
-    bool bLOKActive = comphelper::LibreOfficeKit::isActive();
+    bool bLOKActive = comphelper::COKit::isActive();
 
     if (bLOKActive)
     {
@@ -1557,7 +1557,7 @@ void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
         aPos.AdjustX( -nSizeX );
     tools::Rectangle aCellRect(aPos, Size(nSizeX, nSizeY));
 
-    weld::Window* pParent = comphelper::LibreOfficeKit::isActive() ? GetFrameWeld() : weld::GetPopupParent(*this, aCellRect);
+    weld::Window* pParent = comphelper::COKit::isActive() ? GetFrameWeld() : weld::GetPopupParent(*this, aCellRect);
     mpFilterBox = std::make_shared<ScFilterListBox>(pParent, this, nCol, nRow, ScFilterBoxMode::DataSelect);
     mpFilterBox->connect_closed(LINK(this, ScGridWindow, PopupModeEndHdl));
     weld::TreeView& rFilterBox = mpFilterBox->get_widget();
@@ -1924,7 +1924,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     bool bEditMode = mrViewData.HasEditView(eWhich);        // also in Mode==SC_INPUT_TYPE
     bool bDouble = (rMEvt.GetClicks() == 2);
     ScDocument& rDoc = mrViewData.GetDocument();
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bIsTiledRendering = comphelper::COKit::isActive();
 
     // DeactivateIP does only happen when MarkListHasChanged
 
@@ -2005,7 +2005,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             pScMod->SetInputMode( SC_INPUT_TABLE );
             bEEMouse = true;
 
-            if (comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(mrViewData.CurrentTabForData()))
+            if (comphelper::COKit::isActive() && rDoc.IsLayoutRTL(mrViewData.CurrentTabForData()))
             {
                 Point aMouse = rMEvt.GetPosPixel();
                 tools::Rectangle aOutputArea = pEditView->GetOutputArea();
@@ -2100,7 +2100,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     // FIXME: this is to limit the number of rows handled in the Online
     // to 1000; this will be removed again when the performance
     // bottlenecks are sorted out
-    if ( comphelper::LibreOfficeKit::isActive() && nPosY > MAXTILEDROW - 1 )
+    if ( comphelper::COKit::isActive() && nPosY > MAXTILEDROW - 1 )
     {
         nButtonDown = 0;
         nMouseStatus = SC_GM_NONE;
@@ -2173,7 +2173,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
                 if (!bWasMouseCaptured && IsMouseCaptured())
                     ReleaseMouse();
 
-                const bool lokReadOnly = comphelper::LibreOfficeKit::isActive() && pViewSh->IsLokReadOnlyView();
+                const bool lokReadOnly = comphelper::COKit::isActive() && pViewSh->IsLokReadOnlyView();
                 if (lokReadOnly)
                     return; // Return as if the action was performed, so the flow is not affected.
 
@@ -2308,7 +2308,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         SCROW       nEditRow;
         mrViewData.GetEditView( eWhich, pEditView, nEditCol, nEditRow );
 
-        if (comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(mrViewData.CurrentTabForData()))
+        if (comphelper::COKit::isActive() && rDoc.IsLayoutRTL(mrViewData.CurrentTabForData()))
         {
             Point aMouse = rMEvt.GetPosPixel();
             tools::Rectangle aOutputArea = pEditView->GetOutputArea();
@@ -2430,7 +2430,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         {
             mrViewData.GetDispatcher().Execute( FID_FILL_AUTO, SfxCallMode::SLOT | SfxCallMode::RECORD );
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 // prepare AutoFill menu items for "Copy Cells" and "Fill Series"
                 ScTabViewShell* pViewShell = mrViewData.GetViewShell();
@@ -2605,7 +2605,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     // double click (only left button)
 
-    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bIsTiledRendering = comphelper::COKit::isActive();
     if ( (rMEvt.GetClicks() == 2 && rMEvt.IsLeft())
             && !bRefMode
             && (nMouseStatus == SC_GM_DBLDOWN || (bIsTiledRendering && nMouseStatus != SC_GM_URLDOWN))
@@ -2701,7 +2701,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         if (GetEditUrl(rMEvt.GetPosPixel(), &aName, &aUrl, &aTarget, &nUrlCellX))
         {
             nMouseStatus = SC_GM_NONE;              // Ignore double-click
-            bool isTiledRendering = comphelper::LibreOfficeKit::isActive();
+            bool isTiledRendering = comphelper::COKit::isActive();
             // ScGlobal::OpenURL() only understands Calc A1 style syntax.
             // Convert it to Calc A1 before calling OpenURL().
             if (rDoc.GetAddressConvention() == formula::FormulaGrammar::CONV_OOO)
@@ -2912,7 +2912,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         SCROW       nEditRow;
         mrViewData.GetEditView( eWhich, pEditView, nEditCol, nEditRow );
 
-        if (comphelper::LibreOfficeKit::isActive() && mrViewData.GetDocument().IsLayoutRTL(mrViewData.CurrentTabForData()))
+        if (comphelper::COKit::isActive() && mrViewData.GetDocument().IsLayoutRTL(mrViewData.CurrentTabForData()))
         {
             Point aMouse = rMEvt.GetPosPixel();
             tools::Rectangle aOutputArea = pEditView->GetOutputArea();
@@ -2981,7 +2981,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             }
 
             const SvxFieldItem* pFld;
-            if ( comphelper::LibreOfficeKit::isActive() )
+            if ( comphelper::COKit::isActive() )
             {
                 Point aLogicClick = pEditView->GetOutputDevice().PixelToLogic(aPos);
                 pFld = pEditView->GetField( aLogicClick );
@@ -3086,7 +3086,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
     // In LOK case, avoid spurious "leavingwindow" mouse move events which has negative coordinates.
     // Such events occur for some reason when a user is selecting a range, (even when not leaving the view area)
     // with one or more other viewers in that sheet.
-    bool bSkipSelectionUpdate = comphelper::LibreOfficeKit::isActive() &&
+    bool bSkipSelectionUpdate = comphelper::COKit::isActive() &&
         rMEvt.IsLeaveWindow() && (aCurMousePos.X() < 0 || aCurMousePos.Y() < 0);
 
     if (!bSkipSelectionUpdate)
@@ -3207,7 +3207,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
     }
     else if ( rTEvt.IsTrackingEnded() )
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             // MouseButtonUp always with matching buttons (eg for test tool, # 63148 #)
             // The tracking event will indicate if it was completed and not canceled.
@@ -5197,9 +5197,9 @@ void ScGridWindow::UpdateEditViewPos()
         // bForceToTop = sal_True for editing
         tools::Rectangle aPixRect = mrViewData.GetEditArea( eWhich, nCol, nRow, this, nullptr, true );
 
-        if (comphelper::LibreOfficeKit::isActive() &&
-            comphelper::LibreOfficeKit::isCompatFlagSet(
-                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        if (comphelper::COKit::isActive() &&
+            comphelper::COKit::isCompatFlagSet(
+                comphelper::COKit::Compat::scPrintTwipsMsgs))
         {
             tools::Rectangle aPTwipsRect = mrViewData.GetEditArea(eWhich, nCol, nRow, this, nullptr,
                     true, true /* bInPrintTwips */);
@@ -5248,7 +5248,7 @@ void ScGridWindow::UpdateFormulas(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2)
         return;
     }
 
-    if ( comphelper::LibreOfficeKit::isActive() )
+    if ( comphelper::COKit::isActive() )
     {
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
 
@@ -5309,7 +5309,7 @@ void ScGridWindow::UpdateFormulaRange(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2
 
     SCTAB nTab = mrViewData.CurrentTabForData();
 
-    if ( !comphelper::LibreOfficeKit::isActive() )
+    if ( !comphelper::COKit::isActive() )
     {
         rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
     }
@@ -5408,7 +5408,7 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
         if ( !bOldButton || aListValPos != aOldPos )
         {
             // paint area of new button
-            if ( comphelper::LibreOfficeKit::isActive() )
+            if ( comphelper::COKit::isActive() )
             {
                 updateLOKValListButton( true, aListValPos );
             }
@@ -5424,7 +5424,7 @@ void ScGridWindow::UpdateListValPos( bool bVisible, const ScAddress& rPos )
     if ( !bListValButton || aListValPos != aOldPos )
     {
         // paint area of old button
-        if ( comphelper::LibreOfficeKit::isActive() )
+        if ( comphelper::COKit::isActive() )
         {
             updateLOKValListButton( false, aOldPos );
         }
@@ -6107,7 +6107,7 @@ bool ScGridWindow::GetEditUrl(const Point& rPos, OUString* pName, OUString* pUrl
         aTempView.SetOutputArea( aLogicEdit );
 
         bool bRet;
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             bRet = extractURLInfo(aTempView.GetField(aLogicClick), pName, pUrl, pTarget);
         }
@@ -6243,8 +6243,8 @@ OString ScGridWindow::getCellCursor() const
     if (!mpOOCursors)
         return "EMPTY"_ostr;
 
-    if (comphelper::LibreOfficeKit::isCompatFlagSet(
-            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    if (comphelper::COKit::isCompatFlagSet(
+            comphelper::COKit::Compat::scPrintTwipsMsgs))
         return mrViewData.describeCellCursorInPrintTwips();
 
     return mrViewData.describeCellCursor();
@@ -6280,8 +6280,8 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
         if (!pForTabView)
             return;
 
-        if (comphelper::LibreOfficeKit::isCompatFlagSet(
-            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        if (comphelper::COKit::isCompatFlagSet(
+            comphelper::COKit::Compat::scPrintTwipsMsgs))
             aCursor = mrViewData.describeCellCursorInPrintTwips();
         else
             aCursor = pForTabView->GetViewData().describeCellCursorAt(
@@ -6298,8 +6298,8 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
 // own zoomed co-ordinate system (but not in scPrintTwipsMsgs mode).
 void ScGridWindow::updateKitCellCursor(const SfxViewShell* pForShell) const
 {
-    if (comphelper::LibreOfficeKit::isCompatFlagSet(
-            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    if (comphelper::COKit::isCompatFlagSet(
+            comphelper::COKit::Compat::scPrintTwipsMsgs))
     {
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
         // Generate the cursor info string just once and directly send to all.
@@ -6402,7 +6402,7 @@ void ScGridWindow::UpdateAllOverlays()
 
 void ScGridWindow::DeleteCursorOverlay()
 {
-    if (comphelper::LibreOfficeKit::isActive() && mrViewData.HasEditView(eWhich))
+    if (comphelper::COKit::isActive() && mrViewData.HasEditView(eWhich))
         return;
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY"_ostr);
@@ -6430,7 +6430,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
 
     DeleteCopySourceOverlay();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
     if (!mrViewData.ShowPasteSource())
         return;
@@ -6521,19 +6521,19 @@ static OString rectanglesToString(const std::vector<tools::Rectangle> &rLogicRec
 }
 
 /**
- * Turn the selection ranges rRectangles into the LibreOfficeKit selection, and send to other views.
+ * Turn the selection ranges rRectangles into the COKit selection, and send to other views.
  *
  * @param pLogicRects - if set then don't invoke the callback, just collect the rectangles in the pointed vector.
  */
 void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRectangles, std::vector<tools::Rectangle>* pLogicRects)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     // If this is true, rRectangles should already in print twips.
     // If false, rRectangles are in pixels.
-    bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
-            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    bool bInPrintTwips = comphelper::COKit::isCompatFlagSet(
+            comphelper::COKit::Compat::scPrintTwipsMsgs);
 
     tools::Rectangle aBoundingBox;
     std::vector<tools::Rectangle> aConvertedRects;
@@ -6590,14 +6590,14 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
 }
 
 /**
- * Fetch the selection ranges for other views into the LibreOfficeKit selection,
+ * Fetch the selection ranges for other views into the COKit selection,
  * map them into our view co-ordinates and send to our view.
  */
 void ScGridWindow::updateOtherKitSelections() const
 {
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
-            comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    bool bInPrintTwips = comphelper::COKit::isCompatFlagSet(
+            comphelper::COKit::Compat::scPrintTwipsMsgs);
 
     for (SfxViewShell* it = SfxViewShell::GetFirst(); it;
          it = SfxViewShell::GetNext(*it))
@@ -6639,9 +6639,9 @@ void ScGridWindow::updateOtherKitSelections() const
 namespace
 {
 
-void updateLibreOfficeKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & rRectangle, bool bIsTableArea)
+void updateCOKitAutoFill(const ScViewData& rViewData, tools::Rectangle const & rRectangle, bool bIsTableArea)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
 
     double nPPTX = rViewData.GetPPTX();
@@ -6705,7 +6705,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
     const ScPatternAttr* pPattern = rDoc.GetPattern(nX,nY,nTab);
 
-    if (!comphelper::LibreOfficeKit::isActive() && !maVisibleRange.isInside(nX, nY))
+    if (!comphelper::COKit::isActive() && !maVisibleRange.isInside(nX, nY))
     {
         if (maVisibleRange.mnCol2 < nX || maVisibleRange.mnRow2 < nY)
             return;     // no further check needed, nothing visible
@@ -6730,7 +6730,7 @@ void ScGridWindow::UpdateCursorOverlay()
     const bool bOverlapped = pPattern && pPattern->GetItem(ATTR_MERGE_FLAG).IsOverlapped();
 
     //  left or above of the screen?
-    bool bVis = comphelper::LibreOfficeKit::isActive() || ( nX>=mrViewData.GetPosX(eHWhich) && nY>=mrViewData.GetPosY(eVWhich) );
+    bool bVis = comphelper::COKit::isActive() || ( nX>=mrViewData.GetPosX(eHWhich) && nY>=mrViewData.GetPosY(eVWhich) );
     if (!bVis)
     {
         SCCOL nEndX = nX;
@@ -6763,7 +6763,7 @@ void ScGridWindow::UpdateCursorOverlay()
         }
 
         // in the tiled rendering case, don't limit to the screen size
-        if (bMaybeVisible || comphelper::LibreOfficeKit::isActive())
+        if (bMaybeVisible || comphelper::COKit::isActive())
         {
             tools::Long nSizeXPix;
             tools::Long nSizeYPix;
@@ -6808,7 +6808,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
     if ( !aPixelRects.empty() )
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
             updateKitCellCursor(nullptr);
@@ -6893,9 +6893,9 @@ void ScGridWindow::UpdateCursorOverlay()
 void ScGridWindow::GetCellSelection(std::vector<tools::Rectangle>& rLogicRects)
 {
     std::vector<tools::Rectangle> aRects;
-    if (comphelper::LibreOfficeKit::isActive() &&
-            comphelper::LibreOfficeKit::isCompatFlagSet(
-                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    if (comphelper::COKit::isActive() &&
+            comphelper::COKit::isCompatFlagSet(
+                comphelper::COKit::Compat::scPrintTwipsMsgs))
         GetSelectionRectsPrintTwips(aRects);
     else
         GetSelectionRects(aRects);
@@ -6961,9 +6961,9 @@ void ScGridWindow::UpdateSelectionOverlay()
 
     DeleteSelectionOverlay();
     std::vector<tools::Rectangle> aRects;
-    if (comphelper::LibreOfficeKit::isActive() &&
-            comphelper::LibreOfficeKit::isCompatFlagSet(
-                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    if (comphelper::COKit::isActive() &&
+            comphelper::COKit::isCompatFlagSet(
+                comphelper::COKit::Compat::scPrintTwipsMsgs))
         GetSelectionRectsPrintTwips(aRects);
     else
         GetSelectionRects(aRects);
@@ -6972,9 +6972,9 @@ void ScGridWindow::UpdateSelectionOverlay()
     {
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
-            // notify the LibreOfficeKit too
+            // notify the COKit too
             UpdateKitSelection(aRects);
         }
         else
@@ -7007,10 +7007,10 @@ void ScGridWindow::DeleteDatabaseOverlay()
 {
     mpDBExpandRect.reset();
     mpOODatabase.reset();
-    if (comphelper::LibreOfficeKit::isActive()) // notify the LibreOfficeKit
+    if (comphelper::COKit::isActive()) // notify the COKit
     {
         tools::Rectangle aEmptyRect;
-        updateLibreOfficeKitAutoFill(mrViewData, aEmptyRect, true);
+        updateCOKitAutoFill(mrViewData, aEmptyRect, true);
     }
 }
 
@@ -7081,9 +7081,9 @@ void ScGridWindow::UpdateHighlightOverlay()
 {
     mpOOHighlight.reset();          // DeleteHighlightOverlay
     std::vector<tools::Rectangle> aRects;
-    if (comphelper::LibreOfficeKit::isActive() &&
-            comphelper::LibreOfficeKit::isCompatFlagSet(
-                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+    if (comphelper::COKit::isActive() &&
+            comphelper::COKit::isCompatFlagSet(
+                comphelper::COKit::Compat::scPrintTwipsMsgs))
         GetRectsAnyFor(mrViewData.GetHighlightData(), aRects, true);
     else
         GetPixelRectsFor(mrViewData.GetHighlightData(), aRects);
@@ -7138,7 +7138,7 @@ std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SC
         nY2 += rMerge.GetRowMerge() - 1;
     }
 
-    if (bLayoutRTL && !comphelper::LibreOfficeKit::isActive())
+    if (bLayoutRTL && !comphelper::COKit::isActive())
         aFillPos.AdjustX( -(nSizeXPix + (aFillHandleSize.Width() / 2)) );
     else
         aFillPos.AdjustX(nSizeXPix - (aFillHandleSize.Width() / 2) );
@@ -7154,9 +7154,9 @@ std::unique_ptr<sdr::overlay::OverlayObjectList> ScGridWindow::DrawFillMarker(SC
 
     // #i70788# get the OverlayManager safely
     rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
-    if (comphelper::LibreOfficeKit::isActive()) // notify the LibreOfficeKit
+    if (comphelper::COKit::isActive()) // notify the COKit
     {
-        updateLibreOfficeKitAutoFill(mrViewData, aFillRect, bIsTableArea);
+        updateCOKitAutoFill(mrViewData, aFillRect, bIsTableArea);
     }
     else if (xOverlayManager.is())
     {
@@ -7232,7 +7232,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
     SCCOL nX = aAutoMarkPos.Col();
     SCROW nY = aAutoMarkPos.Row();
 
-    if (!maVisibleRange.isInside(nX, nY) && !comphelper::LibreOfficeKit::isActive())
+    if (!maVisibleRange.isInside(nX, nY) && !comphelper::COKit::isActive())
     {
         // Autofill mark is not visible.  Bail out.
         return;
@@ -7248,8 +7248,8 @@ void ScGridWindow::DeleteDragRectOverlay()
 
 void ScGridWindow::UpdateDragRectOverlay()
 {
-    bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
-        comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+    bool bInPrintTwips = comphelper::COKit::isCompatFlagSet(
+        comphelper::COKit::Compat::scPrintTwipsMsgs);
 
     const MapMode aDrawMode = GetDrawMapMode();
     const MapMode aOldMode = GetMapMode();
@@ -7296,7 +7296,7 @@ void ScGridWindow::UpdateDragRectOverlay()
 
         bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
         tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
-        tools::Long nAdjust = comphelper::LibreOfficeKit::isActive() ? 0 : 2;
+        tools::Long nAdjust = comphelper::COKit::isActive() ? 0 : 2;
 
         if (rDoc.ValidCol(nX2) && nX2>=nX1)
             for (i=nX1; i<=nX2; i++)
@@ -7322,7 +7322,7 @@ void ScGridWindow::UpdateDragRectOverlay()
             nSizeYPix   += nAdjust;
         }
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             nSizeXPix -= 2;
             nSizeYPix -= 2;
@@ -7363,7 +7363,7 @@ void ScGridWindow::UpdateDragRectOverlay()
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if (xOverlayManager.is() && !comphelper::LibreOfficeKit::isActive())
+        if (xOverlayManager.is() && !comphelper::COKit::isActive())
         {
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
@@ -7387,7 +7387,7 @@ void ScGridWindow::UpdateDragRectOverlay()
         }
 
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-        if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+        if (comphelper::COKit::isActive() && pViewShell)
         {
             OString aRectsString;
             tools::Rectangle aBoundingBox;
@@ -7441,7 +7441,7 @@ void ScGridWindow::UpdateHeaderOverlay()
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if (xOverlayManager.is() && !comphelper::LibreOfficeKit::isActive())
+        if (xOverlayManager.is() && !comphelper::COKit::isActive())
         {
             // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             std::vector< basegfx::B2DRange > aRanges;
@@ -7512,7 +7512,7 @@ void ScGridWindow::UpdateShrinkOverlay()
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if (xOverlayManager.is() && !comphelper::LibreOfficeKit::isActive())
+        if (xOverlayManager.is() && !comphelper::COKit::isActive())
         {
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());

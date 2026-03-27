@@ -1699,7 +1699,7 @@ weld::ScreenShotCollection SalInstanceWindow::collect_screenshot_data()
     return aRet;
 }
 
-const vcl::ILibreOfficeKitNotifier* SalInstanceWindow::GetLOKNotifier()
+const vcl::ICOKitNotifier* SalInstanceWindow::GetLOKNotifier()
 {
     return m_xWindow ? m_xWindow->GetLOKNotifier() : nullptr;
 }
@@ -1847,8 +1847,7 @@ void SalInstanceDialog::undo_collapse()
     m_xDialog->setOptimalLayoutSize(true);
 }
 
-void SalInstanceDialog::SetInstallLOKNotifierHdl(
-    const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
+void SalInstanceDialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ICOKitNotifier*>& rLink)
 {
     m_xDialog->SetInstallLOKNotifierHdl(rLink);
 }
@@ -7304,7 +7303,7 @@ void SalInstanceWindow::help()
     vcl::Window* pWidget = ImplGetSVData()->mpWinData->mpFocusWin;
     if (!pWidget)
         pWidget = m_xWindow;
-    if (comphelper::LibreOfficeKit::isActive() && m_xWindow->GetFocusedWindow())
+    if (comphelper::COKit::isActive() && m_xWindow->GetFocusedWindow())
         pWidget = m_xWindow->GetFocusedWindow().get();
     OUString sHelpId = pWidget->GetHelpId();
     while (sHelpId.isEmpty())

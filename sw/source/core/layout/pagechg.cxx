@@ -1885,7 +1885,7 @@ void SwRootFrame::ImplCalcBrowseWidth()
 
     mbBrowseWidthValid = true;
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
-    mnBrowseWidth = (!comphelper::LibreOfficeKit::isActive() && pSh)? MINLAY + 2 * pSh->GetOut()-> PixelToLogic( pSh->GetBrowseBorder() ).Width(): MIN_BROWSE_WIDTH;
+    mnBrowseWidth = (!comphelper::COKit::isActive() && pSh)? MINLAY + 2 * pSh->GetOut()-> PixelToLogic( pSh->GetBrowseBorder() ).Width(): MIN_BROWSE_WIDTH;
 
     do
     {
@@ -2377,7 +2377,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
 
             // center page if possible
             tools::Long nSizeDiff = 0;
-            if (nVisWidth > nCurrentRowWidth && !comphelper::LibreOfficeKit::isActive())
+            if (nVisWidth > nCurrentRowWidth && !comphelper::COKit::isActive())
                 nSizeDiff = ( nVisWidth - nCurrentRowWidth ) / 2;
 
             // adjust positions of pages in current row

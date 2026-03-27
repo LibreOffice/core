@@ -94,7 +94,7 @@ void SdDLL::RegisterFactorys()
     {
         ::sd::ImpressViewShellBase::RegisterFactory (
             ::sd::IMPRESS_FACTORY_ID);
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             ::sd::ImpressViewShellBase::RegisterFactory (
                 ::sd::SLIDE_SORTER_FACTORY_ID);

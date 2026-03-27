@@ -59,7 +59,7 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
                       Annotation& rAnnotation)
 {
     // callbacks only if tiled annotations are explicitly turned off by LOK client
-    if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
+    if (!comphelper::COKit::isActive() || comphelper::COKit::isTiledAnnotations())
         return;
 
     OString aPayload = rAnnotation.ToJSON(nType);
@@ -69,7 +69,7 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
 void LOKCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
 {
     // callbacks only if tiled annotations are explicitly turned off by LOK client
-    if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
+    if (!comphelper::COKit::isActive() || comphelper::COKit::isTiledAnnotations())
         return;
 
     OString aPayload = rAnnotation.ToJSON(nType);

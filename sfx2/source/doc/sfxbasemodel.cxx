@@ -391,7 +391,7 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell const * pObjectShell )
     if ( !pObjectShell )
         return;
 
-    if ( comphelper::LibreOfficeKit::isForkedChild() )
+    if ( comphelper::COKit::isForkedChild() )
         return; // no need to tweak UI when in the background
 
     for (   SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pObjectShell );
@@ -2014,7 +2014,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
                 if( aRequest.isApproved() )
                 {
                     // lok: we want to overwrite file in jail, so don't use template flag
-                    bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+                    bool bIsLOK = comphelper::COKit::isActive();
                     // broken package: try second loading and allow repair
                     pMedium->GetItemSet().Put( SfxBoolItem( SID_REPAIRPACKAGE, true ) );
                     pMedium->GetItemSet().Put( SfxBoolItem( SID_TEMPLATE, !bIsLOK ) );
@@ -3314,7 +3314,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDocFailed : SfxEventHintId::SaveAsDocFailed, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOCFAILED : GlobalEventId::SAVEASDOCFAILED),
                                                 m_pData->m_pObjectShell.get() ) );
 
-        if (SfxViewShell* pNotifyView = comphelper::LibreOfficeKit::isActive() ? SfxViewShell::Current() : nullptr)
+        if (SfxViewShell* pNotifyView = comphelper::COKit::isActive() ? SfxViewShell::Current() : nullptr)
             pNotifyView->libreOfficeKitViewCallback(LOK_CALLBACK_EXPORT_FILE, "ERROR"_ostr);
 
         std::stringstream aErrCode;

@@ -196,7 +196,7 @@ void Application::EnableUICoverage(bool bEnable)
 }
 
 void Application::UICoverageReport(tools::JsonWriter& rJson,
-        /*LibreOfficeKitDocumentType*/ int docType,
+        /*COKitDocumentType*/ int docType,
         bool linguisticDataAvailable)
 {
     auto resultNode = rJson.startNode("result");
@@ -273,7 +273,7 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
     if (bEnableUICoverage)
         pSVData->mpDefInst->getUsedUIList().insert(rUIFile);
 
-    if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
+    if (comphelper::COKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         if (jsdialog::isBuilderEnabledForSidebar(rUIFile))
             return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "sidebar", nLOKWindowId);
@@ -304,7 +304,7 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
     if (bEnableUICoverage)
         pSVData->mpDefInst->getUsedUIList().insert(rUIFile);
 
-    if (comphelper::LibreOfficeKit::isActive() && !jsdialog::isIgnored(rUIFile))
+    if (comphelper::COKit::isActive() && !jsdialog::isIgnored(rUIFile))
     {
         // Notebookbar sub controls
         if (jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))
@@ -324,9 +324,9 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
 
 weld::MessageDialog* Application::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                       VclButtonsType eButtonType, const OUString& rPrimaryMessage,
-                                                      const ILibreOfficeKitNotifier* pNotifier)
+                                                      const ICOKitNotifier* pNotifier)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return JSInstanceBuilder::CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage, pNotifier);
     else
         return ImplGetSVData()->mpDefInst->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
@@ -910,7 +910,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
     }
 #endif
 
-    const bool bHideHelp = comphelper::LibreOfficeKit::isActive() &&
+    const bool bHideHelp = comphelper::COKit::isActive() &&
         officecfg::Office::Common::Help::HelpRootURL::get().isEmpty();
     if (bHideHelp)
     {
@@ -1450,7 +1450,7 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OUString& rName)
                     // in the case of preloading, we don't have eg. the
                     // libcuilo.so, but still need to dlsym the symbols -
                     // which are already in-process
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                     {
                         pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(dlsym(RTLD_DEFAULT, OUStringToOString(sFunction, RTL_TEXTENCODING_UTF8).getStr()));
                         ok = !!pFunction;
@@ -3153,7 +3153,7 @@ void VclBuilder::insertMenuObject(PopupMenu* pParent, PopupMenu* pSubMenu, const
 
     if(rClass == "NotebookBarAddonsMenuMergePoint")
     {
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (!comphelper::COKit::isActive())
         {
             NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, m_xFrame, *m_pNotebookBarAddonsItem);
         }

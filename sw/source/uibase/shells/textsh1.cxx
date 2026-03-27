@@ -3643,7 +3643,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 if (nLang != LANGUAGE_DONTKNOW)
                 {
                     aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                     {
                         if (nLang == LANGUAGE_NONE)
                         {
@@ -3900,7 +3900,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case FN_INSERT_PAGEHEADER:
         case FN_INSERT_PAGEFOOTER:
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 bool bState = false;
                 bool bAllState = true;
@@ -3975,7 +3975,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
 #if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
                     if (!officecfg::Office::Common::Misc::ExperimentalMode::get()
-                        && !comphelper::LibreOfficeKit::isActive())
+                        && !comphelper::COKit::isActive())
                     {
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                         break;

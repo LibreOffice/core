@@ -504,8 +504,8 @@ namespace {
                     xTextStrm->setEncoding(u"utf8"_ustr);
 
                     ::std::vector<OUString> aLocales;
-                    if (comphelper::LibreOfficeKit::isActive())
-                        aLocales = comphelper::LibreOfficeKit::getLanguageTag().getFallbackStrings(true);
+                    if (comphelper::COKit::isActive())
+                        aLocales = comphelper::COKit::getLanguageTag().getFallbackStrings(true);
                     else
                         aLocales = LanguageTag(css::uno::Reference< css::lang::XLocalizable >(
                                                    css::configuration::theDefaultProvider::get(xContext),

@@ -99,7 +99,7 @@ void PriorityHBox::Resize()
     if (!m_bInitialized)
         Initialize();
 
-    if (!m_bInitialized || comphelper::LibreOfficeKit::isActive())
+    if (!m_bInitialized || comphelper::COKit::isActive())
     {
         return VclHBox::Resize();
     }

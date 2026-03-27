@@ -260,7 +260,7 @@ void ChartLinePanel::updateLineWidth(bool bDisabled, bool bSetOrDefault, const S
     LinePropertyPanelBase::updateLineWidth(bDisabled, bSetOrDefault, pItem);
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (comphelper::LibreOfficeKit::isActive() && pViewShell)
+    if (comphelper::COKit::isActive() && pViewShell)
     {
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
                         ".uno:LineWidth=" + OString::number(mnWidthCoreValue));

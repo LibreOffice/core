@@ -50,7 +50,7 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
         assert(pSfxBindings != nullptr);
         OSL_ASSERT(pSfxBindings->GetDispatcher()!=nullptr);
     }
-    else if (!comphelper::LibreOfficeKit::isActive())
+    else if (!comphelper::COKit::isActive())
     {
         GetOrCreateSidebarController();
     }

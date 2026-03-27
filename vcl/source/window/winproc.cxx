@@ -314,7 +314,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
     ImplFrameData* pWinFrameData = xWindow->ImplGetFrameData();
     sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
 
-    if (comphelper::LibreOfficeKit::isActive() && AllSettings::GetLayoutRTL()
+    if (comphelper::COKit::isActive() && AllSettings::GetLayoutRTL()
         && xWindow->GetOutDev() && !xWindow->GetOutDev()->ImplIsAntiparallel())
     {
         xWindow->GetOutDev()->ReMirror(aMousePos);
@@ -1381,7 +1381,7 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
         if( !pChild->ImplGetWindowImpl()->mpFrameData->mnFocusId )
             break;
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             SAL_WARN("vcl", "Failed to get ext text input context");
             break;

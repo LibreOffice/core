@@ -1358,7 +1358,7 @@ void SmCursor::RequestRepaint()
 {
     if (SmViewShell *pViewSh = SmGetActiveView())
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             pViewSh->SendCaretToLOK();
         }

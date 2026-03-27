@@ -36,11 +36,11 @@ std::vector<OUString> completeCalcDialogList(const o3tl::sorted_vector<OUString>
 std::vector<OUString> completeCalcSidebarList(const o3tl::sorted_vector<OUString>& entries);
 // returns vector of common/shared dialog .ui files not seen that should be seen to have complete coverage
 std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUString>& entries,
-                                               /*LibreOfficeKitDocumentType*/ int docType,
+                                               /*COKitDocumentType*/ int docType,
                                                bool linguisticDataAvailable);
 // returns vector of common/shared sidebar .ui files not seen that should be seen to have complete coverage
 std::vector<OUString> completeCommonSidebarList(const o3tl::sorted_vector<OUString>& entries,
-                                                /*LibreOfficeKitDocumentType*/ int docType);
+                                                /*COKitDocumentType*/ int docType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

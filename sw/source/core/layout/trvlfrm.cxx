@@ -2121,7 +2121,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
 
     bool bIgnoreVisArea = true;
     if (pSh)
-        bIgnoreVisArea = pSh->GetViewOptions()->IsPDFExport() || comphelper::LibreOfficeKit::isActive();
+        bIgnoreVisArea = pSh->GetViewOptions()->IsPDFExport() || comphelper::COKit::isActive();
 
     SwRegionRects aRegion( !bIgnoreVisArea ?
                            pSh->VisArea() :

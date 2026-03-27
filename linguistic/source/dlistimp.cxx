@@ -326,7 +326,7 @@ void DicList::SearchForDictionaries(
 
             // when using libreofficekit we don't have "options" dialog to make user-dictionaries active
             // so when we add user-dictionary, we make them active as well
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 xDic->setActive(true);
 
             addDictionary( xDic );
@@ -602,7 +602,7 @@ void DicList::CreateDicList()
 
     // create IgnoreAllList dictionary with empty URL (non persistent)
     // and add it to list
-    const LanguageTag tag = comphelper::LibreOfficeKit::isActive()
+    const LanguageTag tag = comphelper::COKit::isActive()
                                 ? LanguageTag(u"en-US"_ustr)
                                 : SvtSysLocale().GetUILanguageTag();
     std::locale loc(Translate::Create("svt", tag));

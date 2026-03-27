@@ -133,7 +133,7 @@
 #define HAVE_FEATURE_ANDROID_LOK 0
 
 /*
- * Whether LibreOfficeKit::isActive() is a compile-time constant.
+ * Whether COKit::isActive() is a compile-time constant.
  * Enables dead code elimination for non-LOK code paths.
  */
 #define LOK_ALWAYS_ACTIVE 0

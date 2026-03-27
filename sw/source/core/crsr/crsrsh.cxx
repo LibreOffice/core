@@ -2169,7 +2169,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
             if (Imp()->IsAccessible() && m_bSendAccessibleCursorEvents)
                 Imp()->InvalidateAccessibleCursorPosition( pTableFrame );
 #endif
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
                 sendLOKCursorUpdates();
             return;
         }
@@ -2473,7 +2473,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
         RefreshBlockCursor();
 
     // We should not restrict cursor update to the active view when using LOK
-    bool bCheckFocus = m_bHasFocus || comphelper::LibreOfficeKit::isActive();
+    bool bCheckFocus = m_bHasFocus || comphelper::COKit::isActive();
 
     if( !bIdleEnd && bCheckFocus && !m_bBasicHideCursor )
     {
@@ -2541,7 +2541,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
     GetDoc()->getIDocumentState().YrsNotifyCursorUpdate();
 #endif
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         sendLOKCursorUpdates();
 
     getIDocumentMarkAccess()->NotifyCursorUpdate(*this);
@@ -2908,7 +2908,7 @@ void SwCursorShell::ShowCursor()
     m_pCurrentCursor->SetShowTextInputFieldOverlay( true );
     m_pCurrentCursor->SetShowContentControlOverlay(true);
 
-    if (SfxViewShell* pNotifySh = comphelper::LibreOfficeKit::isActive() ? GetSfxViewShell() : nullptr)
+    if (SfxViewShell* pNotifySh = comphelper::COKit::isActive() ? GetSfxViewShell() : nullptr)
     {
         const OString aPayload = OString::boolean(m_bSVCursorVis);
         pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);
@@ -2930,7 +2930,7 @@ void SwCursorShell::HideCursor()
     m_pCurrentCursor->SetShowContentControlOverlay(false);
     m_pVisibleCursor->Hide();
 
-    if (SfxViewShell* pNotifySh = comphelper::LibreOfficeKit::isActive() ? GetSfxViewShell() : nullptr)
+    if (SfxViewShell* pNotifySh = comphelper::COKit::isActive() ? GetSfxViewShell() : nullptr)
     {
         OString aPayload = OString::boolean(m_bSVCursorVis);
         pNotifySh->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, aPayload);

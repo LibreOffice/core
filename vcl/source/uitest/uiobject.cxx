@@ -1110,7 +1110,7 @@ void ListBoxUIObject::execute(const OUString& rAction,
     if (!mxListBox->IsEnabled())
         return;
 
-    bool isTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool isTiledRendering = comphelper::COKit::isActive();
     if (!isTiledRendering && !mxListBox->IsReallyVisible())
         return;
 

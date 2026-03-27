@@ -108,7 +108,7 @@ ImplMarkingOverlay::ImplMarkingOverlay(const SdrPaintView& rView, const basegfx:
 :   maSecondPosition(rStartPos),
     mbUnmarking(bUnmarking)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return; // We do client-side object manipulation with the Kit API
 
     for(sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
@@ -148,7 +148,7 @@ class MarkingSelectionOverlay
 public:
     MarkingSelectionOverlay(const SdrPaintView& rView, basegfx::B2DRectangle const& rSelection)
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
             return; // We do client-side object manipulation with the Kit API
 
         for (sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
@@ -174,7 +174,7 @@ class MarkingSubSelectionOverlay
 public:
     MarkingSubSelectionOverlay(const SdrPaintView& rView, std::vector<basegfx::B2DRectangle> const & rSelections)
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
             return; // We do client-side object manipulation with the Kit API
 
         for (sal_uInt32 a(0); a < rView.PaintWindowCount(); a++)
@@ -266,7 +266,7 @@ void SdrMarkView::ModelHasChanged()
         AdjustMarkHdl();
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         modelHasChangedLOKit();
 }
 
@@ -899,7 +899,7 @@ OString SdrMarkView::CreateInnerTextRectString() const
 
 void SdrMarkView::SetInnerTextAreaForLOKit() const
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
     SfxViewShell* pViewShell = GetSfxViewShell();
     OString sRectString = CreateInnerTextRectString();
@@ -1396,7 +1396,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         return;
 
     // There can be multiple mark views, but we're only interested in the one that has a window associated.
-    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
+    const bool bTiledRendering = comphelper::COKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     const size_t nMarkCount=rMarkList.GetMarkCount();

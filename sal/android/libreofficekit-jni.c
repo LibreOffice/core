@@ -29,8 +29,8 @@
 
 #include <COKit/COKit.h>
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "LibreOfficeKit", __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "LibreOfficeKit", __VA_ARGS__))
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "COKit", __VA_ARGS__))
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "COKit", __VA_ARGS__))
 
 /* These are valid / used in all apps. */
 extern const char* data_dir;
@@ -42,14 +42,14 @@ AAssetManager* native_asset_manager;
 extern void Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env, jobject clazz, jstring string);
 extern void Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env, jobject clazz, jboolean state);
 
-extern LibreOfficeKit* libreofficekit_hook(const char* install_path);
+extern COKit* libreofficekit_hook(const char* install_path);
 
 static char *full_program_dir = NULL;
 
 /// Call the same method from Bootstrap.
 __attribute__ ((visibility("default")))
 void
-Java_org_libreoffice_kit_LibreOfficeKit_putenv
+Java_org_libreoffice_kit_COKit_putenv
     (JNIEnv* env, jobject clazz, jstring string)
 {
     Java_org_libreoffice_android_Bootstrap_putenv(env, clazz, string);
@@ -57,13 +57,13 @@ Java_org_libreoffice_kit_LibreOfficeKit_putenv
 
 /// Call the same method from Bootstrap.
 __attribute__ ((visibility("default")))
-void Java_org_libreoffice_kit_LibreOfficeKit_redirectStdio
+void Java_org_libreoffice_kit_COKit_redirectStdio
     (JNIEnv* env, jobject clazz, jboolean state)
 {
     Java_org_libreoffice_android_Bootstrap_redirect_1stdio(env, clazz, state);
 }
 
-/// Initialize the LibreOfficeKit.
+/// Initialize the COKit.
 __attribute__ ((visibility("default")))
 jboolean libreofficekit_initialize(JNIEnv* env,
      jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager)
@@ -147,14 +147,14 @@ jboolean libreofficekit_initialize(JNIEnv* env,
         return JNI_FALSE;
     }
 
-    LOGI("LibreOfficeKit: libreofficekit_initialize finished");
+    LOGI("COKit: libreofficekit_initialize finished");
 
     return JNI_TRUE;
 }
 
-/// Initialize the LibreOfficeKit.
+/// Initialize the COKit.
 __attribute__ ((visibility("default")))
-jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
+jboolean Java_org_libreoffice_kit_COKit_initializeNative
     (JNIEnv* env, jobject clazz,
      jstring dataDir, jstring cacheDir, jstring apkFile, jobject assetManager)
 {
@@ -165,7 +165,7 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
 
     libreofficekit_initialize(env, dataDir, cacheDir, apkFile, assetManager);
 
-    // LibreOfficeKit expects a path to the program/ directory
+    // COKit expects a path to the program/ directory
     free(full_program_dir);
     data_dir_len = strlen(data_dir);
     full_program_dir = malloc(data_dir_len + sizeof(program_dir));
@@ -173,30 +173,30 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
     strncpy(full_program_dir, data_dir, data_dir_len);
     strncpy(full_program_dir + data_dir_len, program_dir, sizeof(program_dir));
 
-    // Initialize LibreOfficeKit
+    // Initialize COKit
     if (!libreofficekit_hook(full_program_dir))
     {
         LOGE("libreofficekit_hook returned null");
         return JNI_FALSE;
     }
 
-    LOGI("LibreOfficeKit successfully initialized");
+    LOGI("COKit successfully initialized");
 
     return JNI_TRUE;
 }
 
 __attribute__ ((visibility("default")))
-jobject Java_org_libreoffice_kit_LibreOfficeKit_getLibreOfficeKitHandle
+jobject Java_org_libreoffice_kit_COKit_getCOKitHandle
     (JNIEnv* env, jobject clazz)
 {
-    LibreOfficeKit* aOffice;
+    COKit* aOffice;
 
     (void) env;
     (void) clazz;
 
     aOffice = libreofficekit_hook(full_program_dir);
 
-    return (*env)->NewDirectByteBuffer(env, (void*) aOffice, sizeof(LibreOfficeKit));
+    return (*env)->NewDirectByteBuffer(env, (void*) aOffice, sizeof(COKit));
 }
 
 __attribute__ ((visibility("default")))

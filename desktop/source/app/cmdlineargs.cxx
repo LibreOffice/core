@@ -71,7 +71,7 @@ class ExtCommandLineSupplier: public CommandLineArgs::Supplier {
 public:
     explicit ExtCommandLineSupplier():
         m_count(
-            comphelper::LibreOfficeKit::isActive()
+            comphelper::COKit::isActive()
             ? 0 : rtl_getAppCommandArgCount()),
         m_index(0)
     {

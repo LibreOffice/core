@@ -52,7 +52,7 @@ struct GtvApplicationWindow
 
     GtkWidget* scrolledwindow;
     GtkWidget* lokdocview;
-    LibreOfficeKitDocumentType doctype;
+    COKitDocumentType doctype;
 
     GtkWidget* rowbar;
     GtkWidget* columnbar;

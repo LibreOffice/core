@@ -896,7 +896,7 @@ VCLXToolkit::VCLXToolkit():
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
     nVCLToolkitInstanceCount++;
     if( nVCLToolkitInstanceCount == 1 && !Application::IsInMain() &&
-        !comphelper::LibreOfficeKit::isActive() )
+        !comphelper::COKit::isActive() )
     {
         // setup execute thread
         CreateMainLoopThread( ToolkitWorkerFunction, this );

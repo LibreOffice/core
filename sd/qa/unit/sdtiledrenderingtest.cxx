@@ -41,7 +41,7 @@ void SdTiledRenderingTest::setUp()
 
     // prevent showing warning message box
     osl_setEnvironment(u"OOX_NO_SMARTART_WARNING"_ustr.pData, u"1"_ustr.pData);
-    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::COKit::setActive(true);
 }
 
 void SdTiledRenderingTest::tearDown()
@@ -65,9 +65,9 @@ SdTiledRenderingTest::createDoc(const char* pName,
     return pImpressDocument;
 }
 
-void SdTiledRenderingTest::setupLibreOfficeKitViewCallback(SfxViewShell& rViewShell)
+void SdTiledRenderingTest::setupCOKitViewCallback(SfxViewShell& rViewShell)
 {
-    rViewShell.setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    rViewShell.setCOKitViewCallback(&m_callbackWrapper);
     m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(rViewShell));
 }
 
@@ -207,7 +207,7 @@ SdTestViewCallback::SdTestViewCallback()
     , partOfInvalidation(0)
 {
     mpViewShell = SfxViewShell::Current();
-    mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    mpViewShell->setCOKitViewCallback(&m_callbackWrapper);
     mnView = SfxLokHelper::getCurrentView();
     m_callbackWrapper.setLOKViewId(mnView);
 }
@@ -215,7 +215,7 @@ SdTestViewCallback::SdTestViewCallback()
 SdTestViewCallback::~SdTestViewCallback()
 {
     SfxLokHelper::setView(mnView);
-    mpViewShell->setLibreOfficeKitViewCallback(nullptr);
+    mpViewShell->setCOKitViewCallback(nullptr);
 }
 
 void SdTestViewCallback::callback(int nType, const char* pPayload, void* pData)

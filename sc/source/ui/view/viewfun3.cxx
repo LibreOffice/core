@@ -933,7 +933,7 @@ bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi, boo
         {
             ErrorMessage(STR_PASTE_ERROR);
         }
-        else if (comphelper::LibreOfficeKit::isActive())
+        else if (comphelper::COKit::isActive())
         {
             ScTabViewShell* pTabViewShell = rViewData.GetViewShell();
             pTabViewShell->OnLOKSetWidthOrHeight(rViewData.GetCurX(), true);

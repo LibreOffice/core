@@ -474,7 +474,7 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     if (!bLast)
         UpdatePageRelativeURLs(pSdPage, nPos, 1);
 
-    if (comphelper::LibreOfficeKit::isActive() && pSdPage->GetPageKind() == PageKind::Standard)
+    if (comphelper::COKit::isActive() && pSdPage->GetPageKind() == PageKind::Standard)
     {
         SdXImpressDocument* pDoc = getUnoModel();
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
@@ -520,7 +520,7 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
     {
         SdrPage* pMPage = &pPage->TRG_GetMasterPage();
         RemoveMasterPage(pMPage->GetPageNum());
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             DrawViewShell* pDrawViewSh = dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell());
             pDrawViewSh->RememberCanvasPageVisArea(::tools::Rectangle());
@@ -535,7 +535,7 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
     if (!bLast)
         UpdatePageRelativeURLs(pSdPage, nPgNum, -1);
 
-    if (comphelper::LibreOfficeKit::isActive() && pSdPage->GetPageKind() == PageKind::Standard)
+    if (comphelper::COKit::isActive() && pSdPage->GetPageKind() == PageKind::Standard)
     {
         SdXImpressDocument* pDoc = getUnoModel();
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
@@ -1557,7 +1557,7 @@ void SdDrawDocument::ImportCanvasPage()
 
 void SdDrawDocument::NotifyLOKHasOverviewPage(bool bHasOverviewPage)
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
     DrawViewShell* pDrawViewSh = dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell());
     if (!pDrawViewSh)

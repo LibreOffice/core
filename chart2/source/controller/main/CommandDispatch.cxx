@@ -142,7 +142,7 @@ void CommandDispatch::fireStatusEventForURL(
     // Notify LOKit clients about chart command state changes.
     // The chart controller's dispatcher is not part of the SfxDispatcher chain,
     // so state changes would otherwise not reach the LOKit callback layer.
-    if( !xSingleListener.is() && comphelper::LibreOfficeKit::isActive())
+    if( !xSingleListener.is() && comphelper::COKit::isActive())
     {
         if( SfxViewShell* pViewShell = SfxViewShell::Current())
         {

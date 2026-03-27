@@ -28,7 +28,7 @@
 
 sal_uInt32 SvxColorIconView::getEntryEdgeLength()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         return 26;
     }

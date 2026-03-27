@@ -159,7 +159,7 @@ void FormShellManager::RegisterAtCenterPane()
     mrBase.GetViewShellManager()->AddSubShellFactory(pShell,mpSubShellFactory);
     mrBase.GetViewShellManager()->ActivateSubShell(*pShell, ToolbarId::FormLayer_Toolbox);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         SfxViewShell* sfxViewShell = pShell->GetViewShell();
         if (sfxViewShell)

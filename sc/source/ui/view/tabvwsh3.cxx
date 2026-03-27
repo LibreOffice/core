@@ -671,7 +671,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         // align to cursor even if the cursor position hasn't changed,
                         // because the cursor may be set outside the visible area.
                         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
-                        if ( nSlot == SID_JUMPTOMARK && comphelper::LibreOfficeKit::isActive() )
+                        if ( nSlot == SID_JUMPTOMARK && comphelper::COKit::isActive() )
                             rViewData.GetActiveWin()->notifyKitCellFollowJump();
                     }
 
@@ -1345,7 +1345,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_WINDOW_FIX:
             {
-                if (!comphelper::LibreOfficeKit::isActive())
+                if (!comphelper::COKit::isActive())
                 {
                     ScSplitMode eHSplit = GetViewData().GetHSplitMode();
                     ScSplitMode eVSplit = GetViewData().GetVSplitMode();
@@ -1408,7 +1408,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         nFreezeIndex = 0;
                 }
 
-                if (comphelper::LibreOfficeKit::isActive())
+                if (comphelper::COKit::isActive())
                 {
                     ScViewData& rViewData = GetViewData();
                     SCTAB nThisTab = rViewData.GetTabNumber();

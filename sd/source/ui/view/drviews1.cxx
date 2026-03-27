@@ -402,7 +402,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             OUString aPageName = pPage->GetName();
             maTabControl->InsertPage(pPage->getPageId(), aPageName);
 
-            if ( !comphelper::LibreOfficeKit::isActive() && pPage->IsSelected() )
+            if ( !comphelper::COKit::isActive() && pPage->IsSelected() )
             {
                 nActualPageId = pPage->getPageId();
             }
@@ -939,7 +939,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
                         && maTabControl->GetPageText(maTabControl->GetPageId(nSelectedPage)) == pNewPage->GetName())
                     {
                         // this slide is already visible
-                        if (comphelper::LibreOfficeKit::isActive())
+                        if (comphelper::COKit::isActive())
                             notifyLinkAnnotations(GetViewShell(), mpActualPage);
                         return true;
                     }
@@ -1003,9 +1003,9 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
         // never at a masterpage)
         GetDoc()->SetSelected(mpActualPage, true);
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
-            // notify LibreOfficeKit about changed page
+            // notify COKit about changed page
             OString aPayload = OString::number(nSelectedPage);
             if (SfxViewShell* pViewShell = GetViewShell())
             {
@@ -1077,7 +1077,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
 
                     UpdateScrollBars();
 
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                     {
                         OString aPayload = ".uno:CurrentPageResize"_ostr;
                         SfxViewShell* pViewShell = GetViewShell();
@@ -1114,7 +1114,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             mpDrawView->ShowSdrPage(mpActualPage);
             GetViewShellBase().GetDrawController()->FireSwitchCurrentPage(mpActualPage);
 
-            if (comphelper::LibreOfficeKit::isActive())
+            if (comphelper::COKit::isActive())
             {
                 if (bChangeZoom && bAllowChangeFocus)
                 {

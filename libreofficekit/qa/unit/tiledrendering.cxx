@@ -181,7 +181,7 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
-    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
+    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
     // This crashed.
     pDocument->postUnoCommand(".uno:Bold");
     processEventsToIdle();
@@ -192,7 +192,7 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     // FIXME: same comment as below wrt lockfile removal.
     remove( sPresentationLockFile.c_str() );
 
-    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_PRESENTATION, static_cast<LibreOfficeKitDocumentType>(getDocumentType(pOffice, sPresentationDocPath)));
+    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_PRESENTATION, static_cast<COKitDocumentType>(getDocumentType(pOffice, sPresentationDocPath)));
 
     // TODO: do this for all supported document types
 }
@@ -224,7 +224,7 @@ void TiledRenderingTest::testPaintPartTile(Office* pOffice)
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
-    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
+    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
 
     // Create two views.
     pDocument->getView();
@@ -402,7 +402,7 @@ void TiledRenderingTest::testMultiKeyInput(Office *pOffice)
     std::unique_ptr<Document> pDocument(loadDocument(pOffice, "blank_text.odt"));
 
     CPPUNIT_ASSERT(pDocument);
-    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<LibreOfficeKitDocumentType>(pDocument->getDocumentType()));
+    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_TEXT, static_cast<COKitDocumentType>(pDocument->getDocumentType()));
 
     // Create two views.
     int nViewA = pDocument->getView();

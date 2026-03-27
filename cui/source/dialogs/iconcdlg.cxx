@@ -151,7 +151,7 @@ void SvxHpLinkDlg::ActivatePageImpl()
     // tdf#90496 - remember last used view in hyperlink dialog
     msRememberedPageId = msCurrentPageId;
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         m_xResetBtn->show();
 }
 

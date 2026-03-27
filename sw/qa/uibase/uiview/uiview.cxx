@@ -511,8 +511,8 @@ void ViewCallback::callbackImpl(int nType, const char* pPayload)
 CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
 {
     // Set up LOK:
-    comphelper::LibreOfficeKit::setActive(true);
-    comphelper::LibreOfficeKit::setPartInInvalidation(true);
+    comphelper::COKit::setActive(true);
+    comphelper::COKit::setPartInInvalidation(true);
 
     // Given a document where redline render mode is set to "omit deletes":
     createSwDoc();
@@ -521,7 +521,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     ViewCallback aCallback;
     TestLokCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallbackWrapper);
+    pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
     aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(*pWrtShell->GetSfxViewShell()));
     SwViewOption aOpt(*pWrtShell->GetViewOptions());
     aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
@@ -540,8 +540,8 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testRedlineRenderModeInvalidate)
     CPPUNIT_ASSERT(aCallback.m_aInvalidationModes.contains(SwRedlineRenderMode::OmitDeletes));
 
     // Tear down LOK:
-    pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(nullptr);
-    comphelper::LibreOfficeKit::setPartInInvalidation(false);
+    pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
+    comphelper::COKit::setPartInInvalidation(false);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -1241,7 +1241,7 @@ void SvxRuler::CreateJsonNotification(tools::JsonWriter& rJsonWriter)
 
 void SvxRuler::NotifyKit()
 {
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         return;
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!pViewShell)
@@ -1250,7 +1250,7 @@ void SvxRuler::NotifyKit()
     tools::JsonWriter aJsonWriter;
     CreateJsonNotification(aJsonWriter);
     OString pJsonData = aJsonWriter.finishAndGetAsOString();
-    LibreOfficeKitCallbackType eType = isHorizontal() ? LOK_CALLBACK_RULER_UPDATE : LOK_CALLBACK_VERTICAL_RULER_UPDATE;
+    COKitCallbackType eType = isHorizontal() ? LOK_CALLBACK_RULER_UPDATE : LOK_CALLBACK_VERTICAL_RULER_UPDATE;
     pViewShell->libreOfficeKitViewCallback(eType, pJsonData);
 }
 

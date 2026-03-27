@@ -966,10 +966,10 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
 
     if (pOldIconSetInfo->mnHeight)
     {
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             aHeight = rRenderContext.LogicToPixel(Size(0, pOldIconSetInfo->mnHeight), MapMode(MapUnit::MapTwip)).Height();
-            aHeight *= comphelper::LibreOfficeKit::getDPIScale();
+            aHeight *= comphelper::COKit::getDPIScale();
         }
         else
         {
@@ -2157,12 +2157,12 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
         return;
 
     mpDev->SetLineColor( rColor );
-    if (bTop && bBottom && bLeft && bRight && !comphelper::LibreOfficeKit::isActive() )
+    if (bTop && bBottom && bLeft && bRight && !comphelper::COKit::isActive() )
     {
             mpDev->SetFillColor();
             mpDev->DrawRect( tools::Rectangle( nMinX, nMinY, nMaxX, nMaxY ) );
     }
-    else if ( !comphelper::LibreOfficeKit::isActive() )
+    else if ( !comphelper::COKit::isActive() )
     {
         if (bTop)
             mpDev->DrawLine( Point( nMinX, nMinY ), Point( nMaxX, nMinY ) );
@@ -2173,7 +2173,7 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
         if (bRight)
             mpDev->DrawLine( Point( nMaxX, nMinY ), Point( nMaxX, nMaxY ) );
     }
-    if ( !bHandle || !bRight || !bBottom || comphelper::LibreOfficeKit::isActive() )
+    if ( !bHandle || !bRight || !bBottom || comphelper::COKit::isActive() )
         return;
 
     mpDev->SetLineColor( rColor );
@@ -2489,7 +2489,7 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
 void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
 {
     // cool#6911 draw the note indicator browser-side instead
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     tools::Long nInitPosX = mnScrX;

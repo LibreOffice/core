@@ -133,7 +133,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         if ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
             bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             INetURLObject aURL(aFileName);
             if (INetProtocol::File != aURL.GetProtocol() && HostFilter::isForbidden(aURL.GetHost()))
@@ -403,10 +403,10 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             else
                 bRet = mpView->InsertObjectAtView(pOleObj.get(), *pPV, SdrInsertFlags::SETDEFLAYER);
 
-            if (bRet && !comphelper::LibreOfficeKit::isActive())
+            if (bRet && !comphelper::COKit::isActive())
             {
                 // Let the chart be activated after the inserting (unless
-                // via LibreOfficeKit)
+                // via COKit)
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
                     pOleObj->SetProgName( u"StarChart"_ustr);

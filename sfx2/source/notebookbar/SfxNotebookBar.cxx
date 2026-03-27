@@ -111,7 +111,7 @@ static void NotebookbarAddonValues(
     std::vector<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>>&
         aExtensionValues)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
         return;
 
     framework::AddonsOptions aAddonsItems;
@@ -278,7 +278,7 @@ void SfxNotebookBar::CloseMethod(SfxBindings& rBindings)
 
 void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         RemoveCurrentLOKWrapper();
         return;
@@ -352,7 +352,7 @@ bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
     if (bConsiderSingleToolbar && aActive == "Single")
         return true;
 
-    if (comphelper::LibreOfficeKit::isActive() && aActive == "notebookbar_online.ui")
+    if (comphelper::COKit::isActive() && aActive == "notebookbar_online.ui")
         return true;
 
     const utl::OConfigurationNode aModesNode = aAppNode.openNode(u"Modes"_ustr);
@@ -447,7 +447,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
         OUString aModuleName = xModuleManager->identify( xFrame );
         vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
-        bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+        bool bIsLOK = comphelper::COKit::isActive();
 
         OUString sFile;
         if (bIsLOK)
@@ -501,8 +501,8 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 }
 
                 // update the current LOK language and locale for the dialog tunneling
-                comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
-                comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
+                comphelper::COKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
+                comphelper::COKit::setLocale(pViewShell->GetLOKLocale());
 
                 pNotebookBar = VclPtr<NotebookBar>::Create(pSysWindow, "NotebookBar", aBuf, xFrame, std::move(pNotebookBarAddonsItem));
                 rViewData.m_pNotebookBar = pNotebookBar;
@@ -549,7 +549,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
         return true;
     }
-    else if (comphelper::LibreOfficeKit::isActive())
+    else if (comphelper::COKit::isActive())
     {
         // don't do anything to not close notebookbar of other session
         return hasWeldedWrapper;

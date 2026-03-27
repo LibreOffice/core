@@ -147,7 +147,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 bRet = true;
                 if (!officecfg::Office::Common::Save::Document::CreateBackup::isReadOnly())
                     if (!rSet.Put( SfxBoolItem( SID_ATTR_BACKUP,
-                            (officecfg::Office::Common::Save::Document::CreateBackup::get() && !comphelper::LibreOfficeKit::isActive()) )))
+                            (officecfg::Office::Common::Save::Document::CreateBackup::get() && !comphelper::COKit::isActive()) )))
                         bRet = false;
                 break;
             case SID_ATTR_BACKUP_BESIDE_ORIGINAL:

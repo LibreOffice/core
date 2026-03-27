@@ -329,7 +329,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     // TODO undo can mess things up when another view is editing a cell in the range of group entry
     // this is a temporarily workaround
-    if (!comphelper::LibreOfficeKit::isActive() && bRecord )
+    if (!comphelper::COKit::isActive() && bRecord )
     {
         std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
         ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
@@ -378,7 +378,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         }
         else                                                // hidden below
         {
-            if (comphelper::LibreOfficeKit::isActive() && nThisLevel > 0)
+            if (comphelper::COKit::isActive() && nThisLevel > 0)
             {
                 pEntry->SetHidden( true );
                 const ScOutlineEntry* pParentEntry = rArray.GetEntryByPos(nThisLevel - 1, nThisStart);
@@ -450,7 +450,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
 
         // TODO undo can mess things up when another view is editing a cell in the range of group entry
         // this is a temporarily workaround
-        if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
+        if ( !comphelper::COKit::isActive() && bRecord )
         {
             std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
@@ -576,7 +576,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
 
         // TODO undo can mess things up when another view is editing a cell in the range of group entry
         // this is a temporarily workaround
-        if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
+        if ( !comphelper::COKit::isActive() && bRecord )
         {
             std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
@@ -650,7 +650,7 @@ void ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     // TODO undo can mess things up when another view is editing a cell in the range of group entry
     // this is a temporarily workaround
-    if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
+    if ( !comphelper::COKit::isActive() && bRecord )
     {
         ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
         if (bColumns)
@@ -744,7 +744,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     // TODO undo can mess things up when another view is editing a cell in the range of group entry
     // this is a temporarily workaround
-    if ( !comphelper::LibreOfficeKit::isActive() &&  bRecord )
+    if ( !comphelper::COKit::isActive() &&  bRecord )
     {
         ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
         if (bColumns)

@@ -274,8 +274,8 @@ using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::Language
 static LibLibreOffice_Impl *gImpl = nullptr;
 static bool lok_preinit_2_called = false;
 static bool gUseCompactFonts = false;
-static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
-static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
+static std::weak_ptr< COKitClass > gOfficeClass;
+static std::weak_ptr< COKitDocumentClass > gDocumentClass;
 
 static void SetLastExceptionMsg(const OUString& s = OUString())
 {
@@ -552,7 +552,7 @@ RectangleAndPart RectangleAndPart::Create(const OString& rPayload)
     if (rPayload.startsWith("EMPTY")) // payload starts with "EMPTY"
     {
         aRet.m_aRectangle = tools::Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
-        if (comphelper::LibreOfficeKit::isPartInInvalidation())
+        if (comphelper::COKit::isPartInInvalidation())
         {
             int nSeparatorPos = rPayload.indexOf(',', 6);
             bool bHasMode = nSeparatorPos > 0;
@@ -596,7 +596,7 @@ RectangleAndPart RectangleAndPart::Create(const OString& rPayload)
     tools::Long nHeight = rtl_str_toInt64_WithLength(pos, 10, end - pos);
     tools::Long nPart = INT_MIN;
     tools::Long nMode = 0;
-    if (comphelper::LibreOfficeKit::isPartInInvalidation())
+    if (comphelper::COKit::isPartInInvalidation())
     {
         while (pos < end && *pos != ',')
             ++pos;
@@ -1128,76 +1128,76 @@ OUString desktop::extractParameter(OUString& rOptions, std::u16string_view rName
 extern "C"
 {
 
-static void doc_destroy(LibreOfficeKitDocument* pThis);
-static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
-static int doc_getDocumentType(LibreOfficeKitDocument* pThis);
-static int doc_getParts(LibreOfficeKitDocument* pThis);
-static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis);
-static int doc_getPart(LibreOfficeKitDocument* pThis);
-static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
-static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect);
-static void doc_moveSelectedParts(LibreOfficeKitDocument* pThis, int nPosition, bool bDuplicate);
-static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart);
-static void doc_setPartMode(LibreOfficeKitDocument* pThis, int nPartMode);
-static int doc_getEditMode(LibreOfficeKitDocument* pThis);
-static void doc_paintTile(LibreOfficeKitDocument* pThis,
+static void doc_destroy(COKitDocument* pThis);
+static int doc_saveAs(COKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
+static int doc_getDocumentType(COKitDocument* pThis);
+static int doc_getParts(COKitDocument* pThis);
+static char* doc_getPartPageRectangles(COKitDocument* pThis);
+static int doc_getPart(COKitDocument* pThis);
+static void doc_setPart(COKitDocument* pThis, int nPart);
+static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect);
+static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDuplicate);
+static char* doc_getPartName(COKitDocument* pThis, int nPart);
+static void doc_setPartMode(COKitDocument* pThis, int nPartMode);
+static int doc_getEditMode(COKitDocument* pThis);
+static void doc_paintTile(COKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
-static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
+static void doc_paintPartTile(COKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
                               const int nMode,
                               const int nCanvasWidth, const int nCanvasHeight,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight);
-static int doc_getTileMode(LibreOfficeKitDocument* pThis);
-static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
+static int doc_getTileMode(COKitDocument* pThis);
+static void doc_getDocumentSize(COKitDocument* pThis,
                                 long* pWidth,
                                 long* pHeight);
-static void doc_getDataArea(LibreOfficeKitDocument* pThis,
+static void doc_getDataArea(COKitDocument* pThis,
                             long nTab,
                             long* pCol,
                             long* pRow);
-static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
+static void doc_initializeForRendering(COKitDocument* pThis,
                                        const char* pArguments);
 
-static void doc_registerCallback(LibreOfficeKitDocument* pThis,
-                                LibreOfficeKitCallback pCallback,
+static void doc_registerCallback(COKitDocument* pThis,
+                                COKitCallback pCallback,
                                 void* pData);
-static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
+static void doc_postKeyEvent(COKitDocument* pThis,
                              int nType,
                              int nCharCode,
                              int nKeyCode);
-static void doc_setBlockedCommandList(LibreOfficeKitDocument* pThis,
+static void doc_setBlockedCommandList(COKitDocument* pThis,
                                 int nViewId,
                                 const char* blockedCommandList);
 
-static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
+static void doc_postWindowExtTextInputEvent(COKitDocument* pThis,
                                             unsigned nWindowId,
                                             int nType,
                                             const char* pText);
-static void doc_removeTextContext(LibreOfficeKitDocument* pThis,
+static void doc_removeTextContext(COKitDocument* pThis,
                                   unsigned nLOKWindowId,
                                   int nCharBefore,
                                   int nCharAfter);
-static void doc_sendDialogEvent(LibreOfficeKitDocument* pThis,
+static void doc_sendDialogEvent(COKitDocument* pThis,
                                unsigned long long int nLOKWindowId,
                                const char* pArguments);
-static void doc_postWindowKeyEvent(LibreOfficeKitDocument* pThis,
+static void doc_postWindowKeyEvent(COKitDocument* pThis,
                                    unsigned nLOKWindowId,
                                    int nType,
                                    int nCharCode,
                                    int nKeyCode);
-static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
+static void doc_postMouseEvent (COKitDocument* pThis,
                                 int nType,
                                 int nX,
                                 int nY,
                                 int nCount,
                                 int nButtons,
                                 int nModifier);
-static void doc_postWindowMouseEvent (LibreOfficeKitDocument* pThis,
+static void doc_postWindowMouseEvent (COKitDocument* pThis,
                                       unsigned nLOKWindowId,
                                       int nType,
                                       int nX,
@@ -1205,165 +1205,165 @@ static void doc_postWindowMouseEvent (LibreOfficeKitDocument* pThis,
                                       int nCount,
                                       int nButtons,
                                       int nModifier);
-static void doc_postWindowGestureEvent(LibreOfficeKitDocument* pThis,
+static void doc_postWindowGestureEvent(COKitDocument* pThis,
                                       unsigned nLOKWindowId,
                                       const char* pType,
                                       int nX,
                                       int nY,
                                       int nOffset);
-static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
+static void doc_postUnoCommand(COKitDocument* pThis,
                                const char* pCommand,
                                const char* pArguments,
                                bool bNotifyWhenFinished);
-static void doc_setWindowTextSelection(LibreOfficeKitDocument* pThis,
+static void doc_setWindowTextSelection(COKitDocument* pThis,
                                        unsigned nLOKWindowId,
                                        bool swap,
                                        int nX,
                                        int nY);
-static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
+static void doc_setTextSelection (COKitDocument* pThis,
                                   int nType,
                                   int nX,
                                   int nY);
-static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
+static char* doc_getTextSelection(COKitDocument* pThis,
                                   const char* pMimeType,
                                   char** pUsedMimeType);
-static int doc_getSelectionType(LibreOfficeKitDocument* pThis);
-static int doc_getSelectionTypeAndText(LibreOfficeKitDocument* pThis,
+static int doc_getSelectionType(COKitDocument* pThis);
+static int doc_getSelectionTypeAndText(COKitDocument* pThis,
                                        const char* pMimeType,
                                        char** pText,
                                        char** pUsedMimeType);
-static int doc_getClipboard (LibreOfficeKitDocument* pThis,
+static int doc_getClipboard (COKitDocument* pThis,
                              const char **pMimeTypes,
                              size_t      *pOutCount,
                              char      ***pOutMimeTypes,
                              size_t     **pOutSizes,
                              char      ***pOutStreams);
-static int doc_setClipboard (LibreOfficeKitDocument* pThis,
+static int doc_setClipboard (COKitDocument* pThis,
                              const size_t   nInCount,
                              const char   **pInMimeTypes,
                              const size_t  *pInSizes,
                              const char   **pInStreams);
-static bool doc_paste(LibreOfficeKitDocument* pThis,
+static bool doc_paste(COKitDocument* pThis,
                       const char* pMimeType,
                       const char* pData,
                       size_t nSize);
-static void doc_setGraphicSelection (LibreOfficeKitDocument* pThis,
+static void doc_setGraphicSelection (COKitDocument* pThis,
                                   int nType,
                                   int nX,
                                   int nY);
-static void doc_resetSelection (LibreOfficeKitDocument* pThis);
-static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand);
-static void doc_setClientZoom(LibreOfficeKitDocument* pThis,
+static void doc_resetSelection (COKitDocument* pThis);
+static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand);
+static void doc_setClientZoom(COKitDocument* pThis,
                                     int nTilePixelWidth,
                                     int nTilePixelHeight,
                                     int nTileTwipWidth,
                                     int nTileTwipHeight);
-static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight);
-static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden);
-static int doc_createView(LibreOfficeKitDocument* pThis);
-static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis, const char* pOptions);
-static void doc_destroyView(LibreOfficeKitDocument* pThis, int nId);
-static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
-static int doc_getView(LibreOfficeKitDocument* pThis);
-static int doc_getViewsCount(LibreOfficeKitDocument* pThis);
-static bool doc_getViewIds(LibreOfficeKitDocument* pThis, int* pArray, size_t nSize);
-static void doc_setViewLanguage(LibreOfficeKitDocument* pThis, int nId, const char* language);
-static unsigned char* doc_renderFontOrientation(LibreOfficeKitDocument* pThis,
+static void doc_setClientVisibleArea(COKitDocument* pThis, int nX, int nY, int nWidth, int nHeight);
+static void doc_setOutlineState(COKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden);
+static int doc_createView(COKitDocument* pThis);
+static int doc_createViewWithOptions(COKitDocument* pThis, const char* pOptions);
+static void doc_destroyView(COKitDocument* pThis, int nId);
+static void doc_setView(COKitDocument* pThis, int nId);
+static int doc_getView(COKitDocument* pThis);
+static int doc_getViewsCount(COKitDocument* pThis);
+static bool doc_getViewIds(COKitDocument* pThis, int* pArray, size_t nSize);
+static void doc_setViewLanguage(COKitDocument* pThis, int nId, const char* language);
+static unsigned char* doc_renderFontOrientation(COKitDocument* pThis,
                           const char *pFontName,
                           const char *pChar,
                           int* pFontWidth,
                           int* pFontHeight,
                           int pOrientation);
-static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
+static unsigned char* doc_renderFont(COKitDocument* pThis,
                           const char *pFontName,
                           const char *pChar,
                           int* pFontWidth,
                           int* pFontHeight);
-static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
+static char* doc_getPartHash(COKitDocument* pThis, int nPart);
 
-static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
+static void doc_paintWindow(COKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight);
 
-static void doc_paintWindowDPI(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
+static void doc_paintWindowDPI(COKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
                                const int nX, const int nY,
                                const int nWidth, const int nHeight,
                                const double fDPIScale);
 
-static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
+static void doc_paintWindowForView(COKitDocument* pThis, unsigned nLOKWindowId, unsigned char* pBuffer,
                                    const int nX, const int nY,
                                    const int nWidth, const int nHeight,
                                    const double fDPIScale, int viewId);
 
-static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned
+static void doc_postWindow(COKitDocument* pThis, unsigned
  nLOKWindowId, int nAction, const char* pData);
 
-static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart);
+static char* doc_getPartInfo(COKitDocument* pThis, int nPart);
 
-static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
+static bool doc_insertCertificate(COKitDocument* pThis,
                                   const unsigned char* pCertificateBinary,
                                   const int nCertificateBinarySize,
                                   const unsigned char* pPrivateKeyBinary,
                                   const int nPrivateKeyBinarySize);
 
-static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
+static bool doc_addCertificate(COKitDocument* pThis,
                                  const unsigned char* pCertificateBinary,
                                  const int nCertificateBinarySize);
 
-static int doc_getSignatureState(LibreOfficeKitDocument* pThis);
+static int doc_getSignatureState(COKitDocument* pThis);
 
-static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOutput);
+static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput);
 
-static void doc_resizeWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
+static void doc_resizeWindow(COKitDocument* pThis, unsigned nLOKWindowId,
                              const int nWidth, const int nHeight);
 
-static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char*);
+static void doc_completeFunction(COKitDocument* pThis, const char*);
 
 
-static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis,
+static void doc_sendFormFieldEvent(COKitDocument* pThis,
                                    const char* pArguments);
 
-static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
+static bool doc_renderSearchResult(COKitDocument* pThis,
                                  const char* pSearchResult, unsigned char** pBitmapBuffer,
                                  int* pWidth, int* pHeight, size_t* pByteSize);
 
-static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const char* pArguments);
+static void doc_sendContentControlEvent(COKitDocument* pThis, const char* pArguments);
 
-static void doc_setViewTimezone(LibreOfficeKitDocument* pThis, int nId, const char* timezone);
+static void doc_setViewTimezone(COKitDocument* pThis, int nId, const char* timezone);
 
-static void doc_setViewReadOnly(LibreOfficeKitDocument* pThis, int nId, const bool readonly);
+static void doc_setViewReadOnly(COKitDocument* pThis, int nId, const bool readonly);
 
-static void doc_setAllowChangeComments(LibreOfficeKitDocument* pThis, int nId, const bool allow);
+static void doc_setAllowChangeComments(COKitDocument* pThis, int nId, const bool allow);
 
-static void doc_setAllowManageRedlines(LibreOfficeKitDocument* pThis, int nId, bool allow);
+static void doc_setAllowManageRedlines(COKitDocument* pThis, int nId, bool allow);
 
-static void doc_setAccessibilityState(LibreOfficeKitDocument* pThis, int nId, bool bEnabled);
+static void doc_setAccessibilityState(COKitDocument* pThis, int nId, bool bEnabled);
 
-static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis);
+static char* doc_getA11yFocusedParagraph(COKitDocument* pThis);
 
-static int doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis);
+static int doc_getA11yCaretPosition(COKitDocument* pThis);
 
-static char* doc_getPresentationInfo(LibreOfficeKitDocument* pThis);
+static char* doc_getPresentationInfo(COKitDocument* pThis);
 
 static bool doc_createSlideRenderer(
-    LibreOfficeKitDocument* pThis,
+    COKitDocument* pThis,
     const char* pSlideHash,
     int nSlideNumber, unsigned* nViewWidth, unsigned* nViewHeight,
     bool bRenderBackground, bool bRenderMasterPage);
 
-static void doc_postSlideshowCleanup(LibreOfficeKitDocument* pThis);
+static void doc_postSlideshowCleanup(COKitDocument* pThis);
 
 static bool doc_renderNextSlideLayer(
-    LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, char** pJsonMsg);
+    COKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, double* pScale, char** pJsonMsg);
 
-static void doc_setViewOption(LibreOfficeKitDocument* pDoc, const char* pOption, const char* pValue);
+static void doc_setViewOption(COKitDocument* pDoc, const char* pOption, const char* pValue);
 
-static void doc_setColorPreviewState(LibreOfficeKitDocument* pThis, int nId, bool bEnabled);
+static void doc_setColorPreviewState(COKitDocument* pThis, int nId, bool bEnabled);
 
 } // extern "C"
 
 namespace {
-ITiledRenderable* getTiledRenderable(LibreOfficeKitDocument* pThis)
+ITiledRenderable* getTiledRenderable(COKitDocument* pThis)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
@@ -1374,7 +1374,7 @@ ITiledRenderable* getTiledRenderable(LibreOfficeKitDocument* pThis)
  * we also need to ensure that this works for the first view which
  * has no clear 'createView' called for it (unfortunately).
  */
-rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocument *pThis)
+rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(COKitDocument *pThis)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     rtl::Reference<LOKClipboard> xClip(LOKClipboardFactory::getClipboardForCurView());
@@ -1413,7 +1413,7 @@ vcl::Font FindFont_FallbackToDefault(std::u16string_view rFontName)
                                         GetDefaultFontFlags::NONE);
 }
 
-int getDocumentType (LibreOfficeKitDocument* pThis)
+int getDocumentType (COKitDocument* pThis)
 {
     SetLastExceptionMsg();
 
@@ -1479,9 +1479,9 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
     m_pDocumentClass = gDocumentClass.lock();
     if (!m_pDocumentClass)
     {
-        m_pDocumentClass = std::make_shared<LibreOfficeKitDocumentClass>();
+        m_pDocumentClass = std::make_shared<COKitDocumentClass>();
 
-        m_pDocumentClass->nSize = sizeof(LibreOfficeKitDocumentClass);
+        m_pDocumentClass->nSize = sizeof(COKitDocumentClass);
 
         m_pDocumentClass->destroy = doc_destroy;
         m_pDocumentClass->saveAs = doc_saveAs;
@@ -1591,7 +1591,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
 
 LibLODocument_Impl::~LibLODocument_Impl()
 {
-    if (comphelper::LibreOfficeKit::isForkedChild())
+    if (comphelper::COKit::isForkedChild())
     {
         // Touch the least memory possible, while trying to avoid leaking files.
         SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -1626,7 +1626,7 @@ static OUString getGenerator()
 extern "C" {
 
 // One of these is created per view to handle events cf. doc_registerCallback
-CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData)
+CallbackFlushHandler::CallbackFlushHandler(COKitDocument* pDocument, COKitCallback pCallback, void* pData)
     : m_pDocument(pDocument),
       m_pCallback(pCallback),
       m_pFlushEvent(nullptr),
@@ -1715,7 +1715,7 @@ void CallbackFlushHandler::resetUpdatedTypePerViewId( int nType, int nViewId )
     assert(isUpdatedTypePerViewId(nType));
     bool allViewIds = false;
     // Handle specially messages that do not have viewId for backwards compatibility.
-    if( nType == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR && !comphelper::LibreOfficeKit::isViewIdForVisCursorInvalidation())
+    if( nType == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR && !comphelper::COKit::isViewIdForVisCursorInvalidation())
         allViewIds = true;
     if( !allViewIds )
     {
@@ -1826,7 +1826,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 
     SAL_INFO("lok", "Queue: [" << type << "]: [" << aCallbackData.getPayload() << "] on " << m_queue1.size() << " entries.");
 
-    if (comphelper::LibreOfficeKit::isForkedChild())
+    if (comphelper::COKit::isForkedChild())
     {
         // In background mode - avoid any extraneous or confusing messages
         switch (type)
@@ -2695,7 +2695,7 @@ void CallbackFlushHandler::tilePainted(int nPart, int nMode, const tools::Rectan
 }
 
 
-static void doc_destroy(LibreOfficeKitDocument *pThis)
+static void doc_destroy(COKitDocument *pThis)
 {
     comphelper::ProfileZone aZone("doc_destroy");
 
@@ -2709,74 +2709,74 @@ static void doc_destroy(LibreOfficeKitDocument *pThis)
     delete pDocument;
 }
 
-static void                    lo_destroy       (LibreOfficeKit* pThis);
-static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
-static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
-static char *                  lo_getError      (LibreOfficeKit* pThis);
+static void                    lo_destroy       (COKit* pThis);
+static int                     lo_initialize    (COKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
+static COKitDocument* lo_documentLoad  (COKit* pThis, const char* pURL);
+static char *                  lo_getError      (COKit* pThis);
 static void                    lo_freeError     (char* pFree);
-static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
+static COKitDocument* lo_documentLoadWithOptions  (COKit* pThis,
                                                            const char* pURL,
                                                            const char* pOptions);
-static void                    lo_registerCallback (LibreOfficeKit* pThis,
-                                                    LibreOfficeKitCallback pCallback,
+static void                    lo_registerCallback (COKit* pThis,
+                                                    COKitCallback pCallback,
                                                     void* pData);
-static char* lo_getFilterTypes(LibreOfficeKit* pThis);
-static void                    lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long features);
-static void                    lo_setDocumentPassword(LibreOfficeKit* pThis,
+static char* lo_getFilterTypes(COKit* pThis);
+static void                    lo_setOptionalFeatures(COKit* pThis, unsigned long long features);
+static void                    lo_setDocumentPassword(COKit* pThis,
                                                        const char* pURL,
                                                        const char* pPassword);
-static char*                   lo_getVersionInfo(LibreOfficeKit* pThis);
-static int                     lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
+static char*                   lo_getVersionInfo(COKit* pThis);
+static int                     lo_runMacro      (COKit* pThis, const char* pURL);
 
-static bool lo_signDocument(LibreOfficeKit* pThis,
+static bool lo_signDocument(COKit* pThis,
                                    const char* pUrl,
                                    const unsigned char* pCertificateBinary,
                                    const int nCertificateBinarySize,
                                    const unsigned char* pPrivateKeyBinary,
                                    const int nPrivateKeyBinarySize);
 
-static char* lo_extractRequest(LibreOfficeKit* pThis,
+static char* lo_extractRequest(COKit* pThis,
                                    const char* pFilePath);
 
-static void lo_trimMemory(LibreOfficeKit* pThis, int nTarget);
+static void lo_trimMemory(COKit* pThis, int nTarget);
 
 static void*
-lo_startURP(LibreOfficeKit* pThis, void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
+lo_startURP(COKit* pThis, void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
             int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
             int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen));
 
-static void lo_stopURP(LibreOfficeKit* pThis, void* pSendURPToLOContext);
+static void lo_stopURP(COKit* pThis, void* pSendURPToLOContext);
 
-static int lo_joinThreads(LibreOfficeKit* pThis);
+static int lo_joinThreads(COKit* pThis);
 
-static void lo_startThreads(LibreOfficeKit* pThis);
+static void lo_startThreads(COKit* pThis);
 
-static void lo_setForkedChild(LibreOfficeKit* pThis, bool bIsChild);
+static void lo_setForkedChild(COKit* pThis, bool bIsChild);
 
-static void lo_runLoop(LibreOfficeKit* pThis,
-                       LibreOfficeKitPollCallback pPollCallback,
-                       LibreOfficeKitWakeCallback pWakeCallback,
+static void lo_runLoop(COKit* pThis,
+                       COKitPollCallback pPollCallback,
+                       COKitWakeCallback pWakeCallback,
                        void* pData);
 
-static void lo_registerAnyInputCallback(LibreOfficeKit* pThis,
-                       LibreOfficeKitAnyInputCallback pAnyInputCallback,
+static void lo_registerAnyInputCallback(COKit* pThis,
+                       COKitAnyInputCallback pAnyInputCallback,
                        void* pData);
 
-static void lo_registerFileSaveDialogCallback(LibreOfficeKit* pThis,
-                       LibreOfficeKitFileSaveDialogCallback pFileSaveDialogCallback);
+static void lo_registerFileSaveDialogCallback(COKit* pThis,
+                       COKitFileSaveDialogCallback pFileSaveDialogCallback);
 
-static void lo_sendDialogEvent(LibreOfficeKit* pThis,
+static void lo_sendDialogEvent(COKit* pThis,
                                unsigned long long int nLOKWindowId,
                                const char* pArguments);
 
-static void lo_setOption(LibreOfficeKit* pThis, const char* pOption, const char* pValue);
+static void lo_setOption(COKit* pThis, const char* pOption, const char* pValue);
 
-static void lo_dumpState(LibreOfficeKit* pThis, const char* pOptions, char** pState);
+static void lo_dumpState(COKit* pThis, const char* pOptions, char** pState);
 
-static char* lo_extractDocumentStructureRequest(LibreOfficeKit* pThis, const char* pFilePath,
+static char* lo_extractDocumentStructureRequest(COKit* pThis, const char* pFilePath,
                                                 const char* pFilter);
 
-static int lo_getDocsCount(LibreOfficeKit* pThis);
+static int lo_getDocsCount(COKit* pThis);
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
@@ -2786,8 +2786,8 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
     , mOptionalFeatures(0)
 {
     if(!m_pOfficeClass) {
-        m_pOfficeClass = std::make_shared<LibreOfficeKitClass>();
-        m_pOfficeClass->nSize = sizeof(LibreOfficeKitClass);
+        m_pOfficeClass = std::make_shared<COKitClass>();
+        m_pOfficeClass->nSize = sizeof(COKitClass);
 
         m_pOfficeClass->destroy = lo_destroy;
         m_pOfficeClass->documentLoad = lo_documentLoad;
@@ -2852,12 +2852,12 @@ void setFormatSpecificFilterData(std::u16string_view sFormat, comphelper::Sequen
 
 } // anonymous namespace
 
-static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char* pURL)
+static COKitDocument* lo_documentLoad(COKit* pThis, const char* pURL)
 {
     return lo_documentLoadWithOptions(pThis, pURL, nullptr);
 }
 
-static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis, const char* pURL, const char* pOptions)
+static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL, const char* pOptions)
 {
     comphelper::ProfileZone aZone("lo_documentLoadWithOptions");
 
@@ -2913,8 +2913,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
             SfxLokHelper::setDefaultLanguage(aLanguage);
             // Set the LOK language tag, used for dialog tunneling.
-            comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLanguage));
-            comphelper::LibreOfficeKit::setLocale(LanguageTag(aLanguage));
+            comphelper::COKit::setLanguageTag(LanguageTag(aLanguage));
+            comphelper::COKit::setLocale(LanguageTag(aLanguage));
 
             SAL_INFO("lok", "Set document language to " << aLanguage);
             // use with care - it sets it for the entire core, not just the
@@ -2987,7 +2987,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                 aRectangle.Y = aTokens[1].toInt32();
                 aRectangle.Width = aTokens[2].toInt32();
                 aRectangle.Height = aTokens[3].toInt32();
-                comphelper::LibreOfficeKit::setInitialClientVisibleArea(aRectangle);
+                comphelper::COKit::setInitialClientVisibleArea(aRectangle);
             }
         }
 
@@ -3022,7 +3022,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             HostFilter::setExemptVerifyHost(OUString(pExemptVerifyHost, strlen(pExemptVerifyHost), RTL_TEXTENCODING_UTF8));
 
         const int nThisDocumentId = nDocumentIdCounter++;
-        comphelper::LibreOfficeKit::setDocId(ViewShellDocId(nThisDocumentId));
+        comphelper::COKit::setDocId(ViewShellDocId(nThisDocumentId));
         uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, u"_blank"_ustr, 0,
                                             aFilterOptions);
@@ -3036,7 +3036,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             return nullptr;
         }
 
-        assert(comphelper::LibreOfficeKit::getDocId() == ViewShellDocId(nThisDocumentId) && "incorrect docid set on document");
+        assert(comphelper::COKit::getDocId() == ViewShellDocId(nThisDocumentId) && "incorrect docid set on document");
 
         LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, nThisDocumentId);
 
@@ -3154,7 +3154,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     return nullptr;
 }
 
-static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
+static int lo_runMacro(COKit* pThis, const char *pURL)
 {
     comphelper::ProfileZone aZone("lo_runMacro");
 
@@ -3241,7 +3241,7 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
     return true;
 }
 
-static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
+static bool lo_signDocument(COKit* /*pThis*/,
                             const char* pURL,
                             const unsigned char* pCertificateBinary,
                             const int nCertificateBinarySize,
@@ -3272,7 +3272,7 @@ static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
 }
 
 
-static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
+static char* lo_extractRequest(COKit* /*pThis*/, const char* pFilePath)
 {
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
     uno::Reference< css::lang::XComponent > xComp;
@@ -3319,7 +3319,7 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
     return strdup("{ }");
 }
 
-static char* lo_extractDocumentStructureRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath,
+static char* lo_extractDocumentStructureRequest(COKit* /*pThis*/, const char* pFilePath,
                                                 const char* pFilter)
 {
     SolarMutexGuard aGuard;
@@ -3427,7 +3427,7 @@ static void flushBufferedVOCs()
     }
 }
 
-static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
+static void lo_trimMemory(COKit* /* pThis */, int nTarget)
 {
     vcl::lok::trimMemory(nTarget);
 
@@ -3581,7 +3581,7 @@ void FunctionBasedURPConnection::setBridge(const Reference<XBridge>& xBridge) { 
 }
 
 static void*
-lo_startURP(LibreOfficeKit* /* pThis */, void* pRecieveFromLOContext, void* pSendToLOContext,
+lo_startURP(COKit* /* pThis */, void* pRecieveFromLOContext, void* pSendToLOContext,
             int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
             int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen))
 {
@@ -3611,7 +3611,7 @@ lo_startURP(LibreOfficeKit* /* pThis */, void* pRecieveFromLOContext, void* pSen
  * Stop a function based URP connection that you started with lo_startURP above
  *
  * @param pSendToLOContext a pointer to the context returned by lo_startURP */
-static void lo_stopURP(LibreOfficeKit* /* pThis */,
+static void lo_stopURP(COKit* /* pThis */,
                        void* pFunctionBasedURPConnection/* FunctionBasedURPConnection* */)
 {
     static_cast<FunctionBasedURPConnection*>(pFunctionBasedURPConnection)->close();
@@ -3629,7 +3629,7 @@ static int joinThreads(JoinThreads eCategory)
     css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
         css::linguistic2::LinguServiceManager::create(xContext);
 
-    auto joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(xLangSrv.get());
+    auto joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(xLangSrv.get());
     if (joinable && !joinable->joinThreads())
         return 0;
 
@@ -3637,13 +3637,13 @@ static int joinThreads(JoinThreads eCategory)
     {
         auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.ucb.WebDAVManager", xContext);
-        joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(ucpWebdav.get());
+        joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(ucpWebdav.get());
         if (joinable && !joinable->joinThreads())
             return 0;
 
         auto progressThread = xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.task.StatusIndicatorFactory", xContext);
-        joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(progressThread.get());
+        joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(progressThread.get());
         if (joinable && !joinable->joinThreads())
             return 0;
     }
@@ -3660,37 +3660,37 @@ static int joinThreads(JoinThreads eCategory)
     return 1;
 }
 
-static int lo_joinThreads(LibreOfficeKit* /* pThis */)
+static int lo_joinThreads(COKit* /* pThis */)
 {
     return joinThreads(JoinThreads::ALL);
 }
 
-static void lo_startThreads(LibreOfficeKit* /* pThis */)
+static void lo_startThreads(COKit* /* pThis */)
 {
     salhelper::Timer::startThread();
 
     auto ucpWebdav = xContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.ucb.WebDAVManager", xContext);
-    auto joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(ucpWebdav.get());
+    auto joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(ucpWebdav.get());
     if (joinable)
         joinable->startThreads();
 
     auto progressThread = xContext->getServiceManager()->createInstanceWithContext(
         "com.sun.star.task.StatusIndicatorFactory", xContext);
-    joinable = dynamic_cast<comphelper::LibreOfficeKit::ThreadJoinable *>(progressThread.get());
+    joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(progressThread.get());
     if (joinable)
         joinable->startThreads();
 }
 
-static void lo_setForkedChild(LibreOfficeKit* /* pThis */, bool bIsChild)
+static void lo_setForkedChild(COKit* /* pThis */, bool bIsChild)
 {
-    comphelper::LibreOfficeKit::setForkedChild(bIsChild);
+    comphelper::COKit::setForkedChild(bIsChild);
     if (bIsChild)
         Application::UpdateMainThread();
 }
 
-static void lo_registerCallback (LibreOfficeKit* pThis,
-                                 LibreOfficeKitCallback pCallback,
+static void lo_registerCallback (COKit* pThis,
+                                 COKitCallback pCallback,
                                  void* pData)
 {
     SolarMutexGuard aGuard;
@@ -3705,7 +3705,7 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
     pApp->m_pCallbackData = pLib->mpCallbackData = pData;
 }
 
-static SfxObjectShell* getSfxObjectShell(LibreOfficeKitDocument* pThis)
+static SfxObjectShell* getSfxObjectShell(COKitDocument* pThis)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     if (!pDocument)
@@ -3718,7 +3718,7 @@ static SfxObjectShell* getSfxObjectShell(LibreOfficeKitDocument* pThis)
     return pBaseModel->GetObjectShell();
 }
 
-static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
+static int doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     comphelper::ProfileZone aZone("doc_saveAs");
 
@@ -4041,7 +4041,7 @@ static void doc_iniUnoCommands ()
     }
 }
 
-static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
+static int doc_getDocumentType (COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getDocumentType");
 
@@ -4049,7 +4049,7 @@ static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
     return getDocumentType(pThis);
 }
 
-static int doc_getParts (LibreOfficeKitDocument* pThis)
+static int doc_getParts (COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getParts");
 
@@ -4065,7 +4065,7 @@ static int doc_getParts (LibreOfficeKitDocument* pThis)
     return pDoc->getParts();
 }
 
-static int doc_getPart (LibreOfficeKitDocument* pThis)
+static int doc_getPart (COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getPart");
 
@@ -4082,7 +4082,7 @@ static int doc_getPart (LibreOfficeKitDocument* pThis)
     return pDoc->getPart();
 }
 
-static void doc_setPartImpl(LibreOfficeKitDocument* pThis, int nPart, bool bAllowChangeFocus = true)
+static void doc_setPartImpl(COKitDocument* pThis, int nPart, bool bAllowChangeFocus = true)
 {
     comphelper::ProfileZone aZone("doc_setPart");
 
@@ -4099,12 +4099,12 @@ static void doc_setPartImpl(LibreOfficeKitDocument* pThis, int nPart, bool bAllo
     pDoc->setPart( nPart, bAllowChangeFocus );
 }
 
-static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
+static void doc_setPart(COKitDocument* pThis, int nPart)
 {
     doc_setPartImpl(pThis, nPart, true);
 }
 
-static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
+static char* doc_getPartInfo(COKitDocument* pThis, int nPart)
 {
     comphelper::ProfileZone aZone("doc_getPartInfo");
 
@@ -4119,7 +4119,7 @@ static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
     return convertOUString(pDoc->getPartInfo(nPart));
 }
 
-static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect)
+static void doc_selectPart(COKitDocument* pThis, int nPart, int nSelect)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4134,7 +4134,7 @@ static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect
     pDoc->selectPart( nPart, nSelect );
 }
 
-static void doc_moveSelectedParts(LibreOfficeKitDocument* pThis, int nPosition, bool bDuplicate)
+static void doc_moveSelectedParts(COKitDocument* pThis, int nPosition, bool bDuplicate)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4149,7 +4149,7 @@ static void doc_moveSelectedParts(LibreOfficeKitDocument* pThis, int nPosition, 
     pDoc->moveSelectedParts(nPosition, bDuplicate);
 }
 
-static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
+static char* doc_getPartPageRectangles(COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getPartPageRectangles");
 
@@ -4166,7 +4166,7 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
     return convertOUString(pDoc->getPartPageRectangles());
 }
 
-static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis)
+static char* doc_getA11yFocusedParagraph(COKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4186,7 +4186,7 @@ static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis)
     return nullptr;
 }
 
-static int  doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis)
+static int  doc_getA11yCaretPosition(COKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -4206,7 +4206,7 @@ static int  doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis)
 
 }
 
-static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
+static char* doc_getPartName(COKitDocument* pThis, int nPart)
 {
     comphelper::ProfileZone aZone("doc_getPartName");
 
@@ -4223,7 +4223,7 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
     return convertOUString(pDoc->getPartName(nPart));
 }
 
-static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
+static char* doc_getPartHash(COKitDocument* pThis, int nPart)
 {
     comphelper::ProfileZone aZone("doc_getPartHash");
 
@@ -4240,7 +4240,7 @@ static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
     return convertOUString(pDoc->getPartHash(nPart));
 }
 
-static void doc_setPartMode(LibreOfficeKitDocument* pThis,
+static void doc_setPartMode(COKitDocument* pThis,
                             int nPartMode)
 {
     comphelper::ProfileZone aZone("doc_setPartMode");
@@ -4280,7 +4280,7 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
     }
 }
 
-static int doc_getEditMode(LibreOfficeKitDocument* pThis)
+static int doc_getEditMode(COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getEditMode");
 
@@ -4297,7 +4297,7 @@ static int doc_getEditMode(LibreOfficeKitDocument* pThis)
     return pDoc->getEditMode();
 }
 
-static void doc_paintTile(LibreOfficeKitDocument* pThis,
+static void doc_paintTile(COKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
@@ -4326,7 +4326,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     // everything is painted bigger or smaller. This is different to what Calc's internal scaling
     // would do - because that one is trying to fit the lines between cells to integer multiples of
     // pixels.
-    comphelper::ScopeGuard dpiScaleGuard([]() { comphelper::LibreOfficeKit::setDPIScale(1.0); });
+    comphelper::ScopeGuard dpiScaleGuard([]() { comphelper::COKit::setDPIScale(1.0); });
 
 #if defined(IOS)
     double fDPIScale = 1.0;
@@ -4403,7 +4403,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     pDocument->updateViewsForPaintedTile(nOrigViewId, nPart, nMode, aRectangle);
 }
 
-inline static ITiledRenderable* getDocumentPointer(LibreOfficeKitDocument* pThis)
+inline static ITiledRenderable* getDocumentPointer(COKitDocument* pThis)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
 
@@ -4425,7 +4425,7 @@ inline static void writeInfoLog(const int nPart, const int nMode,
                << nCanvasWidth << "x" << nCanvasHeight << "]px" );
 }
 
-inline static int getFirstViewIdAsFallback(LibreOfficeKitDocument* pThis)
+inline static int getFirstViewIdAsFallback(COKitDocument* pThis)
 {
     // tile painting always needs a SfxViewShell::Current(), but actually
     // it does not really matter which one - all of them should paint the
@@ -4461,7 +4461,7 @@ inline static void enableViewCallbacks(LibLODocument_Impl* pDocument, const int 
         handlerIt->second->enableCallbacks();
 }
 
-inline static int getAlternativeViewForPaint(LibreOfficeKitDocument* pThis, ITiledRenderable* pDoc, const SfxViewShell* pCurrentViewShell,
+inline static int getAlternativeViewForPaint(COKitDocument* pThis, ITiledRenderable* pDoc, const SfxViewShell* pCurrentViewShell,
     const std::string_view &sCurrentViewRenderState, const int nPart, const int nMode)
 {
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -4490,7 +4490,7 @@ inline static int getAlternativeViewForPaint(LibreOfficeKitDocument* pThis, ITil
     return -1;
 }
 
-static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
+static void doc_paintPartTile(COKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
                               const int nMode,
@@ -4636,7 +4636,7 @@ void LibLODocument_Impl::updateViewsForPaintedTile(int nOrigViewId, int nPart, i
     }
 }
 
-static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
+static int doc_getTileMode(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/)
 {
     SetLastExceptionMsg();
 #if ENABLE_CAIRO_RGBA || defined IOS
@@ -4646,7 +4646,7 @@ static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*
 #endif
 }
 
-static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
+static void doc_getDocumentSize(COKitDocument* pThis,
                                 long* pWidth,
                                 long* pHeight)
 {
@@ -4668,7 +4668,7 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
     }
 }
 
-static void doc_getDataArea(LibreOfficeKitDocument* pThis,
+static void doc_getDataArea(COKitDocument* pThis,
                             long nTab,
                             long* pCol,
                             long* pRow)
@@ -4691,7 +4691,7 @@ static void doc_getDataArea(LibreOfficeKitDocument* pThis,
     }
 }
 
-static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
+static void doc_initializeForRendering(COKitDocument* pThis,
                                        const char* pArguments)
 {
     comphelper::ProfileZone aZone("doc_initializeForRendering");
@@ -4737,8 +4737,8 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
     }
 }
 
-static void doc_registerCallback(LibreOfficeKitDocument* pThis,
-                                 LibreOfficeKitCallback pCallback,
+static void doc_registerCallback(COKitDocument* pThis,
+                                 COKitCallback pCallback,
                                  void* pData)
 {
     SolarMutexGuard aGuard;
@@ -4787,7 +4787,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
         }
 
         pDocument->mpCallbackFlushHandlers[nView]->setViewId(nView);
-        pViewShell->setLibreOfficeKitViewCallback(pDocument->mpCallbackFlushHandlers[nView].get());
+        pViewShell->setCOKitViewCallback(pDocument->mpCallbackFlushHandlers[nView].get());
 
         if (!pDocument->maFontsMissing.empty())
         {
@@ -4820,14 +4820,14 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     }
     else
     {
-        pViewShell->setLibreOfficeKitViewCallback(nullptr);
+        pViewShell->setCOKitViewCallback(nullptr);
         pDocument->mpCallbackFlushHandlers[nView]->setViewId(-1);
         pDocument->mpCallbackFlushHandlers.erase(nView);
     }
 }
 
 /// Returns the JSON representation of all the comments in the document
-static char* getPostIts(LibreOfficeKitDocument* pThis)
+static char* getPostIts(COKitDocument* pThis)
 {
     SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
@@ -4842,7 +4842,7 @@ static char* getPostIts(LibreOfficeKitDocument* pThis)
 }
 
 /// Returns the JSON representation of the positions of all the comments in the document
-static char* getPostItsPos(LibreOfficeKitDocument* pThis)
+static char* getPostItsPos(COKitDocument* pThis)
 {
     SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
@@ -4856,7 +4856,7 @@ static char* getPostItsPos(LibreOfficeKitDocument* pThis)
     return convertOString(aJsonWriter.finishAndGetAsOString());
 }
 
-static char* getRulerState(LibreOfficeKitDocument* pThis)
+static char* getRulerState(COKitDocument* pThis)
 {
     SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
@@ -4870,7 +4870,7 @@ static char* getRulerState(LibreOfficeKitDocument* pThis)
     return convertOString(aJsonWriter.finishAndGetAsOString());
 }
 
-static char* getAllPartSize(LibreOfficeKitDocument* pThis)
+static char* getAllPartSize(COKitDocument* pThis)
 {
     SetLastExceptionMsg();
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
@@ -4884,7 +4884,7 @@ static char* getAllPartSize(LibreOfficeKitDocument* pThis)
     return convertOString(aJsonWriter.finishAndGetAsOString());
 }
 
-static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
+static void doc_postKeyEvent(COKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
     comphelper::ProfileZone aZone("doc_postKeyEvent");
 
@@ -4909,13 +4909,13 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     }
 }
 
-static void doc_setBlockedCommandList(LibreOfficeKitDocument* /*pThis*/, int nViewId, const char* blockedCommandList)
+static void doc_setBlockedCommandList(COKitDocument* /*pThis*/, int nViewId, const char* blockedCommandList)
 {
     SolarMutexGuard aGuard;
     SfxLokHelper::setBlockedCommandList(nViewId, blockedCommandList);
 }
 
-static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
+static void doc_postWindowExtTextInputEvent(COKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
 {
     comphelper::ProfileZone aZone("doc_postWindowExtTextInputEvent");
 
@@ -4945,7 +4945,7 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
     SfxLokHelper::postExtTextEventAsync(pWindow, nType, OUString::fromUtf8(std::string_view(pText, strlen(pText))));
 }
 
-static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId, int nCharBefore, int nCharAfter)
+static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, int nCharBefore, int nCharAfter)
 {
     SolarMutexGuard aGuard;
 
@@ -5004,7 +5004,7 @@ static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWi
     }
 }
 
-static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nCharCode, int nKeyCode)
+static void doc_postWindowKeyEvent(COKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nCharCode, int nKeyCode)
 {
     comphelper::ProfileZone aZone("doc_postWindowKeyEvent");
 
@@ -5065,7 +5065,7 @@ static bool doc_hasShapeSelection(const css::uno::Reference<css::lang::XComponen
     return xSelection && xSelection->getImplementationName() != "ScCellObj";
 }
 
-static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOutput)
+static size_t doc_renderShapeSelection(COKitDocument* pThis, char** pOutput)
 {
     comphelper::ProfileZone aZone("doc_renderShapeSelection");
 
@@ -5141,7 +5141,7 @@ namespace {
     This will call a LOK_COMMAND_FINISHED callback when postUnoCommand was
     called with the parameter requesting the notification.
 
-    @see LibreOfficeKitCallbackType::LOK_CALLBACK_UNO_COMMAND_RESULT.
+    @see COKitCallbackType::LOK_CALLBACK_UNO_COMMAND_RESULT.
 */
 class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatchResultListener>
 {
@@ -5268,12 +5268,12 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
 }
 
 
-static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
+static void doc_sendDialogEvent(COKitDocument* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
 {
     lcl_sendDialogEvent(nWindowId, pArguments);
 }
 
-static void lo_sendDialogEvent(LibreOfficeKit* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
+static void lo_sendDialogEvent(COKit* /*pThis*/, unsigned long long int nWindowId, const char* pArguments)
 {
     lcl_sendDialogEvent(nWindowId, pArguments);
 }
@@ -5358,7 +5358,7 @@ static void updateConfig(const OUString& rConfigPath)
     }
 }
 
-static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const char* pValue)
+static void lo_setOption(COKit* /*pThis*/, const char *pOption, const char* pValue)
 {
     static char* pCurrentSalLogOverride = nullptr;
 
@@ -5416,7 +5416,7 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
 #endif
 }
 
-static void lo_dumpState (LibreOfficeKit* pThis, const char* /* pOptions */, char** pState)
+static void lo_dumpState (COKit* pThis, const char* /* pOptions */, char** pState)
 {
     if (!pState)
         return;
@@ -5436,7 +5436,7 @@ static void lo_dumpState (LibreOfficeKit* pThis, const char* /* pOptions */, cha
 
 void LibLibreOffice_Impl::dumpState(rtl::OStringBuffer &rState)
 {
-    rState.append("LibreOfficeKit state:"
+    rState.append("COKit state:"
                   "\n\tLastExceptionMsg:\t");
     rState.append(rtl::OUStringToOString(maLastExceptionMsg, RTL_TEXTENCODING_UTF8));
     rState.append("\n\tUnipoll:\t");
@@ -5478,7 +5478,7 @@ static bool isCommandAllowed(std::u16string_view command)
     return std::find(std::begin(denyList), std::end(denyList), command) == std::end(denyList);
 }
 
-static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
+static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
     comphelper::ProfileZone aZone("doc_postUnoCommand");
 
@@ -5743,7 +5743,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     }
 }
 
-static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postMouseEvent(COKitDocument* pThis, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     comphelper::ProfileZone aZone("doc_postMouseEvent");
 
@@ -5767,7 +5767,7 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     }
 }
 
-static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+static void doc_postWindowMouseEvent(COKitDocument* /*pThis*/, unsigned nLOKWindowId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
 {
     comphelper::ProfileZone aZone("doc_postWindowMouseEvent");
 
@@ -5804,7 +5804,7 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
     }
 }
 
-static void doc_postWindowGestureEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, const char* pType, int nX, int nY, int nOffset)
+static void doc_postWindowGestureEvent(COKitDocument* /*pThis*/, unsigned nLOKWindowId, const char* pType, int nX, int nY, int nOffset)
 {
     comphelper::ProfileZone aZone("doc_postWindowGestureEvent");
 
@@ -5839,7 +5839,7 @@ static void doc_postWindowGestureEvent(LibreOfficeKitDocument* /*pThis*/, unsign
     Application::PostGestureEvent(VclEventId::WindowGestureEvent, pWindow, &aEvent);
 }
 
-static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
+static void doc_setTextSelection(COKitDocument* pThis, int nType, int nX, int nY)
 {
     comphelper::ProfileZone aZone("doc_setTextSelection");
 
@@ -5856,7 +5856,7 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     pDoc->setTextSelection(nType, nX, nY);
 }
 
-static void doc_setWindowTextSelection(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, bool swap, int nX, int nY)
+static void doc_setWindowTextSelection(COKitDocument* /*pThis*/, unsigned nLOKWindowId, bool swap, int nX, int nY)
 {
     comphelper::ProfileZone aZone("doc_setWindowTextSelection");
 
@@ -5881,7 +5881,7 @@ static void doc_setWindowTextSelection(LibreOfficeKitDocument* /*pThis*/, unsign
     Application::PostMouseEvent(VclEventId::WindowMouseButtonUp, pWindow, &aCursorEvent);
 }
 
-static char* doc_getPresentationInfo(LibreOfficeKitDocument* pThis)
+static char* doc_getPresentationInfo(COKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -5906,7 +5906,7 @@ static char* doc_getPresentationInfo(LibreOfficeKitDocument* pThis)
 }
 
 static bool doc_createSlideRenderer(
-    LibreOfficeKitDocument* pThis,
+    COKitDocument* pThis,
     const char* pSlideHash,
     int nSlideNumber, unsigned* pViewWidth, unsigned* pViewHeight,
     bool bRenderBackground, bool bRenderMasterPage)
@@ -5935,7 +5935,7 @@ static bool doc_createSlideRenderer(
     return bReturn;
 }
 
-static void doc_postSlideshowCleanup(LibreOfficeKitDocument* pThis)
+static void doc_postSlideshowCleanup(COKitDocument* pThis)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -5950,7 +5950,7 @@ static void doc_postSlideshowCleanup(LibreOfficeKitDocument* pThis)
 }
 
 static bool doc_renderNextSlideLayer(
-    LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* pIsBitmapLayer, double* pScale, char** pJsonMessage)
+    COKitDocument* pThis, unsigned char* pBuffer, bool* pIsBitmapLayer, double* pScale, char** pJsonMessage)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -5972,7 +5972,7 @@ static bool doc_renderNextSlideLayer(
     return bDone;
 }
 
-static void doc_setViewOption(LibreOfficeKitDocument* pThis, const char* pOption, const char* pValue)
+static void doc_setViewOption(COKitDocument* pThis, const char* pOption, const char* pValue)
 {
     comphelper::ProfileZone aZone("doc_setViewOption");
 
@@ -6137,7 +6137,7 @@ static bool getFromTransferable(
     return true;
 }
 
-static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
+static char* doc_getTextSelection(COKitDocument* pThis, const char* pMimeType, char** pUsedMimeType)
 {
     comphelper::ProfileZone aZone("doc_getTextSelection");
 
@@ -6177,7 +6177,7 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
     return convertOString(aRet);
 }
 
-static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
+static int doc_getSelectionType(COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getSelectionType");
 
@@ -6213,7 +6213,7 @@ static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
     return !aRet.isEmpty() ? LOK_SELTYPE_TEXT : LOK_SELTYPE_NONE;
 }
 
-static int doc_getSelectionTypeAndText(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pText, char** pUsedMimeType)
+static int doc_getSelectionTypeAndText(COKitDocument* pThis, const char* pMimeType, char** pText, char** pUsedMimeType)
 {
     // The purpose of this function is to avoid double call to pDoc->getSelection(),
     // which may be expensive.
@@ -6268,7 +6268,7 @@ static int doc_getSelectionTypeAndText(LibreOfficeKitDocument* pThis, const char
     return LOK_SELTYPE_TEXT;
 }
 
-static int doc_getClipboard(LibreOfficeKitDocument* pThis,
+static int doc_getClipboard(COKitDocument* pThis,
                             const char **pMimeTypes,
                             size_t      *pOutCount,
                             char      ***pOutMimeTypes,
@@ -6356,7 +6356,7 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
     return 1;
 }
 
-static int doc_setClipboard(LibreOfficeKitDocument* pThis,
+static int doc_setClipboard(COKitDocument* pThis,
                             const size_t   nInCount,
                             const char   **pInMimeTypes,
                             const size_t  *pInSizes,
@@ -6390,7 +6390,7 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
     return true;
 }
 
-static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
+static bool doc_paste(COKitDocument* pThis, const char* pMimeType, const char* pData, size_t nSize)
 {
     comphelper::ProfileZone aZone("doc_paste");
 
@@ -6422,7 +6422,7 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
     return true;
 }
 
-static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
+static void doc_setGraphicSelection(COKitDocument* pThis, int nType, int nX, int nY)
 {
     comphelper::ProfileZone aZone("doc_setGraphicSelection");
 
@@ -6439,7 +6439,7 @@ static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, in
     pDoc->setGraphicSelection(nType, nX, nY);
 }
 
-static void doc_resetSelection(LibreOfficeKitDocument* pThis)
+static void doc_resetSelection(COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_resetSelection");
 
@@ -6456,7 +6456,7 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
     pDoc->resetSelection();
 }
 
-static char* getDocReadOnly(LibreOfficeKitDocument* pThis)
+static char* getDocReadOnly(COKitDocument* pThis)
 {
     SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
     if (!pObjectShell)
@@ -6759,7 +6759,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
     return pJson;
 }
 
-static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
+static char* getStyles(COKitDocument* pThis, const char* pCommand)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     return getComponentStyles(pDocument->mxComponent, doc_getDocumentType(pThis), pCommand);
@@ -6776,7 +6776,7 @@ enum class UndoOrRedo
 }
 
 /// Returns the JSON representation of either an undo or a redo stack.
-static char* getUndoOrRedo(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
+static char* getUndoOrRedo(COKitDocument* pThis, UndoOrRedo eCommand)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -6802,7 +6802,7 @@ static char* getUndoOrRedo(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
 }
 
 /// Returns the JSON representation of print ranges in the document
-static char* getPrintRanges(LibreOfficeKitDocument* pThis)
+static char* getPrintRanges(COKitDocument* pThis)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -6815,7 +6815,7 @@ static char* getPrintRanges(LibreOfficeKitDocument* pThis)
 }
 
 /// Returns only the number of the undo or redo elements
-static char* getUndoOrRedoCount(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
+static char* getUndoOrRedoCount(COKitDocument* pThis, UndoOrRedo eCommand)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -6843,7 +6843,7 @@ static char* getUndoOrRedoCount(LibreOfficeKitDocument* pThis, UndoOrRedo eComma
 }
 
 /// Returns the JSON representation of the redline stack.
-static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
+static char* getTrackedChanges(COKitDocument* pThis)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -6900,7 +6900,7 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
 
 
 /// Returns the JSON representation of the redline author table.
-static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
+static char* getTrackedChangeAuthors(COKitDocument* pThis)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -6913,7 +6913,7 @@ static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
     return convertOString(aJsonWriter.finishAndGetAsOString());
 }
 
-static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
+static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
 {
     comphelper::ProfileZone aZone("doc_getCommandValues");
 
@@ -7130,7 +7130,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     }
 }
 
-static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth, int nTilePixelHeight,
+static void doc_setClientZoom(COKitDocument* pThis, int nTilePixelWidth, int nTilePixelHeight,
         int nTileTwipWidth, int nTileTwipHeight)
 {
     comphelper::ProfileZone aZone("doc_setClientZoom");
@@ -7148,7 +7148,7 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth
     pDoc->setClientZoom(nTilePixelWidth, nTilePixelHeight, nTileTwipWidth, nTileTwipHeight);
 }
 
-static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int nY, int nWidth, int nHeight)
+static void doc_setClientVisibleArea(COKitDocument* pThis, int nX, int nY, int nWidth, int nHeight)
 {
     comphelper::ProfileZone aZone("doc_setClientVisibleArea");
 
@@ -7166,7 +7166,7 @@ static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int 
     pDoc->setClientVisibleArea(aRectangle);
 }
 
-static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden)
+static void doc_setOutlineState(COKitDocument* pThis, bool bColumn, int nLevel, int nIndex, bool bHidden)
 {
     comphelper::ProfileZone aZone("doc_setOutlineState");
 
@@ -7183,7 +7183,7 @@ static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int
     pDoc->setOutlineState(bColumn, nLevel, nIndex, bHidden);
 }
 
-static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
+static int doc_createViewWithOptions(COKitDocument* pThis,
                                      const char* pOptions)
 {
     comphelper::ProfileZone aZone("doc_createView");
@@ -7197,8 +7197,8 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
     if (!aLanguage.isEmpty())
     {
         // Set the LOK language tag, used for dialog tunneling.
-        comphelper::LibreOfficeKit::setLanguageTag(LanguageTag(aLanguage));
-        comphelper::LibreOfficeKit::setLocale(LanguageTag(aLanguage));
+        comphelper::COKit::setLanguageTag(LanguageTag(aLanguage));
+        comphelper::COKit::setLocale(LanguageTag(aLanguage));
     }
 
     const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
@@ -7214,12 +7214,12 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
     return nId;
 }
 
-static int doc_createView(LibreOfficeKitDocument* pThis)
+static int doc_createView(COKitDocument* pThis)
 {
     return doc_createViewWithOptions(pThis, nullptr); // No options.
 }
 
-static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId)
+static void doc_destroyView(SAL_UNUSED_PARAMETER COKitDocument* pThis, int nId)
 {
     comphelper::ProfileZone aZone("doc_destroyView");
 
@@ -7236,7 +7236,7 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, 
     vcl::lok::numberOfViewsChanged(SfxLokHelper::getViewsCount(pDocument->mnDocumentId));
 }
 
-static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
+static void doc_setView(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId)
 {
     comphelper::ProfileZone aZone("doc_setView");
 
@@ -7246,7 +7246,7 @@ static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, 
     SfxLokHelper::setView(nId);
 }
 
-static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis)
+static int doc_getView(SAL_UNUSED_PARAMETER COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getView");
 
@@ -7257,7 +7257,7 @@ static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis)
     return SfxLokHelper::getViewId(pDocument->mnDocumentId);
 }
 
-static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis)
+static int doc_getViewsCount(SAL_UNUSED_PARAMETER COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getViewsCount");
 
@@ -7268,7 +7268,7 @@ static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis)
     return SfxLokHelper::getViewsCount(pDocument->mnDocumentId);
 }
 
-static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int* pArray, size_t nSize)
+static bool doc_getViewIds(SAL_UNUSED_PARAMETER COKitDocument* pThis, int* pArray, size_t nSize)
 {
     comphelper::ProfileZone aZone("doc_getViewsIds");
 
@@ -7279,7 +7279,7 @@ static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, i
     return SfxLokHelper::getViewIds(pDocument->mnDocumentId, pArray, nSize);
 }
 
-static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const char* language)
+static void doc_setViewLanguage(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId, const char* language)
 {
     comphelper::ProfileZone aZone("doc_setViewLanguage");
 
@@ -7291,7 +7291,7 @@ static void doc_setViewLanguage(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     SfxLokHelper::setViewLocale(nId, sLanguage);
 }
 
-unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
+unsigned char* doc_renderFont(COKitDocument* pThis,
                               const char* pFontName,
                               const char* pChar,
                               int* pFontWidth,
@@ -7300,7 +7300,7 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
     return doc_renderFontOrientation(pThis, pFontName, pChar, pFontWidth, pFontHeight, 0);
 }
 
-unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/,
+unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/,
                               const char* pFontName,
                               const char* pChar,
                               int* pFontWidth,
@@ -7389,7 +7389,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
 }
 
 
-static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
+static void doc_paintWindow(COKitDocument* pThis, unsigned nLOKWindowId,
                             unsigned char* pBuffer,
                             const int nX, const int nY,
                             const int nWidth, const int nHeight)
@@ -7397,7 +7397,7 @@ static void doc_paintWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId
     doc_paintWindowDPI(pThis, nLOKWindowId, pBuffer, nX, nY, nWidth, nHeight, 1.0);
 }
 
-static void doc_paintWindowDPI(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
+static void doc_paintWindowDPI(COKitDocument* pThis, unsigned nLOKWindowId,
                                unsigned char* pBuffer,
                                const int nX, const int nY,
                                const int nWidth, const int nHeight,
@@ -7406,7 +7406,7 @@ static void doc_paintWindowDPI(LibreOfficeKitDocument* pThis, unsigned nLOKWindo
     doc_paintWindowForView(pThis, nLOKWindowId, pBuffer, nX, nY, nWidth, nHeight, fDPIScale, -1);
 }
 
-static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
+static void doc_paintWindowForView(COKitDocument* pThis, unsigned nLOKWindowId,
                                    unsigned char* pBuffer, const int nX, const int nY,
                                    const int nWidth, const int nHeight,
                                    const double fDPIScale, int viewId)
@@ -7424,15 +7424,15 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
     }
 
     // Used to avoid work in setView if set.
-    comphelper::LibreOfficeKit::setDialogPainting(true);
+    comphelper::COKit::setDialogPainting(true);
 
     if (viewId >= 0)
         doc_setView(pThis, viewId);
 
     // Setup cairo (or CoreGraphics, in the iOS case) to draw with the changed DPI scale (and return
     // back to 1.0 when the painting finishes)
-    comphelper::ScopeGuard dpiScaleGuard([]() { comphelper::LibreOfficeKit::setDPIScale(1.0); });
-    comphelper::LibreOfficeKit::setDPIScale(fDPIScale);
+    comphelper::ScopeGuard dpiScaleGuard([]() { comphelper::COKit::setDPIScale(1.0); });
+    comphelper::COKit::setDPIScale(fDPIScale);
 
 #if defined(IOS)
     // Online uses the LOK_TILEMODE_RGBA by default so flip the normal flags
@@ -7472,10 +7472,10 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
     pWindow->PaintToDevice(pDevice.get(), Point(0, 0));
 #endif
 
-    comphelper::LibreOfficeKit::setDialogPainting(false);
+    comphelper::COKit::setDialogPainting(false);
 }
 
-static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId, int nAction, const char* pData)
+static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nLOKWindowId, int nAction, const char* pData)
 {
     comphelper::ProfileZone aZone("doc_postWindow");
 
@@ -7525,7 +7525,7 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
 }
 
 // CERTIFICATE AND DOCUMENT SIGNING
-static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
+static bool doc_insertCertificate(COKitDocument* pThis,
                                   const unsigned char* pCertificateBinary, const int nCertificateBinarySize,
                                   const unsigned char* pPrivateKeyBinary, const int nPrivateKeySize)
 {
@@ -7561,7 +7561,7 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
     return pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
 }
 
-static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
+static bool doc_addCertificate(COKitDocument* pThis,
                                   const unsigned char* pCertificateBinary, const int nCertificateBinarySize)
 {
     comphelper::ProfileZone aZone("doc_addCertificate");
@@ -7619,7 +7619,7 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
     return true;
 }
 
-static int doc_getSignatureState(LibreOfficeKitDocument* pThis)
+static int doc_getSignatureState(COKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getSignatureState");
 
@@ -7643,7 +7643,7 @@ static int doc_getSignatureState(LibreOfficeKitDocument* pThis)
     return int(pObjectShell->GetDocumentSignatureState());
 }
 
-static void doc_resizeWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId,
+static void doc_resizeWindow(COKitDocument* /*pThis*/, unsigned nLOKWindowId,
                              const int nWidth, const int nHeight)
 {
     SolarMutexGuard aGuard;
@@ -7659,7 +7659,7 @@ static void doc_resizeWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWin
     pWindow->SetSizePixel(Size(nWidth, nHeight));
 }
 
-static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char* pFunctionName)
+static void doc_completeFunction(COKitDocument* pThis, const char* pFunctionName)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -7675,7 +7675,7 @@ static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char* pFun
 }
 
 
-static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis, const char* pArguments)
+static void doc_sendFormFieldEvent(COKitDocument* pThis, const char* pArguments)
 {
     SolarMutexGuard aGuard;
 
@@ -7701,7 +7701,7 @@ static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis, const char* pA
     pDoc->executeFromFieldEvent(aMap);
 }
 
-static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
+static bool doc_renderSearchResult(COKitDocument* pThis,
                                      const char* pSearchResult, unsigned char** pBitmapBuffer,
                                      int* pWidth, int* pHeight, size_t* pByteSize)
 {
@@ -7751,7 +7751,7 @@ static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
     return true;
 }
 
-static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const char* pArguments)
+static void doc_sendContentControlEvent(COKitDocument* pThis, const char* pArguments)
 {
     SolarMutexGuard aGuard;
 
@@ -7782,7 +7782,7 @@ static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const cha
     pDoc->executeContentControlEvent(aMap);
 }
 
-static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId,
+static void doc_setViewTimezone(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId,
                                 const char* pTimezone)
 {
     comphelper::ProfileZone aZone("doc_setViewTimezone");
@@ -7798,7 +7798,7 @@ static void doc_setViewTimezone(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     }
 }
 
-static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const bool readOnly)
+static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId, const bool readOnly)
 {
     comphelper::ProfileZone aZone("doc_setViewReadOnly");
 
@@ -7808,7 +7808,7 @@ static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*p
     SfxLokHelper::setViewReadOnly(nId, readOnly);
 }
 
-static void doc_setAllowChangeComments(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, const bool allow)
+static void doc_setAllowChangeComments(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId, const bool allow)
 {
     comphelper::ProfileZone aZone("doc_setAllowChangeComments");
 
@@ -7818,7 +7818,7 @@ static void doc_setAllowChangeComments(SAL_UNUSED_PARAMETER LibreOfficeKitDocume
     SfxLokHelper::setAllowChangeComments(nId, allow);
 }
 
-static void doc_setAllowManageRedlines(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId, bool allow)
+static void doc_setAllowManageRedlines(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId, bool allow)
 {
     comphelper::ProfileZone aZone("doc_setAllowManageRedlines");
 
@@ -7828,7 +7828,7 @@ static void doc_setAllowManageRedlines(SAL_UNUSED_PARAMETER LibreOfficeKitDocume
     SfxLokHelper::setAllowManageRedlines(nId, allow);
 }
 
-static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis, int nId, bool nEnabled)
+static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER COKitDocument* pThis, int nId, bool nEnabled)
 {
     SolarMutexGuard aGuard;
 
@@ -7839,14 +7839,14 @@ static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocumen
     SfxLokHelper::setAccessibilityState(nId, nEnabled);
 }
 
-static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId,
+static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId,
                                      bool bEnabled)
 {
     SolarMutexGuard aGuard;
     SfxLokHelper::setColorPreviewState(nId, bEnabled);
 }
 
-static char* lo_getError (LibreOfficeKit *pThis)
+static char* lo_getError (COKit *pThis)
 {
     comphelper::ProfileZone aZone("lo_getError");
 
@@ -7862,7 +7862,7 @@ static void lo_freeError(char* pFree)
     free(pFree);
 }
 
-static char* lo_getFilterTypes(LibreOfficeKit* pThis)
+static char* lo_getFilterTypes(COKit* pThis)
 {
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
@@ -7899,7 +7899,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
     return convertOString(aJson.finishAndGetAsOString());
 }
 
-static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long const features)
+static void lo_setOptionalFeatures(COKit* pThis, unsigned long long const features)
 {
     comphelper::ProfileZone aZone("lo_setOptionalFeatures");
 
@@ -7909,16 +7909,16 @@ static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long con
     LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     pLib->mOptionalFeatures = features;
     if (features & LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK)
-        comphelper::LibreOfficeKit::setPartInInvalidation(true);
+        comphelper::COKit::setPartInInvalidation(true);
     if (features & LOK_FEATURE_NO_TILED_ANNOTATIONS)
-        comphelper::LibreOfficeKit::setTiledAnnotations(false);
+        comphelper::COKit::setTiledAnnotations(false);
     if (features & LOK_FEATURE_RANGE_HEADERS)
-        comphelper::LibreOfficeKit::setRangeHeaders(true);
+        comphelper::COKit::setRangeHeaders(true);
     if (features & LOK_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK)
-        comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
+        comphelper::COKit::setViewIdForVisCursorInvalidation(true);
 }
 
-static void lo_setDocumentPassword(LibreOfficeKit* pThis,
+static void lo_setDocumentPassword(COKit* pThis,
         const char* pURL, const char* pPassword)
 {
     comphelper::ProfileZone aZone("lo_setDocumentPassword");
@@ -7934,7 +7934,7 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
     it->second->SetPassword(pPassword);
 }
 
-static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
+static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER COKit* /*pThis*/)
 {
     SetLastExceptionMsg();
     return convertOUString(ReplaceStringHookProc(
@@ -8021,9 +8021,9 @@ static void lo_startmain(void*)
 }
 
 // unipoll version.
-static void lo_runLoop(LibreOfficeKit* /*pThis*/,
-                       LibreOfficeKitPollCallback pPollCallback,
-                       LibreOfficeKitWakeCallback pWakeCallback,
+static void lo_runLoop(COKit* /*pThis*/,
+                       COKitPollCallback pPollCallback,
+                       COKitWakeCallback pWakeCallback,
                        void* pData)
 {
 #if defined(IOS) || defined(ANDROID)
@@ -8044,24 +8044,24 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
 #endif
 }
 
-static void lo_registerAnyInputCallback(LibreOfficeKit* /*pThis*/,
-                       LibreOfficeKitAnyInputCallback pAnyInputCallback,
+static void lo_registerAnyInputCallback(COKit* /*pThis*/,
+                       COKitAnyInputCallback pAnyInputCallback,
                        void* pData)
 {
     SolarMutexGuard aGuard;
-    comphelper::LibreOfficeKit::setAnyInputCallback(pAnyInputCallback, pData, []() -> int {
+    comphelper::COKit::setAnyInputCallback(pAnyInputCallback, pData, []() -> int {
         return Scheduler::GetMostUrgentTaskPriority();
     });
 }
 
-static void lo_registerFileSaveDialogCallback(LibreOfficeKit* /*pThis*/,
-                       LibreOfficeKitFileSaveDialogCallback pFileSaveDialogCallback)
+static void lo_registerFileSaveDialogCallback(COKit* /*pThis*/,
+                       COKitFileSaveDialogCallback pFileSaveDialogCallback)
 {
     SolarMutexGuard aGuard;
-    comphelper::LibreOfficeKit::setFileSaveDialogCallback(pFileSaveDialogCallback);
+    comphelper::COKit::setFileSaveDialogCallback(pFileSaveDialogCallback);
 }
 
-static int lo_getDocsCount(LibreOfficeKit* /*pThis*/)
+static int lo_getDocsCount(COKit* /*pThis*/)
 {
     SolarMutexGuard aGuard;
     return SfxLokHelper::getDocsCount();
@@ -8070,7 +8070,7 @@ static int lo_getDocsCount(LibreOfficeKit* /*pThis*/)
 
 static bool bInitialized = false;
 
-static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit::statusIndicatorCallbackType type, int percent, const char* pText)
+static void lo_status_indicator_callback(void *data, comphelper::COKit::statusIndicatorCallbackType type, int percent, const char* pText)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(data);
 
@@ -8079,20 +8079,20 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
 
     switch (type)
     {
-    case comphelper::LibreOfficeKit::statusIndicatorCallbackType::Start:
+    case comphelper::COKit::statusIndicatorCallbackType::Start:
         pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_START, pText, pLib->mpCallbackData);
         break;
-    case comphelper::LibreOfficeKit::statusIndicatorCallbackType::SetValue:
+    case comphelper::COKit::statusIndicatorCallbackType::SetValue:
         pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE,
             OUString(OUString::number(percent)).toUtf8().getStr(), pLib->mpCallbackData);
         break;
-    case comphelper::LibreOfficeKit::statusIndicatorCallbackType::Finish:
+    case comphelper::COKit::statusIndicatorCallbackType::Finish:
         pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_FINISH, nullptr, pLib->mpCallbackData);
         break;
     }
 }
 
-/// Used by preloadData (LibreOfficeKit) for providing different shortcuts for different languages.
+/// Used by preloadData (COKit) for providing different shortcuts for different languages.
 static void preLoadShortCutAccelerators()
 {
     std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& acceleratorConfs = SfxLokHelper::getAcceleratorConfs();
@@ -8152,7 +8152,7 @@ static void preLoadTypeDetection()
     }
 }
 
-/// Used only by LibreOfficeKit when used by Online to pre-initialize
+/// Used only by COKit when used by Online to pre-initialize
 static void preloadData()
 {
     comphelper::ProfileZone aZone("preload data");
@@ -8460,7 +8460,7 @@ void setDeeplConfig()
 
 }
 
-static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
+static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserProfileUrl)
 {
     enum {
         PRE_INIT,     // setup shared data in master process
@@ -8490,11 +8490,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             else if (it == "profile_events")
                 bProfileZones = true;
             else if (it == "sc_no_grid_bg")
-                comphelper::LibreOfficeKit::setCompatFlag(
-                    comphelper::LibreOfficeKit::Compat::scNoGridBackground);
+                comphelper::COKit::setCompatFlag(
+                    comphelper::COKit::Compat::scNoGridBackground);
             else if (it == "sc_print_twips_msgs")
-                comphelper::LibreOfficeKit::setCompatFlag(
-                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
+                comphelper::COKit::setCompatFlag(
+                    comphelper::COKit::Compat::scPrintTwipsMsgs);
             else if (it == "notebookbar")
                 bNotebookbar = true;
         }
@@ -8558,10 +8558,10 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     }
 
     if (eStage != SECOND_INIT)
-        comphelper::LibreOfficeKit::setActive();
+        comphelper::COKit::setActive();
 
     if (eStage != PRE_INIT)
-        comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
+        comphelper::COKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
 
     OUString aAppPath;
     if (pAppPath)
@@ -8865,7 +8865,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 }
 
 SAL_JNI_EXPORT
-LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_url)
+COKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_url)
 {
     static bool alreadyCalled = false;
 
@@ -8884,11 +8884,11 @@ LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user
             lo_destroy(gImpl);
         }
     }
-    return static_cast<LibreOfficeKit*>(gImpl);
+    return static_cast<COKit*>(gImpl);
 }
 
 SAL_JNI_EXPORT
-LibreOfficeKit *libreofficekit_hook(const char* install_path)
+COKit *libreofficekit_hook(const char* install_path)
 {
     return libreofficekit_hook_2(install_path, nullptr);
 }
@@ -8900,7 +8900,7 @@ int lok_preinit(const char* install_path, const char* user_profile_url)
 }
 
 SAL_JNI_EXPORT
-int lok_preinit_2(const char* install_path, const char* user_profile_url, LibreOfficeKit** kit)
+int lok_preinit_2(const char* install_path, const char* user_profile_url, COKit** kit)
 {
     lok_preinit_2_called = true;
     int result = lo_initialize(nullptr, install_path, user_profile_url);
@@ -8909,7 +8909,7 @@ int lok_preinit_2(const char* install_path, const char* user_profile_url, LibreO
     return result;
 }
 
-static void lo_destroy(LibreOfficeKit* pThis)
+static void lo_destroy(COKit* pThis)
 {
     SolarMutexClearableGuard aGuard;
 
@@ -8918,10 +8918,10 @@ static void lo_destroy(LibreOfficeKit* pThis)
 
     SAL_INFO("lok", "LO Destroy");
 
-    comphelper::LibreOfficeKit::setStatusIndicatorCallback(nullptr, nullptr);
+    comphelper::COKit::setStatusIndicatorCallback(nullptr, nullptr);
     uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
     // FIXME: the terminate() call here is a no-op because it detects
-    // that LibreOfficeKit::isActive() and then returns early!
+    // that COKit::isActive() and then returns early!
     bool bSuccess = xDesktop.is() && xDesktop->terminate();
 
     if (!bSuccess)

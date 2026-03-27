@@ -311,7 +311,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
         // Insert shape if it is visible, i.e. its bounding box overlaps
         // the visible area. In the LOK case we skip the overlap check
         // since we could remove a shape that is visible on the client.
-        if ( aBoundingBox.Overlaps(aVisibleArea) || comphelper::LibreOfficeKit::isActive())
+        if ( aBoundingBox.Overlaps(aVisibleArea) || comphelper::COKit::isActive())
             raDescriptorList.emplace_back(xShape);
     }
 }
@@ -477,7 +477,7 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
     if (xParent != mxShapeList)
         return;
 
-    if (!aBoundingBox.Overlaps(aVisibleArea) && !comphelper::LibreOfficeKit::isActive())
+    if (!aBoundingBox.Overlaps(aVisibleArea) && !comphelper::COKit::isActive())
         return;
 
     // Add shape to list of visible shapes.
@@ -1012,7 +1012,7 @@ void ChildrenManagerImpl::UpdateSelection()
     // For instance when ESC is pressed.
     // The only difference is provided by nSelectedChildCount: on editing is equal to 1.
     // In the following a shape get selected, but it was already selected, anyway editing is no more active.
-    if (comphelper::LibreOfficeKit::isActive() && pNewFocusedShape && nAddSelect == 0)
+    if (comphelper::COKit::isActive() && pNewFocusedShape && nAddSelect == 0)
     {
         sal_Int64 nChildCount = pNewFocusedShape->getAccessibleChildCount();
         sal_Int64 nSelectedChildCount = pNewFocusedShape->getSelectedAccessibleChildCount();

@@ -293,7 +293,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         aHelpStr = ScResId( STR_QUICKHELP_DELETE );
 
         if (ScTabViewShell* pLOKViewShell
-            = comphelper::LibreOfficeKit::isActive() ? aViewData.GetViewShell() : nullptr)
+            = comphelper::COKit::isActive() ? aViewData.GetViewShell() : nullptr)
         {
             // set cell addresses for deletion by autofill
             tools::Long nX1 = aDelRange.aStart.Col();
@@ -338,7 +338,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         sTopParent = pWin;
 
         if (ScTabViewShell* pLOKViewShell
-            = comphelper::LibreOfficeKit::isActive() ? aViewData.GetViewShell() : nullptr)
+            = comphelper::COKit::isActive() ? aViewData.GetViewShell() : nullptr)
         {
             // we need to use nAddX and nAddX here because we need the next row&column address
             OUString sCol = OUString::number(nEndX + nAddX);

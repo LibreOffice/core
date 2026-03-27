@@ -286,7 +286,7 @@ SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Wid
     // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
     // serialization when popup widgets are destroyed/recreated during character formatting resets.
     // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         mxLineEndIV->connect_query_tooltip(LINK(this, SvxLineEndWindow, QueryTooltipHdl));
     }
@@ -405,7 +405,7 @@ void SvxLineEndWindow::FillIconView()
     // An entry is temporarily added to get the UI bitmap
     basegfx::B2DPolyPolygon aNothing;
     mpLineEndList->Insert(std::make_unique<XLineEndEntry>(aNothing,
-        comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
+        comphelper::COKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
             : SvxResId(RID_SVXSTR_NONE)));
     const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nCount);
     Bitmap aBmp = mpLineEndList->GetUiBitmap( nCount );
@@ -562,7 +562,7 @@ SvxLineBox::SvxLineBox(SvxLineStyleToolBoxControl* pControl, weld::Widget* pPare
     // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
     // serialization when popup widgets are destroyed/recreated during character formatting resets.
     // Tooltip event binding is not needed for LibreOffice Kit
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         mxLineStyleIV->connect_query_tooltip(LINK(this, SvxLineBox, QueryTooltipHdl));
     }

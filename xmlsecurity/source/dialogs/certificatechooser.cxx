@@ -86,7 +86,7 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
     // disable buttons
     CertificateHighlightHdl(*m_xCertLB);
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         // Single certificate doesn't change during the lifetime of a LOK view: no need to search or
         // reload it.
@@ -226,7 +226,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             {
                 if (meAction == CertificateChooserUserAction::Sign || meAction == CertificateChooserUserAction::SelectSign)
                 {
-                    if (comphelper::LibreOfficeKit::isActive())
+                    if (comphelper::COKit::isActive())
                     {
                         // The LOK case takes the signing certificate from the view.
                         if (m_pViewShell && m_pViewShell->GetSigningCertificate().m_xCertificate.is())

@@ -968,7 +968,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
                         if (aRequest.isApproved())
                         {
                             // lok: we want to overwrite file in jail, so don't use template flag
-                            const bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+                            const bool bIsLOK = comphelper::COKit::isActive();
                             rDescriptor[utl::MediaDescriptor::PROP_DOCUMENTTITLE] <<= aDocumentTitle;
                             rDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE] <<= !bIsLOK;
                             rDescriptor[u"RepairPackage"_ustr] <<= true;

@@ -1844,7 +1844,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testOleSaveWhileEdit)
 {
     // Enable LOK mode, otherwise OCommonEmbeddedObject::SwitchStateTo_Impl() will throw when it
     // finds out that the test runs headless.
-    comphelper::LibreOfficeKit::setActive();
+    comphelper::COKit::setActive();
 
     // Load a document with a Draw doc in it.
     createSwDoc("ole-save-while-edit.odt");

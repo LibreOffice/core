@@ -627,7 +627,7 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
     // FIXME I believe resetting bInSelection should not be here even in the
     // non-tiled-rendering case, but it has been here since 2000 (and before)
     // so who knows what corner case it was supposed to solve back then
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
         mbInSelection = false;
 
     // Special treatments
@@ -1018,7 +1018,7 @@ EditSelection const& ImpEditEngine::MoveCursor(const KeyEvent& rKeyEvent, EditVi
     if ( bKeyModifySelection )
     {
         // Then the selection is expanded ... or the whole selection is painted in case of tiled rendering.
-        EditSelection aTmpNewSel( comphelper::LibreOfficeKit::isActive() ? pEditView->getImpl().GetEditSelection().Min() : aOldEnd, aPaM );
+        EditSelection aTmpNewSel( comphelper::COKit::isActive() ? pEditView->getImpl().GetEditSelection().Min() : aOldEnd, aPaM );
         pEditView->getImpl().DrawSelectionXOR( aTmpNewSel );
     }
     else

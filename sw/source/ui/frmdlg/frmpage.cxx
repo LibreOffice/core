@@ -732,7 +732,7 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
 
     m_xFixedRatioCB->connect_toggled(LINK(this, SwFramePage, RatioClickHdl));
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
         m_xAnchorAtPageRB->hide();
         m_xAnchorAtFrameRB->hide();

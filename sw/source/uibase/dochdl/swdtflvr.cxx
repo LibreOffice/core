@@ -337,7 +337,7 @@ void SwTransferable::ObjectReleased()
 void SwTransferable::AddSupportedFormats()
 {
     // only need if we are the current XSelection Object
-    if (this == SwModule::get()->m_pXSelection || comphelper::LibreOfficeKit::isActive())
+    if (this == SwModule::get()->m_pXSelection || comphelper::COKit::isActive())
     {
         SetDataForDragAndDrop( Point( 0,0) );
     }
@@ -803,7 +803,7 @@ bool SwTransferable::WriteObject( SvStream& rOStream,
     case SWTRANSFER_OBJECTTYPE_HTML:
     {
         // LOK is interested in getting images embedded for copy/paste support.
-        GetHTMLWriter( comphelper::LibreOfficeKit::isActive() ? u"EmbedImages;NoPrettyPrint"_ustr : OUString(), OUString(), xWrt );
+        GetHTMLWriter( comphelper::COKit::isActive() ? u"EmbedImages;NoPrettyPrint"_ustr : OUString(), OUString(), xWrt );
         break;
     }
 
@@ -3427,7 +3427,7 @@ bool SwTransferable::PasteFileList( const TransferableDataHelper& rData,
                                     const Point* pPt, bool bMsg,
                                     bool *const pbCallAutoCaption)
 {
-    if ( comphelper::LibreOfficeKit::isActive() ) {
+    if ( comphelper::COKit::isActive() ) {
         for( sal_uInt32 i = 0, nFormatCount = rData.GetFormatCount(); ( i < nFormatCount ) && !bLink; ++i )
         {
             if( SotClipboardFormatId::FILE_LIST == rData.GetFormat( i ) )

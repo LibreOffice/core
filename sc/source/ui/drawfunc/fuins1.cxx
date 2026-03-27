@@ -206,7 +206,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
                                                  aAnchorType == SCA_CELL_RESIZE);
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
-    SdrInsertFlags nInsOptions = (bApi && !comphelper::LibreOfficeKit::isActive()) ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE;
+    SdrInsertFlags nInsOptions = (bApi && !comphelper::COKit::isActive()) ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE;
     bool bSuccess = pView->InsertObjectAtView( pObj.get(), *pPV, nInsOptions );
 
     // SetGraphicLink has to be used after inserting the object,
@@ -288,7 +288,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
         if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
             bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (comphelper::COKit::isActive())
         {
             INetURLObject aURL(aFileName);
             if (INetProtocol::File != aURL.GetProtocol() && HostFilter::isForbidden(aURL.GetHost()))

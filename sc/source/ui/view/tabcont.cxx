@@ -455,9 +455,9 @@ void ScTabControl::SwitchToPageId(sal_uInt16 nId)
         SelectPage( i, i==nId );
     Select();
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::COKit::isActive())
     {
-        // notify LibreOfficeKit about changed page
+        // notify COKit about changed page
         OString aPayload = OString::number(nId - 1);
         rViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload);
     }

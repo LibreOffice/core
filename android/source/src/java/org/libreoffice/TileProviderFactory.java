@@ -9,7 +9,7 @@
 package org.libreoffice;
 
 
-import org.libreoffice.kit.LibreOfficeKit;
+import org.libreoffice.kit.COKit;
 
 /**
  * Create a desired instance of TileProvider.
@@ -20,7 +20,7 @@ public class TileProviderFactory {
     }
 
     public static void initialize() {
-        LibreOfficeKit.initializeLibrary();
+        COKit.initializeLibrary();
     }
 
     public static TileProvider create(LibreOfficeMainActivity context, InvalidationHandler invalidationHandler, String filename) {

@@ -33,7 +33,7 @@ void JSDialogNotifyIdle::send(const OString& sMsg)
         return;
     }
 
-    const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier();
+    const vcl::ICOKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier();
     if (pNotifier)
     {
         if (m_bForce || sMsg != m_LastNotificationMessage)

@@ -270,7 +270,7 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                  * in 2009 with commit 426ab2c0e8f6e3fe2b766f74f6b8da873d860260
                  * as some "metropatch" and the other places it touched seem to
                  * be gone. */
-                if (!comphelper::LibreOfficeKit::isActive() &&
+                if (!comphelper::COKit::isActive() &&
                     ((menuItemHandler->aMenuItemURL == ".uno:Paste" &&
                             m_aModuleIdentifier != "com.sun.star.sheet.SpreadsheetDocument")
                         || menuItemHandler->aMenuItemURL == ".uno:PasteClipboard"))    // special for draw/impress

@@ -239,7 +239,7 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
     OUString aStrFormText = CuiResId( RID_CUISTR_HYPERDLG_FROM_TEXT );
     OUString aStrFormButton = CuiResId( RID_CUISTR_HYPERDLG_FORM_BUTTON );
 
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         // Frame
         sal_Int32 nPos = mxCbbFrame->find_text(pHyperlinkItem->GetTargetFrame());
@@ -289,7 +289,7 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
     mxEdText->set_text( pHyperlinkItem->GetIntName() );
 
     // Script-button
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!comphelper::COKit::isActive())
     {
         if ( pHyperlinkItem->GetMacroEvents() == HyperDialogEvent::NONE )
             mxBtScript->set_sensitive(false);

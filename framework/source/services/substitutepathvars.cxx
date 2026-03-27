@@ -634,7 +634,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
     // (note: getenv is a hack to detect if we're running in a unit test)
     // Also, it's okay to have an empty user installation path in case of LOK
     if (aState == ::utl::Bootstrap::PATH_EXISTS || getenv("SRC_ROOT") ||
-        (comphelper::LibreOfficeKit::isActive() && aState == ::utl::Bootstrap::PATH_VALID))
+        (comphelper::COKit::isActive() && aState == ::utl::Bootstrap::PATH_VALID))
     {
         m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ] = sVal;
     }
