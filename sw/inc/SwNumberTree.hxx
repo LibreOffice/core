@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_options.h>
 #include <set>
 #include <vector>
 #include "SwNumberTreeTypes.hxx"
@@ -110,7 +111,7 @@ struct compSwNumberTreeNodeLessThan
 
      The phantom gets numbered with the start value.
 */
-class SAL_DLLPUBLIC_RTTI SwNumberTreeNode
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwNumberTreeNode
 {
 protected:
     typedef std::set<SwNumberTreeNode*, compSwNumberTreeNodeLessThan> tSwNumberTreeChildren;

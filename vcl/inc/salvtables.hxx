@@ -184,7 +184,7 @@ public:
 
 class SalFlashAttention;
 
-class VCL_DLLPUBLIC SalInstanceWidget : public virtual weld::Widget
+class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SalInstanceWidget : public virtual weld::Widget
 {
 protected:
     VclPtr<vcl::Window> m_xWidget;

@@ -122,7 +122,7 @@ public:
     static bool areSame(const CellAttributeHolder* p1, const CellAttributeHolder* p2);
 };
 
-class SAL_DLLPUBLIC_RTTI ScPatternAttr final
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScPatternAttr final
 {
     friend class CellAttributeHelper;
 

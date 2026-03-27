@@ -35,7 +35,7 @@ class SfxItemSet;
 class SwCursorShell;
 
 struct DBTextStruct_Impl;
-class SW_DLLPUBLIC SwBaseShell: public SfxShell
+class UNLESS_MERGELIBS_MORE(SW_DLLPUBLIC) SwBaseShell: public SfxShell
 {
     SwView      &m_rView;
 

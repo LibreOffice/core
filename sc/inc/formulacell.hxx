@@ -117,7 +117,7 @@ enum class ScMatrixMode : sal_uInt8 {
     Reference = 2                    // Remaining cells, via ocMatRef reference token
 };
 
-class SAL_DLLPUBLIC_RTTI ScFormulaCell final : public SvtListener
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScFormulaCell final : public SvtListener
 {
 private:
     ScFormulaCellGroupRef mxGroup;       // Group of formulae we're part of

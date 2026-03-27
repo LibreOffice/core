@@ -119,7 +119,7 @@ struct VCL_DLLPUBLIC DamageHandler
     damageHandler damaged;
 };
 
-struct VCL_DLLPUBLIC CairoCommon
+struct UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) CairoCommon
 {
     cairo_surface_t* m_pSurface;
     basegfx::B2IVector m_aFrameSize;

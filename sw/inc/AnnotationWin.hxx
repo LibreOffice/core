@@ -56,7 +56,7 @@ namespace sw::sidebarwindows {
 
 namespace sw::annotation {
 
-class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwAnnotationWin final : public InterimItemWindow
 {
     public:
         SwAnnotationWin( SwEditWin& rEditWin,

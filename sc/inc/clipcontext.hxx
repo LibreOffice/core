@@ -44,7 +44,7 @@ public:
     ColumnBlockPositionSet* getBlockPositionSet() { return mpSet.get(); }
 };
 
-class SAL_DLLPUBLIC_RTTI CopyFromClipContext final : public ClipContextBase
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) CopyFromClipContext final : public ClipContextBase
 {
     /** Tracks modified formula group spans. */
     sc::ColumnSpanSet maListeningFormulaSpans;

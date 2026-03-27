@@ -75,7 +75,7 @@ class ScMarkData;
 struct ScDragData;
 class SfxDialogController;
 
-class SAL_DLLPUBLIC_RTTI ScModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
     Timer               m_aIdleTimer;
     std::unique_ptr<ScDragData> m_pDragData;

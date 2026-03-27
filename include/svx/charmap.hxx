@@ -52,7 +52,7 @@ namespace svx
     class SvxShowCharSetAcc;
 }
 
-class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI SvxShowCharSet : public weld::CustomWidgetController
+class SAL_WARN_UNUSED UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SvxShowCharSet : public weld::CustomWidgetController
 {
 protected:
     VclPtr<VirtualDevice> mxVirDev;

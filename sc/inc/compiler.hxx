@@ -178,7 +178,7 @@ public:
     formula::FormulaToken* CreateToken(ScSheetLimits& rLimits) const;   // create typified token
 };
 
-class SAL_DLLPUBLIC_RTTI ScCompiler final : public formula::FormulaCompiler
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScCompiler final : public formula::FormulaCompiler
 {
 public:
 

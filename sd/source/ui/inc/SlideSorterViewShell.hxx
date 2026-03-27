@@ -32,7 +32,7 @@ namespace sd::slidesorter {
 
 class SlideSorter;
 
-class SAL_DLLPUBLIC_RTTI SlideSorterViewShell final
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SlideSorterViewShell final
     : public ViewShell
 {
     friend class controller::SlotManager;

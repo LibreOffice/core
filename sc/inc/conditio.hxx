@@ -303,7 +303,7 @@ public:
     }
 };
 
-class SAL_DLLPUBLIC_RTTI ScConditionEntry : public ScFormatEntry, public CacheOwner
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) ScConditionEntry : public ScFormatEntry, public CacheOwner
 {
                                         // stored data:
     ScConditionMode     eOp;

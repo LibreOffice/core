@@ -107,7 +107,7 @@ struct SwVisiblePageNumbers
 
 class SwView;
 
-class SAL_DLLPUBLIC_RTTI SwViewShell : public sw::Ring<SwViewShell>
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SwViewShell : public sw::Ring<SwViewShell>
 {
     friend void SetOutDev( SwViewShell *pSh, OutputDevice *pOut );
     friend void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pOut,

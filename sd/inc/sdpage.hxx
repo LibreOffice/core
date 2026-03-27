@@ -89,7 +89,7 @@ namespace sd {
     class UndoAttrObject;
 }
 
-class SAL_DLLPUBLIC_RTTI SdPage final : public FmFormPage, public SdrObjUserCall
+class UNLESS_MERGELIBS_MORE(SAL_DLLPUBLIC_RTTI) SdPage final : public FmFormPage, public SdrObjUserCall
 {
     SdPage& operator=(const SdPage&) = delete;
     SdPage(const SdPage&) = delete;
