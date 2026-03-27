@@ -940,8 +940,6 @@ include/svx/svdpage.hxx:230
     std::reverse_iterator<__gnu_debug::_Safe_iterator<struct std::__cxx1998::_Deque_iterator<rtl::Reference<SdrObject>, const rtl::Reference<SdrObject> &, const rtl::Reference<SdrObject> *>, std::deque<rtl::Reference<SdrObject> > > > SdrObjList::rbegin() const
 include/svx/svdpage.hxx:231
     std::reverse_iterator<__gnu_debug::_Safe_iterator<struct std::__cxx1998::_Deque_iterator<rtl::Reference<SdrObject>, const rtl::Reference<SdrObject> &, const rtl::Reference<SdrObject> *>, std::deque<rtl::Reference<SdrObject> > > > SdrObjList::rend() const
-include/svx/svdpage.hxx:335
-    void SdrPageProperties::sendLOKitThemeChangedCallback()
 include/svx/svdpntv.hxx:518
     _Bool SdrPaintView::IsSwapAsynchron() const
 include/svx/svdtrans.hxx:246
