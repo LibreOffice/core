@@ -268,25 +268,32 @@ void exportGeography(const uno::Reference<beans::XPropertySet>& xSeriesProp,
     if (!xSeriesProp.is())
         return;
 
-    OUString sProjectionType, sViewedRegionType, sCultureLanguage, sCultureRegion, sAttribution;
+    sal_Int32 nProjType = 0, nViewedRegion = 0;
+    OUString sCultureLanguage, sCultureRegion, sAttribution;
     uno::Any aPT = xSeriesProp->getPropertyValue(u"GeographyProjectionType"_ustr);
     uno::Any aVR = xSeriesProp->getPropertyValue(u"GeographyViewedRegionType"_ustr);
     uno::Any aCL = xSeriesProp->getPropertyValue(u"GeographyCultureLanguage"_ustr);
     uno::Any aCR = xSeriesProp->getPropertyValue(u"GeographyCultureRegion"_ustr);
     uno::Any aAT = xSeriesProp->getPropertyValue(u"GeographyAttribution"_ustr);
 
-    bool bHasPT = (aPT >>= sProjectionType);
-    bool bHasVR = (aVR >>= sViewedRegionType);
+    bool bHasPT = (aPT >>= nProjType);
+    bool bHasVR = (aVR >>= nViewedRegion);
     bool bHasCL = (aCL >>= sCultureLanguage);
     bool bHasCR = (aCR >>= sCultureRegion);
     bool bHasAT = (aAT >>= sAttribution);
+
+    OUString sProjStr, sViewedStr;
+    if (bHasPT)
+        sProjStr = geoProjectionTypeToString(static_cast<GeoProjectionType>(nProjType));
+    if (bHasVR)
+        sViewedStr = geoMappingLevelToString(static_cast<GeoMappingLevel>(nViewedRegion));
 
     if (!bHasPT && !bHasVR && !bHasCL && !bHasCR && !bHasAT)
         return;
 
     pFS->startElement(FSNS(XML_cx, XML_geography), XML_projectionType,
-                      bHasPT ? sProjectionType.toUtf8().getStr() : nullptr, XML_viewedRegionType,
-                      bHasVR ? sViewedRegionType.toUtf8().getStr() : nullptr, XML_cultureLanguage,
+                      bHasPT ? sProjStr.toUtf8().getStr() : nullptr, XML_viewedRegionType,
+                      bHasVR ? sViewedStr.toUtf8().getStr() : nullptr, XML_cultureLanguage,
                       bHasCL ? sCultureLanguage.toUtf8().getStr() : nullptr, XML_cultureRegion,
                       bHasCR ? sCultureRegion.toUtf8().getStr() : nullptr, XML_attribution,
                       bHasAT ? sAttribution.toUtf8().getStr() : nullptr);

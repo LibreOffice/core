@@ -109,6 +109,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/chart/datatablecontext \
     oox/source/drawingml/chart/geographycontext \
     oox/source/drawingml/chart/geographyconverter \
+    oox/source/drawingml/chart/geographymodel \
     oox/source/drawingml/chart/datatableconverter \
     oox/source/drawingml/chart/modelbase \
     oox/source/drawingml/chart/objectformatter \

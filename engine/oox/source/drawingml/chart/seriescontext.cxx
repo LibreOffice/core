@@ -863,8 +863,12 @@ ContextHandlerRef LayoutPropsContext::onCreateContext( sal_Int32 nElement, const
                 case CX_TOKEN( geography ):
                 {
                     auto& rGeo = mrModel.mxGeography.emplace();
-                    rGeo.mosProjectionType = rAttribs.getString( XML_projectionType );
-                    rGeo.mosViewedRegionType = rAttribs.getString( XML_viewedRegionType );
+                    std::optional<OUString> sPT = rAttribs.getString( XML_projectionType );
+                    if (sPT.has_value())
+                        rGeo.moeProjectionType = geoProjectionTypeFromString( *sPT );
+                    std::optional<OUString> sVR = rAttribs.getString( XML_viewedRegionType );
+                    if (sVR.has_value())
+                        rGeo.moeViewedRegionType = geoMappingLevelFromString( *sVR );
                     rGeo.mosCultureLanguage = rAttribs.getString( XML_cultureLanguage );
                     rGeo.mosCultureRegion = rAttribs.getString( XML_cultureRegion );
                     rGeo.mosAttribution = rAttribs.getString( XML_attribution );

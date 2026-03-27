@@ -12,9 +12,37 @@
 #include <optional>
 #include <vector>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace oox::drawingml::chart
 {
+// ST_GeoProjectionType
+enum class GeoProjectionType : sal_Int32
+{
+    Mercator,
+    Miller,
+    Robinson,
+    Albers,
+};
+
+// ST_GeoMappingLevel
+enum class GeoMappingLevel : sal_Int32
+{
+    DataOnly,
+    PostalCode,
+    County,
+    State,
+    CountryRegion,
+    CountryRegionList,
+    World,
+    Autodetect,
+};
+
+GeoProjectionType geoProjectionTypeFromString(std::u16string_view rStr);
+OUString geoProjectionTypeToString(GeoProjectionType eType);
+
+GeoMappingLevel geoMappingLevelFromString(std::u16string_view rStr);
+OUString geoMappingLevelToString(GeoMappingLevel eLevel);
 struct GeoAddressModel
 {
     std::optional<OUString> mosAddress1;
@@ -165,8 +193,8 @@ struct GeoCacheModel
 
 struct GeographyModel
 {
-    std::optional<OUString> mosProjectionType;
-    std::optional<OUString> mosViewedRegionType;
+    std::optional<GeoProjectionType> moeProjectionType;
+    std::optional<GeoMappingLevel> moeViewedRegionType;
     std::optional<OUString> mosCultureLanguage;
     std::optional<OUString> mosCultureRegion;
     std::optional<OUString> mosAttribution;

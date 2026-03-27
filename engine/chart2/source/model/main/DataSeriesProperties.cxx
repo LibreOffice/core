@@ -150,13 +150,13 @@ void DataSeriesProperties::AddPropertiesToVector(
 
     rOutProperties.emplace_back( "GeographyProjectionType",
                   PROP_DATASERIES_GEOGRAPHY_PROJECTION_TYPE,
-                  cppu::UnoType<OUString>::get(),
+                  cppu::UnoType<sal_Int32>::get(), // Actually enum GeoProjectionType
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "GeographyViewedRegionType",
                   PROP_DATASERIES_GEOGRAPHY_VIEWED_REGION_TYPE,
-                  cppu::UnoType<OUString>::get(),
+                  cppu::UnoType<sal_Int32>::get(), // Actually enum GeoMappingLevel
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 

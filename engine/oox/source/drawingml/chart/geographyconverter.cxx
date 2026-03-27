@@ -761,10 +761,12 @@ GeoClearModel geoClearFromPropertyValues(const uno::Sequence<beans::PropertyValu
 
 void convertGeography(const GeographyModel& rModel, PropertySet& rSeriesProp)
 {
-    if (rModel.mosProjectionType.has_value())
-        rSeriesProp.setProperty(PROP_GeographyProjectionType, *rModel.mosProjectionType);
-    if (rModel.mosViewedRegionType.has_value())
-        rSeriesProp.setProperty(PROP_GeographyViewedRegionType, *rModel.mosViewedRegionType);
+    if (rModel.moeProjectionType.has_value())
+        rSeriesProp.setProperty(PROP_GeographyProjectionType,
+                                static_cast<sal_Int32>(*rModel.moeProjectionType));
+    if (rModel.moeViewedRegionType.has_value())
+        rSeriesProp.setProperty(PROP_GeographyViewedRegionType,
+                                static_cast<sal_Int32>(*rModel.moeViewedRegionType));
     if (rModel.mosCultureLanguage.has_value())
         rSeriesProp.setProperty(PROP_GeographyCultureLanguage, *rModel.mosCultureLanguage);
     if (rModel.mosCultureRegion.has_value())
