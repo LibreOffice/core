@@ -2220,7 +2220,7 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
     static constexpr OStringLiteral aVectorTile(".uno:VectorTile");
 
     std::map<OUString, OUString> aMap
-        = SfxLokHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
+        = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
 
     if (o3tl::starts_with(rCommand, aExtractDocStructure))
     {
@@ -4296,7 +4296,7 @@ VclPtr<vcl::Window> SdXImpressDocument::getDocWindow()
     if (!pViewShell)
         return {};
 
-    if (VclPtr<vcl::Window> pWindow = SfxLokHelper::getInPlaceDocWindow(pViewShell->GetViewShell()))
+    if (VclPtr<vcl::Window> pWindow = KitHelper::getInPlaceDocWindow(pViewShell->GetViewShell()))
         return pWindow;
 
     return pViewShell->GetActiveWindow();
@@ -4508,7 +4508,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
 void SdXImpressDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
-    SfxLokHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
+    KitHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
 }
 
 void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
@@ -4521,7 +4521,7 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
 
     constexpr double fScale = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::px);
 
-    if (SfxLokHelper::testInPlaceComponentMouseEventHit(
+    if (KitHelper::testInPlaceComponentMouseEventHit(
             pViewShell->GetViewShell(), nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
         return;
 
@@ -4547,7 +4547,7 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount, i
 
     LokMouseEventData aMouseEventData(nType, aPointHMM, nCount, MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
-    SfxLokHelper::postMouseEventAsync(pViewShell->GetActiveWindow(), aMouseEventData);
+    KitHelper::postMouseEventAsync(pViewShell->GetActiveWindow(), aMouseEventData);
 }
 
 void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)

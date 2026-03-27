@@ -46,7 +46,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
 {
     // Given a document with 2 pages, first view on page 1, second view on page 2:
     SwXTextDocument* pXTextDocument = createDoc();
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     pWrtShell1->InsertPageBreak();
     SwRootFrame* pLayout = pWrtShell1->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -54,15 +54,15 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
     CPPUNIT_ASSERT(pPage1);
     SwFrame* pPage2 = pPage1->GetNext();
     CPPUNIT_ASSERT(pPage2);
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     SwTestViewCallback aView1;
     pWrtShell1->SttEndDoc(/*bStt=*/true);
     pWrtShell1->Insert(u"start"_ustr);
     pWrtShell1->GetView().SetVisArea(pPage1->getFrameArea().SVRect());
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     SwTestViewCallback aView2;
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
     pWrtShell2->SttEndDoc(/*bStt=*/false);
@@ -83,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
 
     // When deleting a character in view 2 and processing jobs with view 1 set to active:
     pWrtShell2->DelLeft();
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pWrtShell2->GetView().GetViewFrame().GetBindings().GetTimer().Invoke();
     // Once more to hit the pImpl->bMsgDirty = false case in SfxBindings::NextJob_Impl().
     pWrtShell2->GetView().GetViewFrame().GetBindings().GetTimer().Invoke();
@@ -308,16 +308,16 @@ public:
     DECL_STATIC_LINK(ViewSwitcher, SwitchView, void*, void);
 };
 
-IMPL_STATIC_LINK_NOARG(ViewSwitcher, SwitchView, void*, void) { SfxLokHelper::setView(0); }
+IMPL_STATIC_LINK_NOARG(ViewSwitcher, SwitchView, void*, void) { KitHelper::setView(0); }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPDFExportViewSwitch)
 {
     // Given a document with 2 views:
     SwXTextDocument* pXTextDocument = createDoc("to-pdf.odt");
-    SfxLokHelper::registerViewCallbacks();
+    KitHelper::registerViewCallbacks();
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
     SwTestViewCallback aView1;
-    SfxLokHelper::createView();
+    KitHelper::createView();
     SwTestViewCallback aView2;
     SwView* pView2 = pDoc->GetDocShell()->GetView();
     uno::Reference<frame::XFrame> xFrame2 = pView2->GetViewFrame().GetFrame().GetFrameInterface();
@@ -384,13 +384,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableOne)
     SwXTextDocument* pXTextDocument = createDoc();
     CPPUNIT_ASSERT(pXTextDocument);
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getCurrentView();
-    SfxLokHelper::createView();
+    int nView1 = KitHelper::getCurrentView();
+    KitHelper::createView();
     SwTestViewCallback aView2;
-    int nView2 = SfxLokHelper::getCurrentView();
+    int nView2 = KitHelper::getCurrentView();
 
     // When recording changes in view1:
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     aView1.m_aStateChanges.clear();
     aView2.m_aStateChanges.clear();
     dispatchCommand(mxComponent, ".uno:TrackChangesInThisView", {});
@@ -409,7 +409,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableOne)
     dispatchCommand(mxComponent, ".uno:TrackChanges", aArgs);
 
     // When recording changes in view2:
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     aView1.m_aStateChanges.clear();
     aView2.m_aStateChanges.clear();
     dispatchCommand(mxComponent, ".uno:TrackChangesInThisView", {});
@@ -427,15 +427,15 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableBoth)
     SwXTextDocument* pXTextDocument = createDoc();
     CPPUNIT_ASSERT(pXTextDocument);
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
-    SfxLokHelper::createView();
+    KitHelper::createView();
     SwTestViewCallback aView2;
-    int nView2 = SfxLokHelper::getCurrentView();
+    int nView2 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
     CPPUNIT_ASSERT(!pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
 
@@ -455,12 +455,12 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewAllToOneTransi
     SwXTextDocument* pXTextDocument = createDoc();
     CPPUNIT_ASSERT(pXTextDocument);
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
-    SfxLokHelper::createView();
+    KitHelper::createView();
     SwTestViewCallback aView2;
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     comphelper::dispatchCommand(".uno:TrackChangesInAllViews", {});
     CPPUNIT_ASSERT(pWrtShell1->GetViewOptions()->IsRedlineRecordingOn());
     CPPUNIT_ASSERT(pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
@@ -481,14 +481,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewInsert)
     SwXTextDocument* pXTextDocument = createDoc();
     CPPUNIT_ASSERT(pXTextDocument);
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell1->Insert(u"X"_ustr);
-    SfxLokHelper::createView();
+    KitHelper::createView();
     SwTestViewCallback aView2;
-    int nView2 = SfxLokHelper::getCurrentView();
+    int nView2 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
 
     // When view 1 types:
@@ -498,7 +498,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewInsert)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pWrtShell1->GetRedlineCount());
 
     // When view 2 types:
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     pWrtShell2->SttEndDoc(/*bStt=*/false);
     pWrtShell2->Insert(u"Z"_ustr);
     // Then make sure no redline is created:
@@ -515,14 +515,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewDelete)
     SwXTextDocument* pXTextDocument = createDoc();
     CPPUNIT_ASSERT(pXTextDocument);
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell1->Insert(u"test"_ustr);
-    SfxLokHelper::createView();
+    KitHelper::createView();
     SwTestViewCallback aView2;
-    int nView2 = SfxLokHelper::getCurrentView();
+    int nView2 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
 
     // When view 1 deletes:
@@ -533,7 +533,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewDelete)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pWrtShell1->GetRedlineCount());
 
     // When view 2 deletes:
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     pWrtShell2->SttEndDoc(/*bStt=*/false);
     pWrtShell2->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     pWrtShell2->DelLeft();
@@ -551,14 +551,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerDocInsert)
     SwXTextDocument* pXTextDocument = createDoc();
     CPPUNIT_ASSERT(pXTextDocument);
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell1->Insert(u"X"_ustr);
-    SfxLokHelper::createView();
+    KitHelper::createView();
     SwTestViewCallback aView2;
-    int nView2 = SfxLokHelper::getCurrentView();
+    int nView2 = KitHelper::getCurrentView();
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     comphelper::dispatchCommand(".uno:TrackChanges", {});
 
     // When view 1 types:
@@ -568,7 +568,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerDocInsert)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pWrtShell1->GetRedlineCount());
 
     // When view 2 types:
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     pWrtShell2->SttEndDoc(/*bStt=*/false);
     pWrtShell2->Insert(u"Z"_ustr);
     // Without the accompanying fix in place, this test would have failed with:
@@ -584,12 +584,12 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesStates)
     SwXTextDocument* pXTextDocument = createDoc();
     CPPUNIT_ASSERT(pXTextDocument);
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     SwView* pView1 = pXTextDocument->GetDocShell()->GetView();
-    SfxLokHelper::createView();
+    KitHelper::createView();
     SwTestViewCallback aView2;
     SwView* pView2 = pXTextDocument->GetDocShell()->GetView();
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
 
     // When enabling recording in view1 only:
     pView1->GetViewFrame().GetDispatcher()->Execute(FN_TRACK_CHANGES_IN_THIS_VIEW,
@@ -694,12 +694,12 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesInsertUndo)
     SwXTextDocument* pXTextDocument = createDoc();
     CPPUNIT_ASSERT(pXTextDocument);
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     SwView* pView1 = pXTextDocument->GetDocShell()->GetView();
     SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
-    SfxLokHelper::createView();
+    KitHelper::createView();
     SwTestViewCallback aView2;
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     comphelper::dispatchCommand(".uno:TrackChangesInThisView", {});
 
     // When typing and undoing:
@@ -848,8 +848,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBlockedCommandSlotState)
     CPPUNIT_ASSERT(eState != SfxItemState::DISABLED);
 
     // Block .uno:Bold
-    int nViewId = SfxLokHelper::getView(*pViewShell);
-    SfxLokHelper::setBlockedCommandList(nViewId, ".uno:Bold");
+    int nViewId = KitHelper::getView(*pViewShell);
+    KitHelper::setBlockedCommandList(nViewId, ".uno:Bold");
 
     // Query the state of .uno:Bold after blocking — should be disabled
     eState = pDispatcher->QueryState(SID_ATTR_CHAR_WEIGHT, aResult);

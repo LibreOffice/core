@@ -1298,7 +1298,7 @@ void SwViewShell::SizeChgNotify()
                     ", " + OString::number(aDocSize.Height() + 2 * DOCUMENTBORDER);
 
                 SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(pNotifySh->GetCurrentDocument());
-                SfxLokHelper::notifyDocumentSizeChanged(pNotifySh, sPayload, pModel);
+                KitHelper::notifyDocumentSizeChanged(pNotifySh, sPayload, pModel);
             }
         }
     }
@@ -2578,7 +2578,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     if (SfxViewShell* pNotifySh = GetSfxViewShell())
     {
         SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(pNotifySh->GetCurrentDocument());
-        SfxLokHelper::notifyViewRenderState(pNotifySh, pModel);
+        KitHelper::notifyViewRenderState(pNotifySh, pModel);
     }
 
     pMyWin->Invalidate();

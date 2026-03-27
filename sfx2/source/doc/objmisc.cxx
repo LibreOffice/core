@@ -348,7 +348,7 @@ void SfxObjectShell::ModifyChanged()
     {
         OString aStatus = ".uno:ModifiedStatus="_ostr;
         aStatus += IsModified() ? "true" : "false";
-        SfxLokHelper::notifyAllViews(LOK_CALLBACK_STATE_CHANGED, aStatus);
+        KitHelper::notifyAllViews(LOK_CALLBACK_STATE_CHANGED, aStatus);
     }
 }
 

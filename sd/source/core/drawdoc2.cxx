@@ -477,7 +477,7 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     if (comphelper::COKit::isActive() && pSdPage->GetPageKind() == PageKind::Standard)
     {
         SdXImpressDocument* pDoc = getUnoModel();
-        SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
+        KitHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 
     if (HasCanvasPage())
@@ -538,7 +538,7 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
     if (comphelper::COKit::isActive() && pSdPage->GetPageKind() == PageKind::Standard)
     {
         SdXImpressDocument* pDoc = getUnoModel();
-        SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
+        KitHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 
     if (HasCanvasPage() && pSdPage->GetPageKind() == PageKind::Standard && !mbDestroying)

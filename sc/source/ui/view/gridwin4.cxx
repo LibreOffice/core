@@ -353,7 +353,7 @@ void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
                 Fraction aZoomY = rOtherViewData.GetZoomY();
                 if (aZoomX == aScaleX && aZoomY == aScaleY)
                 {
-                    SfxLokHelper::notifyOtherView(*pThisViewShell, pOtherViewShell,
+                    KitHelper::notifyOtherView(*pThisViewShell, pOtherViewShell,
                             LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", rCursorRect.toString());
                 }
             }
@@ -1689,7 +1689,7 @@ void ScGridWindow::LogicInvalidatePart(const tools::Rectangle* pRectangle, int n
     }
 
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    SfxLokHelper::notifyInvalidation(pViewShell, nPart, pResultRectangle);
+    KitHelper::notifyInvalidation(pViewShell, nPart, pResultRectangle);
 }
 
 void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)

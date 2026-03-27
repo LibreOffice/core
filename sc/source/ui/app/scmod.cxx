@@ -230,7 +230,7 @@ void ScModule::ConfigurationChanged(utl::ConfigurationBroadcaster* p, Configurat
                 if (SfxObjectShell* pKitCurrentObjSh = bKit ? SfxObjectShell::Current() : nullptr)
                 {
                     ScModelObj* pScModelObj = comphelper::getFromUnoTunnel<ScModelObj>(pKitCurrentObjSh->GetModel());
-                    SfxLokHelper::notifyViewRenderState(pViewSh, pScModelObj);
+                    KitHelper::notifyViewRenderState(pViewSh, pScModelObj);
                     // In Online, the document color is the one used for the background, contrary to
                     // Writer and Draw that use the application background color.
                     pViewSh->viewCallback(LOK_CALLBACK_APPLICATION_BACKGROUND_COLOR,

@@ -3206,7 +3206,7 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
         if (comphelper::COKit::isActive() && !pSrcTabs->empty())
         {
             ScModelObj* pModel = pDocShell->GetModel();
-            SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
+            KitHelper::notifyDocumentSizeChangedAllViews(pModel);
         }
 
         if (bUndo)

@@ -7021,7 +7021,7 @@ bool SwEditWin::DeleteSurroundingText(const Selection& rSelection)
 
 void SwEditWin::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
-    SfxLokHelper::notifyInvalidation(&m_rView, pRectangle);
+    KitHelper::notifyInvalidation(&m_rView, pRectangle);
 }
 
 void SwEditWin::SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool bClearMark)

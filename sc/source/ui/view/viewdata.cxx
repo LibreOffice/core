@@ -93,7 +93,7 @@ void lcl_LOKRemoveWindow(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
                 [pTabViewShell, eWhich] (ScTabViewShell* pOtherViewShell)
                 { pOtherViewShell->RemoveWindowFromForeignEditView(pTabViewShell, eWhich); };
 
-        SfxLokHelper::forEachOtherView(pTabViewShell, lRemoveWindows);
+        KitHelper::forEachOtherView(pTabViewShell, lRemoveWindows);
     }
 }
 
@@ -1589,7 +1589,7 @@ void notifyCellCursorAt(const ScTabViewShell* pViewShell, SCCOL nCol, SCROW nRow
        << rCursor.GetHeight() << ", " << nCol << ", " << nRow;
 
     pViewShell->viewCallback(LOK_CALLBACK_CELL_CURSOR, ss.str().c_str());
-    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle",
+    KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle",
                                    ss.str().c_str());
 }
 
@@ -1654,7 +1654,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                         pOtherViewShell->AddWindowToForeignEditView(pThisViewShell, eWhich);
                 };
 
-        SfxLokHelper::forEachOtherView(pThisViewShell, lAddWindows);
+        KitHelper::forEachOtherView(pThisViewShell, lAddWindows);
     }
 
     // if view is gone then during IdleFormat sometimes a cursor is drawn

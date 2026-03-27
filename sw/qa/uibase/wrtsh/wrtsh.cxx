@@ -668,7 +668,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiSelectionTextSelectionCallback)
     SwXTextDocument* pTextDocument = getSwTextDoc();
     pTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    int nViewId = SfxLokHelper::getView(*pWrtShell->GetSfxViewShell());
+    int nViewId = KitHelper::getView(*pWrtShell->GetSfxViewShell());
     pWrtShell->Insert(u"ABC"_ustr);
     pWrtShell->SttEndDoc(/*bStt=*/true);
 

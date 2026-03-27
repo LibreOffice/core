@@ -41,13 +41,13 @@ SwTestViewCallback::SwTestViewCallback(
 
     mpViewShell = pViewShell ? pViewShell : SfxViewShell::Current();
     mpViewShell->setCOKitViewCallback(&m_callbackWrapper);
-    mnView = SfxLokHelper::getCurrentView();
+    mnView = KitHelper::getCurrentView();
     m_callbackWrapper.setLOKViewId(mnView);
 }
 
 SwTestViewCallback::~SwTestViewCallback()
 {
-    SfxLokHelper::setView(mnView);
+    KitHelper::setView(mnView);
     mpViewShell->setCOKitViewCallback(nullptr);
 }
 

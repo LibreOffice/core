@@ -282,7 +282,7 @@ void ScScreenshotTest::testMultiViewCopyPaste()
     CPPUNIT_ASSERT(pView1);
 
     // view #2
-    SfxLokHelper::createView();
+    KitHelper::createView();
     ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView1 != pView2);
     {

@@ -576,7 +576,7 @@ bool ScDocument::InsertTab(
         if (comphelper::COKit::isActive() && GetDrawLayer())
         {
             ScModelObj* pModel = GetDocumentShell()->GetModel();
-            SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
+            KitHelper::notifyDocumentSizeChangedAllViews(pModel);
         }
     }
 
@@ -772,7 +772,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
             if (comphelper::COKit::isActive())
             {
                 ScModelObj* pModel = GetDocumentShell()->GetModel();
-                SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
+                KitHelper::notifyDocumentSizeChangedAllViews(pModel);
             }
 
             bValid = true;
@@ -862,7 +862,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
             if (comphelper::COKit::isActive())
             {
                 ScModelObj* pModel = GetDocumentShell()->GetModel();
-                SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
+                KitHelper::notifyDocumentSizeChangedAllViews(pModel);
             }
 
             bValid = true;
@@ -913,7 +913,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
             if (comphelper::COKit::isActive() && GetDrawLayer())
             {
                 ScModelObj* pModel = GetDocumentShell()->GetModel();
-                SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
+                KitHelper::notifyDocumentSizeChangedAllViews(pModel);
             }
         }
     }

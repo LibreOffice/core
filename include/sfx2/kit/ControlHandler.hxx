@@ -83,7 +83,7 @@ public:
                         LokMouseEventData aMouseEventData(nType, aControlRelativePosition, nCount,
                                                           MouseEventModifiers::SIMPLECLICK,
                                                           nButtons, nModifier);
-                        SfxLokHelper::postMouseEventAsync(pWindow, aMouseEventData);
+                        KitHelper::postMouseEventAsync(pWindow, aMouseEventData);
                         return true;
                     }
                 }

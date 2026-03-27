@@ -551,7 +551,7 @@ RectangleAndPart RectangleAndPart::Create(const OString& rPayload)
     RectangleAndPart aRet;
     if (rPayload.startsWith("EMPTY")) // payload starts with "EMPTY"
     {
-        aRet.m_aRectangle = tools::Rectangle(0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips);
+        aRet.m_aRectangle = tools::Rectangle(0, 0, KitHelper::MaxTwips, KitHelper::MaxTwips);
         if (comphelper::COKit::isPartInInvalidation())
         {
             int nSeparatorPos = rPayload.indexOf(',', 6);
@@ -2907,11 +2907,11 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             if (isLoading)
             {
                 // Capture the language used to load the document.
-                SfxLokHelper::setLoadLanguage(aLanguage);
+                KitHelper::setLoadLanguage(aLanguage);
                 isLoading = false;
             }
 
-            SfxLokHelper::setDefaultLanguage(aLanguage);
+            KitHelper::setDefaultLanguage(aLanguage);
             // Set the LOK language tag, used for dialog tunneling.
             comphelper::COKit::setLanguageTag(LanguageTag(aLanguage));
             comphelper::COKit::setLocale(LanguageTag(aLanguage));
@@ -2928,7 +2928,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         const OUString aTimezone = extractParameter(aOptions, u"Timezone");
         if (!aTimezone.isEmpty())
         {
-            SfxLokHelper::setDefaultTimezone(true, aTimezone);
+            KitHelper::setDefaultTimezone(true, aTimezone);
         }
         else
         {
@@ -2936,17 +2936,17 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             const char* tz = ::getenv("TZ");
             if (tz)
             {
-                SfxLokHelper::setDefaultTimezone(true,
+                KitHelper::setDefaultTimezone(true,
                                                  OStringToOUString(tz, RTL_TEXTENCODING_UTF8));
             }
             else
             {
-                SfxLokHelper::setDefaultTimezone(false, OUString());
+                KitHelper::setDefaultTimezone(false, OUString());
             }
         }
 
         const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
-        SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
+        KitHelper::setDeviceFormFactor(aDeviceFormFactor);
 
         const OUString aBatch = extractParameter(aOptions, u"Batch");
         if (!aBatch.isEmpty())
@@ -3259,7 +3259,7 @@ static bool lo_signDocument(COKit* /*pThis*/,
 
     std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
     std::string aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeyBinarySize);
-    uno::Reference<security::XCertificate> xCertificate = SfxLokHelper::getSigningCertificate(aCertificateString, aPrivateKeyString);
+    uno::Reference<security::XCertificate> xCertificate = KitHelper::getSigningCertificate(aCertificateString, aPrivateKeyString);
 
     if (!xCertificate.is())
         return false;
@@ -4568,7 +4568,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
 
             nOrigEditMode = pDoc->getEditMode();
             if (nOrigEditMode != nMode)
-                SfxLokHelper::setEditMode(nMode, pDoc);
+                KitHelper::setEditMode(nMode, pDoc);
         }
 
         if (!isText)
@@ -4588,7 +4588,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
         {
             // We didn't find an alternative view, set the part and mode back to their initial values if needed.
             if (nMode != nOrigEditMode)
-                SfxLokHelper::setEditMode(nOrigEditMode, pDoc);
+                KitHelper::setEditMode(nOrigEditMode, pDoc);
 
             if (!isText)
             {
@@ -4719,8 +4719,8 @@ static void doc_initializeForRendering(COKitDocument* pThis,
             else if (rArg.Name == ".uno:SignatureCa" && rArg.Value.has<OUString>())
             {
                 std::string aSignatureCa(rArg.Value.get<OUString>().toUtf8());
-                std::vector<std::string> aCerts = SfxLokHelper::extractCertificates(aSignatureCa);
-                SfxLokHelper::addCertificates(aCerts);
+                std::vector<std::string> aCerts = KitHelper::extractCertificates(aSignatureCa);
+                KitHelper::addCertificates(aCerts);
             }
         }
         if (!aSignatureCert.empty() && !aSignatureKey.empty())
@@ -4728,7 +4728,7 @@ static void doc_initializeForRendering(COKitDocument* pThis,
             if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {
                 svl::crypto::CertificateOrName aCertificateOrName;
-                aCertificateOrName.m_xCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+                aCertificateOrName.m_xCertificate = KitHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
                 pViewShell->SetSigningCertificate(aCertificateOrName);
             }
         }
@@ -4745,8 +4745,8 @@ static void doc_registerCallback(COKitDocument* pThis,
     SetLastExceptionMsg();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    const int nView = SfxLokHelper::getViewId(pDocument->mnDocumentId);
-    SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nView);
+    const int nView = KitHelper::getViewId(pDocument->mnDocumentId);
+    SfxViewShell* pViewShell = KitHelper::getViewOfId(nView);
     if (!pViewShell)
         return;
     assert(nView == pViewShell->GetViewShellId().get() && "otherwise we couldn't have found it");
@@ -4912,7 +4912,7 @@ static void doc_postKeyEvent(COKitDocument* pThis, int nType, int nCharCode, int
 static void doc_setBlockedCommandList(COKitDocument* /*pThis*/, int nViewId, const char* blockedCommandList)
 {
     SolarMutexGuard aGuard;
-    SfxLokHelper::setBlockedCommandList(nViewId, blockedCommandList);
+    KitHelper::setBlockedCommandList(nViewId, blockedCommandList);
 }
 
 static void doc_postWindowExtTextInputEvent(COKitDocument* pThis, unsigned nWindowId, int nType, const char* pText)
@@ -4942,7 +4942,7 @@ static void doc_postWindowExtTextInputEvent(COKitDocument* pThis, unsigned nWind
         return;
     }
 
-    SfxLokHelper::postExtTextEventAsync(pWindow, nType, OUString::fromUtf8(std::string_view(pText, strlen(pText))));
+    KitHelper::postExtTextEventAsync(pWindow, nType, OUString::fromUtf8(std::string_view(pText, strlen(pText))));
 }
 
 static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, int nCharBefore, int nCharAfter)
@@ -4987,7 +4987,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, i
                 pWindow->KeyInput(aEvt);
         }
         else
-            SfxLokHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 8, KEY_BACKSPACE, nCharBefore - 1);
+            KitHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 8, KEY_BACKSPACE, nCharBefore - 1);
     }
 
     if (nCharAfter > 0)
@@ -5000,7 +5000,7 @@ static void doc_removeTextContext(COKitDocument* pThis, unsigned nLOKWindowId, i
                 pWindow->KeyInput(aEvt);
         }
         else
-            SfxLokHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 46, KEY_DELETE, nCharAfter - 1);
+            KitHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 46, KEY_DELETE, nCharAfter - 1);
     }
 }
 
@@ -5451,7 +5451,7 @@ void LibCO_Impl::dumpState(rtl::OStringBuffer &rState)
     else
         rState.append("noshell");
     // TODO: dump mInteractionMap
-    SfxLokHelper::dumpState(rState);
+    KitHelper::dumpState(rState);
     vcl::lok::dumpState(rState);
 }
 
@@ -5505,8 +5505,8 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
         aPropertyValuesVector.push_back(aSynchronMode);
     }
 
-    const int nView = SfxLokHelper::getViewId(pDocument->mnDocumentId);
-    SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nView);
+    const int nView = KitHelper::getViewId(pDocument->mnDocumentId);
+    SfxViewShell* pViewShell = KitHelper::getViewOfId(nView);
     if (!pViewShell)
         return;
     assert(nView == pViewShell->GetViewShellId().get() && "otherwise we couldn't have found it");
@@ -5895,8 +5895,8 @@ static char* doc_getPresentationInfo(COKitDocument* pThis)
 
     bool bAllyState = false;
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    const int nView = SfxLokHelper::getViewId(pDocument->mnDocumentId);
-    SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nView);
+    const int nView = KitHelper::getViewId(pDocument->mnDocumentId);
+    SfxViewShell* pViewShell = KitHelper::getViewOfId(nView);
     if (pViewShell)
     {
         bAllyState = pViewShell->GetLOKAccessibilityState();
@@ -7117,10 +7117,10 @@ static char* doc_getCommandValues(COKitDocument* pThis, const char* pCommand)
         pDoc->getCommandValues(aJsonWriter, aCommand);
         return convertOString(aJsonWriter.finishAndGetAsOString());
     }
-    else if (SfxLokHelper::supportsCommand(INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath()))
+    else if (KitHelper::supportsCommand(INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath()))
     {
         tools::JsonWriter aJsonWriter;
-        SfxLokHelper::getCommandValues(aJsonWriter, aCommand);
+        KitHelper::getCommandValues(aJsonWriter, aCommand);
         return convertOString(aJsonWriter.finishAndGetAsOString());
     }
     else
@@ -7202,12 +7202,12 @@ static int doc_createViewWithOptions(COKitDocument* pThis,
     }
 
     const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
-    SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
+    KitHelper::setDeviceFormFactor(aDeviceFormFactor);
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    const int nId = SfxLokHelper::createView(pDocument->mnDocumentId);
+    const int nId = KitHelper::createView(pDocument->mnDocumentId);
 
-    vcl::lok::numberOfViewsChanged(SfxLokHelper::getViewsCount(pDocument->mnDocumentId));
+    vcl::lok::numberOfViewsChanged(KitHelper::getViewsCount(pDocument->mnDocumentId));
 
     forceSetClipboardForCurrentView(pThis);
 
@@ -7230,10 +7230,10 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER COKitDocument* pThis, int nId)
     LOKClipboardFactory::releaseClipboardForView(nId);
 #endif
 
-    SfxLokHelper::destroyView(nId);
+    KitHelper::destroyView(nId);
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    vcl::lok::numberOfViewsChanged(SfxLokHelper::getViewsCount(pDocument->mnDocumentId));
+    vcl::lok::numberOfViewsChanged(KitHelper::getViewsCount(pDocument->mnDocumentId));
 }
 
 static void doc_setView(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId)
@@ -7243,7 +7243,7 @@ static void doc_setView(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId)
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SfxLokHelper::setView(nId);
+    KitHelper::setView(nId);
 }
 
 static int doc_getView(SAL_UNUSED_PARAMETER COKitDocument* pThis)
@@ -7254,7 +7254,7 @@ static int doc_getView(SAL_UNUSED_PARAMETER COKitDocument* pThis)
     SetLastExceptionMsg();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    return SfxLokHelper::getViewId(pDocument->mnDocumentId);
+    return KitHelper::getViewId(pDocument->mnDocumentId);
 }
 
 static int doc_getViewsCount(SAL_UNUSED_PARAMETER COKitDocument* pThis)
@@ -7265,7 +7265,7 @@ static int doc_getViewsCount(SAL_UNUSED_PARAMETER COKitDocument* pThis)
     SetLastExceptionMsg();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    return SfxLokHelper::getViewsCount(pDocument->mnDocumentId);
+    return KitHelper::getViewsCount(pDocument->mnDocumentId);
 }
 
 static bool doc_getViewIds(SAL_UNUSED_PARAMETER COKitDocument* pThis, int* pArray, size_t nSize)
@@ -7276,7 +7276,7 @@ static bool doc_getViewIds(SAL_UNUSED_PARAMETER COKitDocument* pThis, int* pArra
     SetLastExceptionMsg();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    return SfxLokHelper::getViewIds(pDocument->mnDocumentId, pArray, nSize);
+    return KitHelper::getViewIds(pDocument->mnDocumentId, pArray, nSize);
 }
 
 static void doc_setViewLanguage(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId, const char* language)
@@ -7287,8 +7287,8 @@ static void doc_setViewLanguage(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, i
     SetLastExceptionMsg();
 
     OUString sLanguage = OStringToOUString(language, RTL_TEXTENCODING_UTF8);
-    SfxLokHelper::setViewLanguage(nId, sLanguage);
-    SfxLokHelper::setViewLocale(nId, sLanguage);
+    KitHelper::setViewLanguage(nId, sLanguage);
+    KitHelper::setViewLocale(nId, sLanguage);
 }
 
 unsigned char* doc_renderFont(COKitDocument* pThis,
@@ -7550,7 +7550,7 @@ static bool doc_insertCertificate(COKitDocument* pThis,
 
     std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
     std::string aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeySize);
-    uno::Reference<security::XCertificate> xCertificate = SfxLokHelper::getSigningCertificate(aCertificateString, aPrivateKeyString);
+    uno::Reference<security::XCertificate> xCertificate = KitHelper::getSigningCertificate(aCertificateString, aPrivateKeyString);
     if (!xCertificate.is())
         return false;
 
@@ -7597,7 +7597,7 @@ static bool doc_addCertificate(COKitDocument* pThis,
     uno::Sequence<sal_Int8> aCertificateSequence;
 
     std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
-    std::string aCertificateBase64String = SfxLokHelper::extractCertificate(aCertificateString);
+    std::string aCertificateBase64String = KitHelper::extractCertificate(aCertificateString);
     if (!aCertificateBase64String.empty())
     {
         OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
@@ -7609,7 +7609,7 @@ static bool doc_addCertificate(COKitDocument* pThis,
         std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.getArray());
     }
 
-    uno::Reference<security::XCertificate> xCertificate = SfxLokHelper::addCertificate(xCertificateCreator, aCertificateSequence);
+    uno::Reference<security::XCertificate> xCertificate = KitHelper::addCertificate(xCertificateCreator, aCertificateSequence);
 
     if (!xCertificate.is())
         return false;
@@ -7794,7 +7794,7 @@ static void doc_setViewTimezone(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, i
     if (pTimezone)
     {
         OUString sTimezone = OStringToOUString(pTimezone, RTL_TEXTENCODING_UTF8);
-        SfxLokHelper::setViewTimezone(nId, true, sTimezone);
+        KitHelper::setViewTimezone(nId, true, sTimezone);
     }
 }
 
@@ -7805,7 +7805,7 @@ static void doc_setViewReadOnly(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, i
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SfxLokHelper::setViewReadOnly(nId, readOnly);
+    KitHelper::setViewReadOnly(nId, readOnly);
 }
 
 static void doc_setAllowChangeComments(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId, const bool allow)
@@ -7815,7 +7815,7 @@ static void doc_setAllowChangeComments(SAL_UNUSED_PARAMETER COKitDocument* /*pTh
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SfxLokHelper::setAllowChangeComments(nId, allow);
+    KitHelper::setAllowChangeComments(nId, allow);
 }
 
 static void doc_setAllowManageRedlines(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId, bool allow)
@@ -7825,7 +7825,7 @@ static void doc_setAllowManageRedlines(SAL_UNUSED_PARAMETER COKitDocument* /*pTh
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SfxLokHelper::setAllowManageRedlines(nId, allow);
+    KitHelper::setAllowManageRedlines(nId, allow);
 }
 
 static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER COKitDocument* pThis, int nId, bool nEnabled)
@@ -7836,14 +7836,14 @@ static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER COKitDocument* pThis,
     if (!(nDocType == LOK_DOCTYPE_TEXT || nDocType == LOK_DOCTYPE_PRESENTATION || nDocType == LOK_DOCTYPE_SPREADSHEET))
         return;
 
-    SfxLokHelper::setAccessibilityState(nId, nEnabled);
+    KitHelper::setAccessibilityState(nId, nEnabled);
 }
 
 static void doc_setColorPreviewState(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, int nId,
                                      bool bEnabled)
 {
     SolarMutexGuard aGuard;
-    SfxLokHelper::setColorPreviewState(nId, bEnabled);
+    KitHelper::setColorPreviewState(nId, bEnabled);
 }
 
 static char* lo_getError (COKit *pThis)
@@ -8034,7 +8034,7 @@ static void lo_runLoop(COKit* /*pThis*/,
         SolarMutexGuard aGuard;
 
         vcl::lok::registerPollCallbacks(pPollCallback, pWakeCallback, pData);
-        SfxLokHelper::registerViewCallbacks();
+        KitHelper::registerViewCallbacks();
         Application::UpdateMainThread();
         soffice_main();
     }
@@ -8064,7 +8064,7 @@ static void lo_registerFileSaveDialogCallback(COKit* /*pThis*/,
 static int lo_getDocsCount(COKit* /*pThis*/)
 {
     SolarMutexGuard aGuard;
-    return SfxLokHelper::getDocsCount();
+    return KitHelper::getDocsCount();
 
 }
 
@@ -8095,7 +8095,7 @@ static void lo_status_indicator_callback(void *data, comphelper::COKit::statusIn
 /// Used by preloadData (COKit) for providing different shortcuts for different languages.
 static void preLoadShortCutAccelerators()
 {
-    std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& acceleratorConfs = SfxLokHelper::getAcceleratorConfs();
+    std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& acceleratorConfs = KitHelper::getAcceleratorConfs();
     css::uno::Sequence<OUString> installedLocales(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
     OUString actualLang = officecfg::Setup::L10N::ooLocale::get();
 
@@ -8549,7 +8549,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
 
         // Set the default timezone to the TZ envar, if set.
         const char* tz = ::getenv("TZ");
-        SfxLokHelper::setDefaultTimezone(!!tz, tz ? OStringToOUString(tz, RTL_TEXTENCODING_UTF8)
+        KitHelper::setDefaultTimezone(!!tz, tz ? OStringToOUString(tz, RTL_TEXTENCODING_UTF8)
                                                   : OUString());
 #ifdef UNX
         if (urandom < 0)

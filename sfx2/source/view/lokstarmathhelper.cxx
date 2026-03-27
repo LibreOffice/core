@@ -179,7 +179,7 @@ bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, in
 
             LokMouseEventData aMouseEventData(
                 nType, aMousePos, nCount, MouseEventModifiers::SIMPLECLICK, nButtons, nModifier);
-            SfxLokHelper::postMouseEventAsync(pWindow, aMouseEventData);
+            KitHelper::postMouseEventAsync(pWindow, aMouseEventData);
 
             return true;
         }

@@ -1379,7 +1379,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         rBindings.Invalidate( SID_WINDOW_FIX_COL );
                         rBindings.Invalidate( SID_WINDOW_FIX_ROW );
                         // Invalidate the slot for all views on the same tab of the document.
-                        SfxLokHelper::forEachOtherView(this, [nThisTab](ScTabViewShell* pOther) {
+                        KitHelper::forEachOtherView(this, [nThisTab](ScTabViewShell* pOther) {
                             ScViewData& rOtherViewData = pOther->GetViewData();
                             if (rOtherViewData.GetTabNumber() != nThisTab)
                                 return;
@@ -1419,7 +1419,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         rBindings.Invalidate( SID_WINDOW_FIX );
                         rBindings.Invalidate(nSlot);
                         // Invalidate the slot for all views on the same tab of the document.
-                        SfxLokHelper::forEachOtherView(this, [nSlot, nThisTab](ScTabViewShell* pOther) {
+                        KitHelper::forEachOtherView(this, [nSlot, nThisTab](ScTabViewShell* pOther) {
                             ScViewData& rOtherViewData = pOther->GetViewData();
                             if (rOtherViewData.GetTabNumber() != nThisTab)
                                 return;

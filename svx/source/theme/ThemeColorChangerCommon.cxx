@@ -186,7 +186,7 @@ void notifyLOK(std::shared_ptr<model::ColorSet> const& pColorSet,
 
         PaletteManager::generateColorNamesJSON(aTree);
 
-        SfxLokHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, aTree.finishAndGetAsOString());
+        KitHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, aTree.finishAndGetAsOString());
     }
 }
 

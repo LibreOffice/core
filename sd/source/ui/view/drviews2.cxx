@@ -1242,7 +1242,7 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
         }
         else if (aItem.first == "UnoCommand")
         {
-            SfxLokHelper::dispatchUnoCommand(aItem.second);
+            KitHelper::dispatchUnoCommand(aItem.second);
         }
     }
 

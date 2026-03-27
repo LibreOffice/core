@@ -1035,7 +1035,7 @@ void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
         pResultRectangle = &aRectangle;
     }
     SfxViewShell& rSfxViewShell = pDrawViewShell->GetViewShellBase();
-    SfxLokHelper::notifyInvalidation(&rSfxViewShell, pResultRectangle);
+    KitHelper::notifyInvalidation(&rSfxViewShell, pResultRectangle);
 }
 
 FactoryFunction Window::GetUITestFactory() const

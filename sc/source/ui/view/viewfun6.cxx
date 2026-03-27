@@ -286,10 +286,10 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
     const SvNumFormatType nCurNumFormatType = (pCurNumFormatEntry ?
             pCurNumFormatEntry->GetMaskedType() : SvNumFormatType::UNDEFINED);
 
-    const int nView(comphelper::COKit::isActive() ? SfxLokHelper::getCurrentView() : -1);
+    const int nView(comphelper::COKit::isActive() ? KitHelper::getCurrentView() : -1);
     if (nView >= 0)
     {
-        const auto [isTimezoneSet, aTimezone] = SfxLokHelper::getViewTimezone(nView);
+        const auto [isTimezoneSet, aTimezone] = KitHelper::getViewTimezone(nView);
         comphelper::COKit::setTimezone(isTimezoneSet, aTimezone);
     }
 
@@ -298,7 +298,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
         {
             if (nView >= 0)
             {
-                const auto [isTimezoneSet, aTimezone] = SfxLokHelper::getDefaultTimezone();
+                const auto [isTimezoneSet, aTimezone] = KitHelper::getDefaultTimezone();
                 comphelper::COKit::setTimezone(isTimezoneSet, aTimezone);
             }
         });

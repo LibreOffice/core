@@ -2252,7 +2252,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
     if (comphelper::COKit::isActive())
     {
         ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(GetCurrentDocument());
-        SfxLokHelper::notifyViewRenderState(this, pModel);
+        KitHelper::notifyViewRenderState(this, pModel);
     }
 }
 
@@ -2263,10 +2263,10 @@ ScTabViewShell::~ScTabViewShell()
     mChangesListener.clear();
 
     // Notify other LOK views that we are going away.
-    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
-    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
-    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
-    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
+    KitHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
+    KitHelper::notifyOtherViews(this, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
+    KitHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+    KitHelper::notifyOtherViews(this, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
 
     // all to NULL, in case the TabView-dtor tries to access them
     //! (should not really! ??!?!)

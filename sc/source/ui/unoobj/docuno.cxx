@@ -721,7 +721,7 @@ VclPtr<vcl::Window> ScModelObj::getDocWindow()
     if (!pViewShell)
         return VclPtr<vcl::Window>();
 
-    if (VclPtr<vcl::Window> pWindow = SfxLokHelper::getInPlaceDocWindow(pViewShell))
+    if (VclPtr<vcl::Window> pWindow = KitHelper::getInPlaceDocWindow(pViewShell))
         return pWindow;
 
     return pViewShell->GetViewData().GetActiveWin();
@@ -815,7 +815,7 @@ OUString ScModelObj::getPrintRanges()
 void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
-    SfxLokHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
+    KitHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
 }
 
 void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
@@ -838,7 +838,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     SCTAB nTab = pViewData->CurrentTabForData();
     const ScDocument& rDoc = pDocShell->GetDocument();
     bool bDrawNegativeX = rDoc.IsNegativePage(nTab);
-    if (SfxLokHelper::testInPlaceComponentMouseEventHit(pViewShell, nType, nX, nY, nCount,
+    if (KitHelper::testInPlaceComponentMouseEventHit(pViewShell, nType, nX, nY, nCount,
                                                         nButtons, nModifier, pViewData->GetPPTX(),
                                                         pViewData->GetPPTY(), bDrawNegativeX))
         return;
@@ -1067,7 +1067,7 @@ void ScModelObj::resetSelection()
 
     // and hide the cell and text selection
     pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
-    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
+    KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
 }
 
 void ScModelObj::setClipboard(const uno::Reference<datatransfer::clipboard::XClipboard>& xClipboard)
@@ -3799,7 +3799,7 @@ void lcl_dataAreaInvalidation(ScModelObj* pModel,
         if ( bInvalidate )
         {
             if ( comphelper::COKit::isActive() )
-                SfxLokHelper::notifyPartSizeChangedAllViews( pModel, nTab );
+                KitHelper::notifyPartSizeChangedAllViews( pModel, nTab );
         }
     }
 }

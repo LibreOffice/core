@@ -476,7 +476,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         const tools::Rectangle aRectTwips = o3tl::convert(aRect100thMM, o3tl::Length::mm100, o3tl::Length::twip);
 
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
-            SfxLokHelper::notifyInvalidation(pViewShell, &aRectTwips);
+            KitHelper::notifyInvalidation(pViewShell, &aRectTwips);
     }
 }
 

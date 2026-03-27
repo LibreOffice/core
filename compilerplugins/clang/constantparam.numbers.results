@@ -1003,7 +1003,7 @@ include/sfx2/kit/helper.hxx:72
     enum MouseEventModifiers eModifiers
     256
 include/sfx2/kit/helper.hxx:158
-    void SfxLokHelper::notifyOtherViews(const class SfxViewShell *,int,const class boost::property_tree::basic_ptree<class std::basic_string<char>, class std::basic_string<char> > &)
+    void KitHelper::notifyOtherViews(const class SfxViewShell *,int,const class boost::property_tree::basic_ptree<class std::basic_string<char>, class std::basic_string<char> > &)
     int nType
     24
 include/sfx2/opengrf.hxx:37

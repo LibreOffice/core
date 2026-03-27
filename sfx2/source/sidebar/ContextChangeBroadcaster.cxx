@@ -95,7 +95,7 @@ void ContextChangeBroadcaster::BroadcastContextChange (
     // notify the LOK too
     if (comphelper::COKit::isActive())
     {
-        SfxLokHelper::notifyContextChange(aEvent);
+        KitHelper::notifyContextChange(aEvent);
     }
 
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (

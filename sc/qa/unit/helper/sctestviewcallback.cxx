@@ -152,7 +152,7 @@ ScTestViewCallback::ScTestViewCallback(bool bDeleteListenerOnDestruct)
 {
     mpViewShell = SfxViewShell::Current();
     mpViewShell->setCOKitViewCallback(&m_callbackWrapper);
-    mnView = SfxLokHelper::getCurrentView();
+    mnView = KitHelper::getCurrentView();
     m_callbackWrapper.setLOKViewId(mnView);
     if (!bDeleteListenerOnDestruct)
         mpViewShell = nullptr;
@@ -162,7 +162,7 @@ ScTestViewCallback::~ScTestViewCallback()
 {
     if (mpViewShell)
     {
-        SfxLokHelper::setView(mnView);
+        KitHelper::setView(mnView);
         mpViewShell->setCOKitViewCallback(nullptr);
     }
 }

@@ -2229,7 +2229,7 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
                 aCaret.Move(aBounds.Left(), aBounds.Top());
                 sRectangle = aCaret.toString();
             }
-            return SfxLokHelper::makeVisCursorInvalidation(nViewId, sRectangle, false, {});
+            return KitHelper::makeVisCursorInvalidation(nViewId, sRectangle, false, {});
         }
         case LOK_CALLBACK_TEXT_SELECTION:
         {

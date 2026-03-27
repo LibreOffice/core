@@ -42,7 +42,7 @@
                 lok_detail_stream << area << ':'; \
             const char* const where = SAL_WHERE; \
             lok_detail_stream << where << stream; \
-            SfxLokHelper::notifyLog(lok_detail_stream); \
+            KitHelper::notifyLog(lok_detail_stream); \
         } while (false)
 
 #if LOK_NOTIFY_LOG_TO_CLIENT > 0
@@ -83,7 +83,7 @@ struct SFX2_DLLPUBLIC LokMouseEventData
 
 namespace com::sun::star::ui { struct ContextChangeEventObject; };
 
-class SFX2_DLLPUBLIC SfxLokHelper
+class SFX2_DLLPUBLIC KitHelper
 {
 public:
     /// Gets the short cut accelerators.
@@ -281,7 +281,7 @@ private:
 };
 
 template<typename ViewShellType, typename FunctionType>
-void SfxLokHelper::forEachOtherView(ViewShellType* pThisViewShell, FunctionType f)
+void KitHelper::forEachOtherView(ViewShellType* pThisViewShell, FunctionType f)
 {
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)

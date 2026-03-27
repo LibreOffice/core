@@ -465,13 +465,13 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     // Only invalidate if spreadsheet extended to the right
     if (aNewColArea.getOpenWidth())
     {
-        SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), &aNewColArea);
+        KitHelper::notifyInvalidation(aViewData.GetViewShell(), &aNewColArea);
     }
 
     // Only invalidate if spreadsheet extended to the bottom
     if (aNewRowArea.getOpenHeight())
     {
-        SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), &aNewRowArea);
+        KitHelper::notifyInvalidation(aViewData.GetViewShell(), &aNewRowArea);
     }
 
     // Provide size in the payload, so clients don't have to
@@ -480,7 +480,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     ss << aNewSize.Width() << ", " << aNewSize.Height();
     OString sSize( ss.str() );
     ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(aViewData.GetViewShell()->GetCurrentDocument());
-    SfxLokHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
+    KitHelper::notifyDocumentSizeChanged(aViewData.GetViewShell(), sSize, pModel, false);
 }
 
 static bool lcl_IsRefDlgActive(SfxViewFrame& rViewFrm)
@@ -2194,7 +2194,7 @@ void ScTabView::OnCOKitTabChanged()
         }
     };
 
-    SfxLokHelper::forEachOtherView(pThisViewShell, lTabSwitch);
+    KitHelper::forEachOtherView(pThisViewShell, lTabSwitch);
 
     pThisViewShell->viewCallback(LOK_CALLBACK_INVALIDATE_HEADER, "all"_ostr);
 
@@ -2700,7 +2700,7 @@ void ScTabView::KillEditView( bool bNoPaint )
                             }
                         };
 
-                SfxLokHelper::forEachOtherView(GetViewData().GetViewShell(), lInvalidateWindows);
+                KitHelper::forEachOtherView(GetViewData().GetViewShell(), lInvalidateWindows);
             }
             // #i73567# the cell still has to be repainted
             else

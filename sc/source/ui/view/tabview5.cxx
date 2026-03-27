@@ -176,7 +176,7 @@ ScTabView::~ScTabView()
                     }
                 };
 
-        SfxLokHelper::forEachOtherView(pThisViewShell, lRemoveWindows);
+        KitHelper::forEachOtherView(pThisViewShell, lRemoveWindows);
     }
 
     aViewData.KillEditView();           // as long as GridWins still exist
@@ -360,7 +360,7 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
     OString sRect(ss.str());
     ScTabViewShell* pViewShell = aViewData.GetViewShell();
     ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(pViewShell->GetCurrentDocument());
-    SfxLokHelper::notifyDocumentSizeChanged(pViewShell, sRect, pModel, false);
+    KitHelper::notifyDocumentSizeChanged(pViewShell, sRect, pModel, false);
 }
 
 void ScTabView::UpdateLayerLocks()

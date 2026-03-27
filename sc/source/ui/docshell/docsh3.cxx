@@ -201,7 +201,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
     {
         ScModelObj* pModel = GetModel();
         for (auto nTab : aTabsInvalidated)
-            SfxLokHelper::notifyPartSizeChangedAllViews(pModel, nTab);
+            KitHelper::notifyPartSizeChangedAllViews(pModel, nTab);
     }
 }
 

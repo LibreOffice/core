@@ -493,7 +493,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                     svl::crypto::CertificateOrName aCertificateOrName;
                     if (!aSignatureCert.empty() && !aSignatureKey.empty())
                     {
-                        aCertificateOrName.m_xCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+                        aCertificateOrName.m_xCertificate = KitHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
                     }
                     else if (bExternal)
                     {

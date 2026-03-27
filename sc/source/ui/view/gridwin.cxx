@@ -1846,7 +1846,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
 
 void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if (SfxLokHelper::getDeviceFormFactor() == LOKDeviceFormFactor::MOBILE)
+    if (KitHelper::getDeviceFormFactor() == LOKDeviceFormFactor::MOBILE)
     {
         ScViewFunc* pView = mrViewData.GetView();
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
@@ -6262,7 +6262,7 @@ void ScGridWindow::notifyKitCellCursor() const
     if (aRects.empty() || !mrViewData.IsActive())
     {
         pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, ""_ostr);
-        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+        KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
     }
 }
 
@@ -6287,7 +6287,7 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
             aCursor = pForTabView->GetViewData().describeCellCursorAt(
                 mrViewData.GetCurX(), mrViewData.GetCurY()); // our position.
     }
-    SfxLokHelper::notifyOtherView(*pViewShell, pForShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+    KitHelper::notifyOtherView(*pViewShell, pForShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
 }
 
 // Send our cursor details to a view described by @pForShell, or all views
@@ -6309,13 +6309,13 @@ void ScGridWindow::updateKitCellCursor(const SfxViewShell* pForShell) const
 
         if (pForShell)
         {
-            SfxLokHelper::notifyOtherView(*pViewShell, pForShell,
+            KitHelper::notifyOtherView(*pViewShell, pForShell,
                     LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
         }
         else
         {
             notifyKitCellCursor();
-            SfxLokHelper::notifyOtherViews(pViewShell,
+            KitHelper::notifyOtherViews(pViewShell,
                     LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
         }
 
@@ -6406,7 +6406,7 @@ void ScGridWindow::DeleteCursorOverlay()
         return;
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
     pViewShell->viewCallback(LOK_CALLBACK_CELL_CURSOR, "EMPTY"_ostr);
-    SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
+    KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", "EMPTY"_ostr);
     mpOOCursors.reset();
 }
 
@@ -6562,7 +6562,7 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
 
     if (bInPrintTwips)
     {
-        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+        KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
                                        "selection", aRectListString);
         return;
     }
@@ -6584,7 +6584,7 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
         std::vector<tools::Rectangle> aPixelRects;
         pGrid->GetPixelRectsFor(mrViewData.GetMarkData() /* ours */, aPixelRects);
         auto aOtherLogicRects = convertPixelToLogical(pOther->GetViewData(), aPixelRects, aDummyBBox);
-        SfxLokHelper::notifyOtherView(*pViewShell, pOther, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+        KitHelper::notifyOtherView(*pViewShell, pOther, LOK_CALLBACK_TEXT_VIEW_SELECTION,
                                       "selection", rectanglesToString(aOtherLogicRects));
     }
 }
@@ -6631,7 +6631,7 @@ void ScGridWindow::updateOtherKitSelections() const
             pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
         }
         else
-            SfxLokHelper::notifyOtherView(*it, pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+            KitHelper::notifyOtherView(*it, pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
                                           "selection", aRectsString);
     }
 }
@@ -6992,7 +6992,7 @@ void ScGridWindow::UpdateSelectionOverlay()
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
         pViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY"_ostr);
         pViewShell->viewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY"_ostr);
-        SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+        KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
 
         ScInputHandler* pViewHdl = ScModule::get()->GetInputHdl(pViewShell);
         if (!pViewHdl || !pViewHdl->IsEditMode())

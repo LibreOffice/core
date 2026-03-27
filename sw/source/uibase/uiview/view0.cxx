@@ -871,7 +871,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     if (nSlot == SID_SPOTLIGHT_CHARSTYLES || nSlot == SID_SPOTLIGHT_PARASTYLES)
     {
         SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetCurrentDocument());
-        SfxLokHelper::notifyViewRenderState(this, pModel);
+        KitHelper::notifyViewRenderState(this, pModel);
         if (vcl::Window *pMyWin = rSh.GetWin())
             pMyWin->Invalidate();
     }

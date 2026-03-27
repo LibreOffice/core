@@ -1115,15 +1115,15 @@ include/sfx2/filedlghelper.hxx:153
     enum SfxFilterFlags nDont
     0
 include/sfx2/kit/helper.hxx:146
-    void SfxLokHelper::setViewTimezone(int,_Bool,const class rtl::OUString &)
+    void KitHelper::setViewTimezone(int,_Bool,const class rtl::OUString &)
     _Bool isSet
     1
 include/sfx2/kit/helper.hxx:177
-    void SfxLokHelper::notifyDocumentSizeChangedAllViews(class vcl::ITiledRenderable *,_Bool)
+    void KitHelper::notifyDocumentSizeChangedAllViews(class vcl::ITiledRenderable *,_Bool)
     _Bool bInvalidateAll
     1
 include/sfx2/kit/helper.hxx:197
-    void SfxLokHelper::notifyUpdatePerViewId(const class SfxViewShell *,int)
+    void KitHelper::notifyUpdatePerViewId(const class SfxViewShell *,int)
     int nType
     1
 include/sfx2/module.hxx:58

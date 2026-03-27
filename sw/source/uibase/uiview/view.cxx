@@ -1147,7 +1147,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     if (comphelper::COKit::isActive())
     {
         SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetCurrentDocument());
-        SfxLokHelper::notifyViewRenderState(this, pModel);
+        KitHelper::notifyViewRenderState(this, pModel);
     }
 }
 
@@ -1171,9 +1171,9 @@ SwViewGlueDocShell::~SwViewGlueDocShell()
 SwView::~SwView()
 {
     // Notify other LOK views that we are going away.
-    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
-    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
-    SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
+    KitHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false"_ostr);
+    KitHelper::notifyOtherViews(this, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", ""_ostr);
+    KitHelper::notifyOtherViews(this, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", "EMPTY"_ostr);
 
     // Need to remove activated field's button before disposing EditWin.
     GetWrtShell().getIDocumentMarkAccess()->ClearFieldActivation();

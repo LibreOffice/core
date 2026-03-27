@@ -194,7 +194,7 @@ void SfxClipboardChangeListener::ChangedContents()
     if (comphelper::COKit::isActive())
     {
         // In the future we might send the payload as well.
-        SfxLokHelper::notifyAllViews(LOK_CALLBACK_CLIPBOARD_CHANGED, ""_ostr);
+        KitHelper::notifyAllViews(LOK_CALLBACK_CLIPBOARD_CHANGED, ""_ostr);
     }
 }
 
@@ -2767,14 +2767,14 @@ SfxViewShell::SfxViewShell
 
     if (comphelper::COKit::isActive())
     {
-        maLOKLanguageTag = SfxLokHelper::getDefaultLanguage();
-        maLOKLocale = SfxLokHelper::getDefaultLanguage();
+        maLOKLanguageTag = KitHelper::getDefaultLanguage();
+        maLOKLocale = KitHelper::getDefaultLanguage();
 
-        const auto [isTimezoneSet, aTimezone] = SfxLokHelper::getDefaultTimezone();
+        const auto [isTimezoneSet, aTimezone] = KitHelper::getDefaultTimezone();
         maLOKIsTimezoneSet = isTimezoneSet;
         maLOKTimezone = aTimezone;
 
-        maLOKDeviceFormFactor = SfxLokHelper::getDeviceFormFactor();
+        maLOKDeviceFormFactor = KitHelper::getDeviceFormFactor();
 
         vcl::Window* pFrameWin = rViewFrame.GetWindow().GetFrameWindow();
         if (pFrameWin && !pFrameWin->GetLOKNotifier())
@@ -3585,17 +3585,17 @@ ViewShellDocId SfxViewShell::GetDocId() const
 
 void SfxViewShell::notifyInvalidation(tools::Rectangle const* pRect) const
 {
-    SfxLokHelper::notifyInvalidation(this, pRect);
+    KitHelper::notifyInvalidation(this, pRect);
 }
 
 void SfxViewShell::notifyCursorInvalidation(tools::Rectangle const* pRect, bool bControlEvent, int windowID) const
 {
-    SfxLokHelper::notifyCursorInvalidation(this, pRect, bControlEvent, windowID);
+    KitHelper::notifyCursorInvalidation(this, pRect, bControlEvent, windowID);
 }
 
 void SfxViewShell::NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload)
 {
-    SfxLokHelper::notifyOtherViews(this, nType, rKey, rPayload);
+    KitHelper::notifyOtherViews(this, nType, rKey, rPayload);
 }
 
 void SfxViewShell::NotifyOtherView(OutlinerViewShell* pOther, int nType, const OString& rKey, const OString& rPayload)
@@ -3604,7 +3604,7 @@ void SfxViewShell::NotifyOtherView(OutlinerViewShell* pOther, int nType, const O
     if (!pOtherShell)
         return;
 
-    SfxLokHelper::notifyOtherView(*this, pOtherShell, nType, rKey, rPayload);
+    KitHelper::notifyOtherView(*this, pOtherShell, nType, rKey, rPayload);
 }
 
 void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -4005,7 +4005,7 @@ Reference< view::XRenderable > SfxViewShell::GetRenderable()
 
 void SfxViewShell::notifyWindow(vcl::LOKWindowId nDialogId, const OUString& rAction, const std::vector<vcl::LOKPayloadItem>& rPayload) const
 {
-    SfxLokHelper::notifyWindow(this, nDialogId, rAction, rPayload);
+    KitHelper::notifyWindow(this, nDialogId, rAction, rPayload);
 }
 
 OString SfxViewShell::dumpNotifyState() const

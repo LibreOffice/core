@@ -486,7 +486,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
     if (bRefMode)
     {
         // if no input is possible from this doc, don't move the reference cursor around
-        if ( !ScModule::get()->IsModalMode(m_rViewData.GetSfxDocShell()) && (!CheckRefBounds(nPosX, nPosY) || SfxLokHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE))
+        if ( !ScModule::get()->IsModalMode(m_rViewData.GetSfxDocShell()) && (!CheckRefBounds(nPosX, nPosY) || KitHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE))
         {
             if (!m_bAnchor)
             {
@@ -494,7 +494,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
                 pView->InitRefMode( nPosX, nPosY, m_rViewData.CurrentTabForData(), SC_REFTYPE_REF );
             }
 
-            if(SfxLokHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE)
+            if(KitHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE)
                 pView->UpdateRef( nPosX, nPosY, m_rViewData.CurrentTabForData() );
 
             pView->SelectionChanged();

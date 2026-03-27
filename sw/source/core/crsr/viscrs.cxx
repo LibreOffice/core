@@ -245,19 +245,19 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         {
             if (pViewShell == pNotifyViewShell)
             {
-                SfxLokHelper::notifyUpdatePerViewId(*pViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
+                KitHelper::notifyUpdatePerViewId(*pViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
             }
             else
             {
-                SfxLokHelper::notifyUpdatePerViewId(*pViewShell, pNotifyViewShell, *pViewShell,
+                KitHelper::notifyUpdatePerViewId(*pViewShell, pNotifyViewShell, *pViewShell,
                     LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
             }
         }
         else
         {
-            SfxLokHelper::notifyUpdatePerViewId(*pNotifyViewShell, SfxViewShell::Current(),
+            KitHelper::notifyUpdatePerViewId(*pNotifyViewShell, SfxViewShell::Current(),
                 *pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
-            SfxLokHelper::notifyOtherViewsUpdatePerViewId(pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
+            KitHelper::notifyOtherViewsUpdatePerViewId(pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
         }
     }
 
@@ -290,7 +290,7 @@ std::optional<OString> SwVisibleCursor::getLOKPayload(int nType, int nViewId) co
         OString sRect = aSVRect.toString();
 
         if(nType == LOK_CALLBACK_INVALIDATE_VIEW_CURSOR)
-            return SfxLokHelper::makePayloadJSON(m_pCursorShell->GetSfxViewShell(), nViewId, "rectangle", sRect);
+            return KitHelper::makePayloadJSON(m_pCursorShell->GetSfxViewShell(), nViewId, "rectangle", sRect);
 
         // is cursor at a misspelled word ?
         bool bIsWrong = false;
@@ -346,7 +346,7 @@ std::optional<OString> SwVisibleCursor::getLOKPayload(int nType, int nViewId) co
             }
         }
 
-        return SfxLokHelper::makeVisCursorInvalidation(nViewId, sRect, bIsWrong, sHyperlink);
+        return KitHelper::makeVisCursorInvalidation(nViewId, sRect, bIsWrong, sHyperlink);
     }
     else
         abort();
@@ -508,9 +508,9 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         FillStartEnd(aStartRect, aEndRect);
 
         if (aStartRect.HasArea())
-            SfxLokHelper::notifyUpdate(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_SELECTION_START);
+            KitHelper::notifyUpdate(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_SELECTION_START);
         if (aEndRect.HasArea())
-            SfxLokHelper::notifyUpdate(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_SELECTION_END);
+            KitHelper::notifyUpdate(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_SELECTION_END);
     }
 
     std::vector<OString> aRect;
@@ -523,8 +523,8 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
     OString sRect = comphelper::string::join("; ", aRect);
     if (!pSelectionRectangles)
     {
-        SfxLokHelper::notifyUpdate(GetShell()->GetSfxViewShell(),LOK_CALLBACK_TEXT_SELECTION);
-        SfxLokHelper::notifyOtherViewsUpdatePerViewId(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION);
+        KitHelper::notifyUpdate(GetShell()->GetSfxViewShell(),LOK_CALLBACK_TEXT_SELECTION);
+        KitHelper::notifyOtherViewsUpdatePerViewId(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION);
     }
     else
         pSelectionRectangles->push_back(sRect);
@@ -991,7 +991,7 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
     {
         // Just notify pViewShell about our existing selection.
         if (pViewShell != GetShell()->GetSfxViewShell())
-            SfxLokHelper::notifyOtherView(*GetShell()->GetSfxViewShell(), pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+            KitHelper::notifyOtherView(*GetShell()->GetSfxViewShell(), pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
     else
     {
@@ -1008,7 +1008,7 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
         }
 
         pSfxViewShell->viewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect);
-        SfxLokHelper::notifyOtherViews(pSfxViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+        KitHelper::notifyOtherViews(pSfxViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
 }
 

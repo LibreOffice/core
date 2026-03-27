@@ -1327,7 +1327,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureUnoCommand)
 
     createSwDoc();
 
-    // Let comphelper::dispatchCommand (in SfxLokHelper::dispatchUnoCommand) find the frame
+    // Let comphelper::dispatchCommand (in KitHelper::dispatchUnoCommand) find the frame
     auto xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
     auto pFrame = getSwDocShell()->GetFrame();
     CPPUNIT_ASSERT(pFrame);

@@ -1436,7 +1436,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             if (pOtherShell && pThisShell != pOtherShell)
             {
                 // Another shell wants to know about our existing cursor.
-                SfxLokHelper::notifyOtherView(*pThisShell, pOtherShell,
+                KitHelper::notifyOtherView(*pThisShell, pOtherShell,
                         LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, aMessageParams);
             }
             else
@@ -1470,14 +1470,14 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 }
 
                 if (mbBroadcastLOKViewCursor)
-                    SfxLokHelper::notifyOtherViews(pThisShell,
+                    KitHelper::notifyOtherViews(pThisShell,
                             LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, aMessageParams);
 
                 aMessageParams.put("mispelledWord", bIsWrong ? 1 : 0);
                 aMessageParams.add_child("hyperlink", aHyperlinkTree);
 
                 if (comphelper::COKit::isViewIdForVisCursorInvalidation())
-                    SfxLokHelper::notifyOtherView(*pThisShell, pThisShell,
+                    KitHelper::notifyOtherView(*pThisShell, pThisShell,
                             LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, aMessageParams);
                 else
                     pThisShell->viewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,

@@ -48,7 +48,7 @@ namespace desktop {
         // This is the "EMPTY" rectangle, which somewhat confusingly actually means
         // to drop all rectangles (see LOK_CALLBACK_INVALIDATE_TILES documentation),
         // and so it is actually an infinite rectangle and not an empty one.
-        constexpr static tools::Rectangle emptyAllRectangle = {0, 0, SfxLokHelper::MaxTwips, SfxLokHelper::MaxTwips};
+        constexpr static tools::Rectangle emptyAllRectangle = {0, 0, KitHelper::MaxTwips, KitHelper::MaxTwips};
 
         RectangleAndPart()
             : m_nPart(INT_MIN)  // -1 is reserved to mean "all parts".
@@ -73,11 +73,11 @@ namespace desktop {
         }
 
         /// Infinite Rectangle is both sides are
-        /// equal or longer than SfxLokHelper::MaxTwips.
+        /// equal or longer than KitHelper::MaxTwips.
         bool isInfinite() const
         {
-            return m_aRectangle.GetWidth() >= SfxLokHelper::MaxTwips &&
-                   m_aRectangle.GetHeight() >= SfxLokHelper::MaxTwips;
+            return m_aRectangle.GetWidth() >= KitHelper::MaxTwips &&
+                   m_aRectangle.GetHeight() >= KitHelper::MaxTwips;
         }
 
         /// Empty Rectangle is when it has zero dimensions.

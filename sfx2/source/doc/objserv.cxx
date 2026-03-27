@@ -631,7 +631,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     svl::crypto::CertificateOrName aCertificateOrName;
                     if (!aSignatureCert.empty() && !aSignatureKey.empty())
                     {
-                        aCertificateOrName.m_xCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+                        aCertificateOrName.m_xCertificate = KitHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
                     }
                     // Always set the signing certificate, to clear data from a previous dispatch.
                     pViewShell->SetSigningCertificate(aCertificateOrName);

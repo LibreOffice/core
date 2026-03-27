@@ -125,8 +125,8 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwW
 
     if(bHighlightAll)
     {   // FindAll disables this during find, do it once when done.
-        SfxLokHelper::notifyUpdate(pNotifySh,LOK_CALLBACK_TEXT_SELECTION);
-        SfxLokHelper::notifyOtherViewsUpdatePerViewId(pNotifySh, LOK_CALLBACK_TEXT_VIEW_SELECTION);
+        KitHelper::notifyUpdate(pNotifySh,LOK_CALLBACK_TEXT_SELECTION);
+        KitHelper::notifyOtherViewsUpdatePerViewId(pNotifySh, LOK_CALLBACK_TEXT_VIEW_SELECTION);
     }
 }
 

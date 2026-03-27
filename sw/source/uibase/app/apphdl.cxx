@@ -1004,7 +1004,7 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
                     else if (bKit)
                     {
                         SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(pViewShell->GetCurrentDocument());
-                        SfxLokHelper::notifyViewRenderState(pViewShell, pModel);
+                        KitHelper::notifyViewRenderState(pViewShell, pModel);
                     }
 
                     if (bKit)

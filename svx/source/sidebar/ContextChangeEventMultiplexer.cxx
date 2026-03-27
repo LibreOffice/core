@@ -53,7 +53,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
     // notify the LOK too after all the change have taken effect.
     if (comphelper::COKit::isActive())
     {
-        SfxLokHelper::notifyContextChange(aEvent);
+        KitHelper::notifyContextChange(aEvent);
     }
 }
 

@@ -1303,7 +1303,7 @@ void SwFEShell::EndTextEdit()
         pView->SdrEndTextEdit();
 
     if (comphelper::COKit::isActive())
-        SfxLokHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
+        KitHelper::notifyOtherViews(GetSfxViewShell(), LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
 
     EndAllAction();
 }

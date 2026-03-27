@@ -274,7 +274,7 @@ protected:
         moSheetView.emplace();
         mpTabViewSheetView = moSheetView->getTabViewShell();
 
-        SfxLokHelper::createView();
+        KitHelper::createView();
         Scheduler::ProcessEventsToIdle();
 
         moDefaultView.emplace();
@@ -286,13 +286,13 @@ protected:
 
     void switchToSheetView()
     {
-        SfxLokHelper::setView(moSheetView->getViewID());
+        KitHelper::setView(moSheetView->getViewID());
         Scheduler::ProcessEventsToIdle();
     }
 
     void switchToDefaultView()
     {
-        SfxLokHelper::setView(moDefaultView->getViewID());
+        KitHelper::setView(moDefaultView->getViewID());
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -405,7 +405,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     ScTestViewCallback aView1;
     ScTabViewShell* pTabView1 = aView1.getTabViewShell();
 
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
 
     ScTestViewCallback aView2;
@@ -415,14 +415,14 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     CPPUNIT_ASSERT(aView1.getViewID() != aView2.getViewID());
 
     // Switch to view 1
-    SfxLokHelper::setView(aView1.getViewID());
+    KitHelper::setView(aView1.getViewID());
     Scheduler::ProcessEventsToIdle();
 
     // Check AutoFilter values
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView1, 0, 1, 4));
 
     // Switch to view 2
-    SfxLokHelper::setView(aView2.getViewID());
+    KitHelper::setView(aView2.getViewID());
     Scheduler::ProcessEventsToIdle();
 
     // Check auto-filter values
@@ -462,7 +462,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
     // Setup 2 views
     ScTestViewCallback aView1;
     ScTabViewShell* pTabView1 = aView1.getTabViewShell();
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
     ScTestViewCallback aView2;
     ScTabViewShell* pTabView2 = aView2.getTabViewShell();
@@ -492,12 +492,12 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
     CPPUNIT_ASSERT_EQUAL(u"ABCD"_ustr, pTabView2->GetCurrentString(aA2.Col(), aA2.Row()));
 
     // Create a sheet view in View2
-    SfxLokHelper::setView(aView2.getViewID());
+    KitHelper::setView(aView2.getViewID());
     Scheduler::ProcessEventsToIdle();
     createNewSheetViewInCurrentView();
 
     // Change content in View1 with default view -> default view ro sheet view sync
-    SfxLokHelper::setView(aView1.getViewID());
+    KitHelper::setView(aView1.getViewID());
     typeCharsInCell(std::string("XYZ"), aA1.Col(), aA1.Row(), pTabView1, pModelObj);
     typeCharsInCell(std::string("=UPPER(\"x\"&\"Y\"&\"z\""), aA2.Col(), aA2.Row(), pTabView1,
                     pModelObj);
@@ -517,7 +517,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
     CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pDocument->GetString(aA2SheetView));
 
     // Change content in the View2 with the sheet view -> sheet view to default view sync
-    SfxLokHelper::setView(aView2.getViewID());
+    KitHelper::setView(aView2.getViewID());
     Scheduler::ProcessEventsToIdle();
 
     typeCharsInCell(std::string("ABC123"), aA1.Col(), aA1.Row(), pTabView2, pModelObj);
@@ -549,7 +549,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     // Setup views
     ScTestViewCallback aView1;
     ScTabViewShell* pTabView1 = aView1.getTabViewShell();
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
     ScTestViewCallback aView2;
     ScTabViewShell* pTabView2 = aView2.getTabViewShell();
@@ -557,7 +557,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     CPPUNIT_ASSERT(aView1.getViewID() != aView2.getViewID());
 
     // Switch to View1
-    SfxLokHelper::setView(aView1.getViewID());
+    KitHelper::setView(aView1.getViewID());
     Scheduler::ProcessEventsToIdle();
 
     // Create a new sheet view for view 1
@@ -568,7 +568,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView2, 0, 1, 4));
 
     // Switch to View2
-    SfxLokHelper::setView(aView2.getViewID());
+    KitHelper::setView(aView2.getViewID());
     Scheduler::ProcessEventsToIdle();
 
     // Sort AutoFilter descending
@@ -586,7 +586,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     CPPUNIT_ASSERT_EQUAL(SCTAB(2), pDocument->GetTableCount());
 
     // Switch to View1
-    SfxLokHelper::setView(aView1.getViewID());
+    KitHelper::setView(aView1.getViewID());
     Scheduler::ProcessEventsToIdle();
 
     // We remove the current sheet view
@@ -613,24 +613,24 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_DefaultVi
     ScTabViewShell* pTabView1 = aView1.getTabViewShell();
 
     // View 2
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
     ScTestViewCallback aView2;
     ScTabViewShell* pTabView2 = aView2.getTabViewShell();
 
     // View 3
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
     ScTestViewCallback aView3;
     ScTabViewShell* pTabView3 = aView3.getTabViewShell();
 
     // Create a new sheet view for view 1
-    SfxLokHelper::setView(aView1.getViewID());
+    KitHelper::setView(aView1.getViewID());
     Scheduler::ProcessEventsToIdle();
     createNewSheetViewInCurrentView();
 
     // Create a new sheet view for view 3
-    SfxLokHelper::setView(aView3.getViewID());
+    KitHelper::setView(aView3.getViewID());
     Scheduler::ProcessEventsToIdle();
     createNewSheetViewInCurrentView();
 
@@ -651,7 +651,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_DefaultVi
     CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView3->GetCurrentString(0, 4));
 
     // Switch to View2
-    SfxLokHelper::setView(aView2.getViewID());
+    KitHelper::setView(aView2.getViewID());
     Scheduler::ProcessEventsToIdle();
 
     // Sheet view must be present
@@ -675,24 +675,24 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetView
     ScTabViewShell* pTabView1 = aView1.getTabViewShell();
 
     // View 2
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
     ScTestViewCallback aView2;
     ScTabViewShell* pTabView2 = aView2.getTabViewShell();
 
     // View 3
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
     ScTestViewCallback aView3;
     ScTabViewShell* pTabView3 = aView3.getTabViewShell();
 
     // Create a new sheet view for view 1
-    SfxLokHelper::setView(aView1.getViewID());
+    KitHelper::setView(aView1.getViewID());
     Scheduler::ProcessEventsToIdle();
     createNewSheetViewInCurrentView();
 
     // Create a new sheet view for view 3
-    SfxLokHelper::setView(aView3.getViewID());
+    KitHelper::setView(aView3.getViewID());
     Scheduler::ProcessEventsToIdle();
     createNewSheetViewInCurrentView();
 
@@ -717,7 +717,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetView
     CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->size());
 
     // Sort on sheet view 1
-    SfxLokHelper::setView(aView1.getViewID());
+    KitHelper::setView(aView1.getViewID());
     Scheduler::ProcessEventsToIdle();
     sortDescendingForCell(u"A1");
 }
@@ -960,7 +960,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
     ScTestViewCallback aSheetView;
     ScTabViewShell* pTabViewSheetView = aSheetView.getTabViewShell();
 
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
 
     ScTestViewCallback aDefaultView;
@@ -971,7 +971,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
 
     // Switch to Sheet View and Create
     {
-        SfxLokHelper::setView(aSheetView.getViewID());
+        KitHelper::setView(aSheetView.getViewID());
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabViewSheetView->GetViewData().GetTabNumber());
@@ -985,7 +985,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
 
     // Switch to Default View
     {
-        SfxLokHelper::setView(aDefaultView.getViewID());
+        KitHelper::setView(aDefaultView.getViewID());
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT_EQUAL(SCTAB(1), pTabViewSheetView->GetViewData().GetTabNumber());
@@ -1049,7 +1049,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
     ScTestViewCallback aSheetView;
     ScTabViewShell* pTabViewSheetView = aSheetView.getTabViewShell();
 
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
 
     ScTestViewCallback aDefaultView;
@@ -1060,7 +1060,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
 
     // Switch to Sheet View and Create
     {
-        SfxLokHelper::setView(aSheetView.getViewID());
+        KitHelper::setView(aSheetView.getViewID());
         Scheduler::ProcessEventsToIdle();
 
         // New Sheet view
@@ -1121,7 +1121,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
     ScTestViewCallback aSheetView;
     ScTabViewShell* pTabViewSheetView = aSheetView.getTabViewShell();
 
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
 
     ScTestViewCallback aDefaultView;
@@ -1132,7 +1132,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
 
     // Switch to Sheet View and Create
     {
-        SfxLokHelper::setView(aSheetView.getViewID());
+        KitHelper::setView(aSheetView.getViewID());
         Scheduler::ProcessEventsToIdle();
 
         createNewSheetViewInCurrentView();
@@ -1155,7 +1155,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
 
     // Switch to Default view and sort
     {
-        SfxLokHelper::setView(aDefaultView.getViewID());
+        KitHelper::setView(aDefaultView.getViewID());
         Scheduler::ProcessEventsToIdle();
 
         // Sort AutoFilter
@@ -1170,7 +1170,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
 
     // Switch to Sheet view and set a value
     {
-        SfxLokHelper::setView(aSheetView.getViewID());
+        KitHelper::setView(aSheetView.getViewID());
         Scheduler::ProcessEventsToIdle();
 
         // Change "4" to "44"
@@ -1763,7 +1763,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testNewViewOpensInDefaultView)
     createNewSheetViewInCurrentView();
 
     // Create a new view - simulates a new user or new window
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
 
     ScTestViewCallback aView2;
@@ -1970,7 +1970,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MultipleOps_DefaultAndSheetView)
     setupViews();
 
     // Add another view for sheet view 2
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
     ScTestViewCallback aSheetView2;
     int nSheetView2 = aSheetView2.getViewID();
@@ -1999,7 +1999,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MultipleOps_DefaultAndSheetView)
 
     // Create sheet view 2
     {
-        SfxLokHelper::setView(nSheetView2);
+        KitHelper::setView(nSheetView2);
         Scheduler::ProcessEventsToIdle();
         createNewSheetViewInCurrentView();
     }
@@ -3033,7 +3033,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MergeCells_DefaultAndSheetView)
     // Set up 3 views: default view, sheet view 1, sheet view 2
     setupViews();
 
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
     ScTestViewCallback aView3;
     int nView3ID = aView3.getViewID();
@@ -3050,7 +3050,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MergeCells_DefaultAndSheetView)
 
     // Create sheet view 2
     {
-        SfxLokHelper::setView(nView3ID);
+        KitHelper::setView(nView3ID);
         Scheduler::ProcessEventsToIdle();
         createNewSheetViewInCurrentView();
     }
@@ -3097,7 +3097,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertNameList_DefaultAndSheetView)
     // Set up 3 views: default view, sheet view 1, sheet view 2
     setupViews();
 
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
     ScTestViewCallback aView3;
     int nView3ID = aView3.getViewID();
@@ -3115,7 +3115,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertNameList_DefaultAndSheetView)
 
     // Create sheet view 2
     {
-        SfxLokHelper::setView(nView3ID);
+        KitHelper::setView(nView3ID);
         Scheduler::ProcessEventsToIdle();
         createNewSheetViewInCurrentView();
     }
@@ -3153,7 +3153,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SubTotals_DefaultAndSheetView)
     // Set up 3 views: default view, sheet view 1, sheet view 2
     setupViews();
 
-    SfxLokHelper::createView();
+    KitHelper::createView();
     Scheduler::ProcessEventsToIdle();
     ScTestViewCallback aView3;
     int nView3ID = aView3.getViewID();
@@ -3181,7 +3181,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SubTotals_DefaultAndSheetView)
 
     // Create sheet view 2
     {
-        SfxLokHelper::setView(nView3ID);
+        KitHelper::setView(nView3ID);
         Scheduler::ProcessEventsToIdle();
         createNewSheetViewInCurrentView();
     }

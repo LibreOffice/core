@@ -947,7 +947,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             }
         }
 
-        if (bAllowChangeFocus && !SfxLokHelper::isSettingView())
+        if (bAllowChangeFocus && !KitHelper::isSettingView())
             mpDrawView->SdrEndTextEdit();
 
         mpActualPage = nullptr;

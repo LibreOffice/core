@@ -57,7 +57,7 @@ ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
 void ScTiledRenderingTest::setupCOKitViewCallback(SfxViewShell* pViewShell)
 {
     pViewShell->setCOKitViewCallback(&m_callbackWrapper);
-    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(*pViewShell));
+    m_callbackWrapper.setLOKViewId(KitHelper::getView(*pViewShell));
 }
 
 void ScTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)

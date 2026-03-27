@@ -35,7 +35,7 @@ class OOO_DLLPUBLIC_TEST EventPosterHelperBase
 public:
     virtual ~EventPosterHelperBase(){};
 
-    /** @see SfxLokHelper::postKeyEventAsync */
+    /** @see KitHelper::postKeyEventAsync */
     virtual void postKeyEventAsync(int nType, int nCharCode, int nKeyCode) const = 0;
 
     /** Posts a full key down/up cycle */
@@ -45,7 +45,7 @@ public:
         postKeyEventAsync(LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
     }
 
-    /** @see SfxLokHelper::postExtTextEventAsync */
+    /** @see KitHelper::postExtTextEventAsync */
     virtual void postExtTextEventAsync(int nType, const OUString& rText) const = 0;
 
     /** Posts a full text input + commit sequence */
@@ -59,7 +59,7 @@ public:
 /**
  * @brief Helper to send events to a window.
  *
- * This helper basically just wraps SfxLokHelper::post*EventAsync() calls to hold the target window
+ * This helper basically just wraps KitHelper::post*EventAsync() calls to hold the target window
  * reference in the class.
  */
 class OOO_DLLPUBLIC_TEST EventPosterHelper : public EventPosterHelperBase
@@ -92,9 +92,9 @@ public:
     using EventPosterHelperBase::postKeyEventAsync;
     using EventPosterHelperBase::postExtTextEventAsync;
 
-    /** @see SfxLokHelper::postKeyEventAsync */
+    /** @see KitHelper::postKeyEventAsync */
     virtual void postKeyEventAsync(int nType, int nCharCode, int nKeyCode) const override;
-    /** @see SfxLokHelper::postExtTextEventAsync */
+    /** @see KitHelper::postExtTextEventAsync */
     virtual void postExtTextEventAsync(int nType, const OUString& rText) const override;
 };
 

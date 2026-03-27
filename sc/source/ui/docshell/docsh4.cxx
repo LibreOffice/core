@@ -253,7 +253,7 @@ void lcl_setLOKLocale(ScTabViewShell& rViewShell, const LanguageType eLang)
     OUString aLang = LanguageTag(eLang).getBcp47();
     /// This is only used for building the lok calendar as of date.
     /// Don't change the view language as it affects the js-dialog language as well.
-    SfxLokHelper::setViewLocale(SfxLokHelper::getView(rViewShell), aLang);
+    KitHelper::setViewLocale(KitHelper::getView(rViewShell), aLang);
 }
 
 } // end anonymous namespace

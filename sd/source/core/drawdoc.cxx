@@ -562,7 +562,7 @@ void SdDrawDocument::ResizeCurrentPage(
     if (pViewShell)
     {
         SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(pViewShell->GetCurrentDocument());
-        SfxLokHelper::notifyCurrentPageSizeChangedAllViews(pDoc);
+        KitHelper::notifyCurrentPageSizeChangedAllViews(pDoc);
     }
 }
 
@@ -708,7 +708,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
     if (pViewShell)
     {
         SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(pViewShell->GetCurrentDocument());
-        SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
+        KitHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 }
 

@@ -218,7 +218,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewCursors)
 {
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
     ScTestViewCallback aView1;
-    SfxLokHelper::createView();
+    KitHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2(/*bDeleteListenerOnDestruct*/false);
     // This was false, the new view did not get the view (cell) cursor of the old view.
@@ -227,7 +227,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewCursors)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
     Scheduler::ProcessEventsToIdle();
-    SfxLokHelper::destroyView(SfxLokHelper::getCurrentView());
+    KitHelper::destroyView(KitHelper::getCurrentView());
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
 }
 
@@ -254,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextViewSelection)
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
     ScTestViewCallback aView1;
-    SfxLokHelper::createView();
+    KitHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
@@ -287,7 +287,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewLock)
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
     ScTestViewCallback aView1;
-    SfxLokHelper::createView();
+    KitHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
@@ -434,7 +434,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoShells)
     ScUndoManager* pUndoManager = rDoc.GetUndoManager();
     CPPUNIT_ASSERT(pUndoManager);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
-    sal_Int32 nView1 = SfxLokHelper::getCurrentView();
+    sal_Int32 nView1 = KitHelper::getCurrentView();
     // This was -1: ScSimpleUndo did not remember what view shell created it.
     CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pUndoManager->GetUndoAction()->GetViewShellId());
 }
@@ -471,7 +471,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViews)
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
 
     // view #2
-    SfxLokHelper::createView();
+    KitHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
@@ -492,17 +492,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
     CPPUNIT_ASSERT(pViewData);
 
     // view #1
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     // view #2
-    SfxLokHelper::createView();
+    KitHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     aView2.m_bInvalidateTiles = false;
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
@@ -528,12 +528,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
     CPPUNIT_ASSERT(aView2.m_bInvalidateTiles);
 
     // view #3
-    SfxLokHelper::createView();
+    KitHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView3;
 
     // text edit a cell in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     aView3.m_bInvalidateTiles = false;
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
@@ -562,14 +562,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateViewGraphicSelection)
     CPPUNIT_ASSERT(aView1.m_bGraphicSelection);
 
     // Create a second view.
-    int nView1 = SfxLokHelper::getCurrentView();
-    SfxLokHelper::createView();
+    int nView1 = KitHelper::getCurrentView();
+    KitHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
     CPPUNIT_ASSERT(aView2.m_bGraphicViewSelection);
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
@@ -754,14 +754,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
     {
         ScModelObj* pModelObj = createDoc("small.ods");
         ScTestViewCallback aView1;
-        int nView1 = SfxLokHelper::getCurrentView();
+        int nView1 = KitHelper::getCurrentView();
 
         // Create a 2nd view
-        SfxLokHelper::createView();
+        KitHelper::createView();
         pModelObj->initializeForTiledRendering({});
         ScTestViewCallback aView2;
 
-        SfxLokHelper::setView(nView1);
+        KitHelper::setView(nView1);
 
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
         if (pTabViewShell)
@@ -862,17 +862,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoLimiting)
     CPPUNIT_ASSERT(pUndoManager);
 
     // view #1
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
 
     // view #2
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
@@ -883,13 +883,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoLimiting)
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #2
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // check that undo has not been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // check that undo has been executed on view #1
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
@@ -898,13 +898,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoLimiting)
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetRedoActionCount());
 
     // try to execute redo in view #2
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     // check that redo has not been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetRedoActionCount());
 
     // try to execute redo in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     // check that redo has been executed on view #1
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetRedoActionCount());
@@ -920,17 +920,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
     CPPUNIT_ASSERT(pUndoManager);
 
     // view #1
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
 
     // view #2
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
@@ -941,13 +941,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #2
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // check that undo has not been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #2 in repair mode
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"Repair", uno::Any(true)}
@@ -1011,8 +1011,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeWithTwoViews)
     Scheduler::ProcessEventsToIdle();
 
     // Create a new view
-    int nView1 = SfxLokHelper::getCurrentView();
-    SfxLokHelper::createView();
+    int nView1 = KitHelper::getCurrentView();
+    KitHelper::createView();
 
     std::vector<unsigned char> aBuffer2(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice2(DeviceFormat::WITHOUT_ALPHA);
@@ -1025,7 +1025,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeWithTwoViews)
         CPPUNIT_ASSERT_EQUAL(aBuffer1[i], aBuffer2[i]);
 
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
@@ -1035,12 +1035,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)
     CPPUNIT_ASSERT(pModelObj);
 
     // view #1
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     SfxViewShell* pView1 = SfxViewShell::Current();
 
     // view #2
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     SfxViewShell* pView2 = SfxViewShell::Current();
     CPPUNIT_ASSERT(pView1 != pView2);
 
@@ -1055,7 +1055,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)
     }
 
     // text edit a cell in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'h', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'h', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
@@ -1077,7 +1077,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)
     }
 
     // text edit a cell in view #2
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     pModelObj->setPart(1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
@@ -1097,7 +1097,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDisableUndoRepair)
     }
 
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
@@ -1111,10 +1111,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentRepair)
     SfxViewShell* pView1 = SfxViewShell::Current();
 
     // view #2
-    int nView1 = SfxLokHelper::getCurrentView();
-    SfxLokHelper::createView();
+    int nView1 = KitHelper::getCurrentView();
+    KitHelper::createView();
     SfxViewShell* pView2 = SfxViewShell::Current();
-    int nView2 = SfxLokHelper::getCurrentView();
+    int nView2 = KitHelper::getCurrentView();
     CPPUNIT_ASSERT(pView1 != pView2);
     {
         std::unique_ptr<SfxBoolItem> pItem1;
@@ -1128,7 +1128,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentRepair)
     }
 
     // Insert a character in the second view.
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     pModelObj->setPart(1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
@@ -1147,7 +1147,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentRepair)
     }
 
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
@@ -1162,8 +1162,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLanguageStatus)
     SfxViewShell* pView1 = SfxViewShell::Current();
 
     // view #2
-    int nView1 = SfxLokHelper::getCurrentView();
-    SfxLokHelper::createView();
+    int nView1 = KitHelper::getCurrentView();
+    KitHelper::createView();
     SfxViewShell* pView2 = SfxViewShell::Current();
     CPPUNIT_ASSERT(pView1 != pView2);
     {
@@ -1200,7 +1200,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLanguageStatus)
     }
 
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
@@ -1220,8 +1220,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMultiViewCopyPaste)
     pView1->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::LokClipboard::create(comphelper::getProcessComponentContext()));
 
     // view #2
-    int nView1 = SfxLokHelper::getCurrentView();
-    SfxLokHelper::createView();
+    int nView1 = KitHelper::getCurrentView();
+    KitHelper::createView();
     ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     // emulate clipboard
     pView2->GetViewData().GetActiveWin()->SetClipboard(css::datatransfer::clipboard::LokClipboard::create(comphelper::getProcessComponentContext()));
@@ -1249,7 +1249,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMultiViewCopyPaste)
     CPPUNIT_ASSERT_EQUAL(u"TestCopy2"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
 
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
@@ -1290,10 +1290,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFilterDlg)
 
     // view #1
     SfxViewShell* pView1 = SfxViewShell::Current();
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
 
     // view #2
-    SfxLokHelper::createView();
+    KitHelper::createView();
     SfxViewShell* pView2 = SfxViewShell::Current();
     CPPUNIT_ASSERT(pView1 != pView2);
     {
@@ -1306,7 +1306,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFilterDlg)
     CPPUNIT_ASSERT(pRefWindow);
 
     // switch to view 1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     CPPUNIT_ASSERT_EQUAL(true, pView2->GetViewFrame().GetDispatcher()->IsLocked());
     CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame().GetDispatcher()->IsLocked());
 
@@ -1316,7 +1316,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFilterDlg)
     CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame().GetDispatcher()->IsLocked());
 
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
@@ -1326,7 +1326,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFunctionDlg)
 
     // view #1
     SfxViewShell* pView1 = SfxViewShell::Current();
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     {
         pView1->GetViewFrame().GetDispatcher()->Execute(SID_OPENDLG_FUNCTION,
             SfxCallMode::SLOT|SfxCallMode::RECORD);
@@ -1336,7 +1336,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFunctionDlg)
     CPPUNIT_ASSERT(pRefWindow);
 
     // view #2
-    int nView2 = SfxLokHelper::createView();
+    int nView2 = KitHelper::createView();
     SfxViewShell* pView2 = SfxViewShell::Current();
     CPPUNIT_ASSERT(pView1 != pView2);
 
@@ -1344,14 +1344,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFunctionDlg)
     CPPUNIT_ASSERT_EQUAL(true, pView1->GetViewFrame().GetDispatcher()->IsLocked());
     CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame().GetDispatcher()->IsLocked());
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pRefWindow->GetController()->response(RET_CANCEL);
 
     CPPUNIT_ASSERT_EQUAL(false, pView1->GetViewFrame().GetDispatcher()->IsLocked());
     CPPUNIT_ASSERT_EQUAL(false, pView2->GetViewFrame().GetDispatcher()->IsLocked());
 
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
@@ -1414,11 +1414,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPageDownInvalidation)
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
 
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, awt::Key::PAGEDOWN, 0);
@@ -1460,11 +1460,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetChangeNoInvalidation)
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
 
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
 
     aView1.ClearAllInvalids();
 
@@ -1528,11 +1528,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
 
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
 
@@ -1569,11 +1569,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetRowColumnHeadersInvalidation)
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
 
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
     tools::JsonWriter aJsonWriter1;
@@ -1613,11 +1613,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpHorizontallyInvalidation)
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
 
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD2);
@@ -1637,11 +1637,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testJumpToLastRowInvalidation)
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
 
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_MOD1);
@@ -1662,22 +1662,22 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnHeaders)
 
     // view #1
     ScTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
 
     // view #2
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     ScTestViewCallback aView2;
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
     // ViewRowColumnHeaders test
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     tools::JsonWriter aJsonWriter1;
     pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695), aJsonWriter1);
     OString aHeaders1 = aJsonWriter1.finishAndGetAsOString();
 
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     // 50% zoom
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 22474, 47333));
     pModelObj->setClientZoom(256, 256, 6636, 6636);
@@ -1686,22 +1686,22 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnHeaders)
     OString aHeaders2 = aJsonWriter2.finishAndGetAsOString();
 
     // Check vs. view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     tools::JsonWriter aJsonWriter3;
     pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695), aJsonWriter3);
     OString aHeaders1_2 = aJsonWriter3.finishAndGetAsOString();
     CPPUNIT_ASSERT_EQUAL(aHeaders1, aHeaders1_2);
 
     // Check vs. view #2
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     tools::JsonWriter aJsonWriter4;
     pModelObj->getRowColumnHeaders(tools::Rectangle(65,723,10410,4695), aJsonWriter4);
     OString aHeaders2_2 = aJsonWriter4.finishAndGetAsOString();
     CPPUNIT_ASSERT_EQUAL(aHeaders2, aHeaders2_2);
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
@@ -1903,11 +1903,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataInvariance)
 
     // view #1
     ScTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
 
     // view #2
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     ScTestViewCallback aView2;
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
@@ -1917,32 +1917,32 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataInvariance)
         if (nIdx)
             aSGData.setDataToDoc(pDoc);
 
-        SfxLokHelper::setView(nView1);
+        KitHelper::setView(nView1);
         OString aGeomStr1 = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
                 /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
 
-        SfxLokHelper::setView(nView2);
+        KitHelper::setView(nView2);
         pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 22474, 47333));
         pModelObj->setClientZoom(256, 256, 6636, 6636);
         OString aGeomStr2 = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
                 /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
 
         // Check vs. view #1
-        SfxLokHelper::setView(nView1);
+        KitHelper::setView(nView1);
         OString aGeomStr1_2 = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
                 /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
         CPPUNIT_ASSERT_EQUAL(aGeomStr1, aGeomStr1_2);
 
         // Check vs. view #2
-        SfxLokHelper::setView(nView2);
+        KitHelper::setView(nView2);
         OString aGeomStr2_2 = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
                 /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
         CPPUNIT_ASSERT_EQUAL(aGeomStr2, aGeomStr2_2);
     }
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     SfxViewShell::Current()->setCOKitViewCallback(nullptr);
 }
 
@@ -2384,8 +2384,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
     ScModelObj* pModelObj = createDoc("empty.ods");
 
     // view #1
-    int nView1 = SfxLokHelper::getCurrentView();
-    SfxLokHelper::setView(nView1);
+    int nView1 = KitHelper::getCurrentView();
+    KitHelper::setView(nView1);
 
     // Imitate online while creating a new sheet on empty.ods.
     uno::Sequence<beans::PropertyValue> aArgs(
@@ -2401,12 +2401,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
     CPPUNIT_ASSERT(pView1);
 
     // view #2
-    SfxLokHelper::createView();
+    KitHelper::createView();
     ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView2);
     Scheduler::ProcessEventsToIdle();
 
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     // Delete a range.
     pView1->SetCursor(1, 1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_SHIFT);
@@ -2447,9 +2447,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
     {
         ScModelObj* pModelObj = createDoc("empty.ods");
         ScTestViewCallback aView;
-        int nView = SfxLokHelper::getCurrentView();
+        int nView = KitHelper::getCurrentView();
 
-        SfxLokHelper::setView(nView);
+        KitHelper::setView(nView);
 
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
         CPPUNIT_ASSERT(pTabViewShell);
@@ -2539,9 +2539,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     const ScDocument* pDoc = pModelObj->GetDocument();
     ScTestViewCallback aView;
-    int nView = SfxLokHelper::getCurrentView();
+    int nView = KitHelper::getCurrentView();
 
-    SfxLokHelper::setView(nView);
+    KitHelper::setView(nView);
 
     ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
     ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
@@ -2578,17 +2578,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReordering)
     CPPUNIT_ASSERT(pUndoManager);
 
     // view #1
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
 
     // view #2
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
@@ -2599,7 +2599,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReordering)
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // text edit a different cell in view #2
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
@@ -2615,13 +2615,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReordering)
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // check that undo has been executed on view #1
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // try to execute undo in view #2
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     // check that undo has been executed on view #2
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
@@ -2638,19 +2638,19 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 
     // view #1
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     SfxViewShell* pView1 = SfxViewShell::Current();
     ScTestViewCallback aView1;
 
     // view #2
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     SfxViewShell* pView2 = SfxViewShell::Current();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
@@ -2661,7 +2661,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // text edit another cell in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
@@ -2674,7 +2674,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
     CPPUNIT_ASSERT_EQUAL(u"yy"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
 
     // text edit a different cell in view #2
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     ScTabViewShell* pViewShell2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     pViewShell2->SetCursor(0, 2);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
@@ -2690,7 +2690,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
     CPPUNIT_ASSERT_EQUAL(u"CC"_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
 
     // View 1 presses undo, and the second cell is erased
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(u"xx"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
@@ -2728,17 +2728,17 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), pUndoManager->GetUndoActionCount());
 
     // view #1
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
 
     // view #2
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
@@ -2749,7 +2749,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
     CPPUNIT_ASSERT_EQUAL(std::size_t(1), pUndoManager->GetUndoActionCount());
 
     // text edit a different cell in view #2
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     pView2->SetCursor(0, 2);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'C', 0);
@@ -2778,7 +2778,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
     CPPUNIT_ASSERT_EQUAL(u"DD"_ustr, pDoc->GetString(ScAddress(0, 3, 0)));
 
     // View 1 presses undo
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(std::size_t(2), pUndoManager->GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
@@ -2794,12 +2794,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     aColorConfig.AddScheme(u"Light"_ustr);
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    int nFirstViewId = SfxLokHelper::getCurrentView();
+    int nFirstViewId = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
 
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
     // Create a second view
-    SfxLokHelper::createView();
+    KitHelper::createView();
     ScTestViewCallback aView2;
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
     // Set second view to dark scheme
@@ -2814,7 +2814,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pModelObj->getViewRenderState());
 
     // Switch back to first view and make sure it's the same
-    SfxLokHelper::setView(nFirstViewId);
+    KitHelper::setView(nFirstViewId);
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
 }
 
@@ -2886,7 +2886,7 @@ void testInvalidateOnTextEditWithDifferentZoomLevels::TestBody(const ColRowZoom&
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
     // view #2
-    SfxLokHelper::createView();
+    KitHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
     Scheduler::ProcessEventsToIdle();
@@ -2910,15 +2910,15 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testOpenURL)
 {
     // Given a document that has 2 views:
     createDoc("empty.ods");
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
-    SfxLokHelper::createView();
+    KitHelper::createView();
     ScTestViewCallback aView2;
 
     // When clicking on a link in view 2, but switching to view 1 before processing async events:
     ScGlobal::OpenURL(/*aUrl=*/u"http://www.example.com/"_ustr, /*aTarget=*/u""_ustr,
                       /*bIgnoreSettings=*/true);
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     Scheduler::ProcessEventsToIdle();
 
     // Then make sure view 2 gets the callback, not view 1:
@@ -3072,13 +3072,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
 
     Scheduler::ProcessEventsToIdle();
 
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     // register to track View #1 invalidations
     ScTestViewCallback aView1;
 
     // Create a View #2
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     // register to track View #1 invalidations
     ScTestViewCallback aView2;
@@ -3089,7 +3089,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     pModelObj->paintTile(*xDevice, 3328, 512, 0, 0, 19968, 3072);
 
     // Set View #1 to 50% zoom and generate a paint
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 41150, 13250));
     pModelObj->setClientZoom(256, 256, 3185, 3185);
     pModelObj->paintTile(*xDevice, 3328, 512, 0, 0, 41405, 6370);
@@ -3097,7 +3097,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     Scheduler::ProcessEventsToIdle();
 
     // Set View #2 to 200% zoom and generate a paint
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 9574, 3090));
     pModelObj->setClientZoom(256, 256, 741, 741);
     pModelObj->paintTile(*xDevice, 3328, 512, 0, 0, 19968, 3072);
@@ -3189,7 +3189,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInputHandlerSyncedZoom)
                                  pViewData1->GetZoomY(), rEditEngine1.GetRefMapMode().GetScaleY());
 
     // Create a View #2
-    SfxLokHelper::createView();
+    KitHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
     // Set View #2 to the same zoom as View #1
@@ -3225,9 +3225,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)
 {
     // Given 2 views, the second's locale is set to German:
     createDoc("empty.ods");
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
-    SfxLokHelper::createView();
+    KitHelper::createView();
     ScTestViewCallback aView2;
     SfxViewShell* pView2 = SfxViewShell::Current();
     pView2->SetLOKLocale(u"de-DE"_ustr);
@@ -3246,7 +3246,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testStatusBarLocale)
     // When creating a cell selection in the 2nd view and processing jobs with the 1st view set to
     // active:
     comphelper::dispatchCommand(u".uno:GoDownSel"_ustr, {});
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     pView2->GetViewFrame().GetBindings().GetTimer().Invoke();
     // Once more to hit the pImpl->bMsgDirty = false case in SfxBindings::NextJob_Impl().
     pView2->GetViewFrame().GetBindings().GetTimer().Invoke();
@@ -3323,14 +3323,14 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     // Try to check the same scenario in a new view
 
     // Setup view #2
-    SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getCurrentView();
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
     ScTestViewCallback aView2;
     // Set client rect to 2000 x 2000 pixels
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 2000 / nPPTX, 2000 / nPPTY));
 
     // Let's make sure we are in view #2
-    SfxLokHelper::setView(nView2);
+    KitHelper::setView(nView2);
     Scheduler::ProcessEventsToIdle();
 
     // Click at on the left side of A1 cell
@@ -3450,13 +3450,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
         pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
         ScDocument* pDoc = pModelObj->GetDocument();
 
-        int nViewFR = SfxLokHelper::getCurrentView();
+        int nViewFR = KitHelper::getCurrentView();
         ScTestViewCallback aView1;
         SfxViewShell* pViewFR = SfxViewShell::Current();
         pViewFR->SetLOKLocale(u"fr-FR"_ustr);
 
         // modify G12 with FR and use French keywords in the format
-        SfxLokHelper::setView(nViewFR);
+        KitHelper::setView(nViewFR);
 
         sal_Int32 nCheckPos;
         SvNumFormatType nType;
@@ -3575,7 +3575,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorVisibilityAfterPaste)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScTestViewCallback aView;
-    SfxLokHelper::createView();
+    KitHelper::createView();
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());

@@ -86,7 +86,7 @@ foo
 bar
 -----END CERTIFICATE-----)";
 
-    std::vector<std::string> aRet = SfxLokHelper::extractCertificates(signatureCa);
+    std::vector<std::string> aRet = KitHelper::extractCertificates(signatureCa);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aRet.size());
     CPPUNIT_ASSERT_EQUAL(std::string("\nfoo\n"), aRet[0]);
@@ -107,8 +107,8 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperAddCertifices)
     SvFileStream aCaStream(aCaUrl, StreamMode::READ);
     std::string aCa;
     aCa = read_uInt8s_ToOString(aCaStream, aCaStream.remainingSize());
-    std::vector<std::string> aCerts = SfxLokHelper::extractCertificates(aCa);
-    SfxLokHelper::addCertificates(aCerts);
+    std::vector<std::string> aCerts = KitHelper::extractCertificates(aCa);
+    KitHelper::addCertificates(aCerts);
 
     // Then make sure the signature state is updated:
     // Without the accompanying fix in place, this test would have failed with:
@@ -127,11 +127,11 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignature)
 
     // When extracting hashes:
     tools::JsonWriter aWriter;
-    SfxLokHelper::getCommandValues(aWriter, ".uno:Signature");
+    KitHelper::getCommandValues(aWriter, ".uno:Signature");
     OString aJson = aWriter.finishAndGetAsOString();
 
     // Then make sure that we get a signature time and a hash:
-    CPPUNIT_ASSERT(SfxLokHelper::supportsCommand(u"Signature"));
+    CPPUNIT_ASSERT(KitHelper::supportsCommand(u"Signature"));
     std::stringstream aStream{ std::string(aJson) };
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
@@ -163,7 +163,7 @@ OUString GetSignatureHash()
 {
     tools::JsonWriter aWriter;
     // Provide the current time, so the system timer is not contacted:
-    SfxLokHelper::getCommandValues(aWriter, ".uno:Signature?signatureTime=1731329053152");
+    KitHelper::getCommandValues(aWriter, ".uno:Signature?signatureTime=1731329053152");
     OString aJson = aWriter.finishAndGetAsOString();
     std::stringstream aStream{ std::string(aJson) };
     boost::property_tree::ptree aTree;

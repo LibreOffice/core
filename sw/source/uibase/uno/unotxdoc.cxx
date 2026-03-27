@@ -3903,7 +3903,7 @@ VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
     if (!pView)
         return {};
 
-    if (VclPtr<vcl::Window> pWindow = SfxLokHelper::getInPlaceDocWindow(pView))
+    if (VclPtr<vcl::Window> pWindow = KitHelper::getInPlaceDocWindow(pView))
         return pWindow;
 
     return &(pView->GetEditWin());
@@ -4035,7 +4035,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
 void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
-    SfxLokHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
+    KitHelper::postKeyEventAsync(getDocWindow(), nType, nCharCode, nKeyCode);
 }
 
 void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
@@ -4051,7 +4051,7 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     SwViewOption aOption(*(pWrtViewShell->GetViewOptions()));
     double fScale = aOption.GetZoom() / o3tl::convert(100.0, o3tl::Length::px, o3tl::Length::twip);
 
-    if (SfxLokHelper::testInPlaceComponentMouseEventHit(
+    if (KitHelper::testInPlaceComponentMouseEventHit(
             m_pDocShell->GetView(), nType, nX, nY, nCount, nButtons, nModifier, fScale, fScale))
         return;
 
@@ -4068,7 +4068,7 @@ void SwXTextDocument::postMouseEvent(int nType, int nX, int nY, int nCount, int 
     LokMouseEventData aMouseEventData(nType, Point(nX, nY), nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
-    SfxLokHelper::postMouseEventAsync(&rEditWin, aMouseEventData);
+    KitHelper::postMouseEventAsync(&rEditWin, aMouseEventData);
 }
 
 void SwXTextDocument::setTextSelection(int nType, int nX, int nY)

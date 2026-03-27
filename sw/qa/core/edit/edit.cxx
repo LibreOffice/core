@@ -496,7 +496,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
     ViewCallback aCallback;
     TestLokCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
-    aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(*pWrtShell->GetSfxViewShell()));
+    aCallbackWrapper.setLOKViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
 
     // When comparing with an old document:
     OUString aOther = createFileURL(u"compare-old.odt");

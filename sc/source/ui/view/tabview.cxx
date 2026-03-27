@@ -2505,7 +2505,7 @@ void ScTabView::EnableAutoSpell( bool bEnable )
         if (ScTabViewShell* pViewSh = aViewData.GetViewShell())
         {
             ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(pViewSh->GetCurrentDocument());
-            SfxLokHelper::notifyViewRenderState(pViewSh, pModel);
+            KitHelper::notifyViewRenderState(pViewSh, pModel);
         }
     }
 }
@@ -2858,7 +2858,7 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
     if ((bColumn && aNewArea.getOpenWidth()) || (!bColumn && aNewArea.getOpenHeight()))
     {
         rTabView.UpdateSelectionOverlay();
-        SfxLokHelper::notifyInvalidation(rViewData.GetViewShell(), &aNewArea);
+        KitHelper::notifyInvalidation(rViewData.GetViewShell(), &aNewArea);
     }
 
     // Provide size in the payload, so clients don't have to query for that.
@@ -2867,7 +2867,7 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
     OString sSize( ss.str() );
     ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(
         rViewData.GetViewShell()->GetCurrentDocument());
-    SfxLokHelper::notifyDocumentSizeChanged(rViewData.GetViewShell(), sSize, pModel, false);
+    KitHelper::notifyDocumentSizeChanged(rViewData.GetViewShell(), sSize, pModel, false);
 }
 
 } // anonymous namespace

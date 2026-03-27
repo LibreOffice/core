@@ -149,7 +149,7 @@ DrawViewShell::DrawViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParen
         Resize();
 
         SdXImpressDocument* pModel = comphelper::getFromUnoTunnel<SdXImpressDocument>(rViewShellBase.GetCurrentDocument());
-        SfxLokHelper::notifyViewRenderState(&rViewShellBase, pModel);
+        KitHelper::notifyViewRenderState(&rViewShellBase, pModel);
     }
 }
 

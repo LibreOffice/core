@@ -116,7 +116,7 @@ static bool isSfxMediumMissingInteractionHandled(SfxViewFrame& rViewFrame)
 }
 #endif
 
-int SfxLokHelper::createView(SfxViewFrame& rViewFrame, ViewShellDocId docId)
+int KitHelper::createView(SfxViewFrame& rViewFrame, ViewShellDocId docId)
 {
     assert(docId >= ViewShellDocId(0) && "Cannot createView for invalid (negative) DocId.");
 
@@ -136,7 +136,7 @@ int SfxLokHelper::createView(SfxViewFrame& rViewFrame, ViewShellDocId docId)
     return static_cast<sal_Int32>(pViewShell->GetViewShellId());
 }
 
-int SfxLokHelper::createView()
+int KitHelper::createView()
 {
     // Assumes a single document, or at least that the
     // current view belongs to the document on which the
@@ -148,12 +148,12 @@ int SfxLokHelper::createView()
     return createView(pViewShell->GetViewFrame(), pViewShell->GetDocId());
 }
 
-std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& SfxLokHelper::getAcceleratorConfs()
+std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& KitHelper::getAcceleratorConfs()
 {
     return SfxApplication::GetOrCreate()->GetAcceleratorConfs_Impl();
 }
 
-int SfxLokHelper::createView(int nDocId)
+int KitHelper::createView(int nDocId)
 {
     const SfxApplication* pApp = SfxApplication::Get();
     if (pApp == nullptr)
@@ -171,13 +171,13 @@ int SfxLokHelper::createView(int nDocId)
     return -1;
 }
 
-void SfxLokHelper::setEditMode(int nMode, vcl::ITiledRenderable* pDoc)
+void KitHelper::setEditMode(int nMode, vcl::ITiledRenderable* pDoc)
 {
     DisableCallbacks dc;
     pDoc->setEditMode(nMode);
 }
 
-void SfxLokHelper::destroyView(int nId)
+void KitHelper::destroyView(int nId)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
@@ -188,12 +188,12 @@ void SfxLokHelper::destroyView(int nId)
     }
 }
 
-bool SfxLokHelper::isSettingView()
+bool KitHelper::isSettingView()
 {
     return g_bSettingView;
 }
 
-void SfxLokHelper::setView(int nId)
+void KitHelper::setView(int nId)
 {
     g_bSettingView = true;
     comphelper::ScopeGuard g([] { g_bSettingView = false; });
@@ -234,7 +234,7 @@ void SfxLokHelper::setView(int nId)
     xDesktop->setActiveFrame(xFrame);
 }
 
-SfxViewShell* SfxLokHelper::getViewOfId(int nId)
+SfxViewShell* KitHelper::getViewOfId(int nId)
 {
     SfxApplication* pApp = SfxApplication::Get();
     if (pApp == nullptr)
@@ -251,21 +251,21 @@ SfxViewShell* SfxLokHelper::getViewOfId(int nId)
     return nullptr;
 }
 
-int SfxLokHelper::getView(const SfxViewShell& rViewShell)
+int KitHelper::getView(const SfxViewShell& rViewShell)
 {
     return static_cast<sal_Int32>(rViewShell.GetViewShellId());
 }
 
-int SfxLokHelper::getCurrentView()
+int KitHelper::getCurrentView()
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
     // No valid view shell? Then no idea.
     if (!pViewShell)
         return -1;
-    return SfxLokHelper::getView(*pViewShell);
+    return KitHelper::getView(*pViewShell);
 }
 
-std::size_t SfxLokHelper::getViewsCount(int nDocId)
+std::size_t KitHelper::getViewsCount(int nDocId)
 {
     assert(nDocId != -1 && "Cannot getViewsCount for invalid DocId -1");
 
@@ -288,7 +288,7 @@ std::size_t SfxLokHelper::getViewsCount(int nDocId)
 
 // SfxApplication::SetViewFrame_Impl ensures that ViewShells
 // are kept in MRU order
-int SfxLokHelper::getViewId(int nDocId)
+int KitHelper::getViewId(int nDocId)
 {
     assert(nDocId != -1 && "Cannot getViewId for invalid DocId -1");
 
@@ -307,7 +307,7 @@ int SfxLokHelper::getViewId(int nDocId)
     return -1;
 }
 
-std::size_t SfxLokHelper::getDocsCount()
+std::size_t KitHelper::getDocsCount()
 {
     SfxApplication* pApp = SfxApplication::Get();
     if (!pApp)
@@ -325,7 +325,7 @@ std::size_t SfxLokHelper::getDocsCount()
     return aDocs.size();
 }
 
-bool SfxLokHelper::getViewIds(int nDocId, int* pArray, size_t nSize)
+bool KitHelper::getViewIds(int nDocId, int* pArray, size_t nSize)
 {
     assert(nDocId != -1 && "Cannot getViewsIds for invalid DocId -1");
 
@@ -353,7 +353,7 @@ bool SfxLokHelper::getViewIds(int nDocId, int* pArray, size_t nSize)
     return true;
 }
 
-int SfxLokHelper::getDocumentIdOfView(int nViewId)
+int KitHelper::getDocumentIdOfView(int nViewId)
 {
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
@@ -365,24 +365,24 @@ int SfxLokHelper::getDocumentIdOfView(int nViewId)
     return -1;
 }
 
-const LanguageTag & SfxLokHelper::getDefaultLanguage()
+const LanguageTag & KitHelper::getDefaultLanguage()
 {
     return g_defaultLanguageTag;
 }
 
-void SfxLokHelper::setDefaultLanguage(const OUString& rBcp47LanguageTag)
+void KitHelper::setDefaultLanguage(const OUString& rBcp47LanguageTag)
 {
     g_defaultLanguageTag = LanguageTag(rBcp47LanguageTag, true);
 }
 
-const LanguageTag& SfxLokHelper::getLoadLanguage() { return g_loadLanguageTag; }
+const LanguageTag& KitHelper::getLoadLanguage() { return g_loadLanguageTag; }
 
-void SfxLokHelper::setLoadLanguage(const OUString& rBcp47LanguageTag)
+void KitHelper::setLoadLanguage(const OUString& rBcp47LanguageTag)
 {
     g_loadLanguageTag = LanguageTag(rBcp47LanguageTag, true);
 }
 
-void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
+void KitHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
@@ -394,7 +394,7 @@ void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
     }
 }
 
-void SfxLokHelper::setViewLanguageAndLocale(int nId, const OUString& rBcp47LanguageTag)
+void KitHelper::setViewLanguageAndLocale(int nId, const OUString& rBcp47LanguageTag)
 {
     std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
 
@@ -415,43 +415,43 @@ void SfxLokHelper::setViewLanguageAndLocale(int nId, const OUString& rBcp47Langu
     }
 }
 
-void SfxLokHelper::setViewReadOnly(int nId, bool readOnly)
+void KitHelper::setViewReadOnly(int nId, bool readOnly)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        LOK_INFO("lok.readonlyview", "SfxLokHelper::setViewReadOnly: view id: " << nId << ", readOnly: " << readOnly);
+        LOK_INFO("lok.readonlyview", "KitHelper::setViewReadOnly: view id: " << nId << ", readOnly: " << readOnly);
         pViewShell->SetLokReadOnlyView(readOnly);
     }
 }
 
-void SfxLokHelper::setAllowChangeComments(int nId, bool allow)
+void KitHelper::setAllowChangeComments(int nId, bool allow)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        LOK_INFO("lok.readonlyview", "SfxLokHelper::setAllowChangeComments: view id: " << nId << ", allow: " << allow);
+        LOK_INFO("lok.readonlyview", "KitHelper::setAllowChangeComments: view id: " << nId << ", allow: " << allow);
         pViewShell->SetAllowChangeComments(allow);
     }
 }
 
-void SfxLokHelper::setAllowManageRedlines(int nId, bool allow)
+void KitHelper::setAllowManageRedlines(int nId, bool allow)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        LOK_INFO("lok.readonlyview", "SfxLokHelper::setAllowManageRedlines: view id: " << nId << ", allow: " << allow);
+        LOK_INFO("lok.readonlyview", "KitHelper::setAllowManageRedlines: view id: " << nId << ", allow: " << allow);
         pViewShell->SetAllowManageRedlines(allow);
     }
 }
 
-void SfxLokHelper::setAccessibilityState(int nId, bool nEnabled)
+void KitHelper::setAccessibilityState(int nId, bool nEnabled)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
-        LOK_INFO("lok.a11y", "SfxLokHelper::setAccessibilityState: view id: " << nId << ", nEnabled: " << nEnabled);
+        LOK_INFO("lok.a11y", "KitHelper::setAccessibilityState: view id: " << nId << ", nEnabled: " << nEnabled);
         pViewShell->SetLOKAccessibilityState(nEnabled);
     }
 }
 
-void SfxLokHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
+void KitHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
@@ -469,12 +469,12 @@ void SfxLokHelper::setViewLocale(int nId, const OUString& rBcp47LanguageTag)
     }
 }
 
-LOKDeviceFormFactor SfxLokHelper::getDeviceFormFactor()
+LOKDeviceFormFactor KitHelper::getDeviceFormFactor()
 {
     return g_deviceFormFactor;
 }
 
-void SfxLokHelper::setDeviceFormFactor(std::u16string_view rDeviceFormFactor)
+void KitHelper::setDeviceFormFactor(std::u16string_view rDeviceFormFactor)
 {
     if (rDeviceFormFactor == u"desktop")
         g_deviceFormFactor = LOKDeviceFormFactor::DESKTOP;
@@ -486,7 +486,7 @@ void SfxLokHelper::setDeviceFormFactor(std::u16string_view rDeviceFormFactor)
         g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
-void SfxLokHelper::setColorPreviewState(int nId, bool nEnabled)
+void KitHelper::setColorPreviewState(int nId, bool nEnabled)
 {
     std::vector<SfxViewShell*>& rViewArr = SfxGetpApp()->GetViewShells_Impl();
 
@@ -500,18 +500,18 @@ void SfxLokHelper::setColorPreviewState(int nId, bool nEnabled)
     }
 }
 
-void SfxLokHelper::setDefaultTimezone(bool isSet, const OUString& rTimezone)
+void KitHelper::setDefaultTimezone(bool isSet, const OUString& rTimezone)
 {
     g_isDefaultTimezoneSet = isSet;
     g_DefaultTimezone = rTimezone;
 }
 
-std::pair<bool, OUString> SfxLokHelper::getDefaultTimezone()
+std::pair<bool, OUString> KitHelper::getDefaultTimezone()
 {
     return { g_isDefaultTimezoneSet, g_DefaultTimezone };
 }
 
-void SfxLokHelper::setViewTimezone(int nId, bool isSet, const OUString& rTimezone)
+void KitHelper::setViewTimezone(int nId, bool isSet, const OUString& rTimezone)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
@@ -519,7 +519,7 @@ void SfxLokHelper::setViewTimezone(int nId, bool isSet, const OUString& rTimezon
     }
 }
 
-std::pair<bool, OUString> SfxLokHelper::getViewTimezone(int nId)
+std::pair<bool, OUString> KitHelper::getViewTimezone(int nId)
 {
     if (SfxViewShell* pViewShell = getViewOfId(nId))
     {
@@ -553,7 +553,7 @@ static OString lcl_sanitizeJSONAsValue(const OString &rStr)
 static OString lcl_generateJSON(const SfxViewShell& rView, const boost::property_tree::ptree& rTree)
 {
     boost::property_tree::ptree aMessageProps = rTree;
-    aMessageProps.put("viewId", SfxLokHelper::getView(rView));
+    aMessageProps.put("viewId", KitHelper::getView(rView));
     aMessageProps.put("part", rView.getPart());
     aMessageProps.put("mode", rView.getEditMode());
     std::stringstream aStream;
@@ -573,31 +573,31 @@ static inline OString lcl_generateJSON(const SfxViewShell& rView, int nViewId, s
 static inline OString lcl_generateJSON(const SfxViewShell& rView, std::string_view rKey,
                                        const OString& rPayload)
 {
-    return lcl_generateJSON(rView, SfxLokHelper::getView(rView), rKey, rPayload);
+    return lcl_generateJSON(rView, KitHelper::getView(rView), rKey, rPayload);
 }
 
-void SfxLokHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
+void KitHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
                                    int nType, std::string_view rKey, const OString& rPayload)
 {
     if (DisableCallbacks::disabled())
         return;
 
     const OString aPayload = lcl_generateJSON(rThisView, rKey, rPayload);
-    const int viewId = SfxLokHelper::getView(rThisView);
+    const int viewId = KitHelper::getView(rThisView);
     pOtherView->viewCallbackWithViewId(nType, aPayload, viewId);
 }
 
-void SfxLokHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
+void KitHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
                                    int nType, const boost::property_tree::ptree& rTree)
 {
     if (DisableCallbacks::disabled() || !pOtherView)
         return;
 
-    const int viewId = SfxLokHelper::getView(rThisView);
+    const int viewId = KitHelper::getView(rThisView);
     pOtherView->viewCallbackWithViewId(nType, lcl_generateJSON(rThisView, rTree), viewId);
 }
 
-void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
+void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
                                     const OString& rPayload)
 {
     assert(pThisView != nullptr && "pThisView must be valid");
@@ -618,7 +618,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, st
             if (aPayload.isEmpty())
             {
                 aPayload = lcl_generateJSON(*pThisView, rKey, rPayload);
-                viewId = SfxLokHelper::getView(*pThisView);
+                viewId = KitHelper::getView(*pThisView);
             }
 
             pViewShell->viewCallbackWithViewId(nType, aPayload, viewId);
@@ -628,7 +628,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, st
     }
 }
 
-void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
+void KitHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
                                     const boost::property_tree::ptree& rTree)
 {
     assert(pThisView != nullptr && "pThisView must be valid");
@@ -649,7 +649,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
             if (aPayload.isEmpty())
             {
                 aPayload = lcl_generateJSON(*pThisView, rTree);
-                viewId = SfxLokHelper::getView(*pThisView);
+                viewId = KitHelper::getView(*pThisView);
             }
 
             pViewShell->viewCallbackWithViewId(nType, aPayload, viewId);
@@ -659,7 +659,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
     }
 }
 
-OString SfxLokHelper::makePayloadJSON(const SfxViewShell* pThisView, int nViewId, std::string_view rKey, const OString& rPayload)
+OString KitHelper::makePayloadJSON(const SfxViewShell* pThisView, int nViewId, std::string_view rKey, const OString& rPayload)
 {
     return lcl_generateJSON(*pThisView, nViewId, rKey, rPayload);
 }
@@ -683,7 +683,7 @@ namespace {
     }
 }
 
-void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem)
+void KitHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem)
 {
     if (!pShell || !pItem || IsInvalidItem(pItem) || DisableCallbacks::disabled())
         return;
@@ -702,12 +702,12 @@ void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* 
     }
 }
 
-void SfxLokHelper::notifyViewRenderState(const SfxViewShell* pShell, vcl::ITiledRenderable* pDoc)
+void KitHelper::notifyViewRenderState(const SfxViewShell* pShell, vcl::ITiledRenderable* pDoc)
 {
     pShell->viewCallback(LOK_CALLBACK_VIEW_RENDER_STATE, pDoc->getViewRenderState());
 }
 
-void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
+void KitHelper::notifyWindow(const SfxViewShell* pThisView,
                                 vcl::LOKWindowId nLOKWindowId,
                                 std::u16string_view rAction,
                                 const std::vector<vcl::LOKPayloadItem>& rPayload)
@@ -736,9 +736,9 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     pThisView->viewCallback(LOK_CALLBACK_WINDOW, s);
 }
 
-void SfxLokHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect, bool bControlEvent, int windowID)
+void KitHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect, bool bControlEvent, int windowID)
 {
-    int nViewId = SfxLokHelper::getView(*pThisView);
+    int nViewId = KitHelper::getView(*pThisView);
     OString sPayload = OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) + "\", \"rectangle\": \"" + pRect->toString();
     if (bControlEvent)
     {
@@ -748,14 +748,14 @@ void SfxLokHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools
     pThisView->viewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload);
 }
 
-void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect)
+void KitHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect)
 {
     // -1 means all parts
     const int nPart = comphelper::COKit::isPartInInvalidation() ? pThisView->getPart() : INT_MIN;
-    SfxLokHelper::notifyInvalidation(pThisView, nPart, pRect);
+    KitHelper::notifyInvalidation(pThisView, nPart, pRect);
 }
 
-void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const int nInPart, tools::Rectangle const* pRect)
+void KitHelper::notifyInvalidation(SfxViewShell const* pThisView, const int nInPart, tools::Rectangle const* pRect)
 {
     if (DisableCallbacks::disabled())
         return;
@@ -766,7 +766,7 @@ void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const int n
     pThisView->viewInvalidateTilesCallback(pRect, nPart, nMode);
 }
 
-void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
+void KitHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, const OString& rPayload, vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
 {
     if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
         return;
@@ -783,7 +783,7 @@ void SfxLokHelper::notifyDocumentSizeChanged(SfxViewShell const* pThisView, cons
     pThisView->viewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, rPayload);
 }
 
-void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
+void KitHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll)
 {
     if (DisableCallbacks::disabled())
         return;
@@ -798,14 +798,14 @@ void SfxLokHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc
         // or not?
         if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell-> GetDocId())
         {
-            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, bInvalidateAll);
+            KitHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, bInvalidateAll);
             bInvalidateAll = false; // we direct invalidations to all views anyway.
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
 
-void SfxLokHelper::notifyCurrentPageSizeChangedAllViews(vcl::ITiledRenderable *pDoc)
+void KitHelper::notifyCurrentPageSizeChangedAllViews(vcl::ITiledRenderable *pDoc)
 {
     if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
         return;
@@ -823,7 +823,7 @@ void SfxLokHelper::notifyCurrentPageSizeChangedAllViews(vcl::ITiledRenderable *p
     }
 }
 
-void SfxLokHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart)
+void KitHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart)
 {
     if (DisableCallbacks::disabled())
         return;
@@ -833,12 +833,12 @@ void SfxLokHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, in
     {
         if (// FIXME should really filter on pViewShell->GetDocId() too
             pViewShell->getPart() == nPart)
-            SfxLokHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, false);
+            KitHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, false);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }
 
-OString SfxLokHelper::makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
+OString KitHelper::makeVisCursorInvalidation(int nViewId, const OString& rRectangle,
     bool bMispelledWord, const OString& rHyperlink)
 {
     if (comphelper::COKit::isViewIdForVisCursorInvalidation())
@@ -855,7 +855,7 @@ OString SfxLokHelper::makeVisCursorInvalidation(int nViewId, const OString& rRec
     }
 }
 
-void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
+void KitHelper::notifyAllViews(int nType, const OString& rPayload)
 {
     if (DisableCallbacks::disabled())
         return;
@@ -873,7 +873,7 @@ void SfxLokHelper::notifyAllViews(int nType, const OString& rPayload)
     }
 }
 
-void SfxLokHelper::notifyContextChange(const css::ui::ContextChangeEventObject& rEvent)
+void KitHelper::notifyContextChange(const css::ui::ContextChangeEventObject& rEvent)
 {
     if (DisableCallbacks::disabled())
         return;
@@ -896,7 +896,7 @@ void SfxLokHelper::notifyContextChange(const css::ui::ContextChangeEventObject& 
     pViewShell->viewCallback(LOK_CALLBACK_CONTEXT_CHANGED, aBuffer.toUtf8());
 }
 
-void SfxLokHelper::notifyLog(const std::ostringstream& stream)
+void KitHelper::notifyLog(const std::ostringstream& stream)
 {
     if (DisableCallbacks::disabled())
        return;
@@ -949,13 +949,13 @@ std::string extractCertificateWithOffset(const std::string& certificate, size_t&
 }
 }
 
-std::string SfxLokHelper::extractCertificate(const std::string & certificate)
+std::string KitHelper::extractCertificate(const std::string & certificate)
 {
     size_t nOffset = 0;
     return extractCertificateWithOffset(certificate, nOffset);
 }
 
-std::vector<std::string> SfxLokHelper::extractCertificates(const std::string& rCerts)
+std::vector<std::string> KitHelper::extractCertificates(const std::string& rCerts)
 {
     std::vector<std::string> aRet;
     size_t nOffset = 0;
@@ -996,7 +996,7 @@ std::string extractKey(const std::string & privateKey)
 }
 }
 
-css::uno::Reference<css::security::XCertificate> SfxLokHelper::getSigningCertificate(const std::string& rCert, const std::string& rKey)
+css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificate(const std::string& rCert, const std::string& rKey)
 {
     const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
@@ -1045,7 +1045,7 @@ css::uno::Reference<css::security::XCertificate> SfxLokHelper::getSigningCertifi
     return xCertificate;
 }
 
-uno::Reference<security::XCertificate> SfxLokHelper::addCertificate(
+uno::Reference<security::XCertificate> KitHelper::addCertificate(
     const css::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator,
     const css::uno::Sequence<sal_Int8>& rCert)
 {
@@ -1053,7 +1053,7 @@ uno::Reference<security::XCertificate> SfxLokHelper::addCertificate(
     return xCertificateCreator->addDERCertificateToTheDatabase(rCert, u"TCu,Cu,Tu"_ustr);
 }
 
-void SfxLokHelper::addCertificates(const std::vector<std::string>& rCerts)
+void KitHelper::addCertificates(const std::vector<std::string>& rCerts)
 {
     const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
@@ -1088,14 +1088,14 @@ void SfxLokHelper::addCertificates(const std::vector<std::string>& rCerts)
     pObjectShell->RecheckSignature(false);
 }
 
-bool SfxLokHelper::supportsCommand(std::u16string_view rCommand)
+bool KitHelper::supportsCommand(std::u16string_view rCommand)
 {
     static const std::initializer_list<std::u16string_view> vSupport = { u"Signature" };
 
     return std::find(vSupport.begin(), vSupport.end(), rCommand) != vSupport.end();
 }
 
-std::map<OUString, OUString> SfxLokHelper::parseCommandParameters(std::u16string_view rCommand)
+std::map<OUString, OUString> KitHelper::parseCommandParameters(std::u16string_view rCommand)
 {
     std::map<OUString, OUString> aMap;
 
@@ -1122,7 +1122,7 @@ std::map<OUString, OUString> SfxLokHelper::parseCommandParameters(std::u16string
     return aMap;
 }
 
-void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+void KitHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
     static constexpr OString aSignature(".uno:Signature"_ostr);
     if (!o3tl::starts_with(rCommand, aSignature))
@@ -1138,7 +1138,7 @@ void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_
 
     svl::crypto::SigningContext aSigningContext;
     std::map<OUString, OUString> aMap
-        = SfxLokHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
+        = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
     auto it = aMap.find("signatureTime");
     if (it != aMap.end())
     {
@@ -1158,7 +1158,7 @@ void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_
     rJsonWriter.put("digest", aBuffer.makeStringAndClear());
 }
 
-void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)
+void KitHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)
 {
     if (DisableCallbacks::disabled() || !pThisView)
         return;
@@ -1166,12 +1166,12 @@ void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)
     pThisView->viewUpdatedCallback(nType);
 }
 
-void SfxLokHelper::notifyUpdatePerViewId(SfxViewShell const& rThisView, int nType)
+void KitHelper::notifyUpdatePerViewId(SfxViewShell const& rThisView, int nType)
 {
     notifyUpdatePerViewId(rThisView, &rThisView, rThisView, nType);
 }
 
-void SfxLokHelper::notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxViewShell const* pViewShell,
+void KitHelper::notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxViewShell const* pViewShell,
     SfxViewShell const& rSourceShell, int nType)
 {
     if (DisableCallbacks::disabled())
@@ -1179,17 +1179,17 @@ void SfxLokHelper::notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxVi
 
     // This getCurrentView() is dubious
     SAL_WARN_IF(!pViewShell, "lok", "no explicit viewshell set");
-    int viewId = pViewShell ? SfxLokHelper::getView(*pViewShell) : SfxLokHelper::getCurrentView();
-    int sourceViewId = SfxLokHelper::getView(rSourceShell);
+    int viewId = pViewShell ? KitHelper::getView(*pViewShell) : KitHelper::getCurrentView();
+    int sourceViewId = KitHelper::getView(rSourceShell);
     rTargetShell.viewUpdatedCallbackPerViewId(nType, viewId, sourceViewId);
 }
 
-void SfxLokHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView, int nType)
+void KitHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView, int nType)
 {
     if (DisableCallbacks::disabled() || !pThisView)
         return;
 
-    int viewId = SfxLokHelper::getView(*pThisView);
+    int viewId = KitHelper::getView(*pThisView);
     const ViewShellDocId nCurrentDocId = pThisView->GetDocId();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
@@ -1201,17 +1201,17 @@ void SfxLokHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView
     }
 }
 
-void SfxLokHelper::registerViewCallbacks()
+void KitHelper::registerViewCallbacks()
 {
     comphelper::COKit::setViewSetter([](int nView) {
-        SfxLokHelper::setView(nView);
+        KitHelper::setView(nView);
     });
     comphelper::COKit::setViewGetter([]() -> int {
-        return SfxLokHelper::getCurrentView();
+        return KitHelper::getCurrentView();
     });
 }
 
-void SfxLokHelper::dispatchUnoCommand(const boost::property_tree::ptree& tree)
+void KitHelper::dispatchUnoCommand(const boost::property_tree::ptree& tree)
 {
     auto command = OStringToOUString(tree.get_child("name").get_value<std::string>(),
                                      RTL_TEXTENCODING_UTF8);
@@ -1252,11 +1252,11 @@ namespace
         if (pLOKEv->mpWindow->isDisposed())
             return;
 
-        int nView = SfxLokHelper::getCurrentView();
+        int nView = KitHelper::getCurrentView();
         if (nView != pLOKEv->mnView)
         {
             SAL_INFO("sfx.view", "LOK - view mismatch " << nView << " vs. " << pLOKEv->mnView);
-            SfxLokHelper::setView(pLOKEv->mnView);
+            KitHelper::setView(pLOKEv->mnView);
         }
 
         if (!pLOKEv->mpWindow->HasChildPathFocus(true))
@@ -1342,7 +1342,7 @@ namespace
             return;
         }
 
-        pEvent->mnView = SfxLokHelper::getCurrentView();
+        pEvent->mnView = KitHelper::getCurrentView();
         if (vcl::lok::isUnipoll())
         {
             if (!Application::IsMainThread())
@@ -1354,7 +1354,7 @@ namespace
     }
 }
 
-void SfxLokHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
+void KitHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
                                      int nType, int nCharCode, int nKeyCode, int nRepeat)
 {
     LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
@@ -1374,9 +1374,9 @@ void SfxLokHelper::postKeyEventAsync(const VclPtr<vcl::Window> &xWindow,
     postEventAsync(pLOKEv);
 }
 
-void SfxLokHelper::setBlockedCommandList(int nViewId, const char* blockedCommandList)
+void KitHelper::setBlockedCommandList(int nViewId, const char* blockedCommandList)
 {
-    SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nViewId);
+    SfxViewShell* pViewShell = KitHelper::getViewOfId(nViewId);
 
     if(pViewShell)
     {
@@ -1384,7 +1384,7 @@ void SfxLokHelper::setBlockedCommandList(int nViewId, const char* blockedCommand
     }
 }
 
-void SfxLokHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
+void KitHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
                                          int nType, const OUString &rText)
 {
     LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
@@ -1405,7 +1405,7 @@ void SfxLokHelper::postExtTextEventAsync(const VclPtr<vcl::Window> &xWindow,
     postEventAsync(pLOKEv);
 }
 
-void SfxLokHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouseEventData const & rLokMouseEventData)
+void KitHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMouseEventData const & rLokMouseEventData)
 {
     LOKAsyncEventData* pLOKEv = new LOKAsyncEventData;
     switch (rLokMouseEventData.mnType)
@@ -1437,7 +1437,7 @@ void SfxLokHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, LokMo
     postEventAsync(pLOKEv);
 }
 
-void SfxLokHelper::dumpState(rtl::OStringBuffer &rState)
+void KitHelper::dumpState(rtl::OStringBuffer &rState)
 {
     SfxViewShell* pShell = SfxViewShell::Current();
     sal_Int32 nDocId = pShell ? static_cast<sal_Int32>(pShell->GetDocId().get()) : -1;
@@ -1462,7 +1462,7 @@ void SfxLokHelper::dumpState(rtl::OStringBuffer &rState)
     }
 }
 
-bool SfxLokHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int nType, int nX,
+bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int nType, int nX,
                                                      int nY, int nCount, int nButtons,
                                                      int nModifier, double fScaleX, double fScaleY,
                                                      bool bNegativeX)
@@ -1492,7 +1492,7 @@ bool SfxLokHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, i
     return false;
 }
 
-VclPtr<vcl::Window> SfxLokHelper::getInPlaceDocWindow(SfxViewShell* pViewShell)
+VclPtr<vcl::Window> KitHelper::getInPlaceDocWindow(SfxViewShell* pViewShell)
 {
     if (VclPtr<vcl::Window> pWindow = LokChartHelper(pViewShell).GetWindow())
         return pWindow;
@@ -1501,7 +1501,7 @@ VclPtr<vcl::Window> SfxLokHelper::getInPlaceDocWindow(SfxViewShell* pViewShell)
     return {};
 }
 
-void SfxLokHelper::sendNetworkAccessError(std::string_view rAction)
+void KitHelper::sendNetworkAccessError(std::string_view rAction)
 {
     tools::JsonWriter aWriter;
     aWriter.put("code", static_cast<sal_uInt32>(

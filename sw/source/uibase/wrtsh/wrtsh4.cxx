@@ -268,7 +268,7 @@ std::optional<OString> SwWrtShell::getLOKPayload(int nType, int nViewId) const
             if (nType == LOK_CALLBACK_TEXT_SELECTION)
                 return sRect;
             else // LOK_CALLBACK_TEXT_VIEW_SELECTION
-                return SfxLokHelper::makePayloadJSON(GetSfxViewShell(), nViewId, "selection", sRect);
+                return KitHelper::makePayloadJSON(GetSfxViewShell(), nViewId, "selection", sRect);
         }
         case LOK_CALLBACK_TEXT_SELECTION_START:
         case LOK_CALLBACK_TEXT_SELECTION_END:

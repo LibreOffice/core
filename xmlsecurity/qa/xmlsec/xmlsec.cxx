@@ -84,8 +84,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
     OUString aCaPath = createFileURL(u"ca.pem");
     std::string aCa;
     aCa = ReadToString(aCaPath);
-    std::vector<std::string> aCerts = SfxLokHelper::extractCertificates(aCa);
-    SfxLokHelper::addCertificates(aCerts);
+    std::vector<std::string> aCerts = KitHelper::extractCertificates(aCa);
+    KitHelper::addCertificates(aCerts);
     OUString aCertPath = createFileURL(u"cert.pem");
     std::string aCert;
     aCert = ReadToString(aCertPath);
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
     std::string aKey;
     aKey = ReadToString(aKeyPath);
     uno::Reference<security::XCertificate> xCertificate
-        = SfxLokHelper::getSigningCertificate(aCert, aKey);
+        = KitHelper::getSigningCertificate(aCert, aKey);
     CPPUNIT_ASSERT(xCertificate.is());
 
     // When getting the certificate flags and signing:

@@ -1184,7 +1184,7 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
 {
     using namespace std::string_view_literals;
     std::map<OUString, OUString> aMap
-        = SfxLokHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
+        = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
 
     if (o3tl::starts_with(rCommand, ".uno:TextFormFields"sv))
     {

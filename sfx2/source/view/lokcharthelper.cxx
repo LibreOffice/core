@@ -279,7 +279,7 @@ bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,
 
             LokMouseEventData aMouseEventData(nType, aPos, nCount, MouseEventModifiers::SIMPLECLICK,
                                               nButtons, nModifier);
-            SfxLokHelper::postMouseEventAsync(pChartWindow, aMouseEventData);
+            KitHelper::postMouseEventAsync(pChartWindow, aMouseEventData);
 
             return true;
         }

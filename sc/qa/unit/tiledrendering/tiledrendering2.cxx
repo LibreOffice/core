@@ -29,11 +29,11 @@ using namespace com::sun::star;
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
 {
     ScModelObj* pModelObj = createDoc("chart.ods");
-    int nView1 = SfxLokHelper::getCurrentView();
+    int nView1 = KitHelper::getCurrentView();
     ScTestViewCallback aView1;
     SfxViewShell* pView1 = SfxViewShell::Current();
     pView1->SetLOKLocale(u"en-US"_ustr);
-    SfxLokHelper::createView();
+    KitHelper::createView();
     ScTestViewCallback aView2;
     SfxViewShell* pView2 = SfxViewShell::Current();
     pView2->SetLOKLocale(u"de-DE"_ustr);
@@ -45,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
                               /*buttons=*/1, /*modifier=*/0);
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/1, /*y=*/1, /*count=*/2,
                               /*buttons=*/1, /*modifier=*/0);
-    SfxLokHelper::setView(nView1);
+    KitHelper::setView(nView1);
     Scheduler::ProcessEventsToIdle();
 
     auto it = aView2.m_aStateChanges.find(".uno:Sidebar");

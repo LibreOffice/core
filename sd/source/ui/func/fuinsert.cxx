@@ -137,7 +137,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         {
             INetURLObject aURL(aFileName);
             if (INetProtocol::File != aURL.GetProtocol() && HostFilter::isForbidden(aURL.GetHost()))
-                SfxLokHelper::sendNetworkAccessError("insert");
+                KitHelper::sendNetworkAccessError("insert");
         }
 
         nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );

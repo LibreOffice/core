@@ -435,9 +435,9 @@ public:
     virtual void viewAddPendingInvalidateTiles() = 0;
     virtual ViewShellId GetViewShellId() const = 0;
     virtual ViewShellDocId GetDocId() const = 0;
-    /// Wrapper around SfxLokHelper::notifyOtherViews().
+    /// Wrapper around KitHelper::notifyOtherViews().
     virtual void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) = 0;
-    /// Wrapper around SfxLokHelper::notifyOtherView().
+    /// Wrapper around KitHelper::notifyOtherView().
     virtual void NotifyOtherView(OutlinerViewShell* pOtherShell, int nType, const OString& rKey, const OString& rPayload) = 0;
     virtual vcl::Window* GetEditWindowForActiveOLEObj() const = 0;
 

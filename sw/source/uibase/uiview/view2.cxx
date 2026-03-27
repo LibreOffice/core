@@ -325,7 +325,7 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
     {
         INetURLObject aURL(rPath);
         if (INetProtocol::File != aURL.GetProtocol() && HostFilter::isForbidden(aURL.GetHost()))
-            SfxLokHelper::sendNetworkAccessError("insert");
+            KitHelper::sendNetworkAccessError("insert");
     }
 
     auto xHandler(GetDocShell()->GetMedium()->GetInteractionHandler());

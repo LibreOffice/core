@@ -1509,7 +1509,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     if (handler == rUnoCommandList.end())
     {
         // Try to send JSON state version
-        SfxLokHelper::sendUnoStatus(pViewShell, pState);
+        KitHelper::sendUnoStatus(pViewShell, pState);
 
         return;
     }

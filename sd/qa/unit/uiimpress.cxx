@@ -272,7 +272,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUnoCommand)
 
     createSdImpressDoc();
 
-    // Let comphelper::dispatchCommand (in SfxLokHelper::dispatchUnoCommand) find the frame
+    // Let comphelper::dispatchCommand (in KitHelper::dispatchUnoCommand) find the frame
     auto xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
     auto pImpressDocument = static_cast<SdXImpressDocument*>(mxComponent.get());
     auto pFrame = pImpressDocument->GetDocShell()->GetFrame();

@@ -1694,7 +1694,7 @@ void DesktopLOKTest::testNotificationCompression()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     std::vector<std::tuple<int, std::string>> notifs;
     std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-    handler->setViewId(SfxLokHelper::getCurrentView());
+    handler->setViewId(KitHelper::getCurrentView());
 
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""_ostr); // 0
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"_ostr); // Superseded.
@@ -1790,7 +1790,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
@@ -1811,7 +1811,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 1, 0"_ostr); // Different part
@@ -1835,7 +1835,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr); // 0
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 1, 0"_ostr); // 1: Different part
@@ -1862,7 +1862,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 200, 200, 0, 0"_ostr); // 0
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 100, 100, 1, 0"_ostr); // 1: Different part
@@ -1898,7 +1898,7 @@ void DesktopLOKTest::testTileInvalidationCompression()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0, 0"_ostr);
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "EMPTY, 0, 0"_ostr);
@@ -1923,7 +1923,7 @@ void DesktopLOKTest::testPartInInvalidation()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10"_ostr);
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10"_ostr);
@@ -1939,7 +1939,7 @@ void DesktopLOKTest::testPartInInvalidation()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10"_ostr);
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "40, 10, 20, 10"_ostr);
@@ -1959,7 +1959,7 @@ void DesktopLOKTest::testPartInInvalidation()
 
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0, 0"_ostr);
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 0, 0"_ostr);
@@ -1978,7 +1978,7 @@ void DesktopLOKTest::testPartInInvalidation()
 
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0, 0"_ostr);
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 1, 0"_ostr);
@@ -2007,7 +2007,7 @@ void DesktopLOKTest::testBinaryCallback()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, OString(rect1String));
 
@@ -2020,7 +2020,7 @@ void DesktopLOKTest::testBinaryCallback()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->tilePainted(/*nPart=*/INT_MIN, /*nMode=*/0, rect1);
         handler->viewInvalidateTilesCallback(&rect1, INT_MIN, 0);
@@ -2035,7 +2035,7 @@ void DesktopLOKTest::testBinaryCallback()
     {
         std::vector<std::tuple<int, std::string>> notifs;
         std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackBinaryCallbackTest, &notifs));
-        handler->setViewId(SfxLokHelper::getCurrentView());
+        handler->setViewId(KitHelper::getCurrentView());
 
         handler->tilePainted(/*nPart=*/INT_MIN, /*nMode=*/0, rect1);
         handler->viewInvalidateTilesCallback(nullptr, INT_MIN, 0);
@@ -2301,7 +2301,7 @@ public:
           m_bZeroCursor(false),
           m_stateBold(false)
     {
-        mnView = SfxLokHelper::getCurrentView();
+        mnView = KitHelper::getCurrentView();
         mpDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, this);
     }
 
@@ -2965,8 +2965,8 @@ void DesktopLOKTest::testCommentsInReadOnlyMode()
 
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{\".uno:Author\":{\"type\":\"string\",\"value\":\"LOK User1\"}}");
 
-    SfxLokHelper::setViewReadOnly(viewId, true);
-    SfxLokHelper::setAllowChangeComments(viewId, true);
+    KitHelper::setViewReadOnly(viewId, true);
+    KitHelper::setAllowChangeComments(viewId, true);
 
     Scheduler::ProcessEventsToIdle();
 
@@ -3038,7 +3038,7 @@ void DesktopLOKTest::testRedlinesInReadOnlyMode()
     CPPUNIT_ASSERT_EQUAL(size_t(3), getRedlineInfo(pDocument).size());
 
     // Activate read-only mode
-    SfxLokHelper::setViewReadOnly(viewId, true);
+    KitHelper::setViewReadOnly(viewId, true);
 
     // Go to the 1st tracked change: "Delete “Donec”"
     pDocument->pClass->postUnoCommand(pDocument, ".uno:NextTrackedChange", {}, false);
@@ -3058,7 +3058,7 @@ void DesktopLOKTest::testRedlinesInReadOnlyMode()
     CPPUNIT_ASSERT_EQUAL(""s, aCallback.m_aLastRedlineInfo.dateTime);
 
     // Activate the AllowManageRedlines mode
-    SfxLokHelper::setAllowManageRedlines(viewId, true);
+    KitHelper::setAllowManageRedlines(viewId, true);
 
     // Try to reject current redline
     pDocument->pClass->postUnoCommand(pDocument, ".uno:RejectTrackedChange", {}, false);
@@ -3114,7 +3114,7 @@ void DesktopLOKTest::testRedlinesInReadOnlyMode()
     CPPUNIT_ASSERT(aCallback.m_aCommentCallbackResult.empty());
 
     // Check that the same command would succeed in AllowChangeComments mode
-    SfxLokHelper::setAllowChangeComments(viewId, true);
+    KitHelper::setAllowChangeComments(viewId, true);
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation",
                                       R"({"Text":{"type":"string","value":"Comment"}})",
                                       false);
@@ -3169,7 +3169,7 @@ void DesktopLOKTest::testCalcValidityDropdownInReadonlyMode()
     Scheduler::ProcessEventsToIdle();
 
     int viewId = pDocument->m_pDocumentClass->getView(pDocument);
-    SfxLokHelper::setViewReadOnly(viewId, true);
+    KitHelper::setViewReadOnly(viewId, true);
     Scheduler::ProcessEventsToIdle();
 
     // Select row 1 from column 1.
@@ -3822,10 +3822,10 @@ void DesktopLOKTest::testMultiDocuments()
         const int nDocId1 = pDocument1->mnDocumentId;
 
         const int nDoc1View0 = pDocument1->m_pDocumentClass->getView(pDocument1);
-        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View0));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View0));
         const int nDoc1View1 = pDocument1->m_pDocumentClass->createView(pDocument1);
         CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
-        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View1));
         CPPUNIT_ASSERT_EQUAL(2, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
 
         // Validate the views of document 1.
@@ -3836,13 +3836,13 @@ void DesktopLOKTest::testMultiDocuments()
         CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[1]);
 
         CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
-        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View1));
         pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View0);
         CPPUNIT_ASSERT_EQUAL(nDoc1View0, pDocument1->m_pDocumentClass->getView(pDocument1));
-        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View0));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View0));
         pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View1);
         CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
-        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View1));
         CPPUNIT_ASSERT_EQUAL(2, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
 
         // Load another document.
@@ -3852,10 +3852,10 @@ void DesktopLOKTest::testMultiDocuments()
         const int nDocId2 = pDocument2->mnDocumentId;
 
         const int nDoc2View0 = pDocument2->m_pDocumentClass->getView(pDocument2);
-        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View0));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View0));
         const int nDoc2View1 = pDocument2->m_pDocumentClass->createView(pDocument2);
         CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
-        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View1));
         CPPUNIT_ASSERT_EQUAL(2, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
 
         // Validate the views of document 2.
@@ -3866,13 +3866,13 @@ void DesktopLOKTest::testMultiDocuments()
         CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[1]);
 
         CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
-        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View1));
         pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View0);
         CPPUNIT_ASSERT_EQUAL(nDoc2View0, pDocument2->m_pDocumentClass->getView(pDocument2));
-        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View0));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View0));
         pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View1);
         CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
-        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View1));
         CPPUNIT_ASSERT_EQUAL(2, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
 
         // The views of document1 should be unchanged.
@@ -3881,10 +3881,10 @@ void DesktopLOKTest::testMultiDocuments()
         CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[0]);
         CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[1]);
         // Switch views in the first doc.
-        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View0));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View0));
         pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View0);
         CPPUNIT_ASSERT_EQUAL(nDoc1View0, pDocument1->m_pDocumentClass->getView(pDocument1));
-        CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
+        CPPUNIT_ASSERT_EQUAL(nDocId1, KitHelper::getDocumentIdOfView(nDoc1View1));
         pDocument1->m_pDocumentClass->destroyView(pDocument1, nDoc1View1);
         CPPUNIT_ASSERT_EQUAL(1, pDocument1->m_pDocumentClass->getViewsCount(pDocument1));
 
@@ -3894,10 +3894,10 @@ void DesktopLOKTest::testMultiDocuments()
         CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[0]);
         CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[1]);
         // Switch views in the second doc.
-        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View0));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View0));
         pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View0);
         CPPUNIT_ASSERT_EQUAL(nDoc2View0, pDocument2->m_pDocumentClass->getView(pDocument2));
-        CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
+        CPPUNIT_ASSERT_EQUAL(nDocId2, KitHelper::getDocumentIdOfView(nDoc2View1));
         pDocument2->m_pDocumentClass->destroyView(pDocument2, nDoc2View1);
         CPPUNIT_ASSERT_EQUAL(1, pDocument2->m_pDocumentClass->getViewsCount(pDocument2));
 

@@ -305,7 +305,7 @@ void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
 
         aResultRectangle = aRectangle;
     }
-    SfxLokHelper::notifyInvalidation(pCurrentShell, &aResultRectangle);
+    KitHelper::notifyInvalidation(pCurrentShell, &aResultRectangle);
 }
 
 FactoryFunction ChartWindow::GetUITestFactory() const

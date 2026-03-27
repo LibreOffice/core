@@ -739,14 +739,14 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 if (!aSignCertificateCaPem.isEmpty())
                 {
                     std::string aSignatureCa(aSignCertificateCaPem.toUtf8());
-                    std::vector<std::string> aCerts = SfxLokHelper::extractCertificates(aSignatureCa);
-                    SfxLokHelper::addCertificates(aCerts);
+                    std::vector<std::string> aCerts = KitHelper::extractCertificates(aSignatureCa);
+                    KitHelper::addCertificates(aCerts);
                 }
                 if (!aSignCertificateCertPem.isEmpty() && !aSignCertificateKeyPem.isEmpty())
                 {
                     std::string aSignatureCert(aSignCertificateCertPem.toUtf8());
                     std::string aSignatureKey(aSignCertificateKeyPem.toUtf8());
-                    aSignCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+                    aSignCertificate = KitHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
                 }
             }
 

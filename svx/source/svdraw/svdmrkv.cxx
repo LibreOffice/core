@@ -325,7 +325,7 @@ void SdrMarkView::modelHasChangedLOKit()
     }
 
     if (SfxViewShell* pViewShell = GetSfxViewShell())
-        SfxLokHelper::notifyInvalidation(pViewShell, pResultSelection);
+        KitHelper::notifyInvalidation(pViewShell, pResultSelection);
 }
 
 bool SdrMarkView::IsAction() const
@@ -1347,7 +1347,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             // Another shell wants to know about our existing
             // selection.
             if (pViewShell != pOtherShell)
-                SfxLokHelper::notifyOtherView(*pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
+                KitHelper::notifyOtherView(*pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
         else if (pViewShell)
         {
@@ -1355,7 +1355,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             // other views want to know about it.
             pViewShell->viewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText);
 
-            SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
+            KitHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
         }
     }
 }

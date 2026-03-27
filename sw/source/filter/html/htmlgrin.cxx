@@ -514,7 +514,7 @@ IMAGE_SETEVENT:
     else if (m_sBaseURL.isEmpty() || !aGraphicData.isEmpty())
     {
         if (comphelper::COKit::isActive() && HostFilter::isForbidden(aGraphicURL.GetHost()))
-            SfxLokHelper::sendNetworkAccessError("paste");
+            KitHelper::sendNetworkAccessError("paste");
 
         // sBaseURL is empty if the source is clipboard
         // aGraphicData is non-empty for <object data="..."> -> not a linked graphic.

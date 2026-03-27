@@ -19,12 +19,12 @@
 
 void test::EventPosterHelper::postKeyEventAsync(int nType, int nCharCode, int nKeyCode) const
 {
-    SfxLokHelper::postKeyEventAsync(mxWindow, nType, nCharCode, nKeyCode);
+    KitHelper::postKeyEventAsync(mxWindow, nType, nCharCode, nKeyCode);
 }
 
 void test::EventPosterHelper::postExtTextEventAsync(int nType, const OUString& rText) const
 {
-    SfxLokHelper::postExtTextEventAsync(mxWindow, nType, rText);
+    KitHelper::postExtTextEventAsync(mxWindow, nType, rText);
 }
 
 void test::AccessibleEventPosterHelper::setWindow(

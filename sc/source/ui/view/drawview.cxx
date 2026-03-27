@@ -560,7 +560,7 @@ bool ScDrawView::SdrBeginTextEdit(
                 aRectangle = o3tl::convert(aRectangle, o3tl::Length::mm100, o3tl::Length::twip);
             }
             OString sRectangle = aRectangle.toString();
-            SfxLokHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
+            KitHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
         }
     }
 
@@ -583,7 +583,7 @@ SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
     ScTabViewShell* pViewSh = rViewData.GetViewShell();
 
     if (comphelper::COKit::isActive())
-        SfxLokHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
+        KitHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", "EMPTY"_ostr);
 
     SfxFrame& rFrame = pViewSh->GetViewFrame().GetFrame();
     uno::Reference< frame::XController > xController = rFrame.GetController();
