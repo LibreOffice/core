@@ -21,7 +21,7 @@
 using namespace css::uno;
 
 /// A clipboard implementation for COKit.
-class LOKClipboard final
+class KitClipboard final
     : public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                            css::lang::XServiceInfo>
 {
@@ -31,7 +31,7 @@ class LOKClipboard final
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
 
 public:
-    LOKClipboard();
+    KitClipboard();
 
     /// get an XInterface easily.
     css::uno::Reference<css::uno::XInterface> getXI()
@@ -65,7 +65,7 @@ public:
         override;
 };
 
-/// Represents the contents of LOKClipboard.
+/// Represents the contents of KitClipboard.
 class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
     css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
@@ -87,12 +87,12 @@ public:
 };
 
 /// Theoretically to hook into the (horrible) vcl dtranscomp.cxx code.
-class LOKClipboardFactory : public ::cppu::WeakComponentImplHelper<css::lang::XSingleServiceFactory>
+class KitClipboardFactory : public ::cppu::WeakComponentImplHelper<css::lang::XSingleServiceFactory>
 {
     static osl::Mutex gMutex;
 
 public:
-    LOKClipboardFactory()
+    KitClipboardFactory()
         : cppu::WeakComponentImplHelper<css::lang::XSingleServiceFactory>(gMutex)
     {
     }
@@ -105,7 +105,7 @@ public:
     createInstanceWithArguments(const css::uno::Sequence<css::uno::Any>& /* rArgs */) override;
 
     /// Fetch clipboard from the global pool.
-    static rtl::Reference<LOKClipboard> getClipboardForCurView();
+    static rtl::Reference<KitClipboard> getClipboardForCurView();
 
     /// Release a clipboard before its document dies, nViewId of -1 clears all.
     static void releaseClipboardForView(int nViewId);

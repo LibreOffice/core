@@ -19,8 +19,8 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.datatransfer.LOKClipboard"
-    constructor="desktop_LOKClipboard_get_implementation">
+  <implementation name="com.sun.star.datatransfer.KitClipboard"
+    constructor="desktop_KitClipboard_get_implementation">
     <service name="com.sun.star.datatransfer.clipboard.LokClipboard"/>
   </implementation>
 </component>

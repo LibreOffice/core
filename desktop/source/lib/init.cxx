@@ -1374,10 +1374,10 @@ ITiledRenderable* getTiledRenderable(COKitDocument* pThis)
  * we also need to ensure that this works for the first view which
  * has no clear 'createView' called for it (unfortunately).
  */
-rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(COKitDocument *pThis)
+rtl::Reference<KitClipboard> forceSetClipboardForCurrentView(COKitDocument *pThis)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    rtl::Reference<LOKClipboard> xClip(LOKClipboardFactory::getClipboardForCurView());
+    rtl::Reference<KitClipboard> xClip(KitClipboardFactory::getClipboardForCurView());
     if (!pDoc)
     {
         return xClip;
@@ -2702,7 +2702,7 @@ static void doc_destroy(COKitDocument *pThis)
     SolarMutexGuard aGuard;
 
 #ifndef IOS
-    LOKClipboardFactory::releaseClipboardForView(-1);
+    KitClipboardFactory::releaseClipboardForView(-1);
 #endif
 
     LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
@@ -6297,7 +6297,7 @@ static int doc_getClipboard(COKitDocument* pThis,
         return 0;
     }
 
-    rtl::Reference<LOKClipboard> xClip(LOKClipboardFactory::getClipboardForCurView());
+    rtl::Reference<KitClipboard> xClip(KitClipboardFactory::getClipboardForCurView());
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = xClip->getContents();
     SAL_INFO("lok", "Got from clip: " << xClip.get() << " transferable: " << xTransferable);
@@ -7227,7 +7227,7 @@ static void doc_destroyView(SAL_UNUSED_PARAMETER COKitDocument* pThis, int nId)
     SetLastExceptionMsg();
 
 #ifndef IOS
-    LOKClipboardFactory::releaseClipboardForView(nId);
+    KitClipboardFactory::releaseClipboardForView(nId);
 #endif
 
     KitHelper::destroyView(nId);
@@ -7508,7 +7508,7 @@ static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nLOKWindowId, int 
         if (!aMimeType.isEmpty() && aData.hasElements())
         {
             uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(aMimeType, aData));
-            uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new LOKClipboard);
+            uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new KitClipboard);
             xClipboard->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
             pWindow->SetClipboard(xClipboard);
 

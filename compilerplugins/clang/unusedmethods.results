@@ -163,7 +163,7 @@ dbaccess/source/ui/inc/unodatbr.hxx:315
 desktop/inc/lib/init.hxx:152
      desktop::CallbackFlushHandler::CallbackData::CallbackData(const tools::Rectangle *,int)
 desktop/source/lib/lokclipboard.hxx:95
-     LOKClipboardFactory::LOKClipboardFactory()
+     KitClipboardFactory::KitClipboardFactory()
 drawinglayer/inc/texture/texture.hxx:39
     _Bool drawinglayer::texture::GeoTexSvx::operator!=(const drawinglayer::texture::GeoTexSvx &) const
 drawinglayer/source/primitive2d/GlowSoftEgdeShadowTools.hxx:37

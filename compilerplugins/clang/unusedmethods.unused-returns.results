@@ -935,7 +935,7 @@ include/tools/lazydelete.hxx:92
 include/tools/lazydelete.hxx:92
     std::optional<std::shared_ptr<weld::Window> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
 include/tools/lazydelete.hxx:92
-    std::optional<std::unordered_map<int, rtl::Reference<LOKClipboard> > > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+    std::optional<std::unordered_map<int, rtl::Reference<KitClipboard> > > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
 include/tools/lazydelete.hxx:92
     std::optional<std::vector<struct com::sun::star::datatransfer::DataFlavor> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
 include/tools/lazydelete.hxx:92

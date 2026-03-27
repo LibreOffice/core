@@ -19,15 +19,15 @@
 using namespace css;
 using namespace css::uno;
 
-/* static */ osl::Mutex LOKClipboardFactory::gMutex;
-static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard>>>& getClipboards()
+/* static */ osl::Mutex KitClipboardFactory::gMutex;
+static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>& getClipboards()
 {
-    static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard>>>
+    static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<KitClipboard>>>
         gClipboards{};
     return gClipboards;
 }
 
-rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
+rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
 {
     int nViewId = KitHelper::getCurrentView(); // currently active.
 
@@ -40,13 +40,13 @@ rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
         SAL_INFO("lok", "Got clip: " << it->second.get() << " from " << nViewId);
         return it->second;
     }
-    rtl::Reference<LOKClipboard> xClip(new LOKClipboard());
+    rtl::Reference<KitClipboard> xClip(new KitClipboard());
     (*gClipboards.get())[nViewId] = xClip;
     SAL_INFO("lok", "Created clip: " << xClip.get() << " for viewId " << nViewId);
     return xClip;
 }
 
-void LOKClipboardFactory::releaseClipboardForView(int nViewId)
+void KitClipboardFactory::releaseClipboardForView(int nViewId)
 {
     osl::MutexGuard aGuard(gMutex);
 
@@ -68,12 +68,12 @@ void LOKClipboardFactory::releaseClipboardForView(int nViewId)
 }
 
 uno::Reference<uno::XInterface>
-    SAL_CALL LOKClipboardFactory::createInstanceWithArguments(const Sequence<Any>& /* rArgs */)
+    SAL_CALL KitClipboardFactory::createInstanceWithArguments(const Sequence<Any>& /* rArgs */)
 {
     return { static_cast<cppu::OWeakObject*>(getClipboardForCurView().get()) };
 }
 
-LOKClipboard::LOKClipboard()
+KitClipboard::KitClipboard()
     : cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                     css::lang::XServiceInfo>(m_aMutex)
 {
@@ -82,30 +82,30 @@ LOKClipboard::LOKClipboard()
     setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
 }
 
-Sequence<OUString> LOKClipboard::getSupportedServiceNames_static()
+Sequence<OUString> KitClipboard::getSupportedServiceNames_static()
 {
     Sequence<OUString> aRet{ u"com.sun.star.datatransfer.clipboard.LokClipboard"_ustr };
     return aRet;
 }
 
-OUString LOKClipboard::getImplementationName()
+OUString KitClipboard::getImplementationName()
 {
-    return u"com.sun.star.datatransfer.LOKClipboard"_ustr;
+    return u"com.sun.star.datatransfer.KitClipboard"_ustr;
 }
 
-Sequence<OUString> LOKClipboard::getSupportedServiceNames()
+Sequence<OUString> KitClipboard::getSupportedServiceNames()
 {
     return getSupportedServiceNames_static();
 }
 
-sal_Bool LOKClipboard::supportsService(const OUString& ServiceName)
+sal_Bool KitClipboard::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Reference<css::datatransfer::XTransferable> LOKClipboard::getContents() { return m_xTransferable; }
+Reference<css::datatransfer::XTransferable> KitClipboard::getContents() { return m_xTransferable; }
 
-void LOKClipboard::setContents(
+void KitClipboard::setContents(
     const Reference<css::datatransfer::XTransferable>& xTrans,
     const Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
 {
@@ -130,14 +130,14 @@ void LOKClipboard::setContents(
     }
 }
 
-void LOKClipboard::addClipboardListener(
+void KitClipboard::addClipboardListener(
     const Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
     m_aListeners.push_back(listener);
 }
 
-void LOKClipboard::removeClipboardListener(
+void KitClipboard::removeClipboardListener(
     const Reference<datatransfer::clipboard::XClipboardListener>& listener)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -246,12 +246,12 @@ sal_Bool SAL_CALL LOKTransferable::isDataFlavorSupported(const datatransfer::Dat
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-desktop_LOKClipboard_get_implementation(css::uno::XComponentContext*,
+desktop_KitClipboard_get_implementation(css::uno::XComponentContext*,
                                         css::uno::Sequence<css::uno::Any> const& /*args*/)
 {
     SolarMutexGuard aGuard;
 
-    cppu::OWeakObject* pClipboard = LOKClipboardFactory::getClipboardForCurView().get();
+    cppu::OWeakObject* pClipboard = KitClipboardFactory::getClipboardForCurView().get();
 
     pClipboard->acquire();
     return pClipboard;
