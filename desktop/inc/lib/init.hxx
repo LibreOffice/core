@@ -34,7 +34,7 @@
 
 #include <desktop/dllapi.h>
 
-class LOKInteractionHandler;
+class KitInteractionHandler;
 
 namespace desktop {
 
@@ -290,7 +290,7 @@ namespace desktop {
         COKitCallback mpCallback;
         void *mpCallbackData;
         int64_t mOptionalFeatures;
-        std::map<OString, rtl::Reference<LOKInteractionHandler>> mInteractionMap;
+        std::map<OString, rtl::Reference<KitInteractionHandler>> mInteractionMap;
 
         LibCO_Impl();
         ~LibCO_Impl();

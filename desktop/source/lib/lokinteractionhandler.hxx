@@ -41,7 +41,7 @@ information easily via callbacks.
 TODO: the callbacks are not implemented yet, we just approve any interaction
 that we get.
 */
-class LOKInteractionHandler: public cppu::WeakImplHelper<css::lang::XServiceInfo,
+class KitInteractionHandler: public cppu::WeakImplHelper<css::lang::XServiceInfo,
                                                          css::lang::XInitialization,
                                                          css::task::XInteractionHandler2>
 {
@@ -56,8 +56,8 @@ private:
     bool m_usePassword;
     osl::Condition m_havePassword;
 
-    LOKInteractionHandler(const LOKInteractionHandler&) = delete;
-    LOKInteractionHandler& operator=(const LOKInteractionHandler&) = delete;
+    KitInteractionHandler(const KitInteractionHandler&) = delete;
+    KitInteractionHandler& operator=(const KitInteractionHandler&) = delete;
 
     /** Call the LOK_CALLBACK_ERROR on the LOK document (if available) or LOK lib.
 
@@ -79,12 +79,12 @@ private:
 public:
     void SetPassword(char const* pPassword);
 
-    explicit LOKInteractionHandler(
+    explicit KitInteractionHandler(
             OString command,
             desktop::LibCO_Impl *,
             desktop::LibLODocument_Impl *pLOKDocumt = nullptr);
 
-    virtual ~LOKInteractionHandler() override;
+    virtual ~KitInteractionHandler() override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 

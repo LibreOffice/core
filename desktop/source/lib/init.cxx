@@ -2954,8 +2954,8 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
              Application::SetDialogCancelMode(DialogCancelMode::LOKSilent);
         }
 
-        rtl::Reference<LOKInteractionHandler> const pInteraction(
-            new LOKInteractionHandler("load"_ostr, pLib));
+        rtl::Reference<KitInteractionHandler> const pInteraction(
+            new KitInteractionHandler("load"_ostr, pLib));
         auto const pair(pLib->mInteractionMap.insert(std::make_pair(aURL.toUtf8(), pInteraction)));
         comphelper::ScopeGuard const g([&] () {
                 if (pair.second)
@@ -3952,8 +3952,8 @@ static int doc_saveAs(COKitDocument* pThis, const char* sUrl, const char* pForma
         if (gImpl)
         {
             // gImpl does not have to exist when running from a unit test
-            rtl::Reference<LOKInteractionHandler> const pInteraction(
-                    new LOKInteractionHandler("saveas"_ostr, gImpl, pDocument));
+            rtl::Reference<KitInteractionHandler> const pInteraction(
+                    new KitInteractionHandler("saveas"_ostr, gImpl, pDocument));
 
             aSaveMediaDescriptor[MediaDescriptor::PROP_INTERACTIONHANDLER] <<= uno::Reference<task::XInteractionHandler2>(pInteraction);
         }
@@ -5542,8 +5542,8 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
         }
 
 
-        rtl::Reference<LOKInteractionHandler> const pInteraction(
-            new LOKInteractionHandler("save"_ostr, gImpl, pDocument));
+        rtl::Reference<KitInteractionHandler> const pInteraction(
+            new KitInteractionHandler("save"_ostr, gImpl, pDocument));
 
         beans::PropertyValue aValue;
         aValue.Name = u"InteractionHandler"_ustr;

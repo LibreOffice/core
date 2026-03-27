@@ -56,7 +56,7 @@
 
 using namespace com::sun::star;
 
-LOKInteractionHandler::LOKInteractionHandler(
+KitInteractionHandler::KitInteractionHandler(
         OString command,
         desktop::LibCO_Impl *const pLOKit,
         desktop::LibLODocument_Impl *const pLOKDocument)
@@ -68,21 +68,21 @@ LOKInteractionHandler::LOKInteractionHandler(
     assert(m_pLOKit);
 }
 
-LOKInteractionHandler::~LOKInteractionHandler()
+KitInteractionHandler::~KitInteractionHandler()
 {
 }
 
-OUString SAL_CALL LOKInteractionHandler::getImplementationName()
+OUString SAL_CALL KitInteractionHandler::getImplementationName()
 {
-    return u"com.sun.star.comp.uui.LOKInteractionHandler"_ustr;
+    return u"com.sun.star.comp.uui.KitInteractionHandler"_ustr;
 }
 
-sal_Bool SAL_CALL LOKInteractionHandler::supportsService(OUString const & rServiceName)
+sal_Bool SAL_CALL KitInteractionHandler::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL LOKInteractionHandler::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL KitInteractionHandler::getSupportedServiceNames()
 {
     return { u"com.sun.star.task.InteractionHandler"_ustr,
              // added to indicate support for configuration.backend.MergeRecoveryRequest
@@ -91,18 +91,18 @@ uno::Sequence< OUString > SAL_CALL LOKInteractionHandler::getSupportedServiceNam
              u"com.sun.star.uui.InteractionHandler"_ustr };
 }
 
-void SAL_CALL LOKInteractionHandler::initialize(uno::Sequence<uno::Any> const & /*rArguments*/)
+void SAL_CALL KitInteractionHandler::initialize(uno::Sequence<uno::Any> const & /*rArguments*/)
 {
 }
 
-void SAL_CALL LOKInteractionHandler::handle(
+void SAL_CALL KitInteractionHandler::handle(
         uno::Reference<task::XInteractionRequest> const & xRequest)
 {
     // just do the same thing in both cases
     handleInteractionRequest(xRequest);
 }
 
-void LOKInteractionHandler::postError(css::task::InteractionClassification classif, const char* kind, ErrCode code, const OUString &message)
+void KitInteractionHandler::postError(css::task::InteractionClassification classif, const char* kind, ErrCode code, const OUString &message)
 {
     std::string classification = "error";
     switch (classif)
@@ -176,7 +176,7 @@ bool FallbackToStandard(const uno::Reference<task::XInteractionRequest>& xReques
 
 }
 
-bool LOKInteractionHandler::handleIOException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest)
+bool KitInteractionHandler::handleIOException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest)
 {
     ucb::InteractiveIOException aIoException;
     if (!(rRequest >>= aIoException))
@@ -228,7 +228,7 @@ bool LOKInteractionHandler::handleIOException(const css::uno::Sequence<css::uno:
     return true;
 }
 
-bool LOKInteractionHandler::handleNetworkException(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const uno::Any &rRequest)
+bool KitInteractionHandler::handleNetworkException(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const uno::Any &rRequest)
 {
     ucb::InteractiveNetworkException aNetworkException;
     if (!(rRequest >>= aNetworkException))
@@ -277,7 +277,7 @@ bool LOKInteractionHandler::handleNetworkException(const uno::Sequence<uno::Refe
     return true;
 }
 
-bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const uno::Any &rRequest)
+bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const uno::Any &rRequest)
 {
     bool bPasswordRequestFound = false;
     bool bIsRequestPasswordToModify = false;
@@ -369,7 +369,7 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
     return true;
 }
 
-bool LOKInteractionHandler::handleFilterOptionsRequest(
+bool KitInteractionHandler::handleFilterOptionsRequest(
         const uno::Sequence<uno::Reference<task::XInteractionContinuation>>& rContinuations,
         const uno::Any& rRequest)
 {
@@ -392,7 +392,7 @@ bool LOKInteractionHandler::handleFilterOptionsRequest(
     return false;
 }
 
-sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
+sal_Bool SAL_CALL KitInteractionHandler::handleInteractionRequest(
         const uno::Reference<task::XInteractionRequest>& xRequest)
 {
     uno::Sequence<uno::Reference<task::XInteractionContinuation>> const aContinuations = xRequest->getContinuations();
@@ -419,7 +419,7 @@ sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
     return true;
 }
 
-void LOKInteractionHandler::SetPassword(char const*const pPassword)
+void KitInteractionHandler::SetPassword(char const*const pPassword)
 {
     if (pPassword)
     {
