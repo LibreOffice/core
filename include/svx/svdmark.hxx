@@ -214,6 +214,8 @@ public:
 
     // All Entries are copied!
     SdrMarkList& operator=(const SdrMarkList& rLst);
+
+    bool isDiagramBackgroundShapeSelected() const;
 };
 
 

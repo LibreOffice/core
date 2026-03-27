@@ -646,6 +646,21 @@ bool SdrMarkList::TakeSnapRect(SdrPageView const * pPV, tools::Rectangle& rRect)
     return bFnd;
 }
 
+bool SdrMarkList::isDiagramBackgroundShapeSelected() const
+{
+    if (1 != GetMarkCount())
+        return false;
+
+    SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
+    if (nullptr == pObj || !pObj->isDiagram())
+        return false;
+
+    SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+    if(nullptr == pSubSelection)
+        return false;
+
+    return pSubSelection->isDiagramBackgroundShape();
+}
 
 namespace sdr
 {

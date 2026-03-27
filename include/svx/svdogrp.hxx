@@ -31,6 +31,9 @@ public:
     // Basic DiagramHelper support
     virtual bool isDiagram() const override;
     virtual const std::shared_ptr< svx::diagram::DiagramHelper_svx >& getDiagramHelper() const override;
+
+    // return DiagramSubSelection if exists. This will always return
+    // a valid SdrObject* to allow to use this as a loop-through-call
     virtual SdrObject* getDiagramSubSelection() override;
 
 private:

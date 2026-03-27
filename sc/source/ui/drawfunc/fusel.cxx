@@ -474,6 +474,13 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 pObj = pMark->GetMarkedSdrObj();
 
+                if (nullptr != pObj && pObj->isDiagram())
+                {
+                    SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+                    if (nullptr != pSubSelection && pSubSelection->isDiagramTextNode())
+                        pObj = pSubSelection;
+                }
+
                 //  only activate, when the mouse also is over the selected object
 
                 SdrViewEvent aVEvt;

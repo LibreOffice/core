@@ -2493,6 +2493,16 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if (bDrawObject && !bTextBox)
                         {
                             SdrObject* pObj = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+
+                            if (nullptr != pObj && pObj->isDiagram())
+                            {
+                                SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+                                if (nullptr != pSubSelection && pSubSelection->isDiagramTextNode())
+                                    pObj = pSubSelection;
+                                else
+                                    pObj = nullptr;
+                            }
+
                             if(pObj)
                             {
                                 EnterDrawTextMode(pObj->GetLogicRect().Center());

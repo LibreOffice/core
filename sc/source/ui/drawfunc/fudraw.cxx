@@ -639,6 +639,13 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
+            if (nullptr != pObj && pObj->isDiagram())
+            {
+                SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+                if (nullptr != pSubSelection && pSubSelection->isDiagramTextNode())
+                    pObj = pSubSelection;
+            }
+
             // start text edit for suitable object, pass key event to OutlinerView
             if ( lcl_KeyEditMode( pObj, rViewShell, &rKEvt ) )
                 bReturn = true;

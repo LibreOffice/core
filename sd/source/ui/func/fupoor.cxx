@@ -788,6 +788,13 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
+                if (nullptr != pObj && pObj->isDiagram())
+                {
+                    SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+                    if (nullptr != pSubSelection && pSubSelection->isDiagramTextNode())
+                        pObj = pSubSelection;
+                }
+
                 // #i118485# allow TextInput for OLEs, too
                 if( DynCastSdrTextObj( pObj ) !=  nullptr && pObj->HasTextEdit())
                 {

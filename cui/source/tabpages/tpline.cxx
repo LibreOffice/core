@@ -916,7 +916,12 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         m_aSymbolLastSize=m_aSymbolSize;
     }
 
-    if( rAttrs->GetItemState( XATTR_LINESTYLE ) != SfxItemState::INVALID )
+    // LineStyle
+    if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINESTYLE ) == SfxItemState::DEFAULT )
+    {
+        m_xLbLineStyle->set_sensitive(false);
+    }
+    else if( rAttrs->GetItemState( XATTR_LINESTYLE ) != SfxItemState::INVALID )
     {
         eXLS = rAttrs->Get( XATTR_LINESTYLE ).GetValue();
 
@@ -944,7 +949,12 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Line strength
-    if( rAttrs->GetItemState( XATTR_LINEWIDTH ) != SfxItemState::INVALID )
+    if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINEWIDTH ) == SfxItemState::DEFAULT )
+    {
+        m_xBoxWidth->set_sensitive(false);
+        m_xMtrLineWidth->set_sensitive(false);
+    }
+    else if( rAttrs->GetItemState( XATTR_LINEWIDTH ) != SfxItemState::INVALID )
     {
         SetMetricValue( *m_xMtrLineWidth, rAttrs->Get( XATTR_LINEWIDTH ).GetValue(), m_ePoolUnit );
     }
@@ -954,16 +964,23 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     // Line color
     m_xLbColor->SetNoSelection();
 
-    if ( rAttrs->GetItemState( XATTR_LINECOLOR ) != SfxItemState::INVALID )
+    if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINECOLOR ) == SfxItemState::DEFAULT )
+    {
+        m_xBoxColor->set_sensitive(false);
+        m_xLbColor->set_sensitive(false);
+    }
+    else if ( rAttrs->GetItemState( XATTR_LINECOLOR ) != SfxItemState::INVALID )
     {
         Color aCol = rAttrs->Get( XATTR_LINECOLOR ).GetColorValue();
         m_xLbColor->SelectEntry( aCol );
     }
 
     // Line start
+    bool bArrowStylesActive(true);
     if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINESTART ) == SfxItemState::DEFAULT )
     {
         m_xLbStartStyle->set_sensitive(false);
+        bArrowStylesActive = false;
     }
     else if( rAttrs->GetItemState( XATTR_LINESTART ) != SfxItemState::INVALID )
     {
@@ -996,6 +1013,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINEEND ) == SfxItemState::DEFAULT )
     {
         m_xLbEndStyle->set_sensitive(false);
+        bArrowStylesActive = false;
     }
     else if( rAttrs->GetItemState( XATTR_LINEEND ) != SfxItemState::INVALID )
     {
@@ -1027,6 +1045,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     // Line start strength
     if( m_bObjSelected &&  rAttrs->GetItemState( XATTR_LINESTARTWIDTH ) == SfxItemState::DEFAULT )
     {
+        m_xBoxStart->set_sensitive(false);
         m_xMtrStartWidth->set_sensitive(false);
     }
     else if( rAttrs->GetItemState( XATTR_LINESTARTWIDTH ) != SfxItemState::INVALID )
@@ -1041,6 +1060,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     // Line end strength
     if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINEENDWIDTH ) == SfxItemState::DEFAULT )
     {
+        m_xBoxEnd->set_sensitive(false);
         m_xMtrEndWidth->set_sensitive(false);
     }
     else if( rAttrs->GetItemState( XATTR_LINEENDWIDTH ) != SfxItemState::INVALID )
@@ -1087,7 +1107,12 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Transparency
-    if( rAttrs->GetItemState( XATTR_LINETRANSPARENCE ) != SfxItemState::INVALID )
+    if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINETRANSPARENCE ) == SfxItemState::DEFAULT )
+    {
+        m_xBoxTransparency->set_sensitive(false);
+        m_xMtrTransparent->set_sensitive(false);
+    }
+    else if( rAttrs->GetItemState( XATTR_LINETRANSPARENCE ) != SfxItemState::INVALID )
     {
         sal_uInt16 nTransp = rAttrs->Get( XATTR_LINETRANSPARENCE ).GetValue();
         m_xMtrTransparent->set_value(nTransp, FieldUnit::PERCENT);
@@ -1111,6 +1136,10 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     // We get the value from the INI file now
     OUString aStr = GetUserData();
     m_xCbxSynchronize->set_active(aStr.toInt32() != 0);
+    if (!bArrowStylesActive)
+    {
+        m_xCbxSynchronize->set_sensitive(false);
+    }
 
     if(m_bObjSelected && SfxItemState::DEFAULT == rAttrs->GetItemState(XATTR_LINEJOINT))
     {

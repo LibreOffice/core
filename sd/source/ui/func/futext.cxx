@@ -204,6 +204,14 @@ void FuText::DoExecute( SfxRequest& )
         if (rMarkList.GetMarkCount() == 1)
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+            if (nullptr != pObj && pObj->isDiagram())
+            {
+                SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+                if (nullptr != pSubSelection && pSubSelection->isDiagramTextNode())
+                    pObj = pSubSelection;
+            }
+
             mxTextObj = DynCastSdrTextObj( pObj );
         }
     }

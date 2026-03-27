@@ -235,6 +235,7 @@ public:
     void remove(int nPos) { m_xControl->remove(nPos); }
     int get_active() const { return m_xControl->get_active(); }
     void set_active(int nPos) { m_xControl->set_active(nPos); }
+    void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     void set_active_text(const OUString& rStr) { m_xControl->set_active_text(rStr); }
     OUString get_active_text() const { return m_xControl->get_active_text(); }
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }

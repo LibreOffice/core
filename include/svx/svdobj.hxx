@@ -231,7 +231,10 @@ public:
     void setDiagramDataModelID(const OUString& rID);
     const OUString& getDiagramDataModelID() const;
 
+    // return DiagramSubSelection if exists. This will always return
+    // a valid SdrObject* to allow to use this as a loop-through-call
     virtual SdrObject* getDiagramSubSelection();
+
     bool isDiagramBackgroundShape() const;
     bool isDiagramTextNode() const;
     bool removeDiagramNode();
