@@ -21,6 +21,7 @@
 #include <config_collab.h>
 #include <config_feature_desktop.h>
 
+#include <sal/types.h>
 #include <vcl/cursor.hxx>
 #include "swcrsr.hxx"
 #include "swrect.hxx"
@@ -84,7 +85,7 @@ class MapMode;
  * cursor/selection: a list of rectangles to be painted as an overlay. It is also capable of
  * painting other overlays as needed (text input, content control).
  */
-class SwSelPaintRects : public SwRects
+class SAL_DLLPUBLIC_RTTI SwSelPaintRects : public SwRects
 {
     friend void InitCore();
     friend void FinitCore();
