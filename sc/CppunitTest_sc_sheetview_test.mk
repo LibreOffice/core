@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_sheetview_test, \
     cppuhelper \
     editeng \
     sal \
+    salhelper \
     sfx \
     sot \
     svl \
