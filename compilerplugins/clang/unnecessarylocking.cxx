@@ -124,7 +124,7 @@ bool UnnecessaryLocking::VisitCompoundStmt(const CompoundStmt* compoundStmt)
             && !loplugin::isSamePathname(fn, SRCDIR "/dbaccess/source/ui/uno/dbinteraction.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/dbaccess/source/ui/dlg/DbAdminImpl.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/dbaccess/source/ui/misc/UITools.cxx")
-            && !loplugin::isSamePathname(fn, SRCDIR "/desktop/source/lib/lokclipboard.cxx")
+            && !loplugin::isSamePathname(fn, SRCDIR "/desktop/source/lib/kitclipboard.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/editeng/source/misc/unolingu.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR
                                          "/framework/source/uielement/popuptoolbarcontroller.cxx")

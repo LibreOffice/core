@@ -224,8 +224,8 @@
 #include "../app/officeipcthread.hxx"
 #include <lib/init.hxx>
 
-#include "lokinteractionhandler.hxx"
-#include "lokclipboard.hxx"
+#include "kitinteractionhandler.hxx"
+#include "kitclipboard.hxx"
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Linguistic.hxx>

@@ -162,7 +162,7 @@ dbaccess/source/ui/inc/unodatbr.hxx:315
     _Bool dbaui::SbaTableQueryBrowser::implCopyObject(ODataClipboard &,const weld::TreeIter &,int)
 desktop/inc/lib/init.hxx:152
      desktop::CallbackFlushHandler::CallbackData::CallbackData(const tools::Rectangle *,int)
-desktop/source/lib/lokclipboard.hxx:95
+desktop/source/lib/kitclipboard.hxx:95
      KitClipboardFactory::KitClipboardFactory()
 drawinglayer/inc/texture/texture.hxx:39
     _Bool drawinglayer::texture::GeoTexSvx::operator!=(const drawinglayer::texture::GeoTexSvx &) const

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "lokclipboard.hxx"
+#include "kitclipboard.hxx"
 #include <unordered_map>
 #include <tools/lazydelete.hxx>
 #include <vcl/svapp.hxx>

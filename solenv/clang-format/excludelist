@@ -3003,9 +3003,9 @@ desktop/source/deployment/registry/sfwk/dp_parceldesc.hxx
 desktop/source/deployment/registry/sfwk/dp_sfwk.cxx
 desktop/source/inc/helpids.h
 desktop/source/lib/init.cxx
-desktop/source/lib/lokandroid.cxx
-desktop/source/lib/lokinteractionhandler.cxx
-desktop/source/lib/lokinteractionhandler.hxx
+desktop/source/lib/kitandroid.cxx
+desktop/source/lib/kitinteractionhandler.cxx
+desktop/source/lib/kitinteractionhandler.hxx
 desktop/source/migration/migration.cxx
 desktop/source/migration/migration_impl.hxx
 desktop/source/migration/services/basicmigration.cxx

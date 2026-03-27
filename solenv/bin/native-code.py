@@ -124,7 +124,7 @@ core_constructor_list = [
     "com_sun_star_comp_dba_ODatabaseDocument",
     "com_sun_star_comp_dba_ODatabaseSource",
     "com_sun_star_comp_dba_ORowSet_get_implementation",
-# desktop/lokclipboard.component
+# desktop/kitclipboard.component
     "desktop_KitClipboard_get_implementation",
 # drawinglayer/drawinglayer.component
     "drawinglayer_XPrimitive2DRenderer",

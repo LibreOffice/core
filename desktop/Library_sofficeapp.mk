@@ -138,20 +138,20 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 ifneq ($(filter $(OS),ANDROID iOS MACOSX WNT),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
-	desktop/source/lib/lokinteractionhandler \
-	desktop/source/lib/lokclipboard \
+	desktop/source/lib/kitinteractionhandler \
+	desktop/source/lib/kitclipboard \
 	$(if $(filter $(OS),ANDROID), \
-		desktop/source/lib/lokandroid) \
+		desktop/source/lib/kitandroid) \
 ))
-$(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/lokclipboard,services))
+$(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/kitclipboard,services))
 else
 ifneq ($(filter TRUE,$(USING_X11) $(DISABLE_GUI))($filter EMSCRIPTEN,$(OS)),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
-	desktop/source/lib/lokinteractionhandler \
-	desktop/source/lib/lokclipboard \
+	desktop/source/lib/kitinteractionhandler \
+	desktop/source/lib/kitclipboard \
 ))
-$(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/lokclipboard,services))
+$(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/kitclipboard,services))
 endif
 endif
 
