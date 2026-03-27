@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <sal/types.h>
 #include <svx/fmview.hxx>
 
 #include <global.hxx>
@@ -29,7 +30,7 @@ class ScDocument;
 class ScViewData;
 class ScDrawObjData;
 
-class ScDrawView final : public FmFormView
+class SAL_DLLPUBLIC_RTTI ScDrawView final : public FmFormView
 {
     ScViewData&             rViewData;
     VclPtr<OutputDevice>    pDev;                   //! needed ?
