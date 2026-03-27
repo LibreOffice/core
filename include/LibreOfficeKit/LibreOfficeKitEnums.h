@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITENUMS_H
-#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITENUMS_H
+#ifndef INCLUDED_COKIT_COKIT_ENUMS_H
+#define INCLUDED_COKIT_COKIT_ENUMS_H
 
 #include <assert.h>
 
@@ -1304,6 +1304,6 @@ LibreOfficeKitSetGraphicSelectionType;
 }
 #endif
 
-#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITENUMS_H
+#endif // INCLUDED_COKIT_COKIT_ENUMS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

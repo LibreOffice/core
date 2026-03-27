@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
-#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
+#ifndef INCLUDED_COKIT_COKIT_INIT_H
+#define INCLUDED_COKIT_COKIT_INIT_H
 
 #if defined __GNUC__ || defined __clang__
 #  define LOK_TOLERATE_UNUSED __attribute__((used))
@@ -426,6 +426,6 @@ int lok_preinit( const char *install_path,  const char *user_profile_url )
 
 #endif // defined(__linux__) || defined (__FreeBSD__) || defined(_WIN32) || defined(__APPLE__)
 
-#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
+#endif // INCLUDED_COKIT_COKIT_INIT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

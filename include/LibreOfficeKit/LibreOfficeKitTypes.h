@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_TYPES_H
-#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_TYPES_H
+#ifndef INCLUDED_COKIT_COKIT_TYPES_H
+#define INCLUDED_COKIT_COKIT_TYPES_H
 
 #include <stddef.h>
 
@@ -38,6 +38,6 @@ typedef void (*LibreOfficeKitFileSaveDialogCallback)(const char* pSuggestedUri, 
 }
 #endif
 
-#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_TYPES_H
+#endif // INCLUDED_COKIT_COKIT_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_H
-#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_H
+#ifndef INCLUDED_COKIT_COKIT_H
+#define INCLUDED_COKIT_COKIT_H
 
 #include <stddef.h>
 
@@ -593,6 +593,6 @@ struct LibreOfficeKitDocumentClassStruct
 }
 #endif
 
-#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_H
+#endif // INCLUDED_COKIT_COKIT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
