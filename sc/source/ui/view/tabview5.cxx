@@ -282,7 +282,7 @@ void ScTabView::ImplTabChanged(bool bSameTabButMoved)
 {
     // For kit ignore invalidations during tab change
     ScTabViewShell* pViewShell = aViewData.GetViewShell();
-    SfxLokCallbackInterface* pCallback = pViewShell->getCOKitViewCallback();
+    CoKitCallbackInterface* pCallback = pViewShell->getCOKitViewCallback();
     pViewShell->setCOKitViewCallback(nullptr);
     comphelper::ScopeGuard aOutputGuard(
         [this, pViewShell, pCallback] {

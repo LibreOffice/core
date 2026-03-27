@@ -20,12 +20,12 @@
 class SfxChildWindow;
 
 /**
-A helper to convert SfxLokCallbackInterface to a LIbreOfficeKitCallback for tests.
+A helper to convert CoKitCallbackInterface to a LIbreOfficeKitCallback for tests.
 
 It reimplements the specialized callbacks and converts them to the generic type/payload
 callback.
 */
-class OOO_DLLPUBLIC_TEST TestLokCallbackWrapper final : public SfxLokCallbackInterface, public Idle
+class OOO_DLLPUBLIC_TEST TestLokCallbackWrapper final : public CoKitCallbackInterface, public Idle
 {
 public:
     TestLokCallbackWrapper(COKitCallback callback, void* data);

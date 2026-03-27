@@ -54,7 +54,7 @@ class Printer;
 class SfxPrinter;
 class NotifyEvent;
 class SfxInPlaceClient;
-class SfxLokCallbackInterface;
+class CoKitCallbackInterface;
 class LOKDocumentFocusListener;
 class SfxStoringHelper;
 class VCLXPopupMenu;
@@ -392,8 +392,8 @@ public:
     SAL_DLLPRIVATE bool ExecKey_Impl(const KeyEvent& aKey);
 
     /// Set up a more efficient internal callback instead of COKitCallback.
-    void setCOKitViewCallback(SfxLokCallbackInterface* pCallback);
-    SfxLokCallbackInterface* getCOKitViewCallback() const;
+    void setCOKitViewCallback(CoKitCallbackInterface* pCallback);
+    CoKitCallbackInterface* getCOKitViewCallback() const;
     /// dump view state for diagnostics
     void dumpCOKitViewState(rtl::OStringBuffer &rState);
     /// Invokes the registered callback, if there are any.

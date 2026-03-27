@@ -93,7 +93,7 @@ namespace desktop {
     };
 
     /// One instance of this per view, handles flushing callbacks
-    class SAL_DLLPUBLIC_RTTI CallbackFlushHandler final : public SfxLokCallbackInterface
+    class SAL_DLLPUBLIC_RTTI CallbackFlushHandler final : public CoKitCallbackInterface
     {
     public:
         DESKTOP_DLLPUBLIC explicit CallbackFlushHandler(COKitDocument* pDocument, COKitCallback pCallback, void* pData);

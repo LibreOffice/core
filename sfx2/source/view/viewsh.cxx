@@ -3253,7 +3253,7 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     return pImpl->m_xAccExec->execute(aKey.GetKeyCode());
 }
 
-void SfxViewShell::setCOKitViewCallback(SfxLokCallbackInterface* pCallback)
+void SfxViewShell::setCOKitViewCallback(CoKitCallbackInterface* pCallback)
 {
     pImpl->m_pCOKitViewCallback = pCallback;
 
@@ -3272,7 +3272,7 @@ void SfxViewShell::setCOKitViewCallback(SfxLokCallbackInterface* pCallback)
     }
 }
 
-SfxLokCallbackInterface* SfxViewShell::getCOKitViewCallback() const
+CoKitCallbackInterface* SfxViewShell::getCOKitViewCallback() const
 {
     return pImpl->m_pCOKitViewCallback;
 }

@@ -28,10 +28,10 @@ class Rectangle;
 // TODO: It might possibly make sense to drop the generic type/payload function
 // and have only a dedicated function for each message type?
 
-class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI SfxLokCallbackInterface
+class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI CoKitCallbackInterface
 {
 public:
-    virtual ~SfxLokCallbackInterface() {}
+    virtual ~CoKitCallbackInterface() {}
     // COKitCallback equivalent.
     virtual void libreOfficeKitViewCallback(int nType, const rtl::OString& pPayload) = 0;
     // Callback that explicitly provides view id (which is also included in the payload).

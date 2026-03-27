@@ -2104,7 +2104,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
 
     // disable invalidations for kit during tab switching
     {
-        SfxLokCallbackInterface* pCallback = pViewShell->getCOKitViewCallback();
+        CoKitCallbackInterface* pCallback = pViewShell->getCOKitViewCallback();
         pViewShell->setCOKitViewCallback(nullptr);
         comphelper::ScopeGuard aOutputGuard(
             [pViewShell, pCallback] {
