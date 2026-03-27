@@ -1308,6 +1308,18 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                         }
                         break;
 
+                    case ocExternal:
+                        if (mpFunc->GetExternal().equalsIgnoreAsciiCase(
+                                "com.sun.star.sheet.addin.Analysis.getAccrintm"))
+                        {
+                            if (mnCurArg == 2)
+                            {
+                                pNewArr->AddOpCode(ocSep);
+                                pNewArr->AddDouble(1000.0);
+                            }
+                        }
+                        break;
+
                     default:
                         break;
                 }
