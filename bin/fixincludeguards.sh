@@ -29,8 +29,6 @@ for fn in "$@"; do
     # global header in include/ top level dir:
     # drop the project dir
     fnfixed=`echo $fn | sed 's,include/,,g'`
-    # add examples prefix to headers in odk/examples
-    fnfixed=`echo $fnfixed | sed 's,odk/examples/\(cpp\|DevelopersGuide\|OLE\)/,examples_,g'`
 
     # convert file path to header guard
     guard=`echo "$fnfixed" | sed 's/[\/\.-]/_/g' | tr 'a-z' 'A-Z'`

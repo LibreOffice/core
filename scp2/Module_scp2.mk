@@ -27,10 +27,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	InstallModule_writer \
 	InstallModule_xsltfilter \
 	InstallScript_setup_osl \
-	$(if $(filter ODK,$(BUILD_TYPE)), \
-		InstallModule_sdkoo \
-		InstallScript_sdkoo \
-	) \
 	$(if $(filter WNT,$(OS)),\
 		InstallModule_activex \
 		InstallModule_quickstart \

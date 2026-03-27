@@ -131,7 +131,7 @@ endef
 
 gbuild_modules := $(patsubst $(SRCDIR)/%/,%,$(dir $(wildcard $(SRCDIR)/*/Module_*.mk $(SRCDIR)/external/*/Module_*.mk)))
 
-gbuild_internal_modules := $(filter-out odk external,$(patsubst $(SRCDIR)/%/,%,$(dir $(wildcard $(SRCDIR)/*/Module_*.mk))))
+gbuild_internal_modules := $(filter-out external,$(patsubst $(SRCDIR)/%/,%,$(dir $(wildcard $(SRCDIR)/*/Module_*.mk))))
 
 internal.clean: $(addsuffix .clean,$(gbuild_internal_modules))
 
@@ -474,7 +474,6 @@ endif
 distro-pack-install: install
 	WITH_LANG_LIST="$(WITH_LANG_LIST)" WITH_POOR_HELP_LOCALIZATIONS="$(WITH_POOR_HELP_LOCALIZATIONS)" $(SRCDIR)/bin/distro-install-clean-up
 	$(SRCDIR)/bin/distro-install-desktop-integration
-	$(SRCDIR)/bin/distro-install-sdk
 	WITH_LANG_LIST="$(WITH_LANG_LIST)" $(SRCDIR)/bin/distro-install-file-lists
 
 install-package-%:

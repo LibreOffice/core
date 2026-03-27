@@ -1228,7 +1228,6 @@ linux-android*)
     enable_cairo_canvas=no
     enable_coinmp=yes
     enable_lpsolve=no
-    enable_odk=no
     enable_python=no
     enable_xmlhelp=no
     _os=Android
@@ -1241,7 +1240,6 @@ haiku*)
     test_gtk3_kde5=no
     test_kf5=yes
     test_kf6=yes
-    enable_odk=no
     enable_coinmp=no
     enable_pdfium=no
     enable_sdremote=no
@@ -1722,11 +1720,6 @@ libo_FUZZ_ARG_ENABLE(epm,
     AS_HELP_STRING([--enable-epm],
         [LibreOffice includes self-packaging code, that requires epm, however epm is
          useless for large scale package building.])
-)
-
-libo_FUZZ_ARG_ENABLE(odk,
-    AS_HELP_STRING([--enable-odk],
-        [Enable building the Office Development Kit, the part that extensions need to build against])
 )
 
 AC_ARG_ENABLE(mpl-subset,
@@ -2967,14 +2960,6 @@ AC_ARG_WITH(perl-home,
          binary but the location of the entire distribution.]),
 ,)
 
-libo_FUZZ_ARG_WITH(doxygen,
-    AS_HELP_STRING(
-        [--with-doxygen=<absolute path to doxygen executable>],
-        [Only relevant when --enable-odk is set. Specifies the doxygen
-         executable to use when generating ODK C/C++ documentation.
-         --without-doxygen disables generation of ODK C/C++ documentation.]),
-,with_doxygen=yes)
-
 AC_ARG_WITH(visual-studio,
     AS_HELP_STRING([--with-visual-studio=<2022>],
         [Specify which Visual Studio version to use in case several are
@@ -3440,7 +3425,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_lotuswordpro=no
     enable_lpsolve=no
     enable_nss=no
-    enable_odk=no
     enable_online_update=no
     enable_opencl=no
     enable_pdfimport=no
@@ -3525,7 +3509,6 @@ else
     if test $_os != iOS -a $_os != Darwin -a $_os != Android -a $_os != WINNT; then
         enable_database_connectivity=no
         enable_nss=no
-        enable_odk=no
         enable_python=no
         enable_skia=no
         with_java=no
@@ -6287,7 +6270,6 @@ if test "$cross_compiling" = "yes"; then
         --enable-dynamic-loading \
         --enable-icecream="$enable_icecream" \
         --without-gssapi \
-        --without-doxygen \
         --without-tls \
         --without-webdav \
         --without-x \
@@ -9859,68 +9841,6 @@ if test "$enable_lotuswordpro" = "yes"; then
     ENABLE_LWP="TRUE"
 fi
 AC_SUBST(ENABLE_LWP)
-
-dnl ===================================================================
-dnl Check for building ODK
-dnl ===================================================================
-AC_MSG_CHECKING([whether to build the ODK])
-if test "$enable_odk" = yes; then
-    if test "$DISABLE_DYNLOADING" = TRUE; then
-        AC_MSG_ERROR([can't build ODK for --disable-dynamic-loading builds])
-    fi
-    AC_MSG_RESULT([yes])
-    BUILD_TYPE="$BUILD_TYPE ODK"
-else
-    AC_MSG_RESULT([no])
-fi
-
-if test "$enable_odk" != yes; then
-    unset DOXYGEN
-else
-    if test "$with_doxygen" = no; then
-        AC_MSG_CHECKING([for doxygen])
-        unset DOXYGEN
-        AC_MSG_RESULT([no])
-    else
-        if test "$with_doxygen" = yes; then
-            AC_PATH_PROG([DOXYGEN], [doxygen])
-            if test -z "$DOXYGEN"; then
-                AC_MSG_ERROR([doxygen not found in \$PATH; specify its pathname via --with-doxygen=..., or disable its use via --without-doxygen])
-            fi
-            if $DOXYGEN -g - | grep -q "HAVE_DOT *= *YES"; then
-                if ! dot -V 2>/dev/null; then
-                    AC_MSG_ERROR([dot not found in \$PATH but doxygen defaults to HAVE_DOT=YES; install graphviz or disable its use via --without-doxygen])
-                fi
-            fi
-        else
-            AC_MSG_CHECKING([for doxygen])
-            PathFormat "$with_doxygen"
-            DOXYGEN="$formatted_path_unix"
-            AC_MSG_RESULT([$formatted_path])
-        fi
-        if test -n "$DOXYGEN"; then
-            DOXYGEN_VERSION=`$DOXYGEN --version 2>/dev/null`
-            DOXYGEN_NUMVERSION=`echo $DOXYGEN_VERSION | $AWK -F. '{ print \$1*10000 + \$2*100 + \$3 }'`
-            if ! test "$DOXYGEN_NUMVERSION" -ge "10804" ; then
-                AC_MSG_ERROR([found doxygen is too old; need at least version 1.8.4 or specify --without-doxygen])
-            fi
-        fi
-        if test -n "$WSL_ONLY_AS_HELPER"; then
-            dnl what really should be tested is whether it is doxygen from windows-realm
-            dnl i.e. one that runs on the windows-side and deals with windows-pathnames
-            dnl using doxygen from wsl container would be possible, but there's a performance
-            dnl penalty when accessing the files outside the container
-            AC_MSG_CHECKING([whether doxygen is a windows executable])
-            if $(file "$DOXYGEN" | grep -q "PE32"); then
-                AC_MSG_RESULT([yes])
-            else
-                AC_MSG_RESULT([no])
-                AC_MSG_ERROR([please provide a path to a windows version of doxygen or use --without-doxygen])
-            fi
-        fi
-    fi
-fi
-AC_SUBST([DOXYGEN])
 
 dnl ==================================================================
 dnl libfuzzer

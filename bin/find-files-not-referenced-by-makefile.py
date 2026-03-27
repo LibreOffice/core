@@ -12,7 +12,6 @@ with a.stdout as txt:
         if filename.find(".cxx") != -1 \
             and filename.find("precompiled") == -1 \
             and filename.find("/workben") == -1 \
-            and not filename.startswith("odk/examples/") \
             and not filename.startswith("bridges/") \
             and not filename.startswith("compilerplugins/") \
             and filename.find("/qa/") == -1 \

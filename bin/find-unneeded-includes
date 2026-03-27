@@ -399,7 +399,6 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                                     'sf_misc|'
                                     'sfx2|DocTempl|'
                                     'sidebar|' # for sfx2::sidebar
-                                    'skeletonmaker|'
                                     'star|' # for com::sun::star
                                     'std|chrono_literals|literals|'
                                     'stoc_sec|'
@@ -412,7 +411,6 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                                     'toolkit|'
                                     'treeview|'
                                     'ucbhelper|'
-                                    'unodevtools'
                                     'unopkg|'
                                     'util|db|qe|' # for xmlsearch::
                                     'utl|'

@@ -98,11 +98,8 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	netmaker \
 	pythonmaker \
 	$(if $(ENABLE_RUST_UNO),rustmaker) \
-    $(call gb_CondExeSp2bv,sp2bv) \
-	$(if $(filter ODK,$(BUILD_TYPE)),unoapploader) \
 	unoidl-read \
 	unoidl-write \
-	$(if $(filter ODK,$(BUILD_TYPE)),uno-skeletonmaker) \
 ))
 
 ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
@@ -607,7 +604,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	) \
 	i18nlangtag \
 	$(if $(ENABLE_DOTNET), \
-		net_bootstrap \
 		net_uno \
 	) \
 	$(if $(ENABLE_JAVA), \
@@ -868,14 +864,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	instsetoo_native_setup_ure \
     $(call gb_CondExeUno,uno_sh) \
 	ure_install \
-	$(if $(ENABLE_DOTNET),\
-		net_basetypes \
-		net_uretypes \
-		net_oootypes \
-		net_bridge \
-		net_nuget_pkg \
-		net_nuget_config \
-	) \
 	$(if $(ENABLE_JAVA),\
 		jvmfwk_jvmfwk3_ini \
 		jvmfwk_javavendors \
@@ -886,29 +874,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 
 $(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
 	$(if $(BUILD_POSTGRESQL_SDBC),connectivity_postgresql-sdbc) \
-))
-
-$(eval $(call gb_Helper_register_packages_for_install,sdk,\
-	odk_share_readme \
-	odk_share_readme_generated \
-	$(if $(ENABLE_CLI),\
-		$(if $(filter WNT,$(OS)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),odk_cli)) \
-	) \
-	odk_config \
-	$(if $(filter WNT,$(OS)),odk_config_win) \
-	odk_docs \
-	$(if $(DOXYGEN),odk_doxygen) \
-	odk_examples \
-	odk_headers \
-	odk_headers_generated \
-	odk_html \
-	odk_settings \
-	odk_settings_generated \
-	$(if $(ENABLE_JAVA), \
-		odk_javadoc \
-		odk_uno_loader_classes \
-	) \
-	odk_scripts \
 ))
 
 ifneq ($(ENABLE_WASM_STRIP_PINGUSER),TRUE)

@@ -9,8 +9,8 @@
 
 $(eval $(call gb_Module_Module,codemaker))
 
-# if not cross-compiling or we need this for ODK
-ifneq (,$(if $(CROSS_COMPILING),,T)$(filter ODK,$(BUILD_TYPE)))
+# if not cross-compiling
+ifneq (,$(if $(CROSS_COMPILING),,T))
 $(eval $(call gb_Module_add_targets,codemaker,\
     StaticLibrary_codemaker \
     StaticLibrary_codemaker_cpp \

@@ -61,13 +61,9 @@ endif
 # substituted by the : so that cut doesn't stumble over the delimiter
 ifeq (TRUE,$(filter TRUE,$(LIBO_TEST_INSTALL) $(ENABLE_WIX)))
 instsetoo_installer_targets = openoffice‧en-US‧‧‧archive‧nostrip
-ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
-instsetoo_installer_targets += sdkoo‧en-US‧_SDK‧‧archive‧nostrip
-endif
 else
 instsetoo_installer_targets := $(foreach pkgformat,$(PKGFORMAT),\
         openoffice‧$(instsetoo_installer_langs)‧‧‧$(pkgformat)‧$(if $(filter-out archive,$(pkgformat)),strip,nostrip) \
-        $(if $(filter ODK,$(BUILD_TYPE)),sdkoo‧en-US‧_SDK‧‧$(pkgformat)‧nostrip) \
         $(if $(and $(filter HELP,$(BUILD_TYPE)),$(filter-out MACOSX,$(OS))), \
             $(foreach lang,$(gb_HELP_LANGS),ooohelppack‧$(lang)‧‧-helppack‧$(pkgformat)‧nostrip)) \
         $(if $(and $(filter-out WNT,$(OS)),$(filter-out MACOSX,$(OS))), \
@@ -82,7 +78,7 @@ instsetoo_wipe:
 
 # list both as prerequisites so that make won't treat the $(template) one as intermediate /
 # won't attempt to delete it after the $(template)/Binary and the rest of the chain was made
-instsetoo_msi_templates: $(foreach template,openoffice ooohelppack sdkoo,$(addprefix \
+instsetoo_msi_templates: $(foreach template,openoffice ooohelppack,$(addprefix \
         $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_templates/,$(template) $(template)/Binary))
 
 # use awk instead of grep to not have to deal with grep exiting with error on files with no comments
@@ -105,7 +101,7 @@ $(gb_Make_JobLimiter): $(SRCDIR)/solenv/bin/job-limiter.cpp
 # that's the reason for the substitution to multilang below in case more than just en-US is packaged
 # also for windows msi packaging parallel execution is reduced by the job-limiter. This only has any
 # effect when building with help and multiple languages, and it also won't affect the real time for
-# packaging (since packaging the main installer takes longer than packaging sdk and all helppacks
+# packaging (since packaging the main installer takes longer than packaging all helppacks
 # even with the reduced parallelism (the higher the parallelism, the higher the chance for random
 # failures during the cscript call to WiLangId.vbs)
 $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
@@ -136,13 +132,6 @@ ifeq (TRUE,$(LIBO_TEST_INSTALL))
 	mv $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*/* $(TESTINSTALLDIR)/
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive
-ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
-	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_WITHOUT_SPACES)_SDK/archive/install/en-US/LibreOffice*_archive_sdk.zip
-	mv $(TESTINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK/sdk \
-        $(TESTINSTALLDIR)/
-	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK
-	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive_sdk
-endif
 endif # LIBO_TEST_INSTALL
 	touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
@@ -150,7 +139,6 @@ endif # LIBO_TEST_INSTALL
 TIMESTAMPURL ?= "http://timestamp.digicert.com/"
 $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_signing.done: \
         $(if $(filter HELP,$(BUILD_TYPE)),$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_helppack_signing.done) \
-        $(if $(filter ODK,$(BUILD_TYPE)),$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_sdk_signing.done) \
         $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_main_signing.done
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
@@ -158,7 +146,6 @@ $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_signing.done: \
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
 $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_helppack_signing.done \
-$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_sdk_signing.done \
 $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_main_signing.done \
     : $(SRCDIR)/postprocess/signing/signing.pl $(gb_CustomTarget_workdir)/instsetoo_native/install/install.phony
 
@@ -187,20 +174,6 @@ $(gb_CustomTarget_workdir)/instsetoo_native/install/msi_helppack_signing.done:
 			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
 			-d $(PRODUCTNAME_WITHOUT_SPACES)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ Helppack \
 			$(WORKDIR)/installation/$(PRODUCTNAME_WITHOUT_SPACES)_helppack/msi/install/*/*.msi \
-	&& touch $@
-	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
-
-$(gb_CustomTarget_workdir)/instsetoo_native/install/msi_sdk_signing.done:
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
-	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
-	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
-			-l $(subst .done,_log.txt,$@) \
-			$(if $(verbose),-v) \
-			$(if $(PFXFILE),-f $(PFXFILE)) \
-			$(if $(PFXPASSWORD),-p $(PFXPASSWORD)) \
-			$(if $(TIMESTAMPURL),-t $(TIMESTAMPURL)) \
-			-d $(PRODUCTNAME_WITHOUT_SPACES)\ $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\ SDK \
-			$(WORKDIR)/installation/$(PRODUCTNAME_WITHOUT_SPACES)_SDK/msi/install/*/*.msi \
 	&& touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 

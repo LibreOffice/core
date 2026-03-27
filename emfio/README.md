@@ -23,7 +23,7 @@ An example demo that renders a metafile using `vcl` be seen by invoking:
 
     ./bin/run mtfdemo odk/examples/basic/forms_and_controls/burger.wmf
 
-This opens the burger.wmf file from the ODK examples.
+This opens a burger.wmf file.
 
 It is also possible to dump metaactions created as the intermediary format
 before rendering the metafile using:

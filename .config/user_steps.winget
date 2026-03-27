@@ -171,8 +171,6 @@ properties:
           --with-strawberry-perl-portable=$env:USERPROFILE\lo\spp
           --with-ant-home=$env:USERPROFILE\lo\apache-ant-1.10.15
           --with-junit=$env:USERPROFILE\lo\junit-4.10.jar
-          --with-doxygen=$env:USERPROFILE\lo\spp\c\bin\doxygen.exe
-          #--enable-odk
           #--disable-dependency-tracking
           #--enable-dbgutil
           #--with-lang=fr ja

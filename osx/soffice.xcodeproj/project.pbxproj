@@ -37,9 +37,7 @@
 		29F88F922A554D6D00C77A3F /* cpputools */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cpputools; path = ../cpputools; sourceTree = "<group>"; };
 		29F88F932A554D6D00C77A3F /* svl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = svl; path = ../svl; sourceTree = "<group>"; };
 		29F88F942A554D6D00C77A3F /* swext */ = {isa = PBXFileReference; lastKnownFileType = folder; name = swext; path = ../swext; sourceTree = "<group>"; };
-		29F88F962A554D6D00C77A3F /* odk */ = {isa = PBXFileReference; lastKnownFileType = folder; name = odk; path = ../odk; sourceTree = "<group>"; };
 		29F88F972A554D6D00C77A3F /* xmlhelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xmlhelp; path = ../xmlhelp; sourceTree = "<group>"; };
-		29F88F982A554D6D00C77A3F /* unodevtools */ = {isa = PBXFileReference; lastKnownFileType = folder; name = unodevtools; path = ../unodevtools; sourceTree = "<group>"; };
 		29F88F992A554D6D00C77A3F /* embeddedobj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = embeddedobj; path = ../embeddedobj; sourceTree = "<group>"; };
 		29F88F9A2A554D6D00C77A3F /* schema */ = {isa = PBXFileReference; lastKnownFileType = folder; name = schema; path = ../schema; sourceTree = "<group>"; };
 		29F88F9B2A554D6E00C77A3F /* linguistic */ = {isa = PBXFileReference; lastKnownFileType = folder; name = linguistic; path = ../linguistic; sourceTree = "<group>"; };
@@ -213,7 +211,6 @@
 				29F88F802A554D6C00C77A3F /* msicreator */,
 				29F88FCF2A554D7300C77A3F /* nlpsolver */,
 				29F88FFC2A554D7B00C77A3F /* o3tl */,
-				29F88F962A554D6D00C77A3F /* odk */,
 				29F88FD12A554D7300C77A3F /* offapi */,
 				29F88FE92A554D7700C77A3F /* officecfg */,
 				29F88FE12A554D7600C77A3F /* onlineupdate */,
@@ -270,7 +267,6 @@
 				29F88FB22A554D6F00C77A3F /* udkapi */,
 				29F890012A554D8100C77A3F /* uitest */,
 				29F88FD02A554D7300C77A3F /* UnoControls */,
-				29F88F982A554D6D00C77A3F /* unodevtools */,
 				29F890022A554D8300C77A3F /* unoidl */,
 				29F88FE52A554D7700C77A3F /* unoil */,
 				29F88FAA2A554D6F00C77A3F /* unotest */,

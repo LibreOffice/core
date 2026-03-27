@@ -468,8 +468,6 @@ endef
 
 gb_Library_get_sdk_link_dir = $(INSTDIR)/$(SDKDIRNAME)/lib
 
-gb_Library_get_sdk_link_lib = $(gb_Library_get_ilib_target)
-
 # StaticLibrary class
 
 gb_StaticLibrary_get_filename = $(1).lib

@@ -42,7 +42,6 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-dependency-tracking \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
-			--disable-doxygen \
 			--disable-html-docs \
 			--disable-latex-docs \
 			--disable-werror \

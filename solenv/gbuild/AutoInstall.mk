@@ -17,12 +17,7 @@ $(gb_AutoInstall_targetdir)/% : $(GBUILDDIR)/AutoInstall.mk \
         | $(gb_AutoInstall_targetdir)/.dir
 	$(call gb_Output_announce,$*,$(true),AIN,3)
 	$(call gb_Trace_StartRange,$*,AIN)
-	SDKLIBFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
-	   $(foreach lib,$(gb_SdkLinkLibrary_MODULE_$*),\
-			$(lib) \
-			$(notdir $(call gb_Library_get_sdk_link_lib,$(lib))) \
-			../../program/$(call gb_Library_get_runtime_filename,$(lib)))) \
-	&& LIBFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
+	LIBFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
 		$(foreach lib,$(gb_Library_MODULE_$*),\
 			$(lib) \
 			$(call gb_Library_get_runtime_filename,$(lib)))) \
@@ -37,9 +32,9 @@ $(gb_AutoInstall_targetdir)/% : $(GBUILDDIR)/AutoInstall.mk \
 			'$*' '$(SCP2COMPONENTCONDITION)' \
 			'$(SCP2LIBTEMPLATE)' '$(SCP2EXETEMPLATE)' '$(SCP2JARTEMPLATE)' \
 			'$(SCP2PKGTEMPLATE)' \
-			$${SDKLIBFILE} $${LIBFILE} $${EXEFILE} $${JARFILE} $${PKGFILE} \
+			$${LIBFILE} $${EXEFILE} $${JARFILE} $${PKGFILE} \
 			> $@ \
-	&& rm -f $${SDKLIBFILE} $${LIBFILE} $${EXEFILE} $${JARFILE} $${PKGFILE}
+	&& rm -f $${LIBFILE} $${EXEFILE} $${JARFILE} $${PKGFILE}
 	$(call gb_Trace_EndRange,$*,AIN)
 
 

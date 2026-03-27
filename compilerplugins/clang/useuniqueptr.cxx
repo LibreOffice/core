@@ -472,9 +472,6 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     // complicated
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/connectivity/source/drivers/file/"))
         return;
-    // complicated
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/unodevtools/source/skeletonmaker/"))
-        return;
 
     llvm::StringRef parentName;
     if (auto cxxMethodDecl = dyn_cast<CXXMethodDecl>(functionDecl))

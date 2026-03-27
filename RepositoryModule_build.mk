@@ -31,7 +31,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	jvmaccess \
 	jvmfwk \
 	l10ntools \
-	net_ure \
 	o3tl \
 	offapi \
 	officecfg \

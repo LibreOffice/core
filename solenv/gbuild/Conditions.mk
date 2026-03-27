@@ -20,10 +20,6 @@ define gb_CondExeRegistryTools
 $(if $(or $(DISABLE_DYNLOADING),$(ENABLE_MACOSX_SANDBOX)),$(2),$(1))
 endef
 
-define gb_CondExeSp2bv
-$(if $(and $(filter WNT,$(OS)),$(call gb_Helper_optionals_and,DESKTOP ODK,$(true))),$(1),$(2))
-endef
-
 define gb_CondExeUno
 $(if $(and $(filter DESKTOP,$(BUILD_TYPE)),$(if $(DISABLE_DYNLOADING),,$(true))),$(1),$(2))
 endef

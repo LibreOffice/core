@@ -109,13 +109,8 @@ check_one_file()
 {
 local file="$1"
 
-    skip=0
     allowlist="${globalallowlist}"
     case "${file}" in
-        */sdk/docs/*)
-            # skip the majority of files, no ELF binaries here
-            skip=1
-        ;;
         */_uuid.cpython-*.so)
             allowlist="${allowlist} libuuid.so.1"
         ;;
@@ -222,7 +217,7 @@ local file="$1"
             allowlist="${allowlist} ${x11allowlist} ${openglallowlist} ${gioallowlist} ${kerberosallowlist} ${dconfallowlist} libcups.so.2 libcairo.so.2"
         ;;
     esac
-    if test "${skip}" = 0 && readelf -d "${file}" &> /dev/null ; then
+    if readelf -d "${file}" &> /dev/null ; then
         rpath=$(readelf -d "${file}" | grep '(\(RPATH\|RUNPATH\))' || true)
         neededs=$(readelf -d "${file}" | grep '(NEEDED)' | sed -e 's/.*\[\(.*\)\]$/\1/')
         neededsinternal=

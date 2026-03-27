@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 # Search for headers not included in any source files
-# Note: there are still exceptions (such as ODK) so results are not completely foolproof
+# Note: there may still be exceptions so results are not completely foolproof
 
 # Search in all subdirs, except for those not containing C/C++ headers
 for subdir in $(ls -d */ | grep -v \

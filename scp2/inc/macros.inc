@@ -179,28 +179,6 @@ End
         Dir    = gid_Dir_Shlxthdl; \
     End
 
-#ifdef MACOSX
-// links are created at configure time by odk/config/setsdkenv_unix.sh.in
-#define SDK_LIBRARY_LINK(id,name,target)
-#elif defined(WNT)
-#define SDK_LIBRARY_LINK(id,name,target) \
-    File id \
-        TXT_FILE_BODY; \
-        Styles = (PACKED); \
-        Dir = gid_Dir_Lib_Sdk; \
-        Name = name; \
-    End
-#else
-#define SDK_LIBRARY_LINK(id,name,target) \
-    Unixlink id \
-     BIN_FILE_BODY; \
-     Styles = (); \
-     Dir = gid_Dir_Lib_Sdk; \
-     Name = name; \
-     Target = target; \
-    End
-#endif
-
 #define LIBO_JAR_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \

@@ -231,9 +231,6 @@ $(call gb_Helper__register_libraries,$(1),$(3))
 
 gb_Library_MODULE_$(2) += $(filter-out $(gb_MERGEDLIBS),$(3))
 
-$(if $(filter UNOVERLIBS RTVERLIBS,$(1)),\
-	gb_SdkLinkLibrary_MODULE_sdk += $(3))
-
 endef
 
 # a plugin is a library, why can't be dynamically linked and must be dlopen'd, but must be linked static

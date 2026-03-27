@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,cpputools))
 
 $(eval $(call gb_Module_add_targets,cpputools,\
-    $(call gb_CondExeSp2bv,Executable_sp2bv) \
     $(call gb_CondExeUno, \
         Executable_uno \
         Package_uno_sh \
