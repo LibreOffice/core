@@ -16,14 +16,10 @@
 extern "C" {
 #endif
 
-/** @see kit::Office::registerCallback().
-    @since LibreOffice 6.0
- */
+/** @see kit::Office::registerCallback(). */
 typedef void (*COKitCallback)(int nType, const char* pPayload, void* pData);
 
-/** @see kit::Office::runLoop().
-    @since LibreOffice 6.3
- */
+/** @see kit::Office::runLoop(). */
 typedef int (*COKitPollCallback)(void* pData, int timeoutUs);
 typedef void (*COKitWakeCallback)(void* pData);
 

@@ -63,7 +63,6 @@ public:
     /**
      * Get document type.
      *
-     * @since LibreOffice 6.0
      * @return an element of the COKitDocumentType enum.
      */
     int getDocumentType()
@@ -397,7 +396,6 @@ public:
      * @param pText the currently selected text
      * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
      * @return an element of the COKitSelectionType enum.
-     * @since LibreOffice 7.4
      */
     int getSelectionTypeAndText(const char* pMimeType, char** pText, char** pUsedMimeType = NULL)
     {
@@ -995,7 +993,6 @@ public:
      *        Another useful FilterOption is "Language=...".  It is consumed
      *        by the documentLoad() itself, and when provided, COKit
      *        switches the language accordingly first.
-     * @since pFilterOptions argument added in LibreOffice 5.0
      */
     Document* documentLoad(const char* pUrl, const char* pFilterOptions = NULL)
     {
@@ -1026,7 +1023,6 @@ public:
      * functions. In other cases than the value returned by
      * getError(), call freeMemory() instead for clarity.
      *
-     * @since LibreOffice 5.2
      */
     void freeError(char* pFree)
     {
@@ -1037,7 +1033,6 @@ public:
      * Registers a callback. LOK will invoke this function when it wants to
      * inform the client about events.
      *
-     * @since LibreOffice 6.0
      * @param pCallback the callback to invoke
      * @param pData the user data, will be passed to the callback on invocation
      */
@@ -1060,7 +1055,6 @@ public:
      *     }
      * }
      *
-     * @since LibreOffice 6.0
      */
     char* getFilterTypes()
     {
@@ -1070,7 +1064,6 @@ public:
     /**
      * Set bitmask of optional features supported by the client.
      *
-     * @since LibreOffice 6.0
      * @see COKitOptionalFeatures
      */
     void setOptionalFeatures(unsigned long long features)
@@ -1096,8 +1089,6 @@ public:
      * result in another KIT_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY request,
      * and a NULL password will continue loading the document in read-only
      * mode.
-     *
-     * @since LibreOffice 6.0
      */
     void setDocumentPassword(char const* pURL, char const* pPassword)
     {
@@ -1107,12 +1098,11 @@ public:
     /**
      * Get version information of the LOKit process
      *
-     * @since LibreOffice 6.0
      * @returns JSON string containing version information in format:
      * {ProductName: <>, ProductVersion: <>, ProductExtension: <>, BuildId: <>}
      *
-     * Eg: {"ProductName": "LibreOffice",
-     * "ProductVersion": "5.3",
+     * Eg: {"ProductName": "CollaboraOffice",
+     * "ProductVersion": "26.4",
      * "ProductExtension": ".0.0.alpha0",
      * "BuildId": "<full 40 char git hash>"}
      */
@@ -1126,7 +1116,6 @@ public:
      *
      * Same syntax as on command line is permissible (ie. the macro:// URI forms)
      *
-     * @since LibreOffice 6.0
      * @param pURL macro url to run
      */
     bool runMacro( const char* pURL)
@@ -1187,10 +1176,10 @@ public:
      * Override the SAL_LOG environment variable
      *
      * For the syntax of the string see the documentation for "Basic
-     * logging functionality" in LibreOffice internal API
-     * documentation (include/sal/log.hxx). If the logging selector
-     * has been set by this function to a non-empty value, that is used
-     * instead of the environment variable SAL_LOG.
+     * logging functionality" in the internal API documentation
+     * (include/sal/log.hxx). If the logging selector has been set by this
+     * function to a non-empty value, that is used instead of the environment
+     * variable SAL_LOG.
      *
      * The parameter is not copied so you should pass a value that
      * points to memory that will stay valid until you call setOption

@@ -60,11 +60,9 @@ struct COKitClassStruct
 
     char* (*getError) (COKit* pThis);
 
-    /// @since LibreOffice 5.0
     COKitDocument* (*documentLoadWithOptions) (COKit* pThis,
                                                         const char* pURL,
                                                         const char* pOptions);
-    /// @since LibreOffice 5.2
 
     /// The name "freeError" is a historical accident, actually this
     /// is a generic deallocation function for dynamically allocated
@@ -81,41 +79,28 @@ struct COKitClassStruct
 
     void (*freeError) (char* pFree);
 
-    /// @since LibreOffice 6.0
     void (*registerCallback) (COKit* pThis,
                               COKitCallback pCallback,
                               void* pData);
 
-    /** @see kit::Office::getFilterTypes().
-        @since LibreOffice 6.0
-     */
+    /** @see kit::Office::getFilterTypes(). */
     char* (*getFilterTypes) (COKit* pThis);
 
-    /** @see kit::Office::setOptionalFeatures().
-        @since LibreOffice 6.0
-     */
+    /** @see kit::Office::setOptionalFeatures(). */
     void (*setOptionalFeatures)(COKit* pThis, unsigned long long features);
 
-    /** @see kit::Office::setDocumentPassword().
-        @since LibreOffice 6.0
-     */
+    /** @see kit::Office::setDocumentPassword(). */
     void (*setDocumentPassword) (COKit* pThis,
             char const* pURL,
             char const* pPassword);
 
-    /** @see kit::Office::getVersionInfo().
-        @since LibreOffice 6.0
-     */
+    /** @see kit::Office::getVersionInfo(). */
     char* (*getVersionInfo) (COKit* pThis);
 
-    /** @see kit::Office::runMacro().
-        @since LibreOffice 6.0
-     */
+    /** @see kit::Office::runMacro(). */
     int (*runMacro) (COKit *pThis, const char* pURL);
 
-    /** @see kit::Office::signDocument().
-        @since LibreOffice 6.2
-     */
+    /** @see kit::Office::signDocument(). */
      bool (*signDocument) (COKit* pThis,
                            const char* pUrl,
                            const unsigned char* pCertificateBinary,
@@ -138,7 +123,6 @@ struct COKitClassStruct
     void (*setOption) (COKit* pThis, const char* pOption, const char* pValue);
 
     /// @see kit::Office::dumpState
-    /// @since LibreOffice 7.5
     void (*dumpState) (COKit* pThis, const char* pOptions, char** pState);
 
     /** @see kit::Office::extractRequest.
@@ -147,7 +131,6 @@ struct COKitClassStruct
                            const char* pFilePath);
 
     /// @see kit::Office::trimMemory
-    /// @since LibreOffice 7.6
     void (*trimMemory) (COKit* pThis, int nTarget);
 
     /// @see kit::Office::startURP
@@ -203,9 +186,7 @@ struct COKitDocumentClassStruct
                    const char* pFormat,
                    const char* pFilterOptions);
 
-    /** @see kit::Document::getDocumentType().
-        @since LibreOffice 6.0
-     */
+    /** @see kit::Document::getDocumentType(). */
     int (*getDocumentType) (COKitDocument* pThis);
 
 #if defined KIT_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
@@ -527,7 +508,6 @@ struct COKitDocumentClassStruct
     void (*sendContentControlEvent)(COKitDocument* pThis, const char* pArguments);
 
     /// @see kit::Document::getSelectionTypeAndText
-    /// @since LibreOffice 7.4
     int (*getSelectionTypeAndText) (COKitDocument* pThis,
                                     const char* pMimeType,
                                     char** pText,
