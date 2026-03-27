@@ -9,6 +9,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <config_features.h>
 
 #if defined(BASIC_DLLIMPLEMENTATION)
 #define BASIC_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
@@ -16,5 +17,12 @@
 #define BASIC_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 #define BASIC_DLLPRIVATE SAL_DLLPRIVATE
+
+// classes whose virtual functions are only defined with HAVE_FEATURE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
+#define BASIC_DLLPUBLIC_SCRIPTING BASIC_DLLPUBLIC
+#else
+#define BASIC_DLLPUBLIC_SCRIPTING
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
