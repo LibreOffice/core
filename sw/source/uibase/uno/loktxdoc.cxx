@@ -31,7 +31,7 @@
 #include <tools/json_writer.hxx>
 #include <tools/urlobj.hxx>
 #include <xmloff/odffields.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>

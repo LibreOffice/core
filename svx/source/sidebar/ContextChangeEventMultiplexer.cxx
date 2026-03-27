@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/viewsh.hxx>
 
 using namespace css;

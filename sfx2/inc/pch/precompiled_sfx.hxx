@@ -428,7 +428,7 @@
 #include <sfx2/ipclient.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>

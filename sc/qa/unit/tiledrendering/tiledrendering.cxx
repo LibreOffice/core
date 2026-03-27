@@ -31,7 +31,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/childwin.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>

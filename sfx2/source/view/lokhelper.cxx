@@ -14,9 +14,9 @@
 #include <list>
 #include <mutex>
 
-#include <sfx2/lokcomponenthelpers.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <sfx2/lokunocmdlist.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <sfx2/kit/unocommandlist.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>

@@ -68,7 +68,7 @@
 #include <unotools/datetime.hxx>
 
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>

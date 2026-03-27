@@ -25,7 +25,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdograf.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svx/svdpagv.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>

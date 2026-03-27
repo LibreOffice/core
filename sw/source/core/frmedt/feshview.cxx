@@ -89,7 +89,7 @@
 #include <HandleAnchorNodeChg.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
 #include <calbck.hxx>
 #include <PostItMgr.hxx>

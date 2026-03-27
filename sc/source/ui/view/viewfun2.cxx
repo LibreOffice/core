@@ -91,7 +91,7 @@
 #include <tools/json_writer.hxx>
 
 #include <officecfg/Office/Calc.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 using namespace com::sun::star;
 using ::editeng::SvxBorderLine;

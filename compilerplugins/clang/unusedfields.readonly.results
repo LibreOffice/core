@@ -360,7 +360,7 @@ include/oox/core/contexthandler2.hxx:230
     oox::core::ContextHandler2Helper mnRootStackSize size_t
 include/oox/ole/axbinarywriter.hxx:153
     oox::ole::AxBinaryPropertyWriter maStreamProps ComplexPropVector
-include/sfx2/lokhelper.hxx:70
+include/sfx2/kit/helper.hxx:70
     LokMouseEventData maLogicPosition std::optional<Point>
 include/sfx2/msg.hxx:94
     SfxTypeAttrib nAID sal_uInt16

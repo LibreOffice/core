@@ -20,7 +20,7 @@
 #include <hintpost.hxx>
 
 #include <sfx2/request.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <comphelper/lok.hxx>

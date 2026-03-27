@@ -85,9 +85,9 @@
 #if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
 #endif
-#include <sfx2/lokhelper.hxx>
-#include <sfx2/lokcomponenthelpers.hxx>
-#include <sfx2/LokControlHandler.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
+#include <sfx2/kit/ControlHandler.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
 

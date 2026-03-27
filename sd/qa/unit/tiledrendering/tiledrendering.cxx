@@ -64,7 +64,7 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 #include <config_cairo_rgba.h>
 

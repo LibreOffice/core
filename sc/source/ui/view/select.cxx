@@ -30,7 +30,7 @@
 #include <tabprotection.hxx>
 #include <markdata.hxx>
 #include <gridwin.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <comphelper/lok.hxx>
 
 #if defined(_WIN32)

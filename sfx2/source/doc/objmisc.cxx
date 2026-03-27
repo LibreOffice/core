@@ -104,7 +104,7 @@
 #include <workwin.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/infobar.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <openflag.hxx>
 #include "objstor.hxx"

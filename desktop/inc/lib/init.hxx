@@ -28,8 +28,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <tools/gen.hxx>
-#include <sfx2/lokcallback.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/callback.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <vcl/idle.hxx>
 
 #include <desktop/dllapi.h>

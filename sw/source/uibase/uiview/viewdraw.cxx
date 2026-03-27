@@ -63,7 +63,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/extrusionbar.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
 
 using namespace ::com::sun::star;

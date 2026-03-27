@@ -22,7 +22,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <editeng/sizeitem.hxx>
 #include <sal/log.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxresid.hxx>

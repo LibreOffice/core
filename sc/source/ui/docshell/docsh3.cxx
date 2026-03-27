@@ -72,7 +72,7 @@
 #include <formulaopt.hxx>
 
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 //          Redraw - Notifications
 

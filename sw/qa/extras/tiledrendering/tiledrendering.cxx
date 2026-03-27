@@ -53,7 +53,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <COKit/COKitEnums.h>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/searchopt.hxx>

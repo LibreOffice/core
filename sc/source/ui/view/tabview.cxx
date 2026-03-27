@@ -51,7 +51,7 @@
 #include <attrib.hxx>
 #include <spellcheckcontext.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <osl/diagnose.h>
 
 #include <boost/property_tree/ptree.hpp>

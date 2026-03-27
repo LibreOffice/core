@@ -31,7 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/childwin.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <test/unoapi_test.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>

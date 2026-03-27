@@ -144,7 +144,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 #include <COKit/COKitEnums.h>
 #include <tools/json_writer.hxx>

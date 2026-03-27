@@ -39,7 +39,7 @@
 #include <editeng/justifyitem.hxx>
 #include <sal/log.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svl/numformat.hxx>
 #include <svl/intitem.hxx>
 #include <utility>

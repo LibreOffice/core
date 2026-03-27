@@ -814,7 +814,7 @@ include/sfx2/evntconf.hxx:61
     struct SfxEventName & SfxEventNamesList::at(unsigned long)
 include/sfx2/infobar.hxx:104
     void SfxInfoBarWindow::SetCommandHandler(weld::Button &,const rtl::OUString &)
-include/sfx2/lokcomponenthelpers.hxx:48
+include/sfx2/kit/componenthelpers.hxx:48
     void LokChartHelper::Invalidate()
 include/sfx2/viewsh.hxx:475
     enum LOKDeviceFormFactor SfxViewShell::GetLOKDeviceFormFactor() const

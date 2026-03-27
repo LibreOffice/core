@@ -79,7 +79,7 @@
 #include <svx/svdpagv.hxx>
 #include <comphelper/lok.hxx>
 #include <shellres.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <tools/UnitConversion.hxx>
 
 #if !HAVE_FEATURE_DESKTOP

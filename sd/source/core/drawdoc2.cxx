@@ -53,7 +53,7 @@
 #include <stlpool.hxx>
 #include <anminfo.hxx>
 #include <undo/undomanager.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <unomodel.hxx>
 #include <svx/constructhelper.hxx>
 

@@ -95,7 +95,7 @@
 #include <formula/errorcodes.hxx>
 #include <documentlinkmgr.hxx>
 #include <COKit/COKitEnums.h>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 #define SC_IDLE_MIN     150
 #define SC_IDLE_MAX     3000

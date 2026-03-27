@@ -32,14 +32,14 @@
 #include <vcl/print.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <sfx2/LokControlHandler.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <sfx2/kit/ControlHandler.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <COKit/COKitEnums.h>
-#include <sfx2/lokcomponenthelpers.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/ipclient.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/acorrcfg.hxx>

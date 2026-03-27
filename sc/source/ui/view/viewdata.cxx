@@ -24,7 +24,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <o3tl/string_view.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/brushitem.hxx>

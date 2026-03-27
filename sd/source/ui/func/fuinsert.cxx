@@ -36,7 +36,7 @@
 
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
 #include <svtools/insdlg.hxx>

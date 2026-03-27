@@ -63,7 +63,7 @@
 #include <editeng/sizeitem.hxx>
 #include <comphelper/lok.hxx>
 #include <unomodel.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 using namespace ::com::sun::star;
 

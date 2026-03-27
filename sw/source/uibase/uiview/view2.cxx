@@ -50,7 +50,7 @@
 #include <svx/statusitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>

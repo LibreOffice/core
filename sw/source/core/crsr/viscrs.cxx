@@ -49,7 +49,7 @@
 
 #include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/string.hxx>
 #include <osl/diagnose.h>

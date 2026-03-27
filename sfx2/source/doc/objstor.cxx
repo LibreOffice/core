@@ -107,7 +107,7 @@
 #include <sfx2/docfac.hxx>
 #include <appopen.hxx>
 #include <objshimp.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/dispatch.hxx>

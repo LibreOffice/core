@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sal/types.h>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdpage.hxx>
@@ -157,10 +157,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/lokcomponenthelpers.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/DocumentSigner.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
-#include <sfx2/lokunocmdlist.hxx>
+#include <sfx2/kit/unocommandlist.hxx>
 #include <svl/numformat.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>

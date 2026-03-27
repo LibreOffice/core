@@ -47,7 +47,7 @@
 #include "../../inc/lib/init.hxx"
 
 #include <COKit/COKitEnums.h>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/viewsh.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svditer.hxx>
 #include <vcl/virdev.hxx>

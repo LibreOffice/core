@@ -20,7 +20,7 @@
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <comphelper/storagehelper.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svl/cryptosign.hxx>
 
 #include <documentsignaturemanager.hxx>

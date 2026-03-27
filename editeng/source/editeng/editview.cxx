@@ -61,7 +61,7 @@
 #include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <osl/diagnose.h>
 #include <boost/property_tree/json_parser.hpp>
 

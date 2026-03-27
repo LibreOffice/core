@@ -316,7 +316,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>

@@ -16,7 +16,7 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/scheduler.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <test/lokcallback.hxx>
 #include <editeng/escapementitem.hxx>
 

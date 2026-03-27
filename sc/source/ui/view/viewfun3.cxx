@@ -68,7 +68,7 @@
 #include <SheetViewManager.hxx>
 #include <uiitems.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sc.hrc>
 #include <sfx2/bindings.hxx>
 #include <COKit/COKitEnums.h>

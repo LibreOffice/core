@@ -63,8 +63,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/zoomitem.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <sfx2/lokunocmdlist.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <sfx2/kit/unocommandlist.hxx>
 
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/ClassificationDialog.hxx>

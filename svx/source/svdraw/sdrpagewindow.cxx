@@ -32,7 +32,7 @@
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/fmview.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>

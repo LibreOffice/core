@@ -17,7 +17,7 @@
 #include <vcl/scheduler.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <test/lokcallback.hxx>
 #include <comphelper/string.hxx>
 

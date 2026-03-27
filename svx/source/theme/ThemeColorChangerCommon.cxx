@@ -20,7 +20,7 @@
 
 #include <sal/config.h>
 
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 #include <svx/PaletteManager.hxx>
 #include <svx/svdmodel.hxx>

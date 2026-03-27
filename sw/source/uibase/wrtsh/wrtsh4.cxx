@@ -22,7 +22,7 @@
 
 #include <COKit/COKitEnums.h>
 #include <comphelper/string.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 // Private methods, which move the cursor over search.
 // The removal of the selection must be made on the level above.

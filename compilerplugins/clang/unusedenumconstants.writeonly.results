@@ -2214,45 +2214,45 @@ include/sfx2/frmdescr.hxx:42
     enum ScrollingMode No
 include/sfx2/lnkbase.hxx:137
     enum sfx2::SvBaseLink::UpdateResult ERROR_GENERAL
-include/sfx2/lokunocmdlist.hxx:16
+include/sfx2/kit/unocommandlist.hxx:16
     enum PayloadType IsActivePayload
-include/sfx2/lokunocmdlist.hxx:17
+include/sfx2/kit/unocommandlist.hxx:17
     enum PayloadType FontNamePayload
-include/sfx2/lokunocmdlist.hxx:18
+include/sfx2/kit/unocommandlist.hxx:18
     enum PayloadType FontHeightPayload
-include/sfx2/lokunocmdlist.hxx:19
+include/sfx2/kit/unocommandlist.hxx:19
     enum PayloadType StyleApplyPayload
-include/sfx2/lokunocmdlist.hxx:20
+include/sfx2/kit/unocommandlist.hxx:20
     enum PayloadType ColorPayload
-include/sfx2/lokunocmdlist.hxx:21
+include/sfx2/kit/unocommandlist.hxx:21
     enum PayloadType UndoRedoPayload
-include/sfx2/lokunocmdlist.hxx:22
+include/sfx2/kit/unocommandlist.hxx:22
     enum PayloadType EnabledPayload
-include/sfx2/lokunocmdlist.hxx:23
+include/sfx2/kit/unocommandlist.hxx:23
     enum PayloadType ParaDirectionPayload
-include/sfx2/lokunocmdlist.hxx:24
+include/sfx2/kit/unocommandlist.hxx:24
     enum PayloadType Int32Payload
-include/sfx2/lokunocmdlist.hxx:25
+include/sfx2/kit/unocommandlist.hxx:25
     enum PayloadType TransformPayload
-include/sfx2/lokunocmdlist.hxx:26
+include/sfx2/kit/unocommandlist.hxx:26
     enum PayloadType StringPayload
-include/sfx2/lokunocmdlist.hxx:27
+include/sfx2/kit/unocommandlist.hxx:27
     enum PayloadType RowColSelCountPayload
-include/sfx2/lokunocmdlist.hxx:28
+include/sfx2/kit/unocommandlist.hxx:28
     enum PayloadType StateTableCellPayload
-include/sfx2/lokunocmdlist.hxx:29
+include/sfx2/kit/unocommandlist.hxx:29
     enum PayloadType BooleanPayload
-include/sfx2/lokunocmdlist.hxx:30
+include/sfx2/kit/unocommandlist.hxx:30
     enum PayloadType BooleanOrDisabledPayload
-include/sfx2/lokunocmdlist.hxx:31
+include/sfx2/kit/unocommandlist.hxx:31
     enum PayloadType PointPayload
-include/sfx2/lokunocmdlist.hxx:32
+include/sfx2/kit/unocommandlist.hxx:32
     enum PayloadType SizePayload
-include/sfx2/lokunocmdlist.hxx:33
+include/sfx2/kit/unocommandlist.hxx:33
     enum PayloadType StringOrStrSeqPayload
-include/sfx2/lokunocmdlist.hxx:34
+include/sfx2/kit/unocommandlist.hxx:34
     enum PayloadType StrSeqPayload
-include/sfx2/lokunocmdlist.hxx:35
+include/sfx2/kit/unocommandlist.hxx:35
     enum PayloadType TableSizePayload
 include/sfx2/mailmodelapi.hxx:48
     enum SfxMailModel::SaveResult SAVE_ERROR

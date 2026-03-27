@@ -237,7 +237,7 @@ public:
                    // AquaA11yFocusTracker::WindowEventHandler (TODO: is that guaranteed?)
                 || (loplugin::DeclCheck(pVarDecl).Var("maEditViewHistory")
                         .Class("LOKEditViewHistory").GlobalNamespace())
-                   // sfx2/lokhelper.hxx, only handling pointers, not owning
+                   // sfx2/kit/helper.hxx, only handling pointers, not owning
                ) // these variables appear unproblematic
             {
                 return true;

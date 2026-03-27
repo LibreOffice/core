@@ -83,7 +83,7 @@
 #include <unomodel.hxx>
 #include <sdhtmlfilter.hxx>
 #include "unopool.hxx"
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
 #include <Outliner.hxx>
@@ -171,8 +171,8 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 
-#include <sfx2/lokcomponenthelpers.hxx>
-#include <sfx2/LokControlHandler.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
+#include <sfx2/kit/ControlHandler.hxx>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>

@@ -86,7 +86,7 @@
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <comphelper/processfactory.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <comphelper/flagguard.hxx>
 #include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>

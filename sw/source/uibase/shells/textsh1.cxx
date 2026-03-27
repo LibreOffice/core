@@ -45,7 +45,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/lrspitem.hxx>

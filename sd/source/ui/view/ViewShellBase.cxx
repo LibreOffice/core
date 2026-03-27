@@ -75,7 +75,7 @@
 
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
 #include <editeng/editview.hxx>
 #include <tools/svborder.hxx>

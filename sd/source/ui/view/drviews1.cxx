@@ -34,7 +34,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/fmshell.hxx>

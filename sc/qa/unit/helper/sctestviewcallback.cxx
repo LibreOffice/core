@@ -16,7 +16,7 @@
 #include <comphelper/string.hxx>
 #include <test/unoapixml_test.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 using namespace com::sun::star;
 

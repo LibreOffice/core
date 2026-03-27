@@ -92,7 +92,7 @@
 #include <sfx2/infobar.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <SfxRedactionHelper.hxx>
 

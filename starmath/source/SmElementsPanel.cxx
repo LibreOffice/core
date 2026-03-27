@@ -21,7 +21,7 @@
 
 #include <comphelper/lok.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/lokcomponenthelpers.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/hint.hxx>

@@ -13,7 +13,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 

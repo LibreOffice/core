@@ -27,7 +27,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dndlistenercontainer.hxx>

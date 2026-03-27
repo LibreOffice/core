@@ -100,7 +100,7 @@
 #include <basegfx/utils/zoomtools.hxx>
 #include <officecfg/Office/Draw.hxx>
 #include <officecfg/Office/Impress.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <SlideSorter.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <controller/SlideSorterController.hxx>

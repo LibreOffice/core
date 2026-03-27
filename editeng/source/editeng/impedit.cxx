@@ -44,7 +44,7 @@
 #include <COKit/COKitEnums.h>
 #include <comphelper/string.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <tools/urlobj.hxx>
 #include <boost/property_tree/ptree.hpp>
 

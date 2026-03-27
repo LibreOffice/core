@@ -15,7 +15,7 @@
 #include <editeng/editeng.hxx>
 #include <COKit/COKitEnums.h>
 #include <osl/diagnose.h>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/unohelp2.hxx>
 

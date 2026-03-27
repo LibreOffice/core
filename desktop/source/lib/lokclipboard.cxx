@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <tools/lazydelete.hxx>
 #include <vcl/svapp.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>

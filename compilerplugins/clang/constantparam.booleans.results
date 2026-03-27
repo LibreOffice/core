@@ -1114,15 +1114,15 @@ include/sfx2/filedlghelper.hxx:153
     void sfx2::FileDialogHelper::FileDialogHelper(short,enum FileDialogFlags,const class rtl::OUString &,enum SfxFilterFlags,enum SfxFilterFlags,class weld::Window *)
     enum SfxFilterFlags nDont
     0
-include/sfx2/lokhelper.hxx:146
+include/sfx2/kit/helper.hxx:146
     void SfxLokHelper::setViewTimezone(int,_Bool,const class rtl::OUString &)
     _Bool isSet
     1
-include/sfx2/lokhelper.hxx:177
+include/sfx2/kit/helper.hxx:177
     void SfxLokHelper::notifyDocumentSizeChangedAllViews(class vcl::ITiledRenderable *,_Bool)
     _Bool bInvalidateAll
     1
-include/sfx2/lokhelper.hxx:197
+include/sfx2/kit/helper.hxx:197
     void SfxLokHelper::notifyUpdatePerViewId(const class SfxViewShell *,int)
     int nType
     1

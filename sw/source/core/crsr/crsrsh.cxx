@@ -66,7 +66,7 @@
 #include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/frmdir.hxx>
 #include <sal/log.hxx>

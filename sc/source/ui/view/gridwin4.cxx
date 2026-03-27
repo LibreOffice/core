@@ -37,8 +37,8 @@
 
 #include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <sfx2/lokcomponenthelpers.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
 #include <officecfg/Office/Calc.hxx>
 
 #include <svx/svdview.hxx>

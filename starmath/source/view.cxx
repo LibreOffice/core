@@ -40,8 +40,8 @@
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/infobar.hxx>
-#include <sfx2/lokcomponenthelpers.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>

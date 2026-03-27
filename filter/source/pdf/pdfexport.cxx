@@ -41,7 +41,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/compbase.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 #include "pdfexport.hxx"
 #include <strings.hrc>

@@ -13,7 +13,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/scheduler.hxx>
 #include <COKit/COKitEnums.h>

@@ -25,7 +25,7 @@
 #include <ViewShellManager.hxx>
 #include <Window.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <vcl/vclevent.hxx>
 #include <svx/fmshell.hxx>
 #include <osl/diagnose.h>

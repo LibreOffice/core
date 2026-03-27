@@ -22,7 +22,7 @@
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/dispatch.hxx>

@@ -34,7 +34,7 @@
 #include <svl/srchitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svx/srchdlg.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>

@@ -63,8 +63,8 @@
 #include <sfx2/viewsh.hxx>
 #include <slotserv.hxx>
 #include <rtl/ustring.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <sfx2/lokunocmdlist.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <sfx2/kit/unocommandlist.hxx>
 
 #include <memory>
 #include <string_view>

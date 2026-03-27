@@ -120,7 +120,7 @@
 #include <svx/xdef.hxx>
 #include <editeng/lrspitem.hxx> // Defines SvxLRSpaceItem
 #include <editeng/ulspitem.hxx> // Defines SvxULSpaceItem
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 using namespace ::com::sun::star;
 

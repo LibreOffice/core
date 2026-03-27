@@ -15,7 +15,7 @@
 #include <COKit/COKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 using namespace css;
 

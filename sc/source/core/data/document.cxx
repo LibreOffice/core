@@ -102,7 +102,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 
 #include <mtvelements.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <SheetViewManager.hxx>
 
 using ::editeng::SvxBorderLine;

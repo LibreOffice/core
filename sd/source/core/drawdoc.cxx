@@ -40,7 +40,7 @@
 #include <officecfg/Office/Draw.hxx>
 
 #include <sfx2/linkmgr.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <Outliner.hxx>
 #include <sdmod.hxx>
 #include <editeng/editstat.hxx>

@@ -24,7 +24,7 @@
 #include <view.hxx>
 
 #include <comphelper/lok.hxx>
-#include <sfx2/lokcomponenthelpers.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
 
 // return pointer to active SmViewShell, if this is not possible
 // return 0 instead.

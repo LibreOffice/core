@@ -15,7 +15,7 @@
 #include <COKit/COKitEnums.h>
 #include <test/lokcallback.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 #include <docsh.hxx>
 #include <view.hxx>

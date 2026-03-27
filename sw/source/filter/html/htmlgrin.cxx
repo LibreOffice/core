@@ -35,7 +35,7 @@
 #include <editeng/langitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <vcl/imap.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>

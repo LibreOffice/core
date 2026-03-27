@@ -106,8 +106,8 @@
 #include <sfx2/ipclient.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/objface.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <sfx2/lokcallback.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <sfx2/kit/callback.hxx>
 #include <openuriexternally.hxx>
 #include <iostream>
 #include <vector>

@@ -30,7 +30,7 @@
 #include <viewopt.hxx>
 #include <globals.h>
 #include <sfx2/infobar.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <svx/srchdlg.hxx>

@@ -21,7 +21,7 @@
 #include <svx/svdocapt.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <svl/stritem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>

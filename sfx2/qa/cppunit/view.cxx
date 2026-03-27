@@ -22,7 +22,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <tools/json_writer.hxx>
 #include <rtl/ustrbuf.hxx>

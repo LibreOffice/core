@@ -110,7 +110,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <framework/windowstatehelper.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <COKit/COKitEnums.h>
 #include <svtools/embedhlp.hxx>
 #include <tools/UnitConversion.hxx>

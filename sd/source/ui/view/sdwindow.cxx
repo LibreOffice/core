@@ -48,7 +48,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 namespace sd {
 

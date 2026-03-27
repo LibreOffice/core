@@ -21,7 +21,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 namespace sfx2::sidebar {
 

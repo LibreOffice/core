@@ -22,7 +22,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 
 #include <swmodeltestbase.hxx>
 #include <doc.hxx>

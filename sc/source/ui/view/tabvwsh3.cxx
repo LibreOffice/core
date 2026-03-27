@@ -58,7 +58,7 @@
 #include <comphelper/string.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/sheet/XCellRangeData.hpp>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <scabstdlg.hxx>
 #include <officecfg/Office/Calc.hxx>
 
