@@ -27,7 +27,7 @@
 #include <vector>
 
 #include <comphelper/solarmutex.hxx>
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include <LibreOfficeKit/COKitTypes.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/thread.h>

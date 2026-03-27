@@ -39,7 +39,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/window.hxx>
 #include <vcl/task.hxx>
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include <LibreOfficeKit/COKitTypes.h>
 #include <unotools/resmgr.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>

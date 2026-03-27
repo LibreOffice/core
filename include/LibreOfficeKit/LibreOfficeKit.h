@@ -25,7 +25,7 @@
 #include <TargetConditionals.h>
 #endif
 
-#include "LibreOfficeKitTypes.h"
+#include "COKitTypes.h"
 
 #ifdef __cplusplus
 extern "C"

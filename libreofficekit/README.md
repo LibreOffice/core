@@ -59,7 +59,7 @@ method. Whenever editing requires some action on the client side, a callback
 event is emitted. The callback types are described using the
 `LibreOfficeKitCallbackType` enumeration in `COKitEnums.h`, the callback
 function signature itself is provided by the LibreOfficeKitCallback typedef in
-`LibreOfficeKitTypes.h`. The most important callback types:
+`COKitTypes.h`. The most important callback types:
 
 - `LOK_CALLBACK_INVALIDATE_TILES`: drop all tiles cached on client-side that
   intersect with the provided rectangle

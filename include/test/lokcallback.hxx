@@ -11,7 +11,7 @@
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
-#include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include <LibreOfficeKit/COKitTypes.h>
 #include <sfx2/lokcallback.hxx>
 #include <vcl/idle.hxx>
 

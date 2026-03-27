@@ -189,7 +189,7 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	LibreOfficeKit/COKitEnums.h \
 	LibreOfficeKit/LibreOfficeKit.h \
 	LibreOfficeKit/LibreOfficeKitInit.h \
-	LibreOfficeKit/LibreOfficeKitTypes.h \
+	LibreOfficeKit/COKitTypes.h \
 ))
 
 # vim: set noet sw=4 ts=4:
