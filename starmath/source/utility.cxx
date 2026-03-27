@@ -36,7 +36,7 @@ SmViewShell * SmGetActiveView()
     SmViewShell* pSmView = dynamic_cast<SmViewShell*>(pView);
     if (!pSmView && comphelper::COKit::isActive())
     {
-        auto* pWindow = static_cast<SmGraphicWindow*>(LokStarMathHelper(pView).GetGraphicWindow());
+        auto* pWindow = static_cast<SmGraphicWindow*>(KitStarMathHelper(pView).GetGraphicWindow());
         if (pWindow)
             pSmView = &pWindow->GetGraphicWidget().GetView();
     }

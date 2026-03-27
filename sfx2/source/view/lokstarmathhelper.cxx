@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-LokStarMathHelper::LokStarMathHelper(const SfxViewShell* pViewShell)
+KitStarMathHelper::KitStarMathHelper(const SfxViewShell* pViewShell)
     : mpViewShell(pViewShell)
 {
     if (mpViewShell)
@@ -55,7 +55,7 @@ LokStarMathHelper::LokStarMathHelper(const SfxViewShell* pViewShell)
     }
 }
 
-void LokStarMathHelper::Dispatch(
+void KitStarMathHelper::Dispatch(
     const OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const
 {
     if (mxFrame)
@@ -104,7 +104,7 @@ vcl::Window* FindChildSmGraphicWidgetWindow(vcl::Window* pWin)
 }
 }
 
-vcl::Window* LokStarMathHelper::GetGraphicWindow()
+vcl::Window* KitStarMathHelper::GetGraphicWindow()
 {
     if (!mpGraphicWindow)
     {
@@ -118,7 +118,7 @@ vcl::Window* LokStarMathHelper::GetGraphicWindow()
     return mpGraphicWindow.get();
 }
 
-vcl::Window* LokStarMathHelper::GetWidgetWindow()
+vcl::Window* KitStarMathHelper::GetWidgetWindow()
 {
     if (!mpWidgetWindow)
         mpWidgetWindow.reset(FindChildSmGraphicWidgetWindow(GetGraphicWindow()));
@@ -126,7 +126,7 @@ vcl::Window* LokStarMathHelper::GetWidgetWindow()
     return mpWidgetWindow.get();
 }
 
-const SfxViewShell* LokStarMathHelper::GetSmViewShell()
+const SfxViewShell* KitStarMathHelper::GetSmViewShell()
 {
     if (vcl::Window* pGraphWindow = GetGraphicWindow())
     {
@@ -137,7 +137,7 @@ const SfxViewShell* LokStarMathHelper::GetSmViewShell()
     return nullptr;
 }
 
-tools::Rectangle LokStarMathHelper::GetBoundingBox() const
+tools::Rectangle KitStarMathHelper::GetBoundingBox() const
 {
     if (mpIPClient)
     {
@@ -153,7 +153,7 @@ tools::Rectangle LokStarMathHelper::GetBoundingBox() const
     return {};
 }
 
-bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons,
+bool KitStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons,
                                        int nModifier, double fPPTScaleX, double fPPTScaleY)
 {
     const tools::Rectangle rBBox = GetBoundingBox();
@@ -187,7 +187,7 @@ bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, in
     return false;
 }
 
-void LokStarMathHelper::PaintTile(VirtualDevice& rDevice, const tools::Rectangle& rTileRect)
+void KitStarMathHelper::PaintTile(VirtualDevice& rDevice, const tools::Rectangle& rTileRect)
 {
     const tools::Rectangle aMathRect = GetBoundingBox();
     if (rTileRect.GetIntersection(aMathRect).IsEmpty())
@@ -206,7 +206,7 @@ void LokStarMathHelper::PaintTile(VirtualDevice& rDevice, const tools::Rectangle
     pWidgetWindow->Paint(rDevice, {}); // SmGraphicWidget::Paint does not use the passed rectangle
 }
 
-void LokStarMathHelper::PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutputWidth,
+void KitStarMathHelper::PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutputWidth,
                                               int nOutputHeight, int nTilePosX, int nTilePosY,
                                               tools::Long nTileWidth, tools::Long nTileHeight)
 {
@@ -239,7 +239,7 @@ void LokStarMathHelper::PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutpu
     for (SfxViewShell* pViewShell = SfxViewShell::GetFirst(); pViewShell;
          pViewShell = SfxViewShell::GetNext(*pViewShell))
         if (pViewShell->GetDocId() == nDocId && pViewShell->getPart() == nPartForCurView)
-            LokStarMathHelper(pViewShell).PaintTile(rDevice, aTileRect);
+            KitStarMathHelper(pViewShell).PaintTile(rDevice, aTileRect);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

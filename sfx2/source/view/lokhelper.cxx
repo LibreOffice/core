@@ -1477,7 +1477,7 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int 
         aChartHelper.postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
         return true;
 
-    if (LokStarMathHelper aMathHelper(pViewShell);
+    if (KitStarMathHelper aMathHelper(pViewShell);
         aMathHelper.postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
         return true;
 
@@ -1496,7 +1496,7 @@ VclPtr<vcl::Window> KitHelper::getInPlaceDocWindow(SfxViewShell* pViewShell)
 {
     if (VclPtr<vcl::Window> pWindow = LokChartHelper(pViewShell).GetWindow())
         return pWindow;
-    if (VclPtr<vcl::Window> pWindow = LokStarMathHelper(pViewShell).GetWidgetWindow())
+    if (VclPtr<vcl::Window> pWindow = KitStarMathHelper(pViewShell).GetWidgetWindow())
         return pWindow;
     return {};
 }

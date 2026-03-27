@@ -63,10 +63,10 @@ public:
 };
 
 /// A class for math editing support via COKit.
-class SFX2_DLLPUBLIC LokStarMathHelper
+class SFX2_DLLPUBLIC KitStarMathHelper
 {
 public:
-    LokStarMathHelper(const SfxViewShell* pViewShell);
+    KitStarMathHelper(const SfxViewShell* pViewShell);
 
     vcl::Window* GetGraphicWindow();
     vcl::Window* GetWidgetWindow();

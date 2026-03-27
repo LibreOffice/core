@@ -114,7 +114,7 @@ SmViewShell* SmElementsPanel::GetView() const
     SmViewShell* pSmViewShell = dynamic_cast<SmViewShell*>(pView);
     if (!pSmViewShell && comphelper::COKit::isActive())
     {
-        auto* pWindow = static_cast<SmGraphicWindow*>(LokStarMathHelper(pView).GetGraphicWindow());
+        auto* pWindow = static_cast<SmGraphicWindow*>(KitStarMathHelper(pView).GetGraphicWindow());
         if (pWindow)
             pSmViewShell = &pWindow->GetGraphicWidget().GetView();
     }

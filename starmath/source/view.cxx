@@ -2224,7 +2224,7 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
                 tools::Rectangle aCaret = rCursor.GetCaretRectangle(rOutDev);
                 Point aFormulaDrawPos = widget.GetFormulaDrawPos();
                 aCaret.Move(aFormulaDrawPos.X(), aFormulaDrawPos.Y());
-                LokStarMathHelper helper(SfxViewShell::Current());
+                KitStarMathHelper helper(SfxViewShell::Current());
                 tools::Rectangle aBounds = helper.GetBoundingBox();
                 aCaret.Move(aBounds.Left(), aBounds.Top());
                 sRectangle = aCaret.toString();
@@ -2243,7 +2243,7 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
                 {
                     Point aFormulaDrawPos = widget.GetFormulaDrawPos();
                     aSelection.Move(aFormulaDrawPos.X(), aFormulaDrawPos.Y());
-                    LokStarMathHelper helper(SfxViewShell::Current());
+                    KitStarMathHelper helper(SfxViewShell::Current());
                     tools::Rectangle aBounds = helper.GetBoundingBox();
 
                     aSelection.Move(aBounds.Left(), aBounds.Top());

@@ -2499,7 +2499,7 @@ void CallbackFlushHandler::enqueueUpdatedType( int type, const SfxViewShell* vie
 {
     if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR)
     {
-        if (const SfxViewShell* viewShell2 = LokStarMathHelper(viewShell).GetSmViewShell())
+        if (const SfxViewShell* viewShell2 = KitStarMathHelper(viewShell).GetSmViewShell())
             viewShell = viewShell2;
     }
     std::optional<OString> payload = viewShell->getLOKPayload( type, viewId );
@@ -5721,7 +5721,7 @@ static void doc_postUnoCommand(COKitDocument* pThis, const char* pCommand, const
             aChartHelper.Dispatch(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
             return;
         }
-        if (LokStarMathHelper aMathHelper(SfxViewShell::Current()); aMathHelper.GetGraphicWindow())
+        if (KitStarMathHelper aMathHelper(SfxViewShell::Current()); aMathHelper.GetGraphicWindow())
         {
             aMathHelper.Dispatch(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
             return;
